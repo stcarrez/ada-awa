@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hibernate-mapping default-cascade="none">
+    <class name="AWA.Users.Model.Email" table="email"
+           dynamic-insert="true" dynamic-update="true">
+        <comment>Email address</comment>
+        <id name="id" type="ADO.Identifier" unsaved-value="0">
+            <comment>the email id</comment>
+            <column name="ID" not-null="true" unique="false" sql-type="BIGINT"/>
+            <generator class="sequence"/>
+        </id>
+        <version name="version" type="int" column="version"/>
+        <property name="email" type="String">
+            <comment>the email address</comment>
+            <column name="EMAIL" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
+        </property>
+        <property name="user_id" type="ADO.Identifier">
+            <comment>the user identifier</comment>
+            <column name="USER_ID" not-null="false" unique="false" sql-type="BIGINT"/>
+        </property>
+    </class>
+    <class name="AWA.Users.Model.User" table="user"
+           dynamic-insert="true" dynamic-update="true">
+        <comment>Record representing a user</comment>
+        <id name="id" type="ADO.Identifier" unsaved-value="0">
+            <comment>the email id</comment>
+            <column name="ID" not-null="true" unique="false" sql-type="BIGINT"/>
+            <generator class="sequence"/>
+        </id>
+        <version name="version" type="int" column="version"/>
+        <property name="name" type="String">
+            <comment>the user name</comment>
+            <column name="NAME" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
+        </property>
+        <property name="first_name" type="String">
+            <comment>the user first name</comment>
+            <column name="FIRST_NAME" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
+        </property>
+        <property name="last_name" type="String">
+            <comment>the user last name</comment>
+            <column name="LAST_NAME" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
+        </property>
+        <property name="password" type="String">
+            <comment>the user last name</comment>
+            <column name="PASSWORD" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
+        </property>
+        <many-to-one name="email" class="Email" foreign-key="USER_ID" not-null="true" lazy="proxy" fetch="select">
+            <column name="EMAIL_ID" not-null="true" sql-type="INTEGER"/>
+        </many-to-one>
+    </class>
+
+    <class name="AWA.Users.Model.Access_Key" table="access_key"
+           dynamic-insert="true" dynamic-update="true">
+        <comment>Defines an access key</comment>
+        <id name="id" type="ADO.Identifier" unsaved-value="0">
+            <comment>the email id</comment>
+            <column name="ID" not-null="true" unique="false" sql-type="BIGINT"/>
+            <generator class="sequence"/>
+        </id>
+        <version name="version" type="int" column="version"/>
+        <property name="access_key" type="String">
+            <comment>the access key</comment>
+            <column name="ACCESS_KEY" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
+        </property>
+        <property name="user_id" type="ADO.Identifier">
+            <comment>the user identifier</comment>
+            <column name="USER_ID" not-null="false" unique="false" sql-type="BIGINT"/>
+        </property>
+    </class>
+
+
+    <class name="AWA.Users.Model.Session" table="session"
+           dynamic-insert="true" dynamic-update="true">
+        <comment>Defines an user session</comment>
+        <id name="id" type="ADO.Identifier" unsaved-value="0">
+            <comment>the user session id</comment>
+            <column name="ID" not-null="true" unique="false" sql-type="BIGINT"/>
+            <generator class="sequence"/>
+        </id>
+        <version name="version" type="int" column="version"/>
+        <property name="start_date" update="false">
+            <comment>the session start date</comment>
+            <column name="START_DATE" not-null="false" unique="false" sql-type="DATETIME"/>
+            <type name="Nullable_Time"/>
+        </property>
+        <property name="end_date" insert="false">
+            <comment>the session start date</comment>
+            <column name="END_DATE" not-null="false" unique="false" sql-type="DATETIME"/>
+            <type name="Nullable_Time"/>
+        </property>
+        <property name="ip_address" type="String">
+            <comment>the IP address</comment>
+            <column name="IP_ADDRESS" not-null="false" unique="false" sql-type="VARCHAR(255)"/>
+        </property>
+        <property name="user_id" type="ADO.Identifier">
+            <comment>the user identifier</comment>
+            <column name="USER_ID" not-null="false" unique="false" sql-type="BIGINT"/>
+        </property>
+    </class>
+
+</hibernate-mapping>
