@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<f:view contentType="text/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:u="http://code.google.com/p/ada-asf/util"
+        xmlns:h="http://java.sun.com/jsf/html">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <!--DEV_START-->
+    <link media="screen" type="text/css" rel="stylesheet" href="/awa/themes/main.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="/awa/themes/list.css"/>
+    <!--DEV_END-->
+
+    <ui:insert name="pageHeader"/>
+    <title><h:outputText value="#{title}"/></title>
+</head>
+<body class="yui-skin-sam#{pageStyle}">
+<div id="scroll"></div>
+
+<!-- Top header with user account -->
+<div id='pam-hdr'>
+  <div id='pam-top'>
+    <ul>
+      <li id='logout'><a href="/logout" >Sign Out</a></li>
+      <li id='help'><a href="/help" >Help</a> |</li>
+      <li id='settings'><a href="/settings" >Account &amp; Settings</a> |</li>
+    </ul>
+  </div>
+</div>
+
+<div id='pam-page'>
+    <ui:insert name="pageBody"/>
+    <div id="clearfooter"></div>
+</div>
+
+<div id="pz-footer">
+    <div id="blk_footer">
+        <div id="footer_copyright">
+            <span>#{layoutMsg.copyrightMessage}</span>
+        </div>
+        <div id="footer_content">
+            <a href="#{layoutMsg.urlTermsOfService}">#{layoutMsg.linkTermsOfService}</a> |
+            <a href="#{layoutMsg.urlPrivacyPolicy}">#{layoutMsg.linkPrivacyPolicy}</a>
+        </div>
+    </div>
+</div>
+
+<ui:insert name="pageScript"/>
+
+<!--DEV_START-->
+<ui:debug/>
+<!--DEV_END-->
+</body>
+</html>
+</f:view>

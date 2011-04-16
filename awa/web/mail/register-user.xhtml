@@ -1,0 +1,17 @@
+<f:view contentType="text/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:u="http://code.google.com/p/ada-asf/util"
+        xmlns:h="http://java.sun.com/jsf/html">
+
+Bienvenue dans le service AWA,
+
+Vous etes enregistres sous le nom #{event.first_name} #{event.last_name} et l'email #{event.email}.
+
+Vous devez cliquer sur le lien:
+
+http://localhost:8080/awa/users/verify.html?key=#{event.key}
+
+</f:view>
+

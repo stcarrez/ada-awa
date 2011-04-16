@@ -1,0 +1,33 @@
+<ui:composition template="/WEB-INF/layouts/layout.xhtml"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:u="http://code.google.com/p/ada-asf/util"
+        xmlns:h="http://java.sun.com/jsf/html">
+    <ui:param name="title" value="Login Title"/>
+
+    <!-- Main page body -->
+    <ui:define name="pageBody">
+
+     <h:panelGroup rendered="#{not empty user}">
+         <h2>Welcome #{user}</h2>
+     </h:panelGroup>
+     <h:form id='login'>
+         <table>
+             <tr><td>Email</td><td>
+		<h:input id='email' size='50' value='#{login.email}'>
+                </h:input>
+                <h:message for='email'/>
+             </td></tr>
+             <tr><td>Password</td><td>
+                <h:input id='password' size='50' value='#{login.password}'>
+                </h:input>
+                <h:message for='password'/>
+             </td></tr>
+             <tr><td></td><td><h:commandButton id='login' value='Login' action="#{login.authenticate}"/></td></tr>
+         </table>
+     </h:form>
+
+    </ui:define>
+</ui:composition>
+
