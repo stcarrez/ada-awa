@@ -1,0 +1,28 @@
+with "config";
+with "@UTIL_DIR@util";
+with "@UTIL_DIR@testutil";
+with "@EL_DIR@el";
+with "@ASF_DIR@asf";
+with "@ASF_DIR@asfunit";
+with "@ADO_DIR@ado";
+with "aunit";
+
+project Tests is
+
+   for Languages use ("Ada", "Project file");
+
+   Mains := ("awa_harness.adb");
+
+   for Source_Dirs use ("regtests");
+
+   for Main use Mains;
+
+   for Object_Dir use "./" & Config'Object_Dir & "/obj";
+   for Exec_Dir use "./" & Config'Exec_Dir & "/bin";
+
+   package Binder renames Config.Binder;
+   package Builder renames Config.Builder;
+   package Compiler renames Config.Compiler;
+   package Linker renames Config.Linker;
+
+end Tests;

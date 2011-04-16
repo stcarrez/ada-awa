@@ -1,0 +1,83 @@
+# You may edit this makefile as long as you keep these original 
+# target names defined.
+GNATMAKE=gnatmake
+GNATCLEAN=gnatclean
+GPRPATH=awa.gpr
+
+distdir=awa-@AWA_VERSION@
+
+DIST_FILE=awa-@AWA_VERSION@.tar.gz
+
+HAVE_MYSQL=@AWA_DB_MYSQL@
+HAVE_SQLITE=@AWA_DB_SQLITE@
+
+srcdir = .
+top_srcdir = @top_srcdir@
+VPATH = @srcdir@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+top_builddir = .
+
+# Build executables for all mains defined by the project.
+build:
+	$(GNATMAKE) -P "$(GPRPATH)"
+
+# Not intended for manual invocation.
+# Invoked if automatic builds are enabled.
+# Analyzes only on those sources that have changed.
+# Does not build executables.
+autobuild:
+	$(GNATMAKE) -gnatc -c -k  -P "$(GPRPATH)"
+
+# Clean the root project of all build products.
+clean:
+	$(GNATCLEAN) -P "$(GPRPATH)"
+
+# Clean root project and all imported projects too.
+clean_tree:
+	$(GNATCLEAN) -P "$(GPRPATH)" -r
+
+# Check *all* sources for errors, even those not changed.
+# Does not build executables.
+analyze:
+	$(GNATMAKE) -f  -gnatc -c -k  -P "$(GPRPATH)"
+
+# Clean, then build executables for all mains defined by the project.
+rebuild: clean build
+
+GENERATOR=../ada-gen/bin/dynamo -c ../ada-gen/config
+
+generate:
+	$(GENERATOR) -o src/model src/alloc-sequence.xml
+	$(GENERATOR) -o regtests/model regtests/simple-model.xml regtests/Comment.hbm.xml
+	$(GENERATOR) -o samples/model samples/user.hbm.xml
+
+# Files to package in source distribution
+DISTFILES=README LICENSE.txt NOTICE.txt CHANGES config.guess configure config.sub \
+configure.in Makefile.in install-sh \
+ado.gpr.in tests.gpr.in samples.gpr.in config.gpr \
+src samples regtests \
+bin obj lib
+
+dist:
+	-rm -rf $(distdir)
+	mkdir $(distdir)
+	-chmod 777 $(distdir)
+	here=`cd $(top_builddir) && pwd`; \
+	top_distdir=`cd $(distdir) && pwd`; \
+	distdir=`cd $(distdir) && pwd`; \
+	for file in $(DISTFILES); do \
+	  d=$(srcdir); \
+	  if test -d $$d/$$file; then \
+	    cp -pr $$d/$$file $(distdir)/$$file; \
+	  else \
+	    test -f $(distdir)/$$file \
+	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
+	    || cp -p $$d/$$file $(distdir)/$$file || :; \
+	  fi; \
+	done
+	-rm -f $(distdir)/bin/*
+	-rm -f $(distdir)/obj/*
+	tar --exclude=.svn --exclude="*~" --exclude="*.o" --exclude="*.ali" \
+	    --exclude="*.log" --exclude="*.a" \
+	    -cvzf $(DIST_FILE) $(distdir)

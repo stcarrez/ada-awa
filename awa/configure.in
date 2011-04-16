@@ -1,0 +1,129 @@
+dnl Autoconf configure script for BfdAda
+dnl Copyright 2001, 2002, 2003, 2005 Free Software Foundation, Inc.
+dnl
+dnl This file is part of BfdAda.
+dnl 
+dnl This program is free software; you can redistribute it and/or modify
+dnl it under the terms of the GNU General Public License as published by
+dnl the Free Software Foundation; either version 2 of the License, or
+dnl (at your option) any later version.
+dnl 
+dnl This program is distributed in the hope that it will be useful,
+dnl but WITHOUT ANY WARRANTY; without even the implied warranty of
+dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+dnl GNU General Public License for more details.
+dnl 
+dnl You should have received a copy of the GNU General Public License
+dnl along with this program; if not, write to the Free Software
+dnl Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+dnl Process this file with autoconf to produce a configure script.
+
+AC_INIT(src/awa.ads)
+
+AC_CANONICAL_SYSTEM
+dnl AM_MAINTAINER_MODE
+AC_EXEEXT
+
+# Current release settings
+AWA_MAJOR_VERSION=0
+AWA_MINOR_VERSION=1
+AWA_MICRO_VERSION=0
+AWA_VERSION=$AWA_MAJOR_VERSION.$AWA_MINOR_VERSION.$AWA_MICRO_VERSION
+
+# checking for local tools
+AC_PROG_CC
+# AM_PATH_GNAT
+# AM_PATH_PERL
+AC_PROG_MAKE_SET
+AC_PROG_INSTALL
+AC_PROG_RANLIB
+
+# Set the version number of GtkAda
+AC_SUBST(AWA_VERSION)
+AC_SUBST(AWA_MAJOR_VERSION)
+AC_SUBST(AWA_MINOR_VERSION)
+AC_SUBST(AWA_MICRO_VERSION)
+
+EXEC_PREFIX="$prefix"
+AC_SUBST(EXEC_PREFIX)
+
+AWA_LIBDIR="lib"
+AC_SUBST(AWA_LIBDIR)
+
+##########################################
+# Ada Util library
+##########################################
+
+AC_MSG_CHECKING([Ada Utility library (code.google.com/p/ada-util)])
+AC_ARG_WITH(ada-util,
+AS_HELP_STRING([--with-ada-util=x], [Path for the Ada Utility library (code.google.com/p/ada-util)]),
+[
+  UTIL_DIR=${withval}/
+],
+[
+  UTIL_DIR=../util/
+])
+if test ! -f ${UTIL_DIR}/util.gpr; then
+   AC_MSG_ERROR([Ada Utility library not found in ${UTIL_DIR}])
+fi
+AC_MSG_RESULT(${UTIL_DIR})
+AC_SUBST(UTIL_DIR)
+
+##########################################
+# Ada Expression Language library
+##########################################
+AC_MSG_CHECKING([Ada Expression Language library (code.google.com/p/ada-el)])
+AC_ARG_WITH(ada-el,
+AS_HELP_STRING([--with-ada-el=x], [Path for the Ada Expression Language library (code.google.com/p/ada-el)]),
+[
+  EL_DIR=${withval}/
+],
+[
+  EL_DIR=../el/
+])
+if test ! -f ${EL_DIR}/el.gpr; then
+   AC_MSG_ERROR([Ada Expression Language library not found in ${EL_DIR}])
+fi
+AC_MSG_RESULT(${EL_DIR})
+AC_SUBST(EL_DIR)
+
+##########################################
+# Ada Server Faces library
+##########################################
+AC_MSG_CHECKING([Ada Server Faces library (code.google.com/p/ada-asf)])
+AC_ARG_WITH(ada-asf,
+AS_HELP_STRING([--with-ada-asf=x], [Path for the Ada Server Faces library (code.google.com/p/ada-asf)]),
+[
+  ASF_DIR=${withval}/
+],
+[
+  ASF_DIR=../asf/
+])
+if test ! -f ${ASF_DIR}/asf.gpr; then
+   AC_MSG_ERROR([Ada Server Faces library not found in ${ASF_DIR}])
+fi
+AC_MSG_RESULT(${ASF_DIR})
+AC_SUBST(ASF_DIR)
+
+##########################################
+# Ada Database Objects library
+##########################################
+AC_MSG_CHECKING([Ada Database Objects library (code.google.com/p/ada-ado)])
+AC_ARG_WITH(ada-ado,
+AS_HELP_STRING([--with-ada-ado=x], [Path for the Ada Database Objects library (code.google.com/p/ada-ado)]),
+[
+  ADO_DIR=${withval}/
+],
+[
+  ADO_DIR=../ado/
+])
+if test ! -f ${ADO_DIR}/ado.gpr; then
+   AC_MSG_ERROR([Ada Database Objects library not found in ${ADO_DIR}])
+fi
+AC_MSG_RESULT(${ADO_DIR})
+AC_SUBST(ADO_DIR)
+
+AC_OUTPUT(
+Makefile awa.gpr tests.gpr
+)
