@@ -1,0 +1,113 @@
+dnl Autoconf configure script for BfdAda
+dnl Copyright 2001, 2002, 2003, 2005 Free Software Foundation, Inc.
+dnl
+dnl This file is part of BfdAda.
+dnl 
+dnl This program is free software; you can redistribute it and/or modify
+dnl it under the terms of the GNU General Public License as published by
+dnl the Free Software Foundation; either version 2 of the License, or
+dnl (at your option) any later version.
+dnl 
+dnl This program is distributed in the hope that it will be useful,
+dnl but WITHOUT ANY WARRANTY; without even the implied warranty of
+dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+dnl GNU General Public License for more details.
+dnl 
+dnl You should have received a copy of the GNU General Public License
+dnl along with this program; if not, write to the Free Software
+dnl Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+dnl Process this file with autoconf to produce a configure script.
+
+AC_INIT(awa/src/awa.ads)
+
+AC_CANONICAL_SYSTEM
+dnl AM_MAINTAINER_MODE
+AC_EXEEXT
+
+# Current release settings
+AWA_MAJOR_VERSION=0
+AWA_MINOR_VERSION=1
+AWA_MICRO_VERSION=0
+AWA_VERSION=$AWA_MAJOR_VERSION.$AWA_MINOR_VERSION.$AWA_MICRO_VERSION
+
+# checking for local tools
+AC_PROG_CC
+# AM_PATH_GNAT
+# AM_PATH_PERL
+AC_PROG_MAKE_SET
+AC_PROG_INSTALL
+AC_PROG_RANLIB
+
+# Set the version number of GtkAda
+AC_SUBST(AWA_VERSION)
+AC_SUBST(AWA_MAJOR_VERSION)
+AC_SUBST(AWA_MINOR_VERSION)
+AC_SUBST(AWA_MICRO_VERSION)
+
+EXEC_PREFIX="$prefix"
+AC_SUBST(EXEC_PREFIX)
+
+AWA_LIBDIR="lib"
+AC_SUBST(AWA_LIBDIR)
+
+##########################################
+# XMLAda library
+##########################################
+
+ac_xml_ada=xmlada-config
+AC_MSG_CHECKING([xmlada library])
+AC_ARG_WITH(xml,
+AS_HELP_STRING([--with-xmlada=], [Enable XML serialization]),
+[
+  ac_xml_ada=${withval}/xmlada-config
+  WITH_XML_ADA="with \"${withval}\";";
+  AWA_XML_DIR='src/xml';
+],
+[
+  WITH_XML_ADA='';
+  AWA_XML_DIR='src';
+])
+
+ac_xml_version=`$ac_xml_ada --version 2>/dev/null | sed -e 's, ,-,g'`
+case $ac_xml_version in
+  XmlAda-3.2*)
+      AC_MSG_RESULT($ac_xml_version)
+      WITH_XML_ADA="with \"xmlada\";";
+      AWA_XML_DIR='src/xml';
+      ;;
+
+  *)
+      AC_MSG_RESULT(no)
+      WITH_XML_ADA='';
+      AWA_XML_DIR='src';
+      ;;
+
+esac
+
+AC_MSG_RESULT(${WITH_XML})
+AC_SUBST(WITH_XML_ADA)
+AC_SUBST(AWA_XML_DIR)
+
+AC_OUTPUT(
+Makefile
+)
+
+DIR=`pwd`
+echo "Configuring ada-util"
+(cd $DIR/util; ./configure)
+
+echo "Configuring ada-el"
+(cd $DIR/el; ./configure --with-ada-util=../util)
+
+echo "Configuring ada-asf"
+(cd $DIR/asf; ./configure --with-ada-util=../util --with-ada-el=../el)
+
+echo "Configuring dynamo"
+(cd $DIR/dynamo; ./configure --with-ada-util=../util --with-ada-el=../el --with-ada-asf=../asf)
+
+echo "Configuring ada-ado"
+(cd $DIR/ado; ./configure --with-ada-util=../util)
+
+echo "Configuring ada-awa"
+(cd $DIR/awa; ./configure --with-ada-util=../util --with-ada-el=../el --with-ada-asf=../asf --with-ada-ado=../ado)
