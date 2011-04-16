@@ -1,0 +1,47 @@
+Ada Web Application
+
+Ada Web Application is a framework to build a Web Application in Ada 2005.
+
+It integrates the following projects:
+
+ - ASF      (http://code.google.com/p/ada-asf)
+ - ADO      (http://code.google.com/p/ada-ado)
+ - Ada Util (http://code.google.com/p/ada-util)
+ - Ada EL   (http://code.google.com/p/ada-el)
+ - Dynamo   (http://code.google.com/p/ada-gen)
+
+
+It relies on the following external projects:
+
+ - AWS      (http://libre.adacore.com/libre/tools/aws/)
+ - XMLAda   (http://libre.adacore.com/libre/tools/xmlada/)
+
+
+Build with the following commands:
+
+   ./configure
+   make
+
+
+The samples can be built using:
+
+   gnatmake -Psamples
+   
+   
+The unit tests are built using:
+
+   gnatmake -Ptests
+
+
+And unit tests are executed with:
+
+   bin/awa_harness
+
+
+Documentation
+
+   The Ada Web Application sources as well as a wiki documentation is provided on:
+
+   http://code.google.com/p/ada-awa/
+
+
