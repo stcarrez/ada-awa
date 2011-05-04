@@ -27,6 +27,10 @@
             <generator class="sequence"/>
         </id>
         <version name="version" type="int" column="version"/>
+        <property name="open_id" type="String">
+            <comment>the open id</comment>
+            <column name="OPENID" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
+        </property>
         <property name="name" type="String">
             <comment>the user name</comment>
             <column name="NAME" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
