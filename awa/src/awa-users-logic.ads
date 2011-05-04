@@ -62,6 +62,19 @@ package AWA.Users.Logic is
                            User     : out User_Ref'Class;
                            Session  : out Session_Ref'Class);
 
+   --  Authenticate the user with his open id identifier.  The authentication process
+   --  was made by an external OpenID provider.  If the user does not yet exists in
+   --  the database, a record is created for him.  Create a new session for the user.
+   --  The IP address of the connection is saved in the session.
+   --  Raises Not_Found exception if the user is not recognized
+   procedure Authenticate (Model    : in User_Manager;
+                           OpenId   : in String;
+                           Email    : in String;
+                           Name     : in String;
+                           IpAddr   : in String;
+                           User     : out User_Ref'Class;
+                           Session  : out Session_Ref'Class);
+
    --  Start the lost password process for a user.  Find the user having
    --  the given email address and send that user a password reset key
    --  in an email.

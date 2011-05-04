@@ -79,6 +79,60 @@ package body AWA.Users.Logic is
    end Create_Key;
 
    --  ------------------------------
+   --  Authenticate the user with his open id identifier.  The authentication process
+   --  was made by an external OpenID provider.  If the user does not yet exists in
+   --  the database, a record is created for him.  Create a new session for the user.
+   --  The IP address of the connection is saved in the session.
+   --  Raises Not_Found exception if the user is not recognized
+   --  ------------------------------
+   procedure Authenticate (Model    : in User_Manager;
+                           OpenId   : in String;
+                           Email    : in String;
+                           Name     : in String;
+                           IpAddr   : in String;
+                           User     : out User_Ref'Class;
+                           Session  : out Session_Ref'Class) is
+      DB     : Master_Session := Model.Get_Master_Session;
+      Query  : ADO.SQL.Query;
+      Found  : Boolean;
+   begin
+      Log.Info ("Authenticate user {0}", Email);
+
+      DB.Begin_Transaction;
+
+      --  Find the user registered under the given OpenID identifier.
+      Query.Bind_Param (1, OpenId);
+      Query.Set_Filter ("o.openid = ?");
+      User.Find (DB, Query, Found);
+      if not Found then
+         Log.Info ("User {0} is not known", Email);
+
+         User.Set_Name (Name);
+         User.Set_Open_Id (OpenId);
+         User.Save (DB);
+         declare
+            E : Email_Ref;
+         begin
+            E.Set_Email (Email);
+            E.Set_User_Id (User.Get_Id);
+            E.Save (DB);
+
+            User.Set_Email (E);
+            User.Save (DB);
+         end;
+      end if;
+
+      --  Create the session
+      Session := Session_Ref'Class (Null_Session);
+      Session.Set_Start_Date (ADO.Nullable_Time '(Value => Ada.Calendar.Clock, Is_Null => False));
+      Session.Set_User_Id (User.Get_Id);
+      Session.Set_Ip_Address (IpAddr);
+      Session.Save (DB);
+
+      DB.Commit;
+   end Authenticate;
+
+   --  ------------------------------
    --  Authenticate the user with his email address and his password.
    --  If the user is authenticated, return the user information and
    --  create a new session.  The IP address of the connection is saved
