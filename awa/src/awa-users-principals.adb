@@ -17,6 +17,8 @@
 -----------------------------------------------------------------------
 
 with AWA.Users.Model;
+with AWA.Users.Logic;
+with AWA.Users.Module;
 with ASF.Principals;
 package body AWA.Users.Principals is
 
@@ -49,5 +51,28 @@ package body AWA.Users.Principals is
       Result.User := User;
       return Result;
    end Create;
+
+   --  ------------------------------
+   --  Create a principal object that correspond to the authenticated user identified
+   --  by the <b>Auth</b> information.  The principal will be attached to the session
+   --  and will be destroyed when the session is closed.
+   --  ------------------------------
+   procedure Create_Principal (Server : in Verify_Auth_Servlet;
+                               Auth   : in Security.Openid.Authentication;
+                               Result : out ASF.Principals.Principal_Access) is
+      use AWA.Users.Module;
+      use AWA.Users.Logic;
+      Module  : constant User_Module_Access := AWA.Users.Module.Instance;
+      Manager : User_Manager_Access := AWA.Users.Logic.Create_User_Manager (Module);
+      User    : AWA.Users.Principals.Principal_Access := new AWA.Users.Principals.Principal;
+   begin
+      Result := User.all'Access;
+      Manager.Authenticate (OpenId  => Security.Openid.Get_Claimed_Id (Auth),
+                            Email   => Security.Openid.Get_Email (Auth),
+                            Name    => Security.Openid.Get_Full_Name (Auth),
+                            IpAddr  => "",
+                            User    => User.User,
+                            Session => User.Session);
+   end Create_Principal;
 
 end AWA.Users.Principals;

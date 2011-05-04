@@ -19,6 +19,7 @@
 with AWA.Users.Model;
 with ASF.Principals;
 with Security.Permissions;
+with Security.Openid.Servlets;
 package AWA.Users.Principals is
 
    type Principal is new ASF.Principals.Principal with private;
@@ -36,11 +37,29 @@ package AWA.Users.Principals is
    --  Create a principal for the given user.
    function Create (User : in AWA.Users.Model.User_Ref) return Principal_Access;
 
+
+   --  ------------------------------
+   --  OpenID Verification Servlet
+   --  ------------------------------
+   --  The <b>Verify_Auth_Servlet</b> verifies the authentication result and
+   --  extract authentication from the callback URL.
+   type Verify_Auth_Servlet is new Security.Openid.Servlets.Verify_Auth_Servlet with private;
+
+   --  Create a principal object that correspond to the authenticated user identified
+   --  by the <b>Auth</b> information.  The principal will be attached to the session
+   --  and will be destroyed when the session is closed.
+   procedure Create_Principal (Server : in Verify_Auth_Servlet;
+                               Auth   : in Security.Openid.Authentication;
+                               Result : out ASF.Principals.Principal_Access);
+
 private
 
    type Principal is new ASF.Principals.Principal with record
       User        : AWA.Users.Model.User_Ref;
+      Session     : AWA.Users.Model.Session_Ref;
       Permissions : Security.Permissions.Permission_Map;
    end record;
+
+   type Verify_Auth_Servlet is new Security.Openid.Servlets.Verify_Auth_Servlet with null record;
 
 end AWA.Users.Principals;
