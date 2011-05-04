@@ -45,12 +45,10 @@ analyze:
 # Clean, then build executables for all mains defined by the project.
 rebuild: clean build
 
-GENERATOR=../ada-gen/bin/dynamo -c ../ada-gen/config
+GENERATOR=dynamo
 
 generate:
-	$(GENERATOR) -o src/model src/alloc-sequence.xml
-	$(GENERATOR) -o regtests/model regtests/simple-model.xml regtests/Comment.hbm.xml
-	$(GENERATOR) -o samples/model samples/user.hbm.xml
+	$(GENERATOR) -o src/model generate src/user.xml src/Comment.hbm.xml
 
 # Files to package in source distribution
 DISTFILES=README LICENSE.txt NOTICE.txt CHANGES config.guess configure config.sub \
