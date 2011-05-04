@@ -36,19 +36,16 @@ begin
    Register.Register (Plugin  => Object'Access,
                       Name    => "login",
                       Handler => AWA.Users.Beans.Create_Authenticate_Bean'Access,
-                      Free    => AWA.Users.Beans.Free_Authenticate_Bean'Access,
                       Scope   => ASF.Beans.REQUEST_SCOPE);
 
    Register.Register (Plugin  => Object'Access,
                       Name    => "register",
                       Handler => AWA.Users.Beans.Create_Authenticate_Bean'Access,
-                      Free    => AWA.Users.Beans.Free_Authenticate_Bean'Access,
                       Scope   => ASF.Beans.REQUEST_SCOPE);
 
    Register.Register (Plugin  => Object'Access,
                       Name    => "lostPassword",
                       Handler => AWA.Users.Beans.Create_Authenticate_Bean'Access,
-                      Free    => AWA.Users.Beans.Free_Authenticate_Bean'Access,
                       Scope   => ASF.Beans.REQUEST_SCOPE);
 
 end AWA.Users.Module;

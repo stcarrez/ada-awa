@@ -85,7 +85,4 @@ package AWA.Users.Beans is
    function Create_Authenticate_Bean (Module : in AWA.Users.Module.User_Module_Access)
                                       return Util.Beans.Basic.Readonly_Bean_Access;
 
-   --  Delete the bean.
-   procedure Free_Authenticate_Bean (Bean : in out Util.Beans.Basic.Readonly_Bean_Access);
-
 end AWA.Users.Beans;

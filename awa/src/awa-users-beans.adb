@@ -123,23 +123,6 @@ package body AWA.Users.Beans is
       return Object.all'Access;
    end Create_Authenticate_Bean;
 
-   --  Delete the bean.
-   procedure Free_Authenticate_Bean (Bean : in out Util.Beans.Basic.Readonly_Bean_Access) is
-
-      procedure Free is
-        new Ada.Unchecked_Deallocation (Authenticate_Bean'Class,
-                                        Authenticate_Bean_Access);
-   begin
-      if Bean.all in Authenticate_Bean'Class then
-         declare
-            L : Authenticate_Bean_Access := Authenticate_Bean (Bean.all)'Unchecked_Access;
-         begin
-            Free (L);
-            Bean := null;
-         end;
-      end if;
-   end Free_Authenticate_Bean;
-
    --  The code below this line could be generated automatically by an Asis tool.
 
    package Authenticate_Binding is
