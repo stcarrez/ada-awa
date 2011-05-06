@@ -22,7 +22,7 @@
            dynamic-insert="true" dynamic-update="true">
         <comment>Record representing a user</comment>
         <id name="id" type="ADO.Identifier" unsaved-value="0">
-            <comment>the email id</comment>
+            <comment>the user id</comment>
             <column name="ID" not-null="true" unique="false" sql-type="BIGINT"/>
             <generator class="sequence"/>
         </id>
@@ -46,6 +46,10 @@
         <property name="password" type="String">
             <comment>the user last name</comment>
             <column name="PASSWORD" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
+        </property>
+        <property name="country" type="String">
+            <comment>the user country</comment>
+            <column name="COUNTRY" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
         </property>
         <many-to-one name="email" class="Email" foreign-key="USER_ID" not-null="true" lazy="proxy" fetch="select">
             <column name="EMAIL_ID" not-null="true" sql-type="INTEGER"/>

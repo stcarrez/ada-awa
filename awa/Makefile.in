@@ -48,7 +48,7 @@ rebuild: clean build
 GENERATOR=dynamo
 
 generate:
-	$(GENERATOR) -o src/model generate src/user.xml src/Comment.hbm.xml
+	$(GENERATOR) -o src/model generate db/User.hbm.xml db/Comment.hbm.xml
 
 # Files to package in source distribution
 DISTFILES=README LICENSE.txt NOTICE.txt CHANGES config.guess configure config.sub \

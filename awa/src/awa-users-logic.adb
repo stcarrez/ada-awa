@@ -96,7 +96,7 @@ package body AWA.Users.Logic is
       Query  : ADO.SQL.Query;
       Found  : Boolean;
    begin
-      Log.Info ("Authenticate user {0}", Email);
+      Log.Info ("Authenticated user {0}", Email);
 
       DB.Begin_Transaction;
 

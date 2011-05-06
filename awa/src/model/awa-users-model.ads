@@ -145,11 +145,11 @@ package AWA.Users.Model is
    Null_User : constant User_Ref;
    function "=" (Left, Right : User_Ref'Class) return Boolean;
 
-   --  Set the email id
+   --  Set the user id
    procedure Set_Id (Object : in out User_Ref;
                      Value  : in ADO.Identifier);
 
-   --  Get the email id
+   --  Get the user id
    function Get_Id (Object : in User_Ref)
                  return ADO.Identifier;
    --  Get 
@@ -214,6 +214,18 @@ package AWA.Users.Model is
    function Get_Password (Object : in User_Ref)
                  return Ada.Strings.Unbounded.Unbounded_String;
    function Get_Password (Object : in User_Ref)
+                 return String;
+
+   --  Set the user country
+   procedure Set_Country (Object : in out User_Ref;
+                          Value  : in Ada.Strings.Unbounded.Unbounded_String);
+   procedure Set_Country (Object : in out User_Ref;
+                          Value : in String);
+
+   --  Get the user country
+   function Get_Country (Object : in User_Ref)
+                 return Ada.Strings.Unbounded.Unbounded_String;
+   function Get_Country (Object : in User_Ref)
                  return String;
 
    --  Set 
@@ -554,9 +566,10 @@ private
    COL_4_2_NAME : aliased constant String := "FIRST_NAME";
    COL_5_2_NAME : aliased constant String := "LAST_NAME";
    COL_6_2_NAME : aliased constant String := "PASSWORD";
-   COL_7_2_NAME : aliased constant String := "EMAIL_ID";
+   COL_7_2_NAME : aliased constant String := "COUNTRY";
+   COL_8_2_NAME : aliased constant String := "EMAIL_ID";
    USER_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 8,
+     (Count => 9,
       Table => USER_NAME'Access,
       Members => (         COL_0_2_NAME'Access,
          COL_1_2_NAME'Access,
@@ -565,7 +578,8 @@ private
          COL_4_2_NAME'Access,
          COL_5_2_NAME'Access,
          COL_6_2_NAME'Access,
-         COL_7_2_NAME'Access
+         COL_7_2_NAME'Access,
+         COL_8_2_NAME'Access
 )
      );
    Null_User : constant User_Ref := User_Ref' (ADO.Objects.Object_Ref with others => <>);
@@ -579,6 +593,7 @@ private
        First_Name : Ada.Strings.Unbounded.Unbounded_String;
        Last_Name : Ada.Strings.Unbounded.Unbounded_String;
        Password : Ada.Strings.Unbounded.Unbounded_String;
+       Country : Ada.Strings.Unbounded.Unbounded_String;
        Email : Email_Ref;
    end record;
    type User_Access is access all User_Impl;

@@ -538,11 +538,34 @@ package body AWA.Users.Model is
    begin
       return Impl.Password;
    end Get_Password;
+   procedure Set_Country (Object : in out User_Ref;
+                           Value : in String) is
+   begin
+      Object.Set_Country (Ada.Strings.Unbounded.To_Unbounded_String (Value));
+   end Set_Country;
+   procedure Set_Country (Object : in out User_Ref;
+                           Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : User_Access;
+   begin
+      Set_Field (Object, Impl, 8);
+      Impl.Country := Value;
+   end Set_Country;
+   function Get_Country (Object : in User_Ref)
+                 return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (Object.Get_Country);
+   end Get_Country;
+   function Get_Country (Object : in User_Ref)
+                  return Ada.Strings.Unbounded.Unbounded_String is
+      Impl : constant User_Access := User_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Country;
+   end Get_Country;
    procedure Set_Email (Object : in out User_Ref;
                          Value  : in Email_Ref'Class) is
       Impl : User_Access;
    begin
-      Set_Field (Object, Impl, 8);
+      Set_Field (Object, Impl, 9);
       Impl.Email := Email_Ref (Value);
    end Set_Email;
    function Get_Email (Object : in User_Ref)
@@ -570,6 +593,7 @@ package body AWA.Users.Model is
             Copy.First_Name := Impl.First_Name;
             Copy.Last_Name := Impl.Last_Name;
             Copy.Password := Impl.Password;
+            Copy.Country := Impl.Country;
             Copy.Email := Impl.Email;
          end;
       end if;
@@ -720,9 +744,14 @@ package body AWA.Users.Model is
          Object.Clear_Modified (7);
       end if;
       if Object.Is_Modified (8) then
-         Stmt.Save_Field (Name  => COL_7_2_NAME, --  EMAIL_ID
-                          Value => Object.Email);
+         Stmt.Save_Field (Name  => COL_7_2_NAME, --  COUNTRY
+                          Value => Object.Country);
          Object.Clear_Modified (8);
+      end if;
+      if Object.Is_Modified (9) then
+         Stmt.Save_Field (Name  => COL_8_2_NAME, --  EMAIL_ID
+                          Value => Object.Email);
+         Object.Clear_Modified (9);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -767,7 +796,9 @@ package body AWA.Users.Model is
                         Value => Object.Last_Name);
       Query.Save_Field (Name  => COL_6_2_NAME, --  PASSWORD
                         Value => Object.Password);
-      Query.Save_Field (Name  => COL_7_2_NAME, --  EMAIL_ID
+      Query.Save_Field (Name  => COL_7_2_NAME, --  COUNTRY
+                        Value => Object.Country);
+      Query.Save_Field (Name  => COL_8_2_NAME, --  EMAIL_ID
                         Value => Object.Email);
       Query.Execute (Result);
       if Result /= 1 then
@@ -805,6 +836,9 @@ package body AWA.Users.Model is
       if Name = "password" then
          return Util.Beans.Objects.To_Object (Impl.Password);
       end if;
+      if Name = "country" then
+         return Util.Beans.Objects.To_Object (Impl.Country);
+      end if;
       raise ADO.Objects.NOT_FOUND;
    end Get_Value;
    procedure List (Object  : in out User_Vector;
@@ -840,8 +874,9 @@ package body AWA.Users.Model is
       Object.First_Name := Stmt.Get_Unbounded_String (4);
       Object.Last_Name := Stmt.Get_Unbounded_String (5);
       Object.Password := Stmt.Get_Unbounded_String (6);
-      if not Stmt.Is_Null (7) then
-          Object.Email.Set_Key_Value (Stmt.Get_Identifier (7), Session);
+      Object.Country := Stmt.Get_Unbounded_String (7);
+      if not Stmt.Is_Null (8) then
+          Object.Email.Set_Key_Value (Stmt.Get_Identifier (8), Session);
       end if;
       Object.Version := Stmt.Get_Integer (1);
       ADO.Objects.Set_Created (Object);
