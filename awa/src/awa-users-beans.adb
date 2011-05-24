@@ -151,11 +151,11 @@ package body AWA.Users.Beans is
                                                 Name   => "resetPassword");
 
    Binding_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
-     := (Authenticate_Binding.Proxy'Unchecked_Access,
-         Register_Binding.Proxy'Unchecked_Access,
-         Verify_Binding.Proxy'Unchecked_Access,
-         Lost_Password_Binding.Proxy'Unchecked_Access,
-         Reset_Password_Binding.Proxy'Unchecked_Access);
+     := (Authenticate_Binding.Proxy'Access,
+         Register_Binding.Proxy'Access,
+         Verify_Binding.Proxy'Access,
+         Lost_Password_Binding.Proxy'Access,
+         Reset_Password_Binding.Proxy'Access);
 
    --  Get the value identified by the name.
    overriding
@@ -193,7 +193,7 @@ package body AWA.Users.Beans is
    function Get_Method_Bindings (From : in Authenticate_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access is
    begin
-      return Binding_Array'Unchecked_Access;
+      return Binding_Array'Access;
    end Get_Method_Bindings;
 
 end AWA.Users.Beans;
