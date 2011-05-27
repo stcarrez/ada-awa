@@ -15,7 +15,7 @@
         <version name="version" type="int" column="VERSION"/>
         <property name="date">
             <column name="DATE" not-null="true" unique="false" sql-type="TIMESTAMP"/>
-            <type name="DateTime"/>
+            <type name="Time"/>
         </property>
         <property name="message">
             <column name="MESSAGE" not-null="true" unique="false" sql-type="VARCHAR(256)"/>
