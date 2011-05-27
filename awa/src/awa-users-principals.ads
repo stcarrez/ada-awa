@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with ADO;
 with AWA.Users.Model;
 with ASF.Principals;
 with Security.Permissions;
@@ -33,6 +34,13 @@ package AWA.Users.Principals is
                             Permission : in Security.Permissions.Permission_Type) return Boolean;
 
    function Get_Id (From : in Principal) return String;
+
+   --  Get the user associated with the principal.
+   function Get_User (From : in Principal) return AWA.Users.Model.User_Ref;
+
+   --  Get the current user identifier invoking the service operation.
+   --  Returns NO_IDENTIFIER if there is none.
+   function Get_User_Identifier (From : in Principal) return ADO.Identifier;
 
    --  Create a principal for the given user.
    function Create (User : in AWA.Users.Model.User_Ref) return Principal_Access;

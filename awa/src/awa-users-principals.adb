@@ -43,6 +43,23 @@ package body AWA.Users.Principals is
    end Get_Id;
 
    --  ------------------------------
+   --  Get the user associated with the principal.
+   --  ------------------------------
+   function Get_User (From : in Principal) return AWA.Users.Model.User_Ref is
+   begin
+      return From.User;
+   end Get_User;
+
+   --  ------------------------------
+   --  Get the current user identifier invoking the service operation.
+   --  Returns NO_IDENTIFIER if there is none.
+   --  ------------------------------
+   function Get_User_Identifier (From : in Principal) return ADO.Identifier is
+   begin
+      return From.User.Get_Id;
+   end Get_User_Identifier;
+
+   --  ------------------------------
    --  Create a principal for the given user.
    --  ------------------------------
    function Create (User : in AWA.Users.Model.User_Ref) return Principal_Access is
@@ -62,8 +79,7 @@ package body AWA.Users.Principals is
                                Result : out ASF.Principals.Principal_Access) is
       use AWA.Users.Module;
       use AWA.Users.Logic;
-      Module  : constant User_Module_Access := AWA.Users.Module.Instance;
-      Manager : User_Manager_Access := AWA.Users.Logic.Create_User_Manager (Module);
+      Manager : constant User_Manager_Access := AWA.Users.Module.Get_User_Manager;
       User    : AWA.Users.Principals.Principal_Access := new AWA.Users.Principals.Principal;
    begin
       Result := User.all'Access;
