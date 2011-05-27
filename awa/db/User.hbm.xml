@@ -87,7 +87,7 @@
         <version name="version" type="int" column="version"/>
         <property name="start_date" update="false">
             <comment>the session start date</comment>
-            <column name="START_DATE" not-null="false" unique="false" sql-type="DATETIME"/>
+            <column name="START_DATE" not-null="true" unique="false" sql-type="DATETIME"/>
             <type name="Nullable_Time"/>
         </property>
         <property name="end_date" insert="false">
@@ -97,11 +97,19 @@
         </property>
         <property name="ip_address" type="String">
             <comment>the IP address</comment>
-            <column name="IP_ADDRESS" not-null="false" unique="false" sql-type="VARCHAR(255)"/>
+            <column name="IP_ADDRESS" not-null="true" unique="false" sql-type="VARCHAR(255)"/>
         </property>
         <property name="user_id" type="ADO.Identifier">
             <comment>the user identifier</comment>
-            <column name="USER_ID" not-null="false" unique="false" sql-type="BIGINT"/>
+            <column name="USER_ID" not-null="true" unique="false" sql-type="BIGINT"/>
+        </property>
+        <property name="auth_id" type="ADO.Identifier">
+            <comment>the authentication session identifier</comment>
+            <column name="AUTH_ID" not-null="false" unique="false" sql-type="BIGINT"/>
+        </property>
+        <property name="session_type" type="Integer">
+            <comment>the session type</comment>
+            <column name="TYPE" not-null="true" unique="false" sql-type="INTEGER"/>
         </property>
     </class>
 
