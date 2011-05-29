@@ -40,8 +40,8 @@ package body AWA.Applications is
                        Name    : in String;
                        URI     : in String := "") is
    begin
-      App.Register (Module.all'Access, Name, URI);
       Module.Initialize (App);
+      App.Register (Module.all'Unchecked_Access, Name, URI);
    end Register;
 
    --  ------------------------------
