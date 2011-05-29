@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hibernate-mapping default-cascade="none">
+    <class name="AWA.Permissions.Models.ACL" table="ACL"
+           dynamic-insert="true" dynamic-update="true">
+        <comment>Access control</comment>
+        <id name="id" type="ADO.Identifier" unsaved-value="0">
+            <comment>the unique ACL id</comment>
+            <column name="ID" not-null="true" unique="false" sql-type="BIGINT"/>
+            <generator class="sequence"/>
+        </id>
+        <property name="entity_type" type="Entity_Type">
+            <comment>the entity type</comment>
+            <column name="ENTITY_TYPE" not-null="false" unique="false" sql-type="INTEGER"/>
+        </property>
+        <property name="user_id" type="ADO.Identifier" update="false">
+            <comment>the user identifier</comment>
+            <column name="USER_ID" not-null="false" unique="false" sql-type="BIGINT"/>
+        </property>
+       <property name="entity_id" type="ADO.Identifier" update="false">
+            <comment>the entity identifier</comment>
+            <column name="ENTITY_ID" not-null="false" unique="false" sql-type="BIGINT"/>
+        </property>
+        <property name="writeable" type="boolean">
+            <comment>whether the entity is writeable</comment>
+            <column name="WRITEABLE" not-null="false" unique="false" sql-type="TINYINT"/>
+        </property>
+    </class>
+</hibernate-mapping>
