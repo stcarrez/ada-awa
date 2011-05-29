@@ -18,7 +18,7 @@
 
 with AWA.Applications;
 with AWA.Users.Principals;
-with AWA.Users.Model;
+with AWA.Users.Models;
 
 with ADO;
 with ADO.Sessions;
@@ -49,7 +49,7 @@ package AWA.Services.Contexts is
 
    --  Get the current user invoking the service operation.
    --  Returns a null user if there is none.
-   function Get_User (Ctx : in Service_Context) return AWA.Users.Model.User_Ref;
+   function Get_User (Ctx : in Service_Context) return AWA.Users.Models.User_Ref;
 
    --  Get the current user identifier invoking the service operation.
    --  Returns NO_IDENTIFIER if there is none.
@@ -69,9 +69,18 @@ package AWA.Services.Contexts is
    --  call to <b>Rollback</b>.
    procedure Rollback (Ctx : in out Service_Context);
 
+   --  Initializes the service context.
+   overriding
+   procedure Initialize (Ctx : in out Service_Context);
+
    --  Finalize the service context, rollback non-committed transaction, releases any object.
    overriding
    procedure Finalize (Ctx : in out Service_Context);
+
+   --  Set the current application and user context.
+   procedure Set_Context (Ctx         : in out Service_Context;
+                          Application : in AWA.Applications.Application_Access;
+                          Principal   : in AWA.Users.Principals.Principal_Access);
 
    --  Get the current service context.
    --  Returns null if the current thread is not associated with any service context.
@@ -80,6 +89,7 @@ package AWA.Services.Contexts is
 private
 
    type Service_Context is new Ada.Finalization.Limited_Controlled with record
+      Previous    : Service_Context_Access := null;
       Application : AWA.Applications.Application_Access := null;
       Principal   : AWA.Users.Principals.Principal_Access := null;
       Master      : ADO.Sessions.Master_Session;

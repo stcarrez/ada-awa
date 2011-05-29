@@ -16,13 +16,16 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-
+with Ada.Task_Attributes;
 with ADO.Databases;
 
 package body AWA.Services.Contexts is
 
    use type ADO.Databases.Connection_Status;
    use type AWA.Users.Principals.Principal_Access;
+
+   package Task_Context is new Ada.Task_Attributes
+     (Service_Context_Access, null);
 
    --  ------------------------------
    --  Get the application associated with the current service operation.
@@ -61,10 +64,10 @@ package body AWA.Services.Contexts is
    --  Get the current user invoking the service operation.
    --  Returns a null user if there is none.
    --  ------------------------------
-   function Get_User (Ctx : in Service_Context) return AWA.Users.Model.User_Ref is
+   function Get_User (Ctx : in Service_Context) return AWA.Users.Models.User_Ref is
    begin
       if Ctx.Principal = null then
-         return AWA.Users.Model.Null_User;
+         return AWA.Users.Models.Null_User;
       else
          return Ctx.Principal.Get_User;
       end if;
@@ -122,6 +125,27 @@ package body AWA.Services.Contexts is
    end Rollback;
 
    --  ------------------------------
+   --  Set the current application and user context.
+   --  ------------------------------
+   procedure Set_Context (Ctx         : in out Service_Context;
+                          Application : in AWA.Applications.Application_Access;
+                          Principal   : in AWA.Users.Principals.Principal_Access) is
+   begin
+      Ctx.Application := Application;
+      Ctx.Principal   := Principal;
+   end Set_Context;
+
+   --  ------------------------------
+   --  Initializes the service context.
+   --  ------------------------------
+   overriding
+   procedure Initialize (Ctx : in out Service_Context) is
+   begin
+      Ctx.Previous := Task_Context.Value;
+      Task_Context.Set_Value (Ctx'Unchecked_Access);
+   end Initialize;
+
+   --  ------------------------------
    --  Finalize the service context, rollback non-committed transaction, releases any object.
    --  ------------------------------
    overriding
@@ -133,6 +157,7 @@ package body AWA.Services.Contexts is
       if Ctx.Active_Transaction then
          Ctx.Master.Rollback;
       end if;
+      Task_Context.Set_Value (Ctx.Previous);
    end Finalize;
 
    --  ------------------------------
@@ -141,7 +166,7 @@ package body AWA.Services.Contexts is
    --  ------------------------------
    function Current return Service_Context_Access is
    begin
-      return null;
+      return Task_Context.Value;
    end Current;
 
 end AWA.Services.Contexts;
