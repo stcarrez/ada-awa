@@ -30,7 +30,7 @@ with AWA.Users.Principals;
 package body AWA.Users.Beans is
 
 
-   use AWA.Users.Model;
+   use AWA.Users.Models;
 
    --  Action to register a user
    procedure Register_User (Data    : in out Authenticate_Bean;
@@ -86,7 +86,7 @@ package body AWA.Users.Beans is
 
 
    procedure Set_Session_Principal (Data : in Authenticate_Bean;
-                                    User : in AWA.Users.Model.User_Ref) is
+                                    User : in AWA.Users.Models.User_Ref) is
       Principal : AWA.Users.Principals.Principal_Access := AWA.Users.Principals.Create (User);
       Ctx       : ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
       Session   : ASF.Sessions.Session := Ctx.Get_Session (Create => True);
@@ -119,7 +119,7 @@ package body AWA.Users.Beans is
       Object : Authenticate_Bean_Access := new Authenticate_Bean;
    begin
       Object.Module := Module;
-      Object.Manager := AWA.Users.Logic.Create_User_Manager (Module);
+      Object.Manager := AWA.Users.Module.Get_User_Manager;
       return Object.all'Access;
    end Create_Authenticate_Bean;
 

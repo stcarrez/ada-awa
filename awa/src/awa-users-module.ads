@@ -17,12 +17,37 @@
 -----------------------------------------------------------------------
 
 with AWA.Modules;
+with ASF.Modules.Get;
+with ASF.Applications.Main;
+
+with AWA.Users.Logic;
 package AWA.Users.Module is
 
-   type User_Module is new AWA.Modules.Module with null record;
+   NAME : constant String := "users";
+
+   type User_Module is new AWA.Modules.Module with private;
    type User_Module_Access is access all User_Module'Class;
 
-   function Instance return User_Module_Access;
+   overriding
+   procedure Initialize (Plugin : in out User_Module;
+                         App    : access ASF.Applications.Main.Application'Class);
 
+   --  Get the user manager.
+   function Get_User_Manager (Plugin : in User_Module) return Logic.User_Manager_Access;
+
+   --  Create a user manager.
+   function Create_User_Manager (Plugin : in User_Module) return Logic.User_Manager_Access;
+
+   --  Get the user module instance associated with the current application.
+   function Get_User_Module return User_Module_Access;
+
+   --  Get the user manager instance associated with the current application.
+   function Get_User_Manager return Logic.User_Manager_Access;
+
+private
+
+   type User_Module is new AWA.Modules.Module with record
+      Manager : Logic.User_Manager_Access := null;
+   end record;
 
 end AWA.Users.Module;

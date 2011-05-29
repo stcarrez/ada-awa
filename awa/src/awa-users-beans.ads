@@ -23,7 +23,7 @@ with Ada.Strings.Unbounded;
 
 with AWA.Users.Logic;
 with AWA.Users.Module;
-with AWA.Users.Model;
+with AWA.Users.Models;
 
 package AWA.Users.Beans is
 
@@ -59,7 +59,7 @@ package AWA.Users.Beans is
                                  return Util.Beans.Methods.Method_Binding_Array_Access;
 
    procedure Set_Session_Principal (Data : in Authenticate_Bean;
-                                    User : in AWA.Users.Model.User_Ref);
+                                    User : in AWA.Users.Models.User_Ref);
 
    --  Action to register a user
    procedure Register_User (Data    : in out Authenticate_Bean;

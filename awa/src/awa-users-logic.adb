@@ -29,6 +29,8 @@ with ADO.SQL;
 with ADO.Sessions;
 with ADO.Statements;
 with Util.Properties;
+
+with AWA.Services.Contexts;
 package body AWA.Users.Logic is
 
    use Util.Log;
@@ -47,14 +49,6 @@ package body AWA.Users.Logic is
    begin
       return Integer_Random.Random (Random_Generator);
    end Random;
-
-   function Create_User_Manager (Module : AWA.Users.Module.User_Module_Access)
-                                 return User_Manager_Access is
-      Result : constant User_Manager_Access := new User_Manager;
-   begin
-      Result.Initialize (Module.all'Access);
-      return Result;
-   end Create_User_Manager;
 
 --     function Create_User_List (Module : User_Module) return Bean_Access is
 --        DB : Master_Session'Class := Module.Get_Master_Session;
@@ -92,13 +86,14 @@ package body AWA.Users.Logic is
                            IpAddr   : in String;
                            User     : out User_Ref'Class;
                            Session  : out Session_Ref'Class) is
-      DB     : Master_Session := Model.Get_Master_Session;
+      Ctx    : constant AWA.Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB     : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Query  : ADO.SQL.Query;
       Found  : Boolean;
    begin
       Log.Info ("Authenticated user {0}", Email);
 
-      DB.Begin_Transaction;
+      Ctx.Start;
 
       --  Find the user registered under the given OpenID identifier.
       Query.Bind_Param (1, OpenId);
@@ -129,7 +124,7 @@ package body AWA.Users.Logic is
       Session.Set_Ip_Address (IpAddr);
       Session.Save (DB);
 
-      DB.Commit;
+      Ctx.Commit;
    end Authenticate;
 
    --  ------------------------------

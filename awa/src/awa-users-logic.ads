@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa.users -- User registration, authentication processes
---  Copyright (C) 2009, 2010 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,14 +15,15 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with AWA.Users.Model;
+with AWA.Users.Models;
 with AWA.Modules;
 with ASF.Events.Modules;
-with AWA.Users.Module;
 with ADO;
 package AWA.Users.Logic is
 
-   use AWA.Users.Model;
+   use AWA.Users.Models;
+
+   NAME : constant String := "User_Manager";
 
    Not_Found  : exception;
 
@@ -30,9 +31,6 @@ package AWA.Users.Logic is
 
    type User_Manager is new AWA.Modules.Module_Manager with private;
    type User_Manager_Access is access all User_Manager'Class;
-
-   function Create_User_Manager (Module : AWA.Users.Module.User_Module_Access)
-                                 return User_Manager_Access;
 
    --  Create a user in the database with the given user information and
    --  the associated email address.  Verify that no such user already exist.

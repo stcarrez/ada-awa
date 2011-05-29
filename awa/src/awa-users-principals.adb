@@ -16,7 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with AWA.Users.Model;
+with AWA.Users.Models;
 with AWA.Users.Logic;
 with AWA.Users.Module;
 with ASF.Principals;
@@ -45,7 +45,7 @@ package body AWA.Users.Principals is
    --  ------------------------------
    --  Get the user associated with the principal.
    --  ------------------------------
-   function Get_User (From : in Principal) return AWA.Users.Model.User_Ref is
+   function Get_User (From : in Principal) return AWA.Users.Models.User_Ref is
    begin
       return From.User;
    end Get_User;
@@ -62,7 +62,7 @@ package body AWA.Users.Principals is
    --  ------------------------------
    --  Create a principal for the given user.
    --  ------------------------------
-   function Create (User : in AWA.Users.Model.User_Ref) return Principal_Access is
+   function Create (User : in AWA.Users.Models.User_Ref) return Principal_Access is
       Result : constant Principal_Access := new Principal;
    begin
       Result.User := User;

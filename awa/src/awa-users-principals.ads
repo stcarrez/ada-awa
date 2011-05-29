@@ -17,7 +17,7 @@
 -----------------------------------------------------------------------
 
 with ADO;
-with AWA.Users.Model;
+with AWA.Users.Models;
 with ASF.Principals;
 with Security.Permissions;
 with Security.Openid.Servlets;
@@ -36,14 +36,14 @@ package AWA.Users.Principals is
    function Get_Id (From : in Principal) return String;
 
    --  Get the user associated with the principal.
-   function Get_User (From : in Principal) return AWA.Users.Model.User_Ref;
+   function Get_User (From : in Principal) return AWA.Users.Models.User_Ref;
 
    --  Get the current user identifier invoking the service operation.
    --  Returns NO_IDENTIFIER if there is none.
    function Get_User_Identifier (From : in Principal) return ADO.Identifier;
 
    --  Create a principal for the given user.
-   function Create (User : in AWA.Users.Model.User_Ref) return Principal_Access;
+   function Create (User : in AWA.Users.Models.User_Ref) return Principal_Access;
 
 
    --  ------------------------------
@@ -63,8 +63,8 @@ package AWA.Users.Principals is
 private
 
    type Principal is new ASF.Principals.Principal with record
-      User        : AWA.Users.Model.User_Ref;
-      Session     : AWA.Users.Model.Session_Ref;
+      User        : AWA.Users.Models.User_Ref;
+      Session     : AWA.Users.Models.Session_Ref;
       Permissions : Security.Permissions.Permission_Map;
    end record;
 
