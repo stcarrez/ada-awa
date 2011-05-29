@@ -15,34 +15,29 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with AWA.Comments.Model;
-with AWA.Users.Model;
+with AWA.Comments.Models;
+with AWA.Users.Models;
 with AWA.Modules;
-with ASF.Events.Modules;
-with AWA.Users.Module;
 with ADO;
 with ADO.Objects;
 package AWA.Comments.Logic is
 
-   use AWA.Comments.Model;
+   use AWA.Comments.Models;
 
    type Comment_Manager is new AWA.Modules.Module_Manager with private;
    type Comment_Manager_Access is access all Comment_Manager'Class;
-
-   function Create_Comment_Manager (Module : AWA.Users.Module.User_Module_Access)
-                                 return Comment_Manager_Access;
 
    --  Create a user in the database with the given user information and
    --  the associated email address.  Verify that no such user already exist.
    --  Raises User_Exist exception if a user with such email is already registered.
    procedure Create_Comment (Model   : in Comment_Manager;
                              Comment : in out Comment_Ref'Class;
-                             User    : in AWA.Users.Model.User_Ref'Class);
+                             User    : in AWA.Users.Models.User_Ref'Class);
 
    procedure Create_Comment (Model   : in Comment_Manager;
                              Entity  : in ADO.Objects.Object_Key;
                              Message : in String;
-                             User    : in AWA.Users.Model.User_Ref'Class;
+                             User    : in AWA.Users.Models.User_Ref'Class;
                              Result  : out ADO.Identifier);
 
    procedure Find_Comment (Model   : in Comment_Manager;

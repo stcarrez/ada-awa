@@ -15,29 +15,26 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with AWA.Comments.Model;
-with AWA.Users.Model;
-with AWA.Modules;
-with ASF.Events.Modules;
-with AWA.Users.Module;
-with ADO;
-with ADO.Objects;
+
+with ADO.Sessions;
+
+with Ada.Calendar;
+
+with Util.Log.Loggers;
+
 package body AWA.Comments.Logic is
 
-   use AWA.Comments.Model;
+   use Util.Log;
+   use ADO.Sessions;
 
-   function Create_Comment_Manager (Module : AWA.Users.Module.User_Module_Access)
-                                    return Comment_Manager_Access is
-   begin
-      return null;
-   end Create_Comment_Manager;
+   Log : constant Loggers.Logger := Loggers.Create ("AWA.Comments.Logic");
 
    --  Create a user in the database with the given user information and
    --  the associated email address.  Verify that no such user already exist.
    --  Raises User_Exist exception if a user with such email is already registered.
    procedure Create_Comment (Model   : in Comment_Manager;
                              Comment : in out Comment_Ref'Class;
-                             User    : in AWA.Users.Model.User_Ref'Class) is
+                             User    : in AWA.Users.Models.User_Ref'Class) is
    begin
       null;
    end Create_Comment;
@@ -45,10 +42,24 @@ package body AWA.Comments.Logic is
    procedure Create_Comment (Model   : in Comment_Manager;
                              Entity  : in ADO.Objects.Object_Key;
                              Message : in String;
-                             User    : in AWA.Users.Model.User_Ref'Class;
+                             User    : in AWA.Users.Models.User_Ref'Class;
                              Result  : out ADO.Identifier) is
+      DB        : Master_Session := Model.Get_Master_Session;
+      Comment   : Comment_Ref;
+      Entity_Id : constant ADO.Identifier := ADO.Objects.Get_Value (Entity);
    begin
-      null;
+      Log.Info ("Create comment for user {0}", String'(User.Get_Name));
+
+      DB.Begin_Transaction;
+      Comment.Set_Message (Message);
+      Comment.Set_Entity_Id (Integer (Entity_Id));
+      Comment.Set_User (User);
+      Comment.Set_Date (Ada.Calendar.Clock);
+      Comment.Save (DB);
+      DB.Commit;
+      Result := Comment.Get_Id;
+
+      Log.Info ("Comment {0} created", ADO.Identifier'Image (Result));
    end Create_Comment;
 
    procedure Find_Comment (Model   : in Comment_Manager;
