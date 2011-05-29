@@ -16,6 +16,9 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with Ada.Finalization;
+with Util.Beans.Basic;
+with Util.Beans.Objects;
 with ASF.Modules;
 with ASF.Events.Modules;
 with ASF.Applications.Main;
@@ -28,7 +31,11 @@ package AWA.Modules is
    --  ------------------------------
    --
    --  The <b>Module_Manager</b> represents the root of the logic manager
-   type Module_Manager is tagged limited private;
+   type Module_Manager is new Ada.Finalization.Limited_Controlled
+     and Util.Beans.Basic.Readonly_Bean with private;
+
+   function Get_Value (Manager : in Module_Manager;
+                       Name    : in String) return Util.Beans.Objects.Object;
 
    --  ------------------------------
    --  Module
@@ -37,7 +44,7 @@ package AWA.Modules is
    type Module_Access is access all Module'Class;
 
    procedure Initialize (Manager : in out Module_Manager;
-                         Module  : in Module_Access);
+                         Module  : in AWA.Modules.Module'Class);
 
    --  Get the database connection for reading
    function Get_Session (Manager : Module_Manager)
@@ -69,14 +76,22 @@ package AWA.Modules is
 
    type Session_Module is abstract new Module with private;
 
+   generic
+      type Manager_Type is new Module_Manager with private;
+      type Manager_Type_Access is access all Manager_Type'Class;
+      Name : String;
+   function Get_Manager return Manager_Type_Access;
+
 private
 
-   type Module_Manager is tagged limited record
-      Module : Module_Access;
+   type Module_Manager is new Ada.Finalization.Limited_Controlled
+     and Util.Beans.Basic.Readonly_Bean with record
+      Module : Module_Access := null;
    end record;
 
    type Module is abstract new ASF.Modules.Module with record
-      Awa_App : AWA.Applications.Application_Access;
+      Awa_App : AWA.Applications.Application_Access := null;
+      Self    : Module_Access := null;
    end record;
 
    type Pool_Module is new Module with record
