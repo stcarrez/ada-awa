@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hibernate-mapping default-cascade="none">
-    <class name="AWA.Users.Model.Email" table="email"
+    <class name="AWA.Users.Models.Email" table="email"
            dynamic-insert="true" dynamic-update="true">
         <comment>Email address</comment>
         <id name="id" type="ADO.Identifier" unsaved-value="0">
@@ -18,7 +18,7 @@
             <column name="USER_ID" not-null="false" unique="false" sql-type="BIGINT"/>
         </property>
     </class>
-    <class name="AWA.Users.Model.User" table="user"
+    <class name="AWA.Users.Models.User" table="user"
            dynamic-insert="true" dynamic-update="true">
         <comment>Record representing a user</comment>
         <id name="id" type="ADO.Identifier" unsaved-value="0">
@@ -56,7 +56,7 @@
         </many-to-one>
     </class>
 
-    <class name="AWA.Users.Model.Access_Key" table="access_key"
+    <class name="AWA.Users.Models.Access_Key" table="access_key"
            dynamic-insert="true" dynamic-update="true">
         <comment>Defines an access key</comment>
         <id name="id" type="ADO.Identifier" unsaved-value="0">
@@ -76,7 +76,7 @@
     </class>
 
 
-    <class name="AWA.Users.Model.Session" table="session"
+    <class name="AWA.Users.Models.Session" table="session"
            dynamic-insert="true" dynamic-update="true">
         <comment>Defines an user session</comment>
         <id name="id" type="ADO.Identifier" unsaved-value="0">
