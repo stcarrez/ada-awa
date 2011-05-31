@@ -21,6 +21,7 @@ with AWA.Permissions.Models;
 with AWA.Services.Contexts;
 
 with ADO;
+with ADO.Queries;
 with ADO.Sessions;
 with ADO.Statements;
 
@@ -63,25 +64,26 @@ package body AWA.Permissions.Services is
                                Entity     : in ADO.Identifier;
                                Kind       : in ADO.Entity_Type;
                                Permission : in Permission_Type) is
-      Ctx  : constant AWA.Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      User : constant ADO.Identifier := Ctx.Get_User_Identifier;
-      DB   : Session := AWA.Services.Contexts.Get_Session (Ctx);
-      Stmt : ADO.Statements.Query_Statement
-        := DB.Create_Statement ("select ACL.WRITEABLE from ACL "
-                                & "where ACL.USER_ID = ? and ACL.ENTITY_ID = ? "
-                                & "and ACL.ENTITY_TYPE = ?");
+      Ctx   : constant AWA.Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      User  : constant ADO.Identifier := Ctx.Get_User_Identifier;
+      DB    : constant Session := AWA.Services.Contexts.Get_Session (Ctx);
+      Query : ADO.Queries.Context;
    begin
-      Stmt.Bind_Param (1, User);
-      Stmt.Bind_Param (2, Entity);
-      Stmt.Bind_Param (3, Kind);
-      Stmt.Execute;
-      if not Stmt.Has_Elements then
-         Log.Info ("User {0} does not have permission to access entity {1}/{2}",
-                   ADO.Identifier'Image (User), ADO.Identifier'Image (Entity),
-                   ADO.Entity_Type'Image (Kind));
-         raise NO_PERMISSION;
-      end if;
-
+      Query.Set_Query (AWA.Permissions.Models.Query_Check_Entity_Permission);
+      Query.Bind_Param ("user_id", User);
+      Query.Bind_Param ("entity_id", Entity);
+      Query.Bind_Param ("entity_type", Integer (Kind));
+      declare
+         Stmt : ADO.Statements.Query_Statement:= DB.Create_Statement (Query);
+      begin
+         Stmt.Execute;
+         if not Stmt.Has_Elements then
+            Log.Info ("User {0} does not have permission to access entity {1}/{2}",
+                      ADO.Identifier'Image (User), ADO.Identifier'Image (Entity),
+                      ADO.Entity_Type'Image (Kind));
+            raise NO_PERMISSION;
+         end if;
+      end;
    end Check_Permission;
 
 end AWA.Permissions.Services;

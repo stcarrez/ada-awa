@@ -19,7 +19,7 @@
 with AWA.Modules;
 with ASF.Modules.Get;
 with ASF.Applications.Main;
-with AWA.Comments.logic;
+with AWA.Comments.Services;
 package AWA.Comments.Module is
 
    NAME : constant String := "Comment_Module";
@@ -35,8 +35,8 @@ package AWA.Comments.Module is
      new ASF.Modules.Get (Comment_Module, Comment_Module_Access, NAME);
 
    function Get_Comment_Manager is
-     new AWA.Modules.Get_Manager (AWA.Comments.Logic.Comment_Manager,
-                                  AWA.Comments.Logic.Comment_Manager_Access,
+     new AWA.Modules.Get_Manager (AWA.Comments.Services.Comment_Manager,
+                                  AWA.Comments.Services.Comment_Manager_Access,
                                   "Comment_Manager");
 
 end AWA.Comments.Module;

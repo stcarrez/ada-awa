@@ -20,7 +20,7 @@ with AWA.Users.Models;
 with AWA.Modules;
 with ADO;
 with ADO.Objects;
-package AWA.Comments.Logic is
+package AWA.Comments.Services is
 
    use AWA.Comments.Models;
 
@@ -52,4 +52,4 @@ private
 
    type Comment_Manager is new AWA.Modules.Module_Manager with null record;
 
-end AWA.Comments.Logic;
+end AWA.Comments.Services;

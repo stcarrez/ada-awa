@@ -22,12 +22,12 @@ with Ada.Calendar;
 
 with Util.Log.Loggers;
 
-package body AWA.Comments.Logic is
+package body AWA.Comments.Services is
 
    use Util.Log;
    use ADO.Sessions;
 
-   Log : constant Loggers.Logger := Loggers.Create ("AWA.Comments.Logic");
+   Log : constant Loggers.Logger := Loggers.Create ("AWA.Comments.Services");
 
    --  Create a user in the database with the given user information and
    --  the associated email address.  Verify that no such user already exist.
@@ -76,4 +76,4 @@ package body AWA.Comments.Logic is
       null;
    end Delete_Comment;
 
-end AWA.Comments.Logic;
+end AWA.Comments.Services;

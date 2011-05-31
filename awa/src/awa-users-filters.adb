@@ -20,7 +20,7 @@ with Ada.Strings.Unbounded;
 
 with Util.Log.Loggers;
 
-with AWA.Users.Logic;
+with AWA.Users.Services;
 with AWA.Users.Module;
 with ASF.Filters;
 with ASF.Requests;

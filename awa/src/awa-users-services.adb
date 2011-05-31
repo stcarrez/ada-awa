@@ -31,7 +31,7 @@ with ADO.Statements;
 with Util.Properties;
 
 with AWA.Services.Contexts;
-package body AWA.Users.Logic is
+package body AWA.Users.Services is
 
    use Util.Log;
    use ADO.Statements;
@@ -446,4 +446,4 @@ package body AWA.Users.Logic is
       DB.Commit;
    end Close_Session;
 
-end AWA.Users.Logic;
+end AWA.Users.Services;

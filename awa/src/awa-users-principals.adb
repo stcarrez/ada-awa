@@ -17,7 +17,7 @@
 -----------------------------------------------------------------------
 
 with AWA.Users.Models;
-with AWA.Users.Logic;
+with AWA.Users.Services;
 with AWA.Users.Module;
 with ASF.Principals;
 package body AWA.Users.Principals is
@@ -78,7 +78,7 @@ package body AWA.Users.Principals is
                                Auth   : in Security.Openid.Authentication;
                                Result : out ASF.Principals.Principal_Access) is
       use AWA.Users.Module;
-      use AWA.Users.Logic;
+      use AWA.Users.Services;
       Manager : constant User_Manager_Access := AWA.Users.Module.Get_User_Manager;
       User    : AWA.Users.Principals.Principal_Access := new AWA.Users.Principals.Principal;
    begin

@@ -63,7 +63,7 @@ package body AWA.Permissions.Models is
       Impl.Writeable := False;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
- 
+
    -- ----------------------------------------
    --  Data object: Acl
    -- ----------------------------------------
@@ -296,7 +296,7 @@ package body AWA.Permissions.Models is
                else
                   raise ADO.Objects.UPDATE_ERROR;
                end if;
-            end if; 
+            end if;
          end;
       end if;
    end Save;
@@ -351,26 +351,6 @@ package body AWA.Permissions.Models is
       end if;
       raise ADO.Objects.NOT_FOUND;
    end Get_Value;
-   procedure List (Object  : in out Acl_Vector;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class) is
-      Stmt : ADO.Statements.Query_Statement := Session.Create_Statement (ACL_TABLE'Access);
-   begin
-      Stmt.Set_Parameters (Query);
-      Stmt.Execute;
-      Acl_Vectors.Clear (Object);
-      while Stmt.Has_Elements loop
-         declare
-            Item : Acl_Ref;
-            Impl : constant Acl_Access := new Acl_Impl;
-         begin
-            Impl.Load (Stmt, Session);
-            ADO.Objects.Set_Object (Item, Impl.all'Access);
-            Object.Append (Item);
-         end;
-         Stmt.Next;
-      end loop;
-   end List;
    --  ------------------------------
    --  Load the object from current iterator position
    --  ------------------------------
@@ -386,29 +366,6 @@ package body AWA.Permissions.Models is
       Object.Writeable := Stmt.Get_Boolean (4);
       ADO.Objects.Set_Created (Object);
    end Load;
-   --  --------------------
-   --  
-   --  --------------------
-   procedure List (Object  : in out Permission_Info_Vector;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Context : in out ADO.Queries.Context'Class) is
-      Stmt : ADO.Statements.Query_Statement
-          := Session.Create_Statement (Context);
-      Pos  : Natural := 0;
-      procedure Read (Into : in out Permission_Info) is
-      begin
-         Into.Id := Stmt.Get_Identifier (0);
-      end Read;
-   begin
-      Stmt.Execute;
-      Permission_Info_Vectors.Clear (Object);
-      while Stmt.Has_Elements loop
-         Object.Insert_Space (Before => Pos);
-         Object.Update_Element (Index => Pos, Process => Read'Access);
-         Pos := Pos + 1;
-         Stmt.Next;
-      end loop;
-   end List;
 
 
 end AWA.Permissions.Models;

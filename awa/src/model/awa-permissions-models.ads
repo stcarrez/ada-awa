@@ -131,38 +131,14 @@ package AWA.Permissions.Models is
    --  Copy of the object.
    function Copy (Object : Acl_Ref) return Acl_Ref;
 
-   package Acl_Vectors is
-      new Ada.Containers.Vectors (Index_Type   => Natural,
-                                  Element_Type => Acl_Ref,
-                                  "="          => "=");
-   subtype Acl_Vector is Acl_Vectors.Vector;
-
-   procedure List (Object  : in out Acl_Vector;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class);
-
-   --  --------------------
-   --  
-   --  --------------------
-   type Permission_Info is tagged record
-      --  the user identifier.
-      Id : ADO.Identifier;
-
-   end record;
-
-   package Permission_Info_Vectors is
-      new Ada.Containers.Vectors (Index_Type   => Natural,
-                                  Element_Type => Permission_Info,
-                                  "="          => "=");
-   subtype Permission_Info_Vector is Permission_Info_Vectors.Vector;
-
-   procedure List (Object  : in out Permission_Info_Vector;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Context : in out ADO.Queries.Context'Class);
 
    Query_Check_Entity_Permission : constant ADO.Queries.Query_Definition_Access;
 
-   Query_User_List_Filter : constant ADO.Queries.Query_Definition_Access;
+   Query_Remove_Permission : constant ADO.Queries.Query_Definition_Access;
+
+   Query_Remove_Entity_Permission : constant ADO.Queries.Query_Definition_Access;
+
+   Query_Remove_User_Permission : constant ADO.Queries.Query_Definition_Access;
 
 
 private
@@ -220,19 +196,31 @@ private
                         Impl   : out Acl_Access;
                         Field  : in Positive);
 
-   package Query_Permissioninfo is
+   package File is
       new ADO.Queries.Loaders.File (Path => "permissions.xml",
-                                    Sha1 => "19B3D3C919F072932920A6116E09C97EDB9BC913");
+                                    Sha1 => "9B2B599473F75F92CB5AB5045675E4CCEF926543");
 
-   package Query_Permissioninfo_Check_Entity_Permission is
+   package Def_Check_Entity_Permission is
       new ADO.Queries.Loaders.Query (Name => "check-entity-permission",
-                                     File => Query_Permissioninfo.File'Access);
+                                     File => File.File'Access);
    Query_Check_Entity_Permission : constant ADO.Queries.Query_Definition_Access
-   := Query_Permissioninfo_Check_Entity_Permission.Query'Access;
+   := Def_Check_Entity_Permission.Query'Access;
 
-   package Query_Permissioninfo_User_List_Filter is
-      new ADO.Queries.Loaders.Query (Name => "user-list-filter",
-                                     File => Query_Permissioninfo.File'Access);
-   Query_User_List_Filter : constant ADO.Queries.Query_Definition_Access
-   := Query_Permissioninfo_User_List_Filter.Query'Access;
+   package Def_Remove_Permission is
+      new ADO.Queries.Loaders.Query (Name => "remove-permission",
+                                     File => File.File'Access);
+   Query_Remove_Permission : constant ADO.Queries.Query_Definition_Access
+   := Def_Remove_Permission.Query'Access;
+
+   package Def_Remove_Entity_Permission is
+      new ADO.Queries.Loaders.Query (Name => "remove-entity-permission",
+                                     File => File.File'Access);
+   Query_Remove_Entity_Permission : constant ADO.Queries.Query_Definition_Access
+   := Def_Remove_Entity_Permission.Query'Access;
+
+   package Def_Remove_User_Permission is
+      new ADO.Queries.Loaders.Query (Name => "remove-user-permission",
+                                     File => File.File'Access);
+   Query_Remove_User_Permission : constant ADO.Queries.Query_Definition_Access
+   := Def_Remove_User_Permission.Query'Access;
 end AWA.Permissions.Models;

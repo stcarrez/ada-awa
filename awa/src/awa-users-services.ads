@@ -19,7 +19,7 @@ with AWA.Users.Models;
 with AWA.Modules;
 with ASF.Events.Modules;
 with ADO;
-package AWA.Users.Logic is
+package AWA.Users.Services is
 
    use AWA.Users.Models;
 
@@ -111,4 +111,4 @@ private
 
    type User_Manager is new AWA.Modules.Module_Manager with null record;
 
-end AWA.Users.Logic;
+end AWA.Users.Services;

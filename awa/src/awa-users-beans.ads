@@ -21,7 +21,7 @@ with Util.Beans.Objects;
 with Util.Beans.Methods;
 with Ada.Strings.Unbounded;
 
-with AWA.Users.Logic;
+with AWA.Users.Services;
 with AWA.Users.Module;
 with AWA.Users.Models;
 
@@ -32,7 +32,7 @@ package AWA.Users.Beans is
    type Authenticate_Bean is new Util.Beans.Basic.Bean
      and Util.Beans.Methods.Method_Bean with record
       Module     : AWA.Users.Module.User_Module_Access := null;
-      Manager    : AWA.Users.Logic.User_Manager_Access := null;
+      Manager    : AWA.Users.Services.User_Manager_Access := null;
       Email      : Unbounded_String;
       Password   : Unbounded_String;
       First_Name : Unbounded_String;

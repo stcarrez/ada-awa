@@ -16,6 +16,19 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with Ada.Containers.Hashed_Maps;
+with Util.Strings;
 package AWA.Services is
+
+   subtype Service_Id is Util.Strings.Name_Access;
+
+   type Service is limited interface;
+   type Service_Access is access all Service'Class;
+
+   package Service_Map is new Ada.Containers.Hashed_Maps
+     (Key_Type        => Service_Id,
+      Element_Type    => Service_Access,
+      Hash            => Util.Strings.Hash,
+      Equivalent_Keys => Util.Strings.Equivalent_Keys);
 
 end AWA.Services;

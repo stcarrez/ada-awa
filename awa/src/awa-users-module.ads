@@ -20,7 +20,7 @@ with AWA.Modules;
 with ASF.Modules.Get;
 with ASF.Applications.Main;
 
-with AWA.Users.Logic;
+with AWA.Users.Services;
 package AWA.Users.Module is
 
    NAME : constant String := "users";
@@ -33,21 +33,21 @@ package AWA.Users.Module is
                          App    : access ASF.Applications.Main.Application'Class);
 
    --  Get the user manager.
-   function Get_User_Manager (Plugin : in User_Module) return Logic.User_Manager_Access;
+   function Get_User_Manager (Plugin : in User_Module) return Services.User_Manager_Access;
 
    --  Create a user manager.
-   function Create_User_Manager (Plugin : in User_Module) return Logic.User_Manager_Access;
+   function Create_User_Manager (Plugin : in User_Module) return Services.User_Manager_Access;
 
    --  Get the user module instance associated with the current application.
    function Get_User_Module return User_Module_Access;
 
    --  Get the user manager instance associated with the current application.
-   function Get_User_Manager return Logic.User_Manager_Access;
+   function Get_User_Manager return Services.User_Manager_Access;
 
 private
 
    type User_Module is new AWA.Modules.Module with record
-      Manager : Logic.User_Manager_Access := null;
+      Manager : Services.User_Manager_Access := null;
    end record;
 
 end AWA.Users.Module;

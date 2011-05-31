@@ -56,7 +56,7 @@ package body AWA.Users.Module is
    --  ------------------------------
    --  Get the user manager.
    --  ------------------------------
-   function Get_User_Manager (Plugin : in User_Module) return Logic.User_Manager_Access is
+   function Get_User_Manager (Plugin : in User_Module) return Services.User_Manager_Access is
    begin
       return Plugin.Manager;
    end Get_User_Manager;
@@ -64,8 +64,8 @@ package body AWA.Users.Module is
    --  ------------------------------
    --  Create a user manager.
    --  ------------------------------
-   function Create_User_Manager (Plugin : in User_Module) return Logic.User_Manager_Access is
-      Result : constant Logic.User_Manager_Access := new Logic.User_Manager;
+   function Create_User_Manager (Plugin : in User_Module) return Services.User_Manager_Access is
+      Result : constant Services.User_Manager_Access := new Services.User_Manager;
    begin
       Result.Initialize (Plugin);
       return Result;
@@ -83,7 +83,7 @@ package body AWA.Users.Module is
    --  ------------------------------
    --  Get the user manager instance associated with the current application.
    --  ------------------------------
-   function Get_User_Manager return Logic.User_Manager_Access is
+   function Get_User_Manager return Services.User_Manager_Access is
       Module : constant User_Module_Access := Get_User_Module;
    begin
       if Module = null then
