@@ -1,0 +1,38 @@
+<query-mapping package='AWA.Permissions.Models'>
+    <description>
+      Queries used by the permission manager
+    </description>
+
+    <query name='check-entity-permission'>
+       <comment>Get the permission for a user and an entity</comment>
+       <sql>
+    select
+      ACL.WRITEABLE
+    from ACL
+    where ACL.USER_ID = :user_id and ACL.ENTITY_ID = :entity_id and ACL.ENTITY_TYPE = :entity_type
+       </sql>
+    </query>
+
+    <query name='remove-permission'>
+       <comment>Delete the permission associated with a user and an object</comment>
+       <sql>
+    delete from ACL
+    where ACL.USER_ID = :user_id and ACL.ENTITY_ID = :entity_id and ACL.ENTITY_TYPE = :entity_type
+       </sql>
+    </query>
+
+    <query name='remove-entity-permission'>
+       <comment>Delete all the permission associated with an object</comment>
+       <sql>
+    delete from ACL where ACL.ENTITY_ID = :entity_id and ACL.ENTITY_TYPE = :entity_type
+       </sql>
+    </query>
+
+    <query name='remove-user-permission'>
+       <comment>Delete all the permission associated with a user</comment>
+       <sql>
+    delete from ACL where ACL.USER_ID = :user_id
+       </sql>
+    </query>
+
+</query-mapping>
