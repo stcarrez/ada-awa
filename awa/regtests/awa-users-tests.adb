@@ -34,11 +34,11 @@ package body AWA.Users.Tests is
    begin
       Caller.Add_Test (Suite, "Test AWA.Users.Tests.Create_User",
                        Test_Create_User'Access);
-      Caller.Add_Test (Suite, "Test AWA.Users.Logic.Close_Session",
+      Caller.Add_Test (Suite, "Test AWA.Users.Services.Close_Session",
                        Test_Logout_User'Access);
-      Caller.Add_Test (Suite, "Test AWA.Users.Logic.Authenticate, Close_Session",
+      Caller.Add_Test (Suite, "Test AWA.Users.Services.Authenticate, Close_Session",
                        Test_Login_User'Access);
-      Caller.Add_Test (Suite, "Test AWA.Users.Logic.Lost_Password, Reset_Password",
+      Caller.Add_Test (Suite, "Test AWA.Users.Services.Lost_Password, Reset_Password",
                        Test_Reset_Password_User'Access);
    end Add_Tests;
 

@@ -16,14 +16,14 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with AWA.Users.Logic.Tests;
+with AWA.Users.Services.Tests;
 with AWA.Users.Tests;
 package body AWA.Testsuite is
 
    function Suite return Access_Test_Suite is
       Ret : constant Access_Test_Suite := new Test_Suite;
    begin
-      AWA.Users.Logic.Tests.Add_Tests (Ret);
+      AWA.Users.Services.Tests.Add_Tests (Ret);
       AWA.Users.Tests.Add_Tests (Ret);
       return Ret;
    end Suite;

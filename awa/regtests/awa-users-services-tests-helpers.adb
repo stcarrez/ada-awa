@@ -18,19 +18,19 @@
 
 with Util.Tests;
 
-with AWA.Users.Model;
+with AWA.Users.Module;
 with ADO.Sessions;
 with ADO.SQL;
-package body AWA.Users.Logic.Tests.Helpers is
+package body AWA.Users.Services.Tests.Helpers is
 
    --  ------------------------------
    --  Create a test user for a new test and get an open session.
    --  ------------------------------
    procedure Create_User (Principal : in out Test_User) is
-      Key     : AWA.Users.Model.Access_Key_Ref;
+      Key     : AWA.Users.Models.Access_Key_Ref;
    begin
       if Principal.Manager = null then
-         Principal.Manager := AWA.Users.Logic.Create_User_Manager (AWA.Users.Module.Instance);
+         Principal.Manager := AWA.Users.Module.Get_User_Manager;
       end if;
       Principal.User.Set_First_Name ("Joe");
       Principal.User.Set_Last_Name ("Pot");
@@ -60,7 +60,7 @@ package body AWA.Users.Logic.Tests.Helpers is
    procedure Login (Principal : in out Test_User) is
    begin
       if Principal.Manager = null then
-         Principal.Manager := AWA.Users.Logic.Create_User_Manager (AWA.Users.Module.Instance);
+         Principal.Manager := AWA.Users.Module.Get_User_Manager;
       end if;
 
       Principal.Manager.Authenticate (Email    => Principal.Email.Get_Email,
@@ -76,9 +76,9 @@ package body AWA.Users.Logic.Tests.Helpers is
    procedure Logout (Principal : in out Test_User) is
    begin
       if Principal.Manager = null then
-         Principal.Manager := AWA.Users.Logic.Create_User_Manager (AWA.Users.Module.Instance);
+         Principal.Manager := AWA.Users.Module.Get_User_Manager;
       end if;
       Principal.Manager.Close_Session (Principal.Session.Get_Id);
    end Logout;
 
-end AWA.Users.Logic.Tests.Helpers;
+end AWA.Users.Services.Tests.Helpers;

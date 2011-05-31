@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  users-tests-helpers -- Helpers for user creation
---  Copyright (C) 2011 Stephane Carrez
+--  files.tests -- Unit tests for files
+--  Copyright (C) 2009, 2010, 2011 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,23 +16,19 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with AWA.Users.Model;
-package AWA.Users.Logic.Tests.Helpers is
+with AUnit.Test_Suites;
+with AUnit.Test_Fixtures;
 
-   type Test_User is record
-      Manager : User_Manager_Access := null;
-      User    : AWA.Users.Model.User_Ref;
-      Email   : AWA.Users.Model.Email_Ref;
-      Session : AWA.Users.Model.Session_Ref;
-   end record;
+package AWA.Users.Services.Tests is
 
-   --  Create a test user for a new test and get an open session.
-   procedure Create_User (Principal : in out Test_User);
+   procedure Add_Tests (Suite : AUnit.Test_Suites.Access_Test_Suite);
 
-   --  Login a user and create a session
-   procedure Login (Principal : in out Test_User);
+   type Test is new AUnit.Test_Fixtures.Test_Fixture with null record;
 
-   --  Logout the user and closes the current session.
-   procedure Logout (Principal : in out Test_User);
+   procedure Test_Create_User (T : in out Test);
+   procedure Test_Logout_User (T : in out Test);
+   procedure Test_Login_User (T : in out Test);
+   procedure Test_Reset_Password_User (T : in out Test);
+   procedure Test_Get_Module (T : in out Test);
 
-end AWA.Users.Logic.Tests.Helpers;
+end AWA.Users.Services.Tests;

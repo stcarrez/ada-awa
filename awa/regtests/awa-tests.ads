@@ -17,17 +17,11 @@
 -----------------------------------------------------------------------
 
 with Util.Properties;
-with ASF.Requests.Mockup;
-with ASF.Responses.Mockup;
-with ASF.Server;
 with AWA.Applications;
 package AWA.Tests is
 
    --  Initialize the awa test framework mockup.
    procedure Initialize (Props : in Util.Properties.Manager);
-
-   --  Get the server
-   function Get_Server return access ASF.Server.Container;
 
    --  Get the test application.
    function Get_Application return AWA.Applications.Application_Access;

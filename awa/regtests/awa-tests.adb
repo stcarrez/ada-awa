@@ -16,84 +16,66 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Ada.Strings.Unbounded;
-
-with Util.Tests;
-with Util.Files;
-
-with ASF.Servlets.Faces;
-with ASF.Servlets.Files;
-with ASF.Servlets.Measures;
-with ASF.Responses;
-with ASF.Responses.Tools;
-
-with AWA.Applications;
-with ASF.Applications.Main;
-with ASF.Filters.Dump;
-
 with ADO.Drivers;
 
+with ASF.Server.Web;
+with ASF.Navigations;
+with ASF.Server.Tests;
+
 with ASF.Tests;
+
+with AWA.Users.Module;
+with AWA.Mail.Module;
+with AWA.Applications;
 package body AWA.Tests is
 
-   use Ada.Strings.Unbounded;
-
-   CONTEXT_PATH : constant String := "/awa";
-
-   Server   : access ASF.Server.Container;
-
    App      : AWA.Applications.Application_Access := null;
-   Fact     : ASF.Applications.Main.Application_Factory;
-   Faces    : aliased ASF.Servlets.Faces.Faces_Servlet;
-   Files    : aliased ASF.Servlets.Files.File_Servlet;
-   Dump     : aliased ASF.Filters.Dump.Dump_Filter;
-   Measures : aliased ASF.Servlets.Measures.Measure_Servlet;
+
+   Users    : aliased AWA.Users.Module.User_Module;
 
    --  ------------------------------
    --  Initialize the awa test framework mockup.
    --  ------------------------------
    procedure Initialize (Props : in Util.Properties.Manager) is
-      C        : ASF.Applications.Config;
-      Database : constant String := Props.Get ("test.database");
+      use AWA.Applications;
    begin
-      ADO.Drivers.Initialize;
+      ADO.Drivers.Initialize (Props);
 
       App := new AWA.Applications.Application;
 
-      Server := new ASF.Server.Container;
-      Server.Register_Application (CONTEXT_PATH, App.all'Access);
+      ASF.Tests.Initialize (Props, App.all'Access);
+      declare
+         Nav : constant ASF.Navigations.Navigation_Handler_Access := App.Get_Navigation_Handler;
+         Users : AWA.Users.Module.User_Module_Access := AWA.Tests.Users'Access;
+      begin
+         Register (App    => App.all'Access,
+                   Name   =>  AWA.Users.Module.NAME, URI => "user",
+                   Module => Users.all'Access);
 
-      C.Copy (Props);
-      C.Set ("database", Database);
-      App.Initialize (C, Fact);
-      App.Register ("layoutMsg", "layout");
-      App.Set_Global ("contextPath", "/awa");
+         Register (App    => App.all'Access,
+                   Name   => "mail", URI => "mail",
+                   Module => AWA.Mail.Module.Instance.all'Access);
 
-      --  Register the servlets and filters
-      App.Add_Servlet (Name => "faces", Server => Faces'Access);
-      App.Add_Servlet (Name => "files", Server => Files'Access);
-      App.Add_Servlet (Name => "measures", Server => Measures'Access);
-      App.Add_Filter (Name => "dump", Filter => Dump'Access);
-      App.Add_Filter (Name => "measures", Filter => Measures'Access);
+         Nav.Add_Navigation_Case (From    => "/users/login.xhtml",
+                                  To      => "/users/main.xhtml",
+                                  Outcome => "success");
+         Nav.Add_Navigation_Case (From    => "/users/register.xhtml",
+                                  To      => "/users/registration-sent.xhtml",
+                                  Outcome => "success");
 
-      --  Define servlet mappings
-      App.Add_Mapping (Name => "faces", Pattern => "*.html");
-      App.Add_Mapping (Name => "files", Pattern => "*.css");
-      App.Add_Mapping (Name => "files", Pattern => "*.js");
-      App.Add_Mapping (Name => "measures", Pattern => "stats.xml");
-
-      App.Add_Filter_Mapping (Name => "measures", Pattern => "*");
-      App.Add_Filter_Mapping (Name => "dump", Pattern => "*.html");
-      App.Add_Filter_Mapping (Name => "dump", Pattern => "*.css");
+         --           if Props.Exists ("test.server") then
+         --              declare
+         --                 WS : ASF.Server.Web.AWS_Container;
+         --              begin
+         --                 WS.Register_Application ("/awa", App.all'Access);
+         --
+         --                 WS.Start;
+         --                 delay 600.0;
+         --              end;
+         --           end if;
+         ASF.Server.Tests.Set_Context (App.all'Access);
+      end;
    end Initialize;
-
-   --  ------------------------------
-   --  Get the server
-   --  ------------------------------
-   function Get_Server return access ASF.Server.Container is
-   begin
-      return Server;
-   end Get_Server;
 
    --  ------------------------------
    --  Get the test application.
