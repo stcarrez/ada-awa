@@ -17,32 +17,33 @@
 -----------------------------------------------------------------------
 with AWA.Users.Models;
 with AWA.Modules;
+with AWA.Services;
 with ASF.Events.Modules;
 with ADO;
 package AWA.Users.Services is
 
    use AWA.Users.Models;
 
-   NAME : constant String := "User_Manager";
+   NAME : constant String := "User_Service";
 
    Not_Found  : exception;
 
    User_Exist : exception;
 
-   type User_Manager is new AWA.Modules.Module_Manager with private;
-   type User_Manager_Access is access all User_Manager'Class;
+   type User_Service is new AWA.Modules.Module_Manager with private;
+   type User_Service_Access is access all User_Service'Class;
 
    --  Create a user in the database with the given user information and
    --  the associated email address.  Verify that no such user already exist.
    --  Raises User_Exist exception if a user with such email is already registered.
-   procedure Create_User (Model : in User_Manager;
+   procedure Create_User (Model : in User_Service;
                           User  : in out User_Ref'Class;
                           Email : in out Email_Ref'Class);
 
    --  Verify the access key and retrieve the user associated with that key.
    --  Starts a new session associated with the given IP address.
    --  Raises Not_Found if the access key does not exist.
-   procedure Verify_User (Model    : in User_Manager;
+   procedure Verify_User (Model    : in User_Service;
                           Key      : in String;
                           IpAddr   : in String;
                           User     : out User_Ref'Class;
@@ -53,7 +54,7 @@ package AWA.Users.Services is
    --  create a new session.  The IP address of the connection is saved
    --  in the session.
    --  Raises Not_Found exception if the user is not recognized
-   procedure Authenticate (Model    : in User_Manager;
+   procedure Authenticate (Model    : in User_Service;
                            Email    : in String;
                            Password : in String;
                            IpAddr   : in String;
@@ -65,7 +66,7 @@ package AWA.Users.Services is
    --  the database, a record is created for him.  Create a new session for the user.
    --  The IP address of the connection is saved in the session.
    --  Raises Not_Found exception if the user is not recognized
-   procedure Authenticate (Model    : in User_Manager;
+   procedure Authenticate (Model    : in User_Service;
                            OpenId   : in String;
                            Email    : in String;
                            Name     : in String;
@@ -77,13 +78,13 @@ package AWA.Users.Services is
    --  the given email address and send that user a password reset key
    --  in an email.
    --  Raises Not_Found exception if no user with such email exist
-   procedure Lost_Password (Model : in User_Manager;
+   procedure Lost_Password (Model : in User_Service;
                             Email : in String);
 
    --  Reset the password of the user associated with the secure key.
    --  to the user in an email.
    --  Raises Not_Found if there is no key or if the user does not have any email
-   procedure Reset_Password (Model    : in User_Manager;
+   procedure Reset_Password (Model    : in User_Service;
                              Key      : in String;
                              Password : in String;
                              IpAddr   : in String;
@@ -93,22 +94,22 @@ package AWA.Users.Services is
    --  Verify that the user session identified by <b>Id</b> is valid and still active.
    --  Returns the user and the session objects.
    --  Raises Not_Found if the session does not exist or was closed.
-   procedure Verify_Session (Model   : in User_Manager;
+   procedure Verify_Session (Model   : in User_Service;
                              Id      : in ADO.Identifier;
                              User    : out User_Ref'Class;
                              Session : out Session_Ref'Class);
 
    --  Closes the session identified by <b>Id</b>.
-   procedure Close_Session (Model : in User_Manager;
+   procedure Close_Session (Model : in User_Service;
                             Id    : in ADO.Identifier);
 
-   procedure Send_Alert (Model : in User_Manager;
+   procedure Send_Alert (Model : in User_Service;
                          Name  : in String;
                          User  : in User_Ref'Class;
                          Props : in out ASF.Events.Modules.Module_Event);
 
 private
 
-   type User_Manager is new AWA.Modules.Module_Manager with null record;
+   type User_Service is new AWA.Modules.Module_Manager with null record;
 
 end AWA.Users.Services;

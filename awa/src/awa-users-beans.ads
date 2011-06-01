@@ -32,7 +32,7 @@ package AWA.Users.Beans is
    type Authenticate_Bean is new Util.Beans.Basic.Bean
      and Util.Beans.Methods.Method_Bean with record
       Module     : AWA.Users.Module.User_Module_Access := null;
-      Manager    : AWA.Users.Services.User_Manager_Access := null;
+      Manager    : AWA.Users.Services.User_Service_Access := null;
       Email      : Unbounded_String;
       Password   : Unbounded_String;
       First_Name : Unbounded_String;

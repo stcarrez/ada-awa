@@ -28,7 +28,6 @@ with Ada.Numerics.Discrete_Random;
 with ADO.SQL;
 with ADO.Sessions;
 with ADO.Statements;
-with Util.Properties;
 
 with AWA.Services.Contexts;
 package body AWA.Users.Services is
@@ -38,6 +37,7 @@ package body AWA.Users.Services is
    use ADO.Sessions;
    use Ada.Strings.Unbounded;
    use ADO.SQL;
+   use AWA.Services;
 
    Log : constant Loggers.Logger := Loggers.Create ("AWA.Users.Logic");
 
@@ -50,13 +50,7 @@ package body AWA.Users.Services is
       return Integer_Random.Random (Random_Generator);
    end Random;
 
---     function Create_User_List (Module : User_Module) return Bean_Access is
---        DB : Master_Session'Class := Module.Get_Master_Session;
---     begin
---        return null;
---     end Create_User_List;
-
-   procedure Send_Alert (Model : in User_Manager;
+   procedure Send_Alert (Model : in User_Service;
                          Name  : in String;
                          User  : in User_Ref'Class;
                          Props : in out ASF.Events.Modules.Module_Event) is
@@ -79,14 +73,16 @@ package body AWA.Users.Services is
    --  The IP address of the connection is saved in the session.
    --  Raises Not_Found exception if the user is not recognized
    --  ------------------------------
-   procedure Authenticate (Model    : in User_Manager;
+   procedure Authenticate (Model    : in User_Service;
                            OpenId   : in String;
                            Email    : in String;
                            Name     : in String;
                            IpAddr   : in String;
                            User     : out User_Ref'Class;
                            Session  : out Session_Ref'Class) is
-      Ctx    : constant AWA.Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      pragma Unreferenced (Model);
+
+      Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB     : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Query  : ADO.SQL.Query;
       Found  : Boolean;
@@ -134,19 +130,22 @@ package body AWA.Users.Services is
    --  in the session.
    --  Raises Not_Found exception if the user is not recognized
    --  ------------------------------
-   procedure Authenticate (Model    : in User_Manager;
+   procedure Authenticate (Model    : in User_Service;
                            Email    : in String;
                            Password : in String;
                            IpAddr   : in String;
                            User     : out User_Ref'Class;
                            Session  : out Session_Ref'Class) is
-      DB     : Master_Session := Model.Get_Master_Session;
+      pragma Unreferenced (Model);
+
+      Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB     : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Query  : ADO.SQL.Query;
       Found  : Boolean;
    begin
       Log.Info ("Authenticate user {0}", Email);
 
-      DB.Begin_Transaction;
+      Ctx.Start;
 
       --  Find the user registered under the given email address & password.
       Query.Bind_Param (1, Email);
@@ -167,7 +166,7 @@ package body AWA.Users.Services is
       Session.Set_Ip_Address (IpAddr);
       Session.Save (DB);
 
-      DB.Commit;
+      Ctx.Commit;
    end Authenticate;
 
    --  ------------------------------
@@ -176,9 +175,10 @@ package body AWA.Users.Services is
    --  in an email.
    --  Raises Not_Found exception if no user with such email exist
    --  ------------------------------
-   procedure Lost_Password (Model : in User_Manager;
+   procedure Lost_Password (Model : in User_Service;
                             Email : in String) is
-      DB     : Master_Session := Model.Get_Master_Session;
+      Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB     : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       User   : User_Ref;
       Key    : Access_Key_Ref;
       Query  : ADO.SQL.Query;
@@ -186,7 +186,7 @@ package body AWA.Users.Services is
    begin
       Log.Info ("Lost password for {0}", Email);
 
-      DB.Begin_Transaction;
+      Ctx.Start;
 
       --  Find the user with the given email address.
       Query.Set_Join ("inner join Email e on e.user_id = o.id");
@@ -212,7 +212,7 @@ package body AWA.Users.Services is
          Model.Send_Alert ("lost-password", User, Event);
       end;
 
-      DB.Commit;
+      Ctx.Commit;
    end Lost_Password;
 
    --  ------------------------------
@@ -220,13 +220,14 @@ package body AWA.Users.Services is
    --  to the user in an email.
    --  Raises Not_Found if there is no key or if the user does not have any email
    --  ------------------------------
-   procedure Reset_Password (Model    : in User_Manager;
+   procedure Reset_Password (Model    : in User_Service;
                              Key      : in String;
                              Password : in String;
                              IpAddr   : in String;
                              User     : out User_Ref'Class;
                              Session  : out Session_Ref'Class) is
-      DB     : Master_Session := Model.Get_Master_Session;
+      Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB     : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Query  : ADO.SQL.Query;
       Found  : Boolean;
       Email  : Email_Ref;
@@ -234,7 +235,7 @@ package body AWA.Users.Services is
    begin
       Log.Info ("Reset password with key {0}", Key);
 
-      DB.Begin_Transaction;
+      Ctx.Start;
 
       --  Find the user associated with the key.
       Query.Bind_Param (1, Key);
@@ -281,7 +282,7 @@ package body AWA.Users.Services is
          Model.Send_Alert ("reset-password", User, Event);
       end;
 
-      DB.Commit;
+      Ctx.Commit;
    end Reset_Password;
 
    --  ------------------------------
@@ -289,19 +290,20 @@ package body AWA.Users.Services is
    --  the associated email address.  Verify that no such user already exist.
    --  Raises User_Exist exception if a user with such email is already registered.
    --  ------------------------------
-   procedure Create_User (Model : in User_Manager;
+   procedure Create_User (Model : in User_Service;
                           User  : in out User_Ref'Class;
                           Email : in out Email_Ref'Class) is
       COUNT_SQL : constant String := "select count(*) from Email where email = ?";
 
-      DB     : Master_Session := Model.Get_Master_Session;
+      Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB     : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Key    : Access_Key_Ref;
       Stmt   : Query_Statement := DB.Create_Statement (COUNT_SQL);
       Email_Address : constant String := Email.Get_Email;
    begin
       Log.Info ("Create user {0}", Email_Address);
 
-      DB.Begin_Transaction;
+      Ctx.Start;
 
       --  Check first if this user is already known
       Stmt.Bind_Param (1, Email_Address);
@@ -334,7 +336,7 @@ package body AWA.Users.Services is
          Model.Send_Alert ("create-user", User, Event);
       end;
 
-      DB.Commit;
+      Ctx.Commit;
    end Create_User;
 
    --  ------------------------------
@@ -342,19 +344,22 @@ package body AWA.Users.Services is
    --  Starts a new session associated with the given IP address.
    --  Raises Not_Found if the access key does not exist.
    --  ------------------------------
-   procedure Verify_User (Model    : in User_Manager;
+   procedure Verify_User (Model    : in User_Service;
                           Key      : in String;
                           IpAddr   : in String;
                           User     : out User_Ref'Class;
                           Session  : out Session_Ref'Class) is
-      DB     : Master_Session := Model.Get_Master_Session;
+      pragma Unreferenced (Model);
+
+      Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB     : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Query  : ADO.SQL.Query;
       Found  : Boolean;
       Access_Key : Access_Key_Ref;
    begin
       Log.Info ("Verify user with key {0}", Key);
 
-      DB.Begin_Transaction;
+      Ctx.Start;
 
       --  Find the user associated with the given key
       Query.Bind_Param (1, Key);
@@ -380,7 +385,7 @@ package body AWA.Users.Services is
       Session.Set_Ip_Address (IpAddr);
       Session.Save (DB);
 
-      DB.Commit;
+      Ctx.Commit;
    end Verify_User;
 
    --  ------------------------------
@@ -388,12 +393,15 @@ package body AWA.Users.Services is
    --  Returns the user and the session objects.
    --  Raises Not_Found if the session does not exist or was closed.
    --  ------------------------------
-   procedure Verify_Session (Model   : in User_Manager;
+   procedure Verify_Session (Model   : in User_Service;
                              Id      : in ADO.Identifier;
                              User    : out User_Ref'Class;
                              Session : out Session_Ref'Class) is
+      pragma Unreferenced (Model);
+
       Sid    : constant String := ADO.Identifier'Image (Id);
-      DB     : ADO.Sessions.Session := Model.Get_Session;
+      Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB     : ADO.Sessions.Session := AWA.Services.Contexts.Get_Session (Ctx);
       Query  : ADO.SQL.Query;
       Found  : Boolean;
    begin
@@ -419,16 +427,19 @@ package body AWA.Users.Services is
    --  ------------------------------
    --  Closes the session identified by <b>Id</b>.
    --  ------------------------------
-   procedure Close_Session (Model : in User_Manager;
+   procedure Close_Session (Model : in User_Service;
                             Id    : in ADO.Identifier) is
+      pragma Unreferenced (Model);
+
       Sid     : constant String := ADO.Identifier'Image (Id);
-      DB      : Master_Session := Model.Get_Master_Session;
+      Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB     : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Session : Session_Ref;
       Found   : Boolean;
    begin
       Log.Info ("Closing user session {0}", Sid);
 
-      DB.Begin_Transaction;
+      Ctx.Start;
 
       Session.Load (DB, Id, Found);
       if not Found then
@@ -443,7 +454,7 @@ package body AWA.Users.Services is
       end if;
       Session.Set_End_Date (ADO.Nullable_Time '(Value => Ada.Calendar.Clock, Is_Null => False));
       Session.Save (DB);
-      DB.Commit;
+      Ctx.Commit;
    end Close_Session;
 
 end AWA.Users.Services;

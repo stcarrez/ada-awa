@@ -79,7 +79,7 @@ package body AWA.Users.Principals is
                                Result : out ASF.Principals.Principal_Access) is
       use AWA.Users.Module;
       use AWA.Users.Services;
-      Manager : constant User_Manager_Access := AWA.Users.Module.Get_User_Manager;
+      Manager : constant User_Service_Access := AWA.Users.Module.Get_User_Manager;
       User    : AWA.Users.Principals.Principal_Access := new AWA.Users.Principals.Principal;
    begin
       Result := User.all'Access;

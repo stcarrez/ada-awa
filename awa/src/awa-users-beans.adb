@@ -16,12 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Ada.Unchecked_Deallocation;
-
-with Util.Beans.Basic;
-with Util.Beans.Objects;
-with Util.Beans.Methods;
-
 with ASF.Sessions;
 with ASF.Events.Actions;
 with ASF.Contexts.Faces;
@@ -87,8 +81,8 @@ package body AWA.Users.Beans is
 
    procedure Set_Session_Principal (Data : in Authenticate_Bean;
                                     User : in AWA.Users.Models.User_Ref) is
-      Principal : AWA.Users.Principals.Principal_Access := AWA.Users.Principals.Create (User);
-      Ctx       : ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
+      Principal : constant Principals.Principal_Access := Principals.Create (User);
+      Ctx       : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
       Session   : ASF.Sessions.Session := Ctx.Get_Session (Create => True);
       Name      : constant String := "User: " & User.Get_Name;
    begin

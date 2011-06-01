@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  awa -- Ada Web Application
---  Copyright (C) 2009, 2010 Stephane Carrez
+--  awa-users-model -- User management module
+--  Copyright (C) 2009, 2010, 2011 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,21 +33,21 @@ package AWA.Users.Module is
                          App    : access ASF.Applications.Main.Application'Class);
 
    --  Get the user manager.
-   function Get_User_Manager (Plugin : in User_Module) return Services.User_Manager_Access;
+   function Get_User_Manager (Plugin : in User_Module) return Services.User_Service_Access;
 
    --  Create a user manager.
-   function Create_User_Manager (Plugin : in User_Module) return Services.User_Manager_Access;
+   function Create_User_Manager (Plugin : in User_Module) return Services.User_Service_Access;
 
    --  Get the user module instance associated with the current application.
    function Get_User_Module return User_Module_Access;
 
    --  Get the user manager instance associated with the current application.
-   function Get_User_Manager return Services.User_Manager_Access;
+   function Get_User_Manager return Services.User_Service_Access;
 
 private
 
    type User_Module is new AWA.Modules.Module with record
-      Manager : Services.User_Manager_Access := null;
+      Manager : Services.User_Service_Access := null;
    end record;
 
 end AWA.Users.Module;
