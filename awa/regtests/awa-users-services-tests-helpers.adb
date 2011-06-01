@@ -18,10 +18,24 @@
 
 with Util.Tests;
 
+with AWA.Tests;
 with AWA.Users.Module;
 with ADO.Sessions;
 with ADO.SQL;
 package body AWA.Users.Services.Tests.Helpers is
+
+   --  ------------------------------
+   --  Initialize the service context.
+   --  ------------------------------
+   procedure Initialize (Principal : in out Test_User) is
+   begin
+      if Principal.Manager = null then
+         Principal.Manager := AWA.Users.Module.Get_User_Manager;
+      end if;
+
+      --  Setup the service context.
+      Principal.Context.Set_Context (AWA.Tests.Get_Application, null);
+   end Initialize;
 
    --  ------------------------------
    --  Create a test user for a new test and get an open session.
@@ -29,9 +43,7 @@ package body AWA.Users.Services.Tests.Helpers is
    procedure Create_User (Principal : in out Test_User) is
       Key     : AWA.Users.Models.Access_Key_Ref;
    begin
-      if Principal.Manager = null then
-         Principal.Manager := AWA.Users.Module.Get_User_Manager;
-      end if;
+      Initialize (Principal);
       Principal.User.Set_First_Name ("Joe");
       Principal.User.Set_Last_Name ("Pot");
       Principal.User.Set_Password ("admin");
@@ -59,10 +71,7 @@ package body AWA.Users.Services.Tests.Helpers is
    --  ------------------------------
    procedure Login (Principal : in out Test_User) is
    begin
-      if Principal.Manager = null then
-         Principal.Manager := AWA.Users.Module.Get_User_Manager;
-      end if;
-
+      Initialize (Principal);
       Principal.Manager.Authenticate (Email    => Principal.Email.Get_Email,
                                       Password => "admin",
                                       IpAddr   => "192.168.1.1",
@@ -75,9 +84,7 @@ package body AWA.Users.Services.Tests.Helpers is
    --  ------------------------------
    procedure Logout (Principal : in out Test_User) is
    begin
-      if Principal.Manager = null then
-         Principal.Manager := AWA.Users.Module.Get_User_Manager;
-      end if;
+      Initialize (Principal);
       Principal.Manager.Close_Session (Principal.Session.Get_Id);
    end Logout;
 

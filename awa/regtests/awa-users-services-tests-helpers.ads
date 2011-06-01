@@ -17,14 +17,19 @@
 -----------------------------------------------------------------------
 
 with AWA.Users.Models;
+with AWA.Services.Contexts;
 package AWA.Users.Services.Tests.Helpers is
 
-   type Test_User is record
-      Manager : User_Manager_Access := null;
+   type Test_User is limited record
+      Context : AWA.Services.Contexts.Service_Context;
+      Manager : User_Service_Access := null;
       User    : AWA.Users.Models.User_Ref;
       Email   : AWA.Users.Models.Email_Ref;
       Session : AWA.Users.Models.Session_Ref;
    end record;
+
+   --  Initialize the service context.
+   procedure Initialize (Principal : in out Test_User);
 
    --  Create a test user for a new test and get an open session.
    procedure Create_User (Principal : in out Test_User);
