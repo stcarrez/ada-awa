@@ -1676,6 +1676,8 @@ package body AWA.Users.Models is
       pragma Unreferenced (Session);
    begin
       Object.Set_Key_Value (Stmt.Get_Identifier (0));
+      Object.Start_Date := Stmt.Get_Time (2);
+      Object.End_Date := Stmt.Get_Time (3);
       Object.Ip_Address := Stmt.Get_Unbounded_String (4);
       Object.User_Id := Stmt.Get_Identifier (5);
       Object.Auth_Id := Stmt.Get_Identifier (6);

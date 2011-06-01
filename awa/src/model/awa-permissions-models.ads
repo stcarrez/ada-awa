@@ -131,6 +131,16 @@ package AWA.Permissions.Models is
    --  Copy of the object.
    function Copy (Object : Acl_Ref) return Acl_Ref;
 
+   package Acl_Vectors is
+      new Ada.Containers.Vectors (Index_Type   => Natural,
+                                  Element_Type => Acl_Ref,
+                                  "="          => "=");
+   subtype Acl_Vector is Acl_Vectors.Vector;
+
+   procedure List (Object  : in out Acl_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class);
+
 
    Query_Check_Entity_Permission : constant ADO.Queries.Query_Definition_Access;
 

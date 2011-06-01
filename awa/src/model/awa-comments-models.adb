@@ -433,6 +433,7 @@ package body AWA.Comments.Models is
                    Session : in out ADO.Sessions.Session'Class) is
    begin
       Object.Set_Key_Value (Stmt.Get_Identifier (0));
+      Object.Date := Stmt.Get_Time (2);
       Object.Message := Stmt.Get_Unbounded_String (3);
       if not Stmt.Is_Null (5) then
           Object.User.Set_Key_Value (Stmt.Get_Identifier (5), Session);
