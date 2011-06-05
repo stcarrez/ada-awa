@@ -18,11 +18,11 @@
             <type name="Time"/>
         </property>
         <property name="message">
-            <column name="MESSAGE" not-null="true" unique="false" sql-type="VARCHAR(256)"/>
+            <column name="MESSAGE" not-null="true" unique="false" sql-type="VARCHAR(65000)"/>
             <type name="java.lang.String"/>
         </property>
         <property name="entity_Id">
-            <column name="ENTITY_ID" not-null="false" unique="false" sql-type="INTEGER"/>
+            <column name="ENTITY_ID" not-null="true" unique="false" sql-type="INTEGER"/>
             <type name="java.lang.Integer"/>
         </property>
         <many-to-one name="user" class="AWA.Users.Models.User" foreign-key="COMMENTS_USER_FKC" not-null="true" lazy="proxy" fetch="select">
