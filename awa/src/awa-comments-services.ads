@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  awa-comments-logic -- Comments management
+--  awa-comments-services -- Comments management
 --  Copyright (C) 2009, 2010, 2011 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -23,6 +23,8 @@ with ADO.Objects;
 package AWA.Comments.Services is
 
    use AWA.Comments.Models;
+
+   NAME : constant String := "Comment_Service";
 
    type Comment_Manager is new AWA.Modules.Module_Manager with private;
    type Comment_Manager_Access is access all Comment_Manager'Class;

@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with AWA.Services.Contexts;
 with ADO.Sessions;
 
 with Ada.Calendar;
@@ -26,6 +27,7 @@ package body AWA.Comments.Services is
 
    use Util.Log;
    use ADO.Sessions;
+   use AWA.Services;
 
    Log : constant Loggers.Logger := Loggers.Create ("AWA.Comments.Services");
 
@@ -39,24 +41,32 @@ package body AWA.Comments.Services is
       null;
    end Create_Comment;
 
+   --  Create a comment associated with the given database entity.
+   --  The user must have permission to add comments on the given entity.
+   --
+   --  select from asset inner join acl
+   --    on asset.collection_id = acl.entity_id and acl.entity_type = :entity_type
+   --    where asset.id = :entity_id and acl.user_id = :user_id
    procedure Create_Comment (Model   : in Comment_Manager;
                              Entity  : in ADO.Objects.Object_Key;
                              Message : in String;
                              User    : in AWA.Users.Models.User_Ref'Class;
                              Result  : out ADO.Identifier) is
-      DB        : Master_Session := Model.Get_Master_Session;
+      Ctx       : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB        : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Comment   : Comment_Ref;
       Entity_Id : constant ADO.Identifier := ADO.Objects.Get_Value (Entity);
    begin
       Log.Info ("Create comment for user {0}", String'(User.Get_Name));
 
-      DB.Begin_Transaction;
+--        AWA.Permissions.Module.Check (Entity => Entity, Permission => CREATE_COMMENT);
+      Ctx.Start;
       Comment.Set_Message (Message);
       Comment.Set_Entity_Id (Integer (Entity_Id));
       Comment.Set_User (User);
       Comment.Set_Date (Ada.Calendar.Clock);
       Comment.Save (DB);
-      DB.Commit;
+      Ctx.Commit;
       Result := Comment.Get_Id;
 
       Log.Info ("Comment {0} created", ADO.Identifier'Image (Result));
