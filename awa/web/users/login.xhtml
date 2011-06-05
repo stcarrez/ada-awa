@@ -15,13 +15,13 @@
      <h:form id='login'>
          <table>
              <tr><td>Email</td><td>
-		<h:input id='email' size='50' value='#{login.email}'>
-                </h:input>
+		<h:inputText id='email' size='50' value='#{login.email}'>
+                </h:inputText>
                 <h:message for='email'/>
              </td></tr>
              <tr><td>Password</td><td>
-                <h:input id='password' size='50' value='#{login.password}'>
-                </h:input>
+                <h:inputText id='password' size='50' value='#{login.password}'>
+                </h:inputText>
                 <h:message for='password'/>
              </td></tr>
              <tr><td></td><td><h:commandButton id='login' value='Login' action="#{login.authenticate}"/></td></tr>
