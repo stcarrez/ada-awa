@@ -29,6 +29,8 @@ package AWA.Users.Tests is
    procedure Test_Create_User (T : in out Test);
 
    procedure Test_Logout_User (T : in out Test);
+
+   --  Test user authentication by simulating a web request.
    procedure Test_Login_User (T : in out Test);
 
    --  Test the reset password by simulating web requests.

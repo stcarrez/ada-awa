@@ -23,6 +23,7 @@ with ASF.Tests;
 with AWA.Tests;
 with ASF.Requests.Mockup;
 with ASF.Responses.Mockup;
+with ASF.Principals;
 package body AWA.Users.Tests is
 
    use ASF.Tests;
@@ -32,11 +33,11 @@ package body AWA.Users.Tests is
 
    procedure Add_Tests (Suite : AUnit.Test_Suites.Access_Test_Suite) is
    begin
-      Caller.Add_Test (Suite, "Test AWA.Users.Tests.Create_User",
+      Caller.Add_Test (Suite, "Test AWA.Users.Tests.Create_User (/users/register.xhtml)",
                        Test_Create_User'Access);
       Caller.Add_Test (Suite, "Test AWA.Users.Services.Close_Session",
                        Test_Logout_User'Access);
-      Caller.Add_Test (Suite, "Test AWA.Users.Services.Authenticate, Close_Session",
+      Caller.Add_Test (Suite, "Test AWA.Users.Tests.Login_User (/users/login.xhtml)",
                        Test_Login_User'Access);
       Caller.Add_Test (Suite, "Test AWA.Users.Services.Lost_Password, Reset_Password",
                        Test_Reset_Password_User'Access);
@@ -66,21 +67,29 @@ package body AWA.Users.Tests is
       null;
    end Test_Logout_User;
 
+   --  ------------------------------
+   --  Test user authentication by simulating a web request.
+   --  ------------------------------
    procedure Test_Login_User (T : in out Test) is
+      use type ASF.Principals.Principal_Access;
+
       Request : ASF.Requests.Mockup.Request;
       Reply   : ASF.Responses.Mockup.Response;
    begin
       Do_Get (Request, Reply, "/users/login.html", "login-user-1.html");
 
+      --  Check that the user is NOT logged.
+      Assert (T, Request.Get_User_Principal = null, "A user principal should not be defined");
+
       Request.Set_Parameter ("email", "Joe@gmail.com");
       Request.Set_Parameter ("password", "asdf");
-      Request.Set_Parameter ("first_name", "joe");
-      Request.Set_Parameter ("last_name", "dalton");
-      Request.Set_Parameter ("register", "1");
-      Do_Post (Request, Reply, "/users/register.html", "create-user-2.html");
+      Request.Set_Parameter ("login", "1");
+      Do_Post (Request, Reply, "/users/login.html", "login-user-2.html");
 
       Assert (T, Reply.Get_Status = ASF.Responses.SC_OK, "Invalid response");
-      null;
+
+      --  Check that the user is logged and we have a user principal now.
+      Assert (T, Request.Get_User_Principal /= null, "A user principal should be defined");
    end Test_Login_User;
 
    --  ------------------------------
