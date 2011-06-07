@@ -27,11 +27,14 @@ with ASF.Tests;
 with AWA.Users.Module;
 with AWA.Mail.Module;
 with AWA.Applications;
+with AWA.Services.Filters;
 package body AWA.Tests is
 
    App      : AWA.Applications.Application_Access := null;
 
-   Users    : aliased AWA.Users.Module.User_Module;
+   Service_Filter : aliased AWA.Services.Filters.Service_Filter;
+
+   Users          : aliased AWA.Users.Module.User_Module;
 
    --  ------------------------------
    --  Initialize the awa test framework mockup.
@@ -44,6 +47,9 @@ package body AWA.Tests is
       App := new AWA.Applications.Application;
 
       ASF.Tests.Initialize (Props, App.all'Access);
+      App.Add_Filter ("service", Service_Filter'Access);
+      App.Add_Filter_Mapping (Name => "service", Pattern => "*.html");
+
       declare
          Nav : constant ASF.Navigations.Navigation_Handler_Access := App.Get_Navigation_Handler;
          Users : AWA.Users.Module.User_Module_Access := AWA.Tests.Users'Access;
