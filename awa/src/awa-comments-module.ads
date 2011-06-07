@@ -35,8 +35,8 @@ package AWA.Comments.Module is
      new ASF.Modules.Get (Comment_Module, Comment_Module_Access, NAME);
 
    function Get_Comment_Manager is
-     new AWA.Modules.Get_Manager (AWA.Comments.Services.Comment_Manager,
-                                  AWA.Comments.Services.Comment_Manager_Access,
+     new AWA.Modules.Get_Manager (AWA.Comments.Services.Comment_Service,
+                                  AWA.Comments.Services.Comment_Service_Access,
                                   "Comment_Manager");
 
 end AWA.Comments.Module;

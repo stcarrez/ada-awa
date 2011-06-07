@@ -88,7 +88,7 @@ package body AWA.Users.Beans is
 
 
    procedure Set_Session_Principal (Data : in Authenticate_Bean;
-                                    User : in AWA.Users.Models.User_Ref
+                                    User : in AWA.Users.Models.User_Ref;
 									Sess : in AWA.Users.Models.Session_Ref) is
       Principal : constant Principals.Principal_Access := Principals.Create (User, Sess);
       Ctx       : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
@@ -113,7 +113,7 @@ package body AWA.Users.Beans is
                                  Session  => Session);
       Outcome := To_Unbounded_String ("success");
 
-      Data.Set_Session_Principal (User);
+      Data.Set_Session_Principal (User, Session);
    end Authenticate_User;
 
    --  ------------------------------

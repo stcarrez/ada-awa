@@ -59,7 +59,8 @@ package AWA.Users.Beans is
                                  return Util.Beans.Methods.Method_Binding_Array_Access;
 
    procedure Set_Session_Principal (Data : in Authenticate_Bean;
-                                    User : in AWA.Users.Models.User_Ref);
+                                    User : in AWA.Users.Models.User_Ref;
+                                    Sess : in AWA.Users.Models.Session_Ref);
 
    --  Action to register a user
    procedure Register_User (Data    : in out Authenticate_Bean;
