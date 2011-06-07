@@ -42,13 +42,16 @@ package body AWA.Users.Tests is
                        Test_Reset_Password_User'Access);
    end Add_Tests;
 
+   --  ------------------------------
+   --  Test creation of user by simulating web requests.
+   --  ------------------------------
    procedure Test_Create_User (T : in out Test) is
       Request : ASF.Requests.Mockup.Request;
       Reply   : ASF.Responses.Mockup.Response;
    begin
       Do_Get (Request, Reply, "/users/register.html", "create-user-1.html");
 
-      Request.Set_Parameter ("email", "Joe@gmail.com");
+      Request.Set_Parameter ("email", "Joe-" & Util.Tests.Get_UUID & "@gmail.com");
       Request.Set_Parameter ("password", "asdf");
       Request.Set_Parameter ("first_name", "joe");
       Request.Set_Parameter ("last_name", "dalton");
@@ -64,13 +67,35 @@ package body AWA.Users.Tests is
    end Test_Logout_User;
 
    procedure Test_Login_User (T : in out Test) is
+      Request : ASF.Requests.Mockup.Request;
+      Reply   : ASF.Responses.Mockup.Response;
    begin
+      Do_Get (Request, Reply, "/users/login.html", "login-user-1.html");
+
+      Request.Set_Parameter ("email", "Joe@gmail.com");
+      Request.Set_Parameter ("password", "asdf");
+      Request.Set_Parameter ("first_name", "joe");
+      Request.Set_Parameter ("last_name", "dalton");
+      Request.Set_Parameter ("register", "1");
+      Do_Post (Request, Reply, "/users/register.html", "create-user-2.html");
+
+      Assert (T, Reply.Get_Status = ASF.Responses.SC_OK, "Invalid response");
       null;
    end Test_Login_User;
 
+   --  ------------------------------
+   --  Test the reset password by simulating web requests.
+   --  ------------------------------
    procedure Test_Reset_Password_User (T : in out Test) is
+      Request : ASF.Requests.Mockup.Request;
+      Reply   : ASF.Responses.Mockup.Response;
    begin
-      null;
+      Do_Get (Request, Reply, "/users/lost-password.html", "lost-password-1.html");
+
+      Request.Set_Parameter ("email", "Joe@gmail.com");
+      Do_Post (Request, Reply, "/users/lost-password.html", "lost-password-2.html");
+
+      Assert (T, Reply.Get_Status = ASF.Responses.SC_OK, "Invalid response");
    end Test_Reset_Password_User;
 
 end AWA.Users.Tests;

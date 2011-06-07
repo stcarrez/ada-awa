@@ -25,9 +25,13 @@ package AWA.Users.Tests is
 
    type Test is new AUnit.Test_Fixtures.Test_Fixture with null record;
 
+   --  Test creation of user by simulating web requests.
    procedure Test_Create_User (T : in out Test);
+
    procedure Test_Logout_User (T : in out Test);
    procedure Test_Login_User (T : in out Test);
+
+   --  Test the reset password by simulating web requests.
    procedure Test_Reset_Password_User (T : in out Test);
 
 end AWA.Users.Tests;
