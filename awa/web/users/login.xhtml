@@ -9,25 +9,10 @@
     <!-- Main page body -->
     <ui:define name="pageBody">
 
-     <h:panelGroup rendered="#{not empty user}">
-         <h2>Welcome #{user}</h2>
-     </h:panelGroup>
-     <h:form id='login'>
-         <table>
-             <tr><td>Email</td><td>
-		<h:inputText id='email' size='50' value='#{login.email}'>
-                </h:inputText>
-                <h:message for='email'/>
-             </td></tr>
-             <tr><td>Password</td><td>
-                <h:inputText id='password' size='50' value='#{login.password}'>
-                </h:inputText>
-                <h:message for='password'/>
-             </td></tr>
-             <tr><td></td><td><h:commandButton id='login' value='Login' action="#{login.authenticate}"/></td></tr>
-         </table>
-     </h:form>
-
+        <h:panelGroup rendered="#{not empty user}">
+            <h2>Welcome #{user}</h2>
+        </h:panelGroup>
+        <ui:include src="login-form.xhtml"/>
     </ui:define>
 </ui:composition>
 

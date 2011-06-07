@@ -1,0 +1,25 @@
+<ui:composition
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:u="http://code.google.com/p/ada-asf/util"
+        xmlns:h="http://java.sun.com/jsf/html">
+
+    <h:form id='login'>
+        <table>
+            <tr><td>Email</td><td>
+		<h:inputText id='email' size='50' value='#{login.email}'>
+                </h:inputText>
+                <h:message for='email'/>
+             </td></tr>
+             <tr><td>Password</td><td>
+                <h:inputText id='password' size='50' value='#{login.password}'>
+                </h:inputText>
+                <h:message for='password'/>
+             </td></tr>
+             <tr><td></td><td><h:commandButton id='login' value='Login' action="#{login.authenticate}"/></td></tr>
+        </table>
+    </h:form>
+
+</ui:composition>
+
