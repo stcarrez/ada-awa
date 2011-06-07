@@ -23,7 +23,7 @@
         </property>
         <property name="entity_Id">
             <column name="ENTITY_ID" not-null="true" unique="false" sql-type="INTEGER"/>
-            <type name="java.lang.Integer"/>
+            <type name="ADO.Identifier"/>
         </property>
         <many-to-one name="user" class="AWA.Users.Models.User" foreign-key="COMMENTS_USER_FKC" not-null="true" lazy="proxy" fetch="select">
             <column name="USER_FK" not-null="true" sql-type="INTEGER"/>
