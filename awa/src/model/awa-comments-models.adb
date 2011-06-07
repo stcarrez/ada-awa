@@ -59,7 +59,7 @@ package body AWA.Comments.Models is
    begin
       Impl := new Comment_Impl;
       Impl.Version := 0;
-      Impl.Entity_Id := 0;
+      Impl.Entity_Id := ADO.NO_IDENTIFIER;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
  
@@ -122,14 +122,14 @@ package body AWA.Comments.Models is
       return Impl.Message;
    end Get_Message;
    procedure Set_Entity_Id (Object : in out Comment_Ref;
-                             Value  : in Integer) is
+                             Value  : in ADO.Identifier) is
       Impl : Comment_Access;
    begin
       Set_Field (Object, Impl, 5);
       Impl.Entity_Id := Value;
    end Set_Entity_Id;
    function Get_Entity_Id (Object : in Comment_Ref)
-                  return Integer is
+                  return ADO.Identifier is
       Impl : constant Comment_Access := Comment_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Entity_Id;
@@ -435,6 +435,7 @@ package body AWA.Comments.Models is
       Object.Set_Key_Value (Stmt.Get_Identifier (0));
       Object.Date := Stmt.Get_Time (2);
       Object.Message := Stmt.Get_Unbounded_String (3);
+      Object.Entity_Id := Stmt.Get_Identifier (4);
       if not Stmt.Is_Null (5) then
           Object.User.Set_Key_Value (Stmt.Get_Identifier (5), Session);
       end if;

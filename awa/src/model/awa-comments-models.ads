@@ -29,8 +29,8 @@ with Ada.Calendar;
 with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
-with ADO.Model;
 with AWA.Users.Models;
+with ADO.Model;
 package AWA.Comments.Models is
    --  --------------------
    --  
@@ -79,11 +79,11 @@ package AWA.Comments.Models is
 
    --  Set 
    procedure Set_Entity_Id (Object : in out Comment_Ref;
-                            Value  : in Integer);
+                            Value  : in ADO.Identifier);
 
    --  Get 
    function Get_Entity_Id (Object : in Comment_Ref)
-                 return Integer;
+                 return ADO.Identifier;
 
    --  Set 
    procedure Set_User (Object : in out Comment_Ref;
@@ -189,7 +189,7 @@ private
        Version : Integer;
        Date : Ada.Calendar.Time;
        Message : Ada.Strings.Unbounded.Unbounded_String;
-       Entity_Id : Integer;
+       Entity_Id : ADO.Identifier;
        User : AWA.Users.Models.User_Ref;
        Entity_Type : ADO.Model.Entity_Type_Ref;
    end record;
