@@ -20,38 +20,36 @@ with AWA.Users.Models;
 with AWA.Modules;
 with ADO;
 with ADO.Objects;
+
+--  The <b>Comments.Services</b> package defines the service and operations to
+--  create, list, get and remove a comment.
 package AWA.Comments.Services is
 
    use AWA.Comments.Models;
 
    NAME : constant String := "Comment_Service";
 
-   type Comment_Manager is new AWA.Modules.Module_Manager with private;
-   type Comment_Manager_Access is access all Comment_Manager'Class;
+   type Comment_Service is new AWA.Modules.Module_Manager with private;
+   type Comment_Service_Access is access all Comment_Service'Class;
 
-   --  Create a user in the database with the given user information and
-   --  the associated email address.  Verify that no such user already exist.
-   --  Raises User_Exist exception if a user with such email is already registered.
-   procedure Create_Comment (Model   : in Comment_Manager;
-                             Comment : in out Comment_Ref'Class;
-                             User    : in AWA.Users.Models.User_Ref'Class);
-
-   procedure Create_Comment (Model   : in Comment_Manager;
+   --  Create a comment associated with the given database entity.
+   --  The user must have permission to add comments on the given entity.
+   procedure Create_Comment (Model   : in Comment_Service;
                              Entity  : in ADO.Objects.Object_Key;
                              Message : in String;
                              User    : in AWA.Users.Models.User_Ref'Class;
                              Result  : out ADO.Identifier);
 
-   procedure Find_Comment (Model   : in Comment_Manager;
+   procedure Find_Comment (Model   : in Comment_Service;
                            Id      : in ADO.Identifier;
                            Comment : in out Comment_Ref'Class);
 
-   --  Delete the comment with the given identifier.
-   procedure Delete_Comment (Model   : in Comment_Manager;
+   --  Delete the comment identified by the given identifier.
+   procedure Delete_Comment (Model   : in Comment_Service;
                              Id      : in ADO.Identifier);
 
 private
 
-   type Comment_Manager is new AWA.Modules.Module_Manager with null record;
+   type Comment_Service is new AWA.Modules.Module_Manager with null record;
 
 end AWA.Comments.Services;
