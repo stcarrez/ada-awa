@@ -30,13 +30,18 @@ package body AWA.Users.Principals is
       return From.User.Get_Name;
    end Get_Name;
 
+   --  ------------------------------
    --  Returns true if the given permission is stored in the user principal.
+   --  ------------------------------
    function Has_Permission (User       : in Principal;
                             Permission : in Security.Permissions.Permission_Type) return Boolean is
    begin
       return User.Permissions (Permission);
    end Has_Permission;
 
+   --  ------------------------------
+   --  Get the principal identifier (name)
+   --  ------------------------------
    function Get_Id (From : in Principal) return String is
    begin
       return From.User.Get_Name;
@@ -62,10 +67,12 @@ package body AWA.Users.Principals is
    --  ------------------------------
    --  Create a principal for the given user.
    --  ------------------------------
-   function Create (User : in AWA.Users.Models.User_Ref) return Principal_Access is
+   function Create (User    : in AWA.Users.Models.User_Ref;
+                    Session : in AWA.Users.Models.Session_Ref) return Principal_Access is
       Result : constant Principal_Access := new Principal;
    begin
-      Result.User := User;
+      Result.User    := User;
+	  Result.Session := Session;
       return Result;
    end Create;
 
@@ -79,16 +86,18 @@ package body AWA.Users.Principals is
                                Result : out ASF.Principals.Principal_Access) is
       use AWA.Users.Module;
       use AWA.Users.Services;
+
       Manager : constant User_Service_Access := AWA.Users.Module.Get_User_Manager;
-      User    : AWA.Users.Principals.Principal_Access := new AWA.Users.Principals.Principal;
+	  User    : AWA.Users.Models.User_Ref;
+	  Session : AWA.Users.Models.Session_Ref;
    begin
-      Result := User.all'Access;
       Manager.Authenticate (OpenId  => Security.Openid.Get_Claimed_Id (Auth),
                             Email   => Security.Openid.Get_Email (Auth),
                             Name    => Security.Openid.Get_Full_Name (Auth),
                             IpAddr  => "",
-                            User    => User.User,
-                            Session => User.Session);
+                            User    => User,
+                            Session => Session);
+      Result := Create (User, Session).all'Access;
    end Create_Principal;
 
 end AWA.Users.Principals;

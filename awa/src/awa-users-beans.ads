@@ -77,7 +77,7 @@ package AWA.Users.Beans is
    procedure Reset_Password (Data    : in out Authenticate_Bean;
                              Outcome : in out Unbounded_String);
 
-   --  Action to authenticate a user.
+   --  Action to authenticate a user (password authentication).
    procedure Authenticate_User (Data    : in out Authenticate_Bean;
                                 Outcome : in out Unbounded_String);
 

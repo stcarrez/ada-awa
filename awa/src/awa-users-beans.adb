@@ -26,7 +26,9 @@ package body AWA.Users.Beans is
 
    use AWA.Users.Models;
 
+   --  ------------------------------
    --  Action to register a user
+   --  ------------------------------
    procedure Register_User (Data    : in out Authenticate_Bean;
                             Outcome : in out Unbounded_String) is
       User  : User_Ref;
@@ -41,7 +43,9 @@ package body AWA.Users.Beans is
       Outcome := To_Unbounded_String ("success");
    end Register_User;
 
+   --  ------------------------------
    --  Action to verify the user after the registration
+   --  ------------------------------
    procedure Verify_User (Data    : in out Authenticate_Bean;
                           Outcome : in out Unbounded_String) is
       User    : User_Ref;
@@ -56,7 +60,9 @@ package body AWA.Users.Beans is
    end Verify_User;
 
 
+   --  ------------------------------
    --  Action to trigger the lost password email process.
+   --  ------------------------------
    procedure Lost_Password (Data    : in out Authenticate_Bean;
                             Outcome : in out Unbounded_String) is
    begin
@@ -64,7 +70,9 @@ package body AWA.Users.Beans is
       Outcome := To_Unbounded_String ("success");
    end Lost_Password;
 
+   --  ------------------------------
    --  Action to validate the reset password key and set a new password.
+   --  ------------------------------
    procedure Reset_Password (Data    : in out Authenticate_Bean;
                              Outcome : in out Unbounded_String) is
       User    : User_Ref;
@@ -80,18 +88,19 @@ package body AWA.Users.Beans is
 
 
    procedure Set_Session_Principal (Data : in Authenticate_Bean;
-                                    User : in AWA.Users.Models.User_Ref) is
-      Principal : constant Principals.Principal_Access := Principals.Create (User);
+                                    User : in AWA.Users.Models.User_Ref
+									Sess : in AWA.Users.Models.Session_Ref) is
+      Principal : constant Principals.Principal_Access := Principals.Create (User, Sess);
       Ctx       : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
       Session   : ASF.Sessions.Session := Ctx.Get_Session (Create => True);
       Name      : constant String := "User: " & User.Get_Name;
    begin
       Session.Set_Principal (Principal.all'Access);
-      Session.Set_Attribute (Name  => "user",
-                             Value => Util.Beans.Objects.To_Object (Name));
    end Set_Session_Principal;
 
-   --  Action to authenticate a user.
+   --  ------------------------------
+   --  Action to authenticate a user (password authentication).
+   --  ------------------------------
    procedure Authenticate_User (Data    : in out Authenticate_Bean;
                                 Outcome : in out Unbounded_String) is
       User      : User_Ref;
@@ -107,7 +116,9 @@ package body AWA.Users.Beans is
       Data.Set_Session_Principal (User);
    end Authenticate_User;
 
+   --  ------------------------------
    --  Create an authenticate bean.
+   --  ------------------------------
    function Create_Authenticate_Bean (Module : in AWA.Users.Module.User_Module_Access)
                                       return Util.Beans.Basic.Readonly_Bean_Access is
       Object : Authenticate_Bean_Access := new Authenticate_Bean;
@@ -151,7 +162,9 @@ package body AWA.Users.Beans is
          Lost_Password_Binding.Proxy'Access,
          Reset_Password_Binding.Proxy'Access);
 
+   --  ------------------------------
    --  Get the value identified by the name.
+   --  ------------------------------
    overriding
    function Get_Value (From : in Authenticate_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
@@ -167,7 +180,9 @@ package body AWA.Users.Beans is
       end if;
    end Get_Value;
 
+   --  ------------------------------
    --  Set the value identified by the name.
+   --  ------------------------------
    overriding
    procedure Set_Value (From  : in out Authenticate_Bean;
                         Name  : in String;
@@ -182,7 +197,9 @@ package body AWA.Users.Beans is
       end if;
    end Set_Value;
 
+   --  ------------------------------
    --  This bean provides some methods that can be used in a Method_Expression
+   --  ------------------------------
    overriding
    function Get_Method_Bindings (From : in Authenticate_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access is

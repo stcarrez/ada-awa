@@ -29,6 +29,9 @@ package body AWA.Users.Module is
    package Register is new ASF.Modules.Beans (Module => User_Module,
                                               Module_Access => User_Module_Access);
 
+   --  ------------------------------
+   --  Initialize the user module.
+   --  ------------------------------
    overriding
    procedure Initialize (Plugin : in out User_Module;
                          App    : access ASF.Applications.Main.Application'Class) is
@@ -62,7 +65,8 @@ package body AWA.Users.Module is
    end Get_User_Manager;
 
    --  ------------------------------
-   --  Create a user manager.
+   --  Create a user manager.  This operation can be overriden to provide another
+   --  user service implementation.
    --  ------------------------------
    function Create_User_Manager (Plugin : in User_Module) return Services.User_Service_Access is
       Result : constant Services.User_Service_Access := new Services.User_Service;

@@ -67,7 +67,7 @@ package body AWA.Users.Services is
    end Create_Key;
 
    --  ------------------------------
-   --  Authenticate the user with his open id identifier.  The authentication process
+   --  Authenticate the user with his OpenID identifier.  The authentication process
    --  was made by an external OpenID provider.  If the user does not yet exists in
    --  the database, a record is created for him.  Create a new session for the user.
    --  The IP address of the connection is saved in the session.
@@ -167,6 +167,8 @@ package body AWA.Users.Services is
       Session.Save (DB);
 
       Ctx.Commit;
+	  Log.Info ("Session {0} created for user {1}",
+                ADO.Identifier'Image (Session.Get_Id), Email);
    end Authenticate;
 
    --  ------------------------------

@@ -33,6 +33,7 @@ package AWA.Users.Principals is
    function Has_Permission (User       : in Principal;
                             Permission : in Security.Permissions.Permission_Type) return Boolean;
 
+   --  Get the principal identifier (name)
    function Get_Id (From : in Principal) return String;
 
    --  Get the user associated with the principal.
@@ -43,14 +44,18 @@ package AWA.Users.Principals is
    function Get_User_Identifier (From : in Principal) return ADO.Identifier;
 
    --  Create a principal for the given user.
-   function Create (User : in AWA.Users.Models.User_Ref) return Principal_Access;
+   function Create (User    : in AWA.Users.Models.User_Ref;
+                    Session : in AWA.Users.Models.Session_Ref) return Principal_Access;
 
 
    --  ------------------------------
    --  OpenID Verification Servlet
    --  ------------------------------
    --  The <b>Verify_Auth_Servlet</b> verifies the authentication result and
-   --  extract authentication from the callback URL.
+   --  extract authentication from the callback URL.  We override the default implementation
+   --  to provide our own user principal once the authentication succeeded.  At the same time,
+   --  if this is the first time we see the user, s/he will be registered by using the
+   --  user service.
    type Verify_Auth_Servlet is new Security.Openid.Servlets.Verify_Auth_Servlet with private;
 
    --  Create a principal object that correspond to the authenticated user identified

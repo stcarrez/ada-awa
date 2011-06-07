@@ -61,7 +61,7 @@ package AWA.Users.Services is
                            User     : out User_Ref'Class;
                            Session  : out Session_Ref'Class);
 
-   --  Authenticate the user with his open id identifier.  The authentication process
+   --  Authenticate the user with his OpenID identifier.  The authentication process
    --  was made by an external OpenID provider.  If the user does not yet exists in
    --  the database, a record is created for him.  Create a new session for the user.
    --  The IP address of the connection is saved in the session.

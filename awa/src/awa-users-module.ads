@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  awa-users-model -- User management module
+--  awa-users-module -- User management module
 --  Copyright (C) 2009, 2010, 2011 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -21,6 +21,18 @@ with ASF.Modules.Get;
 with ASF.Applications.Main;
 
 with AWA.Users.Services;
+
+--  The <b>Users.Module</b> manages the creation, update, removal and authentication of users
+--  in an application.
+--
+--  A user can register himself by using a subscription form.  In that case, a verification mail
+--  is sent and the user has to follow the verification link defined in the mail to finish
+--  the registration process.  The user will authenticate using a password.
+--
+--  A user can also use an OpenID account and be automatically registered.
+--
+--  A user can have one or several permissions that allow to protect the application data.
+--  User permissions are managed by the <b>Permissions.Module</b>.
 package AWA.Users.Module is
 
    NAME : constant String := "users";
@@ -28,6 +40,7 @@ package AWA.Users.Module is
    type User_Module is new AWA.Modules.Module with private;
    type User_Module_Access is access all User_Module'Class;
 
+   --  Initialize the user module.
    overriding
    procedure Initialize (Plugin : in out User_Module;
                          App    : access ASF.Applications.Main.Application'Class);
@@ -35,7 +48,8 @@ package AWA.Users.Module is
    --  Get the user manager.
    function Get_User_Manager (Plugin : in User_Module) return Services.User_Service_Access;
 
-   --  Create a user manager.
+   --  Create a user manager.  This operation can be overriden to provide another
+   --  user service implementation.
    function Create_User_Manager (Plugin : in User_Module) return Services.User_Service_Access;
 
    --  Get the user module instance associated with the current application.
