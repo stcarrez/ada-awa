@@ -56,6 +56,7 @@ package body AWA.Users.Beans is
                                 IpAddr  => "",
                                 Session => Session);
 
+      Data.Set_Session_Principal (User, Session);
       Outcome := To_Unbounded_String ("success");
    end Verify_User;
 
