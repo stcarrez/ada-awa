@@ -49,10 +49,11 @@ package body AWA.Users.Tests is
    procedure Test_Create_User (T : in out Test) is
       Request : ASF.Requests.Mockup.Request;
       Reply   : ASF.Responses.Mockup.Response;
+	  Email   : constant String := "Joe-" & Util.Tests.Get_UUID & "@gmail.com";
    begin
       Do_Get (Request, Reply, "/users/register.html", "create-user-1.html");
 
-      Request.Set_Parameter ("email", "Joe-" & Util.Tests.Get_UUID & "@gmail.com");
+      Request.Set_Parameter ("email", Email);
       Request.Set_Parameter ("password", "asdf");
       Request.Set_Parameter ("first_name", "joe");
       Request.Set_Parameter ("last_name", "dalton");
@@ -60,6 +61,23 @@ package body AWA.Users.Tests is
       Do_Post (Request, Reply, "/users/register.html", "create-user-2.html");
 
       Assert (T, Reply.Get_Status = ASF.Responses.SC_OK, "Invalid response");
+
+      --  Check that the user is NOT logged.
+      Assert (T, Request.Get_User_Principal = null, "A user principal should not be defined");
+
+	  --  Now, get the access key and simulate a click on the validation link.
+	  declare
+         Principal : Helpers.Test_User;
+		 Key       : AWA.Users.Models.Access_Key_Ref;
+      begin
+	     Helpers.Find_Access_Key (Principal, Email, Key);
+		 Assert (T, not Key.Is_Null, "There is no access key associated with the user");
+		 Request.Set_Parameter ("key", Key.Get_Access_Key);
+		 Do_Get (Request, Reply, "/users/validate.html", "validate-user-1.html");
+	  end;
+
+      --  Check that the user is logged and we have a user principal now.
+      Assert (T, Request.Get_User_Principal /= null, "A user principal should be defined");
    end Test_Create_User;
 
    procedure Test_Logout_User (T : in out Test) is
@@ -105,6 +123,27 @@ package body AWA.Users.Tests is
       Do_Post (Request, Reply, "/users/lost-password.html", "lost-password-2.html");
 
       Assert (T, Reply.Get_Status = ASF.Responses.SC_OK, "Invalid response");
-   end Test_Reset_Password_User;
+
+	  --  Now, get the access key and simulate a click on the reset password link.
+	  declare
+         Principal : Helpers.Test_User;
+		 Key       : AWA.Users.Models.Access_Key_Ref;
+      begin
+	     Helpers.Find_Access_Key (Principal, Email, Key);
+		 Assert (T, not Key.Is_Null, "There is no access key associated with the user");
+		 Request.Set_Parameter ("key", Key.Get_Access_Key);
+		 Do_Get (Request, Reply, "/users/reset-password.html", "reset-password-1.html");
+
+		 --  Post the reset password
+		 Request.Set_Parameter ("password", "asd");
+		 Request.Set_Parameter ("reset-password", "1");
+		 Do_Post (Request, Reply, "/users/reset-password.html", "reset-password-2.html");
+
+         Assert (T, Reply.Get_Status = ASF.Responses.SC_OK, "Invalid response");
+
+         --  Check that the user is logged and we have a user principal now.
+         Assert (T, Request.Get_User_Principal /= null, "A user principal should be defined");
+	 end;
+  end Test_Reset_Password_User;
 
 end AWA.Users.Tests;

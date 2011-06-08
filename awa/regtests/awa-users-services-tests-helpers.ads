@@ -34,6 +34,11 @@ package AWA.Users.Services.Tests.Helpers is
    --  Create a test user for a new test and get an open session.
    procedure Create_User (Principal : in out Test_User);
 
+   --  Find the access key associated with a user (if any).
+   procedure Find_Access_Key (Principal : in out Test_User;
+                              Email     : in String;
+							  Key       : in out AWA.Users.Models.Access_Key_Ref);
+
    --  Login a user and create a session
    procedure Login (Principal : in out Test_User);
 

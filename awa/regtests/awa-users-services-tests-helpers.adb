@@ -42,29 +42,38 @@ package body AWA.Users.Services.Tests.Helpers is
    --  ------------------------------
    procedure Create_User (Principal : in out Test_User) is
       Key     : AWA.Users.Models.Access_Key_Ref;
+	  Email   : constant String := "Joe-" & Util.Tests.Get_UUID & "@gmail.com";
    begin
       Initialize (Principal);
       Principal.User.Set_First_Name ("Joe");
       Principal.User.Set_Last_Name ("Pot");
       Principal.User.Set_Password ("admin");
-      Principal.Email.Set_Email ("Joe-" & Util.Tests.Get_UUID & "@gmail.com");
+      Principal.Email.Set_Email (Email);
       Principal.Manager.Create_User (Principal.User, Principal.Email);
 
-      declare
-         DB    : ADO.Sessions.Session := Principal.Manager.Get_Session;
-         Query : ADO.SQL.Query;
-         Found : Boolean;
-      begin
-         --  Find the access key
-         Query.Set_Filter ("user_id = ?");
-         Query.Bind_Param (1, Principal.User.Get_Id);
-         Key.Find (DB, Query, Found);
-      end;
+	  Find_Access_Key (Principal, Email, Key);
 
       --  Run the verification and get the user and its session
       Principal.Manager.Verify_User (Key.Get_Access_Key, "192.168.1.1",
                                      Principal.User, Principal.Session);
    end Create_User;
+
+   --  ------------------------------
+   --  Find the access key associated with a user (if any).
+   --  ------------------------------
+   procedure Find_Access_Key (Principal : in out Test_User;
+                              Email     : in String;
+							  Key       : in out AWA.Users.Models.Access_Key_Ref) is
+      DB    : ADO.Sessions.Session := Principal.Manager.Get_Session;
+      Query : ADO.SQL.Query;
+      Found : Boolean;
+   begin
+      --  Find the access key
+	  Query.Set_Join ("inner join email e on e.user_id = o.user_id");
+      Query.Set_Filter ("e.email = ?");
+      Query.Bind_Param (1, Email);
+      Key.Find (DB, Query, Found);
+   end Find_Access_Key;
 
    --  ------------------------------
    --  Login a user and create a session
