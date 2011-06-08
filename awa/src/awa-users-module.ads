@@ -21,6 +21,7 @@ with ASF.Modules.Get;
 with ASF.Applications.Main;
 
 with AWA.Users.Services;
+with AWA.Users.Filters;
 
 --  The <b>Users.Module</b> manages the creation, update, removal and authentication of users
 --  in an application.
@@ -61,7 +62,8 @@ package AWA.Users.Module is
 private
 
    type User_Module is new AWA.Modules.Module with record
-      Manager : Services.User_Service_Access := null;
+      Manager    : Services.User_Service_Access := null;
+      Key_Filter : aliased AWA.Users.Filters.Verify_Filter;
    end record;
 
 end AWA.Users.Module;

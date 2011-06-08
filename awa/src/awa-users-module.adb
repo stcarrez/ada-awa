@@ -39,6 +39,10 @@ package body AWA.Users.Module is
       Log.Info ("Initializing the users module");
 
       AWA.Modules.Module (Plugin).Initialize (App);
+
+      App.Add_Filter ("verify-access-key", Plugin.Key_Filter'Access);
+      App.Add_Filter_Mapping (Pattern => "/users/validate.html",
+                              Name    => "verify-access-key");
       Plugin.Manager := Plugin.Create_User_Manager;
       Register.Register (Plugin  => Plugin,
                          Name    => "login",
