@@ -64,10 +64,14 @@ package body AWA.Users.Services.Tests.Helpers is
    procedure Find_Access_Key (Principal : in out Test_User;
                               Email     : in String;
 							  Key       : in out AWA.Users.Models.Access_Key_Ref) is
-      DB    : ADO.Sessions.Session := Principal.Manager.Get_Session;
+      DB    : ADO.Sessions.Session;
       Query : ADO.SQL.Query;
       Found : Boolean;
    begin
+      Initialize (Principal);
+
+      DB := Principal.Manager.Get_Session;
+
       --  Find the access key
 	  Query.Set_Join ("inner join email e on e.user_id = o.user_id");
       Query.Set_Filter ("e.email = ?");

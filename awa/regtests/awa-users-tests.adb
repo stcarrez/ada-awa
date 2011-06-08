@@ -21,6 +21,9 @@ with Util.Test_Caller;
 
 with ASF.Tests;
 with AWA.Tests;
+with AWA.Users.Models;
+with AWA.Users.Services.Tests.Helpers;
+
 with ASF.Requests.Mockup;
 with ASF.Responses.Mockup;
 with ASF.Principals;
@@ -47,10 +50,15 @@ package body AWA.Users.Tests is
    --  Test creation of user by simulating web requests.
    --  ------------------------------
    procedure Test_Create_User (T : in out Test) is
+      use type ASF.Principals.Principal_Access;
+
       Request : ASF.Requests.Mockup.Request;
       Reply   : ASF.Responses.Mockup.Response;
 	  Email   : constant String := "Joe-" & Util.Tests.Get_UUID & "@gmail.com";
+      Principal : Services.Tests.Helpers.Test_User;
    begin
+      Services.Tests.Helpers.Initialize (Principal);
+
       Do_Get (Request, Reply, "/users/register.html", "create-user-1.html");
 
       Request.Set_Parameter ("email", Email);
@@ -67,10 +75,10 @@ package body AWA.Users.Tests is
 
 	  --  Now, get the access key and simulate a click on the validation link.
 	  declare
-         Principal : Helpers.Test_User;
+
 		 Key       : AWA.Users.Models.Access_Key_Ref;
       begin
-	     Helpers.Find_Access_Key (Principal, Email, Key);
+	     Services.Tests.Helpers.Find_Access_Key (Principal, Email, Key);
 		 Assert (T, not Key.Is_Null, "There is no access key associated with the user");
 		 Request.Set_Parameter ("key", Key.Get_Access_Key);
 		 Do_Get (Request, Reply, "/users/validate.html", "validate-user-1.html");
@@ -114,22 +122,25 @@ package body AWA.Users.Tests is
    --  Test the reset password by simulating web requests.
    --  ------------------------------
    procedure Test_Reset_Password_User (T : in out Test) is
+      use type ASF.Principals.Principal_Access;
+
       Request : ASF.Requests.Mockup.Request;
       Reply   : ASF.Responses.Mockup.Response;
+      Email   : constant String := "Joe@gmail.com";
    begin
       Do_Get (Request, Reply, "/users/lost-password.html", "lost-password-1.html");
 
-      Request.Set_Parameter ("email", "Joe@gmail.com");
+      Request.Set_Parameter ("email", Email);
       Do_Post (Request, Reply, "/users/lost-password.html", "lost-password-2.html");
 
       Assert (T, Reply.Get_Status = ASF.Responses.SC_OK, "Invalid response");
 
 	  --  Now, get the access key and simulate a click on the reset password link.
 	  declare
-         Principal : Helpers.Test_User;
+         Principal : Services.Tests.Helpers.Test_User;
 		 Key       : AWA.Users.Models.Access_Key_Ref;
       begin
-	     Helpers.Find_Access_Key (Principal, Email, Key);
+	     Services.Tests.Helpers.Find_Access_Key (Principal, Email, Key);
 		 Assert (T, not Key.Is_Null, "There is no access key associated with the user");
 		 Request.Set_Parameter ("key", Key.Get_Access_Key);
 		 Do_Get (Request, Reply, "/users/reset-password.html", "reset-password-1.html");
