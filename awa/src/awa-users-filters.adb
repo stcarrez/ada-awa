@@ -42,7 +42,6 @@ package body AWA.Users.Filters is
                                     Sess    : in AWA.Users.Models.Session_Ref) is
       Principal : constant Principals.Principal_Access := Principals.Create (User, Sess);
       Session   : ASF.Sessions.Session := Request.Get_Session (Create => True);
-      Name      : constant String := "User: " & User.Get_Name;
    begin
       Session.Set_Principal (Principal.all'Access);
    end Set_Session_Principal;
@@ -58,6 +57,16 @@ package body AWA.Users.Filters is
    end Authenticate;
 
    --  ------------------------------
+   --  Initialize the filter and configure the redirection URIs.
+   --  ------------------------------
+   procedure Initialize (Filter  : in out Verify_Filter;
+                         Context : in ASF.Servlets.Servlet_Registry'Class) is
+      URI : constant String := Context.Get_Init_Parameter ("user.verif-filter.redirect");
+   begin
+      Filter.Invalid_Key_URI := To_Unbounded_String (URI);
+   end Initialize;
+
+   --  ------------------------------
    --  Filter a request which contains an access key and verify that the
    --  key is valid and identifies a user.  Once the user is known, create
    --  a session and setup the user principal.
@@ -65,7 +74,7 @@ package body AWA.Users.Filters is
    --  If the access key is missing or invalid, redirect to the
    --  <b>Invalid_Key_URI</b> associated with the filter.
    --  ------------------------------
-   procedure Do_Filter (F        : in Verify_Filter;
+   procedure Do_Filter (Filter   : in Verify_Filter;
                         Request  : in out ASF.Requests.Request'Class;
                         Response : in out ASF.Responses.Response'Class;
                         Chain    : in out ASF.Servlets.Filter_Chain) is
@@ -91,7 +100,7 @@ package body AWA.Users.Filters is
    exception
       when AWA.Users.Services.Not_Found =>
          declare
-            URI : constant String := Ada.Strings.Unbounded.To_String (F.Invalid_Key_URI);
+            URI : constant String := To_String (Filter.Invalid_Key_URI);
          begin
             Log.Info ("Invalid access key {0}, redirecting to {1}", Key, URI);
             Response.Send_Redirect (Location => URI);

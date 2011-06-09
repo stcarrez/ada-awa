@@ -37,7 +37,21 @@ package AWA.Users.Filters is
                            Auth_Id  : in String;
                            Principal : out ASF.Principals.Principal_Access);
 
+   --  ------------------------------
+   --  Verify access key filter
+   --  ------------------------------
+   --  The <b>Verify_Filter</b> filter verifies an access key associated to a user.
+   --  The access key should have been sent to the user by some mechanism (email).
+   --  The access key must be valid, that is an <b>Access_Key</b> database entry
+   --  must exist and it must be associated with an email address and a user.
    type Verify_Filter is new ASF.Filters.Filter with private;
+
+   --  The request parameter that <b>Verify_Filter</b> will check.
+   PARAM_ACCESS_KEY : constant String := "key";
+
+   --  Initialize the filter and configure the redirection URIs.
+   procedure Initialize (Filter  : in out Verify_Filter;
+                         Context : in ASF.Servlets.Servlet_Registry'Class);
 
    --  Filter a request which contains an access key and verify that the
    --  key is valid and identifies a user.  Once the user is known, create
@@ -45,15 +59,17 @@ package AWA.Users.Filters is
    --
    --  If the access key is missing or invalid, redirect to the
    --  <b>Invalid_Key_URI</b> associated with the filter.
-   procedure Do_Filter (F        : in Verify_Filter;
+   procedure Do_Filter (Filter   : in Verify_Filter;
                         Request  : in out ASF.Requests.Request'Class;
                         Response : in out ASF.Responses.Response'Class;
                         Chain    : in out ASF.Servlets.Filter_Chain);
 
 private
 
+   use Ada.Strings.Unbounded;
+
    type Verify_Filter is new ASF.Filters.Filter with record
-      Invalid_Key_URI : Ada.Strings.Unbounded.Unbounded_String;
+      Invalid_Key_URI : Unbounded_String;
    end record;
 
 end AWA.Users.Filters;

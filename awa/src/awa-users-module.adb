@@ -40,10 +40,13 @@ package body AWA.Users.Module is
 
       AWA.Modules.Module (Plugin).Initialize (App);
 
+	  --  Setup the verify access key filter.
       App.Add_Filter ("verify-access-key", Plugin.Key_Filter'Access);
       App.Add_Filter_Mapping (Pattern => "/users/validate.html",
                               Name    => "verify-access-key");
-      Plugin.Manager := Plugin.Create_User_Manager;
+      Plugin.Key_Filter.Initialize (App.all);
+							  
+	  Plugin.Manager := Plugin.Create_User_Manager;
       Register.Register (Plugin  => Plugin,
                          Name    => "login",
                          Handler => AWA.Users.Beans.Create_Authenticate_Bean'Access,
