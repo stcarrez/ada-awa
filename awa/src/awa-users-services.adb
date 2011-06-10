@@ -39,7 +39,7 @@ package body AWA.Users.Services is
    use ADO.SQL;
    use AWA.Services;
 
-   Log : constant Loggers.Logger := Loggers.Create ("AWA.Users.Logic");
+   Log : constant Loggers.Logger := Loggers.Create ("AWA.Users.Services");
 
    package Integer_Random is new Ada.Numerics.Discrete_Random (Integer);
 
@@ -368,7 +368,7 @@ package body AWA.Users.Services is
       Query.Set_Filter ("access_key = ?");
       Access_Key.Find (DB, Query, Found);
       if not Found then
-         Log.Warn ("No access key {0]", Key);
+         Log.Warn ("No access key {0}", Key);
          raise Not_Found with "No access key: " & Key;
       end if;
 
