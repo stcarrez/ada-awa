@@ -18,6 +18,7 @@
 
 with ASF.Modules.Beans;
 with ASF.Beans;
+with ASF.Modules.Get;
 
 with AWA.Users.Beans;
 
@@ -40,12 +41,17 @@ package body AWA.Users.Module is
 
       AWA.Modules.Module (Plugin).Initialize (App);
 
+      --  Setup the resource bundles.
+      App.Register ("userMsg", "users");
+
 	  --  Setup the verify access key filter.
       App.Add_Filter ("verify-access-key", Plugin.Key_Filter'Access);
       App.Add_Filter_Mapping (Pattern => "/users/validate.html",
                               Name    => "verify-access-key");
+      App.Add_Filter_Mapping (Pattern => "/users/reset-password.html",
+                              Name    => "verify-access-key");
       Plugin.Key_Filter.Initialize (App.all);
-							  
+
 	  Plugin.Manager := Plugin.Create_User_Manager;
       Register.Register (Plugin  => Plugin,
                          Name    => "login",
@@ -54,6 +60,11 @@ package body AWA.Users.Module is
 
       Register.Register (Plugin  => Plugin,
                          Name    => "register",
+                         Handler => AWA.Users.Beans.Create_Authenticate_Bean'Access,
+                         Scope   => ASF.Beans.REQUEST_SCOPE);
+
+      Register.Register (Plugin  => Plugin,
+                         Name    => "resetPassword",
                          Handler => AWA.Users.Beans.Create_Authenticate_Bean'Access,
                          Scope   => ASF.Beans.REQUEST_SCOPE);
 
