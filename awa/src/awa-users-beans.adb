@@ -90,11 +90,12 @@ package body AWA.Users.Beans is
 
    procedure Set_Session_Principal (Data : in Authenticate_Bean;
                                     User : in AWA.Users.Models.User_Ref;
-									Sess : in AWA.Users.Models.Session_Ref) is
+                                    Sess : in AWA.Users.Models.Session_Ref) is
+      pragma Unreferenced (Data);
+
       Principal : constant Principals.Principal_Access := Principals.Create (User, Sess);
       Ctx       : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
       Session   : ASF.Sessions.Session := Ctx.Get_Session (Create => True);
-      Name      : constant String := "User: " & User.Get_Name;
    begin
       Session.Set_Principal (Principal.all'Access);
    end Set_Session_Principal;
@@ -122,7 +123,7 @@ package body AWA.Users.Beans is
    --  ------------------------------
    function Create_Authenticate_Bean (Module : in AWA.Users.Module.User_Module_Access)
                                       return Util.Beans.Basic.Readonly_Bean_Access is
-      Object : Authenticate_Bean_Access := new Authenticate_Bean;
+      Object : constant Authenticate_Bean_Access := new Authenticate_Bean;
    begin
       Object.Module := Module;
       Object.Manager := AWA.Users.Module.Get_User_Manager;
@@ -162,7 +163,7 @@ package body AWA.Users.Beans is
          Verify_Binding.Proxy'Access,
          Lost_Password_Binding.Proxy'Access,
          Reset_Password_Binding.Proxy'Access);
-   
+
    --  ------------------------------
    --  Get the value identified by the name.
    --  ------------------------------
@@ -212,6 +213,7 @@ package body AWA.Users.Beans is
    overriding
    function Get_Method_Bindings (From : in Authenticate_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
    begin
       return Binding_Array'Access;
    end Get_Method_Bindings;

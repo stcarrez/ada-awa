@@ -16,10 +16,8 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with AWA.Users.Models;
 with AWA.Users.Services;
 with AWA.Users.Module;
-with ASF.Principals;
 package body AWA.Users.Principals is
 
    --  ------------------------------
@@ -84,6 +82,7 @@ package body AWA.Users.Principals is
    procedure Create_Principal (Server : in Verify_Auth_Servlet;
                                Auth   : in Security.Openid.Authentication;
                                Result : out ASF.Principals.Principal_Access) is
+      pragma Unreferenced (Server);
       use AWA.Users.Module;
       use AWA.Users.Services;
 

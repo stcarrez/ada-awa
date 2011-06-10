@@ -17,7 +17,6 @@
 -----------------------------------------------------------------------
 
 with AWA.Modules;
-with ASF.Modules.Get;
 with ASF.Applications.Main;
 
 with AWA.Users.Services;
