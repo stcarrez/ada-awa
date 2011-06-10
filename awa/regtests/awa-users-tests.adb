@@ -127,7 +127,9 @@ package body AWA.Users.Tests is
       Request : ASF.Requests.Mockup.Request;
       Reply   : ASF.Responses.Mockup.Response;
       Email   : constant String := "Joe@gmail.com";
+      Principal : Services.Tests.Helpers.Test_User;
    begin
+      Services.Tests.Helpers.Initialize (Principal);
       Do_Get (Request, Reply, "/users/lost-password.html", "lost-password-1.html");
 
       Request.Set_Parameter ("email", Email);
@@ -137,7 +139,6 @@ package body AWA.Users.Tests is
 
 	  --  Now, get the access key and simulate a click on the reset password link.
 	  declare
-         Principal : Services.Tests.Helpers.Test_User;
 		 Key       : AWA.Users.Models.Access_Key_Ref;
       begin
 	     Services.Tests.Helpers.Find_Access_Key (Principal, Email, Key);
