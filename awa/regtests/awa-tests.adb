@@ -91,4 +91,12 @@ package body AWA.Tests is
       return App;
    end Get_Application;
 
+   --  ------------------------------
+   --  Set the application context to simulate a web request context.
+   --  ------------------------------
+   procedure Set_Application_Context is
+   begin
+      ASF.Server.Tests.Set_Context (App.all'Access);
+   end Set_Application_Context;
+
 end AWA.Tests;

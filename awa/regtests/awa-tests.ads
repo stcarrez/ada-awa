@@ -26,4 +26,7 @@ package AWA.Tests is
    --  Get the test application.
    function Get_Application return AWA.Applications.Application_Access;
 
+   --  Set the application context to simulate a web request context.
+   procedure Set_Application_Context;
+
 end AWA.Tests;
