@@ -1,0 +1,35 @@
+<ui:composition
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:u="http://code.google.com/p/ada-asf/util"
+        xmlns:h="http://java.sun.com/jsf/html">
+
+     <h:form id='register'>
+         <table>
+             <tr><td>#{userMsg.signup_firstname_label}</td><td>
+		<h:inputText id='firstName' size='50' value='#{login.firstName}'>
+                </h:inputText>
+             </td></tr>
+             <tr><td>#{userMsg.signup_lastname_label}</td><td>
+		<h:inputText id='lastName' size='50' value='#{login.lastName}'>
+                </h:inputText>
+             </td></tr>
+             <tr><td>#{userMsg.signup_email_label}</td><td>
+		<h:inputText id='email' size='50' value='#{login.email}'>
+                </h:inputText>
+             </td></tr>
+             <tr><td>#{userMsg.signup_password_label}</td><td>
+                <h:inputText id='password' size='50' value='#{login.password}'>
+                </h:inputText>
+             </td></tr>
+             <tr><td>#{userMsg.signup_retype_password_label}</td><td>
+                <h:inputText id='password' size='50' value='#{login.password}'>
+                </h:inputText>
+             </td></tr>
+             <tr><td></td><td><h:commandButton id='register' value='#{userMsg.signup_register_button}' action="#{login.register}"/></td></tr>
+         </table>
+     </h:form>
+
+</ui:composition>
+

@@ -7,17 +7,17 @@
 
     <h:form id='login'>
         <table>
-            <tr><td>Email</td><td>
+            <tr><td>#{userMsg.login_email_label}</td><td>
 		<h:inputText id='email' size='50' value='#{login.email}'>
                 </h:inputText>
                 <h:message for='email'/>
              </td></tr>
-             <tr><td>Password</td><td>
+             <tr><td>#{userMsg.login_password_label}</td><td>
                 <h:inputText id='password' size='50' value='#{login.password}'>
                 </h:inputText>
                 <h:message for='password'/>
              </td></tr>
-             <tr><td></td><td><h:commandButton id='login' value='Login' action="#{login.authenticate}"/></td></tr>
+             <tr><td></td><td><h:commandButton id='login' value='#{userMsg.login_signin_button}' action="#{login.authenticate}"/></td></tr>
         </table>
     </h:form>
 

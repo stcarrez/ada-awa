@@ -1,17 +1,13 @@
-<ui:composition template="/WEB-INF/layouts/layout.xhtml"
+<ui:composition template="/WEB-INF/layouts/anonymous.xhtml"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:c="http://java.sun.com/jstl/core"
 	xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
-    <ui:param name="title" value="Login Title"/>
+    <ui:param name="title" value="#{userMsg.login_page_title}"/>
 
     <!-- Main page body -->
     <ui:define name="pageBody">
-
-        <h:panelGroup rendered="#{not empty user}">
-            <h2>Welcome #{user}</h2>
-        </h:panelGroup>
         <ui:include src="login-form.xhtml"/>
     </ui:define>
 </ui:composition>
