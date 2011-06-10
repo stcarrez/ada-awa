@@ -46,6 +46,16 @@ package body AWA.Users.Filters is
       Session.Set_Principal (Principal.all'Access);
    end Set_Session_Principal;
 
+   --  ------------------------------
+   --  Initialize the filter and configure the redirection URIs.
+   --  ------------------------------
+   procedure Initialize (Filter  : in out Auth_Filter;
+                         Context : in ASF.Servlets.Servlet_Registry'Class) is
+      URI : constant String := Context.Get_Init_Parameter (AUTH_FILTER_REDIRECT_PARAM);
+   begin
+      Filter.Login_URI := To_Unbounded_String (URI);
+   end Initialize;
+
    procedure Authenticate (F        : in Auth_Filter;
                            Request  : in out ASF.Requests.Request'Class;
                            Response : in out ASF.Responses.Response'Class;
@@ -55,6 +65,20 @@ package body AWA.Users.Filters is
    begin
       null;
    end Authenticate;
+
+   --  ------------------------------
+   --  Display or redirects the user to the login page.  This procedure is called when
+   --  the user is not authenticated.
+   --  ------------------------------
+   overriding
+   procedure Do_Login (Filter   : in Auth_Filter;
+                       Request  : in out ASF.Requests.Request'Class;
+                       Response : in out ASF.Responses.Response'Class) is
+      URI : constant String := To_String (Filter.Login_URI);
+   begin
+      Log.Info ("User is not logged, redirecting to {0}", URI);
+      Response.Send_Redirect (Location => URI);
+   end Do_Login;
 
    --  ------------------------------
    --  Initialize the filter and configure the redirection URIs.
@@ -74,6 +98,7 @@ package body AWA.Users.Filters is
    --  If the access key is missing or invalid, redirect to the
    --  <b>Invalid_Key_URI</b> associated with the filter.
    --  ------------------------------
+   overriding
    procedure Do_Filter (Filter   : in Verify_Filter;
                         Request  : in out ASF.Requests.Request'Class;
                         Response : in out ASF.Responses.Response'Class;

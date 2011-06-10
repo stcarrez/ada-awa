@@ -27,7 +27,22 @@ with ASF.Servlets;
 with Security.Filters;
 package AWA.Users.Filters is
 
-   type Auth_Filter is new Security.Filters.Auth_Filter with null record;
+   --  ------------------------------
+   --  Authentication verification filter
+   --  ------------------------------
+   --  The <b>Auth_Filter</b> verifies that the user has the permission to access
+   --  a given page.  If the user is not logged, it tries to login automatically
+   --  by using some persistent cookie.  When this fails, it redirects the
+   --  user to a login page (configured by AUTH_FILTER_REDIRECT_PARAM property).
+   type Auth_Filter is new Security.Filters.Auth_Filter with private;
+
+   --  The configuration parameter which controls the redirection page
+   --  when the user is not logged (this should be the login page).
+   AUTH_FILTER_REDIRECT_PARAM   : constant String := "user.auth-filter.redirect";
+
+   --  Initialize the filter and configure the redirection URIs.
+   procedure Initialize (Filter  : in out Auth_Filter;
+                         Context : in ASF.Servlets.Servlet_Registry'Class);
 
    overriding
    procedure Authenticate (F        : in Auth_Filter;
@@ -36,6 +51,13 @@ package AWA.Users.Filters is
                            Session  : in ASF.Sessions.Session;
                            Auth_Id  : in String;
                            Principal : out ASF.Principals.Principal_Access);
+
+   --  Display or redirects the user to the login page.  This procedure is called when
+   --  the user is not authenticated.
+   overriding
+   procedure Do_Login (Filter   : in Auth_Filter;
+                       Request  : in out ASF.Requests.Request'Class;
+                       Response : in out ASF.Responses.Response'Class);  
 
    --  ------------------------------
    --  Verify access key filter
@@ -49,6 +71,10 @@ package AWA.Users.Filters is
    --  The request parameter that <b>Verify_Filter</b> will check.
    PARAM_ACCESS_KEY : constant String := "key";
 
+   --  The configuration parameter which controls the redirection page
+   --  when the access key is invalid.
+   VERIFY_FILTER_REDIRECT_PARAM : constant String := "user.verify-filter.redirect";
+
    --  Initialize the filter and configure the redirection URIs.
    procedure Initialize (Filter  : in out Verify_Filter;
                          Context : in ASF.Servlets.Servlet_Registry'Class);
@@ -59,6 +85,7 @@ package AWA.Users.Filters is
    --
    --  If the access key is missing or invalid, redirect to the
    --  <b>Invalid_Key_URI</b> associated with the filter.
+   overriding
    procedure Do_Filter (Filter   : in Verify_Filter;
                         Request  : in out ASF.Requests.Request'Class;
                         Response : in out ASF.Responses.Response'Class;
@@ -67,6 +94,10 @@ package AWA.Users.Filters is
 private
 
    use Ada.Strings.Unbounded;
+
+   type Auth_Filter is new Security.Filters.Auth_Filter with record
+      Login_URI : Unbounded_String;
+   end record;
 
    type Verify_Filter is new ASF.Filters.Filter with record
       Invalid_Key_URI : Unbounded_String;
