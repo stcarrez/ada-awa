@@ -40,6 +40,13 @@ package AWA.Users.Beans is
       Access_Key : Unbounded_String;
    end record;
 
+   --  Attributes exposed by the <b>Authenticate_Bean</b> through Get_Value.
+   EMAIL_ATTR      : constant String := "email";
+   PASSWORD_ATTR   : constant String := "password";
+   FIRST_NAME_ATTR : constant String := "firstName";
+   LAST_NAME_ATTR  : constant String := "lastName";
+   KEY_ATTR        : constant String := "key";
+
    type Authenticate_Bean_Access is access all Authenticate_Bean'Class;
 
    --  Get the value identified by the name.

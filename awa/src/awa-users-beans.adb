@@ -162,7 +162,7 @@ package body AWA.Users.Beans is
          Verify_Binding.Proxy'Access,
          Lost_Password_Binding.Proxy'Access,
          Reset_Password_Binding.Proxy'Access);
-
+   
    --  ------------------------------
    --  Get the value identified by the name.
    --  ------------------------------
@@ -170,11 +170,15 @@ package body AWA.Users.Beans is
    function Get_Value (From : in Authenticate_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
-      if Name = "email" then
+      if Name = EMAIL_ATTR then
          return Util.Beans.Objects.To_Object (From.Email);
-      elsif Name = "password" then
+      elsif Name = PASSWORD_ATTR then
          return Util.Beans.Objects.To_Object (From.Password);
-      elsif Name = "key" then
+      elsif Name = FIRST_NAME_ATTR then
+         return Util.Beans.Objects.To_Object (From.First_Name);
+      elsif Name = LAST_NAME_ATTR then
+         return Util.Beans.Objects.To_Object (From.Last_Name);
+      elsif Name = KEY_ATTR then
          return Util.Beans.Objects.To_Object (From.Access_Key);
       else
          return Util.Beans.Objects.Null_Object;
@@ -189,11 +193,15 @@ package body AWA.Users.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      if Name = "email" then
+      if Name = EMAIL_ATTR then
          From.Email := Util.Beans.Objects.To_Unbounded_String (Value);
-      elsif Name = "password" then
+      elsif Name = PASSWORD_ATTR then
          From.Password := Util.Beans.Objects.To_Unbounded_String (Value);
-      elsif Name = "key" then
+      elsif Name = FIRST_NAME_ATTR then
+         From.First_Name := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = LAST_NAME_ATTR then
+         From.Last_Name := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = KEY_ATTR then
          From.Access_Key := Util.Beans.Objects.To_Unbounded_String (Value);
       end if;
    end Set_Value;
