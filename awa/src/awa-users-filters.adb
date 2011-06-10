@@ -20,13 +20,7 @@ with Util.Log.Loggers;
 
 with AWA.Users.Services;
 with AWA.Users.Module;
-with ASF.Filters;
-with ASF.Requests;
-with ASF.Responses;
-with ASF.Servlets;
-with ASF.Sessions;
-with ASF.Cookies;
-with ASF.Principals;
+
 with AWA.Users.Principals;
 with AWA.Users.Models;
 package body AWA.Users.Filters is
@@ -77,7 +71,12 @@ package body AWA.Users.Filters is
       URI : constant String := To_String (Filter.Login_URI);
    begin
       Log.Info ("User is not logged, redirecting to {0}", URI);
-      Response.Send_Redirect (Location => URI);
+
+      if Request.Get_Header ("X-Requested-With") = "" then
+         Response.Send_Redirect (Location => URI);
+      else
+         Response.Send_Error (ASF.Responses.SC_UNAUTHORIZED);
+      end if;
    end Do_Login;
 
    --  ------------------------------
@@ -104,7 +103,7 @@ package body AWA.Users.Filters is
                         Response : in out ASF.Responses.Response'Class;
                         Chain    : in out ASF.Servlets.Filter_Chain) is
       Key     : constant String := Request.Get_Parameter ("key");
-      Manager : AWA.Users.Services.User_Service_Access := AWA.Users.Module.Get_User_Manager;
+      Manager : constant Users.Services.User_Service_Access := Users.Module.Get_User_Manager;
       User    : AWA.Users.Models.User_Ref;
       Session : AWA.Users.Models.Session_Ref;
    begin
