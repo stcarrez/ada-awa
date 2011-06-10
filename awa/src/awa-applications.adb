@@ -17,6 +17,7 @@
 -----------------------------------------------------------------------
 
 with AWA.Modules;
+with AWA.Components.Factory;
 package body AWA.Applications is
 
    --  ------------------------------
@@ -29,6 +30,7 @@ package body AWA.Applications is
       URI : constant String := Conf.Get ("database");
    begin
       ASF.Applications.Main.Application (App).Initialize (Conf, Factory);
+      App.Add_Components (AWA.Components.Factory.Definition);
       App.Factory.Create (URI);
    end Initialize;
 
