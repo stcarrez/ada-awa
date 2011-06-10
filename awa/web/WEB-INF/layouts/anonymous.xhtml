@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<f:view contentType="text/html; charset=UTF-8"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:u="http://code.google.com/p/ada-asf/util"
+        xmlns:h="http://java.sun.com/jsf/html">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link media="screen" type="text/css" rel="stylesheet" href="/awa/themes/main.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="/awa/themes/list.css"/>
+    <ui:insert name="pageHeader"/>
+    <title>#{title}</title>
+</head>
+<body class="#{not empty pageStyle ? pageStyle : ''}">
+<!-- Top header with user account -->
+<div id='awa-hdr'>
+  <div id='awa-top'>
+    <ul>
+      <li id='help'><a href="http://code.google.com/p/ada-awa" title="#{layoutMsg.layout_help_title}">
+         #{layoutMsg.layout_help_label}
+      </a></li>
+      <li>|</li>
+      <li id='settings'><a href="#{contextPath}/statistics.xml" title="#{layoutMsg.layout_statistics_title}">
+         #{layoutMsg.layout_statistics_label}
+       </a></li>
+    </ul>
+  </div>
+</div>
+<div id='awa-page'>
+    <ui:insert name="pageBody"/>
+    <div id="awa-clfooter"></div>
+</div>
+<div id="awa-footer">
+    <div id="blk_footer">
+        <div id="awa-copyright">
+            <span>#{layoutMsg.layout_copyright}</span>
+        </div>
+        <div id="awa-footer_content">
+            <span>#{layoutMsg.layout_served_by}</span>
+            <a href="http://code.google.com/p/ada-awa">AWA</a> |
+            <a href="http://libre.adacore.com/libre/tools/aws/">AWS</a>
+        </div>
+    </div>
+</div>
+<ui:insert name="pageScript"/>
+
+<!--DEV_START-->
+<ui:debug/>
+<!--DEV_END-->
+</body>
+</html>
+</f:view>
