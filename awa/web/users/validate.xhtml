@@ -1,36 +1,6 @@
-<ui:composition template="/WEB-INF/layouts/layout.xhtml"
-        xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:c="http://java.sun.com/jstl/core"
-	xmlns:u="http://code.google.com/p/ada-asf/util"
-        xmlns:h="http://java.sun.com/jsf/html">
-    <ui:param name="title" value="Login Title"/>
-
-    <!-- Main page body -->
-    <ui:define name="pageBody">
-
-     <h:form id='register'>
-         <table>
-             <tr><td>First name</td><td>
-		<h:inputText id='firstName' size='50' value='#{login.firstName}'>
-                </h:inputText>
-             </td></tr>
-             <tr><td>Last name</td><td>
-		<h:inputText id='lastName' size='50' value='#{login.lastName}'>
-                </h:inputText>
-             </td></tr>
-             <tr><td>Email</td><td>
-		<h:inputText id='email' size='50' value='#{login.email}'>
-                </h:inputText>
-             </td></tr>
-             <tr><td>Password</td><td>
-                <h:inputText id='password' size='50' value='#{login.password}'>
-                </h:inputText>
-             </td></tr>
-             <tr><td></td><td><h:commandButton id='register' value='Register' action="#{login.register}"/></td></tr>
-         </table>
-     </h:form>
-
-    </ui:define>
-</ui:composition>
+<awa:redirect link="/users/main.html"
+	      xmlns:awa="http://code.google.com/p/ada-awa/jsf"
+	      xmlns:u="http://code.google.com/p/ada-asf/util"
+	      xmlns:h="http://java.sun.com/jsf/html">
+</awa:redirect>
 
