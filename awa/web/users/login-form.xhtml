@@ -5,21 +5,33 @@
 	xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
 
-    <h:form id='login'>
-        <table>
-            <tr><td>#{userMsg.login_email_label}</td><td>
-		<h:inputText id='email' size='50' value='#{login.email}'>
-                </h:inputText>
-                <h:message for='email'/>
-             </td></tr>
-             <tr><td>#{userMsg.login_password_label}</td><td>
-                <h:inputText id='password' size='50' value='#{login.password}'>
-                </h:inputText>
-                <h:message for='password'/>
-             </td></tr>
-             <tr><td></td><td><h:commandButton id='login' value='#{userMsg.login_signin_button}' action="#{login.authenticate}"/></td></tr>
-        </table>
-    </h:form>
+  <h:form id='login'>
+    <div class='awa-login'>
+      <ul>
+        <li>
+           <label for='email'>#{userMsg.login_email_label}</label>
+	   <h:inputText id='email' size='50' value='#{login.email}'>
+             <f:validateLength minimum='3' maximum='80'/>
+           </h:inputText>
+           <h:message for='email'/>
+        </li>
+        <li>
+           <label for='password'>#{userMsg.login_password_label}</label>
+           <h:inputText id='password' size='20' value='#{login.password}'>
+             <f:validateLength minimum='3' maximum='80'/>
+           </h:inputText>
+           <h:message for='password'/>
+        </li>
+        <li>
+          <h:commandButton id='login' value='#{userMsg.login_signin_button}'
+                           action="#{login.authenticate}"/>
+          <a href='lost-password.html' title='#{userMsg.lost_password_link_title}'>
+             #{userMsg.lost_password_link}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </h:form>
 
 </ui:composition>
 
