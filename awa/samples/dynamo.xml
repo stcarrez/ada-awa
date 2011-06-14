@@ -1,0 +1,2 @@
+<project><name>atlas</name>
+<property name="database">mysql://localhost:3306/atlas?user=atlas</property></project>
