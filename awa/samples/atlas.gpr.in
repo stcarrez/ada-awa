@@ -1,0 +1,21 @@
+with "config";
+with "@AWA_DIR@util/util";
+with "@AWA_DIR@el/el";
+with "@AWA_DIR@asf/asf";
+with "@AWA_DIR@awa/awa";
+with "@AWA_DIR@ado/ado";
+
+project atlas is
+
+   Mains := ("atlas-server.adb");
+   for Main use Mains;
+   for Source_Dirs use ("src");
+   for Object_Dir use "./" & Config'Object_Dir & "/obj";
+   for Exec_Dir use "./" & Config'Exec_Dir & "/bin";
+
+   package Binder renames Config.Binder;
+   package Builder renames Config.Builder;
+   package Compiler renames Config.Compiler;
+   package Linker renames Config.Linker;
+
+end atlas;

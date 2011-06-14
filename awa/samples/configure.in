@@ -1,0 +1,47 @@
+dnl Autoconf configure script for atlas
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(src/atlas.ads)
+AC_CANONICAL_SYSTEM
+dnl AM_MAINTAINER_MODE
+AC_EXEEXT
+# Current release settings
+ATLAS_MAJOR_VERSION=0
+ATLAS_MINOR_VERSION=1
+ATLAS_MICRO_VERSION=0
+ATLAS=$ATLAS_MAJOR_VERSION.$ATLAS_MINOR_VERSION.$ATLAS_MICRO_VERSION
+# checking for local tools
+AC_PROG_CC
+# AM_PATH_GNAT
+# AM_PATH_PERL
+AC_PROG_MAKE_SET
+AC_PROG_INSTALL
+AC_PROG_RANLIB
+# Set the version number of GtkAda
+AC_SUBST(ATLAS_VERSION)
+AC_SUBST(ATLAS_MAJOR_VERSION)
+AC_SUBST(ATLAS_MINOR_VERSION)
+AC_SUBST(ATLAS_MICRO_VERSION)
+EXEC_PREFIX="$prefix"
+AC_SUBST(EXEC_PREFIX)
+ATLAS_LIBDIR="lib"
+AC_SUBST(ATLAS_LIBDIR)
+##########################################
+# Ada Web Application library
+##########################################
+AC_MSG_CHECKING([Ada Web Application library (code.google.com/p/ada-awa)])
+AC_ARG_WITH(ada-awa,
+AS_HELP_STRING([--with-ada-awa=x], [Path for the Ada Web Application library (code.google.com/p/ada-awa)]),
+[
+  AWA_DIR=${withval}/
+],
+[
+  AWA_DIR=../awa/
+])
+if test ! -f ${AWA_DIR}/util/util.gpr; then
+   AC_MSG_ERROR([Ada Utility library not found in ${AWA_DIR}/util/util.gpr])
+fi
+AC_MSG_RESULT(${AWA_DIR})
+AC_SUBST(AWA_DIR)
+AC_OUTPUT(
+Makefile atlas.gpr tests.gpr
+)
