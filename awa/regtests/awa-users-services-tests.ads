@@ -17,13 +17,13 @@
 -----------------------------------------------------------------------
 
 with AUnit.Test_Suites;
-with AUnit.Test_Fixtures;
+with Util.Tests;
 
 package AWA.Users.Services.Tests is
 
    procedure Add_Tests (Suite : AUnit.Test_Suites.Access_Test_Suite);
 
-   type Test is new AUnit.Test_Fixtures.Test_Fixture with null record;
+   type Test is new Util.Tests.Test with null record;
 
    procedure Test_Create_User (T : in out Test);
    procedure Test_Logout_User (T : in out Test);

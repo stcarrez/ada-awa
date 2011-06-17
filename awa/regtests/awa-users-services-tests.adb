@@ -58,11 +58,11 @@ package body AWA.Users.Services.Tests is
    begin
       --  Create the user
       Helpers.Create_User (Principal);
-      Assert (T, not Principal.User.Is_Null, "User is created");
-      Assert (T, Principal.User.Get_Id > 0, "User has an allocated key");
-      Assert (T, Principal.Email.Get_Id > 0, "Email has an allocated key");
-      Assert (T, not Principal.Session.Is_Null, "Session must be created");
-      Assert (T, Principal.Session.Get_End_Date.Is_Null, "Session must be opened");
+      T.Assert (not Principal.User.Is_Null, "User is created");
+      T.Assert (Principal.User.Get_Id > 0, "User has an allocated key");
+      T.Assert (Principal.Email.Get_Id > 0, "Email has an allocated key");
+      T.Assert (not Principal.Session.Is_Null, "Session must be created");
+      T.Assert (Principal.Session.Get_End_Date.Is_Null, "Session must be opened");
 
       --  Verify the user session
       declare
@@ -72,10 +72,10 @@ package body AWA.Users.Services.Tests is
          Principal.Manager.Verify_Session (Id => Principal.Session.Get_Id,
                                            Session => S1, User => U1);
 
-         Assert (T, not S1.Is_Null, "Null session returned by Verify_Session");
-         Assert (T, not U1.Is_Null, "Null user returned by Verify_Session");
-         Assert (T, not S1.Get_Start_Date.Is_Null, "Session must be started");
-         Assert (T, S1.Get_End_Date.Is_Null, "Session must not be finished");
+         t.Assert (not S1.Is_Null, "Null session returned by Verify_Session");
+         T.Assert (not U1.Is_Null, "Null user returned by Verify_Session");
+         T.Assert (not S1.Get_Start_Date.Is_Null, "Session must be started");
+         T.Assert (S1.Get_End_Date.Is_Null, "Session must not be finished");
          Util.Tests.Assert_Equals (T, Principal.Session.Get_Start_Date.Value,
                                    S1.Get_Start_Date.Value,
                                    "Invalid start date");
@@ -93,9 +93,9 @@ package body AWA.Users.Services.Tests is
    begin
       --  Create the user
       Helpers.Create_User (Principal);
-      Assert (T, not Principal.User.Is_Null, "User is created");
-      Assert (T, Principal.User.Get_Id > 0, "User has an allocated key");
-      Assert (T, Principal.Email.Get_Id > 0, "Email has an allocated key");
+      T.Assert (not Principal.User.Is_Null, "User is created");
+      T.Assert (Principal.User.Get_Id > 0, "User has an allocated key");
+      T.Assert (Principal.Email.Get_Id > 0, "Email has an allocated key");
 
       Helpers.Logout (Principal);
 
@@ -107,7 +107,7 @@ package body AWA.Users.Services.Tests is
          Principal.Manager.Verify_Session (Id => Principal.Session.Get_Id,
                                            Session => S1, User => U1);
 
-         Assert (T, False, "Verify_Session should report a non-existent session");
+         T.Assert (False, "Verify_Session should report a non-existent session");
 
       exception
          when Not_Found =>
@@ -117,7 +117,7 @@ package body AWA.Users.Services.Tests is
       begin
          Helpers.Logout (Principal);
 
-         Assert (T, False, "Second logout should report a non-existent session");
+         T.Assert (False, "Second logout should report a non-existent session");
 
       exception
          when Not_Found =>
@@ -137,7 +137,7 @@ package body AWA.Users.Services.Tests is
       begin
          Principal.Email.Set_Email ("nobody@gmail.com");
          Helpers.Login (Principal);
-         Assert (T, False, "Login succeeded with an invalid user name");
+         T.Assert (False, "Login succeeded with an invalid user name");
 
          exception
          when Not_Found =>
@@ -150,10 +150,10 @@ package body AWA.Users.Services.Tests is
 
       Helpers.Login (Principal);
 
-      Assert (T, not Principal.User.Is_Null, "User is created");
-      Assert (T, Principal.User.Get_Id > 0, "User has an allocated key");
-      Assert (T, Principal.Email.Get_Id > 0, "Email has an allocated key");
-      Assert (T, not Principal.Session.Is_Null, "Session is not created");
+      T.Assert (not Principal.User.Is_Null, "User is created");
+      T.Assert (Principal.User.Get_Id > 0, "User has an allocated key");
+      T.Assert (Principal.Email.Get_Id > 0, "Email has an allocated key");
+      T.Assert (not Principal.Session.Is_Null, "Session is not created");
 
       --  Verify the user session
       declare
@@ -164,10 +164,10 @@ package body AWA.Users.Services.Tests is
          Principal.Manager.Verify_Session (Id => Principal.Session.Get_Id,
                                            Session => S1, User => U1);
 
-         Assert (T, not S1.Is_Null, "Null session returned by Verify_Session");
-         Assert (T, not U1.Is_Null, "Null user returned by Verify_Session");
-         Assert (T, not S1.Get_Start_Date.Is_Null, "Session start date must not be null");
-         Assert (T, S1.Get_End_Date.Is_Null, "Session end date must be null");
+         T.Assert (not S1.Is_Null, "Null session returned by Verify_Session");
+         T.Assert (not U1.Is_Null, "Null user returned by Verify_Session");
+         T.Assert (not S1.Get_Start_Date.Is_Null, "Session start date must not be null");
+         T.Assert (S1.Get_End_Date.Is_Null, "Session end date must be null");
          Util.Tests.Assert_Equals (T, Principal.Session.Get_Start_Date.Value,
                                    S1.Get_Start_Date.Value,
                                    "Invalid start date");
@@ -175,8 +175,8 @@ package body AWA.Users.Services.Tests is
                                    S1.Get_Start_Date.Value,
                                    "Invalid start date 3");
 
-         Assert (T, T2 >= S1.Get_Start_Date.Value, "Start date is invalid 1");
-         Assert (T, T1 <= S1.Get_Start_Date.Value + 1.0, "Start date is invalid 2");
+         T.Assert (T2 >= S1.Get_Start_Date.Value, "Start date is invalid 1");
+         T.Assert (T1 <= S1.Get_Start_Date.Value + 1.0, "Start date is invalid 2");
 
          Principal.Manager.Close_Session (Principal.Session.Get_Id);
       end;
@@ -208,7 +208,7 @@ package body AWA.Users.Services.Tests is
          Query.Set_Filter ("user_id = ?");
          Query.Bind_Param (1, Principal.User.Get_Id);
          Key.Find (DB, Query, Found);
-         Assert (T, Found, "Access key for lost_password process not found");
+         T.Assert (Found, "Access key for lost_password process not found");
 
          Principal.Manager.Reset_Password (Key      => Key.Get_Access_Key,
                                            Password => "newadmin",
@@ -218,13 +218,13 @@ package body AWA.Users.Services.Tests is
 
          --  Search the access key again, it must have been removed.
          Key.Find (DB, Query, Found);
-         Assert (T, not Found, "The access key is still present in the database");
+         T.Assert (not Found, "The access key is still present in the database");
       end;
 
-      Assert (T, not Principal.User.Is_Null, "User is created");
-      Assert (T, Principal.User.Get_Id > 0, "User has an allocated key");
-      Assert (T, Principal.Email.Get_Id > 0, "Email has an allocated key");
-      Assert (T, not Principal.Session.Is_Null, "Session is not created");
+      T.Assert (not Principal.User.Is_Null, "User is created");
+      T.Assert (Principal.User.Get_Id > 0, "User has an allocated key");
+      T.Assert (Principal.Email.Get_Id > 0, "Email has an allocated key");
+      T.Assert (not Principal.Session.Is_Null, "Session is not created");
 
       Helpers.Logout (Principal);
 
@@ -239,7 +239,7 @@ package body AWA.Users.Services.Tests is
       declare
          M : AWA.Users.Module.User_Module_Access := AWA.Users.Module.Get_User_Module;
       begin
-         Assert (T, M /= null, "Get_User_Module returned null");
+         T.Assert (M /= null, "Get_User_Module returned null");
       end;
       declare
          T : Util.Measures.Stamp;
