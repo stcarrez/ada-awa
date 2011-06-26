@@ -3,6 +3,7 @@
 GNATMAKE=gnatmake
 GNATCLEAN=gnatclean
 GPRPATH=awa.gpr
+SVN=svn
 
 distdir=awa-@AWA_VERSION@
 
@@ -48,7 +49,7 @@ rebuild: clean build
 GENERATOR=dynamo
 
 generate:
-	$(GENERATOR) -o src/model generate db/User.hbm.xml db/Comment.hbm.xml
+	$(GENERATOR) generate db
 
 # Files to package in source distribution
 DISTFILES=README LICENSE.txt NOTICE.txt CHANGES config.guess configure config.sub \
@@ -79,3 +80,11 @@ dist:
 	tar --exclude=.svn --exclude="*~" --exclude="*.o" --exclude="*.ali" \
 	    --exclude="*.log" --exclude="*.a" \
 	    -cvzf $(DIST_FILE) $(distdir)
+
+
+# prepare before releasing a new version of the package
+# (collect information about changes and SVN repository)
+prepare-release:
+	${SVN} update
+	${SVN} info > CHANGES
+	${SVN} log -v > ChangeLog
