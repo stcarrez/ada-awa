@@ -35,6 +35,14 @@ clean:
 	   cd ..; \
 	done
 
+# Clean the root project of all build products.
+install:
+	for i in $(SUBDIRS); do \
+	   cd $$i; \
+	   $(MAKE) install; \
+	   cd ..; \
+	done
+
 # Clean, then build executables for all mains defined by the project.
 rebuild: clean build
 
