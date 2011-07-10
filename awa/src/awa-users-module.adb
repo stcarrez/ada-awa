@@ -39,8 +39,6 @@ package body AWA.Users.Module is
    begin
       Log.Info ("Initializing the users module");
 
-      AWA.Modules.Module (Plugin).Initialize (App);
-
       --  Setup the resource bundles.
       App.Register ("userMsg", "users");
 
@@ -54,24 +52,10 @@ package body AWA.Users.Module is
 
 	  Plugin.Manager := Plugin.Create_User_Manager;
       Register.Register (Plugin  => Plugin,
-                         Name    => "login",
-                         Handler => AWA.Users.Beans.Create_Authenticate_Bean'Access,
-                         Scope   => ASF.Beans.REQUEST_SCOPE);
+                         Name    => "AWA.Users.Beans.Authenticate_Bean",
+                         Handler => AWA.Users.Beans.Create_Authenticate_Bean'Access);
 
-      Register.Register (Plugin  => Plugin,
-                         Name    => "register",
-                         Handler => AWA.Users.Beans.Create_Authenticate_Bean'Access,
-                         Scope   => ASF.Beans.REQUEST_SCOPE);
-
-      Register.Register (Plugin  => Plugin,
-                         Name    => "resetPassword",
-                         Handler => AWA.Users.Beans.Create_Authenticate_Bean'Access,
-                         Scope   => ASF.Beans.REQUEST_SCOPE);
-
-      Register.Register (Plugin  => Plugin,
-                         Name    => "lostPassword",
-                         Handler => AWA.Users.Beans.Create_Authenticate_Bean'Access,
-                         Scope   => ASF.Beans.REQUEST_SCOPE);
+      AWA.Modules.Module (Plugin).Initialize (App);
    end Initialize;
 
    --  ------------------------------

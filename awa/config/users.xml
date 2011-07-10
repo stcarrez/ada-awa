@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<module version="1.0">
+
+  <managed-bean>
+    <description>This bean is used by the login form</description>
+    <managed-bean-name>login</managed-bean-name>
+    <managed-bean-class>AWA.Users.Beans.Authenticate_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <description>This bean is used by the registration form</description>
+    <managed-bean-name>register</managed-bean-name>
+    <managed-bean-class>AWA.Users.Beans.Authenticate_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <description>This bean is used by the reset password form</description>
+    <managed-bean-name>resetPassword</managed-bean-name>
+    <managed-bean-class>AWA.Users.Beans.Authenticate_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <description>This bean is used by the lost password form</description>
+    <managed-bean-name>lostPassword</managed-bean-name>
+    <managed-bean-class>AWA.Users.Beans.Authenticate_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <navigation-rule>
+    <from-view-id>/users/login.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/users/main.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/users/register.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/users/registration-sent.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <filter-mapping>
+    <filter-name>verify-access-key</filter-name>
+    <url-pattern>/users/validate.html</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>verify-access-key</filter-name>
+    <url-pattern>/users/reset-password.html</url-pattern>
+  </filter-mapping>
+  
+</module>
