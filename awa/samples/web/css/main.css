@@ -24,6 +24,10 @@ a {
   text-decoration: none;
 }
 
+a:hover {
+  text-decoration: underline;
+}
+
 #awa-page {
   position: relative;
   min-height:100%;
