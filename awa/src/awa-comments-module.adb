@@ -16,13 +16,26 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with Util.Log.Loggers;
 package body AWA.Comments.Module is
+
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Comments.Module");
 
    overriding
    procedure Initialize (Plugin : in out Comment_Module;
                          App    : access ASF.Applications.Main.Application'Class) is
    begin
-      null;
+      Log.Info ("Initializing the comments module");
+
+      --  Setup the resource bundles.
+      App.Register ("userMsg", "users");
+
+--        Plugin.Manager := Plugin.Create_User_Manager;
+--        Register.Register (Plugin  => Plugin,
+--                           Name    => "AWA.Users.Beans.Authenticate_Bean",
+--                           Handler => AWA.Users.Beans.Create_Authenticate_Bean'Access);
+
+      AWA.Modules.Module (Plugin).Initialize (App);
    end Initialize;
 
 end AWA.Comments.Module;
