@@ -25,6 +25,7 @@ with ASF.Servlets.Measures;
 with Security.Openid.Servlets;
 with AWA.Users.Principals;
 with AWA.Users.Module;
+with AWA.Comments.Module;
 with AWA.Services.Filters;
 package Atlas.Applications is
 
@@ -43,6 +44,7 @@ private
       Auth           : aliased Security.Openid.Servlets.Request_Auth_Servlet;
       Verify_Auth    : aliased AWA.Users.Principals.Verify_Auth_Servlet;
       User_Module    : aliased AWA.Users.Module.User_Module;
+      Comment_Module : aliased AWA.Comments.Module.Comment_Module;
       Perf           : aliased ASF.Servlets.Measures.Measure_Servlet;
    end record;
 
