@@ -42,12 +42,16 @@ package body AWA.Users.Module is
       --  Setup the resource bundles.
       App.Register ("userMsg", "users");
 
+      --  Register the OpenID servlets.
+      App.Add_Servlet (Name   => "openid-auth",
+                       Server => Plugin.Auth'Unchecked_Access);
+      App.Add_Servlet (Name   => "openid-verify",
+                       Server => Plugin.Verify_Auth'Unchecked_Access);
+
 	  --  Setup the verify access key filter.
       App.Add_Filter ("verify-access-key", Plugin.Key_Filter'Access);
-      App.Add_Filter_Mapping (Pattern => "/users/validate.html",
-                              Name    => "verify-access-key");
-      App.Add_Filter_Mapping (Pattern => "/users/reset-password.html",
-                              Name    => "verify-access-key");
+      App.Add_Filter ("auth-filter", Plugin.Auth_Filter'Access);
+
       Plugin.Key_Filter.Initialize (App.all);
 
 	  Plugin.Manager := Plugin.Create_User_Manager;
