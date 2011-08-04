@@ -84,7 +84,7 @@ package body AWA.Users.Filters is
    --  ------------------------------
    procedure Initialize (Filter  : in out Verify_Filter;
                          Context : in ASF.Servlets.Servlet_Registry'Class) is
-      URI : constant String := Context.Get_Init_Parameter ("user.verif-filter.redirect");
+      URI : constant String := Context.Get_Init_Parameter (VERIFY_FILTER_REDIRECT_PARAM);
    begin
       Filter.Invalid_Key_URI := To_Unbounded_String (URI);
    end Initialize;
@@ -102,7 +102,7 @@ package body AWA.Users.Filters is
                         Request  : in out ASF.Requests.Request'Class;
                         Response : in out ASF.Responses.Response'Class;
                         Chain    : in out ASF.Servlets.Filter_Chain) is
-      Key     : constant String := Request.Get_Parameter ("key");
+      Key     : constant String := Request.Get_Parameter (PARAM_ACCESS_KEY);
       Manager : constant Users.Services.User_Service_Access := Users.Module.Get_User_Manager;
       User    : AWA.Users.Models.User_Ref;
       Session : AWA.Users.Models.Session_Ref;
