@@ -97,19 +97,19 @@ package body AWA.Users.Services is
       User.Find (DB, Query, Found);
       if not Found then
          Log.Info ("User {0} is not known", Email);
-
-         User.Set_Name (Name);
-         User.Set_Open_Id (OpenId);
-         User.Save (DB);
          declare
             E : Email_Ref;
          begin
             E.Set_Email (Email);
-            E.Set_User_Id (User.Get_Id);
+            E.Set_User_Id (0);
             E.Save (DB);
 
             User.Set_Email (E);
+            User.Set_Name (Name);
+            User.Set_Open_Id (OpenId);
             User.Save (DB);
+            E.Set_User_Id (User.Get_Id);
+            E.Save (DB);
          end;
       end if;
 
