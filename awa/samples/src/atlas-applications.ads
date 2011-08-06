@@ -20,10 +20,9 @@ with AWA.Applications;
 
 with ASF.Servlets.Faces;
 with ASF.Servlets.Files;
+with ASF.Servlets.Ajax;
 with ASF.Filters.Dump;
 with ASF.Servlets.Measures;
-with Security.Openid.Servlets;
-with AWA.Users.Principals;
 with AWA.Users.Module;
 with AWA.Comments.Module;
 with AWA.Services.Filters;
@@ -39,10 +38,9 @@ private
    type Application is new AWA.Applications.Application with record
       Faces          : aliased ASF.Servlets.Faces.Faces_Servlet;
       Files          : aliased ASF.Servlets.Files.File_Servlet;
+      Ajax           : aliased ASF.Servlets.Ajax.Ajax_Servlet;
       Dump           : aliased ASF.Filters.Dump.Dump_Filter;
       Service_Filter : aliased AWA.Services.Filters.Service_Filter;
-      Auth           : aliased Security.Openid.Servlets.Request_Auth_Servlet;
-      Verify_Auth    : aliased AWA.Users.Principals.Verify_Auth_Servlet;
       User_Module    : aliased AWA.Users.Module.User_Module;
       Comment_Module : aliased AWA.Comments.Module.Comment_Module;
       Perf           : aliased ASF.Servlets.Measures.Measure_Servlet;

@@ -51,26 +51,20 @@ package body Atlas.Applications is
       --  Register the servlets and filters
       App.Add_Servlet (Name => "faces", Server => App.Faces'Access);
       App.Add_Servlet (Name => "files", Server => App.Files'Access);
-      App.Add_Servlet (Name => "auth", Server => App.Auth'Access);
-      App.Add_Servlet (Name => "verify-auth", Server => App.Verify_Auth'Access);
       App.Add_Servlet (Name => "perf", Server => App.Perf'Access);
+      App.Add_Servlet (Name => "action", Server => App.Ajax'Access);
       App.Add_Filter (Name => "dump", Filter => App.Dump'Access);
       App.Add_Filter (Name => "service", Filter => App.Service_Filter'Access);
       App.Add_Filter (Name => "perf", Filter => App.Perf'Access);
       App.Add_Filter (Name => "service", Filter => App.Service_Filter'Access);
 
-      Register (App    => App.all'Access,
-                Name   => "users", URI => "users",
-                Module => App.User_Module'Access);
-
       --  Define servlet mappings
+      App.Add_Mapping (Name => "action", Pattern => "/action/*");
       App.Add_Mapping (Name => "faces", Pattern => "*.html");
       App.Add_Mapping (Name => "files", Pattern => "*.css");
       App.Add_Mapping (Name => "files", Pattern => "*.js");
       App.Add_Mapping (Name => "files", Pattern => "*.png");
       App.Add_Mapping (Name => "files", Pattern => "*.jpg");
-      App.Add_Mapping (Name => "verify-auth", Pattern => "/auth/verify");
-      App.Add_Mapping (Name => "auth", Pattern => "/auth/auth/*");
       App.Add_Mapping (Name => "perf", Pattern => "statistics.xml");
 
       App.Add_Filter_Mapping (Name => "perf", Pattern => "*.html");
@@ -81,9 +75,14 @@ package body Atlas.Applications is
 
       App.Add_Filter_Mapping (Name => "dump", Pattern => "*.html");
       App.Add_Filter_Mapping (Name => "service", Pattern => "*.html");
+      App.Add_Filter_Mapping (Name => "service", Pattern => "/action/*");
       App.Add_Filter_Mapping (Name => "dump", Pattern => "*.css");
       App.Add_Filter_Mapping (Name => "dump", Pattern => "*.png");
       App.Add_Filter_Mapping (Name => "dump", Pattern => "*.jpg");
+
+      Register (App    => App.all'Access,
+                Name   => "users", URI => "users",
+                Module => App.User_Module'Access);
       App.Add_Filter_Mapping (Name => "dump", Pattern => "/auth/verify");
       App.Add_Filter_Mapping (Name => "dump", Pattern => "/auth/auth/*");
       --

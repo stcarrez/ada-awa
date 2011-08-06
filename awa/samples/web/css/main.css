@@ -122,30 +122,3 @@ div.awa-title div {
   width: 100%;
 }
 
-.awa-login {
-  border: 4px solid #ddd;
-  padding: 1.5em 18px;
-  background: none repeat scroll 0 0 #eee;
-  display: block;
-  width: 420px;
-}
-
-.awa-login ul {
-  list-style-type: none;
-  margin: 1em 0;
-}
-.awa-login label {
-  display: inline;
-  float: left;
-  width: 120px;
-  text-align: left;
-  color: #555;
-  font-weight: bold;
-  padding: 1em 3px 0;
-}
-.awa-login input {
-  width: 210px;
-  padding: 5px;
-  margin: 0.5em 0;
-  border: 1px solid #888;
-}
