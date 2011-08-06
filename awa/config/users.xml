@@ -29,8 +29,15 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
+  <managed-bean>
+    <description>This bean is used by the logout process</description>
+    <managed-bean-name>logout</managed-bean-name>
+    <managed-bean-class>AWA.Users.Beans.Authenticate_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
   <navigation-rule>
-    <from-view-id>/users/login.xhtml</from-view-id>
+    <from-view-id>/auth/login.xhtml</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
       <to-view-id>/users/main.xhtml</to-view-id>
@@ -38,21 +45,50 @@
   </navigation-rule>
 
   <navigation-rule>
-    <from-view-id>/users/register.xhtml</from-view-id>
+    <from-view-id>/auth/register.xhtml</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
-      <to-view-id>/users/registration-sent.xhtml</to-view-id>
+      <to-view-id>/auth/registration-sent.xhtml</to-view-id>
     </navigation-case>
   </navigation-rule>
 
+  <navigation-rule>
+    <from-view-id>/ajax/logout/logout</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/auth/thank-you.xhtml</to-view-id>
+      <redirect/>
+    </navigation-case>
+  </navigation-rule>
+
+  <servlet-mapping>
+    <servlet-name>openid-auth</servlet-name>
+    <url-pattern>/auth/auth/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>openid-verify</servlet-name>
+    <url-pattern>/auth/verify</url-pattern>
+  </servlet-mapping>
+
   <filter-mapping>
     <filter-name>verify-access-key</filter-name>
-    <url-pattern>/users/validate.html</url-pattern>
+    <url-pattern>/auth/validate.html</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
     <filter-name>verify-access-key</filter-name>
-    <url-pattern>/users/reset-password.html</url-pattern>
+    <url-pattern>/auth/reset-password.html</url-pattern>
   </filter-mapping>
   
+  <filter-mapping>
+    <filter-name>service</filter-name>
+    <url-pattern>/auth/verify</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>auth-filter</filter-name>
+    <url-pattern>/users/*.html</url-pattern>
+  </filter-mapping>
+
 </module>
