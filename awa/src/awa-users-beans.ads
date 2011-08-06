@@ -89,6 +89,10 @@ package AWA.Users.Beans is
    procedure Authenticate_User (Data    : in out Authenticate_Bean;
                                 Outcome : in out Unbounded_String);
 
+   --  Logout the user and closes the session.
+   procedure Logout_User (Data    : in out Authenticate_Bean;
+                          Outcome : in out Unbounded_String);
+
    --  Create an authenticate bean.
    function Create_Authenticate_Bean (Module : in AWA.Users.Module.User_Module_Access)
                                       return Util.Beans.Basic.Readonly_Bean_Access;

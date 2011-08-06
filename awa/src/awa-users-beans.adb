@@ -16,9 +16,11 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with ASF.Principals;
 with ASF.Sessions;
 with ASF.Events.Actions;
 with ASF.Contexts.Faces;
+with ASF.Cookies;
 
 with AWA.Users.Principals;
 package body AWA.Users.Beans is
@@ -119,6 +121,47 @@ package body AWA.Users.Beans is
    end Authenticate_User;
 
    --  ------------------------------
+   --  Logout the user and closes the session.
+   --  ------------------------------
+   procedure Logout_User (Data    : in out Authenticate_Bean;
+                          Outcome : in out Unbounded_String) is
+      use type ASF.Principals.Principal_Access;
+
+      Ctx       : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
+      Session   : ASF.Sessions.Session := Ctx.Get_Session (Create => False);
+   begin
+      Outcome := To_Unbounded_String ("success");
+
+      --  If there is no session, we are done.
+      if not Session.Is_Valid then
+         return;
+      end if;
+
+      declare
+         Principal : constant ASF.Principals.Principal_Access := Session.Get_Principal;
+      begin
+         if Principal /= null and then Principal.all in AWA.Users.Principals.Principal'Class then
+            declare
+               P : constant AWA.Users.Principals.Principal_Access :=
+                 AWA.Users.Principals.Principal'Class (Principal.all)'Access;
+            begin
+               Data.Manager.Close_Session (Id => P.Get_Session_Identifier);
+            end;
+         end if;
+         Session.Invalidate;
+      end;
+
+      --  Remove the session cookie.
+      declare
+         C : ASF.Cookies.Cookie := ASF.Cookies.Create ("SID", "");
+      begin
+         ASF.Cookies.Set_Path (C, Ctx.Get_Request.Get_Context_Path);
+         ASF.Cookies.Set_Max_Age (C, 0);
+         Ctx.Get_Response.Add_Cookie (Cookie => C);
+      end;
+   end Logout_User;
+
+   --  ------------------------------
    --  Create an authenticate bean.
    --  ------------------------------
    function Create_Authenticate_Bean (Module : in AWA.Users.Module.User_Module_Access)
@@ -157,12 +200,18 @@ package body AWA.Users.Beans is
                                                 Method => Reset_Password,
                                                 Name   => "resetPassword");
 
+   package Logout_Binding is
+     new ASF.Events.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
+                                                Method => Logout_User,
+                                                Name   => "logout");
+
    Binding_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
      := (Authenticate_Binding.Proxy'Access,
          Register_Binding.Proxy'Access,
          Verify_Binding.Proxy'Access,
          Lost_Password_Binding.Proxy'Access,
-         Reset_Password_Binding.Proxy'Access);
+         Reset_Password_Binding.Proxy'Access,
+         Logout_Binding.Proxy'Access);
 
    --  ------------------------------
    --  Get the value identified by the name.
