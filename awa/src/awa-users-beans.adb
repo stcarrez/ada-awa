@@ -16,17 +16,23 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with Util.Log.Loggers;
+
 with ASF.Principals;
 with ASF.Sessions;
 with ASF.Events.Actions;
 with ASF.Contexts.Faces;
 with ASF.Cookies;
+with ASF.Applications.Messages.Factory;
 
 with AWA.Users.Principals;
 package body AWA.Users.Beans is
 
 
+   use Util.Log;
    use AWA.Users.Models;
+
+   Log : constant Loggers.Logger := Loggers.Create ("AWA.Users.Beans");
 
    --  ------------------------------
    --  Action to register a user
@@ -118,6 +124,12 @@ package body AWA.Users.Beans is
       Outcome := To_Unbounded_String ("success");
 
       Data.Set_Session_Principal (User, Session);
+
+   exception
+      when Services.Not_Found =>
+         Outcome := To_Unbounded_String ("failure");
+
+         ASF.Applications.Messages.Factory.Add_Message ("users.login_signup_fail_message");
    end Authenticate_User;
 
    --  ------------------------------
@@ -146,6 +158,10 @@ package body AWA.Users.Beans is
                  AWA.Users.Principals.Principal'Class (Principal.all)'Access;
             begin
                Data.Manager.Close_Session (Id => P.Get_Session_Identifier);
+
+            exception
+               when others =>
+                  Log.Error ("Exception when closing user session...");
             end;
          end if;
          Session.Invalidate;
