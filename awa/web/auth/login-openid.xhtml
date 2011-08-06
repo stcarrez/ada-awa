@@ -4,23 +4,25 @@
         xmlns:c="http://java.sun.com/jstl/core"
 	xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
-    <div class='awa-login'>
-       <h2>Connect with...</h2>
-          <div class='openid-login'>
-             <a href="#{contextPath}/auth/auth/google" title="#{samplesMsg.openid_google_auth}" class='openid-google'>
-                <em/>#{samplesMsg.openid_google_auth_label}
-             </a>
-          </div>
-         <div class='openid-login'>
-             <a href="#{contextPath}/auth/auth/yahoo" title="#{samplesMsg.openid_yahoo_auth}" class='openid-yahoo'>
-                <em/>#{samplesMsg.openid_yahoo_auth_label}
-             </a>
-          </div>
-         <div class='openid-login'>
-             <a href="#{contextPath}/auth/auth/orange" title="#{samplesMsg.openid_orange_auth}" class='openid-orange'>
-                <em/>#{samplesMsg.openid_orange_auth_label}
-             </a>
-          </div>
-    </div>
+  <div class='awa-login'>
+    <h2>#{userMsg.login_openid_title}</h2>
+    <ul class='openid-login'>
+      <li>
+        <a href="#{contextPath}/auth/auth/google" title="#{userMsg.openid_google_auth}" class='openid-google'>
+          <em/>
+        </a>
+      </li>
+      <li>
+        <a href="#{contextPath}/auth/auth/yahoo" title="#{userMsg.openid_yahoo_auth}" class='openid-yahoo'>
+          <em/>
+        </a>
+      </li>
+      <li>
+        <a href="#{contextPath}/auth/auth/orange" title="#{userMsg.openid_orange_auth}" class='openid-orange'>
+          <em/>
+        </a>
+      </li>
+    </ul>
+  </div>
 </ui:composition>
 

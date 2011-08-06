@@ -9,8 +9,12 @@
     <!-- Main page body -->
     <ui:define name="pageBody">
       <div id='awa-content'>
-        <ui:include src="login-openid.xhtml"/>
-        <ui:include src="login-form.xhtml"/>
+        <div class='awa-side1'>
+          <ui:include src="login-openid.xhtml"/>
+        </div>
+        <div class='awa-side2'>
+          <ui:include src="login-form.xhtml"/>
+        </div>
       </div>
     </ui:define>
 </ui:composition>

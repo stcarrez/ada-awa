@@ -5,33 +5,31 @@
 	xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
 
-  <h:form id='login'>
-    <div class='awa-login'>
+  <div class='awa-login'>
+    <h2>#{userMsg.login_classic_title}</h2>
+    <h:form id='login'>
       <ul>
+        <li class='message'>
+           <h:message styleClass='error'/>
+        </li>
         <li>
            <label for='email'>#{userMsg.login_email_label}</label>
-	   <h:inputText id='email' size='50' value='#{login.email}'>
-             <f:validateLength minimum='3' maximum='80'/>
-           </h:inputText>
-           <h:message for='email'/>
+	   <h:inputText id='email' size='50' required='false' value='#{login.email}'/>
         </li>
         <li>
            <label for='password'>#{userMsg.login_password_label}</label>
-           <h:inputText id='password' size='20' value='#{login.password}'>
-             <f:validateLength minimum='3' maximum='80'/>
-           </h:inputText>
-           <h:message for='password'/>
+           <h:inputSecret id='password' size='20' required='false' value='#{login.password}'/>
         </li>
         <li>
           <h:commandButton id='login' value='#{userMsg.login_signin_button}'
-                           action="#{login.authenticate}"/>
+                           action="#{login.authenticate}" title="#{userMsg.login_submit_login_title}"/>
           <a href='lost-password.html' title='#{userMsg.lost_password_link_title}'>
              #{userMsg.lost_password_link}
           </a>
         </li>
       </ul>
-    </div>
-  </h:form>
+    </h:form>
+  </div>
 
 </ui:composition>
 
