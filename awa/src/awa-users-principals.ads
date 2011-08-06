@@ -43,6 +43,12 @@ package AWA.Users.Principals is
    --  Returns NO_IDENTIFIER if there is none.
    function Get_User_Identifier (From : in Principal) return ADO.Identifier;
 
+   --  Get the connection session used by the user.
+   function Get_Session (From : in Principal) return AWA.Users.Models.Session_Ref;
+
+   --  Get the connection session identifier used by the user.
+   function Get_Session_Identifier (From : in Principal) return ADO.Identifier;
+
    --  Create a principal for the given user.
    function Create (User    : in AWA.Users.Models.User_Ref;
                     Session : in AWA.Users.Models.Session_Ref) return Principal_Access;

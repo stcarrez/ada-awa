@@ -63,6 +63,22 @@ package body AWA.Users.Principals is
    end Get_User_Identifier;
 
    --  ------------------------------
+   --  Get the connection session used by the user.
+   --  ------------------------------
+   function Get_Session (From : in Principal) return AWA.Users.Models.Session_Ref is
+   begin
+      return From.Session;
+   end Get_Session;
+
+   --  ------------------------------
+   --  Get the connection session identifier used by the user.
+   --  ------------------------------
+   function Get_Session_Identifier (From : in Principal) return ADO.Identifier is
+   begin
+      return From.Session.Get_Id;
+   end Get_Session_Identifier;
+
+   --  ------------------------------
    --  Create a principal for the given user.
    --  ------------------------------
    function Create (User    : in AWA.Users.Models.User_Ref;
@@ -90,9 +106,7 @@ package body AWA.Users.Principals is
 	  User    : AWA.Users.Models.User_Ref;
 	  Session : AWA.Users.Models.Session_Ref;
    begin
-      Manager.Authenticate (OpenId  => Security.Openid.Get_Claimed_Id (Auth),
-                            Email   => Security.Openid.Get_Email (Auth),
-                            Name    => Security.Openid.Get_Full_Name (Auth),
+      Manager.Authenticate (Auth    => Auth,
                             IpAddr  => "",
                             User    => User,
                             Session => Session);
