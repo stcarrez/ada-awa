@@ -21,6 +21,7 @@ with Ada.Calendar;
 with Ada.Strings.Unbounded;
 
 with Util.Log.Loggers;
+with Util.Strings;
 
 with GNAT.SHA1;
 with Ada.Numerics.Discrete_Random;
@@ -67,6 +68,24 @@ package body AWA.Users.Services is
    end Create_Key;
 
    --  ------------------------------
+   --  Get the user name from the email address.
+   --  Returns the possible user name from his email address.
+   --  ------------------------------
+   function Get_Name_From_Email (Email : in String) return String is
+      Pos : Natural := Util.Strings.Index (Email, '<');
+   begin
+      if Pos > 0 then
+         return Email (Email'First .. Pos - 1);
+      end if;
+      Pos := Util.Strings.Index (Email, '@');
+      if Pos > 0 then
+         return Email (Email'First .. Pos - 1);
+      else
+         return Email;
+      end if;
+   end Get_Name_From_Email;
+
+   --  ------------------------------
    --  Authenticate the user with his OpenID identifier.  The authentication process
    --  was made by an external OpenID provider.  If the user does not yet exists in
    --  the database, a record is created for him.  Create a new session for the user.
@@ -74,18 +93,37 @@ package body AWA.Users.Services is
    --  Raises Not_Found exception if the user is not recognized
    --  ------------------------------
    procedure Authenticate (Model    : in User_Service;
-                           OpenId   : in String;
-                           Email    : in String;
-                           Name     : in String;
+                           Auth     : in Security.Openid.Authentication;
                            IpAddr   : in String;
                            User     : out User_Ref'Class;
                            Session  : out Session_Ref'Class) is
       pragma Unreferenced (Model);
 
+      OpenId : constant String := Security.Openid.Get_Claimed_Id (Auth);
+      Email  : constant String := Security.Openid.Get_Email (Auth);
       Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB     : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Query  : ADO.SQL.Query;
       Found  : Boolean;
+
+      --  Update the user first name/last name
+      procedure Update_User is
+         Name       : constant String := Security.Openid.Get_Full_Name (Auth);
+         First_Name : constant String := Security.Openid.Get_First_Name (Auth);
+         Last_Name  : constant String := Security.Openid.Get_Last_Name (Auth);
+      begin
+         if Name'Length > 0 and Name /= String '(User.Get_Name) then
+            User.Set_Name (Name);
+         end if;
+         if First_Name'Length > 0 and First_Name /= String '(User.Get_First_Name) then
+            User.Set_First_Name (First_Name);
+         end if;
+         if Last_Name'Length > 0 and Last_Name /= String '(User.Get_Last_Name) then
+            User.Set_Last_Name (Last_Name);
+         end if;
+         User.Save (DB);
+      end Update_User;
+
    begin
       Log.Info ("Authenticated user {0}", Email);
 
@@ -105,11 +143,24 @@ package body AWA.Users.Services is
             E.Save (DB);
 
             User.Set_Email (E);
-            User.Set_Name (Name);
             User.Set_Open_Id (OpenId);
-            User.Save (DB);
+            Update_User;
             E.Set_User_Id (User.Get_Id);
             E.Save (DB);
+         end;
+      else
+         Update_User;
+
+         --  The user email address could have changed
+         declare
+            E : Email_Ref'Class := User.Get_Email;
+         begin
+            if Email /= String '(E.Get_Email) then
+               Log.Info ("Changing email address from {0} to {1} for user {2}",
+                         String' (E.Get_Email), Email, OpenId);
+               E.Set_Email (Email);
+               E.Save (DB);
+            end if;
          end;
       end if;
 
@@ -118,6 +169,7 @@ package body AWA.Users.Services is
       Session.Set_Start_Date (ADO.Nullable_Time '(Value => Ada.Calendar.Clock, Is_Null => False));
       Session.Set_User_Id (User.Get_Id);
       Session.Set_Ip_Address (IpAddr);
+      Session.Set_Session_Type (AUTH_SESSION_TYPE);
       Session.Save (DB);
 
       Ctx.Commit;

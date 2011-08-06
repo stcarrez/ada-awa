@@ -19,6 +19,7 @@ with AWA.Users.Models;
 with AWA.Modules;
 with AWA.Services;
 with ASF.Events.Modules;
+with Security.Openid;
 with ADO;
 package AWA.Users.Services is
 
@@ -29,6 +30,9 @@ package AWA.Users.Services is
    Not_Found  : exception;
 
    User_Exist : exception;
+
+   AUTH_SESSION_TYPE    : constant Integer := 1;
+   CONNECT_SESSION_TYPE : constant Integer := 0;
 
    type User_Service is new AWA.Modules.Module_Manager with private;
    type User_Service_Access is access all User_Service'Class;
@@ -67,9 +71,7 @@ package AWA.Users.Services is
    --  The IP address of the connection is saved in the session.
    --  Raises Not_Found exception if the user is not recognized
    procedure Authenticate (Model    : in User_Service;
-                           OpenId   : in String;
-                           Email    : in String;
-                           Name     : in String;
+                           Auth     : in Security.Openid.Authentication;
                            IpAddr   : in String;
                            User     : out User_Ref'Class;
                            Session  : out Session_Ref'Class);
