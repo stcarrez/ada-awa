@@ -3,28 +3,43 @@ div.openid-login {
 	border: 1px solid #ccc;
 	margin-left: 10px;
 	margin-right: 10px;
+        margin: 5px;
 }
 
 div.openid-login a {
 	display: block;
 	height: 35px;
-	width: 100px;
+	width: 118px;
 	padding-left: 20px;
 	padding-right: 20px;
 	text-align: center;
 	line-height: 35px;
 }
 
+a.openid-orange em,
+a.openid-yahoo em,
 a.openid-google em {
 	display: block;
 	float: left;
 	padding: 5px;
 	background: url(../images/open-id-logos-1.png);
-	width: 100px;
-	height: 35px;
+	width: 91px;
+	height: 28px;
 	overflow: hidden;
 }
-
+a.openid-yahoo em { 
+  background-position: 0 -35px;
+  height: 25px;
+}
+div.openid-login a.openid-orange {
+   padding-left: 0;
+   width: 138px;
+}
+a.openid-orange em { 
+  background-position: 0 -236px;
+  height: 35px;
+  width: 150px;
+}
 div.openid-info {
     float: left;
     padding: 20px;
