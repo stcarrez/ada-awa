@@ -42,7 +42,7 @@ div.awa-login p {
     display: block;
     float: left;
 }
-.awa-login ul {
+.awa-login ul, #awa-message-list {
     list-style-type: none;
     margin: 1em 0;
     float: left;

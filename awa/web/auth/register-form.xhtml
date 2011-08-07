@@ -5,8 +5,9 @@
 	xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
 
-   <h:form id='register'>
-     <div class='awa-login'>
+  <div class='awa-login'>
+    <h2>#{userMsg.signup_classic_title}</h2>
+    <h:form id='register'>
       <ul>
         <li>
          <label for='firstName'>#{userMsg.signup_firstname_label}</label>
@@ -48,8 +49,8 @@
                           action="#{login.register}"/>
        </li>
      </ul>
-   </div>
-  </h:form>
+    </h:form>
+  </div>
 
 </ui:composition>
 

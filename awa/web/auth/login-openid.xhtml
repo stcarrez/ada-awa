@@ -1,11 +1,10 @@
-<ui:composition
+<div class='awa-login'
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:c="http://java.sun.com/jstl/core"
 	xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
-  <div class='awa-login'>
-    <h2>#{userMsg.login_openid_title}</h2>
+    <h2>#{title}</h2>
     <ul class='openid-login'>
       <li>
         <a href="#{contextPath}/auth/auth/google" title="#{userMsg.openid_google_auth}" class='openid-google'>
@@ -23,6 +22,6 @@
         </a>
       </li>
     </ul>
-  </div>
-</ui:composition>
+</div>
+
 
