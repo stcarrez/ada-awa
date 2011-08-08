@@ -23,9 +23,6 @@ package AWA.Mail.Module is
    type Mail_Module is new AWA.Modules.Module with null record;
    type Mail_Module_Access is access all Mail_Module'Class;
 
-   --  Get the mail module instance.
-   function Instance return Mail_Module_Access;
-
    --  Get the mail template that must be used for the given event name.
    --  The mail template is configured by the property: <i>module</i>.template.<i>event</i>.
    function Get_Template (Plugin : in Mail_Module;

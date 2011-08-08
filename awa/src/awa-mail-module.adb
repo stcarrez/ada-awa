@@ -32,17 +32,7 @@ package body AWA.Mail.Module is
 
    use Util.Log;
 
-   Object : aliased Mail_Module;
-
    Log : constant Loggers.Logger := Loggers.Create ("AWA.Mail.Module");
-
-   --  ------------------------------
-   --  Get the mail module instance.
-   --  ------------------------------
-   function Instance return Mail_Module_Access is
-   begin
-      return Object'Access;
-   end Instance;
 
    --  Get the SMTP server to send an email
    function Get_Smtp_Server (Plugin : in Mail_Module) return AWS.SMTP.Receiver is
@@ -76,7 +66,8 @@ package body AWA.Mail.Module is
          Req   : ASF.Requests.Mockup.Request;
          Reply : ASF.Responses.Mockup.Response;
          Ptr   : constant Util.Beans.Basic.Readonly_Bean_Access := Content'Unrestricted_Access;
-         Bean  : constant Util.Beans.Objects.Object := Util.Beans.Objects.To_Object (Ptr);
+         Bean  : constant Util.Beans.Objects.Object
+           := Util.Beans.Objects.To_Object (Ptr, Util.Beans.Objects.STATIC);
       begin
          Log.Info ("With template '{0}'", File);
 
