@@ -1,14 +1,16 @@
-<ui:composition
+<div class='awa-login'
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:c="http://java.sun.com/jstl/core"
 	xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
 
-  <div class='awa-login'>
     <h2>#{userMsg.signup_classic_title}</h2>
     <h:form id='register'>
       <ul>
+        <li class='message'>
+          <h:message styleClass='error'/>
+        </li>
         <li>
          <label for='firstName'>#{userMsg.signup_firstname_label}</label>
          <h:inputText id='firstName' size='50' value='#{login.firstName}' required='true'>
@@ -32,16 +34,16 @@
        </li>
        <li>
          <label for='password'>#{userMsg.signup_password_label}</label>
-         <h:inputText id='password' size='20' value='#{login.password}'>
+         <h:inputSecret id='password' size='20' value='#{login.password}'>
             <f:validateLength minimum='3' maximum='20'/>
-         </h:inputText>
+         </h:inputSecret>
          <h:message for='password'/>
        </li>
        <li>
          <label for='password2'>#{userMsg.signup_retype_password_label}</label>
-         <h:inputText id='password2' size='20' value='#{login.password}'>
+         <h:inputSecret id='password2' size='20' value='#{login.password}'>
            <f:validateLength minimum='3' maximum='20'/>
-         </h:inputText>
+         </h:inputSecret>
          <h:message for='password2'/>
        </li>
        <li>
@@ -50,7 +52,6 @@
        </li>
      </ul>
     </h:form>
-  </div>
 
-</ui:composition>
+</div>
 

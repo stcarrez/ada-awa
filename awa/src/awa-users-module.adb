@@ -54,12 +54,14 @@ package body AWA.Users.Module is
 
       Plugin.Key_Filter.Initialize (App.all);
 
-	  Plugin.Manager := Plugin.Create_User_Manager;
       Register.Register (Plugin  => Plugin,
                          Name    => "AWA.Users.Beans.Authenticate_Bean",
                          Handler => AWA.Users.Beans.Create_Authenticate_Bean'Access);
 
       AWA.Modules.Module (Plugin).Initialize (App);
+
+      --  Create the user manager when everything is initialized.
+      Plugin.Manager := Plugin.Create_User_Manager;
    end Initialize;
 
    --  ------------------------------

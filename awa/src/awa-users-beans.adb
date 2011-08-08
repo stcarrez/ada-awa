@@ -49,6 +49,12 @@ package body AWA.Users.Beans is
       Data.Manager.Create_User (User  => User,
                                 Email => Email);
       Outcome := To_Unbounded_String ("success");
+
+   exception
+      when Services.User_Exist =>
+         Outcome := To_Unbounded_String ("failure");
+
+         ASF.Applications.Messages.Factory.Add_Message ("users.signup_error_message");
    end Register_User;
 
    --  ------------------------------

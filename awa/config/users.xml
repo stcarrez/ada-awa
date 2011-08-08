@@ -49,6 +49,7 @@
     <navigation-case>
       <from-outcome>success</from-outcome>
       <to-view-id>/auth/registration-sent.xhtml</to-view-id>
+      <redirect/>
     </navigation-case>
   </navigation-rule>
 
