@@ -24,6 +24,7 @@ with ASF.Servlets.Ajax;
 with ASF.Filters.Dump;
 with ASF.Servlets.Measures;
 with AWA.Users.Module;
+with AWA.Mail.Module;
 with AWA.Comments.Module;
 with AWA.Services.Filters;
 package Atlas.Applications is
@@ -42,6 +43,7 @@ private
       Dump           : aliased ASF.Filters.Dump.Dump_Filter;
       Service_Filter : aliased AWA.Services.Filters.Service_Filter;
       User_Module    : aliased AWA.Users.Module.User_Module;
+      Mail_Module    : aliased AWA.Mail.Module.Mail_Module;
       Comment_Module : aliased AWA.Comments.Module.Comment_Module;
       Perf           : aliased ASF.Servlets.Measures.Measure_Servlet;
    end record;
