@@ -1,4 +1,32 @@
 /* File generated automatically by dynamo */
+/* Blog  */
+create table blog (
+  /* the blog identifier */
+  `ID` BIGINT NOT NULL,
+  /*  */
+  `version` int ,
+  /* the blog name */
+  `NAME` VARCHAR(256) NOT NULL,
+  primary key (`ID`)
+);
+/* Post in a blog */
+create table blog_post (
+  /* the post identifier */
+  `ID` BIGINT NOT NULL,
+  /*  */
+  `version` int ,
+  /* the post title */
+  `TITLE` VARCHAR(256) NOT NULL,
+  /* the uri */
+  `URI` VARCHAR(256) ,
+  /* the blog text content */
+  `TEXT` VARCHAR(60000) ,
+  /* the post creation date */
+  `CREATE_DATE` DATETIME NOT NULL,
+  /*  */
+  `AUTHOR_ID` INTEGER NOT NULL,
+  primary key (`ID`)
+);
 /*  */
 create table COMMENTS (
   /*  */
@@ -15,6 +43,20 @@ create table COMMENTS (
   `USER_FK` INTEGER NOT NULL,
   /*  */
   `ENTITY__TYPE_FK` INTEGER NOT NULL,
+  primary key (`ID`)
+);
+/* Access control */
+create table ACL (
+  /* the unique ACL id */
+  `ID` BIGINT NOT NULL,
+  /* the entity type */
+  `ENTITY_TYPE` INTEGER ,
+  /* the user identifier */
+  `USER_ID` BIGINT ,
+  /* the entity identifier */
+  `ENTITY_ID` BIGINT ,
+  /* whether the entity is writeable */
+  `WRITEABLE` TINYINT ,
   primary key (`ID`)
 );
 /* Email address */
@@ -83,25 +125,13 @@ create table session (
   `TYPE` INTEGER NOT NULL,
   primary key (`ID`)
 );
-/* Access control */
-create table ACL (
-  /* the unique ACL id */
-  `ID` BIGINT NOT NULL,
-  /* the entity type */
-  `ENTITY_TYPE` INTEGER ,
-  /* the user identifier */
-  `USER_ID` BIGINT ,
-  /* the entity identifier */
-  `ENTITY_ID` BIGINT ,
-  /* whether the entity is writeable */
-  `WRITEABLE` TINYINT ,
-  primary key (`ID`)
-);
 insert into entity_type (name) values
-("COMMENTS")
+("blog")
+,("blog_post")
+,("COMMENTS")
+,("ACL")
 ,("email")
 ,("user")
 ,("access_key")
 ,("session")
-,("ACL")
 ;

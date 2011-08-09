@@ -29,8 +29,8 @@ with Ada.Calendar;
 with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
-with AWA.Users.Models;
 with ADO.Model;
+with AWA.Users.Models;
 package AWA.Comments.Models is
    --  --------------------
    --  
