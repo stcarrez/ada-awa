@@ -17,7 +17,7 @@
 -----------------------------------------------------------------------
 
 with AWA.Modules;
-with ASF.Modules.Get;
+with AWA.Modules.Get;
 with ASF.Applications.Main;
 with AWA.Comments.Services;
 package AWA.Comments.Module is
@@ -32,7 +32,7 @@ package AWA.Comments.Module is
                          App    : access ASF.Applications.Main.Application'Class);
 
    function Get_Comment_Module is
-     new ASF.Modules.Get (Comment_Module, Comment_Module_Access, NAME);
+     new AWA.Modules.Get (Comment_Module, Comment_Module_Access, NAME);
 
    function Get_Comment_Manager is
      new AWA.Modules.Get_Manager (AWA.Comments.Services.Comment_Service,

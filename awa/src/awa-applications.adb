@@ -16,6 +16,8 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with ASF.Beans;
+
 with AWA.Modules;
 with AWA.Components.Factory;
 package body AWA.Applications is
@@ -31,7 +33,8 @@ package body AWA.Applications is
    begin
       ASF.Applications.Main.Application (App).Initialize (Conf, Factory);
       App.Add_Components (AWA.Components.Factory.Definition);
-      App.Factory.Create (URI);
+      App.DB_Factory.Create (URI);
+      AWA.Modules.Initialize (App.Modules, Conf);
    end Initialize;
 
    --  ------------------------------
@@ -52,7 +55,7 @@ package body AWA.Applications is
    function Get_Session (App : Application)
                          return ADO.Sessions.Session is
    begin
-      return App.Factory.Get_Session;
+      return App.DB_Factory.Get_Session;
    end Get_Session;
 
    --  ------------------------------
@@ -61,7 +64,39 @@ package body AWA.Applications is
    function Get_Master_Session (App : Application)
                                 return ADO.Sessions.Master_Session is
    begin
-      return App.Factory.Get_Master_Session;
+      return App.DB_Factory.Get_Master_Session;
    end Get_Master_Session;
+
+   --  ------------------------------
+   --  Find the module with the given name
+   --  ------------------------------
+   function Find_Module (App : in Application;
+                         Name : in String) return AWA.Modules.Module_Access is
+   begin
+      return AWA.Modules.Find_By_Name (App.Modules, Name);
+   end Find_Module;
+
+   --  ------------------------------
+   --  Register the module in the application
+   --  ------------------------------
+   procedure Register (App     : in out Application;
+                       Module  : in AWA.Modules.Module_Access;
+                       Name    : in String;
+                       URI     : in String := "") is
+      procedure Set_Beans (Factory : in out ASF.Beans.Bean_Factory);
+      procedure Set_Beans (Factory : in out ASF.Beans.Bean_Factory) is
+      begin
+         Module.Register_Factory (Factory);
+      end Set_Beans;
+
+      procedure Register_Beans is
+         new ASF.Applications.Main.Register_Beans (Set_Beans);
+   begin
+      Module.Initialize (App'Unchecked_Access);
+      AWA.Modules.Register (App.Modules'Unchecked_Access, Module, Name, URI);
+
+      Register_Beans (App);
+--        App.View.Register_Module (Module);  SCz: 2011-08-10: must check if necessary
+   end Register;
 
 end AWA.Applications;

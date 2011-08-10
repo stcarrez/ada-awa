@@ -19,7 +19,7 @@
 with Ada.Strings.Unbounded;
 with Ada.Exceptions;
 
-with ASF.Modules.Beans;
+with AWA.Modules.Beans;
 with ASF.Beans;
 with ASF.Requests.Mockup;
 with ASF.Responses.Mockup;

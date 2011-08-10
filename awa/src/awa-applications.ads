@@ -19,7 +19,7 @@
 --  with AWA.Messages;
 with ASF.Applications.Main;
 with ADO.Sessions.Factory;
-limited with AWA.Modules;
+with AWA.Modules;
 package AWA.Applications is
 
    --  Module manager
@@ -49,10 +49,21 @@ package AWA.Applications is
    function Get_Master_Session (App : Application)
                                 return ADO.Sessions.Master_Session;
 
+   --  Register the module in the application
+   procedure Register (App     : in out Application;
+                       Module  : in AWA.Modules.Module_Access;
+                       Name    : in String;
+                       URI     : in String := "");
+
+   --  Find the module with the given name
+   function Find_Module (App  : in Application;
+                         Name : in String) return AWA.Modules.Module_Access;
+
 private
 
    type Application is new ASF.Applications.Main.Application with record
-      Factory : ADO.Sessions.Factory.Session_Factory;
+      DB_Factory : ADO.Sessions.Factory.Session_Factory;
+      Modules    : aliased AWA.Modules.Module_Registry;
    end record;
 
 end AWA.Applications;

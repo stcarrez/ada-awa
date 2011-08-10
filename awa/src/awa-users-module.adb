@@ -16,9 +16,9 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with ASF.Modules.Beans;
+with AWA.Modules.Beans;
 with ASF.Beans;
-with ASF.Modules.Get;
+with AWA.Modules.Get;
 
 with AWA.Users.Beans;
 
@@ -27,7 +27,7 @@ package body AWA.Users.Module is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Users.Module");
 
-   package Register is new ASF.Modules.Beans (Module => User_Module,
+   package Register is new AWA.Modules.Beans (Module => User_Module,
                                               Module_Access => User_Module_Access);
 
    --  ------------------------------
@@ -87,7 +87,7 @@ package body AWA.Users.Module is
    --  Get the user module instance associated with the current application.
    --  ------------------------------
    function Get_User_Module return User_Module_Access is
-      function Get is new ASF.Modules.Get (User_Module, User_Module_Access, NAME);
+      function Get is new AWA.Modules.Get (User_Module, User_Module_Access, NAME);
    begin
       return Get;
    end Get_User_Module;
