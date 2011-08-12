@@ -17,7 +17,6 @@
 -----------------------------------------------------------------------
 
 with Util.Serialize.IO.XML;
-with Util.Serialize.Mappers;
 
 with ASF.Applications.Main;
 with ASF.Navigations.Mappers;
@@ -35,42 +34,21 @@ package body AWA.Modules.Reader is
                                  File    : in String;
                                  Context : in EL.Contexts.ELContext_Access) is
 
-      procedure Add_Mapper (Mapper : in Util.Serialize.Mappers.Mapper_Access);
-
       Reader     : Util.Serialize.IO.XML.Parser;
-      MBean      : aliased ASF.Beans.Mappers.Managed_Bean;
-      Navigation : aliased ASF.Navigations.Mappers.Nav_Config;
-      Servlet    : aliased ASF.Servlets.Mappers.Servlet_Config;
 
-      procedure Add_Mapper (Mapper : in Util.Serialize.Mappers.Mapper_Access) is
-      begin
-         Reader.Add_Mapping ("faces-config", Mapper);
-         Reader.Add_Mapping ("module", Mapper);
-         Reader.Add_Mapping ("web-app", Mapper);
-      end Add_Mapper;
+      Nav : constant ASF.Navigations.Navigation_Handler_Access := Plugin.App.Get_Navigation_Handler;
 
+      package Bean_Config is
+        new ASF.Beans.Mappers.Reader_Config (Reader, Plugin.Factory'Unchecked_Access, Context);
+      package Navigation_Config is
+        new ASF.Navigations.Mappers.Reader_Config (Reader, Nav);
+      package Servlet_Config is
+        new ASF.Servlets.Mappers.Reader_Config (Reader, Plugin.App.all'Unchecked_Access);
+      pragma Warnings (Off, Bean_Config);
+      pragma Warnings (Off, Navigation_Config);
+      pragma Warnings (Off, Servlet_Config);
    begin
       Log.Info ("Reading module configuration file {0}", File);
-
-      Add_Mapper (ASF.Beans.Mappers.Get_Managed_Bean_Mapper);
-      Add_Mapper (ASF.Navigations.Mappers.Get_Navigation_Mapper);
-      Add_Mapper (ASF.Servlets.Mappers.Get_Servlet_Mapper);
-
-      --  Setup the managed bean context to read the <managed-bean> elements.
-      --  The ELContext is used for parsing EL expressions defined in property values.
-      MBean.Factory := Plugin.Factory'Unchecked_Access;
-      MBean.Context := Context;
-      ASF.Beans.Mappers.Config_Mapper.Set_Context (Ctx     => Reader,
-                                                   Element => MBean'Unchecked_Access);
-
-      --  Setup the navigation context to read the <navigation-rule> elements.
-      Navigation.Handler := Plugin.App.Get_Navigation_Handler;
-      ASF.Navigations.Mappers.Case_Mapper.Set_Context (Ctx     => Reader,
-                                                       Element => Navigation'Unchecked_Access);
-
-      Servlet.Handler := Plugin.App.all'Unchecked_Access;
-      ASF.Servlets.Mappers.Servlet_Mapper.Set_Context (Ctx     => Reader,
-                                                       Element => Servlet'Unchecked_Access);
 
       Util.Serialize.IO.Dump (Reader, AWA.Modules.Log);
 
