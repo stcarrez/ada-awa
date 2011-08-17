@@ -29,9 +29,9 @@ package AWA.Users.Principals is
    --  Get the principal name.
    function Get_Name (From : in Principal) return String;
 
-   --  Returns true if the given permission is stored in the user principal.
-   function Has_Permission (User       : in Principal;
-                            Permission : in Security.Permissions.Permission_Type) return Boolean;
+   --  Returns true if the given role is stored in the user principal.
+   function Has_Role (User : in Principal;
+                      Role : in Security.Permissions.Role_Type) return Boolean;
 
    --  Get the principal identifier (name)
    function Get_Id (From : in Principal) return String;
@@ -76,7 +76,7 @@ private
    type Principal is new ASF.Principals.Principal with record
       User        : AWA.Users.Models.User_Ref;
       Session     : AWA.Users.Models.Session_Ref;
-      Permissions : Security.Permissions.Permission_Map;
+      Roles       : Security.Permissions.Role_Map;
    end record;
 
    type Verify_Auth_Servlet is new Security.Openid.Servlets.Verify_Auth_Servlet with null record;

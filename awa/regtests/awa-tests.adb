@@ -36,6 +36,8 @@ package body AWA.Tests is
 
    Users          : aliased AWA.Users.Module.User_Module;
 
+   Mail           : aliased AWA.Mail.Module.Mail_Module;
+
    --  ------------------------------
    --  Initialize the awa test framework mockup.
    --  ------------------------------
@@ -60,7 +62,7 @@ package body AWA.Tests is
 
          Register (App    => App.all'Access,
                    Name   => "mail", URI => "mail",
-                   Module => AWA.Mail.Module.Instance.all'Access);
+                   Module => Mail'Access);
 
          Nav.Add_Navigation_Case (From    => "/users/login.xhtml",
                                   To      => "/users/main.xhtml",

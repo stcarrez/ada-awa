@@ -29,13 +29,13 @@ package body AWA.Users.Principals is
    end Get_Name;
 
    --  ------------------------------
-   --  Returns true if the given permission is stored in the user principal.
+   --  Returns true if the given role is stored in the user principal.
    --  ------------------------------
-   function Has_Permission (User       : in Principal;
-                            Permission : in Security.Permissions.Permission_Type) return Boolean is
+   function Has_Role (User : in Principal;
+                      Role : in Security.Permissions.Role_Type) return Boolean is
    begin
-      return User.Permissions (Permission);
-   end Has_Permission;
+      return User.Roles (Role);
+   end Has_Role;
 
    --  ------------------------------
    --  Get the principal identifier (name)
