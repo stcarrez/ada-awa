@@ -86,6 +86,10 @@ package body Atlas.Applications is
       Register (App    => App.all'Access,
                 Name   => "mail", URI => "mail",
                 Module => App.Mail_Module'Access);
+      Register (App    => App.all'Access,
+                Name   => "blogs", URI => "blogs",
+                Module => App.Blog_Module'Access);
+
       App.Add_Filter_Mapping (Name => "dump", Pattern => "/auth/verify");
       App.Add_Filter_Mapping (Name => "dump", Pattern => "/auth/auth/*");
       --
