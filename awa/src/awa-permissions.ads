@@ -16,6 +16,9 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with Security.Permissions;
+
+with ADO;
 package AWA.Permissions is
 
    --  Exception raised by the <b>Check</b> procedure if the user does not have
@@ -23,5 +26,14 @@ package AWA.Permissions is
    NO_PERMISSION : exception;
 
    type Permission_Type is (READ, WRITE);
+
+   --  Verify that the permission represented by <b>Permission</b> is granted.
+   --
+   procedure Check (Permission : in Security.Permissions.Permission_Index);
+
+   --  Verify that the permission represented by <b>Permission</b> is granted to access the
+   --  database entity represented by <b>Entity</b>.
+   procedure Check (Permission : in Security.Permissions.Permission_Index;
+                    Entity     : in ADO.Identifier);
 
 end AWA.Permissions;
