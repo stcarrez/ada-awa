@@ -18,6 +18,8 @@
 
 with AWA.Blogs.Models;
 with AWA.Services.Contexts;
+with AWA.Permissions;
+
 with ADO.Sessions;
 
 with Ada.Calendar;
@@ -51,6 +53,9 @@ package body AWA.Blogs.Services is
       Found : Boolean;
    begin
       Log.Info ("Creating post for user");
+
+      --  Check that the user has the create post permission on the given blog.
+      AWA.Permissions.Check (ACL_Create_Post.Permission, Blog_Id);
 
       Ctx.Start;
       if Blog_Id > 0 then
@@ -88,6 +93,10 @@ package body AWA.Blogs.Services is
       Post  : AWA.Blogs.Models.Post_Ref;
       Found : Boolean;
    begin
+
+      --  Check that the user has the update post permission on the given post.
+      AWA.Permissions.Check (ACL_Update_Post.Permission, Post_Id);
+
       Ctx.Start;
       Post.Load (Session => DB, Id => Post_Id, Found => Found);
       if not Found then
@@ -103,7 +112,9 @@ package body AWA.Blogs.Services is
    procedure Delete_Post (Model   : in Blog_Service;
                           Id      : in ADO.Identifier) is
    begin
-      null;
+      --  Check that the user has the delete post permission on the given post.
+      AWA.Permissions.Check (ACL_Delete_Post.Permission, Id);
+
    end Delete_Post;
 
 end AWA.Blogs.Services;
