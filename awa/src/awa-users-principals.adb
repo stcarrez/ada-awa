@@ -91,6 +91,25 @@ package body AWA.Users.Principals is
    end Create;
 
    --  ------------------------------
+   --  Get the current user identifier invoking the service operation.
+   --  Returns NO_IDENTIFIER if there is none or if the principal is not an AWA principal.
+   --  ------------------------------
+   function Get_User_Identifier (From : in Security.Permissions.Principal_Access)
+                                 return ADO.Identifier is
+      use type Security.Permissions.Principal_Access;
+   begin
+      if From = null then
+         return ADO.NO_IDENTIFIER;
+
+      elsif not (From.all in Principal'Class) then
+         return ADO.NO_IDENTIFIER;
+
+      else
+         return Principal'Class (From.all).Get_User_Identifier;
+      end if;
+   end Get_User_Identifier;
+
+   --  ------------------------------
    --  Create a principal object that correspond to the authenticated user identified
    --  by the <b>Auth</b> information.  The principal will be attached to the session
    --  and will be destroyed when the session is closed.

@@ -54,6 +54,13 @@ package AWA.Users.Principals is
                     Session : in AWA.Users.Models.Session_Ref) return Principal_Access;
 
 
+   --  Utility functions based on the security principal access type.
+
+   --  Get the current user identifier invoking the service operation.
+   --  Returns NO_IDENTIFIER if there is none or if the principal is not an AWA principal.
+   function Get_User_Identifier (From : in Security.Permissions.Principal_Access)
+                                 return ADO.Identifier;
+
    --  ------------------------------
    --  OpenID Verification Servlet
    --  ------------------------------
