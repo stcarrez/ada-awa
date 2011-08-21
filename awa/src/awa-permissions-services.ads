@@ -16,7 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with AWA.Modules;
 with AWA.Applications;
 
 with ADO;

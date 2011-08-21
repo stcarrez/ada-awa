@@ -15,7 +15,6 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with Ada.Strings.Unbounded;
 
 with Util.Beans.Objects;
 with Util.Serialize.IO.XML;

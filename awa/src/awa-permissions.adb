@@ -20,11 +20,12 @@ package body AWA.Permissions is
 
    --  ------------------------------
    --  Verify that the permission represented by <b>Permission</b> is granted.
-   --
    --  ------------------------------
    procedure Check (Permission : in Security.Permissions.Permission_Index) is
    begin
-      raise NO_PERMISSION;
+      if not (Security.Contexts.Has_Permission (Permission)) then
+         raise NO_PERMISSION;
+      end if;
    end Check;
 
    --  ------------------------------
@@ -33,8 +34,17 @@ package body AWA.Permissions is
    --  ------------------------------
    procedure Check (Permission : in Security.Permissions.Permission_Index;
                     Entity     : in ADO.Identifier) is
+      use type Security.Contexts.Security_Context_Access;
+
+      Context : constant Security.Contexts.Security_Context_Access := Security.Contexts.Current;
    begin
-      raise NO_PERMISSION;
+      if Context = null then
+         raise NO_PERMISSION;
+      end if;
+      Context.Add_Context ("entity_id", ADO.Identifier'Image (Entity));
+      if not (Security.Contexts.Has_Permission (Permission)) then
+         raise NO_PERMISSION;
+      end if;
    end Check;
 
    --  ------------------------------

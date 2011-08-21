@@ -16,7 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with AWA.Modules;
 with AWA.Permissions.Models;
 with AWA.Services.Contexts;
 
@@ -46,14 +45,14 @@ package body AWA.Permissions.Services is
    begin
       if M = null then
          Log.Info ("There is no permission manager");
-         return False;
+         return null;
 
-      elsif not (M.all in AWA.Permissions.Services.Permission_Manager'Class) then
+      elsif not (M.all in Permission_Manager'Class) then
          Log.Info ("Permission manager is not a AWA permission manager");
-         return False;
+         return null;
 
       else
-         return M.all'Access;
+         return Permission_Manager'Class (M.all)'Access;
       end if;
    end Get_Permission_Manager;
 

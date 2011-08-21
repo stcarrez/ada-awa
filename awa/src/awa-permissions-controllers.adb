@@ -70,7 +70,7 @@ package body AWA.Permissions.Controllers is
       --  (there is no guarantee that a AWA.Services.Contexts be available)
       declare
          App     : constant AWA.Applications.Application_Access := Manager.Get_Application;
-         Session : ADO.Sessions.Session := App.Get_Session;
+         Session : constant ADO.Sessions.Session := App.Get_Session;
          Query   : ADO.Statements.Query_Statement := Session.Create_Statement (Handler.SQL);
          Result  : Integer;
       begin
@@ -80,7 +80,7 @@ package body AWA.Permissions.Controllers is
          Query.Bind_Param (Name => "user_id", Value => User_Id);
 
          --  Run the query.  We must get a single row result and the value must be > 0.
-         Query.Execute (Session);
+         Query.Execute;
 
          Result := Query.Get_Result_Integer;
          if Result >= 0 then
@@ -138,7 +138,7 @@ package body AWA.Permissions.Controllers is
             end if;
             declare
                Name : constant String := Util.Beans.Objects.To_String (Into.Name);
-               SQL  : constant String ;= Util.Beans.Objects.To_String (Into.SQL);
+               SQL  : constant String := Util.Beans.Objects.To_String (Into.SQL);
                Perm : constant Entity_Controller_Access
                  := new Entity_Controller '(Len    => SQL'Length,
                                             SQL    => SQL,
