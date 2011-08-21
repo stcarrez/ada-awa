@@ -31,17 +31,31 @@ package AWA.Permissions.Controllers is
    --  ------------------------------
    --  Security Controller
    --  ------------------------------
-   --  The <b>Entity_Controller</b> implements an entity base permission check.
+   --  The <b>Entity_Controller</b> implements an entity based permission check.
    --  The controller is configured through an XML description.  It uses an SQL statement
    --  to verify that a permission is granted.
-   type Entity_Controller is limited new Security.Controllers.Controller with record
-      SQL    : Ada.Strings.Unbounded.Unbounded_String;
+   --
+   --  The SQL query can use the following query parameters:
+   --
+   --  <dl>
+   --    <dt>entity_type</dt>
+   --    <dd>The entity type identifier defined by the entity permission</dd>
+   --    <dt>entity_id</dt>
+   --    <dd>The entity identifier which is associated with an <b>ACL</b> entry to check</dd>
+   --    <dt>user_id</dt>
+   --    <dd>The user identifier</dd>
+   --  </dl>
+   type Entity_Controller (Len : Positive) is
+   limited new Security.Controllers.Controller with record
+      SQL    : String (1 .. Len);
       Entity : ADO.Entity_Type;
    end record;
    type Entity_Controller_Access is access all Entity_Controller'Class;
 
    --  Returns true if the user associated with the security context <b>Context</b> has
-   --  one of the role defined in the <b>Handler</b>.
+   --  the permission to access a database entity.  The security context contains some
+   --  information about the entity to check and the permission controller will use an
+   --  SQL statement to verify the permission.
    function Has_Permission (Handler : in Entity_Controller;
                             Context : in Security.Contexts.Security_Context'Class)
                             return Boolean;

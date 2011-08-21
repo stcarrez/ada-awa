@@ -34,6 +34,39 @@ package body AWA.Permissions.Services is
    Log : constant Loggers.Logger := Loggers.Create ("AWA.Permissions.Services");
 
    --  ------------------------------
+   --  Get the permission manager associated with the security context.
+   --  Returns null if there is none.
+   --  ------------------------------
+   function Get_Permission_Manager (Context : in Security.Contexts.Security_Context'Class)
+                                    return Permission_Manager_Access is
+      use type Security.Permissions.Permission_Manager_Access;
+
+      M : constant Security.Permissions.Permission_Manager_Access
+        := Context.Get_Permission_Manager;
+   begin
+      if M = null then
+         Log.Info ("There is no permission manager");
+         return False;
+
+      elsif not (M.all in AWA.Permissions.Services.Permission_Manager'Class) then
+         Log.Info ("Permission manager is not a AWA permission manager");
+         return False;
+
+      else
+         return M.all'Access;
+      end if;
+   end Get_Permission_Manager;
+
+   --  ------------------------------
+   --  Get the application instance.
+   --  ------------------------------
+   function Get_Application (Manager : in Permission_Manager)
+                             return AWA.Applications.Application_Access is
+   begin
+      return Manager.App;
+   end Get_Application;
+
+   --  ------------------------------
    --  Add a permission for the current user to access the entity identified by
    --  <b>Entity</b> and <b>Kind</b>.
    --  ------------------------------

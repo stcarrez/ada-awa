@@ -17,11 +17,25 @@
 -----------------------------------------------------------------------
 
 with AWA.Modules;
+with AWA.Applications;
 
 with ADO;
+
+with Security.Permissions;
+with Security.Contexts;
 package AWA.Permissions.Services is
 
-   type Permission_Manager is new AWA.Modules.Module_Manager with null record;
+   type Permission_Manager is new Security.Permissions.Permission_Manager with private;
+   type Permission_Manager_Access is access all Permission_Manager'Class;
+
+   --  Get the permission manager associated with the security context.
+   --  Returns null if there is none.
+   function Get_Permission_Manager (Context : in Security.Contexts.Security_Context'Class)
+                                    return Permission_Manager_Access;
+
+   --  Get the application instance.
+   function Get_Application (Manager : in Permission_Manager)
+                             return AWA.Applications.Application_Access;
 
    --  Add a permission for the current user to access the entity identified by
    --  <b>Entity</b> and <b>Kind</b>.
@@ -36,5 +50,11 @@ package AWA.Permissions.Services is
                                Entity     : in ADO.Identifier;
                                Kind       : in ADO.Entity_Type;
                                Permission : in Permission_Type);
+
+private
+
+   type Permission_Manager is new Security.Permissions.Permission_Manager with record
+      App : AWA.Applications.Application_Access := null;
+   end record;
 
 end AWA.Permissions.Services;
