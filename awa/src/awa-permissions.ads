@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with Security.Contexts;
 with Security.Permissions;
 
 with ADO;
@@ -35,5 +36,11 @@ package AWA.Permissions is
    --  database entity represented by <b>Entity</b>.
    procedure Check (Permission : in Security.Permissions.Permission_Index;
                     Entity     : in ADO.Identifier);
+
+   --  Get from the security context <b>Context</b> an identifier stored under the
+   --  name <b>Name</b>.  Returns NO_IDENTIFIER if the security context does not define
+   --  such name or the value is not a valid identifier.
+   function Get_Context (Context : in Security.Contexts.Security_Context'Class;
+                         Name    : in String) return ADO.Identifier;
 
 end AWA.Permissions;

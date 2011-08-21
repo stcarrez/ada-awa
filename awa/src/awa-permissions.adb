@@ -37,4 +37,26 @@ package body AWA.Permissions is
       raise NO_PERMISSION;
    end Check;
 
+   --  ------------------------------
+   --  Get from the security context <b>Context</b> an identifier stored under the
+   --  name <b>Name</b>.  Returns NO_IDENTIFIER if the security context does not define
+   --  such name or the value is not a valid identifier.
+   --  ------------------------------
+   function Get_Context (Context : in Security.Contexts.Security_Context'Class;
+                         Name    : in String) return ADO.Identifier is
+   begin
+      declare
+         Value : constant String := Context.Get_Context (Name);
+      begin
+         return ADO.Identifier'Value (Value);
+
+      exception
+         when Security.Contexts.Invalid_Context =>
+            return ADO.NO_IDENTIFIER;
+
+         when Constraint_Error =>
+            return ADO.NO_IDENTIFIER;
+      end;
+   end Get_Context;
+
 end AWA.Permissions;
