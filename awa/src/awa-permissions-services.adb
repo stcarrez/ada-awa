@@ -196,4 +196,16 @@ package body AWA.Permissions.Services is
                       ADO.Entity_Type (Kind.Get_Id), Permission);
    end Add_Permission;
 
+   --  ------------------------------
+   --  Create a permission manager for the given application.
+   --  ------------------------------
+   function Create_Permission_Manager (App : in AWA.Applications.Application_Access)
+                                       return Security.Permissions.Permission_Manager_Access is
+      Result : constant AWA.Permissions.Services.Permission_Manager_Access
+        := new AWA.Permissions.Services.Permission_Manager;
+   begin
+      Result.Set_Application (App);
+      return Result.all'Access;
+   end Create_Permission_Manager;
+
 end AWA.Permissions.Services;

@@ -31,9 +31,9 @@ package AWA.Applications is
 
    --  Initialize the application
    overriding
-   procedure Initialize (App  : in out Application;
-                         Conf : in ASF.Applications.Config;
-                         Factory : in ASF.Applications.Main.Application_Factory'Class);
+   procedure Initialize (App     : in out Application;
+                         Conf    : in ASF.Applications.Config;
+                         Factory : in out ASF.Applications.Main.Application_Factory'Class);
 
    --  Register the module in the application
    procedure Register (App     : in Application_Access;

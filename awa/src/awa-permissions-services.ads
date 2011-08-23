@@ -75,6 +75,10 @@ package AWA.Permissions.Services is
                              Entity     : in ADO.Objects.Object_Ref'Class;
                              Permission : in Permission_Type := READ);
 
+   --  Create a permission manager for the given application.
+   function Create_Permission_Manager (App : in AWA.Applications.Application_Access)
+                                       return Security.Permissions.Permission_Manager_Access;
+
 private
 
    type Permission_Manager is new Security.Permissions.Permission_Manager with record

@@ -18,22 +18,23 @@
 
 with ASF.Beans;
 
-with AWA.Modules;
 with AWA.Components.Factory;
+with AWA.Applications.Factory;
 package body AWA.Applications is
 
    --  ------------------------------
    --  Initialize the application
    --  ------------------------------
    overriding
-   procedure Initialize (App  : in out Application;
-                         Conf : in ASF.Applications.Config;
-                         Factory : in ASF.Applications.Main.Application_Factory'Class) is
-      URI : constant String := Conf.Get ("database");
+   procedure Initialize (App     : in out Application;
+                         Conf    : in ASF.Applications.Config;
+                         Factory : in out ASF.Applications.Main.Application_Factory'Class) is
+      URI     : constant String := Conf.Get ("database");
    begin
+      AWA.Applications.Factory.Set_Application (Factory, App'Unchecked_Access);
+      App.DB_Factory.Create (URI);
       ASF.Applications.Main.Application (App).Initialize (Conf, Factory);
       App.Add_Components (AWA.Components.Factory.Definition);
-      App.DB_Factory.Create (URI);
       AWA.Modules.Initialize (App.Modules, Conf);
    end Initialize;
 
@@ -45,7 +46,6 @@ package body AWA.Applications is
                        Name    : in String;
                        URI     : in String := "") is
    begin
---        Module.Initialize (App);
       App.Register (Module.all'Unchecked_Access, Name, URI);
    end Register;
 
