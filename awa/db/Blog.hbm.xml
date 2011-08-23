@@ -43,6 +43,9 @@
         <many-to-one name="author" class="AWA.Users.Models.User" foreign-key="ID" not-null="true" lazy="proxy" fetch="select">
             <column name="AUTHOR_ID" not-null="true" sql-type="INTEGER"/>
         </many-to-one>
+        <many-to-one name="blog" class="Blog" foreign-key="ID" not-null="true" lazy="proxy" fetch="select">
+            <column name="BLOG_ID" not-null="true" sql-type="INTEGER"/>
+        </many-to-one>
     </class>
 
 </hibernate-mapping>

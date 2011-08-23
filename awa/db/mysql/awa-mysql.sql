@@ -25,6 +25,8 @@ create table blog_post (
   `CREATE_DATE` DATETIME NOT NULL,
   /*  */
   `AUTHOR_ID` INTEGER NOT NULL,
+  /*  */
+  `BLOG_ID` INTEGER NOT NULL,
   primary key (`ID`)
 );
 /*  */
@@ -43,20 +45,6 @@ create table COMMENTS (
   `USER_FK` INTEGER NOT NULL,
   /*  */
   `ENTITY__TYPE_FK` INTEGER NOT NULL,
-  primary key (`ID`)
-);
-/* Access control */
-create table ACL (
-  /* the unique ACL id */
-  `ID` BIGINT NOT NULL,
-  /* the entity type */
-  `ENTITY_TYPE` INTEGER ,
-  /* the user identifier */
-  `USER_ID` BIGINT ,
-  /* the entity identifier */
-  `ENTITY_ID` BIGINT ,
-  /* whether the entity is writeable */
-  `WRITEABLE` TINYINT ,
   primary key (`ID`)
 );
 /* Email address */
@@ -125,13 +113,27 @@ create table session (
   `TYPE` INTEGER NOT NULL,
   primary key (`ID`)
 );
+/* Access control */
+create table ACL (
+  /* the unique ACL id */
+  `ID` BIGINT NOT NULL,
+  /* the entity type */
+  `ENTITY_TYPE` INTEGER ,
+  /* the user identifier */
+  `USER_ID` BIGINT ,
+  /* the entity identifier */
+  `ENTITY_ID` BIGINT ,
+  /* whether the entity is writeable */
+  `WRITEABLE` TINYINT ,
+  primary key (`ID`)
+);
 insert into entity_type (name) values
 ("blog")
 ,("blog_post")
 ,("COMMENTS")
-,("ACL")
 ,("email")
 ,("user")
 ,("access_key")
 ,("session")
+,("ACL")
 ;

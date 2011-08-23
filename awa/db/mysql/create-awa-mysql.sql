@@ -1,4 +1,30 @@
-/* Copied from ./db/mysql/awa-mysql.sql*/
+/* Copied from /home/ciceron/work/pam/pam/awa/ado/db/mysql/ado-mysql.sql*/
+/* File generated automatically by dynamo */
+/* Sequence generator */
+create table sequence (
+  /* the sequence name */
+  `NAME` VARCHAR(256) NOT NULL,
+  /* the sequence record version */
+  `version` int ,
+  /* the sequence value */
+  `VALUE` BIGINT ,
+  /* the sequence block size */
+  `BLOCK_SIZE` BIGINT ,
+  primary key (`NAME`)
+);
+/* Entity types */
+create table entity_type (
+  /* the entity type identifier */
+  `ID` INTEGER  AUTO_INCREMENT,
+  /* the entity type name (table name) */
+  `NAME` VARCHAR(256) UNIQUE NOT NULL,
+  primary key (`ID`)
+);
+insert into entity_type (name) values
+("sequence")
+,("entity_type")
+;
+/* Copied from /home/ciceron/work/pam/pam/awa/awa/db/mysql/awa-mysql.sql*/
 /* File generated automatically by dynamo */
 /* Blog  */
 create table blog (
@@ -26,6 +52,8 @@ create table blog_post (
   `CREATE_DATE` DATETIME NOT NULL,
   /*  */
   `AUTHOR_ID` INTEGER NOT NULL,
+  /*  */
+  `BLOG_ID` INTEGER NOT NULL,
   primary key (`ID`)
 );
 /*  */
@@ -44,20 +72,6 @@ create table COMMENTS (
   `USER_FK` INTEGER NOT NULL,
   /*  */
   `ENTITY__TYPE_FK` INTEGER NOT NULL,
-  primary key (`ID`)
-);
-/* Access control */
-create table ACL (
-  /* the unique ACL id */
-  `ID` BIGINT NOT NULL,
-  /* the entity type */
-  `ENTITY_TYPE` INTEGER ,
-  /* the user identifier */
-  `USER_ID` BIGINT ,
-  /* the entity identifier */
-  `ENTITY_ID` BIGINT ,
-  /* whether the entity is writeable */
-  `WRITEABLE` TINYINT ,
   primary key (`ID`)
 );
 /* Email address */
@@ -126,13 +140,27 @@ create table session (
   `TYPE` INTEGER NOT NULL,
   primary key (`ID`)
 );
+/* Access control */
+create table ACL (
+  /* the unique ACL id */
+  `ID` BIGINT NOT NULL,
+  /* the entity type */
+  `ENTITY_TYPE` INTEGER ,
+  /* the user identifier */
+  `USER_ID` BIGINT ,
+  /* the entity identifier */
+  `ENTITY_ID` BIGINT ,
+  /* whether the entity is writeable */
+  `WRITEABLE` TINYINT ,
+  primary key (`ID`)
+);
 insert into entity_type (name) values
 ("blog")
 ,("blog_post")
 ,("COMMENTS")
-,("ACL")
 ,("email")
 ,("user")
 ,("access_key")
 ,("session")
+,("ACL")
 ;

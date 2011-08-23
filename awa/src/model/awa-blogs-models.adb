@@ -499,6 +499,19 @@ package body AWA.Blogs.Models is
    begin
       return Impl.Author;
    end Get_Author;
+   procedure Set_Blog (Object : in out Post_Ref;
+                        Value  : in Blog_Ref'Class) is
+      Impl : Post_Access;
+   begin
+      Set_Field (Object, Impl, 8);
+      Impl.Blog := Blog_Ref (Value);
+   end Set_Blog;
+   function Get_Blog (Object : in Post_Ref)
+                  return Blog_Ref'Class is
+      Impl : constant Post_Access := Post_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Blog;
+   end Get_Blog;
    --  Copy of the object.
    function Copy (Object : Post_Ref) return Post_Ref is
       Result : Post_Ref;
@@ -518,6 +531,7 @@ package body AWA.Blogs.Models is
             Copy.Text := Impl.Text;
             Copy.Create_Date := Impl.Create_Date;
             Copy.Author := Impl.Author;
+            Copy.Blog := Impl.Blog;
          end;
       end if;
       return Result;
@@ -667,6 +681,11 @@ package body AWA.Blogs.Models is
                           Value => Object.Author);
          Object.Clear_Modified (7);
       end if;
+      if Object.Is_Modified (8) then
+         Stmt.Save_Field (Name  => COL_7_2_NAME, --  BLOG_ID
+                          Value => Object.Blog);
+         Object.Clear_Modified (8);
+      end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
          Stmt.Save_Field (Name  => "version",
@@ -708,6 +727,8 @@ package body AWA.Blogs.Models is
                         Value => Object.Text);
       Query.Save_Field (Name  => COL_6_2_NAME, --  AUTHOR_ID
                         Value => Object.Author);
+      Query.Save_Field (Name  => COL_7_2_NAME, --  BLOG_ID
+                        Value => Object.Blog);
       Query.Execute (Result);
       if Result /= 1 then
          raise ADO.Objects.INSERT_ERROR;
@@ -779,6 +800,9 @@ package body AWA.Blogs.Models is
       Object.Create_Date := Stmt.Get_Time (5);
       if not Stmt.Is_Null (6) then
           Object.Author.Set_Key_Value (Stmt.Get_Identifier (6), Session);
+      end if;
+      if not Stmt.Is_Null (7) then
+          Object.Blog.Set_Key_Value (Stmt.Get_Identifier (7), Session);
       end if;
       Object.Version := Stmt.Get_Integer (1);
       ADO.Objects.Set_Created (Object);

@@ -200,6 +200,14 @@ package AWA.Blogs.Models is
    function Get_Author (Object : in Post_Ref)
                  return AWA.Users.Models.User_Ref'Class;
 
+   --  Set 
+   procedure Set_Blog (Object : in out Post_Ref;
+                       Value  : in Blog_Ref'Class);
+
+   --  Get 
+   function Get_Blog (Object : in Post_Ref)
+                 return Blog_Ref'Class;
+
    --  Load the entity identified by 'Id'.
    --  Raises the NOT_FOUND exception if it does not exist.
    procedure Load (Object  : in out Post_Ref;
@@ -313,8 +321,9 @@ private
    COL_4_2_NAME : aliased constant String := "TEXT";
    COL_5_2_NAME : aliased constant String := "CREATE_DATE";
    COL_6_2_NAME : aliased constant String := "AUTHOR_ID";
+   COL_7_2_NAME : aliased constant String := "BLOG_ID";
    POST_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 7,
+     (Count => 8,
       Table => POST_NAME'Access,
       Members => (
          COL_0_2_NAME'Access,
@@ -323,7 +332,8 @@ private
          COL_3_2_NAME'Access,
          COL_4_2_NAME'Access,
          COL_5_2_NAME'Access,
-         COL_6_2_NAME'Access
+         COL_6_2_NAME'Access,
+         COL_7_2_NAME'Access
 )
      );
    Null_Post : constant Post_Ref
@@ -338,6 +348,7 @@ private
        Text : Ada.Strings.Unbounded.Unbounded_String;
        Create_Date : Ada.Calendar.Time;
        Author : AWA.Users.Models.User_Ref;
+       Blog : Blog_Ref;
    end record;
    type Post_Access is access all Post_Impl;
    overriding
