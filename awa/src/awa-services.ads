@@ -20,6 +20,8 @@ with Ada.Containers.Hashed_Maps;
 with Util.Strings;
 package AWA.Services is
 
+   pragma Preelaborate;
+
    subtype Service_Id is Util.Strings.Name_Access;
 
    type Service is limited interface;

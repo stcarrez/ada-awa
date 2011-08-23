@@ -18,7 +18,8 @@
 
 package AWA is
 
- 
+    pragma Preelaborate;
+
     --  Library SVN identification
     SVN_URL : constant String := "$HeadURL: file:///opt/repository/svn/ada/awa/trunk/src/awa.ads $";
 

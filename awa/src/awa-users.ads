@@ -18,4 +18,6 @@
 
 package AWA.Users is
 
+   pragma Preelaborate;
+
 end AWA.Users;
