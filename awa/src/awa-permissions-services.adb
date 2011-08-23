@@ -16,15 +16,20 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with AWA.Permissions.Models;
-with AWA.Services.Contexts;
-
-with ADO;
 with ADO.Queries;
 with ADO.Sessions;
+with ADO.Sessions.Entities;
 with ADO.Statements;
+with ADO.Model;
 
 with Util.Log.Loggers;
+with Util.Serialize.IO.XML;
+
+with Security.Controllers.Roles;
+
+with AWA.Permissions.Models;
+with AWA.Services.Contexts;
+--  with AWA.Permissions.Controllers;
 package body AWA.Permissions.Services is
 
    use Util.Log;
@@ -64,6 +69,15 @@ package body AWA.Permissions.Services is
    begin
       return Manager.App;
    end Get_Application;
+
+   --  ------------------------------
+   --  Set the application instance.
+   --  ------------------------------
+   procedure Set_Application (Manager : in out Permission_Manager;
+                              App : in AWA.Applications.Application_Access) is
+   begin
+      Manager.App := App;
+   end Set_Application;
 
    --  ------------------------------
    --  Add a permission for the current user to access the entity identified by
@@ -117,5 +131,69 @@ package body AWA.Permissions.Services is
          end if;
       end;
    end Check_Permission;
+
+   --  ------------------------------
+   --  Read the policy file
+   --  ------------------------------
+   overriding
+   procedure Read_Policy (Manager : in out Permission_Manager;
+                          File    : in String) is
+
+      use Util;
+
+      Reader  : Util.Serialize.IO.XML.Parser;
+
+      package Policy_Config is
+        new Security.Permissions.Reader_Config (Reader, Manager'Unchecked_Access);
+      package Role_Config is
+        new Security.Controllers.Roles.Reader_Config (Reader, Manager'Unchecked_Access);
+--        package Entity_Config is
+--           new AWA.Permissions.Controllers.Reader_Config (Reader, Manager'Unchecked_Access);
+   begin
+      Log.Info ("Reading policy file {0}", File);
+
+      Reader.Parse (File);
+
+   end Read_Policy;
+
+   --  ------------------------------
+   --  Add a permission for the user <b>User</b> to access the entity identified by
+   --  <b>Entity</b> which is of type <b>Kind</b>.
+   --  ------------------------------
+   procedure Add_Permission (Session    : in out ADO.Sessions.Master_Session;
+                             User       : in ADO.Identifier;
+                             Entity     : in ADO.Identifier;
+                             Kind       : in ADO.Entity_Type;
+                             Permission : in Permission_Type := READ) is
+      Acl : AWA.Permissions.Models.ACL_Ref;
+   begin
+      Acl.Set_User_Id (User);
+      Acl.Set_Entity_Type (Kind);
+      Acl.Set_Entity_Id (Entity);
+      Acl.Set_Writeable (Permission = WRITE);
+      Acl.Save (Session);
+
+      Log.Info ("Permission created for {0} to access {1}, entity type {2}",
+                ADO.Identifier'Image (User),
+                ADO.Identifier'Image (Entity),
+                ADO.Entity_Type'Image (Kind));
+   end Add_Permission;
+
+   --  ------------------------------
+   --  Add a permission for the user <b>User</b> to access the entity identified by
+   --  <b>Entity</b>.
+   --  ------------------------------
+   procedure Add_Permission (Session    : in out ADO.Sessions.Master_Session;
+                             User       : in ADO.Identifier;
+                             Entity     : in ADO.Objects.Object_Ref'Class;
+                             Permission : in Permission_Type := READ) is
+      Key  : constant ADO.Objects.Object_Key := Entity.Get_Key;
+      Kind : constant ADO.Model.Entity_Type_Ref
+        := ADO.Sessions.Entities.Find_Entity_Type (Session => Session,
+                                                   Object  => Key);
+   begin
+      Add_Permission (Session, User, ADO.Objects.Get_Value (Key),
+                      ADO.Entity_Type (Kind.Get_Id), Permission);
+   end Add_Permission;
 
 end AWA.Permissions.Services;

@@ -19,6 +19,8 @@
 with AWA.Applications;
 
 with ADO;
+with ADO.Sessions;
+with ADO.Objects;
 
 with Security.Permissions;
 with Security.Contexts;
@@ -36,6 +38,10 @@ package AWA.Permissions.Services is
    function Get_Application (Manager : in Permission_Manager)
                              return AWA.Applications.Application_Access;
 
+   --  Set the application instance.
+   procedure Set_Application (Manager : in out Permission_Manager;
+                              App : in AWA.Applications.Application_Access);
+
    --  Add a permission for the current user to access the entity identified by
    --  <b>Entity</b> and <b>Kind</b>.
    procedure Add_Permission (Manager    : in Permission_Manager;
@@ -49,6 +55,25 @@ package AWA.Permissions.Services is
                                Entity     : in ADO.Identifier;
                                Kind       : in ADO.Entity_Type;
                                Permission : in Permission_Type);
+   --  Read the policy file
+   overriding
+   procedure Read_Policy (Manager : in out Permission_Manager;
+                          File    : in String);
+
+   --  Add a permission for the user <b>User</b> to access the entity identified by
+   --  <b>Entity</b> which is of type <b>Kind</b>.
+   procedure Add_Permission (Session    : in out ADO.Sessions.Master_Session;
+                             User       : in ADO.Identifier;
+                             Entity     : in ADO.Identifier;
+                             Kind       : in ADO.Entity_Type;
+                             Permission : in Permission_Type := READ);
+
+   --  Add a permission for the user <b>User</b> to access the entity identified by
+   --  <b>Entity</b>.
+   procedure Add_Permission (Session    : in out ADO.Sessions.Master_Session;
+                             User       : in ADO.Identifier;
+                             Entity     : in ADO.Objects.Object_Ref'Class;
+                             Permission : in Permission_Type := READ);
 
 private
 
