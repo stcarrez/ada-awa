@@ -61,7 +61,7 @@ package AWA.Blogs.Services is
 
    --  Delete the post identified by the given identifier.
    procedure Delete_Post (Model   : in Blog_Service;
-                          Id      : in ADO.Identifier);
+                          Post_Id : in ADO.Identifier);
 
 private
 
