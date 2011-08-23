@@ -28,9 +28,8 @@ with Util.Events.Channels;
 
 with ASF.Beans;
 with ASF.Events.Modules;
-with ASF.Applications.Main;
+with ASF.Applications;
 with ADO.Sessions;
-with ASF.Applications.Main;
 limited with AWA.Applications;
 
 --  The <b>AWA.Modules</b> package defines simple pluggable modules in
@@ -44,6 +43,8 @@ limited with AWA.Applications;
 --  Each module is associated with an event channel that allows other
 --  modules to post easily events.
 package AWA.Modules is
+
+   type Application_Access is access all AWA.Applications.Application'Class;
 
    --  ------------------------------
    --  Module manager
@@ -69,7 +70,7 @@ package AWA.Modules is
    function Get_URI (Plugin : Module) return String;
 
    --  Get the application in which this module is registered.
-   function Get_Application (Plugin : in Module) return access ASF.Applications.Main.Application'Class;
+   function Get_Application (Plugin : in Module) return Application_Access;
 
    --  Find the module with the given name
    function Find_Module (Plugin : Module;
@@ -85,7 +86,7 @@ package AWA.Modules is
                          Module  : in AWA.Modules.Module'Class);
 
    procedure Initialize (Plugin : in out Module;
-                         App    : access ASF.Applications.Main.Application'Class);
+                         App    : in Application_Access);
 
    --  Get the event subscribers for a given event name.
    function Get_Subscribers (Plugin : in Module;
@@ -191,13 +192,12 @@ private
    type Module is abstract new Ada.Finalization.Limited_Controlled with record
       Registry   : Module_Registry_Access;
       Subscriber : aliased Module_Subscriber;
-      App        : access ASF.Applications.Main.Application'Class := null;
+      App        : Application_Access := null;
       Channel    : Util.Events.Channels.Channel_Access;
       Name       : Unbounded_String;
       URI        : Unbounded_String;
       Config     : ASF.Applications.Config;
       Factory    : aliased ASF.Beans.Bean_Factory;
-      Awa_App    : access AWA.Applications.Application'Class;
       Self       : Module_Access := null;
    end record;
 

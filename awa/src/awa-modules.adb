@@ -58,9 +58,10 @@ package body AWA.Modules is
 
    --  ------------------------------
    --  Get the application in which this module is registered.
-   function Get_Application (Plugin : in Module) return access ASF.Applications.Main.Application'Class is
+   --  ------------------------------
+   function Get_Application (Plugin : in Module) return Application_Access is
    begin
-      return Plugin.Awa_App;
+      return Plugin.App;
    end Get_Application;
 
    --  ------------------------------
@@ -218,12 +219,11 @@ package body AWA.Modules is
    end Send_Event;
 
    procedure Initialize (Plugin : in out Module;
-                         App    : access ASF.Applications.Main.Application'Class) is
+                         App    : in Application_Access) is
    begin
       Plugin.Self := Plugin'Unchecked_Access;
       --        ASF.Modules.Module (Plugin).Initialize (App);
       Plugin.App := App;
-      Plugin.Awa_App := AWA.Applications.Application'Class (App.all)'Unchecked_Access;
    end Initialize;
 
    --  ------------------------------
@@ -336,7 +336,7 @@ package body AWA.Modules is
    function Get_Session (Manager : Module)
                             return ADO.Sessions.Session is
    begin
-      return Manager.Awa_App.Get_Session;
+      return Manager.App.Get_Session;
    end Get_Session;
 
    --  ------------------------------
@@ -345,7 +345,7 @@ package body AWA.Modules is
    function Get_Master_Session (Manager : Module)
                                 return ADO.Sessions.Master_Session is
    begin
-      return Manager.Awa_App.Get_Master_Session;
+      return Manager.App.Get_Master_Session;
    end Get_Master_Session;
 
    --  Get per request manager => look in Request
