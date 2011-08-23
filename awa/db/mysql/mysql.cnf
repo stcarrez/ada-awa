@@ -1,0 +1,7 @@
+[client]
+host     = localhost
+user     = awa_user
+password = 
+database = awa_test
+
+

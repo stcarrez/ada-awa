@@ -9,8 +9,8 @@ distdir=awa-@AWA_VERSION@
 
 DIST_FILE=awa-@AWA_VERSION@.tar.gz
 
-HAVE_MYSQL=@AWA_DB_MYSQL@
-HAVE_SQLITE=@AWA_DB_SQLITE@
+HAVE_MYSQL=@ADO_DB_MYSQL@
+HAVE_SQLITE=@ADO_DB_SQLITE@
 
 srcdir = .
 top_srcdir = @top_srcdir@
@@ -32,7 +32,7 @@ autobuild:
 	$(GNATMAKE) -gnatc -c -k  -P "$(GPRPATH)"
 
 # Build and run the unit tests
-test:	test-sqlite test-mysql
+test:	test-mysql
 
 test-sqlite:		build regtests.db
 	-test T${HAVE_SQLITE} = TTrue && \
@@ -49,7 +49,7 @@ regtests.db:
 # Create the tables in the database.
 # (The database itself must have been created)
 create-mysql-tests:
-	-mysql --defaults-extra-file=db/regtests/mysql/mysql.cnf < db/regtests/mysql/drop-ado-mysql.sql
+	-mysql --defaults-extra-file=db/mysql/mysql.cnf < db/mysql/drop-awa-mysql.sql
 	mysql --defaults-extra-file=db/mysql/mysql.cnf < db/mysql/create-awa-mysql.sql
 
 

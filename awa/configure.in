@@ -124,6 +124,35 @@ fi
 AC_MSG_RESULT(${ADO_DIR})
 AC_SUBST(ADO_DIR)
 
+case "${host}" in
+  ## On Windows, the MySQL library name is libmysql
+  *mingw* )
+    MYSQL_LIB=mysql
+    ;;
+
+  *)
+    MYSQL_LIB=mysqlclient
+    ;;
+
+esac
+
+DB=""
+ADO_DB_MYSQL=False
+AC_CHECK_LIB($MYSQL_LIB,mysql_init,[
+    DB="$DB mysql"
+    ADO_DB_MYSQL=True
+    MYSQL_LIBNAME="$MYSQL_LIB"
+])
+
+ADO_DB_SQLITE=False
+AC_CHECK_LIB(sqlite3,sqlite3_open,[
+    DB="$DB sqlite"
+    ADO_DB_SQLITE=True
+])
+
+AC_SUBST(ADO_DB_MYSQL)
+AC_SUBST(ADO_DB_SQLITE)
+
 AC_OUTPUT(
 Makefile awa.gpr tests.gpr
 )
