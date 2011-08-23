@@ -26,17 +26,24 @@ with ASF.Tests;
 
 with AWA.Users.Module;
 with AWA.Mail.Module;
+with AWA.Blogs.Module;
+
 with AWA.Applications;
+with AWA.Applications.Factory;
 with AWA.Services.Filters;
 package body AWA.Tests is
 
    App      : AWA.Applications.Application_Access := null;
+
+   Factory        : AWA.Applications.Factory.Application_Factory;
 
    Service_Filter : aliased AWA.Services.Filters.Service_Filter;
 
    Users          : aliased AWA.Users.Module.User_Module;
 
    Mail           : aliased AWA.Mail.Module.Mail_Module;
+
+   Blogs          : aliased AWA.Blogs.Module.Blog_Module;
 
    --  ------------------------------
    --  Initialize the awa test framework mockup.
@@ -48,28 +55,27 @@ package body AWA.Tests is
 
       App := new AWA.Applications.Application;
 
-      ASF.Tests.Initialize (Props, App.all'Access);
+      ASF.Tests.Initialize (Props, App.all'Access, Factory);
       App.Add_Filter ("service", Service_Filter'Access);
       App.Add_Filter_Mapping (Name => "service", Pattern => "*.html");
 
       declare
-         Nav : constant ASF.Navigations.Navigation_Handler_Access := App.Get_Navigation_Handler;
          Users : AWA.Users.Module.User_Module_Access := AWA.Tests.Users'Access;
       begin
          Register (App    => App.all'Access,
-                   Name   =>  AWA.Users.Module.NAME, URI => "user",
+                   Name   => AWA.Users.Module.NAME,
+                   URI    => "user",
                    Module => Users.all'Access);
 
          Register (App    => App.all'Access,
-                   Name   => "mail", URI => "mail",
+                   Name   => "mail",
+                   URI    => "mail",
                    Module => Mail'Access);
 
-         Nav.Add_Navigation_Case (From    => "/users/login.xhtml",
-                                  To      => "/users/main.xhtml",
-                                  Outcome => "success");
-         Nav.Add_Navigation_Case (From    => "/users/register.xhtml",
-                                  To      => "/users/registration-sent.xhtml",
-                                  Outcome => "success");
+         Register (App    => App.all'Access,
+                   Name   => AWA.Blogs.Module.NAME,
+                   URI    => "blogs",
+                   Module => Blogs'Access);
 
          --           if Props.Exists ("test.server") then
          --              declare

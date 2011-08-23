@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with Security.Contexts;
 with AWA.Users.Models;
 with AWA.Services.Contexts;
 package AWA.Users.Services.Tests.Helpers is
@@ -31,6 +32,11 @@ package AWA.Users.Services.Tests.Helpers is
    --  Initialize the service context.
    procedure Initialize (Principal : in out Test_User);
 
+   --  Create a test user associated with the given email address.
+   --  Get an open session for that user.  If the user already exists, no error is reported.
+   procedure Create_User (Principal : in out Test_User;
+                          Email     : in String);
+
    --  Create a test user for a new test and get an open session.
    procedure Create_User (Principal : in out Test_User);
 
@@ -44,5 +50,10 @@ package AWA.Users.Services.Tests.Helpers is
 
    --  Logout the user and closes the current session.
    procedure Logout (Principal : in out Test_User);
+
+   --  Simulate a user login in the given service context.
+   procedure Login (Context : in out AWA.Services.Contexts.Service_Context;
+                    Sec_Context : in out Security.Contexts.Security_Context;
+                    Email   : in String);
 
 end AWA.Users.Services.Tests.Helpers;

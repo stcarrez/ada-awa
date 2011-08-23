@@ -18,8 +18,10 @@
 
 with Util.Tests;
 
+with AWA.Applications;
 with AWA.Tests;
 with AWA.Users.Module;
+with AWA.Users.Principals;
 with ADO.Sessions;
 with ADO.SQL;
 package body AWA.Users.Services.Tests.Helpers is
@@ -36,6 +38,47 @@ package body AWA.Users.Services.Tests.Helpers is
       --  Setup the service context.
       Principal.Context.Set_Context (AWA.Tests.Get_Application, null);
    end Initialize;
+
+   --  ------------------------------
+   --  Create a test user associated with the given email address.
+   --  Get an open session for that user.  If the user already exists, no error is reported.
+   --  ------------------------------
+   procedure Create_User (Principal : in out Test_User;
+                          Email     : in String) is
+      DB    : ADO.Sessions.Session;
+      Query : ADO.SQL.Query;
+      Found : Boolean;
+      Key   : AWA.Users.Models.Access_Key_Ref;
+   begin
+      Initialize (Principal);
+
+      DB := Principal.Manager.Get_Session;
+
+      --  Find the user
+      Query.Set_Join ("inner join email e on e.user_id = o.id");
+      Query.Set_Filter ("e.email = ?");
+      Query.Bind_Param (1, Email);
+      Principal.User.Find (DB, Query, Found);
+      if not Found then
+         Principal.User.Set_First_Name ("Joe");
+         Principal.User.Set_Last_Name ("Pot");
+         Principal.User.Set_Password ("admin");
+         Principal.Email.Set_Email (Email);
+         Principal.Manager.Create_User (Principal.User, Principal.Email);
+
+         Find_Access_Key (Principal, Email, Key);
+
+         --  Run the verification and get the user and its session
+         Principal.Manager.Verify_User (Key.Get_Access_Key, "192.168.1.1",
+                                        Principal.User, Principal.Session);
+      else
+         Principal.Manager.Authenticate (Email    => Email,
+                                         Password => "admin",
+                                         IpAddr   => "192.168.1.1",
+                                         User     => Principal.User,
+                                         Session  => Principal.Session);
+      end if;
+   end Create_User;
 
    --  ------------------------------
    --  Create a test user for a new test and get an open session.
@@ -100,5 +143,21 @@ package body AWA.Users.Services.Tests.Helpers is
       Initialize (Principal);
       Principal.Manager.Close_Session (Principal.Session.Get_Id);
    end Logout;
+
+   --  Simulate a user login in the given service context.
+   procedure Login (Context : in out AWA.Services.Contexts.Service_Context;
+                    Sec_Context : in out Security.Contexts.Security_Context;
+                    Email   : in String) is
+      User      : Test_User;
+      Principal : AWA.Users.Principals.Principal_Access;
+      App       : AWA.Applications.Application_Access := AWA.Tests.Get_Application;
+   begin
+      AWA.Tests.Set_Application_Context;
+      Create_User (User, Email);
+      Principal := AWA.Users.Principals.Create (User.User, User.Session);
+      Context.Set_Context (App, Principal);
+      Sec_Context.Set_Context (Manager   => App.Get_Permission_Manager,
+                               Principal => Principal.all'Access);
+   end Login;
 
 end AWA.Users.Services.Tests.Helpers;

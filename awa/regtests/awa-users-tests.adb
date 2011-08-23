@@ -59,16 +59,17 @@ package body AWA.Users.Tests is
    begin
       Services.Tests.Helpers.Initialize (Principal);
 
-      Do_Get (Request, Reply, "/users/register.html", "create-user-1.html");
+      Do_Get (Request, Reply, "/auth/register.html", "create-user-1.html");
 
       Request.Set_Parameter ("email", Email);
       Request.Set_Parameter ("password", "asdf");
-      Request.Set_Parameter ("first_name", "joe");
-      Request.Set_Parameter ("last_name", "dalton");
+      Request.Set_Parameter ("password2", "asdf");
+      Request.Set_Parameter ("firstName", "joe");
+      Request.Set_Parameter ("lastName", "dalton");
       Request.Set_Parameter ("register", "1");
-      Do_Post (Request, Reply, "/users/register.html", "create-user-2.html");
+      Do_Post (Request, Reply, "/auth/register.html", "create-user-2.html");
 
-      T.Assert (Reply.Get_Status = ASF.Responses.SC_OK, "Invalid response");
+      T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
 
       --  Check that the user is NOT logged.
       T.Assert (Request.Get_User_Principal = null, "A user principal should not be defined");
@@ -81,7 +82,7 @@ package body AWA.Users.Tests is
 	     Services.Tests.Helpers.Find_Access_Key (Principal, Email, Key);
 		 T.Assert (not Key.Is_Null, "There is no access key associated with the user");
 		 Request.Set_Parameter ("key", Key.Get_Access_Key);
-		 Do_Get (Request, Reply, "/users/validate.html", "validate-user-1.html");
+		 Do_Get (Request, Reply, "/auth/validate.html", "validate-user-1.html");
 
          T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
       end;
@@ -101,10 +102,14 @@ package body AWA.Users.Tests is
    procedure Test_Login_User (T : in out Test) is
       use type ASF.Principals.Principal_Access;
 
-      Request : ASF.Requests.Mockup.Request;
-      Reply   : ASF.Responses.Mockup.Response;
+      Request   : ASF.Requests.Mockup.Request;
+      Reply     : ASF.Responses.Mockup.Response;
+      Principal :Services.Tests.Helpers.Test_User;
    begin
-      Do_Get (Request, Reply, "/users/login.html", "login-user-1.html");
+      AWA.Tests.Set_Application_Context;
+      Services.Tests.Helpers.Create_User (Principal, "Joe@gmail.com");
+
+      Do_Get (Request, Reply, "/auth/login.html", "login-user-1.html");
 
       T.Assert (Reply.Get_Status = ASF.Responses.SC_OK, "Invalid response");
 
@@ -112,9 +117,9 @@ package body AWA.Users.Tests is
       T.Assert (Request.Get_User_Principal = null, "A user principal should not be defined");
 
       Request.Set_Parameter ("email", "Joe@gmail.com");
-      Request.Set_Parameter ("password", "asdf");
+      Request.Set_Parameter ("password", "admin");
       Request.Set_Parameter ("login", "1");
-      Do_Post (Request, Reply, "/users/login.html", "login-user-2.html");
+      Do_Post (Request, Reply, "/auth/login.html", "login-user-2.html");
 
       T.Assert (Reply.Get_Status = ASF.Responses.SC_OK, "Invalid response");
 
@@ -132,13 +137,13 @@ package body AWA.Users.Tests is
       Reply   : ASF.Responses.Mockup.Response;
       Email   : constant String := "Joe@gmail.com";
    begin
-      Do_Get (Request, Reply, "/users/lost-password.html", "lost-password-1.html");
+      Do_Get (Request, Reply, "/auth/lost-password.html", "lost-password-1.html");
 
       T.Assert (Reply.Get_Status = ASF.Responses.SC_OK, "Invalid response");
 
       Request.Set_Parameter ("email", Email);
       Request.Set_Parameter ("lost-password", "1");
-      Do_Post (Request, Reply, "/users/lost-password.html", "lost-password-2.html");
+      Do_Post (Request, Reply, "/auth/lost-password.html", "lost-password-2.html");
 
       T.Assert (Reply.Get_Status = ASF.Responses.SC_OK, "Invalid response");
 
@@ -154,14 +159,14 @@ package body AWA.Users.Tests is
          --  Simulate user clicking on the reset password link.
          --  This verifies the key, login the user and redirect him to the change-password page
          Request.Set_Parameter ("key", Key.Get_Access_Key);
-		 Do_Get (Request, Reply, "/users/reset-password.html", "reset-password-1.html");
+		 Do_Get (Request, Reply, "/auth/reset-password.html", "reset-password-1.html");
 
          T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
 
          --  Post the reset password
 		 Request.Set_Parameter ("password", "asd");
 		 Request.Set_Parameter ("reset-password", "1");
-		 Do_Post (Request, Reply, "/users/change-password.html", "reset-password-2.html");
+		 Do_Post (Request, Reply, "/auth/change-password.html", "reset-password-2.html");
 
          T.Assert (Reply.Get_Status = ASF.Responses.SC_OK, "Invalid response");
 
