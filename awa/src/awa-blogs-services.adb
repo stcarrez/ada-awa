@@ -44,6 +44,7 @@ package body AWA.Blogs.Services is
                           Workspace_Id : in ADO.Identifier;
                           Title        : in String;
                           Result       : out ADO.Identifier) is
+      pragma Unreferenced (Model);
       use type ADO.Identifier;
 
       Ctx   : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
@@ -81,6 +82,7 @@ package body AWA.Blogs.Services is
                           URI     : in String;
                           Text    : in String;
                           Result  : out ADO.Identifier) is
+      pragma Unreferenced (Model);
       use type ADO.Identifier;
 
       Ctx   : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
@@ -127,6 +129,8 @@ package body AWA.Blogs.Services is
                           Post_Id : in ADO.Identifier;
                           Title   : in String;
                           Text    : in String) is
+      pragma Unreferenced (Model);
+
       Ctx   : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB    : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Post  : AWA.Blogs.Models.Post_Ref;
@@ -138,7 +142,7 @@ package body AWA.Blogs.Services is
          Log.Error ("Post {0} not found", ADO.Identifier'Image (Post_Id));
          raise Not_Found;
       end if;
-      
+
       --  Check that the user has the update post permission on the given post.
       AWA.Permissions.Check (Permission => ACL_Update_Post.Permission,
                              Entity     => Post_Id);
@@ -154,9 +158,12 @@ package body AWA.Blogs.Services is
    --  ------------------------------
    procedure Delete_Post (Model   : in Blog_Service;
                           Post_Id : in ADO.Identifier) is
+      pragma Unreferenced (Model);
+
       Ctx   : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB    : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Post  : AWA.Blogs.Models.Post_Ref;
+      Found : Boolean;
    begin
       Ctx.Start;
       Post.Load (Session => DB, Id => Post_Id, Found => Found);
