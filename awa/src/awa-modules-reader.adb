@@ -18,10 +18,14 @@
 
 with Util.Serialize.IO.XML;
 
-with ASF.Applications.Main;
 with ASF.Navigations.Mappers;
 with ASF.Servlets.Mappers;
 with ASF.Beans.Mappers;
+
+with Security.Permissions;
+with Security.Controllers.Roles;
+with AWA.Permissions.Configs;
+with AWA.Services.Contexts;
 
 --  The <b>AWA.Modules.Reader</b> package reads the module configuration files
 --  and initializes the module.
@@ -36,24 +40,42 @@ package body AWA.Modules.Reader is
 
       Reader     : Util.Serialize.IO.XML.Parser;
 
+      Ctx : AWA.Services.Contexts.Service_Context;
       Nav : constant ASF.Navigations.Navigation_Handler_Access := Plugin.App.Get_Navigation_Handler;
+      Sec : constant Security.Permissions.Permission_Manager_Access
+        := Plugin.App.Get_Permission_Manager;
 
-      package Bean_Config is
-        new ASF.Beans.Mappers.Reader_Config (Reader, Plugin.Factory'Unchecked_Access, Context);
-      package Navigation_Config is
-        new ASF.Navigations.Mappers.Reader_Config (Reader, Nav);
-      package Servlet_Config is
-        new ASF.Servlets.Mappers.Reader_Config (Reader, Plugin.App.all'Unchecked_Access);
-      pragma Warnings (Off, Bean_Config);
-      pragma Warnings (Off, Navigation_Config);
-      pragma Warnings (Off, Servlet_Config);
    begin
       Log.Info ("Reading module configuration file {0}", File);
 
-      Util.Serialize.IO.Dump (Reader, AWA.Modules.Log);
+      Ctx.Set_Context (Plugin.App.all'Unchecked_Access, null);
+      declare
+         package Bean_Config is
+           new ASF.Beans.Mappers.Reader_Config (Reader, Plugin.Factory'Unchecked_Access, Context);
+         package Navigation_Config is
+           new ASF.Navigations.Mappers.Reader_Config (Reader, Nav);
+         package Servlet_Config is
+           new ASF.Servlets.Mappers.Reader_Config (Reader, Plugin.App.all'Unchecked_Access);
+         package Policy_Config is
+           new Security.Permissions.Reader_Config (Reader, Sec);
+         package Role_Config is
+           new Security.Controllers.Roles.Reader_Config (Reader, Sec);
+         package Entity_Config is
+           new AWA.Permissions.Configs.Reader_Config (Reader, Sec);
 
-      --  Read the configuration file and record managed beans, navigation rules.
-      Reader.Parse (File);
+         pragma Warnings (Off, Bean_Config);
+         pragma Warnings (Off, Navigation_Config);
+         pragma Warnings (Off, Servlet_Config);
+         pragma Warnings (Off, Policy_Config);
+         pragma Warnings (Off, Role_Config);
+         pragma Warnings (Off, Entity_Config);
+      begin
+
+         Util.Serialize.IO.Dump (Reader, AWA.Modules.Log);
+
+         --  Read the configuration file and record managed beans, navigation rules.
+         Reader.Parse (File);
+      end;
    end Read_Configuration;
 
 end AWA.Modules.Reader;
