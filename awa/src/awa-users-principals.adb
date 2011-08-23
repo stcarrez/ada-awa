@@ -16,8 +16,8 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with AWA.Users.Services;
-with AWA.Users.Module;
+--  with AWA.Users.Services;
+--  with AWA.Users.Module;
 package body AWA.Users.Principals is
 
    --  ------------------------------
@@ -118,18 +118,20 @@ package body AWA.Users.Principals is
                                Auth   : in Security.Openid.Authentication;
                                Result : out ASF.Principals.Principal_Access) is
       pragma Unreferenced (Server);
-      use AWA.Users.Module;
-      use AWA.Users.Services;
+--        use AWA.Users.Module;
+--        use AWA.Users.Services;
 
-      Manager : constant User_Service_Access := AWA.Users.Module.Get_User_Manager;
-	  User    : AWA.Users.Models.User_Ref;
-	  Session : AWA.Users.Models.Session_Ref;
+--        Manager : constant User_Service_Access := AWA.Users.Module.Get_User_Manager;
+--  	  User    : AWA.Users.Models.User_Ref;
+--  	  Session : AWA.Users.Models.Session_Ref;
    begin
-      Manager.Authenticate (Auth    => Auth,
-                            IpAddr  => "",
-                            User    => User,
-                            Session => Session);
-      Result := Create (User, Session).all'Access;
+--        Manager.Authenticate (Auth    => Auth,
+--                              IpAddr  => "",
+--                              User    => User,
+--                              Session => Session);
+--        Result := Create (User, Session).all'Access;
+
+      Result := null;
    end Create_Principal;
 
 end AWA.Users.Principals;
