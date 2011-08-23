@@ -4088,21 +4088,23 @@ $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
 
 
+ARGS="--prefix $prefix"
+
 DIR=`pwd`
 echo "Configuring ada-util"
-(cd $DIR/util; ./configure)
+(cd $DIR/util; ./configure $ARGS)
 
 echo "Configuring ada-el"
-(cd $DIR/el; ./configure --with-ada-util=../util)
+(cd $DIR/el; ./configure --with-ada-util=../util $ARGS)
 
 echo "Configuring ada-asf"
-(cd $DIR/asf; ./configure --with-ada-util=../util --with-ada-el=../el)
+(cd $DIR/asf; ./configure --with-ada-util=../util --with-ada-el=../el $ARGS)
 
 echo "Configuring dynamo"
-(cd $DIR/dynamo; ./configure --with-ada-util=../util --with-ada-el=../el --with-ada-asf=../asf)
+(cd $DIR/dynamo; ./configure --with-ada-util=../util --with-ada-el=../el --with-ada-asf=../asf $ARGS)
 
 echo "Configuring ada-ado"
-(cd $DIR/ado; ./configure --with-ada-util=../util)
+(cd $DIR/ado; ./configure --with-ada-util=../util $ARGS)
 
 echo "Configuring ada-awa"
-(cd $DIR/awa; ./configure --with-ada-util=../util --with-ada-el=../el --with-ada-asf=../asf --with-ada-ado=../ado)
+(cd $DIR/awa; ./configure --with-ada-util=../util --with-ada-el=../el --with-ada-asf=../asf --with-ada-ado=../ado $ARGS)
