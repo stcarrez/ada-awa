@@ -1,1 +1,2 @@
-<project><name>awa</name></project>
+<project><name>awa</name>
+<property name="database">mysql://localhost:3306/awa_test?user=awa_user</property></project>

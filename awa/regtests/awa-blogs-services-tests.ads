@@ -28,4 +28,7 @@ package AWA.Blogs.Services.Tests is
    --  Test creation of blog by simulating web requests.
    procedure Test_Create_Blog (T : in out Test);
 
+   --  Test creating and updating of a blog post
+   procedure Test_Create_Post (T : in out Test);
+
 end AWA.Blogs.Services.Tests;
