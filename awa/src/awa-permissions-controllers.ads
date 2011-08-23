@@ -16,14 +16,8 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Util.Beans.Objects;
-with Util.Serialize.IO.XML;
-
-with ADO.Sessions;
-
 with Security.Contexts;
 with Security.Controllers;
-with Security.Permissions;
 
 package AWA.Permissions.Controllers is
 
@@ -58,31 +52,5 @@ package AWA.Permissions.Controllers is
    function Has_Permission (Handler : in Entity_Controller;
                             Context : in Security.Contexts.Security_Context'Class)
                             return Boolean;
-
-   type Controller_Config is record
-      Name    : Util.Beans.Objects.Object;
-      SQL     : Util.Beans.Objects.Object;
-      Entity  : ADO.Entity_Type;
-      Count   : Natural := 0;
-      Manager : Security.Permissions.Permission_Manager_Access;
-      Session : ADO.Sessions.Session;
-   end record;
-
-   --  Setup the XML parser to read the <b>entity-permission</b> description.  For example:
-   --
-   --  <entity-permission>
-   --     <name>create-workspace</name>
-   --     <entity-type>WORKSPACE</entity-type>
-   --     <sql>select acl.id from acl where ...</sql>
-   --  </entity-permission>
-   --
-   --  This defines a permission <b>create-workspace</b> that will be granted if the
-   --  SQL statement returns a non empty list.
-   generic
-      Reader  : in out Util.Serialize.IO.XML.Parser;
-      Manager : in Security.Permissions.Permission_Manager_Access;
-   package Reader_Config is
-      Config : aliased Controller_Config;
-   end Reader_Config;
 
 end AWA.Permissions.Controllers;
