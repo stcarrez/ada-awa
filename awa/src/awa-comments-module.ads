@@ -18,7 +18,6 @@
 
 with AWA.Modules;
 with AWA.Modules.Get;
-with ASF.Applications.Main;
 with AWA.Comments.Services;
 package AWA.Comments.Module is
 
@@ -29,7 +28,7 @@ package AWA.Comments.Module is
 
    overriding
    procedure Initialize (Plugin : in out Comment_Module;
-                         App    : access ASF.Applications.Main.Application'Class);
+                         App    : in AWA.Modules.Application_Access);
 
    function Get_Comment_Module is
      new AWA.Modules.Get (Comment_Module, Comment_Module_Access, NAME);

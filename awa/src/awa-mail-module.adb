@@ -19,6 +19,7 @@
 with Ada.Strings.Unbounded;
 with Ada.Exceptions;
 
+with AWA.Applications;
 with AWA.Modules.Beans;
 with ASF.Beans;
 with ASF.Requests.Mockup;

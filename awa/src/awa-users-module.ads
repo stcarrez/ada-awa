@@ -17,7 +17,6 @@
 -----------------------------------------------------------------------
 
 with AWA.Modules;
-with ASF.Applications.Main;
 with Security.Openid.Servlets;
 
 with AWA.Users.Services;
@@ -45,7 +44,7 @@ package AWA.Users.Module is
    --  Initialize the user module.
    overriding
    procedure Initialize (Plugin : in out User_Module;
-                         App    : access ASF.Applications.Main.Application'Class);
+                         App    : in AWA.Modules.Application_Access);
 
    --  Get the user manager.
    function Get_User_Manager (Plugin : in User_Module) return Services.User_Service_Access;

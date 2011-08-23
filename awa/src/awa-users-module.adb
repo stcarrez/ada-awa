@@ -20,6 +20,7 @@ with AWA.Modules.Beans;
 with ASF.Beans;
 with AWA.Modules.Get;
 
+with AWA.Applications;
 with AWA.Users.Beans;
 
 with Util.Log.Loggers;
@@ -35,7 +36,7 @@ package body AWA.Users.Module is
    --  ------------------------------
    overriding
    procedure Initialize (Plugin : in out User_Module;
-                         App    : access ASF.Applications.Main.Application'Class) is
+                         App    : in AWA.Modules.Application_Access) is
    begin
       Log.Info ("Initializing the users module");
 

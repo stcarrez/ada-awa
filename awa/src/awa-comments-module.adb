@@ -23,12 +23,11 @@ package body AWA.Comments.Module is
 
    overriding
    procedure Initialize (Plugin : in out Comment_Module;
-                         App    : access ASF.Applications.Main.Application'Class) is
+                         App    : in AWA.Modules.Application_Access) is
    begin
       Log.Info ("Initializing the comments module");
 
       --  Setup the resource bundles.
-      App.Register ("userMsg", "users");
 
 --        Plugin.Manager := Plugin.Create_User_Manager;
 --        Register.Register (Plugin  => Plugin,
