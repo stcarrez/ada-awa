@@ -22,6 +22,7 @@ top_builddir = .
 # Build executables for all mains defined by the project.
 build:
 	$(GNATMAKE) -P "$(GPRPATH)"
+	$(GNATMAKE) -p -Ptests
 
 # Not intended for manual invocation.
 # Invoked if automatic builds are enabled.
@@ -29,6 +30,28 @@ build:
 # Does not build executables.
 autobuild:
 	$(GNATMAKE) -gnatc -c -k  -P "$(GPRPATH)"
+
+# Build and run the unit tests
+test:	test-sqlite test-mysql
+
+test-sqlite:		build regtests.db
+	-test T${HAVE_SQLITE} = TTrue && \
+	bin/awa_harness -xml awa-sqlite-aunit.xml -config test-sqlite.properties
+
+test-mysql:		build create-mysql-tests
+	test T${HAVE_MYSQL} = TTrue && \
+	bin/awa_harness -xml awa-mysql-aunit.xml -config test-mysql.properties
+
+# Create the test sqlite database
+regtests.db:
+	sqlite3 $@ < db/sqlite/create-awa-sqlite.sql
+
+# Create the tables in the database.
+# (The database itself must have been created)
+create-mysql-tests:
+	-mysql --defaults-extra-file=db/regtests/mysql/mysql.cnf < db/regtests/mysql/drop-ado-mysql.sql
+	mysql --defaults-extra-file=db/mysql/mysql.cnf < db/mysql/create-awa-mysql.sql
+
 
 # Clean the root project of all build products.
 clean:
