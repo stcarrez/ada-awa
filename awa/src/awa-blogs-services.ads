@@ -39,6 +39,12 @@ package AWA.Blogs.Services is
    type Blog_Service is new AWA.Modules.Module_Manager with private;
    type Blog_Service_Access is access all Blog_Service'Class;
 
+   --  Create a new blog for the user workspace.
+   procedure Create_Blog (Model        : in Blog_Service;
+                          Workspace_Id : in ADO.Identifier;
+                          Title        : in String;
+                          Result       : out ADO.Identifier);
+
    --  Create a new post associated with the given blog identifier.
    procedure Create_Post (Model   : in Blog_Service;
                           Blog_Id : in ADO.Identifier;

@@ -17,7 +17,6 @@
 -----------------------------------------------------------------------
 
 with AWA.Modules;
-with ASF.Applications.Main;
 
 with AWA.Blogs.Services;
 
@@ -33,7 +32,7 @@ package AWA.Blogs.Module is
    --  Initialize the blog module.
    overriding
    procedure Initialize (Plugin : in out Blog_Module;
-                         App    : access ASF.Applications.Main.Application'Class);
+                         App    : in AWA.Modules.Application_Access);
 
    --  Get the blog manager.
    function Get_Blog_Manager (Plugin : in Blog_Module) return Services.Blog_Service_Access;
@@ -42,11 +41,11 @@ package AWA.Blogs.Module is
    --  user service implementation.
    function Create_Blog_Manager (Plugin : in Blog_Module) return Services.Blog_Service_Access;
 
-   --  Get the user module instance associated with the current application.
---     function Get_User_Module return User_Module_Access;
+   --  Get the blog module instance associated with the current application.
+   function Get_Blog_Module return Blog_Module_Access;
 
-   --  Get the user manager instance associated with the current application.
---     function Get_User_Manager return Services.User_Service_Access;
+   --  Get the blog manager instance associated with the current application.
+   function Get_Blog_Manager return Services.Blog_Service_Access;
 
 private
 

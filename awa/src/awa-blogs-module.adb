@@ -16,12 +16,9 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with AWA.Modules;
-with ASF.Applications.Main;
-
-with AWA.Blogs.Services;
-
 with Util.Log.Loggers;
+
+with AWA.Modules.Get;
 
 --  The <b>Blogs.Module</b> manages the creation, update, removal of blog posts in an application.
 --
@@ -32,12 +29,12 @@ package body AWA.Blogs.Module is
    --  Initialize the blog module.
    overriding
    procedure Initialize (Plugin : in out Blog_Module;
-                         App    : access ASF.Applications.Main.Application'Class) is
+                         App    : in AWA.Modules.Application_Access) is
    begin
       Log.Info ("Initializing the blogs module");
 
       --  Setup the resource bundles.
-      App.Register ("blogMsg", "blogs");
+--        App.Register ("blogMsg", "blogs");
 
 --        Register.Register (Plugin  => Plugin,
 --                           Name    => "AWA.Users.Beans.Authenticate_Bean",
@@ -69,5 +66,28 @@ package body AWA.Blogs.Module is
 
    --  Get the user manager instance associated with the current application.
    --     function Get_User_Manager return Services.User_Service_Access;
+
+   --  ------------------------------
+   --  Get the blog module instance associated with the current application.
+   --  ------------------------------
+   function Get_Blog_Module return Blog_Module_Access is
+      function Get is new AWA.Modules.Get (Blog_Module, Blog_Module_Access, NAME);
+   begin
+      return Get;
+   end Get_Blog_Module;
+
+   --  ------------------------------
+   --  Get the user manager instance associated with the current application.
+   --  ------------------------------
+   function Get_Blog_Manager return Services.Blog_Service_Access is
+      Module : constant Blog_Module_Access := Get_Blog_Module;
+   begin
+      if Module = null then
+         Log.Error ("There is no active Blog_Module");
+         return null;
+      else
+         return Module.Get_Blog_Manager;
+      end if;
+   end Get_Blog_Manager;
 
 end AWA.Blogs.Module;

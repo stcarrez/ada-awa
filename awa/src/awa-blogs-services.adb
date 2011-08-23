@@ -19,6 +19,7 @@
 with AWA.Blogs.Models;
 with AWA.Services.Contexts;
 with AWA.Permissions;
+with AWA.Permissions.Services;
 
 with ADO.Sessions;
 
@@ -35,6 +36,37 @@ package body AWA.Blogs.Services is
    use Util.Log;
 
    Log : constant Loggers.Logger := Loggers.Create ("AWA.Blogs.Services");
+
+   --  Create a new blog for the user workspace.
+   procedure Create_Blog (Model        : in Blog_Service;
+                          Workspace_Id : in ADO.Identifier;
+                          Title        : in String;
+                          Result       : out ADO.Identifier) is
+      use type ADO.Identifier;
+
+      Ctx   : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      User  : constant ADO.Identifier := Ctx.Get_User_Identifier;
+      DB    : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Blog  : AWA.Blogs.Models.Blog_Ref;
+   begin
+      Log.Info ("Creating blog for user");
+
+      --  Check that the user has the create blog permission on the given workspace.
+      AWA.Permissions.Check (ACL_Create_Blog.Permission, Workspace_Id);
+
+      Ctx.Start;
+      Blog.Set_Name (Title);
+      Blog.Save (DB);
+
+      AWA.Permissions.Services.Add_Permission (Session    => DB,
+                                               User       => User,
+                                               Entity     => Blog);
+      Ctx.Commit;
+
+      Result := Blog.Get_Id;
+      Log.Info ("Blog {0} created for user {1}",
+                ADO.Identifier'Image (Result), ADO.Identifier'Image (User));
+   end Create_Blog;
 
    --  Create a new post associated with the given blog identifier.
    procedure Create_Post (Model   : in Blog_Service;
