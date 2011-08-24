@@ -16,8 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
---  with AWA.Users.Services;
---  with AWA.Users.Module;
 package body AWA.Users.Principals is
 
    --  ------------------------------
@@ -108,30 +106,5 @@ package body AWA.Users.Principals is
          return Principal'Class (From.all).Get_User_Identifier;
       end if;
    end Get_User_Identifier;
-
-   --  ------------------------------
-   --  Create a principal object that correspond to the authenticated user identified
-   --  by the <b>Auth</b> information.  The principal will be attached to the session
-   --  and will be destroyed when the session is closed.
-   --  ------------------------------
-   procedure Create_Principal (Server : in Verify_Auth_Servlet;
-                               Auth   : in Security.Openid.Authentication;
-                               Result : out ASF.Principals.Principal_Access) is
-      pragma Unreferenced (Server);
---        use AWA.Users.Module;
---        use AWA.Users.Services;
-
---        Manager : constant User_Service_Access := AWA.Users.Module.Get_User_Manager;
---  	  User    : AWA.Users.Models.User_Ref;
---  	  Session : AWA.Users.Models.Session_Ref;
-   begin
---        Manager.Authenticate (Auth    => Auth,
---                              IpAddr  => "",
---                              User    => User,
---                              Session => Session);
---        Result := Create (User, Session).all'Access;
-
-      Result := null;
-   end Create_Principal;
 
 end AWA.Users.Principals;

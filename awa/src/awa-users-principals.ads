@@ -20,7 +20,6 @@ with ADO;
 with AWA.Users.Models;
 with ASF.Principals;
 with Security.Permissions;
-with Security.Openid.Servlets;
 package AWA.Users.Principals is
 
    type Principal is new ASF.Principals.Principal with private;
@@ -61,23 +60,6 @@ package AWA.Users.Principals is
    function Get_User_Identifier (From : in Security.Permissions.Principal_Access)
                                  return ADO.Identifier;
 
-   --  ------------------------------
-   --  OpenID Verification Servlet
-   --  ------------------------------
-   --  The <b>Verify_Auth_Servlet</b> verifies the authentication result and
-   --  extract authentication from the callback URL.  We override the default implementation
-   --  to provide our own user principal once the authentication succeeded.  At the same time,
-   --  if this is the first time we see the user, s/he will be registered by using the
-   --  user service.
-   type Verify_Auth_Servlet is new Security.Openid.Servlets.Verify_Auth_Servlet with private;
-
-   --  Create a principal object that correspond to the authenticated user identified
-   --  by the <b>Auth</b> information.  The principal will be attached to the session
-   --  and will be destroyed when the session is closed.
-   procedure Create_Principal (Server : in Verify_Auth_Servlet;
-                               Auth   : in Security.Openid.Authentication;
-                               Result : out ASF.Principals.Principal_Access);
-
 private
 
    type Principal is new ASF.Principals.Principal with record
@@ -85,7 +67,5 @@ private
       Session     : AWA.Users.Models.Session_Ref;
       Roles       : Security.Permissions.Role_Map;
    end record;
-
-   type Verify_Auth_Servlet is new Security.Openid.Servlets.Verify_Auth_Servlet with null record;
 
 end AWA.Users.Principals;

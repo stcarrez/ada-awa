@@ -21,7 +21,7 @@ with Security.Openid.Servlets;
 
 with AWA.Users.Services;
 with AWA.Users.Filters;
-with AWA.USers.Principals;
+with AWA.Users.Servlets;
 
 --  The <b>Users.Module</b> manages the creation, update, removal and authentication of users
 --  in an application.
@@ -66,7 +66,7 @@ private
       Key_Filter  : aliased AWA.Users.Filters.Verify_Filter;
       Auth_Filter : aliased AWA.Users.Filters.Auth_Filter;
       Auth        : aliased Security.Openid.Servlets.Request_Auth_Servlet;
-      Verify_Auth : aliased AWA.Users.Principals.Verify_Auth_Servlet;
+      Verify_Auth : aliased AWA.Users.Servlets.Verify_Auth_Servlet;
    end record;
 
 end AWA.Users.Module;
