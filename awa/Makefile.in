@@ -12,12 +12,21 @@ DIST_FILE=awa-@AWA_VERSION@.tar.gz
 HAVE_MYSQL=@ADO_DB_MYSQL@
 HAVE_SQLITE=@ADO_DB_SQLITE@
 
+MKDIR=mkdir
+CP=cp
+
 srcdir = .
 top_srcdir = @top_srcdir@
 VPATH = @srcdir@
 prefix = @prefix@
 exec_prefix = @exec_prefix@
 top_builddir = .
+
+dynamodir=${prefix}/share/dynamo
+includedir=${prefix}/share/ada/adainclude
+projectdir=${prefix}/share/ada/adainclude
+libdir=${prefix}/lib
+alidir=${prefix}/share/ada/adainclude
 
 # Build executables for all mains defined by the project.
 build:
@@ -77,9 +86,9 @@ generate:
 # Files to package in source distribution
 DISTFILES=README LICENSE.txt NOTICE.txt CHANGES config.guess configure config.sub \
 configure.in Makefile.in install-sh \
-ado.gpr.in tests.gpr.in samples.gpr.in config.gpr \
+awa.gpr.in tests.gpr.in samples.gpr.in config.gpr \
 src samples regtests \
-bin obj lib
+bin obj lib distrib test-mysql.properties test-sqlite.properties dynamo.xml
 
 dist:
 	-rm -rf $(distdir)
@@ -111,3 +120,25 @@ prepare-release:
 	${SVN} update
 	${SVN} info > CHANGES
 	${SVN} log -v > ChangeLog
+
+install:
+	$(MKDIR) -p ${includedir}/awa
+	$(MKDIR) -p ${projectdir}/
+	${MKDIR} -p ${alidir}/awa
+	${MKDIR} -p ${dynamodir}/awa/db
+	${MKDIR} -p ${dynamodir}/awa/db/mysql
+	${MKDIR} -p ${dynamodir}/awa/db/sqlite
+	${CP} src/*.ad[bs] ${includedir}/awa
+	${CP} src/model/*.ad[bs] ${includedir}/awa
+	sed -e "s,INSTALL,${prefix},g" < distrib/awa.gpr > ${projectdir}/awa.gpr
+	${CP} db/*.xml ${dynamodir}/awa/db/
+	${CP} db/mysql/*.sql ${dynamodir}/awa/db/mysql
+	${CP} db/sqlite/*.sql ${dynamodir}/awa/db/sqlite
+	${CP} lib/awa/*.ali ${alidir}/awa
+	${CP} lib/awa/libada-awa.a ${libdir}/
+
+
+uninstall:
+	rm -rf ${includedir}/awa
+	rm -f ${libdir}/libada-awa.a
+	rm -f ${projectdir}/awa.gpr
