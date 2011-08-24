@@ -17,7 +17,6 @@
 -----------------------------------------------------------------------
 with AWA.Users.Models;
 with AWA.Modules;
-with AWA.Services;
 with ASF.Events.Modules;
 with Security.Openid;
 with ADO;

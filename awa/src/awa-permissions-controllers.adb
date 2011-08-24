@@ -68,7 +68,7 @@ package body AWA.Permissions.Controllers is
       --  (there is no guarantee that a AWA.Services.Contexts be available)
       declare
          App     : constant AWA.Applications.Application_Access := Manager.Get_Application;
-         Session : ADO.Sessions.Session := App.Get_Session;
+         Session : constant ADO.Sessions.Session := App.Get_Session;
          Query   : ADO.Statements.Query_Statement := Session.Create_Statement (Handler.SQL);
          Result  : Integer;
       begin

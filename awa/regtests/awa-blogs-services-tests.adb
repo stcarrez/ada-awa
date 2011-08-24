@@ -18,13 +18,9 @@
 
 with Util.Tests;
 with Util.Test_Caller;
-with Util.Measures;
+--  with Util.Measures;
 
 with ADO;
-with ADO.Sessions;
-with ADO.SQL;
-with ADO.Objects;
-with Ada.Calendar;
 
 with Security.Contexts;
 
@@ -35,7 +31,6 @@ package body AWA.Blogs.Services.Tests is
 
    use Util.Tests;
    use ADO;
-   use ADO.Objects;
 
    package Caller is new Util.Test_Caller (Test);
 
@@ -95,7 +90,7 @@ package body AWA.Blogs.Services.Tests is
                            Title   => "New blog post title",
                            Text    => "The new post content");
       Manager.Delete_Post (Post_Id => Post_Id);
-      
+
       --  Verify that a Not_Found exception is raised if the post was deleted.
       begin
          Manager.Update_Post (Post_Id => Post_Id,
@@ -106,7 +101,7 @@ package body AWA.Blogs.Services.Tests is
          when Not_Found =>
             null;
       end;
-      
+
       --  Verify that a Not_Found exception is raised if the post was deleted.
       begin
          Manager.Delete_Post (Post_Id => Post_Id);
@@ -115,7 +110,7 @@ package body AWA.Blogs.Services.Tests is
          when Not_Found =>
             null;
       end;
-      
+
    end Test_Create_Post;
 
 end AWA.Blogs.Services.Tests;

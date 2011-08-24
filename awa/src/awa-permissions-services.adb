@@ -17,7 +17,6 @@
 -----------------------------------------------------------------------
 
 with ADO.Queries;
-with ADO.Sessions;
 with ADO.Sessions.Entities;
 with ADO.Statements;
 with ADO.Model;
@@ -87,6 +86,8 @@ package body AWA.Permissions.Services is
                              Entity     : in ADO.Identifier;
                              Kind       : in ADO.Entity_Type;
                              Permission : in Permission_Type) is
+      pragma Unreferenced (Manager);
+
       Ctx  : constant AWA.Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB   : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Perm : AWA.Permissions.Models.ACL_Ref;
@@ -110,7 +111,10 @@ package body AWA.Permissions.Services is
                                Entity     : in ADO.Identifier;
                                Kind       : in ADO.Entity_Type;
                                Permission : in Permission_Type) is
-      Ctx   : constant AWA.Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      pragma Unreferenced (Manager, Permission);
+      use AWA.Services;
+
+      Ctx   : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       User  : constant ADO.Identifier := Ctx.Get_User_Identifier;
       DB    : constant Session := AWA.Services.Contexts.Get_Session (Ctx);
       Query : ADO.Queries.Context;
@@ -149,6 +153,9 @@ package body AWA.Permissions.Services is
         new Security.Controllers.Roles.Reader_Config (Reader, Manager'Unchecked_Access);
 --        package Entity_Config is
 --           new AWA.Permissions.Controllers.Reader_Config (Reader, Manager'Unchecked_Access);
+      pragma Warnings (Off, Policy_Config);
+      pragma Warnings (Off, Role_Config);
+--        pragma Warnings (Off, Entity_Config);
    begin
       Log.Info ("Reading policy file {0}", File);
 

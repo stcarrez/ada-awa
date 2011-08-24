@@ -17,7 +17,6 @@
 -----------------------------------------------------------------------
 
 with AWA.Modules.Beans;
-with ASF.Beans;
 with AWA.Modules.Get;
 
 with AWA.Applications;

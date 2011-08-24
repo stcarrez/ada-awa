@@ -18,8 +18,6 @@
 
 with ADO.Drivers;
 
-with ASF.Server.Web;
-with ASF.Navigations;
 with ASF.Server.Tests;
 
 with ASF.Tests;
@@ -28,7 +26,7 @@ with AWA.Users.Module;
 with AWA.Mail.Module;
 with AWA.Blogs.Module;
 
-with AWA.Applications;
+--  with AWA.Applications;
 with AWA.Applications.Factory;
 with AWA.Services.Filters;
 package body AWA.Tests is
@@ -60,7 +58,7 @@ package body AWA.Tests is
       App.Add_Filter_Mapping (Name => "service", Pattern => "*.html");
 
       declare
-         Users : AWA.Users.Module.User_Module_Access := AWA.Tests.Users'Access;
+         Users : constant AWA.Users.Module.User_Module_Access := AWA.Tests.Users'Access;
       begin
          Register (App    => App.all'Access,
                    Name   => AWA.Users.Module.NAME,

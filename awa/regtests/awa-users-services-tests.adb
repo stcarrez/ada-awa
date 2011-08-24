@@ -16,7 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Util.Tests;
 with Util.Test_Caller;
 with Util.Measures;
 
@@ -237,18 +236,19 @@ package body AWA.Users.Services.Tests is
       use type AWA.Users.Module.User_Module_Access;
    begin
       declare
-         M : AWA.Users.Module.User_Module_Access := AWA.Users.Module.Get_User_Module;
+         M : constant AWA.Users.Module.User_Module_Access := AWA.Users.Module.Get_User_Module;
       begin
          T.Assert (M /= null, "Get_User_Module returned null");
       end;
       declare
-         T : Util.Measures.Stamp;
+         S : Util.Measures.Stamp;
          M : AWA.Users.Module.User_Module_Access;
       begin
          for I in 1 .. 1_000 loop
             M := AWA.Users.Module.Get_User_Module;
          end loop;
-         Util.Measures.Report (T, "Get_User_Module (1000)");
+         Util.Measures.Report (S, "Get_User_Module (1000)");
+         T.Assert (M /= null, "Get_User_Module returned null");
       end;
    end Test_Get_Module;
 

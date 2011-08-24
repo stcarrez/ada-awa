@@ -80,6 +80,8 @@ package body AWA.Comments.Services is
    --  ------------------------------
    procedure Delete_Comment (Model   : in Comment_Service;
                              Id      : in ADO.Identifier) is
+      pragma Unreferenced (Model);
+
       Ctx       : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB        : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Comment   : Comment_Ref;

@@ -30,6 +30,7 @@ with ADO.SQL;
 with ADO.Sessions;
 with ADO.Statements;
 
+with AWA.Services;
 with AWA.Services.Contexts;
 package body AWA.Users.Services is
 
