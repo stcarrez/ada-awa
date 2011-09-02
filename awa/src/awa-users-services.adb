@@ -203,7 +203,7 @@ package body AWA.Users.Services is
       --  Find the user registered under the given email address & password.
       Query.Bind_Param (1, Email);
       Query.Bind_Param (2, Password);
-      Query.Set_Join ("inner join Email e on e.user_id = o.id");
+      Query.Set_Join ("inner join email e on e.user_id = o.id");
       Query.Set_Filter ("e.email = ? and o.password = ?");
       User.Find (DB, Query, Found);
       if not Found then
@@ -244,7 +244,7 @@ package body AWA.Users.Services is
       Ctx.Start;
 
       --  Find the user with the given email address.
-      Query.Set_Join ("inner join Email e on e.user_id = o.id");
+      Query.Set_Join ("inner join email e on e.user_id = o.id");
       Query.Set_Filter ("e.email = ?");
       Query.Bind_Param (1, Email);
       User.Find (DB, Query, Found);
@@ -348,7 +348,7 @@ package body AWA.Users.Services is
    procedure Create_User (Model : in User_Service;
                           User  : in out User_Ref'Class;
                           Email : in out Email_Ref'Class) is
-      COUNT_SQL : constant String := "select count(*) from Email where email = ?";
+      COUNT_SQL : constant String := "select count(*) from email where email = ?";
 
       Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB     : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
