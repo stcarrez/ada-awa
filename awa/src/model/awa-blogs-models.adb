@@ -725,6 +725,8 @@ package body AWA.Blogs.Models is
                         Value => Object.Uri);
       Query.Save_Field (Name  => COL_4_2_NAME, --  TEXT
                         Value => Object.Text);
+      Query.Save_Field (Name  => COL_5_2_NAME, --  CREATE_DATE
+                        Value => Object.Create_Date);
       Query.Save_Field (Name  => COL_6_2_NAME, --  AUTHOR_ID
                         Value => Object.Author);
       Query.Save_Field (Name  => COL_7_2_NAME, --  BLOG_ID

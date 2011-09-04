@@ -35,7 +35,7 @@
             <comment>the blog text content</comment>
             <column name="TEXT" not-null="false" unique="false" sql-type="VARCHAR(60000)"/>
         </property>
-        <property name="create_date" insert="false">
+        <property name="create_date">
             <comment>the post creation date</comment>
             <column name="CREATE_DATE" not-null="true" unique="false" sql-type="DATETIME"/>
             <type name="Time"/>
