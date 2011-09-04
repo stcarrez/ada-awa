@@ -79,37 +79,43 @@ package body AWA.Blogs.Services.Tests is
                            Result       => Blog_Id);
       T.Assert (Blog_Id > 0, "Invalid blog identifier");
 
-      Manager.Create_Post (Blog_Id => Blog_Id,
-                           Title   => "Testing blog title",
-                           URI     => "testing-blog-title",
-                           Text    => "The blog content",
-                           Result  => Post_Id);
-      T.Assert (Post_Id > 0, "Invalid post identifier");
+      for I in 1 .. 5 loop
+         Manager.Create_Post (Blog_Id => Blog_Id,
+                              Title   => "Testing blog title",
+                              URI     => "testing-blog-title",
+                              Text    => "The blog content",
+                              Result  => Post_Id);
+         T.Assert (Post_Id > 0, "Invalid post identifier");
 
-      Manager.Update_Post (Post_Id => Post_Id,
-                           Title   => "New blog post title",
-                           Text    => "The new post content");
-      Manager.Delete_Post (Post_Id => Post_Id);
-
-      --  Verify that a Not_Found exception is raised if the post was deleted.
-      begin
          Manager.Update_Post (Post_Id => Post_Id,
-                              Title   => "Something",
-                              Text    => "Content");
-         T.Assert (False, "Exception Not_Found was not raised");
-      exception
-         when Not_Found =>
-            null;
-      end;
+                              Title   => "New blog post title",
+                              Text    => "The new post content");
 
-      --  Verify that a Not_Found exception is raised if the post was deleted.
-      begin
+         --  Keep the last post in the database.
+         exit when I = 5;
+
          Manager.Delete_Post (Post_Id => Post_Id);
-         T.Assert (False, "Exception Not_Found was not raised");
-      exception
-         when Not_Found =>
-            null;
-      end;
+
+         --  Verify that a Not_Found exception is raised if the post was deleted.
+         begin
+            Manager.Update_Post (Post_Id => Post_Id,
+                                 Title   => "Something",
+                                 Text    => "Content");
+            T.Assert (False, "Exception Not_Found was not raised");
+         exception
+            when Not_Found =>
+               null;
+         end;
+
+         --  Verify that a Not_Found exception is raised if the post was deleted.
+         begin
+            Manager.Delete_Post (Post_Id => Post_Id);
+            T.Assert (False, "Exception Not_Found was not raised");
+         exception
+            when Not_Found =>
+               null;
+         end;
+      end loop;
 
    end Test_Create_Post;
 
