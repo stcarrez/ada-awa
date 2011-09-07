@@ -1,0 +1,7 @@
+PREFIX=@prefix@
+
+NEED_AWS_PATCH=1
+
+export PATH="$PREFIX/bin:$PATH"
+export ADA_PROJECT_PATH="$PREFIX/lib/gnat:$PREFIX/share/ada/adainclude"
+
