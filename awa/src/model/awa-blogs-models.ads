@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 166
 -----------------------------------------------------------------------
---  Copyright (C) 2009, 2010, 2011 Stephane Carrez
+--  Copyright (C) 2011 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -267,9 +267,9 @@ package AWA.Blogs.Models is
 
 private
    BLOG_NAME : aliased constant String := "blog";
-   COL_0_1_NAME : aliased constant String := "ID";
+   COL_0_1_NAME : aliased constant String := "id";
    COL_1_1_NAME : aliased constant String := "version";
-   COL_2_1_NAME : aliased constant String := "NAME";
+   COL_2_1_NAME : aliased constant String := "name";
    BLOG_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
      (Count => 3,
       Table => BLOG_NAME'Access,
@@ -314,14 +314,14 @@ private
                         Impl   : out Blog_Access;
                         Field  : in Positive);
    POST_NAME : aliased constant String := "blog_post";
-   COL_0_2_NAME : aliased constant String := "ID";
+   COL_0_2_NAME : aliased constant String := "id";
    COL_1_2_NAME : aliased constant String := "version";
-   COL_2_2_NAME : aliased constant String := "TITLE";
-   COL_3_2_NAME : aliased constant String := "URI";
-   COL_4_2_NAME : aliased constant String := "TEXT";
-   COL_5_2_NAME : aliased constant String := "CREATE_DATE";
-   COL_6_2_NAME : aliased constant String := "AUTHOR_ID";
-   COL_7_2_NAME : aliased constant String := "BLOG_ID";
+   COL_2_2_NAME : aliased constant String := "title";
+   COL_3_2_NAME : aliased constant String := "uri";
+   COL_4_2_NAME : aliased constant String := "text";
+   COL_5_2_NAME : aliased constant String := "create_date";
+   COL_6_2_NAME : aliased constant String := "author_id";
+   COL_7_2_NAME : aliased constant String := "blog_id";
    POST_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
      (Count => 8,
       Table => POST_NAME'Access,

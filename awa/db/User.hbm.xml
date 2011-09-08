@@ -5,17 +5,17 @@
         <comment>Email address</comment>
         <id name="id" type="ADO.Identifier" unsaved-value="0">
             <comment>the email id</comment>
-            <column name="ID" not-null="true" unique="false" sql-type="BIGINT"/>
+            <column name="id" not-null="true" unique="false" sql-type="BIGINT"/>
             <generator class="sequence"/>
         </id>
         <version name="version" type="int" column="version"/>
         <property name="email" type="String">
             <comment>the email address</comment>
-            <column name="EMAIL" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
+            <column name="email" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
         </property>
         <property name="user_id" type="ADO.Identifier">
             <comment>the user identifier</comment>
-            <column name="USER_ID" not-null="false" unique="false" sql-type="BIGINT"/>
+            <column name="user_id" not-null="false" unique="false" sql-type="BIGINT"/>
         </property>
     </class>
     <class name="AWA.Users.Models.User" table="user"
@@ -23,36 +23,36 @@
         <comment>Record representing a user</comment>
         <id name="id" type="ADO.Identifier" unsaved-value="0">
             <comment>the user id</comment>
-            <column name="ID" not-null="true" unique="false" sql-type="BIGINT"/>
+            <column name="id" not-null="true" unique="false" sql-type="BIGINT"/>
             <generator class="sequence"/>
         </id>
         <version name="version" type="int" column="version"/>
         <property name="open_id" type="String">
             <comment>the open id</comment>
-            <column name="OPENID" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
+            <column name="openid" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
         </property>
         <property name="name" type="String">
             <comment>the user name</comment>
-            <column name="NAME" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
+            <column name="name" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
         </property>
         <property name="first_name" type="String">
             <comment>the user first name</comment>
-            <column name="FIRST_NAME" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
+            <column name="first_name" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
         </property>
         <property name="last_name" type="String">
             <comment>the user last name</comment>
-            <column name="LAST_NAME" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
+            <column name="last_name" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
         </property>
         <property name="password" type="String">
             <comment>the user last name</comment>
-            <column name="PASSWORD" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
+            <column name="password" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
         </property>
         <property name="country" type="String">
             <comment>the user country</comment>
-            <column name="COUNTRY" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
+            <column name="country" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
         </property>
-        <many-to-one name="email" class="Email" foreign-key="USER_ID" not-null="true" lazy="proxy" fetch="select">
-            <column name="EMAIL_ID" not-null="true" sql-type="INTEGER"/>
+        <many-to-one name="email" class="Email" foreign-key="id" not-null="true" lazy="proxy" fetch="select">
+            <column name="email_id" not-null="true" sql-type="INTEGER"/>
         </many-to-one>
     </class>
 
@@ -61,17 +61,17 @@
         <comment>Defines an access key</comment>
         <id name="id" type="ADO.Identifier" unsaved-value="0">
             <comment>the email id</comment>
-            <column name="ID" not-null="true" unique="false" sql-type="BIGINT"/>
+            <column name="id" not-null="true" unique="false" sql-type="BIGINT"/>
             <generator class="sequence"/>
         </id>
         <version name="version" type="int" column="version"/>
         <property name="access_key" type="String">
             <comment>the access key</comment>
-            <column name="ACCESS_KEY" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
+            <column name="access_key" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
         </property>
         <property name="user_id" type="ADO.Identifier">
             <comment>the user identifier</comment>
-            <column name="USER_ID" not-null="false" unique="false" sql-type="BIGINT"/>
+            <column name="user_id" not-null="false" unique="false" sql-type="BIGINT"/>
         </property>
     </class>
 

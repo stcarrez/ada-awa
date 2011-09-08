@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 166
 -----------------------------------------------------------------------
---  Copyright (C) 2009, 2010, 2011 Stephane Carrez
+--  Copyright (C) 2011 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -269,17 +269,17 @@ package body AWA.Permissions.Models is
          := Session.Create_Statement (ACL_TABLE'Access);
    begin
       if Object.Is_Modified (1) then
-         Stmt.Save_Field (Name  => COL_0_1_NAME, --  ID
+         Stmt.Save_Field (Name  => COL_0_1_NAME, --  id
                           Value => Object.Get_Key);
          Object.Clear_Modified (1);
       end if;
       if Object.Is_Modified (2) then
-         Stmt.Save_Field (Name  => COL_1_1_NAME, --  ENTITY_TYPE
+         Stmt.Save_Field (Name  => COL_1_1_NAME, --  entity_type
                           Value => Object.Entity_Type);
          Object.Clear_Modified (2);
       end if;
       if Object.Is_Modified (5) then
-         Stmt.Save_Field (Name  => COL_4_1_NAME, --  WRITEABLE
+         Stmt.Save_Field (Name  => COL_4_1_NAME, --  writeable
                           Value => Object.Writeable);
          Object.Clear_Modified (5);
       end if;
@@ -307,15 +307,15 @@ package body AWA.Permissions.Models is
       Result : Integer;
    begin
       Session.Allocate (Id => Object);
-      Query.Save_Field (Name  => COL_0_1_NAME, --  ID
+      Query.Save_Field (Name  => COL_0_1_NAME, --  id
                         Value => Object.Get_Key);
-      Query.Save_Field (Name  => COL_1_1_NAME, --  ENTITY_TYPE
+      Query.Save_Field (Name  => COL_1_1_NAME, --  entity_type
                         Value => Object.Entity_Type);
-      Query.Save_Field (Name  => COL_2_1_NAME, --  USER_ID
+      Query.Save_Field (Name  => COL_2_1_NAME, --  user_id
                         Value => Object.User_Id);
-      Query.Save_Field (Name  => COL_3_1_NAME, --  ENTITY_ID
+      Query.Save_Field (Name  => COL_3_1_NAME, --  entity_id
                         Value => Object.Entity_Id);
-      Query.Save_Field (Name  => COL_4_1_NAME, --  WRITEABLE
+      Query.Save_Field (Name  => COL_4_1_NAME, --  writeable
                         Value => Object.Writeable);
       Query.Execute (Result);
       if Result /= 1 then

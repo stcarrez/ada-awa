@@ -1,117 +1,117 @@
 /* Copied from /home/ciceron/work/pam/pam/awa/ado/db/sqlite/ado-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* Sequence generator */
-create table sequence (
+CREATE TABLE sequence (
   /* the sequence name */
-  `NAME` VARCHAR(256) PRIMARY KEY,
+  `name` VARCHAR(256) PRIMARY KEY,
   /* the sequence record version */
-  `version` int NOT NULL,
+  `version` int ,
   /* the sequence value */
-  `VALUE` BIGINT NOT NULL,
+  `value` BIGINT ,
   /* the sequence block size */
-  `BLOCK_SIZE` BIGINT NOT NULL
+  `block_size` BIGINT 
 );
 /* Entity types */
-create table entity_type (
+CREATE TABLE entity_type (
   /* the entity type identifier */
-  `ID` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   /* the entity type name (table name) */
-  `NAME` VARCHAR(256) UNIQUE NOT NULL
+  `name` VARCHAR(256) UNIQUE NOT NULL
 );
-insert into entity_type (name) values ("sequence");
-insert into entity_type (name) values ("entity_type");
+INSERT INTO entity_type (name) VALUES ("sequence");
+INSERT INTO entity_type (name) VALUES ("entity_type");
 /* Copied from /home/ciceron/work/pam/pam/awa/awa/db/sqlite/awa-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* Blog  */
-create table blog (
+CREATE TABLE blog (
   /* the blog identifier */
-  `ID` BIGINT PRIMARY KEY,
+  `id` BIGINT PRIMARY KEY,
   /*  */
   `version` int ,
   /* the blog name */
-  `NAME` VARCHAR(256) NOT NULL
+  `name` VARCHAR(256) NOT NULL
 );
 /* Post in a blog */
-create table blog_post (
+CREATE TABLE blog_post (
   /* the post identifier */
-  `ID` BIGINT PRIMARY KEY,
+  `id` BIGINT PRIMARY KEY,
   /*  */
   `version` int ,
   /* the post title */
-  `TITLE` VARCHAR(256) NOT NULL,
+  `title` VARCHAR(256) NOT NULL,
   /* the uri */
-  `URI` VARCHAR(256) ,
+  `uri` VARCHAR(256) ,
   /* the blog text content */
-  `TEXT` VARCHAR(60000) ,
+  `text` VARCHAR(60000) ,
   /* the post creation date */
-  `CREATE_DATE` DATETIME NOT NULL,
+  `create_date` DATETIME NOT NULL,
   /*  */
-  `AUTHOR_ID` INTEGER NOT NULL,
+  `author_id` INTEGER NOT NULL,
   /*  */
-  `BLOG_ID` INTEGER NOT NULL
+  `blog_id` INTEGER NOT NULL
 );
 /*  */
-create table COMMENTS (
+CREATE TABLE COMMENTS (
   /*  */
-  `ID` INTEGER PRIMARY KEY,
+  `id` INTEGER PRIMARY KEY,
   /*  */
-  `VERSION` int ,
+  `version` int ,
   /*  */
-  `DATE` TIMESTAMP NOT NULL,
+  `date` TIMESTAMP NOT NULL,
   /*  */
-  `MESSAGE` VARCHAR(65000) NOT NULL,
+  `message` VARCHAR(65000) NOT NULL,
   /*  */
-  `ENTITY_ID` INTEGER NOT NULL,
+  `entity_id` INTEGER NOT NULL,
   /*  */
-  `USER_FK` INTEGER NOT NULL,
+  `user_fk` INTEGER NOT NULL,
   /*  */
-  `ENTITY__TYPE_FK` INTEGER NOT NULL
+  `entity__type_fk` INTEGER NOT NULL
 );
 /* Email address */
-create table email (
+CREATE TABLE email (
   /* the email id */
-  `ID` BIGINT PRIMARY KEY,
+  `id` BIGINT PRIMARY KEY,
   /*  */
   `version` int ,
   /* the email address */
-  `EMAIL` VARCHAR(256) ,
+  `email` VARCHAR(256) ,
   /* the user identifier */
-  `USER_ID` BIGINT 
+  `user_id` BIGINT 
 );
 /* Record representing a user */
-create table user (
+CREATE TABLE user (
   /* the user id */
-  `ID` BIGINT PRIMARY KEY,
+  `id` BIGINT PRIMARY KEY,
   /*  */
   `version` int ,
   /* the open id */
-  `OPENID` VARCHAR(256) ,
+  `openid` VARCHAR(256) ,
   /* the user name */
-  `NAME` VARCHAR(256) ,
+  `name` VARCHAR(256) ,
   /* the user first name */
-  `FIRST_NAME` VARCHAR(256) ,
+  `first_name` VARCHAR(256) ,
   /* the user last name */
-  `LAST_NAME` VARCHAR(256) ,
+  `last_name` VARCHAR(256) ,
   /* the user last name */
-  `PASSWORD` VARCHAR(256) ,
+  `password` VARCHAR(256) ,
   /* the user country */
-  `COUNTRY` VARCHAR(256) ,
+  `country` VARCHAR(256) ,
   /*  */
-  `EMAIL_ID` INTEGER NOT NULL
+  `email_id` INTEGER NOT NULL
 );
 /* Defines an access key */
-create table access_key (
+CREATE TABLE access_key (
   /* the email id */
-  `ID` BIGINT PRIMARY KEY,
+  `id` BIGINT PRIMARY KEY,
   /*  */
   `version` int ,
   /* the access key */
-  `ACCESS_KEY` VARCHAR(256) ,
+  `access_key` VARCHAR(256) ,
   /* the user identifier */
-  `USER_ID` BIGINT 
+  `user_id` BIGINT 
 );
 /* Defines an user session */
-create table session (
+CREATE TABLE session (
   /* the user session id */
   `ID` BIGINT PRIMARY KEY,
   /*  */
@@ -130,23 +130,23 @@ create table session (
   `TYPE` INTEGER NOT NULL
 );
 /* Access control */
-create table ACL (
+CREATE TABLE ACL (
   /* the unique ACL id */
-  `ID` BIGINT PRIMARY KEY,
+  `id` BIGINT PRIMARY KEY,
   /* the entity type */
-  `ENTITY_TYPE` INTEGER ,
+  `entity_type` INTEGER ,
   /* the user identifier */
-  `USER_ID` BIGINT ,
+  `user_id` BIGINT ,
   /* the entity identifier */
-  `ENTITY_ID` BIGINT ,
+  `entity_id` BIGINT ,
   /* whether the entity is writeable */
-  `WRITEABLE` TINYINT 
+  `writeable` TINYINT 
 );
-insert into entity_type (name) values ("blog");
-insert into entity_type (name) values ("blog_post");
-insert into entity_type (name) values ("COMMENTS");
-insert into entity_type (name) values ("email");
-insert into entity_type (name) values ("user");
-insert into entity_type (name) values ("access_key");
-insert into entity_type (name) values ("session");
-insert into entity_type (name) values ("ACL");
+INSERT INTO entity_type (name) VALUES ("blog");
+INSERT INTO entity_type (name) VALUES ("blog_post");
+INSERT INTO entity_type (name) VALUES ("COMMENTS");
+INSERT INTO entity_type (name) VALUES ("email");
+INSERT INTO entity_type (name) VALUES ("user");
+INSERT INTO entity_type (name) VALUES ("access_key");
+INSERT INTO entity_type (name) VALUES ("session");
+INSERT INTO entity_type (name) VALUES ("ACL");

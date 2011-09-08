@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 166
 -----------------------------------------------------------------------
---  Copyright (C) 2009, 2010, 2011 Stephane Carrez
+--  Copyright (C) 2011 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -526,10 +526,10 @@ package AWA.Users.Models is
 
 private
    EMAIL_NAME : aliased constant String := "email";
-   COL_0_1_NAME : aliased constant String := "ID";
+   COL_0_1_NAME : aliased constant String := "id";
    COL_1_1_NAME : aliased constant String := "version";
-   COL_2_1_NAME : aliased constant String := "EMAIL";
-   COL_3_1_NAME : aliased constant String := "USER_ID";
+   COL_2_1_NAME : aliased constant String := "email";
+   COL_3_1_NAME : aliased constant String := "user_id";
    EMAIL_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
      (Count => 4,
       Table => EMAIL_NAME'Access,
@@ -576,15 +576,15 @@ private
                         Impl   : out Email_Access;
                         Field  : in Positive);
    USER_NAME : aliased constant String := "user";
-   COL_0_2_NAME : aliased constant String := "ID";
+   COL_0_2_NAME : aliased constant String := "id";
    COL_1_2_NAME : aliased constant String := "version";
-   COL_2_2_NAME : aliased constant String := "OPENID";
-   COL_3_2_NAME : aliased constant String := "NAME";
-   COL_4_2_NAME : aliased constant String := "FIRST_NAME";
-   COL_5_2_NAME : aliased constant String := "LAST_NAME";
-   COL_6_2_NAME : aliased constant String := "PASSWORD";
-   COL_7_2_NAME : aliased constant String := "COUNTRY";
-   COL_8_2_NAME : aliased constant String := "EMAIL_ID";
+   COL_2_2_NAME : aliased constant String := "openid";
+   COL_3_2_NAME : aliased constant String := "name";
+   COL_4_2_NAME : aliased constant String := "first_name";
+   COL_5_2_NAME : aliased constant String := "last_name";
+   COL_6_2_NAME : aliased constant String := "password";
+   COL_7_2_NAME : aliased constant String := "country";
+   COL_8_2_NAME : aliased constant String := "email_id";
    USER_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
      (Count => 9,
       Table => USER_NAME'Access,
@@ -641,10 +641,10 @@ private
                         Impl   : out User_Access;
                         Field  : in Positive);
    ACCESS_KEY_NAME : aliased constant String := "access_key";
-   COL_0_3_NAME : aliased constant String := "ID";
+   COL_0_3_NAME : aliased constant String := "id";
    COL_1_3_NAME : aliased constant String := "version";
-   COL_2_3_NAME : aliased constant String := "ACCESS_KEY";
-   COL_3_3_NAME : aliased constant String := "USER_ID";
+   COL_2_3_NAME : aliased constant String := "access_key";
+   COL_3_3_NAME : aliased constant String := "user_id";
    ACCESS_KEY_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
      (Count => 4,
       Table => ACCESS_KEY_NAME'Access,

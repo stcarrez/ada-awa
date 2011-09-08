@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 166
 -----------------------------------------------------------------------
---  Copyright (C) 2009, 2010, 2011 Stephane Carrez
+--  Copyright (C) 2011 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -257,17 +257,17 @@ package body AWA.Users.Models is
          := Session.Create_Statement (EMAIL_TABLE'Access);
    begin
       if Object.Is_Modified (1) then
-         Stmt.Save_Field (Name  => COL_0_1_NAME, --  ID
+         Stmt.Save_Field (Name  => COL_0_1_NAME, --  id
                           Value => Object.Get_Key);
          Object.Clear_Modified (1);
       end if;
       if Object.Is_Modified (3) then
-         Stmt.Save_Field (Name  => COL_2_1_NAME, --  EMAIL
+         Stmt.Save_Field (Name  => COL_2_1_NAME, --  email
                           Value => Object.Email);
          Object.Clear_Modified (3);
       end if;
       if Object.Is_Modified (4) then
-         Stmt.Save_Field (Name  => COL_3_1_NAME, --  USER_ID
+         Stmt.Save_Field (Name  => COL_3_1_NAME, --  user_id
                           Value => Object.User_Id);
          Object.Clear_Modified (4);
       end if;
@@ -300,13 +300,13 @@ package body AWA.Users.Models is
    begin
       Object.Version := 1;
       Session.Allocate (Id => Object);
-      Query.Save_Field (Name  => COL_0_1_NAME, --  ID
+      Query.Save_Field (Name  => COL_0_1_NAME, --  id
                         Value => Object.Get_Key);
       Query.Save_Field (Name  => COL_1_1_NAME, --  version
                         Value => Object.Version);
-      Query.Save_Field (Name  => COL_2_1_NAME, --  EMAIL
+      Query.Save_Field (Name  => COL_2_1_NAME, --  email
                         Value => Object.Email);
-      Query.Save_Field (Name  => COL_3_1_NAME, --  USER_ID
+      Query.Save_Field (Name  => COL_3_1_NAME, --  user_id
                         Value => Object.User_Id);
       Query.Execute (Result);
       if Result /= 1 then
@@ -721,42 +721,42 @@ package body AWA.Users.Models is
          := Session.Create_Statement (USER_TABLE'Access);
    begin
       if Object.Is_Modified (1) then
-         Stmt.Save_Field (Name  => COL_0_2_NAME, --  ID
+         Stmt.Save_Field (Name  => COL_0_2_NAME, --  id
                           Value => Object.Get_Key);
          Object.Clear_Modified (1);
       end if;
       if Object.Is_Modified (3) then
-         Stmt.Save_Field (Name  => COL_2_2_NAME, --  OPENID
+         Stmt.Save_Field (Name  => COL_2_2_NAME, --  openid
                           Value => Object.Open_Id);
          Object.Clear_Modified (3);
       end if;
       if Object.Is_Modified (4) then
-         Stmt.Save_Field (Name  => COL_3_2_NAME, --  NAME
+         Stmt.Save_Field (Name  => COL_3_2_NAME, --  name
                           Value => Object.Name);
          Object.Clear_Modified (4);
       end if;
       if Object.Is_Modified (5) then
-         Stmt.Save_Field (Name  => COL_4_2_NAME, --  FIRST_NAME
+         Stmt.Save_Field (Name  => COL_4_2_NAME, --  first_name
                           Value => Object.First_Name);
          Object.Clear_Modified (5);
       end if;
       if Object.Is_Modified (6) then
-         Stmt.Save_Field (Name  => COL_5_2_NAME, --  LAST_NAME
+         Stmt.Save_Field (Name  => COL_5_2_NAME, --  last_name
                           Value => Object.Last_Name);
          Object.Clear_Modified (6);
       end if;
       if Object.Is_Modified (7) then
-         Stmt.Save_Field (Name  => COL_6_2_NAME, --  PASSWORD
+         Stmt.Save_Field (Name  => COL_6_2_NAME, --  password
                           Value => Object.Password);
          Object.Clear_Modified (7);
       end if;
       if Object.Is_Modified (8) then
-         Stmt.Save_Field (Name  => COL_7_2_NAME, --  COUNTRY
+         Stmt.Save_Field (Name  => COL_7_2_NAME, --  country
                           Value => Object.Country);
          Object.Clear_Modified (8);
       end if;
       if Object.Is_Modified (9) then
-         Stmt.Save_Field (Name  => COL_8_2_NAME, --  EMAIL_ID
+         Stmt.Save_Field (Name  => COL_8_2_NAME, --  email_id
                           Value => Object.Email);
          Object.Clear_Modified (9);
       end if;
@@ -789,23 +789,23 @@ package body AWA.Users.Models is
    begin
       Object.Version := 1;
       Session.Allocate (Id => Object);
-      Query.Save_Field (Name  => COL_0_2_NAME, --  ID
+      Query.Save_Field (Name  => COL_0_2_NAME, --  id
                         Value => Object.Get_Key);
       Query.Save_Field (Name  => COL_1_2_NAME, --  version
                         Value => Object.Version);
-      Query.Save_Field (Name  => COL_2_2_NAME, --  OPENID
+      Query.Save_Field (Name  => COL_2_2_NAME, --  openid
                         Value => Object.Open_Id);
-      Query.Save_Field (Name  => COL_3_2_NAME, --  NAME
+      Query.Save_Field (Name  => COL_3_2_NAME, --  name
                         Value => Object.Name);
-      Query.Save_Field (Name  => COL_4_2_NAME, --  FIRST_NAME
+      Query.Save_Field (Name  => COL_4_2_NAME, --  first_name
                         Value => Object.First_Name);
-      Query.Save_Field (Name  => COL_5_2_NAME, --  LAST_NAME
+      Query.Save_Field (Name  => COL_5_2_NAME, --  last_name
                         Value => Object.Last_Name);
-      Query.Save_Field (Name  => COL_6_2_NAME, --  PASSWORD
+      Query.Save_Field (Name  => COL_6_2_NAME, --  password
                         Value => Object.Password);
-      Query.Save_Field (Name  => COL_7_2_NAME, --  COUNTRY
+      Query.Save_Field (Name  => COL_7_2_NAME, --  country
                         Value => Object.Country);
-      Query.Save_Field (Name  => COL_8_2_NAME, --  EMAIL_ID
+      Query.Save_Field (Name  => COL_8_2_NAME, --  email_id
                         Value => Object.Email);
       Query.Execute (Result);
       if Result /= 1 then
@@ -1119,17 +1119,17 @@ package body AWA.Users.Models is
          := Session.Create_Statement (ACCESS_KEY_TABLE'Access);
    begin
       if Object.Is_Modified (1) then
-         Stmt.Save_Field (Name  => COL_0_3_NAME, --  ID
+         Stmt.Save_Field (Name  => COL_0_3_NAME, --  id
                           Value => Object.Get_Key);
          Object.Clear_Modified (1);
       end if;
       if Object.Is_Modified (3) then
-         Stmt.Save_Field (Name  => COL_2_3_NAME, --  ACCESS_KEY
+         Stmt.Save_Field (Name  => COL_2_3_NAME, --  access_key
                           Value => Object.Access_Key);
          Object.Clear_Modified (3);
       end if;
       if Object.Is_Modified (4) then
-         Stmt.Save_Field (Name  => COL_3_3_NAME, --  USER_ID
+         Stmt.Save_Field (Name  => COL_3_3_NAME, --  user_id
                           Value => Object.User_Id);
          Object.Clear_Modified (4);
       end if;
@@ -1162,13 +1162,13 @@ package body AWA.Users.Models is
    begin
       Object.Version := 1;
       Session.Allocate (Id => Object);
-      Query.Save_Field (Name  => COL_0_3_NAME, --  ID
+      Query.Save_Field (Name  => COL_0_3_NAME, --  id
                         Value => Object.Get_Key);
       Query.Save_Field (Name  => COL_1_3_NAME, --  version
                         Value => Object.Version);
-      Query.Save_Field (Name  => COL_2_3_NAME, --  ACCESS_KEY
+      Query.Save_Field (Name  => COL_2_3_NAME, --  access_key
                         Value => Object.Access_Key);
-      Query.Save_Field (Name  => COL_3_3_NAME, --  USER_ID
+      Query.Save_Field (Name  => COL_3_3_NAME, --  user_id
                         Value => Object.User_Id);
       Query.Execute (Result);
       if Result /= 1 then

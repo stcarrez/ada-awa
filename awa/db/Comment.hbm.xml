@@ -7,29 +7,29 @@
     <class name="AWA.Comments.Models.Comment"
         table="COMMENTS" dynamic-insert="false" dynamic-update="false">
         <id name="id" type="ADO.Identifier" unsaved-value="null">
-            <column name="ID" sql-type="INTEGER"/>
+            <column name="id" sql-type="INTEGER"/>
             <generator class="hilo">
                 <!-- id-generator merge-point -->
             </generator>
         </id>
-        <version name="version" type="int" column="VERSION"/>
+        <version name="version" type="int" column="version"/>
         <property name="date">
-            <column name="DATE" not-null="true" unique="false" sql-type="TIMESTAMP"/>
+            <column name="date" not-null="true" unique="false" sql-type="TIMESTAMP"/>
             <type name="Time"/>
         </property>
         <property name="message">
-            <column name="MESSAGE" not-null="true" unique="false" sql-type="VARCHAR(65000)"/>
+            <column name="message" not-null="true" unique="false" sql-type="VARCHAR(65000)"/>
             <type name="java.lang.String"/>
         </property>
         <property name="entity_Id">
-            <column name="ENTITY_ID" not-null="true" unique="false" sql-type="INTEGER"/>
+            <column name="entity_id" not-null="true" unique="false" sql-type="INTEGER"/>
             <type name="ADO.Identifier"/>
         </property>
-        <many-to-one name="user" class="AWA.Users.Models.User" foreign-key="COMMENTS_USER_FKC" not-null="true" lazy="proxy" fetch="select">
-            <column name="USER_FK" not-null="true" sql-type="INTEGER"/>
+        <many-to-one name="user" class="AWA.Users.Models.User" foreign-key="comments_user_fkc" not-null="true" lazy="proxy" fetch="select">
+            <column name="user_fk" not-null="true" sql-type="INTEGER"/>
         </many-to-one>
-        <many-to-one name="entity_Type" class="ADO.Model.Entity_Type" foreign-key="COMMENTS_ENTITY__TYPE_FKC" not-null="true" lazy="proxy" fetch="select">
-            <column name="ENTITY__TYPE_FK" not-null="true" sql-type="INTEGER"/>
+        <many-to-one name="entity_Type" class="ADO.Model.Entity_Type" foreign-key="comments_entity__type_fkc" not-null="true" lazy="proxy" fetch="select">
+            <column name="entity__type_fk" not-null="true" sql-type="INTEGER"/>
         </many-to-one>
     </class>
 </hibernate-mapping>

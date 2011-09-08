@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 166
 -----------------------------------------------------------------------
---  Copyright (C) 2009, 2010, 2011 Stephane Carrez
+--  Copyright (C) 2011 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -153,11 +153,11 @@ package AWA.Permissions.Models is
 
 private
    ACL_NAME : aliased constant String := "ACL";
-   COL_0_1_NAME : aliased constant String := "ID";
-   COL_1_1_NAME : aliased constant String := "ENTITY_TYPE";
-   COL_2_1_NAME : aliased constant String := "USER_ID";
-   COL_3_1_NAME : aliased constant String := "ENTITY_ID";
-   COL_4_1_NAME : aliased constant String := "WRITEABLE";
+   COL_0_1_NAME : aliased constant String := "id";
+   COL_1_1_NAME : aliased constant String := "entity_type";
+   COL_2_1_NAME : aliased constant String := "user_id";
+   COL_3_1_NAME : aliased constant String := "entity_id";
+   COL_4_1_NAME : aliased constant String := "writeable";
    ACL_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
      (Count => 5,
       Table => ACL_NAME'Access,
