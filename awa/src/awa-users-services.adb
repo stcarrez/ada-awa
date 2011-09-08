@@ -203,8 +203,8 @@ package body AWA.Users.Services is
       --  Find the user registered under the given email address & password.
       Query.Bind_Param (1, Email);
       Query.Bind_Param (2, Password);
-      Query.Set_Join ("inner join email e on e.user_id = o.id");
-      Query.Set_Filter ("e.email = ? and o.password = ?");
+      Query.Set_Join ("INNER JOIN email e ON e.user_id = o.id");
+      Query.Set_Filter ("e.email = ? AND o.password = ?");
       User.Find (DB, Query, Found);
       if not Found then
          Log.Warn ("No user registered under email address {0} or invalid password",
@@ -244,7 +244,7 @@ package body AWA.Users.Services is
       Ctx.Start;
 
       --  Find the user with the given email address.
-      Query.Set_Join ("inner join email e on e.user_id = o.id");
+      Query.Set_Join ("INNER JOIN email e ON e.user_id = o.id");
       Query.Set_Filter ("e.email = ?");
       Query.Bind_Param (1, Email);
       User.Find (DB, Query, Found);
@@ -348,7 +348,7 @@ package body AWA.Users.Services is
    procedure Create_User (Model : in User_Service;
                           User  : in out User_Ref'Class;
                           Email : in out Email_Ref'Class) is
-      COUNT_SQL : constant String := "select count(*) from email where email = ?";
+      COUNT_SQL : constant String := "SELECT COUNT(*) FROM email WHERE email = ?";
 
       Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB     : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
@@ -462,7 +462,7 @@ package body AWA.Users.Services is
    begin
       Log.Info ("Verify user session {0}", Sid);
 
-      Query.Set_Filter ("id = ? and end_date is null");
+      Query.Set_Filter ("id = ? AND end_date IS NULL");
       Query.Bind_Param (1, Id);
       Session.Find (Session => DB,
                     Query   => Query,
