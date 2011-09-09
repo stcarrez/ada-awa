@@ -68,6 +68,10 @@ package body AWA.Mail.Module is
          Bean  : constant Util.Beans.Objects.Object
            := Util.Beans.Objects.To_Object (Ptr, Util.Beans.Objects.STATIC);
       begin
+         if File = "" then
+            Log.Debug ("No email template associated with event {0}", Name);
+            return;
+         end if;
          Log.Info ("With template '{0}'", File);
 
          Req.Set_Path_Info (File);
