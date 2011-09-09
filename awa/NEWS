@@ -1,0 +1,6 @@
+Version 0.1     - Sep 2011
+  - Core implementation of AWA framework on top of ADO and ASF
+  - Provide a Users module for managing application users
+  - Provide a Permissions module to checking permissions
+  - Provide general purpose modules comments and blogs
+
