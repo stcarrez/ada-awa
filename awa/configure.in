@@ -62,11 +62,22 @@ AS_HELP_STRING([--with-ada-util=x], [Path for the Ada Utility library (code.goog
   UTIL_DIR=${withval}/
 ],
 [
-  UTIL_DIR=../util/
+  echo "with \"util\"; project t is for Source_Dirs use (); end t;" > t.gpr
+  gnatmake -p -Pt >/dev/null 2>/dev/null
+  if test $? -eq 0; then
+    UTIL_DIR=
+  else
+    UTIL_DIR=../util/
+  fi;
+  rm -f t.gpr
 ])
-if test ! -f ${UTIL_DIR}/util.gpr; then
+echo "with \"${UTIL_DIR}util\"; project t is for Source_Dirs use (); end t;" > t.gpr
+gnatmake -p -Pt >/dev/null 2>/dev/null
+if test $? -ne 0 ; then
+   rm -f t.gpr
    AC_MSG_ERROR([Ada Utility library not found in ${UTIL_DIR}])
 fi
+rm -f t.gpr
 AC_MSG_RESULT(${UTIL_DIR})
 AC_SUBST(UTIL_DIR)
 
@@ -80,11 +91,22 @@ AS_HELP_STRING([--with-ada-el=x], [Path for the Ada Expression Language library 
   EL_DIR=${withval}/
 ],
 [
-  EL_DIR=../el/
+  echo "with \"el\"; project t is for Source_Dirs use (); end t;" > t.gpr
+  gnatmake -p -Pt >/dev/null 2>/dev/null
+  if test $? -eq 0; then
+    EL_DIR=
+  else
+    EL_DIR=../el/
+  fi;
+  rm -f t.gpr
 ])
-if test ! -f ${EL_DIR}/el.gpr; then
+echo "with \"${EL_DIR}el\"; project t is for Source_Dirs use (); end t;" > t.gpr
+gnatmake -p -Pt >/dev/null 2>/dev/null
+if test $? -ne 0 ; then
+   rm -f t.gpr
    AC_MSG_ERROR([Ada Expression Language library not found in ${EL_DIR}])
 fi
+rm -f t.gpr
 AC_MSG_RESULT(${EL_DIR})
 AC_SUBST(EL_DIR)
 
@@ -98,11 +120,22 @@ AS_HELP_STRING([--with-ada-asf=x], [Path for the Ada Server Faces library (code.
   ASF_DIR=${withval}/
 ],
 [
-  ASF_DIR=../asf/
+  echo "with \"asf\"; project t is for Source_Dirs use (); end t;" > t.gpr
+  gnatmake -p -Pt >/dev/null 2>/dev/null
+  if test $? -eq 0; then
+    ASF_DIR=
+  else
+    ASF_DIR=../asf/
+  fi;
+  rm -f t.gpr
 ])
-if test ! -f ${ASF_DIR}/asf.gpr; then
+echo "with \"${ASF_DIR}asf\"; project t is for Source_Dirs use (); end t;" > t.gpr
+gnatmake -p -Pt >/dev/null 2>/dev/null
+if test $? -ne 0 ; then
+   rm -f t.gpr
    AC_MSG_ERROR([Ada Server Faces library not found in ${ASF_DIR}])
 fi
+rm -f t.gpr
 AC_MSG_RESULT(${ASF_DIR})
 AC_SUBST(ASF_DIR)
 
@@ -116,41 +149,39 @@ AS_HELP_STRING([--with-ada-ado=x], [Path for the Ada Database Objects library (c
   ADO_DIR=${withval}/
 ],
 [
-  ADO_DIR=../ado/
+  echo "with \"ado\"; project t is for Source_Dirs use (); end t;" > t.gpr
+  gnatmake -p -Pt >/dev/null 2>/dev/null
+  if test $? -eq 0; then
+    ADO_DIR=
+  else
+    ADO_DIR=../ado/
+  fi;
+  rm -f t.gpr
 ])
-if test ! -f ${ADO_DIR}/ado.gpr; then
+echo "with \"${ADO_DIR}ado\"; project t is for Source_Dirs use (); end t;" > t.gpr
+gnatmake -p -Pt >/dev/null 2>/dev/null
+if test $? -ne 0 ; then
+   rm -f t.gpr
    AC_MSG_ERROR([Ada Database Objects library not found in ${ADO_DIR}])
 fi
+rm -f t.gpr
 AC_MSG_RESULT(${ADO_DIR})
 AC_SUBST(ADO_DIR)
 
-case "${host}" in
-  ## On Windows, the MySQL library name is libmysql
-  *mingw* )
-    MYSQL_LIB=mysql
-    ;;
-
-  *)
-    MYSQL_LIB=mysqlclient
-    ;;
-
-esac
-
-DB=""
-ADO_DB_MYSQL=False
-AC_CHECK_LIB($MYSQL_LIB,mysql_init,[
-    DB="$DB mysql"
-    ADO_DB_MYSQL=True
-    MYSQL_LIBNAME="$MYSQL_LIB"
-])
-
-ADO_DB_SQLITE=False
-AC_CHECK_LIB(sqlite3,sqlite3_open,[
-    DB="$DB sqlite"
-    ADO_DB_SQLITE=True
-])
-
+AC_CHECK_PROGS(MYSQL, mysql)
+if test "X$MYSQL" != "X" ; then
+  ADO_DB_MYSQL=True
+else
+  ADO_DB_MYSQL=False
+fi
 AC_SUBST(ADO_DB_MYSQL)
+
+AC_CHECK_PROGS(SQLITE3, sqlite3)
+if test "X$SQLITE3" != "X" ; then
+  ADO_DB_SQLITE=True
+else
+  ADO_DB_SQLITE=False
+fi
 AC_SUBST(ADO_DB_SQLITE)
 
 AC_OUTPUT(

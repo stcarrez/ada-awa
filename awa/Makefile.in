@@ -6,9 +6,9 @@ GNATCLEAN=gnatclean
 GPRPATH=awa.gpr
 SVN=svn
 
-distdir=awa-@AWA_VERSION@
+distdir=ada-awa-@AWA_VERSION@
 
-DIST_FILE=awa-@AWA_VERSION@.tar.gz
+DIST_FILE=ada-awa-@AWA_VERSION@.tar.gz
 
 HAVE_MYSQL=@ADO_DB_MYSQL@
 HAVE_SQLITE=@ADO_DB_SQLITE@
@@ -89,7 +89,7 @@ generate:
 DISTFILES=README LICENSE.txt NOTICE.txt NEWS CHANGES ChangeLog config.guess configure config.sub \
 configure.in Makefile.in install-sh \
 awa.gpr.in tests.gpr.in samples.gpr.in config.gpr \
-src samples regtests \
+src samples regtests db web bundles config \
 distrib test-mysql.properties test-sqlite.properties dynamo.xml
 
 dist:
@@ -109,11 +109,18 @@ dist:
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
+	-rm -rf $(distdir)/samples/bin
+	-rm -rf $(distdir)/samples/autom4che.cache
+	-rm -rf $(distdir)/samples/config.status
+	-rm -rf $(distdir)/samples/Makefile
+	-rm -rf $(distdir)/samples/obj
 	mkdir $(distdir)/bin
 	mkdir $(distdir)/obj
 	mkdir $(distdir)/lib
 	tar --exclude=.svn --exclude="*~" --exclude="*.o" --exclude="*.ali" \
-	    --exclude="*.log" --exclude="*.a" \
+	    --exclude="*.log" --exclude="*.a" --exclude=".project" \
+	    --exclude=".cproject" \
+	    --exclude=".gb_project" \
 	    -cvzf $(DIST_FILE) $(distdir)
 
 
@@ -128,12 +135,14 @@ install:
 	$(MKDIR) -p ${includedir}/awa
 	$(MKDIR) -p ${projectdir}/
 	${MKDIR} -p ${alidir}/awa
+	${MKDIR} -p ${dynamodir}/awa/config
 	${MKDIR} -p ${dynamodir}/awa/db
 	${MKDIR} -p ${dynamodir}/awa/db/mysql
 	${MKDIR} -p ${dynamodir}/awa/db/sqlite
 	${CP} src/*.ad[bs] ${includedir}/awa
 	${CP} src/model/*.ad[bs] ${includedir}/awa
 	sed -e "s,INSTALL,${prefix},g" < distrib/awa.gpr > ${projectdir}/awa.gpr
+	${CP} config/*.xml ${dynamodir}/awa/config/
 	${CP} db/*.xml ${dynamodir}/awa/db/
 	${CP} db/mysql/*.sql ${dynamodir}/awa/db/mysql
 	${CP} db/sqlite/*.sql ${dynamodir}/awa/db/sqlite
@@ -145,3 +154,4 @@ uninstall:
 	rm -rf ${includedir}/awa
 	rm -f ${libdir}/libada-awa.a
 	rm -f ${projectdir}/awa.gpr
+	rm -rf ${dynamodir}/awa
