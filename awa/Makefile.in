@@ -1,5 +1,6 @@
 # You may edit this makefile as long as you keep these original 
 # target names defined.
+MODE=debug
 GNATMAKE=gnatmake
 GNATCLEAN=gnatclean
 GPRPATH=awa.gpr
@@ -25,12 +26,13 @@ top_builddir = .
 dynamodir=${prefix}/share/dynamo
 includedir=${prefix}/share/ada/adainclude
 projectdir=${prefix}/share/ada/adainclude
+bindir=${prefix}/bin
 libdir=${prefix}/lib
 alidir=${prefix}/share/ada/adainclude
 
 # Build executables for all mains defined by the project.
 build:
-	$(GNATMAKE) -p -P "$(GPRPATH)"
+	$(GNATMAKE) -XMODE=${MODE} -XPROCESSORS=4 -p -P "$(GPRPATH)"
 	$(GNATMAKE) -p -Ptests
 
 # Not intended for manual invocation.
@@ -84,11 +86,11 @@ generate:
 	$(GENERATOR) generate db
 
 # Files to package in source distribution
-DISTFILES=README LICENSE.txt NOTICE.txt CHANGES config.guess configure config.sub \
+DISTFILES=README LICENSE.txt NOTICE.txt NEWS CHANGES ChangeLog config.guess configure config.sub \
 configure.in Makefile.in install-sh \
 awa.gpr.in tests.gpr.in samples.gpr.in config.gpr \
 src samples regtests \
-bin obj lib distrib test-mysql.properties test-sqlite.properties dynamo.xml
+distrib test-mysql.properties test-sqlite.properties dynamo.xml
 
 dist:
 	-rm -rf $(distdir)
@@ -107,8 +109,9 @@ dist:
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
-	-rm -f $(distdir)/bin/*
-	-rm -f $(distdir)/obj/*
+	mkdir $(distdir)/bin
+	mkdir $(distdir)/obj
+	mkdir $(distdir)/lib
 	tar --exclude=.svn --exclude="*~" --exclude="*.o" --exclude="*.ali" \
 	    --exclude="*.log" --exclude="*.a" \
 	    -cvzf $(DIST_FILE) $(distdir)
