@@ -9,6 +9,7 @@ To build AWA, you will need:
  - Ada Util (http://code.google.com/p/ada-util)
  - Ada EL   (http://code.google.com/p/ada-el)
  - AWS      (http://libre.adacore.com/libre/tools/aws/)
+ - XML/Ada  (http://libre.adacore.com/libre/tools/xmlada/)
 
 Build with the following commands:
 
@@ -16,9 +17,12 @@ Build with the following commands:
    make
 
 
-The samples can be built using:
+The samples provided in AWA is in fact a complete application
+created by Dynamo.  It can be built using:
 
-   gnatmake -Psamples
+   cd samples
+   ./configure
+   make
    
    
 The unit tests are built using:
@@ -28,7 +32,9 @@ The unit tests are built using:
 
 And unit tests are executed with:
 
-   bin/awa_harness
+   bin/awa_harness -config test-mysql.properties
+or
+   bin/awa_harness -config test-sqlite.properties
 
 
 Documentation
