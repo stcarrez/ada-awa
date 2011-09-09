@@ -19,15 +19,6 @@ body.awa {
   background-color: #81CFB7;
 }
 
-a {
-  color: #0077aa;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
 #awa-page {
   position: relative;
   min-height:100%;
@@ -121,4 +112,3 @@ div.awa-title div {
   height: 70px;
   width: 100%;
 }
-

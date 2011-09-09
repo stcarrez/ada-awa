@@ -1,9 +1,9 @@
 with "config";
-with "@AWA_DIR@util/util";
-with "@AWA_DIR@el/el";
-with "@AWA_DIR@asf/asf";
-with "@AWA_DIR@awa/awa";
-with "@AWA_DIR@ado/ado";
+with "@UTIL_DIR@util";
+with "@EL_DIR@el";
+with "@ASF_DIR@asf";
+with "@ADO_DIR@ado";
+with "@AWA_DIR@awa";
 
 project atlas is
 

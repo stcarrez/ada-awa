@@ -557,6 +557,10 @@ ac_unique_file="src/atlas.ads"
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
 AWA_DIR
+ADO_DIR
+ASF_DIR
+EL_DIR
+UTIL_DIR
 ATLAS_LIBDIR
 EXEC_PREFIX
 ATLAS_MICRO_VERSION
@@ -628,6 +632,10 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
+with_ada_util
+with_ada_el
+with_ada_asf
+with_ada_ado
 with_ada_awa
 '
       ac_precious_vars='build_alias
@@ -1250,6 +1258,14 @@ if test -n "$ac_init_help"; then
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-ada-util=x       Path for the Ada Util library
+                          (code.google.com/p/ada-util)
+  --with-ada-el=x         Path for the Ada Expression Language library
+                          (code.google.com/p/ada-el)
+  --with-ada-asf=x        Path for the Ada Server Faces library
+                          (code.google.com/p/ada-asf)
+  --with-ada-ado=x        Path for the Ada Database Objects library
+                          (code.google.com/p/ada-ado)
   --with-ada-awa=x        Path for the Ada Web Application library
                           (code.google.com/p/ada-awa)
 
@@ -2890,6 +2906,141 @@ EXEC_PREFIX="$prefix"
 ATLAS_LIBDIR="lib"
 
 ##########################################
+# Ada Util library
+##########################################
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Ada Util library (code.google.com/p/ada-util)" >&5
+$as_echo_n "checking Ada Util library (code.google.com/p/ada-util)... " >&6; }
+
+# Check whether --with-ada-util was given.
+if test "${with_ada_util+set}" = set; then :
+  withval=$with_ada_util;
+  UTIL_DIR=${withval}/
+
+else
+
+  echo "with \"util\"; project t is for Source_Dirs use (); end t;" > t.gpr
+  gnatmake -p -Pt >/dev/null 2>/dev/null
+  if test $? -eq 0; then
+    UTIL_DIR=
+  else
+    UTIL_DIR=../util/
+  fi;
+
+fi
+
+echo "with \"${UTIL_DIR}util\"; project t is for Source_Dirs use (); end t;" > t.gpr
+gnatmake -p -Pt >/dev/null 2>/dev/null
+if test $? -ne 0 ; then
+   rm -f t.gpr
+   as_fn_error "Ada Util Library not found in ${UTIL_DIR}" "$LINENO" 5
+fi
+rm -f t.gpr
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${UTIL_DIR}" >&5
+$as_echo "${UTIL_DIR}" >&6; }
+
+##########################################
+# Ada Expression Language library
+##########################################
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Ada Expression Language library (code.google.com/p/ada-el)" >&5
+$as_echo_n "checking Ada Expression Language library (code.google.com/p/ada-el)... " >&6; }
+
+# Check whether --with-ada-el was given.
+if test "${with_ada_el+set}" = set; then :
+  withval=$with_ada_el;
+  EL_DIR=${withval}/
+
+else
+
+  echo "with \"el\"; project t is for Source_Dirs use (); end t;" > t.gpr
+  gnatmake -p -Pt >/dev/null 2>/dev/null
+  if test $? -eq 0; then
+    EL_DIR=
+  else
+    EL_DIR=../el/
+  fi;
+  rm -f t.gpr
+
+fi
+
+echo "with \"${EL_DIR}el\"; project t is for Source_Dirs use (); end t;" > t.gpr
+gnatmake -p -Pt >/dev/null 2>/dev/null
+if test $? -ne 0 ; then
+   rm -f t.gpr
+   as_fn_error "Ada Expression Language library not found in ${EL_DIR}" "$LINENO" 5
+fi
+rm -f t.gpr
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${EL_DIR}" >&5
+$as_echo "${EL_DIR}" >&6; }
+
+##########################################
+# Ada Server Faces library
+##########################################
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Ada Server Faces library (code.google.com/p/ada-asf)" >&5
+$as_echo_n "checking Ada Server Faces library (code.google.com/p/ada-asf)... " >&6; }
+
+# Check whether --with-ada-asf was given.
+if test "${with_ada_asf+set}" = set; then :
+  withval=$with_ada_asf;
+  ASF_DIR=${withval}/
+
+else
+
+  echo "with \"asf\"; project t is for Source_Dirs use (); end t;" > t.gpr
+  gnatmake -p -Pt >/dev/null 2>/dev/null
+  if test $? -eq 0; then
+    ASF_DIR=
+  else
+    ASF_DIR=../asf/
+  fi;
+  rm -f t.gpr
+
+fi
+
+echo "with \"${ASF_DIR}asf\"; project t is for Source_Dirs use (); end t;" > t.gpr
+gnatmake -p -Pt >/dev/null 2>/dev/null
+if test $? -ne 0 ; then
+   rm -f t.gpr
+   as_fn_error "Ada Server Faces library not found in ${ASF_DIR}" "$LINENO" 5
+fi
+rm -f t.gpr
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ASF_DIR}" >&5
+$as_echo "${ASF_DIR}" >&6; }
+
+##########################################
+# Ada Database Objects library
+##########################################
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Ada Database Objects library (code.google.com/p/ada-ado)" >&5
+$as_echo_n "checking Ada Database Objects library (code.google.com/p/ada-ado)... " >&6; }
+
+# Check whether --with-ada-ado was given.
+if test "${with_ada_ado+set}" = set; then :
+  withval=$with_ada_ado;
+  ADO_DIR=${withval}/
+
+else
+
+  echo "with \"ado\"; project t is for Source_Dirs use (); end t;" > t.gpr
+  gnatmake -p -Pt >/dev/null 2>/dev/null
+  if test $? -eq 0; then
+    ADO_DIR=
+  else
+    ADO_DIR=../ado/
+  fi;
+  rm -f t.gpr
+
+fi
+
+echo "with \"${ADO_DIR}ado\"; project t is for Source_Dirs use (); end t;" > t.gpr
+gnatmake -p -Pt >/dev/null 2>/dev/null
+if test $? -ne 0 ; then
+   rm -f t.gpr
+   as_fn_error "Ada Database Objects library not found in ${ADO_DIR}" "$LINENO" 5
+fi
+rm -f t.gpr
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ADO_DIR}" >&5
+$as_echo "${ADO_DIR}" >&6; }
+
+##########################################
 # Ada Web Application library
 ##########################################
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking Ada Web Application library (code.google.com/p/ada-awa)" >&5
@@ -2902,13 +3053,23 @@ if test "${with_ada_awa+set}" = set; then :
 
 else
 
-  AWA_DIR=../awa/
+  echo "with \"awa\"; project t is for Source_Dirs use (); end t;" > t.gpr
+  gnatmake -p -Pt >/dev/null 2>/dev/null
+  if test $? -eq 0; then
+    AWA_DIR=
+  else
+    AWA_DIR=../awa/
+  fi;
 
 fi
 
-if test ! -f ${AWA_DIR}/util/util.gpr; then
-   as_fn_error "Ada Utility library not found in ${AWA_DIR}/util/util.gpr" "$LINENO" 5
+echo "with \"${AWA_DIR}awa\"; project t is for Source_Dirs use (); end t;" > t.gpr
+gnatmake -p -Pt >/dev/null 2>/dev/null
+if test $? -ne 0 ; then
+   rm -f t.gpr
+   as_fn_error "Ada Web Application not found in ${AWA_DIR}" "$LINENO" 5
 fi
+rm -f t.gpr
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${AWA_DIR}" >&5
 $as_echo "${AWA_DIR}" >&6; }
 
