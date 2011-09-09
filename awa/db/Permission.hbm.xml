@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hibernate-mapping default-cascade="none">
-    <class name="AWA.Permissions.Models.ACL" table="ACL"
+    <class name="AWA.Permissions.Models.ACL" table="acl"
            dynamic-insert="true" dynamic-update="true">
         <comment>Access control</comment>
         <id name="id" type="ADO.Identifier" unsaved-value="0">

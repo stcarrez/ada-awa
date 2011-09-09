@@ -152,7 +152,7 @@ package AWA.Permissions.Models is
 
 
 private
-   ACL_NAME : aliased constant String := "ACL";
+   ACL_NAME : aliased constant String := "acl";
    COL_0_1_NAME : aliased constant String := "id";
    COL_1_1_NAME : aliased constant String := "entity_type";
    COL_2_1_NAME : aliased constant String := "user_id";

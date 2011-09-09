@@ -57,7 +57,7 @@ CREATE TABLE blog_post (
   PRIMARY KEY (`id`)
 );
 /*  */
-CREATE TABLE COMMENTS (
+CREATE TABLE comments (
   /*  */
   `id` INTEGER ,
   /*  */
@@ -141,7 +141,7 @@ CREATE TABLE session (
   PRIMARY KEY (`ID`)
 );
 /* Access control */
-CREATE TABLE ACL (
+CREATE TABLE acl (
   /* the unique ACL id */
   `id` BIGINT NOT NULL,
   /* the entity type */
@@ -157,10 +157,10 @@ CREATE TABLE ACL (
 INSERT INTO entity_type (name) VALUES
 ("blog")
 ,("blog_post")
-,("COMMENTS")
+,("comments")
 ,("email")
 ,("user")
 ,("access_key")
 ,("session")
-,("ACL")
+,("acl")
 ;
