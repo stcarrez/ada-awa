@@ -114,7 +114,9 @@ dist:
 	  fi; \
 	done
 	-rm -rf $(distdir)/samples/bin
-	-rm -rf $(distdir)/samples/autom4che.cache
+	-rm -rf $(distdir)/samples/atlas.gpr
+	-rm -rf $(distdir)/samples/tests.gpr
+	-rm -rf $(distdir)/samples/autom4te.cache
 	-rm -rf $(distdir)/samples/config.status
 	-rm -rf $(distdir)/samples/Makefile
 	-rm -rf $(distdir)/samples/obj
