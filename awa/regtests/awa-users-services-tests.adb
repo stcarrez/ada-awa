@@ -131,7 +131,7 @@ package body AWA.Users.Services.Tests is
       use type Ada.Calendar.Time;
 
       Principal : Helpers.Test_User;
-      T1        : constant Ada.Calendar.Time := Ada.Calendar.Clock;
+      T1        : Ada.Calendar.Time;
    begin
       begin
          Principal.Email.Set_Email ("nobody@gmail.com");
@@ -144,6 +144,7 @@ package body AWA.Users.Services.Tests is
       end;
 
       --  Create the user
+      T1 := Ada.Calendar.Clock;
       Helpers.Create_User (Principal);
       Helpers.Logout (Principal);
 
@@ -170,12 +171,10 @@ package body AWA.Users.Services.Tests is
          Util.Tests.Assert_Equals (T, Principal.Session.Get_Start_Date.Value,
                                    S1.Get_Start_Date.Value,
                                    "Invalid start date");
-         Util.Tests.Assert_Equals (T, T1,
-                                   S1.Get_Start_Date.Value,
-                                   "Invalid start date 3");
+         T.Assert (S1.Get_Start_Date.Value >= T1, "Start date is invalid 1");
 
-         T.Assert (T2 >= S1.Get_Start_Date.Value, "Start date is invalid 1");
-         T.Assert (T1 <= S1.Get_Start_Date.Value + 1.0, "Start date is invalid 2");
+         T.Assert (S1.Get_Start_Date.Value >= T2, "Start date is invalid 2");
+         T.Assert (S1.Get_Start_Date.Value <= T2 + 10.0, "Start date is invalid 3");
 
          Principal.Manager.Close_Session (Principal.Session.Get_Id);
       end;
