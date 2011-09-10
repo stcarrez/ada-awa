@@ -46,11 +46,11 @@ autobuild:
 test:	test-mysql test-sqlite
 
 test-sqlite:		build regtests.db
-	test T${HAVE_SQLITE} = TTrue && \
+	-test T${HAVE_SQLITE} = TTrue && \
 	bin/awa_harness -xml awa-sqlite-aunit.xml -config test-sqlite.properties
 
 test-mysql:		build create-mysql-tests
-	test T${HAVE_MYSQL} = TTrue && \
+	-test T${HAVE_MYSQL} = TTrue && \
 	bin/awa_harness -xml awa-mysql-aunit.xml -config test-mysql.properties
 
 # Create the test sqlite database
