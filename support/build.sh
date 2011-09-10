@@ -67,6 +67,15 @@ case $NAME in
     make install
     ;;
 
+  ada-awa-*)
+    ./configure --prefix="$PREFIX" &&
+    make &&
+    make test &&
+    make install &&
+    cd samples && ./configure --prefix="$PREFIX" &&
+    make
+    ;;
+
   dynamo-*)
     ./configure --prefix="$PREFIX" &&
     make &&
