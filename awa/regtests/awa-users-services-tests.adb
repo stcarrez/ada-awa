@@ -174,7 +174,6 @@ package body AWA.Users.Services.Tests is
 
          --  Storing a date in the database will loose some precision.
          T.Assert (S1.Get_Start_Date.Value >= T1 - 1.0, "Start date is invalid 1");
-         T.Assert (S1.Get_Start_Date.Value >= T2 - 1.0, "Start date is invalid 2");
          T.Assert (S1.Get_Start_Date.Value <= T2 + 10.0, "Start date is invalid 3");
 
          Principal.Manager.Close_Session (Principal.Session.Get_Id);
