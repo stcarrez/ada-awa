@@ -2,12 +2,11 @@
 # target names defined.
 GNATMAKE=gnatmake
 GNATCLEAN=gnatclean
-GPRPATH=util.gpr
-TESTUTIL_GPRPATH=testutil.gpr
+SVN=svn
 
-distdir=ada-awa-@AWA_VERSION@
+distdir=awa-all-@AWA_VERSION@
 
-DIST_FILE=ada-awa-@AWA_VERSION@.tar.gz
+DIST_FILE=awa-all-@AWA_VERSION@.tar.gz
 
 srcdir = .
 top_srcdir = @top_srcdir@
@@ -47,11 +46,9 @@ install:
 rebuild: clean build
 
 # Files to package in source distribution
-DISTFILES=README LICENSE.txt NOTICE.txt CHANGES config.guess configure config.sub \
+DISTFILES=README LICENSE.txt NOTICE.txt CHANGES ChangeLog config.guess configure config.sub \
 configure.in Makefile.in install-sh \
-util.gpr.in testutil.gpr tests.gpr samples.gpr config.gpr \
-src samples regtests testutil \
-bin obj lib
+distrib external support
 
 dist:
 	-rm -rf $(distdir)
@@ -74,3 +71,10 @@ dist:
 	tar --exclude=.svn --exclude="*~" --exclude="*.o" --exclude="*.ali" \
 	    --exclude="*.log" --exclude="*.a" \
 	    -cvzf $(DIST_FILE) $(distdir)
+
+# prepare before releasing a new version of the package
+# (collect information about changes and SVN repository)
+prepare-release:
+	${SVN} update
+	${SVN} info > CHANGES
+	${SVN} log -v > ChangeLog

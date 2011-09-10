@@ -553,12 +553,9 @@ PACKAGE_STRING=
 PACKAGE_BUGREPORT=
 PACKAGE_URL=
 
-ac_unique_file="awa/src/awa.ads"
+ac_unique_file="support/build.config.in"
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
-AWA_XML_DIR
-WITH_XML_ADA
-AWA_LIBDIR
 EXEC_PREFIX
 AWA_MICRO_VERSION
 AWA_MINOR_VERSION
@@ -629,7 +626,9 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
-with_xml
+enable_aunit
+enable_xmlada
+enable_aws
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1248,10 +1247,13 @@ if test -n "$ac_init_help"; then
 
   cat <<\_ACEOF
 
-Optional Packages:
-  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
-  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --with-xmlada=          Enable XML serialization
+Optional Features:
+  --disable-option-checking  ignore unrecognized --enable/--with options
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-aunit          build AUnit provided by AWA
+  --enable-xmlada         build XML/Ada provided by AWA
+  --enable-aws            build AWS provided by AWA
 
 Some influential environment variables:
   CC          C compiler command
@@ -1872,6 +1874,8 @@ AWA_MAJOR_VERSION=0
 AWA_MINOR_VERSION=1
 AWA_MICRO_VERSION=0
 AWA_VERSION=$AWA_MAJOR_VERSION.$AWA_MINOR_VERSION.$AWA_MICRO_VERSION
+
+AWA_PACKAGES="ada-util-1.3.0 ada-el-1.2.0 ada-asf-0.2.0 ada-ado-0.2.0 ada-awa-0.1.0 dynamo-0.4.0"
 
 # checking for local tools
 ac_ext=c
@@ -2893,56 +2897,138 @@ fi
 EXEC_PREFIX="$prefix"
 
 
-AWA_LIBDIR="lib"
+PACKAGES="$AWA_PACKAGES"
 
-
-##########################################
-# XMLAda library
-##########################################
-
-ac_xml_ada=xmlada-config
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking xmlada library" >&5
-$as_echo_n "checking xmlada library... " >&6; }
-
-# Check whether --with-xml was given.
-if test "${with_xml+set}" = set; then :
-  withval=$with_xml;
-  ac_xml_ada=${withval}/xmlada-config
-  WITH_XML_ADA="with \"${withval}\";";
-  AWA_XML_DIR='src/xml';
-
+# Check whether --enable-aunit was given.
+if test "${enable_aunit+set}" = set; then :
+  enableval=$enable_aunit; ENABLE_AUNIT=$enableval
 else
-
-  WITH_XML_ADA='';
-  AWA_XML_DIR='src';
-
+  ENABLE_AUNIT=no
 fi
 
 
-ac_xml_version=`$ac_xml_ada --version 2>/dev/null | sed -e 's, ,-,g'`
-case $ac_xml_version in
-  XmlAda-3.2*)
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_xml_version" >&5
-$as_echo "$ac_xml_version" >&6; }
-      WITH_XML_ADA="with \"xmlada\";";
-      AWA_XML_DIR='src/xml';
-      ;;
-
-  *)
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-      WITH_XML_ADA='';
-      AWA_XML_DIR='src';
-      ;;
-
-esac
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${WITH_XML}" >&5
-$as_echo "${WITH_XML}" >&6; }
+# Check whether --enable-xmlada was given.
+if test "${enable_xmlada+set}" = set; then :
+  enableval=$enable_xmlada; ENABLE_XMLADA=$enableval
+else
+  ENABLE_XMLADA=no
+fi
 
 
+# Check whether --enable-aws was given.
+if test "${enable_aws+set}" = set; then :
+  enableval=$enable_aws; ENABLE_AWS=$enableval
+else
+  ENABLE_AWS=no
+fi
 
-ac_config_files="$ac_config_files Makefile"
+
+if test $ENABLE_AUNIT = "yes" ; then
+  PACKAGES="$PACKAGES aunit-gpl-2011-src"
+fi
+
+if test $ENABLE_XMLADA = "yes" ; then
+  PACKAGES="$PACKAGES xmlada-gpl-4.1-src"
+fi
+
+if test $ENABLE_AWS = "yes" ; then
+  PACKAGES="$PACKAGES aws-gpl-2.10.0-src"
+fi
+
+for NAME in $PACKAGES ; do
+   TGZ=$NAME.tar.gz
+   DIR=$NAME
+   case $NAME in
+      xmlada-gpl-4.1-src)
+        DIR=xmlada-4.1-src
+        TARGET=xmlada
+	TGZ=$NAME.tgz
+        ;;
+
+      aunit-*)
+        TARGET=aunit
+	TGZ=$NAME.tgz
+        ;;
+
+      aws-*)
+        TARGET=aws
+	TGZ=$NAME.tgz
+        ;;
+
+      ada-util-*)
+        TARGET=util
+        ;;
+
+      ada-el-*)
+        TARGET=el
+        ;;
+
+      ada-asf-*)
+        TARGET=asf
+        ;;
+
+      ada-ado-*)
+        TARGET=ado
+        ;;
+
+      ada-awa-*)
+        TARGET=awa
+        ;;
+
+      dynamo-*)
+        TARGET=dynamo
+        ;;
+
+      dynamo-*)
+        TARGET=dynamo
+        ;;
+
+      *)
+        TARGET=$NAME
+        ;;
+   esac
+   if test -f distrib/$TGZ ; then
+      TGZ="distrib/$TGZ"
+   else
+      if test -f external/$TARGET/$TGZ ; then
+         TGZ="external/$TARGET/$TGZ"
+      fi
+   fi
+      if test -d $TARGET ; then
+      echo "Package $NAME already extracted."
+   else
+      if test -d $DIR ; then
+         echo "Package $NAME already extracted."
+      else
+         echo "Extracting $TGZ"
+         tar xzf $TGZ
+      fi
+      mv $DIR $TARGET
+   fi
+done
+
+ARGS="--prefix $prefix"
+
+DIR=`pwd`
+echo "Configuring ada-util"
+(cd $DIR/util && ./configure $ARGS)
+
+echo "Configuring ada-el"
+(cd $DIR/el && ./configure --with-ada-util=../util $ARGS)
+
+echo "Configuring ada-asf"
+(cd $DIR/asf && ./configure --with-ada-util=../util --with-ada-el=../el $ARGS)
+
+echo "Configuring dynamo"
+(cd $DIR/dynamo && ./configure --with-ada-util=../util --with-ada-el=../el --with-ada-asf=../asf --with-ada-ado=../ado $ARGS)
+
+echo "Configuring ada-ado"
+(cd $DIR/ado && ./configure --with-ada-util=../util $ARGS)
+
+echo "Configuring ada-awa"
+(cd $DIR/awa && ./configure --with-ada-util=../util --with-ada-el=../el --with-ada-asf=../asf --with-ada-ado=../ado $ARGS)
+
+ac_config_files="$ac_config_files Makefile support/build.config"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -3644,6 +3730,7 @@ for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
+    "support/build.config") CONFIG_FILES="$CONFIG_FILES support/build.config" ;;
 
   *) as_fn_error "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
@@ -4087,24 +4174,3 @@ if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
 $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
 
-
-ARGS="--prefix $prefix"
-
-DIR=`pwd`
-echo "Configuring ada-util"
-(cd $DIR/util; ./configure $ARGS)
-
-echo "Configuring ada-el"
-(cd $DIR/el; ./configure --with-ada-util=../util $ARGS)
-
-echo "Configuring ada-asf"
-(cd $DIR/asf; ./configure --with-ada-util=../util --with-ada-el=../el $ARGS)
-
-echo "Configuring dynamo"
-(cd $DIR/dynamo; ./configure --with-ada-util=../util --with-ada-el=../el --with-ada-asf=../asf --with-ada-ado=../ado $ARGS)
-
-echo "Configuring ada-ado"
-(cd $DIR/ado; ./configure --with-ada-util=../util $ARGS)
-
-echo "Configuring ada-awa"
-(cd $DIR/awa; ./configure --with-ada-util=../util --with-ada-el=../el --with-ada-asf=../asf --with-ada-ado=../ado $ARGS)

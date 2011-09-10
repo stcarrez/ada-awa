@@ -10,32 +10,34 @@ It integrates the following projects:
  - Ada EL   (http://code.google.com/p/ada-el)
  - Dynamo   (http://code.google.com/p/ada-gen)
 
+ These projects are provided as tarball in 'distrib' directory.
+ These projects are distributed under the Apache License 2.0.
 
 It relies on the following external projects:
 
  - AWS      (http://libre.adacore.com/libre/tools/aws/)
  - XMLAda   (http://libre.adacore.com/libre/tools/xmlada/)
+ - AUnit    (http://libre.adacore.com/libre/tools/aunit/)
+
+ These projects are provided as tarball in 'external' directory.
+ They are distributed under different licenses (GNU GPL).
+ They are not compiled.
 
 
-Build with the following commands:
+Extract the sources and configure by using:
 
    ./configure
+
+
+If you wan to build AWS, XMLAda or AUnit, you can configure with:
+
+
+   ./configure --enable-aunit --enable-xmlada --enable-aws
+
+
+Then, build the packages by using:
+
    make
-
-
-The samples can be built using:
-
-   gnatmake -Psamples
-   
-   
-The unit tests are built using:
-
-   gnatmake -Ptests
-
-
-And unit tests are executed with:
-
-   bin/awa_harness
 
 
 Documentation
