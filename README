@@ -29,7 +29,7 @@ Extract the sources and configure by using:
    ./configure
 
 
-If you wan to build AWS, XMLAda or AUnit, you can configure with:
+If you want to build AWS, XMLAda or AUnit, you can configure with:
 
 
    ./configure --enable-aunit --enable-xmlada --enable-aws
