@@ -20,22 +20,25 @@ SUBDIRS=util el asf dynamo ado awa
 
 # Build executables for all mains defined by the project.
 build:
+	D=`pwd`; \
 	for i in $(SUBDIRS); do \
-	   cd $$i && \
+	   cd "$$D/$$i" && \
 	   $(MAKE) build ; \
 	done
 
 # Clean the root project of all build products.
 clean:
+	D=`pwd`; \
 	for i in $(SUBDIRS); do \
-	   cd $$i && \
+	   cd "$$D/$$i" && \
 	   $(MAKE) clean ; \
 	done
 
 # Clean the root project of all build products.
 install:
+	D=`pwd`; \
 	for i in $(SUBDIRS); do \
-	   cd $$i && \
+	   cd "$$D/$$i" && \
 	   $(MAKE) install ; \
 	done
 
