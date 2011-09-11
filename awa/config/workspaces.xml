@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="1.0">
+  <filter-mapping>
+    <filter-name>service</filter-name>
+    <url-pattern>/workspaces/*.html</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>auth-filter</filter-name>
+    <url-pattern>/workspaces/*.html</url-pattern>
+  </filter-mapping>
+  <entity-permission>
+    <name>workspaces-create</name>
+    <entity-type>table-name</entity-type>
+    <sql>
+       select ACL.ID from ACL
+       where ACL.ENTITY_TYPE = :entity_type
+       and ACL.USER_ID = :user_id   
+    </sql>
+  </entity-permission>
+</module>
