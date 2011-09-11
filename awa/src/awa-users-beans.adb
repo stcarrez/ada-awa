@@ -25,6 +25,7 @@ with ASF.Contexts.Faces;
 with ASF.Cookies;
 with ASF.Applications.Messages.Factory;
 
+with AWA.Services.Contexts;
 with AWA.Users.Principals;
 package body AWA.Users.Beans is
 
@@ -288,5 +289,67 @@ package body AWA.Users.Beans is
    begin
       return Binding_Array'Access;
    end Get_Method_Bindings;
+
+   --  ------------------------------
+   --  Get the value identified by the name.  The following names are recognized:
+   --    o isLogged  Boolean  True if a user is logged
+   --    o name      String   The user name
+   --    o email     String   The user email address
+   --    o id        Long     The user identifier
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Current_User_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+      pragma Unreferenced (From);
+      use type AWA.Services.Contexts.Service_Context_Access;
+
+      Ctx : constant AWA.Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+   begin
+      if Ctx = null then
+         if Name = IS_LOGGED_ATTR then
+            return Util.Beans.Objects.To_Object (False);
+         else
+            return Util.Beans.Objects.Null_Object;
+         end if;
+      else
+         declare
+            User : constant AWA.Users.Models.User_Ref := Ctx.Get_User;
+         begin
+            if User.Is_Null then
+               if Name = IS_LOGGED_ATTR then
+                  return Util.Beans.Objects.To_Object (False);
+               else
+                  return Util.Beans.Objects.Null_Object;
+               end if;
+            else
+               if Name = USER_NAME_ATTR then
+                  return Util.Beans.Objects.To_Object (String '(User.Get_Name));
+
+               elsif Name = USER_EMAIL_ATTR then
+                  return Util.Beans.Objects.To_Object (String '(User.Get_Email.Get_Email));
+
+               elsif Name = USER_ID_ATTR then
+                  return Util.Beans.Objects.To_Object (Long_Long_Integer (User.Get_Id));
+
+               elsif Name = IS_LOGGED_ATTR then
+                  return Util.Beans.Objects.To_Object (True);
+
+               else
+                  return Util.Beans.Objects.Null_Object;
+               end if;
+            end if;
+         end;
+      end if;
+   end Get_Value;
+
+   --  ------------------------------
+   --  Create the current user bean.
+   --  ------------------------------
+   function Create_Current_User_Bean (Module : in AWA.Users.Module.User_Module_Access)
+                                      return Util.Beans.Basic.Readonly_Bean_Access is
+      Object : constant Current_User_Bean_Access := new Current_User_Bean;
+   begin
+      return Object.all'Access;
+   end Create_Current_User_Bean;
 
 end AWA.Users.Beans;

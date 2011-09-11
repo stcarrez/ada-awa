@@ -58,6 +58,10 @@ package body AWA.Users.Module is
                          Name    => "AWA.Users.Beans.Authenticate_Bean",
                          Handler => AWA.Users.Beans.Create_Authenticate_Bean'Access);
 
+      Register.Register (Plugin  => Plugin,
+                         Name    => "AWA.Users.Beans.Current_User_Bean",
+                         Handler => AWA.Users.Beans.Create_Current_User_Bean'Access);
+
       AWA.Modules.Module (Plugin).Initialize (App);
 
       --  Create the user manager when everything is initialized.

@@ -97,4 +97,32 @@ package AWA.Users.Beans is
    function Create_Authenticate_Bean (Module : in AWA.Users.Module.User_Module_Access)
                                       return Util.Beans.Basic.Readonly_Bean_Access;
 
+   --  ------------------------------
+   --  Current user
+   --  ------------------------------
+   --  The <b>Current_User_Bean</b> provides information about the current user.
+   --  It relies on the <b>AWA.Services.Contexts</b> to identify the current user
+   --  and return information about him/her.
+   type Current_User_Bean is new Util.Beans.Basic.Readonly_Bean with null record;
+   type Current_User_Bean_Access is access all Current_User_Bean'Class;
+
+   --  Attributes exposed by <b>Current_User_Bean</b>
+   IS_LOGGED_ATTR  : constant String := "isLogged";
+   USER_EMAIL_ATTR : constant String := "email";
+   USER_NAME_ATTR  : constant String := "name";
+   USER_ID_ATTR    : constant String := "id";
+
+   --  Get the value identified by the name.  The following names are recognized:
+   --    o isLogged  Boolean  True if a user is logged
+   --    o name      String   The user name
+   --    o email     String   The user email address
+   --    o id        Long     The user identifier
+   overriding
+   function Get_Value (From : in Current_User_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Create the current user bean.
+   function Create_Current_User_Bean (Module : in AWA.Users.Module.User_Module_Access)
+                                      return Util.Beans.Basic.Readonly_Bean_Access;
+
 end AWA.Users.Beans;

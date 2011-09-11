@@ -36,6 +36,13 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
+  <managed-bean>
+    <description>This bean allows to provide information about the current logged user.</description>
+    <managed-bean-name>user</managed-bean-name>
+    <managed-bean-class>AWA.Users.Beans.Current_User_Bean</managed-bean-class>
+    <managed-bean-scope>application</managed-bean-scope>
+  </managed-bean>
+
   <navigation-rule>
     <from-view-id>/auth/login.xhtml</from-view-id>
     <navigation-case>
