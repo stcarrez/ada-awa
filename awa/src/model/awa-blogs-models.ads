@@ -30,6 +30,7 @@ with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
 with AWA.Users.Models;
+with AWA.Workspaces.Models;
 package AWA.Blogs.Models is
    --  --------------------
    --  Blog 
@@ -67,6 +68,14 @@ package AWA.Blogs.Models is
                  return Ada.Strings.Unbounded.Unbounded_String;
    function Get_Name (Object : in Blog_Ref)
                  return String;
+
+   --  Set 
+   procedure Set_Workspace (Object : in out Blog_Ref;
+                            Value  : in AWA.Workspaces.Models.Workspace_Ref'Class);
+
+   --  Get 
+   function Get_Workspace (Object : in Blog_Ref)
+                 return AWA.Workspaces.Models.Workspace_Ref'Class;
 
    --  Load the entity identified by 'Id'.
    --  Raises the NOT_FOUND exception if it does not exist.
@@ -270,13 +279,15 @@ private
    COL_0_1_NAME : aliased constant String := "id";
    COL_1_1_NAME : aliased constant String := "version";
    COL_2_1_NAME : aliased constant String := "name";
+   COL_3_1_NAME : aliased constant String := "workspace_id";
    BLOG_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 3,
+     (Count => 4,
       Table => BLOG_NAME'Access,
       Members => (
          COL_0_1_NAME'Access,
          COL_1_1_NAME'Access,
-         COL_2_1_NAME'Access
+         COL_2_1_NAME'Access,
+         COL_3_1_NAME'Access
 )
      );
    Null_Blog : constant Blog_Ref
@@ -287,6 +298,7 @@ private
    with record
        Version : Integer;
        Name : Ada.Strings.Unbounded.Unbounded_String;
+       Workspace : AWA.Workspaces.Models.Workspace_Ref;
    end record;
    type Blog_Access is access all Blog_Impl;
    overriding

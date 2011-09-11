@@ -5,7 +5,7 @@
         <comment>Blog </comment>
         <id name="id" type="ADO.Identifier" unsaved-value="0">
             <comment>the blog identifier</comment>
-            <column name="id" not-null="true" unique="false" sql-type="BIGINT"/>
+            <column name="id" not-null="true" unique="false" sql-type="INTEGER"/>
             <generator class="sequence"/>
         </id>
         <version name="version" type="int" column="version"/>
@@ -13,6 +13,9 @@
             <comment>the blog name</comment>
             <column name="name" not-null="true" unique="false" sql-type="VARCHAR(256)"/>
         </property>
+        <many-to-one name="workspace" class="AWA.Workspaces.Models.Workspace" foreign-key="id" not-null="true" lazy="proxy" fetch="select">
+            <column name="workspace_id" not-null="true" sql-type="INTEGER"/>
+        </many-to-one>
     </class>
     <class name="AWA.Blogs.Models.Post" table="blog_post"
            dynamic-insert="true" dynamic-update="true">
