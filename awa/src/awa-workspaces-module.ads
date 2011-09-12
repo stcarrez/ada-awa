@@ -16,8 +16,12 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with ADO.Sessions;
+
 with AWA.Modules;
-package Awa.Workspaces.Module is
+with AWA.Services.Contexts;
+with AWA.Workspaces.Models;
+package AWA.Workspaces.Module is
 
    --  The name under which the module is registered.
    NAME : constant String := "workspaces";
@@ -33,8 +37,14 @@ package Awa.Workspaces.Module is
    procedure Initialize (Plugin : in out Workspaces_Module;
                          App    : in AWA.Modules.Application_Access);
 
+   --  Get the current workspace associated with the current user.
+   --  If the user has not workspace, create one.
+   procedure Get_Workspace (Session   : in out ADO.Sessions.Master_Session;
+                            Context   : in AWA.Services.Contexts.Service_Context_Access;
+                            Workspace : out AWA.Workspaces.Models.Workspace_Ref);
+
 private
 
    type Workspaces_Module is new AWA.Modules.Module with null record;
 
-end Awa.Workspaces.Module;
+end AWA.Workspaces.Module;

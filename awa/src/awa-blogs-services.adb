@@ -20,6 +20,7 @@ with AWA.Blogs.Models;
 with AWA.Services.Contexts;
 with AWA.Permissions;
 with AWA.Permissions.Services;
+with AWA.Workspaces.Models;
 
 with ADO.Sessions;
 
@@ -51,6 +52,7 @@ package body AWA.Blogs.Services is
       User  : constant ADO.Identifier := Ctx.Get_User_Identifier;
       DB    : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Blog  : AWA.Blogs.Models.Blog_Ref;
+      WS    : AWA.Workspaces.Models.Workspace_Ref;
    begin
       Log.Info ("Creating blog for user");
 
@@ -59,7 +61,9 @@ package body AWA.Blogs.Services is
                              Entity     => Workspace_Id);
 
       Ctx.Start;
+      AWA.Workspaces.Module.Get_Workspace (DB, Ctx, WS);
       Blog.Set_Name (Title);
+      Blog.Set_Workspace (WS);
       Blog.Save (DB);
 
       --  Add the permission for the user to use the new blog.

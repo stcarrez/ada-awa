@@ -16,11 +16,15 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with Ada.Calendar;
+
+with AWA.Users.Models;
 with AWA.Modules.Beans;
 with AWA.Modules.Get;
+with ADO.SQL;
 with Util.Log.loggers;
-with Awa.Workspaces.Beans;
-package body Awa.Workspaces.Module is
+with AWA.Workspaces.Beans;
+package body AWA.Workspaces.Module is
 
    Log : constant Util.log.Loggers.Logger := Util.Log.Loggers.Create ("Awa.Workspaces.Module");
 
@@ -46,4 +50,38 @@ package body Awa.Workspaces.Module is
       --  Add here the creation of manager instances.
    end Initialize;
 
-end Awa.Workspaces.Module;
+   --  ------------------------------
+   --  Get the current workspace associated with the current user.
+   --  If the user has not workspace, create one.
+   --  ------------------------------
+   procedure Get_Workspace (Session   : in out ADO.Sessions.Master_Session;
+                            Context   : in AWA.Services.Contexts.Service_Context_Access;
+                            Workspace : out AWA.Workspaces.Models.Workspace_Ref) is
+      User    : constant AWA.Users.Models.User_Ref := Context.Get_User;
+      WS      : AWA.Workspaces.Models.Workspace_Ref;
+      Query   : ADO.SQL.Query;
+      Found   : Boolean;
+   begin
+      if User.Is_Null then
+         Log.Error ("There is no current user.  The workspace cannot be identified");
+         Workspace := AWA.Workspaces.Models.Null_Workspace;
+         return;
+      end if;
+
+      --  Find the workspace associated with the current user.
+      Query.Add_Param (User.Get_Id);
+      Query.Set_Filter ("o.user_id = ?");
+      WS.Find (Session, Query, Found);
+      if Found then
+         Workspace := WS;
+         return;
+      end if;
+
+      --  Create a workspace for this user.
+      WS.Set_Owner (User);
+      WS.Set_Create_Date (Ada.Calendar.Clock);
+      WS.Save (Session);
+      Workspace := WS;
+   end Get_Workspace;
+
+end AWA.Workspaces.Module;
