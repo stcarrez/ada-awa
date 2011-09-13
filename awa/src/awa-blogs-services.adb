@@ -21,6 +21,7 @@ with AWA.Services.Contexts;
 with AWA.Permissions;
 with AWA.Permissions.Services;
 with AWA.Workspaces.Models;
+with AWA.Workspaces.Module;
 
 with ADO.Sessions;
 

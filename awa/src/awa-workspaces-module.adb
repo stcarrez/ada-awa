@@ -70,7 +70,7 @@ package body AWA.Workspaces.Module is
 
       --  Find the workspace associated with the current user.
       Query.Add_Param (User.Get_Id);
-      Query.Set_Filter ("o.user_id = ?");
+      Query.Set_Filter ("o.owner_fk = ?");
       WS.Find (Session, Query, Found);
       if Found then
          Workspace := WS;
