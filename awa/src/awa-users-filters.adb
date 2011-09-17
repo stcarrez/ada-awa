@@ -47,6 +47,11 @@ package body AWA.Users.Filters is
                          Context : in ASF.Servlets.Servlet_Registry'Class) is
       URI : constant String := Context.Get_Init_Parameter (AUTH_FILTER_REDIRECT_PARAM);
    begin
+      Log.Info ("Using login URI: {0}", URI);
+
+      if URI = "" then
+         Log.Error ("The login URI is empty.  Redirection to the login page will not work.");
+      end if;
       Filter.Login_URI := To_Unbounded_String (URI);
    end Initialize;
 
