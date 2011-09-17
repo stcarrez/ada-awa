@@ -19,12 +19,17 @@
 with Util.Log.Loggers;
 
 with AWA.Modules.Get;
+with AWA.Modules.Beans;
+with AWA.Blogs.Beans;
 
 --  The <b>Blogs.Module</b> manages the creation, update, removal of blog posts in an application.
 --
 package body AWA.Blogs.Module is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Blogs.Module");
+
+   package Register is new AWA.Modules.Beans (Module => Blog_Module,
+                                              Module_Access => Blog_Module_Access);
 
    --  Initialize the blog module.
    overriding
@@ -36,9 +41,13 @@ package body AWA.Blogs.Module is
       --  Setup the resource bundles.
 --        App.Register ("blogMsg", "blogs");
 
---        Register.Register (Plugin  => Plugin,
---                           Name    => "AWA.Users.Beans.Authenticate_Bean",
---                           Handler => AWA.Users.Beans.Create_Authenticate_Bean'Access);
+      Register.Register (Plugin  => Plugin,
+                         Name    => "AWA.Blogs.Beans.Post_Bean",
+                         Handler => AWA.Blogs.Beans.Create_Post_Bean'Access);
+
+      Register.Register (Plugin  => Plugin,
+                         Name    => "AWA.Blogs.Beans.Post_List_Bean",
+                         Handler => AWA.Blogs.Beans.Create_Post_List_Bean'Access);
 
       AWA.Modules.Module (Plugin).Initialize (App);
 
