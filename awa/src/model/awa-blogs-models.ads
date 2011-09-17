@@ -25,10 +25,13 @@ with ADO.Objects;
 with ADO.Statements;
 with ADO.SQL;
 with ADO.Schemas;
+with ADO.Queries;
+with ADO.Queries.Loaders;
 with Ada.Calendar;
 with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
+with Util.Beans.Basic.Lists;
 with AWA.Users.Models;
 with AWA.Workspaces.Models;
 package AWA.Blogs.Models is
@@ -273,6 +276,56 @@ package AWA.Blogs.Models is
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class);
 
+   --  --------------------
+   --  
+   --  --------------------
+   type Post_Info is new Util.Beans.Basic.Readonly_Bean with record
+      --  the post identifier.
+      Id : ADO.Identifier;
+
+      --  the post title.
+      Title : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the post uri.
+      Uri : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the post publish date.
+      Date : Ada.Calendar.Time;
+
+      --  the user name.
+      Username : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the post text.
+      Text : Ada.Strings.Unbounded.Unbounded_String;
+
+   end record;
+
+   --  Get the bean attribute identified by the given name.
+   overriding
+   function Get_Value (From : in Post_Info;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   package Post_Info_Beans is
+      new Util.Beans.Basic.Lists (Element_Type => Post_Info);
+   package Post_Info_Vectors renames Post_Info_Beans.Vectors;
+   subtype Post_Info_List_Bean is Post_Info_Beans.List_Bean;
+
+   type Post_Info_List_Bean_Access is access all Post_Info_List_Bean;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Post_Info_List_Bean;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   subtype Post_Info_Vector is Post_Info_Vectors.Vector;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Post_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   Query_Blog_Post_List : constant ADO.Queries.Query_Definition_Access;
+
 
 private
    BLOG_NAME : aliased constant String := "blog";
@@ -387,4 +440,14 @@ private
    procedure Set_Field (Object : in out Post_Ref'Class;
                         Impl   : out Post_Access;
                         Field  : in Positive);
+
+   package File_Postinfo is
+      new ADO.Queries.Loaders.File (Path => "blog-post-list.xml",
+                                    Sha1 => "3A20F558F6837D6D3ECF6F0D8BDD77D17C10F1E7");
+
+   package Def_Postinfo_Blog_Post_List is
+      new ADO.Queries.Loaders.Query (Name => "blog-post-list",
+                                     File => File_Postinfo.File'Access);
+   Query_Blog_Post_List : constant ADO.Queries.Query_Definition_Access
+   := Def_Postinfo_Blog_Post_List.Query'Access;
 end AWA.Blogs.Models;

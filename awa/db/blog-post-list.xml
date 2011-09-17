@@ -1,0 +1,45 @@
+<query-mapping package='AWA.Blogs.Models'>
+    <description>
+      Queries used by the permission manager
+    </description>
+
+    <class name="AWA.Blogs.models.Post_Info" bean="yes">
+        <property type='Identifier' name="id">
+            <comment>the post identifier.</comment>
+        </property>
+        <property type='String' name="title">
+            <comment>the post title.</comment>
+        </property>
+        <property type='String' name="uri">
+            <comment>the post uri.</comment>
+        </property>
+        <property type='Date' name="date">
+            <comment>the post publish date.</comment>
+        </property>
+        <property type='String' name="username">
+            <comment>the user name.</comment>
+        </property>
+        <property type='String' name="text">
+            <comment>the post text.</comment>
+        </property>
+    </class>
+
+    <query name='blog-post-list'>
+       <comment>Get the list of public visible posts</comment>
+       <sql>
+    SELECT
+      post.id,
+      post.title,
+      post.uri,
+      post.create_date,
+      user.name,
+      post.text
+    FROM blog_post AS post
+    INNER JOIN user ON post.author_id = user.id
+    WHERE post.id > 0
+    ORDER BY post.create_date DESC
+    LIMIT 10
+       </sql>
+    </query>
+
+</query-mapping>

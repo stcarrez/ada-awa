@@ -30,6 +30,7 @@ with ADO.Queries.Loaders;
 with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
+with Util.Beans.Basic.Lists;
 package AWA.Permissions.Models is
    --  --------------------
    --  Access control
