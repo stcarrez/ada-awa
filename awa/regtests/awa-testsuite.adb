@@ -19,6 +19,7 @@
 with AWA.Users.Services.Tests;
 with AWA.Users.Tests;
 with AWA.Blogs.Services.Tests;
+with AWA.Wikis.Parsers.Tests;
 package body AWA.Testsuite is
 
    function Suite return Access_Test_Suite is
@@ -26,6 +27,7 @@ package body AWA.Testsuite is
    begin
       AWA.Users.Services.Tests.Add_Tests (Ret);
       AWA.Users.Tests.Add_Tests (Ret);
+      AWA.Wikis.Parsers.Tests.Add_Tests (Ret);
       AWA.Blogs.Services.Tests.Add_Tests (Ret);
       return Ret;
    end Suite;
