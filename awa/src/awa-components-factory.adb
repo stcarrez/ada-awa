@@ -19,6 +19,7 @@
 with ASF.Components.Base;
 with AWA.Components.Redirect;
 with AWA.Components.Inputs;
+with AWA.Components.Wikis;
 with ASF.Views.Nodes;
 package body AWA.Components.Factory is
 
@@ -26,6 +27,7 @@ package body AWA.Components.Factory is
 
    function Create_Redirect return UIComponent_Access;
    function Create_Input return UIComponent_Access;
+   function Create_Wiki return UIComponent_Access;
 
    --  ------------------------------
    --  Create an UIRedirect component
@@ -43,11 +45,20 @@ package body AWA.Components.Factory is
       return new AWA.Components.Inputs.UIInput;
    end Create_Input;
 
+   --  ------------------------------
+   --  Create an UIWiki component
+   --  ------------------------------
+   function Create_Wiki return UIComponent_Access is
+   begin
+      return new AWA.Components.Wikis.UIWiki;
+   end Create_Wiki;
+
    use ASF.Views.Nodes;
 
    URI                : aliased constant String := "http://code.google.com/p/ada-awa/jsf";
    REDIRECT_TAG       : aliased constant String := "redirect";
    INPUT_TEXT_TAG     : aliased constant String := "inputText";
+   WIKI_TAG           : aliased constant String := "wiki";
 
    AWA_Bindings : aliased constant ASF.Factory.Binding_Array
      := (1 => (Name      => INPUT_TEXT_TAG'Access,
@@ -55,6 +66,9 @@ package body AWA.Components.Factory is
                Tag       => Create_Component_Node'Access),
          2 => (Name      => REDIRECT_TAG'Access,
                Component => Create_Redirect'Access,
+               Tag       => Create_Component_Node'Access),
+         3 => (Name      => WIKI_TAG'Access,
+               Component => Create_Wiki'Access,
                Tag       => Create_Component_Node'Access)
         );
 
