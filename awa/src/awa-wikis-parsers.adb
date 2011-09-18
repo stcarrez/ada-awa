@@ -162,9 +162,14 @@ package body AWA.Wikis.Parsers is
       Peek (P, C);
       if Token = '{' then
          if C /= LF and C /= CR then
+            Put_Back (P, C);
             P.Format (CODE) := True;
             return;
          end if;
+      elsif Token = '}' then
+         Put_Back (P, C);
+         P.Format (CODE) := True;
+         return;
       else
          while not P.Is_Eof and C /= LF and C /= CR loop
             Append (Format, C);
@@ -325,10 +330,12 @@ package body AWA.Wikis.Parsers is
       Flush_Text (P);
       P.Document.Add_Link (Title, Link, Language, Link_Title);
       Peek (P, C);
-      if C = CR or C = LF then
-         Append (P.Text, C);
+      if not P.Is_Eof then
+         if C = CR or C = LF then
+            Append (P.Text, C);
+         end if;
+         Put_Back (P, C);
       end if;
-      Put_Back (P, C);
    end Parse_Link;
 
    --  ------------------------------
@@ -678,6 +685,8 @@ package body AWA.Wikis.Parsers is
        Character'Pos ('[') => Parse_Link'Access,
        Character'Pos ('\') => Parse_Line_Break'Access,
        Character'Pos ('#') => Parse_List'Access,
+       Character'Pos ('{') => Parse_Preformatted'Access,
+       Character'Pos ('}') => Parse_Preformatted'Access,
        others => Parse_Text'Access
       );
 
