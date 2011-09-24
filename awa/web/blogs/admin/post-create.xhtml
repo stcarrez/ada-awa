@@ -1,0 +1,15 @@
+<ui:composition
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:u="http://code.google.com/p/ada-asf/util"
+        xmlns:h="http://java.sun.com/jsf/html">
+
+  <div class='awa-post'>
+    <ui:include src="post-form.xhtml">
+       <ui:param name="title" value="#{blogMsg.blog_post_update_title}"/>
+    </ui:include>
+  </div>
+
+</ui:composition>
+

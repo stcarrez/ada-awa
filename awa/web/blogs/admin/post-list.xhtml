@@ -1,0 +1,18 @@
+<!-- List of blog posts for the blog administrator -->
+<ui:composition 
+        xmlns:awa="http://code.google.com/p/ada-awa/jsf"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:u="http://code.google.com/p/ada-asf/util"
+        xmlns:h="http://java.sun.com/jsf/html">
+  <h:list var="post" value="#{adminPostList}">
+    <div class='post-info' id="p_#{post.id}">
+      <div class='post-title'>
+         #{post.title}
+      </div>
+      <div class='post-author'>#{post.username}</div>
+    </div>
+  </h:list>
+</ui:composition>
+

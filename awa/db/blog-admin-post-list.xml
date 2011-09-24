@@ -1,0 +1,39 @@
+<query-mapping package='AWA.Blogs.Models'>
+    <description>
+      The list of posts for the blog administrator.
+    </description>
+
+    <class name="AWA.Blogs.models.Admin_Post_Info" bean="yes">
+        <property type='Identifier' name="id">
+            <comment>the post identifier.</comment>
+        </property>
+        <property type='String' name="title">
+            <comment>the post title.</comment>
+        </property>
+        <property type='String' name="uri">
+            <comment>the post uri.</comment>
+        </property>
+        <property type='Date' name="date">
+            <comment>the post publish date.</comment>
+        </property>
+        <property type='String' name="username">
+            <comment>the user name.</comment>
+        </property>
+    </class>
+
+    <query name='blog-admin-post-list'>
+       <comment>Get the list of blog posts</comment>
+       <sql>
+    SELECT
+      post.id,
+      post.title,
+      post.uri,
+      post.create_date,
+      user.name
+    FROM blog_post AS post
+    INNER JOIN user ON post.author_id = user.id
+    WHERE post.blog_id = :blog_id
+       </sql>
+    </query>
+
+</query-mapping>
