@@ -33,9 +33,6 @@ with Util.Beans.Basic.Lists;
 with AWA.Users.Models;
 with ADO.Model;
 package AWA.Comments.Models is
-   --  --------------------
-   --  
-   --  --------------------
    --  Create an object key for Comment.
    function Comment_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
    --  Create an object key for Comment from a string.

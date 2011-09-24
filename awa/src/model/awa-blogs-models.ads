@@ -35,6 +35,8 @@ with Util.Beans.Basic.Lists;
 with AWA.Users.Models;
 with AWA.Workspaces.Models;
 package AWA.Blogs.Models is
+   type Post_Status_Type is (POST_DRAFT, POST_PUBLISHED, POST_SCHEDULED);
+   for Post_Status_Type use (POST_DRAFT => 0, POST_PUBLISHED => 1, POST_SCHEDULED => 2);
    --  --------------------
    --  Blog 
    --  --------------------
@@ -71,6 +73,26 @@ package AWA.Blogs.Models is
                  return Ada.Strings.Unbounded.Unbounded_String;
    function Get_Name (Object : in Blog_Ref)
                  return String;
+
+   --  Set the blog uuid
+   procedure Set_Uid (Object : in out Blog_Ref;
+                      Value  : in Ada.Strings.Unbounded.Unbounded_String);
+   procedure Set_Uid (Object : in out Blog_Ref;
+                      Value : in String);
+
+   --  Get the blog uuid
+   function Get_Uid (Object : in Blog_Ref)
+                 return Ada.Strings.Unbounded.Unbounded_String;
+   function Get_Uid (Object : in Blog_Ref)
+                 return String;
+
+   --  Set the blog creation date
+   procedure Set_Create_Date (Object : in out Blog_Ref;
+                              Value  : in Ada.Calendar.Time);
+
+   --  Get the blog creation date
+   function Get_Create_Date (Object : in Blog_Ref)
+                 return Ada.Calendar.Time;
 
    --  Set 
    procedure Set_Workspace (Object : in out Blog_Ref;
@@ -204,6 +226,22 @@ package AWA.Blogs.Models is
    function Get_Create_Date (Object : in Post_Ref)
                  return Ada.Calendar.Time;
 
+   --  Set the post publication date
+   procedure Set_Publish_Date (Object : in out Post_Ref;
+                               Value  : in ADO.Nullable_Time);
+
+   --  Get the post publication date
+   function Get_Publish_Date (Object : in Post_Ref)
+                 return ADO.Nullable_Time;
+
+   --  Set the post status
+   procedure Set_Status (Object : in out Post_Ref;
+                         Value  : in Post_Status_Type);
+
+   --  Get the post status
+   function Get_Status (Object : in Post_Ref)
+                 return Post_Status_Type;
+
    --  Set 
    procedure Set_Author (Object : in out Post_Ref;
                          Value  : in AWA.Users.Models.User_Ref'Class);
@@ -279,6 +317,53 @@ package AWA.Blogs.Models is
    --  --------------------
    --  
    --  --------------------
+   type Admin_Post_Info is new Util.Beans.Basic.Readonly_Bean with record
+      --  the post identifier.
+      Id : ADO.Identifier;
+
+      --  the post title.
+      Title : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the post uri.
+      Uri : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the post publish date.
+      Date : Ada.Calendar.Time;
+
+      --  the user name.
+      Username : Ada.Strings.Unbounded.Unbounded_String;
+
+   end record;
+
+   --  Get the bean attribute identified by the given name.
+   overriding
+   function Get_Value (From : in Admin_Post_Info;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   package Admin_Post_Info_Beans is
+      new Util.Beans.Basic.Lists (Element_Type => Admin_Post_Info);
+   package Admin_Post_Info_Vectors renames Admin_Post_Info_Beans.Vectors;
+   subtype Admin_Post_Info_List_Bean is Admin_Post_Info_Beans.List_Bean;
+
+   type Admin_Post_Info_List_Bean_Access is access all Admin_Post_Info_List_Bean;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Admin_Post_Info_List_Bean;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   subtype Admin_Post_Info_Vector is Admin_Post_Info_Vectors.Vector;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Admin_Post_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   Query_Blog_Admin_Post_List : constant ADO.Queries.Query_Definition_Access;
+
+   --  --------------------
+   --  
+   --  --------------------
    type Post_Info is new Util.Beans.Basic.Readonly_Bean with record
       --  the post identifier.
       Id : ADO.Identifier;
@@ -332,15 +417,19 @@ private
    COL_0_1_NAME : aliased constant String := "id";
    COL_1_1_NAME : aliased constant String := "version";
    COL_2_1_NAME : aliased constant String := "name";
-   COL_3_1_NAME : aliased constant String := "workspace_id";
+   COL_3_1_NAME : aliased constant String := "uid";
+   COL_4_1_NAME : aliased constant String := "create_date";
+   COL_5_1_NAME : aliased constant String := "workspace_id";
    BLOG_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 4,
+     (Count => 6,
       Table => BLOG_NAME'Access,
       Members => (
          COL_0_1_NAME'Access,
          COL_1_1_NAME'Access,
          COL_2_1_NAME'Access,
-         COL_3_1_NAME'Access
+         COL_3_1_NAME'Access,
+         COL_4_1_NAME'Access,
+         COL_5_1_NAME'Access
 )
      );
    Null_Blog : constant Blog_Ref
@@ -351,6 +440,8 @@ private
    with record
        Version : Integer;
        Name : Ada.Strings.Unbounded.Unbounded_String;
+       Uid : Ada.Strings.Unbounded.Unbounded_String;
+       Create_Date : Ada.Calendar.Time;
        Workspace : AWA.Workspaces.Models.Workspace_Ref;
    end record;
    type Blog_Access is access all Blog_Impl;
@@ -385,10 +476,12 @@ private
    COL_3_2_NAME : aliased constant String := "uri";
    COL_4_2_NAME : aliased constant String := "text";
    COL_5_2_NAME : aliased constant String := "create_date";
-   COL_6_2_NAME : aliased constant String := "author_id";
-   COL_7_2_NAME : aliased constant String := "blog_id";
+   COL_6_2_NAME : aliased constant String := "publish_date";
+   COL_7_2_NAME : aliased constant String := "status";
+   COL_8_2_NAME : aliased constant String := "author_id";
+   COL_9_2_NAME : aliased constant String := "blog_id";
    POST_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 8,
+     (Count => 10,
       Table => POST_NAME'Access,
       Members => (
          COL_0_2_NAME'Access,
@@ -398,7 +491,9 @@ private
          COL_4_2_NAME'Access,
          COL_5_2_NAME'Access,
          COL_6_2_NAME'Access,
-         COL_7_2_NAME'Access
+         COL_7_2_NAME'Access,
+         COL_8_2_NAME'Access,
+         COL_9_2_NAME'Access
 )
      );
    Null_Post : constant Post_Ref
@@ -412,6 +507,8 @@ private
        Uri : Ada.Strings.Unbounded.Unbounded_String;
        Text : Ada.Strings.Unbounded.Unbounded_String;
        Create_Date : Ada.Calendar.Time;
+       Publish_Date : ADO.Nullable_Time;
+       Status : Post_Status_Type;
        Author : AWA.Users.Models.User_Ref;
        Blog : Blog_Ref;
    end record;
@@ -440,6 +537,16 @@ private
    procedure Set_Field (Object : in out Post_Ref'Class;
                         Impl   : out Post_Access;
                         Field  : in Positive);
+
+   package File_Adminpostinfo is
+      new ADO.Queries.Loaders.File (Path => "blog-admin-post-list.xml",
+                                    Sha1 => "44C56452B955B1361591FAD1CA68644C523F27A3");
+
+   package Def_Adminpostinfo_Blog_Admin_Post_List is
+      new ADO.Queries.Loaders.Query (Name => "blog-admin-post-list",
+                                     File => File_Adminpostinfo.File'Access);
+   Query_Blog_Admin_Post_List : constant ADO.Queries.Query_Definition_Access
+   := Def_Adminpostinfo_Blog_Admin_Post_List.Query'Access;
 
    package File_Postinfo is
       new ADO.Queries.Loaders.File (Path => "blog-post-list.xml",

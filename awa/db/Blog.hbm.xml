@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hibernate-mapping default-cascade="none">
+    <enum name="AWA.Blogs.Models.Post_Status_Type">
+       <comment>The post status</comment>
+       <value name="POST_DRAFT" value="0"/>
+       <value name="POST_PUBLISHED" value="1"/>
+       <value name="POST_SCHEDULED" value="2"/>
+    </enum>
     <class name="AWA.Blogs.Models.Blog" table="blog"
            dynamic-insert="true" dynamic-update="true">
         <comment>Blog </comment>
@@ -12,6 +18,15 @@
         <property name="name" type="String">
             <comment>the blog name</comment>
             <column name="name" not-null="true" unique="false" sql-type="VARCHAR(256)"/>
+        </property>
+        <property name="uid" type="String">
+            <comment>the blog uuid</comment>
+            <column name="uid" not-null="true" unique="false" sql-type="VARCHAR(256)"/>
+        </property>
+        <property name="create_date">
+            <comment>the blog creation date</comment>
+            <column name="create_date" not-null="true" unique="false" sql-type="DATETIME"/>
+            <type name="Time"/>
         </property>
         <many-to-one name="workspace" class="AWA.Workspaces.Models.Workspace" foreign-key="id" not-null="true" lazy="proxy" fetch="select">
             <column name="workspace_id" not-null="true" sql-type="INTEGER"/>
@@ -42,6 +57,16 @@
             <comment>the post creation date</comment>
             <column name="create_date" not-null="true" unique="false" sql-type="DATETIME"/>
             <type name="Time"/>
+        </property>
+        <property name="publish_date">
+            <comment>the post publication date</comment>
+            <column name="publish_date" not-null="false" unique="false" sql-type="DATETIME"/>
+            <type name="Nullable_Time"/>
+        </property>
+        <property name="status">
+            <comment>the post status</comment>
+            <column name="status" not-null="true" unique="false" sql-type="INTEGER"/>
+            <type name="AWA.Blogs.Models.Post_Status_Type"/>
         </property>
         <many-to-one name="author" class="AWA.Users.Models.User" foreign-key="ID" not-null="true" lazy="proxy" fetch="select">
             <column name="author_id" not-null="true" sql-type="INTEGER"/>

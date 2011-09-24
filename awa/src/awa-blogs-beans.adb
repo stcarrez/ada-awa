@@ -138,4 +138,23 @@ package body AWA.Blogs.Beans is
       return Object.all'Access;
    end Create_Post_List_Bean;
 
+   --  ------------------------------
+   --  Create the Admin_Post_List_Bean bean instance.
+   --  ------------------------------
+   function Create_Admin_Post_List_Bean (Module : in AWA.Blogs.Module.Blog_Module_Access)
+                                         return Util.Beans.Basic.Readonly_Bean_Access is
+      use AWA.Blogs.Models;
+
+      Object  : constant Admin_Post_Info_List_Bean_Access := new Admin_Post_Info_List_Bean;
+      Session : ADO.Sessions.Session := Module.Get_Session;
+      Query   : ADO.Queries.Context;
+      Blog_Id : ADO.Identifier := 0;  -- := Get_Current_Blog_Id;
+   begin
+      Query.Set_Query (AWA.Blogs.Models.Query_Blog_Admin_Post_List);
+      Query.Bind_Param (":blog_id", Blog_Id);
+      AWA.Blogs.Models.List (Object.all, Session, Query);
+      return Object.all'Access;
+   end Create_Admin_Post_List_Bean;
+
+
 end AWA.Blogs.Beans;

@@ -38,7 +38,6 @@
     INNER JOIN user ON post.author_id = user.id
     WHERE post.id > 0
     ORDER BY post.create_date DESC
-    LIMIT 10
        </sql>
     </query>
 

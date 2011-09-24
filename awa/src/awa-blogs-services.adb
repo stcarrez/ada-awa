@@ -119,6 +119,7 @@ package body AWA.Blogs.Services is
       Post.Set_Create_Date (Ada.Calendar.Clock);
       Post.Set_Uri (URI);
       Post.Set_Author (Ctx.Get_User);
+      Post.Set_Status (Models.POST_DRAFT);
       Post.Set_Blog (Blog);
       Post.Save (DB);
       Ctx.Commit;

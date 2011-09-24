@@ -49,6 +49,10 @@ package body AWA.Blogs.Module is
                          Name    => "AWA.Blogs.Beans.Post_List_Bean",
                          Handler => AWA.Blogs.Beans.Create_Post_List_Bean'Access);
 
+      Register.Register (Plugin  => Plugin,
+                         Name    => "AWA.Blogs.Beans.Admin_Post_List_Bean",
+                         Handler => AWA.Blogs.Beans.Create_Admin_Post_List_Bean'Access);
+
       AWA.Modules.Module (Plugin).Initialize (App);
 
       --  Create the user manager when everything is initialized.

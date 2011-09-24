@@ -74,4 +74,8 @@ package Awa.Blogs.Beans is
    function Create_Post_List_Bean (Module : in AWA.Blogs.Module.Blog_Module_Access)
                                    return Util.Beans.Basic.Readonly_Bean_Access;
 
+   --  Create the Admin_Post_List_Bean bean instance.
+   function Create_Admin_Post_List_Bean (Module : in AWA.Blogs.Module.Blog_Module_Access)
+                                   return Util.Beans.Basic.Readonly_Bean_Access;
+
 end AWA.Blogs.Beans;

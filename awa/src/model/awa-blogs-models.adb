@@ -59,6 +59,7 @@ package body AWA.Blogs.Models is
    begin
       Impl := new Blog_Impl;
       Impl.Version := 0;
+      Impl.Create_Date := ADO.DEFAULT_TIME;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -107,11 +108,47 @@ package body AWA.Blogs.Models is
    begin
       return Impl.Name;
    end Get_Name;
+   procedure Set_Uid (Object : in out Blog_Ref;
+                       Value : in String) is
+   begin
+      Object.Set_Uid (Ada.Strings.Unbounded.To_Unbounded_String (Value));
+   end Set_Uid;
+   procedure Set_Uid (Object : in out Blog_Ref;
+                       Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : Blog_Access;
+   begin
+      Set_Field (Object, Impl, 4);
+      Impl.Uid := Value;
+   end Set_Uid;
+   function Get_Uid (Object : in Blog_Ref)
+                 return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (Object.Get_Uid);
+   end Get_Uid;
+   function Get_Uid (Object : in Blog_Ref)
+                  return Ada.Strings.Unbounded.Unbounded_String is
+      Impl : constant Blog_Access := Blog_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Uid;
+   end Get_Uid;
+   procedure Set_Create_Date (Object : in out Blog_Ref;
+                               Value  : in Ada.Calendar.Time) is
+      Impl : Blog_Access;
+   begin
+      Set_Field (Object, Impl, 5);
+      Impl.Create_Date := Value;
+   end Set_Create_Date;
+   function Get_Create_Date (Object : in Blog_Ref)
+                  return Ada.Calendar.Time is
+      Impl : constant Blog_Access := Blog_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Create_Date;
+   end Get_Create_Date;
    procedure Set_Workspace (Object : in out Blog_Ref;
                              Value  : in AWA.Workspaces.Models.Workspace_Ref'Class) is
       Impl : Blog_Access;
    begin
-      Set_Field (Object, Impl, 4);
+      Set_Field (Object, Impl, 6);
       Impl.Workspace := AWA.Workspaces.Models.Workspace_Ref (Value);
    end Set_Workspace;
    function Get_Workspace (Object : in Blog_Ref)
@@ -135,6 +172,8 @@ package body AWA.Blogs.Models is
             Copy.Copy (Impl.all);
             Copy.Version := Impl.Version;
             Copy.Name := Impl.Name;
+            Copy.Uid := Impl.Uid;
+            Copy.Create_Date := Impl.Create_Date;
             Copy.Workspace := Impl.Workspace;
          end;
       end if;
@@ -266,9 +305,19 @@ package body AWA.Blogs.Models is
          Object.Clear_Modified (3);
       end if;
       if Object.Is_Modified (4) then
-         Stmt.Save_Field (Name  => COL_3_1_NAME, --  workspace_id
-                          Value => Object.Workspace);
+         Stmt.Save_Field (Name  => COL_3_1_NAME, --  uid
+                          Value => Object.Uid);
          Object.Clear_Modified (4);
+      end if;
+      if Object.Is_Modified (5) then
+         Stmt.Save_Field (Name  => COL_4_1_NAME, --  create_date
+                          Value => Object.Create_Date);
+         Object.Clear_Modified (5);
+      end if;
+      if Object.Is_Modified (6) then
+         Stmt.Save_Field (Name  => COL_5_1_NAME, --  workspace_id
+                          Value => Object.Workspace);
+         Object.Clear_Modified (6);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -305,7 +354,11 @@ package body AWA.Blogs.Models is
                         Value => Object.Version);
       Query.Save_Field (Name  => COL_2_1_NAME, --  name
                         Value => Object.Name);
-      Query.Save_Field (Name  => COL_3_1_NAME, --  workspace_id
+      Query.Save_Field (Name  => COL_3_1_NAME, --  uid
+                        Value => Object.Uid);
+      Query.Save_Field (Name  => COL_4_1_NAME, --  create_date
+                        Value => Object.Create_Date);
+      Query.Save_Field (Name  => COL_5_1_NAME, --  workspace_id
                         Value => Object.Workspace);
       Query.Execute (Result);
       if Result /= 1 then
@@ -332,6 +385,12 @@ package body AWA.Blogs.Models is
       end if;
       if Name = "name" then
          return Util.Beans.Objects.To_Object (Impl.Name);
+      end if;
+      if Name = "uid" then
+         return Util.Beans.Objects.To_Object (Impl.Uid);
+      end if;
+      if Name = "create_date" then
+         return Util.Beans.Objects.Time.To_Object (Impl.Create_Date);
       end if;
       raise ADO.Objects.NOT_FOUND;
    end Get_Value;
@@ -364,8 +423,10 @@ package body AWA.Blogs.Models is
    begin
       Object.Set_Key_Value (Stmt.Get_Identifier (0));
       Object.Name := Stmt.Get_Unbounded_String (2);
-      if not Stmt.Is_Null (3) then
-          Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (3), Session);
+      Object.Uid := Stmt.Get_Unbounded_String (3);
+      Object.Create_Date := Stmt.Get_Time (4);
+      if not Stmt.Is_Null (5) then
+          Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (5), Session);
       end if;
       Object.Version := Stmt.Get_Integer (1);
       ADO.Objects.Set_Created (Object);
@@ -402,6 +463,7 @@ package body AWA.Blogs.Models is
       Impl := new Post_Impl;
       Impl.Version := 0;
       Impl.Create_Date := ADO.DEFAULT_TIME;
+      Impl.Publish_Date.Is_Null := True;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -509,11 +571,37 @@ package body AWA.Blogs.Models is
    begin
       return Impl.Create_Date;
    end Get_Create_Date;
+   procedure Set_Publish_Date (Object : in out Post_Ref;
+                                Value  : in ADO.Nullable_Time) is
+      Impl : Post_Access;
+   begin
+      Set_Field (Object, Impl, 7);
+      Impl.Publish_Date := Value;
+   end Set_Publish_Date;
+   function Get_Publish_Date (Object : in Post_Ref)
+                  return ADO.Nullable_Time is
+      Impl : constant Post_Access := Post_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Publish_Date;
+   end Get_Publish_Date;
+   procedure Set_Status (Object : in out Post_Ref;
+                          Value  : in Post_Status_Type) is
+      Impl : Post_Access;
+   begin
+      Set_Field (Object, Impl, 8);
+      Impl.Status := Value;
+   end Set_Status;
+   function Get_Status (Object : in Post_Ref)
+                  return Post_Status_Type is
+      Impl : constant Post_Access := Post_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Status;
+   end Get_Status;
    procedure Set_Author (Object : in out Post_Ref;
                           Value  : in AWA.Users.Models.User_Ref'Class) is
       Impl : Post_Access;
    begin
-      Set_Field (Object, Impl, 7);
+      Set_Field (Object, Impl, 9);
       Impl.Author := AWA.Users.Models.User_Ref (Value);
    end Set_Author;
    function Get_Author (Object : in Post_Ref)
@@ -526,7 +614,7 @@ package body AWA.Blogs.Models is
                         Value  : in Blog_Ref'Class) is
       Impl : Post_Access;
    begin
-      Set_Field (Object, Impl, 8);
+      Set_Field (Object, Impl, 10);
       Impl.Blog := Blog_Ref (Value);
    end Set_Blog;
    function Get_Blog (Object : in Post_Ref)
@@ -553,6 +641,8 @@ package body AWA.Blogs.Models is
             Copy.Uri := Impl.Uri;
             Copy.Text := Impl.Text;
             Copy.Create_Date := Impl.Create_Date;
+            Copy.Publish_Date := Impl.Publish_Date;
+            Copy.Status := Impl.Status;
             Copy.Author := Impl.Author;
             Copy.Blog := Impl.Blog;
          end;
@@ -700,14 +790,24 @@ package body AWA.Blogs.Models is
          Object.Clear_Modified (6);
       end if;
       if Object.Is_Modified (7) then
-         Stmt.Save_Field (Name  => COL_6_2_NAME, --  author_id
-                          Value => Object.Author);
+         Stmt.Save_Field (Name  => COL_6_2_NAME, --  publish_date
+                          Value => Object.Publish_Date);
          Object.Clear_Modified (7);
       end if;
       if Object.Is_Modified (8) then
-         Stmt.Save_Field (Name  => COL_7_2_NAME, --  blog_id
-                          Value => Object.Blog);
+         Stmt.Save_Field (Name  => COL_7_2_NAME, --  status
+                          Value => Integer (Post_Status_Type'Pos (Object.Status)));
          Object.Clear_Modified (8);
+      end if;
+      if Object.Is_Modified (9) then
+         Stmt.Save_Field (Name  => COL_8_2_NAME, --  author_id
+                          Value => Object.Author);
+         Object.Clear_Modified (9);
+      end if;
+      if Object.Is_Modified (10) then
+         Stmt.Save_Field (Name  => COL_9_2_NAME, --  blog_id
+                          Value => Object.Blog);
+         Object.Clear_Modified (10);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -750,9 +850,13 @@ package body AWA.Blogs.Models is
                         Value => Object.Text);
       Query.Save_Field (Name  => COL_5_2_NAME, --  create_date
                         Value => Object.Create_Date);
-      Query.Save_Field (Name  => COL_6_2_NAME, --  author_id
+      Query.Save_Field (Name  => COL_6_2_NAME, --  publish_date
+                        Value => Object.Publish_Date);
+      Query.Save_Field (Name  => COL_7_2_NAME, --  status
+                        Value => Integer (Post_Status_Type'Pos (Object.Status)));
+      Query.Save_Field (Name  => COL_8_2_NAME, --  author_id
                         Value => Object.Author);
-      Query.Save_Field (Name  => COL_7_2_NAME, --  blog_id
+      Query.Save_Field (Name  => COL_9_2_NAME, --  blog_id
                         Value => Object.Blog);
       Query.Execute (Result);
       if Result /= 1 then
@@ -789,6 +893,13 @@ package body AWA.Blogs.Models is
       if Name = "create_date" then
          return Util.Beans.Objects.Time.To_Object (Impl.Create_Date);
       end if;
+      if Name = "publish_date" then
+         if Impl.Publish_Date.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.Time.To_Object (Impl.Publish_Date.Value);
+         end if;
+      end if;
       raise ADO.Objects.NOT_FOUND;
    end Get_Value;
    procedure List (Object  : in out Post_Vector;
@@ -823,15 +934,83 @@ package body AWA.Blogs.Models is
       Object.Uri := Stmt.Get_Unbounded_String (3);
       Object.Text := Stmt.Get_Unbounded_String (4);
       Object.Create_Date := Stmt.Get_Time (5);
-      if not Stmt.Is_Null (6) then
-          Object.Author.Set_Key_Value (Stmt.Get_Identifier (6), Session);
+      Object.Publish_Date := Stmt.Get_Time (6);
+      Object.Status := Post_Status_Type'Val (Stmt.Get_Identifier (7));
+      Object.Status := Post_Status_Type'Val (Stmt.Get_Integer (7));
+      if not Stmt.Is_Null (8) then
+          Object.Author.Set_Key_Value (Stmt.Get_Identifier (8), Session);
       end if;
-      if not Stmt.Is_Null (7) then
-          Object.Blog.Set_Key_Value (Stmt.Get_Identifier (7), Session);
+      if not Stmt.Is_Null (9) then
+          Object.Blog.Set_Key_Value (Stmt.Get_Identifier (9), Session);
       end if;
       Object.Version := Stmt.Get_Integer (1);
       ADO.Objects.Set_Created (Object);
    end Load;
+
+   --  --------------------
+   --  Get the bean attribute identified by the given name.
+   --  --------------------
+   overriding
+   function Get_Value (From : in Admin_Post_Info;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
+      end if;
+      if Name = "title" then
+         return Util.Beans.Objects.To_Object (From.Title);
+      end if;
+      if Name = "uri" then
+         return Util.Beans.Objects.To_Object (From.Uri);
+      end if;
+      if Name = "date" then
+         return Util.Beans.Objects.Time.To_Object (From.Date);
+      end if;
+      if Name = "username" then
+         return Util.Beans.Objects.To_Object (From.Username);
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+   --  --------------------
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   --  --------------------
+   procedure List (Object  : in out Admin_Post_Info_List_Bean;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+   begin
+      List (Object.List, Session, Context);
+   end List;
+   --  --------------------
+   --  
+   --  --------------------
+   procedure List (Object  : in out Admin_Post_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+      procedure Read (Into : in out Admin_Post_Info);
+
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Context);
+      Pos  : Natural := 0;
+      procedure Read (Into : in out Admin_Post_Info) is
+      begin
+         Into.Id := Stmt.Get_Identifier (0);
+         Into.Title := Stmt.Get_Unbounded_String (1);
+         Into.Uri := Stmt.Get_Unbounded_String (2);
+         Into.Date := Stmt.Get_Time (3);
+         Into.Username := Stmt.Get_Unbounded_String (4);
+      end Read;
+   begin
+      Stmt.Execute;
+      Admin_Post_Info_Vectors.Clear (Object);
+      while Stmt.Has_Elements loop
+         Object.Insert_Space (Before => Pos);
+         Object.Update_Element (Index => Pos, Process => Read'Access);
+         Pos := Pos + 1;
+         Stmt.Next;
+      end loop;
+   end List;
+
 
    --  --------------------
    --  Get the bean attribute identified by the given name.

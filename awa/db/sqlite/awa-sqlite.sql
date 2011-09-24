@@ -42,6 +42,10 @@ CREATE TABLE blog (
   `version` int ,
   /* the blog name */
   `name` VARCHAR(256) NOT NULL,
+  /* the blog uuid */
+  `uid` VARCHAR(256) NOT NULL,
+  /* the blog creation date */
+  `create_date` DATETIME NOT NULL,
   /*  */
   `workspace_id` INTEGER NOT NULL
 );
@@ -59,6 +63,10 @@ CREATE TABLE blog_post (
   `text` VARCHAR(60000) ,
   /* the post creation date */
   `create_date` DATETIME NOT NULL,
+  /* the post publication date */
+  `publish_date` DATETIME ,
+  /* the post status */
+  `status` INTEGER NOT NULL,
   /*  */
   `author_id` INTEGER NOT NULL,
   /*  */
