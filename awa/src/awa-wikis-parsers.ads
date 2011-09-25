@@ -78,6 +78,7 @@ private
       Need_Paragraph      : Boolean := True;
       Link_Double_Bracket : Boolean := False;
       Is_Dotclear         : Boolean := False;
+      Header_Offset       : Integer := 0;
       Escape_Char         : Wide_Wide_Character;
       List_Level          : Natural := 0;
       Reader              : Input_Access := null;

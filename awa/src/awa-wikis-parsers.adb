@@ -212,7 +212,7 @@ package body AWA.Wikis.Parsers is
                            Token : in Wide_Wide_Character) is
       Header : Unbounded_Wide_Wide_String;
       C      : Wide_Wide_Character;
-      Level  : Positive := 1;
+      Level  : Integer := 1;
    begin
       if not P.Empty_Line then
          Parse_Text (P, Token);
@@ -257,6 +257,14 @@ package body AWA.Wikis.Parsers is
          end loop;
       end;
 
+      --  dotclear header is the opposite of Creole for the level.
+      Level := Level + P.Header_Offset;
+      if Level < 0 then
+         Level := -Level;
+      end if;
+      if Level = 0 then
+         Level := 1;
+      end if;
       Flush_Text (P);
       P.Document.Add_Header (Header, Level);
       P.Empty_Line   := True;
@@ -815,6 +823,7 @@ package body AWA.Wikis.Parsers is
          when SYNTAX_DOTCLEAR =>
             P.Is_Dotclear := True;
             P.Escape_Char := '\';
+            P.Header_Offset := -6;
             Parse_Token (P, Dotclear_Wiki_Table);
 
          when SYNTAX_CREOLE =>

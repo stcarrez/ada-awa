@@ -17,10 +17,19 @@
 -----------------------------------------------------------------------
 
 with ASF.Contexts.Faces;
+with ASF.Components;
 with ASF.Components.Html;
+
+with AWA.Wikis.Parsers;
 package AWA.Components.Wikis is
 
    use ASF.Contexts.Faces;
+
+   --  The wiki format of the wiki text.  The valid values are:
+   --  dotclear, google, creole, phpbb, mediawiki
+   FORMAT_NAME : constant String := "format";
+
+   VALUE_NAME  : constant String := ASF.Components.VALUE_NAME;
 
    --  ------------------------------
    --  Wiki component
@@ -30,6 +39,12 @@ package AWA.Components.Wikis is
    --
    type UIWiki is new ASF.Components.Html.UIHtmlComponent with null record;
    type UIWiki_Access is access all UIWiki'Class;
+
+   --  Get the wiki format style.  The format style is obtained from the <b>format</b>
+   --  attribute name.
+   function Get_Wiki_Style (UI      : in UIWiki;
+                            Context : in Faces_Context'Class)
+                            return AWA.Wikis.Parsers.Wiki_Syntax_Type;
 
    --  Render the wiki text
    overriding
