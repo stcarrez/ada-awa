@@ -67,6 +67,7 @@ package body AWA.Users.Tests is
       Request.Set_Parameter ("firstName", "joe");
       Request.Set_Parameter ("lastName", "dalton");
       Request.Set_Parameter ("register", "1");
+      Request.Set_Parameter ("register-button", "1");
       Do_Post (Request, Reply, "/auth/register.html", "create-user-2.html");
 
       T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
@@ -119,9 +120,10 @@ package body AWA.Users.Tests is
       Request.Set_Parameter ("email", "Joe@gmail.com");
       Request.Set_Parameter ("password", "admin");
       Request.Set_Parameter ("login", "1");
+      Request.Set_Parameter ("login-button", "1");
       Do_Post (Request, Reply, "/auth/login.html", "login-user-2.html");
 
-      T.Assert (Reply.Get_Status = ASF.Responses.SC_OK, "Invalid response");
+      T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
 
       --  Check that the user is logged and we have a user principal now.
       T.Assert (Request.Get_User_Principal /= null, "A user principal should be defined");
@@ -143,6 +145,7 @@ package body AWA.Users.Tests is
 
       Request.Set_Parameter ("email", Email);
       Request.Set_Parameter ("lost-password", "1");
+      Request.Set_Parameter ("lost-password-button", "1");
       Do_Post (Request, Reply, "/auth/lost-password.html", "lost-password-2.html");
 
       T.Assert (Reply.Get_Status = ASF.Responses.SC_OK, "Invalid response");
