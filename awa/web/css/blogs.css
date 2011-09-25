@@ -12,21 +12,47 @@ div.post-info {
     float: left;
     width: 100%;
 }
-div.blog-admin div.post-title, div.blog-admin div.post-author, div.blog-admin div.post-ref {
+
+/*
+ * Admin section
+ */
+ul.blog-action {
+    float: left;
+    width: 100%;
+    padding-bottom: 10px;
+    list-style-type: none;
+}
+ul.blog-action li {
+    float: left;
+    padding-right: 10px;
+}
+div.blog-admin div.post-info {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+}
+div.blog-admin div.post-title, div.blog-admin div.post-author, div.blog-admin div.post-ref,
+div.blog-admin div.post-date {
     float: left;
     overflow: hidden;
     height: 20px;
 
 }
-div.post-title {
-    width: 70%;
+div.blog-admin div.post-title {
+    width: 60%;
 }
-div.post-author {
+div.blog-admin div.post-author {
     width: 19%;
 }
-div.post-ref {
+div.blog-admin div.post-ref {
     width: 5%;
 }
+div.blog-admin div.post-date {
+    width: 10%;
+}
+
+/*
+ * Blog post
+ */
 div.blog-post {
     float: left;
     width: 96%;

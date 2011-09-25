@@ -1,4 +1,4 @@
-<!-- List the posts for the blog administrator
+<!-- Edit an existing post
   -  Copyright (C) 2011 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
@@ -20,14 +20,18 @@
         xmlns:c="http://java.sun.com/jstl/core"
 	xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
-    <ui:param name="title" value="#{blogMsg.blog_admin_post_list_title}"/>
+    <ui:param name="title" value="#{blogMsg.blog_admin_edit_post_title}"/>
 
     <!-- Main page body -->
     <ui:define name="pageBody">
       <div id='awa-content'>
           <ui:include src="menu-list.xhtml"/>
-          <div id='blog-post-list' class='blog-admin'>
-              <ui:include src="post-list.xhtml"/>
+          <div id='blog-post-edit' class='blog-admin'>
+              <div class='awa-post'>
+                <ui:include src="post-form.xhtml">
+                   <ui:param name="title" value="#{blogMsg.blog_post_update_title}"/>
+                </ui:include>
+              </div>
           </div>
       </div>
     </ui:define>
