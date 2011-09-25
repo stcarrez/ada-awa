@@ -22,6 +22,13 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
+  <managed-bean>
+    <description>Information about the current blog.</description>
+    <managed-bean-name>blog</managed-bean-name>
+    <managed-bean-class>AWA.Blogs.Beans.Blog_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
   <entity-permission>
     <name>blog-create</name>
     <entity-type>blog</entity-type>

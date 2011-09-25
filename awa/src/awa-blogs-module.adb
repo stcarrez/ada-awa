@@ -21,6 +21,7 @@ with Util.Log.Loggers;
 with AWA.Modules.Get;
 with AWA.Modules.Beans;
 with AWA.Blogs.Beans;
+with AWA.Applications;
 
 --  The <b>Blogs.Module</b> manages the creation, update, removal of blog posts in an application.
 --
@@ -39,7 +40,7 @@ package body AWA.Blogs.Module is
       Log.Info ("Initializing the blogs module");
 
       --  Setup the resource bundles.
---        App.Register ("blogMsg", "blogs");
+      App.Register ("blogMsg", "blogs");
 
       Register.Register (Plugin  => Plugin,
                          Name    => "AWA.Blogs.Beans.Post_Bean",
@@ -52,6 +53,10 @@ package body AWA.Blogs.Module is
       Register.Register (Plugin  => Plugin,
                          Name    => "AWA.Blogs.Beans.Admin_Post_List_Bean",
                          Handler => AWA.Blogs.Beans.Create_Admin_Post_List_Bean'Access);
+
+      Register.Register (Plugin  => Plugin,
+                         Name    => "AWA.Blogs.Beans.Blog_Bean",
+                         Handler => AWA.Blogs.Beans.Create_Blog_Bean'Access);
 
       AWA.Modules.Module (Plugin).Initialize (App);
 

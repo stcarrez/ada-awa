@@ -35,6 +35,22 @@ package Awa.Blogs.Beans is
    POST_TEXT_ATTR  : constant String := "text";
    POST_URI_ATTR   : constant String := "uri";
 
+   type Blog_Bean is new Util.Beans.Basic.Bean with record
+      Blog : AWA.Blogs.Models.Blog_Ref;
+   end record;
+   type Blog_Bean_Access is access all Blog_Bean'Class;
+
+   --  Get the value identified by the name.
+   overriding
+   function Get_Value (From : in Blog_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the value identified by the name.
+   overriding
+   procedure Set_Value (From  : in out Blog_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
    type Post_Bean is new Util.Beans.Basic.Bean
      and Util.Beans.Methods.Method_Bean with record
       Module  : AWA.Blogs.Module.Blog_Module_Access := null;
@@ -66,7 +82,11 @@ package Awa.Blogs.Beans is
    procedure Create_Post (Bean    : in out Post_Bean;
                           Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
-   --  Create the Workspaces_Bean bean instance.
+   --  Create the Blog_Bean bean instance.
+   function Create_Blog_Bean (Module : in AWA.Blogs.Module.Blog_Module_Access)
+                              return Util.Beans.Basic.Readonly_Bean_Access;
+
+   --  Create the Post_Bean bean instance.
    function Create_Post_Bean (Module : in AWA.Blogs.Module.Blog_Module_Access)
                               return Util.Beans.Basic.Readonly_Bean_Access;
 
