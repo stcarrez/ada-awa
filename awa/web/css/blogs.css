@@ -1,0 +1,100 @@
+#blog-post-list {
+    float: left;
+    padding: 2%;
+    width: 90%;
+}
+div.post-info {
+    float: left;
+    width: 100%;
+}
+div.blog-admin div.post-title, div.blog-admin div.post-author, div.blog-admin div.post-ref {
+    float: left;
+    overflow: hidden;
+    height: 20px;
+
+}
+div.post-title {
+    width: 70%;
+}
+div.post-author {
+    width: 19%;
+}
+div.post-ref {
+    width: 5%;
+}
+div.blog-post {
+    float: left;
+    width: 96%;
+    padding-left: 2%;
+    padding-right: 2%;
+}
+div.blog-post div.post-title {
+    float: left;
+    margin-top: 10px;
+    width: 95%;
+    border-bottom: 2px solid #47C;
+    padding-bottom: 2px;
+    background: url(../images/blogs/ico_entry.gif) no-repeat;
+    padding-left: 30px;
+}
+div.blog-post div.post-title h2 {
+    margin: 0;
+    line-height: 1.33em;
+}
+div.blog-post div.post-title h2 a {
+    color: #F91;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.33em;
+}
+div.blog-post div.post-title h2 a:hover {
+    color: #A08;
+}
+div.blog-post div.post-text {
+    float: left;
+    padding-top: 10px;
+}
+
+div.post-text {
+    line-height: 1.5em;
+}
+div.post-text p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+div.post-text pre {
+    line-height: 1.2em;
+    margin-bottom: 1em;
+    background: #E8F0FF;
+    padding: 4px;
+    border: 1px solid #AAA;
+    font-size: 1.2em;
+}
+div.post-text h2, div.post-text h3, div.post-text h4, div.post-text h5, div.post-text h6 {
+    color: #346;
+    font-weight: bold;
+    margin-top: 1em;
+}
+div.post-text h2 {
+    font-size: 1.33em;
+}
+div.post-text h3 {
+    font-size: 1.1em;
+}
+div.post-text h4 {
+    font-size: 1.0em;
+}
+div.post-text a {
+    font-weight: bold;
+    color: #47C;
+}
+div.post-text ul {
+    padding-left: 30px;
+}
+div.post-text ol {
+    list-style-type: decimal;
+    padding-left: 30px;
+}
+div.post-text li {
+    display: list-item;
+}
