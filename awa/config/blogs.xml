@@ -15,6 +15,13 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
+  <managed-bean>
+    <description>The admin post list is used for the blog administrator.</description>
+    <managed-bean-name>adminPostList</managed-bean-name>
+    <managed-bean-class>AWA.Blogs.Beans.Admin_Post_List_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
   <entity-permission>
     <name>blog-create</name>
     <entity-type>blog</entity-type>
@@ -71,6 +78,11 @@
   <servlet-mapping>
     <servlet-name>files</servlet-name>
     <url-pattern>*.js</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>files</servlet-name>
+    <url-pattern>*.gif</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>
