@@ -18,37 +18,47 @@
     <ui:insert name="pageHeader"/>
     <title><h:outputText value="#{title}"/></title>
 </head>
-<body class="yui-skin-sam#{pageStyle}">
+<body class="#{not empty pageStyle ? pageStyle : ''}">
 <div id="scroll"></div>
 
 <!-- Top header with user account -->
-<div id='pam-hdr'>
-  <div id='pam-top'>
+<div id='awa-hdr'>
+  <div id='awa-top'>
     <ul>
-      <li id='logout'><a href="/logout" >Sign Out</a></li>
-      <li id='help'><a href="/help" >Help</a> |</li>
-      <li id='settings'><a href="/settings" >Account &amp; Settings</a> |</li>
+        <li id='logout'><a href="#{contextPath}/ajax/logout/logout" title="#{layoutMsg.layout_logout_title}">
+            #{layoutMsg.layout_logout_label}
+        </a></li>
+        <li>|</li>
+      <li id='help'><a href="http://code.google.com/p/ada-awa" title="#{layoutMsg.layout_help_title}">
+         #{layoutMsg.layout_help_label}
+      </a></li>
+      <li>|</li>
+      <li id='settings'><a href="#{contextPath}/statistics.xml" title="#{layoutMsg.layout_statistics_title}">
+         #{layoutMsg.layout_statistics_label}
+       </a></li>
+        <li>|</li>
+        <li>
+            #{user.name}
+        </li>
     </ul>
   </div>
 </div>
-
-<div id='pam-page'>
+<div id='awa-page'>
     <ui:insert name="pageBody"/>
-    <div id="clearfooter"></div>
+    <div id="awa-clfooter"></div>
 </div>
-
-<div id="pz-footer">
+<div id="awa-footer">
     <div id="blk_footer">
-        <div id="footer_copyright">
-            <span>#{layoutMsg.copyrightMessage}</span>
+        <div id="awa-copyright">
+            <span>#{layoutMsg.layout_copyright}</span>
         </div>
-        <div id="footer_content">
-            <a href="#{layoutMsg.urlTermsOfService}">#{layoutMsg.linkTermsOfService}</a> |
-            <a href="#{layoutMsg.urlPrivacyPolicy}">#{layoutMsg.linkPrivacyPolicy}</a>
+        <div id="awa-footer_content">
+            <span>#{layoutMsg.layout_served_by}</span>
+            <a href="http://code.google.com/p/ada-awa">AWA</a> |
+            <a href="http://libre.adacore.com/libre/tools/aws/">AWS</a>
         </div>
     </div>
 </div>
-
 <ui:insert name="pageScript"/>
 
 <!--DEV_START-->

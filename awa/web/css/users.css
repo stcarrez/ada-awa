@@ -8,9 +8,11 @@ div.awa-side1, div.awa-side2 {
 }
 div.awa-side1 {
     padding-right: 1%;
+    width: 48%;
 }
 div.awa-side2 {
     padding-left: 1%;
+    width: 48%;
 }
 li.message {
     height: 30px;
@@ -34,10 +36,13 @@ div.awa-login {
   background: none repeat scroll 0 0 #eee;
   display: block;
   float: left;
-  width: 420px;
+  width: 98%;
   margin: 5px;
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px 6px;
+}
+div.awa-lost-password {
+    width: 50%;
 }
 div.awa-login p {
     width: 96%;
@@ -58,17 +63,30 @@ div.awa-login p {
 .awa-login label {
   display: inline;
   float: left;
+  clear: left;
   width: 120px;
+    width: 40%;
   text-align: left;
   color: #555;
   font-weight: bold;
-  padding: 1em 3px 0;
+  padding-bottom: 5px;
 }
 .awa-login input {
-  width: 210px;
+  width: 50%;
   padding: 5px;
   margin: 0.5em 0;
   border: 1px solid #888;
+}
+.awa-login #login-button, .awa-login #lost-password-button, .awa-login #register-button {
+    margin-left: 120px;
+    margin-left: 40%;
+    margin-top: 15px;
+    width: 200px;
+}
+.awa-login #lost-password {
+    clear: both;
+    display: block;
+    margin-top: 20px;
 }
 ul.openid-login {
 }
