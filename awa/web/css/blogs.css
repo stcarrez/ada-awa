@@ -1,3 +1,8 @@
+/**
+ * blogs.css - Styles for blogs module
+ * Copyright (C) 2011 Stephane Carrez
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ */
 #blog-post-list {
     float: left;
     padding: 2%;

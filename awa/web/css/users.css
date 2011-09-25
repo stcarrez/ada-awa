@@ -1,3 +1,8 @@
+/**
+ * users.css - Style for users module
+ * Copyright (C) 2011 Stephane Carrez
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ */
 div.awa-side1, div.awa-side2 {
     float: left;
 }
@@ -18,7 +23,7 @@ span.error {
     margin-top: 2px;
     height: auto;
 }
-div.awa-login h2 { 
+div.awa-login h2 {
     float: left;
     width: 96%;
     background: white;
@@ -97,14 +102,14 @@ a.openid-google em {
 	height: 40px;
 	overflow: hidden;
 }
-a.openid-yahoo em { 
+a.openid-yahoo em {
   background-position: 0 -39px;
   height: 25px;
 }
 div.openid-login a.openid-orange {
    padding-left: 0;
 }
-a.openid-orange em { 
+a.openid-orange em {
   background-position: 0 -242px;
   height: 35px;
 }
