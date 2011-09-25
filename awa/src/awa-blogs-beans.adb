@@ -16,11 +16,14 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with AWA.Services.Contexts;
 with AWA.Blogs.Services;
 
 with ADO.Queries;
 with ADO.Sessions;
+with ADO.Sessions.Entities;
 
+with ASF.Contexts.Faces;
 with ASF.Applications.Messages.Factory;
 with ASF.Events.Actions;
 package body AWA.Blogs.Beans is
@@ -138,21 +141,45 @@ package body AWA.Blogs.Beans is
       return Object.all'Access;
    end Create_Post_List_Bean;
 
+   function Get_Parameter (Name : in String) return ADO.Identifier is
+      Ctx  : ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
+      P    : constant String := Ctx.Get_Parameter (Name);
+   begin
+      if P = "" then
+         return ADO.NO_IDENTIFIER;
+      else
+         return ADO.Identifier'Value (P);
+      end if;
+   exception
+      when others =>
+         return ADO.NO_IDENTIFIER;
+   end Get_Parameter;
+
    --  ------------------------------
    --  Create the Admin_Post_List_Bean bean instance.
    --  ------------------------------
    function Create_Admin_Post_List_Bean (Module : in AWA.Blogs.Module.Blog_Module_Access)
                                          return Util.Beans.Basic.Readonly_Bean_Access is
       use AWA.Blogs.Models;
+      use AWA.Services;
+      use type ADO.Identifier;
+
+      Ctx   : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      User  : constant ADO.Identifier := Ctx.Get_User_Identifier;
 
       Object  : constant Admin_Post_Info_List_Bean_Access := new Admin_Post_Info_List_Bean;
       Session : ADO.Sessions.Session := Module.Get_Session;
       Query   : ADO.Queries.Context;
-      Blog_Id : ADO.Identifier := 0;  -- := Get_Current_Blog_Id;
+      Blog_Id : ADO.Identifier := Get_Parameter ("blog_id");
    begin
-      Query.Set_Query (AWA.Blogs.Models.Query_Blog_Admin_Post_List);
-      Query.Bind_Param (":blog_id", Blog_Id);
-      AWA.Blogs.Models.List (Object.all, Session, Query);
+      if Blog_Id > 0 then
+         Query.Set_Query (AWA.Blogs.Models.Query_Blog_Admin_Post_List);
+         Query.Bind_Param ("blog_id", Blog_Id);
+         Query.Bind_Param ("user_id", User);
+         ADO.Sessions.Entities.Bind_Param (Query, "table",
+                                           AWA.Blogs.Models.BLOG_TABLE'Access, Session);
+         AWA.Blogs.Models.List (Object.all, Session, Query);
+      end if;
       return Object.all'Access;
    end Create_Admin_Post_List_Bean;
 

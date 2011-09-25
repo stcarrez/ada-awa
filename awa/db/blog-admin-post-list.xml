@@ -30,9 +30,11 @@
       post.uri,
       post.create_date,
       user.name
-    FROM blog_post AS post
+    FROM blog as blog
+    INNER JOIN acl on acl.entity_id = blog.id and acl.entity_type = :table and acl.user_id = :user_id
+    INNER JOIN blog_post AS post on blog.id = post.blog_id
     INNER JOIN user ON post.author_id = user.id
-    WHERE post.blog_id = :blog_id
+    WHERE blog.id = :blog_id
        </sql>
     </query>
 
