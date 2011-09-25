@@ -1,4 +1,4 @@
-<ui:composition 
+<ui:composition
         xmlns:awa="http://code.google.com/p/ada-awa/jsf"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:f="http://java.sun.com/jsf/core"
@@ -8,13 +8,10 @@
   <h:list var="post" value="#{postList}">
     <div class='blog-post' id="p_#{post.id}">
       <div class='post-title'>
-         <h2>#{post.title}</h2>
-         <p>By #{post.username}</p>
+         <h2><a href="#{contextPath}/blogs/post/#{post.uri}">#{post.title}</a></h2>
+         <p>By #{post.username} <h:outputText id="date" value="#{post.date}" converter="dateConverter"/></p>
       </div>
-      <div style='width: 100%; float: left;'>
-        <div style='width: 49%; overflow: hidden; float: left; clear: both; border:1 px solid blue;'><pre>#{post.text}</pre></div>
-        <awa:wiki style='width: 49%; float: left; border: 1px solid red;' value="#{post.text}"/>
-      </div>
+      <awa:wiki styleClass='post-text' value="#{post.text}" format="dotclear"/>
     </div>
   </h:list>
 </ui:composition>

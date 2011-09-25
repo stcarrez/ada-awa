@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<f:view contentType="text/html"
+<f:view contentType="text/html; charset=UTF-8"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:c="http://java.sun.com/jstl/core"
@@ -8,8 +8,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <!--DEV_START-->
-    <link media="screen" type="text/css" rel="stylesheet" href="/awa/themes/main.css"/>
-    <link media="screen" type="text/css" rel="stylesheet" href="/awa/themes/list.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/grids/reset.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/grids/fluid_grid.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/themes/main.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/themes/list.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/blogs.css"/>
     <!--DEV_END-->
 
     <ui:insert name="pageHeader"/>
