@@ -16,7 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with ASF.Events.Actions;
+with ASF.Events.Faces.Actions;
 package body Awa.Workspaces.Beans is
 
    --  ------------------------------
@@ -29,9 +29,9 @@ package body Awa.Workspaces.Beans is
    end Action;
 
    package Action_Binding is
-     new ASF.Events.Actions.Action_Method.Bind (Bean   => Workspaces_Bean,
-                                                Method => Action,
-                                                Name   => "action");
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Workspaces_Bean,
+                                                      Method => Action,
+                                                      Name   => "action");
 
    Workspaces_Bean_Binding : aliased constant Util.Beans.Methods.Method_Binding_Array
      := (Action_Binding.Proxy'Access, null);

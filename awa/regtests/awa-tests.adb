@@ -19,6 +19,8 @@
 with ADO.Drivers;
 
 with ASF.Server.Tests;
+with ASF.Server.Web;
+with ASF.Converters.Dates;
 
 with ASF.Tests;
 
@@ -42,6 +44,8 @@ package body AWA.Tests is
    Mail           : aliased AWA.Mail.Module.Mail_Module;
 
    Blogs          : aliased AWA.Blogs.Module.Blog_Module;
+
+   Date_Converter : aliased ASF.Converters.Dates.Date_Converter;
 
    --  ------------------------------
    --  Initialize the awa test framework mockup.
@@ -75,16 +79,19 @@ package body AWA.Tests is
                    URI    => "blogs",
                    Module => Blogs'Access);
 
-         --           if Props.Exists ("test.server") then
-         --              declare
-         --                 WS : ASF.Server.Web.AWS_Container;
-         --              begin
-         --                 WS.Register_Application ("/awa", App.all'Access);
-         --
-         --                 WS.Start;
-         --                 delay 600.0;
-         --              end;
-         --           end if;
+         if Props.Exists ("test.server") then
+            declare
+               WS : ASF.Server.Web.AWS_Container;
+            begin
+               App.Add_Converter (Name      => "dateConverter",
+                                  Converter => Date_Converter'Access);
+
+               WS.Register_Application ("/asfunit", App.all'Access);
+
+               WS.Start;
+               delay 6000.0;
+            end;
+         end if;
          ASF.Server.Tests.Set_Context (App.all'Access);
       end;
    end Initialize;

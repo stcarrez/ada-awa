@@ -25,7 +25,7 @@ with ADO.Sessions.Entities;
 
 with ASF.Contexts.Faces;
 with ASF.Applications.Messages.Factory;
-with ASF.Events.Actions;
+with ASF.Events.Faces.Actions;
 package body AWA.Blogs.Beans is
 
    use Ada.Strings.Unbounded;
@@ -118,14 +118,14 @@ package body AWA.Blogs.Beans is
    end Create_Post;
 
    package Create_Post_Binding is
-     new ASF.Events.Actions.Action_Method.Bind (Bean   => Post_Bean,
-                                                Method => Create_Post,
-                                                Name   => "create");
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Post_Bean,
+                                                      Method => Create_Post,
+                                                      Name   => "create");
 
    package Save_Post_Binding is
-     new ASF.Events.Actions.Action_Method.Bind (Bean   => Post_Bean,
-                                                Method => Create_Post,
-                                                Name   => "save");
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Post_Bean,
+                                                      Method => Create_Post,
+                                                      Name   => "save");
 
    Post_Bean_Binding : aliased constant Util.Beans.Methods.Method_Binding_Array
      := (1 => Create_Post_Binding.Proxy'Access,

@@ -20,7 +20,7 @@ with Util.Log.Loggers;
 
 with ASF.Principals;
 with ASF.Sessions;
-with ASF.Events.Actions;
+with ASF.Events.Faces.Actions;
 with ASF.Contexts.Faces;
 with ASF.Cookies;
 with ASF.Applications.Messages.Factory;
@@ -199,34 +199,34 @@ package body AWA.Users.Beans is
    --  The code below this line could be generated automatically by an Asis tool.
 
    package Authenticate_Binding is
-     new ASF.Events.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
-                                                Method => Authenticate_User,
-                                                Name   => "authenticate");
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
+                                                      Method => Authenticate_User,
+                                                      Name   => "authenticate");
 
    package Register_Binding is
-     new ASF.Events.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
-                                                Method => Register_User,
-                                                Name   => "register");
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
+                                                      Method => Register_User,
+                                                      Name   => "register");
 
    package Verify_Binding is
-     new ASF.Events.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
-                                                Method => Verify_User,
-                                                Name   => "verify");
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
+                                                      Method => Verify_User,
+                                                      Name   => "verify");
 
    package Lost_Password_Binding is
-     new ASF.Events.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
-                                                Method => Lost_Password,
-                                                Name   => "lostPassword");
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
+                                                      Method => Lost_Password,
+                                                      Name   => "lostPassword");
 
    package Reset_Password_Binding is
-     new ASF.Events.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
-                                                Method => Reset_Password,
-                                                Name   => "resetPassword");
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
+                                                      Method => Reset_Password,
+                                                      Name   => "resetPassword");
 
    package Logout_Binding is
-     new ASF.Events.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
-                                                Method => Logout_User,
-                                                Name   => "logout");
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
+                                                      Method => Logout_User,
+                                                      Name   => "logout");
 
    Binding_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
      := (Authenticate_Binding.Proxy'Access,
