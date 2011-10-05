@@ -21,6 +21,8 @@ with Ada.Calendar;
 with AWA.Users.Models;
 with AWA.Modules.Beans;
 with AWA.Modules.Get;
+with AWA.Permissions.Services;
+
 with ADO.SQL;
 with Util.Log.loggers;
 with AWA.Workspaces.Beans;
@@ -81,6 +83,12 @@ package body AWA.Workspaces.Module is
       WS.Set_Owner (User);
       WS.Set_Create_Date (Ada.Calendar.Clock);
       WS.Save (Session);
+
+      --  And give full control of the workspace for this user
+      AWA.Permissions.Services.Add_Permission (Session => Session,
+                                               User    => User.Get_Id,
+                                               Entity  => WS);
+
       Workspace := WS;
    end Get_Workspace;
 
