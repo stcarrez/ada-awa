@@ -55,6 +55,10 @@ package body AWA.Blogs.Module is
                          Handler => AWA.Blogs.Beans.Create_Admin_Post_List_Bean'Access);
 
       Register.Register (Plugin  => Plugin,
+                         Name    => "AWA.Blogs.Beans.Admin_Blog_List_Bean",
+                         Handler => AWA.Blogs.Beans.Create_Blog_List_Bean'Access);
+
+      Register.Register (Plugin  => Plugin,
                          Name    => "AWA.Blogs.Beans.Blog_Bean",
                          Handler => AWA.Blogs.Beans.Create_Blog_Bean'Access);
 

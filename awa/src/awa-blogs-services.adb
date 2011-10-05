@@ -65,6 +65,7 @@ package body AWA.Blogs.Services is
       AWA.Workspaces.Module.Get_Workspace (DB, Ctx, WS);
       Blog.Set_Name (Title);
       Blog.Set_Workspace (WS);
+      Blog.Set_Create_Date (Ada.Calendar.Clock);
       Blog.Save (DB);
 
       --  Add the permission for the user to use the new blog.

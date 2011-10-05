@@ -69,19 +69,60 @@ package body AWA.Blogs.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      null;
+      if Name = "name" then
+         From.Blog.Set_Name (Util.Beans.Objects.To_String (Value));
+      end if;
    end Set_Value;
+
+   package Create_Blog_Binding is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Blog_Bean,
+                                                      Method => Create_Blog,
+                                                      Name   => "create");
+
+   Blog_Bean_Binding : aliased constant Util.Beans.Methods.Method_Binding_Array
+     := (1 => Create_Blog_Binding.Proxy'Access);
+
+   --  This bean provides some methods that can be used in a Method_Expression
+   overriding
+   function Get_Method_Bindings (From : in Blog_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access is
+   begin
+      return Blog_Bean_Binding'Access;
+   end Get_Method_Bindings;
+
+   --  Create a new blog.
+   procedure Create_Blog (Bean    : in out Blog_Bean;
+                          Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      Manager : constant AWA.Blogs.Services.Blog_Service_Access := Bean.Module.Get_Blog_Manager;
+      Result  : ADO.Identifier;
+   begin
+      Manager.Create_Blog (Workspace_Id => 0,
+                           Title        => Bean.Blog.Get_Name,
+                           Result       => Result);
+      Outcome := To_Unbounded_String ("success");
+
+   exception
+      when Services.Not_Found =>
+         Outcome := To_Unbounded_String ("failure");
+
+         ASF.Applications.Messages.Factory.Add_Message ("users.signup_error_message");
+   end Create_Blog;
 
    --  ------------------------------
    --  Create the Blog_Bean bean instance.
    --  ------------------------------
    function Create_Blog_Bean (Module : in AWA.Blogs.Module.Blog_Module_Access)
                               return Util.Beans.Basic.Readonly_Bean_Access is
+      use type ADO.Identifier;
+
       Blog_Id : constant ADO.Identifier := Get_Parameter (BLOG_ID_PARAMETER);
       Object  : constant Blog_Bean_Access := new Blog_Bean;
       Session : ADO.Sessions.Session := Module.Get_Session;
    begin
-      Object.Blog.Load (Session, Blog_Id);
+      if Blog_Id > 0 then
+         Object.Blog.Load (Session, Blog_Id);
+      end if;
+      Object.Module := Module;
       return Object.all'Access;
    end Create_Blog_Bean;
 
@@ -142,14 +183,8 @@ package body AWA.Blogs.Beans is
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Blog_Id));
       elsif Name = POST_ID_ATTR then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Post.Get_Id));
-      elsif Name = POST_TEXT_ATTR then
-         return Util.Beans.Objects.To_Object (From.Text);
-      elsif Name = POST_TITLE_ATTR then
-         return Util.Beans.Objects.To_Object (From.Title);
-      elsif Name = POST_URI_ATTR then
-         return Util.Beans.Objects.To_Object (From.URI);
       else
-         return Util.Beans.Objects.Null_Object;
+         return From.Post.Get_Value (Name);
       end if;
    end Get_Value;
 
@@ -166,11 +201,11 @@ package body AWA.Blogs.Beans is
       elsif Name = POST_ID_ATTR then
          From.Blog_Id := ADO.Identifier (Util.Beans.Objects.To_Integer (Value));
       elsif Name = POST_TEXT_ATTR then
-         From.Text := Util.Beans.Objects.To_Unbounded_String (Value);
+         From.Post.Set_Text (Util.Beans.Objects.To_Unbounded_String (Value));
       elsif Name = POST_TITLE_ATTR then
-         From.Title := Util.Beans.Objects.To_Unbounded_String (Value);
+         From.Post.Set_Title (Util.Beans.Objects.To_Unbounded_String (Value));
       elsif Name = POST_URI_ATTR then
-         From.URI := Util.Beans.Objects.To_Unbounded_String (Value);
+         From.Post.Set_URI (Util.Beans.Objects.To_Unbounded_String (Value));
       end if;
    end Set_Value;
 
@@ -253,5 +288,28 @@ package body AWA.Blogs.Beans is
       return Object.all'Access;
    end Create_Admin_Post_List_Bean;
 
+
+   --  ------------------------------
+   --  Create the Blog_List_Bean bean instance.
+   --  ------------------------------
+   function Create_Blog_List_Bean (Module : in AWA.Blogs.Module.Blog_Module_Access)
+                                   return Util.Beans.Basic.Readonly_Bean_Access is
+      use AWA.Blogs.Models;
+      use AWA.Services;
+      use type ADO.Identifier;
+
+      Ctx     : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      User    : constant ADO.Identifier := Ctx.Get_User_Identifier;
+      Object  : constant Blog_Info_List_Bean_Access := new Blog_Info_List_Bean;
+      Session : ADO.Sessions.Session := Module.Get_Session;
+      Query   : ADO.Queries.Context;
+   begin
+      Query.Set_Query (AWA.Blogs.Models.Query_Blog_List);
+      Query.Bind_Param ("user_id", User);
+      ADO.Sessions.Entities.Bind_Param (Query, "table",
+                                        AWA.Blogs.Models.BLOG_TABLE'Access, Session);
+      AWA.Blogs.Models.List (Object.all, Session, Query);
+      return Object.all'Access;
+   end Create_Blog_List_Bean;
 
 end AWA.Blogs.Beans;
