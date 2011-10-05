@@ -1,4 +1,4 @@
-<!-- Workspace user page
+<!-- List of blog for the blog administrator
   -  Copyright (C) 2011 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
@@ -14,22 +14,28 @@
   -  See the License for the specific language governing permissions and
   -  limitations under the License.
   -->
-<ui:composition template="/WEB-INF/layouts/layout.xhtml"
+<ui:composition
+        xmlns:awa="http://code.google.com/p/ada-awa/jsf"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:c="http://java.sun.com/jstl/core"
-	xmlns:u="http://code.google.com/p/ada-asf/util"
+	    xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
-    <ui:param name="title" value="#{blogMsg.blog_admin_post_list_title}"/>
-
-    <!-- Main page body -->
-    <ui:define name="pageBody">
-      <div id='awa-content'>
-          <ui:include src="../blogs/admin/menu-list.xhtml"/>
-          <div id='blog-post-list' class='blog-admin'>
-              <ui:include src="../blogs/admin/blog-list.xhtml"/>
-          </div>
+  <h:list var="blog" value="#{adminBlogList}">
+    <div class='post-info' id="b_#{blog.id}">
+        <div class='post-ref'>
+            #{post.id}
+        </div>
+      <div class='post-title'>
+         <a href="#{contextPath}/blogs/admin/list.html?blog_id=#{blog.id}">#{blog.title}</a>
       </div>
-    </ui:define>
+        <div class='post-date'>
+            <h:outputText value="#{blog.create_date}"/>
+        </div>
+    </div>
+  </h:list>
+  <c:if test="#{adminBlogList.count == 0}">
+      There is no blog
+      <ui:include src="blog-create-form.xhtml"/>
+  </c:if>
 </ui:composition>
-

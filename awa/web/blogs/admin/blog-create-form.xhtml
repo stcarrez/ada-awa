@@ -1,4 +1,4 @@
-<!-- Workspace user page
+<!-- Form to create a blog
   -  Copyright (C) 2011 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
@@ -14,22 +14,32 @@
   -  See the License for the specific language governing permissions and
   -  limitations under the License.
   -->
-<ui:composition template="/WEB-INF/layouts/layout.xhtml"
+<ui:composition
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:c="http://java.sun.com/jstl/core"
 	xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
-    <ui:param name="title" value="#{blogMsg.blog_admin_post_list_title}"/>
 
-    <!-- Main page body -->
-    <ui:define name="pageBody">
-      <div id='awa-content'>
-          <ui:include src="../blogs/admin/menu-list.xhtml"/>
-          <div id='blog-post-list' class='blog-admin'>
-              <ui:include src="../blogs/admin/blog-list.xhtml"/>
-          </div>
-      </div>
-    </ui:define>
+  <div class='awa-post'>
+    <h2>#{blogMsg.blog_admin_create_title}</h2>
+    <h:form id='create-blog'>
+        <input type="hidden" name="blog_id" value="#{blog.id}"/>
+      <ul>
+        <li class='message'>
+           <h:message styleClass='error'/>
+        </li>
+        <li>
+           <label for='title'>#{blogMsg.blog_admin_blog_title_label}</label>
+	       <h:inputText id='title' size='50' required='true' value='#{blog.name}'/>
+        </li>
+        <li>
+          <h:commandButton id='create' value='#{blogMsg.blog_admin_create_button}'
+                           action="#{blog.create}" title="#{blogMsg.blog_admin_create_title}"/>
+        </li>
+      </ul>
+    </h:form>
+  </div>
+
 </ui:composition>
 
