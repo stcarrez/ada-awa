@@ -377,9 +377,13 @@ package body AWA.Blogs.Models is
    end Delete;
    function Get_Value (Item : in Blog_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
-      Impl : constant access Blog_Impl
-         := Blog_Impl (Item.Get_Load_Object.all)'Access;
+      Obj  : constant ADO.Objects.Object_Record_Access := Item.Get_Load_Object;
+      Impl : access Blog_Impl;
    begin
+      if Obj = null then
+         return Util.Beans.Objects.Null_Object;
+      end if;
+      Impl := Blog_Impl (Obj.all)'Access;
       if Name = "id" then
          return ADO.Objects.To_Object (Impl.Get_Key);
       end if;
@@ -392,7 +396,7 @@ package body AWA.Blogs.Models is
       if Name = "create_date" then
          return Util.Beans.Objects.Time.To_Object (Impl.Create_Date);
       end if;
-      raise ADO.Objects.NOT_FOUND;
+      return Util.Beans.Objects.Null_Object;
    end Get_Value;
    procedure List (Object  : in out Blog_Vector;
                    Session : in out ADO.Sessions.Session'Class;
@@ -875,9 +879,13 @@ package body AWA.Blogs.Models is
    end Delete;
    function Get_Value (Item : in Post_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
-      Impl : constant access Post_Impl
-         := Post_Impl (Item.Get_Load_Object.all)'Access;
+      Obj  : constant ADO.Objects.Object_Record_Access := Item.Get_Load_Object;
+      Impl : access Post_Impl;
    begin
+      if Obj = null then
+         return Util.Beans.Objects.Null_Object;
+      end if;
+      Impl := Post_Impl (Obj.all)'Access;
       if Name = "id" then
          return ADO.Objects.To_Object (Impl.Get_Key);
       end if;
@@ -900,7 +908,7 @@ package body AWA.Blogs.Models is
             return Util.Beans.Objects.Time.To_Object (Impl.Publish_Date.Value);
          end if;
       end if;
-      raise ADO.Objects.NOT_FOUND;
+      return Util.Beans.Objects.Null_Object;
    end Get_Value;
    procedure List (Object  : in out Post_Vector;
                    Session : in out ADO.Sessions.Session'Class;
@@ -936,7 +944,6 @@ package body AWA.Blogs.Models is
       Object.Create_Date := Stmt.Get_Time (5);
       Object.Publish_Date := Stmt.Get_Time (6);
       Object.Status := Post_Status_Type'Val (Stmt.Get_Identifier (7));
-      Object.Status := Post_Status_Type'Val (Stmt.Get_Integer (7));
       if not Stmt.Is_Null (8) then
           Object.Author.Set_Key_Value (Stmt.Get_Identifier (8), Session);
       end if;
@@ -946,6 +953,67 @@ package body AWA.Blogs.Models is
       Object.Version := Stmt.Get_Integer (1);
       ADO.Objects.Set_Created (Object);
    end Load;
+
+   --  --------------------
+   --  Get the bean attribute identified by the given name.
+   --  --------------------
+   overriding
+   function Get_Value (From : in Blog_Info;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
+      end if;
+      if Name = "title" then
+         return Util.Beans.Objects.To_Object (From.Title);
+      end if;
+      if Name = "uid" then
+         return Util.Beans.Objects.To_Object (From.Uid);
+      end if;
+      if Name = "create_date" then
+         return Util.Beans.Objects.Time.To_Object (From.Create_Date);
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+   --  --------------------
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   --  --------------------
+   procedure List (Object  : in out Blog_Info_List_Bean;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+   begin
+      List (Object.List, Session, Context);
+   end List;
+   --  --------------------
+   --  
+   --  --------------------
+   procedure List (Object  : in out Blog_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+      procedure Read (Into : in out Blog_Info);
+
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Context);
+      Pos  : Natural := 0;
+      procedure Read (Into : in out Blog_Info) is
+      begin
+         Into.Id := Stmt.Get_Identifier (0);
+         Into.Title := Stmt.Get_Unbounded_String (1);
+         Into.Uid := Stmt.Get_Unbounded_String (2);
+         Into.Create_Date := Stmt.Get_Time (3);
+      end Read;
+   begin
+      Stmt.Execute;
+      Blog_Info_Vectors.Clear (Object);
+      while Stmt.Has_Elements loop
+         Object.Insert_Space (Before => Pos);
+         Object.Update_Element (Index => Pos, Process => Read'Access);
+         Pos := Pos + 1;
+         Stmt.Next;
+      end loop;
+   end List;
+
 
    --  --------------------
    --  Get the bean attribute identified by the given name.

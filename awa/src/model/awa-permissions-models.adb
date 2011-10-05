@@ -334,9 +334,13 @@ package body AWA.Permissions.Models is
    end Delete;
    function Get_Value (Item : in Acl_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
-      Impl : constant access Acl_Impl
-         := Acl_Impl (Item.Get_Load_Object.all)'Access;
+      Obj  : constant ADO.Objects.Object_Record_Access := Item.Get_Load_Object;
+      Impl : access Acl_Impl;
    begin
+      if Obj = null then
+         return Util.Beans.Objects.Null_Object;
+      end if;
+      Impl := Acl_Impl (Obj.all)'Access;
       if Name = "id" then
          return ADO.Objects.To_Object (Impl.Get_Key);
       end if;
@@ -349,7 +353,7 @@ package body AWA.Permissions.Models is
       if Name = "entity_id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Entity_Id));
       end if;
-      raise ADO.Objects.NOT_FOUND;
+      return Util.Beans.Objects.Null_Object;
    end Get_Value;
    procedure List (Object  : in out Acl_Vector;
                    Session : in out ADO.Sessions.Session'Class;

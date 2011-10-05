@@ -325,9 +325,13 @@ package body AWA.Users.Models is
    end Delete;
    function Get_Value (Item : in Email_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
-      Impl : constant access Email_Impl
-         := Email_Impl (Item.Get_Load_Object.all)'Access;
+      Obj  : constant ADO.Objects.Object_Record_Access := Item.Get_Load_Object;
+      Impl : access Email_Impl;
    begin
+      if Obj = null then
+         return Util.Beans.Objects.Null_Object;
+      end if;
+      Impl := Email_Impl (Obj.all)'Access;
       if Name = "id" then
          return ADO.Objects.To_Object (Impl.Get_Key);
       end if;
@@ -337,7 +341,7 @@ package body AWA.Users.Models is
       if Name = "user_id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.User_Id));
       end if;
-      raise ADO.Objects.NOT_FOUND;
+      return Util.Beans.Objects.Null_Object;
    end Get_Value;
    procedure List (Object  : in out Email_Vector;
                    Session : in out ADO.Sessions.Session'Class;
@@ -824,9 +828,13 @@ package body AWA.Users.Models is
    end Delete;
    function Get_Value (Item : in User_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
-      Impl : constant access User_Impl
-         := User_Impl (Item.Get_Load_Object.all)'Access;
+      Obj  : constant ADO.Objects.Object_Record_Access := Item.Get_Load_Object;
+      Impl : access User_Impl;
    begin
+      if Obj = null then
+         return Util.Beans.Objects.Null_Object;
+      end if;
+      Impl := User_Impl (Obj.all)'Access;
       if Name = "id" then
          return ADO.Objects.To_Object (Impl.Get_Key);
       end if;
@@ -848,7 +856,7 @@ package body AWA.Users.Models is
       if Name = "country" then
          return Util.Beans.Objects.To_Object (Impl.Country);
       end if;
-      raise ADO.Objects.NOT_FOUND;
+      return Util.Beans.Objects.Null_Object;
    end Get_Value;
    procedure List (Object  : in out User_Vector;
                    Session : in out ADO.Sessions.Session'Class;
@@ -1187,9 +1195,13 @@ package body AWA.Users.Models is
    end Delete;
    function Get_Value (Item : in Access_Key_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
-      Impl : constant access Access_Key_Impl
-         := Access_Key_Impl (Item.Get_Load_Object.all)'Access;
+      Obj  : constant ADO.Objects.Object_Record_Access := Item.Get_Load_Object;
+      Impl : access Access_Key_Impl;
    begin
+      if Obj = null then
+         return Util.Beans.Objects.Null_Object;
+      end if;
+      Impl := Access_Key_Impl (Obj.all)'Access;
       if Name = "id" then
          return ADO.Objects.To_Object (Impl.Get_Key);
       end if;
@@ -1199,7 +1211,7 @@ package body AWA.Users.Models is
       if Name = "user_id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.User_Id));
       end if;
-      raise ADO.Objects.NOT_FOUND;
+      return Util.Beans.Objects.Null_Object;
    end Get_Value;
    procedure List (Object  : in out Access_Key_Vector;
                    Session : in out ADO.Sessions.Session'Class;
@@ -1613,9 +1625,13 @@ package body AWA.Users.Models is
    end Delete;
    function Get_Value (Item : in Session_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
-      Impl : constant access Session_Impl
-         := Session_Impl (Item.Get_Load_Object.all)'Access;
+      Obj  : constant ADO.Objects.Object_Record_Access := Item.Get_Load_Object;
+      Impl : access Session_Impl;
    begin
+      if Obj = null then
+         return Util.Beans.Objects.Null_Object;
+      end if;
+      Impl := Session_Impl (Obj.all)'Access;
       if Name = "id" then
          return ADO.Objects.To_Object (Impl.Get_Key);
       end if;
@@ -1645,7 +1661,7 @@ package body AWA.Users.Models is
       if Name = "session_type" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Session_Type));
       end if;
-      raise ADO.Objects.NOT_FOUND;
+      return Util.Beans.Objects.Null_Object;
    end Get_Value;
    procedure List (Object  : in out Session_Vector;
                    Session : in out ADO.Sessions.Session'Class;

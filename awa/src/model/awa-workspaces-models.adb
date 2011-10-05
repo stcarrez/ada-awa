@@ -310,16 +310,20 @@ package body Awa.Workspaces.Models is
    end Delete;
    function Get_Value (Item : in Workspace_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
-      Impl : constant access Workspace_Impl
-         := Workspace_Impl (Item.Get_Load_Object.all)'Access;
+      Obj  : constant ADO.Objects.Object_Record_Access := Item.Get_Load_Object;
+      Impl : access Workspace_Impl;
    begin
+      if Obj = null then
+         return Util.Beans.Objects.Null_Object;
+      end if;
+      Impl := Workspace_Impl (Obj.all)'Access;
       if Name = "id" then
          return ADO.Objects.To_Object (Impl.Get_Key);
       end if;
       if Name = "create_date" then
          return Util.Beans.Objects.Time.To_Object (Impl.Create_Date);
       end if;
-      raise ADO.Objects.NOT_FOUND;
+      return Util.Beans.Objects.Null_Object;
    end Get_Value;
    procedure List (Object  : in out Workspace_Vector;
                    Session : in out ADO.Sessions.Session'Class;
@@ -659,16 +663,20 @@ package body Awa.Workspaces.Models is
    end Delete;
    function Get_Value (Item : in Member_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
-      Impl : constant access Member_Impl
-         := Member_Impl (Item.Get_Load_Object.all)'Access;
+      Obj  : constant ADO.Objects.Object_Record_Access := Item.Get_Load_Object;
+      Impl : access Member_Impl;
    begin
+      if Obj = null then
+         return Util.Beans.Objects.Null_Object;
+      end if;
+      Impl := Member_Impl (Obj.all)'Access;
       if Name = "id" then
          return ADO.Objects.To_Object (Impl.Get_Key);
       end if;
       if Name = "create_date" then
          return Util.Beans.Objects.Time.To_Object (Impl.Create_Date);
       end if;
-      raise ADO.Objects.NOT_FOUND;
+      return Util.Beans.Objects.Null_Object;
    end Get_Value;
    procedure List (Object  : in out Member_Vector;
                    Session : in out ADO.Sessions.Session'Class;

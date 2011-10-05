@@ -389,9 +389,13 @@ package body AWA.Comments.Models is
    end Delete;
    function Get_Value (Item : in Comment_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
-      Impl : constant access Comment_Impl
-         := Comment_Impl (Item.Get_Load_Object.all)'Access;
+      Obj  : constant ADO.Objects.Object_Record_Access := Item.Get_Load_Object;
+      Impl : access Comment_Impl;
    begin
+      if Obj = null then
+         return Util.Beans.Objects.Null_Object;
+      end if;
+      Impl := Comment_Impl (Obj.all)'Access;
       if Name = "id" then
          return ADO.Objects.To_Object (Impl.Get_Key);
       end if;
@@ -404,7 +408,7 @@ package body AWA.Comments.Models is
       if Name = "entity_Id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Entity_Id));
       end if;
-      raise ADO.Objects.NOT_FOUND;
+      return Util.Beans.Objects.Null_Object;
    end Get_Value;
    procedure List (Object  : in out Comment_Vector;
                    Session : in out ADO.Sessions.Session'Class;
