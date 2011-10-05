@@ -23,11 +23,27 @@
   </managed-bean>
 
   <managed-bean>
+    <description>The list of blogs that the current user can access and update.</description>
+    <managed-bean-name>adminBlogList</managed-bean-name>
+    <managed-bean-class>AWA.Blogs.Beans.Admin_Blog_List_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
     <description>Information about the current blog.</description>
     <managed-bean-name>blog</managed-bean-name>
     <managed-bean-class>AWA.Blogs.Beans.Blog_Bean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
+
+  <navigation-rule>
+    <from-view-id>/blogs/admin/blog-list.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/blogs/admin/blog-list.xhtml</to-view-id>
+      <redirect/>
+    </navigation-case>
+  </navigation-rule>
 
   <entity-permission>
     <name>blog-create</name>
@@ -101,6 +117,11 @@
     <servlet-name>files</servlet-name>
     <url-pattern>*.png</url-pattern>
   </servlet-mapping>
+
+  <filter-mapping>
+    <filter-name>service</filter-name>
+    <url-pattern>/blogs/*.html</url-pattern>
+  </filter-mapping>
 
   <filter-mapping>
     <filter-name>auth-filter</filter-name>
