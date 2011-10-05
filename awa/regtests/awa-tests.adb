@@ -27,6 +27,7 @@ with ASF.Tests;
 with AWA.Users.Module;
 with AWA.Mail.Module;
 with AWA.Blogs.Module;
+with AWA.Workspaces.Module;
 
 --  with AWA.Applications;
 with AWA.Applications.Factory;
@@ -40,6 +41,8 @@ package body AWA.Tests is
    Service_Filter : aliased AWA.Services.Filters.Service_Filter;
 
    Users          : aliased AWA.Users.Module.User_Module;
+
+   Workspaces     : aliased AWA.Workspaces.Module.Workspace_Module;
 
    Mail           : aliased AWA.Mail.Module.Mail_Module;
 
@@ -73,6 +76,11 @@ package body AWA.Tests is
                    Name   => "mail",
                    URI    => "mail",
                    Module => Mail'Access);
+
+         Register (App    => App.all'Access,
+                   Name   => "workspaces",
+                   URI    => "workspaces",
+                   Module => Workspaces'Access);
 
          Register (App    => App.all'Access,
                    Name   => AWA.Blogs.Module.NAME,
