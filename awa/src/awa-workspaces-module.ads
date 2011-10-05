@@ -29,12 +29,12 @@ package AWA.Workspaces.Module is
    --  ------------------------------
    --  Module workspaces
    --  ------------------------------
-   type Workspaces_Module is new AWA.Modules.Module with private;
-   type Workspaces_Module_Access is access all Workspaces_Module'Class;
+   type Workspace_Module is new AWA.Modules.Module with private;
+   type Workspace_Module_Access is access all Workspace_Module'Class;
 
    --  Initialize the workspaces module.
    overriding
-   procedure Initialize (Plugin : in out Workspaces_Module;
+   procedure Initialize (Plugin : in out Workspace_Module;
                          App    : in AWA.Modules.Application_Access);
 
    --  Get the current workspace associated with the current user.
@@ -45,6 +45,6 @@ package AWA.Workspaces.Module is
 
 private
 
-   type Workspaces_Module is new AWA.Modules.Module with null record;
+   type Workspace_Module is new AWA.Modules.Module with null record;
 
 end AWA.Workspaces.Module;

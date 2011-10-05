@@ -26,7 +26,7 @@ package Awa.Workspaces.Beans is
 
    type Workspaces_Bean is new Util.Beans.Basic.Bean
      and Util.Beans.Methods.Method_Bean with record
-      Module : Awa.Workspaces.Module.Workspaces_Module_Access := null;
+      Module : Awa.Workspaces.Module.Workspace_Module_Access := null;
       Count  : Natural := 0;
    end record;
    type Workspaces_Bean_Access is access all Workspaces_Bean'Class;
@@ -52,7 +52,7 @@ package Awa.Workspaces.Beans is
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
    --  Create the Workspaces_Bean bean instance.
-   function Create_Workspaces_Bean (Module : in Awa.Workspaces.Module.Workspaces_Module_Access)
+   function Create_Workspaces_Bean (Module : in Awa.Workspaces.Module.Workspace_Module_Access)
       return Util.Beans.Basic.Readonly_Bean_Access;
 
 end Awa.Workspaces.Beans;

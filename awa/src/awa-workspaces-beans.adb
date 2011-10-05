@@ -77,7 +77,7 @@ package body Awa.Workspaces.Beans is
    --  ------------------------------
    --  Create the Workspaces_Bean bean instance.
    --  ------------------------------
-   function Create_Workspaces_Bean (Module : in Awa.Workspaces.Module.Workspaces_Module_Access)
+   function Create_Workspaces_Bean (Module : in Awa.Workspaces.Module.Workspace_Module_Access)
       return Util.Beans.Basic.Readonly_Bean_Access is
       Object : constant Workspaces_Bean_Access := new Workspaces_Bean;
    begin

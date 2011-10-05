@@ -28,14 +28,14 @@ package body AWA.Workspaces.Module is
 
    Log : constant Util.log.Loggers.Logger := Util.Log.Loggers.Create ("Awa.Workspaces.Module");
 
-   package Register is new AWA.Modules.Beans (Module => Workspaces_Module,
-                                              Module_Access => Workspaces_Module_Access);
+   package Register is new AWA.Modules.Beans (Module => Workspace_Module,
+                                              Module_Access => Workspace_Module_Access);
 
    --  ------------------------------
    --  Initialize the workspaces module.
    --  ------------------------------
    overriding
-   procedure Initialize (Plugin : in out Workspaces_Module;
+   procedure Initialize (Plugin : in out Workspace_Module;
                          App    : in AWA.Modules.Application_Access) is
    begin
       Log.Info ("Initializing the workspaces module");
