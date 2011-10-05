@@ -19,7 +19,6 @@
 with AWA.Testsuite;
 
 with Util.Tests;
-with Util.Properties;
 with AWA.Tests;
 procedure AWA_Harness is
 

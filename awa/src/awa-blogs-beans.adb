@@ -58,7 +58,7 @@ package body AWA.Blogs.Beans is
    function Get_Value (From : in Blog_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
-      return From.Blog.Get_Value (Name);
+      return AWA.Blogs.Models.Blog_Ref (From).Get_Value (Name);
    end Get_Value;
 
    --  ------------------------------
@@ -70,7 +70,7 @@ package body AWA.Blogs.Beans is
                         Value : in Util.Beans.Objects.Object) is
    begin
       if Name = "name" then
-         From.Blog.Set_Name (Util.Beans.Objects.To_String (Value));
+         From.Set_Name (Util.Beans.Objects.To_String (Value));
       end if;
    end Set_Value;
 
@@ -86,18 +86,29 @@ package body AWA.Blogs.Beans is
    overriding
    function Get_Method_Bindings (From : in Blog_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
    begin
       return Blog_Bean_Binding'Access;
    end Get_Method_Bindings;
 
+   overriding
+   function Copy (Bean : in Blog_Bean) return Blog_Bean is
+      pragma Unreferenced (Bean);
+      Ref : Blog_Bean;
+   begin
+      return Ref;
+   end Copy;
+
+   --  ------------------------------
    --  Create a new blog.
+   --  ------------------------------
    procedure Create_Blog (Bean    : in out Blog_Bean;
                           Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       Manager : constant AWA.Blogs.Services.Blog_Service_Access := Bean.Module.Get_Blog_Manager;
       Result  : ADO.Identifier;
    begin
       Manager.Create_Blog (Workspace_Id => 0,
-                           Title        => Bean.Blog.Get_Name,
+                           Title        => Bean.Get_Name,
                            Result       => Result);
       Outcome := To_Unbounded_String ("success");
 
@@ -120,7 +131,7 @@ package body AWA.Blogs.Beans is
       Session : ADO.Sessions.Session := Module.Get_Session;
    begin
       if Blog_Id > 0 then
-         Object.Blog.Load (Session, Blog_Id);
+         Object.Load (Session, Blog_Id);
       end if;
       Object.Module := Module;
       return Object.all'Access;

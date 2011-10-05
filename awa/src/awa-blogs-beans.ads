@@ -35,8 +35,13 @@ package Awa.Blogs.Beans is
    POST_TEXT_ATTR  : constant String := "text";
    POST_URI_ATTR   : constant String := "uri";
 
-   type Blog_Bean is new Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with record
-      Blog    : AWA.Blogs.Models.Blog_Ref;
+   --  ------------------------------
+   --  Blog Bean
+   --  ------------------------------
+   --  The <b>Blog_Bean</b> holds the information about the current blog.
+   --  It allows to create the blog as well as update its primary title.
+   type Blog_Bean is new AWA.Blogs.Models.Blog_Ref
+     and Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with record
       Module  : AWA.Blogs.Module.Blog_Module_Access := null;
    end record;
    type Blog_Bean_Access is access all Blog_Bean'Class;
@@ -56,6 +61,9 @@ package Awa.Blogs.Beans is
    overriding
    function Get_Method_Bindings (From : in Blog_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access;
+
+   overriding
+   function Copy (Bean : in Blog_Bean) return Blog_Bean;
 
    --  Create a new blog.
    procedure Create_Blog (Bean    : in out Blog_Bean;

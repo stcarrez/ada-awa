@@ -55,14 +55,15 @@ package body AWA.Blogs.Services is
       Blog  : AWA.Blogs.Models.Blog_Ref;
       WS    : AWA.Workspaces.Models.Workspace_Ref;
    begin
-      Log.Info ("Creating blog for user");
-
-      --  Check that the user has the create blog permission on the given workspace.
-      AWA.Permissions.Check (Permission => ACL_Create_Blog.Permission,
-                             Entity     => Workspace_Id);
+      Log.Info ("Creating blog {0} for user", Title);
 
       Ctx.Start;
       AWA.Workspaces.Module.Get_Workspace (DB, Ctx, WS);
+
+      --  Check that the user has the create blog permission on the given workspace.
+      AWA.Permissions.Check (Permission => ACL_Create_Blog.Permission,
+                             Entity     => WS.Get_Id);
+
       Blog.Set_Name (Title);
       Blog.Set_Workspace (WS);
       Blog.Set_Create_Date (Ada.Calendar.Clock);

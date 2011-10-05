@@ -53,7 +53,7 @@ package body AWA.Modules.Reader is
          package Bean_Config is
            new ASF.Beans.Mappers.Reader_Config (Reader, Plugin.Factory'Unchecked_Access, Context);
          package Navigation_Config is
-           new ASF.Navigations.Mappers.Reader_Config (Reader, Nav);
+           new ASF.Navigations.Mappers.Reader_Config (Reader, Nav, Context);
          package Servlet_Config is
            new ASF.Servlets.Mappers.Reader_Config (Reader, Plugin.App.all'Unchecked_Access);
          package Policy_Config is
