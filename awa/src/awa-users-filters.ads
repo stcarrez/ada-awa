@@ -41,6 +41,7 @@ package AWA.Users.Filters is
    AUTH_FILTER_REDIRECT_PARAM   : constant String := "user.auth-filter.redirect";
 
    --  Initialize the filter and configure the redirection URIs.
+   overriding
    procedure Initialize (Filter  : in out Auth_Filter;
                          Context : in ASF.Servlets.Servlet_Registry'Class);
 
@@ -57,7 +58,7 @@ package AWA.Users.Filters is
    overriding
    procedure Do_Login (Filter   : in Auth_Filter;
                        Request  : in out ASF.Requests.Request'Class;
-                       Response : in out ASF.Responses.Response'Class);  
+                       Response : in out ASF.Responses.Response'Class);
 
    --  ------------------------------
    --  Verify access key filter

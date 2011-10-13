@@ -53,6 +53,7 @@ package body AWA.Users.Filters is
          Log.Error ("The login URI is empty.  Redirection to the login page will not work.");
       end if;
       Filter.Login_URI := To_Unbounded_String (URI);
+      Security.Filters.Auth_Filter (Filter).Initialize (Context);
    end Initialize;
 
    procedure Authenticate (F        : in Auth_Filter;
@@ -87,6 +88,7 @@ package body AWA.Users.Filters is
    --  ------------------------------
    --  Initialize the filter and configure the redirection URIs.
    --  ------------------------------
+   overriding
    procedure Initialize (Filter  : in out Verify_Filter;
                          Context : in ASF.Servlets.Servlet_Registry'Class) is
       URI : constant String := Context.Get_Init_Parameter (VERIFY_FILTER_REDIRECT_PARAM);
