@@ -1,122 +1,199 @@
 /* Copied from /home/ciceron/work/pam/pam/awa/ado/db/sqlite/ado-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* Sequence generator */
-create table sequence (
+CREATE TABLE sequence (
   /* the sequence name */
-  `NAME` VARCHAR(256) PRIMARY KEY,
+  `name` VARCHAR(127) PRIMARY KEY,
   /* the sequence record version */
-  `version` int NOT NULL,
+  `version` int ,
   /* the sequence value */
-  `VALUE` BIGINT NOT NULL,
+  `value` BIGINT ,
   /* the sequence block size */
-  `BLOCK_SIZE` BIGINT NOT NULL
+  `block_size` BIGINT 
 );
 /* Entity types */
-create table entity_type (
+CREATE TABLE entity_type (
   /* the entity type identifier */
-  `ID` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   /* the entity type name (table name) */
-  `NAME` VARCHAR(256) UNIQUE NOT NULL
+  `name` VARCHAR(127) UNIQUE NOT NULL
 );
-insert into entity_type (name) values ("sequence");
-insert into entity_type (name) values ("entity_type");
+INSERT INTO entity_type (name) VALUES ("sequence");
+INSERT INTO entity_type (name) VALUES ("entity_type");
 /* Copied from /home/ciceron/work/pam/pam/awa/awa/db/sqlite/awa-sqlite.sql*/
 /* File generated automatically by dynamo */
+/* 
+            The workspace allows to group all together the different
+            application entities which belong to a user or a set of collaborating users.
+            Other entities, for example a Blog, a Wiki space, will link to a
+            single workspace.
+
+            The workspace has members which are allowed to access the entities
+            that are part of the workspace.  A workspace owner decides which user
+            is part of the workspace or not.
+         */
+CREATE TABLE workspace (
+  /* the workspace id */
+  `id` INTEGER PRIMARY KEY,
+  /*  */
+  `version` int ,
+  /* the workspace creation date */
+  `create_date` DATETIME NOT NULL,
+  /* the workspace owner */
+  `owner_fk` BIGINT NOT NULL
+);
+/* 
+            The workspace member indicates the users who are part of the workspace.
+         */
+CREATE TABLE workspace_member (
+  /* the member id */
+  `id` BIGINT PRIMARY KEY,
+  /*  */
+  `version` int ,
+  /* the member creation date */
+  `create_date` DATETIME NOT NULL,
+  /* the workspace member */
+  `user_fk` BIGINT NOT NULL,
+  /* the workspace */
+  `workspace_fk` INTEGER NOT NULL
+);
+/* Blog  */
+CREATE TABLE blog (
+  /* the blog identifier */
+  `id` INTEGER PRIMARY KEY,
+  /*  */
+  `version` int ,
+  /* the blog name */
+  `name` VARCHAR(256) NOT NULL,
+  /* the blog uuid */
+  `uid` VARCHAR(256) NOT NULL,
+  /* the blog creation date */
+  `create_date` DATETIME NOT NULL,
+  /*  */
+  `workspace_id` INTEGER NOT NULL
+);
+/* Post in a blog */
+CREATE TABLE blog_post (
+  /* the post identifier */
+  `id` BIGINT PRIMARY KEY,
+  /*  */
+  `version` int ,
+  /* the post title */
+  `title` VARCHAR(256) NOT NULL,
+  /* the uri */
+  `uri` VARCHAR(256) ,
+  /* the blog text content */
+  `text` VARCHAR(60000) ,
+  /* the post creation date */
+  `create_date` DATETIME NOT NULL,
+  /* the post publication date */
+  `publish_date` DATETIME ,
+  /* the post status */
+  `status` INTEGER NOT NULL,
+  /*  */
+  `author_id` INTEGER NOT NULL,
+  /*  */
+  `blog_id` INTEGER NOT NULL
+);
 /*  */
-create table COMMENTS (
+CREATE TABLE comments (
   /*  */
-  `ID` INTEGER PRIMARY KEY,
+  `id` INTEGER PRIMARY KEY,
   /*  */
-  `VERSION` int NOT NULL,
+  `version` int ,
   /*  */
-  `DATE` TIMESTAMP NOT NULL,
+  `date` TIMESTAMP NOT NULL,
   /*  */
-  `MESSAGE` VARCHAR(65000) NOT NULL,
+  `message` VARCHAR(65000) NOT NULL,
   /*  */
-  `ENTITY_ID` INTEGER NOT NULL,
+  `entity_id` INTEGER NOT NULL,
   /*  */
-  `USER_FK` INTEGER NOT NULL,
+  `user_fk` INTEGER NOT NULL,
   /*  */
-  `ENTITY__TYPE_FK` INTEGER NOT NULL
+  `entity__type_fk` INTEGER NOT NULL
 );
 /* Email address */
-create table email (
+CREATE TABLE email (
   /* the email id */
-  `ID` BIGINT PRIMARY KEY,
+  `id` BIGINT PRIMARY KEY,
   /*  */
-  `version` int NOT NULL,
+  `version` int ,
   /* the email address */
-  `EMAIL` VARCHAR(256) NOT NULL,
+  `email` VARCHAR(256) ,
   /* the user identifier */
-  `USER_ID` BIGINT NOT NULL
+  `user_id` BIGINT 
 );
 /* Record representing a user */
-create table user (
+CREATE TABLE user (
   /* the user id */
-  `ID` BIGINT PRIMARY KEY,
+  `id` BIGINT PRIMARY KEY,
   /*  */
-  `version` int NOT NULL,
+  `version` int ,
   /* the open id */
-  `OPENID` VARCHAR(256) NOT NULL,
+  `openid` VARCHAR(256) ,
   /* the user name */
-  `NAME` VARCHAR(256) NOT NULL,
+  `name` VARCHAR(256) ,
   /* the user first name */
-  `FIRST_NAME` VARCHAR(256) NOT NULL,
+  `first_name` VARCHAR(256) ,
   /* the user last name */
-  `LAST_NAME` VARCHAR(256) NOT NULL,
+  `last_name` VARCHAR(256) ,
   /* the user last name */
-  `PASSWORD` VARCHAR(256) NOT NULL,
+  `password` VARCHAR(256) ,
   /* the user country */
-  `COUNTRY` VARCHAR(256) NOT NULL,
+  `country` VARCHAR(256) ,
   /*  */
-  `EMAIL_ID` INTEGER NOT NULL
+  `email_id` INTEGER NOT NULL
 );
 /* Defines an access key */
-create table access_key (
+CREATE TABLE access_key (
   /* the email id */
-  `ID` BIGINT PRIMARY KEY,
+  `id` BIGINT PRIMARY KEY,
   /*  */
-  `version` int NOT NULL,
+  `version` int ,
   /* the access key */
-  `ACCESS_KEY` VARCHAR(256) NOT NULL,
+  `access_key` VARCHAR(256) ,
   /* the user identifier */
-  `USER_ID` BIGINT NOT NULL
+  `user_id` BIGINT 
 );
 /* Defines an user session */
-create table session (
+CREATE TABLE session (
   /* the user session id */
   `ID` BIGINT PRIMARY KEY,
   /*  */
-  `version` int NOT NULL,
+  `version` int ,
   /* the session start date */
   `START_DATE` DATETIME NOT NULL,
   /* the session start date */
-  `END_DATE` DATETIME NOT NULL,
+  `END_DATE` DATETIME ,
   /* the IP address */
   `IP_ADDRESS` VARCHAR(255) NOT NULL,
   /* the user identifier */
   `USER_ID` BIGINT NOT NULL,
   /* the authentication session identifier */
-  `AUTH_ID` BIGINT NOT NULL,
+  `AUTH_ID` BIGINT ,
   /* the session type */
   `TYPE` INTEGER NOT NULL
 );
 /* Access control */
-create table ACL (
+CREATE TABLE acl (
   /* the unique ACL id */
-  `ID` BIGINT PRIMARY KEY,
+  `id` BIGINT PRIMARY KEY,
   /* the entity type */
-  `ENTITY_TYPE` INTEGER NOT NULL,
+  `entity_type` INTEGER ,
   /* the user identifier */
-  `USER_ID` BIGINT NOT NULL,
+  `user_id` BIGINT ,
   /* the entity identifier */
-  `ENTITY_ID` BIGINT NOT NULL,
+  `entity_id` BIGINT ,
   /* whether the entity is writeable */
-  `WRITEABLE` TINYINT NOT NULL
+  `writeable` TINYINT 
 );
-insert into entity_type (name) values ("COMMENTS");
-insert into entity_type (name) values ("email");
-insert into entity_type (name) values ("user");
-insert into entity_type (name) values ("access_key");
-insert into entity_type (name) values ("session");
-insert into entity_type (name) values ("ACL");
+INSERT INTO entity_type (name) VALUES ("workspace");
+INSERT INTO entity_type (name) VALUES ("workspace_member");
+INSERT INTO entity_type (name) VALUES ("blog");
+INSERT INTO entity_type (name) VALUES ("blog_post");
+INSERT INTO entity_type (name) VALUES ("comments");
+INSERT INTO entity_type (name) VALUES ("email");
+INSERT INTO entity_type (name) VALUES ("user");
+INSERT INTO entity_type (name) VALUES ("access_key");
+INSERT INTO entity_type (name) VALUES ("session");
+INSERT INTO entity_type (name) VALUES ("acl");

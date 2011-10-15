@@ -1,4 +1,5 @@
 <project><name>atlas</name>
 <property name="author_email">unknown@company.com</property>
+<property name="database">mysql://localhost:3306/atlas?user=atlas</property>
 <property name="license">apache</property>
 <property name="author">unknown</property></project>
