@@ -44,7 +44,7 @@ package AWA.Components.Inputs is
 
    --  Render the input field title.
    procedure Render_Title (UI      : in UIInput;
-                           Writer  : in ResponseWriter_Access;
+                           Writer  : in Response_Writer_Access;
                            Context : in out Faces_Context'Class);
 
    --  Render the input component.  Starts the DL/DD list and write the input

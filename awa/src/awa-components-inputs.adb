@@ -30,7 +30,7 @@ package body AWA.Components.Inputs is
    --  Render the input field title.
    --  ------------------------------
    procedure Render_Title (UI      : in UIInput;
-                           Writer  : in ResponseWriter_Access;
+                           Writer  : in Response_Writer_Access;
                            Context : in out Faces_Context'Class) is
       Title : constant Util.Beans.Objects.Object := UI.Get_Attribute (Context, "title");
    begin
@@ -52,7 +52,7 @@ package body AWA.Components.Inputs is
       end if;
       declare
          Id       : constant String := To_String (UI.Get_Client_Id);
-         Writer   : constant ResponseWriter_Access := Context.Get_Response_Writer;
+         Writer   : constant Response_Writer_Access := Context.Get_Response_Writer;
          Messages : constant ASF.Applications.Messages.Vectors.Cursor := Context.Get_Messages (Id);
          Style    : constant String := UI.Get_Attribute ("styleClass", Context);
       begin
@@ -83,7 +83,7 @@ package body AWA.Components.Inputs is
       --  Render the error message associated with the input field.
       declare
          Id       : constant String := To_String (UI.Get_Client_Id);
-         Writer   : constant ResponseWriter_Access := Context.Get_Response_Writer;
+         Writer   : constant Response_Writer_Access := Context.Get_Response_Writer;
          Messages : constant ASF.Applications.Messages.Vectors.Cursor := Context.Get_Messages (Id);
       begin
          if ASF.Applications.Messages.Vectors.Has_Element (Messages) then
