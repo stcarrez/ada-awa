@@ -157,8 +157,8 @@ package body AWA.Blogs.Beans is
                               Result  => Result);
       else
          Manager.Update_Post (Post_Id => Post_Id,
-                              Title   => To_String (Bean.Title),
-                              Text    => To_String (Bean.Text));
+                              Title   => Bean.Post.Get_Title,
+                              Text    => Bean.Post.Get_Text);
       end if;
       Outcome := To_Unbounded_String ("success");
 
