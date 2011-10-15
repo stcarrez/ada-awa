@@ -46,6 +46,9 @@ body.awa {
 #awa-content {
   padding-top: 50px;
 }
+#awa-hdr #awa-tools {
+    float: left;
+}
 div.awa-title {
   margin: 10px;
   float: left;

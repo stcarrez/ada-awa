@@ -1,0 +1,53 @@
+<div id='awa-hdr' xmlns:c="http://java.sun.com/jstl/core">
+    <div id='awa-top'>
+        <c:choose>
+            <c:when test="#{user.isLogged}">
+                <ul id='awa-tools'>
+                    <li>
+                        <a href="#{contextPath}/workspaces/main.html" title="#{layoutMsg.layout_workspace_title}">
+                            #{layoutMsg.layout_workspace_label}
+                        </a>
+                    </li>
+                </ul>
+                <ul>
+                    <li id='logout'>
+                        <a href="#{contextPath}/ajax/logout/logout"
+                           title="#{layoutMsg.layout_logout_title}">
+                        #{layoutMsg.layout_logout_label}
+                    </a></li>
+                    <li>|</li>
+                    <li id='help'>
+                        <a href="http://code.google.com/p/ada-awa"
+                           title="#{layoutMsg.layout_help_title}">
+                        #{layoutMsg.layout_help_label}
+                    </a></li>
+                    <li>|</li>
+                    <li id='settings'><a href="#{contextPath}/statistics.xml"
+                                         title="#{layoutMsg.layout_statistics_title}">
+                        #{layoutMsg.layout_statistics_label}
+                    </a></li>
+                    <li>|</li>
+                    <li>
+                        #{user.name}
+                    </li>
+                </ul>
+            </c:when>
+            <c:otherwise>
+                <ul>
+                    <li id='login'><a href="#{contextPath}/auth/login.html" title="#{layoutMsg.layout_login_title}">
+                        #{layoutMsg.layout_login_label}
+                    </a></li>
+                    <li>|</li>
+                    <li id='help'><a href="http://code.google.com/p/ada-awa" title="#{layoutMsg.layout_help_title}">
+                        #{layoutMsg.layout_help_label}
+                    </a></li>
+                    <li>|</li>
+                    <li id='settings'><a href="#{contextPath}/statistics.xml"
+                                         title="#{layoutMsg.layout_statistics_title}">
+                        #{layoutMsg.layout_statistics_label}
+                    </a></li>
+                </ul>
+            </c:otherwise>
+        </c:choose>
+    </div>
+</div>

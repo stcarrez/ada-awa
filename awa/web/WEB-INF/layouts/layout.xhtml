@@ -22,27 +22,8 @@
 <div id="scroll"></div>
 
 <!-- Top header with user account -->
-<div id='awa-hdr'>
-  <div id='awa-top'>
-    <ul>
-        <li id='logout'><a href="#{contextPath}/ajax/logout/logout" title="#{layoutMsg.layout_logout_title}">
-            #{layoutMsg.layout_logout_label}
-        </a></li>
-        <li>|</li>
-      <li id='help'><a href="http://code.google.com/p/ada-awa" title="#{layoutMsg.layout_help_title}">
-         #{layoutMsg.layout_help_label}
-      </a></li>
-      <li>|</li>
-      <li id='settings'><a href="#{contextPath}/statistics.xml" title="#{layoutMsg.layout_statistics_title}">
-         #{layoutMsg.layout_statistics_label}
-       </a></li>
-        <li>|</li>
-        <li>
-            #{user.name}
-        </li>
-    </ul>
-  </div>
-</div>
+<ui:include src="top-bar.xhtml"/>
+
 <div id='awa-page'>
     <ui:insert name="pageBody"/>
     <div id="awa-clfooter"></div>
