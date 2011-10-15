@@ -25,7 +25,7 @@
     <h2>#{blogMsg.blog_post_update_title}</h2>
     <h:form id='post'>
         <input type="hidden" name="blog_id" value="#{blog.id}"/>
-        <input type="hidden" name="post_id" value="#{post.post_id}"/>
+        <input type="hidden" name="post_id" value="#{param['post_id']}"/>
       <ul>
         <li class='message'>
            <h:message styleClass='error'/>
@@ -36,7 +36,7 @@
         </li>
         <li>
            <label for='text'>#{blogMsg.blog_post_text_label}</label>
-           <h:inputTextarea id='password' rows='20' cols='80' required='false' value='#{post.text}'/>
+           <h:inputTextarea id='text' rows='20' cols='80' required='false' value='#{post.text}'/>
         </li>
         <li>
           <h:commandButton id='save' value='#{blogMsg.blog_post_save_button}'
