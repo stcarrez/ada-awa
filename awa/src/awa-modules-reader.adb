@@ -70,11 +70,17 @@ package body AWA.Modules.Reader is
          pragma Warnings (Off, Role_Config);
          pragma Warnings (Off, Entity_Config);
       begin
-
-         Util.Serialize.IO.Dump (Reader, AWA.Modules.Log);
+         if AWA.Modules.Log.Get_Level >= Util.Log.DEBUG_LEVEL then
+            Util.Serialize.IO.Dump (Reader, AWA.Modules.Log);
+         end if;
 
          --  Read the configuration file and record managed beans, navigation rules.
          Reader.Parse (File);
+
+      exception
+         when E : others =>
+            Log.Error ("Error while reading {0}", File);
+            raise;
       end;
    end Read_Configuration;
 
