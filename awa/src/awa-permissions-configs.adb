@@ -56,20 +56,24 @@ package body AWA.Permissions.Configs is
             end;
 
          when FIELD_ENTITY_PERMISSION =>
-            if Into.Entity = 0 then
-               raise Util.Serialize.Mappers.Field_Error with "Missing entity type";
-            end if;
             declare
                Name : constant String := Util.Beans.Objects.To_String (Into.Name);
-               SQL  : constant String := Util.Beans.Objects.To_String (Into.SQL);
-               Perm : constant Entity_Controller_Access
-                 := new Entity_Controller '(Len    => SQL'Length,
-                                            SQL    => SQL,
-                                            Entity => Into.Entity);
             begin
-               Into.Manager.Add_Permission (Name, Perm.all'Access);
-               Into.Count := 0;
-               Into.Entity := 0;
+               if Into.Entity = 0 then
+                  raise Util.Serialize.Mappers.Field_Error
+                  with "Permission '" & Name & "' ignored: missing entity type";
+               end if;
+               declare
+                  SQL  : constant String := Util.Beans.Objects.To_String (Into.SQL);
+                  Perm : constant Entity_Controller_Access
+                    := new Entity_Controller '(Len    => SQL'Length,
+                                               SQL    => SQL,
+                                               Entity => Into.Entity);
+               begin
+                  Into.Manager.Add_Permission (Name, Perm.all'Access);
+                  Into.Count := 0;
+                  Into.Entity := 0;
+               end;
             end;
 
       end case;

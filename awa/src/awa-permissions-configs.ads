@@ -32,7 +32,7 @@ package AWA.Permissions.Configs is
    type Controller_Config is record
       Name    : Util.Beans.Objects.Object;
       SQL     : Util.Beans.Objects.Object;
-      Entity  : ADO.Entity_Type;
+      Entity  : ADO.Entity_Type := 0;
       Count   : Natural := 0;
       Manager : Security.Permissions.Permission_Manager_Access;
       Session : ADO.Sessions.Session;
