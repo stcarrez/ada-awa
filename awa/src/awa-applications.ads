@@ -18,9 +18,16 @@
 
 --  with AWA.Messages;
 with ASF.Applications.Main;
+with ASF.Applications.Main.Configs;
 with ADO.Sessions.Factory;
 with AWA.Modules;
 package AWA.Applications is
+
+   package P_Module_Dir is
+     new ASF.Applications.Main.Configs.Parameter ("app.module.dir", "./config");
+
+   package P_Config_File is
+     new ASF.Applications.Main.Configs.Parameter ("app.config", "awa.xml");
 
    --  Module manager
    --
@@ -34,6 +41,32 @@ package AWA.Applications is
    procedure Initialize (App     : in out Application;
                          Conf    : in ASF.Applications.Config;
                          Factory : in out ASF.Applications.Main.Application_Factory'Class);
+
+   --  Initialize the servlets provided by the application.
+   --  This procedure is called by <b>Initialize</b>.
+   --  It should register the application servlets.
+   overriding
+   procedure Initialize_Servlets (App : in out Application);
+
+   --  Initialize the filters provided by the application.
+   --  This procedure is called by <b>Initialize</b>.
+   --  It should register the application filters.
+   overriding
+   procedure Initialize_Filters (App : in out Application);
+
+   --  Initialize the ASF components provided by the application.
+   --  This procedure is called by <b>Initialize</b>.
+   --  It should register the component factories used by the application.
+   overriding
+   procedure Initialize_Components (App : in out Application);
+
+   --  Initialize the AWA modules provided by the application.
+   --  This procedure is called by <b>Initialize</b>.
+   --  It should register the modules used by the application.
+   procedure Initialize_Modules (App : in out Application);
+
+   --  Register the module in the registry.
+   procedure Load_Configuration (App : in out Application);
 
    --  Register the module in the application
    procedure Register (App     : in Application_Access;

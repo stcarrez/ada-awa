@@ -16,11 +16,22 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with Ada.IO_Exceptions;
+
 with ASF.Beans;
+
+with EL.Contexts.Default;
+with Util.Files;
+with Util.Log.Loggers;
 
 with AWA.Components.Factory;
 with AWA.Applications.Factory;
+with AWA.Applications.Configs;
 package body AWA.Applications is
+
+   use Util.Log;
+
+   Log : constant Loggers.Logger := Loggers.Create ("AWA.Applications.Configs");
 
    --  ------------------------------
    --  Initialize the application
@@ -34,9 +45,70 @@ package body AWA.Applications is
       AWA.Applications.Factory.Set_Application (Factory, App'Unchecked_Access);
       App.DB_Factory.Create (URI);
       ASF.Applications.Main.Application (App).Initialize (Conf, Factory);
-      App.Add_Components (AWA.Components.Factory.Definition);
       AWA.Modules.Initialize (App.Modules, Conf);
+      Application'Class (App).Initialize_Modules;
+      App.Load_Configuration;
    end Initialize;
+
+   --  ------------------------------
+   --  Initialize the servlets provided by the application.
+   --  This procedure is called by <b>Initialize</b>.
+   --  It should register the application servlets.
+   --  ------------------------------
+   overriding
+   procedure Initialize_Servlets (App : in out Application) is
+   begin
+      ASF.Applications.Main.Application (App).Initialize_Servlets;
+   end Initialize_Servlets;
+
+   --  ------------------------------
+   --  Initialize the filters provided by the application.
+   --  This procedure is called by <b>Initialize</b>.
+   --  It should register the application filters.
+   --  ------------------------------
+   overriding
+   procedure Initialize_Filters (App : in out Application) is
+   begin
+      ASF.Applications.Main.Application (App).Initialize_Filters;
+   end Initialize_Filters;
+
+   --  ------------------------------
+   --  Initialize the ASF components provided by the application.
+   --  This procedure is called by <b>Initialize</b>.
+   --  It should register the component factories used by the application.
+   --  ------------------------------
+   overriding
+   procedure Initialize_Components (App : in out Application) is
+   begin
+      ASF.Applications.Main.Application (App).Initialize_Components;
+      App.Add_Components (AWA.Components.Factory.Definition);
+   end Initialize_Components;
+
+   --  ------------------------------
+   --  Initialize the AWA modules provided by the application.
+   --  This procedure is called by <b>Initialize</b>.
+   --  It should register the modules used by the application.
+   --  ------------------------------
+   procedure Initialize_Modules (App : in out Application) is
+   begin
+      null;
+   end Initialize_Modules;
+
+   --  ------------------------------
+   --  Register the module in the registry.
+   --  ------------------------------
+   procedure Load_Configuration (App : in out Application) is
+      Paths : constant String := App.Get_Config (P_Module_Dir.P);
+      Base  : constant String := App.Get_Config (P_Config_File.P);
+      Path  : constant String := Util.Files.Find_File_Path (Base, Paths);
+      Ctx   : aliased EL.Contexts.Default.Default_Context;
+   begin
+      AWA.Applications.Configs.Read_Configuration (App, Path, Ctx'Unchecked_Access);
+
+   exception
+      when Ada.IO_Exceptions.Name_Error =>
+         Log.Warn ("Application configuration file '{0}' does not exist", Path);
+   end Load_Configuration;
 
    --  ------------------------------
    --  Register the module in the application
