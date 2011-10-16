@@ -10,7 +10,7 @@
   </filter-mapping>
   <entity-permission>
     <name>workspaces-create</name>
-    <entity-type>table-name</entity-type>
+    <entity-type>workspaced</entity-type>
     <sql>
        select ACL.ID from ACL
        where ACL.ENTITY_TYPE = :entity_type

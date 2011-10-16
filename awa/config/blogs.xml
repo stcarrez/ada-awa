@@ -37,10 +37,37 @@
   </managed-bean>
 
   <navigation-rule>
+    <from-view-id>/blogs/admin/edit.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/blogs/admin/list.xhtml?blog_id=#{blog.id}</to-view-id>
+      <redirect/>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/blogs/admin/create.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/blogs/admin/list.xhtml?blog_id=#{blog.id}</to-view-id>
+      <redirect/>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
     <from-view-id>/blogs/admin/blog-list.xhtml</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
       <to-view-id>/blogs/admin/blog-list.xhtml?blog_id=#{blog.id}</to-view-id>
+      <redirect/>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/workspaces/main.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/workspaces/main.xhtml</to-view-id>
       <redirect/>
     </navigation-case>
   </navigation-rule>
@@ -133,5 +160,9 @@
     <filter-name>dump</filter-name>
     <url-pattern>*.css</url-pattern>
   </filter-mapping>
+
+  <policy>
+     <url-pattern>/*</url-pattern>
+  </policy>
 
 </module>
