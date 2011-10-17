@@ -24,7 +24,7 @@ with AWA.Modules;
 package AWA.Applications is
 
    package P_Module_Dir is
-     new ASF.Applications.Main.Configs.Parameter ("app.module.dir", "./config");
+     new ASF.Applications.Main.Configs.Parameter ("app.modules.dir", "./config");
 
    package P_Config_File is
      new ASF.Applications.Main.Configs.Parameter ("app.config", "awa.xml");
