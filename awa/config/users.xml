@@ -70,6 +70,31 @@
     </navigation-case>
   </navigation-rule>
 
+  <context-param>
+    <param-name>openid.realm</param-name>
+    <param-value>http://localhost:8080#{contextPath}/auth</param-value>
+    <description>
+       The REALM URL used by OpenID providers to verify the validity of the verification callback.
+    </description>
+  </context-param>
+
+  <context-param>
+    <param-name>openid.callback_url</param-name>
+    <param-value>http://localhost:8080#{contextPath}/auth/verify</param-value>
+    <description>
+       The verification callback URI used by the OpenID provider to redirect the user
+       after authentication.
+    </description>
+  </context-param>
+
+  <context-param>
+    <param-name>openid.success_url</param-name>
+    <param-value>#{contextPath}/workspaces/main.html</param-value>
+    <description>
+       The URI where the user is redirected after a successful authentication.
+    </description>
+  </context-param>
+
   <servlet-mapping>
     <servlet-name>openid-auth</servlet-name>
     <url-pattern>/auth/auth/*</url-pattern>
