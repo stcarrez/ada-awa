@@ -15,7 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with EL.Contexts;
+with EL.Contexts.Default;
 
 --  The <b>AWA.Applications.Configs</b> package reads the application configuration files.
 package AWA.Applications.Configs is
@@ -23,6 +23,6 @@ package AWA.Applications.Configs is
    --  Read the application configuration file and configure the application
    procedure Read_Configuration (App     : in out Application'Class;
                                  File    : in String;
-                                 Context : in EL.Contexts.ELContext_Access);
+                                 Context : in EL.Contexts.Default.Default_Context_Access);
 
 end AWA.Applications.Configs;

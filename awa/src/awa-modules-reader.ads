@@ -15,7 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with EL.Contexts;
+with EL.Contexts.Default;
 
 --  The <b>AWA.Modules.Reader</b> package reads the module configuration files
 --  and initializes the module.
@@ -24,6 +24,6 @@ package AWA.Modules.Reader is
    --  Read the module configuration file and configure the components
    procedure Read_Configuration (Plugin  : in out Module'Class;
                                  File    : in String;
-                                 Context : in EL.Contexts.ELContext_Access);
+                                 Context : in EL.Contexts.Default.Default_Context_Access);
 
 end AWA.Modules.Reader;

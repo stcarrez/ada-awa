@@ -45,7 +45,7 @@ package body AWA.Applications is
       AWA.Applications.Factory.Set_Application (Factory, App'Unchecked_Access);
       App.DB_Factory.Create (URI);
       ASF.Applications.Main.Application (App).Initialize (Conf, Factory);
-      AWA.Modules.Initialize (App.Modules, Conf);
+
       Application'Class (App).Initialize_Modules;
       App.Load_Configuration;
    end Initialize;
@@ -83,6 +83,18 @@ package body AWA.Applications is
       ASF.Applications.Main.Application (App).Initialize_Components;
       App.Add_Components (AWA.Components.Factory.Definition);
    end Initialize_Components;
+
+   --  ------------------------------
+   --  Initialize the application configuration properties.  Properties defined in <b>Conf</b>
+   --  are expanded by using the EL expression resolver.
+   --  ------------------------------
+   overriding
+   procedure Initialize_Config (App  : in out Application;
+                                Conf : in out ASF.Applications.Config) is
+   begin
+      ASF.Applications.Main.Application (App).Initialize_Config (Conf);
+      AWA.Modules.Initialize (App.Modules, Conf);
+   end Initialize_Config;
 
    --  ------------------------------
    --  Initialize the AWA modules provided by the application.

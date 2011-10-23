@@ -60,6 +60,12 @@ package AWA.Applications is
    overriding
    procedure Initialize_Components (App : in out Application);
 
+   --  Initialize the application configuration properties.  Properties defined in <b>Conf</b>
+   --  are expanded by using the EL expression resolver.
+   overriding
+   procedure Initialize_Config (App  : in out Application;
+                                Conf : in out ASF.Applications.Config);
+
    --  Initialize the AWA modules provided by the application.
    --  This procedure is called by <b>Initialize</b>.
    --  It should register the modules used by the application.

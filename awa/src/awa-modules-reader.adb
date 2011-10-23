@@ -18,9 +18,7 @@
 
 with Util.Serialize.IO.XML;
 
-with ASF.Navigations.Mappers;
-with ASF.Servlets.Mappers;
-with ASF.Beans.Mappers;
+with ASF.Applications.Main.Configs;
 
 with Security.Permissions;
 with Security.Controllers.Roles;
@@ -36,12 +34,11 @@ package body AWA.Modules.Reader is
    --  ------------------------------
    procedure Read_Configuration (Plugin  : in out Module'Class;
                                  File    : in String;
-                                 Context : in EL.Contexts.ELContext_Access) is
+                                 Context : in EL.Contexts.Default.Default_Context_Access) is
 
       Reader     : Util.Serialize.IO.XML.Parser;
 
       Ctx : AWA.Services.Contexts.Service_Context;
-      Nav : constant ASF.Navigations.Navigation_Handler_Access := Plugin.App.Get_Navigation_Handler;
       Sec : constant Security.Permissions.Permission_Manager_Access
         := Plugin.App.Get_Permission_Manager;
 
@@ -51,11 +48,9 @@ package body AWA.Modules.Reader is
       Ctx.Set_Context (Plugin.App.all'Unchecked_Access, null);
       declare
          package Bean_Config is
-           new ASF.Beans.Mappers.Reader_Config (Reader, Plugin.Factory'Unchecked_Access, Context);
-         package Navigation_Config is
-           new ASF.Navigations.Mappers.Reader_Config (Reader, Nav, Context);
-         package Servlet_Config is
-           new ASF.Servlets.Mappers.Reader_Config (Reader, Plugin.App.all'Unchecked_Access);
+           new ASF.Applications.Main.Configs.Reader_Config (Reader,
+                                                            Plugin.App.all'Unchecked_Access,
+                                                            Context.all'Access);
          package Policy_Config is
            new Security.Permissions.Reader_Config (Reader, Sec);
          package Role_Config is
@@ -64,8 +59,6 @@ package body AWA.Modules.Reader is
            new AWA.Permissions.Configs.Reader_Config (Reader, Sec);
 
          pragma Warnings (Off, Bean_Config);
-         pragma Warnings (Off, Navigation_Config);
-         pragma Warnings (Off, Servlet_Config);
          pragma Warnings (Off, Policy_Config);
          pragma Warnings (Off, Role_Config);
          pragma Warnings (Off, Entity_Config);
