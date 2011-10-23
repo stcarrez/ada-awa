@@ -167,19 +167,19 @@ package body AWA.Applications is
                        Module  : in AWA.Modules.Module_Access;
                        Name    : in String;
                        URI     : in String := "") is
-      procedure Set_Beans (Factory : in out ASF.Beans.Bean_Factory);
-      procedure Set_Beans (Factory : in out ASF.Beans.Bean_Factory) is
-      begin
-         Module.Register_Factory (Factory);
-      end Set_Beans;
-
-      procedure Register_Beans is
-         new ASF.Applications.Main.Register_Beans (Set_Beans);
+--        procedure Set_Beans (Factory : in out ASF.Beans.Bean_Factory);
+--        procedure Set_Beans (Factory : in out ASF.Beans.Bean_Factory) is
+--        begin
+--           Module.Register_Factory (Factory);
+--        end Set_Beans;
+--
+--        procedure Register_Beans is
+--           new ASF.Applications.Main.Register_Beans (Set_Beans);
    begin
-      Module.Initialize (App'Unchecked_Access);
-      AWA.Modules.Register (App.Modules'Unchecked_Access, Module, Name, URI);
+      --  Module.Initialize ();
+      AWA.Modules.Register (App.Modules'Unchecked_Access, App'Unchecked_Access, Module, Name, URI);
 
-      Register_Beans (App);
+--        Register_Beans (App);
 --        App.View.Register_Module (Module);  SCz: 2011-08-10: must check if necessary
    end Register;
 

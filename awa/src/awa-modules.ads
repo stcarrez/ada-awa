@@ -117,11 +117,6 @@ package AWA.Modules is
                        Name    : in String;
                        Bind    : in ASF.Beans.Class_Binding_Access);
 
-   --  Register all the definitions from the module into a main factory.
-   --  This operation is called when the module is registered in the application.
-   procedure Register_Factory (Plugin : in Module;
-                               Into   : in out ASF.Beans.Bean_Factory);
-
    --  Finalize the module.
    overriding
    procedure Finalize (Plugin : in out Module);
@@ -164,6 +159,7 @@ package AWA.Modules is
 
    --  Register the module in the registry.
    procedure Register (Registry : in Module_Registry_Access;
+                       App      : in Application_Access;
                        Plugin   : in Module_Access;
                        Name     : in String;
                        URI      : in String);
@@ -197,7 +193,6 @@ private
       Name       : Unbounded_String;
       URI        : Unbounded_String;
       Config     : ASF.Applications.Config;
-      Factory    : aliased ASF.Beans.Bean_Factory;
       Self       : Module_Access := null;
    end record;
 

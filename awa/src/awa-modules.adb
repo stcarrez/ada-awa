@@ -149,18 +149,9 @@ package body AWA.Modules is
                        Name    : in String;
                        Bind    : in ASF.Beans.Class_Binding_Access) is
    begin
-      ASF.Beans.Register_Class (Plugin.Factory, Name, Bind);
+      --        ASF.Beans.Register_Class (Plugin.Factory, Name, Bind);
+      Plugin.App.Register_Class (Name, Bind);
    end Register;
-
-   --  ------------------------------
-   --  Register all the definitions from the module into a main factory.
-   --  This operation is called when the module is registered in the application.
-   --  ------------------------------
-   procedure Register_Factory (Plugin : in Module;
-                               Into   : in out ASF.Beans.Bean_Factory) is
-   begin
-      ASF.Beans.Register (Into, Plugin.Factory);
-   end Register_Factory;
 
    --  ------------------------------
    --  Finalize the module.
@@ -239,6 +230,7 @@ package body AWA.Modules is
    --  Register the module in the registry.
    --  ------------------------------
    procedure Register (Registry : in Module_Registry_Access;
+                       App      : in Application_Access;
                        Plugin   : in Module_Access;
                        Name     : in String;
                        URI      : in String) is
@@ -251,6 +243,7 @@ package body AWA.Modules is
 
          raise Program_Error with "Module '" & Name & "' already registered";
       end if;
+      Plugin.App      := App;
       Plugin.Registry := Registry;
       Plugin.Name     := To_Unbounded_String (Name);
       Plugin.URI      := To_Unbounded_String (URI);
@@ -283,6 +276,8 @@ package body AWA.Modules is
          Plugin.Channel := Util.Events.Channels.Create (Name, Kind);
          Plugin.Channel.Subscribe (Plugin.Subscriber'Access);
       end;
+
+      Plugin.Initialize (App);
 
       --  Read the module XML configuration file if there is one.
       declare
