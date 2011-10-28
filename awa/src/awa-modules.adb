@@ -149,7 +149,6 @@ package body AWA.Modules is
                        Name    : in String;
                        Bind    : in ASF.Beans.Class_Binding_Access) is
    begin
-      --        ASF.Beans.Register_Class (Plugin.Factory, Name, Bind);
       Plugin.App.Register_Class (Name, Bind);
    end Register;
 
@@ -213,7 +212,6 @@ package body AWA.Modules is
                          App    : in Application_Access) is
    begin
       Plugin.Self := Plugin'Unchecked_Access;
-      --        ASF.Modules.Module (Plugin).Initialize (App);
       Plugin.App := App;
    end Initialize;
 
