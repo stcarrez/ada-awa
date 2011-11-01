@@ -26,7 +26,7 @@ with ADO.Objects;
 with Ada.Calendar;
 
 with AWA.Users.Module;
-with AWA.Users.Services.Tests.Helpers;
+with AWA.Tests.Helpers.Users;
 package body AWA.Users.Services.Tests is
 
    use Util.Tests;
@@ -53,10 +53,10 @@ package body AWA.Users.Services.Tests is
    --  Test creation of a user
    --  ------------------------------
    procedure Test_Create_User (T : in out Test) is
-      Principal : Helpers.Test_User;
+      Principal : AWA.Tests.Helpers.Users.Test_User;
    begin
       --  Create the user
-      Helpers.Create_User (Principal);
+      AWA.Tests.Helpers.Users.Create_User (Principal);
       T.Assert (not Principal.User.Is_Null, "User is created");
       T.Assert (Principal.User.Get_Id > 0, "User has an allocated key");
       T.Assert (Principal.Email.Get_Id > 0, "Email has an allocated key");
@@ -88,15 +88,15 @@ package body AWA.Users.Services.Tests is
    --  Test logout of a user
    --  ------------------------------
    procedure Test_Logout_User (T : in out Test) is
-      Principal : Helpers.Test_User;
+      Principal : AWA.Tests.Helpers.Users.Test_User;
    begin
       --  Create the user
-      Helpers.Create_User (Principal);
+      AWA.Tests.Helpers.Users.Create_User (Principal);
       T.Assert (not Principal.User.Is_Null, "User is created");
       T.Assert (Principal.User.Get_Id > 0, "User has an allocated key");
       T.Assert (Principal.Email.Get_Id > 0, "Email has an allocated key");
 
-      Helpers.Logout (Principal);
+      AWA.Tests.Helpers.Users.Logout (Principal);
 
       --  Verify the user session
       declare
@@ -114,7 +114,7 @@ package body AWA.Users.Services.Tests is
       end;
 
       begin
-         Helpers.Logout (Principal);
+         AWA.Tests.Helpers.Users.Logout (Principal);
 
          T.Assert (False, "Second logout should report a non-existent session");
 
@@ -130,12 +130,12 @@ package body AWA.Users.Services.Tests is
    procedure Test_Login_User (T : in out Test) is
       use type Ada.Calendar.Time;
 
-      Principal : Helpers.Test_User;
+      Principal : AWA.Tests.Helpers.Users.Test_User;
       T1        : Ada.Calendar.Time;
    begin
       begin
          Principal.Email.Set_Email ("nobody@gmail.com");
-         Helpers.Login (Principal);
+         AWA.Tests.Helpers.Users.Login (Principal);
          T.Assert (False, "Login succeeded with an invalid user name");
 
          exception
@@ -145,10 +145,10 @@ package body AWA.Users.Services.Tests is
 
       --  Create the user
       T1 := Ada.Calendar.Clock;
-      Helpers.Create_User (Principal);
-      Helpers.Logout (Principal);
+      AWA.Tests.Helpers.Users.Create_User (Principal);
+      AWA.Tests.Helpers.Users.Logout (Principal);
 
-      Helpers.Login (Principal);
+      AWA.Tests.Helpers.Users.Login (Principal);
 
       T.Assert (not Principal.User.Is_Null, "User is created");
       T.Assert (Principal.User.Get_Id > 0, "User has an allocated key");
@@ -185,16 +185,16 @@ package body AWA.Users.Services.Tests is
    --  Test password reset process
    --  ------------------------------
    procedure Test_Reset_Password_User (T : in out Test) is
-      Principal : Helpers.Test_User;
-      Key     : AWA.Users.Models.Access_Key_Ref;
+      Principal : AWA.Tests.Helpers.Users.Test_User;
+      Key       : AWA.Users.Models.Access_Key_Ref;
    begin
       --  Create the user
-      Helpers.Create_User (Principal);
-      Helpers.Logout (Principal);
+      AWA.Tests.Helpers.Users.Create_User (Principal);
+      AWA.Tests.Helpers.Users.Logout (Principal);
 
       --  Start the lost password process.
       Principal.Manager.Lost_Password (Email => Principal.Email.Get_Email);
-      Helpers.Login (Principal);
+      AWA.Tests.Helpers.Users.Login (Principal);
 
       --  Get the access key to reset the password
       declare
@@ -224,7 +224,7 @@ package body AWA.Users.Services.Tests is
       T.Assert (Principal.Email.Get_Id > 0, "Email has an allocated key");
       T.Assert (not Principal.Session.Is_Null, "Session is not created");
 
-      Helpers.Logout (Principal);
+      AWA.Tests.Helpers.Users.Logout (Principal);
 
    end Test_Reset_Password_User;
 

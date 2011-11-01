@@ -22,7 +22,7 @@ with Util.Test_Caller;
 with ASF.Tests;
 with AWA.Tests;
 with AWA.Users.Models;
-with AWA.Users.Services.Tests.Helpers;
+with AWA.Tests.Helpers.Users;
 
 with ASF.Requests.Mockup;
 with ASF.Responses.Mockup;
@@ -52,12 +52,12 @@ package body AWA.Users.Tests is
    procedure Test_Create_User (T : in out Test) is
       use type ASF.Principals.Principal_Access;
 
-      Request : ASF.Requests.Mockup.Request;
-      Reply   : ASF.Responses.Mockup.Response;
-	  Email   : constant String := "Joe-" & Util.Tests.Get_UUID & "@gmail.com";
-      Principal : Services.Tests.Helpers.Test_User;
+      Request   : ASF.Requests.Mockup.Request;
+      Reply     : ASF.Responses.Mockup.Response;
+	  Email     : constant String := "Joe-" & Util.Tests.Get_UUID & "@gmail.com";
+      Principal : AWA.Tests.Helpers.Users.Test_User;
    begin
-      Services.Tests.Helpers.Initialize (Principal);
+      AWA.Tests.Helpers.Users.Initialize (Principal);
 
       Do_Get (Request, Reply, "/auth/register.html", "create-user-1.html");
 
@@ -80,7 +80,7 @@ package body AWA.Users.Tests is
 
 		 Key       : AWA.Users.Models.Access_Key_Ref;
       begin
-	     Services.Tests.Helpers.Find_Access_Key (Principal, Email, Key);
+	     AWA.Tests.Helpers.Users.Find_Access_Key (Principal, Email, Key);
 		 T.Assert (not Key.Is_Null, "There is no access key associated with the user");
 		 Request.Set_Parameter ("key", Key.Get_Access_Key);
 		 Do_Get (Request, Reply, "/auth/validate.html", "validate-user-1.html");
@@ -105,10 +105,10 @@ package body AWA.Users.Tests is
 
       Request   : ASF.Requests.Mockup.Request;
       Reply     : ASF.Responses.Mockup.Response;
-      Principal :Services.Tests.Helpers.Test_User;
+      Principal : AWA.Tests.Helpers.Users.Test_User;
    begin
       AWA.Tests.Set_Application_Context;
-      Services.Tests.Helpers.Create_User (Principal, "Joe@gmail.com");
+      AWA.Tests.Helpers.Users.Create_User (Principal, "Joe@gmail.com");
 
       Do_Get (Request, Reply, "/auth/login.html", "login-user-1.html");
 
@@ -152,11 +152,11 @@ package body AWA.Users.Tests is
 
 	  --  Now, get the access key and simulate a click on the reset password link.
 	  declare
-         Principal : Services.Tests.Helpers.Test_User;
+         Principal : AWA.Tests.Helpers.Users.Test_User;
          Key       : AWA.Users.Models.Access_Key_Ref;
       begin
          AWA.Tests.Set_Application_Context;
-	     Services.Tests.Helpers.Find_Access_Key (Principal, Email, Key);
+	     AWA.Tests.Helpers.Users.Find_Access_Key (Principal, Email, Key);
 		 T.Assert (not Key.Is_Null, "There is no access key associated with the user");
 
          --  Simulate user clicking on the reset password link.

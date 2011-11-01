@@ -18,12 +18,13 @@
 
 with Security.Contexts;
 with AWA.Users.Models;
+with AWA.Users.Services;
 with AWA.Services.Contexts;
-package AWA.Users.Services.Tests.Helpers is
+package AWA.Tests.Helpers.Users is
 
    type Test_User is limited record
       Context : AWA.Services.Contexts.Service_Context;
-      Manager : User_Service_Access := null;
+      Manager : AWA.Users.Services.User_Service_Access := null;
       User    : AWA.Users.Models.User_Ref;
       Email   : AWA.Users.Models.Email_Ref;
       Session : AWA.Users.Models.Session_Ref;
@@ -56,4 +57,4 @@ package AWA.Users.Services.Tests.Helpers is
                     Sec_Context : in out Security.Contexts.Security_Context;
                     Email   : in String);
 
-end AWA.Users.Services.Tests.Helpers;
+end AWA.Tests.Helpers.Users;

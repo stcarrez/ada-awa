@@ -26,7 +26,7 @@ with Security.Contexts;
 
 with AWA.Services.Contexts;
 with AWA.Blogs.Module;
-with AWA.Users.Services.Tests.Helpers;
+with AWA.Tests.Helpers.Users;
 package body AWA.Blogs.Services.Tests is
 
    use Util.Tests;
@@ -52,7 +52,7 @@ package body AWA.Blogs.Services.Tests is
       Sec_Ctx   : Security.Contexts.Security_Context;
       Context   : AWA.Services.Contexts.Service_Context;
    begin
-      AWA.Users.Services.Tests.Helpers.Login (Context, Sec_Ctx, "test-blog@test.com");
+      AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-blog@test.com");
 
       Manager := AWA.Blogs.Module.Get_Blog_Manager;
       Manager.Create_Blog (Workspace_Id => 0,
@@ -71,7 +71,7 @@ package body AWA.Blogs.Services.Tests is
       Sec_Ctx   : Security.Contexts.Security_Context;
       Context   : AWA.Services.Contexts.Service_Context;
    begin
-      AWA.Users.Services.Tests.Helpers.Login (Context, Sec_Ctx, "test-blog-post@test.com");
+      AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-blog-post@test.com");
 
       Manager := AWA.Blogs.Module.Get_Blog_Manager;
       Manager.Create_Blog (Workspace_Id => 0,

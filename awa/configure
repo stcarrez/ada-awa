@@ -3151,7 +3151,7 @@ else
 fi
 
 
-ac_config_files="$ac_config_files Makefile awa.gpr tests.gpr"
+ac_config_files="$ac_config_files Makefile awa.gpr tests.gpr awaunit.gpr"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -3855,6 +3855,7 @@ do
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "awa.gpr") CONFIG_FILES="$CONFIG_FILES awa.gpr" ;;
     "tests.gpr") CONFIG_FILES="$CONFIG_FILES tests.gpr" ;;
+    "awaunit.gpr") CONFIG_FILES="$CONFIG_FILES awaunit.gpr" ;;
 
   *) as_fn_error "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

@@ -185,5 +185,5 @@ fi
 AC_SUBST(ADO_DB_SQLITE)
 
 AC_OUTPUT(
-Makefile awa.gpr tests.gpr
+Makefile awa.gpr tests.gpr awaunit.gpr
 )

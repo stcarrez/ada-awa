@@ -24,7 +24,9 @@ with AWA.Users.Module;
 with AWA.Users.Principals;
 with ADO.Sessions;
 with ADO.SQL;
-package body AWA.Users.Services.Tests.Helpers is
+package body AWA.Tests.Helpers.Users is
+
+   use AWA.Users.Services;
 
    --  ------------------------------
    --  Initialize the service context.
@@ -160,4 +162,4 @@ package body AWA.Users.Services.Tests.Helpers is
                                Principal => Principal.all'Access);
    end Login;
 
-end AWA.Users.Services.Tests.Helpers;
+end AWA.Tests.Helpers.Users;
