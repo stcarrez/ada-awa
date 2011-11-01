@@ -122,7 +122,8 @@ package body AWA.Users.Models is
       return Impl.User_Id;
    end Get_User_Id;
    --  Copy of the object.
-   function Copy (Object : Email_Ref) return Email_Ref is
+   procedure Copy (Object : in Email_Ref;
+                   Into   : in out Email_Ref) is
       Result : Email_Ref;
    begin
       if not Object.Is_Null then
@@ -139,7 +140,7 @@ package body AWA.Users.Models is
             Copy.User_Id := Impl.User_Id;
          end;
       end if;
-      return Result;
+      Into := Result;
    end Copy;
    procedure Find (Object  : in out Email_Ref;
                    Session : in out ADO.Sessions.Session'Class;
@@ -585,7 +586,8 @@ package body AWA.Users.Models is
       return Impl.Email;
    end Get_Email;
    --  Copy of the object.
-   function Copy (Object : User_Ref) return User_Ref is
+   procedure Copy (Object : in User_Ref;
+                   Into   : in out User_Ref) is
       Result : User_Ref;
    begin
       if not Object.Is_Null then
@@ -607,7 +609,7 @@ package body AWA.Users.Models is
             Copy.Email := Impl.Email;
          end;
       end if;
-      return Result;
+      Into := Result;
    end Copy;
    procedure Find (Object  : in out User_Ref;
                    Session : in out ADO.Sessions.Session'Class;
@@ -992,7 +994,8 @@ package body AWA.Users.Models is
       return Impl.User_Id;
    end Get_User_Id;
    --  Copy of the object.
-   function Copy (Object : Access_Key_Ref) return Access_Key_Ref is
+   procedure Copy (Object : in Access_Key_Ref;
+                   Into   : in out Access_Key_Ref) is
       Result : Access_Key_Ref;
    begin
       if not Object.Is_Null then
@@ -1009,7 +1012,7 @@ package body AWA.Users.Models is
             Copy.User_Id := Impl.User_Id;
          end;
       end if;
-      return Result;
+      Into := Result;
    end Copy;
    procedure Find (Object  : in out Access_Key_Ref;
                    Session : in out ADO.Sessions.Session'Class;
@@ -1397,7 +1400,8 @@ package body AWA.Users.Models is
       return Impl.Session_Type;
    end Get_Session_Type;
    --  Copy of the object.
-   function Copy (Object : Session_Ref) return Session_Ref is
+   procedure Copy (Object : in Session_Ref;
+                   Into   : in out Session_Ref) is
       Result : Session_Ref;
    begin
       if not Object.Is_Null then
@@ -1418,7 +1422,7 @@ package body AWA.Users.Models is
             Copy.Session_Type := Impl.Session_Type;
          end;
       end if;
-      return Result;
+      Into := Result;
    end Copy;
    procedure Find (Object  : in out Session_Ref;
                    Session : in out ADO.Sessions.Session'Class;

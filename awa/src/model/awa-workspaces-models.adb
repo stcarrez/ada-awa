@@ -112,7 +112,8 @@ package body Awa.Workspaces.Models is
       return Impl.Owner;
    end Get_Owner;
    --  Copy of the object.
-   function Copy (Object : Workspace_Ref) return Workspace_Ref is
+   procedure Copy (Object : in Workspace_Ref;
+                   Into   : in out Workspace_Ref) is
       Result : Workspace_Ref;
    begin
       if not Object.Is_Null then
@@ -129,7 +130,7 @@ package body Awa.Workspaces.Models is
             Copy.Owner := Impl.Owner;
          end;
       end if;
-      return Result;
+      Into := Result;
    end Copy;
    procedure Find (Object  : in out Workspace_Ref;
                    Session : in out ADO.Sessions.Session'Class;
@@ -457,7 +458,8 @@ package body Awa.Workspaces.Models is
       return Impl.Workspace;
    end Get_Workspace;
    --  Copy of the object.
-   function Copy (Object : Member_Ref) return Member_Ref is
+   procedure Copy (Object : in Member_Ref;
+                   Into   : in out Member_Ref) is
       Result : Member_Ref;
    begin
       if not Object.Is_Null then
@@ -475,7 +477,7 @@ package body Awa.Workspaces.Models is
             Copy.Workspace := Impl.Workspace;
          end;
       end if;
-      return Result;
+      Into := Result;
    end Copy;
    procedure Find (Object  : in out Member_Ref;
                    Session : in out ADO.Sessions.Session'Class;

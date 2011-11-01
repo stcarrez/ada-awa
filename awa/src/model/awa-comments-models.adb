@@ -162,7 +162,8 @@ package body AWA.Comments.Models is
       return Impl.Entity_Type;
    end Get_Entity_Type;
    --  Copy of the object.
-   function Copy (Object : Comment_Ref) return Comment_Ref is
+   procedure Copy (Object : in Comment_Ref;
+                   Into   : in out Comment_Ref) is
       Result : Comment_Ref;
    begin
       if not Object.Is_Null then
@@ -182,7 +183,7 @@ package body AWA.Comments.Models is
             Copy.Entity_Type := Impl.Entity_Type;
          end;
       end if;
-      return Result;
+      Into := Result;
    end Copy;
    procedure Find (Object  : in out Comment_Ref;
                    Session : in out ADO.Sessions.Session'Class;

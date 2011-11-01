@@ -130,7 +130,8 @@ package AWA.Permissions.Models is
    procedure Allocate (Object : in out Acl_Ref);
 
    --  Copy of the object.
-   function Copy (Object : Acl_Ref) return Acl_Ref;
+   procedure Copy (Object : in Acl_Ref;
+                   Into   : in out Acl_Ref);
 
    package Acl_Vectors is
       new Ada.Containers.Vectors (Index_Type   => Natural,

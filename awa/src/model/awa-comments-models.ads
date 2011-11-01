@@ -30,8 +30,8 @@ with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
 with Util.Beans.Basic.Lists;
-with AWA.Users.Models;
 with ADO.Model;
+with AWA.Users.Models;
 package AWA.Comments.Models is
    --  Create an object key for Comment.
    function Comment_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
@@ -143,7 +143,8 @@ package AWA.Comments.Models is
    procedure Allocate (Object : in out Comment_Ref);
 
    --  Copy of the object.
-   function Copy (Object : Comment_Ref) return Comment_Ref;
+   procedure Copy (Object : in Comment_Ref;
+                   Into   : in out Comment_Ref);
 
    package Comment_Vectors is
       new Ada.Containers.Vectors (Index_Type   => Natural,

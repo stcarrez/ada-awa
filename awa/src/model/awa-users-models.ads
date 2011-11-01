@@ -120,7 +120,8 @@ package AWA.Users.Models is
    procedure Allocate (Object : in out Email_Ref);
 
    --  Copy of the object.
-   function Copy (Object : Email_Ref) return Email_Ref;
+   procedure Copy (Object : in Email_Ref;
+                   Into   : in out Email_Ref);
 
    package Email_Vectors is
       new Ada.Containers.Vectors (Index_Type   => Natural,
@@ -280,7 +281,8 @@ package AWA.Users.Models is
    procedure Allocate (Object : in out User_Ref);
 
    --  Copy of the object.
-   function Copy (Object : User_Ref) return User_Ref;
+   procedure Copy (Object : in User_Ref;
+                   Into   : in out User_Ref);
 
    package User_Vectors is
       new Ada.Containers.Vectors (Index_Type   => Natural,
@@ -380,7 +382,8 @@ package AWA.Users.Models is
    procedure Allocate (Object : in out Access_Key_Ref);
 
    --  Copy of the object.
-   function Copy (Object : Access_Key_Ref) return Access_Key_Ref;
+   procedure Copy (Object : in Access_Key_Ref;
+                   Into   : in out Access_Key_Ref);
 
    package Access_Key_Vectors is
       new Ada.Containers.Vectors (Index_Type   => Natural,
@@ -512,7 +515,8 @@ package AWA.Users.Models is
    procedure Allocate (Object : in out Session_Ref);
 
    --  Copy of the object.
-   function Copy (Object : Session_Ref) return Session_Ref;
+   procedure Copy (Object : in Session_Ref;
+                   Into   : in out Session_Ref);
 
    package Session_Vectors is
       new Ada.Containers.Vectors (Index_Type   => Natural,

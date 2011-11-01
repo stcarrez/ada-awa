@@ -3,7 +3,7 @@
       The list of posts for the blog administrator.
     </description>
 
-    <class name="AWA.Blogs.models.Admin_Post_Info" bean="yes">
+    <class name="AWA.Blogs.Models.Admin_Post_Info" bean="yes">
         <property type='Identifier' name="id">
             <comment>the post identifier.</comment>
         </property>

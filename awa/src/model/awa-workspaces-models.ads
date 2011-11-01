@@ -123,7 +123,8 @@ package Awa.Workspaces.Models is
    procedure Allocate (Object : in out Workspace_Ref);
 
    --  Copy of the object.
-   function Copy (Object : Workspace_Ref) return Workspace_Ref;
+   procedure Copy (Object : in Workspace_Ref;
+                   Into   : in out Workspace_Ref);
 
    package Workspace_Vectors is
       new Ada.Containers.Vectors (Index_Type   => Natural,
@@ -227,7 +228,8 @@ package Awa.Workspaces.Models is
    procedure Allocate (Object : in out Member_Ref);
 
    --  Copy of the object.
-   function Copy (Object : Member_Ref) return Member_Ref;
+   procedure Copy (Object : in Member_Ref;
+                   Into   : in out Member_Ref);
 
    package Member_Vectors is
       new Ada.Containers.Vectors (Index_Type   => Natural,

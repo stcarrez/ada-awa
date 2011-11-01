@@ -62,9 +62,6 @@ package Awa.Blogs.Beans is
    function Get_Method_Bindings (From : in Blog_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access;
 
-   overriding
-   function Copy (Bean : in Blog_Bean) return Blog_Bean;
-
    --  Create a new blog.
    procedure Create_Blog (Bean    : in out Blog_Bean;
                           Outcome : in out Ada.Strings.Unbounded.Unbounded_String);

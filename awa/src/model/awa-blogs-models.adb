@@ -158,7 +158,8 @@ package body AWA.Blogs.Models is
       return Impl.Workspace;
    end Get_Workspace;
    --  Copy of the object.
-   function Copy (Object : Blog_Ref) return Blog_Ref is
+   procedure Copy (Object : in Blog_Ref;
+                   Into   : in out Blog_Ref) is
       Result : Blog_Ref;
    begin
       if not Object.Is_Null then
@@ -177,7 +178,7 @@ package body AWA.Blogs.Models is
             Copy.Workspace := Impl.Workspace;
          end;
       end if;
-      return Result;
+      Into := Result;
    end Copy;
    procedure Find (Object  : in out Blog_Ref;
                    Session : in out ADO.Sessions.Session'Class;
@@ -628,7 +629,8 @@ package body AWA.Blogs.Models is
       return Impl.Blog;
    end Get_Blog;
    --  Copy of the object.
-   function Copy (Object : Post_Ref) return Post_Ref is
+   procedure Copy (Object : in Post_Ref;
+                   Into   : in out Post_Ref) is
       Result : Post_Ref;
    begin
       if not Object.Is_Null then
@@ -651,7 +653,7 @@ package body AWA.Blogs.Models is
             Copy.Blog := Impl.Blog;
          end;
       end if;
-      return Result;
+      Into := Result;
    end Copy;
    procedure Find (Object  : in out Post_Ref;
                    Session : in out ADO.Sessions.Session'Class;
@@ -958,67 +960,6 @@ package body AWA.Blogs.Models is
    --  Get the bean attribute identified by the given name.
    --  --------------------
    overriding
-   function Get_Value (From : in Blog_Info;
-                       Name : in String) return Util.Beans.Objects.Object is
-   begin
-      if Name = "id" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
-      end if;
-      if Name = "title" then
-         return Util.Beans.Objects.To_Object (From.Title);
-      end if;
-      if Name = "uid" then
-         return Util.Beans.Objects.To_Object (From.Uid);
-      end if;
-      if Name = "create_date" then
-         return Util.Beans.Objects.Time.To_Object (From.Create_Date);
-      end if;
-      return Util.Beans.Objects.Null_Object;
-   end Get_Value;
-
-   --  --------------------
-   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
-   --  --------------------
-   procedure List (Object  : in out Blog_Info_List_Bean;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Context : in out ADO.Queries.Context'Class) is
-   begin
-      List (Object.List, Session, Context);
-   end List;
-   --  --------------------
-   --  
-   --  --------------------
-   procedure List (Object  : in out Blog_Info_Vector;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Context : in out ADO.Queries.Context'Class) is
-      procedure Read (Into : in out Blog_Info);
-
-      Stmt : ADO.Statements.Query_Statement
-          := Session.Create_Statement (Context);
-      Pos  : Natural := 0;
-      procedure Read (Into : in out Blog_Info) is
-      begin
-         Into.Id := Stmt.Get_Identifier (0);
-         Into.Title := Stmt.Get_Unbounded_String (1);
-         Into.Uid := Stmt.Get_Unbounded_String (2);
-         Into.Create_Date := Stmt.Get_Time (3);
-      end Read;
-   begin
-      Stmt.Execute;
-      Blog_Info_Vectors.Clear (Object);
-      while Stmt.Has_Elements loop
-         Object.Insert_Space (Before => Pos);
-         Object.Update_Element (Index => Pos, Process => Read'Access);
-         Pos := Pos + 1;
-         Stmt.Next;
-      end loop;
-   end List;
-
-
-   --  --------------------
-   --  Get the bean attribute identified by the given name.
-   --  --------------------
-   overriding
    function Get_Value (From : in Admin_Post_Info;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
@@ -1071,6 +1012,67 @@ package body AWA.Blogs.Models is
    begin
       Stmt.Execute;
       Admin_Post_Info_Vectors.Clear (Object);
+      while Stmt.Has_Elements loop
+         Object.Insert_Space (Before => Pos);
+         Object.Update_Element (Index => Pos, Process => Read'Access);
+         Pos := Pos + 1;
+         Stmt.Next;
+      end loop;
+   end List;
+
+
+   --  --------------------
+   --  Get the bean attribute identified by the given name.
+   --  --------------------
+   overriding
+   function Get_Value (From : in Blog_Info;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
+      end if;
+      if Name = "title" then
+         return Util.Beans.Objects.To_Object (From.Title);
+      end if;
+      if Name = "uid" then
+         return Util.Beans.Objects.To_Object (From.Uid);
+      end if;
+      if Name = "create_date" then
+         return Util.Beans.Objects.Time.To_Object (From.Create_Date);
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+   --  --------------------
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   --  --------------------
+   procedure List (Object  : in out Blog_Info_List_Bean;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+   begin
+      List (Object.List, Session, Context);
+   end List;
+   --  --------------------
+   --  
+   --  --------------------
+   procedure List (Object  : in out Blog_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+      procedure Read (Into : in out Blog_Info);
+
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Context);
+      Pos  : Natural := 0;
+      procedure Read (Into : in out Blog_Info) is
+      begin
+         Into.Id := Stmt.Get_Identifier (0);
+         Into.Title := Stmt.Get_Unbounded_String (1);
+         Into.Uid := Stmt.Get_Unbounded_String (2);
+         Into.Create_Date := Stmt.Get_Time (3);
+      end Read;
+   begin
+      Stmt.Execute;
+      Blog_Info_Vectors.Clear (Object);
       while Stmt.Has_Elements loop
          Object.Insert_Space (Before => Pos);
          Object.Update_Element (Index => Pos, Process => Read'Access);

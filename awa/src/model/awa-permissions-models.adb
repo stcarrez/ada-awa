@@ -133,7 +133,8 @@ package body AWA.Permissions.Models is
       return Impl.Writeable;
    end Get_Writeable;
    --  Copy of the object.
-   function Copy (Object : Acl_Ref) return Acl_Ref is
+   procedure Copy (Object : in Acl_Ref;
+                   Into   : in out Acl_Ref) is
       Result : Acl_Ref;
    begin
       if not Object.Is_Null then
@@ -151,7 +152,7 @@ package body AWA.Permissions.Models is
             Copy.Writeable := Impl.Writeable;
          end;
       end if;
-      return Result;
+      Into := Result;
    end Copy;
    procedure Find (Object  : in out Acl_Ref;
                    Session : in out ADO.Sessions.Session'Class;

@@ -91,14 +91,6 @@ package body AWA.Blogs.Beans is
       return Blog_Bean_Binding'Access;
    end Get_Method_Bindings;
 
-   overriding
-   function Copy (Bean : in Blog_Bean) return Blog_Bean is
-      pragma Unreferenced (Bean);
-      Ref : Blog_Bean;
-   begin
-      return Ref;
-   end Copy;
-
    --  ------------------------------
    --  Create a new blog.
    --  ------------------------------

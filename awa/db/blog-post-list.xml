@@ -3,7 +3,7 @@
       Queries used by the permission manager
     </description>
 
-    <class name="AWA.Blogs.models.Post_Info" bean="yes">
+    <class name="AWA.Blogs.Models.Post_Info" bean="yes">
         <property type='Identifier' name="id">
             <comment>the post identifier.</comment>
         </property>
