@@ -34,7 +34,7 @@ with AWA.Applications.Factory;
 with AWA.Services.Filters;
 package body AWA.Tests is
 
-   App      : AWA.Applications.Application_Access := null;
+   Application    : AWA.Applications.Application_Access := null;
 
    Factory        : AWA.Applications.Factory.Application_Factory;
 
@@ -50,58 +50,71 @@ package body AWA.Tests is
 
    Date_Converter : aliased ASF.Converters.Dates.Date_Converter;
 
-   --  ------------------------------
-   --  Initialize the awa test framework mockup.
-   --  ------------------------------
    procedure Initialize (Props : in Util.Properties.Manager) is
+   begin
+      Initialize (null, Props, True);
+   end Initialize;
+
+   --  ------------------------------
+   --  Initialize the AWA test framework mockup.
+   --  ------------------------------
+   procedure Initialize (App         : in AWA.Applications.Application_Access;
+                         Props       : in Util.Properties.Manager;
+                         Add_Modules : in Boolean) is
       use AWA.Applications;
    begin
       ADO.Drivers.Initialize (Props);
 
-      App := new AWA.Applications.Application;
+      if App = null then
+         Application := new AWA.Applications.Application;
+      else
+         Application := App;
+      end if;
 
-      ASF.Tests.Initialize (Props, App.all'Access, Factory);
-      App.Add_Filter ("service", Service_Filter'Access);
-      App.Add_Filter_Mapping (Name => "service", Pattern => "*.html");
+      ASF.Tests.Initialize (Props, Application.all'Access, Factory);
+      Application.Add_Filter ("service", Service_Filter'Access);
+      Application.Add_Filter_Mapping (Name => "service", Pattern => "*.html");
 
-      declare
-         Users : constant AWA.Users.Module.User_Module_Access := AWA.Tests.Users'Access;
-      begin
-         Register (App    => App.all'Access,
-                   Name   => AWA.Users.Module.NAME,
-                   URI    => "user",
-                   Module => Users.all'Access);
+      if Add_Modules then
+         declare
+            Users : constant AWA.Users.Module.User_Module_Access := AWA.Tests.Users'Access;
+         begin
+            Register (App    => Application.all'Access,
+                      Name   => AWA.Users.Module.NAME,
+                      URI    => "user",
+                      Module => Users.all'Access);
 
-         Register (App    => App.all'Access,
-                   Name   => "mail",
-                   URI    => "mail",
-                   Module => Mail'Access);
+            Register (App    => Application.all'Access,
+                      Name   => "mail",
+                      URI    => "mail",
+                      Module => Mail'Access);
 
-         Register (App    => App.all'Access,
-                   Name   => "workspaces",
-                   URI    => "workspaces",
-                   Module => Workspaces'Access);
+            Register (App    => Application.all'Access,
+                      Name   => "workspaces",
+                      URI    => "workspaces",
+                      Module => Workspaces'Access);
 
-         Register (App    => App.all'Access,
-                   Name   => AWA.Blogs.Module.NAME,
-                   URI    => "blogs",
-                   Module => Blogs'Access);
+            Register (App    => Application.all'Access,
+                      Name   => AWA.Blogs.Module.NAME,
+                      URI    => "blogs",
+                      Module => Blogs'Access);
 
-         if Props.Exists ("test.server") then
-            declare
-               WS : ASF.Server.Web.AWS_Container;
-            begin
-               App.Add_Converter (Name      => "dateConverter",
-                                  Converter => Date_Converter'Access);
+            if Props.Exists ("test.server") then
+               declare
+                  WS : ASF.Server.Web.AWS_Container;
+               begin
+                  Application.Add_Converter (Name      => "dateConverter",
+                                             Converter => Date_Converter'Access);
 
-               WS.Register_Application ("/asfunit", App.all'Access);
+                  WS.Register_Application ("/asfunit", Application.all'Access);
 
-               WS.Start;
-               delay 6000.0;
-            end;
-         end if;
-         ASF.Server.Tests.Set_Context (App.all'Access);
-      end;
+                  WS.Start;
+                  delay 6000.0;
+               end;
+            end if;
+            ASF.Server.Tests.Set_Context (Application.all'Access);
+         end;
+      end if;
    end Initialize;
 
    --  ------------------------------
@@ -109,7 +122,7 @@ package body AWA.Tests is
    --  ------------------------------
    function Get_Application return AWA.Applications.Application_Access is
    begin
-      return App;
+      return Application;
    end Get_Application;
 
    --  ------------------------------
@@ -117,7 +130,7 @@ package body AWA.Tests is
    --  ------------------------------
    procedure Set_Application_Context is
    begin
-      ASF.Server.Tests.Set_Context (App.all'Access);
+      ASF.Server.Tests.Set_Context (Application.all'Access);
    end Set_Application_Context;
 
 end AWA.Tests;

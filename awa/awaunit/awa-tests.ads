@@ -20,7 +20,11 @@ with Util.Properties;
 with AWA.Applications;
 package AWA.Tests is
 
-   --  Initialize the awa test framework mockup.
+   --  Initialize the AWA test framework mockup.
+   procedure Initialize (App         : in AWA.Applications.Application_Access;
+                         Props       : in Util.Properties.Manager;
+                         Add_Modules : in Boolean);
+
    procedure Initialize (Props : in Util.Properties.Manager);
 
    --  Get the test application.
