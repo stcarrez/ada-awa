@@ -32,8 +32,8 @@ with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
 with Util.Beans.Basic.Lists;
-with AWA.Workspaces.Models;
 with AWA.Users.Models;
+with AWA.Workspaces.Models;
 package AWA.Blogs.Models is
    type Post_Status_Type is (POST_DRAFT, POST_PUBLISHED, POST_SCHEDULED);
    for Post_Status_Type use (POST_DRAFT => 0, POST_PUBLISHED => 1, POST_SCHEDULED => 2);
@@ -366,50 +366,6 @@ package AWA.Blogs.Models is
    --  --------------------
    --  
    --  --------------------
-   type Blog_Info is new Util.Beans.Basic.Readonly_Bean with record
-      --  the blog identifier.
-      Id : ADO.Identifier;
-
-      --  the blog title.
-      Title : Ada.Strings.Unbounded.Unbounded_String;
-
-      --  the blog uuid.
-      Uid : Ada.Strings.Unbounded.Unbounded_String;
-
-      --  the blog creation date.
-      Create_Date : Ada.Calendar.Time;
-
-   end record;
-
-   --  Get the bean attribute identified by the given name.
-   overriding
-   function Get_Value (From : in Blog_Info;
-                       Name : in String) return Util.Beans.Objects.Object;
-
-   package Blog_Info_Beans is
-      new Util.Beans.Basic.Lists (Element_Type => Blog_Info);
-   package Blog_Info_Vectors renames Blog_Info_Beans.Vectors;
-   subtype Blog_Info_List_Bean is Blog_Info_Beans.List_Bean;
-
-   type Blog_Info_List_Bean_Access is access all Blog_Info_List_Bean;
-
-   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
-   procedure List (Object  : in out Blog_Info_List_Bean;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Context : in out ADO.Queries.Context'Class);
-
-   subtype Blog_Info_Vector is Blog_Info_Vectors.Vector;
-
-   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
-   procedure List (Object  : in out Blog_Info_Vector;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Context : in out ADO.Queries.Context'Class);
-
-   Query_Blog_List : constant ADO.Queries.Query_Definition_Access;
-
-   --  --------------------
-   --  
-   --  --------------------
    type Post_Info is new Util.Beans.Basic.Readonly_Bean with record
       --  the post identifier.
       Id : ADO.Identifier;
@@ -456,6 +412,50 @@ package AWA.Blogs.Models is
                    Context : in out ADO.Queries.Context'Class);
 
    Query_Blog_Post_List : constant ADO.Queries.Query_Definition_Access;
+
+   --  --------------------
+   --  
+   --  --------------------
+   type Blog_Info is new Util.Beans.Basic.Readonly_Bean with record
+      --  the blog identifier.
+      Id : ADO.Identifier;
+
+      --  the blog title.
+      Title : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the blog uuid.
+      Uid : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the blog creation date.
+      Create_Date : Ada.Calendar.Time;
+
+   end record;
+
+   --  Get the bean attribute identified by the given name.
+   overriding
+   function Get_Value (From : in Blog_Info;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   package Blog_Info_Beans is
+      new Util.Beans.Basic.Lists (Element_Type => Blog_Info);
+   package Blog_Info_Vectors renames Blog_Info_Beans.Vectors;
+   subtype Blog_Info_List_Bean is Blog_Info_Beans.List_Bean;
+
+   type Blog_Info_List_Bean_Access is access all Blog_Info_List_Bean;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Blog_Info_List_Bean;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   subtype Blog_Info_Vector is Blog_Info_Vectors.Vector;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Blog_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   Query_Blog_List : constant ADO.Queries.Query_Definition_Access;
 
 
 private
@@ -594,16 +594,6 @@ private
    Query_Blog_Admin_Post_List : constant ADO.Queries.Query_Definition_Access
    := Def_Adminpostinfo_Blog_Admin_Post_List.Query'Access;
 
-   package File_Bloginfo is
-      new ADO.Queries.Loaders.File (Path => "blog-list.xml",
-                                    Sha1 => "F4F57D21CFAF56A121532B852D9C38D4ECEFDA64");
-
-   package Def_Bloginfo_Blog_List is
-      new ADO.Queries.Loaders.Query (Name => "blog-list",
-                                     File => File_Bloginfo.File'Access);
-   Query_Blog_List : constant ADO.Queries.Query_Definition_Access
-   := Def_Bloginfo_Blog_List.Query'Access;
-
    package File_Postinfo is
       new ADO.Queries.Loaders.File (Path => "blog-post-list.xml",
                                     Sha1 => "F61889EED51F4277BE7D979A3A2657A506FA0406");
@@ -613,4 +603,14 @@ private
                                      File => File_Postinfo.File'Access);
    Query_Blog_Post_List : constant ADO.Queries.Query_Definition_Access
    := Def_Postinfo_Blog_Post_List.Query'Access;
+
+   package File_Bloginfo is
+      new ADO.Queries.Loaders.File (Path => "blog-list.xml",
+                                    Sha1 => "F4F57D21CFAF56A121532B852D9C38D4ECEFDA64");
+
+   package Def_Bloginfo_Blog_List is
+      new ADO.Queries.Loaders.Query (Name => "blog-list",
+                                     File => File_Bloginfo.File'Access);
+   Query_Blog_List : constant ADO.Queries.Query_Definition_Access
+   := Def_Bloginfo_Blog_List.Query'Access;
 end AWA.Blogs.Models;

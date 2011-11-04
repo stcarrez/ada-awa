@@ -1,5 +1,57 @@
-/* Copied from ./db/mysql/awa-mysql.sql*/
+/* Copied from ado-mysql.sql*/
 /* File generated automatically by dynamo */
+/* Sequence generator */
+CREATE TABLE sequence (
+  /* the sequence name */
+  `name` VARCHAR(127) NOT NULL,
+  /* the sequence record version */
+  `version` int ,
+  /* the sequence value */
+  `value` BIGINT ,
+  /* the sequence block size */
+  `block_size` BIGINT ,
+  PRIMARY KEY (`name`)
+);
+/* Entity types */
+CREATE TABLE entity_type (
+  /* the entity type identifier */
+  `id` INTEGER  AUTO_INCREMENT,
+  /* the entity type name (table name) */
+  `name` VARCHAR(127) UNIQUE NOT NULL,
+  PRIMARY KEY (`id`)
+);
+INSERT INTO entity_type (name) VALUES
+("sequence")
+,("entity_type")
+;
+/* Copied from awa-mysql.sql*/
+/* File generated automatically by dynamo */
+/* Defines an access key */
+CREATE TABLE access_key (
+  /* the email id */
+  `id` BIGINT NOT NULL,
+  /*  */
+  `version` int ,
+  /* the access key */
+  `access_key` VARCHAR(256) ,
+  /* the user identifier */
+  `user_id` BIGINT ,
+  PRIMARY KEY (`id`)
+);
+/* Access control */
+CREATE TABLE acl (
+  /* the unique ACL id */
+  `id` BIGINT NOT NULL,
+  /* the entity type */
+  `entity_type` INTEGER ,
+  /* the user identifier */
+  `user_id` BIGINT ,
+  /* the entity identifier */
+  `entity_id` BIGINT ,
+  /* whether the entity is writeable */
+  `writeable` TINYINT ,
+  PRIMARY KEY (`id`)
+);
 /* Blog  */
 CREATE TABLE blog (
   /* the blog identifier */
@@ -58,20 +110,6 @@ CREATE TABLE comments (
   `entity__type_fk` INTEGER NOT NULL,
   PRIMARY KEY (`id`)
 );
-/* Access control */
-CREATE TABLE acl (
-  /* the unique ACL id */
-  `id` BIGINT NOT NULL,
-  /* the entity type */
-  `entity_type` INTEGER ,
-  /* the user identifier */
-  `user_id` BIGINT ,
-  /* the entity identifier */
-  `entity_id` BIGINT ,
-  /* whether the entity is writeable */
-  `writeable` TINYINT ,
-  PRIMARY KEY (`id`)
-);
 /* Email address */
 CREATE TABLE email (
   /* the email id */
@@ -80,40 +118,6 @@ CREATE TABLE email (
   `version` int ,
   /* the email address */
   `email` VARCHAR(256) ,
-  /* the user identifier */
-  `user_id` BIGINT ,
-  PRIMARY KEY (`id`)
-);
-/* Record representing a user */
-CREATE TABLE user (
-  /* the user id */
-  `id` BIGINT NOT NULL,
-  /*  */
-  `version` int ,
-  /* the open id */
-  `openid` VARCHAR(256) ,
-  /* the user name */
-  `name` VARCHAR(256) ,
-  /* the user first name */
-  `first_name` VARCHAR(256) ,
-  /* the user last name */
-  `last_name` VARCHAR(256) ,
-  /* the user last name */
-  `password` VARCHAR(256) ,
-  /* the user country */
-  `country` VARCHAR(256) ,
-  /*  */
-  `email_id` INTEGER NOT NULL,
-  PRIMARY KEY (`id`)
-);
-/* Defines an access key */
-CREATE TABLE access_key (
-  /* the email id */
-  `id` BIGINT NOT NULL,
-  /*  */
-  `version` int ,
-  /* the access key */
-  `access_key` VARCHAR(256) ,
   /* the user identifier */
   `user_id` BIGINT ,
   PRIMARY KEY (`id`)
@@ -137,6 +141,28 @@ CREATE TABLE session (
   /* the session type */
   `TYPE` INTEGER NOT NULL,
   PRIMARY KEY (`ID`)
+);
+/* Record representing a user */
+CREATE TABLE user (
+  /* the user id */
+  `id` BIGINT NOT NULL,
+  /*  */
+  `version` int ,
+  /* the open id */
+  `openid` VARCHAR(256) ,
+  /* the user name */
+  `name` VARCHAR(256) ,
+  /* the user first name */
+  `first_name` VARCHAR(256) ,
+  /* the user last name */
+  `last_name` VARCHAR(256) ,
+  /* the user last name */
+  `password` VARCHAR(256) ,
+  /* the user country */
+  `country` VARCHAR(256) ,
+  /*  */
+  `email_id` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /* 
             The workspace allows to group all together the different
@@ -176,14 +202,14 @@ CREATE TABLE workspace_member (
   PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES
-("blog")
+("access_key")
+,("acl")
+,("blog")
 ,("blog_post")
 ,("comments")
-,("acl")
 ,("email")
-,("user")
-,("access_key")
 ,("session")
+,("user")
 ,("workspace")
 ,("workspace_member")
 ;

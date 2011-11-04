@@ -1,5 +1,51 @@
-/* Copied from ./db/sqlite/awa-sqlite.sql*/
+/* Copied from ado-sqlite.sql*/
 /* File generated automatically by dynamo */
+/* Sequence generator */
+CREATE TABLE sequence (
+  /* the sequence name */
+  `name` VARCHAR(127) PRIMARY KEY,
+  /* the sequence record version */
+  `version` int ,
+  /* the sequence value */
+  `value` BIGINT ,
+  /* the sequence block size */
+  `block_size` BIGINT 
+);
+/* Entity types */
+CREATE TABLE entity_type (
+  /* the entity type identifier */
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  /* the entity type name (table name) */
+  `name` VARCHAR(127) UNIQUE NOT NULL
+);
+INSERT INTO entity_type (name) VALUES ("sequence");
+INSERT INTO entity_type (name) VALUES ("entity_type");
+/* Copied from awa-sqlite.sql*/
+/* File generated automatically by dynamo */
+/* Defines an access key */
+CREATE TABLE access_key (
+  /* the email id */
+  `id` BIGINT PRIMARY KEY,
+  /*  */
+  `version` int ,
+  /* the access key */
+  `access_key` VARCHAR(256) ,
+  /* the user identifier */
+  `user_id` BIGINT 
+);
+/* Access control */
+CREATE TABLE acl (
+  /* the unique ACL id */
+  `id` BIGINT PRIMARY KEY,
+  /* the entity type */
+  `entity_type` INTEGER ,
+  /* the user identifier */
+  `user_id` BIGINT ,
+  /* the entity identifier */
+  `entity_id` BIGINT ,
+  /* whether the entity is writeable */
+  `writeable` TINYINT 
+);
 /* Blog  */
 CREATE TABLE blog (
   /* the blog identifier */
@@ -55,19 +101,6 @@ CREATE TABLE comments (
   /*  */
   `entity__type_fk` INTEGER NOT NULL
 );
-/* Access control */
-CREATE TABLE acl (
-  /* the unique ACL id */
-  `id` BIGINT PRIMARY KEY,
-  /* the entity type */
-  `entity_type` INTEGER ,
-  /* the user identifier */
-  `user_id` BIGINT ,
-  /* the entity identifier */
-  `entity_id` BIGINT ,
-  /* whether the entity is writeable */
-  `writeable` TINYINT 
-);
 /* Email address */
 CREATE TABLE email (
   /* the email id */
@@ -76,38 +109,6 @@ CREATE TABLE email (
   `version` int ,
   /* the email address */
   `email` VARCHAR(256) ,
-  /* the user identifier */
-  `user_id` BIGINT 
-);
-/* Record representing a user */
-CREATE TABLE user (
-  /* the user id */
-  `id` BIGINT PRIMARY KEY,
-  /*  */
-  `version` int ,
-  /* the open id */
-  `openid` VARCHAR(256) ,
-  /* the user name */
-  `name` VARCHAR(256) ,
-  /* the user first name */
-  `first_name` VARCHAR(256) ,
-  /* the user last name */
-  `last_name` VARCHAR(256) ,
-  /* the user last name */
-  `password` VARCHAR(256) ,
-  /* the user country */
-  `country` VARCHAR(256) ,
-  /*  */
-  `email_id` INTEGER NOT NULL
-);
-/* Defines an access key */
-CREATE TABLE access_key (
-  /* the email id */
-  `id` BIGINT PRIMARY KEY,
-  /*  */
-  `version` int ,
-  /* the access key */
-  `access_key` VARCHAR(256) ,
   /* the user identifier */
   `user_id` BIGINT 
 );
@@ -129,6 +130,27 @@ CREATE TABLE session (
   `AUTH_ID` BIGINT ,
   /* the session type */
   `TYPE` INTEGER NOT NULL
+);
+/* Record representing a user */
+CREATE TABLE user (
+  /* the user id */
+  `id` BIGINT PRIMARY KEY,
+  /*  */
+  `version` int ,
+  /* the open id */
+  `openid` VARCHAR(256) ,
+  /* the user name */
+  `name` VARCHAR(256) ,
+  /* the user first name */
+  `first_name` VARCHAR(256) ,
+  /* the user last name */
+  `last_name` VARCHAR(256) ,
+  /* the user last name */
+  `password` VARCHAR(256) ,
+  /* the user country */
+  `country` VARCHAR(256) ,
+  /*  */
+  `email_id` INTEGER NOT NULL
 );
 /* 
             The workspace allows to group all together the different
@@ -165,13 +187,13 @@ CREATE TABLE workspace_member (
   /* the workspace */
   `workspace_fk` INTEGER NOT NULL
 );
+INSERT INTO entity_type (name) VALUES ("access_key");
+INSERT INTO entity_type (name) VALUES ("acl");
 INSERT INTO entity_type (name) VALUES ("blog");
 INSERT INTO entity_type (name) VALUES ("blog_post");
 INSERT INTO entity_type (name) VALUES ("comments");
-INSERT INTO entity_type (name) VALUES ("acl");
 INSERT INTO entity_type (name) VALUES ("email");
-INSERT INTO entity_type (name) VALUES ("user");
-INSERT INTO entity_type (name) VALUES ("access_key");
 INSERT INTO entity_type (name) VALUES ("session");
+INSERT INTO entity_type (name) VALUES ("user");
 INSERT INTO entity_type (name) VALUES ("workspace");
 INSERT INTO entity_type (name) VALUES ("workspace_member");
