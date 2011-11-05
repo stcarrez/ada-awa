@@ -16,7 +16,12 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with Util.Log.Loggers;
 package body AWA.Permissions is
+
+   use Util.Log;
+
+   Log : constant Loggers.Logger := Loggers.Create ("AWA.Permissions");
 
    --  ------------------------------
    --  Verify that the permission represented by <b>Permission</b> is granted.
@@ -39,10 +44,12 @@ package body AWA.Permissions is
       Context : constant Security.Contexts.Security_Context_Access := Security.Contexts.Current;
    begin
       if Context = null then
+         Log.Debug ("There is no security context, permission denied");
          raise NO_PERMISSION;
       end if;
       Context.Add_Context ("entity_id", ADO.Identifier'Image (Entity));
       if not (Security.Contexts.Has_Permission (Permission)) then
+         Log.Debug ("Permission is refused");
          raise NO_PERMISSION;
       end if;
    end Check;
