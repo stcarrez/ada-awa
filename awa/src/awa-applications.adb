@@ -20,6 +20,8 @@ with Ada.IO_Exceptions;
 
 with ASF.Beans;
 
+with ADO.Drivers;
+
 with EL.Contexts.Default;
 with Util.Files;
 with Util.Log.Loggers;
@@ -40,10 +42,8 @@ package body AWA.Applications is
    procedure Initialize (App     : in out Application;
                          Conf    : in ASF.Applications.Config;
                          Factory : in out ASF.Applications.Main.Application_Factory'Class) is
-      URI     : constant String := Conf.Get ("database");
    begin
       AWA.Applications.Factory.Set_Application (Factory, App'Unchecked_Access);
-      App.DB_Factory.Create (URI);
       ASF.Applications.Main.Application (App).Initialize (Conf, Factory);
 
       Application'Class (App).Initialize_Modules;
@@ -93,6 +93,8 @@ package body AWA.Applications is
                                 Conf : in out ASF.Applications.Config) is
    begin
       ASF.Applications.Main.Application (App).Initialize_Config (Conf);
+      ADO.Drivers.Initialize (Conf);
+      App.DB_Factory.Create (Conf.Get ("database"));
       AWA.Modules.Initialize (App.Modules, Conf);
    end Initialize_Config;
 
