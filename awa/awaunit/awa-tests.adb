@@ -16,8 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with ADO.Drivers;
-
 with ASF.Server.Tests;
 with ASF.Server.Web;
 with ASF.Converters.Dates;
@@ -63,8 +61,6 @@ package body AWA.Tests is
                          Add_Modules : in Boolean) is
       use AWA.Applications;
    begin
-      ADO.Drivers.Initialize (Props);
-
       if App = null then
          Application := new AWA.Applications.Application;
       else
