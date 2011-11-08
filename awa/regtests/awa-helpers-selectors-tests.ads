@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  Util testsuite - Util Testsuite
---  Copyright (C) 2009, 2010 Stephane Carrez
+--  awa-helpers-selectors-tests -- Unit tests for selector helpers
+--  Copyright (C) 2011 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,22 +16,19 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with AWA.Users.Services.Tests;
-with AWA.Users.Tests;
-with AWA.Blogs.Services.Tests;
-with AWA.Wikis.Parsers.Tests;
-with AWA.Helpers.Selectors.Tests;
-package body AWA.Testsuite is
+with AUnit.Test_Suites;
+with Util.Tests;
 
-   function Suite return Access_Test_Suite is
-      Ret : constant Access_Test_Suite := new Test_Suite;
-   begin
-      AWA.Users.Services.Tests.Add_Tests (Ret);
-      AWA.Users.Tests.Add_Tests (Ret);
-      AWA.Wikis.Parsers.Tests.Add_Tests (Ret);
-      AWA.Helpers.Selectors.Tests.Add_Tests (Ret);
-      AWA.Blogs.Services.Tests.Add_Tests (Ret);
-      return Ret;
-   end Suite;
+package AWA.Helpers.Selectors.Tests is
 
-end AWA.Testsuite;
+   procedure Add_Tests (Suite : in AUnit.Test_Suites.Access_Test_Suite);
+
+   type Test is new Util.Tests.Test with null record;
+
+   --  Test creation of selector from an SQL query
+   procedure Test_Create_From_Query (T : in out Test);
+
+   --  Test creation of selector from an enum definition
+   procedure Test_Create_From_Enum (T : in out Test);
+
+end AWA.Helpers.Selectors.Tests;
