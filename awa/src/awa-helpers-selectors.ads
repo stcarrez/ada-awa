@@ -16,6 +16,8 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with Util.Beans.Basic;
+with Util.Beans.Objects;
 with Util.Properties.Bundles;
 
 with ADO.Sessions;
@@ -37,7 +39,7 @@ package AWA.Helpers.Selectors is
    function Create_From_Enum (Bundle : in Util.Properties.Bundles.Manager'Class)
                               return ASF.Models.Selects.Select_Item_List;
 
-   --  Create the selector list from the SQL query.  The query will be executed.
+   --  Append the selector list from the SQL query.  The query will be executed.
    --  It should return rows with at least two columns.  The first column is the
    --  selector value and the second column is the selector label.
    procedure Append_From_Query (Into  : in out ASF.Models.Selects.Select_Item_List;
@@ -46,9 +48,35 @@ package AWA.Helpers.Selectors is
    --  Create the selector list from the SQL query.  The query will be executed.
    --  It should return rows with at least two columns.  The first column is the
    --  selector value and the second column is the selector label.
-
    function Create_From_Query (Session : in ADO.Sessions.Session'Class;
                                Query   : in ADO.Queries.Context'Class)
                                return ASF.Models.Selects.Select_Item_List;
+
+   --  ------------------------------
+   --  Select list bean
+   --  ------------------------------
+   --  The <b>Select_List_Bean</b> type is a bean object that can be declared in XML
+   --  configuration files and customized by the <b>query</b> property.
+   type Select_List_Bean is new Util.Beans.Basic.Bean with record
+      List : ASF.Models.Selects.Select_Item_List;
+   end record;
+   type Select_List_Bean_Access is access all Select_List_Bean;
+
+   --  Get the value identified by the name.
+   --  If the name cannot be found, the method should return the Null object.
+   overriding
+   function Get_Value (From : in Select_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the value identified by the name.
+   --  If the name cannot be found, the method should raise the No_Value
+   --  exception.
+   overriding
+   procedure Set_Value (From  : in out Select_List_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   --  Create the select list bean instance.
+   function Create_Select_List_Bean return Util.Beans.Basic.Readonly_Bean_Access;
 
 end AWA.Helpers.Selectors;

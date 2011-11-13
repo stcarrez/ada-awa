@@ -29,6 +29,7 @@ with Util.Log.Loggers;
 with AWA.Components.Factory;
 with AWA.Applications.Factory;
 with AWA.Applications.Configs;
+with AWA.Helpers.Selectors;
 package body AWA.Applications is
 
    use Util.Log;
@@ -96,6 +97,9 @@ package body AWA.Applications is
       ADO.Drivers.Initialize (Conf);
       App.DB_Factory.Create (Conf.Get ("database"));
       AWA.Modules.Initialize (App.Modules, Conf);
+
+      App.Register_Class ("AWA.Helpers.Selectors.Select_List_Bean",
+                          AWA.Helpers.Selectors.Create_Select_List_Bean'Access);
    end Initialize_Config;
 
    --  ------------------------------

@@ -16,6 +16,8 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with ADO.Queries.Loaders;
+with AWA.Services.Contexts;
 package body AWA.Helpers.Selectors is
 
    --  ------------------------------
@@ -73,5 +75,59 @@ package body AWA.Helpers.Selectors is
       Append_From_Query (Result, Stmt);
       return Result;
    end Create_From_Query;
+
+   --  ------------------------------
+   --  Get the value identified by the name.
+   --  If the name cannot be found, the method should return the Null object.
+   --  ------------------------------
+   function Get_Value (From : in Select_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "list" then
+         return ASF.Models.Selects.To_Object (From.List);
+      else
+         return Util.Beans.Objects.Null_Object;
+      end if;
+   end Get_Value;
+
+   --  ------------------------------
+   --  Set the value identified by the name.
+   --  If the name cannot be found, the method should raise the No_Value
+   --  exception.
+   --  ------------------------------
+   procedure Set_Value (From  : in out Select_List_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+      use type AWA.Services.Contexts.Service_Context_Access;
+      use type ADO.Queries.Query_Definition_Access;
+   begin
+      if Name = "query" then
+         declare
+            Query_Name : constant String := Util.Beans.Objects.To_String (Value);
+            Ctx : constant AWA.Services.Contexts.Service_Context_Access
+              := AWA.Services.Contexts.Current;
+            Query_Def : constant ADO.Queries.Query_Definition_Access
+              := ADO.Queries.Loaders.Find_Query (Query_Name);
+            Query     : ADO.Queries.Context;
+         begin
+            if Ctx = null or Query_Def = null then
+               return;
+            end if;
+
+            Query.Set_Query (Query_Def);
+            From.List := Create_From_Query (Session => AWA.Services.Contexts.Get_Session (Ctx),
+                                            Query   => Query);
+         end;
+      end if;
+   end Set_Value;
+
+   --  ------------------------------
+   --  Create the select list bean instance.
+   --  ------------------------------
+   function Create_Select_List_Bean return Util.Beans.Basic.Readonly_Bean_Access is
+      Result : constant Select_List_Bean_Access := new Select_List_Bean;
+   begin
+      return Result.all'Access;
+   end Create_Select_List_Bean;
 
 end AWA.Helpers.Selectors;
