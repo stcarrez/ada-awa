@@ -17,8 +17,15 @@
 -----------------------------------------------------------------------
 
 with ADO.Queries.Loaders;
+with ADO.Schemas;
+
+with Util.Strings;
+with Util.Log.Loggers;
+
 with AWA.Services.Contexts;
 package body AWA.Helpers.Selectors is
+
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Helpers.Selectors");
 
    --  ------------------------------
    --  Create a selector list from the definition of a discrete type such as an enum.
@@ -48,14 +55,42 @@ package body AWA.Helpers.Selectors is
    --  ------------------------------
    procedure Append_From_Query (Into  : in out ASF.Models.Selects.Select_Item_List;
                                 Query : in out ADO.Statements.Query_Statement'Class) is
+      use ADO.Schemas;
+
+      Id_Type    : ADO.Schemas.Column_Type := T_UNKNOWN;
+      Label_Type : ADO.Schemas.Column_Type := T_UNKNOWN;
+
+      function Get_Column (Id : in Natural;
+                           Of_Type : in ADO.Schemas.Column_Type) return String is
+      begin
+         case Of_Type is
+            when T_CHAR | T_VARCHAR =>
+               return Query.Get_String (Id);
+
+            when T_INTEGER | T_TINYINT | T_SMALLINT | T_ENUM =>
+               return Util.Strings.Image (Query.Get_Integer (Id));
+
+            when T_LONG_INTEGER =>
+               return Util.Strings.Image (Long_Long_Integer (Query.Get_Int64 (Id)));
+
+            when others =>
+               return "";
+
+         end case;
+      end Get_Column;
+
    begin
       Query.Execute;
       while Query.Has_Elements loop
+         if Id_Type = T_UNKNOWN then
+            Id_Type    := Query.Get_Column_Type (0);
+            Label_Type := Query.Get_Column_Type (1);
+         end if;
          declare
-            Id    : constant String := Query.Get_String (1);
-            Label : constant String := Query.Get_String (2);
+            Id    : constant String := Get_Column (0, Id_Type);
+            Label : constant String := Get_Column (1, Label_Type);
          begin
-            Into.Append (ASF.Models.Selects.Create_Select_Item (Id, Label));
+            Into.Append (ASF.Models.Selects.Create_Select_Item (Label => Label, Value => Id));
          end;
          Query.Next;
       end loop;
