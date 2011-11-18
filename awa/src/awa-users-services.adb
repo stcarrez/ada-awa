@@ -86,6 +86,30 @@ package body AWA.Users.Services is
       end if;
    end Get_Name_From_Email;
 
+   procedure Create_Session (DB      : in out Master_Session;
+                             Session : out Session_Ref'Class;
+                             User    : in User_Ref'Class;
+                             Ip_Addr : in String) is
+      Auth_Session : Session_Ref;
+   begin
+      --  Create the authenticate session.
+      Auth_Session.Set_Start_Date (ADO.Nullable_Time '(Value   => Ada.Calendar.Clock,
+                                                       Is_Null => False));
+      Auth_Session.Set_User_Id (User.Get_Id);
+      Auth_Session.Set_Ip_Address (Ip_Addr);
+      Auth_Session.Set_Session_Type (AUTH_SESSION_TYPE);
+      Auth_Session.Save (DB);
+
+      --  Create the connection session.
+      Session := Session_Ref'Class (Null_Session);
+      Session.Set_Start_Date (Auth_Session.Get_Start_Date);
+      Session.Set_User_Id (User.Get_Id);
+      Session.Set_Ip_Address (Ip_Addr);
+      Session.Set_Session_Type (CONNECT_SESSION_TYPE);
+      Session.Set_Auth (Auth_Session);
+      Session.Save (DB);
+   end Create_Session;
+
    --  ------------------------------
    --  Authenticate the user with his OpenID identifier.  The authentication process
    --  was made by an external OpenID provider.  If the user does not yet exists in
@@ -165,14 +189,7 @@ package body AWA.Users.Services is
          end;
       end if;
 
-      --  Create the session
-      Session := Session_Ref'Class (Null_Session);
-      Session.Set_Start_Date (ADO.Nullable_Time '(Value => Ada.Calendar.Clock, Is_Null => False));
-      Session.Set_User_Id (User.Get_Id);
-      Session.Set_Ip_Address (IpAddr);
-      Session.Set_Session_Type (AUTH_SESSION_TYPE);
-      Session.Save (DB);
-
+      Create_Session (DB, Session, User, IpAddr);
       Ctx.Commit;
    end Authenticate;
 
@@ -195,6 +212,8 @@ package body AWA.Users.Services is
       DB     : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Query  : ADO.SQL.Query;
       Found  : Boolean;
+
+      Auth_Session : Session_Ref;
    begin
       Log.Info ("Authenticate user {0}", Email);
 
@@ -212,12 +231,7 @@ package body AWA.Users.Services is
          raise Not_Found with "No user registered under email: " & Email;
       end if;
 
-      --  Create the session
-      Session := Session_Ref'Class (Null_Session);
-      Session.Set_Start_Date (ADO.Nullable_Time '(Value => Ada.Calendar.Clock, Is_Null => False));
-      Session.Set_User_Id (User.Get_Id);
-      Session.Set_Ip_Address (IpAddr);
-      Session.Save (DB);
+      Create_Session (DB, Session, User, IpAddr);
 
       Ctx.Commit;
 	  Log.Info ("Session {0} created for user {1}",
@@ -321,12 +335,8 @@ package body AWA.Users.Services is
       User.Set_Password (Password);
       User.Save (DB);
 
-      --  Create the authentication session
-      Session := Session_Ref'Class (Null_Session);
-      Session.Set_User_Id (User.Get_Id);
-      Session.Set_Start_Date (ADO.Nullable_Time '(Value => Ada.Calendar.Clock, Is_Null => False));
-      Session.Set_Ip_Address (IpAddr);
-      Session.Save (DB);
+      --  Create the authentication session.
+      Create_Session (DB, Session, User, IpAddr);
 
       --  Send the email to warn about the password change
       declare
@@ -433,12 +443,8 @@ package body AWA.Users.Services is
 
       Access_Key.Delete (DB);
 
-      --  Create the session
-      Session := Session_Ref'Class (Null_Session);
-      Session.Set_Start_Date (ADO.Nullable_Time '(Value => Ada.Calendar.Clock, Is_Null => False));
-      Session.Set_User_Id (User.Get_Id);
-      Session.Set_Ip_Address (IpAddr);
-      Session.Save (DB);
+      --  Create the authentication session.
+      Create_Session (DB, Session, User, IpAddr);
 
       Ctx.Commit;
    end Verify_User;
@@ -487,8 +493,8 @@ package body AWA.Users.Services is
       pragma Unreferenced (Model);
 
       Sid     : constant String := ADO.Identifier'Image (Id);
-      Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      DB     : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Ctx     : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB      : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Session : Session_Ref;
       Found   : Boolean;
    begin
@@ -509,6 +515,19 @@ package body AWA.Users.Services is
       end if;
       Session.Set_End_Date (ADO.Nullable_Time '(Value => Ada.Calendar.Clock, Is_Null => False));
       Session.Save (DB);
+
+      --  When closing the authenticate session, close any connection session that is still open.
+      if Session.Get_Session_Type = AUTH_SESSION_TYPE then
+         declare
+            Stmt : ADO.Statements.Update_Statement
+              := DB.Create_Statement (AWA.Users.Models.SESSION_TABLE'Access);
+         begin
+            Stmt.Save_Field (Name => "end_date", Value => Session.Get_End_Date);
+            Stmt.Set_Filter ("auth_id = :auth AND end_date IS NULL");
+            Stmt.Bind_Param ("auth", Session.Get_Id);
+            Stmt.Execute;
+         end;
+      end if;
       Ctx.Commit;
    end Close_Session;
 

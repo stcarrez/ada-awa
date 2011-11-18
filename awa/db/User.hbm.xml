@@ -103,14 +103,14 @@
             <comment>the user identifier</comment>
             <column name="USER_ID" not-null="true" unique="false" sql-type="BIGINT"/>
         </property>
-        <property name="auth_id" type="ADO.Identifier">
-            <comment>the authentication session identifier</comment>
-            <column name="AUTH_ID" not-null="false" unique="false" sql-type="BIGINT"/>
-        </property>
         <property name="session_type" type="Integer">
             <comment>the session type</comment>
             <column name="TYPE" not-null="true" unique="false" sql-type="INTEGER"/>
         </property>
+        <many-to-one name="auth" class="Session" foreign-key="id" not-null="false" lazy="proxy" fetch="select">
+            <comment>the authentication session identifier</comment>
+            <column name="AUTH_ID" not-null="false" sql-type="INTEGER"/>
+        </many-to-one>
     </class>
 
 </hibernate-mapping>

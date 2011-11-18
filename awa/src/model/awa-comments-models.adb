@@ -47,11 +47,11 @@ package body AWA.Comments.Models is
       return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
    end "=";
    procedure Set_Field (Object : in out Comment_Ref'Class;
-                        Impl   : out Comment_Access;
-                        Field  : in Positive) is
+                        Impl   : out Comment_Access) is
+      Result : ADO.Objects.Object_Record_Access;
    begin
-      Object.Set_Field (Field);
-      Impl := Comment_Impl (Object.Get_Object.all)'Access;
+      Object.Prepare_Modify (Result);
+      Impl := Comment_Impl (Result.all)'Access;
    end Set_Field;
    --  Internal method to allocate the Object_Record instance
    procedure Allocate (Object : in out Comment_Ref) is
@@ -68,11 +68,11 @@ package body AWA.Comments.Models is
    --  Data object: Comment
    -- ----------------------------------------
    procedure Set_Id (Object : in out Comment_Ref;
-                      Value  : in ADO.Identifier) is
+                     Value  : in ADO.Identifier) is
       Impl : Comment_Access;
    begin
-      Set_Field (Object, Impl, 1);
-      ADO.Objects.Set_Key_Value (Impl.all, Value);
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
    end Set_Id;
    function Get_Id (Object : in Comment_Ref)
                   return ADO.Identifier is
@@ -87,11 +87,11 @@ package body AWA.Comments.Models is
       return Impl.Version;
    end Get_Version;
    procedure Set_Date (Object : in out Comment_Ref;
-                        Value  : in Ada.Calendar.Time) is
+                       Value  : in Ada.Calendar.Time) is
       Impl : Comment_Access;
    begin
-      Set_Field (Object, Impl, 3);
-      Impl.Date := Value;
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Time (Impl.all, 3, Impl.Date, Value);
    end Set_Date;
    function Get_Date (Object : in Comment_Ref)
                   return Ada.Calendar.Time is
@@ -101,15 +101,17 @@ package body AWA.Comments.Models is
    end Get_Date;
    procedure Set_Message (Object : in out Comment_Ref;
                            Value : in String) is
-   begin
-      Object.Set_Message (Ada.Strings.Unbounded.To_Unbounded_String (Value));
-   end Set_Message;
-   procedure Set_Message (Object : in out Comment_Ref;
-                           Value  : in Ada.Strings.Unbounded.Unbounded_String) is
       Impl : Comment_Access;
    begin
-      Set_Field (Object, Impl, 4);
-      Impl.Message := Value;
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_String (Impl.all, 4, Impl.Message, Value);
+   end Set_Message;
+   procedure Set_Message (Object : in out Comment_Ref;
+                          Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : Comment_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 4, Impl.Message, Value);
    end Set_Message;
    function Get_Message (Object : in Comment_Ref)
                  return String is
@@ -123,11 +125,11 @@ package body AWA.Comments.Models is
       return Impl.Message;
    end Get_Message;
    procedure Set_Entity_Id (Object : in out Comment_Ref;
-                             Value  : in ADO.Identifier) is
+                            Value  : in ADO.Identifier) is
       Impl : Comment_Access;
    begin
-      Set_Field (Object, Impl, 5);
-      Impl.Entity_Id := Value;
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Identifier (Impl.all, 5, Impl.Entity_Id, Value);
    end Set_Entity_Id;
    function Get_Entity_Id (Object : in Comment_Ref)
                   return ADO.Identifier is
@@ -136,11 +138,11 @@ package body AWA.Comments.Models is
       return Impl.Entity_Id;
    end Get_Entity_Id;
    procedure Set_User (Object : in out Comment_Ref;
-                        Value  : in AWA.Users.Models.User_Ref'Class) is
+                       Value  : in AWA.Users.Models.User_Ref'Class) is
       Impl : Comment_Access;
    begin
-      Set_Field (Object, Impl, 6);
-      Impl.User := AWA.Users.Models.User_Ref (Value);
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 6, Impl.User, Value);
    end Set_User;
    function Get_User (Object : in Comment_Ref)
                   return AWA.Users.Models.User_Ref'Class is
@@ -149,11 +151,11 @@ package body AWA.Comments.Models is
       return Impl.User;
    end Get_User;
    procedure Set_Entity_Type (Object : in out Comment_Ref;
-                               Value  : in ADO.Model.Entity_Type_Ref'Class) is
+                              Value  : in ADO.Model.Entity_Type_Ref'Class) is
       Impl : Comment_Access;
    begin
-      Set_Field (Object, Impl, 7);
-      Impl.Entity_Type := ADO.Model.Entity_Type_Ref (Value);
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 7, Impl.Entity_Type, Value);
    end Set_Entity_Type;
    function Get_Entity_Type (Object : in Comment_Ref)
                   return ADO.Model.Entity_Type_Ref'Class is
@@ -342,10 +344,10 @@ package body AWA.Comments.Models is
          begin
             Stmt.Execute (Result);
             if Result /= 1 then
-               if Result = 0 then
-                  raise ADO.Objects.LAZY_LOCK;
-               else
+               if Result /= 0 then
                   raise ADO.Objects.UPDATE_ERROR;
+               else
+                  raise ADO.Objects.LAZY_LOCK;
                end if;
             end if;
          end;

@@ -31,12 +31,16 @@ with Ada.Calendar;
 with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
+with Util.Beans.Objects.Enums;
 with Util.Beans.Basic.Lists;
 with AWA.Users.Models;
 with AWA.Workspaces.Models;
 package AWA.Blogs.Models is
    type Post_Status_Type is (POST_DRAFT, POST_PUBLISHED, POST_SCHEDULED);
    for Post_Status_Type use (POST_DRAFT => 0, POST_PUBLISHED => 1, POST_SCHEDULED => 2);
+   package Post_Status_Type_Objects is
+      new Util.Beans.Objects.Enums (Post_Status_Type);
+
    --  --------------------
    --  Blog 
    --  --------------------
@@ -513,8 +517,7 @@ private
    procedure Delete (Object  : in out Blog_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
    procedure Set_Field (Object : in out Blog_Ref'Class;
-                        Impl   : out Blog_Access;
-                        Field  : in Positive);
+                        Impl   : out Blog_Access);
    POST_NAME : aliased constant String := "blog_post";
    COL_0_2_NAME : aliased constant String := "id";
    COL_1_2_NAME : aliased constant String := "version";
@@ -581,8 +584,7 @@ private
    procedure Delete (Object  : in out Post_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
    procedure Set_Field (Object : in out Post_Ref'Class;
-                        Impl   : out Post_Access;
-                        Field  : in Positive);
+                        Impl   : out Post_Access);
 
    package File_Adminpostinfo is
       new ADO.Queries.Loaders.File (Path => "blog-admin-post-list.xml",

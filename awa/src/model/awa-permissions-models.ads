@@ -205,8 +205,7 @@ private
    procedure Delete (Object  : in out Acl_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
    procedure Set_Field (Object : in out Acl_Ref'Class;
-                        Impl   : out Acl_Access;
-                        Field  : in Positive);
+                        Impl   : out Acl_Access);
 
    package File is
       new ADO.Queries.Loaders.File (Path => "permissions.xml",

@@ -47,11 +47,11 @@ package body AWA.Blogs.Models is
       return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
    end "=";
    procedure Set_Field (Object : in out Blog_Ref'Class;
-                        Impl   : out Blog_Access;
-                        Field  : in Positive) is
+                        Impl   : out Blog_Access) is
+      Result : ADO.Objects.Object_Record_Access;
    begin
-      Object.Set_Field (Field);
-      Impl := Blog_Impl (Object.Get_Object.all)'Access;
+      Object.Prepare_Modify (Result);
+      Impl := Blog_Impl (Result.all)'Access;
    end Set_Field;
    --  Internal method to allocate the Object_Record instance
    procedure Allocate (Object : in out Blog_Ref) is
@@ -67,11 +67,11 @@ package body AWA.Blogs.Models is
    --  Data object: Blog
    -- ----------------------------------------
    procedure Set_Id (Object : in out Blog_Ref;
-                      Value  : in ADO.Identifier) is
+                     Value  : in ADO.Identifier) is
       Impl : Blog_Access;
    begin
-      Set_Field (Object, Impl, 1);
-      ADO.Objects.Set_Key_Value (Impl.all, Value);
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
    end Set_Id;
    function Get_Id (Object : in Blog_Ref)
                   return ADO.Identifier is
@@ -87,15 +87,17 @@ package body AWA.Blogs.Models is
    end Get_Version;
    procedure Set_Name (Object : in out Blog_Ref;
                         Value : in String) is
-   begin
-      Object.Set_Name (Ada.Strings.Unbounded.To_Unbounded_String (Value));
-   end Set_Name;
-   procedure Set_Name (Object : in out Blog_Ref;
-                        Value  : in Ada.Strings.Unbounded.Unbounded_String) is
       Impl : Blog_Access;
    begin
-      Set_Field (Object, Impl, 3);
-      Impl.Name := Value;
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_String (Impl.all, 3, Impl.Name, Value);
+   end Set_Name;
+   procedure Set_Name (Object : in out Blog_Ref;
+                       Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : Blog_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 3, Impl.Name, Value);
    end Set_Name;
    function Get_Name (Object : in Blog_Ref)
                  return String is
@@ -110,15 +112,17 @@ package body AWA.Blogs.Models is
    end Get_Name;
    procedure Set_Uid (Object : in out Blog_Ref;
                        Value : in String) is
-   begin
-      Object.Set_Uid (Ada.Strings.Unbounded.To_Unbounded_String (Value));
-   end Set_Uid;
-   procedure Set_Uid (Object : in out Blog_Ref;
-                       Value  : in Ada.Strings.Unbounded.Unbounded_String) is
       Impl : Blog_Access;
    begin
-      Set_Field (Object, Impl, 4);
-      Impl.Uid := Value;
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_String (Impl.all, 4, Impl.Uid, Value);
+   end Set_Uid;
+   procedure Set_Uid (Object : in out Blog_Ref;
+                      Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : Blog_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 4, Impl.Uid, Value);
    end Set_Uid;
    function Get_Uid (Object : in Blog_Ref)
                  return String is
@@ -132,11 +136,11 @@ package body AWA.Blogs.Models is
       return Impl.Uid;
    end Get_Uid;
    procedure Set_Create_Date (Object : in out Blog_Ref;
-                               Value  : in Ada.Calendar.Time) is
+                              Value  : in Ada.Calendar.Time) is
       Impl : Blog_Access;
    begin
-      Set_Field (Object, Impl, 5);
-      Impl.Create_Date := Value;
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Time (Impl.all, 5, Impl.Create_Date, Value);
    end Set_Create_Date;
    function Get_Create_Date (Object : in Blog_Ref)
                   return Ada.Calendar.Time is
@@ -145,11 +149,11 @@ package body AWA.Blogs.Models is
       return Impl.Create_Date;
    end Get_Create_Date;
    procedure Set_Workspace (Object : in out Blog_Ref;
-                             Value  : in AWA.Workspaces.Models.Workspace_Ref'Class) is
+                            Value  : in AWA.Workspaces.Models.Workspace_Ref'Class) is
       Impl : Blog_Access;
    begin
-      Set_Field (Object, Impl, 6);
-      Impl.Workspace := AWA.Workspaces.Models.Workspace_Ref (Value);
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 6, Impl.Workspace, Value);
    end Set_Workspace;
    function Get_Workspace (Object : in Blog_Ref)
                   return AWA.Workspaces.Models.Workspace_Ref'Class is
@@ -332,10 +336,10 @@ package body AWA.Blogs.Models is
          begin
             Stmt.Execute (Result);
             if Result /= 1 then
-               if Result = 0 then
-                  raise ADO.Objects.LAZY_LOCK;
-               else
+               if Result /= 0 then
                   raise ADO.Objects.UPDATE_ERROR;
+               else
+                  raise ADO.Objects.LAZY_LOCK;
                end if;
             end if;
          end;
@@ -455,11 +459,11 @@ package body AWA.Blogs.Models is
       return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
    end "=";
    procedure Set_Field (Object : in out Post_Ref'Class;
-                        Impl   : out Post_Access;
-                        Field  : in Positive) is
+                        Impl   : out Post_Access) is
+      Result : ADO.Objects.Object_Record_Access;
    begin
-      Object.Set_Field (Field);
-      Impl := Post_Impl (Object.Get_Object.all)'Access;
+      Object.Prepare_Modify (Result);
+      Impl := Post_Impl (Result.all)'Access;
    end Set_Field;
    --  Internal method to allocate the Object_Record instance
    procedure Allocate (Object : in out Post_Ref) is
@@ -469,6 +473,7 @@ package body AWA.Blogs.Models is
       Impl.Version := 0;
       Impl.Create_Date := ADO.DEFAULT_TIME;
       Impl.Publish_Date.Is_Null := True;
+      Impl.Status := Post_Status_Type'First;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -476,11 +481,11 @@ package body AWA.Blogs.Models is
    --  Data object: Post
    -- ----------------------------------------
    procedure Set_Id (Object : in out Post_Ref;
-                      Value  : in ADO.Identifier) is
+                     Value  : in ADO.Identifier) is
       Impl : Post_Access;
    begin
-      Set_Field (Object, Impl, 1);
-      ADO.Objects.Set_Key_Value (Impl.all, Value);
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
    end Set_Id;
    function Get_Id (Object : in Post_Ref)
                   return ADO.Identifier is
@@ -496,15 +501,17 @@ package body AWA.Blogs.Models is
    end Get_Version;
    procedure Set_Title (Object : in out Post_Ref;
                          Value : in String) is
-   begin
-      Object.Set_Title (Ada.Strings.Unbounded.To_Unbounded_String (Value));
-   end Set_Title;
-   procedure Set_Title (Object : in out Post_Ref;
-                         Value  : in Ada.Strings.Unbounded.Unbounded_String) is
       Impl : Post_Access;
    begin
-      Set_Field (Object, Impl, 3);
-      Impl.Title := Value;
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_String (Impl.all, 3, Impl.Title, Value);
+   end Set_Title;
+   procedure Set_Title (Object : in out Post_Ref;
+                        Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : Post_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 3, Impl.Title, Value);
    end Set_Title;
    function Get_Title (Object : in Post_Ref)
                  return String is
@@ -519,15 +526,17 @@ package body AWA.Blogs.Models is
    end Get_Title;
    procedure Set_Uri (Object : in out Post_Ref;
                        Value : in String) is
-   begin
-      Object.Set_Uri (Ada.Strings.Unbounded.To_Unbounded_String (Value));
-   end Set_Uri;
-   procedure Set_Uri (Object : in out Post_Ref;
-                       Value  : in Ada.Strings.Unbounded.Unbounded_String) is
       Impl : Post_Access;
    begin
-      Set_Field (Object, Impl, 4);
-      Impl.Uri := Value;
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_String (Impl.all, 4, Impl.Uri, Value);
+   end Set_Uri;
+   procedure Set_Uri (Object : in out Post_Ref;
+                      Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : Post_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 4, Impl.Uri, Value);
    end Set_Uri;
    function Get_Uri (Object : in Post_Ref)
                  return String is
@@ -542,15 +551,17 @@ package body AWA.Blogs.Models is
    end Get_Uri;
    procedure Set_Text (Object : in out Post_Ref;
                         Value : in String) is
-   begin
-      Object.Set_Text (Ada.Strings.Unbounded.To_Unbounded_String (Value));
-   end Set_Text;
-   procedure Set_Text (Object : in out Post_Ref;
-                        Value  : in Ada.Strings.Unbounded.Unbounded_String) is
       Impl : Post_Access;
    begin
-      Set_Field (Object, Impl, 5);
-      Impl.Text := Value;
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_String (Impl.all, 5, Impl.Text, Value);
+   end Set_Text;
+   procedure Set_Text (Object : in out Post_Ref;
+                       Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : Post_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 5, Impl.Text, Value);
    end Set_Text;
    function Get_Text (Object : in Post_Ref)
                  return String is
@@ -564,11 +575,11 @@ package body AWA.Blogs.Models is
       return Impl.Text;
    end Get_Text;
    procedure Set_Create_Date (Object : in out Post_Ref;
-                               Value  : in Ada.Calendar.Time) is
+                              Value  : in Ada.Calendar.Time) is
       Impl : Post_Access;
    begin
-      Set_Field (Object, Impl, 6);
-      Impl.Create_Date := Value;
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Time (Impl.all, 6, Impl.Create_Date, Value);
    end Set_Create_Date;
    function Get_Create_Date (Object : in Post_Ref)
                   return Ada.Calendar.Time is
@@ -577,11 +588,11 @@ package body AWA.Blogs.Models is
       return Impl.Create_Date;
    end Get_Create_Date;
    procedure Set_Publish_Date (Object : in out Post_Ref;
-                                Value  : in ADO.Nullable_Time) is
+                               Value  : in ADO.Nullable_Time) is
       Impl : Post_Access;
    begin
-      Set_Field (Object, Impl, 7);
-      Impl.Publish_Date := Value;
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Time (Impl.all, 7, Impl.Publish_Date, Value);
    end Set_Publish_Date;
    function Get_Publish_Date (Object : in Post_Ref)
                   return ADO.Nullable_Time is
@@ -590,11 +601,13 @@ package body AWA.Blogs.Models is
       return Impl.Publish_Date;
    end Get_Publish_Date;
    procedure Set_Status (Object : in out Post_Ref;
-                          Value  : in Post_Status_Type) is
+                         Value  : in Post_Status_Type) is
+      procedure Set_Field_Enum is
+         new ADO.Objects.Set_Field_Operation (Post_Status_Type);
       Impl : Post_Access;
    begin
-      Set_Field (Object, Impl, 8);
-      Impl.Status := Value;
+      Set_Field (Object, Impl);
+      Set_Field_Enum (Impl.all, 8, Impl.Status, Value);
    end Set_Status;
    function Get_Status (Object : in Post_Ref)
                   return Post_Status_Type is
@@ -603,11 +616,11 @@ package body AWA.Blogs.Models is
       return Impl.Status;
    end Get_Status;
    procedure Set_Author (Object : in out Post_Ref;
-                          Value  : in AWA.Users.Models.User_Ref'Class) is
+                         Value  : in AWA.Users.Models.User_Ref'Class) is
       Impl : Post_Access;
    begin
-      Set_Field (Object, Impl, 9);
-      Impl.Author := AWA.Users.Models.User_Ref (Value);
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 9, Impl.Author, Value);
    end Set_Author;
    function Get_Author (Object : in Post_Ref)
                   return AWA.Users.Models.User_Ref'Class is
@@ -616,11 +629,11 @@ package body AWA.Blogs.Models is
       return Impl.Author;
    end Get_Author;
    procedure Set_Blog (Object : in out Post_Ref;
-                        Value  : in Blog_Ref'Class) is
+                       Value  : in Blog_Ref'Class) is
       Impl : Post_Access;
    begin
-      Set_Field (Object, Impl, 10);
-      Impl.Blog := Blog_Ref (Value);
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 10, Impl.Blog, Value);
    end Set_Blog;
    function Get_Blog (Object : in Post_Ref)
                   return Blog_Ref'Class is
@@ -827,10 +840,10 @@ package body AWA.Blogs.Models is
          begin
             Stmt.Execute (Result);
             if Result /= 1 then
-               if Result = 0 then
-                  raise ADO.Objects.LAZY_LOCK;
-               else
+               if Result /= 0 then
                   raise ADO.Objects.UPDATE_ERROR;
+               else
+                  raise ADO.Objects.LAZY_LOCK;
                end if;
             end if;
          end;
@@ -910,6 +923,9 @@ package body AWA.Blogs.Models is
             return Util.Beans.Objects.Time.To_Object (Impl.Publish_Date.Value);
          end if;
       end if;
+      if Name = "status" then
+         return Post_Status_Type_Objects.To_Object (Impl.Status);
+      end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
    procedure List (Object  : in out Post_Vector;
@@ -946,6 +962,7 @@ package body AWA.Blogs.Models is
       Object.Create_Date := Stmt.Get_Time (5);
       Object.Publish_Date := Stmt.Get_Time (6);
       Object.Status := Post_Status_Type'Val (Stmt.Get_Identifier (7));
+      Object.Status := Post_Status_Type'Val (Stmt.Get_Integer (7));
       if not Stmt.Is_Null (8) then
           Object.Author.Set_Key_Value (Stmt.Get_Identifier (8), Session);
       end if;

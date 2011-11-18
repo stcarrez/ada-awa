@@ -291,8 +291,7 @@ private
    procedure Delete (Object  : in out Workspace_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
    procedure Set_Field (Object : in out Workspace_Ref'Class;
-                        Impl   : out Workspace_Access;
-                        Field  : in Positive);
+                        Impl   : out Workspace_Access);
    MEMBER_NAME : aliased constant String := "workspace_member";
    COL_0_2_NAME : aliased constant String := "id";
    COL_1_2_NAME : aliased constant String := "version";
@@ -344,6 +343,5 @@ private
    procedure Delete (Object  : in out Member_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
    procedure Set_Field (Object : in out Member_Ref'Class;
-                        Impl   : out Member_Access;
-                        Field  : in Positive);
+                        Impl   : out Member_Access);
 end Awa.Workspaces.Models;

@@ -46,11 +46,11 @@ package body AWA.Permissions.Models is
       return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
    end "=";
    procedure Set_Field (Object : in out Acl_Ref'Class;
-                        Impl   : out Acl_Access;
-                        Field  : in Positive) is
+                        Impl   : out Acl_Access) is
+      Result : ADO.Objects.Object_Record_Access;
    begin
-      Object.Set_Field (Field);
-      Impl := Acl_Impl (Object.Get_Object.all)'Access;
+      Object.Prepare_Modify (Result);
+      Impl := Acl_Impl (Result.all)'Access;
    end Set_Field;
    --  Internal method to allocate the Object_Record instance
    procedure Allocate (Object : in out Acl_Ref) is
@@ -68,11 +68,11 @@ package body AWA.Permissions.Models is
    --  Data object: Acl
    -- ----------------------------------------
    procedure Set_Id (Object : in out Acl_Ref;
-                      Value  : in ADO.Identifier) is
+                     Value  : in ADO.Identifier) is
       Impl : Acl_Access;
    begin
-      Set_Field (Object, Impl, 1);
-      ADO.Objects.Set_Key_Value (Impl.all, Value);
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
    end Set_Id;
    function Get_Id (Object : in Acl_Ref)
                   return ADO.Identifier is
@@ -81,11 +81,11 @@ package body AWA.Permissions.Models is
       return Impl.Get_Key_Value;
    end Get_Id;
    procedure Set_Entity_Type (Object : in out Acl_Ref;
-                               Value  : in ADO.Entity_Type) is
+                              Value  : in ADO.Entity_Type) is
       Impl : Acl_Access;
    begin
-      Set_Field (Object, Impl, 2);
-      Impl.Entity_Type := Value;
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Entity_Type (Impl.all, 2, Impl.Entity_Type, Value);
    end Set_Entity_Type;
    function Get_Entity_Type (Object : in Acl_Ref)
                   return ADO.Entity_Type is
@@ -94,11 +94,11 @@ package body AWA.Permissions.Models is
       return Impl.Entity_Type;
    end Get_Entity_Type;
    procedure Set_User_Id (Object : in out Acl_Ref;
-                           Value  : in ADO.Identifier) is
+                          Value  : in ADO.Identifier) is
       Impl : Acl_Access;
    begin
-      Set_Field (Object, Impl, 3);
-      Impl.User_Id := Value;
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Identifier (Impl.all, 3, Impl.User_Id, Value);
    end Set_User_Id;
    function Get_User_Id (Object : in Acl_Ref)
                   return ADO.Identifier is
@@ -107,11 +107,11 @@ package body AWA.Permissions.Models is
       return Impl.User_Id;
    end Get_User_Id;
    procedure Set_Entity_Id (Object : in out Acl_Ref;
-                             Value  : in ADO.Identifier) is
+                            Value  : in ADO.Identifier) is
       Impl : Acl_Access;
    begin
-      Set_Field (Object, Impl, 4);
-      Impl.Entity_Id := Value;
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Identifier (Impl.all, 4, Impl.Entity_Id, Value);
    end Set_Entity_Id;
    function Get_Entity_Id (Object : in Acl_Ref)
                   return ADO.Identifier is
@@ -120,11 +120,11 @@ package body AWA.Permissions.Models is
       return Impl.Entity_Id;
    end Get_Entity_Id;
    procedure Set_Writeable (Object : in out Acl_Ref;
-                             Value  : in Boolean) is
+                            Value  : in Boolean) is
       Impl : Acl_Access;
    begin
-      Set_Field (Object, Impl, 5);
-      Impl.Writeable := Value;
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Boolean (Impl.all, 5, Impl.Writeable, Value);
    end Set_Writeable;
    function Get_Writeable (Object : in Acl_Ref)
                   return Boolean is
@@ -292,9 +292,7 @@ package body AWA.Permissions.Models is
          begin
             Stmt.Execute (Result);
             if Result /= 1 then
-               if Result = 0 then
-                  raise ADO.Objects.LAZY_LOCK;
-               else
+               if Result /= 0 then
                   raise ADO.Objects.UPDATE_ERROR;
                end if;
             end if;

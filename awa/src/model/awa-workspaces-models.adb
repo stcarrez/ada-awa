@@ -47,11 +47,11 @@ package body Awa.Workspaces.Models is
       return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
    end "=";
    procedure Set_Field (Object : in out Workspace_Ref'Class;
-                        Impl   : out Workspace_Access;
-                        Field  : in Positive) is
+                        Impl   : out Workspace_Access) is
+      Result : ADO.Objects.Object_Record_Access;
    begin
-      Object.Set_Field (Field);
-      Impl := Workspace_Impl (Object.Get_Object.all)'Access;
+      Object.Prepare_Modify (Result);
+      Impl := Workspace_Impl (Result.all)'Access;
    end Set_Field;
    --  Internal method to allocate the Object_Record instance
    procedure Allocate (Object : in out Workspace_Ref) is
@@ -67,11 +67,11 @@ package body Awa.Workspaces.Models is
    --  Data object: Workspace
    -- ----------------------------------------
    procedure Set_Id (Object : in out Workspace_Ref;
-                      Value  : in ADO.Identifier) is
+                     Value  : in ADO.Identifier) is
       Impl : Workspace_Access;
    begin
-      Set_Field (Object, Impl, 1);
-      ADO.Objects.Set_Key_Value (Impl.all, Value);
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
    end Set_Id;
    function Get_Id (Object : in Workspace_Ref)
                   return ADO.Identifier is
@@ -86,11 +86,11 @@ package body Awa.Workspaces.Models is
       return Impl.Version;
    end Get_Version;
    procedure Set_Create_Date (Object : in out Workspace_Ref;
-                               Value  : in Ada.Calendar.Time) is
+                              Value  : in Ada.Calendar.Time) is
       Impl : Workspace_Access;
    begin
-      Set_Field (Object, Impl, 3);
-      Impl.Create_Date := Value;
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Time (Impl.all, 3, Impl.Create_Date, Value);
    end Set_Create_Date;
    function Get_Create_Date (Object : in Workspace_Ref)
                   return Ada.Calendar.Time is
@@ -99,11 +99,11 @@ package body Awa.Workspaces.Models is
       return Impl.Create_Date;
    end Get_Create_Date;
    procedure Set_Owner (Object : in out Workspace_Ref;
-                         Value  : in AWA.Users.Models.User_Ref'Class) is
+                        Value  : in AWA.Users.Models.User_Ref'Class) is
       Impl : Workspace_Access;
    begin
-      Set_Field (Object, Impl, 4);
-      Impl.Owner := AWA.Users.Models.User_Ref (Value);
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 4, Impl.Owner, Value);
    end Set_Owner;
    function Get_Owner (Object : in Workspace_Ref)
                   return AWA.Users.Models.User_Ref'Class is
@@ -269,10 +269,10 @@ package body Awa.Workspaces.Models is
          begin
             Stmt.Execute (Result);
             if Result /= 1 then
-               if Result = 0 then
-                  raise ADO.Objects.LAZY_LOCK;
-               else
+               if Result /= 0 then
                   raise ADO.Objects.UPDATE_ERROR;
+               else
+                  raise ADO.Objects.LAZY_LOCK;
                end if;
             end if;
          end;
@@ -380,11 +380,11 @@ package body Awa.Workspaces.Models is
       return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
    end "=";
    procedure Set_Field (Object : in out Member_Ref'Class;
-                        Impl   : out Member_Access;
-                        Field  : in Positive) is
+                        Impl   : out Member_Access) is
+      Result : ADO.Objects.Object_Record_Access;
    begin
-      Object.Set_Field (Field);
-      Impl := Member_Impl (Object.Get_Object.all)'Access;
+      Object.Prepare_Modify (Result);
+      Impl := Member_Impl (Result.all)'Access;
    end Set_Field;
    --  Internal method to allocate the Object_Record instance
    procedure Allocate (Object : in out Member_Ref) is
@@ -400,11 +400,11 @@ package body Awa.Workspaces.Models is
    --  Data object: Member
    -- ----------------------------------------
    procedure Set_Id (Object : in out Member_Ref;
-                      Value  : in ADO.Identifier) is
+                     Value  : in ADO.Identifier) is
       Impl : Member_Access;
    begin
-      Set_Field (Object, Impl, 1);
-      ADO.Objects.Set_Key_Value (Impl.all, Value);
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
    end Set_Id;
    function Get_Id (Object : in Member_Ref)
                   return ADO.Identifier is
@@ -419,11 +419,11 @@ package body Awa.Workspaces.Models is
       return Impl.Version;
    end Get_Version;
    procedure Set_Create_Date (Object : in out Member_Ref;
-                               Value  : in Ada.Calendar.Time) is
+                              Value  : in Ada.Calendar.Time) is
       Impl : Member_Access;
    begin
-      Set_Field (Object, Impl, 3);
-      Impl.Create_Date := Value;
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Time (Impl.all, 3, Impl.Create_Date, Value);
    end Set_Create_Date;
    function Get_Create_Date (Object : in Member_Ref)
                   return Ada.Calendar.Time is
@@ -432,11 +432,11 @@ package body Awa.Workspaces.Models is
       return Impl.Create_Date;
    end Get_Create_Date;
    procedure Set_Member (Object : in out Member_Ref;
-                          Value  : in AWA.Users.Models.User_Ref'Class) is
+                         Value  : in AWA.Users.Models.User_Ref'Class) is
       Impl : Member_Access;
    begin
-      Set_Field (Object, Impl, 4);
-      Impl.Member := AWA.Users.Models.User_Ref (Value);
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 4, Impl.Member, Value);
    end Set_Member;
    function Get_Member (Object : in Member_Ref)
                   return AWA.Users.Models.User_Ref'Class is
@@ -445,11 +445,11 @@ package body Awa.Workspaces.Models is
       return Impl.Member;
    end Get_Member;
    procedure Set_Workspace (Object : in out Member_Ref;
-                             Value  : in Workspace_Ref'Class) is
+                            Value  : in Workspace_Ref'Class) is
       Impl : Member_Access;
    begin
-      Set_Field (Object, Impl, 5);
-      Impl.Workspace := Workspace_Ref (Value);
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 5, Impl.Workspace, Value);
    end Set_Workspace;
    function Get_Workspace (Object : in Member_Ref)
                   return Workspace_Ref'Class is
@@ -621,10 +621,10 @@ package body Awa.Workspaces.Models is
          begin
             Stmt.Execute (Result);
             if Result /= 1 then
-               if Result = 0 then
-                  raise ADO.Objects.LAZY_LOCK;
-               else
+               if Result /= 0 then
                   raise ADO.Objects.UPDATE_ERROR;
+               else
+                  raise ADO.Objects.LAZY_LOCK;
                end if;
             end if;
          end;

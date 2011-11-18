@@ -126,10 +126,10 @@ CREATE TABLE session (
   `IP_ADDRESS` VARCHAR(255) NOT NULL,
   /* the user identifier */
   `USER_ID` BIGINT NOT NULL,
-  /* the authentication session identifier */
-  `AUTH_ID` BIGINT ,
   /* the session type */
-  `TYPE` INTEGER NOT NULL
+  `TYPE` INTEGER NOT NULL,
+  /* the authentication session identifier */
+  `AUTH_ID` INTEGER 
 );
 /* Record representing a user */
 CREATE TABLE user (

@@ -455,14 +455,6 @@ package AWA.Users.Models is
    function Get_User_Id (Object : in Session_Ref)
                  return ADO.Identifier;
 
-   --  Set the authentication session identifier
-   procedure Set_Auth_Id (Object : in out Session_Ref;
-                          Value  : in ADO.Identifier);
-
-   --  Get the authentication session identifier
-   function Get_Auth_Id (Object : in Session_Ref)
-                 return ADO.Identifier;
-
    --  Set the session type
    procedure Set_Session_Type (Object : in out Session_Ref;
                                Value  : in Integer);
@@ -470,6 +462,14 @@ package AWA.Users.Models is
    --  Get the session type
    function Get_Session_Type (Object : in Session_Ref)
                  return Integer;
+
+   --  Set the authentication session identifier
+   procedure Set_Auth (Object : in out Session_Ref;
+                       Value  : in Session_Ref'Class);
+
+   --  Get the authentication session identifier
+   function Get_Auth (Object : in Session_Ref)
+                 return Session_Ref'Class;
 
    --  Load the entity identified by 'Id'.
    --  Raises the NOT_FOUND exception if it does not exist.
@@ -578,8 +578,7 @@ private
    procedure Delete (Object  : in out Email_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
    procedure Set_Field (Object : in out Email_Ref'Class;
-                        Impl   : out Email_Access;
-                        Field  : in Positive);
+                        Impl   : out Email_Access);
    USER_NAME : aliased constant String := "user";
    COL_0_2_NAME : aliased constant String := "id";
    COL_1_2_NAME : aliased constant String := "version";
@@ -643,8 +642,7 @@ private
    procedure Delete (Object  : in out User_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
    procedure Set_Field (Object : in out User_Ref'Class;
-                        Impl   : out User_Access;
-                        Field  : in Positive);
+                        Impl   : out User_Access);
    ACCESS_KEY_NAME : aliased constant String := "access_key";
    COL_0_3_NAME : aliased constant String := "id";
    COL_1_3_NAME : aliased constant String := "version";
@@ -693,8 +691,7 @@ private
    procedure Delete (Object  : in out Access_Key_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
    procedure Set_Field (Object : in out Access_Key_Ref'Class;
-                        Impl   : out Access_Key_Access;
-                        Field  : in Positive);
+                        Impl   : out Access_Key_Access);
    SESSION_NAME : aliased constant String := "session";
    COL_0_4_NAME : aliased constant String := "ID";
    COL_1_4_NAME : aliased constant String := "version";
@@ -702,8 +699,8 @@ private
    COL_3_4_NAME : aliased constant String := "END_DATE";
    COL_4_4_NAME : aliased constant String := "IP_ADDRESS";
    COL_5_4_NAME : aliased constant String := "USER_ID";
-   COL_6_4_NAME : aliased constant String := "AUTH_ID";
-   COL_7_4_NAME : aliased constant String := "TYPE";
+   COL_6_4_NAME : aliased constant String := "TYPE";
+   COL_7_4_NAME : aliased constant String := "AUTH_ID";
    SESSION_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
      (Count => 8,
       Table => SESSION_NAME'Access,
@@ -729,8 +726,8 @@ private
        End_Date : ADO.Nullable_Time;
        Ip_Address : Ada.Strings.Unbounded.Unbounded_String;
        User_Id : ADO.Identifier;
-       Auth_Id : ADO.Identifier;
        Session_Type : Integer;
+       Auth : Session_Ref;
    end record;
    type Session_Access is access all Session_Impl;
    overriding
@@ -755,6 +752,5 @@ private
    procedure Delete (Object  : in out Session_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
    procedure Set_Field (Object : in out Session_Ref'Class;
-                        Impl   : out Session_Access;
-                        Field  : in Positive);
+                        Impl   : out Session_Access);
 end AWA.Users.Models;

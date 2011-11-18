@@ -8,7 +8,7 @@
             <column name="id" not-null="true" unique="false" sql-type="BIGINT"/>
             <generator class="sequence"/>
         </id>
-        <property name="entity_type" type="Entity_Type">
+        <property name="entity_type" type="ADO.Entity_Type">
             <comment>the entity type</comment>
             <column name="entity_type" not-null="false" unique="false" sql-type="INTEGER"/>
         </property>

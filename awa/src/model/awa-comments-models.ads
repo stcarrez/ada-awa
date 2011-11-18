@@ -215,6 +215,5 @@ private
    procedure Delete (Object  : in out Comment_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
    procedure Set_Field (Object : in out Comment_Ref'Class;
-                        Impl   : out Comment_Access;
-                        Field  : in Positive);
+                        Impl   : out Comment_Access);
 end AWA.Comments.Models;
