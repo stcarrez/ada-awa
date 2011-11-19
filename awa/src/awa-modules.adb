@@ -76,6 +76,22 @@ package body AWA.Modules is
    end Get_Config;
 
    --  ------------------------------
+   --  Get the module configuration property identified by the name.
+   --  If the configuration property does not exist, returns the default value.
+   --  ------------------------------
+   function Get_Config (Plugin  : in Module;
+                        Name    : in String;
+                        Default : in Integer := -1) return Integer is
+      Value : constant String := Plugin.Config.Get (Name, Integer'Image (Default));
+   begin
+      return Integer'Value (Value);
+
+   exception
+      when Constraint_Error =>
+         return Default;
+   end Get_Config;
+
+   --  ------------------------------
    --  Get the event subscribers for a given event name.
    --  ------------------------------
    function Get_Subscribers (Plugin : in Module;

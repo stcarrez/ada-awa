@@ -82,6 +82,12 @@ package AWA.Modules is
                         Name    : String;
                         Default : String := "") return String;
 
+   --  Get the module configuration property identified by the name.
+   --  If the configuration property does not exist, returns the default value.
+   function Get_Config (Plugin  : Module;
+                        Name    : String;
+                        Default : Integer := -1) return Integer;
+
    procedure Initialize (Manager : in out Module_Manager;
                          Module  : in AWA.Modules.Module'Class);
 
