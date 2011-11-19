@@ -22,8 +22,8 @@ with Ada.Strings.Unbounded;
 
 with Util.Log.Loggers;
 with Util.Strings;
+with Util.Encoders.HMAC.SHA1;
 
-with GNAT.SHA1;
 with Ada.Numerics.Discrete_Random;
 
 with ADO.SQL;
@@ -64,8 +64,11 @@ package body AWA.Users.Services is
    end Send_Alert;
 
    function Create_Key (Number : ADO.Identifier) return String is
+      Rand : constant String := Integer'Image (Random);
    begin
-      return GNAT.SHA1.Digest (Integer'Image (Random) & ADO.Identifier'Image (Number));
+      Log.Info ("Random {0}", Rand);
+      return Util.Encoders.HMAC.SHA1.Sign_Base64 (Key  => ADO.Identifier'Image (Number),
+                                                  Data => Rand);
    end Create_Key;
 
    --  ------------------------------
@@ -86,7 +89,8 @@ package body AWA.Users.Services is
       end if;
    end Get_Name_From_Email;
 
-   procedure Create_Session (DB      : in out Master_Session;
+   procedure Create_Session (Model   : in User_Service;
+                             DB      : in out Master_Session;
                              Session : out Session_Ref'Class;
                              User    : in User_Ref'Class;
                              Ip_Addr : in String) is
@@ -98,6 +102,7 @@ package body AWA.Users.Services is
       Auth_Session.Set_User_Id (User.Get_Id);
       Auth_Session.Set_Ip_Address (Ip_Addr);
       Auth_Session.Set_Session_Type (AUTH_SESSION_TYPE);
+      Auth_Session.Set_Server_Id (Model.Server_Id);
       Auth_Session.Save (DB);
 
       --  Create the connection session.
@@ -107,6 +112,7 @@ package body AWA.Users.Services is
       Session.Set_Ip_Address (Ip_Addr);
       Session.Set_Session_Type (CONNECT_SESSION_TYPE);
       Session.Set_Auth (Auth_Session);
+      Session.Set_Server_Id (Model.Server_Id);
       Session.Save (DB);
    end Create_Session;
 
@@ -122,7 +128,6 @@ package body AWA.Users.Services is
                            IpAddr   : in String;
                            User     : out User_Ref'Class;
                            Session  : out Session_Ref'Class) is
-      pragma Unreferenced (Model);
 
       OpenId : constant String := Security.Openid.Get_Claimed_Id (Auth);
       Email  : constant String := Security.Openid.Get_Email (Auth);
@@ -189,7 +194,7 @@ package body AWA.Users.Services is
          end;
       end if;
 
-      Create_Session (DB, Session, User, IpAddr);
+      Create_Session (Model, DB, Session, User, IpAddr);
       Ctx.Commit;
    end Authenticate;
 
@@ -206,14 +211,11 @@ package body AWA.Users.Services is
                            IpAddr   : in String;
                            User     : out User_Ref'Class;
                            Session  : out Session_Ref'Class) is
-      pragma Unreferenced (Model);
 
       Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB     : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Query  : ADO.SQL.Query;
       Found  : Boolean;
-
-      Auth_Session : Session_Ref;
    begin
       Log.Info ("Authenticate user {0}", Email);
 
@@ -231,7 +233,7 @@ package body AWA.Users.Services is
          raise Not_Found with "No user registered under email: " & Email;
       end if;
 
-      Create_Session (DB, Session, User, IpAddr);
+      Create_Session (Model, DB, Session, User, IpAddr);
 
       Ctx.Commit;
 	  Log.Info ("Session {0} created for user {1}",
@@ -252,6 +254,7 @@ package body AWA.Users.Services is
       Key    : Access_Key_Ref;
       Query  : ADO.SQL.Query;
       Found  : Boolean;
+      Stmt   : ADO.Statements.Delete_Statement;
    begin
       Log.Info ("Lost password for {0}", Email);
 
@@ -266,6 +269,12 @@ package body AWA.Users.Services is
          Log.Warn ("No user with email address {0}", Email);
          raise Not_Found with "No user registered under email: " & Email;
       end if;
+
+      --  Delete any previous access key for the user.
+      Stmt := DB.Create_Statement (AWA.Users.Models.ACCESS_KEY_TABLE'Access);
+      Stmt.Set_Filter ("user_id = ?");
+      Stmt.Bind_Param (1, User.Get_Id);
+      Stmt.Execute;
 
       --  Create the secure key to change the password
       Key.Set_Access_Key (Create_Key (User.Get_Id));
@@ -336,7 +345,7 @@ package body AWA.Users.Services is
       User.Save (DB);
 
       --  Create the authentication session.
-      Create_Session (DB, Session, User, IpAddr);
+      Create_Session (Model, DB, Session, User, IpAddr);
 
       --  Send the email to warn about the password change
       declare
@@ -414,7 +423,6 @@ package body AWA.Users.Services is
                           IpAddr   : in String;
                           User     : out User_Ref'Class;
                           Session  : out Session_Ref'Class) is
-      pragma Unreferenced (Model);
 
       Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB     : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
@@ -444,7 +452,7 @@ package body AWA.Users.Services is
       Access_Key.Delete (DB);
 
       --  Create the authentication session.
-      Create_Session (DB, Session, User, IpAddr);
+      Create_Session (Model, DB, Session, User, IpAddr);
 
       Ctx.Commit;
    end Verify_User;
@@ -486,10 +494,15 @@ package body AWA.Users.Services is
    end Verify_Session;
 
    --  ------------------------------
-   --  Closes the session identified by <b>Id</b>.
+   --  Closes the session identified by <b>Id</b>.  The session identified should refer to
+   --  a valid and not closed connection session.
+   --  When <b>Logout</b> is set, the authenticate session is also closed.  The connection
+   --  sessions associated with the authenticate session are also closed.
+   --  Raises <b>Not_Found</b> if the session is invalid or already closed.
    --  ------------------------------
-   procedure Close_Session (Model : in User_Service;
-                            Id    : in ADO.Identifier) is
+   procedure Close_Session (Model  : in User_Service;
+                            Id     : in ADO.Identifier;
+                            Logout : in Boolean := False) is
       pragma Unreferenced (Model);
 
       Sid     : constant String := ADO.Identifier'Image (Id);
@@ -516,6 +529,17 @@ package body AWA.Users.Services is
       Session.Set_End_Date (ADO.Nullable_Time '(Value => Ada.Calendar.Clock, Is_Null => False));
       Session.Save (DB);
 
+      --  When logging out, close the authenticate session.
+      if Logout then
+         declare
+            Auth_Session : Session_Ref'Class := Session.Get_Auth;
+         begin
+            Auth_Session.Set_End_Date (Session.Get_End_Date);
+            Auth_Session.Save (DB);
+            Session := Session_Ref (Auth_Session);
+         end;
+      end if;
+
       --  When closing the authenticate session, close any connection session that is still open.
       if Session.Get_Session_Type = AUTH_SESSION_TYPE then
          declare
@@ -531,4 +555,36 @@ package body AWA.Users.Services is
       Ctx.Commit;
    end Close_Session;
 
+   --  ------------------------------
+   --  Initialize the user service.
+   --  ------------------------------
+   overriding
+   procedure Initialize (Model  : in out User_Service;
+                         Module : in AWA.Modules.Module'Class) is
+   begin
+      AWA.Modules.Module_Manager (Model).Initialize (Module);
+
+      Model.Server_Id := Module.Get_Config ("app.server.id", 1);
+
+      Log.Info ("User server associated with server id {0}", Integer'Image (Model.Server_Id));
+
+      --  Close the connection sessions that have not been closed correctly.
+      declare
+         DB   : ADO.Sessions.Master_Session := Module.Get_Master_Session;
+         Stmt : ADO.Statements.Update_Statement
+           := DB.Create_Statement (AWA.Users.Models.SESSION_TABLE'Access);
+      begin
+         DB.Begin_Transaction;
+         Stmt.Save_Field (Name => "end_date",
+                          Value => ADO.Nullable_Time '(Value   => Ada.Calendar.Clock,
+                                                       Is_Null => False));
+         Stmt.Set_Filter ("server_id = :server AND end_date IS NULL");
+         Stmt.Bind_Param ("server", Model.Server_Id);
+         Stmt.Execute;
+         DB.Commit;
+      end;
+   end Initialize;
+
+begin
+   Integer_Random.Reset (Random_Generator);
 end AWA.Users.Services;

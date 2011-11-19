@@ -164,7 +164,8 @@ package body AWA.Users.Beans is
                P : constant AWA.Users.Principals.Principal_Access :=
                  AWA.Users.Principals.Principal'Class (Principal.all)'Access;
             begin
-               Data.Manager.Close_Session (Id => P.Get_Session_Identifier);
+               Data.Manager.Close_Session (Id => P.Get_Session_Identifier,
+                                           Logout => True);
 
             exception
                when others =>

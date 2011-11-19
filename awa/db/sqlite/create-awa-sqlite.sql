@@ -115,21 +115,23 @@ CREATE TABLE email (
 /* Defines an user session */
 CREATE TABLE session (
   /* the user session id */
-  `ID` BIGINT PRIMARY KEY,
+  `id` BIGINT PRIMARY KEY,
   /*  */
   `version` int ,
   /* the session start date */
-  `START_DATE` DATETIME NOT NULL,
+  `start_date` DATETIME NOT NULL,
   /* the session start date */
-  `END_DATE` DATETIME ,
+  `end_date` DATETIME ,
   /* the IP address */
-  `IP_ADDRESS` VARCHAR(255) NOT NULL,
+  `ip_address` VARCHAR(255) NOT NULL,
   /* the user identifier */
-  `USER_ID` BIGINT NOT NULL,
+  `user_id` BIGINT NOT NULL,
   /* the session type */
-  `TYPE` INTEGER NOT NULL,
+  `type` INTEGER NOT NULL,
+  /* the server instance identifier that created this session */
+  `server_id` INTEGER NOT NULL,
   /* the authentication session identifier */
-  `AUTH_ID` INTEGER 
+  `auth_id` INTEGER 
 );
 /* Record representing a user */
 CREATE TABLE user (

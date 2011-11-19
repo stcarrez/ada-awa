@@ -100,17 +100,29 @@ package AWA.Users.Services is
                              User    : out User_Ref'Class;
                              Session : out Session_Ref'Class);
 
-   --  Closes the session identified by <b>Id</b>.
-   procedure Close_Session (Model : in User_Service;
-                            Id    : in ADO.Identifier);
+   --  Closes the session identified by <b>Id</b>.  The session identified should refer to
+   --  a valid and not closed connection session.
+   --  When <b>Logout</b> is set, the authenticate session is also closed.  The connection
+   --  sessions associated with the authenticate session are also closed.
+   --  Raises <b>Not_Found</b> if the session is invalid or already closed.
+   procedure Close_Session (Model  : in User_Service;
+                            Id     : in ADO.Identifier;
+                            Logout : in Boolean := False);
 
    procedure Send_Alert (Model : in User_Service;
                          Name  : in String;
                          User  : in User_Ref'Class;
                          Props : in out ASF.Events.Modules.Module_Event);
 
+   --  Initialize the user service.
+   overriding
+   procedure Initialize (Model  : in out User_Service;
+                         Module : in AWA.Modules.Module'Class);
+
 private
 
-   type User_Service is new AWA.Modules.Module_Manager with null record;
+   type User_Service is new AWA.Modules.Module_Manager with record
+      Server_Id : Integer := 0;
+   end record;
 
 end AWA.Users.Services;

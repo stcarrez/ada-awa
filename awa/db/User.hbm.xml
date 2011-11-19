@@ -65,11 +65,11 @@
             <generator class="sequence"/>
         </id>
         <version name="version" type="int" column="version"/>
-        <property name="access_key" type="String">
+        <property name="access_key" type="String" update="false">
             <comment>the access key</comment>
             <column name="access_key" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
         </property>
-        <property name="user_id" type="ADO.Identifier">
+        <property name="user_id" type="ADO.Identifier" update="false">
             <comment>the user identifier</comment>
             <column name="user_id" not-null="false" unique="false" sql-type="BIGINT"/>
         </property>
@@ -81,35 +81,39 @@
         <comment>Defines an user session</comment>
         <id name="id" type="ADO.Identifier" unsaved-value="0">
             <comment>the user session id</comment>
-            <column name="ID" not-null="true" unique="false" sql-type="BIGINT"/>
+            <column name="id" not-null="true" unique="false" sql-type="BIGINT"/>
             <generator class="sequence"/>
         </id>
         <version name="version" type="int" column="version"/>
         <property name="start_date" update="false">
             <comment>the session start date</comment>
-            <column name="START_DATE" not-null="true" unique="false" sql-type="DATETIME"/>
+            <column name="start_date" not-null="true" unique="false" sql-type="DATETIME"/>
             <type name="Nullable_Time"/>
         </property>
         <property name="end_date" insert="false">
             <comment>the session start date</comment>
-            <column name="END_DATE" not-null="false" unique="false" sql-type="DATETIME"/>
+            <column name="end_date" not-null="false" unique="false" sql-type="DATETIME"/>
             <type name="Nullable_Time"/>
         </property>
-        <property name="ip_address" type="String">
+        <property name="ip_address" type="String" update="false">
             <comment>the IP address</comment>
-            <column name="IP_ADDRESS" not-null="true" unique="false" sql-type="VARCHAR(255)"/>
+            <column name="ip_address" not-null="true" unique="false" sql-type="VARCHAR(255)"/>
         </property>
         <property name="user_id" type="ADO.Identifier">
             <comment>the user identifier</comment>
-            <column name="USER_ID" not-null="true" unique="false" sql-type="BIGINT"/>
+            <column name="user_id" not-null="true" unique="false" sql-type="BIGINT"/>
         </property>
-        <property name="session_type" type="Integer">
+        <property name="session_type" type="Integer" update="false">
             <comment>the session type</comment>
-            <column name="TYPE" not-null="true" unique="false" sql-type="INTEGER"/>
+            <column name="type" not-null="true" unique="false" sql-type="INTEGER"/>
         </property>
-        <many-to-one name="auth" class="Session" foreign-key="id" not-null="false" lazy="proxy" fetch="select">
+        <property name="server_id" type="Integer" update="false">
+            <comment>the server instance identifier that created this session</comment>
+            <column name="server_id" not-null="true" unique="false" sql-type="INTEGER"/>
+        </property>
+        <many-to-one name="auth" class="Session" foreign-key="id" update="false" not-null="false" lazy="proxy" fetch="select">
             <comment>the authentication session identifier</comment>
-            <column name="AUTH_ID" not-null="false" sql-type="INTEGER"/>
+            <column name="auth_id" not-null="false" sql-type="INTEGER"/>
         </many-to-one>
     </class>
 

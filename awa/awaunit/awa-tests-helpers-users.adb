@@ -143,7 +143,7 @@ package body AWA.Tests.Helpers.Users is
    procedure Logout (Principal : in out Test_User) is
    begin
       Initialize (Principal);
-      Principal.Manager.Close_Session (Principal.Session.Get_Id);
+      Principal.Manager.Close_Session (Principal.Session.Get_Id, True);
    end Logout;
 
    --  Simulate a user login in the given service context.

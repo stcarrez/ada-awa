@@ -463,6 +463,14 @@ package AWA.Users.Models is
    function Get_Session_Type (Object : in Session_Ref)
                  return Integer;
 
+   --  Set the server instance identifier that created this session
+   procedure Set_Server_Id (Object : in out Session_Ref;
+                            Value  : in Integer);
+
+   --  Get the server instance identifier that created this session
+   function Get_Server_Id (Object : in Session_Ref)
+                 return Integer;
+
    --  Set the authentication session identifier
    procedure Set_Auth (Object : in out Session_Ref;
                        Value  : in Session_Ref'Class);
@@ -693,16 +701,17 @@ private
    procedure Set_Field (Object : in out Access_Key_Ref'Class;
                         Impl   : out Access_Key_Access);
    SESSION_NAME : aliased constant String := "session";
-   COL_0_4_NAME : aliased constant String := "ID";
+   COL_0_4_NAME : aliased constant String := "id";
    COL_1_4_NAME : aliased constant String := "version";
-   COL_2_4_NAME : aliased constant String := "START_DATE";
-   COL_3_4_NAME : aliased constant String := "END_DATE";
-   COL_4_4_NAME : aliased constant String := "IP_ADDRESS";
-   COL_5_4_NAME : aliased constant String := "USER_ID";
-   COL_6_4_NAME : aliased constant String := "TYPE";
-   COL_7_4_NAME : aliased constant String := "AUTH_ID";
+   COL_2_4_NAME : aliased constant String := "start_date";
+   COL_3_4_NAME : aliased constant String := "end_date";
+   COL_4_4_NAME : aliased constant String := "ip_address";
+   COL_5_4_NAME : aliased constant String := "user_id";
+   COL_6_4_NAME : aliased constant String := "type";
+   COL_7_4_NAME : aliased constant String := "server_id";
+   COL_8_4_NAME : aliased constant String := "auth_id";
    SESSION_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 8,
+     (Count => 9,
       Table => SESSION_NAME'Access,
       Members => (
          COL_0_4_NAME'Access,
@@ -712,7 +721,8 @@ private
          COL_4_4_NAME'Access,
          COL_5_4_NAME'Access,
          COL_6_4_NAME'Access,
-         COL_7_4_NAME'Access
+         COL_7_4_NAME'Access,
+         COL_8_4_NAME'Access
 )
      );
    Null_Session : constant Session_Ref
@@ -727,6 +737,7 @@ private
        Ip_Address : Ada.Strings.Unbounded.Unbounded_String;
        User_Id : ADO.Identifier;
        Session_Type : Integer;
+       Server_Id : Integer;
        Auth : Session_Ref;
    end record;
    type Session_Access is access all Session_Impl;

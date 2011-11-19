@@ -1150,16 +1150,6 @@ package body AWA.Users.Models is
                           Value => Object.Get_Key);
          Object.Clear_Modified (1);
       end if;
-      if Object.Is_Modified (3) then
-         Stmt.Save_Field (Name  => COL_2_3_NAME, --  access_key
-                          Value => Object.Access_Key);
-         Object.Clear_Modified (3);
-      end if;
-      if Object.Is_Modified (4) then
-         Stmt.Save_Field (Name  => COL_3_3_NAME, --  user_id
-                          Value => Object.User_Id);
-         Object.Clear_Modified (4);
-      end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
          Stmt.Save_Field (Name  => "version",
@@ -1301,6 +1291,7 @@ package body AWA.Users.Models is
       Impl.End_Date.Is_Null := True;
       Impl.User_Id := ADO.NO_IDENTIFIER;
       Impl.Session_Type := 0;
+      Impl.Server_Id := 0;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -1404,12 +1395,26 @@ package body AWA.Users.Models is
    begin
       return Impl.Session_Type;
    end Get_Session_Type;
+   procedure Set_Server_Id (Object : in out Session_Ref;
+                            Value  : in Integer) is
+      Impl : Session_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Integer (Impl.all, 8, Impl.Server_Id, Value);
+      ADO.Objects.Set_Field_Integer (Impl.all, 8, Impl.Server_Id, Value);
+   end Set_Server_Id;
+   function Get_Server_Id (Object : in Session_Ref)
+                  return Integer is
+      Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Server_Id;
+   end Get_Server_Id;
    procedure Set_Auth (Object : in out Session_Ref;
                        Value  : in Session_Ref'Class) is
       Impl : Session_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 8, Impl.Auth, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 9, Impl.Auth, Value);
    end Set_Auth;
    function Get_Auth (Object : in Session_Ref)
                   return Session_Ref'Class is
@@ -1437,6 +1442,7 @@ package body AWA.Users.Models is
             Copy.Ip_Address := Impl.Ip_Address;
             Copy.User_Id := Impl.User_Id;
             Copy.Session_Type := Impl.Session_Type;
+            Copy.Server_Id := Impl.Server_Id;
             Copy.Auth := Impl.Auth;
          end;
       end if;
@@ -1558,34 +1564,24 @@ package body AWA.Users.Models is
          := Session.Create_Statement (SESSION_TABLE'Access);
    begin
       if Object.Is_Modified (1) then
-         Stmt.Save_Field (Name  => COL_0_4_NAME, --  ID
+         Stmt.Save_Field (Name  => COL_0_4_NAME, --  id
                           Value => Object.Get_Key);
          Object.Clear_Modified (1);
       end if;
       if Object.Is_Modified (4) then
-         Stmt.Save_Field (Name  => COL_3_4_NAME, --  END_DATE
+         Stmt.Save_Field (Name  => COL_3_4_NAME, --  end_date
                           Value => Object.End_Date);
          Object.Clear_Modified (4);
       end if;
-      if Object.Is_Modified (5) then
-         Stmt.Save_Field (Name  => COL_4_4_NAME, --  IP_ADDRESS
-                          Value => Object.Ip_Address);
-         Object.Clear_Modified (5);
-      end if;
       if Object.Is_Modified (6) then
-         Stmt.Save_Field (Name  => COL_5_4_NAME, --  USER_ID
+         Stmt.Save_Field (Name  => COL_5_4_NAME, --  user_id
                           Value => Object.User_Id);
          Object.Clear_Modified (6);
       end if;
-      if Object.Is_Modified (7) then
-         Stmt.Save_Field (Name  => COL_6_4_NAME, --  TYPE
-                          Value => Object.Session_Type);
-         Object.Clear_Modified (7);
-      end if;
-      if Object.Is_Modified (8) then
-         Stmt.Save_Field (Name  => COL_7_4_NAME, --  AUTH_ID
+      if Object.Is_Modified (9) then
+         Stmt.Save_Field (Name  => COL_8_4_NAME, --  auth_id
                           Value => Object.Auth);
-         Object.Clear_Modified (8);
+         Object.Clear_Modified (9);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -1616,19 +1612,21 @@ package body AWA.Users.Models is
    begin
       Object.Version := 1;
       Session.Allocate (Id => Object);
-      Query.Save_Field (Name  => COL_0_4_NAME, --  ID
+      Query.Save_Field (Name  => COL_0_4_NAME, --  id
                         Value => Object.Get_Key);
       Query.Save_Field (Name  => COL_1_4_NAME, --  version
                         Value => Object.Version);
-      Query.Save_Field (Name  => COL_2_4_NAME, --  START_DATE
+      Query.Save_Field (Name  => COL_2_4_NAME, --  start_date
                         Value => Object.Start_Date);
-      Query.Save_Field (Name  => COL_4_4_NAME, --  IP_ADDRESS
+      Query.Save_Field (Name  => COL_4_4_NAME, --  ip_address
                         Value => Object.Ip_Address);
-      Query.Save_Field (Name  => COL_5_4_NAME, --  USER_ID
+      Query.Save_Field (Name  => COL_5_4_NAME, --  user_id
                         Value => Object.User_Id);
-      Query.Save_Field (Name  => COL_6_4_NAME, --  TYPE
+      Query.Save_Field (Name  => COL_6_4_NAME, --  type
                         Value => Object.Session_Type);
-      Query.Save_Field (Name  => COL_7_4_NAME, --  AUTH_ID
+      Query.Save_Field (Name  => COL_7_4_NAME, --  server_id
+                        Value => Object.Server_Id);
+      Query.Save_Field (Name  => COL_8_4_NAME, --  auth_id
                         Value => Object.Auth);
       Query.Execute (Result);
       if Result /= 1 then
@@ -1680,6 +1678,9 @@ package body AWA.Users.Models is
       if Name = "session_type" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Session_Type));
       end if;
+      if Name = "server_id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Server_Id));
+      end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
    procedure List (Object  : in out Session_Vector;
@@ -1714,8 +1715,8 @@ package body AWA.Users.Models is
       Object.End_Date := Stmt.Get_Time (3);
       Object.Ip_Address := Stmt.Get_Unbounded_String (4);
       Object.User_Id := Stmt.Get_Identifier (5);
-      if not Stmt.Is_Null (7) then
-          Object.Auth.Set_Key_Value (Stmt.Get_Identifier (7), Session);
+      if not Stmt.Is_Null (8) then
+          Object.Auth.Set_Key_Value (Stmt.Get_Identifier (8), Session);
       end if;
       Object.Version := Stmt.Get_Integer (1);
       ADO.Objects.Set_Created (Object);
