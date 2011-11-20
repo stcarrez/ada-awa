@@ -69,6 +69,9 @@ package AWA.Users.Beans is
                                     User : in AWA.Users.Models.User_Ref;
                                     Sess : in AWA.Users.Models.Session_Ref);
 
+   procedure Set_Authenticate_Cookie (Data    : in out Authenticate_Bean;
+                                      Session : in AWA.Users.Models.Session_Ref);
+
    --  Action to register a user
    procedure Register_User (Data    : in out Authenticate_Bean;
                             Outcome : in out Unbounded_String);

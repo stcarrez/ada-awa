@@ -25,6 +25,8 @@ with ASF.Contexts.Faces;
 with ASF.Cookies;
 with ASF.Applications.Messages.Factory;
 
+with Security.Filters;
+
 with AWA.Services.Contexts;
 with AWA.Users.Principals;
 package body AWA.Users.Beans is
@@ -34,6 +36,9 @@ package body AWA.Users.Beans is
    use AWA.Users.Models;
 
    Log : constant Loggers.Logger := Loggers.Create ("AWA.Users.Beans");
+
+   --  Helper to send a remove cookie in the current response
+   procedure Remove_Cookie (Name : in String);
 
    --  ------------------------------
    --  Action to register a user
@@ -115,6 +120,17 @@ package body AWA.Users.Beans is
       Session.Set_Principal (Principal.all'Access);
    end Set_Session_Principal;
 
+   procedure Set_Authenticate_Cookie (Data    : in out Authenticate_Bean;
+                                      Session : in Session_Ref) is
+      Cookie : constant String := Data.Manager.Get_Authenticate_Cookie (Session.Get_Id);
+      Ctx    : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
+      C      : ASF.Cookies.Cookie := ASF.Cookies.Create (Security.Filters.AID_COOKIE, Cookie);
+   begin
+      ASF.Cookies.Set_Path (C, Ctx.Get_Request.Get_Context_Path);
+      ASF.Cookies.Set_Max_Age (C, 15 * 86400);
+      Ctx.Get_Response.Add_Cookie (Cookie => C);
+   end Set_Authenticate_Cookie;
+
    --  ------------------------------
    --  Action to authenticate a user (password authentication).
    --  ------------------------------
@@ -131,6 +147,7 @@ package body AWA.Users.Beans is
       Outcome := To_Unbounded_String ("success");
 
       Data.Set_Session_Principal (User, Session);
+      Data.Set_Authenticate_Cookie (Session);
 
    exception
       when Services.Not_Found =>
@@ -138,6 +155,18 @@ package body AWA.Users.Beans is
 
          ASF.Applications.Messages.Factory.Add_Message ("users.login_signup_fail_message");
    end Authenticate_User;
+
+   --  ------------------------------
+   --  Helper to send a remove cookie in the current response
+   --  ------------------------------
+   procedure Remove_Cookie (Name : in String) is
+      Ctx : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
+      C   : ASF.Cookies.Cookie := ASF.Cookies.Create (Name, "");
+   begin
+      ASF.Cookies.Set_Path (C, Ctx.Get_Request.Get_Context_Path);
+      ASF.Cookies.Set_Max_Age (C, 0);
+      Ctx.Get_Response.Add_Cookie (Cookie => C);
+   end Remove_Cookie;
 
    --  ------------------------------
    --  Logout the user and closes the session.
@@ -176,13 +205,8 @@ package body AWA.Users.Beans is
       end;
 
       --  Remove the session cookie.
-      declare
-         C : ASF.Cookies.Cookie := ASF.Cookies.Create ("SID", "");
-      begin
-         ASF.Cookies.Set_Path (C, Ctx.Get_Request.Get_Context_Path);
-         ASF.Cookies.Set_Max_Age (C, 0);
-         Ctx.Get_Response.Add_Cookie (Cookie => C);
-      end;
+      Remove_Cookie (Security.Filters.SID_COOKIE);
+      Remove_Cookie (Security.Filters.AID_COOKIE);
    end Logout_User;
 
    --  ------------------------------

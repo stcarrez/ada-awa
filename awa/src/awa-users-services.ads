@@ -15,6 +15,8 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Ada.Strings.Unbounded;
+
 with AWA.Users.Models;
 with AWA.Modules;
 with ASF.Events.Modules;
@@ -30,11 +32,36 @@ package AWA.Users.Services is
 
    User_Exist : exception;
 
+   --  The session is an authenticate session.  The user authenticated using password or OpenID.
+   --  When the user logout, this session is closed as well as any connection session linked to
+   --  the authenticate session.
    AUTH_SESSION_TYPE    : constant Integer := 1;
+
+   --  The session is a connection session.  It is linked to an authenticate session.
+   --  This session can be closed automatically due to a timeout or user's inactivity.
+   --  The AID cookie refers to this connection session to create a new connection session.
+   --  Once re-connecting is done, the connection session refered to by AID is marked
+   --  as <b<USED_SESSION_TYPE</b> and a new AID cookie with the new connection session is
+   --  returned to the user.
    CONNECT_SESSION_TYPE : constant Integer := 0;
+
+   --  The session is a connection session whose associated AID cookie has been used.
+   --  This session cannot be used to re-connect a user through the AID cookie.
+   USED_SESSION_TYPE    : constant Integer := 2;
 
    type User_Service is new AWA.Modules.Module_Manager with private;
    type User_Service_Access is access all User_Service'Class;
+
+   --  Build the authenticate cookie.  The cookie is signed using HMAC-SHA1 with a private key.
+   function Get_Authenticate_Cookie (Model : in User_Service;
+                                     Id    : in ADO.Identifier)
+                                     return String;
+
+   --  Get the authenticate identifier from the cookie.
+   --  Verify that the cookie is valid, the signature is correct.
+   --  Returns the identified or NO_IDENTIFIER
+   function Get_Authenticate_Id (Model  : in User_Service;
+                                 Cookie : in String) return ADO.Identifier;
 
    --  Create a user in the database with the given user information and
    --  the associated email address.  Verify that no such user already exist.
@@ -72,6 +99,17 @@ package AWA.Users.Services is
    procedure Authenticate (Model    : in User_Service;
                            Auth     : in Security.Openid.Authentication;
                            IpAddr   : in String;
+                           User     : out User_Ref'Class;
+                           Session  : out Session_Ref'Class);
+
+   --  Authenticate the user with the authenticate cookie generated from a previous authenticate
+   --  session.  If the cookie has the correct signature, matches a valid session,
+   --  return the user information and create a new session.  The IP address of the connection
+   --  is saved in the session.
+   --  Raises Not_Found exception if the user is not recognized
+   procedure Authenticate (Model    : in User_Service;
+                           Cookie   : in String;
+                           Ip_Addr  : in String;
                            User     : out User_Ref'Class;
                            Session  : out Session_Ref'Class);
 
@@ -123,6 +161,7 @@ private
 
    type User_Service is new AWA.Modules.Module_Manager with record
       Server_Id : Integer := 0;
+      Auth_Key  : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
 end AWA.Users.Services;

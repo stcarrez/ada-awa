@@ -45,6 +45,13 @@ package AWA.Users.Filters is
    procedure Initialize (Filter  : in out Auth_Filter;
                          Context : in ASF.Servlets.Servlet_Registry'Class);
 
+   --  Authenticate a user by using the auto-login cookie.  This procedure is called if the
+   --  current session does not have any principal.  Based on the request and the optional
+   --  auto-login cookie passed in <b>Auth_Id</b>, it should identify the user and return
+   --  a principal object.  The principal object will be freed when the session is closed.
+   --  If the user cannot be authenticated, the returned principal should be null.
+   --
+   --  The default implementation returns a null principal.
    overriding
    procedure Authenticate (F        : in Auth_Filter;
                            Request  : in out ASF.Requests.Request'Class;

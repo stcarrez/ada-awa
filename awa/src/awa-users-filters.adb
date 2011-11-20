@@ -62,8 +62,22 @@ package body AWA.Users.Filters is
                            Session  : in ASF.Sessions.Session;
                            Auth_Id  : in String;
                            Principal : out ASF.Principals.Principal_Access) is
+      use AWA.Users.Module;
+      use AWA.Users.Services;
+
+      Manager : constant User_Service_Access := AWA.Users.Module.Get_User_Manager;
+      User    : AWA.Users.Models.User_Ref;
+      Sess    : AWA.Users.Models.Session_Ref;
    begin
-      null;
+      Manager.Authenticate (Cookie  => Auth_Id,
+                            Ip_Addr => "",
+                            User    => User,
+                            Session => Sess);
+      Principal := AWA.Users.Principals.Create (User, Sess).all'Access;
+
+   exception
+      when Not_Found =>
+         Principal := null;
    end Authenticate;
 
    --  ------------------------------

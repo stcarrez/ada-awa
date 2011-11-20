@@ -72,6 +72,44 @@ package body AWA.Users.Services is
    end Create_Key;
 
    --  ------------------------------
+   --  Build the authenticate cookie.  The cookie is signed using HMAC-SHA1 with a private key.
+   --  ------------------------------
+   function Get_Authenticate_Cookie (Model : in User_Service;
+                                     Id    : in ADO.Identifier)
+                                     return String is
+      Ident : constant String := Util.Strings.Image (Integer (Id));
+      Key   : constant String := To_String (Model.Auth_Key);
+   begin
+      return Ident & '.' & Util.Encoders.HMAC.SHA1.Sign_Base64 (Key  => Key, Data => Ident);
+   end Get_Authenticate_Cookie;
+
+   --  ------------------------------
+   --  Get the authenticate identifier from the cookie.
+   --  Verify that the cookie is valid, the signature is correct.
+   --  Returns the identified or NO_IDENTIFIER
+   --  ------------------------------
+   function Get_Authenticate_Id (Model  : in User_Service;
+                                 Cookie : in String) return ADO.Identifier is
+      Pos : constant Natural := Util.Strings.Index (Cookie, '.');
+      Id  : ADO.Identifier;
+   begin
+      if Pos <= 1 then
+         return ADO.NO_IDENTIFIER;
+      end if;
+
+      Id := ADO.Identifier'Value (Cookie (Cookie'First .. Pos - 1));
+      if Cookie /= Model.Get_Authenticate_Cookie (Id) then
+         return ADO.NO_IDENTIFIER;
+      end if;
+
+      return Id;
+
+   exception
+      when others =>
+         return ADO.NO_IDENTIFIER;
+   end Get_Authenticate_Id;
+
+   --  ------------------------------
    --  Get the user name from the email address.
    --  Returns the possible user name from his email address.
    --  ------------------------------
@@ -238,6 +276,82 @@ package body AWA.Users.Services is
       Ctx.Commit;
 	  Log.Info ("Session {0} created for user {1}",
                 ADO.Identifier'Image (Session.Get_Id), Email);
+   end Authenticate;
+
+   --  ------------------------------
+   --  Authenticate the user with the authenticate cookie generated from a previous authenticate
+   --  session.  If the cookie has the correct signature, matches a valid session,
+   --  return the user information and create a new session.  The IP address of the connection
+   --  is saved in the session.
+   --  Raises Not_Found exception if the user is not recognized
+   --  ------------------------------
+   procedure Authenticate (Model    : in User_Service;
+                           Cookie   : in String;
+                           Ip_Addr  : in String;
+                           User     : out User_Ref'Class;
+                           Session  : out Session_Ref'Class) is
+
+      use type ADO.Identifier;
+
+      Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB     : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Found  : Boolean;
+
+      Cookie_Session : Session_Ref;
+      Auth_Session   : Session_Ref;
+      Id             : constant ADO.Identifier := Model.Get_Authenticate_Id (Cookie);
+   begin
+      Log.Info ("Authenticate cookie {0}", Cookie);
+
+      if Id = ADO.NO_IDENTIFIER then
+         Log.Warn ("Invalid authenticate cookie: {0}", Cookie);
+         raise Not_Found with "Invalid cookie";
+      end if;
+      Ctx.Start;
+
+      Cookie_Session.Load (DB, Id, Found);
+      if not Found then
+         Log.Warn ("Authenticate session {0} not found in database", ADO.Identifier'Image(Id));
+         raise Not_Found with "Invalid cookie";
+      end if;
+
+      if Cookie_Session.Get_Session_Type /= CONNECT_SESSION_TYPE then
+         Log.Warn ("Authenticate session {0} not found in database", ADO.Identifier'Image(Id));
+         raise Not_Found with "Invalid cookie";
+      end if;
+
+      Auth_Session := Session_Ref (Cookie_Session.Get_Auth);
+      if not Auth_Session.Get_End_Date.Is_Null then
+         Log.Warn ("Authenticate session was closed");
+         raise Not_Found with "Authenticate session was closed.";
+      end if;
+
+      User.Load (DB, Auth_Session.Get_User_Id, Found);
+      if not Found then
+         Log.Warn ("No user associated with session {0}", ADO.Identifier'Image(Id));
+         raise Not_Found with "Invalid cookie";
+      end if;
+
+      Session := Session_Ref'Class (Null_Session);
+      Session.Set_Start_Date (ADO.Nullable_Time '(Value   => Ada.Calendar.Clock,
+                                                  Is_Null => False));
+      Session.Set_User_Id (User.Get_Id);
+      Session.Set_Ip_Address (Ip_Addr);
+      Session.Set_Session_Type (CONNECT_SESSION_TYPE);
+      Session.Set_Auth (Auth_Session);
+      Session.Set_Server_Id (Model.Server_Id);
+      Session.Save (DB);
+
+      --  Mark the cookie session as used.
+      Cookie_Session.Set_Session_Type (USED_SESSION_TYPE);
+      if Cookie_Session.Get_End_Date.Is_Null then
+         Cookie_Session.Set_End_Date (Session.Get_Start_Date);
+      end if;
+      Cookie_Session.Save (DB);
+
+      Ctx.Commit;
+      Log.Info ("Session {0} created for user {1}",
+                ADO.Identifier'Image (Session.Get_Id), ADO.Identifier'Image (User.Get_Id));
    end Authenticate;
 
    --  ------------------------------
@@ -561,10 +675,16 @@ package body AWA.Users.Services is
    overriding
    procedure Initialize (Model  : in out User_Service;
                          Module : in AWA.Modules.Module'Class) is
+      DEFAULT_KEY : constant String := "8ef60aad66977c68b12f4f8acab5a4e00a77f6e8";
    begin
       AWA.Modules.Module_Manager (Model).Initialize (Module);
 
       Model.Server_Id := Module.Get_Config ("app.server.id", 1);
+      Set_Unbounded_String (Model.Auth_Key,
+                            Module.Get_Config ("app.server.key", DEFAULT_KEY));
+      if Model.Auth_Key = DEFAULT_KEY then
+         Log.Info ("The 'app.server.key' configuration property not found.  Using default key.");
+      end if;
 
       Log.Info ("User server associated with server id {0}", Integer'Image (Model.Server_Id));
 
