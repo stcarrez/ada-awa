@@ -698,8 +698,9 @@ package body AWA.Users.Services is
          Stmt.Save_Field (Name => "end_date",
                           Value => ADO.Nullable_Time '(Value   => Ada.Calendar.Clock,
                                                        Is_Null => False));
-         Stmt.Set_Filter ("server_id = :server AND end_date IS NULL");
+         Stmt.Set_Filter ("server_id = :server AND end_date IS NULL AND type = :type");
          Stmt.Bind_Param ("server", Model.Server_Id);
+         Stmt.Bind_Param ("type", CONNECT_SESSION_TYPE);
          Stmt.Execute;
          DB.Commit;
       end;

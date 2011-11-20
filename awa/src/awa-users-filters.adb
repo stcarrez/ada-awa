@@ -18,6 +18,8 @@
 
 with Util.Log.Loggers;
 
+with ASF.Cookies;
+
 with AWA.Users.Services;
 with AWA.Users.Module;
 
@@ -62,6 +64,8 @@ package body AWA.Users.Filters is
                            Session  : in ASF.Sessions.Session;
                            Auth_Id  : in String;
                            Principal : out ASF.Principals.Principal_Access) is
+      pragma Unreferenced (F);
+
       use AWA.Users.Module;
       use AWA.Users.Services;
 
@@ -74,6 +78,16 @@ package body AWA.Users.Filters is
                             User    => User,
                             Session => Sess);
       Principal := AWA.Users.Principals.Create (User, Sess).all'Access;
+
+      --  Setup a new AID cookie with the new connection session.
+      declare
+         Cookie : constant String := Manager.Get_Authenticate_Cookie (Sess.Get_Id);
+         C      : ASF.Cookies.Cookie := ASF.Cookies.Create (Security.Filters.AID_COOKIE, Cookie);
+      begin
+         ASF.Cookies.Set_Path (C, Request.Get_Context_Path);
+         ASF.Cookies.Set_Max_Age (C, 15 * 86400);
+         Response.Add_Cookie (Cookie => C);
+      end;
 
    exception
       when Not_Found =>

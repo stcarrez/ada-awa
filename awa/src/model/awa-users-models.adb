@@ -1578,6 +1578,11 @@ package body AWA.Users.Models is
                           Value => Object.User_Id);
          Object.Clear_Modified (6);
       end if;
+      if Object.Is_Modified (7) then
+         Stmt.Save_Field (Name  => COL_6_4_NAME, --  type
+                          Value => Object.Session_Type);
+         Object.Clear_Modified (7);
+      end if;
       if Object.Is_Modified (9) then
          Stmt.Save_Field (Name  => COL_8_4_NAME, --  auth_id
                           Value => Object.Auth);
@@ -1715,6 +1720,8 @@ package body AWA.Users.Models is
       Object.End_Date := Stmt.Get_Time (3);
       Object.Ip_Address := Stmt.Get_Unbounded_String (4);
       Object.User_Id := Stmt.Get_Identifier (5);
+      Object.Session_Type := Stmt.Get_Integer (6);
+      Object.Server_Id := Stmt.Get_Integer (7);
       if not Stmt.Is_Null (8) then
           Object.Auth.Set_Key_Value (Stmt.Get_Identifier (8), Session);
       end if;

@@ -103,7 +103,7 @@
             <comment>the user identifier</comment>
             <column name="user_id" not-null="true" unique="false" sql-type="BIGINT"/>
         </property>
-        <property name="session_type" type="Integer" update="false">
+        <property name="session_type" type="Integer">
             <comment>the session type</comment>
             <column name="type" not-null="true" unique="false" sql-type="INTEGER"/>
         </property>
