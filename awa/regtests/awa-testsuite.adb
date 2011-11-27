@@ -23,8 +23,8 @@ with AWA.Wikis.Parsers.Tests;
 with AWA.Helpers.Selectors.Tests;
 package body AWA.Testsuite is
 
-   function Suite return Access_Test_Suite is
-      Ret : constant Access_Test_Suite := new Test_Suite;
+   function Suite return Util.Tests.Access_Test_Suite is
+      Ret : constant Util.Tests.Access_Test_Suite := new Util.Tests.Test_Suite;
    begin
       AWA.Users.Services.Tests.Add_Tests (Ret);
       AWA.Users.Tests.Add_Tests (Ret);

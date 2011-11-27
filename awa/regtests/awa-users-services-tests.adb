@@ -35,7 +35,7 @@ package body AWA.Users.Services.Tests is
 
    package Caller is new Util.Test_Caller (Test);
 
-   procedure Add_Tests (Suite : AUnit.Test_Suites.Access_Test_Suite) is
+   procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
    begin
       Caller.Add_Test (Suite, "Test AWA.Users.Services.Create_User",
                        Test_Create_User'Access);

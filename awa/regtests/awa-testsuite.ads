@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  AWA testsuite - AWA Testsuite
---  Copyright (C) 2009, 2010 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,10 +16,10 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with AUnit.Test_Suites; use AUnit.Test_Suites;
+with Util.Tests;
 
 package AWA.Testsuite is
 
-   function Suite return Access_Test_Suite;
+   function Suite return Util.Tests.Access_Test_Suite;
 
 end AWA.Testsuite;

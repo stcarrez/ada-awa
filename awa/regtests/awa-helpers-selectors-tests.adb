@@ -28,7 +28,7 @@ package body AWA.Helpers.Selectors.Tests is
 
    function Create_From_Color is new Create_From_Enum (Color, "color_");
 
-   procedure Add_Tests (Suite : in AUnit.Test_Suites.Access_Test_Suite) is
+   procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
    begin
       Caller.Add_Test (Suite, "Test AWA.Helpers.Selectors.Create_From_Query",
                        Test_Create_From_Query'Access);

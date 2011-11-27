@@ -16,7 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with AUnit.Test_Suites;
 with Util.Tests;
 
 package AWA.Blogs.Tests is

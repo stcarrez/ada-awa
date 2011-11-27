@@ -16,12 +16,11 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with AUnit.Test_Suites;
 with Util.Tests;
 
 package AWA.Wikis.Parsers.Tests is
 
-   procedure Add_Tests (Suite : AUnit.Test_Suites.Access_Test_Suite);
+   procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite);
 
    type Test is new Util.Tests.Test with null record;
 
