@@ -17,12 +17,13 @@
 -----------------------------------------------------------------------
 
 with Util.Tests;
+with AWA.Tests;
 
 package AWA.Users.Services.Tests is
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite);
 
-   type Test is new Util.Tests.Test with null record;
+   type Test is new AWA.Tests.Test with null record;
 
    procedure Test_Create_User (T : in out Test);
    procedure Test_Logout_User (T : in out Test);

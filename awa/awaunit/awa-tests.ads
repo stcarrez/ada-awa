@@ -18,7 +18,14 @@
 
 with Util.Properties;
 with AWA.Applications;
+with Util.Tests;
 package AWA.Tests is
+
+   type Test is abstract new Util.Tests.Test with null record;
+
+   --  Setup the service context before executing the test.
+   overriding
+   procedure Set_Up (T : in out Test);
 
    --  Initialize the AWA test framework mockup.
    procedure Initialize (App         : in AWA.Applications.Application_Access;

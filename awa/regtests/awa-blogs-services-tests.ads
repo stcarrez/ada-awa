@@ -17,12 +17,13 @@
 -----------------------------------------------------------------------
 
 with Util.Tests;
+with AWA.Tests;
 
 package AWA.Blogs.Services.Tests is
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite);
 
-   type Test is new Util.Tests.Test with null record;
+   type Test is new AWA.Tests.Test with null record;
 
    --  Test creation of blog by simulating web requests.
    procedure Test_Create_Blog (T : in out Test);

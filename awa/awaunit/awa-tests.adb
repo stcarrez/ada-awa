@@ -48,6 +48,15 @@ package body AWA.Tests is
 
    Date_Converter : aliased ASF.Converters.Dates.Date_Converter;
 
+   --  ------------------------------
+   --  Setup the service context before executing the test.
+   --  ------------------------------
+   overriding
+   procedure Set_Up (T : in out Test) is
+   begin
+      ASF.Server.Tests.Set_Context (Application.all'Access);
+   end Set_Up;
+
    procedure Initialize (Props : in Util.Properties.Manager) is
    begin
       Initialize (null, Props, True);

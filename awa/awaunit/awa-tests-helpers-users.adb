@@ -17,6 +17,7 @@
 -----------------------------------------------------------------------
 
 with Util.Tests;
+with Util.Log.Loggers;
 
 with AWA.Applications;
 with AWA.Tests;
@@ -28,6 +29,10 @@ package body AWA.Tests.Helpers.Users is
 
    use AWA.Users.Services;
 
+   use Util.Log;
+
+   Log : constant Loggers.Logger := Loggers.Create ("AWA.Tests.Helpers.Users");
+
    --  ------------------------------
    --  Initialize the service context.
    --  ------------------------------
@@ -35,6 +40,9 @@ package body AWA.Tests.Helpers.Users is
    begin
       if Principal.Manager = null then
          Principal.Manager := AWA.Users.Module.Get_User_Manager;
+         if Principal.Manager = null then
+            Log.Error ("There is no User_Manager in the application.");
+         end if;
       end if;
 
       --  Setup the service context.
