@@ -32,7 +32,7 @@ package body AWA.Users.Tests is
    use ASF.Tests;
    use AWA.Tests;
 
-   package Caller is new Util.Test_Caller (Test);
+   package Caller is new Util.Test_Caller (Test, "Users.Tests");
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
    begin

@@ -24,7 +24,7 @@ with ASF.Contexts.Writer.String;
 with AWA.Wikis.Writers;
 package body AWA.Wikis.Parsers.Tests is
 
-   package Caller is new Util.Test_Caller (Test);
+   package Caller is new Util.Test_Caller (Test, "Wikis.Parsers");
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
    begin

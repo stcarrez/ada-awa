@@ -22,7 +22,7 @@ with AWA.Tests;
 with ADO.Sessions;
 package body AWA.Helpers.Selectors.Tests is
 
-   package Caller is new Util.Test_Caller (Test);
+   package Caller is new Util.Test_Caller (Test, "Helpers.Selectors");
 
    type Color is (White, Blue, Red, Green, Yellow, Black);
 

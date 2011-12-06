@@ -33,7 +33,7 @@ package body AWA.Users.Services.Tests is
    use ADO;
    use ADO.Objects;
 
-   package Caller is new Util.Test_Caller (Test);
+   package Caller is new Util.Test_Caller (Test, "Users.Services");
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
    begin
