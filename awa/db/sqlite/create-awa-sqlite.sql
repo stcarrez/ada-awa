@@ -1,5 +1,12 @@
 /* Copied from ado-sqlite.sql*/
 /* File generated automatically by dynamo */
+/* Entity types */
+CREATE TABLE entity_type (
+  /* the entity type identifier */
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  /* the entity type name (table name) */
+  `name` VARCHAR(127) UNIQUE NOT NULL
+);
 /* Sequence generator */
 CREATE TABLE sequence (
   /* the sequence name */
@@ -11,15 +18,8 @@ CREATE TABLE sequence (
   /* the sequence block size */
   `block_size` BIGINT 
 );
-/* Entity types */
-CREATE TABLE entity_type (
-  /* the entity type identifier */
-  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
-  /* the entity type name (table name) */
-  `name` VARCHAR(127) UNIQUE NOT NULL
-);
-INSERT INTO entity_type (name) VALUES ("sequence");
 INSERT INTO entity_type (name) VALUES ("entity_type");
+INSERT INTO entity_type (name) VALUES ("sequence");
 /* Copied from awa-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* Defines an access key */

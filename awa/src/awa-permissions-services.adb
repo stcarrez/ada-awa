@@ -19,8 +19,6 @@
 with ADO.Queries;
 with ADO.Sessions.Entities;
 with ADO.Statements;
-with ADO.Model;
-
 with Util.Log.Loggers;
 with Util.Serialize.IO.XML;
 
@@ -195,12 +193,11 @@ package body AWA.Permissions.Services is
                              Entity     : in ADO.Objects.Object_Ref'Class;
                              Permission : in Permission_Type := READ) is
       Key  : constant ADO.Objects.Object_Key := Entity.Get_Key;
-      Kind : constant ADO.Model.Entity_Type_Ref
+      Kind : constant ADO.Entity_Type
         := ADO.Sessions.Entities.Find_Entity_Type (Session => Session,
                                                    Object  => Key);
    begin
-      Add_Permission (Session, User, ADO.Objects.Get_Value (Key),
-                      ADO.Entity_Type (Kind.Get_Id), Permission);
+      Add_Permission (Session, User, ADO.Objects.Get_Value (Key), Kind, Permission);
    end Add_Permission;
 
    --  ------------------------------

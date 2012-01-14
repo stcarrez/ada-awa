@@ -30,7 +30,6 @@ with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
 with Util.Beans.Basic.Lists;
-with ADO.Model;
 with AWA.Users.Models;
 package AWA.Comments.Models is
    --  Create an object key for Comment.
@@ -93,11 +92,11 @@ package AWA.Comments.Models is
 
    --  Set 
    procedure Set_Entity_Type (Object : in out Comment_Ref;
-                              Value  : in ADO.Model.Entity_Type_Ref'Class);
+                              Value  : in ADO.Entity_Type);
 
    --  Get 
    function Get_Entity_Type (Object : in Comment_Ref)
-                 return ADO.Model.Entity_Type_Ref'Class;
+                 return ADO.Entity_Type;
 
    --  Load the entity identified by 'Id'.
    --  Raises the NOT_FOUND exception if it does not exist.
@@ -190,7 +189,7 @@ private
        Message : Ada.Strings.Unbounded.Unbounded_String;
        Entity_Id : ADO.Identifier;
        User : AWA.Users.Models.User_Ref;
-       Entity_Type : ADO.Model.Entity_Type_Ref;
+       Entity_Type : ADO.Entity_Type;
    end record;
    type Comment_Access is access all Comment_Impl;
    overriding
