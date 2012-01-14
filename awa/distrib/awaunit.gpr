@@ -1,0 +1,19 @@
+with "util";
+with "testutil";
+with "el";
+with "asf";
+with "asfunit";
+with "ado";
+with "awa";
+
+project AwaUnit is
+   Version := "0.1.0";
+
+   for Library_Name use "awaunit";
+   for Library_Dir use "INSTALL/lib";
+   for Library_Kind use "static";
+
+   for Source_Dirs use ("INSTALL/share/ada/adainclude/awaunit");
+   for Library_ALI_Dir use "INSTALL/share/ada/adainclude/awaunit";
+   for Externally_Built use "true";
+end AwaUnit;

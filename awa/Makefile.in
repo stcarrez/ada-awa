@@ -93,7 +93,7 @@ generate:
 DISTFILES=README LICENSE.txt NOTICE.txt NEWS CHANGES ChangeLog config.guess configure config.sub \
 configure.in Makefile.in install-sh \
 awa.gpr.in tests.gpr.in samples.gpr.in config.gpr \
-src samples regtests db web bundles config \
+src samples regtests db web bundles config awaunit awaunit.gpr.in \
 distrib test-mysql.properties test-sqlite.properties dynamo.xml
 
 dist:
@@ -139,6 +139,7 @@ prepare-release:
 
 install:
 	$(MKDIR) -p ${includedir}/awa
+	$(MKDIR) -p ${includedir}/awaunit
 	$(MKDIR) -p ${projectdir}/
 	${MKDIR} -p ${alidir}/awa
 	${MKDIR} -p ${dynamodir}/awa/config
@@ -147,13 +148,17 @@ install:
 	${MKDIR} -p ${dynamodir}/awa/db/sqlite
 	${CP} src/*.ad[bs] ${includedir}/awa
 	${CP} src/model/*.ad[bs] ${includedir}/awa
+	${CP} awaunit/*.ad[bs] ${includedir}/awaunit
 	sed -e "s,INSTALL,${prefix},g" < distrib/awa.gpr > ${projectdir}/awa.gpr
+	sed -e "s,INSTALL,${prefix},g" < distrib/awaunit.gpr > ${projectdir}/awaunit.gpr
 	${CP} config/*.xml ${dynamodir}/awa/config/
 	${CP} db/*.xml ${dynamodir}/awa/db/
 	${CP} db/mysql/*.sql ${dynamodir}/awa/db/mysql
 	${CP} db/sqlite/*.sql ${dynamodir}/awa/db/sqlite
 	${CP} lib/awa/*.ali ${alidir}/awa
 	${CP} lib/awa/libada-awa.a ${libdir}/
+	${CP} lib/awaunit/*.ali ${alidir}/awaunit
+	${CP} lib/awaunit/libawaunit.a ${libdir}/
 
 
 uninstall:
