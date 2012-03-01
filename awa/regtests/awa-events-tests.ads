@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  Util testsuite - Util Testsuite
---  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
+--  events-tests -- Unit tests for AWA events
+--  Copyright (C) 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,24 +16,22 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with AWA.Users.Services.Tests;
-with AWA.Users.Tests;
-with AWA.Blogs.Services.Tests;
-with AWA.Wikis.Parsers.Tests;
-with AWA.Helpers.Selectors.Tests;
-with AWA.Events.Tests;
-package body AWA.Testsuite is
+with Util.Tests;
+with AWA.Tests;
 
-   function Suite return Util.Tests.Access_Test_Suite is
-      Ret : constant Util.Tests.Access_Test_Suite := new Util.Tests.Test_Suite;
-   begin
-      AWA.Events.Tests.Add_Tests (Ret);
-      AWA.Users.Services.Tests.Add_Tests (Ret);
-      AWA.Users.Tests.Add_Tests (Ret);
-      AWA.Wikis.Parsers.Tests.Add_Tests (Ret);
-      AWA.Helpers.Selectors.Tests.Add_Tests (Ret);
-      AWA.Blogs.Services.Tests.Add_Tests (Ret);
-      return Ret;
-   end Suite;
+package AWA.Events.Tests is
 
-end AWA.Testsuite;
+   procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite);
+
+   type Test is new AWA.Tests.Test with null record;
+
+   --  Test searching an event name in the definition list.
+   procedure Test_Find_Event (T : in out Test);
+
+   --  Test creation and initialization of event manager.
+   procedure Test_Initialize (T : in out Test);
+
+   --  Test adding an action.
+   procedure Test_Add_Action (T : in out Test);
+
+end AWA.Events.Tests;
