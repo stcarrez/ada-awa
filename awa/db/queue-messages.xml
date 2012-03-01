@@ -1,0 +1,30 @@
+<query-mapping package='AWA.Queues.Models'>
+    <description>
+      Get the list of messages
+    </description>
+
+    <query name='queue-pending-message'>
+       <comment>Get the messages which have been queued on a given message queue</comment>
+       <sql>
+    SELECT
+      m.id,
+      m.version,
+      m.message_type,
+      m.priority,
+      m.server_id,
+      m.task_id,
+      m.parameters,
+      m.create_date,
+      m.processing_date,
+      m.finish_date,
+      m.status,
+      m.user_id,
+      m.session_id,
+      m.queue_id
+    FROM awa_message AS m
+    WHERE m.status = 0 AND m.queue_id = :queue
+    ORDER BY m.priority DESC, m.id ASC LIMIT :max
+       </sql>
+    </query>
+
+</query-mapping>

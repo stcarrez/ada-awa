@@ -25,6 +25,58 @@ CREATE TABLE acl (
   `writeable` TINYINT ,
   PRIMARY KEY (`id`)
 );
+/* A message in the message queue */
+CREATE TABLE awa_message (
+  /* the message identifier */
+  `id` BIGINT NOT NULL,
+  /*  */
+  `version` int ,
+  /* the message priority */
+  `priority` INTEGER NOT NULL,
+  /* the server which is processing this message */
+  `server_id` INTEGER NOT NULL,
+  /* the task within the server which is processing this message */
+  `task_id` INTEGER NOT NULL,
+  /* the message parameters */
+  `parameters` VARCHAR(60000) NOT NULL,
+  /* the message creation date */
+  `create_date` DATETIME NOT NULL,
+  /* the message processing date */
+  `processing_date` DATETIME ,
+  /* the message end processing date */
+  `finish_date` DATETIME ,
+  /* the message status */
+  `status` INTEGER NOT NULL,
+  /* the message type */
+  `type` INTEGER NOT NULL,
+  /* the user who triggered the message */
+  `user_id` INTEGER NOT NULL,
+  /* the user session who triggered the message */
+  `session_id` INTEGER NOT NULL,
+  /* the message queue associated with this message */
+  `queue_id` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
+);
+/* A message type */
+CREATE TABLE awa_message_type (
+  /* the message type identifier */
+  `id` INTEGER NOT NULL AUTO_INCREMENT,
+  /* the message type name */
+  `name` VARCHAR(256) NOT NULL,
+  PRIMARY KEY (`id`)
+);
+/* A message queue */
+CREATE TABLE awa_queue (
+  /* the queue identifier */
+  `id` INTEGER NOT NULL,
+  /*  */
+  `version` int ,
+  /* the message queue name */
+  `name` VARCHAR(256) NOT NULL,
+  /* the server identifier which is associated with this message queue */
+  `server_id` INTEGER ,
+  PRIMARY KEY (`id`)
+);
 /* Blog  */
 CREATE TABLE blog (
   /* the blog identifier */
@@ -179,6 +231,9 @@ CREATE TABLE workspace_member (
 INSERT INTO entity_type (name) VALUES
 ("access_key")
 ,("acl")
+,("awa_message")
+,("awa_message_type")
+,("awa_queue")
 ,("blog")
 ,("blog_post")
 ,("comments")

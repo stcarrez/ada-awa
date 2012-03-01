@@ -23,6 +23,55 @@ CREATE TABLE acl (
   /* whether the entity is writeable */
   `writeable` TINYINT 
 );
+/* A message in the message queue */
+CREATE TABLE awa_message (
+  /* the message identifier */
+  `id` BIGINT PRIMARY KEY,
+  /*  */
+  `version` int ,
+  /* the message priority */
+  `priority` INTEGER NOT NULL,
+  /* the server which is processing this message */
+  `server_id` INTEGER NOT NULL,
+  /* the task within the server which is processing this message */
+  `task_id` INTEGER NOT NULL,
+  /* the message parameters */
+  `parameters` VARCHAR(60000) NOT NULL,
+  /* the message creation date */
+  `create_date` DATETIME NOT NULL,
+  /* the message processing date */
+  `processing_date` DATETIME ,
+  /* the message end processing date */
+  `finish_date` DATETIME ,
+  /* the message status */
+  `status` INTEGER NOT NULL,
+  /* the message type */
+  `type` INTEGER NOT NULL,
+  /* the user who triggered the message */
+  `user_id` INTEGER NOT NULL,
+  /* the user session who triggered the message */
+  `session_id` INTEGER NOT NULL,
+  /* the message queue associated with this message */
+  `queue_id` INTEGER NOT NULL
+);
+/* A message type */
+CREATE TABLE awa_message_type (
+  /* the message type identifier */
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  /* the message type name */
+  `name` VARCHAR(256) NOT NULL
+);
+/* A message queue */
+CREATE TABLE awa_queue (
+  /* the queue identifier */
+  `id` INTEGER PRIMARY KEY,
+  /*  */
+  `version` int ,
+  /* the message queue name */
+  `name` VARCHAR(256) NOT NULL,
+  /* the server identifier which is associated with this message queue */
+  `server_id` INTEGER 
+);
 /* Blog  */
 CREATE TABLE blog (
   /* the blog identifier */
@@ -168,6 +217,9 @@ CREATE TABLE workspace_member (
 );
 INSERT INTO entity_type (name) VALUES ("access_key");
 INSERT INTO entity_type (name) VALUES ("acl");
+INSERT INTO entity_type (name) VALUES ("awa_message");
+INSERT INTO entity_type (name) VALUES ("awa_message_type");
+INSERT INTO entity_type (name) VALUES ("awa_queue");
 INSERT INTO entity_type (name) VALUES ("blog");
 INSERT INTO entity_type (name) VALUES ("blog_post");
 INSERT INTO entity_type (name) VALUES ("comments");
