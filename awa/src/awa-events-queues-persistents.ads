@@ -15,30 +15,40 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with Util.Concurrent.Fifos;
+
+with EL.Beans;
+with EL.Contexts;
+
 with AWA.Events.Models;
 package AWA.Events.Queues.Persistents is
 
    type Persistent_Queue (Name_Length : Natural) is limited new Queue with private;
+   type Persistent_Queue_Access is access all Persistent_Queue'Class;
 
    --  Get the queue name.
    function Get_Name (From : in Persistent_Queue) return String;
 
+   --  Queue the event.  The event is saved in the database with a relation to
+   --  the user, the user session, the event queue and the event type.
    procedure Enqueue (Into  : in out Persistent_Queue;
                       Event : in AWA.Events.Module_Event'Class);
 
    procedure Dequeue (From    : in out Persistent_Queue;
                       Process : access procedure (Event : in Module_Event'Class));
 
+   --  Create the queue associated with the given name and configure it by using
+   --  the configuration properties.
+   function Create_Queue (Name    : in String;
+                          Props   : in EL.Beans.Param_Vectors.Vector;
+                          Context : in EL.Contexts.ELContext'Class) return Queue_Access;
+
 private
 
-   package Fifo_Protected_Queue is
-     new Util.Concurrent.Fifos (Module_Event_Access, 100, True);
-
-   type Persistent_Queue (Name_Length : Natural) is
-     new Fifo_Protected_Queue.Fifo and Queue with record
-      Name  : String (1 .. Name_Length);
-      Queue : AWA.Events.Models.Queue_Ref;
+   type Persistent_Queue (Name_Length : Natural) is limited new Queue with record
+      Queue     : AWA.Events.Models.Queue_Ref;
+      Server_Id : Natural := 0;
+      Max_Batch : Positive := 1;
+      Name      : String (1 .. Name_Length);
    end record;
 
 end AWA.Events.Queues.Persistents;

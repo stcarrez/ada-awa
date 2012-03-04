@@ -32,7 +32,8 @@ package AWA.Events.Configs is
                                           Context : in EL.Contexts.ELContext'Class)
                                           return AWA.Events.Queues.Queue_Access;
 
-   FIFO_QUEUE_TYPE : constant String := "fifo";
+   FIFO_QUEUE_TYPE       : constant String := "fifo";
+   PERSISTENT_QUEUE_TYPE : constant String := "persist";
 
    --  ------------------------------
    --  Event Config Controller

@@ -119,8 +119,11 @@ package body AWA.Events.Services is
    --  ------------------------------
    procedure Add_Queue (Manager : in out Event_Manager;
                         Queue   : in AWA.Events.Queues.Queue_Access) is
+      Name : constant String := Queue.Get_Name;
    begin
-      Manager.Queues.Insert (Key      => Queue.Get_Name,
+      Log.Info ("Adding event queue {0}", Name);
+
+      Manager.Queues.Insert (Key      => Name,
                              New_Item => Queue);
    end Add_Queue;
 

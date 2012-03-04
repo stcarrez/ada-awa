@@ -20,6 +20,7 @@ with Util.Serialize.Mappers.Record_Mapper;
 
 with AWA.Services.Contexts;
 with AWA.Events.Queues.Fifos;
+with AWA.Events.Queues.Persistents;
 package body AWA.Events.Configs is
 
    use AWA.Events.Queues;
@@ -49,6 +50,8 @@ package body AWA.Events.Configs is
             begin
                if Name = FIFO_QUEUE_TYPE then
                   Into.Create := AWA.Events.Queues.Fifos.Create_Queue'Access;
+               elsif Name = PERSISTENT_QUEUE_TYPE then
+                  Into.Create := AWA.Events.Queues.Persistents.Create_Queue'Access;
                else
                   raise Util.Serialize.Mappers.Field_Error with "Invalid queue type: " & Name;
                end if;
