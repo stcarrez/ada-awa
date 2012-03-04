@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-services -- Services
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -85,6 +85,19 @@ package body AWA.Services.Contexts is
          return Ctx.Principal.Get_User_Identifier;
       end if;
    end Get_User_Identifier;
+
+   --  ------------------------------
+   --  Get the current user session from the user invoking the service operation.
+   --  Returns a null session if there is none.
+   --  ------------------------------
+   function Get_User_Session (Ctx : in Service_Context) return AWA.Users.Models.Session_Ref is
+   begin
+      if Ctx.Principal = null then
+         return AWA.Users.Models.Null_Session;
+      else
+         return Ctx.Principal.Get_Session;
+      end if;
+   end Get_User_Session;
 
    --  ------------------------------
    --     function Get_Service (Ctx : in Service_Context; Service : in Service_Id)
