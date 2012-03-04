@@ -1,4 +1,4 @@
-<query-mapping package='AWA.Queues.Models'>
+<query-mapping package='AWA.Events.Models'>
     <description>
       Get the list of messages
     </description>

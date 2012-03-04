@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hibernate-mapping default-cascade="none">
-    <enum name="AWA.Queues.Models.Message_Status_Type">
+    <enum name="AWA.Events.Models.Message_Status_Type">
        <comment>The message status</comment>
        <value name="QUEUED" value="0"/>
        <value name="PROCESSING" value="1"/>
        <value name="PROCESSED" value="2"/>
     </enum>
-    <class name="AWA.Queues.Models.Queue" table="awa_queue"
+    <class name="AWA.Events.Models.Queue" table="awa_queue"
            dynamic-insert="true" dynamic-update="true">
         <comment>A message queue</comment>
         <id name="id" type="ADO.Identifier" unsaved-value="0">
@@ -24,7 +24,7 @@
             <column name="server_id" not-null="false" unique="false" sql-type="INTEGER"/>
         </property>
     </class>
-    <class name="AWA.Queues.Models.Message_Type" table="awa_message_type"
+    <class name="AWA.Events.Models.Message_Type" table="awa_message_type"
            dynamic-insert="true" dynamic-update="true">
         <comment>A message type</comment>
         <id name="id" type="ADO.Identifier" unsaved-value="0">
@@ -37,7 +37,7 @@
             <column name="name" not-null="true" unique="true" sql-type="VARCHAR(256)"/>
         </property>
     </class>
-    <class name="AWA.Queues.Models.Message" table="awa_message"
+    <class name="AWA.Events.Models.Message" table="awa_message"
            dynamic-insert="true" dynamic-update="true">
         <comment>A message in the message queue</comment>
         <id name="id" type="ADO.Identifier" unsaved-value="0">
@@ -84,7 +84,7 @@
         <property name="status">
             <comment>the message status</comment>
             <column name="status" not-null="true" unique="false" sql-type="INTEGER"/>
-            <type name="AWA.Queues.Models.Message_Status_Type"/>
+            <type name="AWA.Events.Models.Message_Status_Type"/>
         </property>
         <many-to-one name="user" class="AWA.Users.Models.User" foreign-key="ID" not-null="true" lazy="proxy" fetch="select">
             <comment>the user who triggered the message</comment>

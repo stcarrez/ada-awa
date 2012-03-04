@@ -28,7 +28,7 @@ with EL.Beans;
 
 with ADO.Sessions;
 
-with AWA.Queues.Models;
+with AWA.Events.Models;
 with AWA.Events.Queues;
 with AWA.Events.Dispatchers;
 
@@ -107,7 +107,7 @@ private
    type Event_Queues is record
       Queues : Queue_Dispatcher_Lists.List;
       Name   : Util.Strings.Name_Access;
-      Event  : AWA.Queues.Models.Message_Type_Ref;
+      Event  : AWA.Events.Models.Message_Type_Ref;
    end record;
 
    --  An array of event queue actions.

@@ -183,11 +183,11 @@ package body AWA.Events.Services is
    --  ------------------------------
    procedure Initialize (Manager : in out Event_Manager;
                          DB      : in out ADO.Sessions.Master_Session) is
-      Msg_Types : AWA.Queues.Models.Message_Type_Vector;
+      Msg_Types : AWA.Events.Models.Message_Type_Vector;
 
       Query     : ADO.SQL.Query;
 
-      procedure Set_Events (Msg : in AWA.Queues.Models.Message_Type_Ref) is
+      procedure Set_Events (Msg : in AWA.Events.Models.Message_Type_Ref) is
          Name : constant String := Msg.Get_Name;
       begin
          declare
@@ -207,15 +207,15 @@ package body AWA.Events.Services is
       DB.Begin_Transaction;
       Manager.Actions := new Event_Queues_Array (1 .. Last_Event);
 
-      AWA.Queues.Models.List (Object  => Msg_Types,
+      AWA.Events.Models.List (Object  => Msg_Types,
                               Session => DB,
                               Query   => Query);
       declare
-         Pos : AWA.Queues.Models.Message_Type_Vectors.Cursor := Msg_Types.First;
+         Pos : AWA.Events.Models.Message_Type_Vectors.Cursor := Msg_Types.First;
       begin
-         while AWA.Queues.Models.Message_Type_Vectors.Has_Element (Pos) loop
-            AWA.Queues.Models.Message_Type_Vectors.Query_Element (Pos, Set_Events'Access);
-            AWA.Queues.Models.Message_Type_Vectors.Next (Pos);
+         while AWA.Events.Models.Message_Type_Vectors.Has_Element (Pos) loop
+            AWA.Events.Models.Message_Type_Vectors.Query_Element (Pos, Set_Events'Access);
+            AWA.Events.Models.Message_Type_Vectors.Next (Pos);
          end loop;
       end;
 
