@@ -1,0 +1,77 @@
+-----------------------------------------------------------------------
+--  awa-events-queues-fifos -- Fifo event queues (memory based)
+--  Copyright (C) 2012 Stephane Carrez
+--  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+--
+--  Licensed under the Apache License, Version 2.0 (the "License");
+--  you may not use this file except in compliance with the License.
+--  You may obtain a copy of the License at
+--
+--      http://www.apache.org/licenses/LICENSE-2.0
+--
+--  Unless required by applicable law or agreed to in writing, software
+--  distributed under the License is distributed on an "AS IS" BASIS,
+--  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+--  See the License for the specific language governing permissions and
+--  limitations under the License.
+-----------------------------------------------------------------------
+with Ada.Unchecked_Deallocation;
+with Ada.Finalization;
+
+package body AWA.Events.Queues.Fifos is
+
+   procedure Free is
+      new Ada.Unchecked_Deallocation (Object => AWA.Events.Module_Event'Class,
+                                      Name   => AWA.Events.Module_Event_Access);
+
+   --  ------------------------------
+   --  Get the queue name.
+   --  ------------------------------
+   function Get_Name (From : in Fifo_Queue) return String is
+   begin
+      return From.Name;
+   end Get_Name;
+
+   --  ------------------------------
+   --  Queue the event.
+   --  ------------------------------
+   procedure Enqueue (Into  : in out Fifo_Queue;
+                      Event : in AWA.Events.Module_Event'Class) is
+      E : constant Module_Event_Access := new Module_Event; --  '(Module_Event (Event));
+   begin
+      Into.Fifo.Enqueue (E);
+   end Enqueue;
+
+   --  ------------------------------
+   --  Dequeue an event and process it with the <b>Process</b> procedure.
+   --  ------------------------------
+   procedure Dequeue (From    : in out Fifo_Queue;
+                      Process : access procedure (Event : in Module_Event'Class)) is
+      E : Module_Event_Access;
+   begin
+      From.Fifo.Dequeue (E);
+      begin
+         Process (E.all);
+
+      exception
+         when E : others =>
+            null;
+      end;
+      Free (E);
+   end Dequeue;
+
+   --  ------------------------------
+   --  Create the queue associated with the given name and configure it by using
+   --  the configuration properties.
+   --  ------------------------------
+   function Create_Queue (Name    : in String;
+                          Props   : in EL.Beans.Param_Vectors.Vector;
+                          Context : in EL.Contexts.ELContext'Class) return Queue_Access is
+      Result : constant Fifo_Queue_Access := new Fifo_Queue '(Name_Length  => Name'Length,
+                                                              Name         => Name,
+                                                              others       => <>);
+   begin
+      return Result.all'Access;
+   end Create_Queue;
+
+end AWA.Events.Queues.Fifos;
