@@ -21,7 +21,7 @@ with ASF.Applications.Main;
 with ASF.Applications.Main.Configs;
 with ADO.Sessions.Factory;
 with AWA.Modules;
-with AWA.Events;
+with AWA.Events.Services;
 package AWA.Applications is
 
    package P_Module_Dir is
@@ -104,7 +104,7 @@ private
    type Application is new ASF.Applications.Main.Application with record
       DB_Factory : ADO.Sessions.Factory.Session_Factory;
       Modules    : aliased AWA.Modules.Module_Registry;
-      Events     : aliased AWA.Events.Event_Manager;
+      Events     : aliased AWA.Events.Services.Event_Manager;
    end record;
 
 end AWA.Applications;
