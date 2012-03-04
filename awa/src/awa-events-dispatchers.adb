@@ -17,39 +17,44 @@
 -----------------------------------------------------------------------
 with Ada.Finalization;
 
-with EL.Expressions;
-with EL.Beans;
-
 with AWA.Events.Queues;
-limited with AWA.Events.Services;
-package AWA.Events.Dispatchers is
+with AWA.Events.Services;
+package body AWA.Events.Dispatchers is
 
-   type Dispatcher is new Ada.Finalization.Limited_Controlled with private;
-   type Dispatcher_Access is access all Dispatcher'Class;
-
+   --  ------------------------------
    --  Dispatch the events from the queue.
+   --  ------------------------------
    procedure Dispatch (Manager : in Dispatcher;
-                       Queue   : in AWA.Events.Queues.Queue_Access);
+                       Queue   : in AWA.Events.Queues.Queue_Access) is
+      procedure Process (Event : in Module_Event'Class) is
+      begin
+         Manager.Manager.Dispatch (Queue, Event);
+      end Process;
+   begin
+      Queue.Dequeue (Process'Access);
+   end Dispatch;
 
+   --  ------------------------------
    --  Dispatch the event identified by <b>Event</b>.
    --  The event actions which are associated with the event are executed synchronously.
+   --  ------------------------------
    procedure Dispatch (Manager : in Dispatcher;
-                       Event   : in Module_Event'Class);
+                       Event   : in Module_Event'Class) is
+   begin
+      null;
+   end Dispatch;
 
+   --  ------------------------------
    --  Add an action invoked when an event is dispatched through this dispatcher.
    --  When the event queue dispatches the event, the Ada bean identified by the method action
    --  represented by <b>Action</b> is created and initialized by evaluating and setting the
    --  parameters defined in <b>Params</b>.  The action method is then invoked.
+   --  ------------------------------
    procedure Add_Action (Manager : in out Dispatcher;
                          Action  : in EL.Expressions.Method_Expression;
-                         Params  : in EL.Beans.Param_Vectors.Vector);
-
-private
-
-   type Event_Manager_Access is access all AWA.Events.Services.Event_Manager'Class;
-
-   type Dispatcher is new Ada.Finalization.Limited_Controlled with record
-      Manager : Event_Manager_Access := null;
-   end record;
+                         Params  : in EL.Beans.Param_Vectors.Vector) is
+   begin
+      null;
+   end Add_Action;
 
 end AWA.Events.Dispatchers;
