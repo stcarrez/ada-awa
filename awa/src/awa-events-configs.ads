@@ -1,0 +1,88 @@
+-----------------------------------------------------------------------
+--  awa-events-configs -- Event configuration
+--  Copyright (C) 2012 Stephane Carrez
+--  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+--
+--  Licensed under the Apache License, Version 2.0 (the "License");
+--  you may not use this file except in compliance with the License.
+--  You may obtain a copy of the License at
+--
+--      http://www.apache.org/licenses/LICENSE-2.0
+--
+--  Unless required by applicable law or agreed to in writing, software
+--  distributed under the License is distributed on an "AS IS" BASIS,
+--  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+--  See the License for the specific language governing permissions and
+--  limitations under the License.
+-----------------------------------------------------------------------
+
+with Util.Beans.Objects;
+with Util.Serialize.IO.XML;
+with EL.Expressions;
+with EL.Beans;
+with EL.Contexts;
+with ADO.Sessions;
+
+with AWA.Events.Queues;
+with AWA.Events.Services;
+package AWA.Events.Configs is
+
+   type Queue_Factory is access function (Name    : in String;
+                                          Props   : in EL.Beans.Param_Vectors.Vector;
+                                          Context : in EL.Contexts.ELContext'Class)
+                                          return AWA.Events.Queues.Queue_Access;
+
+   FIFO_QUEUE_TYPE : constant String := "fifo";
+
+   --  ------------------------------
+   --  Event Config Controller
+   --  ------------------------------
+   type Controller_Config is record
+      Name       : Util.Beans.Objects.Object;
+      Queue      : AWA.Events.Queues.Queue_Access;
+      Prop_Name  : Util.Beans.Objects.Object;
+      Params     : EL.Beans.Param_Vectors.Vector;
+      Create     : Queue_Factory;
+      Manager    : AWA.Events.Services.Event_Manager_Access;
+      Action     : EL.Expressions.Method_Expression;
+      Properties : EL.Beans.Param_Vectors.Vector;
+      Context    : EL.Contexts.ELContext_Access;
+      Session    : ADO.Sessions.Session;
+   end record;
+   type Controller_Config_Access is access all Controller_Config;
+
+   type Config_Fields is (FIELD_ON_EVENT, FIELD_NAME, FIELD_QUEUE_NAME, FIELD_ACTION,
+                          FIELD_PROPERTY_NAME, FIELD_QUEUE, FIELD_TYPE,
+                          FIELD_PROPERTY_VALUE);
+
+   --  Set the configuration value identified by <b>Value</b> after having parsed
+   --  the element identified by <b>Field</b>.
+   procedure Set_Member (Into  : in out Controller_Config;
+                         Field : in Config_Fields;
+                         Value : in Util.Beans.Objects.Object);
+
+   --  Setup the XML parser to read the <b>queue</b> and <b>on-event</b> description.
+   --  For example:
+   --
+   --  <queue name="async" type="fifo">
+   --     <property name="size">254</property>
+   --  </queue>
+   --
+   --  <on-event name="create-user" queue="async">
+   --     <action>#{mail.send}</action>
+   --     <property name="user">#{event.name}</property>
+   --     <property name="template">mail/welcome.xhtml</property>
+   --  </on-event>
+   --
+   --  This defines an event action called when the <b>create-user</b> event is posted.
+   --  The Ada bean <b>mail</b> is created and is populated with the <b>user</b> and
+   --  <b>template</b> properties.  The Ada bean action method <b>send</b> is called.
+   generic
+      Reader  : in out Util.Serialize.IO.XML.Parser;
+      Manager : in AWA.Events.Services.Event_Manager_Access;
+      Context : in EL.Contexts.ELContext_Access;
+   package Reader_Config is
+      Config : aliased Controller_Config;
+   end Reader_Config;
+
+end AWA.Events.Configs;
