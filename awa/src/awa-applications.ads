@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa -- Ada Web Application
---  Copyright (C) 2009, 2010, 2011 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +21,7 @@ with ASF.Applications.Main;
 with ASF.Applications.Main.Configs;
 with ADO.Sessions.Factory;
 with AWA.Modules;
+with AWA.Events;
 with AWA.Events.Services;
 package AWA.Applications is
 
@@ -98,6 +99,10 @@ package AWA.Applications is
    --  Find the module with the given name
    function Find_Module (App  : in Application;
                          Name : in String) return AWA.Modules.Module_Access;
+
+   --  Send the event in the application event queues.
+   procedure Send_Event (App   : in Application;
+                         Event : in AWA.Events.Module_Event'Class);
 
 private
 

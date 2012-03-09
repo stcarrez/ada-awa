@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-applications-configs -- Read application configuration files
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +25,7 @@ with ASF.Applications.Main.Configs;
 with Security.Permissions;
 with Security.Controllers.Roles;
 with AWA.Permissions.Configs;
+with AWA.Events.Configs;
 with AWA.Services.Contexts;
 
 package body AWA.Applications.Configs is
@@ -61,11 +62,16 @@ package body AWA.Applications.Configs is
            new Security.Controllers.Roles.Reader_Config (Reader, Sec);
          package Entity_Config is
            new AWA.Permissions.Configs.Reader_Config (Reader, Sec);
+         package Event_Config is
+            new AWA.Events.Configs.Reader_Config (Reader  => Reader,
+                                                  Manager => App.Events'Unchecked_Access,
+                                                  Context => Context.all'Access);
 
          pragma Warnings (Off, Bean_Config);
          pragma Warnings (Off, Policy_Config);
          pragma Warnings (Off, Role_Config);
          pragma Warnings (Off, Entity_Config);
+         pragma Warnings (Off, Event_Config);
       begin
          if Log.Get_Level >= Util.Log.DEBUG_LEVEL then
             Util.Serialize.IO.Dump (Reader, Log);

@@ -96,6 +96,11 @@ package body AWA.Applications is
       ASF.Applications.Main.Application (App).Initialize_Config (Conf);
       ADO.Drivers.Initialize (Conf);
       App.DB_Factory.Create (Conf.Get ("database"));
+      declare
+         DB : ADO.Sessions.Master_Session := App.Get_Master_Session;
+      begin
+         App.Events.Initialize (DB);
+      end;
       AWA.Modules.Initialize (App.Modules, Conf);
 
       App.Register_Class ("AWA.Helpers.Selectors.Select_List_Bean",
@@ -188,5 +193,14 @@ package body AWA.Applications is
 --        Register_Beans (App);
 --        App.View.Register_Module (Module);  SCz: 2011-08-10: must check if necessary
    end Register;
+
+   --  ------------------------------
+   --  Send the event in the application event queues.
+   --  ------------------------------
+   procedure Send_Event (App   : in Application;
+                         Event : in AWA.Events.Module_Event'Class) is
+   begin
+      App.Events.Send (Event);
+   end Send_Event;
 
 end AWA.Applications;
