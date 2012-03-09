@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<module version="1.0">
+
+  <queue name="small" type="fifo">
+     <property name="size">100</property>
+  </queue>
+
+  <queue name="medium" type="fifo">
+     <property name="size">1000</property>
+  </queue>
+
+  <queue name="large" type="fifo">
+     <property name="size">10000</property>
+  </queue>
+
+  <on-event name="event-test-1" queue="large">
+     <action>#{event_test.send}</action>
+     <property name="priority">#{event.prio}</property>
+     <property name="template">#{event.template}</property>
+  </on-event>
+
+</module>

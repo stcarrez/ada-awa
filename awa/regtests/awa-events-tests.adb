@@ -23,7 +23,10 @@ with EL.Beans;
 with EL.Expressions;
 with EL.Contexts.Default;
 
+with ASF.Applications;
 with AWA.Applications;
+with AWA.Applications.Configs;
+with AWA.Applications.Factory;
 with AWA.Tests;
 with ADO.Sessions;
 
@@ -51,6 +54,8 @@ package body AWA.Events.Tests is
                        Test_Initialize'Access);
       Caller.Add_Test (Suite, "Test AWA.Events.Add_Action",
                        Test_Add_Action'Access);
+      Caller.Add_Test (Suite, "Test AWA.Events.Dispatch",
+                       Test_Dispatch'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -105,6 +110,35 @@ package body AWA.Events.Tests is
 --           Util.Tests.Assert_Equals (T, 1, Integer (Manager.Actions (Pos).Queues.Length),
 --                                     "Add_Action failed");
       end loop;
+
    end Test_Add_Action;
+
+   --  Test dispatching events
+   procedure Test_Dispatch (T : in out Test) is
+
+      Factory  : AWA.Applications.Factory.Application_Factory;
+      Conf  : ASF.Applications.Config;
+      App   : aliased AWA.Applications.Application;
+      Ctx   : aliased EL.Contexts.Default.Default_Context;
+      Path  : constant String := Util.Tests.Get_Test_Path ("regtests/config/event-test.xml");
+   begin
+      Conf.Set ("database", Util.Tests.Get_Parameter ("database"));
+      App.Initialize (Conf    => Conf,
+                      Factory => Factory);
+      AWA.Applications.Configs.Read_Configuration (App     => App,
+                                                   File    => Path,
+                                                   Context => Ctx'Unchecked_Access);
+
+      for I in 1 .. 100 loop
+         declare
+            Event : Module_Event;
+         begin
+            Event.Set_Event_Kind (Event_Test_4.Kind);
+            Event.Set_Parameter ("prio", "3");
+            Event.Set_Parameter ("template", "def");
+            App.Send_Event (Event);
+         end;
+      end loop;
+   end Test_Dispatch;
 
 end AWA.Events.Tests;

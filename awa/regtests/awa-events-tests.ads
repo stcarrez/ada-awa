@@ -34,4 +34,7 @@ package AWA.Events.Tests is
    --  Test adding an action.
    procedure Test_Add_Action (T : in out Test);
 
+   --  Test dispatching events
+   procedure Test_Dispatch (T : in out Test);
+
 end AWA.Events.Tests;
