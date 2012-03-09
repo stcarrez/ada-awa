@@ -15,6 +15,8 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Ada.Strings.Hash;
+with Ada.Containers.Indefinite_Hashed_Maps;
 package AWA.Events.Queues is
 
    type Queue is limited interface;
@@ -30,5 +32,13 @@ package AWA.Events.Queues is
    --  Dequeue an event and process it with the <b>Process</b> procedure.
    procedure Dequeue (From    : in out Queue;
                       Process : access procedure (Event : in Module_Event'Class)) is abstract;
+
+   --  The list of queues created for the application.
+   package Queue_Map is
+     new Ada.Containers.Indefinite_Hashed_Maps (Key_Type        => String,
+                                                Element_Type    => AWA.Events.Queues.Queue_Access,
+                                                Hash            => Ada.Strings.Hash,
+                                                Equivalent_Keys => "=",
+                                                "="             => "=");
 
 end AWA.Events.Queues;

@@ -65,6 +65,13 @@ package AWA.Events.Configs is
    --  Setup the XML parser to read the <b>queue</b> and <b>on-event</b> description.
    --  For example:
    --
+   --  <dispatcher name="async">
+   --     <queue name="async"/>
+   --     <queue name="persist"/>
+   --     <task_count>4</task_count>
+   --     <task_priority>10</task_priority>
+   --  </dispatcher>
+   --
    --  <queue name="async" type="fifo">
    --     <property name="size">254</property>
    --  </queue>

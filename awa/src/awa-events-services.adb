@@ -44,6 +44,8 @@ package body AWA.Events.Services is
       end Send_Queue;
 
    begin
+      Log.Debug ("Sending event {0}", Event_Index'Image (Event.Kind));
+
       if Event.Kind = Invalid_Event or Event.Kind > Manager.Actions'Last then
          Log.Error ("Cannot send event type {0}", Event_Index'Image (Event.Kind));
          raise Not_Found;
@@ -55,7 +57,7 @@ package body AWA.Events.Services is
       declare
          Pos  : Queue_Dispatcher_Lists.Cursor := Manager.Actions (Event.Kind).Queues.First;
       begin
-         while not Queue_Dispatcher_Lists.Has_Element (Pos) loop
+         while Queue_Dispatcher_Lists.Has_Element (Pos) loop
             Queue_Dispatcher_Lists.Query_Element (Pos, Send_Queue'Access);
             Queue_Dispatcher_Lists.Next (Pos);
          end loop;

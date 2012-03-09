@@ -17,6 +17,7 @@
 -----------------------------------------------------------------------
 with Ada.Finalization;
 
+with Util.Concurrent.Fifos;
 with AWA.Events.Queues;
 package AWA.Events.Dispatchers.Tasks is
 
@@ -25,7 +26,15 @@ package AWA.Events.Dispatchers.Tasks is
    type Task_Dispatcher_Access is access all Task_Dispatcher;
 
 
+   procedure Add_Queue (Manager : in out Task_Dispatcher;
+                        Queue   : in AWA.Events.Queues.Queue_Access);
+
 private
+
+   package Queue_Of_Queue is
+      new Util.Concurrent.Fifos (Element_Type     => AWA.Events.Queues.Queue_Access,
+                                 Default_Size     => 10,
+                                 Clear_On_Dequeue => False);
 
    task type Consumer is
       entry Start (D : in Task_Dispatcher_Access);
@@ -33,6 +42,7 @@ private
 
    type Task_Dispatcher is limited new Dispatcher with record
       Worker : Consumer;
+      Queues : Queue_Of_Queue.Fifo;
    end record;
 
 end AWA.Events.Dispatchers.Tasks;

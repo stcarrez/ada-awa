@@ -17,8 +17,6 @@
 -----------------------------------------------------------------------
 
 with Ada.Finalization;
-with Ada.Strings.Hash;
-with Ada.Containers.Indefinite_Hashed_Maps;
 with Ada.Containers.Doubly_Linked_Lists;
 
 with Util.Strings;
@@ -84,14 +82,6 @@ package AWA.Events.Services is
 private
 
    use AWA.Events.Queues;
-
-   --  The list of queues created for the application.
-   package Queue_Map is
-      new Ada.Containers.Indefinite_Hashed_Maps (Key_Type        => String,
-                                                 Element_Type    => AWA.Events.Queues.Queue_Access,
-                                                 Hash            => Ada.Strings.Hash,
-                                                 Equivalent_Keys => "=",
-                                                 "="             => "=");
 
    --  An event queue associated with a dispatcher.
    type Queue_Dispatcher is record

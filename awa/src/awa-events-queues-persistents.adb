@@ -118,8 +118,11 @@ package body AWA.Events.Queues.Persistents is
 
       --  Dispatch the event.
       procedure Dispatch_Message (Msg : in out Models.Message_Ref) is
-         Event : Module_Event;
+         User    : constant AWA.Users.Models.User_Ref := Msg.Get_User;
+         Session : constant AWA.Users.Models.Session_Ref := Msg.Get_Session;
+         Event   : Module_Event;
       begin
+
          Process (Event);
       end Dispatch_Message;
 
