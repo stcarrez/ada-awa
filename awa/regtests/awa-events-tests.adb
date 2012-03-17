@@ -31,7 +31,6 @@ with AWA.Tests;
 with ADO.Sessions;
 
 with AWA.Events.Queues;
-with AWA.Events.Queues.Fifos;
 with AWA.Events.Services;
 
 package body AWA.Events.Tests is
@@ -96,11 +95,11 @@ package body AWA.Events.Tests is
       Action  : EL.Expressions.Method_Expression := EL.Expressions.Create_Expression ("#{a.send}", Ctx);
       Props   : EL.Beans.Param_Vectors.Vector;
       Pos     : Event_Index := Find_Event_Index ("event-test-4");
-      Queue   : Queue_Access;
+      Queue   : Queue_Ref;
    begin
       Manager.Initialize (Session);
 
-      Queue := AWA.Events.Queues.Fifos.Create_Queue ("fifo", Props, Ctx);
+      Queue := AWA.Events.Queues.Create_Queue ("test", "fifo", Props, Ctx);
       Manager.Add_Queue (Queue);
       for I in 1 .. 10 loop
          Manager.Add_Action (Event  => "event-test-4",
