@@ -13,10 +13,36 @@
      <property name="size">10000</property>
   </queue>
 
+  <on-event name="event-test-1">
+     <action>#{event_test.send}</action>
+     <property name="priority">#{event.prio}</property>
+     <property name="template">#{event.template}</property>
+  </on-event>
+  <on-event name="event-test-1">
+     <action>#{event_test.send}</action>
+     <property name="priority">#{event.prio}</property>
+     <property name="template">#{event.template}</property>
+  </on-event>
+  <on-event name="event-test-1">
+     <action>#{event_test.send}</action>
+     <property name="priority">#{event.prio}</property>
+     <property name="template">#{event.template}</property>
+  </on-event>
+  <on-event name="event-test-1">
+     <action>#{event_test.send}</action>
+     <property name="priority">#{event.prio}</property>
+     <property name="template">#{event.template}</property>
+  </on-event>
+  <on-event name="event-test-1">
+     <action>#{event_test.send}</action>
+     <property name="priority">#{event.prio}</property>
+     <property name="template">#{event.template}</property>
+  </on-event>
+<!--
   <on-event name="event-test-1" queue="large">
      <action>#{event_test.send}</action>
      <property name="priority">#{event.prio}</property>
      <property name="template">#{event.template}</property>
   </on-event>
-
+-->
 </module>

@@ -20,7 +20,6 @@ with Util.Tests;
 with Util.Test_Caller;
 
 with ASF.Tests;
-with AWA.Tests;
 with AWA.Users.Models;
 with AWA.Tests.Helpers.Users;
 

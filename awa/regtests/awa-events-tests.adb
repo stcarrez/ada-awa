@@ -18,6 +18,9 @@
 
 with Util.Tests;
 with Util.Test_Caller;
+with Util.Beans.Methods;
+with Util.Log.Loggers;
+with Util.Measures;
 
 with EL.Beans;
 with EL.Expressions;
@@ -27,6 +30,7 @@ with ASF.Applications;
 with AWA.Applications;
 with AWA.Applications.Configs;
 with AWA.Applications.Factory;
+with AWA.Events.Action_Method;
 with AWA.Tests;
 with ADO.Sessions;
 
@@ -36,6 +40,10 @@ with AWA.Events.Services;
 package body AWA.Events.Tests is
 
    use AWA.Events.Services;
+
+   use Util.Log;
+
+   Log : constant Loggers.Logger := Loggers.Create ("AWA.Events.Tests");
 
    package Event_Test_4 is new AWA.Events.Definition (Name => "event-test-4");
    package Event_Test_1 is new AWA.Events.Definition (Name => "event-test-1");
@@ -57,6 +65,86 @@ package body AWA.Events.Tests is
                        Test_Dispatch'Access);
    end Add_Tests;
 
+   type Action_Bean is new Util.Beans.Basic.Bean
+     and Util.Beans.Methods.Method_Bean with record
+      Count    : Natural := 0;
+      Priority : Integer := 0;
+   end record;
+   type Action_Bean_Access is access all Action_Bean'Class;
+
+
+   --  Get the value identified by the name.
+   --  If the name cannot be found, the method should return the Null object.
+   overriding
+   function Get_Value (From : in Action_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the value identified by the name.
+   --  If the name cannot be found, the method should raise the No_Value
+   --  exception.
+   overriding
+   procedure Set_Value (From  : in out Action_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   overriding
+   function Get_Method_Bindings (From : in Action_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access;
+
+   procedure Event_Action (From  : in out Action_Bean;
+                           Event : in AWA.Events.Module_Event'Class);
+
+   package Event_Action_Binding is
+     new AWA.Events.Action_Method.Bind (Bean => Action_Bean,
+                                        Method => Event_Action,
+                                        Name   => "send");
+
+   Binding_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
+     := (1 => Event_Action_Binding.Proxy'Access);
+
+   --  Get the value identified by the name.
+   --  If the name cannot be found, the method should return the Null object.
+   overriding
+   function Get_Value (From : in Action_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+   --  Set the value identified by the name.
+   --  If the name cannot be found, the method should raise the No_Value
+   --  exception.
+   overriding
+   procedure Set_Value (From  : in out Action_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "priority" then
+         From.Priority := Util.Beans.Objects.To_Integer (Value);
+      end if;
+   end Set_Value;
+
+   overriding
+   function Get_Method_Bindings (From : in Action_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access is
+   begin
+      return Binding_Array'Access;
+   end Get_Method_Bindings;
+
+   procedure Event_Action (From  : in out Action_Bean;
+                           Event : in AWA.Events.Module_Event'Class) is
+   begin
+      Log.Info ("Event action called {0}", Event.Get_Parameter ("priority"));
+
+      From.Count := From.Count + 1;
+   end Event_Action;
+
+   function Create_Action_Bean return Util.Beans.Basic.Readonly_Bean_Access is
+      Result : constant Action_Bean_Access := new Action_Bean;
+   begin
+      return Result.all'Access;
+   end Create_Action_Bean;
+
    --  ------------------------------
    --  Test searching an event name in the definition list.
    --  ------------------------------
@@ -76,9 +164,8 @@ package body AWA.Events.Tests is
    procedure Test_Initialize (T : in out Test) is
       App     : AWA.Applications.Application_Access := AWA.Tests.Get_Application;
       Manager : Event_Manager;
-      Session : ADO.Sessions.Master_Session := App.Get_Master_Session;
    begin
-      Manager.Initialize (Session);
+      Manager.Initialize (App.all'Access);
 --        T.Assert (Manager.Actions /= null, "Initialization failed");
    end Test_Initialize;
 
@@ -91,13 +178,12 @@ package body AWA.Events.Tests is
       App     : AWA.Applications.Application_Access := AWA.Tests.Get_Application;
       Manager : Event_Manager;
       Ctx     : EL.Contexts.Default.Default_Context;
-      Session : ADO.Sessions.Master_Session := App.Get_Master_Session;
       Action  : EL.Expressions.Method_Expression := EL.Expressions.Create_Expression ("#{a.send}", Ctx);
       Props   : EL.Beans.Param_Vectors.Vector;
       Pos     : Event_Index := Find_Event_Index ("event-test-4");
       Queue   : Queue_Ref;
    begin
-      Manager.Initialize (Session);
+      Manager.Initialize (App.all'Access);
 
       Queue := AWA.Events.Queues.Create_Queue ("test", "fifo", Props, Ctx);
       Manager.Add_Queue (Queue);
@@ -120,24 +206,39 @@ package body AWA.Events.Tests is
       App   : aliased AWA.Applications.Application;
       Ctx   : aliased EL.Contexts.Default.Default_Context;
       Path  : constant String := Util.Tests.Get_Test_Path ("regtests/config/event-test.xml");
+      Action : aliased Action_Bean;
    begin
       Conf.Set ("database", Util.Tests.Get_Parameter ("database"));
       App.Initialize (Conf    => Conf,
                       Factory => Factory);
+      App.Set_Global ("event_test",
+        Util.Beans.Objects.To_Object (Action'Unchecked_Access,
+          Util.Beans.Objects.STATIC));
+
       AWA.Applications.Configs.Read_Configuration (App     => App,
                                                    File    => Path,
                                                    Context => Ctx'Unchecked_Access);
 
-      for I in 1 .. 100 loop
-         declare
-            Event : Module_Event;
-         begin
-            Event.Set_Event_Kind (Event_Test_4.Kind);
-            Event.Set_Parameter ("prio", "3");
-            Event.Set_Parameter ("template", "def");
-            App.Send_Event (Event);
-         end;
-      end loop;
+      declare
+         T : Util.Measures.Stamp;
+      begin
+         for I in 1 .. 100 loop
+            declare
+               Event : Module_Event;
+            begin
+               Event.Set_Event_Kind (Event_Test_4.Kind);
+               Event.Set_Parameter ("prio", "3");
+               Event.Set_Parameter ("template", "def");
+               App.Send_Event (Event);
+
+               Event.Set_Event_Kind (Event_Test_1.Kind);
+               App.Send_Event (Event);
+            end;
+         end loop;
+         Util.Measures.Report (T, "Send 200 events");
+         Log.Info ("Action count: {0}", Natural'Image (Action.Count));
+         Log.Info ("Priority: {0}", Integer'Image (Action.Priority));
+      end;
    end Test_Dispatch;
 
 end AWA.Events.Tests;
