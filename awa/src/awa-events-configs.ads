@@ -15,6 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Ada.Strings.Unbounded;
 
 with Util.Beans.Objects;
 with Util.Serialize.IO.XML;
@@ -27,34 +28,31 @@ with AWA.Events.Queues;
 with AWA.Events.Services;
 package AWA.Events.Configs is
 
-   type Queue_Factory is access function (Name    : in String;
-                                          Props   : in EL.Beans.Param_Vectors.Vector;
-                                          Context : in EL.Contexts.ELContext'Class)
-                                          return AWA.Events.Queues.Queue_Access;
-
-   FIFO_QUEUE_TYPE       : constant String := "fifo";
-   PERSISTENT_QUEUE_TYPE : constant String := "persist";
-
    --  ------------------------------
    --  Event Config Controller
    --  ------------------------------
    type Controller_Config is record
       Name       : Util.Beans.Objects.Object;
-      Queue      : AWA.Events.Queues.Queue_Access;
+      Queue      : AWA.Events.Queues.Queue_Ref;
+      Queue_Type : Util.Beans.Objects.Object;
       Prop_Name  : Util.Beans.Objects.Object;
       Params     : EL.Beans.Param_Vectors.Vector;
-      Create     : Queue_Factory;
+      Priority   : Util.Beans.Objects.Object;
+      Count      : Util.Beans.Objects.Object;
       Manager    : AWA.Events.Services.Event_Manager_Access;
       Action     : EL.Expressions.Method_Expression;
       Properties : EL.Beans.Param_Vectors.Vector;
       Context    : EL.Contexts.ELContext_Access;
       Session    : ADO.Sessions.Session;
+      Match      : Ada.Strings.Unbounded.Unbounded_String;
    end record;
    type Controller_Config_Access is access all Controller_Config;
 
    type Config_Fields is (FIELD_ON_EVENT, FIELD_NAME, FIELD_QUEUE_NAME, FIELD_ACTION,
                           FIELD_PROPERTY_NAME, FIELD_QUEUE, FIELD_TYPE,
-                          FIELD_PROPERTY_VALUE);
+                          FIELD_PROPERTY_VALUE,
+                          FIELD_DISPATCHER, FIELD_DISPATCHER_QUEUE, FIELD_DISPATCHER_PRIORITY,
+                          FIELD_DISPATCHER_COUNT);
 
    --  Set the configuration value identified by <b>Value</b> after having parsed
    --  the element identified by <b>Field</b>.
@@ -68,8 +66,8 @@ package AWA.Events.Configs is
    --  <dispatcher name="async">
    --     <queue name="async"/>
    --     <queue name="persist"/>
-   --     <task_count>4</task_count>
-   --     <task_priority>10</task_priority>
+   --     <count>4</count>
+   --     <priority>10</priority>
    --  </dispatcher>
    --
    --  <queue name="async" type="fifo">

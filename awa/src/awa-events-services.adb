@@ -70,7 +70,7 @@ package body AWA.Events.Services is
    --  executed synchronously.
    --  ------------------------------
    procedure Dispatch (Manager : in Event_Manager;
-                       Queue   : in AWA.Events.Queues.Queue_Access;
+                       Queue   : in AWA.Events.Queues.Queue_Ref;
                        Event   : in Module_Event'Class) is
 
       Found : Boolean := False;
@@ -105,14 +105,14 @@ package body AWA.Events.Services is
    --  Find the event queue identified by the given name.
    --  ------------------------------
    function Find_Queue (Manager : in Event_Manager;
-                        Name    : in String) return AWA.Events.Queues.Queue_Access is
-      Pos : constant Queue_Map.Cursor := Manager.Queues.Find (Name);
+                        Name    : in String) return AWA.Events.Queues.Queue_Ref is
+      Pos : constant Queues.Maps.Cursor := Manager.Queues.Find (Name);
    begin
-      if Queue_Map.Has_Element (Pos) then
-         return Queue_Map.Element (Pos);
+      if Queues.Maps.Has_Element (Pos) then
+         return Queues.Maps.Element (Pos);
       else
          Log.Error ("Event queue {0} not found", Name);
-         return null;
+         return AWA.Events.Queues.Null_Queue;
       end if;
    end Find_Queue;
 
@@ -120,7 +120,7 @@ package body AWA.Events.Services is
    --  Add the event queue in the registry.
    --  ------------------------------
    procedure Add_Queue (Manager : in out Event_Manager;
-                        Queue   : in AWA.Events.Queues.Queue_Access) is
+                        Queue   : in AWA.Events.Queues.Queue_Ref) is
       Name : constant String := Queue.Get_Name;
    begin
       Log.Info ("Adding event queue {0}", Name);
@@ -138,7 +138,7 @@ package body AWA.Events.Services is
    --  ------------------------------
    procedure Add_Action (Manager : in out Event_Manager;
                          Event   : in String;
-                         Queue   : in AWA.Events.Queues.Queue_Access;
+                         Queue   : in AWA.Events.Queues.Queue_Ref;
                          Action  : in EL.Expressions.Method_Expression;
                          Params  : in EL.Beans.Param_Vectors.Vector) is
 

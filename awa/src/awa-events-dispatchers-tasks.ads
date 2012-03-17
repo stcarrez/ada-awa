@@ -27,14 +27,14 @@ package AWA.Events.Dispatchers.Tasks is
 
 
    procedure Add_Queue (Manager : in out Task_Dispatcher;
-                        Queue   : in AWA.Events.Queues.Queue_Access);
+                        Queue   : in AWA.Events.Queues.Queue_Ref);
 
 private
 
    package Queue_Of_Queue is
-      new Util.Concurrent.Fifos (Element_Type     => AWA.Events.Queues.Queue_Access,
+      new Util.Concurrent.Fifos (Element_Type     => AWA.Events.Queues.Queue_Ref,
                                  Default_Size     => 10,
-                                 Clear_On_Dequeue => False);
+                                 Clear_On_Dequeue => True);
 
    task type Consumer is
       entry Start (D : in Task_Dispatcher_Access);

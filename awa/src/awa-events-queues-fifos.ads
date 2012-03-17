@@ -19,7 +19,7 @@ with Util.Concurrent.Fifos;
 
 with EL.Beans;
 with EL.Contexts;
-package AWA.Events.Queues.Fifos is
+private package AWA.Events.Queues.Fifos is
 
    type Fifo_Queue (Name_Length : Natural) is limited new Queue with private;
    type Fifo_Queue_Access is access all Fifo_Queue'Class;

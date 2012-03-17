@@ -64,7 +64,7 @@ private
    --  The dispatcher maintains a list of event actions to which the events are dispatched.
    type Action_Dispatcher is new Dispatcher with record
       Actions : Event_Action_Lists.List;
-      Queue   : AWA.Events.Queues.Queue_Access := null;
+      Queue   : AWA.Events.Queues.Queue_Ref;
    end record;
 
 end AWA.Events.Dispatchers.Actions;

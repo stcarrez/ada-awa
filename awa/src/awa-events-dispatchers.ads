@@ -29,7 +29,7 @@ package AWA.Events.Dispatchers is
 
    --  Dispatch the events from the queue.
    procedure Dispatch (Manager : in Dispatcher;
-                       Queue   : in AWA.Events.Queues.Queue_Access);
+                       Queue   : in AWA.Events.Queues.Queue_Ref);
 
    --  Dispatch the event identified by <b>Event</b>.
    --  The event actions which are associated with the event are executed synchronously.

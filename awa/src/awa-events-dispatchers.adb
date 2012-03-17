@@ -25,7 +25,7 @@ package body AWA.Events.Dispatchers is
    --  Dispatch the events from the queue.
    --  ------------------------------
    procedure Dispatch (Manager : in Dispatcher;
-                       Queue   : in AWA.Events.Queues.Queue_Access) is
+                       Queue   : in AWA.Events.Queues.Queue_Ref) is
       procedure Process (Event : in Module_Event'Class) is
       begin
          Manager.Manager.Dispatch (Queue, Event);

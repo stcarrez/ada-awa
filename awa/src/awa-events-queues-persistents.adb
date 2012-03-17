@@ -25,6 +25,8 @@ with Util.Streams.Texts;
 with Util.Streams.Buffered;
 
 with AWA.Services.Contexts;
+with AWA.Users.Models;
+
 with ADO;
 with ADO.Queries;
 with ADO.Sessions;
@@ -118,8 +120,8 @@ package body AWA.Events.Queues.Persistents is
 
       --  Dispatch the event.
       procedure Dispatch_Message (Msg : in out Models.Message_Ref) is
-         User    : constant AWA.Users.Models.User_Ref := Msg.Get_User;
-         Session : constant AWA.Users.Models.Session_Ref := Msg.Get_Session;
+         User    : constant AWA.Users.Models.User_Ref'Class := Msg.Get_User;
+         Session : constant AWA.Users.Models.Session_Ref'Class := Msg.Get_Session;
          Event   : Module_Event;
       begin
 

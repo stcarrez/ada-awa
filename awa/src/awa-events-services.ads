@@ -28,6 +28,7 @@ with ADO.Sessions;
 
 with AWA.Events.Models;
 with AWA.Events.Queues;
+with AWA.Events.Queues.Maps;
 with AWA.Events.Dispatchers;
 
 package AWA.Events.Services is
@@ -44,11 +45,11 @@ package AWA.Events.Services is
 
    --  Find the event queue identified by the given name.
    function Find_Queue (Manager : in Event_Manager;
-                        Name    : in String) return AWA.Events.Queues.Queue_Access;
+                        Name    : in String) return AWA.Events.Queues.Queue_Ref;
 
    --  Add the event queue in the registry.
    procedure Add_Queue (Manager : in out Event_Manager;
-                        Queue   : in AWA.Events.Queues.Queue_Access);
+                        Queue   : in AWA.Events.Queues.Queue_Ref);
 
    --  Send the event to the modules that subscribed to it.
    --  The event is sent on each event queue.  Event queues will dispatch the event
@@ -61,7 +62,7 @@ package AWA.Events.Services is
    --  queue <b>Queue</b>.  The event actions which are associated with the event are
    --  executed synchronously.
    procedure Dispatch (Manager : in Event_Manager;
-                       Queue   : in AWA.Events.Queues.Queue_Access;
+                       Queue   : in AWA.Events.Queues.Queue_Ref;
                        Event   : in Module_Event'Class);
 
    --  Add an action invoked when the event identified by <b>Event</b> is sent.
@@ -71,7 +72,7 @@ package AWA.Events.Services is
    --  parameters defined in <b>Params</b>.  The action method is then invoked.
    procedure Add_Action (Manager : in out Event_Manager;
                          Event   : in String;
-                         Queue   : in AWA.Events.Queues.Queue_Access;
+                         Queue   : in AWA.Events.Queues.Queue_Ref;
                          Action  : in EL.Expressions.Method_Expression;
                          Params  : in EL.Beans.Param_Vectors.Vector);
 
@@ -85,7 +86,7 @@ private
 
    --  An event queue associated with a dispatcher.
    type Queue_Dispatcher is record
-      Queue      : AWA.Events.Queues.Queue_Access := null;
+      Queue      : AWA.Events.Queues.Queue_Ref;
       Dispatcher : AWA.Events.Dispatchers.Dispatcher_Access := null;
    end record;
 
@@ -106,7 +107,7 @@ private
 
    type Event_Manager is new Ada.Finalization.Limited_Controlled with record
       Actions : Event_Queues_Array_Access := null;
-      Queues  : Queue_Map.Map;
+      Queues  : AWA.Events.Queues.Maps.Map;
    end record;
 
    --  Finalize the event manager by releasing the allocated storage.

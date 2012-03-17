@@ -22,7 +22,7 @@ package body AWA.Events.Dispatchers.Tasks is
 
 
    procedure Add_Queue (Manager : in out Task_Dispatcher;
-                        Queue   : in AWA.Events.Queues.Queue_Access) is
+                        Queue   : in AWA.Events.Queues.Queue_Ref) is
    begin
       Manager.Queues.Enqueue (Queue);
    end Add_Queue;
@@ -37,7 +37,7 @@ package body AWA.Events.Dispatchers.Tasks is
       loop
          declare
             Nb_Queues : constant Natural := Dispatcher.Queues.Get_Count;
-            Queue     : AWA.Events.Queues.Queue_Access;
+            Queue     : AWA.Events.Queues.Queue_Ref;
             Nb_Events : Natural := 0;
          begin
             --  We can have several tasks that dispatch events from several queues.

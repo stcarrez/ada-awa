@@ -18,9 +18,9 @@
 
 with Util.Serialize.Mappers.Record_Mapper;
 
+with EL.Utils;
+
 with AWA.Services.Contexts;
-with AWA.Events.Queues.Fifos;
-with AWA.Events.Queues.Persistents;
 package body AWA.Events.Configs is
 
    use AWA.Events.Queues;
@@ -37,24 +37,14 @@ package body AWA.Events.Configs is
          when FIELD_NAME =>
             Into.Name := Value;
 
+         when FIELD_TYPE =>
+            Into.Queue_Type := Value;
+
          when FIELD_QUEUE_NAME =>
             declare
                Name : constant String := Util.Beans.Objects.To_String (Value);
             begin
                Into.Queue := Into.Manager.Find_Queue (Name);
-            end;
-
-         when FIELD_TYPE =>
-            declare
-               Name : constant String := Util.Beans.Objects.To_String (Value);
-            begin
-               if Name = FIFO_QUEUE_TYPE then
-                  Into.Create := AWA.Events.Queues.Fifos.Create_Queue'Access;
-               elsif Name = PERSISTENT_QUEUE_TYPE then
-                  Into.Create := AWA.Events.Queues.Persistents.Create_Queue'Access;
-               else
-                  raise Util.Serialize.Mappers.Field_Error with "Invalid queue type: " & Name;
-               end if;
             end;
 
          when FIELD_ACTION =>
@@ -92,7 +82,7 @@ package body AWA.Events.Configs is
             if Util.Beans.Objects.Is_Null (Into.Name) then
                raise Util.Serialize.Mappers.Field_Error with "Missing event name";
             end if;
-            if Into.Queue = null then
+            if Into.Queue.Is_Null then
                raise Util.Serialize.Mappers.Field_Error with "Missing or invalid event queue";
             end if;
 
@@ -106,23 +96,35 @@ package body AWA.Events.Configs is
             end;
 
          when FIELD_QUEUE =>
-            if Into.Create = null then
-               raise Util.Serialize.Mappers.Field_Error with "Missing a valid queue type";
-            end if;
-
             --  Create the queue with the given name and properties and add it to the manager.
             declare
                Name  : constant String := Util.Beans.Objects.To_String (Into.Name);
-               Queue : constant Queue_Access := Into.Create (Name    => Name,
-                                                             Props   => Into.Params,
-                                                             Context => Into.Context.all);
+               Kind  : constant String := Util.Beans.Objects.To_String (Into.Queue_Type);
+               Queue : constant Queue_Ref := Queues.Create_Queue (Name    => Name,
+                                                                  Kind    => Kind,
+                                                                  Props   => Into.Params,
+                                                                  Context => Into.Context.all);
             begin
                Into.Manager.Add_Queue (Queue);
             end;
 
-            Into.Create := null;
-            Into.Name := Util.Beans.Objects.Null_Object;
+            Into.Name       := Util.Beans.Objects.Null_Object;
+            Into.Queue_Type := Util.Beans.Objects.Null_Object;
             Into.Params.Clear;
+
+         when FIELD_DISPATCHER_PRIORITY =>
+            Into.Priority := EL.Utils.Eval (Value   => Value,
+                                            Context => Into.Context.all);
+
+         when FIELD_DISPATCHER_COUNT =>
+            Into.Count := EL.Utils.Eval (Value   => Value,
+                                         Context => Into.Context.all);
+
+         when FIELD_DISPATCHER_QUEUE =>
+            null;
+
+         when FIELD_DISPATCHER =>
+            null;
 
       end case;
    end Set_Member;
@@ -172,4 +174,9 @@ begin
    Mapper.Add_Mapping ("on-event/property/@name", FIELD_PROPERTY_NAME);
    Mapper.Add_Mapping ("on-event/property", FIELD_PROPERTY_VALUE);
    Mapper.Add_Mapping ("on-event/action", FIELD_ACTION);
+   Mapper.Add_Mapping ("dispatcher", FIELD_DISPATCHER);
+   Mapper.Add_Mapping ("dispatcher/@name", FIELD_NAME);
+   Mapper.Add_Mapping ("dispatcher/queue/@match", FIELD_DISPATCHER_QUEUE);
+   Mapper.Add_Mapping ("dispatcher/priority", FIELD_DISPATCHER_PRIORITY);
+   Mapper.Add_Mapping ("dispatcher/count", FIELD_DISPATCHER_COUNT);
 end AWA.Events.Configs;

@@ -20,7 +20,7 @@ with EL.Beans;
 with EL.Contexts;
 
 with AWA.Events.Models;
-package AWA.Events.Queues.Persistents is
+private package AWA.Events.Queues.Persistents is
 
    type Persistent_Queue (Name_Length : Natural) is limited new Queue with private;
    type Persistent_Queue_Access is access all Persistent_Queue'Class;
