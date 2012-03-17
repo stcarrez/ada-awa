@@ -21,6 +21,7 @@ with Ada.Unchecked_Deallocation;
 with Util.Log.Loggers;
 
 with ADO.SQL;
+with ADO.Sessions;
 
 with AWA.Events.Dispatchers.Actions;
 package body AWA.Events.Services is
@@ -40,12 +41,14 @@ package body AWA.Events.Services is
 
       procedure Send_Queue (Queue : in Queue_Dispatcher) is
       begin
-         Queue.Queue.Enqueue (Event);
+         if Queue.Queue.Is_Null then
+            Queue.Dispatcher.Dispatch (Event);
+         else
+            Queue.Queue.Enqueue (Event);
+         end if;
       end Send_Queue;
 
    begin
-      Log.Debug ("Sending event {0}", Event_Index'Image (Event.Kind));
-
       if Event.Kind = Invalid_Event or Event.Kind > Manager.Actions'Last then
          Log.Error ("Cannot send event type {0}", Event_Index'Image (Event.Kind));
          raise Not_Found;
@@ -55,12 +58,19 @@ package body AWA.Events.Services is
       --  Some queue can dispatch the event immediately while some others may dispatched it
       --  asynchronously.
       declare
+         Name : constant Util.Strings.Name_Access := Get_Event_Type_Name (Event.Kind);
          Pos  : Queue_Dispatcher_Lists.Cursor := Manager.Actions (Event.Kind).Queues.First;
       begin
-         while Queue_Dispatcher_Lists.Has_Element (Pos) loop
-            Queue_Dispatcher_Lists.Query_Element (Pos, Send_Queue'Access);
-            Queue_Dispatcher_Lists.Next (Pos);
-         end loop;
+         if not Queue_Dispatcher_Lists.Has_Element (Pos) then
+            Log.Debug ("Sending event {0} but there is no listener", Name.all);
+         else
+            Log.Debug ("Sending event {0}", Name.all);
+            loop
+               Queue_Dispatcher_Lists.Query_Element (Pos, Send_Queue'Access);
+               Queue_Dispatcher_Lists.Next (Pos);
+               exit when not Queue_Dispatcher_Lists.Has_Element (Pos);
+            end loop;
+         end if;
       end;
    end Send;
 
@@ -146,7 +156,8 @@ package body AWA.Events.Services is
          use type AWA.Events.Dispatchers.Dispatcher_Access;
       begin
          if List.Dispatcher = null then
-            List.Dispatcher := new AWA.Events.Dispatchers.Actions.Action_Dispatcher;
+            List.Dispatcher := AWA.Events.Dispatchers.Actions.Create_Dispatcher
+              (Application => Manager.Application.all'Access);
          end if;
          List.Dispatcher.Add_Action (Action, Params);
       end Add_Action;
@@ -187,7 +198,7 @@ package body AWA.Events.Services is
    --  Initialize the event manager.
    --  ------------------------------
    procedure Initialize (Manager : in out Event_Manager;
-                         DB      : in out ADO.Sessions.Master_Session) is
+                         App     : in Application_Access) is
       Msg_Types : AWA.Events.Models.Message_Type_Vector;
 
       Query     : ADO.SQL.Query;
@@ -206,9 +217,11 @@ package body AWA.Events.Services is
             Log.Warn ("Event {0} is no longer used", Name);
       end Set_Events;
 
+      DB : ADO.Sessions.Master_Session := App.Get_Master_Session;
    begin
       Log.Info ("Initializing {0} events", Event_Index'Image (Last_Event));
 
+      Manager.Application := App;
       DB.Begin_Transaction;
       Manager.Actions := new Event_Queues_Array (1 .. Last_Event);
 

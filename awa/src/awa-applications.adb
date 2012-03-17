@@ -94,11 +94,7 @@ package body AWA.Applications is
       ASF.Applications.Main.Application (App).Initialize_Config (Conf);
       ADO.Drivers.Initialize (Conf);
       App.DB_Factory.Create (Conf.Get ("database"));
-      declare
-         DB : ADO.Sessions.Master_Session := App.Get_Master_Session;
-      begin
-         App.Events.Initialize (DB);
-      end;
+      App.Events.Initialize (App'Unchecked_Access);
       AWA.Modules.Initialize (App.Modules, Conf);
 
       App.Register_Class ("AWA.Helpers.Selectors.Select_List_Bean",

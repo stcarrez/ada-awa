@@ -32,6 +32,7 @@ package body AWA.Events.Configs is
    procedure Set_Member (Into  : in out Controller_Config;
                          Field : in Config_Fields;
                          Value : in Util.Beans.Objects.Object) is
+      use Ada.Strings.Unbounded;
    begin
       case Field is
          when FIELD_NAME =>
@@ -82,9 +83,9 @@ package body AWA.Events.Configs is
             if Util.Beans.Objects.Is_Null (Into.Name) then
                raise Util.Serialize.Mappers.Field_Error with "Missing event name";
             end if;
-            if Into.Queue.Is_Null then
-               raise Util.Serialize.Mappers.Field_Error with "Missing or invalid event queue";
-            end if;
+--              if Into.Queue.Is_Null then
+--                 raise Util.Serialize.Mappers.Field_Error with "Missing or invalid event queue";
+--              end if;
 
             declare
                Name  : constant String := Util.Beans.Objects.To_String (Into.Name);
@@ -121,7 +122,14 @@ package body AWA.Events.Configs is
                                          Context => Into.Context.all);
 
          when FIELD_DISPATCHER_QUEUE =>
-            null;
+            declare
+               Match : constant String := Util.Beans.Objects.To_String (Value);
+            begin
+               if Length (Into.Match) > 0 then
+                  Append (Into.Match, ",");
+               end if;
+               Append (Into.Match, Match);
+            end;
 
          when FIELD_DISPATCHER =>
             null;
@@ -156,9 +164,9 @@ package body AWA.Events.Configs is
    package body Reader_Config is
    begin
       Reader.Add_Mapping ("module", Mapper'Access);
-      Config.Manager := Manager;
-      Config.Context := Context;
-      Config.Session := AWA.Services.Contexts.Get_Session (AWA.Services.Contexts.Current);
+      Config.Manager     := Manager;
+      Config.Context     := Context;
+      Config.Session     := AWA.Services.Contexts.Get_Session (AWA.Services.Contexts.Current);
       Config_Mapper.Set_Context (Reader, Config'Unchecked_Access);
    end Reader_Config;
 

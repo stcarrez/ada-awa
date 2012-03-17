@@ -24,12 +24,11 @@ with Util.Strings;
 with EL.Expressions;
 with EL.Beans;
 
-with ADO.Sessions;
-
 with AWA.Events.Models;
 with AWA.Events.Queues;
 with AWA.Events.Queues.Maps;
 with AWA.Events.Dispatchers;
+limited with AWA.Applications;
 
 package AWA.Events.Services is
 
@@ -76,9 +75,12 @@ package AWA.Events.Services is
                          Action  : in EL.Expressions.Method_Expression;
                          Params  : in EL.Beans.Param_Vectors.Vector);
 
+
+   type Application_Access is access all AWA.Applications.Application'Class;
+
    --  Initialize the event manager.
    procedure Initialize (Manager : in out Event_Manager;
-                         DB      : in out ADO.Sessions.Master_Session);
+                         App     : in Application_Access);
 
 private
 
@@ -106,8 +108,9 @@ private
    type Event_Queues_Array_Access is access all Event_Queues_Array;
 
    type Event_Manager is new Ada.Finalization.Limited_Controlled with record
-      Actions : Event_Queues_Array_Access := null;
-      Queues  : AWA.Events.Queues.Maps.Map;
+      Actions     : Event_Queues_Array_Access := null;
+      Queues      : AWA.Events.Queues.Maps.Map;
+      Application : Application_Access;
    end record;
 
    --  Finalize the event manager by releasing the allocated storage.
