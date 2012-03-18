@@ -37,7 +37,21 @@ package AWA.Events.Tests is
    --  Test adding an action.
    procedure Test_Add_Action (T : in out Test);
 
-   --  Test dispatching events
-   procedure Test_Dispatch (T : in out Test);
+   --  Test dispatching synchronous event to a global bean.
+   procedure Test_Dispatch_Synchronous (T : in out Test);
+
+   --  Test dispatching event through a fifo queue.
+   procedure Test_Dispatch_Fifo (T : in out Test);
+
+   --  Test dispatching synchronous event to a dynamic bean (created on demand).
+   procedure Test_Dispatch_Synchronous_Dyn (T : in out Test);
+
+   --  Test dispatching synchronous event to a dynamic bean and raise an exception in the action.
+   procedure Test_Dispatch_Synchronous_Raise (T : in out Test);
+
+   procedure Dispatch_Event (T            : in out Test;
+                             Kind         : in Event_Index;
+                             Expect_Count : in Natural;
+                             Expect_Prio  : in Natural);
 
 end AWA.Events.Tests;

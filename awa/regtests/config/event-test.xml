@@ -13,6 +13,7 @@
      <property name="size">10000</property>
   </queue>
 
+  <!--  Post the event to the same action several times  -->
   <on-event name="event-test-1">
      <action>#{event_test.send}</action>
      <property name="priority">#{event.prio}</property>
@@ -38,11 +39,39 @@
      <property name="priority">#{event.prio}</property>
      <property name="template">#{event.template}</property>
   </on-event>
-<!--
-  <on-event name="event-test-1" queue="large">
+
+  <!--  Post the event on the queue several times to the same action  -->
+  <on-event name="event-test-2" queue="large">
      <action>#{event_test.send}</action>
      <property name="priority">#{event.prio}</property>
      <property name="template">#{event.template}</property>
   </on-event>
--->
+  <on-event name="event-test-2" queue="large">
+     <action>#{event_test.send}</action>
+     <property name="priority">#{event.prio}</property>
+     <property name="template">#{event.template}</property>
+  </on-event>
+
+  <!--  Post the event on a single action, create the bean  -->
+  <on-event name="event-test-3">
+     <action>#{event_dynamic.send}</action>
+     <property name="priority">#{event.prio}</property>
+     <property name="template">#{event.template}</property>
+  </on-event>
+
+  <!--  Post the event on a single action, create the bean, raise an exception in the action  -->
+  <on-event name="event-test-4">
+     <action>#{event_dynamic.send}</action>
+     <property name="priority">#{event.prio}</property>
+     <property name="template">#{event.template}</property>
+     <property name="raise_exception">1</property>
+  </on-event>
+
+  <managed-bean>
+    <description>This bean describes a blog post for the creation or the update</description>
+    <managed-bean-name>event_dynamic</managed-bean-name>
+    <managed-bean-class>AWA.Events.Tests.Event_Action</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
 </module>

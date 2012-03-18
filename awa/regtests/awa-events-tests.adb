@@ -20,6 +20,7 @@ with Util.Test_Caller;
 with Util.Beans.Methods;
 with Util.Log.Loggers;
 with Util.Measures;
+with Util.Concurrent.Counters;
 
 with EL.Beans;
 with EL.Expressions;
@@ -60,14 +61,21 @@ package body AWA.Events.Tests is
                        Test_Initialize'Access);
       Caller.Add_Test (Suite, "Test AWA.Events.Add_Action",
                        Test_Add_Action'Access);
-      Caller.Add_Test (Suite, "Test AWA.Events.Dispatch",
-                       Test_Dispatch'Access);
+      Caller.Add_Test (Suite, "Test AWA.Events.Dispatch_Synchronous",
+                       Test_Dispatch_Synchronous'Access);
+      Caller.Add_Test (Suite, "Test AWA.Events.Dispatch_Fifo",
+                       Test_Dispatch_Fifo'Access);
+      Caller.Add_Test (Suite, "Test AWA.Events.Dispatch_Synchronous_Dyn",
+                       Test_Dispatch_Synchronous_Dyn'Access);
+      Caller.Add_Test (Suite, "Test AWA.Events.Dispatch_Synchronous_Raise",
+                       Test_Dispatch_Synchronous_Raise'Access);
    end Add_Tests;
 
    type Action_Bean is new Util.Beans.Basic.Bean
      and Util.Beans.Methods.Method_Bean with record
-      Count    : Natural := 0;
-      Priority : Integer := 0;
+      Count           : Natural := 0;
+      Priority        : Integer := 0;
+      Raise_Exception : Boolean := False;
    end record;
    type Action_Bean_Access is access all Action_Bean'Class;
 
@@ -101,8 +109,10 @@ package body AWA.Events.Tests is
    Binding_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
      := (1 => Event_Action_Binding.Proxy'Access);
 
+   --  ------------------------------
    --  Get the value identified by the name.
    --  If the name cannot be found, the method should return the Null object.
+   --  ------------------------------
    overriding
    function Get_Value (From : in Action_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
@@ -111,9 +121,11 @@ package body AWA.Events.Tests is
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
 
+   --  ------------------------------
    --  Set the value identified by the name.
    --  If the name cannot be found, the method should raise the No_Value
    --  exception.
+   --  ------------------------------
    overriding
    procedure Set_Value (From  : in out Action_Bean;
                         Name  : in String;
@@ -121,6 +133,8 @@ package body AWA.Events.Tests is
    begin
       if Name = "priority" then
          From.Priority := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "raise_exception" then
+         From.Raise_Exception := Util.Beans.Objects.To_Boolean (Value);
       end if;
    end Set_Value;
 
@@ -132,12 +146,17 @@ package body AWA.Events.Tests is
       return Binding_Array'Access;
    end Get_Method_Bindings;
 
+   Action_Exception : exception;
+   Global_Counter   : Util.Concurrent.Counters.Counter;
+
    procedure Event_Action (From  : in out Action_Bean;
                            Event : in AWA.Events.Module_Event'Class) is
    begin
---        Log.Info ("Event action called {0}", Event.Get_Parameter ("priority"));
-
+      if From.Raise_Exception then
+         raise Action_Exception with "Raising an exception from the event action bean";
+      end if;
       From.Count := From.Count + 1;
+      Util.Concurrent.Counters.Increment (Global_Counter);
    end Event_Action;
 
    function Create_Action_Bean return Util.Beans.Basic.Readonly_Bean_Access is
@@ -216,15 +235,20 @@ package body AWA.Events.Tests is
 
    end Test_Add_Action;
 
+   --  ------------------------------
    --  Test dispatching events
-   procedure Test_Dispatch (T : in out Test) is
+   --  ------------------------------
+   procedure Dispatch_Event (T            : in out Test;
+                             Kind         : in Event_Index;
+                             Expect_Count : in Natural;
+                             Expect_Prio  : in Natural) is
 
-      Factory  : AWA.Applications.Factory.Application_Factory;
-      Conf  : ASF.Applications.Config;
-      App   : aliased AWA.Applications.Application;
-      Ctx   : aliased EL.Contexts.Default.Default_Context;
-      Path  : constant String := Util.Tests.Get_Test_Path ("regtests/config/event-test.xml");
-      Action : aliased Action_Bean;
+      Factory : AWA.Applications.Factory.Application_Factory;
+      Conf    : ASF.Applications.Config;
+      App     : aliased AWA.Applications.Application;
+      Ctx     : aliased EL.Contexts.Default.Default_Context;
+      Path    : constant String := Util.Tests.Get_Test_Path ("regtests/config/event-test.xml");
+      Action  : aliased Action_Bean;
    begin
       Conf.Set ("database", Util.Tests.Get_Parameter ("database"));
       App.Initialize (Conf    => Conf,
@@ -233,6 +257,8 @@ package body AWA.Events.Tests is
         Util.Beans.Objects.To_Object (Action'Unchecked_Access,
           Util.Beans.Objects.STATIC));
 
+      App.Register_Class ("AWA.Events.Tests.Event_Action",
+                          Create_Action_Bean'Access);
       AWA.Applications.Configs.Read_Configuration (App     => App,
                                                    File    => Path,
                                                    Context => Ctx'Unchecked_Access);
@@ -244,21 +270,52 @@ package body AWA.Events.Tests is
             declare
                Event : Module_Event;
             begin
-               Event.Set_Event_Kind (Event_Test_4.Kind);
+               Event.Set_Event_Kind (Kind);
                Event.Set_Parameter ("prio", "3");
                Event.Set_Parameter ("template", "def");
-               App.Send_Event (Event);
-
-               Event.Set_Event_Kind (Event_Test_1.Kind);
                App.Send_Event (Event);
             end;
          end loop;
          Util.Measures.Report (S, "Send 200 events");
          Log.Info ("Action count: {0}", Natural'Image (Action.Count));
          Log.Info ("Priority: {0}", Integer'Image (Action.Priority));
-         Util.Tests.Assert_Equals (T, 3, Action.Priority, "prio parameter not transmitted");
-         Util.Tests.Assert_Equals (T, 500, Action.Count, "invalid number of calls for the action");
+         Util.Tests.Assert_Equals (T, Expect_Prio, Action.Priority,
+                                   "prio parameter not transmitted (global bean)");
+         Util.Tests.Assert_Equals (T, Expect_Count, Action.Count,
+                                   "invalid number of calls for the action (global bean)");
       end;
-   end Test_Dispatch;
+   end Dispatch_Event;
+
+   --  ------------------------------
+   --  Test dispatching synchronous event to a global bean.
+   --  ------------------------------
+   procedure Test_Dispatch_Synchronous (T : in out Test) is
+   begin
+      T.Dispatch_Event (Event_Test_1.Kind, 500, 3);
+   end Test_Dispatch_Synchronous;
+
+   --  ------------------------------
+   --  Test dispatching event through a fifo queue.
+   --  ------------------------------
+   procedure Test_Dispatch_Fifo (T : in out Test) is
+   begin
+      T.Dispatch_Event (Event_Test_2.Kind, 0, 0);
+   end Test_Dispatch_Fifo;
+
+   --  ------------------------------
+   --  Test dispatching synchronous event to a dynamic bean (created on demand).
+   --  ------------------------------
+   procedure Test_Dispatch_Synchronous_Dyn (T : in out Test) is
+   begin
+      T.Dispatch_Event (Event_Test_3.Kind, 0, 0);
+   end Test_Dispatch_Synchronous_Dyn;
+
+   --  ------------------------------
+   --  Test dispatching synchronous event to a dynamic bean and raise an exception in the action.
+   --  ------------------------------
+   procedure Test_Dispatch_Synchronous_Raise (T : in out Test) is
+   begin
+      T.Dispatch_Event (Event_Test_4.Kind, 0, 0);
+   end Test_Dispatch_Synchronous_Raise;
 
 end AWA.Events.Tests;
