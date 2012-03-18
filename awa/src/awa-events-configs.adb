@@ -95,6 +95,9 @@ package body AWA.Events.Configs is
                                         Action => Into.Action,
                                         Params => Into.Params);
             end;
+            Into.Name := Util.Beans.Objects.Null_Object;
+            Into.Queue := AWA.Events.Queues.Null_Queue;
+            Into.Params.Clear;
 
          when FIELD_QUEUE =>
             --  Create the queue with the given name and properties and add it to the manager.

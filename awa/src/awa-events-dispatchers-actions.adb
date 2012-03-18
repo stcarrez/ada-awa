@@ -42,92 +42,6 @@ package body AWA.Events.Dispatchers.Actions is
    Log : constant Loggers.Logger := Loggers.Create ("AWA.Events.Dispatchers.Actions");
 
    --  ------------------------------
-   --  Default Resolver
-   --  ------------------------------
-   type Event_ELResolver is limited new EL.Contexts.ELResolver with record
-      Request     : ASF.Requests.Request_Access;
-      Application : AWA.Applications.Application_Access;
-   end record;
-
-   overriding
-   function Get_Value (Resolver : Event_ELResolver;
-                       Context  : EL.Contexts.ELContext'Class;
-                       Base     : access Util.Beans.Basic.Readonly_Bean'Class;
-                       Name     : Unbounded_String) return Util.Beans.Objects.Object;
-   overriding
-   procedure Set_Value (Resolver : in out Event_ELResolver;
-                        Context  : in EL.Contexts.ELContext'Class;
-                        Base     : access Util.Beans.Basic.Bean'Class;
-                        Name     : in Unbounded_String;
-                        Value    : in Util.Beans.Objects.Object);
-
-   --  Get the value associated with a base object and a given property.
-   overriding
-   function Get_Value (Resolver : Event_ELResolver;
-                       Context  : EL.Contexts.ELContext'Class;
-                       Base     : access Util.Beans.Basic.Readonly_Bean'Class;
-                       Name     : Unbounded_String) return Util.Beans.Objects.Object is
-      use Util.Beans.Objects;
-      use Util.Beans.Basic;
-      use EL.Variables;
-      use type ASF.Requests.Request_Access;
-
-      Result : Object;
-      Bean   : Util.Beans.Basic.Readonly_Bean_Access;
-      Scope  : ASF.Beans.Scope_Type;
-      Key    : constant String := To_String (Name);
-   begin
-      if Base /= null then
-         return Base.Get_Value (Key);
-      end if;
-
-      if Resolver.Request /= null then
-         Result := Resolver.Request.Get_Attribute (Key);
-         if not Util.Beans.Objects.Is_Null (Result) then
-            return Result;
-         end if;
-
-         --  If there is a session, look if the attribute is defined there.
-         declare
-            Session : constant ASF.Sessions.Session := Resolver.Request.Get_Session;
-         begin
-            if Session.Is_Valid then
-               Result := Session.Get_Attribute (Key);
-               if not Util.Beans.Objects.Is_Null (Result) then
-                  return Result;
-               end if;
-            end if;
-         end;
-      end if;
-
-      Resolver.Application.Create (Name, Context, Bean, Scope);
-      if Bean = null then
-         return Resolver.Application.Get_Global (Name, Context);
-      end if;
-      Result := To_Object (Bean);
-      Resolver.Request.Set_Attribute (Key, Result);
-      return Result;
-   end Get_Value;
-
-   --  Set the value associated with a base object and a given property.
-   overriding
-   procedure Set_Value (Resolver : in out Event_ELResolver;
-                        Context  : in EL.Contexts.ELContext'Class;
-                        Base     : access Util.Beans.Basic.Bean'Class;
-                        Name     : in Unbounded_String;
-                        Value    : in Util.Beans.Objects.Object) is
-      pragma Unreferenced (Context);
-
-      Key : constant String := To_String (Name);
-   begin
-      if Base /= null then
-         Base.Set_Value (Name => Key, Value => Value);
-      else
-         Resolver.Request.Set_Attribute (Name => Key, Value => Value);
-      end if;
-   end Set_Value;
-
-   --  ------------------------------
    --  Dispatch the event identified by <b>Event</b>.
    --  The event actions which are associated with the event are executed synchronously.
    --  ------------------------------
@@ -150,10 +64,107 @@ package body AWA.Events.Dispatchers.Actions is
          return Event.Get_Value (Name);
       end Get_Value;
 
+      Variables      : aliased EL.Variables.Default.Default_Variable_Mapper;
+
+      --  ------------------------------
+      --  Default Resolver
+      --  ------------------------------
+      type Event_ELResolver is limited new EL.Contexts.ELResolver with record
+         Request     : ASF.Requests.Request_Access;
+         Application : AWA.Applications.Application_Access;
+      end record;
+
+      overriding
+      function Get_Value (Resolver : Event_ELResolver;
+                          Context  : EL.Contexts.ELContext'Class;
+                          Base     : access Util.Beans.Basic.Readonly_Bean'Class;
+                          Name     : Unbounded_String) return Util.Beans.Objects.Object;
+      overriding
+      procedure Set_Value (Resolver : in out Event_ELResolver;
+                           Context  : in EL.Contexts.ELContext'Class;
+                           Base     : access Util.Beans.Basic.Bean'Class;
+                           Name     : in Unbounded_String;
+                           Value    : in Util.Beans.Objects.Object);
+
+      --  ------------------------------
+      --  Get the value associated with a base object and a given property.
+      --  ------------------------------
+      overriding
+      function Get_Value (Resolver : Event_ELResolver;
+                          Context  : EL.Contexts.ELContext'Class;
+                          Base     : access Util.Beans.Basic.Readonly_Bean'Class;
+                          Name     : Unbounded_String) return Util.Beans.Objects.Object is
+         use Util.Beans.Basic;
+         use EL.Variables;
+         use type ASF.Requests.Request_Access;
+
+         Result : Object;
+         Bean   : Util.Beans.Basic.Readonly_Bean_Access;
+         Scope  : ASF.Beans.Scope_Type;
+         Key    : constant String := To_String (Name);
+      begin
+         if Base /= null then
+            return Base.Get_Value (Key);
+         end if;
+
+         if Resolver.Request /= null then
+            Result := Resolver.Request.Get_Attribute (Key);
+            if not Util.Beans.Objects.Is_Null (Result) then
+               return Result;
+            end if;
+
+            --  If there is a session, look if the attribute is defined there.
+            declare
+               Session : constant ASF.Sessions.Session := Resolver.Request.Get_Session;
+            begin
+               if Session.Is_Valid then
+                  Result := Session.Get_Attribute (Key);
+                  if not Util.Beans.Objects.Is_Null (Result) then
+                     return Result;
+                  end if;
+               end if;
+            end;
+         end if;
+
+         Resolver.Application.Create (Name, Context, Bean, Scope);
+         if Bean = null then
+            return Resolver.Application.Get_Global (Name, Context);
+         end if;
+         Result := To_Object (Bean);
+         if Resolver.Request /= null then
+            Resolver.Request.Set_Attribute (Key, Result);
+         else
+            Variables.Bind (Key, Result);
+         end if;
+         return Result;
+      end Get_Value;
+
+      --  ------------------------------
+      --  Set the value associated with a base object and a given property.
+      --  ------------------------------
+      overriding
+      procedure Set_Value (Resolver : in out Event_ELResolver;
+                           Context  : in EL.Contexts.ELContext'Class;
+                           Base     : access Util.Beans.Basic.Bean'Class;
+                           Name     : in Unbounded_String;
+                           Value    : in Util.Beans.Objects.Object) is
+         pragma Unreferenced (Context);
+         use type ASF.Requests.Request_Access;
+
+         Key : constant String := To_String (Name);
+      begin
+         if Base /= null then
+            Base.Set_Value (Name => Key, Value => Value);
+         elsif Resolver.Request /= null then
+            Resolver.Request.Set_Attribute (Name => Key, Value => Value);
+         else
+            Variables.Bind (To_String (Name), Value);
+         end if;
+      end Set_Value;
+
       Local_Event    : aliased Event_Bean;
       Resolver       : aliased Event_ELResolver;
       ELContext      : aliased EL.Contexts.Default.Default_Context;
-      Variables      : aliased EL.Variables.Default.Default_Variable_Mapper;
 
       --  ------------------------------
       --  Dispatch the event to the event action identified by <b>Action</b>.
