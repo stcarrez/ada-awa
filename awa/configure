@@ -1885,8 +1885,8 @@ test -n "$target_alias" &&
 
 # Current release settings
 AWA_MAJOR_VERSION=0
-AWA_MINOR_VERSION=1
-AWA_MICRO_VERSION=1-dev
+AWA_MINOR_VERSION=2
+AWA_MICRO_VERSION=0
 AWA_VERSION=$AWA_MAJOR_VERSION.$AWA_MINOR_VERSION.$AWA_MICRO_VERSION
 
 # checking for local tools
@@ -2681,8 +2681,6 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-# AM_PATH_GNAT
-# AM_PATH_PERL
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ${MAKE-make} sets \$(MAKE)" >&5
 $as_echo_n "checking whether ${MAKE-make} sets \$(MAKE)... " >&6; }
 set x ${MAKE-make}
