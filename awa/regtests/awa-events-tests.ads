@@ -28,6 +28,9 @@ package AWA.Events.Tests is
    --  Test searching an event name in the definition list.
    procedure Test_Find_Event (T : in out Test);
 
+   --  Test the Get_Event_Type_Name internal operation.
+   procedure Test_Get_Event_Name (T : in out Test);
+
    --  Test creation and initialization of event manager.
    procedure Test_Initialize (T : in out Test);
 

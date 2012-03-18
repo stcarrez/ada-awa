@@ -16,7 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Util.Tests;
 with Util.Test_Caller;
 with Util.Beans.Methods;
 with Util.Log.Loggers;
@@ -31,8 +30,6 @@ with AWA.Applications;
 with AWA.Applications.Configs;
 with AWA.Applications.Factory;
 with AWA.Events.Action_Method;
-with AWA.Tests;
-with ADO.Sessions;
 
 with AWA.Events.Queues;
 with AWA.Events.Services;
@@ -55,6 +52,8 @@ package body AWA.Events.Tests is
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
    begin
+      Caller.Add_Test (Suite, "Test AWA.Events.Get_Event_Name",
+                       Test_Get_Event_Name'Access);
       Caller.Add_Test (Suite, "Test AWA.Events.Find_Event_Index",
                        Test_Find_Event'Access);
       Caller.Add_Test (Suite, "Test AWA.Events.Initialize",
@@ -107,6 +106,7 @@ package body AWA.Events.Tests is
    overriding
    function Get_Value (From : in Action_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
+      pragma Unreferenced (From, Name);
    begin
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -127,6 +127,7 @@ package body AWA.Events.Tests is
    overriding
    function Get_Method_Bindings (From : in Action_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
    begin
       return Binding_Array'Access;
    end Get_Method_Bindings;
@@ -134,7 +135,7 @@ package body AWA.Events.Tests is
    procedure Event_Action (From  : in out Action_Bean;
                            Event : in AWA.Events.Module_Event'Class) is
    begin
-      Log.Info ("Event action called {0}", Event.Get_Parameter ("priority"));
+--        Log.Info ("Event action called {0}", Event.Get_Parameter ("priority"));
 
       From.Count := From.Count + 1;
    end Event_Action;
@@ -159,6 +160,23 @@ package body AWA.Events.Tests is
    end Test_Find_Event;
 
    --  ------------------------------
+   --  Test the Get_Event_Type_Name internal operation.
+   --  ------------------------------
+   procedure Test_Get_Event_Name (T : in out Test) is
+   begin
+      Util.Tests.Assert_Equals (T, "event-test-1", Get_Event_Type_Name (Event_Test_1.Kind).all,
+                                "Get_Event_Type_Name");
+      Util.Tests.Assert_Equals (T, "event-test-2", Get_Event_Type_Name (Event_Test_2.Kind).all,
+                                "Get_Event_Type_Name");
+      Util.Tests.Assert_Equals (T, "event-test-3", Get_Event_Type_Name (Event_Test_3.Kind).all,
+                                "Get_Event_Type_Name");
+      Util.Tests.Assert_Equals (T, "event-test-4", Get_Event_Type_Name (Event_Test_4.Kind).all,
+                                "Get_Event_Type_Name");
+      Util.Tests.Assert_Equals (T, "event-test-5", Get_Event_Type_Name (Event_Test_5.Kind).all,
+                                "Get_Event_Type_Name");
+   end Test_Get_Event_Name;
+
+   --  ------------------------------
    --  Test creation and initialization of event manager.
    --  ------------------------------
    procedure Test_Initialize (T : in out Test) is
@@ -175,12 +193,12 @@ package body AWA.Events.Tests is
    procedure Test_Add_Action (T : in out Test) is
       use AWA.Events.Queues;
 
-      App     : AWA.Applications.Application_Access := AWA.Tests.Get_Application;
+      App     : constant AWA.Applications.Application_Access := AWA.Tests.Get_Application;
       Manager : Event_Manager;
       Ctx     : EL.Contexts.Default.Default_Context;
-      Action  : EL.Expressions.Method_Expression := EL.Expressions.Create_Expression ("#{a.send}", Ctx);
+      Action  : constant EL.Expressions.Method_Expression
+        := EL.Expressions.Create_Expression ("#{a.send}", Ctx);
       Props   : EL.Beans.Param_Vectors.Vector;
-      Pos     : Event_Index := Find_Event_Index ("event-test-4");
       Queue   : Queue_Ref;
    begin
       Manager.Initialize (App.all'Access);
@@ -220,7 +238,7 @@ package body AWA.Events.Tests is
                                                    Context => Ctx'Unchecked_Access);
 
       declare
-         T : Util.Measures.Stamp;
+         S : Util.Measures.Stamp;
       begin
          for I in 1 .. 100 loop
             declare
@@ -235,9 +253,11 @@ package body AWA.Events.Tests is
                App.Send_Event (Event);
             end;
          end loop;
-         Util.Measures.Report (T, "Send 200 events");
+         Util.Measures.Report (S, "Send 200 events");
          Log.Info ("Action count: {0}", Natural'Image (Action.Count));
          Log.Info ("Priority: {0}", Integer'Image (Action.Priority));
+         Util.Tests.Assert_Equals (T, 3, Action.Priority, "prio parameter not transmitted");
+         Util.Tests.Assert_Equals (T, 500, Action.Count, "invalid number of calls for the action");
       end;
    end Test_Dispatch;
 
