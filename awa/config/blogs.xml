@@ -165,4 +165,8 @@
      <url-pattern>/*</url-pattern>
   </policy>
 
+  <on-event name="user-create" queue="fast-async">
+     <action>#{blog.create}</action>
+  </on-event>
+
 </module>

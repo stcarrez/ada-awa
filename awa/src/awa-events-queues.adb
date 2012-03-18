@@ -116,7 +116,10 @@ package body AWA.Events.Queues is
          new Ada.Unchecked_Deallocation (Object => Queue'Class,
                                          Name   => Queue_Access);
    begin
-      Free (Object.Queue);
+      if Object.Queue /= null then
+         Object.Queue.Finalize;
+         Free (Object.Queue);
+      end if;
    end Finalize;
 
 end AWA.Events.Queues;

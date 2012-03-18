@@ -28,12 +28,18 @@ private package AWA.Events.Queues.Fifos is
    function Get_Name (From : in Fifo_Queue) return String;
 
    --  Queue the event.
+   overriding
    procedure Enqueue (Into  : in out Fifo_Queue;
                       Event : in AWA.Events.Module_Event'Class);
 
    --  Dequeue an event and process it with the <b>Process</b> procedure.
+   overriding
    procedure Dequeue (From    : in out Fifo_Queue;
                       Process : access procedure (Event : in Module_Event'Class));
+
+   --  Release the queue storage.
+   overriding
+   procedure Finalize (From : in out Fifo_Queue);
 
    --  Create the queue associated with the given name and configure it by using
    --  the configuration properties.

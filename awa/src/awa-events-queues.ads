@@ -66,6 +66,9 @@ private
    procedure Dequeue (From    : in out Queue;
                       Process : access procedure (Event : in Module_Event'Class)) is abstract;
 
+   --  Release the queue storage.
+   procedure Finalize (From : in out Queue) is null;
+
    type Queue_Info (Length : Natural) is new Util.Refs.Ref_Entity with record
       Queue : Queue_Access := null;
       Name  : String (1 .. Length);

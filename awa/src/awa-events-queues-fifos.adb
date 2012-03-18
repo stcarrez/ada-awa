@@ -61,6 +61,22 @@ package body AWA.Events.Queues.Fifos is
    end Dequeue;
 
    --  ------------------------------
+   --  Release the queue storage.
+   --  ------------------------------
+   overriding
+   procedure Finalize (From : in out Fifo_Queue) is
+   begin
+      while From.Fifo.Get_Count > 0 loop
+         declare
+            E : Module_Event_Access;
+         begin
+            From.Fifo.Dequeue (E);
+            Free (E);
+         end;
+      end loop;
+   end Finalize;
+
+   --  ------------------------------
    --  Create the queue associated with the given name and configure it by using
    --  the configuration properties.
    --  ------------------------------
