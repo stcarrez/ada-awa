@@ -16,27 +16,12 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Ada.Strings.Unbounded;
 with Ada.Unchecked_Deallocation;
 
 with Util.Log.Loggers;
 
-with EL.Contexts;
-with EL.Contexts.Default;
-with EL.Variables;
-with EL.Variables.Default;
-
-with ASF.Beans;
-with ASF.Requests;
-with ASF.Sessions;
-
-with ADO.SQL;
-
---  with AWA.Events.Action_Method;
-with AWA.Applications;
 package body AWA.Events is
 
-   use Ada.Strings.Unbounded;
    use Util.Log;
 
    Log : constant Loggers.Logger := Loggers.Create ("AWA.Events");
@@ -49,26 +34,46 @@ package body AWA.Events is
    type Event_Name_Pair_Array is array (Event_Index range <>) of Event_Name_Pair;
    type Event_Name_Pair_Array_Access is access all Event_Name_Pair_Array;
 
+   type Name_Array is array (Event_Index range <>) of Util.Strings.Name_Access;
+   type Name_Array_Access is access all Name_Array;
+
    --  A static list of event names.  This array is created during the elaboration
    --  of event definitions.  It is sorted on event names.
    Events     : Event_Name_Pair_Array_Access;
+
+   --  A static list of event names indexed by the event index.
+   Names      : Name_Array_Access;
 
    --  ------------------------------
    --  Register an event by its name and allocate a unique runtime event index.
    --  ------------------------------
    procedure Add_Event (Name  : in Util.Strings.Name_Access;
                         Index : out Event_Index) is
+      procedure Free is
+         new Ada.Unchecked_Deallocation (Object => Event_Name_Pair_Array,
+                                         Name   => Event_Name_Pair_Array_Access);
+      procedure Free is
+         new Ada.Unchecked_Deallocation (Object => Name_Array,
+                                         Name   => Name_Array_Access);
+
       Left    : Event_Index := 1;
       Right   : Event_Index := Last_Event;
    begin
       --  Check the storage and allocate it if necessary.
       if Events = null then
          Events := new Event_Name_Pair_Array (1 .. 10);
+         Names  := new Name_Array (1 .. 10);
       elsif Events'Last = Last_Event then
          declare
-            N : Event_Name_Pair_Array_Access := new Event_Name_Pair_Array (1 .. Last_Event + 10);
+            E : Event_Name_Pair_Array_Access := new Event_Name_Pair_Array (1 .. Last_Event + 10);
+            N : Name_Array_Access := new Name_Array (1 .. Last_Event + 10);
          begin
-            N (Events'Range) := Events.all;
+            E (Events'Range) := Events.all;
+            N (Names'Range) := Names.all;
+            Free (Events);
+            Free (Names);
+            Names := N;
+            Events := E;
          end;
       end if;
 
@@ -102,6 +107,7 @@ package body AWA.Events is
       Last_Event := Last_Event + 1;
       Events (Left).Name := Name;
       Events (Left).Index := Last_Event;
+      Names (Last_Event) := Name;
       Index := Last_Event;
 --        for I in 1 .. Last_Event loop
 --           Log.Info ("{0} -> {1}", Event_Index'Image (I), Events (I).Name.all);
@@ -206,7 +212,7 @@ package body AWA.Events is
    --  ------------------------------
    function Get_Event_Type_Name (Index : in Event_Index) return Util.Strings.Name_Access is
    begin
-      return Events (Index).Name;
+      return Names (Index);
    end Get_Event_Type_Name;
 
 end AWA.Events;
