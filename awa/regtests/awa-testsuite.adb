@@ -24,7 +24,7 @@ with AWA.Helpers.Selectors.Tests;
 with AWA.Events.Tests;
 package body AWA.Testsuite is
 
-   Tests : aliased Access_Test_Suite;
+   Tests : aliased Util.Tests.Test_Suite;
 
    function Suite return Util.Tests.Access_Test_Suite is
       Ret : constant Util.Tests.Access_Test_Suite := Tests'Access;
