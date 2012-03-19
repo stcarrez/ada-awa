@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  AWA tests - AWA Tests Framework
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,12 +15,17 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Ada.Task_Termination;
+with Ada.Task_Identification;
+with Ada.Exceptions;
+with Ada.Unchecked_Deallocation;
 
 with ASF.Server.Tests;
 with ASF.Server.Web;
 with ASF.Converters.Dates;
 
 with ASF.Tests;
+with Ada.Text_IO;
 
 with AWA.Users.Module;
 with AWA.Mail.Module;
@@ -32,6 +37,13 @@ with AWA.Applications.Factory;
 with AWA.Services.Filters;
 package body AWA.Tests is
 
+   protected Shutdown is
+      procedure Termination (Cause : in Ada.Task_Termination.Cause_Of_Termination;
+                             Id    : in Ada.Task_Identification.Task_Id;
+                             Ex    : in Ada.Exceptions.Exception_Occurrence);
+   end Shutdown;
+
+   Application_Created : Boolean := False;
    Application    : AWA.Applications.Application_Access := null;
 
    Factory        : AWA.Applications.Factory.Application_Factory;
@@ -47,6 +59,18 @@ package body AWA.Tests is
    Blogs          : aliased AWA.Blogs.Module.Blog_Module;
 
    Date_Converter : aliased ASF.Converters.Dates.Date_Converter;
+
+   protected body Shutdown is
+      procedure Termination (Cause : in Ada.Task_Termination.Cause_Of_Termination;
+                             Id    : in Ada.Task_Identification.Task_Id;
+                             Ex    : in Ada.Exceptions.Exception_Occurrence) is
+         procedure Free is
+            new Ada.Unchecked_Deallocation (Object => AWA.Applications.Application'Class,
+                                            Name   => AWA.Applications.Application_Access);
+      begin
+         Free (Application);
+      end Termination;
+   end Shutdown;
 
    --  ------------------------------
    --  Setup the service context before executing the test.
@@ -70,8 +94,13 @@ package body AWA.Tests is
                          Add_Modules : in Boolean) is
       use AWA.Applications;
    begin
+      --  Create the application unless it is specified as argument.
+      --  Install a shutdown hook to delete the application when the primary task exits.
+      --  This allows to stop the event threads if any.
       if App = null then
          Application := new AWA.Applications.Application;
+         Ada.Task_Termination.Set_Specific_Handler (Ada.Task_Identification.Current_Task,
+                                                    Shutdown.Termination'Access);
       else
          Application := App;
       end if;
