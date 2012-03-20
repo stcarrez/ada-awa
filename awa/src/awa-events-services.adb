@@ -23,6 +23,7 @@ with Util.Log.Loggers;
 with ADO.SQL;
 with ADO.Sessions;
 
+with AWA.Events.Dispatchers.Tasks;
 with AWA.Events.Dispatchers.Actions;
 package body AWA.Events.Services is
 
@@ -195,6 +196,29 @@ package body AWA.Events.Services is
    end Add_Action;
 
    --  ------------------------------
+   --  Add a dispatcher to process the event queues matching the <b>Match</b> string.
+   --  The dispatcher can create up to <b>Count</b> tasks running at the priority <b>Priority</b>.
+   --  ------------------------------
+   procedure Add_Dispatcher (Manager  : in out Event_Manager;
+                             Match    : in String;
+                             Count    : in Positive;
+                             Priority : in Positive) is
+      use type AWA.Events.Dispatchers.Dispatcher_Access;
+   begin
+      Log.Info ("Adding event dispatcher with {0} tasks prio {1} and dispatching queues '{2}'",
+                Positive'Image (Count), Positive'Image (Priority), Match);
+
+      for I in Manager.Dispatchers'Range loop
+         if Manager.Dispatchers (I) = null then
+            Manager.Dispatchers (I) :=
+              AWA.Events.Dispatchers.Tasks.Create_Dispatcher (Match, Count, Priority);
+            return;
+         end if;
+      end loop;
+      Log.Error ("Implementation limit is reached.  Too many dispatcher.");
+   end Add_Dispatcher;
+
+   --  ------------------------------
    --  Initialize the event manager.
    --  ------------------------------
    procedure Initialize (Manager : in out Event_Manager;
@@ -252,15 +276,96 @@ package body AWA.Events.Services is
    end Initialize;
 
    --  ------------------------------
+   --  Start the event manager.  The dispatchers are configured to dispatch the event queues
+   --  and tasks are started to process asynchronous events.
+   --  ------------------------------
+   procedure Start (Manager : in out Event_Manager) is
+      use type AWA.Events.Dispatchers.Dispatcher_Access;
+
+      --  ------------------------------
+      --  Dispatch the event queues to the dispatcher according to the dispatcher configuration.
+      --  ------------------------------
+      procedure Associate_Dispatcher (Key   : in String;
+                                      Queue : in out AWA.Events.Queues.Queue_Ref) is
+         pragma Unreferenced (Key);
+
+         Added : Boolean := False;
+      begin
+         for I in reverse Manager.Dispatchers'Range loop
+            if Manager.Dispatchers (I) /= null then
+               Manager.Dispatchers (I).Add_Queue (Queue, Added);
+               exit when Added;
+            end if;
+         end loop;
+      end Associate_Dispatcher;
+
+      Iter : AWA.Events.Queues.Maps.Cursor := Manager.Queues.First;
+   begin
+      while AWA.Events.Queues.Maps.Has_Element (Iter) loop
+         Manager.Queues.Update_Element (Iter, Associate_Dispatcher'Access);
+         AWA.Events.Queues.Maps.Next (Iter);
+      end loop;
+
+      --  Start the dispatchers.
+      for I in Manager.Dispatchers'Range loop
+         exit when Manager.Dispatchers (I) = null;
+         Manager.Dispatchers (I).Start;
+      end loop;
+   end Start;
+
+   --  ------------------------------
+   --  Finalize the queue dispatcher releasing the dispatcher memory.
+   --  ------------------------------
+   procedure Finalize (Object : in out Queue_Dispatcher) is
+      procedure Free is
+         new Ada.Unchecked_Deallocation (Object => AWA.Events.Dispatchers.Dispatcher'Class,
+                                         Name   => AWA.Events.Dispatchers.Dispatcher_Access);
+   begin
+      Free (Object.Dispatcher);
+   end Finalize;
+
+   --  ------------------------------
+   --  Finalize the event queues and the dispatchers.
+   --  ------------------------------
+   procedure Finalize (Object : in out Event_Queues) is
+   begin
+      loop
+         declare
+            Pos : constant Queue_Dispatcher_Lists.Cursor := Object.Queues.First;
+         begin
+            exit when not Queue_Dispatcher_Lists.Has_Element (Pos);
+
+            Object.Queues.Update_Element (Position => Pos,
+                                          Process  => Finalize'Access);
+            Object.Queues.Delete_First;
+         end;
+      end loop;
+   end Finalize;
+
+   --  ------------------------------
    --  Finalize the event manager by releasing the allocated storage.
    --  ------------------------------
    overriding
    procedure Finalize (Manager : in out Event_Manager) is
+      use type AWA.Events.Dispatchers.Dispatcher_Access;
+
       procedure Free is
         new Ada.Unchecked_Deallocation (Object => Event_Queues_Array,
                                         Name   => Event_Queues_Array_Access);
+      procedure Free is
+         new Ada.Unchecked_Deallocation (Object => AWA.Events.Dispatchers.Dispatcher'Class,
+                                         Name   => AWA.Events.Dispatchers.Dispatcher_Access);
    begin
-      Free (Manager.Actions);
+      if Manager.Actions /= null then
+         for I in Manager.Actions'Range loop
+            Finalize (Manager.Actions (I));
+         end loop;
+         Free (Manager.Actions);
+      end if;
+      for I in Manager.Dispatchers'Range loop
+         exit when Manager.Dispatchers (I) = null;
+         Free (Manager.Dispatchers (I));
+      end loop;
    end Finalize;
 
 end AWA.Events.Services;

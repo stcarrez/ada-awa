@@ -135,7 +135,10 @@ package body AWA.Events.Configs is
             end;
 
          when FIELD_DISPATCHER =>
-            null;
+            Into.Manager.Add_Dispatcher (Match    => To_String (Into.Match),
+                                         Count    => Util.Beans.Objects.To_Integer (Into.Count),
+                                         Priority => Util.Beans.Objects.To_Integer (Into.Priority));
+            Into.Match := To_Unbounded_String ("");
 
       end case;
    end Set_Member;

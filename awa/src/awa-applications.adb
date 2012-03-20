@@ -47,6 +47,9 @@ package body AWA.Applications is
 
       Application'Class (App).Initialize_Modules;
       App.Load_Configuration;
+
+      --  After loading the configuration, start the event service.
+      App.Events.Start;
    end Initialize;
 
    --  ------------------------------

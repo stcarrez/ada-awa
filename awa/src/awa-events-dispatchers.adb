@@ -22,12 +22,25 @@ with AWA.Events.Services;
 package body AWA.Events.Dispatchers is
 
    --  ------------------------------
+   --  Add the queue to the dispatcher.
+   --  ------------------------------
+   procedure Add_Queue (Manager : in out Dispatcher;
+                        Queue   : in AWA.Events.Queues.Queue_Ref;
+                        Added   : out Boolean) is
+   begin
+      Added := False;
+   end Add_Queue;
+
+   --  ------------------------------
    --  Dispatch the events from the queue.
+   --  Increment the <b>Count</b> parameter to indicate the number of events that were dispatched.
    --  ------------------------------
    procedure Dispatch (Manager : in Dispatcher;
-                       Queue   : in AWA.Events.Queues.Queue_Ref) is
+                       Queue   : in AWA.Events.Queues.Queue_Ref;
+                       Count   : in out Natural) is
       procedure Process (Event : in Module_Event'Class) is
       begin
+         Count := Count + 1;
          Manager.Manager.Dispatch (Queue, Event);
       end Process;
    begin

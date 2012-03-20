@@ -75,12 +75,22 @@ package AWA.Events.Services is
                          Action  : in EL.Expressions.Method_Expression;
                          Params  : in EL.Beans.Param_Vectors.Vector);
 
+   --  Add a dispatcher to process the event queues matching the <b>Match</b> string.
+   --  The dispatcher can create up to <b>Count</b> tasks running at the priority <b>Priority</b>.
+   procedure Add_Dispatcher (Manager  : in out Event_Manager;
+                             Match    : in String;
+                             Count    : in Positive;
+                             Priority : in Positive);
 
    type Application_Access is access all AWA.Applications.Application'Class;
 
    --  Initialize the event manager.
    procedure Initialize (Manager : in out Event_Manager;
                          App     : in Application_Access);
+
+   --  Start the event manager.  The dispatchers are configured to dispatch the event queues
+   --  and tasks are started to process asynchronous events.
+   procedure Start (Manager : in out Event_Manager);
 
 private
 
@@ -91,6 +101,9 @@ private
       Queue      : AWA.Events.Queues.Queue_Ref;
       Dispatcher : AWA.Events.Dispatchers.Dispatcher_Access := null;
    end record;
+
+   --  Finalize the queue dispatcher releasing the dispatcher memory.
+   procedure Finalize (Object : in out Queue_Dispatcher);
 
    --  A list of event queue dispatcher.
    package Queue_Dispatcher_Lists is
@@ -103,6 +116,9 @@ private
       Event  : AWA.Events.Models.Message_Type_Ref;
    end record;
 
+   --  Finalize the event queues and the dispatchers.
+   procedure Finalize (Object : in out Event_Queues);
+
    --  An array of event queue actions.
    type Event_Queues_Array is array (Event_Index range <>) of Event_Queues;
    type Event_Queues_Array_Access is access all Event_Queues_Array;
@@ -110,7 +126,8 @@ private
    type Event_Manager is new Ada.Finalization.Limited_Controlled with record
       Actions     : Event_Queues_Array_Access := null;
       Queues      : AWA.Events.Queues.Maps.Map;
-      Application : Application_Access;
+      Application : Application_Access := null;
+      Dispatchers : AWA.Events.Dispatchers.Dispatcher_Access_Array := (others => null);
    end record;
 
    --  Finalize the event manager by releasing the allocated storage.

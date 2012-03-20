@@ -16,18 +16,34 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Ada.Finalization;
+with Ada.Strings.Unbounded;
 
 with Util.Concurrent.Fifos;
 with AWA.Events.Queues;
+with AWA.Events.Services;
 package AWA.Events.Dispatchers.Tasks is
 
 
    type Task_Dispatcher is limited new Dispatcher with private;
    type Task_Dispatcher_Access is access all Task_Dispatcher;
 
+   --  Start the dispatcher.
+   procedure Start (Manager : in out Task_Dispatcher);
 
+   --  Stop the dispatcher.
+   procedure Stop (Manager : in out Task_Dispatcher);
+
+   --  Add the queue to the dispatcher.
    procedure Add_Queue (Manager : in out Task_Dispatcher;
-                        Queue   : in AWA.Events.Queues.Queue_Ref);
+                        Queue   : in AWA.Events.Queues.Queue_Ref;
+                        Added   : out Boolean);
+
+   overriding
+   procedure Finalize (Object : in out Task_Dispatcher);
+
+   function Create_Dispatcher (Match : in String;
+                               Count : in Positive;
+                               Priority : in Positive) return Dispatcher_Access;
 
 private
 
@@ -40,9 +56,15 @@ private
       entry Start (D : in Task_Dispatcher_Access);
    end Consumer;
 
+   type Consumer_Array is array (Positive range <>) of Consumer;
+   type Consumer_Array_Access is access Consumer_Array;
+
    type Task_Dispatcher is limited new Dispatcher with record
-      Worker : Consumer;
-      Queues : Queue_Of_Queue.Fifo;
+      Workers    : Consumer_Array_Access;
+      Queues     : Queue_Of_Queue.Fifo;
+      Task_Count : Positive;
+      Match      : Ada.Strings.Unbounded.Unbounded_String;
+      Priority   : Positive;
    end record;
 
 end AWA.Events.Dispatchers.Tasks;

@@ -24,12 +24,28 @@ with AWA.Events.Queues;
 limited with AWA.Events.Services;
 package AWA.Events.Dispatchers is
 
+   MAX_DISPATCHER_COUNT : constant Positive := 100;
+
    type Dispatcher is new Ada.Finalization.Limited_Controlled with private;
    type Dispatcher_Access is access all Dispatcher'Class;
+   type Dispatcher_Access_Array is array (1 .. MAX_DISPATCHER_COUNT) of Dispatcher_Access;
+
+   --  Start the dispatcher.
+   procedure Start (Manager : in out Dispatcher) is null;
+
+   --  Stop the dispatcher.
+   procedure Stop (Manager : in out Dispatcher) is null;
+
+   --  Add the queue to the dispatcher.
+   procedure Add_Queue (Manager : in out Dispatcher;
+                        Queue   : in AWA.Events.Queues.Queue_Ref;
+                        Added   : out Boolean);
 
    --  Dispatch the events from the queue.
+   --  Increment the <b>Count</b> parameter to indicate the number of events that were dispatched.
    procedure Dispatch (Manager : in Dispatcher;
-                       Queue   : in AWA.Events.Queues.Queue_Ref);
+                       Queue   : in AWA.Events.Queues.Queue_Ref;
+                       Count   : in out Natural);
 
    --  Dispatch the event identified by <b>Event</b>.
    --  The event actions which are associated with the event are executed synchronously.
