@@ -87,6 +87,20 @@ package body AWA.Tests is
    end Initialize;
 
    --  ------------------------------
+   --  Called when the testsuite execution has finished.
+   --  ------------------------------
+   procedure Finish (Status : in Util.XUnit.Status) is
+      procedure Free is
+        new Ada.Unchecked_Deallocation (Object => AWA.Applications.Application'Class,
+                                        Name   => AWA.Applications.Application_Access);
+
+   begin
+      if Application_Created then
+         Free (Application);
+      end if;
+   end Finish;
+
+   --  ------------------------------
    --  Initialize the AWA test framework mockup.
    --  ------------------------------
    procedure Initialize (App         : in AWA.Applications.Application_Access;
@@ -98,6 +112,7 @@ package body AWA.Tests is
       --  Install a shutdown hook to delete the application when the primary task exits.
       --  This allows to stop the event threads if any.
       if App = null then
+         Application_Created := True;
          Application := new AWA.Applications.Application;
          Ada.Task_Termination.Set_Specific_Handler (Ada.Task_Identification.Current_Task,
                                                     Shutdown.Termination'Access);

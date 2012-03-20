@@ -16,9 +16,11 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Util.Properties;
 with AWA.Applications;
+
+with Util.Properties;
 with Util.Tests;
+with Util.XUnit;
 package AWA.Tests is
 
    type Test is abstract new Util.Tests.Test with null record;
@@ -31,6 +33,9 @@ package AWA.Tests is
    procedure Initialize (App         : in AWA.Applications.Application_Access;
                          Props       : in Util.Properties.Manager;
                          Add_Modules : in Boolean);
+
+   --  Called when the testsuite execution has finished.
+   procedure Finish (Status : in Util.XUnit.Status);
 
    procedure Initialize (Props : in Util.Properties.Manager);
 
