@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  AWA - Unit tests
---  Copyright (C) 2009, 2010, 2011 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,8 @@ with AWA.Tests;
 procedure AWA_Harness is
 
    procedure Harness is new Util.Tests.Harness (AWA.Testsuite.Suite,
-                                                AWA.Tests.Initialize);
+                                                AWA.Tests.Initialize,
+                                                AWA.Tests.Finish);
 
 begin
    Harness ("awa-tests.xml");
