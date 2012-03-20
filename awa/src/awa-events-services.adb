@@ -356,16 +356,17 @@ package body AWA.Events.Services is
          new Ada.Unchecked_Deallocation (Object => AWA.Events.Dispatchers.Dispatcher'Class,
                                          Name   => AWA.Events.Dispatchers.Dispatcher_Access);
    begin
+      --  Stop the dispatcher first.
+      for I in Manager.Dispatchers'Range loop
+         exit when Manager.Dispatchers (I) = null;
+         Free (Manager.Dispatchers (I));
+      end loop;
       if Manager.Actions /= null then
          for I in Manager.Actions'Range loop
             Finalize (Manager.Actions (I));
          end loop;
          Free (Manager.Actions);
       end if;
-      for I in Manager.Dispatchers'Range loop
-         exit when Manager.Dispatchers (I) = null;
-         Free (Manager.Dispatchers (I));
-      end loop;
    end Finalize;
 
 end AWA.Events.Services;

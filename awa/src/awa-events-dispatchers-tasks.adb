@@ -106,6 +106,8 @@ package body AWA.Events.Dispatchers.Tasks is
                if Nb_Events /= 0 then
                   Time := 0.01;
                else
+                  Log.Debug ("Sleeping {0} seconds", Duration'Image (Time));
+
                   delay Time;
 
                   if Time < 60.0 then
