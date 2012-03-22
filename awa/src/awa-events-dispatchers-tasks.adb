@@ -28,20 +28,42 @@ package body AWA.Events.Dispatchers.Tasks is
 
    Log : constant Loggers.Logger := Loggers.Create ("AWA.Events.Dispatchers.Tasks");
 
+   --  ------------------------------
    --  Start the dispatcher.
+   --  ------------------------------
    procedure Start (Manager : in out Task_Dispatcher) is
    begin
-      Log.Info ("Starting the tasks");
-      Manager.Workers := new Consumer_Array (1 .. Manager.Task_Count);
-      for I in Manager.Workers'Range loop
-         Manager.Workers (I).Start (Manager'Unchecked_Access);
-      end loop;
+      if Manager.Queues.Get_Count > 0 then
+         Log.Info ("Starting the tasks");
+
+         if Manager.Workers = null then
+            Manager.Workers := new Consumer_Array (1 .. Manager.Task_Count);
+         end if;
+
+         for I in Manager.Workers'Range loop
+            Manager.Workers (I).Start (Manager'Unchecked_Access);
+         end loop;
+      else
+         Log.Info ("No event dispatcher task started (no event queue to poll)");
+      end if;
    end Start;
 
+   --  ------------------------------
    --  Stop the dispatcher.
+   --  ------------------------------
    procedure Stop (Manager : in out Task_Dispatcher) is
+      procedure Free is
+        new Ada.Unchecked_Deallocation (Object => Consumer_Array,
+                                        Name   => Consumer_Array_Access);
    begin
-      null;
+      if Manager.Workers /= null then
+         Log.Info ("Stopping the event dispatcher tasks");
+
+         for I in Manager.Workers'Range loop
+            Manager.Workers (I).Stop;
+         end loop;
+         Free (Manager.Workers);
+      end if;
    end Stop;
 
    procedure Add_Queue (Manager : in out Task_Dispatcher;
@@ -52,32 +74,23 @@ package body AWA.Events.Dispatchers.Tasks is
       Added := True;
    end Add_Queue;
 
-   overriding
-   procedure Finalize (Object : in out Task_Dispatcher) is
-      procedure Free is
-         new Ada.Unchecked_Deallocation (Object => Consumer_Array,
-                                         Name   => Consumer_Array_Access);
-   begin
-      Log.Info ("Deleting the tasks");
-
-      Free (Object.Workers);
-   end Finalize;
-
-   function Create_Dispatcher (Match : in String;
-                               Count : in Positive;
+   function Create_Dispatcher (Service  : in AWA.Events.Services.Event_Manager_Access;
+                               Match    : in String;
+                               Count    : in Positive;
                                Priority : in Positive) return Dispatcher_Access is
       Result : Task_Dispatcher_Access := new Task_Dispatcher;
    begin
       Result.Task_Count := Count;
       Result.Priority   := Priority;
       Result.Match      := To_Unbounded_String (Match);
+      Result.Manager    := Service.all'Access;
       return Result.all'Access;
    end Create_Dispatcher;
 
    task body Consumer is
       Dispatcher : Task_Dispatcher_Access;
-      Time : Duration := 0.01;
-
+      Time       : Duration := 0.01;
+      Do_Work    : Boolean := True;
    begin
       Log.Info ("Event consumer is ready");
       select
@@ -85,7 +98,7 @@ package body AWA.Events.Dispatchers.Tasks is
             Dispatcher := D;
          end Start;
          Log.Info ("Event consumer is started");
-         loop
+         while Do_Work loop
             declare
                Nb_Queues : constant Natural := Dispatcher.Queues.Get_Count;
                Queue     : AWA.Events.Queues.Queue_Ref;
@@ -108,7 +121,13 @@ package body AWA.Events.Dispatchers.Tasks is
                else
                   Log.Debug ("Sleeping {0} seconds", Duration'Image (Time));
 
-                  delay Time;
+                  select
+                     accept Stop do
+                        Do_Work := False;
+                     end Stop;
+                  or
+                     delay Time;
+                  end select;
 
                   if Time < 60.0 then
                      Time := Time * 2.0;
