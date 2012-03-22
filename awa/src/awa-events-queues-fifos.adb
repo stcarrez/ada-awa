@@ -18,7 +18,12 @@
 with Ada.Unchecked_Deallocation;
 with Ada.Finalization;
 
+with Util.Log.Loggers;
 package body AWA.Events.Queues.Fifos is
+
+   use Util.Log;
+
+   Log : constant Loggers.Logger := Loggers.Create ("AWA.Events.Queues.Fifos");
 
    procedure Free is
       new Ada.Unchecked_Deallocation (Object => AWA.Events.Module_Event'Class,
@@ -37,8 +42,11 @@ package body AWA.Events.Queues.Fifos is
    --  ------------------------------
    procedure Enqueue (Into  : in out Fifo_Queue;
                       Event : in AWA.Events.Module_Event'Class) is
-      E : constant Module_Event_Access := new Module_Event; --  '(Module_Event (Event));
+      E : constant Module_Event_Access := Copy (Event);
    begin
+      Log.Debug ("Enqueue event on queue {0}", Into.Name);
+
+      E.Set_Event_Kind (Event.Get_Event_Kind);
       Into.Fifo.Enqueue (E);
    end Enqueue;
 
@@ -49,15 +57,21 @@ package body AWA.Events.Queues.Fifos is
                       Process : access procedure (Event : in Module_Event'Class)) is
       E : Module_Event_Access;
    begin
-      From.Fifo.Dequeue (E);
+      Log.Debug ("Dequeue event queue {0}", From.Name);
+
+      From.Fifo.Dequeue (E, 0.0);
       begin
          Process (E.all);
 
       exception
          when E : others =>
-            null;
+            Log.Error ("Exception when processing event");
       end;
       Free (E);
+
+   exception
+      when Fifo_Protected_Queue.Timeout =>
+         null;
    end Dequeue;
 
    --  ------------------------------
