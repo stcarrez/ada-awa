@@ -113,4 +113,7 @@ private
    --  Get the event type name.
    function Get_Event_Type_Name (Index : in Event_Index) return Util.Strings.Name_Access;
 
+   --  Make and return a copy of the event.
+   function Copy (Event : in Module_Event) return Module_Event_Access;
+
 end AWA.Events;

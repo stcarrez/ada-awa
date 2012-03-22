@@ -215,4 +215,15 @@ package body AWA.Events is
       return Names (Index);
    end Get_Event_Type_Name;
 
+   --  ------------------------------
+   --  Make and return a copy of the event.
+   --  ------------------------------
+   function Copy (Event : in Module_Event) return Module_Event_Access is
+      Result : constant Module_Event_Access := new Module_Event;
+   begin
+      Result.Kind := Event.Kind;
+      Result.Props := Event.Props;
+      return Result;
+   end Copy;
+
 end AWA.Events;
