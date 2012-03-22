@@ -211,7 +211,8 @@ package body AWA.Events.Services is
       for I in Manager.Dispatchers'Range loop
          if Manager.Dispatchers (I) = null then
             Manager.Dispatchers (I) :=
-              AWA.Events.Dispatchers.Tasks.Create_Dispatcher (Match, Count, Priority);
+              AWA.Events.Dispatchers.Tasks.Create_Dispatcher (Manager'Unchecked_Access,
+                                                              Match, Count, Priority);
             return;
          end if;
       end loop;

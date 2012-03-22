@@ -76,6 +76,10 @@ package AWA.Applications is
    --  Register the module in the registry.
    procedure Load_Configuration (App : in out Application);
 
+   --  Start the application.  This is called by the server container when the server is started.
+   overriding
+   procedure Start (App : in out Application);
+
    --  Register the module in the application
    procedure Register (App     : in Application_Access;
                        Module  : access AWA.Modules.Module'Class;

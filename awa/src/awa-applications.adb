@@ -47,9 +47,6 @@ package body AWA.Applications is
 
       Application'Class (App).Initialize_Modules;
       App.Load_Configuration;
-
-      --  After loading the configuration, start the event service.
-      App.Events.Start;
    end Initialize;
 
    --  ------------------------------
@@ -129,6 +126,16 @@ package body AWA.Applications is
       when Ada.IO_Exceptions.Name_Error =>
          Log.Warn ("Application configuration file '{0}' does not exist", Path);
    end Load_Configuration;
+
+   --  ------------------------------
+   --  Start the application.  This is called by the server container when the server is started.
+   --  ------------------------------
+   overriding
+   procedure Start (App : in out Application) is
+   begin
+      --  Start the event service.
+      App.Events.Start;
+   end Start;
 
    --  ------------------------------
    --  Register the module in the application

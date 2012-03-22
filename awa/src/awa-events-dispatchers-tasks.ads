@@ -39,10 +39,11 @@ package AWA.Events.Dispatchers.Tasks is
                         Added   : out Boolean);
 
    overriding
-   procedure Finalize (Object : in out Task_Dispatcher);
+   procedure Finalize (Object : in out Task_Dispatcher) renames Stop;
 
-   function Create_Dispatcher (Match : in String;
-                               Count : in Positive;
+   function Create_Dispatcher (Service  : in AWA.Events.Services.Event_Manager_Access;
+                               Match    : in String;
+                               Count    : in Positive;
                                Priority : in Positive) return Dispatcher_Access;
 
 private
@@ -54,6 +55,7 @@ private
 
    task type Consumer is
       entry Start (D : in Task_Dispatcher_Access);
+      entry Stop;
    end Consumer;
 
    type Consumer_Array is array (Positive range <>) of Consumer;
