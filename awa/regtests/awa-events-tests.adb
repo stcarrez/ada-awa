@@ -245,27 +245,31 @@ package body AWA.Events.Tests is
 
       Factory : AWA.Applications.Factory.Application_Factory;
       Conf    : ASF.Applications.Config;
-      App     : aliased AWA.Applications.Application;
       Ctx     : aliased EL.Contexts.Default.Default_Context;
       Path    : constant String := Util.Tests.Get_Test_Path ("regtests/config/event-test.xml");
       Action  : aliased Action_Bean;
    begin
       Conf.Set ("database", Util.Tests.Get_Parameter ("database"));
-      App.Initialize (Conf    => Conf,
-                      Factory => Factory);
-      App.Set_Global ("event_test",
-        Util.Beans.Objects.To_Object (Action'Unchecked_Access,
-          Util.Beans.Objects.STATIC));
-
-      App.Register_Class ("AWA.Events.Tests.Event_Action",
-                          Create_Action_Bean'Access);
-      AWA.Applications.Configs.Read_Configuration (App     => App,
-                                                   File    => Path,
-                                                   Context => Ctx'Unchecked_Access);
 
       declare
-         S : Util.Measures.Stamp;
+         App  : aliased AWA.Applications.Application;
+         S    : Util.Measures.Stamp;
       begin
+         App.Initialize (Conf    => Conf,
+                         Factory => Factory);
+         App.Set_Global ("event_test",
+           Util.Beans.Objects.To_Object (Action'Unchecked_Access,
+             Util.Beans.Objects.STATIC));
+
+         App.Register_Class ("AWA.Events.Tests.Event_Action",
+                             Create_Action_Bean'Access);
+         AWA.Applications.Configs.Read_Configuration (App     => App,
+                                                      File    => Path,
+                                                      Context => Ctx'Unchecked_Access);
+         Util.Measures.Report (S, "Initialize AWA application and read config");
+         App.Start;
+         Util.Measures.Report (S, "Start event tasks");
+
          for I in 1 .. 100 loop
             declare
                Event : Module_Event;
@@ -276,14 +280,15 @@ package body AWA.Events.Tests is
                App.Send_Event (Event);
             end;
          end loop;
-         Util.Measures.Report (S, "Send 200 events");
-         Log.Info ("Action count: {0}", Natural'Image (Action.Count));
-         Log.Info ("Priority: {0}", Integer'Image (Action.Priority));
-         Util.Tests.Assert_Equals (T, Expect_Prio, Action.Priority,
-                                   "prio parameter not transmitted (global bean)");
-         Util.Tests.Assert_Equals (T, Expect_Count, Action.Count,
-                                   "invalid number of calls for the action (global bean)");
+         Util.Measures.Report (S, "Send 100 events");
       end;
+
+      Log.Info ("Action count: {0}", Natural'Image (Action.Count));
+      Log.Info ("Priority: {0}", Integer'Image (Action.Priority));
+      Util.Tests.Assert_Equals (T, Expect_Prio, Action.Priority,
+                                "prio parameter not transmitted (global bean)");
+      Util.Tests.Assert_Equals (T, Expect_Count, Action.Count,
+                                "invalid number of calls for the action (global bean)");
    end Dispatch_Event;
 
    --  ------------------------------
@@ -299,7 +304,7 @@ package body AWA.Events.Tests is
    --  ------------------------------
    procedure Test_Dispatch_Fifo (T : in out Test) is
    begin
-      T.Dispatch_Event (Event_Test_2.Kind, 0, 0);
+      T.Dispatch_Event (Event_Test_2.Kind, 200, 3);
    end Test_Dispatch_Fifo;
 
    --  ------------------------------
