@@ -70,6 +70,8 @@ package body AWA.Events.Dispatchers.Tasks is
                         Queue   : in AWA.Events.Queues.Queue_Ref;
                         Added   : out Boolean) is
    begin
+      Log.Info ("Adding queue {0} to the task dispatcher", Queue.Get_Name);
+
       Manager.Queues.Enqueue (Queue);
       Added := True;
    end Add_Queue;

@@ -29,13 +29,13 @@ with ASF.Applications;
 --  integrate them together easily at configuration time.
 --
 --  1/ Modules define the events they can generate by instantiating the <b>Definition</b> package.
---     This is a static definition of the event.
+--     This is a static definition of the event.  Each event is given a unique name.
 --
 --    package Event_New_User is new AWA.Events.Definition ("new-user");
 --
 --  2/ The module can post an event to inform other modules or the system that a particular
---  action occurred.  The module creates the event instance of type <b>Module_Event</b> and
---  populates that event with useful properties for event receivers.
+--     action occurred.  The module creates the event instance of type <b>Module_Event</b> and
+--     populates that event with useful properties for event receivers.
 --
 --      Event : AWA.Events.Module_Event;
 --
@@ -46,6 +46,21 @@ with ASF.Applications;
 --
 --    Manager.Send_Event (Event);
 --
+--  4/ Modules or applications interested by a particular event will configure the event manager
+--     to dispatch the event to an Ada bean event action.  The Ada bean is an object that must
+--     implement a procedure that matches the prototype:
+--
+--        type Action_Bean is new Util.Beans.Basic.Readonly_Bean ...;
+--        procedure Action (Bean : in out Action_Bean; Event : in AWA.Events.Module_Event'Class);
+--
+--     The Ada bean method and object are registered as other Ada beans.
+--
+--  5/ The configuration file indicates how to bind the Ada bean action and the event together.
+--     The action is specified using an EL Method Expression (See Ada EL or JSR 245).
+--
+--       <on-event name="new_user">
+--           <action>#{ada_bean.action}</action>
+--       </on-event>
 --
 package AWA.Events is
 

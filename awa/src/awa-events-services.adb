@@ -29,7 +29,7 @@ package body AWA.Events.Services is
 
    use Util.Log;
 
-   Log : constant Loggers.Logger := Loggers.Create ("AWA.Events");
+   Log : constant Loggers.Logger := Loggers.Create ("AWA.Events.Services");
 
    --  ------------------------------
    --  Send the event to the modules that subscribed to it.
@@ -101,14 +101,19 @@ package body AWA.Events.Services is
       end if;
 
       declare
-         Pos   : Queue_Dispatcher_Lists.Cursor := Manager.Actions (Event.Kind).Queues.First;
+         Name : constant Util.Strings.Name_Access := Get_Event_Type_Name (Event.Kind);
+         Pos  : Queue_Dispatcher_Lists.Cursor := Manager.Actions (Event.Kind).Queues.First;
       begin
-         --  Find the queue.
-         while Queue_Dispatcher_Lists.Has_Element (Pos) loop
-            Queue_Dispatcher_Lists.Query_Element (Pos, Find_Queue'Access);
-            exit when Found;
-            Queue_Dispatcher_Lists.Next (Pos);
-         end loop;
+         if not Queue_Dispatcher_Lists.Has_Element (Pos) then
+            Log.Debug ("Dispatching event {0} but there is no listener", Name.all);
+         else
+            Log.Debug ("Dispatching event {0}", Name.all);
+            loop
+               Queue_Dispatcher_Lists.Query_Element (Pos, Find_Queue'Access);
+               exit when Found;
+               Queue_Dispatcher_Lists.Next (Pos);
+            end loop;
+         end if;
       end;
    end Dispatch;
 
@@ -173,6 +178,8 @@ package body AWA.Events.Services is
       Index : constant Event_Index := Find_Event_Index (Event);
       Pos   : Queue_Dispatcher_Lists.Cursor := Manager.Actions (Index).Queues.First;
    begin
+      Log.Info ("Adding action {0} to event {1}", Action.Get_Expression, Event);
+
       --  Find the queue.
       while Queue_Dispatcher_Lists.Has_Element (Pos) loop
          Queue_Dispatcher_Lists.Query_Element (Pos, Find_Queue'Access);
@@ -302,6 +309,8 @@ package body AWA.Events.Services is
 
       Iter : AWA.Events.Queues.Maps.Cursor := Manager.Queues.First;
    begin
+      Log.Info ("Starting the event manager");
+
       while AWA.Events.Queues.Maps.Has_Element (Iter) loop
          Manager.Queues.Update_Element (Iter, Associate_Dispatcher'Access);
          AWA.Events.Queues.Maps.Next (Iter);

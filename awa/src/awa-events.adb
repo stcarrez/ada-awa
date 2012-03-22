@@ -109,9 +109,9 @@ package body AWA.Events is
       Events (Left).Index := Last_Event;
       Names (Last_Event) := Name;
       Index := Last_Event;
---        for I in 1 .. Last_Event loop
---           Log.Info ("{0} -> {1}", Event_Index'Image (I), Events (I).Name.all);
---        end loop;
+      --        for I in 1 .. Last_Event loop
+      --           Log.Info ("{0} -> {1}", Event_Index'Image (I), Events (I).Name.all);
+      --        end loop;
       Log.Debug ("Event {0} index is {1}", Name.all, Event_Index'Image (Index));
    end Add_Event;
 
