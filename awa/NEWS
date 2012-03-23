@@ -1,5 +1,7 @@
 Version 0.2     -
   - New blog module and wiki engine
+  - New event framework with configurable action listeners
+  - Persistent event queues for the event framework
 
 Version 0.1     - Sep 2011
   - Core implementation of AWA framework on top of ADO and ASF
