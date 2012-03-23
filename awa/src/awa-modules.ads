@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-modules -- Application Module
---  Copyright (C) 2009, 2010, 2011 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,12 +24,14 @@ with Ada.Containers.Indefinite_Hashed_Maps;
 with Util.Log.Loggers;
 with Util.Beans.Basic;
 with Util.Beans.Objects;
-with Util.Events.Channels;
+--  with Util.Events.Channels;
 
 with ASF.Beans;
-with ASF.Events.Modules;
+--  with ASF.Events.Modules;
 with ASF.Applications;
 with ADO.Sessions;
+
+with AWA.Events;
 limited with AWA.Applications;
 
 --  The <b>AWA.Modules</b> package defines simple pluggable modules in
@@ -95,18 +97,17 @@ package AWA.Modules is
                          App    : in Application_Access);
 
    --  Get the event subscribers for a given event name.
-   function Get_Subscribers (Plugin : in Module;
-                             Event  : in String) return String;
+--     function Get_Subscribers (Plugin : in Module;
+--                               Event  : in String) return String;
 
    --  Send the event to the module.  The module identified by <b>To</b> is
    --  found and the event is posted on its event channel.
    procedure Send_Event (Plugin  : in Module;
-                         To      : in String;
-                         Content : in ASF.Events.Modules.Module_Event'Class);
+                         Content : in AWA.Events.Module_Event'Class);
 
    --  Receive an event sent by another module with <b>Send_Event</b> method.
-   procedure Receive_Event (Plugin  : in out Module;
-                            Content : in ASF.Events.Modules.Module_Event'Class);
+--     procedure Receive_Event (Plugin  : in out Module;
+--                              Content : in ASF.Events.Modules.Module_Event'Class);
 
    --  Get the database connection for reading
    function Get_Session (Manager : Module)
@@ -148,8 +149,7 @@ package AWA.Modules is
    --  Send the event to the module.  The module identified by <b>To</b> is
    --  found and the event is posted on its event channel.
    procedure Send_Event (Manager : in Module_Manager;
-                         To      : in String;
-                         Content : in ASF.Events.Modules.Module_Event'Class);
+                         Content : in AWA.Events.Module_Event'Class);
 
    --  ------------------------------
    --  Module Registry
@@ -183,19 +183,19 @@ private
    use Ada.Strings.Unbounded;
 
    --  Event channel subscriber
-   type Module_Subscriber is new Util.Events.Channels.Subscriber with record
-      Module : Module_Access;
-   end record;
+--     type Module_Subscriber is new Util.Events.Channels.Subscriber with record
+--        Module : Module_Access;
+--     end record;
 
    --  Receive an event from the event channel
-   procedure Receive_Event (Sub  : in out Module_Subscriber;
-                            Item : in Util.Events.Event'Class);
+--     procedure Receive_Event (Sub  : in out Module_Subscriber;
+--                              Item : in Util.Events.Event'Class);
 
    type Module is abstract new Ada.Finalization.Limited_Controlled with record
       Registry   : Module_Registry_Access;
-      Subscriber : aliased Module_Subscriber;
+--        Subscriber : aliased Module_Subscriber;
       App        : Application_Access := null;
-      Channel    : Util.Events.Channels.Channel_Access;
+--        Channel    : Util.Events.Channels.Channel_Access;
       Name       : Unbounded_String;
       URI        : Unbounded_String;
       Config     : ASF.Applications.Config;

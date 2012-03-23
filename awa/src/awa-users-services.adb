@@ -53,14 +53,15 @@ package body AWA.Users.Services is
    end Random;
 
    procedure Send_Alert (Model : in User_Service;
-                         Name  : in String;
+                         Kind  : in AWA.Events.Event_Index;
                          User  : in User_Ref'Class;
-                         Props : in out ASF.Events.Modules.Module_Event) is
+                         Props : in out AWA.Events.Module_Event) is
    begin
+      Props.Set_Event_Kind (Kind);
       Props.Set_Parameter ("first_name", User.Get_First_Name);
       Props.Set_Parameter ("last_name", User.Get_Last_Name);
       Props.Set_Parameter ("name", Name);
-      Model.Send_Event (Name, Props);
+      Model.Send_Event (Props);
    end Send_Alert;
 
    function Create_Key (Number : ADO.Identifier) return String is
@@ -397,11 +398,11 @@ package body AWA.Users.Services is
 
       --  Send the email with the reset password key
       declare
-         Event : ASF.Events.Modules.Module_Event;
+         Event : AWA.Events.Module_Event;
       begin
          Event.Set_Parameter ("key", Key.Get_Access_Key);
          Event.Set_Parameter ("email", Email);
-         Model.Send_Alert ("lost-password", User, Event);
+         Model.Send_Alert (User_Lost_Password_Event.Kind, User, Event);
       end;
 
       Ctx.Commit;
@@ -463,11 +464,11 @@ package body AWA.Users.Services is
 
       --  Send the email to warn about the password change
       declare
-         Event : ASF.Events.Modules.Module_Event;
+         Event : AWA.Events.Module_Event;
       begin
          Event.Set_Parameter ("ip_address", IpAddr);
          Event.Set_Parameter ("email", Email.Get_Email);
-         Model.Send_Alert ("reset-password", User, Event);
+         Model.Send_Alert (User_Reset_Password_Event.Kind, User, Event);
       end;
 
       Ctx.Commit;
@@ -517,11 +518,11 @@ package body AWA.Users.Services is
 
       --  Send the email with the access key to finish the user creation
       declare
-         Event : ASF.Events.Modules.Module_Event;
+         Event : AWA.Events.Module_Event;
       begin
          Event.Set_Parameter ("key", Key.Get_Access_Key);
          Event.Set_Parameter ("email", Email_Address);
-         Model.Send_Alert ("create-user", User, Event);
+         Model.Send_Alert (User_Create_Event.Kind, User, Event);
       end;
 
       Ctx.Commit;

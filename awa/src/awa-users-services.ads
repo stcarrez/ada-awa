@@ -19,12 +19,16 @@ with Ada.Strings.Unbounded;
 
 with AWA.Users.Models;
 with AWA.Modules;
-with ASF.Events.Modules;
+with AWA.Events;
 with Security.Openid;
 with ADO;
 package AWA.Users.Services is
 
    use AWA.Users.Models;
+
+   package User_Create_Event is new AWA.Events.Definition (Name => "user-create");
+   package User_Lost_Password_Event is new AWA.EVents.Definition (Name => "user-lost-password");
+   package User_Reset_Password_Event is new AWA.EVents.Definition (Name => "user-reset-password");
 
    NAME : constant String := "User_Service";
 
@@ -148,9 +152,9 @@ package AWA.Users.Services is
                             Logout : in Boolean := False);
 
    procedure Send_Alert (Model : in User_Service;
-                         Name  : in String;
+                         Kind  : in AWA.Events.Event_Index;
                          User  : in User_Ref'Class;
-                         Props : in out ASF.Events.Modules.Module_Event);
+                         Props : in out AWA.Events.Module_Event);
 
    --  Initialize the user service.
    overriding

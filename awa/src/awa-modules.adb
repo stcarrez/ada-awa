@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa -- Ada Web Application
---  Copyright (C) 2009, 2010, 2011 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,16 +34,16 @@ package body AWA.Modules is
    --  ------------------------------
    --  Receive an event from the event channel
    --  ------------------------------
-   procedure Receive_Event (Sub  : in out Module_Subscriber;
-                            Item : in Util.Events.Event'Class) is
-   begin
-      Sub.Module.Receive_Event (ASF.Events.Modules.Module_Event'Class (Item));
-   end Receive_Event;
+--     procedure Receive_Event (Sub  : in out Module_Subscriber;
+--                              Item : in Util.Events.Event'Class) is
+--     begin
+--        Sub.Module.Receive_Event (ASF.Events.Modules.Module_Event'Class (Item));
+--     end Receive_Event;
 
    --  ------------------------------
    --  Get the module name
    --  ------------------------------
-   function Get_Name (Plugin : Module) return String is
+   function Get_Name (Plugin : in Module) return String is
    begin
       return To_String (Plugin.Name);
    end Get_Name;
@@ -51,7 +51,7 @@ package body AWA.Modules is
    --  ------------------------------
    --  Get the base URI for this module
    --  ------------------------------
-   function Get_URI (Plugin : Module) return String is
+   function Get_URI (Plugin : in Module) return String is
    begin
       return To_String (Plugin.URI);
    end Get_URI;
@@ -94,55 +94,56 @@ package body AWA.Modules is
    --  ------------------------------
    --  Get the event subscribers for a given event name.
    --  ------------------------------
-   function Get_Subscribers (Plugin : in Module;
-                             Event  : in String) return String is
-      Subscribers : constant String := Plugin.Get_Config ("event.publish." & Event, "");
-   begin
-      if Subscribers'Length > 0 then
-         return Subscribers;
-      else
-         return Plugin.Get_Config ("event.publish", "");
-      end if;
-   end Get_Subscribers;
+--     function Get_Subscribers (Plugin : in Module;
+--                               Event  : in String) return String is
+--        Subscribers : constant String := Plugin.Get_Config ("event.publish." & Event, "");
+--     begin
+--        if Subscribers'Length > 0 then
+--           return Subscribers;
+--        else
+--           return Plugin.Get_Config ("event.publish", "");
+--        end if;
+--     end Get_Subscribers;
 
    --  ------------------------------
    --  Send the event to the module
    --  ------------------------------
    procedure Send_Event (Plugin  : in Module;
-                         To      : in String;
-                         Content : in ASF.Events.Modules.Module_Event'Class) is
-      Subscribers : constant String := Plugin.Get_Subscribers (To);
-      Target      : Module_Access;
-      Last_Pos    : Natural := Subscribers'First;
-      Pos         : Natural;
+                         Content : in AWA.Events.Module_Event'Class) is
+--        Subscribers : constant String := Plugin.Get_Subscribers (To);
+--        Target      : Module_Access;
+--        Last_Pos    : Natural := Subscribers'First;
+--        Pos         : Natural;
    begin
-      while Last_Pos < Subscribers'Last loop
-         Pos := Util.Strings.Index (Source => Subscribers,
-                                    Char   => ',',
-                                    From   => Last_Pos);
-         if Pos = 0 then
-            Pos := Subscribers'Last + 1;
-         end if;
-         exit when Last_Pos = Pos;
-         Target := Plugin.Find_Module (Subscribers (Last_Pos .. Pos - 1));
-         if Target = null then
-            Log.Warn ("Event {0} cannot be sent to missing module {1}",
-                      To, Subscribers (Last_Pos .. Pos - 1));
-            return;
-         end if;
-         Target.Channel.Post (Content);
-         Last_Pos := Pos + 1;
-      end loop;
+      Plugin.App.Send_Event (Content);
+--
+--        while Last_Pos < Subscribers'Last loop
+--           Pos := Util.Strings.Index (Source => Subscribers,
+--                                      Char   => ',',
+--                                      From   => Last_Pos);
+--           if Pos = 0 then
+--              Pos := Subscribers'Last + 1;
+--           end if;
+--           exit when Last_Pos = Pos;
+--           Target := Plugin.Find_Module (Subscribers (Last_Pos .. Pos - 1));
+--           if Target = null then
+--              Log.Warn ("Event {0} cannot be sent to missing module {1}",
+--                        To, Subscribers (Last_Pos .. Pos - 1));
+--              return;
+--           end if;
+--           Target.Channel.Post (Content);
+--           Last_Pos := Pos + 1;
+--        end loop;
    end Send_Event;
 
    --  ------------------------------
    --  Receive an event sent by another module with <b>Send_Event</b> method.
    --  ------------------------------
-   procedure Receive_Event (Plugin  : in out Module;
-                            Content : in ASF.Events.Modules.Module_Event'Class) is
-   begin
-      null;
-   end Receive_Event;
+--     procedure Receive_Event (Plugin  : in out Module;
+--                              Content : in ASF.Events.Modules.Module_Event'Class) is
+--     begin
+--        null;
+--     end Receive_Event;
 
    --  ------------------------------
    --  Find the module with the given name
@@ -173,11 +174,12 @@ package body AWA.Modules is
    --  ------------------------------
    overriding
    procedure Finalize (Plugin : in out Module) is
-      procedure Free is
-        new Ada.Unchecked_Deallocation (Object => Util.Events.Channels.Channel'Class,
-                                        Name   => Util.Events.Channels.Channel_Access);
+--        procedure Free is
+--          new Ada.Unchecked_Deallocation (Object => Util.Events.Channels.Channel'Class,
+--                                          Name   => Util.Events.Channels.Channel_Access);
    begin
-      Free (Plugin.Channel);
+--        Free (Plugin.Channel);
+      null;
    end Finalize;
 
    procedure Initialize (Manager : in out Module_Manager;
@@ -218,10 +220,9 @@ package body AWA.Modules is
    --  found and the event is posted on its event channel.
    --  ------------------------------
    procedure Send_Event (Manager : in Module_Manager;
-                         To      : in String;
-                         Content : in ASF.Events.Modules.Module_Event'Class) is
+                         Content : in AWA.Events.Module_Event'Class) is
    begin
-      Manager.Module.Send_Event (To, Content);
+      Manager.Module.Send_Event (Content);
    end Send_Event;
 
    procedure Initialize (Plugin : in out Module;
@@ -261,7 +262,7 @@ package body AWA.Modules is
       Plugin.Registry := Registry;
       Plugin.Name     := To_Unbounded_String (Name);
       Plugin.URI      := To_Unbounded_String (URI);
-      Plugin.Subscriber.Module := Plugin;
+--        Plugin.Subscriber.Module := Plugin;
       Plugin.Registry.Name_Map.Insert (Name, Plugin);
       if URI /= "" then
          Plugin.Registry.URI_Map.Insert (URI, Plugin);
@@ -284,12 +285,12 @@ package body AWA.Modules is
       Plugin.Config.Copy (From => Registry.Config, Prefix => Name & ".", Strip => True);
 
       --  Configure the event channels for this module
-      declare
-         Kind : constant String := Plugin.Config.Get ("channel.type", "direct");
-      begin
-         Plugin.Channel := Util.Events.Channels.Create (Name, Kind);
-         Plugin.Channel.Subscribe (Plugin.Subscriber'Access);
-      end;
+--        declare
+--           Kind : constant String := Plugin.Config.Get ("channel.type", "direct");
+--        begin
+--           Plugin.Channel := Util.Events.Channels.Create (Name, Kind);
+--           Plugin.Channel.Subscribe (Plugin.Subscriber'Access);
+--        end;
 
       Plugin.Initialize (App);
 
