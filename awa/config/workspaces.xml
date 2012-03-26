@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="1.0">
+
+  <managed-bean>
+    <description>This bean allows to perform some general workspace actions</description>
+    <managed-bean-name>workspace</managed-bean-name>
+    <managed-bean-class>AWA.Workspaces.Beans.Workspaces_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <!--  When a user is created, also create a workspace area.  -->
+  <on-event name="user-create">
+     <action>#{workspace.create}</action>
+  </on-event>
+
   <filter-mapping>
     <filter-name>service</filter-name>
     <url-pattern>/workspaces/*.html</url-pattern>
