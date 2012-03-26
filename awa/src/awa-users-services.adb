@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa.users -- User registration, authentication processes
---  Copyright (C) 2009, 2010, 2011 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -206,6 +206,7 @@ package body AWA.Users.Services is
          Log.Info ("User {0} is not known", Email);
          declare
             E : Email_Ref;
+            Event : AWA.Events.Module_Event;
          begin
             E.Set_Email (Email);
             E.Set_User_Id (0);
@@ -216,6 +217,10 @@ package body AWA.Users.Services is
             Update_User;
             E.Set_User_Id (User.Get_Id);
             E.Save (DB);
+
+            --  Send the event to indicate a new user was created.
+            Event.Set_Parameter ("email", Email);
+            Model.Send_Alert (User_Create_Event.Kind, User, Event);
          end;
       else
          Update_User;

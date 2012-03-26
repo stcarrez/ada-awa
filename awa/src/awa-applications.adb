@@ -135,6 +135,9 @@ package body AWA.Applications is
    begin
       --  Start the event service.
       App.Events.Start;
+
+      --  Start the application.
+      ASF.Applications.Main.Application (App).Start;
    end Start;
 
    --  ------------------------------
