@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail -- Mail module
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,9 @@ with Ada.Strings.Unbounded;
 with Ada.Exceptions;
 
 with AWA.Applications;
+with AWA.Modules.Beans;
+with AWA.Mail.Beans;
+
 with ASF.Requests.Mockup;
 with ASF.Responses.Mockup;
 with Util.Beans.Basic;
@@ -32,6 +35,26 @@ package body AWA.Mail.Module is
    use Util.Log;
 
    Log : constant Loggers.Logger := Loggers.Create ("AWA.Mail.Module");
+
+   package Register is new AWA.Modules.Beans (Module => Mail_Module,
+                                              Module_Access => Mail_Module_Access);
+
+   --  ------------------------------
+   --  Initialize the mail module.
+   --  ------------------------------
+   overriding
+   procedure Initialize (Plugin : in out Mail_Module;
+                         App    : in AWA.Modules.Application_Access) is
+   begin
+      Log.Info ("Initializing the mail module");
+
+      --  Register here any bean class, servlet, filter.
+      Register.Register (Plugin => Plugin,
+                         Name   => "AWA.Mail.Beans.Mail_Bean",
+                         Handler => AWA.Mail.Beans.Create_Mail_Bean'Access);
+
+      AWA.Modules.Module (Plugin).Initialize (App);
+   end Initialize;
 
    --  Get the SMTP server to send an email
    function Get_Smtp_Server (Plugin : in Mail_Module) return AWS.SMTP.Receiver is

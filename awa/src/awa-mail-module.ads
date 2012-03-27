@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail -- Mail module
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +22,11 @@ package AWA.Mail.Module is
 
    type Mail_Module is new AWA.Modules.Module with null record;
    type Mail_Module_Access is access all Mail_Module'Class;
+
+   --  Initialize the mail module.
+   overriding
+   procedure Initialize (Plugin : in out Mail_Module;
+                         App    : in AWA.Modules.Application_Access);
 
    --  Get the mail template that must be used for the given event name.
    --  The mail template is configured by the property: <i>module</i>.template.<i>event</i>.
