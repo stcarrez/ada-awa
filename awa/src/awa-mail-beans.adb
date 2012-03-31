@@ -16,14 +16,13 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with ASF.Events.Faces.Actions;
-
+with AWA.Events.Action_Method;
 package body AWA.Mail.Beans is
 
    package Send_Mail_Binding is
-     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Mail_Bean,
-                                                      Method => Send_Mail,
-                                                      Name   => "send");
+     new AWA.Events.Action_Method.Bind (Bean   => Mail_Bean,
+                                        Method => Send_Mail,
+                                        Name   => "send");
 
    Mail_Bean_Binding : aliased constant Util.Beans.Methods.Method_Binding_Array
      := (1 => Send_Mail_Binding.Proxy'Access);
@@ -80,9 +79,10 @@ package body AWA.Mail.Beans is
    --  Format and send the mail.
    --  ------------------------------
    procedure Send_Mail (Bean    : in out Mail_Bean;
-                        Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+                        Event   : in AWA.Events.Module_Event'Class) is
+      use Ada.Strings.Unbounded;
    begin
-      null;
+      Bean.Module.Send_Mail (To_String (Bean.Template), Bean.Props, Event);
    end Send_Mail;
 
    --  ------------------------------

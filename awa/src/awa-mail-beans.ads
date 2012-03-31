@@ -22,6 +22,8 @@ with Util.Beans.Basic;
 with Util.Beans.Objects;
 with Util.Beans.Methods;
 with Util.Beans.Objects.Maps;
+
+with AWA.Events;
 with AWA.Mail.Module;
 package AWA.Mail.Beans is
 
@@ -51,7 +53,7 @@ package AWA.Mail.Beans is
 
    --  Format and send the mail.
    procedure Send_Mail (Bean    : in out Mail_Bean;
-                        Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+                        Event   : in AWA.Events.Module_Event'Class);
 
    --  Create the mail bean instance.
    function Create_Mail_Bean (Module : in AWA.Mail.Module.Mail_Module_Access)

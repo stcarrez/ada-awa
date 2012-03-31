@@ -16,8 +16,10 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with Util.Beans.Objects.Maps;
+
 with AWA.Modules;
-with ASF.Events.Modules;
+with AWA.Events;
 package AWA.Mail.Module is
 
    type Mail_Module is new AWA.Modules.Module with null record;
@@ -33,8 +35,10 @@ package AWA.Mail.Module is
    function Get_Template (Plugin : in Mail_Module;
                           Name   : in String) return String;
 
-   --  Receive an event sent by another module with <b>Send_Event</b> method.
-   procedure Receive_Event (Plugin  : in out Mail_Module;
-                            Content : in ASF.Events.Modules.Module_Event'Class);
+   --  Format and send an email.
+   procedure Send_Mail (Plugin   : in Mail_Module;
+                        Template : in String;
+                        Props    : in Util.Beans.Objects.Maps.Map;
+                        Content  : in AWA.Events.Module_Event'Class);
 
 end AWA.Mail.Module;

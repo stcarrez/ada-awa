@@ -22,6 +22,7 @@ with Ada.Exceptions;
 with AWA.Applications;
 with AWA.Modules.Beans;
 with AWA.Mail.Beans;
+with AWA.Mail.Components.Factory;
 
 with ASF.Requests.Mockup;
 with ASF.Responses.Mockup;
@@ -77,8 +78,11 @@ package body AWA.Mail.Module is
    end Get_Template;
 
    --  Receive an event sent by another module with <b>Send_Event</b> method.
-   procedure Receive_Event (Plugin  : in out Mail_Module;
-                            Content : in ASF.Events.Modules.Module_Event'Class) is
+   --  Format and send an email.
+   procedure Send_Mail (Plugin   : in Mail_Module;
+                        Template : in String;
+                        Props    : in Util.Beans.Objects.Maps.Map;
+                        Content  : in AWA.Events.Module_Event'Class) is
       Name : constant String := Content.Get_Parameter ("name");
    begin
       Log.Info ("Receive event {0}", Name);
@@ -100,6 +104,7 @@ package body AWA.Mail.Module is
          Req.Set_Path_Info (File);
          Req.Set_Method ("GET");
          Req.Set_Attribute (Name => "event", Value => Bean);
+         Req.Set_Attributes (Props);
 
          Plugin.Get_Application.Dispatch (Page     => File,
                                           Request  => Req,
@@ -131,6 +136,6 @@ package body AWA.Mail.Module is
          end;
       end;
 
-   end Receive_Event;
+   end Send_Mail;
 
 end AWA.Mail.Module;
