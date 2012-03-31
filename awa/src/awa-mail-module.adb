@@ -21,6 +21,7 @@ with Ada.Exceptions;
 
 with AWA.Applications;
 with AWA.Modules.Beans;
+with AWA.Modules.Get;
 with AWA.Mail.Beans;
 with AWA.Mail.Components.Factory;
 
@@ -59,6 +60,15 @@ package body AWA.Mail.Module is
 
       AWA.Modules.Module (Plugin).Initialize (App);
    end Initialize;
+
+   --  ------------------------------
+   --  Get the mail manager which allows to create and send email message.
+   --  ------------------------------
+   function Get_Mail_Manager (Plugin   : in Mail_Module)
+                              return AWA.Mail.Clients.Mail_Manager_Access is
+   begin
+      return null;
+   end Get_Mail_Manager;
 
    --  Get the SMTP server to send an email
    function Get_Smtp_Server (Plugin : in Mail_Module) return AWS.SMTP.Receiver is
@@ -140,5 +150,14 @@ package body AWA.Mail.Module is
       end;
 
    end Send_Mail;
+
+   --  ------------------------------
+   --  Get the mail module instance associated with the current application.
+   --  ------------------------------
+   function Get_Mail_Module return Mail_Module_Access is
+      function Get is new AWA.Modules.Get (Mail_Module, Mail_Module_Access, NAME);
+   begin
+      return Get;
+   end Get_Mail_Module;
 
 end AWA.Mail.Module;

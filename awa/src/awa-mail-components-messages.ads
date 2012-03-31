@@ -28,6 +28,7 @@ package AWA.Mail.Components.Messages is
    --  The mail recipient
    --  ------------------------------
    type UIMailMessage is new UIMailComponent with private;
+   type UIMailMessage_Access is access all UIMailMessage'Class;
 
    --  Set the mail message instance.
    procedure Set_Message (UI      : in out UIMailMessage;

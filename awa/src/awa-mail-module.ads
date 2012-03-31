@@ -20,7 +20,10 @@ with Util.Beans.Objects.Maps;
 
 with AWA.Modules;
 with AWA.Events;
+with AWA.Mail.Clients;
 package AWA.Mail.Module is
+
+   NAME : constant String := "mail";
 
    type Mail_Module is new AWA.Modules.Module with null record;
    type Mail_Module_Access is access all Mail_Module'Class;
@@ -29,6 +32,10 @@ package AWA.Mail.Module is
    overriding
    procedure Initialize (Plugin : in out Mail_Module;
                          App    : in AWA.Modules.Application_Access);
+
+   --  Get the mail manager which allows to create and send email message.
+   function Get_Mail_Manager (Plugin   : in Mail_Module)
+                              return AWA.Mail.Clients.Mail_Manager_Access;
 
    --  Get the mail template that must be used for the given event name.
    --  The mail template is configured by the property: <i>module</i>.template.<i>event</i>.
@@ -40,5 +47,8 @@ package AWA.Mail.Module is
                         Template : in String;
                         Props    : in Util.Beans.Objects.Maps.Map;
                         Content  : in AWA.Events.Module_Event'Class);
+
+   --  Get the mail module instance associated with the current application.
+   function Get_Mail_Module return Mail_Module_Access;
 
 end AWA.Mail.Module;
