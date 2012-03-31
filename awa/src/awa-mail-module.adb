@@ -49,6 +49,9 @@ package body AWA.Mail.Module is
    begin
       Log.Info ("Initializing the mail module");
 
+      --  Add the Mai UI components.
+      App.Add_Components (AWA.Mail.Components.Factory.Definition);
+
       --  Register here any bean class, servlet, filter.
       Register.Register (Plugin => Plugin,
                          Name   => "AWA.Mail.Beans.Mail_Bean",
