@@ -16,6 +16,8 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with Util.Properties;
+
 --  The <b>AWA.Mail.Clients</b> package defines a mail client API used by the mail module.
 --  It defines two interfaces that must be implemented.  This allows to have an implementation
 --  based on an external application such as <tt>sendmail</tt> and other implementation that
@@ -64,5 +66,12 @@ package AWA.Mail.Clients is
 
    --  Create a new mail message.
    function Create_Message (Manager : in Mail_Manager) return Mail_Message_Access is abstract;
+
+   --  Factory to create the mail manager.  The mail manager implementation is identified by
+   --  the <b>Name</b>.  It is configured according to the properties defined in <b>Props</b>.
+   --  Returns null if the mail manager identified by the name is not supported.
+   function Factory (Name  : in String;
+                     Props : in Util.Properties.Manager)
+                     return Mail_Manager_Access;
 
 end AWA.Mail.Clients;

@@ -18,11 +18,14 @@
 
 with Ada.Strings.Unbounded;
 
+with Util.Properties;
 with Util.Concurrent.Counters;
 
 --  The <b>AWA.Mail.Clients.Files</b> package provides a dump implementation of the
 --  mail client interfaces on top of raw system files.
 package AWA.Mail.Clients.Files is
+
+   NAME : constant String := "file";
 
    --  ------------------------------
    --  Mail Message
@@ -66,6 +69,9 @@ package AWA.Mail.Clients.Files is
    --  and be able to send it.
    type File_Mail_Manager is new Mail_Manager with private;
    type File_Mail_Manager_Access is access all File_Mail_Manager'Class;
+
+   --  Create a file based mail manager and configure it according to the properties.
+   function Create_Manager (Props : in Util.Properties.Manager) return Mail_Manager_Access;
 
    --  Create a new mail message.
    overriding

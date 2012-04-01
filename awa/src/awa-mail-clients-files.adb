@@ -127,6 +127,17 @@ package body AWA.Mail.Clients.Files is
    end Send;
 
    --  ------------------------------
+   --  Create a file based mail manager and configure it according to the properties.
+   --  ------------------------------
+   function Create_Manager (Props : in Util.Properties.Manager) return Mail_Manager_Access is
+      Result : constant File_Mail_Manager_Access := new File_Mail_Manager;
+   begin
+      Result.Self := Result;
+      Result.Path := To_Unbounded_String (Props.Get (NAME & ".maildir", "mail"));
+      return Result.all'Access;
+   end Create_Manager;
+
+   --  ------------------------------
    --  Create a new mail message.
    --  ------------------------------
    overriding

@@ -33,9 +33,9 @@ package AWA.Mail.Module is
    procedure Initialize (Plugin : in out Mail_Module;
                          App    : in AWA.Modules.Application_Access);
 
-   --  Get the mail manager which allows to create and send email message.
-   function Get_Mail_Manager (Plugin   : in Mail_Module)
-                              return AWA.Mail.Clients.Mail_Manager_Access;
+   --  Create a new mail message.
+   function Create_Message (Plugin : in Mail_Module)
+                            return AWA.Mail.Clients.Mail_Message_Access;
 
    --  Get the mail template that must be used for the given event name.
    --  The mail template is configured by the property: <i>module</i>.template.<i>event</i>.

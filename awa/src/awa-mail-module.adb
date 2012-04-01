@@ -64,11 +64,12 @@ package body AWA.Mail.Module is
    --  ------------------------------
    --  Get the mail manager which allows to create and send email message.
    --  ------------------------------
-   function Get_Mail_Manager (Plugin   : in Mail_Module)
-                              return AWA.Mail.Clients.Mail_Manager_Access is
+   --  Create a new mail message.
+   function Create_Message (Plugin : in Mail_Module)
+                            return AWA.Mail.Clients.Mail_Message_Access is
    begin
       return null;
-   end Get_Mail_Manager;
+   end Create_Message;
 
    --  Get the SMTP server to send an email
    function Get_Smtp_Server (Plugin : in Mail_Module) return AWS.SMTP.Receiver is
