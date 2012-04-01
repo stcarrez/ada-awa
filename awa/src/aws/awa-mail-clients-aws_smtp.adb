@@ -20,11 +20,13 @@ with Ada.Unchecked_Deallocation;
 
 with AWS.SMTP.Client;
 
---  The <b>AWA.Mail.Clients.AWS_SMTP</b> package provides an implementation of the
---  mail client interfaces on top of AWS SMTP client API.
+with Util.Log.Loggers;
+
 package body AWA.Mail.Clients.AWS_SMTP is
 
    use Ada.Strings.Unbounded;
+
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Mail.Clients.AWS_SMTP");
 
    procedure Free is
       new Ada.Unchecked_Deallocation (Object => AWS.SMTP.Recipients,
@@ -86,6 +88,9 @@ package body AWA.Mail.Clients.AWS_SMTP is
       Message.Content := To_Unbounded_String (Content);
    end Set_Body;
 
+   --  ------------------------------
+   --  Send the email message.
+   --  ------------------------------
    overriding
    procedure Send (Message : in out AWS_Mail_Message) is
       Result  : AWS.SMTP.Status;
@@ -94,21 +99,43 @@ package body AWA.Mail.Clients.AWS_SMTP is
          return;
       end if;
 
-      AWS.SMTP.Client.Send (Server  => Message.Manager.Server,
-                            From    => Message.From,
-                            To      => Message.To.all,
-                            Subject => To_String (Message.Subject),
-                            Message => To_String (Message.Content),
-                            Status  => Result);
+      if Message.Manager.Enable then
+         Log.Info ("Send email to {0}", "");
+         AWS.SMTP.Client.Send (Server  => Message.Manager.Server,
+                               From    => Message.From,
+                               To      => Message.To.all,
+                               Subject => To_String (Message.Subject),
+                               Message => To_String (Message.Content),
+                               Status  => Result);
+
+      else
+         Log.Info ("Disable send email to {0}", "");
+      end if;
    end Send;
 
-   --  Create a file based mail manager and configure it according to the properties.
+   --  ------------------------------
+   --  Deletes the mail message.
+   --  ------------------------------
+   overriding
+   procedure Finalize (Message : in out AWS_Mail_Message) is
+   begin
+      Log.Info ("Finalize mail message");
+      Free (Message.To);
+   end Finalize;
+
+   --  ------------------------------
+   --  Create a SMTP based mail manager and configure it according to the properties.
+   --  ------------------------------
    function Create_Manager (Props : in Util.Properties.Manager) return Mail_Manager_Access is
       Server : constant String := Props.Get (Name => "smtp.host", Default => "localhost");
       Port   : constant String := Props.Get (Name => "smtp.port", Default => "25");
+      Enable : constant String := Props.Get (Name => "smtp.enable", Default => "1");
       Result : constant AWS_Mail_Manager_Access := new AWS_Mail_Manager;
    begin
+      Log.Info ("Creating SMTP mail manager to server {0}:{1}", Server, Port);
+
       Result.Self   := Result;
+      Result.Enable := Enable = "1" or Enable = "yes" or Enable = "true";
       Result.Server := AWS.SMTP.Client.Initialize (Server_Name => Server,
                                                    Port => Positive'Value (Port));
       return Result.all'Access;

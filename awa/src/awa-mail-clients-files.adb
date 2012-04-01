@@ -31,7 +31,7 @@ package body AWA.Mail.Clients.Files is
                        Name    : in String;
                        Address : in String) is
    begin
-      Message.From := To_Unbounded_String ("From: " & Name & "<" & Address & ">");
+      Message.From := To_Unbounded_String ("From: " & Name & " <" & Address & ">");
    end Set_From;
 
    --  ------------------------------
@@ -42,7 +42,7 @@ package body AWA.Mail.Clients.Files is
                             Kind    : in Recipient_Type;
                             Name    : in String;
                             Address : in String) is
-      Email : constant String := Name & "<" & Address & ">";
+      Email : constant String := Name & " <" & Address & ">";
    begin
       case Kind is
          when TO =>
@@ -109,19 +109,19 @@ package body AWA.Mail.Clients.Files is
                              Mode => Ada.Text_IO.Out_File,
                              Name => Path);
 
-         Ada.Text_IO.Put_Line (To_String (Message.From));
+         Ada.Text_IO.Put_Line (Output, To_String (Message.From));
          if Length (Message.To) > 0 then
-            Ada.Text_IO.Put_Line (To_String (Message.To));
+            Ada.Text_IO.Put_Line (Output, To_String (Message.To));
          end if;
          if Length (Message.Cc) > 0 then
-            Ada.Text_IO.Put_Line (To_String (Message.Cc));
+            Ada.Text_IO.Put_Line (Output, To_String (Message.Cc));
          end if;
          if Length (Message.Bcc) > 0 then
-            Ada.Text_IO.Put_Line (To_String (Message.Bcc));
+            Ada.Text_IO.Put_Line (Output, To_String (Message.Bcc));
          end if;
-         Ada.Text_IO.Put ("Subject: ");
-         Ada.Text_IO.Put_Line (To_String (Message.Subject));
-         Ada.Text_IO.Put_Line (To_String (Message.Message));
+         Ada.Text_IO.Put (Output, "Subject: ");
+         Ada.Text_IO.Put_Line (Output, To_String (Message.Subject));
+         Ada.Text_IO.Put_Line (Output, To_String (Message.Message));
          Ada.Text_IO.Close (Output);
       end;
    end Send;

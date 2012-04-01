@@ -28,7 +28,7 @@ separate (AWA.Mail.Clients)
 --  Returns null if the mail manager identified by the name is not supported.
 --  ------------------------------
 function Factory (Name  : in String;
-                         Props : in Util.Properties.Manager) return Mail_Manager_Access is
+                  Props : in Util.Properties.Manager) return Mail_Manager_Access is
 begin
    if Name = AWA.Mail.Clients.Files.NAME then
       return AWA.Mail.Clients.Files.Create_Manager (Props);

@@ -17,6 +17,7 @@
 -----------------------------------------------------------------------
 
 with Ada.Strings.Unbounded;
+with Ada.Finalization;
 
 with Util.Properties;
 
@@ -33,7 +34,7 @@ package AWA.Mail.Clients.AWS_SMTP is
    --  ------------------------------
    --  The <b>Mail_Message</b> represents an abstract mail message that can be initialized
    --  before being sent.
-   type AWS_Mail_Message is new Mail_Message with private;
+   type AWS_Mail_Message is new Ada.Finalization.Limited_Controlled and Mail_Message with private;
    type AWS_Mail_Message_Access is access all AWS_Mail_Message'Class;
 
    --  Set the <tt>From</tt> part of the message.
@@ -63,6 +64,10 @@ package AWA.Mail.Clients.AWS_SMTP is
    overriding
    procedure Send (Message : in out AWS_Mail_Message);
 
+   --  Deletes the mail message.
+   overriding
+   procedure Finalize (Message : in out AWS_Mail_Message);
+
    --  ------------------------------
    --  Mail Manager
    --  ------------------------------
@@ -71,7 +76,7 @@ package AWA.Mail.Clients.AWS_SMTP is
    type AWS_Mail_Manager is new Mail_Manager with private;
    type AWS_Mail_Manager_Access is access all AWS_Mail_Manager'Class;
 
-   --  Create a file based mail manager and configure it according to the properties.
+   --  Create a SMTP based mail manager and configure it according to the properties.
    function Create_Manager (Props : in Util.Properties.Manager) return Mail_Manager_Access;
 
    --  Create a new mail message.
@@ -82,7 +87,7 @@ private
 
    type Recipients_Access is access all AWS.SMTP.Recipients;
 
-   type AWS_Mail_Message is new Mail_Message with record
+   type AWS_Mail_Message is new Ada.Finalization.Limited_Controlled and Mail_Message with record
       Manager : AWS_Mail_Manager_Access;
       From    : AWS.SMTP.E_Mail_Data;
       Subject : Ada.Strings.Unbounded.Unbounded_String;
@@ -93,6 +98,7 @@ private
    type AWS_Mail_Manager is new Mail_Manager with record
       Self    : AWS_Mail_Manager_Access;
       Server  : AWS.SMTP.Receiver;
+      Enable  : Boolean := True;
    end record;
 
 end AWA.Mail.Clients.AWS_SMTP;
