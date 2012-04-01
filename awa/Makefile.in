@@ -12,7 +12,7 @@ DIST_FILE=ada-awa-@AWA_VERSION@.tar.gz
 
 HAVE_MYSQL=@ADO_DB_MYSQL@
 HAVE_SQLITE=@ADO_DB_SQLITE@
-
+HAVE_AWS=@AWA_AWS_STATUS@
 MKDIR=mkdir
 CP=cp
 
@@ -31,7 +31,7 @@ libdir=${prefix}/lib
 alidir=${prefix}/share/ada/adainclude
 
 # Build executables for all mains defined by the project.
-build:
+build:	src/awa-mail-clients-factory.adb
 	$(GNATMAKE) -XMODE=${MODE} -XPROCESSORS=4 -p -P "$(GPRPATH)"
 	$(GNATMAKE) -p -Ptests
 
@@ -41,6 +41,11 @@ build:
 # Does not build executables.
 autobuild:
 	$(GNATMAKE) -gnatc -c -k  -P "$(GPRPATH)"
+
+# Configure the driver file
+src/awa-mail-clients-factory.adb: src/awa-mail-clients-factory.gpb Makefile
+	gnatprep -DHAVE_AWS=$(HAVE_AWS) \
+		  src/awa-mail-clients-factory.gpb $@
 
 # Build and run the unit tests
 test:	test-mysql test-sqlite

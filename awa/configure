@@ -556,6 +556,7 @@ PACKAGE_URL=
 ac_unique_file="src/awa.ads"
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
+AWA_AWS_STATUS
 ADO_DB_SQLITE
 SQLITE3
 ADO_DB_MYSQL
@@ -3147,6 +3148,9 @@ if test "X$SQLITE3" != "X" ; then
 else
   ADO_DB_SQLITE=False
 fi
+
+
+AWA_AWS_STATUS=yes
 
 
 ac_config_files="$ac_config_files Makefile awa.gpr tests.gpr awaunit.gpr"

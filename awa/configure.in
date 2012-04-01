@@ -179,6 +179,9 @@ else
 fi
 AC_SUBST(ADO_DB_SQLITE)
 
+AWA_AWS_STATUS=yes
+AC_SUBST(AWA_AWS_STATUS)
+
 AC_OUTPUT(
 Makefile awa.gpr tests.gpr awaunit.gpr
 )
