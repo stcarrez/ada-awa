@@ -35,7 +35,11 @@ package body AWA.Mail.Components.Recipients is
                       Context : in ASF.Contexts.Faces.Faces_Context'Class) return String is
       Name : constant Util.Beans.Objects.Object := UI.Get_Attribute (Context, "name");
    begin
-      return Util.Beans.Objects.To_String (Name);
+      if Util.Beans.Objects.Is_Null (Name) then
+         return "";
+      else
+         return Util.Beans.Objects.To_String (Name);
+      end if;
    end Get_Name;
 
    --  ------------------------------
@@ -45,7 +49,11 @@ package body AWA.Mail.Components.Recipients is
                          Context : in ASF.Contexts.Faces.Faces_Context'Class) return String is
       Addr : constant Util.Beans.Objects.Object := UI.Get_Attribute (Context, "address");
    begin
-      return Util.Beans.Objects.To_String (Addr);
+      if Util.Beans.Objects.Is_Null (Addr) then
+         return "";
+      else
+         return Util.Beans.Objects.To_String (Addr);
+      end if;
    end Get_Address;
 
    --  ------------------------------

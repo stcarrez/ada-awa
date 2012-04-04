@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-module -- Blog and post management module
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,8 +16,9 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with AWA.Modules;
+with ASF.Applications;
 
+with AWA.Modules;
 with AWA.Blogs.Services;
 
 --  The <b>Blogs.Module</b> manages the creation, update, removal of blog posts in an application.
@@ -32,7 +33,8 @@ package AWA.Blogs.Module is
    --  Initialize the blog module.
    overriding
    procedure Initialize (Plugin : in out Blog_Module;
-                         App    : in AWA.Modules.Application_Access);
+                         App    : in AWA.Modules.Application_Access;
+                         Props  : in ASF.Applications.Config);
 
    --  Get the blog manager.
    function Get_Blog_Manager (Plugin : in Blog_Module) return Services.Blog_Service_Access;

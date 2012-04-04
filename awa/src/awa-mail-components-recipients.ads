@@ -62,7 +62,7 @@ package AWA.Mail.Components.Recipients is
 private
 
    type UIMailRecipient is new UIMailComponent with record
-      Recipient : AWA.Mail.Clients.Recipient_Type;
+      Recipient : AWA.Mail.Clients.Recipient_Type := AWA.Mail.Clients.TO;
    end record;
 
    type UISender is new UIMailRecipient with null record;

@@ -168,7 +168,9 @@ package body AWA.Modules is
    end Send_Event;
 
    procedure Initialize (Plugin : in out Module;
-                         App    : in Application_Access) is
+                         App    : in Application_Access;
+                         Props  : in ASF.Applications.Config) is
+      pragma Unreferenced (Props);
    begin
       Plugin.Self := Plugin'Unchecked_Access;
       Plugin.App := App;
@@ -225,7 +227,7 @@ package body AWA.Modules is
       --  Override the module configuration with the application configuration
       Plugin.Config.Copy (From => Registry.Config, Prefix => Name & ".", Strip => True);
 
-      Plugin.Initialize (App);
+      Plugin.Initialize (App, Plugin.Config);
 
       --  Read the module XML configuration file if there is one.
       declare

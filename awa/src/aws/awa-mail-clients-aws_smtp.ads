@@ -77,7 +77,7 @@ package AWA.Mail.Clients.AWS_SMTP is
    type AWS_Mail_Manager_Access is access all AWS_Mail_Manager'Class;
 
    --  Create a SMTP based mail manager and configure it according to the properties.
-   function Create_Manager (Props : in Util.Properties.Manager) return Mail_Manager_Access;
+   function Create_Manager (Props : in Util.Properties.Manager'Class) return Mail_Manager_Access;
 
    --  Create a new mail message.
    overriding

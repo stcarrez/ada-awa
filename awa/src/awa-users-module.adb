@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-model -- User management module
---  Copyright (C) 2009, 2010, 2011 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,7 +35,8 @@ package body AWA.Users.Module is
    --  ------------------------------
    overriding
    procedure Initialize (Plugin : in out User_Module;
-                         App    : in AWA.Modules.Application_Access) is
+                         App    : in AWA.Modules.Application_Access;
+                         Props  : in ASF.Applications.Config) is
    begin
       Log.Info ("Initializing the users module");
 
@@ -62,7 +63,7 @@ package body AWA.Users.Module is
                          Name    => "AWA.Users.Beans.Current_User_Bean",
                          Handler => AWA.Users.Beans.Create_Current_User_Bean'Access);
 
-      AWA.Modules.Module (Plugin).Initialize (App);
+      AWA.Modules.Module (Plugin).Initialize (App, Props);
 
       --  Create the user manager when everything is initialized.
       Plugin.Manager := Plugin.Create_User_Manager;

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-workspaces-module -- Module workspaces
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,7 +38,8 @@ package body AWA.Workspaces.Module is
    --  ------------------------------
    overriding
    procedure Initialize (Plugin : in out Workspace_Module;
-                         App    : in AWA.Modules.Application_Access) is
+                         App    : in AWA.Modules.Application_Access;
+                         Props  : in ASF.Applications.Config) is
    begin
       Log.Info ("Initializing the workspaces module");
 
@@ -47,7 +48,7 @@ package body AWA.Workspaces.Module is
                          Name   => "Awa.Workspaces.Beans.Workspaces_Bean",
                          Handler => Awa.Workspaces.Beans.Create_Workspaces_Bean'Access);
 
-      AWA.Modules.Module (Plugin).Initialize (App);
+      AWA.Modules.Module (Plugin).Initialize (App, Props);
 
       --  Add here the creation of manager instances.
    end Initialize;

@@ -94,7 +94,8 @@ package AWA.Modules is
                          Module  : in AWA.Modules.Module'Class);
 
    procedure Initialize (Plugin : in out Module;
-                         App    : in Application_Access);
+                         App    : in Application_Access;
+                         Props  : in ASF.Applications.Config);
 
    --  Send the event to the module.  The module identified by <b>To</b> is
    --  found and the event is posted on its event channel.

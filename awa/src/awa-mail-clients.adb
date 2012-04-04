@@ -19,7 +19,7 @@
 package body AWA.Mail.Clients is
 
    function Factory (Name  : in String;
-                     Props : in Util.Properties.Manager)
+                     Props : in Util.Properties.Manager'Class)
                      return Mail_Manager_Access is separate;
 
 end AWA.Mail.Clients;

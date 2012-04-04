@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-workspaces -- Module workspaces
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,5 +15,5 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-package Awa.Workspaces is
-end Awa.Workspaces;
+package AWA.Workspaces is
+end AWA.Workspaces;

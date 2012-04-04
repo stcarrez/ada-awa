@@ -18,6 +18,8 @@
 
 with Util.Beans.Objects.Maps;
 
+with ASF.Applications;
+
 with AWA.Modules;
 with AWA.Events;
 with AWA.Mail.Clients;
@@ -25,13 +27,14 @@ package AWA.Mail.Module is
 
    NAME : constant String := "mail";
 
-   type Mail_Module is new AWA.Modules.Module with null record;
+   type Mail_Module is new AWA.Modules.Module with private;
    type Mail_Module_Access is access all Mail_Module'Class;
 
    --  Initialize the mail module.
    overriding
    procedure Initialize (Plugin : in out Mail_Module;
-                         App    : in AWA.Modules.Application_Access);
+                         App    : in AWA.Modules.Application_Access;
+                         Props  : in ASF.Applications.Config);
 
    --  Create a new mail message.
    function Create_Message (Plugin : in Mail_Module)
@@ -50,5 +53,11 @@ package AWA.Mail.Module is
 
    --  Get the mail module instance associated with the current application.
    function Get_Mail_Module return Mail_Module_Access;
+
+private
+
+   type Mail_Module is new AWA.Modules.Module with record
+      Mailer : AWA.Mail.Clients.Mail_Manager_Access;
+   end record;
 
 end AWA.Mail.Module;

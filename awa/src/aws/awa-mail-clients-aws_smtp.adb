@@ -126,7 +126,7 @@ package body AWA.Mail.Clients.AWS_SMTP is
    --  ------------------------------
    --  Create a SMTP based mail manager and configure it according to the properties.
    --  ------------------------------
-   function Create_Manager (Props : in Util.Properties.Manager) return Mail_Manager_Access is
+   function Create_Manager (Props : in Util.Properties.Manager'Class) return Mail_Manager_Access is
       Server : constant String := Props.Get (Name => "smtp.host", Default => "localhost");
       Port   : constant String := Props.Get (Name => "smtp.port", Default => "25");
       Enable : constant String := Props.Get (Name => "smtp.enable", Default => "1");

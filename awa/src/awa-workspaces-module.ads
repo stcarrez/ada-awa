@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-workspaces-module -- Module workspaces
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,8 @@
 -----------------------------------------------------------------------
 
 with ADO.Sessions;
+
+with ASF.Applications;
 
 with AWA.Modules;
 with AWA.Services.Contexts;
@@ -35,7 +37,8 @@ package AWA.Workspaces.Module is
    --  Initialize the workspaces module.
    overriding
    procedure Initialize (Plugin : in out Workspace_Module;
-                         App    : in AWA.Modules.Application_Access);
+                         App    : in AWA.Modules.Application_Access;
+                         Props  : in ASF.Applications.Config);
 
    --  Get the current workspace associated with the current user.
    --  If the user has not workspace, create one.

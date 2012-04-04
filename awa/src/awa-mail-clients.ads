@@ -71,7 +71,7 @@ package AWA.Mail.Clients is
    --  the <b>Name</b>.  It is configured according to the properties defined in <b>Props</b>.
    --  Returns null if the mail manager identified by the name is not supported.
    function Factory (Name  : in String;
-                     Props : in Util.Properties.Manager)
+                     Props : in Util.Properties.Manager'Class)
                      return Mail_Manager_Access;
 
 end AWA.Mail.Clients;

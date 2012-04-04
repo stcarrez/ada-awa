@@ -16,12 +16,16 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Ada.Text_IO;
+with Ada.IO_Exceptions;
 
 with Util.Files;
 with Util.Strings;
+with Util.Log.Loggers;
 package body AWA.Mail.Clients.Files is
 
    use Ada.Strings.Unbounded;
+
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Mail.Clients.Files");
 
    --  ------------------------------
    --  Set the <tt>From</tt> part of the message.
@@ -105,6 +109,8 @@ package body AWA.Mail.Clients.Files is
          Path : constant String := Util.Files.Compose (To_String (Message.Manager.Path),
                                                        "msg-" & Util.Strings.Image (N));
       begin
+         Log.Info ("Sending dumb mail to {0}", Path);
+
          Ada.Text_IO.Create (File => Output,
                              Mode => Ada.Text_IO.Out_File,
                              Name => Path);
@@ -123,13 +129,18 @@ package body AWA.Mail.Clients.Files is
          Ada.Text_IO.Put_Line (Output, To_String (Message.Subject));
          Ada.Text_IO.Put_Line (Output, To_String (Message.Message));
          Ada.Text_IO.Close (Output);
+
+      exception
+         when Ada.IO_Exceptions.Name_Error =>
+            Log.Error ("Cannot create mail file {0}", Path);
       end;
+
    end Send;
 
    --  ------------------------------
    --  Create a file based mail manager and configure it according to the properties.
    --  ------------------------------
-   function Create_Manager (Props : in Util.Properties.Manager) return Mail_Manager_Access is
+   function Create_Manager (Props : in Util.Properties.Manager'Class) return Mail_Manager_Access is
       Result : constant File_Mail_Manager_Access := new File_Mail_Manager;
    begin
       Result.Self := Result;

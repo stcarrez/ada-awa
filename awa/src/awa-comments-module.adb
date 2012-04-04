@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-comments-module -- Comments module
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,8 @@ package body AWA.Comments.Module is
 
    overriding
    procedure Initialize (Plugin : in out Comment_Module;
-                         App    : in AWA.Modules.Application_Access) is
+                         App    : in AWA.Modules.Application_Access;
+                         Props  : in ASF.Applications.Config) is
    begin
       Log.Info ("Initializing the comments module");
 
@@ -34,7 +35,7 @@ package body AWA.Comments.Module is
 --                           Name    => "AWA.Users.Beans.Authenticate_Bean",
 --                           Handler => AWA.Users.Beans.Create_Authenticate_Bean'Access);
 
-      AWA.Modules.Module (Plugin).Initialize (App);
+      AWA.Modules.Module (Plugin).Initialize (App, Props);
    end Initialize;
 
 end AWA.Comments.Module;

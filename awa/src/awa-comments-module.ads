@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-comments-module -- Comments module
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with ASF.Applications;
 
 with AWA.Modules;
 with AWA.Modules.Get;
@@ -28,7 +29,8 @@ package AWA.Comments.Module is
 
    overriding
    procedure Initialize (Plugin : in out Comment_Module;
-                         App    : in AWA.Modules.Application_Access);
+                         App    : in AWA.Modules.Application_Access;
+                         Props  : in ASF.Applications.Config);
 
    function Get_Comment_Module is
      new AWA.Modules.Get (Comment_Module, Comment_Module_Access, NAME);

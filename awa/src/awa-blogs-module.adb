@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-module -- Blog and post management module
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,8 +23,6 @@ with AWA.Modules.Beans;
 with AWA.Blogs.Beans;
 with AWA.Applications;
 
---  The <b>Blogs.Module</b> manages the creation, update, removal of blog posts in an application.
---
 package body AWA.Blogs.Module is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Blogs.Module");
@@ -32,10 +30,13 @@ package body AWA.Blogs.Module is
    package Register is new AWA.Modules.Beans (Module => Blog_Module,
                                               Module_Access => Blog_Module_Access);
 
+   --  ------------------------------
    --  Initialize the blog module.
+   --  ------------------------------
    overriding
    procedure Initialize (Plugin : in out Blog_Module;
-                         App    : in AWA.Modules.Application_Access) is
+                         App    : in AWA.Modules.Application_Access;
+                         Props  : in ASF.Applications.Config) is
    begin
       Log.Info ("Initializing the blogs module");
 
@@ -62,32 +63,30 @@ package body AWA.Blogs.Module is
                          Name    => "AWA.Blogs.Beans.Blog_Bean",
                          Handler => AWA.Blogs.Beans.Create_Blog_Bean'Access);
 
-      AWA.Modules.Module (Plugin).Initialize (App);
+      AWA.Modules.Module (Plugin).Initialize (App, Props);
 
       --  Create the user manager when everything is initialized.
       Plugin.Manager := Plugin.Create_Blog_Manager;
    end Initialize;
 
+   --  ------------------------------
    --  Get the blog manager.
+   --  ------------------------------
    function Get_Blog_Manager (Plugin : in Blog_Module) return Services.Blog_Service_Access is
    begin
       return Plugin.Manager;
    end Get_Blog_Manager;
 
+   --  ------------------------------
    --  Create a user manager.  This operation can be overriden to provide another
    --  user service implementation.
+   --  ------------------------------
    function Create_Blog_Manager (Plugin : in Blog_Module) return Services.Blog_Service_Access is
       Result : constant Services.Blog_Service_Access := new Services.Blog_Service;
    begin
       Result.Initialize (Plugin);
       return Result;
    end Create_Blog_Manager;
-
-   --  Get the user module instance associated with the current application.
-   --     function Get_User_Module return User_Module_Access;
-
-   --  Get the user manager instance associated with the current application.
-   --     function Get_User_Manager return Services.User_Service_Access;
 
    --  ------------------------------
    --  Get the blog module instance associated with the current application.
