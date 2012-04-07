@@ -25,7 +25,6 @@ with ASF.Server.Web;
 with ASF.Converters.Dates;
 
 with ASF.Tests;
-with Ada.Text_IO;
 
 with AWA.Users.Module;
 with AWA.Mail.Module;
@@ -64,6 +63,8 @@ package body AWA.Tests is
       procedure Termination (Cause : in Ada.Task_Termination.Cause_Of_Termination;
                              Id    : in Ada.Task_Identification.Task_Id;
                              Ex    : in Ada.Exceptions.Exception_Occurrence) is
+         pragma Unreferenced (Cause, Id, Ex);
+
          procedure Free is
             new Ada.Unchecked_Deallocation (Object => AWA.Applications.Application'Class,
                                             Name   => AWA.Applications.Application_Access);
@@ -77,6 +78,7 @@ package body AWA.Tests is
    --  ------------------------------
    overriding
    procedure Set_Up (T : in out Test) is
+      pragma Unreferenced (T);
    begin
       ASF.Server.Tests.Set_Context (Application.all'Access);
    end Set_Up;
@@ -90,6 +92,8 @@ package body AWA.Tests is
    --  Called when the testsuite execution has finished.
    --  ------------------------------
    procedure Finish (Status : in Util.XUnit.Status) is
+      pragma Unreferenced (Status);
+
       procedure Free is
         new Ada.Unchecked_Deallocation (Object => AWA.Applications.Application'Class,
                                         Name   => AWA.Applications.Application_Access);

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  users-tests-helpers -- Helpers for user creation
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,7 +44,7 @@ package AWA.Tests.Helpers.Users is
    --  Find the access key associated with a user (if any).
    procedure Find_Access_Key (Principal : in out Test_User;
                               Email     : in String;
-							  Key       : in out AWA.Users.Models.Access_Key_Ref);
+                              Key       : in out AWA.Users.Models.Access_Key_Ref);
 
    --  Login a user and create a session
    procedure Login (Principal : in out Test_User);

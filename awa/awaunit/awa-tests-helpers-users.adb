@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  files.tests -- Unit tests for files
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -95,7 +95,7 @@ package body AWA.Tests.Helpers.Users is
    --  ------------------------------
    procedure Create_User (Principal : in out Test_User) is
       Key     : AWA.Users.Models.Access_Key_Ref;
-	  Email   : constant String := "Joe-" & Util.Tests.Get_UUID & "@gmail.com";
+      Email   : constant String := "Joe-" & Util.Tests.Get_Uuid & "@gmail.com";
    begin
       Initialize (Principal);
       Principal.User.Set_First_Name ("Joe");
@@ -104,7 +104,7 @@ package body AWA.Tests.Helpers.Users is
       Principal.Email.Set_Email (Email);
       Principal.Manager.Create_User (Principal.User, Principal.Email);
 
-	  Find_Access_Key (Principal, Email, Key);
+      Find_Access_Key (Principal, Email, Key);
 
       --  Run the verification and get the user and its session
       Principal.Manager.Verify_User (Key.Get_Access_Key, "192.168.1.1",
@@ -116,7 +116,7 @@ package body AWA.Tests.Helpers.Users is
    --  ------------------------------
    procedure Find_Access_Key (Principal : in out Test_User;
                               Email     : in String;
-							  Key       : in out AWA.Users.Models.Access_Key_Ref) is
+                              Key       : in out AWA.Users.Models.Access_Key_Ref) is
       DB    : ADO.Sessions.Session;
       Query : ADO.SQL.Query;
       Found : Boolean;
@@ -126,7 +126,7 @@ package body AWA.Tests.Helpers.Users is
       DB := Principal.Manager.Get_Session;
 
       --  Find the access key
-	  Query.Set_Join ("inner join email e on e.user_id = o.user_id");
+      Query.Set_Join ("inner join email e on e.user_id = o.user_id");
       Query.Set_Filter ("e.email = ?");
       Query.Bind_Param (1, Email);
       Key.Find (DB, Query, Found);
@@ -160,7 +160,7 @@ package body AWA.Tests.Helpers.Users is
                     Email   : in String) is
       User      : Test_User;
       Principal : AWA.Users.Principals.Principal_Access;
-      App       : AWA.Applications.Application_Access := AWA.Tests.Get_Application;
+      App       : constant AWA.Applications.Application_Access := AWA.Tests.Get_Application;
    begin
       AWA.Tests.Set_Application_Context;
       Create_User (User, Email);
