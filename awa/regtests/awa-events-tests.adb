@@ -199,7 +199,7 @@ package body AWA.Events.Tests is
    --  Test creation and initialization of event manager.
    --  ------------------------------
    procedure Test_Initialize (T : in out Test) is
-      App     : AWA.Applications.Application_Access := AWA.Tests.Get_Application;
+      App     : constant AWA.Applications.Application_Access := AWA.Tests.Get_Application;
       Manager : Event_Manager;
    begin
       Manager.Initialize (App.all'Access);

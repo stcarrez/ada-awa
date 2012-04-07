@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  files.tests -- Unit tests for files
---  Copyright (C) 2009, 2010, 2011 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Util.Tests;
 with Util.Test_Caller;
 
 with ASF.Tests;
@@ -53,7 +52,7 @@ package body AWA.Users.Tests is
 
       Request   : ASF.Requests.Mockup.Request;
       Reply     : ASF.Responses.Mockup.Response;
-	  Email     : constant String := "Joe-" & Util.Tests.Get_UUID & "@gmail.com";
+      Email     : constant String := "Joe-" & Util.Tests.Get_Uuid & "@gmail.com";
       Principal : AWA.Tests.Helpers.Users.Test_User;
    begin
       AWA.Tests.Helpers.Users.Initialize (Principal);
@@ -74,15 +73,15 @@ package body AWA.Users.Tests is
       --  Check that the user is NOT logged.
       T.Assert (Request.Get_User_Principal = null, "A user principal should not be defined");
 
-	  --  Now, get the access key and simulate a click on the validation link.
-	  declare
+      --  Now, get the access key and simulate a click on the validation link.
+      declare
 
-		 Key       : AWA.Users.Models.Access_Key_Ref;
+         Key       : AWA.Users.Models.Access_Key_Ref;
       begin
-	     AWA.Tests.Helpers.Users.Find_Access_Key (Principal, Email, Key);
-		 T.Assert (not Key.Is_Null, "There is no access key associated with the user");
-		 Request.Set_Parameter ("key", Key.Get_Access_Key);
-		 Do_Get (Request, Reply, "/auth/validate.html", "validate-user-1.html");
+         AWA.Tests.Helpers.Users.Find_Access_Key (Principal, Email, Key);
+         T.Assert (not Key.Is_Null, "There is no access key associated with the user");
+         Request.Set_Parameter ("key", Key.Get_Access_Key);
+         Do_Get (Request, Reply, "/auth/validate.html", "validate-user-1.html");
 
          T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
       end;
@@ -149,32 +148,32 @@ package body AWA.Users.Tests is
 
       T.Assert (Reply.Get_Status = ASF.Responses.SC_OK, "Invalid response");
 
-	  --  Now, get the access key and simulate a click on the reset password link.
-	  declare
+      --  Now, get the access key and simulate a click on the reset password link.
+      declare
          Principal : AWA.Tests.Helpers.Users.Test_User;
          Key       : AWA.Users.Models.Access_Key_Ref;
       begin
          AWA.Tests.Set_Application_Context;
-	     AWA.Tests.Helpers.Users.Find_Access_Key (Principal, Email, Key);
-		 T.Assert (not Key.Is_Null, "There is no access key associated with the user");
+         AWA.Tests.Helpers.Users.Find_Access_Key (Principal, Email, Key);
+         T.Assert (not Key.Is_Null, "There is no access key associated with the user");
 
          --  Simulate user clicking on the reset password link.
          --  This verifies the key, login the user and redirect him to the change-password page
          Request.Set_Parameter ("key", Key.Get_Access_Key);
-		 Do_Get (Request, Reply, "/auth/reset-password.html", "reset-password-1.html");
+         Do_Get (Request, Reply, "/auth/reset-password.html", "reset-password-1.html");
 
          T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
 
          --  Post the reset password
-		 Request.Set_Parameter ("password", "asd");
-		 Request.Set_Parameter ("reset-password", "1");
-		 Do_Post (Request, Reply, "/auth/change-password.html", "reset-password-2.html");
+         Request.Set_Parameter ("password", "asd");
+         Request.Set_Parameter ("reset-password", "1");
+         Do_Post (Request, Reply, "/auth/change-password.html", "reset-password-2.html");
 
          T.Assert (Reply.Get_Status = ASF.Responses.SC_OK, "Invalid response");
 
          --  Check that the user is logged and we have a user principal now.
-         t.Assert (Request.Get_User_Principal /= null, "A user principal should be defined");
-	 end;
-  end Test_Reset_Password_User;
+         T.Assert (Request.Get_User_Principal /= null, "A user principal should be defined");
+      end;
+   end Test_Reset_Password_User;
 
 end AWA.Users.Tests;

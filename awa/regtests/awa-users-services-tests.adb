@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  users - User creation, password tests
---  Copyright (C) 2009, 2010, 2011 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -71,7 +71,7 @@ package body AWA.Users.Services.Tests is
          Principal.Manager.Verify_Session (Id => Principal.Session.Get_Id,
                                            Session => S1, User => U1);
 
-         t.Assert (not S1.Is_Null, "Null session returned by Verify_Session");
+         T.Assert (not S1.Is_Null, "Null session returned by Verify_Session");
          T.Assert (not U1.Is_Null, "Null user returned by Verify_Session");
          T.Assert (not S1.Get_Start_Date.Is_Null, "Session must be started");
          T.Assert (S1.Get_End_Date.Is_Null, "Session must not be finished");

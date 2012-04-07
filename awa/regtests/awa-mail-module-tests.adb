@@ -17,11 +17,7 @@
 -----------------------------------------------------------------------
 
 with Util.Test_Caller;
-with Util.Tests;
-with Util.Properties;
 
-with AWA.Tests;
-with AWA.Applications;
 with AWA.Events;
 
 package body AWA.Mail.Module.Tests is
@@ -38,8 +34,7 @@ package body AWA.Mail.Module.Tests is
    procedure Test_Create_Message (T : in out Test) is
       use Util.Beans.Objects;
 
-      App   : AWA.Applications.Application_Access := AWA.Tests.Get_Application;
-      Mail  : AWA.Mail.Module.Mail_Module_Access := AWA.Mail.Module.Get_Mail_Module;
+      Mail  : constant AWA.Mail.Module.Mail_Module_Access := AWA.Mail.Module.Get_Mail_Module;
       Event : AWA.Events.Module_Event;
       Props : Util.Beans.Objects.Maps.Map;
    begin
