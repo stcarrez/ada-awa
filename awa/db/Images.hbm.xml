@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hibernate-mapping default-cascade="none">
+    <enum name="AWA.Images.Models.Storage_Type">
+       <comment>The image storage type</comment>
+       <value name="DATABASE" value="0"/>
+       <value name="FILE" value="1"/>
+       <value name="URL" value="2"/>
+    </enum>
+    <class name="AWA.Images.Models.Image_Data" table="awa_image_data"
+           dynamic-insert="true" dynamic-update="true" list='false'>
+        <comment>The database storage data when the storage type is DATABASE.</comment>
+        <id name="id" type="ADO.Identifier" unsaved-value="0">
+            <comment>the storage data identifier</comment>
+            <column name="id" not-null="true" unique="false" sql-type="INTEGER"/>
+            <generator class="sequence"/>
+        </id>
+        <version name="version" type="int" column="version">
+            <comment>the storage data version.</comment>
+        </version>
+        <property name="data" type="blob">
+            <comment>the image data when the storage type is DATABASE.</comment>
+            <column name="data" not-null="true" unique="false" sql-type="BLOB"/>
+        </property>
+    </class>
+    <class name="AWA.Images.Models.Image_Folder" table="awa_image_folder"
+           dynamic-insert="true" dynamic-update="true">
+        <comment>The image folder contains a set of images that have been uploaded by the user.</comment>
+        <id name="id" type="ADO.Identifier" unsaved-value="0">
+            <comment>the image folder identifier</comment>
+            <column name="id" not-null="true" unique="false" sql-type="INTEGER"/>
+            <generator class="increment"/>
+        </id>
+        <version name="version" type="int" column="version">
+            <comment>the image folder version.</comment>
+        </version>
+        <property name="name" type="String">
+            <comment>the image folder name</comment>
+            <column name="name" not-null="true" unique="true" sql-type="VARCHAR(256)"/>
+        </property>
+        <property name="create_date" type="Time" update="false">
+            <comment>the image folder creation date</comment>
+            <column name="create_date" not-null="true" unique="false" sql-type="DATETIME"/>
+        </property>
+        <many-to-one name="user" class="AWA.Users.Models.User" foreign-key="ID" not-null="true" lazy="proxy" fetch="select">
+            <comment>the user who owns this image folder</comment>
+            <column name="user_id" not-null="true" sql-type="INTEGER"/>
+        </many-to-one>
+        <many-to-one name="workspace" class="AWA.Workspaces.Models.Workspace" foreign-key="id" not-null="true" lazy="proxy" fetch="select">
+            <comment>the workspace that this image folder belongs.</comment>
+            <column name="workspace_id" not-null="true" sql-type="INTEGER"/>
+        </many-to-one>
+    </class>
+    <class name="AWA.Images.Models.Image" table="awa_image"
+           dynamic-insert="true" dynamic-update="true">
+        <comment>An image that was uploaded by a user in an image folder.</comment>
+        <id name="id" type="ADO.Identifier" unsaved-value="0">
+            <comment>the image identifier.</comment>
+            <column name="id" not-null="true" unique="false" sql-type="BIGINT"/>
+            <generator class="sequence"/>
+        </id>
+        <version name="version" type="int" column="version">
+            <comment>the image version.</comment>
+        </version>
+        <property name="width" type="Natural">
+            <comment>the image width.</comment>
+            <column name="width" not-null="true" unique="false" sql-type="INTEGER"/>
+        </property>
+        <property name="height" type="Natural">
+            <comment>the image height.</comment>
+            <column name="height" not-null="true" unique="false" sql-type="INTEGER"/>
+        </property>
+        <property name="task_id" type="Integer">
+            <comment>the task within the server which is processing this message</comment>
+            <column name="task_id" not-null="true" unique="false" sql-type="INTEGER"/>
+        </property>
+        <property name="name" type="String">
+            <comment>the image name.</comment>
+            <column name="name" not-null="true" unique="false" sql-type="VARCHAR(255)"/>
+        </property>
+        <property name="mime_type" type="String">
+            <comment>the image type.</comment>
+            <column name="mime_type" not-null="true" unique="false" sql-type="VARCHAR(255)"/>
+        </property>
+        <property name="path" type="String">
+            <comment>the image path.</comment>
+            <column name="path" not-null="true" unique="false" sql-type="VARCHAR(255)"/>
+        </property>
+        <property name="create_date" type="Time" update="false">
+            <comment>the image creation date.</comment>
+            <column name="create_date" not-null="true" unique="false" sql-type="DATETIME"/>
+        </property>
+        <property name="storage" type="AWA.Images.Models.Storage_Type">
+            <comment>the image storage type.</comment>
+            <column name="storage" not-null="true" unique="false" sql-type="INTEGER"/>
+        </property>
+        <many-to-one name="user" class="AWA.Users.Models.User" foreign-key="ID" not-null="true" lazy="proxy" fetch="select">
+            <comment>the user who uploaded the image.</comment>
+            <column name="user_id" not-null="true" sql-type="INTEGER"/>
+        </many-to-one>
+        <many-to-one name="folder" class="Image_Folder" foreign-key="ID" not-null="true" lazy="proxy" fetch="select">
+            <comment>the image folder where this image is stored.</comment>
+            <column name="folder_id" not-null="true" sql-type="INTEGER"/>
+        </many-to-one>
+        <many-to-one name="image" class="Image_Data" foreign-key="ID" not-null="false" lazy="proxy" fetch="select">
+            <comment>the image data if the storage type is DATABASE.</comment>
+            <column name="image_id" not-null="false" sql-type="INTEGER"/>
+        </many-to-one>
+    </class>
+
+</hibernate-mapping>
