@@ -5,7 +5,6 @@ with "@EL_DIR@el";
 with "@ASF_DIR@asf";
 with "@ASF_DIR@asfunit";
 with "@ADO_DIR@ado";
-with "aunit";
 with "awaunit";
 with "awa";
 
