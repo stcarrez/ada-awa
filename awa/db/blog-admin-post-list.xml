@@ -4,6 +4,7 @@
     </description>
 
     <class name="AWA.Blogs.Models.Admin_Post_Info" bean="yes">
+        <comment>The Admin_Post_Info describes a post in the administration interface.</comment>
         <property type='Identifier' name="id">
             <comment>the post identifier.</comment>
         </property>

@@ -4,6 +4,7 @@
     </description>
 
     <class name="AWA.Blogs.Models.Post_Info" bean="yes">
+        <comment>The Post_Info describes a post to be displayed in the blog page</comment>
         <property type='Identifier' name="id">
             <comment>the post identifier.</comment>
         </property>

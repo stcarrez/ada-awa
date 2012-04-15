@@ -4,6 +4,7 @@
     </description>
 
     <class name="AWA.Blogs.Models.Blog_Info" bean="yes">
+        <comment>The list of blogs.</comment>
         <property type='Identifier' name="id">
             <comment>the blog identifier.</comment>
         </property>
