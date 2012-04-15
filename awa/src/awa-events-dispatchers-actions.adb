@@ -50,7 +50,14 @@ package body AWA.Events.Dispatchers.Actions is
 
       use Util.Beans.Objects;
 
+      --  Dispatch the event to the event action identified by <b>Action</b>.
+      procedure Dispatch_One (Action : in Event_Action);
+
       type Event_Bean is new Util.Beans.Basic.Readonly_Bean with null record;
+
+      overriding
+      function Get_Value (From : in Event_Bean;
+                          Name : in String) return Util.Beans.Objects.Object;
 
       --  ------------------------------
       --  Get the value identified by the name.

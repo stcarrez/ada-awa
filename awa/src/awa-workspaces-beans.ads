@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-workspaces-beans -- Beans for module workspaces
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,8 +21,8 @@ with Ada.Strings.Unbounded;
 with Util.Beans.Basic;
 with Util.Beans.Objects;
 with Util.Beans.Methods;
-with Awa.Workspaces.Module;
-package Awa.Workspaces.Beans is
+with AWA.Workspaces.Module;
+package AWA.Workspaces.Beans is
 
    type Workspaces_Bean is new Util.Beans.Basic.Bean
      and Util.Beans.Methods.Method_Bean with record
@@ -52,7 +52,7 @@ package Awa.Workspaces.Beans is
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
    --  Create the Workspaces_Bean bean instance.
-   function Create_Workspaces_Bean (Module : in Awa.Workspaces.Module.Workspace_Module_Access)
+   function Create_Workspaces_Bean (Module : in AWA.Workspaces.Module.Workspace_Module_Access)
       return Util.Beans.Basic.Readonly_Bean_Access;
 
-end Awa.Workspaces.Beans;
+end AWA.Workspaces.Beans;

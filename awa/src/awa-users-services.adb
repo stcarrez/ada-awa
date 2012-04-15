@@ -43,6 +43,9 @@ package body AWA.Users.Services is
 
    Log : constant Loggers.Logger := Loggers.Create ("AWA.Users.Services");
 
+   function Random return Integer;
+   function Create_Key (Number : ADO.Identifier) return String;
+
    package Integer_Random is new Ada.Numerics.Discrete_Random (Integer);
 
    Random_Generator : Integer_Random.Generator;
@@ -167,6 +170,8 @@ package body AWA.Users.Services is
                            IpAddr   : in String;
                            User     : out User_Ref'Class;
                            Session  : out Session_Ref'Class) is
+      --  Update the user first name/last name
+      procedure Update_User;
 
       OpenId : constant String := Security.Openid.Get_Claimed_Id (Auth);
       Email  : constant String := Security.Openid.Get_Email (Auth);
@@ -175,7 +180,9 @@ package body AWA.Users.Services is
       Query  : ADO.SQL.Query;
       Found  : Boolean;
 
+      --  ------------------------------
       --  Update the user first name/last name
+      --  ------------------------------
       procedure Update_User is
          Name       : constant String := Security.Openid.Get_Full_Name (Auth);
          First_Name : constant String := Security.Openid.Get_First_Name (Auth);
@@ -231,7 +238,7 @@ package body AWA.Users.Services is
          begin
             if Email /= String '(E.Get_Email) then
                Log.Info ("Changing email address from {0} to {1} for user {2}",
-                         String' (E.Get_Email), Email, OpenId);
+                         String '(E.Get_Email), Email, OpenId);
                E.Set_Email (Email);
                E.Save (DB);
             end if;
@@ -280,7 +287,7 @@ package body AWA.Users.Services is
       Create_Session (Model, DB, Session, User, IpAddr);
 
       Ctx.Commit;
-	  Log.Info ("Session {0} created for user {1}",
+      Log.Info ("Session {0} created for user {1}",
                 ADO.Identifier'Image (Session.Get_Id), Email);
    end Authenticate;
 
@@ -317,12 +324,12 @@ package body AWA.Users.Services is
 
       Cookie_Session.Load (DB, Id, Found);
       if not Found then
-         Log.Warn ("Authenticate session {0} not found in database", ADO.Identifier'Image(Id));
+         Log.Warn ("Authenticate session {0} not found in database", ADO.Identifier'Image (Id));
          raise Not_Found with "Invalid cookie";
       end if;
 
       if Cookie_Session.Get_Session_Type /= CONNECT_SESSION_TYPE then
-         Log.Warn ("Authenticate session {0} not found in database", ADO.Identifier'Image(Id));
+         Log.Warn ("Authenticate session {0} not found in database", ADO.Identifier'Image (Id));
          raise Not_Found with "Invalid cookie";
       end if;
 
@@ -334,7 +341,7 @@ package body AWA.Users.Services is
 
       User.Load (DB, Auth_Session.Get_User_Id, Found);
       if not Found then
-         Log.Warn ("No user associated with session {0}", ADO.Identifier'Image(Id));
+         Log.Warn ("No user associated with session {0}", ADO.Identifier'Image (Id));
          raise Not_Found with "Invalid cookie";
       end if;
 

@@ -26,7 +26,6 @@ with Security.Controllers.Roles;
 
 with AWA.Permissions.Models;
 with AWA.Services.Contexts;
---  with AWA.Permissions.Controllers;
 package body AWA.Permissions.Services is
 
    use Util.Log;
@@ -86,7 +85,8 @@ package body AWA.Permissions.Services is
                              Permission : in Permission_Type) is
       pragma Unreferenced (Manager);
 
-      Ctx  : constant AWA.Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      Ctx  : constant AWA.Services.Contexts.Service_Context_Access
+        := AWA.Services.Contexts.Current;
       DB   : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Perm : AWA.Permissions.Models.ACL_Ref;
    begin
@@ -122,7 +122,7 @@ package body AWA.Permissions.Services is
       Query.Bind_Param ("entity_id", Entity);
       Query.Bind_Param ("entity_type", Integer (Kind));
       declare
-         Stmt : ADO.Statements.Query_Statement:= DB.Create_Statement (Query);
+         Stmt : ADO.Statements.Query_Statement := DB.Create_Statement (Query);
       begin
          Stmt.Execute;
          if not Stmt.Has_Elements then

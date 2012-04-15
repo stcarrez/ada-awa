@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-beans -- Beans for blog module
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +26,7 @@ with ADO;
 
 with AWA.Blogs.Module;
 with AWA.Blogs.Models;
-package Awa.Blogs.Beans is
+package AWA.Blogs.Beans is
 
    --  Attributes exposed by <b>Post_Bean</b>
    BLOG_ID_ATTR    : constant String := "blogId";

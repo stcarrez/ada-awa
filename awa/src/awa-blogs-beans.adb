@@ -33,6 +33,8 @@ package body AWA.Blogs.Beans is
    BLOG_ID_PARAMETER : constant String := "blog_id";
    POST_ID_PARAMETER : constant String := "post_id";
 
+   function Get_Parameter (Name : in String) return ADO.Identifier;
+
    --  ------------------------------
    --  Get the parameter identified by the given name and return it as an identifier.
    --  Returns NO_IDENTIFIER if the parameter does not exist or is not valid.
@@ -144,7 +146,7 @@ package body AWA.Blogs.Beans is
       if Post_Id < 0 then
          Manager.Create_Post (Blog_Id => Blog_Id,
                               Title   => Bean.Post.Get_Title,
-                              URI     => Bean.Post.Get_URI,
+                              URI     => Bean.Post.Get_Uri,
                               Text    => Bean.Post.Get_Text,
                               Result  => Result);
       else
@@ -208,7 +210,7 @@ package body AWA.Blogs.Beans is
       elsif Name = POST_TITLE_ATTR then
          From.Post.Set_Title (Util.Beans.Objects.To_Unbounded_String (Value));
       elsif Name = POST_URI_ATTR then
-         From.Post.Set_URI (Util.Beans.Objects.To_Unbounded_String (Value));
+         From.Post.Set_Uri (Util.Beans.Objects.To_Unbounded_String (Value));
       end if;
    end Set_Value;
 
@@ -240,7 +242,7 @@ package body AWA.Blogs.Beans is
             Object.Post.Load (Session, Post_Id);
             Object.Title := Object.Post.Get_Title;
             Object.Text  := Object.Post.Get_Text;
-            Object.URI   := Object.Post.Get_URI;
+            Object.URI   := Object.Post.Get_Uri;
          end;
       end if;
       Object.Module := Module;

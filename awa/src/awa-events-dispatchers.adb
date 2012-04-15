@@ -15,9 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with Ada.Finalization;
 
-with AWA.Events.Queues;
 with AWA.Events.Services;
 package body AWA.Events.Dispatchers is
 
@@ -27,6 +25,7 @@ package body AWA.Events.Dispatchers is
    procedure Add_Queue (Manager : in out Dispatcher;
                         Queue   : in AWA.Events.Queues.Queue_Ref;
                         Added   : out Boolean) is
+      pragma Unreferenced (Manager, Queue);
    begin
       Added := False;
    end Add_Queue;
@@ -38,6 +37,8 @@ package body AWA.Events.Dispatchers is
    procedure Dispatch (Manager : in Dispatcher;
                        Queue   : in AWA.Events.Queues.Queue_Ref;
                        Count   : in out Natural) is
+      procedure Process (Event : in Module_Event'Class);
+
       procedure Process (Event : in Module_Event'Class) is
       begin
          Count := Count + 1;

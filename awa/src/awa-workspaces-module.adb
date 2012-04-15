@@ -24,11 +24,11 @@ with AWA.Modules.Get;
 with AWA.Permissions.Services;
 
 with ADO.SQL;
-with Util.Log.loggers;
+with Util.Log.Loggers;
 with AWA.Workspaces.Beans;
 package body AWA.Workspaces.Module is
 
-   Log : constant Util.log.Loggers.Logger := Util.Log.Loggers.Create ("Awa.Workspaces.Module");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Awa.Workspaces.Module");
 
    package Register is new AWA.Modules.Beans (Module => Workspace_Module,
                                               Module_Access => Workspace_Module_Access);
@@ -45,8 +45,8 @@ package body AWA.Workspaces.Module is
 
       --  Register here any bean class, servlet, filter.
       Register.Register (Plugin => Plugin,
-                         Name   => "Awa.Workspaces.Beans.Workspaces_Bean",
-                         Handler => Awa.Workspaces.Beans.Create_Workspaces_Bean'Access);
+                         Name   => "AWA.Workspaces.Beans.Workspaces_Bean",
+                         Handler => AWA.Workspaces.Beans.Create_Workspaces_Bean'Access);
 
       AWA.Modules.Module (Plugin).Initialize (App, Props);
 
