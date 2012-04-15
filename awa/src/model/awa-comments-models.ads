@@ -20,6 +20,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+pragma Warnings (Off, "unit * is not referenced");
 with ADO.Sessions;
 with ADO.Objects;
 with ADO.Statements;
@@ -31,6 +32,7 @@ with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
 with Util.Beans.Basic.Lists;
 with AWA.Users.Models;
+pragma Warnings (On, "unit * is not referenced");
 package AWA.Comments.Models is
    --  Create an object key for Comment.
    function Comment_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;

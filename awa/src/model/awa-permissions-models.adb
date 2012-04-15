@@ -34,6 +34,7 @@ package body AWA.Permissions.Models is
       ADO.Objects.Set_Value (Result, Id);
       return Result;
    end ACL_Key;
+
    function ACL_Key (Id : in String) return ADO.Objects.Object_Key is
       Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
                                        Of_Class => ACL_TABLE'Access);
@@ -41,10 +42,12 @@ package body AWA.Permissions.Models is
       ADO.Objects.Set_Value (Result, Id);
       return Result;
    end ACL_Key;
+
    function "=" (Left, Right : ACL_Ref'Class) return Boolean is
    begin
       return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
    end "=";
+
    procedure Set_Field (Object : in out Acl_Ref'Class;
                         Impl   : out Acl_Access) is
       Result : ADO.Objects.Object_Record_Access;
@@ -52,6 +55,7 @@ package body AWA.Permissions.Models is
       Object.Prepare_Modify (Result);
       Impl := Acl_Impl (Result.all)'Access;
    end Set_Field;
+
    --  Internal method to allocate the Object_Record instance
    procedure Allocate (Object : in out Acl_Ref) is
       Impl : Acl_Access;
@@ -67,6 +71,7 @@ package body AWA.Permissions.Models is
    -- ----------------------------------------
    --  Data object: Acl
    -- ----------------------------------------
+
    procedure Set_Id (Object : in out Acl_Ref;
                      Value  : in ADO.Identifier) is
       Impl : Acl_Access;
@@ -74,12 +79,15 @@ package body AWA.Permissions.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
    end Set_Id;
+
    function Get_Id (Object : in Acl_Ref)
                   return ADO.Identifier is
       Impl : constant Acl_Access := Acl_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
+
+
    procedure Set_Entity_Type (Object : in out Acl_Ref;
                               Value  : in ADO.Entity_Type) is
       Impl : Acl_Access;
@@ -87,12 +95,15 @@ package body AWA.Permissions.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Entity_Type (Impl.all, 2, Impl.Entity_Type, Value);
    end Set_Entity_Type;
+
    function Get_Entity_Type (Object : in Acl_Ref)
                   return ADO.Entity_Type is
       Impl : constant Acl_Access := Acl_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Entity_Type;
    end Get_Entity_Type;
+
+
    procedure Set_User_Id (Object : in out Acl_Ref;
                           Value  : in ADO.Identifier) is
       Impl : Acl_Access;
@@ -100,12 +111,15 @@ package body AWA.Permissions.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Identifier (Impl.all, 3, Impl.User_Id, Value);
    end Set_User_Id;
+
    function Get_User_Id (Object : in Acl_Ref)
                   return ADO.Identifier is
       Impl : constant Acl_Access := Acl_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.User_Id;
    end Get_User_Id;
+
+
    procedure Set_Entity_Id (Object : in out Acl_Ref;
                             Value  : in ADO.Identifier) is
       Impl : Acl_Access;
@@ -113,25 +127,31 @@ package body AWA.Permissions.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Identifier (Impl.all, 4, Impl.Entity_Id, Value);
    end Set_Entity_Id;
+
    function Get_Entity_Id (Object : in Acl_Ref)
                   return ADO.Identifier is
       Impl : constant Acl_Access := Acl_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Entity_Id;
    end Get_Entity_Id;
+
+
    procedure Set_Writeable (Object : in out Acl_Ref;
                             Value  : in Boolean) is
       Impl : Acl_Access;
    begin
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Boolean (Impl.all, 5, Impl.Writeable, Value);
+      ADO.Objects.Set_Field_Boolean (Impl.all, 5, Impl.Writeable, Value);
    end Set_Writeable;
+
    function Get_Writeable (Object : in Acl_Ref)
                   return Boolean is
       Impl : constant Acl_Access := Acl_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Writeable;
    end Get_Writeable;
+
    --  Copy of the object.
    procedure Copy (Object : in Acl_Ref;
                    Into   : in out Acl_Ref) is
@@ -154,6 +174,7 @@ package body AWA.Permissions.Models is
       end if;
       Into := Result;
    end Copy;
+
    procedure Find (Object  : in out Acl_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -168,6 +189,7 @@ package body AWA.Permissions.Models is
          Destroy (Impl);
       end if;
    end Find;
+
    procedure Load (Object  : in out Acl_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Id      : in ADO.Identifier) is
@@ -184,6 +206,7 @@ package body AWA.Permissions.Models is
       end if;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Load;
+
    procedure Load (Object  : in out Acl_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Id      : in ADO.Identifier;
@@ -200,6 +223,7 @@ package body AWA.Permissions.Models is
          ADO.Objects.Set_Object (Object, Impl.all'Access);
       end if;
    end Load;
+
    procedure Save (Object  : in out Acl_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -214,6 +238,7 @@ package body AWA.Permissions.Models is
          Impl.Save (Session);
       end if;
    end Save;
+
    procedure Delete (Object  : in out Acl_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -222,6 +247,7 @@ package body AWA.Permissions.Models is
          Impl.Delete (Session);
       end if;
    end Delete;
+
    --  --------------------
    --  Free the object
    --  --------------------
@@ -229,10 +255,13 @@ package body AWA.Permissions.Models is
       type Acl_Impl_Ptr is access all Acl_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
               (Acl_Impl, Acl_Impl_Ptr);
+      pragma Warnings (Off, "*redundant conversion*");
       Ptr : Acl_Impl_Ptr := Acl_Impl (Object.all)'Access;
+      pragma Warnings (On, "*redundant conversion*");
    begin
       Unchecked_Free (Ptr);
    end Destroy;
+
    procedure Find (Object  : in out Acl_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -250,6 +279,7 @@ package body AWA.Permissions.Models is
          Found := False;
       end if;
    end Find;
+
    overriding
    procedure Load (Object  : in out Acl_Impl;
                    Session : in out ADO.Sessions.Session'Class) is
@@ -264,6 +294,7 @@ package body AWA.Permissions.Models is
          raise ADO.Objects.NOT_FOUND;
       end if;
    end Load;
+
    procedure Save (Object  : in out Acl_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -299,6 +330,7 @@ package body AWA.Permissions.Models is
          end;
       end if;
    end Save;
+
    procedure Create (Object  : in out Acl_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -322,6 +354,7 @@ package body AWA.Permissions.Models is
       end if;
       ADO.Objects.Set_Created (Object);
    end Create;
+
    procedure Delete (Object  : in out Acl_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -331,6 +364,7 @@ package body AWA.Permissions.Models is
       Stmt.Add_Param (Value => Object.Get_Key);
       Stmt.Execute;
    end Delete;
+
    function Get_Value (Item : in Acl_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := Item.Get_Load_Object;
@@ -352,8 +386,12 @@ package body AWA.Permissions.Models is
       if Name = "entity_id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Entity_Id));
       end if;
+      if Name = "writeable" then
+         return Util.Beans.Objects.To_Object (Impl.Writeable);
+      end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
+
    procedure List (Object  : in out Acl_Vector;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class) is
@@ -374,6 +412,7 @@ package body AWA.Permissions.Models is
          Stmt.Next;
       end loop;
    end List;
+
    --  ------------------------------
    --  Load the object from current iterator position
    --  ------------------------------
@@ -386,6 +425,7 @@ package body AWA.Permissions.Models is
       Object.Entity_Type := ADO.Entity_Type (Stmt.Get_Integer (1));
       Object.User_Id := Stmt.Get_Identifier (2);
       Object.Entity_Id := Stmt.Get_Identifier (3);
+      Object.Writeable := Stmt.Get_Boolean (4);
       Object.Writeable := Stmt.Get_Boolean (4);
       ADO.Objects.Set_Created (Object);
    end Load;

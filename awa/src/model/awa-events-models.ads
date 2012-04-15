@@ -20,6 +20,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+pragma Warnings (Off, "unit * is not referenced");
 with ADO.Sessions;
 with ADO.Objects;
 with ADO.Statements;
@@ -34,6 +35,7 @@ with Util.Beans.Objects;
 with Util.Beans.Objects.Enums;
 with Util.Beans.Basic.Lists;
 with AWA.Users.Models;
+pragma Warnings (On, "unit * is not referenced");
 package AWA.Events.Models is
    type Message_Status_Type is (QUEUED, PROCESSING, PROCESSED);
    for Message_Status_Type use (QUEUED => 0, PROCESSING => 1, PROCESSED => 2);

@@ -35,6 +35,7 @@ package body AWA.Blogs.Models is
       ADO.Objects.Set_Value (Result, Id);
       return Result;
    end Blog_Key;
+
    function Blog_Key (Id : in String) return ADO.Objects.Object_Key is
       Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
                                        Of_Class => BLOG_TABLE'Access);
@@ -42,10 +43,12 @@ package body AWA.Blogs.Models is
       ADO.Objects.Set_Value (Result, Id);
       return Result;
    end Blog_Key;
+
    function "=" (Left, Right : Blog_Ref'Class) return Boolean is
    begin
       return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
    end "=";
+
    procedure Set_Field (Object : in out Blog_Ref'Class;
                         Impl   : out Blog_Access) is
       Result : ADO.Objects.Object_Record_Access;
@@ -53,6 +56,7 @@ package body AWA.Blogs.Models is
       Object.Prepare_Modify (Result);
       Impl := Blog_Impl (Result.all)'Access;
    end Set_Field;
+
    --  Internal method to allocate the Object_Record instance
    procedure Allocate (Object : in out Blog_Ref) is
       Impl : Blog_Access;
@@ -66,6 +70,7 @@ package body AWA.Blogs.Models is
    -- ----------------------------------------
    --  Data object: Blog
    -- ----------------------------------------
+
    procedure Set_Id (Object : in out Blog_Ref;
                      Value  : in ADO.Identifier) is
       Impl : Blog_Access;
@@ -73,18 +78,23 @@ package body AWA.Blogs.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
    end Set_Id;
+
    function Get_Id (Object : in Blog_Ref)
                   return ADO.Identifier is
       Impl : constant Blog_Access := Blog_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
+
+
    function Get_Version (Object : in Blog_Ref)
                   return Integer is
       Impl : constant Blog_Access := Blog_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Version;
    end Get_Version;
+
+
    procedure Set_Name (Object : in out Blog_Ref;
                         Value : in String) is
       Impl : Blog_Access;
@@ -92,6 +102,7 @@ package body AWA.Blogs.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_String (Impl.all, 3, Impl.Name, Value);
    end Set_Name;
+
    procedure Set_Name (Object : in out Blog_Ref;
                        Value  : in Ada.Strings.Unbounded.Unbounded_String) is
       Impl : Blog_Access;
@@ -99,6 +110,7 @@ package body AWA.Blogs.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Unbounded_String (Impl.all, 3, Impl.Name, Value);
    end Set_Name;
+
    function Get_Name (Object : in Blog_Ref)
                  return String is
    begin
@@ -110,6 +122,8 @@ package body AWA.Blogs.Models is
    begin
       return Impl.Name;
    end Get_Name;
+
+
    procedure Set_Uid (Object : in out Blog_Ref;
                        Value : in String) is
       Impl : Blog_Access;
@@ -117,6 +131,7 @@ package body AWA.Blogs.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_String (Impl.all, 4, Impl.Uid, Value);
    end Set_Uid;
+
    procedure Set_Uid (Object : in out Blog_Ref;
                       Value  : in Ada.Strings.Unbounded.Unbounded_String) is
       Impl : Blog_Access;
@@ -124,6 +139,7 @@ package body AWA.Blogs.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Unbounded_String (Impl.all, 4, Impl.Uid, Value);
    end Set_Uid;
+
    function Get_Uid (Object : in Blog_Ref)
                  return String is
    begin
@@ -135,6 +151,8 @@ package body AWA.Blogs.Models is
    begin
       return Impl.Uid;
    end Get_Uid;
+
+
    procedure Set_Create_Date (Object : in out Blog_Ref;
                               Value  : in Ada.Calendar.Time) is
       Impl : Blog_Access;
@@ -142,12 +160,15 @@ package body AWA.Blogs.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Time (Impl.all, 5, Impl.Create_Date, Value);
    end Set_Create_Date;
+
    function Get_Create_Date (Object : in Blog_Ref)
                   return Ada.Calendar.Time is
       Impl : constant Blog_Access := Blog_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Create_Date;
    end Get_Create_Date;
+
+
    procedure Set_Workspace (Object : in out Blog_Ref;
                             Value  : in AWA.Workspaces.Models.Workspace_Ref'Class) is
       Impl : Blog_Access;
@@ -155,12 +176,14 @@ package body AWA.Blogs.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Object (Impl.all, 6, Impl.Workspace, Value);
    end Set_Workspace;
+
    function Get_Workspace (Object : in Blog_Ref)
                   return AWA.Workspaces.Models.Workspace_Ref'Class is
       Impl : constant Blog_Access := Blog_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Workspace;
    end Get_Workspace;
+
    --  Copy of the object.
    procedure Copy (Object : in Blog_Ref;
                    Into   : in out Blog_Ref) is
@@ -184,6 +207,7 @@ package body AWA.Blogs.Models is
       end if;
       Into := Result;
    end Copy;
+
    procedure Find (Object  : in out Blog_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -198,6 +222,7 @@ package body AWA.Blogs.Models is
          Destroy (Impl);
       end if;
    end Find;
+
    procedure Load (Object  : in out Blog_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Id      : in ADO.Identifier) is
@@ -214,6 +239,7 @@ package body AWA.Blogs.Models is
       end if;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Load;
+
    procedure Load (Object  : in out Blog_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Id      : in ADO.Identifier;
@@ -230,6 +256,7 @@ package body AWA.Blogs.Models is
          ADO.Objects.Set_Object (Object, Impl.all'Access);
       end if;
    end Load;
+
    procedure Save (Object  : in out Blog_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -244,6 +271,7 @@ package body AWA.Blogs.Models is
          Impl.Save (Session);
       end if;
    end Save;
+
    procedure Delete (Object  : in out Blog_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -252,6 +280,7 @@ package body AWA.Blogs.Models is
          Impl.Delete (Session);
       end if;
    end Delete;
+
    --  --------------------
    --  Free the object
    --  --------------------
@@ -259,10 +288,13 @@ package body AWA.Blogs.Models is
       type Blog_Impl_Ptr is access all Blog_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
               (Blog_Impl, Blog_Impl_Ptr);
+      pragma Warnings (Off, "*redundant conversion*");
       Ptr : Blog_Impl_Ptr := Blog_Impl (Object.all)'Access;
+      pragma Warnings (On, "*redundant conversion*");
    begin
       Unchecked_Free (Ptr);
    end Destroy;
+
    procedure Find (Object  : in out Blog_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -280,6 +312,7 @@ package body AWA.Blogs.Models is
          Found := False;
       end if;
    end Find;
+
    overriding
    procedure Load (Object  : in out Blog_Impl;
                    Session : in out ADO.Sessions.Session'Class) is
@@ -294,6 +327,7 @@ package body AWA.Blogs.Models is
          raise ADO.Objects.NOT_FOUND;
       end if;
    end Load;
+
    procedure Save (Object  : in out Blog_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -345,6 +379,7 @@ package body AWA.Blogs.Models is
          end;
       end if;
    end Save;
+
    procedure Create (Object  : in out Blog_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -371,6 +406,7 @@ package body AWA.Blogs.Models is
       end if;
       ADO.Objects.Set_Created (Object);
    end Create;
+
    procedure Delete (Object  : in out Blog_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -380,6 +416,7 @@ package body AWA.Blogs.Models is
       Stmt.Add_Param (Value => Object.Get_Key);
       Stmt.Execute;
    end Delete;
+
    function Get_Value (Item : in Blog_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := Item.Get_Load_Object;
@@ -403,6 +440,7 @@ package body AWA.Blogs.Models is
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
+
    procedure List (Object  : in out Blog_Vector;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class) is
@@ -423,6 +461,7 @@ package body AWA.Blogs.Models is
          Stmt.Next;
       end loop;
    end List;
+
    --  ------------------------------
    --  Load the object from current iterator position
    --  ------------------------------
@@ -435,7 +474,7 @@ package body AWA.Blogs.Models is
       Object.Uid := Stmt.Get_Unbounded_String (3);
       Object.Create_Date := Stmt.Get_Time (4);
       if not Stmt.Is_Null (5) then
-          Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (5), Session);
+         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (5), Session);
       end if;
       Object.Version := Stmt.Get_Integer (1);
       ADO.Objects.Set_Created (Object);
@@ -447,6 +486,7 @@ package body AWA.Blogs.Models is
       ADO.Objects.Set_Value (Result, Id);
       return Result;
    end Post_Key;
+
    function Post_Key (Id : in String) return ADO.Objects.Object_Key is
       Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
                                        Of_Class => POST_TABLE'Access);
@@ -454,10 +494,12 @@ package body AWA.Blogs.Models is
       ADO.Objects.Set_Value (Result, Id);
       return Result;
    end Post_Key;
+
    function "=" (Left, Right : Post_Ref'Class) return Boolean is
    begin
       return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
    end "=";
+
    procedure Set_Field (Object : in out Post_Ref'Class;
                         Impl   : out Post_Access) is
       Result : ADO.Objects.Object_Record_Access;
@@ -465,6 +507,7 @@ package body AWA.Blogs.Models is
       Object.Prepare_Modify (Result);
       Impl := Post_Impl (Result.all)'Access;
    end Set_Field;
+
    --  Internal method to allocate the Object_Record instance
    procedure Allocate (Object : in out Post_Ref) is
       Impl : Post_Access;
@@ -480,6 +523,7 @@ package body AWA.Blogs.Models is
    -- ----------------------------------------
    --  Data object: Post
    -- ----------------------------------------
+
    procedure Set_Id (Object : in out Post_Ref;
                      Value  : in ADO.Identifier) is
       Impl : Post_Access;
@@ -487,18 +531,23 @@ package body AWA.Blogs.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
    end Set_Id;
+
    function Get_Id (Object : in Post_Ref)
                   return ADO.Identifier is
       Impl : constant Post_Access := Post_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
+
+
    function Get_Version (Object : in Post_Ref)
                   return Integer is
       Impl : constant Post_Access := Post_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Version;
    end Get_Version;
+
+
    procedure Set_Title (Object : in out Post_Ref;
                          Value : in String) is
       Impl : Post_Access;
@@ -506,6 +555,7 @@ package body AWA.Blogs.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_String (Impl.all, 3, Impl.Title, Value);
    end Set_Title;
+
    procedure Set_Title (Object : in out Post_Ref;
                         Value  : in Ada.Strings.Unbounded.Unbounded_String) is
       Impl : Post_Access;
@@ -513,6 +563,7 @@ package body AWA.Blogs.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Unbounded_String (Impl.all, 3, Impl.Title, Value);
    end Set_Title;
+
    function Get_Title (Object : in Post_Ref)
                  return String is
    begin
@@ -524,6 +575,8 @@ package body AWA.Blogs.Models is
    begin
       return Impl.Title;
    end Get_Title;
+
+
    procedure Set_Uri (Object : in out Post_Ref;
                        Value : in String) is
       Impl : Post_Access;
@@ -531,6 +584,7 @@ package body AWA.Blogs.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_String (Impl.all, 4, Impl.Uri, Value);
    end Set_Uri;
+
    procedure Set_Uri (Object : in out Post_Ref;
                       Value  : in Ada.Strings.Unbounded.Unbounded_String) is
       Impl : Post_Access;
@@ -538,6 +592,7 @@ package body AWA.Blogs.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Unbounded_String (Impl.all, 4, Impl.Uri, Value);
    end Set_Uri;
+
    function Get_Uri (Object : in Post_Ref)
                  return String is
    begin
@@ -549,6 +604,8 @@ package body AWA.Blogs.Models is
    begin
       return Impl.Uri;
    end Get_Uri;
+
+
    procedure Set_Text (Object : in out Post_Ref;
                         Value : in String) is
       Impl : Post_Access;
@@ -556,6 +613,7 @@ package body AWA.Blogs.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_String (Impl.all, 5, Impl.Text, Value);
    end Set_Text;
+
    procedure Set_Text (Object : in out Post_Ref;
                        Value  : in Ada.Strings.Unbounded.Unbounded_String) is
       Impl : Post_Access;
@@ -563,6 +621,7 @@ package body AWA.Blogs.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Unbounded_String (Impl.all, 5, Impl.Text, Value);
    end Set_Text;
+
    function Get_Text (Object : in Post_Ref)
                  return String is
    begin
@@ -574,6 +633,8 @@ package body AWA.Blogs.Models is
    begin
       return Impl.Text;
    end Get_Text;
+
+
    procedure Set_Create_Date (Object : in out Post_Ref;
                               Value  : in Ada.Calendar.Time) is
       Impl : Post_Access;
@@ -581,12 +642,15 @@ package body AWA.Blogs.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Time (Impl.all, 6, Impl.Create_Date, Value);
    end Set_Create_Date;
+
    function Get_Create_Date (Object : in Post_Ref)
                   return Ada.Calendar.Time is
       Impl : constant Post_Access := Post_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Create_Date;
    end Get_Create_Date;
+
+
    procedure Set_Publish_Date (Object : in out Post_Ref;
                                Value  : in ADO.Nullable_Time) is
       Impl : Post_Access;
@@ -594,12 +658,15 @@ package body AWA.Blogs.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Time (Impl.all, 7, Impl.Publish_Date, Value);
    end Set_Publish_Date;
+
    function Get_Publish_Date (Object : in Post_Ref)
                   return ADO.Nullable_Time is
       Impl : constant Post_Access := Post_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Publish_Date;
    end Get_Publish_Date;
+
+
    procedure Set_Status (Object : in out Post_Ref;
                          Value  : in Post_Status_Type) is
       procedure Set_Field_Enum is
@@ -609,12 +676,15 @@ package body AWA.Blogs.Models is
       Set_Field (Object, Impl);
       Set_Field_Enum (Impl.all, 8, Impl.Status, Value);
    end Set_Status;
+
    function Get_Status (Object : in Post_Ref)
                   return Post_Status_Type is
       Impl : constant Post_Access := Post_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Status;
    end Get_Status;
+
+
    procedure Set_Author (Object : in out Post_Ref;
                          Value  : in AWA.Users.Models.User_Ref'Class) is
       Impl : Post_Access;
@@ -622,12 +692,15 @@ package body AWA.Blogs.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Object (Impl.all, 9, Impl.Author, Value);
    end Set_Author;
+
    function Get_Author (Object : in Post_Ref)
                   return AWA.Users.Models.User_Ref'Class is
       Impl : constant Post_Access := Post_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Author;
    end Get_Author;
+
+
    procedure Set_Blog (Object : in out Post_Ref;
                        Value  : in Blog_Ref'Class) is
       Impl : Post_Access;
@@ -635,12 +708,14 @@ package body AWA.Blogs.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Object (Impl.all, 10, Impl.Blog, Value);
    end Set_Blog;
+
    function Get_Blog (Object : in Post_Ref)
                   return Blog_Ref'Class is
       Impl : constant Post_Access := Post_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Blog;
    end Get_Blog;
+
    --  Copy of the object.
    procedure Copy (Object : in Post_Ref;
                    Into   : in out Post_Ref) is
@@ -668,6 +743,7 @@ package body AWA.Blogs.Models is
       end if;
       Into := Result;
    end Copy;
+
    procedure Find (Object  : in out Post_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -682,6 +758,7 @@ package body AWA.Blogs.Models is
          Destroy (Impl);
       end if;
    end Find;
+
    procedure Load (Object  : in out Post_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Id      : in ADO.Identifier) is
@@ -698,6 +775,7 @@ package body AWA.Blogs.Models is
       end if;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Load;
+
    procedure Load (Object  : in out Post_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Id      : in ADO.Identifier;
@@ -714,6 +792,7 @@ package body AWA.Blogs.Models is
          ADO.Objects.Set_Object (Object, Impl.all'Access);
       end if;
    end Load;
+
    procedure Save (Object  : in out Post_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -728,6 +807,7 @@ package body AWA.Blogs.Models is
          Impl.Save (Session);
       end if;
    end Save;
+
    procedure Delete (Object  : in out Post_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -736,6 +816,7 @@ package body AWA.Blogs.Models is
          Impl.Delete (Session);
       end if;
    end Delete;
+
    --  --------------------
    --  Free the object
    --  --------------------
@@ -743,10 +824,13 @@ package body AWA.Blogs.Models is
       type Post_Impl_Ptr is access all Post_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
               (Post_Impl, Post_Impl_Ptr);
+      pragma Warnings (Off, "*redundant conversion*");
       Ptr : Post_Impl_Ptr := Post_Impl (Object.all)'Access;
+      pragma Warnings (On, "*redundant conversion*");
    begin
       Unchecked_Free (Ptr);
    end Destroy;
+
    procedure Find (Object  : in out Post_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -764,6 +848,7 @@ package body AWA.Blogs.Models is
          Found := False;
       end if;
    end Find;
+
    overriding
    procedure Load (Object  : in out Post_Impl;
                    Session : in out ADO.Sessions.Session'Class) is
@@ -778,6 +863,7 @@ package body AWA.Blogs.Models is
          raise ADO.Objects.NOT_FOUND;
       end if;
    end Load;
+
    procedure Save (Object  : in out Post_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -849,6 +935,7 @@ package body AWA.Blogs.Models is
          end;
       end if;
    end Save;
+
    procedure Create (Object  : in out Post_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -883,6 +970,7 @@ package body AWA.Blogs.Models is
       end if;
       ADO.Objects.Set_Created (Object);
    end Create;
+
    procedure Delete (Object  : in out Post_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -892,6 +980,7 @@ package body AWA.Blogs.Models is
       Stmt.Add_Param (Value => Object.Get_Key);
       Stmt.Execute;
    end Delete;
+
    function Get_Value (Item : in Post_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := Item.Get_Load_Object;
@@ -928,6 +1017,7 @@ package body AWA.Blogs.Models is
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
+
    procedure List (Object  : in out Post_Vector;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class) is
@@ -948,6 +1038,7 @@ package body AWA.Blogs.Models is
          Stmt.Next;
       end loop;
    end List;
+
    --  ------------------------------
    --  Load the object from current iterator position
    --  ------------------------------
@@ -964,10 +1055,10 @@ package body AWA.Blogs.Models is
       Object.Status := Post_Status_Type'Val (Stmt.Get_Identifier (7));
       Object.Status := Post_Status_Type'Val (Stmt.Get_Integer (7));
       if not Stmt.Is_Null (8) then
-          Object.Author.Set_Key_Value (Stmt.Get_Identifier (8), Session);
+         Object.Author.Set_Key_Value (Stmt.Get_Identifier (8), Session);
       end if;
       if not Stmt.Is_Null (9) then
-          Object.Blog.Set_Key_Value (Stmt.Get_Identifier (9), Session);
+         Object.Blog.Set_Key_Value (Stmt.Get_Identifier (9), Session);
       end if;
       Object.Version := Stmt.Get_Integer (1);
       ADO.Objects.Set_Created (Object);
@@ -1008,7 +1099,7 @@ package body AWA.Blogs.Models is
       List (Object.List, Session, Context);
    end List;
    --  --------------------
-   --  
+   --  The Admin_Post_Info describes a post in the administration interface.
    --  --------------------
    procedure List (Object  : in out Admin_Post_Info_Vector;
                    Session : in out ADO.Sessions.Session'Class;
@@ -1076,7 +1167,7 @@ package body AWA.Blogs.Models is
       List (Object.List, Session, Context);
    end List;
    --  --------------------
-   --  
+   --  The Post_Info describes a post to be displayed in the blog page
    --  --------------------
    procedure List (Object  : in out Post_Info_Vector;
                    Session : in out ADO.Sessions.Session'Class;
@@ -1139,7 +1230,7 @@ package body AWA.Blogs.Models is
       List (Object.List, Session, Context);
    end List;
    --  --------------------
-   --  
+   --  The list of blogs.
    --  --------------------
    procedure List (Object  : in out Blog_Info_Vector;
                    Session : in out ADO.Sessions.Session'Class;

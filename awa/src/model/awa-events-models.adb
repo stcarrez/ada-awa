@@ -35,6 +35,7 @@ package body AWA.Events.Models is
       ADO.Objects.Set_Value (Result, Id);
       return Result;
    end Queue_Key;
+
    function Queue_Key (Id : in String) return ADO.Objects.Object_Key is
       Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
                                        Of_Class => QUEUE_TABLE'Access);
@@ -42,10 +43,12 @@ package body AWA.Events.Models is
       ADO.Objects.Set_Value (Result, Id);
       return Result;
    end Queue_Key;
+
    function "=" (Left, Right : Queue_Ref'Class) return Boolean is
    begin
       return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
    end "=";
+
    procedure Set_Field (Object : in out Queue_Ref'Class;
                         Impl   : out Queue_Access) is
       Result : ADO.Objects.Object_Record_Access;
@@ -53,6 +56,7 @@ package body AWA.Events.Models is
       Object.Prepare_Modify (Result);
       Impl := Queue_Impl (Result.all)'Access;
    end Set_Field;
+
    --  Internal method to allocate the Object_Record instance
    procedure Allocate (Object : in out Queue_Ref) is
       Impl : Queue_Access;
@@ -66,6 +70,7 @@ package body AWA.Events.Models is
    -- ----------------------------------------
    --  Data object: Queue
    -- ----------------------------------------
+
    procedure Set_Id (Object : in out Queue_Ref;
                      Value  : in ADO.Identifier) is
       Impl : Queue_Access;
@@ -73,18 +78,23 @@ package body AWA.Events.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
    end Set_Id;
+
    function Get_Id (Object : in Queue_Ref)
                   return ADO.Identifier is
       Impl : constant Queue_Access := Queue_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
+
+
    function Get_Version (Object : in Queue_Ref)
                   return Integer is
       Impl : constant Queue_Access := Queue_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Version;
    end Get_Version;
+
+
    procedure Set_Name (Object : in out Queue_Ref;
                         Value : in String) is
       Impl : Queue_Access;
@@ -92,6 +102,7 @@ package body AWA.Events.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_String (Impl.all, 3, Impl.Name, Value);
    end Set_Name;
+
    procedure Set_Name (Object : in out Queue_Ref;
                        Value  : in Ada.Strings.Unbounded.Unbounded_String) is
       Impl : Queue_Access;
@@ -99,6 +110,7 @@ package body AWA.Events.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Unbounded_String (Impl.all, 3, Impl.Name, Value);
    end Set_Name;
+
    function Get_Name (Object : in Queue_Ref)
                  return String is
    begin
@@ -110,6 +122,8 @@ package body AWA.Events.Models is
    begin
       return Impl.Name;
    end Get_Name;
+
+
    procedure Set_Server_Id (Object : in out Queue_Ref;
                             Value  : in Integer) is
       Impl : Queue_Access;
@@ -118,12 +132,14 @@ package body AWA.Events.Models is
       ADO.Objects.Set_Field_Integer (Impl.all, 4, Impl.Server_Id, Value);
       ADO.Objects.Set_Field_Integer (Impl.all, 4, Impl.Server_Id, Value);
    end Set_Server_Id;
+
    function Get_Server_Id (Object : in Queue_Ref)
                   return Integer is
       Impl : constant Queue_Access := Queue_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Server_Id;
    end Get_Server_Id;
+
    --  Copy of the object.
    procedure Copy (Object : in Queue_Ref;
                    Into   : in out Queue_Ref) is
@@ -145,6 +161,7 @@ package body AWA.Events.Models is
       end if;
       Into := Result;
    end Copy;
+
    procedure Find (Object  : in out Queue_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -159,6 +176,7 @@ package body AWA.Events.Models is
          Destroy (Impl);
       end if;
    end Find;
+
    procedure Load (Object  : in out Queue_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Id      : in ADO.Identifier) is
@@ -175,6 +193,7 @@ package body AWA.Events.Models is
       end if;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Load;
+
    procedure Load (Object  : in out Queue_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Id      : in ADO.Identifier;
@@ -191,6 +210,7 @@ package body AWA.Events.Models is
          ADO.Objects.Set_Object (Object, Impl.all'Access);
       end if;
    end Load;
+
    procedure Save (Object  : in out Queue_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -205,6 +225,7 @@ package body AWA.Events.Models is
          Impl.Save (Session);
       end if;
    end Save;
+
    procedure Delete (Object  : in out Queue_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -213,6 +234,7 @@ package body AWA.Events.Models is
          Impl.Delete (Session);
       end if;
    end Delete;
+
    --  --------------------
    --  Free the object
    --  --------------------
@@ -220,10 +242,13 @@ package body AWA.Events.Models is
       type Queue_Impl_Ptr is access all Queue_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
               (Queue_Impl, Queue_Impl_Ptr);
+      pragma Warnings (Off, "*redundant conversion*");
       Ptr : Queue_Impl_Ptr := Queue_Impl (Object.all)'Access;
+      pragma Warnings (On, "*redundant conversion*");
    begin
       Unchecked_Free (Ptr);
    end Destroy;
+
    procedure Find (Object  : in out Queue_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -241,6 +266,7 @@ package body AWA.Events.Models is
          Found := False;
       end if;
    end Find;
+
    overriding
    procedure Load (Object  : in out Queue_Impl;
                    Session : in out ADO.Sessions.Session'Class) is
@@ -255,6 +281,7 @@ package body AWA.Events.Models is
          raise ADO.Objects.NOT_FOUND;
       end if;
    end Load;
+
    procedure Save (Object  : in out Queue_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -296,6 +323,7 @@ package body AWA.Events.Models is
          end;
       end if;
    end Save;
+
    procedure Create (Object  : in out Queue_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -318,6 +346,7 @@ package body AWA.Events.Models is
       end if;
       ADO.Objects.Set_Created (Object);
    end Create;
+
    procedure Delete (Object  : in out Queue_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -327,6 +356,7 @@ package body AWA.Events.Models is
       Stmt.Add_Param (Value => Object.Get_Key);
       Stmt.Execute;
    end Delete;
+
    function Get_Value (Item : in Queue_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := Item.Get_Load_Object;
@@ -347,6 +377,7 @@ package body AWA.Events.Models is
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
+
    procedure List (Object  : in out Queue_Vector;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class) is
@@ -367,6 +398,7 @@ package body AWA.Events.Models is
          Stmt.Next;
       end loop;
    end List;
+
    --  ------------------------------
    --  Load the object from current iterator position
    --  ------------------------------
@@ -388,6 +420,7 @@ package body AWA.Events.Models is
       ADO.Objects.Set_Value (Result, Id);
       return Result;
    end Message_Type_Key;
+
    function Message_Type_Key (Id : in String) return ADO.Objects.Object_Key is
       Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
                                        Of_Class => MESSAGE_TYPE_TABLE'Access);
@@ -395,10 +428,12 @@ package body AWA.Events.Models is
       ADO.Objects.Set_Value (Result, Id);
       return Result;
    end Message_Type_Key;
+
    function "=" (Left, Right : Message_Type_Ref'Class) return Boolean is
    begin
       return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
    end "=";
+
    procedure Set_Field (Object : in out Message_Type_Ref'Class;
                         Impl   : out Message_Type_Access) is
       Result : ADO.Objects.Object_Record_Access;
@@ -406,6 +441,7 @@ package body AWA.Events.Models is
       Object.Prepare_Modify (Result);
       Impl := Message_Type_Impl (Result.all)'Access;
    end Set_Field;
+
    --  Internal method to allocate the Object_Record instance
    procedure Allocate (Object : in out Message_Type_Ref) is
       Impl : Message_Type_Access;
@@ -417,6 +453,7 @@ package body AWA.Events.Models is
    -- ----------------------------------------
    --  Data object: Message_Type
    -- ----------------------------------------
+
    procedure Set_Id (Object : in out Message_Type_Ref;
                      Value  : in ADO.Identifier) is
       Impl : Message_Type_Access;
@@ -424,12 +461,15 @@ package body AWA.Events.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
    end Set_Id;
+
    function Get_Id (Object : in Message_Type_Ref)
                   return ADO.Identifier is
       Impl : constant Message_Type_Access := Message_Type_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
+
+
    procedure Set_Name (Object : in out Message_Type_Ref;
                         Value : in String) is
       Impl : Message_Type_Access;
@@ -437,6 +477,7 @@ package body AWA.Events.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_String (Impl.all, 2, Impl.Name, Value);
    end Set_Name;
+
    procedure Set_Name (Object : in out Message_Type_Ref;
                        Value  : in Ada.Strings.Unbounded.Unbounded_String) is
       Impl : Message_Type_Access;
@@ -444,6 +485,7 @@ package body AWA.Events.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Unbounded_String (Impl.all, 2, Impl.Name, Value);
    end Set_Name;
+
    function Get_Name (Object : in Message_Type_Ref)
                  return String is
    begin
@@ -455,6 +497,7 @@ package body AWA.Events.Models is
    begin
       return Impl.Name;
    end Get_Name;
+
    --  Copy of the object.
    procedure Copy (Object : in Message_Type_Ref;
                    Into   : in out Message_Type_Ref) is
@@ -474,6 +517,7 @@ package body AWA.Events.Models is
       end if;
       Into := Result;
    end Copy;
+
    procedure Find (Object  : in out Message_Type_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -488,6 +532,7 @@ package body AWA.Events.Models is
          Destroy (Impl);
       end if;
    end Find;
+
    procedure Load (Object  : in out Message_Type_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Id      : in ADO.Identifier) is
@@ -504,6 +549,7 @@ package body AWA.Events.Models is
       end if;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Load;
+
    procedure Load (Object  : in out Message_Type_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Id      : in ADO.Identifier;
@@ -520,6 +566,7 @@ package body AWA.Events.Models is
          ADO.Objects.Set_Object (Object, Impl.all'Access);
       end if;
    end Load;
+
    procedure Save (Object  : in out Message_Type_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -534,6 +581,7 @@ package body AWA.Events.Models is
          Impl.Save (Session);
       end if;
    end Save;
+
    procedure Delete (Object  : in out Message_Type_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -542,6 +590,7 @@ package body AWA.Events.Models is
          Impl.Delete (Session);
       end if;
    end Delete;
+
    --  --------------------
    --  Free the object
    --  --------------------
@@ -549,10 +598,13 @@ package body AWA.Events.Models is
       type Message_Type_Impl_Ptr is access all Message_Type_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
               (Message_Type_Impl, Message_Type_Impl_Ptr);
+      pragma Warnings (Off, "*redundant conversion*");
       Ptr : Message_Type_Impl_Ptr := Message_Type_Impl (Object.all)'Access;
+      pragma Warnings (On, "*redundant conversion*");
    begin
       Unchecked_Free (Ptr);
    end Destroy;
+
    procedure Find (Object  : in out Message_Type_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -570,6 +622,7 @@ package body AWA.Events.Models is
          Found := False;
       end if;
    end Find;
+
    overriding
    procedure Load (Object  : in out Message_Type_Impl;
                    Session : in out ADO.Sessions.Session'Class) is
@@ -584,6 +637,7 @@ package body AWA.Events.Models is
          raise ADO.Objects.NOT_FOUND;
       end if;
    end Load;
+
    procedure Save (Object  : in out Message_Type_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -614,6 +668,7 @@ package body AWA.Events.Models is
          end;
       end if;
    end Save;
+
    procedure Create (Object  : in out Message_Type_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -631,6 +686,7 @@ package body AWA.Events.Models is
       end if;
       ADO.Objects.Set_Created (Object);
    end Create;
+
    procedure Delete (Object  : in out Message_Type_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -640,6 +696,7 @@ package body AWA.Events.Models is
       Stmt.Add_Param (Value => Object.Get_Key);
       Stmt.Execute;
    end Delete;
+
    function Get_Value (Item : in Message_Type_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := Item.Get_Load_Object;
@@ -657,6 +714,7 @@ package body AWA.Events.Models is
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
+
    procedure List (Object  : in out Message_Type_Vector;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class) is
@@ -677,6 +735,7 @@ package body AWA.Events.Models is
          Stmt.Next;
       end loop;
    end List;
+
    --  ------------------------------
    --  Load the object from current iterator position
    --  ------------------------------
@@ -696,6 +755,7 @@ package body AWA.Events.Models is
       ADO.Objects.Set_Value (Result, Id);
       return Result;
    end Message_Key;
+
    function Message_Key (Id : in String) return ADO.Objects.Object_Key is
       Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
                                        Of_Class => MESSAGE_TABLE'Access);
@@ -703,10 +763,12 @@ package body AWA.Events.Models is
       ADO.Objects.Set_Value (Result, Id);
       return Result;
    end Message_Key;
+
    function "=" (Left, Right : Message_Ref'Class) return Boolean is
    begin
       return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
    end "=";
+
    procedure Set_Field (Object : in out Message_Ref'Class;
                         Impl   : out Message_Access) is
       Result : ADO.Objects.Object_Record_Access;
@@ -714,6 +776,7 @@ package body AWA.Events.Models is
       Object.Prepare_Modify (Result);
       Impl := Message_Impl (Result.all)'Access;
    end Set_Field;
+
    --  Internal method to allocate the Object_Record instance
    procedure Allocate (Object : in out Message_Ref) is
       Impl : Message_Access;
@@ -733,6 +796,7 @@ package body AWA.Events.Models is
    -- ----------------------------------------
    --  Data object: Message
    -- ----------------------------------------
+
    procedure Set_Id (Object : in out Message_Ref;
                      Value  : in ADO.Identifier) is
       Impl : Message_Access;
@@ -740,18 +804,23 @@ package body AWA.Events.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
    end Set_Id;
+
    function Get_Id (Object : in Message_Ref)
                   return ADO.Identifier is
       Impl : constant Message_Access := Message_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
+
+
    function Get_Version (Object : in Message_Ref)
                   return Integer is
       Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Version;
    end Get_Version;
+
+
    procedure Set_Priority (Object : in out Message_Ref;
                            Value  : in Integer) is
       Impl : Message_Access;
@@ -760,12 +829,15 @@ package body AWA.Events.Models is
       ADO.Objects.Set_Field_Integer (Impl.all, 3, Impl.Priority, Value);
       ADO.Objects.Set_Field_Integer (Impl.all, 3, Impl.Priority, Value);
    end Set_Priority;
+
    function Get_Priority (Object : in Message_Ref)
                   return Integer is
       Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Priority;
    end Get_Priority;
+
+
    procedure Set_Server_Id (Object : in out Message_Ref;
                             Value  : in Integer) is
       Impl : Message_Access;
@@ -774,12 +846,15 @@ package body AWA.Events.Models is
       ADO.Objects.Set_Field_Integer (Impl.all, 4, Impl.Server_Id, Value);
       ADO.Objects.Set_Field_Integer (Impl.all, 4, Impl.Server_Id, Value);
    end Set_Server_Id;
+
    function Get_Server_Id (Object : in Message_Ref)
                   return Integer is
       Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Server_Id;
    end Get_Server_Id;
+
+
    procedure Set_Task_Id (Object : in out Message_Ref;
                           Value  : in Integer) is
       Impl : Message_Access;
@@ -788,12 +863,15 @@ package body AWA.Events.Models is
       ADO.Objects.Set_Field_Integer (Impl.all, 5, Impl.Task_Id, Value);
       ADO.Objects.Set_Field_Integer (Impl.all, 5, Impl.Task_Id, Value);
    end Set_Task_Id;
+
    function Get_Task_Id (Object : in Message_Ref)
                   return Integer is
       Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Task_Id;
    end Get_Task_Id;
+
+
    procedure Set_Parameters (Object : in out Message_Ref;
                               Value : in String) is
       Impl : Message_Access;
@@ -801,6 +879,7 @@ package body AWA.Events.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_String (Impl.all, 6, Impl.Parameters, Value);
    end Set_Parameters;
+
    procedure Set_Parameters (Object : in out Message_Ref;
                              Value  : in Ada.Strings.Unbounded.Unbounded_String) is
       Impl : Message_Access;
@@ -808,6 +887,7 @@ package body AWA.Events.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Unbounded_String (Impl.all, 6, Impl.Parameters, Value);
    end Set_Parameters;
+
    function Get_Parameters (Object : in Message_Ref)
                  return String is
    begin
@@ -819,6 +899,8 @@ package body AWA.Events.Models is
    begin
       return Impl.Parameters;
    end Get_Parameters;
+
+
    procedure Set_Create_Date (Object : in out Message_Ref;
                               Value  : in Ada.Calendar.Time) is
       Impl : Message_Access;
@@ -826,12 +908,15 @@ package body AWA.Events.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Time (Impl.all, 7, Impl.Create_Date, Value);
    end Set_Create_Date;
+
    function Get_Create_Date (Object : in Message_Ref)
                   return Ada.Calendar.Time is
       Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Create_Date;
    end Get_Create_Date;
+
+
    procedure Set_Processing_Date (Object : in out Message_Ref;
                                   Value  : in ADO.Nullable_Time) is
       Impl : Message_Access;
@@ -839,12 +924,15 @@ package body AWA.Events.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Time (Impl.all, 8, Impl.Processing_Date, Value);
    end Set_Processing_Date;
+
    function Get_Processing_Date (Object : in Message_Ref)
                   return ADO.Nullable_Time is
       Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Processing_Date;
    end Get_Processing_Date;
+
+
    procedure Set_Finish_Date (Object : in out Message_Ref;
                               Value  : in ADO.Nullable_Time) is
       Impl : Message_Access;
@@ -852,12 +940,15 @@ package body AWA.Events.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Time (Impl.all, 9, Impl.Finish_Date, Value);
    end Set_Finish_Date;
+
    function Get_Finish_Date (Object : in Message_Ref)
                   return ADO.Nullable_Time is
       Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Finish_Date;
    end Get_Finish_Date;
+
+
    procedure Set_Status (Object : in out Message_Ref;
                          Value  : in Message_Status_Type) is
       procedure Set_Field_Enum is
@@ -867,12 +958,15 @@ package body AWA.Events.Models is
       Set_Field (Object, Impl);
       Set_Field_Enum (Impl.all, 10, Impl.Status, Value);
    end Set_Status;
+
    function Get_Status (Object : in Message_Ref)
                   return Message_Status_Type is
       Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Status;
    end Get_Status;
+
+
    procedure Set_Message_Type (Object : in out Message_Ref;
                                Value  : in Message_Type_Ref'Class) is
       Impl : Message_Access;
@@ -880,12 +974,15 @@ package body AWA.Events.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Object (Impl.all, 11, Impl.Message_Type, Value);
    end Set_Message_Type;
+
    function Get_Message_Type (Object : in Message_Ref)
                   return Message_Type_Ref'Class is
       Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Message_Type;
    end Get_Message_Type;
+
+
    procedure Set_User (Object : in out Message_Ref;
                        Value  : in AWA.Users.Models.User_Ref'Class) is
       Impl : Message_Access;
@@ -893,12 +990,15 @@ package body AWA.Events.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Object (Impl.all, 12, Impl.User, Value);
    end Set_User;
+
    function Get_User (Object : in Message_Ref)
                   return AWA.Users.Models.User_Ref'Class is
       Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.User;
    end Get_User;
+
+
    procedure Set_Session (Object : in out Message_Ref;
                           Value  : in AWA.Users.Models.Session_Ref'Class) is
       Impl : Message_Access;
@@ -906,12 +1006,15 @@ package body AWA.Events.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Object (Impl.all, 13, Impl.Session, Value);
    end Set_Session;
+
    function Get_Session (Object : in Message_Ref)
                   return AWA.Users.Models.Session_Ref'Class is
       Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Session;
    end Get_Session;
+
+
    procedure Set_Queue (Object : in out Message_Ref;
                         Value  : in Queue_Ref'Class) is
       Impl : Message_Access;
@@ -919,12 +1022,14 @@ package body AWA.Events.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Object (Impl.all, 14, Impl.Queue, Value);
    end Set_Queue;
+
    function Get_Queue (Object : in Message_Ref)
                   return Queue_Ref'Class is
       Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Queue;
    end Get_Queue;
+
    --  Copy of the object.
    procedure Copy (Object : in Message_Ref;
                    Into   : in out Message_Ref) is
@@ -956,6 +1061,7 @@ package body AWA.Events.Models is
       end if;
       Into := Result;
    end Copy;
+
    procedure Find (Object  : in out Message_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -970,6 +1076,7 @@ package body AWA.Events.Models is
          Destroy (Impl);
       end if;
    end Find;
+
    procedure Load (Object  : in out Message_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Id      : in ADO.Identifier) is
@@ -986,6 +1093,7 @@ package body AWA.Events.Models is
       end if;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Load;
+
    procedure Load (Object  : in out Message_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Id      : in ADO.Identifier;
@@ -1002,6 +1110,7 @@ package body AWA.Events.Models is
          ADO.Objects.Set_Object (Object, Impl.all'Access);
       end if;
    end Load;
+
    procedure Save (Object  : in out Message_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -1016,6 +1125,7 @@ package body AWA.Events.Models is
          Impl.Save (Session);
       end if;
    end Save;
+
    procedure Delete (Object  : in out Message_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -1024,6 +1134,7 @@ package body AWA.Events.Models is
          Impl.Delete (Session);
       end if;
    end Delete;
+
    --  --------------------
    --  Free the object
    --  --------------------
@@ -1031,10 +1142,13 @@ package body AWA.Events.Models is
       type Message_Impl_Ptr is access all Message_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
               (Message_Impl, Message_Impl_Ptr);
+      pragma Warnings (Off, "*redundant conversion*");
       Ptr : Message_Impl_Ptr := Message_Impl (Object.all)'Access;
+      pragma Warnings (On, "*redundant conversion*");
    begin
       Unchecked_Free (Ptr);
    end Destroy;
+
    procedure Find (Object  : in out Message_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -1052,6 +1166,7 @@ package body AWA.Events.Models is
          Found := False;
       end if;
    end Find;
+
    overriding
    procedure Load (Object  : in out Message_Impl;
                    Session : in out ADO.Sessions.Session'Class) is
@@ -1066,6 +1181,7 @@ package body AWA.Events.Models is
          raise ADO.Objects.NOT_FOUND;
       end if;
    end Load;
+
    procedure Save (Object  : in out Message_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -1152,6 +1268,7 @@ package body AWA.Events.Models is
          end;
       end if;
    end Save;
+
    procedure Create (Object  : in out Message_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -1190,6 +1307,7 @@ package body AWA.Events.Models is
       end if;
       ADO.Objects.Set_Created (Object);
    end Create;
+
    procedure Delete (Object  : in out Message_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -1199,6 +1317,7 @@ package body AWA.Events.Models is
       Stmt.Add_Param (Value => Object.Get_Key);
       Stmt.Execute;
    end Delete;
+
    function Get_Value (Item : in Message_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := Item.Get_Load_Object;
@@ -1245,6 +1364,7 @@ package body AWA.Events.Models is
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
+
    procedure List (Object  : in out Message_Vector;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class) is
@@ -1265,6 +1385,7 @@ package body AWA.Events.Models is
          Stmt.Next;
       end loop;
    end List;
+
    --  ------------------------------
    --  Load the object from current iterator position
    --  ------------------------------
@@ -1283,16 +1404,16 @@ package body AWA.Events.Models is
       Object.Status := Message_Status_Type'Val (Stmt.Get_Identifier (9));
       Object.Status := Message_Status_Type'Val (Stmt.Get_Integer (9));
       if not Stmt.Is_Null (10) then
-          Object.Message_Type.Set_Key_Value (Stmt.Get_Identifier (10), Session);
+         Object.Message_Type.Set_Key_Value (Stmt.Get_Identifier (10), Session);
       end if;
       if not Stmt.Is_Null (11) then
-          Object.User.Set_Key_Value (Stmt.Get_Identifier (11), Session);
+         Object.User.Set_Key_Value (Stmt.Get_Identifier (11), Session);
       end if;
       if not Stmt.Is_Null (12) then
-          Object.Session.Set_Key_Value (Stmt.Get_Identifier (12), Session);
+         Object.Session.Set_Key_Value (Stmt.Get_Identifier (12), Session);
       end if;
       if not Stmt.Is_Null (13) then
-          Object.Queue.Set_Key_Value (Stmt.Get_Identifier (13), Session);
+         Object.Queue.Set_Key_Value (Stmt.Get_Identifier (13), Session);
       end if;
       Object.Version := Stmt.Get_Integer (1);
       ADO.Objects.Set_Created (Object);

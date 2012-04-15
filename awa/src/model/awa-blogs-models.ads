@@ -20,6 +20,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+pragma Warnings (Off, "unit * is not referenced");
 with ADO.Sessions;
 with ADO.Objects;
 with ADO.Statements;
@@ -35,6 +36,7 @@ with Util.Beans.Objects.Enums;
 with Util.Beans.Basic.Lists;
 with AWA.Users.Models;
 with AWA.Workspaces.Models;
+pragma Warnings (On, "unit * is not referenced");
 package AWA.Blogs.Models is
    type Post_Status_Type is (POST_DRAFT, POST_PUBLISHED, POST_SCHEDULED);
    for Post_Status_Type use (POST_DRAFT => 0, POST_PUBLISHED => 1, POST_SCHEDULED => 2);
@@ -62,7 +64,7 @@ package AWA.Blogs.Models is
    --  Get the blog identifier
    function Get_Id (Object : in Blog_Ref)
                  return ADO.Identifier;
-   --  Get 
+   --  Get the blob version.
    function Get_Version (Object : in Blog_Ref)
                  return Integer;
 
@@ -98,11 +100,11 @@ package AWA.Blogs.Models is
    function Get_Create_Date (Object : in Blog_Ref)
                  return Ada.Calendar.Time;
 
-   --  Set 
+   --  Set the workspace that this blob belongs to.
    procedure Set_Workspace (Object : in out Blog_Ref;
                             Value  : in AWA.Workspaces.Models.Workspace_Ref'Class);
 
-   --  Get 
+   --  Get the workspace that this blob belongs to.
    function Get_Workspace (Object : in Blog_Ref)
                  return AWA.Workspaces.Models.Workspace_Ref'Class;
 
@@ -183,7 +185,7 @@ package AWA.Blogs.Models is
    --  Get the post identifier
    function Get_Id (Object : in Post_Ref)
                  return ADO.Identifier;
-   --  Get 
+   --  Get the post version.
    function Get_Version (Object : in Post_Ref)
                  return Integer;
 
@@ -247,19 +249,19 @@ package AWA.Blogs.Models is
    function Get_Status (Object : in Post_Ref)
                  return Post_Status_Type;
 
-   --  Set 
+   --  Set the post author
    procedure Set_Author (Object : in out Post_Ref;
                          Value  : in AWA.Users.Models.User_Ref'Class);
 
-   --  Get 
+   --  Get the post author
    function Get_Author (Object : in Post_Ref)
                  return AWA.Users.Models.User_Ref'Class;
 
-   --  Set 
+   --  Set the blog that this post belongs
    procedure Set_Blog (Object : in out Post_Ref;
                        Value  : in Blog_Ref'Class);
 
-   --  Get 
+   --  Get the blog that this post belongs
    function Get_Blog (Object : in Post_Ref)
                  return Blog_Ref'Class;
 
@@ -321,7 +323,7 @@ package AWA.Blogs.Models is
                    Query   : in ADO.SQL.Query'Class);
 
    --  --------------------
-   --  
+   --  The Admin_Post_Info describes a post in the administration interface.
    --  --------------------
    type Admin_Post_Info is new Util.Beans.Basic.Readonly_Bean with record
       --  the post identifier.
@@ -368,7 +370,7 @@ package AWA.Blogs.Models is
    Query_Blog_Admin_Post_List : constant ADO.Queries.Query_Definition_Access;
 
    --  --------------------
-   --  
+   --  The Post_Info describes a post to be displayed in the blog page
    --  --------------------
    type Post_Info is new Util.Beans.Basic.Readonly_Bean with record
       --  the post identifier.
@@ -418,7 +420,7 @@ package AWA.Blogs.Models is
    Query_Blog_Post_List : constant ADO.Queries.Query_Definition_Access;
 
    --  --------------------
-   --  
+   --  The list of blogs.
    --  --------------------
    type Blog_Info is new Util.Beans.Basic.Readonly_Bean with record
       --  the blog identifier.

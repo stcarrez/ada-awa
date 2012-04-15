@@ -35,6 +35,7 @@ package body AWA.Users.Models is
       ADO.Objects.Set_Value (Result, Id);
       return Result;
    end Email_Key;
+
    function Email_Key (Id : in String) return ADO.Objects.Object_Key is
       Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
                                        Of_Class => EMAIL_TABLE'Access);
@@ -42,10 +43,12 @@ package body AWA.Users.Models is
       ADO.Objects.Set_Value (Result, Id);
       return Result;
    end Email_Key;
+
    function "=" (Left, Right : Email_Ref'Class) return Boolean is
    begin
       return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
    end "=";
+
    procedure Set_Field (Object : in out Email_Ref'Class;
                         Impl   : out Email_Access) is
       Result : ADO.Objects.Object_Record_Access;
@@ -53,6 +56,7 @@ package body AWA.Users.Models is
       Object.Prepare_Modify (Result);
       Impl := Email_Impl (Result.all)'Access;
    end Set_Field;
+
    --  Internal method to allocate the Object_Record instance
    procedure Allocate (Object : in out Email_Ref) is
       Impl : Email_Access;
@@ -66,6 +70,7 @@ package body AWA.Users.Models is
    -- ----------------------------------------
    --  Data object: Email
    -- ----------------------------------------
+
    procedure Set_Id (Object : in out Email_Ref;
                      Value  : in ADO.Identifier) is
       Impl : Email_Access;
@@ -73,18 +78,23 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
    end Set_Id;
+
    function Get_Id (Object : in Email_Ref)
                   return ADO.Identifier is
       Impl : constant Email_Access := Email_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
+
+
    function Get_Version (Object : in Email_Ref)
                   return Integer is
       Impl : constant Email_Access := Email_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Version;
    end Get_Version;
+
+
    procedure Set_Email (Object : in out Email_Ref;
                          Value : in String) is
       Impl : Email_Access;
@@ -92,6 +102,7 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_String (Impl.all, 3, Impl.Email, Value);
    end Set_Email;
+
    procedure Set_Email (Object : in out Email_Ref;
                         Value  : in Ada.Strings.Unbounded.Unbounded_String) is
       Impl : Email_Access;
@@ -99,6 +110,7 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Unbounded_String (Impl.all, 3, Impl.Email, Value);
    end Set_Email;
+
    function Get_Email (Object : in Email_Ref)
                  return String is
    begin
@@ -110,6 +122,8 @@ package body AWA.Users.Models is
    begin
       return Impl.Email;
    end Get_Email;
+
+
    procedure Set_User_Id (Object : in out Email_Ref;
                           Value  : in ADO.Identifier) is
       Impl : Email_Access;
@@ -117,12 +131,14 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Identifier (Impl.all, 4, Impl.User_Id, Value);
    end Set_User_Id;
+
    function Get_User_Id (Object : in Email_Ref)
                   return ADO.Identifier is
       Impl : constant Email_Access := Email_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.User_Id;
    end Get_User_Id;
+
    --  Copy of the object.
    procedure Copy (Object : in Email_Ref;
                    Into   : in out Email_Ref) is
@@ -144,6 +160,7 @@ package body AWA.Users.Models is
       end if;
       Into := Result;
    end Copy;
+
    procedure Find (Object  : in out Email_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -158,6 +175,7 @@ package body AWA.Users.Models is
          Destroy (Impl);
       end if;
    end Find;
+
    procedure Load (Object  : in out Email_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Id      : in ADO.Identifier) is
@@ -174,6 +192,7 @@ package body AWA.Users.Models is
       end if;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Load;
+
    procedure Load (Object  : in out Email_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Id      : in ADO.Identifier;
@@ -190,6 +209,7 @@ package body AWA.Users.Models is
          ADO.Objects.Set_Object (Object, Impl.all'Access);
       end if;
    end Load;
+
    procedure Save (Object  : in out Email_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -204,6 +224,7 @@ package body AWA.Users.Models is
          Impl.Save (Session);
       end if;
    end Save;
+
    procedure Delete (Object  : in out Email_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -212,6 +233,7 @@ package body AWA.Users.Models is
          Impl.Delete (Session);
       end if;
    end Delete;
+
    --  --------------------
    --  Free the object
    --  --------------------
@@ -219,10 +241,13 @@ package body AWA.Users.Models is
       type Email_Impl_Ptr is access all Email_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
               (Email_Impl, Email_Impl_Ptr);
+      pragma Warnings (Off, "*redundant conversion*");
       Ptr : Email_Impl_Ptr := Email_Impl (Object.all)'Access;
+      pragma Warnings (On, "*redundant conversion*");
    begin
       Unchecked_Free (Ptr);
    end Destroy;
+
    procedure Find (Object  : in out Email_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -240,6 +265,7 @@ package body AWA.Users.Models is
          Found := False;
       end if;
    end Find;
+
    overriding
    procedure Load (Object  : in out Email_Impl;
                    Session : in out ADO.Sessions.Session'Class) is
@@ -254,6 +280,7 @@ package body AWA.Users.Models is
          raise ADO.Objects.NOT_FOUND;
       end if;
    end Load;
+
    procedure Save (Object  : in out Email_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -295,6 +322,7 @@ package body AWA.Users.Models is
          end;
       end if;
    end Save;
+
    procedure Create (Object  : in out Email_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -317,6 +345,7 @@ package body AWA.Users.Models is
       end if;
       ADO.Objects.Set_Created (Object);
    end Create;
+
    procedure Delete (Object  : in out Email_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -326,6 +355,7 @@ package body AWA.Users.Models is
       Stmt.Add_Param (Value => Object.Get_Key);
       Stmt.Execute;
    end Delete;
+
    function Get_Value (Item : in Email_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := Item.Get_Load_Object;
@@ -346,6 +376,7 @@ package body AWA.Users.Models is
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
+
    procedure List (Object  : in out Email_Vector;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class) is
@@ -366,6 +397,7 @@ package body AWA.Users.Models is
          Stmt.Next;
       end loop;
    end List;
+
    --  ------------------------------
    --  Load the object from current iterator position
    --  ------------------------------
@@ -387,6 +419,7 @@ package body AWA.Users.Models is
       ADO.Objects.Set_Value (Result, Id);
       return Result;
    end User_Key;
+
    function User_Key (Id : in String) return ADO.Objects.Object_Key is
       Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
                                        Of_Class => USER_TABLE'Access);
@@ -394,10 +427,12 @@ package body AWA.Users.Models is
       ADO.Objects.Set_Value (Result, Id);
       return Result;
    end User_Key;
+
    function "=" (Left, Right : User_Ref'Class) return Boolean is
    begin
       return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
    end "=";
+
    procedure Set_Field (Object : in out User_Ref'Class;
                         Impl   : out User_Access) is
       Result : ADO.Objects.Object_Record_Access;
@@ -405,6 +440,7 @@ package body AWA.Users.Models is
       Object.Prepare_Modify (Result);
       Impl := User_Impl (Result.all)'Access;
    end Set_Field;
+
    --  Internal method to allocate the Object_Record instance
    procedure Allocate (Object : in out User_Ref) is
       Impl : User_Access;
@@ -417,6 +453,7 @@ package body AWA.Users.Models is
    -- ----------------------------------------
    --  Data object: User
    -- ----------------------------------------
+
    procedure Set_Id (Object : in out User_Ref;
                      Value  : in ADO.Identifier) is
       Impl : User_Access;
@@ -424,18 +461,23 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
    end Set_Id;
+
    function Get_Id (Object : in User_Ref)
                   return ADO.Identifier is
       Impl : constant User_Access := User_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
+
+
    function Get_Version (Object : in User_Ref)
                   return Integer is
       Impl : constant User_Access := User_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Version;
    end Get_Version;
+
+
    procedure Set_Open_Id (Object : in out User_Ref;
                            Value : in String) is
       Impl : User_Access;
@@ -443,6 +485,7 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_String (Impl.all, 3, Impl.Open_Id, Value);
    end Set_Open_Id;
+
    procedure Set_Open_Id (Object : in out User_Ref;
                           Value  : in Ada.Strings.Unbounded.Unbounded_String) is
       Impl : User_Access;
@@ -450,6 +493,7 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Unbounded_String (Impl.all, 3, Impl.Open_Id, Value);
    end Set_Open_Id;
+
    function Get_Open_Id (Object : in User_Ref)
                  return String is
    begin
@@ -461,6 +505,8 @@ package body AWA.Users.Models is
    begin
       return Impl.Open_Id;
    end Get_Open_Id;
+
+
    procedure Set_Name (Object : in out User_Ref;
                         Value : in String) is
       Impl : User_Access;
@@ -468,6 +514,7 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_String (Impl.all, 4, Impl.Name, Value);
    end Set_Name;
+
    procedure Set_Name (Object : in out User_Ref;
                        Value  : in Ada.Strings.Unbounded.Unbounded_String) is
       Impl : User_Access;
@@ -475,6 +522,7 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Unbounded_String (Impl.all, 4, Impl.Name, Value);
    end Set_Name;
+
    function Get_Name (Object : in User_Ref)
                  return String is
    begin
@@ -486,6 +534,8 @@ package body AWA.Users.Models is
    begin
       return Impl.Name;
    end Get_Name;
+
+
    procedure Set_First_Name (Object : in out User_Ref;
                               Value : in String) is
       Impl : User_Access;
@@ -493,6 +543,7 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_String (Impl.all, 5, Impl.First_Name, Value);
    end Set_First_Name;
+
    procedure Set_First_Name (Object : in out User_Ref;
                              Value  : in Ada.Strings.Unbounded.Unbounded_String) is
       Impl : User_Access;
@@ -500,6 +551,7 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Unbounded_String (Impl.all, 5, Impl.First_Name, Value);
    end Set_First_Name;
+
    function Get_First_Name (Object : in User_Ref)
                  return String is
    begin
@@ -511,6 +563,8 @@ package body AWA.Users.Models is
    begin
       return Impl.First_Name;
    end Get_First_Name;
+
+
    procedure Set_Last_Name (Object : in out User_Ref;
                              Value : in String) is
       Impl : User_Access;
@@ -518,6 +572,7 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_String (Impl.all, 6, Impl.Last_Name, Value);
    end Set_Last_Name;
+
    procedure Set_Last_Name (Object : in out User_Ref;
                             Value  : in Ada.Strings.Unbounded.Unbounded_String) is
       Impl : User_Access;
@@ -525,6 +580,7 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Unbounded_String (Impl.all, 6, Impl.Last_Name, Value);
    end Set_Last_Name;
+
    function Get_Last_Name (Object : in User_Ref)
                  return String is
    begin
@@ -536,6 +592,8 @@ package body AWA.Users.Models is
    begin
       return Impl.Last_Name;
    end Get_Last_Name;
+
+
    procedure Set_Password (Object : in out User_Ref;
                             Value : in String) is
       Impl : User_Access;
@@ -543,6 +601,7 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_String (Impl.all, 7, Impl.Password, Value);
    end Set_Password;
+
    procedure Set_Password (Object : in out User_Ref;
                            Value  : in Ada.Strings.Unbounded.Unbounded_String) is
       Impl : User_Access;
@@ -550,6 +609,7 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Unbounded_String (Impl.all, 7, Impl.Password, Value);
    end Set_Password;
+
    function Get_Password (Object : in User_Ref)
                  return String is
    begin
@@ -561,6 +621,8 @@ package body AWA.Users.Models is
    begin
       return Impl.Password;
    end Get_Password;
+
+
    procedure Set_Country (Object : in out User_Ref;
                            Value : in String) is
       Impl : User_Access;
@@ -568,6 +630,7 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_String (Impl.all, 8, Impl.Country, Value);
    end Set_Country;
+
    procedure Set_Country (Object : in out User_Ref;
                           Value  : in Ada.Strings.Unbounded.Unbounded_String) is
       Impl : User_Access;
@@ -575,6 +638,7 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Unbounded_String (Impl.all, 8, Impl.Country, Value);
    end Set_Country;
+
    function Get_Country (Object : in User_Ref)
                  return String is
    begin
@@ -586,6 +650,8 @@ package body AWA.Users.Models is
    begin
       return Impl.Country;
    end Get_Country;
+
+
    procedure Set_Email (Object : in out User_Ref;
                         Value  : in Email_Ref'Class) is
       Impl : User_Access;
@@ -593,12 +659,14 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Object (Impl.all, 9, Impl.Email, Value);
    end Set_Email;
+
    function Get_Email (Object : in User_Ref)
                   return Email_Ref'Class is
       Impl : constant User_Access := User_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Email;
    end Get_Email;
+
    --  Copy of the object.
    procedure Copy (Object : in User_Ref;
                    Into   : in out User_Ref) is
@@ -625,6 +693,7 @@ package body AWA.Users.Models is
       end if;
       Into := Result;
    end Copy;
+
    procedure Find (Object  : in out User_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -639,6 +708,7 @@ package body AWA.Users.Models is
          Destroy (Impl);
       end if;
    end Find;
+
    procedure Load (Object  : in out User_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Id      : in ADO.Identifier) is
@@ -655,6 +725,7 @@ package body AWA.Users.Models is
       end if;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Load;
+
    procedure Load (Object  : in out User_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Id      : in ADO.Identifier;
@@ -671,6 +742,7 @@ package body AWA.Users.Models is
          ADO.Objects.Set_Object (Object, Impl.all'Access);
       end if;
    end Load;
+
    procedure Save (Object  : in out User_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -685,6 +757,7 @@ package body AWA.Users.Models is
          Impl.Save (Session);
       end if;
    end Save;
+
    procedure Delete (Object  : in out User_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -693,6 +766,7 @@ package body AWA.Users.Models is
          Impl.Delete (Session);
       end if;
    end Delete;
+
    --  --------------------
    --  Free the object
    --  --------------------
@@ -700,10 +774,13 @@ package body AWA.Users.Models is
       type User_Impl_Ptr is access all User_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
               (User_Impl, User_Impl_Ptr);
+      pragma Warnings (Off, "*redundant conversion*");
       Ptr : User_Impl_Ptr := User_Impl (Object.all)'Access;
+      pragma Warnings (On, "*redundant conversion*");
    begin
       Unchecked_Free (Ptr);
    end Destroy;
+
    procedure Find (Object  : in out User_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -721,6 +798,7 @@ package body AWA.Users.Models is
          Found := False;
       end if;
    end Find;
+
    overriding
    procedure Load (Object  : in out User_Impl;
                    Session : in out ADO.Sessions.Session'Class) is
@@ -735,6 +813,7 @@ package body AWA.Users.Models is
          raise ADO.Objects.NOT_FOUND;
       end if;
    end Load;
+
    procedure Save (Object  : in out User_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -801,6 +880,7 @@ package body AWA.Users.Models is
          end;
       end if;
    end Save;
+
    procedure Create (Object  : in out User_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -833,6 +913,7 @@ package body AWA.Users.Models is
       end if;
       ADO.Objects.Set_Created (Object);
    end Create;
+
    procedure Delete (Object  : in out User_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -842,6 +923,7 @@ package body AWA.Users.Models is
       Stmt.Add_Param (Value => Object.Get_Key);
       Stmt.Execute;
    end Delete;
+
    function Get_Value (Item : in User_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := Item.Get_Load_Object;
@@ -874,6 +956,7 @@ package body AWA.Users.Models is
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
+
    procedure List (Object  : in out User_Vector;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class) is
@@ -894,6 +977,7 @@ package body AWA.Users.Models is
          Stmt.Next;
       end loop;
    end List;
+
    --  ------------------------------
    --  Load the object from current iterator position
    --  ------------------------------
@@ -909,7 +993,7 @@ package body AWA.Users.Models is
       Object.Password := Stmt.Get_Unbounded_String (6);
       Object.Country := Stmt.Get_Unbounded_String (7);
       if not Stmt.Is_Null (8) then
-          Object.Email.Set_Key_Value (Stmt.Get_Identifier (8), Session);
+         Object.Email.Set_Key_Value (Stmt.Get_Identifier (8), Session);
       end if;
       Object.Version := Stmt.Get_Integer (1);
       ADO.Objects.Set_Created (Object);
@@ -921,6 +1005,7 @@ package body AWA.Users.Models is
       ADO.Objects.Set_Value (Result, Id);
       return Result;
    end Access_Key_Key;
+
    function Access_Key_Key (Id : in String) return ADO.Objects.Object_Key is
       Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
                                        Of_Class => ACCESS_KEY_TABLE'Access);
@@ -928,10 +1013,12 @@ package body AWA.Users.Models is
       ADO.Objects.Set_Value (Result, Id);
       return Result;
    end Access_Key_Key;
+
    function "=" (Left, Right : Access_Key_Ref'Class) return Boolean is
    begin
       return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
    end "=";
+
    procedure Set_Field (Object : in out Access_Key_Ref'Class;
                         Impl   : out Access_Key_Access) is
       Result : ADO.Objects.Object_Record_Access;
@@ -939,6 +1026,7 @@ package body AWA.Users.Models is
       Object.Prepare_Modify (Result);
       Impl := Access_Key_Impl (Result.all)'Access;
    end Set_Field;
+
    --  Internal method to allocate the Object_Record instance
    procedure Allocate (Object : in out Access_Key_Ref) is
       Impl : Access_Key_Access;
@@ -952,6 +1040,7 @@ package body AWA.Users.Models is
    -- ----------------------------------------
    --  Data object: Access_Key
    -- ----------------------------------------
+
    procedure Set_Id (Object : in out Access_Key_Ref;
                      Value  : in ADO.Identifier) is
       Impl : Access_Key_Access;
@@ -959,18 +1048,23 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
    end Set_Id;
+
    function Get_Id (Object : in Access_Key_Ref)
                   return ADO.Identifier is
       Impl : constant Access_Key_Access := Access_Key_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
+
+
    function Get_Version (Object : in Access_Key_Ref)
                   return Integer is
       Impl : constant Access_Key_Access := Access_Key_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Version;
    end Get_Version;
+
+
    procedure Set_Access_Key (Object : in out Access_Key_Ref;
                               Value : in String) is
       Impl : Access_Key_Access;
@@ -978,6 +1072,7 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_String (Impl.all, 3, Impl.Access_Key, Value);
    end Set_Access_Key;
+
    procedure Set_Access_Key (Object : in out Access_Key_Ref;
                              Value  : in Ada.Strings.Unbounded.Unbounded_String) is
       Impl : Access_Key_Access;
@@ -985,6 +1080,7 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Unbounded_String (Impl.all, 3, Impl.Access_Key, Value);
    end Set_Access_Key;
+
    function Get_Access_Key (Object : in Access_Key_Ref)
                  return String is
    begin
@@ -996,6 +1092,8 @@ package body AWA.Users.Models is
    begin
       return Impl.Access_Key;
    end Get_Access_Key;
+
+
    procedure Set_User_Id (Object : in out Access_Key_Ref;
                           Value  : in ADO.Identifier) is
       Impl : Access_Key_Access;
@@ -1003,12 +1101,14 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Identifier (Impl.all, 4, Impl.User_Id, Value);
    end Set_User_Id;
+
    function Get_User_Id (Object : in Access_Key_Ref)
                   return ADO.Identifier is
       Impl : constant Access_Key_Access := Access_Key_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.User_Id;
    end Get_User_Id;
+
    --  Copy of the object.
    procedure Copy (Object : in Access_Key_Ref;
                    Into   : in out Access_Key_Ref) is
@@ -1030,6 +1130,7 @@ package body AWA.Users.Models is
       end if;
       Into := Result;
    end Copy;
+
    procedure Find (Object  : in out Access_Key_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -1044,6 +1145,7 @@ package body AWA.Users.Models is
          Destroy (Impl);
       end if;
    end Find;
+
    procedure Load (Object  : in out Access_Key_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Id      : in ADO.Identifier) is
@@ -1060,6 +1162,7 @@ package body AWA.Users.Models is
       end if;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Load;
+
    procedure Load (Object  : in out Access_Key_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Id      : in ADO.Identifier;
@@ -1076,6 +1179,7 @@ package body AWA.Users.Models is
          ADO.Objects.Set_Object (Object, Impl.all'Access);
       end if;
    end Load;
+
    procedure Save (Object  : in out Access_Key_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -1090,6 +1194,7 @@ package body AWA.Users.Models is
          Impl.Save (Session);
       end if;
    end Save;
+
    procedure Delete (Object  : in out Access_Key_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -1098,6 +1203,7 @@ package body AWA.Users.Models is
          Impl.Delete (Session);
       end if;
    end Delete;
+
    --  --------------------
    --  Free the object
    --  --------------------
@@ -1105,10 +1211,13 @@ package body AWA.Users.Models is
       type Access_Key_Impl_Ptr is access all Access_Key_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
               (Access_Key_Impl, Access_Key_Impl_Ptr);
+      pragma Warnings (Off, "*redundant conversion*");
       Ptr : Access_Key_Impl_Ptr := Access_Key_Impl (Object.all)'Access;
+      pragma Warnings (On, "*redundant conversion*");
    begin
       Unchecked_Free (Ptr);
    end Destroy;
+
    procedure Find (Object  : in out Access_Key_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -1126,6 +1235,7 @@ package body AWA.Users.Models is
          Found := False;
       end if;
    end Find;
+
    overriding
    procedure Load (Object  : in out Access_Key_Impl;
                    Session : in out ADO.Sessions.Session'Class) is
@@ -1140,6 +1250,7 @@ package body AWA.Users.Models is
          raise ADO.Objects.NOT_FOUND;
       end if;
    end Load;
+
    procedure Save (Object  : in out Access_Key_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -1171,6 +1282,7 @@ package body AWA.Users.Models is
          end;
       end if;
    end Save;
+
    procedure Create (Object  : in out Access_Key_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -1193,6 +1305,7 @@ package body AWA.Users.Models is
       end if;
       ADO.Objects.Set_Created (Object);
    end Create;
+
    procedure Delete (Object  : in out Access_Key_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -1202,6 +1315,7 @@ package body AWA.Users.Models is
       Stmt.Add_Param (Value => Object.Get_Key);
       Stmt.Execute;
    end Delete;
+
    function Get_Value (Item : in Access_Key_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := Item.Get_Load_Object;
@@ -1222,6 +1336,7 @@ package body AWA.Users.Models is
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
+
    procedure List (Object  : in out Access_Key_Vector;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class) is
@@ -1242,6 +1357,7 @@ package body AWA.Users.Models is
          Stmt.Next;
       end loop;
    end List;
+
    --  ------------------------------
    --  Load the object from current iterator position
    --  ------------------------------
@@ -1263,6 +1379,7 @@ package body AWA.Users.Models is
       ADO.Objects.Set_Value (Result, Id);
       return Result;
    end Session_Key;
+
    function Session_Key (Id : in String) return ADO.Objects.Object_Key is
       Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
                                        Of_Class => SESSION_TABLE'Access);
@@ -1270,10 +1387,12 @@ package body AWA.Users.Models is
       ADO.Objects.Set_Value (Result, Id);
       return Result;
    end Session_Key;
+
    function "=" (Left, Right : Session_Ref'Class) return Boolean is
    begin
       return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
    end "=";
+
    procedure Set_Field (Object : in out Session_Ref'Class;
                         Impl   : out Session_Access) is
       Result : ADO.Objects.Object_Record_Access;
@@ -1281,6 +1400,7 @@ package body AWA.Users.Models is
       Object.Prepare_Modify (Result);
       Impl := Session_Impl (Result.all)'Access;
    end Set_Field;
+
    --  Internal method to allocate the Object_Record instance
    procedure Allocate (Object : in out Session_Ref) is
       Impl : Session_Access;
@@ -1298,6 +1418,7 @@ package body AWA.Users.Models is
    -- ----------------------------------------
    --  Data object: Session
    -- ----------------------------------------
+
    procedure Set_Id (Object : in out Session_Ref;
                      Value  : in ADO.Identifier) is
       Impl : Session_Access;
@@ -1305,18 +1426,23 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
    end Set_Id;
+
    function Get_Id (Object : in Session_Ref)
                   return ADO.Identifier is
       Impl : constant Session_Access := Session_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
+
+
    function Get_Version (Object : in Session_Ref)
                   return Integer is
       Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Version;
    end Get_Version;
+
+
    procedure Set_Start_Date (Object : in out Session_Ref;
                              Value  : in ADO.Nullable_Time) is
       Impl : Session_Access;
@@ -1324,12 +1450,15 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Time (Impl.all, 3, Impl.Start_Date, Value);
    end Set_Start_Date;
+
    function Get_Start_Date (Object : in Session_Ref)
                   return ADO.Nullable_Time is
       Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Start_Date;
    end Get_Start_Date;
+
+
    procedure Set_End_Date (Object : in out Session_Ref;
                            Value  : in ADO.Nullable_Time) is
       Impl : Session_Access;
@@ -1337,12 +1466,15 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Time (Impl.all, 4, Impl.End_Date, Value);
    end Set_End_Date;
+
    function Get_End_Date (Object : in Session_Ref)
                   return ADO.Nullable_Time is
       Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.End_Date;
    end Get_End_Date;
+
+
    procedure Set_Ip_Address (Object : in out Session_Ref;
                               Value : in String) is
       Impl : Session_Access;
@@ -1350,6 +1482,7 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_String (Impl.all, 5, Impl.Ip_Address, Value);
    end Set_Ip_Address;
+
    procedure Set_Ip_Address (Object : in out Session_Ref;
                              Value  : in Ada.Strings.Unbounded.Unbounded_String) is
       Impl : Session_Access;
@@ -1357,6 +1490,7 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Unbounded_String (Impl.all, 5, Impl.Ip_Address, Value);
    end Set_Ip_Address;
+
    function Get_Ip_Address (Object : in Session_Ref)
                  return String is
    begin
@@ -1368,6 +1502,8 @@ package body AWA.Users.Models is
    begin
       return Impl.Ip_Address;
    end Get_Ip_Address;
+
+
    procedure Set_User_Id (Object : in out Session_Ref;
                           Value  : in ADO.Identifier) is
       Impl : Session_Access;
@@ -1375,12 +1511,15 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Identifier (Impl.all, 6, Impl.User_Id, Value);
    end Set_User_Id;
+
    function Get_User_Id (Object : in Session_Ref)
                   return ADO.Identifier is
       Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.User_Id;
    end Get_User_Id;
+
+
    procedure Set_Session_Type (Object : in out Session_Ref;
                                Value  : in Integer) is
       Impl : Session_Access;
@@ -1389,12 +1528,15 @@ package body AWA.Users.Models is
       ADO.Objects.Set_Field_Integer (Impl.all, 7, Impl.Session_Type, Value);
       ADO.Objects.Set_Field_Integer (Impl.all, 7, Impl.Session_Type, Value);
    end Set_Session_Type;
+
    function Get_Session_Type (Object : in Session_Ref)
                   return Integer is
       Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Session_Type;
    end Get_Session_Type;
+
+
    procedure Set_Server_Id (Object : in out Session_Ref;
                             Value  : in Integer) is
       Impl : Session_Access;
@@ -1403,12 +1545,15 @@ package body AWA.Users.Models is
       ADO.Objects.Set_Field_Integer (Impl.all, 8, Impl.Server_Id, Value);
       ADO.Objects.Set_Field_Integer (Impl.all, 8, Impl.Server_Id, Value);
    end Set_Server_Id;
+
    function Get_Server_Id (Object : in Session_Ref)
                   return Integer is
       Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Server_Id;
    end Get_Server_Id;
+
+
    procedure Set_Auth (Object : in out Session_Ref;
                        Value  : in Session_Ref'Class) is
       Impl : Session_Access;
@@ -1416,12 +1561,14 @@ package body AWA.Users.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Object (Impl.all, 9, Impl.Auth, Value);
    end Set_Auth;
+
    function Get_Auth (Object : in Session_Ref)
                   return Session_Ref'Class is
       Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Auth;
    end Get_Auth;
+
    --  Copy of the object.
    procedure Copy (Object : in Session_Ref;
                    Into   : in out Session_Ref) is
@@ -1448,6 +1595,7 @@ package body AWA.Users.Models is
       end if;
       Into := Result;
    end Copy;
+
    procedure Find (Object  : in out Session_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -1462,6 +1610,7 @@ package body AWA.Users.Models is
          Destroy (Impl);
       end if;
    end Find;
+
    procedure Load (Object  : in out Session_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Id      : in ADO.Identifier) is
@@ -1478,6 +1627,7 @@ package body AWA.Users.Models is
       end if;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Load;
+
    procedure Load (Object  : in out Session_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Id      : in ADO.Identifier;
@@ -1494,6 +1644,7 @@ package body AWA.Users.Models is
          ADO.Objects.Set_Object (Object, Impl.all'Access);
       end if;
    end Load;
+
    procedure Save (Object  : in out Session_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -1508,6 +1659,7 @@ package body AWA.Users.Models is
          Impl.Save (Session);
       end if;
    end Save;
+
    procedure Delete (Object  : in out Session_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -1516,6 +1668,7 @@ package body AWA.Users.Models is
          Impl.Delete (Session);
       end if;
    end Delete;
+
    --  --------------------
    --  Free the object
    --  --------------------
@@ -1523,10 +1676,13 @@ package body AWA.Users.Models is
       type Session_Impl_Ptr is access all Session_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
               (Session_Impl, Session_Impl_Ptr);
+      pragma Warnings (Off, "*redundant conversion*");
       Ptr : Session_Impl_Ptr := Session_Impl (Object.all)'Access;
+      pragma Warnings (On, "*redundant conversion*");
    begin
       Unchecked_Free (Ptr);
    end Destroy;
+
    procedure Find (Object  : in out Session_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -1544,6 +1700,7 @@ package body AWA.Users.Models is
          Found := False;
       end if;
    end Find;
+
    overriding
    procedure Load (Object  : in out Session_Impl;
                    Session : in out ADO.Sessions.Session'Class) is
@@ -1558,6 +1715,7 @@ package body AWA.Users.Models is
          raise ADO.Objects.NOT_FOUND;
       end if;
    end Load;
+
    procedure Save (Object  : in out Session_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -1609,6 +1767,7 @@ package body AWA.Users.Models is
          end;
       end if;
    end Save;
+
    procedure Create (Object  : in out Session_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -1639,6 +1798,7 @@ package body AWA.Users.Models is
       end if;
       ADO.Objects.Set_Created (Object);
    end Create;
+
    procedure Delete (Object  : in out Session_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -1648,6 +1808,7 @@ package body AWA.Users.Models is
       Stmt.Add_Param (Value => Object.Get_Key);
       Stmt.Execute;
    end Delete;
+
    function Get_Value (Item : in Session_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := Item.Get_Load_Object;
@@ -1688,6 +1849,7 @@ package body AWA.Users.Models is
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
+
    procedure List (Object  : in out Session_Vector;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class) is
@@ -1708,6 +1870,7 @@ package body AWA.Users.Models is
          Stmt.Next;
       end loop;
    end List;
+
    --  ------------------------------
    --  Load the object from current iterator position
    --  ------------------------------
@@ -1723,7 +1886,7 @@ package body AWA.Users.Models is
       Object.Session_Type := Stmt.Get_Integer (6);
       Object.Server_Id := Stmt.Get_Integer (7);
       if not Stmt.Is_Null (8) then
-          Object.Auth.Set_Key_Value (Stmt.Get_Identifier (8), Session);
+         Object.Auth.Set_Key_Value (Stmt.Get_Identifier (8), Session);
       end if;
       Object.Version := Stmt.Get_Integer (1);
       ADO.Objects.Set_Created (Object);

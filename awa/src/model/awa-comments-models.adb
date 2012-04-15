@@ -35,6 +35,7 @@ package body AWA.Comments.Models is
       ADO.Objects.Set_Value (Result, Id);
       return Result;
    end Comment_Key;
+
    function Comment_Key (Id : in String) return ADO.Objects.Object_Key is
       Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
                                        Of_Class => COMMENT_TABLE'Access);
@@ -42,10 +43,12 @@ package body AWA.Comments.Models is
       ADO.Objects.Set_Value (Result, Id);
       return Result;
    end Comment_Key;
+
    function "=" (Left, Right : Comment_Ref'Class) return Boolean is
    begin
       return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
    end "=";
+
    procedure Set_Field (Object : in out Comment_Ref'Class;
                         Impl   : out Comment_Access) is
       Result : ADO.Objects.Object_Record_Access;
@@ -53,6 +56,7 @@ package body AWA.Comments.Models is
       Object.Prepare_Modify (Result);
       Impl := Comment_Impl (Result.all)'Access;
    end Set_Field;
+
    --  Internal method to allocate the Object_Record instance
    procedure Allocate (Object : in out Comment_Ref) is
       Impl : Comment_Access;
@@ -68,6 +72,7 @@ package body AWA.Comments.Models is
    -- ----------------------------------------
    --  Data object: Comment
    -- ----------------------------------------
+
    procedure Set_Id (Object : in out Comment_Ref;
                      Value  : in ADO.Identifier) is
       Impl : Comment_Access;
@@ -75,18 +80,23 @@ package body AWA.Comments.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
    end Set_Id;
+
    function Get_Id (Object : in Comment_Ref)
                   return ADO.Identifier is
       Impl : constant Comment_Access := Comment_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
+
+
    function Get_Version (Object : in Comment_Ref)
                   return Integer is
       Impl : constant Comment_Access := Comment_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Version;
    end Get_Version;
+
+
    procedure Set_Date (Object : in out Comment_Ref;
                        Value  : in Ada.Calendar.Time) is
       Impl : Comment_Access;
@@ -94,12 +104,15 @@ package body AWA.Comments.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Time (Impl.all, 3, Impl.Date, Value);
    end Set_Date;
+
    function Get_Date (Object : in Comment_Ref)
                   return Ada.Calendar.Time is
       Impl : constant Comment_Access := Comment_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Date;
    end Get_Date;
+
+
    procedure Set_Message (Object : in out Comment_Ref;
                            Value : in String) is
       Impl : Comment_Access;
@@ -107,6 +120,7 @@ package body AWA.Comments.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_String (Impl.all, 4, Impl.Message, Value);
    end Set_Message;
+
    procedure Set_Message (Object : in out Comment_Ref;
                           Value  : in Ada.Strings.Unbounded.Unbounded_String) is
       Impl : Comment_Access;
@@ -114,6 +128,7 @@ package body AWA.Comments.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Unbounded_String (Impl.all, 4, Impl.Message, Value);
    end Set_Message;
+
    function Get_Message (Object : in Comment_Ref)
                  return String is
    begin
@@ -125,6 +140,8 @@ package body AWA.Comments.Models is
    begin
       return Impl.Message;
    end Get_Message;
+
+
    procedure Set_Entity_Id (Object : in out Comment_Ref;
                             Value  : in ADO.Identifier) is
       Impl : Comment_Access;
@@ -132,12 +149,15 @@ package body AWA.Comments.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Identifier (Impl.all, 5, Impl.Entity_Id, Value);
    end Set_Entity_Id;
+
    function Get_Entity_Id (Object : in Comment_Ref)
                   return ADO.Identifier is
       Impl : constant Comment_Access := Comment_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Entity_Id;
    end Get_Entity_Id;
+
+
    procedure Set_User (Object : in out Comment_Ref;
                        Value  : in AWA.Users.Models.User_Ref'Class) is
       Impl : Comment_Access;
@@ -145,12 +165,15 @@ package body AWA.Comments.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Object (Impl.all, 6, Impl.User, Value);
    end Set_User;
+
    function Get_User (Object : in Comment_Ref)
                   return AWA.Users.Models.User_Ref'Class is
       Impl : constant Comment_Access := Comment_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.User;
    end Get_User;
+
+
    procedure Set_Entity_Type (Object : in out Comment_Ref;
                               Value  : in ADO.Entity_Type) is
       Impl : Comment_Access;
@@ -158,12 +181,14 @@ package body AWA.Comments.Models is
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Entity_Type (Impl.all, 7, Impl.Entity_Type, Value);
    end Set_Entity_Type;
+
    function Get_Entity_Type (Object : in Comment_Ref)
                   return ADO.Entity_Type is
       Impl : constant Comment_Access := Comment_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Entity_Type;
    end Get_Entity_Type;
+
    --  Copy of the object.
    procedure Copy (Object : in Comment_Ref;
                    Into   : in out Comment_Ref) is
@@ -188,6 +213,7 @@ package body AWA.Comments.Models is
       end if;
       Into := Result;
    end Copy;
+
    procedure Find (Object  : in out Comment_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -202,6 +228,7 @@ package body AWA.Comments.Models is
          Destroy (Impl);
       end if;
    end Find;
+
    procedure Load (Object  : in out Comment_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Id      : in ADO.Identifier) is
@@ -218,6 +245,7 @@ package body AWA.Comments.Models is
       end if;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Load;
+
    procedure Load (Object  : in out Comment_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Id      : in ADO.Identifier;
@@ -234,6 +262,7 @@ package body AWA.Comments.Models is
          ADO.Objects.Set_Object (Object, Impl.all'Access);
       end if;
    end Load;
+
    procedure Save (Object  : in out Comment_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -248,6 +277,7 @@ package body AWA.Comments.Models is
          Impl.Save (Session);
       end if;
    end Save;
+
    procedure Delete (Object  : in out Comment_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -256,6 +286,7 @@ package body AWA.Comments.Models is
          Impl.Delete (Session);
       end if;
    end Delete;
+
    --  --------------------
    --  Free the object
    --  --------------------
@@ -263,10 +294,13 @@ package body AWA.Comments.Models is
       type Comment_Impl_Ptr is access all Comment_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
               (Comment_Impl, Comment_Impl_Ptr);
+      pragma Warnings (Off, "*redundant conversion*");
       Ptr : Comment_Impl_Ptr := Comment_Impl (Object.all)'Access;
+      pragma Warnings (On, "*redundant conversion*");
    begin
       Unchecked_Free (Ptr);
    end Destroy;
+
    procedure Find (Object  : in out Comment_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -284,6 +318,7 @@ package body AWA.Comments.Models is
          Found := False;
       end if;
    end Find;
+
    overriding
    procedure Load (Object  : in out Comment_Impl;
                    Session : in out ADO.Sessions.Session'Class) is
@@ -298,6 +333,7 @@ package body AWA.Comments.Models is
          raise ADO.Objects.NOT_FOUND;
       end if;
    end Load;
+
    procedure Save (Object  : in out Comment_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -354,6 +390,7 @@ package body AWA.Comments.Models is
          end;
       end if;
    end Save;
+
    procedure Create (Object  : in out Comment_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -382,6 +419,7 @@ package body AWA.Comments.Models is
       end if;
       ADO.Objects.Set_Created (Object);
    end Create;
+
    procedure Delete (Object  : in out Comment_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -391,6 +429,7 @@ package body AWA.Comments.Models is
       Stmt.Add_Param (Value => Object.Get_Key);
       Stmt.Execute;
    end Delete;
+
    function Get_Value (Item : in Comment_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := Item.Get_Load_Object;
@@ -417,6 +456,7 @@ package body AWA.Comments.Models is
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
+
    procedure List (Object  : in out Comment_Vector;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class) is
@@ -437,6 +477,7 @@ package body AWA.Comments.Models is
          Stmt.Next;
       end loop;
    end List;
+
    --  ------------------------------
    --  Load the object from current iterator position
    --  ------------------------------
@@ -449,7 +490,7 @@ package body AWA.Comments.Models is
       Object.Message := Stmt.Get_Unbounded_String (3);
       Object.Entity_Id := Stmt.Get_Identifier (4);
       if not Stmt.Is_Null (5) then
-          Object.User.Set_Key_Value (Stmt.Get_Identifier (5), Session);
+         Object.User.Set_Key_Value (Stmt.Get_Identifier (5), Session);
       end if;
       Object.Entity_Type := ADO.Entity_Type (Stmt.Get_Integer (6));
       Object.Version := Stmt.Get_Integer (1);
