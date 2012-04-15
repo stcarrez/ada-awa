@@ -25,6 +25,62 @@ CREATE TABLE acl (
   `writeable` TINYINT ,
   PRIMARY KEY (`id`)
 );
+/* An image that was uploaded by a user in an image folder. */
+CREATE TABLE awa_image (
+  /* the image identifier. */
+  `id` BIGINT NOT NULL,
+  /* the image version. */
+  `version` int ,
+  /* the image width. */
+  `width` INTEGER NOT NULL,
+  /* the image height. */
+  `height` INTEGER NOT NULL,
+  /* the task within the server which is processing this message */
+  `task_id` INTEGER NOT NULL,
+  /* the image name. */
+  `name` VARCHAR(255) NOT NULL,
+  /* the image type. */
+  `mime_type` VARCHAR(255) NOT NULL,
+  /* the image path. */
+  `path` VARCHAR(255) NOT NULL,
+  /* the image creation date. */
+  `create_date` DATETIME NOT NULL,
+  /* the image storage type. */
+  `storage` INTEGER NOT NULL,
+  /* the user who uploaded the image. */
+  `user_id` INTEGER NOT NULL,
+  /* the image folder where this image is stored. */
+  `folder_id` INTEGER NOT NULL,
+  /* the image data if the storage type is DATABASE. */
+  `image_id` INTEGER ,
+  PRIMARY KEY (`id`)
+);
+/* The database storage data when the storage type is DATABASE. */
+CREATE TABLE awa_image_data (
+  /* the storage data identifier */
+  `id` INTEGER NOT NULL,
+  /* the storage data version. */
+  `version` int ,
+  /* the image data when the storage type is DATABASE. */
+  `data` BLOB NOT NULL,
+  PRIMARY KEY (`id`)
+);
+/* The image folder contains a set of images that have been uploaded by the user. */
+CREATE TABLE awa_image_folder (
+  /* the image folder identifier */
+  `id` INTEGER NOT NULL AUTO_INCREMENT,
+  /* the image folder version. */
+  `version` int ,
+  /* the image folder name */
+  `name` VARCHAR(256) NOT NULL,
+  /* the image folder creation date */
+  `create_date` DATETIME NOT NULL,
+  /* the user who owns this image folder */
+  `user_id` INTEGER NOT NULL,
+  /* the workspace that this image folder belongs. */
+  `workspace_id` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
+);
 /* A message in the message queue */
 CREATE TABLE awa_message (
   /* the message identifier */
@@ -81,7 +137,7 @@ CREATE TABLE awa_queue (
 CREATE TABLE blog (
   /* the blog identifier */
   `id` INTEGER NOT NULL,
-  /*  */
+  /* the blob version. */
   `version` int ,
   /* the blog name */
   `name` VARCHAR(256) NOT NULL,
@@ -89,7 +145,7 @@ CREATE TABLE blog (
   `uid` VARCHAR(256) NOT NULL,
   /* the blog creation date */
   `create_date` DATETIME NOT NULL,
-  /*  */
+  /* the workspace that this blob belongs to. */
   `workspace_id` INTEGER NOT NULL,
   PRIMARY KEY (`id`)
 );
@@ -97,7 +153,7 @@ CREATE TABLE blog (
 CREATE TABLE blog_post (
   /* the post identifier */
   `id` BIGINT NOT NULL,
-  /*  */
+  /* the post version. */
   `version` int ,
   /* the post title */
   `title` VARCHAR(256) NOT NULL,
@@ -111,9 +167,9 @@ CREATE TABLE blog_post (
   `publish_date` DATETIME ,
   /* the post status */
   `status` INTEGER NOT NULL,
-  /*  */
+  /* the post author */
   `author_id` INTEGER NOT NULL,
-  /*  */
+  /* the blog that this post belongs */
   `blog_id` INTEGER NOT NULL,
   PRIMARY KEY (`id`)
 );
@@ -202,13 +258,13 @@ CREATE TABLE user (
             is part of the workspace or not.
          */
 CREATE TABLE workspace (
-  /* the workspace id */
+  /* the workspace identifier. */
   `id` INTEGER NOT NULL,
-  /*  */
+  /* the storage data version. */
   `version` int ,
-  /* the workspace creation date */
+  /* the workspace creation date. */
   `create_date` DATETIME NOT NULL,
-  /* the workspace owner */
+  /* the workspace owner. */
   `owner_fk` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
@@ -216,21 +272,24 @@ CREATE TABLE workspace (
             The workspace member indicates the users who are part of the workspace.
          */
 CREATE TABLE workspace_member (
-  /* the member id */
+  /* the member identifier. */
   `id` BIGINT NOT NULL,
-  /*  */
+  /* the workspace member version. */
   `version` int ,
-  /* the member creation date */
+  /* the member creation date. */
   `create_date` DATETIME NOT NULL,
-  /* the workspace member */
+  /* the workspace member. */
   `user_fk` BIGINT NOT NULL,
-  /* the workspace */
+  /* the workspace. */
   `workspace_fk` INTEGER NOT NULL,
   PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES
 ("access_key")
 ,("acl")
+,("awa_image")
+,("awa_image_data")
+,("awa_image_folder")
 ,("awa_message")
 ,("awa_message_type")
 ,("awa_queue")

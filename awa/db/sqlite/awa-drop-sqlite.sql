@@ -10,5 +10,8 @@ DROP TABLE IF EXISTS `blog`;
 DROP TABLE IF EXISTS `awa_queue`;
 DROP TABLE IF EXISTS `awa_message_type`;
 DROP TABLE IF EXISTS `awa_message`;
+DROP TABLE IF EXISTS `awa_image_folder`;
+DROP TABLE IF EXISTS `awa_image_data`;
+DROP TABLE IF EXISTS `awa_image`;
 DROP TABLE IF EXISTS `acl`;
 DROP TABLE IF EXISTS `access_key`;
