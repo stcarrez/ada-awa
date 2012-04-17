@@ -30,97 +30,12 @@ with Ada.Calendar;
 with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
-with Util.Beans.Objects.Enums;
 with Util.Beans.Basic.Lists;
+with AWA.Storages.Models;
 with AWA.Users.Models;
 with AWA.Workspaces.Models;
 pragma Warnings (On, "unit * is not referenced");
 package AWA.Images.Models is
-   type Storage_Type is (DATABASE, FILE, URL);
-   for Storage_Type use (DATABASE => 0, FILE => 1, URL => 2);
-   package Storage_Type_Objects is
-      new Util.Beans.Objects.Enums (Storage_Type);
-
-   --  --------------------
-   --  The database storage data when the storage type is DATABASE.
-   --  --------------------
-   --  Create an object key for Image_Data.
-   function Image_Data_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
-   --  Create an object key for Image_Data from a string.
-   --  Raises Constraint_Error if the string cannot be converted into the object key.
-   function Image_Data_Key (Id : in String) return ADO.Objects.Object_Key;
-
-   type Image_Data_Ref is new ADO.Objects.Object_Ref with null record;
-
-   Null_Image_Data : constant Image_Data_Ref;
-   function "=" (Left, Right : Image_Data_Ref'Class) return Boolean;
-
-   --  Set the storage data identifier
-   procedure Set_Id (Object : in out Image_Data_Ref;
-                     Value  : in ADO.Identifier);
-
-   --  Get the storage data identifier
-   function Get_Id (Object : in Image_Data_Ref)
-                 return ADO.Identifier;
-   --  Get the storage data version.
-   function Get_Version (Object : in Image_Data_Ref)
-                 return Integer;
-
-   --  Set the image data when the storage type is DATABASE.
-   procedure Set_Data (Object : in out Image_Data_Ref;
-                       Value  : in ADO.Blob_Ref);
-
-   --  Get the image data when the storage type is DATABASE.
-   function Get_Data (Object : in Image_Data_Ref)
-                 return ADO.Blob_Ref;
-
-   --  Load the entity identified by 'Id'.
-   --  Raises the NOT_FOUND exception if it does not exist.
-   procedure Load (Object  : in out Image_Data_Ref;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Id      : in ADO.Identifier);
-
-   --  Load the entity identified by 'Id'.
-   --  Returns True in <b>Found</b> if the object was found and False if it does not exist.
-   procedure Load (Object  : in out Image_Data_Ref;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Id      : in ADO.Identifier;
-                   Found   : out Boolean);
-
-   --  Find and load the entity.
-   overriding
-   procedure Find (Object  : in out Image_Data_Ref;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class;
-                   Found   : out Boolean);
-
-   --  Save the entity.  If the entity does not have an identifier, an identifier is allocated
-   --  and it is inserted in the table.  Otherwise, only data fields which have been changed
-   --  are updated.
-   overriding
-   procedure Save (Object  : in out Image_Data_Ref;
-                   Session : in out ADO.Sessions.Master_Session'Class);
-
-   --  Delete the entity.
-   overriding
-   procedure Delete (Object  : in out Image_Data_Ref;
-                     Session : in out ADO.Sessions.Master_Session'Class);
-
-   overriding
-   function Get_Value (Item : in Image_Data_Ref;
-                       Name : in String) return Util.Beans.Objects.Object;
-
-   --  Table definition
-   IMAGE_DATA_TABLE : aliased constant ADO.Schemas.Class_Mapping;
-
-   --  Internal method to allocate the Object_Record instance
-   overriding
-   procedure Allocate (Object : in out Image_Data_Ref);
-
-   --  Copy of the object.
-   procedure Copy (Object : in Image_Data_Ref;
-                   Into   : in out Image_Data_Ref);
-
    --  --------------------
    --  The image folder contains a set of images that have been uploaded by the user.
    --  --------------------
@@ -331,13 +246,21 @@ package AWA.Images.Models is
    function Get_Create_Date (Object : in Image_Ref)
                  return Ada.Calendar.Time;
 
-   --  Set the image storage type.
-   procedure Set_Storage (Object : in out Image_Ref;
-                          Value  : in Storage_Type);
+   --  Set the original image if this image was created by the application.
+   procedure Set_Original (Object : in out Image_Ref;
+                           Value  : in Image_Ref'Class);
 
-   --  Get the image storage type.
-   function Get_Storage (Object : in Image_Ref)
-                 return Storage_Type;
+   --  Get the original image if this image was created by the application.
+   function Get_Original (Object : in Image_Ref)
+                 return Image_Ref'Class;
+
+   --  Set the thumbnail image to display the image is an image selector.
+   procedure Set_Thumbnail (Object : in out Image_Ref;
+                            Value  : in Image_Ref'Class);
+
+   --  Get the thumbnail image to display the image is an image selector.
+   function Get_Thumbnail (Object : in Image_Ref)
+                 return Image_Ref'Class;
 
    --  Set the user who uploaded the image.
    procedure Set_User (Object : in out Image_Ref;
@@ -357,11 +280,11 @@ package AWA.Images.Models is
 
    --  Set the image data if the storage type is DATABASE.
    procedure Set_Image (Object : in out Image_Ref;
-                        Value  : in Image_Data_Ref'Class);
+                        Value  : in AWA.Storages.Models.Storage_Ref'Class);
 
    --  Get the image data if the storage type is DATABASE.
    function Get_Image (Object : in Image_Ref)
-                 return Image_Data_Ref'Class;
+                 return AWA.Storages.Models.Storage_Ref'Class;
 
    --  Load the entity identified by 'Id'.
    --  Raises the NOT_FOUND exception if it does not exist.
@@ -422,69 +345,23 @@ package AWA.Images.Models is
 
 
 private
-   IMAGE_DATA_NAME : aliased constant String := "awa_image_data";
+   IMAGE_FOLDER_NAME : aliased constant String := "awa_image_folder";
    COL_0_1_NAME : aliased constant String := "id";
    COL_1_1_NAME : aliased constant String := "version";
-   COL_2_1_NAME : aliased constant String := "data";
-   IMAGE_DATA_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 3,
-      Table => IMAGE_DATA_NAME'Access,
-      Members => (
-         COL_0_1_NAME'Access,
-         COL_1_1_NAME'Access,
-         COL_2_1_NAME'Access
-)
-     );
-   Null_Image_Data : constant Image_Data_Ref
-      := Image_Data_Ref'(ADO.Objects.Object_Ref with others => <>);
-   type Image_Data_Impl is
-      new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
-                                     Of_Class => IMAGE_DATA_TABLE'Access)
-   with record
-       Version : Integer;
-       Data : ADO.Blob_Ref;
-   end record;
-   type Image_Data_Access is access all Image_Data_Impl;
-   overriding
-   procedure Destroy (Object : access Image_Data_Impl);
-   overriding
-   procedure Find (Object  : in out Image_Data_Impl;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class;
-                   Found   : out Boolean);
-   overriding
-   procedure Load (Object  : in out Image_Data_Impl;
-                   Session : in out ADO.Sessions.Session'Class);
-   procedure Load (Object  : in out Image_Data_Impl;
-                   Stmt    : in out ADO.Statements.Query_Statement'Class;
-                   Session : in out ADO.Sessions.Session'Class);
-   overriding
-   procedure Save (Object  : in out Image_Data_Impl;
-                   Session : in out ADO.Sessions.Master_Session'Class);
-   procedure Create (Object  : in out Image_Data_Impl;
-                     Session : in out ADO.Sessions.Master_Session'Class);
-   overriding
-   procedure Delete (Object  : in out Image_Data_Impl;
-                     Session : in out ADO.Sessions.Master_Session'Class);
-   procedure Set_Field (Object : in out Image_Data_Ref'Class;
-                        Impl   : out Image_Data_Access);
-   IMAGE_FOLDER_NAME : aliased constant String := "awa_image_folder";
-   COL_0_2_NAME : aliased constant String := "id";
-   COL_1_2_NAME : aliased constant String := "version";
-   COL_2_2_NAME : aliased constant String := "name";
-   COL_3_2_NAME : aliased constant String := "create_date";
-   COL_4_2_NAME : aliased constant String := "user_id";
-   COL_5_2_NAME : aliased constant String := "workspace_id";
+   COL_2_1_NAME : aliased constant String := "name";
+   COL_3_1_NAME : aliased constant String := "create_date";
+   COL_4_1_NAME : aliased constant String := "user_id";
+   COL_5_1_NAME : aliased constant String := "workspace_id";
    IMAGE_FOLDER_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
      (Count => 6,
       Table => IMAGE_FOLDER_NAME'Access,
       Members => (
-         COL_0_2_NAME'Access,
-         COL_1_2_NAME'Access,
-         COL_2_2_NAME'Access,
-         COL_3_2_NAME'Access,
-         COL_4_2_NAME'Access,
-         COL_5_2_NAME'Access
+         COL_0_1_NAME'Access,
+         COL_1_1_NAME'Access,
+         COL_2_1_NAME'Access,
+         COL_3_1_NAME'Access,
+         COL_4_1_NAME'Access,
+         COL_5_1_NAME'Access
 )
      );
    Null_Image_Folder : constant Image_Folder_Ref
@@ -524,36 +401,38 @@ private
    procedure Set_Field (Object : in out Image_Folder_Ref'Class;
                         Impl   : out Image_Folder_Access);
    IMAGE_NAME : aliased constant String := "awa_image";
-   COL_0_3_NAME : aliased constant String := "id";
-   COL_1_3_NAME : aliased constant String := "version";
-   COL_2_3_NAME : aliased constant String := "width";
-   COL_3_3_NAME : aliased constant String := "height";
-   COL_4_3_NAME : aliased constant String := "task_id";
-   COL_5_3_NAME : aliased constant String := "name";
-   COL_6_3_NAME : aliased constant String := "mime_type";
-   COL_7_3_NAME : aliased constant String := "path";
-   COL_8_3_NAME : aliased constant String := "create_date";
-   COL_9_3_NAME : aliased constant String := "storage";
-   COL_10_3_NAME : aliased constant String := "user_id";
-   COL_11_3_NAME : aliased constant String := "folder_id";
-   COL_12_3_NAME : aliased constant String := "image_id";
+   COL_0_2_NAME : aliased constant String := "id";
+   COL_1_2_NAME : aliased constant String := "version";
+   COL_2_2_NAME : aliased constant String := "width";
+   COL_3_2_NAME : aliased constant String := "height";
+   COL_4_2_NAME : aliased constant String := "task_id";
+   COL_5_2_NAME : aliased constant String := "name";
+   COL_6_2_NAME : aliased constant String := "mime_type";
+   COL_7_2_NAME : aliased constant String := "path";
+   COL_8_2_NAME : aliased constant String := "create_date";
+   COL_9_2_NAME : aliased constant String := "original_id";
+   COL_10_2_NAME : aliased constant String := "thumbnail_id";
+   COL_11_2_NAME : aliased constant String := "user_id";
+   COL_12_2_NAME : aliased constant String := "folder_id";
+   COL_13_2_NAME : aliased constant String := "image_id";
    IMAGE_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 13,
+     (Count => 14,
       Table => IMAGE_NAME'Access,
       Members => (
-         COL_0_3_NAME'Access,
-         COL_1_3_NAME'Access,
-         COL_2_3_NAME'Access,
-         COL_3_3_NAME'Access,
-         COL_4_3_NAME'Access,
-         COL_5_3_NAME'Access,
-         COL_6_3_NAME'Access,
-         COL_7_3_NAME'Access,
-         COL_8_3_NAME'Access,
-         COL_9_3_NAME'Access,
-         COL_10_3_NAME'Access,
-         COL_11_3_NAME'Access,
-         COL_12_3_NAME'Access
+         COL_0_2_NAME'Access,
+         COL_1_2_NAME'Access,
+         COL_2_2_NAME'Access,
+         COL_3_2_NAME'Access,
+         COL_4_2_NAME'Access,
+         COL_5_2_NAME'Access,
+         COL_6_2_NAME'Access,
+         COL_7_2_NAME'Access,
+         COL_8_2_NAME'Access,
+         COL_9_2_NAME'Access,
+         COL_10_2_NAME'Access,
+         COL_11_2_NAME'Access,
+         COL_12_2_NAME'Access,
+         COL_13_2_NAME'Access
 )
      );
    Null_Image : constant Image_Ref
@@ -570,10 +449,11 @@ private
        Mime_Type : Ada.Strings.Unbounded.Unbounded_String;
        Path : Ada.Strings.Unbounded.Unbounded_String;
        Create_Date : Ada.Calendar.Time;
-       Storage : Storage_Type;
+       Original : Image_Ref;
+       Thumbnail : Image_Ref;
        User : AWA.Users.Models.User_Ref;
        Folder : Image_Folder_Ref;
-       Image : Image_Data_Ref;
+       Image : AWA.Storages.Models.Storage_Ref;
    end record;
    type Image_Access is access all Image_Impl;
    overriding
