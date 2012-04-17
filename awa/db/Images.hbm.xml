@@ -1,27 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hibernate-mapping default-cascade="none">
-    <enum name="AWA.Images.Models.Storage_Type">
-       <comment>The image storage type</comment>
-       <value name="DATABASE" value="0"/>
-       <value name="FILE" value="1"/>
-       <value name="URL" value="2"/>
-    </enum>
-    <class name="AWA.Images.Models.Image_Data" table="awa_image_data"
-           dynamic-insert="true" dynamic-update="true" list='false'>
-        <comment>The database storage data when the storage type is DATABASE.</comment>
-        <id name="id" type="ADO.Identifier" unsaved-value="0">
-            <comment>the storage data identifier</comment>
-            <column name="id" not-null="true" unique="false" sql-type="INTEGER"/>
-            <generator class="sequence"/>
-        </id>
-        <version name="version" type="int" column="version">
-            <comment>the storage data version.</comment>
-        </version>
-        <property name="data" type="blob">
-            <comment>the image data when the storage type is DATABASE.</comment>
-            <column name="data" not-null="true" unique="false" sql-type="BLOB"/>
-        </property>
-    </class>
     <class name="AWA.Images.Models.Image_Folder" table="awa_image_folder"
            dynamic-insert="true" dynamic-update="true">
         <comment>The image folder contains a set of images that have been uploaded by the user.</comment>
@@ -89,10 +67,14 @@
             <comment>the image creation date.</comment>
             <column name="create_date" not-null="true" unique="false" sql-type="DATETIME"/>
         </property>
-        <property name="storage" type="AWA.Images.Models.Storage_Type">
-            <comment>the image storage type.</comment>
-            <column name="storage" not-null="true" unique="false" sql-type="INTEGER"/>
-        </property>
+        <many-to-one name="original" class="Image" foreign-key="ID" not-null="false" lazy="proxy" fetch="select">
+            <comment>the original image if this image was created by the application.</comment>
+            <column name="original_id" not-null="true" sql-type="INTEGER"/>
+        </many-to-one>
+        <many-to-one name="thumbnail" class="Image" foreign-key="ID" not-null="false" lazy="proxy" fetch="select">
+            <comment>the thumbnail image to display the image is an image selector.</comment>
+            <column name="thumbnail_id" not-null="true" sql-type="INTEGER"/>
+        </many-to-one>
         <many-to-one name="user" class="AWA.Users.Models.User" foreign-key="ID" not-null="true" lazy="proxy" fetch="select">
             <comment>the user who uploaded the image.</comment>
             <column name="user_id" not-null="true" sql-type="INTEGER"/>
@@ -101,7 +83,7 @@
             <comment>the image folder where this image is stored.</comment>
             <column name="folder_id" not-null="true" sql-type="INTEGER"/>
         </many-to-one>
-        <many-to-one name="image" class="Image_Data" foreign-key="ID" not-null="false" lazy="proxy" fetch="select">
+        <many-to-one name="image" class="AWA.Storages.Models.Storage" foreign-key="ID" not-null="false" lazy="proxy" fetch="select">
             <comment>the image data if the storage type is DATABASE.</comment>
             <column name="image_id" not-null="false" sql-type="INTEGER"/>
         </many-to-one>
