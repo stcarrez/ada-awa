@@ -72,24 +72,16 @@ CREATE TABLE awa_image (
   `path` VARCHAR(255) NOT NULL,
   /* the image creation date. */
   `create_date` DATETIME NOT NULL,
-  /* the image storage type. */
-  `storage` INTEGER NOT NULL,
+  /* the original image if this image was created by the application. */
+  `original_id` INTEGER NOT NULL,
+  /* the thumbnail image to display the image is an image selector. */
+  `thumbnail_id` INTEGER NOT NULL,
   /* the user who uploaded the image. */
   `user_id` INTEGER NOT NULL,
   /* the image folder where this image is stored. */
   `folder_id` INTEGER NOT NULL,
   /* the image data if the storage type is DATABASE. */
   `image_id` INTEGER ,
-  PRIMARY KEY (`id`)
-);
-/* The database storage data when the storage type is DATABASE. */
-CREATE TABLE awa_image_data (
-  /* the storage data identifier */
-  `id` INTEGER NOT NULL,
-  /* the storage data version. */
-  `version` int ,
-  /* the image data when the storage type is DATABASE. */
-  `data` BLOB NOT NULL,
   PRIMARY KEY (`id`)
 );
 /* The image folder contains a set of images that have been uploaded by the user. */
@@ -158,6 +150,53 @@ CREATE TABLE awa_queue (
   `name` VARCHAR(256) NOT NULL,
   /* the server identifier which is associated with this message queue */
   `server_id` INTEGER ,
+  PRIMARY KEY (`id`)
+);
+/* The database storage data when the storage type is DATABASE. */
+CREATE TABLE awa_storage (
+  /* the storage identifier */
+  `id` INTEGER NOT NULL,
+  /* the storage data version. */
+  `version` int ,
+  /* the local store creation date */
+  `create_date` DATETIME NOT NULL,
+  /* the storage type. */
+  `storage_type` INTEGER NOT NULL,
+  /* the storage specific data */
+  `data` VARCHAR(256) NOT NULL,
+  /* the storage that this local store refers to. */
+  `storage_id` INTEGER NOT NULL,
+  /* the workspace that this storage belongs to. */
+  `workspace_id` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
+);
+/* The database storage data when the storage type is DATABASE. */
+CREATE TABLE awa_storage_data (
+  /* the storage data identifier */
+  `id` INTEGER NOT NULL,
+  /* the storage data version. */
+  `version` int ,
+  /* the storage data when the storage type is DATABASE. */
+  `data` BLOB NOT NULL,
+  PRIMARY KEY (`id`)
+);
+/* The local store record is created when a copy of the data
+is needed on the local file system.  The creation date refers to the date when
+the data was copied on the local file system.  The expiration date indicates a
+date after which the local file can be removed from the local file system. */
+CREATE TABLE awa_store_local (
+  /* the local storage identifier */
+  `id` INTEGER NOT NULL,
+  /* the local storage version. */
+  `version` int ,
+  /* the local store creation date */
+  `create_date` DATETIME NOT NULL,
+  /* the local store expiration date */
+  `expire_date` DATETIME NOT NULL,
+  /* the local store path */
+  `name` VARCHAR(256) NOT NULL,
+  /* the storage that this local store refers to. */
+  `storage_id` INTEGER NOT NULL,
   PRIMARY KEY (`id`)
 );
 /* Blog  */
@@ -315,11 +354,13 @@ INSERT INTO entity_type (name) VALUES
 ("access_key")
 ,("acl")
 ,("awa_image")
-,("awa_image_data")
 ,("awa_image_folder")
 ,("awa_message")
 ,("awa_message_type")
 ,("awa_queue")
+,("awa_storage")
+,("awa_storage_data")
+,("awa_store_local")
 ,("blog")
 ,("blog_post")
 ,("comments")
