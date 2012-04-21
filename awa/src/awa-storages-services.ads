@@ -46,7 +46,7 @@ package AWA.Storages.Services is
    --  Load the storage content identified by <b>From</b> in a local file
    --  that will be identified by <b>Into</b>.
    procedure Load (Service : in Storage_Service;
-                   Into    : in out AWA.Storages.Models.Local_Ref'Class;
+                   Into    : in out AWA.Storages.Models.Store_Local_Ref'Class;
                    From    : in AWA.Storages.Models.Storage_Ref'Class);
 
 private
