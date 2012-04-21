@@ -16,6 +16,8 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+--  The <b>Storages</b> module provides a set of storage services allowing an application
+--  to store data files, documents, images in a persistent area.
 package AWA.Storages is
 
 end AWA.Storages;
