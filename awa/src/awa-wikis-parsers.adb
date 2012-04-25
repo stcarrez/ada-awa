@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-parsers -- Wiki parser
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -69,6 +69,18 @@ package body AWA.Wikis.Parsers is
    procedure Parse_Line_Break (P     : in out Parser;
                                Token : in Wide_Wide_Character);
 
+   --  Parse a link.
+   --  Example:
+   --    [name]
+   --    [name|url]
+   --    [name|url|language]
+   --    [name|url|language|title]
+   --    [[link]]
+   --    [[link|name]]
+   --  ------------------------------
+   procedure Parse_Link (P     : in out Parser;
+                         Token : in Wide_Wide_Character);
+
    --  Parse a space and take necessary formatting actions.
    --  Example:
    --    item1 item2   => add space in text buffer
@@ -78,11 +90,44 @@ package body AWA.Wikis.Parsers is
    procedure Parse_Space (P     : in out Parser;
                           Token : in Wide_Wide_Character);
 
+   --  Parse a wiki heading.  The heading could start with '=' or '!'.
+   --  The trailing equals are ignored.
+   --  Example:
+   --    == Level 2 ==
+   --    !!! Level 3
+   procedure Parse_Header (P     : in out Parser;
+                           Token : in Wide_Wide_Character);
+
+   --  Parse an image.
+   --  Example:
+   --    ((url|alt text))
+   --    ((url|alt text|position))
+   --    ((url|alt text|position||description))
+   procedure Parse_Image (P     : in out Parser;
+                          Token : in Wide_Wide_Character);
+
+   --  Parse a quote.
+   --  Example:
+   --    {{name}}
+   --    {{name|language}}
+   --    {{name|language|url}}
+   procedure Parse_Quote (P     : in out Parser;
+                          Token : in Wide_Wide_Character);
+
    procedure Parse_Token (P     : in out Parser;
                           Table : in Parser_Table);
 
    procedure Parse_End_Line (P     : in out Parser;
                              Token : in Wide_Wide_Character);
+
+   procedure Parse_Preformatted (P     : in out Parser;
+                                 Token : in Wide_Wide_Character);
+
+   procedure Parse_List (P     : in out Parser;
+                         Token : in Wide_Wide_Character);
+
+   procedure Toggle_Format (P      : in out Parser;
+                            Format : in Format_Type);
 
    --  ------------------------------
    --  Peek the next character from the wiki text buffer.
@@ -792,6 +837,10 @@ package body AWA.Wikis.Parsers is
 
       procedure Read_Char (Buf    : in out Wide_Input;
                            Token  : out Wide_Wide_Character;
+                           Is_Eof : out Boolean);
+
+      procedure Read_Char (Buf    : in out Wide_Input;
+                           Token  : out Wide_Wide_Character;
                            Is_Eof : out Boolean) is
       begin
          if Buf.Pos > Text'Last then
@@ -830,7 +879,7 @@ package body AWA.Wikis.Parsers is
             P.Link_Double_Bracket := True;
             Parse_Token (P, Creole_Wiki_Table);
 
-         when SYNTAX_MEDIA_WIKI | SYNTAX_PHPBB=>
+         when SYNTAX_MEDIA_WIKI | SYNTAX_PHPBB =>
             Parse_Token (P, Mediawiki_Wiki_Table);
 
          when SYNTAX_MIX =>
