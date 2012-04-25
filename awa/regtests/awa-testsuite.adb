@@ -21,6 +21,7 @@ with AWA.Users.Tests;
 with AWA.Blogs.Services.Tests;
 with AWA.Wikis.Parsers.Tests;
 with AWA.Helpers.Selectors.Tests;
+with AWA.Storages.Services.Tests;
 with AWA.Events.Tests;
 with AWA.Mail.Clients.Tests;
 with AWA.Mail.Module.Tests;
@@ -39,6 +40,7 @@ package body AWA.Testsuite is
       AWA.Wikis.Parsers.Tests.Add_Tests (Ret);
       AWA.Helpers.Selectors.Tests.Add_Tests (Ret);
       AWA.Blogs.Services.Tests.Add_Tests (Ret);
+      AWA.Storages.Services.Tests.Add_Tests (Ret);
       return Ret;
    end Suite;
 
