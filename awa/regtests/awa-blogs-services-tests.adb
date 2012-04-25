@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-tests -- Unit tests for blogs module
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,9 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Util.Tests;
 with Util.Test_Caller;
---  with Util.Measures;
 
 with ADO;
 

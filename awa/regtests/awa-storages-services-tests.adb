@@ -17,9 +17,7 @@
 -----------------------------------------------------------------------
 with Ada.Streams;
 
-with Util.Tests;
 with Util.Test_Caller;
---  with Util.Measures;
 
 with ADO;
 
@@ -95,7 +93,6 @@ package body AWA.Storages.Services.Tests is
    procedure Test_Delete_Storage (T : in out Test) is
       Sec_Ctx   : Security.Contexts.Security_Context;
       Context   : AWA.Services.Contexts.Service_Context;
-      Manager   : AWA.Storages.Services.Storage_Service_Access;
       Data      : ADO.Blob_Ref;
    begin
       AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-storage@test.com");
