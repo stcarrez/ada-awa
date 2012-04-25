@@ -81,7 +81,7 @@ package body AWA.Applications.Configs is
          Reader.Parse (File);
 
       exception
-         when E : others =>
+         when others =>
             Log.Error ("Error while reading {0}", File);
             raise;
       end;

@@ -18,12 +18,12 @@
 
 package AWA is
 
-    pragma Preelaborate;
+   pragma Preelaborate;
 
-    --  Library SVN identification
-    SVN_URL : constant String := "$HeadURL: file:///opt/repository/svn/ada/awa/trunk/src/awa.ads $";
+   --  Library SVN identification
+   SVN_URL : constant String := "$HeadURL: file:///opt/repository/svn/ada/awa/trunk/src/awa.ads $";
 
-    --  Revision used (must run 'make version' to update)
-    SVN_REV : constant String := "$Rev: 318 $";
+   --  Revision used (must run 'make version' to update)
+   SVN_REV : constant String := "$Rev: 318 $";
 
 end AWA;

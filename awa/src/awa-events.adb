@@ -37,6 +37,11 @@ package body AWA.Events is
    type Name_Array is array (Event_Index range <>) of Util.Strings.Name_Access;
    type Name_Array_Access is access all Name_Array;
 
+   --  Register an event by its name and allocate a unique runtime event index.
+   --  ------------------------------
+   procedure Add_Event (Name  : in Util.Strings.Name_Access;
+                        Index : out Event_Index);
+
    --  A static list of event names.  This array is created during the elaboration
    --  of event definitions.  It is sorted on event names.
    Events     : Event_Name_Pair_Array_Access;
@@ -66,7 +71,7 @@ package body AWA.Events is
       elsif Events'Last = Last_Event then
          declare
             E : Event_Name_Pair_Array_Access := new Event_Name_Pair_Array (1 .. Last_Event + 10);
-            N : Name_Array_Access := new Name_Array (1 .. Last_Event + 10);
+            N : constant Name_Array_Access := new Name_Array (1 .. Last_Event + 10);
          begin
             E (Events'Range) := Events.all;
             N (Names'Range) := Names.all;
