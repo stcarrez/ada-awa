@@ -20,7 +20,6 @@ AC_INIT(src/awa.ads)
 
 AC_CANONICAL_SYSTEM
 dnl AM_MAINTAINER_MODE
-AC_EXEEXT
 
 # Current release settings
 AWA_MAJOR_VERSION=0
@@ -28,11 +27,13 @@ AWA_MINOR_VERSION=2
 AWA_MICRO_VERSION=0
 AWA_VERSION=$AWA_MAJOR_VERSION.$AWA_MINOR_VERSION.$AWA_MICRO_VERSION
 
+AC_CHECK_PROGS(GNATMAKE, gnatmake, "")
+
 # checking for local tools
 AC_PROG_CC
 AC_PROG_MAKE_SET
 AC_PROG_INSTALL
-AC_PROG_RANLIB
+AC_PROG_LN_S
 
 # Set the version number of GtkAda
 AC_SUBST(AWA_VERSION)
@@ -183,5 +184,5 @@ AWA_AWS_STATUS=yes
 AC_SUBST(AWA_AWS_STATUS)
 
 AC_OUTPUT(
-Makefile awa.gpr tests.gpr awaunit.gpr
+Makefile awa.gpr tests.gpr awaunit.gpr distrib/awa.gpr distrib/awaunit.gpr
 )

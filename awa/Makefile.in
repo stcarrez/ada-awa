@@ -1,10 +1,21 @@
+## The type of library we want to build. Possible values:
+##   relocatable
+##   static
+LIBRARY_TYPE=static
+
 # You may edit this makefile as long as you keep these original 
 # target names defined.
 MODE=debug
-GNATMAKE=gnatmake
+GNATMAKE=@GNATMAKE@
 GNATCLEAN=gnatclean
-GPRPATH=awa.gpr
 SVN=svn
+INSTALL=@INSTALL@
+
+GPRPATH=awa.gpr
+
+BUILDS_SHARED=@BUILDS_SHARED@
+
+version=@UTIL_VERSION@
 
 distdir=ada-awa-@AWA_VERSION@
 
@@ -13,8 +24,19 @@ DIST_FILE=ada-awa-@AWA_VERSION@.tar.gz
 HAVE_MYSQL=@ADO_DB_MYSQL@
 HAVE_SQLITE=@ADO_DB_SQLITE@
 HAVE_AWS=@AWA_AWS_STATUS@
+
+LN_S=@LN_S@
 MKDIR=mkdir
 CP=cp
+LN=ln -s
+
+ifeq (${OS},Windows_NT)
+LIBEXT=dll
+LIBVER=dll
+else
+LIBEXT=so
+LIBVER=so.$(version)
+endif
 
 srcdir = .
 top_srcdir = @top_srcdir@
@@ -28,12 +50,28 @@ includedir=${prefix}/share/ada/adainclude
 projectdir=${prefix}/share/ada/adainclude
 bindir=${prefix}/bin
 libdir=${prefix}/lib
-alidir=${prefix}/share/ada/adainclude
+alidir=${libdir}/ada/adalib/
+
+MAKE_ARGS=-XMODE=${MODE} -XLIBRARY_TYPE=${LIBRARY_TYPE} -XPROCESSORS=4
+
+ifeq (${BUILDS_SHARED},yes)
+all:     static shared
+install: install_static install_shared
+else
+all:     static
+install: install_static
+endif
 
 # Build executables for all mains defined by the project.
 build:	src/awa-mail-clients-factory.adb
-	$(GNATMAKE) -XMODE=${MODE} -XPROCESSORS=4 -p -P "$(GPRPATH)"
-	$(GNATMAKE) -p -Ptests
+	$(GNATMAKE) -m -p -P "$(GPRPATH)" $(MAKE_ARGS)
+	$(GNATMAKE) -m -p -Ptests $(MAKE_ARGS)
+
+static:
+	$(MAKE) LIBRARY_TYPE=static build
+
+shared:
+	$(MAKE) LIBRARY_TYPE=relocatable build
 
 # Not intended for manual invocation.
 # Invoked if automatic builds are enabled.
@@ -75,7 +113,8 @@ create-mysql-tests:
 
 # Clean the root project of all build products.
 clean:
-	-$(GNATCLEAN) -P "$(GPRPATH)"
+	-$(GNATCLEAN) -P "$(GPRPATH)" -XLIBRARY_TYPE=static
+	-$(GNATCLEAN) -P "$(GPRPATH)" -XLIBRARY_TYPE=relocatable
 
 # Clean root project and all imported projects too.
 clean_tree:
@@ -142,11 +181,17 @@ prepare-release:
 	${SVN} info > CHANGES
 	${SVN} log -v > ChangeLog
 
-install:
+install_static:
+	$(MAKE) LIBRARY_TYPE=static install_lib
+
+install_shared:
+	$(MAKE) LIBRARY_TYPE=relocatable install_lib
+
+install_lib:
 	$(MKDIR) -p ${includedir}/awa
 	$(MKDIR) -p ${includedir}/awaunit
 	$(MKDIR) -p ${projectdir}/
-	${MKDIR} -p ${alidir}/awa
+	${MKDIR} -p ${alidir}/awa/$(LIBRARY_TYPE)
 	${MKDIR} -p ${dynamodir}/awa/config
 	${MKDIR} -p ${dynamodir}/awa/db
 	${MKDIR} -p ${dynamodir}/awa/db/mysql
@@ -154,16 +199,25 @@ install:
 	${CP} src/*.ad[bs] ${includedir}/awa
 	${CP} src/model/*.ad[bs] ${includedir}/awa
 	${CP} awaunit/*.ad[bs] ${includedir}/awaunit
-	sed -e "s,INSTALL,${prefix},g" < distrib/awa.gpr > ${projectdir}/awa.gpr
-	sed -e "s,INSTALL,${prefix},g" < distrib/awaunit.gpr > ${projectdir}/awaunit.gpr
+	sed -e "s,INSTALL,${prefix},g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" < distrib/awa.gpr > ${projectdir}/awa.gpr
+	sed -e "s,INSTALL,${prefix},g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" < distrib/awaunit.gpr > ${projectdir}/awaunit.gpr
 	${CP} config/*.xml ${dynamodir}/awa/config/
 	${CP} db/*.xml ${dynamodir}/awa/db/
 	${CP} db/mysql/*.sql ${dynamodir}/awa/db/mysql
 	${CP} db/sqlite/*.sql ${dynamodir}/awa/db/sqlite
-	${CP} lib/awa/*.ali ${alidir}/awa
+	${CP} lib/awa/*.ali ${alidir}/awa/$(LIBRARY_TYPE)/
+	${CP} lib/awaunit/*.ali ${alidir}/awaunit/$(LIBRARY_TYPE)/
+ifeq ($(LIBRARY_TYPE),static)
 	${CP} lib/awa/libada-awa.a ${libdir}/
-	${CP} lib/awaunit/*.ali ${alidir}/awaunit
 	${CP} lib/awaunit/libawaunit.a ${libdir}/
+else
+	${CP} -p lib/awa/$(LIBRARY_TYPE)/libada-awa.$(LIBVER) ${libdir}/
+	${CP} -p lib/awaunit/$(LIBRARY_TYPE)/libawaunit.$(LIBVER) ${libdir}/
+	cd ${libdir} && \
+	rm -f libada-awa.$(LIBEXT) libawaunit.$(LIBEXT) && \
+	${LN} libada-awa.$(LIBVER) libada-awa.$(LIBEXT) && \
+	${LN} libawaunit.$(LIBVER) libawaunit.$(LIBEXT)
+endif
 
 
 uninstall:

@@ -571,7 +571,7 @@ AWA_MICRO_VERSION
 AWA_MINOR_VERSION
 AWA_MAJOR_VERSION
 AWA_VERSION
-RANLIB
+LN_S
 INSTALL_DATA
 INSTALL_SCRIPT
 INSTALL_PROGRAM
@@ -583,6 +583,7 @@ CPPFLAGS
 LDFLAGS
 CFLAGS
 CC
+GNATMAKE
 target_os
 target_vendor
 target_cpu
@@ -1883,12 +1884,55 @@ test -n "$target_alias" &&
   program_prefix=${target_alias}-
 
 
-
 # Current release settings
 AWA_MAJOR_VERSION=0
 AWA_MINOR_VERSION=2
 AWA_MICRO_VERSION=0
 AWA_VERSION=$AWA_MAJOR_VERSION.$AWA_MINOR_VERSION.$AWA_MICRO_VERSION
+
+for ac_prog in gnatmake
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if test "${ac_cv_prog_GNATMAKE+set}" = set; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$GNATMAKE"; then
+  ac_cv_prog_GNATMAKE="$GNATMAKE" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_prog_GNATMAKE="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+GNATMAKE=$ac_cv_prog_GNATMAKE
+if test -n "$GNATMAKE"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GNATMAKE" >&5
+$as_echo "$GNATMAKE" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$GNATMAKE" && break
+done
+test -n "$GNATMAKE" || GNATMAKE=""""
+
 
 # checking for local tools
 ac_ext=c
@@ -2806,96 +2850,15 @@ test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL}'
 
 test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
-if test -n "$ac_tool_prefix"; then
-  # Extract the first word of "${ac_tool_prefix}ranlib", so it can be a program name with args.
-set dummy ${ac_tool_prefix}ranlib; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if test "${ac_cv_prog_RANLIB+set}" = set; then :
-  $as_echo_n "(cached) " >&6
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ln -s works" >&5
+$as_echo_n "checking whether ln -s works... " >&6; }
+LN_S=$as_ln_s
+if test "$LN_S" = "ln -s"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
 else
-  if test -n "$RANLIB"; then
-  ac_cv_prog_RANLIB="$RANLIB" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
-    ac_cv_prog_RANLIB="${ac_tool_prefix}ranlib"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-fi
-fi
-RANLIB=$ac_cv_prog_RANLIB
-if test -n "$RANLIB"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $RANLIB" >&5
-$as_echo "$RANLIB" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-fi
-if test -z "$ac_cv_prog_RANLIB"; then
-  ac_ct_RANLIB=$RANLIB
-  # Extract the first word of "ranlib", so it can be a program name with args.
-set dummy ranlib; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if test "${ac_cv_prog_ac_ct_RANLIB+set}" = set; then :
-  $as_echo_n "(cached) " >&6
-else
-  if test -n "$ac_ct_RANLIB"; then
-  ac_cv_prog_ac_ct_RANLIB="$ac_ct_RANLIB" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
-    ac_cv_prog_ac_ct_RANLIB="ranlib"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-fi
-fi
-ac_ct_RANLIB=$ac_cv_prog_ac_ct_RANLIB
-if test -n "$ac_ct_RANLIB"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_ct_RANLIB" >&5
-$as_echo "$ac_ct_RANLIB" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-  if test "x$ac_ct_RANLIB" = x; then
-    RANLIB=":"
-  else
-    case $cross_compiling:$ac_tool_warned in
-yes:)
-{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using cross tools not prefixed with host triplet" >&5
-$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
-ac_tool_warned=yes ;;
-esac
-    RANLIB=$ac_ct_RANLIB
-  fi
-else
-  RANLIB="$ac_cv_prog_RANLIB"
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no, using $LN_S" >&5
+$as_echo "no, using $LN_S" >&6; }
 fi
 
 
@@ -3153,7 +3116,7 @@ fi
 AWA_AWS_STATUS=yes
 
 
-ac_config_files="$ac_config_files Makefile awa.gpr tests.gpr awaunit.gpr"
+ac_config_files="$ac_config_files Makefile awa.gpr tests.gpr awaunit.gpr distrib/awa.gpr distrib/awaunit.gpr"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -3858,6 +3821,8 @@ do
     "awa.gpr") CONFIG_FILES="$CONFIG_FILES awa.gpr" ;;
     "tests.gpr") CONFIG_FILES="$CONFIG_FILES tests.gpr" ;;
     "awaunit.gpr") CONFIG_FILES="$CONFIG_FILES awaunit.gpr" ;;
+    "distrib/awa.gpr") CONFIG_FILES="$CONFIG_FILES distrib/awa.gpr" ;;
+    "distrib/awaunit.gpr") CONFIG_FILES="$CONFIG_FILES distrib/awaunit.gpr" ;;
 
   *) as_fn_error "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
