@@ -6,29 +6,35 @@
 <hibernate-mapping default-cascade="none">
     <class name="AWA.Comments.Models.Comment"
         table="comments" dynamic-insert="false" dynamic-update="false">
+        <comment>The Comment table records a user comment associated with a database entity.
+                 The comment can be associated with any other database record.</comment>
         <id name="id" type="ADO.Identifier" unsaved-value="null">
             <column name="id" sql-type="INTEGER"/>
             <generator class="hilo">
                 <!-- id-generator merge-point -->
             </generator>
         </id>
-        <version name="version" type="int" column="version"/>
-        <property name="date">
+        <version name="version" type="int" column="version">
+            <comment>the comment version.</comment>
+        </version> 
+        <property name="date" type="Time">
+            <comment>the comment publication date.</comment>
             <column name="date" not-null="true" unique="false" sql-type="TIMESTAMP"/>
-            <type name="Time"/>
         </property>
-        <property name="message">
+        <property name="message" type="String">
+            <comment>the comment message.</comment>
             <column name="message" not-null="true" unique="false" sql-type="VARCHAR(65000)"/>
-            <type name="java.lang.String"/>
         </property>
-        <property name="entity_Id">
+        <property name="entity_Id" type="ADO.Identifier">
+            <comment>the entity identifier to which this comment is associated.</comment>
             <column name="entity_id" not-null="true" unique="false" sql-type="INTEGER"/>
-            <type name="ADO.Identifier"/>
         </property>
         <many-to-one name="user" class="AWA.Users.Models.User" foreign-key="comments_user_fkc" not-null="true" lazy="proxy" fetch="select">
+            <comment>the user who posted this comment</comment>
             <column name="user_fk" not-null="true" sql-type="INTEGER"/>
         </many-to-one>
         <many-to-one name="entity_Type" class="ADO.Entity_Type" foreign-key="comments_entity__type_fkc" not-null="true" lazy="proxy" fetch="select">
+            <comment>the entity type that correspond to the entity associated with this comment.</comment>
             <column name="entity__type_fk" not-null="true" sql-type="INTEGER"/>
         </many-to-one>
     </class>

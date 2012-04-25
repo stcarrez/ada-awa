@@ -8,7 +8,9 @@
             <column name="id" not-null="true" unique="false" sql-type="BIGINT"/>
             <generator class="sequence"/>
         </id>
-        <version name="version" type="int" column="version"/>
+        <version name="version" type="int" column="version">
+            <comment>the email version.</comment>
+        </version>
         <property name="email" type="String">
             <comment>the email address</comment>
             <column name="email" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
@@ -26,7 +28,9 @@
             <column name="id" not-null="true" unique="false" sql-type="BIGINT"/>
             <generator class="sequence"/>
         </id>
-        <version name="version" type="int" column="version"/>
+        <version name="version" type="int" column="version">
+            <comment>the user version.</comment>
+        </version>
         <property name="open_id" type="String">
             <comment>the open id</comment>
             <column name="openid" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
@@ -52,6 +56,7 @@
             <column name="country" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
         </property>
         <many-to-one name="email" class="Email" foreign-key="id" not-null="true" lazy="proxy" fetch="select">
+            <comment>the user email address</comment>
             <column name="email_id" not-null="true" sql-type="INTEGER"/>
         </many-to-one>
     </class>
@@ -64,7 +69,9 @@
             <column name="id" not-null="true" unique="false" sql-type="BIGINT"/>
             <generator class="sequence"/>
         </id>
-        <version name="version" type="int" column="version"/>
+        <version name="version" type="int" column="version">
+            <comment>the access key version.</comment>
+        </version>
         <property name="access_key" type="String" update="false">
             <comment>the access key</comment>
             <column name="access_key" not-null="false" unique="false" sql-type="VARCHAR(256)"/>
@@ -84,7 +91,9 @@
             <column name="id" not-null="true" unique="false" sql-type="BIGINT"/>
             <generator class="sequence"/>
         </id>
-        <version name="version" type="int" column="version"/>
+        <version name="version" type="int" column="version">
+            <comment>the user session version.</comment>
+        </version>
         <property name="start_date" update="false">
             <comment>the session start date</comment>
             <column name="start_date" not-null="true" unique="false" sql-type="DATETIME"/>
