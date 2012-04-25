@@ -2,17 +2,22 @@ project Config is
    for Source_Dirs use ();
 
    type Yes_No is ("yes", "no");
+
+   type Library_Type_Type is ("relocatable", "static");
+   Library_Type : Library_Type_Type := external ("LIBRARY_TYPE", "static");
+
    type Mode_Type is ("distrib", "debug", "optimize", "profile");
    Mode : Mode_Type := external ("MODE", "debug");
 
    Coverage : Yes_No := External ("COVERAGE", "no");
+   Processors := External ("PROCESSORS", "1");
 
    package Builder is
        case Mode is
           when "debug" => 
-             for Default_Switches ("Ada") use ("-g");
+             for Default_Switches ("Ada") use ("-g", "-gnat05", "-j" & Processors);
           when others =>
-             for Default_Switches ("Ada") use ("-O2");
+             for Default_Switches ("Ada") use ("-g", "-O2", "-gnat05", "-j" & Processors);
        end case;
    end Builder;
 
@@ -21,15 +26,15 @@ project Config is
 
       case Mode is
          when "distrib" =>
-            for Default_Switches ("Ada") use ("-O2", "-gnatN");
+            for Default_Switches ("Ada") use ("-gnatN");
 
          when "debug" =>
             for Default_Switches ("Ada") use warnings
-               & ("-gnata", "-gnatVaMI", "-gnat05");
+               & ("-gnata", "-gnatVaMI", "-gnaty3abcefhiklmnprstxM99");
 
          when "optimize" =>
             for Default_Switches ("Ada") use warnings
-               & ("-O2", "-gnatN", "-gnatp");
+               & ("-gnatN", "-gnatp", "-fdata-sections", "-ffunction-sections");
 
          when "profile" =>
             for Default_Switches ("Ada") use warnings & ("-pg");
@@ -60,6 +65,10 @@ project Config is
 
          when "distrib" =>
             for Default_Switches ("Ada") use ("-s");
+
+         when "optimize" =>
+            for Default_Switches ("Ada") use ("--gc-sections");
+	 
 	 when others =>
 	    null;
       end case;
@@ -72,4 +81,8 @@ project Config is
       end case;
    end linker;        
  
+   package Ide is
+      for VCS_Kind use "Subversion";
+   end Ide;
+
 end Config;

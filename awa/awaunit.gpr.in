@@ -9,15 +9,19 @@ with "awa";
 
 project AwaUnit is
 
+   Version := "@AWA_VERSION@";
    Library_Dir := "lib";
+   Library_Type : Config.Library_Type_Type := external ("LIBRARY_TYPE", "static");
 
    for Source_Dirs use ("awaunit");
 
-   for Library_Dir use Library_Dir & "/awaunit";
    for Library_Name use "awaunit";
-   for Library_Kind use "static";
+   for Library_Kind use Library_Type;
+   for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
 
-   for Object_Dir use "./" & Config'Object_Dir & "/obj/awaunit";
+   for Library_Dir use "lib/awaunit/" & Project'Library_Kind;
+   for Object_Dir use "obj/awaunit/" & Project'Library_Kind;
+
    for Exec_Dir use "./" & Config'Exec_Dir & "/bin";
 
    package Binder renames Config.Binder;

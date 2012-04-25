@@ -8,6 +8,7 @@ project Awa is
 
    Version := "@AWA_VERSION@";
    Library_Dir := "@AWA_LIBDIR@";
+   Library_Type : Config.Library_Type_Type := external ("LIBRARY_TYPE", "static");
 
    Aws_Status : Config.Yes_No := "@AWA_AWS_STATUS@";
 
@@ -22,10 +23,11 @@ project Awa is
    end case;
 
    for Library_Dir use Library_Dir & "/awa";
-   for Library_Name use "ada-awa";
-   for Library_Kind use "static";
+   for Library_Kind use Library_Type;
+   for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
 
-   for Object_Dir use "./" & Config'Object_Dir & "/obj/awa";
+   for Library_Dir use "lib/awa/" & Project'Library_Kind;
+   for Object_Dir use "obj/awa/" & Project'Library_Kind;
    for Exec_Dir use "./" & Config'Exec_Dir & "/bin";
 
    package Binder renames Config.Binder;
