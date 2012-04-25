@@ -30,7 +30,7 @@ INSERT INTO entity_type (name) VALUES
 CREATE TABLE access_key (
   /* the email id */
   `id` BIGINT NOT NULL,
-  /*  */
+  /* the access key version. */
   `version` int ,
   /* the access key */
   `access_key` VARCHAR(256) ,
@@ -104,7 +104,7 @@ CREATE TABLE awa_image_folder (
 CREATE TABLE awa_message (
   /* the message identifier */
   `id` BIGINT NOT NULL,
-  /*  */
+  /* the message version. */
   `version` int ,
   /* the message priority */
   `priority` INTEGER NOT NULL,
@@ -144,7 +144,7 @@ CREATE TABLE awa_message_type (
 CREATE TABLE awa_queue (
   /* the queue identifier */
   `id` INTEGER NOT NULL,
-  /*  */
+  /* the event queue version. */
   `version` int ,
   /* the message queue name */
   `name` VARCHAR(256) NOT NULL,
@@ -239,21 +239,22 @@ CREATE TABLE blog_post (
   `blog_id` INTEGER NOT NULL,
   PRIMARY KEY (`id`)
 );
-/*  */
+/* The Comment table records a user comment associated with a database entity.
+                 The comment can be associated with any other database record. */
 CREATE TABLE comments (
   /*  */
   `id` INTEGER ,
-  /*  */
+  /* the comment version. */
   `version` int ,
-  /*  */
+  /* the comment publication date. */
   `date` TIMESTAMP NOT NULL,
-  /*  */
+  /* the comment message. */
   `message` VARCHAR(65000) NOT NULL,
-  /*  */
+  /* the entity identifier to which this comment is associated. */
   `entity_id` INTEGER NOT NULL,
-  /*  */
+  /* the user who posted this comment */
   `user_fk` INTEGER NOT NULL,
-  /*  */
+  /* the entity type that correspond to the entity associated with this comment. */
   `entity__type_fk` INTEGER NOT NULL,
   PRIMARY KEY (`id`)
 );
@@ -261,7 +262,7 @@ CREATE TABLE comments (
 CREATE TABLE email (
   /* the email id */
   `id` BIGINT NOT NULL,
-  /*  */
+  /* the email version. */
   `version` int ,
   /* the email address */
   `email` VARCHAR(256) ,
@@ -273,7 +274,7 @@ CREATE TABLE email (
 CREATE TABLE session (
   /* the user session id */
   `id` BIGINT NOT NULL,
-  /*  */
+  /* the user session version. */
   `version` int ,
   /* the session start date */
   `start_date` DATETIME NOT NULL,
@@ -295,7 +296,7 @@ CREATE TABLE session (
 CREATE TABLE user (
   /* the user id */
   `id` BIGINT NOT NULL,
-  /*  */
+  /* the user version. */
   `version` int ,
   /* the open id */
   `openid` VARCHAR(256) ,
@@ -309,7 +310,7 @@ CREATE TABLE user (
   `password` VARCHAR(256) ,
   /* the user country */
   `country` VARCHAR(256) ,
-  /*  */
+  /* the user email address */
   `email_id` INTEGER NOT NULL,
   PRIMARY KEY (`id`)
 );
