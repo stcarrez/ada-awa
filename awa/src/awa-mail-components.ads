@@ -16,7 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with ASF.Contexts.Faces;
 with ASF.Components.Core;
 
 with AWA.Mail.Clients;

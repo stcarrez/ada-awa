@@ -70,7 +70,8 @@ package body AWA.Events is
          Names  := new Name_Array (1 .. 10);
       elsif Events'Last = Last_Event then
          declare
-            E : Event_Name_Pair_Array_Access := new Event_Name_Pair_Array (1 .. Last_Event + 10);
+            E : constant Event_Name_Pair_Array_Access
+              := new Event_Name_Pair_Array (1 .. Last_Event + 10);
             N : constant Name_Array_Access := new Name_Array (1 .. Last_Event + 10);
          begin
             E (Events'Range) := Events.all;

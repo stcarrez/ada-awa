@@ -21,7 +21,9 @@ with AWA.Users.Models;
 with AWA.Modules;
 with AWA.Events;
 with Security.Openid;
+
 with ADO;
+with ADO.Sessions;
 package AWA.Users.Services is
 
    use AWA.Users.Models;
@@ -52,6 +54,10 @@ package AWA.Users.Services is
    --  The session is a connection session whose associated AID cookie has been used.
    --  This session cannot be used to re-connect a user through the AID cookie.
    USED_SESSION_TYPE    : constant Integer := 2;
+
+   --  Get the user name from the email address.
+   --  Returns the possible user name from his email address.
+   function Get_Name_From_Email (Email : in String) return String;
 
    type User_Service is new AWA.Modules.Module_Manager with private;
    type User_Service_Access is access all User_Service'Class;
@@ -162,6 +168,12 @@ package AWA.Users.Services is
                          Module : in AWA.Modules.Module'Class);
 
 private
+
+   procedure Create_Session (Model   : in User_Service;
+                             DB      : in out ADO.Sessions.Master_Session;
+                             Session : out Session_Ref'Class;
+                             User    : in User_Ref'Class;
+                             Ip_Addr : in String);
 
    type User_Service is new AWA.Modules.Module_Manager with record
       Server_Id : Integer := 0;

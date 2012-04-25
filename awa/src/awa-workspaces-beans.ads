@@ -26,7 +26,7 @@ package AWA.Workspaces.Beans is
 
    type Workspaces_Bean is new Util.Beans.Basic.Bean
      and Util.Beans.Methods.Method_Bean with record
-      Module : Awa.Workspaces.Module.Workspace_Module_Access := null;
+      Module : AWA.Workspaces.Module.Workspace_Module_Access := null;
       Count  : Natural := 0;
    end record;
    type Workspaces_Bean_Access is access all Workspaces_Bean'Class;

@@ -20,10 +20,8 @@ with ASF.Requests;
 with ASF.Responses;
 with ASF.Server;
 with Ada.IO_Exceptions;
-with Ada.Unchecked_Deallocation;
 
 with Util.Files;
-with Util.Strings;
 
 with EL.Contexts.Default;
 
@@ -298,6 +296,9 @@ package body AWA.Modules is
    --  Get per application manager => look in Application
    --  Get per pool manager => look in pool attached to Application
    function Get_Manager return Manager_Type_Access is
+
+      procedure Process (Request  : in out ASF.Requests.Request'Class;
+                         Response : in out ASF.Responses.Response'Class);
 
       Value : Util.Beans.Objects.Object;
 

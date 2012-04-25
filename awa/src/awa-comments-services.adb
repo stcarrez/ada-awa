@@ -90,7 +90,7 @@ package body AWA.Comments.Services is
 
       --        AWA.Permissions.Module.Check (Entity => Entity, Permission => CREATE_COMMENT);
       Ctx.Start;
-	  Comment.Set_Id (Id);
+      Comment.Set_Id (Id);
       Comment.Delete (DB);
       Ctx.Commit;
    end Delete_Comment;

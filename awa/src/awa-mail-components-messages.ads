@@ -15,6 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with ASF.Contexts.Faces;
 
 --  The <b>AWA.Mail.Components.Messages</b> package defines the UI components
 --  to represent the email message with its recipients, subject and body.

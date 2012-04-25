@@ -33,6 +33,7 @@ package body AWA.Mail.Components.Factory is
    function Create_From return UIComponent_Access;
    function Create_Message return UIComponent_Access;
    function Create_To return UIComponent_Access;
+   function Create_Subject return UIComponent_Access;
 
    URI                : aliased constant String := "http://code.google.com/p/ada-awa/mail";
    BCC_TAG            : aliased constant String := "bcc";

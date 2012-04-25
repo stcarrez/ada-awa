@@ -21,7 +21,6 @@ with Util.Log.Loggers;
 
 with ADO.Objects;
 with ADO.Statements;
-with ADO.Queries;
 with ADO.Sessions.Entities;
 
 with AWA.Services.Contexts;
@@ -142,7 +141,8 @@ package body AWA.Storages.Services is
       Ctx   : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       User  : constant ADO.Identifier := Ctx.Get_User_Identifier;
       DB    : constant ADO.Sessions.Session := AWA.Services.Contexts.Get_Session (Ctx);
-      Query : ADO.Statements.Query_Statement := DB.Create_Statement (Models.Query_Storage_Get_Data);
+      Query : ADO.Statements.Query_Statement
+        := DB.Create_Statement (Models.Query_Storage_Get_Data);
    begin
       Query.Bind_Param ("store_id", From);
       Query.Bind_Param ("user_id", User);

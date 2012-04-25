@@ -16,7 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Ada.Unchecked_Deallocation;
-with Ada.Finalization;
 
 with Util.Log.Loggers;
 package body AWA.Events.Queues.Fifos is
@@ -65,7 +64,7 @@ package body AWA.Events.Queues.Fifos is
 
       exception
          when E : others =>
-            Log.Error ("Exception when processing event");
+            Log.Error ("Exception when processing event", E);
       end;
       Free (E);
 
@@ -97,6 +96,8 @@ package body AWA.Events.Queues.Fifos is
    function Create_Queue (Name    : in String;
                           Props   : in EL.Beans.Param_Vectors.Vector;
                           Context : in EL.Contexts.ELContext'Class) return Queue_Access is
+      pragma Unreferenced (Props, Context);
+
       Result : constant Fifo_Queue_Access := new Fifo_Queue '(Name_Length  => Name'Length,
                                                               Name         => Name,
                                                               others       => <>);

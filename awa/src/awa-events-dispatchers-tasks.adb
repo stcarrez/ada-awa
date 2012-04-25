@@ -15,12 +15,10 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with Ada.Finalization;
 with Ada.Unchecked_Deallocation;
 
 with Util.Log.Loggers;
 
-with AWA.Events.Queues;
 package body AWA.Events.Dispatchers.Tasks is
 
    use Util.Log;
@@ -80,7 +78,7 @@ package body AWA.Events.Dispatchers.Tasks is
                                Match    : in String;
                                Count    : in Positive;
                                Priority : in Positive) return Dispatcher_Access is
-      Result : Task_Dispatcher_Access := new Task_Dispatcher;
+      Result : constant Task_Dispatcher_Access := new Task_Dispatcher;
    begin
       Result.Task_Count := Count;
       Result.Priority   := Priority;
