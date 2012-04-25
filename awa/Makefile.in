@@ -115,6 +115,8 @@ create-mysql-tests:
 clean:
 	-$(GNATCLEAN) -P "$(GPRPATH)" -XLIBRARY_TYPE=static
 	-$(GNATCLEAN) -P "$(GPRPATH)" -XLIBRARY_TYPE=relocatable
+	-$(GNATCLEAN) -P awaunit.gpr -XLIBRARY_TYPE=static
+	-$(GNATCLEAN) -P awaunit.gpr -XLIBRARY_TYPE=relocatable
 
 # Clean root project and all imported projects too.
 clean_tree:
