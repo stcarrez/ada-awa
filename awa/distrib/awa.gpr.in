@@ -4,13 +4,13 @@ with "ado";
 with "asf";
 
 project AWA is
-   Version := "0.1.0";
+   Version := "@AWA_VERSION@";
 
    for Library_Name use "ada-awa";
    for Library_Dir use "INSTALL/lib";
-   for Library_Kind use "static";
+   for Library_Kind use "LIBRARY_TYPE";
 
    for Source_Dirs use ("INSTALL/share/ada/adainclude/awa");
-   for Library_ALI_Dir use "INSTALL/share/ada/adainclude/awa";
+   for Library_ALI_Dir use "INSTALL/lib/ada/adalib/awa/" & Project'Library_Kind;
    for Externally_Built use "true";
 end AWA;
