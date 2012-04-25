@@ -194,6 +194,7 @@ install_lib:
 	$(MKDIR) -p ${includedir}/awaunit
 	$(MKDIR) -p ${projectdir}/
 	${MKDIR} -p ${alidir}/awa/$(LIBRARY_TYPE)
+	${MKDIR} -p ${alidir}/awaunit/$(LIBRARY_TYPE)
 	${MKDIR} -p ${dynamodir}/awa/config
 	${MKDIR} -p ${dynamodir}/awa/db
 	${MKDIR} -p ${dynamodir}/awa/db/mysql
@@ -207,11 +208,11 @@ install_lib:
 	${CP} db/*.xml ${dynamodir}/awa/db/
 	${CP} db/mysql/*.sql ${dynamodir}/awa/db/mysql
 	${CP} db/sqlite/*.sql ${dynamodir}/awa/db/sqlite
-	${CP} lib/awa/*.ali ${alidir}/awa/$(LIBRARY_TYPE)/
-	${CP} lib/awaunit/*.ali ${alidir}/awaunit/$(LIBRARY_TYPE)/
+	${CP} lib/awa/$(LIBRARY_TYPE)//*.ali ${alidir}/awa/$(LIBRARY_TYPE)/
+	${CP} lib/awaunit/$(LIBRARY_TYPE)/*.ali ${alidir}/awaunit/$(LIBRARY_TYPE)/
 ifeq ($(LIBRARY_TYPE),static)
-	${CP} lib/awa/libada-awa.a ${libdir}/
-	${CP} lib/awaunit/libawaunit.a ${libdir}/
+	${CP} lib/awa/$(LIBRARY_TYPE)/libada-awa.a ${libdir}/
+	${CP} lib/awaunit/$(LIBRARY_TYPE)/libawaunit.a ${libdir}/
 else
 	${CP} -p lib/awa/$(LIBRARY_TYPE)/libada-awa.$(LIBVER) ${libdir}/
 	${CP} -p lib/awaunit/$(LIBRARY_TYPE)/libawaunit.$(LIBVER) ${libdir}/

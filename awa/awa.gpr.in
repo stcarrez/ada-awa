@@ -22,6 +22,7 @@ project Awa is
 	     null;
    end case;
 
+   for Library_Name use "ada-awa";
    for Library_Dir use Library_Dir & "/awa";
    for Library_Kind use Library_Type;
    for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
