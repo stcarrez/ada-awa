@@ -63,7 +63,7 @@ package AWA.Events.Models is
    --  Get the queue identifier
    function Get_Id (Object : in Queue_Ref)
                  return ADO.Identifier;
-   --  Get 
+   --  Get the event queue version.
    function Get_Version (Object : in Queue_Ref)
                  return Integer;
 
@@ -254,7 +254,7 @@ package AWA.Events.Models is
    --  Get the message identifier
    function Get_Id (Object : in Message_Ref)
                  return ADO.Identifier;
-   --  Get 
+   --  Get the message version.
    function Get_Version (Object : in Message_Ref)
                  return Integer;
 
@@ -592,13 +592,13 @@ private
    procedure Set_Field (Object : in out Message_Ref'Class;
                         Impl   : out Message_Access);
 
-   package File is
+   package File_1 is
       new ADO.Queries.Loaders.File (Path => "queue-messages.xml",
                                     Sha1 => "9B2B599473F75F92CB5AB5045675E4CCEF926543");
 
    package Def_Queue_Pending_Message is
       new ADO.Queries.Loaders.Query (Name => "queue-pending-message",
-                                     File => File.File'Access);
+                                     File => File_1.File'Access);
    Query_Queue_Pending_Message : constant ADO.Queries.Query_Definition_Access
    := Def_Queue_Pending_Message.Query'Access;
 end AWA.Events.Models;

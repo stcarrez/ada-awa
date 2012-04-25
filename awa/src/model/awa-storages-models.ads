@@ -26,6 +26,8 @@ with ADO.Objects;
 with ADO.Statements;
 with ADO.SQL;
 with ADO.Schemas;
+with ADO.Queries;
+with ADO.Queries.Loaders;
 with Ada.Calendar;
 with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded;
@@ -349,6 +351,11 @@ package AWA.Storages.Models is
 
 
 
+   Query_Storage_Get_Data : constant ADO.Queries.Query_Definition_Access;
+
+   Query_Storage_Delete_Local : constant ADO.Queries.Query_Definition_Access;
+
+
 private
    STORAGE_DATA_NAME : aliased constant String := "awa_storage_data";
    COL_0_1_NAME : aliased constant String := "id";
@@ -509,4 +516,20 @@ private
                      Session : in out ADO.Sessions.Master_Session'Class);
    procedure Set_Field (Object : in out Store_Local_Ref'Class;
                         Impl   : out Store_Local_Access);
+
+   package File_1 is
+      new ADO.Queries.Loaders.File (Path => "storage-queries.xml",
+                                    Sha1 => "9B2B599473F75F92CB5AB5045675E4CCEF926543");
+
+   package Def_Storage_Get_Data is
+      new ADO.Queries.Loaders.Query (Name => "storage-get-data",
+                                     File => File_1.File'Access);
+   Query_Storage_Get_Data : constant ADO.Queries.Query_Definition_Access
+   := Def_Storage_Get_Data.Query'Access;
+
+   package Def_Storage_Delete_Local is
+      new ADO.Queries.Loaders.Query (Name => "storage-delete-local",
+                                     File => File_1.File'Access);
+   Query_Storage_Delete_Local : constant ADO.Queries.Query_Definition_Access
+   := Def_Storage_Delete_Local.Query'Access;
 end AWA.Storages.Models;

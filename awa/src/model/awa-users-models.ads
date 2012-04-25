@@ -54,7 +54,7 @@ package AWA.Users.Models is
    --  Get the email id
    function Get_Id (Object : in Email_Ref)
                  return ADO.Identifier;
-   --  Get 
+   --  Get the email version.
    function Get_Version (Object : in Email_Ref)
                  return Integer;
 
@@ -155,7 +155,7 @@ package AWA.Users.Models is
    --  Get the user id
    function Get_Id (Object : in User_Ref)
                  return ADO.Identifier;
-   --  Get 
+   --  Get the user version.
    function Get_Version (Object : in User_Ref)
                  return Integer;
 
@@ -231,11 +231,11 @@ package AWA.Users.Models is
    function Get_Country (Object : in User_Ref)
                  return String;
 
-   --  Set 
+   --  Set the user email address
    procedure Set_Email (Object : in out User_Ref;
                         Value  : in Email_Ref'Class);
 
-   --  Get 
+   --  Get the user email address
    function Get_Email (Object : in User_Ref)
                  return Email_Ref'Class;
 
@@ -316,7 +316,7 @@ package AWA.Users.Models is
    --  Get the email id
    function Get_Id (Object : in Access_Key_Ref)
                  return ADO.Identifier;
-   --  Get 
+   --  Get the access key version.
    function Get_Version (Object : in Access_Key_Ref)
                  return Integer;
 
@@ -417,7 +417,7 @@ package AWA.Users.Models is
    --  Get the user session id
    function Get_Id (Object : in Session_Ref)
                  return ADO.Identifier;
-   --  Get 
+   --  Get the user session version.
    function Get_Version (Object : in Session_Ref)
                  return Integer;
 

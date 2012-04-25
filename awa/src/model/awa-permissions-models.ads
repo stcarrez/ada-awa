@@ -209,31 +209,31 @@ private
    procedure Set_Field (Object : in out Acl_Ref'Class;
                         Impl   : out Acl_Access);
 
-   package File is
+   package File_1 is
       new ADO.Queries.Loaders.File (Path => "permissions.xml",
                                     Sha1 => "9B2B599473F75F92CB5AB5045675E4CCEF926543");
 
    package Def_Check_Entity_Permission is
       new ADO.Queries.Loaders.Query (Name => "check-entity-permission",
-                                     File => File.File'Access);
+                                     File => File_1.File'Access);
    Query_Check_Entity_Permission : constant ADO.Queries.Query_Definition_Access
    := Def_Check_Entity_Permission.Query'Access;
 
    package Def_Remove_Permission is
       new ADO.Queries.Loaders.Query (Name => "remove-permission",
-                                     File => File.File'Access);
+                                     File => File_1.File'Access);
    Query_Remove_Permission : constant ADO.Queries.Query_Definition_Access
    := Def_Remove_Permission.Query'Access;
 
    package Def_Remove_Entity_Permission is
       new ADO.Queries.Loaders.Query (Name => "remove-entity-permission",
-                                     File => File.File'Access);
+                                     File => File_1.File'Access);
    Query_Remove_Entity_Permission : constant ADO.Queries.Query_Definition_Access
    := Def_Remove_Entity_Permission.Query'Access;
 
    package Def_Remove_User_Permission is
       new ADO.Queries.Loaders.Query (Name => "remove-user-permission",
-                                     File => File.File'Access);
+                                     File => File_1.File'Access);
    Query_Remove_User_Permission : constant ADO.Queries.Query_Definition_Access
    := Def_Remove_User_Permission.Query'Access;
 end AWA.Permissions.Models;
