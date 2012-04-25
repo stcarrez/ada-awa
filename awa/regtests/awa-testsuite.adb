@@ -22,7 +22,7 @@ with AWA.Blogs.Services.Tests;
 with AWA.Wikis.Parsers.Tests;
 with AWA.Helpers.Selectors.Tests;
 with AWA.Storages.Services.Tests;
-with AWA.Events.Tests;
+with AWA.Events.Services.Tests;
 with AWA.Mail.Clients.Tests;
 with AWA.Mail.Module.Tests;
 package body AWA.Testsuite is
@@ -32,7 +32,7 @@ package body AWA.Testsuite is
    function Suite return Util.Tests.Access_Test_Suite is
       Ret : constant Util.Tests.Access_Test_Suite := Tests'Access;
    begin
-      AWA.Events.Tests.Add_Tests (Ret);
+      AWA.Events.Services.Tests.Add_Tests (Ret);
       AWA.Mail.Clients.Tests.Add_Tests (Ret);
       AWA.Mail.Module.Tests.Add_Tests (Ret);
       AWA.Users.Services.Tests.Add_Tests (Ret);

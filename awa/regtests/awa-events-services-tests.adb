@@ -35,7 +35,7 @@ with AWA.Events.Action_Method;
 with AWA.Events.Queues;
 with AWA.Events.Services;
 
-package body AWA.Events.Tests is
+package body AWA.Events.Services.Tests is
 
    use AWA.Events.Services;
 
@@ -101,6 +101,8 @@ package body AWA.Events.Tests is
    procedure Event_Action (From  : in out Action_Bean;
                            Event : in AWA.Events.Module_Event'Class);
 
+   function Create_Action_Bean return Util.Beans.Basic.Readonly_Bean_Access;
+
    package Event_Action_Binding is
      new AWA.Events.Action_Method.Bind (Bean => Action_Bean,
                                         Method => Event_Action,
@@ -151,6 +153,7 @@ package body AWA.Events.Tests is
 
    procedure Event_Action (From  : in out Action_Bean;
                            Event : in AWA.Events.Module_Event'Class) is
+      pragma Unreferenced (Event);
    begin
       if From.Raise_Exception then
          raise Action_Exception with "Raising an exception from the event action bean";
@@ -203,15 +206,13 @@ package body AWA.Events.Tests is
       Manager : Event_Manager;
    begin
       Manager.Initialize (App.all'Access);
---        T.Assert (Manager.Actions /= null, "Initialization failed");
+      T.Assert (Manager.Actions /= null, "Initialization failed");
    end Test_Initialize;
 
    --  ------------------------------
    --  Test adding an action.
    --  ------------------------------
    procedure Test_Add_Action (T : in out Test) is
-      use AWA.Events.Queues;
-
       App     : constant AWA.Applications.Application_Access := AWA.Tests.Get_Application;
       Manager : Event_Manager;
       Ctx     : EL.Contexts.Default.Default_Context;
@@ -219,6 +220,7 @@ package body AWA.Events.Tests is
         := EL.Expressions.Create_Expression ("#{a.send}", Ctx);
       Props   : EL.Beans.Param_Vectors.Vector;
       Queue   : Queue_Ref;
+      Index   : constant Event_Index := Find_Event_Index ("event-test-4");
    begin
       Manager.Initialize (App.all'Access);
 
@@ -229,8 +231,8 @@ package body AWA.Events.Tests is
                              Queue  => Queue,
                              Action => Action,
                              Params => Props);
---           Util.Tests.Assert_Equals (T, 1, Integer (Manager.Actions (Pos).Queues.Length),
---                                     "Add_Action failed");
+         Util.Tests.Assert_Equals (T, 1, Integer (Manager.Actions (Index).Queues.Length),
+                                   "Add_Action failed");
       end loop;
 
    end Test_Add_Action;
@@ -323,4 +325,4 @@ package body AWA.Events.Tests is
       T.Dispatch_Event (Event_Test_4.Kind, 0, 0);
    end Test_Dispatch_Synchronous_Raise;
 
-end AWA.Events.Tests;
+end AWA.Events.Services.Tests;

@@ -19,7 +19,7 @@
 with Util.Tests;
 with AWA.Tests;
 
-package AWA.Events.Tests is
+package AWA.Events.Services.Tests is
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite);
 
@@ -54,4 +54,4 @@ package AWA.Events.Tests is
                              Expect_Count : in Natural;
                              Expect_Prio  : in Natural);
 
-end AWA.Events.Tests;
+end AWA.Events.Services.Tests;
