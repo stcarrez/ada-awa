@@ -196,6 +196,8 @@ install_lib:
 	${MKDIR} -p ${alidir}/awa/$(LIBRARY_TYPE)
 	${MKDIR} -p ${alidir}/awaunit/$(LIBRARY_TYPE)
 	${MKDIR} -p ${dynamodir}/awa/config
+	${MKDIR} -p ${dynamodir}/awa/bundles
+	${MKDIR} -p ${dynamodir}/awa/web
 	${MKDIR} -p ${dynamodir}/awa/db
 	${MKDIR} -p ${dynamodir}/awa/db/mysql
 	${MKDIR} -p ${dynamodir}/awa/db/sqlite
@@ -205,11 +207,16 @@ install_lib:
 	sed -e "s,INSTALL,${prefix},g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" < distrib/awa.gpr > ${projectdir}/awa.gpr
 	sed -e "s,INSTALL,${prefix},g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" < distrib/awaunit.gpr > ${projectdir}/awaunit.gpr
 	${CP} config/*.xml ${dynamodir}/awa/config/
+	${CP} dynamo.xml ${dynamodir}/awa/
+	${CP} NOTICE.txt ${dynamodir}/awa/
+	${CP} LICENSE.txt ${dynamodir}/awa/
+	${CP} bundles/*.properties ${dynamodir}/awa/bundles/
 	${CP} db/*.xml ${dynamodir}/awa/db/
 	${CP} db/mysql/*.sql ${dynamodir}/awa/db/mysql
 	${CP} db/sqlite/*.sql ${dynamodir}/awa/db/sqlite
 	${CP} lib/awa/$(LIBRARY_TYPE)//*.ali ${alidir}/awa/$(LIBRARY_TYPE)/
 	${CP} lib/awaunit/$(LIBRARY_TYPE)/*.ali ${alidir}/awaunit/$(LIBRARY_TYPE)/
+	(cd web && tar --exclude=.svn --exclude='*~' -cf - . )| (cd ${dynamodir}/awa/web && tar xf -)
 ifeq ($(LIBRARY_TYPE),static)
 	${CP} lib/awa/$(LIBRARY_TYPE)/libada-awa.a ${libdir}/
 	${CP} lib/awaunit/$(LIBRARY_TYPE)/libawaunit.a ${libdir}/
