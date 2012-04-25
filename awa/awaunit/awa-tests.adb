@@ -30,6 +30,7 @@ with AWA.Users.Module;
 with AWA.Mail.Module;
 with AWA.Blogs.Module;
 with AWA.Workspaces.Module;
+with AWA.Storages.Modules;
 
 --  with AWA.Applications;
 with AWA.Applications.Factory;
@@ -56,6 +57,8 @@ package body AWA.Tests is
    Mail           : aliased AWA.Mail.Module.Mail_Module;
 
    Blogs          : aliased AWA.Blogs.Module.Blog_Module;
+
+   Storages       : aliased AWA.Storages.Modules.Storage_Module;
 
    Date_Converter : aliased ASF.Converters.Dates.Date_Converter;
 
@@ -146,6 +149,11 @@ package body AWA.Tests is
                       Name   => "workspaces",
                       URI    => "workspaces",
                       Module => Workspaces'Access);
+
+            Register (App    => Application.all'Access,
+                      Name   => AWA.Storages.Modules.NAME,
+                      URI    => "storages",
+                      Module => Storages'Access);
 
             Register (App    => Application.all'Access,
                       Name   => AWA.Blogs.Module.NAME,
