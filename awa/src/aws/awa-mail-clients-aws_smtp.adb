@@ -52,6 +52,7 @@ package body AWA.Mail.Clients.AWS_SMTP is
                             Kind    : in Recipient_Type;
                             Name    : in String;
                             Address : in String) is
+      pragma Unreferenced (Kind);
    begin
       if Message.To = null then
          Message.To := new AWS.SMTP.Recipients (1 .. 1);
