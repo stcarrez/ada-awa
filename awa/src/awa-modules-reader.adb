@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-modules-reader -- Read module configuration files
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,9 +20,7 @@ with Util.Serialize.IO.XML;
 
 with ASF.Applications.Main.Configs;
 
-with Security.Permissions;
-with Security.Controllers.Roles;
-with AWA.Permissions.Configs;
+with AWA.Applications.Configs;
 with AWA.Services.Contexts;
 
 --  The <b>AWA.Modules.Reader</b> package reads the module configuration files
@@ -36,45 +34,31 @@ package body AWA.Modules.Reader is
                                  File    : in String;
                                  Context : in EL.Contexts.Default.Default_Context_Access) is
 
-      Reader     : Util.Serialize.IO.XML.Parser;
+      Reader : Util.Serialize.IO.XML.Parser;
+      Ctx    : AWA.Services.Contexts.Service_Context;
 
-      Ctx : AWA.Services.Contexts.Service_Context;
-      Sec : constant Security.Permissions.Permission_Manager_Access
-        := Plugin.App.Get_Permission_Manager;
+      package Config is
+        new AWA.Applications.Configs.Reader_Config (Reader,
+                                                    Plugin.App.all'Unchecked_Access,
+                                                    Context);
+      pragma Warnings (Off, Config);
 
    begin
       Log.Info ("Reading module configuration file {0}", File);
 
       Ctx.Set_Context (Plugin.App.all'Unchecked_Access, null);
-      declare
-         package Bean_Config is
-           new ASF.Applications.Main.Configs.Reader_Config (Reader,
-                                                            Plugin.App.all'Unchecked_Access,
-                                                            Context.all'Access);
-         package Policy_Config is
-           new Security.Permissions.Reader_Config (Reader, Sec);
-         package Role_Config is
-           new Security.Controllers.Roles.Reader_Config (Reader, Sec);
-         package Entity_Config is
-           new AWA.Permissions.Configs.Reader_Config (Reader, Sec);
 
-         pragma Warnings (Off, Bean_Config);
-         pragma Warnings (Off, Policy_Config);
-         pragma Warnings (Off, Role_Config);
-         pragma Warnings (Off, Entity_Config);
-      begin
-         if AWA.Modules.Log.Get_Level >= Util.Log.DEBUG_LEVEL then
-            Util.Serialize.IO.Dump (Reader, AWA.Modules.Log);
-         end if;
+      if AWA.Modules.Log.Get_Level >= Util.Log.DEBUG_LEVEL then
+         Util.Serialize.IO.Dump (Reader, AWA.Modules.Log);
+      end if;
 
-         --  Read the configuration file and record managed beans, navigation rules.
-         Reader.Parse (File);
+      --  Read the configuration file and record managed beans, navigation rules.
+      Reader.Parse (File);
 
-      exception
-         when E : others =>
-            Log.Error ("Error while reading {0}", File);
-            raise;
-      end;
+   exception
+      when others =>
+         Log.Error ("Error while reading {0}", File);
+         raise;
    end Read_Configuration;
 
 end AWA.Modules.Reader;

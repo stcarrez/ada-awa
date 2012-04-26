@@ -35,56 +35,64 @@ package body AWA.Applications.Configs is
    Log : constant Loggers.Logger := Loggers.Create ("AWA.Applications.Configs");
 
    --  ------------------------------
+   --  XML reader configuration.  By instantiating this generic package, the XML parser
+   --  gets initialized to read the configuration for servlets, filters, managed beans,
+   --  permissions, events and other configuration elements.
+   --  ------------------------------
+   package body Reader_Config is
+      App_Access : constant ASF.Contexts.Faces.Application_Access := App.all'Unchecked_Access;
+      Sec        : constant Security.Permissions.Permission_Manager_Access
+        := App.Get_Permission_Manager;
+
+      package Bean_Config is
+        new ASF.Applications.Main.Configs.Reader_Config (Reader, App_Access,
+                                                         Context.all'Access);
+      package Policy_Config is
+        new Security.Permissions.Reader_Config (Reader, Sec);
+      package Role_Config is
+        new Security.Controllers.Roles.Reader_Config (Reader, Sec);
+      package Entity_Config is
+        new AWA.Permissions.Configs.Reader_Config (Reader, Sec);
+      package Event_Config is
+        new AWA.Events.Configs.Reader_Config (Reader  => Reader,
+                                              Manager => App.Events'Unchecked_Access,
+                                              Context => Context.all'Access);
+
+      pragma Warnings (Off, Bean_Config);
+      pragma Warnings (Off, Policy_Config);
+      pragma Warnings (Off, Role_Config);
+      pragma Warnings (Off, Entity_Config);
+      pragma Warnings (Off, Event_Config);
+   end Reader_Config;
+
+   --  ------------------------------
    --  Read the application configuration file and configure the application
    --  ------------------------------
    procedure Read_Configuration (App     : in out Application'Class;
                                  File    : in String;
                                  Context : in EL.Contexts.Default.Default_Context_Access) is
 
-      Reader     : Util.Serialize.IO.XML.Parser;
+      Reader : Util.Serialize.IO.XML.Parser;
+      Ctx    : AWA.Services.Contexts.Service_Context;
 
-      App_Access : constant ASF.Contexts.Faces.Application_Access := App'Unchecked_Access;
-      Ctx : AWA.Services.Contexts.Service_Context;
-      Sec : constant Security.Permissions.Permission_Manager_Access
-        := App.Get_Permission_Manager;
-
+      package Config is new Reader_Config (Reader, App'Unchecked_Access, Context);
+      pragma Warnings (Off, Config);
    begin
       Log.Info ("Reading application configuration file {0}", File);
 
       Ctx.Set_Context (App'Unchecked_Access, null);
-      declare
-         package Bean_Config is
-           new ASF.Applications.Main.Configs.Reader_Config (Reader, App_Access,
-                                                            Context.all'Access);
-         package Policy_Config is
-           new Security.Permissions.Reader_Config (Reader, Sec);
-         package Role_Config is
-           new Security.Controllers.Roles.Reader_Config (Reader, Sec);
-         package Entity_Config is
-           new AWA.Permissions.Configs.Reader_Config (Reader, Sec);
-         package Event_Config is
-            new AWA.Events.Configs.Reader_Config (Reader  => Reader,
-                                                  Manager => App.Events'Unchecked_Access,
-                                                  Context => Context.all'Access);
 
-         pragma Warnings (Off, Bean_Config);
-         pragma Warnings (Off, Policy_Config);
-         pragma Warnings (Off, Role_Config);
-         pragma Warnings (Off, Entity_Config);
-         pragma Warnings (Off, Event_Config);
-      begin
-         if Log.Get_Level >= Util.Log.DEBUG_LEVEL then
-            Util.Serialize.IO.Dump (Reader, Log);
-         end if;
+      if Log.Get_Level >= Util.Log.DEBUG_LEVEL then
+         Util.Serialize.IO.Dump (Reader, Log);
+      end if;
 
-         --  Read the configuration file and record managed beans, navigation rules.
-         Reader.Parse (File);
+      --  Read the configuration file and record managed beans, navigation rules.
+      Reader.Parse (File);
 
-      exception
-         when others =>
-            Log.Error ("Error while reading {0}", File);
-            raise;
-      end;
+   exception
+      when others =>
+         Log.Error ("Error while reading {0}", File);
+         raise;
    end Read_Configuration;
 
 end AWA.Applications.Configs;

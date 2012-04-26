@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-applications-configs -- Read application configuration files
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,9 +16,20 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with EL.Contexts.Default;
+with Util.Serialize.IO.XML;
 
 --  The <b>AWA.Applications.Configs</b> package reads the application configuration files.
 package AWA.Applications.Configs is
+
+   --  XML reader configuration.  By instantiating this generic package, the XML parser
+   --  gets initialized to read the configuration for servlets, filters, managed beans,
+   --  permissions, events and other configuration elements.
+   generic
+      Reader  : in out Util.Serialize.IO.XML.Parser;
+      App     : in Application_Access;
+      Context : in EL.Contexts.Default.Default_Context_Access;
+   package Reader_Config is
+   end Reader_Config;
 
    --  Read the application configuration file and configure the application
    procedure Read_Configuration (App     : in out Application'Class;
