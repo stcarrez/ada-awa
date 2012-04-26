@@ -21,6 +21,8 @@ with Ada.Strings.Unbounded;
 with Util.Beans.Basic;
 with Util.Beans.Objects;
 with Util.Beans.Methods;
+
+with AWA.Events;
 with AWA.Workspaces.Module;
 package AWA.Workspaces.Beans is
 
@@ -46,6 +48,10 @@ package AWA.Workspaces.Beans is
    overriding
    function Get_Method_Bindings (From : in Workspaces_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access;
+
+   --  Event action called to create the workspace when the given event is posted.
+   procedure Create (Bean  : in out Workspaces_Bean;
+                     Event : in AWA.Events.Module_Event'Class);
 
    --  Example of action method.
    procedure Action (Bean    : in out Workspaces_Bean;

@@ -17,6 +17,12 @@
 -----------------------------------------------------------------------
 
 with ASF.Events.Faces.Actions;
+
+with ADO.Sessions;
+
+with AWA.Workspaces.Models;
+with AWA.Events.Action_Method;
+with AWA.Services.Contexts;
 package body AWA.Workspaces.Beans is
 
    --  ------------------------------
@@ -28,13 +34,36 @@ package body AWA.Workspaces.Beans is
       null;
    end Action;
 
+   --  ------------------------------
+   --  Event action called to create the workspace when the given event is posted.
+   --  ------------------------------
+   procedure Create (Bean  : in out Workspaces_Bean;
+                     Event : in AWA.Events.Module_Event'Class) is
+      pragma Unreferenced (Bean, Event);
+
+      WS  : AWA.Workspaces.Models.Workspace_Ref;
+      Ctx : constant AWA.Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB  : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+   begin
+      Ctx.Start;
+      AWA.Workspaces.Module.Get_Workspace (Session   => DB,
+                                           Context   => Ctx,
+                                           Workspace => WS);
+      Ctx.Commit;
+   end Create;
+
    package Action_Binding is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Workspaces_Bean,
                                                       Method => Action,
                                                       Name   => "action");
 
+   package Create_Binding is
+      new AWA.Events.Action_Method.Bind (Name   => "create",
+                                         Bean   => Workspaces_Bean,
+                                         Method => Create);
+
    Workspaces_Bean_Binding : aliased constant Util.Beans.Methods.Method_Binding_Array
-     := (Action_Binding.Proxy'Access, null);
+     := (Action_Binding.Proxy'Access, Create_Binding.Proxy'Access);
 
    --  ------------------------------
    --  Get the value identified by the name.
