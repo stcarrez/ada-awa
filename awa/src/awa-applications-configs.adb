@@ -25,6 +25,7 @@ with Security.Permissions;
 with Security.Controllers.Roles;
 with AWA.Permissions.Configs;
 with AWA.Events.Configs;
+with AWA.Services.Contexts;
 
 package body AWA.Applications.Configs is
 
@@ -71,19 +72,22 @@ package body AWA.Applications.Configs is
                                  Context : in EL.Contexts.Default.Default_Context_Access) is
 
       Reader : Util.Serialize.IO.XML.Parser;
-
-      package Config is new Reader_Config (Reader, App'Unchecked_Access, Context);
-      pragma Warnings (Off, Config);
+      Ctx    : AWA.Services.Contexts.Service_Context;
    begin
       Log.Info ("Reading application configuration file {0}", File);
+      Ctx.Set_Context (App'Unchecked_Access, null);
 
-      if Log.Get_Level >= Util.Log.DEBUG_LEVEL then
-         Util.Serialize.IO.Dump (Reader, Log);
-      end if;
+      declare
+         package Config is new Reader_Config (Reader, App'Unchecked_Access, Context);
+         pragma Warnings (Off, Config);
+      begin
+         if Log.Get_Level >= Util.Log.DEBUG_LEVEL then
+            Util.Serialize.IO.Dump (Reader, Log);
+         end if;
 
-      --  Read the configuration file and record managed beans, navigation rules.
-      Reader.Parse (File);
-
+         --  Read the configuration file and record managed beans, navigation rules.
+         Reader.Parse (File);
+      end;
    exception
       when others =>
          Log.Error ("Error while reading {0}", File);
