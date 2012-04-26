@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-filters -- Specific filters for authentication and key verification
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +25,13 @@ with ASF.Principals;
 with ASF.Filters;
 with ASF.Servlets;
 with Security.Filters;
+
+with AWA.Users.Principals;
 package AWA.Users.Filters is
+
+   --  Set the user principal on the session associated with the ASF request.
+   procedure Set_Session_Principal (Request   : in out ASF.Requests.Request'Class;
+                                    Principal : in AWA.Users.Principals.Principal_Access);
 
    --  ------------------------------
    --  Authentication verification filter

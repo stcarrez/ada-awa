@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-beans -- ASF Beans for user module
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +28,6 @@ with ASF.Applications.Messages.Factory;
 with Security.Filters;
 
 with AWA.Services.Contexts;
-with AWA.Users.Principals;
 package body AWA.Users.Beans is
 
 
@@ -68,15 +67,13 @@ package body AWA.Users.Beans is
    --  ------------------------------
    procedure Verify_User (Data    : in out Authenticate_Bean;
                           Outcome : in out Unbounded_String) is
-      User    : User_Ref;
-      Session : Session_Ref;
+      Principal : AWA.Users.Principals.Principal_Access;
    begin
       Data.Manager.Verify_User (Key     => To_String (Data.Access_Key),
-                                User    => User,
                                 IpAddr  => "",
-                                Session => Session);
+                                Principal => Principal);
 
-      Data.Set_Session_Principal (User, Session);
+      Data.Set_Session_Principal (Principal);
       Outcome := To_Unbounded_String ("success");
    end Verify_User;
 
@@ -96,24 +93,21 @@ package body AWA.Users.Beans is
    --  ------------------------------
    procedure Reset_Password (Data    : in out Authenticate_Bean;
                              Outcome : in out Unbounded_String) is
-      User    : User_Ref;
-      Session : Session_Ref;
+      Principal : AWA.Users.Principals.Principal_Access;
    begin
-      Data.Manager.Reset_Password (Key      => To_String (Data.Access_Key),
-                                   Password => To_String (Data.Password),
-                                   IpAddr   => "",
-                                   User     => User,
-                                   Session  => Session);
+      Data.Manager.Reset_Password (Key       => To_String (Data.Access_Key),
+                                   Password  => To_String (Data.Password),
+                                   IpAddr    => "",
+                                   Principal => Principal);
+      Data.Set_Session_Principal (Principal);
       Outcome := To_Unbounded_String ("success");
    end Reset_Password;
 
 
-   procedure Set_Session_Principal (Data : in Authenticate_Bean;
-                                    User : in AWA.Users.Models.User_Ref;
-                                    Sess : in AWA.Users.Models.Session_Ref) is
+   procedure Set_Session_Principal (Data      : in Authenticate_Bean;
+                                    Principal : in AWA.Users.Principals.Principal_Access) is
       pragma Unreferenced (Data);
 
-      Principal : constant Principals.Principal_Access := Principals.Create (User, Sess);
       Ctx       : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
       Session   : ASF.Sessions.Session := Ctx.Get_Session (Create => True);
    begin
@@ -121,8 +115,8 @@ package body AWA.Users.Beans is
    end Set_Session_Principal;
 
    procedure Set_Authenticate_Cookie (Data    : in out Authenticate_Bean;
-                                      Session : in Session_Ref) is
-      Cookie : constant String := Data.Manager.Get_Authenticate_Cookie (Session.Get_Id);
+                                      Principal : in AWA.Users.Principals.Principal_Access) is
+      Cookie : constant String := Data.Manager.Get_Authenticate_Cookie (Principal.Get_Session_Identifier);
       Ctx    : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
       C      : ASF.Cookies.Cookie := ASF.Cookies.Create (Security.Filters.AID_COOKIE, Cookie);
    begin
@@ -136,18 +130,16 @@ package body AWA.Users.Beans is
    --  ------------------------------
    procedure Authenticate_User (Data    : in out Authenticate_Bean;
                                 Outcome : in out Unbounded_String) is
-      User      : User_Ref;
-      Session   : Session_Ref;
+      Principal : AWA.Users.Principals.Principal_Access;
    begin
       Data.Manager.Authenticate (Email    => To_String (Data.Email),
                                  Password => To_String (Data.Password),
                                  IpAddr   => "",
-                                 User     => User,
-                                 Session  => Session);
+                                 Principal => Principal);
       Outcome := To_Unbounded_String ("success");
 
-      Data.Set_Session_Principal (User, Session);
-      Data.Set_Authenticate_Cookie (Session);
+      Data.Set_Session_Principal (Principal);
+      Data.Set_Authenticate_Cookie (Principal);
 
    exception
       when Services.Not_Found =>

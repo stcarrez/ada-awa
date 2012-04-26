@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-beans -- ASF Beans for user module
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +24,7 @@ with Ada.Strings.Unbounded;
 with AWA.Users.Services;
 with AWA.Users.Module;
 with AWA.Users.Models;
+with AWA.Users.Principals;
 
 package AWA.Users.Beans is
 
@@ -65,12 +66,11 @@ package AWA.Users.Beans is
    function Get_Method_Bindings (From : in Authenticate_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access;
 
-   procedure Set_Session_Principal (Data : in Authenticate_Bean;
-                                    User : in AWA.Users.Models.User_Ref;
-                                    Sess : in AWA.Users.Models.Session_Ref);
+   procedure Set_Session_Principal (Data      : in Authenticate_Bean;
+                                    Principal : in AWA.Users.Principals.Principal_Access);
 
-   procedure Set_Authenticate_Cookie (Data    : in out Authenticate_Bean;
-                                      Session : in AWA.Users.Models.Session_Ref);
+   procedure Set_Authenticate_Cookie (Data      : in out Authenticate_Bean;
+                                      Principal : in AWA.Users.Principals.Principal_Access);
 
    --  Action to register a user
    procedure Register_User (Data    : in out Authenticate_Bean;

@@ -18,6 +18,7 @@
 with Ada.Strings.Unbounded;
 
 with AWA.Users.Models;
+with AWA.Users.Principals;
 with AWA.Modules;
 with AWA.Events;
 with Security.Openid;
@@ -82,46 +83,44 @@ package AWA.Users.Services is
 
    --  Verify the access key and retrieve the user associated with that key.
    --  Starts a new session associated with the given IP address.
+   --  The authenticated user is identified by a principal instance allocated
+   --  and returned in <b>Principal</b>.
    --  Raises Not_Found if the access key does not exist.
-   procedure Verify_User (Model    : in User_Service;
-                          Key      : in String;
-                          IpAddr   : in String;
-                          User     : out User_Ref'Class;
-                          Session  : out Session_Ref'Class);
+   procedure Verify_User (Model     : in User_Service;
+                          Key       : in String;
+                          IpAddr    : in String;
+                          Principal : out AWA.Users.Principals.Principal_Access);
 
    --  Authenticate the user with his email address and his password.
    --  If the user is authenticated, return the user information and
    --  create a new session.  The IP address of the connection is saved
    --  in the session.
    --  Raises Not_Found exception if the user is not recognized
-   procedure Authenticate (Model    : in User_Service;
-                           Email    : in String;
-                           Password : in String;
-                           IpAddr   : in String;
-                           User     : out User_Ref'Class;
-                           Session  : out Session_Ref'Class);
+   procedure Authenticate (Model     : in User_Service;
+                           Email     : in String;
+                           Password  : in String;
+                           IpAddr    : in String;
+                           Principal : out AWA.Users.Principals.Principal_Access);
 
    --  Authenticate the user with his OpenID identifier.  The authentication process
    --  was made by an external OpenID provider.  If the user does not yet exists in
    --  the database, a record is created for him.  Create a new session for the user.
    --  The IP address of the connection is saved in the session.
    --  Raises Not_Found exception if the user is not recognized
-   procedure Authenticate (Model    : in User_Service;
-                           Auth     : in Security.Openid.Authentication;
-                           IpAddr   : in String;
-                           User     : out User_Ref'Class;
-                           Session  : out Session_Ref'Class);
+   procedure Authenticate (Model     : in User_Service;
+                           Auth      : in Security.Openid.Authentication;
+                           IpAddr    : in String;
+                           Principal : out AWA.Users.Principals.Principal_Access);
 
    --  Authenticate the user with the authenticate cookie generated from a previous authenticate
    --  session.  If the cookie has the correct signature, matches a valid session,
    --  return the user information and create a new session.  The IP address of the connection
    --  is saved in the session.
    --  Raises Not_Found exception if the user is not recognized
-   procedure Authenticate (Model    : in User_Service;
-                           Cookie   : in String;
-                           Ip_Addr  : in String;
-                           User     : out User_Ref'Class;
-                           Session  : out Session_Ref'Class);
+   procedure Authenticate (Model     : in User_Service;
+                           Cookie    : in String;
+                           Ip_Addr   : in String;
+                           Principal : out AWA.Users.Principals.Principal_Access);
 
    --  Start the lost password process for a user.  Find the user having
    --  the given email address and send that user a password reset key
@@ -137,8 +136,7 @@ package AWA.Users.Services is
                              Key      : in String;
                              Password : in String;
                              IpAddr   : in String;
-                             User     : out User_Ref'Class;
-                             Session  : out Session_Ref'Class);
+                             Principal : out AWA.Users.Principals.Principal_Access);
 
    --  Verify that the user session identified by <b>Id</b> is valid and still active.
    --  Returns the user and the session objects.
@@ -173,7 +171,8 @@ private
                              DB      : in out ADO.Sessions.Master_Session;
                              Session : out Session_Ref'Class;
                              User    : in User_Ref'Class;
-                             Ip_Addr : in String);
+                             Ip_Addr : in String;
+                             Principal : out AWA.Users.Principals.Principal_Access);
 
    type User_Service is new AWA.Modules.Module_Manager with record
       Server_Id : Integer := 0;

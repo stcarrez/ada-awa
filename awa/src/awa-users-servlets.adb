@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-servlets -- OpenID verification servlet for user authentication
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,6 @@
 
 with AWA.Users.Services;
 with AWA.Users.Module;
-with AWA.Users.Models;
 with AWA.Users.Principals;
 package body AWA.Users.Servlets is
 
@@ -34,15 +33,13 @@ package body AWA.Users.Servlets is
       use AWA.Users.Module;
       use AWA.Users.Services;
 
-      Manager : constant User_Service_Access := AWA.Users.Module.Get_User_Manager;
-      User    : AWA.Users.Models.User_Ref;
-      Session : AWA.Users.Models.Session_Ref;
+      Manager   : constant User_Service_Access := AWA.Users.Module.Get_User_Manager;
+      Principal : AWA.Users.Principals.Principal_Access;
    begin
       Manager.Authenticate (Auth    => Auth,
                             IpAddr  => "",
-                            User    => User,
-                            Session => Session);
-      Result := AWA.Users.Principals.Create (User, Session).all'Access;
+                            Principal => Principal);
+      Result := Principal.all'Access;
    end Create_Principal;
 
 end AWA.Users.Servlets;

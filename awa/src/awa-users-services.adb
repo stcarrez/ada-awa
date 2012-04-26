@@ -18,7 +18,6 @@
 
 with Ada.Strings;
 with Ada.Calendar;
-with Ada.Strings.Unbounded;
 
 with Util.Log.Loggers;
 with Util.Strings;
@@ -27,7 +26,6 @@ with Util.Encoders.HMAC.SHA1;
 with Ada.Numerics.Discrete_Random;
 
 with ADO.SQL;
-with ADO.Sessions;
 with ADO.Statements;
 
 with AWA.Services;
@@ -63,7 +61,7 @@ package body AWA.Users.Services is
       Props.Set_Event_Kind (Kind);
       Props.Set_Parameter ("first_name", User.Get_First_Name);
       Props.Set_Parameter ("last_name", User.Get_Last_Name);
-      Props.Set_Parameter ("name", Name);
+      Props.Set_Parameter ("name", User.Get_Name);
       Model.Send_Event (Props);
    end Send_Alert;
 
@@ -135,7 +133,9 @@ package body AWA.Users.Services is
                              DB      : in out Master_Session;
                              Session : out Session_Ref'Class;
                              User    : in User_Ref'Class;
-                             Ip_Addr : in String) is
+                             Ip_Addr : in String;
+                             Principal : out AWA.Users.Principals.Principal_Access) is
+      Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       Auth_Session : Session_Ref;
    begin
       --  Create the authenticate session.
@@ -156,6 +156,9 @@ package body AWA.Users.Services is
       Session.Set_Auth (Auth_Session);
       Session.Set_Server_Id (Model.Server_Id);
       Session.Save (DB);
+
+      Principal := AWA.Users.Principals.Create (User_Ref (User), Session_Ref (Session));
+      Ctx.Set_Context (Ctx.Get_Application, Principal);
    end Create_Session;
 
    --  ------------------------------
@@ -165,20 +168,21 @@ package body AWA.Users.Services is
    --  The IP address of the connection is saved in the session.
    --  Raises Not_Found exception if the user is not recognized
    --  ------------------------------
-   procedure Authenticate (Model    : in User_Service;
-                           Auth     : in Security.Openid.Authentication;
-                           IpAddr   : in String;
-                           User     : out User_Ref'Class;
-                           Session  : out Session_Ref'Class) is
+   procedure Authenticate (Model     : in User_Service;
+                           Auth      : in Security.Openid.Authentication;
+                           IpAddr    : in String;
+                           Principal : out AWA.Users.Principals.Principal_Access) is
       --  Update the user first name/last name
       procedure Update_User;
 
-      OpenId : constant String := Security.Openid.Get_Claimed_Id (Auth);
-      Email  : constant String := Security.Openid.Get_Email (Auth);
-      Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      DB     : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
-      Query  : ADO.SQL.Query;
-      Found  : Boolean;
+      OpenId  : constant String := Security.Openid.Get_Claimed_Id (Auth);
+      Email   : constant String := Security.Openid.Get_Email (Auth);
+      Ctx     : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB      : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Query   : ADO.SQL.Query;
+      Found   : Boolean;
+      User    : User_Ref;
+      Session : Session_Ref;
 
       --  ------------------------------
       --  Update the user first name/last name
@@ -213,7 +217,6 @@ package body AWA.Users.Services is
          Log.Info ("User {0} is not known", Email);
          declare
             E : Email_Ref;
-            Event : AWA.Events.Module_Event;
          begin
             E.Set_Email (Email);
             E.Set_User_Id (0);
@@ -224,10 +227,6 @@ package body AWA.Users.Services is
             Update_User;
             E.Set_User_Id (User.Get_Id);
             E.Save (DB);
-
-            --  Send the event to indicate a new user was created.
-            Event.Set_Parameter ("email", Email);
-            Model.Send_Alert (User_Create_Event.Kind, User, Event);
          end;
       else
          Update_User;
@@ -245,7 +244,16 @@ package body AWA.Users.Services is
          end;
       end if;
 
-      Create_Session (Model, DB, Session, User, IpAddr);
+      Create_Session (Model, DB, Session, User, IpAddr, Principal);
+      if not Found then
+         declare
+            Event : AWA.Events.Module_Event;
+         begin
+            --  Send the event to indicate a new user was created.
+            Event.Set_Parameter ("email", Email);
+            Model.Send_Alert (User_Create_Event.Kind, User, Event);
+         end;
+      end if;
       Ctx.Commit;
    end Authenticate;
 
@@ -256,17 +264,18 @@ package body AWA.Users.Services is
    --  in the session.
    --  Raises Not_Found exception if the user is not recognized
    --  ------------------------------
-   procedure Authenticate (Model    : in User_Service;
-                           Email    : in String;
-                           Password : in String;
-                           IpAddr   : in String;
-                           User     : out User_Ref'Class;
-                           Session  : out Session_Ref'Class) is
+   procedure Authenticate (Model     : in User_Service;
+                           Email     : in String;
+                           Password  : in String;
+                           IpAddr    : in String;
+                           Principal : out AWA.Users.Principals.Principal_Access) is
 
-      Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      DB     : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
-      Query  : ADO.SQL.Query;
-      Found  : Boolean;
+      Ctx     : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB      : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Query   : ADO.SQL.Query;
+      Found   : Boolean;
+      User    : User_Ref;
+      Session : Session_Ref;
    begin
       Log.Info ("Authenticate user {0}", Email);
 
@@ -284,7 +293,7 @@ package body AWA.Users.Services is
          raise Not_Found with "No user registered under email: " & Email;
       end if;
 
-      Create_Session (Model, DB, Session, User, IpAddr);
+      Create_Session (Model, DB, Session, User, IpAddr, Principal);
 
       Ctx.Commit;
       Log.Info ("Session {0} created for user {1}",
@@ -301,8 +310,7 @@ package body AWA.Users.Services is
    procedure Authenticate (Model    : in User_Service;
                            Cookie   : in String;
                            Ip_Addr  : in String;
-                           User     : out User_Ref'Class;
-                           Session  : out Session_Ref'Class) is
+                           Principal : out AWA.Users.Principals.Principal_Access) is
 
       use type ADO.Identifier;
 
@@ -312,6 +320,8 @@ package body AWA.Users.Services is
 
       Cookie_Session : Session_Ref;
       Auth_Session   : Session_Ref;
+      Session        : Session_Ref;
+      User           : User_Ref;
       Id             : constant ADO.Identifier := Model.Get_Authenticate_Id (Cookie);
    begin
       Log.Info ("Authenticate cookie {0}", Cookie);
@@ -345,7 +355,6 @@ package body AWA.Users.Services is
          raise Not_Found with "Invalid cookie";
       end if;
 
-      Session := Session_Ref'Class (Null_Session);
       Session.Set_Start_Date (ADO.Nullable_Time '(Value   => Ada.Calendar.Clock,
                                                   Is_Null => False));
       Session.Set_User_Id (User.Get_Id);
@@ -354,6 +363,9 @@ package body AWA.Users.Services is
       Session.Set_Auth (Auth_Session);
       Session.Set_Server_Id (Model.Server_Id);
       Session.Save (DB);
+
+      Principal := AWA.Users.Principals.Create (User, Session);
+      Ctx.Set_Context (Ctx.Get_Application, Principal);
 
       --  Mark the cookie session as used.
       Cookie_Session.Set_Session_Type (USED_SESSION_TYPE);
@@ -429,14 +441,15 @@ package body AWA.Users.Services is
                              Key      : in String;
                              Password : in String;
                              IpAddr   : in String;
-                             User     : out User_Ref'Class;
-                             Session  : out Session_Ref'Class) is
+                             Principal : out AWA.Users.Principals.Principal_Access) is
       Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB     : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Query  : ADO.SQL.Query;
       Found  : Boolean;
       Email  : Email_Ref;
       Access_Key : Access_Key_Ref;
+      User       : User_Ref;
+      Session    : Session_Ref;
    begin
       Log.Info ("Reset password with key {0}", Key);
 
@@ -472,7 +485,7 @@ package body AWA.Users.Services is
       User.Save (DB);
 
       --  Create the authentication session.
-      Create_Session (Model, DB, Session, User, IpAddr);
+      Create_Session (Model, DB, Session, User, IpAddr, Principal);
 
       --  Send the email to warn about the password change
       declare
@@ -548,14 +561,15 @@ package body AWA.Users.Services is
    procedure Verify_User (Model    : in User_Service;
                           Key      : in String;
                           IpAddr   : in String;
-                          User     : out User_Ref'Class;
-                          Session  : out Session_Ref'Class) is
+                          Principal : out AWA.Users.Principals.Principal_Access) is
 
       Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB     : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Query  : ADO.SQL.Query;
       Found  : Boolean;
       Access_Key : Access_Key_Ref;
+      User       : User_Ref;
+      Session    : Session_Ref;
    begin
       Log.Info ("Verify user with key {0}", Key);
 
@@ -579,7 +593,7 @@ package body AWA.Users.Services is
       Access_Key.Delete (DB);
 
       --  Create the authentication session.
-      Create_Session (Model, DB, Session, User, IpAddr);
+      Create_Session (Model, DB, Session, User, IpAddr, Principal);
 
       Ctx.Commit;
    end Verify_User;

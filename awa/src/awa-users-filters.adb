@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  awa-users-beans -- ASF Beans for user module
---  Copyright (C) 2011 Stephane Carrez
+--  awa-users-filters -- Specific filters for authentication and key verification
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,20 +23,17 @@ with ASF.Cookies;
 with AWA.Users.Services;
 with AWA.Users.Module;
 
-with AWA.Users.Principals;
-with AWA.Users.Models;
 package body AWA.Users.Filters is
 
-   use Util.Log;
-
    --  The logger
-   Log : constant Loggers.Logger := Loggers.Create ("AWA.Users.Filters");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Users.Filters");
 
 
-   procedure Set_Session_Principal (Request : in out ASF.Requests.Request'Class;
-                                    User    : in AWA.Users.Models.User_Ref;
-                                    Sess    : in AWA.Users.Models.Session_Ref) is
-      Principal : constant Principals.Principal_Access := Principals.Create (User, Sess);
+   --  ------------------------------
+   --  Set the user principal on the session associated with the ASF request.
+   --  ------------------------------
+   procedure Set_Session_Principal (Request   : in out ASF.Requests.Request'Class;
+                                    Principal : in Principals.Principal_Access) is
       Session   : ASF.Sessions.Session := Request.Get_Session (Create => True);
    begin
       Session.Set_Principal (Principal.all'Access);
@@ -58,30 +55,28 @@ package body AWA.Users.Filters is
       Security.Filters.Auth_Filter (Filter).Initialize (Context);
    end Initialize;
 
-   procedure Authenticate (F        : in Auth_Filter;
-                           Request  : in out ASF.Requests.Request'Class;
-                           Response : in out ASF.Responses.Response'Class;
-                           Session  : in ASF.Sessions.Session;
-                           Auth_Id  : in String;
+   procedure Authenticate (F         : in Auth_Filter;
+                           Request   : in out ASF.Requests.Request'Class;
+                           Response  : in out ASF.Responses.Response'Class;
+                           Session   : in ASF.Sessions.Session;
+                           Auth_Id   : in String;
                            Principal : out ASF.Principals.Principal_Access) is
-      pragma Unreferenced (F);
+      pragma Unreferenced (F, Session);
 
       use AWA.Users.Module;
       use AWA.Users.Services;
 
       Manager : constant User_Service_Access := AWA.Users.Module.Get_User_Manager;
-      User    : AWA.Users.Models.User_Ref;
-      Sess    : AWA.Users.Models.Session_Ref;
+      P       : AWA.Users.Principals.Principal_Access;
    begin
       Manager.Authenticate (Cookie  => Auth_Id,
                             Ip_Addr => "",
-                            User    => User,
-                            Session => Sess);
-      Principal := AWA.Users.Principals.Create (User, Sess).all'Access;
+                            Principal => P);
+      Principal := P.all'Access;
 
       --  Setup a new AID cookie with the new connection session.
       declare
-         Cookie : constant String := Manager.Get_Authenticate_Cookie (Sess.Get_Id);
+         Cookie : constant String := Manager.Get_Authenticate_Cookie (P.Get_Session_Identifier);
          C      : ASF.Cookies.Cookie := ASF.Cookies.Create (Security.Filters.AID_COOKIE, Cookie);
       begin
          ASF.Cookies.Set_Path (C, Request.Get_Context_Path);
@@ -137,19 +132,17 @@ package body AWA.Users.Filters is
                         Request  : in out ASF.Requests.Request'Class;
                         Response : in out ASF.Responses.Response'Class;
                         Chain    : in out ASF.Servlets.Filter_Chain) is
-      Key     : constant String := Request.Get_Parameter (PARAM_ACCESS_KEY);
-      Manager : constant Users.Services.User_Service_Access := Users.Module.Get_User_Manager;
-      User    : AWA.Users.Models.User_Ref;
-      Session : AWA.Users.Models.Session_Ref;
+      Key       : constant String := Request.Get_Parameter (PARAM_ACCESS_KEY);
+      Manager   : constant Users.Services.User_Service_Access := Users.Module.Get_User_Manager;
+      Principal : AWA.Users.Principals.Principal_Access;
    begin
       Log.Info ("Verify access key {0}", Key);
 
-      Manager.Verify_User (Key     => Key,
-                           User    => User,
-                           IpAddr  => "",
-                           Session => Session);
+      Manager.Verify_User (Key       => Key,
+                           IpAddr    => "",
+                           Principal => Principal);
 
-      Set_Session_Principal (Request, User, Session);
+      Set_Session_Principal (Request, Principal);
 
       --  Request is authorized, proceed to the next filter.
       ASF.Servlets.Do_Filter (Chain    => Chain,
