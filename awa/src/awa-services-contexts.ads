@@ -59,9 +59,6 @@ package AWA.Services.Contexts is
    --  Returns a null session if there is none.
    function Get_User_Session (Ctx : in Service_Context) return AWA.Users.Models.Session_Ref;
 
-   --     function Get_Service (Ctx : in Service_Context; Service : in Service_Id)
-   -- return Abstract_Service;
-
    --  Starts a transaction.
    procedure Start (Ctx : in out Service_Context);
 

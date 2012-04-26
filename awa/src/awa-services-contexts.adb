@@ -100,10 +100,6 @@ package body AWA.Services.Contexts is
    end Get_User_Session;
 
    --  ------------------------------
-   --     function Get_Service (Ctx : in Service_Context; Service : in Service_Id)
-   -- return Abstract_Service;
-
-   --  ------------------------------
    --  Starts a transaction.
    --  ------------------------------
    procedure Start (Ctx : in out Service_Context) is
@@ -153,9 +149,13 @@ package body AWA.Services.Contexts is
    --  ------------------------------
    overriding
    procedure Initialize (Ctx : in out Service_Context) is
+      use type AWA.Applications.Application_Access;
    begin
       Ctx.Previous := Task_Context.Value;
       Task_Context.Set_Value (Ctx'Unchecked_Access);
+      if Ctx.Previous /= null and then Ctx.Application = null then
+         Ctx.Application := Ctx.Previous.Application;
+      end if;
    end Initialize;
 
    --  ------------------------------
