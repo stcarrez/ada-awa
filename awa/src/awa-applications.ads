@@ -16,7 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
---  with AWA.Messages;
 with ASF.Applications.Main;
 with ASF.Applications.Main.Configs;
 with ADO.Sessions.Factory;
@@ -44,6 +43,12 @@ package AWA.Applications is
                          Conf    : in ASF.Applications.Config;
                          Factory : in out ASF.Applications.Main.Application_Factory'Class);
 
+   --  Initialize the application configuration properties.  Properties defined in <b>Conf</b>
+   --  are expanded by using the EL expression resolver.
+   overriding
+   procedure Initialize_Config (App  : in out Application;
+                                Conf : in out ASF.Applications.Config);
+
    --  Initialize the servlets provided by the application.
    --  This procedure is called by <b>Initialize</b>.
    --  It should register the application servlets.
@@ -62,19 +67,14 @@ package AWA.Applications is
    overriding
    procedure Initialize_Components (App : in out Application);
 
-   --  Initialize the application configuration properties.  Properties defined in <b>Conf</b>
-   --  are expanded by using the EL expression resolver.
-   overriding
-   procedure Initialize_Config (App  : in out Application;
-                                Conf : in out ASF.Applications.Config);
+   --  Read the application configuration file <b>awa.xml</b>.  This is called after the servlets
+   --  and filters have been registered in the application but before the module registration.
+   procedure Load_Configuration (App : in out Application);
 
    --  Initialize the AWA modules provided by the application.
    --  This procedure is called by <b>Initialize</b>.
    --  It should register the modules used by the application.
    procedure Initialize_Modules (App : in out Application);
-
-   --  Register the module in the registry.
-   procedure Load_Configuration (App : in out Application);
 
    --  Start the application.  This is called by the server container when the server is started.
    overriding
