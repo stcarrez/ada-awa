@@ -185,6 +185,8 @@ package body AWA.Users.Services.Tests is
    --  Test password reset process
    --  ------------------------------
    procedure Test_Reset_Password_User (T : in out Test) is
+      use type AWA.Users.Principals.Principal_Access;
+
       Principal : AWA.Tests.Helpers.Users.Test_User;
       Key       : AWA.Users.Models.Access_Key_Ref;
    begin
@@ -208,11 +210,14 @@ package body AWA.Users.Services.Tests is
          Key.Find (DB, Query, Found);
          T.Assert (Found, "Access key for lost_password process not found");
 
-         Principal.Manager.Reset_Password (Key      => Key.Get_Access_Key,
-                                           Password => "newadmin",
-                                           IpAddr   => "192.168.1.2",
-                                           User     => Principal.User,
-                                           Session  => Principal.Session);
+         Principal.Manager.Reset_Password (Key       => Key.Get_Access_Key,
+                                           Password  => "newadmin",
+                                           IpAddr    => "192.168.1.2",
+                                           Principal => Principal.Principal);
+         T.Assert (Principal.Principal /= null, "No principal returned");
+
+         Principal.User    := Principal.Principal.Get_User;
+         Principal.Session := Principal.Principal.Get_Session;
 
          --  Search the access key again, it must have been removed.
          Key.Find (DB, Query, Found);
