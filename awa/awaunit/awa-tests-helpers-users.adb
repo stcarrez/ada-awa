@@ -15,6 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Ada.Unchecked_Deallocation;
 
 with Util.Tests;
 with Util.Log.Loggers;
@@ -22,7 +23,6 @@ with Util.Log.Loggers;
 with AWA.Applications;
 with AWA.Tests;
 with AWA.Users.Module;
-with AWA.Users.Principals;
 with ADO.Sessions;
 with ADO.SQL;
 package body AWA.Tests.Helpers.Users is
@@ -80,14 +80,15 @@ package body AWA.Tests.Helpers.Users is
 
          --  Run the verification and get the user and its session
          Principal.Manager.Verify_User (Key.Get_Access_Key, "192.168.1.1",
-                                        Principal.User, Principal.Session);
+                                        Principal.Principal);
       else
-         Principal.Manager.Authenticate (Email    => Email,
-                                         Password => "admin",
-                                         IpAddr   => "192.168.1.1",
-                                         User     => Principal.User,
-                                         Session  => Principal.Session);
+         Principal.Manager.Authenticate (Email     => Email,
+                                         Password  => "admin",
+                                         IpAddr    => "192.168.1.1",
+                                         Principal => Principal.Principal);
       end if;
+      Principal.User    := Principal.Principal.Get_User;
+      Principal.Session := Principal.Principal.Get_Session;
    end Create_User;
 
    --  ------------------------------
@@ -108,7 +109,9 @@ package body AWA.Tests.Helpers.Users is
 
       --  Run the verification and get the user and its session
       Principal.Manager.Verify_User (Key.Get_Access_Key, "192.168.1.1",
-                                     Principal.User, Principal.Session);
+                                     Principal.Principal);
+      Principal.User    := Principal.Principal.Get_User;
+      Principal.Session := Principal.Principal.Get_Session;
    end Create_User;
 
    --  ------------------------------
@@ -138,11 +141,12 @@ package body AWA.Tests.Helpers.Users is
    procedure Login (Principal : in out Test_User) is
    begin
       Initialize (Principal);
-      Principal.Manager.Authenticate (Email    => Principal.Email.Get_Email,
-                                      Password => "admin",
-                                      IpAddr   => "192.168.1.1",
-                                      User     => Principal.User,
-                                      Session  => Principal.Session);
+      Principal.Manager.Authenticate (Email     => Principal.Email.Get_Email,
+                                      Password  => "admin",
+                                      IpAddr    => "192.168.1.1",
+                                      Principal => Principal.Principal);
+      Principal.User    := Principal.Principal.Get_User;
+      Principal.Session := Principal.Principal.Get_Session;
    end Login;
 
    --  ------------------------------
@@ -169,5 +173,14 @@ package body AWA.Tests.Helpers.Users is
       Sec_Context.Set_Context (Manager   => App.Get_Permission_Manager,
                                Principal => Principal.all'Access);
    end Login;
+
+   overriding
+   procedure Finalize (Principal : in out Test_User) is
+      procedure Free is
+         new Ada.Unchecked_Deallocation (Object => AWA.Users.Principals.Principal'Class,
+                                         Name   => AWA.Users.Principals.Principal_Access);
+   begin
+      Free (Principal.Principal);
+   end Finalize;
 
 end AWA.Tests.Helpers.Users;

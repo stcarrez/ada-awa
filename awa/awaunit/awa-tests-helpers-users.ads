@@ -15,19 +15,22 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Ada.Finalization;
 
 with Security.Contexts;
 with AWA.Users.Models;
 with AWA.Users.Services;
 with AWA.Services.Contexts;
+with AWA.Users.Principals;
 package AWA.Tests.Helpers.Users is
 
-   type Test_User is limited record
-      Context : AWA.Services.Contexts.Service_Context;
-      Manager : AWA.Users.Services.User_Service_Access := null;
-      User    : AWA.Users.Models.User_Ref;
-      Email   : AWA.Users.Models.Email_Ref;
-      Session : AWA.Users.Models.Session_Ref;
+   type Test_User is new Ada.Finalization.Limited_Controlled with record
+      Context   : AWA.Services.Contexts.Service_Context;
+      Manager   : AWA.Users.Services.User_Service_Access := null;
+      User      : AWA.Users.Models.User_Ref;
+      Email     : AWA.Users.Models.Email_Ref;
+      Session   : AWA.Users.Models.Session_Ref;
+      Principal : AWA.Users.Principals.Principal_Access;
    end record;
 
    --  Initialize the service context.
@@ -56,5 +59,8 @@ package AWA.Tests.Helpers.Users is
    procedure Login (Context : in out AWA.Services.Contexts.Service_Context;
                     Sec_Context : in out Security.Contexts.Security_Context;
                     Email   : in String);
+
+   overriding
+   procedure Finalize (Principal : in out Test_User);
 
 end AWA.Tests.Helpers.Users;

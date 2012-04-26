@@ -35,6 +35,7 @@ with AWA.Storages.Modules;
 --  with AWA.Applications;
 with AWA.Applications.Factory;
 with AWA.Services.Filters;
+with AWA.Services.Contexts;
 package body AWA.Tests is
 
    protected Shutdown is
@@ -133,8 +134,10 @@ package body AWA.Tests is
 
       if Add_Modules then
          declare
+            Ctx    : AWA.Services.Contexts.Service_Context;
             Users : constant AWA.Users.Module.User_Module_Access := AWA.Tests.Users'Access;
          begin
+            Ctx.Set_Context (Application, null);
             Register (App    => Application.all'Access,
                       Name   => AWA.Users.Module.NAME,
                       URI    => "user",
