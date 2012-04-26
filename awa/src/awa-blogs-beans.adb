@@ -40,13 +40,22 @@ package body AWA.Blogs.Beans is
    --  Returns NO_IDENTIFIER if the parameter does not exist or is not valid.
    --  ------------------------------
    function Get_Parameter (Name : in String) return ADO.Identifier is
+      use type ASF.Contexts.Faces.Faces_Context_Access;
+
       Ctx  : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
-      P    : constant String := Ctx.Get_Parameter (Name);
    begin
-      if P = "" then
+      if Ctx = null then
          return ADO.NO_IDENTIFIER;
       else
-         return ADO.Identifier'Value (P);
+         declare
+            P    : constant String := Ctx.Get_Parameter (Name);
+         begin
+            if P = "" then
+               return ADO.NO_IDENTIFIER;
+            else
+               return ADO.Identifier'Value (P);
+            end if;
+         end;
       end if;
    exception
       when others =>
