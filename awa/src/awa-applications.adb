@@ -24,6 +24,7 @@ with EL.Contexts.Default;
 with Util.Files;
 with Util.Log.Loggers;
 
+with AWA.Services.Contexts;
 with AWA.Components.Factory;
 with AWA.Applications.Factory;
 with AWA.Applications.Configs;
@@ -41,9 +42,11 @@ package body AWA.Applications is
    procedure Initialize (App     : in out Application;
                          Conf    : in ASF.Applications.Config;
                          Factory : in out ASF.Applications.Main.Application_Factory'Class) is
+      Ctx    : AWA.Services.Contexts.Service_Context;
    begin
       Log.Info ("Initializing application");
 
+      Ctx.Set_Context (App'Unchecked_Access, null);
       AWA.Applications.Factory.Set_Application (Factory, App'Unchecked_Access);
       ASF.Applications.Main.Application (App).Initialize (Conf, Factory);
 

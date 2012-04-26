@@ -17,7 +17,6 @@
 -----------------------------------------------------------------------
 
 with Util.Log.Loggers;
-with Util.Serialize.IO.XML;
 
 with ASF.Contexts.Faces;
 with ASF.Applications.Main.Configs;
@@ -26,7 +25,6 @@ with Security.Permissions;
 with Security.Controllers.Roles;
 with AWA.Permissions.Configs;
 with AWA.Events.Configs;
-with AWA.Services.Contexts;
 
 package body AWA.Applications.Configs is
 
@@ -73,14 +71,11 @@ package body AWA.Applications.Configs is
                                  Context : in EL.Contexts.Default.Default_Context_Access) is
 
       Reader : Util.Serialize.IO.XML.Parser;
-      Ctx    : AWA.Services.Contexts.Service_Context;
 
       package Config is new Reader_Config (Reader, App'Unchecked_Access, Context);
       pragma Warnings (Off, Config);
    begin
       Log.Info ("Reading application configuration file {0}", File);
-
-      Ctx.Set_Context (App'Unchecked_Access, null);
 
       if Log.Get_Level >= Util.Log.DEBUG_LEVEL then
          Util.Serialize.IO.Dump (Reader, Log);

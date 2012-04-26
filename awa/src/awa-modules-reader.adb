@@ -18,10 +18,7 @@
 
 with Util.Serialize.IO.XML;
 
-with ASF.Applications.Main.Configs;
-
 with AWA.Applications.Configs;
-with AWA.Services.Contexts;
 
 --  The <b>AWA.Modules.Reader</b> package reads the module configuration files
 --  and initializes the module.
@@ -35,7 +32,6 @@ package body AWA.Modules.Reader is
                                  Context : in EL.Contexts.Default.Default_Context_Access) is
 
       Reader : Util.Serialize.IO.XML.Parser;
-      Ctx    : AWA.Services.Contexts.Service_Context;
 
       package Config is
         new AWA.Applications.Configs.Reader_Config (Reader,
@@ -45,8 +41,6 @@ package body AWA.Modules.Reader is
 
    begin
       Log.Info ("Reading module configuration file {0}", File);
-
-      Ctx.Set_Context (Plugin.App.all'Unchecked_Access, null);
 
       if AWA.Modules.Log.Get_Level >= Util.Log.DEBUG_LEVEL then
          Util.Serialize.IO.Dump (Reader, AWA.Modules.Log);
