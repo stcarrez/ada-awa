@@ -191,7 +191,7 @@ package body AWA.Modules is
                        Plugin   : in Module_Access;
                        Name     : in String;
                        URI      : in String) is
-      Paths : constant String := Registry.Config.Get ("app.modules.dir", "./config");
+      Paths : constant String := Registry.Config.Get (Applications.P_Module_Dir.P);
    begin
       Log.Info ("Register module '{0}' under URI '{1}'", Name, URI);
 
