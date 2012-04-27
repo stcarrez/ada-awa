@@ -1,5 +1,5 @@
 <!-- List of blog for the blog administrator
-  -  Copyright (C) 2011 Stephane Carrez
+  -  Copyright (C) 2011, 2012 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,21 +21,23 @@
         xmlns:c="http://java.sun.com/jstl/core"
 	    xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
-  <h:list var="blog" value="#{adminBlogList}">
-    <div class='post-info' id="b_#{blog.id}">
+  <h:list var="admin_blog" value="#{adminBlogList}">
+    <div class='post-info' id="b_#{admin_blog.id}">
         <div class='post-ref'>
-            #{post.id}
+            #{admin_blog.id}
         </div>
       <div class='post-title'>
-         <a href="#{contextPath}/blogs/admin/list.html?blog_id=#{blog.id}">#{blog.title}</a>
+         <a href="#{contextPath}/blogs/admin/list.html?blog_id=#{admin_blog.id}">#{admin_blog.title}</a>
       </div>
         <div class='post-date'>
-            <h:outputText value="#{blog.create_date}"/>
+            <h:outputText value="#{admin_blog.create_date}"/>
         </div>
     </div>
   </h:list>
   <c:if test="#{adminBlogList.count == 0}">
-      There is no blog
-      <ui:include src="blog-create-form.xhtml"/>
+      <p>There is no blog</p>
+      <div class='ui-widget ui-widget-content ui-corner-all'>
+          <ui:include src="blog-create-form.xhtml"/>
+      </div>
   </c:if>
 </ui:composition>

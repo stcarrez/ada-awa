@@ -25,16 +25,19 @@
     <h2>#{blogMsg.blog_admin_create_title}</h2>
     <h:form id='create-blog'>
         <input type="hidden" name="blog_id" value="#{blog.id}"/>
-      <ul>
-        <li class='message'>
-           <h:message styleClass='error'/>
-        </li>
-        <li>
-           <label for='title'>#{blogMsg.blog_admin_blog_title_label}</label>
-	       <h:inputText id='title' size='50' required='true' value='#{blog.name}'/>
-        </li>
+        <dl class='ui-widget container_12'>
+            <dt>
+                <label for='title'>#{blogMsg.blog_admin_blog_title_label}</label>
+                <h:message for='title' styleClass='error'/>
+            </dt>
+            <dd>
+                <h:inputText id='title' size='50' required='true' value='#{blog.name}'/>
+            </dd>
+        </dl>
+      <ul class='container_12 buttons'>
         <li>
           <h:commandButton id='create' value='#{blogMsg.blog_admin_create_button}'
+                           styleClass="ui-button ui-state-default ui-corner-all"
                            action="#{blog.create}" title="#{blogMsg.blog_admin_create_title}"/>
         </li>
       </ul>
