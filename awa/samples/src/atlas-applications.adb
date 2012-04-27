@@ -25,6 +25,7 @@ with Util.Properties;
 with ASF.Applications;
 with ASF.Applications.Main;
 with ASF.Applications.Main.Configs;
+with AWA.Applications.Factory;
 
 
 --  with Atlas.XXX.Module;
@@ -43,7 +44,7 @@ package body Atlas.Applications is
    --  </ul>
    --  ------------------------------
    procedure Initialize (App : in Application_Access) is
-      Fact  : ASF.Applications.Main.Application_Factory;
+      Fact  : AWA.Applications.Factory.Application_Factory;
       C     : ASF.Applications.Config;
    begin
       App.Self := App;
