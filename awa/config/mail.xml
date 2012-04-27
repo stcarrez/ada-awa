@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<module version="1.0">
+
+  <managed-bean>
+    <description>Bean used to send an email with a specific template to the user.</description>
+    <managed-bean-name>userMail</managed-bean-name>
+    <managed-bean-class>AWA.Mail.Beans.Mail_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <context-param>
+    <param-name>openid.realm</param-name>
+    <param-value>http://localhost:8080#{contextPath}/auth</param-value>
+    <description>
+       The REALM URL used by OpenID providers to verify the validity of the verification callback.
+    </description>
+  </context-param>
+
+  <navigation-rule>
+    <from-view-id>/auth/lost-password.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/auth/login.xhtml</to-view-id>
+      <redirect/>
+    </navigation-case>
+  </navigation-rule>
+
+  <!--  When a user is created, send him a welcome message.  -->
+  <on-event name="user-create">
+     <action>#{userMail.send}</action>
+     <property name="template">/mail/welcome-message.xhtml</property>
+  </on-event>
+
+  <!--  When a user is losts his password, send him a message with the reset password key.  -->
+  <on-event name="user-lost-password">
+     <action>#{userMail.send}</action>
+     <property name="template">/mail/lost-password-message.xhtml</property>
+  </on-event>
+
+  <!--  When a user successfully resets his password, send him a message to inform him.  -->
+  <on-event name="user-reset-password">
+     <action>#{userMail.send}</action>
+     <property name="template">/mail/reset-password-message.xhtml</property>
+  </on-event>
+
+</module>
