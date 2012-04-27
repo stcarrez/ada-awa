@@ -121,6 +121,11 @@
   </filter-mapping>
 
   <filter-mapping>
+    <filter-name>service</filter-name>
+    <url-pattern>/auth/*.html</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
     <filter-name>auth-filter</filter-name>
     <url-pattern>/users/*.html</url-pattern>
   </filter-mapping>
