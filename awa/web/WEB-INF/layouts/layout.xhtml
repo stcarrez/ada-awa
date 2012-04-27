@@ -11,6 +11,7 @@
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/grids/reset.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/grids/fluid_grid.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/main.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/redmond/jquery-ui-1.8.13.custom.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/themes/list.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/blogs.css"/>
     <!--DEV_END-->
@@ -19,16 +20,27 @@
     <title><h:outputText value="#{title}"/></title>
 </head>
 <body class="#{not empty pageStyle ? pageStyle : ''}">
-<div id="scroll"></div>
 
 <!-- Top header with user account -->
 <ui:include src="top-bar.xhtml"/>
 
-<div id='awa-page'>
+<div id='awa-page' class='container_12'>
+    <ui:include src="header.xhtml"/>
     <ui:insert name="pageBody"/>
     <div id="awa-clfooter"></div>
 </div>
-<ui:include src="footer.xhtml"/>
+<div id="awa-footer">
+    <div id="blk_footer">
+        <div id="awa-copyright">
+            <span>#{samplesMsg.layout_copyright}</span>
+        </div>
+        <div id="awa-footer_content">
+            <span>#{samplesMsg.layout_served_by}</span>
+            <a href="http://code.google.com/p/ada-asf">ASF</a> |
+            <a href="http://libre.adacore.com/libre/tools/aws/">AWS</a>
+        </div>
+    </div>
+</div>
 
 <ui:insert name="pageScript"/>
 
