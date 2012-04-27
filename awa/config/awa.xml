@@ -1,6 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <module version="1.0">
 
+  <application>
+    <message-bundle var='layoutMsg'>layout</message-bundle>
+  </application>
+
   <dispatcher name="async">
      <count>#{empty awa.dispatcher.count ? 1 : awa.dispatcher.count}</count>
      <priority>#{empty awa.dispatcher.priority ? 1 : awa.dispatcher.priority}</priority>
