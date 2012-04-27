@@ -16,23 +16,21 @@
   -->
 <ui:composition
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:c="http://java.sun.com/jstl/core"
-	xmlns:u="http://code.google.com/p/ada-asf/util"
+	    xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
 
   <div class='awa-login'>
     <h2>#{userMsg.login_classic_title}</h2>
     <h:form id='login'>
         <dl>
-            <dt>
+            <dt class="#{util:hasMessage('email') ? 'awa-error' : ''}">
                 <label for='email'>#{userMsg.login_email_label}</label>
                 <h:message for='email'/>
             </dt>
             <dd>
                 <h:inputText id='email' size='50' required='false' value='#{login.email}'/>
             </dd>
-            <dt>
+            <dt class="#{util:hasMessage('password') ? 'awa-error' : ''}">
                 <label for='password'>#{userMsg.login_password_label}</label>
             </dt>
             <dd>

@@ -1,8 +1,22 @@
+<!-- Signup form
+  -  Copyright (C) 2011, 2012 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
 <div class='awa-login'
-        xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:c="http://java.sun.com/jstl/core"
-	xmlns:u="http://code.google.com/p/ada-asf/util"
+        xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
 
     <h2>#{userMsg.signup_classic_title}</h2>
@@ -11,25 +25,25 @@
             <li class='message'>
                 <h:message styleClass='error'/>
             </li>
-            <li class="#{u:hasMessage('firstName') ? 'awa-error' : ''}">
+            <li class="#{util:hasMessage('firstName') ? 'awa-error' : ''}">
                 <label for='firstName'>#{userMsg.signup_firstname_label}</label>
                 <h:inputText id='firstName' size='50' value='#{login.firstName}' required='true'>
                     <f:validateLength minimum='1' maximum='50'/>
                 </h:inputText>
             </li>
-            <li class="#{u:hasMessage('lastName') ? 'awa-error' : ''}">
+            <li class="#{util:hasMessage('lastName') ? 'awa-error' : ''}">
                 <label for='lastName'>#{userMsg.signup_lastname_label}</label>
                 <h:inputText id='lastName' size='50' value='#{login.lastName}'>
                     <f:validateLength minimum='1' maximum='50'/>
                 </h:inputText>
             </li>
-            <li class="#{u:hasMessage('email') ? 'awa-error' : ''}">
+            <li class="#{util:hasMessage('email') ? 'awa-error' : ''}">
                 <label for='email'>#{userMsg.signup_email_label}</label>
                 <h:inputText id='email' size='50' value='#{login.email}'>
                     <f:validateLength minimum='1' maximum='50'/>
                 </h:inputText>
             </li>
-            <li class="#{u:hasMessage('password') ? 'awa-error' : ''}">
+            <li class="#{util:hasMessage('password') ? 'awa-error' : ''}">
                 <label for='password'>#{userMsg.signup_password_label}</label>
                 <h:message for='password'/>
                 <h:inputSecret id='password' size='20' value='#{login.password}'
@@ -37,7 +51,7 @@
                     <f:validateLength minimum='3' maximum='20'/>
                 </h:inputSecret>
             </li>
-            <li class="#{u:hasMessage('password2') ? 'awa-error' : ''}">
+            <li class="#{util:hasMessage('password2') ? 'awa-error' : ''}">
                 <label for='password2'>#{userMsg.signup_retype_password_label}</label>
                 <h:message for='password2'/>
                 <h:inputSecret id='password2' size='20' value='#{login.password}'
