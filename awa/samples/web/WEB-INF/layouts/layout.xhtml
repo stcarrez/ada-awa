@@ -7,39 +7,32 @@
         xmlns:h="http://java.sun.com/jsf/html">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--DEV_START-->
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/grids/reset.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/grids/fluid_grid.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/main.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/redmond/jquery-ui-1.8.13.custom.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/themes/list.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/blogs.css"/>
+    <!--DEV_END-->
+
     <ui:insert name="pageHeader"/>
-    <title>#{title}</title>
+    <title><h:outputText value="#{title}"/></title>
 </head>
-<body class="#{pageStyle}">
+<body class="#{not empty pageStyle ? pageStyle : ''}">
+<div id="scroll"></div>
+
 <!-- Top header with user account -->
-<div id='awa-hdr'>
-  <div id='awa-top'>
-    <ul>
-      <li id='help'><a href="http://code.google.com/p/ada-awa" >Help</a></li>
-      <li>|</li>
-      <li id='settings'><a href="statistics.xml" >Server Statistics (XML)</a></li>
-    </ul>
-  </div>
-</div>
+<ui:include src="top-bar.xhtml"/>
+
 <div id='awa-page'>
     <ui:insert name="pageBody"/>
     <div id="awa-clfooter"></div>
 </div>
-<div id="awa-footer">
-    <div id="blk_footer">
-        <div id="awa-copyright">
-            <span>#{layoutMsg.copyrightMessage}</span>
-        </div>
-        <div id="awa-footer_content">
-            <span>Served by</span>
-            <a href="http://code.google.com/p/ada-awa">AWA</a> |
-            <a href="http://libre.adacore.com/libre/tools/aws/">AWS</a>
-        </div>
-    </div>
-</div>
+<ui:include src="footer.xhtml"/>
+
 <ui:insert name="pageScript"/>
+
 <!--DEV_START-->
 <ui:debug/>
 <!--DEV_END-->
