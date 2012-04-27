@@ -32,6 +32,9 @@ package body AWA.Mail.Clients.AWS_SMTP is
       new Ada.Unchecked_Deallocation (Object => AWS.SMTP.Recipients,
                                       Name   => Recipients_Access);
 
+   --  Get a printable representation of the email recipients.
+   function Image (Recipients : in AWS.SMTP.Recipients) return String;
+
    --  ------------------------------
    --  Set the <tt>From</tt> part of the message.
    --  ------------------------------
@@ -90,6 +93,18 @@ package body AWA.Mail.Clients.AWS_SMTP is
    end Set_Body;
 
    --  ------------------------------
+   --  Get a printable representation of the email recipients.
+   --  ------------------------------
+   function Image (Recipients : in AWS.SMTP.Recipients) return String is
+      Result : Unbounded_String;
+   begin
+      for I in Recipients'Range loop
+         Append (Result, AWS.SMTP.Image (Recipients (I)));
+      end loop;
+      return To_String (Result);
+   end Image;
+
+   --  ------------------------------
    --  Send the email message.
    --  ------------------------------
    overriding
@@ -101,7 +116,8 @@ package body AWA.Mail.Clients.AWS_SMTP is
       end if;
 
       if Message.Manager.Enable then
-         Log.Info ("Send email to {0}", "");
+         Log.Info ("Send email from {0} to {1}",
+                   AWS.SMTP.Image (Message.From), Image (Message.To.all));
          AWS.SMTP.Client.Send (Server  => Message.Manager.Server,
                                From    => Message.From,
                                To      => Message.To.all,
