@@ -138,3 +138,7 @@ div.awa-title div {
 ul.buttons {
   list-style-type: none;
 }
+
+li.awa-error label {
+    color: red;
+}

@@ -30,10 +30,14 @@ div.awa-login h2 {
     width: 96%;
     background: white;
     padding: 2%;
+    -moz-border-radius-topleft: 6px;
+    -moz-border-radius-topright: 6px;
+    -webkit-border-top-right-radius: 6px;
+    -webkit-border-top-left-radius: 6px;
 }
 div.awa-login {
-  border: 4px solid #ddd;
-  background: none repeat scroll 0 0 #eee;
+  border: 2px solid #A6C9E2;
+  background: none repeat scroll 0 0 #F9FDFF;
   display: block;
   float: left;
   width: 98%;
@@ -69,6 +73,7 @@ div.awa-login p {
   text-align: left;
   color: #555;
   font-weight: bold;
+    margin: 0.5em 0;
   padding-bottom: 5px;
 }
 .awa-login input {

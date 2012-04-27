@@ -7,50 +7,50 @@
 
     <h2>#{userMsg.signup_classic_title}</h2>
     <h:form id='register'>
-      <ul>
-        <li class='message'>
-          <h:message styleClass='error'/>
-        </li>
-        <li>
-         <label for='firstName'>#{userMsg.signup_firstname_label}</label>
-         <h:inputText id='firstName' size='50' value='#{login.firstName}' required='true'>
-            <f:validateLength minimum='1' maximum='50'/>
-         </h:inputText>
-         <h:message for='firstName'/>
-       </li>
-       <li>
-         <label for='lastName'>#{userMsg.signup_lastname_label}</label>
-		 <h:inputText id='lastName' size='50' value='#{login.lastName}'>
-                   <f:validateLength minimum='1' maximum='50'/>
-         </h:inputText>
-         <h:message for='lastName'/>
-       </li>
-       <li>
-         <label for='email'>#{userMsg.signup_email_label}</label>
-		 <h:inputText id='email' size='50' value='#{login.email}'>
-                   <f:validateLength minimum='1' maximum='50'/>
-         </h:inputText>
-         <h:message for='email'/>
-       </li>
-       <li>
-         <label for='password'>#{userMsg.signup_password_label}</label>
-         <h:inputSecret id='password' size='20' value='#{login.password}'>
-            <f:validateLength minimum='3' maximum='20'/>
-         </h:inputSecret>
-         <h:message for='password'/>
-       </li>
-       <li>
-         <label for='password2'>#{userMsg.signup_retype_password_label}</label>
-         <h:inputSecret id='password2' size='20' value='#{login.password}'>
-           <f:validateLength minimum='3' maximum='20'/>
-         </h:inputSecret>
-         <h:message for='password2'/>
-       </li>
-       <li>
-         <h:commandButton id='register-button' value='#{userMsg.signup_register_button}'
-                          action="#{login.register}"/>
-       </li>
-     </ul>
+        <ul>
+            <li class='message'>
+                <h:message styleClass='error'/>
+            </li>
+            <li class="#{u:hasMessage('firstName') ? 'awa-error' : ''}">
+                <label for='firstName'>#{userMsg.signup_firstname_label}</label>
+                <h:inputText id='firstName' size='50' value='#{login.firstName}' required='true'>
+                    <f:validateLength minimum='1' maximum='50'/>
+                </h:inputText>
+            </li>
+            <li class="#{u:hasMessage('lastName') ? 'awa-error' : ''}">
+                <label for='lastName'>#{userMsg.signup_lastname_label}</label>
+                <h:inputText id='lastName' size='50' value='#{login.lastName}'>
+                    <f:validateLength minimum='1' maximum='50'/>
+                </h:inputText>
+            </li>
+            <li class="#{u:hasMessage('email') ? 'awa-error' : ''}">
+                <label for='email'>#{userMsg.signup_email_label}</label>
+                <h:inputText id='email' size='50' value='#{login.email}'>
+                    <f:validateLength minimum='1' maximum='50'/>
+                </h:inputText>
+            </li>
+            <li class="#{u:hasMessage('password') ? 'awa-error' : ''}">
+                <label for='password'>#{userMsg.signup_password_label}</label>
+                <h:message for='password'/>
+                <h:inputSecret id='password' size='20' value='#{login.password}'
+                               validatorMessage='#{userMsg.signup_invalid_password}'>
+                    <f:validateLength minimum='3' maximum='20'/>
+                </h:inputSecret>
+            </li>
+            <li class="#{u:hasMessage('password2') ? 'awa-error' : ''}">
+                <label for='password2'>#{userMsg.signup_retype_password_label}</label>
+                <h:message for='password2'/>
+                <h:inputSecret id='password2' size='20' value='#{login.password}'
+                               validatorMessage='#{userMsg.signup_invalid_password}'>
+                    <f:validateLength minimum='3' maximum='20'/>
+                </h:inputSecret>
+            </li>
+            <li>
+                <h:commandButton id='register-button' value='#{userMsg.signup_register_button}'
+                                 styleClass="ui-button ui-state-default ui-corner-all"
+                                 action="#{login.register}"/>
+            </li>
+        </ul>
     </h:form>
 
 </div>
