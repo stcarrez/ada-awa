@@ -22,6 +22,7 @@ with ASF.Principals;
 with ASF.Sessions;
 with ASF.Events.Faces.Actions;
 with ASF.Contexts.Faces;
+with ASF.Contexts.Flash;
 with ASF.Cookies;
 with ASF.Applications.Messages.Factory;
 
@@ -33,6 +34,7 @@ package body AWA.Users.Beans is
 
    use Util.Log;
    use AWA.Users.Models;
+   use ASF.Applications;
 
    Log : constant Loggers.Logger := Loggers.Create ("AWA.Users.Beans");
 
@@ -46,6 +48,8 @@ package body AWA.Users.Beans is
                             Outcome : in out Unbounded_String) is
       User  : User_Ref;
       Email : Email_Ref;
+      Ctx   : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
+      Flash : constant ASF.Contexts.Faces.Flash_Context_Access := Ctx.Get_Flash;
    begin
       Email.Set_Email (Data.Email);
       User.Set_First_Name (Data.First_Name);
@@ -55,11 +59,15 @@ package body AWA.Users.Beans is
                                 Email => Email);
       Outcome := To_Unbounded_String ("success");
 
+      --  Add a message to the flash context so that it will be displayed on the next page.
+      Flash.Set_Keep_Messages (True);
+      Messages.Factory.Add_Message (Ctx.all, "users.message_signup_sent");
+
    exception
       when Services.User_Exist =>
          Outcome := To_Unbounded_String ("failure");
 
-         ASF.Applications.Messages.Factory.Add_Message ("users.signup_error_message");
+         Messages.Factory.Add_Message (Ctx.all, "users.signup_error_message");
    end Register_User;
 
    --  ------------------------------
@@ -83,9 +91,20 @@ package body AWA.Users.Beans is
    --  ------------------------------
    procedure Lost_Password (Data    : in out Authenticate_Bean;
                             Outcome : in out Unbounded_String) is
+      Ctx   : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
+      Flash : constant ASF.Contexts.Faces.Flash_Context_Access := Ctx.Get_Flash;
    begin
       Data.Manager.Lost_Password (Email => To_String (Data.Email));
       Outcome := To_Unbounded_String ("success");
+
+      --  Add a message to the flash context so that it will be displayed on the next page.
+      Flash.Set_Keep_Messages (True);
+      Messages.Factory.Add_Message (Ctx.all, "users.message_lost_password_sent");
+
+   exception
+      when Services.Not_Found =>
+         Messages.Factory.Add_Message (Ctx.all, "users.error_email_not_found");
+
    end Lost_Password;
 
    --  ------------------------------
