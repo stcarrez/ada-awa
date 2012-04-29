@@ -1,22 +1,22 @@
 <mail:message xmlns:ui="http://java.sun.com/jsf/facelets"
               xmlns:mail="http://code.google.com/p/ada-awa/mail">
   <mail:from address="awa">do-not-reply@awa.org</mail:from>
-  <mail:to address="#{userMail.name}">#{userMail.email}</mail:to>
+  <mail:to address="#{event.name}">#{event.email}</mail:to>
   <mail:subject>Welcom to Atlas</mail:subject>
 
   <mail:body>
-Dear #{userMail.name},
+Dear #{event.name},
 
-   Welcome to this application
+You have started a registration on the Atlas application under the name #{event.first_name} #{event.last_name}
+and with the email address #{event.email}.
 
-Bienvenue dans le service AWA,
+To finish the registration process, click on the followin link:
 
-Vous etes enregistres sous le nom #{event.first_name} #{event.last_name} et l'email #{event.email}.
+http://localhost:8080#{contextPath}/auth/validate.html?key=#{event.key}
 
-Vous devez cliquer sur le lien:
+Sincerely,
 
-http://localhost:8080/awa/users/verify.html?key=#{event.key}
-
+The Atlas Team
   </mail:body>
 </mail:message>
 
