@@ -126,7 +126,8 @@ package body AWA.Mail.Clients.AWS_SMTP is
                                Status  => Result);
 
       else
-         Log.Info ("Disable send email to {0}", "");
+         Log.Info ("Disable send email from {0} to {1}",
+                   AWS.SMTP.Image (Message.From), Image (Message.To.all));
       end if;
    end Send;
 
