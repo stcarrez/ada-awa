@@ -146,7 +146,8 @@ package body AWA.Users.Tests is
       Request.Set_Parameter ("lost-password-button", "1");
       Do_Post (Request, Reply, "/auth/lost-password.html", "lost-password-2.html");
 
-      T.Assert (Reply.Get_Status = ASF.Responses.SC_OK, "Invalid response");
+      ASF.Tests.Assert_Redirect (T, "/asfunit/auth/login.html",
+                                 Reply, "Invalid redirect after lost password");
 
       --  Now, get the access key and simulate a click on the reset password link.
       declare
