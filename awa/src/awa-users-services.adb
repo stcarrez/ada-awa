@@ -541,13 +541,13 @@ package body AWA.Users.Services is
       Key.Set_User_Id (User.Get_Id);
       Key.Save (DB);
 
-      --  Send the email with the access key to finish the user creation
+      --  Send the email with the access key to finish the user registration.
       declare
          Event : AWA.Events.Module_Event;
       begin
          Event.Set_Parameter ("key", Key.Get_Access_Key);
          Event.Set_Parameter ("email", Email_Address);
-         Model.Send_Alert (User_Create_Event.Kind, User, Event);
+         Model.Send_Alert (User_Register_Event.Kind, User, Event);
       end;
 
       Ctx.Commit;
@@ -570,6 +570,7 @@ package body AWA.Users.Services is
       Access_Key : Access_Key_Ref;
       User       : User_Ref;
       Session    : Session_Ref;
+      Email      : Email_Ref;
    begin
       Log.Info ("Verify user with key {0}", Key);
 
@@ -590,10 +591,20 @@ package body AWA.Users.Services is
          raise Not_Found with "No user for access key: " & Key;
       end if;
 
+      Email := Email_Ref (User.Get_Email);
+
       Access_Key.Delete (DB);
 
       --  Create the authentication session.
       Create_Session (Model, DB, Session, User, IpAddr, Principal);
+
+      --  Post the user creation event once the user is registered.
+      declare
+         Event : AWA.Events.Module_Event;
+      begin
+         Event.Set_Parameter ("email", Email.Get_Email);
+         Model.Send_Alert (User_Create_Event.Kind, User, Event);
+      end;
 
       Ctx.Commit;
    end Verify_User;

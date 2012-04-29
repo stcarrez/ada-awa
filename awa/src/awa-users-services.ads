@@ -30,6 +30,7 @@ package AWA.Users.Services is
    use AWA.Users.Models;
 
    package User_Create_Event is new AWA.Events.Definition (Name => "user-create");
+   package User_Register_Event is new AWA.Events.Definition (Name => "user-register");
    package User_Lost_Password_Event is new AWA.Events.Definition (Name => "user-lost-password");
    package User_Reset_Password_Event is new AWA.Events.Definition (Name => "user-reset-password");
 

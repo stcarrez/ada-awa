@@ -16,19 +16,10 @@
     </description>
   </context-param>
 
-  <navigation-rule>
-    <from-view-id>/auth/lost-password.xhtml</from-view-id>
-    <navigation-case>
-      <from-outcome>success</from-outcome>
-      <to-view-id>/auth/login.xhtml</to-view-id>
-      <redirect/>
-    </navigation-case>
-  </navigation-rule>
-
   <!--  When a user is created, send him a welcome message.  -->
-  <on-event name="user-create">
+  <on-event name="user-register">
      <action>#{userMail.send}</action>
-     <property name="template">/mail/welcome-message.xhtml</property>
+     <property name="template">/mail/register-user-message.xhtml</property>
   </on-event>
 
   <!--  When a user is losts his password, send him a message with the reset password key.  -->
