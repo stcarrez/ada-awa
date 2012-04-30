@@ -19,44 +19,39 @@
 	    xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
 
-  <div class='awa-login'>
+  <div class='awa-login awa-form'>
     <h2>#{userMsg.login_classic_title}</h2>
     <h:form id='login'>
-        <dl>
-            <dt class="#{util:hasMessage('email') ? 'awa-error' : ''}">
+        <div class='awa-messages'>
+            <h:message styleClass='awa-error'/>
+        </div>
+        <dl class="awa-required#{util:hasMessage('email') ? ' awa-error' : ''}">
+            <dt>
                 <label for='email'>#{userMsg.login_email_label}</label>
                 <h:message for='email'/>
             </dt>
             <dd>
                 <h:inputText id='email' size='50' required='false' value='#{login.email}'/>
             </dd>
-            <dt class="#{util:hasMessage('password') ? 'awa-error' : ''}">
+        </dl>
+        <dl class="awa-required#{util:hasMessage('password') ? ' awa-error' : ''}">
+            <dt>
                 <label for='password'>#{userMsg.login_password_label}</label>
             </dt>
             <dd>
-                <h:inputSecret id='password' size='20' required='false' value='#{login.password}'/>
-
+                <h:inputSecret id='password' size='20' autocomplete="off" required='false' value='#{login.password}'/>
             </dd>
         </dl>
-      <ul class='buttons'>
-        <li class='message'>
-           <h:message styleClass='error'/>
-        </li>
-        <li>
-
-        </li>
-        <li>
-
-        </li>
-        <li>
-          <h:commandButton id='login-button' value='#{userMsg.login_signin_button}'
-                           styleClass="ui-button ui-state-default ui-corner-all"
-                           action="#{login.authenticate}" title="#{userMsg.login_submit_login_title}"/>
-          <a id='lost-password' href='lost-password.html' title='#{userMsg.lost_password_link_title}'>
-             #{userMsg.lost_password_link}
-          </a>
-        </li>
-      </ul>
+        <ul class='awa-buttons'>
+            <li>
+                <h:commandButton id='login-button' value='#{userMsg.login_signin_button}'
+                                 styleClass="ui-button ui-state-default ui-corner-all"
+                                 action="#{login.authenticate}" title="#{userMsg.login_submit_login_title}"/>
+                <a id='lost-password' href='lost-password.html' title='#{userMsg.lost_password_link_title}'>
+                    #{userMsg.lost_password_link}
+                </a>
+            </li>
+        </ul>
     </h:form>
   </div>
 
