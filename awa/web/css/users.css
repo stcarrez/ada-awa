@@ -59,25 +59,23 @@ div.awa-login p {
     padding-right: 2%;
 }
 
-.awa-login input {
-  width: 50%;
-  padding: 5px;
-  margin: 0.5em 0;
-  border: 1px solid #888;
-}
 .awa-login #login-button, .awa-login #lost-password-button, .awa-login #register-button {
-    margin-left: 120px;
-    margin-left: 40%;
+    margin-left: 10%;
     margin-top: 15px;
     width: 200px;
 }
 .awa-login #lost-password {
     clear: both;
     display: block;
-    margin-top: 20px;
+    margin-top: 10px;
+    float: right;
 }
-ul.openid-login {
+.awa-login #signup-link {
+    clear: both;
+    display: block;
+    float: right;
 }
+
 ul.openid-login li {
     float: left;
     padding-left: 5px;

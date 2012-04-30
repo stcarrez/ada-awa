@@ -176,7 +176,7 @@ dl.awa-optional, dl.awa-required {
 dl.awa-optional dt, dl.awa-required dt {
     float: left;
     width: 100%;
-    padding-top: 5px;
+    padding-top: 8px;
 }
 dl.awa-optional dd, dl.awa-required dd {
     float: left;
@@ -198,6 +198,7 @@ dl.awa-optional label, dl.awa-required label {
 dl.awa-optional input, dl.awa-required input {
     width: 98%;
     font-size: 16px;
+    padding: 3px;
 }
 
 /**
