@@ -193,6 +193,7 @@ dl.awa-optional label, dl.awa-required label {
     text-align: left;
     color: #555;
     font-weight: bold;
+    padding-right: 5px;
 }
 dl.awa-optional input, dl.awa-required input {
     width: 98%;
