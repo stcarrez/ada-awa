@@ -75,7 +75,7 @@
                   <h:inputSecret id='password' size='20' maxlength="20" required="true" autocomplete="off"
                                validatorMessage='#{userMsg.signup_invalid_password}'
                                requiredMessage='#{userMsg.signup_invalid_password}'
-                               value='#{login.email}'>
+                               value='#{login.password}'>
                       <f:validateLength minimum='3' maximum='20'/>
                   </h:inputSecret>
               </dd>
@@ -89,7 +89,7 @@
                   <h:inputSecret id='password2' size='20' maxlength="20" required="true" autocomplete="off"
                                validatorMessage='#{userMsg.signup_invalid_password}'
                                requiredMessage='#{userMsg.signup_invalid_password}'
-                               value='#{lostPassword.email}'>
+                               value='#{lostPassword.password2}'>
                       <f:validateLength minimum='3' maximum='20'/>
                   </h:inputSecret>
               </dd>
