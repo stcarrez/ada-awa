@@ -18,13 +18,7 @@ li.message {
     height: 30px;
     overflow: hidden;
 }
-span.error {
-    color: #FF0000;
-    font-size: 14px;
-    margin-bottom: 2px;
-    margin-top: 2px;
-    height: auto;
-}
+
 div.awa-login h2 {
     float: left;
     width: 96%;
@@ -64,18 +58,7 @@ div.awa-login p {
     padding-left: 2%;
     padding-right: 2%;
 }
-.awa-login label {
-  display: inline;
-  float: left;
-  clear: left;
-  width: 120px;
-    width: 40%;
-  text-align: left;
-  color: #555;
-  font-weight: bold;
-    margin: 0.5em 0;
-  padding-bottom: 5px;
-}
+
 .awa-login input {
   width: 50%;
   padding: 5px;

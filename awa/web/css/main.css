@@ -135,10 +135,78 @@ div.awa-title div {
   float: right;
   margin-right: 20px;
 }
-ul.buttons {
+ul.buttons, ul.awa-buttons {
   list-style-type: none;
 }
 
 li.awa-error label {
     color: red;
+}
+
+/**
+ * AWA Errors
+ */
+span.awa-error, dl.awa-error dt label {
+    color: red;
+}
+span.awa-error {
+    font-size: 14px;
+    margin-bottom: 2px;
+    margin-top: 2px;
+    height: auto;
+}
+
+/**
+ * Form definition.
+ */
+div.awa-form {
+    font-size: 16px;
+}
+
+/**
+ * A form field (optional or required).
+ *  - dt contains the label
+ *  - dd contains the input field
+ */
+dl.awa-optional, dl.awa-required {
+    width: 96%;
+    padding-left: 2%;
+    padding-right: 2%;
+}
+dl.awa-optional dt, dl.awa-required dt {
+    float: left;
+    width: 100%;
+    padding-top: 5px;
+}
+dl.awa-optional dd, dl.awa-required dd {
+    float: left;
+    clear: both;
+    width: 100%;
+}
+dl.awa-error dt {
+    color: red;
+}
+dl.awa-optional label, dl.awa-required label {
+    display: inline;
+    float: left;
+    clear: left;
+    text-align: left;
+    color: #555;
+    font-weight: bold;
+}
+dl.awa-optional input, dl.awa-required input {
+    width: 98%;
+    font-size: 16px;
+}
+
+/**
+ * Error messages
+ */
+div.awa-messages {
+    width: 96%;
+    height: 30px;
+    float: left;
+    padding-top: 5px;
+    padding-left: 2%;
+    padding-right: 2%;
 }
