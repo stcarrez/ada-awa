@@ -42,6 +42,14 @@ install:
 	   $(MAKE) install ; \
 	done
 
+xmlada: force
+	cd xmlada && $(MAKE)
+
+aws:    force
+	cd aws && $(MAKE) prefix=$(prefix) setup build
+
+force:
+
 # Clean, then build executables for all mains defined by the project.
 rebuild: clean build
 
