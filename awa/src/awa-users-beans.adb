@@ -61,7 +61,7 @@ package body AWA.Users.Beans is
 
       --  Add a message to the flash context so that it will be displayed on the next page.
       Flash.Set_Keep_Messages (True);
-      Messages.Factory.Add_Message (Ctx.all, "users.message_signup_sent");
+      Messages.Factory.Add_Message (Ctx.all, "users.message_signup_sent", Messages.INFO);
 
    exception
       when Services.User_Exist =>
@@ -76,6 +76,8 @@ package body AWA.Users.Beans is
    procedure Verify_User (Data    : in out Authenticate_Bean;
                           Outcome : in out Unbounded_String) is
       Principal : AWA.Users.Principals.Principal_Access;
+      Ctx   : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
+      Flash : constant ASF.Contexts.Faces.Flash_Context_Access := Ctx.Get_Flash;
    begin
       Data.Manager.Verify_User (Key     => To_String (Data.Access_Key),
                                 IpAddr  => "",
@@ -83,6 +85,15 @@ package body AWA.Users.Beans is
 
       Data.Set_Session_Principal (Principal);
       Outcome := To_Unbounded_String ("success");
+
+      --  Add a message to the flash context so that it will be displayed on the next page.
+      Flash.Set_Keep_Messages (True);
+      Messages.Factory.Add_Message (Ctx.all, "users.message_registration_done", Messages.INFO);
+
+   exception
+      when Services.Not_Found =>
+         Outcome := To_Unbounded_String ("failure");
+         Messages.Factory.Add_Message (Ctx.all, "users.error_verify_register_key");
    end Verify_User;
 
 
@@ -99,7 +110,7 @@ package body AWA.Users.Beans is
 
       --  Add a message to the flash context so that it will be displayed on the next page.
       Flash.Set_Keep_Messages (True);
-      Messages.Factory.Add_Message (Ctx.all, "users.message_lost_password_sent");
+      Messages.Factory.Add_Message (Ctx.all, "users.message_lost_password_sent", Messages.INFO);
 
    exception
       when Services.Not_Found =>
@@ -112,6 +123,8 @@ package body AWA.Users.Beans is
    --  ------------------------------
    procedure Reset_Password (Data    : in out Authenticate_Bean;
                              Outcome : in out Unbounded_String) is
+      Ctx   : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
+      Flash : constant ASF.Contexts.Faces.Flash_Context_Access := Ctx.Get_Flash;
       Principal : AWA.Users.Principals.Principal_Access;
    begin
       Data.Manager.Reset_Password (Key       => To_String (Data.Access_Key),
@@ -120,6 +133,14 @@ package body AWA.Users.Beans is
                                    Principal => Principal);
       Data.Set_Session_Principal (Principal);
       Outcome := To_Unbounded_String ("success");
+
+      --  Add a message to the flash context so that it will be displayed on the next page.
+      Flash.Set_Keep_Messages (True);
+      Messages.Factory.Add_Message (Ctx.all, "users.message_reset_password_done", Messages.INFO);
+
+   exception
+      when Services.Not_Found =>
+         Messages.Factory.Add_Message (Ctx.all, "users.error_reset_password");
    end Reset_Password;
 
 
