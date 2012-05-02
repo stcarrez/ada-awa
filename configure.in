@@ -34,6 +34,15 @@ AC_SUBST(EXEC_PREFIX)
 
 PACKAGES="$AWA_PACKAGES"
 
+ac_enable_ahven=no
+AC_ARG_ENABLE(ahven,
+[  --enable-ahven          Enable internal Ahven support for testutil library and Ada util unit tests (disabled)],
+[case "${enableval}" in
+  no|none)  ac_enable_ahven= ;;
+  *)        ac_enable_ahven=yes
+            ac_enable_aunit=no ;;
+esac])dnl
+
 AC_ARG_ENABLE(aunit,
 [  --enable-aunit          build AUnit provided by AWA],
 ENABLE_AUNIT=$enableval,
@@ -108,10 +117,6 @@ for NAME in $PACKAGES ; do
         TARGET=dynamo
         ;;
 
-      dynamo-*)
-        TARGET=dynamo
-        ;;
-
       *)
         TARGET=$NAME
         ;;
@@ -137,9 +142,32 @@ for NAME in $PACKAGES ; do
    fi
 done
 
+DIR=`pwd`
+if test $ENABLE_XMLADA = "yes" ; then
+  (cd $DIR/xmlada && ./configure --prefix="$prefix")
+fi
+
+if test $ENABLE_AWS = "yes" ; then
+  NEED_AWS_PATCH=1
+  (cd $DIR/aws;
+    cp makefile.conf makefile.conf.orig
+    sed -e 's,^SOCKET.*=.*,SOCKET=openssl,' \
+        -e 's,^IPv6.*=.*,IPv6=true,' < makefile.conf.orig > makefile.conf
+    if test $NEED_AWS_PATCH -eq 1 ; then
+       # Fix builder switches (others) does not seem to be recognized by gprbuild
+       cp tools/tools.gpr tools/tools.gpr.orig
+       sed -e 's,(others),("Ada"),g' < tools/tools.gpr.orig > tools/tools.gpr
+
+       # Remove -B option which is not supported by gcc 4.4
+       cp shared.gpr shared.gpr.orig
+       sed -e 's,gnaty3abBcefhiIklmnoprstx,gnaty3abcefhiIklmnoprstx,' < shared.gpr.orig > shared.gpr
+    fi
+    make prefix="$PREFIX" setup
+  )
+fi
+
 ARGS="--prefix $prefix --disable-shared"
 
-DIR=`pwd`
 echo "Configuring ada-util"
 (cd $DIR/util && ./configure $ARGS --enable-ahven)
 
