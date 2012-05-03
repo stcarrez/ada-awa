@@ -24,26 +24,65 @@ with Ada.Containers.Indefinite_Hashed_Maps;
 with Util.Log.Loggers;
 with Util.Beans.Basic;
 with Util.Beans.Objects;
---  with Util.Events.Channels;
 
 with ASF.Beans;
---  with ASF.Events.Modules;
 with ASF.Applications;
 with ADO.Sessions;
 
 with AWA.Events;
 limited with AWA.Applications;
 
---  The <b>AWA.Modules</b> package defines simple pluggable modules in
---  the web application.  A module is a software component that can be
---  integrated in the application during the startup or initialization
---  phase.
+--  == Introduction ==
+--  A module is a software component that can be integrated in the
+--  web application.  The module can bring a set of service APIs,
+--  some Ada beans and some presentation files.  The AWA framework
+--  allows to configure various parts of a module when it is integrated
+--  in an application.  Some modules are designed to be re-used by
+--  several applications (for example a _mail_ module, a _users_
+--  module, ...).  Other modules could be specific to an application.
+--  An application will be made of several modules, some will be
+--  generic some others specific to the application.
 --
---  A module can be attached to a given URI under the application's URI.
---  The module will handle all requests below that URI.
+--  == Registration ==
+--  The module should have only one instance per application and it must
+--  be registered when the application is initialized.  The module
+--  instance should be added to the application record as follows:
 --
---  Each module is associated with an event channel that allows other
---  modules to post easily events.
+--    type Application is new AWA.Applications.Application with record
+--       Xxx       : aliased Xxx_Module;
+--    end record;
+--
+--  The application record must override the `Initialize_Module` procedure
+--  and it must register the module instance.  This is done as follows:
+--
+--    overriding
+--    procedure Initialize_Modules (App : in out Application) is
+--    begin
+--       Register (App    => App.Self.all'Access,
+--                 Name   => Xxx.Module.NAME,
+--                 URI    => "xxx",
+--                 Module => App.User_Module'Access);
+--    end Initialize_Modules;
+--
+--  The module is registered under a unique name.  That name is used
+--  to load the module configuration.
+--
+--  == Configuration ==
+--  The module is configured by using an XML or a properties file.
+--  The configuration file is used to define:
+--
+--    * the Ada beans that the module defines and uses,
+--    * the events that the module wants to receive and the action
+--      that must be performed when the event is posted,
+--    * the permissions that the module needs and how to check them,
+--    * the navigation rules which are used for the module web interface,
+--    * the servlet and filter mappings used by the module
+--
+--  The module configuration is located in the *config* directory
+--  and must be the name of the module followed by the file extension
+--  (example: `module-name`.xml or `module-name`.properties).
+--
+--
 package AWA.Modules is
 
    type Application_Access is access all AWA.Applications.Application'Class;
