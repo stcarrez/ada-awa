@@ -177,11 +177,11 @@ echo "Configuring ada-el"
 echo "Configuring ada-asf"
 (cd $DIR/asf && ./configure --with-ada-util=../util --with-ada-el=../el $ARGS)
 
-echo "Configuring dynamo"
-(cd $DIR/dynamo && ./configure --with-ada-util=../util --with-ada-el=../el --with-ada-asf=../asf --with-ada-ado=../ado $ARGS)
-
 echo "Configuring ada-ado"
 (cd $DIR/ado && ./configure --with-ada-util=../util $ARGS)
+
+echo "Configuring dynamo"
+(cd $DIR/dynamo && ./configure --with-ada-util=../util --with-ada-el=../el --with-ada-asf=../asf --with-ada-ado=../ado $ARGS)
 
 echo "Configuring ada-awa"
 (cd $DIR/awa && ./configure --with-ada-util=../util --with-ada-el=../el --with-ada-asf=../asf --with-ada-ado=../ado $ARGS)
