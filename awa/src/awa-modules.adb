@@ -219,7 +219,7 @@ package body AWA.Modules is
 
       exception
          when Ada.IO_Exceptions.Name_Error =>
-            Log.Warn ("Module configuration file '{0}' does not exist", Path);
+            Log.Info ("Module configuration file '{0}' does not exist", Path);
       end;
 
       --  Override the module configuration with the application configuration
