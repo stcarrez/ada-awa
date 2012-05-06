@@ -1,6 +1,4 @@
 <project><name>atlas</name>
 <property name="author_email">Stephane.Carrez@gmail.com</property>
-<property name="search_dirs">.;/data/ext/local/share/dynamo/awa;/data/ext/local/share/dynamo/ado;/data/ext/local/share/dynamo/asf</property>
 <property name="license">apache</property>
-<property name="author">Stephane.Carrez@gmail.com</property>
-<property name="database">mysql://localhost:3306/atlas?user=atlas</property><module name=""></module><module name=""></module><module name=""></module><module name=""></module><module name=""></module><module name=""></module><module name=""></module><module name=""></module><module name=""></module><module name=""></module><module name=""></module><module name=""></module><module name=""></module><module name=""></module><module name=""></module><module name=""></module><module name=""></module><module name=""></module><module name="/home/ciceron/work/pam/pam/awa/awa/samples/dynamo.xml"></module><module name="/data/ext/local/share/dynamo/asf/dynamo.xml"></module><module name="/data/ext/local/share/dynamo/ado/dynamo.xml"></module><module name="/data/ext/local/share/dynamo/awa/dynamo.xml"></module></project>
+<property name="author">Stephane Carrez</property></project>
