@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package>
+   <dist>
+     <install mode='copy'>
+         <include name="bin/*-server"/>
+         <include name="config/*.xml"/>
+         <include name="atlas*.properties"/>
+     </install>
+     <install mode='exec'>
+       <command>chmod +x #{dst}</command>
+       <include name="bin/*-server"/>
+     </install>
+     <install mode='copy' dir="bundles">
+       <fileset dir="bundles">
+         <include name="**/*.properties"/>
+       </fileset>
+     </install>
+     <install mode='copy' dir='licenses'>
+         <include name="LICENSE"/>
+         <include name="LICENSE.*"/>
+         <include name="COPYING"/>
+         <include name="COPYING3"/>
+     </install>
+     <install mode='concat' dir='licenses'>
+       <include name="NOTICE.txt"/>
+     </install>
+     <install mode='copy' dir='db'>
+       <fileset dir="db">
+         <include name="*.xml"/>
+         <include name="**/*.sql"/>
+       </fileset>
+     </install>
+     <install mode='copy' dir='web'>
+       <fileset dir="samples/web">
+          <include name="**/*.xhtml"/>
+          <include name="**/*.html"/>
+       </fileset>
+       <fileset dir="web">
+          <include name="**/*.xhtml"/>
+          <include name="**/*.html"/> 
+          <include name="WEB-INF/**"/>
+       </fileset>
+     </install>
+     <install mode='exec' dir='web'>
+       <command slow='true'>yui-compressor --type js --charset UTF-8 -o #{dst} #{src}</command>
+       <fileset dir="web">
+         <include name="**/*.js"/>
+       </fileset>
+       <fileset dir="samples/web">
+          <include name="**/*.js"/>
+       </fileset>
+     </install>
+     <install mode='exec' dir='web'>
+       <command slow='true'>yui-compressor --type css --charset UTF-8 -o #{dst} #{src}</command>
+       <fileset dir="web">
+         <include name="**/*.css"/>
+       </fileset>
+       <fileset dir="samples/web">
+          <include name="**/*.css"/>
+       </fileset>
+     </install>
+     <install mode='exec' dir='web'>
+       <command>pngcrush -q -fix -no_cc -rem alla -reduce -brute #{src} #{dst}</command>
+       <fileset dir="web">
+         <include name="**/*.png"/>
+       </fileset>
+       <fileset dir="samples/web">
+          <include name="**/*.png"/>
+       </fileset>
+     </install>
+     <install mode='copy-exec' dir='web' >
+       <command output="${dst}">jpegtran -copy none -optimize -perfect #{src}</command>
+       <fileset dir="web">
+         <include name="**/*.jpg"/>
+       </fileset>
+       <fileset dir="samples/web">
+          <include name="**/*.jpg"/>
+       </fileset>
+     </install>
+  </dist>
+</package>
