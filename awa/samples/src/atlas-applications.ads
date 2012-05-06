@@ -33,6 +33,8 @@ with AWA.Storages.Modules;
 with AWA.Applications;
 with AWA.Workspaces.Module;
 with AWA.Services.Filters;
+
+with Atlas.Microblog.Modules;
 package Atlas.Applications is
 
    CONFIG_PATH  : constant String := "/atlas";
@@ -85,6 +87,8 @@ private
       Mail_Module       : aliased AWA.Mail.Module.Mail_Module;
       Comment_Module    : aliased AWA.Comments.Module.Comment_Module;
       Storage_Module    : aliased AWA.Storages.Modules.Storage_Module;
+
+      Microblog_Module  : aliased Atlas.Microblog.Modules.Microblog_Module;
 --      XXX_Module    : aliased Atlas.XXX.Module.XXX_Module;
    end record;
 

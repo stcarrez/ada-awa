@@ -136,6 +136,11 @@ package body Atlas.Applications is
                 Name   => AWA.Comments.Module.NAME,
                 URI    => "comments",
                 Module => App.Comment_Module'Access);
+
+      Register (App    => App.Self.all'Access,
+                Name   => Atlas.Microblog.Modules.NAME,
+                URI    => "microblog",
+                Module => App.Microblog_Module'Access);
    end Initialize_Modules;
 
 end Atlas.Applications;
