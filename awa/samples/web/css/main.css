@@ -1,8 +1,16 @@
-/**
- * main.css - Main style for AWA pages
- * Copyright (C) 2011 Stephane Carrez
- * Licensed under the Apache License, Version 2.0 (the "License");
- */
+html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td, label {
+    margin: 0;
+    padding: 0;
+}
+html, body {
+  height: 100%;
+}
+body {
+  font-family: Arial, Verdana, sans-serif;
+  font-size: 14px;
+  background-color: #f0f0f0;
+  overflow-y: scroll;
+}
 /* IE 6 min-height hack */
 * html #pam-page-content {
     height: 100%;
@@ -45,9 +53,6 @@ body.awa {
 }
 #awa-content {
   padding-top: 50px;
-}
-#awa-hdr #awa-tools {
-    float: left;
 }
 div.awa-title {
   margin: 10px;
@@ -97,25 +102,13 @@ div.awa-title div {
   position: relative;
   bottom: 0;
   height: 2px;
-    height: 60px;
-}
-#awa-footer #blk_footer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
 }
 #awa-copyright {
-    float: left;
+  float: left;
   margin-left: 20px;
-  margin-right: 5px;
 }
 #awa-clfooter {
   clear: both;
   height: 70px;
   width: 100%;
-}
-
-ul.buttons {
-  list-style-type: none;
 }
