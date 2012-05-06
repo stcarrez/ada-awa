@@ -22,7 +22,7 @@ with Util.Log.Loggers;
 
 with AWA.Applications;
 with AWA.Tests;
-with AWA.Users.Module;
+with AWA.Users.Modules;
 with ADO.Sessions;
 with ADO.SQL;
 package body AWA.Tests.Helpers.Users is
@@ -39,7 +39,7 @@ package body AWA.Tests.Helpers.Users is
    procedure Initialize (Principal : in out Test_User) is
    begin
       if Principal.Manager = null then
-         Principal.Manager := AWA.Users.Module.Get_User_Manager;
+         Principal.Manager := AWA.Users.Modules.Get_User_Manager;
          if Principal.Manager = null then
             Log.Error ("There is no User_Manager in the application.");
          end if;

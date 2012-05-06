@@ -26,10 +26,10 @@ with ASF.Converters.Dates;
 
 with ASF.Tests;
 
-with AWA.Users.Module;
-with AWA.Mail.Module;
-with AWA.Blogs.Module;
-with AWA.Workspaces.Module;
+with AWA.Users.Modules;
+with AWA.Mail.Modules;
+with AWA.Blogs.Modules;
+with AWA.Workspaces.Modules;
 with AWA.Storages.Modules;
 
 --  with AWA.Applications;
@@ -51,13 +51,13 @@ package body AWA.Tests is
 
    Service_Filter : aliased AWA.Services.Filters.Service_Filter;
 
-   Users          : aliased AWA.Users.Module.User_Module;
+   Users          : aliased AWA.Users.Modules.User_Module;
 
-   Workspaces     : aliased AWA.Workspaces.Module.Workspace_Module;
+   Workspaces     : aliased AWA.Workspaces.Modules.Workspace_Module;
 
-   Mail           : aliased AWA.Mail.Module.Mail_Module;
+   Mail           : aliased AWA.Mail.Modules.Mail_Module;
 
-   Blogs          : aliased AWA.Blogs.Module.Blog_Module;
+   Blogs          : aliased AWA.Blogs.Modules.Blog_Module;
 
    Storages       : aliased AWA.Storages.Modules.Storage_Module;
 
@@ -135,11 +135,11 @@ package body AWA.Tests is
       if Add_Modules then
          declare
             Ctx    : AWA.Services.Contexts.Service_Context;
-            Users : constant AWA.Users.Module.User_Module_Access := AWA.Tests.Users'Access;
+            Users : constant AWA.Users.Modules.User_Module_Access := AWA.Tests.Users'Access;
          begin
             Ctx.Set_Context (Application, null);
             Register (App    => Application.all'Access,
-                      Name   => AWA.Users.Module.NAME,
+                      Name   => AWA.Users.Modules.NAME,
                       URI    => "user",
                       Module => Users.all'Access);
 
@@ -159,7 +159,7 @@ package body AWA.Tests is
                       Module => Storages'Access);
 
             Register (App    => Application.all'Access,
-                      Name   => AWA.Blogs.Module.NAME,
+                      Name   => AWA.Blogs.Modules.NAME,
                       URI    => "blogs",
                       Module => Blogs'Access);
 
