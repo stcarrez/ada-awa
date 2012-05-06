@@ -19,7 +19,7 @@
 with Util.Tests;
 with AWA.Tests;
 
-package AWA.Mail.Module.Tests is
+package AWA.Mail.Modules.Tests is
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite);
 
@@ -28,4 +28,4 @@ package AWA.Mail.Module.Tests is
    --  Create an email message and verify its content.
    procedure Test_Create_Message (T : in out Test);
 
-end AWA.Mail.Module.Tests;
+end AWA.Mail.Modules.Tests;

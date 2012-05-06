@@ -25,7 +25,7 @@ with ADO.SQL;
 with ADO.Objects;
 with Ada.Calendar;
 
-with AWA.Users.Module;
+with AWA.Users.Modules;
 with AWA.Tests.Helpers.Users;
 package body AWA.Users.Services.Tests is
 
@@ -237,19 +237,19 @@ package body AWA.Users.Services.Tests is
    --  Test Get_User_Module operation
    --  ------------------------------
    procedure Test_Get_Module (T : in out Test) is
-      use type AWA.Users.Module.User_Module_Access;
+      use type AWA.Users.Modules.User_Module_Access;
    begin
       declare
-         M : constant AWA.Users.Module.User_Module_Access := AWA.Users.Module.Get_User_Module;
+         M : constant AWA.Users.Modules.User_Module_Access := AWA.Users.Modules.Get_User_Module;
       begin
          T.Assert (M /= null, "Get_User_Module returned null");
       end;
       declare
          S : Util.Measures.Stamp;
-         M : AWA.Users.Module.User_Module_Access;
+         M : AWA.Users.Modules.User_Module_Access;
       begin
          for I in 1 .. 1_000 loop
-            M := AWA.Users.Module.Get_User_Module;
+            M := AWA.Users.Modules.Get_User_Module;
          end loop;
          Util.Measures.Report (S, "Get_User_Module (1000)");
          T.Assert (M /= null, "Get_User_Module returned null");

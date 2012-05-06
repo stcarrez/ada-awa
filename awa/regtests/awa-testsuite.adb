@@ -24,7 +24,7 @@ with AWA.Helpers.Selectors.Tests;
 with AWA.Storages.Services.Tests;
 with AWA.Events.Services.Tests;
 with AWA.Mail.Clients.Tests;
-with AWA.Mail.Module.Tests;
+with AWA.Mail.Modules.Tests;
 package body AWA.Testsuite is
 
    Tests : aliased Util.Tests.Test_Suite;
@@ -34,7 +34,7 @@ package body AWA.Testsuite is
    begin
       AWA.Events.Services.Tests.Add_Tests (Ret);
       AWA.Mail.Clients.Tests.Add_Tests (Ret);
-      AWA.Mail.Module.Tests.Add_Tests (Ret);
+      AWA.Mail.Modules.Tests.Add_Tests (Ret);
       AWA.Users.Services.Tests.Add_Tests (Ret);
       AWA.Users.Tests.Add_Tests (Ret);
       AWA.Wikis.Parsers.Tests.Add_Tests (Ret);

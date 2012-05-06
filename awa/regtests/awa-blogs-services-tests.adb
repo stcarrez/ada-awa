@@ -23,7 +23,7 @@ with ADO;
 with Security.Contexts;
 
 with AWA.Services.Contexts;
-with AWA.Blogs.Module;
+with AWA.Blogs.Modules;
 with AWA.Tests.Helpers.Users;
 package body AWA.Blogs.Services.Tests is
 
@@ -52,7 +52,7 @@ package body AWA.Blogs.Services.Tests is
    begin
       AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-blog@test.com");
 
-      Manager := AWA.Blogs.Module.Get_Blog_Manager;
+      Manager := AWA.Blogs.Modules.Get_Blog_Manager;
       Manager.Create_Blog (Workspace_Id => 0,
                            Title        => "My blog",
                            Result       => Blog_Id);
@@ -71,7 +71,7 @@ package body AWA.Blogs.Services.Tests is
    begin
       AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-blog-post@test.com");
 
-      Manager := AWA.Blogs.Module.Get_Blog_Manager;
+      Manager := AWA.Blogs.Modules.Get_Blog_Manager;
       Manager.Create_Blog (Workspace_Id => 0,
                            Title        => "My blog post",
                            Result       => Blog_Id);
