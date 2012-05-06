@@ -23,7 +23,7 @@ with AWA.Blogs.Services;
 
 --  The <b>Blogs.Module</b> manages the creation, update, removal of blog posts in an application.
 --
-package AWA.Blogs.Module is
+package AWA.Blogs.Modules is
 
    NAME : constant String := "blogs";
 
@@ -55,4 +55,4 @@ private
       Manager     : Services.Blog_Service_Access := null;
    end record;
 
-end AWA.Blogs.Module;
+end AWA.Blogs.Modules;

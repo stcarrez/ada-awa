@@ -23,12 +23,12 @@ with Util.Beans.Objects;
 with Util.Beans.Methods;
 
 with AWA.Events;
-with AWA.Workspaces.Module;
+with AWA.Workspaces.Modules;
 package AWA.Workspaces.Beans is
 
    type Workspaces_Bean is new Util.Beans.Basic.Bean
      and Util.Beans.Methods.Method_Bean with record
-      Module : AWA.Workspaces.Module.Workspace_Module_Access := null;
+      Module : AWA.Workspaces.Modules.Workspace_Module_Access := null;
       Count  : Natural := 0;
    end record;
    type Workspaces_Bean_Access is access all Workspaces_Bean'Class;
@@ -58,7 +58,7 @@ package AWA.Workspaces.Beans is
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
    --  Create the Workspaces_Bean bean instance.
-   function Create_Workspaces_Bean (Module : in AWA.Workspaces.Module.Workspace_Module_Access)
+   function Create_Workspaces_Bean (Module : in AWA.Workspaces.Modules.Workspace_Module_Access)
       return Util.Beans.Basic.Readonly_Bean_Access;
 
 end AWA.Workspaces.Beans;

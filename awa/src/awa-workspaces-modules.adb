@@ -26,7 +26,7 @@ with AWA.Permissions.Services;
 with ADO.SQL;
 with Util.Log.Loggers;
 with AWA.Workspaces.Beans;
-package body AWA.Workspaces.Module is
+package body AWA.Workspaces.Modules is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Awa.Workspaces.Module");
 
@@ -93,4 +93,4 @@ package body AWA.Workspaces.Module is
       Workspace := WS;
    end Get_Workspace;
 
-end AWA.Workspaces.Module;
+end AWA.Workspaces.Modules;

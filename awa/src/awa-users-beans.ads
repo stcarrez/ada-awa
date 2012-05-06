@@ -22,7 +22,7 @@ with Util.Beans.Methods;
 with Ada.Strings.Unbounded;
 
 with AWA.Users.Services;
-with AWA.Users.Module;
+with AWA.Users.Modules;
 with AWA.Users.Models;
 with AWA.Users.Principals;
 
@@ -32,7 +32,7 @@ package AWA.Users.Beans is
 
    type Authenticate_Bean is new Util.Beans.Basic.Bean
      and Util.Beans.Methods.Method_Bean with record
-      Module     : AWA.Users.Module.User_Module_Access := null;
+      Module     : AWA.Users.Modules.User_Module_Access := null;
       Manager    : AWA.Users.Services.User_Service_Access := null;
       Email      : Unbounded_String;
       Password   : Unbounded_String;
@@ -97,7 +97,7 @@ package AWA.Users.Beans is
                           Outcome : in out Unbounded_String);
 
    --  Create an authenticate bean.
-   function Create_Authenticate_Bean (Module : in AWA.Users.Module.User_Module_Access)
+   function Create_Authenticate_Bean (Module : in AWA.Users.Modules.User_Module_Access)
                                       return Util.Beans.Basic.Readonly_Bean_Access;
 
    --  ------------------------------
@@ -125,7 +125,7 @@ package AWA.Users.Beans is
                        Name : in String) return Util.Beans.Objects.Object;
 
    --  Create the current user bean.
-   function Create_Current_User_Bean (Module : in AWA.Users.Module.User_Module_Access)
+   function Create_Current_User_Bean (Module : in AWA.Users.Modules.User_Module_Access)
                                       return Util.Beans.Basic.Readonly_Bean_Access;
 
 end AWA.Users.Beans;

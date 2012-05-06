@@ -21,7 +21,7 @@ with AWA.Services.Contexts;
 with AWA.Permissions;
 with AWA.Permissions.Services;
 with AWA.Workspaces.Models;
-with AWA.Workspaces.Module;
+with AWA.Workspaces.Modules;
 
 with ADO.Sessions;
 
@@ -58,7 +58,7 @@ package body AWA.Blogs.Services is
       Log.Info ("Creating blog {0} for user", Title);
 
       Ctx.Start;
-      AWA.Workspaces.Module.Get_Workspace (DB, Ctx, WS);
+      AWA.Workspaces.Modules.Get_Workspace (DB, Ctx, WS);
 
       --  Check that the user has the create blog permission on the given workspace.
       AWA.Permissions.Check (Permission => ACL_Create_Blog.Permission,

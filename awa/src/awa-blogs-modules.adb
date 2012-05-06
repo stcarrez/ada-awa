@@ -23,7 +23,7 @@ with AWA.Modules.Beans;
 with AWA.Blogs.Beans;
 with AWA.Applications;
 
-package body AWA.Blogs.Module is
+package body AWA.Blogs.Modules is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Blogs.Module");
 
@@ -111,4 +111,4 @@ package body AWA.Blogs.Module is
       end if;
    end Get_Blog_Manager;
 
-end AWA.Blogs.Module;
+end AWA.Blogs.Modules;

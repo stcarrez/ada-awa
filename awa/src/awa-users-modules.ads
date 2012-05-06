@@ -35,7 +35,7 @@ with AWA.Users.Servlets;
 --
 --  A user can have one or several permissions that allow to protect the application data.
 --  User permissions are managed by the <b>Permissions.Module</b>.
-package AWA.Users.Module is
+package AWA.Users.Modules is
 
    NAME : constant String := "users";
 
@@ -71,4 +71,4 @@ private
       Verify_Auth : aliased AWA.Users.Servlets.Verify_Auth_Servlet;
    end record;
 
-end AWA.Users.Module;
+end AWA.Users.Modules;

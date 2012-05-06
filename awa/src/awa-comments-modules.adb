@@ -15,29 +15,27 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with ASF.Applications;
 
-with AWA.Modules;
-with AWA.Modules.Get;
-with AWA.Comments.Services;
-package AWA.Comments.Module is
+with Util.Log.Loggers;
+package body AWA.Comments.Modules is
 
-   NAME : constant String := "Comment_Module";
-
-   type Comment_Module is new AWA.Modules.Module with null record;
-   type Comment_Module_Access is access all Comment_Module'Class;
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Comments.Module");
 
    overriding
    procedure Initialize (Plugin : in out Comment_Module;
                          App    : in AWA.Modules.Application_Access;
-                         Props  : in ASF.Applications.Config);
+                         Props  : in ASF.Applications.Config) is
+   begin
+      Log.Info ("Initializing the comments module");
 
-   function Get_Comment_Module is
-     new AWA.Modules.Get (Comment_Module, Comment_Module_Access, NAME);
+      --  Setup the resource bundles.
 
-   function Get_Comment_Manager is
-     new AWA.Modules.Get_Manager (AWA.Comments.Services.Comment_Service,
-                                  AWA.Comments.Services.Comment_Service_Access,
-                                  "Comment_Manager");
+--        Plugin.Manager := Plugin.Create_User_Manager;
+--        Register.Register (Plugin  => Plugin,
+--                           Name    => "AWA.Users.Beans.Authenticate_Bean",
+--                           Handler => AWA.Users.Beans.Create_Authenticate_Bean'Access);
 
-end AWA.Comments.Module;
+      AWA.Modules.Module (Plugin).Initialize (App, Props);
+   end Initialize;
+
+end AWA.Comments.Modules;

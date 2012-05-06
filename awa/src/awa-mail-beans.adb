@@ -88,7 +88,7 @@ package body AWA.Mail.Beans is
    --  ------------------------------
    --  Create the mail bean instance.
    --  ------------------------------
-   function Create_Mail_Bean (Module : in AWA.Mail.Module.Mail_Module_Access)
+   function Create_Mail_Bean (Module : in AWA.Mail.Modules.Mail_Module_Access)
                               return Util.Beans.Basic.Readonly_Bean_Access is
       Result : constant Mail_Bean_Access := new Mail_Bean;
    begin

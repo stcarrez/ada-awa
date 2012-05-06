@@ -25,7 +25,7 @@ with ADO.Sessions.Entities;
 
 with AWA.Services.Contexts;
 with AWA.Workspaces.Models;
-with AWA.Workspaces.Module;
+with AWA.Workspaces.Modules;
 with AWA.Permissions;
 package body AWA.Storages.Services is
 
@@ -51,7 +51,7 @@ package body AWA.Storages.Services is
          declare
             Workspace : AWA.Workspaces.Models.Workspace_Ref;
          begin
-            AWA.Workspaces.Module.Get_Workspace (DB, Ctx, Workspace);
+            AWA.Workspaces.Modules.Get_Workspace (DB, Ctx, Workspace);
             Into.Set_Workspace (Workspace);
             Into.Set_Create_Date (Ada.Calendar.Clock);
          end;
@@ -84,7 +84,7 @@ package body AWA.Storages.Services is
          Workspace := AWA.Workspaces.Models.Workspace_Ref (Into.Get_Workspace);
       end if;
       if Workspace.Is_Null then
-         AWA.Workspaces.Module.Get_Workspace (DB, Ctx, Workspace);
+         AWA.Workspaces.Modules.Get_Workspace (DB, Ctx, Workspace);
          Into.Set_Workspace (Workspace);
       end if;
 

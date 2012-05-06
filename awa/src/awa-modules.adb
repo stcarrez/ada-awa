@@ -311,7 +311,7 @@ package body AWA.Modules is
             declare
                M : constant Manager_Type_Access := new Manager_Type;
             begin
-               Value := Util.Beans.Objects.To_Object (M.all'Access);
+               Value := Util.Beans.Objects.To_Object (M.all'Unchecked_Access);
                Request.Set_Attribute (Name, Value);
             end;
          end if;

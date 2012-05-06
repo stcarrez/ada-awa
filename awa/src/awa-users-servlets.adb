@@ -17,7 +17,7 @@
 -----------------------------------------------------------------------
 
 with AWA.Users.Services;
-with AWA.Users.Module;
+with AWA.Users.Modules;
 with AWA.Users.Principals;
 package body AWA.Users.Servlets is
 
@@ -30,10 +30,10 @@ package body AWA.Users.Servlets is
                                Auth   : in Security.Openid.Authentication;
                                Result : out ASF.Principals.Principal_Access) is
       pragma Unreferenced (Server);
-      use AWA.Users.Module;
+      use AWA.Users.Modules;
       use AWA.Users.Services;
 
-      Manager   : constant User_Service_Access := AWA.Users.Module.Get_User_Manager;
+      Manager   : constant User_Service_Access := AWA.Users.Modules.Get_User_Manager;
       Principal : AWA.Users.Principals.Principal_Access;
    begin
       Manager.Authenticate (Auth    => Auth,

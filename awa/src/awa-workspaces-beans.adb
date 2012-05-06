@@ -46,9 +46,9 @@ package body AWA.Workspaces.Beans is
       DB  : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
    begin
       Ctx.Start;
-      AWA.Workspaces.Module.Get_Workspace (Session   => DB,
-                                           Context   => Ctx,
-                                           Workspace => WS);
+      AWA.Workspaces.Modules.Get_Workspace (Session   => DB,
+                                            Context   => Ctx,
+                                            Workspace => WS);
       Ctx.Commit;
    end Create;
 
@@ -106,7 +106,7 @@ package body AWA.Workspaces.Beans is
    --  ------------------------------
    --  Create the Workspaces_Bean bean instance.
    --  ------------------------------
-   function Create_Workspaces_Bean (Module : in AWA.Workspaces.Module.Workspace_Module_Access)
+   function Create_Workspaces_Bean (Module : in AWA.Workspaces.Modules.Workspace_Module_Access)
       return Util.Beans.Basic.Readonly_Bean_Access is
       Object : constant Workspaces_Bean_Access := new Workspaces_Bean;
    begin

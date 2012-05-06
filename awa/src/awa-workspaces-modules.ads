@@ -23,7 +23,7 @@ with ASF.Applications;
 with AWA.Modules;
 with AWA.Services.Contexts;
 with AWA.Workspaces.Models;
-package AWA.Workspaces.Module is
+package AWA.Workspaces.Modules is
 
    --  The name under which the module is registered.
    NAME : constant String := "workspaces";
@@ -50,4 +50,4 @@ private
 
    type Workspace_Module is new AWA.Modules.Module with null record;
 
-end AWA.Workspaces.Module;
+end AWA.Workspaces.Modules;

@@ -125,7 +125,7 @@ package body AWA.Blogs.Beans is
    --  ------------------------------
    --  Create the Blog_Bean bean instance.
    --  ------------------------------
-   function Create_Blog_Bean (Module : in AWA.Blogs.Module.Blog_Module_Access)
+   function Create_Blog_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                               return Util.Beans.Basic.Readonly_Bean_Access is
       use type ADO.Identifier;
 
@@ -237,7 +237,7 @@ package body AWA.Blogs.Beans is
    --  ------------------------------
    --  Create the Workspaces_Bean bean instance.
    --  ------------------------------
-   function Create_Post_Bean (Module : in AWA.Blogs.Module.Blog_Module_Access)
+   function Create_Post_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                               return Util.Beans.Basic.Readonly_Bean_Access is
       use type ADO.Identifier;
 
@@ -261,7 +261,7 @@ package body AWA.Blogs.Beans is
    --  ------------------------------
    --  Create the Post_List_Bean bean instance.
    --  ------------------------------
-   function Create_Post_List_Bean (Module : in AWA.Blogs.Module.Blog_Module_Access)
+   function Create_Post_List_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                                    return Util.Beans.Basic.Readonly_Bean_Access is
       use AWA.Blogs.Models;
 
@@ -277,7 +277,7 @@ package body AWA.Blogs.Beans is
    --  ------------------------------
    --  Create the Admin_Post_List_Bean bean instance.
    --  ------------------------------
-   function Create_Admin_Post_List_Bean (Module : in AWA.Blogs.Module.Blog_Module_Access)
+   function Create_Admin_Post_List_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                                          return Util.Beans.Basic.Readonly_Bean_Access is
       use AWA.Blogs.Models;
       use AWA.Services;
@@ -306,7 +306,7 @@ package body AWA.Blogs.Beans is
    --  ------------------------------
    --  Create the Blog_List_Bean bean instance.
    --  ------------------------------
-   function Create_Blog_List_Bean (Module : in AWA.Blogs.Module.Blog_Module_Access)
+   function Create_Blog_List_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                                    return Util.Beans.Basic.Readonly_Bean_Access is
       use AWA.Blogs.Models;
       use AWA.Services;

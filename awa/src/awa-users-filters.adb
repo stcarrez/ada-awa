@@ -21,7 +21,7 @@ with Util.Log.Loggers;
 with ASF.Cookies;
 
 with AWA.Users.Services;
-with AWA.Users.Module;
+with AWA.Users.Modules;
 
 package body AWA.Users.Filters is
 
@@ -63,10 +63,10 @@ package body AWA.Users.Filters is
                            Principal : out ASF.Principals.Principal_Access) is
       pragma Unreferenced (F, Session);
 
-      use AWA.Users.Module;
+      use AWA.Users.Modules;
       use AWA.Users.Services;
 
-      Manager : constant User_Service_Access := AWA.Users.Module.Get_User_Manager;
+      Manager : constant User_Service_Access := AWA.Users.Modules.Get_User_Manager;
       P       : AWA.Users.Principals.Principal_Access;
    begin
       Manager.Authenticate (Cookie  => Auth_Id,
@@ -133,7 +133,7 @@ package body AWA.Users.Filters is
                         Response : in out ASF.Responses.Response'Class;
                         Chain    : in out ASF.Servlets.Filter_Chain) is
       Key       : constant String := Request.Get_Parameter (PARAM_ACCESS_KEY);
-      Manager   : constant Users.Services.User_Service_Access := Users.Module.Get_User_Manager;
+      Manager   : constant Users.Services.User_Service_Access := Users.Modules.Get_User_Manager;
       Principal : AWA.Users.Principals.Principal_Access;
    begin
       Log.Info ("Verify access key {0}", Key);

@@ -28,7 +28,7 @@ with Util.Beans.Basic;
 with Util.Beans.Objects;
 with Util.Log.Loggers;
 
-package body AWA.Mail.Module is
+package body AWA.Mail.Modules is
 
    use Util.Log;
 
@@ -148,4 +148,4 @@ package body AWA.Mail.Module is
       return Get;
    end Get_Mail_Module;
 
-end AWA.Mail.Module;
+end AWA.Mail.Modules;

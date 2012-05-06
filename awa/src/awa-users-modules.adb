@@ -23,7 +23,7 @@ with AWA.Applications;
 with AWA.Users.Beans;
 
 with Util.Log.Loggers;
-package body AWA.Users.Module is
+package body AWA.Users.Modules is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Users.Module");
 
@@ -111,4 +111,4 @@ package body AWA.Users.Module is
       end if;
    end Get_User_Manager;
 
-end AWA.Users.Module;
+end AWA.Users.Modules;

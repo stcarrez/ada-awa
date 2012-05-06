@@ -18,7 +18,7 @@
 with ASF.Views.Nodes;
 with ASF.Components.Base;
 
-with AWA.Mail.Module;
+with AWA.Mail.Modules;
 with AWA.Mail.Components.Messages;
 with AWA.Mail.Components.Recipients;
 
@@ -84,10 +84,10 @@ package body AWA.Mail.Components.Factory is
    --  Create an UIMailMessage component
    --  ------------------------------
    function Create_Message return UIComponent_Access is
-      use type AWA.Mail.Module.Mail_Module_Access;
+      use type AWA.Mail.Modules.Mail_Module_Access;
 
       Result : constant Messages.UIMailMessage_Access := new Messages.UIMailMessage;
-      Module : constant AWA.Mail.Module.Mail_Module_Access := AWA.Mail.Module.Get_Mail_Module;
+      Module : constant AWA.Mail.Modules.Mail_Module_Access := AWA.Mail.Modules.Get_Mail_Module;
    begin
       if Module = null then
          return null;

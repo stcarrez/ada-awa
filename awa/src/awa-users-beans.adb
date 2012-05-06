@@ -244,12 +244,12 @@ package body AWA.Users.Beans is
    --  ------------------------------
    --  Create an authenticate bean.
    --  ------------------------------
-   function Create_Authenticate_Bean (Module : in AWA.Users.Module.User_Module_Access)
+   function Create_Authenticate_Bean (Module : in AWA.Users.Modules.User_Module_Access)
                                       return Util.Beans.Basic.Readonly_Bean_Access is
       Object : constant Authenticate_Bean_Access := new Authenticate_Bean;
    begin
       Object.Module := Module;
-      Object.Manager := AWA.Users.Module.Get_User_Manager;
+      Object.Manager := AWA.Users.Modules.Get_User_Manager;
       return Object.all'Access;
    end Create_Authenticate_Bean;
 
@@ -402,7 +402,7 @@ package body AWA.Users.Beans is
    --  ------------------------------
    --  Create the current user bean.
    --  ------------------------------
-   function Create_Current_User_Bean (Module : in AWA.Users.Module.User_Module_Access)
+   function Create_Current_User_Bean (Module : in AWA.Users.Modules.User_Module_Access)
                                       return Util.Beans.Basic.Readonly_Bean_Access is
       Object : constant Current_User_Bean_Access := new Current_User_Bean;
    begin

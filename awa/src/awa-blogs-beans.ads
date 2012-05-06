@@ -24,7 +24,7 @@ with Util.Beans.Methods;
 
 with ADO;
 
-with AWA.Blogs.Module;
+with AWA.Blogs.Modules;
 with AWA.Blogs.Models;
 package AWA.Blogs.Beans is
 
@@ -42,7 +42,7 @@ package AWA.Blogs.Beans is
    --  It allows to create the blog as well as update its primary title.
    type Blog_Bean is new AWA.Blogs.Models.Blog_Ref
      and Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with record
-      Module  : AWA.Blogs.Module.Blog_Module_Access := null;
+      Module  : AWA.Blogs.Modules.Blog_Module_Access := null;
    end record;
    type Blog_Bean_Access is access all Blog_Bean'Class;
 
@@ -68,7 +68,7 @@ package AWA.Blogs.Beans is
 
    type Post_Bean is new Util.Beans.Basic.Bean
      and Util.Beans.Methods.Method_Bean with record
-      Module  : AWA.Blogs.Module.Blog_Module_Access := null;
+      Module  : AWA.Blogs.Modules.Blog_Module_Access := null;
       Post    : AWA.Blogs.Models.Post_Ref;
       Blog_Id : ADO.Identifier;
       Title   : Ada.Strings.Unbounded.Unbounded_String;
@@ -98,23 +98,23 @@ package AWA.Blogs.Beans is
                           Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
    --  Create the Blog_Bean bean instance.
-   function Create_Blog_Bean (Module : in AWA.Blogs.Module.Blog_Module_Access)
+   function Create_Blog_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                               return Util.Beans.Basic.Readonly_Bean_Access;
 
    --  Create the Post_Bean bean instance.
-   function Create_Post_Bean (Module : in AWA.Blogs.Module.Blog_Module_Access)
+   function Create_Post_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                               return Util.Beans.Basic.Readonly_Bean_Access;
 
    --  Create the Post_List_Bean bean instance.
-   function Create_Post_List_Bean (Module : in AWA.Blogs.Module.Blog_Module_Access)
+   function Create_Post_List_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                                    return Util.Beans.Basic.Readonly_Bean_Access;
 
    --  Create the Admin_Post_List_Bean bean instance.
-   function Create_Admin_Post_List_Bean (Module : in AWA.Blogs.Module.Blog_Module_Access)
+   function Create_Admin_Post_List_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                                    return Util.Beans.Basic.Readonly_Bean_Access;
 
    --  Create the Blog_List_Bean bean instance.
-   function Create_Blog_List_Bean (Module : in AWA.Blogs.Module.Blog_Module_Access)
+   function Create_Blog_List_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                                    return Util.Beans.Basic.Readonly_Bean_Access;
 
 end AWA.Blogs.Beans;

@@ -56,7 +56,7 @@ with AWA.Mail.Clients;
 --
 --  @see AWA.Mail.Components
 --
-package AWA.Mail.Module is
+package AWA.Mail.Modules is
 
    NAME : constant String := "mail";
 
@@ -93,4 +93,4 @@ private
       Mailer : AWA.Mail.Clients.Mail_Manager_Access;
    end record;
 
-end AWA.Mail.Module;
+end AWA.Mail.Modules;
