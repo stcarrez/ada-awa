@@ -22,7 +22,7 @@ with AWA.Modules.Get;
 with AWA.Comments.Services;
 package AWA.Comments.Modules is
 
-   NAME : constant String := "Comment_Module";
+   NAME : constant String := "comments";
 
    type Comment_Module is new AWA.Modules.Module with null record;
    type Comment_Module_Access is access all Comment_Module'Class;
