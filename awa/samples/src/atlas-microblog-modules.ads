@@ -18,6 +18,7 @@
 with ASF.Applications;
 
 with AWA.Modules;
+with Atlas.Microblog.Models;
 package Atlas.Microblog.Modules is
 
    --  The name under which the module is registered.
@@ -37,6 +38,10 @@ package Atlas.Microblog.Modules is
 
    --  Get the microblog module.
    function Get_Microblog_Module return Microblog_Module_Access;
+
+   --  Create a post for the microblog.
+   procedure Create (Plugin : in Microblog_Module;
+                     Post   : in out Atlas.Microblog.Models.Mblog_Ref);
 
 private
 

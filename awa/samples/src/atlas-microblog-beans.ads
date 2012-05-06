@@ -22,12 +22,13 @@ with Util.Beans.Basic;
 with Util.Beans.Objects;
 with Util.Beans.Methods;
 with Atlas.Microblog.Modules;
+with Atlas.Microblog.Models;
 package Atlas.Microblog.Beans is
 
    type Microblog_Bean is new Util.Beans.Basic.Bean
      and Util.Beans.Methods.Method_Bean with record
       Module : Atlas.Microblog.Modules.Microblog_Module_Access := null;
-      Count  : Natural := 0;
+      Post   : Atlas.Microblog.Models.Mblog_Ref;
    end record;
    type Microblog_Bean_Access is access all Microblog_Bean'Class;
 
@@ -47,9 +48,9 @@ package Atlas.Microblog.Beans is
    function Get_Method_Bindings (From : in Microblog_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access;
 
-   --  Example of action method.
-   procedure Action (Bean    : in out Microblog_Bean;
-                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   --  Post the microblog
+   procedure Post (Bean    : in out Microblog_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
    --  Create the Microblog_Bean bean instance.
    function Create_Microblog_Bean (Module : in Atlas.Microblog.Modules.Microblog_Module_Access)

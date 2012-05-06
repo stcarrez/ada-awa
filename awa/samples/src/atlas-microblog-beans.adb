@@ -22,16 +22,17 @@ package body Atlas.Microblog.Beans is
    --  ------------------------------
    --  Example of action method.
    --  ------------------------------
-   procedure Action (Bean    : in out Microblog_Bean;
-                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   procedure Post (Bean    : in out Microblog_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
    begin
-      null;
-   end Action;
+      Bean.Module.Create (Bean.Post);
+      Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("success");
+   end Post;
 
    package Action_Binding is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Microblog_Bean,
-                                                      Method => Action,
-                                                      Name   => "action");
+                                                      Method => Post,
+                                                      Name   => "post");
 
    Microblog_Bean_Binding : aliased constant Util.Beans.Methods.Method_Binding_Array
      := (Action_Binding.Proxy'Access, null);
@@ -43,10 +44,10 @@ package body Atlas.Microblog.Beans is
    function Get_Value (From : in Microblog_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
-      if Name = "count" then
-         return Util.Beans.Objects.To_Object (From.Count);
-      else
+      if From.Post.Is_Null then
          return Util.Beans.Objects.Null_Object;
+      else
+         return From.Post.Get_Value (Name);
       end if;
    end Get_Value;
 
@@ -58,8 +59,8 @@ package body Atlas.Microblog.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      if Name = "count" then
-         From.Count := Util.Beans.Objects.To_Integer (Value);
+      if Name = "message" then
+         From.Post.Set_Message (Util.Beans.Objects.To_String (Value));
       end if;
    end Set_Value;
 

@@ -1,3 +1,6 @@
+/* Copied from atlas-drop-mysql.sql*/
+/* File generated automatically by dynamo */
+DROP TABLE IF EXISTS `mblog`;
 /* Copied from awa-drop-mysql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `workspace_member`;

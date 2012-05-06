@@ -15,11 +15,17 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Ada.Calendar;
 
 with AWA.Modules.Beans;
 with AWA.Modules.Get;
+with AWA.Services.Contexts;
+
+with ADO.Sessions;
+
 with Util.Log.loggers;
 with Atlas.Microblog.Beans;
+with Atlas.Microblog.Models;
 package body Atlas.Microblog.Modules is
 
    Log : constant Util.log.Loggers.Logger := Util.Log.Loggers.Create ("Atlas.Microblog.Module");
@@ -55,5 +61,22 @@ package body Atlas.Microblog.Modules is
    begin
       return Get;
    end Get_Microblog_Module;
+
+   --  ------------------------------
+   --  Create a post for the microblog.
+   --  ------------------------------
+   procedure Create (Plugin : in Microblog_Module;
+                     Post   : in out Atlas.Microblog.Models.Mblog_Ref) is
+      use AWA.Services;
+
+      Ctx   : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+   begin
+      Ctx.Start;
+      Post.Set_Create_Date (Ada.Calendar.Clock);
+      Post.Set_Author (Ctx.Get_User);
+      Post.Save (DB);
+      Ctx.Commit;
+   end Create;
 
 end Atlas.Microblog.Modules;
