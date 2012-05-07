@@ -16,6 +16,9 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with ADO.Sessions;
+with ADO.Queries;
+
 with ASF.Events.Faces.Actions;
 package body Atlas.Microblog.Beans is
 
@@ -85,5 +88,21 @@ package body Atlas.Microblog.Beans is
       Object.Module := Module;
       return Object.all'Access;
    end Create_Microblog_Bean;
+
+   --  ------------------------------
+   --  Create the a bean to display the list of microblog posts.
+   --  ------------------------------
+   function Create_List_Bean (Module : in Atlas.Microblog.Modules.Microblog_Module_Access)
+                              return Util.Beans.Basic.Readonly_Bean_Access is
+      use Models;
+
+      Result  : constant List_Info_List_Bean_Access := new List_Info_List_Bean;
+      Session : ADO.Sessions.Session := Module.Get_Session;
+      Query   : ADO.Queries.Context;
+   begin
+      Query.Set_Query (Atlas.Microblog.Models.Query_List);
+      Atlas.Microblog.Models.List (Result.all, Session, Query);
+      return Result.all'Access;
+   end Create_List_Bean;
 
 end Atlas.Microblog.Beans;

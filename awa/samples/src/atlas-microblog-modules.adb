@@ -48,6 +48,10 @@ package body Atlas.Microblog.Modules is
                          Name   => "Atlas.Microblog.Beans.Microblog_Bean",
                          Handler => Atlas.Microblog.Beans.Create_Microblog_Bean'Access);
 
+      Register.Register (Plugin => Plugin,
+                         Name   => "Atlas.Microblog.Beans.List_Bean",
+                         Handler => Atlas.Microblog.Beans.Create_List_Bean'Access);
+
       AWA.Modules.Module (Plugin).Initialize (App, Props);
 
       --  Add here the creation of manager instances.

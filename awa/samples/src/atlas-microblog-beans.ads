@@ -56,4 +56,8 @@ package Atlas.Microblog.Beans is
    function Create_Microblog_Bean (Module : in Atlas.Microblog.Modules.Microblog_Module_Access)
       return Util.Beans.Basic.Readonly_Bean_Access;
 
+   --  Create the a bean to display the list of microblog posts.
+   function Create_List_Bean (Module : in Atlas.Microblog.Modules.Microblog_Module_Access)
+                                   return Util.Beans.Basic.Readonly_Bean_Access;
+
 end Atlas.Microblog.Beans;
