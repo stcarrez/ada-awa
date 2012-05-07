@@ -10,10 +10,10 @@
     <!--DEV_START-->
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/grids/reset.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/grids/fluid_grid.css"/>
-    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/main.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/awa.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/redmond/jquery-ui-1.8.13.custom.css"/>
-    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/themes/list.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/blogs.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/atlas.css"/>
     <!--DEV_END-->
 
     <ui:insert name="pageHeader"/>
@@ -25,11 +25,22 @@
 <!-- Top header with user account -->
 <ui:include src="top-bar.xhtml"/>
 
-<div id='awa-page'>
+<div id='awa-page' class='container_12'>
     <ui:insert name="pageBody"/>
     <div id="awa-clfooter"></div>
 </div>
 <ui:include src="footer.xhtml"/>
+<script type="text/javascript" src="#{contextPath}/js/jquery-1.6.js"></script>
+<script type="text/javascript" src="#{contextPath}/js/jquery-ui/jquery.ui.core.js"></script>
+<script type="text/javascript" src="#{contextPath}/js/jquery-ui/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="#{contextPath}/js/jquery-ui/jquery.ui.position.js"></script>
+<script type="text/javascript" src="#{contextPath}/js/jquery-ui/jquery.ui.mouse.js"></script>
+<script type="text/javascript" src="#{contextPath}/js/jquery-ui/jquery.ui.draggable.js"></script>
+<script type="text/javascript" src="#{contextPath}/js/jquery-ui/jquery.ui.resizable.js"></script>
+<script type="text/javascript" src="#{contextPath}/js/jquery-ui/jquery.ui.sortable.js"></script>
+<script type="text/javascript" src="#{contextPath}/js/jquery-ui/jquery.ui.dialog.js"></script>
+<script type="text/javascript" src="#{contextPath}/js/jquery-ui/jquery.ui.tabs.js"></script>
+<script type="text/javascript" src="#{contextPath}/js/asf.js"></script>
 
 <ui:insert name="pageScript"/>
 

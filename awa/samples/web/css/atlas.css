@@ -1,0 +1,19 @@
+.atlas-gravatar {
+    float: left;
+    width: 100px;
+}
+.atlas-mblog {
+    float: left;
+    width: 80%;
+}
+.atlas-mblog dl {
+    width: 60%;
+    float: left;
+}
+.atlas-mblog ul {
+    width: 10%;
+    float: left;
+}
+.atlas-mblog ul.awa-buttons {
+    padding-top: 23px;
+}

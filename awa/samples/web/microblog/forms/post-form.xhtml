@@ -1,0 +1,29 @@
+<div xmlns:f="http://java.sun.com/jsf/core"
+     xmlns:atlas="http://code.google.com/p/ada-awa/atlas"
+     xmlns:h="http://java.sun.com/jsf/html" class="container_12">
+    <h:form id='post-form'>
+        <div class="atlas-gravatar">
+            <img src="#{atlas:gravatar(user.email)}?d=identicon"/>
+        </div>
+        <div class='atlas-mblog'>
+            <dl class="awa-required#{util:hasMessage('email') ? ' awa-error' : ''}">
+                <dt>
+                    <label for='email'>#{atlasMsg.microblog_message_label}</label>
+                    <h:message for='message'/>
+                </dt>
+                <dd>
+                    <h:inputText id='message' size='30' value='#{miniPost.message}'
+                            styleClass="ui-corner-all">
+                    </h:inputText>
+                </dd>
+            </dl>
+            <ul class='awa-buttons'>
+                <li>
+                    <h:commandButton id='save' value='#{atlasMsg.microblog_post_label}'
+                                     action="#{miniPost.post}"
+                                     styleClass="ui-button ui-state-default ui-corner-all"/>
+                </li>
+            </ul>
+        </div>
+    </h:form>
+</div>
