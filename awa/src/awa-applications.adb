@@ -122,16 +122,28 @@ package body AWA.Applications is
    --  and filters have been registered in the application but before the module registration.
    --  ------------------------------
    procedure Load_Configuration (App : in out Application) is
-      Paths : constant String := App.Get_Config (P_Module_Dir.P);
-      Base  : constant String := App.Get_Config (P_Config_File.P);
-      Path  : constant String := Util.Files.Find_File_Path (Base, Paths);
-      Ctx   : aliased EL.Contexts.Default.Default_Context;
-   begin
-      AWA.Applications.Configs.Read_Configuration (App, Path, Ctx'Unchecked_Access);
+      procedure Load_Config (File : in String;
+                             Done : out Boolean);
 
-   exception
-      when Ada.IO_Exceptions.Name_Error =>
-         Log.Warn ("Application configuration file '{0}' does not exist", Path);
+      Paths : constant String := App.Get_Config (P_Module_Dir.P);
+      Files : constant String := App.Get_Config (P_Config_File.P);
+      Ctx   : aliased EL.Contexts.Default.Default_Context;
+
+      procedure Load_Config (File : in String;
+                             Done : out Boolean) is
+         Path  : constant String := Util.Files.Find_File_Path (File, Paths);
+      begin
+         Done := False;
+         AWA.Applications.Configs.Read_Configuration (App, Path, Ctx'Unchecked_Access);
+
+      exception
+         when Ada.IO_Exceptions.Name_Error =>
+            Log.Warn ("Application configuration file '{0}' does not exist", Path);
+
+      end Load_Config;
+
+   begin
+      Util.Files.Iterate_Path (Files, Load_Config'Access);
    end Load_Configuration;
 
    --  ------------------------------

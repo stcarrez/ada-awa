@@ -24,9 +24,12 @@ with AWA.Events;
 with AWA.Events.Services;
 package AWA.Applications is
 
+   --  Directories where the configuration files are searched.
    package P_Module_Dir is
      new ASF.Applications.Main.Configs.Parameter ("app.modules.dir", "./config");
 
+   --  A list of configuration files separated by ';'.  These files are searched in
+   --  'app.modules.dir' and loaded in the order specified.
    package P_Config_File is
      new ASF.Applications.Main.Configs.Parameter ("app.config", "awa.xml");
 
