@@ -1,3 +1,14 @@
+.atlas #awa-content {
+    padding-top: 92px;
+}
+#atlas-logo {
+    margin-left: 10px;
+}
+#awa-hdr #atlas-title {
+    color: #26d3ff;
+    font-weight: bold;
+    font-size: 1.3em;
+}
 .atlas-gravatar {
     float: left;
     width: 100px;

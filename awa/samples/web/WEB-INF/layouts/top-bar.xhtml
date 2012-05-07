@@ -1,0 +1,69 @@
+<!-- Header bar at top of the page layout
+  -  Copyright (C) 2011, 2012 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<div id='awa-hdr' xmlns:c="http://java.sun.com/jstl/core">
+    <div id='awa-top'>
+        <c:choose>
+            <c:when test="#{user.isLogged}">
+                <ul id='awa-tools'>
+                    <li>
+                        <a href="#{contextPath}/workspaces/main.html" title="#{layoutMsg.layout_workspace_title}">
+                            #{layoutMsg.layout_workspace_label}
+                        </a>
+                    </li>
+                </ul>
+                <ul>
+                    <li id='logout'>
+                        <a href="#{contextPath}/auth/logout.html"
+                           title="#{layoutMsg.layout_logout_title}">
+                        #{layoutMsg.layout_logout_label}
+                    </a></li>
+                    <li>|</li>
+                    <li id='help'>
+                        <a href="http://code.google.com/p/ada-awa"
+                           title="#{layoutMsg.layout_help_title}">
+                        #{layoutMsg.layout_help_label}
+                    </a></li>
+                    <li>|</li>
+                    <li id='settings'><a href="#{contextPath}/statistics.xml"
+                                         title="#{layoutMsg.layout_statistics_title}">
+                        #{layoutMsg.layout_statistics_label}
+                    </a></li>
+                    <li>|</li>
+                    <li>
+                        #{user.name}
+                    </li>
+                </ul>
+            </c:when>
+            <c:otherwise>
+                <ul>
+                    <li id='login'><a href="#{contextPath}/auth/login.html" title="#{layoutMsg.layout_login_title}">
+                        #{layoutMsg.layout_login_label}
+                    </a></li>
+                    <li>|</li>
+                    <li id='help'><a href="http://code.google.com/p/ada-awa" title="#{layoutMsg.layout_help_title}">
+                        #{layoutMsg.layout_help_label}
+                    </a></li>
+                    <li>|</li>
+                    <li id='atlas-title'>
+                        #{atlasMsg.layout_atlas_demo_title}
+                    </li>
+                </ul>
+            </c:otherwise>
+        </c:choose>
+    </div>
+    <img id='atlas-logo' src="#{contextPath}/images/atlas-neon.png"/>
+</div>
