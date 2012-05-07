@@ -26,7 +26,7 @@ package body Atlas.Microblog.Beans is
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
    begin
       Bean.Module.Create (Bean.Post);
-      Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("success");
+      Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("post-response");
    end Post;
 
    package Action_Binding is

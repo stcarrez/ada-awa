@@ -16,6 +16,8 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Util.Beans.Objects;
+
 with ASF.Servlets.Faces;
 with ASF.Servlets.Files;
 with ASF.Servlets.Ajax;
@@ -25,13 +27,13 @@ with ASF.Servlets.Measures;
 with Security.Openid.Servlets;
 
 with AWA.Users.Servlets;
-with AWA.Users.Module;
-with AWA.Mail.Module;
-with AWA.Comments.Module;
-with AWA.Blogs.Module;
+with AWA.Users.Modules;
+with AWA.Mail.Modules;
+with AWA.Comments.Modules;
+with AWA.Blogs.Modules;
 with AWA.Storages.Modules;
 with AWA.Applications;
-with AWA.Workspaces.Module;
+with AWA.Workspaces.Modules;
 with AWA.Services.Filters;
 
 with Atlas.Microblog.Modules;
@@ -40,11 +42,28 @@ package Atlas.Applications is
    CONFIG_PATH  : constant String := "/atlas";
    CONTEXT_PATH : constant String := "/atlas";
 
+   ATLAS_NS_URI : aliased constant String := "http://code.google.com/p/ada-awa/atlas";
+
+   --  Given an Email address, return the Gravatar link to the user image.
+   --  (See http://en.gravatar.com/site/implement/hash/ and
+   --  http://en.gravatar.com/site/implement/images/)
+   function Get_Gravatar_Link (Email : in String) return String;
+
+   --  EL function to convert an Email address to a Gravatar image.
+   function To_Gravatar_Link (Email : in Util.Beans.Objects.Object)
+                              return Util.Beans.Objects.Object;
+
    type Application is new AWA.Applications.Application with private;
    type Application_Access is access all Application'Class;
 
    --  Initialize the application.
    procedure Initialize (App : in Application_Access);
+
+   --  Initialize the ASF components provided by the application.
+   --  This procedure is called by <b>Initialize</b>.
+   --  It should register the component factories used by the application.
+   overriding
+   procedure Initialize_Components (App : in out Application);
 
    --  Initialize the servlets provided by the application.
    --  This procedure is called by <b>Initialize</b>.
@@ -81,11 +100,11 @@ private
       Verify_Auth       : aliased AWA.Users.Servlets.Verify_Auth_Servlet;
 
       --  The application modules.
-      User_Module       : aliased AWA.Users.Module.User_Module;
-      Workspace_Module  : aliased AWA.Workspaces.Module.Workspace_Module;
-      Blog_Module       : aliased AWA.Blogs.Module.Blog_Module;
-      Mail_Module       : aliased AWA.Mail.Module.Mail_Module;
-      Comment_Module    : aliased AWA.Comments.Module.Comment_Module;
+      User_Module       : aliased AWA.Users.Modules.User_Module;
+      Workspace_Module  : aliased AWA.Workspaces.Modules.Workspace_Module;
+      Blog_Module       : aliased AWA.Blogs.Modules.Blog_Module;
+      Mail_Module       : aliased AWA.Mail.Modules.Mail_Module;
+      Comment_Module    : aliased AWA.Comments.Modules.Comment_Module;
       Storage_Module    : aliased AWA.Storages.Modules.Storage_Module;
 
       Microblog_Module  : aliased Atlas.Microblog.Modules.Microblog_Module;

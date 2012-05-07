@@ -18,13 +18,19 @@
 -----------------------------------------------------------------------
 
 with Ada.IO_Exceptions;
+with GNAT.MD5;
 
 with Util.Log.Loggers;
 with Util.Properties;
+with Util.Strings.Transforms;
+
+with EL.Functions;
 
 with ASF.Applications;
 with ASF.Applications.Main;
 with ASF.Applications.Main.Configs;
+
+with AWA.Applications.Configs;
 with AWA.Applications.Factory;
 
 
@@ -34,6 +40,35 @@ package body Atlas.Applications is
    use AWA.Applications;
 
    Log     : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Atlas");
+
+   --  ------------------------------
+   --  Given an Email address, return the Gravatar link to the user image.
+   --  (See http://en.gravatar.com/site/implement/hash/ and
+   --  http://en.gravatar.com/site/implement/images/)
+   --  ------------------------------
+   function Get_Gravatar_Link (Email : in String) return String is
+      E : constant String := Util.Strings.Transforms.To_Lower_Case (Email);
+      C : constant GNAT.MD5.Message_Digest := GNAT.MD5.Digest (E);
+   begin
+      return "http://www.gravatar.com/avatar/" & C;
+   end Get_Gravatar_Link;
+
+   --  ------------------------------
+   --  EL function to convert an Email address to a Gravatar image.
+   --  ------------------------------
+   function To_Gravatar_Link (Email : in Util.Beans.Objects.Object)
+                              return Util.Beans.Objects.Object is
+      Link : constant String := Get_Gravatar_Link (Util.Beans.Objects.To_String (Email));
+   begin
+      return Util.Beans.Objects.To_Object (Link);
+   end To_Gravatar_Link;
+
+   procedure Set_Functions (Mapper : in out EL.Functions.Function_Mapper'Class) is
+   begin
+      Mapper.Set_Function (Name      => "gravatar",
+                           Namespace => ATLAS_NS_URI,
+                           Func      => To_Gravatar_Link'Access);
+   end Set_Functions;
 
    --  ------------------------------
    --  Initialize the application:
@@ -60,6 +95,20 @@ package body Atlas.Applications is
 
       App.Set_Global ("contextPath", CONTEXT_PATH);
    end Initialize;
+
+   --  ------------------------------
+   --  Initialize the ASF components provided by the application.
+   --  This procedure is called by <b>Initialize</b>.
+   --  It should register the component factories used by the application.
+   --  ------------------------------
+   overriding
+   procedure Initialize_Components (App : in out Application) is
+      procedure Register is
+         new ASF.Applications.Main.Register_Functions (Set_Functions);
+   begin
+      Register (App);
+      AWA.Applications.Application (App).Initialize_Components;
+   end Initialize_Components;
 
    --  ------------------------------
    --  Initialize the servlets provided by the application.
@@ -108,7 +157,7 @@ package body Atlas.Applications is
       ASF.Applications.Main.Configs.Read_Configuration (App, "web/WEB-INF/web.xml");
 
       Register (App    => App.Self.all'Access,
-                Name   => AWA.Users.Module.NAME,
+                Name   => AWA.Users.Modules.NAME,
                 URI    => "user",
                 Module => App.User_Module'Access);
 
@@ -118,7 +167,7 @@ package body Atlas.Applications is
                 Module => App.Workspace_Module'Access);
 
       Register (App    => App.Self.all'Access,
-                Name   => AWA.Mail.Module.NAME,
+                Name   => AWA.Mail.Modules.NAME,
                 URI    => "mail",
                 Module => App.Mail_Module'Access);
 
@@ -128,12 +177,12 @@ package body Atlas.Applications is
                 Module => App.Storage_Module'Access);
 
       Register (App    => App.Self.all'Access,
-                Name   => AWA.Blogs.Module.NAME,
+                Name   => AWA.Blogs.Modules.NAME,
                 URI    => "blogs",
                 Module => App.Blog_Module'Access);
 
       Register (App    => App.Self.all'Access,
-                Name   => AWA.Comments.Module.NAME,
+                Name   => AWA.Comments.Modules.NAME,
                 URI    => "comments",
                 Module => App.Comment_Module'Access);
 
