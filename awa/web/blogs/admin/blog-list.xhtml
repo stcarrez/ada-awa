@@ -35,8 +35,8 @@
     </div>
   </h:list>
   <c:if test="#{adminBlogList.count == 0}">
-      <p>There is no blog</p>
-      <div class='ui-widget ui-widget-content ui-corner-all'>
+      <p>#{blogMsg.blog_admin_blog_list_empty}</p>
+      <div class='ui-widget'>
           <ui:include src="blog-create-form.xhtml"/>
       </div>
   </c:if>

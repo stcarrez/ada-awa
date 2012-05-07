@@ -21,11 +21,11 @@
 	xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
 
-  <div class='awa-post'>
+  <div class='awa-post awa-form'>
     <h2>#{blogMsg.blog_admin_create_title}</h2>
     <h:form id='create-blog'>
         <input type="hidden" name="blog_id" value="#{blog.id}"/>
-        <dl class='ui-widget container_12'>
+        <dl class='awa-required'>
             <dt>
                 <label for='title'>#{blogMsg.blog_admin_blog_title_label}</label>
                 <h:message for='title' styleClass='error'/>
@@ -34,7 +34,7 @@
                 <h:inputText id='title' size='50' required='true' value='#{blog.name}'/>
             </dd>
         </dl>
-      <ul class='container_12 buttons'>
+      <ul class='awa-buttons'>
         <li>
           <h:commandButton id='create' value='#{blogMsg.blog_admin_create_button}'
                            styleClass="ui-button ui-state-default ui-corner-all"

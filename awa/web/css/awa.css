@@ -136,7 +136,10 @@ div.awa-title div {
   margin-right: 20px;
 }
 ul.buttons, ul.awa-buttons {
-  list-style-type: none;
+    float: left;
+    list-style-type: none;
+    margin-top: 1em;
+    margin-bottom: 1em;
 }
 
 li.awa-error label {
