@@ -26,6 +26,8 @@ with ADO.Objects;
 with ADO.Statements;
 with ADO.SQL;
 with ADO.Schemas;
+with ADO.Queries;
+with ADO.Queries.Loaders;
 with Ada.Calendar;
 with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded;
@@ -144,6 +146,53 @@ package Atlas.Microblog.Models is
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class);
 
+   --  --------------------
+   --  The list of microblogs.
+   --  --------------------
+   type List_Info is new Util.Beans.Basic.Readonly_Bean with record
+      --  the mblog identifier.
+      Id : ADO.Identifier;
+
+      --  the microblog message.
+      Message : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the microblog creation date.
+      Create_Date : Ada.Calendar.Time;
+
+      --  the author's name.
+      Name : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the author's email address.
+      Email : Ada.Strings.Unbounded.Unbounded_String;
+
+   end record;
+
+   --  Get the bean attribute identified by the given name.
+   overriding
+   function Get_Value (From : in List_Info;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   package List_Info_Beans is
+      new Util.Beans.Basic.Lists (Element_Type => List_Info);
+   package List_Info_Vectors renames List_Info_Beans.Vectors;
+   subtype List_Info_List_Bean is List_Info_Beans.List_Bean;
+
+   type List_Info_List_Bean_Access is access all List_Info_List_Bean;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out List_Info_List_Bean;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   subtype List_Info_Vector is List_Info_Vectors.Vector;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out List_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   Query_List : constant ADO.Queries.Query_Definition_Access;
+
 
 private
    MBLOG_NAME : aliased constant String := "mblog";
@@ -198,4 +247,14 @@ private
                      Session : in out ADO.Sessions.Master_Session'Class);
    procedure Set_Field (Object : in out Mblog_Ref'Class;
                         Impl   : out Mblog_Access);
+
+   package File_1 is
+      new ADO.Queries.Loaders.File (Path => "microblog-list.xml",
+                                    Sha1 => "47DAA315FBA533BB12DF4F938AE84FF5F78316AD");
+
+   package Def_Listinfo_List is
+      new ADO.Queries.Loaders.Query (Name => "list",
+                                     File => File_1.File'Access);
+   Query_List : constant ADO.Queries.Query_Definition_Access
+   := Def_Listinfo_List.Query'Access;
 end Atlas.Microblog.Models;
