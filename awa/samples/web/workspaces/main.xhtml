@@ -31,6 +31,9 @@
               <div id='form-block' class="asf-container">
                   <ajax:include src="/microblog/forms/post-form.xhtml"/>
               </div>
+              <div id='blog-post-list' class='blog-admin ui-widget ui-widget-content ui-corner-all '>
+                  <ui:include src="../blogs/admin/blog-list.xhtml"/>
+              </div>
           </div>
           <div class="grid_12 ui-widget posts">
                 <div id='forum-posts' class="asf-container ui-widget ui-widget-content ui-corner-all forum">
@@ -52,10 +55,6 @@
                     </h:list>
                 </div>
             </div>
-          <ui:include src="../blogs/admin/menu-list.xhtml"/>
-          <div id='blog-post-list' class='blog-admin'>
-              <ui:include src="../blogs/admin/blog-list.xhtml"/>
-          </div>
       </div>
     </ui:define>
 </ui:composition>
