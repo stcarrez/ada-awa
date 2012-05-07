@@ -17,6 +17,7 @@
 <ui:composition template="/WEB-INF/layouts/layout.xhtml"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
+        xmlns:atlas="http://code.google.com/p/ada-awa/atlas"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:c="http://java.sun.com/jstl/core"
 	xmlns:u="http://code.google.com/p/ada-asf/util"
@@ -31,6 +32,26 @@
                   <ajax:include src="/microblog/forms/post-form.xhtml"/>
               </div>
           </div>
+          <div class="grid_12 ui-widget posts">
+                <div id='forum-posts' class="asf-container ui-widget ui-widget-content ui-corner-all forum">
+                    <h:list value="#{messages}" var="msg" reverse="true">
+                        <div class="message">
+                            <div class="atlas-gravatar">
+                                <img src="#{atlas:gravatar(msg.email)}?d=identicon&amp;s=60"/>
+                            </div>
+                            <div class="atlas-author">
+                                #{msg.name}
+                            </div>
+                            <div class="atlas-message">
+                                #{msg.message}
+                            </div>
+                            <div class="atlas-time">
+                                #{msg.create_date}
+                            </div>
+                        </div>
+                    </h:list>
+                </div>
+            </div>
           <ui:include src="../blogs/admin/menu-list.xhtml"/>
           <div id='blog-post-list' class='blog-admin'>
               <ui:include src="../blogs/admin/blog-list.xhtml"/>

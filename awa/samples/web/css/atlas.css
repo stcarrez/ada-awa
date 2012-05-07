@@ -17,3 +17,30 @@
 .atlas-mblog ul.awa-buttons {
     padding-top: 23px;
 }
+div.atlas-author {
+    font-weight: bold;
+    font-size: 0.9em;
+}
+div.atlas-time {
+    font-size: 0.6em;
+    color: #ccc;
+}
+div.message {
+    float: left;
+    width: 96%;
+    margin: 2%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #a6c9e2;
+    padding-bottom: 5px;
+}
+div.message img {
+    padding: 3px;
+    border: 1px solid #a6c9e2;
+}
+#forum-posts {
+    margin-top: 20px;
+    float: left;
+    display: block;
+    width: 90%;
+}

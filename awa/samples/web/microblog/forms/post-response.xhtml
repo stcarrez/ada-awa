@@ -1,13 +1,25 @@
 <f:view contentType="application/json"
         xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:atlas="http://code.google.com/p/ada-awa/atlas"
         xmlns:c="http://java.sun.com/jstl/core"
         xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
 [
- { "action": "update", "id": "#result", "data": "<util:escape>
-     <h:panelGroup rendered="false">
-         <h3>User email is </h3>
-     </h:panelGroup>
+ { "action": "prepend", "id": "#forum-posts", "data": "<util:escape>
+    <div class="message">
+        <div class="atlas-gravatar">
+            <img src="#{atlas:gravatar(user.email)}?d=identicon&amp;s=60"/>
+        </div>
+        <div class="atlas-author">
+            #{user.name}
+        </div>
+        <div class="atlas-message">
+            #{miniPost.message}
+        </div>
+        <div class="atlas-time">
+            A moment ago
+        </div>
+    </div>
     </util:escape>" }
 ]
 </f:view>
