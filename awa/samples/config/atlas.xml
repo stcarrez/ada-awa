@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<module version="1.0">
+
+  <application>
+    <message-bundle var='atlasMsg'>atlas</message-bundle>
+  </application>
+
+</module>
