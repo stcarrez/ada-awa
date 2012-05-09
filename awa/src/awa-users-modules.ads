@@ -24,8 +24,10 @@ with AWA.Users.Services;
 with AWA.Users.Filters;
 with AWA.Users.Servlets;
 
+--  == Introduction ==
 --  The <b>Users.Module</b> manages the creation, update, removal and authentication of users
---  in an application.
+--  in an application.  The module provides the foundations for user management in
+--  a web application.
 --
 --  A user can register himself by using a subscription form.  In that case, a verification mail
 --  is sent and the user has to follow the verification link defined in the mail to finish
@@ -35,6 +37,12 @@ with AWA.Users.Servlets;
 --
 --  A user can have one or several permissions that allow to protect the application data.
 --  User permissions are managed by the <b>Permissions.Module</b>.
+--
+--  == Configuration ==
+--  The *users* module uses a set of configuration properties to configure the OpenID
+--  integration.
+--
+--  @see AWA.Users.Services
 package AWA.Users.Modules is
 
    NAME : constant String := "users";

@@ -23,13 +23,14 @@ with Util.Beans.Basic;
 
 with ASF.Applications;
 
+--  == Introduction ==
 --  The <b>AWA.Events</b> package defines an event framework for modules to post events
 --  and have Ada bean methods be invoked when these events are dispatched.  Subscription to
 --  events is done through configuration files.  This allows to configure the modules and
 --  integrate them together easily at configuration time.
 --
---  1/ Modules define the events they can generate by instantiating the <b>Definition</b> package.
---     This is a static definition of the event.  Each event is given a unique name.
+--  1/ Modules define the events that they can generate by instantiating the <b>Definition</b>
+--     package. This is a static definition of the event.  Each event is given a unique name.
 --
 --    package Event_New_User is new AWA.Events.Definition ("new-user");
 --
