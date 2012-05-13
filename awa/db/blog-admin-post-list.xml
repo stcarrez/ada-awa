@@ -17,6 +17,9 @@
         <property type='Date' name="date">
             <comment>the post publish date.</comment>
         </property>
+        <property type='AWA.Blogs.Models.Post_Status_Type' name="status">
+            <comment>the post status.</comment>
+        </property>
         <property type='String' name="username">
             <comment>the user name.</comment>
         </property>
@@ -30,6 +33,7 @@
       post.title,
       post.uri,
       post.create_date,
+      post.status,
       user.name
     FROM blog as blog
     INNER JOIN acl ON acl.entity_id = blog.id AND acl.entity_type = :table AND acl.user_id = :user_id
