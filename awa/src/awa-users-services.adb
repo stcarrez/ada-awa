@@ -531,6 +531,9 @@ package body AWA.Users.Services is
       Email.Set_User_Id (0);
       Email.Save (DB);
       User.Set_Email (Email);
+      if String '(User.Get_Name) = "" then
+         User.Set_Name (String '(User.Get_First_Name) & " " & String '(User.Get_Last_Name));
+      end if;
       User.Save (DB);
 
       Email.Set_User_Id (User.Get_Id);
