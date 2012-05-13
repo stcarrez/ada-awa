@@ -2,7 +2,14 @@
     padding-top: 92px;
 }
 #atlas-logo {
-    margin-left: 10px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-right: 20px;
+    float: right;
+}
+#awa-hdr #awa-tools {
+    margin-right: 80px;
 }
 #awa-hdr #atlas-title {
     color: #26d3ff;
