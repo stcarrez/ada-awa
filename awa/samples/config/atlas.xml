@@ -10,4 +10,10 @@
       <message-bundle var='atlasMsg'>atlas</message-bundle>
   </application>
 
+    <!--  When a user is created, send him a welcome message.  -->
+    <on-event name="user-create">
+       <action>#{userMail.send}</action>
+       <property name="template">/mail/welcome-message.xhtml</property>
+    </on-event>
+
 </module>
