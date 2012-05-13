@@ -156,7 +156,6 @@ package body Atlas.Applications is
    procedure Initialize_Modules (App : in out Application) is
    begin
       Log.Info ("Initializing application modules...");
-      ASF.Applications.Main.Configs.Read_Configuration (App, "web/WEB-INF/web.xml");
 
       Register (App    => App.Self.all'Access,
                 Name   => AWA.Users.Modules.NAME,
