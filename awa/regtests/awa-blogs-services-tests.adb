@@ -82,12 +82,14 @@ package body AWA.Blogs.Services.Tests is
                               Title   => "Testing blog title",
                               URI     => "testing-blog-title",
                               Text    => "The blog content",
+                              Status  => AWA.Blogs.Models.POST_DRAFT,
                               Result  => Post_Id);
          T.Assert (Post_Id > 0, "Invalid post identifier");
 
          Manager.Update_Post (Post_Id => Post_Id,
                               Title   => "New blog post title",
-                              Text    => "The new post content");
+                              Text    => "The new post content",
+                              Status  => AWA.Blogs.Models.POST_DRAFT);
 
          --  Keep the last post in the database.
          exit when I = 5;
@@ -98,7 +100,8 @@ package body AWA.Blogs.Services.Tests is
          begin
             Manager.Update_Post (Post_Id => Post_Id,
                                  Title   => "Something",
-                                 Text    => "Content");
+                                 Text    => "Content",
+                                 Status  => AWA.Blogs.Models.POST_DRAFT);
             T.Assert (False, "Exception Not_Found was not raised");
          exception
             when Not_Found =>
