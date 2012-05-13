@@ -66,9 +66,20 @@ div.message img {
     float: left;
     width: 60%;
 }
+#blog-list {
+    margin-top: 5px;
+    padding: 1%;
+    width: 30%;
+    clear: none;
+    float: right;
+}
+div.blog-admin {
+    width: 40%;
+}
+/*
 .atlas #blog-post-list {
     float: left;
     width: 20%;
     padding-top: 0;
     padding-bottom: 0;
-}
+}*/
