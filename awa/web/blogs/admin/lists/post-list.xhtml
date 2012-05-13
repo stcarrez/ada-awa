@@ -49,7 +49,7 @@
             <div class='post-author'>
                 #{post.username}
             </div>
-            <div class='post-status-#{post.status}'></div>
+            <div class='post-status-#{post.status}' title="#{post.status eq 'POST_PUBLISHED' ? blogMsg.blog_post_published_title : blogMsg.blog_post_pending_title}"></div>
         </div>
     </h:list>
 </ui:composition>
