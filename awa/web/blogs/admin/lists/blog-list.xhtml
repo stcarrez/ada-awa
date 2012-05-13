@@ -30,7 +30,9 @@
          <a href="#{contextPath}/blogs/admin/list.html?blog_id=#{admin_blog.id}">#{admin_blog.title}</a>
       </div>
         <div class='blog-date'>
-            <h:outputText value="#{admin_blog.create_date}"/>
+            <h:outputFormat value="#{blogMsg.blog_post_count_message}">
+                <f:param value="#{admin_blog.post_count}"/>
+            </h:outputFormat>
         </div>
     </div>
   </h:list>
