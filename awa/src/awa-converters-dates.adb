@@ -80,9 +80,20 @@ package body AWA.Converters.Dates is
             Values (1) := Util.Beans.Objects.To_Object (Natural (Dt / 60.0));
             ASF.Utils.Formats.Format (Bundle.Get ("date_minutes_ago"),
                                       Values, Result);
+
+         elsif Dt < 2 * ONE_HOUR then
+            Values (1) := Util.Beans.Objects.To_Object (Natural (Dt / 60.0));
+            ASF.Utils.Formats.Format (Bundle.Get ("date_hour_ago"),
+                                      Values, Result);
+
          elsif Dt < ONE_DAY then
             Values (1) := Util.Beans.Objects.To_Object (Natural (Dt / ONE_HOUR));
             ASF.Utils.Formats.Format (Bundle.Get ("date_hours_ago"),
+                                      Values, Result);
+
+         elsif Dt < 2 * ONE_DAY then
+            Values (1) := Util.Beans.Objects.To_Object (Natural (Dt / ONE_HOUR));
+            ASF.Utils.Formats.Format (Bundle.Get ("date_day_ago"),
                                       Values, Result);
 
          elsif Dt < 7 * ONE_DAY then
