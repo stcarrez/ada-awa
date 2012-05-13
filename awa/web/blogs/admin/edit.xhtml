@@ -25,8 +25,8 @@
     <!-- Main page body -->
     <ui:define name="pageBody">
       <div id='awa-content'>
-          <ui:include src="menu-list.xhtml"/>
-          <div id='blog-post-edit' class='blog-admin'>
+          <ui:include src="lists/menu-list.xhtml"/>
+          <div id='blog-post-edit' class='blog-edit-post'>
               <div class='awa-post'>
                 <ui:include src="post-form.xhtml">
                    <ui:param name="title" value="#{blogMsg.blog_post_update_title}"/>

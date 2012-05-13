@@ -98,6 +98,15 @@ div.blog-info div.blog-date {
     font-size: 0.7em;
 }
 
+div.post-status-POST_DRAFT, div.post-status-POST_PUBLISHED, div.post-status-POST_SCHEDULED {
+    width: 16px;
+    height: 16px;
+    float: right;
+    background: url(../images/blogs/check-wrn.png) no-repeat;
+}
+div.post-status-POST_PUBLISHED {
+    background: url(../images/blogs/check-on.png) no-repeat;
+}
 /*
  * Blog post
  */

@@ -35,19 +35,22 @@
             #{blogMsg.blog_post_author_label}
         </div>
     </div>
-  <h:list var="post" value="#{adminPostList}">
-    <div class='post-info' id="p_#{post.id}">
-        <div class='post-ref'>
-            #{post.id}
+    <h:list var="post" value="#{adminPostList}">
+        <div class='post-info' id="p_#{post.id}">
+            <div class='post-ref'>
+                #{post.id}
+            </div>
+            <div class='post-title'>
+                <a href="edit.html?blog_id=#{blog.id}&amp;post_id=#{post.id}">#{post.title}</a>
+            </div>
+            <div class='post-date'>
+                <h:outputText value="#{post.date}"/>
+            </div>
+            <div class='post-author'>
+                #{post.username}
+            </div>
+            <div class='post-status-#{post.status}'></div>
         </div>
-      <div class='post-title'>
-         <a href="edit.html?blog_id=#{blog.id}&amp;post_id=#{post.id}">#{post.title}</a>
-      </div>
-        <div class='post-date'>
-            <h:outputText value="#{post.date}"/>
-        </div>
-      <div class='post-author'>#{post.username}</div>
-    </div>
-  </h:list>
+    </h:list>
 </ui:composition>
 

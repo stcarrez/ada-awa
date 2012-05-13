@@ -26,7 +26,7 @@
     <h:form id='post'>
         <input type="hidden" name="blog_id" value="#{blog.id}"/>
         <input type="hidden" name="post_id" value="#{param['post_id']}"/>
-        <dl class='ui-widget container_12'>
+        <dl class='awa-required'>
             <dt>
                 <label for='title'>#{blogMsg.blog_post_title_label}</label>
                 <h:message for='title' styleClass='error'/>
@@ -41,7 +41,7 @@
                 <h:inputTextarea id='text' rows='20' cols='80' required='false' value='#{post.text}'/>
             </dd>
         </dl>
-        <ul class='container_12 awa-buttons'>
+        <ul class='awa-buttons'>
             <li>
                 <h:commandButton id='save' value='#{blogMsg.blog_post_save_button}'
                                  styleClass="ui-button ui-state-default ui-corner-all"
