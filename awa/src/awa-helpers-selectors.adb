@@ -21,6 +21,9 @@ with ADO.Schemas;
 
 with Util.Strings;
 with Util.Log.Loggers;
+with Util.Locales;
+
+with ASF.Locales;
 
 with AWA.Services.Contexts;
 package body AWA.Helpers.Selectors is
@@ -49,6 +52,44 @@ package body AWA.Helpers.Selectors is
    end Create_From_Enum;
 
    --  ------------------------------
+   --  Create a selector list by using a resource bundle and a create operation that looks for
+   --  messages in the bundle.  The bundle name <b>Bundle</b> gives the name of the resource
+   --  bundled to load.  The locale is determined by the ASF context passed in <b>Context</b>.
+   --  The <b>Create</b> function is in charge of creating and populating the select list.
+   --  ------------------------------
+   function Create_Selector_Bean (Bundle  : in String;
+                                  Context : in ASF.Contexts.Faces.Faces_Context_Access := null;
+                                  Create  : access function
+                                    (Bundle : in Util.Properties.Bundles.Manager'Class)
+                                  return ASF.Models.Selects.Select_Item_List)
+                                  return Util.Beans.Basic.Readonly_Bean_Access is
+      use ASF.Contexts.Faces;
+
+      Ctx     : ASF.Contexts.Faces.Faces_Context_Access;
+      Manager : ASF.Locales.Bundle;
+      Result  : ASF.Models.Selects.Select_Item_List_Access;
+   begin
+      if Context = null then
+         Ctx := ASF.Contexts.Faces.Current;
+      end if;
+      if Ctx /= null then
+         declare
+            Locale : constant Util.Locales.Locale := Ctx.Get_Locale;
+            App    : constant Application_Access := Ctx.Get_Application;
+         begin
+            App.Load_Bundle (Name   => Bundle,
+                             Locale => Util.Locales.To_String (Locale),
+                             Bundle => Manager);
+         end;
+      else
+         Log.Warn ("No context defined to localize the selector");
+      end if;
+      Result := new ASF.Models.Selects.Select_Item_List;
+      Result.all := Create (Manager);
+      return Result.all'Access;
+   end Create_Selector_Bean;
+
+   --  ------------------------------
    --  Append the selector list from the SQL query.  The query will be executed.
    --  It should return rows with at least two columns.  The first column is the
    --  selector value and the second column is the selector label.
@@ -56,6 +97,8 @@ package body AWA.Helpers.Selectors is
    procedure Append_From_Query (Into  : in out ASF.Models.Selects.Select_Item_List;
                                 Query : in out ADO.Statements.Query_Statement'Class) is
       use ADO.Schemas;
+      function Get_Column (Id : in Natural;
+                           Of_Type : in ADO.Schemas.Column_Type) return String;
 
       Id_Type    : ADO.Schemas.Column_Type := T_UNKNOWN;
       Label_Type : ADO.Schemas.Column_Type := T_UNKNOWN;

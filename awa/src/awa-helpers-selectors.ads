@@ -25,6 +25,7 @@ with ADO.Queries;
 with ADO.Statements;
 
 with ASF.Models.Selects;
+with ASF.Contexts.Faces;
 
 --  The <b>Selectors</b> package provides several helper operations to create and populate
 --  a selector list from an static list (type) or from by using a database SQL query.
@@ -38,6 +39,17 @@ package AWA.Helpers.Selectors is
       Prefix : String;
    function Create_From_Enum (Bundle : in Util.Properties.Bundles.Manager'Class)
                               return ASF.Models.Selects.Select_Item_List;
+
+   --  Create a selector list by using a resource bundle and a create operation that looks for
+   --  messages in the bundle.  The bundle name <b>Bundle</b> gives the name of the resource
+   --  bundled to load.  The locale is determined by the ASF context passed in <b>Context</b>.
+   --  The <b>Create</b> function is in charge of creating and populating the select list.
+   function Create_Selector_Bean (Bundle  : in String;
+                                  Context : in ASF.Contexts.Faces.Faces_Context_Access := null;
+                                  Create  : access function
+                                    (Bundle : in Util.Properties.Bundles.Manager'Class)
+                                  return ASF.Models.Selects.Select_Item_List)
+                                  return Util.Beans.Basic.Readonly_Bean_Access;
 
    --  Append the selector list from the SQL query.  The query will be executed.
    --  It should return rows with at least two columns.  The first column is the
