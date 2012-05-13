@@ -46,10 +46,16 @@
                     <li>
                         #{user.name}
                     </li>
+                    <li>|</li>
+                    <li>
+                        <a href="#{contextPath}/workspaces/main.html" title="#{layoutMsg.layout_workspace_title}">
+                            #{layoutMsg.layout_workspace_label}
+                        </a>
+                    </li>
                 </ul>
             </c:when>
             <c:otherwise>
-                <ul>
+                <ul id='awa-tools'>
                     <li id='login'><a href="#{contextPath}/auth/login.html" title="#{layoutMsg.layout_login_title}">
                         #{layoutMsg.layout_login_label}
                     </a></li>

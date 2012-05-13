@@ -50,7 +50,7 @@ body.awa {
 #awa-hdr ul {
   float: right;
   list-style-type: none;
-  padding-right: 50px;
+  padding-right: 20px;
 }
 #awa-hdr li {
   float: right;
@@ -68,6 +68,9 @@ body.awa {
 #awa-hdr li a:hover {
     color: #fff;
     border-bottom: 3px solid orange;
+}
+#awa-hdr #awa-top-nav {
+    float: left;
 }
 #awa-content {
   padding-top: 50px;
