@@ -191,6 +191,7 @@ package body AWA.Users.Services is
          Name       : constant String := Security.Openid.Get_Full_Name (Auth);
          First_Name : constant String := Security.Openid.Get_First_Name (Auth);
          Last_Name  : constant String := Security.Openid.Get_Last_Name (Auth);
+         Sep        : constant Natural := Util.Strings.Index (Name, ' ');
       begin
          if Name'Length > 0 and Name /= String '(User.Get_Name) then
             User.Set_Name (Name);
@@ -200,6 +201,15 @@ package body AWA.Users.Services is
          end if;
          if Last_Name'Length > 0 and Last_Name /= String '(User.Get_Last_Name) then
             User.Set_Last_Name (Last_Name);
+         end if;
+         if Sep > 0 and String '(User.Get_First_Name) = "" then
+            User.Set_First_Name (Name (Name'First .. Sep - 1));
+         end if;
+         if Sep > 0 and String '(User.Get_Last_Name) = "" then
+            User.Set_Last_Name (Name (Sep + 1 .. Name'Last));
+         end if;
+         if Name'Length > 0 and String '(User.Get_First_Name) = "" then
+            User.Set_First_Name (Name);
          end if;
          User.Save (DB);
       end Update_User;
