@@ -167,6 +167,8 @@ span.awa-error {
  */
 div.awa-form {
     font-size: 16px;
+    float: left;
+    width: 100%;
 }
 
 /**
@@ -191,6 +193,9 @@ dl.awa-optional dd, dl.awa-required dd {
 }
 dl.awa-error dt {
     color: red;
+}
+dl.awa-error span.error {
+    font-size: 0.9em;
 }
 dl.awa-optional label, dl.awa-required label {
     display: inline;

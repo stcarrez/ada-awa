@@ -16,6 +16,7 @@
   -->
 <ui:composition
         xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:c="http://java.sun.com/jstl/core"
 	xmlns:u="http://code.google.com/p/ada-asf/util"
@@ -25,7 +26,7 @@
     <h2>#{blogMsg.blog_admin_create_title}</h2>
     <h:form id='create-blog'>
         <input type="hidden" name="blog_id" value="#{blog.id}"/>
-        <dl class='awa-required'>
+        <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
             <dt>
                 <label for='title'>#{blogMsg.blog_admin_blog_title_label}</label>
                 <h:message for='title' styleClass='error'/>

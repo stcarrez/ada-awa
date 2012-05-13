@@ -17,6 +17,7 @@
 <ui:composition
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:c="http://java.sun.com/jstl/core"
 	xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
@@ -27,7 +28,7 @@
         <input type="hidden" name="blog_id" value="#{blog.id}"/>
         <input type="hidden" name="post_id" value="#{param['post_id']}"/>
         <div class='grid_8'>
-            <dl class='awa-required'>
+            <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
                 <dt>
                     <label for='title'>#{blogMsg.blog_post_title_label}</label>
                     <h:message for='title' styleClass='error'/>
