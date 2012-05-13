@@ -18,16 +18,16 @@
     <div id='awa-top'>
         <c:choose>
             <c:when test="#{user.isLogged}">
-                <ul id='awa-tools'>
+                <ul id='awa-top-nav'>
                     <li>
-                        <a href="#{contextPath}/workspaces/main.html" title="#{layoutMsg.layout_workspace_title}">
-                            #{layoutMsg.layout_workspace_label}
+                        <a href="#{contextPath}/blogs/view.html" title="#{layoutMsg.layout_blogs_title}">
+                            #{layoutMsg.layout_blogs_label}
                         </a>
                     </li>
                 </ul>
-                <ul>
-                    <li id='logout'>
-                        <a href="#{contextPath}/ajax/logout/logout"
+                <ul id='awa-tools'>
+                    <li id='awa-logout'>
+                        <a href="#{contextPath}/auth/logout.html"
                            title="#{layoutMsg.layout_logout_title}">
                         #{layoutMsg.layout_logout_label}
                     </a></li>
@@ -38,7 +38,7 @@
                         #{layoutMsg.layout_help_label}
                     </a></li>
                     <li>|</li>
-                    <li id='settings'><a href="#{contextPath}/statistics.xml"
+                    <li id='awa-statistics'><a href="#{contextPath}/statistics.xml"
                                          title="#{layoutMsg.layout_statistics_title}">
                         #{layoutMsg.layout_statistics_label}
                     </a></li>
@@ -55,8 +55,15 @@
                 </ul>
             </c:when>
             <c:otherwise>
+                <ul id='awa-top-nav'>
+                    <li>
+                        <a href="#{contextPath}/blogs/view.html" title="#{layoutMsg.layout_blogs_title}">
+                            #{layoutMsg.layout_blogs_label}
+                        </a>
+                    </li>
+                </ul>
                 <ul id='awa-tools'>
-                    <li id='login'><a href="#{contextPath}/auth/login.html" title="#{layoutMsg.layout_login_title}">
+                    <li id='awa-login'><a href="#{contextPath}/auth/login.html" title="#{layoutMsg.layout_login_title}">
                         #{layoutMsg.layout_login_label}
                     </a></li>
                     <li>|</li>
