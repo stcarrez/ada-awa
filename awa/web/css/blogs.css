@@ -8,7 +8,7 @@
     padding: 2%;
     width: 90%;
 }
-div.post-info {
+div.post-info, div.post-header {
     float: left;
     width: 100%;
 }
@@ -26,15 +26,37 @@ ul.blog-action li {
     float: left;
     padding-right: 10px;
 }
+ul.blog-action a {
+    width: 100px;
+    display: block;
+}
+ul.blog-action a span {
+    display: block;
+    float: left;
+    width: 100%;
+    text-align: center;
+}
+ul.blog-action a img {
+    display: block;
+    width: 64px;
+    margin-left: auto;
+    margin-right: auto;
+}
+div.blog-admin {
+    float: left;
+    clear: both;
+    width: 100%;
+}
 div.blog-admin div.post-info {
     border-bottom: 1px solid #ccc;
     padding-bottom: 5px;
+    padding-top: 5px;
 }
 div.blog-admin div.post-title, div.blog-admin div.post-author, div.blog-admin div.post-ref,
 div.blog-admin div.post-date {
     float: left;
     overflow: hidden;
-    height: 20px;
+    line-height: 20px;
 
 }
 div.blog-admin div.post-title {
@@ -44,10 +66,36 @@ div.blog-admin div.post-author {
     width: 19%;
 }
 div.blog-admin div.post-ref {
-    width: 5%;
+    width: 40px;
 }
 div.blog-admin div.post-date {
-    width: 10%;
+    width: 15%;
+}
+
+div.post-header {
+    font-weight: bold;
+    padding-bottom: 5px;
+    border-bottom: 1px solid gray;
+    margin-bottom: 5px;
+}
+div.blog-admin div.blog-info, div.blog-info div.blog-ref, div.blog-info div.blog-title, div.blog-info div.blog-date {
+    float: left;
+    line-height: 1.0em;
+    vertical-align: middle;
+}
+div.blog-admin div.blog-info {
+    width: 100%;
+}
+div.blog-info div.blog-ref {
+    width: 40px;
+}
+div.blog-info div.blog-title {
+    width: 50%;
+}
+div.blog-info div.blog-date {
+    width: 33%;
+    float: right;
+    font-size: 0.7em;
 }
 
 /*

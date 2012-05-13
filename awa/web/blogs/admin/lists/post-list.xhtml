@@ -19,8 +19,22 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:c="http://java.sun.com/jstl/core"
-	xmlns:u="http://code.google.com/p/ada-asf/util"
+	    xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
+    <div class='post-header' id="p-header">
+        <div class='post-ref'>
+            #{blogMsg.blog_post_id_label}
+        </div>
+        <div class='post-title'>
+            #{blogMsg.blog_post_title_label}
+        </div>
+        <div class='post-date'>
+            #{blogMsg.blog_post_date_label}
+        </div>
+        <div class='post-author'>
+            #{blogMsg.blog_post_author_label}
+        </div>
+    </div>
   <h:list var="post" value="#{adminPostList}">
     <div class='post-info' id="p_#{post.id}">
         <div class='post-ref'>

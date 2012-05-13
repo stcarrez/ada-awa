@@ -22,14 +22,14 @@
 	    xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
   <h:list var="admin_blog" value="#{adminBlogList}">
-    <div class='post-info' id="b_#{admin_blog.id}">
-        <div class='post-ref'>
+    <div class='blog-info' id="b_#{admin_blog.id}">
+        <div class='blog-ref'>
             #{admin_blog.id}
         </div>
-      <div class='post-title'>
+      <div class='blog-title'>
          <a href="#{contextPath}/blogs/admin/list.html?blog_id=#{admin_blog.id}">#{admin_blog.title}</a>
       </div>
-        <div class='post-date'>
+        <div class='blog-date'>
             <h:outputText value="#{admin_blog.create_date}"/>
         </div>
     </div>
