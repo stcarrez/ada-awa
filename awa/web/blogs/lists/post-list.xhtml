@@ -1,4 +1,4 @@
-<!-- Anonymous page which displays the blog posts
+<!-- Display the blog posts in a list page
   -  Copyright (C) 2011, 2012 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
@@ -14,19 +14,21 @@
   -  See the License for the specific language governing permissions and
   -  limitations under the License.
   -->
-<ui:composition template="/WEB-INF/layouts/anonymous.xhtml"
+<ui:composition
+        xmlns:awa="http://code.google.com/p/ada-awa/jsf"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:c="http://java.sun.com/jstl/core"
 	    xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
-    <ui:param name="title" value="#{blogMsg.blog_page_title}"/>
-
-    <!-- Main page body -->
-    <ui:define name="pageBody">
-      <div id='awa-content'>
-        <ui:include src="lists/post-list.xhtml"/>
+  <h:list var="post" value="#{postList}">
+    <div class='blog-post' id="p_#{post.id}">
+      <div class='post-title'>
+         <h2><a href="#{contextPath}/blogs/post/#{post.uri}">#{post.title}</a></h2>
+         <p>By #{post.username} <h:outputText id="date" value="#{post.date}" converter="dateConverter"/></p>
       </div>
-    </ui:define>
+      <awa:wiki styleClass='post-text' value="#{post.text}" format="dotclear"/>
+    </div>
+  </h:list>
 </ui:composition>
 
