@@ -162,7 +162,7 @@ package body Atlas.Applications is
                 Module => App.User_Module'Access);
 
       Register (App    => App.Self.all'Access,
-                Name   => "workspaces",
+                Name   => AWA.Workspaces.Modules.NAME,
                 URI    => "workspaces",
                 Module => App.Workspace_Module'Access);
 
