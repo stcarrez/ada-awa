@@ -26,6 +26,7 @@ with ASF.Converters.Dates;
 
 with ASF.Tests;
 
+with AWA.Converters.Dates;
 with AWA.Users.Modules;
 with AWA.Mail.Modules;
 with AWA.Blogs.Modules;
@@ -62,6 +63,8 @@ package body AWA.Tests is
    Storages       : aliased AWA.Storages.Modules.Storage_Module;
 
    Date_Converter : aliased ASF.Converters.Dates.Date_Converter;
+
+   Rel_Date_Converter : aliased AWA.Converters.Dates.Relative_Date_Converter;
 
    protected body Shutdown is
       procedure Termination (Cause : in Ada.Task_Termination.Cause_Of_Termination;
@@ -169,6 +172,8 @@ package body AWA.Tests is
                begin
                   Application.Add_Converter (Name      => "dateConverter",
                                              Converter => Date_Converter'Access);
+                  Application.Add_Converter (Name      => "smartDateConverter",
+                                             Converter => Rel_Date_Converter'Access);
 
                   WS.Register_Application ("/asfunit", Application.all'Access);
 
