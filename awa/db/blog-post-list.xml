@@ -37,8 +37,9 @@
       post.text
     FROM blog_post AS post
     INNER JOIN user ON post.author_id = user.id
-    WHERE post.id > 0
+    WHERE post.status > 0
     ORDER BY post.create_date DESC
+    LIMIT 40
        </sql>
     </query>
 
