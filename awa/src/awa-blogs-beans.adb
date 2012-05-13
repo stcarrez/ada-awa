@@ -18,6 +18,7 @@
 
 with AWA.Services.Contexts;
 with AWA.Blogs.Services;
+with AWA.Helpers.Selectors;
 
 with ADO.Queries;
 with ADO.Sessions;
@@ -325,5 +326,21 @@ package body AWA.Blogs.Beans is
       AWA.Blogs.Models.List (Object.all, Session, Query);
       return Object.all'Access;
    end Create_Blog_List_Bean;
+
+   function Create_From_Status is
+     new AWA.Helpers.Selectors.Create_From_Enum (AWA.Blogs.Models.Post_Status_Type,
+                                                 "blog_status_");
+
+   --  ------------------------------
+   --  Get a select item list which contains a list of post status.
+   --  ------------------------------
+   function Create_Status_List (Module : in AWA.Blogs.Modules.Blog_Module_Access)
+                                return Util.Beans.Basic.Readonly_Bean_Access is
+      use AWA.Helpers;
+   begin
+      return Selectors.Create_Selector_Bean (Bundle  => "blogs",
+                                             Context => null,
+                                             Create  => Create_From_Status'Access).all'Access;
+   end Create_Status_List;
 
 end AWA.Blogs.Beans;

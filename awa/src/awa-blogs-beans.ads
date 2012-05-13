@@ -117,4 +117,8 @@ package AWA.Blogs.Beans is
    function Create_Blog_List_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                                    return Util.Beans.Basic.Readonly_Bean_Access;
 
+   --  Get a select item list which contains a list of post status.
+   function Create_Status_List (Module : in AWA.Blogs.Modules.Blog_Module_Access)
+                                return Util.Beans.Basic.Readonly_Bean_Access;
+
 end AWA.Blogs.Beans;
