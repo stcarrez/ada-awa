@@ -49,7 +49,9 @@
                                 #{msg.message}
                             </div>
                             <div class="atlas-time">
-                                #{msg.create_date}
+                                <h:outputText value="#{msg.create_date}">
+                                    <f:converter converterId="smartDateConverter"/>
+                                </h:outputText>
                             </div>
                         </div>
                     </h:list>

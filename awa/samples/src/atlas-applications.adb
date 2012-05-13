@@ -108,6 +108,8 @@ package body Atlas.Applications is
    begin
       Register (App);
       AWA.Applications.Application (App).Initialize_Components;
+      App.Add_Converter (Name      => "smartDateConverter",
+                         Converter => App.Self.Rel_Date_Converter'Access);
    end Initialize_Components;
 
    --  ------------------------------

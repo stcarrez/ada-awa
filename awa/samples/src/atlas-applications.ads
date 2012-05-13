@@ -35,6 +35,7 @@ with AWA.Storages.Modules;
 with AWA.Applications;
 with AWA.Workspaces.Modules;
 with AWA.Services.Filters;
+with AWA.Converters.Dates;
 
 with Atlas.Microblog.Modules;
 package Atlas.Applications is
@@ -98,6 +99,9 @@ private
       --  Authentication servlet and filter.
       Auth              : aliased Security.Openid.Servlets.Request_Auth_Servlet;
       Verify_Auth       : aliased AWA.Users.Servlets.Verify_Auth_Servlet;
+
+      --  Converters shared by web requests.
+      Rel_Date_Converter : aliased AWA.Converters.Dates.Relative_Date_Converter;
 
       --  The application modules.
       User_Module       : aliased AWA.Users.Modules.User_Module;
