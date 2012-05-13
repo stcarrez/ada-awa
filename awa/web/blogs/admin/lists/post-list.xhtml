@@ -21,36 +21,42 @@
         xmlns:c="http://java.sun.com/jstl/core"
 	    xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
-    <div class='post-header' id="p-header">
-        <div class='post-ref'>
-            #{blogMsg.blog_post_id_label}
-        </div>
-        <div class='post-title'>
-            #{blogMsg.blog_post_title_label}
-        </div>
-        <div class='post-date'>
-            #{blogMsg.blog_post_date_label}
-        </div>
-        <div class='post-author'>
-            #{blogMsg.blog_post_author_label}
-        </div>
-    </div>
-    <h:list var="post" value="#{adminPostList}">
-        <div class='post-info' id="p_#{post.id}">
-            <div class='post-ref'>
-                #{post.id}
+    <c:choose>
+        <c:when test="#{adminPostList.count == 0}">
+            #{blogMsg.blog_admin_list_post_empty_message}
+        </c:when>
+        <c:otherwise>
+            <div class='post-header' id="p-header">
+                <div class='post-ref'>
+                    #{blogMsg.blog_post_id_label}
+                </div>
+                <div class='post-title'>
+                    #{blogMsg.blog_post_title_label}
+                </div>
+                <div class='post-date'>
+                    #{blogMsg.blog_post_date_label}
+                </div>
+                <div class='post-author'>
+                    #{blogMsg.blog_post_author_label}
+                </div>
             </div>
-            <div class='post-title'>
-                <a href="edit.html?blog_id=#{blog.id}&amp;post_id=#{post.id}">#{post.title}</a>
-            </div>
-            <div class='post-date'>
-                <h:outputText value="#{post.date}"/>
-            </div>
-            <div class='post-author'>
-                #{post.username}
-            </div>
-            <div class='post-status-#{post.status}' title="#{post.status eq 'POST_PUBLISHED' ? blogMsg.blog_post_published_title : blogMsg.blog_post_pending_title}"></div>
-        </div>
-    </h:list>
+            <h:list var="post" value="#{adminPostList}">
+                <div class='post-info' id="p_#{post.id}">
+                    <div class='post-ref'>
+                        #{post.id}
+                    </div>
+                    <div class='post-title'>
+                        <a href="edit.html?blog_id=#{blog.id}&amp;post_id=#{post.id}">#{post.title}</a>
+                    </div>
+                    <div class='post-date'>
+                        <h:outputText value="#{post.date}"/>
+                    </div>
+                    <div class='post-author'>
+                        #{post.username}
+                    </div>
+                    <div class='post-status-#{post.status}' title="#{post.status eq 'POST_PUBLISHED' ? blogMsg.blog_post_published_title : blogMsg.blog_post_pending_title}"></div>
+                </div>
+            </h:list>
+        </c:otherwise>
+    </c:choose>
 </ui:composition>
-
