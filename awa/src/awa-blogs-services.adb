@@ -88,6 +88,7 @@ package body AWA.Blogs.Services is
                           Title   : in String;
                           URI     : in String;
                           Text    : in String;
+                          Status  : in AWA.Blogs.Models.Post_Status_Type;
                           Result  : out ADO.Identifier) is
       pragma Unreferenced (Model);
       use type ADO.Identifier;
@@ -121,7 +122,7 @@ package body AWA.Blogs.Services is
       Post.Set_Create_Date (Ada.Calendar.Clock);
       Post.Set_Uri (URI);
       Post.Set_Author (Ctx.Get_User);
-      Post.Set_Status (Models.POST_DRAFT);
+      Post.Set_Status (Status);
       Post.Set_Blog (Blog);
       Post.Save (DB);
       Ctx.Commit;
@@ -137,7 +138,8 @@ package body AWA.Blogs.Services is
    procedure Update_Post (Model   : in Blog_Service;
                           Post_Id : in ADO.Identifier;
                           Title   : in String;
-                          Text    : in String) is
+                          Text    : in String;
+                          Status  : in AWA.Blogs.Models.Post_Status_Type) is
       pragma Unreferenced (Model);
 
       Ctx   : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
@@ -158,6 +160,7 @@ package body AWA.Blogs.Services is
 
       Post.Set_Title (Title);
       Post.Set_Text (Text);
+      Post.Set_Status (Status);
       Post.Save (DB);
       Ctx.Commit;
    end Update_Post;

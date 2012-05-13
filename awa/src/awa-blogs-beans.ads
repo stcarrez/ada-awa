@@ -29,11 +29,12 @@ with AWA.Blogs.Models;
 package AWA.Blogs.Beans is
 
    --  Attributes exposed by <b>Post_Bean</b>
-   BLOG_ID_ATTR    : constant String := "blogId";
-   POST_ID_ATTR    : constant String := "id";
-   POST_TITLE_ATTR : constant String := "title";
-   POST_TEXT_ATTR  : constant String := "text";
-   POST_URI_ATTR   : constant String := "uri";
+   BLOG_ID_ATTR      : constant String := "blogId";
+   POST_ID_ATTR      : constant String := "id";
+   POST_TITLE_ATTR   : constant String := "title";
+   POST_TEXT_ATTR    : constant String := "text";
+   POST_URI_ATTR     : constant String := "uri";
+   POST_STATUS_ATTR  : constant String := "status";
 
    --  ------------------------------
    --  Blog Bean

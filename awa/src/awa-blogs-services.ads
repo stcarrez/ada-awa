@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-services -- Blogs and post management
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +15,10 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with AWA.Modules;
 with ADO;
+
+with AWA.Modules;
+with AWA.Blogs.Models;
 
 with Security.Permissions;
 
@@ -51,13 +53,15 @@ package AWA.Blogs.Services is
                           Title   : in String;
                           URI     : in String;
                           Text    : in String;
+                          Status  : in AWA.Blogs.Models.Post_Status_Type;
                           Result  : out ADO.Identifier);
 
    --  Update the post title and text associated with the blog post identified by <b>Post</b>.
    procedure Update_Post (Model   : in Blog_Service;
                           Post_Id : in ADO.Identifier;
                           Title   : in String;
-                          Text    : in String);
+                          Text    : in String;
+                          Status  : in AWA.Blogs.Models.Post_Status_Type);
 
    --  Delete the post identified by the given identifier.
    procedure Delete_Post (Model   : in Blog_Service;

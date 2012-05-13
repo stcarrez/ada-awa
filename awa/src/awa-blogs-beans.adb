@@ -158,11 +158,13 @@ package body AWA.Blogs.Beans is
                               Title   => Bean.Post.Get_Title,
                               URI     => Bean.Post.Get_Uri,
                               Text    => Bean.Post.Get_Text,
+                              Status  => Bean.Post.Get_Status,
                               Result  => Result);
       else
          Manager.Update_Post (Post_Id => Post_Id,
                               Title   => Bean.Post.Get_Title,
-                              Text    => Bean.Post.Get_Text);
+                              Text    => Bean.Post.Get_Text,
+                              Status  => Bean.Post.Get_Status);
       end if;
       Outcome := To_Unbounded_String ("success");
 
@@ -221,6 +223,8 @@ package body AWA.Blogs.Beans is
          From.Post.Set_Title (Util.Beans.Objects.To_Unbounded_String (Value));
       elsif Name = POST_URI_ATTR then
          From.Post.Set_Uri (Util.Beans.Objects.To_Unbounded_String (Value));
+      elsif Name = POST_STATUS_ATTR then
+         From.Post.Set_Status (AWA.Blogs.Models.Post_Status_Type_Objects.To_Value (Value));
       end if;
    end Set_Value;
 
