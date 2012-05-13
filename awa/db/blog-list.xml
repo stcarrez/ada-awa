@@ -17,6 +17,9 @@
         <property type='Date' name="create_date">
             <comment>the blog creation date.</comment>
         </property>
+        <property type='Integer' name="post_count">
+            <comment>the number of posts published.</comment>
+        </property>
     </class>
 
     <query name='blog-list'>
@@ -26,7 +29,8 @@
       blog.id,
       blog.name,
       blog.uid,
-      blog.create_date
+      blog.create_date,
+      (SELECT count(*) FROM blog_post WHERE blog_post.blog_id = blog.id AND blog_post.status = 1)
     FROM blog AS blog
     INNER JOIN acl ON acl.entity_id = blog.id AND acl.entity_type = :table AND acl.user_id = :user_id
     ORDER BY blog.create_date DESC
