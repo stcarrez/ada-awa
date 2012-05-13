@@ -216,6 +216,7 @@ install_lib:
 	${CP} db/sqlite/*.sql ${dynamodir}/awa/db/sqlite
 	${CP} lib/awa/$(LIBRARY_TYPE)//*.ali ${alidir}/awa/$(LIBRARY_TYPE)/
 	${CP} lib/awaunit/$(LIBRARY_TYPE)/*.ali ${alidir}/awaunit/$(LIBRARY_TYPE)/
+	rm -rf ${dynamodir}/awa/web
 	(cd web && tar --exclude=.svn --exclude='*~' -cf - . )| (cd ${dynamodir}/awa/web && tar xf -)
 ifeq ($(LIBRARY_TYPE),static)
 	${CP} lib/awa/$(LIBRARY_TYPE)/libada-awa.a ${libdir}/
@@ -235,3 +236,5 @@ uninstall:
 	rm -f ${libdir}/libada-awa.a
 	rm -f ${projectdir}/awa.gpr
 	rm -rf ${dynamodir}/awa
+	rm -rf ${alidir}/awa
+	rm -rf ${alidir}/awaunit
