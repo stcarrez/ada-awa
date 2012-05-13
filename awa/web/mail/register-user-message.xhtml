@@ -2,7 +2,7 @@
               xmlns:mail="http://code.google.com/p/ada-awa/mail">
   <mail:from address="awa">do-not-reply@awa.org</mail:from>
   <mail:to address="#{event.name}">#{event.email}</mail:to>
-  <mail:subject>Welcom to Atlas</mail:subject>
+  <mail:subject>Welcome to #{initParam['app_name']}</mail:subject>
 
   <mail:body>
 Dear #{event.name},
