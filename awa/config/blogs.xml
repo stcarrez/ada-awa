@@ -16,6 +16,13 @@
   </managed-bean>
 
   <managed-bean>
+    <description>A localized list of post statuses to be used for a f:selectItems</description>
+    <managed-bean-name>postStatusList</managed-bean-name>
+    <managed-bean-class>AWA.Blogs.Beans.Status_List_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
     <description>The admin post list is used for the blog administrator.</description>
     <managed-bean-name>adminPostList</managed-bean-name>
     <managed-bean-class>AWA.Blogs.Beans.Admin_Post_List_Bean</managed-bean-class>
