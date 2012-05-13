@@ -2,7 +2,12 @@
 <module version="1.0">
 
   <application>
-    <message-bundle var='atlasMsg'>atlas</message-bundle>
+      <locale-config>
+          <default-locale>en</default-locale>
+          <supported-locale>en</supported-locale>
+          <supported-locale>fr</supported-locale>
+      </locale-config>
+      <message-bundle var='atlasMsg'>atlas</message-bundle>
   </application>
 
 </module>
