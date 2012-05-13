@@ -1221,6 +1221,9 @@ package body AWA.Blogs.Models is
       if Name = "create_date" then
          return Util.Beans.Objects.Time.To_Object (From.Create_Date);
       end if;
+      if Name = "post_count" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Post_Count));
+      end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
 
@@ -1250,6 +1253,7 @@ package body AWA.Blogs.Models is
          Into.Title := Stmt.Get_Unbounded_String (1);
          Into.Uid := Stmt.Get_Unbounded_String (2);
          Into.Create_Date := Stmt.Get_Time (3);
+         Into.Post_Count := Stmt.Get_Integer (4);
       end Read;
    begin
       Stmt.Execute;

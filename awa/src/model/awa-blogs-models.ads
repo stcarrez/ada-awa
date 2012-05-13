@@ -438,6 +438,9 @@ package AWA.Blogs.Models is
       --  the blog creation date.
       Create_Date : Ada.Calendar.Time;
 
+      --  the number of posts published.
+      Post_Count : Integer;
+
    end record;
 
    --  Get the bean attribute identified by the given name.
@@ -613,7 +616,7 @@ private
 
    package File_3 is
       new ADO.Queries.Loaders.File (Path => "blog-list.xml",
-                                    Sha1 => "F4F57D21CFAF56A121532B852D9C38D4ECEFDA64");
+                                    Sha1 => "BB41EBE10B232F150560185E9A955BDA9FB7F77F");
 
    package Def_Bloginfo_Blog_List is
       new ADO.Queries.Loaders.Query (Name => "blog-list",
