@@ -21,26 +21,50 @@
 	xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
 
-  <div class='awa-post ui-widget ui-widget-content ui-corner-all'>
+  <div class='awa-post ui-widget ui-widget-content ui-corner-all awa-form'>
     <h2>#{blogMsg.blog_post_update_title}</h2>
     <h:form id='post'>
         <input type="hidden" name="blog_id" value="#{blog.id}"/>
         <input type="hidden" name="post_id" value="#{param['post_id']}"/>
-        <dl class='awa-required'>
-            <dt>
-                <label for='title'>#{blogMsg.blog_post_title_label}</label>
-                <h:message for='title' styleClass='error'/>
-            </dt>
-            <dd>
-                <h:inputText id='title' size='50' required='true' value='#{post.title}'/>
-            </dd>
-            <dt>
-                <label for='text'>#{blogMsg.blog_post_text_label}</label>
-            </dt>
-            <dd>
-                <h:inputTextarea id='text' rows='20' cols='80' required='false' value='#{post.text}'/>
-            </dd>
-        </dl>
+        <div class='grid_8'>
+            <dl class='awa-required'>
+                <dt>
+                    <label for='title'>#{blogMsg.blog_post_title_label}</label>
+                    <h:message for='title' styleClass='error'/>
+                </dt>
+                <dd>
+                    <h:inputText id='title' size='50' required='true' value='#{post.title}'/>
+                </dd>
+                <dt>
+                    <label for='text'>#{blogMsg.blog_post_text_label}</label>
+                </dt>
+                <dd>
+                    <h:inputTextarea id='text' rows='20' required='false' value='#{post.text}'/>
+                </dd>
+            </dl>
+        </div>
+        <div class='grid_4'>
+            <dl class="awa-required">
+                <dt>
+                    <label for="post-status">#{blogMsg.blog_post_status_label}</label>
+                </dt>
+                <dd>
+                    <h:selectOneMenu id='post-status' size='10' value='#{post.status}'
+                                     styleClass="ui-state-default ui-corner-all">
+                        <f:selectItems value="#{postStatusList}"/>
+                    </h:selectOneMenu>
+                </dd>
+            </dl>
+            <dl class="awa-required">
+                <dt>
+                    <label for="post-status">#{blogMsg.blog_post_publish_date_label}</label>
+                </dt>
+                <dd>
+                    #{empty post.publish_date ? post.create_date : post.publish_date}
+                </dd>
+            </dl>
+        </div>
+
         <ul class='awa-buttons'>
             <li>
                 <h:commandButton id='save' value='#{blogMsg.blog_post_save_button}'

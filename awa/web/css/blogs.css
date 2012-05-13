@@ -186,3 +186,8 @@ div.post-text ol {
 div.post-text li {
     display: list-item;
 }
+
+div.blog-edit-post {
+    float: left;
+    width: 100%;
+}
