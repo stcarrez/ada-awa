@@ -15,14 +15,6 @@ project Awa is
 
    for Source_Dirs use ("src", "src/model");
 
-   case Aws_Status is
-	when "yes" =>
-	     for Source_Dirs use Project'Source_Dirs & ("src/aws");
-
-	when "no" =>
-	     null;
-   end case;
-
    for Library_Name use "ada-awa";
    for Library_Dir use Library_Dir & "/awa";
    for Library_Kind use Library_Type;
