@@ -9,6 +9,7 @@ project Awa is
    Version := "@AWA_VERSION@";
    Library_Dir := "@AWA_LIBDIR@";
    Library_Type : Config.Library_Type_Type := external ("LIBRARY_TYPE", "static");
+   Exec_Dir     := "./" &  Config'Exec_Dir & "/bin";
 
    Aws_Status : Config.Yes_No := "@AWA_AWS_STATUS@";
 
@@ -29,7 +30,7 @@ project Awa is
 
    for Library_Dir use "lib/awa/" & Project'Library_Kind;
    for Object_Dir use "obj/awa/" & Project'Library_Kind;
-   for Exec_Dir use "./" & Config'Exec_Dir & "/bin";
+   for Exec_Dir use Project'Exec_Dir;
 
    package Binder renames Config.Binder;
    package Builder renames Config.Builder;

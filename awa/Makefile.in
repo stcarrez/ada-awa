@@ -3,87 +3,16 @@
 ##   static
 LIBRARY_TYPE=static
 
-# You may edit this makefile as long as you keep these original 
-# target names defined.
-MODE=debug
-GNATMAKE=@GNATMAKE@
-GNATCLEAN=gnatclean
-SVN=svn
-INSTALL=@INSTALL@
+MODULES=mail storages images
 
-GPRPATH=awa.gpr
+NAME=awa
 
-BUILDS_SHARED=@BUILDS_SHARED@
+include Make-Config.mk
 
-version=@UTIL_VERSION@
-
-distdir=ada-awa-@AWA_VERSION@
-
-DIST_FILE=ada-awa-@AWA_VERSION@.tar.gz
-
-HAVE_MYSQL=@ADO_DB_MYSQL@
-HAVE_SQLITE=@ADO_DB_SQLITE@
-HAVE_AWS=@AWA_AWS_STATUS@
-
-LN_S=@LN_S@
-MKDIR=mkdir
-CP=cp
-LN=ln -s
-
-ifeq (${OS},Windows_NT)
-LIBEXT=dll
-LIBVER=dll
-else
-LIBEXT=so
-LIBVER=so.$(version)
-endif
-
-srcdir = .
-top_srcdir = @top_srcdir@
-VPATH = @srcdir@
-prefix = @prefix@
-exec_prefix = @exec_prefix@
-top_builddir = .
-
-dynamodir=${prefix}/share/dynamo
-includedir=${prefix}/share/ada/adainclude
-projectdir=${prefix}/share/ada/adainclude
-bindir=${prefix}/bin
-libdir=${prefix}/lib
-alidir=${libdir}/ada/adalib/
-
-MAKE_ARGS=-XMODE=${MODE} -XLIBRARY_TYPE=${LIBRARY_TYPE} -XPROCESSORS=4
-
-ifeq (${BUILDS_SHARED},yes)
-all:     static shared
-install: install_static install_shared
-else
-all:     static
-install: install_static
-endif
-
-# Build executables for all mains defined by the project.
-build:	src/awa-mail-clients-factory.adb
-	$(GNATMAKE) -m -p -P "$(GPRPATH)" $(MAKE_ARGS)
-	$(GNATMAKE) -m -p -Ptests $(MAKE_ARGS)
-
-static:
-	$(MAKE) LIBRARY_TYPE=static build
-
-shared:
-	$(MAKE) LIBRARY_TYPE=relocatable build
-
-# Not intended for manual invocation.
-# Invoked if automatic builds are enabled.
-# Analyzes only on those sources that have changed.
-# Does not build executables.
-autobuild:
-	$(GNATMAKE) -gnatc -c -k  -P "$(GPRPATH)"
-
-# Configure the driver file
-src/awa-mail-clients-factory.adb: src/awa-mail-clients-factory.gpb Makefile
-	gnatprep -DHAVE_AWS=$(HAVE_AWS) \
-		  src/awa-mail-clients-factory.gpb $@
+post-build:
+	for i in ${MODULES} ; do \
+	   $(MAKE) -C modules/$$i ; \
+	done
 
 # Build and run the unit tests
 test:	test-mysql test-sqlite
@@ -112,28 +41,9 @@ create-mysql-tests:
 
 
 # Clean the root project of all build products.
-clean:
-	-$(GNATCLEAN) -P "$(GPRPATH)" -XLIBRARY_TYPE=static
-	-$(GNATCLEAN) -P "$(GPRPATH)" -XLIBRARY_TYPE=relocatable
+pre-clean:
 	-$(GNATCLEAN) -P awaunit.gpr -XLIBRARY_TYPE=static
 	-$(GNATCLEAN) -P awaunit.gpr -XLIBRARY_TYPE=relocatable
-
-# Clean root project and all imported projects too.
-clean_tree:
-	$(GNATCLEAN) -P "$(GPRPATH)" -r
-
-# Check *all* sources for errors, even those not changed.
-# Does not build executables.
-analyze:
-	$(GNATMAKE) -f  -gnatc -c -k  -P "$(GPRPATH)"
-
-# Clean, then build executables for all mains defined by the project.
-rebuild: clean build
-
-GENERATOR=dynamo
-
-generate:
-	$(GENERATOR) generate db
 
 # Files to package in source distribution
 DISTFILES=README LICENSE.txt NOTICE.txt NEWS CHANGES ChangeLog config.guess configure config.sub \
@@ -142,7 +52,7 @@ awa.gpr.in tests.gpr.in samples.gpr.in config.gpr \
 src samples regtests db web bundles config awaunit awaunit.gpr.in \
 distrib test-mysql.properties test-sqlite.properties dynamo.xml
 
-dist:
+pre-dist:
 	-rm -rf $(distdir)
 	mkdir $(distdir)
 	-chmod 777 $(distdir)
@@ -169,12 +79,6 @@ dist:
 	mkdir $(distdir)/bin
 	mkdir $(distdir)/obj
 	mkdir $(distdir)/lib
-	tar --exclude=.svn --exclude="*~" --exclude="*.o" --exclude="*.ali" \
-	    --exclude="*.log" --exclude="*.a" --exclude=".project" \
-	    --exclude=".cproject" \
-	    --exclude=".gb_project" \
-	    -cvzf $(DIST_FILE) $(distdir)
-
 
 # prepare before releasing a new version of the package
 # (collect information about changes and SVN repository)
@@ -183,55 +87,27 @@ prepare-release:
 	${SVN} info > CHANGES
 	${SVN} log -v > ChangeLog
 
-install_static:
-	$(MAKE) LIBRARY_TYPE=static install_lib
-
-install_shared:
-	$(MAKE) LIBRARY_TYPE=relocatable install_lib
-
-install_lib:
-	$(MKDIR) -p ${includedir}/awa
+pre-install:
 	$(MKDIR) -p ${includedir}/awaunit
 	$(MKDIR) -p ${projectdir}/
-	${MKDIR} -p ${alidir}/awa/$(LIBRARY_TYPE)
 	${MKDIR} -p ${alidir}/awaunit/$(LIBRARY_TYPE)
-	${MKDIR} -p ${dynamodir}/awa/config
-	${MKDIR} -p ${dynamodir}/awa/bundles
-	${MKDIR} -p ${dynamodir}/awa/web
-	${MKDIR} -p ${dynamodir}/awa/db
-	${MKDIR} -p ${dynamodir}/awa/db/mysql
-	${MKDIR} -p ${dynamodir}/awa/db/sqlite
-	${CP} src/*.ad[bs] ${includedir}/awa
-	${CP} src/model/*.ad[bs] ${includedir}/awa
 	${CP} awaunit/*.ad[bs] ${includedir}/awaunit
-	sed -e "s,INSTALL,${prefix},g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" < distrib/awa.gpr > ${projectdir}/awa.gpr
 	sed -e "s,INSTALL,${prefix},g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" < distrib/awaunit.gpr > ${projectdir}/awaunit.gpr
-	${CP} config/*.xml ${dynamodir}/awa/config/
-	${CP} dynamo.xml ${dynamodir}/awa/
-	${CP} NOTICE.txt ${dynamodir}/awa/
-	${CP} LICENSE.txt ${dynamodir}/awa/
-	${CP} bundles/*.properties ${dynamodir}/awa/bundles/
-	${CP} db/*.xml ${dynamodir}/awa/db/
-	${CP} db/mysql/*.sql ${dynamodir}/awa/db/mysql
-	${CP} db/sqlite/*.sql ${dynamodir}/awa/db/sqlite
-	${CP} lib/awa/$(LIBRARY_TYPE)//*.ali ${alidir}/awa/$(LIBRARY_TYPE)/
 	${CP} lib/awaunit/$(LIBRARY_TYPE)/*.ali ${alidir}/awaunit/$(LIBRARY_TYPE)/
-	-rm -rf ${dynamodir}/awa/web
-	(cd web && tar --exclude=.svn --exclude='*~' -cf - . )| (cd ${dynamodir}/awa/web && tar xf -)
 ifeq ($(LIBRARY_TYPE),static)
-	${CP} lib/awa/$(LIBRARY_TYPE)/libada-awa.a ${libdir}/
 	${CP} lib/awaunit/$(LIBRARY_TYPE)/libawaunit.a ${libdir}/
 else
-	${CP} -p lib/awa/$(LIBRARY_TYPE)/libada-awa.$(LIBVER) ${libdir}/
 	${CP} -p lib/awaunit/$(LIBRARY_TYPE)/libawaunit.$(LIBVER) ${libdir}/
 	cd ${libdir} && \
-	rm -f libada-awa.$(LIBEXT) libawaunit.$(LIBEXT) && \
-	${LN} libada-awa.$(LIBVER) libada-awa.$(LIBEXT) && \
+	rm -f libawaunit.$(LIBEXT) && \
 	${LN} libawaunit.$(LIBVER) libawaunit.$(LIBEXT)
 endif
+	for i in ${MODULES} ; do \
+	   $(MAKE) -C modules/$$i install; \
+	done
 
 
-uninstall:
+pre-uninstall:
 	rm -rf ${includedir}/awa
 	rm -f ${libdir}/libada-awa.a
 	rm -f ${projectdir}/awa.gpr

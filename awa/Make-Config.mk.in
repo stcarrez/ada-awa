@@ -1,0 +1,201 @@
+## The type of library we want to build. Possible values:
+##   relocatable
+##   static
+LIBRARY_TYPE=static
+
+# You may edit this makefile as long as you keep these original 
+# target names defined.
+MODE=debug
+GNATMAKE=@GNATMAKE@
+GNATCLEAN=gnatclean
+SVN=svn
+INSTALL=@INSTALL@
+
+GPRPATH:=${NAME}.gpr
+
+BUILDS_SHARED=@BUILDS_SHARED@
+
+version=@UTIL_VERSION@
+
+distdir=ada-awa-@AWA_VERSION@
+
+DIST_FILE=ada-awa-@AWA_VERSION@.tar.gz
+
+HAVE_MYSQL=@ADO_DB_MYSQL@
+HAVE_SQLITE=@ADO_DB_SQLITE@
+HAVE_AWS=@AWA_AWS_STATUS@
+
+GENERATOR=dynamo
+
+LN_S=@LN_S@
+MKDIR=mkdir
+CP=cp
+LN=ln -s
+
+ifeq (${OS},Windows_NT)
+LIBEXT=dll
+LIBVER=dll
+else
+LIBEXT=so
+LIBVER=so.$(version)
+endif
+
+srcdir = .
+top_srcdir = @top_srcdir@
+VPATH = @srcdir@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+top_builddir = .
+
+dynamodir=${prefix}/share/dynamo
+includedir=${prefix}/share/ada/adainclude
+projectdir=${prefix}/share/ada/adainclude
+bindir=${prefix}/bin
+libdir=${prefix}/lib
+alidir=${libdir}/ada/adalib/
+
+MAKE_ARGS=-XMODE=${MODE} -XLIBRARY_TYPE=${LIBRARY_TYPE} -XPROCESSORS=4
+
+ifeq (${BUILDS_SHARED},yes)
+all:     static shared
+install: install_static install_shared
+else
+all:     static
+install: install_static
+endif
+
+# Build executables for all mains defined by the project.
+build: local-build post-build
+
+local-build: pre-build
+	$(GNATMAKE) -m -p -P "$(GPRPATH)" $(MAKE_ARGS)
+	test ! -f tests.gpr || $(GNATMAKE) -m -p -Ptests $(MAKE_ARGS)
+
+static:
+	$(MAKE) LIBRARY_TYPE=static build
+
+shared:
+	$(MAKE) LIBRARY_TYPE=relocatable build
+
+# Not intended for manual invocation.
+# Invoked if automatic builds are enabled.
+# Analyzes only on those sources that have changed.
+# Does not build executables.
+autobuild:
+	$(GNATMAKE) -gnatc -c -k  -P "$(GPRPATH)"
+
+# Clean the root project of all build products.
+clean:  pre-clean
+	-$(GNATCLEAN) -P "$(GPRPATH)" -XLIBRARY_TYPE=static
+	-$(GNATCLEAN) -P "$(GPRPATH)" -XLIBRARY_TYPE=relocatable
+
+# Clean root project and all imported projects too.
+clean_tree:
+	$(GNATCLEAN) -P "$(GPRPATH)" -r
+
+# Check *all* sources for errors, even those not changed.
+# Does not build executables.
+analyze:
+	$(GNATMAKE) -f  -gnatc -c -k  -P "$(GPRPATH)"
+
+# Clean, then build executables for all mains defined by the project.
+rebuild: clean build
+
+generate:
+	$(GENERATOR) generate db
+
+# Files to package in source distribution
+DISTFILES=README LICENSE.txt NOTICE.txt NEWS CHANGES ChangeLog config.guess configure config.sub \
+configure.in Makefile.in install-sh \
+awa.gpr.in tests.gpr.in samples.gpr.in config.gpr \
+src samples regtests db web bundles config awaunit awaunit.gpr.in \
+distrib test-mysql.properties test-sqlite.properties dynamo.xml
+
+dist-prepare:   pre-dist-prepare
+	-rm -rf $(distdir)
+	mkdir $(distdir)
+	-chmod 777 $(distdir)
+	here=`cd $(top_builddir) && pwd`; \
+	top_distdir=`cd $(distdir) && pwd`; \
+	distdir=`cd $(distdir) && pwd`; \
+	for file in $(DISTFILES); do \
+	  d=$(srcdir); \
+	  if test -d $$d/$$file; then \
+	    cp -pr $$d/$$file $(distdir)/$$file; \
+	  else \
+	    test -f $(distdir)/$$file \
+	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
+	    || cp -p $$d/$$file $(distdir)/$$file || :; \
+	  fi; \
+	done
+	mkdir $(distdir)/bin
+	mkdir $(distdir)/obj
+	mkdir $(distdir)/lib
+
+dist:   pre-dist dist-prepare
+	tar --exclude=.svn --exclude="*~" --exclude="*.o" --exclude="*.ali" \
+	    --exclude="*.log" --exclude="*.a" --exclude=".project" \
+	    --exclude=".cproject" \
+	    --exclude=".gb_project" \
+	    -cvzf $(DIST_FILE) $(distdir)
+
+install_static:
+	$(MAKE) LIBRARY_TYPE=static install_lib
+
+install_shared:
+	$(MAKE) LIBRARY_TYPE=relocatable install_lib
+
+install_lib:  uninstall pre-install
+	$(MKDIR) -p ${includedir}/${NAME}
+	$(MKDIR) -p ${projectdir}/
+	${MKDIR} -p ${dynamodir}/${NAME}/config
+	${MKDIR} -p ${dynamodir}/${NAME}/bundles
+	${MKDIR} -p ${dynamodir}/${NAME}/web
+	${MKDIR} -p ${dynamodir}/${NAME}/db
+	${MKDIR} -p ${dynamodir}/${NAME}/db/mysql
+	${MKDIR} -p ${dynamodir}/${NAME}/db/sqlite
+	test -d src && ${CP} src/*.ad[bs] ${includedir}/${NAME}
+	test -d src/model && ${CP} src/model/*.ad[bs] ${includedir}/${NAME}
+	test -f distrib/${NAME}.gpr && \
+	    sed -e "s,INSTALL,${prefix},g" \
+	        -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" < distrib/${NAME}.gpr > ${projectdir}/${NAME}.gpr
+	test -d config && ${CP} config/*.xml ${dynamodir}/${NAME}/config/
+	${CP} dynamo.xml ${dynamodir}/${NAME}/dynamo.xml
+	test -f NOTICE.txt && ${CP} NOTICE.txt ${dynamodir}/${NAME}/NOTICE.txt
+	test -f LICENSE.txt && ${CP} LICENSE.txt ${dynamodir}/${NAME}/LICENSE.txt
+	test -d bundles && ${CP} bundles/*.properties ${dynamodir}/${NAME}/bundles/
+	test -d db && ${CP} db/*.xml ${dynamodir}/${NAME}/db/
+	test -d db/mysql && ${CP} db/mysql/*.sql ${dynamodir}/${NAME}/db/mysql
+	test -d db/sqlite && ${CP} db/sqlite/*.sql ${dynamodir}/${NAME}/db/sqlite
+	test -d lib/${NAME}/${LIBRARY_TYPE} && \
+	     ${MKDIR} -p ${alidir}/${NAME}/$(LIBRARY_TYPE) && \
+	     ${CP} lib/${NAME}/$(LIBRARY_TYPE)/*.ali ${alidir}/${NAME}/$(LIBRARY_TYPE)/
+	test -d web && \
+	     (tar --exclude=.svn --exclude='*~' -cf - web )| (cd ${dynamodir}/${NAME}/ && tar xf -)
+ifeq ($(LIBRARY_TYPE),static)
+	test -f lib/${NAME}/$(LIBRARY_TYPE)/${LIBNAME}.a && \
+	     ${CP} lib/${NAME}/$(LIBRARY_TYPE)/${LIBNAME}.a ${libdir}/
+else
+	test -f lib/${NAME}/$(LIBRARY_TYPE)/${LIBNAME}.${LIBVER} && \
+	     ${CP} -p lib/${NAME}/$(LIBRARY_TYPE)/${LIBNAME}.$(LIBVER) ${libdir}/ && \
+	     cd ${libdir} && \
+	     rm -f ${LIBNAME}.$(LIBEXT) && \
+	     ${LN} ${LIBNAME}.$(LIBVER) ${LIBNAME}.$(LIBEXT)
+endif
+
+
+uninstall:  pre-uninstall
+	rm -rf ${includedir}/${NAME}
+	rm -f ${libdir}/${LIBNAME}.a
+	rm -f ${libdir}/${LIBNAME}.$(LIBVER)
+	rm -f ${projectdir}/${NAME}.gpr
+	rm -rf ${dynamodir}/${NAME}
+	rm -rf ${alidir}/${NAME}
+
+
+pre-clean:
+pre-build:
+pre-install:
+pre-uninstall:
+pre-dist-prepare:
+post-build:
