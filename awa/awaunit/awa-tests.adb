@@ -22,16 +22,8 @@ with Ada.Unchecked_Deallocation;
 
 with ASF.Server.Tests;
 with ASF.Server.Web;
-with ASF.Converters.Dates;
 
 with ASF.Tests;
-
-with AWA.Converters.Dates;
-with AWA.Users.Modules;
-with AWA.Mail.Modules;
-with AWA.Blogs.Modules;
-with AWA.Workspaces.Modules;
-with AWA.Storages.Modules;
 
 --  with AWA.Applications;
 with AWA.Applications.Factory;
@@ -51,20 +43,6 @@ package body AWA.Tests is
    Factory        : AWA.Applications.Factory.Application_Factory;
 
    Service_Filter : aliased AWA.Services.Filters.Service_Filter;
-
-   Users          : aliased AWA.Users.Modules.User_Module;
-
-   Workspaces     : aliased AWA.Workspaces.Modules.Workspace_Module;
-
-   Mail           : aliased AWA.Mail.Modules.Mail_Module;
-
-   Blogs          : aliased AWA.Blogs.Modules.Blog_Module;
-
-   Storages       : aliased AWA.Storages.Modules.Storage_Module;
-
-   Date_Converter : aliased ASF.Converters.Dates.Date_Converter;
-
-   Rel_Date_Converter : aliased AWA.Converters.Dates.Relative_Date_Converter;
 
    protected body Shutdown is
       procedure Termination (Cause : in Ada.Task_Termination.Cause_Of_Termination;
@@ -134,56 +112,6 @@ package body AWA.Tests is
       ASF.Tests.Initialize (Props, Application.all'Access, Factory);
       Application.Add_Filter ("service", Service_Filter'Access);
       Application.Add_Filter_Mapping (Name => "service", Pattern => "*.html");
-
-      if Add_Modules then
-         declare
-            Ctx    : AWA.Services.Contexts.Service_Context;
-            Users : constant AWA.Users.Modules.User_Module_Access := AWA.Tests.Users'Access;
-         begin
-            Ctx.Set_Context (Application, null);
-            Register (App    => Application.all'Access,
-                      Name   => AWA.Users.Modules.NAME,
-                      URI    => "user",
-                      Module => Users.all'Access);
-
-            Register (App    => Application.all'Access,
-                      Name   => "mail",
-                      URI    => "mail",
-                      Module => Mail'Access);
-
-            Register (App    => Application.all'Access,
-                      Name   => "workspaces",
-                      URI    => "workspaces",
-                      Module => Workspaces'Access);
-
-            Register (App    => Application.all'Access,
-                      Name   => AWA.Storages.Modules.NAME,
-                      URI    => "storages",
-                      Module => Storages'Access);
-
-            Register (App    => Application.all'Access,
-                      Name   => AWA.Blogs.Modules.NAME,
-                      URI    => "blogs",
-                      Module => Blogs'Access);
-
-            if Props.Exists ("test.server") then
-               declare
-                  WS : ASF.Server.Web.AWS_Container;
-               begin
-                  Application.Add_Converter (Name      => "dateConverter",
-                                             Converter => Date_Converter'Access);
-                  Application.Add_Converter (Name      => "smartDateConverter",
-                                             Converter => Rel_Date_Converter'Access);
-
-                  WS.Register_Application ("/asfunit", Application.all'Access);
-
-                  WS.Start;
-                  delay 6000.0;
-               end;
-            end if;
-            ASF.Server.Tests.Set_Context (Application.all'Access);
-         end;
-      end if;
    end Initialize;
 
    --  ------------------------------
