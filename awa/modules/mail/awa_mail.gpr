@@ -1,0 +1,31 @@
+with "../../awa";
+
+project Awa_Mail is
+
+   Name         := "awa-mail";
+
+   for Source_Dirs use ("src");
+
+   case Awa.Aws_Status is
+	when "yes" =>
+	     for Source_Dirs use Project'Source_Dirs & ("src/aws");
+
+	when "no" =>
+	     null;
+   end case;
+
+   for Library_Name use "ada-" & Name;
+   for Library_Dir use Awa.Library_Dir & "/" & Name;
+   for Library_Kind use Awa.Library_Type;
+   for Library_Version use "lib" & Project'Library_Name & ".so." & Awa.Version;
+
+   for Library_Dir use "lib/" & Name & "/" & Project'Library_Kind;
+   for Object_Dir use "obj/" & Name & "/" & Project'Library_Kind;
+   for Exec_Dir use Awa.Exec_Dir;
+
+   package Binder renames AWA.Binder;
+   package Builder renames AWA.Builder;
+   package Compiler renames AWA.Compiler;
+   package Linker renames AWA.Linker;
+
+end Awa_Mail;
