@@ -7,6 +7,8 @@ with "@ASF_DIR@asfunit";
 with "@ADO_DIR@ado";
 with "awaunit";
 with "awa";
+with "modules/storages/awa_storages";
+with "modules/mail/awa_mail";
 
 project Tests is
 
@@ -14,7 +16,7 @@ project Tests is
 
    Mains := ("awa_harness.adb");
 
-   for Source_Dirs use ("regtests");
+   for Source_Dirs use ("regtests", "modules/storages/regtests");
 
    for Main use Mains;
 
