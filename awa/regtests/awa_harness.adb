@@ -23,7 +23,7 @@ with AWA.Tests;
 procedure AWA_Harness is
 
    procedure Harness is new Util.Tests.Harness (AWA.Testsuite.Suite,
-                                                AWA.Tests.Initialize,
+                                                AWA.Testsuite.Initialize,
                                                 AWA.Tests.Finish);
 
 begin
