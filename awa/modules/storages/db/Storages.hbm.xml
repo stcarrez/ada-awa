@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hibernate-mapping default-cascade="none">
+    <enum name="AWA.Storages.Models.Storage_Type">
+       <comment>The image storage type</comment>
+       <value name="DATABASE" value="0"/>
+       <value name="FILE" value="1"/>
+       <value name="URL" value="2"/>
+    </enum>
+    <class name="AWA.Storages.Models.Storage_Data" table="awa_storage_data"
+           dynamic-insert="true" dynamic-update="true" list='false'>
+        <comment>The database storage data when the storage type is DATABASE.</comment>
+        <id name="id" type="ADO.Identifier" unsaved-value="0">
+            <comment>the storage data identifier</comment>
+            <column name="id" not-null="true" unique="false" sql-type="INTEGER"/>
+            <generator class="sequence"/>
+        </id>
+        <version name="version" type="int" column="version">
+            <comment>the storage data version.</comment>
+        </version>
+        <property name="data" type="blob">
+            <comment>the storage data when the storage type is DATABASE.</comment>
+            <column name="data" not-null="true" unique="false" sql-type="BLOB"/>
+        </property>
+    </class>
+    <class name="AWA.Storages.Models.Storage" table="awa_storage"
+           dynamic-insert="true" dynamic-update="true" list='false'>
+        <comment>The database storage data when the storage type is DATABASE.</comment>
+        <id name="id" type="ADO.Identifier" unsaved-value="0">
+            <comment>the storage identifier</comment>
+            <column name="id" not-null="true" unique="false" sql-type="INTEGER"/>
+            <generator class="sequence"/>
+        </id>
+        <version name="version" type="int" column="version">
+            <comment>the storage data version.</comment>
+        </version>
+        <property name="create_date" type="Time" update="false">
+            <comment>the local store creation date</comment>
+            <column name="create_date" not-null="true" unique="false" sql-type="DATETIME"/>
+        </property>
+        <property name="storage" type="AWA.Storages.Models.Storage_Type">
+            <comment>the storage type.</comment>
+            <column name="storage_type" not-null="true" unique="false" sql-type="INTEGER"/>
+        </property>
+        <property name="data" type="String">
+            <comment>the storage specific data</comment>
+            <column name="data" not-null="true" unique="true" sql-type="VARCHAR(256)"/>
+        </property>
+        <many-to-one name="store_data" class="Storage_Data" foreign-key="ID" not-null="false" lazy="proxy" fetch="select">
+            <comment>the storage that this local store refers to.</comment>
+            <column name="storage_id" not-null="true" sql-type="INTEGER"/>
+        </many-to-one>
+        <many-to-one name="workspace" class="AWA.Workspaces.Models.Workspace" foreign-key="id" not-null="true" lazy="proxy" fetch="select">
+            <comment>the workspace that this storage belongs to.</comment>
+            <column name="workspace_id" not-null="true" sql-type="INTEGER"/>
+        </many-to-one>
+    </class>
+    <class name="AWA.Storages.Models.Store_Local" table="awa_store_local"
+           dynamic-insert="true" dynamic-update="true" list='false'>
+        <comment>The local store record is created when a copy of the data
+is needed on the local file system.  The creation date refers to the date when
+the data was copied on the local file system.  The expiration date indicates a
+date after which the local file can be removed from the local file system.</comment>
+        <id name="id" type="ADO.Identifier" unsaved-value="0">
+            <comment>the local storage identifier</comment>
+            <column name="id" not-null="true" unique="false" sql-type="INTEGER"/>
+            <generator class="sequence"/>
+        </id>
+        <version name="version" type="int" column="version">
+            <comment>the local storage version.</comment>
+        </version>
+        <property name="create_date" type="Time" update="false">
+            <comment>the local store creation date</comment>
+            <column name="create_date" not-null="true" unique="false" sql-type="DATETIME"/>
+        </property>
+        <property name="expire_date" type="Time" update="true">
+            <comment>the local store expiration date</comment>
+            <column name="expire_date" not-null="true" unique="false" sql-type="DATETIME"/>
+        </property>
+        <property name="path" type="String">
+            <comment>the local store path</comment>
+            <column name="name" not-null="true" unique="true" sql-type="VARCHAR(256)"/>
+        </property>
+        <many-to-one name="storage" class="Storage" foreign-key="ID" not-null="false" lazy="proxy" fetch="select">
+            <comment>the storage that this local store refers to.</comment>
+            <column name="storage_id" not-null="true" sql-type="INTEGER"/>
+        </many-to-one>
+    </class>
+</hibernate-mapping>

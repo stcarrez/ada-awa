@@ -1,0 +1,25 @@
+<query-mapping package='AWA.Storages.Models'>
+    <description>
+      The list of posts for the blog administrator.
+    </description>
+
+    <query name='storage-get-data'>
+       <comment>Get the data content of the storage object.  The query returns a single BLOB column.</comment>
+       <sql>
+    SELECT
+      data.data
+    FROM awa_storage as store
+    INNER JOIN acl ON acl.entity_id = store.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
+    INNER JOIN awa_storage_data AS data ON store.storage_id = data.id
+    WHERE store.id = :store_id
+       </sql>
+    </query>
+
+    <query name='storage-delete-local'>
+       <comment>Delete the local storage data</comment>
+       <sql>
+    DELETE FROM awa_store_local WHERE storage_id = :store_id
+       </sql>
+    </query>
+
+</query-mapping>
