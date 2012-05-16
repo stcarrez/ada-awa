@@ -65,10 +65,12 @@ install: install_static
 endif
 
 # Build executables for all mains defined by the project.
-build: local-build post-build
+build: local-build post-build build-tests
 
 local-build: pre-build
 	$(GNATMAKE) -m -p -P "$(GPRPATH)" $(MAKE_ARGS)
+
+build-tests:
 	test ! -f tests.gpr || $(GNATMAKE) -m -p -Ptests $(MAKE_ARGS)
 
 static:
