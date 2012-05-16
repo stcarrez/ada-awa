@@ -156,33 +156,33 @@ install_lib:  uninstall pre-install
 	${MKDIR} -p ${dynamodir}/${NAME}/db
 	${MKDIR} -p ${dynamodir}/${NAME}/db/mysql
 	${MKDIR} -p ${dynamodir}/${NAME}/db/sqlite
-	test -d src && ${CP} src/*.ad[bs] ${includedir}/${NAME}
-	test -d src/model && ${CP} src/model/*.ad[bs] ${includedir}/${NAME}
-	test -f distrib/${NAME}.gpr && \
+	test ! -d src || ${CP} src/*.ad[bs] ${includedir}/${NAME}
+	test ! -d src/model || ${CP} src/model/*.ad[bs] ${includedir}/${NAME}
+	test ! -f distrib/${NAME}.gpr || \
 	    sed -e "s,INSTALL,${prefix},g" \
 	        -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" < distrib/${NAME}.gpr > ${projectdir}/${NAME}.gpr
-	test -d config && ${CP} config/*.xml ${dynamodir}/${NAME}/config/
+	test ! -d config || ${CP} config/*.xml ${dynamodir}/${NAME}/config/
 	${CP} dynamo.xml ${dynamodir}/${NAME}/dynamo.xml
-	test -f NOTICE.txt && ${CP} NOTICE.txt ${dynamodir}/${NAME}/NOTICE.txt
-	test -f LICENSE.txt && ${CP} LICENSE.txt ${dynamodir}/${NAME}/LICENSE.txt
-	test -d bundles && ${CP} bundles/*.properties ${dynamodir}/${NAME}/bundles/
-	test -d db && ${CP} db/*.xml ${dynamodir}/${NAME}/db/
-	test -d db/mysql && ${CP} db/mysql/*.sql ${dynamodir}/${NAME}/db/mysql
-	test -d db/sqlite && ${CP} db/sqlite/*.sql ${dynamodir}/${NAME}/db/sqlite
-	test -d lib/${NAME}/${LIBRARY_TYPE} && \
-	     ${MKDIR} -p ${alidir}/${NAME}/$(LIBRARY_TYPE) && \
-	     ${CP} lib/${NAME}/$(LIBRARY_TYPE)/*.ali ${alidir}/${NAME}/$(LIBRARY_TYPE)/
-	test -d web && \
+	test ! -f NOTICE.txt || ${CP} NOTICE.txt ${dynamodir}/${NAME}/NOTICE.txt
+	test ! -f LICENSE.txt || ${CP} LICENSE.txt ${dynamodir}/${NAME}/LICENSE.txt
+	test ! -d bundles || ${CP} bundles/*.properties ${dynamodir}/${NAME}/bundles/
+	test ! -d db || ${CP} db/*.xml ${dynamodir}/${NAME}/db/
+	test ! -d db/mysql || ${CP} db/mysql/*.sql ${dynamodir}/${NAME}/db/mysql
+	test ! -d db/sqlite || ${CP} db/sqlite/*.sql ${dynamodir}/${NAME}/db/sqlite
+	test ! -d lib/${NAME}/${LIBRARY_TYPE} || \
+	     (${MKDIR} -p ${alidir}/${NAME}/$(LIBRARY_TYPE) && \
+	     ${CP} lib/${NAME}/$(LIBRARY_TYPE)/*.ali ${alidir}/${NAME}/$(LIBRARY_TYPE)/)
+	test ! -d web || \
 	     (tar --exclude=.svn --exclude='*~' -cf - web )| (cd ${dynamodir}/${NAME}/ && tar xf -)
 ifeq ($(LIBRARY_TYPE),static)
-	test -f lib/${NAME}/$(LIBRARY_TYPE)/${LIBNAME}.a && \
+	test ! -f lib/${NAME}/$(LIBRARY_TYPE)/${LIBNAME}.a || \
 	     ${CP} lib/${NAME}/$(LIBRARY_TYPE)/${LIBNAME}.a ${libdir}/
 else
-	test -f lib/${NAME}/$(LIBRARY_TYPE)/${LIBNAME}.${LIBVER} && \
-	     ${CP} -p lib/${NAME}/$(LIBRARY_TYPE)/${LIBNAME}.$(LIBVER) ${libdir}/ && \
-	     cd ${libdir} && \
-	     rm -f ${LIBNAME}.$(LIBEXT) && \
-	     ${LN} ${LIBNAME}.$(LIBVER) ${LIBNAME}.$(LIBEXT)
+	test ! -f lib/${NAME}/$(LIBRARY_TYPE)/${LIBNAME}.${LIBVER} || \
+	     (${CP} -p lib/${NAME}/$(LIBRARY_TYPE)/${LIBNAME}.$(LIBVER) ${libdir}/ && \
+	      cd ${libdir} && \
+	      rm -f ${LIBNAME}.$(LIBEXT) && \
+	      ${LN} ${LIBNAME}.$(LIBVER) ${LIBNAME}.$(LIBEXT))
 endif
 
 
