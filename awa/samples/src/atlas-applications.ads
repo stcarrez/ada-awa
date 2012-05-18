@@ -29,9 +29,7 @@ with Security.Openid.Servlets;
 with AWA.Users.Servlets;
 with AWA.Users.Modules;
 with AWA.Mail.Modules;
-with AWA.Comments.Modules;
 with AWA.Blogs.Modules;
-with AWA.Storages.Modules;
 with AWA.Applications;
 with AWA.Workspaces.Modules;
 with AWA.Services.Filters;
@@ -108,8 +106,6 @@ private
       Workspace_Module  : aliased AWA.Workspaces.Modules.Workspace_Module;
       Blog_Module       : aliased AWA.Blogs.Modules.Blog_Module;
       Mail_Module       : aliased AWA.Mail.Modules.Mail_Module;
-      Comment_Module    : aliased AWA.Comments.Modules.Comment_Module;
-      Storage_Module    : aliased AWA.Storages.Modules.Storage_Module;
 
       Microblog_Module  : aliased Atlas.Microblog.Modules.Microblog_Module;
 --      XXX_Module    : aliased Atlas.XXX.Module.XXX_Module;

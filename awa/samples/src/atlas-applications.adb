@@ -173,19 +173,9 @@ package body Atlas.Applications is
                 Module => App.Mail_Module'Access);
 
       Register (App    => App.Self.all'Access,
-                Name   => AWA.Storages.Modules.NAME,
-                URI    => "storages",
-                Module => App.Storage_Module'Access);
-
-      Register (App    => App.Self.all'Access,
                 Name   => AWA.Blogs.Modules.NAME,
                 URI    => "blogs",
                 Module => App.Blog_Module'Access);
-
-      Register (App    => App.Self.all'Access,
-                Name   => AWA.Comments.Modules.NAME,
-                URI    => "comments",
-                Module => App.Comment_Module'Access);
 
       Register (App    => App.Self.all'Access,
                 Name   => Atlas.Microblog.Modules.NAME,
