@@ -1,6 +1,6 @@
 NAME=awa-workspaces
 
-LIBNAME=lib
+LIBNAME=lib${NAME}
 
 include ../../rules.mk
 

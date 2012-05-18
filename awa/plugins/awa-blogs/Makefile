@@ -1,6 +1,6 @@
 NAME=awa-blogs
 
-LIBNAME=lib
+LIBNAME=lib${NAME}
 
 include ../../rules.mk
 
