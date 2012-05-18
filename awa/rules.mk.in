@@ -202,3 +202,4 @@ pre-install:
 pre-uninstall:
 pre-dist-prepare:
 post-build:
+post-generate:
