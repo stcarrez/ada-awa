@@ -7,11 +7,16 @@ PLUGINS=mail storages images comments awa-blogs
 
 NAME=awa
 
-include Make-Config.mk
+include rules.mk
 
 post-build:
 	for i in ${PLUGINS} ; do \
 	   $(MAKE) -C plugins/$$i ; \
+	done
+
+post-generate:
+	for i in ${PLUGINS} ; do \
+	   $(MAKE) -C plugins/$$i generate ; \
 	done
 
 # Build and run the unit tests
