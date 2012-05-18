@@ -15,7 +15,7 @@ GPRPATH:=${NAME}.gpr
 
 BUILDS_SHARED=@BUILDS_SHARED@
 
-version=@UTIL_VERSION@
+version=@AWA_VERSION@
 
 distdir=ada-awa-@AWA_VERSION@
 
@@ -68,7 +68,7 @@ endif
 build: local-build post-build build-tests
 
 local-build: pre-build
-	$(GNATMAKE) -m -p -P "$(GPRPATH)" $(MAKE_ARGS)
+	test ! -f $(GPRPATH) || $(GNATMAKE) -m -p -P "$(GPRPATH)" $(MAKE_ARGS)
 
 build-tests:
 	test ! -f tests.gpr || $(GNATMAKE) -m -p -Ptests $(MAKE_ARGS)
@@ -158,9 +158,9 @@ install_lib:  uninstall pre-install
 	${MKDIR} -p ${dynamodir}/${NAME}/db/sqlite
 	test ! -d src || ${CP} src/*.ad[bs] ${includedir}/${NAME}
 	test ! -d src/model || ${CP} src/model/*.ad[bs] ${includedir}/${NAME}
-	test ! -f distrib/${NAME}.gpr || \
+	test ! -f distrib/${GPRPATH} || \
 	    sed -e "s,INSTALL,${prefix},g" \
-	        -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" < distrib/${NAME}.gpr > ${projectdir}/${NAME}.gpr
+	        -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" < distrib/${GPRPATH} > ${projectdir}/${GPRPATH}
 	test ! -d config || ${CP} config/*.xml ${dynamodir}/${NAME}/config/
 	${CP} dynamo.xml ${dynamodir}/${NAME}/dynamo.xml
 	test ! -f NOTICE.txt || ${CP} NOTICE.txt ${dynamodir}/${NAME}/NOTICE.txt
