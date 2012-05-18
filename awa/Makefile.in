@@ -106,7 +106,6 @@ endif
 	   $(MAKE) -C plugins/$$i install; \
 	done
 
-
 pre-uninstall:
 	rm -rf ${includedir}/awa
 	rm -f ${libdir}/libada-awa.a
@@ -114,3 +113,7 @@ pre-uninstall:
 	rm -rf ${dynamodir}/awa
 	rm -rf ${alidir}/awa
 	rm -rf ${alidir}/awaunit
+	rm -rf ${includedir}/awaaunit
+	for i in ${PLUGINS} ; do \
+	   $(MAKE) -C plugins/$$i uninstall; \
+	done
