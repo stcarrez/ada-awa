@@ -25,7 +25,7 @@ HAVE_MYSQL=@ADO_DB_MYSQL@
 HAVE_SQLITE=@ADO_DB_SQLITE@
 HAVE_AWS=@AWA_AWS_STATUS@
 
-GENERATOR=dynamo
+DYNAMO=dynamo
 
 LN_S=@LN_S@
 MKDIR=mkdir
@@ -103,8 +103,9 @@ analyze:
 # Clean, then build executables for all mains defined by the project.
 rebuild: clean build
 
-generate:
-	$(GENERATOR) generate db
+# Rebuild the generated model files
+generate:  post-generate
+	$(DYNAMO) generate db
 
 # Files to package in source distribution
 DISTFILES=README LICENSE.txt NOTICE.txt NEWS CHANGES ChangeLog config.guess configure config.sub \
