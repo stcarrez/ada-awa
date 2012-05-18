@@ -1,4 +1,4 @@
-<project><name>awa.storages</name>
+<project><name>awa-storages</name>
 <property name="author_email">Stephane.Carrez@gmail.com</property>
 <property name="search_dirs">.;../asf;../ado</property>
 <property name="author">Stephane Carrez</property>
