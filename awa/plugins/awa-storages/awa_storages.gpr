@@ -1,3 +1,4 @@
+with "../awa-workspaces/awa_workspaces";
 with "../../awa";
 project awa_storages is
    Version      := awa.Version;

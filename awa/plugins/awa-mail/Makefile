@@ -3,7 +3,7 @@ NAME=awa-mail
 
 LIBNAME=lib${NAME}
 
-include ../../Make-Config.mk
+include ../../rules.mk
 
 GPRPATH=awa_mail.gpr
 

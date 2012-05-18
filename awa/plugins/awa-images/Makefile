@@ -3,7 +3,7 @@ NAME=awa-images
 
 LIBNAME=lib${NAME}
 
-include ../../Make-Config.mk
+include ../../rules.mk
 
 GPRPATH=awa_images.gpr
 

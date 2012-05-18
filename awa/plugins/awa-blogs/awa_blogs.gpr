@@ -1,4 +1,5 @@
 with "../../awa";
+with "../awa-workspaces/awa_workspaces";
 project awa_blogs is
    Version      := awa.Version;
    Name         := "awa-blogs";

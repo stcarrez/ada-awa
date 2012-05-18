@@ -1,4 +1,5 @@
 with "../../awa";
+with "../awa-storages/awa_storages";
 project awa_images is
    Version      := awa.Version;
    Name         := "awa-images";
