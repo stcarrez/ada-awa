@@ -1,4 +1,15 @@
-<project><name>awa</name>
-<property name="author_email">Stephane.Carrez@gmail.com</property>
-<property name="database">mysql://localhost:3306/awa_test?user=awa_user</property>
-<property name="author">Stephane Carrez</property></project>
+<project>
+    <name>awa</name>
+    <property name="author_email">Stephane.Carrez@gmail.com</property>
+    <property name="author">Stephane Carrez</property>
+    <property name="database">mysql://localhost:3306/awa_test?user=awa_user</property>
+    <module name="ado"></module>
+    <module name="asf"></module>
+    <module name="awa-storages"></module>
+    <module name="awa-mail"></module>
+    <module name="awa-images"></module>
+    <module name="awa-blogs"></module>
+    <module name="awa-markedit"></module>
+    <module name="awa-comments"></module>
+    <module name="awa-workspaces"></module>
+</project>
