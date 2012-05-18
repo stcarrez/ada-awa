@@ -4,6 +4,9 @@ with "@EL_DIR@el";
 with "@ASF_DIR@asf";
 with "@ADO_DIR@ado";
 with "@AWA_DIR@awa";
+with "@AWA_DIR@awa_workspaces";
+with "@AWA_DIR@awa_mail";
+with "@AWA_DIR@awa_blogs";
 
 project atlas is
 
