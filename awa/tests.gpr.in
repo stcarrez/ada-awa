@@ -9,6 +9,7 @@ with "awaunit";
 with "awa";
 with "plugins/storages/awa_storages";
 with "plugins/mail/awa_mail";
+with "plugins/awa-blogs/awa_blogs";
 
 project Tests is
 
