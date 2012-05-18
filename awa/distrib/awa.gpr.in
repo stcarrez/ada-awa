@@ -6,7 +6,7 @@ with "asf";
 project AWA is
    Version := "@AWA_VERSION@";
 
-   for Library_Name use "ada-awa";
+   for Library_Name use "awa";
    for Library_Dir use "INSTALL/lib";
    for Library_Kind use "LIBRARY_TYPE";
 

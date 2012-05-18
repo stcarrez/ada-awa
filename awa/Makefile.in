@@ -6,6 +6,7 @@ LIBRARY_TYPE=static
 PLUGINS=awa-workspaces awa-mail awa-storages awa-images awa-comments awa-blogs
 
 NAME=awa
+LIBNAME=lib${NAME}
 
 include rules.mk
 
