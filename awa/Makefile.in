@@ -3,7 +3,7 @@
 ##   static
 LIBRARY_TYPE=static
 
-PLUGINS=mail storages images comments
+PLUGINS=mail storages images comments awa-blogs
 
 NAME=awa
 
