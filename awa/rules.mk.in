@@ -88,8 +88,8 @@ autobuild:
 
 # Clean the root project of all build products.
 clean:  pre-clean
-	-$(GNATCLEAN) -P "$(GPRPATH)" -XLIBRARY_TYPE=static
-	-$(GNATCLEAN) -P "$(GPRPATH)" -XLIBRARY_TYPE=relocatable
+	-$(GNATCLEAN) -q -P "$(GPRPATH)" -XLIBRARY_TYPE=static
+	-$(GNATCLEAN) -q -P "$(GPRPATH)" -XLIBRARY_TYPE=relocatable
 
 # Clean root project and all imported projects too.
 clean_tree:
