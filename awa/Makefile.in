@@ -56,7 +56,7 @@ DISTFILES=README LICENSE.txt NOTICE.txt NEWS CHANGES ChangeLog config.guess conf
 configure.in Makefile.in install-sh \
 awa.gpr.in tests.gpr.in samples.gpr.in config.gpr \
 src samples regtests db web bundles config awaunit awaunit.gpr.in \
-distrib test-mysql.properties test-sqlite.properties dynamo.xml
+distrib test-mysql.properties test-sqlite.properties dynamo.xml plugins
 
 pre-dist:
 	-rm -rf $(distdir)
@@ -82,6 +82,8 @@ pre-dist:
 	-rm -rf $(distdir)/samples/config.status
 	-rm -rf $(distdir)/samples/Makefile
 	-rm -rf $(distdir)/samples/obj
+	-rm -rf $(distdir)/regtests/result
+	-rm -rf $(distdir)/distrib/*.gpr
 	mkdir $(distdir)/bin
 	mkdir $(distdir)/obj
 	mkdir $(distdir)/lib

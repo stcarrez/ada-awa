@@ -138,7 +138,7 @@ dist-prepare:   pre-dist-prepare
 dist:   pre-dist dist-prepare
 	tar --exclude=.svn --exclude="*~" --exclude="*.o" --exclude="*.ali" \
 	    --exclude="*.log" --exclude="*.a" --exclude=".project" \
-	    --exclude=".cproject" \
+	    --exclude=".cproject" --exclude='autom4te.cache' \
 	    --exclude=".gb_project" \
 	    -cvzf $(DIST_FILE) $(distdir)
 
