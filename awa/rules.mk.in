@@ -166,6 +166,9 @@ install_lib:  uninstall pre-install
 	${CP} dynamo.xml ${dynamodir}/${NAME}/dynamo.xml
 	test ! -f NOTICE.txt || ${CP} NOTICE.txt ${dynamodir}/${NAME}/NOTICE.txt
 	test ! -f LICENSE.txt || ${CP} LICENSE.txt ${dynamodir}/${NAME}/LICENSE.txt
+	test ! -f MIT-LICENSE.txt || ${CP} MIT-LICENSE.txt ${dynamodir}/${NAME}/MIT-LICENSE.txt
+	test ! -f COPYING3 || ${CP} COPYING3 ${dynamodir}/${NAME}/COPYING3
+	test ! -f COPYING || ${CP} COPYING ${dynamodir}/${NAME}/COPYING
 	test ! -d bundles || ${CP} bundles/*.properties ${dynamodir}/${NAME}/bundles/
 	test ! -d db || ${CP} db/*.xml ${dynamodir}/${NAME}/db/
 	test ! -d db/mysql || ${CP} db/mysql/*.sql ${dynamodir}/${NAME}/db/mysql
