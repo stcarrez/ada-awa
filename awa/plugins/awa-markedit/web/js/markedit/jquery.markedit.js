@@ -85,8 +85,8 @@
             },
 
             'markup' : {
-                'boldStart': '*',
-                'boldEnd': '*',
+                'boldStart': '__',
+                'boldEnd': '__',
                 'italicStart': "''",
                 'italicEnd': "''",
                 'underlineStart': '++',
