@@ -200,6 +200,8 @@ package body AWA.Blogs.Beans is
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Blog_Id));
       elsif Name = POST_ID_ATTR then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Post.Get_Id));
+      elsif Name = POST_USERNAME_ATTR then
+         return Util.Beans.Objects.To_Object (String '(From.Post.Get_Author.Get_Name));
       else
          return From.Post.Get_Value (Name);
       end if;
@@ -257,6 +259,16 @@ package body AWA.Blogs.Beans is
             Object.Title := Object.Post.Get_Title;
             Object.Text  := Object.Post.Get_Text;
             Object.URI   := Object.Post.Get_Uri;
+
+            --  SCz: 2012-05-19: workaround for ADO 0.3 limitation.  The lazy loading of
+            --  objects does not work yet.  Force loading the user here while the above
+            --  session is still open.
+            declare
+               A : constant String := String '(Object.Post.Get_Author.Get_Name);
+               pragma Unreferenced (A);
+            begin
+               null;
+            end;
          end;
       end if;
       Object.Module := Module;
