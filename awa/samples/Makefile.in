@@ -1,79 +1,16 @@
-# You may edit this makefile as long as you keep these original 
-# target names defined.
-GNATMAKE=gnatmake
-GNATCLEAN=gnatclean
-GPRPATH=atlas.gpr
+NAME=atlas
+LIBNAME=lib
 
-distdir=atlas-@ATLAS_VERSION@
+PLUGINS=
 
-DIST_FILE=atlas-@ATLAS_VERSION@.tar.gz
+include rules.mk
 
-srcdir = .
-top_srcdir = @top_srcdir@
-VPATH = @srcdir@
-prefix = @prefix@
-exec_prefix = @exec_prefix@
-top_builddir = .
-
-# Build executables for all mains defined by the project.
-build:
-	mkdir -p src/model
-	$(GNATMAKE) -p -P "$(GPRPATH)"
-
-# Not intended for manual invocation.
-# Invoked if automatic builds are enabled.
-# Analyzes only on those sources that have changed.
-# Does not build executables.
-autobuild:
-	$(GNATMAKE) -gnatc -c -k  -P "$(GPRPATH)"
-
-# Clean the root project of all build products.
-clean:
-	$(GNATCLEAN) -q -P "$(GPRPATH)"
-
-# Clean root project and all imported projects too.
-clean_tree:
-	$(GNATCLEAN) -P "$(GPRPATH)" -r
-
-# Check *all* sources for errors, even those not changed.
-# Does not build executables.
-analyze:
-	$(GNATMAKE) -f  -gnatc -c -k  -P "$(GPRPATH)"
-
-# Clean, then build executables for all mains defined by the project.
-rebuild: clean build
-
-GENERATOR=dynamo
-
-generate:
-	$(GENERATOR) generate db
-
-# Files to package in source distribution
-DISTFILES=README LICENSE.txt NOTICE.txt CHANGES config.guess configure config.sub \
-configure.in Makefile.in install-sh \
-atlas.gpr.in tests.gpr.in config.gpr dynamo.xml atlas.properties package.xml \
-src regtests \
-bin obj web bundles db
-
-dist:
-	-rm -rf $(distdir)
-	mkdir $(distdir)
-	-chmod 777 $(distdir)
-	here=`cd $(top_builddir) && pwd`; \
-	top_distdir=`cd $(distdir) && pwd`; \
-	distdir=`cd $(distdir) && pwd`; \
-	for file in $(DISTFILES); do \
-	  d=$(srcdir); \
-	  if test -d $$d/$$file; then \
-	    cp -pr $$d/$$file $(distdir)/$$file; \
-	  else \
-	    test -f $(distdir)/$$file \
-	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
-	    || cp -p $$d/$$file $(distdir)/$$file || :; \
-	  fi; \
+post-build:
+	for i in  ; do \
+	   $(MAKE) -C plugins/$$i ; \
 	done
-	-rm -f $(distdir)/bin/*
-	-rm -f $(distdir)/obj/*
-	tar --exclude=.svn --exclude="*~" --exclude="*.o" --exclude="*.ali" \
-	    --exclude="*.log" --exclude="*.a" \
-	    -cvzf $(DIST_FILE) $(distdir)
+
+post-generate:
+	for i in  ; do \
+	   $(MAKE) -C plugins/$$i generate ; \
+	done
