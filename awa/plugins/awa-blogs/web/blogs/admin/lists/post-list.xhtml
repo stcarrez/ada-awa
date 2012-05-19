@@ -54,6 +54,11 @@
                     <div class='post-author'>
                         #{post.username}
                     </div>
+                    <div class='post-view'>
+                        <a href="preview.html?blog_id=#{blog.id}&amp;post_id=#{post.id}">
+                            #{blogMsg.blog_post_preview_label}
+                        </a>
+                    </div>
                     <div class='post-status-#{post.status}' title="#{post.status eq 'POST_PUBLISHED' ? blogMsg.blog_post_published_title : blogMsg.blog_post_pending_title}"></div>
                 </div>
             </h:list>

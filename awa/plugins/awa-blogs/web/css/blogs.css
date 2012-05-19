@@ -53,14 +53,14 @@ div.blog-admin div.post-info {
     padding-top: 5px;
 }
 div.blog-admin div.post-title, div.blog-admin div.post-author, div.blog-admin div.post-ref,
-div.blog-admin div.post-date {
+div.blog-admin div.post-date, div.blog-admin div.post-view {
     float: left;
     overflow: hidden;
     line-height: 20px;
 
 }
 div.blog-admin div.post-title {
-    width: 60%;
+    width: 55%;
 }
 div.blog-admin div.post-author {
     width: 19%;
@@ -70,6 +70,9 @@ div.blog-admin div.post-ref {
 }
 div.blog-admin div.post-date {
     width: 15%;
+}
+div.blog-admin div.post-view {
+    width: 5%;
 }
 
 div.post-header {
