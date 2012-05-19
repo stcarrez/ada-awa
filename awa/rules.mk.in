@@ -105,7 +105,7 @@ rebuild: clean build
 
 # Rebuild the generated model files
 generate:  post-generate
-	$(DYNAMO) generate db
+	test ! -d db || $(DYNAMO) generate db
 
 # Files to package in source distribution
 DISTFILES=README LICENSE.txt NOTICE.txt NEWS CHANGES ChangeLog config.guess configure config.sub \
