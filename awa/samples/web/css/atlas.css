@@ -76,10 +76,11 @@ div.message img {
 div.blog-admin {
     width: 40%;
 }
-/*
-.atlas #blog-post-list {
-    float: left;
-    width: 20%;
-    padding-top: 0;
-    padding-bottom: 0;
-}*/
+
+dl.awa-required div.markedit textarea {
+    width: 100%;
+    padding: 0;
+}
+div.markedit div.markedit-toolbar {
+    margin-left: 1px;
+}
