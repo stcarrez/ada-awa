@@ -21,6 +21,10 @@ DROP TABLE IF EXISTS `awa_image`;
 DROP TABLE IF EXISTS `awa_store_local`;
 DROP TABLE IF EXISTS `awa_storage_data`;
 DROP TABLE IF EXISTS `awa_storage`;
+/* Copied from awa-workspaces-drop-mysql.sql*/
+/* File generated automatically by dynamo */
+DROP TABLE IF EXISTS `workspace_member`;
+DROP TABLE IF EXISTS `workspace`;
 /* Copied from awa-comments-drop-mysql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `comments`;
