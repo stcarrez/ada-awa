@@ -1,6 +1,6 @@
 /**
  * main.css - Main style for AWA pages
- * Copyright (C) 2011 Stephane Carrez
+ * Copyright (C) 2011, 2012 Stephane Carrez
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
 html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td, label {
@@ -216,7 +216,6 @@ dl.awa-optional textarea, dl.awa-required textarea {
     font-size: 16px;
     padding: 3px;
 }
-
 
 /**
  * Error messages
