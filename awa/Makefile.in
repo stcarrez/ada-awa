@@ -3,7 +3,8 @@
 ##   static
 LIBRARY_TYPE=static
 
-PLUGINS=awa-workspaces awa-mail awa-storages awa-images awa-comments awa-blogs
+PLUGINS=awa-workspaces awa-mail awa-storages awa-images awa-comments \
+        awa-blogs awa-markedit
 
 NAME=awa
 LIBNAME=lib${NAME}
