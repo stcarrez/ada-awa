@@ -5,6 +5,7 @@ Version 0.2     -
   - New mail UI components <mail:message>, <mail:body>, <mail:subject>,
     <mail:to>, <mail:from>, <mail:cc>, <mail:bcc> to build, format and
     send an email
+  - New Javascript plugin Markedit with jQuery Markedit (MIT License)
 
 Version 0.1     - Sep 2011
   - Core implementation of AWA framework on top of ADO and ASF
