@@ -194,3 +194,14 @@ div.blog-edit-post {
     float: left;
     width: 100%;
 }
+ul.blog-syntax {
+    padding-top: 5px;
+    list-style-type: none;
+}
+ul.blog-syntax li {
+    float: left;
+    clear: both;
+}
+ul.blog-syntax li.spare {
+    padding-top: 15px;
+}
