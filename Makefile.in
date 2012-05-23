@@ -16,7 +16,7 @@ exec_prefix = @exec_prefix@
 top_builddir = .
 
 # Directories of sub-projects in the build order.
-SUBDIRS=util el asf dynamo ado awa
+SUBDIRS=util el asf ado dynamo awa
 
 # Build executables for all mains defined by the project.
 build:
