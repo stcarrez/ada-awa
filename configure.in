@@ -13,12 +13,10 @@ AWA_MINOR_VERSION=3
 AWA_MICRO_VERSION=0
 AWA_VERSION=$AWA_MAJOR_VERSION.$AWA_MINOR_VERSION.$AWA_MICRO_VERSION
 
-AWA_PACKAGES="ada-util-1.5.0 ada-el-1.4.0 ada-asf-0.4.0 ada-ado-0.3.0 ada-awa-0.2.0 dynamo-0.5.0"
+AWA_PACKAGES="ada-util-1.5.0 ada-el-1.4.0 ada-security-0.1.0 ada-asf-0.4.0 ada-ado-0.3.0 ada-awa-0.2.0 dynamo-0.5.0"
 
 # checking for local tools
 AC_PROG_CC
-# AM_PATH_GNAT
-# AM_PATH_PERL
 AC_PROG_MAKE_SET
 AC_PROG_INSTALL
 AC_PROG_RANLIB
@@ -173,6 +171,9 @@ echo "Configuring ada-util"
 
 echo "Configuring ada-el"
 (cd $DIR/el && ./configure --with-ada-util=../util $ARGS)
+
+echo "Configuring ada-security"
+(cd $DIR/security && ./configure --with-ada-util=../util $ARGS)
 
 echo "Configuring ada-asf"
 (cd $DIR/asf && ./configure --with-ada-util=../util --with-ada-el=../el $ARGS)
