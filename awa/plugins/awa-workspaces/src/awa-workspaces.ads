@@ -15,5 +15,12 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+
+--  ==  Introduction ==
+--  The *workspaces* plugin defines a workspace area for other plugins.
+--
+--  ==  Data Model ==
+--  @include Workspace.hbm.xml
+--
 package AWA.Workspaces is
 end AWA.Workspaces;
