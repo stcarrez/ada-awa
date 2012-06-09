@@ -16,8 +16,12 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+--  ==  Introduction  ==
 --  The <b>Storages</b> module provides a set of storage services allowing an application
 --  to store data files, documents, images in a persistent area.
+--
+--  == Data Model ==
+--  @include Storages.hbm.xml
 package AWA.Storages is
 
 end AWA.Storages;
