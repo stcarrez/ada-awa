@@ -82,6 +82,7 @@
   <entity-permission>
     <name>blog-create</name>
     <entity-type>blog</entity-type>
+    <description>Permission to create a new blog.</description>
     <sql>
        SELECT acl.id FROM acl
        WHERE acl.entity_type = :entity_type
@@ -92,6 +93,7 @@
   <entity-permission>
     <name>blog-delete</name>
     <entity-type>blog</entity-type>
+    <description>Permission to delete a blog.</description>
     <sql>
        SELECT acl.id FROM acl
        WHERE acl.entity_type = :entity_type
@@ -103,6 +105,7 @@
   <entity-permission>
     <name>blog-create-post</name>
     <entity-type>blog</entity-type>
+    <description>Permission to create a new post.</description>
     <sql>
        SELECT acl.id FROM acl
        WHERE acl.entity_type = :entity_type
@@ -114,6 +117,7 @@
   <entity-permission>
     <name>blog-update-post</name>
     <entity-type>blog</entity-type>
+    <description>Permission to modify a post.</description>
     <sql>
        SELECT acl.id FROM blog_post INNER JOIN acl ON acl.entity_id = blog_post.blog_id
        WHERE acl.entity_type = :entity_type
@@ -125,6 +129,7 @@
   <entity-permission>
     <name>blog-delete-post</name>
     <entity-type>blog</entity-type>
+    <description>Permission to delete a post.</description>
     <sql>
        SELECT acl.id FROM blog_post INNER JOIN acl ON acl.entity_id = blog_post.blog_id
        WHERE acl.entity_type = :entity_type
