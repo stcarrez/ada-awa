@@ -43,6 +43,10 @@ with AWA.Users.Servlets;
 --  integration.
 --
 --  @include awa-users-services.ads
+--
+--  @include users.xml
+--
+--  == Data Model ==
 --  @include User.hbm.xml
 package AWA.Users.Modules is
 
