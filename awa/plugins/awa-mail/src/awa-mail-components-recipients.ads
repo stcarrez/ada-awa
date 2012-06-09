@@ -17,6 +17,7 @@
 -----------------------------------------------------------------------
 with ASF.Contexts.Faces;
 
+--  === Mail Recipients ===
 --  The <b>AWA.Mail.Components.Recipients</b> package defines the UI components
 --  to represent the <tt>To</tt>, <tt>From</tt>, <tt>Cc</tt> and <tt>Bcc</tt> recipients.
 --

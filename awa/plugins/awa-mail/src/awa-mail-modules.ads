@@ -54,7 +54,9 @@ with AWA.Mail.Clients;
 --  is formatted by using the event and application context when the
 --  `user-register` event is posted.
 --
---  @see AWA.Mail.Components
+--  @include awa-mail-components.ads
+--  @include awa-mail-components-recipients.ads
+--  @include awa-mail-components-messages.ads
 --
 package AWA.Mail.Modules is
 

@@ -17,6 +17,7 @@
 -----------------------------------------------------------------------
 with ASF.Contexts.Faces;
 
+--  === Mail Messages ===
 --  The <b>AWA.Mail.Components.Messages</b> package defines the UI components
 --  to represent the email message with its recipients, subject and body.
 --

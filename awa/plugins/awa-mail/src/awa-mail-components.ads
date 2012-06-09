@@ -20,6 +20,7 @@ with ASF.Components.Core;
 
 with AWA.Mail.Clients;
 
+--  == Components ==
 --  The <b>AWA.Mail.Components</b> package defines several UI components that represent
 --  a mail message in an ASF view.  The components allow the creation, formatting and
 --  sending of a mail message using the same mechanism as the application presentation layer.
