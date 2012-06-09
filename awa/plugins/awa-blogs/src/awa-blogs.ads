@@ -16,6 +16,16 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+--  == Introduction ==
+--  The *blogs* plugin is a small blog application which allows users to publish articles.
+--
+--  @include blogs.xml
+--
+--  == Model ==
+--  [http://ada-awa.googlecode.com/svn/wiki/awa_blogs_model.png]
+--
+--  @include Blog.hbm.xml
+--
 package AWA.Blogs is
 
 end AWA.Blogs;
