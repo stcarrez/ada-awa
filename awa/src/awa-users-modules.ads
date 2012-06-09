@@ -42,7 +42,8 @@ with AWA.Users.Servlets;
 --  The *users* module uses a set of configuration properties to configure the OpenID
 --  integration.
 --
---  @see AWA.Users.Services
+--  @include awa-users-services.ads
+--  @include User.hbm.xml
 package AWA.Users.Modules is
 
    NAME : constant String := "users";
