@@ -63,6 +63,9 @@ with ASF.Applications;
 --           <action>#{ada_bean.action}</action>
 --       </on-event>
 --
+--  == Data Model ==
+--  @include Queues.hbm.xml
+--
 package AWA.Events is
 
    type Queue_Index is new Natural;
