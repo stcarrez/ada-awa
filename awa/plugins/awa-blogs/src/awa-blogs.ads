@@ -19,7 +19,13 @@
 --  == Introduction ==
 --  The *blogs* plugin is a small blog application which allows users to publish articles.
 --
+--  == Ada Beans ==
 --  @include blogs.xml
+--
+--  == Queries ==
+--  @include blog-admin-post-list.xml
+--  @include blog-post-list.xml
+--  @include blog-list.xml
 --
 --  == Model ==
 --  [http://ada-awa.googlecode.com/svn/wiki/awa_blogs_model.png]
