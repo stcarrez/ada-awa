@@ -16,10 +16,13 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
---  ==  Introduction ==
+--  == Introduction ==
 --  The *workspaces* plugin defines a workspace area for other plugins.
 --
---  ==  Data Model ==
+--  == Ada Beans ==
+--  @include workspaces.xml
+--
+--  == Data Model ==
 --  @include Workspace.hbm.xml
 --
 package AWA.Workspaces is
