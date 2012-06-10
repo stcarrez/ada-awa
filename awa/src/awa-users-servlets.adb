@@ -26,6 +26,7 @@ package body AWA.Users.Servlets is
    --  by the <b>Auth</b> information.  The principal will be attached to the session
    --  and will be destroyed when the session is closed.
    --  ------------------------------
+   overriding
    procedure Create_Principal (Server : in Verify_Auth_Servlet;
                                Auth   : in Security.Openid.Authentication;
                                Result : out ASF.Principals.Principal_Access) is

@@ -52,7 +52,7 @@ package body AWA.Users.Filters is
          Log.Error ("The login URI is empty.  Redirection to the login page will not work.");
       end if;
       Filter.Login_URI := To_Unbounded_String (URI);
-      Security.Filters.Auth_Filter (Filter).Initialize (Context);
+      ASF.Security.Filters.Auth_Filter (Filter).Initialize (Context);
    end Initialize;
 
    procedure Authenticate (F         : in Auth_Filter;
@@ -77,7 +77,7 @@ package body AWA.Users.Filters is
       --  Setup a new AID cookie with the new connection session.
       declare
          Cookie : constant String := Manager.Get_Authenticate_Cookie (P.Get_Session_Identifier);
-         C      : ASF.Cookies.Cookie := ASF.Cookies.Create (Security.Filters.AID_COOKIE, Cookie);
+         C      : ASF.Cookies.Cookie := ASF.Cookies.Create (ASF.Security.Filters.AID_COOKIE, Cookie);
       begin
          ASF.Cookies.Set_Path (C, Request.Get_Context_Path);
          ASF.Cookies.Set_Max_Age (C, 15 * 86400);

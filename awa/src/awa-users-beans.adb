@@ -25,8 +25,7 @@ with ASF.Contexts.Faces;
 with ASF.Contexts.Flash;
 with ASF.Cookies;
 with ASF.Applications.Messages.Factory;
-
-with Security.Filters;
+with ASF.Security.Filters;
 
 with AWA.Services.Contexts;
 package body AWA.Users.Beans is
@@ -158,7 +157,7 @@ package body AWA.Users.Beans is
                                       Principal : in AWA.Users.Principals.Principal_Access) is
       Cookie : constant String := Data.Manager.Get_Authenticate_Cookie (Principal.Get_Session_Identifier);
       Ctx    : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
-      C      : ASF.Cookies.Cookie := ASF.Cookies.Create (Security.Filters.AID_COOKIE, Cookie);
+      C      : ASF.Cookies.Cookie := ASF.Cookies.Create (ASF.Security.Filters.AID_COOKIE, Cookie);
    begin
       ASF.Cookies.Set_Path (C, Ctx.Get_Request.Get_Context_Path);
       ASF.Cookies.Set_Max_Age (C, 15 * 86400);
@@ -237,8 +236,8 @@ package body AWA.Users.Beans is
       end;
 
       --  Remove the session cookie.
-      Remove_Cookie (Security.Filters.SID_COOKIE);
-      Remove_Cookie (Security.Filters.AID_COOKIE);
+      Remove_Cookie (ASF.Security.Filters.SID_COOKIE);
+      Remove_Cookie (ASF.Security.Filters.AID_COOKIE);
    end Logout_User;
 
    --  ------------------------------

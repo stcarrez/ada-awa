@@ -17,7 +17,7 @@
 -----------------------------------------------------------------------
 with ASF.Applications;
 
-with Security.Openid.Servlets;
+with ASF.Security.Servlets;
 
 with AWA.Modules;
 with AWA.Users.Services;
@@ -42,7 +42,7 @@ with AWA.Users.Servlets;
 --  The *users* module uses a set of configuration properties to configure the OpenID
 --  integration.
 --
---  @include users.xml context-param
+--  @include users.xml
 --
 --  @include awa-users-services.ads
 --
@@ -82,7 +82,7 @@ private
       Manager     : Services.User_Service_Access := null;
       Key_Filter  : aliased AWA.Users.Filters.Verify_Filter;
       Auth_Filter : aliased AWA.Users.Filters.Auth_Filter;
-      Auth        : aliased Security.Openid.Servlets.Request_Auth_Servlet;
+      Auth        : aliased ASF.Security.Servlets.Request_Auth_Servlet;
       Verify_Auth : aliased AWA.Users.Servlets.Verify_Auth_Servlet;
    end record;
 

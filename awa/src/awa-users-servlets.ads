@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-servlets -- OpenID verification servlet for user authentication
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,8 @@
 -----------------------------------------------------------------------
 
 with ASF.Principals;
-with Security.Openid.Servlets;
+with ASF.Security.Servlets;
+with Security.Openid;
 package AWA.Users.Servlets is
 
    --  ------------------------------
@@ -28,17 +29,18 @@ package AWA.Users.Servlets is
    --  to provide our own user principal once the authentication succeeded.  At the same time,
    --  if this is the first time we see the user, s/he will be registered by using the
    --  user service.
-   type Verify_Auth_Servlet is new Security.Openid.Servlets.Verify_Auth_Servlet with private;
+   type Verify_Auth_Servlet is new ASF.Security.Servlets.Verify_Auth_Servlet with private;
 
    --  Create a principal object that correspond to the authenticated user identified
    --  by the <b>Auth</b> information.  The principal will be attached to the session
    --  and will be destroyed when the session is closed.
+   overriding
    procedure Create_Principal (Server : in Verify_Auth_Servlet;
                                Auth   : in Security.Openid.Authentication;
                                Result : out ASF.Principals.Principal_Access);
 
 private
 
-   type Verify_Auth_Servlet is new Security.Openid.Servlets.Verify_Auth_Servlet with null record;
+   type Verify_Auth_Servlet is new ASF.Security.Servlets.Verify_Auth_Servlet with null record;
 
 end AWA.Users.Servlets;

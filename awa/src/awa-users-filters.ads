@@ -24,7 +24,7 @@ with ASF.Sessions;
 with ASF.Principals;
 with ASF.Filters;
 with ASF.Servlets;
-with Security.Filters;
+with ASF.Security.Filters;
 
 with AWA.Users.Principals;
 package AWA.Users.Filters is
@@ -40,7 +40,7 @@ package AWA.Users.Filters is
    --  a given page.  If the user is not logged, it tries to login automatically
    --  by using some persistent cookie.  When this fails, it redirects the
    --  user to a login page (configured by AUTH_FILTER_REDIRECT_PARAM property).
-   type Auth_Filter is new Security.Filters.Auth_Filter with private;
+   type Auth_Filter is new ASF.Security.Filters.Auth_Filter with private;
 
    --  The configuration parameter which controls the redirection page
    --  when the user is not logged (this should be the login page).
@@ -109,7 +109,7 @@ private
 
    use Ada.Strings.Unbounded;
 
-   type Auth_Filter is new Security.Filters.Auth_Filter with record
+   type Auth_Filter is new ASF.Security.Filters.Auth_Filter with record
       Login_URI : Unbounded_String;
    end record;
 
