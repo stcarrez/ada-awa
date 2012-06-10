@@ -27,24 +27,27 @@ with ADO;
 with ADO.Sessions;
 
 --  == Introduction ==
---  The *users* module provides a *users* service which controls the users data model.
+--  The *users* module provides a *users* service which controls the user data model.
 --
 --  == Events ==
 --  The *users* module exposes a number of events which are posted when some action
 --  are performed at the service level.
 --
---    user-register
---      This event is posted when a new user is registered in the application.
---      It can be used to send a registration email.
---    user-create
---      This event is posted when a new user is created.  It can be used to trigger
---      the pre-initialization of the application for the new user.
---    user-lost-password
---      This event is posted when a user asks for a password reset through an
---      anonymous form.  It is intended to be used to send the reset password email.
---    user-reset-password
---      This event is posted when a user has successfully reset his password.
---      It can be used to send an email.
+--  === user-register ===
+--  This event is posted when a new user is registered in the application.
+--  It can be used to send a registration email.
+--
+--  === user-create ===
+--  This event is posted when a new user is created.  It can be used to trigger
+--  the pre-initialization of the application for the new user.
+--
+--  === user-lost-password ===
+--  This event is posted when a user asks for a password reset through an
+--  anonymous form.  It is intended to be used to send the reset password email.
+--
+--  === user-reset-password ===
+--  This event is posted when a user has successfully reset his password.
+--  It can be used to send an email.
 --
 package AWA.Users.Services is
 

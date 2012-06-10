@@ -42,6 +42,8 @@ with AWA.Users.Servlets;
 --  The *users* module uses a set of configuration properties to configure the OpenID
 --  integration.
 --
+--  @include users.xml context-param
+--
 --  @include awa-users-services.ads
 --
 --  @include users.xml
