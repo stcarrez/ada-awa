@@ -22,7 +22,7 @@ with ASF.Contexts.Faces;
 --  to represent the <tt>To</tt>, <tt>From</tt>, <tt>Cc</tt> and <tt>Bcc</tt> recipients.
 --
 --  The mail message is retrieved by looking at the parent UI component until a
---  <tt>UIMailMessage</b> component is found.  The mail message recipients are initialized
+--  `UIMailMessage` component is found.  The mail message recipients are initialized
 --  during the render response JSF phase, that is when <tt>Encode_End</tt> are called.
 package AWA.Mail.Components.Recipients is
 

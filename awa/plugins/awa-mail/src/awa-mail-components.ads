@@ -26,15 +26,15 @@ with AWA.Mail.Clients;
 --  sending of a mail message using the same mechanism as the application presentation layer.
 --  Example:
 --
---  <f:view xmlns="mail:http://code.google.com/p/ada-awa/mail">
---     <mail:message>
+--    <f:view xmlns="mail:http://code.google.com/p/ada-awa/mail">
+--      <mail:message>
 --        <mail:subject>Welcome</mail:subject>
 --        <mail:to name="Iorek Byrnison">Iorek.Byrnison@svalbard.com</mail:to>
 --        <mail:body>
 --            ...
 --        </mail:body>
---     </mail:message>
---  </f:view>
+--      </mail:message>
+--    </f:view>
 --
 --  When the view which contains these components is rendered, a mail message is built
 --  and initialized by rendering the inner components.  The body and other components can use
