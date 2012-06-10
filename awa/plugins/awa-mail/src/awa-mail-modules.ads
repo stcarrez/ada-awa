@@ -58,6 +58,9 @@ with AWA.Mail.Clients;
 --  @include awa-mail-components-recipients.ads
 --  @include awa-mail-components-messages.ads
 --
+--  == Ada Beans ==
+--  @include mail.xml
+--
 package AWA.Mail.Modules is
 
    NAME : constant String := "mail";
