@@ -24,7 +24,7 @@ with ASF.Servlets.Ajax;
 with ASF.Filters.Dump;
 with ASF.Servlets.Measures;
 
-with Security.Openid.Servlets;
+with ASF.Security.Servlets;
 
 with AWA.Users.Servlets;
 with AWA.Users.Modules;
@@ -95,7 +95,7 @@ private
       Measures          : aliased ASF.Servlets.Measures.Measure_Servlet;
 
       --  Authentication servlet and filter.
-      Auth              : aliased Security.Openid.Servlets.Request_Auth_Servlet;
+      Auth              : aliased ASF.Security.Servlets.Request_Auth_Servlet;
       Verify_Auth       : aliased AWA.Users.Servlets.Verify_Auth_Servlet;
 
       --  Converters shared by web requests.
