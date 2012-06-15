@@ -11,7 +11,7 @@ with "plugins/awa-workspaces/awa_workspaces";
 with "plugins/awa-storages/awa_storages";
 with "plugins/awa-mail/awa_mail";
 with "plugins/awa-blogs/awa_jobs";
-with "plugins/awa-blogs/awa_blogs";
+with "plugins/awa-jobs/awa_blogs";
 
 project Tests is
 
