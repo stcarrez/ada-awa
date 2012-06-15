@@ -32,6 +32,7 @@ with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
 with Util.Beans.Objects.Enums;
 with Util.Beans.Basic.Lists;
+with AWA.Events.Models;
 with AWA.Users.Models;
 pragma Warnings (On, "unit * is not referenced");
 package AWA.Jobs.Models is
@@ -179,11 +180,11 @@ package AWA.Jobs.Models is
 
    --  Set the message queue associated with this message
    procedure Set_Queue (Object : in out Job_Ref;
-                        Value  : in Queue_Ref'Class);
+                        Value  : in AWA.Events.Models.Queue_Ref'Class);
 
    --  Get the message queue associated with this message
    function Get_Queue (Object : in Job_Ref)
-                 return Queue_Ref'Class;
+                 return AWA.Events.Models.Queue_Ref'Class;
 
    --  Load the entity identified by 'Id'.
    --  Raises the NOT_FOUND exception if it does not exist.
@@ -300,7 +301,7 @@ private
        Results : Ada.Strings.Unbounded.Unbounded_String;
        User : AWA.Users.Models.User_Ref;
        Session : AWA.Users.Models.Session_Ref;
-       Queue : Queue_Ref;
+       Queue : AWA.Events.Models.Queue_Ref;
    end record;
    type Job_Access is access all Job_Impl;
    overriding

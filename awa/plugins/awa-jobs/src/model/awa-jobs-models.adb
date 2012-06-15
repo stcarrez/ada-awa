@@ -349,7 +349,7 @@ package body AWA.Jobs.Models is
 
 
    procedure Set_Queue (Object : in out Job_Ref;
-                        Value  : in Queue_Ref'Class) is
+                        Value  : in AWA.Events.Models.Queue_Ref'Class) is
       Impl : Job_Access;
    begin
       Set_Field (Object, Impl);
@@ -357,7 +357,7 @@ package body AWA.Jobs.Models is
    end Set_Queue;
 
    function Get_Queue (Object : in Job_Ref)
-                  return Queue_Ref'Class is
+                  return AWA.Events.Models.Queue_Ref'Class is
       Impl : constant Job_Access := Job_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Queue;
