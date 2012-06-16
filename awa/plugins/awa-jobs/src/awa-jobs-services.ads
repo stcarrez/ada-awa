@@ -35,66 +35,94 @@ package AWA.Jobs.Services is
    Invalid_Value : exception;
 
    --  ------------------------------
-   --  Job Type
+   --  Abstract_Job Type
    --  ------------------------------
-   --  The <b>Job_Type</b> is an abstract tagged record which defines a job that can be
+   --  The <b>Abstract_Job_Type</b> is an abstract tagged record which defines a job that can be
    --  scheduled and executed.
-   type Job_Type is abstract new Ada.Finalization.Limited_Controlled with private;
-   type Job_Access is access all Job_Type'Class;
+   type Abstract_Job_Type is abstract new Ada.Finalization.Limited_Controlled with private;
+   type Abstract_Job_Access is access all Abstract_Job_Type'Class;
 
    --  Execute the job.  This operation must be implemented and should perform the work
    --  represented by the job.  It should use the <tt>Get_Parameter</tt> function to retrieve
    --  the job parameter and it can use the <tt>Set_Result</tt> operation to save the result.
-   procedure Execute (Job : in out Job_Type) is abstract;
+   procedure Execute (Job : in out Abstract_Job_Type) is abstract;
 
    --  Set the job parameter identified by the <b>Name</b> to the value given in <b>Value</b>.
-   procedure Set_Parameter (Job   : in out Job_Type;
+   procedure Set_Parameter (Job   : in out Abstract_Job_Type;
                             Name  : in String;
                             Value : in String);
 
    --  Set the job parameter identified by the <b>Name</b> to the value given in <b>Value</b>.
    --  The value object can hold any kind of basic value type (integer, enum, date, strings).
    --  If the value represents a bean, the <tt>Invalid_Value</tt> exception is raised.
-   procedure Set_Parameter (Job   : in out Job_Type;
+   procedure Set_Parameter (Job   : in out Abstract_Job_Type;
                             Name  : in String;
                             Value : in Util.Beans.Objects.Object);
 
    --  Get the job parameter identified by the <b>Name</b> and convert the value into a string.
-   function Get_Parameter (Job  : in Job_Type;
+   function Get_Parameter (Job  : in Abstract_Job_Type;
                            Name : in String) return String;
 
    --  Get the job parameter identified by the <b>Name</b> and return it as a typed object.
-   function Get_Parameter (Job  : in Job_Type;
+   function Get_Parameter (Job  : in Abstract_Job_Type;
                            Name : in String) return Util.Beans.Objects.Object;
 
    --  Get the job status.
-   function Get_Status (Job : in Job_Type) return AWA.Jobs.Models.Job_Status_Type;
+   function Get_Status (Job : in Abstract_Job_Type) return AWA.Jobs.Models.Job_Status_Type;
 
    --  Set the job status.
    --  When the job is terminated, it is closed and the job parameters or results cannot be
    --  changed.
-   procedure Set_Status (Job    : in out Job_Type;
+   procedure Set_Status (Job    : in out Abstract_Job_Type;
                          Status : in AWA.Jobs.Models.Job_Status_Type);
 
-   type Create_Job_Access is access function return Job_Access;
+   type Create_Job_Access is access function return Abstract_Job_Access;
+
+   type Job_Factory is abstract tagged null record;
+   function Create (Factory : in Job_Factory) return Abstract_Job_Access is abstract;
+
+   type Work_Access is access procedure (Job : in out Abstract_Job_Type'Class);
+
+   type Job_Type is new Abstract_Job_Type with private;
+
+   procedure Set_Work (Job  : in out Job_Type;
+                       Work : in Work_Access);
+
+   procedure Execute (Job : in out Job_Type);
 
    --  ------------------------------
    --  Job Declaration
    --  ------------------------------
    --  The <tt>Definition</tt> package must be instantiated with a given job type to
    --  register the new job definition.
-   generic
-      type T is new Job_Type with private;
-   package Definition is
-      function Create return Job_Access;
-   end Definition;
+--     generic
+--        type T is new Abstract_Job_Type with private;
+--     package Definition is
+--        type Job_Type_Factory is new Job_Factory with null record;
+--
+--        overriding
+--        function Create (Factory : in Job_Type_Factory) return Abstract_Job_Access;
+--     end Definition;
+--
+--     generic
+--        with procedure Execute (Job : in out Abstract_Job_Type);
+--     package Job_Definition is
+--        type Job_Type_Factory is new Job_Factory with null record;
+--
+--        overriding
+--        function Create (Factory : in Job_Type_Factory) return Abstract_Job_Access;
+--     end Job_Definition;
 
 private
 
-   type Job_Type is abstract new Ada.Finalization.Limited_Controlled with record
+   type Abstract_Job_Type is abstract new Ada.Finalization.Limited_Controlled with record
       Job     : AWA.Jobs.Models.Job_Ref;
       Props   : Util.Beans.Objects.Maps.Map;
       Results : Util.Beans.Objects.Maps.Map;
+   end record;
+
+   type Job_Type is new Abstract_Job_Type with record
+      Work : Work_Access;
    end record;
 
 end AWA.Jobs.Services;
