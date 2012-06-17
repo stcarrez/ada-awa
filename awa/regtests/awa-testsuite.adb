@@ -37,6 +37,7 @@ with AWA.Storages.Modules;
 with AWA.Converters.Dates;
 with AWA.Tests;
 with AWA.Services.Contexts;
+with AWA.Jobs.Services.Tests;
 
 with ASF.Server.Web;
 with ASF.Server.Tests;
@@ -68,6 +69,7 @@ package body AWA.Testsuite is
       AWA.Users.Tests.Add_Tests (Ret);
       AWA.Wikis.Parsers.Tests.Add_Tests (Ret);
       AWA.Helpers.Selectors.Tests.Add_Tests (Ret);
+      AWA.Jobs.Services.Tests.Add_Tests (Ret);
       AWA.Blogs.Services.Tests.Add_Tests (Ret);
       AWA.Storages.Services.Tests.Add_Tests (Ret);
       return Ret;
