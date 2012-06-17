@@ -15,6 +15,8 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Ada.Tags;
+
 with Util.Log.Loggers;
 
 with AWA.Modules.Get;
@@ -52,11 +54,14 @@ package body AWA.Jobs.Modules is
    --  ------------------------------
    --  Registers the job work procedure represented by <b>Work</b> under the name <b>Name</b>.
    --  ------------------------------
-   procedure Register (Plugin : in out Job_Module;
-                       Work   : in AWA.Jobs.Services.Work_Access;
-                       Name   : in String) is
+   procedure Register (Plugin     : in out Job_Module;
+                       Definition : in AWA.Jobs.Services.Job_Factory_Access) is
+      Name : constant String := Ada.Tags.Expanded_Name (Definition.all'Tag);
+      Ename : constant String := Ada.Tags.External_Tag (Definition.all'Tag);
    begin
-      null;
+      Log.Info ("Register job {0} - {1}", Name, Ename);
+
+      Plugin.Factory.Include (Name, Definition);
    end Register;
 
 end AWA.Jobs.Modules;

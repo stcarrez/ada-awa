@@ -15,6 +15,8 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Ada.Containers.Indefinite_Hashed_Maps;
+with Ada.Strings.Hash;
 
 with ASF.Applications;
 
@@ -42,12 +44,22 @@ package AWA.Jobs.Modules is
    function Get_Job_Module return Job_Module_Access;
 
    --  Registers the job work procedure represented by <b>Work</b> under the name <b>Name</b>.
-   procedure Register (Plugin : in out Job_Module;
-                       Work   : in AWA.Jobs.Services.Work_Access;
-                       Name   : in String);
+   procedure Register (Plugin     : in out Job_Module;
+                       Definition : in AWA.Jobs.Services.Job_Factory_Access);
 
 private
 
-   type Job_Module is new AWA.Modules.Module with null record;
+   use AWA.Jobs.Services;
+
+   --  A factory map to create job instances.
+   package Job_Factory_Map is
+     new Ada.Containers.Indefinite_Hashed_Maps (Key_Type        => String,
+                                                Element_Type    => Job_Factory_Access,
+                                                Hash            => Ada.Strings.Hash,
+                                                Equivalent_Keys => "=");
+
+   type Job_Module is new AWA.Modules.Module with record
+      Factory : Job_Factory_Map.Map;
+   end record;
 
 end AWA.Jobs.Modules;
