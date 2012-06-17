@@ -20,10 +20,10 @@ CREATE TABLE awa_jobs (
   /* the job results */
   `results` VARCHAR(60000) NOT NULL,
   /* the user who triggered the job */
-  `user_id` INTEGER NOT NULL,
+  `user_id` INTEGER ,
   /* the user session who triggered the job */
-  `session_id` INTEGER NOT NULL,
+  `session_id` INTEGER ,
   /* the message creation event associated with this job */
-  `event_id` INTEGER NOT NULL
+  `event_id` INTEGER 
 );
 INSERT INTO entity_type (name) VALUES ("awa_jobs");
