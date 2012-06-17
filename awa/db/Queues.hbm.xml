@@ -90,6 +90,14 @@
             <column name="status" not-null="true" unique="false" sql-type="INTEGER"/>
             <type name="AWA.Events.Models.Message_Status_Type"/>
         </property>
+        <property name="entity_type" type="ADO.Entity_Type">
+            <comment>an optional entity type associated with the `entity_id`</comment>
+            <column name="entity_type" not-null="false" unique="false" sql-type="INTEGER"/>
+        </property>
+       <property name="entity_id" type="ADO.Identifier" update="false">
+            <comment>an optional entity identifier to link the event to another database entity</comment>
+            <column name="entity_id" not-null="false" unique="false" sql-type="BIGINT"/>
+        </property>
         <many-to-one name="user" class="AWA.Users.Models.User" foreign-key="ID" not-null="true" lazy="proxy" fetch="select">
             <comment>the user who triggered the message</comment>
             <column name="user_id" not-null="true" sql-type="INTEGER"/>

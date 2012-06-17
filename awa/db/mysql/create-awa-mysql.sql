@@ -74,6 +74,10 @@ CREATE TABLE awa_message (
   `finish_date` DATETIME ,
   /* the message status */
   `status` INTEGER NOT NULL,
+  /* an optional entity type associated with the `entity_id` */
+  `entity_type` INTEGER ,
+  /* an optional entity identifier to link the event to another database entity */
+  `entity_id` BIGINT ,
   /* the message type */
   `type` INTEGER NOT NULL,
   /* the user who triggered the message */
@@ -344,6 +348,39 @@ CREATE TABLE awa_image_folder (
 INSERT INTO entity_type (name) VALUES
 ("awa_image")
 ,("awa_image_folder")
+;
+/* Copied from awa-jobs-mysql.sql*/
+/* File generated automatically by dynamo */
+/* The jobs table. */
+CREATE TABLE awa_jobs (
+  /* the jobs id */
+  `id` BIGINT NOT NULL,
+  /* the jobs version */
+  `version` int ,
+  /* the jobs name */
+  `name` VARCHAR(256) ,
+  /* the jobs creation date */
+  `create_date` DATETIME ,
+  /* the jobs start date */
+  `start_date` DATETIME ,
+  /* the jobs finish date */
+  `finish_date` DATETIME ,
+  /* the job status */
+  `status` INTEGER NOT NULL,
+  /* the job messages */
+  `messages` VARCHAR(60000) NOT NULL,
+  /* the job results */
+  `results` VARCHAR(60000) NOT NULL,
+  /* the user who triggered the job */
+  `user_id` INTEGER NOT NULL,
+  /* the user session who triggered the job */
+  `session_id` INTEGER NOT NULL,
+  /* the message creation event associated with this job */
+  `event_id` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
+);
+INSERT INTO entity_type (name) VALUES
+("awa_jobs")
 ;
 /* Copied from awa-blogs-mysql.sql*/
 /* File generated automatically by dynamo */

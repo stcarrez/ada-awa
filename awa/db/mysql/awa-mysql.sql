@@ -47,6 +47,10 @@ CREATE TABLE awa_message (
   `finish_date` DATETIME ,
   /* the message status */
   `status` INTEGER NOT NULL,
+  /* an optional entity type associated with the `entity_id` */
+  `entity_type` INTEGER ,
+  /* an optional entity identifier to link the event to another database entity */
+  `entity_id` BIGINT ,
   /* the message type */
   `type` INTEGER NOT NULL,
   /* the user who triggered the message */

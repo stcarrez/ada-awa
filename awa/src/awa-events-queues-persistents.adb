@@ -23,6 +23,7 @@ with Util.Serialize.IO.XML;
 with Util.Properties;
 with Util.Streams.Texts;
 with Util.Streams.Buffered;
+with Util.Serialize.Tools;
 
 with AWA.Services.Contexts;
 with AWA.Users.Models;

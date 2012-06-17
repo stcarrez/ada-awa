@@ -12,6 +12,9 @@ DROP TABLE IF EXISTS `access_key`;
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `blog_post`;
 DROP TABLE IF EXISTS `blog`;
+/* Copied from awa-jobs-drop-mysql.sql*/
+/* File generated automatically by dynamo */
+DROP TABLE IF EXISTS `awa_jobs`;
 /* Copied from awa-images-drop-mysql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `awa_image_folder`;
