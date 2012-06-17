@@ -113,7 +113,8 @@ package body AWA.Jobs.Services is
    end Save;
 
    --  Schedule the job.
-   procedure Schedule (Job    : in out Abstract_Job_Type) is
+   procedure Schedule (Job        : in out Abstract_Job_Type;
+                       Definition : in Job_Factory'Class) is
       Ctx : constant AWA.Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB   : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Msg  : AWA.Events.Models.Message_Ref;
@@ -127,6 +128,7 @@ package body AWA.Jobs.Services is
       Job.Job.Set_Create_Date (Ada.Calendar.Clock);
 
       DB.Begin_Transaction;
+      Job.Job.Set_Name (Definition.Get_Name);
       Job.Job.Set_User (User);
       Job.Job.Set_Session (Sess);
       Job.Save (DB);

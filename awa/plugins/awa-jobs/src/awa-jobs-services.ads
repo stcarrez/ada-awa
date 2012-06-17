@@ -102,7 +102,8 @@ package AWA.Jobs.Services is
                    DB  : in out ADO.Sessions.Master_Session'Class);
 
    --  Schedule the job.
-   procedure Schedule (Job    : in out Abstract_Job_Type);
+   procedure Schedule (Job        : in out Abstract_Job_Type;
+                       Definition : in Job_Factory'Class);
 
    --  ------------------------------
    --  Work Factory
