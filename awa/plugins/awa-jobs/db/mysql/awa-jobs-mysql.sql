@@ -15,12 +15,6 @@ CREATE TABLE awa_jobs (
   `finish_date` DATETIME ,
   /* the job status */
   `status` INTEGER NOT NULL,
-  /* the server which is processing this job */
-  `server_id` INTEGER NOT NULL,
-  /* the task within the server which is processing this job */
-  `task_id` INTEGER NOT NULL,
-  /* the job parameters */
-  `parameters` VARCHAR(60000) NOT NULL,
   /* the job messages */
   `messages` VARCHAR(60000) NOT NULL,
   /* the job results */
@@ -29,8 +23,8 @@ CREATE TABLE awa_jobs (
   `user_id` INTEGER NOT NULL,
   /* the user session who triggered the job */
   `session_id` INTEGER NOT NULL,
-  /* the message queue associated with this message */
-  `queue_id` INTEGER NOT NULL,
+  /* the message creation event associated with this job */
+  `event_id` INTEGER NOT NULL,
   PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES

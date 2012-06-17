@@ -43,18 +43,6 @@
             <column name="status" not-null="true" unique="false" sql-type="INTEGER"/>
             <type name="AWA.Jobs.Models.Job_Status_Type"/>
         </property>
-        <property name="server_id" type="Integer">
-            <comment>the server which is processing this job</comment>
-            <column name="server_id" not-null="true" unique="false" sql-type="INTEGER"/>
-        </property>
-        <property name="task_id" type="Integer">
-            <comment>the task within the server which is processing this job</comment>
-            <column name="task_id" not-null="true" unique="false" sql-type="INTEGER"/>
-        </property>
-        <property name="parameters" type="String">
-            <comment>the job parameters</comment>
-            <column name="parameters" not-null="true" unique="false" sql-type="VARCHAR(60000)"/>
-        </property>
         <property name="messages" type="String">
             <comment>the job messages</comment>
             <column name="messages" not-null="true" unique="false" sql-type="VARCHAR(60000)"/>
@@ -71,9 +59,9 @@
             <comment>the user session who triggered the job</comment>
             <column name="session_id" not-null="true" sql-type="INTEGER"/>
         </many-to-one>
-        <many-to-one name="queue" class="AWA.Events.Models.Queue" foreign-key="ID" not-null="true" lazy="proxy" fetch="select">
-            <comment>the message queue associated with this message</comment>
-            <column name="queue_id" not-null="true" sql-type="INTEGER"/>
+        <many-to-one name="event" class="AWA.Events.Models.Message" foreign-key="ID" not-null="true" lazy="proxy" fetch="select">
+            <comment>the message creation event associated with this job</comment>
+            <column name="event_id" not-null="true" sql-type="INTEGER"/>
         </many-to-one>
     </class>
 </hibernate-mapping>

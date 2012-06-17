@@ -26,13 +26,21 @@ with Util.Beans.Objects.Maps;
 
 with ASF.Applications;
 
+with ADO.Sessions;
+
+with AWA.Events;
 with AWA.Jobs.Models;
 
 package AWA.Jobs.Services is
 
    Closed_Error  : exception;
 
+   Schedule_Error : exception;
+
    Invalid_Value : exception;
+
+   --  Event posted when a job is created.
+   package Job_Create_Event is new AWA.Events.Definition (Name => "job-create");
 
    --  ------------------------------
    --  Abstract_Job Type
@@ -76,6 +84,14 @@ package AWA.Jobs.Services is
    procedure Set_Status (Job    : in out Abstract_Job_Type;
                          Status : in AWA.Jobs.Models.Job_Status_Type);
 
+   --  Save the job information in the database.  Use the database session defined by <b>DB</b>
+   --  to save the job.
+   procedure Save (Job : in out Abstract_Job_Type;
+                   DB  : in out ADO.Sessions.Master_Session'Class);
+
+   --  Schedule the job.
+   procedure Schedule (Job    : in out Abstract_Job_Type);
+
    type Create_Job_Access is access function return Abstract_Job_Access;
 
    type Job_Factory is abstract tagged null record;
@@ -116,9 +132,11 @@ package AWA.Jobs.Services is
 private
 
    type Abstract_Job_Type is abstract new Ada.Finalization.Limited_Controlled with record
-      Job     : AWA.Jobs.Models.Job_Ref;
-      Props   : Util.Beans.Objects.Maps.Map;
-      Results : Util.Beans.Objects.Maps.Map;
+      Job              : AWA.Jobs.Models.Job_Ref;
+      Props            : Util.Beans.Objects.Maps.Map;
+      Results          : Util.Beans.Objects.Maps.Map;
+      Props_Modified   : Boolean := False;
+      Results_Modified : Boolean := False;
    end record;
 
    type Job_Type is new Abstract_Job_Type with record

@@ -15,14 +15,19 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Util.Serialize.Tools;
+with Util.Log.Loggers;
 
+with Ada.Calendar;
+
+with ADO.Sessions.Entities;
+
+with AWA.Users.Models;
+with AWA.Events.Models;
+with AWA.Services.Contexts;
 package body AWA.Jobs.Services is
 
-   --  ------------------------------
-   --  Job Type
-   --  ------------------------------
-   --  The <b>Job_Type</b> is an abstract tagged record which defines a job that can be
-   --  scheduled and executed.
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Jobs.Services");
 
    --  ------------------------------
    --  Set the job parameter identified by the <b>Name</b> to the value given in <b>Value</b>.
@@ -44,6 +49,7 @@ package body AWA.Jobs.Services is
                             Value : in Util.Beans.Objects.Object) is
    begin
       Job.Props.Include (Name, Value);
+      Job.Props_Modified := True;
    end Set_Parameter;
 
    --  ------------------------------
@@ -90,6 +96,56 @@ package body AWA.Jobs.Services is
 
       end case;
    end Set_Status;
+
+   --  ------------------------------
+   --  Save the job information in the database.  Use the database session defined by <b>DB</b>
+   --  to save the job.
+   --  ------------------------------
+   procedure Save (Job : in out Abstract_Job_Type;
+                   DB  : in out ADO.Sessions.Master_Session'Class) is
+   begin
+      if Job.Results_Modified then
+         Job.Job.Set_Results (Util.Serialize.Tools.To_JSON (Job.Results));
+         Job.Results_Modified := False;
+      end if;
+      Job.Job.Save (DB);
+   end Save;
+
+   --  Schedule the job.
+   procedure Schedule (Job    : in out Abstract_Job_Type) is
+      Ctx : constant AWA.Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB   : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Msg  : AWA.Events.Models.Message_Ref;
+      User : constant AWA.Users.Models.User_Ref := Ctx.Get_User;
+      Sess : constant AWA.Users.Models.Session_Ref := Ctx.Get_User_Session;
+   begin
+      if Job.Job.Is_Inserted then
+         Log.Error ("Job is already scheduled");
+         raise Schedule_Error with "The job is already scheduled.";
+      end if;
+      Job.Job.Set_Create_Date (Ada.Calendar.Clock);
+
+      DB.Begin_Transaction;
+      Job.Job.Set_User (User);
+      Job.Job.Set_Session (Sess);
+      Job.Save (DB);
+
+      --  Create the event
+--        Msg.Set_Message_Type
+      Msg.Set_Parameters (Util.Serialize.Tools.To_JSON (Job.Props));
+      Msg.Set_Create_Date (Job.Job.Get_Create_Date);
+      Msg.Set_User (User);
+      Msg.Set_Session (Sess);
+      Msg.Set_Status (AWA.Events.Models.QUEUED);
+      Msg.Set_Entity_Id (Job.Job.Get_Id);
+      Msg.Set_Entity_Type (ADO.Sessions.Entities.Find_Entity_Type (Session => DB,
+                                                                   Object  => Job.Job.Get_Key));
+      Msg.Save (DB);
+
+      Job.Job.Set_Event (Msg);
+      Job.Job.Save (DB);
+      DB.Commit;
+   end Schedule;
 
    procedure Register (Name : in String;
                        Create : in Create_Job_Access) is

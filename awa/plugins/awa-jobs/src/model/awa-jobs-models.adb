@@ -67,8 +67,6 @@ package body AWA.Jobs.Models is
       Impl.Start_Date.Is_Null := True;
       Impl.Finish_Date.Is_Null := True;
       Impl.Status := Job_Status_Type'First;
-      Impl.Server_Id := 0;
-      Impl.Task_Id := 0;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -195,75 +193,12 @@ package body AWA.Jobs.Models is
    end Get_Status;
 
 
-   procedure Set_Server_Id (Object : in out Job_Ref;
-                            Value  : in Integer) is
-      Impl : Job_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Integer (Impl.all, 8, Impl.Server_Id, Value);
-      ADO.Objects.Set_Field_Integer (Impl.all, 8, Impl.Server_Id, Value);
-   end Set_Server_Id;
-
-   function Get_Server_Id (Object : in Job_Ref)
-                  return Integer is
-      Impl : constant Job_Access := Job_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Server_Id;
-   end Get_Server_Id;
-
-
-   procedure Set_Task_Id (Object : in out Job_Ref;
-                          Value  : in Integer) is
-      Impl : Job_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Integer (Impl.all, 9, Impl.Task_Id, Value);
-      ADO.Objects.Set_Field_Integer (Impl.all, 9, Impl.Task_Id, Value);
-   end Set_Task_Id;
-
-   function Get_Task_Id (Object : in Job_Ref)
-                  return Integer is
-      Impl : constant Job_Access := Job_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Task_Id;
-   end Get_Task_Id;
-
-
-   procedure Set_Parameters (Object : in out Job_Ref;
-                              Value : in String) is
-      Impl : Job_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 10, Impl.Parameters, Value);
-   end Set_Parameters;
-
-   procedure Set_Parameters (Object : in out Job_Ref;
-                             Value  : in Ada.Strings.Unbounded.Unbounded_String) is
-      Impl : Job_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 10, Impl.Parameters, Value);
-   end Set_Parameters;
-
-   function Get_Parameters (Object : in Job_Ref)
-                 return String is
-   begin
-      return Ada.Strings.Unbounded.To_String (Object.Get_Parameters);
-   end Get_Parameters;
-   function Get_Parameters (Object : in Job_Ref)
-                  return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Job_Access := Job_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Parameters;
-   end Get_Parameters;
-
-
    procedure Set_Messages (Object : in out Job_Ref;
                             Value : in String) is
       Impl : Job_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 11, Impl.Messages, Value);
+      ADO.Objects.Set_Field_String (Impl.all, 8, Impl.Messages, Value);
    end Set_Messages;
 
    procedure Set_Messages (Object : in out Job_Ref;
@@ -271,7 +206,7 @@ package body AWA.Jobs.Models is
       Impl : Job_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 11, Impl.Messages, Value);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 8, Impl.Messages, Value);
    end Set_Messages;
 
    function Get_Messages (Object : in Job_Ref)
@@ -292,7 +227,7 @@ package body AWA.Jobs.Models is
       Impl : Job_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 12, Impl.Results, Value);
+      ADO.Objects.Set_Field_String (Impl.all, 9, Impl.Results, Value);
    end Set_Results;
 
    procedure Set_Results (Object : in out Job_Ref;
@@ -300,7 +235,7 @@ package body AWA.Jobs.Models is
       Impl : Job_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 12, Impl.Results, Value);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 9, Impl.Results, Value);
    end Set_Results;
 
    function Get_Results (Object : in Job_Ref)
@@ -321,7 +256,7 @@ package body AWA.Jobs.Models is
       Impl : Job_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 13, Impl.User, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 10, Impl.User, Value);
    end Set_User;
 
    function Get_User (Object : in Job_Ref)
@@ -337,7 +272,7 @@ package body AWA.Jobs.Models is
       Impl : Job_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 14, Impl.Session, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 11, Impl.Session, Value);
    end Set_Session;
 
    function Get_Session (Object : in Job_Ref)
@@ -348,20 +283,20 @@ package body AWA.Jobs.Models is
    end Get_Session;
 
 
-   procedure Set_Queue (Object : in out Job_Ref;
-                        Value  : in AWA.Events.Models.Queue_Ref'Class) is
+   procedure Set_Event (Object : in out Job_Ref;
+                        Value  : in AWA.Events.Models.Message_Ref'Class) is
       Impl : Job_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 15, Impl.Queue, Value);
-   end Set_Queue;
+      ADO.Objects.Set_Field_Object (Impl.all, 12, Impl.Event, Value);
+   end Set_Event;
 
-   function Get_Queue (Object : in Job_Ref)
-                  return AWA.Events.Models.Queue_Ref'Class is
+   function Get_Event (Object : in Job_Ref)
+                  return AWA.Events.Models.Message_Ref'Class is
       Impl : constant Job_Access := Job_Impl (Object.Get_Load_Object.all)'Access;
    begin
-      return Impl.Queue;
-   end Get_Queue;
+      return Impl.Event;
+   end Get_Event;
 
    --  Copy of the object.
    procedure Copy (Object : in Job_Ref;
@@ -383,14 +318,11 @@ package body AWA.Jobs.Models is
             Copy.Start_Date := Impl.Start_Date;
             Copy.Finish_Date := Impl.Finish_Date;
             Copy.Status := Impl.Status;
-            Copy.Server_Id := Impl.Server_Id;
-            Copy.Task_Id := Impl.Task_Id;
-            Copy.Parameters := Impl.Parameters;
             Copy.Messages := Impl.Messages;
             Copy.Results := Impl.Results;
             Copy.User := Impl.User;
             Copy.Session := Impl.Session;
-            Copy.Queue := Impl.Queue;
+            Copy.Event := Impl.Event;
          end;
       end if;
       Into := Result;
@@ -547,44 +479,29 @@ package body AWA.Jobs.Models is
          Object.Clear_Modified (7);
       end if;
       if Object.Is_Modified (8) then
-         Stmt.Save_Field (Name  => COL_7_1_NAME, --  server_id
-                          Value => Object.Server_Id);
+         Stmt.Save_Field (Name  => COL_7_1_NAME, --  messages
+                          Value => Object.Messages);
          Object.Clear_Modified (8);
       end if;
       if Object.Is_Modified (9) then
-         Stmt.Save_Field (Name  => COL_8_1_NAME, --  task_id
-                          Value => Object.Task_Id);
+         Stmt.Save_Field (Name  => COL_8_1_NAME, --  results
+                          Value => Object.Results);
          Object.Clear_Modified (9);
       end if;
       if Object.Is_Modified (10) then
-         Stmt.Save_Field (Name  => COL_9_1_NAME, --  parameters
-                          Value => Object.Parameters);
+         Stmt.Save_Field (Name  => COL_9_1_NAME, --  user_id
+                          Value => Object.User);
          Object.Clear_Modified (10);
       end if;
       if Object.Is_Modified (11) then
-         Stmt.Save_Field (Name  => COL_10_1_NAME, --  messages
-                          Value => Object.Messages);
+         Stmt.Save_Field (Name  => COL_10_1_NAME, --  session_id
+                          Value => Object.Session);
          Object.Clear_Modified (11);
       end if;
       if Object.Is_Modified (12) then
-         Stmt.Save_Field (Name  => COL_11_1_NAME, --  results
-                          Value => Object.Results);
+         Stmt.Save_Field (Name  => COL_11_1_NAME, --  event_id
+                          Value => Object.Event);
          Object.Clear_Modified (12);
-      end if;
-      if Object.Is_Modified (13) then
-         Stmt.Save_Field (Name  => COL_12_1_NAME, --  user_id
-                          Value => Object.User);
-         Object.Clear_Modified (13);
-      end if;
-      if Object.Is_Modified (14) then
-         Stmt.Save_Field (Name  => COL_13_1_NAME, --  session_id
-                          Value => Object.Session);
-         Object.Clear_Modified (14);
-      end if;
-      if Object.Is_Modified (15) then
-         Stmt.Save_Field (Name  => COL_14_1_NAME, --  queue_id
-                          Value => Object.Queue);
-         Object.Clear_Modified (15);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -630,22 +547,16 @@ package body AWA.Jobs.Models is
                         Value => Object.Finish_Date);
       Query.Save_Field (Name  => COL_6_1_NAME, --  status
                         Value => Integer (Job_Status_Type'Pos (Object.Status)));
-      Query.Save_Field (Name  => COL_7_1_NAME, --  server_id
-                        Value => Object.Server_Id);
-      Query.Save_Field (Name  => COL_8_1_NAME, --  task_id
-                        Value => Object.Task_Id);
-      Query.Save_Field (Name  => COL_9_1_NAME, --  parameters
-                        Value => Object.Parameters);
-      Query.Save_Field (Name  => COL_10_1_NAME, --  messages
+      Query.Save_Field (Name  => COL_7_1_NAME, --  messages
                         Value => Object.Messages);
-      Query.Save_Field (Name  => COL_11_1_NAME, --  results
+      Query.Save_Field (Name  => COL_8_1_NAME, --  results
                         Value => Object.Results);
-      Query.Save_Field (Name  => COL_12_1_NAME, --  user_id
+      Query.Save_Field (Name  => COL_9_1_NAME, --  user_id
                         Value => Object.User);
-      Query.Save_Field (Name  => COL_13_1_NAME, --  session_id
+      Query.Save_Field (Name  => COL_10_1_NAME, --  session_id
                         Value => Object.Session);
-      Query.Save_Field (Name  => COL_14_1_NAME, --  queue_id
-                        Value => Object.Queue);
+      Query.Save_Field (Name  => COL_11_1_NAME, --  event_id
+                        Value => Object.Event);
       Query.Execute (Result);
       if Result /= 1 then
          raise ADO.Objects.INSERT_ERROR;
@@ -698,15 +609,6 @@ package body AWA.Jobs.Models is
       if Name = "status" then
          return Job_Status_Type_Objects.To_Object (Impl.Status);
       end if;
-      if Name = "server_id" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Server_Id));
-      end if;
-      if Name = "task_id" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Task_Id));
-      end if;
-      if Name = "parameters" then
-         return Util.Beans.Objects.To_Object (Impl.Parameters);
-      end if;
       if Name = "messages" then
          return Util.Beans.Objects.To_Object (Impl.Messages);
       end if;
@@ -751,19 +653,16 @@ package body AWA.Jobs.Models is
       Object.Finish_Date := Stmt.Get_Time (5);
       Object.Status := Job_Status_Type'Val (Stmt.Get_Identifier (6));
       Object.Status := Job_Status_Type'Val (Stmt.Get_Integer (6));
-      Object.Server_Id := Stmt.Get_Integer (7);
-      Object.Task_Id := Stmt.Get_Integer (8);
-      Object.Parameters := Stmt.Get_Unbounded_String (9);
-      Object.Messages := Stmt.Get_Unbounded_String (10);
-      Object.Results := Stmt.Get_Unbounded_String (11);
-      if not Stmt.Is_Null (12) then
-         Object.User.Set_Key_Value (Stmt.Get_Identifier (12), Session);
+      Object.Messages := Stmt.Get_Unbounded_String (7);
+      Object.Results := Stmt.Get_Unbounded_String (8);
+      if not Stmt.Is_Null (9) then
+         Object.User.Set_Key_Value (Stmt.Get_Identifier (9), Session);
       end if;
-      if not Stmt.Is_Null (13) then
-         Object.Session.Set_Key_Value (Stmt.Get_Identifier (13), Session);
+      if not Stmt.Is_Null (10) then
+         Object.Session.Set_Key_Value (Stmt.Get_Identifier (10), Session);
       end if;
-      if not Stmt.Is_Null (14) then
-         Object.Queue.Set_Key_Value (Stmt.Get_Identifier (14), Session);
+      if not Stmt.Is_Null (11) then
+         Object.Event.Set_Key_Value (Stmt.Get_Identifier (11), Session);
       end if;
       Object.Version := Stmt.Get_Integer (1);
       ADO.Objects.Set_Created (Object);

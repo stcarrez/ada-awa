@@ -110,34 +110,6 @@ package AWA.Jobs.Models is
    function Get_Status (Object : in Job_Ref)
                  return Job_Status_Type;
 
-   --  Set the server which is processing this job
-   procedure Set_Server_Id (Object : in out Job_Ref;
-                            Value  : in Integer);
-
-   --  Get the server which is processing this job
-   function Get_Server_Id (Object : in Job_Ref)
-                 return Integer;
-
-   --  Set the task within the server which is processing this job
-   procedure Set_Task_Id (Object : in out Job_Ref;
-                          Value  : in Integer);
-
-   --  Get the task within the server which is processing this job
-   function Get_Task_Id (Object : in Job_Ref)
-                 return Integer;
-
-   --  Set the job parameters
-   procedure Set_Parameters (Object : in out Job_Ref;
-                             Value  : in Ada.Strings.Unbounded.Unbounded_String);
-   procedure Set_Parameters (Object : in out Job_Ref;
-                             Value : in String);
-
-   --  Get the job parameters
-   function Get_Parameters (Object : in Job_Ref)
-                 return Ada.Strings.Unbounded.Unbounded_String;
-   function Get_Parameters (Object : in Job_Ref)
-                 return String;
-
    --  Set the job messages
    procedure Set_Messages (Object : in out Job_Ref;
                            Value  : in Ada.Strings.Unbounded.Unbounded_String);
@@ -178,13 +150,13 @@ package AWA.Jobs.Models is
    function Get_Session (Object : in Job_Ref)
                  return AWA.Users.Models.Session_Ref'Class;
 
-   --  Set the message queue associated with this message
-   procedure Set_Queue (Object : in out Job_Ref;
-                        Value  : in AWA.Events.Models.Queue_Ref'Class);
+   --  Set the message creation event associated with this job
+   procedure Set_Event (Object : in out Job_Ref;
+                        Value  : in AWA.Events.Models.Message_Ref'Class);
 
-   --  Get the message queue associated with this message
-   function Get_Queue (Object : in Job_Ref)
-                 return AWA.Events.Models.Queue_Ref'Class;
+   --  Get the message creation event associated with this job
+   function Get_Event (Object : in Job_Ref)
+                 return AWA.Events.Models.Message_Ref'Class;
 
    --  Load the entity identified by 'Id'.
    --  Raises the NOT_FOUND exception if it does not exist.
@@ -253,16 +225,13 @@ private
    COL_4_1_NAME : aliased constant String := "start_date";
    COL_5_1_NAME : aliased constant String := "finish_date";
    COL_6_1_NAME : aliased constant String := "status";
-   COL_7_1_NAME : aliased constant String := "server_id";
-   COL_8_1_NAME : aliased constant String := "task_id";
-   COL_9_1_NAME : aliased constant String := "parameters";
-   COL_10_1_NAME : aliased constant String := "messages";
-   COL_11_1_NAME : aliased constant String := "results";
-   COL_12_1_NAME : aliased constant String := "user_id";
-   COL_13_1_NAME : aliased constant String := "session_id";
-   COL_14_1_NAME : aliased constant String := "queue_id";
+   COL_7_1_NAME : aliased constant String := "messages";
+   COL_8_1_NAME : aliased constant String := "results";
+   COL_9_1_NAME : aliased constant String := "user_id";
+   COL_10_1_NAME : aliased constant String := "session_id";
+   COL_11_1_NAME : aliased constant String := "event_id";
    JOB_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 15,
+     (Count => 12,
       Table => JOB_NAME'Access,
       Members => (
          COL_0_1_NAME'Access,
@@ -276,10 +245,7 @@ private
          COL_8_1_NAME'Access,
          COL_9_1_NAME'Access,
          COL_10_1_NAME'Access,
-         COL_11_1_NAME'Access,
-         COL_12_1_NAME'Access,
-         COL_13_1_NAME'Access,
-         COL_14_1_NAME'Access
+         COL_11_1_NAME'Access
 )
      );
    Null_Job : constant Job_Ref
@@ -294,14 +260,11 @@ private
        Start_Date : ADO.Nullable_Time;
        Finish_Date : ADO.Nullable_Time;
        Status : Job_Status_Type;
-       Server_Id : Integer;
-       Task_Id : Integer;
-       Parameters : Ada.Strings.Unbounded.Unbounded_String;
        Messages : Ada.Strings.Unbounded.Unbounded_String;
        Results : Ada.Strings.Unbounded.Unbounded_String;
        User : AWA.Users.Models.User_Ref;
        Session : AWA.Users.Models.Session_Ref;
-       Queue : AWA.Events.Models.Queue_Ref;
+       Event : AWA.Events.Models.Message_Ref;
    end record;
    type Job_Access is access all Job_Impl;
    overriding

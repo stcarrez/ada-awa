@@ -46,6 +46,10 @@
 --
 --    package Resize_Def is new AWA.Jobs.Definition (Resize_Job);
 --
+--  and the job definition must be added:
+--
+--    AWA.Jobs.Modules.Register (Resize_Def.Create'Access);
+--
 --  === Scheduling a job ===
 --  To schedule a job, declare an instance of the job to execute and set the job specific
 --  parameters.  The job parameters will be saved in the database.  As soon as parameters
