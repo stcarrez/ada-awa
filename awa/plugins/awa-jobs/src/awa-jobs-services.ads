@@ -50,6 +50,18 @@ package AWA.Jobs.Services is
    type Abstract_Job_Type is abstract new Ada.Finalization.Limited_Controlled with private;
    type Abstract_Job_Access is access all Abstract_Job_Type'Class;
 
+   --  ------------------------------
+   --  Job Factory
+   --  ------------------------------
+   type Job_Factory is abstract tagged limited null record;
+   type Job_Factory_Access is access all Job_Factory'Class;
+
+   --  Create the job instance using the job factory.
+   function Create (Factory : in Job_Factory) return Abstract_Job_Access is abstract;
+
+   --  Get the job factory name.
+   function Get_Name (Factory : in Job_Factory'Class) return String;
+
    --  Execute the job.  This operation must be implemented and should perform the work
    --  represented by the job.  It should use the <tt>Get_Parameter</tt> function to retrieve
    --  the job parameter and it can use the <tt>Set_Result</tt> operation to save the result.
@@ -92,17 +104,23 @@ package AWA.Jobs.Services is
    --  Schedule the job.
    procedure Schedule (Job    : in out Abstract_Job_Type);
 
-   type Create_Job_Access is access function return Abstract_Job_Access;
-
-   type Job_Factory is abstract tagged null record;
-   function Create (Factory : in Job_Factory) return Abstract_Job_Access is abstract;
-
+   --  ------------------------------
+   --  Work Factory
+   --  ------------------------------
    type Work_Access is access procedure (Job : in out Abstract_Job_Type'Class);
 
+   type Work_Factory (Work : Work_Access) is new Job_Factory with null record;
+
+   overriding
+   function Create (Factory : in Work_Factory) return Abstract_Job_Access;
+
+   --  ------------------------------
+   --
+   --  ------------------------------
    type Job_Type is new Abstract_Job_Type with private;
 
    procedure Set_Work (Job  : in out Job_Type;
-                       Work : in Work_Access);
+                       Work : in Work_Factory'Class);
 
    procedure Execute (Job : in out Job_Type);
 
@@ -111,23 +129,25 @@ package AWA.Jobs.Services is
    --  ------------------------------
    --  The <tt>Definition</tt> package must be instantiated with a given job type to
    --  register the new job definition.
---     generic
---        type T is new Abstract_Job_Type with private;
---     package Definition is
---        type Job_Type_Factory is new Job_Factory with null record;
---
---        overriding
---        function Create (Factory : in Job_Type_Factory) return Abstract_Job_Access;
---     end Definition;
---
---     generic
---        with procedure Execute (Job : in out Abstract_Job_Type);
---     package Job_Definition is
---        type Job_Type_Factory is new Job_Factory with null record;
---
---        overriding
---        function Create (Factory : in Job_Type_Factory) return Abstract_Job_Access;
---     end Job_Definition;
+   generic
+      type T is new Abstract_Job_Type with private;
+   package Definition is
+      type Job_Type_Factory is new Job_Factory with null record;
+
+      overriding
+      function Create (Factory : in Job_Type_Factory) return Abstract_Job_Access;
+
+      Factory : aliased Job_Type_Factory;
+
+   end Definition;
+
+   generic
+      Work : in Work_Access;
+   package Work_Definition is
+      type S_Factory is new Work_Factory with null record;
+
+      Factory : aliased S_Factory := S_Factory '(Work => Work);
+   end Work_Definition;
 
 private
 

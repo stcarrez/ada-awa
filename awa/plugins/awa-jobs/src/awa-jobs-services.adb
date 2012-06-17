@@ -19,6 +19,7 @@ with Util.Serialize.Tools;
 with Util.Log.Loggers;
 
 with Ada.Calendar;
+with Ada.Tags;
 
 with ADO.Sessions.Entities;
 
@@ -147,16 +148,16 @@ package body AWA.Jobs.Services is
       DB.Commit;
    end Schedule;
 
-   procedure Register (Name : in String;
-                       Create : in Create_Job_Access) is
+   function Get_Name (Factory : in Job_Factory'Class) return String is
    begin
-      null;
-   end Register;
+      return Ada.Tags.Expanded_Name (Factory'Tag);
+   end Get_Name;
 
    procedure Set_Work (Job  : in out Job_Type;
-                       Work : in Work_Access) is
+                       Work : in Work_Factory'Class) is
    begin
-      Job.Work := Work;
+      Job.Work := Work.Work;
+      Job.Job.Set_Name (Work.Get_Name);
    end Set_Work;
 
    procedure Execute (Job : in out Job_Type) is
@@ -164,19 +165,27 @@ package body AWA.Jobs.Services is
       Job.Work (Job);
    end Execute;
 
+   overriding
+   function Create (Factory : in Work_Factory) return Abstract_Job_Access is
+   begin
+      return new Job_Type '(Ada.Finalization.Limited_Controlled with
+                              Work => Factory.Work,
+                              others => <>);
+   end Create;
+
    --  ------------------------------
    --  Job Declaration
    --  ------------------------------
    --  The <tt>Definition</tt> package must be instantiated with a given job type to
    --  register the new job definition.
---     package body Definition is
---        function Create return Abstract_Job_Access is
---        begin
---           return new T;
---        end Create;
---
---  --     begin
---  --        Register (Ada.Tags.Expanded_Name (T'Tag), Create'Access);
---     end Definition;
+   package body Definition is
+
+      function Create (Factory : in Job_Type_Factory) return Abstract_Job_Access is
+         pragma Unreferenced (Factory);
+      begin
+         return new T;
+      end Create;
+
+   end Definition;
 
 end AWA.Jobs.Services;
