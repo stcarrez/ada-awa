@@ -111,6 +111,11 @@ package AWA.Applications is
    procedure Send_Event (App   : in Application;
                          Event : in AWA.Events.Module_Event'Class);
 
+   --  Execute the <tt>Process</tt> procedure with the event manager used by the application.
+   procedure Do_Event_Manager (App : in out Application;
+                               Process : access procedure
+                                 (Events : in out AWA.Events.Services.Event_Manager));
+
 private
 
    type Application is new ASF.Applications.Main.Application with record
