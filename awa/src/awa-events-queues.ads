@@ -64,6 +64,10 @@ private
    --  Get the queue name.
    function Get_Name (From : in Queue) return String is abstract;
 
+   --  Get the model queue reference object.
+   --  Returns a null object if the queue is not persistent.
+   function Get_Queue (From : in Queue) return AWA.Events.Models.Queue_Ref is abstract;
+
    --  Queue the event.
    procedure Enqueue (Into  : in out Queue;
                       Event : in AWA.Events.Module_Event'Class) is abstract;

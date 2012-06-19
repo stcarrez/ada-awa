@@ -76,9 +76,13 @@ package body AWA.Events.Queues is
    --  Returns a null object if the queue is not persistent.
    --  ------------------------------
    function Get_Queue (Queue : in Queue_Ref'Class) return AWA.Events.Models.Queue_Ref is
-      pragma Unreferenced (Queue);
+      Q : constant Queue_Info_Access := Queue.Value;
    begin
-      return AWA.Events.Models.Null_Queue;
+      if Q = null or else Q.Queue = null then
+         return AWA.Events.Models.Null_Queue;
+      else
+         return Q.Queue.Get_Queue;
+      end if;
    end Get_Queue;
 
 

@@ -25,7 +25,13 @@ private package AWA.Events.Queues.Fifos is
    type Fifo_Queue_Access is access all Fifo_Queue'Class;
 
    --  Get the queue name.
+   overriding
    function Get_Name (From : in Fifo_Queue) return String;
+
+   --  Get the model queue reference object.
+   --  Returns a null object if the queue is not persistent.
+   overriding
+   function Get_Queue (From : in Fifo_Queue) return AWA.Events.Models.Queue_Ref;
 
    --  Queue the event.
    overriding
