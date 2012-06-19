@@ -57,6 +57,17 @@ package AWA.Events.Services is
    procedure Send (Manager : in Event_Manager;
                    Event   : in Module_Event'Class);
 
+   --  Set the event message type which correspond to the <tt>Kind</tt> event index.
+   procedure Set_Message_Type (Manager : in Event_Manager;
+                               Event   : in out AWA.Events.Models.Message_Ref;
+                               Kind    : in Event_Index);
+
+   --  Set the event queue associated with the event message.  The event queue identified by
+   --  <tt>Name</tt> is searched to find the <tt>Queue_Ref</tt> instance.
+   procedure Set_Event_Queue (Manager : in Event_Manager;
+                              Event   : in out AWA.Events.Models.Message_Ref;
+                              Name    : in String);
+
    --  Dispatch the event identified by <b>Event</b> and associated with the event
    --  queue <b>Queue</b>.  The event actions which are associated with the event are
    --  executed synchronously.
@@ -100,6 +111,7 @@ private
    type Queue_Dispatcher is record
       Queue      : AWA.Events.Queues.Queue_Ref;
       Dispatcher : AWA.Events.Dispatchers.Dispatcher_Access := null;
+      Model      : AWA.Events.Models.Queue_Ref;
    end record;
 
    --  Finalize the queue dispatcher releasing the dispatcher memory.

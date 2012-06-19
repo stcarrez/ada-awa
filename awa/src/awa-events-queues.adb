@@ -71,6 +71,17 @@ package body AWA.Events.Queues is
       end if;
    end Get_Name;
 
+   --  ------------------------------
+   --  Get the model queue reference object.
+   --  Returns a null object if the queue is not persistent.
+   --  ------------------------------
+   function Get_Queue (Queue : in Queue_Ref'Class) return AWA.Events.Models.Queue_Ref is
+      pragma Unreferenced (Queue);
+   begin
+      return AWA.Events.Models.Null_Queue;
+   end Get_Queue;
+
+
    FIFO_QUEUE_TYPE       : constant String := "fifo";
    PERSISTENT_QUEUE_TYPE : constant String := "persist";
 

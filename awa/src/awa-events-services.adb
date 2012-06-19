@@ -76,6 +76,33 @@ package body AWA.Events.Services is
    end Send;
 
    --  ------------------------------
+   --  Set the event message type which correspond to the <tt>Kind</tt> event index.
+   --  ------------------------------
+   procedure Set_Message_Type (Manager : in Event_Manager;
+                               Event   : in out AWA.Events.Models.Message_Ref;
+                               Kind    : in Event_Index) is
+   begin
+      if Kind = Invalid_Event or Kind > Manager.Actions'Last then
+         Log.Error ("Cannot send event type {0}", Event_Index'Image (Kind));
+         raise Not_Found;
+      end if;
+      Event.Set_Status (AWA.Events.Models.QUEUED);
+      Event.Set_Message_Type (Manager.Actions (Kind).Event);
+   end Set_Message_Type;
+
+   --  ------------------------------
+   --  Set the event queue associated with the event message.  The event queue identified by
+   --  <tt>Name</tt> is searched to find the <tt>Queue_Ref</tt> instance.
+   --  ------------------------------
+   procedure Set_Event_Queue (Manager : in Event_Manager;
+                              Event   : in out AWA.Events.Models.Message_Ref;
+                              Name    : in String) is
+      Queue : constant AWA.Events.Queues.Queue_Ref := Manager.Find_Queue (Name);
+   begin
+      Event.Set_Queue (Queue.Get_Queue);
+   end Set_Event_Queue;
+
+   --  ------------------------------
    --  Dispatch the event identified by <b>Event</b> and associated with the event
    --  queue <b>Queue</b>.  The event actions which are associated with the event are
    --  executed synchronously.

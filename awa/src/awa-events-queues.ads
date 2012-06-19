@@ -20,6 +20,8 @@ with Util.Refs;
 
 with EL.Beans;
 with EL.Contexts;
+
+with AWA.Events.Models;
 package AWA.Events.Queues is
 
    type Queue_Ref is tagged private;
@@ -38,6 +40,10 @@ package AWA.Events.Queues is
 
    --  Returns the queue name.
    function Get_Name (Queue : in Queue_Ref'Class) return String;
+
+   --  Get the model queue reference object.
+   --  Returns a null object if the queue is not persistent.
+   function Get_Queue (Queue : in Queue_Ref'Class) return AWA.Events.Models.Queue_Ref;
 
    --  Create the event queue identified by the name <b>Name</b>.  The queue factory
    --  identified by <b>Kind</b> is called to create the event queue instance.
