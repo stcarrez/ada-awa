@@ -74,6 +74,9 @@ package AWA.Events.Configs is
    --     <property name="size">254</property>
    --  </queue>
    --
+   --  <queue name="defer" type="persist">
+   --  </queue>
+   --
    --  <on-event name="create-user" queue="async">
    --     <action>#{mail.send}</action>
    --     <property name="user">#{event.name}</property>

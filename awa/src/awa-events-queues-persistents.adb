@@ -31,6 +31,7 @@ with AWA.Users.Models;
 with ADO;
 with ADO.Queries;
 with ADO.Sessions;
+with ADO.SQL;
 package body AWA.Events.Queues.Persistents is
 
    use Util.Log;
@@ -198,12 +199,37 @@ package body AWA.Events.Queues.Persistents is
    function Create_Queue (Name    : in String;
                           Props   : in EL.Beans.Param_Vectors.Vector;
                           Context : in EL.Contexts.ELContext'Class) return Queue_Access is
-      Result : constant Persistent_Queue_Access
-        := new Persistent_Queue '(Name_Length  => Name'Length,
-                                  Name         => Name,
-                                  others       => <>);
+      package AC renames AWA.Services.Contexts;
+
+      Ctx     : constant AC.Service_Context_Access := AC.Current;
+      Session : ADO.Sessions.Master_Session := AC.Get_Master_Session (Ctx);
+      Queue   : AWA.Events.Models.Queue_Ref;
+      Query   : ADO.SQL.Query;
+      Found   : Boolean;
    begin
-      return Result.all'Access;
+      Session.Begin_Transaction;
+      --  Find the queue instance which matches the name.
+      Query.Set_Filter ("o.name = ?");
+      Query.Add_Param (Name);
+      Queue.Find (Session => Session,
+                  Query   => Query,
+                  Found   => Found);
+
+      --  But create the queue instance if it does not exist.
+      if not Found then
+         Queue.Set_Name (Name);
+         Queue.Save (Session);
+      end if;
+      Session.Commit;
+      declare
+         Result : constant Persistent_Queue_Access
+           := new Persistent_Queue '(Name_Length  => Name'Length,
+                                     Name         => Name,
+                                     Queue        => Queue,
+                                     others       => <>);
+      begin
+         return Result.all'Access;
+      end;
    end Create_Queue;
 
 end AWA.Events.Queues.Persistents;

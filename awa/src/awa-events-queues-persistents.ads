@@ -44,6 +44,7 @@ private package AWA.Events.Queues.Persistents is
    procedure Dequeue (From    : in out Persistent_Queue;
                       Process : access procedure (Event : in Module_Event'Class));
 
+
    --  Create the queue associated with the given name and configure it by using
    --  the configuration properties.
    function Create_Queue (Name    : in String;
