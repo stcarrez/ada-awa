@@ -16,12 +16,14 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Util.Concurrent.Fifos;
+with Util.Beans.Basic;
 
 with EL.Beans;
 with EL.Contexts;
 private package AWA.Events.Queues.Fifos is
 
-   type Fifo_Queue (Name_Length : Natural) is limited new Queue with private;
+   type Fifo_Queue (Name_Length : Natural) is limited new Queue
+     and Util.Beans.Basic.Bean with private;
    type Fifo_Queue_Access is access all Fifo_Queue'Class;
 
    --  Get the queue name.
@@ -43,6 +45,20 @@ private package AWA.Events.Queues.Fifos is
    procedure Dequeue (From    : in out Fifo_Queue;
                       Process : access procedure (Event : in Module_Event'Class));
 
+   --  Get the value identified by the name.
+   --  If the name cannot be found, the method should return the Null object.
+   overriding
+   function Get_Value (From : in Fifo_Queue;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the value identified by the name.
+   --  If the name cannot be found, the method should raise the No_Value
+   --  exception.
+   overriding
+   procedure Set_Value (From  : in out Fifo_Queue;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
    --  Release the queue storage.
    overriding
    procedure Finalize (From : in out Fifo_Queue);
@@ -58,7 +74,8 @@ private
    package Fifo_Protected_Queue is
      new Util.Concurrent.Fifos (Module_Event_Access, 100, True);
 
-   type Fifo_Queue (Name_Length : Natural) is limited new Queue with record
+   type Fifo_Queue (Name_Length : Natural) is limited new Queue
+     and Util.Beans.Basic.Bean with record
       Fifo : Fifo_Protected_Queue.Fifo;
       Name : String (1 .. Name_Length);
    end record;

@@ -86,6 +86,33 @@ package body AWA.Events.Queues.Fifos is
    end Dequeue;
 
    --  ------------------------------
+   --  Get the value identified by the name.
+   --  If the name cannot be found, the method should return the Null object.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Fifo_Queue;
+                       Name : in String) return Util.Beans.Objects.Object is
+      pragma Unreferenced (From, Name);
+   begin
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+   --  ------------------------------
+   --  Set the value identified by the name.
+   --  If the name cannot be found, the method should raise the No_Value
+   --  exception.
+   --  ------------------------------
+   overriding
+   procedure Set_Value (From  : in out Fifo_Queue;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "size" then
+         From.Fifo.Set_Size (Util.Beans.Objects.To_Integer (Value));
+      end if;
+   end Set_Value;
+
+   --  ------------------------------
    --  Release the queue storage.
    --  ------------------------------
    overriding
@@ -108,12 +135,11 @@ package body AWA.Events.Queues.Fifos is
    function Create_Queue (Name    : in String;
                           Props   : in EL.Beans.Param_Vectors.Vector;
                           Context : in EL.Contexts.ELContext'Class) return Queue_Access is
-      pragma Unreferenced (Props, Context);
-
       Result : constant Fifo_Queue_Access := new Fifo_Queue '(Name_Length  => Name'Length,
                                                               Name         => Name,
                                                               others       => <>);
    begin
+      EL.Beans.Initialize (Result.all, Props, Context);
       return Result.all'Access;
    end Create_Queue;
 
