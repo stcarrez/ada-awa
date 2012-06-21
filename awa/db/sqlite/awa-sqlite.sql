@@ -52,9 +52,9 @@ CREATE TABLE awa_message (
   /* the message type */
   `type` INTEGER NOT NULL,
   /* the user who triggered the message */
-  `user_id` INTEGER NOT NULL,
+  `user_id` INTEGER ,
   /* the user session who triggered the message */
-  `session_id` INTEGER NOT NULL,
+  `session_id` INTEGER ,
   /* the message queue associated with this message */
   `queue_id` INTEGER NOT NULL
 );
