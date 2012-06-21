@@ -26,7 +26,7 @@ project Config is
 
       case Mode is
          when "distrib" =>
-            for Default_Switches ("Ada") use ("-gnatN");
+            for Default_Switches ("Ada") use ("-gnatn");
 
          when "debug" =>
             for Default_Switches ("Ada") use warnings
@@ -34,7 +34,7 @@ project Config is
 
          when "optimize" =>
             for Default_Switches ("Ada") use warnings
-               & ("-gnatN", "-gnatp", "-fdata-sections", "-ffunction-sections");
+               & ("-gnatn", "-gnatp", "-fdata-sections", "-ffunction-sections");
 
          when "profile" =>
             for Default_Switches ("Ada") use warnings & ("-pg");
@@ -67,7 +67,7 @@ project Config is
             for Default_Switches ("Ada") use ("-s");
 
          when "optimize" =>
-            for Default_Switches ("Ada") use ("--gc-sections");
+            for Default_Switches ("Ada") use ();
 	 
 	 when others =>
 	    null;
