@@ -81,6 +81,9 @@ package body AWA.Applications.Configs is
          package Config is new Reader_Config (Reader, App'Unchecked_Access, Context);
          pragma Warnings (Off, Config);
       begin
+         --  Initialize the parser with the module configuration mappers (if any).
+         Initialize_Parser (App, Reader);
+
          if Log.Get_Level >= Util.Log.DEBUG_LEVEL then
             Util.Serialize.IO.Dump (Reader, Log);
          end if;
