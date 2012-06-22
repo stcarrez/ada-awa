@@ -15,6 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Util.Serialize.IO;
 
 with ASF.Applications.Main;
 with ASF.Applications.Main.Configs;
@@ -117,6 +118,11 @@ package AWA.Applications is
                                  (Events : in out AWA.Events.Services.Event_Manager));
 
 private
+
+   --  Initialize the parser represented by <b>Parser</b> to recognize the configuration
+   --  that are specific to the plugins that have been registered so far.
+   procedure Initialize_Parser (App : in out Application'Class;
+                                Parser : in out Util.Serialize.IO.Parser'Class);
 
    type Application is new ASF.Applications.Main.Application with record
       DB_Factory : ADO.Sessions.Factory.Session_Factory;

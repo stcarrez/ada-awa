@@ -237,4 +237,20 @@ package body AWA.Applications is
       Process (App.Events);
    end Do_Event_Manager;
 
+   --  ------------------------------
+   --  Initialize the parser represented by <b>Parser</b> to recognize the configuration
+   --  that are specific to the plugins that have been registered so far.
+   --  ------------------------------
+   procedure Initialize_Parser (App : in out Application'Class;
+                                Parser : in out Util.Serialize.IO.Parser'Class) is
+      procedure Process (Module : in out AWA.Modules.Module'Class);
+
+      procedure Process (Module : in out AWA.Modules.Module'Class) is
+      begin
+         Module.Initialize_Parser (Parser);
+      end Process;
+   begin
+      AWA.Modules.Iterate (App.Modules, Process'Access);
+   end Initialize_Parser;
+
 end AWA.Applications;
