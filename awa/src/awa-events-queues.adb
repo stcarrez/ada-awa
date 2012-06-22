@@ -108,10 +108,10 @@ package body AWA.Events.Queues is
       Queue_Refs.Ref (Result) := Queue_Refs.Create (Q);
       if Kind = FIFO_QUEUE_TYPE then
          Q.Queue := AWA.Events.Queues.Fifos.Create_Queue (Name, Props, Context);
-      elsif Name = PERSISTENT_QUEUE_TYPE then
+      elsif Kind = PERSISTENT_QUEUE_TYPE then
          Q.Queue := AWA.Events.Queues.Persistents.Create_Queue (Name, Props, Context);
       else
-         raise Util.Serialize.Mappers.Field_Error with "Invalid queue type: " & Name;
+         raise Util.Serialize.Mappers.Field_Error with "Invalid queue type: " & Kind;
       end if;
       return Result;
    end Create_Queue;
