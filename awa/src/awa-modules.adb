@@ -274,6 +274,20 @@ package body AWA.Modules is
    end Find_By_URI;
 
    --  ------------------------------
+   --  Iterate over the modules that have been registered and execute the <b>Process</b>
+   --  procedure on each of the module instance.
+   --  ------------------------------
+   procedure Iterate (Registry : in Module_Registry;
+                      Process  : access procedure (Plugin : in out Module'Class)) is
+      Iter : Module_Maps.Cursor := Registry.Name_Map.First;
+   begin
+      while Module_Maps.Has_Element (Iter) loop
+         Process (Module_Maps.Element (Iter).all);
+         Module_Maps.Next (Iter);
+      end loop;
+   end Iterate;
+
+   --  ------------------------------
    --  Get the database connection for reading
    --  ------------------------------
    function Get_Session (Manager : Module)

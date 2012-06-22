@@ -24,6 +24,7 @@ with Ada.Containers.Indefinite_Hashed_Maps;
 with Util.Log.Loggers;
 with Util.Beans.Basic;
 with Util.Beans.Objects;
+with Util.Serialize.IO;
 
 with ASF.Beans;
 with ASF.Applications;
@@ -136,6 +137,11 @@ package AWA.Modules is
                          App    : in Application_Access;
                          Props  : in ASF.Applications.Config);
 
+   --  Initialize the configuration file parser represented by <b>Parser</b> to recognize
+   --  the specific configuration recognized by the module.
+   procedure Initialize_Parser (Plugin : in out Module;
+                                Parser : in out Util.Serialize.IO.Parser'Class) is null;
+
    --  Send the event to the module.  The module identified by <b>To</b> is
    --  found and the event is posted on its event channel.
    procedure Send_Event (Plugin  : in Module;
@@ -209,6 +215,11 @@ package AWA.Modules is
    --  Find the module mapped to a given URI
    function Find_By_URI (Registry : Module_Registry;
                          URI      : String) return Module_Access;
+
+   --  Iterate over the modules that have been registered and execute the <b>Process</b>
+   --  procedure on each of the module instance.
+   procedure Iterate (Registry : in Module_Registry;
+                      Process  : access procedure (Plugin : in out Module'Class));
 
 private
 
