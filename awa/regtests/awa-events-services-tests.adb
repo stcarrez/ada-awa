@@ -27,10 +27,13 @@ with EL.Expressions;
 with EL.Contexts.Default;
 
 with ASF.Applications;
+with ASF.Servlets.Faces;
+
 with AWA.Applications;
 with AWA.Applications.Configs;
 with AWA.Applications.Factory;
 with AWA.Events.Action_Method;
+with AWA.Services.Contexts;
 
 with AWA.Events.Queues;
 with AWA.Events.Services;
@@ -65,6 +68,8 @@ package body AWA.Events.Services.Tests is
                        Test_Dispatch_Synchronous'Access);
       Caller.Add_Test (Suite, "Test AWA.Events.Dispatch_Fifo",
                        Test_Dispatch_Fifo'Access);
+      Caller.Add_Test (Suite, "Test AWA.Events.Dispatch_Persist",
+                       Test_Dispatch_Persist'Access);
       Caller.Add_Test (Suite, "Test AWA.Events.Dispatch_Synchronous_Dyn",
                        Test_Dispatch_Synchronous_Dyn'Access);
       Caller.Add_Test (Suite, "Test AWA.Events.Dispatch_Synchronous_Raise",
@@ -254,8 +259,10 @@ package body AWA.Events.Services.Tests is
       Conf.Set ("database", Util.Tests.Get_Parameter ("database"));
 
       declare
-         App  : aliased AWA.Applications.Application;
-         S    : Util.Measures.Stamp;
+         App   : aliased AWA.Tests.Test_Application;
+         S     : Util.Measures.Stamp;
+         Faces : aliased ASF.Servlets.Faces.Faces_Servlet;
+         SC    : AWA.Services.Contexts.Service_Context;
       begin
          App.Initialize (Conf    => Conf,
                          Factory => Factory);
@@ -263,6 +270,9 @@ package body AWA.Events.Services.Tests is
            Util.Beans.Objects.To_Object (Action'Unchecked_Access,
              Util.Beans.Objects.STATIC));
 
+         SC.Set_Context (App'Unchecked_Access, null);
+
+         App.Add_Servlet (Name => "faces", Server => Faces'Unchecked_Access);
          App.Register_Class ("AWA.Events.Tests.Event_Action",
                              Create_Action_Bean'Access);
          AWA.Applications.Configs.Read_Configuration (App     => App,
@@ -308,6 +318,14 @@ package body AWA.Events.Services.Tests is
    begin
       T.Dispatch_Event (Event_Test_2.Kind, 200, 3);
    end Test_Dispatch_Fifo;
+
+   --  ------------------------------
+   --  Test dispatching event through a database queue.
+   --  ------------------------------
+   procedure Test_Dispatch_Persist (T : in out Test) is
+   begin
+      T.Dispatch_Event (Event_Test_5.Kind, 200, 3);
+   end Test_Dispatch_Persist;
 
    --  ------------------------------
    --  Test dispatching synchronous event to a dynamic bean (created on demand).

@@ -43,6 +43,9 @@ package AWA.Events.Services.Tests is
    --  Test dispatching event through a fifo queue.
    procedure Test_Dispatch_Fifo (T : in out Test);
 
+   --  Test dispatching event through a database queue.
+   procedure Test_Dispatch_Persist (T : in out Test);
+
    --  Test dispatching synchronous event to a dynamic bean (created on demand).
    procedure Test_Dispatch_Synchronous_Dyn (T : in out Test);
 
