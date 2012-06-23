@@ -61,11 +61,11 @@ private
    type Consumer_Array_Access is access Consumer_Array;
 
    type Task_Dispatcher is limited new Dispatcher with record
-      Workers    : Consumer_Array_Access;
-      Queues     : Queue_Of_Queue.Fifo;
-      Task_Count : Positive;
-      Match      : Ada.Strings.Unbounded.Unbounded_String;
-      Priority   : Positive;
+      Workers     : Consumer_Array_Access;
+      Queues      : Queue_Of_Queue.Fifo;
+      Task_Count  : Positive;
+      Match       : Ada.Strings.Unbounded.Unbounded_String;
+      Priority    : Positive;
    end record;
 
 end AWA.Events.Dispatchers.Tasks;

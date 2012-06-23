@@ -19,6 +19,7 @@ with Ada.Unchecked_Deallocation;
 
 with Util.Log.Loggers;
 
+with AWA.Services.Contexts;
 package body AWA.Events.Dispatchers.Tasks is
 
    use Util.Log;
@@ -58,7 +59,11 @@ package body AWA.Events.Dispatchers.Tasks is
          Log.Info ("Stopping the event dispatcher tasks");
 
          for I in Manager.Workers'Range loop
-            Manager.Workers (I).Stop;
+            if Manager.Workers (I)'Callable then
+               Manager.Workers (I).Stop;
+            else
+               Log.Error ("Event consumer task terminated abnormally");
+            end if;
          end loop;
          Free (Manager.Workers);
       end if;
@@ -91,6 +96,7 @@ package body AWA.Events.Dispatchers.Tasks is
       Dispatcher : Task_Dispatcher_Access;
       Time       : Duration := 0.01;
       Do_Work    : Boolean := True;
+      Context    : AWA.Services.Contexts.Service_Context;
    begin
       Log.Info ("Event consumer is ready");
       select
@@ -98,6 +104,10 @@ package body AWA.Events.Dispatchers.Tasks is
             Dispatcher := D;
          end Start;
          Log.Info ("Event consumer is started");
+
+         --  Set the service context.
+         Context.Set_Context (Application => Dispatcher.Manager.Get_Application.all'Access,
+                              Principal   => null);
          while Do_Work loop
             declare
                Nb_Queues : constant Natural := Dispatcher.Queues.Get_Count;
@@ -110,7 +120,13 @@ package body AWA.Events.Dispatchers.Tasks is
                --  Put back the queue in the fifo.
                for I in 1 .. Nb_Queues loop
                   Dispatcher.Queues.Dequeue (Queue);
-                  Dispatcher.Dispatch (Queue, Nb_Events);
+                  begin
+                     Dispatcher.Dispatch (Queue, Nb_Events);
+
+                  exception
+                     when E : others =>
+                        Log.Error ("Exception when dispatching events", E, True);
+                  end;
                   Dispatcher.Queues.Enqueue (Queue);
                end loop;
 
