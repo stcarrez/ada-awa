@@ -115,14 +115,28 @@ package body AWA.Events.Queues.Persistents is
    overriding
    procedure Dequeue (From : in out Persistent_Queue;
                       Process : access procedure (Event : in Module_Event'Class)) is
-      Ctx      : constant AWA.Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      DB       : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      package AC renames AWA.Services.Contexts;
+
+      --  Prepare the message by indicating in the database it is going to be processed
+      --  by the given server and task.
+      procedure Prepare_Message (Msg : in out Models.Message_Ref);
+
+      --  Dispatch the event.
+      procedure Dispatch_Message (Msg : in out Models.Message_Ref);
+
+      --  Finish processing the message by marking it as being processed.
+      procedure Finish_Message (Msg : in out Models.Message_Ref);
+
+      Ctx      : constant AC.Service_Context_Access := AC.Current;
+      DB       : ADO.Sessions.Master_Session := AC.Get_Master_Session (Ctx);
       Messages : Models.Message_Vector;
       Query    : ADO.Queries.Context;
       Task_Id  : Integer := 0;
 
+      --  ------------------------------
       --  Prepare the message by indicating in the database it is going to be processed
       --  by the given server and task.
+      --  ------------------------------
       procedure Prepare_Message (Msg : in out Models.Message_Ref) is
       begin
          Msg.Set_Status (Models.PROCESSING);
@@ -143,15 +157,15 @@ package body AWA.Events.Queues.Persistents is
          Process (Event);
       end Dispatch_Message;
 
+      --  ------------------------------
       --  Finish processing the message by marking it as being processed.
+      --  ------------------------------
       procedure Finish_Message (Msg : in out Models.Message_Ref) is
       begin
-         Ctx.Start;
          Msg.Set_Status (Models.PROCESSED);
          Msg.Set_Finish_Date (ADO.Nullable_Time '(Is_Null => False,
                                                   Value   => Ada.Calendar.Clock));
          Msg.Save (DB);
-         Ctx.Commit;
       end Finish_Message;
 
       Count : Natural;
@@ -166,7 +180,7 @@ package body AWA.Events.Queues.Persistents is
       --  Prepare the event messages by marking them in the database.
       --  This makes sure that no other server or task (if any), will process them.
       if Count > 0 then
-         for I in 1 .. Count loop
+         for I in 0 .. Count - 1 loop
             Messages.Update_Element (Index   => I,
                                      Process => Prepare_Message'Access);
          end loop;
@@ -178,14 +192,14 @@ package body AWA.Events.Queues.Persistents is
       end if;
 
       --  Dispatch each event.
-      for I in 1 .. Count loop
+      for I in 0 .. Count - 1 loop
          Messages.Update_Element (Index   => I,
                                   Process => Dispatch_Message'Access);
       end loop;
 
       --  After having dispatched the events, mark them as dispatched in the queue.
       Ctx.Start;
-      for I in 1 .. Count loop
+      for I in 0 .. Count - 1 loop
          Messages.Update_Element (Index   => I,
                                   Process => Finish_Message'Access);
       end loop;

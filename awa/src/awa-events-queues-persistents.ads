@@ -54,10 +54,10 @@ private package AWA.Events.Queues.Persistents is
 private
 
    type Persistent_Queue (Name_Length : Natural) is limited new Queue with record
-      Queue     : AWA.Events.Models.Queue_Ref;
-      Server_Id : Natural := 0;
-      Max_Batch : Positive := 1;
-      Name      : String (1 .. Name_Length);
+      Queue       : AWA.Events.Models.Queue_Ref;
+      Server_Id   : Natural := 0;
+      Max_Batch   : Positive := 1;
+      Name        : String (1 .. Name_Length);
    end record;
 
 end AWA.Events.Queues.Persistents;
