@@ -31,8 +31,8 @@ package AWA.Jobs.Services.Tests is
 
    type Test is new AWA.Tests.Test with null record;
 
-   --  Test the job factory.
-   procedure Test_Register (T : in out Test);
+   --  Test the job schedule.
+   procedure Test_Job_Schedule (T : in out Test);
 
    type Test_Job is new AWA.Jobs.Services.Job_Type with null record;
 

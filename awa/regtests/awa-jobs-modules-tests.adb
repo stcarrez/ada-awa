@@ -16,9 +16,8 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Util.Tests;
 with Util.Test_Caller;
-with AWA.Tests;
+
 with AWA.Jobs.Modules;
 with AWA.Jobs.Services.Tests;
 
@@ -32,7 +31,9 @@ package body AWA.Jobs.Modules.Tests is
                        Test_Register'Access);
    end Add_Tests;
 
+   --  ------------------------------
    --  Test the job factory.
+   --  ------------------------------
    procedure Test_Register (T : in out Test) is
       M : AWA.Jobs.Modules.Job_Module;
    begin

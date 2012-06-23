@@ -38,16 +38,19 @@ with AWA.Converters.Dates;
 with AWA.Tests;
 with AWA.Services.Contexts;
 with AWA.Jobs.Services.Tests;
+with AWA.Jobs.Modules.Tests;
 
 with ASF.Server.Web;
+with ASF.Servlets.Faces;
 with ASF.Server.Tests;
 package body AWA.Testsuite is
-
    Users          : aliased AWA.Users.Modules.User_Module;
 
    Workspaces     : aliased AWA.Workspaces.Modules.Workspace_Module;
 
    Mail           : aliased AWA.Mail.Modules.Mail_Module;
+
+   Jobs           : aliased AWA.Jobs.Modules.Job_Module;
 
    Blogs          : aliased AWA.Blogs.Modules.Blog_Module;
 
@@ -56,6 +59,7 @@ package body AWA.Testsuite is
    Date_Converter : aliased ASF.Converters.Dates.Date_Converter;
 
    Rel_Date_Converter : aliased AWA.Converters.Dates.Relative_Date_Converter;
+   Faces              : aliased ASF.Servlets.Faces.Faces_Servlet;
 
    Tests : aliased Util.Tests.Test_Suite;
 
@@ -69,6 +73,7 @@ package body AWA.Testsuite is
       AWA.Users.Tests.Add_Tests (Ret);
       AWA.Wikis.Parsers.Tests.Add_Tests (Ret);
       AWA.Helpers.Selectors.Tests.Add_Tests (Ret);
+      AWA.Jobs.Modules.Tests.Add_Tests (Ret);
       AWA.Jobs.Services.Tests.Add_Tests (Ret);
       AWA.Blogs.Services.Tests.Add_Tests (Ret);
       AWA.Storages.Services.Tests.Add_Tests (Ret);
@@ -116,6 +121,11 @@ package body AWA.Testsuite is
                       Name   => AWA.Storages.Modules.NAME,
                       URI    => "storages",
                       Module => Storages'Access);
+
+            Register (App    => Application.all'Access,
+                      Name   => AWA.Jobs.Modules.NAME,
+                      URI    => "jobs",
+                      Module => Jobs'Access);
 
             Register (App    => Application.all'Access,
                       Name   => AWA.Blogs.Modules.NAME,

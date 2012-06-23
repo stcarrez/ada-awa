@@ -20,6 +20,7 @@ with Util.Tests;
 with Util.Test_Caller;
 with AWA.Tests;
 with AWA.Jobs.Modules;
+with AWA.Services.Contexts;
 
 package body AWA.Jobs.Services.Tests is
 
@@ -28,7 +29,7 @@ package body AWA.Jobs.Services.Tests is
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
    begin
       Caller.Add_Test (Suite, "Test AWA.Jobs.Modules.Register",
-                       Test_Register'Access);
+                       Test_Job_Schedule'Access);
    end Add_Tests;
 
    procedure Work_1 (Job : in out AWA.Jobs.Services.Abstract_Job_Type'Class) is
@@ -42,13 +43,17 @@ package body AWA.Jobs.Services.Tests is
    end Work_2;
 
    --  Test the job factory.
-   procedure Test_Register (T : in out Test) is
-      M : AWA.Jobs.Modules.Job_Module;
+   procedure Test_Job_Schedule (T : in out Test) is
+      Context : AWA.Services.Contexts.Service_Context;
+      J       : AWA.Jobs.Services.Job_Type;
    begin
-      M.Register (Definition => Test_Definition.Factory'Access);
-      M.Register (Definition => Work_1_Definition.Factory'Access);
-      M.Register (Definition => Work_2_Definition.Factory'Access);
-   end Test_Register;
+      Context.Set_Context (AWA.Tests.Get_Application, null);
+
+      J.Set_Parameter ("count", "1");
+      J.Set_Parameter ("message", "Hello");
+      J.Schedule (Work_1_Definition.Factory);
+
+   end Test_Job_Schedule;
 
    --  Execute the job.  This operation must be implemented and should perform the work
    --  represented by the job.  It should use the <tt>Get_Parameter</tt> function to retrieve
