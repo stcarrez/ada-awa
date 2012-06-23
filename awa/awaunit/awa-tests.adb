@@ -23,6 +23,8 @@ with Ada.Unchecked_Deallocation;
 with ASF.Server.Tests;
 with ASF.Server.Web;
 
+with Util.Log.Loggers;
+
 with ASF.Tests;
 
 --  with AWA.Applications;
@@ -30,6 +32,8 @@ with AWA.Applications.Factory;
 with AWA.Services.Filters;
 with AWA.Services.Contexts;
 package body AWA.Tests is
+
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Tests");
 
    protected Shutdown is
       procedure Termination (Cause : in Ada.Task_Termination.Cause_Of_Termination;
@@ -63,8 +67,9 @@ package body AWA.Tests is
    --  ------------------------------
    overriding
    procedure Set_Up (T : in out Test) is
-      pragma Unreferenced (T);
    begin
+      Log.Info ("Setup test {0}", T.Get_Name);
+
       ASF.Server.Tests.Set_Context (Application.all'Access);
    end Set_Up;
 
