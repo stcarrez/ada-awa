@@ -21,16 +21,12 @@ with Ada.Exceptions;
 with Ada.Unchecked_Deallocation;
 
 with ASF.Server.Tests;
-with ASF.Server.Web;
 
 with Util.Log.Loggers;
 
 with ASF.Tests;
 
---  with AWA.Applications;
 with AWA.Applications.Factory;
-with AWA.Services.Filters;
-with AWA.Services.Contexts;
 package body AWA.Tests is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Tests");
@@ -107,7 +103,7 @@ package body AWA.Tests is
       --  This allows to stop the event threads if any.
       if App = null then
          Application_Created := True;
-         Application := new AWA.Applications.Application;
+         Application := new Test_Application;
          Ada.Task_Termination.Set_Specific_Handler (Ada.Task_Identification.Current_Task,
                                                     Shutdown.Termination'Access);
       else
@@ -134,5 +130,40 @@ package body AWA.Tests is
    begin
       ASF.Server.Tests.Set_Context (Application.all'Access);
    end Set_Application_Context;
+
+   --  ------------------------------
+   --  Initialize the servlets provided by the application.
+   --  This procedure is called by <b>Initialize</b>.
+   --  It should register the application servlets.
+   --  ------------------------------
+   overriding
+   procedure Initialize_Servlets (App : in out Test_Application) is
+   begin
+      Log.Info ("Initializing application servlets...");
+
+      AWA.Applications.Application (App).Initialize_Servlets;
+      App.Add_Servlet (Name => "faces", Server => App.Faces'Unchecked_Access);
+      App.Add_Servlet (Name => "files", Server => App.Files'Unchecked_Access);
+      App.Add_Servlet (Name => "ajax", Server => App.Ajax'Unchecked_Access);
+      App.Add_Servlet (Name => "measures", Server => App.Measures'Unchecked_Access);
+--        App.Add_Servlet (Name => "auth", Server => App.Auth'Unchecked_Access);
+--        App.Add_Servlet (Name => "verify-auth", Server => App.Self.Verify_Auth'Access);
+   end Initialize_Servlets;
+
+   --  ------------------------------
+   --  Initialize the filters provided by the application.
+   --  This procedure is called by <b>Initialize</b>.
+   --  It should register the application filters.
+   --  ------------------------------
+   overriding
+   procedure Initialize_Filters (App : in out Test_Application) is
+   begin
+      Log.Info ("Initializing application filters...");
+
+      AWA.Applications.Application (App).Initialize_Filters;
+      App.Add_Filter (Name => "dump", Filter => App.Dump'Access);
+      App.Add_Filter (Name => "measures", Filter => App.Measures'Access);
+      App.Add_Filter (Name => "service", Filter => App.Service_Filter'Access);
+   end Initialize_Filters;
 
 end AWA.Tests;
