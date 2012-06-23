@@ -188,7 +188,7 @@ package body AWA.Events is
                             Name   : in String;
                             Value  : in String) is
    begin
-      Event.Props.Set (Name, Value);
+      Event.Props.Include (Name, Util.Beans.Objects.To_Object (Value));
    end Set_Parameter;
 
    --  ------------------------------
@@ -196,8 +196,13 @@ package body AWA.Events is
    --  ------------------------------
    function Get_Parameter (Event : in Module_Event;
                            Name  : in String) return String is
+      Pos : constant Util.Beans.Objects.Maps.Cursor := Event.Props.Find (Name);
    begin
-      return Event.Props.Get (Name, "");
+      if Util.Beans.Objects.Maps.Has_Element (Pos) then
+         return Util.Beans.Objects.To_String (Util.Beans.Objects.Maps.Element (Pos));
+      else
+         return "";
+      end if;
    end Get_Parameter;
 
    --  ------------------------------
@@ -206,8 +211,8 @@ package body AWA.Events is
    function Get_Value (Event : in Module_Event;
                        Name  : in String) return Util.Beans.Objects.Object is
    begin
-      if Event.Props.Exists (Name) then
-         return Util.Beans.Objects.To_Object (Event.Get_Parameter (Name));
+      if Event.Props.Contains (Name) then
+         return Event.Props.Element (Name);
       else
          return Util.Beans.Objects.Null_Object;
       end if;

@@ -20,8 +20,7 @@ with Util.Strings;
 with Util.Events;
 with Util.Beans.Objects;
 with Util.Beans.Basic;
-
-with ASF.Applications;
+with Util.Beans.Objects.Maps;
 
 --  == Introduction ==
 --  The <b>AWA.Events</b> package defines an event framework for modules to post events
@@ -147,7 +146,7 @@ private
 
    type Module_Event is new Util.Events.Event and Util.Beans.Basic.Readonly_Bean with record
       Kind  : Event_Index := Invalid_Event;
-      Props : ASF.Applications.Config;
+      Props : Util.Beans.Objects.Maps.Map;
    end record;
 
    --  The index of the last event definition.
