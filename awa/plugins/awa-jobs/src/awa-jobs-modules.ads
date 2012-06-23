@@ -22,6 +22,7 @@ with ASF.Applications;
 
 with AWA.Modules;
 with AWA.Jobs.Services;
+with AWA.Events.Models;
 
 --  == Job Module ==
 --  The <b>Jobs.Modules</b> is the entry point for the management of asynchronous jobs.
@@ -47,6 +48,9 @@ package AWA.Jobs.Modules is
    procedure Register (Plugin     : in out Job_Module;
                        Definition : in AWA.Jobs.Services.Job_Factory_Access);
 
+   --  Create an event to schedule the job execution.
+   procedure Create_Event (Event : in out AWA.Events.Models.Message_Ref);
+
 private
 
    use AWA.Jobs.Services;
@@ -59,7 +63,9 @@ private
                                                 Equivalent_Keys => "=");
 
    type Job_Module is new AWA.Modules.Module with record
-      Factory : Job_Factory_Map.Map;
+      Factory      : Job_Factory_Map.Map;
+      Queue        : AWA.Events.Models.Queue_Ref;
+      Message_Type : AWA.Events.Models.Message_Type_Ref;
    end record;
 
 end AWA.Jobs.Modules;

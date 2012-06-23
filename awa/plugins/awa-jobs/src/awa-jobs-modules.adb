@@ -16,9 +16,15 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Ada.Tags;
+with Ada.Calendar;
 
 with Util.Log.Loggers;
 
+with ADO.Sessions;
+with ADO.SQL;
+
+with AWA.Applications;
+with AWA.Events.Services;
 with AWA.Modules.Get;
 
 package body AWA.Jobs.Modules is
@@ -32,13 +38,37 @@ package body AWA.Jobs.Modules is
    procedure Initialize (Plugin : in out Job_Module;
                          App    : in AWA.Modules.Application_Access;
                          Props  : in ASF.Applications.Config) is
+
+      Name : constant String := Props.Get ("jobs_queue", "default");
+
+      procedure Process (Events : in out AWA.Events.Services.Event_Manager) is
+      begin
+         null;
+      end Process;
+
    begin
-      Log.Info ("Initializing the jobs module");
+      Log.Info ("Initializing the jobs module, queue {0}", Name);
+
+      App.Do_Event_Manager (Process'Access);
 --
 --        Register.Register (Plugin  => Plugin,
 --                           Name    => "AWA.Blogs.Beans.Post_Bean",
 --                           Handler => AWA.Blogs.Beans.Create_Post_Bean'Access);
 
+      declare
+         DB    : ADO.Sessions.Session := App.Get_Session;
+         Query : ADO.SQL.Query;
+         Found : Boolean;
+      begin
+         Query.Set_Filter ("o.name = ?");
+         Query.Add_Param ("job-create");
+         Plugin.Message_Type.Find (Session => DB,
+                                   Query   => Query,
+                                   Found   => Found);
+         if not Found then
+            Log.Error ("Event {0} not found in database", "job-create");
+         end if;
+      end;
       AWA.Modules.Module (Plugin).Initialize (App, Props);
    end Initialize;
 
@@ -63,5 +93,17 @@ package body AWA.Jobs.Modules is
 
       Plugin.Factory.Include (Name, Definition);
    end Register;
+
+   --  ------------------------------
+   --  Create an event to schedule the job execution.
+   --  ------------------------------
+   procedure Create_Event (Event : in out AWA.Events.Models.Message_Ref) is
+      M : constant Job_Module_Access := Get_Job_Module;
+   begin
+      Event.Set_Status (AWA.Events.Models.QUEUED);
+      Event.Set_Message_Type (M.Message_Type);
+      Event.Set_Queue (M.Queue);
+      Event.Set_Create_Date (Ada.Calendar.Clock);
+   end Create_Event;
 
 end AWA.Jobs.Modules;
