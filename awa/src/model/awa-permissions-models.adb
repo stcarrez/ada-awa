@@ -267,9 +267,8 @@ package body AWA.Permissions.Models is
                    Query   : in ADO.SQL.Query'Class;
                    Found   : out Boolean) is
       Stmt : ADO.Statements.Query_Statement
-          := Session.Create_Statement (ACL_TABLE'Access);
+          := Session.Create_Statement (Query, ACL_TABLE'Access);
    begin
-      Stmt.Set_Parameters (Query);
       Stmt.Execute;
       if Stmt.Has_Elements then
          Object.Load (Stmt, Session);
@@ -395,9 +394,8 @@ package body AWA.Permissions.Models is
    procedure List (Object  : in out Acl_Vector;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class) is
-      Stmt : ADO.Statements.Query_Statement := Session.Create_Statement (ACL_TABLE'Access);
+      Stmt : ADO.Statements.Query_Statement := Session.Create_Statement (Query, ACL_TABLE'Access);
    begin
-      Stmt.Set_Parameters (Query);
       Stmt.Execute;
       Acl_Vectors.Clear (Object);
       while Stmt.Has_Elements loop

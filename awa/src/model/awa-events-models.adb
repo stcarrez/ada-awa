@@ -254,9 +254,8 @@ package body AWA.Events.Models is
                    Query   : in ADO.SQL.Query'Class;
                    Found   : out Boolean) is
       Stmt : ADO.Statements.Query_Statement
-          := Session.Create_Statement (QUEUE_TABLE'Access);
+          := Session.Create_Statement (Query, QUEUE_TABLE'Access);
    begin
-      Stmt.Set_Parameters (Query);
       Stmt.Execute;
       if Stmt.Has_Elements then
          Object.Load (Stmt, Session);
@@ -381,9 +380,8 @@ package body AWA.Events.Models is
    procedure List (Object  : in out Queue_Vector;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class) is
-      Stmt : ADO.Statements.Query_Statement := Session.Create_Statement (QUEUE_TABLE'Access);
+      Stmt : ADO.Statements.Query_Statement := Session.Create_Statement (Query, QUEUE_TABLE'Access);
    begin
-      Stmt.Set_Parameters (Query);
       Stmt.Execute;
       Queue_Vectors.Clear (Object);
       while Stmt.Has_Elements loop
@@ -610,9 +608,8 @@ package body AWA.Events.Models is
                    Query   : in ADO.SQL.Query'Class;
                    Found   : out Boolean) is
       Stmt : ADO.Statements.Query_Statement
-          := Session.Create_Statement (MESSAGE_TYPE_TABLE'Access);
+          := Session.Create_Statement (Query, MESSAGE_TYPE_TABLE'Access);
    begin
-      Stmt.Set_Parameters (Query);
       Stmt.Execute;
       if Stmt.Has_Elements then
          Object.Load (Stmt, Session);
@@ -718,9 +715,8 @@ package body AWA.Events.Models is
    procedure List (Object  : in out Message_Type_Vector;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class) is
-      Stmt : ADO.Statements.Query_Statement := Session.Create_Statement (MESSAGE_TYPE_TABLE'Access);
+      Stmt : ADO.Statements.Query_Statement := Session.Create_Statement (Query, MESSAGE_TYPE_TABLE'Access);
    begin
-      Stmt.Set_Parameters (Query);
       Stmt.Execute;
       Message_Type_Vectors.Clear (Object);
       while Stmt.Has_Elements loop
@@ -1190,9 +1186,8 @@ package body AWA.Events.Models is
                    Query   : in ADO.SQL.Query'Class;
                    Found   : out Boolean) is
       Stmt : ADO.Statements.Query_Statement
-          := Session.Create_Statement (MESSAGE_TABLE'Access);
+          := Session.Create_Statement (Query, MESSAGE_TABLE'Access);
    begin
-      Stmt.Set_Parameters (Query);
       Stmt.Execute;
       if Stmt.Has_Elements then
          Object.Load (Stmt, Session);
@@ -1419,9 +1414,8 @@ package body AWA.Events.Models is
    procedure List (Object  : in out Message_Vector;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class) is
-      Stmt : ADO.Statements.Query_Statement := Session.Create_Statement (MESSAGE_TABLE'Access);
+      Stmt : ADO.Statements.Query_Statement := Session.Create_Statement (Query, MESSAGE_TABLE'Access);
    begin
-      Stmt.Set_Parameters (Query);
       Stmt.Execute;
       Message_Vectors.Clear (Object);
       while Stmt.Has_Elements loop

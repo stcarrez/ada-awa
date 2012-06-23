@@ -253,9 +253,8 @@ package body AWA.Users.Models is
                    Query   : in ADO.SQL.Query'Class;
                    Found   : out Boolean) is
       Stmt : ADO.Statements.Query_Statement
-          := Session.Create_Statement (EMAIL_TABLE'Access);
+          := Session.Create_Statement (Query, EMAIL_TABLE'Access);
    begin
-      Stmt.Set_Parameters (Query);
       Stmt.Execute;
       if Stmt.Has_Elements then
          Object.Load (Stmt, Session);
@@ -380,9 +379,8 @@ package body AWA.Users.Models is
    procedure List (Object  : in out Email_Vector;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class) is
-      Stmt : ADO.Statements.Query_Statement := Session.Create_Statement (EMAIL_TABLE'Access);
+      Stmt : ADO.Statements.Query_Statement := Session.Create_Statement (Query, EMAIL_TABLE'Access);
    begin
-      Stmt.Set_Parameters (Query);
       Stmt.Execute;
       Email_Vectors.Clear (Object);
       while Stmt.Has_Elements loop
@@ -786,9 +784,8 @@ package body AWA.Users.Models is
                    Query   : in ADO.SQL.Query'Class;
                    Found   : out Boolean) is
       Stmt : ADO.Statements.Query_Statement
-          := Session.Create_Statement (USER_TABLE'Access);
+          := Session.Create_Statement (Query, USER_TABLE'Access);
    begin
-      Stmt.Set_Parameters (Query);
       Stmt.Execute;
       if Stmt.Has_Elements then
          Object.Load (Stmt, Session);
@@ -960,9 +957,8 @@ package body AWA.Users.Models is
    procedure List (Object  : in out User_Vector;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class) is
-      Stmt : ADO.Statements.Query_Statement := Session.Create_Statement (USER_TABLE'Access);
+      Stmt : ADO.Statements.Query_Statement := Session.Create_Statement (Query, USER_TABLE'Access);
    begin
-      Stmt.Set_Parameters (Query);
       Stmt.Execute;
       User_Vectors.Clear (Object);
       while Stmt.Has_Elements loop
@@ -1223,9 +1219,8 @@ package body AWA.Users.Models is
                    Query   : in ADO.SQL.Query'Class;
                    Found   : out Boolean) is
       Stmt : ADO.Statements.Query_Statement
-          := Session.Create_Statement (ACCESS_KEY_TABLE'Access);
+          := Session.Create_Statement (Query, ACCESS_KEY_TABLE'Access);
    begin
-      Stmt.Set_Parameters (Query);
       Stmt.Execute;
       if Stmt.Has_Elements then
          Object.Load (Stmt, Session);
@@ -1340,9 +1335,8 @@ package body AWA.Users.Models is
    procedure List (Object  : in out Access_Key_Vector;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class) is
-      Stmt : ADO.Statements.Query_Statement := Session.Create_Statement (ACCESS_KEY_TABLE'Access);
+      Stmt : ADO.Statements.Query_Statement := Session.Create_Statement (Query, ACCESS_KEY_TABLE'Access);
    begin
-      Stmt.Set_Parameters (Query);
       Stmt.Execute;
       Access_Key_Vectors.Clear (Object);
       while Stmt.Has_Elements loop
@@ -1688,9 +1682,8 @@ package body AWA.Users.Models is
                    Query   : in ADO.SQL.Query'Class;
                    Found   : out Boolean) is
       Stmt : ADO.Statements.Query_Statement
-          := Session.Create_Statement (SESSION_TABLE'Access);
+          := Session.Create_Statement (Query, SESSION_TABLE'Access);
    begin
-      Stmt.Set_Parameters (Query);
       Stmt.Execute;
       if Stmt.Has_Elements then
          Object.Load (Stmt, Session);
@@ -1853,9 +1846,8 @@ package body AWA.Users.Models is
    procedure List (Object  : in out Session_Vector;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class) is
-      Stmt : ADO.Statements.Query_Statement := Session.Create_Statement (SESSION_TABLE'Access);
+      Stmt : ADO.Statements.Query_Statement := Session.Create_Statement (Query, SESSION_TABLE'Access);
    begin
-      Stmt.Set_Parameters (Query);
       Stmt.Execute;
       Session_Vectors.Clear (Object);
       while Stmt.Has_Elements loop
