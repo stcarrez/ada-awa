@@ -217,8 +217,11 @@ package body AWA.Events.Queues.Persistents is
 
       --  But create the queue instance if it does not exist.
       if not Found then
+         Log.Info ("Creating database queue {0}", Name);
          Queue.Set_Name (Name);
          Queue.Save (Session);
+      else
+         Log.Info ("Using database queue {0}", Name);
       end if;
       Session.Commit;
       declare
