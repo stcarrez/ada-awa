@@ -39,6 +39,7 @@ package body AWA.Events.Services is
    --  ------------------------------
    procedure Send (Manager : in Event_Manager;
                    Event   : in Module_Event'Class) is
+      procedure Send_Queue (Queue : in Queue_Dispatcher);
 
       procedure Send_Queue (Queue : in Queue_Dispatcher) is
       begin
@@ -110,6 +111,7 @@ package body AWA.Events.Services is
    procedure Dispatch (Manager : in Event_Manager;
                        Queue   : in AWA.Events.Queues.Queue_Ref;
                        Event   : in Module_Event'Class) is
+      procedure Find_Queue (List : in Queue_Dispatcher);
 
       Found : Boolean := False;
 
@@ -166,10 +168,13 @@ package body AWA.Events.Services is
                         Queue   : in AWA.Events.Queues.Queue_Ref) is
       Name : constant String := Queue.Get_Name;
    begin
-      Log.Info ("Adding event queue {0}", Name);
-
-      Manager.Queues.Insert (Key      => Name,
-                             New_Item => Queue);
+      if Manager.Queues.Contains (Name) then
+         Log.Error ("Event queue {0} already defined");
+      else
+         Log.Info ("Adding event queue {0}", Name);
+      end if;
+      Manager.Queues.Include (Key      => Name,
+                              New_Item => Queue);
    end Add_Queue;
 
    --  ------------------------------
@@ -184,6 +189,8 @@ package body AWA.Events.Services is
                          Queue   : in AWA.Events.Queues.Queue_Ref;
                          Action  : in EL.Expressions.Method_Expression;
                          Params  : in EL.Beans.Param_Vectors.Vector) is
+      procedure Find_Queue (List : in Queue_Dispatcher);
+      procedure Add_Action (List : in out Queue_Dispatcher);
 
       procedure Add_Action (List : in out Queue_Dispatcher) is
          use type AWA.Events.Dispatchers.Dispatcher_Access;
@@ -258,6 +265,8 @@ package body AWA.Events.Services is
    --  ------------------------------
    procedure Initialize (Manager : in out Event_Manager;
                          App     : in Application_Access) is
+      procedure Set_Events (Msg : in AWA.Events.Models.Message_Type_Ref);
+
       Msg_Types : AWA.Events.Models.Message_Type_Vector;
 
       Query     : ADO.SQL.Query;
@@ -316,6 +325,10 @@ package body AWA.Events.Services is
    --  ------------------------------
    procedure Start (Manager : in out Event_Manager) is
       use type AWA.Events.Dispatchers.Dispatcher_Access;
+
+      --  Dispatch the event queues to the dispatcher according to the dispatcher configuration.
+      procedure Associate_Dispatcher (Key   : in String;
+                                      Queue : in out AWA.Events.Queues.Queue_Ref);
 
       --  ------------------------------
       --  Dispatch the event queues to the dispatcher according to the dispatcher configuration.
