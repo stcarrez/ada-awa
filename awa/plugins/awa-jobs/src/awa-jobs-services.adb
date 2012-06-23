@@ -18,7 +18,6 @@
 with Util.Serialize.Tools;
 with Util.Log.Loggers;
 
-with Ada.Calendar;
 with Ada.Tags;
 
 with ADO.Sessions.Entities;
@@ -26,6 +25,9 @@ with ADO.Sessions.Entities;
 with AWA.Users.Models;
 with AWA.Events.Models;
 with AWA.Services.Contexts;
+with AWA.Jobs.Modules;
+with AWA.Applications;
+with AWA.Events.Services;
 package body AWA.Jobs.Services is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Jobs.Services");
@@ -115,17 +117,29 @@ package body AWA.Jobs.Services is
    --  Schedule the job.
    procedure Schedule (Job        : in out Abstract_Job_Type;
                        Definition : in Job_Factory'Class) is
+
+      procedure Set_Event (Manager : in out AWA.Events.Services.Event_Manager);
+
       Ctx : constant AWA.Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB   : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Msg  : AWA.Events.Models.Message_Ref;
       User : constant AWA.Users.Models.User_Ref := Ctx.Get_User;
       Sess : constant AWA.Users.Models.Session_Ref := Ctx.Get_User_Session;
+      App  : constant AWA.Applications.Application_Access := Ctx.Get_Application;
+
+      procedure Set_Event (Manager : in out AWA.Events.Services.Event_Manager) is
+      begin
+         Manager.Set_Message_Type (Msg, Job_Create_Event.Kind);
+         Manager.Set_Event_Queue (Msg, "job-queue");
+      end Set_Event;
+
    begin
       if Job.Job.Is_Inserted then
          Log.Error ("Job is already scheduled");
          raise Schedule_Error with "The job is already scheduled.";
       end if;
-      Job.Job.Set_Create_Date (Ada.Calendar.Clock);
+      AWA.Jobs.Modules.Create_Event (Msg);
+      Job.Job.Set_Create_Date (Msg.Get_Create_Date);
 
       DB.Begin_Transaction;
       Job.Job.Set_Name (Definition.Get_Name);
@@ -134,12 +148,10 @@ package body AWA.Jobs.Services is
       Job.Save (DB);
 
       --  Create the event
---        Msg.Set_Message_Type
       Msg.Set_Parameters (Util.Serialize.Tools.To_JSON (Job.Props));
-      Msg.Set_Create_Date (Job.Job.Get_Create_Date);
+      App.Do_Event_Manager (Process => Set_Event'Access);
       Msg.Set_User (User);
       Msg.Set_Session (Sess);
-      Msg.Set_Status (AWA.Events.Models.QUEUED);
       Msg.Set_Entity_Id (Job.Job.Get_Id);
       Msg.Set_Entity_Type (ADO.Sessions.Entities.Find_Entity_Type (Session => DB,
                                                                    Object  => Job.Job.Get_Key));
