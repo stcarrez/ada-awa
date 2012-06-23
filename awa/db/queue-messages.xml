@@ -9,7 +9,6 @@
     SELECT
       m.id,
       m.version,
-      m.message_type,
       m.priority,
       m.server_id,
       m.task_id,
@@ -18,6 +17,9 @@
       m.processing_date,
       m.finish_date,
       m.status,
+      m.entity_type,
+      m.entity_id,
+      m.type,
       m.user_id,
       m.session_id,
       m.queue_id
