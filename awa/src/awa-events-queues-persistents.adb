@@ -19,20 +19,21 @@ with Ada.Calendar;
 with Ada.Strings.Unbounded;
 
 with Util.Log.Loggers;
-with Util.Serialize.IO.XML;
-with Util.Properties;
-with Util.Streams.Texts;
-with Util.Streams.Buffered;
+
 with Util.Serialize.Tools;
 
 with AWA.Services.Contexts;
 with AWA.Users.Models;
+with AWA.Applications;
+with AWA.Events.Services;
 
 with ADO;
 with ADO.Queries;
 with ADO.Sessions;
 with ADO.SQL;
 package body AWA.Events.Queues.Persistents is
+
+   package AC renames AWA.Services.Contexts;
 
    use Util.Log;
 
@@ -64,32 +65,20 @@ package body AWA.Events.Queues.Persistents is
    overriding
    procedure Enqueue (Into  : in out Persistent_Queue;
                       Event : in AWA.Events.Module_Event'Class) is
-      use Ada.Strings.Unbounded;
-      use Util.Streams;
-      procedure Add_Property (Name, Value : in Util.Properties.Value);
+      procedure Set_Event (Manager : in out AWA.Events.Services.Event_Manager);
 
-      Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Ctx   : constant AC.Service_Context_Access := AC.Current;
+      App   : constant AWA.Applications.Application_Access := Ctx.Get_Application;
+      DB    : ADO.Sessions.Master_Session := AC.Get_Master_Session (Ctx);
       Msg   : AWA.Events.Models.Message_Ref;
 
-      Has_Param : Boolean := False;
-      Output    : Util.Serialize.IO.XML.Output_Stream;
-
-      procedure Add_Property (Name, Value : in Util.Properties.Value) is
+      procedure Set_Event (Manager : in out AWA.Events.Services.Event_Manager) is
       begin
-         if not Has_Param then
-            Output.Initialize (Size => 10000);
-            Has_Param := True;
-            Output.Start_Entity (Name => "params");
-         end if;
-         Output.Start_Entity (Name => "param");
-         Output.Write_Attribute (Name  => "name",
-                                 Value => Util.Beans.Objects.To_Object (Name));
-         Output.Write_String (Value => To_String (Value));
-         Output.End_Entity (Name => "param");
-      end Add_Property;
+         Manager.Set_Message_Type (Msg, Event.Get_Event_Kind);
+      end Set_Event;
 
    begin
+      App.Do_Event_Manager (Set_Event'Access);
       Ctx.Start;
       Msg.Set_Queue (Into.Queue);
       Msg.Set_User (Ctx.Get_User);
@@ -97,15 +86,8 @@ package body AWA.Events.Queues.Persistents is
       Msg.Set_Create_Date (Event.Get_Time);
       Msg.Set_Status (AWA.Events.Models.QUEUED);
 
-      --  Collect the event parameters in a string and format the result in XML.
-      --  If there is no parameter, avoid the overhead of allocating and formatting this.
-      Event.Props.Iterate (Process => Add_Property'Access);
-      if Has_Param then
-         Output.End_Entity (Name => "params");
-         Msg.Set_Parameters (Util.Streams.Texts.To_String (Buffered.Buffered_Stream (Output)));
-      end if;
-
---        Msg.Set_Message_Type
+      --  Collect the event parameters in a string and format the result in JSON.
+      Msg.Set_Parameters (Util.Serialize.Tools.To_JSON (Event.Props));
       Msg.Save (DB);
       Ctx.Commit;
 
@@ -115,7 +97,6 @@ package body AWA.Events.Queues.Persistents is
    overriding
    procedure Dequeue (From : in out Persistent_Queue;
                       Process : access procedure (Event : in Module_Event'Class)) is
-      package AC renames AWA.Services.Contexts;
 
       --  Prepare the message by indicating in the database it is going to be processed
       --  by the given server and task.
@@ -153,8 +134,14 @@ package body AWA.Events.Queues.Persistents is
          Session : constant AWA.Users.Models.Session_Ref'Class := Msg.Get_Session;
          Event   : Module_Event;
       begin
-
+         Event.Set_Event_Kind (AWA.Events.Find_Event_Index (Msg.Get_Message_Type.Get_Name));
+         Util.Serialize.Tools.From_JSON (Msg.Get_Parameters, Event.Props);
          Process (Event);
+
+      exception
+         when E : others =>
+            Log.Error ("Exception when processing event", E, True);
+
       end Dispatch_Message;
 
       --  ------------------------------
