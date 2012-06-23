@@ -18,13 +18,8 @@
 
 with Ada.Finalization;
 
-with Util.Strings;
-with Util.Events;
 with Util.Beans.Objects;
-with Util.Beans.Basic;
 with Util.Beans.Objects.Maps;
-
-with ASF.Applications;
 
 with ADO.Sessions;
 
