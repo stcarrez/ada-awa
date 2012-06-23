@@ -178,6 +178,8 @@ package body AWA.Events.Queues.Persistents is
          return;
       end if;
 
+      Log.Info ("Dispatching {0} events", Natural'Image (Count));
+
       --  Dispatch each event.
       for I in 0 .. Count - 1 loop
          Messages.Update_Element (Index   => I,

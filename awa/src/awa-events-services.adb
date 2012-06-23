@@ -141,6 +141,10 @@ package body AWA.Events.Services is
                Queue_Dispatcher_Lists.Query_Element (Pos, Find_Queue'Access);
                exit when Found;
                Queue_Dispatcher_Lists.Next (Pos);
+               if not Queue_Dispatcher_Lists.Has_Element (Pos) then
+                  Log.Debug ("Dispatched event {0} but there was no listener", Name.all);
+                  exit;
+               end if;
             end loop;
          end if;
       end;
