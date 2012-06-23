@@ -11,6 +11,9 @@
      <queue match="*"/>
   </dispatcher>
 
+  <queue name="job-queue" type="persist">
+  </queue>
+
   <context-param>
     <param-name>view.ext</param-name>
     <param-value>.html</param-value>
