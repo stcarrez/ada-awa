@@ -324,7 +324,7 @@ package body AWA.Events.Services.Tests is
    --  ------------------------------
    procedure Test_Dispatch_Persist (T : in out Test) is
    begin
-      T.Dispatch_Event (Event_Test_5.Kind, 200, 3);
+      T.Dispatch_Event (Event_Test_5.Kind, 100, 3);
    end Test_Dispatch_Persist;
 
    --  ------------------------------

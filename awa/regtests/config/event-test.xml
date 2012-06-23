@@ -75,7 +75,7 @@
 
   <!--  Post the event on a database queue.  -->
   <on-event name="event-test-5" queue="persist-queue">
-     <action>#{event_dynamic.send}</action>
+     <action>#{event_test.send}</action>
      <property name="priority">#{event.prio}</property>
      <property name="template">#{event.template}</property>
   </on-event>
