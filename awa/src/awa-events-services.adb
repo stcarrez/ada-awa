@@ -364,6 +364,14 @@ package body AWA.Events.Services is
    end Start;
 
    --  ------------------------------
+   --  Get the application associated with the event manager.
+   --  ------------------------------
+   function Get_Application (Manager : in Event_Manager) return Application_Access is
+   begin
+      return Manager.Application;
+   end Get_Application;
+
+   --  ------------------------------
    --  Finalize the queue dispatcher releasing the dispatcher memory.
    --  ------------------------------
    procedure Finalize (Object : in out Queue_Dispatcher) is

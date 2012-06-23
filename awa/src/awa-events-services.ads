@@ -103,6 +103,9 @@ package AWA.Events.Services is
    --  and tasks are started to process asynchronous events.
    procedure Start (Manager : in out Event_Manager);
 
+   --  Get the application associated with the event manager.
+   function Get_Application (Manager : in Event_Manager) return Application_Access;
+
 private
 
    use AWA.Events.Queues;
