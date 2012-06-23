@@ -13,6 +13,12 @@
      <property name="size">10000</property>
   </queue>
 
+  <queue name="job-queue" type="persist">
+  </queue>
+
+  <queue name="persist-queue" type="persist">
+  </queue>
+
   <!--  Post the event to the same action several times  -->
   <on-event name="event-test-1">
      <action>#{event_test.send}</action>
@@ -65,6 +71,13 @@
      <property name="priority">#{event.prio}</property>
      <property name="template">#{event.template}</property>
      <property name="raise_exception">1</property>
+  </on-event>
+
+  <!--  Post the event on a database queue.  -->
+  <on-event name="event-test-5" queue="persist-queue">
+     <action>#{event_dynamic.send}</action>
+     <property name="priority">#{event.prio}</property>
+     <property name="template">#{event.template}</property>
   </on-event>
 
   <managed-bean>
