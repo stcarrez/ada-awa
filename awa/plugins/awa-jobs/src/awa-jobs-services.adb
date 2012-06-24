@@ -215,7 +215,7 @@ package body AWA.Jobs.Services is
       exception
          when E : others =>
             Log.Error ("Exception when executing job {0}", Job.Job.Get_Name);
-            Log.Error ("Exception: {0}", E, True);
+            Log.Error ("Exception:", E, True);
             Job.Job.Set_Status (Models.FAILED);
       end;
 
@@ -226,7 +226,8 @@ package body AWA.Jobs.Services is
 
       --  And save the job.
       DB.Begin_Transaction;
-      Job.Job.Set_Finish_Date (ADO.Nullable_Time '(Is_Null => True, Value => Ada.Calendar.Clock));
+      Job.Job.Set_Finish_Date (ADO.Nullable_Time '(Is_Null => False,
+                                                   Value   => Ada.Calendar.Clock));
       Job.Save (DB);
       DB.Commit;
    end Execute;
@@ -282,6 +283,8 @@ package body AWA.Jobs.Services is
             else
                Log.Error ("There is no factory to execute job '{0}'", Name);
                Job.Set_Status (AWA.Jobs.Models.FAILED);
+               Job.Set_Finish_Date (ADO.Nullable_Time '(Is_Null => False,
+                                                        Value   => Ada.Calendar.Clock));
                DB.Begin_Transaction;
                Job.Save (Session => DB);
                DB.Commit;
