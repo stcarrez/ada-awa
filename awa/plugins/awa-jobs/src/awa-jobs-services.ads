@@ -156,7 +156,14 @@ package AWA.Jobs.Services is
       Factory : aliased S_Factory := S_Factory '(Work => Work);
    end Work_Definition;
 
+   --  Execute the job associated with the given event.
+   procedure Execute (Event : in AWA.Events.Module_Event'Class);
+
 private
+
+   --  Execute the job and save the job information in the database.
+   procedure Execute (Job : in out Abstract_Job_Type'Class;
+                      DB  : in out ADO.Sessions.Master_Session'Class);
 
    type Abstract_Job_Type is abstract new Ada.Finalization.Limited_Controlled with record
       Job              : AWA.Jobs.Models.Job_Ref;

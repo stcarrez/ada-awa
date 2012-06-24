@@ -19,6 +19,8 @@ with Util.Serialize.Tools;
 with Util.Log.Loggers;
 
 with Ada.Tags;
+with Ada.Calendar;
+with Ada.Unchecked_Deallocation;
 
 with ADO.Sessions.Entities;
 
@@ -29,6 +31,8 @@ with AWA.Jobs.Modules;
 with AWA.Applications;
 with AWA.Events.Services;
 package body AWA.Jobs.Services is
+
+   package ASC renames AWA.Services.Contexts;
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Jobs.Services");
 
@@ -154,8 +158,8 @@ package body AWA.Jobs.Services is
 
       procedure Set_Event (Manager : in out AWA.Events.Services.Event_Manager);
 
-      Ctx : constant AWA.Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      DB   : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Ctx : constant ASC.Service_Context_Access := ASC.Current;
+      DB   : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
       Msg  : AWA.Events.Models.Message_Ref;
       User : constant AWA.Users.Models.User_Ref := Ctx.Get_User;
       Sess : constant AWA.Users.Models.Session_Ref := Ctx.Get_User_Session;
@@ -195,6 +199,70 @@ package body AWA.Jobs.Services is
       Job.Job.Save (DB);
       DB.Commit;
    end Schedule;
+
+   --  ------------------------------
+   --  Execute the job and save the job information in the database.
+   --  ------------------------------
+   procedure Execute (Job : in out Abstract_Job_Type'Class;
+                      DB  : in out ADO.Sessions.Master_Session'Class) is
+      use type AWA.Jobs.Models.Job_Status_Type;
+   begin
+      --  Execute the job with an exception guard.
+      begin
+         Job.Execute;
+
+      exception
+         when E : others =>
+            Log.Error ("Exception when executing job {0}", Job.Job.Get_Name);
+            Log.Error ("Exception: {0}", E, True);
+            Job.Job.Set_Status (Models.FAILED);
+      end;
+
+      --  If the job did not set a completion status, mark it as terminated.
+      if Job.Job.Get_Status = Models.SCHEDULED or Job.Job.Get_Status = Models.RUNNING then
+         Job.Job.Set_Status (Models.TERMINATED);
+      end if;
+
+      --  And save the job.
+      DB.Begin_Transaction;
+      Job.Job.Set_Finish_Date (ADO.Nullable_Time '(Is_Null => True, Value => Ada.Calendar.Clock));
+      Job.Save (DB);
+      DB.Commit;
+   end Execute;
+
+   --  ------------------------------
+   --  Execute the job associated with the given event.
+   --  ------------------------------
+   procedure Execute (Event : in AWA.Events.Module_Event'Class) is
+      procedure Free is
+         new Ada.Unchecked_Deallocation (Object => Abstract_Job_Type'Class,
+                                         Name   => Abstract_Job_Access);
+
+      Ctx  : constant ASC.Service_Context_Access := ASC.Current;
+      DB   : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
+      Job  : AWA.Jobs.Models.Job_Ref;
+   begin
+      DB.Begin_Transaction;
+      Job.Load (Session => DB,
+                Id      => Event.Get_Entity_Identifier);
+      Job.Set_Start_Date (ADO.Nullable_Time '(Is_Null => False, Value => Ada.Calendar.Clock));
+      Job.Set_Status (AWA.Jobs.Models.RUNNING);
+      Job.Save (Session => DB);
+      DB.Commit;
+
+      declare
+         Plugin  : constant AWA.Jobs.Modules.Job_Module_Access := AWA.Jobs.Modules.Get_Job_Module;
+         Factory : constant Job_Factory_Access := Plugin.Find_Factory (Job.Get_Name);
+         Work    : AWA.Jobs.Services.Abstract_Job_Access := null;
+      begin
+         if Factory /= null then
+            Work := Factory.Create;
+            Work.Job := Job;
+            Work.Execute (DB);
+            Free (Work);
+         end if;
+      end;
+   end Execute;
 
    function Get_Name (Factory : in Job_Factory'Class) return String is
    begin
