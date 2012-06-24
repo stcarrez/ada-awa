@@ -26,10 +26,15 @@ with ADO.SQL;
 with AWA.Applications;
 with AWA.Events.Services;
 with AWA.Modules.Get;
+with AWA.Modules.Beans;
+with AWA.Jobs.Beans;
 
 package body AWA.Jobs.Modules is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Jobs.Modules");
+
+   package Register_Beans is new AWA.Modules.Beans (Module        => Job_Module,
+                                                    Module_Access => Job_Module_Access);
 
    --  ------------------------------
    --  Initialize the job module.
@@ -50,10 +55,6 @@ package body AWA.Jobs.Modules is
       Log.Info ("Initializing the jobs module, queue {0}", Name);
 
       App.Do_Event_Manager (Process'Access);
---
---        Register.Register (Plugin  => Plugin,
---                           Name    => "AWA.Blogs.Beans.Post_Bean",
---                           Handler => AWA.Blogs.Beans.Create_Post_Bean'Access);
 
       declare
          DB    : ADO.Sessions.Session := App.Get_Session;
@@ -69,6 +70,10 @@ package body AWA.Jobs.Modules is
             Log.Error ("Event {0} not found in database", "job-create");
          end if;
       end;
+      Register_Beans.Register (Plugin  => Plugin,
+                               Name    => "AWA.Jobs.Beans.Process_Bean",
+                               Handler => AWA.Jobs.Beans.Create_Process_Bean'Access);
+
       AWA.Modules.Module (Plugin).Initialize (App, Props);
    end Initialize;
 

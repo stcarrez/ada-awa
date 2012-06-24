@@ -20,12 +20,14 @@ with Util.Beans.Basic;
 with Util.Beans.Methods;
 
 with AWA.Events;
+with AWA.Jobs.Modules;
 package AWA.Jobs.Beans is
 
    --  The <tt>Process_Bean</tt> is the Ada bean that receives the job event and
    --  performs the job action associated with it.
    type Process_Bean is new Util.Beans.Basic.Bean
      and Util.Beans.Methods.Method_Bean with private;
+   type Process_Bean_Access is access all Process_Bean'Class;
 
    --  Get the value identified by the name.
    overriding
@@ -47,9 +49,15 @@ package AWA.Jobs.Beans is
    procedure Execute (Bean    : in out Process_Bean;
                       Event   : in AWA.Events.Module_Event'Class);
 
+   --  Create the job process bean instance.
+   function Create_Process_Bean (Module : in AWA.Jobs.Modules.Job_Module_Access)
+                                 return Util.Beans.Basic.Readonly_Bean_Access;
+
 private
 
    type Process_Bean is new Util.Beans.Basic.Bean
-     and Util.Beans.Methods.Method_Bean with null record;
+     and Util.Beans.Methods.Method_Bean with record
+      Module : AWA.Jobs.Modules.Job_Module_Access;
+   end record;
 
 end AWA.Jobs.Beans;

@@ -69,4 +69,15 @@ package body AWA.Jobs.Beans is
       null;
    end Execute;
 
+   --  ------------------------------
+   --  Create the job process bean instance.
+   --  ------------------------------
+   function Create_Process_Bean (Module : in AWA.Jobs.Modules.Job_Module_Access)
+                                 return Util.Beans.Basic.Readonly_Bean_Access is
+      Result : constant Process_Bean_Access := new Process_Bean;
+   begin
+      Result.Module := Module;
+      return Result.all'Access;
+   end Create_Process_Bean;
+
 end AWA.Jobs.Beans;
