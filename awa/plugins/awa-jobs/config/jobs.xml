@@ -17,7 +17,7 @@
   </context-param>
 
   <!--  When a user is created, send him a welcome message.  -->
-  <on-event name="job-create" type="job-queue">
+  <on-event name="job-create" queue="job-queue">
      <action>#{jobHandler.execute}</action>
   </on-event>
 
