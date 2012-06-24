@@ -85,6 +85,8 @@ package body AWA.Events.Queues.Persistents is
       Msg.Set_Session (Ctx.Get_User_Session);
       Msg.Set_Create_Date (Event.Get_Time);
       Msg.Set_Status (AWA.Events.Models.QUEUED);
+      Msg.Set_Entity_Id (Event.Get_Entity_Identifier);
+      Msg.Set_Entity_Type (Event.Entity_Type);
 
       --  Collect the event parameters in a string and format the result in JSON.
       Msg.Set_Parameters (Util.Serialize.Tools.To_JSON (Event.Props));
@@ -136,6 +138,8 @@ package body AWA.Events.Queues.Persistents is
       begin
          Event.Set_Event_Kind (AWA.Events.Find_Event_Index (Msg.Get_Message_Type.Get_Name));
          Util.Serialize.Tools.From_JSON (Msg.Get_Parameters, Event.Props);
+         Event.Set_Entity_Identifier (Msg.Get_Entity_Id);
+         Event.Entity_Type := Msg.Get_Entity_Type;
          Process (Event);
 
       exception
