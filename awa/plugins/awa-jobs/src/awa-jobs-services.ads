@@ -68,6 +68,11 @@ package AWA.Jobs.Services is
                             Value : in String);
 
    --  Set the job parameter identified by the <b>Name</b> to the value given in <b>Value</b>.
+   procedure Set_Parameter (Job   : in out Abstract_Job_Type;
+                            Name  : in String;
+                            Value : in Integer);
+
+   --  Set the job parameter identified by the <b>Name</b> to the value given in <b>Value</b>.
    --  The value object can hold any kind of basic value type (integer, enum, date, strings).
    --  If the value represents a bean, the <tt>Invalid_Value</tt> exception is raised.
    procedure Set_Parameter (Job   : in out Abstract_Job_Type;
@@ -77,6 +82,12 @@ package AWA.Jobs.Services is
    --  Get the job parameter identified by the <b>Name</b> and convert the value into a string.
    function Get_Parameter (Job  : in Abstract_Job_Type;
                            Name : in String) return String;
+
+   --  Get the job parameter identified by the <b>Name</b> and convert the value as an integer.
+   --  If the parameter is not defined, return the default value passed in <b>Default</b>.
+   function Get_Parameter (Job     : in Abstract_Job_Type;
+                           Name    : in String;
+                           Default : in Integer) return Integer;
 
    --  Get the job parameter identified by the <b>Name</b> and return it as a typed object.
    function Get_Parameter (Job  : in Abstract_Job_Type;

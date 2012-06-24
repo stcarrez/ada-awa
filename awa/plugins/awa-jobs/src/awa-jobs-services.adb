@@ -44,6 +44,16 @@ package body AWA.Jobs.Services is
 
    --  ------------------------------
    --  Set the job parameter identified by the <b>Name</b> to the value given in <b>Value</b>.
+   --  ------------------------------
+   procedure Set_Parameter (Job   : in out Abstract_Job_Type;
+                            Name  : in String;
+                            Value : in Integer) is
+   begin
+      Job.Set_Parameter (Name, Util.Beans.Objects.To_Object (Value));
+   end Set_Parameter;
+
+   --  ------------------------------
+   --  Set the job parameter identified by the <b>Name</b> to the value given in <b>Value</b>.
    --  The value object can hold any kind of basic value type (integer, enum, date, strings).
    --  If the value represents a bean, the <tt>Invalid_Value</tt> exception is raised.
    --  ------------------------------
@@ -63,6 +73,30 @@ package body AWA.Jobs.Services is
       Value : constant Util.Beans.Objects.Object := Job.Get_Parameter (Name);
    begin
       return Util.Beans.Objects.To_String (Value);
+   end Get_Parameter;
+
+   --  ------------------------------
+   --  Get the job parameter identified by the <b>Name</b> and convert the value as an integer.
+   --  If the parameter is not defined, return the default value passed in <b>Default</b>.
+   --  ------------------------------
+   function Get_Parameter (Job     : in Abstract_Job_Type;
+                           Name    : in String;
+                           Default : in Integer) return Integer is
+      Pos : constant Util.Beans.Objects.Maps.Cursor := Job.Props.Find (Name);
+   begin
+      if Util.Beans.Objects.Maps.Has_Element (Pos) then
+         declare
+            Value : constant Util.Beans.Objects.Object := Util.Beans.Objects.Maps.Element (Pos);
+         begin
+            if Util.Beans.Objects.Is_Null (Value) then
+               return Default;
+            else
+               return Util.Beans.Objects.To_Integer (Value);
+            end if;
+         end;
+      else
+         return Default;
+      end if;
    end Get_Parameter;
 
    --  ------------------------------
