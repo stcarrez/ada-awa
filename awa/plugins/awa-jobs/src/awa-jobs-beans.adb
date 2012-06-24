@@ -17,7 +17,7 @@
 -----------------------------------------------------------------------
 
 with AWA.Events.Action_Method;
-
+with AWA.Jobs.Services;
 package body AWA.Jobs.Beans is
 
    package Execute_Binding is
@@ -66,7 +66,7 @@ package body AWA.Jobs.Beans is
    procedure Execute (Bean    : in out Process_Bean;
                       Event   : in AWA.Events.Module_Event'Class) is
    begin
-      null;
+      AWA.Jobs.Services.Execute (Event);
    end Execute;
 
    --  ------------------------------
