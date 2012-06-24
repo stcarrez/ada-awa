@@ -30,6 +30,7 @@ with AWA.Services.Contexts;
 with AWA.Jobs.Modules;
 with AWA.Applications;
 with AWA.Events.Services;
+with AWA.Modules;
 package body AWA.Jobs.Services is
 
    package ASC renames AWA.Services.Contexts;
@@ -234,14 +235,28 @@ package body AWA.Jobs.Services is
    --  Execute the job associated with the given event.
    --  ------------------------------
    procedure Execute (Event : in AWA.Events.Module_Event'Class) is
+      use AWA.Jobs.Modules;
+      use type AWA.Modules.Module_Access;
+
       procedure Free is
          new Ada.Unchecked_Deallocation (Object => Abstract_Job_Type'Class,
                                          Name   => Abstract_Job_Access);
 
-      Ctx  : constant ASC.Service_Context_Access := ASC.Current;
-      DB   : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
-      Job  : AWA.Jobs.Models.Job_Ref;
+      Ctx    : constant ASC.Service_Context_Access := ASC.Current;
+      App    : constant AWA.Applications.Application_Access := Ctx.Get_Application;
+      Module : constant AWA.Modules.Module_Access := App.Find_Module (AWA.Jobs.Modules.NAME);
+      DB     : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
+      Job    : AWA.Jobs.Models.Job_Ref;
    begin
+      if Module = null then
+         Log.Warn ("There is no Job module to execute a job");
+         raise Execute_Error;
+      end if;
+      if not (Module.all in AWA.Jobs.Modules.Job_Module'Class) then
+         Log.Warn ("The 'job' module is not a valid module for job execution");
+         raise Execute_Error;
+      end if;
+
       DB.Begin_Transaction;
       Job.Load (Session => DB,
                 Id      => Event.Get_Entity_Identifier);
@@ -251,16 +266,27 @@ package body AWA.Jobs.Services is
       DB.Commit;
 
       declare
-         Plugin  : constant AWA.Jobs.Modules.Job_Module_Access := AWA.Jobs.Modules.Get_Job_Module;
-         Factory : constant Job_Factory_Access := Plugin.Find_Factory (Job.Get_Name);
-         Work    : AWA.Jobs.Services.Abstract_Job_Access := null;
+         Name : constant String := Job.Get_Name;
       begin
-         if Factory /= null then
-            Work := Factory.Create;
-            Work.Job := Job;
-            Work.Execute (DB);
-            Free (Work);
-         end if;
+         Log.Info ("Restoring job '{0}'", Name);
+         declare
+            Plugin  : constant Job_Module_Access := Job_Module'Class (Module.all)'Access;
+            Factory : constant Job_Factory_Access := Plugin.Find_Factory (Name);
+            Work    : AWA.Jobs.Services.Abstract_Job_Access := null;
+         begin
+            if Factory /= null then
+               Work := Factory.Create;
+               Work.Job := Job;
+               Work.Execute (DB);
+               Free (Work);
+            else
+               Log.Error ("There is no factory to execute job '{0}'", Name);
+               Job.Set_Status (AWA.Jobs.Models.FAILED);
+               DB.Begin_Transaction;
+               Job.Save (Session => DB);
+               DB.Commit;
+            end if;
+         end;
       end;
    end Execute;
 

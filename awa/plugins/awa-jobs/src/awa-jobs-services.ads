@@ -28,11 +28,13 @@ with AWA.Jobs.Models;
 
 package AWA.Jobs.Services is
 
-   Closed_Error  : exception;
+   Closed_Error   : exception;
 
    Schedule_Error : exception;
 
-   Invalid_Value : exception;
+   Execute_Error  : exception;
+
+   Invalid_Value  : exception;
 
    --  Event posted when a job is created.
    package Job_Create_Event is new AWA.Events.Definition (Name => "job-create");
