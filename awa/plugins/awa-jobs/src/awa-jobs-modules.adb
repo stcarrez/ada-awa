@@ -91,13 +91,28 @@ package body AWA.Jobs.Modules is
    --  ------------------------------
    procedure Register (Plugin     : in out Job_Module;
                        Definition : in AWA.Jobs.Services.Job_Factory_Access) is
-      Name : constant String := Ada.Tags.Expanded_Name (Definition.all'Tag);
+      Name  : constant String := Ada.Tags.Expanded_Name (Definition.all'Tag);
       Ename : constant String := Ada.Tags.External_Tag (Definition.all'Tag);
    begin
       Log.Info ("Register job {0} - {1}", Name, Ename);
 
       Plugin.Factory.Include (Name, Definition);
    end Register;
+
+   --  ------------------------------
+   --  Find the job work factory registered under the name <b>Name</b>.
+   --  Returns null if there is no such factory.
+   --  ------------------------------
+   function Find_Factory (Plugin : in Job_Module;
+                          Name   : in String) return AWA.Jobs.Services.Job_Factory_Access is
+      Pos : constant Job_Factory_Map.Cursor := Plugin.Factory.Find (Name);
+   begin
+      if Job_Factory_Map.Has_Element (Pos) then
+         return Job_Factory_Map.Element (Pos);
+      else
+         return null;
+      end if;
+   end Find_Factory;
 
    --  ------------------------------
    --  Create an event to schedule the job execution.

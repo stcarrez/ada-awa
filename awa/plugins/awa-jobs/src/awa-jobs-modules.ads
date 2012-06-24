@@ -48,6 +48,11 @@ package AWA.Jobs.Modules is
    procedure Register (Plugin     : in out Job_Module;
                        Definition : in AWA.Jobs.Services.Job_Factory_Access);
 
+   --  Find the job work factory registered under the name <b>Name</b>.
+   --  Returns null if there is no such factory.
+   function Find_Factory (Plugin : in Job_Module;
+                          Name   : in String) return AWA.Jobs.Services.Job_Factory_Access;
+
    --  Create an event to schedule the job execution.
    procedure Create_Event (Event : in out AWA.Events.Models.Message_Ref);
 
