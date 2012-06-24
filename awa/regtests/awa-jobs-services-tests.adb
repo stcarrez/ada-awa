@@ -16,13 +16,15 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Util.Tests;
 with Util.Test_Caller;
-with AWA.Tests;
+with Util.Log.Loggers;
+
 with AWA.Jobs.Modules;
 with AWA.Services.Contexts;
 
 package body AWA.Jobs.Services.Tests is
+
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Jobs.Services.Tests");
 
    package Caller is new Util.Test_Caller (Test, "Jobs.Services");
 
@@ -33,8 +35,10 @@ package body AWA.Jobs.Services.Tests is
    end Add_Tests;
 
    procedure Work_1 (Job : in out AWA.Jobs.Services.Abstract_Job_Type'Class) is
+      Msg : constant String := Job.Get_Parameter ("message");
+      Cnt : constant Natural := Job.Get_Parameter ("count", 0);
    begin
-      null;
+      Log.Info ("Execute work_1 {0}, count {1}", Msg, Natural'Image (Cnt));
    end Work_1;
 
    procedure Work_2 (Job : in out AWA.Jobs.Services.Abstract_Job_Type'Class) is
@@ -42,17 +46,30 @@ package body AWA.Jobs.Services.Tests is
       null;
    end Work_2;
 
+   --  ------------------------------
    --  Test the job factory.
+   --  ------------------------------
    procedure Test_Job_Schedule (T : in out Test) is
+      use type AWA.Jobs.Models.Job_Status_Type;
+
       Context : AWA.Services.Contexts.Service_Context;
       J       : AWA.Jobs.Services.Job_Type;
    begin
       Context.Set_Context (AWA.Tests.Get_Application, null);
 
-      J.Set_Parameter ("count", "1");
+      J.Set_Parameter ("count", 1);
+      Util.Tests.Assert_Equals (T, 1, J.Get_Parameter ("count", 0), "Invalid count param");
+
       J.Set_Parameter ("message", "Hello");
+      Util.Tests.Assert_Equals (T, "Hello", J.Get_Parameter ("message"), "Invalid message param");
+
       J.Schedule (Work_1_Definition.Factory);
 
+      T.Assert (J.Get_Status = AWA.Jobs.Models.SCHEDULED, "Job is not scheduled");
+      --
+      for I in 1 .. 10 loop
+         delay 0.1;
+      end loop;
    end Test_Job_Schedule;
 
    --  Execute the job.  This operation must be implemented and should perform the work
