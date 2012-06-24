@@ -227,6 +227,23 @@ package body AWA.Events is
    end Get_Event_Type_Name;
 
    --  ------------------------------
+   --  Get the entity identifier associated with the event.
+   --  ------------------------------
+   function Get_Entity_Identifier (Event : in Module_Event) return ADO.Identifier is
+   begin
+      return Event.Entity;
+   end Get_Entity_Identifier;
+
+   --  ------------------------------
+   --  Set the entity identifier associated with the event.
+   --  ------------------------------
+   procedure Set_Entity_Identifier (Event : in out Module_Event;
+                                    Id    : in ADO.Identifier) is
+   begin
+      Event.Entity := Id;
+   end Set_Entity_Identifier;
+
+   --  ------------------------------
    --  Make and return a copy of the event.
    --  ------------------------------
    function Copy (Event : in Module_Event) return Module_Event_Access is

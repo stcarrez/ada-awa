@@ -22,6 +22,8 @@ with Util.Beans.Objects;
 with Util.Beans.Basic;
 with Util.Beans.Objects.Maps;
 
+with ADO;
+
 --  == Introduction ==
 --  The <b>AWA.Events</b> package defines an event framework for modules to post events
 --  and have Ada bean methods be invoked when these events are dispatched.  Subscription to
@@ -142,11 +144,21 @@ package AWA.Events is
    function Get_Value (Event : in Module_Event;
                        Name  : in String) return Util.Beans.Objects.Object;
 
+   --  Get the entity identifier associated with the event.
+   function Get_Entity_Identifier (Event : in Module_Event) return ADO.Identifier;
+
+   --  Set the entity identifier associated with the event.
+   procedure Set_Entity_Identifier (Event : in out Module_Event;
+                                    Id    : in ADO.Identifier);
+
+
 private
 
    type Module_Event is new Util.Events.Event and Util.Beans.Basic.Readonly_Bean with record
-      Kind  : Event_Index := Invalid_Event;
-      Props : Util.Beans.Objects.Maps.Map;
+      Kind        : Event_Index := Invalid_Event;
+      Props       : Util.Beans.Objects.Maps.Map;
+      Entity      : ADO.Identifier;
+      Entity_Type : ADO.Entity_Type;
    end record;
 
    --  The index of the last event definition.
