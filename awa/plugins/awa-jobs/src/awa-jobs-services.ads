@@ -39,6 +39,9 @@ package AWA.Jobs.Services is
    --  Event posted when a job is created.
    package Job_Create_Event is new AWA.Events.Definition (Name => "job-create");
 
+   --  Get the job status.
+   function Get_Job_Status (Id : in ADO.Identifier) return AWA.Jobs.Models.Job_Status_Type;
+
    --  ------------------------------
    --  Abstract_Job Type
    --  ------------------------------

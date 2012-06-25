@@ -23,6 +23,7 @@ with Ada.Calendar;
 with Ada.Unchecked_Deallocation;
 
 with ADO.Sessions.Entities;
+with ADO.Statements;
 
 with AWA.Users.Models;
 with AWA.Events.Models;
@@ -36,6 +37,20 @@ package body AWA.Jobs.Services is
    package ASC renames AWA.Services.Contexts;
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Jobs.Services");
+
+   --  ------------------------------
+   --  Get the job status.
+   --  ------------------------------
+   function Get_Job_Status (Id : in ADO.Identifier) return AWA.Jobs.Models.Job_Status_Type is
+      Ctx  : constant ASC.Service_Context_Access := ASC.Current;
+      DB   : constant ADO.Sessions.Session := ASC.Get_Session (Ctx);
+      Stmt : ADO.Statements.Query_Statement
+        := DB.Create_Statement ("select status from awa_jobs where id = ?");
+   begin
+      Stmt.Add_Param (Id);
+      Stmt.Execute;
+      return Models.Job_Status_Type'Val (Stmt.Get_Result_Integer);
+   end Get_Job_Status;
 
    --  ------------------------------
    --  Set the job parameter identified by the <b>Name</b> to the value given in <b>Value</b>.
