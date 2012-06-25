@@ -278,6 +278,7 @@ package body AWA.Jobs.Services is
             if Factory /= null then
                Work := Factory.Create;
                Work.Job := Job;
+               Event.Copy (Work.Props);
                Work.Execute (DB);
                Free (Work);
             else
