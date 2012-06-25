@@ -104,7 +104,7 @@ package body AWA.Services.Contexts is
    --  ------------------------------
    procedure Start (Ctx : in out Service_Context) is
    begin
-      if Ctx.Transaction = 0 and then Ctx.Master.Get_Status /= ADO.Databases.OPEN then
+      if Ctx.Transaction = 0 and then not Ctx.Active_Transaction then
          Ctx.Master.Begin_Transaction;
          Ctx.Active_Transaction := True;
       end if;
