@@ -122,6 +122,15 @@ package body AWA.Jobs.Services is
    end Get_Status;
 
    --  ------------------------------
+   --  Get the job identifier once the job was scheduled.  The job identifier allows to
+   --  retrieve the job and check its execution and completion status later on.
+   --  ------------------------------
+   function Get_Identifier (Job : in Abstract_Job_Type) return ADO.Identifier is
+   begin
+      return Job.Job.Get_Id;
+   end Get_Identifier;
+
+   --  ------------------------------
    --  Set the job status.
    --  When the job is terminated, it is closed and the job parameters or results cannot be
    --  changed.

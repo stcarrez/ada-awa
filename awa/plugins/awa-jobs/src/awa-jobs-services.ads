@@ -47,18 +47,6 @@ package AWA.Jobs.Services is
    type Abstract_Job_Type is abstract new Ada.Finalization.Limited_Controlled with private;
    type Abstract_Job_Access is access all Abstract_Job_Type'Class;
 
-   --  ------------------------------
-   --  Job Factory
-   --  ------------------------------
-   type Job_Factory is abstract tagged limited null record;
-   type Job_Factory_Access is access all Job_Factory'Class;
-
-   --  Create the job instance using the job factory.
-   function Create (Factory : in Job_Factory) return Abstract_Job_Access is abstract;
-
-   --  Get the job factory name.
-   function Get_Name (Factory : in Job_Factory'Class) return String;
-
    --  Execute the job.  This operation must be implemented and should perform the work
    --  represented by the job.  It should use the <tt>Get_Parameter</tt> function to retrieve
    --  the job parameter and it can use the <tt>Set_Result</tt> operation to save the result.
@@ -98,6 +86,10 @@ package AWA.Jobs.Services is
    --  Get the job status.
    function Get_Status (Job : in Abstract_Job_Type) return AWA.Jobs.Models.Job_Status_Type;
 
+   --  Get the job identifier once the job was scheduled.  The job identifier allows to
+   --  retrieve the job and check its execution and completion status later on.
+   function Get_Identifier (Job : in Abstract_Job_Type) return ADO.Identifier;
+
    --  Set the job status.
    --  When the job is terminated, it is closed and the job parameters or results cannot be
    --  changed.
@@ -108,6 +100,20 @@ package AWA.Jobs.Services is
    --  to save the job.
    procedure Save (Job : in out Abstract_Job_Type;
                    DB  : in out ADO.Sessions.Master_Session'Class);
+
+   --  ------------------------------
+   --  Job Factory
+   --  ------------------------------
+   --  The <b>Job_Factory</b> is the interface that allows to create a job instance in order
+   --  to execute a scheduled job.
+   type Job_Factory is abstract tagged limited null record;
+   type Job_Factory_Access is access all Job_Factory'Class;
+
+   --  Create the job instance using the job factory.
+   function Create (Factory : in Job_Factory) return Abstract_Job_Access is abstract;
+
+   --  Get the job factory name.
+   function Get_Name (Factory : in Job_Factory'Class) return String;
 
    --  Schedule the job.
    procedure Schedule (Job        : in out Abstract_Job_Type;
