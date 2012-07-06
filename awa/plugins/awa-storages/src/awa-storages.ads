@@ -18,12 +18,16 @@
 
 --  ==  Introduction  ==
 --  The <b>Storages</b> module provides a set of storage services allowing an application
---  to store data files, documents, images in a persistent area.
+--  to store data files, documents, images in a persistent area.  The persistent store can
+--  be on a file system, in the database or provided by a remote service such as
+--  Amazon Web Services.
 --
 --  == Ada Beans ==
 --  @include storages.xml
 --
---  == Data Model ==
+--  == Model ==
+--  [http://ada-awa.googlecode.com/svn/wiki/awa_storage_model.png]
+--
 --  @include Storages.hbm.xml
 package AWA.Storages is
 
