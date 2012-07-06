@@ -244,6 +244,15 @@ package body AWA.Events is
    end Set_Entity_Identifier;
 
    --  ------------------------------
+   --  Copy the event properties to the map passed in <tt>Into</tt>.
+   --  ------------------------------
+   procedure Copy (Event : in Module_Event;
+                   Into  : in out Util.Beans.Objects.Maps.Map) is
+   begin
+      Into := Event.Props;
+   end Copy;
+
+   --  ------------------------------
    --  Make and return a copy of the event.
    --  ------------------------------
    function Copy (Event : in Module_Event) return Module_Event_Access is

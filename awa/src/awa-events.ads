@@ -152,6 +152,10 @@ package AWA.Events is
                                     Id    : in ADO.Identifier);
 
 
+   --  Copy the event properties to the map passed in <tt>Into</tt>.
+   procedure Copy (Event : in Module_Event;
+                   Into  : in out Util.Beans.Objects.Maps.Map);
+
 private
 
    type Module_Event is new Util.Events.Event and Util.Beans.Basic.Readonly_Bean with record
