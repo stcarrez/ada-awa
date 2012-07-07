@@ -48,7 +48,9 @@ with AWA.Users.Servlets;
 --
 --  @include users.xml
 --
---  == Data Model ==
+--  == Model ==
+--  [http://ada-awa.googlecode.com/svn/wiki/awa_user_model.png]
+--
 --  @include User.hbm.xml
 package AWA.Users.Modules is
 
