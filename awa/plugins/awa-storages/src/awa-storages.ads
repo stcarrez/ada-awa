@@ -23,9 +23,9 @@
 --  Amazon Simple Storage Service.
 --
 --  == Creating a storage ==
---  A content in the storage is represented by a `Storage_Ref` instance.  The data itself
---  can be physically stored in the file system (`FILE` mode), in the database (`DATABASE`
---  mode) or on a remote server (`URL` mode).  To put a file in the storage, first create
+--  A data in the storage is represented by a `Storage_Ref` instance.  The data itself
+--  can be physically stored in a file system (`FILE` mode), in the database (`DATABASE`
+--  mode) or on a remote server (`URL` mode).  To put a file in the storage space, first create
 --  the storage object instance:
 --
 --    Data : AWA.Storages.Models.Storage_Ref;
@@ -35,8 +35,9 @@
 --
 --    Data.Set_Storage (Storage => AWA.Storages.Models.DATABASE);
 --
---  To save a file in the store, we can use the `Save` operation.  It will read the file
---  and put in in the corresponding persistent store (the database in this example).
+--  To save a file in the store, we can use the `Save` operation of the storage service.
+--  It will read the file and put in in the corresponding persistent store (the database
+--  in this example).
 --
 --    Service.Save (Into => Data, Path => Path_To_The_File);
 --
