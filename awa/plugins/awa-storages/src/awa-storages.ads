@@ -28,20 +28,47 @@
 --  mode) or on a remote server (`URL` mode).  To put a file in the storage, first create
 --  the storage object instance:
 --
---    Data     : AWA.Storages.Models.Storage_Ref;
+--    Data : AWA.Storages.Models.Storage_Ref;
 --
 --  Then setup the storage mode that you want.  The storage service uses this information
 --  to save the data in a file, in the database or in a remote service (in the future).
 --
---    Data.Set_Storage (AWA.Storages.Models.DATABASE);
+--    Data.Set_Storage (Storage => AWA.Storages.Models.DATABASE);
 --
 --  To save a file in the store, we can use the `Save` operation.  It will read the file
 --  and put in in the corresponding persistent store (the database in this example).
 --
---    Service.Save (Data, Path);
+--    Service.Save (Into => Data, Path => Path_To_The_File);
 --
 --  Upon successful completion, the storage instance `Data` will be allocated a unique
 --  identifier that can be retrieved by `Get_Id` or `Get_Key`.
+--
+--  == Getting the data ==
+--  Several operations are defined to retrieve the data.  Each of them has been designed
+--  to optimize the retrieval and
+--
+--    * The data can be retrieved in a local file.
+--      This mode is useful if an external program must be launched and be able to read
+--      the file.  If the storage mode of the data is `FILE`, the path of the file on
+--      the storage file system is used.  For other storage modes, the file is saved
+--      in a temporary file.  In that case the `Store_Local` database table is used
+--      to track such locally saved data.
+--    * The data can be returned as a stream.
+--      When the application has to read the data, opening a read stream connection is
+--      the most efficient mechanism.
+--
+--  To access the data by using a local file, we must define a local storage reference:
+--
+--    Data : AWA.Storages.Models.Store_Local_Ref;
+--
+--  and use the `Load` operation with the storage identifier:
+--
+--    Service.Load (From => Id, Into => Data);
+--
+--  Once the load operation succeeded, the data is stored on the file system and
+--  the local path is obtained by using the `Get_Path` operation:
+--
+--    Path : constant String := Data.Get_Path;
 --
 --  == Ada Beans ==
 --  @include storages.xml
