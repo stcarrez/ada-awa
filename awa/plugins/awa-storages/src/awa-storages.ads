@@ -16,11 +16,32 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
---  ==  Introduction  ==
+--  == Introduction ==
 --  The <b>Storages</b> module provides a set of storage services allowing an application
 --  to store data files, documents, images in a persistent area.  The persistent store can
 --  be on a file system, in the database or provided by a remote service such as
---  Amazon Web Services.
+--  Amazon Simple Storage Service.
+--
+--  == Creating a storage ==
+--  A content in the storage is represented by a `Storage_Ref` instance.  The data itself
+--  can be physically stored in the file system (`FILE` mode), in the database (`DATABASE`
+--  mode) or on a remote server (`URL` mode).  To put a file in the storage, first create
+--  the storage object instance:
+--
+--    Data     : AWA.Storages.Models.Storage_Ref;
+--
+--  Then setup the storage mode that you want.  The storage service uses this information
+--  to save the data in a file, in the database or in a remote service (in the future).
+--
+--    Data.Set_Storage (AWA.Storages.Models.DATABASE);
+--
+--  To save a file in the store, we can use the `Save` operation.  It will read the file
+--  and put in in the corresponding persistent store (the database in this example).
+--
+--    Service.Save (Data, Path);
+--
+--  Upon successful completion, the storage instance `Data` will be allocated a unique
+--  identifier that can be retrieved by `Get_Id` or `Get_Key`.
 --
 --  == Ada Beans ==
 --  @include storages.xml
