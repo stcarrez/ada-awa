@@ -53,17 +53,23 @@
 --      the storage file system is used.  For other storage modes, the file is saved
 --      in a temporary file.  In that case the `Store_Local` database table is used
 --      to track such locally saved data.
+--
 --    * The data can be returned as a stream.
 --      When the application has to read the data, opening a read stream connection is
 --      the most efficient mechanism.
 --
+--  === Local file ===
 --  To access the data by using a local file, we must define a local storage reference:
 --
 --    Data : AWA.Storages.Models.Store_Local_Ref;
 --
---  and use the `Load` operation with the storage identifier:
+--  and use the `Load` operation with the storage identifier.  When loading locally we
+--  also indicate whether the file will be read or written.  A file that is in `READ` mode
+--  can be shared by several tasks or processes.  A file that is in `WRITE` mode will have
+--  a specific copy for the caller.  An optional expiration parameter indicate when the
+--  local file representation can expire.
 --
---    Service.Load (From => Id, Into => Data);
+--    Service.Load (From => Id, Into => Data, Mode => READ, Expire => ONE_DAY);
 --
 --  Once the load operation succeeded, the data is stored on the file system and
 --  the local path is obtained by using the `Get_Path` operation:
