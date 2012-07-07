@@ -38,7 +38,7 @@ package AWA.Storages.Modules is
    function Get_Storage_Manager (Plugin : in Storage_Module)
                                  return Services.Storage_Service_Access;
 
-   --  Create a storage manager.  This operation can be overriden to provide another
+   --  Create a storage manager.  This operation can be overridden to provide another
    --  storage service implementation.
    function Create_Storage_Manager (Plugin : in Storage_Module)
                                     return Services.Storage_Service_Access;
@@ -52,7 +52,7 @@ package AWA.Storages.Modules is
 private
 
    type Storage_Module is new AWA.Modules.Module with record
-      Manager     : Services.Storage_Service_Access := null;
+      Manager        : Services.Storage_Service_Access := null;
    end record;
 
 end AWA.Storages.Modules;
