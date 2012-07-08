@@ -18,6 +18,10 @@
 with ADO.Sessions;
 
 with AWA.Storages.Models;
+
+--  == Store Service ==
+--  The `AWA.Storages.Stores` package defines the interface that a store must implement to
+--  be able to save and retrieve a data content.
 package AWA.Storages.Stores is
 
    --  ------------------------------
@@ -26,6 +30,8 @@ package AWA.Storages.Stores is
    type Store is limited interface;
    type Store_Access is access all Store'Class;
 
+   --  Save the file represented by the `Path` variable into a store and associate that
+   --  content with the storage reference represented by `Into`.
    procedure Save (Storage : in Store;
                    Into    : in out AWA.Storages.Models.Storage_Ref'Class;
                    Path    : in String) is abstract;
