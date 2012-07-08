@@ -15,10 +15,10 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with ADO.Sessions;
 
 with Security.Permissions;
 
+with ADO;
 with ASF.Parts;
 with AWA.Modules;
 
@@ -29,6 +29,10 @@ package AWA.Storages.Services is
 
    package ACL_Create_Storage is new Security.Permissions.Permission_ACL ("storage-create");
    package ACL_Delete_Storage is new Security.Permissions.Permission_ACL ("storage-delete");
+
+   type Read_Mode is (READ, WRITE);
+
+   type Expire_Type is (ONE_HOUR, ONE_DAY, TWO_DAYS, ONE_WEEK, ONE_YEAR, NEVER);
 
    --  ------------------------------
    --  Storage Service
@@ -75,6 +79,16 @@ package AWA.Storages.Services is
    procedure Load (Service : in Storage_Service;
                    From    : in ADO.Identifier;
                    Into    : out ADO.Blob_Ref);
+
+   --  Load the storage content into a file.  If the data is not stored in a file, a temporary
+   --  file is created with the data content fetched from the store (ex: the database).
+   --  The `Mode` parameter indicates whether the file will be read or written.
+   --  The `Expire` parameter allows to control the expiration of the temporary file.
+   procedure Load (Service : in Storage_Service;
+                   From    : in ADO.Identifier;
+                   Into    : out AWA.Storages.Models.Store_Local_Ref;
+                   Mode    : in Read_Mode := READ;
+                   Expire  : in Expire_Type := ONE_DAY);
 
    --  Deletes the storage instance.
    procedure Delete (Service : in Storage_Service;

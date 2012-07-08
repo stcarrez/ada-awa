@@ -20,6 +20,7 @@ with Ada.Calendar;
 with Util.Log.Loggers;
 
 with ADO.Objects;
+with ADO.Queries;
 with ADO.Statements;
 with ADO.Sessions.Entities;
 
@@ -142,6 +143,54 @@ package body AWA.Storages.Services is
 
       Query.Execute;
       Into := Query.Get_Result_Blob;
+   end Load;
+
+   --  Load the storage content into a file.  If the data is not stored in a file, a temporary
+   --  file is created with the data content fetched from the store (ex: the database).
+   --  The `Mode` parameter indicates whether the file will be read or written.
+   --  The `Expire` parameter allows to control the expiration of the temporary file.
+   procedure Load (Service : in Storage_Service;
+                   From    : in ADO.Identifier;
+                   Into    : out AWA.Storages.Models.Store_Local_Ref;
+                   Mode    : in Read_Mode := READ;
+                   Expire  : in Expire_Type := ONE_DAY) is
+      use type Stores.Store_Access;
+      use type Models.Storage_Type;
+
+      Ctx     : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      User    : constant ADO.Identifier := Ctx.Get_User_Identifier;
+      DB      : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Query   : ADO.Queries.Context;
+      Found   : Boolean;
+      Storage : AWA.Storages.Models.Storage_Ref;
+      Store   : Stores.Store_Access;
+   begin
+      if Mode = READ then
+         Query.Set_Query (AWA.Storages.Models.Query_Storage_Get_Local);
+         Query.Bind_Param ("store_id", From);
+         Query.Bind_Param ("user_id", User);
+         Into.Find (DB, Query, Found);
+         if Found then
+            return;
+         end if;
+      end if;
+
+      Query.Set_Query (AWA.Storages.Models.Query_Storage_Get_Storage);
+      Query.Bind_Param ("store_id", From);
+      Query.Bind_Param ("user_id", User);
+      Storage.Find (DB, Query, Found);
+      if not Found then
+         raise ADO.Objects.NOT_FOUND;
+      end if;
+
+      if Storage.Get_Storage = AWA.Storages.Models.FILE then
+         Into.Set_Path (String '(Storage.Get_Uri));
+         return;
+      end if;
+      Store := Storage_Service'Class (Service).Get_Store (Storage);
+      Store.Load (Session => DB,
+                  From    => Storage,
+                  Into    => Into.Get_Path);
    end Load;
 
    --  ------------------------------
