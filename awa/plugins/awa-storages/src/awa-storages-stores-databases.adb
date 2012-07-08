@@ -15,23 +15,29 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with ADO.Sessions;
 
-with AWA.Storages.Models;
 package body AWA.Storages.Stores.Databases is
 
    --  ------------------------------
-   --  Storage Service
+   --  Save the file represented by the `Path` variable into a store and associate that
+   --  content with the storage reference represented by `Into`.
    --  ------------------------------
-
    procedure Save (Storage : in Database_Store;
+                   Session : in out ADO.Sessions.Master_Session;
                    Into    : in out AWA.Storages.Models.Storage_Ref'Class;
                    Path    : in String) is
+      pragma Unreferenced (Storage);
+
+      Store : AWA.Storages.Models.Storage_Data_Ref;
+      Blob  : constant ADO.Blob_Ref := ADO.Create_Blob (Path);
    begin
-      null;
+      Store.Set_Data (Blob);
+      Store.Save (Session);
+      Into.Set_Store_Data (Store);
    end Save;
 
    procedure Load (Storage : in Database_Store;
+                   Session : in out ADO.Sessions.Master_Session;
                    From    : in AWA.Storages.Models.Storage_Ref'Class;
                    Into    : in String) is
    begin

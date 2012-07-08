@@ -18,6 +18,10 @@
 with ADO.Sessions;
 
 with AWA.Storages.Models;
+
+--  === Database store ===
+--  The `AWA.Storages.Stores.Databases` store uses the database to save a data content.
+--  The data is saved in a specific table in a database blob column.
 package AWA.Storages.Stores.Databases is
 
    --  ------------------------------
@@ -25,11 +29,15 @@ package AWA.Storages.Stores.Databases is
    --  ------------------------------
    type Database_Store is new AWA.Storages.Stores.Store with null record;
 
+   --  Save the file represented by the `Path` variable into a store and associate that
+   --  content with the storage reference represented by `Into`.
    procedure Save (Storage : in Database_Store;
+                   Session : in out ADO.Sessions.Master_Session;
                    Into    : in out AWA.Storages.Models.Storage_Ref'Class;
                    Path    : in String);
 
    procedure Load (Storage : in Database_Store;
+                   Session : in out ADO.Sessions.Master_Session;
                    From    : in AWA.Storages.Models.Storage_Ref'Class;
                    Into    : in String);
 
