@@ -60,30 +60,10 @@ package body AWA.Storages.Services is
    --  ------------------------------
    procedure Save (Service : in Storage_Service;
                    Into    : in out AWA.Storages.Models.Storage_Ref'Class;
-                   Data    : in ASF.Parts.Part'Class) is
-      use type AWA.Storages.Models.Storage_Type;
-
-      Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      DB     : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
-      Store  : constant Stores.Store_Access := Storage_Service'Class (Service).Get_Store (Into);
+                   Data    : in ASF.Parts.Part'Class;
+                   Storage : in AWA.Storages.Models.Storage_Type) is
    begin
-      Ctx.Start;
-      if not Into.Is_Inserted then
-         declare
-            Workspace : AWA.Workspaces.Models.Workspace_Ref;
-         begin
-            AWA.Workspaces.Modules.Get_Workspace (DB, Ctx, Workspace);
-            Into.Set_Workspace (Workspace);
-            Into.Set_Create_Date (Ada.Calendar.Clock);
-         end;
-      end if;
-      Store.Save (DB, Into, Data.Get_Local_Filename);
---        if Into.Get_Storage = AWA.Storages.Models.DATABASE then
---           Service.Save (DB, Data.Get_Local_Filename, Store);
---           Into.Set_Store_Data (Store);
---        end if;
-      Into.Save (DB);
-      Ctx.Commit;
+      Storage_Service'Class (Service).Save (Into, Data.Get_Local_Filename, Storage);
    end Save;
 
    --  ------------------------------
@@ -92,15 +72,23 @@ package body AWA.Storages.Services is
    --  ------------------------------
    procedure Save (Service : in Storage_Service;
                    Into    : in out AWA.Storages.Models.Storage_Ref'Class;
-                   Path    : in String) is
+                   Path    : in String;
+                   Storage : in AWA.Storages.Models.Storage_Type) is
       use type AWA.Storages.Models.Storage_Type;
+      use type Stores.Store_Access;
 
       Ctx       : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB        : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Workspace : AWA.Workspaces.Models.Workspace_Ref;
-      Store  : constant Stores.Store_Access := Storage_Service'Class (Service).Get_Store (Into);
+      Store     : Stores.Store_Access;
    begin
       Log.Info ("Save {0} in storage space", Path);
+
+      Into.Set_Storage (Storage);
+      Store := Storage_Service'Class (Service).Get_Store (Into);
+      if Store = null then
+         Log.Error ("There is no store for storage {0}", Models.Storage_Type'Image (Storage));
+      end if;
 
       if not Into.Is_Null then
          Workspace := AWA.Workspaces.Models.Workspace_Ref (Into.Get_Workspace);

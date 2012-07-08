@@ -54,13 +54,15 @@ package AWA.Storages.Services is
    --  target storage represented by <b>Into</b>.
    procedure Save (Service : in Storage_Service;
                    Into    : in out AWA.Storages.Models.Storage_Ref'Class;
-                   Data    : in ASF.Parts.Part'Class);
+                   Data    : in ASF.Parts.Part'Class;
+                   Storage : in AWA.Storages.Models.Storage_Type);
 
    --  Save the file pointed to by the <b>Path</b> string in the storage
    --  object represented by <b>Into</b> and managed by the storage service.
    procedure Save (Service : in Storage_Service;
                    Into    : in out AWA.Storages.Models.Storage_Ref'Class;
-                   Path    : in String);
+                   Path    : in String;
+                   Storage : in AWA.Storages.Models.Storage_Type);
 
    --  Load the storage content identified by <b>From</b> in a local file
    --  that will be identified by <b>Into</b>.
