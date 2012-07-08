@@ -51,8 +51,9 @@ package body AWA.Storages.Services.Tests is
       T.Manager := AWA.Storages.Modules.Get_Storage_Manager;
       T.Assert (T.Manager /= null, "Null storage manager");
 
-      T.Manager.Save (Into => Store,
-                      Path => "Makefile");
+      T.Manager.Save (Into    => Store,
+                      Path    => "Makefile",
+                      Storage => AWA.Storages.Models.DATABASE);
       T.Assert (not Store.Is_Null, "Storage object should not be null");
       T.Id := Store.Get_Id;
       T.Assert (T.Id > 0, "Invalid storage identifier");
