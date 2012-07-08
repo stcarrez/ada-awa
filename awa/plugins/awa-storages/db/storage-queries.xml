@@ -15,6 +15,43 @@
        </sql>
     </query>
 
+    <query name='storage-get-local'>
+       <comment>Get the local data storage that can be used to read locally a storage object.</comment>
+       <sql>
+    SELECT
+      local.id,
+      local.version,
+      local.create_date,
+      local.expire_date,
+      local.path,
+      local.store_version,
+      local.shared,
+      local.storage_id
+    FROM awa_store_local AS local
+    INNER JOIN awa_storage AS store ON local.storage_id = store.id AND local.store_version = store.version
+    INNER JOIN acl ON acl.entity_id = store.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
+    WHERE local.storage_id = :store_id AND local.shared = 1
+       </sql>
+    </query>
+
+    <query name='storage-get-storage'>
+       <comment>Get the local data storage that can be used to read locally a storage object.</comment>
+       <sql>
+    SELECT
+      local.id,
+      local.version,
+      local.create_date,
+      local.expire_date,
+      local.path,
+      local.store_version,
+      local.shared,
+      local.storage_id
+    FROM awa_storage AS store
+    INNER JOIN acl ON acl.entity_id = store.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
+    WHERE store.id = :store_id
+       </sql>
+    </query>
+
     <query name='storage-delete-local'>
        <comment>Delete the local storage data</comment>
        <sql>
