@@ -41,9 +41,9 @@
             <comment>the storage type.</comment>
             <column name="storage_type" not-null="true" unique="false" sql-type="INTEGER"/>
         </property>
-        <property name="data" type="String">
-            <comment>the storage specific data</comment>
-            <column name="data" not-null="true" unique="true" sql-type="VARCHAR(256)"/>
+        <property name="uri" type="String">
+            <comment>the storage specific URI</comment>
+            <column name="uri" not-null="true" unique="false" sql-type="VARCHAR(256)"/>
         </property>
         <many-to-one name="store_data" class="Storage_Data" foreign-key="ID" not-null="false" lazy="proxy" fetch="select">
             <comment>the storage that this local store refers to.</comment>
@@ -78,7 +78,15 @@ date after which the local file can be removed from the local file system.</comm
         </property>
         <property name="path" type="String">
             <comment>the local store path</comment>
-            <column name="name" not-null="true" unique="true" sql-type="VARCHAR(256)"/>
+            <column name="path" not-null="true" unique="true" sql-type="VARCHAR(256)"/>
+        </property>
+        <property name="store_version" type="Integer">
+            <comment>the storage version that this local store represents</comment>
+            <column name="store_version" not-null="true" unique="false" sql-type="INTEGER"/>
+        </property>
+        <property name="shared" type="Boolean">
+            <comment>whether the local store file can be shared or not</comment>
+            <column name="shared" not-null="true" unique="false" sql-type="TINYINT"/>
         </property>
         <many-to-one name="storage" class="Storage" foreign-key="ID" not-null="false" lazy="proxy" fetch="select">
             <comment>the storage that this local store refers to.</comment>
