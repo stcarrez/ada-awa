@@ -41,4 +41,9 @@ package AWA.Storages.Stores.Databases is
                    From    : in AWA.Storages.Models.Storage_Ref'Class;
                    Into    : in String);
 
+   --  Delete the content associate with the storage represented by `From`.
+   procedure Delete (Storage : in Database_Store;
+                     Session : in out ADO.Sessions.Master_Session;
+                     From    : in out AWA.Storages.Models.Storage_Ref'Class);
+
 end AWA.Storages.Stores.Databases;

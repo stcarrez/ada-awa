@@ -44,4 +44,17 @@ package body AWA.Storages.Stores.Databases is
       null;
    end Load;
 
+   --  ------------------------------
+   --  Delete the content associate with the storage represented by `From`.
+   --  ------------------------------
+   procedure Delete (Storage : in Database_Store;
+                     Session : in out ADO.Sessions.Master_Session;
+                     From    : in out AWA.Storages.Models.Storage_Ref'Class) is
+      Store : AWA.Storages.Models.Storage_Data_Ref'Class := From.Get_Store_Data;
+   begin
+      if not Store.Is_Null then
+         Store.Delete (Session);
+      end if;
+   end Delete;
+
 end AWA.Storages.Stores.Databases;
