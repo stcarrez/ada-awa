@@ -22,6 +22,8 @@ with AWA.Storages.Models;
 --  == Store Service ==
 --  The `AWA.Storages.Stores` package defines the interface that a store must implement to
 --  be able to save and retrieve a data content.
+--
+--  @include awa-storages-stores-databases.ads
 package AWA.Storages.Stores is
 
    --  ------------------------------
@@ -41,5 +43,10 @@ package AWA.Storages.Stores is
                    Session : in out ADO.Sessions.Master_Session;
                    From    : in AWA.Storages.Models.Storage_Ref'Class;
                    Into    : in String) is abstract;
+
+   --  Delete the content associate with the storage represented by `From`.
+   procedure Delete (Storage : in Store;
+                     Session : in out ADO.Sessions.Master_Session;
+                     From    : in out AWA.Storages.Models.Storage_Ref'Class) is abstract;
 
 end AWA.Storages.Stores;
