@@ -23,6 +23,8 @@ with ASF.Parts;
 with AWA.Modules;
 
 with AWA.Storages.Models;
+with AWA.Storages.Stores;
+with AWA.Storages.Stores.Databases;
 package AWA.Storages.Services is
 
    package ACL_Create_Storage is new Security.Permissions.Permission_ACL ("storage-create");
@@ -38,12 +40,15 @@ package AWA.Storages.Services is
    type Storage_Service is new AWA.Modules.Module_Manager with private;
    type Storage_Service_Access is access all Storage_Service'Class;
 
-   --  Save the file whose path is specified in <b>Path</b> in the data object
-   --  refered to by <b>Data</b>.
-   procedure Save (Service : in Storage_Service;
-                   Session : in out ADO.Sessions.Master_Session;
-                   Path    : in String;
-                   Data    : in out AWA.Storages.Models.Storage_Data_Ref);
+   --  Initializes the storage service.
+   overriding
+   procedure Initialize (Service : in out Storage_Service;
+                         Module  : in AWA.Modules.Module'Class);
+
+   --  Get the persistent store that manages the data represented by <tt>Data</tt>.
+   function Get_Store (Service : in Storage_Service;
+                       Data    : in AWA.Storages.Models.Storage_Ref'Class)
+                       return AWA.Storages.Stores.Store_Access;
 
    --  Save the data object contained in the <b>Data</b> part element into the
    --  target storage represented by <b>Into</b>.
@@ -79,8 +84,12 @@ package AWA.Storages.Services is
 
 private
 
+   type Store_Access_Array is
+     array (AWA.Storages.Models.Storage_Type) of AWA.Storages.Stores.Store_Access;
+
    type Storage_Service is new AWA.Modules.Module_Manager with record
-      A : Natural;
+      Stores         : Store_Access_Array;
+      Database_Store : aliased AWA.Storages.Stores.Databases.Database_Store;
    end record;
 
 end AWA.Storages.Services;

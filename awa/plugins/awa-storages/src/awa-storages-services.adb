@@ -34,6 +34,27 @@ package body AWA.Storages.Services is
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Storages.Services");
 
    --  ------------------------------
+   --  Get the persistent store that manages the data represented by <tt>Data</tt>.
+   --  ------------------------------
+   function Get_Store (Service : in Storage_Service;
+                       Data    : in AWA.Storages.Models.Storage_Ref'Class)
+                       return AWA.Storages.Stores.Store_Access is
+   begin
+      return Service.Stores (Data.Get_Storage);
+   end Get_Store;
+
+   --  ------------------------------
+   --  Initializes the storage service.
+   --  ------------------------------
+   overriding
+   procedure Initialize (Service : in out Storage_Service;
+                         Module  : in AWA.Modules.Module'Class) is
+   begin
+      AWA.Modules.Module_Manager (Service).Initialize (Module);
+      Service.Stores (AWA.Storages.Models.DATABASE) := Service.Database_Store'Unchecked_Access;
+   end Initialize;
+
+   --  ------------------------------
    --  Save the data object contained in the <b>Data</b> part element into the
    --  target storage represented by <b>Into</b>.
    --  ------------------------------
@@ -44,7 +65,7 @@ package body AWA.Storages.Services is
 
       Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB     : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
-      Store  : AWA.Storages.Models.Storage_Data_Ref;
+      Store  : constant Stores.Store_Access := Storage_Service'Class (Service).Get_Store (Into);
    begin
       Ctx.Start;
       if not Into.Is_Inserted then
@@ -56,10 +77,11 @@ package body AWA.Storages.Services is
             Into.Set_Create_Date (Ada.Calendar.Clock);
          end;
       end if;
-      if Into.Get_Storage = AWA.Storages.Models.DATABASE then
-         Service.Save (DB, Data.Get_Local_Filename, Store);
-         Into.Set_Store_Data (Store);
-      end if;
+      Store.Save (DB, Into, Data.Get_Local_Filename);
+--        if Into.Get_Storage = AWA.Storages.Models.DATABASE then
+--           Service.Save (DB, Data.Get_Local_Filename, Store);
+--           Into.Set_Store_Data (Store);
+--        end if;
       Into.Save (DB);
       Ctx.Commit;
    end Save;
@@ -75,8 +97,8 @@ package body AWA.Storages.Services is
 
       Ctx       : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB        : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
-      Data      : AWA.Storages.Models.Storage_Data_Ref;
       Workspace : AWA.Workspaces.Models.Workspace_Ref;
+      Store  : constant Stores.Store_Access := Storage_Service'Class (Service).Get_Store (Into);
    begin
       Log.Info ("Save {0} in storage space", Path);
 
@@ -96,28 +118,9 @@ package body AWA.Storages.Services is
       if not Into.Is_Inserted then
          Into.Set_Create_Date (Ada.Calendar.Clock);
       end if;
-      if Into.Get_Storage = AWA.Storages.Models.DATABASE then
-         Service.Save (DB, Path, Data);
-         Into.Set_Store_Data (Data);
-      end if;
+      Store.Save (DB, Into, Path);
       Into.Save (DB);
       Ctx.Commit;
-   end Save;
-
-   --  ------------------------------
-   --  Save the file whose path is specified in <b>Path</b> in the data object
-   --  refered to by <b>Data</b>.
-   --  ------------------------------
-   procedure Save (Service : in Storage_Service;
-                   Session : in out ADO.Sessions.Master_Session;
-                   Path    : in String;
-                   Data    : in out AWA.Storages.Models.Storage_Data_Ref) is
-      pragma Unreferenced (Service);
-
-      Blob : constant ADO.Blob_Ref := ADO.Create_Blob (Path);
-   begin
-      Data.Set_Data (Blob);
-      Data.Save (Session);
    end Save;
 
    --  Load the storage content identified by <b>From</b> in a local file
