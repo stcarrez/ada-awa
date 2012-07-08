@@ -171,13 +171,14 @@ package body AWA.Storages.Services is
    --  ------------------------------
    procedure Delete (Service : in Storage_Service;
                      Storage : in ADO.Identifier) is
-      pragma Unreferenced (Service);
+      use type Stores.Store_Access;
 
       Ctx  : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB   : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       S    : AWA.Storages.Models.Storage_Ref;
       Query : ADO.Statements.Query_Statement
         := DB.Create_Statement (AWA.Storages.Models.Query_Storage_Delete_Local);
+      Store : Stores.Store_Access;
    begin
       Log.Info ("Delete storage {0}", ADO.Identifier'Image (Storage));
 
@@ -185,8 +186,17 @@ package body AWA.Storages.Services is
       AWA.Permissions.Check (Permission => ACL_Delete_Storage.Permission,
                              Entity     => Storage);
 
-      S.Set_Id (Storage);
       Ctx.Start;
+      S.Load (Id => Storage, Session => DB);
+
+      Store := Storage_Service'Class (Service).Get_Store (S);
+      if Store = null then
+         Log.Error ("There is no store associated with storage item {0}",
+                    ADO.Identifier'Image (Storage));
+      else
+         Store.Delete (DB, S);
+      end if;
+
       --  Delete the local storage instances.
       Query.Bind_Param ("store_id", Storage);
       Query.Execute;
