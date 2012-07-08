@@ -33,10 +33,12 @@ package AWA.Storages.Stores is
    --  Save the file represented by the `Path` variable into a store and associate that
    --  content with the storage reference represented by `Into`.
    procedure Save (Storage : in Store;
+                   Session : in out ADO.Sessions.Master_Session;
                    Into    : in out AWA.Storages.Models.Storage_Ref'Class;
                    Path    : in String) is abstract;
 
    procedure Load (Storage : in Store;
+                   Session : in out ADO.Sessions.Master_Session;
                    From    : in AWA.Storages.Models.Storage_Ref'Class;
                    Into    : in String) is abstract;
 
