@@ -32,14 +32,12 @@
 --
 --  Then setup the storage mode that you want.  The storage service uses this information
 --  to save the data in a file, in the database or in a remote service (in the future).
---
---    Data.Set_Storage (Storage => AWA.Storages.Models.DATABASE);
---
 --  To save a file in the store, we can use the `Save` operation of the storage service.
 --  It will read the file and put in in the corresponding persistent store (the database
 --  in this example).
 --
---    Service.Save (Into => Data, Path => Path_To_The_File);
+--    Service.Save (Into => Data, Path => Path_To_The_File,
+--                  Storage => AWA.Storages.Models.DATABASE);
 --
 --  Upon successful completion, the storage instance `Data` will be allocated a unique
 --  identifier that can be retrieved by `Get_Id` or `Get_Key`.
