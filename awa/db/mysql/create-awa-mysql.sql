@@ -253,8 +253,8 @@ CREATE TABLE awa_storage (
   `create_date` DATETIME NOT NULL,
   /* the storage type. */
   `storage_type` INTEGER NOT NULL,
-  /* the storage specific data */
-  `data` VARCHAR(256) NOT NULL,
+  /* the storage specific URI */
+  `uri` VARCHAR(256) NOT NULL,
   /* the storage that this local store refers to. */
   `storage_id` INTEGER NOT NULL,
   /* the workspace that this storage belongs to. */
@@ -285,7 +285,11 @@ CREATE TABLE awa_store_local (
   /* the local store expiration date */
   `expire_date` DATETIME NOT NULL,
   /* the local store path */
-  `name` VARCHAR(256) NOT NULL,
+  `path` VARCHAR(256) NOT NULL,
+  /* the storage version that this local store represents */
+  `store_version` INTEGER NOT NULL,
+  /* whether the local store file can be shared or not */
+  `shared` TINYINT NOT NULL,
   /* the storage that this local store refers to. */
   `storage_id` INTEGER NOT NULL,
   PRIMARY KEY (`id`)
