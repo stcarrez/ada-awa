@@ -107,6 +107,7 @@ package body AWA.Storages.Services is
       if not Into.Is_Inserted then
          Into.Set_Create_Date (Ada.Calendar.Clock);
       end if;
+      Into.Save (DB);
       Store.Save (DB, Into, Path);
       Into.Save (DB);
       Ctx.Commit;
