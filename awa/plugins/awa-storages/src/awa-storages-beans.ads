@@ -53,6 +53,7 @@ package AWA.Storages.Beans is
    function Get_Method_Bindings (From : in Upload_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access;
 
+   --  Save the uploaded file in the storage service.
    procedure Save_Part (Bean : in out Upload_Bean;
                         Part : in ASF.Parts.Part'Class);
 

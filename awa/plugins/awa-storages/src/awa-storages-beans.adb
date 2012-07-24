@@ -23,10 +23,6 @@ with ASF.Events.Faces.Actions;
 with AWA.Storages.Services;
 package body AWA.Storages.Beans is
 
-   --  ------------------------------
-   --  Upload Bean
-   --  ------------------------------
-
    package Upload_Binding is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Upload_Bean,
                                                       Method => Upload,
@@ -41,7 +37,9 @@ package body AWA.Storages.Beans is
      := (1 => Upload_Binding.Proxy'Access,
          2 => Save_Part_Binding.Proxy'Access);
 
+   --  ------------------------------
    --  Get the value identified by the name.
+   --  ------------------------------
    overriding
    function Get_Value (From : in Upload_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
@@ -49,7 +47,9 @@ package body AWA.Storages.Beans is
       return AWA.Storages.Models.Storage_Ref (From).Get_Value (Name);
    end Get_Value;
 
+   --  ------------------------------
    --  Set the value identified by the name.
+   --  ------------------------------
    overriding
    procedure Set_Value (From  : in out Upload_Bean;
                         Name  : in String;
@@ -58,7 +58,9 @@ package body AWA.Storages.Beans is
       null;
    end Set_Value;
 
+   --  ------------------------------
    --  This bean provides some methods that can be used in a Method_Expression
+   --  ------------------------------
    overriding
    function Get_Method_Bindings (From : in Upload_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access is
@@ -67,6 +69,9 @@ package body AWA.Storages.Beans is
       return Upload_Bean_Binding'Access;
    end Get_Method_Bindings;
 
+   --  ------------------------------
+   --  Save the uploaded file in the storage service.
+   --  ------------------------------
    procedure Save_Part (Bean : in out Upload_Bean;
                         Part : in ASF.Parts.Part'Class) is
       Manager : AWA.Storages.Services.Storage_Service_Access := Bean.Module.Get_Storage_Manager;
