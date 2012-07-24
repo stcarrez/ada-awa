@@ -20,6 +20,7 @@ with Util.Log.Loggers;
 with AWA.Modules.Get;
 with AWA.Modules.Beans;
 with AWA.Applications;
+with AWA.Storages.Beans;
 
 package body AWA.Storages.Modules is
 
@@ -36,34 +37,18 @@ package body AWA.Storages.Modules is
                          App    : in AWA.Modules.Application_Access;
                          Props  : in ASF.Applications.Config) is
    begin
-      Log.Info ("Initializing the blogs module");
+      Log.Info ("Initializing the storage module");
 
       --  Setup the resource bundles.
       App.Register ("blogMsg", "blogs");
---
---        Register.Register (Plugin  => Plugin,
---                           Name    => "AWA.Blogs.Beans.Post_Bean",
---                           Handler => AWA.Blogs.Beans.Create_Post_Bean'Access);
---
---        Register.Register (Plugin  => Plugin,
---                           Name    => "AWA.Blogs.Beans.Post_List_Bean",
---                           Handler => AWA.Blogs.Beans.Create_Post_List_Bean'Access);
---
---        Register.Register (Plugin  => Plugin,
---                           Name    => "AWA.Blogs.Beans.Admin_Post_List_Bean",
---                           Handler => AWA.Blogs.Beans.Create_Admin_Post_List_Bean'Access);
---
---        Register.Register (Plugin  => Plugin,
---                           Name    => "AWA.Blogs.Beans.Admin_Blog_List_Bean",
---                           Handler => AWA.Blogs.Beans.Create_Blog_List_Bean'Access);
---
---        Register.Register (Plugin  => Plugin,
---                           Name    => "AWA.Blogs.Beans.Blog_Bean",
---                           Handler => AWA.Blogs.Beans.Create_Blog_Bean'Access);
+
+      Register.Register (Plugin  => Plugin,
+                         Name    => "AWA.Storages.Beans.Upload_Bean",
+                         Handler => AWA.Storages.Beans.Create_Upload_Bean'Access);
 
       AWA.Modules.Module (Plugin).Initialize (App, Props);
 
-      --  Create the user manager when everything is initialized.
+      --  Create the storage manager when everything is initialized.
       Plugin.Manager := Plugin.Create_Storage_Manager;
    end Initialize;
 
