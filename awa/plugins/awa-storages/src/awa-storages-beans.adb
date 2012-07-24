@@ -82,4 +82,15 @@ package body AWA.Storages.Beans is
       null;
    end Upload;
 
+   --  ------------------------------
+   --  Create the Upload_Bean bean instance.
+   --  ------------------------------
+   function Create_Upload_Bean (Module : in AWA.Storages.Modules.Storage_Module_Access)
+                                return Util.Beans.Basic.Readonly_Bean_Access is
+      Result : constant Upload_Bean_Access := new Upload_Bean;
+   begin
+      Result.Module := Module;
+      return Result.all'Access;
+   end Create_Upload_Bean;
+
 end AWA.Storages.Beans;

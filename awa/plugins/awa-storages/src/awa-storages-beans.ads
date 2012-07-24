@@ -60,4 +60,8 @@ package AWA.Storages.Beans is
    procedure Upload (Bean    : in out Upload_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
+   --  Create the Upload_Bean bean instance.
+   function Create_Upload_Bean (Module : in AWA.Storages.Modules.Storage_Module_Access)
+                              return Util.Beans.Basic.Readonly_Bean_Access;
+
 end AWA.Storages.Beans;
