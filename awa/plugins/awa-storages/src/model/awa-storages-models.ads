@@ -123,6 +123,106 @@ package AWA.Storages.Models is
                    Into   : in out Storage_Data_Ref);
 
    --  --------------------
+   --  Storage files are organized in folders.
+   --  --------------------
+   --  Create an object key for Storage_Folder.
+   function Storage_Folder_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
+   --  Create an object key for Storage_Folder from a string.
+   --  Raises Constraint_Error if the string cannot be converted into the object key.
+   function Storage_Folder_Key (Id : in String) return ADO.Objects.Object_Key;
+
+   type Storage_Folder_Ref is new ADO.Objects.Object_Ref with null record;
+
+   Null_Storage_Folder : constant Storage_Folder_Ref;
+   function "=" (Left, Right : Storage_Folder_Ref'Class) return Boolean;
+
+   --  Set the storage folder identifier
+   procedure Set_Id (Object : in out Storage_Folder_Ref;
+                     Value  : in ADO.Identifier);
+
+   --  Get the storage folder identifier
+   function Get_Id (Object : in Storage_Folder_Ref)
+                 return ADO.Identifier;
+   --  Get the storage folder version.
+   function Get_Version (Object : in Storage_Folder_Ref)
+                 return Integer;
+
+   --  Set the storage folder name
+   procedure Set_Name (Object : in out Storage_Folder_Ref;
+                       Value  : in Ada.Strings.Unbounded.Unbounded_String);
+   procedure Set_Name (Object : in out Storage_Folder_Ref;
+                       Value : in String);
+
+   --  Get the storage folder name
+   function Get_Name (Object : in Storage_Folder_Ref)
+                 return Ada.Strings.Unbounded.Unbounded_String;
+   function Get_Name (Object : in Storage_Folder_Ref)
+                 return String;
+
+   --  Set the folder creation date
+   procedure Set_Create_Date (Object : in out Storage_Folder_Ref;
+                              Value  : in Ada.Calendar.Time);
+
+   --  Get the folder creation date
+   function Get_Create_Date (Object : in Storage_Folder_Ref)
+                 return Ada.Calendar.Time;
+
+   --  Set the workspace that this storage folder belongs to.
+   procedure Set_Workspace (Object : in out Storage_Folder_Ref;
+                            Value  : in AWA.Workspaces.Models.Workspace_Ref'Class);
+
+   --  Get the workspace that this storage folder belongs to.
+   function Get_Workspace (Object : in Storage_Folder_Ref)
+                 return AWA.Workspaces.Models.Workspace_Ref'Class;
+
+   --  Load the entity identified by 'Id'.
+   --  Raises the NOT_FOUND exception if it does not exist.
+   procedure Load (Object  : in out Storage_Folder_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier);
+
+   --  Load the entity identified by 'Id'.
+   --  Returns True in <b>Found</b> if the object was found and False if it does not exist.
+   procedure Load (Object  : in out Storage_Folder_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier;
+                   Found   : out Boolean);
+
+   --  Find and load the entity.
+   overriding
+   procedure Find (Object  : in out Storage_Folder_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean);
+
+   --  Save the entity.  If the entity does not have an identifier, an identifier is allocated
+   --  and it is inserted in the table.  Otherwise, only data fields which have been changed
+   --  are updated.
+   overriding
+   procedure Save (Object  : in out Storage_Folder_Ref;
+                   Session : in out ADO.Sessions.Master_Session'Class);
+
+   --  Delete the entity.
+   overriding
+   procedure Delete (Object  : in out Storage_Folder_Ref;
+                     Session : in out ADO.Sessions.Master_Session'Class);
+
+   overriding
+   function Get_Value (Item : in Storage_Folder_Ref;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Table definition
+   STORAGE_FOLDER_TABLE : aliased constant ADO.Schemas.Class_Mapping;
+
+   --  Internal method to allocate the Object_Record instance
+   overriding
+   procedure Allocate (Object : in out Storage_Folder_Ref);
+
+   --  Copy of the object.
+   procedure Copy (Object : in Storage_Folder_Ref;
+                   Into   : in out Storage_Folder_Ref);
+
+   --  --------------------
    --  The database storage data when the storage type is DATABASE.
    --  --------------------
    --  Create an object key for Storage.
@@ -222,6 +322,14 @@ package AWA.Storages.Models is
    --  Get the workspace that this storage belongs to.
    function Get_Workspace (Object : in Storage_Ref)
                  return AWA.Workspaces.Models.Workspace_Ref'Class;
+
+   --  Set the storage folder that this storage belongs to.
+   procedure Set_Folder (Object : in out Storage_Ref;
+                         Value  : in Storage_Folder_Ref'Class);
+
+   --  Get the storage folder that this storage belongs to.
+   function Get_Folder (Object : in Storage_Ref)
+                 return Storage_Folder_Ref'Class;
 
    --  Load the entity identified by 'Id'.
    --  Raises the NOT_FOUND exception if it does not exist.
@@ -455,31 +563,85 @@ private
                      Session : in out ADO.Sessions.Master_Session'Class);
    procedure Set_Field (Object : in out Storage_Data_Ref'Class;
                         Impl   : out Storage_Data_Access);
-   STORAGE_NAME : aliased constant String := "awa_storage";
+   STORAGE_FOLDER_NAME : aliased constant String := "awa_storage_folder";
    COL_0_2_NAME : aliased constant String := "id";
    COL_1_2_NAME : aliased constant String := "version";
-   COL_2_2_NAME : aliased constant String := "create_date";
-   COL_3_2_NAME : aliased constant String := "storage_type";
-   COL_4_2_NAME : aliased constant String := "uri";
-   COL_5_2_NAME : aliased constant String := "name";
-   COL_6_2_NAME : aliased constant String := "mime_type";
-   COL_7_2_NAME : aliased constant String := "file_size";
-   COL_8_2_NAME : aliased constant String := "storage_id";
-   COL_9_2_NAME : aliased constant String := "workspace_id";
-   STORAGE_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 10,
-      Table => STORAGE_NAME'Access,
+   COL_2_2_NAME : aliased constant String := "name";
+   COL_3_2_NAME : aliased constant String := "create_date";
+   COL_4_2_NAME : aliased constant String := "workspace_id";
+   STORAGE_FOLDER_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
+     (Count => 5,
+      Table => STORAGE_FOLDER_NAME'Access,
       Members => (
          COL_0_2_NAME'Access,
          COL_1_2_NAME'Access,
          COL_2_2_NAME'Access,
          COL_3_2_NAME'Access,
-         COL_4_2_NAME'Access,
-         COL_5_2_NAME'Access,
-         COL_6_2_NAME'Access,
-         COL_7_2_NAME'Access,
-         COL_8_2_NAME'Access,
-         COL_9_2_NAME'Access
+         COL_4_2_NAME'Access
+)
+     );
+   Null_Storage_Folder : constant Storage_Folder_Ref
+      := Storage_Folder_Ref'(ADO.Objects.Object_Ref with others => <>);
+   type Storage_Folder_Impl is
+      new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
+                                     Of_Class => STORAGE_FOLDER_TABLE'Access)
+   with record
+       Version : Integer;
+       Name : Ada.Strings.Unbounded.Unbounded_String;
+       Create_Date : Ada.Calendar.Time;
+       Workspace : AWA.Workspaces.Models.Workspace_Ref;
+   end record;
+   type Storage_Folder_Access is access all Storage_Folder_Impl;
+   overriding
+   procedure Destroy (Object : access Storage_Folder_Impl);
+   overriding
+   procedure Find (Object  : in out Storage_Folder_Impl;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean);
+   overriding
+   procedure Load (Object  : in out Storage_Folder_Impl;
+                   Session : in out ADO.Sessions.Session'Class);
+   procedure Load (Object  : in out Storage_Folder_Impl;
+                   Stmt    : in out ADO.Statements.Query_Statement'Class;
+                   Session : in out ADO.Sessions.Session'Class);
+   overriding
+   procedure Save (Object  : in out Storage_Folder_Impl;
+                   Session : in out ADO.Sessions.Master_Session'Class);
+   procedure Create (Object  : in out Storage_Folder_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class);
+   overriding
+   procedure Delete (Object  : in out Storage_Folder_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class);
+   procedure Set_Field (Object : in out Storage_Folder_Ref'Class;
+                        Impl   : out Storage_Folder_Access);
+   STORAGE_NAME : aliased constant String := "awa_storage";
+   COL_0_3_NAME : aliased constant String := "id";
+   COL_1_3_NAME : aliased constant String := "version";
+   COL_2_3_NAME : aliased constant String := "create_date";
+   COL_3_3_NAME : aliased constant String := "storage_type";
+   COL_4_3_NAME : aliased constant String := "uri";
+   COL_5_3_NAME : aliased constant String := "name";
+   COL_6_3_NAME : aliased constant String := "mime_type";
+   COL_7_3_NAME : aliased constant String := "file_size";
+   COL_8_3_NAME : aliased constant String := "storage_id";
+   COL_9_3_NAME : aliased constant String := "workspace_id";
+   COL_10_3_NAME : aliased constant String := "folder_id";
+   STORAGE_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
+     (Count => 11,
+      Table => STORAGE_NAME'Access,
+      Members => (
+         COL_0_3_NAME'Access,
+         COL_1_3_NAME'Access,
+         COL_2_3_NAME'Access,
+         COL_3_3_NAME'Access,
+         COL_4_3_NAME'Access,
+         COL_5_3_NAME'Access,
+         COL_6_3_NAME'Access,
+         COL_7_3_NAME'Access,
+         COL_8_3_NAME'Access,
+         COL_9_3_NAME'Access,
+         COL_10_3_NAME'Access
 )
      );
    Null_Storage : constant Storage_Ref
@@ -497,6 +659,7 @@ private
        File_Size : Integer;
        Store_Data : Storage_Data_Ref;
        Workspace : AWA.Workspaces.Models.Workspace_Ref;
+       Folder : Storage_Folder_Ref;
    end record;
    type Storage_Access is access all Storage_Impl;
    overriding
@@ -523,26 +686,26 @@ private
    procedure Set_Field (Object : in out Storage_Ref'Class;
                         Impl   : out Storage_Access);
    STORE_LOCAL_NAME : aliased constant String := "awa_store_local";
-   COL_0_3_NAME : aliased constant String := "id";
-   COL_1_3_NAME : aliased constant String := "version";
-   COL_2_3_NAME : aliased constant String := "create_date";
-   COL_3_3_NAME : aliased constant String := "expire_date";
-   COL_4_3_NAME : aliased constant String := "path";
-   COL_5_3_NAME : aliased constant String := "store_version";
-   COL_6_3_NAME : aliased constant String := "shared";
-   COL_7_3_NAME : aliased constant String := "storage_id";
+   COL_0_4_NAME : aliased constant String := "id";
+   COL_1_4_NAME : aliased constant String := "version";
+   COL_2_4_NAME : aliased constant String := "create_date";
+   COL_3_4_NAME : aliased constant String := "expire_date";
+   COL_4_4_NAME : aliased constant String := "path";
+   COL_5_4_NAME : aliased constant String := "store_version";
+   COL_6_4_NAME : aliased constant String := "shared";
+   COL_7_4_NAME : aliased constant String := "storage_id";
    STORE_LOCAL_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
      (Count => 8,
       Table => STORE_LOCAL_NAME'Access,
       Members => (
-         COL_0_3_NAME'Access,
-         COL_1_3_NAME'Access,
-         COL_2_3_NAME'Access,
-         COL_3_3_NAME'Access,
-         COL_4_3_NAME'Access,
-         COL_5_3_NAME'Access,
-         COL_6_3_NAME'Access,
-         COL_7_3_NAME'Access
+         COL_0_4_NAME'Access,
+         COL_1_4_NAME'Access,
+         COL_2_4_NAME'Access,
+         COL_3_4_NAME'Access,
+         COL_4_4_NAME'Access,
+         COL_5_4_NAME'Access,
+         COL_6_4_NAME'Access,
+         COL_7_4_NAME'Access
 )
      );
    Null_Store_Local : constant Store_Local_Ref

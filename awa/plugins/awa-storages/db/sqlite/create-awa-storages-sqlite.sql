@@ -21,7 +21,9 @@ CREATE TABLE awa_storage (
   /* the storage that this local store refers to. */
   `storage_id` INTEGER NOT NULL,
   /* the workspace that this storage belongs to. */
-  `workspace_id` INTEGER NOT NULL
+  `workspace_id` INTEGER NOT NULL,
+  /* the storage folder that this storage belongs to. */
+  `folder_id` INTEGER NOT NULL
 );
 /* The database storage data when the storage type is DATABASE. */
 CREATE TABLE awa_storage_data (
@@ -31,6 +33,19 @@ CREATE TABLE awa_storage_data (
   `version` int ,
   /* the storage data when the storage type is DATABASE. */
   `data` BLOB NOT NULL
+);
+/* Storage files are organized in folders. */
+CREATE TABLE awa_storage_folder (
+  /* the storage folder identifier */
+  `id` INTEGER PRIMARY KEY,
+  /* the storage folder version. */
+  `version` int ,
+  /* the storage folder name */
+  `name` VARCHAR(256) NOT NULL,
+  /* the folder creation date */
+  `create_date` DATETIME NOT NULL,
+  /* the workspace that this storage folder belongs to. */
+  `workspace_id` INTEGER NOT NULL
 );
 /* The local store record is created when a copy of the data
 is needed on the local file system.  The creation date refers to the date when
@@ -56,4 +71,5 @@ CREATE TABLE awa_store_local (
 );
 INSERT INTO entity_type (name) VALUES ("awa_storage");
 INSERT INTO entity_type (name) VALUES ("awa_storage_data");
+INSERT INTO entity_type (name) VALUES ("awa_storage_folder");
 INSERT INTO entity_type (name) VALUES ("awa_store_local");

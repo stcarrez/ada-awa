@@ -345,6 +345,389 @@ package body AWA.Storages.Models is
       Object.Version := Stmt.Get_Integer (1);
       ADO.Objects.Set_Created (Object);
    end Load;
+   function Storage_Folder_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+                                       Of_Class => STORAGE_FOLDER_TABLE'Access);
+   begin
+      ADO.Objects.Set_Value (Result, Id);
+      return Result;
+   end Storage_Folder_Key;
+
+   function Storage_Folder_Key (Id : in String) return ADO.Objects.Object_Key is
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+                                       Of_Class => STORAGE_FOLDER_TABLE'Access);
+   begin
+      ADO.Objects.Set_Value (Result, Id);
+      return Result;
+   end Storage_Folder_Key;
+
+   function "=" (Left, Right : Storage_Folder_Ref'Class) return Boolean is
+   begin
+      return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
+   end "=";
+
+   procedure Set_Field (Object : in out Storage_Folder_Ref'Class;
+                        Impl   : out Storage_Folder_Access) is
+      Result : ADO.Objects.Object_Record_Access;
+   begin
+      Object.Prepare_Modify (Result);
+      Impl := Storage_Folder_Impl (Result.all)'Access;
+   end Set_Field;
+
+   --  Internal method to allocate the Object_Record instance
+   procedure Allocate (Object : in out Storage_Folder_Ref) is
+      Impl : Storage_Folder_Access;
+   begin
+      Impl := new Storage_Folder_Impl;
+      Impl.Version := 0;
+      Impl.Create_Date := ADO.DEFAULT_TIME;
+      ADO.Objects.Set_Object (Object, Impl.all'Access);
+   end Allocate;
+
+   -- ----------------------------------------
+   --  Data object: Storage_Folder
+   -- ----------------------------------------
+
+   procedure Set_Id (Object : in out Storage_Folder_Ref;
+                     Value  : in ADO.Identifier) is
+      Impl : Storage_Folder_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
+   end Set_Id;
+
+   function Get_Id (Object : in Storage_Folder_Ref)
+                  return ADO.Identifier is
+      Impl : constant Storage_Folder_Access := Storage_Folder_Impl (Object.Get_Object.all)'Access;
+   begin
+      return Impl.Get_Key_Value;
+   end Get_Id;
+
+
+   function Get_Version (Object : in Storage_Folder_Ref)
+                  return Integer is
+      Impl : constant Storage_Folder_Access := Storage_Folder_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Version;
+   end Get_Version;
+
+
+   procedure Set_Name (Object : in out Storage_Folder_Ref;
+                        Value : in String) is
+      Impl : Storage_Folder_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_String (Impl.all, 3, Impl.Name, Value);
+   end Set_Name;
+
+   procedure Set_Name (Object : in out Storage_Folder_Ref;
+                       Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : Storage_Folder_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 3, Impl.Name, Value);
+   end Set_Name;
+
+   function Get_Name (Object : in Storage_Folder_Ref)
+                 return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (Object.Get_Name);
+   end Get_Name;
+   function Get_Name (Object : in Storage_Folder_Ref)
+                  return Ada.Strings.Unbounded.Unbounded_String is
+      Impl : constant Storage_Folder_Access := Storage_Folder_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Name;
+   end Get_Name;
+
+
+   procedure Set_Create_Date (Object : in out Storage_Folder_Ref;
+                              Value  : in Ada.Calendar.Time) is
+      Impl : Storage_Folder_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Time (Impl.all, 4, Impl.Create_Date, Value);
+   end Set_Create_Date;
+
+   function Get_Create_Date (Object : in Storage_Folder_Ref)
+                  return Ada.Calendar.Time is
+      Impl : constant Storage_Folder_Access := Storage_Folder_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Create_Date;
+   end Get_Create_Date;
+
+
+   procedure Set_Workspace (Object : in out Storage_Folder_Ref;
+                            Value  : in AWA.Workspaces.Models.Workspace_Ref'Class) is
+      Impl : Storage_Folder_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 5, Impl.Workspace, Value);
+   end Set_Workspace;
+
+   function Get_Workspace (Object : in Storage_Folder_Ref)
+                  return AWA.Workspaces.Models.Workspace_Ref'Class is
+      Impl : constant Storage_Folder_Access := Storage_Folder_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Workspace;
+   end Get_Workspace;
+
+   --  Copy of the object.
+   procedure Copy (Object : in Storage_Folder_Ref;
+                   Into   : in out Storage_Folder_Ref) is
+      Result : Storage_Folder_Ref;
+   begin
+      if not Object.Is_Null then
+         declare
+            Impl : constant Storage_Folder_Access
+              := Storage_Folder_Impl (Object.Get_Load_Object.all)'Access;
+            Copy : constant Storage_Folder_Access
+              := new Storage_Folder_Impl;
+         begin
+            ADO.Objects.Set_Object (Result, Copy.all'Access);
+            Copy.Copy (Impl.all);
+            Copy.Version := Impl.Version;
+            Copy.Name := Impl.Name;
+            Copy.Create_Date := Impl.Create_Date;
+            Copy.Workspace := Impl.Workspace;
+         end;
+      end if;
+      Into := Result;
+   end Copy;
+
+   procedure Find (Object  : in out Storage_Folder_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean) is
+      Impl  : constant Storage_Folder_Access := new Storage_Folder_Impl;
+   begin
+      Impl.Find (Session, Query, Found);
+      if Found then
+         ADO.Objects.Set_Object (Object, Impl.all'Access);
+      else
+         ADO.Objects.Set_Object (Object, null);
+         Destroy (Impl);
+      end if;
+   end Find;
+
+   procedure Load (Object  : in out Storage_Folder_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier) is
+      Impl  : constant Storage_Folder_Access := new Storage_Folder_Impl;
+      Found : Boolean;
+      Query : ADO.SQL.Query;
+   begin
+      Query.Bind_Param (Position => 1, Value => Id);
+      Query.Set_Filter ("id = ?");
+      Impl.Find (Session, Query, Found);
+      if not Found then
+         Destroy (Impl);
+         raise ADO.Objects.NOT_FOUND;
+      end if;
+      ADO.Objects.Set_Object (Object, Impl.all'Access);
+   end Load;
+
+   procedure Load (Object  : in out Storage_Folder_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier;
+                   Found   : out Boolean) is
+      Impl  : constant Storage_Folder_Access := new Storage_Folder_Impl;
+      Query : ADO.SQL.Query;
+   begin
+      Query.Bind_Param (Position => 1, Value => Id);
+      Query.Set_Filter ("id = ?");
+      Impl.Find (Session, Query, Found);
+      if not Found then
+         Destroy (Impl);
+      else
+         ADO.Objects.Set_Object (Object, Impl.all'Access);
+      end if;
+   end Load;
+
+   procedure Save (Object  : in out Storage_Folder_Ref;
+                   Session : in out ADO.Sessions.Master_Session'Class) is
+      Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
+   begin
+      if Impl = null then
+         Impl := new Storage_Folder_Impl;
+         ADO.Objects.Set_Object (Object, Impl);
+      end if;
+      if not ADO.Objects.Is_Created (Impl.all) then
+         Impl.Create (Session);
+      else
+         Impl.Save (Session);
+      end if;
+   end Save;
+
+   procedure Delete (Object  : in out Storage_Folder_Ref;
+                     Session : in out ADO.Sessions.Master_Session'Class) is
+      Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
+   begin
+      if Impl /= null then
+         Impl.Delete (Session);
+      end if;
+   end Delete;
+
+   --  --------------------
+   --  Free the object
+   --  --------------------
+   procedure Destroy (Object : access Storage_Folder_Impl) is
+      type Storage_Folder_Impl_Ptr is access all Storage_Folder_Impl;
+      procedure Unchecked_Free is new Ada.Unchecked_Deallocation
+              (Storage_Folder_Impl, Storage_Folder_Impl_Ptr);
+      pragma Warnings (Off, "*redundant conversion*");
+      Ptr : Storage_Folder_Impl_Ptr := Storage_Folder_Impl (Object.all)'Access;
+      pragma Warnings (On, "*redundant conversion*");
+   begin
+      Unchecked_Free (Ptr);
+   end Destroy;
+
+   procedure Find (Object  : in out Storage_Folder_Impl;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean) is
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Query, STORAGE_FOLDER_TABLE'Access);
+   begin
+      Stmt.Execute;
+      if Stmt.Has_Elements then
+         Object.Load (Stmt, Session);
+         Stmt.Next;
+         Found := not Stmt.Has_Elements;
+      else
+         Found := False;
+      end if;
+   end Find;
+
+   overriding
+   procedure Load (Object  : in out Storage_Folder_Impl;
+                   Session : in out ADO.Sessions.Session'Class) is
+      Found : Boolean;
+      Query : ADO.SQL.Query;
+      Id    : constant ADO.Identifier := Object.Get_Key_Value;
+   begin
+      Query.Bind_Param (Position => 1, Value => Id);
+      Query.Set_Filter ("id = ?");
+      Object.Find (Session, Query, Found);
+      if not Found then
+         raise ADO.Objects.NOT_FOUND;
+      end if;
+   end Load;
+
+   procedure Save (Object  : in out Storage_Folder_Impl;
+                   Session : in out ADO.Sessions.Master_Session'Class) is
+      Stmt : ADO.Statements.Update_Statement
+         := Session.Create_Statement (STORAGE_FOLDER_TABLE'Access);
+   begin
+      if Object.Is_Modified (1) then
+         Stmt.Save_Field (Name  => COL_0_2_NAME, --  id
+                          Value => Object.Get_Key);
+         Object.Clear_Modified (1);
+      end if;
+      if Object.Is_Modified (3) then
+         Stmt.Save_Field (Name  => COL_2_2_NAME, --  name
+                          Value => Object.Name);
+         Object.Clear_Modified (3);
+      end if;
+      if Object.Is_Modified (5) then
+         Stmt.Save_Field (Name  => COL_4_2_NAME, --  workspace_id
+                          Value => Object.Workspace);
+         Object.Clear_Modified (5);
+      end if;
+      if Stmt.Has_Save_Fields then
+         Object.Version := Object.Version + 1;
+         Stmt.Save_Field (Name  => "version",
+                          Value => Object.Version);
+         Stmt.Set_Filter (Filter => "id = ? and version = ?");
+         Stmt.Add_Param (Value => Object.Get_Key);
+         Stmt.Add_Param (Value => Object.Version - 1);
+         declare
+            Result : Integer;
+         begin
+            Stmt.Execute (Result);
+            if Result /= 1 then
+               if Result /= 0 then
+                  raise ADO.Objects.UPDATE_ERROR;
+               else
+                  raise ADO.Objects.LAZY_LOCK;
+               end if;
+            end if;
+         end;
+      end if;
+   end Save;
+
+   procedure Create (Object  : in out Storage_Folder_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class) is
+      Query : ADO.Statements.Insert_Statement
+                  := Session.Create_Statement (STORAGE_FOLDER_TABLE'Access);
+      Result : Integer;
+   begin
+      Object.Version := 1;
+      Session.Allocate (Id => Object);
+      Query.Save_Field (Name  => COL_0_2_NAME, --  id
+                        Value => Object.Get_Key);
+      Query.Save_Field (Name  => COL_1_2_NAME, --  version
+                        Value => Object.Version);
+      Query.Save_Field (Name  => COL_2_2_NAME, --  name
+                        Value => Object.Name);
+      Query.Save_Field (Name  => COL_3_2_NAME, --  create_date
+                        Value => Object.Create_Date);
+      Query.Save_Field (Name  => COL_4_2_NAME, --  workspace_id
+                        Value => Object.Workspace);
+      Query.Execute (Result);
+      if Result /= 1 then
+         raise ADO.Objects.INSERT_ERROR;
+      end if;
+      ADO.Objects.Set_Created (Object);
+   end Create;
+
+   procedure Delete (Object  : in out Storage_Folder_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class) is
+      Stmt : ADO.Statements.Delete_Statement
+         := Session.Create_Statement (STORAGE_FOLDER_TABLE'Access);
+   begin
+      Stmt.Set_Filter (Filter => "id = ?");
+      Stmt.Add_Param (Value => Object.Get_Key);
+      Stmt.Execute;
+   end Delete;
+
+   function Get_Value (Item : in Storage_Folder_Ref;
+                       Name : in String) return Util.Beans.Objects.Object is
+      Obj  : constant ADO.Objects.Object_Record_Access := Item.Get_Load_Object;
+      Impl : access Storage_Folder_Impl;
+   begin
+      if Obj = null then
+         return Util.Beans.Objects.Null_Object;
+      end if;
+      Impl := Storage_Folder_Impl (Obj.all)'Access;
+      if Name = "id" then
+         return ADO.Objects.To_Object (Impl.Get_Key);
+      end if;
+      if Name = "name" then
+         return Util.Beans.Objects.To_Object (Impl.Name);
+      end if;
+      if Name = "create_date" then
+         return Util.Beans.Objects.Time.To_Object (Impl.Create_Date);
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+   --  ------------------------------
+   --  Load the object from current iterator position
+   --  ------------------------------
+   procedure Load (Object  : in out Storage_Folder_Impl;
+                   Stmt    : in out ADO.Statements.Query_Statement'Class;
+                   Session : in out ADO.Sessions.Session'Class) is
+   begin
+      Object.Set_Key_Value (Stmt.Get_Identifier (0));
+      Object.Name := Stmt.Get_Unbounded_String (2);
+      Object.Create_Date := Stmt.Get_Time (3);
+      if not Stmt.Is_Null (4) then
+         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (4), Session);
+      end if;
+      Object.Version := Stmt.Get_Integer (1);
+      ADO.Objects.Set_Created (Object);
+   end Load;
    function Storage_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
       Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
                                        Of_Class => STORAGE_TABLE'Access);
@@ -583,6 +966,22 @@ package body AWA.Storages.Models is
       return Impl.Workspace;
    end Get_Workspace;
 
+
+   procedure Set_Folder (Object : in out Storage_Ref;
+                         Value  : in Storage_Folder_Ref'Class) is
+      Impl : Storage_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 11, Impl.Folder, Value);
+   end Set_Folder;
+
+   function Get_Folder (Object : in Storage_Ref)
+                  return Storage_Folder_Ref'Class is
+      Impl : constant Storage_Access := Storage_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Folder;
+   end Get_Folder;
+
    --  Copy of the object.
    procedure Copy (Object : in Storage_Ref;
                    Into   : in out Storage_Ref) is
@@ -606,6 +1005,7 @@ package body AWA.Storages.Models is
             Copy.File_Size := Impl.File_Size;
             Copy.Store_Data := Impl.Store_Data;
             Copy.Workspace := Impl.Workspace;
+            Copy.Folder := Impl.Folder;
          end;
       end if;
       Into := Result;
@@ -736,44 +1136,49 @@ package body AWA.Storages.Models is
          := Session.Create_Statement (STORAGE_TABLE'Access);
    begin
       if Object.Is_Modified (1) then
-         Stmt.Save_Field (Name  => COL_0_2_NAME, --  id
+         Stmt.Save_Field (Name  => COL_0_3_NAME, --  id
                           Value => Object.Get_Key);
          Object.Clear_Modified (1);
       end if;
       if Object.Is_Modified (4) then
-         Stmt.Save_Field (Name  => COL_3_2_NAME, --  storage_type
+         Stmt.Save_Field (Name  => COL_3_3_NAME, --  storage_type
                           Value => Integer (Storage_Type'Pos (Object.Storage)));
          Object.Clear_Modified (4);
       end if;
       if Object.Is_Modified (5) then
-         Stmt.Save_Field (Name  => COL_4_2_NAME, --  uri
+         Stmt.Save_Field (Name  => COL_4_3_NAME, --  uri
                           Value => Object.Uri);
          Object.Clear_Modified (5);
       end if;
       if Object.Is_Modified (6) then
-         Stmt.Save_Field (Name  => COL_5_2_NAME, --  name
+         Stmt.Save_Field (Name  => COL_5_3_NAME, --  name
                           Value => Object.Name);
          Object.Clear_Modified (6);
       end if;
       if Object.Is_Modified (7) then
-         Stmt.Save_Field (Name  => COL_6_2_NAME, --  mime_type
+         Stmt.Save_Field (Name  => COL_6_3_NAME, --  mime_type
                           Value => Object.Mime_Type);
          Object.Clear_Modified (7);
       end if;
       if Object.Is_Modified (8) then
-         Stmt.Save_Field (Name  => COL_7_2_NAME, --  file_size
+         Stmt.Save_Field (Name  => COL_7_3_NAME, --  file_size
                           Value => Object.File_Size);
          Object.Clear_Modified (8);
       end if;
       if Object.Is_Modified (9) then
-         Stmt.Save_Field (Name  => COL_8_2_NAME, --  storage_id
+         Stmt.Save_Field (Name  => COL_8_3_NAME, --  storage_id
                           Value => Object.Store_Data);
          Object.Clear_Modified (9);
       end if;
       if Object.Is_Modified (10) then
-         Stmt.Save_Field (Name  => COL_9_2_NAME, --  workspace_id
+         Stmt.Save_Field (Name  => COL_9_3_NAME, --  workspace_id
                           Value => Object.Workspace);
          Object.Clear_Modified (10);
+      end if;
+      if Object.Is_Modified (11) then
+         Stmt.Save_Field (Name  => COL_10_3_NAME, --  folder_id
+                          Value => Object.Folder);
+         Object.Clear_Modified (11);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -805,26 +1210,28 @@ package body AWA.Storages.Models is
    begin
       Object.Version := 1;
       Session.Allocate (Id => Object);
-      Query.Save_Field (Name  => COL_0_2_NAME, --  id
+      Query.Save_Field (Name  => COL_0_3_NAME, --  id
                         Value => Object.Get_Key);
-      Query.Save_Field (Name  => COL_1_2_NAME, --  version
+      Query.Save_Field (Name  => COL_1_3_NAME, --  version
                         Value => Object.Version);
-      Query.Save_Field (Name  => COL_2_2_NAME, --  create_date
+      Query.Save_Field (Name  => COL_2_3_NAME, --  create_date
                         Value => Object.Create_Date);
-      Query.Save_Field (Name  => COL_3_2_NAME, --  storage_type
+      Query.Save_Field (Name  => COL_3_3_NAME, --  storage_type
                         Value => Integer (Storage_Type'Pos (Object.Storage)));
-      Query.Save_Field (Name  => COL_4_2_NAME, --  uri
+      Query.Save_Field (Name  => COL_4_3_NAME, --  uri
                         Value => Object.Uri);
-      Query.Save_Field (Name  => COL_5_2_NAME, --  name
+      Query.Save_Field (Name  => COL_5_3_NAME, --  name
                         Value => Object.Name);
-      Query.Save_Field (Name  => COL_6_2_NAME, --  mime_type
+      Query.Save_Field (Name  => COL_6_3_NAME, --  mime_type
                         Value => Object.Mime_Type);
-      Query.Save_Field (Name  => COL_7_2_NAME, --  file_size
+      Query.Save_Field (Name  => COL_7_3_NAME, --  file_size
                         Value => Object.File_Size);
-      Query.Save_Field (Name  => COL_8_2_NAME, --  storage_id
+      Query.Save_Field (Name  => COL_8_3_NAME, --  storage_id
                         Value => Object.Store_Data);
-      Query.Save_Field (Name  => COL_9_2_NAME, --  workspace_id
+      Query.Save_Field (Name  => COL_9_3_NAME, --  workspace_id
                         Value => Object.Workspace);
+      Query.Save_Field (Name  => COL_10_3_NAME, --  folder_id
+                        Value => Object.Folder);
       Query.Execute (Result);
       if Result /= 1 then
          raise ADO.Objects.INSERT_ERROR;
@@ -895,6 +1302,9 @@ package body AWA.Storages.Models is
       end if;
       if not Stmt.Is_Null (9) then
          Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (9), Session);
+      end if;
+      if not Stmt.Is_Null (10) then
+         Object.Folder.Set_Key_Value (Stmt.Get_Identifier (10), Session);
       end if;
       Object.Version := Stmt.Get_Integer (1);
       ADO.Objects.Set_Created (Object);
@@ -1230,32 +1640,32 @@ package body AWA.Storages.Models is
          := Session.Create_Statement (STORE_LOCAL_TABLE'Access);
    begin
       if Object.Is_Modified (1) then
-         Stmt.Save_Field (Name  => COL_0_3_NAME, --  id
+         Stmt.Save_Field (Name  => COL_0_4_NAME, --  id
                           Value => Object.Get_Key);
          Object.Clear_Modified (1);
       end if;
       if Object.Is_Modified (4) then
-         Stmt.Save_Field (Name  => COL_3_3_NAME, --  expire_date
+         Stmt.Save_Field (Name  => COL_3_4_NAME, --  expire_date
                           Value => Object.Expire_Date);
          Object.Clear_Modified (4);
       end if;
       if Object.Is_Modified (5) then
-         Stmt.Save_Field (Name  => COL_4_3_NAME, --  path
+         Stmt.Save_Field (Name  => COL_4_4_NAME, --  path
                           Value => Object.Path);
          Object.Clear_Modified (5);
       end if;
       if Object.Is_Modified (6) then
-         Stmt.Save_Field (Name  => COL_5_3_NAME, --  store_version
+         Stmt.Save_Field (Name  => COL_5_4_NAME, --  store_version
                           Value => Object.Store_Version);
          Object.Clear_Modified (6);
       end if;
       if Object.Is_Modified (7) then
-         Stmt.Save_Field (Name  => COL_6_3_NAME, --  shared
+         Stmt.Save_Field (Name  => COL_6_4_NAME, --  shared
                           Value => Object.Shared);
          Object.Clear_Modified (7);
       end if;
       if Object.Is_Modified (8) then
-         Stmt.Save_Field (Name  => COL_7_3_NAME, --  storage_id
+         Stmt.Save_Field (Name  => COL_7_4_NAME, --  storage_id
                           Value => Object.Storage);
          Object.Clear_Modified (8);
       end if;
@@ -1289,21 +1699,21 @@ package body AWA.Storages.Models is
    begin
       Object.Version := 1;
       Session.Allocate (Id => Object);
-      Query.Save_Field (Name  => COL_0_3_NAME, --  id
+      Query.Save_Field (Name  => COL_0_4_NAME, --  id
                         Value => Object.Get_Key);
-      Query.Save_Field (Name  => COL_1_3_NAME, --  version
+      Query.Save_Field (Name  => COL_1_4_NAME, --  version
                         Value => Object.Version);
-      Query.Save_Field (Name  => COL_2_3_NAME, --  create_date
+      Query.Save_Field (Name  => COL_2_4_NAME, --  create_date
                         Value => Object.Create_Date);
-      Query.Save_Field (Name  => COL_3_3_NAME, --  expire_date
+      Query.Save_Field (Name  => COL_3_4_NAME, --  expire_date
                         Value => Object.Expire_Date);
-      Query.Save_Field (Name  => COL_4_3_NAME, --  path
+      Query.Save_Field (Name  => COL_4_4_NAME, --  path
                         Value => Object.Path);
-      Query.Save_Field (Name  => COL_5_3_NAME, --  store_version
+      Query.Save_Field (Name  => COL_5_4_NAME, --  store_version
                         Value => Object.Store_Version);
-      Query.Save_Field (Name  => COL_6_3_NAME, --  shared
+      Query.Save_Field (Name  => COL_6_4_NAME, --  shared
                         Value => Object.Shared);
-      Query.Save_Field (Name  => COL_7_3_NAME, --  storage_id
+      Query.Save_Field (Name  => COL_7_4_NAME, --  storage_id
                         Value => Object.Storage);
       Query.Execute (Result);
       if Result /= 1 then
