@@ -66,6 +66,8 @@
 --  === Checking for job completion ===
 --
 --
+--  @include awa-jobs-modules.ads
+--
 --  == Data Model ==
 --  @include jobs.hbm.xml
 --
