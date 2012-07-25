@@ -76,6 +76,9 @@ package body AWA.Storages.Beans is
                         Part : in ASF.Parts.Part'Class) is
       Manager : AWA.Storages.Services.Storage_Service_Access := Bean.Module.Get_Storage_Manager;
    begin
+      Bean.Set_Name (Part.Get_Name);
+      Bean.Set_Mime_Type (Part.Get_Content_Type);
+      Bean.Set_File_Size (Part.Get_Size);
       Manager.Save (Bean, Part, AWA.Storages.Models.DATABASE);
    end Save_Part;
 
