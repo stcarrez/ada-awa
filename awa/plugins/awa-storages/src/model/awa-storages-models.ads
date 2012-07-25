@@ -175,6 +175,38 @@ package AWA.Storages.Models is
    function Get_Uri (Object : in Storage_Ref)
                  return String;
 
+   --  Set the storage name or filename
+   procedure Set_Name (Object : in out Storage_Ref;
+                       Value  : in Ada.Strings.Unbounded.Unbounded_String);
+   procedure Set_Name (Object : in out Storage_Ref;
+                       Value : in String);
+
+   --  Get the storage name or filename
+   function Get_Name (Object : in Storage_Ref)
+                 return Ada.Strings.Unbounded.Unbounded_String;
+   function Get_Name (Object : in Storage_Ref)
+                 return String;
+
+   --  Set the content mime type
+   procedure Set_Mime_Type (Object : in out Storage_Ref;
+                            Value  : in Ada.Strings.Unbounded.Unbounded_String);
+   procedure Set_Mime_Type (Object : in out Storage_Ref;
+                            Value : in String);
+
+   --  Get the content mime type
+   function Get_Mime_Type (Object : in Storage_Ref)
+                 return Ada.Strings.Unbounded.Unbounded_String;
+   function Get_Mime_Type (Object : in Storage_Ref)
+                 return String;
+
+   --  Set the content size
+   procedure Set_File_Size (Object : in out Storage_Ref;
+                            Value  : in Integer);
+
+   --  Get the content size
+   function Get_File_Size (Object : in Storage_Ref)
+                 return Integer;
+
    --  Set the storage that this local store refers to.
    procedure Set_Store_Data (Object : in out Storage_Ref;
                              Value  : in Storage_Data_Ref'Class);
@@ -429,10 +461,13 @@ private
    COL_2_2_NAME : aliased constant String := "create_date";
    COL_3_2_NAME : aliased constant String := "storage_type";
    COL_4_2_NAME : aliased constant String := "uri";
-   COL_5_2_NAME : aliased constant String := "storage_id";
-   COL_6_2_NAME : aliased constant String := "workspace_id";
+   COL_5_2_NAME : aliased constant String := "name";
+   COL_6_2_NAME : aliased constant String := "mime_type";
+   COL_7_2_NAME : aliased constant String := "file_size";
+   COL_8_2_NAME : aliased constant String := "storage_id";
+   COL_9_2_NAME : aliased constant String := "workspace_id";
    STORAGE_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 7,
+     (Count => 10,
       Table => STORAGE_NAME'Access,
       Members => (
          COL_0_2_NAME'Access,
@@ -441,7 +476,10 @@ private
          COL_3_2_NAME'Access,
          COL_4_2_NAME'Access,
          COL_5_2_NAME'Access,
-         COL_6_2_NAME'Access
+         COL_6_2_NAME'Access,
+         COL_7_2_NAME'Access,
+         COL_8_2_NAME'Access,
+         COL_9_2_NAME'Access
 )
      );
    Null_Storage : constant Storage_Ref
@@ -454,6 +492,9 @@ private
        Create_Date : Ada.Calendar.Time;
        Storage : Storage_Type;
        Uri : Ada.Strings.Unbounded.Unbounded_String;
+       Name : Ada.Strings.Unbounded.Unbounded_String;
+       Mime_Type : Ada.Strings.Unbounded.Unbounded_String;
+       File_Size : Integer;
        Store_Data : Storage_Data_Ref;
        Workspace : AWA.Workspaces.Models.Workspace_Ref;
    end record;

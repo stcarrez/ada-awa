@@ -382,6 +382,7 @@ package body AWA.Storages.Models is
       Impl.Version := 0;
       Impl.Create_Date := ADO.DEFAULT_TIME;
       Impl.Storage := Storage_Type'First;
+      Impl.File_Size := 0;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -476,12 +477,87 @@ package body AWA.Storages.Models is
    end Get_Uri;
 
 
+   procedure Set_Name (Object : in out Storage_Ref;
+                        Value : in String) is
+      Impl : Storage_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_String (Impl.all, 6, Impl.Name, Value);
+   end Set_Name;
+
+   procedure Set_Name (Object : in out Storage_Ref;
+                       Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : Storage_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 6, Impl.Name, Value);
+   end Set_Name;
+
+   function Get_Name (Object : in Storage_Ref)
+                 return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (Object.Get_Name);
+   end Get_Name;
+   function Get_Name (Object : in Storage_Ref)
+                  return Ada.Strings.Unbounded.Unbounded_String is
+      Impl : constant Storage_Access := Storage_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Name;
+   end Get_Name;
+
+
+   procedure Set_Mime_Type (Object : in out Storage_Ref;
+                             Value : in String) is
+      Impl : Storage_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_String (Impl.all, 7, Impl.Mime_Type, Value);
+   end Set_Mime_Type;
+
+   procedure Set_Mime_Type (Object : in out Storage_Ref;
+                            Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : Storage_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 7, Impl.Mime_Type, Value);
+   end Set_Mime_Type;
+
+   function Get_Mime_Type (Object : in Storage_Ref)
+                 return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (Object.Get_Mime_Type);
+   end Get_Mime_Type;
+   function Get_Mime_Type (Object : in Storage_Ref)
+                  return Ada.Strings.Unbounded.Unbounded_String is
+      Impl : constant Storage_Access := Storage_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Mime_Type;
+   end Get_Mime_Type;
+
+
+   procedure Set_File_Size (Object : in out Storage_Ref;
+                            Value  : in Integer) is
+      Impl : Storage_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Integer (Impl.all, 8, Impl.File_Size, Value);
+      ADO.Objects.Set_Field_Integer (Impl.all, 8, Impl.File_Size, Value);
+   end Set_File_Size;
+
+   function Get_File_Size (Object : in Storage_Ref)
+                  return Integer is
+      Impl : constant Storage_Access := Storage_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.File_Size;
+   end Get_File_Size;
+
+
    procedure Set_Store_Data (Object : in out Storage_Ref;
                              Value  : in Storage_Data_Ref'Class) is
       Impl : Storage_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 6, Impl.Store_Data, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 9, Impl.Store_Data, Value);
    end Set_Store_Data;
 
    function Get_Store_Data (Object : in Storage_Ref)
@@ -497,7 +573,7 @@ package body AWA.Storages.Models is
       Impl : Storage_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 7, Impl.Workspace, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 10, Impl.Workspace, Value);
    end Set_Workspace;
 
    function Get_Workspace (Object : in Storage_Ref)
@@ -525,6 +601,9 @@ package body AWA.Storages.Models is
             Copy.Create_Date := Impl.Create_Date;
             Copy.Storage := Impl.Storage;
             Copy.Uri := Impl.Uri;
+            Copy.Name := Impl.Name;
+            Copy.Mime_Type := Impl.Mime_Type;
+            Copy.File_Size := Impl.File_Size;
             Copy.Store_Data := Impl.Store_Data;
             Copy.Workspace := Impl.Workspace;
          end;
@@ -672,14 +751,29 @@ package body AWA.Storages.Models is
          Object.Clear_Modified (5);
       end if;
       if Object.Is_Modified (6) then
-         Stmt.Save_Field (Name  => COL_5_2_NAME, --  storage_id
-                          Value => Object.Store_Data);
+         Stmt.Save_Field (Name  => COL_5_2_NAME, --  name
+                          Value => Object.Name);
          Object.Clear_Modified (6);
       end if;
       if Object.Is_Modified (7) then
-         Stmt.Save_Field (Name  => COL_6_2_NAME, --  workspace_id
-                          Value => Object.Workspace);
+         Stmt.Save_Field (Name  => COL_6_2_NAME, --  mime_type
+                          Value => Object.Mime_Type);
          Object.Clear_Modified (7);
+      end if;
+      if Object.Is_Modified (8) then
+         Stmt.Save_Field (Name  => COL_7_2_NAME, --  file_size
+                          Value => Object.File_Size);
+         Object.Clear_Modified (8);
+      end if;
+      if Object.Is_Modified (9) then
+         Stmt.Save_Field (Name  => COL_8_2_NAME, --  storage_id
+                          Value => Object.Store_Data);
+         Object.Clear_Modified (9);
+      end if;
+      if Object.Is_Modified (10) then
+         Stmt.Save_Field (Name  => COL_9_2_NAME, --  workspace_id
+                          Value => Object.Workspace);
+         Object.Clear_Modified (10);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -721,9 +815,15 @@ package body AWA.Storages.Models is
                         Value => Integer (Storage_Type'Pos (Object.Storage)));
       Query.Save_Field (Name  => COL_4_2_NAME, --  uri
                         Value => Object.Uri);
-      Query.Save_Field (Name  => COL_5_2_NAME, --  storage_id
+      Query.Save_Field (Name  => COL_5_2_NAME, --  name
+                        Value => Object.Name);
+      Query.Save_Field (Name  => COL_6_2_NAME, --  mime_type
+                        Value => Object.Mime_Type);
+      Query.Save_Field (Name  => COL_7_2_NAME, --  file_size
+                        Value => Object.File_Size);
+      Query.Save_Field (Name  => COL_8_2_NAME, --  storage_id
                         Value => Object.Store_Data);
-      Query.Save_Field (Name  => COL_6_2_NAME, --  workspace_id
+      Query.Save_Field (Name  => COL_9_2_NAME, --  workspace_id
                         Value => Object.Workspace);
       Query.Execute (Result);
       if Result /= 1 then
@@ -763,6 +863,15 @@ package body AWA.Storages.Models is
       if Name = "uri" then
          return Util.Beans.Objects.To_Object (Impl.Uri);
       end if;
+      if Name = "name" then
+         return Util.Beans.Objects.To_Object (Impl.Name);
+      end if;
+      if Name = "mime_type" then
+         return Util.Beans.Objects.To_Object (Impl.Mime_Type);
+      end if;
+      if Name = "file_size" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.File_Size));
+      end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
 
@@ -778,11 +887,14 @@ package body AWA.Storages.Models is
       Object.Storage := Storage_Type'Val (Stmt.Get_Identifier (3));
       Object.Storage := Storage_Type'Val (Stmt.Get_Integer (3));
       Object.Uri := Stmt.Get_Unbounded_String (4);
-      if not Stmt.Is_Null (5) then
-         Object.Store_Data.Set_Key_Value (Stmt.Get_Identifier (5), Session);
+      Object.Name := Stmt.Get_Unbounded_String (5);
+      Object.Mime_Type := Stmt.Get_Unbounded_String (6);
+      Object.File_Size := Stmt.Get_Integer (7);
+      if not Stmt.Is_Null (8) then
+         Object.Store_Data.Set_Key_Value (Stmt.Get_Identifier (8), Session);
       end if;
-      if not Stmt.Is_Null (6) then
-         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (6), Session);
+      if not Stmt.Is_Null (9) then
+         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (9), Session);
       end if;
       Object.Version := Stmt.Get_Integer (1);
       ADO.Objects.Set_Created (Object);

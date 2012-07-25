@@ -12,6 +12,12 @@ CREATE TABLE awa_storage (
   `storage_type` INTEGER NOT NULL,
   /* the storage specific URI */
   `uri` VARCHAR(256) NOT NULL,
+  /* the storage name or filename */
+  `name` VARCHAR(256) NOT NULL,
+  /* the content mime type */
+  `mime_type` VARCHAR(256) NOT NULL,
+  /* the content size */
+  `file_size` BIGINT NOT NULL,
   /* the storage that this local store refers to. */
   `storage_id` INTEGER NOT NULL,
   /* the workspace that this storage belongs to. */
