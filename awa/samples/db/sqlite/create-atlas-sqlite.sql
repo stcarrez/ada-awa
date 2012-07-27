@@ -148,6 +148,16 @@ CREATE TABLE user (
   /* the user email address */
   `email_id` INTEGER NOT NULL
 );
+INSERT INTO entity_type (name) VALUES ("access_key");
+INSERT INTO entity_type (name) VALUES ("acl");
+INSERT INTO entity_type (name) VALUES ("awa_message");
+INSERT INTO entity_type (name) VALUES ("awa_message_type");
+INSERT INTO entity_type (name) VALUES ("awa_queue");
+INSERT INTO entity_type (name) VALUES ("email");
+INSERT INTO entity_type (name) VALUES ("session");
+INSERT INTO entity_type (name) VALUES ("user");
+/* Copied from awa-workspaces-sqlite.sql*/
+/* File generated automatically by dynamo */
 /* 
             The workspace allows to group all together the different
             application entities which belong to a user or a set of collaborating users.
@@ -183,14 +193,6 @@ CREATE TABLE workspace_member (
   /* the workspace. */
   `workspace_fk` INTEGER NOT NULL
 );
-INSERT INTO entity_type (name) VALUES ("access_key");
-INSERT INTO entity_type (name) VALUES ("acl");
-INSERT INTO entity_type (name) VALUES ("awa_message");
-INSERT INTO entity_type (name) VALUES ("awa_message_type");
-INSERT INTO entity_type (name) VALUES ("awa_queue");
-INSERT INTO entity_type (name) VALUES ("email");
-INSERT INTO entity_type (name) VALUES ("session");
-INSERT INTO entity_type (name) VALUES ("user");
 INSERT INTO entity_type (name) VALUES ("workspace");
 INSERT INTO entity_type (name) VALUES ("workspace_member");
 /* Copied from awa-blogs-sqlite.sql*/

@@ -5,10 +5,12 @@ DROP TABLE IF EXISTS `mblog`;
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `blog_post`;
 DROP TABLE IF EXISTS `blog`;
-/* Copied from awa-drop-mysql.sql*/
+/* Copied from awa-workspaces-drop-mysql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `workspace_member`;
 DROP TABLE IF EXISTS `workspace`;
+/* Copied from awa-drop-mysql.sql*/
+/* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `user`;
 DROP TABLE IF EXISTS `session`;
 DROP TABLE IF EXISTS `email`;

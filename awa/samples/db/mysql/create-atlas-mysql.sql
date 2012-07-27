@@ -160,6 +160,18 @@ CREATE TABLE user (
   `email_id` INTEGER NOT NULL,
   PRIMARY KEY (`id`)
 );
+INSERT INTO entity_type (name) VALUES
+("access_key")
+,("acl")
+,("awa_message")
+,("awa_message_type")
+,("awa_queue")
+,("email")
+,("session")
+,("user")
+;
+/* Copied from awa-workspaces-mysql.sql*/
+/* File generated automatically by dynamo */
 /* 
             The workspace allows to group all together the different
             application entities which belong to a user or a set of collaborating users.
@@ -198,15 +210,7 @@ CREATE TABLE workspace_member (
   PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES
-("access_key")
-,("acl")
-,("awa_message")
-,("awa_message_type")
-,("awa_queue")
-,("email")
-,("session")
-,("user")
-,("workspace")
+("workspace")
 ,("workspace_member")
 ;
 /* Copied from awa-blogs-mysql.sql*/
