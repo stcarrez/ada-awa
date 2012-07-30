@@ -1,6 +1,30 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <module version="1.0">
 
+  <managed-bean>
+    <description>This bean allows to create a storage folder.</description>
+    <managed-bean-name>storageFolder</managed-bean-name>
+    <managed-bean-class>AWA.Storages.Beans.Folder_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <description>This bean allows to upload a new file in the storage space.</description>
+    <managed-bean-name>uploadFile</managed-bean-name>
+    <managed-bean-class>AWA.Storages.Beans.Upload_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <entity-permission>
+    <name>folder-create</name>
+    <entity-type>workspace</entity-type>
+    <sql>
+       SELECT acl.id FROM acl
+       WHERE acl.entity_type = :entity_type
+       AND acl.user_id = :user_id   
+    </sql>
+  </entity-permission>
+
   <entity-permission>
     <name>storage-create</name>
     <entity-type>workspace</entity-type>

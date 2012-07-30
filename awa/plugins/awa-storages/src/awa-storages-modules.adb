@@ -46,6 +46,10 @@ package body AWA.Storages.Modules is
                          Name    => "AWA.Storages.Beans.Upload_Bean",
                          Handler => AWA.Storages.Beans.Create_Upload_Bean'Access);
 
+      Register.Register (Plugin  => Plugin,
+                         Name    => "AWA.Storages.Beans.Folder_Bean",
+                         Handler => AWA.Storages.Beans.Create_Folder_Bean'Access);
+
       AWA.Modules.Module (Plugin).Initialize (App, Props);
 
       --  Create the storage manager when everything is initialized.
