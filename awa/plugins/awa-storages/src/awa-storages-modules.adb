@@ -40,7 +40,7 @@ package body AWA.Storages.Modules is
       Log.Info ("Initializing the storage module");
 
       --  Setup the resource bundles.
-      App.Register ("blogMsg", "blogs");
+      App.Register ("storageMsg", "storages");
 
       Register.Register (Plugin  => Plugin,
                          Name    => "AWA.Storages.Beans.Upload_Bean",

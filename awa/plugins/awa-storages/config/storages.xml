@@ -15,6 +15,13 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
+  <managed-bean>
+    <description>This bean gives the list of storage folders in the workspace.</description>
+    <managed-bean-name>folderList</managed-bean-name>
+    <managed-bean-class>AWA.Storages.Beans.Folder_List_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
   <entity-permission>
     <name>folder-create</name>
     <entity-type>workspace</entity-type>
