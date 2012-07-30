@@ -101,4 +101,67 @@ package body AWA.Storages.Beans is
       return Result.all'Access;
    end Create_Upload_Bean;
 
+   package Folder_Save_Binding is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Folder_Bean,
+                                                      Method => Save,
+                                                      Name   => "save");
+
+   Folder_Bean_Binding : aliased constant Util.Beans.Methods.Method_Binding_Array
+     := (1 => Folder_Save_Binding.Proxy'Access);
+
+   --  ------------------------------
+   --  Get the value identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Folder_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      return AWA.Storages.Models.Storage_Folder_Ref (From).Get_Value (Name);
+   end Get_Value;
+
+   --  ------------------------------
+   --  Set the value identified by the name.
+   --  ------------------------------
+   overriding
+   procedure Set_Value (From  : in out Folder_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "name" then
+         From.Set_Name (Name);
+      end if;
+   end Set_Value;
+
+   --  ------------------------------
+   --  This bean provides some methods that can be used in a Method_Expression
+   --  ------------------------------
+   overriding
+   function Get_Method_Bindings (From : in Folder_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
+   begin
+      return Folder_Bean_Binding'Access;
+   end Get_Method_Bindings;
+
+   --  ------------------------------
+   --  Create or save the folder.
+   --  ------------------------------
+   procedure Save (Bean    : in out Folder_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      Manager : AWA.Storages.Services.Storage_Service_Access := Bean.Module.Get_Storage_Manager;
+   begin
+      Manager.Save_Folder (Bean);
+   end Save;
+
+   --  ------------------------------
+   --  Create the Upload_Bean bean instance.
+   --  ------------------------------
+   function Create_Folder_Bean (Module : in AWA.Storages.Modules.Storage_Module_Access)
+                                return Util.Beans.Basic.Readonly_Bean_Access is
+      Result : constant Folder_Bean_Access := new Folder_Bean;
+   begin
+      Result.Module := Module;
+      return Result.all'Access;
+   end Create_Folder_Bean;
+
 end AWA.Storages.Beans;
