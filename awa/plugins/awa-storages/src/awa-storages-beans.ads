@@ -32,7 +32,7 @@ package AWA.Storages.Beans is
    --  ------------------------------
    --  The <b>Upload_Bean</b> allows to upload a file in the storage space.
    type Upload_Bean is new AWA.Storages.Models.Storage_Ref
-     and Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with record
+     and Util.Beans.Basic.Bean with record
       Module  : AWA.Storages.Modules.Storage_Module_Access := null;
    end record;
    type Upload_Bean_Access is access all Upload_Bean'Class;
@@ -48,11 +48,6 @@ package AWA.Storages.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object);
 
-   --  This bean provides some methods that can be used in a Method_Expression
-   overriding
-   function Get_Method_Bindings (From : in Upload_Bean)
-                                 return Util.Beans.Methods.Method_Binding_Array_Access;
-
    --  Save the uploaded file in the storage service.
    --  @method
    procedure Save_Part (Bean : in out Upload_Bean;
@@ -63,16 +58,12 @@ package AWA.Storages.Beans is
    procedure Upload (Bean    : in out Upload_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
-   --  Create the Upload_Bean bean instance.
-   function Create_Upload_Bean (Module : in AWA.Storages.Modules.Storage_Module_Access)
-                              return Util.Beans.Basic.Readonly_Bean_Access;
-
    --  ------------------------------
    --  Folder Bean
    --  ------------------------------
    --  The <b>Folder_Bean</b> allows to create or update the folder name.
    type Folder_Bean is new AWA.Storages.Models.Storage_Folder_Ref
-     and Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with record
+     and Util.Beans.Basic.Bean with record
       Module  : AWA.Storages.Modules.Storage_Module_Access := null;
    end record;
    type Folder_Bean_Access is access all Folder_Bean'Class;
@@ -88,17 +79,8 @@ package AWA.Storages.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object);
 
-   --  This bean provides some methods that can be used in a Method_Expression
-   overriding
-   function Get_Method_Bindings (From : in Folder_Bean)
-                                 return Util.Beans.Methods.Method_Binding_Array_Access;
-
    --  Create or save the folder.
    procedure Save (Bean    : in out Folder_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
-
-   --  Create the Folder_Bean bean instance.
-   function Create_Folder_Bean (Module : in AWA.Storages.Modules.Storage_Module_Access)
-                                return Util.Beans.Basic.Readonly_Bean_Access;
 
 end AWA.Storages.Beans;
