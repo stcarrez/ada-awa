@@ -29,6 +29,7 @@ package AWA.Storages.Services is
 
    package ACL_Create_Storage is new Security.Permissions.Permission_ACL ("storage-create");
    package ACL_Delete_Storage is new Security.Permissions.Permission_ACL ("storage-delete");
+   package ACL_Create_Folder is new Security.Permissions.Permission_ACL ("folder-create");
 
    type Read_Mode is (READ, WRITE);
 
@@ -53,6 +54,10 @@ package AWA.Storages.Services is
    function Get_Store (Service : in Storage_Service;
                        Data    : in AWA.Storages.Models.Storage_Ref'Class)
                        return AWA.Storages.Stores.Store_Access;
+
+   --  Create or save the folder.
+   procedure Save_Folder (Service : in Storage_Service;
+                          Folder  : in out AWA.Storages.Models.Storage_Folder_Ref'Class);
 
    --  Save the data object contained in the <b>Data</b> part element into the
    --  target storage represented by <b>Into</b>.

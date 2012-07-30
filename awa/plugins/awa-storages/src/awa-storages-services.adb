@@ -56,6 +56,35 @@ package body AWA.Storages.Services is
    end Initialize;
 
    --  ------------------------------
+   --  Create or save the folder.
+   --  ------------------------------
+   procedure Save_Folder (Service : in Storage_Service;
+                          Folder  : in out AWA.Storages.Models.Storage_Folder_Ref'Class) is
+      Ctx       : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB        : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Workspace : AWA.Workspaces.Models.Workspace_Ref;
+   begin
+      if not Folder.Is_Null then
+         Workspace := AWA.Workspaces.Models.Workspace_Ref (Folder.Get_Workspace);
+      end if;
+      if Workspace.Is_Null then
+         AWA.Workspaces.Modules.Get_Workspace (DB, Ctx, Workspace);
+         Folder.Set_Workspace (Workspace);
+      end if;
+
+      --  Check that the user has the create folder permission on the given workspace.
+      AWA.Permissions.Check (Permission => ACL_Create_Folder.Permission,
+                             Entity     => Workspace.Get_Id);
+
+      Ctx.Start;
+      if not Folder.Is_Inserted then
+         Folder.Set_Create_Date (Ada.Calendar.Clock);
+      end if;
+      Folder.Save (DB);
+      Ctx.Commit;
+   end Save_Folder;
+
+   --  ------------------------------
    --  Save the data object contained in the <b>Data</b> part element into the
    --  target storage represented by <b>Into</b>.
    --  ------------------------------
