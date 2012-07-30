@@ -18,11 +18,11 @@ CREATE TABLE awa_storage (
   /* the content size */
   `file_size` BIGINT NOT NULL,
   /* the storage that this local store refers to. */
-  `storage_id` INTEGER NOT NULL,
+  `storage_id` INTEGER ,
   /* the workspace that this storage belongs to. */
   `workspace_id` INTEGER NOT NULL,
   /* the storage folder that this storage belongs to. */
-  `folder_id` INTEGER NOT NULL
+  `folder_id` INTEGER 
 );
 /* The database storage data when the storage type is DATABASE. */
 CREATE TABLE awa_storage_data (

@@ -506,6 +506,47 @@ package AWA.Storages.Models is
                    Into   : in out Store_Local_Ref);
 
 
+   --  --------------------
+   --  The list of folders.
+   --  --------------------
+   type Folder_Info is new Util.Beans.Basic.Readonly_Bean with record
+      --  the folder identifier.
+      Id : ADO.Identifier;
+
+      --  the folder name.
+      Name : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the blog creation date.
+      Create_Date : Ada.Calendar.Time;
+
+   end record;
+
+   --  Get the bean attribute identified by the given name.
+   overriding
+   function Get_Value (From : in Folder_Info;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   package Folder_Info_Beans is
+      new Util.Beans.Basic.Lists (Element_Type => Folder_Info);
+   package Folder_Info_Vectors renames Folder_Info_Beans.Vectors;
+   subtype Folder_Info_List_Bean is Folder_Info_Beans.List_Bean;
+
+   type Folder_Info_List_Bean_Access is access all Folder_Info_List_Bean;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Folder_Info_List_Bean;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   subtype Folder_Info_Vector is Folder_Info_Vectors.Vector;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Folder_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   Query_Storage_Folder_List : constant ADO.Queries.Query_Definition_Access;
+
 
    Query_Storage_Get_Data : constant ADO.Queries.Query_Definition_Access;
 
@@ -748,30 +789,40 @@ private
                         Impl   : out Store_Local_Access);
 
    package File_1 is
+      new ADO.Queries.Loaders.File (Path => "folder-queries.xml",
+                                    Sha1 => "4A3EAF58F54C45825D96AED13FE40DD0EB97D591");
+
+   package Def_Folderinfo_Storage_Folder_List is
+      new ADO.Queries.Loaders.Query (Name => "storage-folder-list",
+                                     File => File_1.File'Access);
+   Query_Storage_Folder_List : constant ADO.Queries.Query_Definition_Access
+   := Def_Folderinfo_Storage_Folder_List.Query'Access;
+
+   package File_2 is
       new ADO.Queries.Loaders.File (Path => "storage-queries.xml",
                                     Sha1 => "9B2B599473F75F92CB5AB5045675E4CCEF926543");
 
    package Def_Storage_Get_Data is
       new ADO.Queries.Loaders.Query (Name => "storage-get-data",
-                                     File => File_1.File'Access);
+                                     File => File_2.File'Access);
    Query_Storage_Get_Data : constant ADO.Queries.Query_Definition_Access
    := Def_Storage_Get_Data.Query'Access;
 
    package Def_Storage_Get_Local is
       new ADO.Queries.Loaders.Query (Name => "storage-get-local",
-                                     File => File_1.File'Access);
+                                     File => File_2.File'Access);
    Query_Storage_Get_Local : constant ADO.Queries.Query_Definition_Access
    := Def_Storage_Get_Local.Query'Access;
 
    package Def_Storage_Get_Storage is
       new ADO.Queries.Loaders.Query (Name => "storage-get-storage",
-                                     File => File_1.File'Access);
+                                     File => File_2.File'Access);
    Query_Storage_Get_Storage : constant ADO.Queries.Query_Definition_Access
    := Def_Storage_Get_Storage.Query'Access;
 
    package Def_Storage_Delete_Local is
       new ADO.Queries.Loaders.Query (Name => "storage-delete-local",
-                                     File => File_1.File'Access);
+                                     File => File_2.File'Access);
    Query_Storage_Delete_Local : constant ADO.Queries.Query_Definition_Access
    := Def_Storage_Delete_Local.Query'Access;
 end AWA.Storages.Models;

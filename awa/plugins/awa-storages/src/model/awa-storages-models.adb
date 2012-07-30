@@ -1783,5 +1783,62 @@ package body AWA.Storages.Models is
       ADO.Objects.Set_Created (Object);
    end Load;
 
+   --  --------------------
+   --  Get the bean attribute identified by the given name.
+   --  --------------------
+   overriding
+   function Get_Value (From : in Folder_Info;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
+      end if;
+      if Name = "name" then
+         return Util.Beans.Objects.To_Object (From.Name);
+      end if;
+      if Name = "create_date" then
+         return Util.Beans.Objects.Time.To_Object (From.Create_Date);
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+   --  --------------------
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   --  --------------------
+   procedure List (Object  : in out Folder_Info_List_Bean;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+   begin
+      List (Object.List, Session, Context);
+   end List;
+   --  --------------------
+   --  The list of folders.
+   --  --------------------
+   procedure List (Object  : in out Folder_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+      procedure Read (Into : in out Folder_Info);
+
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Context);
+      Pos  : Natural := 0;
+      procedure Read (Into : in out Folder_Info) is
+      begin
+         Into.Id := Stmt.Get_Identifier (0);
+         Into.Name := Stmt.Get_Unbounded_String (1);
+         Into.Create_Date := Stmt.Get_Time (2);
+      end Read;
+   begin
+      Stmt.Execute;
+      Folder_Info_Vectors.Clear (Object);
+      while Stmt.Has_Elements loop
+         Object.Insert_Space (Before => Pos);
+         Object.Update_Element (Index => Pos, Process => Read'Access);
+         Pos := Pos + 1;
+         Stmt.Next;
+      end loop;
+   end List;
+
+
 
 end AWA.Storages.Models;
