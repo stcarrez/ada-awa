@@ -160,6 +160,48 @@ INSERT INTO entity_type (name) VALUES ("awa_queue");
 INSERT INTO entity_type (name) VALUES ("email");
 INSERT INTO entity_type (name) VALUES ("session");
 INSERT INTO entity_type (name) VALUES ("user");
+/* Copied from awa-blogs-sqlite.sql*/
+/* File generated automatically by dynamo */
+/* Blog  */
+CREATE TABLE blog (
+  /* the blog identifier */
+  `id` INTEGER PRIMARY KEY,
+  /* the blob version. */
+  `version` int ,
+  /* the blog name */
+  `name` VARCHAR(256) NOT NULL,
+  /* the blog uuid */
+  `uid` VARCHAR(256) NOT NULL,
+  /* the blog creation date */
+  `create_date` DATETIME NOT NULL,
+  /* the workspace that this blob belongs to. */
+  `workspace_id` INTEGER NOT NULL
+);
+/* Post in a blog */
+CREATE TABLE blog_post (
+  /* the post identifier */
+  `id` BIGINT PRIMARY KEY,
+  /* the post version. */
+  `version` int ,
+  /* the post title */
+  `title` VARCHAR(256) NOT NULL,
+  /* the uri */
+  `uri` VARCHAR(256) ,
+  /* the blog text content */
+  `text` VARCHAR(60000) ,
+  /* the post creation date */
+  `create_date` DATETIME NOT NULL,
+  /* the post publication date */
+  `publish_date` DATETIME ,
+  /* the post status */
+  `status` INTEGER NOT NULL,
+  /* the post author */
+  `author_id` INTEGER NOT NULL,
+  /* the blog that this post belongs */
+  `blog_id` INTEGER NOT NULL
+);
+INSERT INTO entity_type (name) VALUES ("blog");
+INSERT INTO entity_type (name) VALUES ("blog_post");
 /* Copied from awa-comments-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* The Comment table records a user comment associated with a database entity.
@@ -181,98 +223,6 @@ CREATE TABLE comments (
   `entity__type_fk` INTEGER NOT NULL
 );
 INSERT INTO entity_type (name) VALUES ("comments");
-/* Copied from awa-workspaces-sqlite.sql*/
-/* File generated automatically by dynamo */
-/* 
-            The workspace allows to group all together the different
-            application entities which belong to a user or a set of collaborating users.
-            Other entities, for example a Blog, a Wiki space, will link to a
-            single workspace.
-
-            The workspace has members which are allowed to access the entities
-            that are part of the workspace.  A workspace owner decides which user
-            is part of the workspace or not.
-         */
-CREATE TABLE workspace (
-  /* the workspace identifier. */
-  `id` INTEGER PRIMARY KEY,
-  /* the storage data version. */
-  `version` int ,
-  /* the workspace creation date. */
-  `create_date` DATETIME NOT NULL,
-  /* the workspace owner. */
-  `owner_fk` BIGINT NOT NULL
-);
-/* 
-            The workspace member indicates the users who are part of the workspace.
-         */
-CREATE TABLE workspace_member (
-  /* the member identifier. */
-  `id` BIGINT PRIMARY KEY,
-  /* the workspace member version. */
-  `version` int ,
-  /* the member creation date. */
-  `create_date` DATETIME NOT NULL,
-  /* the workspace member. */
-  `user_fk` BIGINT NOT NULL,
-  /* the workspace. */
-  `workspace_fk` INTEGER NOT NULL
-);
-INSERT INTO entity_type (name) VALUES ("workspace");
-INSERT INTO entity_type (name) VALUES ("workspace_member");
-/* Copied from awa-storages-sqlite.sql*/
-/* File generated automatically by dynamo */
-/* The database storage data when the storage type is DATABASE. */
-CREATE TABLE awa_storage (
-  /* the storage identifier */
-  `id` INTEGER PRIMARY KEY,
-  /* the storage data version. */
-  `version` int ,
-  /* the local store creation date */
-  `create_date` DATETIME NOT NULL,
-  /* the storage type. */
-  `storage_type` INTEGER NOT NULL,
-  /* the storage specific URI */
-  `uri` VARCHAR(256) NOT NULL,
-  /* the storage that this local store refers to. */
-  `storage_id` INTEGER NOT NULL,
-  /* the workspace that this storage belongs to. */
-  `workspace_id` INTEGER NOT NULL
-);
-/* The database storage data when the storage type is DATABASE. */
-CREATE TABLE awa_storage_data (
-  /* the storage data identifier */
-  `id` INTEGER PRIMARY KEY,
-  /* the storage data version. */
-  `version` int ,
-  /* the storage data when the storage type is DATABASE. */
-  `data` BLOB NOT NULL
-);
-/* The local store record is created when a copy of the data
-is needed on the local file system.  The creation date refers to the date when
-the data was copied on the local file system.  The expiration date indicates a
-date after which the local file can be removed from the local file system. */
-CREATE TABLE awa_store_local (
-  /* the local storage identifier */
-  `id` INTEGER PRIMARY KEY,
-  /* the local storage version. */
-  `version` int ,
-  /* the local store creation date */
-  `create_date` DATETIME NOT NULL,
-  /* the local store expiration date */
-  `expire_date` DATETIME NOT NULL,
-  /* the local store path */
-  `path` VARCHAR(256) NOT NULL,
-  /* the storage version that this local store represents */
-  `store_version` INTEGER NOT NULL,
-  /* whether the local store file can be shared or not */
-  `shared` TINYINT NOT NULL,
-  /* the storage that this local store refers to. */
-  `storage_id` INTEGER NOT NULL
-);
-INSERT INTO entity_type (name) VALUES ("awa_storage");
-INSERT INTO entity_type (name) VALUES ("awa_storage_data");
-INSERT INTO entity_type (name) VALUES ("awa_store_local");
 /* Copied from awa-images-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* An image that was uploaded by a user in an image folder. */
@@ -342,9 +292,9 @@ CREATE TABLE awa_jobs (
   /* the job status */
   `status` INTEGER NOT NULL,
   /* the job messages */
-  `messages` VARCHAR(60000) NOT NULL,
+  `messages` TEXT NOT NULL,
   /* the job results */
-  `results` VARCHAR(60000) NOT NULL,
+  `results` TEXT NOT NULL,
   /* the user who triggered the job */
   `user_id` INTEGER ,
   /* the user session who triggered the job */
@@ -353,45 +303,117 @@ CREATE TABLE awa_jobs (
   `event_id` INTEGER 
 );
 INSERT INTO entity_type (name) VALUES ("awa_jobs");
-/* Copied from awa-blogs-sqlite.sql*/
+/* Copied from awa-storages-sqlite.sql*/
 /* File generated automatically by dynamo */
-/* Blog  */
-CREATE TABLE blog (
-  /* the blog identifier */
+/* The database storage data when the storage type is DATABASE. */
+CREATE TABLE awa_storage (
+  /* the storage identifier */
   `id` INTEGER PRIMARY KEY,
-  /* the blob version. */
+  /* the storage data version. */
   `version` int ,
-  /* the blog name */
-  `name` VARCHAR(256) NOT NULL,
-  /* the blog uuid */
-  `uid` VARCHAR(256) NOT NULL,
-  /* the blog creation date */
+  /* the local store creation date */
   `create_date` DATETIME NOT NULL,
-  /* the workspace that this blob belongs to. */
+  /* the storage type. */
+  `storage_type` INTEGER NOT NULL,
+  /* the storage specific URI */
+  `uri` VARCHAR(256) NOT NULL,
+  /* the storage name or filename */
+  `name` VARCHAR(256) NOT NULL,
+  /* the content mime type */
+  `mime_type` VARCHAR(256) NOT NULL,
+  /* the content size */
+  `file_size` BIGINT NOT NULL,
+  /* the storage that this local store refers to. */
+  `storage_id` INTEGER ,
+  /* the workspace that this storage belongs to. */
+  `workspace_id` INTEGER NOT NULL,
+  /* the storage folder that this storage belongs to. */
+  `folder_id` INTEGER 
+);
+/* The database storage data when the storage type is DATABASE. */
+CREATE TABLE awa_storage_data (
+  /* the storage data identifier */
+  `id` INTEGER PRIMARY KEY,
+  /* the storage data version. */
+  `version` int ,
+  /* the storage data when the storage type is DATABASE. */
+  `data` BLOB NOT NULL
+);
+/* Storage files are organized in folders. */
+CREATE TABLE awa_storage_folder (
+  /* the storage folder identifier */
+  `id` INTEGER PRIMARY KEY,
+  /* the storage folder version. */
+  `version` int ,
+  /* the storage folder name */
+  `name` VARCHAR(256) NOT NULL,
+  /* the folder creation date */
+  `create_date` DATETIME NOT NULL,
+  /* the workspace that this storage folder belongs to. */
   `workspace_id` INTEGER NOT NULL
 );
-/* Post in a blog */
-CREATE TABLE blog_post (
-  /* the post identifier */
-  `id` BIGINT PRIMARY KEY,
-  /* the post version. */
+/* The local store record is created when a copy of the data
+is needed on the local file system.  The creation date refers to the date when
+the data was copied on the local file system.  The expiration date indicates a
+date after which the local file can be removed from the local file system. */
+CREATE TABLE awa_store_local (
+  /* the local storage identifier */
+  `id` INTEGER PRIMARY KEY,
+  /* the local storage version. */
   `version` int ,
-  /* the post title */
-  `title` VARCHAR(256) NOT NULL,
-  /* the uri */
-  `uri` VARCHAR(256) ,
-  /* the blog text content */
-  `text` VARCHAR(60000) ,
-  /* the post creation date */
+  /* the local store creation date */
   `create_date` DATETIME NOT NULL,
-  /* the post publication date */
-  `publish_date` DATETIME ,
-  /* the post status */
-  `status` INTEGER NOT NULL,
-  /* the post author */
-  `author_id` INTEGER NOT NULL,
-  /* the blog that this post belongs */
-  `blog_id` INTEGER NOT NULL
+  /* the local store expiration date */
+  `expire_date` DATETIME NOT NULL,
+  /* the local store path */
+  `path` VARCHAR(256) NOT NULL,
+  /* the storage version that this local store represents */
+  `store_version` INTEGER NOT NULL,
+  /* whether the local store file can be shared or not */
+  `shared` TINYINT NOT NULL,
+  /* the storage that this local store refers to. */
+  `storage_id` INTEGER NOT NULL
 );
-INSERT INTO entity_type (name) VALUES ("blog");
-INSERT INTO entity_type (name) VALUES ("blog_post");
+INSERT INTO entity_type (name) VALUES ("awa_storage");
+INSERT INTO entity_type (name) VALUES ("awa_storage_data");
+INSERT INTO entity_type (name) VALUES ("awa_storage_folder");
+INSERT INTO entity_type (name) VALUES ("awa_store_local");
+/* Copied from awa-workspaces-sqlite.sql*/
+/* File generated automatically by dynamo */
+/* 
+            The workspace allows to group all together the different
+            application entities which belong to a user or a set of collaborating users.
+            Other entities, for example a Blog, a Wiki space, will link to a
+            single workspace.
+
+            The workspace has members which are allowed to access the entities
+            that are part of the workspace.  A workspace owner decides which user
+            is part of the workspace or not.
+         */
+CREATE TABLE workspace (
+  /* the workspace identifier. */
+  `id` INTEGER PRIMARY KEY,
+  /* the storage data version. */
+  `version` int ,
+  /* the workspace creation date. */
+  `create_date` DATETIME NOT NULL,
+  /* the workspace owner. */
+  `owner_fk` BIGINT NOT NULL
+);
+/* 
+            The workspace member indicates the users who are part of the workspace.
+         */
+CREATE TABLE workspace_member (
+  /* the member identifier. */
+  `id` BIGINT PRIMARY KEY,
+  /* the workspace member version. */
+  `version` int ,
+  /* the member creation date. */
+  `create_date` DATETIME NOT NULL,
+  /* the workspace member. */
+  `user_fk` BIGINT NOT NULL,
+  /* the workspace. */
+  `workspace_fk` INTEGER NOT NULL
+);
+INSERT INTO entity_type (name) VALUES ("workspace");
+INSERT INTO entity_type (name) VALUES ("workspace_member");

@@ -16,9 +16,9 @@ CREATE TABLE awa_jobs (
   /* the job status */
   `status` INTEGER NOT NULL,
   /* the job messages */
-  `messages` VARCHAR(60000) NOT NULL,
+  `messages` TEXT NOT NULL,
   /* the job results */
-  `results` VARCHAR(60000) NOT NULL,
+  `results` TEXT NOT NULL,
   /* the user who triggered the job */
   `user_id` INTEGER ,
   /* the user session who triggered the job */

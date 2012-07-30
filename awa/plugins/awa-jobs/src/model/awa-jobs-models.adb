@@ -420,9 +420,8 @@ package body AWA.Jobs.Models is
                    Query   : in ADO.SQL.Query'Class;
                    Found   : out Boolean) is
       Stmt : ADO.Statements.Query_Statement
-          := Session.Create_Statement (JOB_TABLE'Access);
+          := Session.Create_Statement (Query, JOB_TABLE'Access);
    begin
-      Stmt.Set_Parameters (Query);
       Stmt.Execute;
       if Stmt.Has_Elements then
          Object.Load (Stmt, Session);
@@ -621,9 +620,8 @@ package body AWA.Jobs.Models is
    procedure List (Object  : in out Job_Vector;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class) is
-      Stmt : ADO.Statements.Query_Statement := Session.Create_Statement (JOB_TABLE'Access);
+      Stmt : ADO.Statements.Query_Statement := Session.Create_Statement (Query, JOB_TABLE'Access);
    begin
-      Stmt.Set_Parameters (Query);
       Stmt.Execute;
       Job_Vectors.Clear (Object);
       while Stmt.Has_Elements loop
