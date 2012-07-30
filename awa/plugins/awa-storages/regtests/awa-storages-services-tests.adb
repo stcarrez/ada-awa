@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Ada.Streams;
+with Ada.Strings.Unbounded;
 
 with Util.Test_Caller;
 
@@ -25,6 +26,7 @@ with Security.Contexts;
 
 with AWA.Services.Contexts;
 with AWA.Storages.Modules;
+with AWA.Storages.Beans.Factories;
 with AWA.Tests.Helpers.Users;
 package body AWA.Storages.Services.Tests is
 
@@ -39,6 +41,8 @@ package body AWA.Storages.Services.Tests is
                        Test_Create_Storage'Access);
       Caller.Add_Test (Suite, "Test AWA.Storages.Services.Delete",
                        Test_Delete_Storage'Access);
+      Caller.Add_Test (Suite, "Test AWA.Storages.Services.Save_Folder, Folder_Bean",
+                       Test_Create_Folder'Access);
 
    end Add_Tests;
 
@@ -103,5 +107,24 @@ package body AWA.Storages.Services.Tests is
       T.Manager.Load (From => T.Id, Into => Data);
       T.Assert (Data.Is_Null, "A non null blob returned by load");
    end Test_Delete_Storage;
+
+   --  ------------------------------
+   --  Test creation of a storage folder
+   --  ------------------------------
+   procedure Test_Create_Folder (T : in out Test) is
+      Sec_Ctx   : Security.Contexts.Security_Context;
+      Context   : AWA.Services.Contexts.Service_Context;
+      Folder    : AWA.Storages.Beans.Factories.Folder_Bean;
+      Outcome   : Ada.Strings.Unbounded.Unbounded_String;
+   begin
+      AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-storage@test.com");
+
+      Folder.Set_Name ("Test folder name");
+      Folder.Module := AWA.Storages.Modules.Get_Storage_Module;
+      Folder.Save (Outcome);
+      Util.Tests.Assert_Equals (T, "success", Outcome, "Invalid outcome returned by Save action");
+
+
+   end Test_Create_Folder;
 
 end AWA.Storages.Services.Tests;

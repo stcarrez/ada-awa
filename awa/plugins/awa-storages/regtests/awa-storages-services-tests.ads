@@ -34,6 +34,9 @@ package AWA.Storages.Services.Tests is
    --  Test deletion of a storage object
    procedure Test_Delete_Storage (T : in out Test);
 
+   --  Test creation of a storage folder
+   procedure Test_Create_Folder (T : in out Test);
+
    --  Save something in a storage element and keep track of the store id in the test <b>Id</b>.
    procedure Save (T : in out Test);
 
