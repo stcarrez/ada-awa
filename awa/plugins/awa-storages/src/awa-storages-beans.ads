@@ -24,7 +24,6 @@ with ASF.Parts;
 
 with Util.Beans.Objects;
 with Util.Beans.Basic;
-with Util.Beans.Methods;
 package AWA.Storages.Beans is
 
    --  ------------------------------
@@ -82,5 +81,9 @@ package AWA.Storages.Beans is
    --  Create or save the folder.
    procedure Save (Bean    : in out Folder_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Create the Folder_List_Bean bean instance.
+   function Create_Folder_List_Bean (Module : in AWA.Storages.Modules.Storage_Module_Access)
+                                     return Util.Beans.Basic.Readonly_Bean_Access;
 
 end AWA.Storages.Beans;

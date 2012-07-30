@@ -15,11 +15,13 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with ADO;
+with ADO.Queries;
+with ADO.Sessions;
+with ADO.Sessions.Entities;
 
-with ASF.Parts;
-with ASF.Parts.Upload_Method;
-with ASF.Events.Faces.Actions;
-
+with AWA.Workspaces.Models;
+with AWA.Services.Contexts;
 with AWA.Storages.Services;
 package body AWA.Storages.Beans is
 
@@ -98,5 +100,29 @@ package body AWA.Storages.Beans is
       Manager.Save_Folder (Bean);
       Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("success");
    end Save;
+
+   --  ------------------------------
+   --  Create the Folder_List_Bean bean instance.
+   --  ------------------------------
+   function Create_Folder_List_Bean (Module : in AWA.Storages.Modules.Storage_Module_Access)
+                                     return Util.Beans.Basic.Readonly_Bean_Access is
+      use AWA.Storages.Models;
+      use AWA.Services;
+      use type ADO.Identifier;
+
+      Ctx   : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      User  : constant ADO.Identifier := Ctx.Get_User_Identifier;
+
+      Object  : constant Folder_Info_List_Bean_Access := new Folder_Info_List_Bean;
+      Session : ADO.Sessions.Session := Module.Get_Session;
+      Query   : ADO.Queries.Context;
+   begin
+      Query.Set_Query (AWA.Storages.Models.Query_Storage_Folder_List);
+      Query.Bind_Param ("user_id", User);
+      ADO.Sessions.Entities.Bind_Param (Query, "table",
+                                        AWA.Workspaces.Models.WORKSPACE_TABLE'Access, Session);
+      AWA.Storages.Models.List (Object.all, Session, Query);
+      return Object.all'Access;
+   end Create_Folder_List_Bean;
 
 end AWA.Storages.Beans;
