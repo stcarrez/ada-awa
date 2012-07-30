@@ -217,10 +217,12 @@ package body AWA.Storages.Services is
          Into.Set_Path (String '(Storage.Get_Uri));
          return;
       end if;
+      Ctx.Start;
       Store := Storage_Service'Class (Service).Get_Store (Storage);
       Store.Load (Session => DB,
                   From    => Storage,
                   Into    => Into.Get_Path);
+      Ctx.Commit;
    end Load;
 
    --  ------------------------------
