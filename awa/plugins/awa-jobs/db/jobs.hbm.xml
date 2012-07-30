@@ -45,11 +45,11 @@
         </property>
         <property name="messages" type="String">
             <comment>the job messages</comment>
-            <column name="messages" not-null="true" unique="false" sql-type="VARCHAR(60000)"/>
+            <column name="messages" not-null="true" unique="false" sql-type="TEXT"/>
         </property>
         <property name="results" type="String">
             <comment>the job results</comment>
-            <column name="results" not-null="true" unique="false" sql-type="VARCHAR(60000)"/>
+            <column name="results" not-null="true" unique="false" sql-type="TEXT"/>
         </property>
         <many-to-one name="user" class="AWA.Users.Models.User" foreign-key="ID" not-null="false" lazy="proxy" fetch="select">
             <comment>the user who triggered the job</comment>
