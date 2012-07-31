@@ -74,12 +74,16 @@ CREATE TABLE awa_message (
   `finish_date` DATETIME ,
   /* the message status */
   `status` INTEGER NOT NULL,
+  /* an optional entity type associated with the `entity_id` */
+  `entity_type` INTEGER ,
+  /* an optional entity identifier to link the event to another database entity */
+  `entity_id` BIGINT ,
   /* the message type */
   `type` INTEGER NOT NULL,
   /* the user who triggered the message */
-  `user_id` INTEGER NOT NULL,
+  `user_id` INTEGER ,
   /* the user session who triggered the message */
-  `session_id` INTEGER NOT NULL,
+  `session_id` INTEGER ,
   /* the message queue associated with this message */
   `queue_id` INTEGER NOT NULL,
   PRIMARY KEY (`id`)
@@ -258,6 +262,87 @@ CREATE TABLE blog_post (
 INSERT INTO entity_type (name) VALUES
 ("blog")
 ,("blog_post")
+;
+/* Copied from awa-storages-mysql.sql*/
+/* File generated automatically by dynamo */
+/* The database storage data when the storage type is DATABASE. */
+CREATE TABLE awa_storage (
+  /* the storage identifier */
+  `id` INTEGER NOT NULL,
+  /* the storage data version. */
+  `version` int ,
+  /* the local store creation date */
+  `create_date` DATETIME NOT NULL,
+  /* the storage type. */
+  `storage_type` INTEGER NOT NULL,
+  /* the storage specific URI */
+  `uri` VARCHAR(256) NOT NULL,
+  /* the storage name or filename */
+  `name` VARCHAR(256) NOT NULL,
+  /* the content mime type */
+  `mime_type` VARCHAR(256) NOT NULL,
+  /* the content size */
+  `file_size` BIGINT NOT NULL,
+  /* the storage that this local store refers to. */
+  `storage_id` INTEGER ,
+  /* the workspace that this storage belongs to. */
+  `workspace_id` INTEGER NOT NULL,
+  /* the storage folder that this storage belongs to. */
+  `folder_id` INTEGER ,
+  PRIMARY KEY (`id`)
+);
+/* The database storage data when the storage type is DATABASE. */
+CREATE TABLE awa_storage_data (
+  /* the storage data identifier */
+  `id` INTEGER NOT NULL,
+  /* the storage data version. */
+  `version` int ,
+  /* the storage data when the storage type is DATABASE. */
+  `data` BLOB NOT NULL,
+  PRIMARY KEY (`id`)
+);
+/* Storage files are organized in folders. */
+CREATE TABLE awa_storage_folder (
+  /* the storage folder identifier */
+  `id` INTEGER NOT NULL,
+  /* the storage folder version. */
+  `version` int ,
+  /* the storage folder name */
+  `name` VARCHAR(256) NOT NULL,
+  /* the folder creation date */
+  `create_date` DATETIME NOT NULL,
+  /* the workspace that this storage folder belongs to. */
+  `workspace_id` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
+);
+/* The local store record is created when a copy of the data
+is needed on the local file system.  The creation date refers to the date when
+the data was copied on the local file system.  The expiration date indicates a
+date after which the local file can be removed from the local file system. */
+CREATE TABLE awa_store_local (
+  /* the local storage identifier */
+  `id` INTEGER NOT NULL,
+  /* the local storage version. */
+  `version` int ,
+  /* the local store creation date */
+  `create_date` DATETIME NOT NULL,
+  /* the local store expiration date */
+  `expire_date` DATETIME NOT NULL,
+  /* the local store path */
+  `path` VARCHAR(256) NOT NULL,
+  /* the storage version that this local store represents */
+  `store_version` INTEGER NOT NULL,
+  /* whether the local store file can be shared or not */
+  `shared` TINYINT NOT NULL,
+  /* the storage that this local store refers to. */
+  `storage_id` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
+);
+INSERT INTO entity_type (name) VALUES
+("awa_storage")
+,("awa_storage_data")
+,("awa_storage_folder")
+,("awa_store_local")
 ;
 /* Copied from atlas-mysql.sql*/
 /* File generated automatically by dynamo */

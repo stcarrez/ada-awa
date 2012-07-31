@@ -1,6 +1,12 @@
 /* Copied from atlas-drop-mysql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `mblog`;
+/* Copied from awa-storages-drop-mysql.sql*/
+/* File generated automatically by dynamo */
+DROP TABLE IF EXISTS `awa_store_local`;
+DROP TABLE IF EXISTS `awa_storage_folder`;
+DROP TABLE IF EXISTS `awa_storage_data`;
+DROP TABLE IF EXISTS `awa_storage`;
 /* Copied from awa-blogs-drop-mysql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `blog_post`;
