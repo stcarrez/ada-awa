@@ -178,6 +178,11 @@ package body Atlas.Applications is
                 Module => App.Blog_Module'Access);
 
       Register (App    => App.Self.all'Access,
+                Name   => AWA.Storages.Modules.NAME,
+                URI    => "storages",
+                Module => App.Storage_Module'Access);
+
+      Register (App    => App.Self.all'Access,
                 Name   => Atlas.Microblog.Modules.NAME,
                 URI    => "microblog",
                 Module => App.Microblog_Module'Access);
