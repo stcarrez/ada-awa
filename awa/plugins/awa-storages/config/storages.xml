@@ -22,6 +22,14 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
+  <navigation-rule>
+    <from-view-id>/storages/forms/folder-create.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/storages/forms/folder-create-response.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
   <entity-permission>
     <name>folder-create</name>
     <entity-type>workspace</entity-type>
@@ -52,4 +60,15 @@
        AND acl.entity_id = :entity_id
     </sql>
   </entity-permission>
+
+  <filter-mapping>
+    <filter-name>service</filter-name>
+    <url-pattern>/storages/*.html</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>auth-filter</filter-name>
+    <url-pattern>/storages/*.html</url-pattern>
+  </filter-mapping>
+
 </module>

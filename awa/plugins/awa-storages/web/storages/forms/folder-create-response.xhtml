@@ -1,4 +1,4 @@
-<!-- List of folders
+<!-- Folder creation response
   -  Copyright (C) 2012 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
@@ -14,11 +14,16 @@
   -  See the License for the specific language governing permissions and
   -  limitations under the License.
   -->
-<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:h="http://java.sun.com/jsf/html">
-   <h:list var="folder" value="#{folderList}">
-       <div id='folder-#{folder.id}' class='folder'>
-           <div>#{folder.name}</div>
-       </div>
-   </h:list>
-</ui:composition>
+<f:view contentType="application/json"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:util="http://code.google.com/p/ada-asf/util"
+        xmlns:h="http://java.sun.com/jsf/html">
+[
+ { "action": "append", "id": "#folder-list", "data": "<util:escape>
+    <div class="folder" id="folder-#{storageFolder.id}">
+        <div>#{storageFolder.name}</div>
+    </div>
+    </util:escape>" },
+ { "action": "clear", "id": "#message" }
+]
+</f:view>
