@@ -84,3 +84,12 @@ dl.awa-required div.markedit textarea {
 div.markedit div.markedit-toolbar {
     margin-left: 1px;
 }
+
+#folder-list-editor {
+    width: 130px;
+    float: left;
+}
+#folder-create {
+    float: left;
+    clear: both;
+}
