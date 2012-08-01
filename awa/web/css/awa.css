@@ -75,47 +75,12 @@ body.awa {
 #awa-content {
   padding-top: 50px;
 }
-div.awa-title {
-  margin: 10px;
-  float: left;
-  clear: both;
-  width: 90%;
-  padding-top: 20px;
-  padding-left: 20px;
-  padding-bottom: 20px;
-  font-size: 24px;
-  background-color: #C2EFDD;
-  border-color: #FFFFFF #4CAF91 #4CAF91 #FFFFFF;
-  border-style: solid;
-  border-width: 1px;
-}
-div.awa-title dl {
-  float: left;
-  clear: both;
-  margin: 10px;
-}
-div.awa-title dt {
-  float: left;
-  clear: both;
-  font-weight: bold;
-  padding-top: 10px;
-  font-size: 20px;
-}
-div.awa-title dd {
-  float: left;
-  clear: both;
-  padding-left: 20px;
-  font-size: 16px;
-}
 .awa-ok {
   float: left;
   width: 48px;
   height: 48px;
   margin-left: 5px;
   margin-right: 15px;
-}
-div.awa-title div {
-  float: left;
 }
 #awa-footer {
   float: none;
