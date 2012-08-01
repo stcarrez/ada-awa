@@ -1783,6 +1783,7 @@ package body AWA.Storages.Models is
       ADO.Objects.Set_Created (Object);
    end Load;
 
+
    --  --------------------
    --  Get the bean attribute identified by the given name.
    --  --------------------
@@ -1839,6 +1840,78 @@ package body AWA.Storages.Models is
       end loop;
    end List;
 
+
+   --  --------------------
+   --  Get the bean attribute identified by the given name.
+   --  --------------------
+   overriding
+   function Get_Value (From : in Storage_Info;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
+      end if;
+      if Name = "name" then
+         return Util.Beans.Objects.To_Object (From.Name);
+      end if;
+      if Name = "create_date" then
+         return Util.Beans.Objects.Time.To_Object (From.Create_Date);
+      end if;
+      if Name = "uri" then
+         return Util.Beans.Objects.To_Object (From.Uri);
+      end if;
+      if Name = "storage" then
+         return Storage_Type_Objects.To_Object (From.Storage);
+      end if;
+      if Name = "mime_type" then
+         return Util.Beans.Objects.To_Object (From.Mime_Type);
+      end if;
+      if Name = "file_size" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.File_Size));
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+   --  --------------------
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   --  --------------------
+   procedure List (Object  : in out Storage_Info_List_Bean;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+   begin
+      List (Object.List, Session, Context);
+   end List;
+   --  --------------------
+   --  The list of documents for a given folder.
+   --  --------------------
+   procedure List (Object  : in out Storage_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+      procedure Read (Into : in out Storage_Info);
+
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Context);
+      Pos  : Natural := 0;
+      procedure Read (Into : in out Storage_Info) is
+      begin
+         Into.Id := Stmt.Get_Identifier (0);
+         Into.Name := Stmt.Get_Unbounded_String (1);
+         Into.Create_Date := Stmt.Get_Time (2);
+         Into.Uri := Stmt.Get_Unbounded_String (3);
+         Into.Storage := Storage_Type'Val (Stmt.Get_Integer (4));
+         Into.Mime_Type := Stmt.Get_Unbounded_String (5);
+         Into.File_Size := Stmt.Get_Integer (6);
+      end Read;
+   begin
+      Stmt.Execute;
+      Storage_Info_Vectors.Clear (Object);
+      while Stmt.Has_Elements loop
+         Object.Insert_Space (Before => Pos);
+         Object.Update_Element (Index => Pos, Process => Read'Access);
+         Pos := Pos + 1;
+         Stmt.Next;
+      end loop;
+   end List;
 
 
 end AWA.Storages.Models;

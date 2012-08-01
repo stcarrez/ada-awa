@@ -20,6 +20,7 @@ with ADO.Queries;
 with ADO.Sessions;
 with ADO.Sessions.Entities;
 
+with AWA.Helpers.Requests;
 with AWA.Workspaces.Models;
 with AWA.Services.Contexts;
 with AWA.Storages.Services;
@@ -51,7 +52,7 @@ package body AWA.Storages.Beans is
    --  ------------------------------
    procedure Save_Part (Bean : in out Upload_Bean;
                         Part : in ASF.Parts.Part'Class) is
-      Manager : AWA.Storages.Services.Storage_Service_Access := Bean.Module.Get_Storage_Manager;
+      Manager : constant Services.Storage_Service_Access := Bean.Module.Get_Storage_Manager;
    begin
       Bean.Set_Name (Part.Get_Name);
       Bean.Set_Mime_Type (Part.Get_Content_Type);
@@ -86,7 +87,7 @@ package body AWA.Storages.Beans is
                         Value : in Util.Beans.Objects.Object) is
    begin
       if Name = "name" then
-         From.Set_Name (Name);
+         From.Set_Name (Util.Beans.Objects.To_String (Value));
       end if;
    end Set_Value;
 
@@ -95,7 +96,7 @@ package body AWA.Storages.Beans is
    --  ------------------------------
    procedure Save (Bean    : in out Folder_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
-      Manager : AWA.Storages.Services.Storage_Service_Access := Bean.Module.Get_Storage_Manager;
+      Manager : constant Services.Storage_Service_Access := Bean.Module.Get_Storage_Manager;
    begin
       Manager.Save_Folder (Bean);
       Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("success");
@@ -124,5 +125,34 @@ package body AWA.Storages.Beans is
       AWA.Storages.Models.List (Object.all, Session, Query);
       return Object.all'Access;
    end Create_Folder_List_Bean;
+
+   --  ------------------------------
+   --  Create the Storage_List_Bean bean instance.
+   --  ------------------------------
+   function Create_Storage_List_Bean (Module : in AWA.Storages.Modules.Storage_Module_Access)
+                                      return Util.Beans.Basic.Readonly_Bean_Access is
+      use AWA.Storages.Models;
+      use AWA.Services;
+      use type ADO.Identifier;
+
+      Ctx       : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      User      : constant ADO.Identifier := Ctx.Get_User_Identifier;
+      Object    : constant Storage_Info_List_Bean_Access := new Storage_Info_List_Bean;
+      Session   : ADO.Sessions.Session := Module.Get_Session;
+      Query     : ADO.Queries.Context;
+      Folder_Id : constant ADO.Identifier := Helpers.Requests.Get_Parameter (FOLDER_ID_PARAMETER);
+   begin
+      Query.Set_Query (AWA.Storages.Models.Query_Storage_List);
+      Query.Bind_Param ("user_id", User);
+      ADO.Sessions.Entities.Bind_Param (Query, "table",
+                                        AWA.Workspaces.Models.WORKSPACE_TABLE'Access, Session);
+      if Folder_Id = ADO.NO_IDENTIFIER then
+         Query.Bind_Null_Param ("folder_id");
+      else
+         Query.Bind_Param ("folder_id", Folder_Id);
+      end if;
+      AWA.Storages.Models.List (Object.all, Session, Query);
+      return Object.all'Access;
+   end Create_Storage_List_Bean;
 
 end AWA.Storages.Beans;

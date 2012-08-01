@@ -1,0 +1,31 @@
+<query-mapping package='AWA.Storages.Models'>
+    <description>
+      The list of posts for the blog administrator.
+    </description>
+
+    <class name="AWA.Storages.Models.Folder_Info" bean="yes">
+        <comment>The list of folders.</comment>
+        <property type='Identifier' name="id">
+            <comment>the folder identifier.</comment>
+        </property>
+        <property type='String' name="name">
+            <comment>the folder name.</comment>
+        </property>
+        <property type='Date' name="create_date">
+            <comment>the blog creation date.</comment>
+        </property>
+    </class>
+
+    <query name='storage-folder-list'>
+       <comment>Get a list of storage folders that a user can see.</comment>
+       <sql>
+    SELECT
+      folder.id,
+      folder.name,
+      folder.create_date
+    FROM awa_storage_folder as folder
+    INNER JOIN acl ON acl.entity_id = folder.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
+       </sql>
+    </query>
+
+</query-mapping>

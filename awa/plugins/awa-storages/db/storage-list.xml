@@ -1,0 +1,48 @@
+<query-mapping package='AWA.Storages.Models'>
+    <description>
+      The list of documents for a given folder.
+    </description>
+
+    <class name="AWA.Storages.Models.Storage_Info" bean="yes">
+        <comment>The list of documents for a given folder.</comment>
+        <property type='Identifier' name="id">
+            <comment>the storage identifier.</comment>
+        </property>
+        <property type='String' name="name">
+            <comment>the file name.</comment>
+        </property>
+        <property type='Date' name="create_date">
+            <comment>the file creation date.</comment>
+        </property>
+        <property type='String' name="uri">
+            <comment>the file storage URI.</comment>
+        </property>
+        <property type='AWA.Storages.Models.Storage_Type' name="storage">
+            <comment>the file storage URI.</comment>
+        </property>
+        <property type='String' name="mime_type">
+            <comment>the file mime type.</comment>
+        </property>
+        <property type='Integer' name="file_size">
+            <comment>the file size.</comment>
+        </property>
+    </class>
+
+    <query name='storage-list'>
+       <comment>Get a list of storage files for a given folder.</comment>
+       <sql>
+    SELECT
+      st.id,
+      st.name,
+      st.create_date,
+      st.uri,
+      st.storage,
+      st.mime_type,
+      st.file_size
+    FROM awa_storage as st
+    INNER JOIN acl ON acl.entity_id = st.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
+    WHERE st.folder_id = :folder_id
+       </sql>
+    </query>
+
+</query-mapping>

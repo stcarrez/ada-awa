@@ -26,6 +26,8 @@ with Util.Beans.Objects;
 with Util.Beans.Basic;
 package AWA.Storages.Beans is
 
+   FOLDER_ID_PARAMETER : constant String := "folderId";
+
    --  ------------------------------
    --  Upload Bean
    --  ------------------------------
@@ -85,5 +87,9 @@ package AWA.Storages.Beans is
    --  Create the Folder_List_Bean bean instance.
    function Create_Folder_List_Bean (Module : in AWA.Storages.Modules.Storage_Module_Access)
                                      return Util.Beans.Basic.Readonly_Bean_Access;
+
+   --  Create the Storage_List_Bean bean instance.
+   function Create_Storage_List_Bean (Module : in AWA.Storages.Modules.Storage_Module_Access)
+                                      return Util.Beans.Basic.Readonly_Bean_Access;
 
 end AWA.Storages.Beans;

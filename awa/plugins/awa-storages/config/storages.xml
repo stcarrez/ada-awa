@@ -22,6 +22,13 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
+  <managed-bean>
+    <description>This bean gives the list of storage files associated with a given folder.</description>
+    <managed-bean-name>storageList</managed-bean-name>
+    <managed-bean-class>AWA.Storages.Beans.Storage_List_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
   <navigation-rule>
     <from-view-id>/storages/forms/folder-create.xhtml</from-view-id>
     <navigation-case>
