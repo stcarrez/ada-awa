@@ -27,3 +27,15 @@ div.folder-list {
 div.folder-list div.awa-active {
     background-color: #A6C9E2;
 }
+div.awa-document {
+    float: left;
+    clear: both;
+    width: 100%;
+}
+div.document-list {
+    float: left;
+    padding-left: 10px;
+}
+.documentUpload {
+    height: 40px;
+}

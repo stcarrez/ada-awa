@@ -1,4 +1,4 @@
-<!-- List of folders
+<!-- List of documents
   -  Copyright (C) 2012 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
@@ -14,17 +14,21 @@
   -  See the License for the specific language governing permissions and
   -  limitations under the License.
   -->
-<div id='folder-list-editor'
+
+<div id='document-list-editor'
      xmlns:ui="http://java.sun.com/jsf/facelets"
      xmlns:util="http://code.google.com/p/ada-asf/util"
      xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
      xmlns:h="http://java.sun.com/jsf/html">
 
-    <div id='folder-list' class='folder-list'>
-        <ui:include src="folder-list.xhtml"/>
+    <div id='document-upload'>
+        <iframe frameborder="0" class='documentUpload'
+                scrolling="no"
+                height="25"
+                width="100%"
+                src="#{contextPath}/storages/forms/upload-form.html"/>
     </div>
-    <ajax:include src="/storages/forms/folder-create.xhtml"/>
-    <util:script>
-        init_folder_list('#folder-list', '#folder-create');
-    </util:script>
+    <div id='document-list' class='document-list'>
+        <ui:include src="document-list.xhtml"/>
+    </div>
 </div>
