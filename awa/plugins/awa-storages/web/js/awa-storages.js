@@ -15,15 +15,11 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-div.folder {
-    float: left;
-    clear: both;
-    width: 100%;
-}
+var AWA = {};
 
-div.folder-list {
-    float: left;
-}
-div.folder-list div.awa-active {
-    background-color: #A6C9E2;
+function init_folder_list(id, idCreate) {
+    $(id).list({
+        actionId: null,
+        editUrl: '/storages/forms/create-folder-form.html'
+    });
 }
