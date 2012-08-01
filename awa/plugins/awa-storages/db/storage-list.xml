@@ -36,7 +36,7 @@
       st.name,
       st.create_date,
       st.uri,
-      st.storage,
+      st.storage_type,
       st.mime_type,
       st.file_size
     FROM awa_storage as st

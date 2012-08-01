@@ -16,6 +16,12 @@
   -->
 <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html">
+     <h:list var="document" value="#{storageList}">
+       <div id='store-#{document.id}' class='awa-document'>
+           <div class='awa-title'>#{document.name}</div>
+           <div class='awa-size'>#{document.file_size}</div>
+       </div>
+   </h:list>
     <div id='document-1' class='awa-document'>
         <div class='awa-title'>The document title</div>
         <div class='awa-size'>23k</div>
