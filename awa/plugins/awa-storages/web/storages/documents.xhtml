@@ -24,13 +24,29 @@
 
     <!-- Main page body -->
     <ui:define name="pageBody">
-      <div id='awa-content'>
-          <ui:include src="lists/folders.xhtml"/>
-          <ui:include src="lists/documents.xhtml"/>
-      </div>
-      <util:script>
-          $('#folder-list-editor').resizable({ minWidth: 100, maxWidth: 400 });
-      </util:script>
+        <util:script>
+            var contextPath = '#{contextPath}';
+        </util:script>
+        <div id='awa-content'>
+            <ui:include src="lists/folders.xhtml"/>
+            <div id='document-list-editor'>
+                <ui:include src="lists/documents.xhtml"/>
+            </div>
+        </div>
+        <util:script>
+            $('#folder-list-editor').resizable({
+            minWidth: 100, maxWidth: 400,
+            resize: function(event, ui) {
+            var width = ui.size.width;
+            var ow = $('#folder-list-editor').parent().outerWidth();
+            width = ow - width - 5;
+            if (width &lt;= 10) {
+            width = 10;
+            }
+            $('#document-list-editor').css({ width: width });
+            }
+            });
+        </util:script>
     </ui:define>
 </ui:composition>
 

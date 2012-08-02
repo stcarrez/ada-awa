@@ -20,6 +20,11 @@ var AWA = {};
 function init_folder_list(id, idCreate) {
     $(id).list({
         actionId: null,
-        editUrl: '/storages/forms/create-folder-form.html'
+        itemPrefix: 'folder-',
+        editUrl: contextPath + '/storages/forms/create-folder-form.html',
+        selectAction: function(element, item) {
+            var id = element.getSelectedId(item);
+            return ASF.Update(this, contextPath + '/storages/lists/documents.html?folderId=' + id, '#document-list-editor');
+        }
     });
 }

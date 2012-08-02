@@ -39,3 +39,6 @@ div.document-list {
 .documentUpload {
     height: 40px;
 }
+#document-list-editor {
+    float: right;
+}

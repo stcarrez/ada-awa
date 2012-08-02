@@ -15,8 +15,7 @@
   -  limitations under the License.
   -->
 
-<div id='document-list-editor'
-     xmlns:ui="http://java.sun.com/jsf/facelets"
+<div xmlns:ui="http://java.sun.com/jsf/facelets"
      xmlns:util="http://code.google.com/p/ada-asf/util"
      xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
      xmlns:h="http://java.sun.com/jsf/html">
@@ -26,7 +25,7 @@
                 scrolling="no"
                 height="25"
                 width="100%"
-                src="#{contextPath}/storages/forms/upload-form.html"/>
+                src="#{contextPath}/storages/forms/upload-form.html?folderId=#{param['folderId']}"/>
     </div>
     <div id='document-list' class='document-list'>
         <ui:include src="document-list.xhtml"/>

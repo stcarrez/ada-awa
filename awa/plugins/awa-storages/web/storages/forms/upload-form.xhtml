@@ -16,6 +16,9 @@
   -->
 <f:view xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html">
+    <f:metadata>
+        <f:viewParam id='folderId' value='#{uploadFile.folderId}'/>
+    </f:metadata>
     <html>
     <head>
         <link rel="stylesheet" type="text/css"
@@ -23,7 +26,7 @@
      </head>
     <body class='#{picStyle}'>
     <h:form id='uploadForm' enctype="multipart/form-data">
-<!--        <h:inputHidden name="folder" value="#{uploadFile.folderId}"/> -->
+        <h:inputHidden id="folder" value="#{uploadFile.folderId}"/>
         <div class='uploadForm'>
             <div class='upload'>
                 <h:inputFile id="upload"
