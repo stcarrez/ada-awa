@@ -111,7 +111,7 @@ package body Atlas.Applications is
       App.Add_Converter (Name      => "smartDateConverter",
                          Converter => App.Self.Rel_Date_Converter'Access);
       App.Add_Converter (Name      => "sizeConverter",
-                         Converter => App.Self.Rel_Date_Converter'Access);
+                         Converter => App.Self.Size_Converter'Access);
    end Initialize_Components;
 
    --  ------------------------------

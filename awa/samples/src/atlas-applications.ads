@@ -25,6 +25,7 @@ with ASF.Filters.Dump;
 with ASF.Servlets.Measures;
 
 with ASF.Security.Servlets;
+with ASF.Converters.Sizes;
 
 with AWA.Users.Servlets;
 with AWA.Users.Modules;
