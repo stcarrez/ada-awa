@@ -59,6 +59,11 @@ package AWA.Storages.Services is
    procedure Save_Folder (Service : in Storage_Service;
                           Folder  : in out AWA.Storages.Models.Storage_Folder_Ref'Class);
 
+   --  Load the folder identified by the given id.
+   procedure Load_Folder (Service : in Storage_Service;
+                          Folder  : in out AWA.Storages.Models.Storage_Folder_Ref'Class;
+                          Id      : in ADO.Identifier);
+
    --  Save the data object contained in the <b>Data</b> part element into the
    --  target storage represented by <b>Into</b>.
    procedure Save (Service : in Storage_Service;

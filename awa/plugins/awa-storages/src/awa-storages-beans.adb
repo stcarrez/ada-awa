@@ -18,6 +18,7 @@
 with ADO;
 with ADO.Queries;
 with ADO.Sessions;
+with ADO.Objects;
 with ADO.Sessions.Entities;
 
 with AWA.Helpers.Requests;
@@ -33,6 +34,9 @@ package body AWA.Storages.Beans is
    function Get_Value (From : in Upload_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
+      if Name = "folderId" then
+         return ADO.Objects.To_Object (From.Get_Folder.Get_Key);
+      end if;
       return AWA.Storages.Models.Storage_Ref (From).Get_Value (Name);
    end Get_Value;
 
@@ -43,8 +47,13 @@ package body AWA.Storages.Beans is
    procedure Set_Value (From  : in out Upload_Bean;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
+      Manager : constant Services.Storage_Service_Access := From.Module.Get_Storage_Manager;
+      Folder  : Models.Storage_Folder_Ref;
    begin
-      null;
+      if Name = "folderId" then
+         Manager.Load_Folder (Folder, ADO.Identifier (Util.Beans.Objects.To_Integer (Value)));
+         From.Set_Folder (Folder);
+      end if;
    end Set_Value;
 
    --  ------------------------------

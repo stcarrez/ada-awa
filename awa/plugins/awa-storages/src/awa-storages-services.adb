@@ -85,6 +85,18 @@ package body AWA.Storages.Services is
    end Save_Folder;
 
    --  ------------------------------
+   --  Load the folder identified by the given id.
+   --  ------------------------------
+   procedure Load_Folder (Service : in Storage_Service;
+                          Folder  : in out AWA.Storages.Models.Storage_Folder_Ref'Class;
+                          Id      : in ADO.Identifier) is
+      Ctx       : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB        : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+   begin
+      Folder.Load (Session => DB, Id => Id);
+   end Load_Folder;
+
+   --  ------------------------------
    --  Save the data object contained in the <b>Data</b> part element into the
    --  target storage represented by <b>Into</b>.
    --  ------------------------------

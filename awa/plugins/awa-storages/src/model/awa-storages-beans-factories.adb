@@ -37,27 +37,6 @@ package body AWA.Storages.Beans.Factories is
          2 => Save_Part_Binding.Proxy'Access);
 
    --  ------------------------------
-   --  Get the value identified by the name.
-   --  ------------------------------
-   overriding
-   function Get_Value (From : in Upload_Bean;
-                       Name : in String) return Util.Beans.Objects.Object is
-   begin
-      return AWA.Storages.Models.Storage_Ref (From).Get_Value (Name);
-   end Get_Value;
-
-   --  ------------------------------
-   --  Set the value identified by the name.
-   --  ------------------------------
-   overriding
-   procedure Set_Value (From  : in out Upload_Bean;
-                        Name  : in String;
-                        Value : in Util.Beans.Objects.Object) is
-   begin
-      null;
-   end Set_Value;
-
-   --  ------------------------------
    --  This bean provides some methods that can be used in a Method_Expression
    --  ------------------------------
    overriding

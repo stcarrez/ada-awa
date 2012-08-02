@@ -29,17 +29,6 @@ package AWA.Storages.Beans.Factories is
      and Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with null record;
    type Upload_Bean_Access is access all Upload_Bean'Class;
 
-   --  Get the value identified by the name.
-   overriding
-   function Get_Value (From : in Upload_Bean;
-                       Name : in String) return Util.Beans.Objects.Object;
-
-   --  Set the value identified by the name.
-   overriding
-   procedure Set_Value (From  : in out Upload_Bean;
-                        Name  : in String;
-                        Value : in Util.Beans.Objects.Object);
-
    --  This bean provides some methods that can be used in a Method_Expression
    overriding
    function Get_Method_Bindings (From : in Upload_Bean)
