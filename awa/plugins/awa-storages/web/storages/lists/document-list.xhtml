@@ -15,18 +15,22 @@
   -  limitations under the License.
   -->
 <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html">
      <h:list var="document" value="#{storageList}">
        <div id='store-#{document.id}' class='awa-document'>
            <div class='awa-title'>#{document.name}</div>
-           <div class='awa-size'>#{document.file_size}</div>
+           <div class='awa-size'>
+               <h:outputText value="#{document.file_size}">
+                   <f:converter converterId="sizeConverter"/>
+               </h:outputText>
+           </div>
            <div class='awa-mime'>#{document.mime_type}</div>
+           <div class='awa-date'>
+               <h:outputText value="#{document.create_date}">
+                   <f:converter converterId="smartDateConverter"/>
+               </h:outputText>
+           </div>
        </div>
    </h:list>
-    <div id='document-1' class='awa-document'>
-        <div class='awa-title'>The document title</div>
-        <div class='awa-size'>23k</div>
-        <a href="#">Download</a>
-    </div>
-
 </ui:composition>

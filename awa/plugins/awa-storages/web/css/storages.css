@@ -23,22 +23,51 @@ div.folder {
 
 div.folder-list {
     float: left;
+    width: 100%;
 }
-div.folder-list div.awa-active {
+div.folder-list div.asf-active {
     background-color: #A6C9E2;
 }
 div.awa-document {
     float: left;
     clear: both;
     width: 100%;
+    font-size: 0.9em;
+    padding-top: 4px;
+    padding-bottom: 4px;
 }
-div.document-list {
+div.awa-document div.awa-title {
+    float: left;
+    font-size: 1.1em;
+    width: 80%;
+}
+div.awa-document div.awa-size {
+    clear: left;
+    float: left;
+    width: 100px;
+}
+div.awa-document div.awa-mime {
+    float: left;
+    width: auto;
+    padding-left: 10px;
+}
+div.awa-document div.awa-date {
     float: left;
     padding-left: 10px;
+}
+
+div.document-list {
+    float: left;
+    width: 99%;
+    padding-left: 1%;
 }
 .documentUpload {
     height: 40px;
 }
+#folder-list-editor {
+    width: 20%;
+}
 #document-list-editor {
-    float: right;
+    float: left;
+    width: 79%;
 }
