@@ -101,6 +101,7 @@ private
 
       --  Converters shared by web requests.
       Rel_Date_Converter : aliased AWA.Converters.Dates.Relative_Date_Converter;
+      Size_Converter     : aliased ASF.Converters.Sizes.Size_Converter;
 
       --  The application modules.
       User_Module       : aliased AWA.Users.Modules.User_Module;
