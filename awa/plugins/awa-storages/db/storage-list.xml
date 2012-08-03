@@ -26,6 +26,9 @@
         <property type='Integer' name="file_size">
             <comment>the file size.</comment>
         </property>
+        <property type='String' name="user_name">
+            <comment>the user name who uploaded the document.</comment>
+        </property>
     </class>
 
     <query name='storage-list'>
@@ -38,9 +41,11 @@
       st.uri,
       st.storage_type,
       st.mime_type,
-      st.file_size
+      st.file_size,
+      user.name
     FROM awa_storage as st
     INNER JOIN acl ON acl.entity_id = st.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
+    INNER JOIN user ON st.owner_id = user.id
     WHERE st.folder_id = :folder_id
     ORDER BY st.create_date DESC
        </sql>
