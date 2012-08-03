@@ -46,7 +46,6 @@ div.awa-document div.awa-title {
     width: 80%;
 }
 div.awa-document div.awa-size {
-    clear: left;
     float: left;
     width: 100px;
 }
@@ -59,7 +58,16 @@ div.awa-document div.awa-date {
     float: left;
     padding-left: 10px;
 }
-
+div.awa-document div.awa-owner {
+    float: left;
+    padding-left: 10px;
+}
+div.awa-document a {
+    float: left;
+    clear: left;
+    display: block;
+    width: 120px;
+}
 div.document-list {
     float: left;
     width: 99%;
@@ -70,8 +78,11 @@ div.document-list {
 }
 #folder-list-editor {
     width: 20%;
+    border: 2px solid #BCD;
 }
 #document-list-editor {
     float: left;
     width: 79%;
+    border: 2px solid #BCD;
+    margin-left: 5px;
 }
