@@ -69,12 +69,14 @@ package body AWA.Storages.Beans is
       Manager.Save (Bean, Part, AWA.Storages.Models.DATABASE);
    end Save_Part;
 
+   --  ------------------------------
    --  Upload the file.
+   --  ------------------------------
    procedure Upload (Bean    : in out Upload_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
 
    begin
-      null;
+      Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("success");
    end Upload;
 
    --  ------------------------------

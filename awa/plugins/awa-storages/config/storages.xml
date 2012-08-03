@@ -37,6 +37,14 @@
     </navigation-case>
   </navigation-rule>
 
+  <navigation-rule>
+    <from-view-id>/storages/forms/upload-form.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/storages/forms/upload-form-response.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
   <entity-permission>
     <name>folder-create</name>
     <entity-type>workspace</entity-type>

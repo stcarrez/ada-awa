@@ -21,6 +21,9 @@
     </f:metadata>
     <html>
     <head>
+        <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/grids/reset.css"/>
+        <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/grids/fluid_grid.css"/>
+        <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/redmond/jquery-ui-1.8.21.custom.css"/>
         <link rel="stylesheet" type="text/css"
               href="#{contextPath}/css/iframe.css"/>
      </head>
@@ -30,8 +33,10 @@
         <div class='uploadForm'>
             <div class='upload'>
                 <h:inputFile id="upload"
-                             value="#{uploadFile.save}"
-                             onchange="return awa_upload();"/>
+                             value="#{uploadFile.save}"/>
+                <h:commandButton id="uploadButton"
+                                 styleClass="ui-button ui-state-default ui-corner-all"
+                                 action="#{uploadFile.upload}"/>
             </div>
         </div>
     </h:form>
