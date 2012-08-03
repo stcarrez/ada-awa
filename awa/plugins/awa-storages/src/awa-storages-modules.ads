@@ -20,7 +20,7 @@ with ASF.Applications;
 
 with AWA.Modules;
 with AWA.Storages.Services;
-
+with AWA.Storages.Servlets;
 package AWA.Storages.Modules is
 
    NAME : constant String := "storages";
@@ -52,7 +52,8 @@ package AWA.Storages.Modules is
 private
 
    type Storage_Module is new AWA.Modules.Module with record
-      Manager        : Services.Storage_Service_Access := null;
+      Manager         : Services.Storage_Service_Access := null;
+      Storage_Servlet : aliased AWA.Storages.Servlets.Storage_Servlet;
    end record;
 
 end AWA.Storages.Modules;
