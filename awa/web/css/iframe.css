@@ -1,0 +1,9 @@
+/**
+ * iframe.css - CSS for embedded iframes
+ * Copyright (C) 2011, 2012 Stephane Carrez
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ */
+html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td, label {
+    margin: 0;
+    padding: 0;
+}
