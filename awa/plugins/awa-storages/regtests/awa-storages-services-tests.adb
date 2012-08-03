@@ -69,6 +69,7 @@ package body AWA.Storages.Services.Tests is
    procedure Load (T : in out Test) is
       use type Ada.Streams.Stream_Element_Offset;
 
+      Name      : Ada.Strings.Unbounded.Unbounded_String;
       Mime      : Ada.Strings.Unbounded.Unbounded_String;
       Date      : Ada.Calendar.Time;
       Data      : ADO.Blob_Ref;
@@ -76,7 +77,7 @@ package body AWA.Storages.Services.Tests is
       T.Manager := AWA.Storages.Modules.Get_Storage_Manager;
       T.Assert (T.Manager /= null, "Null storage manager");
 
-      T.Manager.Load (From => T.Id, Mime => Mime, Date => Date, Into => Data);
+      T.Manager.Load (From => T.Id, Name => Name, Mime => Mime, Date => Date, Into => Data);
       T.Assert (not Data.Is_Null, "Null blob returned by load");
       T.Assert (Data.Value.Len > 100, "Invalid length for the blob data");
    end Load;
@@ -101,6 +102,7 @@ package body AWA.Storages.Services.Tests is
       Sec_Ctx   : Security.Contexts.Security_Context;
       Context   : AWA.Services.Contexts.Service_Context;
       Data      : ADO.Blob_Ref;
+      Name      : Ada.Strings.Unbounded.Unbounded_String;
       Mime      : Ada.Strings.Unbounded.Unbounded_String;
       Date      : Ada.Calendar.Time;
    begin
@@ -108,7 +110,7 @@ package body AWA.Storages.Services.Tests is
 
       T.Save;
       T.Manager.Delete (T.Id);
-      T.Manager.Load (From => T.Id, Mime => Mime, Date => Date, Into => Data);
+      T.Manager.Load (From => T.Id, Name => Name, Mime => Mime, Date => Date, Into => Data);
       T.Assert (Data.Is_Null, "A non null blob returned by load");
    end Test_Delete_Storage;
 

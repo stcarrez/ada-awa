@@ -19,6 +19,7 @@ with Ada.Strings.Unbounded;
 with Ada.Calendar;
 
 with Util.Log.Loggers;
+with Util.Strings;
 
 with ADO.Objects;
 
@@ -86,15 +87,36 @@ package body AWA.Storages.Servlets is
       URI     : constant String := Request.Get_Path_Info;
       Data    : ADO.Blob_Ref;
       Mime    : Ada.Strings.Unbounded.Unbounded_String;
+      Name    : Ada.Strings.Unbounded.Unbounded_String;
       Date    : Ada.Calendar.Time;
       Manager : constant Services.Storage_Service_Access := Storages.Modules.Get_Storage_Manager;
       Id      : ADO.Identifier;
+      Pos     : Natural;
    begin
-      Log.Info ("GET storage file {0}", URI);
+      if URI'Length <= 1 or else URI (URI'First) /= '/' then
+         Log.Info ("Invalid storage URI: {0}", URI);
+         Response.Send_Error (ASF.Responses.SC_NOT_FOUND);
+         return;
+      end if;
 
-      Id := ADO.Identifier'Value (URI);
-      Manager.Load (From => Id, Mime => Mime, Date => Date, Into => Data);
+      --  Extract the storage identifier from the URI.
+      Pos := Util.Strings.Index (URI, '/', URI'First + 1);
+      if Pos <= 0 then
+         Pos := URI'Last;
+      else
+         Pos := Pos - 1;
+      end if;
+      Id := ADO.Identifier'Value (URI (URI'First + 1 .. Pos));
+
+      Log.Info ("GET storage file {0}", URI);
+      Manager.Load (From => Id, Name => Name, Mime => Mime, Date => Date, Into => Data);
+
+      --  Send the file.
       Response.Set_Content_Type (Ada.Strings.Unbounded.To_String (Mime));
+      if Ada.Strings.Unbounded.Length (Name) > 0 then
+         Response.Add_Header ("Content-Disposition",
+                              "attachment; filename=" & Ada.Strings.Unbounded.To_String (Name));
+      end if;
       declare
          Output : ASF.Streams.Print_Stream := Response.Get_Output_Stream;
       begin

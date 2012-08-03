@@ -90,6 +90,7 @@ package AWA.Storages.Services is
    --  Raises the <b>NOT_FOUND</b> exception if there is no such storage.
    procedure Load (Service : in Storage_Service;
                    From    : in ADO.Identifier;
+                   Name    : out Ada.Strings.Unbounded.Unbounded_String;
                    Mime    : out Ada.Strings.Unbounded.Unbounded_String;
                    Date    : out Ada.Calendar.Time;
                    Into    : out ADO.Blob_Ref);

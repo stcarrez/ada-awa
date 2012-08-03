@@ -170,6 +170,7 @@ package body AWA.Storages.Services is
    --  ------------------------------
    procedure Load (Service : in Storage_Service;
                    From    : in ADO.Identifier;
+                   Name    : out Ada.Strings.Unbounded.Unbounded_String;
                    Mime    : out Ada.Strings.Unbounded.Unbounded_String;
                    Date    : out Ada.Calendar.Time;
                    Into    : out ADO.Blob_Ref) is
@@ -192,7 +193,8 @@ package body AWA.Storages.Services is
       end if;
       Mime := Query.Get_Unbounded_String (0);
       Date := Query.Get_Time (1);
-      Into := Query.Get_Blob (2);
+      Name := Query.Get_Unbounded_String (2);
+      Into := Query.Get_Blob (3);
    end Load;
 
    --  Load the storage content into a file.  If the data is not stored in a file, a temporary
