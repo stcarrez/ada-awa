@@ -26,8 +26,12 @@ div.folder-list {
     width: 100%;
 }
 div.folder-list div.asf-active {
+    background-color: #DFEFFC;
+}
+div.folder-list div.asf-selected {
     background-color: #A6C9E2;
 }
+
 div.awa-document {
     float: left;
     clear: both;
