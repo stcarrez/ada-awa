@@ -20,7 +20,13 @@
      <h:list var="document" value="#{storageList}">
        <div id='store-#{document.id}' class='awa-document'>
            <div class='awa-title'>#{document.name}</div>
+           <div class='awa-owner'>
+               <h:outputFormat value="By {0}">
+                   <f:param value="#{document.user_name}"/>
+               </h:outputFormat>
+           </div>
            <div class='awa-size'>
+               Size:
                <h:outputText value="#{document.file_size}">
                    <f:converter converterId="sizeConverter"/>
                </h:outputText>
