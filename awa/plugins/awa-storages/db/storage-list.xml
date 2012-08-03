@@ -42,6 +42,7 @@
     FROM awa_storage as st
     INNER JOIN acl ON acl.entity_id = st.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
     WHERE st.folder_id = :folder_id
+    ORDER BY st.create_date DESC
        </sql>
     </query>
 
