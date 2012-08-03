@@ -15,6 +15,8 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Ada.Calendar;
+with Ada.Strings.Unbounded;
 
 with Security.Permissions;
 
@@ -88,6 +90,8 @@ package AWA.Storages.Services is
    --  Raises the <b>NOT_FOUND</b> exception if there is no such storage.
    procedure Load (Service : in Storage_Service;
                    From    : in ADO.Identifier;
+                   Mime    : out Ada.Strings.Unbounded.Unbounded_String;
+                   Date    : out Ada.Calendar.Time;
                    Into    : out ADO.Blob_Ref);
 
    --  Load the storage content into a file.  If the data is not stored in a file, a temporary

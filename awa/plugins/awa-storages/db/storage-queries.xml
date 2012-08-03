@@ -7,10 +7,12 @@
        <comment>Get the data content of the storage object.  The query returns a single BLOB column.</comment>
        <sql>
     SELECT
+      store.mime_type,
+      store.create_date,
       data.data
-    FROM awa_storage as store
+    FROM awa_storage AS store
     INNER JOIN acl ON acl.entity_id = store.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
-    INNER JOIN awa_storage_data AS data ON store.storage_id = data.id
+    LEFT JOIN awa_storage_data AS data ON store.storage_id = data.id
     WHERE store.id = :store_id
        </sql>
     </query>
