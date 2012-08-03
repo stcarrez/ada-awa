@@ -147,6 +147,7 @@ package body AWA.Storages.Services is
       Ctx.Start;
       if not Into.Is_Inserted then
          Into.Set_Create_Date (Ada.Calendar.Clock);
+         Into.Set_Owner (Ctx.Get_User);
       end if;
       Into.Save (DB);
       Store.Save (DB, Into, Path);
