@@ -69,12 +69,14 @@ package body AWA.Storages.Services.Tests is
    procedure Load (T : in out Test) is
       use type Ada.Streams.Stream_Element_Offset;
 
+      Mime      : Ada.Strings.Unbounded.Unbounded_String;
+      Date      : Ada.Calendar.Time;
       Data      : ADO.Blob_Ref;
    begin
       T.Manager := AWA.Storages.Modules.Get_Storage_Manager;
       T.Assert (T.Manager /= null, "Null storage manager");
 
-      T.Manager.Load (From => T.Id, Into => Data);
+      T.Manager.Load (From => T.Id, Mime => Mime, Date => Date, Into => Data);
       T.Assert (not Data.Is_Null, "Null blob returned by load");
       T.Assert (Data.Value.Len > 100, "Invalid length for the blob data");
    end Load;
@@ -99,12 +101,14 @@ package body AWA.Storages.Services.Tests is
       Sec_Ctx   : Security.Contexts.Security_Context;
       Context   : AWA.Services.Contexts.Service_Context;
       Data      : ADO.Blob_Ref;
+      Mime      : Ada.Strings.Unbounded.Unbounded_String;
+      Date      : Ada.Calendar.Time;
    begin
       AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-storage@test.com");
 
       T.Save;
       T.Manager.Delete (T.Id);
-      T.Manager.Load (From => T.Id, Into => Data);
+      T.Manager.Load (From => T.Id, Mime => Mime, Date => Date, Into => Data);
       T.Assert (Data.Is_Null, "A non null blob returned by load");
    end Test_Delete_Storage;
 
