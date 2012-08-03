@@ -24,6 +24,8 @@ CREATE TABLE awa_storage (
   `workspace_id` INTEGER NOT NULL,
   /* the storage folder that this storage belongs to. */
   `folder_id` INTEGER ,
+  /* the storage file owner (or user who uploaded the document). */
+  `owner_id` INTEGER NOT NULL,
   PRIMARY KEY (`id`)
 );
 /* The database storage data when the storage type is DATABASE. */

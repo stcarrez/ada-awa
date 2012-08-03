@@ -34,6 +34,7 @@ with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
 with Util.Beans.Objects.Enums;
 with Util.Beans.Basic.Lists;
+with AWA.Users.Models;
 with AWA.Workspaces.Models;
 pragma Warnings (On, "unit * is not referenced");
 package AWA.Storages.Models is
@@ -331,6 +332,14 @@ package AWA.Storages.Models is
    function Get_Folder (Object : in Storage_Ref)
                  return Storage_Folder_Ref'Class;
 
+   --  Set the storage file owner (or user who uploaded the document).
+   procedure Set_Owner (Object : in out Storage_Ref;
+                        Value  : in AWA.Users.Models.User_Ref'Class);
+
+   --  Get the storage file owner (or user who uploaded the document).
+   function Get_Owner (Object : in Storage_Ref)
+                 return AWA.Users.Models.User_Ref'Class;
+
    --  Load the entity identified by 'Id'.
    --  Raises the NOT_FOUND exception if it does not exist.
    procedure Load (Object  : in out Storage_Ref;
@@ -581,6 +590,9 @@ package AWA.Storages.Models is
       --  the file size.
       File_Size : Integer;
 
+      --  the user name who uploaded the document.
+      User_Name : Ada.Strings.Unbounded.Unbounded_String;
+
    end record;
 
    --  Get the bean attribute identified by the given name.
@@ -721,8 +733,9 @@ private
    COL_8_3_NAME : aliased constant String := "storage_id";
    COL_9_3_NAME : aliased constant String := "workspace_id";
    COL_10_3_NAME : aliased constant String := "folder_id";
+   COL_11_3_NAME : aliased constant String := "owner_id";
    STORAGE_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 11,
+     (Count => 12,
       Table => STORAGE_NAME'Access,
       Members => (
          COL_0_3_NAME'Access,
@@ -735,7 +748,8 @@ private
          COL_7_3_NAME'Access,
          COL_8_3_NAME'Access,
          COL_9_3_NAME'Access,
-         COL_10_3_NAME'Access
+         COL_10_3_NAME'Access,
+         COL_11_3_NAME'Access
 )
      );
    Null_Storage : constant Storage_Ref
@@ -754,6 +768,7 @@ private
        Store_Data : Storage_Data_Ref;
        Workspace : AWA.Workspaces.Models.Workspace_Ref;
        Folder : Storage_Folder_Ref;
+       Owner : AWA.Users.Models.User_Ref;
    end record;
    type Storage_Access is access all Storage_Impl;
    overriding
@@ -881,7 +896,7 @@ private
 
    package File_3 is
       new ADO.Queries.Loaders.File (Path => "storage-list.xml",
-                                    Sha1 => "FA4A4AF8FC331FF76B6240265D0593BCF9BE820E");
+                                    Sha1 => "C4BF5BFDB927D353A6FC65AC4B8ED031E25278B9");
 
    package Def_Storageinfo_Storage_List is
       new ADO.Queries.Loaders.Query (Name => "storage-list",

@@ -982,6 +982,22 @@ package body AWA.Storages.Models is
       return Impl.Folder;
    end Get_Folder;
 
+
+   procedure Set_Owner (Object : in out Storage_Ref;
+                        Value  : in AWA.Users.Models.User_Ref'Class) is
+      Impl : Storage_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 12, Impl.Owner, Value);
+   end Set_Owner;
+
+   function Get_Owner (Object : in Storage_Ref)
+                  return AWA.Users.Models.User_Ref'Class is
+      Impl : constant Storage_Access := Storage_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Owner;
+   end Get_Owner;
+
    --  Copy of the object.
    procedure Copy (Object : in Storage_Ref;
                    Into   : in out Storage_Ref) is
@@ -1006,6 +1022,7 @@ package body AWA.Storages.Models is
             Copy.Store_Data := Impl.Store_Data;
             Copy.Workspace := Impl.Workspace;
             Copy.Folder := Impl.Folder;
+            Copy.Owner := Impl.Owner;
          end;
       end if;
       Into := Result;
@@ -1180,6 +1197,11 @@ package body AWA.Storages.Models is
                           Value => Object.Folder);
          Object.Clear_Modified (11);
       end if;
+      if Object.Is_Modified (12) then
+         Stmt.Save_Field (Name  => COL_11_3_NAME, --  owner_id
+                          Value => Object.Owner);
+         Object.Clear_Modified (12);
+      end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
          Stmt.Save_Field (Name  => "version",
@@ -1232,6 +1254,8 @@ package body AWA.Storages.Models is
                         Value => Object.Workspace);
       Query.Save_Field (Name  => COL_10_3_NAME, --  folder_id
                         Value => Object.Folder);
+      Query.Save_Field (Name  => COL_11_3_NAME, --  owner_id
+                        Value => Object.Owner);
       Query.Execute (Result);
       if Result /= 1 then
          raise ADO.Objects.INSERT_ERROR;
@@ -1305,6 +1329,9 @@ package body AWA.Storages.Models is
       end if;
       if not Stmt.Is_Null (10) then
          Object.Folder.Set_Key_Value (Stmt.Get_Identifier (10), Session);
+      end if;
+      if not Stmt.Is_Null (11) then
+         Object.Owner.Set_Key_Value (Stmt.Get_Identifier (11), Session);
       end if;
       Object.Version := Stmt.Get_Integer (1);
       ADO.Objects.Set_Created (Object);
@@ -1869,6 +1896,9 @@ package body AWA.Storages.Models is
       if Name = "file_size" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.File_Size));
       end if;
+      if Name = "user_name" then
+         return Util.Beans.Objects.To_Object (From.User_Name);
+      end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
 
@@ -1901,6 +1931,7 @@ package body AWA.Storages.Models is
          Into.Storage := Storage_Type'Val (Stmt.Get_Integer (4));
          Into.Mime_Type := Stmt.Get_Unbounded_String (5);
          Into.File_Size := Stmt.Get_Integer (6);
+         Into.User_Name := Stmt.Get_Unbounded_String (7);
       end Read;
    begin
       Stmt.Execute;
