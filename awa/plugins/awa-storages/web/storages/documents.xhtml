@@ -46,6 +46,10 @@
                     $('#document-list-editor').css({ width: width });
                 }
             });
+            $('#document-list-editor').list({
+                actionId: null,
+                itemPrefix: 'store-'
+            });
         </util:script>
     </ui:define>
 </ui:composition>

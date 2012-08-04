@@ -73,6 +73,9 @@ div.document-list {
     width: 99%;
     padding-left: 1%;
 }
+div.document-list div.asf-active {
+    background-color: #FFC;
+}
 .documentUpload {
     height: 40px;
 }

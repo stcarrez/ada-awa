@@ -1,0 +1,37 @@
+<!-- Dialog box to confirm and perform the deletion of a storage file.
+  -  Copyright (C) 2012 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<f:view xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html">
+    <f:metadata>
+        <f:viewParam id='storeId' value='#{uploadFile.id}'/>
+    </f:metadata>
+    <div title="#{storageMsg.storage_delete_file_title}">
+        <h:form id='file-delete'>
+            <h:inputHidden id='file-delete-id' value='#{uploadFile.id}'/>
+            <dl>
+                <dt>#{storageMsg.storage_confirm_delete_file_message}</dt>
+            </dl>
+            <ul class='awa-buttons'>
+                <li>
+                    <h:commandButton id='file-delete-button' value='#{storageMsg.storage_delete_file_button}'
+                                     styleClass="ui-button ui-state-default ui-corner-all"
+                                     action="#{uploadFile.delete}" title="#{storageMsg.storage_delete_file_tooltip}"/>
+                </li>
+            </ul>
+        </h:form>
+    </div>
+</f:view>
