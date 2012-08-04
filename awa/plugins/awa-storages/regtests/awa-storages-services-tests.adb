@@ -21,6 +21,7 @@ with Ada.Strings.Unbounded;
 with Util.Test_Caller;
 
 with ADO;
+with ADO.Objects;
 
 with Security.Contexts;
 
@@ -122,6 +123,7 @@ package body AWA.Storages.Services.Tests is
       Context   : AWA.Services.Contexts.Service_Context;
       Folder    : AWA.Storages.Beans.Factories.Folder_Bean;
       Outcome   : Ada.Strings.Unbounded.Unbounded_String;
+      Folder2   : AWA.Storages.Beans.Factories.Folder_Bean;
    begin
       AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-storage@test.com");
 
@@ -130,7 +132,9 @@ package body AWA.Storages.Services.Tests is
       Folder.Save (Outcome);
       Util.Tests.Assert_Equals (T, "success", Outcome, "Invalid outcome returned by Save action");
 
-
+      Folder2.Set_Value ("folderId", ADO.Objects.To_Object (Folder.Get_Key));
+      Util.Tests.Assert_Equals (T, "Test folder name", String '(Folder2.Get_Name),
+                                "Invalid folder name");
    end Test_Create_Folder;
 
 end AWA.Storages.Services.Tests;
