@@ -111,8 +111,14 @@ package body AWA.Storages.Services.Tests is
 
       T.Save;
       T.Manager.Delete (T.Id);
-      T.Manager.Load (From => T.Id, Name => Name, Mime => Mime, Date => Date, Into => Data);
-      T.Assert (Data.Is_Null, "A non null blob returned by load");
+      begin
+         T.Manager.Load (From => T.Id, Name => Name, Mime => Mime, Date => Date, Into => Data);
+         T.Assert (False, "No exception raised");
+
+      exception
+         when ADO.Objects.NOT_FOUND =>
+            null;
+      end;
    end Test_Delete_Storage;
 
    --  ------------------------------
@@ -123,17 +129,18 @@ package body AWA.Storages.Services.Tests is
       Context   : AWA.Services.Contexts.Service_Context;
       Folder    : AWA.Storages.Beans.Factories.Folder_Bean;
       Outcome   : Ada.Strings.Unbounded.Unbounded_String;
-      Folder2   : AWA.Storages.Beans.Factories.Folder_Bean;
+      Upload    : AWA.Storages.Beans.Factories.Upload_Bean;
    begin
       AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-storage@test.com");
+      Folder.Module := AWA.Storages.Modules.Get_Storage_Module;
+      Upload.Module := AWA.Storages.Modules.Get_Storage_Module;
 
       Folder.Set_Name ("Test folder name");
-      Folder.Module := AWA.Storages.Modules.Get_Storage_Module;
       Folder.Save (Outcome);
       Util.Tests.Assert_Equals (T, "success", Outcome, "Invalid outcome returned by Save action");
 
-      Folder2.Set_Value ("folderId", ADO.Objects.To_Object (Folder.Get_Key));
-      Util.Tests.Assert_Equals (T, "Test folder name", String '(Folder2.Get_Name),
+      Upload.Set_Value ("folderId", ADO.Objects.To_Object (Folder.Get_Key));
+      Util.Tests.Assert_Equals (T, "Test folder name", String '(Upload.Get_Folder.Get_Name),
                                 "Invalid folder name");
    end Test_Create_Folder;
 
