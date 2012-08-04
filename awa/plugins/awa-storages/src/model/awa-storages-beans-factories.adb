@@ -27,6 +27,11 @@ package body AWA.Storages.Beans.Factories is
                                                       Method => Upload,
                                                       Name   => "upload");
 
+   package Delete_Binding is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Upload_Bean,
+                                                      Method => Delete,
+                                                      Name   => "delete");
+
    package Save_Part_Binding is
      new ASF.Parts.Upload_Method.Bind (Name   => "save",
                                        Bean   => Upload_Bean,
@@ -34,7 +39,8 @@ package body AWA.Storages.Beans.Factories is
 
    Upload_Bean_Binding : aliased constant Util.Beans.Methods.Method_Binding_Array
      := (1 => Upload_Binding.Proxy'Access,
-         2 => Save_Part_Binding.Proxy'Access);
+         2 => Save_Part_Binding.Proxy'Access,
+         3 => Delete_Binding.Proxy'Access);
 
    --  ------------------------------
    --  This bean provides some methods that can be used in a Method_Expression
