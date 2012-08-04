@@ -24,18 +24,23 @@
         <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/grids/reset.css"/>
         <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/grids/fluid_grid.css"/>
         <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/redmond/jquery-ui-1.8.21.custom.css"/>
-        <link rel="stylesheet" type="text/css"
-              href="#{contextPath}/css/iframe.css"/>
+        <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/iframe.css"/>
+        <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/storage.css"/>
      </head>
-    <body class='#{picStyle}'>
+    <body>
     <h:form id='uploadForm' enctype="multipart/form-data">
         <h:inputHidden id="folder" value="#{uploadFile.folderId}"/>
         <div class='uploadForm'>
             <div class='upload'>
-                <h:inputFile id="upload"
+                #{storageMsg.storage_upload_message}
+
+                <h:inputFile id="upload-file"
+                             styleClass="ui-button ui-corner-all"
                              value="#{uploadFile.save}"/>
-                <h:commandButton id="uploadButton"
+                <h:commandButton id="upload-button"
                                  styleClass="ui-button ui-state-default ui-corner-all"
+                                 value="#{storageMsg.storage_upload_label}"
+                                 title="#{storageMsg.storage_upload_title}"
                                  action="#{uploadFile.upload}"/>
             </div>
         </div>
