@@ -59,6 +59,11 @@ package AWA.Storages.Beans is
    procedure Upload (Bean    : in out Upload_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
+   --  Delete the file.
+   --  @method
+   procedure Delete (Bean    : in out Upload_Bean;
+                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
    --  ------------------------------
    --  Folder Bean
    --  ------------------------------

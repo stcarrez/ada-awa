@@ -80,6 +80,18 @@ package body AWA.Storages.Beans is
    end Upload;
 
    --  ------------------------------
+   --  Delete the file.
+   --  @method
+   --  ------------------------------
+   procedure Delete (Bean    : in out Upload_Bean;
+                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      Manager : constant Services.Storage_Service_Access := Bean.Module.Get_Storage_Manager;
+   begin
+      Manager.Delete (Bean);
+      Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("success");
+   end Delete;
+
+   --  ------------------------------
    --  Get the value identified by the name.
    --  ------------------------------
    overriding
