@@ -18,6 +18,7 @@
 with AWA.Modules.Beans;
 with AWA.Modules.Get;
 with AWA.Applications;
+with AWA.Storages.Modules;
 
 with Util.Strings;
 with Util.Log.Loggers;
@@ -51,6 +52,19 @@ package body AWA.Images.Modules is
 
       --  Create the image manager when everything is initialized.
       Plugin.Manager := Plugin.Create_Image_Manager;
+
+      --  Register the image module as listener to the storage module events.
+      declare
+         use AWA.Storages.Modules;
+
+         Storage : constant Storage_Module_Access := AWA.Storages.Modules.Get_Storage_Module;
+      begin
+         if Storage = null then
+            Log.Error ("Cannot initialize the image module: there is no storage module.");
+         else
+            Storage.Add_Listener (Plugin'Unchecked_Access);
+         end if;
+      end;
    end Initialize;
 
    --  ------------------------------
