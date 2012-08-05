@@ -305,6 +305,25 @@ package body AWA.Modules is
       return Manager.App.Get_Master_Session;
    end Get_Master_Session;
 
+   --  ------------------------------
+   --  Add a listener to the module listner list.  The module will invoke the listner
+   --  depending on events or actions that occur in the module.
+   --  ------------------------------
+   procedure Add_Listener (Into : in out Module;
+                           Item : in Util.Listeners.Listener_Access) is
+   begin
+      Util.Listeners.Add_Listener (Into.Listeners, Item);
+   end Add_Listener;
+
+   --  ------------------------------
+   --  Remove a listener from the module listener list.
+   --  ------------------------------
+   procedure Remove_Listener (Into : in out Module;
+                              Item : in Util.Listeners.Listener_Access) is
+   begin
+      Util.Listeners.Remove_Listener (Into.Listeners, Item);
+   end Remove_Listener;
+
    --  Get per request manager => look in Request
    --  Get per session manager => look in Request.Get_Session
    --  Get per application manager => look in Application

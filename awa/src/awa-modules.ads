@@ -25,6 +25,7 @@ with Util.Log.Loggers;
 with Util.Beans.Basic;
 with Util.Beans.Objects;
 with Util.Serialize.IO;
+with Util.Listeners;
 
 with ASF.Beans;
 with ASF.Applications;
@@ -162,6 +163,15 @@ package AWA.Modules is
                        Name    : in String;
                        Bind    : in ASF.Beans.Class_Binding_Access);
 
+   --  Add a listener to the module listner list.  The module will invoke the listner
+   --  depending on events or actions that occur in the module.
+   procedure Add_Listener (Into : in out Module;
+                           Item : in Util.Listeners.Listener_Access);
+
+   --  Remove a listener from the module listener list.
+   procedure Remove_Listener (Into : in out Module;
+                              Item : in Util.Listeners.Listener_Access);
+
    --  Finalize the module.
    overriding
    procedure Finalize (Plugin : in out Module);
@@ -232,6 +242,7 @@ private
       URI        : Unbounded_String;
       Config     : ASF.Applications.Config;
       Self       : Module_Access := null;
+      Listeners  : Util.Listeners.List;
    end record;
 
    --  Map to find a module from its name or its URI
