@@ -123,6 +123,7 @@ package body AWA.Storages.Services is
       DB        : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Workspace : AWA.Workspaces.Models.Workspace_Ref;
       Store     : Stores.Store_Access;
+      Created   : Boolean;
    begin
       Log.Info ("Save {0} in storage space", Path);
 
@@ -145,13 +146,21 @@ package body AWA.Storages.Services is
                              Entity     => Workspace.Get_Id);
 
       Ctx.Start;
-      if not Into.Is_Inserted then
+      Created := not Into.Is_Inserted;
+      if Created then
          Into.Set_Create_Date (Ada.Calendar.Clock);
          Into.Set_Owner (Ctx.Get_User);
       end if;
       Into.Save (DB);
       Store.Save (DB, Into, Path);
       Into.Save (DB);
+
+      --  Notify the listeners.
+      if Created then
+         Storage_Lifecycle.Notify_Create (Service, Into);
+      else
+         Storage_Lifecycle.Notify_Update (Service, Into);
+      end if;
       Ctx.Commit;
    end Save;
 
@@ -252,8 +261,6 @@ package body AWA.Storages.Services is
    --  ------------------------------
    procedure Delete (Service : in Storage_Service;
                      Storage : in out AWA.Storages.Models.Storage_Ref'Class) is
-      pragma Unreferenced (Service);
-
       Ctx : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB  : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Id  : constant ADO.Identifier := ADO.Objects.Get_Value (Storage.Get_Key);
@@ -265,6 +272,7 @@ package body AWA.Storages.Services is
                              Entity     => Id);
 
       Ctx.Start;
+      Storage_Lifecycle.Notify_Delete (Service, Storage);
       Storage.Delete (DB);
       Ctx.Commit;
    end Delete;
@@ -303,6 +311,7 @@ package body AWA.Storages.Services is
       --  Delete the local storage instances.
       Query.Bind_Param ("store_id", Storage);
       Query.Execute;
+      Storage_Lifecycle.Notify_Delete (Service, S);
       S.Delete (DB);
       Ctx.Commit;
    end Delete;

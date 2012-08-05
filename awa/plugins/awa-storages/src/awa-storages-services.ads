@@ -23,10 +23,18 @@ with Security.Permissions;
 with ADO;
 with ASF.Parts;
 with AWA.Modules;
+with AWA.Modules.Lifecycles;
 
 with AWA.Storages.Models;
 with AWA.Storages.Stores;
 with AWA.Storages.Stores.Databases;
+
+--  == Storage Service ==
+--  The <tt>Storage_Service</tt> provides the operations to access and use the persisent storage.
+--  It controls the permissions that grant access to the service for users.
+--
+--  Other modules can be notified of storage changes by registering a listener
+--  on the storage module.
 package AWA.Storages.Services is
 
    package ACL_Create_Storage is new Security.Permissions.Permission_ACL ("storage-create");
@@ -36,6 +44,11 @@ package AWA.Storages.Services is
    type Read_Mode is (READ, WRITE);
 
    type Expire_Type is (ONE_HOUR, ONE_DAY, TWO_DAYS, ONE_WEEK, ONE_YEAR, NEVER);
+
+   package Storage_Lifecycle is
+     new AWA.Modules.Lifecycles (Element_Type => AWA.Storages.Models.Storage_Ref'Class);
+
+   subtype Listener is Storage_Lifecycle.Listener;
 
    --  ------------------------------
    --  Storage Service

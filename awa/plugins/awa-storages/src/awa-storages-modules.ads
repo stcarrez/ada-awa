@@ -21,6 +21,12 @@ with ASF.Applications;
 with AWA.Modules;
 with AWA.Storages.Services;
 with AWA.Storages.Servlets;
+
+--  == Storage Module ==
+--  The <tt>Storage_Module</tt> type represents the storage module.  An instance of the storage
+--  module must be declared and registered when the application is created and initialized.
+--  The storage module is associated with the storage service which provides and implements
+--  the storage management operations.
 package AWA.Storages.Modules is
 
    NAME : constant String := "storages";
