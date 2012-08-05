@@ -1,33 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hibernate-mapping default-cascade="none">
-    <class name="AWA.Images.Models.Image_Folder" table="awa_image_folder"
-           dynamic-insert="true" dynamic-update="true">
-        <comment>The image folder contains a set of images that have been uploaded by the user.</comment>
-        <id name="id" type="ADO.Identifier" unsaved-value="0">
-            <comment>the image folder identifier</comment>
-            <column name="id" not-null="true" unique="false" sql-type="INTEGER"/>
-            <generator class="increment"/>
-        </id>
-        <version name="version" type="int" column="version">
-            <comment>the image folder version.</comment>
-        </version>
-        <property name="name" type="String">
-            <comment>the image folder name</comment>
-            <column name="name" not-null="true" unique="true" sql-type="VARCHAR(256)"/>
-        </property>
-        <property name="create_date" type="Time" update="false">
-            <comment>the image folder creation date</comment>
-            <column name="create_date" not-null="true" unique="false" sql-type="DATETIME"/>
-        </property>
-        <many-to-one name="user" class="AWA.Users.Models.User" foreign-key="ID" not-null="true" lazy="proxy" fetch="select">
-            <comment>the user who owns this image folder</comment>
-            <column name="user_id" not-null="true" sql-type="INTEGER"/>
-        </many-to-one>
-        <many-to-one name="workspace" class="AWA.Workspaces.Models.Workspace" foreign-key="id" not-null="true" lazy="proxy" fetch="select">
-            <comment>the workspace that this image folder belongs.</comment>
-            <column name="workspace_id" not-null="true" sql-type="INTEGER"/>
-        </many-to-one>
-    </class>
     <class name="AWA.Images.Models.Image" table="awa_image"
            dynamic-insert="true" dynamic-update="true">
         <comment>An image that was uploaded by a user in an image folder.</comment>
@@ -47,45 +19,25 @@
             <comment>the image height.</comment>
             <column name="height" not-null="true" unique="false" sql-type="INTEGER"/>
         </property>
-        <property name="task_id" type="Integer">
-            <comment>the task within the server which is processing this message</comment>
-            <column name="task_id" not-null="true" unique="false" sql-type="INTEGER"/>
+        <property name="thumb_height" type="Natural">
+            <comment>the image thumbnail height.</comment>
+            <column name="thumb_height" not-null="true" unique="false" sql-type="INTEGER"/>
         </property>
-        <property name="name" type="String">
-            <comment>the image name.</comment>
-            <column name="name" not-null="true" unique="false" sql-type="VARCHAR(255)"/>
-        </property>
-        <property name="mime_type" type="String">
-            <comment>the image type.</comment>
-            <column name="mime_type" not-null="true" unique="false" sql-type="VARCHAR(255)"/>
-        </property>
-        <property name="path" type="String">
-            <comment>the image path.</comment>
-            <column name="path" not-null="true" unique="false" sql-type="VARCHAR(255)"/>
-        </property>
-        <property name="create_date" type="Time" update="false">
-            <comment>the image creation date.</comment>
-            <column name="create_date" not-null="true" unique="false" sql-type="DATETIME"/>
+        <property name="thumb_width" type="Natural">
+            <comment>the image thumbnail width.</comment>
+            <column name="thumb_width" not-null="true" unique="false" sql-type="INTEGER"/>
         </property>
         <many-to-one name="original" class="Image" foreign-key="ID" not-null="false" lazy="proxy" fetch="select">
             <comment>the original image if this image was created by the application.</comment>
             <column name="original_id" not-null="true" sql-type="INTEGER"/>
         </many-to-one>
-        <many-to-one name="thumbnail" class="Image" foreign-key="ID" not-null="false" lazy="proxy" fetch="select">
+        <many-to-one name="thumbnail" class="AWA.Storages.Models.Storage" foreign-key="ID" not-null="false" lazy="proxy" fetch="select">
             <comment>the thumbnail image to display the image is an image selector.</comment>
-            <column name="thumbnail_id" not-null="true" sql-type="INTEGER"/>
+            <column name="thumbnail_id" not-null="false" sql-type="INTEGER"/>
         </many-to-one>
-        <many-to-one name="user" class="AWA.Users.Models.User" foreign-key="ID" not-null="true" lazy="proxy" fetch="select">
-            <comment>the user who uploaded the image.</comment>
-            <column name="user_id" not-null="true" sql-type="INTEGER"/>
-        </many-to-one>
-        <many-to-one name="folder" class="Image_Folder" foreign-key="ID" not-null="true" lazy="proxy" fetch="select">
-            <comment>the image folder where this image is stored.</comment>
-            <column name="folder_id" not-null="true" sql-type="INTEGER"/>
-        </many-to-one>
-        <many-to-one name="image" class="AWA.Storages.Models.Storage" foreign-key="ID" not-null="false" lazy="proxy" fetch="select">
-            <comment>the image data if the storage type is DATABASE.</comment>
-            <column name="image_id" not-null="false" sql-type="INTEGER"/>
+        <many-to-one name="storage" class="AWA.Storages.Models.Storage" foreign-key="ID" not-null="true" lazy="proxy" fetch="select">
+            <comment>the image storage file.</comment>
+            <column name="storage_id" not-null="true" sql-type="INTEGER"/>
         </many-to-one>
     </class>
 
