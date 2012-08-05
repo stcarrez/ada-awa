@@ -28,436 +28,6 @@ package body AWA.Images.Models is
    use type ADO.Objects.Object_Ref;
    use type ADO.Objects.Object_Record;
 
-   function Image_Folder_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
-                                       Of_Class => IMAGE_FOLDER_TABLE'Access);
-   begin
-      ADO.Objects.Set_Value (Result, Id);
-      return Result;
-   end Image_Folder_Key;
-
-   function Image_Folder_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
-                                       Of_Class => IMAGE_FOLDER_TABLE'Access);
-   begin
-      ADO.Objects.Set_Value (Result, Id);
-      return Result;
-   end Image_Folder_Key;
-
-   function "=" (Left, Right : Image_Folder_Ref'Class) return Boolean is
-   begin
-      return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
-   end "=";
-
-   procedure Set_Field (Object : in out Image_Folder_Ref'Class;
-                        Impl   : out Image_Folder_Access) is
-      Result : ADO.Objects.Object_Record_Access;
-   begin
-      Object.Prepare_Modify (Result);
-      Impl := Image_Folder_Impl (Result.all)'Access;
-   end Set_Field;
-
-   --  Internal method to allocate the Object_Record instance
-   procedure Allocate (Object : in out Image_Folder_Ref) is
-      Impl : Image_Folder_Access;
-   begin
-      Impl := new Image_Folder_Impl;
-      Impl.Version := 0;
-      Impl.Create_Date := ADO.DEFAULT_TIME;
-      ADO.Objects.Set_Object (Object, Impl.all'Access);
-   end Allocate;
-
-   -- ----------------------------------------
-   --  Data object: Image_Folder
-   -- ----------------------------------------
-
-   procedure Set_Id (Object : in out Image_Folder_Ref;
-                     Value  : in ADO.Identifier) is
-      Impl : Image_Folder_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
-   end Set_Id;
-
-   function Get_Id (Object : in Image_Folder_Ref)
-                  return ADO.Identifier is
-      Impl : constant Image_Folder_Access := Image_Folder_Impl (Object.Get_Object.all)'Access;
-   begin
-      return Impl.Get_Key_Value;
-   end Get_Id;
-
-
-   function Get_Version (Object : in Image_Folder_Ref)
-                  return Integer is
-      Impl : constant Image_Folder_Access := Image_Folder_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Version;
-   end Get_Version;
-
-
-   procedure Set_Name (Object : in out Image_Folder_Ref;
-                        Value : in String) is
-      Impl : Image_Folder_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 3, Impl.Name, Value);
-   end Set_Name;
-
-   procedure Set_Name (Object : in out Image_Folder_Ref;
-                       Value  : in Ada.Strings.Unbounded.Unbounded_String) is
-      Impl : Image_Folder_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 3, Impl.Name, Value);
-   end Set_Name;
-
-   function Get_Name (Object : in Image_Folder_Ref)
-                 return String is
-   begin
-      return Ada.Strings.Unbounded.To_String (Object.Get_Name);
-   end Get_Name;
-   function Get_Name (Object : in Image_Folder_Ref)
-                  return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Image_Folder_Access := Image_Folder_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Name;
-   end Get_Name;
-
-
-   procedure Set_Create_Date (Object : in out Image_Folder_Ref;
-                              Value  : in Ada.Calendar.Time) is
-      Impl : Image_Folder_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Time (Impl.all, 4, Impl.Create_Date, Value);
-   end Set_Create_Date;
-
-   function Get_Create_Date (Object : in Image_Folder_Ref)
-                  return Ada.Calendar.Time is
-      Impl : constant Image_Folder_Access := Image_Folder_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Create_Date;
-   end Get_Create_Date;
-
-
-   procedure Set_User (Object : in out Image_Folder_Ref;
-                       Value  : in AWA.Users.Models.User_Ref'Class) is
-      Impl : Image_Folder_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 5, Impl.User, Value);
-   end Set_User;
-
-   function Get_User (Object : in Image_Folder_Ref)
-                  return AWA.Users.Models.User_Ref'Class is
-      Impl : constant Image_Folder_Access := Image_Folder_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.User;
-   end Get_User;
-
-
-   procedure Set_Workspace (Object : in out Image_Folder_Ref;
-                            Value  : in AWA.Workspaces.Models.Workspace_Ref'Class) is
-      Impl : Image_Folder_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 6, Impl.Workspace, Value);
-   end Set_Workspace;
-
-   function Get_Workspace (Object : in Image_Folder_Ref)
-                  return AWA.Workspaces.Models.Workspace_Ref'Class is
-      Impl : constant Image_Folder_Access := Image_Folder_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Workspace;
-   end Get_Workspace;
-
-   --  Copy of the object.
-   procedure Copy (Object : in Image_Folder_Ref;
-                   Into   : in out Image_Folder_Ref) is
-      Result : Image_Folder_Ref;
-   begin
-      if not Object.Is_Null then
-         declare
-            Impl : constant Image_Folder_Access
-              := Image_Folder_Impl (Object.Get_Load_Object.all)'Access;
-            Copy : constant Image_Folder_Access
-              := new Image_Folder_Impl;
-         begin
-            ADO.Objects.Set_Object (Result, Copy.all'Access);
-            Copy.Copy (Impl.all);
-            Copy.Version := Impl.Version;
-            Copy.Name := Impl.Name;
-            Copy.Create_Date := Impl.Create_Date;
-            Copy.User := Impl.User;
-            Copy.Workspace := Impl.Workspace;
-         end;
-      end if;
-      Into := Result;
-   end Copy;
-
-   procedure Find (Object  : in out Image_Folder_Ref;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class;
-                   Found   : out Boolean) is
-      Impl  : constant Image_Folder_Access := new Image_Folder_Impl;
-   begin
-      Impl.Find (Session, Query, Found);
-      if Found then
-         ADO.Objects.Set_Object (Object, Impl.all'Access);
-      else
-         ADO.Objects.Set_Object (Object, null);
-         Destroy (Impl);
-      end if;
-   end Find;
-
-   procedure Load (Object  : in out Image_Folder_Ref;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Id      : in ADO.Identifier) is
-      Impl  : constant Image_Folder_Access := new Image_Folder_Impl;
-      Found : Boolean;
-      Query : ADO.SQL.Query;
-   begin
-      Query.Bind_Param (Position => 1, Value => Id);
-      Query.Set_Filter ("id = ?");
-      Impl.Find (Session, Query, Found);
-      if not Found then
-         Destroy (Impl);
-         raise ADO.Objects.NOT_FOUND;
-      end if;
-      ADO.Objects.Set_Object (Object, Impl.all'Access);
-   end Load;
-
-   procedure Load (Object  : in out Image_Folder_Ref;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Id      : in ADO.Identifier;
-                   Found   : out Boolean) is
-      Impl  : constant Image_Folder_Access := new Image_Folder_Impl;
-      Query : ADO.SQL.Query;
-   begin
-      Query.Bind_Param (Position => 1, Value => Id);
-      Query.Set_Filter ("id = ?");
-      Impl.Find (Session, Query, Found);
-      if not Found then
-         Destroy (Impl);
-      else
-         ADO.Objects.Set_Object (Object, Impl.all'Access);
-      end if;
-   end Load;
-
-   procedure Save (Object  : in out Image_Folder_Ref;
-                   Session : in out ADO.Sessions.Master_Session'Class) is
-      Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
-   begin
-      if Impl = null then
-         Impl := new Image_Folder_Impl;
-         ADO.Objects.Set_Object (Object, Impl);
-      end if;
-      if not ADO.Objects.Is_Created (Impl.all) then
-         Impl.Create (Session);
-      else
-         Impl.Save (Session);
-      end if;
-   end Save;
-
-   procedure Delete (Object  : in out Image_Folder_Ref;
-                     Session : in out ADO.Sessions.Master_Session'Class) is
-      Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
-   begin
-      if Impl /= null then
-         Impl.Delete (Session);
-      end if;
-   end Delete;
-
-   --  --------------------
-   --  Free the object
-   --  --------------------
-   procedure Destroy (Object : access Image_Folder_Impl) is
-      type Image_Folder_Impl_Ptr is access all Image_Folder_Impl;
-      procedure Unchecked_Free is new Ada.Unchecked_Deallocation
-              (Image_Folder_Impl, Image_Folder_Impl_Ptr);
-      pragma Warnings (Off, "*redundant conversion*");
-      Ptr : Image_Folder_Impl_Ptr := Image_Folder_Impl (Object.all)'Access;
-      pragma Warnings (On, "*redundant conversion*");
-   begin
-      Unchecked_Free (Ptr);
-   end Destroy;
-
-   procedure Find (Object  : in out Image_Folder_Impl;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class;
-                   Found   : out Boolean) is
-      Stmt : ADO.Statements.Query_Statement
-          := Session.Create_Statement (Query, IMAGE_FOLDER_TABLE'Access);
-   begin
-      Stmt.Execute;
-      if Stmt.Has_Elements then
-         Object.Load (Stmt, Session);
-         Stmt.Next;
-         Found := not Stmt.Has_Elements;
-      else
-         Found := False;
-      end if;
-   end Find;
-
-   overriding
-   procedure Load (Object  : in out Image_Folder_Impl;
-                   Session : in out ADO.Sessions.Session'Class) is
-      Found : Boolean;
-      Query : ADO.SQL.Query;
-      Id    : constant ADO.Identifier := Object.Get_Key_Value;
-   begin
-      Query.Bind_Param (Position => 1, Value => Id);
-      Query.Set_Filter ("id = ?");
-      Object.Find (Session, Query, Found);
-      if not Found then
-         raise ADO.Objects.NOT_FOUND;
-      end if;
-   end Load;
-
-   procedure Save (Object  : in out Image_Folder_Impl;
-                   Session : in out ADO.Sessions.Master_Session'Class) is
-      Stmt : ADO.Statements.Update_Statement
-         := Session.Create_Statement (IMAGE_FOLDER_TABLE'Access);
-   begin
-      if Object.Is_Modified (1) then
-         Stmt.Save_Field (Name  => COL_0_1_NAME, --  id
-                          Value => Object.Get_Key);
-         Object.Clear_Modified (1);
-      end if;
-      if Object.Is_Modified (3) then
-         Stmt.Save_Field (Name  => COL_2_1_NAME, --  name
-                          Value => Object.Name);
-         Object.Clear_Modified (3);
-      end if;
-      if Object.Is_Modified (5) then
-         Stmt.Save_Field (Name  => COL_4_1_NAME, --  user_id
-                          Value => Object.User);
-         Object.Clear_Modified (5);
-      end if;
-      if Object.Is_Modified (6) then
-         Stmt.Save_Field (Name  => COL_5_1_NAME, --  workspace_id
-                          Value => Object.Workspace);
-         Object.Clear_Modified (6);
-      end if;
-      if Stmt.Has_Save_Fields then
-         Object.Version := Object.Version + 1;
-         Stmt.Save_Field (Name  => "version",
-                          Value => Object.Version);
-         Stmt.Set_Filter (Filter => "id = ? and version = ?");
-         Stmt.Add_Param (Value => Object.Get_Key);
-         Stmt.Add_Param (Value => Object.Version - 1);
-         declare
-            Result : Integer;
-         begin
-            Stmt.Execute (Result);
-            if Result /= 1 then
-               if Result /= 0 then
-                  raise ADO.Objects.UPDATE_ERROR;
-               else
-                  raise ADO.Objects.LAZY_LOCK;
-               end if;
-            end if;
-         end;
-      end if;
-   end Save;
-
-   procedure Create (Object  : in out Image_Folder_Impl;
-                     Session : in out ADO.Sessions.Master_Session'Class) is
-      Query : ADO.Statements.Insert_Statement
-                  := Session.Create_Statement (IMAGE_FOLDER_TABLE'Access);
-      Result : Integer;
-   begin
-      Object.Version := 1;
-      Session.Allocate (Id => Object);
-      Query.Save_Field (Name  => COL_0_1_NAME, --  id
-                        Value => Object.Get_Key);
-      Query.Save_Field (Name  => COL_1_1_NAME, --  version
-                        Value => Object.Version);
-      Query.Save_Field (Name  => COL_2_1_NAME, --  name
-                        Value => Object.Name);
-      Query.Save_Field (Name  => COL_3_1_NAME, --  create_date
-                        Value => Object.Create_Date);
-      Query.Save_Field (Name  => COL_4_1_NAME, --  user_id
-                        Value => Object.User);
-      Query.Save_Field (Name  => COL_5_1_NAME, --  workspace_id
-                        Value => Object.Workspace);
-      Query.Execute (Result);
-      if Result /= 1 then
-         raise ADO.Objects.INSERT_ERROR;
-      end if;
-      ADO.Objects.Set_Created (Object);
-   end Create;
-
-   procedure Delete (Object  : in out Image_Folder_Impl;
-                     Session : in out ADO.Sessions.Master_Session'Class) is
-      Stmt : ADO.Statements.Delete_Statement
-         := Session.Create_Statement (IMAGE_FOLDER_TABLE'Access);
-   begin
-      Stmt.Set_Filter (Filter => "id = ?");
-      Stmt.Add_Param (Value => Object.Get_Key);
-      Stmt.Execute;
-   end Delete;
-
-   function Get_Value (Item : in Image_Folder_Ref;
-                       Name : in String) return Util.Beans.Objects.Object is
-      Obj  : constant ADO.Objects.Object_Record_Access := Item.Get_Load_Object;
-      Impl : access Image_Folder_Impl;
-   begin
-      if Obj = null then
-         return Util.Beans.Objects.Null_Object;
-      end if;
-      Impl := Image_Folder_Impl (Obj.all)'Access;
-      if Name = "id" then
-         return ADO.Objects.To_Object (Impl.Get_Key);
-      end if;
-      if Name = "name" then
-         return Util.Beans.Objects.To_Object (Impl.Name);
-      end if;
-      if Name = "create_date" then
-         return Util.Beans.Objects.Time.To_Object (Impl.Create_Date);
-      end if;
-      return Util.Beans.Objects.Null_Object;
-   end Get_Value;
-
-   procedure List (Object  : in out Image_Folder_Vector;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class) is
-      Stmt : ADO.Statements.Query_Statement := Session.Create_Statement (Query, IMAGE_FOLDER_TABLE'Access);
-   begin
-      Stmt.Execute;
-      Image_Folder_Vectors.Clear (Object);
-      while Stmt.Has_Elements loop
-         declare
-            Item : Image_Folder_Ref;
-            Impl : constant Image_Folder_Access := new Image_Folder_Impl;
-         begin
-            Impl.Load (Stmt, Session);
-            ADO.Objects.Set_Object (Item, Impl.all'Access);
-            Object.Append (Item);
-         end;
-         Stmt.Next;
-      end loop;
-   end List;
-
-   --  ------------------------------
-   --  Load the object from current iterator position
-   --  ------------------------------
-   procedure Load (Object  : in out Image_Folder_Impl;
-                   Stmt    : in out ADO.Statements.Query_Statement'Class;
-                   Session : in out ADO.Sessions.Session'Class) is
-   begin
-      Object.Set_Key_Value (Stmt.Get_Identifier (0));
-      Object.Name := Stmt.Get_Unbounded_String (2);
-      Object.Create_Date := Stmt.Get_Time (3);
-      if not Stmt.Is_Null (4) then
-         Object.User.Set_Key_Value (Stmt.Get_Identifier (4), Session);
-      end if;
-      if not Stmt.Is_Null (5) then
-         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (5), Session);
-      end if;
-      Object.Version := Stmt.Get_Integer (1);
-      ADO.Objects.Set_Created (Object);
-   end Load;
    function Image_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
       Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
                                        Of_Class => IMAGE_TABLE'Access);
@@ -495,8 +65,8 @@ package body AWA.Images.Models is
       Impl.Version := 0;
       Impl.Width := 0;
       Impl.Height := 0;
-      Impl.Task_Id := 0;
-      Impl.Create_Date := ADO.DEFAULT_TIME;
+      Impl.Thumb_Height := 0;
+      Impl.Thumb_Width := 0;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -562,124 +132,38 @@ package body AWA.Images.Models is
    end Get_Height;
 
 
-   procedure Set_Task_Id (Object : in out Image_Ref;
-                          Value  : in Integer) is
+   procedure Set_Thumb_Height (Object : in out Image_Ref;
+                               Value  : in Natural) is
       Impl : Image_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Integer (Impl.all, 5, Impl.Task_Id, Value);
-      ADO.Objects.Set_Field_Integer (Impl.all, 5, Impl.Task_Id, Value);
-   end Set_Task_Id;
+      ADO.Objects.Set_Field_Integer (Impl.all, 5, Impl.Thumb_Height, Value);
+      ADO.Objects.Set_Field_Natural (Impl.all, 5, Impl.Thumb_Height, Value);
+   end Set_Thumb_Height;
 
-   function Get_Task_Id (Object : in Image_Ref)
-                  return Integer is
+   function Get_Thumb_Height (Object : in Image_Ref)
+                  return Natural is
       Impl : constant Image_Access := Image_Impl (Object.Get_Load_Object.all)'Access;
    begin
-      return Impl.Task_Id;
-   end Get_Task_Id;
+      return Impl.Thumb_Height;
+   end Get_Thumb_Height;
 
 
-   procedure Set_Name (Object : in out Image_Ref;
-                        Value : in String) is
+   procedure Set_Thumb_Width (Object : in out Image_Ref;
+                              Value  : in Natural) is
       Impl : Image_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 6, Impl.Name, Value);
-   end Set_Name;
+      ADO.Objects.Set_Field_Integer (Impl.all, 6, Impl.Thumb_Width, Value);
+      ADO.Objects.Set_Field_Natural (Impl.all, 6, Impl.Thumb_Width, Value);
+   end Set_Thumb_Width;
 
-   procedure Set_Name (Object : in out Image_Ref;
-                       Value  : in Ada.Strings.Unbounded.Unbounded_String) is
-      Impl : Image_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 6, Impl.Name, Value);
-   end Set_Name;
-
-   function Get_Name (Object : in Image_Ref)
-                 return String is
-   begin
-      return Ada.Strings.Unbounded.To_String (Object.Get_Name);
-   end Get_Name;
-   function Get_Name (Object : in Image_Ref)
-                  return Ada.Strings.Unbounded.Unbounded_String is
+   function Get_Thumb_Width (Object : in Image_Ref)
+                  return Natural is
       Impl : constant Image_Access := Image_Impl (Object.Get_Load_Object.all)'Access;
    begin
-      return Impl.Name;
-   end Get_Name;
-
-
-   procedure Set_Mime_Type (Object : in out Image_Ref;
-                             Value : in String) is
-      Impl : Image_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 7, Impl.Mime_Type, Value);
-   end Set_Mime_Type;
-
-   procedure Set_Mime_Type (Object : in out Image_Ref;
-                            Value  : in Ada.Strings.Unbounded.Unbounded_String) is
-      Impl : Image_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 7, Impl.Mime_Type, Value);
-   end Set_Mime_Type;
-
-   function Get_Mime_Type (Object : in Image_Ref)
-                 return String is
-   begin
-      return Ada.Strings.Unbounded.To_String (Object.Get_Mime_Type);
-   end Get_Mime_Type;
-   function Get_Mime_Type (Object : in Image_Ref)
-                  return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Image_Access := Image_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Mime_Type;
-   end Get_Mime_Type;
-
-
-   procedure Set_Path (Object : in out Image_Ref;
-                        Value : in String) is
-      Impl : Image_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 8, Impl.Path, Value);
-   end Set_Path;
-
-   procedure Set_Path (Object : in out Image_Ref;
-                       Value  : in Ada.Strings.Unbounded.Unbounded_String) is
-      Impl : Image_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 8, Impl.Path, Value);
-   end Set_Path;
-
-   function Get_Path (Object : in Image_Ref)
-                 return String is
-   begin
-      return Ada.Strings.Unbounded.To_String (Object.Get_Path);
-   end Get_Path;
-   function Get_Path (Object : in Image_Ref)
-                  return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Image_Access := Image_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Path;
-   end Get_Path;
-
-
-   procedure Set_Create_Date (Object : in out Image_Ref;
-                              Value  : in Ada.Calendar.Time) is
-      Impl : Image_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Time (Impl.all, 9, Impl.Create_Date, Value);
-   end Set_Create_Date;
-
-   function Get_Create_Date (Object : in Image_Ref)
-                  return Ada.Calendar.Time is
-      Impl : constant Image_Access := Image_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Create_Date;
-   end Get_Create_Date;
+      return Impl.Thumb_Width;
+   end Get_Thumb_Width;
 
 
    procedure Set_Original (Object : in out Image_Ref;
@@ -687,7 +171,7 @@ package body AWA.Images.Models is
       Impl : Image_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 10, Impl.Original, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 7, Impl.Original, Value);
    end Set_Original;
 
    function Get_Original (Object : in Image_Ref)
@@ -699,67 +183,35 @@ package body AWA.Images.Models is
 
 
    procedure Set_Thumbnail (Object : in out Image_Ref;
-                            Value  : in Image_Ref'Class) is
+                            Value  : in AWA.Storages.Models.Storage_Ref'Class) is
       Impl : Image_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 11, Impl.Thumbnail, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 8, Impl.Thumbnail, Value);
    end Set_Thumbnail;
 
    function Get_Thumbnail (Object : in Image_Ref)
-                  return Image_Ref'Class is
+                  return AWA.Storages.Models.Storage_Ref'Class is
       Impl : constant Image_Access := Image_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Thumbnail;
    end Get_Thumbnail;
 
 
-   procedure Set_User (Object : in out Image_Ref;
-                       Value  : in AWA.Users.Models.User_Ref'Class) is
+   procedure Set_Storage (Object : in out Image_Ref;
+                          Value  : in AWA.Storages.Models.Storage_Ref'Class) is
       Impl : Image_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 12, Impl.User, Value);
-   end Set_User;
+      ADO.Objects.Set_Field_Object (Impl.all, 9, Impl.Storage, Value);
+   end Set_Storage;
 
-   function Get_User (Object : in Image_Ref)
-                  return AWA.Users.Models.User_Ref'Class is
-      Impl : constant Image_Access := Image_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.User;
-   end Get_User;
-
-
-   procedure Set_Folder (Object : in out Image_Ref;
-                         Value  : in Image_Folder_Ref'Class) is
-      Impl : Image_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 13, Impl.Folder, Value);
-   end Set_Folder;
-
-   function Get_Folder (Object : in Image_Ref)
-                  return Image_Folder_Ref'Class is
-      Impl : constant Image_Access := Image_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Folder;
-   end Get_Folder;
-
-
-   procedure Set_Image (Object : in out Image_Ref;
-                        Value  : in AWA.Storages.Models.Storage_Ref'Class) is
-      Impl : Image_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 14, Impl.Image, Value);
-   end Set_Image;
-
-   function Get_Image (Object : in Image_Ref)
+   function Get_Storage (Object : in Image_Ref)
                   return AWA.Storages.Models.Storage_Ref'Class is
       Impl : constant Image_Access := Image_Impl (Object.Get_Load_Object.all)'Access;
    begin
-      return Impl.Image;
-   end Get_Image;
+      return Impl.Storage;
+   end Get_Storage;
 
    --  Copy of the object.
    procedure Copy (Object : in Image_Ref;
@@ -778,16 +230,11 @@ package body AWA.Images.Models is
             Copy.Version := Impl.Version;
             Copy.Width := Impl.Width;
             Copy.Height := Impl.Height;
-            Copy.Task_Id := Impl.Task_Id;
-            Copy.Name := Impl.Name;
-            Copy.Mime_Type := Impl.Mime_Type;
-            Copy.Path := Impl.Path;
-            Copy.Create_Date := Impl.Create_Date;
+            Copy.Thumb_Height := Impl.Thumb_Height;
+            Copy.Thumb_Width := Impl.Thumb_Width;
             Copy.Original := Impl.Original;
             Copy.Thumbnail := Impl.Thumbnail;
-            Copy.User := Impl.User;
-            Copy.Folder := Impl.Folder;
-            Copy.Image := Impl.Image;
+            Copy.Storage := Impl.Storage;
          end;
       end if;
       Into := Result;
@@ -918,64 +365,44 @@ package body AWA.Images.Models is
          := Session.Create_Statement (IMAGE_TABLE'Access);
    begin
       if Object.Is_Modified (1) then
-         Stmt.Save_Field (Name  => COL_0_2_NAME, --  id
+         Stmt.Save_Field (Name  => COL_0_1_NAME, --  id
                           Value => Object.Get_Key);
          Object.Clear_Modified (1);
       end if;
       if Object.Is_Modified (3) then
-         Stmt.Save_Field (Name  => COL_2_2_NAME, --  width
+         Stmt.Save_Field (Name  => COL_2_1_NAME, --  width
                           Value => Object.Width);
          Object.Clear_Modified (3);
       end if;
       if Object.Is_Modified (4) then
-         Stmt.Save_Field (Name  => COL_3_2_NAME, --  height
+         Stmt.Save_Field (Name  => COL_3_1_NAME, --  height
                           Value => Object.Height);
          Object.Clear_Modified (4);
       end if;
       if Object.Is_Modified (5) then
-         Stmt.Save_Field (Name  => COL_4_2_NAME, --  task_id
-                          Value => Object.Task_Id);
+         Stmt.Save_Field (Name  => COL_4_1_NAME, --  thumb_height
+                          Value => Object.Thumb_Height);
          Object.Clear_Modified (5);
       end if;
       if Object.Is_Modified (6) then
-         Stmt.Save_Field (Name  => COL_5_2_NAME, --  name
-                          Value => Object.Name);
+         Stmt.Save_Field (Name  => COL_5_1_NAME, --  thumb_width
+                          Value => Object.Thumb_Width);
          Object.Clear_Modified (6);
       end if;
       if Object.Is_Modified (7) then
-         Stmt.Save_Field (Name  => COL_6_2_NAME, --  mime_type
-                          Value => Object.Mime_Type);
+         Stmt.Save_Field (Name  => COL_6_1_NAME, --  original_id
+                          Value => Object.Original);
          Object.Clear_Modified (7);
       end if;
       if Object.Is_Modified (8) then
-         Stmt.Save_Field (Name  => COL_7_2_NAME, --  path
-                          Value => Object.Path);
+         Stmt.Save_Field (Name  => COL_7_1_NAME, --  thumbnail_id
+                          Value => Object.Thumbnail);
          Object.Clear_Modified (8);
       end if;
-      if Object.Is_Modified (10) then
-         Stmt.Save_Field (Name  => COL_9_2_NAME, --  original_id
-                          Value => Object.Original);
-         Object.Clear_Modified (10);
-      end if;
-      if Object.Is_Modified (11) then
-         Stmt.Save_Field (Name  => COL_10_2_NAME, --  thumbnail_id
-                          Value => Object.Thumbnail);
-         Object.Clear_Modified (11);
-      end if;
-      if Object.Is_Modified (12) then
-         Stmt.Save_Field (Name  => COL_11_2_NAME, --  user_id
-                          Value => Object.User);
-         Object.Clear_Modified (12);
-      end if;
-      if Object.Is_Modified (13) then
-         Stmt.Save_Field (Name  => COL_12_2_NAME, --  folder_id
-                          Value => Object.Folder);
-         Object.Clear_Modified (13);
-      end if;
-      if Object.Is_Modified (14) then
-         Stmt.Save_Field (Name  => COL_13_2_NAME, --  image_id
-                          Value => Object.Image);
-         Object.Clear_Modified (14);
+      if Object.Is_Modified (9) then
+         Stmt.Save_Field (Name  => COL_8_1_NAME, --  storage_id
+                          Value => Object.Storage);
+         Object.Clear_Modified (9);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -1007,34 +434,24 @@ package body AWA.Images.Models is
    begin
       Object.Version := 1;
       Session.Allocate (Id => Object);
-      Query.Save_Field (Name  => COL_0_2_NAME, --  id
+      Query.Save_Field (Name  => COL_0_1_NAME, --  id
                         Value => Object.Get_Key);
-      Query.Save_Field (Name  => COL_1_2_NAME, --  version
+      Query.Save_Field (Name  => COL_1_1_NAME, --  version
                         Value => Object.Version);
-      Query.Save_Field (Name  => COL_2_2_NAME, --  width
+      Query.Save_Field (Name  => COL_2_1_NAME, --  width
                         Value => Object.Width);
-      Query.Save_Field (Name  => COL_3_2_NAME, --  height
+      Query.Save_Field (Name  => COL_3_1_NAME, --  height
                         Value => Object.Height);
-      Query.Save_Field (Name  => COL_4_2_NAME, --  task_id
-                        Value => Object.Task_Id);
-      Query.Save_Field (Name  => COL_5_2_NAME, --  name
-                        Value => Object.Name);
-      Query.Save_Field (Name  => COL_6_2_NAME, --  mime_type
-                        Value => Object.Mime_Type);
-      Query.Save_Field (Name  => COL_7_2_NAME, --  path
-                        Value => Object.Path);
-      Query.Save_Field (Name  => COL_8_2_NAME, --  create_date
-                        Value => Object.Create_Date);
-      Query.Save_Field (Name  => COL_9_2_NAME, --  original_id
+      Query.Save_Field (Name  => COL_4_1_NAME, --  thumb_height
+                        Value => Object.Thumb_Height);
+      Query.Save_Field (Name  => COL_5_1_NAME, --  thumb_width
+                        Value => Object.Thumb_Width);
+      Query.Save_Field (Name  => COL_6_1_NAME, --  original_id
                         Value => Object.Original);
-      Query.Save_Field (Name  => COL_10_2_NAME, --  thumbnail_id
+      Query.Save_Field (Name  => COL_7_1_NAME, --  thumbnail_id
                         Value => Object.Thumbnail);
-      Query.Save_Field (Name  => COL_11_2_NAME, --  user_id
-                        Value => Object.User);
-      Query.Save_Field (Name  => COL_12_2_NAME, --  folder_id
-                        Value => Object.Folder);
-      Query.Save_Field (Name  => COL_13_2_NAME, --  image_id
-                        Value => Object.Image);
+      Query.Save_Field (Name  => COL_8_1_NAME, --  storage_id
+                        Value => Object.Storage);
       Query.Execute (Result);
       if Result /= 1 then
          raise ADO.Objects.INSERT_ERROR;
@@ -1070,20 +487,11 @@ package body AWA.Images.Models is
       if Name = "height" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Height));
       end if;
-      if Name = "task_id" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Task_Id));
+      if Name = "thumb_height" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Thumb_Height));
       end if;
-      if Name = "name" then
-         return Util.Beans.Objects.To_Object (Impl.Name);
-      end if;
-      if Name = "mime_type" then
-         return Util.Beans.Objects.To_Object (Impl.Mime_Type);
-      end if;
-      if Name = "path" then
-         return Util.Beans.Objects.To_Object (Impl.Path);
-      end if;
-      if Name = "create_date" then
-         return Util.Beans.Objects.Time.To_Object (Impl.Create_Date);
+      if Name = "thumb_width" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Thumb_Width));
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -1118,28 +526,112 @@ package body AWA.Images.Models is
       Object.Set_Key_Value (Stmt.Get_Identifier (0));
       Object.Width := Stmt.Get_Natural (2);
       Object.Height := Stmt.Get_Natural (3);
-      Object.Task_Id := Stmt.Get_Integer (4);
-      Object.Name := Stmt.Get_Unbounded_String (5);
-      Object.Mime_Type := Stmt.Get_Unbounded_String (6);
-      Object.Path := Stmt.Get_Unbounded_String (7);
-      Object.Create_Date := Stmt.Get_Time (8);
-      if not Stmt.Is_Null (9) then
-         Object.Original.Set_Key_Value (Stmt.Get_Identifier (9), Session);
+      Object.Thumb_Height := Stmt.Get_Natural (4);
+      Object.Thumb_Width := Stmt.Get_Natural (5);
+      if not Stmt.Is_Null (6) then
+         Object.Original.Set_Key_Value (Stmt.Get_Identifier (6), Session);
       end if;
-      if not Stmt.Is_Null (10) then
-         Object.Thumbnail.Set_Key_Value (Stmt.Get_Identifier (10), Session);
+      if not Stmt.Is_Null (7) then
+         Object.Thumbnail.Set_Key_Value (Stmt.Get_Identifier (7), Session);
       end if;
-      if not Stmt.Is_Null (11) then
-         Object.User.Set_Key_Value (Stmt.Get_Identifier (11), Session);
-      end if;
-      if not Stmt.Is_Null (12) then
-         Object.Folder.Set_Key_Value (Stmt.Get_Identifier (12), Session);
-      end if;
-      if not Stmt.Is_Null (13) then
-         Object.Image.Set_Key_Value (Stmt.Get_Identifier (13), Session);
+      if not Stmt.Is_Null (8) then
+         Object.Storage.Set_Key_Value (Stmt.Get_Identifier (8), Session);
       end if;
       Object.Version := Stmt.Get_Integer (1);
       ADO.Objects.Set_Created (Object);
    end Load;
+
+   --  --------------------
+   --  Get the bean attribute identified by the given name.
+   --  --------------------
+   overriding
+   function Get_Value (From : in Image_Info;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
+      end if;
+      if Name = "name" then
+         return Util.Beans.Objects.To_Object (From.Name);
+      end if;
+      if Name = "create_date" then
+         return Util.Beans.Objects.Time.To_Object (From.Create_Date);
+      end if;
+      if Name = "uri" then
+         return Util.Beans.Objects.To_Object (From.Uri);
+      end if;
+      if Name = "storage" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Storage));
+      end if;
+      if Name = "mime_type" then
+         return Util.Beans.Objects.To_Object (From.Mime_Type);
+      end if;
+      if Name = "file_size" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.File_Size));
+      end if;
+      if Name = "width" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Width));
+      end if;
+      if Name = "height" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Height));
+      end if;
+      if Name = "thumb_width" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Thumb_Width));
+      end if;
+      if Name = "thumb_height" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Thumb_Height));
+      end if;
+      if Name = "thumbnail_id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Thumbnail_Id));
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+   --  --------------------
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   --  --------------------
+   procedure List (Object  : in out Image_Info_List_Bean;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+   begin
+      List (Object.List, Session, Context);
+   end List;
+   --  --------------------
+   --  The list of images for a given folder.
+   --  --------------------
+   procedure List (Object  : in out Image_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+      procedure Read (Into : in out Image_Info);
+
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Context);
+      Pos  : Natural := 0;
+      procedure Read (Into : in out Image_Info) is
+      begin
+         Into.Id := Stmt.Get_Identifier (0);
+         Into.Name := Stmt.Get_Unbounded_String (1);
+         Into.Create_Date := Stmt.Get_Time (2);
+         Into.Uri := Stmt.Get_Unbounded_String (3);
+         Into.Storage := Stmt.Get_Integer (4);
+         Into.Mime_Type := Stmt.Get_Unbounded_String (5);
+         Into.File_Size := Stmt.Get_Integer (6);
+         Into.Width := Stmt.Get_Integer (7);
+         Into.Height := Stmt.Get_Integer (8);
+         Into.Thumb_Width := Stmt.Get_Integer (9);
+         Into.Thumb_Height := Stmt.Get_Integer (10);
+         Into.Thumbnail_Id := Stmt.Get_Identifier (11);
+      end Read;
+   begin
+      Stmt.Execute;
+      Image_Info_Vectors.Clear (Object);
+      while Stmt.Has_Elements loop
+         Object.Insert_Space (Before => Pos);
+         Object.Update_Element (Index => Pos, Process => Read'Access);
+         Pos := Pos + 1;
+         Stmt.Next;
+      end loop;
+   end List;
+
 
 end AWA.Images.Models;
