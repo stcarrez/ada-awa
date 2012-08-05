@@ -117,6 +117,9 @@ package AWA.Applications is
                                Process : access procedure
                                  (Events : in out AWA.Events.Services.Event_Manager));
 
+   --  Get the current application from the servlet context or service context.
+   function Current return Application_Access;
+
 private
 
    --  Initialize the parser represented by <b>Parser</b> to recognize the configuration

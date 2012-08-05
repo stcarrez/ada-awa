@@ -24,6 +24,9 @@ with EL.Contexts.Default;
 with Util.Files;
 with Util.Log.Loggers;
 
+with ASF.Server;
+with ASF.Servlets;
+
 with AWA.Services.Contexts;
 with AWA.Components.Factory;
 with AWA.Applications.Factory;
@@ -252,5 +255,35 @@ package body AWA.Applications is
    begin
       AWA.Modules.Iterate (App.Modules, Process'Access);
    end Initialize_Parser;
+
+   --  ------------------------------
+   --  Get the current application from the servlet context or service context.
+   --  ------------------------------
+   function Current return Application_Access is
+      use type AWA.Services.Contexts.Service_Context_Access;
+
+      Ctx : constant AWA.Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+   begin
+      if Ctx /= null then
+         return Ctx.Get_Application;
+      end if;
+
+      --  If there is no service context, look in the servlet current context.
+      declare
+         use type ASF.Servlets.Servlet_Registry_Access;
+
+         Ctx : constant ASF.Servlets.Servlet_Registry_Access := ASF.Server.Current;
+      begin
+         if Ctx = null then
+            Log.Warn ("There is no service context");
+            return null;
+         end if;
+         if not (Ctx.all in AWA.Applications.Application'Class) then
+            Log.Warn ("The servlet context is not an application");
+            return null;
+         end if;
+         return AWA.Applications.Application'Class (Ctx.all)'Access;
+      end;
+   end Current;
 
 end AWA.Applications;

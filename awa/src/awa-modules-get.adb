@@ -16,8 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with ASF.Server;
-with ASF.Servlets;
 with AWA.Applications;
 
 --  ------------------------------
@@ -25,22 +23,16 @@ with AWA.Applications;
 --  instance from the current application.
 --  ------------------------------
 function AWA.Modules.Get return Module_Type_Access is
-   use type ASF.Servlets.Servlet_Registry_Access;
+   use type AWA.Applications.Application_Access;
 
-   Ctx : constant ASF.Servlets.Servlet_Registry_Access := ASF.Server.Current;
+   App : constant AWA.Applications.Application_Access := AWA.Applications.Current;
 begin
-   if Ctx = null then
-      Log.Warn ("There is no servlet context");
+   if App = null then
       return null;
    end if;
-   if not (Ctx.all in AWA.Applications.Application'Class) then
-      Log.Warn ("The servlet context is not an application");
-      return null;
-   end if;
+
    declare
-      A : constant AWA.Applications.Application_Access
-        := AWA.Applications.Application'Class (Ctx.all)'Access;
-      M : constant Module_Access := A.Find_Module (Name);
+      M : constant Module_Access := App.Find_Module (Name);
    begin
       if M = null then
          return null;
