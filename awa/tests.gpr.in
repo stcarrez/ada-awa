@@ -20,7 +20,7 @@ project Tests is
 
    Mains := ("awa_harness.adb");
 
-   for Source_Dirs use ("regtests", "plugins/awa-storages/regtests");
+   for Source_Dirs use ("regtests", "plugins/awa-storages/regtests", "plugins/awa-images/regtests");
 
    for Main use Mains;
 
