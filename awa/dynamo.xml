@@ -1,6 +1,7 @@
 <project>
     <name>awa</name>
     <property name="author_email">Stephane.Carrez@gmail.com</property>
+    <property name="search_dirs">plugins\awa-workspaces;plugins\awa-storages;plugins\awa-markedit;plugins\awa-mail;plugins\awa-jobs;plugins\awa-images;plugins\awa-comments;plugins\awa-blogs;d:\dev\pam\ada-awa\awa;d:\dev\pam\ada-awa\asf;d:\dev\pam\ada-awa\ado</property>
     <property name="author">Stephane Carrez</property>
     <property name="database">mysql://localhost:3306/awa_test?user=awa_user</property>
     <module name="ado"></module>
@@ -12,4 +13,5 @@
     <module name="awa-markedit"></module>
     <module name="awa-comments"></module>
     <module name="awa-workspaces"></module>
+    <module name="awa-jobs"></module>
 </project>

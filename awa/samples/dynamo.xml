@@ -1,13 +1,16 @@
 <project>
     <name>atlas</name>
     <property name="author_email">Stephane.Carrez@gmail.com</property>
+    <property name="search_dirs">d:\dev\pam\ada-awa\awa\samples;d:\dev\pam\ada-awa\awa\plugins\awa-storages;d:\dev\pam\ada-awa\awa\plugins\awa-blogs;d:\dev\pam\ada-awa\awa\plugins\awa-mail;d:\dev\pam\ada-awa\awa\plugins\awa-workspaces;d:\dev\pam\ada-awa\awa;d:\dev\pam\ada-awa\ado;d:\dev\pam\ada-awa\asf</property>
     <property name="license">apache</property>
     <property name="contextPath">/atlas</property>
     <property name="author">Stephane Carrez</property>
+    <property name="database">mysql://localhost:3306/atlas?user=atlas</property>
     <module name="awa-mail"></module>
     <module name="asf"></module>
     <module name="ado"></module>
     <module name="awa"></module>
     <module name="awa-workspaces"></module>
     <module name="awa-blogs"></module>
+    <module name="awa-storages"></module>
 </project>

@@ -93,3 +93,6 @@ div.markedit div.markedit-toolbar {
     float: left;
     clear: both;
 }
+.ui-resizable-e {
+    background: #f0f0f0;
+}
