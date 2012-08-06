@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-beans -- Beans for blog module
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,13 +18,13 @@
 
 with AWA.Services.Contexts;
 with AWA.Blogs.Services;
+with AWA.Helpers.Requests;
 with AWA.Helpers.Selectors;
 
 with ADO.Queries;
 with ADO.Sessions;
 with ADO.Sessions.Entities;
 
-with ASF.Contexts.Faces;
 with ASF.Applications.Messages.Factory;
 with ASF.Events.Faces.Actions;
 package body AWA.Blogs.Beans is
@@ -33,35 +33,6 @@ package body AWA.Blogs.Beans is
 
    BLOG_ID_PARAMETER : constant String := "blog_id";
    POST_ID_PARAMETER : constant String := "post_id";
-
-   function Get_Parameter (Name : in String) return ADO.Identifier;
-
-   --  ------------------------------
-   --  Get the parameter identified by the given name and return it as an identifier.
-   --  Returns NO_IDENTIFIER if the parameter does not exist or is not valid.
-   --  ------------------------------
-   function Get_Parameter (Name : in String) return ADO.Identifier is
-      use type ASF.Contexts.Faces.Faces_Context_Access;
-
-      Ctx  : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
-   begin
-      if Ctx = null then
-         return ADO.NO_IDENTIFIER;
-      else
-         declare
-            P    : constant String := Ctx.Get_Parameter (Name);
-         begin
-            if P = "" then
-               return ADO.NO_IDENTIFIER;
-            else
-               return ADO.Identifier'Value (P);
-            end if;
-         end;
-      end if;
-   exception
-      when others =>
-         return ADO.NO_IDENTIFIER;
-   end Get_Parameter;
 
    --  ------------------------------
    --  Get the value identified by the name.
@@ -130,7 +101,7 @@ package body AWA.Blogs.Beans is
                               return Util.Beans.Basic.Readonly_Bean_Access is
       use type ADO.Identifier;
 
-      Blog_Id : constant ADO.Identifier := Get_Parameter (BLOG_ID_PARAMETER);
+      Blog_Id : constant ADO.Identifier := AWA.Helpers.Requests.Get_Parameter (BLOG_ID_PARAMETER);
       Object  : constant Blog_Bean_Access := new Blog_Bean;
       Session : ADO.Sessions.Session := Module.Get_Session;
    begin
@@ -150,8 +121,8 @@ package body AWA.Blogs.Beans is
 
       Manager : constant AWA.Blogs.Services.Blog_Service_Access := Bean.Module.Get_Blog_Manager;
       Result  : ADO.Identifier;
-      Blog_Id : constant ADO.Identifier := Get_Parameter (BLOG_ID_PARAMETER);
-      Post_Id : constant ADO.Identifier := Get_Parameter (POST_ID_PARAMETER);
+      Blog_Id : constant ADO.Identifier := AWA.Helpers.Requests.Get_Parameter (BLOG_ID_PARAMETER);
+      Post_Id : constant ADO.Identifier := AWA.Helpers.Requests.Get_Parameter (POST_ID_PARAMETER);
    begin
       if Post_Id < 0 then
          Manager.Create_Post (Blog_Id => Blog_Id,
@@ -249,7 +220,7 @@ package body AWA.Blogs.Beans is
       use type ADO.Identifier;
 
       Object  : constant Post_Bean_Access := new Post_Bean;
-      Post_Id : constant ADO.Identifier := Get_Parameter (POST_ID_PARAMETER);
+      Post_Id : constant ADO.Identifier := AWA.Helpers.Requests.Get_Parameter (POST_ID_PARAMETER);
    begin
       if Post_Id > 0 then
          declare
@@ -306,7 +277,7 @@ package body AWA.Blogs.Beans is
       Object  : constant Admin_Post_Info_List_Bean_Access := new Admin_Post_Info_List_Bean;
       Session : ADO.Sessions.Session := Module.Get_Session;
       Query   : ADO.Queries.Context;
-      Blog_Id : constant ADO.Identifier := Get_Parameter (BLOG_ID_PARAMETER);
+      Blog_Id : constant ADO.Identifier := AWA.Helpers.Requests.Get_Parameter (BLOG_ID_PARAMETER);
    begin
       if Blog_Id > 0 then
          Query.Set_Query (AWA.Blogs.Models.Query_Blog_Admin_Post_List);
@@ -352,6 +323,7 @@ package body AWA.Blogs.Beans is
    --  ------------------------------
    function Create_Status_List (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                                 return Util.Beans.Basic.Readonly_Bean_Access is
+      pragma Unreferenced (Module);
       use AWA.Helpers;
    begin
       return Selectors.Create_Selector_Bean (Bundle  => "blogs",
