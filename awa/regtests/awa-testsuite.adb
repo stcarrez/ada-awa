@@ -26,6 +26,7 @@ with AWA.Events.Services.Tests;
 with AWA.Mail.Clients.Tests;
 with AWA.Mail.Modules.Tests;
 with AWA.Images.Services.Tests;
+with AWA.Modules.Tests;
 
 with ASF.Converters.Dates;
 
@@ -43,7 +44,6 @@ with AWA.Jobs.Services.Tests;
 with AWA.Jobs.Modules.Tests;
 
 with ASF.Server.Web;
-with ASF.Servlets.Faces;
 with ASF.Server.Tests;
 package body AWA.Testsuite is
    Users          : aliased AWA.Users.Modules.User_Module;
@@ -63,13 +63,13 @@ package body AWA.Testsuite is
    Date_Converter : aliased ASF.Converters.Dates.Date_Converter;
 
    Rel_Date_Converter : aliased AWA.Converters.Dates.Relative_Date_Converter;
-   Faces              : aliased ASF.Servlets.Faces.Faces_Servlet;
 
    Tests : aliased Util.Tests.Test_Suite;
 
    function Suite return Util.Tests.Access_Test_Suite is
       Ret : constant Util.Tests.Access_Test_Suite := Tests'Access;
    begin
+      AWA.Modules.Tests.Add_Tests (Ret);
       AWA.Events.Services.Tests.Add_Tests (Ret);
       AWA.Mail.Clients.Tests.Add_Tests (Ret);
       AWA.Mail.Modules.Tests.Add_Tests (Ret);
@@ -102,9 +102,9 @@ package body AWA.Testsuite is
 
       if Add_Modules then
          declare
-            Application : AWA.Applications.Application_Access := AWA.Tests.Get_Application;
-            Ctx    : AWA.Services.Contexts.Service_Context;
-            Users : constant AWA.Users.Modules.User_Module_Access := AWA.Testsuite.Users'Access;
+            Application : constant Applications.Application_Access := AWA.Tests.Get_Application;
+            Ctx         : AWA.Services.Contexts.Service_Context;
+            Users  : constant AWA.Users.Modules.User_Module_Access := AWA.Testsuite.Users'Access;
          begin
             Ctx.Set_Context (Application, null);
             Register (App    => Application.all'Access,
