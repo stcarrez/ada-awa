@@ -9,6 +9,7 @@ with "awaunit";
 with "awa";
 with "plugins/awa-workspaces/awa_workspaces";
 with "plugins/awa-storages/awa_storages";
+with "plugins/awa-images/awa_images";
 with "plugins/awa-mail/awa_mail";
 with "plugins/awa-jobs/awa_jobs";
 with "plugins/awa-blogs/awa_blogs";
