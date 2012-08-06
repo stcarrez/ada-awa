@@ -50,9 +50,6 @@ package body AWA.Images.Modules is
 
       AWA.Modules.Module (Plugin).Initialize (App, Props);
 
-      --  Create the image manager when everything is initialized.
-      Plugin.Manager := Plugin.Create_Image_Manager;
-
       --  Register the image module as listener to the storage module events.
       declare
          use AWA.Storages.Modules;
@@ -66,6 +63,18 @@ package body AWA.Images.Modules is
          end if;
       end;
    end Initialize;
+
+   --  ------------------------------
+   --  Configures the module after its initialization and after having read its XML configuration.
+   --  ------------------------------
+   overriding
+   procedure Configure (Plugin : in out Image_Module;
+                        Props  : in ASF.Applications.Config) is
+      pragma Unreferenced (Props);
+   begin
+      --  Create the image manager when everything is initialized.
+      Plugin.Manager := Plugin.Create_Image_Manager;
+   end Configure;
 
    --  ------------------------------
    --  Get the image manager.

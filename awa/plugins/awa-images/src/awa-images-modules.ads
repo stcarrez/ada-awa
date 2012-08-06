@@ -47,6 +47,11 @@ package AWA.Images.Modules is
                          App    : in AWA.Modules.Application_Access;
                          Props  : in ASF.Applications.Config);
 
+   --  Configures the module after its initialization and after having read its XML configuration.
+   overriding
+   procedure Configure (Plugin : in out Image_Module;
+                        Props  : in ASF.Applications.Config);
+
    --  Get the image manager.
    function Get_Image_Manager (Plugin : in Image_Module)
                                  return Services.Image_Service_Access;
