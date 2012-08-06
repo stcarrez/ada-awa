@@ -25,6 +25,7 @@ with AWA.Storages.Services.Tests;
 with AWA.Events.Services.Tests;
 with AWA.Mail.Clients.Tests;
 with AWA.Mail.Modules.Tests;
+with AWA.Images.Services.Tests;
 
 with ASF.Converters.Dates;
 
@@ -33,6 +34,7 @@ with AWA.Mail.Modules;
 with AWA.Blogs.Modules;
 with AWA.Workspaces.Modules;
 with AWA.Storages.Modules;
+with AWA.Images.Modules;
 
 with AWA.Converters.Dates;
 with AWA.Tests;
@@ -56,6 +58,8 @@ package body AWA.Testsuite is
 
    Storages       : aliased AWA.Storages.Modules.Storage_Module;
 
+   Images         : aliased AWA.Images.Modules.Image_Module;
+
    Date_Converter : aliased ASF.Converters.Dates.Date_Converter;
 
    Rel_Date_Converter : aliased AWA.Converters.Dates.Relative_Date_Converter;
@@ -77,6 +81,7 @@ package body AWA.Testsuite is
       AWA.Jobs.Services.Tests.Add_Tests (Ret);
       AWA.Blogs.Services.Tests.Add_Tests (Ret);
       AWA.Storages.Services.Tests.Add_Tests (Ret);
+      AWA.Images.Services.Tests.Add_Tests (Ret);
       return Ret;
    end Suite;
 
@@ -121,6 +126,11 @@ package body AWA.Testsuite is
                       Name   => AWA.Storages.Modules.NAME,
                       URI    => "storages",
                       Module => Storages'Access);
+
+            Register (App    => Application.all'Access,
+                      Name   => AWA.Images.Modules.NAME,
+                      URI    => "images",
+                      Module => Images'Access);
 
             Register (App    => Application.all'Access,
                       Name   => AWA.Jobs.Modules.NAME,
