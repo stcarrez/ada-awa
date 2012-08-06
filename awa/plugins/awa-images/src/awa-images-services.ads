@@ -21,6 +21,8 @@ with Security.Permissions;
 with ADO;
 with AWA.Modules;
 
+with EL.Expressions;
+
 with AWA.Storages.Models;
 
 --  == Storage Service ==
@@ -35,6 +37,8 @@ package AWA.Images.Services is
    package ACL_Delete_Storage is new Security.Permissions.Permission_ACL ("storage-delete");
    package ACL_Create_Folder is new Security.Permissions.Permission_ACL ("folder-create");
 
+   PARAM_THUMBNAIL_COMMAND : constant String := "thumbnail_command";
+
    --  ------------------------------
    --  Image Service
    --  ------------------------------
@@ -48,6 +52,12 @@ package AWA.Images.Services is
    procedure Initialize (Service : in out Image_Service;
                          Module  : in AWA.Modules.Module'Class);
 
+   procedure Create_Thumbnail (Service : in Image_Service;
+                               Source  : in String;
+                               Into    : in String;
+                               Width   : out Natural;
+                               Height  : out Natural);
+
    --  Save the data object contained in the <b>Data</b> part element into the
    --  target storage represented by <b>Into</b>.
    procedure Create_Image (Service : in Image_Service;
@@ -59,6 +69,8 @@ package AWA.Images.Services is
 
 private
 
-   type Image_Service is new AWA.Modules.Module_Manager with null record;
+   type Image_Service is new AWA.Modules.Module_Manager with record
+      Thumbnail_Command : EL.Expressions.Expression;
+   end record;
 
 end AWA.Images.Services;
