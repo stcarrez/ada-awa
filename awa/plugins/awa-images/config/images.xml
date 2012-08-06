@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<module version="1.0">
+
+  <context-param>
+    <param-name>images.thumbnail_command</param-name>
+    <param-value>convert -verbose -resize 64x64 -background white -gravity center -extent 64x64 -format jpg -quality 75 \#{src} \#{dst}</param-value>
+  </context-param>
+
+  <managed-bean>
+    <description>This bean allows to create a storage folder.</description>
+    <managed-bean-name>storageFolder</managed-bean-name>
+    <managed-bean-class>AWA.Storages.Beans.Folder_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <servlet-mapping>
+    <servlet-name>storage</servlet-name>
+    <url-pattern>/storages/files/*</url-pattern>
+  </servlet-mapping>
+
+  <filter-mapping>
+    <filter-name>service</filter-name>
+    <url-pattern>/images/*.html</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>auth-filter</filter-name>
+    <url-pattern>/images/*.html</url-pattern>
+  </filter-mapping>
+
+</module>
