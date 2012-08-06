@@ -74,6 +74,11 @@ package AWA.Mail.Modules is
                          App    : in AWA.Modules.Application_Access;
                          Props  : in ASF.Applications.Config);
 
+   --  Configures the module after its initialization and after having read its XML configuration.
+   overriding
+   procedure Configure (Plugin : in out Mail_Module;
+                        Props  : in ASF.Applications.Config);
+
    --  Create a new mail message.
    function Create_Message (Plugin : in Mail_Module)
                             return AWA.Mail.Clients.Mail_Message_Access;

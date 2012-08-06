@@ -44,7 +44,6 @@ package body AWA.Mail.Modules is
    procedure Initialize (Plugin : in out Mail_Module;
                          App    : in AWA.Modules.Application_Access;
                          Props  : in ASF.Applications.Config) is
-      Mailer : constant String := Props.Get ("mailer", "smtp");
    begin
       Log.Info ("Initializing the mail module");
 
@@ -56,9 +55,19 @@ package body AWA.Mail.Modules is
                          Name   => "AWA.Mail.Beans.Mail_Bean",
                          Handler => AWA.Mail.Beans.Create_Mail_Bean'Access);
 
-      Plugin.Mailer := AWA.Mail.Clients.Factory (Mailer, Props);
       AWA.Modules.Module (Plugin).Initialize (App, Props);
    end Initialize;
+
+   --  ------------------------------
+   --  Configures the module after its initialization and after having read its XML configuration.
+   --  ------------------------------
+   overriding
+   procedure Configure (Plugin : in out Mail_Module;
+                        Props  : in ASF.Applications.Config) is
+      Mailer : constant String := Props.Get ("mailer", "smtp");
+   begin
+      Plugin.Mailer := AWA.Mail.Clients.Factory (Mailer, Props);
+   end Configure;
 
    --  ------------------------------
    --  Create a new mail message.
@@ -110,33 +119,7 @@ package body AWA.Mail.Modules is
          Plugin.Get_Application.Dispatch (Page     => Template,
                                           Request  => Req,
                                           Response => Reply);
-
---           declare
---              Email   : constant String := Content.Get_Parameter ("email");
---              Server  : constant AWS.SMTP.Receiver := Get_Smtp_Server (Plugin);
---              Content : Ada.Strings.Unbounded.Unbounded_String;
---              Result  : AWS.SMTP.Status;
---           begin
---              Reply.Read_Content (Content);
---              Log.Info ("Mail to be sent: {0}", Content);
---
---              AWS.SMTP.Client.Send (Server  => Server,
---                                    From    => AWS.SMTP.E_Mail (Name    => "awa",
---                                                                Address => "noreply@vacs.fr"),
---                                    To      => AWS.SMTP.E_Mail (Name    => Email,
---                                                                Address => "Stephane.Carrez@vacs.fr"),
---                                    Subject => "Welcome to awa",
---                                    Message => Ada.Strings.Unbounded.To_String (Content),
---                                    Status  => Result);
---
---           exception
---              when E : others =>
---                 Log.Error ("Error when sending email with template {0}: {1}: {2}", File,
---                            Ada.Exceptions.Exception_Name (E),
---                            Ada.Exceptions.Exception_Message (E));
---           end;
       end;
-
    end Send_Mail;
 
    --  ------------------------------
