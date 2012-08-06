@@ -50,7 +50,7 @@ package body AWA.Images.Services.Tests is
       Sec_Ctx   : Security.Contexts.Security_Context;
       Context   : AWA.Services.Contexts.Service_Context;
       Source    : constant String := Util.Tests.Get_Path ("regtests/files/images/bast-12.jpg");
-      Thumb     : constant String := Util.Tests.Get_Test_Path ("bast-12-thumb.jpg");
+      Thumb     : constant String := Util.Tests.Get_Test_Path ("regtests/result/bast-12-thumb.jpg");
       Width     : Natural;
       Height    : Natural;
    begin
@@ -58,6 +58,8 @@ package body AWA.Images.Services.Tests is
       T.Manager := AWA.Images.Modules.Get_Image_Manager;
 
       T.Manager.Create_Thumbnail (Source, Thumb, Width, Height);
+      Util.Tests.Assert_Equals (T, 1720, Width, "Invalid image width");
+      Util.Tests.Assert_Equals (T, 1098, Height, "Invalid image height");
    end Test_Create_Image;
 
 end AWA.Images.Services.Tests;
