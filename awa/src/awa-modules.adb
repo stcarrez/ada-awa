@@ -22,6 +22,7 @@ with ASF.Server;
 with Ada.IO_Exceptions;
 
 with Util.Files;
+with Util.Properties;
 
 with EL.Contexts.Default;
 
@@ -191,6 +192,13 @@ package body AWA.Modules is
                        Plugin   : in Module_Access;
                        Name     : in String;
                        URI      : in String) is
+      procedure Copy (Params : in Util.Properties.Manager'Class);
+
+      procedure Copy (Params : in Util.Properties.Manager'Class) is
+      begin
+         Plugin.Config.Copy (From => Params, Prefix => Name & ".", Strip => True);
+      end Copy;
+
       Paths : constant String := Registry.Config.Get (Applications.P_Module_Dir.P);
    begin
       Log.Info ("Register module '{0}' under URI '{1}'", Name, URI);
@@ -222,9 +230,6 @@ package body AWA.Modules is
             Log.Info ("Module configuration file '{0}' does not exist", Path);
       end;
 
-      --  Override the module configuration with the application configuration
-      Plugin.Config.Copy (From => Registry.Config, Prefix => Name & ".", Strip => True);
-
       Plugin.Initialize (App, Plugin.Config);
 
       --  Read the module XML configuration file if there is one.
@@ -239,6 +244,11 @@ package body AWA.Modules is
          when Ada.IO_Exceptions.Name_Error =>
             Log.Warn ("Module configuration file '{0}' does not exist", Path);
       end;
+
+      --  Override the module configuration with the application configuration
+      App.Get_Init_Parameters (Copy'Access);
+
+      Plugin.Configure (Plugin.Config);
 
    exception
       when Constraint_Error =>

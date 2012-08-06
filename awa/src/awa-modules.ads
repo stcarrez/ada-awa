@@ -143,6 +143,10 @@ package AWA.Modules is
    procedure Initialize_Parser (Plugin : in out Module;
                                 Parser : in out Util.Serialize.IO.Parser'Class) is null;
 
+   --  Configures the module after its initialization and after having read its XML configuration.
+   procedure Configure (Plugin : in out Module;
+                        Props  : in ASF.Applications.Config) is null;
+
    --  Send the event to the module.  The module identified by <b>To</b> is
    --  found and the event is posted on its event channel.
    procedure Send_Event (Plugin  : in Module;
