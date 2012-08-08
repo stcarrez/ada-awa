@@ -131,6 +131,11 @@ package AWA.Modules is
                         Name    : String;
                         Default : Integer := -1) return Integer;
 
+   --  Get the module configuration property identified by the <tt>Config</tt> parameter.
+   --  If the property does not exist, the default configuration value is returned.
+   function Get_Config (Plugin : in Module;
+                        Config : in ASF.Applications.Config_Param) return String;
+
    procedure Initialize (Manager : in out Module_Manager;
                          Module  : in AWA.Modules.Module'Class);
 

@@ -82,6 +82,16 @@ package body AWA.Modules is
    end Get_Config;
 
    --  ------------------------------
+   --  Get the module configuration property identified by the <tt>Config</tt> parameter.
+   --  If the property does not exist, the default configuration value is returned.
+   --  ------------------------------
+   function Get_Config (Plugin : in Module;
+                        Config : in ASF.Applications.Config_Param) return String is
+   begin
+      return Plugin.Config.Get (Config);
+   end Get_Config;
+
+   --  ------------------------------
    --  Send the event to the module
    --  ------------------------------
    procedure Send_Event (Plugin  : in Module;
