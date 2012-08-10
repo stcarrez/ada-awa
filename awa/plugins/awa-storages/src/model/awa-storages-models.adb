@@ -998,6 +998,22 @@ package body AWA.Storages.Models is
       return Impl.Owner;
    end Get_Owner;
 
+
+   procedure Set_Original (Object : in out Storage_Ref;
+                           Value  : in Storage_Ref'Class) is
+      Impl : Storage_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 13, Impl.Original, Value);
+   end Set_Original;
+
+   function Get_Original (Object : in Storage_Ref)
+                  return Storage_Ref'Class is
+      Impl : constant Storage_Access := Storage_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Original;
+   end Get_Original;
+
    --  Copy of the object.
    procedure Copy (Object : in Storage_Ref;
                    Into   : in out Storage_Ref) is
@@ -1023,6 +1039,7 @@ package body AWA.Storages.Models is
             Copy.Workspace := Impl.Workspace;
             Copy.Folder := Impl.Folder;
             Copy.Owner := Impl.Owner;
+            Copy.Original := Impl.Original;
          end;
       end if;
       Into := Result;
@@ -1202,6 +1219,11 @@ package body AWA.Storages.Models is
                           Value => Object.Owner);
          Object.Clear_Modified (12);
       end if;
+      if Object.Is_Modified (13) then
+         Stmt.Save_Field (Name  => COL_12_3_NAME, --  original_id
+                          Value => Object.Original);
+         Object.Clear_Modified (13);
+      end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
          Stmt.Save_Field (Name  => "version",
@@ -1256,6 +1278,8 @@ package body AWA.Storages.Models is
                         Value => Object.Folder);
       Query.Save_Field (Name  => COL_11_3_NAME, --  owner_id
                         Value => Object.Owner);
+      Query.Save_Field (Name  => COL_12_3_NAME, --  original_id
+                        Value => Object.Original);
       Query.Execute (Result);
       if Result /= 1 then
          raise ADO.Objects.INSERT_ERROR;
@@ -1332,6 +1356,9 @@ package body AWA.Storages.Models is
       end if;
       if not Stmt.Is_Null (11) then
          Object.Owner.Set_Key_Value (Stmt.Get_Identifier (11), Session);
+      end if;
+      if not Stmt.Is_Null (12) then
+         Object.Original.Set_Key_Value (Stmt.Get_Identifier (12), Session);
       end if;
       Object.Version := Stmt.Get_Integer (1);
       ADO.Objects.Set_Created (Object);

@@ -25,7 +25,9 @@ CREATE TABLE awa_storage (
   /* the storage folder that this storage belongs to. */
   `folder_id` INTEGER ,
   /* the storage file owner (or user who uploaded the document). */
-  `owner_id` INTEGER NOT NULL
+  `owner_id` INTEGER NOT NULL,
+  /* the original storage file that this storage instance refers to. */
+  `original_id` INTEGER 
 );
 /* The database storage data when the storage type is DATABASE. */
 CREATE TABLE awa_storage_data (

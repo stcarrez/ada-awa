@@ -38,8 +38,8 @@ with AWA.Users.Models;
 with AWA.Workspaces.Models;
 pragma Warnings (On, "unit * is not referenced");
 package AWA.Storages.Models is
-   type Storage_Type is (DATABASE, FILE, URL);
-   for Storage_Type use (DATABASE => 0, FILE => 1, URL => 2);
+   type Storage_Type is (DATABASE, FILE, TMP, URL);
+   for Storage_Type use (DATABASE => 0, FILE => 1, TMP => 2, URL => 3);
    package Storage_Type_Objects is
       new Util.Beans.Objects.Enums (Storage_Type);
 
@@ -339,6 +339,14 @@ package AWA.Storages.Models is
    --  Get the storage file owner (or user who uploaded the document).
    function Get_Owner (Object : in Storage_Ref)
                  return AWA.Users.Models.User_Ref'Class;
+
+   --  Set the original storage file that this storage instance refers to.
+   procedure Set_Original (Object : in out Storage_Ref;
+                           Value  : in Storage_Ref'Class);
+
+   --  Get the original storage file that this storage instance refers to.
+   function Get_Original (Object : in Storage_Ref)
+                 return Storage_Ref'Class;
 
    --  Load the entity identified by 'Id'.
    --  Raises the NOT_FOUND exception if it does not exist.
@@ -734,8 +742,9 @@ private
    COL_9_3_NAME : aliased constant String := "workspace_id";
    COL_10_3_NAME : aliased constant String := "folder_id";
    COL_11_3_NAME : aliased constant String := "owner_id";
+   COL_12_3_NAME : aliased constant String := "original_id";
    STORAGE_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 12,
+     (Count => 13,
       Table => STORAGE_NAME'Access,
       Members => (
          COL_0_3_NAME'Access,
@@ -749,7 +758,8 @@ private
          COL_8_3_NAME'Access,
          COL_9_3_NAME'Access,
          COL_10_3_NAME'Access,
-         COL_11_3_NAME'Access
+         COL_11_3_NAME'Access,
+         COL_12_3_NAME'Access
 )
      );
    Null_Storage : constant Storage_Ref
@@ -769,6 +779,7 @@ private
        Workspace : AWA.Workspaces.Models.Workspace_Ref;
        Folder : Storage_Folder_Ref;
        Owner : AWA.Users.Models.User_Ref;
+       Original : Storage_Ref;
    end record;
    type Storage_Access is access all Storage_Impl;
    overriding
