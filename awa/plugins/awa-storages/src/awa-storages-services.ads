@@ -65,16 +65,16 @@ package AWA.Storages.Services is
    procedure Initialize (Service : in out Storage_Service;
                          Module  : in AWA.Modules.Module'Class);
 
-   --  Get the persistent store that manages the data represented by <tt>Data</tt>.
+   --  Get the persistent store that manages the data store identified by <tt>Kind</tt>.
    function Get_Store (Service : in Storage_Service;
-                       Data    : in AWA.Storages.Models.Storage_Ref'Class)
+                       Kind    : in AWA.Storages.Models.Storage_Type)
                        return AWA.Storages.Stores.Store_Access;
 
    --  Create or save the folder.
    procedure Save_Folder (Service : in Storage_Service;
                           Folder  : in out AWA.Storages.Models.Storage_Folder_Ref'Class);
 
-   --  Load the folder identified by the given id.
+   --  Load the folder instance identified by the given identifier.
    procedure Load_Folder (Service : in Storage_Service;
                           Folder  : in out AWA.Storages.Models.Storage_Folder_Ref'Class;
                           Id      : in ADO.Identifier);
@@ -93,12 +93,6 @@ package AWA.Storages.Services is
                    Path    : in String;
                    Storage : in AWA.Storages.Models.Storage_Type);
 
-   --  Load the storage content identified by <b>From</b> in a local file
-   --  that will be identified by <b>Into</b>.
-   procedure Load (Service : in Storage_Service;
-                   From    : in AWA.Storages.Models.Storage_Ref'Class;
-                   Into    : in out AWA.Storages.Models.Store_Local_Ref'Class);
-
    --  Load the storage content identified by <b>From</b> into the blob descriptor <b>Into</b>.
    --  Raises the <b>NOT_FOUND</b> exception if there is no such storage.
    procedure Load (Service : in Storage_Service;
@@ -112,11 +106,13 @@ package AWA.Storages.Services is
    --  file is created with the data content fetched from the store (ex: the database).
    --  The `Mode` parameter indicates whether the file will be read or written.
    --  The `Expire` parameter allows to control the expiration of the temporary file.
-   procedure Load (Service : in Storage_Service;
-                   From    : in ADO.Identifier;
-                   Into    : out AWA.Storages.Models.Store_Local_Ref;
-                   Mode    : in Read_Mode := READ;
-                   Expire  : in Expire_Type := ONE_DAY);
+   procedure Get_Local_File (Service : in Storage_Service;
+                             From    : in ADO.Identifier;
+                             Mode    : in Read_Mode := READ;
+                             Into    : out Storage_File);
+
+   procedure Create_Local_File (Service : in Storage_Service;
+                                Into    : out Storage_File);
 
    --  Deletes the storage instance.
    procedure Delete (Service : in Storage_Service;

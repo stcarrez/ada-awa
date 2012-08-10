@@ -28,6 +28,7 @@ with AWA.Services.Contexts;
 with AWA.Workspaces.Models;
 with AWA.Workspaces.Modules;
 with AWA.Permissions;
+with AWA.Storages.Stores.Files;
 package body AWA.Storages.Services is
 
    use AWA.Services;
@@ -35,13 +36,13 @@ package body AWA.Storages.Services is
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Storages.Services");
 
    --  ------------------------------
-   --  Get the persistent store that manages the data represented by <tt>Data</tt>.
+   --  Get the persistent store that manages the data store identified by <tt>Kind</tt>.
    --  ------------------------------
    function Get_Store (Service : in Storage_Service;
-                       Data    : in AWA.Storages.Models.Storage_Ref'Class)
+                       Kind    : in AWA.Storages.Models.Storage_Type)
                        return AWA.Storages.Stores.Store_Access is
    begin
-      return Service.Stores (Data.Get_Storage);
+      return Service.Stores (Kind);
    end Get_Store;
 
    --  ------------------------------
@@ -50,9 +51,14 @@ package body AWA.Storages.Services is
    overriding
    procedure Initialize (Service : in out Storage_Service;
                          Module  : in AWA.Modules.Module'Class) is
+      Root : constant String := Module.Get_Config (Stores.Files.Root_Directory_Parameter.P);
+      Tmp  : constant String := Module.Get_Config (Stores.Files.Tmp_Directory_Parameter.P);
    begin
       AWA.Modules.Module_Manager (Service).Initialize (Module);
-      Service.Stores (AWA.Storages.Models.DATABASE) := Service.Database_Store'Unchecked_Access;
+      Service.Stores (Storages.Models.DATABASE) := Service.Database_Store'Unchecked_Access;
+      Service.Stores (Storages.Models.FILE) := AWA.Storages.Stores.Files.Create_File_Store (Root);
+      Service.Stores (Storages.Models.TMP) := AWA.Storages.Stores.Files.Create_File_Store (Tmp);
+      Service.Database_Store.Tmp := Service.Stores (Storages.Models.TMP);
    end Initialize;
 
    --  ------------------------------
@@ -60,6 +66,8 @@ package body AWA.Storages.Services is
    --  ------------------------------
    procedure Save_Folder (Service : in Storage_Service;
                           Folder  : in out AWA.Storages.Models.Storage_Folder_Ref'Class) is
+      pragma Unreferenced (Service);
+
       Ctx       : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB        : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Workspace : AWA.Workspaces.Models.Workspace_Ref;
@@ -85,11 +93,13 @@ package body AWA.Storages.Services is
    end Save_Folder;
 
    --  ------------------------------
-   --  Load the folder identified by the given id.
+   --  Load the folder instance identified by the given identifier.
    --  ------------------------------
    procedure Load_Folder (Service : in Storage_Service;
                           Folder  : in out AWA.Storages.Models.Storage_Folder_Ref'Class;
                           Id      : in ADO.Identifier) is
+      pragma Unreferenced (Service);
+
       Ctx       : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB        : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
    begin
@@ -128,7 +138,7 @@ package body AWA.Storages.Services is
       Log.Info ("Save {0} in storage space", Path);
 
       Into.Set_Storage (Storage);
-      Store := Storage_Service'Class (Service).Get_Store (Into);
+      Store := Storage_Service'Class (Service).Get_Store (Into.Get_Storage);
       if Store = null then
          Log.Error ("There is no store for storage {0}", Models.Storage_Type'Image (Storage));
       end if;
@@ -164,15 +174,6 @@ package body AWA.Storages.Services is
       Ctx.Commit;
    end Save;
 
-   --  Load the storage content identified by <b>From</b> in a local file
-   --  that will be identified by <b>Into</b>.
-   procedure Load (Service : in Storage_Service;
-                   From    : in AWA.Storages.Models.Storage_Ref'Class;
-                   Into    : in out AWA.Storages.Models.Store_Local_Ref'Class) is
-   begin
-      null;
-   end Load;
-
    --  ------------------------------
    --  Load the storage content identified by <b>From</b> into the blob descriptor <b>Into</b>.
    --  Raises the <b>NOT_FOUND</b> exception if there is no such storage.
@@ -183,13 +184,15 @@ package body AWA.Storages.Services is
                    Mime    : out Ada.Strings.Unbounded.Unbounded_String;
                    Date    : out Ada.Calendar.Time;
                    Into    : out ADO.Blob_Ref) is
-      pragma Unreferenced (Service);
+      use type AWA.Storages.Models.Storage_Type;
+      use type AWA.Storages.Stores.Store_Access;
 
       Ctx   : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       User  : constant ADO.Identifier := Ctx.Get_User_Identifier;
-      DB    : constant ADO.Sessions.Session := AWA.Services.Contexts.Get_Session (Ctx);
+      DB    : ADO.Sessions.Session := AWA.Services.Contexts.Get_Session (Ctx);
       Query : ADO.Statements.Query_Statement
         := DB.Create_Statement (Models.Query_Storage_Get_Data);
+      Kind  : AWA.Storages.Models.Storage_Type;
    begin
       Query.Bind_Param ("store_id", From);
       Query.Bind_Param ("user_id", User);
@@ -198,23 +201,45 @@ package body AWA.Storages.Services is
 
       Query.Execute;
       if not Query.Has_Elements then
+         Log.Warn ("Storage entity {0} not found", ADO.Identifier'Image (From));
          raise ADO.Objects.NOT_FOUND;
       end if;
       Mime := Query.Get_Unbounded_String (0);
       Date := Query.Get_Time (1);
       Name := Query.Get_Unbounded_String (2);
-      Into := Query.Get_Blob (3);
+      Kind := AWA.Storages.Models.Storage_Type'Val (Query.Get_Integer (4));
+      if Kind = AWA.Storages.Models.DATABASE then
+         Into := Query.Get_Blob (5);
+      else
+         declare
+            Store   : Stores.Store_Access;
+            Storage : AWA.Storages.Models.Storage_Ref;
+            File    : AWA.Storages.Storage_File;
+            Found   : Boolean;
+         begin
+            Store := Storage_Service'Class (Service).Get_Store (Kind);
+            if Store = null then
+               Log.Error ("There is no store for storage {0}", Models.Storage_Type'Image (Kind));
+            end if;
+            Storage.Load (DB, From, Found);
+            if not Found then
+               Log.Warn ("Storage entity {0} not found", ADO.Identifier'Image (From));
+               raise ADO.Objects.NOT_FOUND;
+            end if;
+            Store.Load (DB, Storage, File);
+            Into := ADO.Create_Blob (AWA.Storages.Get_Path (File));
+         end;
+      end if;
    end Load;
 
    --  Load the storage content into a file.  If the data is not stored in a file, a temporary
    --  file is created with the data content fetched from the store (ex: the database).
    --  The `Mode` parameter indicates whether the file will be read or written.
    --  The `Expire` parameter allows to control the expiration of the temporary file.
-   procedure Load (Service : in Storage_Service;
-                   From    : in ADO.Identifier;
-                   Into    : out AWA.Storages.Models.Store_Local_Ref;
-                   Mode    : in Read_Mode := READ;
-                   Expire  : in Expire_Type := ONE_DAY) is
+   procedure Get_Local_File (Service : in Storage_Service;
+                             From    : in ADO.Identifier;
+                             Mode    : in Read_Mode := READ;
+                             Into    : out Storage_File) is
       use type Stores.Store_Access;
       use type Models.Storage_Type;
 
@@ -224,14 +249,18 @@ package body AWA.Storages.Services is
       Query   : ADO.Queries.Context;
       Found   : Boolean;
       Storage : AWA.Storages.Models.Storage_Ref;
+      Local   : AWA.Storages.Models.Store_Local_Ref;
       Store   : Stores.Store_Access;
    begin
       if Mode = READ then
          Query.Set_Query (AWA.Storages.Models.Query_Storage_Get_Local);
          Query.Bind_Param ("store_id", From);
          Query.Bind_Param ("user_id", User);
-         Into.Find (DB, Query, Found);
+         ADO.Sessions.Entities.Bind_Param (Query, "table",
+                                           AWA.Workspaces.Models.WORKSPACE_TABLE'Access, DB);
+         Local.Find (DB, Query, Found);
          if Found then
+            Into.Path := Local.Get_Path;
             return;
          end if;
       end if;
@@ -239,22 +268,26 @@ package body AWA.Storages.Services is
       Query.Set_Query (AWA.Storages.Models.Query_Storage_Get_Storage);
       Query.Bind_Param ("store_id", From);
       Query.Bind_Param ("user_id", User);
+      ADO.Sessions.Entities.Bind_Param (Query, "table",
+                                        AWA.Workspaces.Models.WORKSPACE_TABLE'Access, DB);
       Storage.Find (DB, Query, Found);
       if not Found then
          raise ADO.Objects.NOT_FOUND;
       end if;
 
-      if Storage.Get_Storage = AWA.Storages.Models.FILE then
-         Into.Set_Path (String '(Storage.Get_Uri));
-         return;
-      end if;
       Ctx.Start;
-      Store := Storage_Service'Class (Service).Get_Store (Storage);
+      Store := Storage_Service'Class (Service).Get_Store (Storage.Get_Storage);
       Store.Load (Session => DB,
                   From    => Storage,
-                  Into    => Into.Get_Path);
+                  Into    => Into);
       Ctx.Commit;
-   end Load;
+   end Get_Local_File;
+
+   procedure Create_Local_File (Service : in Storage_Service;
+                                Into    : out Storage_File) is
+   begin
+      null;
+   end Create_Local_File;
 
    --  ------------------------------
    --  Deletes the storage instance.
@@ -300,7 +333,7 @@ package body AWA.Storages.Services is
       Ctx.Start;
       S.Load (Id => Storage, Session => DB);
 
-      Store := Storage_Service'Class (Service).Get_Store (S);
+      Store := Storage_Service'Class (Service).Get_Store (S.Get_Storage);
       if Store = null then
          Log.Error ("There is no store associated with storage item {0}",
                     ADO.Identifier'Image (Storage));
@@ -308,10 +341,21 @@ package body AWA.Storages.Services is
          Store.Delete (DB, S);
       end if;
 
+      Storage_Lifecycle.Notify_Delete (Service, S);
+
+      --  Delete the storage instance and all storage that refer to it.
+      declare
+         Stmt : ADO.Statements.Delete_Statement
+           := DB.Create_Statement (AWA.Storages.Models.STORAGE_TABLE'Access);
+      begin
+         Stmt.Set_Filter (Filter => "id = ? OR original_id = ?");
+         Stmt.Add_Param (Value => Storage);
+         Stmt.Add_Param (Value => Storage);
+         Stmt.Execute;
+      end;
       --  Delete the local storage instances.
       Query.Bind_Param ("store_id", Storage);
       Query.Execute;
-      Storage_Lifecycle.Notify_Delete (Service, S);
       S.Delete (DB);
       Ctx.Commit;
    end Delete;
