@@ -1,6 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <module version="1.0">
 
+  <context-param>
+    <param-name>storages.rootdir</param-name>
+    <param-value>storage-root</param-value>
+  </context-param>
+
   <managed-bean>
     <description>This bean allows to create a storage folder.</description>
     <managed-bean-name>storageFolder</managed-bean-name>
