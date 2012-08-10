@@ -15,6 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Ada.Strings.Unbounded;
 
 --  == Introduction ==
 --  The <b>Storages</b> module provides a set of storage services allowing an application
@@ -83,5 +84,16 @@
 --
 --  @include Storages.hbm.xml
 package AWA.Storages is
+
+   type Storage_File is limited private;
+
+   --  Get the path to get access to the file.
+   function Get_Path (File : in Storage_File) return String;
+
+private
+
+   type Storage_File is limited record
+      Path : Ada.Strings.Unbounded.Unbounded_String;
+   end record;
 
 end AWA.Storages;
