@@ -32,6 +32,12 @@ package AWA.Storages.Stores is
    type Store is limited interface;
    type Store_Access is access all Store'Class;
 
+   --  Create a storage
+   procedure Create (Storage : in Store;
+                     Session : in out ADO.Sessions.Master_Session;
+                     From    : in AWA.Storages.Models.Storage_Ref'Class;
+                     Into    : in out AWA.Storages.Storage_File) is abstract;
+
    --  Save the file represented by the `Path` variable into a store and associate that
    --  content with the storage reference represented by `Into`.
    procedure Save (Storage : in Store;
@@ -39,10 +45,11 @@ package AWA.Storages.Stores is
                    Into    : in out AWA.Storages.Models.Storage_Ref'Class;
                    Path    : in String) is abstract;
 
+   --  Load the storage item represented by `From` in a file that can be accessed locally.
    procedure Load (Storage : in Store;
-                   Session : in out ADO.Sessions.Master_Session;
+                   Session : in out ADO.Sessions.Session'Class;
                    From    : in AWA.Storages.Models.Storage_Ref'Class;
-                   Into    : in String) is abstract;
+                   Into    : in out AWA.Storages.Storage_File) is abstract;
 
    --  Delete the content associate with the storage represented by `From`.
    procedure Delete (Storage : in Store;

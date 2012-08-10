@@ -22,12 +22,16 @@ with AWA.Storages.Models;
 --  === Database store ===
 --  The `AWA.Storages.Stores.Databases` store uses the database to save a data content.
 --  The data is saved in a specific table in a database blob column.
+--  The database store uses another store service to temporarily save the data content
+--  in a local file when the application needs a file access to the data.
 package AWA.Storages.Stores.Databases is
 
    --  ------------------------------
    --  Storage Service
    --  ------------------------------
-   type Database_Store is new AWA.Storages.Stores.Store with null record;
+   type Database_Store is new AWA.Storages.Stores.Store with record
+      Tmp : AWA.Storages.Stores.Store_Access;
+   end record;
 
    --  Save the file represented by the `Path` variable into a store and associate that
    --  content with the storage reference represented by `Into`.
@@ -37,9 +41,15 @@ package AWA.Storages.Stores.Databases is
                    Path    : in String);
 
    procedure Load (Storage : in Database_Store;
-                   Session : in out ADO.Sessions.Master_Session;
+                   Session : in out ADO.Sessions.Session'Class;
                    From    : in AWA.Storages.Models.Storage_Ref'Class;
-                   Into    : in String);
+                   Into    : in out AWA.Storages.Storage_File);
+
+   --  Create a storage
+   procedure Create (Storage : in Database_Store;
+                     Session : in out ADO.Sessions.Master_Session;
+                     From    : in AWA.Storages.Models.Storage_Ref'Class;
+                     Into    : in out AWA.Storages.Storage_File);
 
    --  Delete the content associate with the storage represented by `From`.
    procedure Delete (Storage : in Database_Store;

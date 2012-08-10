@@ -15,8 +15,17 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-
+with Ada.Streams.Stream_IO;
 package body AWA.Storages.Stores.Databases is
+
+   --  Create a storage
+   procedure Create (Storage : in Database_Store;
+                     Session : in out ADO.Sessions.Master_Session;
+                     From    : in AWA.Storages.Models.Storage_Ref'Class;
+                     Into    : in out AWA.Storages.Storage_File) is
+   begin
+      Storage.Tmp.Create (Session, From, Into);
+   end Create;
 
    --  ------------------------------
    --  Save the file represented by the `Path` variable into a store and associate that
@@ -37,11 +46,20 @@ package body AWA.Storages.Stores.Databases is
    end Save;
 
    procedure Load (Storage : in Database_Store;
-                   Session : in out ADO.Sessions.Master_Session;
+                   Session : in out ADO.Sessions.Session'Class;
                    From    : in AWA.Storages.Models.Storage_Ref'Class;
-                   Into    : in String) is
+                   Into    : in out AWA.Storages.Storage_File) is
+      Store : AWA.Storages.Models.Storage_Data_Ref'Class := From.Get_Store_Data;
+      File  : Ada.Streams.Stream_IO.File_Type;
+      DB    : ADO.Sessions.Master_Session := ADO.Sessions.Master_Session (Session);
    begin
-      null;
+      Storage.Tmp.Create (DB, From, Into);
+      Store.Load (Session, Store.Get_Id);
+      Ada.Streams.Stream_IO.Open (File => File,
+                                  Mode => Ada.Streams.Stream_IO.Out_File,
+                                  Name => Get_Path (Into));
+      Ada.Streams.Stream_IO.Write (File, Store.Get_Data.Value.Data);
+      Ada.Streams.Stream_IO.Close (File);
    end Load;
 
    --  ------------------------------

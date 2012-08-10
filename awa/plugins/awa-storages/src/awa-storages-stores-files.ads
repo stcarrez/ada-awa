@@ -17,6 +17,7 @@
 -----------------------------------------------------------------------
 with ADO.Sessions;
 
+with ASF.Applications.Main.Configs;
 with AWA.Storages.Models;
 
 --  === File Syste; store ===
@@ -24,10 +25,24 @@ with AWA.Storages.Models;
 --
 package AWA.Storages.Stores.Files is
 
+   --  Parameter that indicates the root directory for the file storage.
+   package Root_Directory_Parameter is
+     new ASF.Applications.Main.Configs.Parameter (Name    => "storage_root",
+                                                  Default => "storage");
+
+   --  Parameter that indicates the root directory for a temporary file storage.
+   package Tmp_Directory_Parameter is
+     new ASF.Applications.Main.Configs.Parameter (Name    => "tmp_storage_root",
+                                                  Default => "tmp");
+
    --  ------------------------------
    --  Storage Service
    --  ------------------------------
    type File_Store (Len : Natural) is new AWA.Storages.Stores.Store with private;
+   type File_Store_Access is access all File_Store'Class;
+
+   --  Create a file storage service and use the <tt>Root</tt> directory to store the files.
+   function Create_File_Store (Root : in String) return Store_Access;
 
    --  Save the file represented by the `Path` variable into a store and associate that
    --  content with the storage reference represented by `Into`.
@@ -37,9 +52,15 @@ package AWA.Storages.Stores.Files is
                    Path    : in String);
 
    procedure Load (Storage : in File_Store;
-                   Session : in out ADO.Sessions.Master_Session;
+                   Session : in out ADO.Sessions.Session'Class;
                    From    : in AWA.Storages.Models.Storage_Ref'Class;
-                   Into    : in String);
+                   Into    : in out AWA.Storages.Storage_File);
+
+   --  Create a storage
+   procedure Create (Storage : in File_Store;
+                     Session : in out ADO.Sessions.Master_Session;
+                     From    : in AWA.Storages.Models.Storage_Ref'Class;
+                     Into    : in out AWA.Storages.Storage_File);
 
    --  Delete the content associate with the storage represented by `From`.
    procedure Delete (Storage : in File_Store;

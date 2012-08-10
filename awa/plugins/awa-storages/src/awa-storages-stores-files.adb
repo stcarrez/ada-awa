@@ -25,6 +25,16 @@ with Util.Encoders.Base64;
 package body AWA.Storages.Stores.Files is
 
    --  ------------------------------
+   --  Create a file storage service and use the <tt>Root</tt> directory to store the files.
+   --  ------------------------------
+   function Create_File_Store (Root : in String) return Store_Access is
+      Result : constant File_Store_Access := new File_Store '(Len => Root'Length,
+                                                              Root => Root);
+   begin
+      return Result.all'Access;
+   end Create_File_Store;
+
+   --  ------------------------------
    --  Build a path where the file store represented by <tt>Store</tt> is saved.
    --  ------------------------------
    function Get_Path (Storage : in File_Store;
@@ -79,12 +89,27 @@ package body AWA.Storages.Stores.Files is
    end Save;
 
    procedure Load (Storage : in File_Store;
-                   Session : in out ADO.Sessions.Master_Session;
+                   Session : in out ADO.Sessions.Session'Class;
                    From    : in AWA.Storages.Models.Storage_Ref'Class;
-                   Into    : in String) is
+                   Into    : in out Storage_File) is
+      pragma Unreferenced (Session);
+
+      Store : constant String := Storage.Get_Path (From);
    begin
-      null;
+      Into.Path := Ada.Strings.Unbounded.To_Unbounded_String (Store);
    end Load;
+
+   --  Create a storage
+   procedure Create (Storage : in File_Store;
+                     Session : in out ADO.Sessions.Master_Session;
+                     From    : in AWA.Storages.Models.Storage_Ref'Class;
+                     Into    : in out AWA.Storages.Storage_File) is
+      Store : constant String := Storage.Get_Path (From);
+      Dir   : constant String := Ada.Directories.Containing_Directory (Store);
+   begin
+      Ada.Directories.Create_Path (Dir);
+      Into.Path := Ada.Strings.Unbounded.To_Unbounded_String (Store);
+   end Create;
 
    --  ------------------------------
    --  Delete the content associate with the storage represented by `From`.
