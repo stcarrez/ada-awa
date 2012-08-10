@@ -4,12 +4,14 @@
     </description>
 
     <query name='storage-get-data'>
-       <comment>Get the data content of the storage object.  The query returns a single BLOB column.</comment>
+       <comment>Get the data content of the storage object.</comment>
        <sql>
     SELECT
       store.mime_type,
       store.create_date,
       store.name,
+      store.uri,
+      store.storage_type,
       data.data
     FROM awa_storage AS store
     INNER JOIN acl ON acl.entity_id = store.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
@@ -41,14 +43,19 @@
        <comment>Get the local data storage that can be used to read locally a storage object.</comment>
        <sql>
     SELECT
-      local.id,
-      local.version,
-      local.create_date,
-      local.expire_date,
-      local.path,
-      local.store_version,
-      local.shared,
-      local.storage_id
+      store.id,
+      store.version,
+      store.create_date,
+      store.storage_type,
+      store.uri,
+      store.name,
+      store.mime_type,
+      store.file_size,
+      store.storage_id,
+      store.workspace_id,
+      store.folder_id,
+      store.owner_id,
+      store.original_id
     FROM awa_storage AS store
     INNER JOIN acl ON acl.entity_id = store.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
     WHERE store.id = :store_id
