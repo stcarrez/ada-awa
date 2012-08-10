@@ -27,10 +27,6 @@
             <comment>the image thumbnail width.</comment>
             <column name="thumb_width" not-null="true" unique="false" sql-type="INTEGER"/>
         </property>
-        <many-to-one name="original" class="Image" foreign-key="ID" not-null="false" lazy="proxy" fetch="select">
-            <comment>the original image if this image was created by the application.</comment>
-            <column name="original_id" not-null="true" sql-type="INTEGER"/>
-        </many-to-one>
         <many-to-one name="thumbnail" class="AWA.Storages.Models.Storage" foreign-key="ID" not-null="false" lazy="proxy" fetch="select">
             <comment>the thumbnail image to display the image is an image selector.</comment>
             <column name="thumbnail_id" not-null="false" sql-type="INTEGER"/>
