@@ -38,12 +38,16 @@ package body AWA.Storages.Services.Tests is
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
    begin
-      Caller.Add_Test (Suite, "Test AWA.Storages.Services.Save",
+      Caller.Add_Test (Suite, "Test AWA.Storages.Services.Save (DATABASE)",
                        Test_Create_Storage'Access);
+      Caller.Add_Test (Suite, "Test AWA.Storages.Services.Save (FILE)",
+                       Test_File_Create_Storage'Access);
       Caller.Add_Test (Suite, "Test AWA.Storages.Services.Delete",
                        Test_Delete_Storage'Access);
       Caller.Add_Test (Suite, "Test AWA.Storages.Services.Save_Folder, Folder_Bean",
                        Test_Create_Folder'Access);
+      Caller.Add_Test (Suite, "Test AWA.Storages.Services.Get_Local_File",
+                       Test_Get_Local_File'Access);
 
    end Add_Tests;
 
@@ -58,7 +62,7 @@ package body AWA.Storages.Services.Tests is
 
       T.Manager.Save (Into    => Store,
                       Path    => "Makefile",
-                      Storage => AWA.Storages.Models.DATABASE);
+                      Storage => T.Kind);
       T.Assert (not Store.Is_Null, "Storage object should not be null");
       T.Id := Store.Get_Id;
       T.Assert (T.Id > 0, "Invalid storage identifier");
@@ -95,6 +99,30 @@ package body AWA.Storages.Services.Tests is
       T.Save;
       T.Load;
    end Test_Create_Storage;
+
+   procedure Test_File_Create_Storage (T : in out Test) is
+   begin
+      T.Kind := AWA.Storages.Models.FILE;
+      T.Test_Create_Storage;
+   end Test_File_Create_Storage;
+
+   --  ------------------------------
+   --  Test creation of a storage object and local file access after its creation.
+   --  ------------------------------
+   procedure Test_Get_Local_File (T : in out Test) is
+      Sec_Ctx   : Security.Contexts.Security_Context;
+      Context   : AWA.Services.Contexts.Service_Context;
+   begin
+      AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-storage@test.com");
+
+      T.Save;
+      declare
+         File : AWA.Storages.Storage_File;
+      begin
+         T.Manager.Get_Local_File (From => T.Id, Into => File);
+         T.Assert (AWA.Storages.Get_Path (File)'Length > 0, "Invalid local file path");
+      end;
+   end Test_Get_Local_File;
 
    --  ------------------------------
    --  Test deletion of a storage object
