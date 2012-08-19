@@ -16,18 +16,18 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Security.Permissions;
-
 with Util.Processes;
 with Util.Beans.Objects;
 with Util.Log.Loggers;
 with Util.Streams.Pipes;
 with Util.Streams.Texts;
 
-with ADO;
-with AWA.Modules;
+with ADO.Sessions;
+
 with AWA.Images.Models;
-with AWA.Storages.Models;
+with AWA.Services.Contexts;
+with AWA.Storages.Services;
+with AWA.Storages.Modules;
 with Ada.Strings.Unbounded;
 
 with EL.Variables.Default;
@@ -40,6 +40,8 @@ with EL.Contexts.Default;
 --  Other modules can be notified of storage changes by registering a listener
 --  on the storage module.
 package body AWA.Images.Services is
+
+   package ASC renames Awa.Services.Contexts;
 
    --  ------------------------------
    --  Image Service
@@ -93,7 +95,7 @@ package body AWA.Images.Services is
          Input.Initialize (null, Pipe'Unchecked_Access, 1024);
          while not Input.Is_Eof loop
             declare
-               Line     : Ada.Strings.Unbounded.Unbounded_String;
+               Line : Ada.Strings.Unbounded.Unbounded_String;
                Pos  : Natural;
                Sep  : Natural;
                Last : Natural;
@@ -131,15 +133,51 @@ package body AWA.Images.Services is
 
    --  Save the data object contained in the <b>Data</b> part element into the
    --  target storage represented by <b>Into</b>.
+   procedure Build_Thumbnail (Service : in Image_Service;
+                              Id      : in ADO.Identifier;
+                              File    : in AWA.Storages.Models.Storage_Ref'Class) is
+
+      Storage_Service : constant AWA.Storages.Services.Storage_Service_Access := AWA.Storages.Modules.Get_Storage_Manager;
+      Ctx         : constant ASC.Service_Context_Access := ASC.Current;
+      DB          : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
+      Img         : AWA.Images.Models.Image_Ref;
+      Local_Path  : Ada.Strings.Unbounded.Unbounded_String;
+      Target_File : AWA.Storages.Storage_File;
+      Local_File  : AWA.Storages.Storage_File;
+      Width       : Natural;
+      Height      : Natural;
+   begin
+      Img.Load (DB, Id);
+      Storage_Service.Get_Local_File (From => Img.Get_Storage.Get_Id, Into => Local_File);
+      Storage_Service.Create_Local_File (Target_File);
+      Service.Create_Thumbnail (AWA.Storages.Get_Path (Local_File),
+                                AWA.Storages.Get_Path (Target_File), Width, Height);
+      Img.Set_Width (Width);
+      Img.Set_Height (Height);
+      Img.Set_Thumb_Width (64);
+      Img.Set_Thumb_Height (64);
+      Ctx.Start;
+      Img.Save (DB);
+--        Storage_Service.Save (Target_File);
+      Ctx.Commit;
+   end Build_Thumbnail;
+
+   --  Save the data object contained in the <b>Data</b> part element into the
+   --  target storage represented by <b>Into</b>.
    procedure Create_Image (Service : in Image_Service;
                            File    : in AWA.Storages.Models.Storage_Ref'Class) is
+      Ctx : constant AWA.Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB  : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Img : AWA.Images.Models.Image_Ref;
    begin
+      Ctx.Start;
       Img.Set_Width (0);
       Img.Set_Height (0);
       Img.Set_Thumb_Height (0);
       Img.Set_Thumb_Width (0);
       Img.Set_Storage (File);
+      Img.Save (DB);
+      Ctx.Commit;
    end Create_Image;
 
    --  Deletes the storage instance.
