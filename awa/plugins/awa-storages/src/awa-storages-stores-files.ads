@@ -20,9 +20,14 @@ with ADO.Sessions;
 with ASF.Applications.Main.Configs;
 with AWA.Storages.Models;
 
---  === File Syste; store ===
+--  === File System store ===
 --  The `AWA.Storages.Stores.Files` store uses the file system to save a data content.
+--  Files are stored in a directory tree whose path is created from the workspace identifier
+--  and the storage identifier.  The layout is such that files belonged to a given workspace
+--  are stored in the same directory sub-tree.
 --
+--  The root directory of the file system store is configured through the
+--  <b>storage_root</b> and <b>tmp_storage_root</b> configuration properties.
 package AWA.Storages.Stores.Files is
 
    --  Parameter that indicates the root directory for the file storage.
@@ -51,6 +56,7 @@ package AWA.Storages.Stores.Files is
                    Into    : in out AWA.Storages.Models.Storage_Ref'Class;
                    Path    : in String);
 
+   --  Load the storage item represented by `From` in a file that can be accessed locally.
    procedure Load (Storage : in File_Store;
                    Session : in out ADO.Sessions.Session'Class;
                    From    : in AWA.Storages.Models.Storage_Ref'Class;

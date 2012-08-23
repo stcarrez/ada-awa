@@ -24,6 +24,7 @@ with AWA.Storages.Models;
 --  be able to save and retrieve a data content.
 --
 --  @include awa-storages-stores-databases.ads
+--  @include awa-storages-stores-files.ads
 package AWA.Storages.Stores is
 
    --  ------------------------------

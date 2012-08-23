@@ -35,6 +35,8 @@ with AWA.Storages.Stores.Databases;
 --
 --  Other modules can be notified of storage changes by registering a listener
 --  on the storage module.
+--
+--  @include awa-storages-stores.ads
 package AWA.Storages.Services is
 
    package ACL_Create_Storage is new Security.Permissions.Permission_ACL ("storage-create");
