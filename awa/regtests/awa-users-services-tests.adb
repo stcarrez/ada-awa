@@ -138,7 +138,7 @@ package body AWA.Users.Services.Tests is
          AWA.Tests.Helpers.Users.Login (Principal);
          T.Assert (False, "Login succeeded with an invalid user name");
 
-         exception
+      exception
          when Not_Found =>
             null;
       end;
