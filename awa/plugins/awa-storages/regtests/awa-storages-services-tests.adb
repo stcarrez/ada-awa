@@ -60,6 +60,9 @@ package body AWA.Storages.Services.Tests is
       T.Manager := AWA.Storages.Modules.Get_Storage_Manager;
       T.Assert (T.Manager /= null, "Null storage manager");
 
+      Store.Set_Mime_Type ("text/plain");
+      Store.Set_Name ("Makefile");
+      Store.Set_File_Size (1000);
       T.Manager.Save (Into    => Store,
                       Path    => "Makefile",
                       Storage => T.Kind);
