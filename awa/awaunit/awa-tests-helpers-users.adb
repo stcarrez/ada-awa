@@ -38,15 +38,15 @@ package body AWA.Tests.Helpers.Users is
    --  ------------------------------
    procedure Initialize (Principal : in out Test_User) is
    begin
+      --  Setup the service context.
+      Principal.Context.Set_Context (AWA.Tests.Get_Application, null);
+
       if Principal.Manager = null then
          Principal.Manager := AWA.Users.Modules.Get_User_Manager;
          if Principal.Manager = null then
             Log.Error ("There is no User_Manager in the application.");
          end if;
       end if;
-
-      --  Setup the service context.
-      Principal.Context.Set_Context (AWA.Tests.Get_Application, null);
    end Initialize;
 
    --  ------------------------------
@@ -133,6 +133,9 @@ package body AWA.Tests.Helpers.Users is
       Query.Set_Filter ("e.email = ?");
       Query.Bind_Param (1, Email);
       Key.Find (DB, Query, Found);
+      if not Found then
+         Log.Error ("Cannot find access key for email {0}", Email);
+      end if;
    end Find_Access_Key;
 
    --  ------------------------------
