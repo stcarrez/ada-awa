@@ -161,8 +161,8 @@ private
    type Module_Event is new Util.Events.Event and Util.Beans.Basic.Readonly_Bean with record
       Kind        : Event_Index := Invalid_Event;
       Props       : Util.Beans.Objects.Maps.Map;
-      Entity      : ADO.Identifier := ADO.NO_IDENTIFIER;
-      Entity_Type : ADO.Entity_Type;
+      Entity      : ADO.Identifier  := ADO.NO_IDENTIFIER;
+      Entity_Type : ADO.Entity_Type := ADO.NO_ENTITY_TYPE;
    end record;
 
    --  The index of the last event definition.
