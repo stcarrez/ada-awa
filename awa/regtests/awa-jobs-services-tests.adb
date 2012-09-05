@@ -52,10 +52,12 @@ package body AWA.Jobs.Services.Tests is
    procedure Test_Job_Schedule (T : in out Test) is
       use type AWA.Jobs.Models.Job_Status_Type;
 
-      Context : AWA.Services.Contexts.Service_Context;
       J       : AWA.Jobs.Services.Job_Type;
+      M       : AWA.Jobs.Modules.Job_Module_Access := AWA.Jobs.Modules.Get_Job_Module;
+      Context : AWA.Services.Contexts.Service_Context;
    begin
       Context.Set_Context (AWA.Tests.Get_Application, null);
+      M.Register (Definition => Services.Tests.Work_1_Definition.Factory'Access);
 
       J.Set_Parameter ("count", 1);
       Util.Tests.Assert_Equals (T, 1, J.Get_Parameter ("count", 0), "Invalid count param");
