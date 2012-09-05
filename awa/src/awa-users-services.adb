@@ -289,8 +289,6 @@ package body AWA.Users.Services is
    begin
       Log.Info ("Authenticate user {0}", Email);
 
-      Ctx.Start;
-
       --  Find the user registered under the given email address & password.
       Query.Bind_Param (1, Email);
       Query.Bind_Param (2, Password);
@@ -302,6 +300,8 @@ package body AWA.Users.Services is
                    Email);
          raise Not_Found with "No user registered under email: " & Email;
       end if;
+
+      Ctx.Start;
 
       Create_Session (Model, DB, Session, User, IpAddr, Principal);
 
