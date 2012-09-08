@@ -293,14 +293,21 @@ package body AWA.Events.Services.Tests is
             end;
          end loop;
          Util.Measures.Report (S, "Send 100 events");
+
+         --  Wait for the dispatcher to process the events but do not wait more than 10 secs.
+         for I in 1 .. 10_000 loop
+            exit when Action.Count = Expect_Count;
+
+            delay 0.1;
+         end loop;
       end;
 
       Log.Info ("Action count: {0}", Natural'Image (Action.Count));
       Log.Info ("Priority: {0}", Integer'Image (Action.Priority));
-      Util.Tests.Assert_Equals (T, Expect_Prio, Action.Priority,
-                                "prio parameter not transmitted (global bean)");
       Util.Tests.Assert_Equals (T, Expect_Count, Action.Count,
                                 "invalid number of calls for the action (global bean)");
+      Util.Tests.Assert_Equals (T, Expect_Prio, Action.Priority,
+                                "prio parameter not transmitted (global bean)");
    end Dispatch_Event;
 
    --  ------------------------------
