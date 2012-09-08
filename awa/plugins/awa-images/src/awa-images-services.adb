@@ -112,8 +112,11 @@ package body AWA.Images.Services is
                   Pos := Ada.Strings.Unbounded.Index (Line, " ", Pos + 1);
                   if Pos > 0 then
                      Sep := Ada.Strings.Unbounded.Index (Line, "x", Pos + 1);
-                     Last := Ada.Strings.Unbounded.Index (Line, " ", Pos + 1);
+                     Last := Ada.Strings.Unbounded.Index (Line, "=", Pos + 1);
                      if Sep > 0 and Sep < Last then
+                        Log.Info ("Dimension {0} - {1}..{2}",
+                                  Ada.Strings.Unbounded.Slice (Line, Pos, Last),
+                                  Natural'Image (Pos), Natural'Image (Last));
                         Width := Natural'Value (Ada.Strings.Unbounded.Slice (Line, Pos + 1, Sep - 1));
                         Height := Natural'Value (Ada.Strings.Unbounded.Slice (Line, Sep + 1, Last - 1));
                      end if;
