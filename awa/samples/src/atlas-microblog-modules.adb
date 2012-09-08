@@ -23,12 +23,11 @@ with AWA.Services.Contexts;
 
 with ADO.Sessions;
 
-with Util.Log.loggers;
+with Util.Log.Loggers;
 with Atlas.Microblog.Beans;
-with Atlas.Microblog.Models;
 package body Atlas.Microblog.Modules is
 
-   Log : constant Util.log.Loggers.Logger := Util.Log.Loggers.Create ("Atlas.Microblog.Module");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Atlas.Microblog.Module");
 
    package Register is new AWA.Modules.Beans (Module => Microblog_Module,
                                               Module_Access => Microblog_Module_Access);
@@ -71,6 +70,7 @@ package body Atlas.Microblog.Modules is
    --  ------------------------------
    procedure Create (Plugin : in Microblog_Module;
                      Post   : in out Atlas.Microblog.Models.Mblog_Ref) is
+      pragma Unreferenced (Plugin);
       use AWA.Services;
 
       Ctx   : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;

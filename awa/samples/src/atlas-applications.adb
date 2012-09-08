@@ -41,6 +41,8 @@ package body Atlas.Applications is
 
    Log     : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Atlas");
 
+   procedure Set_Functions (Mapper : in out EL.Functions.Function_Mapper'Class);
+
    --  ------------------------------
    --  Given an Email address, return the Gravatar link to the user image.
    --  (See http://en.gravatar.com/site/implement/hash/ and
