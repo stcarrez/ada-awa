@@ -142,6 +142,7 @@ package body AWA.Testsuite is
                       URI    => "blogs",
                       Module => Blogs'Access);
 
+            Application.Start;
             if Props.Exists ("test.server") then
                declare
                   WS : ASF.Server.Web.AWS_Container;
