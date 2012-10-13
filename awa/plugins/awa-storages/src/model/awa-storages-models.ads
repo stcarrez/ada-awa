@@ -560,7 +560,7 @@ package AWA.Storages.Models is
    type Folder_Info_List_Bean_Access is access all Folder_Info_List_Bean;
 
    --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
-   procedure List (Object  : in out Folder_Info_List_Bean;
+   procedure List (Object  : in out Folder_Info_List_Bean'Class;
                    Session : in out ADO.Sessions.Session'Class;
                    Context : in out ADO.Queries.Context'Class);
 
@@ -616,7 +616,7 @@ package AWA.Storages.Models is
    type Storage_Info_List_Bean_Access is access all Storage_Info_List_Bean;
 
    --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
-   procedure List (Object  : in out Storage_Info_List_Bean;
+   procedure List (Object  : in out Storage_Info_List_Bean'Class;
                    Session : in out ADO.Sessions.Session'Class;
                    Context : in out ADO.Queries.Context'Class);
 

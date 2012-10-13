@@ -1860,7 +1860,7 @@ package body AWA.Storages.Models is
    --  --------------------
    --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
    --  --------------------
-   procedure List (Object  : in out Folder_Info_List_Bean;
+   procedure List (Object  : in out Folder_Info_List_Bean'Class;
                    Session : in out ADO.Sessions.Session'Class;
                    Context : in out ADO.Queries.Context'Class) is
    begin
@@ -1932,7 +1932,7 @@ package body AWA.Storages.Models is
    --  --------------------
    --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
    --  --------------------
-   procedure List (Object  : in out Storage_Info_List_Bean;
+   procedure List (Object  : in out Storage_Info_List_Bean'Class;
                    Session : in out ADO.Sessions.Session'Class;
                    Context : in out ADO.Queries.Context'Class) is
    begin
