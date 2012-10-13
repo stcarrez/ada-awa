@@ -89,6 +89,19 @@ package AWA.Storages.Beans is
    procedure Save (Bean    : in out Folder_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
+   --  ------------------------------
+   --  Storage List Bean
+   --  ------------------------------
+   --  This bean represents a list of storage files for a given folder.
+   type Storage_List_Bean is new AWA.Storages.Models.Storage_Info_List_Bean with record
+      Folder : Folder_Bean;
+   end record;
+   type Storage_List_Bean_Access is access all Storage_List_Bean'Class;
+
+   overriding
+   function Get_Value (List : in Storage_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
    --  Create the Folder_List_Bean bean instance.
    function Create_Folder_List_Bean (Module : in AWA.Storages.Modules.Storage_Module_Access)
                                      return Util.Beans.Basic.Readonly_Bean_Access;

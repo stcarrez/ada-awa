@@ -125,6 +125,13 @@ package body AWA.Storages.Beans is
       Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("success");
    end Save;
 
+   overriding
+   function Get_Value (List : in Storage_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      return Models.Storage_Info_List_Bean (List).Get_Value (Name);
+   end Get_Value;
+
    --  ------------------------------
    --  Create the Folder_List_Bean bean instance.
    --  ------------------------------
@@ -160,7 +167,7 @@ package body AWA.Storages.Beans is
 
       Ctx       : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       User      : constant ADO.Identifier := Ctx.Get_User_Identifier;
-      Object    : constant Storage_Info_List_Bean_Access := new Storage_Info_List_Bean;
+      Object    : constant Storage_List_Bean_Access := new Storage_List_Bean;
       Session   : ADO.Sessions.Session := Module.Get_Session;
       Query     : ADO.Queries.Context;
       Folder_Id : constant ADO.Identifier := Helpers.Requests.Get_Parameter (FOLDER_ID_PARAMETER);
