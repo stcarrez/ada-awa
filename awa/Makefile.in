@@ -25,11 +25,11 @@ post-generate:
 test:	test-mysql test-sqlite
 
 test-sqlite:		build regtests.db
-	-test T${HAVE_SQLITE} = TTrue && \
+	-test T${HAVE_SQLITE} = TFalse || \
 	bin/awa_harness -p SQLite -xml awa-sqlite-aunit.xml -config test-sqlite.properties
 
 test-mysql:		build create-mysql-tests
-	-test T${HAVE_MYSQL} = TTrue && \
+	-test T${HAVE_MYSQL} = TFalse || \
 	bin/awa_harness -p MySQL -xml awa-mysql-aunit.xml -config test-mysql.properties
 
 # Create the test sqlite database
@@ -41,9 +41,9 @@ regtests.db:
 # Create the tables in the database.
 # (The database itself must have been created)
 create-mysql-tests:
-	-test T${HAVE_MYSQL} = TTrue && \
+	-test T${HAVE_MYSQL} = TFalse || \
 	mysql --defaults-extra-file=db/mysql/mysql.cnf < db/mysql/drop-awa-mysql.sql
-	test T${HAVE_MYSQL} = TTrue && \
+	test T${HAVE_MYSQL} = TFalse || \
 	mysql --defaults-extra-file=db/mysql/mysql.cnf < db/mysql/create-awa-mysql.sql
 
 
