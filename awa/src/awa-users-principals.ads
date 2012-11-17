@@ -57,7 +57,7 @@ package AWA.Users.Principals is
 
    --  Get the current user identifier invoking the service operation.
    --  Returns NO_IDENTIFIER if there is none or if the principal is not an AWA principal.
-   function Get_User_Identifier (From : in Security.Permissions.Principal_Access)
+   function Get_User_Identifier (From : in ASF.Principals.Principal_Access)
                                  return ADO.Identifier;
 
 private
