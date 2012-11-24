@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions-controllers -- Permission controllers
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,8 +49,10 @@ package AWA.Permissions.Controllers is
    --  the permission to access a database entity.  The security context contains some
    --  information about the entity to check and the permission controller will use an
    --  SQL statement to verify the permission.
+   overriding
    function Has_Permission (Handler : in Entity_Controller;
-                            Context : in Security.Contexts.Security_Context'Class)
+                            Context : in Security.Contexts.Security_Context'Class;
+                            Permission : in Security.Permissions.Permission'Class)
                             return Boolean;
 
 end AWA.Permissions.Controllers;
