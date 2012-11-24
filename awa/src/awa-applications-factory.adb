@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-applications-factory -- Factory for AWA Applications
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,21 +16,20 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
---  with AWA.Permissions.Managers;
 with AWA.Permissions.Services;
 package body AWA.Applications.Factory is
 
    --  ------------------------------
-   --  Create the permission manager.  The permission manager is created during
+   --  Create the security manager.  The security manager is created during
    --  the initialization phase of the application.  This implementation
    --  creates a <b>AWA.Permissions.Services.Permission_Manager</b> object.
    --  ------------------------------
    overriding
-   function Create_Permission_Manager (App : in Application_Factory)
-                                       return Security.Permissions.Permission_Manager_Access is
+   function Create_Security_Manager (App : in Application_Factory)
+                                       return Security.Policies.Policy_Manager_Access is
    begin
       return AWA.Permissions.Services.Create_Permission_Manager (App.App);
-   end Create_Permission_Manager;
+   end Create_Security_Manager;
 
    --  ------------------------------
    --  Set the application instance that will be used when creating the permission manager.
