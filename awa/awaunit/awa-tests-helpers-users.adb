@@ -173,7 +173,7 @@ package body AWA.Tests.Helpers.Users is
       Create_User (User, Email);
       Principal := AWA.Users.Principals.Create (User.User, User.Session);
       Context.Set_Context (App, Principal);
-      Sec_Context.Set_Context (Manager   => App.Get_Permission_Manager,
+      Sec_Context.Set_Context (Manager   => App.Get_Security_Manager,
                                Principal => Principal.all'Access);
    end Login;
 
