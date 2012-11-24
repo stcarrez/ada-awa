@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions-services -- Permissions controller
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,8 +22,6 @@ with ADO.Statements;
 with Util.Log.Loggers;
 with Util.Serialize.IO.XML;
 
-with Security.Controllers.Roles;
-
 with AWA.Permissions.Models;
 with AWA.Services.Contexts;
 package body AWA.Permissions.Services is
@@ -39,9 +37,9 @@ package body AWA.Permissions.Services is
    --  ------------------------------
    function Get_Permission_Manager (Context : in Security.Contexts.Security_Context'Class)
                                     return Permission_Manager_Access is
-      use type Security.Permissions.Permission_Manager_Access;
+      use type Security.Policies.Policy_Manager_Access;
 
-      M : constant Security.Permissions.Permission_Manager_Access
+      M : constant Security.Policies.Policy_Manager_Access
         := Context.Get_Permission_Manager;
    begin
       if M = null then
@@ -145,14 +143,12 @@ package body AWA.Permissions.Services is
 
       Reader  : Util.Serialize.IO.XML.Parser;
 
-      package Policy_Config is
-        new Security.Permissions.Reader_Config (Reader, Manager'Unchecked_Access);
-      package Role_Config is
-        new Security.Controllers.Roles.Reader_Config (Reader, Manager'Unchecked_Access);
---        package Entity_Config is
---           new AWA.Permissions.Controllers.Reader_Config (Reader, Manager'Unchecked_Access);
-      pragma Warnings (Off, Policy_Config);
-      pragma Warnings (Off, Role_Config);
+--        package Policy_Config is
+--          new Security.Permissions.Reader_Config (Reader, Manager'Unchecked_Access);
+--        package Role_Config is
+--          new Security.Controllers.Roles.Reader_Config (Reader, Manager'Unchecked_Access);
+--        pragma Warnings (Off, Policy_Config);
+--        pragma Warnings (Off, Role_Config);
 --        pragma Warnings (Off, Entity_Config);
    begin
       Log.Info ("Reading policy file {0}", File);
@@ -204,9 +200,9 @@ package body AWA.Permissions.Services is
    --  Create a permission manager for the given application.
    --  ------------------------------
    function Create_Permission_Manager (App : in AWA.Applications.Application_Access)
-                                       return Security.Permissions.Permission_Manager_Access is
+                                       return Security.Policies.Policy_Manager_Access is
       Result : constant AWA.Permissions.Services.Permission_Manager_Access
-        := new AWA.Permissions.Services.Permission_Manager;
+        := new AWA.Permissions.Services.Permission_Manager (10);
    begin
       Result.Set_Application (App);
       return Result.all'Access;
