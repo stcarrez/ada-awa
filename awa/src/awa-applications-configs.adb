@@ -21,9 +21,7 @@ with Util.Log.Loggers;
 with ASF.Contexts.Faces;
 with ASF.Applications.Main.Configs;
 
-with Security.Permissions;
-with Security.Controllers.Roles;
-with AWA.Permissions.Configs;
+with Security.Policies;
 with AWA.Events.Configs;
 with AWA.Services.Contexts;
 
@@ -40,18 +38,14 @@ package body AWA.Applications.Configs is
    --  ------------------------------
    package body Reader_Config is
       App_Access : constant ASF.Contexts.Faces.Application_Access := App.all'Unchecked_Access;
-      Sec        : constant Security.Permissions.Permission_Manager_Access
-        := App.Get_Permission_Manager;
+      Sec        : constant Security.Policies.Policy_Manager_Access
+        := App.Get_Security_Manager;
 
       package Bean_Config is
         new ASF.Applications.Main.Configs.Reader_Config (Reader, App_Access,
                                                          Context.all'Access);
       package Policy_Config is
-        new Security.Permissions.Reader_Config (Reader, Sec);
-      package Role_Config is
-        new Security.Controllers.Roles.Reader_Config (Reader, Sec);
-      package Entity_Config is
-        new AWA.Permissions.Configs.Reader_Config (Reader, Sec);
+        new Security.Policies.Reader_Config (Reader, Sec);
       package Event_Config is
         new AWA.Events.Configs.Reader_Config (Reader  => Reader,
                                               Manager => App.Events'Unchecked_Access,
@@ -59,8 +53,6 @@ package body AWA.Applications.Configs is
 
       pragma Warnings (Off, Bean_Config);
       pragma Warnings (Off, Policy_Config);
-      pragma Warnings (Off, Role_Config);
-      pragma Warnings (Off, Entity_Config);
       pragma Warnings (Off, Event_Config);
    end Reader_Config;
 
