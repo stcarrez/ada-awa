@@ -22,7 +22,7 @@ post-generate:
 	done
 
 # Build and run the unit tests
-test:	test-mysql test-sqlite
+check test:	test-mysql test-sqlite
 
 test-sqlite:		build regtests.db
 	-test T${HAVE_SQLITE} = TFalse || \
