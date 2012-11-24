@@ -16,8 +16,10 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Security.Contexts;
 with Security.Permissions;
+with Security.Policies;
+
+with Util.Serialize.IO.XML;
 
 with ADO;
 
@@ -84,11 +86,15 @@ with ADO;
 --
 package AWA.Permissions is
 
+   NAME : constant String := "Entity-Policy";
+
    --  Exception raised by the <b>Check</b> procedure if the user does not have
    --  the permission.
    NO_PERMISSION : exception;
 
    type Permission_Type is (READ, WRITE);
+
+   type Entity_Permission is new Security.Permissions.Permission with private;
 
    --  Verify that the permission represented by <b>Permission</b> is granted.
    --
@@ -98,11 +104,35 @@ package AWA.Permissions is
    --  database entity represented by <b>Entity</b>.
    procedure Check (Permission : in Security.Permissions.Permission_Index;
                     Entity     : in ADO.Identifier);
+--
+--     --  Get from the security context <b>Context</b> an identifier stored under the
+--     --  name <b>Name</b>.  Returns NO_IDENTIFIER if the security context does not define
+--     --  such name or the value is not a valid identifier.
+--     function Get_Context (Context : in Security.Contexts.Security_Context'Class;
+--                           Name    : in String) return ADO.Identifier;
 
-   --  Get from the security context <b>Context</b> an identifier stored under the
-   --  name <b>Name</b>.  Returns NO_IDENTIFIER if the security context does not define
-   --  such name or the value is not a valid identifier.
-   function Get_Context (Context : in Security.Contexts.Security_Context'Class;
-                         Name    : in String) return ADO.Identifier;
+private
+
+   type Entity_Permission is new Security.Permissions.Permission with record
+      Entity : ADO.Identifier;
+   end record;
+
+   type Entity_Policy is new Security.Policies.Policy with null record;
+   type Entity_Policy_Access is access all Entity_Policy'Class;
+
+   --  Get the policy name.
+   overriding
+   function Get_Name (From : in Entity_Policy) return String;
+
+   --  Setup the XML parser to read the <b>policy</b> description.
+   overriding
+   procedure Prepare_Config (Policy : in out Entity_Policy;
+                             Reader : in out Util.Serialize.IO.XML.Parser);
+
+   --  Finish reading the XML policy configuration.  The security policy implementation can use
+   --  this procedure to perform any configuration setup after the configuration is parsed.
+   overriding
+   procedure Finish_Config (Into    : in out Entity_Policy;
+                            Reader  : in out Util.Serialize.IO.XML.Parser);
 
 end AWA.Permissions;
