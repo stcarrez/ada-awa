@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions-services -- Permissions controller
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,11 +22,11 @@ with ADO;
 with ADO.Sessions;
 with ADO.Objects;
 
-with Security.Permissions;
+with Security.Policies;
 with Security.Contexts;
 package AWA.Permissions.Services is
 
-   type Permission_Manager is new Security.Permissions.Permission_Manager with private;
+   type Permission_Manager is new Security.Policies.Policy_Manager with private;
    type Permission_Manager_Access is access all Permission_Manager'Class;
 
    --  Get the permission manager associated with the security context.
@@ -77,11 +77,11 @@ package AWA.Permissions.Services is
 
    --  Create a permission manager for the given application.
    function Create_Permission_Manager (App : in AWA.Applications.Application_Access)
-                                       return Security.Permissions.Permission_Manager_Access;
+                                       return Security.Policies.Policy_Manager_Access;
 
 private
 
-   type Permission_Manager is new Security.Permissions.Permission_Manager with record
+   type Permission_Manager is new Security.Policies.Policy_Manager with record
       App : AWA.Applications.Application_Access := null;
    end record;
 
