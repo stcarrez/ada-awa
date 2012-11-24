@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions-controllers -- Permission controllers
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,8 +36,10 @@ package body AWA.Permissions.Controllers is
    --  information about the entity to check and the permission controller will use an
    --  SQL statement to verify the permission.
    --  ------------------------------
+   overriding
    function Has_Permission (Handler : in Entity_Controller;
-                            Context : in Security.Contexts.Security_Context'Class)
+                            Context : in Security.Contexts.Security_Context'Class;
+                            Permission : in Security.Permissions.Permission'Class)
                             return Boolean is
       use AWA.Permissions.Services;
       use AWA.Users.Principals;
@@ -45,7 +47,7 @@ package body AWA.Permissions.Controllers is
 
       Manager : constant Permission_Manager_Access := Get_Permission_Manager (Context);
       User_Id : constant ADO.Identifier := Get_User_Identifier (Context.Get_User_Principal);
-      Entity_Id : constant ADO.Identifier := Get_Context (Context, "entity_id");
+      Entity_Id : ADO.Identifier;
    begin
       --  If there is no permission manager, permission is denied.
       if Manager = null or else User_Id = ADO.NO_IDENTIFIER then
@@ -57,6 +59,8 @@ package body AWA.Permissions.Controllers is
          Log.Info ("No user identifier in the security context.  Permission is denied");
          return False;
       end if;
+
+      Entity_Id := Entity_Permission'Class (Permission).Entity;
 
       --  If the security context does not contain the entity identifier, permission is denied.
       if Entity_Id = ADO.NO_IDENTIFIER then
