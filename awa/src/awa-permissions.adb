@@ -53,13 +53,15 @@ package body AWA.Permissions is
 
       Context : constant Security.Contexts.Security_Context_Access := Security.Contexts.Current;
       Perm    : Entity_Permission (Permission);
+      Result  : Boolean;
    begin
       if Context = null then
          Log.Debug ("There is no security context, permission denied");
          raise NO_PERMISSION;
       end if;
       Perm.Entity := Entity;
-      if not (Security.Contexts.Has_Permission (Perm)) then
+      Context.Has_Permission (Perm, Result);
+      if not Result then
          Log.Debug ("Permission is refused");
          raise NO_PERMISSION;
       end if;
