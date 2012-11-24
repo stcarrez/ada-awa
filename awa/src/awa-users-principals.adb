@@ -29,11 +29,11 @@ package body AWA.Users.Principals is
    --  ------------------------------
    --  Returns true if the given role is stored in the user principal.
    --  ------------------------------
-   function Has_Role (User : in Principal;
-                      Role : in Security.Permissions.Role_Type) return Boolean is
-   begin
-      return User.Roles (Role);
-   end Has_Role;
+--     function Has_Role (User : in Principal;
+--                        Role : in Security.Permissions.Role_Type) return Boolean is
+--     begin
+--        return User.Roles (Role);
+--     end Has_Role;
 
    --  ------------------------------
    --  Get the principal identifier (name)
