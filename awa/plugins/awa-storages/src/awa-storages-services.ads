@@ -39,9 +39,9 @@ with AWA.Storages.Stores.Databases;
 --  @include awa-storages-stores.ads
 package AWA.Storages.Services is
 
-   package ACL_Create_Storage is new Security.Permissions.Permission_ACL ("storage-create");
-   package ACL_Delete_Storage is new Security.Permissions.Permission_ACL ("storage-delete");
-   package ACL_Create_Folder is new Security.Permissions.Permission_ACL ("folder-create");
+   package ACL_Create_Storage is new Security.Permissions.Definition ("storage-create");
+   package ACL_Delete_Storage is new Security.Permissions.Definition ("storage-delete");
+   package ACL_Create_Folder is new Security.Permissions.Definition ("folder-create");
 
    type Read_Mode is (READ, WRITE);
 
