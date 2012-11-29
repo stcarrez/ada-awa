@@ -33,9 +33,9 @@ with AWA.Storages.Models;
 --  on the storage module.
 package AWA.Images.Services is
 
-   package ACL_Create_Storage is new Security.Permissions.Permission_ACL ("storage-create");
-   package ACL_Delete_Storage is new Security.Permissions.Permission_ACL ("storage-delete");
-   package ACL_Create_Folder is new Security.Permissions.Permission_ACL ("folder-create");
+   package ACL_Create_Storage is new Security.Permissions.Definition ("storage-create");
+   package ACL_Delete_Storage is new Security.Permissions.Definition ("storage-delete");
+   package ACL_Create_Folder is new Security.Permissions.Definition ("folder-create");
 
    PARAM_THUMBNAIL_COMMAND : constant String := "thumbnail_command";
 
