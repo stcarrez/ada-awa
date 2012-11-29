@@ -29,11 +29,11 @@ package AWA.Blogs.Services is
    NAME : constant String := "Blog_Service";
 
    --  Define the permissions.
-   package ACL_Create_Blog is new Security.Permissions.Permission_ACL ("blog-create");
-   package ACL_Delete_Blog is new Security.Permissions.Permission_ACL ("blog-delete");
-   package ACL_Create_Post is new Security.Permissions.Permission_ACL ("blog-create-post");
-   package ACL_Delete_Post is new Security.Permissions.Permission_ACL ("blog-delete-post");
-   package ACL_Update_Post is new Security.Permissions.Permission_ACL ("blog-update-post");
+   package ACL_Create_Blog is new Security.Permissions.Definition ("blog-create");
+   package ACL_Delete_Blog is new Security.Permissions.Definition ("blog-delete");
+   package ACL_Create_Post is new Security.Permissions.Definition ("blog-create-post");
+   package ACL_Delete_Post is new Security.Permissions.Definition ("blog-delete-post");
+   package ACL_Update_Post is new Security.Permissions.Definition ("blog-update-post");
 
    --  Exception raised when a post cannot be found.
    Not_Found : exception;
