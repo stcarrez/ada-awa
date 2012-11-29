@@ -37,7 +37,7 @@ with ADO;
 --  This is a static definition of the permission that will be used to ask to verify the
 --  permission.  The permission is given a unique name that will be used in configuration files:
 --
---    package ACL_Create_Post is new Security.Permissions.Permission_ACL ("blog-create-post");
+--    package ACL_Create_Post is new Security.Permissions.Definition ("blog-create-post");
 --
 --  === Checking for a permission ===
 --  A permission can be checked in Ada as well as in the presentation pages.
