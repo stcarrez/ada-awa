@@ -55,10 +55,6 @@ package AWA.Permissions.Services is
                                Entity     : in ADO.Identifier;
                                Kind       : in ADO.Entity_Type;
                                Permission : in Permission_Type);
-   --  Read the policy file
-   overriding
-   procedure Read_Policy (Manager : in out Permission_Manager;
-                          File    : in String);
 
    --  Add a permission for the user <b>User</b> to access the entity identified by
    --  <b>Entity</b> which is of type <b>Kind</b>.
