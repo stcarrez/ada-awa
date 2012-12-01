@@ -158,14 +158,18 @@ package body AWA.Permissions is
    --  SQL statement returns a non empty list.
    --  ------------------------------
 
+   --  ------------------------------
    --  Get the policy name.
+   --  ------------------------------
    overriding
    function Get_Name (From : in Entity_Policy) return String is
    begin
       return NAME;
    end Get_Name;
 
+   --  ------------------------------
    --  Setup the XML parser to read the <b>policy</b> description.
+   --  ------------------------------
    overriding
    procedure Prepare_Config (Policy : in out Entity_Policy;
                              Reader : in out Util.Serialize.IO.XML.Parser) is
@@ -177,15 +181,6 @@ package body AWA.Permissions is
       Config.Session := AWA.Services.Contexts.Get_Session (AWA.Services.Contexts.Current);
       Config_Mapper.Set_Context (Reader, Config);
    end Prepare_Config;
-
-   --  Finish reading the XML policy configuration.  The security policy implementation can use
-   --  this procedure to perform any configuration setup after the configuration is parsed.
-   overriding
-   procedure Finish_Config (Into    : in out Entity_Policy;
-                            Reader  : in out Util.Serialize.IO.XML.Parser) is
-   begin
-      null;
-   end Finish_Config;
 
 begin
    Mapper.Add_Mapping ("entity-permission", FIELD_ENTITY_PERMISSION);
