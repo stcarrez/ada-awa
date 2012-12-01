@@ -38,21 +38,19 @@ package body AWA.Applications.Configs is
    --  ------------------------------
    package body Reader_Config is
       App_Access : constant ASF.Contexts.Faces.Application_Access := App.all'Unchecked_Access;
-      Sec        : constant Security.Policies.Policy_Manager_Access
-        := App.Get_Security_Manager;
 
       package Bean_Config is
         new ASF.Applications.Main.Configs.Reader_Config (Reader, App_Access,
                                                          Context.all'Access);
-      package Policy_Config is
-        new Security.Policies.Reader_Config (Reader, Sec);
+--        package Policy_Config is
+--          new Security.Policies.Reader_Config (Reader, Sec);
       package Event_Config is
         new AWA.Events.Configs.Reader_Config (Reader  => Reader,
                                               Manager => App.Events'Unchecked_Access,
                                               Context => Context.all'Access);
 
       pragma Warnings (Off, Bean_Config);
-      pragma Warnings (Off, Policy_Config);
+--        pragma Warnings (Off, Policy_Config);
       pragma Warnings (Off, Event_Config);
    end Reader_Config;
 
@@ -65,6 +63,7 @@ package body AWA.Applications.Configs is
 
       Reader : Util.Serialize.IO.XML.Parser;
       Ctx    : AWA.Services.Contexts.Service_Context;
+      Sec    : constant Security.Policies.Policy_Manager_Access := App.Get_Security_Manager;
    begin
       Log.Info ("Reading application configuration file {0}", File);
       Ctx.Set_Context (App'Unchecked_Access, null);
@@ -73,6 +72,8 @@ package body AWA.Applications.Configs is
          package Config is new Reader_Config (Reader, App'Unchecked_Access, Context);
          pragma Warnings (Off, Config);
       begin
+         Sec.Prepare_Config (Reader);
+
          --  Initialize the parser with the module configuration mappers (if any).
          Initialize_Parser (App, Reader);
 
