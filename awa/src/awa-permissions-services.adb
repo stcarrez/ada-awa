@@ -22,6 +22,9 @@ with ADO.Statements;
 with Util.Log.Loggers;
 with Util.Serialize.IO.XML;
 
+with Security.Policies.Roles;
+with Security.Policies.URLs;
+
 with AWA.Permissions.Models;
 with AWA.Services.Contexts;
 package body AWA.Permissions.Services is
@@ -133,31 +136,6 @@ package body AWA.Permissions.Services is
    end Check_Permission;
 
    --  ------------------------------
-   --  Read the policy file
-   --  ------------------------------
-   overriding
-   procedure Read_Policy (Manager : in out Permission_Manager;
-                          File    : in String) is
-
-      use Util;
-
-      Reader  : Util.Serialize.IO.XML.Parser;
-
---        package Policy_Config is
---          new Security.Permissions.Reader_Config (Reader, Manager'Unchecked_Access);
---        package Role_Config is
---          new Security.Controllers.Roles.Reader_Config (Reader, Manager'Unchecked_Access);
---        pragma Warnings (Off, Policy_Config);
---        pragma Warnings (Off, Role_Config);
---        pragma Warnings (Off, Entity_Config);
-   begin
-      Log.Info ("Reading policy file {0}", File);
-
-      Reader.Parse (File);
-
-   end Read_Policy;
-
-   --  ------------------------------
    --  Add a permission for the user <b>User</b> to access the entity identified by
    --  <b>Entity</b> which is of type <b>Kind</b>.
    --  ------------------------------
@@ -203,8 +181,19 @@ package body AWA.Permissions.Services is
                                        return Security.Policies.Policy_Manager_Access is
       Result : constant AWA.Permissions.Services.Permission_Manager_Access
         := new AWA.Permissions.Services.Permission_Manager (10);
+      RP : constant Security.Policies.Roles.Role_Policy_Access
+        := new Security.Policies.Roles.Role_Policy;
+      RU : constant Security.Policies.URLs.URL_Policy_Access
+        := new Security.Policies.URLs.URL_Policy;
+      RE : constant Entity_Policy_Access
+        := new Entity_Policy;
    begin
+      Result.Add_Policy (RP.all'Access);
+      Result.Add_Policy (RU.all'Access);
+      Result.Add_Policy (RE.all'Access);
       Result.Set_Application (App);
+
+      Log.Info ("Creation of the AWA Permissions manager");
       return Result.all'Access;
    end Create_Permission_Manager;
 
