@@ -19,6 +19,7 @@
 with Util.Serialize.IO.XML;
 
 with AWA.Applications.Configs;
+with Security.Policies;
 
 --  The <b>AWA.Modules.Reader</b> package reads the module configuration files
 --  and initializes the module.
@@ -39,15 +40,18 @@ package body AWA.Modules.Reader is
                                                     Context);
       pragma Warnings (Off, Config);
 
+      Sec    : constant Security.Policies.Policy_Manager_Access := Plugin.App.Get_Security_Manager;
    begin
       Log.Info ("Reading module configuration file {0}", File);
 
+      Sec.Prepare_Config (Reader);
       if AWA.Modules.Log.Get_Level >= Util.Log.DEBUG_LEVEL then
          Util.Serialize.IO.Dump (Reader, AWA.Modules.Log);
       end if;
 
       --  Read the configuration file and record managed beans, navigation rules.
       Reader.Parse (File);
+      Sec.Finish_Config (Reader);
 
    exception
       when others =>
