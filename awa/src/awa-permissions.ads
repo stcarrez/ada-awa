@@ -129,10 +129,4 @@ private
    procedure Prepare_Config (Policy : in out Entity_Policy;
                              Reader : in out Util.Serialize.IO.XML.Parser);
 
-   --  Finish reading the XML policy configuration.  The security policy implementation can use
-   --  this procedure to perform any configuration setup after the configuration is parsed.
-   overriding
-   procedure Finish_Config (Into    : in out Entity_Policy;
-                            Reader  : in out Util.Serialize.IO.XML.Parser);
-
 end AWA.Permissions;
