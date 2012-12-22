@@ -1,0 +1,3 @@
+This directory contains the UML model for the generation of Ada and
+SQL files.  The UML model was created using ArgoUML 0.34.
+You can get ArgoUML at: http://argouml.tigris.org/
