@@ -13,9 +13,9 @@ CREATE TABLE comments (
   `message` VARCHAR(65000) NOT NULL,
   /* the entity identifier to which this comment is associated. */
   `entity_id` INTEGER NOT NULL,
-  /* the user who posted this comment */
-  `user_fk` INTEGER NOT NULL,
   /* the entity type that correspond to the entity associated with this comment. */
-  `entity__type_fk` INTEGER NOT NULL
+  `entity_type` INTEGER ,
+  /* the user who posted this comment */
+  `user_fk` INTEGER NOT NULL
 );
 INSERT INTO entity_type (name) VALUES ("comments");
