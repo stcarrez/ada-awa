@@ -1,30 +1,4 @@
 /* File generated automatically by dynamo */
-/* Defines an access key */
-CREATE TABLE access_key (
-  /* the email id */
-  `id` BIGINT NOT NULL,
-  /* the access key version. */
-  `version` int ,
-  /* the access key */
-  `access_key` VARCHAR(256) ,
-  /* the user identifier */
-  `user_id` BIGINT ,
-  PRIMARY KEY (`id`)
-);
-/* Access control */
-CREATE TABLE acl (
-  /* the unique ACL id */
-  `id` BIGINT NOT NULL,
-  /* the entity type */
-  `entity_type` INTEGER ,
-  /* the user identifier */
-  `user_id` BIGINT ,
-  /* the entity identifier */
-  `entity_id` BIGINT ,
-  /* whether the entity is writeable */
-  `writeable` TINYINT ,
-  PRIMARY KEY (`id`)
-);
 /* A message in the message queue */
 CREATE TABLE awa_message (
   /* the message identifier */
@@ -79,6 +53,32 @@ CREATE TABLE awa_queue (
   `name` VARCHAR(256) NOT NULL,
   /* the server identifier which is associated with this message queue */
   `server_id` INTEGER ,
+  PRIMARY KEY (`id`)
+);
+/* Access control */
+CREATE TABLE acl (
+  /* the unique ACL id */
+  `id` BIGINT NOT NULL,
+  /* the entity type */
+  `entity_type` INTEGER ,
+  /* the user identifier */
+  `user_id` BIGINT ,
+  /* the entity identifier */
+  `entity_id` BIGINT ,
+  /* whether the entity is writeable */
+  `writeable` TINYINT ,
+  PRIMARY KEY (`id`)
+);
+/* Defines an access key */
+CREATE TABLE access_key (
+  /* the email id */
+  `id` BIGINT NOT NULL,
+  /* the access key version. */
+  `version` int ,
+  /* the access key */
+  `access_key` VARCHAR(256) ,
+  /* the user identifier */
+  `user_id` BIGINT ,
   PRIMARY KEY (`id`)
 );
 /* Email address */
@@ -138,11 +138,11 @@ CREATE TABLE user (
   PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES
-("access_key")
-,("acl")
-,("awa_message")
+("awa_message")
 ,("awa_message_type")
 ,("awa_queue")
+,("acl")
+,("access_key")
 ,("email")
 ,("session")
 ,("user")

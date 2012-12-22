@@ -26,32 +26,6 @@ INSERT INTO entity_type (name) VALUES
 ;
 /* Copied from awa-mysql.sql*/
 /* File generated automatically by dynamo */
-/* Defines an access key */
-CREATE TABLE access_key (
-  /* the email id */
-  `id` BIGINT NOT NULL,
-  /* the access key version. */
-  `version` int ,
-  /* the access key */
-  `access_key` VARCHAR(256) ,
-  /* the user identifier */
-  `user_id` BIGINT ,
-  PRIMARY KEY (`id`)
-);
-/* Access control */
-CREATE TABLE acl (
-  /* the unique ACL id */
-  `id` BIGINT NOT NULL,
-  /* the entity type */
-  `entity_type` INTEGER ,
-  /* the user identifier */
-  `user_id` BIGINT ,
-  /* the entity identifier */
-  `entity_id` BIGINT ,
-  /* whether the entity is writeable */
-  `writeable` TINYINT ,
-  PRIMARY KEY (`id`)
-);
 /* A message in the message queue */
 CREATE TABLE awa_message (
   /* the message identifier */
@@ -106,6 +80,32 @@ CREATE TABLE awa_queue (
   `name` VARCHAR(256) NOT NULL,
   /* the server identifier which is associated with this message queue */
   `server_id` INTEGER ,
+  PRIMARY KEY (`id`)
+);
+/* Access control */
+CREATE TABLE acl (
+  /* the unique ACL id */
+  `id` BIGINT NOT NULL,
+  /* the entity type */
+  `entity_type` INTEGER ,
+  /* the user identifier */
+  `user_id` BIGINT ,
+  /* the entity identifier */
+  `entity_id` BIGINT ,
+  /* whether the entity is writeable */
+  `writeable` TINYINT ,
+  PRIMARY KEY (`id`)
+);
+/* Defines an access key */
+CREATE TABLE access_key (
+  /* the email id */
+  `id` BIGINT NOT NULL,
+  /* the access key version. */
+  `version` int ,
+  /* the access key */
+  `access_key` VARCHAR(256) ,
+  /* the user identifier */
+  `user_id` BIGINT ,
   PRIMARY KEY (`id`)
 );
 /* Email address */
@@ -165,60 +165,14 @@ CREATE TABLE user (
   PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES
-("access_key")
-,("acl")
-,("awa_message")
+("awa_message")
 ,("awa_message_type")
 ,("awa_queue")
+,("acl")
+,("access_key")
 ,("email")
 ,("session")
 ,("user")
-;
-/* Copied from awa-blogs-mysql.sql*/
-/* File generated automatically by dynamo */
-/* Blog  */
-CREATE TABLE blog (
-  /* the blog identifier */
-  `id` INTEGER NOT NULL,
-  /* the blob version. */
-  `version` int ,
-  /* the blog name */
-  `name` VARCHAR(256) NOT NULL,
-  /* the blog uuid */
-  `uid` VARCHAR(256) NOT NULL,
-  /* the blog creation date */
-  `create_date` DATETIME NOT NULL,
-  /* the workspace that this blob belongs to. */
-  `workspace_id` INTEGER NOT NULL,
-  PRIMARY KEY (`id`)
-);
-/* Post in a blog */
-CREATE TABLE blog_post (
-  /* the post identifier */
-  `id` BIGINT NOT NULL,
-  /* the post version. */
-  `version` int ,
-  /* the post title */
-  `title` VARCHAR(256) NOT NULL,
-  /* the uri */
-  `uri` VARCHAR(256) ,
-  /* the blog text content */
-  `text` VARCHAR(60000) ,
-  /* the post creation date */
-  `create_date` DATETIME NOT NULL,
-  /* the post publication date */
-  `publish_date` DATETIME ,
-  /* the post status */
-  `status` INTEGER NOT NULL,
-  /* the post author */
-  `author_id` INTEGER NOT NULL,
-  /* the blog that this post belongs */
-  `blog_id` INTEGER NOT NULL,
-  PRIMARY KEY (`id`)
-);
-INSERT INTO entity_type (name) VALUES
-("blog")
-,("blog_post")
 ;
 /* Copied from awa-comments-mysql.sql*/
 /* File generated automatically by dynamo */
@@ -235,74 +189,57 @@ CREATE TABLE comments (
   `message` VARCHAR(65000) NOT NULL,
   /* the entity identifier to which this comment is associated. */
   `entity_id` INTEGER NOT NULL,
+  /* the entity type that correspond to the entity associated with this comment. */
+  `entity_type` INTEGER ,
   /* the user who posted this comment */
   `user_fk` INTEGER NOT NULL,
-  /* the entity type that correspond to the entity associated with this comment. */
-  `entity__type_fk` INTEGER NOT NULL,
   PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES
 ("comments")
 ;
-/* Copied from awa-images-mysql.sql*/
+/* Copied from awa-workspaces-mysql.sql*/
 /* File generated automatically by dynamo */
-/* An image that was uploaded by a user in an image folder. */
-CREATE TABLE awa_image (
-  /* the image identifier. */
+/* 
+            The workspace member indicates the users who are part of the workspace.
+         */
+CREATE TABLE workspace_member (
+  /* the member identifier. */
   `id` BIGINT NOT NULL,
-  /* the image version. */
+  /* the workspace member version. */
   `version` int ,
-  /* the image width. */
-  `width` INTEGER NOT NULL,
-  /* the image height. */
-  `height` INTEGER NOT NULL,
-  /* the image thumbnail height. */
-  `thumb_height` INTEGER NOT NULL,
-  /* the image thumbnail width. */
-  `thumb_width` INTEGER NOT NULL,
-  /* the original image if this image was created by the application. */
-  `original_id` INTEGER NOT NULL,
-  /* the thumbnail image to display the image is an image selector. */
-  `thumbnail_id` INTEGER ,
-  /* the image storage file. */
-  `storage_id` INTEGER NOT NULL,
+  /* the member creation date. */
+  `create_date` DATETIME NOT NULL,
+  /* the workspace member. */
+  `user_fk` BIGINT NOT NULL,
+  /* the workspace. */
+  `workspace_fk` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
+);
+/* 
+            The workspace allows to group all together the different
+            application entities which belong to a user or a set of collaborating users.
+            Other entities, for example a Blog, a Wiki space, will link to a
+            single workspace.
+
+            The workspace has members which are allowed to access the entities
+            that are part of the workspace.  A workspace owner decides which user
+            is part of the workspace or not.
+         */
+CREATE TABLE workspace (
+  /* the workspace identifier. */
+  `id` INTEGER NOT NULL,
+  /* the storage data version. */
+  `version` int ,
+  /* the workspace creation date. */
+  `create_date` DATETIME NOT NULL,
+  /* the workspace owner. */
+  `owner_fk` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES
-("awa_image")
-;
-/* Copied from awa-jobs-mysql.sql*/
-/* File generated automatically by dynamo */
-/* The jobs table. */
-CREATE TABLE awa_jobs (
-  /* the jobs id */
-  `id` BIGINT NOT NULL,
-  /* the jobs version */
-  `version` int ,
-  /* the jobs name */
-  `name` VARCHAR(256) ,
-  /* the jobs creation date */
-  `create_date` DATETIME ,
-  /* the jobs start date */
-  `start_date` DATETIME ,
-  /* the jobs finish date */
-  `finish_date` DATETIME ,
-  /* the job status */
-  `status` INTEGER NOT NULL,
-  /* the job messages */
-  `messages` TEXT NOT NULL,
-  /* the job results */
-  `results` TEXT NOT NULL,
-  /* the user who triggered the job */
-  `user_id` INTEGER ,
-  /* the user session who triggered the job */
-  `session_id` INTEGER ,
-  /* the message creation event associated with this job */
-  `event_id` INTEGER ,
-  PRIMARY KEY (`id`)
-);
-INSERT INTO entity_type (name) VALUES
-("awa_jobs")
+("workspace_member")
+,("workspace")
 ;
 /* Copied from awa-storages-mysql.sql*/
 /* File generated automatically by dynamo */
@@ -389,46 +326,107 @@ INSERT INTO entity_type (name) VALUES
 ,("awa_storage_folder")
 ,("awa_store_local")
 ;
-/* Copied from awa-workspaces-mysql.sql*/
+/* Copied from awa-images-mysql.sql*/
 /* File generated automatically by dynamo */
-/* 
-            The workspace allows to group all together the different
-            application entities which belong to a user or a set of collaborating users.
-            Other entities, for example a Blog, a Wiki space, will link to a
-            single workspace.
-
-            The workspace has members which are allowed to access the entities
-            that are part of the workspace.  A workspace owner decides which user
-            is part of the workspace or not.
-         */
-CREATE TABLE workspace (
-  /* the workspace identifier. */
-  `id` INTEGER NOT NULL,
-  /* the storage data version. */
-  `version` int ,
-  /* the workspace creation date. */
-  `create_date` DATETIME NOT NULL,
-  /* the workspace owner. */
-  `owner_fk` BIGINT NOT NULL,
-  PRIMARY KEY (`id`)
-);
-/* 
-            The workspace member indicates the users who are part of the workspace.
-         */
-CREATE TABLE workspace_member (
-  /* the member identifier. */
+/* An image that was uploaded by a user in an image folder. */
+CREATE TABLE awa_image (
+  /* the image identifier. */
   `id` BIGINT NOT NULL,
-  /* the workspace member version. */
+  /* the image version. */
   `version` int ,
-  /* the member creation date. */
-  `create_date` DATETIME NOT NULL,
-  /* the workspace member. */
-  `user_fk` BIGINT NOT NULL,
-  /* the workspace. */
-  `workspace_fk` INTEGER NOT NULL,
+  /* the image width. */
+  `width` INTEGER NOT NULL,
+  /* the image height. */
+  `height` INTEGER NOT NULL,
+  /* the image thumbnail height. */
+  `thumb_height` INTEGER NOT NULL,
+  /* the image thumbnail width. */
+  `thumb_width` INTEGER NOT NULL,
+  /* the thumbnail image to display the image is an image selector. */
+  `thumbnail_id` INTEGER ,
+  /* the image storage file. */
+  `storage_id` INTEGER NOT NULL,
   PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES
-("workspace")
-,("workspace_member")
+("awa_image")
+;
+/* Copied from awa-jobs-mysql.sql*/
+/* File generated automatically by dynamo */
+/* The jobs table. */
+CREATE TABLE awa_jobs (
+  /* the jobs id */
+  `id` BIGINT NOT NULL,
+  /* the jobs version */
+  `version` int ,
+  /* the jobs name */
+  `name` VARCHAR(256) ,
+  /* the jobs creation date */
+  `create_date` DATETIME ,
+  /* the jobs start date */
+  `start_date` DATETIME ,
+  /* the jobs finish date */
+  `finish_date` DATETIME ,
+  /* the job status */
+  `status` INTEGER NOT NULL,
+  /* the job messages */
+  `messages` TEXT NOT NULL,
+  /* the job results */
+  `results` TEXT NOT NULL,
+  /* the user who triggered the job */
+  `user_id` INTEGER ,
+  /* the user session who triggered the job */
+  `session_id` INTEGER ,
+  /* the message creation event associated with this job */
+  `event_id` INTEGER ,
+  PRIMARY KEY (`id`)
+);
+INSERT INTO entity_type (name) VALUES
+("awa_jobs")
+;
+/* Copied from awa-blogs-mysql.sql*/
+/* File generated automatically by dynamo */
+/* Blog  */
+CREATE TABLE blog (
+  /* the blog identifier */
+  `id` INTEGER NOT NULL,
+  /* the blob version. */
+  `version` int ,
+  /* the blog name */
+  `name` VARCHAR(256) NOT NULL,
+  /* the blog uuid */
+  `uid` VARCHAR(256) NOT NULL,
+  /* the blog creation date */
+  `create_date` DATETIME NOT NULL,
+  /* the workspace that this blob belongs to. */
+  `workspace_id` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
+);
+/* Post in a blog */
+CREATE TABLE blog_post (
+  /* the post identifier */
+  `id` BIGINT NOT NULL,
+  /* the post version. */
+  `version` int ,
+  /* the post title */
+  `title` VARCHAR(256) NOT NULL,
+  /* the uri */
+  `uri` VARCHAR(256) ,
+  /* the blog text content */
+  `text` VARCHAR(60000) ,
+  /* the post creation date */
+  `create_date` DATETIME NOT NULL,
+  /* the post publication date */
+  `publish_date` DATETIME ,
+  /* the post status */
+  `status` INTEGER NOT NULL,
+  /* the post author */
+  `author_id` INTEGER NOT NULL,
+  /* the blog that this post belongs */
+  `blog_id` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
+);
+INSERT INTO entity_type (name) VALUES
+("blog")
+,("blog_post")
 ;

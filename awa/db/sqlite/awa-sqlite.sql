@@ -1,28 +1,4 @@
 /* File generated automatically by dynamo */
-/* Defines an access key */
-CREATE TABLE access_key (
-  /* the email id */
-  `id` BIGINT PRIMARY KEY,
-  /* the access key version. */
-  `version` int ,
-  /* the access key */
-  `access_key` VARCHAR(256) ,
-  /* the user identifier */
-  `user_id` BIGINT 
-);
-/* Access control */
-CREATE TABLE acl (
-  /* the unique ACL id */
-  `id` BIGINT PRIMARY KEY,
-  /* the entity type */
-  `entity_type` INTEGER ,
-  /* the user identifier */
-  `user_id` BIGINT ,
-  /* the entity identifier */
-  `entity_id` BIGINT ,
-  /* whether the entity is writeable */
-  `writeable` TINYINT 
-);
 /* A message in the message queue */
 CREATE TABLE awa_message (
   /* the message identifier */
@@ -75,6 +51,30 @@ CREATE TABLE awa_queue (
   `name` VARCHAR(256) NOT NULL,
   /* the server identifier which is associated with this message queue */
   `server_id` INTEGER 
+);
+/* Access control */
+CREATE TABLE acl (
+  /* the unique ACL id */
+  `id` BIGINT PRIMARY KEY,
+  /* the entity type */
+  `entity_type` INTEGER ,
+  /* the user identifier */
+  `user_id` BIGINT ,
+  /* the entity identifier */
+  `entity_id` BIGINT ,
+  /* whether the entity is writeable */
+  `writeable` TINYINT 
+);
+/* Defines an access key */
+CREATE TABLE access_key (
+  /* the email id */
+  `id` BIGINT PRIMARY KEY,
+  /* the access key version. */
+  `version` int ,
+  /* the access key */
+  `access_key` VARCHAR(256) ,
+  /* the user identifier */
+  `user_id` BIGINT 
 );
 /* Email address */
 CREATE TABLE email (
@@ -129,11 +129,11 @@ CREATE TABLE user (
   /* the user email address */
   `email_id` INTEGER NOT NULL
 );
-INSERT INTO entity_type (name) VALUES ("access_key");
-INSERT INTO entity_type (name) VALUES ("acl");
 INSERT INTO entity_type (name) VALUES ("awa_message");
 INSERT INTO entity_type (name) VALUES ("awa_message_type");
 INSERT INTO entity_type (name) VALUES ("awa_queue");
+INSERT INTO entity_type (name) VALUES ("acl");
+INSERT INTO entity_type (name) VALUES ("access_key");
 INSERT INTO entity_type (name) VALUES ("email");
 INSERT INTO entity_type (name) VALUES ("session");
 INSERT INTO entity_type (name) VALUES ("user");
