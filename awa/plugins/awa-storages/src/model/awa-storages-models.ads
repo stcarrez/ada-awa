@@ -38,11 +38,8 @@ with AWA.Users.Models;
 with AWA.Workspaces.Models;
 pragma Warnings (On, "unit * is not referenced");
 package AWA.Storages.Models is
-   --  --------------------
-   --  The image storage type
-   --  --------------------
-   type Storage_Type is (DATABASE, FILE, TMP, URL);
-   for Storage_Type use (DATABASE => 0, FILE => 1, TMP => 2, URL => 3);
+   type Storage_Type is (DATABASE, FILE, URL, TMP);
+   for Storage_Type use (DATABASE => 0, FILE => 1, URL => 2, TMP => 3);
    package Storage_Type_Objects is
       new Util.Beans.Objects.Enums (Storage_Type);
 
@@ -55,7 +52,8 @@ package AWA.Storages.Models is
    type Store_Local_Ref is new ADO.Objects.Object_Ref with null record;
 
    --  --------------------
-   --  The database storage data when the storage type is DATABASE.
+   --  The storage data is created only if the storage type
+   --  is set to DATABASE.  It holds the file content in the blob.
    --  --------------------
    --  Create an object key for Storage_Data.
    function Storage_Data_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
@@ -73,17 +71,17 @@ package AWA.Storages.Models is
    --  Get the storage data identifier
    function Get_Id (Object : in Storage_Data_Ref)
                  return ADO.Identifier;
-   --  Get the storage data version.
-   function Get_Version (Object : in Storage_Data_Ref)
-                 return Integer;
 
-   --  Set the storage data when the storage type is DATABASE.
+   --  Set the storage content
    procedure Set_Data (Object : in out Storage_Data_Ref;
                        Value  : in ADO.Blob_Ref);
 
-   --  Get the storage data when the storage type is DATABASE.
+   --  Get the storage content
    function Get_Data (Object : in Storage_Data_Ref)
                  return ADO.Blob_Ref;
+   --
+   function Get_Version (Object : in Storage_Data_Ref)
+                 return Integer;
 
    --  Load the entity identified by 'Id'.
    --  Raises the NOT_FOUND exception if it does not exist.
@@ -132,9 +130,6 @@ package AWA.Storages.Models is
    procedure Copy (Object : in Storage_Data_Ref;
                    Into   : in out Storage_Data_Ref);
 
-   --  --------------------
-   --  Storage files are organized in folders.
-   --  --------------------
    --  Create an object key for Storage_Folder.
    function Storage_Folder_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
    --  Create an object key for Storage_Folder from a string.
@@ -151,21 +146,21 @@ package AWA.Storages.Models is
    --  Get the storage folder identifier
    function Get_Id (Object : in Storage_Folder_Ref)
                  return ADO.Identifier;
-   --  Get the storage folder version.
-   function Get_Version (Object : in Storage_Folder_Ref)
-                 return Integer;
 
-   --  Set the storage folder name
+   --
    procedure Set_Name (Object : in out Storage_Folder_Ref;
                        Value  : in Ada.Strings.Unbounded.Unbounded_String);
    procedure Set_Name (Object : in out Storage_Folder_Ref;
                        Value : in String);
 
-   --  Get the storage folder name
+   --
    function Get_Name (Object : in Storage_Folder_Ref)
                  return Ada.Strings.Unbounded.Unbounded_String;
    function Get_Name (Object : in Storage_Folder_Ref)
                  return String;
+   --
+   function Get_Version (Object : in Storage_Folder_Ref)
+                 return Integer;
 
    --  Set the folder creation date
    procedure Set_Create_Date (Object : in out Storage_Folder_Ref;
@@ -175,11 +170,19 @@ package AWA.Storages.Models is
    function Get_Create_Date (Object : in Storage_Folder_Ref)
                  return Ada.Calendar.Time;
 
-   --  Set the workspace that this storage folder belongs to.
+   --
+   procedure Set_Owner (Object : in out Storage_Folder_Ref;
+                        Value  : in AWA.Users.Models.User_Ref'Class);
+
+   --
+   function Get_Owner (Object : in Storage_Folder_Ref)
+                 return AWA.Users.Models.User_Ref'Class;
+
+   --
    procedure Set_Workspace (Object : in out Storage_Folder_Ref;
                             Value  : in AWA.Workspaces.Models.Workspace_Ref'Class);
 
-   --  Get the workspace that this storage folder belongs to.
+   --
    function Get_Workspace (Object : in Storage_Folder_Ref)
                  return AWA.Workspaces.Models.Workspace_Ref'Class;
 
@@ -231,7 +234,9 @@ package AWA.Storages.Models is
                    Into   : in out Storage_Folder_Ref);
 
    --  --------------------
-   --  The database storage data when the storage type is DATABASE.
+   --  The uri member holds the URI if the storage type is URL.
+   --  When storage is FILE, the local file path is built by using
+   --  the workspace identifier and the storage identifier.
    --  --------------------
    --  Create an object key for Storage.
    function Storage_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
@@ -249,107 +254,107 @@ package AWA.Storages.Models is
    --  Get the storage identifier
    function Get_Id (Object : in Storage_Ref)
                  return ADO.Identifier;
-   --  Get the storage data version.
+   --
    function Get_Version (Object : in Storage_Ref)
                  return Integer;
 
-   --  Set the local store creation date
-   procedure Set_Create_Date (Object : in out Storage_Ref;
-                              Value  : in Ada.Calendar.Time);
-
-   --  Get the local store creation date
-   function Get_Create_Date (Object : in Storage_Ref)
-                 return Ada.Calendar.Time;
-
-   --  Set the storage type.
-   procedure Set_Storage (Object : in out Storage_Ref;
-                          Value  : in Storage_Type);
-
-   --  Get the storage type.
-   function Get_Storage (Object : in Storage_Ref)
-                 return Storage_Type;
-
-   --  Set the storage specific URI
+   --  Set the storage URI
    procedure Set_Uri (Object : in out Storage_Ref;
                       Value  : in Ada.Strings.Unbounded.Unbounded_String);
    procedure Set_Uri (Object : in out Storage_Ref;
                       Value : in String);
 
-   --  Get the storage specific URI
+   --  Get the storage URI
    function Get_Uri (Object : in Storage_Ref)
                  return Ada.Strings.Unbounded.Unbounded_String;
    function Get_Uri (Object : in Storage_Ref)
                  return String;
 
-   --  Set the storage name or filename
+   --  Set the storage type which defines where the content is stored
+   procedure Set_Storage (Object : in out Storage_Ref;
+                          Value  : in Storage_Type);
+
+   --  Get the storage type which defines where the content is stored
+   function Get_Storage (Object : in Storage_Ref)
+                 return Storage_Type;
+
+   --  Set the storage creation date
+   procedure Set_Create_Date (Object : in out Storage_Ref;
+                              Value  : in Ada.Calendar.Time);
+
+   --  Get the storage creation date
+   function Get_Create_Date (Object : in Storage_Ref)
+                 return Ada.Calendar.Time;
+
+   --  Set the file name
    procedure Set_Name (Object : in out Storage_Ref;
                        Value  : in Ada.Strings.Unbounded.Unbounded_String);
    procedure Set_Name (Object : in out Storage_Ref;
                        Value : in String);
 
-   --  Get the storage name or filename
+   --  Get the file name
    function Get_Name (Object : in Storage_Ref)
                  return Ada.Strings.Unbounded.Unbounded_String;
    function Get_Name (Object : in Storage_Ref)
                  return String;
 
-   --  Set the content mime type
+   --  Set the file size
+   procedure Set_File_Size (Object : in out Storage_Ref;
+                            Value  : in Integer);
+
+   --  Get the file size
+   function Get_File_Size (Object : in Storage_Ref)
+                 return Integer;
+
+   --  Set the mime type
    procedure Set_Mime_Type (Object : in out Storage_Ref;
                             Value  : in Ada.Strings.Unbounded.Unbounded_String);
    procedure Set_Mime_Type (Object : in out Storage_Ref;
                             Value : in String);
 
-   --  Get the content mime type
+   --  Get the mime type
    function Get_Mime_Type (Object : in Storage_Ref)
                  return Ada.Strings.Unbounded.Unbounded_String;
    function Get_Mime_Type (Object : in Storage_Ref)
                  return String;
 
-   --  Set the content size
-   procedure Set_File_Size (Object : in out Storage_Ref;
-                            Value  : in Integer);
-
-   --  Get the content size
-   function Get_File_Size (Object : in Storage_Ref)
-                 return Integer;
-
-   --  Set the storage that this local store refers to.
-   procedure Set_Store_Data (Object : in out Storage_Ref;
-                             Value  : in AWA.Storages.Models.Storage_Data_Ref'Class);
-
-   --  Get the storage that this local store refers to.
-   function Get_Store_Data (Object : in Storage_Ref)
-                 return AWA.Storages.Models.Storage_Data_Ref'Class;
-
-   --  Set the workspace that this storage belongs to.
-   procedure Set_Workspace (Object : in out Storage_Ref;
-                            Value  : in AWA.Workspaces.Models.Workspace_Ref'Class);
-
-   --  Get the workspace that this storage belongs to.
-   function Get_Workspace (Object : in Storage_Ref)
-                 return AWA.Workspaces.Models.Workspace_Ref'Class;
-
-   --  Set the storage folder that this storage belongs to.
-   procedure Set_Folder (Object : in out Storage_Ref;
-                         Value  : in AWA.Storages.Models.Storage_Folder_Ref'Class);
-
-   --  Get the storage folder that this storage belongs to.
-   function Get_Folder (Object : in Storage_Ref)
-                 return AWA.Storages.Models.Storage_Folder_Ref'Class;
-
-   --  Set the storage file owner (or user who uploaded the document).
+   --
    procedure Set_Owner (Object : in out Storage_Ref;
                         Value  : in AWA.Users.Models.User_Ref'Class);
 
-   --  Get the storage file owner (or user who uploaded the document).
+   --
    function Get_Owner (Object : in Storage_Ref)
                  return AWA.Users.Models.User_Ref'Class;
 
-   --  Set the original storage file that this storage instance refers to.
+   --
+   procedure Set_Store_Data (Object : in out Storage_Ref;
+                             Value  : in AWA.Storages.Models.Storage_Data_Ref'Class);
+
+   --
+   function Get_Store_Data (Object : in Storage_Ref)
+                 return AWA.Storages.Models.Storage_Data_Ref'Class;
+
+   --
+   procedure Set_Folder (Object : in out Storage_Ref;
+                         Value  : in AWA.Storages.Models.Storage_Folder_Ref'Class);
+
+   --
+   function Get_Folder (Object : in Storage_Ref)
+                 return AWA.Storages.Models.Storage_Folder_Ref'Class;
+
+   --
+   procedure Set_Workspace (Object : in out Storage_Ref;
+                            Value  : in AWA.Workspaces.Models.Workspace_Ref'Class);
+
+   --
+   function Get_Workspace (Object : in Storage_Ref)
+                 return AWA.Workspaces.Models.Workspace_Ref'Class;
+
+   --
    procedure Set_Original (Object : in out Storage_Ref;
                            Value  : in AWA.Storages.Models.Storage_Ref'Class);
 
-   --  Get the original storage file that this storage instance refers to.
+   --
    function Get_Original (Object : in Storage_Ref)
                  return AWA.Storages.Models.Storage_Ref'Class;
 
@@ -401,10 +406,10 @@ package AWA.Storages.Models is
                    Into   : in out Storage_Ref);
 
    --  --------------------
-   --  The local store record is created when a copy of the data
-   --  is needed on the local file system.  The creation date refers to the date when
-   --  the data was copied on the local file system.  The expiration date indicates a
-   --  date after which the local file can be removed from the local file system.
+   --  The local store record is created when a copy of the data is needed on the local file system.
+   --  The creation date refers to the date when the data was copied to the local file system.
+   --  The expiration date indicates a date after which the local file can be removed
+   --  from the local file system.
    --  --------------------
    --  Create an object key for Store_Local.
    function Store_Local_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
@@ -415,32 +420,13 @@ package AWA.Storages.Models is
    Null_Store_Local : constant Store_Local_Ref;
    function "=" (Left, Right : Store_Local_Ref'Class) return Boolean;
 
-   --  Set the local storage identifier
+   --  Set the local store identifier
    procedure Set_Id (Object : in out Store_Local_Ref;
                      Value  : in ADO.Identifier);
 
-   --  Get the local storage identifier
+   --  Get the local store identifier
    function Get_Id (Object : in Store_Local_Ref)
                  return ADO.Identifier;
-   --  Get the local storage version.
-   function Get_Version (Object : in Store_Local_Ref)
-                 return Integer;
-
-   --  Set the local store creation date
-   procedure Set_Create_Date (Object : in out Store_Local_Ref;
-                              Value  : in Ada.Calendar.Time);
-
-   --  Get the local store creation date
-   function Get_Create_Date (Object : in Store_Local_Ref)
-                 return Ada.Calendar.Time;
-
-   --  Set the local store expiration date
-   procedure Set_Expire_Date (Object : in out Store_Local_Ref;
-                              Value  : in Ada.Calendar.Time);
-
-   --  Get the local store expiration date
-   function Get_Expire_Date (Object : in Store_Local_Ref)
-                 return Ada.Calendar.Time;
 
    --  Set the local store path
    procedure Set_Path (Object : in out Store_Local_Ref;
@@ -454,27 +440,46 @@ package AWA.Storages.Models is
    function Get_Path (Object : in Store_Local_Ref)
                  return String;
 
-   --  Set the storage version that this local store represents
+   --  Set the creation date
+   procedure Set_Create_Date (Object : in out Store_Local_Ref;
+                              Value  : in Ada.Calendar.Time);
+
+   --  Get the creation date
+   function Get_Create_Date (Object : in Store_Local_Ref)
+                 return Ada.Calendar.Time;
+
+   --  Set the local store expiration date
+   procedure Set_Expire_Date (Object : in out Store_Local_Ref;
+                              Value  : in Ada.Calendar.Time);
+
+   --  Get the local store expiration date
+   function Get_Expire_Date (Object : in Store_Local_Ref)
+                 return Ada.Calendar.Time;
+   --
+   function Get_Version (Object : in Store_Local_Ref)
+                 return Integer;
+
+   --
    procedure Set_Store_Version (Object : in out Store_Local_Ref;
                                 Value  : in Integer);
 
-   --  Get the storage version that this local store represents
+   --
    function Get_Store_Version (Object : in Store_Local_Ref)
                  return Integer;
 
-   --  Set whether the local store file can be shared or not
+   --  Set the shared flag which indicates whether this local store can be shared by several clients.
    procedure Set_Shared (Object : in out Store_Local_Ref;
                          Value  : in Boolean);
 
-   --  Get whether the local store file can be shared or not
+   --  Get the shared flag which indicates whether this local store can be shared by several clients.
    function Get_Shared (Object : in Store_Local_Ref)
                  return Boolean;
 
-   --  Set the storage that this local store refers to.
+   --
    procedure Set_Storage (Object : in out Store_Local_Ref;
                           Value  : in AWA.Storages.Models.Storage_Ref'Class);
 
-   --  Get the storage that this local store refers to.
+   --
    function Get_Storage (Object : in Store_Local_Ref)
                  return AWA.Storages.Models.Storage_Ref'Class;
 
@@ -637,8 +642,8 @@ package AWA.Storages.Models is
 private
    STORAGE_DATA_NAME : aliased constant String := "awa_storage_data";
    COL_0_1_NAME : aliased constant String := "id";
-   COL_1_1_NAME : aliased constant String := "version";
-   COL_2_1_NAME : aliased constant String := "data";
+   COL_1_1_NAME : aliased constant String := "data";
+   COL_2_1_NAME : aliased constant String := "version";
 
    STORAGE_DATA_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
      (Count => 3,
@@ -657,8 +662,8 @@ private
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
                                      Of_Class => STORAGE_DATA_TABLE'Access)
    with record
-       Version : Integer;
        Data : ADO.Blob_Ref;
+       Version : Integer;
    end record;
 
    type Storage_Data_Access is access all Storage_Data_Impl;
@@ -694,20 +699,22 @@ private
                         Impl   : out Storage_Data_Access);
    STORAGE_FOLDER_NAME : aliased constant String := "awa_storage_folder";
    COL_0_2_NAME : aliased constant String := "id";
-   COL_1_2_NAME : aliased constant String := "version";
-   COL_2_2_NAME : aliased constant String := "name";
+   COL_1_2_NAME : aliased constant String := "name";
+   COL_2_2_NAME : aliased constant String := "version";
    COL_3_2_NAME : aliased constant String := "create_date";
-   COL_4_2_NAME : aliased constant String := "workspace_id";
+   COL_4_2_NAME : aliased constant String := "owner_id";
+   COL_5_2_NAME : aliased constant String := "workspace_id";
 
    STORAGE_FOLDER_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 5,
+     (Count => 6,
       Table => STORAGE_FOLDER_NAME'Access,
       Members => (
          1 => COL_0_2_NAME'Access,
          2 => COL_1_2_NAME'Access,
          3 => COL_2_2_NAME'Access,
          4 => COL_3_2_NAME'Access,
-         5 => COL_4_2_NAME'Access
+         5 => COL_4_2_NAME'Access,
+         6 => COL_5_2_NAME'Access
 )
      );
 
@@ -718,9 +725,10 @@ private
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
                                      Of_Class => STORAGE_FOLDER_TABLE'Access)
    with record
-       Version : Integer;
        Name : Ada.Strings.Unbounded.Unbounded_String;
+       Version : Integer;
        Create_Date : Ada.Calendar.Time;
+       Owner : AWA.Users.Models.User_Ref;
        Workspace : AWA.Workspaces.Models.Workspace_Ref;
    end record;
 
@@ -758,16 +766,16 @@ private
    STORAGE_NAME : aliased constant String := "awa_storage";
    COL_0_3_NAME : aliased constant String := "id";
    COL_1_3_NAME : aliased constant String := "version";
-   COL_2_3_NAME : aliased constant String := "create_date";
-   COL_3_3_NAME : aliased constant String := "storage_type";
-   COL_4_3_NAME : aliased constant String := "uri";
+   COL_2_3_NAME : aliased constant String := "uri";
+   COL_3_3_NAME : aliased constant String := "storage";
+   COL_4_3_NAME : aliased constant String := "create_date";
    COL_5_3_NAME : aliased constant String := "name";
-   COL_6_3_NAME : aliased constant String := "mime_type";
-   COL_7_3_NAME : aliased constant String := "file_size";
-   COL_8_3_NAME : aliased constant String := "storage_id";
-   COL_9_3_NAME : aliased constant String := "workspace_id";
+   COL_6_3_NAME : aliased constant String := "file_size";
+   COL_7_3_NAME : aliased constant String := "mime_type";
+   COL_8_3_NAME : aliased constant String := "owner_id";
+   COL_9_3_NAME : aliased constant String := "store_data_id";
    COL_10_3_NAME : aliased constant String := "folder_id";
-   COL_11_3_NAME : aliased constant String := "owner_id";
+   COL_11_3_NAME : aliased constant String := "workspace_id";
    COL_12_3_NAME : aliased constant String := "original_id";
 
    STORAGE_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
@@ -798,16 +806,16 @@ private
                                      Of_Class => STORAGE_TABLE'Access)
    with record
        Version : Integer;
-       Create_Date : Ada.Calendar.Time;
-       Storage : Storage_Type;
        Uri : Ada.Strings.Unbounded.Unbounded_String;
+       Storage : Storage_Type;
+       Create_Date : Ada.Calendar.Time;
        Name : Ada.Strings.Unbounded.Unbounded_String;
-       Mime_Type : Ada.Strings.Unbounded.Unbounded_String;
        File_Size : Integer;
-       Store_Data : AWA.Storages.Models.Storage_Data_Ref;
-       Workspace : AWA.Workspaces.Models.Workspace_Ref;
-       Folder : AWA.Storages.Models.Storage_Folder_Ref;
+       Mime_Type : Ada.Strings.Unbounded.Unbounded_String;
        Owner : AWA.Users.Models.User_Ref;
+       Store_Data : AWA.Storages.Models.Storage_Data_Ref;
+       Folder : AWA.Storages.Models.Storage_Folder_Ref;
+       Workspace : AWA.Workspaces.Models.Workspace_Ref;
        Original : AWA.Storages.Models.Storage_Ref;
    end record;
 
@@ -844,10 +852,10 @@ private
                         Impl   : out Storage_Access);
    STORE_LOCAL_NAME : aliased constant String := "awa_store_local";
    COL_0_4_NAME : aliased constant String := "id";
-   COL_1_4_NAME : aliased constant String := "version";
+   COL_1_4_NAME : aliased constant String := "path";
    COL_2_4_NAME : aliased constant String := "create_date";
    COL_3_4_NAME : aliased constant String := "expire_date";
-   COL_4_4_NAME : aliased constant String := "path";
+   COL_4_4_NAME : aliased constant String := "version";
    COL_5_4_NAME : aliased constant String := "store_version";
    COL_6_4_NAME : aliased constant String := "shared";
    COL_7_4_NAME : aliased constant String := "storage_id";
@@ -874,10 +882,10 @@ private
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
                                      Of_Class => STORE_LOCAL_TABLE'Access)
    with record
-       Version : Integer;
+       Path : Ada.Strings.Unbounded.Unbounded_String;
        Create_Date : Ada.Calendar.Time;
        Expire_Date : Ada.Calendar.Time;
-       Path : Ada.Strings.Unbounded.Unbounded_String;
+       Version : Integer;
        Store_Version : Integer;
        Shared : Boolean;
        Storage : AWA.Storages.Models.Storage_Ref;
