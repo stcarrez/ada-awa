@@ -77,7 +77,7 @@ package body Atlas.Microblog.Modules is
       DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
    begin
       Ctx.Start;
-      Post.Set_Create_Date (Ada.Calendar.Clock);
+      Post.Set_Creation_Date (Ada.Calendar.Clock);
       Post.Set_Author (Ctx.Get_User);
       Post.Save (DB);
       Ctx.Commit;
