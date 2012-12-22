@@ -1,5 +1,21 @@
 /* File generated automatically by dynamo */
 /* 
+            The workspace member indicates the users who are part of the workspace.
+         */
+CREATE TABLE workspace_member (
+  /* the member identifier. */
+  `id` BIGINT NOT NULL,
+  /* the workspace member version. */
+  `version` int ,
+  /* the member creation date. */
+  `create_date` DATETIME NOT NULL,
+  /* the workspace member. */
+  `user_fk` BIGINT NOT NULL,
+  /* the workspace. */
+  `workspace_fk` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
+);
+/* 
             The workspace allows to group all together the different
             application entities which belong to a user or a set of collaborating users.
             Other entities, for example a Blog, a Wiki space, will link to a
@@ -20,23 +36,7 @@ CREATE TABLE workspace (
   `owner_fk` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
-/* 
-            The workspace member indicates the users who are part of the workspace.
-         */
-CREATE TABLE workspace_member (
-  /* the member identifier. */
-  `id` BIGINT NOT NULL,
-  /* the workspace member version. */
-  `version` int ,
-  /* the member creation date. */
-  `create_date` DATETIME NOT NULL,
-  /* the workspace member. */
-  `user_fk` BIGINT NOT NULL,
-  /* the workspace. */
-  `workspace_fk` INTEGER NOT NULL,
-  PRIMARY KEY (`id`)
-);
 INSERT INTO entity_type (name) VALUES
-("workspace")
-,("workspace_member")
+("workspace_member")
+,("workspace")
 ;
