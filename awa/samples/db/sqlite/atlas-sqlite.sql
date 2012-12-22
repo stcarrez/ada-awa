@@ -1,15 +1,16 @@
 /* File generated automatically by dynamo */
-/* The mblog table. */
+/* The Mblog table holds the message posted by users.
+Once posted, the message is not supposed to be changed. */
 CREATE TABLE mblog (
-  /* the mblog id */
+  /*  */
   `id` BIGINT PRIMARY KEY,
-  /* the mblog version */
-  `version` int ,
-  /* the mblog message */
-  `message` VARCHAR(256) ,
-  /* the mblog creation date */
-  `create_date` DATETIME NOT NULL,
+  /*  */
+  `version` INTEGER NOT NULL,
+  /* the microblog message */
+  `message` VARCHAR(255) NOT NULL,
+  /*  */
+  `creation_date` DATETIME NOT NULL,
   /* the post author */
-  `author_id` INTEGER NOT NULL
+  `author_id` BIGINT NOT NULL
 );
 INSERT INTO entity_type (name) VALUES ("mblog");

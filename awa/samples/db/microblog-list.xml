@@ -27,13 +27,13 @@
     SELECT
       mblog.id,
       mblog.message,
-      mblog.create_date,
+      mblog.creation_date,
       user.name,
       email.email
     FROM mblog AS mblog
     INNER JOIN user ON mblog.author_id = user.id
     INNER JOIN email ON mblog.author_id = email.user_id
-    ORDER BY mblog.create_date ASC
+    ORDER BY mblog.creation_date ASC
        </sql>
     </query>
 </query-mapping>

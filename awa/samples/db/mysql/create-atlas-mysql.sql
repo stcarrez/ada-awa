@@ -289,6 +289,10 @@ CREATE TABLE awa_storage (
   `workspace_id` INTEGER NOT NULL,
   /* the storage folder that this storage belongs to. */
   `folder_id` INTEGER ,
+  /* the storage file owner (or user who uploaded the document). */
+  `owner_id` INTEGER NOT NULL,
+  /* the original storage file that this storage instance refers to. */
+  `original_id` INTEGER ,
   PRIMARY KEY (`id`)
 );
 /* The database storage data when the storage type is DATABASE. */
@@ -344,20 +348,48 @@ INSERT INTO entity_type (name) VALUES
 ,("awa_storage_folder")
 ,("awa_store_local")
 ;
+/* Copied from awa-images-mysql.sql*/
+/* File generated automatically by dynamo */
+/* An image that was uploaded by a user in an image folder. */
+CREATE TABLE awa_image (
+  /* the image identifier. */
+  `id` BIGINT NOT NULL,
+  /* the image version. */
+  `version` int ,
+  /* the image width. */
+  `width` INTEGER NOT NULL,
+  /* the image height. */
+  `height` INTEGER NOT NULL,
+  /* the image thumbnail height. */
+  `thumb_height` INTEGER NOT NULL,
+  /* the image thumbnail width. */
+  `thumb_width` INTEGER NOT NULL,
+  /* the original image if this image was created by the application. */
+  `original_id` INTEGER NOT NULL,
+  /* the thumbnail image to display the image is an image selector. */
+  `thumbnail_id` INTEGER ,
+  /* the image storage file. */
+  `storage_id` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
+);
+INSERT INTO entity_type (name) VALUES
+("awa_image")
+;
 /* Copied from atlas-mysql.sql*/
 /* File generated automatically by dynamo */
-/* The mblog table. */
+/* The Mblog table holds the message posted by users.
+Once posted, the message is not supposed to be changed. */
 CREATE TABLE mblog (
-  /* the mblog id */
+  /*  */
   `id` BIGINT NOT NULL,
-  /* the mblog version */
-  `version` int ,
-  /* the mblog message */
-  `message` VARCHAR(256) ,
-  /* the mblog creation date */
-  `create_date` DATETIME NOT NULL,
+  /*  */
+  `version` INTEGER NOT NULL,
+  /* the microblog message */
+  `message` VARCHAR(255) BINARY NOT NULL,
+  /*  */
+  `creation_date` DATETIME NOT NULL,
   /* the post author */
-  `author_id` INTEGER NOT NULL,
+  `author_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES
