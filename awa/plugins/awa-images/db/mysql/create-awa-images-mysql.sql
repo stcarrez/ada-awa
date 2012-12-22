@@ -14,8 +14,6 @@ CREATE TABLE awa_image (
   `thumb_height` INTEGER NOT NULL,
   /* the image thumbnail width. */
   `thumb_width` INTEGER NOT NULL,
-  /* the original image if this image was created by the application. */
-  `original_id` INTEGER NOT NULL,
   /* the thumbnail image to display the image is an image selector. */
   `thumbnail_id` INTEGER ,
   /* the image storage file. */
