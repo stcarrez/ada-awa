@@ -26,6 +26,7 @@ HAVE_SQLITE=@ADO_DB_SQLITE@
 HAVE_AWS=@AWA_AWS_STATUS@
 
 DYNAMO=dynamo
+DYNAMO_ARGS=db
 
 LN_S=@LN_S@
 MKDIR=mkdir
@@ -105,7 +106,7 @@ rebuild: clean build
 
 # Rebuild the generated model files
 generate:  post-generate
-	test ! -d db || $(DYNAMO) generate db
+	test ! -d db || $(DYNAMO) generate $(DYNAMO_ARGS)
 
 # Files to package in source distribution
 DISTFILES=README LICENSE.txt NOTICE.txt NEWS CHANGES ChangeLog config.guess configure config.sub \
