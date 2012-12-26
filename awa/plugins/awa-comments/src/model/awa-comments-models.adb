@@ -62,9 +62,9 @@ package body AWA.Comments.Models is
       Impl : Comment_Access;
    begin
       Impl := new Comment_Impl;
-      Impl.Version := 0;
       Impl.Date := ADO.DEFAULT_TIME;
       Impl.Entity_Id := ADO.NO_IDENTIFIER;
+      Impl.Version := 0;
       Impl.Entity_Type := 0;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
@@ -73,36 +73,12 @@ package body AWA.Comments.Models is
    --  Data object: Comment
    -- ----------------------------------------
 
-   procedure Set_Id (Object : in out Comment_Ref;
-                     Value  : in ADO.Identifier) is
-      Impl : Comment_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
-   end Set_Id;
-
-   function Get_Id (Object : in Comment_Ref)
-                  return ADO.Identifier is
-      Impl : constant Comment_Access := Comment_Impl (Object.Get_Object.all)'Access;
-   begin
-      return Impl.Get_Key_Value;
-   end Get_Id;
-
-
-   function Get_Version (Object : in Comment_Ref)
-                  return Integer is
-      Impl : constant Comment_Access := Comment_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Version;
-   end Get_Version;
-
-
    procedure Set_Date (Object : in out Comment_Ref;
                        Value  : in Ada.Calendar.Time) is
       Impl : Comment_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Time (Impl.all, 3, Impl.Date, Value);
+      ADO.Objects.Set_Field_Time (Impl.all, 1, Impl.Date, Value);
    end Set_Date;
 
    function Get_Date (Object : in Comment_Ref)
@@ -118,7 +94,7 @@ package body AWA.Comments.Models is
       Impl : Comment_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 4, Impl.Message, Value);
+      ADO.Objects.Set_Field_String (Impl.all, 2, Impl.Message, Value);
    end Set_Message;
 
    procedure Set_Message (Object : in out Comment_Ref;
@@ -126,7 +102,7 @@ package body AWA.Comments.Models is
       Impl : Comment_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 4, Impl.Message, Value);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 2, Impl.Message, Value);
    end Set_Message;
 
    function Get_Message (Object : in Comment_Ref)
@@ -147,7 +123,7 @@ package body AWA.Comments.Models is
       Impl : Comment_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Identifier (Impl.all, 5, Impl.Entity_Id, Value);
+      ADO.Objects.Set_Field_Identifier (Impl.all, 3, Impl.Entity_Id, Value);
    end Set_Entity_Id;
 
    function Get_Entity_Id (Object : in Comment_Ref)
@@ -156,6 +132,30 @@ package body AWA.Comments.Models is
    begin
       return Impl.Entity_Id;
    end Get_Entity_Id;
+
+
+   procedure Set_Id (Object : in out Comment_Ref;
+                     Value  : in ADO.Identifier) is
+      Impl : Comment_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Key_Value (Impl.all, 4, Value);
+   end Set_Id;
+
+   function Get_Id (Object : in Comment_Ref)
+                  return ADO.Identifier is
+      Impl : constant Comment_Access := Comment_Impl (Object.Get_Object.all)'Access;
+   begin
+      return Impl.Get_Key_Value;
+   end Get_Id;
+
+
+   function Get_Version (Object : in Comment_Ref)
+                  return Integer is
+      Impl : constant Comment_Access := Comment_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Version;
+   end Get_Version;
 
 
    procedure Set_Entity_Type (Object : in out Comment_Ref;
@@ -174,20 +174,20 @@ package body AWA.Comments.Models is
    end Get_Entity_Type;
 
 
-   procedure Set_User (Object : in out Comment_Ref;
-                       Value  : in AWA.Users.Models.User_Ref'Class) is
+   procedure Set_Author (Object : in out Comment_Ref;
+                         Value  : in AWA.Users.Models.User_Ref'Class) is
       Impl : Comment_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 7, Impl.User, Value);
-   end Set_User;
+      ADO.Objects.Set_Field_Object (Impl.all, 7, Impl.Author, Value);
+   end Set_Author;
 
-   function Get_User (Object : in Comment_Ref)
+   function Get_Author (Object : in Comment_Ref)
                   return AWA.Users.Models.User_Ref'Class is
       Impl : constant Comment_Access := Comment_Impl (Object.Get_Load_Object.all)'Access;
    begin
-      return Impl.User;
-   end Get_User;
+      return Impl.Author;
+   end Get_Author;
 
    --  Copy of the object.
    procedure Copy (Object : in Comment_Ref;
@@ -203,12 +203,12 @@ package body AWA.Comments.Models is
          begin
             ADO.Objects.Set_Object (Result, Copy.all'Access);
             Copy.Copy (Impl.all);
-            Copy.Version := Impl.Version;
             Copy.Date := Impl.Date;
             Copy.Message := Impl.Message;
             Copy.Entity_Id := Impl.Entity_Id;
+            Copy.Version := Impl.Version;
             Copy.Entity_Type := Impl.Entity_Type;
-            Copy.User := Impl.User;
+            Copy.Author := Impl.Author;
          end;
       end if;
       Into := Result;
@@ -339,24 +339,24 @@ package body AWA.Comments.Models is
          := Session.Create_Statement (COMMENT_TABLE'Access);
    begin
       if Object.Is_Modified (1) then
-         Stmt.Save_Field (Name  => COL_0_1_NAME, --  id
-                          Value => Object.Get_Key);
+         Stmt.Save_Field (Name  => COL_0_1_NAME, --  date
+                          Value => Object.Date);
          Object.Clear_Modified (1);
       end if;
+      if Object.Is_Modified (2) then
+         Stmt.Save_Field (Name  => COL_1_1_NAME, --  message
+                          Value => Object.Message);
+         Object.Clear_Modified (2);
+      end if;
       if Object.Is_Modified (3) then
-         Stmt.Save_Field (Name  => COL_2_1_NAME, --  date
-                          Value => Object.Date);
+         Stmt.Save_Field (Name  => COL_2_1_NAME, --  entity_id
+                          Value => Object.Entity_Id);
          Object.Clear_Modified (3);
       end if;
       if Object.Is_Modified (4) then
-         Stmt.Save_Field (Name  => COL_3_1_NAME, --  message
-                          Value => Object.Message);
+         Stmt.Save_Field (Name  => COL_3_1_NAME, --  id
+                          Value => Object.Get_Key);
          Object.Clear_Modified (4);
-      end if;
-      if Object.Is_Modified (5) then
-         Stmt.Save_Field (Name  => COL_4_1_NAME, --  entity_id
-                          Value => Object.Entity_Id);
-         Object.Clear_Modified (5);
       end if;
       if Object.Is_Modified (6) then
          Stmt.Save_Field (Name  => COL_5_1_NAME, --  entity_type
@@ -364,8 +364,8 @@ package body AWA.Comments.Models is
          Object.Clear_Modified (6);
       end if;
       if Object.Is_Modified (7) then
-         Stmt.Save_Field (Name  => COL_6_1_NAME, --  user_fk
-                          Value => Object.User);
+         Stmt.Save_Field (Name  => COL_6_1_NAME, --  author_id
+                          Value => Object.Author);
          Object.Clear_Modified (7);
       end if;
       if Stmt.Has_Save_Fields then
@@ -397,21 +397,21 @@ package body AWA.Comments.Models is
       Result : Integer;
    begin
       Object.Version := 1;
-      Session.Allocate (Id => Object);
-      Query.Save_Field (Name  => COL_0_1_NAME, --  id
-                        Value => Object.Get_Key);
-      Query.Save_Field (Name  => COL_1_1_NAME, --  version
-                        Value => Object.Version);
-      Query.Save_Field (Name  => COL_2_1_NAME, --  date
+      Query.Save_Field (Name  => COL_0_1_NAME, --  date
                         Value => Object.Date);
-      Query.Save_Field (Name  => COL_3_1_NAME, --  message
+      Query.Save_Field (Name  => COL_1_1_NAME, --  message
                         Value => Object.Message);
-      Query.Save_Field (Name  => COL_4_1_NAME, --  entity_id
+      Query.Save_Field (Name  => COL_2_1_NAME, --  entity_id
                         Value => Object.Entity_Id);
+      Session.Allocate (Id => Object);
+      Query.Save_Field (Name  => COL_3_1_NAME, --  id
+                        Value => Object.Get_Key);
+      Query.Save_Field (Name  => COL_4_1_NAME, --  version
+                        Value => Object.Version);
       Query.Save_Field (Name  => COL_5_1_NAME, --  entity_type
                         Value => Object.Entity_Type);
-      Query.Save_Field (Name  => COL_6_1_NAME, --  user_fk
-                        Value => Object.User);
+      Query.Save_Field (Name  => COL_6_1_NAME, --  author_id
+                        Value => Object.Author);
       Query.Execute (Result);
       if Result /= 1 then
          raise ADO.Objects.INSERT_ERROR;
@@ -438,17 +438,17 @@ package body AWA.Comments.Models is
          return Util.Beans.Objects.Null_Object;
       end if;
       Impl := Comment_Impl (Obj.all)'Access;
-      if Name = "id" then
-         return ADO.Objects.To_Object (Impl.Get_Key);
-      end if;
       if Name = "date" then
          return Util.Beans.Objects.Time.To_Object (Impl.Date);
       end if;
       if Name = "message" then
          return Util.Beans.Objects.To_Object (Impl.Message);
       end if;
-      if Name = "entity_Id" then
+      if Name = "entity_id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Entity_Id));
+      end if;
+      if Name = "id" then
+         return ADO.Objects.To_Object (Impl.Get_Key);
       end if;
       if Name = "entity_type" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Entity_Type));
@@ -458,27 +458,6 @@ package body AWA.Comments.Models is
 
 
 
-   procedure List (Object  : in out Comment_Vector;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class) is
-      Stmt : ADO.Statements.Query_Statement
-        := Session.Create_Statement (Query, COMMENT_TABLE'Access);
-   begin
-      Stmt.Execute;
-      Comment_Vectors.Clear (Object);
-      while Stmt.Has_Elements loop
-         declare
-            Item : Comment_Ref;
-            Impl : constant Comment_Access := new Comment_Impl;
-         begin
-            Impl.Load (Stmt, Session);
-            ADO.Objects.Set_Object (Item, Impl.all'Access);
-            Object.Append (Item);
-         end;
-         Stmt.Next;
-      end loop;
-   end List;
-
    --  ------------------------------
    --  Load the object from current iterator position
    --  ------------------------------
@@ -486,15 +465,15 @@ package body AWA.Comments.Models is
                    Stmt    : in out ADO.Statements.Query_Statement'Class;
                    Session : in out ADO.Sessions.Session'Class) is
    begin
-      Object.Set_Key_Value (Stmt.Get_Identifier (0));
-      Object.Date := Stmt.Get_Time (2);
-      Object.Message := Stmt.Get_Unbounded_String (3);
-      Object.Entity_Id := Stmt.Get_Identifier (4);
+      Object.Date := Stmt.Get_Time (0);
+      Object.Message := Stmt.Get_Unbounded_String (1);
+      Object.Entity_Id := Stmt.Get_Identifier (2);
+      Object.Set_Key_Value (Stmt.Get_Identifier (3));
       Object.Entity_Type := ADO.Entity_Type (Stmt.Get_Integer (5));
       if not Stmt.Is_Null (6) then
-         Object.User.Set_Key_Value (Stmt.Get_Identifier (6), Session);
+         Object.Author.Set_Key_Value (Stmt.Get_Identifier (6), Session);
       end if;
-      Object.Version := Stmt.Get_Integer (1);
+      Object.Version := Stmt.Get_Integer (4);
       ADO.Objects.Set_Created (Object);
    end Load;
 

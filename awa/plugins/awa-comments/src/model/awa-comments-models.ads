@@ -31,7 +31,6 @@ with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
 with Util.Beans.Basic.Lists;
-with ADO;
 with AWA.Users.Models;
 pragma Warnings (On, "unit * is not referenced");
 package AWA.Comments.Models is
@@ -50,22 +49,11 @@ package AWA.Comments.Models is
    Null_Comment : constant Comment_Ref;
    function "=" (Left, Right : Comment_Ref'Class) return Boolean;
 
-   --
-   procedure Set_Id (Object : in out Comment_Ref;
-                     Value  : in ADO.Identifier);
-
-   --
-   function Get_Id (Object : in Comment_Ref)
-                 return ADO.Identifier;
-   --  Get the comment version.
-   function Get_Version (Object : in Comment_Ref)
-                 return Integer;
-
-   --  Set the comment publication date.
+   --  Set the comment publication date
    procedure Set_Date (Object : in out Comment_Ref;
                        Value  : in Ada.Calendar.Time);
 
-   --  Get the comment publication date.
+   --  Get the comment publication date
    function Get_Date (Object : in Comment_Ref)
                  return Ada.Calendar.Time;
 
@@ -81,28 +69,39 @@ package AWA.Comments.Models is
    function Get_Message (Object : in Comment_Ref)
                  return String;
 
-   --  Set the entity identifier to which this comment is associated.
+   --  Set the entity identifier to which this comment is associated
    procedure Set_Entity_Id (Object : in out Comment_Ref;
                             Value  : in ADO.Identifier);
 
-   --  Get the entity identifier to which this comment is associated.
+   --  Get the entity identifier to which this comment is associated
    function Get_Entity_Id (Object : in Comment_Ref)
                  return ADO.Identifier;
 
-   --  Set the entity type that correspond to the entity associated with this comment.
+   --  Set the comment identifier
+   procedure Set_Id (Object : in out Comment_Ref;
+                     Value  : in ADO.Identifier);
+
+   --  Get the comment identifier
+   function Get_Id (Object : in Comment_Ref)
+                 return ADO.Identifier;
+   --
+   function Get_Version (Object : in Comment_Ref)
+                 return Integer;
+
+   --
    procedure Set_Entity_Type (Object : in out Comment_Ref;
                               Value  : in ADO.Entity_Type);
 
-   --  Get the entity type that correspond to the entity associated with this comment.
+   --
    function Get_Entity_Type (Object : in Comment_Ref)
                  return ADO.Entity_Type;
 
-   --  Set the user who posted this comment
-   procedure Set_User (Object : in out Comment_Ref;
-                       Value  : in AWA.Users.Models.User_Ref'Class);
+   --
+   procedure Set_Author (Object : in out Comment_Ref;
+                         Value  : in AWA.Users.Models.User_Ref'Class);
 
-   --  Get the user who posted this comment
-   function Get_User (Object : in Comment_Ref)
+   --
+   function Get_Author (Object : in Comment_Ref)
                  return AWA.Users.Models.User_Ref'Class;
 
    --  Load the entity identified by 'Id'.
@@ -152,27 +151,18 @@ package AWA.Comments.Models is
    procedure Copy (Object : in Comment_Ref;
                    Into   : in out Comment_Ref);
 
-   package Comment_Vectors is
-      new Ada.Containers.Vectors (Index_Type   => Natural,
-                                  Element_Type => Comment_Ref,
-                                  "="          => "=");
-   subtype Comment_Vector is Comment_Vectors.Vector;
-
-   procedure List (Object  : in out Comment_Vector;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class);
 
 
 
 private
-   COMMENT_NAME : aliased constant String := "comments";
-   COL_0_1_NAME : aliased constant String := "id";
-   COL_1_1_NAME : aliased constant String := "version";
-   COL_2_1_NAME : aliased constant String := "date";
-   COL_3_1_NAME : aliased constant String := "message";
-   COL_4_1_NAME : aliased constant String := "entity_id";
+   COMMENT_NAME : aliased constant String := "awa_comments";
+   COL_0_1_NAME : aliased constant String := "date";
+   COL_1_1_NAME : aliased constant String := "message";
+   COL_2_1_NAME : aliased constant String := "entity_id";
+   COL_3_1_NAME : aliased constant String := "id";
+   COL_4_1_NAME : aliased constant String := "version";
    COL_5_1_NAME : aliased constant String := "entity_type";
-   COL_6_1_NAME : aliased constant String := "user_fk";
+   COL_6_1_NAME : aliased constant String := "author_id";
 
    COMMENT_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
      (Count => 7,
@@ -195,12 +185,12 @@ private
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
                                      Of_Class => COMMENT_TABLE'Access)
    with record
-       Version : Integer;
        Date : Ada.Calendar.Time;
        Message : Ada.Strings.Unbounded.Unbounded_String;
        Entity_Id : ADO.Identifier;
+       Version : Integer;
        Entity_Type : ADO.Entity_Type;
-       User : AWA.Users.Models.User_Ref;
+       Author : AWA.Users.Models.User_Ref;
    end record;
 
    type Comment_Access is access all Comment_Impl;
