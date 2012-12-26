@@ -221,7 +221,7 @@ package body AWA.Users.Services is
 
       --  Find the user registered under the given OpenID identifier.
       Query.Bind_Param (1, OpenId);
-      Query.Set_Filter ("o.openid = ?");
+      Query.Set_Filter ("o.open_id = ?");
       User.Find (DB, Query, Found);
       if not Found then
          Log.Info ("User {0} is not known", Email);
