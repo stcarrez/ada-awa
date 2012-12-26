@@ -44,8 +44,8 @@
       st.file_size,
       user.name
     FROM awa_storage AS st
-    INNER JOIN acl ON acl.entity_id = st.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
-    INNER JOIN awa_user ON st.owner_id = user.id
+    INNER JOIN awa_acl AS acl ON acl.entity_id = st.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
+    INNER JOIN awa_user AS user ON st.owner_id = user.id
     WHERE st.folder_id = :folder_id AND st.original_id IS NULL
     ORDER BY st.create_date DESC
        </sql>

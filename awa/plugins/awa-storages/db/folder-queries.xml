@@ -24,7 +24,7 @@
       folder.name,
       folder.create_date
     FROM awa_storage_folder as folder
-    INNER JOIN acl ON acl.entity_id = folder.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
+    INNER JOIN awa_acl AS acl ON acl.entity_id = folder.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
        </sql>
     </query>
 
