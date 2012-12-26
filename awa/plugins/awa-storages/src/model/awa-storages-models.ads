@@ -71,6 +71,9 @@ package AWA.Storages.Models is
    --  Get the storage data identifier
    function Get_Id (Object : in Storage_Data_Ref)
                  return ADO.Identifier;
+   --
+   function Get_Version (Object : in Storage_Data_Ref)
+                 return Integer;
 
    --  Set the storage content
    procedure Set_Data (Object : in out Storage_Data_Ref;
@@ -79,9 +82,6 @@ package AWA.Storages.Models is
    --  Get the storage content
    function Get_Data (Object : in Storage_Data_Ref)
                  return ADO.Blob_Ref;
-   --
-   function Get_Version (Object : in Storage_Data_Ref)
-                 return Integer;
 
    --  Load the entity identified by 'Id'.
    --  Raises the NOT_FOUND exception if it does not exist.
@@ -146,6 +146,17 @@ package AWA.Storages.Models is
    --  Get the storage folder identifier
    function Get_Id (Object : in Storage_Folder_Ref)
                  return ADO.Identifier;
+   --
+   function Get_Version (Object : in Storage_Folder_Ref)
+                 return Integer;
+
+   --  Set the folder creation date
+   procedure Set_Create_Date (Object : in out Storage_Folder_Ref;
+                              Value  : in Ada.Calendar.Time);
+
+   --  Get the folder creation date
+   function Get_Create_Date (Object : in Storage_Folder_Ref)
+                 return Ada.Calendar.Time;
 
    --
    procedure Set_Name (Object : in out Storage_Folder_Ref;
@@ -158,17 +169,6 @@ package AWA.Storages.Models is
                  return Ada.Strings.Unbounded.Unbounded_String;
    function Get_Name (Object : in Storage_Folder_Ref)
                  return String;
-   --
-   function Get_Version (Object : in Storage_Folder_Ref)
-                 return Integer;
-
-   --  Set the folder creation date
-   procedure Set_Create_Date (Object : in out Storage_Folder_Ref;
-                              Value  : in Ada.Calendar.Time);
-
-   --  Get the folder creation date
-   function Get_Create_Date (Object : in Storage_Folder_Ref)
-                 return Ada.Calendar.Time;
 
    --
    procedure Set_Owner (Object : in out Storage_Folder_Ref;
@@ -247,29 +247,6 @@ package AWA.Storages.Models is
    Null_Storage : constant Storage_Ref;
    function "=" (Left, Right : Storage_Ref'Class) return Boolean;
 
-   --  Set the storage identifier
-   procedure Set_Id (Object : in out Storage_Ref;
-                     Value  : in ADO.Identifier);
-
-   --  Get the storage identifier
-   function Get_Id (Object : in Storage_Ref)
-                 return ADO.Identifier;
-   --
-   function Get_Version (Object : in Storage_Ref)
-                 return Integer;
-
-   --  Set the storage URI
-   procedure Set_Uri (Object : in out Storage_Ref;
-                      Value  : in Ada.Strings.Unbounded.Unbounded_String);
-   procedure Set_Uri (Object : in out Storage_Ref;
-                      Value : in String);
-
-   --  Get the storage URI
-   function Get_Uri (Object : in Storage_Ref)
-                 return Ada.Strings.Unbounded.Unbounded_String;
-   function Get_Uri (Object : in Storage_Ref)
-                 return String;
-
    --  Set the storage type which defines where the content is stored
    procedure Set_Storage (Object : in out Storage_Ref;
                           Value  : in Storage_Type);
@@ -317,6 +294,29 @@ package AWA.Storages.Models is
                  return Ada.Strings.Unbounded.Unbounded_String;
    function Get_Mime_Type (Object : in Storage_Ref)
                  return String;
+
+   --  Set the storage URI
+   procedure Set_Uri (Object : in out Storage_Ref;
+                      Value  : in Ada.Strings.Unbounded.Unbounded_String);
+   procedure Set_Uri (Object : in out Storage_Ref;
+                      Value : in String);
+
+   --  Get the storage URI
+   function Get_Uri (Object : in Storage_Ref)
+                 return Ada.Strings.Unbounded.Unbounded_String;
+   function Get_Uri (Object : in Storage_Ref)
+                 return String;
+   --
+   function Get_Version (Object : in Storage_Ref)
+                 return Integer;
+
+   --  Set the storage identifier
+   procedure Set_Id (Object : in out Storage_Ref;
+                     Value  : in ADO.Identifier);
+
+   --  Get the storage identifier
+   function Get_Id (Object : in Storage_Ref)
+                 return ADO.Identifier;
 
    --
    procedure Set_Owner (Object : in out Storage_Ref;
@@ -427,34 +427,6 @@ package AWA.Storages.Models is
    --  Get the local store identifier
    function Get_Id (Object : in Store_Local_Ref)
                  return ADO.Identifier;
-
-   --  Set the local store path
-   procedure Set_Path (Object : in out Store_Local_Ref;
-                       Value  : in Ada.Strings.Unbounded.Unbounded_String);
-   procedure Set_Path (Object : in out Store_Local_Ref;
-                       Value : in String);
-
-   --  Get the local store path
-   function Get_Path (Object : in Store_Local_Ref)
-                 return Ada.Strings.Unbounded.Unbounded_String;
-   function Get_Path (Object : in Store_Local_Ref)
-                 return String;
-
-   --  Set the creation date
-   procedure Set_Create_Date (Object : in out Store_Local_Ref;
-                              Value  : in Ada.Calendar.Time);
-
-   --  Get the creation date
-   function Get_Create_Date (Object : in Store_Local_Ref)
-                 return Ada.Calendar.Time;
-
-   --  Set the local store expiration date
-   procedure Set_Expire_Date (Object : in out Store_Local_Ref;
-                              Value  : in Ada.Calendar.Time);
-
-   --  Get the local store expiration date
-   function Get_Expire_Date (Object : in Store_Local_Ref)
-                 return Ada.Calendar.Time;
    --
    function Get_Version (Object : in Store_Local_Ref)
                  return Integer;
@@ -474,6 +446,34 @@ package AWA.Storages.Models is
    --  Get the shared flag which indicates whether this local store can be shared by several clients.
    function Get_Shared (Object : in Store_Local_Ref)
                  return Boolean;
+
+   --  Set the local store path
+   procedure Set_Path (Object : in out Store_Local_Ref;
+                       Value  : in Ada.Strings.Unbounded.Unbounded_String);
+   procedure Set_Path (Object : in out Store_Local_Ref;
+                       Value : in String);
+
+   --  Get the local store path
+   function Get_Path (Object : in Store_Local_Ref)
+                 return Ada.Strings.Unbounded.Unbounded_String;
+   function Get_Path (Object : in Store_Local_Ref)
+                 return String;
+
+   --  Set the local store expiration date
+   procedure Set_Expire_Date (Object : in out Store_Local_Ref;
+                              Value  : in Ada.Calendar.Time);
+
+   --  Get the local store expiration date
+   function Get_Expire_Date (Object : in Store_Local_Ref)
+                 return Ada.Calendar.Time;
+
+   --  Set the creation date
+   procedure Set_Create_Date (Object : in out Store_Local_Ref;
+                              Value  : in Ada.Calendar.Time);
+
+   --  Get the creation date
+   function Get_Create_Date (Object : in Store_Local_Ref)
+                 return Ada.Calendar.Time;
 
    --
    procedure Set_Storage (Object : in out Store_Local_Ref;
@@ -642,8 +642,8 @@ package AWA.Storages.Models is
 private
    STORAGE_DATA_NAME : aliased constant String := "awa_storage_data";
    COL_0_1_NAME : aliased constant String := "id";
-   COL_1_1_NAME : aliased constant String := "data";
-   COL_2_1_NAME : aliased constant String := "version";
+   COL_1_1_NAME : aliased constant String := "version";
+   COL_2_1_NAME : aliased constant String := "data";
 
    STORAGE_DATA_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
      (Count => 3,
@@ -662,8 +662,8 @@ private
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
                                      Of_Class => STORAGE_DATA_TABLE'Access)
    with record
-       Data : ADO.Blob_Ref;
        Version : Integer;
+       Data : ADO.Blob_Ref;
    end record;
 
    type Storage_Data_Access is access all Storage_Data_Impl;
@@ -699,9 +699,9 @@ private
                         Impl   : out Storage_Data_Access);
    STORAGE_FOLDER_NAME : aliased constant String := "awa_storage_folder";
    COL_0_2_NAME : aliased constant String := "id";
-   COL_1_2_NAME : aliased constant String := "name";
-   COL_2_2_NAME : aliased constant String := "version";
-   COL_3_2_NAME : aliased constant String := "create_date";
+   COL_1_2_NAME : aliased constant String := "version";
+   COL_2_2_NAME : aliased constant String := "create_date";
+   COL_3_2_NAME : aliased constant String := "name";
    COL_4_2_NAME : aliased constant String := "owner_id";
    COL_5_2_NAME : aliased constant String := "workspace_id";
 
@@ -725,9 +725,9 @@ private
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
                                      Of_Class => STORAGE_FOLDER_TABLE'Access)
    with record
-       Name : Ada.Strings.Unbounded.Unbounded_String;
        Version : Integer;
        Create_Date : Ada.Calendar.Time;
+       Name : Ada.Strings.Unbounded.Unbounded_String;
        Owner : AWA.Users.Models.User_Ref;
        Workspace : AWA.Workspaces.Models.Workspace_Ref;
    end record;
@@ -764,14 +764,14 @@ private
    procedure Set_Field (Object : in out Storage_Folder_Ref'Class;
                         Impl   : out Storage_Folder_Access);
    STORAGE_NAME : aliased constant String := "awa_storage";
-   COL_0_3_NAME : aliased constant String := "id";
-   COL_1_3_NAME : aliased constant String := "version";
-   COL_2_3_NAME : aliased constant String := "uri";
-   COL_3_3_NAME : aliased constant String := "storage";
-   COL_4_3_NAME : aliased constant String := "create_date";
-   COL_5_3_NAME : aliased constant String := "name";
-   COL_6_3_NAME : aliased constant String := "file_size";
-   COL_7_3_NAME : aliased constant String := "mime_type";
+   COL_0_3_NAME : aliased constant String := "storage";
+   COL_1_3_NAME : aliased constant String := "create_date";
+   COL_2_3_NAME : aliased constant String := "name";
+   COL_3_3_NAME : aliased constant String := "file_size";
+   COL_4_3_NAME : aliased constant String := "mime_type";
+   COL_5_3_NAME : aliased constant String := "uri";
+   COL_6_3_NAME : aliased constant String := "version";
+   COL_7_3_NAME : aliased constant String := "id";
    COL_8_3_NAME : aliased constant String := "owner_id";
    COL_9_3_NAME : aliased constant String := "store_data_id";
    COL_10_3_NAME : aliased constant String := "folder_id";
@@ -805,13 +805,13 @@ private
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
                                      Of_Class => STORAGE_TABLE'Access)
    with record
-       Version : Integer;
-       Uri : Ada.Strings.Unbounded.Unbounded_String;
        Storage : Storage_Type;
        Create_Date : Ada.Calendar.Time;
        Name : Ada.Strings.Unbounded.Unbounded_String;
        File_Size : Integer;
        Mime_Type : Ada.Strings.Unbounded.Unbounded_String;
+       Uri : Ada.Strings.Unbounded.Unbounded_String;
+       Version : Integer;
        Owner : AWA.Users.Models.User_Ref;
        Store_Data : AWA.Storages.Models.Storage_Data_Ref;
        Folder : AWA.Storages.Models.Storage_Folder_Ref;
@@ -852,12 +852,12 @@ private
                         Impl   : out Storage_Access);
    STORE_LOCAL_NAME : aliased constant String := "awa_store_local";
    COL_0_4_NAME : aliased constant String := "id";
-   COL_1_4_NAME : aliased constant String := "path";
-   COL_2_4_NAME : aliased constant String := "create_date";
-   COL_3_4_NAME : aliased constant String := "expire_date";
-   COL_4_4_NAME : aliased constant String := "version";
-   COL_5_4_NAME : aliased constant String := "store_version";
-   COL_6_4_NAME : aliased constant String := "shared";
+   COL_1_4_NAME : aliased constant String := "version";
+   COL_2_4_NAME : aliased constant String := "store_version";
+   COL_3_4_NAME : aliased constant String := "shared";
+   COL_4_4_NAME : aliased constant String := "path";
+   COL_5_4_NAME : aliased constant String := "expire_date";
+   COL_6_4_NAME : aliased constant String := "create_date";
    COL_7_4_NAME : aliased constant String := "storage_id";
 
    STORE_LOCAL_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
@@ -882,12 +882,12 @@ private
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
                                      Of_Class => STORE_LOCAL_TABLE'Access)
    with record
-       Path : Ada.Strings.Unbounded.Unbounded_String;
-       Create_Date : Ada.Calendar.Time;
-       Expire_Date : Ada.Calendar.Time;
        Version : Integer;
        Store_Version : Integer;
        Shared : Boolean;
+       Path : Ada.Strings.Unbounded.Unbounded_String;
+       Expire_Date : Ada.Calendar.Time;
+       Create_Date : Ada.Calendar.Time;
        Storage : AWA.Storages.Models.Storage_Ref;
    end record;
 
