@@ -121,6 +121,8 @@ endif
 	for i in ${PLUGINS} ; do \
 	   $(MAKE) -C plugins/$$i install; \
 	done
+	# Install the AWA UML model in Dynamo UML search path
+	unzip -cq uml/awa.zargo awa.xmi > ${dynamodir}/base/uml/AWA.xmi
 
 pre-uninstall:
 	rm -rf ${includedir}/awa
