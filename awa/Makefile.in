@@ -11,6 +11,12 @@ LIBNAME=lib${NAME}
 
 include rules.mk
 
+
+DYNAMO_ARGS=--package AWA.Users.Models \
+  --package AWA.Events.Models \
+  --package AWA.Permissions.Models \
+  db uml/awa.zargo
+
 post-build:
 	for i in ${PLUGINS} ; do \
 	   $(MAKE) -C plugins/$$i ; \
