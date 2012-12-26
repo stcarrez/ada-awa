@@ -30,8 +30,8 @@
       blog.name,
       blog.uid,
       blog.create_date,
-      (SELECT count(*) FROM blog_post WHERE blog_post.blog_id = blog.id AND blog_post.status = 1)
-    FROM blog AS blog
+      (SELECT count(*) FROM awa_post WHERE awa_post.blog_id = blog.id AND awa_post.status = 1)
+    FROM awa_blog AS blog
     INNER JOIN acl ON acl.entity_id = blog.id AND acl.entity_type = :table AND acl.user_id = :user_id
     ORDER BY blog.create_date DESC
        </sql>

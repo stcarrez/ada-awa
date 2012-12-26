@@ -35,7 +35,7 @@
       post.create_date,
       user.name,
       post.text
-    FROM blog_post AS post
+    FROM awa_post AS post
     INNER JOIN user ON post.author_id = user.id
     WHERE post.status > 0
     ORDER BY post.create_date DESC

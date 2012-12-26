@@ -35,9 +35,9 @@
       post.create_date,
       post.status,
       user.name
-    FROM blog as blog
+    FROM awa_blog as blog
     INNER JOIN acl ON acl.entity_id = blog.id AND acl.entity_type = :table AND acl.user_id = :user_id
-    INNER JOIN blog_post AS post ON blog.id = post.blog_id
+    INNER JOIN awa_post AS post ON blog.id = post.blog_id
     INNER JOIN user ON post.author_id = user.id
     WHERE blog.id = :blog_id
        </sql>
