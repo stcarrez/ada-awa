@@ -81,10 +81,10 @@
 
   <entity-permission>
     <name>blog-create</name>
-    <entity-type>blog</entity-type>
+    <entity-type>awa_blog</entity-type>
     <description>Permission to create a new blog.</description>
     <sql>
-       SELECT acl.id FROM acl
+       SELECT acl.id FROM awa_acl AS acl
        WHERE acl.entity_type = :entity_type
        AND acl.user_id = :user_id   
     </sql>
@@ -92,10 +92,10 @@
 
   <entity-permission>
     <name>blog-delete</name>
-    <entity-type>blog</entity-type>
+    <entity-type>awa_blog</entity-type>
     <description>Permission to delete a blog.</description>
     <sql>
-       SELECT acl.id FROM acl
+       SELECT acl.id FROM awa_acl AS acl
        WHERE acl.entity_type = :entity_type
        AND acl.user_id = :user_id   
        AND acl.entity_id = :entity_id
@@ -104,10 +104,10 @@
 
   <entity-permission>
     <name>blog-create-post</name>
-    <entity-type>blog</entity-type>
+    <entity-type>awa_blog</entity-type>
     <description>Permission to create a new post.</description>
     <sql>
-       SELECT acl.id FROM acl
+       SELECT acl.id FROM awa_acl AS acl
        WHERE acl.entity_type = :entity_type
        AND acl.user_id = :user_id
        AND acl.entity_id = :entity_id
@@ -116,10 +116,10 @@
 
   <entity-permission>
     <name>blog-update-post</name>
-    <entity-type>blog</entity-type>
+    <entity-type>awa_blog</entity-type>
     <description>Permission to modify a post.</description>
     <sql>
-       SELECT acl.id FROM blog_post INNER JOIN acl ON acl.entity_id = blog_post.blog_id
+       SELECT acl.id FROM awa_post AS blog_post INNER JOIN awa_acl AS acl ON acl.entity_id = blog_post.blog_id
        WHERE acl.entity_type = :entity_type
        AND acl.user_id = :user_id
        AND blog_post.id = :entity_id
@@ -128,10 +128,10 @@
 
   <entity-permission>
     <name>blog-delete-post</name>
-    <entity-type>blog</entity-type>
+    <entity-type>awa_blog</entity-type>
     <description>Permission to delete a post.</description>
     <sql>
-       SELECT acl.id FROM blog_post INNER JOIN acl ON acl.entity_id = blog_post.blog_id
+       SELECT acl.id FROM awa_post AS blog_post INNER JOIN awa_acl AS acl ON acl.entity_id = blog_post.blog_id
        WHERE acl.entity_type = :entity_type
        AND acl.user_id = :user_id
        AND blog_post.id = :entity_id
