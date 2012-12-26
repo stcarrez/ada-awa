@@ -87,7 +87,7 @@ analyze:
 rebuild: clean build
 # Rebuild the generated model files
 generate:  post-generate
-	$(DYNAMO) generate db
+	$(DYNAMO) generate $(DYNAMO_ARGS)
 # Files to package in source distribution
 DISTFILES=README LICENSE.txt NOTICE.txt NEWS CHANGES ChangeLog config.guess configure config.sub \
 configure.in Makefile.in install-sh \
@@ -117,7 +117,7 @@ dist-prepare:   pre-dist-prepare
 dist:   pre-dist dist-prepare
 	tar --exclude=.svn --exclude="*~" --exclude="*.o" --exclude="*.ali" \
 	    --exclude="*.log" --exclude="*.a" --exclude=".project" \
-	    --exclude=".cproject" \
+	    --exclude=".cproject" --exclude='autom4te.cache' \
 	    --exclude=".gb_project" \
 	    -cvzf $(DIST_FILE) $(distdir)
 install_static:
@@ -125,14 +125,14 @@ install_static:
 install_shared:
 	$(MAKE) LIBRARY_TYPE=relocatable install_lib
 install_lib:  uninstall pre-install
-	$(MKDIR) -p ${includedir}/${NAME}
-	$(MKDIR) -p ${projectdir}/
-	 -p ${dynamodir}/${NAME}/config
-	 -p ${dynamodir}/${NAME}/bundles
-	 -p ${dynamodir}/${NAME}/web
-	 -p ${dynamodir}/${NAME}/db
-	 -p ${dynamodir}/${NAME}/db/mysql
-	 -p ${dynamodir}/${NAME}/db/sqlite
+	${MKDIR} -p ${includedir}/${NAME}
+	${MKDIR} -p ${projectdir}/
+	${MKDIR} -p ${dynamodir}/${NAME}/config
+	${MKDIR} -p ${dynamodir}/${NAME}/bundles
+	${MKDIR} -p ${dynamodir}/${NAME}/web
+	${MKDIR} -p ${dynamodir}/${NAME}/db
+	${MKDIR} -p ${dynamodir}/${NAME}/db/mysql
+	${MKDIR} -p ${dynamodir}/${NAME}/db/sqlite
 	test ! -d src ||  src/*.ad[bs] ${includedir}/${NAME}
 	test ! -d src/model || ${CP} src/model/*.ad[bs] ${includedir}/${NAME}
 	test ! -f distrib/${GPRPATH} || \
@@ -140,12 +140,13 @@ install_lib:  uninstall pre-install
 	        -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" < distrib/${GPRPATH} > ${projectdir}/${GPRPATH}
 	test ! -d config || ${CP} config/*.xml ${dynamodir}/${NAME}/config/
 	${CP} dynamo.xml ${dynamodir}/${NAME}/dynamo.xml
+	test ! -f MIT-LICENSE.txt || ${CP} MIT-LICENSE.txt ${dynamodir}/${NAME}/MIT-LICENSE.txt
+	test ! -f COPYING3 || ${CP} COPYING3 ${dynamodir}/${NAME}/COPYING3
 	test ! -f NOTICE.txt || ${CP} NOTICE.txt ${dynamodir}/${NAME}/NOTICE.txt
 	test ! -f LICENSE.txt || ${CP} LICENSE.txt ${dynamodir}/${NAME}/LICENSE.txt
 	test ! -d bundles || ${CP} bundles/*.properties ${dynamodir}/${NAME}/bundles/
-	test ! -d db || ${CP} db/*.xml ${dynamodir}/${NAME}/db/
-	test ! -d db/mysql || ${CP} db/mysql/*.sql ${dynamodir}/${NAME}/db/mysql
-	test ! -d db/sqlite || ${CP} db/sqlite/*.sql ${dynamodir}/${NAME}/db/sqlite
+	test ! -d db || \
+	     (tar --exclude=.svn --exclude='*~' -cf - db)| (cd ${dynamodir}/${NAME}/ && tar xf -)
 	test ! -d lib/${NAME}/${LIBRARY_TYPE} || \
 	     (${MKDIR} -p ${alidir}/${NAME}/$(LIBRARY_TYPE) && \
 	     ${CP} lib/${NAME}/$(LIBRARY_TYPE)/*.ali ${alidir}/${NAME}/$(LIBRARY_TYPE)/)
