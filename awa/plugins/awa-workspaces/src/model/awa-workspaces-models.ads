@@ -36,16 +36,15 @@ pragma Warnings (On, "unit * is not referenced");
 package AWA.Workspaces.Models is
    type Workspace_Ref is new ADO.Objects.Object_Ref with null record;
 
-   type Member_Ref is new ADO.Objects.Object_Ref with null record;
+   type Workspace_Feature_Ref is new ADO.Objects.Object_Ref with null record;
+
+   type Workspace_Member_Ref is new ADO.Objects.Object_Ref with null record;
 
    --  --------------------
-   --  The workspace allows to group all together the different
-   --  application entities which belong to a user or a set of collaborating users.
-   --  Other entities, for example a Blog, a Wiki space, will link to a
-   --  single workspace.
-   --  The workspace has members which are allowed to access the entities
-   --  that are part of the workspace.  A workspace owner decides which user
-   --  is part of the workspace or not.
+   --  The workspace controls the features available in the application
+   --  for a set of users: the workspace members.  A user could create
+   --  several workspaces and be part of several workspaces that other
+   --  users have created.
    --  --------------------
    --  Create an object key for Workspace.
    function Workspace_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
@@ -56,30 +55,30 @@ package AWA.Workspaces.Models is
    Null_Workspace : constant Workspace_Ref;
    function "=" (Left, Right : Workspace_Ref'Class) return Boolean;
 
-   --  Set the workspace identifier.
+   --  Set the workspace identifier
    procedure Set_Id (Object : in out Workspace_Ref;
                      Value  : in ADO.Identifier);
 
-   --  Get the workspace identifier.
+   --  Get the workspace identifier
    function Get_Id (Object : in Workspace_Ref)
                  return ADO.Identifier;
-   --  Get the storage data version.
+   --
    function Get_Version (Object : in Workspace_Ref)
                  return Integer;
 
-   --  Set the workspace creation date.
+   --
    procedure Set_Create_Date (Object : in out Workspace_Ref;
                               Value  : in Ada.Calendar.Time);
 
-   --  Get the workspace creation date.
+   --
    function Get_Create_Date (Object : in Workspace_Ref)
                  return Ada.Calendar.Time;
 
-   --  Set the workspace owner.
+   --
    procedure Set_Owner (Object : in out Workspace_Ref;
                         Value  : in AWA.Users.Models.User_Ref'Class);
 
-   --  Get the workspace owner.
+   --
    function Get_Owner (Object : in Workspace_Ref)
                  return AWA.Users.Models.User_Ref'Class;
 
@@ -130,78 +129,55 @@ package AWA.Workspaces.Models is
    procedure Copy (Object : in Workspace_Ref;
                    Into   : in out Workspace_Ref);
 
-   package Workspace_Vectors is
-      new Ada.Containers.Vectors (Index_Type   => Natural,
-                                  Element_Type => Workspace_Ref,
-                                  "="          => "=");
-   subtype Workspace_Vector is Workspace_Vectors.Vector;
-
-   procedure List (Object  : in out Workspace_Vector;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class);
-   --  --------------------
-   --  The workspace member indicates the users who are part of the workspace.
-   --  --------------------
-   --  Create an object key for Member.
-   function Member_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
-   --  Create an object key for Member from a string.
+   --  Create an object key for Workspace_Feature.
+   function Workspace_Feature_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
+   --  Create an object key for Workspace_Feature from a string.
    --  Raises Constraint_Error if the string cannot be converted into the object key.
-   function Member_Key (Id : in String) return ADO.Objects.Object_Key;
+   function Workspace_Feature_Key (Id : in String) return ADO.Objects.Object_Key;
 
-   Null_Member : constant Member_Ref;
-   function "=" (Left, Right : Member_Ref'Class) return Boolean;
+   Null_Workspace_Feature : constant Workspace_Feature_Ref;
+   function "=" (Left, Right : Workspace_Feature_Ref'Class) return Boolean;
 
-   --  Set the member identifier.
-   procedure Set_Id (Object : in out Member_Ref;
+   --
+   procedure Set_Id (Object : in out Workspace_Feature_Ref;
                      Value  : in ADO.Identifier);
 
-   --  Get the member identifier.
-   function Get_Id (Object : in Member_Ref)
+   --
+   function Get_Id (Object : in Workspace_Feature_Ref)
                  return ADO.Identifier;
-   --  Get the workspace member version.
-   function Get_Version (Object : in Member_Ref)
+
+   --
+   procedure Set_Limit (Object : in out Workspace_Feature_Ref;
+                        Value  : in Integer);
+
+   --
+   function Get_Limit (Object : in Workspace_Feature_Ref)
                  return Integer;
 
-   --  Set the member creation date.
-   procedure Set_Create_Date (Object : in out Member_Ref;
-                              Value  : in Ada.Calendar.Time);
-
-   --  Get the member creation date.
-   function Get_Create_Date (Object : in Member_Ref)
-                 return Ada.Calendar.Time;
-
-   --  Set the workspace member.
-   procedure Set_Member (Object : in out Member_Ref;
-                         Value  : in AWA.Users.Models.User_Ref'Class);
-
-   --  Get the workspace member.
-   function Get_Member (Object : in Member_Ref)
-                 return AWA.Users.Models.User_Ref'Class;
-
-   --  Set the workspace.
-   procedure Set_Workspace (Object : in out Member_Ref;
+   --
+   procedure Set_Workspace (Object : in out Workspace_Feature_Ref;
                             Value  : in AWA.Workspaces.Models.Workspace_Ref'Class);
 
-   --  Get the workspace.
-   function Get_Workspace (Object : in Member_Ref)
+   --
+   function Get_Workspace (Object : in Workspace_Feature_Ref)
                  return AWA.Workspaces.Models.Workspace_Ref'Class;
 
    --  Load the entity identified by 'Id'.
    --  Raises the NOT_FOUND exception if it does not exist.
-   procedure Load (Object  : in out Member_Ref;
+   procedure Load (Object  : in out Workspace_Feature_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Id      : in ADO.Identifier);
 
    --  Load the entity identified by 'Id'.
    --  Returns True in <b>Found</b> if the object was found and False if it does not exist.
-   procedure Load (Object  : in out Member_Ref;
+   procedure Load (Object  : in out Workspace_Feature_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Id      : in ADO.Identifier;
                    Found   : out Boolean);
 
    --  Find and load the entity.
    overriding
-   procedure Find (Object  : in out Member_Ref;
+   procedure Find (Object  : in out Workspace_Feature_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
                    Found   : out Boolean);
@@ -210,47 +186,122 @@ package AWA.Workspaces.Models is
    --  and it is inserted in the table.  Otherwise, only data fields which have been changed
    --  are updated.
    overriding
-   procedure Save (Object  : in out Member_Ref;
+   procedure Save (Object  : in out Workspace_Feature_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
    --  Delete the entity.
    overriding
-   procedure Delete (Object  : in out Member_Ref;
+   procedure Delete (Object  : in out Workspace_Feature_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class);
 
    overriding
-   function Get_Value (From : in Member_Ref;
+   function Get_Value (From : in Workspace_Feature_Ref;
                        Name : in String) return Util.Beans.Objects.Object;
 
    --  Table definition
-   MEMBER_TABLE : aliased constant ADO.Schemas.Class_Mapping;
+   WORKSPACE_FEATURE_TABLE : aliased constant ADO.Schemas.Class_Mapping;
 
    --  Internal method to allocate the Object_Record instance
    overriding
-   procedure Allocate (Object : in out Member_Ref);
+   procedure Allocate (Object : in out Workspace_Feature_Ref);
 
    --  Copy of the object.
-   procedure Copy (Object : in Member_Ref;
-                   Into   : in out Member_Ref);
+   procedure Copy (Object : in Workspace_Feature_Ref;
+                   Into   : in out Workspace_Feature_Ref);
 
-   package Member_Vectors is
-      new Ada.Containers.Vectors (Index_Type   => Natural,
-                                  Element_Type => Member_Ref,
-                                  "="          => "=");
-   subtype Member_Vector is Member_Vectors.Vector;
+   --  --------------------
+   --  The workspace member indicates the users who
+   --  are part of the workspace.
+   --  --------------------
+   --  Create an object key for Workspace_Member.
+   function Workspace_Member_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
+   --  Create an object key for Workspace_Member from a string.
+   --  Raises Constraint_Error if the string cannot be converted into the object key.
+   function Workspace_Member_Key (Id : in String) return ADO.Objects.Object_Key;
 
-   procedure List (Object  : in out Member_Vector;
+   Null_Workspace_Member : constant Workspace_Member_Ref;
+   function "=" (Left, Right : Workspace_Member_Ref'Class) return Boolean;
+
+   --
+   procedure Set_Id (Object : in out Workspace_Member_Ref;
+                     Value  : in ADO.Identifier);
+
+   --
+   function Get_Id (Object : in Workspace_Member_Ref)
+                 return ADO.Identifier;
+
+   --
+   procedure Set_Workspace (Object : in out Workspace_Member_Ref;
+                            Value  : in AWA.Workspaces.Models.Workspace_Ref'Class);
+
+   --
+   function Get_Workspace (Object : in Workspace_Member_Ref)
+                 return AWA.Workspaces.Models.Workspace_Ref'Class;
+
+   --
+   procedure Set_Member (Object : in out Workspace_Member_Ref;
+                         Value  : in AWA.Users.Models.User_Ref'Class);
+
+   --
+   function Get_Member (Object : in Workspace_Member_Ref)
+                 return AWA.Users.Models.User_Ref'Class;
+
+   --  Load the entity identified by 'Id'.
+   --  Raises the NOT_FOUND exception if it does not exist.
+   procedure Load (Object  : in out Workspace_Member_Ref;
                    Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class);
+                   Id      : in ADO.Identifier);
+
+   --  Load the entity identified by 'Id'.
+   --  Returns True in <b>Found</b> if the object was found and False if it does not exist.
+   procedure Load (Object  : in out Workspace_Member_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier;
+                   Found   : out Boolean);
+
+   --  Find and load the entity.
+   overriding
+   procedure Find (Object  : in out Workspace_Member_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean);
+
+   --  Save the entity.  If the entity does not have an identifier, an identifier is allocated
+   --  and it is inserted in the table.  Otherwise, only data fields which have been changed
+   --  are updated.
+   overriding
+   procedure Save (Object  : in out Workspace_Member_Ref;
+                   Session : in out ADO.Sessions.Master_Session'Class);
+
+   --  Delete the entity.
+   overriding
+   procedure Delete (Object  : in out Workspace_Member_Ref;
+                     Session : in out ADO.Sessions.Master_Session'Class);
+
+   overriding
+   function Get_Value (From : in Workspace_Member_Ref;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Table definition
+   WORKSPACE_MEMBER_TABLE : aliased constant ADO.Schemas.Class_Mapping;
+
+   --  Internal method to allocate the Object_Record instance
+   overriding
+   procedure Allocate (Object : in out Workspace_Member_Ref);
+
+   --  Copy of the object.
+   procedure Copy (Object : in Workspace_Member_Ref;
+                   Into   : in out Workspace_Member_Ref);
+
 
 
 
 private
-   WORKSPACE_NAME : aliased constant String := "workspace";
+   WORKSPACE_NAME : aliased constant String := "awa_workspace";
    COL_0_1_NAME : aliased constant String := "id";
    COL_1_1_NAME : aliased constant String := "version";
    COL_2_1_NAME : aliased constant String := "create_date";
-   COL_3_1_NAME : aliased constant String := "owner_fk";
+   COL_3_1_NAME : aliased constant String := "owner_id";
 
    WORKSPACE_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
      (Count => 4,
@@ -306,67 +357,118 @@ private
 
    procedure Set_Field (Object : in out Workspace_Ref'Class;
                         Impl   : out Workspace_Access);
-   MEMBER_NAME : aliased constant String := "workspace_member";
+   WORKSPACE_FEATURE_NAME : aliased constant String := "awa_workspace_feature";
    COL_0_2_NAME : aliased constant String := "id";
-   COL_1_2_NAME : aliased constant String := "version";
-   COL_2_2_NAME : aliased constant String := "create_date";
-   COL_3_2_NAME : aliased constant String := "user_fk";
-   COL_4_2_NAME : aliased constant String := "workspace_fk";
+   COL_1_2_NAME : aliased constant String := "limit";
+   COL_2_2_NAME : aliased constant String := "workspace_id";
 
-   MEMBER_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 5,
-      Table => MEMBER_NAME'Access,
+   WORKSPACE_FEATURE_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
+     (Count => 3,
+      Table => WORKSPACE_FEATURE_NAME'Access,
       Members => (
          1 => COL_0_2_NAME'Access,
          2 => COL_1_2_NAME'Access,
-         3 => COL_2_2_NAME'Access,
-         4 => COL_3_2_NAME'Access,
-         5 => COL_4_2_NAME'Access
+         3 => COL_2_2_NAME'Access
 )
      );
 
-   Null_Member : constant Member_Ref
-      := Member_Ref'(ADO.Objects.Object_Ref with others => <>);
+   Null_Workspace_Feature : constant Workspace_Feature_Ref
+      := Workspace_Feature_Ref'(ADO.Objects.Object_Ref with others => <>);
 
-   type Member_Impl is
+   type Workspace_Feature_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
-                                     Of_Class => MEMBER_TABLE'Access)
+                                     Of_Class => WORKSPACE_FEATURE_TABLE'Access)
    with record
-       Version : Integer;
-       Create_Date : Ada.Calendar.Time;
-       Member : AWA.Users.Models.User_Ref;
+       Limit : Integer;
        Workspace : AWA.Workspaces.Models.Workspace_Ref;
    end record;
 
-   type Member_Access is access all Member_Impl;
+   type Workspace_Feature_Access is access all Workspace_Feature_Impl;
 
    overriding
-   procedure Destroy (Object : access Member_Impl);
+   procedure Destroy (Object : access Workspace_Feature_Impl);
 
    overriding
-   procedure Find (Object  : in out Member_Impl;
+   procedure Find (Object  : in out Workspace_Feature_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
                    Found   : out Boolean);
 
    overriding
-   procedure Load (Object  : in out Member_Impl;
+   procedure Load (Object  : in out Workspace_Feature_Impl;
                    Session : in out ADO.Sessions.Session'Class);
-   procedure Load (Object  : in out Member_Impl;
+   procedure Load (Object  : in out Workspace_Feature_Impl;
                    Stmt    : in out ADO.Statements.Query_Statement'Class;
                    Session : in out ADO.Sessions.Session'Class);
 
    overriding
-   procedure Save (Object  : in out Member_Impl;
+   procedure Save (Object  : in out Workspace_Feature_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
-   procedure Create (Object  : in out Member_Impl;
+   procedure Create (Object  : in out Workspace_Feature_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 
    overriding
-   procedure Delete (Object  : in out Member_Impl;
+   procedure Delete (Object  : in out Workspace_Feature_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 
-   procedure Set_Field (Object : in out Member_Ref'Class;
-                        Impl   : out Member_Access);
+   procedure Set_Field (Object : in out Workspace_Feature_Ref'Class;
+                        Impl   : out Workspace_Feature_Access);
+   WORKSPACE_MEMBER_NAME : aliased constant String := "awa_workspace_member";
+   COL_0_3_NAME : aliased constant String := "id";
+   COL_1_3_NAME : aliased constant String := "workspace_id";
+   COL_2_3_NAME : aliased constant String := "member_id";
+
+   WORKSPACE_MEMBER_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
+     (Count => 3,
+      Table => WORKSPACE_MEMBER_NAME'Access,
+      Members => (
+         1 => COL_0_3_NAME'Access,
+         2 => COL_1_3_NAME'Access,
+         3 => COL_2_3_NAME'Access
+)
+     );
+
+   Null_Workspace_Member : constant Workspace_Member_Ref
+      := Workspace_Member_Ref'(ADO.Objects.Object_Ref with others => <>);
+
+   type Workspace_Member_Impl is
+      new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
+                                     Of_Class => WORKSPACE_MEMBER_TABLE'Access)
+   with record
+       Workspace : AWA.Workspaces.Models.Workspace_Ref;
+       Member : AWA.Users.Models.User_Ref;
+   end record;
+
+   type Workspace_Member_Access is access all Workspace_Member_Impl;
+
+   overriding
+   procedure Destroy (Object : access Workspace_Member_Impl);
+
+   overriding
+   procedure Find (Object  : in out Workspace_Member_Impl;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean);
+
+   overriding
+   procedure Load (Object  : in out Workspace_Member_Impl;
+                   Session : in out ADO.Sessions.Session'Class);
+   procedure Load (Object  : in out Workspace_Member_Impl;
+                   Stmt    : in out ADO.Statements.Query_Statement'Class;
+                   Session : in out ADO.Sessions.Session'Class);
+
+   overriding
+   procedure Save (Object  : in out Workspace_Member_Impl;
+                   Session : in out ADO.Sessions.Master_Session'Class);
+
+   procedure Create (Object  : in out Workspace_Member_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class);
+
+   overriding
+   procedure Delete (Object  : in out Workspace_Member_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class);
+
+   procedure Set_Field (Object : in out Workspace_Member_Ref'Class;
+                        Impl   : out Workspace_Member_Access);
 end AWA.Workspaces.Models;

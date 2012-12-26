@@ -277,8 +277,13 @@ package body AWA.Workspaces.Models is
                           Value => Object.Get_Key);
          Object.Clear_Modified (1);
       end if;
+      if Object.Is_Modified (3) then
+         Stmt.Save_Field (Name  => COL_2_1_NAME, --  create_date
+                          Value => Object.Create_Date);
+         Object.Clear_Modified (3);
+      end if;
       if Object.Is_Modified (4) then
-         Stmt.Save_Field (Name  => COL_3_1_NAME, --  owner_fk
+         Stmt.Save_Field (Name  => COL_3_1_NAME, --  owner_id
                           Value => Object.Owner);
          Object.Clear_Modified (4);
       end if;
@@ -318,7 +323,7 @@ package body AWA.Workspaces.Models is
                         Value => Object.Version);
       Query.Save_Field (Name  => COL_2_1_NAME, --  create_date
                         Value => Object.Create_Date);
-      Query.Save_Field (Name  => COL_3_1_NAME, --  owner_fk
+      Query.Save_Field (Name  => COL_3_1_NAME, --  owner_id
                         Value => Object.Owner);
       Query.Execute (Result);
       if Result /= 1 then
@@ -357,27 +362,6 @@ package body AWA.Workspaces.Models is
 
 
 
-   procedure List (Object  : in out Workspace_Vector;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class) is
-      Stmt : ADO.Statements.Query_Statement
-        := Session.Create_Statement (Query, WORKSPACE_TABLE'Access);
-   begin
-      Stmt.Execute;
-      Workspace_Vectors.Clear (Object);
-      while Stmt.Has_Elements loop
-         declare
-            Item : Workspace_Ref;
-            Impl : constant Workspace_Access := new Workspace_Impl;
-         begin
-            Impl.Load (Stmt, Session);
-            ADO.Objects.Set_Object (Item, Impl.all'Access);
-            Object.Append (Item);
-         end;
-         Stmt.Next;
-      end loop;
-   end List;
-
    --  ------------------------------
    --  Load the object from current iterator position
    --  ------------------------------
@@ -393,148 +377,122 @@ package body AWA.Workspaces.Models is
       Object.Version := Stmt.Get_Integer (1);
       ADO.Objects.Set_Created (Object);
    end Load;
-   function Member_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
+   function Workspace_Feature_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
       Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
-                                       Of_Class => MEMBER_TABLE'Access);
+                                       Of_Class => WORKSPACE_FEATURE_TABLE'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
       return Result;
-   end Member_Key;
+   end Workspace_Feature_Key;
 
-   function Member_Key (Id : in String) return ADO.Objects.Object_Key is
+   function Workspace_Feature_Key (Id : in String) return ADO.Objects.Object_Key is
       Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
-                                       Of_Class => MEMBER_TABLE'Access);
+                                       Of_Class => WORKSPACE_FEATURE_TABLE'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
       return Result;
-   end Member_Key;
+   end Workspace_Feature_Key;
 
-   function "=" (Left, Right : Member_Ref'Class) return Boolean is
+   function "=" (Left, Right : Workspace_Feature_Ref'Class) return Boolean is
    begin
       return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
    end "=";
 
-   procedure Set_Field (Object : in out Member_Ref'Class;
-                        Impl   : out Member_Access) is
+   procedure Set_Field (Object : in out Workspace_Feature_Ref'Class;
+                        Impl   : out Workspace_Feature_Access) is
       Result : ADO.Objects.Object_Record_Access;
    begin
       Object.Prepare_Modify (Result);
-      Impl := Member_Impl (Result.all)'Access;
+      Impl := Workspace_Feature_Impl (Result.all)'Access;
    end Set_Field;
 
    --  Internal method to allocate the Object_Record instance
-   procedure Allocate (Object : in out Member_Ref) is
-      Impl : Member_Access;
+   procedure Allocate (Object : in out Workspace_Feature_Ref) is
+      Impl : Workspace_Feature_Access;
    begin
-      Impl := new Member_Impl;
-      Impl.Version := 0;
-      Impl.Create_Date := ADO.DEFAULT_TIME;
+      Impl := new Workspace_Feature_Impl;
+      Impl.Limit := 0;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
    -- ----------------------------------------
-   --  Data object: Member
+   --  Data object: Workspace_Feature
    -- ----------------------------------------
 
-   procedure Set_Id (Object : in out Member_Ref;
+   procedure Set_Id (Object : in out Workspace_Feature_Ref;
                      Value  : in ADO.Identifier) is
-      Impl : Member_Access;
+      Impl : Workspace_Feature_Access;
    begin
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
    end Set_Id;
 
-   function Get_Id (Object : in Member_Ref)
+   function Get_Id (Object : in Workspace_Feature_Ref)
                   return ADO.Identifier is
-      Impl : constant Member_Access := Member_Impl (Object.Get_Object.all)'Access;
+      Impl : constant Workspace_Feature_Access := Workspace_Feature_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
 
 
-   function Get_Version (Object : in Member_Ref)
+   procedure Set_Limit (Object : in out Workspace_Feature_Ref;
+                        Value  : in Integer) is
+      Impl : Workspace_Feature_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Integer (Impl.all, 2, Impl.Limit, Value);
+      ADO.Objects.Set_Field_Integer (Impl.all, 2, Impl.Limit, Value);
+   end Set_Limit;
+
+   function Get_Limit (Object : in Workspace_Feature_Ref)
                   return Integer is
-      Impl : constant Member_Access := Member_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Workspace_Feature_Access := Workspace_Feature_Impl (Object.Get_Load_Object.all)'Access;
    begin
-      return Impl.Version;
-   end Get_Version;
+      return Impl.Limit;
+   end Get_Limit;
 
 
-   procedure Set_Create_Date (Object : in out Member_Ref;
-                              Value  : in Ada.Calendar.Time) is
-      Impl : Member_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Time (Impl.all, 3, Impl.Create_Date, Value);
-   end Set_Create_Date;
-
-   function Get_Create_Date (Object : in Member_Ref)
-                  return Ada.Calendar.Time is
-      Impl : constant Member_Access := Member_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Create_Date;
-   end Get_Create_Date;
-
-
-   procedure Set_Member (Object : in out Member_Ref;
-                         Value  : in AWA.Users.Models.User_Ref'Class) is
-      Impl : Member_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 4, Impl.Member, Value);
-   end Set_Member;
-
-   function Get_Member (Object : in Member_Ref)
-                  return AWA.Users.Models.User_Ref'Class is
-      Impl : constant Member_Access := Member_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Member;
-   end Get_Member;
-
-
-   procedure Set_Workspace (Object : in out Member_Ref;
+   procedure Set_Workspace (Object : in out Workspace_Feature_Ref;
                             Value  : in AWA.Workspaces.Models.Workspace_Ref'Class) is
-      Impl : Member_Access;
+      Impl : Workspace_Feature_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 5, Impl.Workspace, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 3, Impl.Workspace, Value);
    end Set_Workspace;
 
-   function Get_Workspace (Object : in Member_Ref)
+   function Get_Workspace (Object : in Workspace_Feature_Ref)
                   return AWA.Workspaces.Models.Workspace_Ref'Class is
-      Impl : constant Member_Access := Member_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Workspace_Feature_Access := Workspace_Feature_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Workspace;
    end Get_Workspace;
 
    --  Copy of the object.
-   procedure Copy (Object : in Member_Ref;
-                   Into   : in out Member_Ref) is
-      Result : Member_Ref;
+   procedure Copy (Object : in Workspace_Feature_Ref;
+                   Into   : in out Workspace_Feature_Ref) is
+      Result : Workspace_Feature_Ref;
    begin
       if not Object.Is_Null then
          declare
-            Impl : constant Member_Access
-              := Member_Impl (Object.Get_Load_Object.all)'Access;
-            Copy : constant Member_Access
-              := new Member_Impl;
+            Impl : constant Workspace_Feature_Access
+              := Workspace_Feature_Impl (Object.Get_Load_Object.all)'Access;
+            Copy : constant Workspace_Feature_Access
+              := new Workspace_Feature_Impl;
          begin
             ADO.Objects.Set_Object (Result, Copy.all'Access);
             Copy.Copy (Impl.all);
-            Copy.Version := Impl.Version;
-            Copy.Create_Date := Impl.Create_Date;
-            Copy.Member := Impl.Member;
+            Copy.Limit := Impl.Limit;
             Copy.Workspace := Impl.Workspace;
          end;
       end if;
       Into := Result;
    end Copy;
 
-   procedure Find (Object  : in out Member_Ref;
+   procedure Find (Object  : in out Workspace_Feature_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
                    Found   : out Boolean) is
-      Impl  : constant Member_Access := new Member_Impl;
+      Impl  : constant Workspace_Feature_Access := new Workspace_Feature_Impl;
    begin
       Impl.Find (Session, Query, Found);
       if Found then
@@ -545,10 +503,10 @@ package body AWA.Workspaces.Models is
       end if;
    end Find;
 
-   procedure Load (Object  : in out Member_Ref;
+   procedure Load (Object  : in out Workspace_Feature_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Id      : in ADO.Identifier) is
-      Impl  : constant Member_Access := new Member_Impl;
+      Impl  : constant Workspace_Feature_Access := new Workspace_Feature_Impl;
       Found : Boolean;
       Query : ADO.SQL.Query;
    begin
@@ -562,11 +520,11 @@ package body AWA.Workspaces.Models is
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Load;
 
-   procedure Load (Object  : in out Member_Ref;
+   procedure Load (Object  : in out Workspace_Feature_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Id      : in ADO.Identifier;
                    Found   : out Boolean) is
-      Impl  : constant Member_Access := new Member_Impl;
+      Impl  : constant Workspace_Feature_Access := new Workspace_Feature_Impl;
       Query : ADO.SQL.Query;
    begin
       Query.Bind_Param (Position => 1, Value => Id);
@@ -579,12 +537,12 @@ package body AWA.Workspaces.Models is
       end if;
    end Load;
 
-   procedure Save (Object  : in out Member_Ref;
+   procedure Save (Object  : in out Workspace_Feature_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
    begin
       if Impl = null then
-         Impl := new Member_Impl;
+         Impl := new Workspace_Feature_Impl;
          ADO.Objects.Set_Object (Object, Impl);
       end if;
       if not ADO.Objects.Is_Created (Impl.all) then
@@ -594,7 +552,7 @@ package body AWA.Workspaces.Models is
       end if;
    end Save;
 
-   procedure Delete (Object  : in out Member_Ref;
+   procedure Delete (Object  : in out Workspace_Feature_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
    begin
@@ -606,23 +564,23 @@ package body AWA.Workspaces.Models is
    --  --------------------
    --  Free the object
    --  --------------------
-   procedure Destroy (Object : access Member_Impl) is
-      type Member_Impl_Ptr is access all Member_Impl;
+   procedure Destroy (Object : access Workspace_Feature_Impl) is
+      type Workspace_Feature_Impl_Ptr is access all Workspace_Feature_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
-              (Member_Impl, Member_Impl_Ptr);
+              (Workspace_Feature_Impl, Workspace_Feature_Impl_Ptr);
       pragma Warnings (Off, "*redundant conversion*");
-      Ptr : Member_Impl_Ptr := Member_Impl (Object.all)'Access;
+      Ptr : Workspace_Feature_Impl_Ptr := Workspace_Feature_Impl (Object.all)'Access;
       pragma Warnings (On, "*redundant conversion*");
    begin
       Unchecked_Free (Ptr);
    end Destroy;
 
-   procedure Find (Object  : in out Member_Impl;
+   procedure Find (Object  : in out Workspace_Feature_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
                    Found   : out Boolean) is
       Stmt : ADO.Statements.Query_Statement
-          := Session.Create_Statement (Query, MEMBER_TABLE'Access);
+          := Session.Create_Statement (Query, WORKSPACE_FEATURE_TABLE'Access);
    begin
       Stmt.Execute;
       if Stmt.Has_Elements then
@@ -635,7 +593,7 @@ package body AWA.Workspaces.Models is
    end Find;
 
    overriding
-   procedure Load (Object  : in out Member_Impl;
+   procedure Load (Object  : in out Workspace_Feature_Impl;
                    Session : in out ADO.Sessions.Session'Class) is
       Found : Boolean;
       Query : ADO.SQL.Query;
@@ -649,33 +607,29 @@ package body AWA.Workspaces.Models is
       end if;
    end Load;
 
-   procedure Save (Object  : in out Member_Impl;
+   procedure Save (Object  : in out Workspace_Feature_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
-         := Session.Create_Statement (MEMBER_TABLE'Access);
+         := Session.Create_Statement (WORKSPACE_FEATURE_TABLE'Access);
    begin
       if Object.Is_Modified (1) then
          Stmt.Save_Field (Name  => COL_0_2_NAME, --  id
                           Value => Object.Get_Key);
          Object.Clear_Modified (1);
       end if;
-      if Object.Is_Modified (4) then
-         Stmt.Save_Field (Name  => COL_3_2_NAME, --  user_fk
-                          Value => Object.Member);
-         Object.Clear_Modified (4);
+      if Object.Is_Modified (2) then
+         Stmt.Save_Field (Name  => COL_1_2_NAME, --  limit
+                          Value => Object.Limit);
+         Object.Clear_Modified (2);
       end if;
-      if Object.Is_Modified (5) then
-         Stmt.Save_Field (Name  => COL_4_2_NAME, --  workspace_fk
+      if Object.Is_Modified (3) then
+         Stmt.Save_Field (Name  => COL_2_2_NAME, --  workspace_id
                           Value => Object.Workspace);
-         Object.Clear_Modified (5);
+         Object.Clear_Modified (3);
       end if;
       if Stmt.Has_Save_Fields then
-         Object.Version := Object.Version + 1;
-         Stmt.Save_Field (Name  => "version",
-                          Value => Object.Version);
-         Stmt.Set_Filter (Filter => "id = ? and version = ?");
+         Stmt.Set_Filter (Filter => "id = ?");
          Stmt.Add_Param (Value => Object.Get_Key);
-         Stmt.Add_Param (Value => Object.Version - 1);
          declare
             Result : Integer;
          begin
@@ -683,31 +637,24 @@ package body AWA.Workspaces.Models is
             if Result /= 1 then
                if Result /= 0 then
                   raise ADO.Objects.UPDATE_ERROR;
-               else
-                  raise ADO.Objects.LAZY_LOCK;
                end if;
             end if;
          end;
       end if;
    end Save;
 
-   procedure Create (Object  : in out Member_Impl;
+   procedure Create (Object  : in out Workspace_Feature_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
-                  := Session.Create_Statement (MEMBER_TABLE'Access);
+                  := Session.Create_Statement (WORKSPACE_FEATURE_TABLE'Access);
       Result : Integer;
    begin
-      Object.Version := 1;
       Session.Allocate (Id => Object);
       Query.Save_Field (Name  => COL_0_2_NAME, --  id
                         Value => Object.Get_Key);
-      Query.Save_Field (Name  => COL_1_2_NAME, --  version
-                        Value => Object.Version);
-      Query.Save_Field (Name  => COL_2_2_NAME, --  create_date
-                        Value => Object.Create_Date);
-      Query.Save_Field (Name  => COL_3_2_NAME, --  user_fk
-                        Value => Object.Member);
-      Query.Save_Field (Name  => COL_4_2_NAME, --  workspace_fk
+      Query.Save_Field (Name  => COL_1_2_NAME, --  limit
+                        Value => Object.Limit);
+      Query.Save_Field (Name  => COL_2_2_NAME, --  workspace_id
                         Value => Object.Workspace);
       Query.Execute (Result);
       if Result /= 1 then
@@ -716,73 +663,375 @@ package body AWA.Workspaces.Models is
       ADO.Objects.Set_Created (Object);
    end Create;
 
-   procedure Delete (Object  : in out Member_Impl;
+   procedure Delete (Object  : in out Workspace_Feature_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
-         := Session.Create_Statement (MEMBER_TABLE'Access);
+         := Session.Create_Statement (WORKSPACE_FEATURE_TABLE'Access);
    begin
       Stmt.Set_Filter (Filter => "id = ?");
       Stmt.Add_Param (Value => Object.Get_Key);
       Stmt.Execute;
    end Delete;
 
-   function Get_Value (From : in Member_Ref;
+   function Get_Value (From : in Workspace_Feature_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
-      Impl : access Member_Impl;
+      Impl : access Workspace_Feature_Impl;
    begin
       if Obj = null then
          return Util.Beans.Objects.Null_Object;
       end if;
-      Impl := Member_Impl (Obj.all)'Access;
+      Impl := Workspace_Feature_Impl (Obj.all)'Access;
       if Name = "id" then
          return ADO.Objects.To_Object (Impl.Get_Key);
       end if;
-      if Name = "create_date" then
-         return Util.Beans.Objects.Time.To_Object (Impl.Create_Date);
+      if Name = "limit" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Limit));
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
 
 
 
-   procedure List (Object  : in out Member_Vector;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class) is
-      Stmt : ADO.Statements.Query_Statement
-        := Session.Create_Statement (Query, MEMBER_TABLE'Access);
-   begin
-      Stmt.Execute;
-      Member_Vectors.Clear (Object);
-      while Stmt.Has_Elements loop
-         declare
-            Item : Member_Ref;
-            Impl : constant Member_Access := new Member_Impl;
-         begin
-            Impl.Load (Stmt, Session);
-            ADO.Objects.Set_Object (Item, Impl.all'Access);
-            Object.Append (Item);
-         end;
-         Stmt.Next;
-      end loop;
-   end List;
-
    --  ------------------------------
    --  Load the object from current iterator position
    --  ------------------------------
-   procedure Load (Object  : in out Member_Impl;
+   procedure Load (Object  : in out Workspace_Feature_Impl;
                    Stmt    : in out ADO.Statements.Query_Statement'Class;
                    Session : in out ADO.Sessions.Session'Class) is
    begin
       Object.Set_Key_Value (Stmt.Get_Identifier (0));
-      Object.Create_Date := Stmt.Get_Time (2);
-      if not Stmt.Is_Null (3) then
-         Object.Member.Set_Key_Value (Stmt.Get_Identifier (3), Session);
+      Object.Limit := Stmt.Get_Integer (1);
+      if not Stmt.Is_Null (2) then
+         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (2), Session);
       end if;
-      if not Stmt.Is_Null (4) then
-         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (4), Session);
+      ADO.Objects.Set_Created (Object);
+   end Load;
+   function Workspace_Member_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+                                       Of_Class => WORKSPACE_MEMBER_TABLE'Access);
+   begin
+      ADO.Objects.Set_Value (Result, Id);
+      return Result;
+   end Workspace_Member_Key;
+
+   function Workspace_Member_Key (Id : in String) return ADO.Objects.Object_Key is
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+                                       Of_Class => WORKSPACE_MEMBER_TABLE'Access);
+   begin
+      ADO.Objects.Set_Value (Result, Id);
+      return Result;
+   end Workspace_Member_Key;
+
+   function "=" (Left, Right : Workspace_Member_Ref'Class) return Boolean is
+   begin
+      return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
+   end "=";
+
+   procedure Set_Field (Object : in out Workspace_Member_Ref'Class;
+                        Impl   : out Workspace_Member_Access) is
+      Result : ADO.Objects.Object_Record_Access;
+   begin
+      Object.Prepare_Modify (Result);
+      Impl := Workspace_Member_Impl (Result.all)'Access;
+   end Set_Field;
+
+   --  Internal method to allocate the Object_Record instance
+   procedure Allocate (Object : in out Workspace_Member_Ref) is
+      Impl : Workspace_Member_Access;
+   begin
+      Impl := new Workspace_Member_Impl;
+      ADO.Objects.Set_Object (Object, Impl.all'Access);
+   end Allocate;
+
+   -- ----------------------------------------
+   --  Data object: Workspace_Member
+   -- ----------------------------------------
+
+   procedure Set_Id (Object : in out Workspace_Member_Ref;
+                     Value  : in ADO.Identifier) is
+      Impl : Workspace_Member_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
+   end Set_Id;
+
+   function Get_Id (Object : in Workspace_Member_Ref)
+                  return ADO.Identifier is
+      Impl : constant Workspace_Member_Access := Workspace_Member_Impl (Object.Get_Object.all)'Access;
+   begin
+      return Impl.Get_Key_Value;
+   end Get_Id;
+
+
+   procedure Set_Workspace (Object : in out Workspace_Member_Ref;
+                            Value  : in AWA.Workspaces.Models.Workspace_Ref'Class) is
+      Impl : Workspace_Member_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 2, Impl.Workspace, Value);
+   end Set_Workspace;
+
+   function Get_Workspace (Object : in Workspace_Member_Ref)
+                  return AWA.Workspaces.Models.Workspace_Ref'Class is
+      Impl : constant Workspace_Member_Access := Workspace_Member_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Workspace;
+   end Get_Workspace;
+
+
+   procedure Set_Member (Object : in out Workspace_Member_Ref;
+                         Value  : in AWA.Users.Models.User_Ref'Class) is
+      Impl : Workspace_Member_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 3, Impl.Member, Value);
+   end Set_Member;
+
+   function Get_Member (Object : in Workspace_Member_Ref)
+                  return AWA.Users.Models.User_Ref'Class is
+      Impl : constant Workspace_Member_Access := Workspace_Member_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Member;
+   end Get_Member;
+
+   --  Copy of the object.
+   procedure Copy (Object : in Workspace_Member_Ref;
+                   Into   : in out Workspace_Member_Ref) is
+      Result : Workspace_Member_Ref;
+   begin
+      if not Object.Is_Null then
+         declare
+            Impl : constant Workspace_Member_Access
+              := Workspace_Member_Impl (Object.Get_Load_Object.all)'Access;
+            Copy : constant Workspace_Member_Access
+              := new Workspace_Member_Impl;
+         begin
+            ADO.Objects.Set_Object (Result, Copy.all'Access);
+            Copy.Copy (Impl.all);
+            Copy.Workspace := Impl.Workspace;
+            Copy.Member := Impl.Member;
+         end;
       end if;
-      Object.Version := Stmt.Get_Integer (1);
+      Into := Result;
+   end Copy;
+
+   procedure Find (Object  : in out Workspace_Member_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean) is
+      Impl  : constant Workspace_Member_Access := new Workspace_Member_Impl;
+   begin
+      Impl.Find (Session, Query, Found);
+      if Found then
+         ADO.Objects.Set_Object (Object, Impl.all'Access);
+      else
+         ADO.Objects.Set_Object (Object, null);
+         Destroy (Impl);
+      end if;
+   end Find;
+
+   procedure Load (Object  : in out Workspace_Member_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier) is
+      Impl  : constant Workspace_Member_Access := new Workspace_Member_Impl;
+      Found : Boolean;
+      Query : ADO.SQL.Query;
+   begin
+      Query.Bind_Param (Position => 1, Value => Id);
+      Query.Set_Filter ("id = ?");
+      Impl.Find (Session, Query, Found);
+      if not Found then
+         Destroy (Impl);
+         raise ADO.Objects.NOT_FOUND;
+      end if;
+      ADO.Objects.Set_Object (Object, Impl.all'Access);
+   end Load;
+
+   procedure Load (Object  : in out Workspace_Member_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier;
+                   Found   : out Boolean) is
+      Impl  : constant Workspace_Member_Access := new Workspace_Member_Impl;
+      Query : ADO.SQL.Query;
+   begin
+      Query.Bind_Param (Position => 1, Value => Id);
+      Query.Set_Filter ("id = ?");
+      Impl.Find (Session, Query, Found);
+      if not Found then
+         Destroy (Impl);
+      else
+         ADO.Objects.Set_Object (Object, Impl.all'Access);
+      end if;
+   end Load;
+
+   procedure Save (Object  : in out Workspace_Member_Ref;
+                   Session : in out ADO.Sessions.Master_Session'Class) is
+      Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
+   begin
+      if Impl = null then
+         Impl := new Workspace_Member_Impl;
+         ADO.Objects.Set_Object (Object, Impl);
+      end if;
+      if not ADO.Objects.Is_Created (Impl.all) then
+         Impl.Create (Session);
+      else
+         Impl.Save (Session);
+      end if;
+   end Save;
+
+   procedure Delete (Object  : in out Workspace_Member_Ref;
+                     Session : in out ADO.Sessions.Master_Session'Class) is
+      Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
+   begin
+      if Impl /= null then
+         Impl.Delete (Session);
+      end if;
+   end Delete;
+
+   --  --------------------
+   --  Free the object
+   --  --------------------
+   procedure Destroy (Object : access Workspace_Member_Impl) is
+      type Workspace_Member_Impl_Ptr is access all Workspace_Member_Impl;
+      procedure Unchecked_Free is new Ada.Unchecked_Deallocation
+              (Workspace_Member_Impl, Workspace_Member_Impl_Ptr);
+      pragma Warnings (Off, "*redundant conversion*");
+      Ptr : Workspace_Member_Impl_Ptr := Workspace_Member_Impl (Object.all)'Access;
+      pragma Warnings (On, "*redundant conversion*");
+   begin
+      Unchecked_Free (Ptr);
+   end Destroy;
+
+   procedure Find (Object  : in out Workspace_Member_Impl;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean) is
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Query, WORKSPACE_MEMBER_TABLE'Access);
+   begin
+      Stmt.Execute;
+      if Stmt.Has_Elements then
+         Object.Load (Stmt, Session);
+         Stmt.Next;
+         Found := not Stmt.Has_Elements;
+      else
+         Found := False;
+      end if;
+   end Find;
+
+   overriding
+   procedure Load (Object  : in out Workspace_Member_Impl;
+                   Session : in out ADO.Sessions.Session'Class) is
+      Found : Boolean;
+      Query : ADO.SQL.Query;
+      Id    : constant ADO.Identifier := Object.Get_Key_Value;
+   begin
+      Query.Bind_Param (Position => 1, Value => Id);
+      Query.Set_Filter ("id = ?");
+      Object.Find (Session, Query, Found);
+      if not Found then
+         raise ADO.Objects.NOT_FOUND;
+      end if;
+   end Load;
+
+   procedure Save (Object  : in out Workspace_Member_Impl;
+                   Session : in out ADO.Sessions.Master_Session'Class) is
+      Stmt : ADO.Statements.Update_Statement
+         := Session.Create_Statement (WORKSPACE_MEMBER_TABLE'Access);
+   begin
+      if Object.Is_Modified (1) then
+         Stmt.Save_Field (Name  => COL_0_3_NAME, --  id
+                          Value => Object.Get_Key);
+         Object.Clear_Modified (1);
+      end if;
+      if Object.Is_Modified (2) then
+         Stmt.Save_Field (Name  => COL_1_3_NAME, --  workspace_id
+                          Value => Object.Workspace);
+         Object.Clear_Modified (2);
+      end if;
+      if Object.Is_Modified (3) then
+         Stmt.Save_Field (Name  => COL_2_3_NAME, --  member_id
+                          Value => Object.Member);
+         Object.Clear_Modified (3);
+      end if;
+      if Stmt.Has_Save_Fields then
+         Stmt.Set_Filter (Filter => "id = ?");
+         Stmt.Add_Param (Value => Object.Get_Key);
+         declare
+            Result : Integer;
+         begin
+            Stmt.Execute (Result);
+            if Result /= 1 then
+               if Result /= 0 then
+                  raise ADO.Objects.UPDATE_ERROR;
+               end if;
+            end if;
+         end;
+      end if;
+   end Save;
+
+   procedure Create (Object  : in out Workspace_Member_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class) is
+      Query : ADO.Statements.Insert_Statement
+                  := Session.Create_Statement (WORKSPACE_MEMBER_TABLE'Access);
+      Result : Integer;
+   begin
+      Session.Allocate (Id => Object);
+      Query.Save_Field (Name  => COL_0_3_NAME, --  id
+                        Value => Object.Get_Key);
+      Query.Save_Field (Name  => COL_1_3_NAME, --  workspace_id
+                        Value => Object.Workspace);
+      Query.Save_Field (Name  => COL_2_3_NAME, --  member_id
+                        Value => Object.Member);
+      Query.Execute (Result);
+      if Result /= 1 then
+         raise ADO.Objects.INSERT_ERROR;
+      end if;
+      ADO.Objects.Set_Created (Object);
+   end Create;
+
+   procedure Delete (Object  : in out Workspace_Member_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class) is
+      Stmt : ADO.Statements.Delete_Statement
+         := Session.Create_Statement (WORKSPACE_MEMBER_TABLE'Access);
+   begin
+      Stmt.Set_Filter (Filter => "id = ?");
+      Stmt.Add_Param (Value => Object.Get_Key);
+      Stmt.Execute;
+   end Delete;
+
+   function Get_Value (From : in Workspace_Member_Ref;
+                       Name : in String) return Util.Beans.Objects.Object is
+      Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
+      Impl : access Workspace_Member_Impl;
+   begin
+      if Obj = null then
+         return Util.Beans.Objects.Null_Object;
+      end if;
+      Impl := Workspace_Member_Impl (Obj.all)'Access;
+      if Name = "id" then
+         return ADO.Objects.To_Object (Impl.Get_Key);
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+
+
+   --  ------------------------------
+   --  Load the object from current iterator position
+   --  ------------------------------
+   procedure Load (Object  : in out Workspace_Member_Impl;
+                   Stmt    : in out ADO.Statements.Query_Statement'Class;
+                   Session : in out ADO.Sessions.Session'Class) is
+   begin
+      Object.Set_Key_Value (Stmt.Get_Identifier (0));
+      if not Stmt.Is_Null (1) then
+         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (1), Session);
+      end if;
+      if not Stmt.Is_Null (2) then
+         Object.Member.Set_Key_Value (Stmt.Get_Identifier (2), Session);
+      end if;
       ADO.Objects.Set_Created (Object);
    end Load;
 
