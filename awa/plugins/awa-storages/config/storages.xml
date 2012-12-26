@@ -60,9 +60,9 @@
 
   <entity-permission>
     <name>folder-create</name>
-    <entity-type>workspace</entity-type>
+    <entity-type>awa_workspace</entity-type>
     <sql>
-       SELECT acl.id FROM acl
+       SELECT acl.id FROM awa_acl AS acl
        WHERE acl.entity_type = :entity_type
        AND acl.user_id = :user_id   
     </sql>
@@ -70,9 +70,9 @@
 
   <entity-permission>
     <name>storage-create</name>
-    <entity-type>workspace</entity-type>
+    <entity-type>awa_workspace</entity-type>
     <sql>
-       SELECT acl.id FROM acl
+       SELECT acl.id FROM awa_acl AS acl
        WHERE acl.entity_type = :entity_type
        AND acl.user_id = :user_id   
     </sql>
@@ -82,7 +82,7 @@
     <name>storage-delete</name>
     <entity-type>awa_storage</entity-type>
     <sql>
-       SELECT acl.id FROM awa_storage INNER JOIN  acl ON acl.entity_id = awa_storage.workspace_id
+       SELECT acl.id FROM awa_storage INNER JOIN awa_acl AS acl ON acl.entity_id = awa_storage.workspace_id
        WHERE acl.entity_type = :entity_type
        AND acl.user_id = :user_id   
        AND acl.entity_id = :entity_id
