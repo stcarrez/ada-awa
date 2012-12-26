@@ -138,22 +138,6 @@ package AWA.Jobs.Models is
                  return Ada.Strings.Unbounded.Unbounded_String;
    function Get_Results (Object : in Job_Ref)
                  return String;
-
-   --  Set the server identifier where the job is running
-   procedure Set_Server_Id (Object : in out Job_Ref;
-                            Value  : in Integer);
-
-   --  Get the server identifier where the job is running
-   function Get_Server_Id (Object : in Job_Ref)
-                 return Integer;
-
-   --  Set the task identifier on the server which executes the job
-   procedure Set_Task_Id (Object : in out Job_Ref;
-                          Value  : in Integer);
-
-   --  Get the task identifier on the server which executes the job
-   function Get_Task_Id (Object : in Job_Ref)
-                 return Integer;
    --
    function Get_Version (Object : in Job_Ref)
                  return Integer;
@@ -181,14 +165,6 @@ package AWA.Jobs.Models is
    --
    function Get_User (Object : in Job_Ref)
                  return AWA.Users.Models.User_Ref'Class;
-
-   --
-   procedure Set_Job_Queue (Object : in out Job_Ref;
-                            Value  : in AWA.Events.Models.Queue_Ref'Class);
-
-   --
-   function Get_Job_Queue (Object : in Job_Ref)
-                 return AWA.Events.Models.Queue_Ref'Class;
 
    --
    procedure Set_Session (Object : in out Job_Ref;
@@ -259,17 +235,14 @@ private
    COL_6_1_NAME : aliased constant String := "progress";
    COL_7_1_NAME : aliased constant String := "parameters";
    COL_8_1_NAME : aliased constant String := "results";
-   COL_9_1_NAME : aliased constant String := "server_id";
-   COL_10_1_NAME : aliased constant String := "task_id";
-   COL_11_1_NAME : aliased constant String := "version";
-   COL_12_1_NAME : aliased constant String := "priority";
-   COL_13_1_NAME : aliased constant String := "event_id";
-   COL_14_1_NAME : aliased constant String := "user_id";
-   COL_15_1_NAME : aliased constant String := "job_queue_id";
-   COL_16_1_NAME : aliased constant String := "session_id";
+   COL_9_1_NAME : aliased constant String := "version";
+   COL_10_1_NAME : aliased constant String := "priority";
+   COL_11_1_NAME : aliased constant String := "event_id";
+   COL_12_1_NAME : aliased constant String := "user_id";
+   COL_13_1_NAME : aliased constant String := "session_id";
 
    JOB_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 17,
+     (Count => 14,
       Table => JOB_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
@@ -285,10 +258,7 @@ private
          11 => COL_10_1_NAME'Access,
          12 => COL_11_1_NAME'Access,
          13 => COL_12_1_NAME'Access,
-         14 => COL_13_1_NAME'Access,
-         15 => COL_14_1_NAME'Access,
-         16 => COL_15_1_NAME'Access,
-         17 => COL_16_1_NAME'Access
+         14 => COL_13_1_NAME'Access
 )
      );
 
@@ -307,13 +277,10 @@ private
        Progress : Integer;
        Parameters : Ada.Strings.Unbounded.Unbounded_String;
        Results : Ada.Strings.Unbounded.Unbounded_String;
-       Server_Id : Integer;
-       Task_Id : Integer;
        Version : Integer;
        Priority : Integer;
        Event : AWA.Events.Models.Message_Ref;
        User : AWA.Users.Models.User_Ref;
-       Job_Queue : AWA.Events.Models.Queue_Ref;
        Session : AWA.Users.Models.Session_Ref;
    end record;
 
