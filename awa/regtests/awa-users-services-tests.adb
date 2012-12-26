@@ -73,10 +73,10 @@ package body AWA.Users.Services.Tests is
 
          T.Assert (not S1.Is_Null, "Null session returned by Verify_Session");
          T.Assert (not U1.Is_Null, "Null user returned by Verify_Session");
-         T.Assert (not S1.Get_Start_Date.Is_Null, "Session must be started");
+--           T.Assert (not S1.Get_Start_Date.Is_Null, "Session must be started");
          T.Assert (S1.Get_End_Date.Is_Null, "Session must not be finished");
-         Util.Tests.Assert_Equals (T, Principal.Session.Get_Start_Date.Value,
-                                   S1.Get_Start_Date.Value,
+         Util.Tests.Assert_Equals (T, Principal.Session.Get_Start_Date,
+                                   S1.Get_Start_Date,
                                    "Invalid start date");
 
          Principal.Manager.Close_Session (Principal.Session.Get_Id);
@@ -166,15 +166,15 @@ package body AWA.Users.Services.Tests is
 
          T.Assert (not S1.Is_Null, "Null session returned by Verify_Session");
          T.Assert (not U1.Is_Null, "Null user returned by Verify_Session");
-         T.Assert (not S1.Get_Start_Date.Is_Null, "Session start date must not be null");
+--           T.Assert (not S1.Get_Start_Date.Is_Null, "Session start date must not be null");
          T.Assert (S1.Get_End_Date.Is_Null, "Session end date must be null");
-         Util.Tests.Assert_Equals (T, Principal.Session.Get_Start_Date.Value,
-                                   S1.Get_Start_Date.Value,
+         Util.Tests.Assert_Equals (T, Principal.Session.Get_Start_Date,
+                                   S1.Get_Start_Date,
                                    "Invalid start date");
 
          --  Storing a date in the database will loose some precision.
-         T.Assert (S1.Get_Start_Date.Value >= T1 - 1.0, "Start date is invalid 1");
-         T.Assert (S1.Get_Start_Date.Value <= T2 + 10.0, "Start date is invalid 3");
+         T.Assert (S1.Get_Start_Date >= T1 - 1.0, "Start date is invalid 1");
+         T.Assert (S1.Get_Start_Date <= T2 + 10.0, "Start date is invalid 3");
 
          Principal.Manager.Close_Session (Principal.Session.Get_Id);
       end;

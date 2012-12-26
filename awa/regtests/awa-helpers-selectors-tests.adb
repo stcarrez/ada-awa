@@ -58,7 +58,7 @@ package body AWA.Helpers.Selectors.Tests is
             T.Assert (Item.Get_Value /= Item.Get_Label, "Item and label are equals");
 
             --  To make this test simple, check only for one known entry in the list.
-            if Item.Get_Label = "user" then
+            if Item.Get_Label = "awa_user" then
                Found_User := True;
             end if;
          end;
