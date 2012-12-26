@@ -171,9 +171,8 @@ install_lib:  uninstall pre-install
 	test ! -f COPYING3 || ${CP} COPYING3 ${dynamodir}/${NAME}/COPYING3
 	test ! -f COPYING || ${CP} COPYING ${dynamodir}/${NAME}/COPYING
 	test ! -d bundles || ${CP} bundles/*.properties ${dynamodir}/${NAME}/bundles/
-	test ! -d db || ${CP} db/*.xml ${dynamodir}/${NAME}/db/
-	test ! -d db/mysql || ${CP} db/mysql/*.sql ${dynamodir}/${NAME}/db/mysql
-	test ! -d db/sqlite || ${CP} db/sqlite/*.sql ${dynamodir}/${NAME}/db/sqlite
+	test ! -d db || \
+	     (tar --exclude=.svn --exclude='*~' -cf - db)| (cd ${dynamodir}/${NAME}/ && tar xf -)
 	test ! -d lib/${NAME}/${LIBRARY_TYPE} || \
 	     (${MKDIR} -p ${alidir}/${NAME}/$(LIBRARY_TYPE) && \
 	     ${CP} lib/${NAME}/$(LIBRARY_TYPE)/*.ali ${alidir}/${NAME}/$(LIBRARY_TYPE)/)
