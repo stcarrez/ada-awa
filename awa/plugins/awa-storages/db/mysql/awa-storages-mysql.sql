@@ -4,12 +4,6 @@
 When storage is FILE, the local file path is built by using
 the workspace identifier and the storage identifier. */
 CREATE TABLE awa_storage (
-  /* the storage identifier */
-  `id` BIGINT ,
-  /*  */
-  `version` INTEGER ,
-  /* the storage URI */
-  `uri` VARCHAR(255) BINARY NOT NULL,
   /* the storage type which defines where the content is stored */
   `storage` TINYINT NOT NULL,
   /* the storage creation date */
@@ -20,6 +14,12 @@ CREATE TABLE awa_storage (
   `file_size` INTEGER NOT NULL,
   /* the mime type */
   `mime_type` VARCHAR(255) BINARY NOT NULL,
+  /* the storage URI */
+  `uri` VARCHAR(255) BINARY NOT NULL,
+  /*  */
+  `version` INTEGER NOT NULL,
+  /* the storage identifier */
+  `id` BIGINT ,
   /*  */
   `owner_id` BIGINT NOT NULL,
   /*  */
@@ -37,10 +37,10 @@ is set to DATABASE.  It holds the file content in the blob. */
 CREATE TABLE awa_storage_data (
   /* the storage data identifier */
   `id` BIGINT NOT NULL,
-  /* the storage content */
-  `data`  NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
+  /* the storage content */
+  `data` LONGBLOB NOT NULL,
   PRIMARY KEY (`id`)
 );
 /*  */
@@ -48,11 +48,11 @@ CREATE TABLE awa_storage_folder (
   /* the storage folder identifier */
   `id` BIGINT NOT NULL,
   /*  */
-  `name` VARCHAR(255) BINARY NOT NULL,
-  /*  */
   `version` INTEGER NOT NULL,
   /* the folder creation date */
   `create_date` DATETIME NOT NULL,
+  /*  */
+  `name` VARCHAR(255) BINARY NOT NULL,
   /*  */
   `owner_id` BIGINT NOT NULL,
   /*  */
@@ -66,18 +66,18 @@ from the local file system. */
 CREATE TABLE awa_store_local (
   /* the local store identifier */
   `id` BIGINT NOT NULL,
-  /* the local store path */
-  `path` VARCHAR(255) BINARY NOT NULL,
-  /* the creation date */
-  `create_date` DATETIME NOT NULL,
-  /* the local store expiration date */
-  `expire_date` DATETIME NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
   /*  */
   `store_version` INTEGER NOT NULL,
   /* the shared flag which indicates whether this local store can be shared by several clients. */
   `shared` TINYINT NOT NULL,
+  /* the local store path */
+  `path` VARCHAR(255) BINARY NOT NULL,
+  /* the local store expiration date */
+  `expire_date` DATETIME NOT NULL,
+  /* the creation date */
+  `create_date` DATETIME NOT NULL,
   /*  */
   `storage_id` BIGINT ,
   PRIMARY KEY (`id`)
