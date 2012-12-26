@@ -27,6 +27,7 @@ with Ada.Numerics.Discrete_Random;
 
 with ADO.SQL;
 with ADO.Statements;
+with ADO.Objects;
 
 with AWA.Services;
 with AWA.Services.Contexts;
@@ -139,20 +140,19 @@ package body AWA.Users.Services is
       Auth_Session : Session_Ref;
    begin
       --  Create the authenticate session.
-      Auth_Session.Set_Start_Date (ADO.Nullable_Time '(Value   => Ada.Calendar.Clock,
-                                                       Is_Null => False));
-      Auth_Session.Set_User_Id (User.Get_Id);
+      Auth_Session.Set_Start_Date (Ada.Calendar.Clock);
+      Auth_Session.Set_User (User);
       Auth_Session.Set_Ip_Address (Ip_Addr);
-      Auth_Session.Set_Session_Type (AUTH_SESSION_TYPE);
+      Auth_Session.Set_Stype (Users.Models.AUTH_SESSION);
       Auth_Session.Set_Server_Id (Model.Server_Id);
       Auth_Session.Save (DB);
 
       --  Create the connection session.
       Session := Session_Ref'Class (Null_Session);
       Session.Set_Start_Date (Auth_Session.Get_Start_Date);
-      Session.Set_User_Id (User.Get_Id);
+      Session.Set_User (User);
       Session.Set_Ip_Address (Ip_Addr);
-      Session.Set_Session_Type (CONNECT_SESSION_TYPE);
+      Session.Set_Stype (Users.Models.CONNECT_SESSION);
       Session.Set_Auth (Auth_Session);
       Session.Set_Server_Id (Model.Server_Id);
       Session.Save (DB);
@@ -292,7 +292,7 @@ package body AWA.Users.Services is
       --  Find the user registered under the given email address & password.
       Query.Bind_Param (1, Email);
       Query.Bind_Param (2, Password);
-      Query.Set_Join ("INNER JOIN email e ON e.user_id = o.id");
+      Query.Set_Join ("INNER JOIN awa_email e ON e.user_id = o.id");
       Query.Set_Filter ("e.email = ? AND o.password = ?");
       User.Find (DB, Query, Found);
       if not Found then
@@ -348,7 +348,7 @@ package body AWA.Users.Services is
          raise Not_Found with "Invalid cookie";
       end if;
 
-      if Cookie_Session.Get_Session_Type /= CONNECT_SESSION_TYPE then
+      if Cookie_Session.Get_Stype /= Users.Models.CONNECT_SESSION then
          Log.Warn ("Authenticate session {0} not found in database", ADO.Identifier'Image (Id));
          raise Not_Found with "Invalid cookie";
       end if;
@@ -359,17 +359,12 @@ package body AWA.Users.Services is
          raise Not_Found with "Authenticate session was closed.";
       end if;
 
-      User.Load (DB, Auth_Session.Get_User_Id, Found);
-      if not Found then
-         Log.Warn ("No user associated with session {0}", ADO.Identifier'Image (Id));
-         raise Not_Found with "Invalid cookie";
-      end if;
+      User := User_Ref (Auth_Session.Get_User);
 
-      Session.Set_Start_Date (ADO.Nullable_Time '(Value   => Ada.Calendar.Clock,
-                                                  Is_Null => False));
-      Session.Set_User_Id (User.Get_Id);
+      Session.Set_Start_Date (Ada.Calendar.Clock);
+      Session.Set_User (User);
       Session.Set_Ip_Address (Ip_Addr);
-      Session.Set_Session_Type (CONNECT_SESSION_TYPE);
+      Session.Set_Stype (Users.Models.CONNECT_SESSION);
       Session.Set_Auth (Auth_Session);
       Session.Set_Server_Id (Model.Server_Id);
       Session.Save (DB);
@@ -378,15 +373,22 @@ package body AWA.Users.Services is
       Ctx.Set_Context (Ctx.Get_Application, Principal);
 
       --  Mark the cookie session as used.
-      Cookie_Session.Set_Session_Type (USED_SESSION_TYPE);
+      Cookie_Session.Set_Stype (Users.Models.USED_SESSION);
       if Cookie_Session.Get_End_Date.Is_Null then
-         Cookie_Session.Set_End_Date (Session.Get_Start_Date);
+         Cookie_Session.Set_End_Date (ADO.Nullable_Time '(Value => Session.Get_Start_Date,
+                                                          Is_Null => False));
       end if;
       Cookie_Session.Save (DB);
 
       Ctx.Commit;
       Log.Info ("Session {0} created for user {1}",
                 ADO.Identifier'Image (Session.Get_Id), ADO.Identifier'Image (User.Get_Id));
+
+   exception
+      when ADO.Objects.NOT_FOUND =>
+         Log.Warn ("No user associated with session {0}", ADO.Identifier'Image (Id));
+         raise Not_Found with "Invalid cookie";
+
    end Authenticate;
 
    --  ------------------------------
@@ -410,7 +412,7 @@ package body AWA.Users.Services is
       Ctx.Start;
 
       --  Find the user with the given email address.
-      Query.Set_Join ("INNER JOIN email e ON e.user_id = o.id");
+      Query.Set_Join ("INNER JOIN awa_email e ON e.user_id = o.id");
       Query.Set_Filter ("e.email = ?");
       Query.Bind_Param (1, Email);
       User.Find (DB, Query, Found);
@@ -427,7 +429,7 @@ package body AWA.Users.Services is
 
       --  Create the secure key to change the password
       Key.Set_Access_Key (Create_Key (User.Get_Id));
-      Key.Set_User_Id (User.Get_Id);
+      Key.Set_User (User);
       Key.Save (DB);
 
       --  Send the email with the reset password key
@@ -474,18 +476,10 @@ package body AWA.Users.Services is
          raise Not_Found with "No such access key: " & Key;
       end if;
 
-      User.Load (DB, Access_Key.Get_User_Id, Found);
-      if not Found then
-         Log.Warn ("No user associated with access key {0}", Key);
-         raise Not_Found with "No user associated with access key: " & Key;
-      end if;
+      User := User_Ref (Access_Key.Get_User);
 
       --  Get the user primary email address.
       Email.Load (DB, User.Get_Email.Get_Id, Found);
-      if not Found then
-         Log.Warn ("No email address associated with user {0}", User.Get_Name);
-         raise Not_Found with "No email address for user";
-      end if;
 
       --  Delete the access key.
       Access_Key.Delete (DB);
@@ -507,6 +501,12 @@ package body AWA.Users.Services is
       end;
 
       Ctx.Commit;
+
+   exception
+      when ADO.Objects.NOT_FOUND =>
+         Log.Warn ("No user associated with access key {0}", Key);
+         raise Not_Found with "No user associated with access key: " & Key;
+
    end Reset_Password;
 
    --  ------------------------------
@@ -517,7 +517,7 @@ package body AWA.Users.Services is
    procedure Create_User (Model : in User_Service;
                           User  : in out User_Ref'Class;
                           Email : in out Email_Ref'Class) is
-      COUNT_SQL : constant String := "SELECT COUNT(*) FROM email WHERE email = ?";
+      COUNT_SQL : constant String := "SELECT COUNT(*) FROM awa_email WHERE email = ?";
 
       Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB     : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
@@ -551,7 +551,7 @@ package body AWA.Users.Services is
 
       --  Create the access key
       Key.Set_Access_Key (Create_Key (Email.Get_Id));
-      Key.Set_User_Id (User.Get_Id);
+      Key.Set_User (User);
       Key.Save (DB);
 
       --  Send the email with the access key to finish the user registration.
@@ -598,11 +598,7 @@ package body AWA.Users.Services is
          raise Not_Found with "No access key: " & Key;
       end if;
 
-      User.Load (DB, Access_Key.Get_User_Id, Found);
-      if not Found then
-         Log.Warn ("No user linked to access key {0}", Key);
-         raise Not_Found with "No user for access key: " & Key;
-      end if;
+      User := User_Ref (Access_Key.Get_User);
 
       Email := Email_Ref (User.Get_Email);
 
@@ -620,6 +616,12 @@ package body AWA.Users.Services is
       end;
 
       Ctx.Commit;
+
+   exception
+      when ADO.Objects.NOT_FOUND =>
+         Log.Warn ("No user linked to access key {0}", Key);
+         raise Not_Found with "No user for access key: " & Key;
+
    end Verify_User;
 
    --  ------------------------------
@@ -651,11 +653,7 @@ package body AWA.Users.Services is
          raise Not_Found with "Session not found: " & Sid;
       end if;
 
-      User.Load (Session => DB, Id => Session.Get_User_Id, Found => Found);
-      if not Found then
-         Log.Error ("User linked to session {0} does not exist", Sid);
-         raise Not_Found with "Session not found: " & Sid;
-      end if;
+      User := Session.Get_User;
    end Verify_Session;
 
    --  ------------------------------
@@ -706,7 +704,7 @@ package body AWA.Users.Services is
       end if;
 
       --  When closing the authenticate session, close any connection session that is still open.
-      if Session.Get_Session_Type = AUTH_SESSION_TYPE then
+      if Session.Get_Stype = Users.Models.AUTH_SESSION then
          declare
             Stmt : ADO.Statements.Update_Statement
               := DB.Create_Statement (AWA.Users.Models.SESSION_TABLE'Access);
@@ -749,7 +747,7 @@ package body AWA.Users.Services is
          Stmt.Save_Field (Name => "end_date",
                           Value => ADO.Nullable_Time '(Value   => Ada.Calendar.Clock,
                                                        Is_Null => False));
-         Stmt.Set_Filter ("server_id = :server AND end_date IS NULL AND type = :type");
+         Stmt.Set_Filter ("server_id = :server AND end_date IS NULL AND stype = :type");
          Stmt.Bind_Param ("server", Model.Server_Id);
          Stmt.Bind_Param ("type", CONNECT_SESSION_TYPE);
          Stmt.Execute;
