@@ -87,6 +87,7 @@ package body AWA.Storages.Services is
       Ctx.Start;
       if not Folder.Is_Inserted then
          Folder.Set_Create_Date (Ada.Calendar.Clock);
+         Folder.Set_Owner (Ctx.Get_User);
       end if;
       Folder.Save (DB);
       Ctx.Commit;
