@@ -36,7 +36,7 @@
       user.name,
       post.text
     FROM awa_post AS post
-    INNER JOIN user ON post.author_id = user.id
+    INNER JOIN awa_user AS user ON post.author_id = user.id
     WHERE post.status > 0
     ORDER BY post.create_date DESC
     LIMIT 40
