@@ -151,7 +151,7 @@ package body AWA.Storages.Beans is
       Query.Set_Query (AWA.Storages.Models.Query_Storage_Folder_List);
       Query.Bind_Param ("user_id", User);
       ADO.Sessions.Entities.Bind_Param (Query, "table",
-                                        AWA.Workspaces.Models.WORKSPACE_TABLE'Access, Session);
+                                        AWA.Workspaces.Models.WORKSPACE_TABLE, Session);
       AWA.Storages.Models.List (Object.all, Session, Query);
       return Object.all'Access;
    end Create_Folder_List_Bean;
@@ -175,7 +175,7 @@ package body AWA.Storages.Beans is
       Query.Set_Query (AWA.Storages.Models.Query_Storage_List);
       Query.Bind_Param ("user_id", User);
       ADO.Sessions.Entities.Bind_Param (Query, "table",
-                                        AWA.Workspaces.Models.WORKSPACE_TABLE'Access, Session);
+                                        AWA.Workspaces.Models.WORKSPACE_TABLE, Session);
       if Folder_Id = ADO.NO_IDENTIFIER then
          Query.Bind_Null_Param ("folder_id");
       else

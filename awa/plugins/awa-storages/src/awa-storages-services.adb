@@ -198,7 +198,7 @@ package body AWA.Storages.Services is
       Query.Bind_Param ("store_id", From);
       Query.Bind_Param ("user_id", User);
       ADO.Sessions.Entities.Bind_Param (Query, "table",
-                                        AWA.Workspaces.Models.WORKSPACE_TABLE'Access, DB);
+                                        AWA.Workspaces.Models.WORKSPACE_TABLE, DB);
 
       Query.Execute;
       if not Query.Has_Elements then
@@ -258,7 +258,7 @@ package body AWA.Storages.Services is
          Query.Bind_Param ("store_id", From);
          Query.Bind_Param ("user_id", User);
          ADO.Sessions.Entities.Bind_Param (Query, "table",
-                                           AWA.Workspaces.Models.WORKSPACE_TABLE'Access, DB);
+                                           AWA.Workspaces.Models.WORKSPACE_TABLE, DB);
          Local.Find (DB, Query, Found);
          if Found then
             Into.Path := Local.Get_Path;
@@ -270,7 +270,7 @@ package body AWA.Storages.Services is
       Query.Bind_Param ("store_id", From);
       Query.Bind_Param ("user_id", User);
       ADO.Sessions.Entities.Bind_Param (Query, "table",
-                                        AWA.Workspaces.Models.WORKSPACE_TABLE'Access, DB);
+                                        AWA.Workspaces.Models.WORKSPACE_TABLE, DB);
       Storage.Find (DB, Query, Found);
       if not Found then
          raise ADO.Objects.NOT_FOUND;
@@ -347,7 +347,7 @@ package body AWA.Storages.Services is
       --  Delete the storage instance and all storage that refer to it.
       declare
          Stmt : ADO.Statements.Delete_Statement
-           := DB.Create_Statement (AWA.Storages.Models.STORAGE_TABLE'Access);
+           := DB.Create_Statement (AWA.Storages.Models.STORAGE_TABLE);
       begin
          Stmt.Set_Filter (Filter => "id = ? OR original_id = ?");
          Stmt.Add_Param (Value => Storage);
