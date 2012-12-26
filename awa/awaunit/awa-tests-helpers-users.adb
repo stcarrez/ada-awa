@@ -65,7 +65,7 @@ package body AWA.Tests.Helpers.Users is
       DB := Principal.Manager.Get_Session;
 
       --  Find the user
-      Query.Set_Join ("inner join email e on e.user_id = o.id");
+      Query.Set_Join ("inner join awa_email e on e.user_id = o.id");
       Query.Set_Filter ("e.email = ?");
       Query.Bind_Param (1, Email);
       Principal.User.Find (DB, Query, Found);
@@ -129,7 +129,7 @@ package body AWA.Tests.Helpers.Users is
       DB := Principal.Manager.Get_Session;
 
       --  Find the access key
-      Query.Set_Join ("inner join email e on e.user_id = o.user_id");
+      Query.Set_Join ("inner join awa_email e on e.user_id = o.user_id");
       Query.Set_Filter ("e.email = ?");
       Query.Bind_Param (1, Email);
       Key.Find (DB, Query, Found);
