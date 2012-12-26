@@ -235,7 +235,7 @@ CREATE TABLE awa_post (
   /* the post title */
   `title` VARCHAR(255) NOT NULL,
   /* the post text content */
-  `text` VARCHAR(255) NOT NULL,
+  `text` VARCHAR(60000) NOT NULL,
   /* the post creation date */
   `create_date` DATETIME NOT NULL,
   /* the post URI */
