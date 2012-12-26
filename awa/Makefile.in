@@ -4,7 +4,7 @@
 LIBRARY_TYPE=static
 
 PLUGINS=awa-workspaces awa-mail awa-storages awa-images awa-comments \
-        awa-blogs awa-markedit
+        awa-blogs awa-markedit awa-jobs
 
 NAME=awa
 LIBNAME=lib${NAME}
