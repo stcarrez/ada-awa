@@ -356,9 +356,9 @@ CREATE TABLE awa_job (
   /* the job progress indicator */
   `progress` INTEGER NOT NULL,
   /* the job parameters */
-  `parameters` VARCHAR(255) NOT NULL,
+  `parameters` VARCHAR(60000) NOT NULL,
   /* the job result */
-  `results` VARCHAR(255) NOT NULL,
+  `results` VARCHAR(60000) NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
   /* the job priority */
@@ -397,7 +397,7 @@ CREATE TABLE awa_post (
   /* the post title */
   `title` VARCHAR(255) NOT NULL,
   /* the post text content */
-  `text` VARCHAR(255) NOT NULL,
+  `text` VARCHAR(60000) NOT NULL,
   /* the post creation date */
   `create_date` DATETIME NOT NULL,
   /* the post URI */
