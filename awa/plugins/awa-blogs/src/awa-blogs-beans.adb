@@ -284,7 +284,7 @@ package body AWA.Blogs.Beans is
          Query.Bind_Param ("blog_id", Blog_Id);
          Query.Bind_Param ("user_id", User);
          ADO.Sessions.Entities.Bind_Param (Query, "table",
-                                           AWA.Blogs.Models.BLOG_TABLE'Access, Session);
+                                           AWA.Blogs.Models.BLOG_TABLE, Session);
          AWA.Blogs.Models.List (Object.all, Session, Query);
       end if;
       return Object.all'Access;
@@ -309,7 +309,7 @@ package body AWA.Blogs.Beans is
       Query.Set_Query (AWA.Blogs.Models.Query_Blog_List);
       Query.Bind_Param ("user_id", User);
       ADO.Sessions.Entities.Bind_Param (Query, "table",
-                                        AWA.Blogs.Models.BLOG_TABLE'Access, Session);
+                                        AWA.Blogs.Models.BLOG_TABLE, Session);
       AWA.Blogs.Models.List (Object.all, Session, Query);
       return Object.all'Access;
    end Create_Blog_List_Bean;
