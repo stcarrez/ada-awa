@@ -5,6 +5,8 @@ PLUGINS=
 
 include rules.mk
 
+DYNAMO_ARGS=db uml/atlas.zargo
+
 post-build:
 	for i in  ; do \
 	   $(MAKE) -C plugins/$$i ; \
