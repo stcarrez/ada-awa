@@ -38,9 +38,6 @@ with AWA.Users.Models;
 with AWA.Workspaces.Models;
 pragma Warnings (On, "unit * is not referenced");
 package AWA.Blogs.Models is
-   --  --------------------
-   --  The post status
-   --  --------------------
    type Post_Status_Type is (POST_DRAFT, POST_PUBLISHED, POST_SCHEDULED);
    for Post_Status_Type use (POST_DRAFT => 0, POST_PUBLISHED => 1, POST_SCHEDULED => 2);
    package Post_Status_Type_Objects is
@@ -50,9 +47,6 @@ package AWA.Blogs.Models is
 
    type Post_Ref is new ADO.Objects.Object_Ref with null record;
 
-   --  --------------------
-   --  Blog
-   --  --------------------
    --  Create an object key for Blog.
    function Blog_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
    --  Create an object key for Blog from a string.
@@ -69,9 +63,6 @@ package AWA.Blogs.Models is
    --  Get the blog identifier
    function Get_Id (Object : in Blog_Ref)
                  return ADO.Identifier;
-   --  Get the blob version.
-   function Get_Version (Object : in Blog_Ref)
-                 return Integer;
 
    --  Set the blog name
    procedure Set_Name (Object : in out Blog_Ref;
@@ -84,6 +75,9 @@ package AWA.Blogs.Models is
                  return Ada.Strings.Unbounded.Unbounded_String;
    function Get_Name (Object : in Blog_Ref)
                  return String;
+   --  Get the version
+   function Get_Version (Object : in Blog_Ref)
+                 return Integer;
 
    --  Set the blog uuid
    procedure Set_Uid (Object : in out Blog_Ref;
@@ -105,11 +99,19 @@ package AWA.Blogs.Models is
    function Get_Create_Date (Object : in Blog_Ref)
                  return Ada.Calendar.Time;
 
-   --  Set the workspace that this blob belongs to.
+   --  Set the date when the blog was updated
+   procedure Set_Update_Date (Object : in out Blog_Ref;
+                              Value  : in Ada.Calendar.Time);
+
+   --  Get the date when the blog was updated
+   function Get_Update_Date (Object : in Blog_Ref)
+                 return Ada.Calendar.Time;
+
+   --  Set the workspace that this blog belongs to
    procedure Set_Workspace (Object : in out Blog_Ref;
                             Value  : in AWA.Workspaces.Models.Workspace_Ref'Class);
 
-   --  Get the workspace that this blob belongs to.
+   --  Get the workspace that this blog belongs to
    function Get_Workspace (Object : in Blog_Ref)
                  return AWA.Workspaces.Models.Workspace_Ref'Class;
 
@@ -169,9 +171,6 @@ package AWA.Blogs.Models is
    procedure List (Object  : in out Blog_Vector;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class);
-   --  --------------------
-   --  Post in a blog
-   --  --------------------
    --  Create an object key for Post.
    function Post_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
    --  Create an object key for Post from a string.
@@ -188,9 +187,6 @@ package AWA.Blogs.Models is
    --  Get the post identifier
    function Get_Id (Object : in Post_Ref)
                  return ADO.Identifier;
-   --  Get the post version.
-   function Get_Version (Object : in Post_Ref)
-                 return Integer;
 
    --  Set the post title
    procedure Set_Title (Object : in out Post_Ref;
@@ -204,25 +200,13 @@ package AWA.Blogs.Models is
    function Get_Title (Object : in Post_Ref)
                  return String;
 
-   --  Set the uri
-   procedure Set_Uri (Object : in out Post_Ref;
-                      Value  : in Ada.Strings.Unbounded.Unbounded_String);
-   procedure Set_Uri (Object : in out Post_Ref;
-                      Value : in String);
-
-   --  Get the uri
-   function Get_Uri (Object : in Post_Ref)
-                 return Ada.Strings.Unbounded.Unbounded_String;
-   function Get_Uri (Object : in Post_Ref)
-                 return String;
-
-   --  Set the blog text content
+   --  Set the post text content
    procedure Set_Text (Object : in out Post_Ref;
                        Value  : in Ada.Strings.Unbounded.Unbounded_String);
    procedure Set_Text (Object : in out Post_Ref;
                        Value : in String);
 
-   --  Get the blog text content
+   --  Get the post text content
    function Get_Text (Object : in Post_Ref)
                  return Ada.Strings.Unbounded.Unbounded_String;
    function Get_Text (Object : in Post_Ref)
@@ -235,6 +219,21 @@ package AWA.Blogs.Models is
    --  Get the post creation date
    function Get_Create_Date (Object : in Post_Ref)
                  return Ada.Calendar.Time;
+
+   --  Set the post URI
+   procedure Set_Uri (Object : in out Post_Ref;
+                      Value  : in Ada.Strings.Unbounded.Unbounded_String);
+   procedure Set_Uri (Object : in out Post_Ref;
+                      Value : in String);
+
+   --  Get the post URI
+   function Get_Uri (Object : in Post_Ref)
+                 return Ada.Strings.Unbounded.Unbounded_String;
+   function Get_Uri (Object : in Post_Ref)
+                 return String;
+   --
+   function Get_Version (Object : in Post_Ref)
+                 return Integer;
 
    --  Set the post publication date
    procedure Set_Publish_Date (Object : in out Post_Ref;
@@ -252,21 +251,21 @@ package AWA.Blogs.Models is
    function Get_Status (Object : in Post_Ref)
                  return Post_Status_Type;
 
-   --  Set the post author
-   procedure Set_Author (Object : in out Post_Ref;
-                         Value  : in AWA.Users.Models.User_Ref'Class);
-
-   --  Get the post author
-   function Get_Author (Object : in Post_Ref)
-                 return AWA.Users.Models.User_Ref'Class;
-
-   --  Set the blog that this post belongs
+   --
    procedure Set_Blog (Object : in out Post_Ref;
                        Value  : in AWA.Blogs.Models.Blog_Ref'Class);
 
-   --  Get the blog that this post belongs
+   --
    function Get_Blog (Object : in Post_Ref)
                  return AWA.Blogs.Models.Blog_Ref'Class;
+
+   --
+   procedure Set_Author (Object : in out Post_Ref;
+                         Value  : in AWA.Users.Models.User_Ref'Class);
+
+   --
+   function Get_Author (Object : in Post_Ref)
+                 return AWA.Users.Models.User_Ref'Class;
 
    --  Load the entity identified by 'Id'.
    --  Raises the NOT_FOUND exception if it does not exist.
@@ -315,15 +314,6 @@ package AWA.Blogs.Models is
    procedure Copy (Object : in Post_Ref;
                    Into   : in out Post_Ref);
 
-   package Post_Vectors is
-      new Ada.Containers.Vectors (Index_Type   => Natural,
-                                  Element_Type => Post_Ref,
-                                  "="          => "=");
-   subtype Post_Vector is Post_Vectors.Vector;
-
-   procedure List (Object  : in out Post_Vector;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class);
 
    --  --------------------
    --  The Admin_Post_Info describes a post in the administration interface.
@@ -475,16 +465,17 @@ package AWA.Blogs.Models is
 
 
 private
-   BLOG_NAME : aliased constant String := "blog";
+   BLOG_NAME : aliased constant String := "awa_blog";
    COL_0_1_NAME : aliased constant String := "id";
-   COL_1_1_NAME : aliased constant String := "version";
-   COL_2_1_NAME : aliased constant String := "name";
+   COL_1_1_NAME : aliased constant String := "name";
+   COL_2_1_NAME : aliased constant String := "version";
    COL_3_1_NAME : aliased constant String := "uid";
    COL_4_1_NAME : aliased constant String := "create_date";
-   COL_5_1_NAME : aliased constant String := "workspace_id";
+   COL_5_1_NAME : aliased constant String := "update_date";
+   COL_6_1_NAME : aliased constant String := "workspace_id";
 
    BLOG_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 6,
+     (Count => 7,
       Table => BLOG_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
@@ -492,7 +483,8 @@ private
          3 => COL_2_1_NAME'Access,
          4 => COL_3_1_NAME'Access,
          5 => COL_4_1_NAME'Access,
-         6 => COL_5_1_NAME'Access
+         6 => COL_5_1_NAME'Access,
+         7 => COL_6_1_NAME'Access
 )
      );
 
@@ -503,10 +495,11 @@ private
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
                                      Of_Class => BLOG_TABLE'Access)
    with record
-       Version : Integer;
        Name : Ada.Strings.Unbounded.Unbounded_String;
+       Version : Integer;
        Uid : Ada.Strings.Unbounded.Unbounded_String;
        Create_Date : Ada.Calendar.Time;
+       Update_Date : Ada.Calendar.Time;
        Workspace : AWA.Workspaces.Models.Workspace_Ref;
    end record;
 
@@ -541,17 +534,17 @@ private
 
    procedure Set_Field (Object : in out Blog_Ref'Class;
                         Impl   : out Blog_Access);
-   POST_NAME : aliased constant String := "blog_post";
+   POST_NAME : aliased constant String := "awa_post";
    COL_0_2_NAME : aliased constant String := "id";
-   COL_1_2_NAME : aliased constant String := "version";
-   COL_2_2_NAME : aliased constant String := "title";
-   COL_3_2_NAME : aliased constant String := "uri";
-   COL_4_2_NAME : aliased constant String := "text";
-   COL_5_2_NAME : aliased constant String := "create_date";
+   COL_1_2_NAME : aliased constant String := "title";
+   COL_2_2_NAME : aliased constant String := "text";
+   COL_3_2_NAME : aliased constant String := "create_date";
+   COL_4_2_NAME : aliased constant String := "uri";
+   COL_5_2_NAME : aliased constant String := "version";
    COL_6_2_NAME : aliased constant String := "publish_date";
    COL_7_2_NAME : aliased constant String := "status";
-   COL_8_2_NAME : aliased constant String := "author_id";
-   COL_9_2_NAME : aliased constant String := "blog_id";
+   COL_8_2_NAME : aliased constant String := "blog_id";
+   COL_9_2_NAME : aliased constant String := "author_id";
 
    POST_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
      (Count => 10,
@@ -577,15 +570,15 @@ private
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
                                      Of_Class => POST_TABLE'Access)
    with record
-       Version : Integer;
        Title : Ada.Strings.Unbounded.Unbounded_String;
-       Uri : Ada.Strings.Unbounded.Unbounded_String;
        Text : Ada.Strings.Unbounded.Unbounded_String;
        Create_Date : Ada.Calendar.Time;
+       Uri : Ada.Strings.Unbounded.Unbounded_String;
+       Version : Integer;
        Publish_Date : ADO.Nullable_Time;
        Status : Post_Status_Type;
-       Author : AWA.Users.Models.User_Ref;
        Blog : AWA.Blogs.Models.Blog_Ref;
+       Author : AWA.Users.Models.User_Ref;
    end record;
 
    type Post_Access is access all Post_Impl;

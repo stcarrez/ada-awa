@@ -64,6 +64,7 @@ package body AWA.Blogs.Models is
       Impl := new Blog_Impl;
       Impl.Version := 0;
       Impl.Create_Date := ADO.DEFAULT_TIME;
+      Impl.Update_Date := ADO.DEFAULT_TIME;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -87,20 +88,12 @@ package body AWA.Blogs.Models is
    end Get_Id;
 
 
-   function Get_Version (Object : in Blog_Ref)
-                  return Integer is
-      Impl : constant Blog_Access := Blog_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Version;
-   end Get_Version;
-
-
    procedure Set_Name (Object : in out Blog_Ref;
                         Value : in String) is
       Impl : Blog_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 3, Impl.Name, Value);
+      ADO.Objects.Set_Field_String (Impl.all, 2, Impl.Name, Value);
    end Set_Name;
 
    procedure Set_Name (Object : in out Blog_Ref;
@@ -108,7 +101,7 @@ package body AWA.Blogs.Models is
       Impl : Blog_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 3, Impl.Name, Value);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 2, Impl.Name, Value);
    end Set_Name;
 
    function Get_Name (Object : in Blog_Ref)
@@ -122,6 +115,14 @@ package body AWA.Blogs.Models is
    begin
       return Impl.Name;
    end Get_Name;
+
+
+   function Get_Version (Object : in Blog_Ref)
+                  return Integer is
+      Impl : constant Blog_Access := Blog_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Version;
+   end Get_Version;
 
 
    procedure Set_Uid (Object : in out Blog_Ref;
@@ -169,12 +170,28 @@ package body AWA.Blogs.Models is
    end Get_Create_Date;
 
 
+   procedure Set_Update_Date (Object : in out Blog_Ref;
+                              Value  : in Ada.Calendar.Time) is
+      Impl : Blog_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Time (Impl.all, 6, Impl.Update_Date, Value);
+   end Set_Update_Date;
+
+   function Get_Update_Date (Object : in Blog_Ref)
+                  return Ada.Calendar.Time is
+      Impl : constant Blog_Access := Blog_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Update_Date;
+   end Get_Update_Date;
+
+
    procedure Set_Workspace (Object : in out Blog_Ref;
                             Value  : in AWA.Workspaces.Models.Workspace_Ref'Class) is
       Impl : Blog_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 6, Impl.Workspace, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 7, Impl.Workspace, Value);
    end Set_Workspace;
 
    function Get_Workspace (Object : in Blog_Ref)
@@ -198,10 +215,11 @@ package body AWA.Blogs.Models is
          begin
             ADO.Objects.Set_Object (Result, Copy.all'Access);
             Copy.Copy (Impl.all);
-            Copy.Version := Impl.Version;
             Copy.Name := Impl.Name;
+            Copy.Version := Impl.Version;
             Copy.Uid := Impl.Uid;
             Copy.Create_Date := Impl.Create_Date;
+            Copy.Update_Date := Impl.Update_Date;
             Copy.Workspace := Impl.Workspace;
          end;
       end if;
@@ -337,10 +355,10 @@ package body AWA.Blogs.Models is
                           Value => Object.Get_Key);
          Object.Clear_Modified (1);
       end if;
-      if Object.Is_Modified (3) then
-         Stmt.Save_Field (Name  => COL_2_1_NAME, --  name
+      if Object.Is_Modified (2) then
+         Stmt.Save_Field (Name  => COL_1_1_NAME, --  name
                           Value => Object.Name);
-         Object.Clear_Modified (3);
+         Object.Clear_Modified (2);
       end if;
       if Object.Is_Modified (4) then
          Stmt.Save_Field (Name  => COL_3_1_NAME, --  uid
@@ -353,9 +371,14 @@ package body AWA.Blogs.Models is
          Object.Clear_Modified (5);
       end if;
       if Object.Is_Modified (6) then
-         Stmt.Save_Field (Name  => COL_5_1_NAME, --  workspace_id
-                          Value => Object.Workspace);
+         Stmt.Save_Field (Name  => COL_5_1_NAME, --  update_date
+                          Value => Object.Update_Date);
          Object.Clear_Modified (6);
+      end if;
+      if Object.Is_Modified (7) then
+         Stmt.Save_Field (Name  => COL_6_1_NAME, --  workspace_id
+                          Value => Object.Workspace);
+         Object.Clear_Modified (7);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -389,15 +412,17 @@ package body AWA.Blogs.Models is
       Session.Allocate (Id => Object);
       Query.Save_Field (Name  => COL_0_1_NAME, --  id
                         Value => Object.Get_Key);
-      Query.Save_Field (Name  => COL_1_1_NAME, --  version
-                        Value => Object.Version);
-      Query.Save_Field (Name  => COL_2_1_NAME, --  name
+      Query.Save_Field (Name  => COL_1_1_NAME, --  name
                         Value => Object.Name);
+      Query.Save_Field (Name  => COL_2_1_NAME, --  version
+                        Value => Object.Version);
       Query.Save_Field (Name  => COL_3_1_NAME, --  uid
                         Value => Object.Uid);
       Query.Save_Field (Name  => COL_4_1_NAME, --  create_date
                         Value => Object.Create_Date);
-      Query.Save_Field (Name  => COL_5_1_NAME, --  workspace_id
+      Query.Save_Field (Name  => COL_5_1_NAME, --  update_date
+                        Value => Object.Update_Date);
+      Query.Save_Field (Name  => COL_6_1_NAME, --  workspace_id
                         Value => Object.Workspace);
       Query.Execute (Result);
       if Result /= 1 then
@@ -437,6 +462,9 @@ package body AWA.Blogs.Models is
       if Name = "create_date" then
          return Util.Beans.Objects.Time.To_Object (Impl.Create_Date);
       end if;
+      if Name = "update_date" then
+         return Util.Beans.Objects.Time.To_Object (Impl.Update_Date);
+      end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
 
@@ -471,13 +499,14 @@ package body AWA.Blogs.Models is
                    Session : in out ADO.Sessions.Session'Class) is
    begin
       Object.Set_Key_Value (Stmt.Get_Identifier (0));
-      Object.Name := Stmt.Get_Unbounded_String (2);
+      Object.Name := Stmt.Get_Unbounded_String (1);
       Object.Uid := Stmt.Get_Unbounded_String (3);
       Object.Create_Date := Stmt.Get_Time (4);
-      if not Stmt.Is_Null (5) then
-         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (5), Session);
+      Object.Update_Date := Stmt.Get_Time (5);
+      if not Stmt.Is_Null (6) then
+         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (6), Session);
       end if;
-      Object.Version := Stmt.Get_Integer (1);
+      Object.Version := Stmt.Get_Integer (2);
       ADO.Objects.Set_Created (Object);
    end Load;
    function Post_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
@@ -514,8 +543,8 @@ package body AWA.Blogs.Models is
       Impl : Post_Access;
    begin
       Impl := new Post_Impl;
-      Impl.Version := 0;
       Impl.Create_Date := ADO.DEFAULT_TIME;
+      Impl.Version := 0;
       Impl.Publish_Date.Is_Null := True;
       Impl.Status := Post_Status_Type'First;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
@@ -541,20 +570,12 @@ package body AWA.Blogs.Models is
    end Get_Id;
 
 
-   function Get_Version (Object : in Post_Ref)
-                  return Integer is
-      Impl : constant Post_Access := Post_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Version;
-   end Get_Version;
-
-
    procedure Set_Title (Object : in out Post_Ref;
                          Value : in String) is
       Impl : Post_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 3, Impl.Title, Value);
+      ADO.Objects.Set_Field_String (Impl.all, 2, Impl.Title, Value);
    end Set_Title;
 
    procedure Set_Title (Object : in out Post_Ref;
@@ -562,7 +583,7 @@ package body AWA.Blogs.Models is
       Impl : Post_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 3, Impl.Title, Value);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 2, Impl.Title, Value);
    end Set_Title;
 
    function Get_Title (Object : in Post_Ref)
@@ -578,41 +599,12 @@ package body AWA.Blogs.Models is
    end Get_Title;
 
 
-   procedure Set_Uri (Object : in out Post_Ref;
-                       Value : in String) is
-      Impl : Post_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 4, Impl.Uri, Value);
-   end Set_Uri;
-
-   procedure Set_Uri (Object : in out Post_Ref;
-                      Value  : in Ada.Strings.Unbounded.Unbounded_String) is
-      Impl : Post_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 4, Impl.Uri, Value);
-   end Set_Uri;
-
-   function Get_Uri (Object : in Post_Ref)
-                 return String is
-   begin
-      return Ada.Strings.Unbounded.To_String (Object.Get_Uri);
-   end Get_Uri;
-   function Get_Uri (Object : in Post_Ref)
-                  return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Post_Access := Post_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Uri;
-   end Get_Uri;
-
-
    procedure Set_Text (Object : in out Post_Ref;
                         Value : in String) is
       Impl : Post_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 5, Impl.Text, Value);
+      ADO.Objects.Set_Field_String (Impl.all, 3, Impl.Text, Value);
    end Set_Text;
 
    procedure Set_Text (Object : in out Post_Ref;
@@ -620,7 +612,7 @@ package body AWA.Blogs.Models is
       Impl : Post_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 5, Impl.Text, Value);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 3, Impl.Text, Value);
    end Set_Text;
 
    function Get_Text (Object : in Post_Ref)
@@ -641,7 +633,7 @@ package body AWA.Blogs.Models is
       Impl : Post_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Time (Impl.all, 6, Impl.Create_Date, Value);
+      ADO.Objects.Set_Field_Time (Impl.all, 4, Impl.Create_Date, Value);
    end Set_Create_Date;
 
    function Get_Create_Date (Object : in Post_Ref)
@@ -650,6 +642,43 @@ package body AWA.Blogs.Models is
    begin
       return Impl.Create_Date;
    end Get_Create_Date;
+
+
+   procedure Set_Uri (Object : in out Post_Ref;
+                       Value : in String) is
+      Impl : Post_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_String (Impl.all, 5, Impl.Uri, Value);
+   end Set_Uri;
+
+   procedure Set_Uri (Object : in out Post_Ref;
+                      Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : Post_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 5, Impl.Uri, Value);
+   end Set_Uri;
+
+   function Get_Uri (Object : in Post_Ref)
+                 return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (Object.Get_Uri);
+   end Get_Uri;
+   function Get_Uri (Object : in Post_Ref)
+                  return Ada.Strings.Unbounded.Unbounded_String is
+      Impl : constant Post_Access := Post_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Uri;
+   end Get_Uri;
+
+
+   function Get_Version (Object : in Post_Ref)
+                  return Integer is
+      Impl : constant Post_Access := Post_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Version;
+   end Get_Version;
 
 
    procedure Set_Publish_Date (Object : in out Post_Ref;
@@ -686,28 +715,12 @@ package body AWA.Blogs.Models is
    end Get_Status;
 
 
-   procedure Set_Author (Object : in out Post_Ref;
-                         Value  : in AWA.Users.Models.User_Ref'Class) is
-      Impl : Post_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 9, Impl.Author, Value);
-   end Set_Author;
-
-   function Get_Author (Object : in Post_Ref)
-                  return AWA.Users.Models.User_Ref'Class is
-      Impl : constant Post_Access := Post_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Author;
-   end Get_Author;
-
-
    procedure Set_Blog (Object : in out Post_Ref;
                        Value  : in AWA.Blogs.Models.Blog_Ref'Class) is
       Impl : Post_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 10, Impl.Blog, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 9, Impl.Blog, Value);
    end Set_Blog;
 
    function Get_Blog (Object : in Post_Ref)
@@ -716,6 +729,22 @@ package body AWA.Blogs.Models is
    begin
       return Impl.Blog;
    end Get_Blog;
+
+
+   procedure Set_Author (Object : in out Post_Ref;
+                         Value  : in AWA.Users.Models.User_Ref'Class) is
+      Impl : Post_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 10, Impl.Author, Value);
+   end Set_Author;
+
+   function Get_Author (Object : in Post_Ref)
+                  return AWA.Users.Models.User_Ref'Class is
+      Impl : constant Post_Access := Post_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Author;
+   end Get_Author;
 
    --  Copy of the object.
    procedure Copy (Object : in Post_Ref;
@@ -731,15 +760,15 @@ package body AWA.Blogs.Models is
          begin
             ADO.Objects.Set_Object (Result, Copy.all'Access);
             Copy.Copy (Impl.all);
-            Copy.Version := Impl.Version;
             Copy.Title := Impl.Title;
-            Copy.Uri := Impl.Uri;
             Copy.Text := Impl.Text;
             Copy.Create_Date := Impl.Create_Date;
+            Copy.Uri := Impl.Uri;
+            Copy.Version := Impl.Version;
             Copy.Publish_Date := Impl.Publish_Date;
             Copy.Status := Impl.Status;
-            Copy.Author := Impl.Author;
             Copy.Blog := Impl.Blog;
+            Copy.Author := Impl.Author;
          end;
       end if;
       Into := Result;
@@ -874,25 +903,25 @@ package body AWA.Blogs.Models is
                           Value => Object.Get_Key);
          Object.Clear_Modified (1);
       end if;
-      if Object.Is_Modified (3) then
-         Stmt.Save_Field (Name  => COL_2_2_NAME, --  title
+      if Object.Is_Modified (2) then
+         Stmt.Save_Field (Name  => COL_1_2_NAME, --  title
                           Value => Object.Title);
+         Object.Clear_Modified (2);
+      end if;
+      if Object.Is_Modified (3) then
+         Stmt.Save_Field (Name  => COL_2_2_NAME, --  text
+                          Value => Object.Text);
          Object.Clear_Modified (3);
       end if;
       if Object.Is_Modified (4) then
-         Stmt.Save_Field (Name  => COL_3_2_NAME, --  uri
-                          Value => Object.Uri);
+         Stmt.Save_Field (Name  => COL_3_2_NAME, --  create_date
+                          Value => Object.Create_Date);
          Object.Clear_Modified (4);
       end if;
       if Object.Is_Modified (5) then
-         Stmt.Save_Field (Name  => COL_4_2_NAME, --  text
-                          Value => Object.Text);
+         Stmt.Save_Field (Name  => COL_4_2_NAME, --  uri
+                          Value => Object.Uri);
          Object.Clear_Modified (5);
-      end if;
-      if Object.Is_Modified (6) then
-         Stmt.Save_Field (Name  => COL_5_2_NAME, --  create_date
-                          Value => Object.Create_Date);
-         Object.Clear_Modified (6);
       end if;
       if Object.Is_Modified (7) then
          Stmt.Save_Field (Name  => COL_6_2_NAME, --  publish_date
@@ -905,13 +934,13 @@ package body AWA.Blogs.Models is
          Object.Clear_Modified (8);
       end if;
       if Object.Is_Modified (9) then
-         Stmt.Save_Field (Name  => COL_8_2_NAME, --  author_id
-                          Value => Object.Author);
+         Stmt.Save_Field (Name  => COL_8_2_NAME, --  blog_id
+                          Value => Object.Blog);
          Object.Clear_Modified (9);
       end if;
       if Object.Is_Modified (10) then
-         Stmt.Save_Field (Name  => COL_9_2_NAME, --  blog_id
-                          Value => Object.Blog);
+         Stmt.Save_Field (Name  => COL_9_2_NAME, --  author_id
+                          Value => Object.Author);
          Object.Clear_Modified (10);
       end if;
       if Stmt.Has_Save_Fields then
@@ -946,24 +975,24 @@ package body AWA.Blogs.Models is
       Session.Allocate (Id => Object);
       Query.Save_Field (Name  => COL_0_2_NAME, --  id
                         Value => Object.Get_Key);
-      Query.Save_Field (Name  => COL_1_2_NAME, --  version
-                        Value => Object.Version);
-      Query.Save_Field (Name  => COL_2_2_NAME, --  title
+      Query.Save_Field (Name  => COL_1_2_NAME, --  title
                         Value => Object.Title);
-      Query.Save_Field (Name  => COL_3_2_NAME, --  uri
-                        Value => Object.Uri);
-      Query.Save_Field (Name  => COL_4_2_NAME, --  text
+      Query.Save_Field (Name  => COL_2_2_NAME, --  text
                         Value => Object.Text);
-      Query.Save_Field (Name  => COL_5_2_NAME, --  create_date
+      Query.Save_Field (Name  => COL_3_2_NAME, --  create_date
                         Value => Object.Create_Date);
+      Query.Save_Field (Name  => COL_4_2_NAME, --  uri
+                        Value => Object.Uri);
+      Query.Save_Field (Name  => COL_5_2_NAME, --  version
+                        Value => Object.Version);
       Query.Save_Field (Name  => COL_6_2_NAME, --  publish_date
                         Value => Object.Publish_Date);
       Query.Save_Field (Name  => COL_7_2_NAME, --  status
                         Value => Integer (Post_Status_Type'Pos (Object.Status)));
-      Query.Save_Field (Name  => COL_8_2_NAME, --  author_id
-                        Value => Object.Author);
-      Query.Save_Field (Name  => COL_9_2_NAME, --  blog_id
+      Query.Save_Field (Name  => COL_8_2_NAME, --  blog_id
                         Value => Object.Blog);
+      Query.Save_Field (Name  => COL_9_2_NAME, --  author_id
+                        Value => Object.Author);
       Query.Execute (Result);
       if Result /= 1 then
          raise ADO.Objects.INSERT_ERROR;
@@ -996,14 +1025,14 @@ package body AWA.Blogs.Models is
       if Name = "title" then
          return Util.Beans.Objects.To_Object (Impl.Title);
       end if;
-      if Name = "uri" then
-         return Util.Beans.Objects.To_Object (Impl.Uri);
-      end if;
       if Name = "text" then
          return Util.Beans.Objects.To_Object (Impl.Text);
       end if;
       if Name = "create_date" then
          return Util.Beans.Objects.Time.To_Object (Impl.Create_Date);
+      end if;
+      if Name = "uri" then
+         return Util.Beans.Objects.To_Object (Impl.Uri);
       end if;
       if Name = "publish_date" then
          if Impl.Publish_Date.Is_Null then
@@ -1020,27 +1049,6 @@ package body AWA.Blogs.Models is
 
 
 
-   procedure List (Object  : in out Post_Vector;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class) is
-      Stmt : ADO.Statements.Query_Statement
-        := Session.Create_Statement (Query, POST_TABLE'Access);
-   begin
-      Stmt.Execute;
-      Post_Vectors.Clear (Object);
-      while Stmt.Has_Elements loop
-         declare
-            Item : Post_Ref;
-            Impl : constant Post_Access := new Post_Impl;
-         begin
-            Impl.Load (Stmt, Session);
-            ADO.Objects.Set_Object (Item, Impl.all'Access);
-            Object.Append (Item);
-         end;
-         Stmt.Next;
-      end loop;
-   end List;
-
    --  ------------------------------
    --  Load the object from current iterator position
    --  ------------------------------
@@ -1049,19 +1057,19 @@ package body AWA.Blogs.Models is
                    Session : in out ADO.Sessions.Session'Class) is
    begin
       Object.Set_Key_Value (Stmt.Get_Identifier (0));
-      Object.Title := Stmt.Get_Unbounded_String (2);
-      Object.Uri := Stmt.Get_Unbounded_String (3);
-      Object.Text := Stmt.Get_Unbounded_String (4);
-      Object.Create_Date := Stmt.Get_Time (5);
+      Object.Title := Stmt.Get_Unbounded_String (1);
+      Object.Text := Stmt.Get_Unbounded_String (2);
+      Object.Create_Date := Stmt.Get_Time (3);
+      Object.Uri := Stmt.Get_Unbounded_String (4);
       Object.Publish_Date := Stmt.Get_Time (6);
       Object.Status := Post_Status_Type'Val (Stmt.Get_Integer (7));
       if not Stmt.Is_Null (8) then
-         Object.Author.Set_Key_Value (Stmt.Get_Identifier (8), Session);
+         Object.Blog.Set_Key_Value (Stmt.Get_Identifier (8), Session);
       end if;
       if not Stmt.Is_Null (9) then
-         Object.Blog.Set_Key_Value (Stmt.Get_Identifier (9), Session);
+         Object.Author.Set_Key_Value (Stmt.Get_Identifier (9), Session);
       end if;
-      Object.Version := Stmt.Get_Integer (1);
+      Object.Version := Stmt.Get_Integer (5);
       ADO.Objects.Set_Created (Object);
    end Load;
 
