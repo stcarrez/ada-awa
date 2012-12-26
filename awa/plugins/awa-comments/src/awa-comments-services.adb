@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-comments-logic -- Comments management
---  Copyright (C) 2009, 2010, 2011 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -59,7 +59,7 @@ package body AWA.Comments.Services is
       Comment.Set_Message (Message);
       Comment.Set_Entity_Id (Entity_Id);
       Comment.Set_Entity_Type (ADO.Sessions.Entities.Find_Entity_Type (DB, Entity));
-      Comment.Set_User (User);
+      Comment.Set_Author (User);
       Comment.Set_Date (Ada.Calendar.Clock);
       Comment.Save (DB);
       Ctx.Commit;
