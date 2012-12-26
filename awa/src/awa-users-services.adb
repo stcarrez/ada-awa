@@ -422,7 +422,7 @@ package body AWA.Users.Services is
       end if;
 
       --  Delete any previous access key for the user.
-      Stmt := DB.Create_Statement (AWA.Users.Models.ACCESS_KEY_TABLE'Access);
+      Stmt := DB.Create_Statement (AWA.Users.Models.ACCESS_KEY_TABLE);
       Stmt.Set_Filter ("user_id = ?");
       Stmt.Bind_Param (1, User.Get_Id);
       Stmt.Execute;
@@ -707,7 +707,7 @@ package body AWA.Users.Services is
       if Session.Get_Stype = Users.Models.AUTH_SESSION then
          declare
             Stmt : ADO.Statements.Update_Statement
-              := DB.Create_Statement (AWA.Users.Models.SESSION_TABLE'Access);
+              := DB.Create_Statement (AWA.Users.Models.SESSION_TABLE);
          begin
             Stmt.Save_Field (Name => "end_date", Value => Session.Get_End_Date);
             Stmt.Set_Filter ("auth_id = :auth AND end_date IS NULL");
@@ -741,7 +741,7 @@ package body AWA.Users.Services is
       declare
          DB   : ADO.Sessions.Master_Session := Module.Get_Master_Session;
          Stmt : ADO.Statements.Update_Statement
-           := DB.Create_Statement (AWA.Users.Models.SESSION_TABLE'Access);
+           := DB.Create_Statement (AWA.Users.Models.SESSION_TABLE);
       begin
          DB.Begin_Transaction;
          Stmt.Save_Field (Name => "end_date",
