@@ -8,7 +8,7 @@
        <sql>
     SELECT
       acl.writeable
-    FROM acl
+    FROM awa_acl AS acl
     WHERE acl.user_id = :user_id AND acl.entity_id = :entity_id AND acl.entity_type = :entity_type
        </sql>
     </query>
@@ -16,7 +16,7 @@
     <query name='remove-permission'>
        <comment>Delete the permission associated with a user and an object</comment>
        <sql>
-    DELETE FROM acl
+    DELETE FROM awa_acl AS acl
     WHERE acl.user_id = :user_id AND acl.entity_id = :entity_id AND acl.entity_type = :entity_type
        </sql>
     </query>
@@ -24,14 +24,14 @@
     <query name='remove-entity-permission'>
        <comment>Delete all the permission associated with an object</comment>
        <sql>
-    DELETE FROM acl WHERE acl.entity_id = :entity_id AND acl.entity_type = :entity_type
+    DELETE FROM awa_acl AS acl WHERE acl.entity_id = :entity_id AND acl.entity_type = :entity_type
        </sql>
     </query>
 
     <query name='remove-user-permission'>
        <comment>Delete all the permission associated with a user</comment>
        <sql>
-    DELETE FROM acl WHERE acl.user_id = :user_id
+    DELETE FROM awa_acl AS acl WHERE acl.user_id = :user_id
        </sql>
     </query>
 

@@ -19,7 +19,7 @@
       m.status,
       m.entity_type,
       m.entity_id,
-      m.type,
+      m.message_type_id,
       m.user_id,
       m.session_id,
       m.queue_id
