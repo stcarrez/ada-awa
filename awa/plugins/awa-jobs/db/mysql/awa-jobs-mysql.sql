@@ -19,20 +19,14 @@ CREATE TABLE awa_job (
   `parameters` VARCHAR(255) BINARY NOT NULL,
   /* the job result */
   `results` VARCHAR(255) BINARY NOT NULL,
-  /* the server identifier where the job is running */
-  `server_id` INTEGER ,
-  /* the task identifier on the server which executes the job */
-  `task_id` INTEGER ,
   /*  */
   `version` INTEGER NOT NULL,
   /* the job priority */
   `priority` INTEGER NOT NULL,
   /*  */
-  `event_id` BIGINT NOT NULL,
+  `event_id` BIGINT ,
   /*  */
   `user_id` BIGINT ,
-  /*  */
-  `job_queue_id` BIGINT NOT NULL,
   /*  */
   `session_id` BIGINT ,
   PRIMARY KEY (`id`)
