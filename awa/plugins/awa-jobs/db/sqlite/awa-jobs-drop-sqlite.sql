@@ -1,2 +1,2 @@
 /* File generated automatically by dynamo */
-DROP TABLE IF EXISTS `awa_jobs`;
+DROP TABLE IF EXISTS `awa_job`;
