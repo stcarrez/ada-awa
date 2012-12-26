@@ -98,7 +98,11 @@ package body AWA.Storages.Beans is
    function Get_Value (From : in Folder_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
-      return AWA.Storages.Models.Storage_Folder_Ref (From).Get_Value (Name);
+      if ADO.Objects.Is_Null (From) then
+         return Util.Beans.Objects.Null_Object;
+      else
+         return AWA.Storages.Models.Storage_Folder_Ref (From).Get_Value (Name);
+      end if;
    end Get_Value;
 
    --  ------------------------------
