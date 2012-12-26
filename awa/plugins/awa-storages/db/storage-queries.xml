@@ -11,11 +11,11 @@
       store.create_date,
       store.name,
       store.uri,
-      store.storage_type,
+      store.storage,
       data.data
     FROM awa_storage AS store
-    INNER JOIN acl ON acl.entity_id = store.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
-    LEFT JOIN awa_storage_data AS data ON store.storage_id = data.id
+    INNER JOIN awa_acl AS acl ON acl.entity_id = store.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
+    LEFT JOIN awa_storage_data AS data ON store.store_data_id = data.id
     WHERE store.id = :store_id
        </sql>
     </query>
@@ -34,7 +34,7 @@
       local.storage_id
     FROM awa_store_local AS local
     INNER JOIN awa_storage AS store ON local.storage_id = store.id AND local.store_version = store.version
-    INNER JOIN acl ON acl.entity_id = store.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
+    INNER JOIN awa_acl AS acl ON acl.entity_id = store.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
     WHERE local.storage_id = :store_id AND local.shared = 1
        </sql>
     </query>
@@ -46,18 +46,18 @@
       store.id,
       store.version,
       store.create_date,
-      store.storage_type,
+      store.storage,
       store.uri,
       store.name,
       store.mime_type,
       store.file_size,
-      store.storage_id,
+      store.store_data_id,
       store.workspace_id,
       store.folder_id,
       store.owner_id,
       store.original_id
     FROM awa_storage AS store
-    INNER JOIN acl ON acl.entity_id = store.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
+    INNER JOIN awa_acl AS acl ON acl.entity_id = store.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
     WHERE store.id = :store_id
        </sql>
     </query>
