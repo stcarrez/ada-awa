@@ -16,7 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Ada.Calendar;
-with Ada.Strings.Unbounded;
 
 with Util.Log.Loggers;
 
@@ -28,7 +27,6 @@ with AWA.Applications;
 with AWA.Events.Services;
 
 with ADO;
-with ADO.Queries;
 with ADO.Sessions;
 with ADO.SQL;
 package body AWA.Events.Queues.Persistents is
@@ -113,7 +111,7 @@ package body AWA.Events.Queues.Persistents is
       Ctx      : constant AC.Service_Context_Access := AC.Current;
       DB       : ADO.Sessions.Master_Session := AC.Get_Master_Session (Ctx);
       Messages : Models.Message_Vector;
-      Query    : ADO.Queries.Context;
+      Query    : ADO.SQL.Query;
       Task_Id  : Integer := 0;
 
       --  ------------------------------
@@ -162,7 +160,8 @@ package body AWA.Events.Queues.Persistents is
       Count : Natural;
    begin
       Ctx.Start;
-      Query.Set_Query (Models.Query_Queue_Pending_Message);
+      Query.Set_Filter ("o.status = 0 AND o.queue_id = :queue ORDER BY o.priority DESC, "
+                        & "o.id ASC LIMIT :max");
       Query.Bind_Param ("queue", From.Queue.Get_Id);
       Query.Bind_Param ("max", From.Max_Batch);
       Models.List (Messages, DB, Query);
