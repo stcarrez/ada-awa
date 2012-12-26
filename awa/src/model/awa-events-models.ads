@@ -34,13 +34,9 @@ with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
 with Util.Beans.Objects.Enums;
 with Util.Beans.Basic.Lists;
-with ADO;
 with AWA.Users.Models;
 pragma Warnings (On, "unit * is not referenced");
 package AWA.Events.Models is
-   --  --------------------
-   --  The message status
-   --  --------------------
    type Message_Status_Type is (QUEUED, PROCESSING, PROCESSED);
    for Message_Status_Type use (QUEUED => 0, PROCESSING => 1, PROCESSED => 2);
    package Message_Status_Type_Objects is
@@ -52,9 +48,6 @@ package AWA.Events.Models is
 
    type Message_Ref is new ADO.Objects.Object_Ref with null record;
 
-   --  --------------------
-   --  A message type
-   --  --------------------
    --  Create an object key for Message_Type.
    function Message_Type_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
    --  Create an object key for Message_Type from a string.
@@ -64,11 +57,11 @@ package AWA.Events.Models is
    Null_Message_Type : constant Message_Type_Ref;
    function "=" (Left, Right : Message_Type_Ref'Class) return Boolean;
 
-   --  Set the message type identifier
+   --
    procedure Set_Id (Object : in out Message_Type_Ref;
                      Value  : in ADO.Identifier);
 
-   --  Get the message type identifier
+   --
    function Get_Id (Object : in Message_Type_Ref)
                  return ADO.Identifier;
 
@@ -141,7 +134,8 @@ package AWA.Events.Models is
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class);
    --  --------------------
-   --  A message queue
+   --  The message queue tracks the event messages that must be dispatched by
+   --  a given server.
    --  --------------------
    --  Create an object key for Queue.
    function Queue_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
@@ -152,15 +146,20 @@ package AWA.Events.Models is
    Null_Queue : constant Queue_Ref;
    function "=" (Left, Right : Queue_Ref'Class) return Boolean;
 
-   --  Set the queue identifier
+   --
    procedure Set_Id (Object : in out Queue_Ref;
                      Value  : in ADO.Identifier);
 
-   --  Get the queue identifier
+   --
    function Get_Id (Object : in Queue_Ref)
                  return ADO.Identifier;
-   --  Get the event queue version.
-   function Get_Version (Object : in Queue_Ref)
+
+   --
+   procedure Set_Server_Id (Object : in out Queue_Ref;
+                            Value  : in Integer);
+
+   --
+   function Get_Server_Id (Object : in Queue_Ref)
                  return Integer;
 
    --  Set the message queue name
@@ -174,14 +173,6 @@ package AWA.Events.Models is
                  return Ada.Strings.Unbounded.Unbounded_String;
    function Get_Name (Object : in Queue_Ref)
                  return String;
-
-   --  Set the server identifier which is associated with this message queue
-   procedure Set_Server_Id (Object : in out Queue_Ref;
-                            Value  : in Integer);
-
-   --  Get the server identifier which is associated with this message queue
-   function Get_Server_Id (Object : in Queue_Ref)
-                 return Integer;
 
    --  Load the entity identified by 'Id'.
    --  Raises the NOT_FOUND exception if it does not exist.
@@ -230,18 +221,6 @@ package AWA.Events.Models is
    procedure Copy (Object : in Queue_Ref;
                    Into   : in out Queue_Ref);
 
-   package Queue_Vectors is
-      new Ada.Containers.Vectors (Index_Type   => Natural,
-                                  Element_Type => Queue_Ref,
-                                  "="          => "=");
-   subtype Queue_Vector is Queue_Vectors.Vector;
-
-   procedure List (Object  : in out Queue_Vector;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class);
-   --  --------------------
-   --  A message in the message queue
-   --  --------------------
    --  Create an object key for Message.
    function Message_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
    --  Create an object key for Message from a string.
@@ -258,9 +237,14 @@ package AWA.Events.Models is
    --  Get the message identifier
    function Get_Id (Object : in Message_Ref)
                  return ADO.Identifier;
-   --  Get the message version.
-   function Get_Version (Object : in Message_Ref)
-                 return Integer;
+
+   --  Set the message creation date
+   procedure Set_Create_Date (Object : in out Message_Ref;
+                              Value  : in Ada.Calendar.Time);
+
+   --  Get the message creation date
+   function Get_Create_Date (Object : in Message_Ref)
+                 return Ada.Calendar.Time;
 
    --  Set the message priority
    procedure Set_Priority (Object : in out Message_Ref;
@@ -270,20 +254,12 @@ package AWA.Events.Models is
    function Get_Priority (Object : in Message_Ref)
                  return Integer;
 
-   --  Set the server which is processing this message
-   procedure Set_Server_Id (Object : in out Message_Ref;
-                            Value  : in Integer);
+   --  Set the message count
+   procedure Set_Count (Object : in out Message_Ref;
+                        Value  : in Integer);
 
-   --  Get the server which is processing this message
-   function Get_Server_Id (Object : in Message_Ref)
-                 return Integer;
-
-   --  Set the task within the server which is processing this message
-   procedure Set_Task_Id (Object : in out Message_Ref;
-                          Value  : in Integer);
-
-   --  Get the task within the server which is processing this message
-   function Get_Task_Id (Object : in Message_Ref)
+   --  Get the message count
+   function Get_Count (Object : in Message_Ref)
                  return Integer;
 
    --  Set the message parameters
@@ -298,29 +274,21 @@ package AWA.Events.Models is
    function Get_Parameters (Object : in Message_Ref)
                  return String;
 
-   --  Set the message creation date
-   procedure Set_Create_Date (Object : in out Message_Ref;
-                              Value  : in Ada.Calendar.Time);
+   --  Set the server identifier which processes the message
+   procedure Set_Server_Id (Object : in out Message_Ref;
+                            Value  : in Integer);
 
-   --  Get the message creation date
-   function Get_Create_Date (Object : in Message_Ref)
-                 return Ada.Calendar.Time;
+   --  Get the server identifier which processes the message
+   function Get_Server_Id (Object : in Message_Ref)
+                 return Integer;
 
-   --  Set the message processing date
-   procedure Set_Processing_Date (Object : in out Message_Ref;
-                                  Value  : in ADO.Nullable_Time);
+   --  Set the task identfier on the server which processes the message
+   procedure Set_Task_Id (Object : in out Message_Ref;
+                          Value  : in Integer);
 
-   --  Get the message processing date
-   function Get_Processing_Date (Object : in Message_Ref)
-                 return ADO.Nullable_Time;
-
-   --  Set the message end processing date
-   procedure Set_Finish_Date (Object : in out Message_Ref;
-                              Value  : in ADO.Nullable_Time);
-
-   --  Get the message end processing date
-   function Get_Finish_Date (Object : in Message_Ref)
-                 return ADO.Nullable_Time;
+   --  Get the task identfier on the server which processes the message
+   function Get_Task_Id (Object : in Message_Ref)
+                 return Integer;
 
    --  Set the message status
    procedure Set_Status (Object : in out Message_Ref;
@@ -330,21 +298,64 @@ package AWA.Events.Models is
    function Get_Status (Object : in Message_Ref)
                  return Message_Status_Type;
 
-   --  Set an optional entity type associated with the `entity_id`
-   procedure Set_Entity_Type (Object : in out Message_Ref;
-                              Value  : in ADO.Entity_Type);
+   --  Set the message processing date
+   procedure Set_Processing_Date (Object : in out Message_Ref;
+                                  Value  : in ADO.Nullable_Time);
 
-   --  Get an optional entity type associated with the `entity_id`
-   function Get_Entity_Type (Object : in Message_Ref)
-                 return ADO.Entity_Type;
+   --  Get the message processing date
+   function Get_Processing_Date (Object : in Message_Ref)
+                 return ADO.Nullable_Time;
+   --
+   function Get_Version (Object : in Message_Ref)
+                 return Integer;
 
-   --  Set an optional entity identifier to link the event to another database entity
+   --  Set the entity identifier to which this event is associated.
    procedure Set_Entity_Id (Object : in out Message_Ref;
                             Value  : in ADO.Identifier);
 
-   --  Get an optional entity identifier to link the event to another database entity
+   --  Get the entity identifier to which this event is associated.
    function Get_Entity_Id (Object : in Message_Ref)
                  return ADO.Identifier;
+
+   --  Set the entity type of the entity identifier to which this event is associated.
+   procedure Set_Entity_Type (Object : in out Message_Ref;
+                              Value  : in ADO.Entity_Type);
+
+   --  Get the entity type of the entity identifier to which this event is associated.
+   function Get_Entity_Type (Object : in Message_Ref)
+                 return ADO.Entity_Type;
+
+   --  Set the date and time when the event was finished to be processed.
+   procedure Set_Finish_Date (Object : in out Message_Ref;
+                              Value  : in ADO.Nullable_Time);
+
+   --  Get the date and time when the event was finished to be processed.
+   function Get_Finish_Date (Object : in Message_Ref)
+                 return ADO.Nullable_Time;
+
+   --  Set the optional user who triggered the event message creation
+   procedure Set_User (Object : in out Message_Ref;
+                       Value  : in AWA.Users.Models.User_Ref'Class);
+
+   --  Get the optional user who triggered the event message creation
+   function Get_User (Object : in Message_Ref)
+                 return AWA.Users.Models.User_Ref'Class;
+
+   --  Set the optional user session that triggered the message creation
+   procedure Set_Session (Object : in out Message_Ref;
+                          Value  : in AWA.Users.Models.Session_Ref'Class);
+
+   --  Get the optional user session that triggered the message creation
+   function Get_Session (Object : in Message_Ref)
+                 return AWA.Users.Models.Session_Ref'Class;
+
+   --
+   procedure Set_Queue (Object : in out Message_Ref;
+                        Value  : in AWA.Events.Models.Queue_Ref'Class);
+
+   --
+   function Get_Queue (Object : in Message_Ref)
+                 return AWA.Events.Models.Queue_Ref'Class;
 
    --  Set the message type
    procedure Set_Message_Type (Object : in out Message_Ref;
@@ -353,30 +364,6 @@ package AWA.Events.Models is
    --  Get the message type
    function Get_Message_Type (Object : in Message_Ref)
                  return AWA.Events.Models.Message_Type_Ref'Class;
-
-   --  Set the user who triggered the message
-   procedure Set_User (Object : in out Message_Ref;
-                       Value  : in AWA.Users.Models.User_Ref'Class);
-
-   --  Get the user who triggered the message
-   function Get_User (Object : in Message_Ref)
-                 return AWA.Users.Models.User_Ref'Class;
-
-   --  Set the user session who triggered the message
-   procedure Set_Session (Object : in out Message_Ref;
-                          Value  : in AWA.Users.Models.Session_Ref'Class);
-
-   --  Get the user session who triggered the message
-   function Get_Session (Object : in Message_Ref)
-                 return AWA.Users.Models.Session_Ref'Class;
-
-   --  Set the message queue associated with this message
-   procedure Set_Queue (Object : in out Message_Ref;
-                        Value  : in AWA.Events.Models.Queue_Ref'Class);
-
-   --  Get the message queue associated with this message
-   function Get_Queue (Object : in Message_Ref)
-                 return AWA.Events.Models.Queue_Ref'Class;
 
    --  Load the entity identified by 'Id'.
    --  Raises the NOT_FOUND exception if it does not exist.
@@ -497,18 +484,16 @@ private
                         Impl   : out Message_Type_Access);
    QUEUE_NAME : aliased constant String := "awa_queue";
    COL_0_2_NAME : aliased constant String := "id";
-   COL_1_2_NAME : aliased constant String := "version";
+   COL_1_2_NAME : aliased constant String := "server_id";
    COL_2_2_NAME : aliased constant String := "name";
-   COL_3_2_NAME : aliased constant String := "server_id";
 
    QUEUE_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 4,
+     (Count => 3,
       Table => QUEUE_NAME'Access,
       Members => (
          1 => COL_0_2_NAME'Access,
          2 => COL_1_2_NAME'Access,
-         3 => COL_2_2_NAME'Access,
-         4 => COL_3_2_NAME'Access
+         3 => COL_2_2_NAME'Access
 )
      );
 
@@ -519,9 +504,8 @@ private
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
                                      Of_Class => QUEUE_TABLE'Access)
    with record
-       Version : Integer;
-       Name : Ada.Strings.Unbounded.Unbounded_String;
        Server_Id : Integer;
+       Name : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
    type Queue_Access is access all Queue_Impl;
@@ -557,24 +541,25 @@ private
                         Impl   : out Queue_Access);
    MESSAGE_NAME : aliased constant String := "awa_message";
    COL_0_3_NAME : aliased constant String := "id";
-   COL_1_3_NAME : aliased constant String := "version";
+   COL_1_3_NAME : aliased constant String := "create_date";
    COL_2_3_NAME : aliased constant String := "priority";
-   COL_3_3_NAME : aliased constant String := "server_id";
-   COL_4_3_NAME : aliased constant String := "task_id";
-   COL_5_3_NAME : aliased constant String := "parameters";
-   COL_6_3_NAME : aliased constant String := "create_date";
-   COL_7_3_NAME : aliased constant String := "processing_date";
-   COL_8_3_NAME : aliased constant String := "finish_date";
-   COL_9_3_NAME : aliased constant String := "status";
-   COL_10_3_NAME : aliased constant String := "entity_type";
-   COL_11_3_NAME : aliased constant String := "entity_id";
-   COL_12_3_NAME : aliased constant String := "type";
+   COL_3_3_NAME : aliased constant String := "count";
+   COL_4_3_NAME : aliased constant String := "parameters";
+   COL_5_3_NAME : aliased constant String := "server_id";
+   COL_6_3_NAME : aliased constant String := "task_id";
+   COL_7_3_NAME : aliased constant String := "status";
+   COL_8_3_NAME : aliased constant String := "processing_date";
+   COL_9_3_NAME : aliased constant String := "version";
+   COL_10_3_NAME : aliased constant String := "entity_id";
+   COL_11_3_NAME : aliased constant String := "entity_type";
+   COL_12_3_NAME : aliased constant String := "finish_date";
    COL_13_3_NAME : aliased constant String := "user_id";
    COL_14_3_NAME : aliased constant String := "session_id";
    COL_15_3_NAME : aliased constant String := "queue_id";
+   COL_16_3_NAME : aliased constant String := "message_type_id";
 
    MESSAGE_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 16,
+     (Count => 17,
       Table => MESSAGE_NAME'Access,
       Members => (
          1 => COL_0_3_NAME'Access,
@@ -592,7 +577,8 @@ private
          13 => COL_12_3_NAME'Access,
          14 => COL_13_3_NAME'Access,
          15 => COL_14_3_NAME'Access,
-         16 => COL_15_3_NAME'Access
+         16 => COL_15_3_NAME'Access,
+         17 => COL_16_3_NAME'Access
 )
      );
 
@@ -603,21 +589,22 @@ private
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
                                      Of_Class => MESSAGE_TABLE'Access)
    with record
-       Version : Integer;
+       Create_Date : Ada.Calendar.Time;
        Priority : Integer;
+       Count : Integer;
+       Parameters : Ada.Strings.Unbounded.Unbounded_String;
        Server_Id : Integer;
        Task_Id : Integer;
-       Parameters : Ada.Strings.Unbounded.Unbounded_String;
-       Create_Date : Ada.Calendar.Time;
-       Processing_Date : ADO.Nullable_Time;
-       Finish_Date : ADO.Nullable_Time;
        Status : Message_Status_Type;
-       Entity_Type : ADO.Entity_Type;
+       Processing_Date : ADO.Nullable_Time;
+       Version : Integer;
        Entity_Id : ADO.Identifier;
-       Message_Type : AWA.Events.Models.Message_Type_Ref;
+       Entity_Type : ADO.Entity_Type;
+       Finish_Date : ADO.Nullable_Time;
        User : AWA.Users.Models.User_Ref;
        Session : AWA.Users.Models.Session_Ref;
        Queue : AWA.Events.Models.Queue_Ref;
+       Message_Type : AWA.Events.Models.Message_Type_Ref;
    end record;
 
    type Message_Access is access all Message_Impl;

@@ -32,13 +32,12 @@ with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
 with Util.Beans.Basic.Lists;
-with ADO;
 pragma Warnings (On, "unit * is not referenced");
 package AWA.Permissions.Models is
    type ACL_Ref is new ADO.Objects.Object_Ref with null record;
 
    --  --------------------
-   --  Access control
+   --  The ACL table records permissions which are granted for a user to access a given database entity.
    --  --------------------
    --  Create an object key for ACL.
    function ACL_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
@@ -49,45 +48,45 @@ package AWA.Permissions.Models is
    Null_ACL : constant ACL_Ref;
    function "=" (Left, Right : ACL_Ref'Class) return Boolean;
 
-   --  Set the unique ACL id
+   --  Set the ACL identifier
    procedure Set_Id (Object : in out Acl_Ref;
                      Value  : in ADO.Identifier);
 
-   --  Get the unique ACL id
+   --  Get the ACL identifier
    function Get_Id (Object : in Acl_Ref)
                  return ADO.Identifier;
 
-   --  Set the entity type
-   procedure Set_Entity_Type (Object : in out Acl_Ref;
-                              Value  : in ADO.Entity_Type);
-
-   --  Get the entity type
-   function Get_Entity_Type (Object : in Acl_Ref)
-                 return ADO.Entity_Type;
-
-   --  Set the user identifier
-   procedure Set_User_Id (Object : in out Acl_Ref;
-                          Value  : in ADO.Identifier);
-
-   --  Get the user identifier
-   function Get_User_Id (Object : in Acl_Ref)
-                 return ADO.Identifier;
-
-   --  Set the entity identifier
+   --  Set the entity identifier to which the ACL applies
    procedure Set_Entity_Id (Object : in out Acl_Ref;
                             Value  : in ADO.Identifier);
 
-   --  Get the entity identifier
+   --  Get the entity identifier to which the ACL applies
    function Get_Entity_Id (Object : in Acl_Ref)
                  return ADO.Identifier;
 
-   --  Set whether the entity is writeable
+   --  Set the writeable flag
    procedure Set_Writeable (Object : in out Acl_Ref;
                             Value  : in Boolean);
 
-   --  Get whether the entity is writeable
+   --  Get the writeable flag
    function Get_Writeable (Object : in Acl_Ref)
                  return Boolean;
+
+   --  Set the entity type concerned by the ACL.
+   procedure Set_Entity_Type (Object : in out Acl_Ref;
+                              Value  : in ADO.Entity_Type);
+
+   --  Get the entity type concerned by the ACL.
+   function Get_Entity_Type (Object : in Acl_Ref)
+                 return ADO.Entity_Type;
+
+   --
+   procedure Set_User_Id (Object : in out Acl_Ref;
+                          Value  : in ADO.Identifier);
+
+   --
+   function Get_User_Id (Object : in Acl_Ref)
+                 return ADO.Identifier;
 
    --  Load the entity identified by 'Id'.
    --  Raises the NOT_FOUND exception if it does not exist.
@@ -136,15 +135,6 @@ package AWA.Permissions.Models is
    procedure Copy (Object : in Acl_Ref;
                    Into   : in out Acl_Ref);
 
-   package Acl_Vectors is
-      new Ada.Containers.Vectors (Index_Type   => Natural,
-                                  Element_Type => Acl_Ref,
-                                  "="          => "=");
-   subtype Acl_Vector is Acl_Vectors.Vector;
-
-   procedure List (Object  : in out Acl_Vector;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class);
 
 
    Query_Check_Entity_Permission : constant ADO.Queries.Query_Definition_Access;
@@ -158,12 +148,12 @@ package AWA.Permissions.Models is
 
 
 private
-   ACL_NAME : aliased constant String := "acl";
+   ACL_NAME : aliased constant String := "awa_acl";
    COL_0_1_NAME : aliased constant String := "id";
-   COL_1_1_NAME : aliased constant String := "entity_type";
-   COL_2_1_NAME : aliased constant String := "user_id";
-   COL_3_1_NAME : aliased constant String := "entity_id";
-   COL_4_1_NAME : aliased constant String := "writeable";
+   COL_1_1_NAME : aliased constant String := "entity_id";
+   COL_2_1_NAME : aliased constant String := "writeable";
+   COL_3_1_NAME : aliased constant String := "entity_type";
+   COL_4_1_NAME : aliased constant String := "user_id";
 
    ACL_TABLE : aliased constant ADO.Schemas.Class_Mapping :=
      (Count => 5,
@@ -184,10 +174,10 @@ private
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
                                      Of_Class => ACL_TABLE'Access)
    with record
-       Entity_Type : ADO.Entity_Type;
-       User_Id : ADO.Identifier;
        Entity_Id : ADO.Identifier;
        Writeable : Boolean;
+       Entity_Type : ADO.Entity_Type;
+       User_Id : ADO.Identifier;
    end record;
 
    type Acl_Access is access all Acl_Impl;

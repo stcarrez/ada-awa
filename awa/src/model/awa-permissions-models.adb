@@ -61,10 +61,10 @@ package body AWA.Permissions.Models is
       Impl : Acl_Access;
    begin
       Impl := new Acl_Impl;
-      Impl.Entity_Type := 0;
-      Impl.User_Id := ADO.NO_IDENTIFIER;
       Impl.Entity_Id := ADO.NO_IDENTIFIER;
       Impl.Writeable := False;
+      Impl.Entity_Type := 0;
+      Impl.User_Id := ADO.NO_IDENTIFIER;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -88,44 +88,12 @@ package body AWA.Permissions.Models is
    end Get_Id;
 
 
-   procedure Set_Entity_Type (Object : in out Acl_Ref;
-                              Value  : in ADO.Entity_Type) is
-      Impl : Acl_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Entity_Type (Impl.all, 2, Impl.Entity_Type, Value);
-   end Set_Entity_Type;
-
-   function Get_Entity_Type (Object : in Acl_Ref)
-                  return ADO.Entity_Type is
-      Impl : constant Acl_Access := Acl_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Entity_Type;
-   end Get_Entity_Type;
-
-
-   procedure Set_User_Id (Object : in out Acl_Ref;
-                          Value  : in ADO.Identifier) is
-      Impl : Acl_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Identifier (Impl.all, 3, Impl.User_Id, Value);
-   end Set_User_Id;
-
-   function Get_User_Id (Object : in Acl_Ref)
-                  return ADO.Identifier is
-      Impl : constant Acl_Access := Acl_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.User_Id;
-   end Get_User_Id;
-
-
    procedure Set_Entity_Id (Object : in out Acl_Ref;
                             Value  : in ADO.Identifier) is
       Impl : Acl_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Identifier (Impl.all, 4, Impl.Entity_Id, Value);
+      ADO.Objects.Set_Field_Identifier (Impl.all, 2, Impl.Entity_Id, Value);
    end Set_Entity_Id;
 
    function Get_Entity_Id (Object : in Acl_Ref)
@@ -141,8 +109,8 @@ package body AWA.Permissions.Models is
       Impl : Acl_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Boolean (Impl.all, 5, Impl.Writeable, Value);
-      ADO.Objects.Set_Field_Boolean (Impl.all, 5, Impl.Writeable, Value);
+      ADO.Objects.Set_Field_Boolean (Impl.all, 3, Impl.Writeable, Value);
+      ADO.Objects.Set_Field_Boolean (Impl.all, 3, Impl.Writeable, Value);
    end Set_Writeable;
 
    function Get_Writeable (Object : in Acl_Ref)
@@ -151,6 +119,38 @@ package body AWA.Permissions.Models is
    begin
       return Impl.Writeable;
    end Get_Writeable;
+
+
+   procedure Set_Entity_Type (Object : in out Acl_Ref;
+                              Value  : in ADO.Entity_Type) is
+      Impl : Acl_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Entity_Type (Impl.all, 4, Impl.Entity_Type, Value);
+   end Set_Entity_Type;
+
+   function Get_Entity_Type (Object : in Acl_Ref)
+                  return ADO.Entity_Type is
+      Impl : constant Acl_Access := Acl_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Entity_Type;
+   end Get_Entity_Type;
+
+
+   procedure Set_User_Id (Object : in out Acl_Ref;
+                          Value  : in ADO.Identifier) is
+      Impl : Acl_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Identifier (Impl.all, 5, Impl.User_Id, Value);
+   end Set_User_Id;
+
+   function Get_User_Id (Object : in Acl_Ref)
+                  return ADO.Identifier is
+      Impl : constant Acl_Access := Acl_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.User_Id;
+   end Get_User_Id;
 
    --  Copy of the object.
    procedure Copy (Object : in Acl_Ref;
@@ -166,10 +166,10 @@ package body AWA.Permissions.Models is
          begin
             ADO.Objects.Set_Object (Result, Copy.all'Access);
             Copy.Copy (Impl.all);
-            Copy.Entity_Type := Impl.Entity_Type;
-            Copy.User_Id := Impl.User_Id;
             Copy.Entity_Id := Impl.Entity_Id;
             Copy.Writeable := Impl.Writeable;
+            Copy.Entity_Type := Impl.Entity_Type;
+            Copy.User_Id := Impl.User_Id;
          end;
       end if;
       Into := Result;
@@ -305,13 +305,23 @@ package body AWA.Permissions.Models is
          Object.Clear_Modified (1);
       end if;
       if Object.Is_Modified (2) then
-         Stmt.Save_Field (Name  => COL_1_1_NAME, --  entity_type
-                          Value => Object.Entity_Type);
+         Stmt.Save_Field (Name  => COL_1_1_NAME, --  entity_id
+                          Value => Object.Entity_Id);
          Object.Clear_Modified (2);
       end if;
-      if Object.Is_Modified (5) then
-         Stmt.Save_Field (Name  => COL_4_1_NAME, --  writeable
+      if Object.Is_Modified (3) then
+         Stmt.Save_Field (Name  => COL_2_1_NAME, --  writeable
                           Value => Object.Writeable);
+         Object.Clear_Modified (3);
+      end if;
+      if Object.Is_Modified (4) then
+         Stmt.Save_Field (Name  => COL_3_1_NAME, --  entity_type
+                          Value => Object.Entity_Type);
+         Object.Clear_Modified (4);
+      end if;
+      if Object.Is_Modified (5) then
+         Stmt.Save_Field (Name  => COL_4_1_NAME, --  user_id
+                          Value => Object.User_Id);
          Object.Clear_Modified (5);
       end if;
       if Stmt.Has_Save_Fields then
@@ -339,14 +349,14 @@ package body AWA.Permissions.Models is
       Session.Allocate (Id => Object);
       Query.Save_Field (Name  => COL_0_1_NAME, --  id
                         Value => Object.Get_Key);
-      Query.Save_Field (Name  => COL_1_1_NAME, --  entity_type
-                        Value => Object.Entity_Type);
-      Query.Save_Field (Name  => COL_2_1_NAME, --  user_id
-                        Value => Object.User_Id);
-      Query.Save_Field (Name  => COL_3_1_NAME, --  entity_id
+      Query.Save_Field (Name  => COL_1_1_NAME, --  entity_id
                         Value => Object.Entity_Id);
-      Query.Save_Field (Name  => COL_4_1_NAME, --  writeable
+      Query.Save_Field (Name  => COL_2_1_NAME, --  writeable
                         Value => Object.Writeable);
+      Query.Save_Field (Name  => COL_3_1_NAME, --  entity_type
+                        Value => Object.Entity_Type);
+      Query.Save_Field (Name  => COL_4_1_NAME, --  user_id
+                        Value => Object.User_Id);
       Query.Execute (Result);
       if Result /= 1 then
          raise ADO.Objects.INSERT_ERROR;
@@ -376,43 +386,22 @@ package body AWA.Permissions.Models is
       if Name = "id" then
          return ADO.Objects.To_Object (Impl.Get_Key);
       end if;
-      if Name = "entity_type" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Entity_Type));
-      end if;
-      if Name = "user_id" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.User_Id));
-      end if;
       if Name = "entity_id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Entity_Id));
       end if;
       if Name = "writeable" then
          return Util.Beans.Objects.To_Object (Impl.Writeable);
       end if;
+      if Name = "entity_type" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Entity_Type));
+      end if;
+      if Name = "user_id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.User_Id));
+      end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
 
 
-
-   procedure List (Object  : in out Acl_Vector;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class) is
-      Stmt : ADO.Statements.Query_Statement
-        := Session.Create_Statement (Query, ACL_TABLE'Access);
-   begin
-      Stmt.Execute;
-      Acl_Vectors.Clear (Object);
-      while Stmt.Has_Elements loop
-         declare
-            Item : Acl_Ref;
-            Impl : constant Acl_Access := new Acl_Impl;
-         begin
-            Impl.Load (Stmt, Session);
-            ADO.Objects.Set_Object (Item, Impl.all'Access);
-            Object.Append (Item);
-         end;
-         Stmt.Next;
-      end loop;
-   end List;
 
    --  ------------------------------
    --  Load the object from current iterator position
@@ -420,14 +409,13 @@ package body AWA.Permissions.Models is
    procedure Load (Object  : in out Acl_Impl;
                    Stmt    : in out ADO.Statements.Query_Statement'Class;
                    Session : in out ADO.Sessions.Session'Class) is
-      pragma Unreferenced (Session);
    begin
       Object.Set_Key_Value (Stmt.Get_Identifier (0));
-      Object.Entity_Type := ADO.Entity_Type (Stmt.Get_Integer (1));
-      Object.User_Id := Stmt.Get_Identifier (2);
-      Object.Entity_Id := Stmt.Get_Identifier (3);
-      Object.Writeable := Stmt.Get_Boolean (4);
-      Object.Writeable := Stmt.Get_Boolean (4);
+      Object.Entity_Id := Stmt.Get_Identifier (1);
+      Object.Writeable := Stmt.Get_Boolean (2);
+      Object.Writeable := Stmt.Get_Boolean (2);
+      Object.Entity_Type := ADO.Entity_Type (Stmt.Get_Integer (3));
+      Object.User_Id := Stmt.Get_Identifier (4);
       ADO.Objects.Set_Created (Object);
    end Load;
 

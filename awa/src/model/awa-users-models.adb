@@ -28,381 +28,6 @@ package body AWA.Users.Models is
    use type ADO.Objects.Object_Ref;
    use type ADO.Objects.Object_Record;
 
-   function Access_Key_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
-                                       Of_Class => ACCESS_KEY_TABLE'Access);
-   begin
-      ADO.Objects.Set_Value (Result, Id);
-      return Result;
-   end Access_Key_Key;
-
-   function Access_Key_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
-                                       Of_Class => ACCESS_KEY_TABLE'Access);
-   begin
-      ADO.Objects.Set_Value (Result, Id);
-      return Result;
-   end Access_Key_Key;
-
-   function "=" (Left, Right : Access_Key_Ref'Class) return Boolean is
-   begin
-      return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
-   end "=";
-
-   procedure Set_Field (Object : in out Access_Key_Ref'Class;
-                        Impl   : out Access_Key_Access) is
-      Result : ADO.Objects.Object_Record_Access;
-   begin
-      Object.Prepare_Modify (Result);
-      Impl := Access_Key_Impl (Result.all)'Access;
-   end Set_Field;
-
-   --  Internal method to allocate the Object_Record instance
-   procedure Allocate (Object : in out Access_Key_Ref) is
-      Impl : Access_Key_Access;
-   begin
-      Impl := new Access_Key_Impl;
-      Impl.Version := 0;
-      Impl.User_Id := ADO.NO_IDENTIFIER;
-      ADO.Objects.Set_Object (Object, Impl.all'Access);
-   end Allocate;
-
-   -- ----------------------------------------
-   --  Data object: Access_Key
-   -- ----------------------------------------
-
-   procedure Set_Id (Object : in out Access_Key_Ref;
-                     Value  : in ADO.Identifier) is
-      Impl : Access_Key_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
-   end Set_Id;
-
-   function Get_Id (Object : in Access_Key_Ref)
-                  return ADO.Identifier is
-      Impl : constant Access_Key_Access := Access_Key_Impl (Object.Get_Object.all)'Access;
-   begin
-      return Impl.Get_Key_Value;
-   end Get_Id;
-
-
-   function Get_Version (Object : in Access_Key_Ref)
-                  return Integer is
-      Impl : constant Access_Key_Access := Access_Key_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Version;
-   end Get_Version;
-
-
-   procedure Set_Access_Key (Object : in out Access_Key_Ref;
-                              Value : in String) is
-      Impl : Access_Key_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 3, Impl.Access_Key, Value);
-   end Set_Access_Key;
-
-   procedure Set_Access_Key (Object : in out Access_Key_Ref;
-                             Value  : in Ada.Strings.Unbounded.Unbounded_String) is
-      Impl : Access_Key_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 3, Impl.Access_Key, Value);
-   end Set_Access_Key;
-
-   function Get_Access_Key (Object : in Access_Key_Ref)
-                 return String is
-   begin
-      return Ada.Strings.Unbounded.To_String (Object.Get_Access_Key);
-   end Get_Access_Key;
-   function Get_Access_Key (Object : in Access_Key_Ref)
-                  return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Access_Key_Access := Access_Key_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Access_Key;
-   end Get_Access_Key;
-
-
-   procedure Set_User_Id (Object : in out Access_Key_Ref;
-                          Value  : in ADO.Identifier) is
-      Impl : Access_Key_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Identifier (Impl.all, 4, Impl.User_Id, Value);
-   end Set_User_Id;
-
-   function Get_User_Id (Object : in Access_Key_Ref)
-                  return ADO.Identifier is
-      Impl : constant Access_Key_Access := Access_Key_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.User_Id;
-   end Get_User_Id;
-
-   --  Copy of the object.
-   procedure Copy (Object : in Access_Key_Ref;
-                   Into   : in out Access_Key_Ref) is
-      Result : Access_Key_Ref;
-   begin
-      if not Object.Is_Null then
-         declare
-            Impl : constant Access_Key_Access
-              := Access_Key_Impl (Object.Get_Load_Object.all)'Access;
-            Copy : constant Access_Key_Access
-              := new Access_Key_Impl;
-         begin
-            ADO.Objects.Set_Object (Result, Copy.all'Access);
-            Copy.Copy (Impl.all);
-            Copy.Version := Impl.Version;
-            Copy.Access_Key := Impl.Access_Key;
-            Copy.User_Id := Impl.User_Id;
-         end;
-      end if;
-      Into := Result;
-   end Copy;
-
-   procedure Find (Object  : in out Access_Key_Ref;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class;
-                   Found   : out Boolean) is
-      Impl  : constant Access_Key_Access := new Access_Key_Impl;
-   begin
-      Impl.Find (Session, Query, Found);
-      if Found then
-         ADO.Objects.Set_Object (Object, Impl.all'Access);
-      else
-         ADO.Objects.Set_Object (Object, null);
-         Destroy (Impl);
-      end if;
-   end Find;
-
-   procedure Load (Object  : in out Access_Key_Ref;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Id      : in ADO.Identifier) is
-      Impl  : constant Access_Key_Access := new Access_Key_Impl;
-      Found : Boolean;
-      Query : ADO.SQL.Query;
-   begin
-      Query.Bind_Param (Position => 1, Value => Id);
-      Query.Set_Filter ("id = ?");
-      Impl.Find (Session, Query, Found);
-      if not Found then
-         Destroy (Impl);
-         raise ADO.Objects.NOT_FOUND;
-      end if;
-      ADO.Objects.Set_Object (Object, Impl.all'Access);
-   end Load;
-
-   procedure Load (Object  : in out Access_Key_Ref;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Id      : in ADO.Identifier;
-                   Found   : out Boolean) is
-      Impl  : constant Access_Key_Access := new Access_Key_Impl;
-      Query : ADO.SQL.Query;
-   begin
-      Query.Bind_Param (Position => 1, Value => Id);
-      Query.Set_Filter ("id = ?");
-      Impl.Find (Session, Query, Found);
-      if not Found then
-         Destroy (Impl);
-      else
-         ADO.Objects.Set_Object (Object, Impl.all'Access);
-      end if;
-   end Load;
-
-   procedure Save (Object  : in out Access_Key_Ref;
-                   Session : in out ADO.Sessions.Master_Session'Class) is
-      Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
-   begin
-      if Impl = null then
-         Impl := new Access_Key_Impl;
-         ADO.Objects.Set_Object (Object, Impl);
-      end if;
-      if not ADO.Objects.Is_Created (Impl.all) then
-         Impl.Create (Session);
-      else
-         Impl.Save (Session);
-      end if;
-   end Save;
-
-   procedure Delete (Object  : in out Access_Key_Ref;
-                     Session : in out ADO.Sessions.Master_Session'Class) is
-      Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
-   begin
-      if Impl /= null then
-         Impl.Delete (Session);
-      end if;
-   end Delete;
-
-   --  --------------------
-   --  Free the object
-   --  --------------------
-   procedure Destroy (Object : access Access_Key_Impl) is
-      type Access_Key_Impl_Ptr is access all Access_Key_Impl;
-      procedure Unchecked_Free is new Ada.Unchecked_Deallocation
-              (Access_Key_Impl, Access_Key_Impl_Ptr);
-      pragma Warnings (Off, "*redundant conversion*");
-      Ptr : Access_Key_Impl_Ptr := Access_Key_Impl (Object.all)'Access;
-      pragma Warnings (On, "*redundant conversion*");
-   begin
-      Unchecked_Free (Ptr);
-   end Destroy;
-
-   procedure Find (Object  : in out Access_Key_Impl;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class;
-                   Found   : out Boolean) is
-      Stmt : ADO.Statements.Query_Statement
-          := Session.Create_Statement (Query, ACCESS_KEY_TABLE'Access);
-   begin
-      Stmt.Execute;
-      if Stmt.Has_Elements then
-         Object.Load (Stmt, Session);
-         Stmt.Next;
-         Found := not Stmt.Has_Elements;
-      else
-         Found := False;
-      end if;
-   end Find;
-
-   overriding
-   procedure Load (Object  : in out Access_Key_Impl;
-                   Session : in out ADO.Sessions.Session'Class) is
-      Found : Boolean;
-      Query : ADO.SQL.Query;
-      Id    : constant ADO.Identifier := Object.Get_Key_Value;
-   begin
-      Query.Bind_Param (Position => 1, Value => Id);
-      Query.Set_Filter ("id = ?");
-      Object.Find (Session, Query, Found);
-      if not Found then
-         raise ADO.Objects.NOT_FOUND;
-      end if;
-   end Load;
-
-   procedure Save (Object  : in out Access_Key_Impl;
-                   Session : in out ADO.Sessions.Master_Session'Class) is
-      Stmt : ADO.Statements.Update_Statement
-         := Session.Create_Statement (ACCESS_KEY_TABLE'Access);
-   begin
-      if Object.Is_Modified (1) then
-         Stmt.Save_Field (Name  => COL_0_1_NAME, --  id
-                          Value => Object.Get_Key);
-         Object.Clear_Modified (1);
-      end if;
-      if Stmt.Has_Save_Fields then
-         Object.Version := Object.Version + 1;
-         Stmt.Save_Field (Name  => "version",
-                          Value => Object.Version);
-         Stmt.Set_Filter (Filter => "id = ? and version = ?");
-         Stmt.Add_Param (Value => Object.Get_Key);
-         Stmt.Add_Param (Value => Object.Version - 1);
-         declare
-            Result : Integer;
-         begin
-            Stmt.Execute (Result);
-            if Result /= 1 then
-               if Result /= 0 then
-                  raise ADO.Objects.UPDATE_ERROR;
-               else
-                  raise ADO.Objects.LAZY_LOCK;
-               end if;
-            end if;
-         end;
-      end if;
-   end Save;
-
-   procedure Create (Object  : in out Access_Key_Impl;
-                     Session : in out ADO.Sessions.Master_Session'Class) is
-      Query : ADO.Statements.Insert_Statement
-                  := Session.Create_Statement (ACCESS_KEY_TABLE'Access);
-      Result : Integer;
-   begin
-      Object.Version := 1;
-      Session.Allocate (Id => Object);
-      Query.Save_Field (Name  => COL_0_1_NAME, --  id
-                        Value => Object.Get_Key);
-      Query.Save_Field (Name  => COL_1_1_NAME, --  version
-                        Value => Object.Version);
-      Query.Save_Field (Name  => COL_2_1_NAME, --  access_key
-                        Value => Object.Access_Key);
-      Query.Save_Field (Name  => COL_3_1_NAME, --  user_id
-                        Value => Object.User_Id);
-      Query.Execute (Result);
-      if Result /= 1 then
-         raise ADO.Objects.INSERT_ERROR;
-      end if;
-      ADO.Objects.Set_Created (Object);
-   end Create;
-
-   procedure Delete (Object  : in out Access_Key_Impl;
-                     Session : in out ADO.Sessions.Master_Session'Class) is
-      Stmt : ADO.Statements.Delete_Statement
-         := Session.Create_Statement (ACCESS_KEY_TABLE'Access);
-   begin
-      Stmt.Set_Filter (Filter => "id = ?");
-      Stmt.Add_Param (Value => Object.Get_Key);
-      Stmt.Execute;
-   end Delete;
-
-   function Get_Value (From : in Access_Key_Ref;
-                       Name : in String) return Util.Beans.Objects.Object is
-      Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
-      Impl : access Access_Key_Impl;
-   begin
-      if Obj = null then
-         return Util.Beans.Objects.Null_Object;
-      end if;
-      Impl := Access_Key_Impl (Obj.all)'Access;
-      if Name = "id" then
-         return ADO.Objects.To_Object (Impl.Get_Key);
-      end if;
-      if Name = "access_key" then
-         return Util.Beans.Objects.To_Object (Impl.Access_Key);
-      end if;
-      if Name = "user_id" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.User_Id));
-      end if;
-      return Util.Beans.Objects.Null_Object;
-   end Get_Value;
-
-
-
-   procedure List (Object  : in out Access_Key_Vector;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class) is
-      Stmt : ADO.Statements.Query_Statement
-        := Session.Create_Statement (Query, ACCESS_KEY_TABLE'Access);
-   begin
-      Stmt.Execute;
-      Access_Key_Vectors.Clear (Object);
-      while Stmt.Has_Elements loop
-         declare
-            Item : Access_Key_Ref;
-            Impl : constant Access_Key_Access := new Access_Key_Impl;
-         begin
-            Impl.Load (Stmt, Session);
-            ADO.Objects.Set_Object (Item, Impl.all'Access);
-            Object.Append (Item);
-         end;
-         Stmt.Next;
-      end loop;
-   end List;
-
-   --  ------------------------------
-   --  Load the object from current iterator position
-   --  ------------------------------
-   procedure Load (Object  : in out Access_Key_Impl;
-                   Stmt    : in out ADO.Statements.Query_Statement'Class;
-                   Session : in out ADO.Sessions.Session'Class) is
-      pragma Unreferenced (Session);
-   begin
-      Object.Set_Key_Value (Stmt.Get_Identifier (0));
-      Object.Access_Key := Stmt.Get_Unbounded_String (2);
-      Object.User_Id := Stmt.Get_Identifier (3);
-      Object.Version := Stmt.Get_Integer (1);
-      ADO.Objects.Set_Created (Object);
-   end Load;
    function Email_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
       Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
                                        Of_Class => EMAIL_TABLE'Access);
@@ -437,6 +62,8 @@ package body AWA.Users.Models is
       Impl : Email_Access;
    begin
       Impl := new Email_Impl;
+      Impl.Status := MailDeliveryStatus'First;
+      Impl.Last_Error_Date := ADO.DEFAULT_TIME;
       Impl.Version := 0;
       Impl.User_Id := ADO.NO_IDENTIFIER;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
@@ -446,36 +73,12 @@ package body AWA.Users.Models is
    --  Data object: Email
    -- ----------------------------------------
 
-   procedure Set_Id (Object : in out Email_Ref;
-                     Value  : in ADO.Identifier) is
-      Impl : Email_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
-   end Set_Id;
-
-   function Get_Id (Object : in Email_Ref)
-                  return ADO.Identifier is
-      Impl : constant Email_Access := Email_Impl (Object.Get_Object.all)'Access;
-   begin
-      return Impl.Get_Key_Value;
-   end Get_Id;
-
-
-   function Get_Version (Object : in Email_Ref)
-                  return Integer is
-      Impl : constant Email_Access := Email_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Version;
-   end Get_Version;
-
-
    procedure Set_Email (Object : in out Email_Ref;
                          Value : in String) is
       Impl : Email_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 3, Impl.Email, Value);
+      ADO.Objects.Set_Field_String (Impl.all, 1, Impl.Email, Value);
    end Set_Email;
 
    procedure Set_Email (Object : in out Email_Ref;
@@ -483,7 +86,7 @@ package body AWA.Users.Models is
       Impl : Email_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 3, Impl.Email, Value);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 1, Impl.Email, Value);
    end Set_Email;
 
    function Get_Email (Object : in Email_Ref)
@@ -499,12 +102,70 @@ package body AWA.Users.Models is
    end Get_Email;
 
 
+   procedure Set_Status (Object : in out Email_Ref;
+                         Value  : in MailDeliveryStatus) is
+      procedure Set_Field_Enum is
+         new ADO.Objects.Set_Field_Operation (MailDeliveryStatus);
+      Impl : Email_Access;
+   begin
+      Set_Field (Object, Impl);
+      Set_Field_Enum (Impl.all, 2, Impl.Status, Value);
+   end Set_Status;
+
+   function Get_Status (Object : in Email_Ref)
+                  return MailDeliveryStatus is
+      Impl : constant Email_Access := Email_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Status;
+   end Get_Status;
+
+
+   procedure Set_Last_Error_Date (Object : in out Email_Ref;
+                                  Value  : in Ada.Calendar.Time) is
+      Impl : Email_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Time (Impl.all, 3, Impl.Last_Error_Date, Value);
+   end Set_Last_Error_Date;
+
+   function Get_Last_Error_Date (Object : in Email_Ref)
+                  return Ada.Calendar.Time is
+      Impl : constant Email_Access := Email_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Last_Error_Date;
+   end Get_Last_Error_Date;
+
+
+   function Get_Version (Object : in Email_Ref)
+                  return Integer is
+      Impl : constant Email_Access := Email_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Version;
+   end Get_Version;
+
+
+   procedure Set_Id (Object : in out Email_Ref;
+                     Value  : in ADO.Identifier) is
+      Impl : Email_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Key_Value (Impl.all, 5, Value);
+   end Set_Id;
+
+   function Get_Id (Object : in Email_Ref)
+                  return ADO.Identifier is
+      Impl : constant Email_Access := Email_Impl (Object.Get_Object.all)'Access;
+   begin
+      return Impl.Get_Key_Value;
+   end Get_Id;
+
+
    procedure Set_User_Id (Object : in out Email_Ref;
                           Value  : in ADO.Identifier) is
       Impl : Email_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Identifier (Impl.all, 4, Impl.User_Id, Value);
+      ADO.Objects.Set_Field_Identifier (Impl.all, 6, Impl.User_Id, Value);
    end Set_User_Id;
 
    function Get_User_Id (Object : in Email_Ref)
@@ -528,8 +189,10 @@ package body AWA.Users.Models is
          begin
             ADO.Objects.Set_Object (Result, Copy.all'Access);
             Copy.Copy (Impl.all);
-            Copy.Version := Impl.Version;
             Copy.Email := Impl.Email;
+            Copy.Status := Impl.Status;
+            Copy.Last_Error_Date := Impl.Last_Error_Date;
+            Copy.Version := Impl.Version;
             Copy.User_Id := Impl.User_Id;
          end;
       end if;
@@ -661,19 +324,29 @@ package body AWA.Users.Models is
          := Session.Create_Statement (EMAIL_TABLE'Access);
    begin
       if Object.Is_Modified (1) then
-         Stmt.Save_Field (Name  => COL_0_2_NAME, --  id
-                          Value => Object.Get_Key);
+         Stmt.Save_Field (Name  => COL_0_1_NAME, --  email
+                          Value => Object.Email);
          Object.Clear_Modified (1);
       end if;
+      if Object.Is_Modified (2) then
+         Stmt.Save_Field (Name  => COL_1_1_NAME, --  status
+                          Value => Integer (MailDeliveryStatus'Pos (Object.Status)));
+         Object.Clear_Modified (2);
+      end if;
       if Object.Is_Modified (3) then
-         Stmt.Save_Field (Name  => COL_2_2_NAME, --  email
-                          Value => Object.Email);
+         Stmt.Save_Field (Name  => COL_2_1_NAME, --  last_error_date
+                          Value => Object.Last_Error_Date);
          Object.Clear_Modified (3);
       end if;
-      if Object.Is_Modified (4) then
-         Stmt.Save_Field (Name  => COL_3_2_NAME, --  user_id
+      if Object.Is_Modified (5) then
+         Stmt.Save_Field (Name  => COL_4_1_NAME, --  id
+                          Value => Object.Get_Key);
+         Object.Clear_Modified (5);
+      end if;
+      if Object.Is_Modified (6) then
+         Stmt.Save_Field (Name  => COL_5_1_NAME, --  user_id
                           Value => Object.User_Id);
-         Object.Clear_Modified (4);
+         Object.Clear_Modified (6);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -704,14 +377,18 @@ package body AWA.Users.Models is
       Result : Integer;
    begin
       Object.Version := 1;
-      Session.Allocate (Id => Object);
-      Query.Save_Field (Name  => COL_0_2_NAME, --  id
-                        Value => Object.Get_Key);
-      Query.Save_Field (Name  => COL_1_2_NAME, --  version
-                        Value => Object.Version);
-      Query.Save_Field (Name  => COL_2_2_NAME, --  email
+      Query.Save_Field (Name  => COL_0_1_NAME, --  email
                         Value => Object.Email);
-      Query.Save_Field (Name  => COL_3_2_NAME, --  user_id
+      Query.Save_Field (Name  => COL_1_1_NAME, --  status
+                        Value => Integer (MailDeliveryStatus'Pos (Object.Status)));
+      Query.Save_Field (Name  => COL_2_1_NAME, --  last_error_date
+                        Value => Object.Last_Error_Date);
+      Query.Save_Field (Name  => COL_3_1_NAME, --  version
+                        Value => Object.Version);
+      Session.Allocate (Id => Object);
+      Query.Save_Field (Name  => COL_4_1_NAME, --  id
+                        Value => Object.Get_Key);
+      Query.Save_Field (Name  => COL_5_1_NAME, --  user_id
                         Value => Object.User_Id);
       Query.Execute (Result);
       if Result /= 1 then
@@ -739,11 +416,17 @@ package body AWA.Users.Models is
          return Util.Beans.Objects.Null_Object;
       end if;
       Impl := Email_Impl (Obj.all)'Access;
-      if Name = "id" then
-         return ADO.Objects.To_Object (Impl.Get_Key);
-      end if;
       if Name = "email" then
          return Util.Beans.Objects.To_Object (Impl.Email);
+      end if;
+      if Name = "status" then
+         return MailDeliveryStatus_Objects.To_Object (Impl.Status);
+      end if;
+      if Name = "last_error_date" then
+         return Util.Beans.Objects.Time.To_Object (Impl.Last_Error_Date);
+      end if;
+      if Name = "id" then
+         return ADO.Objects.To_Object (Impl.Get_Key);
       end if;
       if Name = "user_id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.User_Id));
@@ -752,27 +435,6 @@ package body AWA.Users.Models is
    end Get_Value;
 
 
-
-   procedure List (Object  : in out Email_Vector;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class) is
-      Stmt : ADO.Statements.Query_Statement
-        := Session.Create_Statement (Query, EMAIL_TABLE'Access);
-   begin
-      Stmt.Execute;
-      Email_Vectors.Clear (Object);
-      while Stmt.Has_Elements loop
-         declare
-            Item : Email_Ref;
-            Impl : constant Email_Access := new Email_Impl;
-         begin
-            Impl.Load (Stmt, Session);
-            ADO.Objects.Set_Object (Item, Impl.all'Access);
-            Object.Append (Item);
-         end;
-         Stmt.Next;
-      end loop;
-   end List;
 
    --  ------------------------------
    --  Load the object from current iterator position
@@ -780,532 +442,13 @@ package body AWA.Users.Models is
    procedure Load (Object  : in out Email_Impl;
                    Stmt    : in out ADO.Statements.Query_Statement'Class;
                    Session : in out ADO.Sessions.Session'Class) is
-      pragma Unreferenced (Session);
    begin
-      Object.Set_Key_Value (Stmt.Get_Identifier (0));
-      Object.Email := Stmt.Get_Unbounded_String (2);
-      Object.User_Id := Stmt.Get_Identifier (3);
-      Object.Version := Stmt.Get_Integer (1);
-      ADO.Objects.Set_Created (Object);
-   end Load;
-   function Session_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
-                                       Of_Class => SESSION_TABLE'Access);
-   begin
-      ADO.Objects.Set_Value (Result, Id);
-      return Result;
-   end Session_Key;
-
-   function Session_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
-                                       Of_Class => SESSION_TABLE'Access);
-   begin
-      ADO.Objects.Set_Value (Result, Id);
-      return Result;
-   end Session_Key;
-
-   function "=" (Left, Right : Session_Ref'Class) return Boolean is
-   begin
-      return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
-   end "=";
-
-   procedure Set_Field (Object : in out Session_Ref'Class;
-                        Impl   : out Session_Access) is
-      Result : ADO.Objects.Object_Record_Access;
-   begin
-      Object.Prepare_Modify (Result);
-      Impl := Session_Impl (Result.all)'Access;
-   end Set_Field;
-
-   --  Internal method to allocate the Object_Record instance
-   procedure Allocate (Object : in out Session_Ref) is
-      Impl : Session_Access;
-   begin
-      Impl := new Session_Impl;
-      Impl.Version := 0;
-      Impl.Start_Date.Is_Null := True;
-      Impl.End_Date.Is_Null := True;
-      Impl.User_Id := ADO.NO_IDENTIFIER;
-      Impl.Session_Type := 0;
-      Impl.Server_Id := 0;
-      ADO.Objects.Set_Object (Object, Impl.all'Access);
-   end Allocate;
-
-   -- ----------------------------------------
-   --  Data object: Session
-   -- ----------------------------------------
-
-   procedure Set_Id (Object : in out Session_Ref;
-                     Value  : in ADO.Identifier) is
-      Impl : Session_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
-   end Set_Id;
-
-   function Get_Id (Object : in Session_Ref)
-                  return ADO.Identifier is
-      Impl : constant Session_Access := Session_Impl (Object.Get_Object.all)'Access;
-   begin
-      return Impl.Get_Key_Value;
-   end Get_Id;
-
-
-   function Get_Version (Object : in Session_Ref)
-                  return Integer is
-      Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Version;
-   end Get_Version;
-
-
-   procedure Set_Start_Date (Object : in out Session_Ref;
-                             Value  : in ADO.Nullable_Time) is
-      Impl : Session_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Time (Impl.all, 3, Impl.Start_Date, Value);
-   end Set_Start_Date;
-
-   function Get_Start_Date (Object : in Session_Ref)
-                  return ADO.Nullable_Time is
-      Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Start_Date;
-   end Get_Start_Date;
-
-
-   procedure Set_End_Date (Object : in out Session_Ref;
-                           Value  : in ADO.Nullable_Time) is
-      Impl : Session_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Time (Impl.all, 4, Impl.End_Date, Value);
-   end Set_End_Date;
-
-   function Get_End_Date (Object : in Session_Ref)
-                  return ADO.Nullable_Time is
-      Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.End_Date;
-   end Get_End_Date;
-
-
-   procedure Set_Ip_Address (Object : in out Session_Ref;
-                              Value : in String) is
-      Impl : Session_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 5, Impl.Ip_Address, Value);
-   end Set_Ip_Address;
-
-   procedure Set_Ip_Address (Object : in out Session_Ref;
-                             Value  : in Ada.Strings.Unbounded.Unbounded_String) is
-      Impl : Session_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 5, Impl.Ip_Address, Value);
-   end Set_Ip_Address;
-
-   function Get_Ip_Address (Object : in Session_Ref)
-                 return String is
-   begin
-      return Ada.Strings.Unbounded.To_String (Object.Get_Ip_Address);
-   end Get_Ip_Address;
-   function Get_Ip_Address (Object : in Session_Ref)
-                  return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Ip_Address;
-   end Get_Ip_Address;
-
-
-   procedure Set_User_Id (Object : in out Session_Ref;
-                          Value  : in ADO.Identifier) is
-      Impl : Session_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Identifier (Impl.all, 6, Impl.User_Id, Value);
-   end Set_User_Id;
-
-   function Get_User_Id (Object : in Session_Ref)
-                  return ADO.Identifier is
-      Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.User_Id;
-   end Get_User_Id;
-
-
-   procedure Set_Session_Type (Object : in out Session_Ref;
-                               Value  : in Integer) is
-      Impl : Session_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Integer (Impl.all, 7, Impl.Session_Type, Value);
-      ADO.Objects.Set_Field_Integer (Impl.all, 7, Impl.Session_Type, Value);
-   end Set_Session_Type;
-
-   function Get_Session_Type (Object : in Session_Ref)
-                  return Integer is
-      Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Session_Type;
-   end Get_Session_Type;
-
-
-   procedure Set_Server_Id (Object : in out Session_Ref;
-                            Value  : in Integer) is
-      Impl : Session_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Integer (Impl.all, 8, Impl.Server_Id, Value);
-      ADO.Objects.Set_Field_Integer (Impl.all, 8, Impl.Server_Id, Value);
-   end Set_Server_Id;
-
-   function Get_Server_Id (Object : in Session_Ref)
-                  return Integer is
-      Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Server_Id;
-   end Get_Server_Id;
-
-
-   procedure Set_Auth (Object : in out Session_Ref;
-                       Value  : in AWA.Users.Models.Session_Ref'Class) is
-      Impl : Session_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 9, Impl.Auth, Value);
-   end Set_Auth;
-
-   function Get_Auth (Object : in Session_Ref)
-                  return AWA.Users.Models.Session_Ref'Class is
-      Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Auth;
-   end Get_Auth;
-
-   --  Copy of the object.
-   procedure Copy (Object : in Session_Ref;
-                   Into   : in out Session_Ref) is
-      Result : Session_Ref;
-   begin
-      if not Object.Is_Null then
-         declare
-            Impl : constant Session_Access
-              := Session_Impl (Object.Get_Load_Object.all)'Access;
-            Copy : constant Session_Access
-              := new Session_Impl;
-         begin
-            ADO.Objects.Set_Object (Result, Copy.all'Access);
-            Copy.Copy (Impl.all);
-            Copy.Version := Impl.Version;
-            Copy.Start_Date := Impl.Start_Date;
-            Copy.End_Date := Impl.End_Date;
-            Copy.Ip_Address := Impl.Ip_Address;
-            Copy.User_Id := Impl.User_Id;
-            Copy.Session_Type := Impl.Session_Type;
-            Copy.Server_Id := Impl.Server_Id;
-            Copy.Auth := Impl.Auth;
-         end;
-      end if;
-      Into := Result;
-   end Copy;
-
-   procedure Find (Object  : in out Session_Ref;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class;
-                   Found   : out Boolean) is
-      Impl  : constant Session_Access := new Session_Impl;
-   begin
-      Impl.Find (Session, Query, Found);
-      if Found then
-         ADO.Objects.Set_Object (Object, Impl.all'Access);
-      else
-         ADO.Objects.Set_Object (Object, null);
-         Destroy (Impl);
-      end if;
-   end Find;
-
-   procedure Load (Object  : in out Session_Ref;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Id      : in ADO.Identifier) is
-      Impl  : constant Session_Access := new Session_Impl;
-      Found : Boolean;
-      Query : ADO.SQL.Query;
-   begin
-      Query.Bind_Param (Position => 1, Value => Id);
-      Query.Set_Filter ("id = ?");
-      Impl.Find (Session, Query, Found);
-      if not Found then
-         Destroy (Impl);
-         raise ADO.Objects.NOT_FOUND;
-      end if;
-      ADO.Objects.Set_Object (Object, Impl.all'Access);
-   end Load;
-
-   procedure Load (Object  : in out Session_Ref;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Id      : in ADO.Identifier;
-                   Found   : out Boolean) is
-      Impl  : constant Session_Access := new Session_Impl;
-      Query : ADO.SQL.Query;
-   begin
-      Query.Bind_Param (Position => 1, Value => Id);
-      Query.Set_Filter ("id = ?");
-      Impl.Find (Session, Query, Found);
-      if not Found then
-         Destroy (Impl);
-      else
-         ADO.Objects.Set_Object (Object, Impl.all'Access);
-      end if;
-   end Load;
-
-   procedure Save (Object  : in out Session_Ref;
-                   Session : in out ADO.Sessions.Master_Session'Class) is
-      Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
-   begin
-      if Impl = null then
-         Impl := new Session_Impl;
-         ADO.Objects.Set_Object (Object, Impl);
-      end if;
-      if not ADO.Objects.Is_Created (Impl.all) then
-         Impl.Create (Session);
-      else
-         Impl.Save (Session);
-      end if;
-   end Save;
-
-   procedure Delete (Object  : in out Session_Ref;
-                     Session : in out ADO.Sessions.Master_Session'Class) is
-      Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
-   begin
-      if Impl /= null then
-         Impl.Delete (Session);
-      end if;
-   end Delete;
-
-   --  --------------------
-   --  Free the object
-   --  --------------------
-   procedure Destroy (Object : access Session_Impl) is
-      type Session_Impl_Ptr is access all Session_Impl;
-      procedure Unchecked_Free is new Ada.Unchecked_Deallocation
-              (Session_Impl, Session_Impl_Ptr);
-      pragma Warnings (Off, "*redundant conversion*");
-      Ptr : Session_Impl_Ptr := Session_Impl (Object.all)'Access;
-      pragma Warnings (On, "*redundant conversion*");
-   begin
-      Unchecked_Free (Ptr);
-   end Destroy;
-
-   procedure Find (Object  : in out Session_Impl;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class;
-                   Found   : out Boolean) is
-      Stmt : ADO.Statements.Query_Statement
-          := Session.Create_Statement (Query, SESSION_TABLE'Access);
-   begin
-      Stmt.Execute;
-      if Stmt.Has_Elements then
-         Object.Load (Stmt, Session);
-         Stmt.Next;
-         Found := not Stmt.Has_Elements;
-      else
-         Found := False;
-      end if;
-   end Find;
-
-   overriding
-   procedure Load (Object  : in out Session_Impl;
-                   Session : in out ADO.Sessions.Session'Class) is
-      Found : Boolean;
-      Query : ADO.SQL.Query;
-      Id    : constant ADO.Identifier := Object.Get_Key_Value;
-   begin
-      Query.Bind_Param (Position => 1, Value => Id);
-      Query.Set_Filter ("id = ?");
-      Object.Find (Session, Query, Found);
-      if not Found then
-         raise ADO.Objects.NOT_FOUND;
-      end if;
-   end Load;
-
-   procedure Save (Object  : in out Session_Impl;
-                   Session : in out ADO.Sessions.Master_Session'Class) is
-      Stmt : ADO.Statements.Update_Statement
-         := Session.Create_Statement (SESSION_TABLE'Access);
-   begin
-      if Object.Is_Modified (1) then
-         Stmt.Save_Field (Name  => COL_0_3_NAME, --  id
-                          Value => Object.Get_Key);
-         Object.Clear_Modified (1);
-      end if;
-      if Object.Is_Modified (4) then
-         Stmt.Save_Field (Name  => COL_3_3_NAME, --  end_date
-                          Value => Object.End_Date);
-         Object.Clear_Modified (4);
-      end if;
-      if Object.Is_Modified (6) then
-         Stmt.Save_Field (Name  => COL_5_3_NAME, --  user_id
-                          Value => Object.User_Id);
-         Object.Clear_Modified (6);
-      end if;
-      if Object.Is_Modified (7) then
-         Stmt.Save_Field (Name  => COL_6_3_NAME, --  type
-                          Value => Object.Session_Type);
-         Object.Clear_Modified (7);
-      end if;
-      if Object.Is_Modified (9) then
-         Stmt.Save_Field (Name  => COL_8_3_NAME, --  auth_id
-                          Value => Object.Auth);
-         Object.Clear_Modified (9);
-      end if;
-      if Stmt.Has_Save_Fields then
-         Object.Version := Object.Version + 1;
-         Stmt.Save_Field (Name  => "version",
-                          Value => Object.Version);
-         Stmt.Set_Filter (Filter => "id = ? and version = ?");
-         Stmt.Add_Param (Value => Object.Get_Key);
-         Stmt.Add_Param (Value => Object.Version - 1);
-         declare
-            Result : Integer;
-         begin
-            Stmt.Execute (Result);
-            if Result /= 1 then
-               if Result /= 0 then
-                  raise ADO.Objects.UPDATE_ERROR;
-               else
-                  raise ADO.Objects.LAZY_LOCK;
-               end if;
-            end if;
-         end;
-      end if;
-   end Save;
-
-   procedure Create (Object  : in out Session_Impl;
-                     Session : in out ADO.Sessions.Master_Session'Class) is
-      Query : ADO.Statements.Insert_Statement
-                  := Session.Create_Statement (SESSION_TABLE'Access);
-      Result : Integer;
-   begin
-      Object.Version := 1;
-      Session.Allocate (Id => Object);
-      Query.Save_Field (Name  => COL_0_3_NAME, --  id
-                        Value => Object.Get_Key);
-      Query.Save_Field (Name  => COL_1_3_NAME, --  version
-                        Value => Object.Version);
-      Query.Save_Field (Name  => COL_2_3_NAME, --  start_date
-                        Value => Object.Start_Date);
-      Query.Save_Field (Name  => COL_4_3_NAME, --  ip_address
-                        Value => Object.Ip_Address);
-      Query.Save_Field (Name  => COL_5_3_NAME, --  user_id
-                        Value => Object.User_Id);
-      Query.Save_Field (Name  => COL_6_3_NAME, --  type
-                        Value => Object.Session_Type);
-      Query.Save_Field (Name  => COL_7_3_NAME, --  server_id
-                        Value => Object.Server_Id);
-      Query.Save_Field (Name  => COL_8_3_NAME, --  auth_id
-                        Value => Object.Auth);
-      Query.Execute (Result);
-      if Result /= 1 then
-         raise ADO.Objects.INSERT_ERROR;
-      end if;
-      ADO.Objects.Set_Created (Object);
-   end Create;
-
-   procedure Delete (Object  : in out Session_Impl;
-                     Session : in out ADO.Sessions.Master_Session'Class) is
-      Stmt : ADO.Statements.Delete_Statement
-         := Session.Create_Statement (SESSION_TABLE'Access);
-   begin
-      Stmt.Set_Filter (Filter => "id = ?");
-      Stmt.Add_Param (Value => Object.Get_Key);
-      Stmt.Execute;
-   end Delete;
-
-   function Get_Value (From : in Session_Ref;
-                       Name : in String) return Util.Beans.Objects.Object is
-      Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
-      Impl : access Session_Impl;
-   begin
-      if Obj = null then
-         return Util.Beans.Objects.Null_Object;
-      end if;
-      Impl := Session_Impl (Obj.all)'Access;
-      if Name = "id" then
-         return ADO.Objects.To_Object (Impl.Get_Key);
-      end if;
-      if Name = "start_date" then
-         if Impl.Start_Date.Is_Null then
-            return Util.Beans.Objects.Null_Object;
-         else
-            return Util.Beans.Objects.Time.To_Object (Impl.Start_Date.Value);
-         end if;
-      end if;
-      if Name = "end_date" then
-         if Impl.End_Date.Is_Null then
-            return Util.Beans.Objects.Null_Object;
-         else
-            return Util.Beans.Objects.Time.To_Object (Impl.End_Date.Value);
-         end if;
-      end if;
-      if Name = "ip_address" then
-         return Util.Beans.Objects.To_Object (Impl.Ip_Address);
-      end if;
-      if Name = "user_id" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.User_Id));
-      end if;
-      if Name = "session_type" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Session_Type));
-      end if;
-      if Name = "server_id" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Server_Id));
-      end if;
-      return Util.Beans.Objects.Null_Object;
-   end Get_Value;
-
-
-
-   procedure List (Object  : in out Session_Vector;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class) is
-      Stmt : ADO.Statements.Query_Statement
-        := Session.Create_Statement (Query, SESSION_TABLE'Access);
-   begin
-      Stmt.Execute;
-      Session_Vectors.Clear (Object);
-      while Stmt.Has_Elements loop
-         declare
-            Item : Session_Ref;
-            Impl : constant Session_Access := new Session_Impl;
-         begin
-            Impl.Load (Stmt, Session);
-            ADO.Objects.Set_Object (Item, Impl.all'Access);
-            Object.Append (Item);
-         end;
-         Stmt.Next;
-      end loop;
-   end List;
-
-   --  ------------------------------
-   --  Load the object from current iterator position
-   --  ------------------------------
-   procedure Load (Object  : in out Session_Impl;
-                   Stmt    : in out ADO.Statements.Query_Statement'Class;
-                   Session : in out ADO.Sessions.Session'Class) is
-   begin
-      Object.Set_Key_Value (Stmt.Get_Identifier (0));
-      Object.Start_Date := Stmt.Get_Time (2);
-      Object.End_Date := Stmt.Get_Time (3);
-      Object.Ip_Address := Stmt.Get_Unbounded_String (4);
+      Object.Email := Stmt.Get_Unbounded_String (0);
+      Object.Status := MailDeliveryStatus'Val (Stmt.Get_Integer (1));
+      Object.Last_Error_Date := Stmt.Get_Time (2);
+      Object.Set_Key_Value (Stmt.Get_Identifier (4));
       Object.User_Id := Stmt.Get_Identifier (5);
-      Object.Session_Type := Stmt.Get_Integer (6);
-      Object.Server_Id := Stmt.Get_Integer (7);
-      if not Stmt.Is_Null (8) then
-         Object.Auth.Set_Key_Value (Stmt.Get_Identifier (8), Session);
-      end if;
-      Object.Version := Stmt.Get_Integer (1);
+      Object.Version := Stmt.Get_Integer (3);
       ADO.Objects.Set_Created (Object);
    end Load;
    function User_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
@@ -1350,94 +493,12 @@ package body AWA.Users.Models is
    --  Data object: User
    -- ----------------------------------------
 
-   procedure Set_Id (Object : in out User_Ref;
-                     Value  : in ADO.Identifier) is
-      Impl : User_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
-   end Set_Id;
-
-   function Get_Id (Object : in User_Ref)
-                  return ADO.Identifier is
-      Impl : constant User_Access := User_Impl (Object.Get_Object.all)'Access;
-   begin
-      return Impl.Get_Key_Value;
-   end Get_Id;
-
-
-   function Get_Version (Object : in User_Ref)
-                  return Integer is
-      Impl : constant User_Access := User_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Version;
-   end Get_Version;
-
-
-   procedure Set_Open_Id (Object : in out User_Ref;
-                           Value : in String) is
-      Impl : User_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 3, Impl.Open_Id, Value);
-   end Set_Open_Id;
-
-   procedure Set_Open_Id (Object : in out User_Ref;
-                          Value  : in Ada.Strings.Unbounded.Unbounded_String) is
-      Impl : User_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 3, Impl.Open_Id, Value);
-   end Set_Open_Id;
-
-   function Get_Open_Id (Object : in User_Ref)
-                 return String is
-   begin
-      return Ada.Strings.Unbounded.To_String (Object.Get_Open_Id);
-   end Get_Open_Id;
-   function Get_Open_Id (Object : in User_Ref)
-                  return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant User_Access := User_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Open_Id;
-   end Get_Open_Id;
-
-
-   procedure Set_Name (Object : in out User_Ref;
-                        Value : in String) is
-      Impl : User_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 4, Impl.Name, Value);
-   end Set_Name;
-
-   procedure Set_Name (Object : in out User_Ref;
-                       Value  : in Ada.Strings.Unbounded.Unbounded_String) is
-      Impl : User_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 4, Impl.Name, Value);
-   end Set_Name;
-
-   function Get_Name (Object : in User_Ref)
-                 return String is
-   begin
-      return Ada.Strings.Unbounded.To_String (Object.Get_Name);
-   end Get_Name;
-   function Get_Name (Object : in User_Ref)
-                  return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant User_Access := User_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Name;
-   end Get_Name;
-
-
    procedure Set_First_Name (Object : in out User_Ref;
                               Value : in String) is
       Impl : User_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 5, Impl.First_Name, Value);
+      ADO.Objects.Set_Field_String (Impl.all, 1, Impl.First_Name, Value);
    end Set_First_Name;
 
    procedure Set_First_Name (Object : in out User_Ref;
@@ -1445,7 +506,7 @@ package body AWA.Users.Models is
       Impl : User_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 5, Impl.First_Name, Value);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 1, Impl.First_Name, Value);
    end Set_First_Name;
 
    function Get_First_Name (Object : in User_Ref)
@@ -1466,7 +527,7 @@ package body AWA.Users.Models is
       Impl : User_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 6, Impl.Last_Name, Value);
+      ADO.Objects.Set_Field_String (Impl.all, 2, Impl.Last_Name, Value);
    end Set_Last_Name;
 
    procedure Set_Last_Name (Object : in out User_Ref;
@@ -1474,7 +535,7 @@ package body AWA.Users.Models is
       Impl : User_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 6, Impl.Last_Name, Value);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 2, Impl.Last_Name, Value);
    end Set_Last_Name;
 
    function Get_Last_Name (Object : in User_Ref)
@@ -1495,7 +556,7 @@ package body AWA.Users.Models is
       Impl : User_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 7, Impl.Password, Value);
+      ADO.Objects.Set_Field_String (Impl.all, 3, Impl.Password, Value);
    end Set_Password;
 
    procedure Set_Password (Object : in out User_Ref;
@@ -1503,7 +564,7 @@ package body AWA.Users.Models is
       Impl : User_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 7, Impl.Password, Value);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 3, Impl.Password, Value);
    end Set_Password;
 
    function Get_Password (Object : in User_Ref)
@@ -1519,12 +580,41 @@ package body AWA.Users.Models is
    end Get_Password;
 
 
+   procedure Set_Open_Id (Object : in out User_Ref;
+                           Value : in String) is
+      Impl : User_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_String (Impl.all, 4, Impl.Open_Id, Value);
+   end Set_Open_Id;
+
+   procedure Set_Open_Id (Object : in out User_Ref;
+                          Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : User_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 4, Impl.Open_Id, Value);
+   end Set_Open_Id;
+
+   function Get_Open_Id (Object : in User_Ref)
+                 return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (Object.Get_Open_Id);
+   end Get_Open_Id;
+   function Get_Open_Id (Object : in User_Ref)
+                  return Ada.Strings.Unbounded.Unbounded_String is
+      Impl : constant User_Access := User_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Open_Id;
+   end Get_Open_Id;
+
+
    procedure Set_Country (Object : in out User_Ref;
                            Value : in String) is
       Impl : User_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 8, Impl.Country, Value);
+      ADO.Objects.Set_Field_String (Impl.all, 5, Impl.Country, Value);
    end Set_Country;
 
    procedure Set_Country (Object : in out User_Ref;
@@ -1532,7 +622,7 @@ package body AWA.Users.Models is
       Impl : User_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 8, Impl.Country, Value);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 5, Impl.Country, Value);
    end Set_Country;
 
    function Get_Country (Object : in User_Ref)
@@ -1546,6 +636,59 @@ package body AWA.Users.Models is
    begin
       return Impl.Country;
    end Get_Country;
+
+
+   procedure Set_Name (Object : in out User_Ref;
+                        Value : in String) is
+      Impl : User_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_String (Impl.all, 6, Impl.Name, Value);
+   end Set_Name;
+
+   procedure Set_Name (Object : in out User_Ref;
+                       Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : User_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 6, Impl.Name, Value);
+   end Set_Name;
+
+   function Get_Name (Object : in User_Ref)
+                 return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (Object.Get_Name);
+   end Get_Name;
+   function Get_Name (Object : in User_Ref)
+                  return Ada.Strings.Unbounded.Unbounded_String is
+      Impl : constant User_Access := User_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Name;
+   end Get_Name;
+
+
+   function Get_Version (Object : in User_Ref)
+                  return Integer is
+      Impl : constant User_Access := User_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Version;
+   end Get_Version;
+
+
+   procedure Set_Id (Object : in out User_Ref;
+                     Value  : in ADO.Identifier) is
+      Impl : User_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Key_Value (Impl.all, 8, Value);
+   end Set_Id;
+
+   function Get_Id (Object : in User_Ref)
+                  return ADO.Identifier is
+      Impl : constant User_Access := User_Impl (Object.Get_Object.all)'Access;
+   begin
+      return Impl.Get_Key_Value;
+   end Get_Id;
 
 
    procedure Set_Email (Object : in out User_Ref;
@@ -1577,13 +720,13 @@ package body AWA.Users.Models is
          begin
             ADO.Objects.Set_Object (Result, Copy.all'Access);
             Copy.Copy (Impl.all);
-            Copy.Version := Impl.Version;
-            Copy.Open_Id := Impl.Open_Id;
-            Copy.Name := Impl.Name;
             Copy.First_Name := Impl.First_Name;
             Copy.Last_Name := Impl.Last_Name;
             Copy.Password := Impl.Password;
+            Copy.Open_Id := Impl.Open_Id;
             Copy.Country := Impl.Country;
+            Copy.Name := Impl.Name;
+            Copy.Version := Impl.Version;
             Copy.Email := Impl.Email;
          end;
       end if;
@@ -1715,42 +858,42 @@ package body AWA.Users.Models is
          := Session.Create_Statement (USER_TABLE'Access);
    begin
       if Object.Is_Modified (1) then
-         Stmt.Save_Field (Name  => COL_0_4_NAME, --  id
-                          Value => Object.Get_Key);
+         Stmt.Save_Field (Name  => COL_0_2_NAME, --  first_name
+                          Value => Object.First_Name);
          Object.Clear_Modified (1);
       end if;
+      if Object.Is_Modified (2) then
+         Stmt.Save_Field (Name  => COL_1_2_NAME, --  last_name
+                          Value => Object.Last_Name);
+         Object.Clear_Modified (2);
+      end if;
       if Object.Is_Modified (3) then
-         Stmt.Save_Field (Name  => COL_2_4_NAME, --  openid
-                          Value => Object.Open_Id);
+         Stmt.Save_Field (Name  => COL_2_2_NAME, --  password
+                          Value => Object.Password);
          Object.Clear_Modified (3);
       end if;
       if Object.Is_Modified (4) then
-         Stmt.Save_Field (Name  => COL_3_4_NAME, --  name
-                          Value => Object.Name);
+         Stmt.Save_Field (Name  => COL_3_2_NAME, --  open_id
+                          Value => Object.Open_Id);
          Object.Clear_Modified (4);
       end if;
       if Object.Is_Modified (5) then
-         Stmt.Save_Field (Name  => COL_4_4_NAME, --  first_name
-                          Value => Object.First_Name);
+         Stmt.Save_Field (Name  => COL_4_2_NAME, --  country
+                          Value => Object.Country);
          Object.Clear_Modified (5);
       end if;
       if Object.Is_Modified (6) then
-         Stmt.Save_Field (Name  => COL_5_4_NAME, --  last_name
-                          Value => Object.Last_Name);
+         Stmt.Save_Field (Name  => COL_5_2_NAME, --  name
+                          Value => Object.Name);
          Object.Clear_Modified (6);
       end if;
-      if Object.Is_Modified (7) then
-         Stmt.Save_Field (Name  => COL_6_4_NAME, --  password
-                          Value => Object.Password);
-         Object.Clear_Modified (7);
-      end if;
       if Object.Is_Modified (8) then
-         Stmt.Save_Field (Name  => COL_7_4_NAME, --  country
-                          Value => Object.Country);
+         Stmt.Save_Field (Name  => COL_7_2_NAME, --  id
+                          Value => Object.Get_Key);
          Object.Clear_Modified (8);
       end if;
       if Object.Is_Modified (9) then
-         Stmt.Save_Field (Name  => COL_8_4_NAME, --  email_id
+         Stmt.Save_Field (Name  => COL_8_2_NAME, --  email_id
                           Value => Object.Email);
          Object.Clear_Modified (9);
       end if;
@@ -1783,24 +926,24 @@ package body AWA.Users.Models is
       Result : Integer;
    begin
       Object.Version := 1;
-      Session.Allocate (Id => Object);
-      Query.Save_Field (Name  => COL_0_4_NAME, --  id
-                        Value => Object.Get_Key);
-      Query.Save_Field (Name  => COL_1_4_NAME, --  version
-                        Value => Object.Version);
-      Query.Save_Field (Name  => COL_2_4_NAME, --  openid
-                        Value => Object.Open_Id);
-      Query.Save_Field (Name  => COL_3_4_NAME, --  name
-                        Value => Object.Name);
-      Query.Save_Field (Name  => COL_4_4_NAME, --  first_name
+      Query.Save_Field (Name  => COL_0_2_NAME, --  first_name
                         Value => Object.First_Name);
-      Query.Save_Field (Name  => COL_5_4_NAME, --  last_name
+      Query.Save_Field (Name  => COL_1_2_NAME, --  last_name
                         Value => Object.Last_Name);
-      Query.Save_Field (Name  => COL_6_4_NAME, --  password
+      Query.Save_Field (Name  => COL_2_2_NAME, --  password
                         Value => Object.Password);
-      Query.Save_Field (Name  => COL_7_4_NAME, --  country
+      Query.Save_Field (Name  => COL_3_2_NAME, --  open_id
+                        Value => Object.Open_Id);
+      Query.Save_Field (Name  => COL_4_2_NAME, --  country
                         Value => Object.Country);
-      Query.Save_Field (Name  => COL_8_4_NAME, --  email_id
+      Query.Save_Field (Name  => COL_5_2_NAME, --  name
+                        Value => Object.Name);
+      Query.Save_Field (Name  => COL_6_2_NAME, --  version
+                        Value => Object.Version);
+      Session.Allocate (Id => Object);
+      Query.Save_Field (Name  => COL_7_2_NAME, --  id
+                        Value => Object.Get_Key);
+      Query.Save_Field (Name  => COL_8_2_NAME, --  email_id
                         Value => Object.Email);
       Query.Execute (Result);
       if Result /= 1 then
@@ -1828,15 +971,6 @@ package body AWA.Users.Models is
          return Util.Beans.Objects.Null_Object;
       end if;
       Impl := User_Impl (Obj.all)'Access;
-      if Name = "id" then
-         return ADO.Objects.To_Object (Impl.Get_Key);
-      end if;
-      if Name = "open_id" then
-         return Util.Beans.Objects.To_Object (Impl.Open_Id);
-      end if;
-      if Name = "name" then
-         return Util.Beans.Objects.To_Object (Impl.Name);
-      end if;
       if Name = "first_name" then
          return Util.Beans.Objects.To_Object (Impl.First_Name);
       end if;
@@ -1846,34 +980,22 @@ package body AWA.Users.Models is
       if Name = "password" then
          return Util.Beans.Objects.To_Object (Impl.Password);
       end if;
+      if Name = "open_id" then
+         return Util.Beans.Objects.To_Object (Impl.Open_Id);
+      end if;
       if Name = "country" then
          return Util.Beans.Objects.To_Object (Impl.Country);
+      end if;
+      if Name = "name" then
+         return Util.Beans.Objects.To_Object (Impl.Name);
+      end if;
+      if Name = "id" then
+         return ADO.Objects.To_Object (Impl.Get_Key);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
 
 
-
-   procedure List (Object  : in out User_Vector;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class) is
-      Stmt : ADO.Statements.Query_Statement
-        := Session.Create_Statement (Query, USER_TABLE'Access);
-   begin
-      Stmt.Execute;
-      User_Vectors.Clear (Object);
-      while Stmt.Has_Elements loop
-         declare
-            Item : User_Ref;
-            Impl : constant User_Access := new User_Impl;
-         begin
-            Impl.Load (Stmt, Session);
-            ADO.Objects.Set_Object (Item, Impl.all'Access);
-            Object.Append (Item);
-         end;
-         Stmt.Next;
-      end loop;
-   end List;
 
    --  ------------------------------
    --  Load the object from current iterator position
@@ -1882,17 +1004,918 @@ package body AWA.Users.Models is
                    Stmt    : in out ADO.Statements.Query_Statement'Class;
                    Session : in out ADO.Sessions.Session'Class) is
    begin
-      Object.Set_Key_Value (Stmt.Get_Identifier (0));
-      Object.Open_Id := Stmt.Get_Unbounded_String (2);
-      Object.Name := Stmt.Get_Unbounded_String (3);
-      Object.First_Name := Stmt.Get_Unbounded_String (4);
-      Object.Last_Name := Stmt.Get_Unbounded_String (5);
-      Object.Password := Stmt.Get_Unbounded_String (6);
-      Object.Country := Stmt.Get_Unbounded_String (7);
+      Object.First_Name := Stmt.Get_Unbounded_String (0);
+      Object.Last_Name := Stmt.Get_Unbounded_String (1);
+      Object.Password := Stmt.Get_Unbounded_String (2);
+      Object.Open_Id := Stmt.Get_Unbounded_String (3);
+      Object.Country := Stmt.Get_Unbounded_String (4);
+      Object.Name := Stmt.Get_Unbounded_String (5);
+      Object.Set_Key_Value (Stmt.Get_Identifier (7));
       if not Stmt.Is_Null (8) then
          Object.Email.Set_Key_Value (Stmt.Get_Identifier (8), Session);
       end if;
-      Object.Version := Stmt.Get_Integer (1);
+      Object.Version := Stmt.Get_Integer (6);
+      ADO.Objects.Set_Created (Object);
+   end Load;
+   function Access_Key_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+                                       Of_Class => ACCESS_KEY_TABLE'Access);
+   begin
+      ADO.Objects.Set_Value (Result, Id);
+      return Result;
+   end Access_Key_Key;
+
+   function Access_Key_Key (Id : in String) return ADO.Objects.Object_Key is
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+                                       Of_Class => ACCESS_KEY_TABLE'Access);
+   begin
+      ADO.Objects.Set_Value (Result, Id);
+      return Result;
+   end Access_Key_Key;
+
+   function "=" (Left, Right : Access_Key_Ref'Class) return Boolean is
+   begin
+      return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
+   end "=";
+
+   procedure Set_Field (Object : in out Access_Key_Ref'Class;
+                        Impl   : out Access_Key_Access) is
+      Result : ADO.Objects.Object_Record_Access;
+   begin
+      Object.Prepare_Modify (Result);
+      Impl := Access_Key_Impl (Result.all)'Access;
+   end Set_Field;
+
+   --  Internal method to allocate the Object_Record instance
+   procedure Allocate (Object : in out Access_Key_Ref) is
+      Impl : Access_Key_Access;
+   begin
+      Impl := new Access_Key_Impl;
+      Impl.Expire_Date := ADO.DEFAULT_TIME;
+      Impl.Version := 0;
+      ADO.Objects.Set_Object (Object, Impl.all'Access);
+   end Allocate;
+
+   -- ----------------------------------------
+   --  Data object: Access_Key
+   -- ----------------------------------------
+
+   procedure Set_Access_Key (Object : in out Access_Key_Ref;
+                              Value : in String) is
+      Impl : Access_Key_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_String (Impl.all, 1, Impl.Access_Key, Value);
+   end Set_Access_Key;
+
+   procedure Set_Access_Key (Object : in out Access_Key_Ref;
+                             Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : Access_Key_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 1, Impl.Access_Key, Value);
+   end Set_Access_Key;
+
+   function Get_Access_Key (Object : in Access_Key_Ref)
+                 return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (Object.Get_Access_Key);
+   end Get_Access_Key;
+   function Get_Access_Key (Object : in Access_Key_Ref)
+                  return Ada.Strings.Unbounded.Unbounded_String is
+      Impl : constant Access_Key_Access := Access_Key_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Access_Key;
+   end Get_Access_Key;
+
+
+   procedure Set_Expire_Date (Object : in out Access_Key_Ref;
+                              Value  : in Ada.Calendar.Time) is
+      Impl : Access_Key_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Time (Impl.all, 2, Impl.Expire_Date, Value);
+   end Set_Expire_Date;
+
+   function Get_Expire_Date (Object : in Access_Key_Ref)
+                  return Ada.Calendar.Time is
+      Impl : constant Access_Key_Access := Access_Key_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Expire_Date;
+   end Get_Expire_Date;
+
+
+   procedure Set_Id (Object : in out Access_Key_Ref;
+                     Value  : in ADO.Identifier) is
+      Impl : Access_Key_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Key_Value (Impl.all, 3, Value);
+   end Set_Id;
+
+   function Get_Id (Object : in Access_Key_Ref)
+                  return ADO.Identifier is
+      Impl : constant Access_Key_Access := Access_Key_Impl (Object.Get_Object.all)'Access;
+   begin
+      return Impl.Get_Key_Value;
+   end Get_Id;
+
+
+   function Get_Version (Object : in Access_Key_Ref)
+                  return Integer is
+      Impl : constant Access_Key_Access := Access_Key_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Version;
+   end Get_Version;
+
+
+   procedure Set_User (Object : in out Access_Key_Ref;
+                       Value  : in AWA.Users.Models.User_Ref'Class) is
+      Impl : Access_Key_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 5, Impl.User, Value);
+   end Set_User;
+
+   function Get_User (Object : in Access_Key_Ref)
+                  return AWA.Users.Models.User_Ref'Class is
+      Impl : constant Access_Key_Access := Access_Key_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.User;
+   end Get_User;
+
+   --  Copy of the object.
+   procedure Copy (Object : in Access_Key_Ref;
+                   Into   : in out Access_Key_Ref) is
+      Result : Access_Key_Ref;
+   begin
+      if not Object.Is_Null then
+         declare
+            Impl : constant Access_Key_Access
+              := Access_Key_Impl (Object.Get_Load_Object.all)'Access;
+            Copy : constant Access_Key_Access
+              := new Access_Key_Impl;
+         begin
+            ADO.Objects.Set_Object (Result, Copy.all'Access);
+            Copy.Copy (Impl.all);
+            Copy.Access_Key := Impl.Access_Key;
+            Copy.Expire_Date := Impl.Expire_Date;
+            Copy.Version := Impl.Version;
+            Copy.User := Impl.User;
+         end;
+      end if;
+      Into := Result;
+   end Copy;
+
+   procedure Find (Object  : in out Access_Key_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean) is
+      Impl  : constant Access_Key_Access := new Access_Key_Impl;
+   begin
+      Impl.Find (Session, Query, Found);
+      if Found then
+         ADO.Objects.Set_Object (Object, Impl.all'Access);
+      else
+         ADO.Objects.Set_Object (Object, null);
+         Destroy (Impl);
+      end if;
+   end Find;
+
+   procedure Load (Object  : in out Access_Key_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier) is
+      Impl  : constant Access_Key_Access := new Access_Key_Impl;
+      Found : Boolean;
+      Query : ADO.SQL.Query;
+   begin
+      Query.Bind_Param (Position => 1, Value => Id);
+      Query.Set_Filter ("id = ?");
+      Impl.Find (Session, Query, Found);
+      if not Found then
+         Destroy (Impl);
+         raise ADO.Objects.NOT_FOUND;
+      end if;
+      ADO.Objects.Set_Object (Object, Impl.all'Access);
+   end Load;
+
+   procedure Load (Object  : in out Access_Key_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier;
+                   Found   : out Boolean) is
+      Impl  : constant Access_Key_Access := new Access_Key_Impl;
+      Query : ADO.SQL.Query;
+   begin
+      Query.Bind_Param (Position => 1, Value => Id);
+      Query.Set_Filter ("id = ?");
+      Impl.Find (Session, Query, Found);
+      if not Found then
+         Destroy (Impl);
+      else
+         ADO.Objects.Set_Object (Object, Impl.all'Access);
+      end if;
+   end Load;
+
+   procedure Save (Object  : in out Access_Key_Ref;
+                   Session : in out ADO.Sessions.Master_Session'Class) is
+      Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
+   begin
+      if Impl = null then
+         Impl := new Access_Key_Impl;
+         ADO.Objects.Set_Object (Object, Impl);
+      end if;
+      if not ADO.Objects.Is_Created (Impl.all) then
+         Impl.Create (Session);
+      else
+         Impl.Save (Session);
+      end if;
+   end Save;
+
+   procedure Delete (Object  : in out Access_Key_Ref;
+                     Session : in out ADO.Sessions.Master_Session'Class) is
+      Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
+   begin
+      if Impl /= null then
+         Impl.Delete (Session);
+      end if;
+   end Delete;
+
+   --  --------------------
+   --  Free the object
+   --  --------------------
+   procedure Destroy (Object : access Access_Key_Impl) is
+      type Access_Key_Impl_Ptr is access all Access_Key_Impl;
+      procedure Unchecked_Free is new Ada.Unchecked_Deallocation
+              (Access_Key_Impl, Access_Key_Impl_Ptr);
+      pragma Warnings (Off, "*redundant conversion*");
+      Ptr : Access_Key_Impl_Ptr := Access_Key_Impl (Object.all)'Access;
+      pragma Warnings (On, "*redundant conversion*");
+   begin
+      Unchecked_Free (Ptr);
+   end Destroy;
+
+   procedure Find (Object  : in out Access_Key_Impl;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean) is
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Query, ACCESS_KEY_TABLE'Access);
+   begin
+      Stmt.Execute;
+      if Stmt.Has_Elements then
+         Object.Load (Stmt, Session);
+         Stmt.Next;
+         Found := not Stmt.Has_Elements;
+      else
+         Found := False;
+      end if;
+   end Find;
+
+   overriding
+   procedure Load (Object  : in out Access_Key_Impl;
+                   Session : in out ADO.Sessions.Session'Class) is
+      Found : Boolean;
+      Query : ADO.SQL.Query;
+      Id    : constant ADO.Identifier := Object.Get_Key_Value;
+   begin
+      Query.Bind_Param (Position => 1, Value => Id);
+      Query.Set_Filter ("id = ?");
+      Object.Find (Session, Query, Found);
+      if not Found then
+         raise ADO.Objects.NOT_FOUND;
+      end if;
+   end Load;
+
+   procedure Save (Object  : in out Access_Key_Impl;
+                   Session : in out ADO.Sessions.Master_Session'Class) is
+      Stmt : ADO.Statements.Update_Statement
+         := Session.Create_Statement (ACCESS_KEY_TABLE'Access);
+   begin
+      if Object.Is_Modified (1) then
+         Stmt.Save_Field (Name  => COL_0_3_NAME, --  access_key
+                          Value => Object.Access_Key);
+         Object.Clear_Modified (1);
+      end if;
+      if Object.Is_Modified (2) then
+         Stmt.Save_Field (Name  => COL_1_3_NAME, --  expire_date
+                          Value => Object.Expire_Date);
+         Object.Clear_Modified (2);
+      end if;
+      if Object.Is_Modified (3) then
+         Stmt.Save_Field (Name  => COL_2_3_NAME, --  id
+                          Value => Object.Get_Key);
+         Object.Clear_Modified (3);
+      end if;
+      if Object.Is_Modified (5) then
+         Stmt.Save_Field (Name  => COL_4_3_NAME, --  user_id
+                          Value => Object.User);
+         Object.Clear_Modified (5);
+      end if;
+      if Stmt.Has_Save_Fields then
+         Object.Version := Object.Version + 1;
+         Stmt.Save_Field (Name  => "version",
+                          Value => Object.Version);
+         Stmt.Set_Filter (Filter => "id = ? and version = ?");
+         Stmt.Add_Param (Value => Object.Get_Key);
+         Stmt.Add_Param (Value => Object.Version - 1);
+         declare
+            Result : Integer;
+         begin
+            Stmt.Execute (Result);
+            if Result /= 1 then
+               if Result /= 0 then
+                  raise ADO.Objects.UPDATE_ERROR;
+               else
+                  raise ADO.Objects.LAZY_LOCK;
+               end if;
+            end if;
+         end;
+      end if;
+   end Save;
+
+   procedure Create (Object  : in out Access_Key_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class) is
+      Query : ADO.Statements.Insert_Statement
+                  := Session.Create_Statement (ACCESS_KEY_TABLE'Access);
+      Result : Integer;
+   begin
+      Object.Version := 1;
+      Query.Save_Field (Name  => COL_0_3_NAME, --  access_key
+                        Value => Object.Access_Key);
+      Query.Save_Field (Name  => COL_1_3_NAME, --  expire_date
+                        Value => Object.Expire_Date);
+      Session.Allocate (Id => Object);
+      Query.Save_Field (Name  => COL_2_3_NAME, --  id
+                        Value => Object.Get_Key);
+      Query.Save_Field (Name  => COL_3_3_NAME, --  version
+                        Value => Object.Version);
+      Query.Save_Field (Name  => COL_4_3_NAME, --  user_id
+                        Value => Object.User);
+      Query.Execute (Result);
+      if Result /= 1 then
+         raise ADO.Objects.INSERT_ERROR;
+      end if;
+      ADO.Objects.Set_Created (Object);
+   end Create;
+
+   procedure Delete (Object  : in out Access_Key_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class) is
+      Stmt : ADO.Statements.Delete_Statement
+         := Session.Create_Statement (ACCESS_KEY_TABLE'Access);
+   begin
+      Stmt.Set_Filter (Filter => "id = ?");
+      Stmt.Add_Param (Value => Object.Get_Key);
+      Stmt.Execute;
+   end Delete;
+
+   function Get_Value (From : in Access_Key_Ref;
+                       Name : in String) return Util.Beans.Objects.Object is
+      Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
+      Impl : access Access_Key_Impl;
+   begin
+      if Obj = null then
+         return Util.Beans.Objects.Null_Object;
+      end if;
+      Impl := Access_Key_Impl (Obj.all)'Access;
+      if Name = "access_key" then
+         return Util.Beans.Objects.To_Object (Impl.Access_Key);
+      end if;
+      if Name = "expire_date" then
+         return Util.Beans.Objects.Time.To_Object (Impl.Expire_Date);
+      end if;
+      if Name = "id" then
+         return ADO.Objects.To_Object (Impl.Get_Key);
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+
+
+   --  ------------------------------
+   --  Load the object from current iterator position
+   --  ------------------------------
+   procedure Load (Object  : in out Access_Key_Impl;
+                   Stmt    : in out ADO.Statements.Query_Statement'Class;
+                   Session : in out ADO.Sessions.Session'Class) is
+   begin
+      Object.Access_Key := Stmt.Get_Unbounded_String (0);
+      Object.Expire_Date := Stmt.Get_Time (1);
+      Object.Set_Key_Value (Stmt.Get_Identifier (2));
+      if not Stmt.Is_Null (4) then
+         Object.User.Set_Key_Value (Stmt.Get_Identifier (4), Session);
+      end if;
+      Object.Version := Stmt.Get_Integer (3);
+      ADO.Objects.Set_Created (Object);
+   end Load;
+   function Session_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+                                       Of_Class => SESSION_TABLE'Access);
+   begin
+      ADO.Objects.Set_Value (Result, Id);
+      return Result;
+   end Session_Key;
+
+   function Session_Key (Id : in String) return ADO.Objects.Object_Key is
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+                                       Of_Class => SESSION_TABLE'Access);
+   begin
+      ADO.Objects.Set_Value (Result, Id);
+      return Result;
+   end Session_Key;
+
+   function "=" (Left, Right : Session_Ref'Class) return Boolean is
+   begin
+      return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
+   end "=";
+
+   procedure Set_Field (Object : in out Session_Ref'Class;
+                        Impl   : out Session_Access) is
+      Result : ADO.Objects.Object_Record_Access;
+   begin
+      Object.Prepare_Modify (Result);
+      Impl := Session_Impl (Result.all)'Access;
+   end Set_Field;
+
+   --  Internal method to allocate the Object_Record instance
+   procedure Allocate (Object : in out Session_Ref) is
+      Impl : Session_Access;
+   begin
+      Impl := new Session_Impl;
+      Impl.Start_Date := ADO.DEFAULT_TIME;
+      Impl.End_Date.Is_Null := True;
+      Impl.Stype := Session_Type'First;
+      Impl.Version := 0;
+      Impl.Server_Id := 0;
+      ADO.Objects.Set_Object (Object, Impl.all'Access);
+   end Allocate;
+
+   -- ----------------------------------------
+   --  Data object: Session
+   -- ----------------------------------------
+
+   procedure Set_Start_Date (Object : in out Session_Ref;
+                             Value  : in Ada.Calendar.Time) is
+      Impl : Session_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Time (Impl.all, 1, Impl.Start_Date, Value);
+   end Set_Start_Date;
+
+   function Get_Start_Date (Object : in Session_Ref)
+                  return Ada.Calendar.Time is
+      Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Start_Date;
+   end Get_Start_Date;
+
+
+   procedure Set_End_Date (Object : in out Session_Ref;
+                           Value  : in ADO.Nullable_Time) is
+      Impl : Session_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Time (Impl.all, 2, Impl.End_Date, Value);
+   end Set_End_Date;
+
+   function Get_End_Date (Object : in Session_Ref)
+                  return ADO.Nullable_Time is
+      Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.End_Date;
+   end Get_End_Date;
+
+
+   procedure Set_Ip_Address (Object : in out Session_Ref;
+                              Value : in String) is
+      Impl : Session_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_String (Impl.all, 3, Impl.Ip_Address, Value);
+   end Set_Ip_Address;
+
+   procedure Set_Ip_Address (Object : in out Session_Ref;
+                             Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : Session_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 3, Impl.Ip_Address, Value);
+   end Set_Ip_Address;
+
+   function Get_Ip_Address (Object : in Session_Ref)
+                 return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (Object.Get_Ip_Address);
+   end Get_Ip_Address;
+   function Get_Ip_Address (Object : in Session_Ref)
+                  return Ada.Strings.Unbounded.Unbounded_String is
+      Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Ip_Address;
+   end Get_Ip_Address;
+
+
+   procedure Set_Stype (Object : in out Session_Ref;
+                        Value  : in Session_Type) is
+      procedure Set_Field_Enum is
+         new ADO.Objects.Set_Field_Operation (Session_Type);
+      Impl : Session_Access;
+   begin
+      Set_Field (Object, Impl);
+      Set_Field_Enum (Impl.all, 4, Impl.Stype, Value);
+   end Set_Stype;
+
+   function Get_Stype (Object : in Session_Ref)
+                  return Session_Type is
+      Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Stype;
+   end Get_Stype;
+
+
+   function Get_Version (Object : in Session_Ref)
+                  return Integer is
+      Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Version;
+   end Get_Version;
+
+
+   procedure Set_Server_Id (Object : in out Session_Ref;
+                            Value  : in Integer) is
+      Impl : Session_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Integer (Impl.all, 6, Impl.Server_Id, Value);
+      ADO.Objects.Set_Field_Integer (Impl.all, 6, Impl.Server_Id, Value);
+   end Set_Server_Id;
+
+   function Get_Server_Id (Object : in Session_Ref)
+                  return Integer is
+      Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Server_Id;
+   end Get_Server_Id;
+
+
+   procedure Set_Id (Object : in out Session_Ref;
+                     Value  : in ADO.Identifier) is
+      Impl : Session_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Key_Value (Impl.all, 7, Value);
+   end Set_Id;
+
+   function Get_Id (Object : in Session_Ref)
+                  return ADO.Identifier is
+      Impl : constant Session_Access := Session_Impl (Object.Get_Object.all)'Access;
+   begin
+      return Impl.Get_Key_Value;
+   end Get_Id;
+
+
+   procedure Set_User (Object : in out Session_Ref;
+                       Value  : in AWA.Users.Models.User_Ref'Class) is
+      Impl : Session_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 8, Impl.User, Value);
+   end Set_User;
+
+   function Get_User (Object : in Session_Ref)
+                  return AWA.Users.Models.User_Ref'Class is
+      Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.User;
+   end Get_User;
+
+
+   procedure Set_Auth (Object : in out Session_Ref;
+                       Value  : in AWA.Users.Models.Session_Ref'Class) is
+      Impl : Session_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 9, Impl.Auth, Value);
+   end Set_Auth;
+
+   function Get_Auth (Object : in Session_Ref)
+                  return AWA.Users.Models.Session_Ref'Class is
+      Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Auth;
+   end Get_Auth;
+
+   --  Copy of the object.
+   procedure Copy (Object : in Session_Ref;
+                   Into   : in out Session_Ref) is
+      Result : Session_Ref;
+   begin
+      if not Object.Is_Null then
+         declare
+            Impl : constant Session_Access
+              := Session_Impl (Object.Get_Load_Object.all)'Access;
+            Copy : constant Session_Access
+              := new Session_Impl;
+         begin
+            ADO.Objects.Set_Object (Result, Copy.all'Access);
+            Copy.Copy (Impl.all);
+            Copy.Start_Date := Impl.Start_Date;
+            Copy.End_Date := Impl.End_Date;
+            Copy.Ip_Address := Impl.Ip_Address;
+            Copy.Stype := Impl.Stype;
+            Copy.Version := Impl.Version;
+            Copy.Server_Id := Impl.Server_Id;
+            Copy.User := Impl.User;
+            Copy.Auth := Impl.Auth;
+         end;
+      end if;
+      Into := Result;
+   end Copy;
+
+   procedure Find (Object  : in out Session_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean) is
+      Impl  : constant Session_Access := new Session_Impl;
+   begin
+      Impl.Find (Session, Query, Found);
+      if Found then
+         ADO.Objects.Set_Object (Object, Impl.all'Access);
+      else
+         ADO.Objects.Set_Object (Object, null);
+         Destroy (Impl);
+      end if;
+   end Find;
+
+   procedure Load (Object  : in out Session_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier) is
+      Impl  : constant Session_Access := new Session_Impl;
+      Found : Boolean;
+      Query : ADO.SQL.Query;
+   begin
+      Query.Bind_Param (Position => 1, Value => Id);
+      Query.Set_Filter ("id = ?");
+      Impl.Find (Session, Query, Found);
+      if not Found then
+         Destroy (Impl);
+         raise ADO.Objects.NOT_FOUND;
+      end if;
+      ADO.Objects.Set_Object (Object, Impl.all'Access);
+   end Load;
+
+   procedure Load (Object  : in out Session_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier;
+                   Found   : out Boolean) is
+      Impl  : constant Session_Access := new Session_Impl;
+      Query : ADO.SQL.Query;
+   begin
+      Query.Bind_Param (Position => 1, Value => Id);
+      Query.Set_Filter ("id = ?");
+      Impl.Find (Session, Query, Found);
+      if not Found then
+         Destroy (Impl);
+      else
+         ADO.Objects.Set_Object (Object, Impl.all'Access);
+      end if;
+   end Load;
+
+   procedure Save (Object  : in out Session_Ref;
+                   Session : in out ADO.Sessions.Master_Session'Class) is
+      Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
+   begin
+      if Impl = null then
+         Impl := new Session_Impl;
+         ADO.Objects.Set_Object (Object, Impl);
+      end if;
+      if not ADO.Objects.Is_Created (Impl.all) then
+         Impl.Create (Session);
+      else
+         Impl.Save (Session);
+      end if;
+   end Save;
+
+   procedure Delete (Object  : in out Session_Ref;
+                     Session : in out ADO.Sessions.Master_Session'Class) is
+      Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
+   begin
+      if Impl /= null then
+         Impl.Delete (Session);
+      end if;
+   end Delete;
+
+   --  --------------------
+   --  Free the object
+   --  --------------------
+   procedure Destroy (Object : access Session_Impl) is
+      type Session_Impl_Ptr is access all Session_Impl;
+      procedure Unchecked_Free is new Ada.Unchecked_Deallocation
+              (Session_Impl, Session_Impl_Ptr);
+      pragma Warnings (Off, "*redundant conversion*");
+      Ptr : Session_Impl_Ptr := Session_Impl (Object.all)'Access;
+      pragma Warnings (On, "*redundant conversion*");
+   begin
+      Unchecked_Free (Ptr);
+   end Destroy;
+
+   procedure Find (Object  : in out Session_Impl;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean) is
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Query, SESSION_TABLE'Access);
+   begin
+      Stmt.Execute;
+      if Stmt.Has_Elements then
+         Object.Load (Stmt, Session);
+         Stmt.Next;
+         Found := not Stmt.Has_Elements;
+      else
+         Found := False;
+      end if;
+   end Find;
+
+   overriding
+   procedure Load (Object  : in out Session_Impl;
+                   Session : in out ADO.Sessions.Session'Class) is
+      Found : Boolean;
+      Query : ADO.SQL.Query;
+      Id    : constant ADO.Identifier := Object.Get_Key_Value;
+   begin
+      Query.Bind_Param (Position => 1, Value => Id);
+      Query.Set_Filter ("id = ?");
+      Object.Find (Session, Query, Found);
+      if not Found then
+         raise ADO.Objects.NOT_FOUND;
+      end if;
+   end Load;
+
+   procedure Save (Object  : in out Session_Impl;
+                   Session : in out ADO.Sessions.Master_Session'Class) is
+      Stmt : ADO.Statements.Update_Statement
+         := Session.Create_Statement (SESSION_TABLE'Access);
+   begin
+      if Object.Is_Modified (1) then
+         Stmt.Save_Field (Name  => COL_0_4_NAME, --  start_date
+                          Value => Object.Start_Date);
+         Object.Clear_Modified (1);
+      end if;
+      if Object.Is_Modified (2) then
+         Stmt.Save_Field (Name  => COL_1_4_NAME, --  end_date
+                          Value => Object.End_Date);
+         Object.Clear_Modified (2);
+      end if;
+      if Object.Is_Modified (3) then
+         Stmt.Save_Field (Name  => COL_2_4_NAME, --  ip_address
+                          Value => Object.Ip_Address);
+         Object.Clear_Modified (3);
+      end if;
+      if Object.Is_Modified (4) then
+         Stmt.Save_Field (Name  => COL_3_4_NAME, --  stype
+                          Value => Integer (Session_Type'Pos (Object.Stype)));
+         Object.Clear_Modified (4);
+      end if;
+      if Object.Is_Modified (6) then
+         Stmt.Save_Field (Name  => COL_5_4_NAME, --  server_id
+                          Value => Object.Server_Id);
+         Object.Clear_Modified (6);
+      end if;
+      if Object.Is_Modified (7) then
+         Stmt.Save_Field (Name  => COL_6_4_NAME, --  id
+                          Value => Object.Get_Key);
+         Object.Clear_Modified (7);
+      end if;
+      if Object.Is_Modified (8) then
+         Stmt.Save_Field (Name  => COL_7_4_NAME, --  user_id
+                          Value => Object.User);
+         Object.Clear_Modified (8);
+      end if;
+      if Object.Is_Modified (9) then
+         Stmt.Save_Field (Name  => COL_8_4_NAME, --  auth_id
+                          Value => Object.Auth);
+         Object.Clear_Modified (9);
+      end if;
+      if Stmt.Has_Save_Fields then
+         Object.Version := Object.Version + 1;
+         Stmt.Save_Field (Name  => "version",
+                          Value => Object.Version);
+         Stmt.Set_Filter (Filter => "id = ? and version = ?");
+         Stmt.Add_Param (Value => Object.Get_Key);
+         Stmt.Add_Param (Value => Object.Version - 1);
+         declare
+            Result : Integer;
+         begin
+            Stmt.Execute (Result);
+            if Result /= 1 then
+               if Result /= 0 then
+                  raise ADO.Objects.UPDATE_ERROR;
+               else
+                  raise ADO.Objects.LAZY_LOCK;
+               end if;
+            end if;
+         end;
+      end if;
+   end Save;
+
+   procedure Create (Object  : in out Session_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class) is
+      Query : ADO.Statements.Insert_Statement
+                  := Session.Create_Statement (SESSION_TABLE'Access);
+      Result : Integer;
+   begin
+      Object.Version := 1;
+      Query.Save_Field (Name  => COL_0_4_NAME, --  start_date
+                        Value => Object.Start_Date);
+      Query.Save_Field (Name  => COL_1_4_NAME, --  end_date
+                        Value => Object.End_Date);
+      Query.Save_Field (Name  => COL_2_4_NAME, --  ip_address
+                        Value => Object.Ip_Address);
+      Query.Save_Field (Name  => COL_3_4_NAME, --  stype
+                        Value => Integer (Session_Type'Pos (Object.Stype)));
+      Query.Save_Field (Name  => COL_4_4_NAME, --  version
+                        Value => Object.Version);
+      Query.Save_Field (Name  => COL_5_4_NAME, --  server_id
+                        Value => Object.Server_Id);
+      Session.Allocate (Id => Object);
+      Query.Save_Field (Name  => COL_6_4_NAME, --  id
+                        Value => Object.Get_Key);
+      Query.Save_Field (Name  => COL_7_4_NAME, --  user_id
+                        Value => Object.User);
+      Query.Save_Field (Name  => COL_8_4_NAME, --  auth_id
+                        Value => Object.Auth);
+      Query.Execute (Result);
+      if Result /= 1 then
+         raise ADO.Objects.INSERT_ERROR;
+      end if;
+      ADO.Objects.Set_Created (Object);
+   end Create;
+
+   procedure Delete (Object  : in out Session_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class) is
+      Stmt : ADO.Statements.Delete_Statement
+         := Session.Create_Statement (SESSION_TABLE'Access);
+   begin
+      Stmt.Set_Filter (Filter => "id = ?");
+      Stmt.Add_Param (Value => Object.Get_Key);
+      Stmt.Execute;
+   end Delete;
+
+   function Get_Value (From : in Session_Ref;
+                       Name : in String) return Util.Beans.Objects.Object is
+      Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
+      Impl : access Session_Impl;
+   begin
+      if Obj = null then
+         return Util.Beans.Objects.Null_Object;
+      end if;
+      Impl := Session_Impl (Obj.all)'Access;
+      if Name = "start_date" then
+         return Util.Beans.Objects.Time.To_Object (Impl.Start_Date);
+      end if;
+      if Name = "end_date" then
+         if Impl.End_Date.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.Time.To_Object (Impl.End_Date.Value);
+         end if;
+      end if;
+      if Name = "ip_address" then
+         return Util.Beans.Objects.To_Object (Impl.Ip_Address);
+      end if;
+      if Name = "stype" then
+         return Session_Type_Objects.To_Object (Impl.Stype);
+      end if;
+      if Name = "server_id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Server_Id));
+      end if;
+      if Name = "id" then
+         return ADO.Objects.To_Object (Impl.Get_Key);
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+
+
+   --  ------------------------------
+   --  Load the object from current iterator position
+   --  ------------------------------
+   procedure Load (Object  : in out Session_Impl;
+                   Stmt    : in out ADO.Statements.Query_Statement'Class;
+                   Session : in out ADO.Sessions.Session'Class) is
+   begin
+      Object.Start_Date := Stmt.Get_Time (0);
+      Object.End_Date := Stmt.Get_Time (1);
+      Object.Ip_Address := Stmt.Get_Unbounded_String (2);
+      Object.Stype := Session_Type'Val (Stmt.Get_Integer (3));
+      Object.Server_Id := Stmt.Get_Integer (5);
+      Object.Set_Key_Value (Stmt.Get_Identifier (6));
+      if not Stmt.Is_Null (7) then
+         Object.User.Set_Key_Value (Stmt.Get_Identifier (7), Session);
+      end if;
+      if not Stmt.Is_Null (8) then
+         Object.Auth.Set_Key_Value (Stmt.Get_Identifier (8), Session);
+      end if;
+      Object.Version := Stmt.Get_Integer (4);
       ADO.Objects.Set_Created (Object);
    end Load;
 

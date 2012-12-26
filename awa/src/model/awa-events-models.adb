@@ -398,7 +398,6 @@ package body AWA.Events.Models is
       Impl : Queue_Access;
    begin
       Impl := new Queue_Impl;
-      Impl.Version := 0;
       Impl.Server_Id := 0;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
@@ -423,12 +422,21 @@ package body AWA.Events.Models is
    end Get_Id;
 
 
-   function Get_Version (Object : in Queue_Ref)
+   procedure Set_Server_Id (Object : in out Queue_Ref;
+                            Value  : in Integer) is
+      Impl : Queue_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Integer (Impl.all, 2, Impl.Server_Id, Value);
+      ADO.Objects.Set_Field_Integer (Impl.all, 2, Impl.Server_Id, Value);
+   end Set_Server_Id;
+
+   function Get_Server_Id (Object : in Queue_Ref)
                   return Integer is
       Impl : constant Queue_Access := Queue_Impl (Object.Get_Load_Object.all)'Access;
    begin
-      return Impl.Version;
-   end Get_Version;
+      return Impl.Server_Id;
+   end Get_Server_Id;
 
 
    procedure Set_Name (Object : in out Queue_Ref;
@@ -459,23 +467,6 @@ package body AWA.Events.Models is
       return Impl.Name;
    end Get_Name;
 
-
-   procedure Set_Server_Id (Object : in out Queue_Ref;
-                            Value  : in Integer) is
-      Impl : Queue_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Integer (Impl.all, 4, Impl.Server_Id, Value);
-      ADO.Objects.Set_Field_Integer (Impl.all, 4, Impl.Server_Id, Value);
-   end Set_Server_Id;
-
-   function Get_Server_Id (Object : in Queue_Ref)
-                  return Integer is
-      Impl : constant Queue_Access := Queue_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Server_Id;
-   end Get_Server_Id;
-
    --  Copy of the object.
    procedure Copy (Object : in Queue_Ref;
                    Into   : in out Queue_Ref) is
@@ -490,9 +481,8 @@ package body AWA.Events.Models is
          begin
             ADO.Objects.Set_Object (Result, Copy.all'Access);
             Copy.Copy (Impl.all);
-            Copy.Version := Impl.Version;
-            Copy.Name := Impl.Name;
             Copy.Server_Id := Impl.Server_Id;
+            Copy.Name := Impl.Name;
          end;
       end if;
       Into := Result;
@@ -627,23 +617,19 @@ package body AWA.Events.Models is
                           Value => Object.Get_Key);
          Object.Clear_Modified (1);
       end if;
+      if Object.Is_Modified (2) then
+         Stmt.Save_Field (Name  => COL_1_2_NAME, --  server_id
+                          Value => Object.Server_Id);
+         Object.Clear_Modified (2);
+      end if;
       if Object.Is_Modified (3) then
          Stmt.Save_Field (Name  => COL_2_2_NAME, --  name
                           Value => Object.Name);
          Object.Clear_Modified (3);
       end if;
-      if Object.Is_Modified (4) then
-         Stmt.Save_Field (Name  => COL_3_2_NAME, --  server_id
-                          Value => Object.Server_Id);
-         Object.Clear_Modified (4);
-      end if;
       if Stmt.Has_Save_Fields then
-         Object.Version := Object.Version + 1;
-         Stmt.Save_Field (Name  => "version",
-                          Value => Object.Version);
-         Stmt.Set_Filter (Filter => "id = ? and version = ?");
+         Stmt.Set_Filter (Filter => "id = ?");
          Stmt.Add_Param (Value => Object.Get_Key);
-         Stmt.Add_Param (Value => Object.Version - 1);
          declare
             Result : Integer;
          begin
@@ -651,8 +637,6 @@ package body AWA.Events.Models is
             if Result /= 1 then
                if Result /= 0 then
                   raise ADO.Objects.UPDATE_ERROR;
-               else
-                  raise ADO.Objects.LAZY_LOCK;
                end if;
             end if;
          end;
@@ -665,16 +649,13 @@ package body AWA.Events.Models is
                   := Session.Create_Statement (QUEUE_TABLE'Access);
       Result : Integer;
    begin
-      Object.Version := 1;
       Session.Allocate (Id => Object);
       Query.Save_Field (Name  => COL_0_2_NAME, --  id
                         Value => Object.Get_Key);
-      Query.Save_Field (Name  => COL_1_2_NAME, --  version
-                        Value => Object.Version);
+      Query.Save_Field (Name  => COL_1_2_NAME, --  server_id
+                        Value => Object.Server_Id);
       Query.Save_Field (Name  => COL_2_2_NAME, --  name
                         Value => Object.Name);
-      Query.Save_Field (Name  => COL_3_2_NAME, --  server_id
-                        Value => Object.Server_Id);
       Query.Execute (Result);
       if Result /= 1 then
          raise ADO.Objects.INSERT_ERROR;
@@ -704,37 +685,16 @@ package body AWA.Events.Models is
       if Name = "id" then
          return ADO.Objects.To_Object (Impl.Get_Key);
       end if;
-      if Name = "name" then
-         return Util.Beans.Objects.To_Object (Impl.Name);
-      end if;
       if Name = "server_id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Server_Id));
+      end if;
+      if Name = "name" then
+         return Util.Beans.Objects.To_Object (Impl.Name);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
 
 
-
-   procedure List (Object  : in out Queue_Vector;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class) is
-      Stmt : ADO.Statements.Query_Statement
-        := Session.Create_Statement (Query, QUEUE_TABLE'Access);
-   begin
-      Stmt.Execute;
-      Queue_Vectors.Clear (Object);
-      while Stmt.Has_Elements loop
-         declare
-            Item : Queue_Ref;
-            Impl : constant Queue_Access := new Queue_Impl;
-         begin
-            Impl.Load (Stmt, Session);
-            ADO.Objects.Set_Object (Item, Impl.all'Access);
-            Object.Append (Item);
-         end;
-         Stmt.Next;
-      end loop;
-   end List;
 
    --  ------------------------------
    --  Load the object from current iterator position
@@ -745,9 +705,8 @@ package body AWA.Events.Models is
       pragma Unreferenced (Session);
    begin
       Object.Set_Key_Value (Stmt.Get_Identifier (0));
+      Object.Server_Id := Stmt.Get_Integer (1);
       Object.Name := Stmt.Get_Unbounded_String (2);
-      Object.Server_Id := Stmt.Get_Integer (3);
-      Object.Version := Stmt.Get_Integer (1);
       ADO.Objects.Set_Created (Object);
    end Load;
    function Message_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
@@ -784,16 +743,17 @@ package body AWA.Events.Models is
       Impl : Message_Access;
    begin
       Impl := new Message_Impl;
-      Impl.Version := 0;
+      Impl.Create_Date := ADO.DEFAULT_TIME;
       Impl.Priority := 0;
+      Impl.Count := 0;
       Impl.Server_Id := 0;
       Impl.Task_Id := 0;
-      Impl.Create_Date := ADO.DEFAULT_TIME;
-      Impl.Processing_Date.Is_Null := True;
-      Impl.Finish_Date.Is_Null := True;
       Impl.Status := Message_Status_Type'First;
-      Impl.Entity_Type := 0;
+      Impl.Processing_Date.Is_Null := True;
+      Impl.Version := 0;
       Impl.Entity_Id := ADO.NO_IDENTIFIER;
+      Impl.Entity_Type := 0;
+      Impl.Finish_Date.Is_Null := True;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -817,12 +777,20 @@ package body AWA.Events.Models is
    end Get_Id;
 
 
-   function Get_Version (Object : in Message_Ref)
-                  return Integer is
+   procedure Set_Create_Date (Object : in out Message_Ref;
+                              Value  : in Ada.Calendar.Time) is
+      Impl : Message_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Time (Impl.all, 2, Impl.Create_Date, Value);
+   end Set_Create_Date;
+
+   function Get_Create_Date (Object : in Message_Ref)
+                  return Ada.Calendar.Time is
       Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
-      return Impl.Version;
-   end Get_Version;
+      return Impl.Create_Date;
+   end Get_Create_Date;
 
 
    procedure Set_Priority (Object : in out Message_Ref;
@@ -842,38 +810,21 @@ package body AWA.Events.Models is
    end Get_Priority;
 
 
-   procedure Set_Server_Id (Object : in out Message_Ref;
-                            Value  : in Integer) is
+   procedure Set_Count (Object : in out Message_Ref;
+                        Value  : in Integer) is
       Impl : Message_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Integer (Impl.all, 4, Impl.Server_Id, Value);
-      ADO.Objects.Set_Field_Integer (Impl.all, 4, Impl.Server_Id, Value);
-   end Set_Server_Id;
+      ADO.Objects.Set_Field_Integer (Impl.all, 4, Impl.Count, Value);
+      ADO.Objects.Set_Field_Integer (Impl.all, 4, Impl.Count, Value);
+   end Set_Count;
 
-   function Get_Server_Id (Object : in Message_Ref)
+   function Get_Count (Object : in Message_Ref)
                   return Integer is
       Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
-      return Impl.Server_Id;
-   end Get_Server_Id;
-
-
-   procedure Set_Task_Id (Object : in out Message_Ref;
-                          Value  : in Integer) is
-      Impl : Message_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Integer (Impl.all, 5, Impl.Task_Id, Value);
-      ADO.Objects.Set_Field_Integer (Impl.all, 5, Impl.Task_Id, Value);
-   end Set_Task_Id;
-
-   function Get_Task_Id (Object : in Message_Ref)
-                  return Integer is
-      Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Task_Id;
-   end Get_Task_Id;
+      return Impl.Count;
+   end Get_Count;
 
 
    procedure Set_Parameters (Object : in out Message_Ref;
@@ -881,7 +832,7 @@ package body AWA.Events.Models is
       Impl : Message_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 6, Impl.Parameters, Value);
+      ADO.Objects.Set_Field_String (Impl.all, 5, Impl.Parameters, Value);
    end Set_Parameters;
 
    procedure Set_Parameters (Object : in out Message_Ref;
@@ -889,7 +840,7 @@ package body AWA.Events.Models is
       Impl : Message_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 6, Impl.Parameters, Value);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 5, Impl.Parameters, Value);
    end Set_Parameters;
 
    function Get_Parameters (Object : in Message_Ref)
@@ -905,52 +856,38 @@ package body AWA.Events.Models is
    end Get_Parameters;
 
 
-   procedure Set_Create_Date (Object : in out Message_Ref;
-                              Value  : in Ada.Calendar.Time) is
+   procedure Set_Server_Id (Object : in out Message_Ref;
+                            Value  : in Integer) is
       Impl : Message_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Time (Impl.all, 7, Impl.Create_Date, Value);
-   end Set_Create_Date;
+      ADO.Objects.Set_Field_Integer (Impl.all, 6, Impl.Server_Id, Value);
+      ADO.Objects.Set_Field_Integer (Impl.all, 6, Impl.Server_Id, Value);
+   end Set_Server_Id;
 
-   function Get_Create_Date (Object : in Message_Ref)
-                  return Ada.Calendar.Time is
+   function Get_Server_Id (Object : in Message_Ref)
+                  return Integer is
       Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
-      return Impl.Create_Date;
-   end Get_Create_Date;
+      return Impl.Server_Id;
+   end Get_Server_Id;
 
 
-   procedure Set_Processing_Date (Object : in out Message_Ref;
-                                  Value  : in ADO.Nullable_Time) is
+   procedure Set_Task_Id (Object : in out Message_Ref;
+                          Value  : in Integer) is
       Impl : Message_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Time (Impl.all, 8, Impl.Processing_Date, Value);
-   end Set_Processing_Date;
+      ADO.Objects.Set_Field_Integer (Impl.all, 7, Impl.Task_Id, Value);
+      ADO.Objects.Set_Field_Integer (Impl.all, 7, Impl.Task_Id, Value);
+   end Set_Task_Id;
 
-   function Get_Processing_Date (Object : in Message_Ref)
-                  return ADO.Nullable_Time is
+   function Get_Task_Id (Object : in Message_Ref)
+                  return Integer is
       Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
-      return Impl.Processing_Date;
-   end Get_Processing_Date;
-
-
-   procedure Set_Finish_Date (Object : in out Message_Ref;
-                              Value  : in ADO.Nullable_Time) is
-      Impl : Message_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Time (Impl.all, 9, Impl.Finish_Date, Value);
-   end Set_Finish_Date;
-
-   function Get_Finish_Date (Object : in Message_Ref)
-                  return ADO.Nullable_Time is
-      Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Finish_Date;
-   end Get_Finish_Date;
+      return Impl.Task_Id;
+   end Get_Task_Id;
 
 
    procedure Set_Status (Object : in out Message_Ref;
@@ -960,7 +897,7 @@ package body AWA.Events.Models is
       Impl : Message_Access;
    begin
       Set_Field (Object, Impl);
-      Set_Field_Enum (Impl.all, 10, Impl.Status, Value);
+      Set_Field_Enum (Impl.all, 8, Impl.Status, Value);
    end Set_Status;
 
    function Get_Status (Object : in Message_Ref)
@@ -971,20 +908,28 @@ package body AWA.Events.Models is
    end Get_Status;
 
 
-   procedure Set_Entity_Type (Object : in out Message_Ref;
-                              Value  : in ADO.Entity_Type) is
+   procedure Set_Processing_Date (Object : in out Message_Ref;
+                                  Value  : in ADO.Nullable_Time) is
       Impl : Message_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Entity_Type (Impl.all, 11, Impl.Entity_Type, Value);
-   end Set_Entity_Type;
+      ADO.Objects.Set_Field_Time (Impl.all, 9, Impl.Processing_Date, Value);
+   end Set_Processing_Date;
 
-   function Get_Entity_Type (Object : in Message_Ref)
-                  return ADO.Entity_Type is
+   function Get_Processing_Date (Object : in Message_Ref)
+                  return ADO.Nullable_Time is
       Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
-      return Impl.Entity_Type;
-   end Get_Entity_Type;
+      return Impl.Processing_Date;
+   end Get_Processing_Date;
+
+
+   function Get_Version (Object : in Message_Ref)
+                  return Integer is
+      Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Version;
+   end Get_Version;
 
 
    procedure Set_Entity_Id (Object : in out Message_Ref;
@@ -992,7 +937,7 @@ package body AWA.Events.Models is
       Impl : Message_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Identifier (Impl.all, 12, Impl.Entity_Id, Value);
+      ADO.Objects.Set_Field_Identifier (Impl.all, 11, Impl.Entity_Id, Value);
    end Set_Entity_Id;
 
    function Get_Entity_Id (Object : in Message_Ref)
@@ -1003,20 +948,36 @@ package body AWA.Events.Models is
    end Get_Entity_Id;
 
 
-   procedure Set_Message_Type (Object : in out Message_Ref;
-                               Value  : in AWA.Events.Models.Message_Type_Ref'Class) is
+   procedure Set_Entity_Type (Object : in out Message_Ref;
+                              Value  : in ADO.Entity_Type) is
       Impl : Message_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 13, Impl.Message_Type, Value);
-   end Set_Message_Type;
+      ADO.Objects.Set_Field_Entity_Type (Impl.all, 12, Impl.Entity_Type, Value);
+   end Set_Entity_Type;
 
-   function Get_Message_Type (Object : in Message_Ref)
-                  return AWA.Events.Models.Message_Type_Ref'Class is
+   function Get_Entity_Type (Object : in Message_Ref)
+                  return ADO.Entity_Type is
       Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
-      return Impl.Message_Type;
-   end Get_Message_Type;
+      return Impl.Entity_Type;
+   end Get_Entity_Type;
+
+
+   procedure Set_Finish_Date (Object : in out Message_Ref;
+                              Value  : in ADO.Nullable_Time) is
+      Impl : Message_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Time (Impl.all, 13, Impl.Finish_Date, Value);
+   end Set_Finish_Date;
+
+   function Get_Finish_Date (Object : in Message_Ref)
+                  return ADO.Nullable_Time is
+      Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Finish_Date;
+   end Get_Finish_Date;
 
 
    procedure Set_User (Object : in out Message_Ref;
@@ -1066,6 +1027,22 @@ package body AWA.Events.Models is
       return Impl.Queue;
    end Get_Queue;
 
+
+   procedure Set_Message_Type (Object : in out Message_Ref;
+                               Value  : in AWA.Events.Models.Message_Type_Ref'Class) is
+      Impl : Message_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 17, Impl.Message_Type, Value);
+   end Set_Message_Type;
+
+   function Get_Message_Type (Object : in Message_Ref)
+                  return AWA.Events.Models.Message_Type_Ref'Class is
+      Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Message_Type;
+   end Get_Message_Type;
+
    --  Copy of the object.
    procedure Copy (Object : in Message_Ref;
                    Into   : in out Message_Ref) is
@@ -1080,21 +1057,22 @@ package body AWA.Events.Models is
          begin
             ADO.Objects.Set_Object (Result, Copy.all'Access);
             Copy.Copy (Impl.all);
-            Copy.Version := Impl.Version;
+            Copy.Create_Date := Impl.Create_Date;
             Copy.Priority := Impl.Priority;
+            Copy.Count := Impl.Count;
+            Copy.Parameters := Impl.Parameters;
             Copy.Server_Id := Impl.Server_Id;
             Copy.Task_Id := Impl.Task_Id;
-            Copy.Parameters := Impl.Parameters;
-            Copy.Create_Date := Impl.Create_Date;
-            Copy.Processing_Date := Impl.Processing_Date;
-            Copy.Finish_Date := Impl.Finish_Date;
             Copy.Status := Impl.Status;
-            Copy.Entity_Type := Impl.Entity_Type;
+            Copy.Processing_Date := Impl.Processing_Date;
+            Copy.Version := Impl.Version;
             Copy.Entity_Id := Impl.Entity_Id;
-            Copy.Message_Type := Impl.Message_Type;
+            Copy.Entity_Type := Impl.Entity_Type;
+            Copy.Finish_Date := Impl.Finish_Date;
             Copy.User := Impl.User;
             Copy.Session := Impl.Session;
             Copy.Queue := Impl.Queue;
+            Copy.Message_Type := Impl.Message_Type;
          end;
       end if;
       Into := Result;
@@ -1229,49 +1207,59 @@ package body AWA.Events.Models is
                           Value => Object.Get_Key);
          Object.Clear_Modified (1);
       end if;
+      if Object.Is_Modified (2) then
+         Stmt.Save_Field (Name  => COL_1_3_NAME, --  create_date
+                          Value => Object.Create_Date);
+         Object.Clear_Modified (2);
+      end if;
       if Object.Is_Modified (3) then
          Stmt.Save_Field (Name  => COL_2_3_NAME, --  priority
                           Value => Object.Priority);
          Object.Clear_Modified (3);
       end if;
       if Object.Is_Modified (4) then
-         Stmt.Save_Field (Name  => COL_3_3_NAME, --  server_id
-                          Value => Object.Server_Id);
+         Stmt.Save_Field (Name  => COL_3_3_NAME, --  count
+                          Value => Object.Count);
          Object.Clear_Modified (4);
       end if;
       if Object.Is_Modified (5) then
-         Stmt.Save_Field (Name  => COL_4_3_NAME, --  task_id
-                          Value => Object.Task_Id);
+         Stmt.Save_Field (Name  => COL_4_3_NAME, --  parameters
+                          Value => Object.Parameters);
          Object.Clear_Modified (5);
       end if;
       if Object.Is_Modified (6) then
-         Stmt.Save_Field (Name  => COL_5_3_NAME, --  parameters
-                          Value => Object.Parameters);
+         Stmt.Save_Field (Name  => COL_5_3_NAME, --  server_id
+                          Value => Object.Server_Id);
          Object.Clear_Modified (6);
       end if;
+      if Object.Is_Modified (7) then
+         Stmt.Save_Field (Name  => COL_6_3_NAME, --  task_id
+                          Value => Object.Task_Id);
+         Object.Clear_Modified (7);
+      end if;
       if Object.Is_Modified (8) then
-         Stmt.Save_Field (Name  => COL_7_3_NAME, --  processing_date
-                          Value => Object.Processing_Date);
+         Stmt.Save_Field (Name  => COL_7_3_NAME, --  status
+                          Value => Integer (Message_Status_Type'Pos (Object.Status)));
          Object.Clear_Modified (8);
       end if;
       if Object.Is_Modified (9) then
-         Stmt.Save_Field (Name  => COL_8_3_NAME, --  finish_date
-                          Value => Object.Finish_Date);
+         Stmt.Save_Field (Name  => COL_8_3_NAME, --  processing_date
+                          Value => Object.Processing_Date);
          Object.Clear_Modified (9);
       end if;
-      if Object.Is_Modified (10) then
-         Stmt.Save_Field (Name  => COL_9_3_NAME, --  status
-                          Value => Integer (Message_Status_Type'Pos (Object.Status)));
-         Object.Clear_Modified (10);
-      end if;
       if Object.Is_Modified (11) then
-         Stmt.Save_Field (Name  => COL_10_3_NAME, --  entity_type
-                          Value => Object.Entity_Type);
+         Stmt.Save_Field (Name  => COL_10_3_NAME, --  entity_id
+                          Value => Object.Entity_Id);
          Object.Clear_Modified (11);
       end if;
+      if Object.Is_Modified (12) then
+         Stmt.Save_Field (Name  => COL_11_3_NAME, --  entity_type
+                          Value => Object.Entity_Type);
+         Object.Clear_Modified (12);
+      end if;
       if Object.Is_Modified (13) then
-         Stmt.Save_Field (Name  => COL_12_3_NAME, --  type
-                          Value => Object.Message_Type);
+         Stmt.Save_Field (Name  => COL_12_3_NAME, --  finish_date
+                          Value => Object.Finish_Date);
          Object.Clear_Modified (13);
       end if;
       if Object.Is_Modified (14) then
@@ -1288,6 +1276,11 @@ package body AWA.Events.Models is
          Stmt.Save_Field (Name  => COL_15_3_NAME, --  queue_id
                           Value => Object.Queue);
          Object.Clear_Modified (16);
+      end if;
+      if Object.Is_Modified (17) then
+         Stmt.Save_Field (Name  => COL_16_3_NAME, --  message_type_id
+                          Value => Object.Message_Type);
+         Object.Clear_Modified (17);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -1321,32 +1314,38 @@ package body AWA.Events.Models is
       Session.Allocate (Id => Object);
       Query.Save_Field (Name  => COL_0_3_NAME, --  id
                         Value => Object.Get_Key);
-      Query.Save_Field (Name  => COL_1_3_NAME, --  version
-                        Value => Object.Version);
+      Query.Save_Field (Name  => COL_1_3_NAME, --  create_date
+                        Value => Object.Create_Date);
       Query.Save_Field (Name  => COL_2_3_NAME, --  priority
                         Value => Object.Priority);
-      Query.Save_Field (Name  => COL_3_3_NAME, --  server_id
-                        Value => Object.Server_Id);
-      Query.Save_Field (Name  => COL_4_3_NAME, --  task_id
-                        Value => Object.Task_Id);
-      Query.Save_Field (Name  => COL_5_3_NAME, --  parameters
+      Query.Save_Field (Name  => COL_3_3_NAME, --  count
+                        Value => Object.Count);
+      Query.Save_Field (Name  => COL_4_3_NAME, --  parameters
                         Value => Object.Parameters);
-      Query.Save_Field (Name  => COL_6_3_NAME, --  create_date
-                        Value => Object.Create_Date);
-      Query.Save_Field (Name  => COL_9_3_NAME, --  status
+      Query.Save_Field (Name  => COL_5_3_NAME, --  server_id
+                        Value => Object.Server_Id);
+      Query.Save_Field (Name  => COL_6_3_NAME, --  task_id
+                        Value => Object.Task_Id);
+      Query.Save_Field (Name  => COL_7_3_NAME, --  status
                         Value => Integer (Message_Status_Type'Pos (Object.Status)));
-      Query.Save_Field (Name  => COL_10_3_NAME, --  entity_type
-                        Value => Object.Entity_Type);
-      Query.Save_Field (Name  => COL_11_3_NAME, --  entity_id
+      Query.Save_Field (Name  => COL_8_3_NAME, --  processing_date
+                        Value => Object.Processing_Date);
+      Query.Save_Field (Name  => COL_9_3_NAME, --  version
+                        Value => Object.Version);
+      Query.Save_Field (Name  => COL_10_3_NAME, --  entity_id
                         Value => Object.Entity_Id);
-      Query.Save_Field (Name  => COL_12_3_NAME, --  type
-                        Value => Object.Message_Type);
+      Query.Save_Field (Name  => COL_11_3_NAME, --  entity_type
+                        Value => Object.Entity_Type);
+      Query.Save_Field (Name  => COL_12_3_NAME, --  finish_date
+                        Value => Object.Finish_Date);
       Query.Save_Field (Name  => COL_13_3_NAME, --  user_id
                         Value => Object.User);
       Query.Save_Field (Name  => COL_14_3_NAME, --  session_id
                         Value => Object.Session);
       Query.Save_Field (Name  => COL_15_3_NAME, --  queue_id
                         Value => Object.Queue);
+      Query.Save_Field (Name  => COL_16_3_NAME, --  message_type_id
+                        Value => Object.Message_Type);
       Query.Execute (Result);
       if Result /= 1 then
          raise ADO.Objects.INSERT_ERROR;
@@ -1376,8 +1375,17 @@ package body AWA.Events.Models is
       if Name = "id" then
          return ADO.Objects.To_Object (Impl.Get_Key);
       end if;
+      if Name = "create_date" then
+         return Util.Beans.Objects.Time.To_Object (Impl.Create_Date);
+      end if;
       if Name = "priority" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Priority));
+      end if;
+      if Name = "count" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Count));
+      end if;
+      if Name = "parameters" then
+         return Util.Beans.Objects.To_Object (Impl.Parameters);
       end if;
       if Name = "server_id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Server_Id));
@@ -1385,11 +1393,8 @@ package body AWA.Events.Models is
       if Name = "task_id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Task_Id));
       end if;
-      if Name = "parameters" then
-         return Util.Beans.Objects.To_Object (Impl.Parameters);
-      end if;
-      if Name = "create_date" then
-         return Util.Beans.Objects.Time.To_Object (Impl.Create_Date);
+      if Name = "status" then
+         return Message_Status_Type_Objects.To_Object (Impl.Status);
       end if;
       if Name = "processing_date" then
          if Impl.Processing_Date.Is_Null then
@@ -1398,21 +1403,18 @@ package body AWA.Events.Models is
             return Util.Beans.Objects.Time.To_Object (Impl.Processing_Date.Value);
          end if;
       end if;
+      if Name = "entity_id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Entity_Id));
+      end if;
+      if Name = "entity_type" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Entity_Type));
+      end if;
       if Name = "finish_date" then
          if Impl.Finish_Date.Is_Null then
             return Util.Beans.Objects.Null_Object;
          else
             return Util.Beans.Objects.Time.To_Object (Impl.Finish_Date.Value);
          end if;
-      end if;
-      if Name = "status" then
-         return Message_Status_Type_Objects.To_Object (Impl.Status);
-      end if;
-      if Name = "entity_type" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Entity_Type));
-      end if;
-      if Name = "entity_id" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Entity_Id));
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -1448,19 +1450,17 @@ package body AWA.Events.Models is
                    Session : in out ADO.Sessions.Session'Class) is
    begin
       Object.Set_Key_Value (Stmt.Get_Identifier (0));
+      Object.Create_Date := Stmt.Get_Time (1);
       Object.Priority := Stmt.Get_Integer (2);
-      Object.Server_Id := Stmt.Get_Integer (3);
-      Object.Task_Id := Stmt.Get_Integer (4);
-      Object.Parameters := Stmt.Get_Unbounded_String (5);
-      Object.Create_Date := Stmt.Get_Time (6);
-      Object.Processing_Date := Stmt.Get_Time (7);
-      Object.Finish_Date := Stmt.Get_Time (8);
-      Object.Status := Message_Status_Type'Val (Stmt.Get_Integer (9));
-      Object.Entity_Type := ADO.Entity_Type (Stmt.Get_Integer (10));
-      Object.Entity_Id := Stmt.Get_Identifier (11);
-      if not Stmt.Is_Null (12) then
-         Object.Message_Type.Set_Key_Value (Stmt.Get_Identifier (12), Session);
-      end if;
+      Object.Count := Stmt.Get_Integer (3);
+      Object.Parameters := Stmt.Get_Unbounded_String (4);
+      Object.Server_Id := Stmt.Get_Integer (5);
+      Object.Task_Id := Stmt.Get_Integer (6);
+      Object.Status := Message_Status_Type'Val (Stmt.Get_Integer (7));
+      Object.Processing_Date := Stmt.Get_Time (8);
+      Object.Entity_Id := Stmt.Get_Identifier (10);
+      Object.Entity_Type := ADO.Entity_Type (Stmt.Get_Integer (11));
+      Object.Finish_Date := Stmt.Get_Time (12);
       if not Stmt.Is_Null (13) then
          Object.User.Set_Key_Value (Stmt.Get_Identifier (13), Session);
       end if;
@@ -1470,7 +1470,10 @@ package body AWA.Events.Models is
       if not Stmt.Is_Null (15) then
          Object.Queue.Set_Key_Value (Stmt.Get_Identifier (15), Session);
       end if;
-      Object.Version := Stmt.Get_Integer (1);
+      if not Stmt.Is_Null (16) then
+         Object.Message_Type.Set_Key_Value (Stmt.Get_Identifier (16), Session);
+      end if;
+      Object.Version := Stmt.Get_Integer (9);
       ADO.Objects.Set_Created (Object);
    end Load;
 
