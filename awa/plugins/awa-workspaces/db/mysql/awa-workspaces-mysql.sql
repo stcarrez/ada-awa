@@ -1,42 +1,42 @@
 /* File generated automatically by dynamo */
-/* 
-            The workspace member indicates the users who are part of the workspace.
-         */
-CREATE TABLE workspace_member (
-  /* the member identifier. */
+/* The workspace controls the features available in the application
+for a set of users: the workspace members.  A user could create
+several workspaces and be part of several workspaces that other
+users have created. */
+CREATE TABLE awa_workspace (
+  /* the workspace identifier */
   `id` BIGINT NOT NULL,
-  /* the workspace member version. */
-  `version` int ,
-  /* the member creation date. */
+  /*  */
+  `version` INTEGER NOT NULL,
+  /*  */
   `create_date` DATETIME NOT NULL,
-  /* the workspace member. */
-  `user_fk` BIGINT NOT NULL,
-  /* the workspace. */
-  `workspace_fk` INTEGER NOT NULL,
+  /*  */
+  `owner_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
-/* 
-            The workspace allows to group all together the different
-            application entities which belong to a user or a set of collaborating users.
-            Other entities, for example a Blog, a Wiki space, will link to a
-            single workspace.
-
-            The workspace has members which are allowed to access the entities
-            that are part of the workspace.  A workspace owner decides which user
-            is part of the workspace or not.
-         */
-CREATE TABLE workspace (
-  /* the workspace identifier. */
-  `id` INTEGER NOT NULL,
-  /* the storage data version. */
-  `version` int ,
-  /* the workspace creation date. */
-  `create_date` DATETIME NOT NULL,
-  /* the workspace owner. */
-  `owner_fk` BIGINT NOT NULL,
+/*  */
+CREATE TABLE awa_workspace_feature (
+  /*  */
+  `id` BIGINT NOT NULL,
+  /*  */
+  `limit` INTEGER NOT NULL,
+  /*  */
+  `workspace_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
+);
+/* The workspace member indicates the users who
+are part of the workspace. */
+CREATE TABLE awa_workspace_member (
+  /*  */
+  `id` BIGINT NOT NULL,
+  /*  */
+  `workspace_id` BIGINT NOT NULL,
+  /*  */
+  `member_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES
-("workspace_member")
-,("workspace")
+("awa_workspace")
+,("awa_workspace_feature")
+,("awa_workspace_member")
 ;
