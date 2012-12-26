@@ -14,19 +14,4 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
-  <servlet-mapping>
-    <servlet-name>storage</servlet-name>
-    <url-pattern>/storages/files/*</url-pattern>
-  </servlet-mapping>
-
-  <filter-mapping>
-    <filter-name>service</filter-name>
-    <url-pattern>/images/*.html</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>auth-filter</filter-name>
-    <url-pattern>/images/*.html</url-pattern>
-  </filter-mapping>
-
 </module>
