@@ -1,3 +1,3 @@
 /* File generated automatically by dynamo */
-DROP TABLE IF EXISTS `blog_post`;
-DROP TABLE IF EXISTS `blog`;
+DROP TABLE IF EXISTS `awa_post`;
+DROP TABLE IF EXISTS `awa_blog`;
