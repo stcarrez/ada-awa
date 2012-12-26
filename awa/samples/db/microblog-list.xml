@@ -31,8 +31,8 @@
       user.name,
       email.email
     FROM mblog AS mblog
-    INNER JOIN user ON mblog.author_id = user.id
-    INNER JOIN email ON mblog.author_id = email.user_id
+    INNER JOIN awa_user AS user ON mblog.author_id = user.id
+    INNER JOIN awa_email AS email ON mblog.author_id = email.user_id
     ORDER BY mblog.creation_date ASC
        </sql>
     </query>
