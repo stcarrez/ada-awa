@@ -1,0 +1,40 @@
+<!-- Form to ask deletion of a post
+  -  Copyright (C) 2012 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<div class='awa-post awa-form'
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:util="http://code.google.com/p/ada-asf/util"
+        xmlns:h="http://java.sun.com/jsf/html">
+    <h2>#{blogMsg.blog_post_delete_title}</h2>
+    <h:form id='delete-post'>
+        <input type="hidden" name="post_id" value="#{post.id}"/>
+        <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
+            <dt>
+                #{blogMsg.blog_post_confirm_delete}
+            </dt>
+            <dd>
+                <b>#{post.title}</b>
+            </dd>
+        </dl>
+        <ul class='awa-buttons'>
+            <li>
+                <h:commandButton id='delete-post-button' value='#{blogMsg.blog_post_delete_button}'
+                                 styleClass="ui-button ui-state-default ui-corner-all"
+                                 action="#{post.delete}" title="#{blogMsg.blog_post_delete_button_title}"/>
+            </li>
+        </ul>
+    </h:form>
+</div>
