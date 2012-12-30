@@ -3,9 +3,9 @@
  * Copyright (C) 2011 Stephane Carrez
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-#blog-post-list {
+#blog-post-list, #blog-post-list-header {
     float: left;
-    padding: 2%;
+    padding: 0 2% 0 2%;
     width: 96%;
 }
 div.post-info, div.post-header {
@@ -62,10 +62,10 @@ div.blog-admin div.post-date, div.blog-admin div.post-view {
 
 }
 div.blog-admin div.post-title {
-    width: 55%;
+    width: 50%;
 }
 div.blog-admin div.post-author {
-    width: 19%;
+    width: 15%;
 }
 div.blog-admin div.post-ref {
     width: 40px;
