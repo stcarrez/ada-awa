@@ -26,10 +26,7 @@
     <ui:define name="pageBody">
         <div id='awa-content'>
             <ui:include src="lists/menu-list.xhtml"/>
-            <div id='blog-post-list' class='blog-admin'>
-                <ui:include src="lists/post-list.xhtml"/>
-            </div>
-            <div class='post-header' id="p-header">
+            <div class='blog-admin post-header' id="blog-post-list-header">
                 <div class='post-ref'>
                     #{blogMsg.blog_post_id_label}
                 </div>
@@ -43,6 +40,9 @@
                 <div class='post-author'>
                     #{blogMsg.blog_post_author_label}
                 </div>
+            </div>
+            <div id='blog-post-list' class='blog-admin'>
+                <ui:include src="lists/post-list.xhtml"/>
             </div>
             <div id='blog-post-action' class='asf-list-action'>
                     <a href="#" class='asf-icon asf-delete' title='#{todoMsg.todoTooltips_deleteTodo}'></a>
