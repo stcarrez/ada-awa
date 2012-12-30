@@ -41,7 +41,11 @@ package body AWA.Blogs.Beans is
    function Get_Value (From : in Blog_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
-      return AWA.Blogs.Models.Blog_Ref (From).Get_Value (Name);
+      if not From.Is_Null then
+         return AWA.Blogs.Models.Blog_Ref (From).Get_Value (Name);
+      else
+         return Util.Beans.Objects.Null_Object;
+      end if;
    end Get_Value;
 
    --  ------------------------------
@@ -105,7 +109,7 @@ package body AWA.Blogs.Beans is
       Object  : constant Blog_Bean_Access := new Blog_Bean;
       Session : ADO.Sessions.Session := Module.Get_Session;
    begin
-      if Blog_Id > 0 then
+      if Blog_Id /= ADO.NO_IDENTIFIER then
          Object.Load (Session, Blog_Id);
       end if;
       Object.Module := Module;
@@ -146,6 +150,23 @@ package body AWA.Blogs.Beans is
          ASF.Applications.Messages.Factory.Add_Message ("users.signup_error_message");
    end Create_Post;
 
+   --  ------------------------------
+   --  Delete a post.
+   --  ------------------------------
+   procedure Delete_Post (Bean    : in out Post_Bean;
+                          Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      Manager : constant AWA.Blogs.Services.Blog_Service_Access := Bean.Module.Get_Blog_Manager;
+   begin
+      Manager.Delete_Post (Post_Id => Bean.Post.Get_Id);
+      Outcome := To_Unbounded_String ("success");
+
+   exception
+      when Services.Not_Found =>
+         Outcome := To_Unbounded_String ("failure");
+
+         ASF.Applications.Messages.Factory.Add_Message ("users.signup_error_message");
+   end Delete_Post;
+
    package Create_Post_Binding is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Post_Bean,
                                                       Method => Create_Post,
@@ -156,9 +177,15 @@ package body AWA.Blogs.Beans is
                                                       Method => Create_Post,
                                                       Name   => "save");
 
+   package Delete_Post_Binding is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Post_Bean,
+                                                      Method => Delete_Post,
+                                                      Name   => "delete");
+
    Post_Bean_Binding : aliased constant Util.Beans.Methods.Method_Binding_Array
      := (1 => Create_Post_Binding.Proxy'Access,
-         2 => Save_Post_Binding.Proxy'Access);
+         2 => Save_Post_Binding.Proxy'Access,
+         3 => Delete_Post_Binding.Proxy'Access);
 
    --  ------------------------------
    --  Get the value identified by the name.
