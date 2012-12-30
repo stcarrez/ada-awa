@@ -108,6 +108,20 @@ package body AWA.Storages.Services is
    end Load_Folder;
 
    --  ------------------------------
+   --  Load the storage instance identified by the given identifier.
+   --  ------------------------------
+   procedure Load_Storage (Service : in Storage_Service;
+                           Storage : in out AWA.Storages.Models.Storage_Ref'Class;
+                           Id      : in ADO.Identifier) is
+      pragma Unreferenced (Service);
+
+      Ctx       : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB        : ADO.Sessions.Session := AWA.Services.Contexts.Get_Session (Ctx);
+   begin
+      Storage.Load (Session => DB, Id => Id);
+   end Load_Storage;
+
+   --  ------------------------------
    --  Save the data object contained in the <b>Data</b> part element into the
    --  target storage represented by <b>Into</b>.
    --  ------------------------------

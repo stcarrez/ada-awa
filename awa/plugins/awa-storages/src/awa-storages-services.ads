@@ -95,6 +95,11 @@ package AWA.Storages.Services is
                    Path    : in String;
                    Storage : in AWA.Storages.Models.Storage_Type);
 
+   --  Load the storage instance identified by the given identifier.
+   procedure Load_Storage (Service : in Storage_Service;
+                           Storage : in out AWA.Storages.Models.Storage_Ref'Class;
+                           Id      : in ADO.Identifier);
+
    --  Load the storage content identified by <b>From</b> into the blob descriptor <b>Into</b>.
    --  Raises the <b>NOT_FOUND</b> exception if there is no such storage.
    procedure Load (Service : in Storage_Service;
