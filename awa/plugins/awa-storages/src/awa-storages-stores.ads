@@ -21,7 +21,8 @@ with AWA.Storages.Models;
 
 --  == Store Service ==
 --  The `AWA.Storages.Stores` package defines the interface that a store must implement to
---  be able to save and retrieve a data content.
+--  be able to save and retrieve a data content.  The store can be a file system, a database
+--  or a remote store service.
 --
 --  @include awa-storages-stores-databases.ads
 --  @include awa-storages-stores-files.ads
