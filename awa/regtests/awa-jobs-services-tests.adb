@@ -65,7 +65,7 @@ package body AWA.Jobs.Services.Tests is
       J.Set_Parameter ("message", "Hello");
       Util.Tests.Assert_Equals (T, "Hello", J.Get_Parameter ("message"), "Invalid message param");
 
-      J.Schedule (Work_1_Definition.Factory);
+      J.Schedule (Work_1_Definition.Factory.all);
 
       T.Assert (J.Get_Status = AWA.Jobs.Models.SCHEDULED, "Job is not scheduled");
       --
