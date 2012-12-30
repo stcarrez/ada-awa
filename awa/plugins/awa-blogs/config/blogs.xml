@@ -70,6 +70,14 @@
     </navigation-case>
   </navigation-rule>
 
+    <navigation-rule>
+      <from-view-id>/blogs/admin/forms/post-delete.xhtml</from-view-id>
+      <navigation-case>
+        <from-outcome>success</from-outcome>
+        <to-view-id>/blogs/admin/forms/post-delete-response.xhtml</to-view-id>
+      </navigation-case>
+    </navigation-rule>
+
   <navigation-rule>
     <from-view-id>/workspaces/main.xhtml</from-view-id>
     <navigation-case>
@@ -86,7 +94,7 @@
     <sql>
        SELECT acl.id FROM awa_acl AS acl
        WHERE acl.entity_type = :entity_type
-       AND acl.user_id = :user_id   
+       AND acl.user_id = :user_id
     </sql>
   </entity-permission>
 
@@ -97,7 +105,7 @@
     <sql>
        SELECT acl.id FROM awa_acl AS acl
        WHERE acl.entity_type = :entity_type
-       AND acl.user_id = :user_id   
+       AND acl.user_id = :user_id
        AND acl.entity_id = :entity_id
     </sql>
   </entity-permission>
