@@ -41,7 +41,7 @@ with EL.Contexts.Default;
 --  on the storage module.
 package body AWA.Images.Services is
 
-   package ASC renames Awa.Services.Contexts;
+   package ASC renames AWA.Services.Contexts;
 
    --  ------------------------------
    --  Image Service
