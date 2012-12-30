@@ -155,8 +155,12 @@ package AWA.Jobs.Services is
       overriding
       function Create (Factory : in Job_Type_Factory) return Abstract_Job_Access;
 
-      Factory : aliased Job_Type_Factory;
+      --  The job factory.
+      Factory : constant Job_Factory_Access;
 
+   private
+      Instance : aliased Job_Type_Factory;
+      Factory  : constant Job_Factory_Access := Instance'Access;
    end Definition;
 
    generic
@@ -164,7 +168,11 @@ package AWA.Jobs.Services is
    package Work_Definition is
       type S_Factory is new Work_Factory with null record;
 
-      Factory : aliased S_Factory := S_Factory '(Work => Work);
+      --  The job factory.
+      Factory : constant Job_Factory_Access;
+   private
+      Instance : aliased S_Factory := S_Factory '(Work => Work);
+      Factory  : constant Job_Factory_Access := Instance'Access;
    end Work_Definition;
 
    --  Execute the job associated with the given event.
