@@ -43,7 +43,7 @@ div.awa-document {
 div.awa-document div.awa-title {
     float: left;
     font-size: 1.1em;
-    width: 80%;
+    width: 60%;
 }
 div.awa-document div.awa-size {
     float: left;
@@ -95,4 +95,8 @@ div.document-list div.asf-active {
 }
 #upload-button {
     margin-left: 10px;
+}
+#document-action {
+    width: 24px;
+    left:  -4px;
 }
