@@ -1,5 +1,5 @@
 <!-- List the posts for the blog administrator
-  -  Copyright (C) 2011 Stephane Carrez
+  -  Copyright (C) 2011, 2012 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,18 +18,44 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:c="http://java.sun.com/jstl/core"
-	xmlns:u="http://code.google.com/p/ada-asf/util"
+	    xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{blogMsg.blog_admin_post_list_title}"/>
 
     <!-- Main page body -->
     <ui:define name="pageBody">
-      <div id='awa-content'>
-          <ui:include src="lists/menu-list.xhtml"/>
-          <div id='blog-post-list' class='blog-admin'>
-              <ui:include src="lists/post-list.xhtml"/>
-          </div>
-      </div>
+        <div id='awa-content'>
+            <ui:include src="lists/menu-list.xhtml"/>
+            <div id='blog-post-list' class='blog-admin'>
+                <ui:include src="lists/post-list.xhtml"/>
+            </div>
+            <div class='post-header' id="p-header">
+                <div class='post-ref'>
+                    #{blogMsg.blog_post_id_label}
+                </div>
+                <div class='post-status'></div>
+                <div class='post-title'>
+                    #{blogMsg.blog_post_title_label}
+                </div>
+                <div class='post-date'>
+                    #{blogMsg.blog_post_date_label}
+                </div>
+                <div class='post-author'>
+                    #{blogMsg.blog_post_author_label}
+                </div>
+            </div>
+            <div id='blog-post-action' class='asf-list-action'>
+                    <a href="#" class='asf-icon asf-delete' title='#{todoMsg.todoTooltips_deleteTodo}'></a>
+                    <a href="#" class='asf-icon asf-edit' title='#{todoMsg.todoTooltips_editTodo}'></a>
+            </div>
+        </div>
+        <util:script>
+            $('#blog-post-list').list({
+                actionId: '#blog-post-action',
+                itemPrefix: 'p_',
+                deleteUrl: '#{contextPath}/blogs/admin/forms/post-delete.html?post_id='
+            });
+        </util:script>
     </ui:define>
 </ui:composition>
 

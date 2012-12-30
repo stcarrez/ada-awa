@@ -6,13 +6,15 @@
 #blog-post-list {
     float: left;
     padding: 2%;
-    width: 90%;
+    width: 96%;
 }
 div.post-info, div.post-header {
     float: left;
     width: 100%;
 }
-
+div.post-info div.asf-list-action {
+    left: -5px;
+}
 /*
  * Admin section
  */
@@ -67,6 +69,7 @@ div.blog-admin div.post-author {
 }
 div.blog-admin div.post-ref {
     width: 40px;
+    padding-left: 30px;
 }
 div.blog-admin div.post-date {
     width: 15%;
@@ -101,14 +104,17 @@ div.blog-info div.blog-date {
     font-size: 0.7em;
 }
 
-div.post-status-POST_DRAFT, div.post-status-POST_PUBLISHED, div.post-status-POST_SCHEDULED {
+div.post-status, div.post-status-POST_DRAFT, div.post-status-POST_PUBLISHED, div.post-status-POST_SCHEDULED {
     width: 16px;
     height: 16px;
-    float: right;
+    float: left;
     background: url(../images/blogs/check-wrn.png) no-repeat;
 }
 div.post-status-POST_PUBLISHED {
     background: url(../images/blogs/check-on.png) no-repeat;
+}
+div.post-status {
+    background: none;
 }
 /*
  * Blog post
