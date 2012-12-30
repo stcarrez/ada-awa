@@ -18,7 +18,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html">
      <h:list var="document" value="#{storageList}">
-       <div id='store-#{document.id}' class='awa-document'>
+       <div id='store-#{document.id}' class='awa-document ui-list-item'>
            <div class='awa-title'>#{document.name}</div>
            <a href="#{contextPath}/storages/files/#{document.id}">#{storageMsg.storage_download_label}</a>
            <div class='awa-size'>

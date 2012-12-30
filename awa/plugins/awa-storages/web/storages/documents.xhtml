@@ -32,6 +32,9 @@
             <div id='document-list-editor' class="ui-widget ui-corner-all">
                 <ui:include src="lists/documents.xhtml"/>
             </div>
+            <div id='document-action' class='asf-list-action'>
+                <a href="#" class='asf-icon asf-delete' title='#{storageMsg.storage_list_delete_file_tooltip}'></a>
+            </div>
         </div>
         <util:script>
             $('#folder-list-editor').resizable({
@@ -47,7 +50,8 @@
                 }
             });
             $('#document-list-editor').list({
-                actionId: null,
+                actionId: '#document-action',
+                deleteUrl: '#{contextPath}/storages/forms/file-delete-form.html?storeId=',
                 itemPrefix: 'store-'
             });
         </util:script>
