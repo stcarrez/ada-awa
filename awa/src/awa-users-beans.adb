@@ -27,6 +27,8 @@ with ASF.Cookies;
 with ASF.Applications.Messages.Factory;
 with ASF.Security.Filters;
 
+with ADO.Sessions;
+
 with AWA.Services.Contexts;
 package body AWA.Users.Beans is
 
@@ -356,10 +358,12 @@ package body AWA.Users.Beans is
    overriding
    function Get_Value (From : in Current_User_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
-      pragma Unreferenced (From);
-      use type AWA.Services.Contexts.Service_Context_Access;
+      package ASC renames AWA.Services.Contexts;
 
-      Ctx : constant AWA.Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      pragma Unreferenced (From);
+      use type ASC.Service_Context_Access;
+
+      Ctx : constant ASC.Service_Context_Access := ASC.Current;
    begin
       if Ctx = null then
          if Name = IS_LOGGED_ATTR then
@@ -382,7 +386,19 @@ package body AWA.Users.Beans is
                   return Util.Beans.Objects.To_Object (String '(User.Get_Name));
 
                elsif Name = USER_EMAIL_ATTR then
-                  return Util.Beans.Objects.To_Object (String '(User.Get_Email.Get_Email));
+                  declare
+                     Email : AWA.Users.Models.Email_Ref'Class := User.Get_Email;
+                  begin
+                     if not Email.Is_Loaded then
+                        --  The email object was not loaded.  Load it using a new database session.
+                        declare
+                           Session : ADO.Sessions.Session := ASC.Get_Session (Ctx);
+                        begin
+                           Email.Load (Session, Email.Get_Id);
+                        end;
+                     end if;
+                     return Util.Beans.Objects.To_Object (String '(Email.Get_Email));
+                  end;
 
                elsif Name = USER_ID_ATTR then
                   return Util.Beans.Objects.To_Object (Long_Long_Integer (User.Get_Id));
