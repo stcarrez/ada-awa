@@ -21,7 +21,7 @@ with AWA.Users.Models;
 with AWA.Users.Principals;
 with AWA.Modules;
 with AWA.Events;
-with Security.Openid;
+with Security.OpenID;
 
 with ADO;
 with ADO.Sessions;
@@ -133,7 +133,7 @@ package AWA.Users.Services is
    --  The IP address of the connection is saved in the session.
    --  Raises Not_Found exception if the user is not recognized
    procedure Authenticate (Model     : in User_Service;
-                           Auth      : in Security.Openid.Authentication;
+                           Auth      : in Security.OpenID.Authentication;
                            IpAddr    : in String;
                            Principal : out AWA.Users.Principals.Principal_Access);
 
