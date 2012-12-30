@@ -24,6 +24,7 @@
         <div>#{storageFolder.name}</div>
     </div>
     </util:escape>" },
- { "action": "clear", "id": "#message" }
+ { "action": "clear", "id": "#message" },
+ { "action": "script", "script": "$('#folder-list').selectAction($('#folder-#{storageFolder.id}'));" }
 ]
 </f:view>
