@@ -37,13 +37,13 @@ package body AWA.Jobs.Modules.Tests is
    procedure Test_Register (T : in out Test) is
       M : AWA.Jobs.Modules.Job_Module;
    begin
-      M.Register (Definition => Services.Tests.Test_Definition.Factory'Access);
+      M.Register (Definition => Services.Tests.Test_Definition.Factory);
       Util.Tests.Assert_Equals (T, 1, Integer (M.Factory.Length), "Invalid factory length");
 
-      M.Register (Definition => Services.Tests.Work_1_Definition.Factory'Access);
+      M.Register (Definition => Services.Tests.Work_1_Definition.Factory);
       Util.Tests.Assert_Equals (T, 2, Integer (M.Factory.Length), "Invalid factory length");
 
-      M.Register (Definition => Services.Tests.Work_2_Definition.Factory'Access);
+      M.Register (Definition => Services.Tests.Work_2_Definition.Factory);
       Util.Tests.Assert_Equals (T, 3, Integer (M.Factory.Length), "Invalid factory length");
    end Test_Register;
 
