@@ -14,24 +14,24 @@
   -  See the License for the specific language governing permissions and
   -  limitations under the License.
   -->
-<f:view xmlns:f="http://java.sun.com/jsf/core"
+<f:view contentType="text/html; charset=UTF-8"
+        xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html">
     <f:metadata>
         <f:viewParam id='storeId' value='#{uploadFile.id}'/>
     </f:metadata>
-    <div title="#{storageMsg.storage_delete_file_title}">
-        <h:form id='file-delete'>
-            <h:inputHidden id='file-delete-id' value='#{uploadFile.id}'/>
-            <dl>
-                <dt>#{storageMsg.storage_confirm_delete_file_message}</dt>
-            </dl>
-            <ul class='awa-buttons'>
-                <li>
-                    <h:commandButton id='file-delete-button' value='#{storageMsg.storage_delete_file_button}'
-                                     styleClass="ui-button ui-state-default ui-corner-all"
-                                     action="#{uploadFile.delete}" title="#{storageMsg.storage_delete_file_tooltip}"/>
-                </li>
-            </ul>
-        </h:form>
-    </div>
+    <h2>#{storageMsg.storage_delete_file_title}</h2>
+    <h:form id='file-delete'>
+        <h:inputHidden id='file-delete-id' value='#{uploadFile.id}'/>
+        <dl>
+            <dt>#{storageMsg.storage_confirm_delete_file_message}</dt>
+        </dl>
+        <ul class='awa-buttons'>
+            <li>
+                <h:commandButton id='file-delete-button' value='#{storageMsg.storage_delete_file_button}'
+                                 styleClass="ui-button ui-state-default ui-corner-all"
+                                 action="#{uploadFile.delete}" title="#{storageMsg.storage_delete_file_tooltip}"/>
+            </li>
+        </ul>
+    </h:form>
 </f:view>
