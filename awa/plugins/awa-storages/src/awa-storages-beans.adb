@@ -36,8 +36,11 @@ package body AWA.Storages.Beans is
    begin
       if Name = "folderId" then
          return ADO.Objects.To_Object (From.Get_Folder.Get_Key);
+      elsif From.Is_Null then
+         return Util.Beans.Objects.Null_Object;
+      else
+         return AWA.Storages.Models.Storage_Ref (From).Get_Value (Name);
       end if;
-      return AWA.Storages.Models.Storage_Ref (From).Get_Value (Name);
    end Get_Value;
 
    --  ------------------------------
@@ -53,6 +56,8 @@ package body AWA.Storages.Beans is
       if Name = "folderId" then
          Manager.Load_Folder (Folder, ADO.Identifier (Util.Beans.Objects.To_Integer (Value)));
          From.Set_Folder (Folder);
+      elsif Name = "id" then
+         Manager.Load_Storage (From, ADO.Identifier (Util.Beans.Objects.To_Integer (Value)));
       end if;
    end Set_Value;
 
