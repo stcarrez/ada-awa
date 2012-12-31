@@ -23,9 +23,11 @@
     <h2>#{storageMsg.storage_delete_file_title}</h2>
     <h:form id='file-delete'>
         <h:inputHidden id='file-delete-id' value='#{uploadFile.id}'/>
-        <dl>
-            <dt>#{storageMsg.storage_confirm_delete_file_message}</dt>
-        </dl>
+        <p>
+            <h:outputFormat value="#{storageMsg.storage_confirm_delete_file_message}">
+                <f:param value="#{uploadFile.name}"/>
+            </h:outputFormat>
+        </p>
         <ul class='awa-buttons'>
             <li>
                 <h:commandButton id='file-delete-button' value='#{storageMsg.storage_delete_file_button}'
