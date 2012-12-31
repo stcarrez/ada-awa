@@ -27,9 +27,6 @@
         <div id='awa-content'>
             <ui:include src="lists/menu-list.xhtml"/>
             <div class='blog-admin post-header' id="blog-post-list-header">
-                <div class='post-ref'>
-                    #{blogMsg.blog_post_id_label}
-                </div>
                 <div class='post-status'></div>
                 <div class='post-title'>
                     #{blogMsg.blog_post_title_label}
@@ -45,8 +42,7 @@
                 <ui:include src="lists/post-list.xhtml"/>
             </div>
             <div id='blog-post-action' class='asf-list-action'>
-                    <a href="#" class='asf-icon asf-delete' title='#{todoMsg.todoTooltips_deleteTodo}'></a>
-                    <a href="#" class='asf-icon asf-edit' title='#{todoMsg.todoTooltips_editTodo}'></a>
+                    <a href="#" class='asf-icon asf-delete' title='#{blogMsg.blog_post_delete_action_tooltip}'></a>
             </div>
         </div>
         <util:script>
