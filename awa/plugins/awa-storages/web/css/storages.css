@@ -35,10 +35,12 @@ div.folder-list div.asf-selected {
 div.awa-document {
     float: left;
     clear: both;
-    width: 100%;
+    width: 92%;
     font-size: 0.9em;
     padding-top: 4px;
     padding-bottom: 4px;
+    padding-left: 4%;
+    padding-right: 2%;
 }
 div.awa-document div.awa-title {
     float: left;
@@ -46,27 +48,32 @@ div.awa-document div.awa-title {
     width: 60%;
 }
 div.awa-document div.awa-size {
-    float: left;
+    float: right;
     width: 100px;
+    padding-left: 10px;
 }
 div.awa-document div.awa-mime {
-    float: left;
-    width: auto;
+    float: right;
+    width: 100px;
     padding-left: 10px;
 }
 div.awa-document div.awa-date {
-    float: left;
+    float: right;
     padding-left: 10px;
 }
 div.awa-document div.awa-owner {
-    float: left;
+    float: right;
     padding-left: 10px;
 }
-div.awa-document a {
+div.awa-document div.awa-download {
     float: left;
     clear: left;
-    display: block;
+    display: inline-block;
     width: 120px;
+    visibility: hidden;
+}
+div.asf-active-list div.asf-active div.awa-download {
+    visibility: visible;
 }
 div.document-list {
     float: left;
