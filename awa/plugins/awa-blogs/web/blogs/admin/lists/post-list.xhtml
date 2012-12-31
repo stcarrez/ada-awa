@@ -28,9 +28,6 @@
         <c:otherwise>
            <h:list var="post" value="#{adminPostList}">
                 <div class='post-info ui-list-item' id="p_#{post.id}">
-                    <div class='post-ref'>
-                        #{post.id}
-                    </div>
                     <div class='post-status-#{post.status}' title="#{post.status eq 'POST_PUBLISHED' ? blogMsg.blog_post_published_title : blogMsg.blog_post_pending_title}"></div>
                     <div class='post-title'>
                         <a href="edit.html?blog_id=#{blog.id}&amp;post_id=#{post.id}">#{post.title}</a>
