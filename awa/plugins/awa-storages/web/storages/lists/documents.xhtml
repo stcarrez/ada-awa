@@ -14,23 +14,12 @@
   -  See the License for the specific language governing permissions and
   -  limitations under the License.
   -->
-
-<div xmlns:ui="http://java.sun.com/jsf/facelets"
-     xmlns:c="http://java.sun.com/jstl/core"
-     xmlns:util="http://code.google.com/p/ada-asf/util"
-     xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
-     xmlns:h="http://java.sun.com/jsf/html">
-
-    <div id='document-upload'>
-        <c:if test="#{not empty param['folderId']}">
-            <iframe frameborder="0" class='documentUpload'
-                    scrolling="no"
-                    height="25"
-                    width="100%"
-                    src="#{contextPath}/storages/forms/upload-form.html?folderId=#{param['folderId']}"/>
-        </c:if>
-    </div>
-    <div id='document-list' class='document-list ui-list'>
-        <ui:include src="document-list.xhtml"/>
-    </div>
-</div>
+<f:view contentType="text/html; charset=UTF-8"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:h="http://java.sun.com/jsf/html">
+    <f:metadata>
+        <f:viewParam id='folderId' value='#{storageList.folderId}'/>
+    </f:metadata>
+    <ui:include src="document-list.xhtml"/>
+</f:view>
