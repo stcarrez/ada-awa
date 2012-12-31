@@ -15,26 +15,21 @@
   -  limitations under the License.
   -->
 <ui:composition
-        xmlns:awa="http://code.google.com/p/ada-awa/jsf"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:c="http://java.sun.com/jstl/core"
-	    xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
   <h:list var="admin_blog" value="#{adminBlogList}">
-    <div class='blog-info' id="b_#{admin_blog.id}">
-        <div class='blog-ref'>
-            #{admin_blog.id}
-        </div>
-      <div class='blog-title'>
-         <a href="#{contextPath}/blogs/admin/list.html?blog_id=#{admin_blog.id}">#{admin_blog.title}</a>
+      <div class='blog-info' id="b_#{admin_blog.id}">
+          <div class='blog-title'>
+              <a href="#{contextPath}/blogs/admin/list.html?blog_id=#{admin_blog.id}">#{admin_blog.title}</a>
+          </div>
+          <div class='blog-date'>
+              <h:outputFormat value="#{blogMsg.blog_post_count_message}">
+                  <f:param value="#{admin_blog.post_count}"/>
+              </h:outputFormat>
+          </div>
       </div>
-        <div class='blog-date'>
-            <h:outputFormat value="#{blogMsg.blog_post_count_message}">
-                <f:param value="#{admin_blog.post_count}"/>
-            </h:outputFormat>
-        </div>
-    </div>
   </h:list>
   <c:if test="#{adminBlogList.count == 0}">
       <p>#{blogMsg.blog_admin_blog_list_empty}</p>
