@@ -14,27 +14,31 @@
   -  See the License for the specific language governing permissions and
   -  limitations under the License.
   -->
-<div class='awa-post awa-form'
+<f:view contentType="text/html; charset=UTF-8"
         xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
-    <h2>#{blogMsg.blog_post_delete_title}</h2>
-    <h:form id='delete-post'>
-        <input type="hidden" name="post_id" value="#{post.id}"/>
-        <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
-            <dt>
-                #{blogMsg.blog_post_confirm_delete}
-            </dt>
-            <dd>
-                <b>#{post.title}</b>
-            </dd>
-        </dl>
-        <ul class='awa-buttons'>
-            <li>
-                <h:commandButton id='delete-post-button' value='#{blogMsg.blog_post_delete_button}'
-                                 styleClass="ui-button ui-state-default ui-corner-all"
-                                 action="#{post.delete}" title="#{blogMsg.blog_post_delete_button_title}"/>
-            </li>
-        </ul>
-    </h:form>
-</div>
+    <f:metadata>
+        <f:viewParam id='post_id' value='#{post.id}'/>
+    </f:metadata>
+    <div class='awa-post awa-form'>
+        <h2>#{blogMsg.blog_post_delete_title}</h2>
+        <h:form id='delete-post'>
+            <h:inputHidden id='post-delete-id' value='#{post.id}'/>
+            <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
+                <dt>
+                    #{blogMsg.blog_post_confirm_delete}
+                </dt>
+                <dd>
+                    <b>#{post.title}</b>
+                </dd>
+            </dl>
+            <ul class='awa-buttons'>
+                <li>
+                    <h:commandButton id='delete-post-button' value='#{blogMsg.blog_post_delete_button}'
+                                     styleClass="ui-button ui-state-default ui-corner-all"
+                                     action="#{post.delete}" title="#{blogMsg.blog_post_delete_button_title}"/>
+                </li>
+            </ul>
+        </h:form>
+    </div>
+</f:view>
