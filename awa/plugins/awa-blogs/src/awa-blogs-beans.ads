@@ -95,6 +95,10 @@ package AWA.Blogs.Beans is
    function Get_Method_Bindings (From : in Post_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access;
 
+   --  Load the post.
+   procedure Load_Post (Post : in out Post_Bean;
+                        Id   : in ADO.Identifier);
+
    --  Create a new post.
    procedure Create_Post (Bean    : in out Post_Bean;
                           Outcome : in out Ada.Strings.Unbounded.Unbounded_String);

@@ -216,7 +216,7 @@ package body AWA.Blogs.Beans is
       if Name = BLOG_ID_ATTR then
          From.Blog_Id := ADO.Identifier (Util.Beans.Objects.To_Integer (Value));
       elsif Name = POST_ID_ATTR then
-         From.Blog_Id := ADO.Identifier (Util.Beans.Objects.To_Integer (Value));
+         From.Load_Post (ADO.Identifier (Util.Beans.Objects.To_Integer (Value)));
       elsif Name = POST_TEXT_ATTR then
          From.Post.Set_Text (Util.Beans.Objects.To_Unbounded_String (Value));
       elsif Name = POST_TITLE_ATTR then
@@ -227,6 +227,29 @@ package body AWA.Blogs.Beans is
          From.Post.Set_Status (AWA.Blogs.Models.Post_Status_Type_Objects.To_Value (Value));
       end if;
    end Set_Value;
+
+   --  ------------------------------
+   --  Load the post.
+   --  ------------------------------
+   procedure Load_Post (Post : in out Post_Bean;
+                        Id   : in ADO.Identifier) is
+      Session : ADO.Sessions.Session := Post.Module.Get_Session;
+   begin
+      Post.Post.Load (Session, Id);
+      Post.Title := Post.Post.Get_Title;
+      Post.Text  := Post.Post.Get_Text;
+      Post.URI   := Post.Post.Get_Uri;
+
+      --  SCz: 2012-05-19: workaround for ADO 0.3 limitation.  The lazy loading of
+      --  objects does not work yet.  Force loading the user here while the above
+      --  session is still open.
+      declare
+         A : constant String := String '(Post.Post.Get_Author.Get_Name);
+         pragma Unreferenced (A);
+      begin
+         null;
+      end;
+   end Load_Post;
 
    --  ------------------------------
    --  This bean provides some methods that can be used in a Method_Expression
@@ -247,28 +270,28 @@ package body AWA.Blogs.Beans is
       use type ADO.Identifier;
 
       Object  : constant Post_Bean_Access := new Post_Bean;
-      Post_Id : constant ADO.Identifier := AWA.Helpers.Requests.Get_Parameter (POST_ID_PARAMETER);
+--        Post_Id : constant ADO.Identifier := AWA.Helpers.Requests.Get_Parameter (POST_ID_PARAMETER);
    begin
-      if Post_Id > 0 then
-         declare
-            Session : ADO.Sessions.Session := Module.Get_Session;
-         begin
-            Object.Post.Load (Session, Post_Id);
-            Object.Title := Object.Post.Get_Title;
-            Object.Text  := Object.Post.Get_Text;
-            Object.URI   := Object.Post.Get_Uri;
-
-            --  SCz: 2012-05-19: workaround for ADO 0.3 limitation.  The lazy loading of
-            --  objects does not work yet.  Force loading the user here while the above
-            --  session is still open.
-            declare
-               A : constant String := String '(Object.Post.Get_Author.Get_Name);
-               pragma Unreferenced (A);
-            begin
-               null;
-            end;
-         end;
-      end if;
+--        if Post_Id > 0 then
+--           declare
+--              Session : ADO.Sessions.Session := Module.Get_Session;
+--           begin
+--              Object.Post.Load (Session, Post_Id);
+--              Object.Title := Object.Post.Get_Title;
+--              Object.Text  := Object.Post.Get_Text;
+--              Object.URI   := Object.Post.Get_Uri;
+--
+--              --  SCz: 2012-05-19: workaround for ADO 0.3 limitation.  The lazy loading of
+--              --  objects does not work yet.  Force loading the user here while the above
+--              --  session is still open.
+--              declare
+--                 A : constant String := String '(Object.Post.Get_Author.Get_Name);
+--                 pragma Unreferenced (A);
+--              begin
+--                 null;
+--              end;
+--           end;
+--        end if;
       Object.Module := Module;
       return Object.all'Access;
    end Create_Post_Bean;
