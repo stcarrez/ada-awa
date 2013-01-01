@@ -25,8 +25,9 @@
   <div class='awa-post ui-widget ui-widget-content ui-corner-all awa-form'>
     <h2>#{blogMsg.blog_post_update_title}</h2>
     <h:form id='post'>
+        <h:inputHidden id='post-id' value='#{post.id}'/>
+        <h:inputHidden id='post-blog-id' value='#{post.blogId}'/>
         <input type="hidden" name="blog_id" value="#{blog.id}"/>
-        <input type="hidden" name="post_id" value="#{param['post_id']}"/>
         <div class='grid_8'>
             <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
                 <dt>
