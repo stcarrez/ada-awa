@@ -1,0 +1,72 @@
+<!-- Form to create or edit a question
+  -  Copyright (C) 2013 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<ui:composition
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:util="http://code.google.com/p/ada-asf/util"
+        xmlns:c="http://java.sun.com/jstl/core"
+        xmlns:h="http://java.sun.com/jsf/html">
+
+  <div class='awa-post ui-widget ui-widget-content ui-corner-all awa-form'>
+    <h:form id='post'>
+        <h:inputHidden id='question-id' value='#{question.id}' required='false'/>
+        <div class='grid_8'>
+            <h:messages styleClass='error'/>
+            <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
+                <dt>
+                    <label for='title'>#{questionMsg.question_title_label}</label>
+                    <h:message for='title' styleClass='error'/>
+                </dt>
+                <dd>
+                    <h:inputText id='title' size='50' required='true' value='#{question.title}'/>
+                </dd>
+                <dd>
+                    <h:inputTextarea id='text' rows='15' required='false' value='#{question.description}'/>
+                </dd>
+            </dl>
+            <ul class='awa-buttons'>
+                <li>
+                    <h:commandButton id='save' value='#{questionMsg.question_post_question_button}'
+                                     styleClass="ui-button ui-state-default ui-corner-all"
+                                     action="#{question.save}"/>
+                </li>
+            </ul>
+        </div>
+        <div class='grid_4'>
+            <dl class="awa-optional">
+                <dd>
+                    <ui:include src="syntax.xhtml"/>
+                </dd>
+            </dl>
+        </div>
+
+    </h:form>
+  </div>
+    <util:script>
+            // Create a MarkEdit editor on page load
+            $(function(){
+               $('textarea').markedit({ 'preview': false,
+                'toolbar' : {
+                  'backgroundMode': 'light',
+                  'layout': 'bold italic underline strike | quote code | numberlist bulletlist heading line'
+                }
+               });
+            });
+    </util:script>
+
+</ui:composition>
+
