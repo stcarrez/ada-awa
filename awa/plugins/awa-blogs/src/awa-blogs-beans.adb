@@ -26,7 +26,6 @@ with ADO.Sessions;
 with ADO.Sessions.Entities;
 
 with ASF.Applications.Messages.Factory;
-with ASF.Events.Faces.Actions;
 package body AWA.Blogs.Beans is
 
    use Ada.Strings.Unbounded;
@@ -60,28 +59,11 @@ package body AWA.Blogs.Beans is
       end if;
    end Set_Value;
 
-   package Create_Blog_Binding is
-     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Blog_Bean,
-                                                      Method => Create_Blog,
-                                                      Name   => "create");
-
-   Blog_Bean_Binding : aliased constant Util.Beans.Methods.Method_Binding_Array
-     := (1 => Create_Blog_Binding.Proxy'Access);
-
-   --  This bean provides some methods that can be used in a Method_Expression
-   overriding
-   function Get_Method_Bindings (From : in Blog_Bean)
-                                 return Util.Beans.Methods.Method_Binding_Array_Access is
-      pragma Unreferenced (From);
-   begin
-      return Blog_Bean_Binding'Access;
-   end Get_Method_Bindings;
-
    --  ------------------------------
    --  Create a new blog.
    --  ------------------------------
-   procedure Create_Blog (Bean    : in out Blog_Bean;
-                          Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   procedure Create (Bean    : in out Blog_Bean;
+                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       Manager : constant AWA.Blogs.Services.Blog_Service_Access := Bean.Module.Get_Blog_Manager;
       Result  : ADO.Identifier;
    begin
@@ -95,7 +77,7 @@ package body AWA.Blogs.Beans is
          Outcome := To_Unbounded_String ("failure");
 
          ASF.Applications.Messages.Factory.Add_Message ("users.signup_error_message");
-   end Create_Blog;
+   end Create;
 
    --  ------------------------------
    --  Create the Blog_Bean bean instance.
@@ -116,27 +98,27 @@ package body AWA.Blogs.Beans is
    end Create_Blog_Bean;
 
    --  ------------------------------
-   --  Example of action method.
+   --  Create or save the post.
    --  ------------------------------
-   procedure Create_Post (Bean    : in out Post_Bean;
-                          Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   procedure Save (Bean    : in out Post_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       use type ADO.Identifier;
 
       Manager : constant AWA.Blogs.Services.Blog_Service_Access := Bean.Module.Get_Blog_Manager;
       Result  : ADO.Identifier;
    begin
-      if not Bean.Post.Is_Inserted then
+      if not Bean.Is_Inserted then
          Manager.Create_Post (Blog_Id => Bean.Blog_Id,
-                              Title   => Bean.Post.Get_Title,
-                              URI     => Bean.Post.Get_Uri,
-                              Text    => Bean.Post.Get_Text,
-                              Status  => Bean.Post.Get_Status,
+                              Title   => Bean.Get_Title,
+                              URI     => Bean.Get_Uri,
+                              Text    => Bean.Get_Text,
+                              Status  => Bean.Get_Status,
                               Result  => Result);
       else
-         Manager.Update_Post (Post_Id => Bean.Post.Get_Id,
-                              Title   => Bean.Post.Get_Title,
-                              Text    => Bean.Post.Get_Text,
-                              Status  => Bean.Post.Get_Status);
+         Manager.Update_Post (Post_Id => Bean.Get_Id,
+                              Title   => Bean.Get_Title,
+                              Text    => Bean.Get_Text,
+                              Status  => Bean.Get_Status);
       end if;
       Outcome := To_Unbounded_String ("success");
 
@@ -145,16 +127,16 @@ package body AWA.Blogs.Beans is
          Outcome := To_Unbounded_String ("failure");
 
          ASF.Applications.Messages.Factory.Add_Message ("users.signup_error_message");
-   end Create_Post;
+   end Save;
 
    --  ------------------------------
    --  Delete a post.
    --  ------------------------------
-   procedure Delete_Post (Bean    : in out Post_Bean;
-                          Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   procedure Delete (Bean    : in out Post_Bean;
+                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       Manager : constant AWA.Blogs.Services.Blog_Service_Access := Bean.Module.Get_Blog_Manager;
    begin
-      Manager.Delete_Post (Post_Id => Bean.Post.Get_Id);
+      Manager.Delete_Post (Post_Id => Bean.Get_Id);
       Outcome := To_Unbounded_String ("success");
 
    exception
@@ -162,27 +144,7 @@ package body AWA.Blogs.Beans is
          Outcome := To_Unbounded_String ("failure");
 
          ASF.Applications.Messages.Factory.Add_Message ("users.signup_error_message");
-   end Delete_Post;
-
-   package Create_Post_Binding is
-     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Post_Bean,
-                                                      Method => Create_Post,
-                                                      Name   => "create");
-
-   package Save_Post_Binding is
-     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Post_Bean,
-                                                      Method => Create_Post,
-                                                      Name   => "save");
-
-   package Delete_Post_Binding is
-     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Post_Bean,
-                                                      Method => Delete_Post,
-                                                      Name   => "delete");
-
-   Post_Bean_Binding : aliased constant Util.Beans.Methods.Method_Binding_Array
-     := (1 => Create_Post_Binding.Proxy'Access,
-         2 => Save_Post_Binding.Proxy'Access,
-         3 => Delete_Post_Binding.Proxy'Access);
+   end Delete;
 
    --  ------------------------------
    --  Get the value identified by the name.
@@ -193,14 +155,14 @@ package body AWA.Blogs.Beans is
    begin
       if Name = BLOG_ID_ATTR then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Blog_Id));
-      elsif From.Post.Is_Null then
+      elsif From.Is_Null then
          return Util.Beans.Objects.Null_Object;
       elsif Name = POST_ID_ATTR then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Post.Get_Id));
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Get_Id));
       elsif Name = POST_USERNAME_ATTR then
-         return Util.Beans.Objects.To_Object (String '(From.Post.Get_Author.Get_Name));
+         return Util.Beans.Objects.To_Object (String '(From.Get_Author.Get_Name));
       else
-         return From.Post.Get_Value (Name);
+         return AWA.Blogs.Models.Post_Bean (From).Get_Value (Name);
       end if;
    end Get_Value;
 
@@ -217,13 +179,13 @@ package body AWA.Blogs.Beans is
       elsif Name = POST_ID_ATTR and not Util.Beans.Objects.Is_Empty (Value) then
          From.Load_Post (ADO.Identifier (Util.Beans.Objects.To_Integer (Value)));
       elsif Name = POST_TEXT_ATTR then
-         From.Post.Set_Text (Util.Beans.Objects.To_Unbounded_String (Value));
+         From.Set_Text (Util.Beans.Objects.To_Unbounded_String (Value));
       elsif Name = POST_TITLE_ATTR then
-         From.Post.Set_Title (Util.Beans.Objects.To_Unbounded_String (Value));
+         From.Set_Title (Util.Beans.Objects.To_Unbounded_String (Value));
       elsif Name = POST_URI_ATTR then
-         From.Post.Set_Uri (Util.Beans.Objects.To_Unbounded_String (Value));
+         From.Set_Uri (Util.Beans.Objects.To_Unbounded_String (Value));
       elsif Name = POST_STATUS_ATTR then
-         From.Post.Set_Status (AWA.Blogs.Models.Post_Status_Type_Objects.To_Value (Value));
+         From.Set_Status (AWA.Blogs.Models.Post_Status_Type_Objects.To_Value (Value));
       end if;
    end Set_Value;
 
@@ -234,32 +196,21 @@ package body AWA.Blogs.Beans is
                         Id   : in ADO.Identifier) is
       Session : ADO.Sessions.Session := Post.Module.Get_Session;
    begin
-      Post.Post.Load (Session, Id);
-      Post.Title := Post.Post.Get_Title;
-      Post.Text  := Post.Post.Get_Text;
-      Post.URI   := Post.Post.Get_Uri;
+      Post.Load (Session, Id);
+--        Post.Title := Post.Post.Get_Title;
+--        Post.Text  := Post.Post.Get_Text;
+--        Post.URI   := Post.Post.Get_Uri;
 
       --  SCz: 2012-05-19: workaround for ADO 0.3 limitation.  The lazy loading of
       --  objects does not work yet.  Force loading the user here while the above
       --  session is still open.
       declare
-         A : constant String := String '(Post.Post.Get_Author.Get_Name);
+         A : constant String := String '(Post.Get_Author.Get_Name);
          pragma Unreferenced (A);
       begin
          null;
       end;
    end Load_Post;
-
-   --  ------------------------------
-   --  This bean provides some methods that can be used in a Method_Expression
-   --  ------------------------------
-   overriding
-   function Get_Method_Bindings (From : in Post_Bean)
-                                 return Util.Beans.Methods.Method_Binding_Array_Access is
-      pragma Unreferenced (From);
-   begin
-      return Post_Bean_Binding'Access;
-   end Get_Method_Bindings;
 
    --  ------------------------------
    --  Create the Workspaces_Bean bean instance.
