@@ -50,14 +50,14 @@ CREATE TABLE awa_message (
   `entity_type` INTEGER NOT NULL,
   /* the date and time when the event was finished to be processed. */
   `finish_date` DATETIME ,
-  /* the optional user who triggered the event message creation */
-  `user_id` BIGINT ,
-  /* the optional user session that triggered the message creation */
-  `session_id` BIGINT ,
   /*  */
   `queue_id` BIGINT NOT NULL,
   /* the message type */
-  `message_type_id` BIGINT NOT NULL
+  `message_type_id` BIGINT NOT NULL,
+  /* the optional user who triggered the event message creation */
+  `user_id` BIGINT ,
+  /* the optional user session that triggered the message creation */
+  `session_id` BIGINT 
 );
 /*  */
 CREATE TABLE awa_message_type (
@@ -84,10 +84,10 @@ CREATE TABLE awa_acl (
   `entity_id` BIGINT NOT NULL,
   /* the writeable flag */
   `writeable` TINYINT NOT NULL,
-  /* the entity type concerned by the ACL. */
-  `entity_type` INTEGER NOT NULL,
   /*  */
-  `user_id` BIGINT NOT NULL
+  `user_id` BIGINT NOT NULL,
+  /* the entity type concerned by the ACL. */
+  `entity_type` INTEGER NOT NULL
 );
 /*  */
 CREATE TABLE awa_access_key (
@@ -137,9 +137,9 @@ CREATE TABLE awa_session (
   /*  */
   `id` BIGINT PRIMARY KEY,
   /*  */
-  `user_id` BIGINT NOT NULL,
+  `auth_id` BIGINT ,
   /*  */
-  `auth_id` BIGINT 
+  `user_id` BIGINT NOT NULL
 );
 /* The User entity represents a user that can access and use the application.
  */
@@ -202,9 +202,9 @@ CREATE TABLE awa_workspace_member (
   /*  */
   `id` BIGINT PRIMARY KEY,
   /*  */
-  `workspace_id` BIGINT NOT NULL,
+  `member_id` BIGINT NOT NULL,
   /*  */
-  `member_id` BIGINT NOT NULL
+  `workspace_id` BIGINT NOT NULL
 );
 INSERT INTO entity_type (name) VALUES ("awa_workspace");
 INSERT INTO entity_type (name) VALUES ("awa_workspace_feature");
@@ -247,9 +247,9 @@ CREATE TABLE awa_post (
   /* the post status */
   `status` TINYINT NOT NULL,
   /*  */
-  `blog_id` BIGINT NOT NULL,
+  `author_id` BIGINT NOT NULL,
   /*  */
-  `author_id` BIGINT NOT NULL
+  `blog_id` BIGINT NOT NULL
 );
 INSERT INTO entity_type (name) VALUES ("awa_blog");
 INSERT INTO entity_type (name) VALUES ("awa_post");
@@ -277,15 +277,15 @@ CREATE TABLE awa_storage (
   /* the storage identifier */
   `id` BIGINT PRIMARY KEY,
   /*  */
-  `owner_id` BIGINT NOT NULL,
+  `original_id` BIGINT ,
   /*  */
   `store_data_id` BIGINT ,
   /*  */
-  `folder_id` BIGINT ,
+  `owner_id` BIGINT NOT NULL,
   /*  */
   `workspace_id` BIGINT NOT NULL,
   /*  */
-  `original_id` BIGINT 
+  `folder_id` BIGINT 
 );
 /* The storage data is created only if the storage type
 is set to DATABASE.  It holds the file content in the blob. */
@@ -308,9 +308,9 @@ CREATE TABLE awa_storage_folder (
   /*  */
   `name` VARCHAR(255) NOT NULL,
   /*  */
-  `owner_id` BIGINT NOT NULL,
+  `workspace_id` BIGINT NOT NULL,
   /*  */
-  `workspace_id` BIGINT NOT NULL
+  `owner_id` BIGINT NOT NULL
 );
 /* The local store record is created when a copy of the data is needed on the local file system.
 The creation date refers to the date when the data was copied to the local file system.
@@ -360,6 +360,59 @@ CREATE TABLE awa_image (
   `storage_id` INTEGER NOT NULL
 );
 INSERT INTO entity_type (name) VALUES ("awa_image");
+/* Copied from awa-questions-sqlite.sql*/
+/* File generated automatically by dynamo */
+/* The answer table gives a list of anwsers to the question.
+Ranking is updating according to users voting for the anwser.
+ */
+CREATE TABLE awa_answer (
+  /* the answer creation date. */
+  `create_date` DATETIME NOT NULL,
+  /* the date when the answer was edited. */
+  `edit_date` DATETIME ,
+  /* the answer text. */
+  `answer` VARCHAR(60000) NOT NULL,
+  /* the anwser rank number. */
+  `rank` INTEGER NOT NULL,
+  /* the answer identifier. */
+  `id` BIGINT PRIMARY KEY,
+  /*  */
+  `version` INTEGER NOT NULL,
+  /* the user who wrote the answer. */
+  `author_id` BIGINT NOT NULL,
+  /*  */
+  `question_id` BIGINT NOT NULL
+);
+/* The question table holds a single question asked by a user to the community.
+The short description is used to give an overview of the question in long lists
+while the description contains the full question text.  The rating is updating
+according to users voting for the question. */
+CREATE TABLE awa_question (
+  /* the date when the question was created. */
+  `create_date` DATETIME NOT NULL,
+  /* the question title. */
+  `title` VARCHAR(255) NOT NULL,
+  /* the full description. */
+  `description` VARCHAR(60000) NOT NULL,
+  /* the date when the question was edited. */
+  `edit_date` DATETIME ,
+  /* Title: Questions and Answers model
+Date: 2013-01-02
+the question short description. */
+  `short_description` VARCHAR(255) NOT NULL,
+  /* the question rating. */
+  `rating` INTEGER NOT NULL,
+  /* the question identifier. */
+  `id` BIGINT PRIMARY KEY,
+  /* the optimistic locking version. */
+  `version` INTEGER NOT NULL,
+  /* the user who asked the question. */
+  `author_id` BIGINT NOT NULL,
+  /*  */
+  `workspace_id` BIGINT NOT NULL
+);
+INSERT INTO entity_type (name) VALUES ("awa_answer");
+INSERT INTO entity_type (name) VALUES ("awa_question");
 /* Copied from atlas-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* The Mblog table holds the message posted by users.

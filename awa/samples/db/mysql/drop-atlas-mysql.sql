@@ -1,6 +1,10 @@
 /* Copied from atlas-drop-mysql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `mblog`;
+/* Copied from awa-questions-drop-mysql.sql*/
+/* File generated automatically by dynamo */
+DROP TABLE IF EXISTS `awa_question`;
+DROP TABLE IF EXISTS `awa_answer`;
 /* Copied from awa-images-drop-mysql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `awa_image`;
