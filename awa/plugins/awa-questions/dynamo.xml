@@ -1,0 +1,7 @@
+<project>
+    <name>awa-questions</name>
+    <property name="author_email">Stephane.Carrez@gmail.com</property>
+    <property name="license">none</property>
+    <property name="author">Stephane Carrez</property>
+    <property name="gnat.project">awa_questions.gpr</property>
+</project>
