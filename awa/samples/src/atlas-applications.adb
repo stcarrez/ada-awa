@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------
 --  atlas -- atlas applications
 -----------------------------------------------------------------------
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -190,6 +190,11 @@ package body Atlas.Applications is
                 Name   => AWA.Images.Modules.NAME,
                 URI    => "images",
                 Module => App.Image_Module'Access);
+
+      Register (App    => App.Self.all'Access,
+                Name   => AWA.Questions.Modules.NAME,
+                URI    => "questions",
+                Module => App.Question_Module'Access);
 
       Register (App    => App.Self.all'Access,
                 Name   => Atlas.Microblog.Modules.NAME,
