@@ -1,6 +1,6 @@
 NAME=awa-questions
 
-LIBNAME=lib
+LIBNAME=lib${NAME}
 
 include ../../rules.mk
 
