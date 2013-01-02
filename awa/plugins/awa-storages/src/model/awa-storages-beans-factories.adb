@@ -73,16 +73,6 @@ package body AWA.Storages.Beans.Factories is
      := (1 => Folder_Save_Binding.Proxy'Access);
 
    --  ------------------------------
-   --  Get the value identified by the name.
-   --  ------------------------------
-   overriding
-   function Get_Value (From : in Folder_Bean;
-                       Name : in String) return Util.Beans.Objects.Object is
-   begin
-      return AWA.Storages.Models.Storage_Folder_Ref (From).Get_Value (Name);
-   end Get_Value;
-
-   --  ------------------------------
    --  Set the value identified by the name.
    --  ------------------------------
    overriding

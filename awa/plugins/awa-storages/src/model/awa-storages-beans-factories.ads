@@ -46,11 +46,6 @@ package AWA.Storages.Beans.Factories is
      and Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with null record;
    type Folder_Bean_Access is access all Folder_Bean'Class;
 
-   --  Get the value identified by the name.
-   overriding
-   function Get_Value (From : in Folder_Bean;
-                       Name : in String) return Util.Beans.Objects.Object;
-
    --  Set the value identified by the name.
    overriding
    procedure Set_Value (From  : in out Folder_Bean;
