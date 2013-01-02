@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with AWA.Questions.Services;
 package body AWA.Questions.Beans is
 
    --  ------------------------------
@@ -47,8 +48,9 @@ package body AWA.Questions.Beans is
 
    procedure Save (Bean : in out Question_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      Manager : constant Services.Question_Service_Access := Bean.Module.Get_Question_Manager;
    begin
-      null;
+      Manager.Save_Question (Bean);
    end Save;
 
    procedure Delete (Bean : in out Question_Bean;
