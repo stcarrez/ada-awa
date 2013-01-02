@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  awa-questions-questions-modules -- Module questions
---  Copyright (C) 2012 Stephane Carrez
+--  awa-questions-modules -- Module questions
+--  Copyright (C) 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,7 @@
 with ASF.Applications;
 
 with AWA.Modules;
-package Awa-questions.Questions.Modules is
+package AWA.Questions.Modules is
 
    --  The name under which the module is registered.
    NAME : constant String := "questions";
@@ -42,4 +42,4 @@ private
 
    type Question_Module is new AWA.Modules.Module with null record;
 
-end Awa-questions.Questions.Modules;
+end AWA.Questions.Modules;

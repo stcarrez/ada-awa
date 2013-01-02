@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  awa-questions-questions-beans -- Beans for module questions
---  Copyright (C) 2012 Stephane Carrez
+--  awa-questions-beans -- Beans for module questions
+--  Copyright (C) 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,7 @@
 -----------------------------------------------------------------------
 
 with ASF.Events.Faces.Actions;
-package body Awa-questions.Questions.Beans is
+package body AWA.Questions.Beans is
 
    --  ------------------------------
    --  Example of action method.
@@ -77,7 +77,7 @@ package body Awa-questions.Questions.Beans is
    --  ------------------------------
    --  Create the Question_Bean bean instance.
    --  ------------------------------
-   function Create_Question_Bean (Module : in Awa-questions.Questions.Modules.Question_Module_Access)
+   function Create_Question_Bean (Module : in AWA.Questions.Modules.Question_Module_Access)
       return Util.Beans.Basic.Readonly_Bean_Access is
       Object : constant Question_Bean_Access := new Question_Bean;
    begin
@@ -85,4 +85,4 @@ package body Awa-questions.Questions.Beans is
       return Object.all'Access;
    end Create_Question_Bean;
 
-end Awa-questions.Questions.Beans;
+end AWA.Questions.Beans;

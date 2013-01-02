@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  awa-questions-questions-beans -- Beans for module questions
---  Copyright (C) 2012 Stephane Carrez
+--  awa-questions-beans -- Beans for module questions
+--  Copyright (C) 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,12 +21,12 @@ with Ada.Strings.Unbounded;
 with Util.Beans.Basic;
 with Util.Beans.Objects;
 with Util.Beans.Methods;
-with Awa-questions.Questions.Modules;
-package Awa-questions.Questions.Beans is
+with AWA.Questions.Modules;
+package AWA.Questions.Beans is
 
    type Question_Bean is new Util.Beans.Basic.Bean
      and Util.Beans.Methods.Method_Bean with record
-      Module : Awa-questions.Questions.Modules.Question_Module_Access := null;
+      Module : AWA.Questions.Modules.Question_Module_Access := null;
       Count  : Natural := 0;
    end record;
    type Question_Bean_Access is access all Question_Bean'Class;
@@ -52,7 +52,7 @@ package Awa-questions.Questions.Beans is
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
    --  Create the Questions_Bean bean instance.
-   function Create_Question_Bean (Module : in Awa-questions.Questions.Modules.Question_Module_Access)
+   function Create_Question_Bean (Module : in AWA.Questions.Modules.Question_Module_Access)
       return Util.Beans.Basic.Readonly_Bean_Access;
 
-end Awa-questions.Questions.Beans;
+end AWA.Questions.Beans;

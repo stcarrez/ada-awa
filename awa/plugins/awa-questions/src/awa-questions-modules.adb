@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  awa-questions-questions-modules -- Module questions
---  Copyright (C) 2012 Stephane Carrez
+--  awa-questions-modules -- Module questions
+--  Copyright (C) 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,10 +19,10 @@
 with AWA.Modules.Beans;
 with AWA.Modules.Get;
 with Util.Log.loggers;
-with Awa-questions.Questions.Beans;
-package body Awa-questions.Questions.Modules is
+with AWA.Questions.Beans;
+package body AWA.Questions.Modules is
 
-   Log : constant Util.log.Loggers.Logger := Util.Log.Loggers.Create ("Awa-questions.Questions.Module");
+   Log : constant Util.log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Questions.Module");
 
    package Register is new AWA.Modules.Beans (Module => Question_Module,
                                               Module_Access => Question_Module_Access);
@@ -39,8 +39,8 @@ package body Awa-questions.Questions.Modules is
 
       --  Register here any bean class, servlet, filter.
       Register.Register (Plugin => Plugin,
-                         Name   => "Awa-questions.Questions.Beans.Questions_Bean",
-                         Handler => Awa-questions.Questions.Beans.Create_Question_Bean'Access);
+                         Name   => "AWA.Questions.Beans.Questions_Bean",
+                         Handler => AWA.Questions.Beans.Create_Question_Bean'Access);
 
       AWA.Modules.Module (Plugin).Initialize (App, Props);
 
@@ -56,4 +56,4 @@ package body Awa-questions.Questions.Modules is
       return Get;
    end Get_Question_Module;
 
-end Awa-questions.Questions.Modules;
+end AWA.Questions.Modules;
