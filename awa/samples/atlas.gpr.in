@@ -9,6 +9,7 @@ with "@AWA_DIR@awa_mail";
 with "@AWA_DIR@awa_blogs";
 with "@AWA_DIR@awa_storages";
 with "@AWA_DIR@awa_images";
+with "@AWA_DIR@awa_questions";
 
 project atlas is
 
