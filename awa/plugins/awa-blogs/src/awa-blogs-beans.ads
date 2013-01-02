@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-beans -- Beans for blog module
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,6 @@ with Ada.Strings.Unbounded;
 
 with Util.Beans.Basic;
 with Util.Beans.Objects;
-with Util.Beans.Methods;
 
 with ADO;
 
@@ -42,8 +41,7 @@ package AWA.Blogs.Beans is
    --  ------------------------------
    --  The <b>Blog_Bean</b> holds the information about the current blog.
    --  It allows to create the blog as well as update its primary title.
-   type Blog_Bean is new AWA.Blogs.Models.Blog_Ref
-     and Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with record
+   type Blog_Bean is new AWA.Blogs.Models.Blog_Bean with record
       Module  : AWA.Blogs.Modules.Blog_Module_Access := null;
    end record;
    type Blog_Bean_Access is access all Blog_Bean'Class;
@@ -59,23 +57,14 @@ package AWA.Blogs.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object);
 
-   --  This bean provides some methods that can be used in a Method_Expression
-   overriding
-   function Get_Method_Bindings (From : in Blog_Bean)
-                                 return Util.Beans.Methods.Method_Binding_Array_Access;
-
    --  Create a new blog.
-   procedure Create_Blog (Bean    : in out Blog_Bean;
-                          Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   overriding
+   procedure Create (Bean    : in out Blog_Bean;
+                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
-   type Post_Bean is new Util.Beans.Basic.Bean
-     and Util.Beans.Methods.Method_Bean with record
+   type Post_Bean is new AWA.Blogs.Models.Post_Bean with record
       Module  : AWA.Blogs.Modules.Blog_Module_Access := null;
-      Post    : AWA.Blogs.Models.Post_Ref;
       Blog_Id : ADO.Identifier;
-      Title   : Ada.Strings.Unbounded.Unbounded_String;
-      Text    : Ada.Strings.Unbounded.Unbounded_String;
-      URI     : Ada.Strings.Unbounded.Unbounded_String;
    end record;
    type Post_Bean_Access is access all Post_Bean'Class;
 
@@ -90,22 +79,19 @@ package AWA.Blogs.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object);
 
-   --  This bean provides some methods that can be used in a Method_Expression
-   overriding
-   function Get_Method_Bindings (From : in Post_Bean)
-                                 return Util.Beans.Methods.Method_Binding_Array_Access;
-
    --  Load the post.
    procedure Load_Post (Post : in out Post_Bean;
                         Id   : in ADO.Identifier);
 
-   --  Create a new post.
-   procedure Create_Post (Bean    : in out Post_Bean;
-                          Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   --  Create or save the post.
+   overriding
+   procedure Save (Bean    : in out Post_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
    --  Delete a post.
-   procedure Delete_Post (Bean    : in out Post_Bean;
-                          Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   overriding
+   procedure Delete (Bean    : in out Post_Bean;
+                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
    --  Create the Blog_Bean bean instance.
    function Create_Blog_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
