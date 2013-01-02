@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-beans -- Beans for blog module
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,7 +32,6 @@ package body AWA.Blogs.Beans is
    use Ada.Strings.Unbounded;
 
    BLOG_ID_PARAMETER : constant String := "blog_id";
-   POST_ID_PARAMETER : constant String := "post_id";
 
    --  ------------------------------
    --  Get the value identified by the name.
@@ -125,18 +124,16 @@ package body AWA.Blogs.Beans is
 
       Manager : constant AWA.Blogs.Services.Blog_Service_Access := Bean.Module.Get_Blog_Manager;
       Result  : ADO.Identifier;
-      Blog_Id : constant ADO.Identifier := AWA.Helpers.Requests.Get_Parameter (BLOG_ID_PARAMETER);
-      Post_Id : constant ADO.Identifier := AWA.Helpers.Requests.Get_Parameter (POST_ID_PARAMETER);
    begin
-      if Post_Id < 0 then
-         Manager.Create_Post (Blog_Id => Blog_Id,
+      if not Bean.Post.Is_Inserted then
+         Manager.Create_Post (Blog_Id => Bean.Blog_Id,
                               Title   => Bean.Post.Get_Title,
                               URI     => Bean.Post.Get_Uri,
                               Text    => Bean.Post.Get_Text,
                               Status  => Bean.Post.Get_Status,
                               Result  => Result);
       else
-         Manager.Update_Post (Post_Id => Post_Id,
+         Manager.Update_Post (Post_Id => Bean.Post.Get_Id,
                               Title   => Bean.Post.Get_Title,
                               Text    => Bean.Post.Get_Text,
                               Status  => Bean.Post.Get_Status);
@@ -196,6 +193,8 @@ package body AWA.Blogs.Beans is
    begin
       if Name = BLOG_ID_ATTR then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Blog_Id));
+      elsif From.Post.Is_Null then
+         return Util.Beans.Objects.Null_Object;
       elsif Name = POST_ID_ATTR then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Post.Get_Id));
       elsif Name = POST_USERNAME_ATTR then
@@ -215,7 +214,7 @@ package body AWA.Blogs.Beans is
    begin
       if Name = BLOG_ID_ATTR then
          From.Blog_Id := ADO.Identifier (Util.Beans.Objects.To_Integer (Value));
-      elsif Name = POST_ID_ATTR then
+      elsif Name = POST_ID_ATTR and not Util.Beans.Objects.Is_Empty (Value) then
          From.Load_Post (ADO.Identifier (Util.Beans.Objects.To_Integer (Value)));
       elsif Name = POST_TEXT_ATTR then
          From.Post.Set_Text (Util.Beans.Objects.To_Unbounded_String (Value));
@@ -267,31 +266,8 @@ package body AWA.Blogs.Beans is
    --  ------------------------------
    function Create_Post_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                               return Util.Beans.Basic.Readonly_Bean_Access is
-      use type ADO.Identifier;
-
       Object  : constant Post_Bean_Access := new Post_Bean;
---        Post_Id : constant ADO.Identifier := AWA.Helpers.Requests.Get_Parameter (POST_ID_PARAMETER);
    begin
---        if Post_Id > 0 then
---           declare
---              Session : ADO.Sessions.Session := Module.Get_Session;
---           begin
---              Object.Post.Load (Session, Post_Id);
---              Object.Title := Object.Post.Get_Title;
---              Object.Text  := Object.Post.Get_Text;
---              Object.URI   := Object.Post.Get_Uri;
---
---              --  SCz: 2012-05-19: workaround for ADO 0.3 limitation.  The lazy loading of
---              --  objects does not work yet.  Force loading the user here while the above
---              --  session is still open.
---              declare
---                 A : constant String := String '(Object.Post.Get_Author.Get_Name);
---                 pragma Unreferenced (A);
---              begin
---                 null;
---              end;
---           end;
---        end if;
       Object.Module := Module;
       return Object.all'Access;
    end Create_Post_Bean;
