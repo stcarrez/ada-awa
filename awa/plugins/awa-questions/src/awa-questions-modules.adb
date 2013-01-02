@@ -15,14 +15,15 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Util.Log.Loggers;
 
 with AWA.Modules.Beans;
 with AWA.Modules.Get;
-with Util.Log.loggers;
 with AWA.Questions.Beans;
+with AWA.Applications;
 package body AWA.Questions.Modules is
 
-   Log : constant Util.log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Questions.Module");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Questions.Module");
 
    package Register is new AWA.Modules.Beans (Module => Question_Module,
                                               Module_Access => Question_Module_Access);
@@ -37,6 +38,9 @@ package body AWA.Questions.Modules is
    begin
       Log.Info ("Initializing the questions module");
 
+      --  Setup the resource bundles.
+      App.Register ("questionMsg", "questions");
+
       --  Register here any bean class, servlet, filter.
       Register.Register (Plugin => Plugin,
                          Name   => "AWA.Questions.Beans.Questions_Bean",
@@ -45,7 +49,29 @@ package body AWA.Questions.Modules is
       AWA.Modules.Module (Plugin).Initialize (App, Props);
 
       --  Add here the creation of manager instances.
+      Plugin.Manager := Plugin.Create_Question_Manager;
    end Initialize;
+
+   --  ------------------------------
+   --  Get the question manager.
+   --  ------------------------------
+   function Get_Question_Manager (Plugin : in Question_Module)
+                                  return Services.Question_Service_Access is
+   begin
+      return Plugin.Manager;
+   end Get_Question_Manager;
+
+   --  ------------------------------
+   --  Create a question manager.  This operation can be overridden to provide another
+   --  question service implementation.
+   --  ------------------------------
+   function Create_Question_Manager (Plugin : in Question_Module)
+                                     return Services.Question_Service_Access is
+      Result : constant Services.Question_Service_Access := new Services.Question_Service;
+   begin
+      Result.Initialize (Plugin);
+      return Result;
+   end Create_Question_Manager;
 
    --  ------------------------------
    --  Get the questions module.

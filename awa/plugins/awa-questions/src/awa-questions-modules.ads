@@ -18,6 +18,7 @@
 with ASF.Applications;
 
 with AWA.Modules;
+with AWA.Questions.Services;
 package AWA.Questions.Modules is
 
    --  The name under which the module is registered.
@@ -35,11 +36,22 @@ package AWA.Questions.Modules is
                          App    : in AWA.Modules.Application_Access;
                          Props  : in ASF.Applications.Config);
 
+   --  Get the question manager.
+   function Get_Question_Manager (Plugin : in Question_Module)
+                                 return Services.Question_Service_Access;
+
+   --  Create a question manager.  This operation can be overridden to provide another
+   --  question service implementation.
+   function Create_Question_Manager (Plugin : in Question_Module)
+                                    return Services.Question_Service_Access;
+
    --  Get the questions module.
    function Get_Question_Module return Question_Module_Access;
 
 private
 
-   type Question_Module is new AWA.Modules.Module with null record;
+   type Question_Module is new AWA.Modules.Module with record
+      Manager : AWA.Questions.Services.Question_Service_Access;
+   end record;
 
 end AWA.Questions.Modules;
