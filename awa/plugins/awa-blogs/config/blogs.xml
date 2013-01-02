@@ -47,7 +47,7 @@
     <from-view-id>/blogs/admin/edit.xhtml</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
-      <to-view-id>/blogs/admin/list.xhtml?blog_id=#{blog.id}</to-view-id>
+      <to-view-id>/blogs/admin/list.xhtml?blog_id=#{post.blogId}</to-view-id>
       <redirect/>
     </navigation-case>
   </navigation-rule>
@@ -56,7 +56,7 @@
     <from-view-id>/blogs/admin/create.xhtml</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
-      <to-view-id>/blogs/admin/list.xhtml?blog_id=#{blog.id}</to-view-id>
+      <to-view-id>/blogs/admin/list.xhtml?blog_id=#{post.blogId}</to-view-id>
       <redirect/>
     </navigation-case>
   </navigation-rule>
