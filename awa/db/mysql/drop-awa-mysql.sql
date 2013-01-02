@@ -12,6 +12,10 @@ DROP TABLE IF EXISTS `awa_message`;
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `awa_post`;
 DROP TABLE IF EXISTS `awa_blog`;
+/* Copied from awa-questions-drop-mysql.sql*/
+/* File generated automatically by dynamo */
+DROP TABLE IF EXISTS `awa_question`;
+DROP TABLE IF EXISTS `awa_answer`;
 /* Copied from awa-jobs-drop-mysql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `awa_job`;
