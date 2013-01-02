@@ -212,7 +212,7 @@ package body AWA.Storages.Beans is
                         Value : in Util.Beans.Objects.Object) is
       Manager : constant Services.Storage_Service_Access := From.Module.Get_Storage_Manager;
    begin
-      if Name = "folderId" then
+      if Name = "folderId" and not Util.Beans.Objects.Is_Empty (Value) then
          Manager.Load_Folder (From.Folder, ADO.Identifier (Util.Beans.Objects.To_Integer (Value)));
          From.Flags (INIT_FOLDER) := True;
       end if;
