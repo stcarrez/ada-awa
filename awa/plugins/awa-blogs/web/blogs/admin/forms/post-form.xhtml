@@ -1,5 +1,5 @@
 <!-- Form to create or update a blog post
-  -  Copyright (C) 2011 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,12 +23,12 @@
         xmlns:h="http://java.sun.com/jsf/html">
 
   <div class='awa-post ui-widget ui-widget-content ui-corner-all awa-form'>
-    <h2>#{blogMsg.blog_post_update_title}</h2>
+    <h2>#{title}</h2>
     <h:form id='post'>
-        <h:inputHidden id='post-id' value='#{post.id}'/>
+        <h:inputHidden id='post-id' value='#{post.id}' required='false'/>
         <h:inputHidden id='post-blog-id' value='#{post.blogId}'/>
-        <input type="hidden" name="blog_id" value="#{blog.id}"/>
         <div class='grid_8'>
+            <h:messages styleClass='error'/>
             <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
                 <dt>
                     <label for='title'>#{blogMsg.blog_post_title_label}</label>
