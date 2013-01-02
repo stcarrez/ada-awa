@@ -20,12 +20,11 @@ with Ada.Strings.Unbounded;
 
 with Util.Beans.Basic;
 with Util.Beans.Objects;
-with Util.Beans.Methods;
 with AWA.Questions.Modules;
+with AWA.Questions.Models;
 package AWA.Questions.Beans is
 
-   type Question_Bean is new Util.Beans.Basic.Bean
-     and Util.Beans.Methods.Method_Bean with record
+   type Question_Bean is new AWA.Questions.Models.Question_Bean with record
       Module : AWA.Questions.Modules.Question_Module_Access := null;
       Count  : Natural := 0;
    end record;
@@ -42,13 +41,10 @@ package AWA.Questions.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object);
 
-   --  This bean provides some methods that can be used in a Method_Expression
-   overriding
-   function Get_Method_Bindings (From : in Question_Bean)
-                                 return Util.Beans.Methods.Method_Binding_Array_Access;
+   procedure Save (Bean : in out Question_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
-   --  Example of action method.
-   procedure Action (Bean    : in out Question_Bean;
+   procedure Delete (Bean : in out Question_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
    --  Create the Questions_Bean bean instance.

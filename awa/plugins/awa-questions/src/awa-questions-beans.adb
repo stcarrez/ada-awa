@@ -16,25 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with ASF.Events.Faces.Actions;
 package body AWA.Questions.Beans is
-
-   --  ------------------------------
-   --  Example of action method.
-   --  ------------------------------
-   procedure Action (Bean    : in out Question_Bean;
-                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
-   begin
-      null;
-   end Action;
-
-   package Action_Binding is
-     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Question_Bean,
-                                                      Method => Action,
-                                                      Name   => "action");
-
-   Question_Bean_Binding : aliased constant Util.Beans.Methods.Method_Binding_Array
-     := (Action_Binding.Proxy'Access, null);
 
    --  ------------------------------
    --  Get the value identified by the name.
@@ -63,16 +45,17 @@ package body AWA.Questions.Beans is
       end if;
    end Set_Value;
 
-   --  ------------------------------
-   --  This bean provides some methods that can be used in a Method_Expression
-   --  ------------------------------
-   overriding
-   function Get_Method_Bindings (From : in Question_Bean)
-                                 return Util.Beans.Methods.Method_Binding_Array_Access is
-      pragma Unreferenced (From);
+   procedure Save (Bean : in out Question_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
    begin
-      return Question_Bean_Binding'Access;
-   end Get_Method_Bindings;
+      null;
+   end Save;
+
+   procedure Delete (Bean : in out Question_Bean;
+                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      null;
+   end Delete;
 
    --  ------------------------------
    --  Create the Question_Bean bean instance.
