@@ -24,9 +24,9 @@ CREATE TABLE awa_job (
   /* the job priority */
   `priority` INTEGER NOT NULL,
   /*  */
-  `event_id` BIGINT ,
-  /*  */
   `user_id` BIGINT ,
+  /*  */
+  `event_id` BIGINT ,
   /*  */
   `session_id` BIGINT ,
   PRIMARY KEY (`id`)

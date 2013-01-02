@@ -28,14 +28,14 @@ CREATE TABLE awa_message (
   `entity_type` INTEGER NOT NULL,
   /* the date and time when the event was finished to be processed. */
   `finish_date` DATETIME ,
-  /* the optional user who triggered the event message creation */
-  `user_id` BIGINT ,
-  /* the optional user session that triggered the message creation */
-  `session_id` BIGINT ,
   /*  */
   `queue_id` BIGINT NOT NULL,
   /* the message type */
-  `message_type_id` BIGINT NOT NULL
+  `message_type_id` BIGINT NOT NULL,
+  /* the optional user who triggered the event message creation */
+  `user_id` BIGINT ,
+  /* the optional user session that triggered the message creation */
+  `session_id` BIGINT 
 );
 /*  */
 CREATE TABLE awa_message_type (
@@ -62,10 +62,10 @@ CREATE TABLE awa_acl (
   `entity_id` BIGINT NOT NULL,
   /* the writeable flag */
   `writeable` TINYINT NOT NULL,
-  /* the entity type concerned by the ACL. */
-  `entity_type` INTEGER NOT NULL,
   /*  */
-  `user_id` BIGINT NOT NULL
+  `user_id` BIGINT NOT NULL,
+  /* the entity type concerned by the ACL. */
+  `entity_type` INTEGER NOT NULL
 );
 /*  */
 CREATE TABLE awa_access_key (
@@ -115,9 +115,9 @@ CREATE TABLE awa_session (
   /*  */
   `id` BIGINT PRIMARY KEY,
   /*  */
-  `user_id` BIGINT NOT NULL,
+  `auth_id` BIGINT ,
   /*  */
-  `auth_id` BIGINT 
+  `user_id` BIGINT NOT NULL
 );
 /* The User entity represents a user that can access and use the application.
  */
@@ -202,9 +202,9 @@ CREATE TABLE awa_workspace_member (
   /*  */
   `id` BIGINT PRIMARY KEY,
   /*  */
-  `workspace_id` BIGINT NOT NULL,
+  `member_id` BIGINT NOT NULL,
   /*  */
-  `member_id` BIGINT NOT NULL
+  `workspace_id` BIGINT NOT NULL
 );
 INSERT INTO entity_type (name) VALUES ("awa_workspace");
 INSERT INTO entity_type (name) VALUES ("awa_workspace_feature");

@@ -21,15 +21,15 @@ CREATE TABLE awa_storage (
   /* the storage identifier */
   `id` BIGINT PRIMARY KEY,
   /*  */
-  `owner_id` BIGINT NOT NULL,
+  `original_id` BIGINT ,
   /*  */
   `store_data_id` BIGINT ,
   /*  */
-  `folder_id` BIGINT ,
+  `owner_id` BIGINT NOT NULL,
   /*  */
   `workspace_id` BIGINT NOT NULL,
   /*  */
-  `original_id` BIGINT 
+  `folder_id` BIGINT 
 );
 /* The storage data is created only if the storage type
 is set to DATABASE.  It holds the file content in the blob. */
@@ -52,9 +52,9 @@ CREATE TABLE awa_storage_folder (
   /*  */
   `name` VARCHAR(255) NOT NULL,
   /*  */
-  `owner_id` BIGINT NOT NULL,
+  `workspace_id` BIGINT NOT NULL,
   /*  */
-  `workspace_id` BIGINT NOT NULL
+  `owner_id` BIGINT NOT NULL
 );
 /* The local store record is created when a copy of the data is needed on the local file system.
 The creation date refers to the date when the data was copied to the local file system.

@@ -28,9 +28,9 @@ CREATE TABLE awa_workspace_member (
   /*  */
   `id` BIGINT PRIMARY KEY,
   /*  */
-  `workspace_id` BIGINT NOT NULL,
+  `member_id` BIGINT NOT NULL,
   /*  */
-  `member_id` BIGINT NOT NULL
+  `workspace_id` BIGINT NOT NULL
 );
 INSERT INTO entity_type (name) VALUES ("awa_workspace");
 INSERT INTO entity_type (name) VALUES ("awa_workspace_feature");

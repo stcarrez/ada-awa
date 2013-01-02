@@ -21,15 +21,15 @@ CREATE TABLE awa_storage (
   /* the storage identifier */
   `id` BIGINT ,
   /*  */
-  `owner_id` BIGINT NOT NULL,
+  `original_id` BIGINT ,
   /*  */
   `store_data_id` BIGINT ,
   /*  */
-  `folder_id` BIGINT ,
+  `owner_id` BIGINT NOT NULL,
   /*  */
   `workspace_id` BIGINT NOT NULL,
   /*  */
-  `original_id` BIGINT ,
+  `folder_id` BIGINT ,
   PRIMARY KEY (`id`)
 );
 /* The storage data is created only if the storage type
@@ -54,9 +54,9 @@ CREATE TABLE awa_storage_folder (
   /*  */
   `name` VARCHAR(255) BINARY NOT NULL,
   /*  */
-  `owner_id` BIGINT NOT NULL,
-  /*  */
   `workspace_id` BIGINT NOT NULL,
+  /*  */
+  `owner_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
 /* The local store record is created when a copy of the data is needed on the local file system.

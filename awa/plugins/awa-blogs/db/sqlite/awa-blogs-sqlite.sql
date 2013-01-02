@@ -35,9 +35,9 @@ CREATE TABLE awa_post (
   /* the post status */
   `status` TINYINT NOT NULL,
   /*  */
-  `blog_id` BIGINT NOT NULL,
+  `author_id` BIGINT NOT NULL,
   /*  */
-  `author_id` BIGINT NOT NULL
+  `blog_id` BIGINT NOT NULL
 );
 INSERT INTO entity_type (name) VALUES ("awa_blog");
 INSERT INTO entity_type (name) VALUES ("awa_post");

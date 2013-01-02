@@ -15,10 +15,10 @@ CREATE TABLE awa_answer (
   `id` BIGINT NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
-  /*  */
-  `question_id` BIGINT NOT NULL,
   /* the user who wrote the answer. */
   `author_id` BIGINT NOT NULL,
+  /*  */
+  `question_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
 /* The question table holds a single question asked by a user to the community.

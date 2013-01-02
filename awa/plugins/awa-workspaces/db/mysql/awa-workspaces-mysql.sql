@@ -30,9 +30,9 @@ CREATE TABLE awa_workspace_member (
   /*  */
   `id` BIGINT NOT NULL,
   /*  */
-  `workspace_id` BIGINT NOT NULL,
-  /*  */
   `member_id` BIGINT NOT NULL,
+  /*  */
+  `workspace_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES
