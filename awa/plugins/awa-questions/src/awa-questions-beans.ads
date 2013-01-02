@@ -41,9 +41,11 @@ package AWA.Questions.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object);
 
-   procedure Save (Bean : in out Question_Bean;
+   --  Create or save the question.
+   procedure Save (Bean    : in out Question_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
+   --  Delete the question.
    procedure Delete (Bean : in out Question_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
