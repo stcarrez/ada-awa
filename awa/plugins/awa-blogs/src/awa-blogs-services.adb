@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-services -- Blogs and post management
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with AWA.Blogs.Models;
 with AWA.Services.Contexts;
 with AWA.Permissions;
 with AWA.Permissions.Services;
@@ -35,9 +34,8 @@ package body AWA.Blogs.Services is
 
    use AWA.Services;
    use ADO.Sessions;
-   use Util.Log;
 
-   Log : constant Loggers.Logger := Loggers.Create ("AWA.Blogs.Services");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Blogs.Services");
 
    --  ------------------------------
    --  Create a new blog for the user workspace.
@@ -62,7 +60,7 @@ package body AWA.Blogs.Services is
 
       --  Check that the user has the create blog permission on the given workspace.
       AWA.Permissions.Check (Permission => ACL_Create_Blog.Permission,
-                             Entity     => WS.Get_Id);
+                             Entity     => WS);
 
       Blog.Set_Name (Title);
       Blog.Set_Workspace (WS);
@@ -114,7 +112,7 @@ package body AWA.Blogs.Services is
 
       --  Check that the user has the create post permission on the given blog.
       AWA.Permissions.Check (Permission => ACL_Create_Blog.Permission,
-                             Entity     => Blog_Id);
+                             Entity     => Blog);
 
       --  Build the new post.
       Post.Set_Title (Title);
@@ -156,7 +154,7 @@ package body AWA.Blogs.Services is
 
       --  Check that the user has the update post permission on the given post.
       AWA.Permissions.Check (Permission => ACL_Update_Post.Permission,
-                             Entity     => Post_Id);
+                             Entity     => Post);
 
       Post.Set_Title (Title);
       Post.Set_Text (Text);
@@ -186,7 +184,7 @@ package body AWA.Blogs.Services is
 
       --  Check that the user has the delete post permission on the given post.
       AWA.Permissions.Check (Permission => ACL_Delete_Post.Permission,
-                             Entity     => Post_Id);
+                             Entity     => Post);
 
       Post.Delete (Session => DB);
       Ctx.Commit;
