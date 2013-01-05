@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-services -- Storage service
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -82,7 +82,7 @@ package body AWA.Storages.Services is
 
       --  Check that the user has the create folder permission on the given workspace.
       AWA.Permissions.Check (Permission => ACL_Create_Folder.Permission,
-                             Entity     => Workspace.Get_Id);
+                             Entity     => Workspace);
 
       Ctx.Start;
       if not Folder.Is_Inserted then
@@ -168,7 +168,7 @@ package body AWA.Storages.Services is
 
       --  Check that the user has the create storage permission on the given workspace.
       AWA.Permissions.Check (Permission => ACL_Create_Storage.Permission,
-                             Entity     => Workspace.Get_Id);
+                             Entity     => Workspace);
 
       Ctx.Start;
       Created := not Into.Is_Inserted;
