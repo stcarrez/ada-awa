@@ -19,6 +19,8 @@ with Ada.Streams;
 with Ada.Strings.Unbounded;
 
 with Util.Test_Caller;
+with Util.Beans.Basic;
+with Util.Beans.Objects;
 
 with ADO;
 with ADO.Objects;
@@ -27,6 +29,7 @@ with Security.Contexts;
 
 with AWA.Services.Contexts;
 with AWA.Questions.Modules;
+with AWA.Questions.Beans;
 with AWA.Tests.Helpers.Users;
 package body AWA.Questions.Services.Tests is
 
@@ -37,8 +40,10 @@ package body AWA.Questions.Services.Tests is
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
    begin
-      Caller.Add_Test (Suite, "Test AWA.Storages.Services.Save (DATABASE)",
+      Caller.Add_Test (Suite, "Test AWA.Questions.Services.Save_Question",
                        Test_Create_Question'Access);
+      Caller.Add_Test (Suite, "Test AWA.Questions.Queries question-list",
+                       Test_List_Questions'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -69,5 +74,32 @@ package body AWA.Questions.Services.Tests is
                          & "But I need some long text for the unit test.");
       T.Manager.Save_Question (Q);
    end Test_Create_Question;
+
+   --  ------------------------------
+   --  Test list of questions.
+   --  ------------------------------
+   procedure Test_List_Questions (T : in out Test) is
+      use AWA.Questions.Models;
+      use type Util.Beans.Basic.Readonly_Bean_Access;
+
+      Sec_Ctx   : Security.Contexts.Security_Context;
+      Context   : AWA.Services.Contexts.Service_Context;
+      Q         : AWA.Questions.Models.Question_Ref;
+      Module    : AWA.Questions.Modules.Question_Module_Access;
+      List      : Util.Beans.Basic.Readonly_Bean_Access;
+      Bean      : Util.Beans.Objects.Object;
+      Count     : Natural;
+   begin
+      AWA.Tests.Helpers.Users.Anonymous (Context, Sec_Ctx);
+      Module := AWA.Questions.Modules.Get_Question_Module;
+      List := AWA.Questions.Beans.Create_Question_List_Bean (Module);
+      T.Assert (List /= null, "The Create_Question_List_Bean returned null");
+
+      Bean := Util.Beans.Objects.To_Object (List);
+      T.Assert (not Util.Beans.Objects.Is_Null (Bean), "The list bean should not be null");
+      Count := Questions.Models.Question_Info_List_Bean'Class (List.all).Get_Count;
+
+      T.Assert (Count > 0, "The list of question is empty");
+   end Test_List_Questions;
 
 end AWA.Questions.Services.Tests;
