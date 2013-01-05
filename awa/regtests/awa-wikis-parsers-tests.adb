@@ -269,10 +269,10 @@ package body AWA.Wikis.Parsers.Tests is
    --  ------------------------------
    procedure Test_Wiki_Text_Renderer (T : in out Test) is
    begin
-      Util.Tests.Assert_Equals (T, "code" & ASCII.LF,
+      Util.Tests.Assert_Equals (T, ASCII.LF & "code",
                                 Writers.To_Text ("{{{code}}}", SYNTAX_GOOGLE),
                                 "Preformat rendering invalid");
-      Util.Tests.Assert_Equals (T, "bold item my_title" & ASCII.LF,
+      Util.Tests.Assert_Equals (T, ASCII.LF & "bold item my_title" & ASCII.LF,
                                 Writers.To_Text ("_bold_ __item__ [my_title]", SYNTAX_GOOGLE),
                                 "Preformat rendering invalid");
 
