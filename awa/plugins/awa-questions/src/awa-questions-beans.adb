@@ -15,7 +15,10 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with ADO.Queries;
+with ADO.Sessions;
 
+with AWA.Services.Contexts;
 with AWA.Questions.Services;
 package body AWA.Questions.Beans is
 
@@ -69,5 +72,23 @@ package body AWA.Questions.Beans is
       Object.Module := Module;
       return Object.all'Access;
    end Create_Question_Bean;
+
+   --  ------------------------------
+   --  Create the Question_Info_List_Bean bean instance.
+   --  ------------------------------
+   function Create_Question_List_Bean (Module : in AWA.Questions.Modules.Question_Module_Access)
+                                       return Util.Beans.Basic.Readonly_Bean_Access is
+      use AWA.Questions.Models;
+      use AWA.Services;
+
+      Ctx     : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      Object  : constant Question_Info_List_Bean_Access := new Question_Info_List_Bean;
+      Session : ADO.Sessions.Session := Module.Get_Session;
+      Query   : ADO.Queries.Context;
+   begin
+      Query.Set_Query (AWA.Questions.Models.Query_Question_List);
+      AWA.Questions.Models.List (Object.all, Session, Query);
+      return Object.all'Access;
+   end Create_Question_List_Bean;
 
 end AWA.Questions.Beans;
