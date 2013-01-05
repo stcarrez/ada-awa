@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-parsers-tests -- Unit tests for wiki parsing
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -53,5 +53,8 @@ package AWA.Wikis.Parsers.Tests is
 
    --  Test preformatted rendering.
    procedure Test_Wiki_Preformatted (T : in out Test);
+
+   --  Test the text renderer.
+   procedure Test_Wiki_Text_Renderer (T : in out Test);
 
 end AWA.Wikis.Parsers.Tests;
