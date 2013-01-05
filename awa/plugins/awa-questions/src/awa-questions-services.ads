@@ -26,6 +26,9 @@ package AWA.Questions.Services is
    package ACL_Delete_Questions is new Security.Permissions.Definition ("question-delete");
    package ACL_Update_Questions is new Security.Permissions.Definition ("question-update");
 
+   --  The maximum length for a short description.
+   SHORT_DESCRIPTION_LENGTH : constant Positive := 200;
+
    --  ------------------------------
    --  Service services
    --  ------------------------------
