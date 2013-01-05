@@ -16,12 +16,15 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Ada.Calendar;
+with Ada.Characters.Conversions;
 
 with AWA.Permissions;
 with AWA.Services.Contexts;
 with AWA.Users.Models;
 with AWA.Workspaces.Models;
 with AWA.Workspaces.Modules;
+with AWA.Wikis.Parsers;
+with AWA.Wikis.Writers;
 
 with ADO.Sessions;
 
@@ -38,6 +41,9 @@ package body AWA.Questions.Services is
    --  ------------------------------
    procedure Save_Question (Model    : in out Question_Service;
                             Question : in out AWA.Questions.Models.Question_Ref'Class) is
+      function To_Wide (Item : in String) return Wide_Wide_String
+                        renames Ada.Characters.Conversions.To_Wide_Wide_String;
+
       Ctx   : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       User  : constant AWA.Users.Models.User_Ref := Ctx.Get_User;
       DB    : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
@@ -60,6 +66,18 @@ package body AWA.Questions.Services is
          Question.Set_Author (User);
       end if;
 
+      declare
+         Text : constant String := AWA.Wikis.Writers.To_Text (To_Wide (Question.Get_Description),
+                                                              AWA.Wikis.Parsers.SYNTAX_MIX);
+         Last : Natural;
+      begin
+         if Text'Length < SHORT_DESCRIPTION_LENGTH then
+            Last := Text'Last;
+         else
+            Last := SHORT_DESCRIPTION_LENGTH;
+         end if;
+         Question.Set_Short_Description (Text (Text'First .. Last) & "...");
+      end;
       if not Question.Is_Inserted then
          Question.Set_Create_Date (Ada.Calendar.Clock);
       else
