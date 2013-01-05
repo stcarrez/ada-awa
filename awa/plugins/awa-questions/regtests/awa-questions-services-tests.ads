@@ -30,4 +30,7 @@ package AWA.Questions.Services.Tests is
    --  Test creation of a question.
    procedure Test_Create_Question (T : in out Test);
 
+   --  Test list of questions.
+   procedure Test_List_Questions (T : in out Test);
+
 end AWA.Questions.Services.Tests;
