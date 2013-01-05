@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions -- Permissions module
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +22,7 @@ with Security.Policies;
 with Util.Serialize.IO.XML;
 
 with ADO;
+with ADO.Objects;
 
 --  == Introduction ==
 --  The *AWA.Permissions* framework defines and controls the permissions used by an application
@@ -104,12 +105,11 @@ package AWA.Permissions is
    --  database entity represented by <b>Entity</b>.
    procedure Check (Permission : in Security.Permissions.Permission_Index;
                     Entity     : in ADO.Identifier);
---
---     --  Get from the security context <b>Context</b> an identifier stored under the
---     --  name <b>Name</b>.  Returns NO_IDENTIFIER if the security context does not define
---     --  such name or the value is not a valid identifier.
---     function Get_Context (Context : in Security.Contexts.Security_Context'Class;
---                           Name    : in String) return ADO.Identifier;
+
+   --  Verify that the permission represented by <b>Permission</b> is granted to access the
+   --  database entity represented by <b>Entity</b>.
+   procedure Check (Permission : in Security.Permissions.Permission_Index;
+                    Entity     : in ADO.Objects.Object_Ref'Class);
 
 private
 
