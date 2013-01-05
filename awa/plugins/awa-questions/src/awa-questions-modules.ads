@@ -48,6 +48,9 @@ package AWA.Questions.Modules is
    --  Get the questions module.
    function Get_Question_Module return Question_Module_Access;
 
+   --  Get the question manager instance associated with the current application.
+   function Get_Question_Manager return Services.Question_Service_Access;
+
 private
 
    type Question_Module is new AWA.Modules.Module with record
