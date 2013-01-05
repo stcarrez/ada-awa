@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-components-wikis -- Wiki rendering component
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,7 @@ with Util.Beans.Objects;
 with ASF.Contexts.Writer;
 with ASF.Utils;
 
-with AWA.Wikis.Writers;
+with AWA.Wikis.Writers.Html;
 package body AWA.Components.Wikis is
 
    WIKI_ATTRIBUTE_NAMES  : Util.Strings.String_Set.Set;
@@ -66,7 +66,7 @@ package body AWA.Components.Wikis is
       end if;
       declare
          Writer   : constant Response_Writer_Access := Context.Get_Response_Writer;
-         Html     : aliased AWA.Wikis.Writers.Html_Writer;
+         Html     : aliased AWA.Wikis.Writers.Html.Html_Writer;
          Format   : constant AWA.Wikis.Parsers.Wiki_Syntax_Type := UI.Get_Wiki_Style (Context);
          Value    : constant Util.Beans.Objects.Object := UI.Get_Attribute (Context, VALUE_NAME);
       begin
