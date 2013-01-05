@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  users-tests-helpers -- Helpers for user creation
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -59,6 +59,10 @@ package AWA.Tests.Helpers.Users is
    procedure Login (Context : in out AWA.Services.Contexts.Service_Context;
                     Sec_Context : in out Security.Contexts.Security_Context;
                     Email   : in String);
+
+   --  Setup the context and security context to simulate an anonymous user.
+   procedure Anonymous (Context     : in out AWA.Services.Contexts.Service_Context;
+                        Sec_Context : in out Security.Contexts.Security_Context);
 
    overriding
    procedure Finalize (Principal : in out Test_User);
