@@ -39,7 +39,9 @@ package body AWA.Wikis.Writers.Text is
       pragma Unreferenced (Level);
    begin
       Document.Close_Paragraph;
-      Document.Add_Line_Break;
+      if not Document.Empty_Line then
+         Document.Add_Line_Break;
+      end if;
       Document.Writer.Write (Header);
       Document.Add_Line_Break;
    end Add_Header;
@@ -51,6 +53,7 @@ package body AWA.Wikis.Writers.Text is
    procedure Add_Line_Break (Document : in out Text_Writer) is
    begin
       Document.Writer.Write (ASCII.LF);
+      Document.Empty_Line := True;
    end Add_Line_Break;
 
    --  ------------------------------
@@ -75,14 +78,16 @@ package body AWA.Wikis.Writers.Text is
                             Ordered  : in Boolean) is
       pragma Unreferenced (Level, Ordered);
    begin
-      Document.Add_Line_Break;
+      if not Document.Empty_Line then
+         Document.Add_Line_Break;
+      end if;
       Document.Need_Paragraph := False;
       Document.Open_Paragraph;
    end Add_List_Item;
 
    procedure Close_Paragraph (Document : in out Text_Writer) is
    begin
-      if Document.Has_Paragraph or Document.Has_Item then
+      if Document.Has_Paragraph then
          Document.Add_Line_Break;
       end if;
       Document.Has_Paragraph := False;
@@ -93,9 +98,6 @@ package body AWA.Wikis.Writers.Text is
       if Document.Need_Paragraph then
          Document.Has_Paragraph  := True;
          Document.Need_Paragraph := False;
-      end if;
-      if Document.Current_Level > 0 and not Document.Has_Item then
-         Document.Has_Item := True;
       end if;
    end Open_Paragraph;
 
@@ -125,6 +127,7 @@ package body AWA.Wikis.Writers.Text is
       end if;
       Document.Writer.Write (Link);
       Document.Writer.Write (Name);
+      Document.Empty_Line := False;
    end Add_Link;
 
    --  ------------------------------
@@ -146,6 +149,7 @@ package body AWA.Wikis.Writers.Text is
          Document.Writer.Write (Description);
       end if;
       Document.Writer.Write (Link);
+      Document.Empty_Line := False;
    end Add_Image;
 
    --  ------------------------------
@@ -160,6 +164,7 @@ package body AWA.Wikis.Writers.Text is
    begin
       Document.Open_Paragraph;
       Document.Writer.Write (Quote);
+      Document.Empty_Line := False;
    end Add_Quote;
 
    --  ------------------------------
@@ -172,6 +177,7 @@ package body AWA.Wikis.Writers.Text is
       pragma Unreferenced (Format);
    begin
       Document.Writer.Write (Text);
+      Document.Empty_Line := False;
    end Add_Text;
 
    --  ------------------------------
@@ -184,6 +190,7 @@ package body AWA.Wikis.Writers.Text is
    begin
       Document.Close_Paragraph;
       Document.Writer.Write (Text);
+      Document.Empty_Line := False;
    end Add_Preformatted;
 
    --  ------------------------------

@@ -101,16 +101,12 @@ private
    procedure Close_Paragraph (Document : in out Text_Writer);
    procedure Open_Paragraph (Document : in out Text_Writer);
 
-   type List_Style_Array is array (1 .. 32) of Boolean;
-
    type Text_Writer is new AWA.Wikis.Documents.Document_Reader with record
       Writer         : ASF.Contexts.Writer.Response_Writer_Access := null;
       Format         : AWA.Wikis.Documents.Format_Map := (others => False);
       Has_Paragraph  : Boolean := False;
       Need_Paragraph : Boolean := False;
-      Current_Level  : Natural := 0;
-      List_Styles    : List_Style_Array := (others => False);
-      Has_Item       : Boolean := False;
+      Empty_Line     : Boolean := True;
    end record;
 
 end AWA.Wikis.Writers.Text;
