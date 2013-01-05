@@ -1,0 +1,245 @@
+Through this article you will learn how to use the [OAuth 2.0|http://oauth.net/] framework to let an application access service provider APIs such as Facebook API, Google+ API and others.
+Althought this article uses Ada as programming language and Facebook as service provider, most part also applies to other programming languages and other service providers.
+
+!!!! Overview
+
+[OAuth 2.0|http://oauth.net/] is an open standard for authorization.  It is used by service providers as authorization mechanism for most of their APIs.
+The authorization workflow is depicted below:
+
+* \[1\], first a user goes in the application which displays a link to the OAuth API provider asking the user to grant access to his data for the application,
+* \[2\], the user clicks on the authenticate link and grants access to the application,
+* \[3.1\], The OAuth server redirects the user to a callback URL and it provides an application grant code,
+* \[3.3\], The application ask the API provider to transform the grant code to an access token,
+* \[4\] The application invokes the API provider with the access token
+
+((/images/samples/.OAuth_m.jpg|OAuth Workflow|C|OAuth Workflow, juin 2012))
+
+!!!! Registering the application
+
+The first step is to register the application in the service provider (Facebook, Google+, Twitter, ...). 
+This registration process is specific to the provider.  From this registration, several elements will be defined:
+
+* An application id is allocated,  This identifier is public. This is the @@client_id@@ parameter in OAuth 2.0.
+* An application secret is defined. It must be kept private to the application. This is the @@secret@@ parameter in OAuth 2.0.
+* A callback URL or domain name is registered in the service provider. As far as I'm concerned, I had to register the domain @@demo.vacs.fr@@.
+
+!!!! Facebook OAuth
+
+For the OAuth authorization process, we will use the [Ada Security|http://code.google.com/p/ada-security] library and its @@Application@@ type.
+We will extend that type to expose some EL variables and an EL method that will be used in the authorization process. The
+[Ada Server Faces Application Example part 3: the action bean|http://blog.vacs.fr/index.php?post/2011/05/02/Ada-Server-Faces-Application-Example-part-3%3A-the-action-bean]
+explains how to do that and many details will no be covered by this article.
+
+///[ada]
+type Facebook_Auth is new Security.OAuth.Clients.Application
+     and Util.Beans.Basic.Readonly_Bean
+     and Util.Beans.Methods.Method_Bean with private;
+
+FB_Auth      : aliased Facebook.Facebook_Auth;
+///
+
+Before anything we have to initialize the @@Application@@ type to setup the application identifier, the application secret, the provider URL and a callback URL.
+
+///[ada]
+FB_Auth.Set_Application_Identifier ("116337738505130");
+FB_Auth.Set_Application_Secret ("xxxxxxxxxxx");
+FB_Auth.Set_Application_Callback ("http://demo.vacs.fr/oauth/localhost:8080/demo/oauth_callback.html");
+///
+
+The first step in the OAuth process is to build the authorization page with the link that redirects the user to the service provider OAuth authorization process.
+The link must be created by using the @@Get_State@@ and @@Get_Auth_Params@@ functions provided by the @@Application@@ type.
+The first one generates a secure unique key that will be returned back by the service provider.  The second one builds a list of request
+parameters that are necessary for the service provider to identify the application and redirect the user back to the application once the authentication is done.
+///[ada]
+Id : constant String := "...";
+State  : constant String := FB_Auth.Get_State (Id);
+Params : constant String := FB_Auth.Get_Auth_Params (State, "read_stream");
+///
+
+For a Facebook authorization process, the URI would be created as follows:
+
+///[ada]
+URI : constant String := "https://www.facebook.com/dialog/oauth?" & Params;
+///
+
+For another service provider, the process is similar but the URL is different.
+
+!!! OAuth callback
+
+When the user has granted access to his data, he will be redirected to the callback defined by the application.
+Most service providers will require that the OAuth callback be a public URL.
+If you want to run you application on @@localhost@@ (which is the case when you are developing), you will need a second redirection.
+If you are using the Apache server, you can easily setup a rewrite rule:
+
+///
+RewriteRule ^/oauth/localhost:([0-9]+)/(.*) http://localhost:$1/$2 [L,R=302]
+///
+
+With the above rewrite rule, the callback given to the OAuth provider would look like:
+
+///
+http://demo.vacs.fr/oauth/localhost:8080/demo/oauth_callback.html
+///
+
+The OAuth provider will first redirect to the public internet site which will redirect again to localhost and port 8080.
+
+!!! Getting the OAuth access token
+
+The next step is to receive the @@code@@ parameter from the callback which grants the application access to the service provider API.
+For this, we will use an XHTML view file and a view action that will be executed when the page is displayed.  When this happens,
+the EL method @@authenticate@@ will be called on the @@facebook@@ bean (ie, our @@FB_Auth@@ instance).
+///
+<f:view xmlns:f="http://java.sun.com/jsf/core">
+    <f:metadata>
+        <f:viewAction action="#{facebook.authenticate}"/>
+    </f:metadata>
+</f:view>
+///
+
+The @@Authenticate@@ procedure extracts from the request the OAuth @@state@@ and @@code@@ parameters.
+It verifies that the @@state@@ parameter is a valid key that we submitted and it makes a HTTP POST request
+on the OAuth service provider to transform the @@code@@ into an access token.  This step is handled
+by the [Ada Security|http://code.google.com/p/ada-security]  library through the @@Request_Access_Token@@ operation.
+///[ada] 
+procedure Authenticate (From    : in out Facebook_Auth;
+                        Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   use type Security.OAuth.Clients.Access_Token_Access;
+
+   F       : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
+   State : constant String := F.Get_Parameter (Security.OAuth.State);
+   Code  : constant String := F.Get_Parameter (Security.OAuth.Code);
+   Session : ASF.Sessions.Session := F.Get_Session;
+begin
+   Log.Info ("Auth code {0} for state {1}", Code, State);
+   if Session.Is_Valid then
+      if From.Is_Valid_State (Session.Get_Id, State) then
+         declare
+            Acc : Security.OAuth.Clients.Access_Token_Access
+              := From.Request_Access_Token (Code);
+         begin
+            if Acc /= null then
+               Log.Info ("Access token is {0}", Acc.Get_Name);
+               Session.Set_Attribute ("access_token",
+                                      Util.Beans.Objects.To_Object (Acc.Get_Name));
+            end if;
+         end;
+      end if;
+   end if;
+end Authenticate;
+///
+
+The access token must be saved in the user session or another per-user safe storage so that it can be retrieved later on.
+The access token can expire and if this happens a fresh new access token must be obtained.
+
+!!!! Getting the Facebook friends
+
+Until now we have dealt with the authorization process.  Let's look at using the service provider API and see how
+the [Ada Utility Library|http://code.google.com/p/ada-util] will help in this task.
+
+!!! Defining the Ada beans
+
+To represent the API result, we will use an Ada bean object that can easily be used from a presentation page.
+For the Facebook friend, a name and an identifier are necessary:
+///[ada]
+type Friend_Info is new Util.Beans.Basic.Readonly_Bean with record
+   Name : Util.Beans.Objects.Object;
+   Id   : Util.Beans.Objects.Object;
+end record;
+type Friend_Info_Access is access all Friend_Info;
+///
+
+Having a bean type to represent each friend, we will get a list of friends by instantiating the Ada bean @@Lists@@ package:
+///[ada]
+package Friend_List is new Util.Beans.Basic.Lists (Element_Type => Friend_Info);
+///
+
+!!! Mapping JSON or XML to Ada
+
+The Ada Utility library provides a mechanism that parses JSON or XML and map the result in Ada objects.
+To be able to read the Facebook friend definition, we have to define an enum and implement a @@Set_Member@@ procedure.
+This procedure will be called by the JSON/XML parser when a given data field is recognized and extracted.
+
+///[ada]
+type Friend_Field_Type is (FIELD_NAME, FIELD_ID);
+
+procedure Set_Member (Into : in out Friend_Info;
+                      Field : in Friend_Field_Type;
+                      Value : in Util.Beans.Objects.Object);
+///
+
+The @@Set_Member@@ procedure is rather simple as it just populates the data record with the value.
+///[ada]
+procedure Set_Member (Into : in out Friend_Info;
+                      Field : in Friend_Field_Type;
+                      Value : in Util.Beans.Objects.Object) is
+begin
+   case Field is
+      when FIELD_ID =>
+         Into.Id := Value;
+
+      when FIELD_NAME =>
+         Into.Name := Value;
+
+   end case;
+end Set_Member;
+///
+
+The mapper is a package that defines and controls how to map the JSON/XML data fields into the Ada record
+by using the @@Set_Member@@ operation.  We just have to instantiate the package.
+The @@Record_Mapper@@ generic package will map JSON/XML into the Ada record and
+the @@Vector_Mapper@@ will map a list of JSON/XML elements following a given structure into an Ada vector.
+///[ada]
+package Friend_Mapper is
+  new Util.Serialize.Mappers.Record_Mapper (Element_Type        => Friend_Info,
+                                            Element_Type_Access => Friend_Info_Access,
+                                            Fields              => Friend_Field_Type,
+                                            Set_Member          => Set_Member);
+
+package Friend_Vector_Mapper is
+   new Util.Serialize.Mappers.Vector_Mapper (Vectors        => Friend_List.Vectors,
+                                             Element_Mapper => Friend_Mapper);
+///
+
+Now we need to control how the JSON/XML fields are mapped to our Ada fields.  For this we have to setup
+the mapping.  The Facebook JSON structure is so simple that we can use the default mapping provided
+by the mapper. For this we use the @@Add_Default_Mapping@@ procedure. We also have to tell
+what is the JSON mapping used by the friend vector mapper.
+///[ada]
+Friend_Map        : aliased Friend_Mapper.Mapper;
+Friend_Vector_Map : aliased Friend_Vector_Mapper.Mapper;
+...
+   Friend_Map.Add_Default_Mapping;
+   Friend_Vector_Map.Set_Mapping (Friend_Map'Access);
+///
+
+!!! Creating the REST client 
+
+Now it would be nice if we could get an operation that invokes the service provider API through an HTTP GET operation and put the result in our Ada object.
+The Facebook friends API returns a list of friends which correspond to our @@Friend_List.Vectors@@.  To get our operation, we just have to
+instantiate the @@Rest_Get_Vector@@ operation with our vector mapper (the generic parameter is a package name).
+///[ada]
+procedure Get_Friends is
+  new Util.Http.Rest.Rest_Get_Vector (Vector_Mapper => Friend_Vector_Mapper);
+///
+
+!!! Calling the REST client
+
+Invoking the service provider API is now as simple as calling a procedure.  The URI must include the access token as parameter.
+The HTTP GET operation must be made using SSL/TLS since this is part of OAuth 2.0.
+///
+ List  : Friend_List.List_Bean;
+...
+   Get_Friends ("https://graph.facebook.com/me/friends?access_token="
+                      & Token,
+                      Friend_Vector_Map'Access,
+                      "/data",
+                      List.List'Access);
+///
+
+Now you are ready to use and access the user's data as easily as other information...
+
+!!! References
+
+[facebook.ads | http://code.google.com/p/ada-asf/source/browse/trunk/samples/beans/facebook.ads]%%%
+[facebook.adb | http://code.google.com/p/ada-asf/source/browse/trunk/samples/beans/facebook.adb]%%%
+[Facebook API|http://developers.facebook.com/docs/reference/api/]
