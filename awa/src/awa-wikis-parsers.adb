@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-parsers -- Wiki parser
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -652,7 +652,8 @@ package body AWA.Wikis.Parsers is
          elsif C = CR or C = LF then
             Parse_End_Line (P, C);
          else
-            Parse_Preformatted (P, C);
+            Put_Back (P, C);
+            Parse_Preformatted (P, Token);
          end if;
       else
          Append (P.Text, Token);
