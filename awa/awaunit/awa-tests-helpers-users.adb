@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  files.tests -- Unit tests for files
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -161,10 +161,12 @@ package body AWA.Tests.Helpers.Users is
       Principal.Manager.Close_Session (Principal.Session.Get_Id, True);
    end Logout;
 
+   --  ------------------------------
    --  Simulate a user login in the given service context.
-   procedure Login (Context : in out AWA.Services.Contexts.Service_Context;
+   --  ------------------------------
+   procedure Login (Context     : in out AWA.Services.Contexts.Service_Context;
                     Sec_Context : in out Security.Contexts.Security_Context;
-                    Email   : in String) is
+                    Email       : in String) is
       User      : Test_User;
       Principal : AWA.Users.Principals.Principal_Access;
       App       : constant AWA.Applications.Application_Access := AWA.Tests.Get_Application;
@@ -176,6 +178,19 @@ package body AWA.Tests.Helpers.Users is
       Sec_Context.Set_Context (Manager   => App.Get_Security_Manager,
                                Principal => Principal.all'Access);
    end Login;
+
+   --  ------------------------------
+   --  Setup the context and security context to simulate an anonymous user.
+   --  ------------------------------
+   procedure Anonymous (Context     : in out AWA.Services.Contexts.Service_Context;
+                        Sec_Context : in out Security.Contexts.Security_Context) is
+      App : constant AWA.Applications.Application_Access := AWA.Tests.Get_Application;
+   begin
+      AWA.Tests.Set_Application_Context;
+      Context.Set_Context (App, null);
+      Sec_Context.Set_Context (Manager   => App.Get_Security_Manager,
+                               Principal => null);
+   end Anonymous;
 
    overriding
    procedure Finalize (Principal : in out Test_User) is
