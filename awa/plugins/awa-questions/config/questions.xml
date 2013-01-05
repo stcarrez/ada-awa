@@ -11,7 +11,7 @@
     </filter-mapping>
 
     <entity-permission>
-        <name>questions-create</name>
+        <name>question-create</name>
         <entity-type>awa_workspace</entity-type>
         <sql>
             select ACL.ID from awa_acl AS ACL
