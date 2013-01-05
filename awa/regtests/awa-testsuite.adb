@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Util testsuite - Util Testsuite
---  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,7 @@ with AWA.Users.Services.Tests;
 with AWA.Users.Tests;
 with AWA.Blogs.Services.Tests;
 with AWA.Wikis.Parsers.Tests;
+with AWA.Wikis.Writers.Tests;
 with AWA.Helpers.Selectors.Tests;
 with AWA.Storages.Services.Tests;
 with AWA.Events.Services.Tests;
@@ -76,6 +77,7 @@ package body AWA.Testsuite is
       AWA.Users.Services.Tests.Add_Tests (Ret);
       AWA.Users.Tests.Add_Tests (Ret);
       AWA.Wikis.Parsers.Tests.Add_Tests (Ret);
+      AWA.Wikis.Writers.Tests.Add_Tests (Ret);
       AWA.Helpers.Selectors.Tests.Add_Tests (Ret);
       AWA.Jobs.Modules.Tests.Add_Tests (Ret);
       AWA.Jobs.Services.Tests.Add_Tests (Ret);
