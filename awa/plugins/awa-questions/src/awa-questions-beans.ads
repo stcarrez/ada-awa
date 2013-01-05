@@ -51,6 +51,10 @@ package AWA.Questions.Beans is
 
    --  Create the Questions_Bean bean instance.
    function Create_Question_Bean (Module : in AWA.Questions.Modules.Question_Module_Access)
-      return Util.Beans.Basic.Readonly_Bean_Access;
+                                  return Util.Beans.Basic.Readonly_Bean_Access;
+
+   --  Create the Question_Info_List_Bean bean instance.
+   function Create_Question_List_Bean (Module : in AWA.Questions.Modules.Question_Module_Access)
+                                     return Util.Beans.Basic.Readonly_Bean_Access;
 
 end AWA.Questions.Beans;
