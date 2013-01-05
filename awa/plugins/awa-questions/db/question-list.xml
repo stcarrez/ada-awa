@@ -1,0 +1,57 @@
+<query-mapping package='AWA.Questions.Models'>
+    <description>
+      The list of questions.
+    </description>
+
+    <class name="AWA.Questions.Models.Question_Info" bean="yes">
+        <comment>The list of questions.</comment>
+        <property type='Identifier' name="id">
+            <comment>the question identifier.</comment>
+        </property>
+        <property type='String' name="title">
+            <comment>the question title.</comment>
+        </property>
+        <property type='Date' name="create_date">
+            <comment>the question creation date.</comment>
+        </property>
+        <property type='String' name="description">
+            <comment>the question short description.</comment>
+        </property>
+        <property type='String' name="rating">
+            <comment>the question rating.</comment>
+        </property>
+        <property type='Integer' name="answer_count">
+            <comment>the number of answers.</comment>
+        </property>
+        <property type='Identifier' name="author_id">
+            <comment>the author's identifier.</comment>
+        </property>
+        <property type='String' name="author_name">
+            <comment>the author's name.</comment>
+        </property>
+        <property type='String' name="author_email">
+            <comment>the author's email.</comment>
+        </property>
+    </class>
+
+    <query name='question-list'>
+       <comment>Get a list of questions.</comment>
+       <sql>
+    SELECT
+      q.id,
+      q.title,
+      q.create_date,
+      q.short_description,
+      q.rating,
+      (select count(*) from awa_answer AS a WHERE q.id = a.question_id),
+      q.author_id,
+      user.name,
+      email.email
+    FROM awa_question AS q
+    INNER JOIN awa_user AS user ON q.author_id = user.id
+    INNER JOIN awa_email AS email ON q.author_id = email.user_id
+    ORDER BY q.create_date DESC
+       </sql>
+    </query>
+
+</query-mapping>
