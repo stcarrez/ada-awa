@@ -1,0 +1,201 @@
+<p><q lang="pChecked" cite="pChecked">HardwareStatus</q>|pChecked|pChecked|pUnchecked|pUnchecked}}</p><h2>Description</h2><p>The rectifier board has the following roles:
+</p><ul><li>It converts the alternating current into direct current,
+</li><li>It selects the best supply voltage for every power supply outputs,
+</li><li>It limits and measures the current.
+The choice to have all these functionalities on one board was motivated by the PCB form factor, the available space in the final LPS box, a logical grouping of these functionalities and the ability to limit the number of interconnections on the power supply lines.</li></ul></li><h3>Rectifier</h3><p>The <a href="">http://en.wikipedia.org/wiki/Rectifier rectifier</a> board contains the diodes to convert the alternating current into direct current.
+<a title="left" lang="384px" href="thumb">[Image:lps_rectifier_study.png</a>|Rectifiers]] Four diodes are used to convert the 2x9V into two positive unregulated outputs. The diodes form a <a href="">http://en.wikipedia.org/wiki/Bridge_rectifier bridge rectifier</a> connected to the 2x9V transformer outputs which are in serial.  The drop voltage arround the diode can reach 0.8V at 5A.</p></li><p>Two 22000uF capacitors are present on each output to produce
+a steady DC.  The DC outputs may vary between 24V and 26V due to the
+toric transformer. Indeed the toric transformer has an output that could
+be 10% higher without any load.</p></li><p>&lt;math&gt;18V\times\sqrt{2}-1.6V=23V&lt;/math&gt;</p></li><p>Under a maximum load of 4A (thus overloading the transformer) the
+output voltage swing will be arround 2.6V for the 24V output and
+1.3V for the 12V output (at 100Hz).</p></li><p>&lt;math&gt;dV = \frac{i \times 0.007}{C}&lt;/math&gt;</p></li><p>&lt;br clear="all"/&gt;
+</p></li><h3>Voltage Switch and Filter</h3>At the begining of LPS design, two fixed power supplies of +5V and -5V were defined.  In that design, the +5V and -5V were driven by one of the middle voltage produced by the rectifiers (a 9V transformer producing 13V as DV voltage).  But it turns out that it was easier to only have several variable power supplies and set them to these low voltages.  The 2x9V transformer was kept and a voltage switch was introduced to optimize the power supplies.
+<a title="left" lang="384px" href="thumb">[Image:lps_voltage_switch_study.png</a>|Voltage Switch and Filter]] A 1RT relay is used to switch the voltage and select either the +13V or the +26V DV voltage produced by the rectifier (respectively -13V and -26V for the negative supply).  When the output supply is below 10V, the relay is activated to select the +13V unregulated DV voltage.  This limits the dissipation heat on the power supply transistor.  By default the relay selects the +26V.  The relay must be capable of supporting currents arround 5A with maximum current of 10A.  The OMRON relay G6R and SIEMENS V23061 are specified as 1RT/8A with maximum current on 10A.</li><p>The voltage switch is followed by a low pass LC filter.  The intent of that filter is to limit and reduce the interactions of different power supplies.  During the voltage switch, the LC filter also limits the current and reduces the voltage spikes.</p></li><p>&lt;br clear="all"/&gt;</p></li></li><h3>Measuring the current</h3><p>To measure the output current a resistor is used in the path of the
+power transistor controlling the output voltage.</p></li><p><a title="left" lang="384px" href="thumb">[Image:lps_rectifier_current_selection.png</a>|Current Selection]] In fact the resistor is composed of two parallel networks composed of a resistor followed by a high <a href="">http://en.wikipedia.org/wiki/Power_MOSFET power MOSFET</a> transistor.  Each MOSFET transistor can be switched on or off. When both are off, the corresponding output voltage is switched off. This feature is used by the protection system controlled by the power supply controller.  To compute the current we just need to measure the voltage of the resistor. We must take into account the Rdson of each MOSFET because they are in the current path. The IRF9540 has an Rdson arround 0.117 ohm and some others have an Rdson that can reach 0.48 ohm.  In that later case it is possible to remove the resistor to only have two parallel MOSFETs.  The table gives the different values of R1 when at least one MOSFET is on.</p></li><p>The MOSFET transistors are controlled by an open drain output provided by the <a href="Power Supply Controller">[VACS:Projects:Hardware:LPS:ControllerBoard</a>]. The open drain outputs are implemented by using the Q1 and Q2 NPN transistors (2N1893 because I had many). The MOSFET has a maximum VGS that is arround 20V which is too low since the power supply input voltage can reach 26V. To protect the resistors R1 and R2 are added in the path to limit and make sure the VGS of the switching transistors will remain in acceptable range.</p></li><p>&lt;br clear="all"/&gt;</p></li><p>&lt;table border="1" cellpadding="0" cellspacing="0"&gt;
+&lt;tr&gt;
+ &lt;th width="20%"&gt;R1&lt;/th&gt;
+ &lt;th width="20%"&gt;Rdson max&lt;/th&gt;
+ &lt;th width="20%"&gt;I max&lt;/th&gt;
+ &lt;th width="20%"&gt;V max (Rdson = 0)&lt;/th&gt;
+ &lt;th width="20%"&gt;V max (Rdson max)&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+ &lt;td&gt;0.66 (3W)&lt;/td&gt;
+ &lt;td&gt;0.117&lt;/td&gt;
+ &lt;td&gt;2.13A&lt;/td&gt;
+ &lt;td&gt;1.4V&lt;/td&gt;
+ &lt;td&gt;1.65V&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+ &lt;td&gt;0.22 (3W)&lt;/td&gt;
+ &lt;td&gt;0.117&lt;/td&gt;
+ &lt;td&gt;3.69A&lt;/td&gt;
+ &lt;td&gt;0.81V&lt;/td&gt;
+ &lt;td&gt;1.24V&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+ &lt;td&gt;0.165&lt;/td&gt;
+ &lt;td&gt;0.117&lt;/td&gt;
+ &lt;td&gt;4.90A/5.28A&lt;/td&gt;
+ &lt;td&gt;0.81V&lt;/td&gt;
+ &lt;td&gt;1.24V&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;</p></li><p>Two ways can be used to measure the current or voltage arround R1.
+<a title="left" lang="384px" href="thumb">[Image:study_current_measure.png</a>|Current Measurement]] The current is measured with an operational amplifier. The output current &lt;i&gt;i&lt;/i&gt; creates a voltage drop in the resistor R1 that is used to measure the output current. The operational amplifier drives the transistor Q1 to maintain the same voltage drop on resistor R2. The current &lt;i&gt;ic&lt;/i&gt; which flows in R2 is therefore proportional to the output current &lt;i&gt;i&lt;/i&gt;. The current &lt;i&gt;ic&lt;/i&gt; goes in R3 and creates a voltage which depends on &lt;i&gt;i&lt;/i&gt;. The voltage on R3 is defined by the formula:</p></li><p>&lt;math&gt;Vs = \frac{R3 \times R1}{R2} \times i&lt;/math&gt;</p></li><p>The operational amplifier has its inputs which can range from 0 to the maximum output voltage supported by the power supply. Therefore we must provide it a power supply that is 1 or 2 volts greater than the maximum output voltage.</p></li><p>A second issue more important occurs when the output power supply has a low voltage and high output current. We have a constraint that Vs &lt; Vo. If this is not satisfied, then the transistor Q1 cannot drive the current in R3 from its collector. Due to the NPN transistor, the current that flows in R3 will come from the Q1 base and Vs will grow without any relation to the current &lt;i&gt;i&lt;/i&gt;.</p></li><p>&lt;table cellpadding="0" border="1" cellspacing="0" width="80%"&gt;
+&lt;tr&gt;
+ &lt;th width="20%"&gt;R1&lt;/th&gt;
+ &lt;th width="20%"&gt;R2&lt;/th&gt;
+ &lt;th width="20%"&gt;R3&lt;/th&gt;
+ &lt;th width="20%"&gt;i&lt;/th&gt;
+ &lt;th width="20%"&gt;Vs&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+ &lt;td&gt;0.66&lt;/td&gt;
+ &lt;td&gt;2.2K&lt;/td&gt;
+ &lt;td&gt;15K&lt;/td&gt;
+ &lt;td&gt;1.2A&lt;/td&gt;
+ &lt;td&gt;5V&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+ &lt;td&gt;0.165&lt;/td&gt;
+ &lt;td&gt;2.2K&lt;/td&gt;
+ &lt;td&gt;15K&lt;/td&gt;
+ &lt;td&gt;4.8A&lt;/td&gt;
+ &lt;td&gt;5.4V&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+&lt;br clear="all"/&gt;
+<a title="left" lang="384px" href="thumb">[Image:study_current_measure2.png</a>|Current Measurement]] The second method is not really inovative. We use an operational amplifier in <a href="">http://en.wikipedia.org/wiki/Operational_amplifier_applications#Differential_amplifier differential mode</a>. If we assume that R2 = R4 and R3 = R5, the output voltage Vs is defined by the formula:</p></li><p>&lt;math&gt;Vs = \frac{R3 \times R1}{R2} \times i&lt;/math&gt;</p></li><p>The gain created by R3/R2 is chosen to be near 4 to maximize the output voltage swing for the analog converter.</p></li><p>One advantage of the differential solution is that we do not have the limitation or constraint on the output voltage. It also offers a low impedance result due to the operational amplifier output.</p></li><p>&lt;br clear="all" /&gt;</p></li></li><h3>Positive vs Negative Board</h3><p>The positive and negative rectifier boards are very closes but they have small differences:
+</p></li><ul><li>The negative board has its ground connected to the highest positive output of the rectifier (hence creating negative outputs).
+</li><li>The AOP used to measure the current is reversed to take into account the difference in current flow (positive vs negative).
+</li><li>The AOP uses different supply voltages to produce in both case an output in the range 0..+5V while the inputs have positive or negative values.
+</li><li>The switching current MOSFET transistors are N-channel for the negative board and P-channel for the positive board.
+</li><li>Capacitors have their polarity which is reversed.</li></ul></li><h2>Connectors</h2><p>The rectifier board is connected to the power supply microcontroller board for the control and measurement of the output current.  For the power distribution it has several one wire high power connectors (not described here).  The positive and negative power supply rectifier boards have the same connector.</p></li><p>&lt;table cellpadding="0" cellspacing="0" border="1"&gt;
+&lt;tr&gt;
+ &lt;th colspan="4"&gt;POWER_CONTROL&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+ &lt;td&gt;1&lt;/td&gt;
+ &lt;td&gt;IS11&lt;/td&gt;
+ &lt;td width="20px"&gt;&lt;/td&gt;
+ &lt;td&gt;MOSFET driver current selector 0.22 ohm (active low)&lt;/td&gt;
+ &lt;td rowspan="4"&gt;Power supply 1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+ &lt;td&gt;2&lt;/td&gt;
+ &lt;td&gt;IS12&lt;/td&gt;
+ &lt;td&gt;&lt;/td&gt;
+ &lt;td&gt;MOSFET driver current selector 0.66 ohm (active low)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+ &lt;td&gt;3&lt;/td&gt;
+ &lt;td&gt;RE1&lt;/td&gt;
+ &lt;td&gt;&lt;/td&gt;
+ &lt;td&gt;Power supply relay selector (active high)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+ &lt;td&gt;4&lt;/td&gt;
+ &lt;td&gt;Io1&lt;/td&gt;
+ &lt;td&gt;&lt;/td&gt;
+ &lt;td&gt;Output current measure&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+ &lt;td&gt;5&lt;/td&gt;
+ &lt;td&gt;X&lt;/td&gt;
+ &lt;td&gt;&lt;/td&gt;
+ &lt;td&gt;&lt;/td&gt;
+ &lt;td rowspan="4"&gt;AOP and relay supply&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+ &lt;td&gt;6&lt;/td&gt;
+ &lt;td&gt;-5V&lt;/td&gt;
+ &lt;td&gt;&lt;/td&gt;
+ &lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+ &lt;td&gt;7&lt;/td&gt;
+ &lt;td&gt;gndref&lt;/td&gt;
+ &lt;td&gt;&lt;/td&gt;
+ &lt;td&gt;Ground reference for current measurement&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+ &lt;td&gt;8&lt;/td&gt;
+ &lt;td&gt;+24V&lt;/td&gt;
+ &lt;td&gt;&lt;/td&gt;
+ &lt;td&gt;AOP using -5V for negative supply (DV = 29V, max = 36V).&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+ &lt;td&gt;9&lt;/td&gt;
+ &lt;td&gt;Io2&lt;/td&gt;
+ &lt;td&gt;&lt;/td&gt;
+ &lt;td&gt;Output current measure&lt;/td&gt;
+ &lt;td rowspan="4"&gt;Power supply 2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+ &lt;td&gt;10&lt;/td&gt;
+ &lt;td&gt;RE2&lt;/td&gt;
+ &lt;td&gt;&lt;/td&gt;
+ &lt;td&gt;Power supply relay selector (active high)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+ &lt;td&gt;11&lt;/td&gt;
+ &lt;td&gt;IS22&lt;/td&gt;
+ &lt;td&gt;&lt;/td&gt;
+ &lt;td&gt;MOSFET driver current selector 0.66 ohm (active low)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+ &lt;td&gt;12&lt;/td&gt;
+ &lt;td&gt;IS21&lt;/td&gt;
+ &lt;td&gt;&lt;/td&gt;
+ &lt;td&gt;MOSFET driver current selector 0.22 ohm (active low)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;</p></li></li><h2>Schematics</h2><p><a title="left" lang="512px" href="thumb">[Image:lps_rectifier_board_sch.png</a>|Positive Rectifier Board]]</p></li><p>&lt;br clear="all"/&gt;</p></li></li><h2>PCB</h2><p><a title="left" lang="512px" href="thumb">[Image:lps_rectifier_board_placement.png</a>|Positive Rectifier Board Placement]] The circuit is made on a 124mm x 83mm PCB using 70um copper. The component placement is such that we can put the positive and negative rectifier board with their components in front of each other with a maximum height of 70mm.  This height is limited by the height of the 20000uF capacitors (50mm) and the height of the MOSFET heat sink (20mm).</p></li><p><a title="left" lang="512px" href="thumb">[Image:lps_rectifier_board_bottom.png</a>|Positive Rectifier Board PCB]] The board layout is made with the following constraints (DRC checks):</p></li><p>&lt;table border="1"&gt;
+&lt;tr&gt;
+ &lt;th&gt;Signal class&lt;/th&gt;
+ &lt;th&gt;Width&lt;/th&gt;
+ &lt;th&gt;Clearance&lt;/th&gt;
+ &lt;th&gt;Drill&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+ &lt;th&gt;GND&lt;/th&gt;
+ &lt;th&gt;2mm&lt;/th&gt;
+ &lt;th&gt;0.4mm&lt;/th&gt;
+ &lt;th&gt;1mm&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+ &lt;th&gt;Power (VSx)&lt;/th&gt;
+ &lt;th&gt;2mm&lt;/th&gt;
+ &lt;th&gt;0.4mm&lt;/th&gt;
+ &lt;th&gt;1mm&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+ &lt;th&gt;signal&lt;/th&gt;
+ &lt;th&gt;0.4mm&lt;/th&gt;
+ &lt;th&gt;0.4mm&lt;/th&gt;
+ &lt;th&gt;0.6mm&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+ &lt;th&gt;Others&lt;/th&gt;
+ &lt;th&gt;0.6mm&lt;/th&gt;
+ &lt;th&gt;0.4mm&lt;/th&gt;
+ &lt;th&gt;0.8mm&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/table&gt;</p></li><p>The auto layout was made with a smaller clearance (0.3mm) and the routing grid of 0.635mm.  After a 100% complete auto route, the clearance was increased to 0.4mm and the PCB was fixed by hand.  The wire-to-wire clearance was put to 0.5mm and the number of clearance errors reduced to 6 (there are two wires which are at 0.45mm each).  The GND, VS1 and VS2 polygon were drawn at the end (otherwise the auto-router skips the routing of these signals!).</p></li><p><a title="left" lang="512px" href="thumb">[Image:lps_rectifier_board_picture.jpg</a>|Positive Rectifier Board PCB Picture]]</p></li><p>&lt;br clear="all"/&gt;</p></li></li><h2>Datasheets</h2><p>Below is a collection of datasheets, white papers and articles related to the parts used in the board.
+</p></li><h3>Resistors</h3></li><ul><li><q lang="rcl/metal-film-resistor.pdf" cite="Metal Film Resistor">HardwareDoc</q></li><li><q lang="rcl/resistor-er.pdf" cite="Power Resistor">HardwareDoc</q></li></ul></li><h3>Capacitors</h3></li><ul><li><q lang="rcl/solid-polymerium-alu-capacitor.pdf" cite="SOLID POLYMER ALUMINUM CAPACITOR CHIPS IN DC-DC CONVERTER MODULES REDUCE COST AND SIZE AND IMPROVE HIGH-FREQUENCY PERFORMANCE">HardwareDoc</q></li><li><q lang="rcl/alu-solid-electrolytic-capacitor.pdf" cite="CONDUCTIVE POLYMER ALUMINUM SOLID ELECTROLYTIC CAPACITORS">HardwareDoc</q></li><li><q lang="rcl/capacitor-appguide.pdf" cite="Electrolytic Capacitor Guide">HardwareDoc</q></li><li><q lang="rcl/epcos-cap-02100222.pdf" cite="EPCOS Electrolytic Aluminium Capacitor (22000uF/25V)">HardwareDoc</q></li><li><q lang="rcl/epcos-cap-02100222.pdf" cite="EPCOS Electrolytic Aluminium Capacitor (22000uF/16V)">HardwareDoc</q></li></ul></li><h3>Relays</h3></li><ul><li><q lang="relay/relais-RY611012.pdf" cite="Schrack Relay">HardwareDoc</q></li><li><q lang="relay/omron-g6r-1rt.pdf" cite="Omron Relay">HardwareDoc</q></li></ul></li><h3>Semiconductors</h3></li><ul><li><q lang="aop/TL072.pdf" cite="TL072 Operational Amplifiers">HardwareDoc</q></li><li><q lang="diode/mbr2545.pdf" cite="MBR2545 Schottky Barrier Rectifier">HardwareDoc</q></li><li><q lang="transistors/IRF9540.pdf" cite="IRF 9540">HardwareDoc</q></li></ul></li><h3>Others</h3></li><ul><li><q lang="design/texas-pcb-layout-advices.pdf" cite="PCB Layout Guidelines for Power Controllers (Texas Instrument)">HardwareDoc</q></li><li><q lang="transformers/toric-transformer-nuvotem.pdf" cite="Toric transformer">HardwareDoc</q></li></ul></li><h2>Changes</h2><p>{|border="1"
+|-
+|2007-07-28
+|v1.4.1
+|
+</p></li><ul><li>Used 0.6mm width for small signals
+|-
+|2007-05-06
+|v1.4
+|
+</li><li>Use a 12-pin connector instead of a 13-pin connector
+</li><li>Added a 10nF capacitor between the ground and the reference ground
+|-
+|2007-01-21
+|v1.3
+|
+</li><li>Added a diode followed by a resistor to provide a hardware current protection on the power supply regulator board
+|}</li></ul></li>
