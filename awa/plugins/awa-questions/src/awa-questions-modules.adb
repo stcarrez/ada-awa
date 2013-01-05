@@ -82,4 +82,18 @@ package body AWA.Questions.Modules is
       return Get;
    end Get_Question_Module;
 
+   --  ------------------------------
+   --  Get the question manager instance associated with the current application.
+   --  ------------------------------
+   function Get_Question_Manager return Services.Question_Service_Access is
+      Module : constant Question_Module_Access := Get_Question_Module;
+   begin
+      if Module = null then
+         Log.Error ("There is no active Question_Module");
+         return null;
+      else
+         return Module.Get_Question_Manager;
+      end if;
+   end Get_Question_Manager;
+
 end AWA.Questions.Modules;
