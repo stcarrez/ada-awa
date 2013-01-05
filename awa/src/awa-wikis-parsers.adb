@@ -627,7 +627,11 @@ package body AWA.Wikis.Parsers is
       end loop;
       Flush_Text (P);
       P.Document.Add_List_Item (Level, Token = '#');
-      Put_Back (P, C);
+
+      --  Ignore the first white space after the list item.
+      if C /= ' ' and C /= HT then
+         Put_Back (P, C);
+      end if;
    end Parse_List;
 
    --  ------------------------------
