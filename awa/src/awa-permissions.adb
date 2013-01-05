@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions -- Permissions module
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -63,6 +63,20 @@ package body AWA.Permissions is
          Log.Debug ("Permission is refused");
          raise NO_PERMISSION;
       end if;
+   end Check;
+
+   --  ------------------------------
+   --  Verify that the permission represented by <b>Permission</b> is granted to access the
+   --  database entity represented by <b>Entity</b>.
+   --  ------------------------------
+   procedure Check (Permission : in Security.Permissions.Permission_Index;
+                    Entity     : in ADO.Objects.Object_Ref'Class) is
+   begin
+      if Entity.Is_Null then
+         Log.Debug ("Permission is refused because the entity is null.");
+         raise NO_PERMISSION;
+      end if;
+      Check (Permission, ADO.Objects.Get_Value (Entity.Get_Key));
    end Check;
 
    type Controller_Config is record
@@ -161,6 +175,7 @@ package body AWA.Permissions is
    --  ------------------------------
    overriding
    function Get_Name (From : in Entity_Policy) return String is
+      pragma Unreferenced (From);
    begin
       return NAME;
    end Get_Name;
