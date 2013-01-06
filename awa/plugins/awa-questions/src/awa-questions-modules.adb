@@ -41,10 +41,15 @@ package body AWA.Questions.Modules is
       --  Setup the resource bundles.
       App.Register ("questionMsg", "questions");
 
-      --  Register here any bean class, servlet, filter.
+      --  Edit and save a question.
       Register.Register (Plugin => Plugin,
                          Name   => "AWA.Questions.Beans.Questions_Bean",
                          Handler => AWA.Questions.Beans.Create_Question_Bean'Access);
+
+      --  List of questions.
+      Register.Register (Plugin => Plugin,
+                         Name   => "AWA.Questions.Beans.Question_List_Bean",
+                         Handler => AWA.Questions.Beans.Create_Question_List_Bean'Access);
 
       AWA.Modules.Module (Plugin).Initialize (App, Props);
 
