@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="1.0">
+  <managed-bean>
+    <description>This bean allows to create or edit a question.</description>
+    <managed-bean-name>question</managed-bean-name>
+    <managed-bean-class>AWA.Questions.Beans.Questions_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <description>This list bean represents the list of questions.</description>
+    <managed-bean-name>questionList</managed-bean-name>
+    <managed-bean-class>AWA.Questions.Beans.Questions_List_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <navigation-rule>
+    <from-view-id>/questions/ask.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/questions/view.xhtml?id=#{question.id}</to-view-id>
+      <redirect/>
+    </navigation-case>
+  </navigation-rule>
+
     <filter-mapping>
         <filter-name>service</filter-name>
         <url-pattern>/questions/*.html</url-pattern>
@@ -8,6 +31,7 @@
     <filter-mapping>
         <filter-name>auth-filter</filter-name>
         <url-pattern>/questions/forms/*.html</url-pattern>
+        <url-pattern>/questions/ask.html</url-pattern>
     </filter-mapping>
 
     <entity-permission>
