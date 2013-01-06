@@ -320,6 +320,62 @@ package AWA.Questions.Models is
 
 
    --  --------------------
+   --  The list of answers.
+   --  --------------------
+   type Answer_Info is new Util.Beans.Basic.Readonly_Bean with record
+      --  the answer identifier.
+      Id : ADO.Identifier;
+
+      --  the answer creation date.
+      Create_Date : Ada.Calendar.Time;
+
+      --  the answer edit date.
+      Edit_Date : Ada.Calendar.Time;
+
+      --  the answer description.
+      Answer : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the answer rank.
+      Rank : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the author's identifier.
+      Author_Id : ADO.Identifier;
+
+      --  the author's name.
+      Author_Name : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the author's email.
+      Author_Email : Ada.Strings.Unbounded.Unbounded_String;
+
+   end record;
+
+   --  Get the bean attribute identified by the given name.
+   overriding
+   function Get_Value (From : in Answer_Info;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   package Answer_Info_Beans is
+      new Util.Beans.Basic.Lists (Element_Type => Answer_Info);
+   package Answer_Info_Vectors renames Answer_Info_Beans.Vectors;
+   subtype Answer_Info_List_Bean is Answer_Info_Beans.List_Bean;
+
+   type Answer_Info_List_Bean_Access is access all Answer_Info_List_Bean;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Answer_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   subtype Answer_Info_Vector is Answer_Info_Vectors.Vector;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Answer_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   Query_Answer_List : constant ADO.Queries.Query_Definition_Access;
+
+   --  --------------------
    --  The list of questions.
    --  --------------------
    type Question_Info is new Util.Beans.Basic.Readonly_Bean with record
@@ -579,12 +635,22 @@ private
                         Impl   : out Answer_Access);
 
    package File_1 is
+      new ADO.Queries.Loaders.File (Path => "answer-list.xml",
+                                    Sha1 => "444FCCD381E2361DD08198E9960E47CA4E91611F");
+
+   package Def_Answerinfo_Answer_List is
+      new ADO.Queries.Loaders.Query (Name => "answer-list",
+                                     File => File_1.File'Access);
+   Query_Answer_List : constant ADO.Queries.Query_Definition_Access
+   := Def_Answerinfo_Answer_List.Query'Access;
+
+   package File_2 is
       new ADO.Queries.Loaders.File (Path => "question-list.xml",
                                     Sha1 => "F1BB6507A43DC668AC8E21B0E239864D7CEFB0CA");
 
    package Def_Questioninfo_Question_List is
       new ADO.Queries.Loaders.Query (Name => "question-list",
-                                     File => File_1.File'Access);
+                                     File => File_2.File'Access);
    Query_Question_List : constant ADO.Queries.Query_Definition_Access
    := Def_Questioninfo_Question_List.Query'Access;
 end AWA.Questions.Models;
