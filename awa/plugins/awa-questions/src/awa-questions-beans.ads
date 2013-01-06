@@ -78,6 +78,10 @@ package AWA.Questions.Beans is
    procedure Delete (Bean    : in out Answer_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
+   --  Create the answer bean instance.
+   function Create_Answer_Bean (Module : in AWA.Questions.Modules.Question_Module_Access)
+                                       return Util.Beans.Basic.Readonly_Bean_Access;
+
    --  Create the Question_Info_List_Bean bean instance.
    function Create_Question_List_Bean (Module : in AWA.Questions.Modules.Question_Module_Access)
                                      return Util.Beans.Basic.Readonly_Bean_Access;
@@ -90,6 +94,7 @@ package AWA.Questions.Beans is
       Answer_List_Bean : AWA.Questions.Models.Answer_Info_List_Bean_Access;
 
       Question         : aliased AWA.Questions.Models.Question_Display_Info;
+      Question_Bean    : Util.Beans.Basic.Readonly_Bean_Access;
    end record;
    type Question_Display_Bean_Access is access all Question_Display_Bean'Class;
 
