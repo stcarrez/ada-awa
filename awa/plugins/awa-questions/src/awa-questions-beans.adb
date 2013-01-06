@@ -91,7 +91,9 @@ package body AWA.Questions.Beans is
    function Get_Value (From : in Answer_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
-      if From.Is_Null then
+      if Name = "question_id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Question.Get_Id));
+      elsif From.Is_Null then
          return Util.Beans.Objects.Null_Object;
       else
          return AWA.Questions.Models.Answer_Bean (From).Get_Value (Name);
@@ -106,8 +108,9 @@ package body AWA.Questions.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      if Name = "id" then
-         null;
+      if Name = "id" and not Util.Beans.Objects.Is_Null (Value) then
+         From.Service.Load_Answer (From,
+                                   ADO.Identifier (Util.Beans.Objects.To_Integer (Value)));
 
       elsif Name = "answer" then
          From.Set_Answer (Util.Beans.Objects.To_String (Value));
@@ -136,6 +139,17 @@ package body AWA.Questions.Beans is
    end Delete;
 
    --  ------------------------------
+   --  Create the answer bean instance.
+   --  ------------------------------
+   function Create_Answer_Bean (Module : in AWA.Questions.Modules.Question_Module_Access)
+                                return Util.Beans.Basic.Readonly_Bean_Access is
+      Object : constant Answer_Bean_Access := new Answer_Bean;
+   begin
+      Object.Service := Module.Get_Question_Manager;
+      return Object.all'Access;
+   end Create_Answer_Bean;
+
+   --  ------------------------------
    --  Create the Question_Info_List_Bean bean instance.
    --  ------------------------------
    function Create_Question_List_Bean (Module : in AWA.Questions.Modules.Question_Module_Access)
@@ -143,7 +157,6 @@ package body AWA.Questions.Beans is
       use AWA.Questions.Models;
       use AWA.Services;
 
-      Ctx     : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       Object  : constant Question_Info_List_Bean_Access := new Question_Info_List_Bean;
       Session : ADO.Sessions.Session := Module.Get_Session;
       Query   : ADO.Queries.Context;
@@ -165,7 +178,7 @@ package body AWA.Questions.Beans is
                                               Storage => Util.Beans.Objects.STATIC);
 
       elsif Name = "question" then
-         return Util.Beans.Objects.To_Object (Value   => From.Answer_List_Bean,
+         return Util.Beans.Objects.To_Object (Value   => From.Question_Bean,
                                               Storage => Util.Beans.Objects.STATIC);
 
       else
@@ -186,7 +199,6 @@ package body AWA.Questions.Beans is
             use AWA.Questions.Models;
             use AWA.Services;
 
-            Ctx     : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
             Session : ADO.Sessions.Session := From.Service.Get_Session;
             Query   : ADO.Queries.Context;
             List    : AWA.Questions.Models.Question_Display_Info_List_Bean;
@@ -213,7 +225,9 @@ package body AWA.Questions.Beans is
                                        return Util.Beans.Basic.Readonly_Bean_Access is
       Object  : constant Question_Display_Bean_Access := new Question_Display_Bean;
    begin
-      Object.Service := Module.Get_Question_Manager;
+      Object.Service          := Module.Get_Question_Manager;
+      Object.Question_Bean    := Object.Question'Access;
+      Object.Answer_List_Bean := Object.Answer_List'Access;
       return Object.all'Access;
    end Create_Question_Display_Bean;
 
