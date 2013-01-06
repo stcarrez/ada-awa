@@ -22,11 +22,11 @@ with Util.Beans.Basic;
 with Util.Beans.Objects;
 with AWA.Questions.Modules;
 with AWA.Questions.Models;
+with AWA.Questions.Services;
 package AWA.Questions.Beans is
 
    type Question_Bean is new AWA.Questions.Models.Question_Bean with record
-      Module : AWA.Questions.Modules.Question_Module_Access := null;
-      Count  : Natural := 0;
+      Service : Services.Question_Service_Access := null;
    end record;
    type Question_Bean_Access is access all Question_Bean'Class;
 
@@ -52,6 +52,31 @@ package AWA.Questions.Beans is
    --  Create the Questions_Bean bean instance.
    function Create_Question_Bean (Module : in AWA.Questions.Modules.Question_Module_Access)
                                   return Util.Beans.Basic.Readonly_Bean_Access;
+
+   type Answer_Bean is new AWA.Questions.Models.Answer_Bean with record
+      Service  : Services.Question_Service_Access := null;
+      Question : AWA.Questions.Models.Question_Ref;
+   end record;
+   type Answer_Bean_Access is access all Answer_Bean'Class;
+
+   --  Get the value identified by the name.
+   overriding
+   function Get_Value (From : in Answer_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the value identified by the name.
+   overriding
+   procedure Set_Value (From  : in out Answer_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   --  Create or save the answer.
+   procedure Save (Bean    : in out Answer_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Delete the question.
+   procedure Delete (Bean    : in out Answer_Bean;
+                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
    --  Create the Question_Info_List_Bean bean instance.
    function Create_Question_List_Bean (Module : in AWA.Questions.Modules.Question_Module_Access)
