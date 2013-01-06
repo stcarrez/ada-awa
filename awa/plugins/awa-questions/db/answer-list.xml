@@ -46,7 +46,7 @@
     FROM awa_answer AS a
     INNER JOIN awa_user AS user ON a.author_id = user.id
     INNER JOIN awa_email AS email ON a.author_id = email.user_id
-    WHERE a.question_id = ?
+    WHERE a.question_id = :question_id
     ORDER BY a.rank DESC, a.create_date DESC
        </sql>
     </query>
