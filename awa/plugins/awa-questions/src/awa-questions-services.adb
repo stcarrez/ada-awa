@@ -170,4 +170,19 @@ package body AWA.Questions.Services is
       Ctx.Commit;
    end Save_Answer;
 
+   --  ------------------------------
+   --  Load the answer.
+   --  ------------------------------
+   procedure Load_Answer (Model  : in Question_Service;
+                          Answer : in out AWA.Questions.Models.Answer_Ref'Class;
+                          Id     : in ADO.Identifier) is
+      pragma Unreferenced (Model);
+
+      Ctx   : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB    : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Found : Boolean;
+   begin
+      Answer.Load (DB, Id, Found);
+   end Load_Answer;
+
 end AWA.Questions.Services;

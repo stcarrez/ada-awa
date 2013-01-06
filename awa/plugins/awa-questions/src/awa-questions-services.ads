@@ -56,6 +56,11 @@ package AWA.Questions.Services is
                           Question : in AWA.Questions.Models.Question_Ref'Class;
                           Answer   : in out AWA.Questions.Models.Answer_Ref'Class);
 
+   --  Load the answer.
+   procedure Load_Answer (Model  : in Question_Service;
+                          Answer : in out AWA.Questions.Models.Answer_Ref'Class;
+                          Id     : in ADO.Identifier);
+
 private
 
    type Question_Service is new AWA.Modules.Module_Manager with null record;
