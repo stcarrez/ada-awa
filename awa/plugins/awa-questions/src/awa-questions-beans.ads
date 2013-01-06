@@ -82,4 +82,30 @@ package AWA.Questions.Beans is
    function Create_Question_List_Bean (Module : in AWA.Questions.Modules.Question_Module_Access)
                                      return Util.Beans.Basic.Readonly_Bean_Access;
 
+
+   type Question_Display_Bean is new Util.Beans.Basic.Bean with record
+      Service          : Services.Question_Service_Access := null;
+
+      Answer_List      : aliased AWA.Questions.Models.Answer_Info_List_Bean;
+      Answer_List_Bean : AWA.Questions.Models.Answer_Info_List_Bean_Access;
+
+      Question         : aliased AWA.Questions.Models.Question_Display_Info;
+   end record;
+   type Question_Display_Bean_Access is access all Question_Display_Bean'Class;
+
+   --  Get the value identified by the name.
+   overriding
+   function Get_Value (From : in Question_Display_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the value identified by the name.
+   overriding
+   procedure Set_Value (From  : in out Question_Display_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   --  Create the Question_Display_Bean bean instance.
+   function Create_Question_Display_Bean (Module : in AWA.Questions.Modules.Question_Module_Access)
+                                          return Util.Beans.Basic.Readonly_Bean_Access;
+
 end AWA.Questions.Beans;
