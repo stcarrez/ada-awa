@@ -15,12 +15,12 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-div.question {
+div.question, div.answer {
     float: left;
     width: 98%;
     padding-left: 2%;
 }
-div.question-content {
+div.question-content, div.answer-content {
     float: left;
     width: 90%;
 }
@@ -29,7 +29,7 @@ div.question-vote {
     width: 30px;
     font-weight: bold;
 }
-div.question-vote div.vote-up, div.question-vote div.vote-down, div.question div.vote-count {
+div.question-vote div.vote-up, div.question-vote div.vote-down, div.question-vote div.vote-count {
     float: left;
     clear: both;
     width: 20px;
@@ -48,4 +48,9 @@ div.question-action {
 div.question-author {
     float: right;
     width: 45%;
+}
+div.answer {
+    margin-top: 5px;
+    border-top: 1px solid #ddd;
+    padding-top: 5px;
 }
