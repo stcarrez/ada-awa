@@ -29,10 +29,10 @@ package body AWA.Questions.Beans is
    function Get_Value (From : in Question_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
-      if Name = "count" then
-         return Util.Beans.Objects.To_Object (From.Count);
-      else
+      if From.Is_Null then
          return Util.Beans.Objects.Null_Object;
+      else
+         return AWA.Questions.Models.Question_Bean (From).Get_Value (Name);
       end if;
    end Get_Value;
 
@@ -44,22 +44,34 @@ package body AWA.Questions.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      if Name = "count" then
-         From.Count := Util.Beans.Objects.To_Integer (Value);
+      if Name = "title" then
+         From.Set_Title (Util.Beans.Objects.To_String (Value));
+
+      elsif Name = "description" then
+         From.Set_Description (Util.Beans.Objects.To_String (Value));
+
+      elsif Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
+            From.Service.Load_Question (From,
+                                        ADO.Identifier (Util.Beans.Objects.To_Integer (Value)));
       end if;
    end Set_Value;
 
-   procedure Save (Bean : in out Question_Bean;
+   --  ------------------------------
+   --  Create or save the question.
+   --  ------------------------------
+   procedure Save (Bean    : in out Question_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
-      Manager : constant Services.Question_Service_Access := Bean.Module.Get_Question_Manager;
    begin
-      Manager.Save_Question (Bean);
+      Bean.Service.Save_Question (Bean);
    end Save;
 
-   procedure Delete (Bean : in out Question_Bean;
+   --  ------------------------------
+   --  Delete the question.
+   --  ------------------------------
+   procedure Delete (Bean    : in out Question_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
    begin
-      null;
+      Bean.Service.Delete_Question (Bean);
    end Delete;
 
    --  ------------------------------
@@ -69,9 +81,59 @@ package body AWA.Questions.Beans is
       return Util.Beans.Basic.Readonly_Bean_Access is
       Object : constant Question_Bean_Access := new Question_Bean;
    begin
-      Object.Module := Module;
+      Object.Service := Module.Get_Question_Manager;
       return Object.all'Access;
    end Create_Question_Bean;
+
+
+   --  Get the value identified by the name.
+   overriding
+   function Get_Value (From : in Answer_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if From.Is_Null then
+         return Util.Beans.Objects.Null_Object;
+      else
+         return AWA.Questions.Models.Answer_Bean (From).Get_Value (Name);
+      end if;
+   end Get_Value;
+
+   --  ------------------------------
+   --  Set the value identified by the name.
+   --  ------------------------------
+   overriding
+   procedure Set_Value (From  : in out Answer_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "id" then
+         null;
+
+      elsif Name = "answer" then
+         From.Set_Answer (Util.Beans.Objects.To_String (Value));
+
+      elsif Name = "question_id" and not Util.Beans.Objects.Is_Null (Value) then
+         From.Service.Load_Question (From.Question,
+                                     ADO.Identifier (Util.Beans.Objects.To_Integer (Value)));
+      end if;
+   end Set_Value;
+
+   --  ------------------------------
+   --  Create or save the answer.
+   --  ------------------------------
+   procedure Save (Bean    : in out Answer_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Bean.Service.Save_Answer (Question => Bean.Question,
+                                Answer   => Bean);
+   end Save;
+
+   --  Delete the question.
+   procedure Delete (Bean    : in out Answer_Bean;
+                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      null;
+   end Delete;
 
    --  ------------------------------
    --  Create the Question_Info_List_Bean bean instance.
