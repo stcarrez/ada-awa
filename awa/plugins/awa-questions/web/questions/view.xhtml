@@ -25,10 +25,13 @@
     <!-- Main page body -->
     <ui:define name="pageBody">
         <f:metadata>
-            <f:viewParam id='id' value='#{question.id}'/>
+            <f:viewParam id='id' value='#{questionInfo.id}'/>
+            <f:viewParam id='id' value='#{answer.question_id}'/>
         </f:metadata>
         <div id='awa-content'>
             <ui:include src="views/question.xhtml"/>
+            <ui:include src="lists/answer-list.xhtml"/>
+            <ui:include src="forms/answer-form.xhtml"/>
         </div>
 
     </ui:define>

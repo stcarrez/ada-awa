@@ -18,21 +18,22 @@
         xmlns:awa="http://code.google.com/p/ada-awa/jsf"
         xmlns:h="http://java.sun.com/jsf/html">
 
-    <h2>#{question.title}</h2>
+    <h2>#{questionInfo.question.title}</h2>
     <div>
         <div class='question-vote'>
             <div class='vote-up'></div>
-            <div class='vote-count'>#{question.rating}</div>
+            <div class='vote-count'>#{questionInfo.question.rating}</div>
             <div class='vote-down'></div>
         </div>
         <div class='question-content'>
-            <awa:wiki styleClass='post-text' value="#{question.description}" format="mix"/>
+            <awa:wiki styleClass='post-text' value="#{questionInfo.question.description}" format="mix"/>
             <div class='question-info'>
                 <div class='question-action'>
-                    <a href="#{contextPath}/questions/edit.xhtml?id=#{question.id}">edit</a>
+                    <a href="#{contextPath}/questions/edit.xhtml?id=#{questionInfo.question.id}">edit</a>
                 </div>
                 <div class='question-author'>
-                    John <h:outputText id="date" value="#{question.create_date}" converter="dateConverter"/>
+                    #{questionInfo.question.author_name}
+                    <h:outputText id="date" value="#{questionInfo.question.create_date}" converter="dateConverter"/>
                 </div>
             </div>
         </div>

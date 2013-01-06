@@ -1,4 +1,4 @@
-<!-- Form to create or edit a question
+<!-- Form to create or edit answer
   -  Copyright (C) 2013 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
@@ -21,28 +21,26 @@
         xmlns:c="http://java.sun.com/jstl/core"
         xmlns:h="http://java.sun.com/jsf/html">
 
-  <div class='awa-post ui-widget ui-widget-content ui-corner-all awa-form'>
+  <div class='awa-post awa-form'>
     <h:form id='post'>
-        <h:inputHidden id='question-id' value='#{question.id}' required='false'/>
+        <h:inputHidden id='question-id' value='#{answer.question_id}' required='false'/>
+        <h:inputHidden id='answer-id' value='#{answer.id}' required='false'/>
         <div class='grid_8'>
             <h:messages styleClass='error'/>
             <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
                 <dt>
-                    <label for='title'>#{questionMsg.question_title_label}</label>
-                    <h:message for='title' styleClass='error'/>
+                    <label for='title'>#{questionMsg.question_anwser_title_label}</label>
+                    <h:message for='text' styleClass='error'/>
                 </dt>
                 <dd>
-                    <h:inputText id='title' size='50' required='true' value='#{question.title}'/>
-                </dd>
-                <dd>
-                    <h:inputTextarea id='text' rows='15' required='false' value='#{question.description}'/>
+                    <h:inputTextarea id='text' rows='15' required='false' value='#{answer.answer}'/>
                 </dd>
             </dl>
             <ul class='awa-buttons'>
                 <li>
-                    <h:commandButton id='save' value='#{questionMsg.question_post_question_button}'
+                    <h:commandButton id='save' value='#{questionMsg.question_post_answer_button}'
                                      styleClass="ui-button ui-state-default ui-corner-all"
-                                     action="#{question.Save}"/>
+                                     action="#{answer.Save}"/>
                 </li>
             </ul>
         </div>
