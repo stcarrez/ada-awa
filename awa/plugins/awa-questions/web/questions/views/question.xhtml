@@ -1,0 +1,40 @@
+<!-- Display a question
+  -  Copyright (C) 2013 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<div class='question'
+        xmlns:awa="http://code.google.com/p/ada-awa/jsf"
+        xmlns:h="http://java.sun.com/jsf/html">
+
+    <h2>#{question.title}</h2>
+    <div>
+        <div class='question-vote'>
+            <div class='vote-up'></div>
+            <div class='vote-count'>#{question.rating}</div>
+            <div class='vote-down'></div>
+        </div>
+        <div class='question-content'>
+            <awa:wiki styleClass='post-text' value="#{question.description}" format="mix"/>
+            <div class='question-info'>
+                <div class='question-action'>
+                    <a href="#{contextPath}/questions/edit.xhtml?id=#{question.id}">edit</a>
+                </div>
+                <div class='question-author'>
+                    John <h:outputText id="date" value="#{question.create_date}" converter="dateConverter"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
