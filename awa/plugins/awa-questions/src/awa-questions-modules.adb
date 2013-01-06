@@ -51,6 +51,11 @@ package body AWA.Questions.Modules is
                          Name   => "AWA.Questions.Beans.Question_List_Bean",
                          Handler => AWA.Questions.Beans.Create_Question_List_Bean'Access);
 
+      --  Display a question with its answers.
+      Register.Register (Plugin => Plugin,
+                         Name   => "AWA.Questions.Beans.Question_Display_Bean",
+                         Handler => AWA.Questions.Beans.Create_Question_Display_Bean'Access);
+
       AWA.Modules.Module (Plugin).Initialize (App, Props);
 
       --  Add here the creation of manager instances.
