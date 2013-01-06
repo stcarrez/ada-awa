@@ -153,4 +153,68 @@ package body AWA.Questions.Beans is
       return Object.all'Access;
    end Create_Question_List_Bean;
 
+   --  ------------------------------
+   --  Get the value identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Question_Display_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "answers" then
+         return Util.Beans.Objects.To_Object (Value   => From.Answer_List_Bean,
+                                              Storage => Util.Beans.Objects.STATIC);
+
+      elsif Name = "question" then
+         return Util.Beans.Objects.To_Object (Value   => From.Answer_List_Bean,
+                                              Storage => Util.Beans.Objects.STATIC);
+
+      else
+         return Util.Beans.Objects.Null_Object;
+      end if;
+   end Get_Value;
+
+   --  ------------------------------
+   --  Set the value identified by the name.
+   --  ------------------------------
+   overriding
+   procedure Set_Value (From  : in out Question_Display_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
+         declare
+            use AWA.Questions.Models;
+            use AWA.Services;
+
+            Ctx     : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+            Session : ADO.Sessions.Session := From.Service.Get_Session;
+            Query   : ADO.Queries.Context;
+            List    : AWA.Questions.Models.Question_Display_Info_List_Bean;
+         begin
+            Query.Set_Query (AWA.Questions.Models.Query_Question_Info);
+            Query.Bind_Param ("question_id", Util.Beans.Objects.To_Integer (Value));
+            AWA.Questions.Models.List (List, Session, Query);
+            if not List.List.Is_Empty then
+               From.Question := List.List.Element (0);
+            end if;
+            Query.Clear;
+
+            Query.Set_Query (AWA.Questions.Models.Query_Answer_List);
+            Query.Bind_Param ("question_id", Util.Beans.Objects.To_Integer (Value));
+            AWA.Questions.Models.List (From.Answer_List, Session, Query);
+         end;
+      end if;
+   end Set_Value;
+
+   --  ------------------------------
+   --  Create the Question_Display_Bean bean instance.
+   --  ------------------------------
+   function Create_Question_Display_Bean (Module : in AWA.Questions.Modules.Question_Module_Access)
+                                       return Util.Beans.Basic.Readonly_Bean_Access is
+      Object  : constant Question_Display_Bean_Access := new Question_Display_Bean;
+   begin
+      Object.Service := Module.Get_Question_Manager;
+      return Object.all'Access;
+   end Create_Question_Display_Bean;
+
 end AWA.Questions.Beans;
