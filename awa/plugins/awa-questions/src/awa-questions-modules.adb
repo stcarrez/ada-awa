@@ -43,8 +43,13 @@ package body AWA.Questions.Modules is
 
       --  Edit and save a question.
       Register.Register (Plugin => Plugin,
-                         Name   => "AWA.Questions.Beans.Questions_Bean",
+                         Name   =>  "AWA.Questions.Beans.Question_Bean",
                          Handler => AWA.Questions.Beans.Create_Question_Bean'Access);
+
+      --  Edit and save an answer.
+      Register.Register (Plugin => Plugin,
+                         Name   =>  "AWA.Questions.Beans.Answer_Bean",
+                         Handler => AWA.Questions.Beans.Create_Answer_Bean'Access);
 
       --  List of questions.
       Register.Register (Plugin => Plugin,
