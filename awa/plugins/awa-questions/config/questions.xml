@@ -3,21 +3,28 @@
   <managed-bean>
     <description>This bean allows to create or edit a question.</description>
     <managed-bean-name>question</managed-bean-name>
-    <managed-bean-class>AWA.Questions.Beans.Questions_Bean</managed-bean-class>
+    <managed-bean-class>AWA.Questions.Beans.Question_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <description>This bean allows to create or edit an answer.</description>
+    <managed-bean-name>answer</managed-bean-name>
+    <managed-bean-class>AWA.Questions.Beans.Answer_Bean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
   <managed-bean>
     <description>This list bean represents the list of questions.</description>
     <managed-bean-name>questionList</managed-bean-name>
-    <managed-bean-class>AWA.Questions.Beans.Questions_List_Bean</managed-bean-class>
+    <managed-bean-class>AWA.Questions.Beans.Question_List_Bean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
   <managed-bean>
     <description>This list bean represents the list of questions.</description>
     <managed-bean-name>questionInfo</managed-bean-name>
-    <managed-bean-class>AWA.Questions.Beans.Questions_Display_Bean</managed-bean-class>
+    <managed-bean-class>AWA.Questions.Beans.Question_Display_Bean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
@@ -26,6 +33,15 @@
     <navigation-case>
       <from-outcome>success</from-outcome>
       <to-view-id>/questions/view.xhtml?id=#{question.id}</to-view-id>
+      <redirect/>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/questions/view.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/questions/view.xhtml?id=#{answer.question_id}</to-view-id>
       <redirect/>
     </navigation-case>
   </navigation-rule>
@@ -39,6 +55,7 @@
         <filter-name>auth-filter</filter-name>
         <url-pattern>/questions/forms/*.html</url-pattern>
         <url-pattern>/questions/ask.html</url-pattern>
+        <url-pattern>/questions/view.html</url-pattern>
     </filter-mapping>
 
     <entity-permission>
@@ -48,6 +65,14 @@
             select ACL.ID from awa_acl AS ACL
             where ACL.ENTITY_TYPE = :entity_type
             and ACL.USER_ID = :user_id
+        </sql>
+    </entity-permission>
+
+    <entity-permission>
+        <name>answer-create</name>
+        <entity-type>awa_question</entity-type>
+        <sql>
+            select user.id from awa_user as user where user.id = :user_id
         </sql>
     </entity-permission>
 </module>
