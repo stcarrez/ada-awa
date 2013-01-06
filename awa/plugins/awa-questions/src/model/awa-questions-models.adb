@@ -1139,6 +1139,87 @@ package body AWA.Questions.Models is
    --  Get the bean attribute identified by the given name.
    --  --------------------
    overriding
+   function Get_Value (From : in Question_Display_Info;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
+      end if;
+      if Name = "title" then
+         return Util.Beans.Objects.To_Object (From.Title);
+      end if;
+      if Name = "create_date" then
+         return Util.Beans.Objects.Time.To_Object (From.Create_Date);
+      end if;
+      if Name = "edit_date" then
+         return Util.Beans.Objects.Time.To_Object (From.Edit_Date);
+      end if;
+      if Name = "description" then
+         return Util.Beans.Objects.To_Object (From.Description);
+      end if;
+      if Name = "rating" then
+         return Util.Beans.Objects.To_Object (From.Rating);
+      end if;
+      if Name = "author_id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Author_Id));
+      end if;
+      if Name = "author_name" then
+         return Util.Beans.Objects.To_Object (From.Author_Name);
+      end if;
+      if Name = "author_email" then
+         return Util.Beans.Objects.To_Object (From.Author_Email);
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+   --  --------------------
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   --  --------------------
+   procedure List (Object  : in out Question_Display_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+   begin
+      List (Object.List, Session, Context);
+   end List;
+   --  --------------------
+   --  The list of questions.
+   --  --------------------
+   procedure List (Object  : in out Question_Display_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+      procedure Read (Into : in out Question_Display_Info);
+
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Context);
+      Pos  : Natural := 0;
+      procedure Read (Into : in out Question_Display_Info) is
+      begin
+         Into.Id := Stmt.Get_Identifier (0);
+         Into.Title := Stmt.Get_Unbounded_String (1);
+         Into.Create_Date := Stmt.Get_Time (2);
+         Into.Edit_Date := Stmt.Get_Time (3);
+         Into.Description := Stmt.Get_Unbounded_String (4);
+         Into.Rating := Stmt.Get_Unbounded_String (5);
+         Into.Author_Id := Stmt.Get_Identifier (6);
+         Into.Author_Name := Stmt.Get_Unbounded_String (7);
+         Into.Author_Email := Stmt.Get_Unbounded_String (8);
+      end Read;
+   begin
+      Stmt.Execute;
+      Question_Display_Info_Vectors.Clear (Object);
+      while Stmt.Has_Elements loop
+         Object.Insert_Space (Before => Pos);
+         Object.Update_Element (Index => Pos, Process => Read'Access);
+         Pos := Pos + 1;
+         Stmt.Next;
+      end loop;
+   end List;
+
+
+   --  --------------------
+   --  Get the bean attribute identified by the given name.
+   --  --------------------
+   overriding
    function Get_Value (From : in Question_Info;
                        Name : in String) return Util.Beans.Objects.Object is
    begin

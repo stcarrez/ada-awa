@@ -378,6 +378,65 @@ package AWA.Questions.Models is
    --  --------------------
    --  The list of questions.
    --  --------------------
+   type Question_Display_Info is new Util.Beans.Basic.Readonly_Bean with record
+      --  the question identifier.
+      Id : ADO.Identifier;
+
+      --  the question title.
+      Title : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the question creation date.
+      Create_Date : Ada.Calendar.Time;
+
+      --  the question edit date.
+      Edit_Date : Ada.Calendar.Time;
+
+      --  the question description.
+      Description : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the question rating.
+      Rating : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the author's identifier.
+      Author_Id : ADO.Identifier;
+
+      --  the author's name.
+      Author_Name : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the author's email.
+      Author_Email : Ada.Strings.Unbounded.Unbounded_String;
+
+   end record;
+
+   --  Get the bean attribute identified by the given name.
+   overriding
+   function Get_Value (From : in Question_Display_Info;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   package Question_Display_Info_Beans is
+      new Util.Beans.Basic.Lists (Element_Type => Question_Display_Info);
+   package Question_Display_Info_Vectors renames Question_Display_Info_Beans.Vectors;
+   subtype Question_Display_Info_List_Bean is Question_Display_Info_Beans.List_Bean;
+
+   type Question_Display_Info_List_Bean_Access is access all Question_Display_Info_List_Bean;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Question_Display_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   subtype Question_Display_Info_Vector is Question_Display_Info_Vectors.Vector;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Question_Display_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   Query_Question_Info : constant ADO.Queries.Query_Definition_Access;
+
+   --  --------------------
+   --  The list of questions.
+   --  --------------------
    type Question_Info is new Util.Beans.Basic.Readonly_Bean with record
       --  the question identifier.
       Id : ADO.Identifier;
@@ -645,12 +704,22 @@ private
    := Def_Answerinfo_Answer_List.Query'Access;
 
    package File_2 is
+      new ADO.Queries.Loaders.File (Path => "question-info.xml",
+                                    Sha1 => "81EA61CAF6D626E31A2794BA7BA7795826C98FCF");
+
+   package Def_Questiondisplayinfo_Question_Info is
+      new ADO.Queries.Loaders.Query (Name => "question-info",
+                                     File => File_2.File'Access);
+   Query_Question_Info : constant ADO.Queries.Query_Definition_Access
+   := Def_Questiondisplayinfo_Question_Info.Query'Access;
+
+   package File_3 is
       new ADO.Queries.Loaders.File (Path => "question-list.xml",
                                     Sha1 => "F1BB6507A43DC668AC8E21B0E239864D7CEFB0CA");
 
    package Def_Questioninfo_Question_List is
       new ADO.Queries.Loaders.Query (Name => "question-list",
-                                     File => File_2.File'Access);
+                                     File => File_3.File'Access);
    Query_Question_List : constant ADO.Queries.Query_Definition_Access
    := Def_Questioninfo_Question_List.Query'Access;
 end AWA.Questions.Models;
