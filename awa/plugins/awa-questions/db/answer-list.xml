@@ -1,0 +1,54 @@
+<query-mapping package='AWA.Questions.Models'>
+    <description>
+      The list of answers associated with a question.
+    </description>
+
+    <class name="AWA.Questions.Models.Answer_Info" bean="yes">
+        <comment>The list of answers.</comment>
+        <property type='Identifier' name="id">
+            <comment>the answer identifier.</comment>
+        </property>
+        <property type='Date' name="create_date">
+            <comment>the answer creation date.</comment>
+        </property>
+        <property type='Date' name="edit_date">
+            <comment>the answer edit date.</comment>
+        </property>
+        <property type='String' name="answer">
+            <comment>the answer description.</comment>
+        </property>
+        <property type='String' name="rank">
+            <comment>the answer rank.</comment>
+        </property>
+        <property type='Identifier' name="author_id">
+            <comment>the author's identifier.</comment>
+        </property>
+        <property type='String' name="author_name">
+            <comment>the author's name.</comment>
+        </property>
+        <property type='String' name="author_email">
+            <comment>the author's email.</comment>
+        </property>
+    </class>
+
+    <query name='answer-list'>
+       <comment>Get a list of answers.</comment>
+       <sql>
+    SELECT
+      a.id,
+      a.create_date,
+      a.edit_date,
+      a.answer,
+      a.rank,
+      a.author_id,
+      user.name,
+      email.email
+    FROM awa_answer AS a
+    INNER JOIN awa_user AS user ON a.author_id = user.id
+    INNER JOIN awa_email AS email ON a.author_id = email.user_id
+    WHERE a.question_id = ?
+    ORDER BY a.rank DESC, a.create_date DESC
+       </sql>
+    </query>
+
+</query-mapping>
