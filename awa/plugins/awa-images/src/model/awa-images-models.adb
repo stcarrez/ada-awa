@@ -29,7 +29,7 @@ package body AWA.Images.Models is
    use type ADO.Objects.Object_Record;
 
    function Image_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => IMAGE_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -37,7 +37,7 @@ package body AWA.Images.Models is
    end Image_Key;
 
    function Image_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => IMAGE_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -104,7 +104,6 @@ package body AWA.Images.Models is
    begin
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Integer (Impl.all, 3, Impl.Width, Value);
-      ADO.Objects.Set_Field_Natural (Impl.all, 3, Impl.Width, Value);
    end Set_Width;
 
    function Get_Width (Object : in Image_Ref)
@@ -121,7 +120,6 @@ package body AWA.Images.Models is
    begin
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Integer (Impl.all, 4, Impl.Height, Value);
-      ADO.Objects.Set_Field_Natural (Impl.all, 4, Impl.Height, Value);
    end Set_Height;
 
    function Get_Height (Object : in Image_Ref)
@@ -138,7 +136,6 @@ package body AWA.Images.Models is
    begin
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Integer (Impl.all, 5, Impl.Thumb_Height, Value);
-      ADO.Objects.Set_Field_Natural (Impl.all, 5, Impl.Thumb_Height, Value);
    end Set_Thumb_Height;
 
    function Get_Thumb_Height (Object : in Image_Ref)
@@ -155,7 +152,6 @@ package body AWA.Images.Models is
    begin
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Integer (Impl.all, 6, Impl.Thumb_Width, Value);
-      ADO.Objects.Set_Field_Natural (Impl.all, 6, Impl.Thumb_Width, Value);
    end Set_Thumb_Width;
 
    function Get_Thumb_Width (Object : in Image_Ref)
