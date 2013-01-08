@@ -29,7 +29,7 @@ package body AWA.Jobs.Models is
    use type ADO.Objects.Object_Record;
 
    function Job_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => JOB_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -37,7 +37,7 @@ package body AWA.Jobs.Models is
    end Job_Key;
 
    function Job_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => JOB_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -193,7 +193,6 @@ package body AWA.Jobs.Models is
    begin
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Integer (Impl.all, 7, Impl.Progress, Value);
-      ADO.Objects.Set_Field_Integer (Impl.all, 7, Impl.Progress, Value);
    end Set_Progress;
 
    function Get_Progress (Object : in Job_Ref)
@@ -275,7 +274,6 @@ package body AWA.Jobs.Models is
       Impl : Job_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Integer (Impl.all, 11, Impl.Priority, Value);
       ADO.Objects.Set_Field_Integer (Impl.all, 11, Impl.Priority, Value);
    end Set_Priority;
 
