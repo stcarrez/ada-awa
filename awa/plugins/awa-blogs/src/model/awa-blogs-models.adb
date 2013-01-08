@@ -30,7 +30,7 @@ package body AWA.Blogs.Models is
    use type ADO.Objects.Object_Record;
 
    function Blog_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => BLOG_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -38,7 +38,7 @@ package body AWA.Blogs.Models is
    end Blog_Key;
 
    function Blog_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => BLOG_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -507,7 +507,7 @@ package body AWA.Blogs.Models is
       ADO.Objects.Set_Created (Object);
    end Load;
    function Post_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => POST_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -515,7 +515,7 @@ package body AWA.Blogs.Models is
    end Post_Key;
 
    function Post_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => POST_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
