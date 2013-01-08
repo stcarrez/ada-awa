@@ -1,0 +1,45 @@
+<!-- Display a list of question
+  -  Copyright (C) 2013 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<div class='question-list'
+        xmlns:awa="http://code.google.com/p/ada-awa/jsf"
+        xmlns:h="http://java.sun.com/jsf/html">
+
+    <h:list var="questionInfo" value="#{questionList}">
+        <div class='question' id='q_#{questionInfo.id}'>
+            <div class='question-vote'>
+                <div class='vote-up'></div>
+                <div class='vote-count'>#{questionInfo.rank}</div>
+                <div class='vote-down'></div>
+            </div>
+            <div class='question-content'>
+                <h2><a href="#{contextPath}/questions/view.xhtml?id=#{questionInfo.id}">
+                    #{questionInfo.title}</a>
+                </h2>
+                <div class='question-summary'>
+                    #{questionInfo.description}
+                </div>
+                <div class='question-info'>
+                    
+                    <div class='question-author'>
+                        #{questionInfo.author_name}
+                        <h:outputText id="date" value="#{questionInfo.create_date}" converter="dateConverter"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h:list>
+</div>
