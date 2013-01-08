@@ -35,7 +35,7 @@ CREATE TABLE awa_question (
   /* the date when the question was edited. */
   `edit_date` DATETIME ,
   /* Title: Questions and Answers model
-Date: 2013-01-02
+Date: 2013-01-07
 the question short description. */
   `short_description` VARCHAR(255) BINARY NOT NULL,
   /* the question rating. */
@@ -48,6 +48,8 @@ the question short description. */
   `author_id` BIGINT NOT NULL,
   /*  */
   `workspace_id` BIGINT NOT NULL,
+  /*  */
+  `accepted_answer_id` BIGINT ,
   PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES
