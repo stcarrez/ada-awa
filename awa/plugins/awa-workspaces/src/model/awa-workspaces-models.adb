@@ -29,7 +29,7 @@ package body AWA.Workspaces.Models is
    use type ADO.Objects.Object_Record;
 
    function Workspace_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => WORKSPACE_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -37,7 +37,7 @@ package body AWA.Workspaces.Models is
    end Workspace_Key;
 
    function Workspace_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => WORKSPACE_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -377,7 +377,7 @@ package body AWA.Workspaces.Models is
       ADO.Objects.Set_Created (Object);
    end Load;
    function Workspace_Feature_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => WORKSPACE_FEATURE_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -385,7 +385,7 @@ package body AWA.Workspaces.Models is
    end Workspace_Feature_Key;
 
    function Workspace_Feature_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => WORKSPACE_FEATURE_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -439,7 +439,6 @@ package body AWA.Workspaces.Models is
       Impl : Workspace_Feature_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Integer (Impl.all, 2, Impl.Limit, Value);
       ADO.Objects.Set_Field_Integer (Impl.all, 2, Impl.Limit, Value);
    end Set_Limit;
 
@@ -706,7 +705,7 @@ package body AWA.Workspaces.Models is
       ADO.Objects.Set_Created (Object);
    end Load;
    function Workspace_Member_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => WORKSPACE_MEMBER_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -714,7 +713,7 @@ package body AWA.Workspaces.Models is
    end Workspace_Member_Key;
 
    function Workspace_Member_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => WORKSPACE_MEMBER_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
