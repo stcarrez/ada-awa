@@ -29,7 +29,7 @@ package body AWA.Storages.Models is
    use type ADO.Objects.Object_Record;
 
    function Storage_Data_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => STORAGE_DATA_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -37,7 +37,7 @@ package body AWA.Storages.Models is
    end Storage_Data_Key;
 
    function Storage_Data_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => STORAGE_DATA_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -348,7 +348,7 @@ package body AWA.Storages.Models is
       ADO.Objects.Set_Created (Object);
    end Load;
    function Storage_Folder_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => STORAGE_FOLDER_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -356,7 +356,7 @@ package body AWA.Storages.Models is
    end Storage_Folder_Key;
 
    function Storage_Folder_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => STORAGE_FOLDER_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -763,7 +763,7 @@ package body AWA.Storages.Models is
       ADO.Objects.Set_Created (Object);
    end Load;
    function Storage_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => STORAGE_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -771,7 +771,7 @@ package body AWA.Storages.Models is
    end Storage_Key;
 
    function Storage_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => STORAGE_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -875,7 +875,6 @@ package body AWA.Storages.Models is
       Impl : Storage_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Integer (Impl.all, 4, Impl.File_Size, Value);
       ADO.Objects.Set_Field_Integer (Impl.all, 4, Impl.File_Size, Value);
    end Set_File_Size;
 
@@ -1398,7 +1397,7 @@ package body AWA.Storages.Models is
       ADO.Objects.Set_Created (Object);
    end Load;
    function Store_Local_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => STORE_LOCAL_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -1406,7 +1405,7 @@ package body AWA.Storages.Models is
    end Store_Local_Key;
 
    function Store_Local_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => STORE_LOCAL_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -1472,7 +1471,6 @@ package body AWA.Storages.Models is
       Impl : Store_Local_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Integer (Impl.all, 3, Impl.Store_Version, Value);
       ADO.Objects.Set_Field_Integer (Impl.all, 3, Impl.Store_Version, Value);
    end Set_Store_Version;
 
