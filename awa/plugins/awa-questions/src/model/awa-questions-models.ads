@@ -98,7 +98,7 @@ package AWA.Questions.Models is
                  return Ada.Calendar.Time;
 
    --  Set Title: Questions and Answers model
-   --  Date: 2013-01-02
+   --  Date: 2013-01-07
    --  the question short description.
    procedure Set_Short_Description (Object : in out Question_Ref;
                                     Value  : in Ada.Strings.Unbounded.Unbounded_String);
@@ -106,7 +106,7 @@ package AWA.Questions.Models is
                                     Value : in String);
 
    --  Get Title: Questions and Answers model
-   --  Date: 2013-01-02
+   --  Date: 2013-01-07
    --  the question short description.
    function Get_Short_Description (Object : in Question_Ref)
                  return Ada.Strings.Unbounded.Unbounded_String;
@@ -147,6 +147,14 @@ package AWA.Questions.Models is
    --
    function Get_Workspace (Object : in Question_Ref)
                  return AWA.Workspaces.Models.Workspace_Ref'Class;
+
+   --
+   procedure Set_Accepted_Answer (Object : in out Question_Ref;
+                                  Value  : in AWA.Questions.Models.Answer_Ref'Class);
+
+   --
+   function Get_Accepted_Answer (Object : in Question_Ref)
+                 return AWA.Questions.Models.Answer_Ref'Class;
 
    --  Load the entity identified by 'Id'.
    --  Raises the NOT_FOUND exception if it does not exist.
@@ -551,9 +559,10 @@ private
    COL_7_1_NAME : aliased constant String := "version";
    COL_8_1_NAME : aliased constant String := "author_id";
    COL_9_1_NAME : aliased constant String := "workspace_id";
+   COL_10_1_NAME : aliased constant String := "accepted_answer_id";
 
    QUESTION_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 10,
+     (Count => 11,
       Table => QUESTION_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
@@ -565,7 +574,8 @@ private
          7 => COL_6_1_NAME'Access,
          8 => COL_7_1_NAME'Access,
          9 => COL_8_1_NAME'Access,
-         10 => COL_9_1_NAME'Access
+         10 => COL_9_1_NAME'Access,
+         11 => COL_10_1_NAME'Access
 )
      );
    QUESTION_TABLE : constant ADO.Schemas.Class_Mapping_Access := QUESTION_DEF'Access;
@@ -586,6 +596,7 @@ private
        Version : Integer;
        Author : AWA.Users.Models.User_Ref;
        Workspace : AWA.Workspaces.Models.Workspace_Ref;
+       Accepted_Answer : AWA.Questions.Models.Answer_Ref;
    end record;
 
    type Question_Access is access all Question_Impl;

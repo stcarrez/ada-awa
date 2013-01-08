@@ -30,7 +30,7 @@ package body AWA.Questions.Models is
    use type ADO.Objects.Object_Record;
 
    function Question_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => QUESTION_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -38,7 +38,7 @@ package body AWA.Questions.Models is
    end Question_Key;
 
    function Question_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => QUESTION_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -199,7 +199,6 @@ package body AWA.Questions.Models is
    begin
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Integer (Impl.all, 6, Impl.Rating, Value);
-      ADO.Objects.Set_Field_Integer (Impl.all, 6, Impl.Rating, Value);
    end Set_Rating;
 
    function Get_Rating (Object : in Question_Ref)
@@ -265,6 +264,22 @@ package body AWA.Questions.Models is
       return Impl.Workspace;
    end Get_Workspace;
 
+
+   procedure Set_Accepted_Answer (Object : in out Question_Ref;
+                                  Value  : in AWA.Questions.Models.Answer_Ref'Class) is
+      Impl : Question_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 11, Impl.Accepted_Answer, Value);
+   end Set_Accepted_Answer;
+
+   function Get_Accepted_Answer (Object : in Question_Ref)
+                  return AWA.Questions.Models.Answer_Ref'Class is
+      Impl : constant Question_Access := Question_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Accepted_Answer;
+   end Get_Accepted_Answer;
+
    --  Copy of the object.
    procedure Copy (Object : in Question_Ref;
                    Into   : in out Question_Ref) is
@@ -288,6 +303,7 @@ package body AWA.Questions.Models is
             Copy.Version := Impl.Version;
             Copy.Author := Impl.Author;
             Copy.Workspace := Impl.Workspace;
+            Copy.Accepted_Answer := Impl.Accepted_Answer;
          end;
       end if;
       Into := Result;
@@ -462,6 +478,11 @@ package body AWA.Questions.Models is
                           Value => Object.Workspace);
          Object.Clear_Modified (10);
       end if;
+      if Object.Is_Modified (11) then
+         Stmt.Save_Field (Name  => COL_10_1_NAME, --  accepted_answer_id
+                          Value => Object.Accepted_Answer);
+         Object.Clear_Modified (11);
+      end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
          Stmt.Save_Field (Name  => "version",
@@ -512,6 +533,8 @@ package body AWA.Questions.Models is
                         Value => Object.Author);
       Query.Save_Field (Name  => COL_9_1_NAME, --  workspace_id
                         Value => Object.Workspace);
+      Query.Save_Field (Name  => COL_10_1_NAME, --  accepted_answer_id
+                        Value => Object.Accepted_Answer);
       Query.Execute (Result);
       if Result /= 1 then
          raise ADO.Objects.INSERT_ERROR;
@@ -578,11 +601,14 @@ package body AWA.Questions.Models is
       if not Stmt.Is_Null (9) then
          Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (9), Session);
       end if;
+      if not Stmt.Is_Null (10) then
+         Object.Accepted_Answer.Set_Key_Value (Stmt.Get_Identifier (10), Session);
+      end if;
       Object.Version := Stmt.Get_Integer (7);
       ADO.Objects.Set_Created (Object);
    end Load;
    function Answer_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => ANSWER_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -590,7 +616,7 @@ package body AWA.Questions.Models is
    end Answer_Key;
 
    function Answer_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => ANSWER_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -692,7 +718,6 @@ package body AWA.Questions.Models is
       Impl : Answer_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Integer (Impl.all, 4, Impl.Rank, Value);
       ADO.Objects.Set_Field_Integer (Impl.all, 4, Impl.Rank, Value);
    end Set_Rank;
 
