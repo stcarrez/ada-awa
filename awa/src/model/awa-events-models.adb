@@ -29,7 +29,7 @@ package body AWA.Events.Models is
    use type ADO.Objects.Object_Record;
 
    function Message_Type_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => MESSAGE_TYPE_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -37,7 +37,7 @@ package body AWA.Events.Models is
    end Message_Type_Key;
 
    function Message_Type_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => MESSAGE_TYPE_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -364,7 +364,7 @@ package body AWA.Events.Models is
       ADO.Objects.Set_Created (Object);
    end Load;
    function Queue_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => QUEUE_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -372,7 +372,7 @@ package body AWA.Events.Models is
    end Queue_Key;
 
    function Queue_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => QUEUE_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -426,7 +426,6 @@ package body AWA.Events.Models is
       Impl : Queue_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Integer (Impl.all, 2, Impl.Server_Id, Value);
       ADO.Objects.Set_Field_Integer (Impl.all, 2, Impl.Server_Id, Value);
    end Set_Server_Id;
 
@@ -707,7 +706,7 @@ package body AWA.Events.Models is
       ADO.Objects.Set_Created (Object);
    end Load;
    function Message_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => MESSAGE_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -715,7 +714,7 @@ package body AWA.Events.Models is
    end Message_Key;
 
    function Message_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => MESSAGE_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -796,7 +795,6 @@ package body AWA.Events.Models is
    begin
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Integer (Impl.all, 3, Impl.Priority, Value);
-      ADO.Objects.Set_Field_Integer (Impl.all, 3, Impl.Priority, Value);
    end Set_Priority;
 
    function Get_Priority (Object : in Message_Ref)
@@ -812,7 +810,6 @@ package body AWA.Events.Models is
       Impl : Message_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Integer (Impl.all, 4, Impl.Count, Value);
       ADO.Objects.Set_Field_Integer (Impl.all, 4, Impl.Count, Value);
    end Set_Count;
 
@@ -859,7 +856,6 @@ package body AWA.Events.Models is
    begin
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Integer (Impl.all, 6, Impl.Server_Id, Value);
-      ADO.Objects.Set_Field_Integer (Impl.all, 6, Impl.Server_Id, Value);
    end Set_Server_Id;
 
    function Get_Server_Id (Object : in Message_Ref)
@@ -875,7 +871,6 @@ package body AWA.Events.Models is
       Impl : Message_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Integer (Impl.all, 7, Impl.Task_Id, Value);
       ADO.Objects.Set_Field_Integer (Impl.all, 7, Impl.Task_Id, Value);
    end Set_Task_Id;
 

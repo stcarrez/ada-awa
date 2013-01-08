@@ -28,7 +28,7 @@ package body AWA.Permissions.Models is
    use type ADO.Objects.Object_Record;
 
    function ACL_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => ACL_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -36,7 +36,7 @@ package body AWA.Permissions.Models is
    end ACL_Key;
 
    function ACL_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => ACL_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
