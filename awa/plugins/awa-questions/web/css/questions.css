@@ -24,16 +24,40 @@ div.question-content, div.answer-content {
     float: left;
     width: 90%;
 }
+div.question h2 {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+}
+div.question-list div.question h2 {
+    border: none;
+}
+.question-date {
+    font-weight: bold;
+    font-size: 0.8em;
+}
 div.question-vote {
     float: left;
-    width: 30px;
+    width: 40px;
     font-weight: bold;
+    color: #F91;
+    font-size: 1.3em;
 }
 div.question-vote div.vote-up, div.question-vote div.vote-down, div.question-vote div.vote-count {
+    text-align: center;
     float: left;
     clear: both;
-    width: 20px;
+    width: 30px;
+    height: 25px;
+}
+div.question-vote div.vote-up em, div.question-vote div.vote-down em {
+    display: block;
+    margin-left: 5px;
+    width: 30px;
     height: 20px;
+    background: url(../images/vote-icons.png) 0 0 no-repeat;
+}
+div.question-vote div.vote-down em {
+    background: url(../images/vote-icons.png) -40px -27px no-repeat;
 }
 div.question-info {
     float: left;
@@ -53,4 +77,17 @@ div.answer {
     margin-top: 5px;
     border-top: 1px solid #ddd;
     padding-top: 5px;
+}
+div.question-list div.question-content {
+    border-bottom: 1px solid #ddd;
+    margin-top: 5px;
+    padding-top: 5px;
+}
+div.question-list div.question-content a, div.question-list div.question-content a:visited {
+    text-decoration: none;
+    color: #F91;
+    font-size: 1.2em;
+}
+div.question-content a:hover {
+    text-decoration: underline;
 }
