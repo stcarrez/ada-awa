@@ -21,22 +21,23 @@
     <h:list var="questionInfo" value="#{questionList}">
         <div class='question' id='q_#{questionInfo.id}'>
             <div class='question-vote'>
-                <div class='vote-up'></div>
-                <div class='vote-count'>#{questionInfo.rank}</div>
-                <div class='vote-down'></div>
+                <div class='vote-up'><em></em></div>
+                <div class='vote-count'>#{questionInfo.answer_count}</div>
+                <div class='vote-down'><em></em></div>
             </div>
             <div class='question-content'>
-                <h2><a href="#{contextPath}/questions/view.xhtml?id=#{questionInfo.id}">
+                <h2><a href="#{contextPath}/questions/view.html?id=#{questionInfo.id}">
                     #{questionInfo.title}</a>
                 </h2>
                 <div class='question-summary'>
                     #{questionInfo.description}
                 </div>
                 <div class='question-info'>
-                    
+
                     <div class='question-author'>
                         #{questionInfo.author_name}
-                        <h:outputText id="date" value="#{questionInfo.create_date}" converter="dateConverter"/>
+                        <h:outputText id="date" styleClass='question-date' value="#{questionInfo.create_date}"
+                                      converter="dateConverter"/>
                     </div>
                 </div>
             </div>

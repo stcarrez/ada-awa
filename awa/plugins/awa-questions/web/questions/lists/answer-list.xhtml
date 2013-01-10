@@ -23,9 +23,9 @@
         <h:list var="answerInfo" value="#{questionInfo.answers}">
             <div class='answer' id='answer_#{answerInfo.id}'>
                 <div class='question-vote'>
-                    <div class='vote-up'></div>
+                    <div class='vote-up'><em></em></div>
                     <div class='vote-count'>#{answerInfo.rank}</div>
-                    <div class='vote-down'></div>
+                    <div class='vote-down'><em></em></div>
                 </div>
                 <div class='question-content'>
                     <awa:wiki styleClass='post-text' value="#{answerInfo.answer}" format="mix"/>
@@ -35,7 +35,8 @@
                         </div>
                         <div class='question-author'>
                             #{answerInfo.author_name}
-                            <h:outputText id="date" value="#{answerInfo.create_date}" converter="dateConverter"/>
+                            <h:outputText id="date" styleClass='question-date' value="#{answerInfo.create_date}"
+                                          converter="dateConverter"/>
                         </div>
                     </div>
                 </div>
