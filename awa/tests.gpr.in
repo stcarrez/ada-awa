@@ -13,6 +13,7 @@ with "plugins/awa-images/awa_images";
 with "plugins/awa-mail/awa_mail";
 with "plugins/awa-jobs/awa_jobs";
 with "plugins/awa-blogs/awa_blogs";
+with "plugins/awa-votes/awa_votes";
 with "plugins/awa-questions/awa_questions";
 
 project Tests is
@@ -24,6 +25,7 @@ project Tests is
    for Source_Dirs use ("regtests",
 	"plugins/awa-storages/regtests",
 	"plugins/awa-images/regtests",
+	"plugins/awa-votes/regtests",
 	"plugins/awa-questions/regtests");
 
    for Main use Mains;
