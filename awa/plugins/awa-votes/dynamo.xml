@@ -1,0 +1,12 @@
+<project>
+    <name>awa-votes</name>
+    <property name="author_email">Stephane.Carrez@gmail.com</property>
+    <property name="search_dirs">.;../awa-workspaces;../../../asf;../../../security;../../../ado;../../</property>
+    <property name="license">none</property>
+    <property name="author">Stephane Carrez</property>
+    <module name="awa"></module>
+    <module name="ado"></module>
+    <module name="security"></module>
+    <module name="asf"></module>
+    <module name="awa-workspaces"></module>
+</project>
