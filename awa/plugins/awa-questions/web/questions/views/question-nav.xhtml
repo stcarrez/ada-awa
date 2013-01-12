@@ -1,4 +1,4 @@
-<!-- List the questions
+<!-- Navigation in question list page
   -  Copyright (C) 2013 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
@@ -14,20 +14,10 @@
   -  See the License for the specific language governing permissions and
   -  limitations under the License.
   -->
-<ui:composition template="/WEB-INF/layouts/layout.xhtml"
-        xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:c="http://java.sun.com/jstl/core"
-	    xmlns:util="http://code.google.com/p/ada-asf/util"
+<ul class='question-nav'
+        xmlns:awa="http://code.google.com/p/ada-awa/jsf"
         xmlns:h="http://java.sun.com/jsf/html">
-    <ui:param name="title" value="#{questionMsg.question_list_title}"/>
-
-    <!-- Main page body -->
-    <ui:define name="pageBody">
-        <div id='awa-content'>
-            <ui:include src="views/question-nav.xhtml"/>
-            <ui:include src="lists/question-list.xhtml"/>
-        </div>
-
-    </ui:define>
-</ui:composition>
+    <li>
+        <a href="#{contextPath}/questions/ask.html">#{questionMsg.question_ask_question_label}</a>
+    </li>
+</ul>
