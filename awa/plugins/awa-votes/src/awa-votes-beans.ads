@@ -19,14 +19,11 @@
 with Ada.Strings.Unbounded;
 
 with Util.Beans.Basic;
-with AWA.Votes.Services;
 with AWA.Votes.Modules;
 with AWA.Votes.Models;
 package AWA.Votes.Beans is
 
-   type Vote_Bean is new AWA.Votes.Models.Vote_Bean with record
-      Service : AWA.Votes.Services.Vote_Service_Access := null;
-   end record;
+   type Vote_Bean is new AWA.Votes.Models.Vote_Bean with private;
    type Vote_Bean_Access is access all Vote_Bean'Class;
 
    --  Action to vote up.
@@ -42,5 +39,11 @@ package AWA.Votes.Beans is
    --  Create the Votes_Bean bean instance.
    function Create_Vote_Bean (Module : in AWA.Votes.Modules.Vote_Module_Access)
       return Util.Beans.Basic.Readonly_Bean_Access;
+
+private
+
+   type Vote_Bean is new AWA.Votes.Models.Vote_Bean with record
+      Module : AWA.Votes.Modules.Vote_Module_Access := null;
+   end record;
 
 end AWA.Votes.Beans;
