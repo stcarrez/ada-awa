@@ -33,4 +33,15 @@ package AWA.Questions.Services.Tests is
    --  Test list of questions.
    procedure Test_List_Questions (T : in out Test);
 
+   --  Test anonymous user voting for a question.
+   procedure Test_Question_Vote_Anonymous (T : in out Test);
+
+   --  Test voting for a question.
+   procedure Test_Question_Vote (T : in out Test);
+
+private
+
+   --  Do a vote on a question through the question vote bean.
+   procedure Do_Vote (T : in out Test);
+
 end AWA.Questions.Services.Tests;
