@@ -56,11 +56,12 @@ package body AWA.Votes.Modules.Tests is
       declare
          Vote_Manager : Vote_Module_Access := Get_Vote_Module;
          User         : AWA.Users.Models.User_Ref := Context.Get_User;
+         Total        : Integer;
       begin
          T.Assert (Vote_Manager /= null, "There is no vote module");
 
-         Vote_Manager.Vote_For (User.Get_Id, "awa_user", "workspaces-create", 1);
-         Vote_Manager.Vote_For (User.Get_Id, "awa_user", "workspaces-create", 2);
+         Vote_Manager.Vote_For (User.Get_Id, "awa_user", "workspaces-create", 1, Total);
+         Vote_Manager.Vote_For (User.Get_Id, "awa_user", "workspaces-create", 2, Total);
       end;
   end Test_Vote_Up;
 
