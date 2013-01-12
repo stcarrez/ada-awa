@@ -17,6 +17,7 @@
 -----------------------------------------------------------------------
 with ADO.Queries;
 with ADO.Sessions;
+with ADO.Sessions.Entities;
 
 with AWA.Services.Contexts;
 with AWA.Questions.Services;
@@ -162,6 +163,10 @@ package body AWA.Questions.Beans is
       Query   : ADO.Queries.Context;
    begin
       Query.Set_Query (AWA.Questions.Models.Query_Question_List);
+      ADO.Sessions.Entities.Bind_Param (Params  => Query,
+                                        Name    => "entity_type",
+                                        Table   => AWA.Questions.Models.QUESTION_TABLE,
+                                        Session => Session);
       AWA.Questions.Models.List (Object.all, Session, Query);
       return Object.all'Access;
    end Create_Question_List_Bean;
@@ -205,6 +210,10 @@ package body AWA.Questions.Beans is
          begin
             Query.Set_Query (AWA.Questions.Models.Query_Question_Info);
             Query.Bind_Param ("question_id", Util.Beans.Objects.To_Integer (Value));
+            ADO.Sessions.Entities.Bind_Param (Params  => Query,
+                                              Name    => "entity_type",
+                                              Table   => AWA.Questions.Models.QUESTION_TABLE,
+                                              Session => Session);
             AWA.Questions.Models.List (List, Session, Query);
             if not List.List.Is_Empty then
                From.Question := List.List.Element (0);
