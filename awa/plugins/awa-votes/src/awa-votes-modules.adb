@@ -24,8 +24,10 @@ with AWA.Modules.Get;
 with AWA.Votes.Beans;
 with AWA.Permissions;
 with AWA.Services.Contexts;
+with AWA.Users.Models;
 with AWA.Votes.Models;
 
+with ADO.SQL;
 with ADO.Sessions;
 with ADO.Statements;
 with ADO.Sessions.Entities;
@@ -70,61 +72,77 @@ package body AWA.Votes.Modules is
    end Get_Vote_Module;
 
    --  ------------------------------
-   --  Vote for the given element.
+   --  Vote for the given element and return the total vote for that element.
    --  ------------------------------
    procedure Vote_For (Model       : in Vote_Module;
                        Id          : in ADO.Identifier;
                        Entity_Type : in String;
                        Permission  : in String;
-                       Rating      : in Integer) is
+                       Value       : in Integer;
+                       Total       : out Integer) is
       pragma Unreferenced (Model);
 
-      Ctx   : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      User  : constant ADO.Identifier := Ctx.Get_User_Identifier;
-      DB    : constant Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
-      Kind  : ADO.Entity_Type;
+      Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      User   : constant AWA.Users.Models.User_Ref := Ctx.Get_User;
+      DB     : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Kind   : ADO.Entity_Type;
+      Rating : AWA.Votes.Models.Rating_Ref;
+      Vote   : AWA.Votes.Models.Vote_Ref;
+      Query  : ADO.SQL.Query;
+      Found  : Boolean;
    begin
       Log.Info ("User {0} votes for {1} rating {2}",
-                ADO.Identifier'Image (User), Entity_Type & ADO.Identifier'Image (Id),
-                Integer'Image (Rating));
+                ADO.Identifier'Image (User.Get_Id), Entity_Type & ADO.Identifier'Image (Id),
+                Integer'Image (Value));
 
       Ctx.Start;
-
       Kind := ADO.Sessions.Entities.Find_Entity_Type (DB, Entity_Type);
 
       --  Check that the user has the vote permission on the given object.
       AWA.Permissions.Check (Permission => Security.Permissions.Get_Permission_Index (Permission),
                              Entity     => Id);
 
-      declare
-         Stmt   : ADO.Statements.Insert_Statement
-           := DB.Create_Statement (AWA.Votes.Models.VOTE_TABLE);
-         Result : Integer;
-      begin
-         Stmt.Save_Field (Name  => "for_entity_id",
-                          Value => Id);
-         Stmt.Save_Field (Name  => "user_id",
-                          Value => User);
-         Stmt.Save_Field (Name  => "rating",
-                          Value => Rating);
-         Stmt.Save_Field (Name  => "for_entity_type",
-                          Value => Kind);
-         Stmt.Execute (Result);
-         if Result /= 1 then
-            declare
-               Update : ADO.Statements.Update_Statement
-                 := DB.Create_Statement (AWA.Votes.Models.VOTE_TABLE);
-            begin
-               Update.Save_Field (Name => "rating", Value => Rating);
-               Update.Set_Filter ("for_entity_id = :id and user_id = :user "
-                                  & "and for_entity_type = :type");
-               Update.Bind_Param ("id", Id);
-               Update.Bind_Param ("user", User);
-               Update.Bind_Param ("type", Kind);
-               Update.Execute (Result);
-            end;
+      --  Get the vote associated with the object for the user.
+      Query.Set_Join ("INNER JOIN awa_rating r ON r.id = o.entity_id");
+      Query.Set_Filter ("r.for_entity_id = :id and r.for_entity_type = :type "
+                        & "and o.user_id = :user_id");
+      Query.Bind_Param ("id", Id);
+      Query.Bind_Param ("type", Kind);
+      Query.Bind_Param ("user_id", User.Get_Id);
+      Vote.Find (DB, Query, Found);
+      if not Found then
+         Query.Clear;
+
+         --  Get the rating associated with the object.
+         Query.Set_Filter ("for_entity_id = :id and for_entity_type = :type");
+         Query.Bind_Param ("id", Id);
+         Query.Bind_Param ("type", Kind);
+         Rating.Find (DB, Query, Found);
+
+         --  Create it if it does not exist.
+         if not Found then
+            Rating.Set_For_Entity_Id (Id);
+            Rating.Set_For_Entity_Type (Kind);
+            Rating.Set_Rating (Value);
+            Rating.Set_Vote_Count (1);
+         else
+            Rating.Set_Vote_Count (Rating.Get_Vote_Count + 1);
+            Rating.Set_Rating (Value + Rating.Get_Rating);
          end if;
-      end;
+         Rating.Save (DB);
+
+         Vote.Set_User (User);
+         Vote.Set_Entity (Rating);
+      else
+         Rating := AWA.Votes.Models.Rating_Ref (Vote.Get_Entity);
+         Rating.Set_Rating (Rating.Get_Rating + Value - Vote.Get_Rating);
+         Rating.Save (DB);
+      end if;
+      Vote.Set_Rating (Value);
+      Vote.Save (DB);
+
+      --  Return the total rating for the element.
+      Total := Rating.Get_Rating;
       Ctx.Commit;
    end Vote_For;
 
