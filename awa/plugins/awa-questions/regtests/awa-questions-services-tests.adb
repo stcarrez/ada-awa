@@ -120,6 +120,7 @@ package body AWA.Questions.Services.Tests is
       Bean    : Util.Beans.Basic.Readonly_Bean_Access;
       Vote    : AWA.Votes.Beans.Vote_Bean_Access;
    begin
+      Context.Set_Parameter ("id", "1");
       Bean := Context.Get_Bean ("questionVote");
       T.Assert (Bean /= null, "The questionVote bean was not created");
 
