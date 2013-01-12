@@ -28,9 +28,7 @@ with EL.Functions;
 
 with ASF.Applications;
 with ASF.Applications.Main;
-with ASF.Applications.Main.Configs;
 
-with AWA.Applications.Configs;
 with AWA.Applications.Factory;
 
 
@@ -190,6 +188,11 @@ package body Atlas.Applications is
                 Name   => AWA.Images.Modules.NAME,
                 URI    => "images",
                 Module => App.Image_Module'Access);
+
+      Register (App    => App.Self.all'Access,
+                Name   => AWA.Votes.Modules.NAME,
+                URI    => "votes",
+                Module => App.Vote_Module'Access);
 
       Register (App    => App.Self.all'Access,
                 Name   => AWA.Questions.Modules.NAME,
