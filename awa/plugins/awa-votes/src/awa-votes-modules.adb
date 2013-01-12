@@ -15,12 +15,25 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Util.Log.Loggers;
+
+with Security.Permissions;
 
 with AWA.Modules.Beans;
 with AWA.Modules.Get;
-with Util.Log.Loggers;
 with AWA.Votes.Beans;
+with AWA.Permissions;
+with AWA.Services.Contexts;
+with AWA.Votes.Models;
+
+with ADO.Sessions;
+with ADO.Statements;
+with ADO.Sessions.Entities;
+
 package body AWA.Votes.Modules is
+
+   use AWA.Services;
+   use ADO.Sessions;
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Votes.Module");
 
@@ -55,5 +68,64 @@ package body AWA.Votes.Modules is
    begin
       return Get;
    end Get_Vote_Module;
+
+   --  ------------------------------
+   --  Vote for the given element.
+   --  ------------------------------
+   procedure Vote_For (Model       : in Vote_Module;
+                       Id          : in ADO.Identifier;
+                       Entity_Type : in String;
+                       Permission  : in String;
+                       Rating      : in Integer) is
+      pragma Unreferenced (Model);
+
+      Ctx   : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      User  : constant ADO.Identifier := Ctx.Get_User_Identifier;
+      DB    : constant Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Kind  : ADO.Entity_Type;
+   begin
+      Log.Info ("User {0} votes for {1} rating {2}",
+                ADO.Identifier'Image (User), Entity_Type & ADO.Identifier'Image (Id),
+                Integer'Image (Rating));
+
+      Ctx.Start;
+
+      Kind := ADO.Sessions.Entities.Find_Entity_Type (DB, Entity_Type);
+
+      --  Check that the user has the vote permission on the given object.
+      AWA.Permissions.Check (Permission => Security.Permissions.Get_Permission_Index (Permission),
+                             Entity     => Id);
+
+      declare
+         Stmt   : ADO.Statements.Insert_Statement
+           := DB.Create_Statement (AWA.Votes.Models.VOTE_TABLE);
+         Result : Integer;
+      begin
+         Stmt.Save_Field (Name  => "for_entity_id",
+                          Value => Id);
+         Stmt.Save_Field (Name  => "user_id",
+                          Value => User);
+         Stmt.Save_Field (Name  => "rating",
+                          Value => Rating);
+         Stmt.Save_Field (Name  => "for_entity_type",
+                          Value => Kind);
+         Stmt.Execute (Result);
+         if Result /= 1 then
+            declare
+               Update : ADO.Statements.Update_Statement
+                 := DB.Create_Statement (AWA.Votes.Models.VOTE_TABLE);
+            begin
+               Update.Save_Field (Name => "rating", Value => Rating);
+               Update.Set_Filter ("for_entity_id = :id and user_id = :user "
+                                  & "and for_entity_type = :type");
+               Update.Bind_Param ("id", Id);
+               Update.Bind_Param ("user", User);
+               Update.Bind_Param ("type", Kind);
+               Update.Execute (Result);
+            end;
+         end if;
+      end;
+      Ctx.Commit;
+   end Vote_For;
 
 end AWA.Votes.Modules;
