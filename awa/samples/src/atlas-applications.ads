@@ -36,6 +36,7 @@ with AWA.Workspaces.Modules;
 with AWA.Storages.Modules;
 with AWA.Images.Modules;
 with AWA.Questions.Modules;
+with AWA.Votes.Modules;
 with AWA.Services.Filters;
 with AWA.Converters.Dates;
 
@@ -113,6 +114,7 @@ private
       Mail_Module       : aliased AWA.Mail.Modules.Mail_Module;
       Storage_Module    : aliased AWA.Storages.Modules.Storage_Module;
       Image_Module      : aliased AWA.Images.Modules.Image_Module;
+      Vote_Module       : aliased AWA.Votes.Modules.Vote_Module;
       Question_Module   : aliased AWA.Questions.Modules.Question_Module;
 
       Microblog_Module  : aliased Atlas.Microblog.Modules.Microblog_Module;
