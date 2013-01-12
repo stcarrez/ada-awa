@@ -430,6 +430,8 @@ package body AWA.Votes.Models is
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Entity_Id));
       elsif Name = "rating" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Rating));
+      elsif Name = "entity_type" then
+         return Util.Beans.Objects.To_Object (From.Entity_Type);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -447,6 +449,8 @@ package body AWA.Votes.Models is
          Item.Entity_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
       elsif Name = "rating" then
          Item.Rating := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "entity_type" then
+         Item.Entity_Type := Util.Beans.Objects.To_Unbounded_String (Value);
       end if;
    end Set_Value;
 

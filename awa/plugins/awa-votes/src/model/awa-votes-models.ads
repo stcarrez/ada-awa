@@ -135,6 +135,7 @@ package AWA.Votes.Models is
       Permission : Ada.Strings.Unbounded.Unbounded_String;
       Entity_Id : ADO.Identifier;
       Rating : Integer;
+      Entity_Type : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
    --  This bean provides some methods that can be used in a Method_Expression.
