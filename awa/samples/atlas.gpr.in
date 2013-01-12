@@ -10,6 +10,7 @@ with "@AWA_DIR@awa_blogs";
 with "@AWA_DIR@awa_storages";
 with "@AWA_DIR@awa_images";
 with "@AWA_DIR@awa_questions";
+with "@AWA_DIR@awa_votes";
 
 project atlas is
 
