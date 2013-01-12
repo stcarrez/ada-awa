@@ -42,7 +42,7 @@
       q.title,
       q.create_date,
       q.short_description,
-      q.rating,
+      r.rating,
       (select count(*) from awa_answer AS a WHERE q.id = a.question_id),
       q.author_id,
       user.name,
@@ -50,6 +50,7 @@
     FROM awa_question AS q
     INNER JOIN awa_user AS user ON q.author_id = user.id
     INNER JOIN awa_email AS email ON q.author_id = email.user_id
+    LEFT JOIN awa_rating AS r ON r.for_entity_id = q.id AND r.for_entity_type = :entity_type
     ORDER BY q.create_date DESC
        </sql>
     </query>
