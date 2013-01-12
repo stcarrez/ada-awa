@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with AWA.Helpers.Requests;
 package body AWA.Votes.Beans is
 
    --  ------------------------------
@@ -24,11 +25,14 @@ package body AWA.Votes.Beans is
    overriding
    procedure Vote_Up (Bean    : in out Vote_Bean;
                       Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
    begin
+      Bean.Entity_Id := AWA.Helpers.Requests.Get_Parameter ("id");
       Bean.Module.Vote_For (Permission  => Ada.Strings.Unbounded.To_String (Bean.Permission),
                             Entity_Type => Ada.Strings.Unbounded.To_String (Bean.Entity_Type),
                             Id          => Bean.Entity_Id,
-                            Rating      => 1);
+                            Value       => 1,
+                            Total       => Bean.Total);
    end Vote_Up;
 
    --  ------------------------------
@@ -37,11 +41,14 @@ package body AWA.Votes.Beans is
    overriding
    procedure Vote_Down (Bean    : in out Vote_Bean;
                         Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
    begin
+      Bean.Entity_Id := AWA.Helpers.Requests.Get_Parameter ("id");
       Bean.Module.Vote_For (Permission  => Ada.Strings.Unbounded.To_String (Bean.Permission),
                             Entity_Type => Ada.Strings.Unbounded.To_String (Bean.Entity_Type),
                             Id          => Bean.Entity_Id,
-                            Rating      => -1);
+                            Value       => -1,
+                            Total       => Bean.Total);
    end Vote_Down;
 
    --  ------------------------------
