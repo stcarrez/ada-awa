@@ -38,12 +38,13 @@ package AWA.Votes.Modules is
    --  Get the votes module.
    function Get_Vote_Module return Vote_Module_Access;
 
-   --  Vote for the given element.
+   --  Vote for the given element and return the total vote for that element.
    procedure Vote_For (Model       : in Vote_Module;
                        Id          : in ADO.Identifier;
                        Entity_Type : in String;
                        Permission  : in String;
-                       Rating      : in Integer);
+                       Value       : in Integer;
+                       Total       : out Integer);
 
 private
 
