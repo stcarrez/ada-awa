@@ -28,6 +28,23 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
+  <managed-bean>
+    <description>The vote bean that allows to vote for a question.</description>
+    <managed-bean-name>questionVote</managed-bean-name>
+    <managed-bean-class>AWA.Votes.Beans.Votes_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+       <property-name>permission</property-name>
+       <property-class>String</property-class>
+       <value>answer-create</value>
+    </managed-property>
+    <managed-property>
+       <property-name>entity_type</property-name>
+       <property-class>String</property-class>
+       <value>awa_question</value>
+    </managed-property>
+  </managed-bean>x
+
   <navigation-rule>
     <from-view-id>/questions/ask.xhtml</from-view-id>
     <navigation-case>
