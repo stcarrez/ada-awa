@@ -108,3 +108,6 @@ ul.question-nav li {
     float: right;
     height: 20px;
 }
+#question-nav-ask {
+    padding-right: 100px;
+}
