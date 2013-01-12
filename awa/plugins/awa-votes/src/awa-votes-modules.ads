@@ -16,7 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with ASF.Applications;
-
+with ADO;
 with AWA.Modules;
 package AWA.Votes.Modules is
 
@@ -37,6 +37,13 @@ package AWA.Votes.Modules is
 
    --  Get the votes module.
    function Get_Vote_Module return Vote_Module_Access;
+
+   --  Vote for the given element.
+   procedure Vote_For (Model       : in Vote_Module;
+                       Id          : in ADO.Identifier;
+                       Entity_Type : in String;
+                       Permission  : in String;
+                       Rating      : in Integer);
 
 private
 
