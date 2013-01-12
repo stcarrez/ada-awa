@@ -20,7 +20,7 @@
         <property type='String' name="description">
             <comment>the question description.</comment>
         </property>
-        <property type='String' name="rating">
+        <property type='Integer' name="rating">
             <comment>the question rating.</comment>
         </property>
         <property type='Identifier' name="author_id">
@@ -43,13 +43,14 @@
       q.create_date,
       q.edit_date,
       q.description,
-      q.rating,
+      r.rating,
       q.author_id,
       user.name,
       email.email
     FROM awa_question AS q
     INNER JOIN awa_user AS user ON q.author_id = user.id
     INNER JOIN awa_email AS email ON q.author_id = email.user_id
+    LEFT JOIN awa_rating AS r ON r.for_entity_id = q.id AND r.for_entity_type = :entity_type
     WHERE q.id = :question_id
        </sql>
     </query>
