@@ -91,3 +91,20 @@ div.question-list div.question-content a, div.question-list div.question-content
 div.question-content a:hover {
     text-decoration: underline;
 }
+
+/**
+ * Navigation in question list
+ */
+ul.question-nav {
+    margin-top: 10px;
+    float: left;
+    width: 96%;
+    padding-left: 3%;
+    padding-right: 3%;
+        border-bottom: 1px solid #eee;
+}
+ul.question-nav li {
+    list-style-type: none;
+    float: right;
+    height: 20px;
+}
