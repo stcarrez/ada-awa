@@ -25,7 +25,10 @@ package body AWA.Votes.Beans is
    procedure Vote_Up (Bean    : in out Vote_Bean;
                       Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
    begin
-      null;
+      Bean.Module.Vote_For (Permission  => Ada.Strings.Unbounded.To_String (Bean.Permission),
+                            Entity_Type => Ada.Strings.Unbounded.To_String (Bean.Entity_Type),
+                            Id          => Bean.Entity_Id,
+                            Rating      => 1);
    end Vote_Up;
 
    --  ------------------------------
@@ -35,7 +38,10 @@ package body AWA.Votes.Beans is
    procedure Vote_Down (Bean    : in out Vote_Bean;
                         Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
    begin
-      null;
+      Bean.Module.Vote_For (Permission  => Ada.Strings.Unbounded.To_String (Bean.Permission),
+                            Entity_Type => Ada.Strings.Unbounded.To_String (Bean.Entity_Type),
+                            Id          => Bean.Entity_Id,
+                            Rating      => -1);
    end Vote_Down;
 
    --  ------------------------------
@@ -45,7 +51,7 @@ package body AWA.Votes.Beans is
       return Util.Beans.Basic.Readonly_Bean_Access is
       Object : constant Vote_Bean_Access := new Vote_Bean;
    begin
---        Object.Module := Module;
+      Object.Module := Module;
       return Object.all'Access;
    end Create_Vote_Bean;
 
