@@ -43,7 +43,7 @@
        <property-class>String</property-class>
        <value>awa_question</value>
     </managed-property>
-  </managed-bean>x
+  </managed-bean>
 
   <navigation-rule>
     <from-view-id>/questions/ask.xhtml</from-view-id>
@@ -71,7 +71,15 @@
     <filter-mapping>
         <filter-name>auth-filter</filter-name>
         <url-pattern>/questions/forms/*.html</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>auth-filter</filter-name>
         <url-pattern>/questions/ask.html</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>auth-filter</filter-name>
         <url-pattern>/questions/view.html</url-pattern>
     </filter-mapping>
 
