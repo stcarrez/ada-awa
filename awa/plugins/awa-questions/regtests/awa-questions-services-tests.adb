@@ -15,7 +15,6 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with Ada.Streams;
 with Ada.Strings.Unbounded;
 
 with Util.Test_Caller;
@@ -27,9 +26,14 @@ with ADO.Objects;
 
 with Security.Contexts;
 
+with ASF.Contexts.Faces;
+with ASF.Contexts.Faces.Mockup;
+
+with AWA.Permissions;
 with AWA.Services.Contexts;
 with AWA.Questions.Modules;
 with AWA.Questions.Beans;
+with AWA.Votes.Beans;
 with AWA.Tests.Helpers.Users;
 package body AWA.Questions.Services.Tests is
 
@@ -44,6 +48,10 @@ package body AWA.Questions.Services.Tests is
                        Test_Create_Question'Access);
       Caller.Add_Test (Suite, "Test AWA.Questions.Queries question-list",
                        Test_List_Questions'Access);
+      Caller.Add_Test (Suite, "Test AWA.Questions.Beans questionVote bean",
+                       Test_Question_Vote'Access);
+      Caller.Add_Test (Suite, "Test AWA.Questions.Beans questionVote bean (anonymous user)",
+                       Test_Question_Vote'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -84,7 +92,6 @@ package body AWA.Questions.Services.Tests is
 
       Sec_Ctx   : Security.Contexts.Security_Context;
       Context   : AWA.Services.Contexts.Service_Context;
-      Q         : AWA.Questions.Models.Question_Ref;
       Module    : AWA.Questions.Modules.Question_Module_Access;
       List      : Util.Beans.Basic.Readonly_Bean_Access;
       Bean      : Util.Beans.Objects.Object;
@@ -101,5 +108,57 @@ package body AWA.Questions.Services.Tests is
 
       T.Assert (Count > 0, "The list of question is empty");
    end Test_List_Questions;
+
+   --  ------------------------------
+   --  Do a vote on a question through the question vote bean.
+   --  ------------------------------
+   procedure Do_Vote (T : in out Test) is
+      use type Util.Beans.Basic.Readonly_Bean_Access;
+
+      Context : ASF.Contexts.Faces.Mockup.Mockup_Faces_Context;
+      Outcome : Ada.Strings.Unbounded.Unbounded_String;
+      Bean    : Util.Beans.Basic.Readonly_Bean_Access;
+      Vote    : AWA.Votes.Beans.Vote_Bean_Access;
+   begin
+      Bean := Context.Get_Bean ("questionVote");
+      T.Assert (Bean /= null, "The questionVote bean was not created");
+
+      T.Assert (Bean.all in AWA.Votes.Beans.Vote_Bean'Class,
+                "The questionVote is not a Vote_Bean");
+
+      Vote := AWA.Votes.Beans.Vote_Bean (Bean.all)'Access;
+      Vote.Rating    := 1;
+      Vote.Entity_Id := 1;
+      Vote.Vote_Up (Outcome);
+   end Do_Vote;
+
+   --  ------------------------------
+   --  Test anonymous user voting for a question.
+   --  ------------------------------
+   procedure Test_Question_Vote_Anonymous (T : in out Test) is
+      Sec_Ctx : Security.Contexts.Security_Context;
+      Context : AWA.Services.Contexts.Service_Context;
+   begin
+      AWA.Tests.Helpers.Users.Anonymous (Context, Sec_Ctx);
+
+      Do_Vote (T);
+      T.Fail ("Anonymous users should not be allowed to vote");
+
+   exception
+      when AWA.Permissions.NO_PERMISSION =>
+         null;
+   end Test_Question_Vote_Anonymous;
+
+   --  ------------------------------
+   --  Test voting for a question.
+   --  ------------------------------
+   procedure Test_Question_Vote (T : in out Test) is
+      Sec_Ctx : Security.Contexts.Security_Context;
+      Context : AWA.Services.Contexts.Service_Context;
+   begin
+      AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-voter@test.com");
+
+      Do_Vote (T);
+   end Test_Question_Vote;
 
 end AWA.Questions.Services.Tests;
