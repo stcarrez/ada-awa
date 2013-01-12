@@ -19,6 +19,9 @@ DROP TABLE IF EXISTS `awa_answer`;
 /* Copied from awa-jobs-drop-mysql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `awa_job`;
+/* Copied from awa-votes-drop-mysql.sql*/
+/* File generated automatically by dynamo */
+DROP TABLE IF EXISTS `awa_vote`;
 /* Copied from awa-images-drop-mysql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `awa_image`;
