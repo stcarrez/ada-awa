@@ -20,10 +20,15 @@
 
     <h:list var="questionInfo" value="#{questionList}">
         <div class='question' id='q_#{questionInfo.id}'>
-            <div class='question-vote'>
-                <div class='vote-up'><em></em></div>
-                <div class='vote-count'>#{empty questionInfo.rating ? 0 : questionInfo.rating}</div>
-                <div class='vote-down'><em></em></div>
+            <div class='question-stats'>
+                <div class='answer-stat'>
+                    <b>#{questionInfo.answer_count}</b>
+                    <span>#{questionMsg.question_answers_label}</span>
+                </div>
+                <div class='vote-stat'>
+                    <b>#{questionInfo.rating}</b>
+                    <span>#{questionMsg.question_votes_label}</span>
+                </div>
             </div>
             <div class='question-content'>
                 <h2><a href="#{contextPath}/questions/view.html?id=#{questionInfo.id}">
