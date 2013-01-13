@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -403,7 +403,10 @@ package AWA.Questions.Models is
       Description : Ada.Strings.Unbounded.Unbounded_String;
 
       --  the question rating.
-      Rating : Ada.Strings.Unbounded.Unbounded_String;
+      Rating : Integer;
+
+      --  the question rating as voted by the current user.
+      User_Rating : Integer;
 
       --  the author's identifier.
       Author_Id : ADO.Identifier;
@@ -716,7 +719,7 @@ private
 
    package File_2 is
       new ADO.Queries.Loaders.File (Path => "question-info.xml",
-                                    Sha1 => "81EA61CAF6D626E31A2794BA7BA7795826C98FCF");
+                                    Sha1 => "A1D5F5A8FB625A12FB09D9A6587CF1B217883596");
 
    package Def_Questiondisplayinfo_Question_Info is
       new ADO.Queries.Loaders.Query (Name => "question-info",

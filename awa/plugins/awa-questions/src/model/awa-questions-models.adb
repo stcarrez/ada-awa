@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -1183,7 +1183,10 @@ package body AWA.Questions.Models is
          return Util.Beans.Objects.To_Object (From.Description);
       end if;
       if Name = "rating" then
-         return Util.Beans.Objects.To_Object (From.Rating);
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Rating));
+      end if;
+      if Name = "user_rating" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.User_Rating));
       end if;
       if Name = "author_id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Author_Id));
@@ -1224,10 +1227,11 @@ package body AWA.Questions.Models is
          Into.Create_Date := Stmt.Get_Time (2);
          Into.Edit_Date := Stmt.Get_Time (3);
          Into.Description := Stmt.Get_Unbounded_String (4);
-         Into.Rating := Stmt.Get_Unbounded_String (5);
-         Into.Author_Id := Stmt.Get_Identifier (6);
-         Into.Author_Name := Stmt.Get_Unbounded_String (7);
-         Into.Author_Email := Stmt.Get_Unbounded_String (8);
+         Into.Rating := Stmt.Get_Integer (5);
+         Into.User_Rating := Stmt.Get_Integer (6);
+         Into.Author_Id := Stmt.Get_Identifier (7);
+         Into.Author_Name := Stmt.Get_Unbounded_String (8);
+         Into.Author_Email := Stmt.Get_Unbounded_String (9);
       end Read;
    begin
       Stmt.Execute;
