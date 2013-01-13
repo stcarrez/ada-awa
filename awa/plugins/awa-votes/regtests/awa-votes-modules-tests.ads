@@ -30,4 +30,7 @@ package AWA.Votes.Modules.Tests is
    --  Test vote.
    procedure Test_Vote_Up (T : in out Test);
 
+   --  Test vote.
+   procedure Test_Vote_Undo (T : in out Test);
+
 end AWA.Votes.Modules.Tests;
