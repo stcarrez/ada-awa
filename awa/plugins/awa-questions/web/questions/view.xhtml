@@ -38,6 +38,10 @@
                 voteUrl: "#{contextPath}/questions/ajax/questionVote/vote?id=",
                 itemPrefix: "vote_for-"
             });
+            $('.answer-vote').votes({
+                voteUrl: "#{contextPath}/questions/ajax/answerVote/vote?id=",
+                itemPrefix: "vote_for-"
+            });
         </util:script>
 
     </ui:define>
