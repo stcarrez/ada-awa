@@ -15,7 +15,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-div.question, div.answer {
+div.question, div.answer, div.answer-list h2 {
     float: left;
     width: 98%;
     padding-left: 2%;
@@ -71,6 +71,7 @@ div.question-info {
     float: left;
     width: 100%;
     padding-top: 15px;
+    padding-bottom: 15px;
 }
 div.question-action {
     float: left;
@@ -86,16 +87,37 @@ div.answer {
     border-top: 1px solid #ddd;
     padding-top: 5px;
 }
+
 div.question-list div.question-content {
     border-bottom: 1px solid #ddd;
     margin-top: 5px;
     padding-top: 5px;
+    width: 80%;
 }
 div.question-list div.question-content a, div.question-list div.question-content a:visited {
     text-decoration: none;
     color: #F91;
     font-size: 1.2em;
 }
+/**
+ * Question list stats
+ */
+div.vote-stat, div.answer-stat {
+    float: left;
+    width: 70px;
+    overflow: hidden;
+    text-align: center;
+    color: #2E6E9E;
+    padding-top: 12px;
+}
+div.vote-stat span, div.answer-stat span {
+    display: inline-block;
+    width: 70px;
+    color: #824222;
+    color: #C5DBEC;
+}
+
+/* div.vote-stat b, div.vote-stat span, div.answer-stat*/
 div.question-content a:hover {
     text-decoration: underline;
 }
@@ -117,5 +139,19 @@ ul.question-nav li {
     height: 20px;
 }
 #question-nav-ask {
-    padding-right: 100px;
+    margin-right: 100px;
+    margin-bottom: 5px;
+    background: #DFEFFC;
+    border: 1px solid #C5DBEC;
+    color: #2E6E9E;
+    border-radius: 5px;
+}
+#question-nav-ask a {
+    display: block;
+    padding: 5px;
+    line-height: 12px;
+    color: #2E6E9E;
+    font-weight: bold;
+    text-decoration: none;
+    padding-bottom: 8px;
 }
