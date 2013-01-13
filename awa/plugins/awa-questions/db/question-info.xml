@@ -23,6 +23,9 @@
         <property type='Integer' name="rating">
             <comment>the question rating.</comment>
         </property>
+        <property type='Integer' name="user_rating">
+            <comment>the question rating as voted by the current user.</comment>
+        </property>
         <property type='Identifier' name="author_id">
             <comment>the author's identifier.</comment>
         </property>
@@ -44,6 +47,7 @@
       q.edit_date,
       q.description,
       r.rating,
+      coalesce(v.rating,0),
       q.author_id,
       user.name,
       email.email
@@ -51,6 +55,7 @@
     INNER JOIN awa_user AS user ON q.author_id = user.id
     INNER JOIN awa_email AS email ON q.author_id = email.user_id
     LEFT JOIN awa_rating AS r ON r.for_entity_id = q.id AND r.for_entity_type = :entity_type
+    LEFT JOIN awa_vote AS v ON v.entity_id = r.id AND v.user_id = :user_id
     WHERE q.id = :question_id
        </sql>
     </query>
