@@ -22,7 +22,7 @@
         <div class='question' id='q_#{questionInfo.id}'>
             <div class='question-vote'>
                 <div class='vote-up'><em></em></div>
-                <div class='vote-count'>#{questionInfo.answer_count}</div>
+                <div class='vote-count'>#{empty questionInfo.rating ? 0 : questionInfo.rating}</div>
                 <div class='vote-down'><em></em></div>
             </div>
             <div class='question-content'>
