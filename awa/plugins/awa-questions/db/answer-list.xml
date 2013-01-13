@@ -50,7 +50,7 @@
     FROM awa_answer AS a
     INNER JOIN awa_user AS user ON a.author_id = user.id
     INNER JOIN awa_email AS email ON a.author_id = email.user_id
-    LEFT JOIN awa_rating AS r ON r.for_entity_id = a.id AND a.for_entity_type = :entity_type
+    LEFT JOIN awa_rating AS r ON r.for_entity_id = a.id AND r.for_entity_type = :entity_type
     LEFT JOIN awa_vote AS v ON v.entity_id = r.id AND v.user_id = :user_id
     WHERE a.question_id = :question_id
     ORDER BY rank DESC, a.create_date DESC
