@@ -64,7 +64,7 @@
   </navigation-rule>
 
   <navigation-rule>
-    <from-view-id>/ajax/questionVote/vote_up</from-view-id>
+    <from-view-id>/ajax/questionVote/*</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
       <to-view-id>/questions/views/vote-response.xhtml</to-view-id>
