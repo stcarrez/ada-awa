@@ -1103,7 +1103,10 @@ package body AWA.Questions.Models is
          return Util.Beans.Objects.To_Object (From.Answer);
       end if;
       if Name = "rank" then
-         return Util.Beans.Objects.To_Object (From.Rank);
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Rank));
+      end if;
+      if Name = "user_rating" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.User_Rating));
       end if;
       if Name = "author_id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Author_Id));
@@ -1143,10 +1146,11 @@ package body AWA.Questions.Models is
          Into.Create_Date := Stmt.Get_Time (1);
          Into.Edit_Date := Stmt.Get_Time (2);
          Into.Answer := Stmt.Get_Unbounded_String (3);
-         Into.Rank := Stmt.Get_Unbounded_String (4);
-         Into.Author_Id := Stmt.Get_Identifier (5);
-         Into.Author_Name := Stmt.Get_Unbounded_String (6);
-         Into.Author_Email := Stmt.Get_Unbounded_String (7);
+         Into.Rank := Stmt.Get_Integer (4);
+         Into.User_Rating := Stmt.Get_Integer (5);
+         Into.Author_Id := Stmt.Get_Identifier (6);
+         Into.Author_Name := Stmt.Get_Unbounded_String (7);
+         Into.Author_Email := Stmt.Get_Unbounded_String (8);
       end Read;
    begin
       Stmt.Execute;

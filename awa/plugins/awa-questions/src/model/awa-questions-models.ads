@@ -344,7 +344,10 @@ package AWA.Questions.Models is
       Answer : Ada.Strings.Unbounded.Unbounded_String;
 
       --  the answer rank.
-      Rank : Ada.Strings.Unbounded.Unbounded_String;
+      Rank : Integer;
+
+      --  the question rating as voted by the current user.
+      User_Rating : Integer;
 
       --  the author's identifier.
       Author_Id : ADO.Identifier;
@@ -709,7 +712,7 @@ private
 
    package File_1 is
       new ADO.Queries.Loaders.File (Path => "answer-list.xml",
-                                    Sha1 => "444FCCD381E2361DD08198E9960E47CA4E91611F");
+                                    Sha1 => "D9D27E1C16B0B7CFE836C21746FF3E5B205262CC");
 
    package Def_Answerinfo_Answer_List is
       new ADO.Queries.Loaders.Query (Name => "answer-list",
