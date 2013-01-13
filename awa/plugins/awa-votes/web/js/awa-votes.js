@@ -111,7 +111,7 @@
          * @param rating the user rating (vote-up: +1, undo: 0, vote-down: -1)
          */
         vote: function(event, node, rating) {
-            var id = this.getSelectedI(node),
+            var id = this.getSelectedId(node),
                 url = this.options.voteUrl + id + "&rating=" + rating;
 
             /* Perform the HTTP POST */
