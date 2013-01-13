@@ -16,11 +16,12 @@
   -->
 <div class='question'
         xmlns:awa="http://code.google.com/p/ada-awa/jsf"
+        xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
 
     <h2>#{questionInfo.question.title}</h2>
     <div>
-        <div class='question-vote'>
+        <div id='vote_for-#{questionInfo.question.id}' class='question-vote user-vote#{questionInfo.question.user_rating}'>
             <div class='vote-up'><em></em></div>
             <div class='vote-count'>#{questionInfo.question.rating}</div>
             <div class='vote-down'><em></em></div>
