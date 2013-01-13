@@ -54,10 +54,16 @@ div.question-vote div.vote-up em, div.question-vote div.vote-down em {
     margin-left: 5px;
     width: 30px;
     height: 20px;
-    background: url(../images/vote-icons.png) 0 0 no-repeat;
+    background: url(../images/vote-icons.png) 0 -49px no-repeat;
 }
 div.question-vote div.vote-down em {
-    background: url(../images/vote-icons.png) -40px -27px no-repeat;
+    background: url(../images/vote-icons.png) -40px -49px no-repeat;
+}
+div.user-vote1 div.vote-up em {
+    background: url(../images/vote-icons.png) 0 0 no-repeat;
+}
+div.user-vote-1 div.vote-down em {
+    background: url(../images/vote-icons.png) -40px 0 no-repeat;
 }
 div.question-info {
     float: left;
