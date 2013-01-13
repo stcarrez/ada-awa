@@ -40,9 +40,11 @@ package body AWA.Votes.Modules.Tests is
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
    begin
-      Caller.Add_Test (Suite, "Test AWA.Votes.Services.Vote_Up",
+      Caller.Add_Test (Suite, "Test AWA.Votes.Modules.Vote_For",
                        Test_Vote_Up'Access);
-    end Add_Tests;
+      Caller.Add_Test (Suite, "Test AWA.Votes.Modules.Vote_For (Undo)",
+                       Test_Vote_Undo'Access);
+   end Add_Tests;
 
    --  ------------------------------
    --  Test creation of a question.
@@ -64,5 +66,27 @@ package body AWA.Votes.Modules.Tests is
          Vote_Manager.Vote_For (User.Get_Id, "awa_user", "workspaces-create", 2, Total);
       end;
   end Test_Vote_Up;
+
+   --  ------------------------------
+   --  Test vote.
+   --  ------------------------------
+   procedure Test_Vote_Undo (T : in out Test) is
+      Sec_Ctx      : Security.Contexts.Security_Context;
+      Context      : AWA.Services.Contexts.Service_Context;
+   begin
+      AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-vote@test.com");
+
+      declare
+         Vote_Manager : Vote_Module_Access := Get_Vote_Module;
+         User         : AWA.Users.Models.User_Ref := Context.Get_User;
+         Total        : Integer;
+      begin
+         T.Assert (Vote_Manager /= null, "There is no vote module");
+
+         Vote_Manager.Vote_For (User.Get_Id, "awa_user", "workspaces-create", 1, Total);
+         Vote_Manager.Vote_For (User.Get_Id, "awa_user", "workspaces-create", 2, Total);
+         Vote_Manager.Vote_For (User.Get_Id, "awa_user", "workspaces-create", 0, Total);
+      end;
+   end Test_Vote_Undo;
 
 end AWA.Votes.Modules.Tests;
