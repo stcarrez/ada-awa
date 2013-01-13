@@ -30,7 +30,9 @@
             <awa:wiki styleClass='post-text' value="#{questionInfo.question.description}" format="mix"/>
             <div class='question-info'>
                 <div class='question-action'>
-                    <a href="#{contextPath}/questions/edit.xhtml?id=#{questionInfo.question.id}">edit</a>
+                    <a href="#{contextPath}/questions/edit.html?id=#{questionInfo.question.id}">
+                        #{questionMsg.question_edit_question_label}
+                    </a>
                 </div>
                 <div class='question-author'>
                     #{questionInfo.question.author_name}
