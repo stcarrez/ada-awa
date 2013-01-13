@@ -224,9 +224,14 @@ package body AWA.Questions.Beans is
                From.Question := List.List.Element (0);
             end if;
             Query.Clear;
+            Query.Bind_Param ("question_id", Util.Beans.Objects.To_Integer (Value));
+            Query.Bind_Param ("user_id", Ctx.Get_User_Identifier);
+            ADO.Sessions.Entities.Bind_Param (Params  => Query,
+                                              Name    => "entity_type",
+                                              Table   => AWA.Questions.Models.ANSWER_TABLE,
+                                              Session => Session);
 
             Query.Set_Query (AWA.Questions.Models.Query_Answer_List);
-            Query.Bind_Param ("question_id", Util.Beans.Objects.To_Integer (Value));
             AWA.Questions.Models.List (From.Answer_List, Session, Query);
          end;
       end if;
