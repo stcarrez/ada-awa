@@ -36,6 +36,11 @@ package AWA.Votes.Beans is
    procedure Vote_Down (Bean    : in out Vote_Bean;
                         Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
+   --  Action to vote.
+   overriding
+   procedure Vote (Bean    : in out Vote_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
    --  Create the Votes_Bean bean instance.
    function Create_Vote_Bean (Module : in AWA.Votes.Modules.Vote_Module_Access)
       return Util.Beans.Basic.Readonly_Bean_Access;
