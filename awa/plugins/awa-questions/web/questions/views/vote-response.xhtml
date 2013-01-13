@@ -15,8 +15,14 @@
   -  limitations under the License.
   -->
 <f:view contentType="application/json"
+        xmlns:c="http://java.sun.com/jstl/core"
         xmlns:f="http://java.sun.com/jsf/core">
 [
- { "action": "update", "id": "#vote_cnt-#{questionVote.entity_id}", "data": "#{questionVote.total}" }
+    { "action": "removeClass", "data": "user-vote1" },
+    { "action": "removeClass", "data": "user-vote-1" },
+    <c:if test="#{questionVote.rating ne 0}">
+        { "action": "addClass", "data": "user-vote#{questionVote.rating}" },
+    </c:if>
+    { "action": "update", "child": ".vote-count", "data": "#{questionVote.total}" }
 ]
 </f:view>
