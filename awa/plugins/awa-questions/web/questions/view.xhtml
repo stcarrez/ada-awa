@@ -33,6 +33,12 @@
             <ui:include src="lists/answer-list.xhtml"/>
             <ui:include src="forms/answer-form.xhtml"/>
         </div>
+        <util:script>
+            $('.question-vote').votes({
+                voteUrl: "#{contextPath}/questions/ajax/questionVote/vote?id=",
+                itemPrefix: "vote_for-"
+            });
+        </util:script>
 
     </ui:define>
 </ui:composition>
