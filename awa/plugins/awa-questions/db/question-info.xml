@@ -46,7 +46,7 @@
       q.create_date,
       q.edit_date,
       q.description,
-      r.rating,
+      coalesce(r.rating,0),
       coalesce(v.rating,0),
       q.author_id,
       user.name,

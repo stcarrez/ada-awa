@@ -17,8 +17,11 @@
         <property type='String' name="answer">
             <comment>the answer description.</comment>
         </property>
-        <property type='String' name="rank">
+        <property type='Integer' name="rank">
             <comment>the answer rank.</comment>
+        </property>
+        <property type='Integer' name="user_rating">
+            <comment>the question rating as voted by the current user.</comment>
         </property>
         <property type='Identifier' name="author_id">
             <comment>the author's identifier.</comment>
@@ -39,15 +42,18 @@
       a.create_date,
       a.edit_date,
       a.answer,
-      a.rank,
+      coalesce(r.rating,0) as rank,
+      coalesce(v.rating,0),
       a.author_id,
       user.name,
       email.email
     FROM awa_answer AS a
     INNER JOIN awa_user AS user ON a.author_id = user.id
     INNER JOIN awa_email AS email ON a.author_id = email.user_id
+    LEFT JOIN awa_rating AS r ON r.for_entity_id = a.id AND a.for_entity_type = :entity_type
+    LEFT JOIN awa_vote AS v ON v.entity_id = r.id AND v.user_id = :user_id
     WHERE a.question_id = :question_id
-    ORDER BY a.rank DESC, a.create_date DESC
+    ORDER BY rank DESC, a.create_date DESC
        </sql>
     </query>
 
