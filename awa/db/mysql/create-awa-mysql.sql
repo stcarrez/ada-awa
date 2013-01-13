@@ -370,22 +370,37 @@ INSERT INTO entity_type (name) VALUES
 ;
 /* Copied from awa-votes-mysql.sql*/
 /* File generated automatically by dynamo */
+/*  */
+CREATE TABLE awa_rating (
+  /* the rating identifier */
+  `id` BIGINT NOT NULL,
+  /* the rating taking into account all votes */
+  `rating` INTEGER NOT NULL,
+  /* the number of votes */
+  `vote_count` INTEGER NOT NULL,
+  /*  */
+  `for_entity_id` BIGINT NOT NULL,
+  /*  */
+  `for_entity_type` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
+);
 /* The vote table tracks a vote action by a user on a given database entity.
 The primary key is made of the user, the entity id and entity type.
  */
 CREATE TABLE awa_vote (
   /*  */
-  `for_entity_id` BIGINT NOT NULL,
-  /*  */
   `rating` INTEGER NOT NULL,
   /*  */
-  `user_id` BIGINT NOT NULL,
+  `id` BIGINT NOT NULL,
   /*  */
-  `for_entity_type` INTEGER NOT NULL,
-  PRIMARY KEY (`for_entity_id`)
+  `entity_id` BIGINT NOT NULL,
+  /*  */
+  `user_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES
-("awa_vote")
+("awa_rating")
+,("awa_vote")
 ;
 /* Copied from awa-jobs-mysql.sql*/
 /* File generated automatically by dynamo */
