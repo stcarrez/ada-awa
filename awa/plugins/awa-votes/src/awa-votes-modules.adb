@@ -90,9 +90,10 @@ package body AWA.Votes.Modules is
       Vote   : AWA.Votes.Models.Vote_Ref;
       Query  : ADO.SQL.Query;
       Found  : Boolean;
+      Ident  : constant String := Entity_Type & ADO.Identifier'Image (Id);
    begin
       Log.Info ("User {0} votes for {1} rating {2}",
-                ADO.Identifier'Image (User.Get_Id), Entity_Type & ADO.Identifier'Image (Id),
+                ADO.Identifier'Image (User.Get_Id), Ident,
                 Integer'Image (Value));
 
       Ctx.Start;
@@ -111,6 +112,11 @@ package body AWA.Votes.Modules is
       Query.Bind_Param ("user_id", User.Get_Id);
       Vote.Find (DB, Query, Found);
       if not Found then
+
+         --  If the rating is 0, do not create any vote.
+         if Value = 0 then
+            return;
+         end if;
          Query.Clear;
 
          --  Get the rating associated with the object.
@@ -121,6 +127,8 @@ package body AWA.Votes.Modules is
 
          --  Create it if it does not exist.
          if not Found then
+            Log.Info ("Creating rating for {0}", Ident);
+
             Rating.Set_For_Entity_Id (Id);
             Rating.Set_For_Entity_Type (Kind);
             Rating.Set_Rating (Value);
