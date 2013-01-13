@@ -20,7 +20,6 @@ with ADO.Sessions;
 with ADO.Sessions.Entities;
 
 with AWA.Services.Contexts;
-with AWA.Questions.Services;
 package body AWA.Questions.Beans is
 
    --  ------------------------------
@@ -62,6 +61,7 @@ package body AWA.Questions.Beans is
    --  ------------------------------
    procedure Save (Bean    : in out Question_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
    begin
       Bean.Service.Save_Question (Bean);
    end Save;
@@ -71,6 +71,7 @@ package body AWA.Questions.Beans is
    --  ------------------------------
    procedure Delete (Bean    : in out Question_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
    begin
       Bean.Service.Delete_Question (Bean);
    end Delete;
@@ -127,6 +128,7 @@ package body AWA.Questions.Beans is
    --  ------------------------------
    procedure Save (Bean    : in out Answer_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
    begin
       Bean.Service.Save_Answer (Question => Bean.Question,
                                 Answer   => Bean);
@@ -201,15 +203,18 @@ package body AWA.Questions.Beans is
    begin
       if Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
          declare
+            package ASC renames AWA.Services.Contexts;
             use AWA.Questions.Models;
             use AWA.Services;
 
             Session : ADO.Sessions.Session := From.Service.Get_Session;
             Query   : ADO.Queries.Context;
             List    : AWA.Questions.Models.Question_Display_Info_List_Bean;
+            Ctx     : constant ASC.Service_Context_Access := ASC.Current;
          begin
             Query.Set_Query (AWA.Questions.Models.Query_Question_Info);
             Query.Bind_Param ("question_id", Util.Beans.Objects.To_Integer (Value));
+            Query.Bind_Param ("user_id", Ctx.Get_User_Identifier);
             ADO.Sessions.Entities.Bind_Param (Params  => Query,
                                               Name    => "entity_type",
                                               Table   => AWA.Questions.Models.QUESTION_TABLE,
