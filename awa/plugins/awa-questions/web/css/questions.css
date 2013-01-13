@@ -35,13 +35,14 @@ div.question-list div.question h2 {
     font-weight: bold;
     font-size: 0.8em;
 }
-div.question-vote {
+div.question-vote, div.answer-vote {
     float: left;
     width: 40px;
     font-weight: bold;
     color: #F91;
     font-size: 1.3em;
 }
+div.answer-vote div.vote-up, div.answer-vote div.vote-down, div.answer-vote div.vote-count,
 div.question-vote div.vote-up, div.question-vote div.vote-down, div.question-vote div.vote-count {
     text-align: center;
     float: left;
@@ -49,6 +50,7 @@ div.question-vote div.vote-up, div.question-vote div.vote-down, div.question-vot
     width: 30px;
     height: 25px;
 }
+div.answer-vote div.vote-up em, div.answer-vote div.vote-down em,
 div.question-vote div.vote-up em, div.question-vote div.vote-down em {
     display: block;
     margin-left: 5px;
@@ -56,7 +58,7 @@ div.question-vote div.vote-up em, div.question-vote div.vote-down em {
     height: 20px;
     background: url(../images/vote-icons.png) 0 -49px no-repeat;
 }
-div.question-vote div.vote-down em {
+div.question-vote div.vote-down em, div.answer-vote div.vote-down em {
     background: url(../images/vote-icons.png) -40px -49px no-repeat;
 }
 div.user-vote1 div.vote-up em {
