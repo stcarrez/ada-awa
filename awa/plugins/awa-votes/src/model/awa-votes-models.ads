@@ -259,6 +259,9 @@ package AWA.Votes.Models is
    procedure Vote_Down (Bean : in out Vote_Bean;
                        Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
+   procedure Vote (Bean : in out Vote_Bean;
+                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
 
 private
    RATING_NAME : aliased constant String := "awa_rating";

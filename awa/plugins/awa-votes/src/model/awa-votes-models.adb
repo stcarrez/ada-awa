@@ -791,10 +791,22 @@ package body AWA.Votes.Models is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Vote_Bean,
                                                       Method => Op_Vote_Down,
                                                       Name   => "vote_down");
+   procedure Op_Vote (Bean    : in out Vote_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Vote (Bean    : in out Vote_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Vote_Bean'Class (Bean).Vote (Outcome);
+   end Op_Vote;
+   package Binding_Vote_Bean_3 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Vote_Bean,
+                                                      Method => Op_Vote,
+                                                      Name   => "vote");
 
    Binding_Vote_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
      := (1 => Binding_Vote_Bean_1.Proxy'Access,
-         2 => Binding_Vote_Bean_2.Proxy'Access
+         2 => Binding_Vote_Bean_2.Proxy'Access,
+         3 => Binding_Vote_Bean_3.Proxy'Access
      );
 
    --  This bean provides some methods that can be used in a Method_Expression.
