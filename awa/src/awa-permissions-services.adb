@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions-services -- Permissions controller
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,6 @@ with ADO.Queries;
 with ADO.Sessions.Entities;
 with ADO.Statements;
 with Util.Log.Loggers;
-with Util.Serialize.IO.XML;
 
 with Security.Policies.Roles;
 with Security.Policies.URLs;
@@ -29,10 +28,58 @@ with AWA.Permissions.Models;
 with AWA.Services.Contexts;
 package body AWA.Permissions.Services is
 
-   use Util.Log;
    use ADO.Sessions;
 
-   Log : constant Loggers.Logger := Loggers.Create ("AWA.Permissions.Services");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Permissions.Services");
+
+   --  ------------------------------
+   --  Check if the permission with the name <tt>Name</tt> is granted for the current user.
+   --  If the <tt>Entity</tt> is defined, an <tt>Entity_Permission</tt> is created and verified.
+   --  Returns True if the user is granted the given permission.
+   --  ------------------------------
+   function Has_Permission (Name   : in Util.Beans.Objects.Object;
+                            Entity : in Util.Beans.Objects.Object)
+                            return Util.Beans.Objects.Object is
+      use type Security.Contexts.Security_Context_Access;
+
+      Context : constant Security.Contexts.Security_Context_Access := Security.Contexts.Current;
+      Perm    : constant String := Util.Beans.Objects.To_String (Name);
+      Result  : Boolean;
+   begin
+      if Util.Beans.Objects.Is_Empty (Name) or Context = null then
+         Result := False;
+
+      elsif Util.Beans.Objects.Is_Empty (Entity) then
+         Result := Context.Has_Permission (Perm);
+
+      else
+         declare
+            P : Entity_Permission (Security.Permissions.Get_Permission_Index (Perm));
+         begin
+            P.Entity := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Entity));
+            Result := Context.Has_Permission (P);
+         end;
+      end if;
+      return Util.Beans.Objects.To_Object (Result);
+
+   exception
+      when Security.Permissions.Invalid_Name =>
+         Log.Error ("Invalid permission {0}", Perm);
+         raise;
+   end Has_Permission;
+
+   URI        : aliased constant String := "http://code.google.com/p/ada-awa/auth";
+
+   --  ------------------------------
+   --  Register the security EL functions in the EL mapper.
+   --  ------------------------------
+   procedure Set_Functions (Mapper : in out EL.Functions.Function_Mapper'Class) is
+   begin
+      Mapper.Set_Function (Name      => "hasPermission",
+                           Namespace => URI,
+                           Func      => Has_Permission'Access,
+                           Optimize  => False);
+   end Set_Functions;
 
    --  ------------------------------
    --  Get the permission manager associated with the security context.
