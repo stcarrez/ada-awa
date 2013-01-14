@@ -32,7 +32,8 @@
                     <h:message for='title' styleClass='error'/>
                 </dt>
                 <dd>
-                    <h:inputText id='title' size='50' required='true' value='#{question.title}'/>
+                    <h:inputText id='title' size='50' required='true' value='#{question.title}'
+                            placeholder='this is your question'/>
                 </dd>
                 <dd>
                     <h:inputTextarea id='text' rows='15' required='false' value='#{question.description}'/>
@@ -40,9 +41,10 @@
             </dl>
             <ul class='awa-buttons'>
                 <li>
-                    <h:commandButton id='save' value='#{questionMsg.question_post_question_button}'
+                    <h:commandButton id='save'
+                                     value='#{question.id gt 0 ? questionMsg.question_edit_question_button : questionMsg.question_post_question_button}'
                                      styleClass="ui-button ui-state-default ui-corner-all"
-                                     action="#{question.Save}"/>
+                                     action="#{question.save}"/>
                 </li>
             </ul>
         </div>
