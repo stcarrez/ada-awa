@@ -72,6 +72,15 @@
   </navigation-rule>
 
   <navigation-rule>
+    <from-view-id>/questions/edit.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/questions/view.xhtml?id=#{question.id}</to-view-id>
+      <redirect/>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
     <from-view-id>/questions/view.xhtml</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
