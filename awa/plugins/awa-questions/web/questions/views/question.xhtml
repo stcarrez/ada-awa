@@ -40,7 +40,8 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#{contextPath}/questions/delete.html?id=#{questionInfo.question.id}">
+                                <a href="#{contextPath}/questions/delete.html?id=#{questionInfo.question.id}"
+                                        onclick="return ASF.OpenDialog(this, 'deleteDialog', '#{contextPath}/questions/forms/delete-question.html?id=#{questionInfo.question.id}');">
                                     #{questionMsg.question_delete_question_label}
                                 </a>
                             </li>
