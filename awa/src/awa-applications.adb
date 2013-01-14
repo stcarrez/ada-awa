@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa -- Ada Web Application
---  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,6 +32,7 @@ with AWA.Components.Factory;
 with AWA.Applications.Factory;
 with AWA.Applications.Configs;
 with AWA.Helpers.Selectors;
+with AWA.Permissions.Services;
 package body AWA.Applications is
 
    use Util.Log;
@@ -113,11 +114,14 @@ package body AWA.Applications is
    --  ------------------------------
    overriding
    procedure Initialize_Components (App : in out Application) is
+      procedure Register_Functions is
+         new ASF.Applications.Main.Register_Functions (AWA.Permissions.Services.Set_Functions);
    begin
       Log.Info ("Initializing application components");
 
       ASF.Applications.Main.Application (App).Initialize_Components;
       App.Add_Components (AWA.Components.Factory.Definition);
+      Register_Functions (App);
    end Initialize_Components;
 
    --  ------------------------------
