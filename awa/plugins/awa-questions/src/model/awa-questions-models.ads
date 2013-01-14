@@ -465,7 +465,7 @@ package AWA.Questions.Models is
       Description : Ada.Strings.Unbounded.Unbounded_String;
 
       --  the question rating.
-      Rating : Ada.Strings.Unbounded.Unbounded_String;
+      Rating : Integer;
 
       --  the number of answers.
       Answer_Count : Integer;
@@ -732,7 +732,7 @@ private
 
    package File_3 is
       new ADO.Queries.Loaders.File (Path => "question-list.xml",
-                                    Sha1 => "F1BB6507A43DC668AC8E21B0E239864D7CEFB0CA");
+                                    Sha1 => "6B1373D779DD15CEB92310B13BBB715BD674231C");
 
    package Def_Questioninfo_Question_List is
       new ADO.Queries.Loaders.Query (Name => "question-list",

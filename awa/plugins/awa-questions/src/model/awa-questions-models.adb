@@ -1269,7 +1269,7 @@ package body AWA.Questions.Models is
          return Util.Beans.Objects.To_Object (From.Description);
       end if;
       if Name = "rating" then
-         return Util.Beans.Objects.To_Object (From.Rating);
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Rating));
       end if;
       if Name = "answer_count" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Answer_Count));
@@ -1312,7 +1312,7 @@ package body AWA.Questions.Models is
          Into.Title := Stmt.Get_Unbounded_String (1);
          Into.Create_Date := Stmt.Get_Time (2);
          Into.Description := Stmt.Get_Unbounded_String (3);
-         Into.Rating := Stmt.Get_Unbounded_String (4);
+         Into.Rating := Stmt.Get_Integer (4);
          Into.Answer_Count := Stmt.Get_Integer (5);
          Into.Author_Id := Stmt.Get_Identifier (6);
          Into.Author_Name := Stmt.Get_Unbounded_String (7);
