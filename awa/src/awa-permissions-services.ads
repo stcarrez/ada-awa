@@ -20,6 +20,8 @@ with AWA.Applications;
 
 with Util.Beans.Objects;
 
+with EL.Functions;
+
 with ADO;
 with ADO.Sessions;
 with ADO.Objects;
@@ -27,6 +29,9 @@ with ADO.Objects;
 with Security.Policies;
 with Security.Contexts;
 package AWA.Permissions.Services is
+
+   --  Register the security EL functions in the EL mapper.
+   procedure Set_Functions (Mapper : in out EL.Functions.Function_Mapper'Class);
 
    type Permission_Manager is new Security.Policies.Policy_Manager with private;
    type Permission_Manager_Access is access all Permission_Manager'Class;
