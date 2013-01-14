@@ -16,7 +16,9 @@
   -->
 <div class='question'
         xmlns:awa="http://code.google.com/p/ada-awa/jsf"
+        xmlns:auth="http://code.google.com/p/ada-awa/auth"
         xmlns:util="http://code.google.com/p/ada-asf/util"
+        xmlns:c="http://java.sun.com/jstl/core"
         xmlns:h="http://java.sun.com/jsf/html">
 
     <h2>#{questionInfo.question.title}</h2>
@@ -30,9 +32,20 @@
             <awa:wiki styleClass='post-text' value="#{questionInfo.question.description}" format="mix"/>
             <div class='question-info'>
                 <div class='question-action'>
-                    <a href="#{contextPath}/questions/edit.html?id=#{questionInfo.question.id}">
-                        #{questionMsg.question_edit_question_label}
-                    </a>
+                    <h:panelGroup rendered="#{auth:hasPermission('question-edit',questionInfo.question.id)}">
+                        <ul>
+                            <li>
+                                <a href="#{contextPath}/questions/edit.html?id=#{questionInfo.question.id}">
+                                    #{questionMsg.question_edit_question_label}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#{contextPath}/questions/delete.html?id=#{questionInfo.question.id}">
+                                    #{questionMsg.question_delete_question_label}
+                                </a>
+                            </li>
+                        </ul>
+                    </h:panelGroup>
                 </div>
                 <div class='question-author'>
                     #{questionInfo.question.author_name}
