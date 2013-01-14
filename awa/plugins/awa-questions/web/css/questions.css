@@ -78,6 +78,22 @@ div.question-action {
     width: 45%;
     color: #888;
 }
+div.question-action li {
+    list-style-type: none;
+    float: left;
+    padding: 2px;
+}
+div.question-action a {
+    display: inline-block;
+    line-height: 10px;
+    padding: 5px;
+    text-decoration: none;
+    color: #C5DBEC;
+}
+div.question-action a:hover {
+    color: #2E6E9E;
+    background-color: #DFEFFC;
+}
 div.question-author {
     float: right;
     width: 45%;
