@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions-services -- Permissions controller
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,8 @@
 -----------------------------------------------------------------------
 
 with AWA.Applications;
+
+with Util.Beans.Objects;
 
 with ADO;
 with ADO.Sessions;
@@ -74,6 +76,13 @@ package AWA.Permissions.Services is
    --  Create a permission manager for the given application.
    function Create_Permission_Manager (App : in AWA.Applications.Application_Access)
                                        return Security.Policies.Policy_Manager_Access;
+
+   --  Check if the permission with the name <tt>Name</tt> is granted for the current user.
+   --  If the <tt>Entity</tt> is defined, an <tt>Entity_Permission</tt> is created and verified.
+   --  Returns True if the user is granted the given permission.
+   function Has_Permission (Name   : in Util.Beans.Objects.Object;
+                            Entity : in Util.Beans.Objects.Object)
+                            return Util.Beans.Objects.Object;
 
 private
 
