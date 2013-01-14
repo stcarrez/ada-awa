@@ -17,7 +17,7 @@
         <property type='String' name="description">
             <comment>the question short description.</comment>
         </property>
-        <property type='String' name="rating">
+        <property type='Integer' name="rating">
             <comment>the question rating.</comment>
         </property>
         <property type='Integer' name="answer_count">
@@ -42,7 +42,7 @@
       q.title,
       q.create_date,
       q.short_description,
-      r.rating,
+      coalesce(r.rating,0),
       (select count(*) from awa_answer AS a WHERE q.id = a.question_id),
       q.author_id,
       user.name,
