@@ -1340,7 +1340,7 @@ package body AWA.Questions.Models is
    package Binding_Question_Bean_1 is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Question_Bean,
                                                       Method => Op_Save,
-                                                      Name   => "Save");
+                                                      Name   => "save");
    procedure Op_Delete (Bean    : in out Question_Bean;
                         Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
    procedure Op_Delete (Bean    : in out Question_Bean;
@@ -1351,7 +1351,7 @@ package body AWA.Questions.Models is
    package Binding_Question_Bean_2 is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Question_Bean,
                                                       Method => Op_Delete,
-                                                      Name   => "Delete");
+                                                      Name   => "delete");
 
    Binding_Question_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
      := (1 => Binding_Question_Bean_1.Proxy'Access,
@@ -1388,7 +1388,7 @@ package body AWA.Questions.Models is
    package Binding_Answer_Bean_1 is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Answer_Bean,
                                                       Method => Op_Save,
-                                                      Name   => "Save");
+                                                      Name   => "save");
    procedure Op_Delete (Bean    : in out Answer_Bean;
                         Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
    procedure Op_Delete (Bean    : in out Answer_Bean;
@@ -1399,7 +1399,7 @@ package body AWA.Questions.Models is
    package Binding_Answer_Bean_2 is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Answer_Bean,
                                                       Method => Op_Delete,
-                                                      Name   => "Delete");
+                                                      Name   => "delete");
 
    Binding_Answer_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
      := (1 => Binding_Answer_Bean_1.Proxy'Access,
