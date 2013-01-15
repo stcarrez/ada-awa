@@ -171,6 +171,27 @@ package body AWA.Questions.Services is
    end Save_Answer;
 
    --  ------------------------------
+   --  Delete the answer.
+   --  ------------------------------
+   procedure Delete_Answer (Model  : in Question_Service;
+                            Answer : in out AWA.Questions.Models.Answer_Ref'Class) is
+      pragma Unreferenced (Model);
+
+      Ctx   : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB    : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+   begin
+      Ctx.Start;
+
+      --  Check that the user has the delete permission on the given answer.
+      AWA.Permissions.Check (Permission => ACL_Delete_Answer.Permission,
+                             Entity     => Answer);
+
+
+      Answer.Delete (DB);
+      Ctx.Commit;
+   end Delete_Answer;
+
+   --  ------------------------------
    --  Load the answer.
    --  ------------------------------
    procedure Load_Answer (Model    : in Question_Service;
