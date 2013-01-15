@@ -1,0 +1,39 @@
+<!-- Dialog box to confirm the deletion of the answer.
+  -  Copyright (C) 2013 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<f:view contentType="text/html; charset=UTF-8"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html">
+    <f:metadata>
+        <f:viewParam id='id' value='#{answer.id}'/>
+    </f:metadata>
+    <h2>#{questionMsg.question_delete_title}</h2>
+    <h:form id='answer-delete'>
+        <h:inputHidden id='answer-delete-id' value='#{answer.id}'/>
+        <p>
+            <h:outputFormat value="#{storageMsg.storage_confirm_delete_file_message}">
+                <f:param value="#{answer.title}"/>
+            </h:outputFormat>
+        </p>
+        <ul class='awa-buttons'>
+            <li>
+                <h:commandButton id='answer-delete-button' value='#{questionMsg.question_delete_button}'
+                                 styleClass="ui-button ui-state-default ui-corner-all"
+                                 action="#{answer.delete}" title="#{questionMsg.question_delete_tooltip}"/>
+            </li>
+        </ul>
+    </h:form>
+</f:view>
