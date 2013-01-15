@@ -219,6 +219,16 @@
     </entity-permission>
 
     <entity-permission>
+        <name>answer-delete</name>
+        <entity-type>awa_answer</entity-type>
+        <description>Grant the delete permission to author only</description>
+        <sql>
+            select a.id from awa_answer as a
+            where a.id = :entity_id and a.author_id = :user_id
+        </sql>
+    </entity-permission>
+
+    <entity-permission>
         <name>answer-accept</name>
         <entity-type>awa_answer</entity-type>
         <description>The question author is the only one who can accept an answer.</description>
