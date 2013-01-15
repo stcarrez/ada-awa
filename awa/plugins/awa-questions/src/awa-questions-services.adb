@@ -173,9 +173,10 @@ package body AWA.Questions.Services is
    --  ------------------------------
    --  Load the answer.
    --  ------------------------------
-   procedure Load_Answer (Model  : in Question_Service;
-                          Answer : in out AWA.Questions.Models.Answer_Ref'Class;
-                          Id     : in ADO.Identifier) is
+   procedure Load_Answer (Model    : in Question_Service;
+                          Answer   : in out AWA.Questions.Models.Answer_Ref'Class;
+                          Question : in out AWA.Questions.Models.Question_Ref'Class;
+                          Id       : in ADO.Identifier) is
       pragma Unreferenced (Model);
 
       Ctx   : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
@@ -183,6 +184,7 @@ package body AWA.Questions.Services is
       Found : Boolean;
    begin
       Answer.Load (DB, Id, Found);
+      Question := Answer.Get_Question;
    end Load_Answer;
 
 end AWA.Questions.Services;
