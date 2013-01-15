@@ -15,6 +15,7 @@
   -  limitations under the License.
   -->
 <div class='answer-list'
+     xmlns:auth="http://code.google.com/p/ada-awa/auth"
         xmlns:awa="http://code.google.com/p/ada-awa/jsf"
         xmlns:h="http://java.sun.com/jsf/html">
 
@@ -31,9 +32,21 @@
                     <awa:wiki styleClass='post-text' value="#{answerInfo.answer}" format="mix"/>
                     <div class='question-info'>
                         <div class='question-action'>
-                            <a href="#{contextPath}/questions/edit.html?id=#{answerInfo.id}">
-                                #{questionMsg.question_edit_answer_label}
-                            </a>
+                            <h:panelGroup rendered="#{auth:hasPermission('answer-edit',answerInfo.id)}">
+                                <ul>
+                                    <li>
+                                        <a href="#{contextPath}/questions/edit-answer.html?id=#{answerInfo.id}">
+                                            #{questionMsg.question_edit_answer_label}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#"
+                                           onclick="return ASF.OpenDialog(this, 'deleteDialog', '#{contextPath}/questions/forms/delete-question.html?id=#{questionInfo.question.id}');">
+                                            #{questionMsg.question_delete_question_label}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </h:panelGroup>
                         </div>
                         <div class='question-author'>
                             #{answerInfo.author_name}
