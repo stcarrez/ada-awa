@@ -57,9 +57,10 @@ package AWA.Questions.Services is
                           Answer   : in out AWA.Questions.Models.Answer_Ref'Class);
 
    --  Load the answer.
-   procedure Load_Answer (Model  : in Question_Service;
-                          Answer : in out AWA.Questions.Models.Answer_Ref'Class;
-                          Id     : in ADO.Identifier);
+   procedure Load_Answer (Model    : in Question_Service;
+                          Answer   : in out AWA.Questions.Models.Answer_Ref'Class;
+                          Question : in out AWA.Questions.Models.Question_Ref'Class;
+                          Id       : in ADO.Identifier);
 
 private
 
