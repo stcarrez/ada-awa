@@ -46,6 +46,8 @@ package body AWA.Questions.Services.Tests is
    begin
       Caller.Add_Test (Suite, "Test AWA.Questions.Services.Save_Question",
                        Test_Create_Question'Access);
+      Caller.Add_Test (Suite, "Test AWA.Questions.Services.Delete_Question",
+                       Test_Delete_Question'Access);
       Caller.Add_Test (Suite, "Test AWA.Questions.Queries question-list",
                        Test_List_Questions'Access);
       Caller.Add_Test (Suite, "Test AWA.Questions.Beans questionVote bean",
@@ -82,6 +84,27 @@ package body AWA.Questions.Services.Tests is
                          & "But I need some long text for the unit test.");
       T.Manager.Save_Question (Q);
    end Test_Create_Question;
+
+   --  ------------------------------
+   --  Test deletion of a question.
+   --  ------------------------------
+   procedure Test_Delete_Question (T : in out Test) is
+      Sec_Ctx   : Security.Contexts.Security_Context;
+      Context   : AWA.Services.Contexts.Service_Context;
+      Q         : AWA.Questions.Models.Question_Ref;
+   begin
+      AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-storage@test.com");
+
+      T.Manager := AWA.Questions.Modules.Get_Question_Manager;
+      T.Assert (T.Manager /= null, "There is no question manager");
+
+      Q.Set_Title ("How can I search strings in Ada?");
+      Q.Set_Description ("I have two strings that I want to search.  % does not work.");
+      T.Manager.Save_Question (Q);
+      T.Assert (Q.Is_Inserted, "The new question was not inserted");
+
+      T.Manager.Delete_Question (Q);
+   end Test_Delete_Question;
 
    --  ------------------------------
    --  Test list of questions.
