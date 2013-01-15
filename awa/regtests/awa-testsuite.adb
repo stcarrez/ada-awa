@@ -27,6 +27,8 @@ with AWA.Events.Services.Tests;
 with AWA.Mail.Clients.Tests;
 with AWA.Mail.Modules.Tests;
 with AWA.Images.Services.Tests;
+with AWA.Votes.Modules.Tests;
+with AWA.Questions.Services.Tests;
 with AWA.Modules.Tests;
 
 with ASF.Converters.Dates;
@@ -37,6 +39,8 @@ with AWA.Blogs.Modules;
 with AWA.Workspaces.Modules;
 with AWA.Storages.Modules;
 with AWA.Images.Modules;
+with AWA.Questions.Modules;
+with AWA.Votes.Modules;
 
 with AWA.Converters.Dates;
 with AWA.Tests;
@@ -61,6 +65,10 @@ package body AWA.Testsuite is
 
    Images         : aliased AWA.Images.Modules.Image_Module;
 
+   Questions      : aliased AWA.Questions.Modules.Question_Module;
+
+   Votes          : aliased AWA.Votes.Modules.Vote_Module;
+
    Date_Converter : aliased ASF.Converters.Dates.Date_Converter;
 
    Rel_Date_Converter : aliased AWA.Converters.Dates.Relative_Date_Converter;
@@ -84,6 +92,8 @@ package body AWA.Testsuite is
       AWA.Blogs.Services.Tests.Add_Tests (Ret);
       AWA.Storages.Services.Tests.Add_Tests (Ret);
       AWA.Images.Services.Tests.Add_Tests (Ret);
+      AWA.Votes.Modules.Tests.Add_Tests (Ret);
+      AWA.Questions.Services.Tests.Add_Tests (Ret);
       return Ret;
    end Suite;
 
@@ -140,9 +150,19 @@ package body AWA.Testsuite is
                       Module => Jobs'Access);
 
             Register (App    => Application.all'Access,
+                      Name   => AWA.Votes.Modules.NAME,
+                      URI    => "votes",
+                      Module => Votes'Access);
+
+            Register (App    => Application.all'Access,
                       Name   => AWA.Blogs.Modules.NAME,
                       URI    => "blogs",
                       Module => Blogs'Access);
+
+            Register (App    => Application.all'Access,
+                      Name   => AWA.Questions.Modules.NAME,
+                      URI    => "questions",
+                      Module => Questions'Access);
 
             Application.Start;
             if Props.Exists ("test.server") then
