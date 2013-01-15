@@ -39,7 +39,7 @@
             <ul class='awa-buttons'>
                 <li>
                     <h:commandButton id='save'
-                                     value='#{question.id gt 0 ? questionMsg.question_edit_answer_button : questionMsg.question_post_answer_button}'
+                                     value='#{not empty answer.id ? questionMsg.question_edit_answer_button : questionMsg.question_post_answer_button}'
                                      styleClass="ui-button ui-state-default ui-corner-all"
                                      action="#{answer.save}"/>
                 </li>
