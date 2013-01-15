@@ -111,7 +111,7 @@ package body AWA.Questions.Beans is
                         Value : in Util.Beans.Objects.Object) is
    begin
       if Name = "id" and not Util.Beans.Objects.Is_Null (Value) then
-         From.Service.Load_Answer (From,
+         From.Service.Load_Answer (From, From.Question,
                                    ADO.Identifier (Util.Beans.Objects.To_Integer (Value)));
 
       elsif Name = "answer" then
