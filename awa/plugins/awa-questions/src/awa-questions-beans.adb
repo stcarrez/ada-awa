@@ -134,11 +134,14 @@ package body AWA.Questions.Beans is
                                 Answer   => Bean);
    end Save;
 
+   --  ------------------------------
    --  Delete the question.
+   --  ------------------------------
    procedure Delete (Bean    : in out Answer_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
    begin
-      null;
+      Bean.Service.Delete_Answer (Answer => Bean);
    end Delete;
 
    --  ------------------------------
