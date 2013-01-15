@@ -28,6 +28,7 @@ package AWA.Questions.Services is
    package ACL_Delete_Questions is new Security.Permissions.Definition ("question-delete");
    package ACL_Update_Questions is new Security.Permissions.Definition ("question-update");
    package ACL_Answer_Questions is new Security.Permissions.Definition ("answer-create");
+   package ACL_Delete_Answer is new Security.Permissions.Definition ("answer-delete");
 
    --  The maximum length for a short description.
    SHORT_DESCRIPTION_LENGTH : constant Positive := 200;
@@ -55,6 +56,10 @@ package AWA.Questions.Services is
    procedure Save_Answer (Model    : in Question_Service;
                           Question : in AWA.Questions.Models.Question_Ref'Class;
                           Answer   : in out AWA.Questions.Models.Answer_Ref'Class);
+
+   --  Delete the answer.
+   procedure Delete_Answer (Model  : in Question_Service;
+                            Answer : in out AWA.Questions.Models.Answer_Ref'Class);
 
    --  Load the answer.
    procedure Load_Answer (Model    : in Question_Service;
