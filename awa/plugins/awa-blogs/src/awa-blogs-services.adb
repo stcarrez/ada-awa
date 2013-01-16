@@ -111,7 +111,7 @@ package body AWA.Blogs.Services is
       end if;
 
       --  Check that the user has the create post permission on the given blog.
-      AWA.Permissions.Check (Permission => ACL_Create_Blog.Permission,
+      AWA.Permissions.Check (Permission => ACL_Create_Post.Permission,
                              Entity     => Blog);
 
       --  Build the new post.
