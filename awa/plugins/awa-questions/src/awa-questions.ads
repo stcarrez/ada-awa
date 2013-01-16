@@ -16,4 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 package AWA.Questions is
+
+   pragma Preelaborate;
+
 end AWA.Questions;
