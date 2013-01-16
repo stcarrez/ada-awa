@@ -89,7 +89,7 @@
 
   <entity-permission>
     <name>blog-create</name>
-    <entity-type>awa_blog</entity-type>
+    <entity-type>awa_workspace</entity-type>
     <description>Permission to create a new blog.</description>
     <sql>
        SELECT acl.id FROM awa_acl AS acl
