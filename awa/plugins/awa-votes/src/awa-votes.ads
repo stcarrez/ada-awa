@@ -21,7 +21,7 @@
 --  Users can vote by setting a rating value on an item (+1, -1 or any other integer value).
 --  The Votes module makes sure that users can vote only once for an item.  A global rating
 --  is associated with the item to give the vote summary.  The vote can be associated with
---  any database entity and it is not necessary to change other entities data model.
+--  any database entity and it is not necessary to change other entities in your data model.
 --
 --  == Model ==
 --  [http://ada-awa.googlecode.com/svn/wiki/awa_votes_model.png]
@@ -31,6 +31,23 @@
 --  be declared and registered in the AWA application.
 --
 --  @include awa-votes-beans.ads
+--
+--  == Javascript Integration ==
+--  The <b>Votes</b> module provides a Javascript support to help users vote for items.
+--  The Javascript file <tt>/js/awa-votes.js</tt> must be included in the Javascript page.
+--  It is based on jQuery and ASF.  The vote actions are activated on the page items as
+--  follows in XHTML facelet files:
+--
+--    <util:script>
+--      $('.question-vote').votes({
+--        voteUrl: "#{contextPath}/questions/ajax/questionVote/vote?id=",
+--        itemPrefix: "vote_for-"
+--    });
+--    </util:script>
+--
+--  When the vote up or down HTML element is clicked, the <tt>vote</tt> operation of the
+--  managed bean <tt>questionVote</tt> is called.  The operation will update the user's vote
+--  for the selected item (in the example "a question").
 package AWA.Votes is
 
    pragma Preelaborate;
