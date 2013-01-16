@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  awa-questions-services-tests -- Unit tests for storage service
+--  awa-questions-modules-tests -- Unit tests for storage service
 --  Copyright (C) 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -35,7 +35,7 @@ with AWA.Questions.Modules;
 with AWA.Questions.Beans;
 with AWA.Votes.Beans;
 with AWA.Tests.Helpers.Users;
-package body AWA.Questions.Services.Tests is
+package body AWA.Questions.Modules.Tests is
 
    use Util.Tests;
    use ADO;
@@ -66,7 +66,7 @@ package body AWA.Questions.Services.Tests is
    begin
       AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-storage@test.com");
 
-      T.Manager := AWA.Questions.Modules.Get_Question_Manager;
+      T.Manager := AWA.Questions.Modules.Get_Question_Module;
       T.Assert (T.Manager /= null, "There is no question manager");
 
       Q.Set_Title ("How can I append strings in Ada?");
@@ -95,7 +95,7 @@ package body AWA.Questions.Services.Tests is
    begin
       AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-storage@test.com");
 
-      T.Manager := AWA.Questions.Modules.Get_Question_Manager;
+      T.Manager := AWA.Questions.Modules.Get_Question_Module;
       T.Assert (T.Manager /= null, "There is no question manager");
 
       Q.Set_Title ("How can I search strings in Ada?");
@@ -185,4 +185,4 @@ package body AWA.Questions.Services.Tests is
       Do_Vote (T);
    end Test_Question_Vote;
 
-end AWA.Questions.Services.Tests;
+end AWA.Questions.Modules.Tests;

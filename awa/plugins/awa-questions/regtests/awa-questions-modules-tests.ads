@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  awa-questions-services-tests -- Unit tests for question service
+--  awa-questions-modules-tests -- Unit tests for question service
 --  Copyright (C) 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -19,12 +19,12 @@
 with Util.Tests;
 with AWA.Tests;
 
-package AWA.Questions.Services.Tests is
+package AWA.Questions.Modules.Tests is
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite);
 
    type Test is new AWA.Tests.Test with record
-      Manager : AWA.Questions.Services.Question_Service_Access;
+      Manager : AWA.Questions.Modules.Question_Module_Access;
    end record;
 
    --  Test creation of a question.
@@ -47,4 +47,4 @@ private
    --  Do a vote on a question through the question vote bean.
    procedure Do_Vote (T : in out Test);
 
-end AWA.Questions.Services.Tests;
+end AWA.Questions.Modules.Tests;
