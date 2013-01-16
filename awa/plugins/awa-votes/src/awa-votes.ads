@@ -26,10 +26,7 @@
 --  == Model ==
 --  [http://ada-awa.googlecode.com/svn/wiki/awa_votes_model.png]
 --
---  == Integration ==
---  To add the <b>Votes</b> module in an application, the <tt>Vote_Module</tt> instance must
---  be declared and registered in the AWA application.
---
+--  @include awa-votes-modules.ads
 --  @include awa-votes-beans.ads
 --
 --  == Javascript Integration ==
