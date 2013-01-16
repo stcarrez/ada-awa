@@ -22,11 +22,10 @@ with Util.Beans.Basic;
 with Util.Beans.Objects;
 with AWA.Questions.Modules;
 with AWA.Questions.Models;
-with AWA.Questions.Services;
 package AWA.Questions.Beans is
 
    type Question_Bean is new AWA.Questions.Models.Question_Bean with record
-      Service : Services.Question_Service_Access := null;
+      Service : Modules.Question_Module_Access := null;
    end record;
    type Question_Bean_Access is access all Question_Bean'Class;
 
@@ -54,7 +53,7 @@ package AWA.Questions.Beans is
                                   return Util.Beans.Basic.Readonly_Bean_Access;
 
    type Answer_Bean is new AWA.Questions.Models.Answer_Bean with record
-      Service  : Services.Question_Service_Access := null;
+      Service  : Modules.Question_Module_Access := null;
       Question : AWA.Questions.Models.Question_Ref;
    end record;
    type Answer_Bean_Access is access all Answer_Bean'Class;
@@ -88,7 +87,7 @@ package AWA.Questions.Beans is
 
 
    type Question_Display_Bean is new Util.Beans.Basic.Bean with record
-      Service          : Services.Question_Service_Access := null;
+      Service          : Modules.Question_Module_Access := null;
 
       Answer_List      : aliased AWA.Questions.Models.Answer_Info_List_Bean;
       Answer_List_Bean : AWA.Questions.Models.Answer_Info_List_Bean_Access;
