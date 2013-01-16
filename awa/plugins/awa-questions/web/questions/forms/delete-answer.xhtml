@@ -20,13 +20,11 @@
     <f:metadata>
         <f:viewParam id='id' value='#{answer.id}'/>
     </f:metadata>
-    <h2>#{questionMsg.question_delete_title}</h2>
+    <h2>#{questionMsg.question_delete_answer_title}</h2>
     <h:form id='answer-delete'>
         <h:inputHidden id='answer-delete-id' value='#{answer.id}'/>
         <p>
-            <h:outputFormat value="#{storageMsg.storage_confirm_delete_file_message}">
-                <f:param value="#{answer.title}"/>
-            </h:outputFormat>
+            <h:outputText value="#{questionMsg.question_confirm_delete_answer_message}"/>
         </p>
         <ul class='awa-buttons'>
             <li>
