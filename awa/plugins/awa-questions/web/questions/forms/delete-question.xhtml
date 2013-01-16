@@ -24,7 +24,7 @@
     <h:form id='question-delete'>
         <h:inputHidden id='question-delete-id' value='#{question.id}'/>
         <p>
-            <h:outputFormat value="#{storageMsg.storage_confirm_delete_file_message}">
+            <h:outputFormat value="#{questionMsg.question_confirm_delete_message}">
                 <f:param value="#{question.title}"/>
             </h:outputFormat>
         </p>
