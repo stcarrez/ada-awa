@@ -83,7 +83,7 @@ package body AWA.Questions.Beans is
       return Util.Beans.Basic.Readonly_Bean_Access is
       Object : constant Question_Bean_Access := new Question_Bean;
    begin
-      Object.Service := Module.Get_Question_Manager;
+      Object.Service := Module;
       return Object.all'Access;
    end Create_Question_Bean;
 
@@ -151,7 +151,7 @@ package body AWA.Questions.Beans is
                                 return Util.Beans.Basic.Readonly_Bean_Access is
       Object : constant Answer_Bean_Access := new Answer_Bean;
    begin
-      Object.Service := Module.Get_Question_Manager;
+      Object.Service := Module;
       return Object.all'Access;
    end Create_Answer_Bean;
 
@@ -247,7 +247,7 @@ package body AWA.Questions.Beans is
                                        return Util.Beans.Basic.Readonly_Bean_Access is
       Object  : constant Question_Display_Bean_Access := new Question_Display_Bean;
    begin
-      Object.Service          := Module.Get_Question_Manager;
+      Object.Service          := Module;
       Object.Question_Bean    := Object.Question'Access;
       Object.Answer_List_Bean := Object.Answer_List'Access;
       return Object.all'Access;
