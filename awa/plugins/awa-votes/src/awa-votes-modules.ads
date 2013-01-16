@@ -23,7 +23,19 @@ with AWA.Modules;
 --  The <tt>Vote_Module</tt> manages the votes on entities.  It provides operations that are
 --  used by the vote beans or other services to vote for an item.  An instance of the
 --  the <tt>Vote_Module</tt> must be declared and registered in the AWA application.
+--  The module instance can be defined as follows:
 --
+--    type Application is new AWA.Applications.Application with record
+--       Vote_Module : aliased AWA.Votes.Modules.Vote_Module;
+--    end record;
+--
+--  And registered in the `Initialize_Modules` procedure by using:
+--
+--    Register (App    => App.Self.all'Access,
+--              Name   => AWA.Votes.Modules.NAME,
+--              URI    => "votes",
+--              Module => App.Vote_Module'Access);
+
 package AWA.Votes.Modules is
 
    --  The name under which the module is registered.
