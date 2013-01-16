@@ -10,7 +10,6 @@ project awa_votes is
    for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
    for Library_Dir use "lib/" & Name & "/" & Project'Library_Kind;
    for Object_Dir use "obj/" & Name & "/" & Project'Library_Kind;
-   for Exec_Dir use awa.Exec_Dir;
    package Binder renames awa.Binder;
    package Builder renames awa.Builder;
    package Compiler renames awa.Compiler;
