@@ -23,8 +23,8 @@ with AWA.Votes.Modules;
 with AWA.Votes.Models;
 
 --  === Vote Beans ===
---  The <b>Vote_Bean</b> is a bean intended to be used in presentation files (facelet files)
---  to vote for an item.  The managed bean can be easily configured in the application XML
+--  The <tt>Vote_Bean</tt> is a bean intended to be used in presentation files (XHTML facelet
+--  files) to vote for an item.  The managed bean can be easily configured in the application XML
 --  configuration file.  The <b>permission</b> and <b>entity_type</b> are the two properties
 --  that should be defined in the configuration.  The <b>permission</b> is the name of the
 --  permission that must be used to verify that the user is allowed to vote for the item.
@@ -49,10 +49,12 @@ with AWA.Votes.Models;
 --    </managed-bean>
 --
 --  The vote concerns entities for the <tt>awa_question</tt> entity table.
---  The permission <tt>answer-create</tt> is used to verify for the vote.
+--  The permission <tt>answer-create</tt> is used to verify that the vote is allowed.
 --
 --  [http://ada-awa.googlecode.com/svn/wiki/awa_votes_bean.png]
 --
+--  The managed bean defines three operations that can be called: <tt>vote_up</tt>,
+--  <tt>vote_down</tt> and <tt>vote</tt> to setup specific ratings.
 package AWA.Votes.Beans is
 
    type Vote_Bean is new AWA.Votes.Models.Vote_Bean with private;
