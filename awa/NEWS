@@ -2,6 +2,7 @@ Version 0.3     -
   - New jobs plugin to manage asynchronous jobs
   - New storage plugin to manage a storage space for application documents
   - New votes plugin to allow voting on items
+  - New question plugin to provide a general purpose Q&A
 
 Version 0.2     - May 2012
   - New blog module and wiki engine
