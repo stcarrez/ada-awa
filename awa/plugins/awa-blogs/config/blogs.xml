@@ -185,4 +185,15 @@
      <url-pattern>/*</url-pattern>
   </policy>
 
+  <url-policy>
+    <permission>anonymous</permission>
+    <url-pattern>/blogs/view.html</url-pattern>
+    <url-pattern>/blogs/index.html</url-pattern>
+  </url-policy>
+
+  <url-policy>
+    <permission>logged-user</permission>
+    <url-pattern>/blogs/admin/.*</url-pattern>
+  </url-policy>
+
 </module>
