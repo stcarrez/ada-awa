@@ -40,4 +40,13 @@
        and ACL.USER_ID = :user_id
     </sql>
   </entity-permission>
+
+    <url-policy>
+        <description>
+           Security rule to allow only logged users to post micro blogs.
+        </description>
+        <permission>logged-user</permission>
+        <url-pattern>/microblog/forms/post-form.html</url-pattern>
+    </url-policy>
+
 </module>
