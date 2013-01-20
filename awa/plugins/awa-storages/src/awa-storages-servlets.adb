@@ -85,6 +85,8 @@ package body AWA.Storages.Servlets is
                      Request  : in out ASF.Requests.Request'Class;
                      Response : in out ASF.Responses.Response'Class) is
       URI     : constant String := Request.Get_Path_Info;
+      pragma Unreferenced (Server);
+
       Data    : ADO.Blob_Ref;
       Mime    : Ada.Strings.Unbounded.Unbounded_String;
       Name    : Ada.Strings.Unbounded.Unbounded_String;
@@ -101,7 +103,7 @@ package body AWA.Storages.Servlets is
 
       --  Extract the storage identifier from the URI.
       Pos := Util.Strings.Index (URI, '/', URI'First + 1);
-      if Pos <= 0 then
+      if Pos = 0 then
          Pos := URI'Last;
       else
          Pos := Pos - 1;

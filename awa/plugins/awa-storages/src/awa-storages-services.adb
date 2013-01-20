@@ -15,7 +15,6 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with Ada.Calendar;
 
 with Util.Log.Loggers;
 
@@ -317,7 +316,7 @@ package body AWA.Storages.Services is
 
       --  Check that the user has the delete storage permission on the given workspace.
       AWA.Permissions.Check (Permission => ACL_Delete_Storage.Permission,
-                             Entity     => Id);
+                             Entity     => Storage);
 
       Ctx.Start;
       Storage_Lifecycle.Notify_Delete (Service, Storage);
