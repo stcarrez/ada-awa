@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-services-tests -- Unit tests for storage service
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,19 +15,12 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with Ada.Streams;
-with Ada.Strings.Unbounded;
 
 with Util.Test_Caller;
-
-with ADO;
-with ADO.Objects;
 
 with Security.Contexts;
 
 with AWA.Services.Contexts;
-with AWA.Storages.Modules;
-with AWA.Storages.Beans.Factories;
 with AWA.Tests.Helpers.Users;
 with AWA.Images.Modules;
 package body AWA.Images.Services.Tests is
@@ -50,7 +43,8 @@ package body AWA.Images.Services.Tests is
       Sec_Ctx   : Security.Contexts.Security_Context;
       Context   : AWA.Services.Contexts.Service_Context;
       Source    : constant String := Util.Tests.Get_Path ("regtests/files/images/bast-12.jpg");
-      Thumb     : constant String := Util.Tests.Get_Test_Path ("regtests/result/bast-12-thumb.jpg");
+      Thumb     : constant String
+        := Util.Tests.Get_Test_Path ("regtests/result/bast-12-thumb.jpg");
       Width     : Natural;
       Height    : Natural;
    begin

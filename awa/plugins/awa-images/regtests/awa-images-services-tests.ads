@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-images-services-tests -- Unit tests for image service
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,7 @@
 
 with Util.Tests;
 with AWA.Tests;
-
+with ADO;
 package AWA.Images.Services.Tests is
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite);
