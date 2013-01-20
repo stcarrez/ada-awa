@@ -54,4 +54,14 @@
     <url-pattern>*.gif</url-pattern>
   </servlet-mapping>
 
+  <policy-rules>
+  <grant-permission>
+    <name>anonymous</name>
+  </grant-permission>
+
+  <auth-permission>
+    <name>logged-user</name>
+  </auth-permission>
+  </policy-rules>
+
 </module>
