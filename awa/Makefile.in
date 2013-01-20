@@ -27,6 +27,10 @@ post-generate:
 	   $(MAKE) -C plugins/$$i generate ; \
 	done
 
+# Generate the documentation from Ada headers comments.
+doc:
+	$(DYNAMO) build-doc wiki
+
 # Build and run the unit tests
 check test:	test-mysql test-sqlite
 
