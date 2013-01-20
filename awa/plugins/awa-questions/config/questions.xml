@@ -263,6 +263,11 @@
         <permission>logged-user</permission>
         <url-pattern>/questions/ask.html</url-pattern>
         <url-pattern>/questions/edit.html</url-pattern>
+        <url-pattern>/questions/forms/delete-question.html</url-pattern>
+        <url-pattern>/questions/forms/delete-answer.html</url-pattern>
+        <url-pattern>/questions/edit-answer.html</url-pattern>
+        <url-pattern>/questions/ajax/questionVote/vote</url-pattern>
+        <url-pattern>/questions/ajax/answerVote/vote</url-pattern>
     </url-policy>
 
 </module>
