@@ -80,12 +80,13 @@
 
   <entity-permission>
     <name>storage-delete</name>
-    <entity-type>awa_storage</entity-type>
+    <entity-type>awa_workspace</entity-type>
     <sql>
-       SELECT acl.id FROM awa_storage INNER JOIN awa_acl AS acl ON acl.entity_id = awa_storage.workspace_id
+       SELECT acl.id FROM awa_storage
+       INNER JOIN awa_acl AS acl ON acl.entity_id = awa_storage.workspace_id
        WHERE acl.entity_type = :entity_type
        AND acl.user_id = :user_id   
-       AND acl.entity_id = :entity_id
+       AND awa_storage.id = :entity_id
     </sql>
   </entity-permission>
 
@@ -113,5 +114,17 @@
     <filter-name>auth-filter</filter-name>
     <url-pattern>/storages/files/*</url-pattern>
   </filter-mapping>
+
+    <url-policy>
+        <description>
+           Security rule to allow only logged users to view documents.
+        </description>
+        <permission>logged-user</permission>
+        <url-pattern>/storages/forms/create-folder-form.html</url-pattern>
+        <url-pattern>/storages/forms/upload-form.html</url-pattern>
+        <url-pattern>/storages/forms/file-delete-form.html</url-pattern>
+        <url-pattern>/storages/lists/documents.html</url-pattern>
+        <url-pattern>/storages/documents.html</url-pattern>
+    </url-policy>
 
 </module>
