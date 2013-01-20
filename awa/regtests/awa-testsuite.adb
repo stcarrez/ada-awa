@@ -28,7 +28,7 @@ with AWA.Mail.Clients.Tests;
 with AWA.Mail.Modules.Tests;
 with AWA.Images.Services.Tests;
 with AWA.Votes.Modules.Tests;
-with AWA.Questions.Services.Tests;
+with AWA.Questions.Modules.Tests;
 with AWA.Modules.Tests;
 
 with ASF.Converters.Dates;
@@ -93,7 +93,7 @@ package body AWA.Testsuite is
       AWA.Storages.Services.Tests.Add_Tests (Ret);
       AWA.Images.Services.Tests.Add_Tests (Ret);
       AWA.Votes.Modules.Tests.Add_Tests (Ret);
-      AWA.Questions.Services.Tests.Add_Tests (Ret);
+      AWA.Questions.Modules.Tests.Add_Tests (Ret);
       return Ret;
    end Suite;
 
