@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-configs -- Event configuration
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,6 +33,7 @@ package body AWA.Events.Configs is
                          Field : in Config_Fields;
                          Value : in Util.Beans.Objects.Object) is
       use Ada.Strings.Unbounded;
+      use Util.Beans.Objects;
    begin
       case Field is
          when FIELD_NAME =>
@@ -83,9 +84,6 @@ package body AWA.Events.Configs is
             if Util.Beans.Objects.Is_Null (Into.Name) then
                raise Util.Serialize.Mappers.Field_Error with "Missing event name";
             end if;
---              if Into.Queue.Is_Null then
---                 raise Util.Serialize.Mappers.Field_Error with "Missing or invalid event queue";
---              end if;
 
             declare
                Name  : constant String := Util.Beans.Objects.To_String (Into.Name);
@@ -117,12 +115,12 @@ package body AWA.Events.Configs is
             Into.Params.Clear;
 
          when FIELD_DISPATCHER_PRIORITY =>
-            Into.Priority := EL.Utils.Eval (Value   => Value,
-                                            Context => Into.Context.all);
+            Into.Priority := To_Integer (EL.Utils.Eval (Value   => Value,
+                                                        Context => Into.Context.all));
 
          when FIELD_DISPATCHER_COUNT =>
-            Into.Count := EL.Utils.Eval (Value   => Value,
-                                         Context => Into.Context.all);
+            Into.Count := To_Integer (EL.Utils.Eval (Value   => Value,
+                                                     Context => Into.Context.all));
 
          when FIELD_DISPATCHER_QUEUE =>
             declare
@@ -136,8 +134,8 @@ package body AWA.Events.Configs is
 
          when FIELD_DISPATCHER =>
             Into.Manager.Add_Dispatcher (Match    => To_String (Into.Match),
-                                         Count    => Util.Beans.Objects.To_Integer (Into.Count),
-                                         Priority => Util.Beans.Objects.To_Integer (Into.Priority));
+                                         Count    => Into.Count,
+                                         Priority => Into.Priority);
             Into.Match := To_Unbounded_String ("");
 
       end case;

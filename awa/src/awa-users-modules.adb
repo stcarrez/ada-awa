@@ -49,7 +49,7 @@ package body AWA.Users.Modules is
       App.Add_Servlet (Name   => "openid-verify",
                        Server => Plugin.Verify_Auth'Unchecked_Access);
 
-	  --  Setup the verify access key filter.
+      --  Setup the verify access key filter.
       App.Add_Filter ("verify-access-key", Plugin.Key_Filter'Access);
       App.Add_Filter ("auth-filter", Plugin.Auth_Filter'Access);
 

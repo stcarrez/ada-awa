@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-converters-dates -- Date Converters
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,6 @@ with Ada.Exceptions;
 with Ada.Strings.Unbounded;
 
 with Util.Locales;
-with Util.Log.Loggers;
 with Util.Dates.Formats;
 with Util.Properties.Bundles;
 with Util.Beans.Objects.Time;
@@ -29,9 +28,6 @@ with ASF.Locales;
 with ASF.Utils;
 with ASF.Applications.Main;
 package body AWA.Converters.Dates is
-
-   --  The logger
-   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Converters.Dates");
 
    ONE_HOUR : constant Duration := 3600.0;
    ONE_DAY  : constant Duration := 24 * ONE_HOUR;
@@ -50,9 +46,10 @@ package body AWA.Converters.Dates is
       Locale  : constant Util.Locales.Locale := Context.Get_Locale;
    begin
       begin
-         Context.Get_Application.Load_Bundle (Name   => "dates",
-                                              Locale => Util.Locales.To_String (Locale),
-                                              Bundle => Bundle);
+         ASF.Applications.Main.Load_Bundle (Context.Get_Application.all,
+                                            Name   => "dates",
+                                            Locale => Util.Locales.To_String (Locale),
+                                            Bundle => Bundle);
 
       exception
          when E : Util.Properties.Bundles.NO_BUNDLE =>

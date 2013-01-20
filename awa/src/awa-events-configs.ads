@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-configs -- Event configuration
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,8 +37,8 @@ package AWA.Events.Configs is
       Queue_Type : Util.Beans.Objects.Object;
       Prop_Name  : Util.Beans.Objects.Object;
       Params     : EL.Beans.Param_Vectors.Vector;
-      Priority   : Util.Beans.Objects.Object;
-      Count      : Util.Beans.Objects.Object;
+      Priority   : Integer;
+      Count      : Integer;
       Manager    : AWA.Events.Services.Event_Manager_Access;
       Action     : EL.Expressions.Method_Expression;
       Properties : EL.Beans.Param_Vectors.Vector;

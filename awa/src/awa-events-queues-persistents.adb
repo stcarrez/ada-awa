@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-queues-persistents -- AWA Event Queues
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -112,7 +112,7 @@ package body AWA.Events.Queues.Persistents is
       DB       : ADO.Sessions.Master_Session := AC.Get_Master_Session (Ctx);
       Messages : Models.Message_Vector;
       Query    : ADO.SQL.Query;
-      Task_Id  : Integer := 0;
+      Task_Id  : constant Integer := 0;
 
       --  ------------------------------
       --  Prepare the message by indicating in the database it is going to be processed
@@ -205,6 +205,7 @@ package body AWA.Events.Queues.Persistents is
    function Create_Queue (Name    : in String;
                           Props   : in EL.Beans.Param_Vectors.Vector;
                           Context : in EL.Contexts.ELContext'Class) return Queue_Access is
+      pragma Unreferenced (Props, Context);
       package AC renames AWA.Services.Contexts;
 
       Ctx     : constant AC.Service_Context_Access := AC.Current;
@@ -230,15 +231,10 @@ package body AWA.Events.Queues.Persistents is
          Log.Info ("Using database queue {0}", Name);
       end if;
       Session.Commit;
-      declare
-         Result : constant Persistent_Queue_Access
-           := new Persistent_Queue '(Name_Length  => Name'Length,
-                                     Name         => Name,
-                                     Queue        => Queue,
-                                     others       => <>);
-      begin
-         return Result.all'Access;
-      end;
+      return new Persistent_Queue '(Name_Length  => Name'Length,
+                                    Name         => Name,
+                                    Queue        => Queue,
+                                    others       => <>);
    end Create_Queue;
 
 end AWA.Events.Queues.Persistents;

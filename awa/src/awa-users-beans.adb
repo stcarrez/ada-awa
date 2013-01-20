@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-beans -- ASF Beans for user module
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,15 +29,14 @@ with ASF.Security.Filters;
 
 with ADO.Sessions;
 
+with AWA.Users.Models;
 with AWA.Services.Contexts;
 package body AWA.Users.Beans is
 
-
-   use Util.Log;
    use AWA.Users.Models;
    use ASF.Applications;
 
-   Log : constant Loggers.Logger := Loggers.Create ("AWA.Users.Beans");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Users.Beans");
 
    --  Helper to send a remove cookie in the current response
    procedure Remove_Cookie (Name : in String);
@@ -157,7 +156,8 @@ package body AWA.Users.Beans is
 
    procedure Set_Authenticate_Cookie (Data    : in out Authenticate_Bean;
                                       Principal : in AWA.Users.Principals.Principal_Access) is
-      Cookie : constant String := Data.Manager.Get_Authenticate_Cookie (Principal.Get_Session_Identifier);
+      Id     : constant ADO.Identifier := Principal.Get_Session_Identifier;
+      Cookie : constant String := Data.Manager.Get_Authenticate_Cookie (Id);
       Ctx    : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
       C      : ASF.Cookies.Cookie := ASF.Cookies.Create (ASF.Security.Filters.AID_COOKIE, Cookie);
    begin
@@ -419,6 +419,8 @@ package body AWA.Users.Beans is
    --  ------------------------------
    function Create_Current_User_Bean (Module : in AWA.Users.Modules.User_Module_Access)
                                       return Util.Beans.Basic.Readonly_Bean_Access is
+      pragma Unreferenced (Module);
+
       Object : constant Current_User_Bean_Access := new Current_User_Bean;
    begin
       return Object.all'Access;

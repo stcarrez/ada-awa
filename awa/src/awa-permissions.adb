@@ -29,9 +29,7 @@ with AWA.Services.Contexts;
 with AWA.Permissions.Controllers;
 package body AWA.Permissions is
 
-   use Util.Log;
-
-   Log : constant Loggers.Logger := Loggers.Create ("AWA.Permissions");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Permissions");
 
    --  ------------------------------
    --  Verify that the permission represented by <b>Permission</b> is granted.
@@ -55,12 +53,12 @@ package body AWA.Permissions is
       Perm    : Entity_Permission (Permission);
    begin
       if Context = null then
-         Log.Debug ("There is no security context, permission denied");
+         Log.Debug ("Permission is refused because there is no security context");
          raise NO_PERMISSION;
       end if;
       Perm.Entity := Entity;
       if not Context.Has_Permission (Perm) then
-         Log.Debug ("Permission is refused");
+         Log.Debug ("Permission is refused by the security controller");
          raise NO_PERMISSION;
       end if;
    end Check;
@@ -186,7 +184,7 @@ package body AWA.Permissions is
    overriding
    procedure Prepare_Config (Policy : in out Entity_Policy;
                              Reader : in out Util.Serialize.IO.XML.Parser) is
-      Config : Controller_Config_Access := new Controller_Config;
+      Config : constant Controller_Config_Access := new Controller_Config;
    begin
       Reader.Add_Mapping ("policy-rules", Mapper'Access);
       Reader.Add_Mapping ("module", Mapper'Access);
