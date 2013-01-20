@@ -139,4 +139,12 @@
     <url-pattern>/auth/reset-password.html</url-pattern>
   </filter-mapping>
   
+    <url-policy>
+        <description>
+           Give access to login pages to anybody.
+        </description>
+        <permission>anonymous</permission>
+        <url-pattern>/auth/.*</url-pattern>
+    </url-policy>
+
 </module>

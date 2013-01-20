@@ -30,4 +30,13 @@
        and ACL.USER_ID = :user_id   
     </sql>
   </entity-permission>
+
+    <url-policy>
+        <description>
+           Security rule to allow only logged users to access the workspace.
+        </description>
+        <permission>logged-user</permission>
+        <url-pattern>/workspaces/main.html</url-pattern>
+    </url-policy>
+
 </module>
