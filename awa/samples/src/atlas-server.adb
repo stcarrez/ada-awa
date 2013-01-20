@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------
 --  Atlas-server -- Application server
---  Copyright (C) 2011 unknown
---  Written by unknown (unknown@company.com)
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
 --  you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 -----------------------------------------------------------------------
 with Ada.Exceptions;
 
-with Util.Log.loggers;
+with Util.Log.Loggers;
 
 with ASF.Server.Web;
 
@@ -35,7 +35,7 @@ begin
    delay 365.0 * 24.0 * 3600.0;
    App.Close;
 exception
-   when E: others =>
+   when E : others =>
       Log.Error ("Exception in server: " &
                  Ada.Exceptions.Exception_Name (E) & ": " &
                  Ada.Exceptions.Exception_Message (E));
