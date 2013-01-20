@@ -246,4 +246,23 @@
             select user.id from awa_user as user where user.id = :user_id
         </sql>
     </entity-permission>
+
+    <url-policy>
+        <description>
+           Security rule to allow anonymous users to display the questions.
+        </description>
+        <permission>anonymous</permission>
+        <url-pattern>/questions/view.html</url-pattern>
+        <url-pattern>/questions/list.html</url-pattern>
+    </url-policy>
+
+    <url-policy>
+        <description>
+           Security rule to allow only logged users to post and edit questions.
+        </description>
+        <permission>logged-user</permission>
+        <url-pattern>/questions/ask.html</url-pattern>
+        <url-pattern>/questions/edit.html</url-pattern>
+    </url-policy>
+
 </module>
