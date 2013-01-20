@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-images-services -- Image service
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +22,7 @@ with Util.Log.Loggers;
 with Util.Streams.Pipes;
 with Util.Streams.Texts;
 
+with ADO;
 with ADO.Sessions;
 
 with AWA.Images.Models;
@@ -95,6 +96,8 @@ package body AWA.Images.Services is
          Input.Initialize (null, Pipe'Unchecked_Access, 1024);
          while not Input.Is_Eof loop
             declare
+               use Ada.Strings;
+
                Line : Ada.Strings.Unbounded.Unbounded_String;
                Pos  : Natural;
                Sep  : Natural;
@@ -117,8 +120,8 @@ package body AWA.Images.Services is
                         Log.Info ("Dimension {0} - {1}..{2}",
                                   Ada.Strings.Unbounded.Slice (Line, Pos, Last),
                                   Natural'Image (Pos), Natural'Image (Last));
-                        Width := Natural'Value (Ada.Strings.Unbounded.Slice (Line, Pos + 1, Sep - 1));
-                        Height := Natural'Value (Ada.Strings.Unbounded.Slice (Line, Sep + 1, Last - 1));
+                        Width := Natural'Value (Unbounded.Slice (Line, Pos + 1, Sep - 1));
+                        Height := Natural'Value (Unbounded.Slice (Line, Sep + 1, Last - 1));
                      end if;
                   end if;
                end if;
@@ -139,12 +142,13 @@ package body AWA.Images.Services is
    procedure Build_Thumbnail (Service : in Image_Service;
                               Id      : in ADO.Identifier;
                               File    : in AWA.Storages.Models.Storage_Ref'Class) is
+      pragma Unreferenced (File);
 
-      Storage_Service : constant AWA.Storages.Services.Storage_Service_Access := AWA.Storages.Modules.Get_Storage_Manager;
+      Storage_Service : constant AWA.Storages.Services.Storage_Service_Access
+        := AWA.Storages.Modules.Get_Storage_Manager;
       Ctx         : constant ASC.Service_Context_Access := ASC.Current;
       DB          : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
       Img         : AWA.Images.Models.Image_Ref;
-      Local_Path  : Ada.Strings.Unbounded.Unbounded_String;
       Target_File : AWA.Storages.Storage_File;
       Local_File  : AWA.Storages.Storage_File;
       Width       : Natural;
@@ -169,6 +173,8 @@ package body AWA.Images.Services is
    --  target storage represented by <b>Into</b>.
    procedure Create_Image (Service : in Image_Service;
                            File    : in AWA.Storages.Models.Storage_Ref'Class) is
+      pragma Unreferenced (Service);
+
       Ctx : constant AWA.Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB  : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Img : AWA.Images.Models.Image_Ref;

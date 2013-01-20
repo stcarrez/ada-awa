@@ -15,7 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with AWA.Modules.Beans;
+--  with AWA.Modules.Beans;
 with AWA.Modules.Get;
 with AWA.Applications;
 with AWA.Storages.Modules;
@@ -26,8 +26,8 @@ package body AWA.Images.Modules is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Images.Module");
 
-   package Register is new AWA.Modules.Beans (Module        => Image_Module,
-                                              Module_Access => Image_Module_Access);
+--     package Register is new AWA.Modules.Beans (Module        => Image_Module,
+--                                                Module_Access => Image_Module_Access);
 
    --  ------------------------------
    --  Initialize the image module.

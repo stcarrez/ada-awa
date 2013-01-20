@@ -21,7 +21,6 @@ with ASF.Applications;
 with AWA.Modules;
 with AWA.Storages.Models;
 with AWA.Storages.Services;
-with AWA.Storages.Servlets;
 with AWA.Images.Services;
 
 --  == Image Module ==
