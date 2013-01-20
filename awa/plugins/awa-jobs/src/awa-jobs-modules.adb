@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-jobs-module -- Job module
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,6 +43,7 @@ package body AWA.Jobs.Modules is
    procedure Initialize (Plugin : in out Job_Module;
                          App    : in AWA.Modules.Application_Access;
                          Props  : in ASF.Applications.Config) is
+      procedure Process (Events : in out AWA.Events.Services.Event_Manager);
 
       Name : constant String := Props.Get ("jobs_queue", "default");
 

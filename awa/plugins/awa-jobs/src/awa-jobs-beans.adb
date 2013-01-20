@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-jobs-beans -- AWA Jobs Ada Beans
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -56,6 +56,7 @@ package body AWA.Jobs.Beans is
    overriding
    function Get_Method_Bindings (From : in Process_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
    begin
       return Process_Binding'Access;
    end Get_Method_Bindings;
@@ -65,6 +66,7 @@ package body AWA.Jobs.Beans is
    --  ------------------------------
    procedure Execute (Bean    : in out Process_Bean;
                       Event   : in AWA.Events.Module_Event'Class) is
+      pragma Unreferenced (Bean);
    begin
       AWA.Jobs.Services.Execute (Event);
    end Execute;
