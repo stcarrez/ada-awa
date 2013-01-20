@@ -124,7 +124,7 @@
 
   <entity-permission>
     <name>blog-update-post</name>
-    <entity-type>awa_blog</entity-type>
+    <entity-type>awa_post</entity-type>
     <description>Permission to modify a post.</description>
     <sql>
        SELECT acl.id FROM awa_post AS blog_post INNER JOIN awa_acl AS acl ON acl.entity_id = blog_post.blog_id
@@ -136,7 +136,7 @@
 
   <entity-permission>
     <name>blog-delete-post</name>
-    <entity-type>awa_blog</entity-type>
+    <entity-type>awa_post</entity-type>
     <description>Permission to delete a post.</description>
     <sql>
        SELECT acl.id FROM awa_post AS blog_post INNER JOIN awa_acl AS acl ON acl.entity_id = blog_post.blog_id
