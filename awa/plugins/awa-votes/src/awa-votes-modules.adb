@@ -29,7 +29,6 @@ with AWA.Votes.Models;
 
 with ADO.SQL;
 with ADO.Sessions;
-with ADO.Statements;
 with ADO.Sessions.Entities;
 
 package body AWA.Votes.Modules is
@@ -112,11 +111,6 @@ package body AWA.Votes.Modules is
       Query.Bind_Param ("user_id", User.Get_Id);
       Vote.Find (DB, Query, Found);
       if not Found then
-
-         --  If the rating is 0, do not create any vote.
-         if Value = 0 then
-            return;
-         end if;
          Query.Clear;
 
          --  Get the rating associated with the object.
