@@ -6,8 +6,8 @@
   </application>
 
   <dispatcher name="async">
-     <count>#{empty awa.dispatcher.count ? 1 : awa.dispatcher.count}</count>
-     <priority>#{empty awa.dispatcher.priority ? 1 : awa.dispatcher.priority}</priority>
+     <count>#{empty awa_dispatcher_count ? 1 : awa_dispatcher_count}</count>
+     <priority>#{empty awa_dispatcher_priority ? 1 : awa_dispatcher_priority}</priority>
      <queue match="*"/>
   </dispatcher>
 
@@ -54,7 +54,6 @@
     <url-pattern>*.gif</url-pattern>
   </servlet-mapping>
 
-  <policy-rules>
   <grant-permission>
     <name>anonymous</name>
   </grant-permission>
@@ -62,6 +61,5 @@
   <auth-permission>
     <name>logged-user</name>
   </auth-permission>
-  </policy-rules>
 
 </module>
