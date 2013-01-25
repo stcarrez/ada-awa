@@ -133,9 +133,11 @@ package body AWA.Events.Configs is
             end;
 
          when FIELD_DISPATCHER =>
-            Into.Manager.Add_Dispatcher (Match    => To_String (Into.Match),
-                                         Count    => Into.Count,
-                                         Priority => Into.Priority);
+            if Into.Count > 0 then
+               Into.Manager.Add_Dispatcher (Match    => To_String (Into.Match),
+                                            Count    => Into.Count,
+                                            Priority => Into.Priority);
+            end if;
             Into.Match := To_Unbounded_String ("");
 
       end case;
