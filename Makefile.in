@@ -19,11 +19,11 @@ top_builddir = .
 SUBDIRS=util el security asf ado dynamo awa
 
 # Build executables for all mains defined by the project.
-build:
+test build:
 	D=`pwd`; \
 	for i in $(SUBDIRS); do \
 	   cd "$$D/$$i" && \
-	   $(MAKE) build ; \
+	   $(MAKE) $@ ; \
 	done
 
 # Clean the root project of all build products.
