@@ -1,32 +1,41 @@
 Ada Web Application
 
-Ada Web Application is a framework to build a Web Application in Ada 2005.
+Ada Web Application is a framework to build a Web Application in Ada 2005/2012.
 
 It integrates the following projects:
 
- - ASF      (http://code.google.com/p/ada-asf)
- - ADO      (http://code.google.com/p/ada-ado)
- - Ada Util (http://code.google.com/p/ada-util)
- - Ada EL   (http://code.google.com/p/ada-el)
- - Dynamo   (http://code.google.com/p/ada-gen)
+ - ASF           (http://code.google.com/p/ada-asf)
+ - ADO           (http://code.google.com/p/ada-ado)
+ - Ada Util      (http://code.google.com/p/ada-util)
+ - Ada EL        (http://code.google.com/p/ada-el)
+ - Ada Security  (http://code.google.com/p/ada-security)
+ - Dynamo        (http://code.google.com/p/ada-gen)
 
  These projects are provided as tarball in 'distrib' directory.
  These projects are distributed under the Apache License 2.0.
 
-It relies on the following external projects:
+AWA relies on the following external projects:
 
  - AWS      (http://libre.adacore.com/libre/tools/aws/)
  - XMLAda   (http://libre.adacore.com/libre/tools/xmlada/)
- - AUnit    (http://libre.adacore.com/libre/tools/aunit/)
 
  These projects are provided as tarball in 'external' directory.
  They are distributed under different licenses (GNU GPL).
  They are not compiled.
 
+The AWA framework integrates a set unit tests and provides a framework
+to build unit tests for AWA applications.   The unit tests are based on
+Ada Util test framework which itself is built on top of the excellent
+Ahven test framework (Ahven sources is integrated in Ada Util).
+You may get Ahven or Aunit at:
+
+ - Ahven    (http://ahven.stronglytyped.org/)
+ - AUnit    (http://libre.adacore.com/libre/tools/aunit/)
+
 
 Extract the sources and configure by using:
 
-   ./configure
+   ./configure  --enable-ahven
 
 
 If you want to build AWS, XMLAda or AUnit, you can configure with:
