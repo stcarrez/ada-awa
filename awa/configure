@@ -571,6 +571,7 @@ ADO_DB_MYSQL
 MYSQL
 ADO_DIR
 ASF_DIR
+SECURITY_DIR
 EL_DIR
 UTIL_DIR
 AWA_LIBDIR
@@ -648,6 +649,7 @@ ac_user_opts='
 enable_option_checking
 with_ada_util
 with_ada_el
+with_ada_security
 with_ada_asf
 with_ada_ado
 '
@@ -1276,6 +1278,8 @@ Optional Packages:
                           (code.google.com/p/ada-util)
   --with-ada-el=x         Path for the Ada Expression Language library
                           (code.google.com/p/ada-el)
+  --with-ada-security=x   Path for the Ada Security library
+                          (code.google.com/p/ada-security)
   --with-ada-asf=x        Path for the Ada Server Faces library
                           (code.google.com/p/ada-asf)
   --with-ada-ado=x        Path for the Ada Database Objects library
@@ -2999,6 +3003,41 @@ fi
 rm -f t.gpr
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${EL_DIR}" >&5
 $as_echo "${EL_DIR}" >&6; }
+
+
+##########################################
+# Ada Security library
+##########################################
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Ada Security library (code.google.com/p/ada-security)" >&5
+$as_echo_n "checking Ada Security library (code.google.com/p/ada-security)... " >&6; }
+
+# Check whether --with-ada-security was given.
+if test "${with_ada_security+set}" = set; then :
+  withval=$with_ada_security;
+  SECURITY_DIR=${withval}/
+
+else
+
+  echo "with \"security\"; project t is for Source_Dirs use (); end t;" > t.gpr
+  gnatmake -p -Pt >/dev/null 2>/dev/null
+  if test $? -eq 0; then
+    SECURITY_DIR=
+  else
+    SECURITY_DIR=../security/
+  fi;
+  rm -f t.gpr
+
+fi
+
+echo "with \"${SECURITY_DIR}security\"; project t is for Source_Dirs use (); end t;" > t.gpr
+gnatmake -p -Pt >/dev/null 2>/dev/null
+if test $? -ne 0 ; then
+   rm -f t.gpr
+   as_fn_error $? "Ada Security library not found in ${SECURITY_DIR}" "$LINENO" 5
+fi
+rm -f t.gpr
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ok ${SECURITY_DIR}" >&5
+$as_echo "ok ${SECURITY_DIR}" >&6; }
 
 
 ##########################################
