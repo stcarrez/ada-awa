@@ -111,6 +111,35 @@ AC_MSG_RESULT(${EL_DIR})
 AC_SUBST(EL_DIR)
 
 ##########################################
+# Ada Security library
+##########################################
+AC_MSG_CHECKING([Ada Security library (code.google.com/p/ada-security)])
+AC_ARG_WITH(ada-security,
+AS_HELP_STRING([--with-ada-security=x], [Path for the Ada Security library (code.google.com/p/ada-security)]),
+[
+  SECURITY_DIR=${withval}/
+],
+[
+  echo "with \"security\"; project t is for Source_Dirs use (); end t;" > t.gpr
+  gnatmake -p -Pt >/dev/null 2>/dev/null
+  if test $? -eq 0; then
+    SECURITY_DIR=
+  else
+    SECURITY_DIR=../security/
+  fi;
+  rm -f t.gpr
+])
+echo "with \"${SECURITY_DIR}security\"; project t is for Source_Dirs use (); end t;" > t.gpr
+gnatmake -p -Pt >/dev/null 2>/dev/null
+if test $? -ne 0 ; then
+   rm -f t.gpr
+   AC_MSG_ERROR([Ada Security library not found in ${SECURITY_DIR}])
+fi
+rm -f t.gpr
+AC_MSG_RESULT(ok ${SECURITY_DIR})
+AC_SUBST(SECURITY_DIR)
+
+##########################################
 # Ada Server Faces library
 ##########################################
 AC_MSG_CHECKING([Ada Server Faces library (code.google.com/p/ada-asf)])
