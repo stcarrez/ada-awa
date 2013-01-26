@@ -3,6 +3,7 @@ with "@UTIL_DIR@util";
 with "@EL_DIR@el";
 with "@ADO_DIR@ado";
 with "@ASF_DIR@asf";
+with "@SECURITY_DIR@security";
 
 project Awa is
 
