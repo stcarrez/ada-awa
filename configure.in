@@ -13,7 +13,7 @@ AWA_MINOR_VERSION=3
 AWA_MICRO_VERSION=0
 AWA_VERSION=$AWA_MAJOR_VERSION.$AWA_MINOR_VERSION.$AWA_MICRO_VERSION
 
-AWA_PACKAGES="ada-util-1.6.0 ada-el-1.4.0 ada-security-0.1.0 ada-asf-0.4.0 ada-ado-0.3.0 ada-awa-0.2.0 dynamo-0.5.0"
+AWA_PACKAGES="ada-util-1.6.0 ada-el-1.4.0 ada-security-1.0.0 ada-asf-0.4.0 ada-ado-0.3.0 ada-awa-0.2.0 dynamo-0.5.0"
 
 # checking for local tools
 AC_PROG_CC
@@ -103,6 +103,10 @@ for NAME in $PACKAGES ; do
         TARGET=asf
         ;;
 
+      ada-security-*)
+        TARGET=security
+        ;;
+
       ada-ado-*)
         TARGET=ado
         ;;
@@ -142,11 +146,13 @@ done
 
 DIR=`pwd`
 if test $ENABLE_XMLADA = "yes" ; then
+  echo "Configuring ==== xmlada ===="
   (cd $DIR/xmlada && ./configure --prefix="$prefix")
 fi
 
 if test $ENABLE_AWS = "yes" ; then
   NEED_AWS_PATCH=1
+  echo "Configuring ==== aws ===="
   (cd $DIR/aws;
     cp makefile.conf makefile.conf.orig
     sed -e 's,^SOCKET.*=.*,SOCKET=openssl,' \
@@ -166,26 +172,26 @@ fi
 
 ARGS="--prefix $prefix --disable-shared"
 
-echo "Configuring ada-util"
+echo "Configuring ==== ada-util ===="
 (cd $DIR/util && ./configure $ARGS --enable-ahven)
 
-echo "Configuring ada-el"
+echo "Configuring ==== ada-el ===="
 (cd $DIR/el && ./configure --with-ada-util=../util $ARGS)
 
-echo "Configuring ada-security"
+echo "Configuring ==== ada-security ===="
 (cd $DIR/security && ./configure --with-ada-util=../util $ARGS)
 
-echo "Configuring ada-asf"
-(cd $DIR/asf && ./configure --with-ada-util=../util --with-ada-el=../el $ARGS)
+echo "Configuring ==== ada-asf ===="
+(cd $DIR/asf && ./configure --with-ada-util=../util --with-ada-el=../el --with-ada-security=../security $ARGS)
 
-echo "Configuring ada-ado"
+echo "Configuring ==== ada-ado ===="
 (cd $DIR/ado && ./configure --with-ada-util=../util $ARGS)
 
-echo "Configuring dynamo"
+echo "Configuring ==== dynamo ===="
 (cd $DIR/dynamo && ./configure --with-ada-util=../util --with-ada-el=../el --with-ada-asf=../asf --with-ada-ado=../ado $ARGS)
 
-echo "Configuring ada-awa"
-(cd $DIR/awa && ./configure --with-ada-util=../util --with-ada-el=../el --with-ada-asf=../asf --with-ada-ado=../ado $ARGS)
+echo "Configuring ==== ada-awa ===="
+(cd $DIR/awa && ./configure --with-ada-util=../util --with-ada-el=../el --with-ada-asf=../asf --with-ada-security=../security --with-ada-ado=../ado $ARGS)
 
 AC_OUTPUT(
 Makefile support/build.config
