@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-principals -- User principals
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,6 @@
 with ADO;
 with AWA.Users.Models;
 with ASF.Principals;
-with Security.Permissions;
 package AWA.Users.Principals is
 
    type Principal is new ASF.Principals.Principal with private;
@@ -27,10 +26,6 @@ package AWA.Users.Principals is
 
    --  Get the principal name.
    function Get_Name (From : in Principal) return String;
-
-   --  Returns true if the given role is stored in the user principal.
---     function Has_Role (User : in Principal;
---                        Role : in Security.Permissions.Role_Type) return Boolean;
 
    --  Get the principal identifier (name)
    function Get_Id (From : in Principal) return String;
@@ -65,7 +60,6 @@ private
    type Principal is new ASF.Principals.Principal with record
       User        : AWA.Users.Models.User_Ref;
       Session     : AWA.Users.Models.Session_Ref;
---        Roles       : Security.Permissions.Role_Map;
    end record;
 
 end AWA.Users.Principals;
