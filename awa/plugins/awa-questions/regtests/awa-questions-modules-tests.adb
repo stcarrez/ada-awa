@@ -21,9 +21,6 @@ with Util.Test_Caller;
 with Util.Beans.Basic;
 with Util.Beans.Objects;
 
-with ADO;
-with ADO.Objects;
-
 with Security.Contexts;
 
 with ASF.Contexts.Faces;
