@@ -15,15 +15,8 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with Ada.Streams;
-with Ada.Strings.Unbounded;
 
 with Util.Test_Caller;
-with Util.Beans.Basic;
-with Util.Beans.Objects;
-
-with ADO;
-with ADO.Objects;
 
 with Security.Contexts;
 
@@ -56,16 +49,19 @@ package body AWA.Votes.Modules.Tests is
       AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-storage@test.com");
 
       declare
-         Vote_Manager : Vote_Module_Access := Get_Vote_Module;
-         User         : AWA.Users.Models.User_Ref := Context.Get_User;
+         Vote_Manager : constant Vote_Module_Access := Get_Vote_Module;
+         User         : constant AWA.Users.Models.User_Ref := Context.Get_User;
          Total        : Integer;
       begin
          T.Assert (Vote_Manager /= null, "There is no vote module");
 
          Vote_Manager.Vote_For (User.Get_Id, "awa_user", "workspaces-create", 1, Total);
+         T.Assert (Total > 0, "Invalid total");
+
          Vote_Manager.Vote_For (User.Get_Id, "awa_user", "workspaces-create", 2, Total);
+         T.Assert (Total > 0, "Invalid total");
       end;
-  end Test_Vote_Up;
+   end Test_Vote_Up;
 
    --  ------------------------------
    --  Test vote.
@@ -77,15 +73,20 @@ package body AWA.Votes.Modules.Tests is
       AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-vote@test.com");
 
       declare
-         Vote_Manager : Vote_Module_Access := Get_Vote_Module;
-         User         : AWA.Users.Models.User_Ref := Context.Get_User;
+         Vote_Manager : constant Vote_Module_Access := Get_Vote_Module;
+         User         : constant AWA.Users.Models.User_Ref := Context.Get_User;
          Total        : Integer;
       begin
          T.Assert (Vote_Manager /= null, "There is no vote module");
 
          Vote_Manager.Vote_For (User.Get_Id, "awa_user", "workspaces-create", 1, Total);
+         T.Assert (Total > 0, "Invalid total");
+
          Vote_Manager.Vote_For (User.Get_Id, "awa_user", "workspaces-create", 2, Total);
+         T.Assert (Total > 0, "Invalid total");
+
          Vote_Manager.Vote_For (User.Get_Id, "awa_user", "workspaces-create", 0, Total);
+         T.Assert (Total >= 0, "Invalid total");
       end;
    end Test_Vote_Undo;
 
