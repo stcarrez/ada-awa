@@ -106,11 +106,16 @@
   </navigation-rule>
 
   <navigation-rule>
-    <from-view-id>/questions/view.xhtml</from-view-id>
+    <from-view-id>/questions/forms/answer-form.xhtml</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
       <to-view-id>/questions/view.xhtml?id=#{answer.question_id}</to-view-id>
       <redirect/>
+    </navigation-case>
+
+    <navigation-case>
+      <from-outcome>awa.permissions.no_permission</from-outcome>
+      <to-view-id>/questions/views/deny-response.xhtml</to-view-id>
     </navigation-case>
   </navigation-rule>
 
