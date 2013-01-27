@@ -19,6 +19,7 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:c="http://java.sun.com/jstl/core"
 	    xmlns:util="http://code.google.com/p/ada-asf/util"
+        xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
         xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{questionInfo.question.title}"/>
 
@@ -31,7 +32,7 @@
         <div id='awa-content'>
             <ui:include src="views/question.xhtml"/>
             <ui:include src="lists/answer-list.xhtml"/>
-            <ui:include src="forms/answer-form.xhtml"/>
+            <ajax:include id='answer' src="questions/forms/answer-form"/>
         </div>
         <util:script>
             $('.question-vote').votes({
