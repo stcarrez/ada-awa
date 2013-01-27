@@ -147,7 +147,7 @@ ul.question-nav {
     width: 96%;
     padding-left: 3%;
     padding-right: 3%;
-        border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #eee;
 }
 ul.question-nav li {
     list-style-type: none;
@@ -170,4 +170,9 @@ ul.question-nav li {
     font-weight: bold;
     text-decoration: none;
     padding-bottom: 8px;
+}
+div.awa-message {
+    border: 1px solid #C5DBEC;
+    background: #DFEFFC;
+    padding: 5px;
 }
