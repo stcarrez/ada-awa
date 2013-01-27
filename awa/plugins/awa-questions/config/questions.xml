@@ -120,6 +120,10 @@
       <from-outcome>success</from-outcome>
       <to-view-id>/questions/views/vote-response.xhtml</to-view-id>
     </navigation-case>
+    <navigation-case>
+      <from-outcome>awa.permissions.no_permission</from-outcome>
+      <to-view-id>/questions/views/deny-response.xhtml</to-view-id>
+    </navigation-case>
   </navigation-rule>
 
   <navigation-rule>
@@ -128,7 +132,12 @@
       <from-outcome>success</from-outcome>
       <to-view-id>/questions/views/vote-answer-response.xhtml</to-view-id>
     </navigation-case>
+    <navigation-case>
+      <from-outcome>awa.permissions.no_permission</from-outcome>
+      <to-view-id>/questions/views/deny-response.xhtml</to-view-id>
+    </navigation-case>
   </navigation-rule>
+
 
     <filter-mapping>
         <filter-name>service</filter-name>
@@ -254,6 +263,8 @@
         <permission>anonymous</permission>
         <url-pattern>/questions/view.html</url-pattern>
         <url-pattern>/questions/list.html</url-pattern>
+        <url-pattern>/questionVote/vote</url-pattern>
+        <url-pattern>/answerVote/vote</url-pattern>
     </url-policy>
 
     <url-policy>
@@ -266,8 +277,6 @@
         <url-pattern>/questions/forms/delete-question.html</url-pattern>
         <url-pattern>/questions/forms/delete-answer.html</url-pattern>
         <url-pattern>/questions/edit-answer.html</url-pattern>
-        <url-pattern>/questionVote/vote</url-pattern>
-        <url-pattern>/answerVote/vote</url-pattern>
     </url-policy>
 
 </module>
