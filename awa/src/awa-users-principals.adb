@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-principals -- User principals
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,15 +25,6 @@ package body AWA.Users.Principals is
    begin
       return From.User.Get_Name;
    end Get_Name;
-
-   --  ------------------------------
-   --  Returns true if the given role is stored in the user principal.
-   --  ------------------------------
---     function Has_Role (User : in Principal;
---                        Role : in Security.Permissions.Role_Type) return Boolean is
---     begin
---        return User.Roles (Role);
---     end Has_Role;
 
    --  ------------------------------
    --  Get the principal identifier (name)
@@ -84,7 +75,7 @@ package body AWA.Users.Principals is
       Result : constant Principal_Access := new Principal;
    begin
       Result.User    := User;
-	  Result.Session := Session;
+      Result.Session := Session;
       return Result;
    end Create;
 
