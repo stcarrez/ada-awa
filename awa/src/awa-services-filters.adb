@@ -44,7 +44,8 @@ package body AWA.Services.Filters is
 
       use type ASF.Principals.Principal_Access;
 
-      App : constant ASF.Servlets.Servlet_Registry_Access := ASF.Servlets.Get_Servlet_Context (Chain);
+      App : constant ASF.Servlets.Servlet_Registry_Access
+        := ASF.Servlets.Get_Servlet_Context (Chain);
       P   : constant ASF.Principals.Principal_Access := Request.Get_User_Principal;
       Context     : aliased AWA.Services.Contexts.Service_Context;
       Principal   : AWA.Users.Principals.Principal_Access;
