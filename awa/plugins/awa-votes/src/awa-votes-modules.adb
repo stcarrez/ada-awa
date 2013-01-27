@@ -91,16 +91,16 @@ package body AWA.Votes.Modules is
       Found  : Boolean;
       Ident  : constant String := Entity_Type & ADO.Identifier'Image (Id);
    begin
+      --  Check that the user has the vote permission on the given object.
+      AWA.Permissions.Check (Permission => Security.Permissions.Get_Permission_Index (Permission),
+                             Entity     => Id);
+
       Log.Info ("User {0} votes for {1} rating {2}",
                 ADO.Identifier'Image (User.Get_Id), Ident,
                 Integer'Image (Value));
 
       Ctx.Start;
       Kind := ADO.Sessions.Entities.Find_Entity_Type (DB, Entity_Type);
-
-      --  Check that the user has the vote permission on the given object.
-      AWA.Permissions.Check (Permission => Security.Permissions.Get_Permission_Index (Permission),
-                             Entity     => Id);
 
       --  Get the vote associated with the object for the user.
       Query.Set_Join ("INNER JOIN awa_rating r ON r.id = o.entity_id");
