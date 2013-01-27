@@ -25,6 +25,11 @@
   </auth-permission>
 
   <error-page>
+    <error-code>401</error-code>
+    <location>/errors/401.html</location>
+  </error-page>
+
+  <error-page>
     <error-code>403</error-code>
     <location>/errors/403.html</location>
   </error-page>
@@ -38,5 +43,13 @@
     <error-code>500</error-code>
     <location>/errors/500.html</location>
   </error-page>
+  
+    <url-policy>
+        <description>
+           Security rule to allow only logged users to post micro blogs.
+        </description>
+        <permission>anonymous</permission>
+        <url-pattern>/errors/.*</url-pattern>
+    </url-policy>
 
 </module>
