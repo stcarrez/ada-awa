@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  AWA tests - AWA Tests Framework
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -63,9 +63,8 @@ package body AWA.Tests is
    --  ------------------------------
    overriding
    procedure Set_Up (T : in out Test) is
+      pragma Unreferenced (T);
    begin
-      Log.Info ("Setup test {0}", T.Get_Name);
-
       ASF.Server.Tests.Set_Context (Application.all'Access);
    end Set_Up;
 
@@ -96,6 +95,7 @@ package body AWA.Tests is
    procedure Initialize (App         : in AWA.Applications.Application_Access;
                          Props       : in Util.Properties.Manager;
                          Add_Modules : in Boolean) is
+      pragma Unreferenced (Add_Modules);
       use AWA.Applications;
    begin
       --  Create the application unless it is specified as argument.
