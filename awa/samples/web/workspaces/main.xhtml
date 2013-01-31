@@ -1,5 +1,5 @@
 <!-- Workspace user page
-  -  Copyright (C) 2011 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,8 +33,15 @@
               </div>
               <div id='blog-list' class='blog-admin ui-widget ui-widget-content ui-corner-all '>
                   <ui:include src="/blogs/admin/lists/blog-list.xhtml"/>
+                  <ul class='question-nav'>
+                      <li class='action-button'>
+                          <a href="#{contextPath}/questions/ask.html">#{questionMsg.question_ask_question_label}</a>
+                      </li>
+                      <li class='action-button'>
+                          <a href="#{contextPath}/storages/documents.html">#{atlasMsg.atlas_upload_documents}</a>
+                      </li>
+                  </ul>
               </div>
-              <ui:include src="/storages/lists/folders.xhtml"/>
           </div>
           <div class="grid_12 ui-widget posts">
                 <div id='forum-posts' class="asf-container ui-widget ui-widget-content ui-corner-all forum">
