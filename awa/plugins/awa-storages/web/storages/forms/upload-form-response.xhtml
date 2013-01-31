@@ -33,10 +33,13 @@
         <div class="awa-date"><h:outputText value="#{uploadFile.create_date}">
                    <f:converter converterId="smartDateConverter"/>
                </h:outputText></div>
+        <div class='awa-download'>
+            <a href="#{contextPath}/storages/files/#{uploadFile.id}">#{storageMsg.storage_download_label}</a>
+        </div>
     </util:escape>';
 
     item.setAttribute("id", "store-${uploadFile.id}");
-    item.setAttribute("class", "awa-document");
+    item.setAttribute("class", "awa-document ui-list-item");
     list.insertBefore(item, list.firstChild);
     document.location = "upload-form.html?folderId=#{uploadFile.folderId}";
     </script>
