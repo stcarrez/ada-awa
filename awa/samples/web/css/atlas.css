@@ -96,3 +96,21 @@ div.markedit div.markedit-toolbar {
 .ui-resizable-e {
     background: #f0f0f0;
 }
+.atlas li.action-button {
+    height: 33px;
+    margin-right: 100px;
+    margin-bottom: 5px;
+    background: #DFEFFC;
+    border: 1px solid #C5DBEC;
+    color: #2E6E9E;
+    border-radius: 5px;
+}
+.atlas li.action-button a {
+    display: block;
+    padding: 5px;
+    line-height: 16px;
+    color: #2E6E9E;
+    font-weight: bold;
+    text-decoration: none;
+    padding-bottom: 8px;
+}
