@@ -268,8 +268,8 @@
         <permission>anonymous</permission>
         <url-pattern>/questions/view.html</url-pattern>
         <url-pattern>/questions/list.html</url-pattern>
-        <url-pattern>/questionVote/vote</url-pattern>
-        <url-pattern>/answerVote/vote</url-pattern>
+        <url-pattern>/questions/ajax/questionVote/vote</url-pattern>
+        <url-pattern>/questions/ajax/answerVote/vote</url-pattern>
     </url-policy>
 
     <url-policy>
