@@ -125,6 +125,7 @@
         <url-pattern>/storages/forms/file-delete-form.html</url-pattern>
         <url-pattern>/storages/lists/documents.html</url-pattern>
         <url-pattern>/storages/documents.html</url-pattern>
+        <url-pattern>/storages/files/.*</url-pattern>
     </url-policy>
 
 </module>
