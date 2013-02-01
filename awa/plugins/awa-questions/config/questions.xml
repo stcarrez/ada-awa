@@ -101,7 +101,7 @@
     <from-view-id>/questions/forms/delete-answer.xhtml</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
-      <to-view-id>/questions/forms/delete-answer-response.xhtml</to-view-id>
+      <to-view-id>/questions/forms/refresh-answer-response.xhtml</to-view-id>
     </navigation-case>
   </navigation-rule>
 
@@ -109,8 +109,7 @@
     <from-view-id>/questions/forms/answer-form.xhtml</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
-      <to-view-id>/questions/view.xhtml?id=#{answer.question_id}</to-view-id>
-      <redirect/>
+      <to-view-id>/questions/forms/refresh-answer-response.xhtml</to-view-id>
     </navigation-case>
 
     <navigation-case>
@@ -281,6 +280,7 @@
         <url-pattern>/questions/edit.html</url-pattern>
         <url-pattern>/questions/forms/delete-question.html</url-pattern>
         <url-pattern>/questions/forms/delete-answer.html</url-pattern>
+        <url-pattern>/questions/forms/answer-form.html</url-pattern>
         <url-pattern>/questions/edit-answer.html</url-pattern>
     </url-policy>
 
