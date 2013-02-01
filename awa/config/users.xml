@@ -121,6 +121,16 @@
 
   <filter-mapping>
     <filter-name>service</filter-name>
+    <url-pattern>/auth/reset-password.html</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>service</filter-name>
+    <url-pattern>/auth/validate.html</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>service</filter-name>
     <url-pattern>/auth/*.html</url-pattern>
   </filter-mapping>
 
