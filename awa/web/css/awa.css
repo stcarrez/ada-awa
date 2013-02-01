@@ -193,3 +193,12 @@ div.awa-messages {
     padding-left: 2%;
     padding-right: 2%;
 }
+
+/**
+ * A global error message.
+ */
+div.awa-error {
+    width: 640px;
+    margin: auto;
+    font-size: 16px;
+}
