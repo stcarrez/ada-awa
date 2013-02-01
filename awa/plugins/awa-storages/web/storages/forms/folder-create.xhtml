@@ -23,8 +23,8 @@
             <span>#{storageMsg.message_create_folder}</span>
         </div>
         <div class='asf-editable-input'>
-            <h:inputText id='folder-name' value='#{storageFolder.name}'/>
-            <h:commandButton id='folder-create' value='#{storageMsg.button_create_folder_label}'
+            <h:inputText id='folder-name' styleClass='asf-editable-text' value='#{storageFolder.name}'/>
+            <h:commandButton id='folder-create-button' value='#{storageMsg.button_create_folder_label}'
                              styleClass="ui-button ui-state-default ui-corner-all"
                              action="#{storageFolder.save}" title="#{storageMsg.button_create_folder_tooltip}"/>
         </div>

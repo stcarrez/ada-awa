@@ -107,3 +107,14 @@ div.document-list div.asf-active {
     width: 24px;
     left:  -4px;
 }
+#folder-create {
+    width: 96%;
+    padding: 2%;
+}
+input.asf-editable-text {
+    width: 98%;
+    margin-bottom: 10px;
+}
+#folder-create-button {
+    margin-bottom: 10px;
+}

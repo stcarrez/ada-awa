@@ -1,5 +1,5 @@
 <!-- List the documents available in the workspace
-  -  Copyright (C) 2012 Stephane Carrez
+  -  Copyright (C) 2012, 2013 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +28,9 @@
             var contextPath = '#{contextPath}';
         </util:script>
         <div id='awa-content'>
-            <ui:include src="lists/folders.xhtml"/>
+            <div id='folder-list-editor' class="ui-widget ui-corner-all">
+                <ui:include src="lists/folders.xhtml"/>
+            </div>
             <div id='document-list-editor' class="ui-widget ui-corner-all">
                 <ui:include src="lists/documents.xhtml"/>
             </div>
