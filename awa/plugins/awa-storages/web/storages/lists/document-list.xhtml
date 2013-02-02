@@ -15,19 +15,37 @@
   -  limitations under the License.
   -->
 <div xmlns:f="http://java.sun.com/jsf/core"
+     xmlns:ui="http://java.sun.com/jsf/facelets"
+     xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
      xmlns:c="http://java.sun.com/jstl/core"
      xmlns:h="http://java.sun.com/jsf/html">
 
     <div id='document-upload'>
-        <c:if test="#{not empty storageList.folder}">
-            <iframe frameborder="0" class='documentUpload'
-                    scrolling="no"
-                    height="25"
-                    width="100%"
-                    src="#{contextPath}/storages/forms/upload-form.html?folderId=#{storageList.folder.id}"/>
-        </c:if>
+        <c:choose>
+            <c:when test="#{not empty storageList.folder}">
+                <iframe frameborder="0" class='documentUpload'
+                        scrolling="no"
+                        height="25"
+                        width="100%"
+                        src="#{contextPath}/storages/forms/upload-form.html?folderId=#{storageList.folder.id}"/>
+            </c:when>
+            <c:otherwise>
+                <p>#{storageMsg.storage_no_folder}</p>
+                <div class="grid_3">
+                    <img src="#{contextPath}/images/storages/folder.png"/>
+                </div>
+                <div class="asf-container grid_6">
+                    <ajax:include src="/storages/forms/folder-create-first.xhtml"/>
+                </div>
+            </c:otherwise>
+        </c:choose>
     </div>
     <div id='document-list' class='document-list ui-list'>
+        <c:choose>
+            <c:when test="#{empty storageList.files and not empty storageList.folder}">
+                #{storageMsg.storage_folder_empty_message}
+            </c:when>
+        </c:choose>
         <h:list var="document" value="#{storageList.files}">
             <div id='store-#{document.id}' class='awa-document ui-list-item'>
                 <div class='awa-title'>#{document.name}</div>
