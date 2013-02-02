@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa.users -- User registration, authentication processes
---  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -85,6 +85,18 @@ package body AWA.Users.Services is
    begin
       return Ident & '.' & Util.Encoders.HMAC.SHA1.Sign_Base64 (Key  => Key, Data => Ident);
    end Get_Authenticate_Cookie;
+
+   --  ------------------------------
+   --  Get the password hash.  The password is signed using HMAC-SHA1 with the email address.
+   --  ------------------------------
+   function Get_Password_Hash (Model    : in User_Service;
+                               Password : in String;
+                               Email    : in String)
+                               return String is
+      pragma Unreferenced (Model);
+   begin
+      return Util.Encoders.HMAC.SHA1.Sign_Base64 (Key => Email, Data => Password);
+   end Get_Password_Hash;
 
    --  ------------------------------
    --  Get the authenticate identifier from the cookie.
@@ -280,6 +292,7 @@ package body AWA.Users.Services is
                            IpAddr    : in String;
                            Principal : out AWA.Users.Principals.Principal_Access) is
 
+      Hash    : constant String := User_Service'Class (Model).Get_Password_Hash (Email, Password);
       Ctx     : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB      : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Query   : ADO.SQL.Query;
@@ -291,7 +304,7 @@ package body AWA.Users.Services is
 
       --  Find the user registered under the given email address & password.
       Query.Bind_Param (1, Email);
-      Query.Bind_Param (2, Password);
+      Query.Bind_Param (2, Hash);
       Query.Set_Join ("INNER JOIN awa_email e ON e.user_id = o.id");
       Query.Set_Filter ("e.email = ? AND o.password = ?");
       User.Find (DB, Query, Found);
@@ -485,7 +498,7 @@ package body AWA.Users.Services is
       Access_Key.Delete (DB);
 
       --  Reset the user password
-      User.Set_Password (Password);
+      User.Set_Password (User_Service'Class (Model).Get_Password_Hash (Email.Get_Email, Password));
       User.Save (DB);
 
       --  Create the authentication session.
@@ -524,6 +537,7 @@ package body AWA.Users.Services is
       Key    : Access_Key_Ref;
       Stmt   : Query_Statement := DB.Create_Statement (COUNT_SQL);
       Email_Address : constant String := Email.Get_Email;
+      Password      : constant String := User.Get_Password;
    begin
       Log.Info ("Create user {0}", Email_Address);
 
@@ -544,6 +558,7 @@ package body AWA.Users.Services is
       if String '(User.Get_Name) = "" then
          User.Set_Name (String '(User.Get_First_Name) & " " & String '(User.Get_Last_Name));
       end if;
+      User.Set_Password (User_Service'Class (Model).Get_Password_Hash (Email_Address, Password));
       User.Save (DB);
 
       Email.Set_User_Id (User.Get_Id);
