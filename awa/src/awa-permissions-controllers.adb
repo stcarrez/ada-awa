@@ -24,6 +24,7 @@ with Util.Log.Loggers;
 with AWA.Applications;
 with AWA.Users.Principals;
 with AWA.Permissions.Services;
+with AWA.Services.Contexts;
 package body AWA.Permissions.Controllers is
 
    use Util.Log;
@@ -45,8 +46,8 @@ package body AWA.Permissions.Controllers is
       use AWA.Users.Principals;
       use type ADO.Identifier;
 
-      Manager : constant Permission_Manager_Access := Get_Permission_Manager (Context);
-      User_Id : constant ADO.Identifier := Get_User_Identifier (Context.Get_User_Principal);
+      Manager   : constant Permission_Manager_Access := Get_Permission_Manager (Context);
+      User_Id   : constant ADO.Identifier := Get_User_Identifier (Context.Get_User_Principal);
       Entity_Id : ADO.Identifier;
    begin
       --  If there is no permission manager, permission is denied.
@@ -68,11 +69,29 @@ package body AWA.Permissions.Controllers is
          return False;
       end if;
 
-      --  Get a database session from the AWA application.
-      --  (there is no guarantee that a AWA.Services.Contexts be available)
       declare
-         App     : constant AWA.Applications.Application_Access := Manager.Get_Application;
-         Session : constant ADO.Sessions.Session := App.Get_Session;
+         function Get_Session return ADO.Sessions.Session;
+
+         --  ------------------------------
+         --  Get a database session from the AWA application.
+         --  There is no guarantee that a AWA.Services.Contexts be available.
+         --  But if we are within a service context, we must use the current session so
+         --  that we are part of the current transaction.
+         --  ------------------------------
+         function Get_Session return ADO.Sessions.Session is
+            package ASC renames AWA.Services.Contexts;
+            use type ASC.Service_Context_Access;
+
+            Ctx : constant ASC.Service_Context_Access := ASC.Current;
+         begin
+            if Ctx /= null then
+               return AWA.Services.Contexts.Get_Session (Ctx);
+            else
+               return Manager.Get_Application.Get_Session;
+            end if;
+         end Get_Session;
+
+         Session : constant ADO.Sessions.Session := Get_Session;
          Query   : ADO.Statements.Query_Statement := Session.Create_Statement (Handler.SQL);
          Result  : Integer;
       begin
