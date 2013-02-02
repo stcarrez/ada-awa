@@ -161,16 +161,11 @@ package body AWA.Users.Tests is
          --  Simulate user clicking on the reset password link.
          --  This verifies the key, login the user and redirect him to the change-password page
          Request.Set_Parameter ("key", Key.Get_Access_Key);
-         Do_Get (Request, Reply, "/auth/reset-password.html", "reset-password-1.html");
-
-         T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
-
-         --  Post the reset password
          Request.Set_Parameter ("password", "asd");
          Request.Set_Parameter ("reset-password", "1");
          Do_Post (Request, Reply, "/auth/change-password.html", "reset-password-2.html");
 
-         T.Assert (Reply.Get_Status = ASF.Responses.SC_OK, "Invalid response");
+         T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
 
          --  Check that the user is logged and we have a user principal now.
          T.Assert (Request.Get_User_Principal /= null, "A user principal should be defined");
