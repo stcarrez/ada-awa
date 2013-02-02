@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-services -- Services
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,7 +41,11 @@ package body AWA.Services.Contexts is
    --  ------------------------------
    function Get_Session (Ctx : in Service_Context_Access) return ADO.Sessions.Session is
    begin
-      if Ctx.Slave.Get_Status /= ADO.Databases.OPEN then
+      --  If a master database session was created, use it.
+      if Ctx.Master.Get_Status = ADO.Databases.OPEN then
+         return ADO.Sessions.Session (Ctx.Master);
+
+      elsif Ctx.Slave.Get_Status /= ADO.Databases.OPEN then
          Ctx.Slave  := Ctx.Application.Get_Session;
       end if;
       return Ctx.Slave;
@@ -55,7 +59,6 @@ package body AWA.Services.Contexts is
    begin
       if Ctx.Master.Get_Status /= ADO.Databases.OPEN then
          Ctx.Master := Ctx.Application.Get_Master_Session;
---           Ctx.Slave  := Ctx.Master;
       end if;
       return Ctx.Master;
    end Get_Master_Session;
