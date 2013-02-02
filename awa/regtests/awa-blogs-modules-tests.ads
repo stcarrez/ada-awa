@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-tests -- Unit tests for blogs module
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,7 @@
 with Util.Tests;
 with AWA.Tests;
 
-package AWA.Blogs.Services.Tests is
+package AWA.Blogs.Modules.Tests is
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite);
 
@@ -31,4 +31,4 @@ package AWA.Blogs.Services.Tests is
    --  Test creating and updating of a blog post
    procedure Test_Create_Post (T : in out Test);
 
-end AWA.Blogs.Services.Tests;
+end AWA.Blogs.Modules.Tests;

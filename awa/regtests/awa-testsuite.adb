@@ -18,7 +18,7 @@
 
 with AWA.Users.Services.Tests;
 with AWA.Users.Tests;
-with AWA.Blogs.Services.Tests;
+with AWA.Blogs.Modules.Tests;
 with AWA.Wikis.Parsers.Tests;
 with AWA.Wikis.Writers.Tests;
 with AWA.Helpers.Selectors.Tests;
@@ -89,7 +89,7 @@ package body AWA.Testsuite is
       AWA.Helpers.Selectors.Tests.Add_Tests (Ret);
       AWA.Jobs.Modules.Tests.Add_Tests (Ret);
       AWA.Jobs.Services.Tests.Add_Tests (Ret);
-      AWA.Blogs.Services.Tests.Add_Tests (Ret);
+      AWA.Blogs.Modules.Tests.Add_Tests (Ret);
       AWA.Storages.Services.Tests.Add_Tests (Ret);
       AWA.Images.Services.Tests.Add_Tests (Ret);
       AWA.Votes.Modules.Tests.Add_Tests (Ret);

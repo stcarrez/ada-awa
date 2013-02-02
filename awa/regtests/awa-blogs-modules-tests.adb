@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-tests -- Unit tests for blogs module
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +25,7 @@ with Security.Contexts;
 with AWA.Services.Contexts;
 with AWA.Blogs.Modules;
 with AWA.Tests.Helpers.Users;
-package body AWA.Blogs.Services.Tests is
+package body AWA.Blogs.Modules.Tests is
 
    use Util.Tests;
    use ADO;
@@ -45,14 +45,14 @@ package body AWA.Blogs.Services.Tests is
    --  Test creation of a blog
    --  ------------------------------
    procedure Test_Create_Blog (T : in out Test) is
-      Manager   : AWA.Blogs.Services.Blog_Service_Access;
+      Manager   : AWA.Blogs.Modules.Blog_Module_Access;
       Blog_Id   : ADO.Identifier;
       Sec_Ctx   : Security.Contexts.Security_Context;
       Context   : AWA.Services.Contexts.Service_Context;
    begin
       AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-blog@test.com");
 
-      Manager := AWA.Blogs.Modules.Get_Blog_Manager;
+      Manager := AWA.Blogs.Modules.Get_Blog_Module;
       Manager.Create_Blog (Workspace_Id => 0,
                            Title        => "My blog",
                            Result       => Blog_Id);
@@ -63,7 +63,7 @@ package body AWA.Blogs.Services.Tests is
    --  Test creating and updating of a blog post
    --  ------------------------------
    procedure Test_Create_Post (T : in out Test) is
-      Manager   : AWA.Blogs.Services.Blog_Service_Access;
+      Manager   : AWA.Blogs.Modules.Blog_Module_Access;
       Blog_Id   : ADO.Identifier;
       Post_Id   : ADO.Identifier;
       Sec_Ctx   : Security.Contexts.Security_Context;
@@ -71,7 +71,7 @@ package body AWA.Blogs.Services.Tests is
    begin
       AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-blog-post@test.com");
 
-      Manager := AWA.Blogs.Modules.Get_Blog_Manager;
+      Manager := AWA.Blogs.Modules.Get_Blog_Module;
       Manager.Create_Blog (Workspace_Id => 0,
                            Title        => "My blog post",
                            Result       => Blog_Id);
@@ -120,4 +120,4 @@ package body AWA.Blogs.Services.Tests is
 
    end Test_Create_Post;
 
-end AWA.Blogs.Services.Tests;
+end AWA.Blogs.Modules.Tests;
