@@ -22,8 +22,19 @@ with AWA.Modules.Get;
 with AWA.Modules.Beans;
 with AWA.Blogs.Beans;
 with AWA.Applications;
+with AWA.Services.Contexts;
+with AWA.Permissions;
+with AWA.Permissions.Services;
+with AWA.Workspaces.Models;
+with AWA.Workspaces.Modules;
+
+with ADO.Sessions;
+
+with Ada.Calendar;
 
 package body AWA.Blogs.Modules is
+
+   package ASC renames AWA.Services.Contexts;
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Blogs.Module");
 
@@ -68,29 +79,7 @@ package body AWA.Blogs.Modules is
                          Handler => AWA.Blogs.Beans.Create_Status_List'Access);
 
       AWA.Modules.Module (Plugin).Initialize (App, Props);
-
-      --  Create the user manager when everything is initialized.
-      Plugin.Manager := Plugin.Create_Blog_Manager;
    end Initialize;
-
-   --  ------------------------------
-   --  Get the blog manager.
-   --  ------------------------------
-   function Get_Blog_Manager (Plugin : in Blog_Module) return Services.Blog_Service_Access is
-   begin
-      return Plugin.Manager;
-   end Get_Blog_Manager;
-
-   --  ------------------------------
-   --  Create a user manager.  This operation can be overriden to provide another
-   --  user service implementation.
-   --  ------------------------------
-   function Create_Blog_Manager (Plugin : in Blog_Module) return Services.Blog_Service_Access is
-      Result : constant Services.Blog_Service_Access := new Services.Blog_Service;
-   begin
-      Result.Initialize (Plugin);
-      return Result;
-   end Create_Blog_Manager;
 
    --  ------------------------------
    --  Get the blog module instance associated with the current application.
@@ -102,17 +91,156 @@ package body AWA.Blogs.Modules is
    end Get_Blog_Module;
 
    --  ------------------------------
-   --  Get the user manager instance associated with the current application.
+   --  Create a new blog for the user workspace.
    --  ------------------------------
-   function Get_Blog_Manager return Services.Blog_Service_Access is
-      Module : constant Blog_Module_Access := Get_Blog_Module;
+   procedure Create_Blog (Model        : in Blog_Module;
+                          Workspace_Id : in ADO.Identifier;
+                          Title        : in String;
+                          Result       : out ADO.Identifier) is
+      pragma Unreferenced (Model);
+      use type ADO.Identifier;
+
+      Ctx   : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
+      User  : constant ADO.Identifier := Ctx.Get_User_Identifier;
+      DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Blog  : AWA.Blogs.Models.Blog_Ref;
+      WS    : AWA.Workspaces.Models.Workspace_Ref;
    begin
-      if Module = null then
-         Log.Error ("There is no active Blog_Module");
-         return null;
-      else
-         return Module.Get_Blog_Manager;
+      Log.Info ("Creating blog {0} for user", Title);
+
+      Ctx.Start;
+      AWA.Workspaces.Modules.Get_Workspace (DB, Ctx, WS);
+
+      --  Check that the user has the create blog permission on the given workspace.
+      AWA.Permissions.Check (Permission => ACL_Create_Blog.Permission,
+                             Entity     => WS);
+
+      Blog.Set_Name (Title);
+      Blog.Set_Workspace (WS);
+      Blog.Set_Create_Date (Ada.Calendar.Clock);
+      Blog.Save (DB);
+
+      --  Add the permission for the user to use the new blog.
+      AWA.Permissions.Services.Add_Permission (Session => DB,
+                                               User    => User,
+                                               Entity  => Blog);
+      Ctx.Commit;
+
+      Result := Blog.Get_Id;
+      Log.Info ("Blog {0} created for user {1}",
+                ADO.Identifier'Image (Result), ADO.Identifier'Image (User));
+   end Create_Blog;
+
+   --  ------------------------------
+   --  Create a new post associated with the given blog identifier.
+   --  ------------------------------
+   procedure Create_Post (Model   : in Blog_Module;
+                          Blog_Id : in ADO.Identifier;
+                          Title   : in String;
+                          URI     : in String;
+                          Text    : in String;
+                          Status  : in AWA.Blogs.Models.Post_Status_Type;
+                          Result  : out ADO.Identifier) is
+      pragma Unreferenced (Model);
+      use type ADO.Identifier;
+
+      Ctx   : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
+      User  : constant ADO.Identifier := Ctx.Get_User_Identifier;
+      DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Blog  : AWA.Blogs.Models.Blog_Ref;
+      Post  : AWA.Blogs.Models.Post_Ref;
+      Found : Boolean;
+   begin
+      Log.Debug ("Creating post for user");
+
+      Ctx.Start;
+      --  Get the blog instance.
+      Blog.Load (Session => DB,
+                 Id      => Blog_Id,
+                 Found   => Found);
+      if not Found then
+         Log.Error ("Blog {0} not found", ADO.Identifier'Image (Blog_Id));
+         raise Not_Found with "Blog not found";
       end if;
-   end Get_Blog_Manager;
+
+      --  Check that the user has the create post permission on the given blog.
+      AWA.Permissions.Check (Permission => ACL_Create_Post.Permission,
+                             Entity     => Blog);
+
+      --  Build the new post.
+      Post.Set_Title (Title);
+      Post.Set_Text (Text);
+      Post.Set_Create_Date (Ada.Calendar.Clock);
+      Post.Set_Uri (URI);
+      Post.Set_Author (Ctx.Get_User);
+      Post.Set_Status (Status);
+      Post.Set_Blog (Blog);
+      Post.Save (DB);
+      Ctx.Commit;
+
+      Result := Post.Get_Id;
+      Log.Info ("Post {0} created for user {1}",
+                ADO.Identifier'Image (Result), ADO.Identifier'Image (User));
+   end Create_Post;
+
+   --  ------------------------------
+   --  Update the post title and text associated with the blog post identified by <b>Post</b>.
+   --  ------------------------------
+   procedure Update_Post (Model   : in Blog_Module;
+                          Post_Id : in ADO.Identifier;
+                          Title   : in String;
+                          Text    : in String;
+                          Status  : in AWA.Blogs.Models.Post_Status_Type) is
+      pragma Unreferenced (Model);
+
+      Ctx   : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Post  : AWA.Blogs.Models.Post_Ref;
+      Found : Boolean;
+   begin
+      Ctx.Start;
+      Post.Load (Session => DB, Id => Post_Id, Found => Found);
+      if not Found then
+         Log.Error ("Post {0} not found", ADO.Identifier'Image (Post_Id));
+         raise Not_Found;
+      end if;
+
+      --  Check that the user has the update post permission on the given post.
+      AWA.Permissions.Check (Permission => ACL_Update_Post.Permission,
+                             Entity     => Post);
+
+      Post.Set_Title (Title);
+      Post.Set_Text (Text);
+      Post.Set_Status (Status);
+      Post.Save (DB);
+      Ctx.Commit;
+   end Update_Post;
+
+   --  ------------------------------
+   --  Delete the post identified by the given identifier.
+   --  ------------------------------
+   procedure Delete_Post (Model   : in Blog_Module;
+                          Post_Id : in ADO.Identifier) is
+      pragma Unreferenced (Model);
+
+      Ctx   : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Post  : AWA.Blogs.Models.Post_Ref;
+      Found : Boolean;
+   begin
+      Ctx.Start;
+      Post.Load (Session => DB, Id => Post_Id, Found => Found);
+      if not Found then
+         Log.Error ("Post {0} not found", ADO.Identifier'Image (Post_Id));
+         raise Not_Found;
+      end if;
+
+      --  Check that the user has the delete post permission on the given post.
+      AWA.Permissions.Check (Permission => ACL_Delete_Post.Permission,
+                             Entity     => Post);
+
+      Post.Delete (Session => DB);
+      Ctx.Commit;
+   end Delete_Post;
 
 end AWA.Blogs.Modules;

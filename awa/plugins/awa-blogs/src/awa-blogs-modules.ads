@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-module -- Blog and post management module
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,14 +18,26 @@
 
 with ASF.Applications;
 
+with ADO;
 with AWA.Modules;
-with AWA.Blogs.Services;
+with AWA.Blogs.Models;
+
+with Security.Permissions;
 
 --  The <b>Blogs.Module</b> manages the creation, update, removal of blog posts in an application.
 --
 package AWA.Blogs.Modules is
 
    NAME : constant String := "blogs";
+
+   --  Define the permissions.
+   package ACL_Create_Blog is new Security.Permissions.Definition ("blog-create");
+   package ACL_Delete_Blog is new Security.Permissions.Definition ("blog-delete");
+   package ACL_Create_Post is new Security.Permissions.Definition ("blog-create-post");
+   package ACL_Delete_Post is new Security.Permissions.Definition ("blog-delete-post");
+   package ACL_Update_Post is new Security.Permissions.Definition ("blog-update-post");
+
+   Not_Found : exception;
 
    type Blog_Module is new AWA.Modules.Module with private;
    type Blog_Module_Access is access all Blog_Module'Class;
@@ -36,23 +48,37 @@ package AWA.Blogs.Modules is
                          App    : in AWA.Modules.Application_Access;
                          Props  : in ASF.Applications.Config);
 
-   --  Get the blog manager.
-   function Get_Blog_Manager (Plugin : in Blog_Module) return Services.Blog_Service_Access;
-
-   --  Create a user manager.  This operation can be overriden to provide another
-   --  user service implementation.
-   function Create_Blog_Manager (Plugin : in Blog_Module) return Services.Blog_Service_Access;
-
    --  Get the blog module instance associated with the current application.
    function Get_Blog_Module return Blog_Module_Access;
 
-   --  Get the blog manager instance associated with the current application.
-   function Get_Blog_Manager return Services.Blog_Service_Access;
+   --  Create a new blog for the user workspace.
+   procedure Create_Blog (Model        : in Blog_Module;
+                          Workspace_Id : in ADO.Identifier;
+                          Title        : in String;
+                          Result       : out ADO.Identifier);
+
+   --  Create a new post associated with the given blog identifier.
+   procedure Create_Post (Model   : in Blog_Module;
+                          Blog_Id : in ADO.Identifier;
+                          Title   : in String;
+                          URI     : in String;
+                          Text    : in String;
+                          Status  : in AWA.Blogs.Models.Post_Status_Type;
+                          Result  : out ADO.Identifier);
+
+   --  Update the post title and text associated with the blog post identified by <b>Post</b>.
+   procedure Update_Post (Model   : in Blog_Module;
+                          Post_Id : in ADO.Identifier;
+                          Title   : in String;
+                          Text    : in String;
+                          Status  : in AWA.Blogs.Models.Post_Status_Type);
+
+   --  Delete the post identified by the given identifier.
+   procedure Delete_Post (Model   : in Blog_Module;
+                          Post_Id : in ADO.Identifier);
 
 private
 
-   type Blog_Module is new AWA.Modules.Module with record
-      Manager     : Services.Blog_Service_Access := null;
-   end record;
+   type Blog_Module is new AWA.Modules.Module with null record;
 
 end AWA.Blogs.Modules;

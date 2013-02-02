@@ -17,7 +17,6 @@
 -----------------------------------------------------------------------
 
 with AWA.Services.Contexts;
-with AWA.Blogs.Services;
 with AWA.Helpers.Requests;
 with AWA.Helpers.Selectors;
 
@@ -64,19 +63,11 @@ package body AWA.Blogs.Beans is
    --  ------------------------------
    procedure Create (Bean    : in out Blog_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
-      Manager : constant AWA.Blogs.Services.Blog_Service_Access := Bean.Module.Get_Blog_Manager;
       Result  : ADO.Identifier;
    begin
-      Manager.Create_Blog (Workspace_Id => 0,
-                           Title        => Bean.Get_Name,
-                           Result       => Result);
-      Outcome := To_Unbounded_String ("success");
-
-   exception
-      when Services.Not_Found =>
-         Outcome := To_Unbounded_String ("failure");
-
-         ASF.Applications.Messages.Factory.Add_Message ("users.signup_error_message");
+      Bean.Module.Create_Blog (Workspace_Id => 0,
+                               Title        => Bean.Get_Name,
+                               Result       => Result);
    end Create;
 
    --  ------------------------------
@@ -104,29 +95,21 @@ package body AWA.Blogs.Beans is
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       use type ADO.Identifier;
 
-      Manager : constant AWA.Blogs.Services.Blog_Service_Access := Bean.Module.Get_Blog_Manager;
       Result  : ADO.Identifier;
    begin
       if not Bean.Is_Inserted then
-         Manager.Create_Post (Blog_Id => Bean.Blog_Id,
-                              Title   => Bean.Get_Title,
-                              URI     => Bean.Get_Uri,
-                              Text    => Bean.Get_Text,
-                              Status  => Bean.Get_Status,
-                              Result  => Result);
+         Bean.Module.Create_Post (Blog_Id => Bean.Blog_Id,
+                                  Title   => Bean.Get_Title,
+                                  URI     => Bean.Get_Uri,
+                                  Text    => Bean.Get_Text,
+                                  Status  => Bean.Get_Status,
+                                  Result  => Result);
       else
-         Manager.Update_Post (Post_Id => Bean.Get_Id,
-                              Title   => Bean.Get_Title,
-                              Text    => Bean.Get_Text,
-                              Status  => Bean.Get_Status);
+         Bean.Module.Update_Post (Post_Id => Bean.Get_Id,
+                                  Title   => Bean.Get_Title,
+                                  Text    => Bean.Get_Text,
+                                  Status  => Bean.Get_Status);
       end if;
-      Outcome := To_Unbounded_String ("success");
-
-   exception
-      when Services.Not_Found =>
-         Outcome := To_Unbounded_String ("failure");
-
-         ASF.Applications.Messages.Factory.Add_Message ("users.signup_error_message");
    end Save;
 
    --  ------------------------------
@@ -134,16 +117,8 @@ package body AWA.Blogs.Beans is
    --  ------------------------------
    procedure Delete (Bean    : in out Post_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
-      Manager : constant AWA.Blogs.Services.Blog_Service_Access := Bean.Module.Get_Blog_Manager;
    begin
-      Manager.Delete_Post (Post_Id => Bean.Get_Id);
-      Outcome := To_Unbounded_String ("success");
-
-   exception
-      when Services.Not_Found =>
-         Outcome := To_Unbounded_String ("failure");
-
-         ASF.Applications.Messages.Factory.Add_Message ("users.signup_error_message");
+      Bean.Module.Delete_Post (Post_Id => Bean.Get_Id);
    end Delete;
 
    --  ------------------------------
