@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa.users -- User registration, authentication processes
---  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -98,6 +98,12 @@ package AWA.Users.Services is
    --  Returns the identified or NO_IDENTIFIER
    function Get_Authenticate_Id (Model  : in User_Service;
                                  Cookie : in String) return ADO.Identifier;
+
+   --  Get the password hash.  The password is signed using HMAC-SHA1 with the email address.
+   function Get_Password_Hash (Model    : in User_Service;
+                               Password : in String;
+                               Email    : in String)
+                               return String;
 
    --  Create a user in the database with the given user information and
    --  the associated email address.  Verify that no such user already exist.
