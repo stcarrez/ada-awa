@@ -15,20 +15,22 @@
   -  limitations under the License.
   -->
 <f:view xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:h="http://java.sun.com/jsf/html">
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:util="http://code.google.com/p/ada-asf/util"
+        contentType="text/html; charset=UTF-8">
     <h:form>
         <div class='awa-messages'>
             <h:message styleClass='awa-error'/>
         </div>
-        <dl class="awa-required#{util:hasMessage('folder-name') ? ' awa-error' : ''}">
+        <dl class="awa-required#{util:hasMessage('foldername') ? ' awa-error' : ''}">
             <dt>
-                <label for='folderName'>#{storageMsg.message_create_folder}</label>
-                <h:message for='folder-name'/>
+                <label for='foldername'>#{storageMsg.message_create_folder}</label>
+                <h:message for='foldername'/>
             </dt>
             <dd>
-                <h:inputText id='folder-name' size='30' maxlength="50" required="true"
-                             validatorMessage='#{storageMsg.storage_folder_name_required}'
-                             requiredMessage='#{storageMsg.storage_folder_name_required}'
+                <h:inputText id='foldername' size='30' maxlength="50" required="true"
+                             validatorMessage='storages.storage_folder_name_required'
+                             requiredMessage='storages.storage_folder_name_required'
                              value='#{storageFolder.name}'>
                     <f:validateLength minimum='1' maximum='50'/>
                 </h:inputText>
