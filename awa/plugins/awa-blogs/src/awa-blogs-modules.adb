@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-module -- Blog and post management module
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -63,12 +63,8 @@ package body AWA.Blogs.Modules is
                          Handler => AWA.Blogs.Beans.Create_Post_List_Bean'Access);
 
       Register.Register (Plugin  => Plugin,
-                         Name    => "AWA.Blogs.Beans.Admin_Post_List_Bean",
-                         Handler => AWA.Blogs.Beans.Create_Admin_Post_List_Bean'Access);
-
-      Register.Register (Plugin  => Plugin,
-                         Name    => "AWA.Blogs.Beans.Admin_Blog_List_Bean",
-                         Handler => AWA.Blogs.Beans.Create_Blog_List_Bean'Access);
+                         Name    => "AWA.Blogs.Beans.Blog_Admin_Bean",
+                         Handler => AWA.Blogs.Beans.Create_Blog_Admin_Bean'Access);
 
       Register.Register (Plugin  => Plugin,
                          Name    => "AWA.Blogs.Beans.Blog_Bean",
