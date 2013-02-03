@@ -66,9 +66,9 @@ div.message img {
     float: left;
     width: 60%;
 }
-#blog-list {
-    margin-top: 5px;
-    padding: 1%;
+#atlas-user-stat {
+    padding-left: 2%;
+    padding-right: 2%;
     width: 30%;
     clear: none;
     float: right;
@@ -96,16 +96,16 @@ div.markedit div.markedit-toolbar {
 .ui-resizable-e {
     background: #f0f0f0;
 }
-.atlas li.action-button {
-    height: 33px;
-    margin-right: 100px;
+div.atlas-button {
+    float: left;
+    width: 70%;
     margin-bottom: 5px;
     background: #DFEFFC;
     border: 1px solid #C5DBEC;
     color: #2E6E9E;
     border-radius: 5px;
 }
-.atlas li.action-button a {
+.atlas li.atlas-action a {
     display: block;
     padding: 5px;
     line-height: 16px;
@@ -113,4 +113,21 @@ div.markedit div.markedit-toolbar {
     font-weight: bold;
     text-decoration: none;
     padding-bottom: 8px;
+}
+
+div.atlas-badge {
+    float: right;
+    width: 32px;
+    height: 32px;
+    background: url(../images/badge.png);
+    text-align: center;
+}
+ul.atlas-stat {
+    list-style-type: none;
+}
+li.atlas-action {
+    float: left;
+    width: 100%;
+    height: 40px;
+    line-height: 20px;
 }
