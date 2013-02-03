@@ -71,7 +71,8 @@ package body AWA.Users.Services is
    begin
       Log.Info ("Random {0}", Rand);
       return Util.Encoders.HMAC.SHA1.Sign_Base64 (Key  => ADO.Identifier'Image (Number),
-                                                  Data => Rand);
+                                                  Data => Rand,
+                                                  URL  => True);
    end Create_Key;
 
    --  ------------------------------
