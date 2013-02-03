@@ -31,10 +31,13 @@
         <div id='awa-content'>
             <h:panelGroup rendered="#{empty adminBlog.id}">
                 <div class="grid_3">
-                    Give a name to your blog
+                    <img src="#{contextPath}/images/blogs/blog-icon.png"/>
                 </div>
-                <div class="grid_6 asf-container">
-                    <ajax:include id='blog-create' src="/blogs/admin/forms/blog-create-form.xhtml"/>
+                <div class="grid_6">
+                    <p>#{blogMsg.blog_create_blog_message}</p>
+                    <div class="asf-container awa-form">
+                        <ajax:include id='blog-create' src="/blogs/admin/forms/blog-create-form.xhtml"/>
+                    </div>
                 </div>
             </h:panelGroup>
             <h:panelGroup rendered="#{not empty adminBlog.id}">
