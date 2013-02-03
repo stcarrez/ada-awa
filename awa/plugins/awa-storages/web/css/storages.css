@@ -1,6 +1,6 @@
 /*
  *  awa-storages -- Storages and folders
- *  Copyright (C) 2012 Stephane Carrez
+ *  Copyright (C) 2012, 2013 Stephane Carrez
  *  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +24,7 @@ div.folder {
 div.folder-list {
     float: left;
     width: 100%;
+    overflow: hidden;
 }
 div.folder-list div.asf-active {
     background-color: #DFEFFC;
@@ -89,6 +90,10 @@ div.document-list div.asf-active {
 #folder-list-editor {
     width: 20%;
     border: 2px solid #BCD;
+}
+#folder-add {
+    float: left;
+    width: 100%;
 }
 #document-list-editor {
     float: left;
