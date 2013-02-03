@@ -22,7 +22,8 @@
     <!-- Main page body -->
     <ui:define name="pageBody">
         <f:metadata>
-            <f:viewParam id='blog_id' value='#{post.blogId}'/>
+            <f:viewParam id='id' value='#{post.blogId}'/>
+            <f:viewParam id='id' value='#{adminBlog.id}'/>
         </f:metadata>
         <div id='awa-content'>
             <ui:include src="lists/menu-list.xhtml"/>
