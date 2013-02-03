@@ -23,16 +23,9 @@
   </managed-bean>
 
   <managed-bean>
-    <description>The admin post list is used for the blog administrator.</description>
-    <managed-bean-name>adminPostList</managed-bean-name>
-    <managed-bean-class>AWA.Blogs.Beans.Admin_Post_List_Bean</managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>
-
-  <managed-bean>
-    <description>The list of blogs that the current user can access and update.</description>
-    <managed-bean-name>adminBlogList</managed-bean-name>
-    <managed-bean-class>AWA.Blogs.Beans.Admin_Blog_List_Bean</managed-bean-class>
+    <description>The list of blogs and posts that the current user can access and update.</description>
+    <managed-bean-name>adminBlog</managed-bean-name>
+    <managed-bean-class>AWA.Blogs.Beans.Blog_Admin_Bean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
