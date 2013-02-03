@@ -22,15 +22,15 @@
 	    xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
     <c:choose>
-        <c:when test="#{adminPostList.count == 0}">
+        <c:when test="#{adminBlog.posts.count == 0}">
             #{blogMsg.blog_admin_list_post_empty_message}
         </c:when>
         <c:otherwise>
-           <h:list var="post" value="#{adminPostList}">
+           <h:list var="post" value="#{adminBlog.posts}">
                 <div class='post-info ui-list-item' id="p_#{post.id}">
                     <div class='post-status-#{post.status}' title="#{post.status eq 'POST_PUBLISHED' ? blogMsg.blog_post_published_title : blogMsg.blog_post_pending_title}"></div>
                     <div class='post-title'>
-                        <a href="edit.html?blog_id=#{blog.id}&amp;post_id=#{post.id}">#{post.title}</a>
+                        <a href="edit.html?blog_id=#{adminBlog.id}&amp;post_id=#{post.id}">#{post.title}</a>
                     </div>
                     <div class='post-date'>
                         <h:outputText value="#{post.date}"/>
@@ -39,7 +39,7 @@
                         #{post.username}
                     </div>
                     <div class='post-view'>
-                        <a href="preview.html?blog_id=#{blog.id}&amp;post_id=#{post.id}">
+                        <a href="preview.html?blog_id=#{adminBlog.id}&amp;post_id=#{post.id}">
                             #{blogMsg.blog_post_preview_label}
                         </a>
                     </div>
