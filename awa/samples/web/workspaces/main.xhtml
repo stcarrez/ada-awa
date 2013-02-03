@@ -20,7 +20,7 @@
         xmlns:atlas="http://code.google.com/p/ada-awa/atlas"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:c="http://java.sun.com/jstl/core"
-	xmlns:u="http://code.google.com/p/ada-asf/util"
+	    xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{blogMsg.blog_admin_post_list_title}"/>
 
@@ -31,14 +31,62 @@
               <div id='form-block' class="asf-container">
                   <ajax:include src="/microblog/forms/post-form.xhtml"/>
               </div>
-              <div id='blog-list' class='blog-admin ui-widget ui-widget-content ui-corner-all '>
-                  <ui:include src="/blogs/admin/lists/blog-list.xhtml"/>
-                  <ul class='question-nav'>
-                      <li class='action-button'>
-                          <a href="#{contextPath}/questions/ask.html">#{questionMsg.question_ask_question_label}</a>
+              <div id='atlas-user-stat' class='blog-admin'>
+                  <dl class='awa-required'>
+                      <dt><label>#{atlasMsg.atlas_action_message}</label></dt>
+                  </dl>
+
+                  <ul class='atlas-stat'>
+                      <li class='atlas-action'>
+                          <c:choose>
+                              <c:when test="#{userStat.post_count != 0}">
+                                  <div class='atlas-button'>
+                                      <a href="#{contextPath}/blogs/admin/list.html">#{atlasMsg.atlas_post_articles}</a>
+                                  </div>
+                                  <div class='atlas-badge'>
+                                      #{userStat.post_count}
+                                  </div>
+                              </c:when>
+                              <c:otherwise>
+                                  <div class='atlas-button'>
+                                      <a href="#{contextPath}/blogs/admin/list.html">#{atlasMsg.atlas_post_articles}</a>
+                                  </div>
+                              </c:otherwise>
+                          </c:choose>
                       </li>
-                      <li class='action-button'>
-                          <a href="#{contextPath}/storages/documents.html">#{atlasMsg.atlas_upload_documents}</a>
+                      <li class='atlas-action'>
+                          <c:choose>
+                              <c:when test="#{userStat.question_count != 0}">
+                                  <div class='atlas-button'>
+                                      <a href="#{contextPath}/questions/ask.html">#{questionMsg.question_ask_question_label}</a>
+                                  </div>
+                                  <div class='atlas-badge'>
+                                      #{userStat.question_count}
+                                  </div>
+                              </c:when>
+                              <c:otherwise>
+                                  <div class='atlas-button'>
+                                      <a href="#{contextPath}/questions/ask.html">#{questionMsg.question_ask_question_label}</a>
+                                  </div>
+                              </c:otherwise>
+                          </c:choose>
+                      </li>
+                      <li class='atlas-action'>
+                          <c:choose>
+                              <c:when test="#{userStat.document_count != 0}">
+                                  <div class='atlas-button'>
+                                      <a href="#{contextPath}/storages/documents.html">#{atlasMsg.atlas_upload_documents}</a>
+                                  </div>
+                                  <div class='atlas-badge'>
+                                      #{userStat.document_count}
+                                  </div>
+                              </c:when>
+                              <c:otherwise>
+                                  <div class='atlas-button'>
+                                      <a href="#{contextPath}/storages/documents.html">#{atlasMsg.atlas_upload_documents}</a>
+                                  </div>
+                              </c:otherwise>
+                          </c:choose>
                       </li>
                   </ul>
               </div>
