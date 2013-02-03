@@ -16,6 +16,16 @@
        <property name="template">/mail/welcome-message.xhtml</property>
     </on-event>
 
+  <managed-bean>
+    <description>
+       This bean gives count information on posts, documents, questions
+       and answers created by the current user.
+    </description>
+    <managed-bean-name>userStat</managed-bean-name>
+    <managed-bean-class>Atlas.Applications.User_Stat_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
   <grant-permission>
     <name>anonymous</name>
   </grant-permission>
