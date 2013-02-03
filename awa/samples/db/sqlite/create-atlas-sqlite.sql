@@ -397,7 +397,7 @@ CREATE TABLE awa_question (
   /* the date when the question was edited. */
   `edit_date` DATETIME ,
   /* Title: Questions and Answers model
-Date: 2013-01-02
+Date: 2013-01-07
 the question short description. */
   `short_description` VARCHAR(255) NOT NULL,
   /* the question rating. */
@@ -409,10 +409,42 @@ the question short description. */
   /* the user who asked the question. */
   `author_id` BIGINT NOT NULL,
   /*  */
-  `workspace_id` BIGINT NOT NULL
+  `workspace_id` BIGINT NOT NULL,
+  /*  */
+  `accepted_answer_id` BIGINT 
 );
 INSERT INTO entity_type (name) VALUES ("awa_answer");
 INSERT INTO entity_type (name) VALUES ("awa_question");
+/* Copied from awa-votes-sqlite.sql*/
+/* File generated automatically by dynamo */
+/*  */
+CREATE TABLE awa_rating (
+  /* the rating identifier */
+  `id` BIGINT PRIMARY KEY,
+  /* the rating taking into account all votes */
+  `rating` INTEGER NOT NULL,
+  /* the number of votes */
+  `vote_count` INTEGER NOT NULL,
+  /*  */
+  `for_entity_id` BIGINT NOT NULL,
+  /* the entity type */
+  `for_entity_type` INTEGER NOT NULL
+);
+/* The vote table tracks a vote action by a user on a given database entity.
+The primary key is made of the user, the entity id and entity type.
+ */
+CREATE TABLE awa_vote (
+  /*  */
+  `rating` INTEGER NOT NULL,
+  /*  */
+  `id` BIGINT PRIMARY KEY,
+  /*  */
+  `entity_id` BIGINT NOT NULL,
+  /*  */
+  `user_id` BIGINT NOT NULL
+);
+INSERT INTO entity_type (name) VALUES ("awa_rating");
+INSERT INTO entity_type (name) VALUES ("awa_vote");
 /* Copied from atlas-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* The Mblog table holds the message posted by users.

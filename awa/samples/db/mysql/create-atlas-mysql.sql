@@ -430,7 +430,7 @@ CREATE TABLE awa_question (
   /* the date when the question was edited. */
   `edit_date` DATETIME ,
   /* Title: Questions and Answers model
-Date: 2013-01-02
+Date: 2013-01-07
 the question short description. */
   `short_description` VARCHAR(255) BINARY NOT NULL,
   /* the question rating. */
@@ -443,11 +443,47 @@ the question short description. */
   `author_id` BIGINT NOT NULL,
   /*  */
   `workspace_id` BIGINT NOT NULL,
+  /*  */
+  `accepted_answer_id` BIGINT ,
   PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES
 ("awa_answer")
 ,("awa_question")
+;
+/* Copied from awa-votes-mysql.sql*/
+/* File generated automatically by dynamo */
+/*  */
+CREATE TABLE awa_rating (
+  /* the rating identifier */
+  `id` BIGINT NOT NULL,
+  /* the rating taking into account all votes */
+  `rating` INTEGER NOT NULL,
+  /* the number of votes */
+  `vote_count` INTEGER NOT NULL,
+  /*  */
+  `for_entity_id` BIGINT NOT NULL,
+  /* the entity type */
+  `for_entity_type` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
+);
+/* The vote table tracks a vote action by a user on a given database entity.
+The primary key is made of the user, the entity id and entity type.
+ */
+CREATE TABLE awa_vote (
+  /*  */
+  `rating` INTEGER NOT NULL,
+  /*  */
+  `id` BIGINT NOT NULL,
+  /*  */
+  `entity_id` BIGINT NOT NULL,
+  /*  */
+  `user_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
+);
+INSERT INTO entity_type (name) VALUES
+("awa_rating")
+,("awa_vote")
 ;
 /* Copied from atlas-mysql.sql*/
 /* File generated automatically by dynamo */
