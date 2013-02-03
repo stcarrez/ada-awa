@@ -21,14 +21,14 @@
         xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
     <li>
-        <a href="#{contextPath}/blogs/admin/create.html?blog_id=#{blog.id}"
+        <a href="#{contextPath}/blogs/admin/create.html?id=#{adminBlog.id}"
            title="#{blogMsg.blog_admin_create_post_title}">
             <img src="#{contextPath}/images/blogs/edit-b.png" alt="#{blogMsg.blog_admin_create_post_label}"/>
             <span>#{blogMsg.blog_admin_create_post_label}</span>
         </a>
     </li>
     <li>
-        <a href="#{contextPath}/blogs/admin/list.html?blog_id=#{blog.id}"
+        <a href="#{contextPath}/blogs/admin/list.html?id=#{adminBlog.id}"
            title="#{blogMsg.blog_admin_list_post_title}">
             <img src="#{contextPath}/images/blogs/entries-b.png" alt="#{blogMsg.blog_admin_list_post_label}"/>
             <span>#{blogMsg.blog_admin_list_post_label}</span>
