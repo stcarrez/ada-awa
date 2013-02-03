@@ -22,6 +22,7 @@ with GNAT.MD5;
 
 with Util.Log.Loggers;
 with Util.Properties;
+with Util.Beans.Basic;
 with Util.Strings.Transforms;
 
 with EL.Functions;
@@ -29,17 +30,59 @@ with EL.Functions;
 with ASF.Applications;
 with ASF.Applications.Main;
 
-with AWA.Applications.Factory;
+with ADO.Queries;
+with ADO.Sessions;
 
+with AWA.Applications.Factory;
+with AWA.Services.Contexts;
+with Atlas.Applications.Models;
 
 --  with Atlas.XXX.Module;
 package body Atlas.Applications is
 
+   package ASC renames AWA.Services.Contexts;
+
    use AWA.Applications;
+
+   type User_Stat_Info_Access is access all Atlas.Applications.Models.User_Stat_Info;
 
    Log     : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Atlas");
 
    procedure Set_Functions (Mapper : in out EL.Functions.Function_Mapper'Class);
+   function Create_User_Stat_Bean return Util.Beans.Basic.Readonly_Bean_Access;
+
+   --  ------------------------------
+   --  Create the user statistics bean which indicates what feature the user has used.
+   --  ------------------------------
+   function Create_User_Stat_Bean return Util.Beans.Basic.Readonly_Bean_Access is
+      use type ASC.Service_Context_Access;
+
+      Ctx    : constant ASC.Service_Context_Access := ASC.Current;
+      Result : User_Stat_Info_Access;
+   begin
+      if Ctx /= null then
+         declare
+            List    : Atlas.Applications.Models.User_Stat_Info_List_Bean;
+            Session : ADO.Sessions.Session := ASC.Get_Session (Ctx);
+            User    : constant ADO.Identifier := Ctx.Get_User_Identifier;
+            Query   : ADO.Queries.Context;
+         begin
+            Query.Set_Query (Atlas.Applications.Models.Query_User_Stat);
+            Query.Bind_Param ("user_id", User);
+            Atlas.Applications.Models.List (List, Session, Query);
+
+            Result := new Atlas.Applications.Models.User_Stat_Info;
+            Result.all := List.List.Element (0);
+         end;
+      else
+         Result := new Atlas.Applications.Models.User_Stat_Info;
+         Result.Post_Count     := 0;
+         Result.Document_Count := 0;
+         Result.Question_Count := 0;
+         Result.Answer_Count   := 0;
+      end if;
+      return Result.all'Access;
+   end Create_User_Stat_Bean;
 
    --  ------------------------------
    --  Given an Email address, return the Gravatar link to the user image.
@@ -112,6 +155,9 @@ package body Atlas.Applications is
                          Converter => App.Self.Rel_Date_Converter'Access);
       App.Add_Converter (Name      => "sizeConverter",
                          Converter => App.Self.Size_Converter'Access);
+
+      App.Register_Class (Name => "Atlas.Applications.User_Stat_Bean",
+                          Handler => Create_User_Stat_Bean'Access);
    end Initialize_Components;
 
    --  ------------------------------
