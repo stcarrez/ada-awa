@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<query-mapping package='Atlas.Applications.Models'>
+    <description>
+      Information for Atlas to display some tips to users based on what they already did.
+    </description>
+    <class name="Atlas.Applications.Models.User_Stat_Info" bean="yes">
+        <comment>Stats about what the user did.</comment>
+        <property type='Integer' name="post_count">
+            <comment>the number of posts.</comment>
+        </property>
+        <property type='Integer' name="document_count">
+            <comment>the number of documents.</comment>
+        </property>
+        <property type='Integer' name="question_count">
+            <comment>the number of questions asked.</comment>
+        </property>
+        <property type='Integer' name="answer_count">
+            <comment>the number of answers.</comment>
+        </property>
+    </class>
+    <query name='user-stat'>
+       <comment>Get information about what the user did.</comment>
+       <sql>
+    SELECT
+      (SELECT COUNT(*) FROM awa_post AS post WHERE post.author_id = :user_id) AS nb_posts,
+      (SELECT COUNT(*) FROM awa_storage AS store
+          WHERE store.owner_id = :user_id AND store.original_id IS NULL) AS nb_docs,
+      (SELECT COUNT(*) FROM awa_question AS question
+          WHERE question.author_id = :user_id) AS nb_questions,
+      (SELECT COUNT(*) FROM awa_answer AS answer
+          WHERE answer.author_id = :user_id) AS nb_answers
+       </sql>
+    </query>
+</query-mapping>
