@@ -105,16 +105,54 @@ package AWA.Blogs.Beans is
    function Create_Post_List_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                                    return Util.Beans.Basic.Readonly_Bean_Access;
 
-   --  Create the Admin_Post_List_Bean bean instance.
-   function Create_Admin_Post_List_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
-                                   return Util.Beans.Basic.Readonly_Bean_Access;
-
-   --  Create the Blog_List_Bean bean instance.
-   function Create_Blog_List_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
+   --  Create the Blog_Admin_Bean bean instance.
+   function Create_Blog_Admin_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                                    return Util.Beans.Basic.Readonly_Bean_Access;
 
    --  Get a select item list which contains a list of post status.
    function Create_Status_List (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                                 return Util.Beans.Basic.Readonly_Bean_Access;
+
+   type Init_Flag is (INIT_BLOG_LIST, INIT_POST_LIST);
+   type Init_Map is array (Init_Flag) of Boolean;
+
+   type Blog_Admin_Bean is new Util.Beans.Basic.Bean with record
+      Module : AWA.Blogs.Modules.Blog_Module_Access := null;
+
+      --  The blog identifier.
+      Blog_Id          : ADO.Identifier := ADO.NO_IDENTIFIER;
+
+      --  List of blogs.
+      Blog_List        : aliased AWA.Blogs.Models.Blog_Info_List_Bean;
+      Blog_List_Bean   : AWA.Blogs.Models.Blog_Info_List_Bean_Access;
+
+      --  List of posts.
+      Post_List        : aliased AWA.Blogs.Models.Admin_Post_Info_List_Bean;
+      Post_List_Bean   : AWA.Blogs.Models.Admin_Post_Info_List_Bean_Access;
+
+      --  Initialization flags.
+      Init_Flags       : aliased Init_Map := (others => False);
+      Flags            : access Init_Map;
+   end record;
+   type Blog_Admin_Bean_Access is access all Blog_Admin_Bean;
+
+   --  Get the blog identifier.
+   function Get_Blog_Id (List : in Blog_Admin_Bean) return ADO.Identifier;
+
+   --  Load the posts associated with the current blog.
+   procedure Load_Posts (List : in Blog_Admin_Bean);
+
+   overriding
+   function Get_Value (List : in Blog_Admin_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the value identified by the name.
+   overriding
+   procedure Set_Value (From  : in out Blog_Admin_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   --  Load the list of blogs.
+   procedure Load_Blogs (List : in Blog_Admin_Bean);
 
 end AWA.Blogs.Beans;

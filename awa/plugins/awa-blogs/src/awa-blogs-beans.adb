@@ -20,13 +20,14 @@ with AWA.Services.Contexts;
 with AWA.Helpers.Requests;
 with AWA.Helpers.Selectors;
 
+with ADO.Objects;
 with ADO.Queries;
 with ADO.Sessions;
 with ADO.Sessions.Entities;
 
-with ASF.Applications.Messages.Factory;
 package body AWA.Blogs.Beans is
 
+   use type ADO.Identifier;
    use Ada.Strings.Unbounded;
 
    BLOG_ID_PARAMETER : constant String := "blog_id";
@@ -63,6 +64,8 @@ package body AWA.Blogs.Beans is
    --  ------------------------------
    procedure Create (Bean    : in out Blog_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
+
       Result  : ADO.Identifier;
    begin
       Bean.Module.Create_Blog (Workspace_Id => 0,
@@ -75,7 +78,6 @@ package body AWA.Blogs.Beans is
    --  ------------------------------
    function Create_Blog_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                               return Util.Beans.Basic.Readonly_Bean_Access is
-      use type ADO.Identifier;
 
       Blog_Id : constant ADO.Identifier := AWA.Helpers.Requests.Get_Parameter (BLOG_ID_PARAMETER);
       Object  : constant Blog_Bean_Access := new Blog_Bean;
@@ -93,7 +95,7 @@ package body AWA.Blogs.Beans is
    --  ------------------------------
    procedure Save (Bean    : in out Post_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
-      use type ADO.Identifier;
+      pragma Unreferenced (Outcome);
 
       Result  : ADO.Identifier;
    begin
@@ -117,6 +119,7 @@ package body AWA.Blogs.Beans is
    --  ------------------------------
    procedure Delete (Bean    : in out Post_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
    begin
       Bean.Module.Delete_Post (Post_Id => Bean.Get_Id);
    end Delete;
@@ -215,56 +218,18 @@ package body AWA.Blogs.Beans is
    end Create_Post_List_Bean;
 
    --  ------------------------------
-   --  Create the Admin_Post_List_Bean bean instance.
-   --  ------------------------------
-   function Create_Admin_Post_List_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
-                                         return Util.Beans.Basic.Readonly_Bean_Access is
-      use AWA.Blogs.Models;
-      use AWA.Services;
-      use type ADO.Identifier;
-
-      Ctx   : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      User  : constant ADO.Identifier := Ctx.Get_User_Identifier;
-
-      Object  : constant Admin_Post_Info_List_Bean_Access := new Admin_Post_Info_List_Bean;
-      Session : ADO.Sessions.Session := Module.Get_Session;
-      Query   : ADO.Queries.Context;
-      Blog_Id : constant ADO.Identifier := AWA.Helpers.Requests.Get_Parameter (BLOG_ID_PARAMETER);
-   begin
-      if Blog_Id > 0 then
-         Query.Set_Query (AWA.Blogs.Models.Query_Blog_Admin_Post_List);
-         Query.Bind_Param ("blog_id", Blog_Id);
-         Query.Bind_Param ("user_id", User);
-         ADO.Sessions.Entities.Bind_Param (Query, "table",
-                                           AWA.Blogs.Models.BLOG_TABLE, Session);
-         AWA.Blogs.Models.List (Object.all, Session, Query);
-      end if;
-      return Object.all'Access;
-   end Create_Admin_Post_List_Bean;
-
-
-   --  ------------------------------
    --  Create the Blog_List_Bean bean instance.
    --  ------------------------------
-   function Create_Blog_List_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
+   function Create_Blog_Admin_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                                    return Util.Beans.Basic.Readonly_Bean_Access is
-      use AWA.Blogs.Models;
-      use AWA.Services;
-      use type ADO.Identifier;
-
-      Ctx     : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      User    : constant ADO.Identifier := Ctx.Get_User_Identifier;
-      Object  : constant Blog_Info_List_Bean_Access := new Blog_Info_List_Bean;
-      Session : ADO.Sessions.Session := Module.Get_Session;
-      Query   : ADO.Queries.Context;
+      Object  : constant Blog_Admin_Bean_Access := new Blog_Admin_Bean;
    begin
-      Query.Set_Query (AWA.Blogs.Models.Query_Blog_List);
-      Query.Bind_Param ("user_id", User);
-      ADO.Sessions.Entities.Bind_Param (Query, "table",
-                                        AWA.Blogs.Models.BLOG_TABLE, Session);
-      AWA.Blogs.Models.List (Object.all, Session, Query);
+      Object.Module         := Module;
+      Object.Flags          := Object.Init_Flags'Access;
+      Object.Post_List_Bean := Object.Post_List'Access;
+      Object.Blog_List_Bean := Object.Blog_List'Access;
       return Object.all'Access;
-   end Create_Blog_List_Bean;
+   end Create_Blog_Admin_Bean;
 
    function Create_From_Status is
      new AWA.Helpers.Selectors.Create_From_Enum (AWA.Blogs.Models.Post_Status_Type,
@@ -282,5 +247,110 @@ package body AWA.Blogs.Beans is
                                              Context => null,
                                              Create  => Create_From_Status'Access).all'Access;
    end Create_Status_List;
+
+   --  ------------------------------
+   --  Load the list of blogs.
+   --  ------------------------------
+   procedure Load_Blogs (List : in Blog_Admin_Bean) is
+      use AWA.Blogs.Models;
+      use AWA.Services;
+
+      Ctx     : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      User    : constant ADO.Identifier := Ctx.Get_User_Identifier;
+      Session : ADO.Sessions.Session := List.Module.Get_Session;
+      Query   : ADO.Queries.Context;
+   begin
+      Query.Set_Query (AWA.Blogs.Models.Query_Blog_List);
+      Query.Bind_Param ("user_id", User);
+      ADO.Sessions.Entities.Bind_Param (Query, "table",
+                                        AWA.Blogs.Models.BLOG_TABLE, Session);
+      AWA.Blogs.Models.List (List.Blog_List_Bean.all, Session, Query);
+      List.Flags (INIT_BLOG_LIST) := True;
+   end Load_Blogs;
+
+   --  ------------------------------
+   --  Get the blog identifier.
+   --  ------------------------------
+   function Get_Blog_Id (List : in Blog_Admin_Bean) return ADO.Identifier is
+   begin
+      if List.Blog_Id = ADO.NO_IDENTIFIER then
+         if not List.Flags (INIT_BLOG_LIST) then
+            Load_Blogs (List);
+         end if;
+         if not List.Blog_List.List.Is_Empty then
+            return List.Blog_List.List.Element (0).Id;
+         end if;
+      end if;
+      return List.Blog_Id;
+   end Get_Blog_Id;
+
+   --  ------------------------------
+   --  Load the posts associated with the current blog.
+   --  ------------------------------
+   procedure Load_Posts (List : in Blog_Admin_Bean) is
+      use AWA.Blogs.Models;
+      use AWA.Services;
+
+      Ctx     : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      User    : constant ADO.Identifier := Ctx.Get_User_Identifier;
+      Session : ADO.Sessions.Session := List.Module.Get_Session;
+      Query   : ADO.Queries.Context;
+      Blog_Id : constant ADO.Identifier := List.Get_Blog_Id;
+   begin
+      if Blog_Id /= ADO.NO_IDENTIFIER then
+         Query.Set_Query (AWA.Blogs.Models.Query_Blog_Admin_Post_List);
+         Query.Bind_Param ("blog_id", Blog_Id);
+         Query.Bind_Param ("user_id", User);
+         ADO.Sessions.Entities.Bind_Param (Query, "table",
+                                           AWA.Blogs.Models.BLOG_TABLE, Session);
+
+         AWA.Blogs.Models.List (List.Post_List_Bean.all, Session, Query);
+         List.Flags (INIT_POST_LIST) := True;
+      end if;
+   end Load_Posts;
+
+   overriding
+   function Get_Value (List : in Blog_Admin_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "blogs" then
+         if not List.Init_Flags (INIT_BLOG_LIST) then
+            Load_Blogs (List);
+         end if;
+         return Util.Beans.Objects.To_Object (Value   => List.Blog_List_Bean,
+                                              Storage => Util.Beans.Objects.STATIC);
+
+      elsif Name = "posts" then
+         if not List.Init_Flags (INIT_POST_LIST) then
+            Load_Posts (List);
+         end if;
+         return Util.Beans.Objects.To_Object (Value   => List.Post_List_Bean,
+                                              Storage => Util.Beans.Objects.STATIC);
+
+      elsif Name = "id" then
+         declare
+            Id : constant ADO.Identifier := List.Get_Blog_Id;
+         begin
+            if Id = ADO.NO_IDENTIFIER then
+               return Util.Beans.Objects.Null_Object;
+            else
+               return Util.Beans.Objects.To_Object (Long_Long_Integer (Id));
+            end if;
+         end;
+      else
+         return Util.Beans.Objects.Null_Object;
+      end if;
+   end Get_Value;
+
+   --  Set the value identified by the name.
+   overriding
+   procedure Set_Value (From  : in out Blog_Admin_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
+         From.Blog_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Integer (Value));
+      end if;
+   end Set_Value;
 
 end AWA.Blogs.Beans;
