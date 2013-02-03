@@ -17,6 +17,7 @@
 <ui:composition template="/WEB-INF/layouts/layout.xhtml"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
         xmlns:c="http://java.sun.com/jstl/core"
 	    xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
@@ -28,35 +29,52 @@
             var contextPath = '#{contextPath}';
         </util:script>
         <div id='awa-content'>
-            <div id='folder-list-editor' class="ui-widget ui-corner-all">
-                <ui:include src="lists/folders.xhtml"/>
-            </div>
-            <div id='document-list-editor' class="ui-widget ui-corner-all">
-                <ui:include src="lists/documents.xhtml"/>
-            </div>
-            <div id='document-action' class='asf-list-action'>
-                <a href="#" class='asf-icon asf-delete' title='#{storageMsg.storage_list_delete_file_tooltip}'></a>
-            </div>
+            <c:choose>
+                <c:when test="#{not empty storageList.folder}">
+                    <div id='folder-list-editor' class="ui-widget ui-corner-all">
+                        <ui:include src="lists/folders.xhtml"/>
+                    </div>
+                    <div id='document-list-editor' class="ui-widget ui-corner-all">
+                        <ui:include src="lists/documents.xhtml"/>
+                    </div>
+                    <div id='document-action' class='asf-list-action'>
+                        <a href="#" class='asf-icon asf-delete' title='#{storageMsg.storage_list_delete_file_tooltip}'></a>
+                    </div>
+                    <util:script>
+                        $('#folder-list-editor').resizable({
+                            minWidth: 100, maxWidth: 400,
+                            resize: function(event, ui) {
+                                var width = ui.size.width;
+                                var ow = $('#folder-list-editor').parent().outerWidth();
+                                width = ow - width - 20;
+                                if (width &lt;= 10) {
+                                    width = 10;
+                                }
+                                $('#document-list-editor').css({ width: width });
+                            }
+                        });
+                        $('#document-list-editor').list({
+                            actionId: '#document-action',
+                            deleteUrl: '#{contextPath}/storages/forms/file-delete-form.html?storeId=',
+                            itemPrefix: 'store-'
+                        });
+                    </util:script>
+                </c:when>
+                <c:otherwise>
+                    <div>
+                        <div class="grid_3">
+                            <img src="#{contextPath}/images/storages/folder.png"/>
+                        </div>
+                        <div class="grid_6">
+                            <p>#{storageMsg.storage_no_folder}</p>
+                            <div class="asf-containerawa-form">
+                                <ajax:include src="/storages/forms/folder-create-first.xhtml"/>
+                            </div>
+                        </div>
+                    </div>
+                </c:otherwise>
+            </c:choose>
         </div>
-        <util:script>
-            $('#folder-list-editor').resizable({
-                minWidth: 100, maxWidth: 400,
-                resize: function(event, ui) {
-                    var width = ui.size.width;
-                    var ow = $('#folder-list-editor').parent().outerWidth();
-                    width = ow - width - 20;
-                    if (width &lt;= 10) {
-                        width = 10;
-                    }
-                    $('#document-list-editor').css({ width: width });
-                }
-            });
-            $('#document-list-editor').list({
-                actionId: '#document-action',
-                deleteUrl: '#{contextPath}/storages/forms/file-delete-form.html?storeId=',
-                itemPrefix: 'store-'
-            });
-        </util:script>
     </ui:define>
 </ui:composition>
 
