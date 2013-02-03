@@ -46,6 +46,14 @@
   </navigation-rule>
 
   <navigation-rule>
+    <from-view-id>/blogs/admin/forms/blog-create-form.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/blogs/admin/forms/blog-create-form-response.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
     <from-view-id>/blogs/admin/create.xhtml</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
