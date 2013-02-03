@@ -23,7 +23,7 @@
     <div id='folder-list' class='folder-list'>
         <ui:include src="folder-list.xhtml"/>
     </div>
-    <ajax:include src="/storages/forms/folder-create.xhtml"/>
+    <ajax:include id='folder-add' src="/storages/forms/folder-create.xhtml"/>
     <util:script>
         init_folder_list('#folder-list', '#folder-create', #{not empty storageList.folder ? storageList.folder.id : 'null'});
     </util:script>
