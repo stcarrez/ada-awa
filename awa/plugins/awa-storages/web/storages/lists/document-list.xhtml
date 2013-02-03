@@ -15,8 +15,6 @@
   -  limitations under the License.
   -->
 <div xmlns:f="http://java.sun.com/jsf/core"
-     xmlns:ui="http://java.sun.com/jsf/facelets"
-     xmlns:c="http://java.sun.com/jstl/core"
      xmlns:h="http://java.sun.com/jsf/html">
 
     <div id='document-upload'>
@@ -27,11 +25,9 @@
                 src="#{contextPath}/storages/forms/upload-form.html?folderId=#{storageList.folder.id}"/>
     </div>
     <div id='document-list' class='document-list ui-list'>
-        <c:choose>
-            <c:when test="#{empty storageList.files and not empty storageList.folder}">
+        <h:panelGroup rendered="#{empty storageList.files and not empty storageList.folder}">
                 #{storageMsg.storage_folder_empty_message}
-            </c:when>
-        </c:choose>
+        </h:panelGroup>
         <h:list var="document" value="#{storageList.files}">
             <div id='store-#{document.id}' class='awa-document ui-list-item'>
                 <div class='awa-title'>#{document.name}</div>
