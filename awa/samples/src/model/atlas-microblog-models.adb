@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +29,7 @@ package body Atlas.Microblog.Models is
    use type ADO.Objects.Object_Record;
 
    function Mblog_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => MBLOG_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -37,7 +37,7 @@ package body Atlas.Microblog.Models is
    end Mblog_Key;
 
    function Mblog_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => MBLOG_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
