@@ -638,6 +638,8 @@ enable_ahven
 enable_aunit
 enable_xmlada
 enable_aws
+with_xmlada
+with_aws
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1265,6 +1267,14 @@ Optional Features:
   --enable-aunit          build AUnit provided by AWA
   --enable-xmlada         build XML/Ada provided by AWA
   --enable-aws            build AWS provided by AWA
+
+Optional Packages:
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-xmlada=x         Path for the XML/Ada library
+                          (http://libre.adacore.com/libre/tools/xmlada/)
+  --with-aws=x            Path for the Ada Web Server library
+                          (http://libre.adacore.com/libre/tools/aws/)
 
 Some influential environment variables:
   CC          C compiler command
@@ -3033,29 +3043,136 @@ for NAME in $PACKAGES ; do
 done
 
 DIR=`pwd`
-if test $ENABLE_XMLADA = "yes" ; then
-  echo "Configuring ==== xmlada ===="
-  (cd $DIR/xmlada && ./configure --prefix="$prefix")
+NEED_INSTALL=""
+
+##########################################
+# Check for XML Ada
+##########################################
+
+XMLADA_DIR=
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking XML/Ada library (http://libre.adacore.com/libre/tools/xmlada/)" >&5
+$as_echo_n "checking XML/Ada library (http://libre.adacore.com/libre/tools/xmlada/)... " >&6; }
+
+# Check whether --with-xmlada was given.
+if test "${with_xmlada+set}" = set; then :
+  withval=$with_xmlada;
+  WITH_SERVER="with \"${withval}\";";
+  XMLADA_DIR=${withval}/
+
+else
+
+  echo "with \"xmlada\"; project t is for Source_Dirs use (); end t;" > t.gpr
+  gnatmake -p -Pt >/dev/null 2>/dev/null
+  if test $? -eq 0; then
+    XMLADA_DIR=
+  else
+    XMLADA_DIR=../xmlada/
+  fi;
+  rm -f t.gpr
+
 fi
 
-if test $ENABLE_AWS = "yes" ; then
-  NEED_AWS_PATCH=1
-  echo "Configuring ==== aws ===="
-  (cd $DIR/aws;
-    cp makefile.conf makefile.conf.orig
-    sed -e 's,^SOCKET.*=.*,SOCKET=openssl,' \
-        -e 's,^IPv6.*=.*,IPv6=true,' < makefile.conf.orig > makefile.conf
-    if test $NEED_AWS_PATCH -eq 1 ; then
-       # Fix builder switches (others) does not seem to be recognized by gprbuild
-       cp tools/tools.gpr tools/tools.gpr.orig
-       sed -e 's,(others),("Ada"),g' < tools/tools.gpr.orig > tools/tools.gpr
+echo "with \"${XMLADA_DIR}xmlada\"; project t is for Source_Dirs use (); end t;" > t.gpr
+gnatmake -p -Pt >/dev/null 2>/dev/null
+if test $? -ne 0 ; then
+   rm -f t.gpr
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: Not found" >&5
+$as_echo "Not found" >&6; }
 
-       # Remove -B option which is not supported by gcc 4.4
-       cp shared.gpr shared.gpr.orig
-       sed -e 's,gnaty3abBcefhiIklmnoprstx,gnaty3abcefhiIklmnoprstx,' < shared.gpr.orig > shared.gpr
-    fi
-    make prefix="$PREFIX" setup
-  )
+   if test $ENABLE_XMLADA != "yes" ; then
+      as_fn_error $? "XML/Ada library not found and --enable-xmlada not specified" "$LINENO" 5
+   fi
+   echo "Configuring ==== xmlada ===="
+   (cd $DIR/xmlada && ./configure --prefix="$prefix")
+   NEED_INSTALL="$NEED_INSTALL xmlada"
+
+   XMLADA_DIR=
+else
+   WITH_SERVER="with \"${XMLADA_DIR}xmlada\";";
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes ${XMLADA_DIR}" >&5
+$as_echo "yes ${XMLADA_DIR}" >&6; }
+fi
+rm -f t.gpr
+
+##########################################
+# Check for Ada Web Server
+##########################################
+
+AWS_DIR=
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Ada Web Server library (http://libre.adacore.com/libre/tools/aws/)" >&5
+$as_echo_n "checking Ada Web Server library (http://libre.adacore.com/libre/tools/aws/)... " >&6; }
+
+# Check whether --with-aws was given.
+if test "${with_aws+set}" = set; then :
+  withval=$with_aws;
+  WITH_SERVER="with \"${withval}\";";
+  AWS_DIR=${withval}/
+
+else
+
+  echo "with \"aws\"; project t is for Source_Dirs use (); end t;" > t.gpr
+  gnatmake -p -Pt >/dev/null 2>/dev/null
+  if test $? -eq 0; then
+    AWS_DIR=
+  else
+    AWS_DIR=../aws/
+  fi;
+  rm -f t.gpr
+
+fi
+
+echo "with \"${AWS_DIR}aws\"; project t is for Source_Dirs use (); end t;" > t.gpr
+gnatmake -p -Pt >/dev/null 2>/dev/null
+if test $? -ne 0 ; then
+   rm -f t.gpr
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: Not found" >&5
+$as_echo "Not found" >&6; }
+
+   if test $ENABLE_AWS != "yes" ; then
+      as_fn_error $? "Ada Web Server not found and --enable-aws not specified" "$LINENO" 5
+   fi
+
+   NEED_AWS_PATCH=1
+   echo "Configuring ==== aws ===="
+   (cd $DIR/aws;
+         cp makefile.conf makefile.conf.orig
+         sed -e 's,^SOCKET.*=.*,SOCKET=openssl,' \
+             -e 's,^IPv6.*=.*,IPv6=true,' < makefile.conf.orig > makefile.conf
+         if test $NEED_AWS_PATCH -eq 1 ; then
+            # Fix builder switches (others) does not seem to be recognized by gprbuild
+            cp tools/tools.gpr tools/tools.gpr.orig
+            sed -e 's,(others),("Ada"),g' < tools/tools.gpr.orig > tools/tools.gpr
+
+            # Remove -B option which is not supported by gcc 4.4
+            cp shared.gpr shared.gpr.orig
+            sed -e 's,gnaty3abBcefhiIklmnoprstx,gnaty3abcefhiIklmnoprstx,' < shared.gpr.orig > shared.gpr
+         fi
+         make prefix="$prefix" setup
+      )
+   NEED_INSTALL="$NEED_INSTALL aws"
+
+   AWS_DIR=
+else
+   WITH_SERVER="with \"${AWS_DIR}aws\";";
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes ${AWS_DIR}" >&5
+$as_echo "yes ${AWS_DIR}" >&6; }
+fi
+rm -f t.gpr
+
+if test T"$NEED_INSTALL" != T; then
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: The following packages have been configured: ${NEED_INSTALL}" >&5
+$as_echo "The following packages have been configured: ${NEED_INSTALL}" >&6; }
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: You must compile and install them before configuring other packages." >&5
+$as_echo "You must compile and install them before configuring other packages." >&6; }
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: Suggested commands:" >&5
+$as_echo "Suggested commands:" >&6; }
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: (cd xmlada && make && make install)" >&5
+$as_echo "(cd xmlada && make && make install)" >&6; }
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: (cd aws && make prefix=\"$prefix\" setup build install)" >&5
+$as_echo "(cd aws && make prefix=\"$prefix\" setup build install)" >&6; }
+   exit 0
 fi
 
 ARGS="--prefix $prefix --disable-shared"
