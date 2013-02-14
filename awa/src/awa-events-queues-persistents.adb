@@ -22,7 +22,6 @@ with Util.Log.Loggers;
 with Util.Serialize.Tools;
 
 with AWA.Services.Contexts;
-with AWA.Users.Models;
 with AWA.Applications;
 with AWA.Events.Services;
 
@@ -130,8 +129,8 @@ package body AWA.Events.Queues.Persistents is
 
       --  Dispatch the event.
       procedure Dispatch_Message (Msg : in out Models.Message_Ref) is
-         User    : constant AWA.Users.Models.User_Ref'Class := Msg.Get_User;
-         Session : constant AWA.Users.Models.Session_Ref'Class := Msg.Get_Session;
+--           User    : constant AWA.Users.Models.User_Ref'Class := Msg.Get_User;
+--           Session : constant AWA.Users.Models.Session_Ref'Class := Msg.Get_Session;
          Event   : Module_Event;
       begin
          Event.Set_Event_Kind (AWA.Events.Find_Event_Index (Msg.Get_Message_Type.Get_Name));
