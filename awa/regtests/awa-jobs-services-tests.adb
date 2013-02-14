@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  jobs-tests -- Unit tests for AWA jobs
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -53,7 +53,7 @@ package body AWA.Jobs.Services.Tests is
       use type AWA.Jobs.Models.Job_Status_Type;
 
       J       : AWA.Jobs.Services.Job_Type;
-      M       : AWA.Jobs.Modules.Job_Module_Access := AWA.Jobs.Modules.Get_Job_Module;
+      M       : constant AWA.Jobs.Modules.Job_Module_Access := AWA.Jobs.Modules.Get_Job_Module;
       Context : AWA.Services.Contexts.Service_Context;
    begin
       Context.Set_Context (AWA.Tests.Get_Application, null);

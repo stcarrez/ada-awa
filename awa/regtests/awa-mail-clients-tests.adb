@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail-clients-tests -- Unit tests for Mail clients
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -59,6 +59,8 @@ package body AWA.Mail.Clients.Tests is
    --  Create an email message and verify its content.
    --  ------------------------------
    procedure Test_Create_Message (T : in out Test) is
+      procedure Send;
+
       M   : AWA.Mail.Clients.Mail_Manager_Access;
 
       procedure Send is

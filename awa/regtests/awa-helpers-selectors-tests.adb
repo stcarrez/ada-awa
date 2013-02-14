@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-helpers-selectors-tests -- Unit tests for selector helpers
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,8 +23,6 @@ with ADO.Sessions;
 package body AWA.Helpers.Selectors.Tests is
 
    package Caller is new Util.Test_Caller (Test, "Helpers.Selectors");
-
-   type Color is (White, Blue, Red, Green, Yellow, Black);
 
    function Create_From_Color is new Create_From_Enum (Color, "color_");
 
@@ -71,7 +69,7 @@ package body AWA.Helpers.Selectors.Tests is
    --  ------------------------------
    procedure Test_Create_From_Enum (T : in out Test) is
       Bundle  : Util.Properties.Bundles.Manager;
-      Result  : ASF.Models.Selects.Select_Item_List := Create_From_Color (Bundle);
+      Result  : constant ASF.Models.Selects.Select_Item_List := Create_From_Color (Bundle);
    begin
       T.Assert (Result.Length > 0, "The list should not be empty");
    end Test_Create_From_Enum;

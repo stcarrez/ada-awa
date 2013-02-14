@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-helpers-selectors-tests -- Unit tests for selector helpers
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +19,8 @@
 with Util.Tests;
 
 package AWA.Helpers.Selectors.Tests is
+
+   type Color is (White, Blue, Red, Green, Yellow, Black);
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite);
 
