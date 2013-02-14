@@ -4,12 +4,13 @@ Ada Web Application is a framework to build a Web Application in Ada 2005.
 
 To build AWA, you will need:
 
- - ASF      (http://code.google.com/p/ada-asf)
- - ADO      (http://code.google.com/p/ada-ado)
- - Ada Util (http://code.google.com/p/ada-util)
- - Ada EL   (http://code.google.com/p/ada-el)
- - AWS      (http://libre.adacore.com/libre/tools/aws/)
- - XML/Ada  (http://libre.adacore.com/libre/tools/xmlada/)
+ - Ada Util     (http://code.google.com/p/ada-util             1.6.1)
+ - Ada EL       (http://code.google.com/p/ada-el               1.4.2)
+ - Ada Security (http://code.google.com/p/ada-security         1.0.0)
+ - ADO          (http://code.google.com/p/ada-ado              0.4.0)
+ - ASF          (http://code.google.com/p/ada-asf              0.5.0)
+ - AWS          (http://libre.adacore.com/libre/tools/aws/     2.11)
+ - XML/Ada      (http://libre.adacore.com/libre/tools/xmlada/  4.3)
 
 Build with the following commands:
 
