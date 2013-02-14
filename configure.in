@@ -13,7 +13,7 @@ AWA_MINOR_VERSION=3
 AWA_MICRO_VERSION=0
 AWA_VERSION=$AWA_MAJOR_VERSION.$AWA_MINOR_VERSION.$AWA_MICRO_VERSION
 
-AWA_PACKAGES="ada-util-1.6.1 ada-el-1.4.2 ada-security-1.0.0 ada-asf-0.5.0 ada-ado-0.4.0 ada-awa-0.2.0 dynamo-0.6.0"
+AWA_PACKAGES="ada-util-1.6.1 ada-el-1.4.2 ada-security-1.0.0 ada-asf-0.5.0 ada-ado-0.4.0 ada-awa-0.3.0 dynamo-0.6.0"
 
 # checking for local tools
 AC_PROG_CC
