@@ -33,21 +33,32 @@ You may get Ahven or Aunit at:
  - AUnit    (http://libre.adacore.com/libre/tools/aunit/)
 
 
-Extract the sources and configure by using:
+If XML/Ada and AWS are already installed in your environment, configure,
+build and install as follows:
 
-   ./configure  --enable-ahven
-
-
-If you want to build AWS, XMLAda or AUnit, you can configure with:
-
-
-   ./configure --enable-aunit --enable-xmlada --enable-aws
-
-
-Then, build the packages by using:
-
+   ./configure  --prefix=/usr/local
    make
+   make install
 
+If you don't have XML/Ada or AWS, you must build them and install them first.
+You can use the XML/Ada and or AWS packages provided in the 'external' directory.
+To do this, run the configure as follows:
+
+   ./configure --enable-xmlada --enable-aws
+
+This will extract and configure XML/Ada in 'xmlada' and AWS in 'aws'.
+You will then have to build these packages as follows:
+
+  cd xmlada && make && make install
+
+  cd aws && make prefix="/usr/local" setup build install
+
+After you have built XML/Ada and AWS, you must the the configure, build
+and install as follows:
+
+   ./configure  --prefix=/usr/local
+   make
+   make install
 
 Documentation
 
