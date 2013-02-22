@@ -1,0 +1,18 @@
+with "../../awa";
+with "awa_countries";
+
+project tools is
+
+   Name         := "awa-countries";
+   Mains := ("import_country.adb");
+   for Main use Mains;
+   for Source_Dirs use ("tools");
+   for Object_Dir use "obj/" & Name & "/" & Project'Library_Kind;
+   for Exec_Dir use awa.Exec_Dir;
+
+   package Binder renames awa.Binder;
+   package Builder renames awa.Builder;
+   package Compiler renames awa.Compiler;
+   package Linker renames awa.Linker;
+
+end tools;
