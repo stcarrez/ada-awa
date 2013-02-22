@@ -34,6 +34,10 @@ CREATE TABLE awa_country (
   `geonameid` INTEGER NOT NULL,
   /* the country main language */
   `languages` VARCHAR(255) BINARY NOT NULL,
+  /* the TLD associated with this country */
+  `tld` VARCHAR(3) BINARY NOT NULL,
+  /*  */
+  `currency_code` VARCHAR(3) BINARY NOT NULL,
   PRIMARY KEY (`id`)
 );
 /*  */

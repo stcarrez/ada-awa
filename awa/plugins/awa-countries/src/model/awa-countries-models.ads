@@ -129,6 +129,30 @@ package AWA.Countries.Models is
    function Get_Languages (Object : in Country_Ref)
                  return String;
 
+   --  Set the TLD associated with this country
+   procedure Set_Tld (Object : in out Country_Ref;
+                      Value  : in Ada.Strings.Unbounded.Unbounded_String);
+   procedure Set_Tld (Object : in out Country_Ref;
+                      Value : in String);
+
+   --  Get the TLD associated with this country
+   function Get_Tld (Object : in Country_Ref)
+                 return Ada.Strings.Unbounded.Unbounded_String;
+   function Get_Tld (Object : in Country_Ref)
+                 return String;
+
+   --
+   procedure Set_Currency_Code (Object : in out Country_Ref;
+                                Value  : in Ada.Strings.Unbounded.Unbounded_String);
+   procedure Set_Currency_Code (Object : in out Country_Ref;
+                                Value : in String);
+
+   --
+   function Get_Currency_Code (Object : in Country_Ref)
+                 return Ada.Strings.Unbounded.Unbounded_String;
+   function Get_Currency_Code (Object : in Country_Ref)
+                 return String;
+
    --  Load the entity identified by 'Id'.
    --  Raises the NOT_FOUND exception if it does not exist.
    procedure Load (Object  : in out Country_Ref;
@@ -476,9 +500,11 @@ private
    COL_4_1_NAME : aliased constant String := "iso_code";
    COL_5_1_NAME : aliased constant String := "geonameid";
    COL_6_1_NAME : aliased constant String := "languages";
+   COL_7_1_NAME : aliased constant String := "tld";
+   COL_8_1_NAME : aliased constant String := "currency_code";
 
    COUNTRY_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 7,
+     (Count => 9,
       Table => COUNTRY_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
@@ -487,7 +513,9 @@ private
          4 => COL_3_1_NAME'Access,
          5 => COL_4_1_NAME'Access,
          6 => COL_5_1_NAME'Access,
-         7 => COL_6_1_NAME'Access
+         7 => COL_6_1_NAME'Access,
+         8 => COL_7_1_NAME'Access,
+         9 => COL_8_1_NAME'Access
 )
      );
    COUNTRY_TABLE : constant ADO.Schemas.Class_Mapping_Access
@@ -506,6 +534,8 @@ private
        Iso_Code : Ada.Strings.Unbounded.Unbounded_String;
        Geonameid : Integer;
        Languages : Ada.Strings.Unbounded.Unbounded_String;
+       Tld : Ada.Strings.Unbounded.Unbounded_String;
+       Currency_Code : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
    type Country_Access is access all Country_Impl;

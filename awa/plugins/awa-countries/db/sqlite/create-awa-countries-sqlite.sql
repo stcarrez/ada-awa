@@ -206,7 +206,11 @@ CREATE TABLE awa_country (
   /* the country geoname id */
   `geonameid` INTEGER NOT NULL,
   /* the country main language */
-  `languages` VARCHAR(255) NOT NULL
+  `languages` VARCHAR(255) NOT NULL,
+  /* the TLD associated with this country */
+  `tld` VARCHAR(3) NOT NULL,
+  /*  */
+  `currency_code` VARCHAR(3) NOT NULL
 );
 /*  */
 CREATE TABLE awa_country_neighbor (

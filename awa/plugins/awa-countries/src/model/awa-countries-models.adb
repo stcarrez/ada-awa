@@ -252,6 +252,66 @@ package body AWA.Countries.Models is
       return Impl.Languages;
    end Get_Languages;
 
+
+   procedure Set_Tld (Object : in out Country_Ref;
+                       Value : in String) is
+      Impl : Country_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_String (Impl.all, 8, Impl.Tld, Value);
+   end Set_Tld;
+
+   procedure Set_Tld (Object : in out Country_Ref;
+                      Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : Country_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 8, Impl.Tld, Value);
+   end Set_Tld;
+
+   function Get_Tld (Object : in Country_Ref)
+                 return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (Object.Get_Tld);
+   end Get_Tld;
+   function Get_Tld (Object : in Country_Ref)
+                  return Ada.Strings.Unbounded.Unbounded_String is
+      Impl : constant Country_Access
+         := Country_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Tld;
+   end Get_Tld;
+
+
+   procedure Set_Currency_Code (Object : in out Country_Ref;
+                                 Value : in String) is
+      Impl : Country_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_String (Impl.all, 9, Impl.Currency_Code, Value);
+   end Set_Currency_Code;
+
+   procedure Set_Currency_Code (Object : in out Country_Ref;
+                                Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : Country_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 9, Impl.Currency_Code, Value);
+   end Set_Currency_Code;
+
+   function Get_Currency_Code (Object : in Country_Ref)
+                 return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (Object.Get_Currency_Code);
+   end Get_Currency_Code;
+   function Get_Currency_Code (Object : in Country_Ref)
+                  return Ada.Strings.Unbounded.Unbounded_String is
+      Impl : constant Country_Access
+         := Country_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Currency_Code;
+   end Get_Currency_Code;
+
    --  Copy of the object.
    procedure Copy (Object : in Country_Ref;
                    Into   : in out Country_Ref) is
@@ -272,6 +332,8 @@ package body AWA.Countries.Models is
             Copy.Iso_Code := Impl.Iso_Code;
             Copy.Geonameid := Impl.Geonameid;
             Copy.Languages := Impl.Languages;
+            Copy.Tld := Impl.Tld;
+            Copy.Currency_Code := Impl.Currency_Code;
          end;
       end if;
       Into := Result;
@@ -436,6 +498,16 @@ package body AWA.Countries.Models is
                           Value => Object.Languages);
          Object.Clear_Modified (7);
       end if;
+      if Object.Is_Modified (8) then
+         Stmt.Save_Field (Name  => COL_7_1_NAME, --  tld
+                          Value => Object.Tld);
+         Object.Clear_Modified (8);
+      end if;
+      if Object.Is_Modified (9) then
+         Stmt.Save_Field (Name  => COL_8_1_NAME, --  currency_code
+                          Value => Object.Currency_Code);
+         Object.Clear_Modified (9);
+      end if;
       if Stmt.Has_Save_Fields then
          Stmt.Set_Filter (Filter => "id = ?");
          Stmt.Add_Param (Value => Object.Get_Key);
@@ -473,6 +545,10 @@ package body AWA.Countries.Models is
                         Value => Object.Geonameid);
       Query.Save_Field (Name  => COL_6_1_NAME, --  languages
                         Value => Object.Languages);
+      Query.Save_Field (Name  => COL_7_1_NAME, --  tld
+                        Value => Object.Tld);
+      Query.Save_Field (Name  => COL_8_1_NAME, --  currency_code
+                        Value => Object.Currency_Code);
       Query.Execute (Result);
       if Result /= 1 then
          raise ADO.Objects.INSERT_ERROR;
@@ -513,6 +589,10 @@ package body AWA.Countries.Models is
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Geonameid));
       elsif Name = "languages" then
          return Util.Beans.Objects.To_Object (Impl.Languages);
+      elsif Name = "tld" then
+         return Util.Beans.Objects.To_Object (Impl.Tld);
+      elsif Name = "currency_code" then
+         return Util.Beans.Objects.To_Object (Impl.Currency_Code);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -534,6 +614,8 @@ package body AWA.Countries.Models is
       Object.Iso_Code := Stmt.Get_Unbounded_String (4);
       Object.Geonameid := Stmt.Get_Integer (5);
       Object.Languages := Stmt.Get_Unbounded_String (6);
+      Object.Tld := Stmt.Get_Unbounded_String (7);
+      Object.Currency_Code := Stmt.Get_Unbounded_String (8);
       ADO.Objects.Set_Created (Object);
    end Load;
    function City_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
