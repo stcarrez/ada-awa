@@ -1,0 +1,18 @@
+<query-mapping package='AWA.Tags.Models'>
+    <description>
+      Queries used by the tags module
+    </description>
+
+    <query name='check-tag'>
+       <comment>Check and get the tag identifier associated with a given tag and entity</comment>
+       <sql>
+    SELECT
+      t.id, e.id
+    FROM awa_tags AS t
+    LEFT JOIN awa_tagged_entity AS e ON t.id = e.tag_id
+       AND e.entity_type = :entity_type AND e.entity_id = :entity_id
+    WHERE t.name = :tag
+       </sql>
+    </query>
+
+</query-mapping>
