@@ -17,6 +17,8 @@
 -----------------------------------------------------------------------
 with ASF.Applications;
 
+with ADO;
+
 with AWA.Modules;
 package AWA.Tags.Modules is
 
@@ -37,6 +39,26 @@ package AWA.Tags.Modules is
 
    --  Get the tags module.
    function Get_Tag_Module return Tag_Module_Access;
+
+   --  Add a tag on the database entity referenced by <tt>Id</tt> in the table identified
+   --  by <tt>Entity_Type</tt>.  The permission represented by <tt>Permission</tt> is checked
+   --  to make sure the current user can add the tag.  If the permission is granted, the
+   --  tag represented by <tt>Tag</tt> is associated with the said database entity.
+   procedure Add_Tag (Model       : in Tag_Module;
+                      Id          : in ADO.Identifier;
+                      Entity_Type : in String;
+                      Permission  : in String;
+                      Tag         : in String);
+
+   --  Remove the tag identified by <tt>Tag</tt> and associated with the database entity
+   --  referenced by <tt>Id</tt> in the table identified by <tt>Entity_Type</tt>.
+   --  The permission represented by <tt>Permission</tt> is checked to make sure the current user
+   --  can remove the tag.
+   procedure Remove_Tag (Model       : in Tag_Module;
+                         Id          : in ADO.Identifier;
+                         Entity_Type : in String;
+                         Permission  : in String;
+                         Tag         : in String);
 
 private
 
