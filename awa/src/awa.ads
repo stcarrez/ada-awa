@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa -- Ada Web Application
---  Copyright (C) 2009, 2010 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,7 @@
 
 package AWA is
 
-   pragma Preelaborate;
+   pragma Pure;
 
    --  Library SVN identification
    SVN_URL : constant String := "$HeadURL: file:///opt/repository/svn/ada/awa/trunk/src/awa.ads $";
