@@ -1,0 +1,7 @@
+<project>
+    <name>awa-tags</name>
+    <property name="author_email">Stephane.Carrez@gmail.com</property>
+    <property name="search_dirs"></property>
+    <property name="license">none</property>
+    <property name="author">Stephane Carrez</property>
+</project>
