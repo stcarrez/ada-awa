@@ -175,19 +175,19 @@ INSERT INTO entity_type (name) VALUES ("sequence");
 /* File generated automatically by dynamo */
 /*  */
 CREATE TABLE awa_city (
-  /*  */
+  /* the city identifier */
   `id` INTEGER PRIMARY KEY,
   /* the city name */
   `name` VARCHAR(255) NOT NULL,
   /* the city ZIP code */
   `zip_code` INTEGER NOT NULL,
-  /*  */
+  /* the city latitude */
   `latitude` INTEGER NOT NULL,
-  /*  */
+  /* the city longitude */
   `longitude` INTEGER NOT NULL,
-  /*  */
+  /* the region that this city belongs to */
   `region_id` INTEGER NOT NULL,
-  /*  */
+  /* the country that this city belongs to */
   `country_id` INTEGER NOT NULL
 );
 /* The country model is a system data model for the application.
@@ -209,10 +209,11 @@ CREATE TABLE awa_country (
   `languages` VARCHAR(255) NOT NULL,
   /* the TLD associated with this country */
   `tld` VARCHAR(3) NOT NULL,
-  /*  */
+  /* the currency code */
   `currency_code` VARCHAR(3) NOT NULL
 );
-/*  */
+/* The country neighbor defines what countries
+are neigbors with each other */
 CREATE TABLE awa_country_neighbor (
   /*  */
   `id` BIGINT PRIMARY KEY,
@@ -221,7 +222,7 @@ CREATE TABLE awa_country_neighbor (
   /*  */
   `neighbor_id` INTEGER NOT NULL
 );
-/*  */
+/* Region defines an area within a country. */
 CREATE TABLE awa_region (
   /* the region identifier */
   `id` INTEGER PRIMARY KEY,
@@ -229,7 +230,7 @@ CREATE TABLE awa_region (
   `name` VARCHAR(255) NOT NULL,
   /* the region geonameid */
   `geonameid` INTEGER NOT NULL,
-  /*  */
+  /* the country that this region belongs to */
   `country_id` INTEGER NOT NULL
 );
 INSERT INTO entity_type (name) VALUES ("awa_city");

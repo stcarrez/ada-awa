@@ -141,13 +141,13 @@ package AWA.Countries.Models is
    function Get_Tld (Object : in Country_Ref)
                  return String;
 
-   --
+   --  Set the currency code
    procedure Set_Currency_Code (Object : in out Country_Ref;
                                 Value  : in Ada.Strings.Unbounded.Unbounded_String);
    procedure Set_Currency_Code (Object : in out Country_Ref;
                                 Value : in String);
 
-   --
+   --  Get the currency code
    function Get_Currency_Code (Object : in Country_Ref)
                  return Ada.Strings.Unbounded.Unbounded_String;
    function Get_Currency_Code (Object : in Country_Ref)
@@ -209,11 +209,11 @@ package AWA.Countries.Models is
    Null_City : constant City_Ref;
    function "=" (Left, Right : City_Ref'Class) return Boolean;
 
-   --
+   --  Set the city identifier
    procedure Set_Id (Object : in out City_Ref;
                      Value  : in Integer);
 
-   --
+   --  Get the city identifier
    function Get_Id (Object : in City_Ref)
                  return Integer;
 
@@ -237,35 +237,35 @@ package AWA.Countries.Models is
    function Get_Zip_Code (Object : in City_Ref)
                  return Integer;
 
-   --
+   --  Set the city latitude
    procedure Set_Latitude (Object : in out City_Ref;
                            Value  : in Integer);
 
-   --
+   --  Get the city latitude
    function Get_Latitude (Object : in City_Ref)
                  return Integer;
 
-   --
+   --  Set the city longitude
    procedure Set_Longitude (Object : in out City_Ref;
                             Value  : in Integer);
 
-   --
+   --  Get the city longitude
    function Get_Longitude (Object : in City_Ref)
                  return Integer;
 
-   --
+   --  Set the region that this city belongs to
    procedure Set_Region (Object : in out City_Ref;
                          Value  : in AWA.Countries.Models.Region_Ref'Class);
 
-   --
+   --  Get the region that this city belongs to
    function Get_Region (Object : in City_Ref)
                  return AWA.Countries.Models.Region_Ref'Class;
 
-   --
+   --  Set the country that this city belongs to
    procedure Set_Country (Object : in out City_Ref;
                           Value  : in AWA.Countries.Models.Country_Ref'Class);
 
-   --
+   --  Get the country that this city belongs to
    function Get_Country (Object : in City_Ref)
                  return AWA.Countries.Models.Country_Ref'Class;
 
@@ -316,6 +316,10 @@ package AWA.Countries.Models is
    procedure Copy (Object : in City_Ref;
                    Into   : in out City_Ref);
 
+   --  --------------------
+   --  The country neighbor defines what countries
+   --  are neigbors with each other
+   --  --------------------
    --  Create an object key for Country_Neighbor.
    function Country_Neighbor_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
    --  Create an object key for Country_Neighbor from a string.
@@ -396,6 +400,9 @@ package AWA.Countries.Models is
    procedure Copy (Object : in Country_Neighbor_Ref;
                    Into   : in out Country_Neighbor_Ref);
 
+   --  --------------------
+   --  Region defines an area within a country.
+   --  --------------------
    --  Create an object key for Region.
    function Region_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
    --  Create an object key for Region from a string.
@@ -433,11 +440,11 @@ package AWA.Countries.Models is
    function Get_Geonameid (Object : in Region_Ref)
                  return Integer;
 
-   --
+   --  Set the country that this region belongs to
    procedure Set_Country (Object : in out Region_Ref;
                           Value  : in AWA.Countries.Models.Country_Ref'Class);
 
-   --
+   --  Get the country that this region belongs to
    function Get_Country (Object : in Region_Ref)
                  return AWA.Countries.Models.Country_Ref'Class;
 
