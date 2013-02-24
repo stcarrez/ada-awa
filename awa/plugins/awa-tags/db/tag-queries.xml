@@ -8,9 +8,9 @@
        <sql>
     SELECT
       t.id, e.id
-    FROM awa_tags AS t
+    FROM awa_tag AS t
     LEFT JOIN awa_tagged_entity AS e ON t.id = e.tag_id
-       AND e.entity_type = :entity_type AND e.entity_id = :entity_id
+       AND e.entity_type = :entity_type AND e.for_entity_id = :entity_id
     WHERE t.name = :tag
        </sql>
     </query>
