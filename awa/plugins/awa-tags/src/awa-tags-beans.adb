@@ -15,7 +15,12 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with ADO.Queries;
+with ADO.Statements;
+with ADO.Sessions;
+with ADO.Sessions.Entities;
 
+with AWA.Tags.Models;
 package body AWA.Tags.Beans is
 
    --  ------------------------------
@@ -32,6 +37,23 @@ package body AWA.Tags.Beans is
          return Util.Beans.Objects.Null_Object;
       end if;
    end Get_Value;
+
+   --  ------------------------------
+   --  Set the value identified by the name.
+   --  If the name cannot be found, the method should raise the No_Value
+   --  exception.
+   --  ------------------------------
+   overriding
+   procedure Set_Value (From  : in out Tag_List_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "entity_type" then
+         From.Entity_Type := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "permission" then
+         From.Permission := Util.Beans.Objects.To_Unbounded_String (Value);
+      end if;
+   end Set_Value;
 
    --  ------------------------------
    --  Get the number of elements in the list.
@@ -60,6 +82,33 @@ package body AWA.Tags.Beans is
    begin
       return From.List.Element (From.Current);
    end Get_Row;
+
+   --  ------------------------------
+   --  Load the tags associated with the given database identifier.
+   --  ------------------------------
+   procedure Load_Tags (Into          : in out Tag_List_Bean;
+                        For_Entity_Id : in ADO.Identifier) is
+      use ADO.Sessions.Entities;
+
+      Session     : constant ADO.Sessions.Session := Into.Module.Get_Session;
+      Entity_Type : constant String := Ada.Strings.Unbounded.To_String (Into.Entity_Type);
+      Kind        : constant ADO.Entity_Type := Find_Entity_Type (Session, Entity_Type);
+      Query       : ADO.Queries.Context;
+   begin
+      Query.Set_Query (AWA.Tags.Models.Query_Tag_List);
+      Query.Bind_Param ("entity_type", Kind);
+      Query.Bind_Param ("entity_id", For_Entity_Id);
+      declare
+         Stmt : ADO.Statements.Query_Statement := Session.Create_Statement (Query);
+      begin
+         Stmt.Execute;
+
+         while Stmt.Has_Elements loop
+            Into.List.Append (Util.Beans.Objects.To_Object (Stmt.Get_String (0)));
+            Stmt.Next;
+         end loop;
+      end;
+   end Load_Tags;
 
    --  ------------------------------
    --  Create the tag list bean instance.
