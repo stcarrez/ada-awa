@@ -229,6 +229,8 @@ package AWA.Tags.Models is
 
    Query_Check_Tag : constant ADO.Queries.Query_Definition_Access;
 
+   Query_Tag_List : constant ADO.Queries.Query_Definition_Access;
+
 
 
 private
@@ -360,4 +362,10 @@ private
                                      File => File_1.File'Access);
    Query_Check_Tag : constant ADO.Queries.Query_Definition_Access
    := Def_Check_Tag.Query'Access;
+
+   package Def_Tag_List is
+      new ADO.Queries.Loaders.Query (Name => "tag-list",
+                                     File => File_1.File'Access);
+   Query_Tag_List : constant ADO.Queries.Query_Definition_Access
+   := Def_Tag_List.Query'Access;
 end AWA.Tags.Models;
