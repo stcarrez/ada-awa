@@ -26,6 +26,8 @@ with ADO.Objects;
 with ADO.Statements;
 with ADO.SQL;
 with ADO.Schemas;
+with ADO.Queries;
+with ADO.Queries.Loaders;
 with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
@@ -225,9 +227,12 @@ package AWA.Tags.Models is
                    Query   : in ADO.SQL.Query'Class);
 
 
+   Query_Check_Tag : constant ADO.Queries.Query_Definition_Access;
+
+
 
 private
-   TAG_NAME : aliased constant String := "Tag";
+   TAG_NAME : aliased constant String := "awa_tag";
    COL_0_1_NAME : aliased constant String := "id";
    COL_1_1_NAME : aliased constant String := "name";
 
@@ -283,7 +288,7 @@ private
 
    procedure Set_Field (Object : in out Tag_Ref'Class;
                         Impl   : out Tag_Access);
-   TAGGED_ENTITY_NAME : aliased constant String := "Tagged_Entity";
+   TAGGED_ENTITY_NAME : aliased constant String := "awa_tagged_entity";
    COL_0_2_NAME : aliased constant String := "id";
    COL_1_2_NAME : aliased constant String := "for_entity_id";
    COL_2_2_NAME : aliased constant String := "entity_type";
@@ -345,4 +350,14 @@ private
 
    procedure Set_Field (Object : in out Tagged_Entity_Ref'Class;
                         Impl   : out Tagged_Entity_Access);
+
+   package File_1 is
+      new ADO.Queries.Loaders.File (Path => "tag-queries.xml",
+                                    Sha1 => "9B2B599473F75F92CB5AB5045675E4CCEF926543");
+
+   package Def_Check_Tag is
+      new ADO.Queries.Loaders.Query (Name => "check-tag",
+                                     File => File_1.File'Access);
+   Query_Check_Tag : constant ADO.Queries.Query_Definition_Access
+   := Def_Check_Tag.Query'Access;
 end AWA.Tags.Models;

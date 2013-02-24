@@ -1,6 +1,6 @@
 /* File generated automatically by dynamo */
 /* The tag definition. */
-CREATE TABLE Tag (
+CREATE TABLE awa_tag (
   /* the tag identifier */
   `id` BIGINT NOT NULL,
   /* the tag name */
@@ -8,7 +8,7 @@ CREATE TABLE Tag (
   PRIMARY KEY (`id`)
 );
 /*  */
-CREATE TABLE Tagged_Entity (
+CREATE TABLE awa_tagged_entity (
   /* the tag entity identifier */
   `id` BIGINT NOT NULL,
   /* Title: Tag model
@@ -21,6 +21,6 @@ Date: 2013-02-23the database entity to which the tag is associated */
   PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES
-("Tag")
-,("Tagged_Entity")
+("awa_tag")
+,("awa_tagged_entity")
 ;

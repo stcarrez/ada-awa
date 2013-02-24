@@ -1,3 +1,3 @@
 /* File generated automatically by dynamo */
-DROP TABLE IF EXISTS `Tagged_Entity`;
-DROP TABLE IF EXISTS `Tag`;
+DROP TABLE IF EXISTS `awa_tagged_entity`;
+DROP TABLE IF EXISTS `awa_tag`;
