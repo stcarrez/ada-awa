@@ -15,4 +15,15 @@
        </sql>
     </query>
 
+    <query name='entity-tags'>
+       <comment>Get the list of tags associated with a given database entity</comment>
+       <sql>
+    SELECT
+      t.name
+    FROM awa_tagged_entity AS e
+    INNER JOIN awa_tag AS t ON t.id = e.tag_id
+    WHERE e.entity_type = :entity_type AND e.for_entity_id = :entity_id
+       </sql>
+    </query>
+    
 </query-mapping>
