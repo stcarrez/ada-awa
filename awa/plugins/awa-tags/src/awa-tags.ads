@@ -15,6 +15,14 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+
+--  == Introduction ==
+--  The <b>Tags</b> module allows to associate general purpose tags to any database entity.
+--
+--  == Model ==
+--  [http://ada-awa.googlecode.com/svn/wiki/awa_tags_model.png]
+--
+--  @include awa-tags-modules.ads
 package AWA.Tags is
 
    pragma Pure;
