@@ -15,7 +15,7 @@
        </sql>
     </query>
 
-    <query name='entity-tags'>
+    <query name='tag-list'>
        <comment>Get the list of tags associated with a given database entity</comment>
        <sql>
     SELECT

@@ -10,6 +10,12 @@ DROP TABLE IF EXISTS `awa_blog`;
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `awa_question`;
 DROP TABLE IF EXISTS `awa_answer`;
+/* Copied from awa-countries-drop-mysql.sql*/
+/* File generated automatically by dynamo */
+DROP TABLE IF EXISTS `awa_region`;
+DROP TABLE IF EXISTS `awa_country_neighbor`;
+DROP TABLE IF EXISTS `awa_country`;
+DROP TABLE IF EXISTS `awa_city`;
 /* Copied from awa-jobs-drop-mysql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `awa_job`;
