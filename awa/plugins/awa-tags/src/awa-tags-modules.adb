@@ -27,8 +27,10 @@ with Security.Permissions;
 with AWA.Permissions;
 with AWA.Services.Contexts;
 with AWA.Modules.Get;
+with AWA.Modules.Beans;
 with AWA.Users.Models;
 with AWA.Tags.Models;
+with AWA.Tags.Beans;
 
 with Util.Log.Loggers;
 package body AWA.Tags.Modules is
@@ -36,6 +38,9 @@ package body AWA.Tags.Modules is
    package ASC renames AWA.Services.Contexts;
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Tags.Module");
+
+   package Register is new AWA.Modules.Beans (Module        => Tag_Module,
+                                              Module_Access => Tag_Module_Access);
 
    --  ------------------------------
    --  Initialize the tags module.
@@ -46,6 +51,11 @@ package body AWA.Tags.Modules is
                          Props  : in ASF.Applications.Config) is
    begin
       Log.Info ("Initializing the awa-tags module");
+
+      --  Register the tag list bean.
+      Register.Register (Plugin => Plugin,
+                         Name   => "AWA.Tags.Beans.Tag_List_Bean",
+                         Handler => AWA.Tags.Beans.Create_Tag_List_Bean'Access);
 
       AWA.Modules.Module (Plugin).Initialize (App, Props);
 
