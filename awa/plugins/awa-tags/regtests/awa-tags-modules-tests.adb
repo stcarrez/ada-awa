@@ -17,19 +17,21 @@
 -----------------------------------------------------------------------
 
 with Util.Test_Caller;
+with Util.Beans.Basic;
+with Util.Beans.Objects;
 
 with Security.Contexts;
 
 with AWA.Users.Models;
 with AWA.Services.Contexts;
-with AWA.Votes.Modules;
 with AWA.Tests.Helpers.Users;
+with AWA.Tags.Beans;
 package body AWA.Tags.Modules.Tests is
 
    use Util.Tests;
    use ADO;
 
-   package Caller is new Util.Test_Caller (Test, "Votes.Services");
+   package Caller is new Util.Test_Caller (Test, "Tags.Modules");
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
    begin
@@ -39,6 +41,13 @@ package body AWA.Tags.Modules.Tests is
                        Test_Remove_Tag'Access);
    end Add_Tests;
 
+   function Create_Tag_List_Bean (Module : in Tag_Module_Access)
+                                  return AWA.Tags.Beans.Tag_List_Bean_Access is
+      Bean : Util.Beans.Basic.Readonly_Bean_Access := AWA.Tags.Beans.Create_Tag_List_Bean (Module);
+   begin
+      return AWA.Tags.Beans.Tag_List_Bean'Class (Bean.all)'Access;
+   end Create_Tag_List_Bean;
+
    --  ------------------------------
    --  Test tag creation.
    --  ------------------------------
@@ -46,17 +55,28 @@ package body AWA.Tags.Modules.Tests is
       Sec_Ctx      : Security.Contexts.Security_Context;
       Context      : AWA.Services.Contexts.Service_Context;
    begin
-      AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-tag@test.com");
+      AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-add-tag@test.com");
 
       declare
          Tag_Manager  : constant Tag_Module_Access := Get_Tag_Module;
          User         : constant AWA.Users.Models.User_Ref := Context.Get_User;
+         List         : AWA.Tags.Beans.Tag_List_Bean_Access;
+         Cleanup      : Util.Beans.Objects.Object;
       begin
          T.Assert (Tag_Manager /= null, "There is no tag module");
 
+         List := Create_Tag_List_Bean (Tag_Manager);
+         Cleanup := Util.Beans.Objects.To_Object (List.all'Access);
+         List.Set_Value ("entity_type", Util.Beans.Objects.To_Object (String '("awa_user")));
+
+         --  Create a tag.
+         Tag_Manager.Add_Tag (User.Get_Id, "awa_user", "workspaces-create", "user-tag");
          Tag_Manager.Add_Tag (User.Get_Id, "awa_user", "workspaces-create", "user-tag");
 
-         Tag_Manager.Add_Tag (User.Get_Id, "awa_user", "workspaces-create", "user-tag");
+         --  Load the list.
+         List.Load_Tags (User.Get_Id);
+
+         Util.Tests.Assert_Equals (T, 1, Integer (List.Get_Count), "Invalid number of tags");
       end;
    end Test_Add_Tag;
 
@@ -72,8 +92,14 @@ package body AWA.Tags.Modules.Tests is
       declare
          Tag_Manager  : constant Tag_Module_Access := Get_Tag_Module;
          User         : constant AWA.Users.Models.User_Ref := Context.Get_User;
+         List         : AWA.Tags.Beans.Tag_List_Bean_Access;
+         Cleanup      : Util.Beans.Objects.Object;
       begin
          T.Assert (Tag_Manager /= null, "There is no tag module");
+
+         List := Create_Tag_List_Bean (Tag_Manager);
+         Cleanup := Util.Beans.Objects.To_Object (List.all'Access);
+         List.Set_Value ("entity_type", Util.Beans.Objects.To_Object (String '("awa_user")));
 
          Tag_Manager.Add_Tag (User.Get_Id, "awa_user", "workspaces-create", "user-tag-1");
          Tag_Manager.Add_Tag (User.Get_Id, "awa_user", "workspaces-create", "user-tag-2");
@@ -81,6 +107,10 @@ package body AWA.Tags.Modules.Tests is
 
          Tag_Manager.Remove_Tag (User.Get_Id, "awa_user", "workspaces-create", "user-tag-2");
          Tag_Manager.Remove_Tag (User.Get_Id, "awa_user", "workspaces-create", "user-tag-1");
+
+         --  Load the list.
+         List.Load_Tags (User.Get_Id);
+         Util.Tests.Assert_Equals (T, 2, Integer (List.Get_Count), "Invalid number of tags");
       end;
    end Test_Remove_Tag;
 
