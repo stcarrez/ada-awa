@@ -87,6 +87,7 @@ package body AWA.Tags.Modules is
       Log.Info ("User {0} add tag {1} on {2}",
                 ADO.Identifier'Image (User.Get_Id), Tag, Ident);
 
+      Query.Set_Query (AWA.Tags.Models.Query_Check_Tag);
       Ctx.Start;
       declare
          Kind     : ADO.Entity_Type := ADO.Sessions.Entities.Find_Entity_Type (DB, Entity_Type);
@@ -152,7 +153,7 @@ package body AWA.Tags.Modules is
                 ADO.Identifier'Image (User.Get_Id), Tag, Ident);
 
       Query.Set_Join ("INNER JOIN awa_tag AS tag ON tag.id = o.tag_id");
-      Query.Set_Filter ("tag.name = :name AND o.for_entity_id = :entity_id "
+      Query.Set_Filter ("tag.name = :tag AND o.for_entity_id = :entity_id "
                         & "AND o.entity_type = :entity_type");
 
       Ctx.Start;
