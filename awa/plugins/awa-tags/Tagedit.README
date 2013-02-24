@@ -1,0 +1,53 @@
+Tagedit - jQuery Plugin
+The Plugin can be used to edit tags from a database the easy way
+
+Examples, code and documentation:
+http://tagedit.webwork-albrecht.de
+http://www.youtube.com/watch?v=TU_FdBlSPNc
+https://github.com/webworka/Tagedit
+  
+Copyright (c) 2010 Oliver Albrecht <info@webwork-albrecht.de>
+ 
+This work is licensed under a MIT License
+http://www.opensource.org/licenses/mit-license.php
+
+ 
+Author:
+Oliver Albrecht - Mail: info@webwork-albrecht.de Twitter: @webworka
+
+Version:
+1.2.1 (11/2011)
+
+
+------ Changelog ---------
+
+v1.2.1 - 05.11.2011
+- Bugfix: When editing a tag, there was no check on the existing values (issue #15)
+- Extension: Pressing ESC while editing no does a reset
+
+v1.2.0 - 08.06.2011
+- Extension: Added Support for local data, remote url and function for autocomplete. Thanks to garjitec (issue #9 and #7)
+- Extension: Added option for breaking characters. Thanks to garjitec (issue #9)
+- Extension: Added option for Case Sesnsitive check of new entries. (issue #8)
+- Extension: Added support for pasting into input field. Thanks to garjitec (issue #9)
+- Bugfix: Items where not marked as deleted when taking to much time for confirmation
+- Merge: Cleaned up formatting. Thanks to garjitech (issue #9)
+- Merge: Changed the way that autocompleteURL is used to overwrite autocompleteOptions.source. Thanks to garjitec (issue #9)
+
+v1.1.0 - 05.06.2011
+- Bugfix: Putting an item that is inside the autocompletionlist was not possible without clicking on the item (issue #2) thanks to mmezzacca
+- Change: Make the Regexp for the name of the items less restrictable (issue #4 and #5) thanks to jdart
+- Change: removed the versionstring from the css file
+- Extension: Putting the jQuery ui autocompletion options to the tagedit options. Therfore its possible to view the complete list of items (partly issue #1)
+- Minor: Added another example page
+- Minor: removing some german comments
+- Minor: adding some comments for events
+
+v1.0.2 - 19.05.2011
+- Bugfix for cases if there are already Elements from database befor initialising the Plugin
+
+v1.0.1 - 18.05.2011
+- Bugfix for adding elements that are already inside the autocompletion list
+
+v1.0.0 - 18.05.2011
+- initial checkin
