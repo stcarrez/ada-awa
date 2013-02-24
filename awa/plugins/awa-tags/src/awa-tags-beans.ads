@@ -15,13 +15,17 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Ada.Strings.Unbounded;
+
 with Util.Beans.Basic;
 with Util.Beans.Objects.Vectors;
+
+with ADO;
 
 with AWA.Tags.Modules;
 package AWA.Tags.Beans is
 
-   type Tag_List_Bean is new Util.Beans.Basic.List_Bean with private;
+   type Tag_List_Bean is new Util.Beans.Basic.List_Bean and Util.Beans.Basic.Bean with private;
 
    type Tag_List_Bean_Access is access all Tag_List_Bean'Class;
 
@@ -30,6 +34,14 @@ package AWA.Tags.Beans is
    overriding
    function Get_Value (From : in Tag_List_Bean;
                        Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the value identified by the name.
+   --  If the name cannot be found, the method should raise the No_Value
+   --  exception.
+   overriding
+   procedure Set_Value (From  : in out Tag_List_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
 
    --  Get the number of elements in the list.
    overriding
@@ -44,16 +56,22 @@ package AWA.Tags.Beans is
    overriding
    function Get_Row (From  : in Tag_List_Bean) return Util.Beans.Objects.Object;
 
+   --  Load the tags associated with the given database identifier.
+   procedure Load_Tags (Into          : in out Tag_List_Bean;
+                        For_Entity_Id : in ADO.Identifier);
+
    --  Create the tag list bean instance.
    function Create_Tag_List_Bean (Module : in AWA.Tags.Modules.Tag_Module_Access)
                                   return Util.Beans.Basic.Readonly_Bean_Access;
 
 private
 
-   type Tag_List_Bean is new Util.Beans.Basic.List_Bean with record
-      List    : Util.Beans.Objects.Vectors.Vector;
-      Module  : AWA.Tags.Modules.Tag_Module_Access;
-      Current : Natural := 0;
+   type Tag_List_Bean is new Util.Beans.Basic.List_Bean and Util.Beans.Basic.Bean with record
+      List        : Util.Beans.Objects.Vectors.Vector;
+      Module      : AWA.Tags.Modules.Tag_Module_Access;
+      Entity_Type : Ada.Strings.Unbounded.Unbounded_String;
+      Permission  : Ada.Strings.Unbounded.Unbounded_String;
+      Current     : Natural := 0;
    end record;
 
 end AWA.Tags.Beans;
