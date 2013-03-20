@@ -31,6 +31,7 @@ with AWA.Modules.Beans;
 with AWA.Users.Models;
 with AWA.Tags.Models;
 with AWA.Tags.Beans;
+with AWA.Tags.Components;
 
 with Util.Log.Loggers;
 package body AWA.Tags.Modules is
@@ -51,6 +52,8 @@ package body AWA.Tags.Modules is
                          Props  : in ASF.Applications.Config) is
    begin
       Log.Info ("Initializing the awa-tags module");
+
+      App.Add_Components (AWA.Tags.Components.Definition);
 
       --  Register the tag list bean.
       Register.Register (Plugin => Plugin,
