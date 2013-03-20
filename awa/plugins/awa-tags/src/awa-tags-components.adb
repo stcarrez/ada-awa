@@ -17,22 +17,50 @@
 -----------------------------------------------------------------------
 
 with Util.Beans.Basic;
-with Util.Beans.Objects;
 with Util.Strings;
 
 with ASF.Utils;
-with ASF.Contexts.Writer;
 with ASF.Converters;
+with ASF.Views.Nodes;
+with ASF.Components;
+with ASF.Components.Base;
 
 with AWA.Tags.Beans;
 
 package body AWA.Tags.Components is
 
    use ASF.Contexts.Faces;
-   use ASF.Contexts.Writer;
 
    INPUT_ATTRIBUTE_NAMES     : Util.Strings.String_Set.Set;
    READONLY_ATTRIBUTE_NAMES  : Util.Strings.String_Set.Set;
+
+   --  ------------------------------
+   --  Create an UIRedirect component
+   --  ------------------------------
+   function Create_Tag return ASF.Components.Base.UIComponent_Access is
+   begin
+      return new Tag_UIInput;
+   end Create_Tag;
+
+   URI                : aliased constant String := "http://code.google.com/p/ada-awa/jsf";
+   TAG_LIST_TAG       : aliased constant String := "tagList";
+
+   AWA_Bindings : aliased constant ASF.Factory.Binding_Array
+     := (1 => (Name      => TAG_LIST_TAG'Access,
+               Component => Create_Tag'Access,
+               Tag       => ASF.Views.Nodes.Create_Component_Node'Access)
+        );
+
+   AWA_Factory : aliased constant ASF.Factory.Factory_Bindings
+     := (URI => URI'Access, Bindings => AWA_Bindings'Access);
+
+   --  ------------------------------
+   --  Get the Tags component factory.
+   --  ------------------------------
+   function Definition return ASF.Factory.Factory_Bindings_Access is
+   begin
+      return AWA_Factory'Access;
+   end Definition;
 
    --  ------------------------------
    --  Returns True if the tag component must be rendered as readonly.

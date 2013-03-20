@@ -21,10 +21,14 @@ with Util.Beans.Objects;
 with ASF.Components.Html.Forms;
 with ASF.Contexts.Faces;
 with ASF.Contexts.Writer;
+with ASF.Factory;
 
 package AWA.Tags.Components is
 
    use ASF.Contexts.Writer;
+
+   --  Get the Tags component factory.
+   function Definition return ASF.Factory.Factory_Bindings_Access;
 
    --  ------------------------------
    --  Input component
