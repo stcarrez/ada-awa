@@ -1,5 +1,6 @@
 with "../../awa";
 with "../awa-workspaces/awa_workspaces";
+with "../awa-tags/awa_tags";
 project awa_questions is
    Version      := awa.Version;
    Name         := "awa-questions";
