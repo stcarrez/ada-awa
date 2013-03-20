@@ -191,6 +191,10 @@ package body AWA.Questions.Beans is
          return Util.Beans.Objects.To_Object (Value   => From.Question_Bean,
                                               Storage => Util.Beans.Objects.STATIC);
 
+      elsif Name = "tags" then
+         return Util.Beans.Objects.To_Object (Value   => From.Tags_Bean,
+                                              Storage => Util.Beans.Objects.STATIC);
+
       else
          return Util.Beans.Objects.Null_Object;
       end if;
@@ -214,9 +218,10 @@ package body AWA.Questions.Beans is
             Query   : ADO.Queries.Context;
             List    : AWA.Questions.Models.Question_Display_Info_List_Bean;
             Ctx     : constant ASC.Service_Context_Access := ASC.Current;
+            Id      : ADO.Identifier := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
          begin
             Query.Set_Query (AWA.Questions.Models.Query_Question_Info);
-            Query.Bind_Param ("question_id", Util.Beans.Objects.To_Integer (Value));
+            Query.Bind_Param ("question_id", Id);
             Query.Bind_Param ("user_id", Ctx.Get_User_Identifier);
             ADO.Sessions.Entities.Bind_Param (Params  => Query,
                                               Name    => "entity_type",
@@ -236,6 +241,9 @@ package body AWA.Questions.Beans is
 
             Query.Set_Query (AWA.Questions.Models.Query_Answer_List);
             AWA.Questions.Models.List (From.Answer_List, Session, Query);
+
+            --  Load the tags if any.
+            From.Tags.Load_Tags (Session, Id);
          end;
       end if;
    end Set_Value;
@@ -250,6 +258,7 @@ package body AWA.Questions.Beans is
       Object.Service          := Module;
       Object.Question_Bean    := Object.Question'Access;
       Object.Answer_List_Bean := Object.Answer_List'Access;
+      Object.Tags_Bean        := Object.Tags'Access;
       return Object.all'Access;
    end Create_Question_Display_Bean;
 
