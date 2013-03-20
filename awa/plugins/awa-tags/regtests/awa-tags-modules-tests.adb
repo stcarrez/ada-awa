@@ -74,7 +74,7 @@ package body AWA.Tags.Modules.Tests is
          Tag_Manager.Add_Tag (User.Get_Id, "awa_user", "workspaces-create", "user-tag");
 
          --  Load the list.
-         List.Load_Tags (User.Get_Id);
+         List.Load_Tags (Tag_Manager.Get_Session, User.Get_Id);
 
          Util.Tests.Assert_Equals (T, 1, Integer (List.Get_Count), "Invalid number of tags");
       end;
@@ -109,7 +109,7 @@ package body AWA.Tags.Modules.Tests is
          Tag_Manager.Remove_Tag (User.Get_Id, "awa_user", "workspaces-create", "user-tag-1");
 
          --  Load the list.
-         List.Load_Tags (User.Get_Id);
+         List.Load_Tags (Tag_Manager.Get_Session, User.Get_Id);
          Util.Tests.Assert_Equals (T, 2, Integer (List.Get_Count), "Invalid number of tags");
       end;
    end Test_Remove_Tag;
