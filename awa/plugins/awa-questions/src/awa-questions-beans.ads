@@ -22,6 +22,7 @@ with Util.Beans.Basic;
 with Util.Beans.Objects;
 with AWA.Questions.Modules;
 with AWA.Questions.Models;
+with AWA.Tags.Beans;
 package AWA.Questions.Beans is
 
    type Question_Bean is new AWA.Questions.Models.Question_Bean with record
@@ -89,11 +90,17 @@ package AWA.Questions.Beans is
    type Question_Display_Bean is new Util.Beans.Basic.Bean with record
       Service          : Modules.Question_Module_Access := null;
 
+      --  List of answers associated with the question.
       Answer_List      : aliased AWA.Questions.Models.Answer_Info_List_Bean;
       Answer_List_Bean : AWA.Questions.Models.Answer_Info_List_Bean_Access;
 
+      --  The question.
       Question         : aliased AWA.Questions.Models.Question_Display_Info;
       Question_Bean    : Util.Beans.Basic.Readonly_Bean_Access;
+
+      --  List of tags associated with the question.
+      Tags             : aliased AWA.Tags.Beans.Tag_List_Bean;
+      Tags_Bean        : Util.Beans.Basic.Readonly_Bean_Access;
    end record;
    type Question_Display_Bean_Access is access all Question_Display_Bean'Class;
 
