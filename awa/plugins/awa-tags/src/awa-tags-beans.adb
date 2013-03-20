@@ -87,10 +87,11 @@ package body AWA.Tags.Beans is
    --  Load the tags associated with the given database identifier.
    --  ------------------------------
    procedure Load_Tags (Into          : in out Tag_List_Bean;
+                        Session       : in ADO.Sessions.Session;
                         For_Entity_Id : in ADO.Identifier) is
       use ADO.Sessions.Entities;
 
-      Session     : constant ADO.Sessions.Session := Into.Module.Get_Session;
+--        Session     : constant ADO.Sessions.Session := Into.Module.Get_Session;
       Entity_Type : constant String := Ada.Strings.Unbounded.To_String (Into.Entity_Type);
       Kind        : constant ADO.Entity_Type := Find_Entity_Type (Session, Entity_Type);
       Query       : ADO.Queries.Context;

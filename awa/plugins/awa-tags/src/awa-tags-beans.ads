@@ -21,6 +21,7 @@ with Util.Beans.Basic;
 with Util.Beans.Objects.Vectors;
 
 with ADO;
+with ADO.Sessions;
 
 with AWA.Tags.Modules;
 package AWA.Tags.Beans is
@@ -58,6 +59,7 @@ package AWA.Tags.Beans is
 
    --  Load the tags associated with the given database identifier.
    procedure Load_Tags (Into          : in out Tag_List_Bean;
+                        Session       : in ADO.Sessions.Session;
                         For_Entity_Id : in ADO.Identifier);
 
    --  Create the tag list bean instance.
