@@ -84,6 +84,15 @@ package body AWA.Tags.Beans is
    end Get_Row;
 
    --  ------------------------------
+   --  Set the entity type (database table) onto which the tags are associated.
+   --  ------------------------------
+   procedure Set_Entity_Type (Into  : in out Tag_List_Bean;
+                              Table : in ADO.Schemas.Class_Mapping_Access) is
+   begin
+      Into.Entity_Type := Ada.Strings.Unbounded.To_Unbounded_String (Table.Table.all);
+   end Set_Entity_Type;
+
+   --  ------------------------------
    --  Load the tags associated with the given database identifier.
    --  ------------------------------
    procedure Load_Tags (Into          : in out Tag_List_Bean;
