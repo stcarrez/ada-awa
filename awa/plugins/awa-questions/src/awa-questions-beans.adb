@@ -259,6 +259,7 @@ package body AWA.Questions.Beans is
       Object.Question_Bean    := Object.Question'Access;
       Object.Answer_List_Bean := Object.Answer_List'Access;
       Object.Tags_Bean        := Object.Tags'Access;
+      Object.Tags.Set_Entity_Type (AWA.Questions.Models.QUESTION_TABLE);
       return Object.all'Access;
    end Create_Question_Display_Bean;
 
