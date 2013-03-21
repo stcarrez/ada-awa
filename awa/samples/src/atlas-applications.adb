@@ -241,6 +241,11 @@ package body Atlas.Applications is
                 Module => App.Vote_Module'Access);
 
       Register (App    => App.Self.all'Access,
+                Name   => AWA.Tags.Modules.NAME,
+                URI    => "tags",
+                Module => App.Tag_Module'Access);
+
+      Register (App    => App.Self.all'Access,
                 Name   => AWA.Questions.Modules.NAME,
                 URI    => "questions",
                 Module => App.Question_Module'Access);
