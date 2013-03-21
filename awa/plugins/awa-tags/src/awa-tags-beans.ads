@@ -21,6 +21,7 @@ with Util.Beans.Basic;
 with Util.Beans.Objects.Vectors;
 
 with ADO;
+with ADO.Schemas;
 with ADO.Sessions;
 
 with AWA.Tags.Modules;
@@ -56,6 +57,10 @@ package AWA.Tags.Beans is
    --  Get the element at the current row index.
    overriding
    function Get_Row (From  : in Tag_List_Bean) return Util.Beans.Objects.Object;
+
+   --  Set the entity type (database table) onto which the tags are associated.
+   procedure Set_Entity_Type (Into  : in out Tag_List_Bean;
+                              Table : in ADO.Schemas.Class_Mapping_Access);
 
    --  Load the tags associated with the given database identifier.
    procedure Load_Tags (Into          : in out Tag_List_Bean;
