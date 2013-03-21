@@ -11,6 +11,7 @@ with "@AWA_DIR@awa_storages";
 with "@AWA_DIR@awa_images";
 with "@AWA_DIR@awa_questions";
 with "@AWA_DIR@awa_votes";
+with "@AWA_DIR@awa_tags";
 
 project atlas is
 
