@@ -2,7 +2,7 @@
 /*  */
 CREATE TABLE awa_city (
   /* the city identifier */
-  `id` INTEGER PRIMARY KEY,
+  `id` BIGINT PRIMARY KEY,
   /* the city name */
   `name` VARCHAR(255) NOT NULL,
   /* the city ZIP code */
@@ -12,15 +12,15 @@ CREATE TABLE awa_city (
   /* the city longitude */
   `longitude` INTEGER NOT NULL,
   /* the region that this city belongs to */
-  `region_id` INTEGER NOT NULL,
+  `region_id` BIGINT NOT NULL,
   /* the country that this city belongs to */
-  `country_id` INTEGER NOT NULL
+  `country_id` BIGINT NOT NULL
 );
 /* The country model is a system data model for the application.
 In theory, it never changes. */
 CREATE TABLE awa_country (
   /* the country identifier */
-  `id` INTEGER PRIMARY KEY,
+  `id` BIGINT PRIMARY KEY,
   /* the country name */
   `name` VARCHAR(255) NOT NULL,
   /* the continent name */
@@ -44,20 +44,20 @@ CREATE TABLE awa_country_neighbor (
   /*  */
   `id` BIGINT PRIMARY KEY,
   /*  */
-  `neighbor_of_id` INTEGER NOT NULL,
+  `neighbor_of_id` BIGINT NOT NULL,
   /*  */
-  `neighbor_id` INTEGER NOT NULL
+  `neighbor_id` BIGINT NOT NULL
 );
 /* Region defines an area within a country. */
 CREATE TABLE awa_region (
   /* the region identifier */
-  `id` INTEGER PRIMARY KEY,
+  `id` BIGINT PRIMARY KEY,
   /* the region name */
   `name` VARCHAR(255) NOT NULL,
   /* the region geonameid */
   `geonameid` INTEGER NOT NULL,
   /* the country that this region belongs to */
-  `country_id` INTEGER NOT NULL
+  `country_id` BIGINT NOT NULL
 );
 INSERT INTO entity_type (name) VALUES ("awa_city");
 INSERT INTO entity_type (name) VALUES ("awa_country");

@@ -55,11 +55,11 @@ package AWA.Countries.Models is
 
    --  Set the country identifier
    procedure Set_Id (Object : in out Country_Ref;
-                     Value  : in Integer);
+                     Value  : in ADO.Identifier);
 
    --  Get the country identifier
    function Get_Id (Object : in Country_Ref)
-                 return Integer;
+                 return ADO.Identifier;
 
    --  Set the country name
    procedure Set_Name (Object : in out Country_Ref;
@@ -157,13 +157,13 @@ package AWA.Countries.Models is
    --  Raises the NOT_FOUND exception if it does not exist.
    procedure Load (Object  : in out Country_Ref;
                    Session : in out ADO.Sessions.Session'Class;
-                   Id      : in Integer);
+                   Id      : in ADO.Identifier);
 
    --  Load the entity identified by 'Id'.
    --  Returns True in <b>Found</b> if the object was found and False if it does not exist.
    procedure Load (Object  : in out Country_Ref;
                    Session : in out ADO.Sessions.Session'Class;
-                   Id      : in Integer;
+                   Id      : in ADO.Identifier;
                    Found   : out Boolean);
 
    --  Find and load the entity.
@@ -211,11 +211,11 @@ package AWA.Countries.Models is
 
    --  Set the city identifier
    procedure Set_Id (Object : in out City_Ref;
-                     Value  : in Integer);
+                     Value  : in ADO.Identifier);
 
    --  Get the city identifier
    function Get_Id (Object : in City_Ref)
-                 return Integer;
+                 return ADO.Identifier;
 
    --  Set the city name
    procedure Set_Name (Object : in out City_Ref;
@@ -273,13 +273,13 @@ package AWA.Countries.Models is
    --  Raises the NOT_FOUND exception if it does not exist.
    procedure Load (Object  : in out City_Ref;
                    Session : in out ADO.Sessions.Session'Class;
-                   Id      : in Integer);
+                   Id      : in ADO.Identifier);
 
    --  Load the entity identified by 'Id'.
    --  Returns True in <b>Found</b> if the object was found and False if it does not exist.
    procedure Load (Object  : in out City_Ref;
                    Session : in out ADO.Sessions.Session'Class;
-                   Id      : in Integer;
+                   Id      : in ADO.Identifier;
                    Found   : out Boolean);
 
    --  Find and load the entity.
@@ -414,11 +414,11 @@ package AWA.Countries.Models is
 
    --  Set the region identifier
    procedure Set_Id (Object : in out Region_Ref;
-                     Value  : in Integer);
+                     Value  : in ADO.Identifier);
 
    --  Get the region identifier
    function Get_Id (Object : in Region_Ref)
-                 return Integer;
+                 return ADO.Identifier;
 
    --  Set the region name
    procedure Set_Name (Object : in out Region_Ref;
@@ -452,13 +452,13 @@ package AWA.Countries.Models is
    --  Raises the NOT_FOUND exception if it does not exist.
    procedure Load (Object  : in out Region_Ref;
                    Session : in out ADO.Sessions.Session'Class;
-                   Id      : in Integer);
+                   Id      : in ADO.Identifier);
 
    --  Load the entity identified by 'Id'.
    --  Returns True in <b>Found</b> if the object was found and False if it does not exist.
    procedure Load (Object  : in out Region_Ref;
                    Session : in out ADO.Sessions.Session'Class;
-                   Id      : in Integer;
+                   Id      : in ADO.Identifier;
                    Found   : out Boolean);
 
    --  Find and load the entity.
@@ -532,7 +532,7 @@ private
       := Country_Ref'(ADO.Objects.Object_Ref with others => <>);
 
    type Country_Impl is
-      new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_STRING,
+      new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
                                      Of_Class => COUNTRY_DEF'Access)
    with record
        Name : Ada.Strings.Unbounded.Unbounded_String;
@@ -605,7 +605,7 @@ private
       := City_Ref'(ADO.Objects.Object_Ref with others => <>);
 
    type City_Impl is
-      new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_STRING,
+      new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
                                      Of_Class => CITY_DEF'Access)
    with record
        Name : Ada.Strings.Unbounded.Unbounded_String;
@@ -729,7 +729,7 @@ private
       := Region_Ref'(ADO.Objects.Object_Ref with others => <>);
 
    type Region_Impl is
-      new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_STRING,
+      new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
                                      Of_Class => REGION_DEF'Access)
    with record
        Name : Ada.Strings.Unbounded.Unbounded_String;

@@ -28,7 +28,7 @@ package body AWA.Countries.Models is
    use type ADO.Objects.Object_Record;
 
    function Country_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => COUNTRY_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -36,7 +36,7 @@ package body AWA.Countries.Models is
    end Country_Key;
 
    function Country_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => COUNTRY_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -70,19 +70,19 @@ package body AWA.Countries.Models is
    -- ----------------------------------------
 
    procedure Set_Id (Object : in out Country_Ref;
-                     Value  : in Integer) is
+                     Value  : in ADO.Identifier) is
       Impl : Country_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, ADO.Identifier (Value));
+      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
    end Set_Id;
 
    function Get_Id (Object : in Country_Ref)
-                  return Integer is
+                  return ADO.Identifier is
       Impl : constant Country_Access
          := Country_Impl (Object.Get_Object.all)'Access;
    begin
-      return Integer (ADO.Identifier '(Impl.Get_Key_Value));
+      return Impl.Get_Key_Value;
    end Get_Id;
 
 
@@ -356,7 +356,7 @@ package body AWA.Countries.Models is
 
    procedure Load (Object  : in out Country_Ref;
                    Session : in out ADO.Sessions.Session'Class;
-                   Id      : in Integer) is
+                   Id      : in ADO.Identifier) is
       Impl  : constant Country_Access := new Country_Impl;
       Found : Boolean;
       Query : ADO.SQL.Query;
@@ -373,7 +373,7 @@ package body AWA.Countries.Models is
 
    procedure Load (Object  : in out Country_Ref;
                    Session : in out ADO.Sessions.Session'Class;
-                   Id      : in Integer;
+                   Id      : in ADO.Identifier;
                    Found   : out Boolean) is
       Impl  : constant Country_Access := new Country_Impl;
       Query : ADO.SQL.Query;
@@ -448,7 +448,7 @@ package body AWA.Countries.Models is
                    Session : in out ADO.Sessions.Session'Class) is
       Found : Boolean;
       Query : ADO.SQL.Query;
-      Id    : constant Integer := Integer (ADO.Identifier '(Object.Get_Key_Value));
+      Id    : constant ADO.Identifier := Object.Get_Key_Value;
    begin
       Query.Bind_Param (Position => 1, Value => Id);
       Query.Set_Filter ("id = ?");
@@ -607,7 +607,7 @@ package body AWA.Countries.Models is
                    Session : in out ADO.Sessions.Session'Class) is
       pragma Unreferenced (Session);
    begin
-      Object.Set_Key_Value (Stmt.Get_Unbounded_String (0));
+      Object.Set_Key_Value (Stmt.Get_Identifier (0));
       Object.Name := Stmt.Get_Unbounded_String (1);
       Object.Continent := Stmt.Get_Unbounded_String (2);
       Object.Currency := Stmt.Get_Unbounded_String (3);
@@ -619,7 +619,7 @@ package body AWA.Countries.Models is
       ADO.Objects.Set_Created (Object);
    end Load;
    function City_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => CITY_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -627,7 +627,7 @@ package body AWA.Countries.Models is
    end City_Key;
 
    function City_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => CITY_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -663,19 +663,19 @@ package body AWA.Countries.Models is
    -- ----------------------------------------
 
    procedure Set_Id (Object : in out City_Ref;
-                     Value  : in Integer) is
+                     Value  : in ADO.Identifier) is
       Impl : City_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, ADO.Identifier (Value));
+      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
    end Set_Id;
 
    function Get_Id (Object : in City_Ref)
-                  return Integer is
+                  return ADO.Identifier is
       Impl : constant City_Access
          := City_Impl (Object.Get_Object.all)'Access;
    begin
-      return Integer (ADO.Identifier '(Impl.Get_Key_Value));
+      return Impl.Get_Key_Value;
    end Get_Id;
 
 
@@ -835,7 +835,7 @@ package body AWA.Countries.Models is
 
    procedure Load (Object  : in out City_Ref;
                    Session : in out ADO.Sessions.Session'Class;
-                   Id      : in Integer) is
+                   Id      : in ADO.Identifier) is
       Impl  : constant City_Access := new City_Impl;
       Found : Boolean;
       Query : ADO.SQL.Query;
@@ -852,7 +852,7 @@ package body AWA.Countries.Models is
 
    procedure Load (Object  : in out City_Ref;
                    Session : in out ADO.Sessions.Session'Class;
-                   Id      : in Integer;
+                   Id      : in ADO.Identifier;
                    Found   : out Boolean) is
       Impl  : constant City_Access := new City_Impl;
       Query : ADO.SQL.Query;
@@ -927,7 +927,7 @@ package body AWA.Countries.Models is
                    Session : in out ADO.Sessions.Session'Class) is
       Found : Boolean;
       Query : ADO.SQL.Query;
-      Id    : constant Integer := Integer (ADO.Identifier '(Object.Get_Key_Value));
+      Id    : constant ADO.Identifier := Object.Get_Key_Value;
    begin
       Query.Bind_Param (Position => 1, Value => Id);
       Query.Set_Filter ("id = ?");
@@ -1063,7 +1063,7 @@ package body AWA.Countries.Models is
                    Stmt    : in out ADO.Statements.Query_Statement'Class;
                    Session : in out ADO.Sessions.Session'Class) is
    begin
-      Object.Set_Key_Value (Stmt.Get_Unbounded_String (0));
+      Object.Set_Key_Value (Stmt.Get_Identifier (0));
       Object.Name := Stmt.Get_Unbounded_String (1);
       Object.Zip_Code := Stmt.Get_Integer (2);
       Object.Latitude := Stmt.Get_Integer (3);
@@ -1407,7 +1407,7 @@ package body AWA.Countries.Models is
       ADO.Objects.Set_Created (Object);
    end Load;
    function Region_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => REGION_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -1415,7 +1415,7 @@ package body AWA.Countries.Models is
    end Region_Key;
 
    function Region_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => REGION_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -1449,19 +1449,19 @@ package body AWA.Countries.Models is
    -- ----------------------------------------
 
    procedure Set_Id (Object : in out Region_Ref;
-                     Value  : in Integer) is
+                     Value  : in ADO.Identifier) is
       Impl : Region_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, ADO.Identifier (Value));
+      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
    end Set_Id;
 
    function Get_Id (Object : in Region_Ref)
-                  return Integer is
+                  return ADO.Identifier is
       Impl : constant Region_Access
          := Region_Impl (Object.Get_Object.all)'Access;
    begin
-      return Integer (ADO.Identifier '(Impl.Get_Key_Value));
+      return Impl.Get_Key_Value;
    end Get_Id;
 
 
@@ -1567,7 +1567,7 @@ package body AWA.Countries.Models is
 
    procedure Load (Object  : in out Region_Ref;
                    Session : in out ADO.Sessions.Session'Class;
-                   Id      : in Integer) is
+                   Id      : in ADO.Identifier) is
       Impl  : constant Region_Access := new Region_Impl;
       Found : Boolean;
       Query : ADO.SQL.Query;
@@ -1584,7 +1584,7 @@ package body AWA.Countries.Models is
 
    procedure Load (Object  : in out Region_Ref;
                    Session : in out ADO.Sessions.Session'Class;
-                   Id      : in Integer;
+                   Id      : in ADO.Identifier;
                    Found   : out Boolean) is
       Impl  : constant Region_Access := new Region_Impl;
       Query : ADO.SQL.Query;
@@ -1659,7 +1659,7 @@ package body AWA.Countries.Models is
                    Session : in out ADO.Sessions.Session'Class) is
       Found : Boolean;
       Query : ADO.SQL.Query;
-      Id    : constant Integer := Integer (ADO.Identifier '(Object.Get_Key_Value));
+      Id    : constant ADO.Identifier := Object.Get_Key_Value;
    begin
       Query.Bind_Param (Position => 1, Value => Id);
       Query.Set_Filter ("id = ?");
@@ -1770,7 +1770,7 @@ package body AWA.Countries.Models is
                    Stmt    : in out ADO.Statements.Query_Statement'Class;
                    Session : in out ADO.Sessions.Session'Class) is
    begin
-      Object.Set_Key_Value (Stmt.Get_Unbounded_String (0));
+      Object.Set_Key_Value (Stmt.Get_Identifier (0));
       Object.Name := Stmt.Get_Unbounded_String (1);
       Object.Geonameid := Stmt.Get_Integer (2);
       if not Stmt.Is_Null (3) then
