@@ -113,6 +113,137 @@
     </description>
   </context-param>
 
+  <!--  OpenID Orange -->
+  <context-param>
+    <param-name>auth.url.orange</param-name>
+    <param-value>http://openid.orange.fr</param-value>
+    <description>Orange OpenID access point</description>
+  </context-param>
+
+  <context-param>
+    <param-name>auth.provider.orange</param-name>
+    <param-value>openid</param-value>
+    <description>Auth provider to use for Orange</description>
+  </context-param>
+
+  <!--  OpenID Yahoo! -->
+  <context-param>
+    <param-name>auth.url.yahoo</param-name>
+    <param-value>http://open.login.yahooapis.com/openid20/www.yahoo.com/xrds</param-value>
+    <description>Yahoo! OpenID access point</description>
+  </context-param>
+
+  <context-param>
+    <param-name>auth.provider.yahoo</param-name>
+    <param-value>openid</param-value>
+    <description>Auth provider to use for Yahoo!</description>
+  </context-param>
+
+  <!--  OpenID Google -->
+  <context-param>
+    <param-name>auth.url.google</param-name>
+    <param-value>https://www.google.com/accounts/o8/id</param-value>
+    <description>Google OpenID access point</description>
+  </context-param>
+
+  <context-param>
+    <param-name>auth.provider.google</param-name>
+    <param-value>openid</param-value>
+    <description>Auth provider to use for Google</description>
+  </context-param>
+
+  <!--  Facebook Login -->
+  <context-param>
+    <param-name>auth.url.facebook</param-name>
+    <param-value>https://www.facebook.com/dialog/oauth</param-value>
+    <description>Facebook OAuth access point</description>
+  </context-param>
+
+  <context-param>
+    <param-name>auth.provider.facebook</param-name>
+    <param-value>facebook</param-value>
+    <description>Auth provider to use for Facebook</description>
+  </context-param>
+
+  <context-param>
+    <param-name>facebook.callback_url</param-name>
+    <param-value>#{openid-verify}</param-value>
+    <description>Facebook verify callback</description>
+  </context-param>
+
+  <context-param>
+    <param-name>facebook.request_url</param-name>
+    <param-value>https://graph.facebook.com/oauth/access_token</param-value>
+    <description>Facebook request OAuth token access point</description>
+  </context-param>
+
+  <context-param>
+    <param-name>facebook.scope</param-name>
+    <param-value>read_stream,email</param-value>
+    <description>Facebook permission scope</description>
+  </context-param>
+
+  <context-param>
+    <param-name>facebook.client_id</param-name>
+    <param-value>#{app_facebook_client_id}</param-value>
+    <description>Facebook API client ID</description>
+  </context-param>
+
+  <context-param>
+    <param-name>facebook.secret</param-name>
+    <param-value>#{app_facebook_secret}</param-value>
+    <description>Facebook API secret</description>
+  </context-param>
+
+  <!-- Google+ Login -->
+  <context-param>
+    <param-name>auth.url.google-plus</param-name>
+    <param-value>https://accounts.google.com/o/oauth2/auth</param-value>
+    <description>Google+ OAuth access point</description>
+  </context-param>
+
+  <context-param>
+    <param-name>auth.provider.google-plus</param-name>
+    <param-value>google-plus</param-value>
+    <description>Auth provider to use for Google+</description>
+  </context-param>
+
+  <context-param>
+    <param-name>google-plus.issuer</param-name>
+    <param-value>accounts.google.com</param-value>
+    <description>Google+ issuer identification</description>
+  </context-param>
+
+  <context-param>
+    <param-name>google-plus.callback_url</param-name>
+    <param-value>#{openid-verify}</param-value>
+    <description>Google+ verify callback</description>
+  </context-param>
+
+  <context-param>
+    <param-name>google-plus.request_url</param-name>
+    <param-value>https://accounts.google.com/o/oauth2/token</param-value>
+    <description>Google+ request OAuth token access point</description>
+  </context-param>
+
+  <context-param>
+    <param-name>google-plus.scope</param-name>
+    <param-value>openid profile email</param-value>
+    <description>Google+ permission scope</description>
+  </context-param>
+
+  <context-param>
+    <param-name>google-plus.client_id</param-name>
+    <param-value>#{app_google_plus_client_id}</param-value>
+    <description>Google+ API client ID</description>
+  </context-param>
+
+  <context-param>
+    <param-name>google-plus.secret</param-name>
+    <param-value>#{app_google_plus_secret}</param-value>
+    <description>Google+ API secret</description>
+  </context-param>
+
   <servlet-mapping>
     <servlet-name>openid-auth</servlet-name>
     <url-pattern>/auth/auth/*</url-pattern>
