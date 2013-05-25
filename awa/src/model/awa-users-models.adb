@@ -96,7 +96,8 @@ package body AWA.Users.Models is
    end Get_Email;
    function Get_Email (Object : in Email_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Email_Access := Email_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Email_Access
+         := Email_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Email;
    end Get_Email;
@@ -114,7 +115,8 @@ package body AWA.Users.Models is
 
    function Get_Status (Object : in Email_Ref)
                   return MailDeliveryStatus is
-      Impl : constant Email_Access := Email_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Email_Access
+         := Email_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Status;
    end Get_Status;
@@ -130,7 +132,8 @@ package body AWA.Users.Models is
 
    function Get_Last_Error_Date (Object : in Email_Ref)
                   return Ada.Calendar.Time is
-      Impl : constant Email_Access := Email_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Email_Access
+         := Email_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Last_Error_Date;
    end Get_Last_Error_Date;
@@ -138,7 +141,8 @@ package body AWA.Users.Models is
 
    function Get_Version (Object : in Email_Ref)
                   return Integer is
-      Impl : constant Email_Access := Email_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Email_Access
+         := Email_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Version;
    end Get_Version;
@@ -154,7 +158,8 @@ package body AWA.Users.Models is
 
    function Get_Id (Object : in Email_Ref)
                   return ADO.Identifier is
-      Impl : constant Email_Access := Email_Impl (Object.Get_Object.all)'Access;
+      Impl : constant Email_Access
+         := Email_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
@@ -170,7 +175,8 @@ package body AWA.Users.Models is
 
    function Get_User_Id (Object : in Email_Ref)
                   return ADO.Identifier is
-      Impl : constant Email_Access := Email_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Email_Access
+         := Email_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.User_Id;
    end Get_User_Id;
@@ -512,7 +518,8 @@ package body AWA.Users.Models is
    end Get_First_Name;
    function Get_First_Name (Object : in User_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant User_Access := User_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant User_Access
+         := User_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.First_Name;
    end Get_First_Name;
@@ -541,7 +548,8 @@ package body AWA.Users.Models is
    end Get_Last_Name;
    function Get_Last_Name (Object : in User_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant User_Access := User_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant User_Access
+         := User_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Last_Name;
    end Get_Last_Name;
@@ -570,7 +578,8 @@ package body AWA.Users.Models is
    end Get_Password;
    function Get_Password (Object : in User_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant User_Access := User_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant User_Access
+         := User_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Password;
    end Get_Password;
@@ -599,7 +608,8 @@ package body AWA.Users.Models is
    end Get_Open_Id;
    function Get_Open_Id (Object : in User_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant User_Access := User_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant User_Access
+         := User_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Open_Id;
    end Get_Open_Id;
@@ -628,7 +638,8 @@ package body AWA.Users.Models is
    end Get_Country;
    function Get_Country (Object : in User_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant User_Access := User_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant User_Access
+         := User_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Country;
    end Get_Country;
@@ -657,7 +668,8 @@ package body AWA.Users.Models is
    end Get_Name;
    function Get_Name (Object : in User_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant User_Access := User_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant User_Access
+         := User_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Name;
    end Get_Name;
@@ -665,7 +677,8 @@ package body AWA.Users.Models is
 
    function Get_Version (Object : in User_Ref)
                   return Integer is
-      Impl : constant User_Access := User_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant User_Access
+         := User_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Version;
    end Get_Version;
@@ -681,7 +694,8 @@ package body AWA.Users.Models is
 
    function Get_Id (Object : in User_Ref)
                   return ADO.Identifier is
-      Impl : constant User_Access := User_Impl (Object.Get_Object.all)'Access;
+      Impl : constant User_Access
+         := User_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
@@ -697,7 +711,8 @@ package body AWA.Users.Models is
 
    function Get_Email (Object : in User_Ref)
                   return AWA.Users.Models.Email_Ref'Class is
-      Impl : constant User_Access := User_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant User_Access
+         := User_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Email;
    end Get_Email;
@@ -1073,7 +1088,8 @@ package body AWA.Users.Models is
    end Get_Access_Key;
    function Get_Access_Key (Object : in Access_Key_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Access_Key_Access := Access_Key_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Access_Key_Access
+         := Access_Key_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Access_Key;
    end Get_Access_Key;
@@ -1089,7 +1105,8 @@ package body AWA.Users.Models is
 
    function Get_Expire_Date (Object : in Access_Key_Ref)
                   return Ada.Calendar.Time is
-      Impl : constant Access_Key_Access := Access_Key_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Access_Key_Access
+         := Access_Key_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Expire_Date;
    end Get_Expire_Date;
@@ -1105,7 +1122,8 @@ package body AWA.Users.Models is
 
    function Get_Id (Object : in Access_Key_Ref)
                   return ADO.Identifier is
-      Impl : constant Access_Key_Access := Access_Key_Impl (Object.Get_Object.all)'Access;
+      Impl : constant Access_Key_Access
+         := Access_Key_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
@@ -1113,7 +1131,8 @@ package body AWA.Users.Models is
 
    function Get_Version (Object : in Access_Key_Ref)
                   return Integer is
-      Impl : constant Access_Key_Access := Access_Key_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Access_Key_Access
+         := Access_Key_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Version;
    end Get_Version;
@@ -1129,7 +1148,8 @@ package body AWA.Users.Models is
 
    function Get_User (Object : in Access_Key_Ref)
                   return AWA.Users.Models.User_Ref'Class is
-      Impl : constant Access_Key_Access := Access_Key_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Access_Key_Access
+         := Access_Key_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.User;
    end Get_User;
@@ -1451,7 +1471,8 @@ package body AWA.Users.Models is
 
    function Get_Start_Date (Object : in Session_Ref)
                   return Ada.Calendar.Time is
-      Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Session_Access
+         := Session_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Start_Date;
    end Get_Start_Date;
@@ -1467,7 +1488,8 @@ package body AWA.Users.Models is
 
    function Get_End_Date (Object : in Session_Ref)
                   return ADO.Nullable_Time is
-      Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Session_Access
+         := Session_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.End_Date;
    end Get_End_Date;
@@ -1496,7 +1518,8 @@ package body AWA.Users.Models is
    end Get_Ip_Address;
    function Get_Ip_Address (Object : in Session_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Session_Access
+         := Session_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Ip_Address;
    end Get_Ip_Address;
@@ -1514,7 +1537,8 @@ package body AWA.Users.Models is
 
    function Get_Stype (Object : in Session_Ref)
                   return Session_Type is
-      Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Session_Access
+         := Session_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Stype;
    end Get_Stype;
@@ -1522,7 +1546,8 @@ package body AWA.Users.Models is
 
    function Get_Version (Object : in Session_Ref)
                   return Integer is
-      Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Session_Access
+         := Session_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Version;
    end Get_Version;
@@ -1538,7 +1563,8 @@ package body AWA.Users.Models is
 
    function Get_Server_Id (Object : in Session_Ref)
                   return Integer is
-      Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Session_Access
+         := Session_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Server_Id;
    end Get_Server_Id;
@@ -1554,7 +1580,8 @@ package body AWA.Users.Models is
 
    function Get_Id (Object : in Session_Ref)
                   return ADO.Identifier is
-      Impl : constant Session_Access := Session_Impl (Object.Get_Object.all)'Access;
+      Impl : constant Session_Access
+         := Session_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
@@ -1570,7 +1597,8 @@ package body AWA.Users.Models is
 
    function Get_Auth (Object : in Session_Ref)
                   return AWA.Users.Models.Session_Ref'Class is
-      Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Session_Access
+         := Session_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Auth;
    end Get_Auth;
@@ -1586,7 +1614,8 @@ package body AWA.Users.Models is
 
    function Get_User (Object : in Session_Ref)
                   return AWA.Users.Models.User_Ref'Class is
-      Impl : constant Session_Access := Session_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Session_Access
+         := Session_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.User;
    end Get_User;

@@ -82,7 +82,8 @@ package body AWA.Permissions.Models is
 
    function Get_Id (Object : in Acl_Ref)
                   return ADO.Identifier is
-      Impl : constant Acl_Access := Acl_Impl (Object.Get_Object.all)'Access;
+      Impl : constant Acl_Access
+         := Acl_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
@@ -98,7 +99,8 @@ package body AWA.Permissions.Models is
 
    function Get_Entity_Id (Object : in Acl_Ref)
                   return ADO.Identifier is
-      Impl : constant Acl_Access := Acl_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Acl_Access
+         := Acl_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Entity_Id;
    end Get_Entity_Id;
@@ -115,7 +117,8 @@ package body AWA.Permissions.Models is
 
    function Get_Writeable (Object : in Acl_Ref)
                   return Boolean is
-      Impl : constant Acl_Access := Acl_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Acl_Access
+         := Acl_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Writeable;
    end Get_Writeable;
@@ -131,7 +134,8 @@ package body AWA.Permissions.Models is
 
    function Get_User_Id (Object : in Acl_Ref)
                   return ADO.Identifier is
-      Impl : constant Acl_Access := Acl_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Acl_Access
+         := Acl_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.User_Id;
    end Get_User_Id;
@@ -147,7 +151,8 @@ package body AWA.Permissions.Models is
 
    function Get_Entity_Type (Object : in Acl_Ref)
                   return ADO.Entity_Type is
-      Impl : constant Acl_Access := Acl_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Acl_Access
+         := Acl_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Entity_Type;
    end Get_Entity_Type;

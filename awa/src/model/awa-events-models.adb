@@ -79,7 +79,8 @@ package body AWA.Events.Models is
 
    function Get_Id (Object : in Message_Type_Ref)
                   return ADO.Identifier is
-      Impl : constant Message_Type_Access := Message_Type_Impl (Object.Get_Object.all)'Access;
+      Impl : constant Message_Type_Access
+         := Message_Type_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
@@ -108,7 +109,8 @@ package body AWA.Events.Models is
    end Get_Name;
    function Get_Name (Object : in Message_Type_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Message_Type_Access := Message_Type_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Message_Type_Access
+         := Message_Type_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Name;
    end Get_Name;
@@ -415,7 +417,8 @@ package body AWA.Events.Models is
 
    function Get_Id (Object : in Queue_Ref)
                   return ADO.Identifier is
-      Impl : constant Queue_Access := Queue_Impl (Object.Get_Object.all)'Access;
+      Impl : constant Queue_Access
+         := Queue_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
@@ -431,7 +434,8 @@ package body AWA.Events.Models is
 
    function Get_Server_Id (Object : in Queue_Ref)
                   return Integer is
-      Impl : constant Queue_Access := Queue_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Queue_Access
+         := Queue_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Server_Id;
    end Get_Server_Id;
@@ -460,7 +464,8 @@ package body AWA.Events.Models is
    end Get_Name;
    function Get_Name (Object : in Queue_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Queue_Access := Queue_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Queue_Access
+         := Queue_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Name;
    end Get_Name;
@@ -767,7 +772,8 @@ package body AWA.Events.Models is
 
    function Get_Id (Object : in Message_Ref)
                   return ADO.Identifier is
-      Impl : constant Message_Access := Message_Impl (Object.Get_Object.all)'Access;
+      Impl : constant Message_Access
+         := Message_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
@@ -783,7 +789,8 @@ package body AWA.Events.Models is
 
    function Get_Create_Date (Object : in Message_Ref)
                   return Ada.Calendar.Time is
-      Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Message_Access
+         := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Create_Date;
    end Get_Create_Date;
@@ -799,7 +806,8 @@ package body AWA.Events.Models is
 
    function Get_Priority (Object : in Message_Ref)
                   return Integer is
-      Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Message_Access
+         := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Priority;
    end Get_Priority;
@@ -815,7 +823,8 @@ package body AWA.Events.Models is
 
    function Get_Count (Object : in Message_Ref)
                   return Integer is
-      Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Message_Access
+         := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Count;
    end Get_Count;
@@ -844,7 +853,8 @@ package body AWA.Events.Models is
    end Get_Parameters;
    function Get_Parameters (Object : in Message_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Message_Access
+         := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Parameters;
    end Get_Parameters;
@@ -860,7 +870,8 @@ package body AWA.Events.Models is
 
    function Get_Server_Id (Object : in Message_Ref)
                   return Integer is
-      Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Message_Access
+         := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Server_Id;
    end Get_Server_Id;
@@ -876,7 +887,8 @@ package body AWA.Events.Models is
 
    function Get_Task_Id (Object : in Message_Ref)
                   return Integer is
-      Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Message_Access
+         := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Task_Id;
    end Get_Task_Id;
@@ -894,7 +906,8 @@ package body AWA.Events.Models is
 
    function Get_Status (Object : in Message_Ref)
                   return Message_Status_Type is
-      Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Message_Access
+         := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Status;
    end Get_Status;
@@ -910,7 +923,8 @@ package body AWA.Events.Models is
 
    function Get_Processing_Date (Object : in Message_Ref)
                   return ADO.Nullable_Time is
-      Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Message_Access
+         := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Processing_Date;
    end Get_Processing_Date;
@@ -918,7 +932,8 @@ package body AWA.Events.Models is
 
    function Get_Version (Object : in Message_Ref)
                   return Integer is
-      Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Message_Access
+         := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Version;
    end Get_Version;
@@ -934,7 +949,8 @@ package body AWA.Events.Models is
 
    function Get_Entity_Id (Object : in Message_Ref)
                   return ADO.Identifier is
-      Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Message_Access
+         := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Entity_Id;
    end Get_Entity_Id;
@@ -950,7 +966,8 @@ package body AWA.Events.Models is
 
    function Get_Entity_Type (Object : in Message_Ref)
                   return ADO.Entity_Type is
-      Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Message_Access
+         := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Entity_Type;
    end Get_Entity_Type;
@@ -966,7 +983,8 @@ package body AWA.Events.Models is
 
    function Get_Finish_Date (Object : in Message_Ref)
                   return ADO.Nullable_Time is
-      Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Message_Access
+         := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Finish_Date;
    end Get_Finish_Date;
@@ -982,7 +1000,8 @@ package body AWA.Events.Models is
 
    function Get_Queue (Object : in Message_Ref)
                   return AWA.Events.Models.Queue_Ref'Class is
-      Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Message_Access
+         := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Queue;
    end Get_Queue;
@@ -998,7 +1017,8 @@ package body AWA.Events.Models is
 
    function Get_Message_Type (Object : in Message_Ref)
                   return AWA.Events.Models.Message_Type_Ref'Class is
-      Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Message_Access
+         := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Message_Type;
    end Get_Message_Type;
@@ -1014,7 +1034,8 @@ package body AWA.Events.Models is
 
    function Get_User (Object : in Message_Ref)
                   return AWA.Users.Models.User_Ref'Class is
-      Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Message_Access
+         := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.User;
    end Get_User;
@@ -1030,7 +1051,8 @@ package body AWA.Events.Models is
 
    function Get_Session (Object : in Message_Ref)
                   return AWA.Users.Models.Session_Ref'Class is
-      Impl : constant Message_Access := Message_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Message_Access
+         := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Session;
    end Get_Session;

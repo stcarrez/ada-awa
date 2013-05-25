@@ -166,7 +166,8 @@ private
          5 => COL_4_1_NAME'Access
 )
      );
-   ACL_TABLE : constant ADO.Schemas.Class_Mapping_Access := ACL_DEF'Access;
+   ACL_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := ACL_DEF'Access;
 
    Null_ACL : constant ACL_Ref
       := ACL_Ref'(ADO.Objects.Object_Ref with others => <>);

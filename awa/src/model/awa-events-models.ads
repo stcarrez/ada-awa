@@ -440,7 +440,8 @@ private
          2 => COL_1_1_NAME'Access
 )
      );
-   MESSAGE_TYPE_TABLE : constant ADO.Schemas.Class_Mapping_Access := MESSAGE_TYPE_DEF'Access;
+   MESSAGE_TYPE_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := MESSAGE_TYPE_DEF'Access;
 
    Null_Message_Type : constant Message_Type_Ref
       := Message_Type_Ref'(ADO.Objects.Object_Ref with others => <>);
@@ -497,7 +498,8 @@ private
          3 => COL_2_2_NAME'Access
 )
      );
-   QUEUE_TABLE : constant ADO.Schemas.Class_Mapping_Access := QUEUE_DEF'Access;
+   QUEUE_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := QUEUE_DEF'Access;
 
    Null_Queue : constant Queue_Ref
       := Queue_Ref'(ADO.Objects.Object_Ref with others => <>);
@@ -583,7 +585,8 @@ private
          17 => COL_16_3_NAME'Access
 )
      );
-   MESSAGE_TABLE : constant ADO.Schemas.Class_Mapping_Access := MESSAGE_DEF'Access;
+   MESSAGE_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := MESSAGE_DEF'Access;
 
    Null_Message : constant Message_Ref
       := Message_Ref'(ADO.Objects.Object_Ref with others => <>);

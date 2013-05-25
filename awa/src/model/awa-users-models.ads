@@ -562,7 +562,8 @@ private
          6 => COL_5_1_NAME'Access
 )
      );
-   EMAIL_TABLE : constant ADO.Schemas.Class_Mapping_Access := EMAIL_DEF'Access;
+   EMAIL_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := EMAIL_DEF'Access;
 
    Null_Email : constant Email_Ref
       := Email_Ref'(ADO.Objects.Object_Ref with others => <>);
@@ -635,7 +636,8 @@ private
          9 => COL_8_2_NAME'Access
 )
      );
-   USER_TABLE : constant ADO.Schemas.Class_Mapping_Access := USER_DEF'Access;
+   USER_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := USER_DEF'Access;
 
    Null_User : constant User_Ref
       := User_Ref'(ADO.Objects.Object_Ref with others => <>);
@@ -703,7 +705,8 @@ private
          5 => COL_4_3_NAME'Access
 )
      );
-   ACCESS_KEY_TABLE : constant ADO.Schemas.Class_Mapping_Access := ACCESS_KEY_DEF'Access;
+   ACCESS_KEY_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := ACCESS_KEY_DEF'Access;
 
    Null_Access_Key : constant Access_Key_Ref
       := Access_Key_Ref'(ADO.Objects.Object_Ref with others => <>);
@@ -775,7 +778,8 @@ private
          9 => COL_8_4_NAME'Access
 )
      );
-   SESSION_TABLE : constant ADO.Schemas.Class_Mapping_Access := SESSION_DEF'Access;
+   SESSION_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := SESSION_DEF'Access;
 
    Null_Session : constant Session_Ref
       := Session_Ref'(ADO.Objects.Object_Ref with others => <>);
