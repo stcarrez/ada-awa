@@ -182,14 +182,14 @@ package body AWA.Users.Services is
    --  Raises Not_Found exception if the user is not recognized
    --  ------------------------------
    procedure Authenticate (Model     : in User_Service;
-                           Auth      : in Security.OpenID.Authentication;
+                           Auth      : in Security.Auth.Authentication;
                            IpAddr    : in String;
                            Principal : out AWA.Users.Principals.Principal_Access) is
       --  Update the user first name/last name
       procedure Update_User;
 
-      OpenId  : constant String := Security.OpenID.Get_Claimed_Id (Auth);
-      Email   : constant String := Security.OpenID.Get_Email (Auth);
+      OpenId  : constant String := Security.Auth.Get_Claimed_Id (Auth);
+      Email   : constant String := Security.Auth.Get_Email (Auth);
       Ctx     : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB      : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Query   : ADO.SQL.Query;
@@ -201,9 +201,9 @@ package body AWA.Users.Services is
       --  Update the user first name/last name
       --  ------------------------------
       procedure Update_User is
-         Name       : constant String := Security.OpenID.Get_Full_Name (Auth);
-         First_Name : constant String := Security.OpenID.Get_First_Name (Auth);
-         Last_Name  : constant String := Security.OpenID.Get_Last_Name (Auth);
+         Name       : constant String := Security.Auth.Get_Full_Name (Auth);
+         First_Name : constant String := Security.Auth.Get_First_Name (Auth);
+         Last_Name  : constant String := Security.Auth.Get_Last_Name (Auth);
          Sep        : constant Natural := Util.Strings.Index (Name, ' ');
       begin
          if Name'Length > 0 and Name /= String '(User.Get_Name) then
