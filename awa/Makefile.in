@@ -112,6 +112,7 @@ pre-install:
 	$(MKDIR) -p ${includedir}/awaunit
 	$(MKDIR) -p ${projectdir}/
 	${MKDIR} -p ${alidir}/awaunit/$(LIBRARY_TYPE)
+	$(MKDIR) -p ${dynamodir}/base/uml
 	${CP} awaunit/*.ad[bs] ${includedir}/awaunit
 	sed -e "s,INSTALL,${prefix},g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" < distrib/awaunit.gpr > ${projectdir}/awaunit.gpr
 	${CP} lib/awaunit/$(LIBRARY_TYPE)/*.ali ${alidir}/awaunit/$(LIBRARY_TYPE)/
