@@ -71,6 +71,15 @@ package body AWA.Applications is
    begin
       Log.Info ("Initializing configuration");
 
+      if Conf.Get ("app.modules.dir", "") = "" then
+         Conf.Set ("app.modules.dir", "#{fn:composePath(app_search_dirs,'config')}");
+      end if;
+      if Conf.Get ("bundle.dir", "") = "" then
+         Conf.Set ("bundle.dir", "#{fn:composePath(app_search_dirs,'bundles')}");
+      end if;
+      if Conf.Get ("ado.queries.paths", "") = "" then
+         Conf.Set ("ado.queries.paths", "#{fn:composePath(app_search_dirs,'db')}");
+      end if;
       ASF.Applications.Main.Application (App).Initialize_Config (Conf);
       ADO.Drivers.Initialize (Conf);
       App.DB_Factory.Create (Conf.Get ("database"));
@@ -132,9 +141,9 @@ package body AWA.Applications is
       procedure Load_Config (File : in String;
                              Done : out Boolean);
 
-      Paths : constant String := App.Get_Config (P_Module_Dir.P);
-      Files : constant String := App.Get_Config (P_Config_File.P);
-      Ctx   : aliased EL.Contexts.Default.Default_Context;
+      Paths     : constant String := App.Get_Config (P_Module_Dir.P);
+      Files     : constant String := App.Get_Config (P_Config_File.P);
+      Ctx       : aliased EL.Contexts.Default.Default_Context;
 
       procedure Load_Config (File : in String;
                              Done : out Boolean) is

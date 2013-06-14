@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa -- Ada Web Application
---  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +27,8 @@ package AWA.Applications is
 
    --  Directories where the configuration files are searched.
    package P_Module_Dir is
-     new ASF.Applications.Main.Configs.Parameter ("app.modules.dir", "./config");
+     new ASF.Applications.Main.Configs.Parameter ("app.modules.dir",
+                                                  "#{fn:composePath(app_search_dirs,'config')}");
 
    --  A list of configuration files separated by ';'.  These files are searched in
    --  'app.modules.dir' and loaded in the order specified.
