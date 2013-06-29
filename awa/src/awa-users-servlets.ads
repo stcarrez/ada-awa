@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-servlets -- OpenID verification servlet for user authentication
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,7 @@
 
 with ASF.Principals;
 with ASF.Security.Servlets;
-with Security.Openid;
+with Security.Auth;
 package AWA.Users.Servlets is
 
    --  ------------------------------
@@ -36,7 +36,7 @@ package AWA.Users.Servlets is
    --  and will be destroyed when the session is closed.
    overriding
    procedure Create_Principal (Server : in Verify_Auth_Servlet;
-                               Auth   : in Security.Openid.Authentication;
+                               Auth   : in Security.Auth.Authentication;
                                Result : out ASF.Principals.Principal_Access);
 
 private

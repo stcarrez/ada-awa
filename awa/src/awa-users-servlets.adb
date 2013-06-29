@@ -28,7 +28,7 @@ package body AWA.Users.Servlets is
    --  ------------------------------
    overriding
    procedure Create_Principal (Server : in Verify_Auth_Servlet;
-                               Auth   : in Security.OpenID.Authentication;
+                               Auth   : in Security.Auth.Authentication;
                                Result : out ASF.Principals.Principal_Access) is
       pragma Unreferenced (Server);
       use AWA.Users.Modules;
