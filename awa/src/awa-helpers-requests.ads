@@ -28,4 +28,9 @@ package AWA.Helpers.Requests is
    function Get_Parameter (Name    : in String;
                            Default : in Integer) return Integer;
 
+   --  Get the parameter identified by the given name and return it as a string.
+   --  Returns the default value if the parameter does not exist or is not valid.
+   function Get_Parameter (Name    : in String;
+                           Default : in String) return String;
+
 end AWA.Helpers.Requests;

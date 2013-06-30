@@ -56,4 +56,23 @@ package body AWA.Helpers.Requests is
          return Default;
    end Get_Parameter;
 
+   --  ------------------------------
+   --  Get the parameter identified by the given name and return it as a string.
+   --  Returns the default value if the parameter does not exist or is not valid.
+   --  ------------------------------
+   function Get_Parameter (Name    : in String;
+                           Default : in String) return String is
+      Ctx  : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
+      P    : constant String := Ctx.Get_Parameter (Name);
+   begin
+      if P = "" then
+         return Default;
+      else
+         return P;
+      end if;
+   exception
+      when others =>
+         return Default;
+   end Get_Parameter;
+
 end AWA.Helpers.Requests;
