@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with Util.Dates.ISO8601;
 with ASF.Contexts.Faces;
 package body AWA.Helpers.Requests is
 
@@ -73,6 +74,26 @@ package body AWA.Helpers.Requests is
    exception
       when others =>
          return Default;
+   end Get_Parameter;
+
+   --  ------------------------------
+   --  Get the parameter identified by the given name and return it as a date.
+   --  Returns the default value if the parameter does not exist or is not a valid date.
+   --  The date is assumed to be in ISO8601 format.
+   --  ------------------------------
+   function Get_Parameter (Name    : in String;
+                           Default : in String) return Ada.Calendar.Time is
+      Ctx  : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
+      P    : constant String := Ctx.Get_Parameter (Name);
+   begin
+      if P = "" then
+         return Util.Dates.ISO8601.Value (Default);
+      else
+         return Util.Dates.ISO8601.Value (P);
+      end if;
+   exception
+      when others =>
+         return Util.Dates.ISO8601.Value (Default);
    end Get_Parameter;
 
 end AWA.Helpers.Requests;

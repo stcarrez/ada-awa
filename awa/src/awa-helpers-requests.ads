@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with Ada.Calendar;
 with ADO;
 package AWA.Helpers.Requests is
 
@@ -32,5 +33,11 @@ package AWA.Helpers.Requests is
    --  Returns the default value if the parameter does not exist or is not valid.
    function Get_Parameter (Name    : in String;
                            Default : in String) return String;
+
+   --  Get the parameter identified by the given name and return it as a date.
+   --  Returns the default value if the parameter does not exist or is not a valid date.
+   --  The date is assumed to be in ISO8601 format.
+   function Get_Parameter (Name    : in String;
+                           Default : in String) return Ada.Calendar.Time;
 
 end AWA.Helpers.Requests;
