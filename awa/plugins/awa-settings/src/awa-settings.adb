@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Ada.Strings.Unbounded;
+with Util.Strings;
 with AWA.Settings.Modules;
 package body AWA.Settings is
 
