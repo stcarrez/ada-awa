@@ -23,6 +23,10 @@ package AWA.Settings.Modules is
    --  The name under which the module is registered.
    NAME : constant String := "awa-settings";
 
+   --  The settings manager controls the creation and update of user settings.
+   --  It maintains a small LRU cache of user settings that have been loaded and
+   --  used by the application.  The settings manager is intended to be stored as
+   --  an HTTP session attribute.
    type Setting_Manager is new AWA.Modules.Module_Manager with private;
    type Setting_Manager_Access is access all Setting_Manager'Class;
 
