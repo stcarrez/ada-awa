@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-services-filters -- Setup service context in request processing flow
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +21,8 @@ with AWA.Applications;
 with AWA.Users.Principals;
 
 with ASF.Principals;
+with ASF.Sessions;
+with Util.Beans.Objects;
 
 package body AWA.Services.Filters is
 
@@ -44,10 +46,41 @@ package body AWA.Services.Filters is
 
       use type ASF.Principals.Principal_Access;
 
+      type Context_Type is new AWA.Services.Contexts.Service_Context with null record;
+
+      --  Get the attribute registered under the given name in the HTTP session.
+      overriding
+      function Get_Session_Attribute (Ctx  : in Context_Type;
+                                      Name : in String) return Util.Beans.Objects.Object;
+
+      --  Set the attribute registered under the given name in the HTTP session.
+      overriding
+      procedure Set_Session_Attribute (Ctx   : in out Context_Type;
+                                       Name  : in String;
+                                       Value : in Util.Beans.Objects.Object);
+
+      overriding
+      function Get_Session_Attribute (Ctx  : in Context_Type;
+                                      Name : in String) return Util.Beans.Objects.Object is
+         pragma Unreferenced (Ctx);
+      begin
+         return Request.Get_Session.Get_Attribute (Name);
+      end Get_Session_Attribute;
+
+      --  Set the attribute registered under the given name in the HTTP session.
+      overriding
+      procedure Set_Session_Attribute (Ctx   : in out Context_Type;
+                                       Name  : in String;
+                                       Value : in Util.Beans.Objects.Object) is
+         S : ASF.Sessions.Session := Request.Get_Session;
+      begin
+         S.Set_Attribute (Name, Value);
+      end Set_Session_Attribute;
+
       App : constant ASF.Servlets.Servlet_Registry_Access
         := ASF.Servlets.Get_Servlet_Context (Chain);
       P   : constant ASF.Principals.Principal_Access := Request.Get_User_Principal;
-      Context     : aliased AWA.Services.Contexts.Service_Context;
+      Context     : aliased Context_Type;
       Principal   : AWA.Users.Principals.Principal_Access;
       Application : AWA.Applications.Application_Access;
    begin
