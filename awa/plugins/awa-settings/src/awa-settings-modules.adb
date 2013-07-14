@@ -20,6 +20,8 @@ with Ada.Unchecked_Deallocation;
 with AWA.Services.Contexts;
 with AWA.Modules.Get;
 with Util.Log.Loggers;
+with Util.Beans.Objects;
+with Util.Beans.Basic;
 package body AWA.Settings.Modules is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Awa.Awa-settings.Module");
@@ -47,13 +49,20 @@ package body AWA.Settings.Modules is
 
    function Current return Setting_Manager_Access is
       Ctx : ASC.Service_Context_Access := ASC.Current;
+      Obj : Util.Beans.Objects.Object := Ctx.Get_Session_Attribute ("AWA.Settings");
+      Bean : access Util.Beans.Basic.Readonly_Bean'Class := Util.Beans.Objects.To_Bean (Obj);
    begin
---        Settings := Ctx.Get_Session_Attribute ("AWA.Settings");
---        if Settings = null then
---           --  create
---           null;
---        end if;
-      return null;
+      if Bean = null or else not (Bean.all in Setting_Manager'Class) then
+         declare
+            Mgr : Setting_Manager_Access := new Setting_Manager;
+         begin
+            Obj := Util.Beans.Objects.To_Object (Mgr.all'Access);
+            Ctx.Set_Session_Attribute ("AWA.Settings", Obj);
+            return Mgr;
+         end;
+      else
+         return Setting_Manager'Class (Bean.all)'Access;
+      end if;
    end Current;
 
    --  ------------------------------
