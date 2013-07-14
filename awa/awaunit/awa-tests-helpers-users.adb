@@ -164,7 +164,7 @@ package body AWA.Tests.Helpers.Users is
    --  ------------------------------
    --  Simulate a user login in the given service context.
    --  ------------------------------
-   procedure Login (Context     : in out AWA.Services.Contexts.Service_Context;
+   procedure Login (Context     : in out AWA.Services.Contexts.Service_Context'Class;
                     Sec_Context : in out Security.Contexts.Security_Context;
                     Email       : in String) is
       User      : Test_User;
@@ -182,7 +182,7 @@ package body AWA.Tests.Helpers.Users is
    --  ------------------------------
    --  Setup the context and security context to simulate an anonymous user.
    --  ------------------------------
-   procedure Anonymous (Context     : in out AWA.Services.Contexts.Service_Context;
+   procedure Anonymous (Context     : in out AWA.Services.Contexts.Service_Context'Class;
                         Sec_Context : in out Security.Contexts.Security_Context) is
       App : constant AWA.Applications.Application_Access := AWA.Tests.Get_Application;
    begin
