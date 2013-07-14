@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-services -- Services
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +22,7 @@ with AWA.Users.Models;
 
 with ADO;
 with ADO.Sessions;
+with Util.Beans.Objects;
 
 with Ada.Finalization;
 
@@ -69,6 +70,15 @@ package AWA.Services.Contexts is
    --  Rollback the current transaction.  The database transaction is rollback at the first
    --  call to <b>Rollback</b>.
    procedure Rollback (Ctx : in out Service_Context);
+
+   --  Get the attribute registered under the given name in the HTTP session.
+   function Get_Session_Attribute (Ctx  : in Service_Context;
+                                   Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the attribute registered under the given name in the HTTP session.
+   procedure Set_Session_Attribute (Ctx   : in out Service_Context;
+                                    Name  : in String;
+                                    Value : in Util.Beans.Objects.Object);
 
    --  Initializes the service context.
    overriding

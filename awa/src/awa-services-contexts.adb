@@ -137,6 +137,26 @@ package body AWA.Services.Contexts is
    end Rollback;
 
    --  ------------------------------
+   --  Get the attribute registered under the given name in the HTTP session.
+   --  ------------------------------
+   function Get_Session_Attribute (Ctx  : in Service_Context;
+                                   Name : in String) return Util.Beans.Objects.Object is
+      pragma Unreferenced (Ctx, Name);
+   begin
+      return Util.Beans.Objects.Null_Object;
+   end Get_Session_Attribute;
+
+   --  ------------------------------
+   --  Set the attribute registered under the given name in the HTTP session.
+   --  ------------------------------
+   procedure Set_Session_Attribute (Ctx   : in out Service_Context;
+                                    Name  : in String;
+                                    Value : in Util.Beans.Objects.Object) is
+   begin
+      null;
+   end Set_Session_Attribute;
+
+   --  ------------------------------
    --  Set the current application and user context.
    --  ------------------------------
    procedure Set_Context (Ctx         : in out Service_Context;
