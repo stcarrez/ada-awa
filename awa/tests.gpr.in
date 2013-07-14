@@ -15,6 +15,8 @@ with "plugins/awa-jobs/awa_jobs";
 with "plugins/awa-blogs/awa_blogs";
 with "plugins/awa-votes/awa_votes";
 with "plugins/awa-questions/awa_questions";
+with "plugins/awa-tags/awa_tags";
+with "plugins/awa-settings/awa_settings";
 
 project Tests is
 
@@ -26,6 +28,8 @@ project Tests is
 	"plugins/awa-storages/regtests",
 	"plugins/awa-images/regtests",
 	"plugins/awa-votes/regtests",
+	"plugins/awa-tags/regtests",
+	"plugins/awa-settings/regtests",
 	"plugins/awa-questions/regtests");
 
    for Main use Mains;
