@@ -137,6 +137,11 @@ package body AWA.Settings.Modules is
             Previous := Item;
             Item := Item.Next_Setting;
          end loop;
+         Item := new Setting_Data;
+         Item.Name  := Ada.Strings.Unbounded.To_Unbounded_String (Name);
+         Item.Value := Ada.Strings.Unbounded.To_Unbounded_String (Value);
+         Item.Next_Setting := First;
+         First := Item;
       end Set;
 
       procedure Clear is
