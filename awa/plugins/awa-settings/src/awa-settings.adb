@@ -39,8 +39,11 @@ package body AWA.Settings is
    --  ------------------------------
    function Get_User_Setting (Name    : in String;
                               Default : in Integer) return Integer is
+      Mgr   : constant AWA.Settings.Modules.Setting_Manager_Access := AWA.Settings.Modules.Current;
+      Value : Ada.Strings.Unbounded.Unbounded_String;
    begin
-      return Default;
+      Mgr.Get (Name, Integer'Image (Default), Value);
+      return Integer'Value (Ada.Strings.Unbounded.To_String (Value));
    end Get_User_Setting;
 
    --  ------------------------------
