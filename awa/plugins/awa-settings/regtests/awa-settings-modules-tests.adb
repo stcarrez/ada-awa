@@ -42,6 +42,8 @@ package body AWA.Settings.Modules.Tests is
    begin
       Caller.Add_Test (Suite, "Test AWA.Settings.Get_User_Setting",
                        Test_Get_User_Setting'Access);
+      Caller.Add_Test (Suite, "Test AWA.Settings.Set_User_Setting",
+                       Test_Set_User_Setting'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -67,8 +69,22 @@ package body AWA.Settings.Modules.Tests is
    --  Test saving a user setting.
    --  ------------------------------
    procedure Test_Set_User_Setting (T : in out Test) is
+      Sec_Ctx   : Security.Contexts.Security_Context;
+      Context   : AWA.Tests.Helpers.Contexts.Service_Context;
    begin
-      null;
+      AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-setting@test.com");
+
+      for I in 1 .. 10 loop
+         declare
+            Name : constant String  := "setting-" & Natural'Image (I);
+            R    : Integer;
+         begin
+            AWA.Settings.Set_User_Setting (Name, I);
+
+            R := AWA.Settings.Get_User_Setting (Name, 0);
+            Util.Tests.Assert_Equals (T, I, R, "Invalid Set_User_Setting result");
+         end;
+      end loop;
    end Test_Set_User_Setting;
 
 end AWA.Settings.Modules.Tests;
