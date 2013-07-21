@@ -2,7 +2,7 @@ with "../../awa";
 project awa_settings is
    Version      := awa.Version;
    Name         := "awa-settings";
-   for Source_Dirs use ("src");
+   for Source_Dirs use ("src", "src/model");
    for Library_Name use Name;
    for Library_Dir use awa.Library_Dir & "/" & Name;
    for Library_Kind use awa.Library_Type;
