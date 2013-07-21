@@ -261,7 +261,8 @@ private
          14 => COL_13_1_NAME'Access
 )
      );
-   JOB_TABLE : constant ADO.Schemas.Class_Mapping_Access := JOB_DEF'Access;
+   JOB_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := JOB_DEF'Access;
 
    Null_Job : constant Job_Ref
       := Job_Ref'(ADO.Objects.Object_Ref with others => <>);

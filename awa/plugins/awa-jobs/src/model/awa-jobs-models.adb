@@ -86,7 +86,8 @@ package body AWA.Jobs.Models is
 
    function Get_Id (Object : in Job_Ref)
                   return ADO.Identifier is
-      Impl : constant Job_Access := Job_Impl (Object.Get_Object.all)'Access;
+      Impl : constant Job_Access
+         := Job_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
@@ -104,7 +105,8 @@ package body AWA.Jobs.Models is
 
    function Get_Status (Object : in Job_Ref)
                   return Job_Status_Type is
-      Impl : constant Job_Access := Job_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Job_Access
+         := Job_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Status;
    end Get_Status;
@@ -133,7 +135,8 @@ package body AWA.Jobs.Models is
    end Get_Name;
    function Get_Name (Object : in Job_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Job_Access := Job_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Job_Access
+         := Job_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Name;
    end Get_Name;
@@ -149,7 +152,8 @@ package body AWA.Jobs.Models is
 
    function Get_Start_Date (Object : in Job_Ref)
                   return ADO.Nullable_Time is
-      Impl : constant Job_Access := Job_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Job_Access
+         := Job_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Start_Date;
    end Get_Start_Date;
@@ -165,7 +169,8 @@ package body AWA.Jobs.Models is
 
    function Get_Create_Date (Object : in Job_Ref)
                   return Ada.Calendar.Time is
-      Impl : constant Job_Access := Job_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Job_Access
+         := Job_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Create_Date;
    end Get_Create_Date;
@@ -181,7 +186,8 @@ package body AWA.Jobs.Models is
 
    function Get_Finish_Date (Object : in Job_Ref)
                   return ADO.Nullable_Time is
-      Impl : constant Job_Access := Job_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Job_Access
+         := Job_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Finish_Date;
    end Get_Finish_Date;
@@ -197,7 +203,8 @@ package body AWA.Jobs.Models is
 
    function Get_Progress (Object : in Job_Ref)
                   return Integer is
-      Impl : constant Job_Access := Job_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Job_Access
+         := Job_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Progress;
    end Get_Progress;
@@ -226,7 +233,8 @@ package body AWA.Jobs.Models is
    end Get_Parameters;
    function Get_Parameters (Object : in Job_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Job_Access := Job_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Job_Access
+         := Job_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Parameters;
    end Get_Parameters;
@@ -255,7 +263,8 @@ package body AWA.Jobs.Models is
    end Get_Results;
    function Get_Results (Object : in Job_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Job_Access := Job_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Job_Access
+         := Job_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Results;
    end Get_Results;
@@ -263,7 +272,8 @@ package body AWA.Jobs.Models is
 
    function Get_Version (Object : in Job_Ref)
                   return Integer is
-      Impl : constant Job_Access := Job_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Job_Access
+         := Job_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Version;
    end Get_Version;
@@ -279,7 +289,8 @@ package body AWA.Jobs.Models is
 
    function Get_Priority (Object : in Job_Ref)
                   return Integer is
-      Impl : constant Job_Access := Job_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Job_Access
+         := Job_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Priority;
    end Get_Priority;
@@ -295,7 +306,8 @@ package body AWA.Jobs.Models is
 
    function Get_User (Object : in Job_Ref)
                   return AWA.Users.Models.User_Ref'Class is
-      Impl : constant Job_Access := Job_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Job_Access
+         := Job_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.User;
    end Get_User;
@@ -311,7 +323,8 @@ package body AWA.Jobs.Models is
 
    function Get_Event (Object : in Job_Ref)
                   return AWA.Events.Models.Message_Ref'Class is
-      Impl : constant Job_Access := Job_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Job_Access
+         := Job_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Event;
    end Get_Event;
@@ -327,7 +340,8 @@ package body AWA.Jobs.Models is
 
    function Get_Session (Object : in Job_Ref)
                   return AWA.Users.Models.Session_Ref'Class is
-      Impl : constant Job_Access := Job_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Job_Access
+         := Job_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Session;
    end Get_Session;
