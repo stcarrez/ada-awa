@@ -43,6 +43,7 @@ package AWA.Settings.Modules is
                   Default : in String;
                   Value   : out Ada.Strings.Unbounded.Unbounded_String);
 
+   --  Get the current setting manager for the current user.
    function Current return Setting_Manager_Access;
 
    --  ------------------------------
@@ -51,13 +52,13 @@ package AWA.Settings.Modules is
    type Setting_Module is new AWA.Modules.Module with private;
    type Setting_Module_Access is access all Setting_Module'Class;
 
-   --  Initialize the awa-settings module.
+   --  Initialize the settings module.
    overriding
    procedure Initialize (Plugin : in out Setting_Module;
                          App    : in AWA.Modules.Application_Access;
                          Props  : in ASF.Applications.Config);
 
-   --  Get the awa-settings module.
+   --  Get the settings module.
    function Get_Setting_Module return Setting_Module_Access;
 
 
