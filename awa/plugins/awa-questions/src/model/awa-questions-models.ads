@@ -584,7 +584,8 @@ private
          11 => COL_10_1_NAME'Access
 )
      );
-   QUESTION_TABLE : constant ADO.Schemas.Class_Mapping_Access := QUESTION_DEF'Access;
+   QUESTION_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := QUESTION_DEF'Access;
 
    Null_Question : constant Question_Ref
       := Question_Ref'(ADO.Objects.Object_Ref with others => <>);
@@ -660,7 +661,8 @@ private
          8 => COL_7_2_NAME'Access
 )
      );
-   ANSWER_TABLE : constant ADO.Schemas.Class_Mapping_Access := ANSWER_DEF'Access;
+   ANSWER_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := ANSWER_DEF'Access;
 
    Null_Answer : constant Answer_Ref
       := Answer_Ref'(ADO.Objects.Object_Ref with others => <>);

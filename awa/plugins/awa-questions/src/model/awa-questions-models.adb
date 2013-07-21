@@ -84,7 +84,8 @@ package body AWA.Questions.Models is
 
    function Get_Create_Date (Object : in Question_Ref)
                   return Ada.Calendar.Time is
-      Impl : constant Question_Access := Question_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Question_Access
+         := Question_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Create_Date;
    end Get_Create_Date;
@@ -113,7 +114,8 @@ package body AWA.Questions.Models is
    end Get_Title;
    function Get_Title (Object : in Question_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Question_Access := Question_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Question_Access
+         := Question_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Title;
    end Get_Title;
@@ -142,7 +144,8 @@ package body AWA.Questions.Models is
    end Get_Description;
    function Get_Description (Object : in Question_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Question_Access := Question_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Question_Access
+         := Question_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Description;
    end Get_Description;
@@ -158,7 +161,8 @@ package body AWA.Questions.Models is
 
    function Get_Edit_Date (Object : in Question_Ref)
                   return Ada.Calendar.Time is
-      Impl : constant Question_Access := Question_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Question_Access
+         := Question_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Edit_Date;
    end Get_Edit_Date;
@@ -187,7 +191,8 @@ package body AWA.Questions.Models is
    end Get_Short_Description;
    function Get_Short_Description (Object : in Question_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Question_Access := Question_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Question_Access
+         := Question_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Short_Description;
    end Get_Short_Description;
@@ -203,7 +208,8 @@ package body AWA.Questions.Models is
 
    function Get_Rating (Object : in Question_Ref)
                   return Integer is
-      Impl : constant Question_Access := Question_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Question_Access
+         := Question_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Rating;
    end Get_Rating;
@@ -219,7 +225,8 @@ package body AWA.Questions.Models is
 
    function Get_Id (Object : in Question_Ref)
                   return ADO.Identifier is
-      Impl : constant Question_Access := Question_Impl (Object.Get_Object.all)'Access;
+      Impl : constant Question_Access
+         := Question_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
@@ -227,7 +234,8 @@ package body AWA.Questions.Models is
 
    function Get_Version (Object : in Question_Ref)
                   return Integer is
-      Impl : constant Question_Access := Question_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Question_Access
+         := Question_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Version;
    end Get_Version;
@@ -243,7 +251,8 @@ package body AWA.Questions.Models is
 
    function Get_Author (Object : in Question_Ref)
                   return AWA.Users.Models.User_Ref'Class is
-      Impl : constant Question_Access := Question_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Question_Access
+         := Question_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Author;
    end Get_Author;
@@ -259,7 +268,8 @@ package body AWA.Questions.Models is
 
    function Get_Workspace (Object : in Question_Ref)
                   return AWA.Workspaces.Models.Workspace_Ref'Class is
-      Impl : constant Question_Access := Question_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Question_Access
+         := Question_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Workspace;
    end Get_Workspace;
@@ -275,7 +285,8 @@ package body AWA.Questions.Models is
 
    function Get_Accepted_Answer (Object : in Question_Ref)
                   return AWA.Questions.Models.Answer_Ref'Class is
-      Impl : constant Question_Access := Question_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Question_Access
+         := Question_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Accepted_Answer;
    end Get_Accepted_Answer;
@@ -662,7 +673,8 @@ package body AWA.Questions.Models is
 
    function Get_Create_Date (Object : in Answer_Ref)
                   return Ada.Calendar.Time is
-      Impl : constant Answer_Access := Answer_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Answer_Access
+         := Answer_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Create_Date;
    end Get_Create_Date;
@@ -678,7 +690,8 @@ package body AWA.Questions.Models is
 
    function Get_Edit_Date (Object : in Answer_Ref)
                   return ADO.Nullable_Time is
-      Impl : constant Answer_Access := Answer_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Answer_Access
+         := Answer_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Edit_Date;
    end Get_Edit_Date;
@@ -707,7 +720,8 @@ package body AWA.Questions.Models is
    end Get_Answer;
    function Get_Answer (Object : in Answer_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Answer_Access := Answer_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Answer_Access
+         := Answer_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Answer;
    end Get_Answer;
@@ -723,7 +737,8 @@ package body AWA.Questions.Models is
 
    function Get_Rank (Object : in Answer_Ref)
                   return Integer is
-      Impl : constant Answer_Access := Answer_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Answer_Access
+         := Answer_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Rank;
    end Get_Rank;
@@ -739,7 +754,8 @@ package body AWA.Questions.Models is
 
    function Get_Id (Object : in Answer_Ref)
                   return ADO.Identifier is
-      Impl : constant Answer_Access := Answer_Impl (Object.Get_Object.all)'Access;
+      Impl : constant Answer_Access
+         := Answer_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
@@ -747,7 +763,8 @@ package body AWA.Questions.Models is
 
    function Get_Version (Object : in Answer_Ref)
                   return Integer is
-      Impl : constant Answer_Access := Answer_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Answer_Access
+         := Answer_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Version;
    end Get_Version;
@@ -763,7 +780,8 @@ package body AWA.Questions.Models is
 
    function Get_Author (Object : in Answer_Ref)
                   return AWA.Users.Models.User_Ref'Class is
-      Impl : constant Answer_Access := Answer_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Answer_Access
+         := Answer_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Author;
    end Get_Author;
@@ -779,7 +797,8 @@ package body AWA.Questions.Models is
 
    function Get_Question (Object : in Answer_Ref)
                   return AWA.Questions.Models.Question_Ref'Class is
-      Impl : constant Answer_Access := Answer_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Answer_Access
+         := Answer_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Question;
    end Get_Question;
