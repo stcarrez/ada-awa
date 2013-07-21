@@ -31,4 +31,7 @@ package AWA.Settings.Modules.Tests is
    --  Test saving a user setting.
    procedure Test_Set_User_Setting (T : in out Test);
 
+   --  Test performance on user setting.
+   procedure Test_Perf_User_Setting (T : in out Test);
+
 end AWA.Settings.Modules.Tests;

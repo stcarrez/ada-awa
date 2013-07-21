@@ -15,26 +15,17 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with Ada.Strings.Unbounded;
 
 with Util.Test_Caller;
-with Util.Beans.Basic;
-with Util.Beans.Objects;
+with Util.Measures;
 
-with ADO;
 with Security.Contexts;
 
-with ASF.Contexts.Faces;
-with ASF.Contexts.Faces.Mockup;
-
-with AWA.Permissions;
-with AWA.Services.Contexts;
 with AWA.Tests.Helpers.Users;
 with AWA.Tests.Helpers.Contexts;
 package body AWA.Settings.Modules.Tests is
 
    use Util.Tests;
-   use ADO;
 
    package Caller is new Util.Test_Caller (Test, "Questions.Services");
 
@@ -44,6 +35,8 @@ package body AWA.Settings.Modules.Tests is
                        Test_Get_User_Setting'Access);
       Caller.Add_Test (Suite, "Test AWA.Settings.Set_User_Setting",
                        Test_Set_User_Setting'Access);
+      Caller.Add_Test (Suite, "Test AWA.Settings.Get_User_Setting (perf)",
+                       Test_Perf_User_Setting'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -86,5 +79,56 @@ package body AWA.Settings.Modules.Tests is
          end;
       end loop;
    end Test_Set_User_Setting;
+
+   --  ------------------------------
+   --  Test performance on user setting.
+   --  ------------------------------
+   procedure Test_Perf_User_Setting (T : in out Test) is
+      Sec_Ctx   : Security.Contexts.Security_Context;
+      Context   : AWA.Tests.Helpers.Contexts.Service_Context;
+      Ident     : constant String := Util.Tests.Get_Uuid;
+   begin
+      AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-setting@test.com");
+
+      --  First pass has to look in the database for the user setting.
+      --  Second pass finds the setting in the cache.
+      for Pass in 1 .. 2 loop
+         declare
+            Value : Integer;
+            Stamp : Util.Measures.Stamp;
+         begin
+            for I in 1 .. 100 loop
+               Value := AWA.Settings.Get_User_Setting ("perf-" & Integer'Image (I) & Ident, I);
+               Util.Tests.Assert_Equals (T, I, Value, "Invalid setting returned");
+            end loop;
+            Util.Measures.Report (Stamp, "Getting a user setting (100 times) pass"
+                                  & Integer'Image (Pass));
+         end;
+      end loop;
+
+      declare
+         Stamp : Util.Measures.Stamp;
+      begin
+         for I in 1 .. 100 loop
+            AWA.Settings.Set_User_Setting ("perf-" & Integer'Image (I) & Ident, I);
+         end loop;
+         Util.Measures.Report (Stamp, "Saving and creating user setting (100 times)");
+      end;
+
+      --  Erase the session cache.
+      Context.Session_Attributes.Clear;
+
+      --  Get the user setting that have been created.
+      declare
+         Value : Integer;
+         Stamp : Util.Measures.Stamp;
+      begin
+         for I in 1 .. 100 loop
+            Value := AWA.Settings.Get_User_Setting ("perf-" & Integer'Image (I) & Ident, -1);
+            Util.Tests.Assert_Equals (T, I, Value, "Invalid setting returned");
+         end loop;
+         Util.Measures.Report (Stamp, "Getting a user setting (100 times) load from DB");
+      end;
+   end Test_Perf_User_Setting;
 
 end AWA.Settings.Modules.Tests;
