@@ -80,7 +80,8 @@ package body AWA.Storages.Models is
 
    function Get_Id (Object : in Storage_Data_Ref)
                   return ADO.Identifier is
-      Impl : constant Storage_Data_Access := Storage_Data_Impl (Object.Get_Object.all)'Access;
+      Impl : constant Storage_Data_Access
+         := Storage_Data_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
@@ -88,7 +89,8 @@ package body AWA.Storages.Models is
 
    function Get_Version (Object : in Storage_Data_Ref)
                   return Integer is
-      Impl : constant Storage_Data_Access := Storage_Data_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Storage_Data_Access
+         := Storage_Data_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Version;
    end Get_Version;
@@ -104,7 +106,8 @@ package body AWA.Storages.Models is
 
    function Get_Data (Object : in Storage_Data_Ref)
                   return ADO.Blob_Ref is
-      Impl : constant Storage_Data_Access := Storage_Data_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Storage_Data_Access
+         := Storage_Data_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Data;
    end Get_Data;
@@ -400,7 +403,8 @@ package body AWA.Storages.Models is
 
    function Get_Id (Object : in Storage_Folder_Ref)
                   return ADO.Identifier is
-      Impl : constant Storage_Folder_Access := Storage_Folder_Impl (Object.Get_Object.all)'Access;
+      Impl : constant Storage_Folder_Access
+         := Storage_Folder_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
@@ -408,7 +412,8 @@ package body AWA.Storages.Models is
 
    function Get_Version (Object : in Storage_Folder_Ref)
                   return Integer is
-      Impl : constant Storage_Folder_Access := Storage_Folder_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Storage_Folder_Access
+         := Storage_Folder_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Version;
    end Get_Version;
@@ -424,7 +429,8 @@ package body AWA.Storages.Models is
 
    function Get_Create_Date (Object : in Storage_Folder_Ref)
                   return Ada.Calendar.Time is
-      Impl : constant Storage_Folder_Access := Storage_Folder_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Storage_Folder_Access
+         := Storage_Folder_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Create_Date;
    end Get_Create_Date;
@@ -453,7 +459,8 @@ package body AWA.Storages.Models is
    end Get_Name;
    function Get_Name (Object : in Storage_Folder_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Storage_Folder_Access := Storage_Folder_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Storage_Folder_Access
+         := Storage_Folder_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Name;
    end Get_Name;
@@ -469,7 +476,8 @@ package body AWA.Storages.Models is
 
    function Get_Workspace (Object : in Storage_Folder_Ref)
                   return AWA.Workspaces.Models.Workspace_Ref'Class is
-      Impl : constant Storage_Folder_Access := Storage_Folder_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Storage_Folder_Access
+         := Storage_Folder_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Workspace;
    end Get_Workspace;
@@ -485,7 +493,8 @@ package body AWA.Storages.Models is
 
    function Get_Owner (Object : in Storage_Folder_Ref)
                   return AWA.Users.Models.User_Ref'Class is
-      Impl : constant Storage_Folder_Access := Storage_Folder_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Storage_Folder_Access
+         := Storage_Folder_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Owner;
    end Get_Owner;
@@ -819,7 +828,8 @@ package body AWA.Storages.Models is
 
    function Get_Storage (Object : in Storage_Ref)
                   return Storage_Type is
-      Impl : constant Storage_Access := Storage_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Storage_Access
+         := Storage_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Storage;
    end Get_Storage;
@@ -835,7 +845,8 @@ package body AWA.Storages.Models is
 
    function Get_Create_Date (Object : in Storage_Ref)
                   return Ada.Calendar.Time is
-      Impl : constant Storage_Access := Storage_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Storage_Access
+         := Storage_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Create_Date;
    end Get_Create_Date;
@@ -864,7 +875,8 @@ package body AWA.Storages.Models is
    end Get_Name;
    function Get_Name (Object : in Storage_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Storage_Access := Storage_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Storage_Access
+         := Storage_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Name;
    end Get_Name;
@@ -880,7 +892,8 @@ package body AWA.Storages.Models is
 
    function Get_File_Size (Object : in Storage_Ref)
                   return Integer is
-      Impl : constant Storage_Access := Storage_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Storage_Access
+         := Storage_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.File_Size;
    end Get_File_Size;
@@ -909,7 +922,8 @@ package body AWA.Storages.Models is
    end Get_Mime_Type;
    function Get_Mime_Type (Object : in Storage_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Storage_Access := Storage_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Storage_Access
+         := Storage_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Mime_Type;
    end Get_Mime_Type;
@@ -938,7 +952,8 @@ package body AWA.Storages.Models is
    end Get_Uri;
    function Get_Uri (Object : in Storage_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Storage_Access := Storage_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Storage_Access
+         := Storage_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Uri;
    end Get_Uri;
@@ -946,7 +961,8 @@ package body AWA.Storages.Models is
 
    function Get_Version (Object : in Storage_Ref)
                   return Integer is
-      Impl : constant Storage_Access := Storage_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Storage_Access
+         := Storage_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Version;
    end Get_Version;
@@ -962,7 +978,8 @@ package body AWA.Storages.Models is
 
    function Get_Id (Object : in Storage_Ref)
                   return ADO.Identifier is
-      Impl : constant Storage_Access := Storage_Impl (Object.Get_Object.all)'Access;
+      Impl : constant Storage_Access
+         := Storage_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
@@ -978,7 +995,8 @@ package body AWA.Storages.Models is
 
    function Get_Original (Object : in Storage_Ref)
                   return AWA.Storages.Models.Storage_Ref'Class is
-      Impl : constant Storage_Access := Storage_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Storage_Access
+         := Storage_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Original;
    end Get_Original;
@@ -994,7 +1012,8 @@ package body AWA.Storages.Models is
 
    function Get_Store_Data (Object : in Storage_Ref)
                   return AWA.Storages.Models.Storage_Data_Ref'Class is
-      Impl : constant Storage_Access := Storage_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Storage_Access
+         := Storage_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Store_Data;
    end Get_Store_Data;
@@ -1010,7 +1029,8 @@ package body AWA.Storages.Models is
 
    function Get_Owner (Object : in Storage_Ref)
                   return AWA.Users.Models.User_Ref'Class is
-      Impl : constant Storage_Access := Storage_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Storage_Access
+         := Storage_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Owner;
    end Get_Owner;
@@ -1026,7 +1046,8 @@ package body AWA.Storages.Models is
 
    function Get_Workspace (Object : in Storage_Ref)
                   return AWA.Workspaces.Models.Workspace_Ref'Class is
-      Impl : constant Storage_Access := Storage_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Storage_Access
+         := Storage_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Workspace;
    end Get_Workspace;
@@ -1042,7 +1063,8 @@ package body AWA.Storages.Models is
 
    function Get_Folder (Object : in Storage_Ref)
                   return AWA.Storages.Models.Storage_Folder_Ref'Class is
-      Impl : constant Storage_Access := Storage_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Storage_Access
+         := Storage_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Folder;
    end Get_Folder;
@@ -1452,7 +1474,8 @@ package body AWA.Storages.Models is
 
    function Get_Id (Object : in Store_Local_Ref)
                   return ADO.Identifier is
-      Impl : constant Store_Local_Access := Store_Local_Impl (Object.Get_Object.all)'Access;
+      Impl : constant Store_Local_Access
+         := Store_Local_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
@@ -1460,7 +1483,8 @@ package body AWA.Storages.Models is
 
    function Get_Version (Object : in Store_Local_Ref)
                   return Integer is
-      Impl : constant Store_Local_Access := Store_Local_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Store_Local_Access
+         := Store_Local_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Version;
    end Get_Version;
@@ -1476,7 +1500,8 @@ package body AWA.Storages.Models is
 
    function Get_Store_Version (Object : in Store_Local_Ref)
                   return Integer is
-      Impl : constant Store_Local_Access := Store_Local_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Store_Local_Access
+         := Store_Local_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Store_Version;
    end Get_Store_Version;
@@ -1493,7 +1518,8 @@ package body AWA.Storages.Models is
 
    function Get_Shared (Object : in Store_Local_Ref)
                   return Boolean is
-      Impl : constant Store_Local_Access := Store_Local_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Store_Local_Access
+         := Store_Local_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Shared;
    end Get_Shared;
@@ -1522,7 +1548,8 @@ package body AWA.Storages.Models is
    end Get_Path;
    function Get_Path (Object : in Store_Local_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Store_Local_Access := Store_Local_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Store_Local_Access
+         := Store_Local_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Path;
    end Get_Path;
@@ -1538,7 +1565,8 @@ package body AWA.Storages.Models is
 
    function Get_Expire_Date (Object : in Store_Local_Ref)
                   return Ada.Calendar.Time is
-      Impl : constant Store_Local_Access := Store_Local_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Store_Local_Access
+         := Store_Local_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Expire_Date;
    end Get_Expire_Date;
@@ -1554,7 +1582,8 @@ package body AWA.Storages.Models is
 
    function Get_Create_Date (Object : in Store_Local_Ref)
                   return Ada.Calendar.Time is
-      Impl : constant Store_Local_Access := Store_Local_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Store_Local_Access
+         := Store_Local_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Create_Date;
    end Get_Create_Date;
@@ -1570,7 +1599,8 @@ package body AWA.Storages.Models is
 
    function Get_Storage (Object : in Store_Local_Ref)
                   return AWA.Storages.Models.Storage_Ref'Class is
-      Impl : constant Store_Local_Access := Store_Local_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Store_Local_Access
+         := Store_Local_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Storage;
    end Get_Storage;

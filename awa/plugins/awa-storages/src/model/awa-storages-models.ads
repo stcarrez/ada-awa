@@ -654,7 +654,8 @@ private
          3 => COL_2_1_NAME'Access
 )
      );
-   STORAGE_DATA_TABLE : constant ADO.Schemas.Class_Mapping_Access := STORAGE_DATA_DEF'Access;
+   STORAGE_DATA_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := STORAGE_DATA_DEF'Access;
 
    Null_Storage_Data : constant Storage_Data_Ref
       := Storage_Data_Ref'(ADO.Objects.Object_Ref with others => <>);
@@ -718,7 +719,8 @@ private
          6 => COL_5_2_NAME'Access
 )
      );
-   STORAGE_FOLDER_TABLE : constant ADO.Schemas.Class_Mapping_Access := STORAGE_FOLDER_DEF'Access;
+   STORAGE_FOLDER_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := STORAGE_FOLDER_DEF'Access;
 
    Null_Storage_Folder : constant Storage_Folder_Ref
       := Storage_Folder_Ref'(ADO.Objects.Object_Ref with others => <>);
@@ -799,7 +801,8 @@ private
          13 => COL_12_3_NAME'Access
 )
      );
-   STORAGE_TABLE : constant ADO.Schemas.Class_Mapping_Access := STORAGE_DEF'Access;
+   STORAGE_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := STORAGE_DEF'Access;
 
    Null_Storage : constant Storage_Ref
       := Storage_Ref'(ADO.Objects.Object_Ref with others => <>);
@@ -877,7 +880,8 @@ private
          8 => COL_7_4_NAME'Access
 )
      );
-   STORE_LOCAL_TABLE : constant ADO.Schemas.Class_Mapping_Access := STORE_LOCAL_DEF'Access;
+   STORE_LOCAL_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := STORE_LOCAL_DEF'Access;
 
    Null_Store_Local : constant Store_Local_Ref
       := Store_Local_Ref'(ADO.Objects.Object_Ref with others => <>);
