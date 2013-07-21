@@ -313,7 +313,8 @@ private
          4 => COL_3_1_NAME'Access
 )
      );
-   WORKSPACE_TABLE : constant ADO.Schemas.Class_Mapping_Access := WORKSPACE_DEF'Access;
+   WORKSPACE_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := WORKSPACE_DEF'Access;
 
    Null_Workspace : constant Workspace_Ref
       := Workspace_Ref'(ADO.Objects.Object_Ref with others => <>);
@@ -372,7 +373,8 @@ private
          3 => COL_2_2_NAME'Access
 )
      );
-   WORKSPACE_FEATURE_TABLE : constant ADO.Schemas.Class_Mapping_Access := WORKSPACE_FEATURE_DEF'Access;
+   WORKSPACE_FEATURE_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := WORKSPACE_FEATURE_DEF'Access;
 
    Null_Workspace_Feature : constant Workspace_Feature_Ref
       := Workspace_Feature_Ref'(ADO.Objects.Object_Ref with others => <>);
@@ -430,7 +432,8 @@ private
          3 => COL_2_3_NAME'Access
 )
      );
-   WORKSPACE_MEMBER_TABLE : constant ADO.Schemas.Class_Mapping_Access := WORKSPACE_MEMBER_DEF'Access;
+   WORKSPACE_MEMBER_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := WORKSPACE_MEMBER_DEF'Access;
 
    Null_Workspace_Member : constant Workspace_Member_Ref
       := Workspace_Member_Ref'(ADO.Objects.Object_Ref with others => <>);

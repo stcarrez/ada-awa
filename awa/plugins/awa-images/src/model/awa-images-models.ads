@@ -261,7 +261,8 @@ private
          8 => COL_7_1_NAME'Access
 )
      );
-   IMAGE_TABLE : constant ADO.Schemas.Class_Mapping_Access := IMAGE_DEF'Access;
+   IMAGE_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := IMAGE_DEF'Access;
 
    Null_Image : constant Image_Ref
       := Image_Ref'(ADO.Objects.Object_Ref with others => <>);

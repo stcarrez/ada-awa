@@ -177,7 +177,8 @@ private
          7 => COL_6_1_NAME'Access
 )
      );
-   COMMENT_TABLE : constant ADO.Schemas.Class_Mapping_Access := COMMENT_DEF'Access;
+   COMMENT_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := COMMENT_DEF'Access;
 
    Null_Comment : constant Comment_Ref
       := Comment_Ref'(ADO.Objects.Object_Ref with others => <>);

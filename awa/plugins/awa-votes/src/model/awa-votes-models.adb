@@ -83,7 +83,8 @@ package body AWA.Votes.Models is
 
    function Get_Id (Object : in Rating_Ref)
                   return ADO.Identifier is
-      Impl : constant Rating_Access := Rating_Impl (Object.Get_Object.all)'Access;
+      Impl : constant Rating_Access
+         := Rating_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
@@ -99,7 +100,8 @@ package body AWA.Votes.Models is
 
    function Get_Rating (Object : in Rating_Ref)
                   return Integer is
-      Impl : constant Rating_Access := Rating_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Rating_Access
+         := Rating_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Rating;
    end Get_Rating;
@@ -115,7 +117,8 @@ package body AWA.Votes.Models is
 
    function Get_Vote_Count (Object : in Rating_Ref)
                   return Integer is
-      Impl : constant Rating_Access := Rating_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Rating_Access
+         := Rating_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Vote_Count;
    end Get_Vote_Count;
@@ -131,7 +134,8 @@ package body AWA.Votes.Models is
 
    function Get_For_Entity_Id (Object : in Rating_Ref)
                   return ADO.Identifier is
-      Impl : constant Rating_Access := Rating_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Rating_Access
+         := Rating_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.For_Entity_Id;
    end Get_For_Entity_Id;
@@ -147,7 +151,8 @@ package body AWA.Votes.Models is
 
    function Get_For_Entity_Type (Object : in Rating_Ref)
                   return ADO.Entity_Type is
-      Impl : constant Rating_Access := Rating_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Rating_Access
+         := Rating_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.For_Entity_Type;
    end Get_For_Entity_Type;
@@ -465,7 +470,8 @@ package body AWA.Votes.Models is
 
    function Get_Rating (Object : in Vote_Ref)
                   return Integer is
-      Impl : constant Vote_Access := Vote_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Vote_Access
+         := Vote_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Rating;
    end Get_Rating;
@@ -481,7 +487,8 @@ package body AWA.Votes.Models is
 
    function Get_Id (Object : in Vote_Ref)
                   return ADO.Identifier is
-      Impl : constant Vote_Access := Vote_Impl (Object.Get_Object.all)'Access;
+      Impl : constant Vote_Access
+         := Vote_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
@@ -497,7 +504,8 @@ package body AWA.Votes.Models is
 
    function Get_Entity (Object : in Vote_Ref)
                   return AWA.Votes.Models.Rating_Ref'Class is
-      Impl : constant Vote_Access := Vote_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Vote_Access
+         := Vote_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Entity;
    end Get_Entity;
@@ -513,7 +521,8 @@ package body AWA.Votes.Models is
 
    function Get_User (Object : in Vote_Ref)
                   return AWA.Users.Models.User_Ref'Class is
-      Impl : constant Vote_Access := Vote_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Vote_Access
+         := Vote_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.User;
    end Get_User;

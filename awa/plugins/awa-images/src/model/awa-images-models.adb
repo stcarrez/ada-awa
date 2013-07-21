@@ -84,7 +84,8 @@ package body AWA.Images.Models is
 
    function Get_Id (Object : in Image_Ref)
                   return ADO.Identifier is
-      Impl : constant Image_Access := Image_Impl (Object.Get_Object.all)'Access;
+      Impl : constant Image_Access
+         := Image_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
@@ -92,7 +93,8 @@ package body AWA.Images.Models is
 
    function Get_Version (Object : in Image_Ref)
                   return Integer is
-      Impl : constant Image_Access := Image_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Image_Access
+         := Image_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Version;
    end Get_Version;
@@ -108,7 +110,8 @@ package body AWA.Images.Models is
 
    function Get_Width (Object : in Image_Ref)
                   return Natural is
-      Impl : constant Image_Access := Image_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Image_Access
+         := Image_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Width;
    end Get_Width;
@@ -124,7 +127,8 @@ package body AWA.Images.Models is
 
    function Get_Height (Object : in Image_Ref)
                   return Natural is
-      Impl : constant Image_Access := Image_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Image_Access
+         := Image_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Height;
    end Get_Height;
@@ -140,7 +144,8 @@ package body AWA.Images.Models is
 
    function Get_Thumb_Height (Object : in Image_Ref)
                   return Natural is
-      Impl : constant Image_Access := Image_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Image_Access
+         := Image_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Thumb_Height;
    end Get_Thumb_Height;
@@ -156,7 +161,8 @@ package body AWA.Images.Models is
 
    function Get_Thumb_Width (Object : in Image_Ref)
                   return Natural is
-      Impl : constant Image_Access := Image_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Image_Access
+         := Image_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Thumb_Width;
    end Get_Thumb_Width;
@@ -172,7 +178,8 @@ package body AWA.Images.Models is
 
    function Get_Thumbnail (Object : in Image_Ref)
                   return AWA.Storages.Models.Storage_Ref'Class is
-      Impl : constant Image_Access := Image_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Image_Access
+         := Image_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Thumbnail;
    end Get_Thumbnail;
@@ -188,7 +195,8 @@ package body AWA.Images.Models is
 
    function Get_Storage (Object : in Image_Ref)
                   return AWA.Storages.Models.Storage_Ref'Class is
-      Impl : constant Image_Access := Image_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Image_Access
+         := Image_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Storage;
    end Get_Storage;

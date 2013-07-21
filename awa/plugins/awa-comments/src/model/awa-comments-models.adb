@@ -83,7 +83,8 @@ package body AWA.Comments.Models is
 
    function Get_Date (Object : in Comment_Ref)
                   return Ada.Calendar.Time is
-      Impl : constant Comment_Access := Comment_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Comment_Access
+         := Comment_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Date;
    end Get_Date;
@@ -112,7 +113,8 @@ package body AWA.Comments.Models is
    end Get_Message;
    function Get_Message (Object : in Comment_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Comment_Access := Comment_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Comment_Access
+         := Comment_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Message;
    end Get_Message;
@@ -128,7 +130,8 @@ package body AWA.Comments.Models is
 
    function Get_Entity_Id (Object : in Comment_Ref)
                   return ADO.Identifier is
-      Impl : constant Comment_Access := Comment_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Comment_Access
+         := Comment_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Entity_Id;
    end Get_Entity_Id;
@@ -144,7 +147,8 @@ package body AWA.Comments.Models is
 
    function Get_Id (Object : in Comment_Ref)
                   return ADO.Identifier is
-      Impl : constant Comment_Access := Comment_Impl (Object.Get_Object.all)'Access;
+      Impl : constant Comment_Access
+         := Comment_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
@@ -152,7 +156,8 @@ package body AWA.Comments.Models is
 
    function Get_Version (Object : in Comment_Ref)
                   return Integer is
-      Impl : constant Comment_Access := Comment_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Comment_Access
+         := Comment_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Version;
    end Get_Version;
@@ -168,7 +173,8 @@ package body AWA.Comments.Models is
 
    function Get_Entity_Type (Object : in Comment_Ref)
                   return ADO.Entity_Type is
-      Impl : constant Comment_Access := Comment_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Comment_Access
+         := Comment_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Entity_Type;
    end Get_Entity_Type;
@@ -184,7 +190,8 @@ package body AWA.Comments.Models is
 
    function Get_Author (Object : in Comment_Ref)
                   return AWA.Users.Models.User_Ref'Class is
-      Impl : constant Comment_Access := Comment_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Comment_Access
+         := Comment_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Author;
    end Get_Author;

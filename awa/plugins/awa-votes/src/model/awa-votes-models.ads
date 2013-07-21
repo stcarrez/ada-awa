@@ -282,7 +282,8 @@ private
          5 => COL_4_1_NAME'Access
 )
      );
-   RATING_TABLE : constant ADO.Schemas.Class_Mapping_Access := RATING_DEF'Access;
+   RATING_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := RATING_DEF'Access;
 
    Null_Rating : constant Rating_Ref
       := Rating_Ref'(ADO.Objects.Object_Ref with others => <>);
@@ -344,7 +345,8 @@ private
          4 => COL_3_2_NAME'Access
 )
      );
-   VOTE_TABLE : constant ADO.Schemas.Class_Mapping_Access := VOTE_DEF'Access;
+   VOTE_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := VOTE_DEF'Access;
 
    Null_Vote : constant Vote_Ref
       := Vote_Ref'(ADO.Objects.Object_Ref with others => <>);

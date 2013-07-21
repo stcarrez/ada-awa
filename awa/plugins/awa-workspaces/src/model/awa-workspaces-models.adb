@@ -81,7 +81,8 @@ package body AWA.Workspaces.Models is
 
    function Get_Id (Object : in Workspace_Ref)
                   return ADO.Identifier is
-      Impl : constant Workspace_Access := Workspace_Impl (Object.Get_Object.all)'Access;
+      Impl : constant Workspace_Access
+         := Workspace_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
@@ -89,7 +90,8 @@ package body AWA.Workspaces.Models is
 
    function Get_Version (Object : in Workspace_Ref)
                   return Integer is
-      Impl : constant Workspace_Access := Workspace_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Workspace_Access
+         := Workspace_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Version;
    end Get_Version;
@@ -105,7 +107,8 @@ package body AWA.Workspaces.Models is
 
    function Get_Create_Date (Object : in Workspace_Ref)
                   return Ada.Calendar.Time is
-      Impl : constant Workspace_Access := Workspace_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Workspace_Access
+         := Workspace_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Create_Date;
    end Get_Create_Date;
@@ -121,7 +124,8 @@ package body AWA.Workspaces.Models is
 
    function Get_Owner (Object : in Workspace_Ref)
                   return AWA.Users.Models.User_Ref'Class is
-      Impl : constant Workspace_Access := Workspace_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Workspace_Access
+         := Workspace_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Owner;
    end Get_Owner;
@@ -428,7 +432,8 @@ package body AWA.Workspaces.Models is
 
    function Get_Id (Object : in Workspace_Feature_Ref)
                   return ADO.Identifier is
-      Impl : constant Workspace_Feature_Access := Workspace_Feature_Impl (Object.Get_Object.all)'Access;
+      Impl : constant Workspace_Feature_Access
+         := Workspace_Feature_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
@@ -444,7 +449,8 @@ package body AWA.Workspaces.Models is
 
    function Get_Limit (Object : in Workspace_Feature_Ref)
                   return Integer is
-      Impl : constant Workspace_Feature_Access := Workspace_Feature_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Workspace_Feature_Access
+         := Workspace_Feature_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Limit;
    end Get_Limit;
@@ -460,7 +466,8 @@ package body AWA.Workspaces.Models is
 
    function Get_Workspace (Object : in Workspace_Feature_Ref)
                   return AWA.Workspaces.Models.Workspace_Ref'Class is
-      Impl : constant Workspace_Feature_Access := Workspace_Feature_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Workspace_Feature_Access
+         := Workspace_Feature_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Workspace;
    end Get_Workspace;
@@ -755,7 +762,8 @@ package body AWA.Workspaces.Models is
 
    function Get_Id (Object : in Workspace_Member_Ref)
                   return ADO.Identifier is
-      Impl : constant Workspace_Member_Access := Workspace_Member_Impl (Object.Get_Object.all)'Access;
+      Impl : constant Workspace_Member_Access
+         := Workspace_Member_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
@@ -771,7 +779,8 @@ package body AWA.Workspaces.Models is
 
    function Get_Member (Object : in Workspace_Member_Ref)
                   return AWA.Users.Models.User_Ref'Class is
-      Impl : constant Workspace_Member_Access := Workspace_Member_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Workspace_Member_Access
+         := Workspace_Member_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Member;
    end Get_Member;
@@ -787,7 +796,8 @@ package body AWA.Workspaces.Models is
 
    function Get_Workspace (Object : in Workspace_Member_Ref)
                   return AWA.Workspaces.Models.Workspace_Ref'Class is
-      Impl : constant Workspace_Member_Access := Workspace_Member_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Workspace_Member_Access
+         := Workspace_Member_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Workspace;
    end Get_Workspace;
