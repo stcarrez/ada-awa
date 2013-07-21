@@ -36,9 +36,7 @@
 --
 --    AWA.Settings.Set_User_Setting ("row-per-page", 20);
 --
---  == Model ==
---  [http://ada-awa.googlecode.com/svn/wiki/awa_settings_model.png]
---
+--  @include awa-settings-modules.ads
 package AWA.Settings is
 
    --  Get the user setting identified by the given name.

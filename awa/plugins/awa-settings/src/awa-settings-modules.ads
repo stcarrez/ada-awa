@@ -18,6 +18,25 @@
 with ASF.Applications;
 with Ada.Strings.Unbounded;
 with AWA.Modules;
+
+--  == Integration ==
+--  The <tt>Setting_Module</tt> manages the application and user settings.  An instance of the
+--  the <tt>Setting_Module</tt> must be declared and registered in the AWA application.
+--  The module instance can be defined as follows:
+--
+--    type Application is new AWA.Applications.Application with record
+--       Setting_Module : aliased AWA.Settings.Modules.Setting_Module;
+--    end record;
+--
+--  And registered in the `Initialize_Modules` procedure by using:
+--
+--    Register (App    => App.Self.all'Access,
+--              Name   => AWA.Settings.Modules.NAME,
+--              URI    => "settings",
+--              Module => App.Setting_Module'Access);
+--
+--  == Model ==
+--  [http://ada-awa.googlecode.com/svn/wiki/awa_settings_model.png]
 package AWA.Settings.Modules is
 
    --  The name under which the module is registered.
