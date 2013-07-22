@@ -27,7 +27,7 @@ package body AWA.Settings.Modules.Tests is
 
    use Util.Tests;
 
-   package Caller is new Util.Test_Caller (Test, "Questions.Services");
+   package Caller is new Util.Test_Caller (Test, "Settings.Services");
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
    begin
