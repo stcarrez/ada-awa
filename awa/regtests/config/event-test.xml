@@ -1,6 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <module version="1.0">
 
+  <dispatcher name="async">
+     <count>#{empty awa_dispatcher_count ? 1 : awa_dispatcher_count}</count>
+     <priority>#{empty awa_dispatcher_priority ? 1 : awa_dispatcher_priority}</priority>
+     <queue match="*"/>
+  </dispatcher>
+
   <queue name="small" type="fifo">
      <property name="size">100</property>
   </queue>
