@@ -94,7 +94,7 @@ CREATE TABLE awa_access_key (
   /* the secure access key. */
   `access_key` VARCHAR(255) NOT NULL,
   /* the access key expiration date. */
-  `expire_date` DATETIME NOT NULL,
+  `expire_date` DATE NOT NULL,
   /* the access key identifier. */
   `id` BIGINT PRIMARY KEY,
   /*  */
@@ -305,7 +305,7 @@ CREATE TABLE awa_store_local (
   /* the local store path */
   `path` VARCHAR(255) NOT NULL,
   /* the local store expiration date */
-  `expire_date` DATETIME NOT NULL,
+  `expire_date` DATE NOT NULL,
   /* the creation date */
   `create_date` DATETIME NOT NULL,
   /*  */
@@ -315,6 +315,29 @@ INSERT INTO entity_type (name) VALUES ("awa_storage");
 INSERT INTO entity_type (name) VALUES ("awa_storage_data");
 INSERT INTO entity_type (name) VALUES ("awa_storage_folder");
 INSERT INTO entity_type (name) VALUES ("awa_store_local");
+/* Copied from awa-tags-sqlite.sql*/
+/* File generated automatically by dynamo */
+/* The tag definition. */
+CREATE TABLE awa_tag (
+  /* the tag identifier */
+  `id` BIGINT PRIMARY KEY,
+  /* the tag name */
+  `name` VARCHAR(255) NOT NULL
+);
+/*  */
+CREATE TABLE awa_tagged_entity (
+  /* the tag entity identifier */
+  `id` BIGINT PRIMARY KEY,
+  /* Title: Tag model
+Date: 2013-02-23the database entity to which the tag is associated */
+  `for_entity_id` BIGINT NOT NULL,
+  /* the entity type */
+  `entity_type` INTEGER NOT NULL,
+  /*  */
+  `tag_id` BIGINT NOT NULL
+);
+INSERT INTO entity_type (name) VALUES ("awa_tag");
+INSERT INTO entity_type (name) VALUES ("awa_tagged_entity");
 /* Copied from awa-images-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* An image that was uploaded by a user in an image folder. */
@@ -337,6 +360,55 @@ CREATE TABLE awa_image (
   `storage_id` INTEGER NOT NULL
 );
 INSERT INTO entity_type (name) VALUES ("awa_image");
+/* Copied from awa-settings-sqlite.sql*/
+/* File generated automatically by dynamo */
+/* The global setting holds some generic
+application configuration parameter
+which can be stored in the database.
+
+The global setting can be specific to a server. */
+CREATE TABLE awa_global_setting (
+  /* the global setting identifier. */
+  `id` BIGINT PRIMARY KEY,
+  /* the global setting value. */
+  `value` VARCHAR(255) NOT NULL,
+  /* the global setting optimistic lock version. */
+  `version` INTEGER NOT NULL,
+  /* the server to which this global setting applies. */
+  `server_id` INTEGER NOT NULL,
+  /* the setting that corresponds to this global setting. */
+  `setting_id` BIGINT NOT NULL
+);
+/* The setting table defines all the possible settings
+that an application manages.  This table is automatically
+populated when an application starts. It is not modified.
+ */
+CREATE TABLE awa_setting (
+  /* the setting identifier. */
+  `id` BIGINT PRIMARY KEY,
+  /* the setting name. */
+  `name` VARCHAR(255) NOT NULL
+);
+/* The user setting holds the setting value for a given user.
+It is created the first time a user changes the default
+setting value. It is updated when the user modifies the setting.
+
+ */
+CREATE TABLE awa_user_setting (
+  /* the user setting identifier. */
+  `id` BIGINT PRIMARY KEY,
+  /* the setting value. */
+  `value` VARCHAR(255) NOT NULL,
+  /* the setting optimistic lock version. */
+  `version` INTEGER NOT NULL,
+  /* the setting that correspond to the value. */
+  `setting_id` BIGINT NOT NULL,
+  /* the user to which the setting value is associated. */
+  `user_id` BIGINT NOT NULL
+);
+INSERT INTO entity_type (name) VALUES ("awa_global_setting");
+INSERT INTO entity_type (name) VALUES ("awa_setting");
+INSERT INTO entity_type (name) VALUES ("awa_user_setting");
 /* Copied from awa-votes-sqlite.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -349,7 +421,7 @@ CREATE TABLE awa_rating (
   `vote_count` INTEGER NOT NULL,
   /*  */
   `for_entity_id` BIGINT NOT NULL,
-  /*  */
+  /* the entity type */
   `for_entity_type` INTEGER NOT NULL
 );
 /* The vote table tracks a vote action by a user on a given database entity.
@@ -401,6 +473,72 @@ CREATE TABLE awa_job (
   `session_id` BIGINT 
 );
 INSERT INTO entity_type (name) VALUES ("awa_job");
+/* Copied from awa-countries-sqlite.sql*/
+/* File generated automatically by dynamo */
+/*  */
+CREATE TABLE awa_city (
+  /* the city identifier */
+  `id` BIGINT PRIMARY KEY,
+  /* the city name */
+  `name` VARCHAR(255) NOT NULL,
+  /* the city ZIP code */
+  `zip_code` INTEGER NOT NULL,
+  /* the city latitude */
+  `latitude` INTEGER NOT NULL,
+  /* the city longitude */
+  `longitude` INTEGER NOT NULL,
+  /* the region that this city belongs to */
+  `region_id` BIGINT NOT NULL,
+  /* the country that this city belongs to */
+  `country_id` BIGINT NOT NULL
+);
+/* The country model is a system data model for the application.
+In theory, it never changes. */
+CREATE TABLE awa_country (
+  /* the country identifier */
+  `id` BIGINT PRIMARY KEY,
+  /* the country name */
+  `name` VARCHAR(255) NOT NULL,
+  /* the continent name */
+  `continent` VARCHAR(255) NOT NULL,
+  /* the currency used in the country */
+  `currency` VARCHAR(255) NOT NULL,
+  /* the country ISO code */
+  `iso_code` VARCHAR(255) NOT NULL,
+  /* the country geoname id */
+  `geonameid` INTEGER NOT NULL,
+  /* the country main language */
+  `languages` VARCHAR(255) NOT NULL,
+  /* the TLD associated with this country */
+  `tld` VARCHAR(3) NOT NULL,
+  /* the currency code */
+  `currency_code` VARCHAR(3) NOT NULL
+);
+/* The country neighbor defines what countries
+are neigbors with each other */
+CREATE TABLE awa_country_neighbor (
+  /*  */
+  `id` BIGINT PRIMARY KEY,
+  /*  */
+  `neighbor_of_id` BIGINT NOT NULL,
+  /*  */
+  `neighbor_id` BIGINT NOT NULL
+);
+/* Region defines an area within a country. */
+CREATE TABLE awa_region (
+  /* the region identifier */
+  `id` BIGINT PRIMARY KEY,
+  /* the region name */
+  `name` VARCHAR(255) NOT NULL,
+  /* the region geonameid */
+  `geonameid` INTEGER NOT NULL,
+  /* the country that this region belongs to */
+  `country_id` BIGINT NOT NULL
+);
+INSERT INTO entity_type (name) VALUES ("awa_city");
+INSERT INTO entity_type (name) VALUES ("awa_country");
+INSERT INTO entity_type (name) VALUES ("awa_country_neighbor");
+INSERT INTO entity_type (name) VALUES ("awa_region");
 /* Copied from awa-questions-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* The answer table gives a list of anwsers to the question.
