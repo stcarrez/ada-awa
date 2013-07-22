@@ -83,7 +83,8 @@ package body AWA.Blogs.Models is
 
    function Get_Id (Object : in Blog_Ref)
                   return ADO.Identifier is
-      Impl : constant Blog_Access := Blog_Impl (Object.Get_Object.all)'Access;
+      Impl : constant Blog_Access
+         := Blog_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
@@ -112,7 +113,8 @@ package body AWA.Blogs.Models is
    end Get_Name;
    function Get_Name (Object : in Blog_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Blog_Access := Blog_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Blog_Access
+         := Blog_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Name;
    end Get_Name;
@@ -120,7 +122,8 @@ package body AWA.Blogs.Models is
 
    function Get_Version (Object : in Blog_Ref)
                   return Integer is
-      Impl : constant Blog_Access := Blog_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Blog_Access
+         := Blog_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Version;
    end Get_Version;
@@ -149,7 +152,8 @@ package body AWA.Blogs.Models is
    end Get_Uid;
    function Get_Uid (Object : in Blog_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Blog_Access := Blog_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Blog_Access
+         := Blog_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Uid;
    end Get_Uid;
@@ -165,7 +169,8 @@ package body AWA.Blogs.Models is
 
    function Get_Create_Date (Object : in Blog_Ref)
                   return Ada.Calendar.Time is
-      Impl : constant Blog_Access := Blog_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Blog_Access
+         := Blog_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Create_Date;
    end Get_Create_Date;
@@ -181,7 +186,8 @@ package body AWA.Blogs.Models is
 
    function Get_Update_Date (Object : in Blog_Ref)
                   return Ada.Calendar.Time is
-      Impl : constant Blog_Access := Blog_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Blog_Access
+         := Blog_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Update_Date;
    end Get_Update_Date;
@@ -197,7 +203,8 @@ package body AWA.Blogs.Models is
 
    function Get_Workspace (Object : in Blog_Ref)
                   return AWA.Workspaces.Models.Workspace_Ref'Class is
-      Impl : constant Blog_Access := Blog_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Blog_Access
+         := Blog_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Workspace;
    end Get_Workspace;
@@ -561,7 +568,8 @@ package body AWA.Blogs.Models is
 
    function Get_Id (Object : in Post_Ref)
                   return ADO.Identifier is
-      Impl : constant Post_Access := Post_Impl (Object.Get_Object.all)'Access;
+      Impl : constant Post_Access
+         := Post_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
@@ -590,7 +598,8 @@ package body AWA.Blogs.Models is
    end Get_Title;
    function Get_Title (Object : in Post_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Post_Access := Post_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Post_Access
+         := Post_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Title;
    end Get_Title;
@@ -619,7 +628,8 @@ package body AWA.Blogs.Models is
    end Get_Text;
    function Get_Text (Object : in Post_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Post_Access := Post_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Post_Access
+         := Post_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Text;
    end Get_Text;
@@ -635,7 +645,8 @@ package body AWA.Blogs.Models is
 
    function Get_Create_Date (Object : in Post_Ref)
                   return Ada.Calendar.Time is
-      Impl : constant Post_Access := Post_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Post_Access
+         := Post_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Create_Date;
    end Get_Create_Date;
@@ -664,7 +675,8 @@ package body AWA.Blogs.Models is
    end Get_Uri;
    function Get_Uri (Object : in Post_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Post_Access := Post_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Post_Access
+         := Post_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Uri;
    end Get_Uri;
@@ -672,7 +684,8 @@ package body AWA.Blogs.Models is
 
    function Get_Version (Object : in Post_Ref)
                   return Integer is
-      Impl : constant Post_Access := Post_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Post_Access
+         := Post_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Version;
    end Get_Version;
@@ -688,7 +701,8 @@ package body AWA.Blogs.Models is
 
    function Get_Publish_Date (Object : in Post_Ref)
                   return ADO.Nullable_Time is
-      Impl : constant Post_Access := Post_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Post_Access
+         := Post_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Publish_Date;
    end Get_Publish_Date;
@@ -706,7 +720,8 @@ package body AWA.Blogs.Models is
 
    function Get_Status (Object : in Post_Ref)
                   return Post_Status_Type is
-      Impl : constant Post_Access := Post_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Post_Access
+         := Post_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Status;
    end Get_Status;
@@ -722,7 +737,8 @@ package body AWA.Blogs.Models is
 
    function Get_Author (Object : in Post_Ref)
                   return AWA.Users.Models.User_Ref'Class is
-      Impl : constant Post_Access := Post_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Post_Access
+         := Post_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Author;
    end Get_Author;
@@ -738,7 +754,8 @@ package body AWA.Blogs.Models is
 
    function Get_Blog (Object : in Post_Ref)
                   return AWA.Blogs.Models.Blog_Ref'Class is
-      Impl : constant Post_Access := Post_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Post_Access
+         := Post_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Blog;
    end Get_Blog;

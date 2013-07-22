@@ -529,7 +529,8 @@ private
          7 => COL_6_1_NAME'Access
 )
      );
-   BLOG_TABLE : constant ADO.Schemas.Class_Mapping_Access := BLOG_DEF'Access;
+   BLOG_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := BLOG_DEF'Access;
 
    Null_Blog : constant Blog_Ref
       := Blog_Ref'(ADO.Objects.Object_Ref with others => <>);
@@ -605,7 +606,8 @@ private
          10 => COL_9_2_NAME'Access
 )
      );
-   POST_TABLE : constant ADO.Schemas.Class_Mapping_Access := POST_DEF'Access;
+   POST_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := POST_DEF'Access;
 
    Null_Post : constant Post_Ref
       := Post_Ref'(ADO.Objects.Object_Ref with others => <>);
