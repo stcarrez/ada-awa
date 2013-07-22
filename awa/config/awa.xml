@@ -15,8 +15,85 @@
   </queue>
 
   <context-param>
+    <param-name>awa_url_scheme</param-name>
+    <param-value>#{empty app_url_scheme ? 'http://' : app_url_scheme}</param-value>
+  </context-param>
+
+  <context-param>
+    <param-name>awa_url_host</param-name>
+    <param-value>#{empty app_url_host ? 'localhost' : app_url_host}</param-value>
+  </context-param>
+
+  <context-param>
+    <param-name>awa_url_port</param-name>
+    <param-value>#{empty app_url_port ? ':8080' : app_url_port}</param-value>
+  </context-param>
+
+  <context-param>
+    <param-name>app_url_base</param-name>
+    <param-value>http://localhost:8080</param-value>
+  </context-param>
+
+  <context-param>
+    <param-name>app_oauth_url_base</param-name>
+    <param-value>http://localhost:8080</param-value>
+  </context-param>
+
+  <context-param>
     <param-name>view.ext</param-name>
     <param-value>.html</param-value>
+  </context-param>
+
+  <context-param>
+    <param-name>web.dir</param-name>
+    <param-value>#{fn:composePath(app_search_dirs,'web')}</param-value>
+    <description>
+      Defines a list of paths separated by ';' where the XHTML files are searched.
+      The default searches for the 'web' directory in the application search paths.
+    </description>
+  </context-param>
+
+  <context-param>
+    <param-name>content-type.default</param-name>
+    <param-value>text/plain</param-value>
+    <description>
+      Defines the default content type for the file servlet.
+    </description>
+  </context-param>
+
+  <context-param>
+    <param-name>ado.queries.load</param-name>
+    <param-value>true</param-value>
+    <description>
+      Controls whether the database query definitions are loaded.
+    </description>
+  </context-param>
+
+  <context-param>
+    <param-name>ado.queries.paths</param-name>
+    <param-value>#{fn:composePath(app_search_dirs,'db')}</param-value>
+    <description>
+      Defines a list of paths separated by ';' where the database query files are searched.
+      The default searches for the 'db' directory in the application search paths.
+    </description>
+  </context-param>
+
+  <context-param>
+    <param-name>bundle.dir</param-name>
+    <param-value>#{fn:composePath(app_search_dirs,'bundles')}</param-value>
+    <description>
+      Defines a list of paths separated by ';' where the resource bundle files are searched.
+      The default searches for the 'bundles' directory in the application search paths.
+    </description>
+  </context-param>
+
+  <context-param>
+    <param-name>app.modules.dir</param-name>
+    <param-value>#{fn:composePath(app_search_dirs,'config')}</param-value>
+    <description>
+      Defines a list of paths separated by ';' where the module configuration files are searched.
+      The default searches for the 'config' directory in the application search paths.
+    </description>
   </context-param>
 
   <servlet-mapping>

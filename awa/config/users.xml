@@ -1,6 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <module version="1.0">
-
+  <!-- Application override
+   app_base_url
+   app_facebook_client_id
+   app_facebook_secret
+   app_google_plus_client_id
+   app_google_plus_secret
+  -->
   <managed-bean>
     <description>This bean is used by the login form</description>
     <managed-bean-name>login</managed-bean-name>
@@ -90,7 +96,7 @@
 
   <context-param>
     <param-name>openid.realm</param-name>
-    <param-value>http://localhost:8080#{contextPath}/auth</param-value>
+    <param-value>#{app_url_base}#{contextPath}/auth</param-value>
     <description>
        The REALM URL used by OpenID providers to verify the validity of the verification callback.
     </description>
@@ -98,7 +104,7 @@
 
   <context-param>
     <param-name>openid.callback_url</param-name>
-    <param-value>http://localhost:8080#{contextPath}/auth/verify</param-value>
+    <param-value>#{app_url_base}#{contextPath}/auth/verify</param-value>
     <description>
        The verification callback URI used by the OpenID provider to redirect the user
        after authentication.
@@ -167,7 +173,7 @@
 
   <context-param>
     <param-name>facebook.callback_url</param-name>
-    <param-value>#{openid-verify}</param-value>
+    <param-value>#{app_oauth_url_base}#{contextPath}/auth/verify</param-value>
     <description>Facebook verify callback</description>
   </context-param>
 
@@ -216,7 +222,7 @@
 
   <context-param>
     <param-name>google-plus.callback_url</param-name>
-    <param-value>#{openid-verify}</param-value>
+    <param-value>#{app_oauth_url_base}#{contextPath}/auth/verify</param-value>
     <description>Google+ verify callback</description>
   </context-param>
 
