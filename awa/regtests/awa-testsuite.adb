@@ -28,6 +28,7 @@ with AWA.Mail.Clients.Tests;
 with AWA.Mail.Modules.Tests;
 with AWA.Images.Services.Tests;
 with AWA.Votes.Modules.Tests;
+with AWA.Tags.Modules.Tests;
 with AWA.Questions.Modules.Tests;
 with AWA.Modules.Tests;
 
@@ -41,12 +42,14 @@ with AWA.Storages.Modules;
 with AWA.Images.Modules;
 with AWA.Questions.Modules;
 with AWA.Votes.Modules;
+with AWA.Tags.Modules;
 
 with AWA.Converters.Dates;
 with AWA.Tests;
 with AWA.Services.Contexts;
 with AWA.Jobs.Services.Tests;
 with AWA.Jobs.Modules.Tests;
+with AWA.Settings.Modules.Tests;
 
 with ASF.Server.Web;
 with ASF.Server.Tests;
@@ -69,6 +72,10 @@ package body AWA.Testsuite is
 
    Votes          : aliased AWA.Votes.Modules.Vote_Module;
 
+   Tags           : aliased AWA.Tags.Modules.Tag_Module;
+
+   Settings       : aliased AWA.Settings.Modules.Setting_Module;
+
    Date_Converter : aliased ASF.Converters.Dates.Date_Converter;
 
    Rel_Date_Converter : aliased AWA.Converters.Dates.Relative_Date_Converter;
@@ -89,10 +96,12 @@ package body AWA.Testsuite is
       AWA.Helpers.Selectors.Tests.Add_Tests (Ret);
       AWA.Jobs.Modules.Tests.Add_Tests (Ret);
       AWA.Jobs.Services.Tests.Add_Tests (Ret);
+      AWA.Settings.Modules.Tests.Add_Tests (Ret);
       AWA.Blogs.Modules.Tests.Add_Tests (Ret);
       AWA.Storages.Services.Tests.Add_Tests (Ret);
       AWA.Images.Services.Tests.Add_Tests (Ret);
       AWA.Votes.Modules.Tests.Add_Tests (Ret);
+      AWA.Tags.Modules.Tests.Add_Tests (Ret);
       AWA.Questions.Modules.Tests.Add_Tests (Ret);
       return Ret;
    end Suite;
@@ -150,9 +159,19 @@ package body AWA.Testsuite is
                       Module => Jobs'Access);
 
             Register (App    => Application.all'Access,
+                      Name   => AWA.Settings.Modules.NAME,
+                      URI    => "settings",
+                      Module => Settings'Access);
+
+            Register (App    => Application.all'Access,
                       Name   => AWA.Votes.Modules.NAME,
                       URI    => "votes",
                       Module => Votes'Access);
+
+            Register (App    => Application.all'Access,
+                      Name   => AWA.Tags.Modules.NAME,
+                      URI    => "tags",
+                      Module => Tags'Access);
 
             Register (App    => Application.all'Access,
                       Name   => AWA.Blogs.Modules.NAME,
