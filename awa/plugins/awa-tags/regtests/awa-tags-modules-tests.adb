@@ -110,7 +110,7 @@ package body AWA.Tags.Modules.Tests is
 
          --  Load the list.
          List.Load_Tags (Tag_Manager.Get_Session, User.Get_Id);
-         Util.Tests.Assert_Equals (T, 2, Integer (List.Get_Count), "Invalid number of tags");
+         Util.Tests.Assert_Equals (T, 1, Integer (List.Get_Count), "Invalid number of tags");
       end;
    end Test_Remove_Tag;
 
