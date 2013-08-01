@@ -25,9 +25,9 @@
     <name>workspaces-create</name>
     <entity-type>awa_workspace</entity-type>
     <sql>
-       select ACL.ID from AWA_ACL as ACL
-       where ACL.ENTITY_TYPE = :entity_type
-       and ACL.USER_ID = :user_id   
+       SELECT acl.id FROM awa_acl AS acl
+       WHERE acl.entity_type = :entity_type
+       AND acl.user_id = :user_id   
     </sql>
   </entity-permission>
 
