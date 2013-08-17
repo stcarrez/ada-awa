@@ -507,6 +507,8 @@ package AWA.Questions.Models is
 
    Query_Question_List : constant ADO.Queries.Query_Definition_Access;
 
+   Query_Question_Tag_List : constant ADO.Queries.Query_Definition_Access;
+
 
    type Question_Bean is abstract new AWA.Questions.Models.Question_Ref
      and Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with null record;
@@ -741,4 +743,10 @@ private
                                      File => File_3.File'Access);
    Query_Question_List : constant ADO.Queries.Query_Definition_Access
    := Def_Questioninfo_Question_List.Query'Access;
+
+   package Def_Questioninfo_Question_Tag_List is
+      new ADO.Queries.Loaders.Query (Name => "question-tag-list",
+                                     File => File_3.File'Access);
+   Query_Question_Tag_List : constant ADO.Queries.Query_Definition_Access
+   := Def_Questioninfo_Question_Tag_List.Query'Access;
 end AWA.Questions.Models;
