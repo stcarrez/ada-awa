@@ -33,4 +33,7 @@ package AWA.Tags.Modules.Tests is
    --  Test tag removal.
    procedure Test_Remove_Tag (T : in out Test);
 
+   --  Test tag creation and removal.
+   procedure Test_Update_Tag (T : in out Test);
+
 end AWA.Tags.Modules.Tests;
