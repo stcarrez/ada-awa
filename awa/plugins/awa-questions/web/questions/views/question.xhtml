@@ -29,6 +29,8 @@
             <div class='vote-down'><em></em></div>
         </div>
         <div class='question-content'>
+            <awa:tagList value='#{questionInfo.tags}' id='qtags' styleClass="tagedit-list"
+                         tagClass="tagedit-listelement tagedit-listelement-old"/>
             <awa:wiki styleClass='post-text' value="#{questionInfo.question.description}" format="dotclear"/>
             <div class='question-info'>
                 <div class='question-action'>
