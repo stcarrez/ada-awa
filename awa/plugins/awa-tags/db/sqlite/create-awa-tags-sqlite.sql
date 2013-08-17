@@ -72,7 +72,7 @@ CREATE TABLE awa_access_key (
   /* the secure access key. */
   `access_key` VARCHAR(255) NOT NULL,
   /* the access key expiration date. */
-  `expire_date` DATETIME NOT NULL,
+  `expire_date` DATE NOT NULL,
   /* the access key identifier. */
   `id` BIGINT PRIMARY KEY,
   /*  */

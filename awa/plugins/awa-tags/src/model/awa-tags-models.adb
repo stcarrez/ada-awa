@@ -746,6 +746,58 @@ package body AWA.Tags.Models is
       ADO.Objects.Set_Created (Object);
    end Load;
 
+   --  --------------------
+   --  Get the bean attribute identified by the given name.
+   --  --------------------
+   overriding
+   function Get_Value (From : in Tag_Info;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "tag" then
+         return Util.Beans.Objects.To_Object (From.Tag);
+      end if;
+      if Name = "count" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Count));
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+   --  --------------------
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   --  --------------------
+   procedure List (Object  : in out Tag_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+   begin
+      List (Object.List, Session, Context);
+   end List;
+   --  --------------------
+   --  The tag information.
+   --  --------------------
+   procedure List (Object  : in out Tag_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+      procedure Read (Into : in out Tag_Info);
+
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Context);
+      Pos  : Natural := 0;
+      procedure Read (Into : in out Tag_Info) is
+      begin
+         Into.Tag := Stmt.Get_Unbounded_String (0);
+         Into.Count := Stmt.Get_Natural (1);
+      end Read;
+   begin
+      Stmt.Execute;
+      Tag_Info_Vectors.Clear (Object);
+      while Stmt.Has_Elements loop
+         Object.Insert_Space (Before => Pos);
+         Object.Update_Element (Index => Pos, Process => Read'Access);
+         Pos := Pos + 1;
+         Stmt.Next;
+      end loop;
+   end List;
+
 
 
 end AWA.Tags.Models;

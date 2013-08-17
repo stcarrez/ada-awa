@@ -226,10 +226,49 @@ package AWA.Tags.Models is
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class);
 
+   --  --------------------
+   --  The tag information.
+   --  --------------------
+   type Tag_Info is new Util.Beans.Basic.Readonly_Bean with record
+      --  the tag name.
+      Tag : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the number of references for the tag.
+      Count : Natural;
+
+   end record;
+
+   --  Get the bean attribute identified by the given name.
+   overriding
+   function Get_Value (From : in Tag_Info;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   package Tag_Info_Beans is
+      new Util.Beans.Basic.Lists (Element_Type => Tag_Info);
+   package Tag_Info_Vectors renames Tag_Info_Beans.Vectors;
+   subtype Tag_Info_List_Bean is Tag_Info_Beans.List_Bean;
+
+   type Tag_Info_List_Bean_Access is access all Tag_Info_List_Bean;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Tag_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   subtype Tag_Info_Vector is Tag_Info_Vectors.Vector;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Tag_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
 
    Query_Check_Tag : constant ADO.Queries.Query_Definition_Access;
 
    Query_Tag_List : constant ADO.Queries.Query_Definition_Access;
+
+   Query_Tag_Search : constant ADO.Queries.Query_Definition_Access;
+
+   Query_Tag_List_All : constant ADO.Queries.Query_Definition_Access;
 
 
 
@@ -355,17 +394,29 @@ private
 
    package File_1 is
       new ADO.Queries.Loaders.File (Path => "tag-queries.xml",
-                                    Sha1 => "9B2B599473F75F92CB5AB5045675E4CCEF926543");
+                                    Sha1 => "BFA439EF20901C425F86DB33AD8870BADB46FBEB");
 
-   package Def_Check_Tag is
+   package Def_Taginfo_Check_Tag is
       new ADO.Queries.Loaders.Query (Name => "check-tag",
                                      File => File_1.File'Access);
    Query_Check_Tag : constant ADO.Queries.Query_Definition_Access
-   := Def_Check_Tag.Query'Access;
+   := Def_Taginfo_Check_Tag.Query'Access;
 
-   package Def_Tag_List is
+   package Def_Taginfo_Tag_List is
       new ADO.Queries.Loaders.Query (Name => "tag-list",
                                      File => File_1.File'Access);
    Query_Tag_List : constant ADO.Queries.Query_Definition_Access
-   := Def_Tag_List.Query'Access;
+   := Def_Taginfo_Tag_List.Query'Access;
+
+   package Def_Taginfo_Tag_Search is
+      new ADO.Queries.Loaders.Query (Name => "tag-search",
+                                     File => File_1.File'Access);
+   Query_Tag_Search : constant ADO.Queries.Query_Definition_Access
+   := Def_Taginfo_Tag_Search.Query'Access;
+
+   package Def_Taginfo_Tag_List_All is
+      new ADO.Queries.Loaders.Query (Name => "tag-list-all",
+                                     File => File_1.File'Access);
+   Query_Tag_List_All : constant ADO.Queries.Query_Definition_Access
+   := Def_Taginfo_Tag_List_All.Query'Access;
 end AWA.Tags.Models;
