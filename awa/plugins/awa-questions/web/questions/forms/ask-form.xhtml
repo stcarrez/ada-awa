@@ -19,6 +19,7 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:c="http://java.sun.com/jstl/core"
+        xmlns:awa="http://code.google.com/p/ada-awa/jsf"
         xmlns:h="http://java.sun.com/jsf/html">
 
   <div class='awa-post ui-widget awa-form'>
@@ -34,6 +35,13 @@
                 <dd>
                     <h:inputText id='title' size='50' required='true' value='#{question.title}'
                             placeholder='this is your question'/>
+                </dd>
+                <dt>
+                    <label for='qtags'>#{questionMsg.question_tags_label}</label>
+                </dt>
+                <dd>
+                    <awa:tagList value='#{question.tags}' id='qtags'
+                                 autoCompleteUrl='#{contextPath}/questions/lists/tag-search.html'/>
                 </dd>
                 <dd>
                     <h:inputTextarea id='text' rows='15' required='false' value='#{question.description}'/>
