@@ -17,26 +17,10 @@
 -----------------------------------------------------------------------
 with ADO.Queries;
 with ADO.Statements;
-with ADO.Sessions;
 with ADO.Sessions.Entities;
 
 with AWA.Tags.Models;
 package body AWA.Tags.Beans is
-
-   --  ------------------------------
-   --  Get the value identified by the name.
-   --  If the name cannot be found, the method should return the Null object.
-   --  ------------------------------
-   overriding
-   function Get_Value (From : in Tag_List_Bean;
-                       Name : in String) return Util.Beans.Objects.Object is
-   begin
-      if Name = "count" then
-         return Util.Beans.Objects.To_Object (Integer (From.List.Length));
-      else
-         return Util.Beans.Objects.Null_Object;
-      end if;
-   end Get_Value;
 
    --  ------------------------------
    --  Set the value identified by the name.
@@ -56,34 +40,6 @@ package body AWA.Tags.Beans is
    end Set_Value;
 
    --  ------------------------------
-   --  Get the number of elements in the list.
-   --  ------------------------------
-   overriding
-   function Get_Count (From : in Tag_List_Bean) return Natural is
-   begin
-      return Natural (From.List.Length);
-   end Get_Count;
-
-   --  ------------------------------
-   --  Set the current row index.  Valid row indexes start at 1.
-   --  ------------------------------
-   overriding
-   procedure Set_Row_Index (From  : in out Tag_List_Bean;
-                            Index : in Natural) is
-   begin
-      From.Current := Index;
-   end Set_Row_Index;
-
-   --  ------------------------------
-   --  Get the element at the current row index.
-   --  ------------------------------
-   overriding
-   function Get_Row (From  : in Tag_List_Bean) return Util.Beans.Objects.Object is
-   begin
-      return From.List.Element (From.Current);
-   end Get_Row;
-
-   --  ------------------------------
    --  Set the entity type (database table) onto which the tags are associated.
    --  ------------------------------
    procedure Set_Entity_Type (Into  : in out Tag_List_Bean;
@@ -93,6 +49,15 @@ package body AWA.Tags.Beans is
    end Set_Entity_Type;
 
    --  ------------------------------
+   --  Set the permission to check before removing or adding a tag on the entity.
+   --  ------------------------------
+   procedure Set_Permission (Into       : in out Tag_List_Bean;
+                             Permission : in String) is
+   begin
+      Into.Permission := Ada.Strings.Unbounded.To_Unbounded_String (Permission);
+   end Set_Permission;
+
+   --  ------------------------------
    --  Load the tags associated with the given database identifier.
    --  ------------------------------
    procedure Load_Tags (Into          : in out Tag_List_Bean;
@@ -100,7 +65,6 @@ package body AWA.Tags.Beans is
                         For_Entity_Id : in ADO.Identifier) is
       use ADO.Sessions.Entities;
 
---        Session     : constant ADO.Sessions.Session := Into.Module.Get_Session;
       Entity_Type : constant String := Ada.Strings.Unbounded.To_String (Into.Entity_Type);
       Kind        : constant ADO.Entity_Type := Find_Entity_Type (Session, Entity_Type);
       Query       : ADO.Queries.Context;
@@ -121,6 +85,46 @@ package body AWA.Tags.Beans is
    end Load_Tags;
 
    --  ------------------------------
+   --  Set the list of tags to add.
+   --  ------------------------------
+   procedure Set_Added (Into  : in out Tag_List_Bean;
+                        Tags  : in Util.Strings.Vectors.Vector) is
+   begin
+      Into.Added := Tags;
+   end Set_Added;
+
+   --  ------------------------------
+   --  Set the list of tags to remove.
+   --  ------------------------------
+   procedure Set_Deleted (Into : in out Tag_List_Bean;
+                          Tags : in Util.Strings.Vectors.Vector) is
+   begin
+      Into.Deleted := Tags;
+   end Set_Deleted;
+
+   --  ------------------------------
+   --  Update the tags associated with the tag entity represented by <tt>For_Entity_Id</tt>.
+   --  The list of tags defined by <tt>Set_Deleted</tt> are removed first and the list of
+   --  tags defined by <tt>Set_Added</tt> are associated with the database entity.
+   --  ------------------------------
+   procedure Update_Tags (From          : in Tag_List_Bean;
+                          For_Entity_Id : in ADO.Identifier) is
+      use type AWA.Tags.Modules.Tag_Module_Access;
+
+      Entity_Type : constant String := Ada.Strings.Unbounded.To_String (From.Entity_Type);
+      Service     : AWA.Tags.Modules.Tag_Module_Access := From.Module;
+   begin
+      if Service = null then
+         Service := AWA.Tags.Modules.Get_Tag_Module;
+      end if;
+      Service.Update_Tags (Id          => For_Entity_Id,
+                           Entity_Type => Entity_Type,
+                           Permission  => Ada.Strings.Unbounded.To_String (From.Permission),
+                           Added       => From.Added,
+                           Deleted     => From.Deleted);
+   end Update_Tags;
+
+   --  ------------------------------
    --  Create the tag list bean instance.
    --  ------------------------------
    function Create_Tag_List_Bean (Module : in AWA.Tags.Modules.Tag_Module_Access)
@@ -130,5 +134,121 @@ package body AWA.Tags.Beans is
       Result.Module := Module;
       return Result.all'Access;
    end Create_Tag_List_Bean;
+
+   --  ------------------------------
+   --  Search the tags that match the search string.
+   --  ------------------------------
+   procedure Search_Tags (Into    : in out Tag_Search_Bean;
+                          Session : in ADO.Sessions.Session;
+                          Search  : in String) is
+      use ADO.Sessions.Entities;
+
+      Entity_Type : constant String := Ada.Strings.Unbounded.To_String (Into.Entity_Type);
+      Kind        : constant ADO.Entity_Type := Find_Entity_Type (Session, Entity_Type);
+      Query       : ADO.Queries.Context;
+   begin
+      Query.Set_Query (AWA.Tags.Models.Query_Tag_Search);
+      Query.Bind_Param ("entity_type", Kind);
+      Query.Bind_Param ("search", Search & "%");
+      declare
+         Stmt : ADO.Statements.Query_Statement := Session.Create_Statement (Query);
+      begin
+         Stmt.Execute;
+
+         while Stmt.Has_Elements loop
+            Into.List.Append (Util.Beans.Objects.To_Object (Stmt.Get_String (0)));
+            Stmt.Next;
+         end loop;
+      end;
+   end Search_Tags;
+
+   --  ------------------------------
+   --  Set the value identified by the name.
+   --  If the name cannot be found, the method should raise the No_Value
+   --  exception.
+   --  ------------------------------
+   overriding
+   procedure Set_Value (From  : in out Tag_Search_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "entity_type" then
+         From.Entity_Type := Util.Beans.Objects.To_Unbounded_String (Value);
+
+      elsif Name = "search" then
+         declare
+            Session : constant ADO.Sessions.Session := From.Module.Get_Session;
+         begin
+            From.Search_Tags (Session, Util.Beans.Objects.To_String (Value));
+         end;
+      end if;
+   end Set_Value;
+
+   --  ------------------------------
+   --  Set the entity type (database table) onto which the tags are associated.
+   --  ------------------------------
+   procedure Set_Entity_Type (Into  : in out Tag_Search_Bean;
+                              Table : in ADO.Schemas.Class_Mapping_Access) is
+   begin
+      Into.Entity_Type := Ada.Strings.Unbounded.To_Unbounded_String (Table.Table.all);
+   end Set_Entity_Type;
+
+   --  ------------------------------
+   --  Create the tag search bean instance.
+   --  ------------------------------
+   function Create_Tag_Search_Bean (Module : in AWA.Tags.Modules.Tag_Module_Access)
+                                  return Util.Beans.Basic.Readonly_Bean_Access is
+      Result : constant Tag_Search_Bean_Access := new Tag_Search_Bean;
+   begin
+      Result.Module := Module;
+      return Result.all'Access;
+   end Create_Tag_Search_Bean;
+
+   --  ------------------------------
+   --  Set the value identified by the name.
+   --  If the name cannot be found, the method should raise the No_Value
+   --  exception.
+   --  ------------------------------
+   overriding
+   procedure Set_Value (From  : in out Tag_Info_List_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "entity_type" then
+         From.Entity_Type := Util.Beans.Objects.To_Unbounded_String (Value);
+         declare
+            Session : ADO.Sessions.Session := From.Module.Get_Session;
+         begin
+            From.Load_Tags (Session);
+         end;
+      end if;
+   end Set_Value;
+
+   --  ------------------------------
+   --  Load the list of tags.
+   --  ------------------------------
+   procedure Load_Tags (Into    : in out Tag_Info_List_Bean;
+                        Session : in out ADO.Sessions.Session) is
+      use ADO.Sessions.Entities;
+
+      Entity_Type : constant String := Ada.Strings.Unbounded.To_String (Into.Entity_Type);
+      Kind        : constant ADO.Entity_Type := Find_Entity_Type (Session, Entity_Type);
+      Query       : ADO.Queries.Context;
+   begin
+      Query.Set_Query (AWA.Tags.Models.Query_Tag_List_All);
+      Query.Bind_Param ("entity_type", Kind);
+      AWA.Tags.Models.List (Into, Session, Query);
+   end Load_Tags;
+
+   --  ------------------------------
+   --  Create the tag info list bean instance.
+   --  ------------------------------
+   function Create_Tag_Info_List_Bean (Module : in AWA.Tags.Modules.Tag_Module_Access)
+                                    return Util.Beans.Basic.Readonly_Bean_Access is
+      Result : constant Tag_Info_List_Bean_Access := new Tag_Info_List_Bean;
+   begin
+      Result.Module := Module;
+      return Result.all'Access;
+   end Create_Tag_Info_List_Bean;
 
 end AWA.Tags.Beans;
