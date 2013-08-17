@@ -10,7 +10,8 @@
 /**
  * Styles of the tagedit inputsforms
  */
-.tagedit-list {margin: 0; padding: 5px 5px 0 5px; border: 1px solid #c6c6c6; width: 400px; overflow: auto; font-size: 11px; min-height: 25px; }
+.tagedit-list {margin: 0; padding: 5px 5px 0 5px; width: 400px; overflow: auto; font-size: 11px; min-height: 25px; }
+.awa-form .tagedit-list {border: 1px solid #ccc; margin-bottom: 5px; }
 .tagedit-list li.tagedit-listelement {list-style-type: none; float: left; margin: 0 5px 5px 0; padding: 0; }
 /* New Item input */
 .tagedit-list li.tagedit-listelement-new input {border: 0; height: 100%; padding: 2px 5px; width: 15px; background: #fff;}
@@ -37,3 +38,4 @@
 .tagedit-list li.tagedit-listelement-deleted:hover {padding-right: 5px; background-color: #FFD6D6; border-color: #FFB7B7; border-style: dashed; }
 .tagedit-list li.tagedit-listelement-deleted span {text-decoration: line-through;}
 .tagedit-list li.tagedit-listelement-deleted a.tagedit-close {margin-right: 0;}
+.tagedit-list li.tagedit-listelement a { padding-right: 5px; text-decoration: none; padding-bottom: 5px; }
