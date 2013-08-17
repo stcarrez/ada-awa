@@ -16,8 +16,15 @@
   -->
 <ul class='question-nav'
         xmlns:awa="http://code.google.com/p/ada-awa/jsf"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:h="http://java.sun.com/jsf/html">
     <li id='question-nav-ask'>
         <a href="#{contextPath}/questions/ask.html">#{questionMsg.question_ask_question_label}</a>
+    </li>
+    <li id='question-nav-tags'>
+        <ui:include src="/tags/lists/list.xhtml">
+            <ui:param name="link" value="#{contextPath}/questions/tagged.html"/>
+            <ui:param name="tagList" value="#{questionTagList}"/>
+        </ui:include>
     </li>
 </ul>
