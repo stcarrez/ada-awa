@@ -26,7 +26,11 @@ with AWA.Tags.Beans;
 package AWA.Questions.Beans is
 
    type Question_Bean is new AWA.Questions.Models.Question_Bean with record
-      Service : Modules.Question_Module_Access := null;
+      Service   : Modules.Question_Module_Access := null;
+
+      --  List of tags associated with the question.
+      Tags      : aliased AWA.Tags.Beans.Tag_List_Bean;
+      Tags_Bean : Util.Beans.Basic.Readonly_Bean_Access;
    end record;
    type Question_Bean_Access is access all Question_Bean'Class;
 
@@ -81,6 +85,27 @@ package AWA.Questions.Beans is
    --  Create the answer bean instance.
    function Create_Answer_Bean (Module : in AWA.Questions.Modules.Question_Module_Access)
                                        return Util.Beans.Basic.Readonly_Bean_Access;
+
+   type Question_List_Bean is
+     new AWA.Questions.Models.Question_Info_List_Bean and Util.Beans.Basic.Bean with record
+      Service : Modules.Question_Module_Access := null;
+      Tag     : Ada.Strings.Unbounded.Unbounded_String;
+   end record;
+   type Question_List_Bean_Access is access all Question_List_Bean'Class;
+
+   --  Get the value identified by the name.
+   overriding
+   function Get_Value (From : in Question_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the value identified by the name.
+   overriding
+   procedure Set_Value (From  : in out Question_List_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   --  Load the list of question.  If a tag was set, filter the list of questions with the tag.
+   procedure Load_List (Into : in out Question_List_Bean);
 
    --  Create the Question_Info_List_Bean bean instance.
    function Create_Question_List_Bean (Module : in AWA.Questions.Modules.Question_Module_Access)

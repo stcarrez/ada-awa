@@ -19,8 +19,11 @@ with ADO.Queries;
 with ADO.Sessions;
 with ADO.Sessions.Entities;
 
+with AWA.Tags.Modules;
 with AWA.Services.Contexts;
 package body AWA.Questions.Beans is
+
+   package ASC renames AWA.Services.Contexts;
 
    --  ------------------------------
    --  Get the value identified by the name.
@@ -29,7 +32,9 @@ package body AWA.Questions.Beans is
    function Get_Value (From : in Question_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
-      if From.Is_Null then
+      if Name = "tags" then
+         return Util.Beans.Objects.To_Object (From.Tags_Bean, Util.Beans.Objects.STATIC);
+      elsif From.Is_Null then
          return Util.Beans.Objects.Null_Object;
       else
          return AWA.Questions.Models.Question_Bean (From).Get_Value (Name);
@@ -51,8 +56,14 @@ package body AWA.Questions.Beans is
          From.Set_Description (Util.Beans.Objects.To_String (Value));
 
       elsif Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
-            From.Service.Load_Question (From,
-                                        ADO.Identifier (Util.Beans.Objects.To_Integer (Value)));
+         declare
+            Ctx : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
+            DB  : constant ADO.Sessions.Session := AWA.Services.Contexts.Get_Session (Ctx);
+            Id  : constant ADO.Identifier := ADO.Identifier (Util.Beans.Objects.To_Integer (Value));
+         begin
+            From.Service.Load_Question (From, Id);
+            From.Tags.Load_Tags (DB, Id);
+         end;
       end if;
    end Set_Value;
 
@@ -64,6 +75,7 @@ package body AWA.Questions.Beans is
       pragma Unreferenced (Outcome);
    begin
       Bean.Service.Save_Question (Bean);
+      Bean.Tags.Update_Tags (Bean.Get_Id);
    end Save;
 
    --  ------------------------------
@@ -83,7 +95,10 @@ package body AWA.Questions.Beans is
       return Util.Beans.Basic.Readonly_Bean_Access is
       Object : constant Question_Bean_Access := new Question_Bean;
    begin
-      Object.Service := Module;
+      Object.Service   := Module;
+      Object.Tags_Bean := Object.Tags'Access;
+      Object.Tags.Set_Entity_Type (AWA.Questions.Models.QUESTION_TABLE);
+      Object.Tags.Set_Permission ("question-edit");
       return Object.all'Access;
    end Create_Question_Bean;
 
@@ -156,6 +171,56 @@ package body AWA.Questions.Beans is
    end Create_Answer_Bean;
 
    --  ------------------------------
+   --  Get the value identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Question_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      return AWA.Questions.Models.Question_Info_List_Bean (From).Get_Value (Name);
+   end Get_Value;
+
+   --  ------------------------------
+   --  Set the value identified by the name.
+   --  ------------------------------
+   overriding
+   procedure Set_Value (From  : in out Question_List_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "tag" then
+         From.Tag := Util.Beans.Objects.To_Unbounded_String (Value);
+         From.Load_List;
+      end if;
+   end Set_Value;
+
+   --  ------------------------------
+   --  Load the list of question.  If a tag was set, filter the list of questions with the tag.
+   --  ------------------------------
+   procedure Load_List (Into : in out Question_List_Bean) is
+      use AWA.Questions.Models;
+      use AWA.Services;
+      use type ADO.Identifier;
+
+      Session : ADO.Sessions.Session := Into.Service.Get_Session;
+      Query   : ADO.Queries.Context;
+      Tag_Id  : ADO.Identifier;
+   begin
+      AWA.Tags.Modules.Find_Tag_Id (Session, Ada.Strings.Unbounded.To_String (Into.Tag), Tag_Id);
+      if Tag_Id /= ADO.NO_IDENTIFIER then
+         Query.Set_Query (AWA.Questions.Models.Query_Question_Tag_List);
+         Query.Bind_Param (Name => "tag", Value => Tag_Id);
+      else
+         Query.Set_Query (AWA.Questions.Models.Query_Question_List);
+      end if;
+      ADO.Sessions.Entities.Bind_Param (Params  => Query,
+                                        Name    => "entity_type",
+                                        Table   => AWA.Questions.Models.QUESTION_TABLE,
+                                        Session => Session);
+      AWA.Questions.Models.List (Into, Session, Query);
+   end Load_List;
+
+   --  ------------------------------
    --  Create the Question_Info_List_Bean bean instance.
    --  ------------------------------
    function Create_Question_List_Bean (Module : in AWA.Questions.Modules.Question_Module_Access)
@@ -163,10 +228,11 @@ package body AWA.Questions.Beans is
       use AWA.Questions.Models;
       use AWA.Services;
 
-      Object  : constant Question_Info_List_Bean_Access := new Question_Info_List_Bean;
+      Object  : constant Question_List_Bean_Access := new Question_List_Bean;
       Session : ADO.Sessions.Session := Module.Get_Session;
       Query   : ADO.Queries.Context;
    begin
+      Object.Service := Module;
       Query.Set_Query (AWA.Questions.Models.Query_Question_List);
       ADO.Sessions.Entities.Bind_Param (Params  => Query,
                                         Name    => "entity_type",
