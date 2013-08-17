@@ -104,8 +104,9 @@
 		}
 		else {
 			// Elementname does not match the expected format, exit
-			alert('elementname dows not match the expected format (regexp: '+baseNameRegexp+')')
-			return;
+		    //	alert('elementname dows not match the expected format (regexp: '+baseNameRegexp+')')
+			// return;
+			baseName = elements.eq(0).attr('name');
 		}
 
 		// init elements
@@ -260,7 +261,8 @@
 					switch(event.target.tagName) {
 						case 'A':
 							$(event.target).parent().fadeOut(options.animSpeed, function() {
-								$(event.target).parent().remove();
+								// $(event.target).parent().remove();
+								markAsDeleted($(event.target).parent());
 								});
 							break;
 						case 'INPUT':
@@ -305,7 +307,7 @@
 				var isNewResult = isNew(textfield.val(), true);
 				if(textfield.val().length > 0 && (typeof doReset == 'undefined' || doReset === false) && (isNewResult[0] == true)) {
 					// This is a new Value and we do not want to do a reset. Set the new value
-					$(this).find(':hidden').val(textfield.val());
+					$(this).find('input:hidden').val(textfield.val());
 					$(this).find('span').html(textfield.val());
 				}
 
@@ -315,14 +317,14 @@
 				return false;
 			});
 
-			var hidden = element.find(':hidden');
+			var hidden = element.find('input:hidden');
 			html = '<input type="text" name="tmpinput" autocomplete="off" value="'+hidden.val()+'" class="tagedit-edit-input" dir="'+options.direction+'"/>';
 			html += '<a class="tagedit-save" title="'+options.texts.saveEditLinkTitle+'">o</a>';
 			html += '<a class="tagedit-break" title="'+options.texts.breakEditLinkTitle+'">x</a>';
 
 			// If the Element is one from the Database, it can be deleted
-			if(options.allowDelete == true && element.find(':hidden').length > 0 &&
-			typeof element.find(':hidden').attr('name').match(baseNameRegexp)[3] != 'undefined') {
+			if(options.allowDelete == true && element.find('input:hidden').length > 0 &&
+			typeof element.find('input:hidden').attr('name').match(baseNameRegexp)[3] != 'undefined') {
 				html += '<a class="tagedit-delete" title="'+options.texts.deleteLinkTitle+'">d</a>';
 			}
 
@@ -385,7 +387,7 @@
 				.trigger('finishEdit', [true])
 				.addClass('tagedit-listelement-deleted')
 				.attr('title', options.deletedElementTitle);
-				element.find(':hidden').each(function() {
+				element.find('input:hidden').each(function() {
 					var nameEndRegexp = new RegExp('('+options.addedPostfix+'|'+options.deletedPostfix+')?\]');
 					var name = $(this).attr('name').replace(nameEndRegexp, options.deletedPostfix+']');
 					$(this).attr('name', name);
@@ -403,7 +405,7 @@
 		function isNew(value, checkAutocomplete) {
             checkAutocomplete = typeof checkAutocomplete == 'undefined'? false : checkAutocomplete;
 			var autoCompleteId = null;
-            
+
             var compareValue = options.checkNewEntriesCaseSensitive == true? value : value.toLowerCase();
 
 			var isNew = true;
@@ -440,7 +442,7 @@
 						}
 					});
 				}
-                
+
 				// If there is an entry for that already in the autocomplete, don't use it (Check could be case sensitive or not)
 				for (var i = 0; i < result.length; i++) {
                     var label = options.checkNewEntriesCaseSensitive == true? result[i].label : result[i].label.toLowerCase();
