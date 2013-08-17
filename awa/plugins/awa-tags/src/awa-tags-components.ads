@@ -17,10 +17,14 @@
 -----------------------------------------------------------------------
 
 with Util.Beans.Objects;
+with Util.Strings.Vectors;
+
+with EL.Expressions;
 
 with ASF.Components.Html.Forms;
 with ASF.Contexts.Faces;
 with ASF.Contexts.Writer;
+with ASF.Events.Faces;
 with ASF.Factory;
 
 package AWA.Tags.Components is
@@ -46,15 +50,32 @@ package AWA.Tags.Components is
    --
    --    <input type='text' name='' value='tag'/>
    --
-   type Tag_UIInput is new ASF.Components.Html.Forms.UIInput with null record;
+   type Tag_UIInput is new ASF.Components.Html.Forms.UIInput with record
+      --  List of tags that have been added.
+      Added    : Util.Strings.Vectors.Vector;
+
+      --  List of tags that have been removed.
+      Deleted  : Util.Strings.Vectors.Vector;
+
+      --  True if the submitted values are correct.
+      Is_Valid : Boolean := False;
+   end record;
    type Tag_UIInput_Access is access all Tag_UIInput'Class;
 
    --  Returns True if the tag component must be rendered as readonly.
    function Is_Readonly (UI      : in Tag_UIInput;
                          Context : in ASF.Contexts.Faces.Faces_Context'Class) return Boolean;
 
+   --  Render the javascript to enable the tag edition.
+   procedure Render_Script (UI      : in Tag_UIInput;
+                            Id      : in String;
+                            Writer  : in Response_Writer_Access;
+                            Context : in out ASF.Contexts.Faces.Faces_Context'Class);
+
    procedure Render_Tag (UI       : in Tag_UIInput;
+                         Id       : in String;
                          Tag      : in Util.Beans.Objects.Object;
+                         Class    : in Util.Beans.Objects.Object;
                          Readonly : in Boolean;
                          Writer   : in Response_Writer_Access;
                          Context  : in out ASF.Contexts.Faces.Faces_Context'Class);
@@ -69,6 +90,12 @@ package AWA.Tags.Components is
    overriding
    procedure Encode_End (UI      : in Tag_UIInput;
                          Context : in out ASF.Contexts.Faces.Faces_Context'Class);
+
+   --  Get the action method expression to invoke if the command is pressed.
+   --  ------------------------------
+   function Get_Action_Expression (UI      : in Tag_UIInput;
+                                   Context : in ASF.Contexts.Faces.Faces_Context'Class)
+                                   return EL.Expressions.Method_Expression;
 
    --  Decode any new state of the specified component from the request contained
    --  in the specified context and store that state on the component.
@@ -90,5 +117,12 @@ package AWA.Tags.Components is
    overriding
    procedure Process_Updates (UI      : in out Tag_UIInput;
                               Context : in out ASF.Contexts.Faces.Faces_Context'Class);
+
+   --  Broadcast the event to the event listeners installed on this component.
+   --  Listeners are called in the order in which they were added.
+   overriding
+   procedure Broadcast (UI      : in out Tag_UIInput;
+                        Event   : not null access ASF.Events.Faces.Faces_Event'Class;
+                        Context : in out ASF.Contexts.Faces.Faces_Context'Class);
 
 end AWA.Tags.Components;
