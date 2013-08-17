@@ -25,5 +25,39 @@
     WHERE e.entity_type = :entity_type AND e.for_entity_id = :entity_id
        </sql>
     </query>
+
+    <query name='tag-search'>
+       <comment>Get the list of tag names that match some string</comment>
+       <sql>
+    SELECT
+      DISTINCT t.name
+    FROM awa_tagged_entity AS e
+    INNER JOIN awa_tag AS t ON t.id = e.tag_id
+    WHERE e.entity_type = :entity_type AND t.name LIKE :search
+    ORDER BY t.name
+       </sql>
+    </query>
     
+    <class name="AWA.Tags.Models.Tag_Info" bean="yes">
+        <comment>The tag information.</comment>
+        <property type='String' name="tag">
+            <comment>the tag name.</comment>
+        </property>
+        <property type='Natural' name="count">
+            <comment>the number of references for the tag.</comment>
+        </property>
+    </class>
+
+    <query name='tag-list-all'>
+       <comment>Get the list of tags associated with all the database entities of a given type</comment>
+       <sql>
+    SELECT
+      t.name, count(e.id)
+    FROM awa_tagged_entity AS e
+    INNER JOIN awa_tag AS t ON t.id = e.tag_id
+    WHERE e.entity_type = :entity_type
+    GROUP BY t.id
+       </sql>
+    </query>
+
 </query-mapping>
