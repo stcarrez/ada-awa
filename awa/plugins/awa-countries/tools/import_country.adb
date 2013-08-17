@@ -214,24 +214,29 @@ procedure Import_Country is
    Factory : ADO.Sessions.Factory.Session_Factory;
    Parser  : CSV_Parser;
 begin
-   Util.Log.Loggers.Initialize ("log4j.properties");
-   if Count /= 1 then
-      Ada.Text_IO.Put_Line ("Usage: import_country file");
+   if Count /= 2 then
+      Ada.Text_IO.Put_Line ("Usage: import_country config file");
       return;
    end if;
 
-   --  Initialize the database drivers.
-   ADO.Drivers.Initialize ("am.properties");
+   declare
+      Config : constant String := Ada.Command_Line.Argument (1);
+   begin
+      Util.Log.Loggers.Initialize (Config);
 
-   --  Initialize the session factory to connect to the
-   --  database defined by 'ado.database' property.
-   Factory.Create (ADO.Drivers.Get_Config ("ado.database"));
+      --  Initialize the database drivers.
+      ADO.Drivers.Initialize (Config);
+
+      --  Initialize the session factory to connect to the
+      --  database defined by 'ado.database' property.
+      Factory.Create (ADO.Drivers.Get_Config ("database"));
+   end;
 
    DB := Factory.Get_Master_Session;
    DB.Begin_Transaction;
 
    declare
-      File : constant String := Ada.Command_Line.Argument (1);
+      File : constant String := Ada.Command_Line.Argument (2);
    begin
       Parser.Set_Comment_Separator ('#');
       Parser.Set_Field_Separator (ASCII.HT);
