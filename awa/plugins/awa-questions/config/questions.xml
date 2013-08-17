@@ -46,6 +46,47 @@
   </managed-bean>
 
   <managed-bean>
+    <description>The question tag search bean.</description>
+    <managed-bean-name>questionTagSearch</managed-bean-name>
+    <managed-bean-class>AWA.Tags.Beans.Tag_Search_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>entity_type</property-name>
+      <property-class>String</property-class>
+      <value>awa_question</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <description>The list of tags associated with question entities.</description>
+    <managed-bean-name>questionTagList</managed-bean-name>
+    <managed-bean-class>AWA.Tags.Beans.Tag_Info_List_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>entity_type</property-name>
+      <property-class>String</property-class>
+      <value>awa_question</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <description>The question tag editor bean.</description>
+    <managed-bean-name>questionTags</managed-bean-name>
+    <managed-bean-class>AWA.Tags.Beans.Tag_List_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>entity_type</property-name>
+      <property-class>String</property-class>
+      <value>awa_question</value>
+    </managed-property>
+    <managed-property>
+      <property-name>permission</property-name>
+      <property-class>String</property-class>
+      <value>question-edit</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
     <description>The vote bean that allows to vote for an answer.</description>
     <managed-bean-name>answerVote</managed-bean-name>
     <managed-bean-class>AWA.Votes.Beans.Votes_Bean</managed-bean-class>
@@ -267,6 +308,7 @@
         <permission>anonymous</permission>
         <url-pattern>/questions/view.html</url-pattern>
         <url-pattern>/questions/list.html</url-pattern>
+        <url-pattern>/questions/tagged.html</url-pattern>
         <url-pattern>/questions/ajax/questionVote/vote</url-pattern>
         <url-pattern>/questions/ajax/answerVote/vote</url-pattern>
     </url-policy>
@@ -282,6 +324,7 @@
         <url-pattern>/questions/forms/delete-answer.html</url-pattern>
         <url-pattern>/questions/forms/answer-form.html</url-pattern>
         <url-pattern>/questions/edit-answer.html</url-pattern>
+        <url-pattern>/questions/lists/tag-search.html</url-pattern>
     </url-policy>
 
 </module>
