@@ -18,6 +18,9 @@
 with ASF.Applications;
 
 with ADO;
+with ADO.Sessions;
+
+with Util.Strings.Vectors;
 
 with AWA.Modules;
 package AWA.Tags.Modules is
@@ -59,6 +62,24 @@ package AWA.Tags.Modules is
                          Entity_Type : in String;
                          Permission  : in String;
                          Tag         : in String);
+
+   --  Remove the tags defined by the <tt>Deleted</tt> tag list and add the tags defined
+   --  in the <tt>Added</tt> tag list.  The tags are associated with the database entity
+   --  referenced by <tt>Id</tt> in the table identified by <tt>Entity_Type</tt>.
+   --  The permission represented by <tt>Permission</tt> is checked to make sure the current user
+   --  can remove or add the tag.
+   procedure Update_Tags (Model       : in Tag_Module;
+                          Id          : in ADO.Identifier;
+                          Entity_Type : in String;
+                          Permission  : in String;
+                          Added       : in Util.Strings.Vectors.Vector;
+                          Deleted     : in Util.Strings.Vectors.Vector);
+
+   --  Find the tag identifier associated with the given tag.
+   --  Return NO_IDENTIFIER if there is no such tag.
+   procedure Find_Tag_Id (Session : in out ADO.Sessions.Session'Class;
+                          Tag     : in String;
+                          Result  : out ADO.Identifier);
 
 private
 
