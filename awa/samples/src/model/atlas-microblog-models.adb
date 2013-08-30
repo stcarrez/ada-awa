@@ -81,7 +81,8 @@ package body Atlas.Microblog.Models is
 
    function Get_Id (Object : in Mblog_Ref)
                   return ADO.Identifier is
-      Impl : constant Mblog_Access := Mblog_Impl (Object.Get_Object.all)'Access;
+      Impl : constant Mblog_Access
+         := Mblog_Impl (Object.Get_Object.all)'Access;
    begin
       return Impl.Get_Key_Value;
    end Get_Id;
@@ -89,7 +90,8 @@ package body Atlas.Microblog.Models is
 
    function Get_Version (Object : in Mblog_Ref)
                   return Integer is
-      Impl : constant Mblog_Access := Mblog_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Mblog_Access
+         := Mblog_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Version;
    end Get_Version;
@@ -118,7 +120,8 @@ package body Atlas.Microblog.Models is
    end Get_Message;
    function Get_Message (Object : in Mblog_Ref)
                   return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Mblog_Access := Mblog_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Mblog_Access
+         := Mblog_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Message;
    end Get_Message;
@@ -134,7 +137,8 @@ package body Atlas.Microblog.Models is
 
    function Get_Creation_Date (Object : in Mblog_Ref)
                   return Ada.Calendar.Time is
-      Impl : constant Mblog_Access := Mblog_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Mblog_Access
+         := Mblog_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Creation_Date;
    end Get_Creation_Date;
@@ -150,7 +154,8 @@ package body Atlas.Microblog.Models is
 
    function Get_Author (Object : in Mblog_Ref)
                   return AWA.Users.Models.User_Ref'Class is
-      Impl : constant Mblog_Access := Mblog_Impl (Object.Get_Load_Object.all)'Access;
+      Impl : constant Mblog_Access
+         := Mblog_Impl (Object.Get_Load_Object.all)'Access;
    begin
       return Impl.Author;
    end Get_Author;

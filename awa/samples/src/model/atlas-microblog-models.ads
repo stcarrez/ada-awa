@@ -206,7 +206,8 @@ private
          5 => COL_4_1_NAME'Access
 )
      );
-   MBLOG_TABLE : constant ADO.Schemas.Class_Mapping_Access := MBLOG_DEF'Access;
+   MBLOG_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := MBLOG_DEF'Access;
 
    Null_Mblog : constant Mblog_Ref
       := Mblog_Ref'(ADO.Objects.Object_Ref with others => <>);
