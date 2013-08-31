@@ -19,6 +19,7 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:c="http://java.sun.com/jstl/core"
+        xmlns:w="http://code.google.com/p/ada-asf/widget"
         xmlns:awa="http://code.google.com/p/ada-awa/jsf"
         xmlns:h="http://java.sun.com/jsf/html">
 
@@ -27,24 +28,21 @@
         <h:inputHidden id='question-id' value='#{question.id}' required='false'/>
         <div class='grid_8'>
             <h:messages styleClass='error'/>
+            <w:inputText styleClass="awa-required"
+                         id='title' size='50' required='true' value='#{question.title}'
+                         title='#{questionMsg.question_title_label}'/>
             <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
-                <dt>
-                    <label for='title'>#{questionMsg.question_title_label}</label>
-                    <h:message for='title' styleClass='error'/>
-                </dt>
                 <dd>
-                    <h:inputText id='title' size='50' required='true' value='#{question.title}'
-                            placeholder='this is your question'/>
+                    <h:inputTextarea id='text' rows='15' required='false' value='#{question.description}'/>
                 </dd>
+            </dl>
+            <dl class="awa-required">
                 <dt>
                     <label for='qtags'>#{questionMsg.question_tags_label}</label>
                 </dt>
                 <dd>
                     <awa:tagList value='#{question.tags}' id='qtags'
                                  autoCompleteUrl='#{contextPath}/questions/lists/tag-search.html'/>
-                </dd>
-                <dd>
-                    <h:inputTextarea id='text' rows='15' required='false' value='#{question.description}'/>
                 </dd>
             </dl>
             <ul class='awa-buttons'>
