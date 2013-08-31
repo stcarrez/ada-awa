@@ -39,3 +39,6 @@
 .tagedit-list li.tagedit-listelement-deleted span {text-decoration: line-through;}
 .tagedit-list li.tagedit-listelement-deleted a.tagedit-close {margin-right: 0;}
 .tagedit-list li.tagedit-listelement a { padding-right: 5px; text-decoration: none; padding-bottom: 5px; }
+a.tag-link { display: inline-block; padding-right: 5px; text-decoration: none; padding-bottom: 5px;
+ background-color: #dfeffc; color: #2E6E9E; margin: 5px;  }
+a.tag-link:hover { background-color: #c0d0e1; }

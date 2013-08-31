@@ -16,8 +16,8 @@
   -->
 <ul class="tagedit-list" xmlns:h="http://java.sun.com/jsf/html">
     <h:list var="tag" value="#{tagList}">
-        <li class='tagedit-listelement tagedit-listelement-old'>
-            <a href="#{link}?tag=#{tag.tag}">#{tag.tag}</a>
+        <li class='xtagedit-listelement xtagedit-listelement-old'>
+            <a class='tag-link' href="#{link}?tag=#{tag.tag}">#{tag.tag}</a>
         </li>
     </h:list>
 </ul>
