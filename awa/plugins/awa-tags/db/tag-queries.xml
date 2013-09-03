@@ -60,4 +60,16 @@
        </sql>
     </query>
 
+    <query name='tag-list-for-entities'>
+       <comment>Get the list of tags associated with a set of entities of the same type.</comment>
+       <sql>
+    SELECT
+      e.for_entity_id,
+      t.name
+    FROM awa_tagged_entity AS e
+    INNER JOIN awa_tag AS t ON t.id = e.tag_id
+    WHERE e.entity_type = :entity_type AND e.for_entity_id IN (:entity_id_list)
+       </sql>
+    </query>
+
 </query-mapping>
