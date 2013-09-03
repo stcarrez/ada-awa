@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-beans -- Storage Ada Beans
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,7 @@
 with Ada.Containers;
 
 with ADO;
+with ADO.Utils;
 with ADO.Queries;
 with ADO.Sessions;
 with ADO.Objects;
@@ -55,10 +56,10 @@ package body AWA.Storages.Beans is
       Folder  : Models.Storage_Folder_Ref;
    begin
       if Name = "folderId" then
-         Manager.Load_Folder (Folder, ADO.Identifier (Util.Beans.Objects.To_Integer (Value)));
+         Manager.Load_Folder (Folder, ADO.Utils.To_Identifier (Value));
          From.Set_Folder (Folder);
       elsif Name = "id" then
-         Manager.Load_Storage (From, ADO.Identifier (Util.Beans.Objects.To_Integer (Value)));
+         Manager.Load_Storage (From, ADO.Utils.To_Identifier (Value));
       end if;
    end Set_Value;
 
