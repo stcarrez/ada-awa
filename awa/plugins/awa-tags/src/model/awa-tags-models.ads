@@ -270,6 +270,8 @@ package AWA.Tags.Models is
 
    Query_Tag_List_All : constant ADO.Queries.Query_Definition_Access;
 
+   Query_Tag_List_For_Entities : constant ADO.Queries.Query_Definition_Access;
+
 
 
 private
@@ -419,4 +421,10 @@ private
                                      File => File_1.File'Access);
    Query_Tag_List_All : constant ADO.Queries.Query_Definition_Access
    := Def_Taginfo_Tag_List_All.Query'Access;
+
+   package Def_Taginfo_Tag_List_For_Entities is
+      new ADO.Queries.Loaders.Query (Name => "tag-list-for-entities",
+                                     File => File_1.File'Access);
+   Query_Tag_List_For_Entities : constant ADO.Queries.Query_Definition_Access
+   := Def_Taginfo_Tag_List_For_Entities.Query'Access;
 end AWA.Tags.Models;
