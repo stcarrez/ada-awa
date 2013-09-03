@@ -16,12 +16,16 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Ada.Strings.Unbounded;
+with Ada.Containers.Hashed_Maps;
+with Ada.Finalization;
 
 with Util.Beans.Basic;
 with Util.Beans.Objects.Lists;
+with Util.Beans.Lists.Strings;
 with Util.Strings.Vectors;
 
 with ADO;
+with ADO.Utils;
 with ADO.Schemas;
 with ADO.Sessions;
 
@@ -118,6 +122,30 @@ package AWA.Tags.Beans is
    function Create_Tag_Info_List_Bean (Module : in AWA.Tags.Modules.Tag_Module_Access)
                                        return Util.Beans.Basic.Readonly_Bean_Access;
 
+   --  The <tt>Entity_Tag_Map</tt> contains a list of tags associated with some entities.
+   --  It allows to retrieve from the database all the tags associated with several entities
+   --  and get the list of tags for a given entity.
+   type Entity_Tag_Map is new Ada.Finalization.Limited_Controlled with private;
+
+   --  Get the list of tags associated with the given entity.
+   --  Returns null if the entity does not have any tag.
+   function Get_Tags (From       : in Entity_Tag_Map;
+                      For_Entity : in ADO.Identifier)
+                      return Util.Beans.Lists.Strings.List_Bean_Access;
+
+   --  Release the list of tags.
+   procedure Clear (List : in out Entity_Tag_Map);
+
+   --  Load the list of tags associated with a list of entities.
+   procedure Load_Tags (Into        : in out Entity_Tag_Map;
+                        Session     : in out ADO.Sessions.Session'Class;
+                        Entity_Type : in String;
+                        List        : in ADO.Utils.Identifier_Vector);
+
+   --  Release the list of tags.
+   overriding
+   procedure Finalize (List : in out Entity_Tag_Map);
+
 private
 
    type Tag_List_Bean is
@@ -140,6 +168,17 @@ private
      new AWA.Tags.Models.Tag_Info_List_Bean and Util.Beans.Basic.Bean with record
       Module      : AWA.Tags.Modules.Tag_Module_Access;
       Entity_Type : Ada.Strings.Unbounded.Unbounded_String;
+   end record;
+
+   package Entity_Tag_Maps is
+     new Ada.Containers.Hashed_Maps (Key_Type        => ADO.Identifier,
+                                     Element_Type    => Util.Beans.Lists.Strings.List_Bean_Access,
+                                     Hash            => ADO.Utils.Hash,
+                                     Equivalent_Keys => ADO."=",
+                                     "="             => Util.Beans.Lists.Strings."=");
+
+   type Entity_Tag_Map is new Ada.Finalization.Limited_Controlled with record
+      Tags : Entity_Tag_Maps.Map;
    end record;
 
 end AWA.Tags.Beans;
