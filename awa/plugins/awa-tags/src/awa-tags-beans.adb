@@ -15,11 +15,12 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Ada.Unchecked_Deallocation;
+
 with ADO.Queries;
 with ADO.Statements;
 with ADO.Sessions.Entities;
 
-with AWA.Tags.Models;
 package body AWA.Tags.Beans is
 
    --  ------------------------------
@@ -250,5 +251,88 @@ package body AWA.Tags.Beans is
       Result.Module := Module;
       return Result.all'Access;
    end Create_Tag_Info_List_Bean;
+
+   --  ------------------------------
+   --  Get the list of tags associated with the given entity.
+   --  Returns null if the entity does not have any tag.
+   --  ------------------------------
+   function Get_Tags (From       : in Entity_Tag_Map;
+                      For_Entity : in ADO.Identifier)
+                      return Util.Beans.Lists.Strings.List_Bean_Access is
+      Pos : constant Entity_Tag_Maps.Cursor := From.Tags.Find (For_Entity);
+   begin
+      if Entity_Tag_Maps.Has_Element (Pos) then
+         return Entity_Tag_Maps.Element (Pos);
+      else
+         return null;
+      end if;
+   end Get_Tags;
+
+   --  ------------------------------
+   --  Load the list of tags associated with a list of entities.
+   --  ------------------------------
+   procedure Load_Tags (Into        : in out Entity_Tag_Map;
+                        Session     : in out ADO.Sessions.Session'Class;
+                        Entity_Type : in String;
+                        List        : in ADO.Utils.Identifier_Vector) is
+      Query : ADO.Queries.Context;
+      Kind  : ADO.Entity_Type;
+   begin
+      if List.Is_Empty then
+         return;
+      end if;
+      Kind := ADO.Sessions.Entities.Find_Entity_Type (Session, Entity_Type);
+      Query.Set_Query (AWA.Tags.Models.Query_Tag_List_All);
+      Query.Bind_Param ("entity_id_list", ADO.Utils.To_Parameter_List (List));
+      Query.Bind_Param ("entity_type", Kind);
+      declare
+         Stmt  : ADO.Statements.Query_Statement := Session.Create_Statement (Query);
+         Id    : ADO.Identifier;
+         List  : Util.Beans.Lists.Strings.List_Bean_Access;
+         Pos   : Entity_Tag_Maps.Cursor;
+      begin
+         Stmt.Execute;
+         while Stmt.Has_Elements loop
+            Id := Stmt.Get_Identifier (0);
+            Pos := Into.Tags.Find (Id);
+            if not Entity_Tag_Maps.Has_Element (Pos) then
+               List := new Util.Beans.Lists.Strings.List_Bean;
+               Into.Tags.Insert (Id, List);
+            else
+               List := Entity_Tag_Maps.Element (Pos);
+            end if;
+            List.List.Append (Stmt.Get_String (1));
+         end loop;
+      end;
+   end Load_Tags;
+
+   --  ------------------------------
+   --  Release the list of tags.
+   --  ------------------------------
+   procedure Clear (List : in out Entity_Tag_Map) is
+      procedure Free is
+        new Ada.Unchecked_Deallocation (Object => Util.Beans.Lists.Strings.List_Bean'Class,
+                                        Name   => Util.Beans.Lists.Strings.List_Bean_Access);
+
+      Pos  : Entity_Tag_Maps.Cursor;
+      Tags : Util.Beans.Lists.Strings.List_Bean_Access;
+   begin
+      loop
+         Pos := List.Tags.First;
+         exit when not Entity_Tag_Maps.Has_Element (Pos);
+         Tags := Entity_Tag_Maps.Element (Pos);
+         List.Tags.Delete (Pos);
+         Free (Tags);
+      end loop;
+   end Clear;
+
+   --  ------------------------------
+   --  Release the list of tags.
+   --  ------------------------------
+   overriding
+   procedure Finalize (List : in out Entity_Tag_Map) is
+   begin
+      List.Clear;
+   end Finalize;
 
 end AWA.Tags.Beans;
