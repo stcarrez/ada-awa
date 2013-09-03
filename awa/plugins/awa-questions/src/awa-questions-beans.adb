@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with ADO.Queries;
+with ADO.Utils;
 with ADO.Sessions;
 with ADO.Sessions.Entities;
 
@@ -59,7 +60,7 @@ package body AWA.Questions.Beans is
          declare
             Ctx : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
             DB  : constant ADO.Sessions.Session := AWA.Services.Contexts.Get_Session (Ctx);
-            Id  : constant ADO.Identifier := ADO.Identifier (Util.Beans.Objects.To_Integer (Value));
+            Id  : constant ADO.Identifier := ADO.Utils.To_Identifier (Value);
          begin
             From.Service.Load_Question (From, Id);
             From.Tags.Load_Tags (DB, Id);
@@ -127,14 +128,14 @@ package body AWA.Questions.Beans is
    begin
       if Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
          From.Service.Load_Answer (From, From.Question,
-                                   ADO.Identifier (Util.Beans.Objects.To_Integer (Value)));
+                                   ADO.Utils.To_Identifier (Value));
 
       elsif Name = "answer" then
          From.Set_Answer (Util.Beans.Objects.To_String (Value));
 
       elsif Name = "question_id" and not Util.Beans.Objects.Is_Null (Value) then
          From.Service.Load_Question (From.Question,
-                                     ADO.Identifier (Util.Beans.Objects.To_Integer (Value)));
+                                     ADO.Utils.To_Identifier (Value));
       end if;
    end Set_Value;
 
@@ -284,7 +285,7 @@ package body AWA.Questions.Beans is
             Query   : ADO.Queries.Context;
             List    : AWA.Questions.Models.Question_Display_Info_List_Bean;
             Ctx     : constant ASC.Service_Context_Access := ASC.Current;
-            Id      : ADO.Identifier := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+            Id      : constant ADO.Identifier := ADO.Utils.To_Identifier (Value);
          begin
             Query.Set_Query (AWA.Questions.Models.Query_Question_Info);
             Query.Bind_Param ("question_id", Id);
