@@ -20,7 +20,7 @@ with AWA.Services.Contexts;
 with AWA.Helpers.Requests;
 with AWA.Helpers.Selectors;
 
-with ADO.Objects;
+with ADO.Utils;
 with ADO.Queries;
 with ADO.Sessions;
 with ADO.Sessions.Entities;
@@ -153,9 +153,9 @@ package body AWA.Blogs.Beans is
                         Value : in Util.Beans.Objects.Object) is
    begin
       if Name = BLOG_ID_ATTR then
-         From.Blog_Id := ADO.Identifier (Util.Beans.Objects.To_Integer (Value));
+         From.Blog_Id := ADO.Utils.To_Identifier (Value);
       elsif Name = POST_ID_ATTR and not Util.Beans.Objects.Is_Empty (Value) then
-         From.Load_Post (ADO.Identifier (Util.Beans.Objects.To_Integer (Value)));
+         From.Load_Post (ADO.Utils.To_Identifier (Value));
       elsif Name = POST_TEXT_ATTR then
          From.Set_Text (Util.Beans.Objects.To_Unbounded_String (Value));
       elsif Name = POST_TITLE_ATTR then
@@ -349,7 +349,7 @@ package body AWA.Blogs.Beans is
                         Value : in Util.Beans.Objects.Object) is
    begin
       if Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
-         From.Blog_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Integer (Value));
+         From.Blog_Id := ADO.Utils.To_Identifier (Value);
       end if;
    end Set_Value;
 
