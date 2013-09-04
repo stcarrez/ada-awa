@@ -269,6 +269,23 @@ package body AWA.Tags.Beans is
    end Get_Tags;
 
    --  ------------------------------
+   --  Get the list of tags associated with the given entity.
+   --  Returns a null object if the entity does not have any tag.
+   --  ------------------------------
+   function Get_Tags (From       : in Entity_Tag_Map;
+                      For_Entity : in ADO.Identifier)
+                      return Util.Beans.Objects.Object is
+      Pos : constant Entity_Tag_Maps.Cursor := From.Tags.Find (For_Entity);
+   begin
+      if Entity_Tag_Maps.Has_Element (Pos) then
+         return Util.Beans.Objects.To_Object (Value   => Entity_Tag_Maps.Element (Pos).all'Access,
+                                              Storage => Util.Beans.Objects.STATIC);
+      else
+         return Util.Beans.Objects.Null_Object;
+      end if;
+   end Get_Tags;
+
+   --  ------------------------------
    --  Load the list of tags associated with a list of entities.
    --  ------------------------------
    procedure Load_Tags (Into        : in out Entity_Tag_Map;
@@ -278,12 +295,13 @@ package body AWA.Tags.Beans is
       Query : ADO.Queries.Context;
       Kind  : ADO.Entity_Type;
    begin
+      Into.Clear;
       if List.Is_Empty then
          return;
       end if;
       Kind := ADO.Sessions.Entities.Find_Entity_Type (Session, Entity_Type);
-      Query.Set_Query (AWA.Tags.Models.Query_Tag_List_All);
-      Query.Bind_Param ("entity_id_list", ADO.Utils.To_Parameter_List (List));
+      Query.Set_Query (AWA.Tags.Models.Query_Tag_List_For_Entities);
+      Query.Bind_Param ("entity_id_list", List);
       Query.Bind_Param ("entity_type", Kind);
       declare
          Stmt  : ADO.Statements.Query_Statement := Session.Create_Statement (Query);
@@ -302,6 +320,7 @@ package body AWA.Tags.Beans is
                List := Entity_Tag_Maps.Element (Pos);
             end if;
             List.List.Append (Stmt.Get_String (1));
+            Stmt.Next;
          end loop;
       end;
    end Load_Tags;
