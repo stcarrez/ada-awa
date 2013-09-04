@@ -184,7 +184,8 @@ package body AWA.Tags.Components is
          Bean     : constant access Util.Beans.Basic.Readonly_Bean'Class
            := Util.Beans.Objects.To_Bean (Value);
          Readonly : constant Boolean := UI.Is_Readonly (Context);
-         List     : Tag_List_Bean_Access;
+         --           List     : Tag_List_Bean_Access;
+         List     : Util.Beans.Basic.List_Bean_Access;
          Count    : Natural;
          Id       : constant String := Ada.Strings.Unbounded.To_String (UI.Get_Client_Id);
          Class    : constant Util.Beans.Objects.Object := UI.Get_Attribute (Context, "tagClass");
@@ -192,12 +193,12 @@ package body AWA.Tags.Components is
          if Bean = null then
             ASF.Components.Base.Log_Error (UI, "There is no tagList bean value");
             return;
-         elsif not (Bean.all in Tag_List_Bean'Class) then
-            ASF.Components.Base.Log_Error (UI, "There is not taglist bean");
+         elsif not (Bean.all in Util.Beans.Basic.List_Bean'Class) then
+            ASF.Components.Base.Log_Error (UI, "There bean value is not a List_Bean");
             return;
          end if;
 
-         List := Tag_List_Bean'Class (Bean.all)'Unchecked_Access;
+         List := Util.Beans.Basic.List_Bean'Class (Bean.all)'Unchecked_Access;
          Count := List.Get_Count;
          if Count > 0 then
             if Readonly then
