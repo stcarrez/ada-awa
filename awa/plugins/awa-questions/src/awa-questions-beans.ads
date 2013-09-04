@@ -86,10 +86,12 @@ package AWA.Questions.Beans is
    function Create_Answer_Bean (Module : in AWA.Questions.Modules.Question_Module_Access)
                                        return Util.Beans.Basic.Readonly_Bean_Access;
 
-   type Question_List_Bean is
-     new AWA.Questions.Models.Question_Info_List_Bean and Util.Beans.Basic.Bean with record
-      Service : Modules.Question_Module_Access := null;
-      Tag     : Ada.Strings.Unbounded.Unbounded_String;
+   type Question_List_Bean is limited new Util.Beans.Basic.Bean with record
+      Questions : aliased AWA.Questions.Models.Question_Info_List_Bean;
+      Service   : Modules.Question_Module_Access := null;
+      Tag       : Ada.Strings.Unbounded.Unbounded_String;
+      Tags      : AWA.Tags.Beans.Entity_Tag_Map;
+      Questions_Bean : AWA.Questions.Models.Question_Info_List_Bean_Access;
    end record;
    type Question_List_Bean_Access is access all Question_List_Bean'Class;
 
