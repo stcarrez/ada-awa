@@ -20,6 +20,8 @@ with ADO.Utils;
 with ADO.Sessions;
 with ADO.Sessions.Entities;
 
+with Util.Beans.Lists.Strings;
+
 with AWA.Tags.Modules;
 with AWA.Services.Contexts;
 package body AWA.Questions.Beans is
@@ -177,8 +179,24 @@ package body AWA.Questions.Beans is
    overriding
    function Get_Value (From : in Question_List_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
+      Pos : Natural;
    begin
-      return AWA.Questions.Models.Question_Info_List_Bean (From).Get_Value (Name);
+      if Name = "tags" then
+         Pos := From.Questions.Get_Row_Index;
+         if Pos = 0 then
+            return Util.Beans.Objects.Null_Object;
+         end if;
+         declare
+            Item : constant Models.Question_Info := From.Questions.List.Element (Pos);
+         begin
+            return From.Tags.Get_Tags (Item.Id);
+         end;
+      elsif Name = "questions" then
+         return Util.Beans.Objects.To_Object (Value   => From.Questions_Bean,
+                                              Storage => Util.Beans.Objects.STATIC);
+      else
+         return From.Questions.Get_Value (Name);
+      end if;
    end Get_Value;
 
    --  ------------------------------
@@ -218,7 +236,18 @@ package body AWA.Questions.Beans is
                                         Name    => "entity_type",
                                         Table   => AWA.Questions.Models.QUESTION_TABLE,
                                         Session => Session);
-      AWA.Questions.Models.List (Into, Session, Query);
+      AWA.Questions.Models.List (Into.Questions, Session, Query);
+      declare
+         List : ADO.Utils.Identifier_Vector;
+         Iter : Question_Info_Vectors.Cursor := Into.Questions.List.First;
+      begin
+         while Question_Info_Vectors.Has_Element (Iter) loop
+            List.Append (Question_Info_Vectors.Element (Iter).Id);
+            Question_Info_Vectors.Next (Iter);
+         end loop;
+         Into.Tags.Load_Tags (Session, AWA.Questions.Models.QUESTION_TABLE.Table.all,
+                              List);
+      end;
    end Load_List;
 
    --  ------------------------------
@@ -230,16 +259,18 @@ package body AWA.Questions.Beans is
       use AWA.Services;
 
       Object  : constant Question_List_Bean_Access := new Question_List_Bean;
-      Session : ADO.Sessions.Session := Module.Get_Session;
-      Query   : ADO.Queries.Context;
+--        Session : ADO.Sessions.Session := Module.Get_Session;
+--        Query   : ADO.Queries.Context;
    begin
       Object.Service := Module;
-      Query.Set_Query (AWA.Questions.Models.Query_Question_List);
-      ADO.Sessions.Entities.Bind_Param (Params  => Query,
-                                        Name    => "entity_type",
-                                        Table   => AWA.Questions.Models.QUESTION_TABLE,
-                                        Session => Session);
-      AWA.Questions.Models.List (Object.all, Session, Query);
+      Object.Questions_Bean := Object.Questions'Unchecked_Access;
+--        Query.Set_Query (AWA.Questions.Models.Query_Question_List);
+--        ADO.Sessions.Entities.Bind_Param (Params  => Query,
+--                                          Name    => "entity_type",
+--                                          Table   => AWA.Questions.Models.QUESTION_TABLE,
+--                                          Session => Session);
+--        AWA.Questions.Models.List (Object.Questions, Session, Query);
+      Object.Load_List;
       return Object.all'Access;
    end Create_Question_List_Bean;
 
