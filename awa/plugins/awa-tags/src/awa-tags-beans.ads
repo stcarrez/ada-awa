@@ -133,6 +133,12 @@ package AWA.Tags.Beans is
                       For_Entity : in ADO.Identifier)
                       return Util.Beans.Lists.Strings.List_Bean_Access;
 
+   --  Get the list of tags associated with the given entity.
+   --  Returns a null object if the entity does not have any tag.
+   function Get_Tags (From       : in Entity_Tag_Map;
+                      For_Entity : in ADO.Identifier)
+                      return Util.Beans.Objects.Object;
+
    --  Release the list of tags.
    procedure Clear (List : in out Entity_Tag_Map);
 
