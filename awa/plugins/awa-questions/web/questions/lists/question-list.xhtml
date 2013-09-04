@@ -18,7 +18,7 @@
         xmlns:awa="http://code.google.com/p/ada-awa/jsf"
         xmlns:h="http://java.sun.com/jsf/html">
 
-    <h:list var="questionInfo" value="#{questionList}">
+    <h:list var="questionInfo" value="#{questionList.questions}">
         <div class='question' id='q_#{questionInfo.id}'>
             <div class='question-stats'>
                 <div class='answer-stat'>
@@ -45,6 +45,9 @@
                                       converter="dateConverter"/>
                     </div>
                 </div>
+                <awa:tagList value='#{questionList.tags}' id='qtags' styleClass="tagedit-list"
+                             tagClass="tagedit-listelement tagedit-listelement-old"/>
+
             </div>
         </div>
     </h:list>
