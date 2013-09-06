@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with Util.Beans.Basic;
 with Util.Beans.Objects;
 with Util.Strings.Vectors;
 
@@ -66,19 +67,49 @@ package AWA.Tags.Components is
    function Is_Readonly (UI      : in Tag_UIInput;
                          Context : in ASF.Contexts.Faces.Faces_Context'Class) return Boolean;
 
+   --  Get the tag after convertion with the optional converter.
+   function Get_Tag (UI      : in Tag_UIInput;
+                     Tag     : in Util.Beans.Objects.Object;
+                     Context : in ASF.Contexts.Faces.Faces_Context'Class) return String;
+
+   --  Render the tag as a readonly item.
+   procedure Render_Readonly_Tag (UI       : in Tag_UIInput;
+                                  Tag      : in Util.Beans.Objects.Object;
+                                  Class    : in Util.Beans.Objects.Object;
+                                  Writer   : in Response_Writer_Access;
+                                  Context  : in out ASF.Contexts.Faces.Faces_Context'Class);
+
+   --  Render the tag as a link.
+   procedure Render_Link_Tag (UI       : in Tag_UIInput;
+                              Name     : in String;
+                              Tag      : in Util.Beans.Objects.Object;
+                              Link     : in EL.Expressions.Expression;
+                              Class    : in Util.Beans.Objects.Object;
+                              Writer   : in Response_Writer_Access;
+                              Context  : in out ASF.Contexts.Faces.Faces_Context'Class);
+
+   --  Render the tag for an input form.
+   procedure Render_Form_Tag (UI       : in Tag_UIInput;
+                              Id       : in String;
+                              Tag      : in Util.Beans.Objects.Object;
+                              Writer   : in Response_Writer_Access;
+                              Context  : in out ASF.Contexts.Faces.Faces_Context'Class);
+
+   --  a link is rendered for each tag.  Otherwise, each tag is rendered as a <tt>span</tt>.
+   procedure Render_Readonly (UI      : in Tag_UIInput;
+                              List    : in Util.Beans.Basic.List_Bean_Access;
+                              Context : in out ASF.Contexts.Faces.Faces_Context'Class);
+
+   --  Render the list of tags for a form.
+   procedure Render_Form (UI      : in Tag_UIInput;
+                          List    : in Util.Beans.Basic.List_Bean_Access;
+                          Context : in out ASF.Contexts.Faces.Faces_Context'Class);
+
    --  Render the javascript to enable the tag edition.
    procedure Render_Script (UI      : in Tag_UIInput;
                             Id      : in String;
                             Writer  : in Response_Writer_Access;
                             Context : in out ASF.Contexts.Faces.Faces_Context'Class);
-
-   procedure Render_Tag (UI       : in Tag_UIInput;
-                         Id       : in String;
-                         Tag      : in Util.Beans.Objects.Object;
-                         Class    : in Util.Beans.Objects.Object;
-                         Readonly : in Boolean;
-                         Writer   : in Response_Writer_Access;
-                         Context  : in out ASF.Contexts.Faces.Faces_Context'Class);
 
    --  Render the input component.  Starts the DL/DD list and write the input
    --  component with the possible associated error message.
