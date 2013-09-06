@@ -31,7 +31,9 @@
         <div class='question-content'>
             <awa:wiki styleClass='post-text' value="#{questionInfo.question.description}" format="dotclear"/>
             <awa:tagList value='#{questionInfo.tags}' id='qtags' styleClass="tagedit-list"
-                         tagClass="tagedit-listelement tagedit-listelement-old"/>
+                         var="tagName"
+                         tagClass="tagedit-listelement tagedit-listelement-old"
+                         tagLink="#{contextPath}/questions/lists.html?tag=#{tagName}"/>
             <div class='question-info'>
                 <div class='question-action'>
                     <h:panelGroup rendered="#{auth:hasPermission('question-edit',questionInfo.question.id)}">
