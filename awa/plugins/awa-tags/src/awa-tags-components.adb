@@ -18,7 +18,6 @@
 with Ada.Strings.Unbounded;
 with Ada.Exceptions;
 
-with Util.Beans.Basic;
 with Util.Strings;
 with Util.Log.Loggers;
 
@@ -109,61 +108,175 @@ package body AWA.Tags.Components is
    end Render_Script;
 
    --  ------------------------------
-   --  Render the input field title.
+   --  Get the tag after convertion with the optional converter.
    --  ------------------------------
-   procedure Render_Tag (UI       : in Tag_UIInput;
-                         Id       : in String;
-                         Tag      : in Util.Beans.Objects.Object;
-                         Class    : in Util.Beans.Objects.Object;
-                         Readonly : in Boolean;
-                         Writer   : in Response_Writer_Access;
-                         Context  : in out ASF.Contexts.Faces.Faces_Context'Class) is
+   function Get_Tag (UI      : in Tag_UIInput;
+                     Tag     : in Util.Beans.Objects.Object;
+                     Context : in ASF.Contexts.Faces.Faces_Context'Class) return String is
    begin
-      if Readonly then
-         Writer.Start_Element ("li");
-         --  Apply the tag class but only on the readonly item.
-         if not Util.Beans.Objects.Is_Null (Class) then
-            Writer.Write_Attribute ("class", Class);
-         end if;
-         Writer.Start_Element ("span");
-         if not Util.Beans.Objects.Is_Null (Tag) then
-            declare
-               Convert : constant access ASF.Converters.Converter'Class
-                 := Tag_UIInput'Class (UI).Get_Converter;
-            begin
-               if Convert /= null then
-                  Writer.Write_Text (Text => Convert.To_String (Value     => Tag,
-                                                                Component => UI,
-                                                                Context   => Context));
-               else
-                  Writer.Write_Text (Value => Tag);
-               end if;
-            end;
-         end if;
-         Writer.End_Element ("span");
-         Writer.End_Element ("li");
+      if not Util.Beans.Objects.Is_Null (Tag) then
+         declare
+            Convert : constant access ASF.Converters.Converter'Class
+              := Tag_UIInput'Class (UI).Get_Converter;
+         begin
+            if Convert /= null then
+               return Convert.To_String (Value     => Tag,
+                                         Component => UI,
+                                         Context   => Context);
+            else
+               return Util.Beans.Objects.To_String (Value => Tag);
+            end if;
+         end;
       else
-         Writer.Start_Element ("input");
-         Writer.Write_Attribute (Name => "type", Value => "text");
-         Writer.Write_Attribute (Name => "name", Value => Id);
-         if not Util.Beans.Objects.Is_Null (Tag) then
-            declare
-               Convert : constant access ASF.Converters.Converter'Class
-                 := Tag_UIInput'Class (UI).Get_Converter;
-            begin
-               if Convert /= null then
-                  Writer.Write_Attribute (Name  => "value",
-                                          Value => Convert.To_String (Value     => Tag,
-                                                                      Component => UI,
-                                                                      Context   => Context));
-               else
-                  Writer.Write_Attribute (Name => "value", Value => Tag);
-               end if;
-            end;
-         end if;
-         Writer.End_Element ("input");
+         return "";
       end if;
-   end Render_Tag;
+   end Get_Tag;
+
+   --  ------------------------------
+   --  Render the tag as a readonly item.
+   --  ------------------------------
+   procedure Render_Readonly_Tag (UI       : in Tag_UIInput;
+                                  Tag      : in Util.Beans.Objects.Object;
+                                  Class    : in Util.Beans.Objects.Object;
+                                  Writer   : in Response_Writer_Access;
+                                  Context  : in out ASF.Contexts.Faces.Faces_Context'Class) is
+      Value : constant String := UI.Get_Tag (Tag, Context);
+   begin
+      Writer.Start_Element ("li");
+      if not Util.Beans.Objects.Is_Null (Class) then
+         Writer.Write_Attribute ("class", Class);
+      end if;
+      Writer.Start_Element ("span");
+      Writer.Write_Text (Value);
+      Writer.End_Element ("span");
+      Writer.End_Element ("li");
+   end Render_Readonly_Tag;
+
+   --  ------------------------------
+   --  Render the tag as a link.
+   --  ------------------------------
+   procedure Render_Link_Tag (UI       : in Tag_UIInput;
+                              Name     : in String;
+                              Tag      : in Util.Beans.Objects.Object;
+                              Link     : in EL.Expressions.Expression;
+                              Class    : in Util.Beans.Objects.Object;
+                              Writer   : in Response_Writer_Access;
+                              Context  : in out ASF.Contexts.Faces.Faces_Context'Class) is
+      Value : constant String := UI.Get_Tag (Tag, Context);
+   begin
+      Context.Set_Attribute (Name, Util.Beans.Objects.To_Object (Value));
+      Writer.Start_Element ("li");
+      if not Util.Beans.Objects.Is_Null (Class) then
+         Writer.Write_Attribute ("class", Class);
+      end if;
+      Writer.Start_Element ("a");
+      Writer.Write_Attribute ("href", Link.Get_Value (Context.Get_ELContext.all));
+      Writer.Write_Text (Value);
+      Writer.End_Element ("a");
+      Writer.End_Element ("li");
+   end Render_Link_Tag;
+
+   --  ------------------------------
+   --  Render the tag for an input form.
+   --  ------------------------------
+   procedure Render_Form_Tag (UI       : in Tag_UIInput;
+                              Id       : in String;
+                              Tag      : in Util.Beans.Objects.Object;
+                              Writer   : in Response_Writer_Access;
+                              Context  : in out ASF.Contexts.Faces.Faces_Context'Class) is
+   begin
+      Writer.Start_Element ("input");
+      Writer.Write_Attribute (Name => "type", Value => "text");
+      Writer.Write_Attribute (Name => "name", Value => Id);
+      if not Util.Beans.Objects.Is_Null (Tag) then
+         declare
+            Convert : constant access ASF.Converters.Converter'Class
+              := Tag_UIInput'Class (UI).Get_Converter;
+         begin
+            if Convert /= null then
+               Writer.Write_Attribute (Name  => "value",
+                                       Value => Convert.To_String (Value     => Tag,
+                                                                   Component => UI,
+                                                                   Context   => Context));
+            else
+               Writer.Write_Attribute (Name => "value", Value => Tag);
+            end if;
+         end;
+      end if;
+      Writer.End_Element ("input");
+   end Render_Form_Tag;
+
+   --  ------------------------------
+   --  Render the list of tags as readonly list.  If a <tt>tagLink</tt> attribute is defined,
+   --  a link is rendered for each tag.  Otherwise, each tag is rendered as a <tt>span</tt>.
+   --  ------------------------------
+   procedure Render_Readonly (UI      : in Tag_UIInput;
+                              List    : in Util.Beans.Basic.List_Bean_Access;
+                              Context : in out ASF.Contexts.Faces.Faces_Context'Class) is
+      Class  : constant Util.Beans.Objects.Object := UI.Get_Attribute (Context, "tagClass");
+      Count  : constant Natural := List.Get_Count;
+      Writer : constant Response_Writer_Access := Context.Get_Response_Writer;
+      Link   : constant access ASF.Views.Nodes.Tag_Attribute := UI.Get_Attribute ("tagLink");
+   begin
+      if Count > 0 then
+         Writer.Start_Element ("ul");
+         UI.Render_Attributes (Context, Writer);
+         if Link /= null then
+            declare
+               Link : constant EL.Expressions.Expression := UI.Get_Expression ("tagLink");
+               Name : constant String := UI.Get_Attribute (Name    => "var",
+                                                           Context => Context,
+                                                           Default => "tag");
+            begin
+               for I in 1 .. Count loop
+                  List.Set_Row_Index (I);
+                  Tag_UIInput'Class (UI).Render_Link_Tag (Name    => Name,
+                                                          Tag     => List.Get_Row,
+                                                          Link    => Link,
+                                                          Class   => Class,
+                                                          Writer  => Writer,
+                                                          Context => Context);
+               end loop;
+            end;
+         else
+            for I in 1 .. Count loop
+               List.Set_Row_Index (I);
+               Tag_UIInput'Class (UI).Render_Readonly_Tag (Tag     => List.Get_Row,
+                                                           Class   => Class,
+                                                           Writer  => Writer,
+                                                           Context => Context);
+            end loop;
+         end if;
+         Writer.End_Element ("ul");
+      end if;
+   end Render_Readonly;
+
+   --  ------------------------------
+   --  Render the list of tags for a form.
+   --  ------------------------------
+   procedure Render_Form (UI      : in Tag_UIInput;
+                          List    : in Util.Beans.Basic.List_Bean_Access;
+                          Context : in out ASF.Contexts.Faces.Faces_Context'Class) is
+      Id     : constant String := Ada.Strings.Unbounded.To_String (UI.Get_Client_Id);
+      Count  : constant Natural := List.Get_Count;
+      Writer : constant Response_Writer_Access := Context.Get_Response_Writer;
+   begin
+      Writer.Start_Element ("div");
+      if Count > 0 then
+         UI.Render_Attributes (Context, Writer);
+         for I in 1 .. Count loop
+            List.Set_Row_Index (I);
+            Tag_UIInput'Class (UI).Render_Form_Tag (Id & "[" & Util.Strings.Image (I) & "-a]",
+                                                    List.Get_Row, Writer, Context);
+         end loop;
+      else
+         Writer.Write_Attribute ("id", Id);
+      end if;
+      Tag_UIInput'Class (UI).Render_Form_Tag (Id & "[]", Util.Beans.Objects.Null_Object,
+                                              Writer, Context);
+      Writer.End_Element ("div");
+      Tag_UIInput'Class (UI).Render_Script (Id, Writer, Context);
+   end Render_Form;
 
    --  ------------------------------
    --  Render the input component.  Starts the DL/DD list and write the input
@@ -179,19 +292,16 @@ package body AWA.Tags.Components is
       declare
          use AWA.Tags.Beans;
 
-         Writer   : constant Response_Writer_Access := Context.Get_Response_Writer;
          Value    : constant Util.Beans.Objects.Object := Tag_UIInput'Class (UI).Get_Value;
          Bean     : constant access Util.Beans.Basic.Readonly_Bean'Class
            := Util.Beans.Objects.To_Bean (Value);
          Readonly : constant Boolean := UI.Is_Readonly (Context);
-         --           List     : Tag_List_Bean_Access;
          List     : Util.Beans.Basic.List_Bean_Access;
-         Count    : Natural;
-         Id       : constant String := Ada.Strings.Unbounded.To_String (UI.Get_Client_Id);
-         Class    : constant Util.Beans.Objects.Object := UI.Get_Attribute (Context, "tagClass");
       begin
          if Bean = null then
-            ASF.Components.Base.Log_Error (UI, "There is no tagList bean value");
+            if not Readonly then
+               ASF.Components.Base.Log_Error (UI, "There is no tagList bean value");
+            end if;
             return;
          elsif not (Bean.all in Util.Beans.Basic.List_Bean'Class) then
             ASF.Components.Base.Log_Error (UI, "There bean value is not a List_Bean");
@@ -199,37 +309,17 @@ package body AWA.Tags.Components is
          end if;
 
          List := Util.Beans.Basic.List_Bean'Class (Bean.all)'Unchecked_Access;
-         Count := List.Get_Count;
-         if Count > 0 then
-            if Readonly then
-               Writer.Start_Element ("ul");
-            else
-               Writer.Start_Element ("div");
-            end if;
-            UI.Render_Attributes (Context, Writer);
-            for I in 1 .. Count loop
-               List.Set_Row_Index (I);
-               Tag_UIInput'Class (UI).Render_Tag (Id & "[" & Util.Strings.Image (I) & "-a]",
-                                                  List.Get_Row, Class, Readonly, Writer, Context);
-            end loop;
-            if Readonly then
-               Writer.End_Element ("ul");
-            end if;
-         elsif not Readonly then
-            Writer.Start_Element ("div");
-            Writer.Write_Attribute ("id", Id);
-         end if;
-         if not Readonly then
-            Tag_UIInput'Class (UI).Render_Tag (Id & "[]", Util.Beans.Objects.Null_Object,
-                                               Util.Beans.Objects.Null_Object, Readonly,
-                                               Writer, Context);
-            Writer.End_Element ("div");
-            Tag_UIInput'Class (UI).Render_Script (Id, Writer, Context);
+         if Readonly then
+            UI.Render_Readonly (List, Context);
+         else
+            UI.Render_Form (List, Context);
          end if;
       end;
    end Encode_Begin;
 
+   --  ------------------------------
    --  Render the end of the input component.  Closes the DL/DD list.
+   --  ------------------------------
    overriding
    procedure Encode_End (UI      : in Tag_UIInput;
                          Context : in out ASF.Contexts.Faces.Faces_Context'Class) is
