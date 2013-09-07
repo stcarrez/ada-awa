@@ -187,7 +187,7 @@ package body AWA.Questions.Beans is
             return Util.Beans.Objects.Null_Object;
          end if;
          declare
-            Item : constant Models.Question_Info := From.Questions.List.Element (Pos);
+            Item : constant Models.Question_Info := From.Questions.List.Element (Pos - 1);
          begin
             return From.Tags.Get_Tags (Item.Id);
          end;
