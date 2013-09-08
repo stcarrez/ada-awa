@@ -111,7 +111,9 @@ package body AWA.Blogs.Beans is
                                   Title   => Bean.Get_Title,
                                   Text    => Bean.Get_Text,
                                   Status  => Bean.Get_Status);
+         Result := Bean.Get_Id;
       end if;
+      Bean.Tags.Update_Tags (Result);
    end Save;
 
    --  ------------------------------
@@ -139,6 +141,8 @@ package body AWA.Blogs.Beans is
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Get_Id));
       elsif Name = POST_USERNAME_ATTR then
          return Util.Beans.Objects.To_Object (String '(From.Get_Author.Get_Name));
+      elsif Name = POST_TAG_ATTR then
+         return Util.Beans.Objects.To_Object (From.Tags_Bean, Util.Beans.Objects.STATIC);
       else
          return AWA.Blogs.Models.Post_Bean (From).Get_Value (Name);
       end if;
@@ -175,9 +179,7 @@ package body AWA.Blogs.Beans is
       Session : ADO.Sessions.Session := Post.Module.Get_Session;
    begin
       Post.Load (Session, Id);
---        Post.Title := Post.Post.Get_Title;
---        Post.Text  := Post.Post.Get_Text;
---        Post.URI   := Post.Post.Get_Uri;
+      Post.Tags.Load_Tags (Session, Id);
 
       --  SCz: 2012-05-19: workaround for ADO 0.3 limitation.  The lazy loading of
       --  objects does not work yet.  Force loading the user here while the above
@@ -198,6 +200,9 @@ package body AWA.Blogs.Beans is
       Object  : constant Post_Bean_Access := new Post_Bean;
    begin
       Object.Module := Module;
+      Object.Tags_Bean := Object.Tags'Access;
+      Object.Tags.Set_Entity_Type (AWA.Blogs.Models.POST_TABLE);
+      Object.Tags.Set_Permission ("blog-update-post");
       return Object.all'Access;
    end Create_Post_Bean;
 
