@@ -25,6 +25,7 @@ with ADO;
 
 with AWA.Blogs.Modules;
 with AWA.Blogs.Models;
+with AWA.Tags.Beans;
 package AWA.Blogs.Beans is
 
    --  Attributes exposed by <b>Post_Bean</b>
@@ -35,6 +36,7 @@ package AWA.Blogs.Beans is
    POST_URI_ATTR     : constant String := "uri";
    POST_STATUS_ATTR  : constant String := "status";
    POST_USERNAME_ATTR : constant String := "username";
+   POST_TAG_ATTR      : constant String := "tags";
 
    --  ------------------------------
    --  Blog Bean
@@ -65,6 +67,10 @@ package AWA.Blogs.Beans is
    type Post_Bean is new AWA.Blogs.Models.Post_Bean with record
       Module  : AWA.Blogs.Modules.Blog_Module_Access := null;
       Blog_Id : ADO.Identifier;
+
+      --  List of tags associated with the post.
+      Tags      : aliased AWA.Tags.Beans.Tag_List_Bean;
+      Tags_Bean : Util.Beans.Basic.Readonly_Bean_Access;
    end record;
    type Post_Bean_Access is access all Post_Bean'Class;
 
