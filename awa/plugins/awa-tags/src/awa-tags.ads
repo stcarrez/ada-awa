@@ -18,11 +18,17 @@
 
 --  == Introduction ==
 --  The <b>Tags</b> module allows to associate general purpose tags to any database entity.
+--  It provides a JSF component that allows to insert easily a list of tags in a page and
+--  in a form.  An application can use the bean types defined in <tt>AWA.Tags.Beans</tt>
+--  to define the tags and it will use the <tt>awa:tagList</tt> component to display them.
 --
 --  == Model ==
 --  [http://ada-awa.googlecode.com/svn/wiki/awa_tags_model.png]
 --
 --  @include awa-tags-modules.ads
+--  @include awa-tags-beans.ads
+--  @include awa-tags-components.ads
+--
 package AWA.Tags is
 
    pragma Pure;
