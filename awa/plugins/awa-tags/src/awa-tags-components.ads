@@ -28,6 +28,37 @@ with ASF.Contexts.Writer;
 with ASF.Events.Faces;
 with ASF.Factory;
 
+--  == Tags Component ==
+--
+--  === Displaying a list of tags ===
+--  The <tt>awa:tagList</tt> component displays a list of tags.  Each tag can be rendered as
+--  a link if the <tt>tagLink</tt> attribute is defined.  The list of tags is passed in the
+--  <tt>value</tt> attribute.  When rending that list, the <tt>var</tt> attribute is used to
+--  setup a variable with the tag value.  The <tt>tagLink</tt> attribute is then evaluated
+--  against that variable and the result defines the link.
+--
+--    <awa:tagList value='#{questionList.tags}' id='qtags' styleClass="tagedit-list"
+--                 tagLink="#{contextPath}/questions/tagged.html?tag=#{tagName}"
+--                 var="tagName"
+--                 tagClass="tagedit-listelement tagedit-listelement-old"/>
+--
+--  === Tag editing ===
+--  The <tt>awa:tagList</tt> component allows to add or remove tags associated with a given
+--  database entity.  The tag management works with the jQuery plugin <b>Tagedit</b>.  For this,
+--  the page must include the <b>/js/jquery.tagedit.js</b> Javascript resource.
+--
+--  The tag edition is active only if the <tt>awa:tagList</tt> component is placed within an
+--  <tt>h:form</tt> component.  The <tt>value</tt> attribute defines the list of tags.  This must
+--  be a <tt>Tag_List_Bean</tt> object.
+--
+--    <awa:tagList value='#{question.tags}' id='qtags'
+--                 autoCompleteUrl='#{contextPath}/questions/lists/tag-search.html'/>
+--
+--  When the form is submitted and validated, the procedure <tt>Set_Added</tt> and
+--  <tt>Set_Deleted</tt> are called on the value bean with the list of tags that were
+--  added and removed.  These operations are called in the <tt>UPDATE_MODEL_VALUES</tt>
+--  phase (ie, before calling the action's bean operation).
+--
 package AWA.Tags.Components is
 
    use ASF.Contexts.Writer;
@@ -123,7 +154,6 @@ package AWA.Tags.Components is
                          Context : in out ASF.Contexts.Faces.Faces_Context'Class);
 
    --  Get the action method expression to invoke if the command is pressed.
-   --  ------------------------------
    function Get_Action_Expression (UI      : in Tag_UIInput;
                                    Context : in ASF.Contexts.Faces.Faces_Context'Class)
                                    return EL.Expressions.Method_Expression;
