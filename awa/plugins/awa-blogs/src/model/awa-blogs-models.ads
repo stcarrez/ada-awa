@@ -463,6 +463,8 @@ package AWA.Blogs.Models is
 
    Query_Blog_Post_List : constant ADO.Queries.Query_Definition_Access;
 
+   Query_Blog_Post_Tag_List : constant ADO.Queries.Query_Definition_Access;
+
 
    type Blog_Bean is abstract new AWA.Blogs.Models.Blog_Ref
      and Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with null record;
@@ -688,4 +690,10 @@ private
                                      File => File_3.File'Access);
    Query_Blog_Post_List : constant ADO.Queries.Query_Definition_Access
    := Def_Postinfo_Blog_Post_List.Query'Access;
+
+   package Def_Postinfo_Blog_Post_Tag_List is
+      new ADO.Queries.Loaders.Query (Name => "blog-post-tag-list",
+                                     File => File_3.File'Access);
+   Query_Blog_Post_Tag_List : constant ADO.Queries.Query_Definition_Access
+   := Def_Postinfo_Blog_Post_Tag_List.Query'Access;
 end AWA.Blogs.Models;
