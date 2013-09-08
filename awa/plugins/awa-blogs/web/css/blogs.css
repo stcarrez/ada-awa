@@ -209,3 +209,7 @@ ul.blog-syntax li {
 ul.blog-syntax li.spare {
     padding-top: 15px;
 }
+div.blog-post ul.tagedit-list {
+    float: right;
+    list-style-type: none;
+}
