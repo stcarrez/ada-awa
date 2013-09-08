@@ -19,6 +19,7 @@
 with AWA.Services.Contexts;
 with AWA.Helpers.Requests;
 with AWA.Helpers.Selectors;
+with AWA.Tags.Modules;
 
 with ADO.Utils;
 with ADO.Queries;
@@ -207,18 +208,91 @@ package body AWA.Blogs.Beans is
    end Create_Post_Bean;
 
    --  ------------------------------
+   --  Get the value identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Post_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+      Pos : Natural;
+   begin
+      if Name = "tags" then
+         Pos := From.Posts.Get_Row_Index;
+         if Pos = 0 then
+            return Util.Beans.Objects.Null_Object;
+         end if;
+         declare
+            Item : constant Models.Post_Info := From.Posts.List.Element (Pos - 1);
+         begin
+            return From.Tags.Get_Tags (Item.Id);
+         end;
+      elsif Name = "posts" then
+         return Util.Beans.Objects.To_Object (Value   => From.Posts_Bean,
+                                              Storage => Util.Beans.Objects.STATIC);
+      else
+         return From.Posts.Get_Value (Name);
+      end if;
+   end Get_Value;
+
+   --  ------------------------------
+   --  Set the value identified by the name.
+   --  ------------------------------
+   overriding
+   procedure Set_Value (From  : in out Post_List_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "tag" then
+         From.Tag := Util.Beans.Objects.To_Unbounded_String (Value);
+         From.Load_List;
+      end if;
+   end Set_Value;
+
+   --  ------------------------------
+   --  Load the list of posts.  If a tag was set, filter the list of posts with the tag.
+   --  ------------------------------
+   procedure Load_List (Into : in out Post_List_Bean) is
+      use AWA.Blogs.Models;
+      use AWA.Services;
+
+      Session : ADO.Sessions.Session := Into.Service.Get_Session;
+      Query   : ADO.Queries.Context;
+      Tag_Id  : ADO.Identifier;
+   begin
+      AWA.Tags.Modules.Find_Tag_Id (Session, Ada.Strings.Unbounded.To_String (Into.Tag), Tag_Id);
+      if Tag_Id /= ADO.NO_IDENTIFIER then
+         Query.Set_Query (AWA.Blogs.Models.Query_Blog_Post_Tag_List);
+         Query.Bind_Param (Name => "tag", Value => Tag_Id);
+      else
+         Query.Set_Query (AWA.Blogs.Models.Query_Blog_Post_List);
+      end if;
+      ADO.Sessions.Entities.Bind_Param (Params  => Query,
+                                        Name    => "entity_type",
+                                        Table   => AWA.Blogs.Models.POST_TABLE,
+                                        Session => Session);
+      AWA.Blogs.Models.List (Into.Posts, Session, Query);
+      declare
+         List : ADO.Utils.Identifier_Vector;
+         Iter : Post_Info_Vectors.Cursor := Into.Posts.List.First;
+      begin
+         while Post_Info_Vectors.Has_Element (Iter) loop
+            List.Append (Post_Info_Vectors.Element (Iter).Id);
+            Post_Info_Vectors.Next (Iter);
+         end loop;
+         Into.Tags.Load_Tags (Session, AWA.Blogs.Models.POST_TABLE.Table.all,
+                              List);
+      end;
+   end Load_List;
+
+   --  ------------------------------
    --  Create the Post_List_Bean bean instance.
    --  ------------------------------
    function Create_Post_List_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                                    return Util.Beans.Basic.Readonly_Bean_Access is
-      use AWA.Blogs.Models;
-
-      Object  : constant Post_Info_List_Bean_Access := new Post_Info_List_Bean;
-      Session : ADO.Sessions.Session := Module.Get_Session;
-      Query   : ADO.Queries.Context;
+      Object  : constant Post_List_Bean_Access := new Post_List_Bean;
    begin
-      Query.Set_Query (AWA.Blogs.Models.Query_Blog_Post_List);
-      AWA.Blogs.Models.List (Object.all, Session, Query);
+      Object.Service    := Module;
+      Object.Posts_Bean := Object.Posts'Access;
+      Object.Load_List;
       return Object.all'Access;
    end Create_Post_List_Bean;
 
