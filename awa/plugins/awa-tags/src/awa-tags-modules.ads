@@ -23,6 +23,23 @@ with ADO.Sessions;
 with Util.Strings.Vectors;
 
 with AWA.Modules;
+
+--  == Integration ==
+--  The <tt>Tag_Module</tt> manages the tags associated with entities.  It provides operations
+--  that are used by the tag beans and the <tt>awa:tagList</tt> component to manage the tags.
+--  An instance of the <tt>Tag_Module</tt> must be declared and registered in the AWA application.
+--  The module instance can be defined as follows:
+--
+--    type Application is new AWA.Applications.Application with record
+--       Tag_Module : aliased AWA.Votes.Modules.Tag_Module;
+--    end record;
+--
+--  And registered in the `Initialize_Modules` procedure by using:
+--
+--    Register (App    => App.Self.all'Access,
+--              Name   => AWA.Tags.Modules.NAME,
+--              URI    => "tags",
+--              Module => App.Tag_Module'Access);
 package AWA.Tags.Modules is
 
    --  The name under which the module is registered.
