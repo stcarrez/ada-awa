@@ -43,4 +43,23 @@
        </sql>
     </query>
 
+    <query name='blog-post-tag-list'>
+       <comment>Get the list of public visible posts filtered by a tag</comment>
+       <sql>
+    SELECT
+      post.id,
+      post.title,
+      post.uri,
+      post.create_date,
+      user.name,
+      post.text
+    FROM awa_post AS post
+    INNER JOIN awa_user AS user ON post.author_id = user.id
+    INNER JOIN awa_tagged_entity AS e ON e.for_entity_id = post.id AND e.entity_type = :entity_type AND e.tag_id = :tag
+    WHERE post.status > 0
+    ORDER BY post.create_date DESC
+    LIMIT 40
+       </sql>
+    </query>
+
 </query-mapping>
