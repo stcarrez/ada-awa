@@ -36,6 +36,18 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
+  <managed-bean>
+    <description>The blog tag search bean.</description>
+    <managed-bean-name>blogTagSearch</managed-bean-name>
+    <managed-bean-class>AWA.Tags.Beans.Tag_Search_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>entity_type</property-name>
+      <property-class>String</property-class>
+      <value>awa_blog</value>
+    </managed-property>
+  </managed-bean>
+
   <navigation-rule>
     <from-view-id>/blogs/admin/edit.xhtml</from-view-id>
     <navigation-case>
@@ -191,6 +203,7 @@
   <url-policy>
     <permission>anonymous</permission>
     <url-pattern>/blogs/view.html</url-pattern>
+    <url-pattern>/blogs/tagged.html</url-pattern>
     <url-pattern>/blogs/index.html</url-pattern>
   </url-policy>
 
