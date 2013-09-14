@@ -17,6 +17,7 @@
 -----------------------------------------------------------------------
 with Ada.Strings.Unbounded;
 with Ada.Containers.Hashed_Maps;
+with Ada.Containers.Ordered_Sets;
 with Ada.Finalization;
 
 with Util.Beans.Basic;
@@ -32,6 +33,13 @@ with ADO.Sessions;
 with AWA.Tags.Models;
 with AWA.Tags.Modules;
 package AWA.Tags.Beans is
+
+   --  Compare two tags on their count and name.
+   function "<" (Left, Right : in AWA.Tags.Models.Tag_Info) return Boolean;
+
+   package Tag_Ordered_Sets is
+     new Ada.Containers.Ordered_Sets (Element_Type => AWA.Tags.Models.Tag_Info,
+                                      "="          => AWA.Tags.Models."=");
 
    type Tag_List_Bean is
      new Util.Beans.Objects.Lists.List_Bean and Util.Beans.Basic.Bean with private;
