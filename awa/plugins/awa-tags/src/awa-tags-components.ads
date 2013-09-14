@@ -28,6 +28,8 @@ with ASF.Contexts.Writer;
 with ASF.Events.Faces;
 with ASF.Factory;
 
+with AWA.Tags.Models;
+
 --  == Tags Component ==
 --
 --  === Displaying a list of tags ===
@@ -58,6 +60,17 @@ with ASF.Factory;
 --  <tt>Set_Deleted</tt> are called on the value bean with the list of tags that were
 --  added and removed.  These operations are called in the <tt>UPDATE_MODEL_VALUES</tt>
 --  phase (ie, before calling the action's bean operation).
+--
+--  === Tag cloud ===
+--  The <tt>awa:tagCloud</tt> component displays a list of tags as a tag cloud.
+--  The tags list passed in the <tt>value</tt> attribute must inherit from the
+--  <tt>Tag_Info_List_Bean</tt> type which indicates for each tag the number of
+--  times it is used.
+--
+--    <awa:tagCloud value='#{questionTagList}' id='cloud' styleClass="tag-cloud"
+--                  var="tagName" rows="30"
+--                  tagLink="#{contextPath}/questions/tagged.html?tag=#{tagName}"
+--                  tagClass="tag-link"/>
 --
 package AWA.Tags.Components is
 
@@ -185,5 +198,25 @@ package AWA.Tags.Components is
    procedure Broadcast (UI      : in out Tag_UIInput;
                         Event   : not null access ASF.Events.Faces.Faces_Event'Class;
                         Context : in out ASF.Contexts.Faces.Faces_Context'Class);
+
+   --  ------------------------------
+   --  Tag Cloud Component
+   --  ------------------------------
+   --  The tag cloud component
+   type Tag_UICloud is new ASF.Components.Html.UIHtmlComponent with null record;
+
+   type Tag_Info_Array is array (Positive range <>) of AWA.Tags.Models.Tag_Info;
+   type Tag_Info_Array_Access is access all Tag_Info_Array;
+
+   --  Render the tag cloud component.
+   overriding
+   procedure Encode_Children (UI      : in Tag_UICloud;
+                              Context : in out ASF.Contexts.Faces.Faces_Context'Class);
+
+   --  Render the list of tags.  If the <tt>tagLink</tt> attribute is defined, a link
+   --  is rendered for each tag.
+   procedure Render_Cloud (UI      : in Tag_UICloud;
+                           List    : in Tag_Info_Array;
+                           Context : in out ASF.Contexts.Faces.Faces_Context'Class);
 
 end AWA.Tags.Components;
