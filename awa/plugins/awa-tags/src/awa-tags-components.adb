@@ -17,6 +17,7 @@
 -----------------------------------------------------------------------
 with Ada.Strings.Unbounded;
 with Ada.Exceptions;
+with Ada.Unchecked_Deallocation;
 
 with Util.Strings;
 with Util.Log.Loggers;
@@ -40,6 +41,7 @@ package body AWA.Tags.Components is
    READONLY_ATTRIBUTE_NAMES  : Util.Strings.String_Set.Set;
 
    function Create_Tag return ASF.Components.Base.UIComponent_Access;
+   function Create_Cloud return ASF.Components.Base.UIComponent_Access;
 
    --  ------------------------------
    --  Create an Tag_UIInput component
@@ -49,11 +51,23 @@ package body AWA.Tags.Components is
       return new Tag_UIInput;
    end Create_Tag;
 
+   --  ------------------------------
+   --  Create an Tag_UICloud component
+   --  ------------------------------
+   function Create_Cloud return ASF.Components.Base.UIComponent_Access is
+   begin
+      return new Tag_UICloud;
+   end Create_Cloud;
+
    URI                : aliased constant String := "http://code.google.com/p/ada-awa/jsf";
    TAG_LIST_TAG       : aliased constant String := "tagList";
+   TAG_CLOUD_TAG      : aliased constant String := "tagCloud";
 
    AWA_Bindings : aliased constant ASF.Factory.Binding_Array
-     := (1 => (Name      => TAG_LIST_TAG'Access,
+     := (1 => (Name      => TAG_CLOUD_TAG'Access,
+               Component => Create_Cloud'Access,
+               Tag       => ASF.Views.Nodes.Create_Component_Node'Access),
+         2 => (Name      => TAG_LIST_TAG'Access,
                Component => Create_Tag'Access,
                Tag       => ASF.Views.Nodes.Create_Component_Node'Access)
         );
@@ -452,6 +466,127 @@ package body AWA.Tags.Components is
                               Context => Context);
       end if;
    end Broadcast;
+
+
+   --  ------------------------------
+   --  Render the list of tags.  If the <tt>tagLink</tt> attribute is defined, a link
+   --  is rendered for each tag.
+   --  ------------------------------
+   procedure Render_Cloud (UI      : in Tag_UICloud;
+                           List    : in Tag_Info_Array;
+                           Context : in out ASF.Contexts.Faces.Faces_Context'Class) is
+      Writer : constant Response_Writer_Access := Context.Get_Response_Writer;
+      Link   : constant access ASF.Views.Nodes.Tag_Attribute := UI.Get_Attribute ("tagLink");
+      Name   : constant String := UI.Get_Attribute ("var", Context, "");
+      Style  : constant Util.Beans.Objects.Object := UI.Get_Attribute (Context, "tagClass");
+   begin
+      Writer.Start_Element ("ul");
+      UI.Render_Attributes (Context, Writer);
+      if Link /= null then
+         for I in List'Range loop
+            Writer.Start_Element ("li");
+            if not Util.Beans.Objects.Is_Null (Style) then
+               Writer.Write_Attribute ("class", Style);
+            end if;
+            Writer.Start_Element ("a");
+            Writer.Write_Text (List (I).Tag);
+            Writer.End_Element ("a");
+            Writer.End_Element ("li");
+         end loop;
+      else
+         for I in List'Range loop
+            Writer.Start_Element ("li");
+            if not Util.Beans.Objects.Is_Null (Style) then
+               Writer.Write_Attribute ("class", Style);
+            end if;
+            Writer.Write_Text (List (I).Tag);
+            Writer.End_Element ("li");
+         end loop;
+      end if;
+      Writer.End_Element ("ul");
+   end Render_Cloud;
+--
+--     procedure Compute_Cloud_Weight (UI   : in Tag_UICloud;
+--                                     List : in out Tag_Info_Array) is
+--     begin
+--        for I in List'Range loop
+--           Table (I) := Tags.First_Element;
+--        end loop;
+--     end Compute_Cloud_Weight;
+
+   --  ------------------------------
+   --  Render the tag cloud component.
+   --  ------------------------------
+   overriding
+   procedure Encode_Children (UI      : in Tag_UICloud;
+                              Context : in out ASF.Contexts.Faces.Faces_Context'Class) is
+
+      procedure Free is
+         new Ada.Unchecked_Deallocation (Object => Tag_Info_Array,
+                                         Name   => Tag_Info_Array_Access);
+
+      Table : Tag_Info_Array_Access := null;
+   begin
+      if not UI.Is_Rendered (Context) then
+         return;
+      end if;
+
+      declare
+         use type Util.Beans.Basic.List_Bean_Access;
+
+         Max   : constant Integer := UI.Get_Attribute ("rows", Context, 0);
+         Bean  : constant Util.Beans.Basic.List_Bean_Access
+           := ASF.Components.Utils.Get_List_Bean (UI, "value", Context);
+         Count : Natural;
+         Tags  : AWA.Tags.Beans.Tag_Ordered_Sets.Set;
+         List  : AWA.Tags.Beans.Tag_Info_List_Bean_Access;
+      begin
+         --  Check that we have a List_Bean but do not complain if we have a null value.
+         if Bean = null or Max <= 0 then
+            return;
+         end if;
+
+         if not (Bean.all in AWA.Tags.Beans.Tag_Info_List_Bean'Class) then
+            ASF.Components.Base.Log_Error (UI, "Invalid tag list bean: it does not "
+                                           & "implement 'Tag_Info_List_Bean' interface");
+            return;
+         end if;
+
+         List := AWA.Tags.Beans.Tag_Info_List_Bean'Class (Bean.all)'Unchecked_Access;
+         Count := List.Get_Count;
+         if Count = 0 then
+            return;
+         end if;
+
+         --  Pass 1: Collect the tags and keep the most used.
+         for I in 1 .. Count loop
+            Tags.Insert (List.List.Element (I - 1));
+            if Integer (Tags.Length) > Max then
+               Tags.Delete_Last;
+            end if;
+         end loop;
+
+         --  Pass 2: Assign weight to each tag.
+         Count := Natural (Tags.Length);
+         Table := new Tag_Info_Array (1 .. Count);
+         for I in 1 .. Count loop
+            Table (I) := Tags.First_Element;
+            Tags.Delete_First;
+         end loop;
+
+         --  Pass 3: Sort the tags on their name.
+
+         --  Pass 4: Render each tag.
+         UI.Render_Cloud (Table.all, Context);
+
+         Free (Table);
+
+      exception
+         when others =>
+            Free (Table);
+            raise;
+      end;
+   end Encode_Children;
 
 begin
    ASF.Utils.Set_Text_Attributes (READONLY_ATTRIBUTE_NAMES);
