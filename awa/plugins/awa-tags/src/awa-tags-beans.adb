@@ -24,6 +24,19 @@ with ADO.Sessions.Entities;
 package body AWA.Tags.Beans is
 
    --  ------------------------------
+   --  Compare two tags on their count and name.
+   --  ------------------------------
+   function "<" (Left, Right : in AWA.Tags.Models.Tag_Info) return Boolean is
+      use type Ada.Strings.Unbounded.Unbounded_String;
+   begin
+      if Left.Count = Right.Count then
+         return Left.Tag < Right.Tag;
+      else
+         return Left.Count < Right.Count;
+      end if;
+   end "<";
+
+   --  ------------------------------
    --  Set the value identified by the name.
    --  If the name cannot be found, the method should raise the No_Value
    --  exception.
