@@ -221,6 +221,11 @@ package body Atlas.Applications is
                 Module => App.Mail_Module'Access);
 
       Register (App    => App.Self.all'Access,
+                Name   => AWA.Tags.Modules.NAME,
+                URI    => "tags",
+                Module => App.Tag_Module'Access);
+
+      Register (App    => App.Self.all'Access,
                 Name   => AWA.Blogs.Modules.NAME,
                 URI    => "blogs",
                 Module => App.Blog_Module'Access);
@@ -239,11 +244,6 @@ package body Atlas.Applications is
                 Name   => AWA.Votes.Modules.NAME,
                 URI    => "votes",
                 Module => App.Vote_Module'Access);
-
-      Register (App    => App.Self.all'Access,
-                Name   => AWA.Tags.Modules.NAME,
-                URI    => "tags",
-                Module => App.Tag_Module'Access);
 
       Register (App    => App.Self.all'Access,
                 Name   => AWA.Questions.Modules.NAME,
