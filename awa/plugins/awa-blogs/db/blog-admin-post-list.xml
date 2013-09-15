@@ -40,6 +40,7 @@
     INNER JOIN awa_post AS post ON blog.id = post.blog_id
     INNER JOIN awa_user AS user ON post.author_id = user.id
     WHERE blog.id = :blog_id
+    ORDER BY post.id DESC
        </sql>
     </query>
 
