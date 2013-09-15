@@ -26,7 +26,8 @@ with AWA.Modules;
 
 --  == Integration ==
 --  The <tt>Tag_Module</tt> manages the tags associated with entities.  It provides operations
---  that are used by the tag beans and the <tt>awa:tagList</tt> component to manage the tags.
+--  that are used by the tag beans together with the <tt>awa:tagList</tt> and
+--  <tt>awa:tagCloud</tt> components to manage the tags.
 --  An instance of the <tt>Tag_Module</tt> must be declared and registered in the AWA application.
 --  The module instance can be defined as follows:
 --
