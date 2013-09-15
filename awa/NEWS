@@ -2,6 +2,7 @@ Version 0.4     -
   - New countries plugin to provide country/region/city data models
   - New settings plugin to control application user settings
   - New tags plugin to easily add tags in applications
+  - New <awa:tagList> and <awa:tagCloud> components for tag display
   - Add tags to the question and blog plugins
 
 Version 0.3     - Feb 2012
