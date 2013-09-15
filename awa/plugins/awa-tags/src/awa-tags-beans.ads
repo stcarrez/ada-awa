@@ -44,7 +44,7 @@ with AWA.Tags.Modules;
 --    <managed-bean>
 --      <managed-bean-name>questionTags</managed-bean-name>
 --      <managed-bean-class>AWA.Tags.Beans.Tag_List_Bean</managed-bean-class>
---      <managed-bean-scope>Request</managed-bean-scope>
+--      <managed-bean-scope>request</managed-bean-scope>
 --      <managed-property>
 --        <property-name>entity_type</property-name>
 --        <property-class>String</property-class>
@@ -72,7 +72,7 @@ with AWA.Tags.Modules;
 --    <managed-bean>
 --      <managed-bean-name>questionTagSearch</managed-bean-name>
 --      <managed-bean-class>AWA.Tags.Beans.Tag_Search_Bean</managed-bean-class>
---      <managed-bean-scope>Request</managed-bean-scope>
+--      <managed-bean-scope>request</managed-bean-scope>
 --      <managed-property>
 --        <property-name>entity_type</property-name>
 --        <property-class>String</property-class>
@@ -84,17 +84,17 @@ with AWA.Tags.Modules;
 --  The <tt>Tag_Info_List_Bean</tt> holds a collection of tags with their weight.  It is used
 --  by the <tt>awa:tagCloud</tt> component.
 --
---
 --    <managed-bean>
---      <managed-bean-name>QuestionTagList</managed-bean-name>
+--      <managed-bean-name>questionTagList</managed-bean-name>
 --      <managed-bean-class>AWA.Tags.Beans.Tag_Info_List_Bean</managed-bean-class>
---      <managed-bean-scope>Request</managed-bean-scope>
+--      <managed-bean-scope>request</managed-bean-scope>
 --      <managed-property>
---        <property-name>Entity_Type</property-name>
+--        <property-name>entity_type</property-name>
 --        <property-class>String</property-class>
---        <value>Awa_Question</value>
+--        <value>awa_question</value>
 --      </managed-property>
 --    </managed-bean>
+--
 package AWA.Tags.Beans is
 
    --  Compare two tags on their count and name.
