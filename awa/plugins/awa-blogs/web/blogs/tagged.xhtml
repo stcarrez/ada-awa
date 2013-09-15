@@ -28,6 +28,13 @@
             <f:viewParam id='tag' value='#{postList.tag}'/>
         </f:metadata>
         <div id='awa-content'>
+            <div class='grid_8 blog-post-tag-info'>
+                <h2>
+                    <h:outputFormat value="#{blogMsg.blog_tag_page_title}">
+                        <f:param value="#{postList.tag}"/>
+                    </h:outputFormat>
+                </h2>
+            </div>
             <div class='grid_8'>
                 <ui:include src="lists/post-list.xhtml"/>
             </div>
