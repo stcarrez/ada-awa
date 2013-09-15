@@ -213,3 +213,13 @@ div.blog-post ul.tagedit-list {
     float: right;
     list-style-type: none;
 }
+div.blog-post-tag-info {
+    border: 1px solid #f91;
+    margin-bottom: 4em;
+}
+div.blog-post-tag-info h2 {
+    background: #f91;
+    padding: 2px 8px;
+    color: #fff;
+    font-size: 1.15em;
+}
