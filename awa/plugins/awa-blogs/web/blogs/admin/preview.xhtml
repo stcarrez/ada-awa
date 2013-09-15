@@ -1,5 +1,5 @@
 <!-- View an existing post
-  -  Copyright (C) 2011 Stephane Carrez
+  -  Copyright (C) 2011, 2013 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,6 +40,10 @@
                       <h2><a href="#{contextPath}/blogs/post/#{post.uri}">#{post.title}</a></h2>
                       <p>By #{post.username} <h:outputText id="date" value="#{post.date}" converter="dateConverter"/></p>
                   </div>
+                  <awa:tagList value='#{post.tags}' id='qtags' styleClass="tagedit-list"
+                               tagLink="#{contextPath}/blogs/tagged.html?tag=#{tagName}"
+                               var="tagName"
+                               tagClass="tagedit-listelement tagedit-listelement-old"/>
                   <awa:wiki styleClass='post-text' value="#{post.text}" format="dotclear"/>
               </div>
           </div>
