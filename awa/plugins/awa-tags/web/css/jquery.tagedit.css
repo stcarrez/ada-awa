@@ -42,3 +42,7 @@
 a.tag-link { display: inline-block; padding-right: 5px; text-decoration: none; padding-bottom: 5px;
  background-color: #dfeffc; color: #2E6E9E; margin: 5px;  }
 a.tag-link:hover { background-color: #c0d0e1; }
+ul.tag-cloud { list-style-type: none; }
+ul.tag-cloud li { display: inline-block; }
+ul.tag-cloud a { padding-right: 4px; text-decoration: none; }
+ul.tag-cloud a:hover { text-decoration: underline; }
