@@ -1,0 +1,16 @@
+<query-mapping package='AWA.Blogs.Models'>
+
+    <query name='blog-tag-cloud'>
+       <comment>Get the list of tags associated with all the database entities of a given type</comment>
+       <sql>
+    SELECT
+      t.name, count(e.id)
+    FROM awa_post AS p
+    INNER JOIN awa_tagged_entity AS e ON e.entity_id = p.id AND e.entity_type = :entity_type
+    INNER JOIN awa_tag AS t ON t.id = e.tag_id
+    WHERE p.status > 0
+    GROUP BY t.id
+       </sql>
+    </query>
+
+</query-mapping>
