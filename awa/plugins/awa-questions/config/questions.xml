@@ -59,7 +59,7 @@
 
   <managed-bean>
     <description>The list of tags associated with question entities.</description>
-    <managed-bean-name>questionTagList</managed-bean-name>
+    <managed-bean-name>questionTagCloud</managed-bean-name>
     <managed-bean-class>AWA.Tags.Beans.Tag_Info_List_Bean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
     <managed-property>
