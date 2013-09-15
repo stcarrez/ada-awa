@@ -28,8 +28,20 @@
             <f:viewParam id='tag' value='#{questionList.tag}'/>
         </f:metadata>
         <div id='awa-content'>
-            <ui:include src="views/question-nav.xhtml"/>
-            <ui:include src="lists/question-list.xhtml"/>
+            <div class='grid_8 blog-post-tag-info'>
+                <h2>
+                    <h:outputFormat value="#{blogMsg.blog_tag_page_title}">
+                        <f:param value="#{questionList.tag}"/>
+                    </h:outputFormat>
+                </h2>
+            </div>
+            <div class='grid_10'>
+                <ui:include src="views/question-nav.xhtml"/>
+                <ui:include src="lists/question-list.xhtml"/>
+            </div>
+            <div class='grid_2 blog-post-info'>
+                <ui:include src="views/question-tags.xhtml"/>
+            </div>
         </div>
     </ui:define>
 </ui:composition>
