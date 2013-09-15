@@ -21,8 +21,14 @@
 --  It provides a JSF component that allows to insert easily a list of tags in a page and
 --  in a form.  An application can use the bean types defined in <tt>AWA.Tags.Beans</tt>
 --  to define the tags and it will use the <tt>awa:tagList</tt> component to display them.
+--  A tag cloud is also provided by the <tt>awa:tagCloud</tt> component.
 --
 --  == Model ==
+--  The database model is generic and it uses the <tt>Entity_Type</tt> provided by
+--  [http://ada-ado.googlecode.com ADO] to associate a tag to entities stored in different
+--  tables.  The <tt>Entity_Type</tt> identifies the database table and the stored identifier
+--  in <tt>for_entity_id</tt> defines the entity in that table.
+--
 --  [http://ada-awa.googlecode.com/svn/wiki/awa_tags_model.png]
 --
 --  @include awa-tags-modules.ads
