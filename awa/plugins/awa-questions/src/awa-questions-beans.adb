@@ -194,6 +194,8 @@ package body AWA.Questions.Beans is
       elsif Name = "questions" then
          return Util.Beans.Objects.To_Object (Value   => From.Questions_Bean,
                                               Storage => Util.Beans.Objects.STATIC);
+      elsif Name = "tag" then
+         return Util.Beans.Objects.To_Object (From.Tag);
       else
          return From.Questions.Get_Value (Name);
       end if;
