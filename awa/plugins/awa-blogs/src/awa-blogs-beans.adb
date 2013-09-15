@@ -228,6 +228,8 @@ package body AWA.Blogs.Beans is
       elsif Name = "posts" then
          return Util.Beans.Objects.To_Object (Value   => From.Posts_Bean,
                                               Storage => Util.Beans.Objects.STATIC);
+      elsif Name = "tag" then
+         return Util.Beans.Objects.To_Object (From.Tag);
       else
          return From.Posts.Get_Value (Name);
       end if;
