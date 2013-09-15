@@ -28,7 +28,12 @@
             <f:viewParam id='tag' value='#{postList.tag}'/>
         </f:metadata>
         <div id='awa-content'>
-            <ui:include src="lists/post-list.xhtml"/>
+            <div class='grid_8'>
+                <ui:include src="lists/post-list.xhtml"/>
+            </div>
+            <div class='grid_2'>
+              <ui:include src="lists/post-info.xhtml"/>
+          </div>
         </div>
     </ui:define>
 </ui:composition>
