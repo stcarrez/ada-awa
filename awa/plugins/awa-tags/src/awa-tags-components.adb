@@ -477,22 +477,38 @@ package body AWA.Tags.Components is
                            Context : in out ASF.Contexts.Faces.Faces_Context'Class) is
       Writer : constant Response_Writer_Access := Context.Get_Response_Writer;
       Link   : constant access ASF.Views.Nodes.Tag_Attribute := UI.Get_Attribute ("tagLink");
-      Name   : constant String := UI.Get_Attribute ("var", Context, "");
       Style  : constant Util.Beans.Objects.Object := UI.Get_Attribute (Context, "tagClass");
+      Font_Size : Boolean := True;
    begin
       Writer.Start_Element ("ul");
       UI.Render_Attributes (Context, Writer);
       if Link /= null then
-         for I in List'Range loop
-            Writer.Start_Element ("li");
-            if not Util.Beans.Objects.Is_Null (Style) then
-               Writer.Write_Attribute ("class", Style);
-            end if;
-            Writer.Start_Element ("a");
-            Writer.Write_Text (List (I).Tag);
-            Writer.End_Element ("a");
-            Writer.End_Element ("li");
-         end loop;
+         declare
+            Link : constant EL.Expressions.Expression := UI.Get_Expression ("tagLink");
+            Name : constant String := UI.Get_Attribute ("var", Context, "");
+         begin
+            for I in List'Range loop
+               Writer.Start_Element ("li");
+               if not Util.Beans.Objects.Is_Null (Style) then
+                  Writer.Write_Attribute ("class", Style);
+               end if;
+               Writer.Start_Element ("a");
+               Context.Set_Attribute (Name, Util.Beans.Objects.To_Object (List (I).Tag));
+               Writer.Write_Attribute ("href", Link.Get_Value (Context.Get_ELContext.all));
+               if Font_Size then
+                  Writer.Write_Attribute ("style",
+                                          "font-size:" & Util.Strings.Image (List (I).Count / 100)
+                                          & "." & Util.Strings.Image (List (I).Count mod 100)
+                                          & "px;");
+               else
+                  Writer.Write_Attribute ("class", "tag"
+                                          & Util.Strings.Image (List (I).Count / 100));
+               end if;
+               Writer.Write_Text (List (I).Tag);
+               Writer.End_Element ("a");
+               Writer.End_Element ("li");
+            end loop;
+         end;
       else
          for I in List'Range loop
             Writer.Start_Element ("li");
@@ -505,14 +521,32 @@ package body AWA.Tags.Components is
       end if;
       Writer.End_Element ("ul");
    end Render_Cloud;
---
---     procedure Compute_Cloud_Weight (UI   : in Tag_UICloud;
---                                     List : in out Tag_Info_Array) is
---     begin
---        for I in List'Range loop
---           Table (I) := Tags.First_Element;
---        end loop;
---     end Compute_Cloud_Weight;
+
+   --  ------------------------------
+   --  Compute the weight for each tag in the list according to the <tt>minWeight</tt> and
+   --  <tt>maxWeight</tt> attributes.  The computed weight is an integer multiplied by 100
+   --  and will range from 100x<i>minWeight</i> and 100x<i>maxWeight</i>.
+   --  ------------------------------
+   procedure Compute_Cloud_Weight (UI           : in Tag_UICloud;
+                                   List         : in out Tag_Info_Array;
+                                   Context      : in out ASF.Contexts.Faces.Faces_Context'Class) is
+      Min       : constant Integer := UI.Get_Attribute ("minWeight", Context, 0);
+      Max       : constant Integer := UI.Get_Attribute ("maxWeight", Context, 100) - Min;
+      Min_Count : constant Natural := List (List'Last).Count;
+      Max_Count : Natural := List (List'First).Count;
+   begin
+      if Max_Count = Min_Count then
+         Max_Count := Min_Count + 1;
+      end if;
+      for I in List'Range loop
+         if List (I).Count = Min_Count then
+            List (I).Count := 100 * Min;
+         else
+            List (I).Count := (100 * Max * (List (I).Count - Min_Count)) / (Max_Count - Min_Count)
+              + 100 * Min;
+         end if;
+      end loop;
+   end Compute_Cloud_Weight;
 
    --  ------------------------------
    --  Render the tag cloud component.
@@ -534,7 +568,7 @@ package body AWA.Tags.Components is
       declare
          use type Util.Beans.Basic.List_Bean_Access;
 
-         Max   : constant Integer := UI.Get_Attribute ("rows", Context, 0);
+         Max   : constant Integer := UI.Get_Attribute ("rows", Context, 1000);
          Bean  : constant Util.Beans.Basic.List_Bean_Access
            := ASF.Components.Utils.Get_List_Bean (UI, "value", Context);
          Count : Natural;
@@ -566,13 +600,15 @@ package body AWA.Tags.Components is
             end if;
          end loop;
 
-         --  Pass 2: Assign weight to each tag.
          Count := Natural (Tags.Length);
          Table := new Tag_Info_Array (1 .. Count);
          for I in 1 .. Count loop
             Table (I) := Tags.First_Element;
             Tags.Delete_First;
          end loop;
+
+         --  Pass 2: Assign weight to each tag.
+         UI.Compute_Cloud_Weight (Table.all, Context);
 
          --  Pass 3: Sort the tags on their name.
 
