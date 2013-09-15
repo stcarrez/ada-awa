@@ -32,7 +32,7 @@ package body AWA.Tags.Beans is
       if Left.Count = Right.Count then
          return Left.Tag < Right.Tag;
       else
-         return Left.Count < Right.Count;
+         return Left.Count > Right.Count;
       end if;
    end "<";
 
