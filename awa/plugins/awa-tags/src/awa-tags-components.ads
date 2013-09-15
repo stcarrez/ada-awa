@@ -213,6 +213,13 @@ package AWA.Tags.Components is
    procedure Encode_Children (UI      : in Tag_UICloud;
                               Context : in out ASF.Contexts.Faces.Faces_Context'Class);
 
+   --  Compute the weight for each tag in the list according to the <tt>minWeight</tt> and
+   --  <tt>maxWeight</tt> attributes.  The computed weight is an integer multiplied by 100
+   --  and will range from 100x<i>minWeight</i> and 100x<i>maxWeight</i>.
+   procedure Compute_Cloud_Weight (UI           : in Tag_UICloud;
+                                   List         : in out Tag_Info_Array;
+                                   Context      : in out ASF.Contexts.Faces.Faces_Context'Class);
+
    --  Render the list of tags.  If the <tt>tagLink</tt> attribute is defined, a link
    --  is rendered for each tag.
    procedure Render_Cloud (UI      : in Tag_UICloud;
