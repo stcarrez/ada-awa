@@ -179,7 +179,7 @@ div.post-text h3 {
 div.post-text h4 {
     font-size: 1.0em;
 }
-div.post-text a {
+div.post-text a, ul.tag-cloud a {
     font-weight: bold;
     color: #47C;
 }
