@@ -316,6 +316,9 @@ package AWA.Blogs.Models is
                    Into   : in out Post_Ref);
 
 
+
+   Query_Blog_Tag_Cloud : constant ADO.Queries.Query_Definition_Access;
+
    --  --------------------
    --  The Admin_Post_Info describes a post in the administration interface.
    --  --------------------
@@ -662,38 +665,48 @@ private
                         Impl   : out Post_Access);
 
    package File_1 is
+      new ADO.Queries.Loaders.File (Path => "blog-tags.xml",
+                                    Sha1 => "9B2B599473F75F92CB5AB5045675E4CCEF926543");
+
+   package Def_Blog_Tag_Cloud is
+      new ADO.Queries.Loaders.Query (Name => "blog-tag-cloud",
+                                     File => File_1.File'Access);
+   Query_Blog_Tag_Cloud : constant ADO.Queries.Query_Definition_Access
+   := Def_Blog_Tag_Cloud.Query'Access;
+
+   package File_2 is
       new ADO.Queries.Loaders.File (Path => "blog-admin-post-list.xml",
                                     Sha1 => "F3BE5E28E359F698644846BAD351DA809BDBD95A");
 
    package Def_Adminpostinfo_Blog_Admin_Post_List is
       new ADO.Queries.Loaders.Query (Name => "blog-admin-post-list",
-                                     File => File_1.File'Access);
+                                     File => File_2.File'Access);
    Query_Blog_Admin_Post_List : constant ADO.Queries.Query_Definition_Access
    := Def_Adminpostinfo_Blog_Admin_Post_List.Query'Access;
 
-   package File_2 is
+   package File_3 is
       new ADO.Queries.Loaders.File (Path => "blog-list.xml",
                                     Sha1 => "BB41EBE10B232F150560185E9A955BDA9FB7F77F");
 
    package Def_Bloginfo_Blog_List is
       new ADO.Queries.Loaders.Query (Name => "blog-list",
-                                     File => File_2.File'Access);
+                                     File => File_3.File'Access);
    Query_Blog_List : constant ADO.Queries.Query_Definition_Access
    := Def_Bloginfo_Blog_List.Query'Access;
 
-   package File_3 is
+   package File_4 is
       new ADO.Queries.Loaders.File (Path => "blog-post-list.xml",
                                     Sha1 => "F61889EED51F4277BE7D979A3A2657A506FA0406");
 
    package Def_Postinfo_Blog_Post_List is
       new ADO.Queries.Loaders.Query (Name => "blog-post-list",
-                                     File => File_3.File'Access);
+                                     File => File_4.File'Access);
    Query_Blog_Post_List : constant ADO.Queries.Query_Definition_Access
    := Def_Postinfo_Blog_Post_List.Query'Access;
 
    package Def_Postinfo_Blog_Post_Tag_List is
       new ADO.Queries.Loaders.Query (Name => "blog-post-tag-list",
-                                     File => File_3.File'Access);
+                                     File => File_4.File'Access);
    Query_Blog_Post_Tag_List : constant ADO.Queries.Query_Definition_Access
    := Def_Postinfo_Blog_Post_Tag_List.Query'Access;
 end AWA.Blogs.Models;

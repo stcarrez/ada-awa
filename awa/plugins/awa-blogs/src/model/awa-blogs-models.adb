@@ -1081,6 +1081,7 @@ package body AWA.Blogs.Models is
       ADO.Objects.Set_Created (Object);
    end Load;
 
+
    --  --------------------
    --  Get the bean attribute identified by the given name.
    --  --------------------
