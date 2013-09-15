@@ -44,7 +44,19 @@
     <managed-property>
       <property-name>entity_type</property-name>
       <property-class>String</property-class>
-      <value>awa_blog</value>
+      <value>awa_post</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <description>A list of tags associated with all post entities.</description>
+    <managed-bean-name>blogTagCloud</managed-bean-name>
+    <managed-bean-class>AWA.Tags.Beans.Tag_Info_List_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>entity_type</property-name>
+      <property-class>String</property-class>
+      <value>awa_post</value>
     </managed-property>
   </managed-bean>
 
