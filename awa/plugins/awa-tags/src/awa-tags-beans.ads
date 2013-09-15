@@ -32,6 +32,69 @@ with ADO.Sessions;
 
 with AWA.Tags.Models;
 with AWA.Tags.Modules;
+
+--  == Tag Beans ==
+--  Several bean types are provided to represent and manage a list of tags.
+--
+--  === Tag_List_Bean ===
+--  The <tt>Tag_List_Bean</tt> holds a list of tags and provides operations used by the
+--  <tt>awa:tagList</tt> component to add or remove tags within a <tt>h:form</tt> component.
+--  A bean can be declared and configured as follows in the XML application configuration file:
+--
+--    <managed-bean>
+--      <managed-bean-name>questionTags</managed-bean-name>
+--      <managed-bean-class>AWA.Tags.Beans.Tag_List_Bean</managed-bean-class>
+--      <managed-bean-scope>Request</managed-bean-scope>
+--      <managed-property>
+--        <property-name>entity_type</property-name>
+--        <property-class>String</property-class>
+--        <value>Awa_Question</value>
+--      </managed-property>
+--      <managed-property>
+--        <property-name>permission</property-name>
+--        <property-class>String</property-class>
+--        <value>question-edit</value>
+--      </managed-property>
+--    </managed-bean>
+--
+--  The <tt>entity_type</tt> property defines the name of the database table to which the tags
+--  are assigned.  The <tt>permission</tt> property defines the permission name that must be used
+--  to verify that the user has the permission do add or remove the tag.  Such permission is
+--  verified only when the <tt>awa:tagList</tt> component is used within a form.
+--
+--  === Tag_Search_Bean ===
+--  The <tt>Tag_Search_Bean</tt> is dedicated to searching for tags that start with a given
+--  pattern.  The auto complete feature of the <tt>awa:tagList</tt> component can use this
+--  bean type to look in the database for tags matching a start pattern.  The declaration of the
+--  bean should define the database table to search for tags associated with a given database
+--  table.  This is done in the XML configuration with the <tt>entity_type</tt> property.
+--
+--    <managed-bean>
+--      <managed-bean-name>questionTagSearch</managed-bean-name>
+--      <managed-bean-class>AWA.Tags.Beans.Tag_Search_Bean</managed-bean-class>
+--      <managed-bean-scope>Request</managed-bean-scope>
+--      <managed-property>
+--        <property-name>entity_type</property-name>
+--        <property-class>String</property-class>
+--        <value>awa_question</value>
+--      </managed-property>
+--    </managed-bean>
+--
+--  === Tag_Info_List_Bean ===
+--  The <tt>Tag_Info_List_Bean</tt> holds a collection of tags with their weight.  It is used
+--  by the <tt>awa:tagCloud</tt> component.
+--
+--
+--    <managed-bean>
+--      <managed-bean-name>QuestionTagList</managed-bean-name>
+--      <managed-bean-class>AWA.Tags.Beans.Tag_Info_List_Bean</managed-bean-class>
+--      <managed-bean-scope>Request</managed-bean-scope>
+--      <managed-property>
+--        <property-name>Entity_Type</property-name>
+--        <property-class>String</property-class>
+--        <value>Awa_Question</value>
+--      </managed-property>
+--    </managed-bean>
 package AWA.Tags.Beans is
 
    --  Compare two tags on their count and name.
