@@ -136,14 +136,14 @@ package body AWA.Blogs.Beans is
    begin
       if Name = BLOG_ID_ATTR then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Blog_Id));
+      elsif Name = POST_TAG_ATTR then
+         return Util.Beans.Objects.To_Object (From.Tags_Bean, Util.Beans.Objects.STATIC);
       elsif From.Is_Null then
          return Util.Beans.Objects.Null_Object;
       elsif Name = POST_ID_ATTR then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Get_Id));
       elsif Name = POST_USERNAME_ATTR then
          return Util.Beans.Objects.To_Object (String '(From.Get_Author.Get_Name));
-      elsif Name = POST_TAG_ATTR then
-         return Util.Beans.Objects.To_Object (From.Tags_Bean, Util.Beans.Objects.STATIC);
       else
          return AWA.Blogs.Models.Post_Bean (From).Get_Value (Name);
       end if;
