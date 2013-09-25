@@ -35,6 +35,8 @@ with AWA.Tags.Modules;
 
 --  == Tag Beans ==
 --  Several bean types are provided to represent and manage a list of tags.
+--  The tag module registers the bean constructors when it is initialized.
+--  To use them, one must declare a bean definition in the application XML configuration.
 --
 --  === Tag_List_Bean ===
 --  The <tt>Tag_List_Bean</tt> holds a list of tags and provides operations used by the
@@ -48,7 +50,7 @@ with AWA.Tags.Modules;
 --      <managed-property>
 --        <property-name>entity_type</property-name>
 --        <property-class>String</property-class>
---        <value>Awa_Question</value>
+--        <value>awa_question</value>
 --      </managed-property>
 --      <managed-property>
 --        <property-name>permission</property-name>
