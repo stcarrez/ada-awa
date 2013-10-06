@@ -131,3 +131,8 @@ li.atlas-action {
     height: 40px;
     line-height: 20px;
 }
+div.ui-panel, div.ui-panel-content {
+    /* float: left;
+    display: block; */
+    overflow: auto;
+}
