@@ -1,0 +1,79 @@
+<!-- Action panel
+  -  Copyright (C) 2013 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<w:panel xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:c="http://java.sun.com/jstl/core"
+        xmlns:w="http://code.google.com/p/ada-asf/widget"
+        xmlns:h="http://java.sun.com/jsf/html"
+        toggleable="true">
+    <f:facet name="header">
+        <label>#{atlasMsg.atlas_action_message}</label>
+    </f:facet>
+
+    <ul class='atlas-stat'>
+        <li class='atlas-action'>
+            <c:choose>
+                <c:when test="#{userStat.post_count != 0}">
+                    <div class='atlas-button'>
+                        <a href="#{contextPath}/blogs/admin/list.html">#{atlasMsg.atlas_post_articles}</a>
+                    </div>
+                    <div class='atlas-badge'>
+                        #{userStat.post_count}
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class='atlas-button'>
+                        <a href="#{contextPath}/blogs/admin/list.html">#{atlasMsg.atlas_post_articles}</a>
+                    </div>
+                </c:otherwise>
+            </c:choose>
+        </li>
+        <li class='atlas-action'>
+            <c:choose>
+                <c:when test="#{userStat.question_count != 0}">
+                    <div class='atlas-button'>
+                        <a href="#{contextPath}/questions/ask.html">#{questionMsg.question_ask_question_label}</a>
+                    </div>
+                    <div class='atlas-badge'>
+                        #{userStat.question_count}
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class='atlas-button'>
+                        <a href="#{contextPath}/questions/ask.html">#{questionMsg.question_ask_question_label}</a>
+                    </div>
+                </c:otherwise>
+            </c:choose>
+        </li>
+        <li class='atlas-action'>
+            <c:choose>
+                <c:when test="#{userStat.document_count != 0}">
+                    <div class='atlas-button'>
+                        <a href="#{contextPath}/storages/documents.html">#{atlasMsg.atlas_upload_documents}</a>
+                    </div>
+                    <div class='atlas-badge'>
+                        #{userStat.document_count}
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class='atlas-button'>
+                        <a href="#{contextPath}/storages/documents.html">#{atlasMsg.atlas_upload_documents}</a>
+                    </div>
+                </c:otherwise>
+            </c:choose>
+        </li>
+    </ul>
+</w:panel>
