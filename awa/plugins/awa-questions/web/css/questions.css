@@ -110,7 +110,7 @@ div.question-list div.question-content {
     padding-top: 5px;
     width: 80%;
 }
-div.question-list div.question-content a, div.question-list div.question-content a:visited {
+div.question-list div.question-content h2 a, div.question-list div.question-content h2 a:visited {
     text-decoration: none;
     color: #F91;
     font-size: 1.2em;
