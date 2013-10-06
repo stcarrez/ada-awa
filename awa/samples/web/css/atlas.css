@@ -132,7 +132,20 @@ li.atlas-action {
     line-height: 20px;
 }
 div.ui-panel, div.ui-panel-content {
-    /* float: left;
-    display: block; */
     overflow: auto;
+}
+div.likes {
+    float: left;
+    padding-top: 15px;
+    width: 100%;
+    height: 30px;
+}
+div.likes div.like-facebook, div.likes div.like-google, div.likes div.like-twitter {
+    width: 100px;
+    float: left;
+    height: 30px;
+    overflow: hidden;
+}
+div.likes div.like-google {
+    width: 70px;
 }
