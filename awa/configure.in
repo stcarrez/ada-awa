@@ -27,8 +27,6 @@ AWA_MINOR_VERSION=4
 AWA_MICRO_VERSION=0
 AWA_VERSION=$AWA_MAJOR_VERSION.$AWA_MINOR_VERSION.$AWA_MICRO_VERSION
 
-AC_CHECK_PROGS(GNATMAKE, gnatmake, "")
-
 # checking for local tools
 AC_PROG_CC
 AC_PROG_MAKE_SET
@@ -50,6 +48,41 @@ AC_SUBST(EXEC_PREFIX)
 
 AWA_LIBDIR="lib"
 AC_SUBST(AWA_LIBDIR)
+
+ADO_USE_GPRBUILD=no
+AC_ARG_WITH(gprbuild,
+AS_HELP_STRING([--with-gprbuild], [Use gprbuild instead of gnatmake for the compilation]),
+[
+  ADO_USE_GPRBUILD=${withval}
+])
+case "$ADO_USE_GPRBUILD" in
+  yes)
+    AC_CHECK_PROGS(GNATMAKE, gprbuild, "")
+    AC_CHECK_PROGS(GNATCLEAN, gprclean, "")
+	;;
+
+  *)
+	AC_CHECK_PROGS(GNATMAKE, gnatmake, "")
+	AC_CHECK_PROGS(GNATCLEAN, gnatclean, "")
+   ;;
+esac
+
+##########################################
+# Check to enable/disable shared library
+##########################################
+
+AC_MSG_CHECKING([shared library support])
+ac_enable_shared=no
+AC_ARG_ENABLE(shared,
+[  --enable-shared         Enable the shared libraries (disabled)],
+[case "${enableval}" in
+  no|none)  ac_enable_shared=no ;;
+  *)        ac_enable_shared=yes ;;
+esac])dnl
+
+AC_MSG_RESULT(${ac_enable_shared})
+BUILDS_SHARED=$ac_enable_shared
+AC_SUBST(BUILDS_SHARED)
 
 ##########################################
 # Ada Util library
@@ -78,7 +111,7 @@ if test $? -ne 0 ; then
    AC_MSG_ERROR([Ada Utility library not found in ${UTIL_DIR}])
 fi
 rm -f t.gpr
-AC_MSG_RESULT(${UTIL_DIR})
+AC_MSG_RESULT(ok ${UTIL_DIR})
 AC_SUBST(UTIL_DIR)
 
 ##########################################
@@ -107,7 +140,7 @@ if test $? -ne 0 ; then
    AC_MSG_ERROR([Ada Expression Language library not found in ${EL_DIR}])
 fi
 rm -f t.gpr
-AC_MSG_RESULT(${EL_DIR})
+AC_MSG_RESULT(ok ${EL_DIR})
 AC_SUBST(EL_DIR)
 
 ##########################################
@@ -165,7 +198,7 @@ if test $? -ne 0 ; then
    AC_MSG_ERROR([Ada Server Faces library not found in ${ASF_DIR}])
 fi
 rm -f t.gpr
-AC_MSG_RESULT(${ASF_DIR})
+AC_MSG_RESULT(ok ${ASF_DIR})
 AC_SUBST(ASF_DIR)
 
 ##########################################
@@ -194,7 +227,7 @@ if test $? -ne 0 ; then
    AC_MSG_ERROR([Ada Database Objects library not found in ${ADO_DIR}])
 fi
 rm -f t.gpr
-AC_MSG_RESULT(${ADO_DIR})
+AC_MSG_RESULT(ok ${ADO_DIR})
 AC_SUBST(ADO_DIR)
 
 AC_CHECK_PROGS(MYSQL, mysql)
