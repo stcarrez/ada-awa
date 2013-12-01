@@ -4,7 +4,7 @@ with "@UTIL_DIR@testutil";
 with "@EL_DIR@el";
 with "@ASF_DIR@asf";
 with "@ASF_DIR@asfunit";
-with "@ADO_DIR@ado";
+with "@ADO_DIR@ado_core";
 with "awa";
 
 project AwaUnit is
