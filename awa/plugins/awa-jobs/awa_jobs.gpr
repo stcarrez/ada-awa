@@ -1,7 +1,7 @@
 with "../../awa";
 project awa_jobs is
    Version      := awa.Version;
-   Name         := "awa-jobs";
+   Name         := "awa_jobs";
    for Source_Dirs use ("src", "src/model");
    for Library_Name use Name;
    for Library_Dir use awa.Library_Dir & "/" & Name;

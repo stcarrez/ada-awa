@@ -2,7 +2,7 @@ with "../../awa";
 with "../awa-workspaces/awa_workspaces";
 project awa_votes is
    Version      := awa.Version;
-   Name         := "awa-votes";
+   Name         := "awa_votes";
    for Source_Dirs use ("src", "src/model");
    for Library_Name use Name;
    for Library_Dir use awa.Library_Dir & "/" & Name;

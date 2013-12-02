@@ -2,7 +2,7 @@ with "../awa-workspaces/awa_workspaces";
 with "../../awa";
 project awa_storages is
    Version      := awa.Version;
-   Name         := "awa-storages";
+   Name         := "awa_storages";
    for Source_Dirs use ("src", "src/model");
    for Library_Name use Name;
    for Library_Dir use awa.Library_Dir & "/" & Name;

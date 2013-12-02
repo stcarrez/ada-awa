@@ -3,7 +3,7 @@ with "../awa-workspaces/awa_workspaces";
 with "../awa-tags/awa_tags";
 project awa_blogs is
    Version      := awa.Version;
-   Name         := "awa-blogs";
+   Name         := "awa_blogs";
    for Source_Dirs use ("src", "src/model");
    for Library_Name use Name;
    for Library_Dir use awa.Library_Dir & "/" & Name;

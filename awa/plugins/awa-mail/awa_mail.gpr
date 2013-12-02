@@ -3,7 +3,7 @@ with "../../awa";
 project Awa_Mail is
 
    Version      := Awa.Version;
-   Name         := "awa-mail";
+   Name         := "awa_mail";
 
    for Source_Dirs use ("src");
 

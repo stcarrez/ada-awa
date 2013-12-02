@@ -3,7 +3,7 @@ with "../../awa";
 project Awa_Comments is
 
    Version      := awa.Version;
-   Name         := "awa-comments";
+   Name         := "awa_comments";
 
    for Source_Dirs use ("src", "src/model");
 

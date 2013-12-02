@@ -2,7 +2,7 @@ with "../../awa";
 with "../awa-storages/awa_storages";
 project awa_images is
    Version      := awa.Version;
-   Name         := "awa-images";
+   Name         := "awa_images";
    for Source_Dirs use ("src", "src/model");
    for Library_Name use Name;
    for Library_Dir use awa.Library_Dir & "/" & Name;
