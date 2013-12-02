@@ -29,6 +29,10 @@ LIBRARY_TYPE=dynamic
 
 .PHONY: binary-arch build-arch
 .PHONY: $(pkgname)$(aliversion)-dev $(pkgname)$(soversion)
+.PHONY: $(pkgname)$(aliversion)-workspaces $(pkgname)$(aliversion)-workspaces-dev
+.PHONY: $(pkgname)$(aliversion)-tags  $(pkgname)$(aliversion)-tags-dev
+.PHONY: $(pkgname)$(aliversion)-votes  $(pkgname)$(aliversion)-votes-dev
+.PHONY: $(pkgname)$(aliversion)-blogs  $(pkgname)$(aliversion)-blogs-dev
 
 binary-arch: build-arch $(pkgname)$(aliversion)-dev $(pkgname)$(soversion)
 	: # Common to all architecture-dependent packages
@@ -131,42 +135,75 @@ $(pkgname)$(aliversion)-test-dev:
 
 awa_%:
 	name=`echo $@ | cut -d _ -f 2` ; \
-	dh_installdirs -p$(pkgname)$(aliversion)-$$name \
+	dh_installdirs -p$(pkgname)$(aliversion)-$$name-dev \
 		usr/lib/$(DEB_HOST_MULTIARCH) \
 		usr/share/dynamo/$@
 	name=`echo $@ | cut -d _ -f 2` ; \
 	dirs=`cd $(CURDIR)/debian/tmp/usr/share/dynamo && find $@ -type d`; \
 	for i in $$dirs; do \
-		dh_installdirs -p$(pkgname)$(aliversion)-$$name usr/share/dynamo/$$i ; \
+		dh_installdirs -p$(pkgname)$(aliversion)-$$name-dev usr/share/dynamo/$$i ; \
 	done
 	name=`echo $@ | cut -d _ -f 2` ; \
 	files=`cd $(CURDIR)/debian/tmp/usr/share/dynamo && find $@ -type f`; \
 	for i in $$files; do \
 		dir=`dirname $$i`; \
-		dh_install -p$(pkgname)$(aliversion)-$$name usr/share/dynamo/$$i usr/share/dynamo/$$dir ; \
+		dh_install -p$(pkgname)$(aliversion)-$$name-dev usr/share/dynamo/$$i usr/share/dynamo/$$dir ; \
 	done
 
-$(pkgname)$(aliversion)-workspaces:	awa_workspaces
+ada_%:
+	name=`echo $@ | cut -d _ -f 2` ; \
+	dh_installdirs -p$(pkgname)$(aliversion)-$$name-dev \
+		usr/lib/ada/adalib/awa_$$name \
+		usr/share/ada/adainclude/awa_$$name ; \
+	dh_install -p$(pkgname)$(aliversion)-$$name-dev \
+	   usr/share/ada/adainclude/awa_$$name.gpr usr/share/ada/adainclude
+	name=`echo $@ | cut -d _ -f 2` ; \
+	files=`cd $(CURDIR)/debian/tmp/usr/lib/ada/adalib && find awa_$$name -type f`; \
+	for i in $$files; do \
+		dir=`dirname $$i`; \
+		dh_install -p$(pkgname)$(aliversion)-$$name-dev usr/lib/ada/adalib/$$i usr/lib/ada/adalib/$$dir ; \
+	done
+	name=`echo $@ | cut -d _ -f 2` ; \
+	files=`cd $(CURDIR)/debian/tmp/usr/share/ada/adainclude && find awa_$$name -type f`; \
+	for i in $$files; do \
+		dir=`dirname $$i`; \
+		dh_install -p$(pkgname)$(aliversion)-$$name-dev usr/share/ada/adainclude/$$i usr/share/ada/adainclude/$$dir ; \
+	done
+
+$(pkgname)$(aliversion)-workspaces:
 	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
 	dh_install -p$@ usr/lib/$(libprefix)workspaces.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
+
+$(pkgname)$(aliversion)-workspaces-dev:	awa_workspaces ada_workspaces
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
 	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)workspaces.so.$(soversion) \
 	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)workspaces.so
 
-$(pkgname)$(aliversion)-votes:	awa_votes
+$(pkgname)$(aliversion)-votes:
 	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
 	dh_install -p$@ usr/lib/$(libprefix)votes.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
+
+$(pkgname)$(aliversion)-votes-dev:	awa_votes ada_votes
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
 	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)votes.so.$(soversion) \
 	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)votes.so
 
-$(pkgname)$(aliversion)-tags:	awa_tags
+$(pkgname)$(aliversion)-tags:
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_install -p$@ usr/lib/$(libprefix)tags.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
+
+$(pkgname)$(aliversion)-tags-dev:	awa_tags ada_tags
 	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
 	dh_install -p$@ usr/lib/$(libprefix)tags.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
 	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)tags.so.$(soversion) \
 	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)tags.so
 
-$(pkgname)$(aliversion)-blogs:	awa_blogs
+$(pkgname)$(aliversion)-blogs:
 	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
 	dh_install -p$@ usr/lib/$(libprefix)blogs.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
+
+$(pkgname)$(aliversion)-blogs-dev:	awa_blogs ada_blogs
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
 	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)blogs.so.$(soversion) \
 	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)blogs.so
 
@@ -181,9 +218,13 @@ override_dh_auto_test:
 
 override_dh_auto_install: $(pkgname)$(aliversion) \
 						  $(pkgname)$(aliversion)-workspaces \
+						  $(pkgname)$(aliversion)-workspaces-dev \
 						  $(pkgname)$(aliversion)-tags \
+						  $(pkgname)$(aliversion)-tags-dev \
 						  $(pkgname)$(aliversion)-votes \
-						  $(pkgname)$(aliversion)-blogs
+						  $(pkgname)$(aliversion)-votes-dev \
+						  $(pkgname)$(aliversion)-blogs \
+						  $(pkgname)$(aliversion)-blogs-dev
 
 override_dh_install:
 	dh_install
