@@ -60,9 +60,10 @@ create-mysql-tests:
 
 # Clean the root project of all build products.
 pre-clean:
-	# -$(GNATCLEAN) -P awaunit.gpr -XLIBRARY_TYPE=static
-	# -$(GNATCLEAN) -P awaunit.gpr -XLIBRARY_TYPE=relocatable
 	-rm -rf obj/* lib/*
+	for i in ${PLUGINS} ; do \
+	   $(MAKE) -C plugins/$$i clean ; \
+	done
 
 # Files to package in source distribution
 DISTFILES=README LICENSE.txt NOTICE.txt NEWS CHANGES ChangeLog config.guess configure config.sub \
