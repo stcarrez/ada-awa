@@ -574,6 +574,9 @@ ASF_DIR
 SECURITY_DIR
 EL_DIR
 UTIL_DIR
+BUILDS_SHARED
+GNATCLEAN
+GNATMAKE
 AWA_LIBDIR
 EXEC_PREFIX
 AWA_MICRO_VERSION
@@ -593,7 +596,6 @@ CPPFLAGS
 LDFLAGS
 CFLAGS
 CC
-GNATMAKE
 target_os
 target_vendor
 target_cpu
@@ -647,6 +649,8 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
+with_gprbuild
+enable_shared
 with_ada_util
 with_ada_el
 with_ada_security
@@ -1271,9 +1275,16 @@ if test -n "$ac_init_help"; then
 
   cat <<\_ACEOF
 
+Optional Features:
+  --disable-option-checking  ignore unrecognized --enable/--with options
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-shared         Enable the shared libraries (disabled)
+
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-gprbuild         Use gprbuild instead of gnatmake for the compilation
   --with-ada-util=x       Path for the Ada Utility library
                           (code.google.com/p/ada-util)
   --with-ada-el=x         Path for the Ada Expression Language library
@@ -1910,50 +1921,6 @@ AWA_MAJOR_VERSION=0
 AWA_MINOR_VERSION=4
 AWA_MICRO_VERSION=0
 AWA_VERSION=$AWA_MAJOR_VERSION.$AWA_MINOR_VERSION.$AWA_MICRO_VERSION
-
-for ac_prog in gnatmake
-do
-  # Extract the first word of "$ac_prog", so it can be a program name with args.
-set dummy $ac_prog; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_prog_GNATMAKE+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  if test -n "$GNATMAKE"; then
-  ac_cv_prog_GNATMAKE="$GNATMAKE" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
-    ac_cv_prog_GNATMAKE="$ac_prog"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-fi
-fi
-GNATMAKE=$ac_cv_prog_GNATMAKE
-if test -n "$GNATMAKE"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GNATMAKE" >&5
-$as_echo "$GNATMAKE" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-  test -n "$GNATMAKE" && break
-done
-test -n "$GNATMAKE" || GNATMAKE=""""
-
 
 # checking for local tools
 ac_ext=c
@@ -2934,6 +2901,215 @@ EXEC_PREFIX="$prefix"
 AWA_LIBDIR="lib"
 
 
+ADO_USE_GPRBUILD=no
+
+# Check whether --with-gprbuild was given.
+if test "${with_gprbuild+set}" = set; then :
+  withval=$with_gprbuild;
+  ADO_USE_GPRBUILD=${withval}
+
+fi
+
+case "$ADO_USE_GPRBUILD" in
+  yes)
+    for ac_prog in gprbuild
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_GNATMAKE+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$GNATMAKE"; then
+  ac_cv_prog_GNATMAKE="$GNATMAKE" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_prog_GNATMAKE="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+GNATMAKE=$ac_cv_prog_GNATMAKE
+if test -n "$GNATMAKE"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GNATMAKE" >&5
+$as_echo "$GNATMAKE" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$GNATMAKE" && break
+done
+test -n "$GNATMAKE" || GNATMAKE=""""
+
+    for ac_prog in gprclean
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_GNATCLEAN+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$GNATCLEAN"; then
+  ac_cv_prog_GNATCLEAN="$GNATCLEAN" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_prog_GNATCLEAN="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+GNATCLEAN=$ac_cv_prog_GNATCLEAN
+if test -n "$GNATCLEAN"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GNATCLEAN" >&5
+$as_echo "$GNATCLEAN" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$GNATCLEAN" && break
+done
+test -n "$GNATCLEAN" || GNATCLEAN=""""
+
+	;;
+
+  *)
+	for ac_prog in gnatmake
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_GNATMAKE+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$GNATMAKE"; then
+  ac_cv_prog_GNATMAKE="$GNATMAKE" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_prog_GNATMAKE="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+GNATMAKE=$ac_cv_prog_GNATMAKE
+if test -n "$GNATMAKE"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GNATMAKE" >&5
+$as_echo "$GNATMAKE" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$GNATMAKE" && break
+done
+test -n "$GNATMAKE" || GNATMAKE=""""
+
+	for ac_prog in gnatclean
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_GNATCLEAN+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$GNATCLEAN"; then
+  ac_cv_prog_GNATCLEAN="$GNATCLEAN" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_prog_GNATCLEAN="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+GNATCLEAN=$ac_cv_prog_GNATCLEAN
+if test -n "$GNATCLEAN"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GNATCLEAN" >&5
+$as_echo "$GNATCLEAN" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$GNATCLEAN" && break
+done
+test -n "$GNATCLEAN" || GNATCLEAN=""""
+
+   ;;
+esac
+
+##########################################
+# Check to enable/disable shared library
+##########################################
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking shared library support" >&5
+$as_echo_n "checking shared library support... " >&6; }
+ac_enable_shared=no
+# Check whether --enable-shared was given.
+if test "${enable_shared+set}" = set; then :
+  enableval=$enable_shared; case "${enableval}" in
+  no|none)  ac_enable_shared=no ;;
+  *)        ac_enable_shared=yes ;;
+esac
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ac_enable_shared}" >&5
+$as_echo "${ac_enable_shared}" >&6; }
+BUILDS_SHARED=$ac_enable_shared
+
+
 ##########################################
 # Ada Util library
 ##########################################
@@ -2966,8 +3142,8 @@ if test $? -ne 0 ; then
    as_fn_error $? "Ada Utility library not found in ${UTIL_DIR}" "$LINENO" 5
 fi
 rm -f t.gpr
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${UTIL_DIR}" >&5
-$as_echo "${UTIL_DIR}" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ok ${UTIL_DIR}" >&5
+$as_echo "ok ${UTIL_DIR}" >&6; }
 
 
 ##########################################
@@ -3001,8 +3177,8 @@ if test $? -ne 0 ; then
    as_fn_error $? "Ada Expression Language library not found in ${EL_DIR}" "$LINENO" 5
 fi
 rm -f t.gpr
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${EL_DIR}" >&5
-$as_echo "${EL_DIR}" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ok ${EL_DIR}" >&5
+$as_echo "ok ${EL_DIR}" >&6; }
 
 
 ##########################################
@@ -3071,8 +3247,8 @@ if test $? -ne 0 ; then
    as_fn_error $? "Ada Server Faces library not found in ${ASF_DIR}" "$LINENO" 5
 fi
 rm -f t.gpr
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ASF_DIR}" >&5
-$as_echo "${ASF_DIR}" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ok ${ASF_DIR}" >&5
+$as_echo "ok ${ASF_DIR}" >&6; }
 
 
 ##########################################
@@ -3106,8 +3282,8 @@ if test $? -ne 0 ; then
    as_fn_error $? "Ada Database Objects library not found in ${ADO_DIR}" "$LINENO" 5
 fi
 rm -f t.gpr
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ADO_DIR}" >&5
-$as_echo "${ADO_DIR}" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ok ${ADO_DIR}" >&5
+$as_echo "ok ${ADO_DIR}" >&6; }
 
 
 for ac_prog in mysql
