@@ -35,6 +35,8 @@
 --  @include awa-tags-beans.ads
 --  @include awa-tags-components.ads
 --
+--  == Queries ==
+--  @include tag-queries.xml
 package AWA.Tags is
 
    pragma Pure;
