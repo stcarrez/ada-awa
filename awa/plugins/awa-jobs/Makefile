@@ -1,4 +1,4 @@
-NAME=awa-jobs
+NAME=awa_jobs
 
 LIBNAME=lib
 

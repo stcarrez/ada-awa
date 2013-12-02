@@ -1,5 +1,5 @@
 
-NAME=awa-images
+NAME=awa_images
 
 LIBNAME=lib${NAME}
 

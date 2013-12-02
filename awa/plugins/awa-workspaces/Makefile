@@ -1,4 +1,4 @@
-NAME=awa-workspaces
+NAME=awa_workspaces
 
 LIBNAME=lib${NAME}
 

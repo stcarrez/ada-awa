@@ -1,4 +1,4 @@
-NAME=awa-blogs
+NAME=awa_blogs
 
 LIBNAME=lib${NAME}
 

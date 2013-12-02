@@ -1,5 +1,4 @@
-
-NAME=awa-mail
+NAME=awa_mail
 
 LIBNAME=lib${NAME}
 

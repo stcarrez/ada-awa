@@ -1,4 +1,4 @@
-NAME=awa-countries
+NAME=awa_countries
 
 LIBNAME=lib${NAME}
 

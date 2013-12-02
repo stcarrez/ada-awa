@@ -1,4 +1,4 @@
-NAME=awa-questions
+NAME=awa_questions
 
 LIBNAME=lib${NAME}
 

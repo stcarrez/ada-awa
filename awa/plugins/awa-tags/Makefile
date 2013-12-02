@@ -1,4 +1,4 @@
-NAME=awa-tags
+NAME=awa_tags
 
 LIBNAME=lib${NAME}
 

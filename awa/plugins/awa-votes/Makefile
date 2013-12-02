@@ -1,4 +1,4 @@
-NAME=awa-votes
+NAME=awa_votes
 
 LIBNAME=lib${NAME}
 
