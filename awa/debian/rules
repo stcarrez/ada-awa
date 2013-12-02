@@ -1,0 +1,203 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+# Sample debian/rules that uses debhelper.
+# This file was originally written by Joey Hess and Craig Small.
+# As a special exception, when this file is copied by dh-make into a
+# dh-make output file, you may use that output file without restriction.
+# This special exception was added by Craig Small in version 0.37 of dh-make.
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+LIBRARY_TYPE=static
+
+# gnatmake can do parallel builds; we don't want make to interfere.
+.NOTPARALLEL:
+
+aliversion := $(shell sed -n -r 's/^Package: libawa([^-]*)-dev$$/\1/p' debian/control)
+soversion := $(shell sed -n -r 's/^Package: libawa([^-]+)$$/\1/p' debian/control).0
+CPUS := $(shell getconf _NPROCESSORS_ONLN)
+DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
+package=libawa-dev
+pkgname=libawa
+libname=libawa
+libprefix=$(libname)_
+
+LIBRARY_TYPE=dynamic
+
+%:
+	dh $@ 
+
+.PHONY: binary-arch build-arch
+.PHONY: $(pkgname)$(aliversion)-dev $(pkgname)$(soversion)
+
+binary-arch: build-arch $(pkgname)$(aliversion)-dev $(pkgname)$(soversion)
+	: # Common to all architecture-dependent packages
+	dh_installchangelogs -a
+	dh_installdocs -a
+	dh_lintian -a
+	dh_compress -a
+	dh_fixperms -a
+	dh_makeshlibs -a
+	dh_installdeb -a
+	dh_shlibdeps -a -L$(libname)$(soversion) -ldebian/$(libname)$(soversion)/usr/lib
+	dh_gencontrol -a
+	dh_md5sums -a
+	dh_builddeb -a
+
+$(pkgname)$(aliversion):
+	$(MAKE) prefix=$(CURDIR)/debian/tmp/usr install
+	dh_installdirs -p$@ \
+		usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_install -p$@ usr/lib/$(libname).so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
+	#dh_install -p$@ usr/lib/$(libprefix)aws.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
+	#dh_install -p$@ usr/lib/$(libprefix)curl.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
+
+$(pkgname)$(aliversion)-dev:
+	: # The development package
+	sed -e "s,INSTALL,/usr,g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" \
+		< $(CURDIR)/distrib/util.gpr > $(CURDIR)/debian/tmp/usr/share/ada/adainclude/util.gpr
+	sed -e "s,INSTALL,/usr,g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" \
+		< $(CURDIR)/distrib/util_http.gpr > $(CURDIR)/debian/tmp/usr/share/ada/adainclude/util_http.gpr
+	sed -e "s,INSTALL,/usr,g" -e "s,LIBRARY_TYPE,static,g" \
+		< $(CURDIR)/distrib/testutil.gpr > $(CURDIR)/debian/tmp/usr/share/ada/adainclude/testutil.gpr
+	cp $(CURDIR)/debian/dev-postinst $(CURDIR)/debian/$@.postinst
+	cp $(CURDIR)/debian/dev-postrm $(CURDIR)/debian/$@.postrm
+	dh_installdirs -p$@ \
+		usr/lib/$(DEB_HOST_MULTIARCH) \
+		usr/share/ada/adainclude/ada-util \
+		usr/lib/ada/adalib/ada-util
+	dh_install -p$@ usr/lib/$(libname).a /usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_install -p$@ usr/lib/ada/adalib/ada-util/*.ali /usr/lib/ada/adalib/ada-util
+	dh_install -p$@ usr/share/ada/adainclude/util.gpr /usr/share/ada/adainclude
+	dh_install -p$@ usr/share/ada/adainclude/util_http.gpr /usr/share/ada/adainclude
+	dh_install -p$@ usr/share/ada/adainclude/ada-util/*.ad[bs] /usr/share/ada/adainclude/ada-util
+	dh_install -p$@ bundles/*.properties usr/share/doc/$@/bundles
+	dh_install -p$@ samples/*.ads usr/share/doc/$@/samples
+	dh_install -p$@ samples/*.properties usr/share/doc/$@/samples
+	dh_install -p$@ samples/*.xmi usr/share/doc/$@/samples
+	dh_install -p$@ samples/*.adb usr/share/doc/$@/samples
+	dh_install -p$@ samples.gpr usr/share/doc/$@/
+	dh_install -p$@ config.gpr usr/share/doc/$@/
+	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libname).so.$(soversion) \
+	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libname).so
+	dh_strip -p$@ -X.a
+
+$(pkgname)$(aliversion)-aws-dev:
+	cp $(CURDIR)/debian/dev-postinst $(CURDIR)/debian/$@.postinst
+	cp $(CURDIR)/debian/dev-postrm $(CURDIR)/debian/$@.postrm
+	sed -e "s,INSTALL,/usr,g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" \
+		< $(CURDIR)/distrib/util_http_aws.gpr > $(CURDIR)/debian/tmp/usr/share/ada/adainclude/util_http_aws.gpr
+	dh_installdirs -p$@ \
+		usr/lib/$(DEB_HOST_MULTIARCH) \
+		usr/share/ada/adainclude/ada-util-aws \
+		usr/lib/ada/adalib/ada-util-aws
+	dh_install -p$@ usr/lib/$(libprefix)aws.a /usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_install -p$@ usr/lib/ada/adalib/ada-util-aws/*.ali /usr/lib/ada/adalib/ada-util-aws
+	dh_install -p$@ usr/share/ada/adainclude/ada-util-aws/*.ad[bs] /usr/share/ada/adainclude/ada-util-aws
+	dh_install -p$@ usr/share/ada/adainclude/util_http_aws.gpr /usr/share/ada/adainclude
+	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)aws.so.$(soversion) \
+	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)aws.so
+	dh_strip -p$@ -X.a
+
+$(pkgname)$(aliversion)-curl-dev:
+	cp $(CURDIR)/debian/dev-postinst $(CURDIR)/debian/$@.postinst
+	cp $(CURDIR)/debian/dev-postrm $(CURDIR)/debian/$@.postrm
+	sed -e "s,INSTALL,/usr,g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" \
+		< $(CURDIR)/distrib/util_http_curl.gpr > $(CURDIR)/debian/tmp/usr/share/ada/adainclude/util_http_curl.gpr
+	dh_installdirs -p$@ \
+		usr/lib/$(DEB_HOST_MULTIARCH) \
+		usr/share/ada/adainclude/ada-util-curl \
+		usr/lib/ada/adalib/ada-util-curl
+	dh_install -p$@ usr/lib/$(libprefix)curl.a /usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_install -p$@ usr/lib/ada/adalib/ada-util-curl/*.ali /usr/lib/ada/adalib/ada-util-curl
+	dh_install -p$@ usr/share/ada/adainclude/ada-util-curl/*.ad[bs] /usr/share/ada/adainclude/ada-util-curl
+	dh_install -p$@ usr/share/ada/adainclude/util_http_curl.gpr /usr/share/ada/adainclude
+	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)curl.so.$(soversion) \
+	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)curl.so
+	dh_strip -p$@ -X.a
+
+$(pkgname)$(aliversion)-test-dev:
+	: # The development package
+	dh_installdirs -p$@ \
+		usr/lib/$(DEB_HOST_MULTIARCH) \
+		usr/share/ada/adainclude/ada-testutil \
+		usr/lib/ada/adalib/ada-testutil
+	dh_install -p$@ usr/lib/$(libprefix)test.a /usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_install -p$@ usr/lib/ada/adalib/ada-testutil/*.ali /usr/lib/ada/adalib/ada-testutil
+	dh_install -p$@ usr/share/ada/adainclude/ada-testutil/*.ad[bs] /usr/share/ada/adainclude/ada-testutil
+	dh_install -p$@ usr/share/ada/adainclude/testutil.gpr /usr/share/ada/adainclude
+	dh_install -p$@ usr/share/ada/adainclude/ada-testutil/*.ad[bs] /usr/share/ada/adainclude/ada-testutil
+	dh_strip -p$@ -X.a
+
+awa_%:
+	name=`echo $@ | cut -d _ -f 2` ; \
+	dh_installdirs -p$(pkgname)$(aliversion)-$$name \
+		usr/lib/$(DEB_HOST_MULTIARCH) \
+		usr/share/dynamo/$@
+	name=`echo $@ | cut -d _ -f 2` ; \
+	dirs=`cd $(CURDIR)/debian/tmp/usr/share/dynamo && find $@ -type d`; \
+	for i in $$dirs; do \
+		dh_installdirs -p$(pkgname)$(aliversion)-$$name usr/share/dynamo/$$i ; \
+	done
+	name=`echo $@ | cut -d _ -f 2` ; \
+	files=`cd $(CURDIR)/debian/tmp/usr/share/dynamo && find $@ -type f`; \
+	for i in $$files; do \
+		dir=`dirname $$i`; \
+		dh_install -p$(pkgname)$(aliversion)-$$name usr/share/dynamo/$$i usr/share/dynamo/$$dir ; \
+	done
+
+$(pkgname)$(aliversion)-workspaces:	awa_workspaces
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_install -p$@ usr/lib/$(libprefix)workspaces.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)workspaces.so.$(soversion) \
+	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)workspaces.so
+
+$(pkgname)$(aliversion)-votes:	awa_votes
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_install -p$@ usr/lib/$(libprefix)votes.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)votes.so.$(soversion) \
+	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)votes.so
+
+$(pkgname)$(aliversion)-tags:	awa_tags
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_install -p$@ usr/lib/$(libprefix)tags.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)tags.so.$(soversion) \
+	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)tags.so
+
+$(pkgname)$(aliversion)-blogs:	awa_blogs
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_install -p$@ usr/lib/$(libprefix)blogs.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)blogs.so.$(soversion) \
+	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)blogs.so
+
+override_dh_auto_configure:
+	dh_auto_configure -- --enable-shared
+
+override_dh_auto_build:
+	dh_auto_build
+
+override_dh_auto_test:
+	dh_auto_test -- LD_LIBRARY_PATH=./lib
+
+override_dh_auto_install: $(pkgname)$(aliversion) \
+						  $(pkgname)$(aliversion)-workspaces \
+						  $(pkgname)$(aliversion)-tags \
+						  $(pkgname)$(aliversion)-votes \
+						  $(pkgname)$(aliversion)-blogs
+
+override_dh_install:
+	dh_install
+
+override_dh_installchangelogs:
+	dh_installchangelogs NEWS
+
+override_dh_compress:
+	dh_compress -X.ads -X.adb -XMakefile
+
+override_dh_strip:
+	dh_strip --dbg-package=libawa$(aliversion)-dbg
+
+override_dh_auto_clean:
+	rm -f $(CURDIR)/debian/$(libname)*.postinst
+	rm -f $(CURDIR)/debian/$(libname)*.postrm
+	dh_auto_clean

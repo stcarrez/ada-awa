@@ -1,0 +1,73 @@
+Source: libawa
+Priority: extra
+Maintainer: Stephane Carrez <Stephane.Carrez@gmail.com>
+Build-Depends: debhelper (>= 8.0.0), autotools-dev, gnat, gnat-4.6, libxmlada4.1-dev
+Standards-Version: 3.9.2
+Section: libs
+Homepage: http://code.google.com/p/ada-awa/
+
+Package: libawa1.0
+Section: libs
+Architecture: any
+Pre-Depends: multiarch-support
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Ada Web Application
+ This package provides a framework to build web applications in Ada 2005.
+
+Package: libawa1.0-workspaces
+Section: libs
+Architecture: any
+Depends: ${misc:Depends}, libawa1.0 (= ${binary:Version})
+Description: Workspace plugin for AWA (Runtime)
+ This is the Workspace plugin for Ada Web Application.
+
+Package: libawa1.0-votes
+Section: libs
+Architecture: any
+Depends: ${misc:Depends}, libawa1.0-workspaces (= ${binary:Version})
+Description: Votes plugin for AWA (Runtime)
+ This is the Votes plugin for Ada Web Application.  The Votes plugin allows
+ to easily add voting features to an application.
+
+Package: libawa1.0-blogs
+Section: libs
+Architecture: any
+Depends: ${misc:Depends}, libawa1.0-workspaces (= ${binary:Version}), libawa1.0-tags (= ${binary:Version})
+Description: Blogs plugin for AWA (Runtime)
+ This is the Blogs plugin for Ada Web Application.  The Blogs plugin provides
+ a complete and ready to use blog system that can be integrated easily in an
+ application.
+
+Package: libawa1.0-tags
+Section: libs
+Architecture: any
+Depends: ${misc:Depends}, libawa1.0 (= ${binary:Version})
+Description: Tags plugin for AWA (Runtime)
+ This is the Tags plugin for Ada Web Application.  The Tags plugin allows
+ to integrate and use easily tags in an application.
+
+Package: libawa1.0-dev
+Section: libdevel
+Architecture: any
+Depends: ${misc:Depends}, libada-asf1.0, libada-ado1.0, libada-util1.7 (= ${binary:Version}), gnat, gnat-4.6
+Suggests: libada-util1.7-dbg
+Description: Ada Utility Library (Development files)
+ This package contains the development files for Ada Web Application.
+
+Package: libawa1.0-unit-dev
+Section: libdevel
+Architecture: any
+Depends: ${misc:Depends}, libawa1.0-dev (= ${binary:Version}), libada-util1.7-dev, gnat, gnat-4.6
+Description: Unit test framework for AWA.
+ This library provides support and helpers for writing unit tests for AWA.
+
+Package: libawa1.0-dbg
+Section: debug
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Debugging symbols for the Ada Web Application
+ This package provides a framework to build web applications in Ada 2005.
+ .
+ This is the library containing debugging symbols for the Ada Web
+ Application.
+
