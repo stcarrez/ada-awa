@@ -50,11 +50,12 @@ binary-arch: build-arch $(pkgname)$(aliversion)-dev $(pkgname)$(soversion)
 
 $(pkgname)$(aliversion):
 	$(MAKE) prefix=$(CURDIR)/debian/tmp/usr install
+	for i in $(CURDIR)/debian/tmp/usr/lib/*.so.$(soversion); do \
+	   chrpath -d $$i ; \
+	done
 	dh_installdirs -p$@ \
 		usr/lib/$(DEB_HOST_MULTIARCH)
 	dh_install -p$@ usr/lib/$(libname).so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
-	#dh_install -p$@ usr/lib/$(libprefix)aws.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
-	#dh_install -p$@ usr/lib/$(libprefix)curl.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
 
 $(pkgname)$(aliversion)-dev:
 	: # The development package
@@ -84,40 +85,6 @@ $(pkgname)$(aliversion)-dev:
 	dh_install -p$@ config.gpr usr/share/doc/$@/
 	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libname).so.$(soversion) \
 	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libname).so
-	dh_strip -p$@ -X.a
-
-$(pkgname)$(aliversion)-aws-dev:
-	cp $(CURDIR)/debian/dev-postinst $(CURDIR)/debian/$@.postinst
-	cp $(CURDIR)/debian/dev-postrm $(CURDIR)/debian/$@.postrm
-	sed -e "s,INSTALL,/usr,g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" \
-		< $(CURDIR)/distrib/util_http_aws.gpr > $(CURDIR)/debian/tmp/usr/share/ada/adainclude/util_http_aws.gpr
-	dh_installdirs -p$@ \
-		usr/lib/$(DEB_HOST_MULTIARCH) \
-		usr/share/ada/adainclude/ada-util-aws \
-		usr/lib/ada/adalib/ada-util-aws
-	dh_install -p$@ usr/lib/$(libprefix)aws.a /usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_install -p$@ usr/lib/ada/adalib/ada-util-aws/*.ali /usr/lib/ada/adalib/ada-util-aws
-	dh_install -p$@ usr/share/ada/adainclude/ada-util-aws/*.ad[bs] /usr/share/ada/adainclude/ada-util-aws
-	dh_install -p$@ usr/share/ada/adainclude/util_http_aws.gpr /usr/share/ada/adainclude
-	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)aws.so.$(soversion) \
-	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)aws.so
-	dh_strip -p$@ -X.a
-
-$(pkgname)$(aliversion)-curl-dev:
-	cp $(CURDIR)/debian/dev-postinst $(CURDIR)/debian/$@.postinst
-	cp $(CURDIR)/debian/dev-postrm $(CURDIR)/debian/$@.postrm
-	sed -e "s,INSTALL,/usr,g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" \
-		< $(CURDIR)/distrib/util_http_curl.gpr > $(CURDIR)/debian/tmp/usr/share/ada/adainclude/util_http_curl.gpr
-	dh_installdirs -p$@ \
-		usr/lib/$(DEB_HOST_MULTIARCH) \
-		usr/share/ada/adainclude/ada-util-curl \
-		usr/lib/ada/adalib/ada-util-curl
-	dh_install -p$@ usr/lib/$(libprefix)curl.a /usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_install -p$@ usr/lib/ada/adalib/ada-util-curl/*.ali /usr/lib/ada/adalib/ada-util-curl
-	dh_install -p$@ usr/share/ada/adainclude/ada-util-curl/*.ad[bs] /usr/share/ada/adainclude/ada-util-curl
-	dh_install -p$@ usr/share/ada/adainclude/util_http_curl.gpr /usr/share/ada/adainclude
-	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)curl.so.$(soversion) \
-	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)curl.so
 	dh_strip -p$@ -X.a
 
 $(pkgname)$(aliversion)-test-dev:
@@ -174,6 +141,7 @@ $(pkgname)$(aliversion)-workspaces:
 	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
 	dh_install -p$@ usr/lib/$(libprefix)workspaces.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
 
+
 $(pkgname)$(aliversion)-workspaces-dev:	awa_workspaces ada_workspaces
 	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
 	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)workspaces.so.$(soversion) \
@@ -194,7 +162,6 @@ $(pkgname)$(aliversion)-tags:
 
 $(pkgname)$(aliversion)-tags-dev:	awa_tags ada_tags
 	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_install -p$@ usr/lib/$(libprefix)tags.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
 	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)tags.so.$(soversion) \
 	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)tags.so
 
@@ -208,7 +175,7 @@ $(pkgname)$(aliversion)-blogs-dev:	awa_blogs ada_blogs
 	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)blogs.so
 
 override_dh_auto_configure:
-	dh_auto_configure -- --enable-shared
+	dh_auto_configure -- --enable-shared --with-gprbuild
 
 override_dh_auto_build:
 	dh_auto_build
