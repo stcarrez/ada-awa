@@ -96,7 +96,7 @@ Description: Ada Utility Library (Development files)
 Package: libawa1.0-unit-dev
 Section: libdevel
 Architecture: any
-Depends: ${misc:Depends}, libawa1.0-dev (= ${binary:Version}), libada-util1.7-dev, gnat, gnat-4.6
+Depends: ${misc:Depends}, libawa1.0-dev (= ${binary:Version}), libada-util1.7-dev, libada-util1.7-unit-dev, libada-asf1.0-unit-dev, gnat, gnat-4.6
 Description: Unit test framework for AWA.
  This library provides support and helpers for writing unit tests for AWA.
 

@@ -60,22 +60,16 @@ $(pkgname)$(aliversion):
 $(pkgname)$(aliversion)-dev:
 	: # The development package
 	sed -e "s,INSTALL,/usr,g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" \
-		< $(CURDIR)/distrib/util.gpr > $(CURDIR)/debian/tmp/usr/share/ada/adainclude/util.gpr
-	sed -e "s,INSTALL,/usr,g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" \
-		< $(CURDIR)/distrib/util_http.gpr > $(CURDIR)/debian/tmp/usr/share/ada/adainclude/util_http.gpr
-	sed -e "s,INSTALL,/usr,g" -e "s,LIBRARY_TYPE,static,g" \
-		< $(CURDIR)/distrib/testutil.gpr > $(CURDIR)/debian/tmp/usr/share/ada/adainclude/testutil.gpr
+		< $(CURDIR)/distrib/awa.gpr > $(CURDIR)/debian/tmp/usr/share/ada/adainclude/awa.gpr
 	cp $(CURDIR)/debian/dev-postinst $(CURDIR)/debian/$@.postinst
 	cp $(CURDIR)/debian/dev-postrm $(CURDIR)/debian/$@.postrm
 	dh_installdirs -p$@ \
 		usr/lib/$(DEB_HOST_MULTIARCH) \
-		usr/share/ada/adainclude/ada-util \
-		usr/lib/ada/adalib/ada-util
+		usr/share/ada/adainclude/awa \
+		usr/lib/ada/adalib/awa
 	dh_install -p$@ usr/lib/$(libname).a /usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_install -p$@ usr/lib/ada/adalib/ada-util/*.ali /usr/lib/ada/adalib/ada-util
-	dh_install -p$@ usr/share/ada/adainclude/util.gpr /usr/share/ada/adainclude
-	dh_install -p$@ usr/share/ada/adainclude/util_http.gpr /usr/share/ada/adainclude
-	dh_install -p$@ usr/share/ada/adainclude/ada-util/*.ad[bs] /usr/share/ada/adainclude/ada-util
+	dh_install -p$@ usr/lib/ada/adalib/awa/*.ali /usr/lib/ada/adalib/awa
+	dh_install -p$@ usr/share/ada/adainclude/awa/*.ad[bs] /usr/share/ada/adainclude/awa
 	dh_install -p$@ bundles/*.properties usr/share/doc/$@/bundles
 	dh_install -p$@ samples/*.ads usr/share/doc/$@/samples
 	dh_install -p$@ samples/*.properties usr/share/doc/$@/samples
@@ -87,17 +81,16 @@ $(pkgname)$(aliversion)-dev:
 	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libname).so
 	dh_strip -p$@ -X.a
 
-$(pkgname)$(aliversion)-test-dev:
+$(pkgname)$(aliversion)-unit-dev:
 	: # The development package
 	dh_installdirs -p$@ \
 		usr/lib/$(DEB_HOST_MULTIARCH) \
-		usr/share/ada/adainclude/ada-testutil \
-		usr/lib/ada/adalib/ada-testutil
-	dh_install -p$@ usr/lib/$(libprefix)test.a /usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_install -p$@ usr/lib/ada/adalib/ada-testutil/*.ali /usr/lib/ada/adalib/ada-testutil
-	dh_install -p$@ usr/share/ada/adainclude/ada-testutil/*.ad[bs] /usr/share/ada/adainclude/ada-testutil
-	dh_install -p$@ usr/share/ada/adainclude/testutil.gpr /usr/share/ada/adainclude
-	dh_install -p$@ usr/share/ada/adainclude/ada-testutil/*.ad[bs] /usr/share/ada/adainclude/ada-testutil
+		usr/share/ada/adainclude/awa-unit \
+		usr/lib/ada/adalib/awa-unit
+	dh_install -p$@ usr/lib/$(libprefix)unit.a /usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_install -p$@ usr/lib/ada/adalib/awa-unit/*.ali /usr/lib/ada/adalib/awa-unit
+	dh_install -p$@ usr/share/ada/adainclude/awa-unit/*.ad[bs] /usr/share/ada/adainclude/awa-unit
+	dh_install -p$@ usr/share/ada/adainclude/awa_unit.gpr /usr/share/ada/adainclude
 	dh_strip -p$@ -X.a
 
 awa_%:
@@ -191,7 +184,8 @@ override_dh_auto_install: $(pkgname)$(aliversion) \
 						  $(pkgname)$(aliversion)-votes \
 						  $(pkgname)$(aliversion)-votes-dev \
 						  $(pkgname)$(aliversion)-blogs \
-						  $(pkgname)$(aliversion)-blogs-dev
+						  $(pkgname)$(aliversion)-blogs-dev \
+						  $(pkgname)$(aliversion)-unit-dev
 
 override_dh_install:
 	dh_install
