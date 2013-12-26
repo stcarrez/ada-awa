@@ -70,7 +70,8 @@ DISTFILES=README LICENSE.txt NOTICE.txt NEWS CHANGES ChangeLog config.guess conf
 configure.in Makefile.in install-sh \
 awa.gpr.in tests.gpr.in config.gpr \
 src samples regtests db web bundles config awaunit awaunit.gpr.in rules.mk.in \
-distrib test-mysql.properties test-sqlite.properties dynamo.xml plugins uml
+distrib test-mysql.properties test-sqlite.properties dynamo.xml plugins uml \
+debian
 
 pre-dist:
 	-rm -rf $(distdir)
