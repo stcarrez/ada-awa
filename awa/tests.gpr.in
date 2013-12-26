@@ -4,7 +4,7 @@ with "@UTIL_DIR@util_unit";
 with "@EL_DIR@el";
 with "@ASF_DIR@asf_core";
 with "@ASF_DIR@asf_unit";
-with "@ADO_DIR@ado";
+with "@ADO_DIR@ado_core";
 with "awa";
 with "awa_unit";
 with "plugins/awa-workspaces/awa_workspaces";
