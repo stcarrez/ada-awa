@@ -250,5 +250,5 @@ AWA_AWS_STATUS=yes
 AC_SUBST(AWA_AWS_STATUS)
 
 AC_OUTPUT(
-Makefile rules.mk awa.gpr tests.gpr awaunit.gpr distrib/awa.gpr distrib/awaunit.gpr
+Makefile rules.mk awa.gpr tests.gpr awa_unit.gpr distrib/awa.gpr distrib/awaunit.gpr
 )
