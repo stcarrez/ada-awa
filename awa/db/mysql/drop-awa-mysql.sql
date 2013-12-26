@@ -8,6 +8,10 @@ DROP TABLE IF EXISTS `awa_acl`;
 DROP TABLE IF EXISTS `awa_queue`;
 DROP TABLE IF EXISTS `awa_message_type`;
 DROP TABLE IF EXISTS `awa_message`;
+/* Copied from ado-drop-mysql.sql*/
+/* File generated automatically by dynamo */
+DROP TABLE IF EXISTS `sequence`;
+DROP TABLE IF EXISTS `entity_type`;
 /* Copied from awa-blogs-drop-mysql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `awa_post`;
@@ -55,7 +59,3 @@ DROP TABLE IF EXISTS `awa_workspace`;
 /* Copied from awa-comments-drop-mysql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `awa_comments`;
-/* Copied from ado-drop-mysql.sql*/
-/* File generated automatically by dynamo */
-DROP TABLE IF EXISTS `sequence`;
-DROP TABLE IF EXISTS `entity_type`;
