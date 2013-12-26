@@ -69,7 +69,7 @@ pre-clean:
 DISTFILES=README LICENSE.txt NOTICE.txt NEWS CHANGES ChangeLog config.guess configure config.sub \
 configure.in Makefile.in install-sh \
 awa.gpr.in tests.gpr.in config.gpr \
-src samples regtests db web bundles config awaunit awaunit.gpr.in rules.mk.in \
+src samples regtests db web bundles config awaunit awa_unit.gpr.in rules.mk.in \
 distrib test-mysql.properties test-sqlite.properties dynamo.xml plugins uml \
 debian
 
@@ -111,20 +111,20 @@ prepare-release:
 	${SVN} log -v > ChangeLog
 
 pre-install:
-	$(MKDIR) -p ${includedir}/awaunit
+	$(MKDIR) -p ${includedir}/awa-unit
 	$(MKDIR) -p ${projectdir}/
-	${MKDIR} -p ${alidir}/awaunit/$(LIBRARY_TYPE)
+	${MKDIR} -p ${alidir}/awa-unit/$(LIBRARY_TYPE)
 	$(MKDIR) -p ${dynamodir}/base/uml
-	${CP} awaunit/*.ad[bs] ${includedir}/awaunit
-	sed -e "s,INSTALL,${prefix},g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" < distrib/awaunit.gpr > ${projectdir}/awaunit.gpr
-	${CP} lib/awaunit/$(LIBRARY_TYPE)/*.ali ${alidir}/awaunit/$(LIBRARY_TYPE)/
+	${CP} awaunit/*.ad[bs] ${includedir}/awa-unit
+	sed -e "s,INSTALL,${prefix},g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" < distrib/awa_unit.gpr > ${projectdir}/awa_unit.gpr
+	${CP} lib/awaunit/$(LIBRARY_TYPE)/*.ali ${alidir}/awa-unit/$(LIBRARY_TYPE)/
 ifeq ($(LIBRARY_TYPE),static)
-	${CP} lib/awaunit/$(LIBRARY_TYPE)/libawaunit.a ${libdir}/
+	${CP} lib/awaunit/$(LIBRARY_TYPE)/libawa_unit.a ${libdir}/
 else
-	${CP} -p lib/awaunit/$(LIBRARY_TYPE)/libawaunit.$(LIBVER) ${libdir}/
+	${CP} -p lib/awaunit/$(LIBRARY_TYPE)/libawa_unit.$(LIBVER) ${libdir}/
 	cd ${libdir} && \
-	rm -f libawaunit.$(LIBEXT) && \
-	${LN} libawaunit.$(LIBVER) libawaunit.$(LIBEXT)
+	rm -f libawa_unit.$(LIBEXT) && \
+	${LN} libawa_unit.$(LIBVER) libawa_unit.$(LIBEXT)
 endif
 	for i in ${PLUGINS} ; do \
 	   $(MAKE) -C plugins/$$i install; \
@@ -138,8 +138,8 @@ pre-uninstall:
 	rm -f ${projectdir}/awa.gpr
 	rm -rf ${dynamodir}/awa
 	rm -rf ${alidir}/awa
-	rm -rf ${alidir}/awaunit
-	rm -rf ${includedir}/awaaunit
+	rm -rf ${alidir}/awa-unit
+	rm -rf ${includedir}/awa-unit
 	for i in ${PLUGINS} ; do \
 	   $(MAKE) -C plugins/$$i uninstall; \
 	done
