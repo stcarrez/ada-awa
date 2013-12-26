@@ -1,13 +1,13 @@
 with "config";
 with "@UTIL_DIR@util";
-with "@UTIL_DIR@testutil";
+with "@UTIL_DIR@util_unit";
 with "@EL_DIR@el";
-with "@ASF_DIR@asf";
-with "@ASF_DIR@asfunit";
+with "@ASF_DIR@asf_core";
+with "@ASF_DIR@asf_unit";
 with "@ADO_DIR@ado_core";
 with "awa";
 
-project AwaUnit is
+project Awa_Unit is
 
    Version := "@AWA_VERSION@";
    Library_Dir := "lib";
@@ -15,7 +15,7 @@ project AwaUnit is
 
    for Source_Dirs use ("awaunit");
 
-   for Library_Name use "awaunit";
+   for Library_Name use "awa_unit";
    for Library_Kind use Library_Type;
    for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
 
@@ -28,4 +28,4 @@ project AwaUnit is
    package Builder renames Config.Builder;
    package Compiler renames Config.Compiler;
 
-end AwaUnit;
+end Awa_Unit;

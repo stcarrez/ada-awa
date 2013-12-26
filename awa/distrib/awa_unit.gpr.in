@@ -1,0 +1,19 @@
+with "util";
+with "util_unit";
+with "el";
+with "asf_core";
+with "asf_unit";
+with "ado";
+with "awa";
+
+project Awa_Unit is
+   Version := "@AWA_VERSION@";
+
+   for Library_Name use "awa_unit";
+   for Library_Dir use "INSTALL/lib";
+   for Library_Kind use "LIBRARY_TYPE";
+
+   for Source_Dirs use ("INSTALL/share/ada/adainclude/awa-unit");
+   for Library_ALI_Dir use "INSTALL/lib/ada/adalib/awa-unit/" & Project'Library_Kind;
+   for Externally_Built use "true";
+end Awa_Unit;
