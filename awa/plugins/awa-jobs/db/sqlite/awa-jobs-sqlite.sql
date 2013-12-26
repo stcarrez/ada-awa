@@ -16,9 +16,9 @@ CREATE TABLE awa_job (
   /* the job progress indicator */
   `progress` INTEGER NOT NULL,
   /* the job parameters */
-  `parameters` VARCHAR(60000) NOT NULL,
+  `parameters` TEXT NOT NULL,
   /* the job result */
-  `results` VARCHAR(60000) NOT NULL,
+  `results` TEXT NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
   /* the job priority */

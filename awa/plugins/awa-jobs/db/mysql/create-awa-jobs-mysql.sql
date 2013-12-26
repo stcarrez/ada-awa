@@ -76,7 +76,7 @@ CREATE TABLE awa_access_key (
   /* the secure access key. */
   `access_key` VARCHAR(255) BINARY NOT NULL,
   /* the access key expiration date. */
-  `expire_date` DATETIME NOT NULL,
+  `expire_date` DATE NOT NULL,
   /* the access key identifier. */
   `id` BIGINT NOT NULL,
   /*  */
@@ -159,6 +159,43 @@ INSERT INTO entity_type (name) VALUES
 ,("awa_session")
 ,("awa_user")
 ;
+/* Copied from awa-jobs-mysql.sql*/
+/* File generated automatically by dynamo */
+/* The job is associated with a dispatching queue. */
+CREATE TABLE awa_job (
+  /* the job identifier */
+  `id` BIGINT NOT NULL,
+  /* the job status */
+  `status` TINYINT NOT NULL,
+  /* the job name */
+  `name` VARCHAR(255) BINARY NOT NULL,
+  /* the job start date */
+  `start_date` DATETIME ,
+  /* the job creation date */
+  `create_date` DATETIME NOT NULL,
+  /* the job finish date */
+  `finish_date` DATETIME ,
+  /* the job progress indicator */
+  `progress` INTEGER NOT NULL,
+  /* the job parameters */
+  `parameters` TEXT NOT NULL,
+  /* the job result */
+  `results` TEXT NOT NULL,
+  /*  */
+  `version` INTEGER NOT NULL,
+  /* the job priority */
+  `priority` INTEGER NOT NULL,
+  /*  */
+  `user_id` BIGINT ,
+  /*  */
+  `event_id` BIGINT ,
+  /*  */
+  `session_id` BIGINT ,
+  PRIMARY KEY (`id`)
+);
+INSERT INTO entity_type (name) VALUES
+("awa_job")
+;
 /* Copied from ado-mysql.sql*/
 /* File generated automatically by dynamo */
 /* Entity types */
@@ -184,41 +221,4 @@ CREATE TABLE sequence (
 INSERT INTO entity_type (name) VALUES
 ("entity_type")
 ,("sequence")
-;
-/* Copied from awa-jobs-mysql.sql*/
-/* File generated automatically by dynamo */
-/* The job is associated with a dispatching queue. */
-CREATE TABLE awa_job (
-  /* the job identifier */
-  `id` BIGINT NOT NULL,
-  /* the job status */
-  `status` TINYINT NOT NULL,
-  /* the job name */
-  `name` VARCHAR(255) BINARY NOT NULL,
-  /* the job start date */
-  `start_date` DATETIME ,
-  /* the job creation date */
-  `create_date` DATETIME NOT NULL,
-  /* the job finish date */
-  `finish_date` DATETIME ,
-  /* the job progress indicator */
-  `progress` INTEGER NOT NULL,
-  /* the job parameters */
-  `parameters` VARCHAR(60000) BINARY NOT NULL,
-  /* the job result */
-  `results` VARCHAR(60000) BINARY NOT NULL,
-  /*  */
-  `version` INTEGER NOT NULL,
-  /* the job priority */
-  `priority` INTEGER NOT NULL,
-  /*  */
-  `user_id` BIGINT ,
-  /*  */
-  `event_id` BIGINT ,
-  /*  */
-  `session_id` BIGINT ,
-  PRIMARY KEY (`id`)
-);
-INSERT INTO entity_type (name) VALUES
-("awa_job")
 ;
