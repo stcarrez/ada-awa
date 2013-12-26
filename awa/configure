@@ -3387,7 +3387,7 @@ fi
 AWA_AWS_STATUS=yes
 
 
-ac_config_files="$ac_config_files Makefile rules.mk awa.gpr tests.gpr awaunit.gpr distrib/awa.gpr distrib/awaunit.gpr"
+ac_config_files="$ac_config_files Makefile rules.mk awa.gpr tests.gpr awa_unit.gpr distrib/awa.gpr distrib/awa_unit.gpr"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -4111,9 +4111,9 @@ do
     "rules.mk") CONFIG_FILES="$CONFIG_FILES rules.mk" ;;
     "awa.gpr") CONFIG_FILES="$CONFIG_FILES awa.gpr" ;;
     "tests.gpr") CONFIG_FILES="$CONFIG_FILES tests.gpr" ;;
-    "awaunit.gpr") CONFIG_FILES="$CONFIG_FILES awaunit.gpr" ;;
+    "awa_unit.gpr") CONFIG_FILES="$CONFIG_FILES awa_unit.gpr" ;;
     "distrib/awa.gpr") CONFIG_FILES="$CONFIG_FILES distrib/awa.gpr" ;;
-    "distrib/awaunit.gpr") CONFIG_FILES="$CONFIG_FILES distrib/awaunit.gpr" ;;
+    "distrib/awa_unit.gpr") CONFIG_FILES="$CONFIG_FILES distrib/awa_unit.gpr" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
