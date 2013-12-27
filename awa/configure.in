@@ -49,6 +49,11 @@ AC_SUBST(EXEC_PREFIX)
 AWA_LIBDIR="lib"
 AC_SUBST(AWA_LIBDIR)
 
+AC_MSG_CHECKING([number of processors])
+NR_CPUS=`getconf _NPROCESSORS_CONF 2>/dev/null || getconf NPROCESSORS_CONF 2>/dev/null || echo 1`
+AC_MSG_RESULT($NR_CPUS)
+AC_SUBST(NR_CPUS)
+
 ADO_USE_GPRBUILD=no
 AC_ARG_WITH(gprbuild,
 AS_HELP_STRING([--with-gprbuild], [Use gprbuild instead of gnatmake for the compilation]),
