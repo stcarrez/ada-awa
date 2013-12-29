@@ -117,7 +117,7 @@ pre-install:
 	$(MKDIR) -p ${dynamodir}/base/uml
 	${CP} awaunit/*.ad[bs] ${includedir}/awa-unit
 	sed -e "s,INSTALL,${prefix},g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" < distrib/awa_unit.gpr > ${projectdir}/awa_unit.gpr
-	${CP} lib/awaunit/$(LIBRARY_TYPE)/*.ali ${alidir}/awa-unit/$(LIBRARY_TYPE)/
+	${CP} lib/awaunit/$(LIBRARY_TYPE)/*.ali ${alidir}/awa-unit/
 ifeq ($(LIBRARY_TYPE),static)
 	${CP} lib/awaunit/$(LIBRARY_TYPE)/libawa_unit.a ${libdir}/
 else

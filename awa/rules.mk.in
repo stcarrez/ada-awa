@@ -175,8 +175,8 @@ install_lib:  uninstall pre-install
 	test ! -d db || \
 	     (tar --exclude=.svn --exclude='*~' -cf - db)| (cd ${dynamodir}/${NAME}/ && tar xf -)
 	test ! -d lib/${NAME}/${LIBRARY_TYPE} || \
-	     (${MKDIR} -p ${alidir}/${NAME}/$(LIBRARY_TYPE) && \
-	     ${CP} lib/${NAME}/$(LIBRARY_TYPE)/*.ali ${alidir}/${NAME}/$(LIBRARY_TYPE)/)
+	     (${MKDIR} -p ${alidir}/${NAME}/ && \
+	     ${CP} lib/${NAME}/$(LIBRARY_TYPE)/*.ali ${alidir}/${NAME}/)
 	test ! -d web || \
 	     (tar --exclude=.svn --exclude='*~' -cf - web )| (cd ${dynamodir}/${NAME}/ && tar xf -)
 ifeq ($(LIBRARY_TYPE),static)
