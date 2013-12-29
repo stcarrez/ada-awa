@@ -1,7 +1,7 @@
 with "util";
 with "el";
-with "ado";
-with "asf";
+with "ado_core";
+with "asf_core";
 
 project AWA is
    Version := "@AWA_VERSION@";
@@ -11,6 +11,6 @@ project AWA is
    for Library_Kind use "LIBRARY_TYPE";
 
    for Source_Dirs use ("INSTALL/share/ada/adainclude/awa");
-   for Library_ALI_Dir use "INSTALL/lib/ada/adalib/awa/" & Project'Library_Kind;
+   for Library_ALI_Dir use "INSTALL/lib/ada/adalib/awa/";
    for Externally_Built use "true";
 end AWA;
