@@ -81,7 +81,7 @@ package body AWA.Applications is
          Conf.Set ("ado.queries.paths", "#{fn:composePath(app_search_dirs,'db')}");
       end if;
       ASF.Applications.Main.Application (App).Initialize_Config (Conf);
-      --  ADO.Drivers.Initialize (Conf);
+      ADO.Drivers.Initialize (Conf);
       App.DB_Factory.Create (Conf.Get ("database"));
       App.Events.Initialize (App'Unchecked_Access);
       AWA.Modules.Initialize (App.Modules, Conf);
