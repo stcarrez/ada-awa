@@ -88,7 +88,7 @@ Description: Tags plugin for AWA (Runtime)
 Package: libawa1.0-dev
 Section: libdevel
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libada-asf1.0, libada-ado1.0, libada-util1.7 (= ${binary:Version}), gnat, gnat-4.6
+Depends: ${shlibs:Depends}, ${misc:Depends}, libada-asf1.0-dev, libada-ado1.0-dev, libada-util1.7-dev, gnat, gnat-4.6
 Suggests: libada-util1.7-dbg
 Description: Ada Utility Library (Development files)
  This package contains the development files for Ada Web Application.
