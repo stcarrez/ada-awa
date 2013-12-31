@@ -29,10 +29,19 @@ LIBRARY_TYPE=dynamic
 
 .PHONY: binary-arch build-arch
 .PHONY: $(pkgname)$(aliversion)-dev $(pkgname)$(soversion)
-.PHONY: $(pkgname)$(aliversion)-workspaces $(pkgname)$(aliversion)-workspaces-dev
+.PHONY: $(pkgname)$(aliversion)-blogs  $(pkgname)$(aliversion)-blogs-dev
+.PHONY: $(pkgname)$(aliversion)-comments  $(pkgname)$(aliversion)-comments-dev
+.PHONY: $(pkgname)$(aliversion)-countries  $(pkgname)$(aliversion)-countries-dev
+.PHONY: $(pkgname)$(aliversion)-images  $(pkgname)$(aliversion)-images-dev
+.PHONY: $(pkgname)$(aliversion)-jobs  $(pkgname)$(aliversion)-jobs-dev
+.PHONY: $(pkgname)$(aliversion)-mail  $(pkgname)$(aliversion)-mail-dev
+.PHONY: $(pkgname)$(aliversion)-markedit  $(pkgname)$(aliversion)-markedit-dev
+.PHONY: $(pkgname)$(aliversion)-questions  $(pkgname)$(aliversion)-questions-dev
+.PHONY: $(pkgname)$(aliversion)-settings  $(pkgname)$(aliversion)-settings-dev
+.PHONY: $(pkgname)$(aliversion)-storages  $(pkgname)$(aliversion)-storages-dev
 .PHONY: $(pkgname)$(aliversion)-tags  $(pkgname)$(aliversion)-tags-dev
 .PHONY: $(pkgname)$(aliversion)-votes  $(pkgname)$(aliversion)-votes-dev
-.PHONY: $(pkgname)$(aliversion)-blogs  $(pkgname)$(aliversion)-blogs-dev
+.PHONY: $(pkgname)$(aliversion)-workspaces $(pkgname)$(aliversion)-workspaces-dev
 
 binary-arch: build-arch $(pkgname)$(aliversion)-dev $(pkgname)$(soversion)
 	: # Common to all architecture-dependent packages
@@ -130,24 +139,92 @@ ada_%:
 		dh_install -p$(pkgname)$(aliversion)-$$name-dev usr/share/ada/adainclude/$$i usr/share/ada/adainclude/$$dir ; \
 	done
 
-$(pkgname)$(aliversion)-workspaces:
+$(pkgname)$(aliversion)-blogs:
 	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_install -p$@ usr/lib/$(libprefix)workspaces.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_install -p$@ usr/lib/$(libprefix)blogs.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
 
-
-$(pkgname)$(aliversion)-workspaces-dev:	awa_workspaces ada_workspaces
+$(pkgname)$(aliversion)-blogs-dev:	awa_blogs ada_blogs
 	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)workspaces.so.$(soversion) \
-	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)workspaces.so
+	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)blogs.so.$(soversion) \
+	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)blogs.so
 
-$(pkgname)$(aliversion)-votes:
+$(pkgname)$(aliversion)-comments:
 	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_install -p$@ usr/lib/$(libprefix)votes.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_install -p$@ usr/lib/$(libprefix)comments.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
 
-$(pkgname)$(aliversion)-votes-dev:	awa_votes ada_votes
+$(pkgname)$(aliversion)-comments-dev:	awa_comments ada_comments
 	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)votes.so.$(soversion) \
-	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)votes.so
+	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)comments.so.$(soversion) \
+	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)comments.so
+
+$(pkgname)$(aliversion)-countries:
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_install -p$@ usr/lib/$(libprefix)countries.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
+
+$(pkgname)$(aliversion)-countries-dev:	awa_countries ada_countries
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)countries.so.$(soversion) \
+	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)countries.so
+
+$(pkgname)$(aliversion)-images:
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_install -p$@ usr/lib/$(libprefix)images.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
+
+$(pkgname)$(aliversion)-images-dev:	awa_images ada_images
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)images.so.$(soversion) \
+	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)images.so
+
+$(pkgname)$(aliversion)-jobs:
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_install -p$@ usr/lib/$(libprefix)jobs.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
+
+$(pkgname)$(aliversion)-jobs-dev:	awa_jobs ada_jobs
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)jobs.so.$(soversion) \
+	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)jobs.so
+
+$(pkgname)$(aliversion)-mail:
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_install -p$@ usr/lib/$(libprefix)mail.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
+
+$(pkgname)$(aliversion)-mail-dev:	awa_mail ada_mail
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)mail.so.$(soversion) \
+	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)mail.so
+
+$(pkgname)$(aliversion)-markedit:
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
+
+$(pkgname)$(aliversion)-markedit-dev:	awa_markedit ada_markedit
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
+
+$(pkgname)$(aliversion)-questions:
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_install -p$@ usr/lib/$(libprefix)questions.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
+
+$(pkgname)$(aliversion)-questions-dev:	awa_questions ada_questions
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)questions.so.$(soversion) \
+	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)questions.so
+
+$(pkgname)$(aliversion)-settings:
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_install -p$@ usr/lib/$(libprefix)settings.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
+
+$(pkgname)$(aliversion)-settings-dev:	awa_settings ada_settings
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)settings.so.$(soversion) \
+	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)settings.so
+
+$(pkgname)$(aliversion)-storages:
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_install -p$@ usr/lib/$(libprefix)storages.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
+
+$(pkgname)$(aliversion)-storages-dev:	awa_storages ada_storages
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)storages.so.$(soversion) \
+	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)storages.so
 
 $(pkgname)$(aliversion)-tags:
 	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
@@ -158,14 +235,24 @@ $(pkgname)$(aliversion)-tags-dev:	awa_tags ada_tags
 	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)tags.so.$(soversion) \
 	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)tags.so
 
-$(pkgname)$(aliversion)-blogs:
+$(pkgname)$(aliversion)-votes:
 	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_install -p$@ usr/lib/$(libprefix)blogs.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_install -p$@ usr/lib/$(libprefix)votes.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
 
-$(pkgname)$(aliversion)-blogs-dev:	awa_blogs ada_blogs
+$(pkgname)$(aliversion)-votes-dev:	awa_votes ada_votes
 	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)blogs.so.$(soversion) \
-	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)blogs.so
+	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)votes.so.$(soversion) \
+	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)votes.so
+
+$(pkgname)$(aliversion)-workspaces:
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_install -p$@ usr/lib/$(libprefix)workspaces.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
+
+
+$(pkgname)$(aliversion)-workspaces-dev:	awa_workspaces ada_workspaces
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)workspaces.so.$(soversion) \
+	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)workspaces.so
 
 override_dh_auto_configure:
 	dh_auto_configure -- --enable-shared --with-gprbuild
@@ -177,14 +264,32 @@ override_dh_auto_test:
 	dh_auto_test -- LD_LIBRARY_PATH=./lib
 
 override_dh_auto_install: $(pkgname)$(aliversion) \
-						  $(pkgname)$(aliversion)-workspaces \
-						  $(pkgname)$(aliversion)-workspaces-dev \
+						  $(pkgname)$(aliversion)-blogs \
+						  $(pkgname)$(aliversion)-blogs-dev \
+						  $(pkgname)$(aliversion)-comments \
+						  $(pkgname)$(aliversion)-comments-dev \
+						  $(pkgname)$(aliversion)-countries \
+						  $(pkgname)$(aliversion)-countries-dev \
+						  $(pkgname)$(aliversion)-images \
+						  $(pkgname)$(aliversion)-images-dev \
+						  $(pkgname)$(aliversion)-jobs \
+						  $(pkgname)$(aliversion)-jobs-dev \
+						  $(pkgname)$(aliversion)-mail \
+						  $(pkgname)$(aliversion)-mail-dev \
+						  $(pkgname)$(aliversion)-markedit \
+						  $(pkgname)$(aliversion)-markedit-dev \
+						  $(pkgname)$(aliversion)-questions \
+						  $(pkgname)$(aliversion)-questions-dev \
+						  $(pkgname)$(aliversion)-settings \
+						  $(pkgname)$(aliversion)-settings-dev \
+						  $(pkgname)$(aliversion)-storages \
+						  $(pkgname)$(aliversion)-storages-dev \
 						  $(pkgname)$(aliversion)-tags \
 						  $(pkgname)$(aliversion)-tags-dev \
 						  $(pkgname)$(aliversion)-votes \
 						  $(pkgname)$(aliversion)-votes-dev \
-						  $(pkgname)$(aliversion)-blogs \
-						  $(pkgname)$(aliversion)-blogs-dev \
+						  $(pkgname)$(aliversion)-workspaces \
+						  $(pkgname)$(aliversion)-workspaces-dev \
 						  $(pkgname)$(aliversion)-unit-dev
 
 override_dh_install:
