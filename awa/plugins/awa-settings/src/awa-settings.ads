@@ -19,7 +19,7 @@
 --  == Introduction ==
 --  The <b>Settings</b> module provides management of application and user settings.
 --  A setting is identified by a unique name in the application.  It is saved in
---  the database and associated to a user.
+--  the database and associated with a user.
 --
 --  === Getting a user setting ===
 --  Getting a user setting is as simple as calling a function with the setting name
