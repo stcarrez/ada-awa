@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  awa-awa-settings-modules -- Module awa-settings
+--  awa-settings-modules -- Module awa-settings
 --  Copyright (C) 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -30,7 +30,7 @@ with Util.Beans.Objects;
 with Util.Beans.Basic;
 package body AWA.Settings.Modules is
 
-   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Awa.Awa-settings.Module");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Awa.Settings.Module");
 
    package ASC renames AWA.Services.Contexts;
 
@@ -72,7 +72,7 @@ package body AWA.Settings.Modules is
    --  ------------------------------
    function Current return Setting_Manager_Access is
       Ctx  : constant ASC.Service_Context_Access := ASC.Current;
-      Obj  : Util.Beans.Objects.Object := Ctx.Get_Session_Attribute ("AWA.Settings");
+      Obj  : Util.Beans.Objects.Object := Ctx.Get_Session_Attribute (SESSION_ATTR_NAME);
       Bean : constant access Util.Beans.Basic.Readonly_Bean'Class
         := Util.Beans.Objects.To_Bean (Obj);
    begin
@@ -81,7 +81,7 @@ package body AWA.Settings.Modules is
             Mgr : constant Setting_Manager_Access := new Setting_Manager;
          begin
             Obj := Util.Beans.Objects.To_Object (Mgr.all'Access);
-            Ctx.Set_Session_Attribute ("AWA.Settings", Obj);
+            Ctx.Set_Session_Attribute (SESSION_ATTR_NAME, Obj);
             return Mgr;
          end;
       else
