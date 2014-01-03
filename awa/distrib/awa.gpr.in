@@ -1,6 +1,6 @@
 with "util";
 with "el";
-with "ado_core";
+with "ado";
 with "asf_core";
 
 project AWA is

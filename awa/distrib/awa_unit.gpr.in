@@ -3,7 +3,7 @@ with "util_unit";
 with "el";
 with "asf_core";
 with "asf_unit";
-with "ado_core";
+with "ado";
 with "awa";
 
 project Awa_Unit is
