@@ -1,5 +1,5 @@
 
-NAME=awa-comments
+NAME=awa_comments
 
 LIBNAME=lib${NAME}
 

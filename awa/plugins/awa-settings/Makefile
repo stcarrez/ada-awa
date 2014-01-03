@@ -1,4 +1,4 @@
-NAME=awa-settings
+NAME=awa_settings
 
 LIBNAME=lib${NAME}
 
