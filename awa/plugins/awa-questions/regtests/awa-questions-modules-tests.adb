@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-questions-modules-tests -- Unit tests for storage service
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -108,6 +108,7 @@ package body AWA.Questions.Modules.Tests is
    --  ------------------------------
    procedure Test_List_Questions (T : in out Test) is
       use AWA.Questions.Models;
+      use AWA.Questions.Beans;
       use type Util.Beans.Basic.Readonly_Bean_Access;
 
       Sec_Ctx   : Security.Contexts.Security_Context;
@@ -124,7 +125,9 @@ package body AWA.Questions.Modules.Tests is
 
       Bean := Util.Beans.Objects.To_Object (List);
       T.Assert (not Util.Beans.Objects.Is_Null (Bean), "The list bean should not be null");
-      Count := Questions.Models.Question_Info_List_Bean'Class (List.all).Get_Count;
+      T.Assert (List.all in Questions.Beans.Question_List_Bean'Class,
+                "The Create_Question_List_Bean returns an invalid bean");
+      Count := Questions.Beans.Question_List_Bean'Class (List.all).Questions.Get_Count;
 
       T.Assert (Count > 0, "The list of question is empty");
    end Test_List_Questions;
