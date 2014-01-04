@@ -1,6 +1,6 @@
 NAME=awa_jobs
 
-LIBNAME=lib
+LIBNAME=lib${NAME}
 
 include ../../rules.mk
 
