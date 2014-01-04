@@ -176,14 +176,6 @@ Depends: ${shlibs:Depends}, ${misc:Depends}, libawa1.0-workspaces-dev (= ${binar
 Description: Comments plugin for AWA (Development)
  This is the Comments plugin for Ada Web Application.
 
-Package: libawa1.0-markedit
-Section: libs
-Architecture: any
-Pre-Depends: multiarch-support
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: Markedit plugin for AWA (Runtime)
- This is the Markedit plugin for Ada Web Application.
-
 Package: libawa1.0-markedit-dev
 Section: libdevel
 Architecture: any

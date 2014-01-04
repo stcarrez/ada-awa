@@ -276,7 +276,6 @@ override_dh_auto_install: $(pkgname)$(aliversion) \
 						  $(pkgname)$(aliversion)-jobs-dev \
 						  $(pkgname)$(aliversion)-mail \
 						  $(pkgname)$(aliversion)-mail-dev \
-						  $(pkgname)$(aliversion)-markedit \
 						  $(pkgname)$(aliversion)-markedit-dev \
 						  $(pkgname)$(aliversion)-questions \
 						  $(pkgname)$(aliversion)-questions-dev \
