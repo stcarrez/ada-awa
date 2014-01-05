@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-comments-module -- Comments module
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,9 +39,10 @@ package AWA.Comments.Modules is
                            Id      : in ADO.Identifier);
 
    --  Create a new comment for the associated database entity.
-   procedure Create_Comment (Model      : in Comment_Module;
-                             Permission : in String;
-                             Comment    : in out AWA.Comments.Models.Comment_Ref'Class);
+   procedure Create_Comment (Model       : in Comment_Module;
+                             Permission  : in String;
+                             Entity_Type : in String;
+                             Comment     : in out AWA.Comments.Models.Comment_Ref'Class);
 
    function Get_Comment_Module is
      new AWA.Modules.Get (Comment_Module, Comment_Module_Access, NAME);
