@@ -1,10 +1,12 @@
 <project>
     <name>awa-comments</name>
     <property name="author_email">Stephane.Carrez@gmail.com</property>
-    <property name="search_dirs">.;../../../asf;../../../security;../../../ado;../../</property>
+    <property name="search_dirs">.;../../../asf;../../../security;../../../ado;../../../util;../../</property>
+    <property name="is_plugin">TRUE</property>
     <property name="author">Stephane Carrez</property>
     <module name="awa"></module>
     <module name="ado"></module>
     <module name="security"></module>
     <module name="asf"></module>
+    <module name="util"></module>
 </project>
