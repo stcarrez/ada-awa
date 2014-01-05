@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Util testsuite - Util Testsuite
---  Copyright (C) 2009, 2010, 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,6 +50,7 @@ with AWA.Services.Contexts;
 with AWA.Jobs.Services.Tests;
 with AWA.Jobs.Modules.Tests;
 with AWA.Settings.Modules.Tests;
+with AWA.Comments.Modules.Tests;
 
 with ASF.Server.Web;
 with ASF.Server.Tests;
@@ -61,6 +62,8 @@ package body AWA.Testsuite is
    Mail           : aliased AWA.Mail.Modules.Mail_Module;
 
    Jobs           : aliased AWA.Jobs.Modules.Job_Module;
+
+   Comments       : aliased AWA.Comments.Modules.Comment_Module;
 
    Blogs          : aliased AWA.Blogs.Modules.Blog_Module;
 
@@ -97,6 +100,7 @@ package body AWA.Testsuite is
       AWA.Jobs.Modules.Tests.Add_Tests (Ret);
       AWA.Jobs.Services.Tests.Add_Tests (Ret);
       AWA.Settings.Modules.Tests.Add_Tests (Ret);
+      AWA.Comments.Modules.Tests.Add_Tests (Ret);
       AWA.Blogs.Modules.Tests.Add_Tests (Ret);
       AWA.Storages.Services.Tests.Add_Tests (Ret);
       AWA.Images.Services.Tests.Add_Tests (Ret);
@@ -142,6 +146,11 @@ package body AWA.Testsuite is
                       Name   => "workspaces",
                       URI    => "workspaces",
                       Module => Workspaces'Access);
+
+            Register (App    => Application.all'Access,
+                      Name   => AWA.Comments.Modules.NAME,
+                      URI    => "comments",
+                      Module => Comments'Access);
 
             Register (App    => Application.all'Access,
                       Name   => AWA.Storages.Modules.NAME,
