@@ -18,7 +18,87 @@
 with ADO.Sessions.Entities;
 with ADO.Queries;
 with ADO.Statements;
+with ADO.Utils;
+with AWA.Services.Contexts;
 package body AWA.Comments.Beans is
+
+   package ASC renames AWA.Services.Contexts;
+
+   --  Get the value identified by the name.
+   overriding
+   function Get_Value (From : in Comment_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if From.Is_Null then
+         return Util.Beans.Objects.Null_Object;
+      else
+         return AWA.Comments.Models.Comment_Bean (From).Get_Value (Name);
+      end if;
+   end Get_Value;
+
+   --  Set the value identified by the name.
+   overriding
+   procedure Set_Value (From  : in out Comment_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "comment" then
+         From.Set_Message (Util.Beans.Objects.To_String (Value));
+
+      elsif Name = "entity_type" then
+         From.Entity_Type := Util.Beans.Objects.To_Unbounded_String (Value);
+
+      elsif Name = "permission" then
+         From.Permission := Util.Beans.Objects.To_Unbounded_String (Value);
+
+      elsif Name = "status" then
+         From.Set_Status (AWA.Comments.Models.Status_Type_Objects.To_Value (Value));
+
+      elsif Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
+         declare
+            Ctx : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
+            DB  : constant ADO.Sessions.Session := AWA.Services.Contexts.Get_Session (Ctx);
+            Id  : constant ADO.Identifier := ADO.Utils.To_Identifier (Value);
+         begin
+            From.Module.Load_Comment (From, Id);
+         end;
+      end if;
+   end Set_Value;
+
+   --  Create the comment.
+   overriding
+   procedure Create (Bean    : in out Comment_Bean;
+                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Bean.Module.Create_Comment (Ada.Strings.Unbounded.To_String (Bean.Permission), Bean);
+   end Create;
+
+   --  Save the comment.
+   overriding
+   procedure Save (Bean    : in out Comment_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      null;
+   end Save;
+
+   --  Delete the comment.
+   overriding
+   procedure Delete (Bean    : in out Comment_Bean;
+                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      null;
+   end Delete;
+
+   --  ------------------------------
+   --  Create a new comment bean instance.
+   --  ------------------------------
+   function Create_Comment_Bean (Module : in AWA.Comments.Modules.Comment_Module_Access)
+                                 return Util.Beans.Basic.Readonly_Bean_Access is
+      Result : constant Comment_Bean_Access := new Comment_Bean;
+   begin
+      Result.Module := Module;
+      return Result.all'Access;
+   end Create_Comment_Bean;
 
    --  ------------------------------
    --  Set the value identified by the name.
