@@ -18,7 +18,7 @@
 with Ada.Strings.Unbounded;
 
 with Util.Beans.Basic;
-with Util.Beans.Objects.Lists;
+with Util.Beans.Objects;
 
 with ADO;
 with ADO.Schemas;
@@ -97,7 +97,7 @@ package AWA.Comments.Beans is
                                  return Util.Beans.Basic.Readonly_Bean_Access;
 
    type Comment_List_Bean is
-     new Util.Beans.Objects.Lists.List_Bean and Util.Beans.Basic.Bean with private;
+     new AWA.Comments.Models.Comment_Info_List_Bean and Util.Beans.Basic.Bean with private;
 
    type Comment_List_Bean_Access is access all Comment_List_Bean'Class;
 
@@ -119,7 +119,11 @@ package AWA.Comments.Beans is
 
    --  Load the comments associated with the given database identifier.
    procedure Load_Comments (Into          : in out Comment_List_Bean;
-                            Session       : in ADO.Sessions.Session;
+                            For_Entity_Id : in ADO.Identifier);
+
+   --  Load the comments associated with the given database identifier.
+   procedure Load_Comments (Into          : in out Comment_List_Bean;
+                            Session       : in out ADO.Sessions.Session;
                             For_Entity_Id : in ADO.Identifier);
 
    --  Create the comment list bean instance.
@@ -129,9 +133,10 @@ package AWA.Comments.Beans is
 private
 
    type Comment_List_Bean is
-     new Util.Beans.Objects.Lists.List_Bean and Util.Beans.Basic.Bean with record
+     new AWA.Comments.Models.Comment_Info_List_Bean and Util.Beans.Basic.Bean with record
       Module      : AWA.Comments.Modules.Comment_Module_Access;
       Entity_Type : Ada.Strings.Unbounded.Unbounded_String;
+      Entity_Id   : ADO.Identifier;
       Permission  : Ada.Strings.Unbounded.Unbounded_String;
       Current     : Natural := 0;
    end record;
