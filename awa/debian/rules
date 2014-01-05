@@ -196,7 +196,7 @@ $(pkgname)$(aliversion)-mail-dev:	awa_mail ada_mail
 $(pkgname)$(aliversion)-markedit:
 	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
 
-$(pkgname)$(aliversion)-markedit-dev:	awa_markedit ada_markedit
+$(pkgname)$(aliversion)-markedit-dev:	awa_markedit
 	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
 
 $(pkgname)$(aliversion)-questions:
