@@ -8,7 +8,7 @@ CREATE TABLE awa_answer (
   /* the date when the answer was edited. */
   `edit_date` DATETIME ,
   /* the answer text. */
-  `answer` VARCHAR(60000) NOT NULL,
+  `answer` TEXT NOT NULL,
   /* the anwser rank number. */
   `rank` INTEGER NOT NULL,
   /* the answer identifier. */
@@ -30,11 +30,11 @@ CREATE TABLE awa_question (
   /* the question title. */
   `title` VARCHAR(255) NOT NULL,
   /* the full description. */
-  `description` VARCHAR(60000) NOT NULL,
+  `description` TEXT NOT NULL,
   /* the date when the question was edited. */
   `edit_date` DATETIME ,
   /* Title: Questions and Answers model
-Date: 2013-01-07
+Date: 2014-01-01
 the question short description. */
   `short_description` VARCHAR(255) NOT NULL,
   /* the question rating. */
