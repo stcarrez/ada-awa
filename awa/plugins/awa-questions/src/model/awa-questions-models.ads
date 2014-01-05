@@ -98,7 +98,7 @@ package AWA.Questions.Models is
                  return Ada.Calendar.Time;
 
    --  Set Title: Questions and Answers model
-   --  Date: 2013-01-07
+   --  Date: 2014-01-01
    --  the question short description.
    procedure Set_Short_Description (Object : in out Question_Ref;
                                     Value  : in Ada.Strings.Unbounded.Unbounded_String);
@@ -106,7 +106,7 @@ package AWA.Questions.Models is
                                     Value : in String);
 
    --  Get Title: Questions and Answers model
-   --  Date: 2013-01-07
+   --  Date: 2014-01-01
    --  the question short description.
    function Get_Short_Description (Object : in Question_Ref)
                  return Ada.Strings.Unbounded.Unbounded_String;
