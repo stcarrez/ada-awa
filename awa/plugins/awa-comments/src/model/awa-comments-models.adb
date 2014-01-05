@@ -66,6 +66,7 @@ package body AWA.Comments.Models is
       Impl.Entity_Id := ADO.NO_IDENTIFIER;
       Impl.Version := 0;
       Impl.Entity_Type := 0;
+      Impl.Status := Status_Type'First;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -180,12 +181,31 @@ package body AWA.Comments.Models is
    end Get_Entity_Type;
 
 
+   procedure Set_Status (Object : in out Comment_Ref;
+                         Value  : in Status_Type) is
+      procedure Set_Field_Enum is
+         new ADO.Objects.Set_Field_Operation (Status_Type);
+      Impl : Comment_Access;
+   begin
+      Set_Field (Object, Impl);
+      Set_Field_Enum (Impl.all, 7, Impl.Status, Value);
+   end Set_Status;
+
+   function Get_Status (Object : in Comment_Ref)
+                  return Status_Type is
+      Impl : constant Comment_Access
+         := Comment_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Status;
+   end Get_Status;
+
+
    procedure Set_Author (Object : in out Comment_Ref;
                          Value  : in AWA.Users.Models.User_Ref'Class) is
       Impl : Comment_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 7, Impl.Author, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 8, Impl.Author, Value);
    end Set_Author;
 
    function Get_Author (Object : in Comment_Ref)
@@ -215,6 +235,7 @@ package body AWA.Comments.Models is
             Copy.Entity_Id := Impl.Entity_Id;
             Copy.Version := Impl.Version;
             Copy.Entity_Type := Impl.Entity_Type;
+            Copy.Status := Impl.Status;
             Copy.Author := Impl.Author;
          end;
       end if;
@@ -371,9 +392,14 @@ package body AWA.Comments.Models is
          Object.Clear_Modified (6);
       end if;
       if Object.Is_Modified (7) then
-         Stmt.Save_Field (Name  => COL_6_1_NAME, --  author_id
-                          Value => Object.Author);
+         Stmt.Save_Field (Name  => COL_6_1_NAME, --  status
+                          Value => Integer (Status_Type'Pos (Object.Status)));
          Object.Clear_Modified (7);
+      end if;
+      if Object.Is_Modified (8) then
+         Stmt.Save_Field (Name  => COL_7_1_NAME, --  author_id
+                          Value => Object.Author);
+         Object.Clear_Modified (8);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -417,7 +443,9 @@ package body AWA.Comments.Models is
                         Value => Object.Version);
       Query.Save_Field (Name  => COL_5_1_NAME, --  entity_type
                         Value => Object.Entity_Type);
-      Query.Save_Field (Name  => COL_6_1_NAME, --  author_id
+      Query.Save_Field (Name  => COL_6_1_NAME, --  status
+                        Value => Integer (Status_Type'Pos (Object.Status)));
+      Query.Save_Field (Name  => COL_7_1_NAME, --  author_id
                         Value => Object.Author);
       Query.Execute (Result);
       if Result /= 1 then
@@ -455,6 +483,8 @@ package body AWA.Comments.Models is
          return ADO.Objects.To_Object (Impl.Get_Key);
       elsif Name = "entity_type" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Entity_Type));
+      elsif Name = "status" then
+         return Status_Type_Objects.To_Object (Impl.Status);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -473,12 +503,78 @@ package body AWA.Comments.Models is
       Object.Entity_Id := Stmt.Get_Identifier (2);
       Object.Set_Key_Value (Stmt.Get_Identifier (3));
       Object.Entity_Type := ADO.Entity_Type (Stmt.Get_Integer (5));
-      if not Stmt.Is_Null (6) then
-         Object.Author.Set_Key_Value (Stmt.Get_Identifier (6), Session);
+      Object.Status := Status_Type'Val (Stmt.Get_Integer (6));
+      if not Stmt.Is_Null (7) then
+         Object.Author.Set_Key_Value (Stmt.Get_Identifier (7), Session);
       end if;
       Object.Version := Stmt.Get_Integer (4);
       ADO.Objects.Set_Created (Object);
    end Load;
+
+   --  --------------------
+   --  Get the bean attribute identified by the given name.
+   --  --------------------
+   overriding
+   function Get_Value (From : in Comment_Info;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
+      end if;
+      if Name = "author" then
+         return Util.Beans.Objects.To_Object (From.Author);
+      end if;
+      if Name = "email" then
+         return Util.Beans.Objects.To_Object (From.Email);
+      end if;
+      if Name = "date" then
+         return Util.Beans.Objects.Time.To_Object (From.Date);
+      end if;
+      if Name = "comment" then
+         return Util.Beans.Objects.To_Object (From.Comment);
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+   --  --------------------
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   --  --------------------
+   procedure List (Object  : in out Comment_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+   begin
+      List (Object.List, Session, Context);
+   end List;
+   --  --------------------
+   --  The comment information.
+   --  --------------------
+   procedure List (Object  : in out Comment_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+      procedure Read (Into : in out Comment_Info);
+
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Context);
+      Pos  : Natural := 0;
+      procedure Read (Into : in out Comment_Info) is
+      begin
+         Into.Id := Stmt.Get_Identifier (0);
+         Into.Author := Stmt.Get_Unbounded_String (1);
+         Into.Email := Stmt.Get_Unbounded_String (2);
+         Into.Date := Stmt.Get_Time (3);
+         Into.Comment := Stmt.Get_Unbounded_String (4);
+      end Read;
+   begin
+      Stmt.Execute;
+      Comment_Info_Vectors.Clear (Object);
+      while Stmt.Has_Elements loop
+         Object.Insert_Space (Before => Pos);
+         Object.Update_Element (Index => Pos, Process => Read'Access);
+         Pos := Pos + 1;
+         Stmt.Next;
+      end loop;
+   end List;
+
 
 
 end AWA.Comments.Models;

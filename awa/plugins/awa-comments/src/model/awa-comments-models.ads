@@ -26,14 +26,28 @@ with ADO.Objects;
 with ADO.Statements;
 with ADO.SQL;
 with ADO.Schemas;
+with ADO.Queries;
+with ADO.Queries.Loaders;
 with Ada.Calendar;
 with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
+with Util.Beans.Objects.Enums;
 with Util.Beans.Basic.Lists;
 with AWA.Users.Models;
 pragma Warnings (On, "unit * is not referenced");
 package AWA.Comments.Models is
+   --  --------------------
+   --  The status type defines whether the comment is visible or not.
+   --  The comment can be put in the COMMENT_WAITING state so that
+   --  it is not immediately visible. It must be put in the COMMENT_PUBLISHED
+   --  state to be visible.
+   --  --------------------
+   type Status_Type is (COMMENT_PUBLISHED, COMMENT_WAITING, COMMENT_SPAM, COMMENT_BLOCKED, COMMENT_ARCHIVED);
+   for Status_Type use (COMMENT_PUBLISHED => 0, COMMENT_WAITING => 1, COMMENT_SPAM => 2, COMMENT_BLOCKED => 3, COMMENT_ARCHIVED => 4);
+   package Status_Type_Objects is
+      new Util.Beans.Objects.Enums (Status_Type);
+
    type Comment_Ref is new ADO.Objects.Object_Ref with null record;
 
    --  --------------------
@@ -84,17 +98,25 @@ package AWA.Comments.Models is
    --  Get the comment identifier
    function Get_Id (Object : in Comment_Ref)
                  return ADO.Identifier;
-   --
+   --  Get the optimistic lock version.
    function Get_Version (Object : in Comment_Ref)
                  return Integer;
 
-   --
+   --  Set the entity type that identifies the table to which the comment is associated.
    procedure Set_Entity_Type (Object : in out Comment_Ref;
                               Value  : in ADO.Entity_Type);
 
-   --
+   --  Get the entity type that identifies the table to which the comment is associated.
    function Get_Entity_Type (Object : in Comment_Ref)
                  return ADO.Entity_Type;
+
+   --  Set the comment status to decide whether the comment is visible (published) or not.
+   procedure Set_Status (Object : in out Comment_Ref;
+                         Value  : in Status_Type);
+
+   --  Get the comment status to decide whether the comment is visible (published) or not.
+   function Get_Status (Object : in Comment_Ref)
+                 return Status_Type;
 
    --
    procedure Set_Author (Object : in out Comment_Ref;
@@ -152,6 +174,53 @@ package AWA.Comments.Models is
                    Into   : in out Comment_Ref);
 
 
+   --  --------------------
+   --  The comment information.
+   --  --------------------
+   type Comment_Info is new Util.Beans.Basic.Readonly_Bean with record
+      --  the comment identifier.
+      Id : ADO.Identifier;
+
+      --  the comment author's name.
+      Author : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the comment author's email.
+      Email : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the comment date.
+      Date : Ada.Calendar.Time;
+
+      --  the comment text.
+      Comment : Ada.Strings.Unbounded.Unbounded_String;
+
+   end record;
+
+   --  Get the bean attribute identified by the given name.
+   overriding
+   function Get_Value (From : in Comment_Info;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   package Comment_Info_Beans is
+      new Util.Beans.Basic.Lists (Element_Type => Comment_Info);
+   package Comment_Info_Vectors renames Comment_Info_Beans.Vectors;
+   subtype Comment_Info_List_Bean is Comment_Info_Beans.List_Bean;
+
+   type Comment_Info_List_Bean_Access is access all Comment_Info_List_Bean;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Comment_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   subtype Comment_Info_Vector is Comment_Info_Vectors.Vector;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Comment_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   Query_Comment_List : constant ADO.Queries.Query_Definition_Access;
+
 
 
 private
@@ -162,10 +231,11 @@ private
    COL_3_1_NAME : aliased constant String := "id";
    COL_4_1_NAME : aliased constant String := "version";
    COL_5_1_NAME : aliased constant String := "entity_type";
-   COL_6_1_NAME : aliased constant String := "author_id";
+   COL_6_1_NAME : aliased constant String := "status";
+   COL_7_1_NAME : aliased constant String := "author_id";
 
    COMMENT_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 7,
+     (Count => 8,
       Table => COMMENT_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
@@ -174,7 +244,8 @@ private
          4 => COL_3_1_NAME'Access,
          5 => COL_4_1_NAME'Access,
          6 => COL_5_1_NAME'Access,
-         7 => COL_6_1_NAME'Access
+         7 => COL_6_1_NAME'Access,
+         8 => COL_7_1_NAME'Access
 )
      );
    COMMENT_TABLE : constant ADO.Schemas.Class_Mapping_Access
@@ -192,6 +263,7 @@ private
        Entity_Id : ADO.Identifier;
        Version : Integer;
        Entity_Type : ADO.Entity_Type;
+       Status : Status_Type;
        Author : AWA.Users.Models.User_Ref;
    end record;
 
@@ -226,4 +298,14 @@ private
 
    procedure Set_Field (Object : in out Comment_Ref'Class;
                         Impl   : out Comment_Access);
+
+   package File_1 is
+      new ADO.Queries.Loaders.File (Path => "comment-queries.xml",
+                                    Sha1 => "23485D2C3F50D233CB8D52A2414B417F4296B51A");
+
+   package Def_Commentinfo_Comment_List is
+      new ADO.Queries.Loaders.Query (Name => "comment-list",
+                                     File => File_1.File'Access);
+   Query_Comment_List : constant ADO.Queries.Query_Definition_Access
+   := Def_Commentinfo_Comment_List.Query'Access;
 end AWA.Comments.Models;
