@@ -59,6 +59,43 @@ with AWA.Comments.Modules;
 --
 package AWA.Comments.Beans is
 
+   type Comment_Bean is new AWA.Comments.Models.Comment_Bean with record
+      Module      : Modules.Comment_Module_Access := null;
+      Entity_Type : Ada.Strings.Unbounded.Unbounded_String;
+      Permission  : Ada.Strings.Unbounded.Unbounded_String;
+   end record;
+   type Comment_Bean_Access is access all Comment_Bean'Class;
+
+   --  Get the value identified by the name.
+   overriding
+   function Get_Value (From : in Comment_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the value identified by the name.
+   overriding
+   procedure Set_Value (From  : in out Comment_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   --  Create the comment.
+   overriding
+   procedure Create (Bean    : in out Comment_Bean;
+                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Save the comment.
+   overriding
+   procedure Save (Bean    : in out Comment_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Delete the comment.
+   overriding
+   procedure Delete (Bean    : in out Comment_Bean;
+                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Create a new comment bean instance.
+   function Create_Comment_Bean (Module : in AWA.Comments.Modules.Comment_Module_Access)
+                                 return Util.Beans.Basic.Readonly_Bean_Access;
+
    type Comment_List_Bean is
      new Util.Beans.Objects.Lists.List_Bean and Util.Beans.Basic.Bean with private;
 
