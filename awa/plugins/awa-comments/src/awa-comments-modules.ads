@@ -17,9 +17,10 @@
 -----------------------------------------------------------------------
 with ASF.Applications;
 
+with ADO;
 with AWA.Modules;
 with AWA.Modules.Get;
-with AWA.Comments.Services;
+with AWA.Comments.Models;
 package AWA.Comments.Modules is
 
    NAME : constant String := "comments";
@@ -32,12 +33,17 @@ package AWA.Comments.Modules is
                          App    : in AWA.Modules.Application_Access;
                          Props  : in ASF.Applications.Config);
 
+   --  Load the comment identified by the given identifier.
+   procedure Load_Comment (Model   : in Comment_Module;
+                           Comment : in out AWA.Comments.Models.Comment_Ref'Class;
+                           Id      : in ADO.Identifier);
+
+   --  Create a new comment for the associated database entity.
+   procedure Create_Comment (Model      : in Comment_Module;
+                             Permission : in String;
+                             Comment    : in out AWA.Comments.Models.Comment_Ref'Class);
+
    function Get_Comment_Module is
      new AWA.Modules.Get (Comment_Module, Comment_Module_Access, NAME);
-
-   function Get_Comment_Manager is
-     new AWA.Modules.Get_Manager (AWA.Comments.Services.Comment_Service,
-                                  AWA.Comments.Services.Comment_Service_Access,
-                                  "Comment_Manager");
 
 end AWA.Comments.Modules;
