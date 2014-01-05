@@ -25,6 +25,8 @@ package AWA.Comments.Modules is
 
    NAME : constant String := "comments";
 
+   Not_Found : exception;
+
    type Comment_Module is new AWA.Modules.Module with null record;
    type Comment_Module_Access is access all Comment_Module'Class;
 
@@ -42,6 +44,18 @@ package AWA.Comments.Modules is
    procedure Create_Comment (Model       : in Comment_Module;
                              Permission  : in String;
                              Entity_Type : in String;
+                             Comment     : in out AWA.Comments.Models.Comment_Ref'Class);
+
+   --  Update the comment represented by <tt>Comment</tt> if the current user has the
+   --  permission identified by <tt>Permission</tt>.
+   procedure Update_Comment (Model       : in Comment_Module;
+                             Permission  : in String;
+                             Comment     : in out AWA.Comments.Models.Comment_Ref'Class);
+
+   --  Delete the comment represented by <tt>Comment</tt> if the current user has the
+   --  permission identified by <tt>Permission</tt>.
+   procedure Delete_Comment (Model       : in Comment_Module;
+                             Permission  : in String;
                              Comment     : in out AWA.Comments.Models.Comment_Ref'Class);
 
    function Get_Comment_Module is
