@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-comments-module -- Comments module
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,7 @@ with Ada.Calendar;
 with Util.Log.Loggers;
 
 with ADO.Sessions;
+with ADO.Sessions.Entities;
 with Security.Permissions;
 
 with AWA.Users.Models;
@@ -73,10 +74,13 @@ package body AWA.Comments.Modules is
       Comment.Load (DB, Id, Found);
    end Load_Comment;
 
+   --  ------------------------------
    --  Create a new comment for the associated database entity.
-   procedure Create_Comment (Model      : in Comment_Module;
-                             Permission : in String;
-                             Comment    : in out AWA.Comments.Models.Comment_Ref'Class) is
+   --  ------------------------------
+   procedure Create_Comment (Model       : in Comment_Module;
+                             Permission  : in String;
+                             Entity_Type : in String;
+                             Comment     : in out AWA.Comments.Models.Comment_Ref'Class) is
       pragma Unreferenced (Model);
 
       Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
@@ -90,6 +94,7 @@ package body AWA.Comments.Modules is
       AWA.Permissions.Check (Permission => Security.Permissions.Get_Permission_Index (Permission),
                              Entity     => Comment.Get_Entity_Id);
 
+      Comment.Set_Entity_Type (ADO.Sessions.Entities.Find_Entity_Type (DB, Entity_Type));
       Comment.Set_Author (User);
       Comment.Set_Create_Date (Ada.Calendar.Clock);
       Comment.Save (DB);
