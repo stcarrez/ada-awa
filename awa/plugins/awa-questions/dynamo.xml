@@ -4,4 +4,5 @@
     <property name="license">none</property>
     <property name="author">Stephane Carrez</property>
     <property name="gnat.project">awa_questions.gpr</property>
+    <property name="is_plugin">TRUE</property>
 </project>
