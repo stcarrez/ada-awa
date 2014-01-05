@@ -72,7 +72,7 @@ CREATE TABLE awa_store_local (
   /* the local store path */
   `path` VARCHAR(255) NOT NULL,
   /* the local store expiration date */
-  `expire_date` DATE NOT NULL,
+  `expire_date` DATETIME NOT NULL,
   /* the creation date */
   `create_date` DATETIME NOT NULL,
   /*  */
