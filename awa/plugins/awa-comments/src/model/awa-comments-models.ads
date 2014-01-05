@@ -35,6 +35,7 @@ with Util.Beans.Objects;
 with Util.Beans.Objects.Enums;
 with Util.Beans.Basic.Lists;
 with AWA.Users.Models;
+with Util.Beans.Methods;
 pragma Warnings (On, "unit * is not referenced");
 package AWA.Comments.Models is
    --  --------------------
@@ -64,11 +65,11 @@ package AWA.Comments.Models is
    function "=" (Left, Right : Comment_Ref'Class) return Boolean;
 
    --  Set the comment publication date
-   procedure Set_Date (Object : in out Comment_Ref;
-                       Value  : in Ada.Calendar.Time);
+   procedure Set_Create_Date (Object : in out Comment_Ref;
+                              Value  : in Ada.Calendar.Time);
 
    --  Get the comment publication date
-   function Get_Date (Object : in Comment_Ref)
+   function Get_Create_Date (Object : in Comment_Ref)
                  return Ada.Calendar.Time;
 
    --  Set the comment message.
@@ -222,10 +223,35 @@ package AWA.Comments.Models is
    Query_Comment_List : constant ADO.Queries.Query_Definition_Access;
 
 
+   type Comment_Bean is abstract new AWA.Comments.Models.Comment_Ref
+     and Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with null record;
+
+
+   --  This bean provides some methods that can be used in a Method_Expression.
+   overriding
+   function Get_Method_Bindings (From : in Comment_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access;
+
+
+   --  Set the value identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Comment_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   procedure Create (Bean : in out Comment_Bean;
+                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   procedure Delete (Bean : in out Comment_Bean;
+                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   procedure Save (Bean : in out Comment_Bean;
+                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
 
 private
    COMMENT_NAME : aliased constant String := "awa_comments";
-   COL_0_1_NAME : aliased constant String := "date";
+   COL_0_1_NAME : aliased constant String := "create_date";
    COL_1_1_NAME : aliased constant String := "message";
    COL_2_1_NAME : aliased constant String := "entity_id";
    COL_3_1_NAME : aliased constant String := "id";
@@ -258,7 +284,7 @@ private
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
                                      Of_Class => COMMENT_DEF'Access)
    with record
-       Date : Ada.Calendar.Time;
+       Create_Date : Ada.Calendar.Time;
        Message : Ada.Strings.Unbounded.Unbounded_String;
        Entity_Id : ADO.Identifier;
        Version : Integer;

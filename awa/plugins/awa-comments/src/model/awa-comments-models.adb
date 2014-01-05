@@ -22,6 +22,7 @@
 -----------------------------------------------------------------------
 with Ada.Unchecked_Deallocation;
 with Util.Beans.Objects.Time;
+with ASF.Events.Faces.Actions;
 package body AWA.Comments.Models is
 
    use type ADO.Objects.Object_Record_Access;
@@ -62,7 +63,7 @@ package body AWA.Comments.Models is
       Impl : Comment_Access;
    begin
       Impl := new Comment_Impl;
-      Impl.Date := ADO.DEFAULT_TIME;
+      Impl.Create_Date := ADO.DEFAULT_TIME;
       Impl.Entity_Id := ADO.NO_IDENTIFIER;
       Impl.Version := 0;
       Impl.Entity_Type := 0;
@@ -74,21 +75,21 @@ package body AWA.Comments.Models is
    --  Data object: Comment
    -- ----------------------------------------
 
-   procedure Set_Date (Object : in out Comment_Ref;
-                       Value  : in Ada.Calendar.Time) is
+   procedure Set_Create_Date (Object : in out Comment_Ref;
+                              Value  : in Ada.Calendar.Time) is
       Impl : Comment_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Time (Impl.all, 1, Impl.Date, Value);
-   end Set_Date;
+      ADO.Objects.Set_Field_Time (Impl.all, 1, Impl.Create_Date, Value);
+   end Set_Create_Date;
 
-   function Get_Date (Object : in Comment_Ref)
+   function Get_Create_Date (Object : in Comment_Ref)
                   return Ada.Calendar.Time is
       Impl : constant Comment_Access
          := Comment_Impl (Object.Get_Load_Object.all)'Access;
    begin
-      return Impl.Date;
-   end Get_Date;
+      return Impl.Create_Date;
+   end Get_Create_Date;
 
 
    procedure Set_Message (Object : in out Comment_Ref;
@@ -230,7 +231,7 @@ package body AWA.Comments.Models is
          begin
             ADO.Objects.Set_Object (Result, Copy.all'Access);
             Copy.Copy (Impl.all);
-            Copy.Date := Impl.Date;
+            Copy.Create_Date := Impl.Create_Date;
             Copy.Message := Impl.Message;
             Copy.Entity_Id := Impl.Entity_Id;
             Copy.Version := Impl.Version;
@@ -367,8 +368,8 @@ package body AWA.Comments.Models is
          := Session.Create_Statement (COMMENT_DEF'Access);
    begin
       if Object.Is_Modified (1) then
-         Stmt.Save_Field (Name  => COL_0_1_NAME, --  date
-                          Value => Object.Date);
+         Stmt.Save_Field (Name  => COL_0_1_NAME, --  create_date
+                          Value => Object.Create_Date);
          Object.Clear_Modified (1);
       end if;
       if Object.Is_Modified (2) then
@@ -430,8 +431,8 @@ package body AWA.Comments.Models is
       Result : Integer;
    begin
       Object.Version := 1;
-      Query.Save_Field (Name  => COL_0_1_NAME, --  date
-                        Value => Object.Date);
+      Query.Save_Field (Name  => COL_0_1_NAME, --  create_date
+                        Value => Object.Create_Date);
       Query.Save_Field (Name  => COL_1_1_NAME, --  message
                         Value => Object.Message);
       Query.Save_Field (Name  => COL_2_1_NAME, --  entity_id
@@ -473,8 +474,8 @@ package body AWA.Comments.Models is
          return Util.Beans.Objects.Null_Object;
       end if;
       Impl := Comment_Impl (Obj.all)'Access;
-      if Name = "date" then
-         return Util.Beans.Objects.Time.To_Object (Impl.Date);
+      if Name = "create_date" then
+         return Util.Beans.Objects.Time.To_Object (Impl.Create_Date);
       elsif Name = "message" then
          return Util.Beans.Objects.To_Object (Impl.Message);
       elsif Name = "entity_id" then
@@ -498,7 +499,7 @@ package body AWA.Comments.Models is
                    Stmt    : in out ADO.Statements.Query_Statement'Class;
                    Session : in out ADO.Sessions.Session'Class) is
    begin
-      Object.Date := Stmt.Get_Time (0);
+      Object.Create_Date := Stmt.Get_Time (0);
       Object.Message := Stmt.Get_Unbounded_String (1);
       Object.Entity_Id := Stmt.Get_Identifier (2);
       Object.Set_Key_Value (Stmt.Get_Identifier (3));
@@ -574,6 +575,66 @@ package body AWA.Comments.Models is
          Stmt.Next;
       end loop;
    end List;
+
+
+   procedure Op_Create (Bean    : in out Comment_Bean;
+                        Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Create (Bean    : in out Comment_Bean;
+                        Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Comment_Bean'Class (Bean).Create (Outcome);
+   end Op_Create;
+   package Binding_Comment_Bean_1 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Comment_Bean,
+                                                      Method => Op_Create,
+                                                      Name   => "create");
+   procedure Op_Delete (Bean    : in out Comment_Bean;
+                        Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Delete (Bean    : in out Comment_Bean;
+                        Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Comment_Bean'Class (Bean).Delete (Outcome);
+   end Op_Delete;
+   package Binding_Comment_Bean_2 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Comment_Bean,
+                                                      Method => Op_Delete,
+                                                      Name   => "delete");
+   procedure Op_Save (Bean    : in out Comment_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Save (Bean    : in out Comment_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Comment_Bean'Class (Bean).Save (Outcome);
+   end Op_Save;
+   package Binding_Comment_Bean_3 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Comment_Bean,
+                                                      Method => Op_Save,
+                                                      Name   => "save");
+
+   Binding_Comment_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
+     := (1 => Binding_Comment_Bean_1.Proxy'Access,
+         2 => Binding_Comment_Bean_2.Proxy'Access,
+         3 => Binding_Comment_Bean_3.Proxy'Access
+     );
+
+   --  This bean provides some methods that can be used in a Method_Expression.
+   overriding
+   function Get_Method_Bindings (From : in Comment_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access is
+   begin
+      return Binding_Comment_Bean_Array'Access;
+   end Get_Method_Bindings;
+
+
+   --  Set the value identified by the name
+   overriding 
+   procedure Set_Value (Item  : in out Comment_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      null;
+   end Set_Value;
+
 
 
 
