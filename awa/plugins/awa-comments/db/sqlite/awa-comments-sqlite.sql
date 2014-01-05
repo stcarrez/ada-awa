@@ -3,7 +3,7 @@
 The comment can be associated with any other database record. */
 CREATE TABLE awa_comments (
   /* the comment publication date */
-  `date` DATETIME NOT NULL,
+  `create_date` DATETIME NOT NULL,
   /* the comment message. */
   `message` TEXT NOT NULL,
   /* the entity identifier to which this comment is associated */
@@ -15,7 +15,7 @@ CREATE TABLE awa_comments (
   /* the entity type that identifies the table to which the comment is associated. */
   `entity_type` INTEGER NOT NULL,
   /* the comment status to decide whether the comment is visible (published) or not. */
-  `status`  NOT NULL,
+  `status` integer NOT NULL,
   /*  */
   `author_id` BIGINT NOT NULL
 );

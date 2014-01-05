@@ -177,17 +177,19 @@ INSERT INTO entity_type (name) VALUES ("sequence");
 The comment can be associated with any other database record. */
 CREATE TABLE awa_comments (
   /* the comment publication date */
-  `date` DATETIME NOT NULL,
+  `create_date` DATETIME NOT NULL,
   /* the comment message. */
-  `message` VARCHAR(255) NOT NULL,
+  `message` TEXT NOT NULL,
   /* the entity identifier to which this comment is associated */
   `entity_id` BIGINT ,
   /* the comment identifier */
   `id` BIGINT PRIMARY KEY,
-  /*  */
+  /* the optimistic lock version. */
   `version` INTEGER NOT NULL,
-  /*  */
+  /* the entity type that identifies the table to which the comment is associated. */
   `entity_type` INTEGER NOT NULL,
+  /* the comment status to decide whether the comment is visible (published) or not. */
+  `status` integer NOT NULL,
   /*  */
   `author_id` BIGINT NOT NULL
 );
