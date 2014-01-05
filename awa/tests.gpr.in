@@ -17,6 +17,7 @@ with "plugins/awa-votes/awa_votes";
 with "plugins/awa-questions/awa_questions";
 with "plugins/awa-tags/awa_tags";
 with "plugins/awa-settings/awa_settings";
+with "plugins/awa-comments/awa_comments";
 
 project Tests is
 
@@ -27,6 +28,7 @@ project Tests is
    for Source_Dirs use ("regtests",
 	"plugins/awa-storages/regtests",
 	"plugins/awa-images/regtests",
+	"plugins/awa-comments/regtests",
 	"plugins/awa-votes/regtests",
 	"plugins/awa-tags/regtests",
 	"plugins/awa-settings/regtests",
