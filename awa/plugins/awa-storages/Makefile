@@ -1,5 +1,5 @@
 
-NAME=awa-storages
+NAME=awa_storages
 
 LIBNAME=lib${NAME}
 
