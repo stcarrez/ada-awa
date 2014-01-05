@@ -101,4 +101,53 @@ package body AWA.Comments.Modules is
       Ctx.Commit;
    end Create_Comment;
 
+   --  ------------------------------
+   --  Update the comment represented by <tt>Comment</tt> if the current user has the
+   --  permission identified by <tt>Permission</tt>.
+   --  ------------------------------
+   procedure Update_Comment (Model       : in Comment_Module;
+                             Permission  : in String;
+                             Comment     : in out AWA.Comments.Models.Comment_Ref'Class) is
+      pragma Unreferenced (Model);
+
+      Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+   begin
+      if not Comment.Is_Inserted then
+         Log.Error ("The comment was not created");
+         raise Not_Found with "The comment was not inserted";
+      end if;
+      Ctx.Start;
+      Log.Info ("Updating the comment {0}", ADO.Identifier'Image (Comment.Get_Id));
+
+      --  Check that the user has the update permission on the given comment.
+      AWA.Permissions.Check (Permission => Security.Permissions.Get_Permission_Index (Permission),
+                             Entity     => Comment);
+      Comment.Save (DB);
+      Ctx.Commit;
+   end Update_Comment;
+
+   --  ------------------------------
+   --  Delete the comment represented by <tt>Comment</tt> if the current user has the
+   --  permission identified by <tt>Permission</tt>.
+   --  ------------------------------
+   procedure Delete_Comment (Model       : in Comment_Module;
+                             Permission  : in String;
+                             Comment     : in out AWA.Comments.Models.Comment_Ref'Class) is
+      pragma Unreferenced (Model);
+
+      Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+   begin
+      Ctx.Start;
+
+      --  Check that the user has the delete permission on the given answer.
+      AWA.Permissions.Check (Permission => Security.Permissions.Get_Permission_Index (Permission),
+                             Entity     => Comment);
+
+
+      Comment.Delete (DB);
+      Ctx.Commit;
+   end Delete_Comment;
+
 end AWA.Comments.Modules;
