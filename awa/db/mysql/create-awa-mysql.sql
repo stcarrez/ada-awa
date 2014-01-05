@@ -191,17 +191,19 @@ INSERT INTO entity_type (name) VALUES
 The comment can be associated with any other database record. */
 CREATE TABLE awa_comments (
   /* the comment publication date */
-  `date` DATETIME NOT NULL,
+  `create_date` DATETIME NOT NULL,
   /* the comment message. */
-  `message` VARCHAR(255) BINARY NOT NULL,
+  `message` TEXT NOT NULL,
   /* the entity identifier to which this comment is associated */
   `entity_id` BIGINT ,
   /* the comment identifier */
   `id` BIGINT NOT NULL,
-  /*  */
+  /* the optimistic lock version. */
   `version` INTEGER NOT NULL,
-  /*  */
+  /* the entity type that identifies the table to which the comment is associated. */
   `entity_type` INTEGER NOT NULL,
+  /* the comment status to decide whether the comment is visible (published) or not. */
+  `status` integer NOT NULL,
   /*  */
   `author_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
@@ -603,7 +605,7 @@ CREATE TABLE awa_answer (
   /* the date when the answer was edited. */
   `edit_date` DATETIME ,
   /* the answer text. */
-  `answer` VARCHAR(60000) BINARY NOT NULL,
+  `answer` TEXT NOT NULL,
   /* the anwser rank number. */
   `rank` INTEGER NOT NULL,
   /* the answer identifier. */
@@ -626,11 +628,11 @@ CREATE TABLE awa_question (
   /* the question title. */
   `title` VARCHAR(255) BINARY NOT NULL,
   /* the full description. */
-  `description` VARCHAR(60000) BINARY NOT NULL,
+  `description` TEXT NOT NULL,
   /* the date when the question was edited. */
   `edit_date` DATETIME ,
   /* Title: Questions and Answers model
-Date: 2013-01-07
+Date: 2014-01-01
 the question short description. */
   `short_description` VARCHAR(255) BINARY NOT NULL,
   /* the question rating. */
@@ -678,7 +680,7 @@ CREATE TABLE awa_post (
   /* the post title */
   `title` VARCHAR(255) BINARY NOT NULL,
   /* the post text content */
-  `text` VARCHAR(60000) BINARY NOT NULL,
+  `text` TEXT NOT NULL,
   /* the post creation date */
   `create_date` DATETIME NOT NULL,
   /* the post URI */
