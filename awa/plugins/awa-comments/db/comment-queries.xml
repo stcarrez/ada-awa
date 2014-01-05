@@ -1,0 +1,42 @@
+<query-mapping package='AWA.Comments.Models'>
+    <description>
+      Queries used by the comments module
+    </description>
+
+    <class name="AWA.Comments.Models.Comment_Info" bean="yes">
+        <comment>The comment information.</comment>
+        <property type='Identifier' name="id">
+            <comment>the comment identifier.</comment>
+        </property>
+        <property type='String' name="author">
+            <comment>the comment author's name.</comment>
+        </property>
+        <property type='String' name="email">
+            <comment>the comment author's email.</comment>
+        </property>
+        <property type='Date' name="date">
+            <comment>the comment date.</comment>
+        </property>
+        <property type='String' name="comment">
+            <comment>the comment text.</comment>
+        </property>
+    </class>
+
+    <query name='comment-list'>
+       <comment>Get the list of comments associated with given database entity</comment>
+       <sql>
+    SELECT
+      c.id,
+      u.name,
+      e.email,
+      c.date,
+      c.message
+    FROM awa_comment AS c
+    INNER JOIN awa_user AS u ON c.author_id = u.id
+    INNER JOIN awa_email AS e ON u.email_id = e.id
+    WHERE c.entity_type = :entity_type AND c.entity_id = :entity_id AND c.status = :status
+    ORDER BY c.date DESC
+       </sql>
+    </query>
+
+</query-mapping>
