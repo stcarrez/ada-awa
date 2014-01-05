@@ -17,7 +17,6 @@
 -----------------------------------------------------------------------
 with ADO.Sessions.Entities;
 with ADO.Queries;
-with ADO.Statements;
 with ADO.Utils;
 with AWA.Services.Contexts;
 package body AWA.Comments.Beans is
@@ -56,8 +55,6 @@ package body AWA.Comments.Beans is
 
       elsif Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
          declare
-            Ctx : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
-            DB  : constant ADO.Sessions.Session := AWA.Services.Contexts.Get_Session (Ctx);
             Id  : constant ADO.Identifier := ADO.Utils.To_Identifier (Value);
          begin
             From.Module.Load_Comment (From, Id);
@@ -70,7 +67,9 @@ package body AWA.Comments.Beans is
    procedure Create (Bean    : in out Comment_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
    begin
-      Bean.Module.Create_Comment (Ada.Strings.Unbounded.To_String (Bean.Permission), Bean);
+      Bean.Module.Create_Comment (Permission  => Ada.Strings.Unbounded.To_String (Bean.Permission),
+                                  Entity_Type => Ada.Strings.Unbounded.To_String (Bean.Entity_Type),
+                                  Comment     => Bean);
    end Create;
 
    --  Save the comment.
@@ -114,6 +113,8 @@ package body AWA.Comments.Beans is
          From.Entity_Type := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "permission" then
          From.Permission := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "entity_id" then
+         From.Load_Comments (ADO.Utils.To_Identifier (Value));
       end if;
    end Set_Value;
 
@@ -139,7 +140,17 @@ package body AWA.Comments.Beans is
    --  Load the comments associated with the given database identifier.
    --  ------------------------------
    procedure Load_Comments (Into          : in out Comment_List_Bean;
-                            Session       : in ADO.Sessions.Session;
+                            For_Entity_Id : in ADO.Identifier) is
+      Session : ADO.Sessions.Session := Into.Module.Get_Session;
+   begin
+      Into.Load_Comments (Session, For_Entity_Id);
+   end Load_Comments;
+
+   --  ------------------------------
+   --  Load the comments associated with the given database identifier.
+   --  ------------------------------
+   procedure Load_Comments (Into          : in out Comment_List_Bean;
+                            Session       : in out ADO.Sessions.Session;
                             For_Entity_Id : in ADO.Identifier) is
       use ADO.Sessions.Entities;
 
@@ -147,19 +158,12 @@ package body AWA.Comments.Beans is
       Kind        : constant ADO.Entity_Type := Find_Entity_Type (Session, Entity_Type);
       Query       : ADO.Queries.Context;
    begin
+      Into.Entity_Id := For_Entity_Id;
       Query.Set_Query (AWA.Comments.Models.Query_Comment_List);
       Query.Bind_Param ("entity_type", Kind);
       Query.Bind_Param ("entity_id", For_Entity_Id);
-      declare
-         Stmt : ADO.Statements.Query_Statement := Session.Create_Statement (Query);
-      begin
-         Stmt.Execute;
-
-         while Stmt.Has_Elements loop
-            Into.List.Append (Util.Beans.Objects.To_Object (Stmt.Get_String (0)));
-            Stmt.Next;
-         end loop;
-      end;
+      Query.Bind_Param ("status", Integer (Models.Status_Type'Pos (Models.COMMENT_PUBLISHED)));
+      AWA.Comments.Models.List (Into, Session, Query);
    end Load_Comments;
 
    --  ------------------------------
