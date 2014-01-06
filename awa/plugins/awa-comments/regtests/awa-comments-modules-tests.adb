@@ -23,6 +23,8 @@ with Util.Beans.Objects;
 
 with Security.Contexts;
 
+with ADO.Utils;
+
 with AWA.Users.Models;
 with AWA.Services.Contexts;
 with AWA.Tests.Helpers.Users;
@@ -43,9 +45,9 @@ package body AWA.Comments.Modules.Tests is
                        Test_Create_Published_Comment'Access);
       Caller.Add_Test (Suite, "Test AWA.Comments.Modules.Create_Comment (WAITING)",
                        Test_Create_Waiting_Comment'Access);
-      Caller.Add_Test (Suite, "Test AWA.Tags.Modules.Remove_Tag",
+      Caller.Add_Test (Suite, "Test AWA.Comments.Modules.Delete_Comment",
                        Test_Remove_Comment'Access);
-      Caller.Add_Test (Suite, "Test AWA.Tags.Modules.Update_Tags",
+      Caller.Add_Test (Suite, "Test AWA.Comments.Modules.Update_Comment (publish)",
                        Test_Publish_Comment'Access);
    end Add_Tests;
 
@@ -55,13 +57,31 @@ package body AWA.Comments.Modules.Tests is
       return Util.Beans.Objects.To_Integer (Value);
    end Get_Count;
 
+   procedure List_Comments (T    : in out Test;
+                            User : in ADO.Identifier;
+                            Into : out Util.Beans.Objects.Object) is
+      Comment_Manager  : constant Comment_Module_Access := Get_Comment_Module;
+      Bean             : Util.Beans.Basic.Readonly_Bean_Access;
+      List             : AWA.Comments.Beans.Comment_List_Bean_Access;
+   begin
+      Bean := Beans.Create_Comment_List_Bean (Comment_Manager);
+      Into := Util.Beans.Objects.To_Object (Bean.all'Access);
+      List := AWA.Comments.Beans.Comment_List_Bean'Class (Bean.all)'Access;
+      List.Set_Value ("entity_type", Util.Beans.Objects.To_Object (String '("awa_user")));
+      Util.Tests.Assert_Equals (T, 0, Integer (List.Get_Count), "Invalid number of comments");
+
+      --  Load the existing comments.
+      List.Load_Comments (User);
+   end List_Comments;
+
    --  ------------------------------
    --  Create a comment and return the list of comments before and after the creation.
    --  ------------------------------
    procedure Create_Comment (T : in out Test;
                              Status : in AWA.Comments.Models.Status_Type;
                              Before : out Util.Beans.Objects.Object;
-                             After  : out Util.Beans.Objects.Object) is
+                             After  : out Util.Beans.Objects.Object;
+                             Id     : out ADO.Identifier) is
       Sec_Ctx      : Security.Contexts.Security_Context;
       Context      : AWA.Services.Contexts.Service_Context;
    begin
@@ -71,23 +91,13 @@ package body AWA.Comments.Modules.Tests is
          Comment_Manager  : constant Comment_Module_Access := Get_Comment_Module;
          User             : constant AWA.Users.Models.User_Ref := Context.Get_User;
          Bean             : Util.Beans.Basic.Readonly_Bean_Access;
-         List             : AWA.Comments.Beans.Comment_List_Bean_Access;
          Comment          : AWA.Comments.Beans.Comment_Bean_Access;
          Cleanup          : Util.Beans.Objects.Object;
          Outcome          : Ada.Strings.Unbounded.Unbounded_String;
-         Count            : Natural;
       begin
          T.Assert (Comment_Manager /= null, "There is no comment module");
 
-         Bean := Beans.Create_Comment_List_Bean (Comment_Manager);
-         Before := Util.Beans.Objects.To_Object (Bean.all'Access);
-         List := AWA.Comments.Beans.Comment_List_Bean'Class (Bean.all)'Access;
-         List.Set_Value ("entity_type", Util.Beans.Objects.To_Object (String '("awa_user")));
-         Util.Tests.Assert_Equals (T, 0, Integer (List.Get_Count), "Invalid number of tags");
-
-         --  Load the existing comments.
-         List.Load_Comments (User.Get_Id);
-         Count := List.Get_Count;
+         T.List_Comments (User.Get_Id, Before);
 
          --  Create a new comment associated with the current user.
          Bean := Beans.Create_Comment_Bean (Comment_Manager);
@@ -102,13 +112,12 @@ package body AWA.Comments.Modules.Tests is
          Comment.Set_Message ("the comment message for the current user " &
                               AWA.Comments.Models.Status_Type'Image (Status));
          Comment.Create (Outcome);
+         Id := Comment.Get_Id;
+         T.Assert (Id /= ADO.NO_IDENTIFIER, "Invalid new comment identifier");
 
          --  Load again the comments.
-         Bean := Beans.Create_Comment_List_Bean (Comment_Manager);
-         After := Util.Beans.Objects.To_Object (Bean.all'Access);
-         List := AWA.Comments.Beans.Comment_List_Bean'Class (Bean.all)'Access;
-         List.Set_Value ("entity_type", Util.Beans.Objects.To_Object (String '("awa_user")));
-         List.Load_Comments (User.Get_Id);
+         T.List_Comments (User.Get_Id, After);
+         T.Assert (not Util.Beans.Objects.Is_Null (Cleanup), "Comment bean is null");
       end;
       T.Assert (not Util.Beans.Objects.Is_Null (Before), "Before list instance is null");
       T.Assert (not Util.Beans.Objects.Is_Null (After), "After list instance is null");
@@ -118,10 +127,11 @@ package body AWA.Comments.Modules.Tests is
    --  Test comment creation (PUBLISHED).
    --  ------------------------------
    procedure Test_Create_Published_Comment (T : in out Test) is
-      Before       : Util.Beans.Objects.Object;
-      After        : Util.Beans.Objects.Object;
+      Before   : Util.Beans.Objects.Object;
+      After    : Util.Beans.Objects.Object;
+      Id       : ADO.Identifier;
    begin
-      T.Create_Comment (AWA.Comments.Models.COMMENT_PUBLISHED, Before, After);
+      T.Create_Comment (AWA.Comments.Models.COMMENT_PUBLISHED, Before, After, Id);
       declare
          Before_Count : constant Natural := Get_Count (Before);
          After_Count  : constant Natural := Get_Count (After);
@@ -135,10 +145,11 @@ package body AWA.Comments.Modules.Tests is
    --  Test comment creation (WAITING).
    --  ------------------------------
    procedure Test_Create_Waiting_Comment (T : in out Test) is
-      Before       : Util.Beans.Objects.Object;
-      After        : Util.Beans.Objects.Object;
+      Before   : Util.Beans.Objects.Object;
+      After    : Util.Beans.Objects.Object;
+      Id       : ADO.Identifier;
    begin
-      T.Create_Comment (AWA.Comments.Models.COMMENT_WAITING, Before, After);
+      T.Create_Comment (AWA.Comments.Models.COMMENT_WAITING, Before, After, Id);
       declare
          Before_Count : constant Natural := Get_Count (Before);
          After_Count  : constant Natural := Get_Count (After);
@@ -149,90 +160,90 @@ package body AWA.Comments.Modules.Tests is
    end Test_Create_Waiting_Comment;
 
    --  ------------------------------
-   --  Test tag removal.
+   --  Test comment removal.
    --  ------------------------------
    procedure Test_Remove_Comment (T : in out Test) is
-      Sec_Ctx      : Security.Contexts.Security_Context;
-      Context      : AWA.Services.Contexts.Service_Context;
+      Sec_Ctx  : Security.Contexts.Security_Context;
+      Context  : AWA.Services.Contexts.Service_Context;
+      Before   : Util.Beans.Objects.Object;
+      After    : Util.Beans.Objects.Object;
+      Id       : ADO.Identifier;
    begin
-      AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-tag@test.com");
---
---        declare
---           Tag_Manager  : constant Tag_Module_Access := Get_Tag_Module;
---           User         : constant AWA.Users.Models.User_Ref := Context.Get_User;
---           List         : AWA.Tags.Beans.Tag_List_Bean_Access;
---           Cleanup      : Util.Beans.Objects.Object;
---        begin
---           T.Assert (Tag_Manager /= null, "There is no tag module");
---
---           List := Create_Tag_List_Bean (Tag_Manager);
---           Cleanup := Util.Beans.Objects.To_Object (List.all'Access);
---           List.Set_Value ("entity_type", Util.Beans.Objects.To_Object (String '("awa_user")));
---
---           Tag_Manager.Add_Tag (User.Get_Id, "awa_user", "workspaces-create", "user-tag-1");
---           Tag_Manager.Add_Tag (User.Get_Id, "awa_user", "workspaces-create", "user-tag-2");
---           Tag_Manager.Add_Tag (User.Get_Id, "awa_user", "workspaces-create", "user-tag-3");
---
---           Tag_Manager.Remove_Tag (User.Get_Id, "awa_user", "workspaces-create", "user-tag-2");
---           Tag_Manager.Remove_Tag (User.Get_Id, "awa_user", "workspaces-create", "user-tag-1");
---
---           --  Load the list.
---           List.Load_Tags (Tag_Manager.Get_Session, User.Get_Id);
---           Util.Tests.Assert_Equals (T, 1, Integer (List.Get_Count), "Invalid number of tags");
---           T.Assert (not Util.Beans.Objects.Is_Null (Cleanup), "Cleanup instance is null");
---        end;
+      T.Create_Comment (AWA.Comments.Models.COMMENT_PUBLISHED, Before, After, Id);
+      Util.Tests.Assert_Equals (T, Get_Count (Before) + 1, Get_Count (After),
+                                "The new comment MUST have been added in the list");
+
+      --  Now, simulate a user that logs in and deletes the comment.
+      AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-add-comment@test.com");
+      declare
+         Comment_Manager  : constant Comment_Module_Access := Get_Comment_Module;
+         User             : constant AWA.Users.Models.User_Ref := Context.Get_User;
+         Comment          : AWA.Comments.Beans.Comment_Bean_Access;
+         Bean             : Util.Beans.Basic.Readonly_Bean_Access;
+         Outcome          : Ada.Strings.Unbounded.Unbounded_String;
+         Cleanup          : Util.Beans.Objects.Object;
+      begin
+         T.Assert (Comment_Manager /= null, "There is no comment module");
+
+         --  Create the comment bean for the deletion.
+         Bean := Beans.Create_Comment_Bean (Comment_Manager);
+         Cleanup := Util.Beans.Objects.To_Object (Bean.all'Access);
+         Comment := AWA.Comments.Beans.Comment_Bean'Class (Bean.all)'Access;
+         Comment.Set_Value ("entity_type", Util.Beans.Objects.To_Object (String '("awa_user")));
+         Comment.Set_Value ("permission", Util.Beans.Objects.To_Object (String '("logged-user")));
+         Comment.Set_Value ("id", ADO.Utils.To_Object (Id));
+
+         Comment.Delete (Outcome);
+
+         T.List_Comments (User.Get_Id, After);
+         T.Assert (not Util.Beans.Objects.Is_Null (Cleanup), "Comment bean is null");
+      end;
+      Util.Tests.Assert_Equals (T, Get_Count (Before), Get_Count (After),
+                                "The new comment MUST have been removed from the list");
    end Test_Remove_Comment;
 
    --  ------------------------------
-   --  Test tag creation and removal.
+   --  Test comment publication.
    --  ------------------------------
    procedure Test_Publish_Comment (T : in out Test) is
-      Sec_Ctx      : Security.Contexts.Security_Context;
-      Context      : AWA.Services.Contexts.Service_Context;
+      Before    : Util.Beans.Objects.Object;
+      After     : Util.Beans.Objects.Object;
+      Sec_Ctx   : Security.Contexts.Security_Context;
+      Context   : AWA.Services.Contexts.Service_Context;
+      Id        : ADO.Identifier;
    begin
-      AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-tag@test.com");
+      T.Create_Comment (AWA.Comments.Models.COMMENT_WAITING, Before, After, Id);
+      Util.Tests.Assert_Equals (T, Get_Count (Before), Get_Count (After),
+                                "The new comment MUST not be in the list");
 
---        declare
---           Tag_Manager  : constant Tag_Module_Access := Get_Tag_Module;
---           User         : constant AWA.Users.Models.User_Ref := Context.Get_User;
---           List         : AWA.Tags.Beans.Tag_List_Bean_Access;
---           Cleanup      : Util.Beans.Objects.Object;
---           Tags         : Util.Strings.Vectors.Vector;
---        begin
---           T.Assert (Tag_Manager /= null, "There is no tag module");
---
---           List := Create_Tag_List_Bean (Tag_Manager);
---           Cleanup := Util.Beans.Objects.To_Object (List.all'Access);
---           List.Set_Value ("entity_type", Util.Beans.Objects.To_Object (String '("awa_user")));
---           List.Set_Value ("permission", Util.Beans.Objects.To_Object (String '("workspace-create")));
---
---           --  Add 3 tags.
---           Tags.Append ("user-tag-1");
---           Tags.Append ("user-tag-2");
---           Tags.Append ("user-tag-3");
---           List.Set_Added (Tags);
---
---           List.Update_Tags (User.Get_Id);
---
---           --  Load the list.
---           List.Load_Tags (Tag_Manager.Get_Session, User.Get_Id);
---           Util.Tests.Assert_Equals (T, 3, Integer (List.Get_Count), "Invalid number of tags");
---
---           --  Remove a tag that was not created.
---           Tags.Append ("user-tag-4");
---           List.Set_Deleted (Tags);
---
---           Tags.Clear;
---           Tags.Append ("user-tag-5");
---           List.Set_Added (Tags);
---           List.Update_Tags (User.Get_Id);
---
---           --  'user-tag-5' is the only tag that should exist now.
---           List.Load_Tags (Tag_Manager.Get_Session, User.Get_Id);
---           Util.Tests.Assert_Equals (T, 1, Integer (List.Get_Count), "Invalid number of tags");
---
---           T.Assert (not Util.Beans.Objects.Is_Null (Cleanup), "Cleanup instance is null");
---        end;
+      --  Now, simulate a user that logs in and publishes the comment.
+      AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-add-comment@test.com");
+      declare
+         Comment_Manager  : constant Comment_Module_Access := Get_Comment_Module;
+         User             : constant AWA.Users.Models.User_Ref := Context.Get_User;
+         Comment          : AWA.Comments.Beans.Comment_Bean_Access;
+         Bean             : Util.Beans.Basic.Readonly_Bean_Access;
+         Outcome          : Ada.Strings.Unbounded.Unbounded_String;
+         Cleanup          : Util.Beans.Objects.Object;
+      begin
+         T.Assert (Comment_Manager /= null, "There is no comment module");
+
+         --  Create the comment bean for the deletion.
+         Bean := Beans.Create_Comment_Bean (Comment_Manager);
+         Cleanup := Util.Beans.Objects.To_Object (Bean.all'Access);
+         Comment := AWA.Comments.Beans.Comment_Bean'Class (Bean.all)'Access;
+         Comment.Set_Value ("entity_type", Util.Beans.Objects.To_Object (String '("awa_user")));
+         Comment.Set_Value ("permission", Util.Beans.Objects.To_Object (String '("logged-user")));
+         Comment.Set_Value ("id", ADO.Utils.To_Object (Id));
+
+         Comment.Set_Status (AWA.Comments.Models.COMMENT_PUBLISHED);
+         Comment.Save (Outcome);
+
+         T.List_Comments (User.Get_Id, After);
+         T.Assert (not Util.Beans.Objects.Is_Null (Cleanup), "Comment bean is null");
+      end;
+      Util.Tests.Assert_Equals (T, Get_Count (Before) + 1, Get_Count (After),
+                                "The new comment MUST be present in the list after publication");
    end Test_Publish_Comment;
 
 end AWA.Comments.Modules.Tests;

@@ -28,11 +28,16 @@ package AWA.Comments.Modules.Tests is
       Manager : AWA.Comments.Modules.Comment_Module_Access;
    end record;
 
+   procedure List_Comments (T    : in out Test;
+                            User : in ADO.Identifier;
+                            Into : out Util.Beans.Objects.Object);
+
    --  Create a comment and return the list of comments before and after the creation.
    procedure Create_Comment (T : in out Test;
                              Status : in AWA.Comments.Models.Status_Type;
                              Before : out Util.Beans.Objects.Object;
-                             After  : out Util.Beans.Objects.Object);
+                             After  : out Util.Beans.Objects.Object;
+                             Id     : out ADO.Identifier);
 
    --  Test comment creation (PUBLISHED).
    procedure Test_Create_Published_Comment (T : in out Test);
