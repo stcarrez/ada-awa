@@ -62,10 +62,13 @@ package body AWA.Comments.Beans is
       end if;
    end Set_Value;
 
+   --  ------------------------------
    --  Create the comment.
+   --  ------------------------------
    overriding
    procedure Create (Bean    : in out Comment_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
    begin
       Bean.Module.Create_Comment (Permission  => Ada.Strings.Unbounded.To_String (Bean.Permission),
                                   Entity_Type => Ada.Strings.Unbounded.To_String (Bean.Entity_Type),
@@ -80,12 +83,15 @@ package body AWA.Comments.Beans is
       null;
    end Save;
 
+   --  ------------------------------
    --  Delete the comment.
+   --  ------------------------------
    overriding
    procedure Delete (Bean    : in out Comment_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
    begin
-      null;
+      Bean.Module.Delete_Comment (Ada.Strings.Unbounded.To_String (Bean.Permission), Bean);
    end Delete;
 
    --  ------------------------------
