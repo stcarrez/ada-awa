@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------
 --  atlas -- atlas applications
 -----------------------------------------------------------------------
---  Copyright (C) 2012, 2013 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -224,6 +224,11 @@ package body Atlas.Applications is
                 Name   => AWA.Tags.Modules.NAME,
                 URI    => "tags",
                 Module => App.Tag_Module'Access);
+
+      Register (App    => App.Self.all'Access,
+                Name   => AWA.Comments.Modules.NAME,
+                URI    => "comments",
+                Module => App.Comment_Module'Access);
 
       Register (App    => App.Self.all'Access,
                 Name   => AWA.Blogs.Modules.NAME,
