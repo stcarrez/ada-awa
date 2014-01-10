@@ -60,6 +60,58 @@
     </managed-property>
   </managed-bean>
 
+  <managed-bean>
+    <description>A list of comments associated with a post.</description>
+    <managed-bean-name>postComments</managed-bean-name>
+    <managed-bean-class>AWA.Comments.Beans.Comment_List_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>entity_type</property-name>
+      <property-class>String</property-class>
+      <value>awa_post</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <description>
+       The bean to allow a user to post a new comment.  This is a specific bean because
+       the permission to create a new post is different from other permissions.
+    </description>
+    <managed-bean-name>commentCreate</managed-bean-name>
+    <managed-bean-class>AWA.Comments.Beans.Comment_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>entity_type</property-name>
+      <property-class>String</property-class>
+      <value>awa_post</value>
+    </managed-property>
+    <managed-property>
+      <property-name>permission</property-name>
+      <property-class>String</property-class>
+      <value>blog-add-comment</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <description>
+       The bean to allow a user to edit the comment.  This is a specific bean because
+       the permission to edit the comment is different from other permissions.
+    </description>
+    <managed-bean-name>commentEdit</managed-bean-name>
+    <managed-bean-class>AWA.Comments.Beans.Comment_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>entity_type</property-name>
+      <property-class>String</property-class>
+      <value>awa_post</value>
+    </managed-property>
+    <managed-property>
+      <property-name>permission</property-name>
+      <property-class>String</property-class>
+      <value>logger-user</value>
+    </managed-property>
+  </managed-bean>
+
   <navigation-rule>
     <from-view-id>/blogs/admin/edit.xhtml</from-view-id>
     <navigation-case>
