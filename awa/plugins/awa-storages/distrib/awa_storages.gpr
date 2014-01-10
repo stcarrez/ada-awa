@@ -1,11 +1,11 @@
 with "awa";
 project awa_storages is
    Version      := awa.Version;
-   Name         := "awa-storages";
+   Name         := "awa_storages";
    for Library_Name use Name;
    for Library_Dir use "INSTALL/lib";
    for Library_Kind use "LIBRARY_TYPE";
    for Source_Dirs use ("INSTALL/share/ada/adainclude/" & Name);
-   for Library_ALI_Dir use "INSTALL/lib/ada/adalib/" & Name & "/" & Project'Library_Kind;
+   for Library_ALI_Dir use "INSTALL/lib/ada/adalib/" & Name & "/";
    for Externally_Built use "true";
 end awa_storages;
