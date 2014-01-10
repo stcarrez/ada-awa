@@ -79,6 +79,7 @@ $(pkgname)$(aliversion)-dev:
 	dh_install -p$@ usr/lib/$(libname).a /usr/lib/$(DEB_HOST_MULTIARCH)
 	dh_install -p$@ usr/lib/ada/adalib/awa/*.ali /usr/lib/ada/adalib/awa
 	dh_install -p$@ usr/share/ada/adainclude/awa/*.ad[bs] /usr/share/ada/adainclude/awa
+	dh_install -p$@ usr/share/ada/adainclude/awa.gpr /usr/share/ada/adainclude
 	dh_install -p$@ bundles/*.properties usr/share/doc/$@/bundles
 	dh_install -p$@ samples/*.ads usr/share/doc/$@/samples
 	dh_install -p$@ samples/*.properties usr/share/doc/$@/samples
@@ -121,6 +122,8 @@ awa_%:
 
 ada_%:
 	name=`echo $@ | cut -d _ -f 2` ; \
+	sed -e "s,INSTALL,/usr,g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" \
+		< $(CURDIR)/plugins/awa-$$name/distrib/awa_$$name.gpr > $(CURDIR)/debian/tmp/usr/share/ada/adainclude/awa_$$name.gpr
 	dh_installdirs -p$(pkgname)$(aliversion)-$$name-dev \
 		usr/lib/ada/adalib/awa_$$name \
 		usr/share/ada/adainclude/awa_$$name ; \
