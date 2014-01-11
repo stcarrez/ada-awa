@@ -77,7 +77,7 @@
        The bean to allow a user to post a new comment.  This is a specific bean because
        the permission to create a new post is different from other permissions.
     </description>
-    <managed-bean-name>commentCreate</managed-bean-name>
+    <managed-bean-name>postNewComment</managed-bean-name>
     <managed-bean-class>AWA.Comments.Beans.Comment_Bean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
     <managed-property>
@@ -225,6 +225,14 @@
     </sql>
   </entity-permission>
 
+  <entity-permission>
+    <name>blog-add-comment</name>
+    <entity-type>awa_post</entity-type>
+    <sql>
+      select user.id from awa_user as user where user.id = :user_id
+    </sql>
+  </entity-permission>
+
   <servlet-mapping>
     <servlet-name>files</servlet-name>
     <url-pattern>*.js</url-pattern>
@@ -267,6 +275,7 @@
   <url-policy>
     <permission>anonymous</permission>
     <url-pattern>/blogs/view.html</url-pattern>
+    <url-pattern>/blogs/post.html</url-pattern>
     <url-pattern>/blogs/tagged.html</url-pattern>
     <url-pattern>/blogs/index.html</url-pattern>
   </url-policy>
