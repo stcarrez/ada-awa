@@ -1,0 +1,76 @@
+<!-- View a single post
+  -  Copyright (C) 2014 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<ui:composition template="/WEB-INF/layouts/layout.xhtml"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:awa="http://code.google.com/p/ada-awa/jsf"
+        xmlns:c="http://java.sun.com/jstl/core"
+	    xmlns:util="http://code.google.com/p/ada-asf/util"
+        xmlns:h="http://java.sun.com/jsf/html">
+    <ui:param name="title" value="#{blogMsg.blog_page_title}"/>
+
+    <!-- Main page body -->
+    <ui:define name="pageBody">
+        <f:metadata>
+            <f:viewParam id='id' value='#{postComments.entity_id}'/>
+            <f:viewParam id='id' value='#{post.id}'/>
+            <f:viewParam id='id' value='#{postNewComment.entity_id}'/>
+            <f:viewAction action='#{post.load}'/>
+        </f:metadata>
+        <div id='awa-content'>
+            <div class='grid_8'>
+                <div class='blog-post' id="p_#{post.id}">
+                    <div class='post-title'>
+                        <h2><a href="#{contextPath}/blogs/post/#{post.uri}">#{post.title}</a></h2>
+                        <p>By #{post.username} <h:outputText id="date" value="#{post.date}" converter="dateConverter"/></p>
+                    </div>
+                    <awa:tagList value='#{post.tags}' id='qtags' styleClass="tagedit-list"
+                                 tagLink="#{contextPath}/blogs/tagged.html?tag=#{tagName}"
+                                 var="tagName"
+                                 tagClass="tagedit-listelement tagedit-listelement-old"/>
+                    <awa:wiki styleClass='post-text' value="#{post.text}" format="dotclear"/>
+                    <div class='post-comments'>
+                        <h:panelGroup rendered="#{not empty postComments}">
+                            <h3>
+                                <h:outputFormat value="#{blogMsg.blog_comment_list}">
+                                    <f:param value="#{postComments.size}"/>
+                                </h:outputFormat>
+                            </h3>
+                            <ui:include src="/comments/lists/comment-list.xhtml">
+                                <ui:param name="commentList" value="#{postComments}"/>
+                            </ui:include>
+                        </h:panelGroup>
+                        <h3>#{blogMsg.blog_add_comment}</h3>
+                        <c:choose>
+                            <c:when test="#{user.isLogged}">
+                                <ui:include src="/comments/forms/comment-form.xhtml">
+                                    <ui:param name="comment" value="#{postNewComment}"/>
+                                </ui:include>
+                            </c:when>
+                            <c:otherwise>
+                            To comment, please <a href="#{contextPath}/auth/login.html?">sign in</a>.
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                </div>
+            </div>
+            <div class='grid_2 blog-post-info'>
+              <ui:include src="lists/post-info.xhtml"/>
+          </div>
+        </div>
+    </ui:define>
+</ui:composition>
