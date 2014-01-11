@@ -510,6 +510,9 @@ package AWA.Blogs.Models is
    procedure Delete (Bean : in out Post_Bean;
                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
+   procedure Load (Bean : in out Post_Bean;
+                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
 
 private
    BLOG_NAME : aliased constant String := "awa_blog";

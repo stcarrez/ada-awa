@@ -1343,10 +1343,22 @@ package body AWA.Blogs.Models is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Post_Bean,
                                                       Method => Op_Delete,
                                                       Name   => "delete");
+   procedure Op_Load (Bean    : in out Post_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Load (Bean    : in out Post_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Post_Bean'Class (Bean).Load (Outcome);
+   end Op_Load;
+   package Binding_Post_Bean_3 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Post_Bean,
+                                                      Method => Op_Load,
+                                                      Name   => "load");
 
    Binding_Post_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
      := (1 => Binding_Post_Bean_1.Proxy'Access,
-         2 => Binding_Post_Bean_2.Proxy'Access
+         2 => Binding_Post_Bean_2.Proxy'Access,
+         3 => Binding_Post_Bean_3.Proxy'Access
      );
 
    --  This bean provides some methods that can be used in a Method_Expression.
