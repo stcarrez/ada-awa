@@ -1,0 +1,52 @@
+<!-- Form to create or comment
+  -  Copyright (C) 2014 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<ui:composition
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:w="http://code.google.com/p/ada-asf/widget"
+        xmlns:util="http://code.google.com/p/ada-asf/util"
+        xmlns:c="http://java.sun.com/jstl/core"
+        xmlns:h="http://java.sun.com/jsf/html">
+
+  <div class='awa-comment-form awa-form'>
+    <h:form id='post'>
+        <h:inputHidden id='entity-id' value='#{comment.entity_id}' required='false'/>
+        <h:inputHidden id='comment-id' value='#{comment.id}' required='false'/>
+        <div class='comment-gravatar'>
+            <w:gravatar email="#{user.email}" size="60"/>
+        </div>
+        <div class='comment-form'>
+            <h:messages styleClass='error'/>
+            <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
+                <dd>
+                    <h:inputTextarea id='text' rows='10' required='true' value='#{comment.message}'/>
+                </dd>
+            </dl>
+            <ul class='awa-buttons'>
+                <li>
+                    <h:commandButton id='create'
+                                     value='#{questionMsg.question_post_answer_button}'
+                                     styleClass="ui-button ui-state-default ui-corner-all"
+                                     action="#{comment.create}"/>
+                </li>
+            </ul>
+        </div>
+    </h:form>
+  </div>
+
+</ui:composition>
+
