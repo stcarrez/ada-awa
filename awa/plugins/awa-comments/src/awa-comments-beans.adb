@@ -23,7 +23,9 @@ package body AWA.Comments.Beans is
 
    package ASC renames AWA.Services.Contexts;
 
+   --  ------------------------------
    --  Get the value identified by the name.
+   --  ------------------------------
    overriding
    function Get_Value (From : in Comment_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
@@ -35,17 +37,30 @@ package body AWA.Comments.Beans is
       end if;
    end Get_Value;
 
+   --  ------------------------------
    --  Set the value identified by the name.
+   --  ------------------------------
    overriding
    procedure Set_Value (From  : in out Comment_Bean;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      if Name = "comment" then
+      if Name = "message" then
          From.Set_Message (Util.Beans.Objects.To_String (Value));
 
       elsif Name = "entity_type" then
          From.Entity_Type := Util.Beans.Objects.To_Unbounded_String (Value);
+
+      elsif Name = "entity_id" then
+         declare
+            use type ADO.Identifier;
+
+            Id : constant ADO.Identifier := ADO.Utils.To_Identifier (Value);
+         begin
+            if Id /= ADO.NO_IDENTIFIER then
+               From.Set_Entity_Id (ADO.Utils.To_Identifier (Value));
+            end if;
+         end;
 
       elsif Name = "permission" then
          From.Permission := Util.Beans.Objects.To_Unbounded_String (Value);
