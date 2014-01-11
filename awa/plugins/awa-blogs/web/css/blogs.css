@@ -15,6 +15,11 @@ div.post-info, div.post-header {
 div.post-info div.asf-list-action {
     left: -5px;
 }
+div.post-comments {
+    float: left;
+    width: 100%;
+    padding-top: 1em;
+}
 /*
  * Admin section
  */
@@ -227,4 +232,31 @@ div.blog-post-info h2 {
     font-size: 1.15em;
     background: #d8e7fa;
     color: #346;
+}
+
+div.post-comments h3 {
+    color: #a08;
+    font-weight: normal;
+    font-size: 1.3em;
+}
+div.comment-list {
+    margin-left: 10%;
+    float: left;
+}
+div.awa-comment-form {
+    margin-left: 10%;
+    float: left;
+    width: 90%;
+}
+div.comment, div.awa-comment-form {
+    position: relative;
+    padding-bottom: 50px;
+}
+div.comment div.comment-gravatar, div.awa-form div.comment-gravatar {
+    position: absolute;
+    left: -70px;
+    top: 0;
+}
+div.comment div.comment-text {
+    padding-top: 5px;
 }
