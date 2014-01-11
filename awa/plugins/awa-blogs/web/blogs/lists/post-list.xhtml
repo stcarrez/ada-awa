@@ -23,16 +23,19 @@
         xmlns:h="http://java.sun.com/jsf/html">
   <h:list var="post" value="#{postList.posts}">
     <div class='blog-post' id="p_#{post.id}">
-      <div class='post-title'>
-         <h2><a href="#{contextPath}/blogs/post/#{post.uri}">#{post.title}</a></h2>
-         <p>By #{post.username} <h:outputText id="date" value="#{post.date}" converter="dateConverter"/></p>
-      </div>
+        <div class='post-title'>
+            <h2><a href="#{contextPath}/blogs/post.html?id=#{post.id}">#{post.title}</a></h2>
+            <p>By #{post.username} <h:outputText id="date" value="#{post.date}" converter="dateConverter"/></p>
+        </div>
         <awa:tagList value='#{postList.tags}' id='qtags' styleClass="tagedit-list"
                      tagLink="#{contextPath}/blogs/tagged.html?tag=#{tagName}"
                      var="tagName"
                      tagClass="tagedit-listelement tagedit-listelement-old"/>
 
-      <awa:wiki styleClass='post-text' value="#{post.text}" format="dotclear"/>
+        <awa:wiki styleClass='post-text' value="#{post.text}" format="dotclear"/>
+        <div>
+
+        </div>
     </div>
   </h:list>
 </ui:composition>
