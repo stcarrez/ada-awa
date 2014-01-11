@@ -127,6 +127,14 @@ package body AWA.Blogs.Beans is
       Bean.Module.Delete_Post (Post_Id => Bean.Get_Id);
    end Delete;
 
+   --  Load the post.
+   overriding
+   procedure Load (Bean    : in out Post_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      null;
+   end Load;
+
    --  ------------------------------
    --  Get the value identified by the name.
    --  ------------------------------

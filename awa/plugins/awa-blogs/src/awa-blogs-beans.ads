@@ -99,6 +99,11 @@ package AWA.Blogs.Beans is
    procedure Delete (Bean    : in out Post_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
+   --  Load the post.
+   overriding
+   procedure Load (Bean    : in out Post_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
    --  Create the Blog_Bean bean instance.
    function Create_Blog_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                               return Util.Beans.Basic.Readonly_Bean_Access;
