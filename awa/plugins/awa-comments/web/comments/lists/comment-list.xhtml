@@ -14,24 +14,20 @@
   -  See the License for the specific language governing permissions and
   -  limitations under the License.
   -->
-<div class='comment-list'
-     xmlns:w="http://code.google.com/p/ada-asf/widget"
-     xmlns:h="http://java.sun.com/jsf/html">
-
-    <h:list var="cmt" value="#{commentList}">
-        <div class='comment' id='cmt_#{cmt.id}'>
-            <div class='comment-gravatar'>
-                <w:gravatar email="#{cmt.email}" size="60"/>
-            </div>
-            <div class='comment-author'>
-                #{cmt.author} on
-                <h:outputText styleClass='comment-date' value="#{cmt.date}"
-                              converter="dateConverter"/>
-                said:
-            </div>
-            <div class='comment-text'>
-                #{cmt.comment}
-            </div>
-        </div>
-    </h:list>
-</div>
+<h:list xmlns:w="http://code.google.com/p/ada-asf/widget"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:awa="http://code.google.com/p/ada-awa/jsf"
+        styleClass="comment-list" var="cmt" value="#{commentList}" layout="orderedList" itemStyleClass="comment">
+    <div class='comment-gravatar'>
+        <w:gravatar email="#{cmt.email}" size="60"/>
+    </div>
+    <div class='comment-author'>
+        #{cmt.author} on
+        <a href="#comment-#{commentList.rowIndex}">
+            <h:outputText styleClass='comment-date' value="#{cmt.date}"
+                          converter="dateConverter"/>
+        </a>
+        said:
+    </div>
+    <awa:wiki styleClass='comment-text' value="#{cmt.comment}" format="dotclear"/>
+</h:list>
