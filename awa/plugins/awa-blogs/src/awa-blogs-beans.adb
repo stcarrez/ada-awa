@@ -68,6 +68,7 @@ package body AWA.Blogs.Beans is
       pragma Unreferenced (Outcome);
 
       Result  : ADO.Identifier;
+      pragma Unreferenced (Result);
    begin
       Bean.Module.Create_Blog (Workspace_Id => 0,
                                Title        => Bean.Get_Name,
@@ -313,10 +314,11 @@ package body AWA.Blogs.Beans is
                                    return Util.Beans.Basic.Readonly_Bean_Access is
       Object  : constant Blog_Admin_Bean_Access := new Blog_Admin_Bean;
    begin
-      Object.Module         := Module;
-      Object.Flags          := Object.Init_Flags'Access;
-      Object.Post_List_Bean := Object.Post_List'Access;
-      Object.Blog_List_Bean := Object.Blog_List'Access;
+      Object.Module            := Module;
+      Object.Flags             := Object.Init_Flags'Access;
+      Object.Post_List_Bean    := Object.Post_List'Access;
+      Object.Blog_List_Bean    := Object.Blog_List'Access;
+      Object.Comment_List_Bean := Object.Comment_List'Access;
       return Object.all'Access;
    end Create_Blog_Admin_Bean;
 
@@ -396,13 +398,50 @@ package body AWA.Blogs.Beans is
          Query.Set_Query (AWA.Blogs.Models.Query_Blog_Admin_Post_List);
          Query.Bind_Param ("blog_id", Blog_Id);
          Query.Bind_Param ("user_id", User);
-         ADO.Sessions.Entities.Bind_Param (Query, "table",
-                                           AWA.Blogs.Models.BLOG_TABLE, Session);
+         ADO.Sessions.Entities.Bind_Param (Params  => Query,
+                                           Name    => "table",
+                                           Table   => AWA.Blogs.Models.BLOG_TABLE,
+                                           Session => Session);
+         ADO.Sessions.Entities.Bind_Param (Params  => Query,
+                                           Name    => "entity_type",
+                                           Table   => AWA.Blogs.Models.POST_TABLE,
+                                           Session => Session);
 
          AWA.Blogs.Models.List (List.Post_List_Bean.all, Session, Query);
          List.Flags (INIT_POST_LIST) := True;
       end if;
    end Load_Posts;
+
+   --  ------------------------------
+   --  Load the comments associated with the current blog.
+   --  ------------------------------
+   procedure Load_Comments (List : in Blog_Admin_Bean) is
+      use AWA.Blogs.Models;
+      use AWA.Services;
+
+      Ctx     : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      User    : constant ADO.Identifier := Ctx.Get_User_Identifier;
+      Session : ADO.Sessions.Session := List.Module.Get_Session;
+      Query   : ADO.Queries.Context;
+      Blog_Id : constant ADO.Identifier := List.Get_Blog_Id;
+   begin
+      if Blog_Id /= ADO.NO_IDENTIFIER then
+         Query.Set_Query (AWA.Blogs.Models.Query_Comment_List);
+         Query.Bind_Param ("blog_id", Blog_Id);
+         Query.Bind_Param ("user_id", User);
+         ADO.Sessions.Entities.Bind_Param (Params  => Query,
+                                           Name    => "table",
+                                           Table   => AWA.Blogs.Models.BLOG_TABLE,
+                                           Session => Session);
+         ADO.Sessions.Entities.Bind_Param (Params  => Query,
+                                           Name    => "entity_type",
+                                           Table   => AWA.Blogs.Models.POST_TABLE,
+                                           Session => Session);
+
+         AWA.Blogs.Models.List (List.Comment_List_Bean.all, Session, Query);
+         List.Flags (INIT_COMMENT_LIST) := True;
+      end if;
+   end Load_Comments;
 
    overriding
    function Get_Value (List : in Blog_Admin_Bean;
@@ -420,6 +459,13 @@ package body AWA.Blogs.Beans is
             Load_Posts (List);
          end if;
          return Util.Beans.Objects.To_Object (Value   => List.Post_List_Bean,
+                                              Storage => Util.Beans.Objects.STATIC);
+
+      elsif Name = "comments" then
+         if not List.Init_Flags (INIT_COMMENT_LIST) then
+            Load_Comments (List);
+         end if;
+         return Util.Beans.Objects.To_Object (Value   => List.Comment_List_Bean,
                                               Storage => Util.Beans.Objects.STATIC);
 
       elsif Name = "id" then
