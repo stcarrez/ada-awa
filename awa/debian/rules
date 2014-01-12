@@ -267,6 +267,7 @@ override_dh_auto_test:
 	dh_auto_test -- LD_LIBRARY_PATH=./lib
 
 override_dh_auto_install: $(pkgname)$(aliversion) \
+						  $(pkgname)$(aliversion)-dev \
 						  $(pkgname)$(aliversion)-blogs \
 						  $(pkgname)$(aliversion)-blogs-dev \
 						  $(pkgname)$(aliversion)-comments \
