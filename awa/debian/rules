@@ -123,7 +123,7 @@ awa_%:
 ada_%:
 	name=`echo $@ | cut -d _ -f 2` ; \
 	sed -e "s,INSTALL,/usr,g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" \
-		< $(CURDIR)/plugins/awa-$$name/distrib/awa_$$name.gpr > $(CURDIR)/debian/tmp/usr/share/ada/adainclude/awa_$$name.gpr
+		< $(CURDIR)/plugins/awa-$$name/distrib/awa_$$name.gpr > $(CURDIR)/debian/tmp/usr/share/ada/adainclude/awa_$$name.gpr ; \
 	dh_installdirs -p$(pkgname)$(aliversion)-$$name-dev \
 		usr/lib/ada/adalib/awa_$$name \
 		usr/share/ada/adainclude/awa_$$name ; \
