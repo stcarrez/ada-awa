@@ -244,6 +244,7 @@ div.post-comments h3 {
 ol.comment-list {
     margin-left: 10%;
     float: left;
+    width: 90%;
 }
 div.awa-comment-form {
     margin-left: 10%;
