@@ -23,6 +23,9 @@
         <property type='String' name="username">
             <comment>the user name.</comment>
         </property>
+        <property type='Natural' name="comment_count">
+            <comment>the number of comments for this post.</comment>
+        </property>
     </class>
 
     <query name='blog-admin-post-list'>
@@ -34,12 +37,15 @@
       post.uri,
       post.create_date,
       post.status,
-      user.name
+      user.name,
+      count(cmt.id)
     FROM awa_blog as blog
     INNER JOIN awa_acl AS acl ON acl.entity_id = blog.id AND acl.entity_type = :table AND acl.user_id = :user_id
     INNER JOIN awa_post AS post ON blog.id = post.blog_id
     INNER JOIN awa_user AS user ON post.author_id = user.id
+    LEFT JOIN awa_comment AS cmt ON cmt.entity_id = post.id AND cmt.entity_type = :entity_type
     WHERE blog.id = :blog_id
+    GROUP BY post.id
     ORDER BY post.id DESC
        </sql>
     </query>
