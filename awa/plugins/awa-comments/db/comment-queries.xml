@@ -31,7 +31,7 @@
       e.email,
       c.create_date,
       c.message
-    FROM awa_comments AS c
+    FROM awa_comment AS c
     INNER JOIN awa_user AS u ON c.author_id = u.id
     INNER JOIN awa_email AS e ON u.email_id = e.id
     WHERE c.entity_type = :entity_type AND c.entity_id = :entity_id AND c.status = :status
