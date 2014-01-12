@@ -31,7 +31,7 @@
         </div>
         <div class='comment-form'>
             <h:messages styleClass='error'/>
-            <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
+            <dl class="awa-required#{util:hasMessage('text') ? ' awa-error' : ''}">
                 <dd>
                     <h:inputTextarea id='text' rows='10' required='true' value='#{comment.message}'/>
                 </dd>
@@ -39,7 +39,7 @@
             <ul class='awa-buttons'>
                 <li>
                     <h:commandButton id='create'
-                                     value='#{questionMsg.question_post_answer_button}'
+                                     value='#{commentMsg.comment_add_button}'
                                      styleClass="ui-button ui-state-default ui-corner-all"
                                      action="#{comment.create}"/>
                 </li>
