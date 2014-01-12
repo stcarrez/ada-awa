@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-beans -- Beans for blog module
---  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -148,7 +148,7 @@ package AWA.Blogs.Beans is
    function Create_Status_List (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                                 return Util.Beans.Basic.Readonly_Bean_Access;
 
-   type Init_Flag is (INIT_BLOG_LIST, INIT_POST_LIST);
+   type Init_Flag is (INIT_BLOG_LIST, INIT_POST_LIST, INIT_COMMENT_LIST);
    type Init_Map is array (Init_Flag) of Boolean;
 
    type Blog_Admin_Bean is new Util.Beans.Basic.Bean with record
@@ -165,6 +165,10 @@ package AWA.Blogs.Beans is
       Post_List        : aliased AWA.Blogs.Models.Admin_Post_Info_List_Bean;
       Post_List_Bean   : AWA.Blogs.Models.Admin_Post_Info_List_Bean_Access;
 
+      --  List of comments.
+      Comment_List      : aliased AWA.Blogs.Models.Comment_Info_List_Bean;
+      Comment_List_Bean : AWA.Blogs.Models.Comment_Info_List_Bean_Access;
+
       --  Initialization flags.
       Init_Flags       : aliased Init_Map := (others => False);
       Flags            : access Init_Map;
@@ -176,6 +180,9 @@ package AWA.Blogs.Beans is
 
    --  Load the posts associated with the current blog.
    procedure Load_Posts (List : in Blog_Admin_Bean);
+
+   --  Load the comments associated with the current blog.
+   procedure Load_Comments (List : in Blog_Admin_Bean);
 
    overriding
    function Get_Value (List : in Blog_Admin_Bean;
