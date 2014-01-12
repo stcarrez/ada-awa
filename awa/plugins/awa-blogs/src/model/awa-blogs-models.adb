@@ -1224,6 +1224,79 @@ package body AWA.Blogs.Models is
    --  Get the bean attribute identified by the given name.
    --  --------------------
    overriding
+   function Get_Value (From : in Comment_Info;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
+      end if;
+      if Name = "post_id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Post_Id));
+      end if;
+      if Name = "title" then
+         return Util.Beans.Objects.To_Object (From.Title);
+      end if;
+      if Name = "author" then
+         return Util.Beans.Objects.To_Object (From.Author);
+      end if;
+      if Name = "email" then
+         return Util.Beans.Objects.To_Object (From.Email);
+      end if;
+      if Name = "date" then
+         return Util.Beans.Objects.Time.To_Object (From.Date);
+      end if;
+      if Name = "status" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Status));
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+   --  --------------------
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   --  --------------------
+   procedure List (Object  : in out Comment_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+   begin
+      List (Object.List, Session, Context);
+   end List;
+   --  --------------------
+   --  The comment information.
+   --  --------------------
+   procedure List (Object  : in out Comment_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+      procedure Read (Into : in out Comment_Info);
+
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Context);
+      Pos  : Natural := 0;
+      procedure Read (Into : in out Comment_Info) is
+      begin
+         Into.Id := Stmt.Get_Identifier (0);
+         Into.Post_Id := Stmt.Get_Identifier (1);
+         Into.Title := Stmt.Get_Unbounded_String (2);
+         Into.Author := Stmt.Get_Unbounded_String (3);
+         Into.Email := Stmt.Get_Unbounded_String (4);
+         Into.Date := Stmt.Get_Time (5);
+         Into.Status := Stmt.Get_Integer (6);
+      end Read;
+   begin
+      Stmt.Execute;
+      Comment_Info_Vectors.Clear (Object);
+      while Stmt.Has_Elements loop
+         Object.Insert_Space (Before => Pos);
+         Object.Update_Element (Index => Pos, Process => Read'Access);
+         Pos := Pos + 1;
+         Stmt.Next;
+      end loop;
+   end List;
+
+
+   --  --------------------
+   --  Get the bean attribute identified by the given name.
+   --  --------------------
+   overriding
    function Get_Value (From : in Post_Info;
                        Name : in String) return Util.Beans.Objects.Object is
    begin

@@ -420,6 +420,59 @@ package AWA.Blogs.Models is
    Query_Blog_List : constant ADO.Queries.Query_Definition_Access;
 
    --  --------------------
+   --  The comment information.
+   --  --------------------
+   type Comment_Info is new Util.Beans.Basic.Readonly_Bean with record
+      --  the comment identifier.
+      Id : ADO.Identifier;
+
+      --  the post identifier.
+      Post_Id : ADO.Identifier;
+
+      --  the post title.
+      Title : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the comment author's name.
+      Author : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the comment author's email.
+      Email : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the comment date.
+      Date : Ada.Calendar.Time;
+
+      --  the comment status.
+      Status : Integer;
+
+   end record;
+
+   --  Get the bean attribute identified by the given name.
+   overriding
+   function Get_Value (From : in Comment_Info;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   package Comment_Info_Beans is
+      new Util.Beans.Basic.Lists (Element_Type => Comment_Info);
+   package Comment_Info_Vectors renames Comment_Info_Beans.Vectors;
+   subtype Comment_Info_List_Bean is Comment_Info_Beans.List_Bean;
+
+   type Comment_Info_List_Bean_Access is access all Comment_Info_List_Bean;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Comment_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   subtype Comment_Info_Vector is Comment_Info_Vectors.Vector;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Comment_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   Query_Comment_List : constant ADO.Queries.Query_Definition_Access;
+
+   --  --------------------
    --  The Post_Info describes a post to be displayed in the blog page
    --  --------------------
    type Post_Info is new Util.Beans.Basic.Readonly_Bean with record
@@ -704,18 +757,28 @@ private
    := Def_Bloginfo_Blog_List.Query'Access;
 
    package File_4 is
+      new ADO.Queries.Loaders.File (Path => "blog-comment-list.xml",
+                                    Sha1 => "03A0B42E536FD5FCD5CF09A3B59788D7B8C6439D");
+
+   package Def_Commentinfo_Comment_List is
+      new ADO.Queries.Loaders.Query (Name => "comment-list",
+                                     File => File_4.File'Access);
+   Query_Comment_List : constant ADO.Queries.Query_Definition_Access
+   := Def_Commentinfo_Comment_List.Query'Access;
+
+   package File_5 is
       new ADO.Queries.Loaders.File (Path => "blog-post-list.xml",
                                     Sha1 => "515B28C537EF68F50513885D4E7A852716AC88D5");
 
    package Def_Postinfo_Blog_Post_List is
       new ADO.Queries.Loaders.Query (Name => "blog-post-list",
-                                     File => File_4.File'Access);
+                                     File => File_5.File'Access);
    Query_Blog_Post_List : constant ADO.Queries.Query_Definition_Access
    := Def_Postinfo_Blog_Post_List.Query'Access;
 
    package Def_Postinfo_Blog_Post_Tag_List is
       new ADO.Queries.Loaders.Query (Name => "blog-post-tag-list",
-                                     File => File_4.File'Access);
+                                     File => File_5.File'Access);
    Query_Blog_Post_Tag_List : constant ADO.Queries.Query_Definition_Access
    := Def_Postinfo_Blog_Post_Tag_List.Query'Access;
 end AWA.Blogs.Models;
