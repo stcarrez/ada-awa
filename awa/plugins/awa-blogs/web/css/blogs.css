@@ -62,14 +62,16 @@ div.blog-admin div.post-info {
     padding-top: 5px;
 }
 div.blog-admin div.post-title, div.blog-admin div.post-author, div.blog-admin div.post-ref,
-div.blog-admin div.post-date, div.blog-admin div.post-view {
+div.blog-admin div.post-date, div.blog-admin div.post-view, div.blog-admin div.post-comment-count,
+div.blog-admin div.comment-title, div.blog-admin div.comment-author, div.blog-admin div.comment-date,
+div.blog-admin div.comment-gravatar {
     float: left;
     overflow: hidden;
     line-height: 20px;
 
 }
 div.blog-admin div.post-title {
-    width: 50%;
+    width: 45%;
 }
 div.blog-admin div.post-author {
     width: 15%;
@@ -81,7 +83,20 @@ div.blog-admin div.post-ref {
 div.blog-admin div.post-date {
     width: 15%;
 }
+div.blog-admin div.post-comment-count {
+    width: 5%;
+}
 div.blog-admin div.post-view {
+    width: 5%;
+}
+
+div.blog-admin div.comment-title {
+    width: 45%;
+}
+div.blog-admin div.comment-author, div.blog-admin div.comment-date {
+    width: 20%;
+}
+div.blog-admin div.comment-gravatar {
     width: 5%;
 }
 
@@ -108,6 +123,7 @@ div.blog-info div.blog-date {
     font-size: 0.7em;
 }
 
+div.comment-status, div.comment-status-0, div.comment-status-1, div.comment-status-2,
 div.post-status, div.post-status-POST_DRAFT, div.post-status-POST_PUBLISHED, div.post-status-POST_SCHEDULED {
     width: 16px;
     height: 16px;
@@ -115,6 +131,7 @@ div.post-status, div.post-status-POST_DRAFT, div.post-status-POST_PUBLISHED, div
     margin-left: 24px;
     background: url(../images/blogs/check-wrn.png) no-repeat;
 }
+div.comment-status-0,
 div.post-status-POST_PUBLISHED {
     background: url(../images/blogs/check-on.png) no-repeat;
 }
