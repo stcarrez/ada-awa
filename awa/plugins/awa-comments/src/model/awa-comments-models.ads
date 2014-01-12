@@ -250,7 +250,7 @@ package AWA.Comments.Models is
 
 
 private
-   COMMENT_NAME : aliased constant String := "awa_comments";
+   COMMENT_NAME : aliased constant String := "awa_comment";
    COL_0_1_NAME : aliased constant String := "create_date";
    COL_1_1_NAME : aliased constant String := "message";
    COL_2_1_NAME : aliased constant String := "entity_id";
