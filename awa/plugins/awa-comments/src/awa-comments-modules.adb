@@ -46,6 +46,9 @@ package body AWA.Comments.Modules is
    begin
       Log.Info ("Initializing the comments module");
 
+      --  Setup the resource bundles.
+      App.Register ("commentMsg", "comments");
+
       --  Register the comment list bean.
       Register.Register (Plugin => Plugin,
                          Name   => "AWA.Comments.Beans.Comment_List_Bean",
