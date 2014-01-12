@@ -1,5 +1,5 @@
 <!-- List of blog posts for the blog administrator
-  -  Copyright (C) 2011 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,6 +37,9 @@
                     </div>
                     <div class='post-author'>
                         #{post.username}
+                    </div>
+                    <div class='post-comment-count'>
+                        #{post.comment_count}
                     </div>
                     <div class='post-view'>
                         <a href="preview.html?blog_id=#{adminBlog.id}&amp;post_id=#{post.id}">

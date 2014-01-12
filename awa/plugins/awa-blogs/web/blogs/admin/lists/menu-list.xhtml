@@ -1,5 +1,5 @@
 <!-- Admin menus
-  -  Copyright (C) 2011 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,6 +32,13 @@
            title="#{blogMsg.blog_admin_list_post_title}">
             <img src="#{contextPath}/images/blogs/entries-b.png" alt="#{blogMsg.blog_admin_list_post_label}"/>
             <span>#{blogMsg.blog_admin_list_post_label}</span>
+        </a>
+    </li>
+    <li>
+        <a href="#{contextPath}/blogs/admin/list-comments.html?id=#{adminBlog.id}"
+           title="#{blogMsg.blog_admin_list_comments_title}">
+            <img src="#{contextPath}/images/blogs/comments-b.png" alt="#{blogMsg.blog_admin_list_comments_label}"/>
+            <span>#{blogMsg.blog_admin_list_comments_label}</span>
         </a>
     </li>
 
