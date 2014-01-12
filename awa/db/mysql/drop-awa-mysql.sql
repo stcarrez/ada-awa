@@ -54,7 +54,7 @@ DROP TABLE IF EXISTS `awa_workspace_feature`;
 DROP TABLE IF EXISTS `awa_workspace`;
 /* Copied from awa-comments-drop-mysql.sql*/
 /* File generated automatically by dynamo */
-DROP TABLE IF EXISTS `awa_comments`;
+DROP TABLE IF EXISTS `awa_comment`;
 /* Copied from ado-drop-mysql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `sequence`;
