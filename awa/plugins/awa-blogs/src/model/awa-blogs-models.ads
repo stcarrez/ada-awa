@@ -341,6 +341,9 @@ package AWA.Blogs.Models is
       --  the user name.
       Username : Ada.Strings.Unbounded.Unbounded_String;
 
+      --  the number of comments for this post.
+      Comment_Count : Natural;
+
    end record;
 
    --  Get the bean attribute identified by the given name.
@@ -437,6 +440,9 @@ package AWA.Blogs.Models is
 
       --  the post text.
       Text : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the number of comments for this post.
+      Comment_Count : Natural;
 
    end record;
 
@@ -679,7 +685,7 @@ private
 
    package File_2 is
       new ADO.Queries.Loaders.File (Path => "blog-admin-post-list.xml",
-                                    Sha1 => "F3BE5E28E359F698644846BAD351DA809BDBD95A");
+                                    Sha1 => "1B08D3E8597DB1BC2CB904CE5473D7AF7C2A3F1B");
 
    package Def_Adminpostinfo_Blog_Admin_Post_List is
       new ADO.Queries.Loaders.Query (Name => "blog-admin-post-list",
@@ -699,7 +705,7 @@ private
 
    package File_4 is
       new ADO.Queries.Loaders.File (Path => "blog-post-list.xml",
-                                    Sha1 => "F61889EED51F4277BE7D979A3A2657A506FA0406");
+                                    Sha1 => "515B28C537EF68F50513885D4E7A852716AC88D5");
 
    package Def_Postinfo_Blog_Post_List is
       new ADO.Queries.Loaders.Query (Name => "blog-post-list",

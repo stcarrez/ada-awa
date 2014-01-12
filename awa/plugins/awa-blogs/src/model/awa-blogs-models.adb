@@ -1107,6 +1107,9 @@ package body AWA.Blogs.Models is
       if Name = "username" then
          return Util.Beans.Objects.To_Object (From.Username);
       end if;
+      if Name = "comment_count" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Comment_Count));
+      end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
 
@@ -1138,6 +1141,7 @@ package body AWA.Blogs.Models is
          Into.Date := Stmt.Get_Time (3);
          Into.Status := Post_Status_Type'Val (Stmt.Get_Integer (4));
          Into.Username := Stmt.Get_Unbounded_String (5);
+         Into.Comment_Count := Stmt.Get_Natural (6);
       end Read;
    begin
       Stmt.Execute;
@@ -1241,6 +1245,9 @@ package body AWA.Blogs.Models is
       if Name = "text" then
          return Util.Beans.Objects.To_Object (From.Text);
       end if;
+      if Name = "comment_count" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Comment_Count));
+      end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
 
@@ -1272,6 +1279,7 @@ package body AWA.Blogs.Models is
          Into.Date := Stmt.Get_Time (3);
          Into.Username := Stmt.Get_Unbounded_String (4);
          Into.Text := Stmt.Get_Unbounded_String (5);
+         Into.Comment_Count := Stmt.Get_Natural (6);
       end Read;
    begin
       Stmt.Execute;
