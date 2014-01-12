@@ -1,5 +1,5 @@
 <!-- Display the blog posts in a list page
-  -  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,9 +33,13 @@
                      tagClass="tagedit-listelement tagedit-listelement-old"/>
 
         <awa:wiki styleClass='post-text' value="#{post.text}" format="dotclear"/>
-        <div>
-
-        </div>
+        <h:panelGroup rendered="#{post.comment_count ne 0}" styleClass="blog-post-comment-count" layout="div">
+            <a href="#{contextPath}/blogs/post.html?id=#{post.id}#comment-1">
+                <h:outputFormat value="#{blogMsg.blog_post_count}">
+                    <f:param value="#{post.comment_count}"/>
+                </h:outputFormat>
+            </a>
+        </h:panelGroup>
     </div>
   </h:list>
 </ui:composition>
