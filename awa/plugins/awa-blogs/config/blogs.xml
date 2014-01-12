@@ -164,6 +164,14 @@
     </navigation-case>
   </navigation-rule>
 
+  <navigation-rule>
+    <from-view-id>/blogs/forms/comment-add-form.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/blogs/forms/comment-add-form-response.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
   <entity-permission>
     <name>blog-create</name>
     <entity-type>awa_workspace</entity-type>
@@ -283,6 +291,7 @@
   <url-policy>
     <permission>logged-user</permission>
     <url-pattern>/blogs/admin/.*</url-pattern>
+    <url-pattern>/blogs/forms/comment-add-form.html</url-pattern>
   </url-policy>
 
 </module>
