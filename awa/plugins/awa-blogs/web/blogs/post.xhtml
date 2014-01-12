@@ -58,10 +58,12 @@
                         <h3>#{blogMsg.blog_add_comment}</h3>
                         <c:choose>
                             <c:when test="#{user.isLogged}">
-                                <ajax:include src="forms/comment-add-form"/>
+                                <ajax:include src="/blogs/forms/comment-add-form.html"/>
                             </c:when>
                             <c:otherwise>
-                            To comment, please <a href="#{contextPath}/auth/login.html?">sign in</a>.
+                                <h:outputFormat value="#{blogMsg.blog_sign_in_add_comment}" escape="false">
+                                    <f:param value="#{contextPath}/auth/login.html?"/>
+                                </h:outputFormat>
                             </c:otherwise>
                         </c:choose>
                     </div>
