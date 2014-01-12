@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-beans -- Beans for blog module
---  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -351,8 +351,14 @@ package body AWA.Blogs.Beans is
    begin
       Query.Set_Query (AWA.Blogs.Models.Query_Blog_List);
       Query.Bind_Param ("user_id", User);
-      ADO.Sessions.Entities.Bind_Param (Query, "table",
-                                        AWA.Blogs.Models.BLOG_TABLE, Session);
+      ADO.Sessions.Entities.Bind_Param (Params  => Query,
+                                        Name    => "table",
+                                        Table   => AWA.Blogs.Models.BLOG_TABLE,
+                                        Session => Session);
+      ADO.Sessions.Entities.Bind_Param (Params  => Query,
+                                        Name    => "entity_type",
+                                        Table   => AWA.Blogs.Models.POST_TABLE,
+                                        Session => Session);
       AWA.Blogs.Models.List (List.Blog_List_Bean.all, Session, Query);
       List.Flags (INIT_BLOG_LIST) := True;
    end Load_Blogs;
