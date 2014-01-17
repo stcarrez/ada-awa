@@ -59,7 +59,7 @@
       post.create_date,
       user.name,
       post.text,
-      count(cmt.id)
+      count(distinct cmt.id)
     FROM awa_post AS post
     INNER JOIN awa_user AS user ON post.author_id = user.id
     INNER JOIN awa_tagged_entity AS e ON e.for_entity_id = post.id AND e.entity_type = :entity_type AND e.tag_id = :tag
