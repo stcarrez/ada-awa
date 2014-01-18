@@ -96,4 +96,19 @@ package body AWA.Helpers.Requests is
          return Util.Dates.ISO8601.Value (Default);
    end Get_Parameter;
 
+   --  ------------------------------
+   --  Get the parameter identified by the given name and return it as an Object.
+   --  Returns the NULL object value if the parameter does not exist.
+   --  ------------------------------
+   function Get_Parameter (Name    : in String) return Util.Beans.Objects.Object is
+      Ctx  : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
+      P    : constant String := Ctx.Get_Parameter (Name);
+   begin
+      return Util.Beans.Objects.To_Object (P);
+
+   exception
+      when others =>
+         return Util.Beans.Objects.Null_Object;
+   end Get_Parameter;
+
 end AWA.Helpers.Requests;
