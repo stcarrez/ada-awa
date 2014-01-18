@@ -19,7 +19,6 @@ with Ada.Strings.Unbounded;
 
 with Util.Test_Caller;
 with Util.Beans.Basic;
-with Util.Beans.Objects;
 
 with Security.Contexts;
 
@@ -35,9 +34,8 @@ package body AWA.Comments.Modules.Tests is
    use ADO;
 
    package Caller is new Util.Test_Caller (Test, "Comments.Modules");
---
---     function Create_Tag_List_Bean (Module : in Tag_Module_Access)
---                                    return AWA.Tags.Beans.Tag_List_Bean_Access;
+
+   function Get_Count (Bean : in Util.Beans.Objects.Object) return Natural;
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
    begin
@@ -48,6 +46,8 @@ package body AWA.Comments.Modules.Tests is
       Caller.Add_Test (Suite, "Test AWA.Comments.Modules.Delete_Comment",
                        Test_Remove_Comment'Access);
       Caller.Add_Test (Suite, "Test AWA.Comments.Modules.Update_Comment (publish)",
+                       Test_Update_Comment'Access);
+      Caller.Add_Test (Suite, "Test AWA.Comments.Modules.Publish_Comment (publish)",
                        Test_Publish_Comment'Access);
    end Add_Tests;
 
@@ -205,7 +205,7 @@ package body AWA.Comments.Modules.Tests is
    --  ------------------------------
    --  Test comment publication.
    --  ------------------------------
-   procedure Test_Publish_Comment (T : in out Test) is
+   procedure Test_Update_Comment (T : in out Test) is
       Before    : Util.Beans.Objects.Object;
       After     : Util.Beans.Objects.Object;
       Sec_Ctx   : Security.Contexts.Security_Context;
@@ -241,6 +241,39 @@ package body AWA.Comments.Modules.Tests is
 
          T.List_Comments (User.Get_Id, After);
          T.Assert (not Util.Beans.Objects.Is_Null (Cleanup), "Comment bean is null");
+      end;
+      Util.Tests.Assert_Equals (T, Get_Count (Before) + 1, Get_Count (After),
+                                "The new comment MUST be present in the list after publication");
+   end Test_Update_Comment;
+
+   --  ------------------------------
+   --  Test comment publication through the publish operation bean.
+   --  ------------------------------
+   procedure Test_Publish_Comment (T : in out Test) is
+      Before    : Util.Beans.Objects.Object;
+      After     : Util.Beans.Objects.Object;
+      Sec_Ctx   : Security.Contexts.Security_Context;
+      Context   : AWA.Services.Contexts.Service_Context;
+      Id        : ADO.Identifier;
+   begin
+      T.Create_Comment (AWA.Comments.Models.COMMENT_WAITING, Before, After, Id);
+      Util.Tests.Assert_Equals (T, Get_Count (Before), Get_Count (After),
+                                "The new comment MUST not be in the list");
+
+      --  Now, simulate a user that logs in and publishes the comment.
+      AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-add-comment@test.com");
+      declare
+         Comment_Manager  : constant Comment_Module_Access := Get_Comment_Module;
+         User             : constant AWA.Users.Models.User_Ref := Context.Get_User;
+         Comment          : AWA.Comments.Beans.Comment_Bean;
+      begin
+         T.Assert (Comment_Manager /= null, "There is no comment module");
+
+         Comment_Manager.Publish_Comment ("logged-user", Id, AWA.Comments.Models.COMMENT_PUBLISHED,
+                                          Comment);
+         T.Assert (not Comment.Is_Null, "Comment bean is null");
+
+         T.List_Comments (User.Get_Id, After);
       end;
       Util.Tests.Assert_Equals (T, Get_Count (Before) + 1, Get_Count (After),
                                 "The new comment MUST be present in the list after publication");
