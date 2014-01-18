@@ -87,6 +87,11 @@ package AWA.Comments.Beans is
    procedure Save (Bean    : in out Comment_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
+   --  Publish or not the comment.
+   overriding
+   procedure Publish (Bean    : in out Comment_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
    --  Delete the comment.
    overriding
    procedure Delete (Bean    : in out Comment_Bean;
