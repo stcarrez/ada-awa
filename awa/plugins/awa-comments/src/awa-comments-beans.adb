@@ -90,12 +90,16 @@ package body AWA.Comments.Beans is
                                   Comment     => Bean);
    end Create;
 
+   --  ------------------------------
    --  Save the comment.
+   --  ------------------------------
    overriding
    procedure Save (Bean    : in out Comment_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
    begin
-      null;
+      Bean.Module.Update_Comment (Permission  => To_String (Bean.Permission),
+                                  Comment     => Bean);
    end Save;
 
    --  ------------------------------
