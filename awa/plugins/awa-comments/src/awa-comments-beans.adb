@@ -18,10 +18,10 @@
 with ADO.Sessions.Entities;
 with ADO.Queries;
 with ADO.Utils;
-with AWA.Services.Contexts;
+with AWA.Helpers.Requests;
 package body AWA.Comments.Beans is
 
-   package ASC renames AWA.Services.Contexts;
+   use Ada.Strings.Unbounded;
 
    --  ------------------------------
    --  Get the value identified by the name.
@@ -85,8 +85,8 @@ package body AWA.Comments.Beans is
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       pragma Unreferenced (Outcome);
    begin
-      Bean.Module.Create_Comment (Permission  => Ada.Strings.Unbounded.To_String (Bean.Permission),
-                                  Entity_Type => Ada.Strings.Unbounded.To_String (Bean.Entity_Type),
+      Bean.Module.Create_Comment (Permission  => To_String (Bean.Permission),
+                                  Entity_Type => To_String (Bean.Entity_Type),
                                   Comment     => Bean);
    end Create;
 
@@ -97,6 +97,23 @@ package body AWA.Comments.Beans is
    begin
       null;
    end Save;
+
+   --  ------------------------------
+   --  Publish or not the comment.
+   --  ------------------------------
+   overriding
+   procedure Publish (Bean    : in out Comment_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
+
+      Id     : constant ADO.Identifier := Helpers.Requests.Get_Parameter ("id");
+      Value  : constant Util.Beans.Objects.Object := Helpers.Requests.Get_Parameter ("status");
+   begin
+      Bean.Module.Publish_Comment (Permission  => To_String (Bean.Permission),
+                                   Id          => Id,
+                                   Status      => Models.Status_Type_Objects.To_Value (Value),
+                                   Comment     => Bean);
+   end Publish;
 
    --  ------------------------------
    --  Delete the comment.
