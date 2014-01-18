@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions -- Permissions module
---  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -78,12 +78,13 @@ package body AWA.Permissions is
    end Check;
 
    type Controller_Config is record
-      Name    : Util.Beans.Objects.Object;
-      SQL     : Util.Beans.Objects.Object;
-      Entity  : ADO.Entity_Type := 0;
-      Count   : Natural := 0;
-      Manager : Entity_Policy_Access;
-      Session : ADO.Sessions.Session;
+      Name     : Util.Beans.Objects.Object;
+      SQL      : Util.Beans.Objects.Object;
+      Entity   : ADO.Entity_Type := 0;
+      Entities : Entity_Type_Array := (others => ADO.NO_ENTITY_TYPE);
+      Count    : Natural := 0;
+      Manager  : Entity_Policy_Access;
+      Session  : ADO.Sessions.Session;
    end record;
 
    type Config_Fields is (FIELD_NAME, FIELD_ENTITY_TYPE, FIELD_ENTITY_PERMISSION, FIELD_SQL);
@@ -116,7 +117,12 @@ package body AWA.Permissions is
             declare
                Name : constant String := Util.Beans.Objects.To_String (Value);
             begin
-               Into.Entity := ADO.Sessions.Entities.Find_Entity_Type (Into.Session, Name);
+               if Into.Count = MAX_ENTITY_TYPES then
+                  raise Util.Serialize.Mappers.Field_Error with "Too many entity types.";
+               end if;
+               Into.Count := Into.Count + 1;
+               Into.Entities (Into.Count)
+                 := ADO.Sessions.Entities.Find_Entity_Type (Into.Session, Name);
 
             exception
                when ADO.Schemas.Entities.No_Entity_Type =>
@@ -127,20 +133,20 @@ package body AWA.Permissions is
             declare
                Name : constant String := Util.Beans.Objects.To_String (Into.Name);
             begin
-               if Into.Entity = 0 then
+               if Into.Count = 0 then
                   raise Util.Serialize.Mappers.Field_Error
                   with "Permission '" & Name & "' ignored: missing entity type";
                end if;
                declare
                   SQL  : constant String := Util.Beans.Objects.To_String (Into.SQL);
                   Perm : constant Entity_Controller_Access
-                    := new Entity_Controller '(Len    => SQL'Length,
-                                               SQL    => SQL,
-                                               Entity => Into.Entity);
+                    := new Entity_Controller '(Len      => SQL'Length,
+                                               SQL      => SQL,
+                                               Entities => Into.Entities);
                begin
                   Into.Manager.Add_Permission (Name, Perm.all'Access);
                   Into.Count := 0;
-                  Into.Entity := 0;
+                  Into.Entities := (others => ADO.NO_ENTITY_TYPE);
                end;
             end;
 
