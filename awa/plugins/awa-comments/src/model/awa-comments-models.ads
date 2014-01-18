@@ -248,6 +248,9 @@ package AWA.Comments.Models is
    procedure Save (Bean : in out Comment_Bean;
                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
+   procedure Publish (Bean : in out Comment_Bean;
+                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
 
 private
    COMMENT_NAME : aliased constant String := "awa_comment";

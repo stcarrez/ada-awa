@@ -610,11 +610,23 @@ package body AWA.Comments.Models is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Comment_Bean,
                                                       Method => Op_Save,
                                                       Name   => "save");
+   procedure Op_Publish (Bean    : in out Comment_Bean;
+                         Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Publish (Bean    : in out Comment_Bean;
+                         Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Comment_Bean'Class (Bean).Publish (Outcome);
+   end Op_Publish;
+   package Binding_Comment_Bean_4 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Comment_Bean,
+                                                      Method => Op_Publish,
+                                                      Name   => "publish");
 
    Binding_Comment_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
      := (1 => Binding_Comment_Bean_1.Proxy'Access,
          2 => Binding_Comment_Bean_2.Proxy'Access,
-         3 => Binding_Comment_Bean_3.Proxy'Access
+         3 => Binding_Comment_Bean_3.Proxy'Access,
+         4 => Binding_Comment_Bean_4.Proxy'Access
      );
 
    --  This bean provides some methods that can be used in a Method_Expression.
