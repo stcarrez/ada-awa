@@ -58,6 +58,14 @@ package AWA.Comments.Modules is
                              Permission  : in String;
                              Comment     : in out AWA.Comments.Models.Comment_Ref'Class);
 
+   --  Set the publication status of the comment represented by <tt>Comment</tt>
+   --  if the current user has the permission identified by <tt>Permission</tt>.
+   procedure Publish_Comment (Model       : in Comment_Module;
+                              Permission  : in String;
+                              Id          : in ADO.Identifier;
+                              Status      : in AWA.Comments.Models.Status_Type;
+                              Comment     : in out AWA.Comments.Models.Comment_Ref'Class);
+
    function Get_Comment_Module is
      new AWA.Modules.Get (Comment_Module, Comment_Module_Access, NAME);
 
