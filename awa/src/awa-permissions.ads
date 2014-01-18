@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions -- Permissions module
---  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -92,6 +92,12 @@ package AWA.Permissions is
    --  Exception raised by the <b>Check</b> procedure if the user does not have
    --  the permission.
    NO_PERMISSION : exception;
+
+   --  Maximum number of entity types that can be defined in the XML entity-permission.
+   --  Most permission need only one entity type.  Keep that number small.
+   MAX_ENTITY_TYPES : constant Positive := 5;
+
+   type Entity_Type_Array is array (1 .. MAX_ENTITY_TYPES) of ADO.Entity_Type;
 
    type Permission_Type is (READ, WRITE);
 
