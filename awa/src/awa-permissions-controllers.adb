@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions-controllers -- Permission controllers
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,7 @@ with ADO.Sessions;
 with ADO.Statements;
 
 with Util.Log.Loggers;
+with Util.Strings;
 
 with AWA.Applications;
 with AWA.Users.Principals;
@@ -45,6 +46,7 @@ package body AWA.Permissions.Controllers is
       use AWA.Permissions.Services;
       use AWA.Users.Principals;
       use type ADO.Identifier;
+      use type ADO.Entity_Type;
 
       Manager   : constant Permission_Manager_Access := Get_Permission_Manager (Context);
       User_Id   : constant ADO.Identifier := Get_User_Identifier (Context.Get_User_Principal);
@@ -96,9 +98,17 @@ package body AWA.Permissions.Controllers is
          Result  : Integer;
       begin
          --  Build the query
-         Query.Bind_Param (Name => "entity_type", Value => Handler.Entity);
          Query.Bind_Param (Name => "entity_id", Value => Entity_Id);
          Query.Bind_Param (Name => "user_id", Value => User_Id);
+         if Handler.Entities (2) /= ADO.NO_ENTITY_TYPE then
+            for I in Handler.Entities'Range loop
+               exit when Handler.Entities (I) = ADO.NO_ENTITY_TYPE;
+               Query.Bind_Param (Name  => "entity_type_" & Util.Strings.Image (I),
+                                 Value => Handler.Entities (I));
+            end loop;
+         else
+            Query.Bind_Param (Name => "entity_type", Value => Handler.Entities (1));
+         end if;
 
          --  Run the query.  We must get a single row result and the value must be > 0.
          Query.Execute;
