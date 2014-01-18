@@ -153,4 +153,30 @@ package body AWA.Comments.Modules is
       Ctx.Commit;
    end Delete_Comment;
 
+   --  ------------------------------
+   --  Set the publication status of the comment represented by <tt>Comment</tt>
+   --  if the current user has the permission identified by <tt>Permission</tt>.
+   --  ------------------------------
+   procedure Publish_Comment (Model       : in Comment_Module;
+                              Permission  : in String;
+                              Id          : in ADO.Identifier;
+                              Status      : in AWA.Comments.Models.Status_Type;
+                              Comment     : in out AWA.Comments.Models.Comment_Ref'Class) is
+      pragma Unreferenced (Model);
+
+      Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+   begin
+      Ctx.Start;
+
+      --  Check that the user has the permission to publish for the given comment.
+      AWA.Permissions.Check (Permission => Security.Permissions.Get_Permission_Index (Permission),
+                             Entity     => Id);
+
+      Comment.Load (DB, Id);
+      Comment.Set_Status (Status);
+      Comment.Save (DB);
+      Ctx.Commit;
+   end Publish_Comment;
+
 end AWA.Comments.Modules;
