@@ -1,9 +1,9 @@
 /**
  * blogs.css - Styles for blogs module
- * Copyright (C) 2011, 2012, 2013 Stephane Carrez
+ * Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-#blog-post-list, #blog-post-list-header {
+#blog-post-list, #blog-comment-list, #blog-post-list-header, #blog-comment-list-header {
     float: left;
     padding: 0 2% 0 2%;
     width: 96%;
@@ -137,6 +137,9 @@ div.post-status-POST_PUBLISHED {
 }
 div.post-status {
     background: none;
+}
+div.comment-status {
+    margin-left: 50px;
 }
 /*
  * Blog post
