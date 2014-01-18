@@ -48,7 +48,10 @@ package AWA.Comments.Modules.Tests is
    --  Test comment removal.
    procedure Test_Remove_Comment (T : in out Test);
 
-   --  Test comment publication.
+   --  Test comment update.
+   procedure Test_Update_Comment (T : in out Test);
+
+   --  Test comment publication through the publish operation bean.
    procedure Test_Publish_Comment (T : in out Test);
 
 end AWA.Comments.Modules.Tests;
