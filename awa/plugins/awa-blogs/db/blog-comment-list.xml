@@ -20,7 +20,7 @@
         <property type='Date' name="date">
             <comment>the comment date.</comment>
         </property>
-        <property type='Integer' name="status">
+        <property type='AWA.Comments.Models.Status_Type' name="status">
             <comment>the comment status.</comment>
         </property>
     </class>
