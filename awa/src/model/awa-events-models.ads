@@ -292,11 +292,11 @@ package AWA.Events.Models is
 
    --  Set the message status
    procedure Set_Status (Object : in out Message_Ref;
-                         Value  : in Message_Status_Type);
+                         Value  : in AWA.Events.Models.Message_Status_Type);
 
    --  Get the message status
    function Get_Status (Object : in Message_Ref)
-                 return Message_Status_Type;
+                 return AWA.Events.Models.Message_Status_Type;
 
    --  Set the message processing date
    procedure Set_Processing_Date (Object : in out Message_Ref;
@@ -601,7 +601,7 @@ private
        Parameters : Ada.Strings.Unbounded.Unbounded_String;
        Server_Id : Integer;
        Task_Id : Integer;
-       Status : Message_Status_Type;
+       Status : AWA.Events.Models.Message_Status_Type;
        Processing_Date : ADO.Nullable_Time;
        Version : Integer;
        Entity_Id : ADO.Identifier;
