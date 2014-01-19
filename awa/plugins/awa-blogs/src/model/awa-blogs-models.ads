@@ -34,6 +34,7 @@ with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
 with Util.Beans.Objects.Enums;
 with Util.Beans.Basic.Lists;
+with AWA.Comments.Models;
 with AWA.Users.Models;
 with AWA.Workspaces.Models;
 with Util.Beans.Methods;
@@ -246,11 +247,11 @@ package AWA.Blogs.Models is
 
    --  Set the post status
    procedure Set_Status (Object : in out Post_Ref;
-                         Value  : in Post_Status_Type);
+                         Value  : in AWA.Blogs.Models.Post_Status_Type);
 
    --  Get the post status
    function Get_Status (Object : in Post_Ref)
-                 return Post_Status_Type;
+                 return AWA.Blogs.Models.Post_Status_Type;
 
    --
    procedure Set_Author (Object : in out Post_Ref;
@@ -336,7 +337,7 @@ package AWA.Blogs.Models is
       Date : Ada.Calendar.Time;
 
       --  the post status.
-      Status : Post_Status_Type;
+      Status : AWA.Blogs.Models.Post_Status_Type;
 
       --  the user name.
       Username : Ada.Strings.Unbounded.Unbounded_String;
@@ -442,7 +443,7 @@ package AWA.Blogs.Models is
       Date : Ada.Calendar.Time;
 
       --  the comment status.
-      Status : Integer;
+      Status : AWA.Comments.Models.Status_Type;
 
    end record;
 
@@ -689,7 +690,7 @@ private
        Uri : Ada.Strings.Unbounded.Unbounded_String;
        Version : Integer;
        Publish_Date : ADO.Nullable_Time;
-       Status : Post_Status_Type;
+       Status : AWA.Blogs.Models.Post_Status_Type;
        Author : AWA.Users.Models.User_Ref;
        Blog : AWA.Blogs.Models.Blog_Ref;
    end record;
@@ -758,7 +759,7 @@ private
 
    package File_4 is
       new ADO.Queries.Loaders.File (Path => "blog-comment-list.xml",
-                                    Sha1 => "03A0B42E536FD5FCD5CF09A3B59788D7B8C6439D");
+                                    Sha1 => "44E136D659FBA9859F2F077995D82161C743CAF3");
 
    package Def_Commentinfo_Comment_List is
       new ADO.Queries.Loaders.Query (Name => "comment-list",

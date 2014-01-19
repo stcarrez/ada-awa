@@ -550,7 +550,7 @@ package body AWA.Blogs.Models is
       Impl.Create_Date := ADO.DEFAULT_TIME;
       Impl.Version := 0;
       Impl.Publish_Date.Is_Null := True;
-      Impl.Status := Post_Status_Type'First;
+      Impl.Status := AWA.Blogs.Models.Post_Status_Type'First;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -709,7 +709,7 @@ package body AWA.Blogs.Models is
 
 
    procedure Set_Status (Object : in out Post_Ref;
-                         Value  : in Post_Status_Type) is
+                         Value  : in AWA.Blogs.Models.Post_Status_Type) is
       procedure Set_Field_Enum is
          new ADO.Objects.Set_Field_Operation (Post_Status_Type);
       Impl : Post_Access;
@@ -719,7 +719,7 @@ package body AWA.Blogs.Models is
    end Set_Status;
 
    function Get_Status (Object : in Post_Ref)
-                  return Post_Status_Type is
+                  return AWA.Blogs.Models.Post_Status_Type is
       Impl : constant Post_Access
          := Post_Impl (Object.Get_Load_Object.all)'Access;
    begin
@@ -1102,7 +1102,7 @@ package body AWA.Blogs.Models is
          return Util.Beans.Objects.Time.To_Object (From.Date);
       end if;
       if Name = "status" then
-         return Post_Status_Type_Objects.To_Object (From.Status);
+         return AWA.Blogs.Models.Post_Status_Type_Objects.To_Object (From.Status);
       end if;
       if Name = "username" then
          return Util.Beans.Objects.To_Object (From.Username);
@@ -1139,7 +1139,7 @@ package body AWA.Blogs.Models is
          Into.Title := Stmt.Get_Unbounded_String (1);
          Into.Uri := Stmt.Get_Unbounded_String (2);
          Into.Date := Stmt.Get_Time (3);
-         Into.Status := Post_Status_Type'Val (Stmt.Get_Integer (4));
+         Into.Status := AWA.Blogs.Models.Post_Status_Type'Val (Stmt.Get_Integer (4));
          Into.Username := Stmt.Get_Unbounded_String (5);
          Into.Comment_Count := Stmt.Get_Natural (6);
       end Read;
@@ -1246,7 +1246,7 @@ package body AWA.Blogs.Models is
          return Util.Beans.Objects.Time.To_Object (From.Date);
       end if;
       if Name = "status" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Status));
+         return AWA.Comments.Models.Status_Type_Objects.To_Object (From.Status);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -1279,7 +1279,7 @@ package body AWA.Blogs.Models is
          Into.Author := Stmt.Get_Unbounded_String (3);
          Into.Email := Stmt.Get_Unbounded_String (4);
          Into.Date := Stmt.Get_Time (5);
-         Into.Status := Stmt.Get_Integer (6);
+         Into.Status := AWA.Comments.Models.Status_Type'Val (Stmt.Get_Integer (6));
       end Read;
    begin
       Stmt.Execute;
