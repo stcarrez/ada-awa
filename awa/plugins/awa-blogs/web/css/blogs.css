@@ -123,23 +123,36 @@ div.blog-info div.blog-date {
     font-size: 0.7em;
 }
 
-div.comment-status, div.comment-status-0, div.comment-status-1, div.comment-status-2,
+div.comment-status,
 div.post-status, div.post-status-POST_DRAFT, div.post-status-POST_PUBLISHED, div.post-status-POST_SCHEDULED {
-    width: 16px;
-    height: 16px;
+    width: 26px;
+    height: 26px;
     float: left;
     margin-left: 24px;
-    background: url(../images/blogs/check-wrn.png) no-repeat;
+    margin-right: 2px;
+    background: url(../images/blogs/icon-check-box-orange.png) no-repeat;
 }
-div.comment-status-0,
+div.status-COMMENT_PUBLISHED div.comment-status,
 div.post-status-POST_PUBLISHED {
-    background: url(../images/blogs/check-on.png) no-repeat;
+    background: url(../images/blogs/icon-check-box-green.png) no-repeat;
 }
 div.post-status {
     background: none;
 }
 div.comment-status {
     margin-left: 50px;
+}
+div.status-COMMENT_SPAM div.comment-status, div.status-COMMENT_ARCHIVED div.comment-status {
+    background: url(../images/blogs/icon-spam-red.png) no-repeat;
+}
+div.status-COMMENT_PUBLISHED {
+    color: #111;
+}
+div.comment-status-4 {
+    // opacity: 0.4;
+}
+a.spam-icon {
+    background: url(../images/blogs/icon-spam-grey.png) no-repeat;
 }
 /*
  * Blog post
