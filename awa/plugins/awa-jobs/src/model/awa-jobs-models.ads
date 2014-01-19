@@ -65,11 +65,11 @@ package AWA.Jobs.Models is
 
    --  Set the job status
    procedure Set_Status (Object : in out Job_Ref;
-                         Value  : in Job_Status_Type);
+                         Value  : in AWA.Jobs.Models.Job_Status_Type);
 
    --  Get the job status
    function Get_Status (Object : in Job_Ref)
-                 return Job_Status_Type;
+                 return AWA.Jobs.Models.Job_Status_Type;
 
    --  Set the job name
    procedure Set_Name (Object : in out Job_Ref;
@@ -271,7 +271,7 @@ private
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
                                      Of_Class => JOB_DEF'Access)
    with record
-       Status : Job_Status_Type;
+       Status : AWA.Jobs.Models.Job_Status_Type;
        Name : Ada.Strings.Unbounded.Unbounded_String;
        Start_Date : ADO.Nullable_Time;
        Create_Date : Ada.Calendar.Time;

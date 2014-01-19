@@ -62,7 +62,7 @@ package body AWA.Jobs.Models is
       Impl : Job_Access;
    begin
       Impl := new Job_Impl;
-      Impl.Status := Job_Status_Type'First;
+      Impl.Status := AWA.Jobs.Models.Job_Status_Type'First;
       Impl.Start_Date.Is_Null := True;
       Impl.Create_Date := ADO.DEFAULT_TIME;
       Impl.Finish_Date.Is_Null := True;
@@ -94,7 +94,7 @@ package body AWA.Jobs.Models is
 
 
    procedure Set_Status (Object : in out Job_Ref;
-                         Value  : in Job_Status_Type) is
+                         Value  : in AWA.Jobs.Models.Job_Status_Type) is
       procedure Set_Field_Enum is
          new ADO.Objects.Set_Field_Operation (Job_Status_Type);
       Impl : Job_Access;
@@ -104,7 +104,7 @@ package body AWA.Jobs.Models is
    end Set_Status;
 
    function Get_Status (Object : in Job_Ref)
-                  return Job_Status_Type is
+                  return AWA.Jobs.Models.Job_Status_Type is
       Impl : constant Job_Access
          := Job_Impl (Object.Get_Load_Object.all)'Access;
    begin
