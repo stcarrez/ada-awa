@@ -749,7 +749,7 @@ package body AWA.Events.Models is
       Impl.Count := 0;
       Impl.Server_Id := 0;
       Impl.Task_Id := 0;
-      Impl.Status := Message_Status_Type'First;
+      Impl.Status := AWA.Events.Models.Message_Status_Type'First;
       Impl.Processing_Date.Is_Null := True;
       Impl.Version := 0;
       Impl.Entity_Id := ADO.NO_IDENTIFIER;
@@ -895,7 +895,7 @@ package body AWA.Events.Models is
 
 
    procedure Set_Status (Object : in out Message_Ref;
-                         Value  : in Message_Status_Type) is
+                         Value  : in AWA.Events.Models.Message_Status_Type) is
       procedure Set_Field_Enum is
          new ADO.Objects.Set_Field_Operation (Message_Status_Type);
       Impl : Message_Access;
@@ -905,7 +905,7 @@ package body AWA.Events.Models is
    end Set_Status;
 
    function Get_Status (Object : in Message_Ref)
-                  return Message_Status_Type is
+                  return AWA.Events.Models.Message_Status_Type is
       Impl : constant Message_Access
          := Message_Impl (Object.Get_Load_Object.all)'Access;
    begin
