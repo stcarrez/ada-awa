@@ -113,11 +113,11 @@ package AWA.Comments.Models is
 
    --  Set the comment status to decide whether the comment is visible (published) or not.
    procedure Set_Status (Object : in out Comment_Ref;
-                         Value  : in Status_Type);
+                         Value  : in AWA.Comments.Models.Status_Type);
 
    --  Get the comment status to decide whether the comment is visible (published) or not.
    function Get_Status (Object : in Comment_Ref)
-                 return Status_Type;
+                 return AWA.Comments.Models.Status_Type;
 
    --
    procedure Set_Author (Object : in out Comment_Ref;
@@ -292,7 +292,7 @@ private
        Entity_Id : ADO.Identifier;
        Version : Integer;
        Entity_Type : ADO.Entity_Type;
-       Status : Status_Type;
+       Status : AWA.Comments.Models.Status_Type;
        Author : AWA.Users.Models.User_Ref;
    end record;
 

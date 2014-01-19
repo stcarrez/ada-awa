@@ -67,7 +67,7 @@ package body AWA.Comments.Models is
       Impl.Entity_Id := ADO.NO_IDENTIFIER;
       Impl.Version := 0;
       Impl.Entity_Type := 0;
-      Impl.Status := Status_Type'First;
+      Impl.Status := AWA.Comments.Models.Status_Type'First;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -183,7 +183,7 @@ package body AWA.Comments.Models is
 
 
    procedure Set_Status (Object : in out Comment_Ref;
-                         Value  : in Status_Type) is
+                         Value  : in AWA.Comments.Models.Status_Type) is
       procedure Set_Field_Enum is
          new ADO.Objects.Set_Field_Operation (Status_Type);
       Impl : Comment_Access;
@@ -193,7 +193,7 @@ package body AWA.Comments.Models is
    end Set_Status;
 
    function Get_Status (Object : in Comment_Ref)
-                  return Status_Type is
+                  return AWA.Comments.Models.Status_Type is
       Impl : constant Comment_Access
          := Comment_Impl (Object.Get_Load_Object.all)'Access;
    begin
