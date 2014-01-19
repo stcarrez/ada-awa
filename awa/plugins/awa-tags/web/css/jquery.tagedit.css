@@ -46,3 +46,4 @@ ul.tag-cloud { list-style-type: none; }
 ul.tag-cloud li { display: inline-block; }
 ul.tag-cloud a { padding-right: 4px; text-decoration: none; }
 ul.tag-cloud a:hover { text-decoration: underline; }
+.tagedit-list li.tagedit-listelement a { color: #47C; font-weight: bold; }
