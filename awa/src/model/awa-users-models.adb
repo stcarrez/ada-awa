@@ -62,7 +62,7 @@ package body AWA.Users.Models is
       Impl : Email_Access;
    begin
       Impl := new Email_Impl;
-      Impl.Status := MailDeliveryStatus'First;
+      Impl.Status := AWA.Users.Models.MailDeliveryStatus'First;
       Impl.Last_Error_Date := ADO.DEFAULT_TIME;
       Impl.Version := 0;
       Impl.User_Id := ADO.NO_IDENTIFIER;
@@ -104,7 +104,7 @@ package body AWA.Users.Models is
 
 
    procedure Set_Status (Object : in out Email_Ref;
-                         Value  : in MailDeliveryStatus) is
+                         Value  : in AWA.Users.Models.MailDeliveryStatus) is
       procedure Set_Field_Enum is
          new ADO.Objects.Set_Field_Operation (MailDeliveryStatus);
       Impl : Email_Access;
@@ -114,7 +114,7 @@ package body AWA.Users.Models is
    end Set_Status;
 
    function Get_Status (Object : in Email_Ref)
-                  return MailDeliveryStatus is
+                  return AWA.Users.Models.MailDeliveryStatus is
       Impl : constant Email_Access
          := Email_Impl (Object.Get_Load_Object.all)'Access;
    begin
@@ -1451,7 +1451,7 @@ package body AWA.Users.Models is
       Impl := new Session_Impl;
       Impl.Start_Date := ADO.DEFAULT_TIME;
       Impl.End_Date.Is_Null := True;
-      Impl.Stype := Session_Type'First;
+      Impl.Stype := AWA.Users.Models.Session_Type'First;
       Impl.Version := 0;
       Impl.Server_Id := 0;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
@@ -1526,7 +1526,7 @@ package body AWA.Users.Models is
 
 
    procedure Set_Stype (Object : in out Session_Ref;
-                        Value  : in Session_Type) is
+                        Value  : in AWA.Users.Models.Session_Type) is
       procedure Set_Field_Enum is
          new ADO.Objects.Set_Field_Operation (Session_Type);
       Impl : Session_Access;
@@ -1536,7 +1536,7 @@ package body AWA.Users.Models is
    end Set_Stype;
 
    function Get_Stype (Object : in Session_Ref)
-                  return Session_Type is
+                  return AWA.Users.Models.Session_Type is
       Impl : constant Session_Access
          := Session_Impl (Object.Get_Load_Object.all)'Access;
    begin
