@@ -805,7 +805,7 @@ package body AWA.Storages.Models is
       Impl : Storage_Access;
    begin
       Impl := new Storage_Impl;
-      Impl.Storage := Storage_Type'First;
+      Impl.Storage := AWA.Storages.Models.Storage_Type'First;
       Impl.Create_Date := ADO.DEFAULT_TIME;
       Impl.File_Size := 0;
       Impl.Version := 0;
@@ -817,7 +817,7 @@ package body AWA.Storages.Models is
    -- ----------------------------------------
 
    procedure Set_Storage (Object : in out Storage_Ref;
-                          Value  : in Storage_Type) is
+                          Value  : in AWA.Storages.Models.Storage_Type) is
       procedure Set_Field_Enum is
          new ADO.Objects.Set_Field_Operation (Storage_Type);
       Impl : Storage_Access;
@@ -827,7 +827,7 @@ package body AWA.Storages.Models is
    end Set_Storage;
 
    function Get_Storage (Object : in Storage_Ref)
-                  return Storage_Type is
+                  return AWA.Storages.Models.Storage_Type is
       Impl : constant Storage_Access
          := Storage_Impl (Object.Get_Load_Object.all)'Access;
    begin
@@ -1979,7 +1979,7 @@ package body AWA.Storages.Models is
          return Util.Beans.Objects.To_Object (From.Uri);
       end if;
       if Name = "storage" then
-         return Storage_Type_Objects.To_Object (From.Storage);
+         return AWA.Storages.Models.Storage_Type_Objects.To_Object (From.Storage);
       end if;
       if Name = "mime_type" then
          return Util.Beans.Objects.To_Object (From.Mime_Type);
@@ -2019,7 +2019,7 @@ package body AWA.Storages.Models is
          Into.Name := Stmt.Get_Unbounded_String (1);
          Into.Create_Date := Stmt.Get_Time (2);
          Into.Uri := Stmt.Get_Unbounded_String (3);
-         Into.Storage := Storage_Type'Val (Stmt.Get_Integer (4));
+         Into.Storage := AWA.Storages.Models.Storage_Type'Val (Stmt.Get_Integer (4));
          Into.Mime_Type := Stmt.Get_Unbounded_String (5);
          Into.File_Size := Stmt.Get_Integer (6);
          Into.User_Name := Stmt.Get_Unbounded_String (7);

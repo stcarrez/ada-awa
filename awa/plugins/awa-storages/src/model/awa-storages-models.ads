@@ -249,11 +249,11 @@ package AWA.Storages.Models is
 
    --  Set the storage type which defines where the content is stored
    procedure Set_Storage (Object : in out Storage_Ref;
-                          Value  : in Storage_Type);
+                          Value  : in AWA.Storages.Models.Storage_Type);
 
    --  Get the storage type which defines where the content is stored
    function Get_Storage (Object : in Storage_Ref)
-                 return Storage_Type;
+                 return AWA.Storages.Models.Storage_Type;
 
    --  Set the storage creation date
    procedure Set_Create_Date (Object : in out Storage_Ref;
@@ -598,7 +598,7 @@ package AWA.Storages.Models is
       Uri : Ada.Strings.Unbounded.Unbounded_String;
 
       --  the file storage URI.
-      Storage : Storage_Type;
+      Storage : AWA.Storages.Models.Storage_Type;
 
       --  the file mime type.
       Mime_Type : Ada.Strings.Unbounded.Unbounded_String;
@@ -811,7 +811,7 @@ private
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
                                      Of_Class => STORAGE_DEF'Access)
    with record
-       Storage : Storage_Type;
+       Storage : AWA.Storages.Models.Storage_Type;
        Create_Date : Ada.Calendar.Time;
        Name : Ada.Strings.Unbounded.Unbounded_String;
        File_Size : Integer;
