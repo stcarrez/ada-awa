@@ -86,11 +86,11 @@ package AWA.Users.Models is
 
    --  Set the last mail delivery status (if known).
    procedure Set_Status (Object : in out Email_Ref;
-                         Value  : in MailDeliveryStatus);
+                         Value  : in AWA.Users.Models.MailDeliveryStatus);
 
    --  Get the last mail delivery status (if known).
    function Get_Status (Object : in Email_Ref)
-                 return MailDeliveryStatus;
+                 return AWA.Users.Models.MailDeliveryStatus;
 
    --  Set the date when the last email error was detected.
    procedure Set_Last_Error_Date (Object : in out Email_Ref;
@@ -450,11 +450,11 @@ package AWA.Users.Models is
 
    --
    procedure Set_Stype (Object : in out Session_Ref;
-                        Value  : in Session_Type);
+                        Value  : in AWA.Users.Models.Session_Type);
 
    --
    function Get_Stype (Object : in Session_Ref)
-                 return Session_Type;
+                 return AWA.Users.Models.Session_Type;
    --
    function Get_Version (Object : in Session_Ref)
                  return Integer;
@@ -573,7 +573,7 @@ private
                                      Of_Class => EMAIL_DEF'Access)
    with record
        Email : Ada.Strings.Unbounded.Unbounded_String;
-       Status : MailDeliveryStatus;
+       Status : AWA.Users.Models.MailDeliveryStatus;
        Last_Error_Date : Ada.Calendar.Time;
        Version : Integer;
        User_Id : ADO.Identifier;
@@ -791,7 +791,7 @@ private
        Start_Date : Ada.Calendar.Time;
        End_Date : ADO.Nullable_Time;
        Ip_Address : Ada.Strings.Unbounded.Unbounded_String;
-       Stype : Session_Type;
+       Stype : AWA.Users.Models.Session_Type;
        Version : Integer;
        Server_Id : Integer;
        Auth : AWA.Users.Models.Session_Ref;
