@@ -28,8 +28,9 @@
         </c:when>
         <c:otherwise>
            <h:list var="cmt" value="#{adminBlog.comments}">
-                <div class='post-info ui-list-item' id="p_#{cmt.id}">
-                    <div class='comment-status comment-status-#{cmt.status}' title="#{cmt.status eq 'POST_PUBLISHED' ? blogMsg.blog_post_published_title : blogMsg.blog_post_pending_title}"></div>
+                <div class='post-info ui-list-item status-#{cmt.status}' id="p_#{cmt.id}">
+                    <div class='comment-status'>
+                    </div>
                     <div class='comment-title'>
                         <a href="edit.html?blog_id=#{adminBlog.id}&amp;post_id=#{cmt.post_id}">#{cmt.title}</a>
                     </div>
