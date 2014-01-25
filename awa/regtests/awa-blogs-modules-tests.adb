@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-tests -- Unit tests for blogs module
---  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -88,6 +88,7 @@ package body AWA.Blogs.Modules.Tests is
 
          Manager.Update_Post (Post_Id => Post_Id,
                               Title   => "New blog post title",
+                              URI     => "testing-blog-title",
                               Text    => "The new post content",
                               Status  => AWA.Blogs.Models.POST_DRAFT);
 
@@ -101,6 +102,7 @@ package body AWA.Blogs.Modules.Tests is
             Manager.Update_Post (Post_Id => Post_Id,
                                  Title   => "Something",
                                  Text    => "Content",
+                                 URI     => "testing-blog-title",
                                  Status  => AWA.Blogs.Models.POST_DRAFT);
             T.Assert (False, "Exception Not_Found was not raised");
          exception
