@@ -252,6 +252,8 @@ package body AWA.Blogs.Beans is
          From.Set_Uri (Util.Beans.Objects.To_Unbounded_String (Value));
       elsif Name = POST_STATUS_ATTR then
          From.Set_Status (AWA.Blogs.Models.Post_Status_Type_Objects.To_Value (Value));
+      elsif Name = POST_ALLOW_COMMENTS_ATTR then
+         From.Set_Allow_Comments (Util.Beans.Objects.To_Boolean (Value));
       end if;
    end Set_Value;
 
