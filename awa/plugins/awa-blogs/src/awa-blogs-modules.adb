@@ -135,6 +135,7 @@ package body AWA.Blogs.Modules is
                           Title   : in String;
                           URI     : in String;
                           Text    : in String;
+                          Comment : in Boolean;
                           Status  : in AWA.Blogs.Models.Post_Status_Type;
                           Result  : out ADO.Identifier) is
       pragma Unreferenced (Model);
@@ -171,6 +172,7 @@ package body AWA.Blogs.Modules is
       Post.Set_Author (Ctx.Get_User);
       Post.Set_Status (Status);
       Post.Set_Blog (Blog);
+      Post.Set_Allow_Comments (Comment);
       Post.Save (DB);
       Ctx.Commit;
 
@@ -187,6 +189,7 @@ package body AWA.Blogs.Modules is
                           Title   : in String;
                           URI     : in String;
                           Text    : in String;
+                          Comment : in Boolean;
                           Status  : in AWA.Blogs.Models.Post_Status_Type) is
       pragma Unreferenced (Model);
 
@@ -210,6 +213,7 @@ package body AWA.Blogs.Modules is
       Post.Set_Text (Text);
       Post.Set_Uri (URI);
       Post.Set_Status (Status);
+      Post.Set_Allow_Comments (Comment);
       Post.Save (DB);
       Ctx.Commit;
    end Update_Post;
