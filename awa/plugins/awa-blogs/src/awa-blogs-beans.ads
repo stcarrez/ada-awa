@@ -37,6 +37,7 @@ package AWA.Blogs.Beans is
    POST_STATUS_ATTR  : constant String := "status";
    POST_USERNAME_ATTR : constant String := "username";
    POST_TAG_ATTR      : constant String := "tags";
+   POST_ALLOW_COMMENTS_ATTR : constant String := "allow_comments";
 
    --  ------------------------------
    --  Blog Bean
