@@ -36,6 +36,8 @@ CREATE TABLE awa_post (
   /* the post status */
   `status` TINYINT NOT NULL,
   /*  */
+  `allow_comments` TINYINT NOT NULL,
+  /*  */
   `author_id` BIGINT NOT NULL,
   /*  */
   `blog_id` BIGINT NOT NULL,
