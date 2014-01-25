@@ -185,6 +185,7 @@ package body AWA.Blogs.Modules is
    procedure Update_Post (Model   : in Blog_Module;
                           Post_Id : in ADO.Identifier;
                           Title   : in String;
+                          URI     : in String;
                           Text    : in String;
                           Status  : in AWA.Blogs.Models.Post_Status_Type) is
       pragma Unreferenced (Model);
@@ -207,6 +208,7 @@ package body AWA.Blogs.Modules is
 
       Post.Set_Title (Title);
       Post.Set_Text (Text);
+      Post.Set_Uri (URI);
       Post.Set_Status (Status);
       Post.Save (DB);
       Ctx.Commit;
