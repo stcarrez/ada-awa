@@ -254,6 +254,14 @@ package AWA.Blogs.Models is
                  return AWA.Blogs.Models.Post_Status_Type;
 
    --
+   procedure Set_Allow_Comments (Object : in out Post_Ref;
+                                 Value  : in Boolean);
+
+   --
+   function Get_Allow_Comments (Object : in Post_Ref)
+                 return Boolean;
+
+   --
    procedure Set_Author (Object : in out Post_Ref;
                          Value  : in AWA.Users.Models.User_Ref'Class);
 
@@ -655,11 +663,12 @@ private
    COL_5_2_NAME : aliased constant String := "version";
    COL_6_2_NAME : aliased constant String := "publish_date";
    COL_7_2_NAME : aliased constant String := "status";
-   COL_8_2_NAME : aliased constant String := "author_id";
-   COL_9_2_NAME : aliased constant String := "blog_id";
+   COL_8_2_NAME : aliased constant String := "allow_comments";
+   COL_9_2_NAME : aliased constant String := "author_id";
+   COL_10_2_NAME : aliased constant String := "blog_id";
 
    POST_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 10,
+     (Count => 11,
       Table => POST_NAME'Access,
       Members => (
          1 => COL_0_2_NAME'Access,
@@ -671,7 +680,8 @@ private
          7 => COL_6_2_NAME'Access,
          8 => COL_7_2_NAME'Access,
          9 => COL_8_2_NAME'Access,
-         10 => COL_9_2_NAME'Access
+         10 => COL_9_2_NAME'Access,
+         11 => COL_10_2_NAME'Access
 )
      );
    POST_TABLE : constant ADO.Schemas.Class_Mapping_Access
@@ -691,6 +701,7 @@ private
        Version : Integer;
        Publish_Date : ADO.Nullable_Time;
        Status : AWA.Blogs.Models.Post_Status_Type;
+       Allow_Comments : Boolean;
        Author : AWA.Users.Models.User_Ref;
        Blog : AWA.Blogs.Models.Blog_Ref;
    end record;

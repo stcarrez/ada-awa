@@ -551,6 +551,7 @@ package body AWA.Blogs.Models is
       Impl.Version := 0;
       Impl.Publish_Date.Is_Null := True;
       Impl.Status := AWA.Blogs.Models.Post_Status_Type'First;
+      Impl.Allow_Comments := False;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -727,12 +728,30 @@ package body AWA.Blogs.Models is
    end Get_Status;
 
 
+   procedure Set_Allow_Comments (Object : in out Post_Ref;
+                                 Value  : in Boolean) is
+      Impl : Post_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Boolean (Impl.all, 9, Impl.Allow_Comments, Value);
+      ADO.Objects.Set_Field_Boolean (Impl.all, 9, Impl.Allow_Comments, Value);
+   end Set_Allow_Comments;
+
+   function Get_Allow_Comments (Object : in Post_Ref)
+                  return Boolean is
+      Impl : constant Post_Access
+         := Post_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Allow_Comments;
+   end Get_Allow_Comments;
+
+
    procedure Set_Author (Object : in out Post_Ref;
                          Value  : in AWA.Users.Models.User_Ref'Class) is
       Impl : Post_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 9, Impl.Author, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 10, Impl.Author, Value);
    end Set_Author;
 
    function Get_Author (Object : in Post_Ref)
@@ -749,7 +768,7 @@ package body AWA.Blogs.Models is
       Impl : Post_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 10, Impl.Blog, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 11, Impl.Blog, Value);
    end Set_Blog;
 
    function Get_Blog (Object : in Post_Ref)
@@ -781,6 +800,7 @@ package body AWA.Blogs.Models is
             Copy.Version := Impl.Version;
             Copy.Publish_Date := Impl.Publish_Date;
             Copy.Status := Impl.Status;
+            Copy.Allow_Comments := Impl.Allow_Comments;
             Copy.Author := Impl.Author;
             Copy.Blog := Impl.Blog;
          end;
@@ -948,14 +968,19 @@ package body AWA.Blogs.Models is
          Object.Clear_Modified (8);
       end if;
       if Object.Is_Modified (9) then
-         Stmt.Save_Field (Name  => COL_8_2_NAME, --  author_id
-                          Value => Object.Author);
+         Stmt.Save_Field (Name  => COL_8_2_NAME, --  allow_comments
+                          Value => Object.Allow_Comments);
          Object.Clear_Modified (9);
       end if;
       if Object.Is_Modified (10) then
-         Stmt.Save_Field (Name  => COL_9_2_NAME, --  blog_id
-                          Value => Object.Blog);
+         Stmt.Save_Field (Name  => COL_9_2_NAME, --  author_id
+                          Value => Object.Author);
          Object.Clear_Modified (10);
+      end if;
+      if Object.Is_Modified (11) then
+         Stmt.Save_Field (Name  => COL_10_2_NAME, --  blog_id
+                          Value => Object.Blog);
+         Object.Clear_Modified (11);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -1003,9 +1028,11 @@ package body AWA.Blogs.Models is
                         Value => Object.Publish_Date);
       Query.Save_Field (Name  => COL_7_2_NAME, --  status
                         Value => Integer (Post_Status_Type'Pos (Object.Status)));
-      Query.Save_Field (Name  => COL_8_2_NAME, --  author_id
+      Query.Save_Field (Name  => COL_8_2_NAME, --  allow_comments
+                        Value => Object.Allow_Comments);
+      Query.Save_Field (Name  => COL_9_2_NAME, --  author_id
                         Value => Object.Author);
-      Query.Save_Field (Name  => COL_9_2_NAME, --  blog_id
+      Query.Save_Field (Name  => COL_10_2_NAME, --  blog_id
                         Value => Object.Blog);
       Query.Execute (Result);
       if Result /= 1 then
@@ -1051,6 +1078,8 @@ package body AWA.Blogs.Models is
          end if;
       elsif Name = "status" then
          return Post_Status_Type_Objects.To_Object (Impl.Status);
+      elsif Name = "allow_comments" then
+         return Util.Beans.Objects.To_Object (Impl.Allow_Comments);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -1071,11 +1100,13 @@ package body AWA.Blogs.Models is
       Object.Uri := Stmt.Get_Unbounded_String (4);
       Object.Publish_Date := Stmt.Get_Time (6);
       Object.Status := Post_Status_Type'Val (Stmt.Get_Integer (7));
-      if not Stmt.Is_Null (8) then
-         Object.Author.Set_Key_Value (Stmt.Get_Identifier (8), Session);
-      end if;
+      Object.Allow_Comments := Stmt.Get_Boolean (8);
+      Object.Allow_Comments := Stmt.Get_Boolean (8);
       if not Stmt.Is_Null (9) then
-         Object.Blog.Set_Key_Value (Stmt.Get_Identifier (9), Session);
+         Object.Author.Set_Key_Value (Stmt.Get_Identifier (9), Session);
+      end if;
+      if not Stmt.Is_Null (10) then
+         Object.Blog.Set_Key_Value (Stmt.Get_Identifier (10), Session);
       end if;
       Object.Version := Stmt.Get_Integer (5);
       ADO.Objects.Set_Created (Object);
