@@ -63,6 +63,7 @@ package AWA.Blogs.Modules is
                           Title   : in String;
                           URI     : in String;
                           Text    : in String;
+                          Comment : in Boolean;
                           Status  : in AWA.Blogs.Models.Post_Status_Type;
                           Result  : out ADO.Identifier);
 
@@ -72,6 +73,7 @@ package AWA.Blogs.Modules is
                           Title   : in String;
                           URI     : in String;
                           Text    : in String;
+                          Comment : in Boolean;
                           Status  : in AWA.Blogs.Models.Post_Status_Type);
 
    --  Delete the post identified by the given identifier.
