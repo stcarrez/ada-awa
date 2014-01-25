@@ -82,6 +82,7 @@ package body AWA.Blogs.Modules.Tests is
                               Title   => "Testing blog title",
                               URI     => "testing-blog-title",
                               Text    => "The blog content",
+                              Comment => False,
                               Status  => AWA.Blogs.Models.POST_DRAFT,
                               Result  => Post_Id);
          T.Assert (Post_Id > 0, "Invalid post identifier");
@@ -90,6 +91,7 @@ package body AWA.Blogs.Modules.Tests is
                               Title   => "New blog post title",
                               URI     => "testing-blog-title",
                               Text    => "The new post content",
+                              Comment => True,
                               Status  => AWA.Blogs.Models.POST_DRAFT);
 
          --  Keep the last post in the database.
@@ -103,6 +105,7 @@ package body AWA.Blogs.Modules.Tests is
                                  Title   => "Something",
                                  Text    => "Content",
                                  URI     => "testing-blog-title",
+                                 Comment => True,
                                  Status  => AWA.Blogs.Models.POST_DRAFT);
             T.Assert (False, "Exception Not_Found was not raised");
          exception
