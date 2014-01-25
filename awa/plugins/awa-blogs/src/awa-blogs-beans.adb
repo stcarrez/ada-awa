@@ -15,14 +15,20 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Ada.Calendar;
+with Ada.Characters.Handling;
+
+with Util.Dates.ISO8601;
 
 with AWA.Services.Contexts;
 with AWA.Helpers.Requests;
 with AWA.Helpers.Selectors;
 with AWA.Tags.Modules;
+with AWA.Comments.Beans;
 
 with ADO.Utils;
 with ADO.Queries;
+with ADO.SQL;
 with ADO.Sessions;
 with ADO.Sessions.Entities;
 
@@ -93,6 +99,32 @@ package body AWA.Blogs.Beans is
    end Create_Blog_Bean;
 
    --  ------------------------------
+   --  Build the URI from the post title and the post date.
+   --  ------------------------------
+   function Get_Predefined_Uri (Title : in String;
+                                Date  : in Ada.Calendar.Time) return String is
+      D      : constant String := Util.Dates.ISO8601.Image (Date);
+      Result : String (1 .. Title'Length + 11);
+   begin
+      Result (1 .. 4) := D (1 .. 4);
+      Result (5) := '/';
+      Result (6 .. 7) := D (6 .. 7);
+      Result (8) := '/';
+      Result (9 .. 10) := D (9 .. 10);
+      Result (11) := '/';
+      for I in Title'Range loop
+         if Ada.Characters.Handling.Is_Alphanumeric (Title (I))
+           or Title (I) = '-' or Title (I) = '_' or Title (I) = '$' or Title (I) = ','
+           or Title (I) = '.' or Title (I) = '+' then
+            Result (I + 11) := Title (I);
+         else
+            Result (I + 11) := '-';
+         end if;
+      end loop;
+      return Result;
+   end Get_Predefined_Uri;
+
+   --  ------------------------------
    --  Create or save the post.
    --  ------------------------------
    procedure Save (Bean    : in out Post_Bean;
@@ -104,13 +136,15 @@ package body AWA.Blogs.Beans is
       if not Bean.Is_Inserted then
          Bean.Module.Create_Post (Blog_Id => Bean.Blog_Id,
                                   Title   => Bean.Get_Title,
-                                  URI     => Bean.Get_Uri,
+                                  URI     => Get_Predefined_Uri (Bean.Get_Title,
+                                    Ada.Calendar.Clock),
                                   Text    => Bean.Get_Text,
                                   Status  => Bean.Get_Status,
                                   Result  => Result);
       else
          Bean.Module.Update_Post (Post_Id => Bean.Get_Id,
                                   Title   => Bean.Get_Title,
+                                  URI     => Bean.Get_Uri,
                                   Text    => Bean.Get_Text,
                                   Status  => Bean.Get_Status);
          Result := Bean.Get_Id;
@@ -128,12 +162,48 @@ package body AWA.Blogs.Beans is
       Bean.Module.Delete_Post (Post_Id => Bean.Get_Id);
    end Delete;
 
-   --  Load the post.
+   --  ------------------------------
+   --  Load the post from the URI.
+   --  ------------------------------
    overriding
-   procedure Load (Bean    : in out Post_Bean;
+   procedure Load (bean    : in out Post_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      use type AWA.Comments.Beans.Comment_Bean_Access;
+      use type AWA.Comments.Beans.Comment_List_Bean_Access;
+
+      Session      : ADO.Sessions.Session := Bean.Module.Get_Session;
+      Query        : ADO.SQL.Query;
+      Found        : Boolean;
+      Comment      : AWA.Comments.Beans.Comment_Bean_Access;
+      Comment_List : AWA.Comments.Beans.Comment_List_Bean_Access;
    begin
-      null;
+      Query.Bind_Param (1, String '(Bean.Get_Uri));
+      Query.Set_Filter ("o.uri = ?");
+      Bean.Find (Session, Query, Found);
+      if not Found then
+         Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
+         return;
+      end if;
+      Bean.Tags.Load_Tags (Session, Bean.Get_Id);
+
+      Comment := AWA.Comments.Beans.Get_Comment_Bean ("postNewComment");
+      if Comment /= null then
+         Comment.Set_Entity_Id (Bean.Get_Id);
+      end if;
+      Comment_List := AWA.Comments.Beans.Get_Comment_List_Bean ("postComments");
+      if Comment_List /= null then
+         Comment_List.Load_Comments (Bean.Get_Id);
+      end if;
+
+      --  SCz: 2012-05-19: workaround for ADO 0.3 limitation.  The lazy loading of
+      --  objects does not work yet.  Force loading the user here while the above
+      --  session is still open.
+      declare
+         A : constant String := String '(Bean.Get_Author.Get_Name);
+         pragma Unreferenced (A);
+      begin
+         null;
+      end;
    end Load;
 
    --  ------------------------------
