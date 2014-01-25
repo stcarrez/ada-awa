@@ -133,12 +133,15 @@ package body AWA.Blogs.Beans is
 
       Result  : ADO.Identifier;
    begin
+      if String '(Bean.Get_Uri) = "" then
+         Bean.Set_Uri (Get_Predefined_Uri (Bean.Get_Title, Ada.Calendar.Clock));
+      end if;
       if not Bean.Is_Inserted then
          Bean.Module.Create_Post (Blog_Id => Bean.Blog_Id,
                                   Title   => Bean.Get_Title,
-                                  URI     => Get_Predefined_Uri (Bean.Get_Title,
-                                    Ada.Calendar.Clock),
+                                  URI     => Bean.Get_Uri,
                                   Text    => Bean.Get_Text,
+                                  Comment => Bean.Get_Allow_Comments,
                                   Status  => Bean.Get_Status,
                                   Result  => Result);
       else
@@ -146,6 +149,7 @@ package body AWA.Blogs.Beans is
                                   Title   => Bean.Get_Title,
                                   URI     => Bean.Get_Uri,
                                   Text    => Bean.Get_Text,
+                                  Comment => Bean.Get_Allow_Comments,
                                   Status  => Bean.Get_Status);
          Result := Bean.Get_Id;
       end if;
