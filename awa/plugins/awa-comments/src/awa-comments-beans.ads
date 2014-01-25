@@ -24,6 +24,8 @@ with ADO;
 with ADO.Schemas;
 with ADO.Sessions;
 
+with ASF.Helpers.Beans;
+
 with AWA.Comments.Models;
 with AWA.Comments.Modules;
 
@@ -102,7 +104,13 @@ package AWA.Comments.Beans is
                                  return Util.Beans.Basic.Readonly_Bean_Access;
 
    type Comment_List_Bean is
-     new AWA.Comments.Models.Comment_Info_List_Bean and Util.Beans.Basic.Bean with private;
+     new AWA.Comments.Models.Comment_Info_List_Bean and Util.Beans.Basic.Bean with record
+      Module      : AWA.Comments.Modules.Comment_Module_Access;
+      Entity_Type : Ada.Strings.Unbounded.Unbounded_String;
+      Entity_Id   : ADO.Identifier;
+      Permission  : Ada.Strings.Unbounded.Unbounded_String;
+      Current     : Natural := 0;
+   end record;
 
    type Comment_List_Bean_Access is access all Comment_List_Bean'Class;
 
@@ -135,15 +143,12 @@ package AWA.Comments.Beans is
    function Create_Comment_List_Bean (Module : in AWA.Comments.Modules.Comment_Module_Access)
                                   return Util.Beans.Basic.Readonly_Bean_Access;
 
-private
+   function Get_Comment_Bean is
+     new ASF.Helpers.Beans.Get_Bean (Element_Type   => Comment_Bean,
+                                     Element_Access => Comment_Bean_Access);
 
-   type Comment_List_Bean is
-     new AWA.Comments.Models.Comment_Info_List_Bean and Util.Beans.Basic.Bean with record
-      Module      : AWA.Comments.Modules.Comment_Module_Access;
-      Entity_Type : Ada.Strings.Unbounded.Unbounded_String;
-      Entity_Id   : ADO.Identifier;
-      Permission  : Ada.Strings.Unbounded.Unbounded_String;
-      Current     : Natural := 0;
-   end record;
+   function Get_Comment_List_Bean is
+     new ASF.Helpers.Beans.Get_Bean (Element_Type   => Comment_List_Bean,
+                                     Element_Access => Comment_List_Bean_Access);
 
 end AWA.Comments.Beans;
