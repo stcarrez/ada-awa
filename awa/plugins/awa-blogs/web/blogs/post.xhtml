@@ -53,17 +53,19 @@
                                 <ui:param name="commentList" value="#{postComments}"/>
                             </ui:include>
                         </h:panelGroup>
-                        <h3>#{blogMsg.blog_add_comment}</h3>
-                        <c:choose>
-                            <c:when test="#{user.isLogged}">
-                                <ajax:include src="/blogs/forms/comment-add-form.html"/>
-                            </c:when>
-                            <c:otherwise>
-                                <h:outputFormat value="#{blogMsg.blog_sign_in_add_comment}" escape="false">
-                                    <f:param value="#{contextPath}/auth/login.html?"/>
-                                </h:outputFormat>
-                            </c:otherwise>
-                        </c:choose>
+                        <h:panelGroup rendered="#{post.allow_comments}">
+                            <h3>#{blogMsg.blog_add_comment}</h3>
+                            <c:choose>
+                                <c:when test="#{user.isLogged}">
+                                    <ajax:include src="/blogs/forms/comment-add-form.html"/>
+                                </c:when>
+                                <c:otherwise>
+                                    <h:outputFormat value="#{blogMsg.blog_sign_in_add_comment}" escape="false">
+                                        <f:param value="#{contextPath}/auth/login.html?"/>
+                                    </h:outputFormat>
+                                </c:otherwise>
+                            </c:choose>
+                        </h:panelGroup>
                     </div>
                 </div>
             </div>
