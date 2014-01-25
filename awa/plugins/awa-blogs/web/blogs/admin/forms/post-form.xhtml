@@ -17,6 +17,7 @@
 <ui:composition
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:w="http://code.google.com/p/ada-asf/widget"
         xmlns:awa="http://code.google.com/p/ada-awa/jsf"
         xmlns:c="http://java.sun.com/jstl/core"
         xmlns:h="http://java.sun.com/jsf/html">
@@ -28,6 +29,9 @@
         <h:inputHidden id='post-blog-id' value='#{post.blogId}'/>
         <div class='grid_8'>
             <h:messages styleClass='error'/>
+            <w:inputText title="#{blogMsg.blog_post_title_label}"
+                         styleClass="ui-corner-all"
+                         value="#{post.title}"/>
             <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
                 <dt>
                     <label for='title'>#{blogMsg.blog_post_title_label}</label>
