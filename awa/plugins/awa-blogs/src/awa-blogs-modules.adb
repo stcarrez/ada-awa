@@ -192,6 +192,7 @@ package body AWA.Blogs.Modules is
                           Comment : in Boolean;
                           Status  : in AWA.Blogs.Models.Post_Status_Type) is
       pragma Unreferenced (Model);
+      use type AWA.Blogs.Models.Post_Status_Type;
 
       Ctx   : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
       DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
@@ -209,6 +210,10 @@ package body AWA.Blogs.Modules is
       AWA.Permissions.Check (Permission => ACL_Update_Post.Permission,
                              Entity     => Post);
 
+      if Status = AWA.Blogs.Models.POST_PUBLISHED and then Post.Get_Publish_Date.Is_Null then
+         Post.Set_Publish_Date (ADO.Nullable_Time '(Is_Null => False,
+                                                    Value   => Ada.Calendar.Clock));
+      end if;
       Post.Set_Title (Title);
       Post.Set_Text (Text);
       Post.Set_Uri (URI);
