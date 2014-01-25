@@ -27,9 +27,7 @@
     <!-- Main page body -->
     <ui:define name="pageBody">
         <f:metadata>
-            <f:viewParam id='id' value='#{postComments.entity_id}'/>
-            <f:viewParam id='id' value='#{post.id}'/>
-            <f:viewParam id='id' value='#{postNewComment.entity_id}'/>
+            <f:viewParam id='post' value='#{post.uri}'/>
             <f:viewAction action='#{post.load}'/>
         </f:metadata>
         <div id='awa-content'>
