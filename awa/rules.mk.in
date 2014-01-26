@@ -150,7 +150,11 @@ install_static:
 install_shared:
 	$(MAKE) LIBRARY_TYPE=relocatable install_lib
 
-install_lib:  uninstall pre-install
+install_lib:  pre-install
+	rm -rf ${includedir}/${NAME}
+	rm -f ${projectdir}/${NAME}.gpr
+	rm -rf ${dynamodir}/${NAME}
+	rm -rf ${alidir}/${NAME}
 	$(MKDIR) -p ${includedir}/${NAME}
 	$(MKDIR) -p ${projectdir}/
 	${MKDIR} -p ${dynamodir}/${NAME}/config
