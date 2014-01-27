@@ -21,6 +21,24 @@ with ADO;
 with AWA.Modules;
 with AWA.Modules.Get;
 with AWA.Comments.Models;
+
+--  == Integration ==
+--  The <tt>Comment_Module</tt> manages the comments associated with entities.  It provides
+--  operations that are used by the comment beans to manage the comments.
+--  An instance of the <tt>Comment_Module</tt> must be declared and registered in the
+--  AWA application.  The module instance can be defined as follows:
+--
+--    type Application is new AWA.Applications.Application with record
+--       Comment_Module : aliased AWA.Comments.Modules.Comment_Module;
+--    end record;
+--
+--  And registered in the `Initialize_Modules` procedure by using:
+--
+--    Register (App    => App.Self.all'Access,
+--              Name   => AWA.Comments.Modules.NAME,
+--              URI    => "comments",
+--              Module => App.Comment_Module'Access);
+--
 package AWA.Comments.Modules is
 
    NAME : constant String := "comments";
