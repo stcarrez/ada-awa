@@ -14,7 +14,14 @@
   -  See the License for the specific language governing permissions and
   -  limitations under the License.
   -->
-<ui:include xmlns:ui="http://java.sun.com/jsf/facelets"
-            src="/comments/forms/comment-form.xhtml">
-    <ui:param name="comment" value="#{postNewComment}"/>
-</ui:include>
+<f:view contentType="text/html; charset=UTF-8"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:ui="http://java.sun.com/jsf/facelets">
+    <f:metadata>
+        <f:viewParam id='id' value='#{post.id}'/>
+        <f:viewParam id='id' value='#{postNewComment.entity_id}'/>
+    </f:metadata>
+    <ui:include src="/comments/forms/comment-form.xhtml">
+        <ui:param name="comment" value="#{postNewComment}"/>
+    </ui:include>
+</f:view>
