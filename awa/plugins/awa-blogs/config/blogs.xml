@@ -132,6 +132,14 @@
   </managed-bean>
 
   <navigation-rule>
+    <from-view-id>/blogs/post.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>not-found</from-outcome>
+      <to-view-id>/blogs/post-missing.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
     <from-view-id>/blogs/admin/edit.xhtml</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
