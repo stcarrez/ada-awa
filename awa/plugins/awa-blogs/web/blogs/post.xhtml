@@ -57,7 +57,8 @@
                             <h3>#{blogMsg.blog_add_comment}</h3>
                             <c:choose>
                                 <c:when test="#{user.isLogged}">
-                                    <ajax:include src="/blogs/forms/comment-add-form.html"/>
+                                    <ajax:include styleClass="asf-container" async="true"
+                                                  src="/blogs/forms/comment-add-form.html?id=#{post.id}"/>
                                 </c:when>
                                 <c:otherwise>
                                     <h:outputFormat value="#{blogMsg.blog_sign_in_add_comment}" escape="false">
