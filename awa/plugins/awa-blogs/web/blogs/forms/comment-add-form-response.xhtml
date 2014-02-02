@@ -24,7 +24,7 @@
         { "action": "update", "data": "#{blogMsg.blog_comment_submitted_for_approval}" }
     </c:when>
     <c:otherwise>
-        { "action": "redirect", "url": "#{contextPath}/blogs/post.html?id=#{postNewComment.entity_id}" }
+        { "action": "redirect", "url": "#{contextPath}/blogs/post.html?post=#{postNewComment.entity_id}" }
     </c:otherwise>
 </c:choose>
 ]
