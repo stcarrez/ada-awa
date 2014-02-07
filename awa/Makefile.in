@@ -115,6 +115,7 @@ pre-install:
 	$(MKDIR) -p ${projectdir}/
 	${MKDIR} -p ${alidir}/awa-unit/$(LIBRARY_TYPE)
 	$(MKDIR) -p ${dynamodir}/base/uml
+	$(MKDIR) -p ${prefix}/share/doc/awa
 	${CP} awaunit/*.ad[bs] ${includedir}/awa-unit
 	sed -e "s,INSTALL,${prefix},g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" < distrib/awa_unit.gpr > ${projectdir}/awa_unit.gpr
 	${CP} lib/awaunit/$(LIBRARY_TYPE)/*.ali ${alidir}/awa-unit/
@@ -131,6 +132,7 @@ endif
 	done
 	# Install the AWA UML model in Dynamo UML search path
 	unzip -cq uml/awa.zargo awa.xmi > ${dynamodir}/base/uml/AWA.xmi
+	cp -rp samples ${prefix}/share/doc/awa/examples
 
 pre-uninstall:
 	rm -rf ${includedir}/awa
