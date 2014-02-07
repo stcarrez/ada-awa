@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail-clients-files -- Mail client dump/file implementation
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -67,7 +67,7 @@ package AWA.Mail.Clients.Files is
    --  ------------------------------
    --  The <b>Mail_Manager</b> is the entry point to create a new mail message
    --  and be able to send it.
-   type File_Mail_Manager is new Mail_Manager with private;
+   type File_Mail_Manager is limited new Mail_Manager with private;
    type File_Mail_Manager_Access is access all File_Mail_Manager'Class;
 
    --  Create a file based mail manager and configure it according to the properties.
@@ -89,7 +89,7 @@ private
       Message : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
-   type File_Mail_Manager is new Mail_Manager with record
+   type File_Mail_Manager is limited new Mail_Manager with record
       Self    : File_Mail_Manager_Access;
       Path    : Ada.Strings.Unbounded.Unbounded_String;
       Index   : Util.Concurrent.Counters.Counter;
