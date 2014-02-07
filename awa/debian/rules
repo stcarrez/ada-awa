@@ -81,12 +81,6 @@ $(pkgname)$(aliversion)-dev:
 	dh_install -p$@ usr/share/ada/adainclude/awa/*.ad[bs] /usr/share/ada/adainclude/awa
 	dh_install -p$@ usr/share/ada/adainclude/awa.gpr /usr/share/ada/adainclude
 	dh_install -p$@ bundles/*.properties usr/share/doc/$@/bundles
-	dh_install -p$@ samples/*.ads usr/share/doc/$@/samples
-	dh_install -p$@ samples/*.properties usr/share/doc/$@/samples
-	dh_install -p$@ samples/*.xmi usr/share/doc/$@/samples
-	dh_install -p$@ samples/*.adb usr/share/doc/$@/samples
-	dh_install -p$@ samples.gpr usr/share/doc/$@/
-	dh_install -p$@ config.gpr usr/share/doc/$@/
 	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libname).so.$(soversion) \
 	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libname).so
 	dh_strip -p$@ -X.a
