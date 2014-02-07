@@ -80,10 +80,18 @@ $(pkgname)$(aliversion)-dev:
 	dh_install -p$@ usr/lib/ada/adalib/awa/*.ali /usr/lib/ada/adalib/awa
 	dh_install -p$@ usr/share/ada/adainclude/awa/*.ad[bs] /usr/share/ada/adainclude/awa
 	dh_install -p$@ usr/share/ada/adainclude/awa.gpr /usr/share/ada/adainclude
-	dh_install -p$@ bundles/*.properties usr/share/doc/$@/bundles
 	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libname).so.$(soversion) \
 	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libname).so
 	dh_strip -p$@ -X.a
+	dirs=`cd $(CURDIR)/debian/tmp/usr/share/dynamo && find awa -type d`; \
+	for i in $$dirs; do \
+		dh_installdirs -p$(pkgname)$(aliversion)-dev usr/share/dynamo/$$i ; \
+	done
+	files=`cd $(CURDIR)/debian/tmp/usr/share/dynamo && find awa -type f`; \
+	for i in $$files; do \
+		dir=`dirname $$i`; \
+		dh_install -p$(pkgname)$(aliversion)-dev usr/share/dynamo/$$i usr/share/dynamo/$$dir ; \
+	done
 
 $(pkgname)$(aliversion)-unit-dev:
 	: # The development package
