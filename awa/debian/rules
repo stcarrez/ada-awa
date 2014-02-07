@@ -92,6 +92,7 @@ $(pkgname)$(aliversion)-dev:
 		dir=`dirname $$i`; \
 		dh_install -p$(pkgname)$(aliversion)-dev usr/share/dynamo/$$i usr/share/dynamo/$$dir ; \
 	done
+	dh_install -p$@ usr/share/dynamo/base/uml/AWA.xmi /usr/share/dynamo/base/uml
 
 $(pkgname)$(aliversion)-unit-dev:
 	: # The development package
@@ -304,7 +305,7 @@ override_dh_installchangelogs:
 	dh_installchangelogs NEWS
 
 override_dh_compress:
-	dh_compress -X.ads -X.adb -XMakefile
+	dh_compress -X.ads -X.adb -XMakefile -X.xmi
 
 override_dh_strip:
 	dh_strip --dbg-package=libawa$(aliversion)-dbg
