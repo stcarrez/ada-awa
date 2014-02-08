@@ -132,7 +132,6 @@ endif
 	done
 	# Install the AWA UML model in Dynamo UML search path
 	unzip -cq uml/awa.zargo awa.xmi > ${dynamodir}/base/uml/AWA.xmi
-	cp -rp samples ${prefix}/share/doc/awa/examples
 
 pre-uninstall:
 	rm -rf ${includedir}/awa
