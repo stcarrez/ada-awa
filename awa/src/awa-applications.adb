@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa -- Ada Web Application
---  Copyright (C) 2009, 2010, 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -55,10 +55,13 @@ package body AWA.Applications is
       ASF.Applications.Main.Application (App).Initialize (Conf, Factory);
 
       --  Load the application configuration before any module.
-      Application'Class (App).Load_Configuration;
+      Application'Class (App).Load_Configuration (App.Get_Config (P_Config_File.P));
 
       --  Register the application modules and load their configuration.
       Application'Class (App).Initialize_Modules;
+
+      --  Load the plugin application configuration after the module are configured.
+      Application'Class (App).Load_Configuration (App.Get_Config (P_Plugin_Config_File.P));
    end Initialize;
 
    --  ------------------------------
@@ -137,12 +140,12 @@ package body AWA.Applications is
    --  Read the application configuration file <b>awa.xml</b>.  This is called after the servlets
    --  and filters have been registered in the application but before the module registration.
    --  ------------------------------
-   procedure Load_Configuration (App : in out Application) is
+   procedure Load_Configuration (App   : in out Application;
+                                 Files : in String) is
       procedure Load_Config (File : in String;
                              Done : out Boolean);
 
       Paths     : constant String := App.Get_Config (P_Module_Dir.P);
-      Files     : constant String := App.Get_Config (P_Config_File.P);
       Ctx       : aliased EL.Contexts.Default.Default_Context;
 
       procedure Load_Config (File : in String;
