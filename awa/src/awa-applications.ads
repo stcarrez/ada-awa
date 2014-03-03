@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa -- Ada Web Application
---  Copyright (C) 2009, 2010, 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,9 +31,15 @@ package AWA.Applications is
                                                   "#{fn:composePath(app_search_dirs,'config')}");
 
    --  A list of configuration files separated by ';'.  These files are searched in
-   --  'app.modules.dir' and loaded in the order specified.
+   --  'app.modules.dir' and loaded in the order specified before the application modules.
    package P_Config_File is
      new ASF.Applications.Main.Configs.Parameter ("app.config", "awa.xml");
+
+   --  A list of configuration files separated by ';'.  These files are searched in
+   --  'app.modules.dir' and loaded in the order specified after all the application modules
+   --  are initialized.
+   package P_Plugin_Config_File is
+     new ASF.Applications.Main.Configs.Parameter ("app.config.plugins", "");
 
    --  Module manager
    --
@@ -74,7 +80,8 @@ package AWA.Applications is
 
    --  Read the application configuration file <b>awa.xml</b>.  This is called after the servlets
    --  and filters have been registered in the application but before the module registration.
-   procedure Load_Configuration (App : in out Application);
+   procedure Load_Configuration (App   : in out Application;
+                                 Files : in String);
 
    --  Initialize the AWA modules provided by the application.
    --  This procedure is called by <b>Initialize</b>.
