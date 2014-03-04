@@ -65,6 +65,7 @@
     INNER JOIN awa_tagged_entity AS e ON e.for_entity_id = post.id AND e.entity_type = :entity_type AND e.tag_id = :tag
     LEFT JOIN awa_comment AS cmt ON cmt.entity_id = post.id AND cmt.entity_type = :entity_type AND cmt.status = 0
     WHERE post.status > 0
+    GROUP BY post.id
     ORDER BY post.create_date DESC
     LIMIT 40
        </sql>
