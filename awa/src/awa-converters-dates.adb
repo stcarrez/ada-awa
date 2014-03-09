@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-converters-dates -- Date Converters
---  Copyright (C) 2012, 2013 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -103,7 +103,7 @@ package body AWA.Converters.Dates is
                use ASF.Converters.Dates;
 
                Pattern : constant String
-                 := Date_Converter'Class (Convert).Get_Pattern (Context, Component);
+                 := Date_Converter'Class (Convert).Get_Pattern (Context, Bundle, Component);
             begin
                return Util.Dates.Formats.Format (Pattern, Date, Bundle);
             end;
