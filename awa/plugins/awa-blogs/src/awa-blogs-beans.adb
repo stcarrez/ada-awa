@@ -19,6 +19,7 @@ with Ada.Calendar;
 with Ada.Characters.Handling;
 
 with Util.Dates.ISO8601;
+with Util.Beans.Objects.Time;
 
 with AWA.Services.Contexts;
 with AWA.Helpers.Requests;
@@ -38,6 +39,10 @@ package body AWA.Blogs.Beans is
    use Ada.Strings.Unbounded;
 
    BLOG_ID_PARAMETER : constant String := "blog_id";
+
+   --  Build the URI from the post title and the post date.
+   function Get_Predefined_Uri (Title : in String;
+                                Date  : in Ada.Calendar.Time) return String;
 
    --  ------------------------------
    --  Get the value identified by the name.
@@ -170,7 +175,7 @@ package body AWA.Blogs.Beans is
    --  Load the post from the URI.
    --  ------------------------------
    overriding
-   procedure Load (bean    : in out Post_Bean;
+   procedure Load (Bean    : in out Post_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       use type AWA.Comments.Beans.Comment_Bean_Access;
       use type AWA.Comments.Beans.Comment_List_Bean_Access;
@@ -315,6 +320,17 @@ package body AWA.Blogs.Beans is
                                               Storage => Util.Beans.Objects.STATIC);
       elsif Name = "tag" then
          return Util.Beans.Objects.To_Object (From.Tag);
+
+      elsif Name = "updateDate" then
+         if From.Posts.Get_Count = 0 then
+            return Util.Beans.Objects.Null_Object;
+         else
+            declare
+               Item : constant Models.Post_Info := From.Posts.List.Element (0);
+            begin
+               return Util.Beans.Objects.Time.To_Object (Item.Date);
+            end;
+         end if;
       else
          return From.Posts.Get_Value (Name);
       end if;
