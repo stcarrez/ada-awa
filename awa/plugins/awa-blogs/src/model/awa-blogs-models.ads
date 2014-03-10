@@ -109,6 +109,18 @@ package AWA.Blogs.Models is
    function Get_Update_Date (Object : in Blog_Ref)
                  return Ada.Calendar.Time;
 
+   --  Set The blog base URL.
+   procedure Set_Url (Object : in out Blog_Ref;
+                      Value  : in Ada.Strings.Unbounded.Unbounded_String);
+   procedure Set_Url (Object : in out Blog_Ref;
+                      Value : in String);
+
+   --  Get The blog base URL.
+   function Get_Url (Object : in Blog_Ref)
+                 return Ada.Strings.Unbounded.Unbounded_String;
+   function Get_Url (Object : in Blog_Ref)
+                 return String;
+
    --  Set the workspace that this blog belongs to
    procedure Set_Workspace (Object : in out Blog_Ref;
                             Value  : in AWA.Workspaces.Models.Workspace_Ref'Class);
@@ -590,10 +602,11 @@ private
    COL_3_1_NAME : aliased constant String := "uid";
    COL_4_1_NAME : aliased constant String := "create_date";
    COL_5_1_NAME : aliased constant String := "update_date";
-   COL_6_1_NAME : aliased constant String := "workspace_id";
+   COL_6_1_NAME : aliased constant String := "url";
+   COL_7_1_NAME : aliased constant String := "workspace_id";
 
    BLOG_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 7,
+     (Count => 8,
       Table => BLOG_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
@@ -602,7 +615,8 @@ private
          4 => COL_3_1_NAME'Access,
          5 => COL_4_1_NAME'Access,
          6 => COL_5_1_NAME'Access,
-         7 => COL_6_1_NAME'Access
+         7 => COL_6_1_NAME'Access,
+         8 => COL_7_1_NAME'Access
 )
      );
    BLOG_TABLE : constant ADO.Schemas.Class_Mapping_Access
@@ -620,6 +634,7 @@ private
        Uid : Ada.Strings.Unbounded.Unbounded_String;
        Create_Date : Ada.Calendar.Time;
        Update_Date : Ada.Calendar.Time;
+       Url : Ada.Strings.Unbounded.Unbounded_String;
        Workspace : AWA.Workspaces.Models.Workspace_Ref;
    end record;
 

@@ -193,12 +193,42 @@ package body AWA.Blogs.Models is
    end Get_Update_Date;
 
 
+   procedure Set_Url (Object : in out Blog_Ref;
+                       Value : in String) is
+      Impl : Blog_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_String (Impl.all, 7, Impl.Url, Value);
+   end Set_Url;
+
+   procedure Set_Url (Object : in out Blog_Ref;
+                      Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : Blog_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 7, Impl.Url, Value);
+   end Set_Url;
+
+   function Get_Url (Object : in Blog_Ref)
+                 return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (Object.Get_Url);
+   end Get_Url;
+   function Get_Url (Object : in Blog_Ref)
+                  return Ada.Strings.Unbounded.Unbounded_String is
+      Impl : constant Blog_Access
+         := Blog_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Url;
+   end Get_Url;
+
+
    procedure Set_Workspace (Object : in out Blog_Ref;
                             Value  : in AWA.Workspaces.Models.Workspace_Ref'Class) is
       Impl : Blog_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 7, Impl.Workspace, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 8, Impl.Workspace, Value);
    end Set_Workspace;
 
    function Get_Workspace (Object : in Blog_Ref)
@@ -228,6 +258,7 @@ package body AWA.Blogs.Models is
             Copy.Uid := Impl.Uid;
             Copy.Create_Date := Impl.Create_Date;
             Copy.Update_Date := Impl.Update_Date;
+            Copy.Url := Impl.Url;
             Copy.Workspace := Impl.Workspace;
          end;
       end if;
@@ -384,9 +415,14 @@ package body AWA.Blogs.Models is
          Object.Clear_Modified (6);
       end if;
       if Object.Is_Modified (7) then
-         Stmt.Save_Field (Name  => COL_6_1_NAME, --  workspace_id
-                          Value => Object.Workspace);
+         Stmt.Save_Field (Name  => COL_6_1_NAME, --  url
+                          Value => Object.Url);
          Object.Clear_Modified (7);
+      end if;
+      if Object.Is_Modified (8) then
+         Stmt.Save_Field (Name  => COL_7_1_NAME, --  workspace_id
+                          Value => Object.Workspace);
+         Object.Clear_Modified (8);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -430,7 +466,9 @@ package body AWA.Blogs.Models is
                         Value => Object.Create_Date);
       Query.Save_Field (Name  => COL_5_1_NAME, --  update_date
                         Value => Object.Update_Date);
-      Query.Save_Field (Name  => COL_6_1_NAME, --  workspace_id
+      Query.Save_Field (Name  => COL_6_1_NAME, --  url
+                        Value => Object.Url);
+      Query.Save_Field (Name  => COL_7_1_NAME, --  workspace_id
                         Value => Object.Workspace);
       Query.Execute (Result);
       if Result /= 1 then
@@ -468,6 +506,8 @@ package body AWA.Blogs.Models is
          return Util.Beans.Objects.Time.To_Object (Impl.Create_Date);
       elsif Name = "update_date" then
          return Util.Beans.Objects.Time.To_Object (Impl.Update_Date);
+      elsif Name = "url" then
+         return Util.Beans.Objects.To_Object (Impl.Url);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -507,8 +547,9 @@ package body AWA.Blogs.Models is
       Object.Uid := Stmt.Get_Unbounded_String (3);
       Object.Create_Date := Stmt.Get_Time (4);
       Object.Update_Date := Stmt.Get_Time (5);
-      if not Stmt.Is_Null (6) then
-         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (6), Session);
+      Object.Url := Stmt.Get_Unbounded_String (6);
+      if not Stmt.Is_Null (7) then
+         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (7), Session);
       end if;
       Object.Version := Stmt.Get_Integer (2);
       ADO.Objects.Set_Created (Object);
