@@ -612,6 +612,8 @@ CREATE TABLE awa_blog (
   `create_date` DATETIME NOT NULL,
   /* the date when the blog was updated */
   `update_date` DATETIME NOT NULL,
+  /* The blog base URL. */
+  `url` VARCHAR(255) NOT NULL,
   /* the workspace that this blog belongs to */
   `workspace_id` BIGINT NOT NULL
 );
