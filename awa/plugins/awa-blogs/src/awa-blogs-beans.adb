@@ -68,6 +68,8 @@ package body AWA.Blogs.Beans is
    begin
       if Name = "name" then
          From.Set_Name (Util.Beans.Objects.To_String (Value));
+      elsif Name = "url" then
+         From.Set_Url (Util.Beans.Objects.To_String (Value));
       end if;
    end Set_Value;
 
