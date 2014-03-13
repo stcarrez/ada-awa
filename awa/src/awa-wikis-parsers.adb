@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-parsers -- Wiki parser
---  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -189,6 +189,7 @@ package body AWA.Wikis.Parsers is
       C          : Wide_Wide_Character;
       Stop_Token : Wide_Wide_Character;
       Format     : Unbounded_Wide_Wide_String;
+      Col        : Natural;
    begin
       Peek (P, C);
       if C /= Token then
@@ -226,15 +227,21 @@ package body AWA.Wikis.Parsers is
       else
          Stop_Token := Token;
       end if;
+      Col := 0;
       while not P.Is_Eof loop
          Peek (P, C);
-         if C = Stop_Token then
+         if C = Stop_Token and Col = 0 then
             Peek (P, C);
             if C = Stop_Token then
                Peek (P, C);
                exit when C = Stop_Token;
             end if;
             Append (P.Text, Stop_Token);
+            Col := Col + 1;
+         elsif C = LF or C = CR then
+            Col := 0;
+         else
+            Col := Col + 1;
          end if;
          Append (P.Text, C);
       end loop;
