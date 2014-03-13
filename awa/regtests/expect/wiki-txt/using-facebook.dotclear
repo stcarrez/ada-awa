@@ -42,7 +42,7 @@ FB_Auth      : aliased Facebook.Facebook_Auth;
 Before anything we have to initialize the Application type to setup the application identifier, the application secret, the provider URL and a callback URL.
 FB_Auth.Set_Application_Identifier ("116337738505130");
 FB_Auth.Set_Application_Secret ("xxxxxxxxxxx");
-FB_Auth.Set_Application_Callback ("http:/demo.vacs.fr/oauth/localhost:8080/demo/oauth_callback.html");
+FB_Auth.Set_Application_Callback ("http://demo.vacs.fr/oauth/localhost:8080/demo/oauth_callback.html");
 
 
 The first step in the OAuth process is to build the authorization page with the link that redirects the user to the service provider OAuth authorization process.
@@ -55,7 +55,7 @@ Params : constant String := FB_Auth.Get_Auth_Params (State, "read_stream");
 
 
 For a Facebook authorization process, the URI would be created as follows:
-URI : constant String := "https:/www.facebook.com/dialog/oauth?" & Params;
+URI : constant String := "https://www.facebook.com/dialog/oauth?" & Params;
 
 
 For another service provider, the process is similar but the URL is different.
@@ -64,11 +64,11 @@ When the user has granted access to his data, he will be redirected to the callb
 Most service providers will require that the OAuth callback be a public URL.
 If you want to run you application on localhost (which is the case when you are developing), you will need a second redirection.
 If you are using the Apache server, you can easily setup a rewrite rule:
-RewriteRule ^/oauth/localhost:([0-9]+)/(.*) http:/localhost:$1/$2 [L,R=302]
+RewriteRule ^/oauth/localhost:([0-9]+)/(.*) http://localhost:$1/$2 [L,R=302]
 
 
 With the above rewrite rule, the callback given to the OAuth provider would look like:
-http:/demo.vacs.fr/oauth/localhost:8080/demo/oauth_callback.html
+http://demo.vacs.fr/oauth/localhost:8080/demo/oauth_callback.html
 
 
 The OAuth provider will first redirect to the public internet site which will redirect again to localhost and port 8080.
@@ -76,7 +76,7 @@ Getting the OAuth access token
 The next step is to receive the code parameter from the callback which grants the application access to the service provider API.
 For this, we will use an XHTML view file and a view action that will be executed when the page is displayed.  When this happens,
 the EL method authenticate will be called on the facebook bean (ie, our FB_Auth instance).
-<f:view xmlns:f="http:/java.sun.com/jsf/core">
+<f:view xmlns:f="http://java.sun.com/jsf/core">
     <f:metadata>
         <f:viewAction action="#{facebook.authenticate}"/>
     </f:metadata>
@@ -201,7 +201,7 @@ Invoking the service provider API is now as simple as calling a procedure.  The 
 The HTTP GET operation must be made using SSL/TLS since this is part of OAuth 2.0.
  List  : Friend_List.List_Bean;
 ...
-   Get_Friends ("https:/graph.facebook.com/me/friends?access_token="
+   Get_Friends ("https://graph.facebook.com/me/friends?access_token="
                       & Token,
                       Friend_Vector_Map'Access,
                       "/data",

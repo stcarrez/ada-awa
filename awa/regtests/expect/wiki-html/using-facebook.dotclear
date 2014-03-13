@@ -18,7 +18,7 @@ explains how to do that and many details will no be covered by this article.</p>
 FB_Auth      : aliased Facebook.Facebook_Auth;
 </pre></li></li><p>Before anything we have to initialize the <tt>Application</tt> type to setup the application identifier, the application secret, the provider URL and a callback URL.</p></li></li><pre>FB_Auth.Set_Application_Identifier ("116337738505130");
 FB_Auth.Set_Application_Secret ("xxxxxxxxxxx");
-FB_Auth.Set_Application_Callback ("http:/demo.vacs.fr/oauth/localhost:8080/demo/oauth_callback.html");
+FB_Auth.Set_Application_Callback ("http://demo.vacs.fr/oauth/localhost:8080/demo/oauth_callback.html");
 </pre></li></li><p>The first step in the OAuth process is to build the authorization page with the link that redirects the user to the service provider OAuth authorization process.
 The link must be created by using the <tt>Get_State</tt> and <tt>Get_Auth_Params</tt> functions provided by the <tt>Application</tt> type.
 The first one generates a secure unique key that will be returned back by the service provider.  The second one builds a list of request
@@ -26,16 +26,16 @@ parameters that are necessary for the service provider to identify the applicati
 </p></li><pre>Id : constant String := "...";
 State  : constant String := FB_Auth.Get_State (Id);
 Params : constant String := FB_Auth.Get_Auth_Params (State, "read_stream");
-</pre></li></li><p>For a Facebook authorization process, the URI would be created as follows:</p></li></li><pre>URI : constant String := "https:/www.facebook.com/dialog/oauth?" &amp; Params;
+</pre></li></li><p>For a Facebook authorization process, the URI would be created as follows:</p></li></li><pre>URI : constant String := "https://www.facebook.com/dialog/oauth?" &amp; Params;
 </pre></li></li><p>For another service provider, the process is similar but the URL is different.</p></li></li><h3>OAuth callback</h3><p>When the user has granted access to his data, he will be redirected to the callback defined by the application.
 Most service providers will require that the OAuth callback be a public URL.
 If you want to run you application on <tt>localhost</tt> (which is the case when you are developing), you will need a second redirection.
-If you are using the Apache server, you can easily setup a rewrite rule:</p></li></li><pre>RewriteRule ^/oauth/localhost:([0-9]+)/(.*) http:/localhost:$1/$2 [L,R=302]
-</pre></li></li><p>With the above rewrite rule, the callback given to the OAuth provider would look like:</p></li></li><pre>http:/demo.vacs.fr/oauth/localhost:8080/demo/oauth_callback.html
+If you are using the Apache server, you can easily setup a rewrite rule:</p></li></li><pre>RewriteRule ^/oauth/localhost:([0-9]+)/(.*) http://localhost:$1/$2 [L,R=302]
+</pre></li></li><p>With the above rewrite rule, the callback given to the OAuth provider would look like:</p></li></li><pre>http://demo.vacs.fr/oauth/localhost:8080/demo/oauth_callback.html
 </pre></li></li><p>The OAuth provider will first redirect to the public internet site which will redirect again to localhost and port 8080.</p></li></li><h3>Getting the OAuth access token</h3><p>The next step is to receive the <tt>code</tt> parameter from the callback which grants the application access to the service provider API.
 For this, we will use an XHTML view file and a view action that will be executed when the page is displayed.  When this happens,
 the EL method <tt>authenticate</tt> will be called on the <tt>facebook</tt> bean (ie, our <tt>FB_Auth</tt> instance).
-</p></li><pre>&lt;f:view xmlns:f="http:/java.sun.com/jsf/core"&gt;
+</p></li><pre>&lt;f:view xmlns:f="http://java.sun.com/jsf/core"&gt;
     &lt;f:metadata&gt;
         &lt;f:viewAction action="#{facebook.authenticate}"/&gt;
     &lt;/f:metadata&gt;
@@ -132,7 +132,7 @@ instantiate the <tt>Rest_Get_Vector</tt> operation with our vector mapper (the g
 The HTTP GET operation must be made using SSL/TLS since this is part of OAuth 2.0.
 </p></li><pre> List  : Friend_List.List_Bean;
 ...
-   Get_Friends ("https:/graph.facebook.com/me/friends?access_token="
+   Get_Friends ("https://graph.facebook.com/me/friends?access_token="
                       &amp; Token,
                       Friend_Vector_Map'Access,
                       "/data",
