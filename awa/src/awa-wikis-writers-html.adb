@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-writers -- Wiki HTML writer
---  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -135,6 +135,7 @@ package body AWA.Wikis.Writers.Html is
          Document.Current_Level := Document.Current_Level - 1;
       end loop;
       Document.Has_Paragraph := False;
+      Document.Has_Item := False;
    end Close_Paragraph;
 
    procedure Open_Paragraph (Document : in out Html_Writer) is
@@ -193,6 +194,7 @@ package body AWA.Wikis.Writers.Html is
                         Alt         : in Unbounded_Wide_Wide_String;
                         Position    : in Unbounded_Wide_Wide_String;
                         Description : in Unbounded_Wide_Wide_String) is
+      pragma Unreferenced (Position);
    begin
       Document.Open_Paragraph;
       Document.Writer.Start_Element ("img");
@@ -233,7 +235,7 @@ package body AWA.Wikis.Writers.Html is
    HTML_SUPERSCRIPT : aliased constant String := "sup";
    HTML_SUBSCRIPT   : aliased constant String := "sub";
    HTML_STRIKEOUT   : aliased constant String := "del";
-   HTML_UNDERLINE   : aliased constant String := "ins";
+   --  HTML_UNDERLINE   : aliased constant String := "ins";
    HTML_PREFORMAT   : aliased constant String := "pre";
 
    type String_Array_Access is array (Documents.Format_Type) of Util.Strings.Name_Access;
