@@ -25,9 +25,9 @@
     <div class='blog-post' id="p_#{post.id}">
         <div class='post-title'>
             <h2><a href="#{contextPath}/blogs/post.html?post=#{post.uri}">#{post.title}</a></h2>
-            <p>By #{post.username} <h:outputText id="date" value="#{post.date}" converter="dateConverter"/></p>
+            <p>By #{post.username} <h:outputText class='post-date' value="#{post.date}" converter="dateConverter"/></p>
         </div>
-        <awa:tagList value='#{postList.tags}' id='qtags' styleClass="tagedit-list"
+        <awa:tagList value='#{postList.tags}' styleClass="tagedit-list"
                      tagLink="#{contextPath}/blogs/tagged.html?tag=#{tagName}"
                      var="tagName"
                      tagClass="tagedit-listelement tagedit-listelement-old"/>
