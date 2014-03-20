@@ -1,5 +1,5 @@
 <!-- Form to create or update a blog post
-  -  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,16 +30,10 @@
         <div class='grid_8'>
             <h:messages styleClass='error'/>
             <w:inputText title="#{blogMsg.blog_post_title_label}"
-                         styleClass="ui-corner-all"
+                         styleClass="awa-required ui-corner-all"
+                         size='80'
                          value="#{post.title}"/>
             <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
-                <dt>
-                    <label for='title'>#{blogMsg.blog_post_title_label}</label>
-                    <h:message for='title' styleClass='error'/>
-                </dt>
-                <dd>
-                    <h:inputText id='title' size='50' required='true' value='#{post.title}'/>
-                </dd>
                 <dt>
                     <label for='text'>#{blogMsg.blog_post_text_label}</label>
                 </dt>
@@ -54,6 +48,9 @@
                                  autoCompleteUrl='#{contextPath}/blogs/admin/lists/tag-search.html'/>
                 </dd>
             </dl>
+            <w:inputText id='uri' title="#{blogMsg.blog_post_url_label}"
+                         styleClass="awa-required ui-corner-all" size='80'
+                         value="#{post.uri}" required="false"/>
         </div>
         <div class='grid_4'>
             <dl class="awa-required">
@@ -65,6 +62,11 @@
                                      styleClass="ui-state-default ui-corner-all">
                         <f:selectItems value="#{postStatusList}"/>
                     </h:selectOneMenu>
+                </dd>
+                <dt></dt>
+                <dd>
+                    <h:selectBooleanCheckbox id="allow-comment" value="#{post.allow_comments}"/>
+                    <label for='allow-comment'>#{blogMsg.blog_post_allow_comments_label}</label>
                 </dd>
             </dl>
             <dl class="awa-required">
