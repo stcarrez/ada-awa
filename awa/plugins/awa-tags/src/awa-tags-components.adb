@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-tags-components -- Tags component
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -280,7 +280,7 @@ package body AWA.Tags.Components is
          UI.Render_Attributes (Context, Writer);
          for I in 1 .. Count loop
             List.Set_Row_Index (I);
-            Tag_UIInput'Class (UI).Render_Form_Tag (Id & "[" & Util.Strings.Image (I) & "-a]",
+            Tag_UIInput'Class (UI).Render_Form_Tag (Id & "[" & Util.Strings.Image (I) & "]",
                                                     List.Get_Row, Writer, Context);
          end loop;
       else
@@ -386,7 +386,7 @@ package body AWA.Tags.Components is
             end if;
             if Name (Name'Last - 1) = 'd' then
                UI.Deleted.Append (Value);
-            elsif Name (Name'Last - 1) /= 'a' then
+            elsif Name (Name'Last - 1) = 'a' or else Name (Name'Last - 1) = '[' then
                UI.Added.Append (Value);
             end if;
          end Process_Parameter;
@@ -478,7 +478,7 @@ package body AWA.Tags.Components is
       Writer : constant Response_Writer_Access := Context.Get_Response_Writer;
       Link   : constant access ASF.Views.Nodes.Tag_Attribute := UI.Get_Attribute ("tagLink");
       Style  : constant Util.Beans.Objects.Object := UI.Get_Attribute (Context, "tagClass");
-      Font_Size : Boolean := True;
+      Font_Size : constant Boolean := True;
    begin
       Writer.Start_Element ("ul");
       UI.Render_Attributes (Context, Writer);
