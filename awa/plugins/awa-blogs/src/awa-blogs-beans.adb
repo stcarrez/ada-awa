@@ -188,8 +188,13 @@ package body AWA.Blogs.Beans is
       Comment      : AWA.Comments.Beans.Comment_Bean_Access;
       Comment_List : AWA.Comments.Beans.Comment_List_Bean_Access;
    begin
-      Query.Bind_Param (1, String '(Bean.Get_Uri));
-      Query.Set_Filter ("o.uri = ?");
+      if not Bean.Is_Null and then Bean.Get_Id /= ADO.NO_IDENTIFIER then
+         Query.Bind_Param (1, Bean.Get_Id);
+         Query.Set_Filter ("o.id = ?");
+      else
+         Query.Bind_Param (1, String '(Bean.Get_Uri));
+         Query.Set_Filter ("o.uri = ?");
+      end if;
       Bean.Find (Session, Query, Found);
       if not Found then
          Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
@@ -251,6 +256,8 @@ package body AWA.Blogs.Beans is
          From.Blog_Id := ADO.Utils.To_Identifier (Value);
       elsif Name = POST_ID_ATTR and not Util.Beans.Objects.Is_Empty (Value) then
          From.Load_Post (ADO.Utils.To_Identifier (Value));
+      elsif Name = POST_UID_ATTR and not Util.Beans.Objects.Is_Empty (Value) then
+         From.Set_Id (ADO.Utils.To_Identifier (Value));
       elsif Name = POST_TEXT_ATTR then
          From.Set_Text (Util.Beans.Objects.To_Unbounded_String (Value));
       elsif Name = POST_TITLE_ATTR then
