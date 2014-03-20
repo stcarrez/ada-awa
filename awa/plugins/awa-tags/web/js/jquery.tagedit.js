@@ -52,6 +52,7 @@
 		options = $.extend(true, {
 			// default options here
 			autocompleteURL: null,
+            checkToDeleteURL: null,
 			deletedPostfix: '-d',
 			addedPostfix: '-a',
 			additionalListClass: '',
@@ -74,7 +75,8 @@
 				deleteLinkTitle: 'Delete this tag from database.',
 				deleteConfirmation: 'Are you sure to delete this entry?',
 				deletedElementTitle: 'This Element will be deleted.',
-				breakEditLinkTitle: 'Cancel'
+				breakEditLinkTitle: 'Cancel',
+                forceDeleteConfirmation: 'There are more records using this tag, are you sure do you want to remove it?'
 			}
 		}, options || {});
 
@@ -161,18 +163,22 @@
 					.each(function() {
 						$(this).autoGrowInput({comfortZone: 15, minWidth: 15, maxWidth: 20000});
 
-						// Event ist triggert in case of choosing an item from the autocomplete, or finish the input
+						// Event is triggert in case of choosing an item from the autocomplete, or finish the input
 						$(this).bind('transformToTag', function(event, id) {
-							var oldValue = (typeof id != 'undefined' && id.length > 0);
+							var oldValue = (typeof id != 'undefined' && (id.length > 0 || id > 0));
 
 							var checkAutocomplete = oldValue == true? false : true;
 							// check if the Value ist new
 							var isNewResult = isNew($(this).val(), checkAutocomplete);
-							if(isNewResult[0] === true || (isNewResult[0] === false && typeof isNewResult[1] == 'string')) {
+							if(isNewResult[0] === true || (isNewResult[0] === false && typeof isNewResult[1] == 'string')
+							    || (isNewResult[0] === false && isNewResult[1] == null)) {
 
 								if(oldValue == false && typeof isNewResult[1] == 'string') {
 									oldValue = true;
 									id = isNewResult[1];
+								}
+								if (typeof id == 'undefined') {
+								    id = '';
 								}
 
 								if(options.allowAdd == true || oldValue) {
@@ -347,7 +353,16 @@
 					.click(function() {
                         window.clearTimeout(closeTimer);
 						if(confirm(options.texts.deleteConfirmation)) {
-							markAsDeleted($(this).parent());
+                            var canDelete = checkToDelete($(this).parent());
+                            if (!canDelete && confirm(options.texts.forceDeleteConfirmation)) {
+                                markAsDeleted($(this).parent());
+                            }
+
+                            if(canDelete) {
+                                markAsDeleted($(this).parent());
+                            }
+
+                            $(this).parent().find(':text').trigger('finishEdit', [true]);
 						}
                         else {
                             $(this).parent().find(':text').trigger('finishEdit', [true]);
@@ -376,6 +391,42 @@
 						closeTimer = window.setTimeout(function() {that.parent().trigger('finishEdit', [true])}, 500);
 					});
 		}
+
+        /**
+         * Verifies if the tag select to be deleted is used by other records using an Ajax request.
+         *
+         * @param element
+         * @returns {boolean}
+         */
+        function checkToDelete(element) {
+            // if no URL is provide will not verify
+            if(options.checkToDeleteURL === null) {
+                return false;
+            }
+
+            var inputName = element.find('input:hidden').attr('name');
+            var idPattern = new RegExp('\\d');
+            var tagId = inputName.match(idPattern);
+            var checkResult = false;
+
+            $.ajax({
+                async   : false,
+                url     : options.checkToDeleteURL,
+                dataType: 'json',
+                type    : 'POST',
+                data    : { 'tagId' : tagId},
+                complete: function (XMLHttpRequest, textStatus) {
+
+                    // Expected JSON Object: { "success": Boolean, "allowDelete": Boolean}
+                    var result = $.parseJSON(XMLHttpRequest.responseText);
+                    if(result.success === true){
+                        checkResult = result.allowDelete;
+                    }
+                }
+            });
+
+            return checkResult;
+        }
 
 		/**
 		* Marks a single Tag as deleted.
@@ -445,10 +496,11 @@
 
 				// If there is an entry for that already in the autocomplete, don't use it (Check could be case sensitive or not)
 				for (var i = 0; i < result.length; i++) {
-                    var label = options.checkNewEntriesCaseSensitive == true? result[i].label : result[i].label.toLowerCase();
+                    var resultValue = result[i].label? result[i].label : result[i];
+                    var label = options.checkNewEntriesCaseSensitive == true? resultValue : resultValue.toLowerCase();
 					if (label == compareValue) {
 						isNew = false;
-						autoCompleteId = result[i].id;
+						autoCompleteId = typeof result[i] == 'string' ? i : result[i].id;
 						break;
 					}
 				}
