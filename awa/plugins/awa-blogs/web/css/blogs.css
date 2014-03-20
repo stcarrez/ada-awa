@@ -200,6 +200,7 @@ div.post-text p {
 div.post-text pre {
     line-height: 1.2em;
     margin-bottom: 1em;
+    overflow: auto;
     background: #E8F0FF;
     padding: 4px;
     border: 1px solid #AAA;
