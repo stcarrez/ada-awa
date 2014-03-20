@@ -1,5 +1,5 @@
 <!-- For the tag autocompletion, display the tags that match some pattern.
-  -  Copyright (C) 2013 Stephane Carrez
+  -  Copyright (C) 2013, 2014 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,9 +21,9 @@
     <f:metadata>
         <f:viewParam id='term' value='#{tagSearch.search}'/>
     </f:metadata>
-[   {"id": 0, "label": "" }
+[
     <h:list value="#{tagSearch}" var="tag">
-        ,{"id": #{tagSearch.rowIndex}, "label": "#{tag}"}
+        #{tagSearch.rowIndex != 1 ? ',' : ''}{"id": #{tagSearch.rowIndex}, "label": "#{tag}"}
     </h:list>
 ]
 </f:view>
