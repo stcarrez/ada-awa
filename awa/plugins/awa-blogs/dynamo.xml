@@ -2,8 +2,8 @@
     <name>awa-blogs</name>
     <property name="author_email">Stephane.Carrez@gmail.com</property>
     <property name="license">none</property>
-    <property name="author">Stephane Carrez</property>
     <property name="is_plugin">TRUE</property>
+    <property name="author">Stephane Carrez</property>
     <module name="awa"></module>
     <module name="ado"></module>
     <module name="security"></module>
@@ -11,4 +11,6 @@
     <module name="awa-workspaces"></module>
     <module name="awa-tags"></module>
     <module name="util"></module>
+    <module name="awa-comments"></module>
+    <module name="awa-markedit"></module>
 </project>
