@@ -4,13 +4,13 @@
     <property name="license">none</property>
     <property name="is_plugin">TRUE</property>
     <property name="author">Stephane Carrez</property>
-    <module name="awa"></module>
-    <module name="ado"></module>
-    <module name="security"></module>
-    <module name="asf"></module>
-    <module name="awa-workspaces"></module>
-    <module name="awa-tags"></module>
-    <module name="util"></module>
-    <module name="awa-comments"></module>
-    <module name="awa-markedit"></module>
+    <depend name="awa_markedit"></depend>
+    <depend name="awa"></depend>
+    <depend name="util"></depend>
+    <depend name="ado"></depend>
+    <depend name="security"></depend>
+    <depend name="asf"></depend>
+    <depend name="awa-workspaces"></depend>
+    <depend name="awa-tags"></depend>
+    <depend name="awa-comments"></depend>
 </project>
