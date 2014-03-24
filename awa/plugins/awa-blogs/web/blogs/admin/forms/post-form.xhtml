@@ -18,6 +18,7 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:w="http://code.google.com/p/ada-asf/widget"
+        xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:awa="http://code.google.com/p/ada-awa/jsf"
         xmlns:c="http://java.sun.com/jstl/core"
         xmlns:h="http://java.sun.com/jsf/html">
@@ -92,6 +93,17 @@
             </li>
         </ul>
     </h:form>
+      <util:script>
+              // Create a MarkEdit editor on page load
+              $(function(){
+                 $('textarea').markedit({ 'preview': false,
+                  'toolbar' : {
+                    'backgroundMode': 'light',
+                    'layout': 'bold italic underline strike | quote code | numberlist bulletlist heading line'
+                  }
+                 });
+              });
+      </util:script>
   </div>
 
 </ui:composition>
