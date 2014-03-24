@@ -198,7 +198,7 @@ Package: libawa1.0-blogs-dev
 Section: libdevel
 Architecture: any
 Pre-Depends: multiarch-support
-Depends: ${shlibs:Depends}, ${misc:Depends}, libawa1.0-workspaces-dev (= ${binary:Version}), libawa1.0-tags-dev (= ${binary:Version}), libawa1.0-blogs (= ${binary:Version}), libawa1.0-votes-dev
+Depends: ${shlibs:Depends}, ${misc:Depends}, libawa1.0-workspaces-dev (= ${binary:Version}), libawa1.0-tags-dev (= ${binary:Version}), libawa1.0-blogs (= ${binary:Version}), libawa1.0-votes-dev, libawa1.0-markedit-dev
 Description: Blogs plugin for AWA (Development)
  This is the Blogs plugin for Ada Web Application.  The Blogs plugin provides
  a complete and ready to use blog system that can be integrated easily in an
