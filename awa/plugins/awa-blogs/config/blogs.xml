@@ -349,6 +349,7 @@
     <url-pattern>/blogs/post.html</url-pattern>
     <url-pattern>/blogs/tagged.html</url-pattern>
     <url-pattern>/blogs/index.html</url-pattern>
+    <url-pattern>/blogs/feeds.html</url-pattern>
   </url-policy>
 
   <url-policy>
