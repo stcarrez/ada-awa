@@ -1,5 +1,5 @@
 <!-- Edit an existing post
-  -  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +19,11 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{blogMsg.blog_admin_edit_post_title}"/>
+
+    <ui:define name="pageScript">
+        <script type="text/javascript" src="#{contextPath}/js/markedit/showdown.js"></script>
+        <script type="text/javascript" src="#{contextPath}/js/markedit/jquery.markedit.js"></script>
+    </ui:define>
 
     <!-- Main page body -->
     <ui:define name="pageBody">
