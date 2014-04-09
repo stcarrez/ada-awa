@@ -34,7 +34,7 @@
 
         <awa:wiki styleClass='post-text' value="#{post.text}" format="dotclear"/>
         <h:panelGroup rendered="#{post.comment_count ne 0}" styleClass="blog-post-comment-count" layout="div">
-            <a href="#{contextPath}/blogs/post.html?id=#{post.id}#comment-1">
+            <a href="#{contextPath}/blogs/post.html?post=#{post.uri}#comment-1">
                 <h:outputFormat value="#{blogMsg.blog_post_count}">
                     <f:param value="#{post.comment_count}"/>
                 </h:outputFormat>
