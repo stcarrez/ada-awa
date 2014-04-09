@@ -562,6 +562,9 @@ package body AWA.Comments.Models is
       if Name = "date" then
          return Util.Beans.Objects.Time.To_Object (From.Date);
       end if;
+      if Name = "format" then
+         return AWA.Comments.Models.Format_Type_Objects.To_Object (From.Format);
+      end if;
       if Name = "comment" then
          return Util.Beans.Objects.To_Object (From.Comment);
       end if;
@@ -594,7 +597,8 @@ package body AWA.Comments.Models is
          Into.Author := Stmt.Get_Unbounded_String (1);
          Into.Email := Stmt.Get_Unbounded_String (2);
          Into.Date := Stmt.Get_Time (3);
-         Into.Comment := Stmt.Get_Unbounded_String (4);
+         Into.Format := AWA.Comments.Models.Format_Type'Val (Stmt.Get_Integer (4));
+         Into.Comment := Stmt.Get_Unbounded_String (5);
       end Read;
    begin
       Stmt.Execute;

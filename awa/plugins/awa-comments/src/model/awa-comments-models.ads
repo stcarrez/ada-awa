@@ -207,6 +207,9 @@ package AWA.Comments.Models is
       --  the comment date.
       Date : Ada.Calendar.Time;
 
+      --  the comment format type.
+      Format : AWA.Comments.Models.Format_Type;
+
       --  the comment text.
       Comment : Ada.Strings.Unbounded.Unbounded_String;
 
@@ -349,7 +352,7 @@ private
 
    package File_1 is
       new ADO.Queries.Loaders.File (Path => "comment-queries.xml",
-                                    Sha1 => "23485D2C3F50D233CB8D52A2414B417F4296B51A");
+                                    Sha1 => "4B683D52B3B47805957572BAE1B1DAF794DB0B85");
 
    package Def_Commentinfo_Comment_List is
       new ADO.Queries.Loaders.Query (Name => "comment-list",
