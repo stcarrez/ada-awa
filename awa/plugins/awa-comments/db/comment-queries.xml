@@ -17,6 +17,9 @@
         <property type='Date' name="date">
             <comment>the comment date.</comment>
         </property>
+        <property type='AWA.Comments.Models.Format_Type' name="format">
+            <comment>the comment format type.</comment>
+        </property>
         <property type='String' name="comment">
             <comment>the comment text.</comment>
         </property>
@@ -30,6 +33,7 @@
       u.name,
       e.email,
       c.create_date,
+      c.format,
       c.message
     FROM awa_comment AS c
     INNER JOIN awa_user AS u ON c.author_id = u.id
