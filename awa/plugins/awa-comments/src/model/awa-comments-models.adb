@@ -68,6 +68,7 @@ package body AWA.Comments.Models is
       Impl.Version := 0;
       Impl.Entity_Type := 0;
       Impl.Status := AWA.Comments.Models.Status_Type'First;
+      Impl.Format := AWA.Comments.Models.Format_Type'First;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -201,12 +202,31 @@ package body AWA.Comments.Models is
    end Get_Status;
 
 
+   procedure Set_Format (Object : in out Comment_Ref;
+                         Value  : in AWA.Comments.Models.Format_Type) is
+      procedure Set_Field_Enum is
+         new ADO.Objects.Set_Field_Operation (Format_Type);
+      Impl : Comment_Access;
+   begin
+      Set_Field (Object, Impl);
+      Set_Field_Enum (Impl.all, 8, Impl.Format, Value);
+   end Set_Format;
+
+   function Get_Format (Object : in Comment_Ref)
+                  return AWA.Comments.Models.Format_Type is
+      Impl : constant Comment_Access
+         := Comment_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Format;
+   end Get_Format;
+
+
    procedure Set_Author (Object : in out Comment_Ref;
                          Value  : in AWA.Users.Models.User_Ref'Class) is
       Impl : Comment_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 8, Impl.Author, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 9, Impl.Author, Value);
    end Set_Author;
 
    function Get_Author (Object : in Comment_Ref)
@@ -237,6 +257,7 @@ package body AWA.Comments.Models is
             Copy.Version := Impl.Version;
             Copy.Entity_Type := Impl.Entity_Type;
             Copy.Status := Impl.Status;
+            Copy.Format := Impl.Format;
             Copy.Author := Impl.Author;
          end;
       end if;
@@ -398,9 +419,14 @@ package body AWA.Comments.Models is
          Object.Clear_Modified (7);
       end if;
       if Object.Is_Modified (8) then
-         Stmt.Save_Field (Name  => COL_7_1_NAME, --  author_id
-                          Value => Object.Author);
+         Stmt.Save_Field (Name  => COL_7_1_NAME, --  format
+                          Value => Integer (Format_Type'Pos (Object.Format)));
          Object.Clear_Modified (8);
+      end if;
+      if Object.Is_Modified (9) then
+         Stmt.Save_Field (Name  => COL_8_1_NAME, --  author_id
+                          Value => Object.Author);
+         Object.Clear_Modified (9);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -446,7 +472,9 @@ package body AWA.Comments.Models is
                         Value => Object.Entity_Type);
       Query.Save_Field (Name  => COL_6_1_NAME, --  status
                         Value => Integer (Status_Type'Pos (Object.Status)));
-      Query.Save_Field (Name  => COL_7_1_NAME, --  author_id
+      Query.Save_Field (Name  => COL_7_1_NAME, --  format
+                        Value => Integer (Format_Type'Pos (Object.Format)));
+      Query.Save_Field (Name  => COL_8_1_NAME, --  author_id
                         Value => Object.Author);
       Query.Execute (Result);
       if Result /= 1 then
@@ -486,6 +514,8 @@ package body AWA.Comments.Models is
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Entity_Type));
       elsif Name = "status" then
          return Status_Type_Objects.To_Object (Impl.Status);
+      elsif Name = "format" then
+         return Format_Type_Objects.To_Object (Impl.Format);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -505,8 +535,9 @@ package body AWA.Comments.Models is
       Object.Set_Key_Value (Stmt.Get_Identifier (3));
       Object.Entity_Type := ADO.Entity_Type (Stmt.Get_Integer (5));
       Object.Status := Status_Type'Val (Stmt.Get_Integer (6));
-      if not Stmt.Is_Null (7) then
-         Object.Author.Set_Key_Value (Stmt.Get_Identifier (7), Session);
+      Object.Format := Format_Type'Val (Stmt.Get_Integer (7));
+      if not Stmt.Is_Null (8) then
+         Object.Author.Set_Key_Value (Stmt.Get_Identifier (8), Session);
       end if;
       Object.Version := Stmt.Get_Integer (4);
       ADO.Objects.Set_Created (Object);

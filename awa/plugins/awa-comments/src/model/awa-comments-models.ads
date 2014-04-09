@@ -39,6 +39,14 @@ with Util.Beans.Methods;
 pragma Warnings (On, "unit * is not referenced");
 package AWA.Comments.Models is
    --  --------------------
+   --  The format type defines the message format type.
+   --  --------------------
+   type Format_Type is (FORMAT_TEXT, FORMAT_WIKI, FORMAT_HTML);
+   for Format_Type use (FORMAT_TEXT => 0, FORMAT_WIKI => 1, FORMAT_HTML => 2);
+   package Format_Type_Objects is
+      new Util.Beans.Objects.Enums (Format_Type);
+
+   --  --------------------
    --  The status type defines whether the comment is visible or not.
    --  The comment can be put in the COMMENT_WAITING state so that
    --  it is not immediately visible. It must be put in the COMMENT_PUBLISHED
@@ -118,6 +126,14 @@ package AWA.Comments.Models is
    --  Get the comment status to decide whether the comment is visible (published) or not.
    function Get_Status (Object : in Comment_Ref)
                  return AWA.Comments.Models.Status_Type;
+
+   --  Set the comment format type.
+   procedure Set_Format (Object : in out Comment_Ref;
+                         Value  : in AWA.Comments.Models.Format_Type);
+
+   --  Get the comment format type.
+   function Get_Format (Object : in Comment_Ref)
+                 return AWA.Comments.Models.Format_Type;
 
    --
    procedure Set_Author (Object : in out Comment_Ref;
@@ -261,10 +277,11 @@ private
    COL_4_1_NAME : aliased constant String := "version";
    COL_5_1_NAME : aliased constant String := "entity_type";
    COL_6_1_NAME : aliased constant String := "status";
-   COL_7_1_NAME : aliased constant String := "author_id";
+   COL_7_1_NAME : aliased constant String := "format";
+   COL_8_1_NAME : aliased constant String := "author_id";
 
    COMMENT_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 8,
+     (Count => 9,
       Table => COMMENT_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
@@ -274,7 +291,8 @@ private
          5 => COL_4_1_NAME'Access,
          6 => COL_5_1_NAME'Access,
          7 => COL_6_1_NAME'Access,
-         8 => COL_7_1_NAME'Access
+         8 => COL_7_1_NAME'Access,
+         9 => COL_8_1_NAME'Access
 )
      );
    COMMENT_TABLE : constant ADO.Schemas.Class_Mapping_Access
@@ -293,6 +311,7 @@ private
        Version : Integer;
        Entity_Type : ADO.Entity_Type;
        Status : AWA.Comments.Models.Status_Type;
+       Format : AWA.Comments.Models.Format_Type;
        Author : AWA.Users.Models.User_Ref;
    end record;
 
