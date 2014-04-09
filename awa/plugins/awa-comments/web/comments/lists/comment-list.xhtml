@@ -29,5 +29,9 @@
         </a>
         said:
     </div>
-    <awa:wiki styleClass='comment-text' value="#{cmt.comment}" format="dotclear"/>
+    <h:panelGroup rendered="#{cmt.format ne 'FORMAT_WIKI'}" styleClass='comment-text'>
+        <h:outputText escape="#{cmt.format ne 'FORMAT_HTML'}" value="#{cmt.comment}"/>
+    </h:panelGroup>
+    <awa:wiki rendered="#{cmt.format eq 'FORMAT_WIKI'}"
+              styleClass='comment-text' value="#{cmt.comment}" format="dotclear"/>
 </h:list>
