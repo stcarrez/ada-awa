@@ -23,10 +23,8 @@
     </div>
     <div class='comment-author'>
         #{cmt.author} on
-        <a href="#comment-#{commentList.rowIndex}">
-            <h:outputText styleClass='comment-date' value="#{cmt.date}"
-                          converter="dateConverter"/>
-        </a>
+        <h:outputText styleClass='comment-date' value="#{cmt.date}"
+                      converter="dateConverter"/>
         said:
     </div>
     <h:panelGroup rendered="#{cmt.format ne 'FORMAT_WIKI'}" styleClass='comment-text'>
