@@ -17,8 +17,6 @@
 -----------------------------------------------------------------------
 with ASF.Applications;
 
-with ASF.Security.Servlets;
-
 with AWA.Modules;
 with AWA.Users.Services;
 with AWA.Users.Filters;
