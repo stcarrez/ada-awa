@@ -64,6 +64,9 @@
                                     <h:outputFormat value="#{blogMsg.blog_sign_in_add_comment}" escape="false">
                                         <f:param value="#{contextPath}/auth/login.html?"/>
                                     </h:outputFormat>
+                                    <util:script>
+                                        $("#awa-login").modal({ url: "#{contextPath}/auth/forms/login-dialog.html" });
+                                    </util:script>
                                 </c:otherwise>
                             </c:choose>
                         </h:panelGroup>
@@ -75,4 +78,11 @@
           </div>
         </div>
     </ui:define>
+
+    <ui:define name="pageScript">
+        <script type="text/javascript" src="#{contextPath}/js/jquery-1.8.3.js"></script>
+        <script type="text/javascript" src="#{contextPath}/js/asf.js"></script>
+        <script type="text/javascript" src="#{contextPath}/js/awa.js"></script>
+    </ui:define>
+
 </ui:composition>
