@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-module -- User management module
---  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -84,7 +84,7 @@ private
       Manager     : Services.User_Service_Access := null;
       Key_Filter  : aliased AWA.Users.Filters.Verify_Filter;
       Auth_Filter : aliased AWA.Users.Filters.Auth_Filter;
-      Auth        : aliased ASF.Security.Servlets.Request_Auth_Servlet;
+      Auth        : aliased AWA.Users.Servlets.Request_Auth_Servlet;
       Verify_Auth : aliased AWA.Users.Servlets.Verify_Auth_Servlet;
    end record;
 
