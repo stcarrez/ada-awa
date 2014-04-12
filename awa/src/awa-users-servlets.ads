@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-servlets -- OpenID verification servlet for user authentication
---  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,8 +18,27 @@
 
 with ASF.Principals;
 with ASF.Security.Servlets;
+with ASF.Requests;
+with ASF.Responses;
 with Security.Auth;
 package AWA.Users.Servlets is
+
+   --  ------------------------------
+   --  OpenID Request Servlet
+   --  ------------------------------
+   --  The <b>Request_Auth_Servlet</b> servlet implements the first steps of an OpenID
+   --  authentication.
+   type Request_Auth_Servlet is new ASF.Security.Servlets.Request_Auth_Servlet with null record;
+
+   --  Proceed to the OpenID authentication with an OpenID provider.
+   --  Find the OpenID provider URL and starts the discovery, association phases
+   --  during which a private key is obtained from the OpenID provider.
+   --  After OpenID discovery and association, the user will be redirected to
+   --  the OpenID provider.
+   overriding
+   procedure Do_Get (Server   : in Request_Auth_Servlet;
+                     Request  : in out ASF.Requests.Request'Class;
+                     Response : in out ASF.Responses.Response'Class);
 
    --  ------------------------------
    --  OpenID Verification Servlet
@@ -38,6 +57,14 @@ package AWA.Users.Servlets is
    procedure Create_Principal (Server : in Verify_Auth_Servlet;
                                Auth   : in Security.Auth.Authentication;
                                Result : out ASF.Principals.Principal_Access);
+
+   --  Verify the authentication result that was returned by the OpenID provider.
+   --  If the authentication succeeded and the signature was correct, sets a
+   --  user principals on the session.
+   overriding
+   procedure Do_Get (Server   : in Verify_Auth_Servlet;
+                     Request  : in out ASF.Requests.Request'Class;
+                     Response : in out ASF.Responses.Response'Class);
 
 private
 
