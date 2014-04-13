@@ -314,3 +314,15 @@ div.blog-post-comment-count a {
     color: #777;
     text-decoration: none;
 }
+ul.blog-pagination {
+    float: left;
+    width: 96%;
+    list-style-type: none;
+}
+ul.blog-pagination li {
+    float: left;
+    margin-left: 10%;
+    margin-right: 10%;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+}
