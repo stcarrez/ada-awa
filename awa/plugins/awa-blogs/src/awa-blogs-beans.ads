@@ -115,10 +115,9 @@ package AWA.Blogs.Beans is
                               return Util.Beans.Basic.Readonly_Bean_Access;
 
    --  List of posts visible to anybody.
-   type Post_List_Bean is limited new Util.Beans.Basic.Bean with record
+   type Post_List_Bean is new AWA.Blogs.Models.Post_List_Bean with record
       Posts      : aliased AWA.Blogs.Models.Post_Info_List_Bean;
       Service    : Modules.Blog_Module_Access := null;
-      Tag        : Ada.Strings.Unbounded.Unbounded_String;
       Tags       : AWA.Tags.Beans.Entity_Tag_Map;
       Posts_Bean : AWA.Blogs.Models.Post_Info_List_Bean_Access;
    end record;
@@ -134,6 +133,10 @@ package AWA.Blogs.Beans is
    procedure Set_Value (From  : in out Post_List_Bean;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object);
+
+   overriding
+   procedure Load (From    : in out Post_List_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
    --  Load the list of posts.  If a tag was set, filter the list of posts with the tag.
    procedure Load_List (Into : in out Post_List_Bean);
