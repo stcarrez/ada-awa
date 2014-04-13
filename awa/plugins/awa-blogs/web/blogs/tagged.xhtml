@@ -25,7 +25,9 @@
     <!-- Main page body -->
     <ui:define name="pageBody">
         <f:metadata>
+            <f:viewParam id='page' value='#{postList.page}' required="false"/>
             <f:viewParam id='tag' value='#{postList.tag}'/>
+            <f:viewAction action="#{postList.load}"/>
         </f:metadata>
         <div id='awa-content'>
             <div class='grid_8 blog-post-tag-info'>
