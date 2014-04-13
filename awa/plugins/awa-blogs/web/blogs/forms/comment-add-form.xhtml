@@ -16,12 +16,16 @@
   -->
 <f:view contentType="text/html; charset=UTF-8"
         xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets">
     <f:metadata>
         <f:viewParam id='id' value='#{post.id}'/>
         <f:viewParam id='id' value='#{postNewComment.entity_id}'/>
     </f:metadata>
-    <ui:include src="/comments/forms/comment-form.xhtml">
+    <ui:decorate template="/comments/forms/comment-form.xhtml">
         <ui:param name="comment" value="#{postNewComment}"/>
-    </ui:include>
+        <ui:define name="comment-input">
+            <h:inputHidden id='post-id' value='#{post.id}'/>
+        </ui:define>
+    </ui:decorate>
 </f:view>
