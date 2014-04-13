@@ -30,6 +30,7 @@ with AWA.Comments.Beans;
 with ADO.Utils;
 with ADO.Queries;
 with ADO.SQL;
+with ADO.Datasets;
 with ADO.Sessions;
 with ADO.Sessions.Entities;
 
@@ -330,6 +331,12 @@ package body AWA.Blogs.Beans is
       elsif Name = "tag" then
          return Util.Beans.Objects.To_Object (From.Tag);
 
+      elsif Name = "page" then
+         return Util.Beans.Objects.To_Object (From.Page);
+
+      elsif Name = "count" then
+         return Util.Beans.Objects.To_Object (From.Count);
+
       elsif Name = "updateDate" then
          if From.Posts.Get_Count = 0 then
             return Util.Beans.Objects.Null_Object;
@@ -355,7 +362,9 @@ package body AWA.Blogs.Beans is
    begin
       if Name = "tag" then
          From.Tag := Util.Beans.Objects.To_Unbounded_String (Value);
-         From.Load_List;
+--           From.Load_List;
+      elsif Name = "page" then
+         From.Page := Util.Beans.Objects.To_Integer (Value);
       end if;
    end Set_Value;
 
@@ -366,22 +375,31 @@ package body AWA.Blogs.Beans is
       use AWA.Blogs.Models;
       use AWA.Services;
 
-      Session : ADO.Sessions.Session := Into.Service.Get_Session;
-      Query   : ADO.Queries.Context;
-      Tag_Id  : ADO.Identifier;
+      Session     : ADO.Sessions.Session := Into.Service.Get_Session;
+      Query       : ADO.Queries.Context;
+      Count_Query : ADO.Queries.Context;
+      Tag_Id      : ADO.Identifier;
+      First       : constant Positive := 1 + (Into.Page - 1) * Into.Page_Size;
+      Last        : constant Positive := First + Into.Page_Size;
    begin
       AWA.Tags.Modules.Find_Tag_Id (Session, Ada.Strings.Unbounded.To_String (Into.Tag), Tag_Id);
       if Tag_Id /= ADO.NO_IDENTIFIER then
          Query.Set_Query (AWA.Blogs.Models.Query_Blog_Post_Tag_List);
          Query.Bind_Param (Name => "tag", Value => Tag_Id);
+         Count_Query.Set_Query (AWA.Blogs.Models.Query_Blog_Post_Tag_List_Count);
+         Count_Query.Bind_Param (Name => "tag", Value => Tag_Id);
       else
          Query.Set_Query (AWA.Blogs.Models.Query_Blog_Post_List);
+         Count_Query.Set_Query (AWA.Blogs.Models.Query_Blog_Post_List_Count);
       end if;
+      Query.Bind_Param (Name => "first", Value => First);
+      Query.Bind_Param (Name => "last", Value => Last);
       ADO.Sessions.Entities.Bind_Param (Params  => Query,
                                         Name    => "entity_type",
                                         Table   => AWA.Blogs.Models.POST_TABLE,
                                         Session => Session);
       AWA.Blogs.Models.List (Into.Posts, Session, Query);
+      Into.Count := ADO.Datasets.Get_Count (Session, Count_Query);
       declare
          List : ADO.Utils.Identifier_Vector;
          Iter : Post_Info_Vectors.Cursor := Into.Posts.List.First;
@@ -395,6 +413,14 @@ package body AWA.Blogs.Beans is
       end;
    end Load_List;
 
+   overriding
+   procedure Load (From    : in out Post_List_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
+   begin
+      From.Load_List;
+   end Load;
+
    --  ------------------------------
    --  Create the Post_List_Bean bean instance.
    --  ------------------------------
@@ -404,7 +430,9 @@ package body AWA.Blogs.Beans is
    begin
       Object.Service    := Module;
       Object.Posts_Bean := Object.Posts'Access;
-      Object.Load_List;
+      Object.Page_Size  := 20;
+      Object.Page       := 1;
+      Object.Count      := 0;
       return Object.all'Access;
    end Create_Post_List_Bean;
 
