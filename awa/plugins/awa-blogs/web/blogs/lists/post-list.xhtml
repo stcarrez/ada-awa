@@ -42,5 +42,20 @@
         </h:panelGroup>
     </div>
   </h:list>
+    <ul class='blog-pagination'>
+        <h:panelGroup rendered="#{postList.page gt 1}">
+            <li>
+                <a href="#{contextPath}/#{pageUrl}?page=#{postList.page - 1}#{pageParam}">Previous</a>
+            </li>
+        </h:panelGroup>
+        <li>
+            Page #{postList.page}
+        </li>
+        <h:panelGroup rendered="#{postList.page lt postList.page_count}">
+            <li>
+                <a href="#{contextPath}/#{pageUrl}?page=#{postList.page + 1}#{pageParam}">Next</a>
+            </li>
+        </h:panelGroup>
+    </ul>
 </ui:composition>
 
