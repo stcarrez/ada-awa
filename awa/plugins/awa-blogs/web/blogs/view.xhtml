@@ -1,5 +1,5 @@
 <!-- Anonymous page which displays the blog posts
-  -  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,14 +24,18 @@
 
     <!-- Main page body -->
     <ui:define name="pageBody">
-      <div id='awa-content'>
-          <div class='grid_9'>
-              <ui:include src="lists/post-list.xhtml"/>
-          </div>
-          <div class='grid_3 blog-post-info'>
-              <ui:include src="lists/post-info.xhtml"/>
-          </div>
-      </div>
+        <f:metadata>
+            <f:viewParam id='page' value='#{postList.page}' required="false"/>
+            <f:viewAction action="#{postList.load}"/>
+        </f:metadata>
+        <div id='awa-content'>
+            <div class='grid_9'>
+                <ui:include src="lists/post-list.xhtml"/>
+            </div>
+            <div class='grid_3 blog-post-info'>
+                <ui:include src="lists/post-info.xhtml"/>
+            </div>
+        </div>
     </ui:define>
 </ui:composition>
 
