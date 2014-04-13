@@ -26,6 +26,7 @@
     <h:form id='post'>
         <h:inputHidden id='entity-id' value='#{comment.entity_id}' required='false'/>
         <h:inputHidden id='comment-id' value='#{comment.id}' required='false'/>
+        <ui:insert name="comment-input"/>
         <div class='comment-gravatar'>
             <w:gravatar email="#{user.email}" size="60"/>
         </div>
