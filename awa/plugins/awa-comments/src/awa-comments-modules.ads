@@ -20,6 +20,7 @@ with ASF.Applications;
 with ADO;
 with AWA.Modules;
 with AWA.Modules.Get;
+with AWA.Modules.Lifecycles;
 with AWA.Comments.Models;
 
 --  == Integration ==
@@ -44,6 +45,11 @@ package AWA.Comments.Modules is
    NAME : constant String := "comments";
 
    Not_Found : exception;
+
+   --  The <tt>Comment_Lifecycle</tt> package allows to receive life cycle events related
+   --  to the <tt>Comment</tt> object.
+   package Comment_Lifecycle is
+     new AWA.Modules.Lifecycles (Element_Type => AWA.Comments.Models.Comment_Ref'Class);
 
    type Comment_Module is new AWA.Modules.Module with null record;
    type Comment_Module_Access is access all Comment_Module'Class;
