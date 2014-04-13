@@ -546,7 +546,11 @@ package AWA.Blogs.Models is
 
    Query_Blog_Post_List : constant ADO.Queries.Query_Definition_Access;
 
+   Query_Blog_Post_List_Count : constant ADO.Queries.Query_Definition_Access;
+
    Query_Blog_Post_Tag_List : constant ADO.Queries.Query_Definition_Access;
+
+   Query_Blog_Post_Tag_List_Count : constant ADO.Queries.Query_Definition_Access;
 
 
    type Blog_Bean is abstract new AWA.Blogs.Models.Blog_Ref
@@ -591,6 +595,33 @@ package AWA.Blogs.Models is
                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
    procedure Load (Bean : in out Post_Bean;
+                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   type Post_List_Bean is abstract limited
+     new Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with  record
+      Tag : Ada.Strings.Unbounded.Unbounded_String;
+      Page : Integer;
+      Count : Integer;
+      Page_Size : Integer;
+   end record;
+
+   --  This bean provides some methods that can be used in a Method_Expression.
+   overriding
+   function Get_Method_Bindings (From : in Post_List_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access;
+
+   --  Get the value identified by the name.
+   overriding
+   function Get_Value (From : in Post_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the value identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Post_List_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   procedure Load (Bean : in out Post_List_Bean;
                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
 
@@ -803,9 +834,21 @@ private
    Query_Blog_Post_List : constant ADO.Queries.Query_Definition_Access
    := Def_Postinfo_Blog_Post_List.Query'Access;
 
+   package Def_Postinfo_Blog_Post_List_Count is
+      new ADO.Queries.Loaders.Query (Name => "blog-post-list-count",
+                                     File => File_5.File'Access);
+   Query_Blog_Post_List_Count : constant ADO.Queries.Query_Definition_Access
+   := Def_Postinfo_Blog_Post_List_Count.Query'Access;
+
    package Def_Postinfo_Blog_Post_Tag_List is
       new ADO.Queries.Loaders.Query (Name => "blog-post-tag-list",
                                      File => File_5.File'Access);
    Query_Blog_Post_Tag_List : constant ADO.Queries.Query_Definition_Access
    := Def_Postinfo_Blog_Post_Tag_List.Query'Access;
+
+   package Def_Postinfo_Blog_Post_Tag_List_Count is
+      new ADO.Queries.Loaders.Query (Name => "blog-post-tag-list-count",
+                                     File => File_5.File'Access);
+   Query_Blog_Post_Tag_List_Count : constant ADO.Queries.Query_Definition_Access
+   := Def_Postinfo_Blog_Post_Tag_List_Count.Query'Access;
 end AWA.Blogs.Models;

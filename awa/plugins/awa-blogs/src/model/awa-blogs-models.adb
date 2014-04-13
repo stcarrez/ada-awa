@@ -1534,5 +1534,64 @@ package body AWA.Blogs.Models is
 
 
 
+   procedure Op_Load (Bean    : in out Post_List_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Load (Bean    : in out Post_List_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Post_List_Bean'Class (Bean).Load (Outcome);
+   end Op_Load;
+   package Binding_Post_List_Bean_1 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Post_List_Bean,
+                                                      Method => Op_Load,
+                                                      Name   => "load");
+
+   Binding_Post_List_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
+     := (1 => Binding_Post_List_Bean_1.Proxy'Access
+     );
+
+   --  This bean provides some methods that can be used in a Method_Expression.
+   overriding
+   function Get_Method_Bindings (From : in Post_List_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access is
+   begin
+      return Binding_Post_List_Bean_Array'Access;
+   end Get_Method_Bindings;
+
+   function Get_Value (From : in Post_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "tag" then
+         return Util.Beans.Objects.To_Object (From.Tag);
+      elsif Name = "page" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Page));
+      elsif Name = "count" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Count));
+      elsif Name = "page_size" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Page_Size));
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+
+   --  Set the value identified by the name
+   overriding 
+   procedure Set_Value (Item  : in out Post_List_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "tag" then
+         Item.Tag := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "page" then
+         Item.Page := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "count" then
+         Item.Count := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "page_size" then
+         Item.Page_Size := Util.Beans.Objects.To_Integer (Value);
+      end if;
+   end Set_Value;
+
+
+
 
 end AWA.Blogs.Models;
