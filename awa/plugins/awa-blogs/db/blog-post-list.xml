@@ -45,7 +45,17 @@
     WHERE post.status > 0
     GROUP BY post.id
     ORDER BY post.create_date DESC
-    LIMIT 40
+    LIMIT :first, :last
+       </sql>
+    </query>
+
+    <query name='blog-post-list-count'>
+       <comment>Get the number of public visible posts.</comment>
+       <sql>
+    SELECT
+      count(post.id)
+    FROM awa_post AS post
+    WHERE post.status > 0
        </sql>
     </query>
 
@@ -67,7 +77,18 @@
     WHERE post.status > 0
     GROUP BY post.id
     ORDER BY post.create_date DESC
-    LIMIT 40
+    LIMIT :first, :last
+       </sql>
+    </query>
+
+    <query name='blog-post-tag-list-count'>
+       <comment>Get the number of public visible posts for a given tag.</comment>
+       <sql>
+    SELECT
+      count(distinct post.id)
+    FROM awa_post AS post
+    INNER JOIN awa_tagged_entity AS e ON e.for_entity_id = post.id AND e.entity_type = :entity_type AND e.tag_id = :tag
+    WHERE post.status > 0
        </sql>
     </query>
 
