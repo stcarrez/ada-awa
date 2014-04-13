@@ -272,7 +272,9 @@
     <name>blog-add-comment</name>
     <entity-type>awa_post</entity-type>
     <sql>
-      select user.id from awa_user as user where user.id = :user_id
+      SELECT user.id FROM awa_user as user
+      INNER JOIN awa_post AS blog_post ON blog_post.id = :entity_id
+      WHERE user.id = :user_id AND blog_post.allow_comments = 1
     </sql>
   </entity-permission>
 
