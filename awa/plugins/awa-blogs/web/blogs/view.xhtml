@@ -30,7 +30,9 @@
         </f:metadata>
         <div id='awa-content'>
             <div class='grid_9'>
-                <ui:include src="lists/post-list.xhtml"/>
+                <ui:include src="lists/post-list.xhtml">
+                    <ui:param name="pageUrl" value="blogs/view.html"/>
+                </ui:include>
             </div>
             <div class='grid_3 blog-post-info'>
                 <ui:include src="lists/post-info.xhtml"/>
