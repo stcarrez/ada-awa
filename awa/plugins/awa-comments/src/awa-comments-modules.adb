@@ -84,8 +84,6 @@ package body AWA.Comments.Modules is
                              Permission  : in String;
                              Entity_Type : in String;
                              Comment     : in out AWA.Comments.Models.Comment_Ref'Class) is
-      pragma Unreferenced (Model);
-
       Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       User  : constant AWA.Users.Models.User_Ref := Ctx.Get_User;
       DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
@@ -101,6 +99,8 @@ package body AWA.Comments.Modules is
       Comment.Set_Author (User);
       Comment.Set_Create_Date (Ada.Calendar.Clock);
       Comment.Save (DB);
+
+      Comment_Lifecycle.Notify_Create (Model, Comment);
       Ctx.Commit;
    end Create_Comment;
 
@@ -111,8 +111,6 @@ package body AWA.Comments.Modules is
    procedure Update_Comment (Model       : in Comment_Module;
                              Permission  : in String;
                              Comment     : in out AWA.Comments.Models.Comment_Ref'Class) is
-      pragma Unreferenced (Model);
-
       Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
    begin
@@ -126,6 +124,7 @@ package body AWA.Comments.Modules is
       --  Check that the user has the update permission on the given comment.
       AWA.Permissions.Check (Permission => Security.Permissions.Get_Permission_Index (Permission),
                              Entity     => Comment);
+      Comment_Lifecycle.Notify_Update (Model, Comment);
       Comment.Save (DB);
       Ctx.Commit;
    end Update_Comment;
@@ -137,8 +136,6 @@ package body AWA.Comments.Modules is
    procedure Delete_Comment (Model       : in Comment_Module;
                              Permission  : in String;
                              Comment     : in out AWA.Comments.Models.Comment_Ref'Class) is
-      pragma Unreferenced (Model);
-
       Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
    begin
@@ -148,7 +145,7 @@ package body AWA.Comments.Modules is
       AWA.Permissions.Check (Permission => Security.Permissions.Get_Permission_Index (Permission),
                              Entity     => Comment);
 
-
+      Comment_Lifecycle.Notify_Delete (Model, Comment);
       Comment.Delete (DB);
       Ctx.Commit;
    end Delete_Comment;
