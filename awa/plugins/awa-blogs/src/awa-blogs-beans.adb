@@ -337,6 +337,9 @@ package body AWA.Blogs.Beans is
       elsif Name = "count" then
          return Util.Beans.Objects.To_Object (From.Count);
 
+      elsif Name = "page_count" then
+         return Util.Beans.Objects.To_Object ((From.Count + From.Page_Size - 1) / From.Page_Size);
+
       elsif Name = "updateDate" then
          if From.Posts.Get_Count = 0 then
             return Util.Beans.Objects.Null_Object;
