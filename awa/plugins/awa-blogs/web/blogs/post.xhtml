@@ -61,11 +61,12 @@
                                                   src="/blogs/forms/comment-add-form.html?id=#{post.id}"/>
                                 </c:when>
                                 <c:otherwise>
-                                    <h:outputFormat value="#{blogMsg.blog_sign_in_add_comment}" escape="false">
-                                        <f:param value="#{contextPath}/auth/login.html?"/>
-                                    </h:outputFormat>
+                                    #{blogMsg.blog_sign_in_add_comment}
+                                    <span id="awa-login">#{blogMsg.blog_sign_in_label}</span>
                                     <util:script>
-                                        $("#awa-login").modal({ url: "#{contextPath}/auth/forms/login-dialog.html" });
+                                        $("#awa-login").modal({
+                                            url: "#{contextPath}/auth/forms/login-dialog.html?redirect=#{contextPath}/blogs/post.html%3Fpost=#{post.uri}",
+                                        allow_close: true });
                                     </util:script>
                                 </c:otherwise>
                             </c:choose>
