@@ -90,6 +90,16 @@
       <property-class>String</property-class>
       <value>blog-add-comment</value>
     </managed-property>
+    <managed-property>
+      <property-name>status</property-name>
+      <property-class>String</property-class>
+      <value>COMMENT_WAITING</value>
+    </managed-property>
+    <managed-property>
+      <property-name>format</property-name>
+      <property-class>String</property-class>
+      <value>FORMAT_TEXT</value>
+    </managed-property>
   </managed-bean>
 
   <managed-bean>
