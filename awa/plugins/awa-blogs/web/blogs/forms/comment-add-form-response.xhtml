@@ -16,12 +16,12 @@
   -->
 <f:view contentType="application/json"
         xmlns:c="http://java.sun.com/jstl/core"
-        xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:f="http://java.sun.com/jsf/core">
     [
 <c:choose>
     <c:when test="#{postNewComment.status ne 0}">
-        { "action": "update", "data": "#{blogMsg.blog_comment_submitted_for_approval}" }
+        { "action": "append", "id": ".comment-list", "data": "#{blogMsg.blog_comment_submitted_for_approval}" },
+        { "action": "hide" }
     </c:when>
     <c:otherwise>
         { "action": "redirect", "url": "#{contextPath}/blogs/post.html?post=#{post.uri}" }
