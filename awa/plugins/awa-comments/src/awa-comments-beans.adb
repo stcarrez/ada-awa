@@ -68,6 +68,9 @@ package body AWA.Comments.Beans is
       elsif Name = "status" then
          From.Set_Status (AWA.Comments.Models.Status_Type_Objects.To_Value (Value));
 
+      elsif Name = "format" then
+         From.Set_Format (AWA.Comments.Models.Format_Type_Objects.To_Value (Value));
+
       elsif Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
          declare
             Id  : constant ADO.Identifier := ADO.Utils.To_Identifier (Value);
