@@ -54,15 +54,15 @@
                             </ui:include>
                         </h:panelGroup>
                         <h:panelGroup rendered="#{post.allow_comments}">
-                            <h3>#{blogMsg.blog_add_comment}</h3>
                             <c:choose>
                                 <c:when test="#{user.isLogged}">
                                     <ajax:include styleClass="asf-container" async="true"
                                                   src="/blogs/forms/comment-add-form.html?id=#{post.id}"/>
                                 </c:when>
                                 <c:otherwise>
+                                    <h3>#{blogMsg.blog_add_comment}</h3>
                                     #{blogMsg.blog_sign_in_add_comment}
-                                    <span id="awa-login">#{blogMsg.blog_sign_in_label}</span>
+                                    <a id="awa-login" href="#">#{blogMsg.blog_sign_in_label}</a>
                                     <util:script>
                                         $("#awa-login").modal({
                                             url: "#{contextPath}/auth/forms/login-dialog.html?redirect=#{contextPath}/blogs/post.html%3Fpost=#{post.uri}",
