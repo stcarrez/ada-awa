@@ -22,6 +22,7 @@
         <f:viewParam id='id' value='#{post.id}'/>
         <f:viewParam id='id' value='#{postNewComment.entity_id}'/>
     </f:metadata>
+    <h3>#{blogMsg.blog_add_comment}</h3>
     <ui:decorate template="/comments/forms/comment-form.xhtml">
         <ui:param name="comment" value="#{postNewComment}"/>
         <ui:define name="comment-input">
