@@ -51,6 +51,8 @@ package AWA.Comments.Modules is
    package Comment_Lifecycle is
      new AWA.Modules.Lifecycles (Element_Type => AWA.Comments.Models.Comment_Ref'Class);
 
+   subtype Listener is Comment_Lifecycle.Listener;
+
    type Comment_Module is new AWA.Modules.Module with null record;
    type Comment_Module_Access is access all Comment_Module'Class;
 
