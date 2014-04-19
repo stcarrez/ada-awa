@@ -365,7 +365,6 @@ package body AWA.Blogs.Beans is
    begin
       if Name = "tag" then
          From.Tag := Util.Beans.Objects.To_Unbounded_String (Value);
---           From.Load_List;
       elsif Name = "page" then
          From.Page := Util.Beans.Objects.To_Integer (Value);
       end if;
