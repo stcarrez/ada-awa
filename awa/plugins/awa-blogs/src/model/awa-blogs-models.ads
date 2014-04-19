@@ -546,11 +546,7 @@ package AWA.Blogs.Models is
 
    Query_Blog_Post_List : constant ADO.Queries.Query_Definition_Access;
 
-   Query_Blog_Post_List_Count : constant ADO.Queries.Query_Definition_Access;
-
    Query_Blog_Post_Tag_List : constant ADO.Queries.Query_Definition_Access;
-
-   Query_Blog_Post_Tag_List_Count : constant ADO.Queries.Query_Definition_Access;
 
 
    type Blog_Bean is abstract new AWA.Blogs.Models.Blog_Ref
@@ -834,21 +830,9 @@ private
    Query_Blog_Post_List : constant ADO.Queries.Query_Definition_Access
    := Def_Postinfo_Blog_Post_List.Query'Access;
 
-   package Def_Postinfo_Blog_Post_List_Count is
-      new ADO.Queries.Loaders.Query (Name => "blog-post-list-count",
-                                     File => File_5.File'Access);
-   Query_Blog_Post_List_Count : constant ADO.Queries.Query_Definition_Access
-   := Def_Postinfo_Blog_Post_List_Count.Query'Access;
-
    package Def_Postinfo_Blog_Post_Tag_List is
       new ADO.Queries.Loaders.Query (Name => "blog-post-tag-list",
                                      File => File_5.File'Access);
    Query_Blog_Post_Tag_List : constant ADO.Queries.Query_Definition_Access
    := Def_Postinfo_Blog_Post_Tag_List.Query'Access;
-
-   package Def_Postinfo_Blog_Post_Tag_List_Count is
-      new ADO.Queries.Loaders.Query (Name => "blog-post-tag-list-count",
-                                     File => File_5.File'Access);
-   Query_Blog_Post_Tag_List_Count : constant ADO.Queries.Query_Definition_Access
-   := Def_Postinfo_Blog_Post_Tag_List_Count.Query'Access;
 end AWA.Blogs.Models;
