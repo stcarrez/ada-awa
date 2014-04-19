@@ -43,19 +43,23 @@
     </div>
   </h:list>
     <ul class='blog-pagination'>
-        <h:panelGroup rendered="#{postList.page gt 1}">
-            <li>
-                <a href="#{contextPath}/#{pageUrl}?page=#{postList.page - 1}#{pageParam}">Previous</a>
-            </li>
-        </h:panelGroup>
         <li>
-            Page #{postList.page}
+            <h:panelGroup rendered="#{postList.page gt 1}">
+                <a href="#{contextPath}/#{pageUrl}?page=#{postList.page - 1}#{pageParam}"
+                        title="#{blogMsg.blog_post_previous_page_title}">#{blogMsg.blog_post_previous}</a>
+            </h:panelGroup>
         </li>
-        <h:panelGroup rendered="#{postList.page lt postList.page_count}">
-            <li>
-                <a href="#{contextPath}/#{pageUrl}?page=#{postList.page + 1}#{pageParam}">Next</a>
-            </li>
-        </h:panelGroup>
+        <li>
+            <h:outputFormat value="#{blogMsg.blog_post_page_number}">
+                <f:param value="#{postList.page}"/>
+            </h:outputFormat>
+        </li>
+        <li>
+            <h:panelGroup rendered="#{postList.page lt postList.page_count}">
+                <a href="#{contextPath}/#{pageUrl}?page=#{postList.page + 1}#{pageParam}"
+                        title="#{blogMsg.blog_post_next_page_title}">#{blogMsg.blog_post_next}</a>
+            </h:panelGroup>
+        </li>
     </ul>
 </ui:composition>
 
