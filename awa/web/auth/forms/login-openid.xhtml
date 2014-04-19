@@ -1,5 +1,5 @@
 <!-- OpenID login form
-  -  Copyright (C) 2011, 2012 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,21 +17,26 @@
 <div class='awa-login ui-widget ui-widget-content ui-corner-all'>
     <h2>#{title}</h2>
     <ul class='openid-login'>
-      <li>
-        <a href="#{contextPath}/auth/auth/google?redirect=#{redirect}" title="#{userMsg.openid_google_auth}" class='openid-google'>
-          <em/>
-        </a>
-      </li>
-      <li>
-        <a href="#{contextPath}/auth/auth/yahoo?redirect=#{redirect}" title="#{userMsg.openid_yahoo_auth}" class='openid-yahoo'>
-          <em/>
-        </a>
-      </li>
-      <li>
-        <a href="#{contextPath}/auth/auth/orange?redirect=#{redirect}" title="#{userMsg.openid_orange_auth}" class='openid-orange'>
-          <em/>
-        </a>
-      </li>
+        <li>
+            <a href="#{contextPath}/auth/auth/yahoo?redirect=#{redirect}" title="#{userMsg.openid_yahoo_auth}" class='openid-yahoo'>
+                <em/>
+            </a>
+        </li>
+        <li>
+            <a href="#{contextPath}/auth/auth/google-plus?redirect=#{redirect}" title="#{userMsg.openid_google_plus_auth}" class='openid-google-plus'>
+                <em/>
+            </a>
+        </li>
+        <li>
+            <a href="#{contextPath}/auth/auth/facebook?redirect=#{redirect}" title="#{userMsg.openid_facebook_auth}" class='openid-facebook'>
+                <em/>
+            </a>
+        </li>
+        <li>
+            <a href="#{contextPath}/auth/auth/orange?redirect=#{redirect}" title="#{userMsg.openid_orange_auth}" class='openid-orange'>
+                <em/>
+            </a>
+        </li>
     </ul>
 </div>
 
