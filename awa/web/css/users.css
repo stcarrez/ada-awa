@@ -97,6 +97,8 @@ ul.openid-login a {
 }
 
 a.openid-orange em,
+a.openid-facebook em,
+a.openid-google-plus em,
 a.openid-yahoo em,
 a.openid-google em {
 	display: block;
@@ -105,6 +107,10 @@ a.openid-google em {
 	width: 119px;
 	height: 40px;
 	overflow: hidden;
+}
+ul.openid-login a.openid-google-plus, ul.openid-login a.openid-facebook {
+    border: none;
+    padding: 0;
 }
 a.openid-yahoo em {
   background-position: 0 -39px;
@@ -116,6 +122,14 @@ div.openid-login a.openid-orange {
 a.openid-orange em {
   background-position: 0 -242px;
   height: 35px;
+}
+a.openid-facebook em {
+  background-position: 0 -72px;
+  height: 48px;
+}
+a.openid-google-plus em {
+  background-position: 0 -123px;
+  height: 36px;
 }
 div.openid-info {
     float: left;
