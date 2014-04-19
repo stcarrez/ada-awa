@@ -42,7 +42,7 @@
     INNER JOIN awa_user AS u ON c.author_id = u.id
     INNER JOIN awa_email AS e ON u.email_id = e.id
     WHERE post.blog_id = :blog_id
-    ORDER BY c.create_date ASC
+    ORDER BY c.create_date DESC
        </sql>
     </query>
 
