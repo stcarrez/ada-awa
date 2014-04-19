@@ -389,11 +389,11 @@ package body AWA.Blogs.Beans is
       if Tag_Id /= ADO.NO_IDENTIFIER then
          Query.Set_Query (AWA.Blogs.Models.Query_Blog_Post_Tag_List);
          Query.Bind_Param (Name => "tag", Value => Tag_Id);
-         Count_Query.Set_Query (AWA.Blogs.Models.Query_Blog_Post_Tag_List_Count);
+         Count_Query.Set_Count_Query (AWA.Blogs.Models.Query_Blog_Post_Tag_List);
          Count_Query.Bind_Param (Name => "tag", Value => Tag_Id);
       else
          Query.Set_Query (AWA.Blogs.Models.Query_Blog_Post_List);
-         Count_Query.Set_Query (AWA.Blogs.Models.Query_Blog_Post_List_Count);
+         Count_Query.Set_Count_Query (AWA.Blogs.Models.Query_Blog_Post_List);
       end if;
       Query.Bind_Param (Name => "first", Value => First);
       Query.Bind_Param (Name => "last", Value => Last);
