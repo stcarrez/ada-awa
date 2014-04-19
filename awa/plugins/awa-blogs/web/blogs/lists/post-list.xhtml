@@ -46,7 +46,7 @@
         <li>
             <h:panelGroup rendered="#{postList.page gt 1}">
                 <a href="#{contextPath}/#{pageUrl}?page=#{postList.page - 1}#{pageParam}"
-                        title="#{blogMsg.blog_post_previous_page_title}">#{blogMsg.blog_post_previous}</a>
+                        title="#{blogMsg.blog_post_previous_page_title}">#{blogMsg.blog_post_previous_page}</a>
             </h:panelGroup>
         </li>
         <li>
@@ -57,7 +57,7 @@
         <li>
             <h:panelGroup rendered="#{postList.page lt postList.page_count}">
                 <a href="#{contextPath}/#{pageUrl}?page=#{postList.page + 1}#{pageParam}"
-                        title="#{blogMsg.blog_post_next_page_title}">#{blogMsg.blog_post_next}</a>
+                        title="#{blogMsg.blog_post_next_page_title}">#{blogMsg.blog_post_next_page}</a>
             </h:panelGroup>
         </li>
     </ul>
