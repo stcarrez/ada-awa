@@ -23,6 +23,7 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"><f:metadata>
        <f:viewParam id='tag' value='#{postList.tag}'/>
+       <f:viewAction action="#{postList.load}"/>
     </f:metadata><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"
           xmlns:dc="http://purl.org/dc/elements/1.1/"
