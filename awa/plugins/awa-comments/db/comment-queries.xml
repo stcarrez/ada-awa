@@ -39,7 +39,7 @@
     INNER JOIN awa_user AS u ON c.author_id = u.id
     INNER JOIN awa_email AS e ON u.email_id = e.id
     WHERE c.entity_type = :entity_type AND c.entity_id = :entity_id AND c.status = :status
-    ORDER BY c.create_date ASC
+    ORDER BY c.create_date DESC
        </sql>
     </query>
 
