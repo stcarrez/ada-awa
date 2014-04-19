@@ -382,7 +382,7 @@ package body AWA.Blogs.Beans is
       Count_Query : ADO.Queries.Context;
       Tag_Id      : ADO.Identifier;
       First       : constant Positive := 1 + (Into.Page - 1) * Into.Page_Size;
-      Last        : constant Positive := First + Into.Page_Size;
+      Last        : constant Positive := First + Into.Page_Size - 1;
    begin
       AWA.Tags.Modules.Find_Tag_Id (Session, Ada.Strings.Unbounded.To_String (Into.Tag), Tag_Id);
       if Tag_Id /= ADO.NO_IDENTIFIER then
@@ -397,6 +397,10 @@ package body AWA.Blogs.Beans is
       Query.Bind_Param (Name => "first", Value => First);
       Query.Bind_Param (Name => "last", Value => Last);
       ADO.Sessions.Entities.Bind_Param (Params  => Query,
+                                        Name    => "entity_type",
+                                        Table   => AWA.Blogs.Models.POST_TABLE,
+                                        Session => Session);
+      ADO.Sessions.Entities.Bind_Param (Params  => Count_Query,
                                         Name    => "entity_type",
                                         Table   => AWA.Blogs.Models.POST_TABLE,
                                         Session => Session);
