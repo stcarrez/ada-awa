@@ -20,7 +20,7 @@
     [
 <c:choose>
     <c:when test="#{postNewComment.status ne 0}">
-        { "action": "append", "id": ".comment-list", "data": "#{blogMsg.blog_comment_submitted_for_approval}" },
+        { "action": "append", "id": ".post-comments", "data": "#{blogMsg.blog_comment_submitted_for_approval}" },
         { "action": "hide" }
     </c:when>
     <c:otherwise>
