@@ -9,4 +9,9 @@
     <module name="security"></module>
     <module name="asf"></module>
     <module name="util"></module>
+    <depend name="awa"></depend>
+    <depend name="util"></depend>
+    <depend name="ado"></depend>
+    <depend name="security"></depend>
+    <depend name="asf"></depend>
 </project>
