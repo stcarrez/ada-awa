@@ -188,6 +188,7 @@ div.blog-post div.post-title h2 a:hover {
 div.blog-post div.post-text {
     float: left;
     padding-top: 10px;
+    width: 100%;
 }
 
 div.post-text {
