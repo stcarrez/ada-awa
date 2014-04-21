@@ -381,8 +381,8 @@ package body AWA.Blogs.Beans is
       Query       : ADO.Queries.Context;
       Count_Query : ADO.Queries.Context;
       Tag_Id      : ADO.Identifier;
-      First       : constant Positive := 1 + (Into.Page - 1) * Into.Page_Size;
-      Last        : constant Positive := First + Into.Page_Size - 1;
+      First       : constant Natural  := (Into.Page - 1) * Into.Page_Size;
+      Last        : constant Positive := First + Into.Page_Size;
    begin
       AWA.Tags.Modules.Find_Tag_Id (Session, Ada.Strings.Unbounded.To_String (Into.Tag), Tag_Id);
       if Tag_Id /= ADO.NO_IDENTIFIER then
