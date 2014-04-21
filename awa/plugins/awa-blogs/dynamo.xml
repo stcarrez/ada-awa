@@ -13,4 +13,5 @@
     <depend name="awa-workspaces"></depend>
     <depend name="awa-tags"></depend>
     <depend name="awa-comments"></depend>
+    <depend name="awa_markedit"></depend>
 </project>
