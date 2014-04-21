@@ -291,7 +291,7 @@ li.comment, div.awa-comment-form {
 }
 li.comment div.comment-gravatar, div.awa-form div.comment-gravatar {
     position: absolute;
-    left: -110px;
+    left: -90px;
     top: 0;
 }
 li.comment div.comment-author {
