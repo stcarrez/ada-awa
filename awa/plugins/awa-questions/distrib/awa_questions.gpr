@@ -1,4 +1,7 @@
 with "awa";
+with "awa_workspaces";
+with "awa_tags";
+with "awa_votes";
 project awa_questions is
    Version      := awa.Version;
    Name         := "awa_questions";
