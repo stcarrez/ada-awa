@@ -1,4 +1,6 @@
 with "awa";
+with "awa_workspaces";
+with "awa_storages";
 project awa_images is
    Version      := awa.Version;
    Name         := "awa_images";
