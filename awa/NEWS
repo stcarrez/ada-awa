@@ -6,7 +6,7 @@ Version 0.4     -
   - Add tags to the question and blog plugins
   - Add comments to the blog post
 
-Version 0.3     - Feb 2012
+Version 0.3     - Feb 2013
   - New jobs plugin to manage asynchronous jobs
   - New storage plugin to manage a storage space for application documents
   - New votes plugin to allow voting on items
