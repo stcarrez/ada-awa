@@ -1,7 +1,7 @@
 ## The type of library we want to build. Possible values:
 ##   relocatable
 ##   static
-LIBRARY_TYPE=static
+AWA_LIBRARY_TYPE=static
 
 # You may edit this makefile as long as you keep these original 
 # target names defined.
@@ -56,7 +56,7 @@ libdir=${prefix}/lib
 alidir=${libdir}/ada/adalib/
 
 CPUS := @NR_CPUS@
-MAKE_ARGS=-XMODE=${MODE} -XLIBRARY_TYPE=${LIBRARY_TYPE} -XPROCESSORS=$(CPUS)
+MAKE_ARGS=-XMODE=${MODE} -XAWA_LIBRARY_TYPE=${AWA_LIBRARY_TYPE} -XPROCESSORS=$(CPUS)
 
 ifeq (${BUILDS_SHARED},yes)
 all:     static shared
@@ -76,10 +76,10 @@ build-tests:
 	test ! -f tests.gpr || $(GNATMAKE) -m -p -Ptests $(MAKE_ARGS)
 
 static:
-	$(MAKE) LIBRARY_TYPE=static build
+	$(MAKE) AWA_LIBRARY_TYPE=static build
 
 shared:
-	$(MAKE) LIBRARY_TYPE=relocatable build
+	$(MAKE) AWA_LIBRARY_TYPE=relocatable build
 
 # Not intended for manual invocation.
 # Invoked if automatic builds are enabled.
@@ -90,8 +90,8 @@ autobuild:
 
 # Clean the root project of all build products.
 clean:  pre-clean
-	-$(GNATCLEAN) -q -P "$(GPRPATH)" -XLIBRARY_TYPE=static
-	-$(GNATCLEAN) -q -P "$(GPRPATH)" -XLIBRARY_TYPE=relocatable
+	-$(GNATCLEAN) -q -P "$(GPRPATH)" -XAWA_LIBRARY_TYPE=static
+	-$(GNATCLEAN) -q -P "$(GPRPATH)" -XAWA_LIBRARY_TYPE=relocatable
 
 # Clean root project and all imported projects too.
 clean_tree:
@@ -145,10 +145,10 @@ dist:   pre-dist dist-prepare
 	    -cvzf $(DIST_FILE) $(distdir)
 
 install_static:
-	$(MAKE) LIBRARY_TYPE=static install_lib
+	$(MAKE) AWA_LIBRARY_TYPE=static install_lib
 
 install_shared:
-	$(MAKE) LIBRARY_TYPE=relocatable install_lib
+	$(MAKE) AWA_LIBRARY_TYPE=relocatable install_lib
 
 install_lib:  pre-install
 	rm -rf ${includedir}/${NAME}
@@ -167,7 +167,7 @@ install_lib:  pre-install
 	test ! -d src/model || ${CP} src/model/*.ad[bs] ${includedir}/${NAME}
 	test ! -f distrib/${GPRPATH} || \
 	    sed -e "s,INSTALL,${prefix},g" \
-	        -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" < distrib/${GPRPATH} > ${projectdir}/${GPRPATH}
+	        -e "s,LIBRARY_TYPE,$(AWA_LIBRARY_TYPE),g" < distrib/${GPRPATH} > ${projectdir}/${GPRPATH}
 	test ! -d config || ${CP} config/*.xml ${dynamodir}/${NAME}/config/
 	${CP} dynamo.xml ${dynamodir}/${NAME}/dynamo.xml
 	test ! -f NOTICE.txt || ${CP} NOTICE.txt ${dynamodir}/${NAME}/NOTICE.txt
@@ -178,17 +178,17 @@ install_lib:  pre-install
 	test ! -d bundles || ${CP} bundles/*.properties ${dynamodir}/${NAME}/bundles/
 	test ! -d db || \
 	     (tar --exclude=.svn --exclude='*~' -cf - db)| (cd ${dynamodir}/${NAME}/ && tar xf -)
-	test ! -d lib/${NAME}/${LIBRARY_TYPE} || \
+	test ! -d lib/${NAME}/${AWA_LIBRARY_TYPE} || \
 	     (${MKDIR} -p ${alidir}/${NAME}/ && \
-	     ${CP} lib/${NAME}/$(LIBRARY_TYPE)/*.ali ${alidir}/${NAME}/)
+	     ${CP} lib/${NAME}/$(AWA_LIBRARY_TYPE)/*.ali ${alidir}/${NAME}/)
 	test ! -d web || \
 	     (tar --exclude=.svn --exclude='*~' -cf - web )| (cd ${dynamodir}/${NAME}/ && tar xf -)
-ifeq ($(LIBRARY_TYPE),static)
-	test ! -f lib/${NAME}/$(LIBRARY_TYPE)/${LIBNAME}.a || \
-	     ${CP} lib/${NAME}/$(LIBRARY_TYPE)/${LIBNAME}.a ${libdir}/
+ifeq ($(AWA_LIBRARY_TYPE),static)
+	test ! -f lib/${NAME}/$(AWA_LIBRARY_TYPE)/${LIBNAME}.a || \
+	     ${CP} lib/${NAME}/$(AWA_LIBRARY_TYPE)/${LIBNAME}.a ${libdir}/
 else
-	test ! -f lib/${NAME}/$(LIBRARY_TYPE)/${LIBNAME}.${LIBVER} || \
-	     (${CP} -p lib/${NAME}/$(LIBRARY_TYPE)/${LIBNAME}.$(LIBVER) ${libdir}/ && \
+	test ! -f lib/${NAME}/$(AWA_LIBRARY_TYPE)/${LIBNAME}.${LIBVER} || \
+	     (${CP} -p lib/${NAME}/$(AWA_LIBRARY_TYPE)/${LIBNAME}.$(LIBVER) ${libdir}/ && \
 	      cd ${libdir} && \
 	      rm -f ${LIBNAME}.$(LIBEXT) && \
 	      ${LN} ${LIBNAME}.$(LIBVER) ${LIBNAME}.$(LIBEXT))

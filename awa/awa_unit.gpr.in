@@ -1,4 +1,4 @@
-with "config";
+with "@UTIL_DIR@config";
 with "@UTIL_DIR@util";
 with "@UTIL_DIR@util_unit";
 with "@EL_DIR@el";
@@ -11,7 +11,7 @@ project Awa_Unit is
 
    Version := "@AWA_VERSION@";
    Library_Dir := "lib";
-   Library_Type : Config.Library_Type_Type := external ("LIBRARY_TYPE", "static");
+   Library_Type : Config.Library_Type_Type := external ("AWA_LIBRARY_TYPE", "static");
 
    for Source_Dirs use ("awaunit");
 

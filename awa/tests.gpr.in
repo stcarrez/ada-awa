@@ -1,4 +1,4 @@
-with "config";
+with "@UTIL_DIR@config";
 with "@UTIL_DIR@util";
 with "@UTIL_DIR@util_unit";
 with "@EL_DIR@el";
