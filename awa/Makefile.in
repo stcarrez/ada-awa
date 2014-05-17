@@ -1,7 +1,7 @@
 ## The type of library we want to build. Possible values:
 ##   relocatable
 ##   static
-LIBRARY_TYPE=static
+AWA_LIBRARY_TYPE=static
 
 PLUGINS=awa-workspaces awa-mail awa-storages awa-images awa-comments \
         awa-blogs awa-markedit awa-jobs awa-votes awa-tags awa-questions \
@@ -113,16 +113,16 @@ prepare-release:
 pre-install:
 	$(MKDIR) -p ${includedir}/awa-unit
 	$(MKDIR) -p ${projectdir}/
-	${MKDIR} -p ${alidir}/awa-unit/$(LIBRARY_TYPE)
+	${MKDIR} -p ${alidir}/awa-unit/$(AWA_LIBRARY_TYPE)
 	$(MKDIR) -p ${dynamodir}/base/uml
 	$(MKDIR) -p ${prefix}/share/doc/awa
 	${CP} awaunit/*.ad[bs] ${includedir}/awa-unit
-	sed -e "s,INSTALL,${prefix},g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" < distrib/awa_unit.gpr > ${projectdir}/awa_unit.gpr
-	${CP} lib/awaunit/$(LIBRARY_TYPE)/*.ali ${alidir}/awa-unit/
-ifeq ($(LIBRARY_TYPE),static)
-	${CP} lib/awaunit/$(LIBRARY_TYPE)/libawa_unit.a ${libdir}/
+	sed -e "s,INSTALL,${prefix},g" -e "s,LIBRARY_TYPE,$(AWA_LIBRARY_TYPE),g" < distrib/awa_unit.gpr > ${projectdir}/awa_unit.gpr
+	${CP} lib/awaunit/$(AWA_LIBRARY_TYPE)/*.ali ${alidir}/awa-unit/
+ifeq ($(AWA_LIBRARY_TYPE),static)
+	${CP} lib/awaunit/$(AWA_LIBRARY_TYPE)/libawa_unit.a ${libdir}/
 else
-	${CP} -p lib/awaunit/$(LIBRARY_TYPE)/libawa_unit.$(LIBVER) ${libdir}/
+	${CP} -p lib/awaunit/$(AWA_LIBRARY_TYPE)/libawa_unit.$(LIBVER) ${libdir}/
 	cd ${libdir} && \
 	rm -f libawa_unit.$(LIBEXT) && \
 	${LN} libawa_unit.$(LIBVER) libawa_unit.$(LIBEXT)
