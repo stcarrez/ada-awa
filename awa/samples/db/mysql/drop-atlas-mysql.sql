@@ -1,18 +1,15 @@
 /* Copied from atlas-drop-mysql.sql*/
 /* File generated automatically by dynamo */
+DROP TABLE IF EXISTS `atlas_review`;
 DROP TABLE IF EXISTS `mblog`;
-/* Copied from awa-tags-drop-mysql.sql*/
-/* File generated automatically by dynamo */
-DROP TABLE IF EXISTS `awa_tagged_entity`;
-DROP TABLE IF EXISTS `awa_tag`;
-/* Copied from awa-votes-drop-mysql.sql*/
-/* File generated automatically by dynamo */
-DROP TABLE IF EXISTS `awa_vote`;
-DROP TABLE IF EXISTS `awa_rating`;
 /* Copied from awa-questions-drop-mysql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `awa_question`;
 DROP TABLE IF EXISTS `awa_answer`;
+/* Copied from awa-votes-drop-mysql.sql*/
+/* File generated automatically by dynamo */
+DROP TABLE IF EXISTS `awa_vote`;
+DROP TABLE IF EXISTS `awa_rating`;
 /* Copied from awa-images-drop-mysql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `awa_image`;
@@ -26,6 +23,13 @@ DROP TABLE IF EXISTS `awa_storage`;
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `awa_post`;
 DROP TABLE IF EXISTS `awa_blog`;
+/* Copied from awa-comments-drop-mysql.sql*/
+/* File generated automatically by dynamo */
+DROP TABLE IF EXISTS `awa_comment`;
+/* Copied from awa-tags-drop-mysql.sql*/
+/* File generated automatically by dynamo */
+DROP TABLE IF EXISTS `awa_tagged_entity`;
+DROP TABLE IF EXISTS `awa_tag`;
 /* Copied from awa-workspaces-drop-mysql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `awa_workspace_member`;

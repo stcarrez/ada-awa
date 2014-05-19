@@ -228,6 +228,61 @@ INSERT INTO entity_type (name) VALUES
 ,("awa_workspace_feature")
 ,("awa_workspace_member")
 ;
+/* Copied from awa-tags-mysql.sql*/
+/* File generated automatically by dynamo */
+/* The tag definition. */
+CREATE TABLE awa_tag (
+  /* the tag identifier */
+  `id` BIGINT NOT NULL,
+  /* the tag name */
+  `name` VARCHAR(255) BINARY NOT NULL,
+  PRIMARY KEY (`id`)
+);
+/*  */
+CREATE TABLE awa_tagged_entity (
+  /* the tag entity identifier */
+  `id` BIGINT NOT NULL,
+  /* Title: Tag model
+Date: 2013-02-23the database entity to which the tag is associated */
+  `for_entity_id` BIGINT NOT NULL,
+  /* the entity type */
+  `entity_type` INTEGER NOT NULL,
+  /*  */
+  `tag_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
+);
+INSERT INTO entity_type (name) VALUES
+("awa_tag")
+,("awa_tagged_entity")
+;
+/* Copied from awa-comments-mysql.sql*/
+/* File generated automatically by dynamo */
+/* The Comment table records a user comment associated with a database entity.
+The comment can be associated with any other database record. */
+CREATE TABLE awa_comment (
+  /* the comment publication date */
+  `create_date` DATETIME NOT NULL,
+  /* the comment message. */
+  `message` TEXT NOT NULL,
+  /* the entity identifier to which this comment is associated */
+  `entity_id` BIGINT ,
+  /* the comment identifier */
+  `id` BIGINT NOT NULL,
+  /* the optimistic lock version. */
+  `version` INTEGER NOT NULL,
+  /* the entity type that identifies the table to which the comment is associated. */
+  `entity_type` INTEGER NOT NULL,
+  /* the comment status to decide whether the comment is visible (published) or not. */
+  `status` integer NOT NULL,
+  /* the comment format type. */
+  `format` integer NOT NULL,
+  /*  */
+  `author_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
+);
+INSERT INTO entity_type (name) VALUES
+("awa_comment")
+;
 /* Copied from awa-blogs-mysql.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -244,6 +299,8 @@ CREATE TABLE awa_blog (
   `create_date` DATETIME NOT NULL,
   /* the date when the blog was updated */
   `update_date` DATETIME NOT NULL,
+  /* The blog base URL. */
+  `url` VARCHAR(255) BINARY NOT NULL,
   /* the workspace that this blog belongs to */
   `workspace_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
@@ -255,7 +312,7 @@ CREATE TABLE awa_post (
   /* the post title */
   `title` VARCHAR(255) BINARY NOT NULL,
   /* the post text content */
-  `text` VARCHAR(60000) BINARY NOT NULL,
+  `text` TEXT NOT NULL,
   /* the post creation date */
   `create_date` DATETIME NOT NULL,
   /* the post URI */
@@ -266,6 +323,8 @@ CREATE TABLE awa_post (
   `publish_date` DATETIME ,
   /* the post status */
   `status` TINYINT NOT NULL,
+  /*  */
+  `allow_comments` TINYINT NOT NULL,
   /*  */
   `author_id` BIGINT NOT NULL,
   /*  */
@@ -392,65 +451,6 @@ CREATE TABLE awa_image (
 INSERT INTO entity_type (name) VALUES
 ("awa_image")
 ;
-/* Copied from awa-questions-mysql.sql*/
-/* File generated automatically by dynamo */
-/* The answer table gives a list of anwsers to the question.
-Ranking is updating according to users voting for the anwser.
- */
-CREATE TABLE awa_answer (
-  /* the answer creation date. */
-  `create_date` DATETIME NOT NULL,
-  /* the date when the answer was edited. */
-  `edit_date` DATETIME ,
-  /* the answer text. */
-  `answer` VARCHAR(60000) BINARY NOT NULL,
-  /* the anwser rank number. */
-  `rank` INTEGER NOT NULL,
-  /* the answer identifier. */
-  `id` BIGINT NOT NULL,
-  /*  */
-  `version` INTEGER NOT NULL,
-  /* the user who wrote the answer. */
-  `author_id` BIGINT NOT NULL,
-  /*  */
-  `question_id` BIGINT NOT NULL,
-  PRIMARY KEY (`id`)
-);
-/* The question table holds a single question asked by a user to the community.
-The short description is used to give an overview of the question in long lists
-while the description contains the full question text.  The rating is updating
-according to users voting for the question. */
-CREATE TABLE awa_question (
-  /* the date when the question was created. */
-  `create_date` DATETIME NOT NULL,
-  /* the question title. */
-  `title` VARCHAR(255) BINARY NOT NULL,
-  /* the full description. */
-  `description` VARCHAR(60000) BINARY NOT NULL,
-  /* the date when the question was edited. */
-  `edit_date` DATETIME ,
-  /* Title: Questions and Answers model
-Date: 2013-01-07
-the question short description. */
-  `short_description` VARCHAR(255) BINARY NOT NULL,
-  /* the question rating. */
-  `rating` INTEGER NOT NULL,
-  /* the question identifier. */
-  `id` BIGINT NOT NULL,
-  /* the optimistic locking version. */
-  `version` INTEGER NOT NULL,
-  /* the user who asked the question. */
-  `author_id` BIGINT NOT NULL,
-  /*  */
-  `workspace_id` BIGINT NOT NULL,
-  /*  */
-  `accepted_answer_id` BIGINT ,
-  PRIMARY KEY (`id`)
-);
-INSERT INTO entity_type (name) VALUES
-("awa_answer")
-,("awa_question")
-;
 /* Copied from awa-votes-mysql.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -485,32 +485,64 @@ INSERT INTO entity_type (name) VALUES
 ("awa_rating")
 ,("awa_vote")
 ;
-/* Copied from awa-tags-mysql.sql*/
+/* Copied from awa-questions-mysql.sql*/
 /* File generated automatically by dynamo */
-/* The tag definition. */
-CREATE TABLE awa_tag (
-  /* the tag identifier */
+/* The answer table gives a list of anwsers to the question.
+Ranking is updating according to users voting for the anwser.
+ */
+CREATE TABLE awa_answer (
+  /* the answer creation date. */
+  `create_date` DATETIME NOT NULL,
+  /* the date when the answer was edited. */
+  `edit_date` DATETIME ,
+  /* the answer text. */
+  `answer` TEXT NOT NULL,
+  /* the anwser rank number. */
+  `rank` INTEGER NOT NULL,
+  /* the answer identifier. */
   `id` BIGINT NOT NULL,
-  /* the tag name */
-  `name` VARCHAR(255) BINARY NOT NULL,
+  /*  */
+  `version` INTEGER NOT NULL,
+  /* the user who wrote the answer. */
+  `author_id` BIGINT NOT NULL,
+  /*  */
+  `question_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
-/*  */
-CREATE TABLE awa_tagged_entity (
-  /* the tag entity identifier */
+/* The question table holds a single question asked by a user to the community.
+The short description is used to give an overview of the question in long lists
+while the description contains the full question text.  The rating is updating
+according to users voting for the question. */
+CREATE TABLE awa_question (
+  /* the date when the question was created. */
+  `create_date` DATETIME NOT NULL,
+  /* the question title. */
+  `title` VARCHAR(255) BINARY NOT NULL,
+  /* the full description. */
+  `description` TEXT NOT NULL,
+  /* the date when the question was edited. */
+  `edit_date` DATETIME ,
+  /* Title: Questions and Answers model
+Date: 2014-01-01
+the question short description. */
+  `short_description` VARCHAR(255) BINARY NOT NULL,
+  /* the question rating. */
+  `rating` INTEGER NOT NULL,
+  /* the question identifier. */
   `id` BIGINT NOT NULL,
-  /* Title: Tag model
-Date: 2013-02-23the database entity to which the tag is associated */
-  `for_entity_id` BIGINT NOT NULL,
-  /* the entity type */
-  `entity_type` INTEGER NOT NULL,
+  /* the optimistic locking version. */
+  `version` INTEGER NOT NULL,
+  /* the user who asked the question. */
+  `author_id` BIGINT NOT NULL,
   /*  */
-  `tag_id` BIGINT NOT NULL,
+  `workspace_id` BIGINT NOT NULL,
+  /*  */
+  `accepted_answer_id` BIGINT ,
   PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES
-("awa_tag")
-,("awa_tagged_entity")
+("awa_answer")
+,("awa_question")
 ;
 /* Copied from atlas-mysql.sql*/
 /* File generated automatically by dynamo */
@@ -529,6 +561,27 @@ CREATE TABLE mblog (
   `author_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
+/* the table that contains the reviews made by users. */
+CREATE TABLE atlas_review (
+  /* the review identifier */
+  `id` BIGINT NOT NULL,
+  /*  */
+  `version` INTEGER NOT NULL,
+  /* the review title. */
+  `title` VARCHAR(255) BINARY NOT NULL,
+  /* the review description */
+  `text` VARCHAR(65535) BINARY NOT NULL,
+  /* the review creation date. */
+  `create_date` DATETIME NOT NULL,
+  /* whether comments are allowed. */
+  `allow_comments` INTEGER NOT NULL,
+  /* the site, article or application being reviewed. */
+  `site` VARCHAR(255) BINARY NOT NULL,
+  /*  */
+  `reviewer_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
+);
 INSERT INTO entity_type (name) VALUES
 ("mblog")
+,("atlas_review")
 ;
