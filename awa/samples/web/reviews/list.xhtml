@@ -1,0 +1,14 @@
+<ui:composition xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jstl/core"
+                template="/WEB-INF/layouts/layout.xhtml">
+  <ui:param name="title" value="#{layoutMsg.homePageTitle}" />
+  <ui:param name="pageStyle" value="awa"/>
+  <!-- Main page body -->
+  <ui:define name="pageBody">
+     <div id='awa-content'>
+        <a href="#{contextPath}/reviews/edit-review.html">Create a review</a>
+     </div>
+  </ui:define>
+</ui:composition>
