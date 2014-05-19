@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="1.0">
+
+  <application>
+    <message-bundle var='reviewsMsg'>reviews</message-bundle>
+  </application>
+
+  <managed-bean>
+    <description>An example of a bean (change description and bean name)</description>
+    <managed-bean-name>review</managed-bean-name>
+    <managed-bean-class>Atlas.Reviews.Beans.Reviews_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <filter-mapping>
+    <filter-name>service</filter-name>
+    <url-pattern>/reviews/*.html</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>auth-filter</filter-name>
+    <url-pattern>/reviews/*.html</url-pattern>
+  </filter-mapping>
+
+  <url-policy>
+    <permission>anonymous</permission>
+    <url-pattern>/reviews/.*\.html</url-pattern>
+  </url-policy>
+
+  <url-policy>
+    <permission>logged-user</permission>
+    <url-pattern>/reviews/admin/.*</url-pattern>
+  </url-policy>
+
+    <navigation-rule>
+        <from-view-id>/reviews/edit-review.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/reviews/forms/edit-review-response.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <from-view-id>/reviews/edit-review.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/reviews/forms/edit-review-response.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+  <auth-permission>
+    <name>review-create</name>
+  </auth-permission>
+
+  <entity-permission>
+    <name>review-update</name>
+    <entity-type>review</entity-type>
+    <sql>
+       SELECT r.id FROM atlas_reviews AS r
+       WHERE r.id = :entity_id AND r.reviewer_id = :user_id
+    </sql>
+  </entity-permission>
+
+  <entity-permission>
+    <name>review-delete</name>
+    <entity-type>review</entity-type>
+    <sql>
+       SELECT r.id FROM atlas_reviews AS r
+       WHERE r.id = :entity_id AND r.reviewer_id = :user_id
+    </sql>
+  </entity-permission>
+
+</module>
