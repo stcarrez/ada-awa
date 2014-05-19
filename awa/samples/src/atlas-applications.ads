@@ -43,6 +43,7 @@ with AWA.Services.Filters;
 with AWA.Converters.Dates;
 
 with Atlas.Microblog.Modules;
+with Atlas.Reviews.Modules;
 package Atlas.Applications is
 
    CONFIG_PATH  : constant String := "/atlas";
@@ -122,7 +123,7 @@ private
       Comment_Module    : aliased AWA.Comments.Modules.Comment_Module;
 
       Microblog_Module  : aliased Atlas.Microblog.Modules.Microblog_Module;
---      XXX_Module    : aliased Atlas.XXX.Module.XXX_Module;
+      Review_Module     : aliased Atlas.Reviews.Modules.Review_Module;
    end record;
 
 end Atlas.Applications;

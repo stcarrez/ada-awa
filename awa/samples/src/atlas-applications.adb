@@ -259,6 +259,11 @@ package body Atlas.Applications is
                 Name   => Atlas.Microblog.Modules.NAME,
                 URI    => "microblog",
                 Module => App.Microblog_Module'Access);
+
+      Register (App    => App.Self.all'Access,
+                Name   => Atlas.Reviews.Modules.NAME,
+                URI    => "reviews",
+                Module => App.Review_Module'Access);
    end Initialize_Modules;
 
 end Atlas.Applications;
