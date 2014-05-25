@@ -149,3 +149,82 @@ div.likes div.like-facebook, div.likes div.like-google, div.likes div.like-twitt
 div.likes div.like-google {
     width: 70px;
 }
+/**
+ * Review module style.
+ */
+ul.review-nav {
+	list-style-type: none;
+    margin-top: 10px;
+    float: left;
+    width: 96%;
+    padding-left: 3%;
+    padding-right: 3%;
+    border-bottom: 1px solid #eee;
+}
+ul.review-nav li {
+	float: right;
+    height: 20px;
+}
+#review-nav-ask {
+    margin-right: 100px;
+    margin-bottom: 5px;
+    background: #DFEFFC;
+    border: 1px solid #C5DBEC;
+    color: #2E6E9E;
+    border-radius: 5px;
+}
+#review-nav-ask a, ul.review-info a {
+    display: block;
+    padding: 5px;
+    line-height: 12px;
+    color: #2E6E9E;
+    font-weight: bold;
+    text-decoration: none;
+    padding-bottom: 8px;
+}
+div.atlas-reviews {
+	float: left;
+	width: 100%;
+}
+div.atlas-reviews div.review {
+	float: left;
+	width: 99%;
+	padding-top: 0.2em;
+	padding-bottom: 0.4em;
+	padding-left: 1%;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+}
+div.atlas-reviews div.review-title {
+	float: left;
+    width: 100%;
+	padding-top: 0.5em;
+	padding-bottom: 0.4em;
+}
+div.atlas-reviews div.review-text {
+	float: left;
+    width: 98%;
+    padding-left: 1%;
+    padding-right: 1%;
+	padding-bottom: 0.5em;
+}
+div.atlas-reviews div.review-title h2 a, div.atlas-reviews div.review-title h2 a:visited {
+    text-decoration: none;
+    color: #F91;
+    font-size: 1.2em;
+}
+ul.review-info {
+	list-style-type: none;
+	float: left;
+}
+ul.review-info li {
+	float: left;
+	padding-right: 1em;
+	font-size: 0.7em;
+}
+ul.review-info a, ul.review-info span {
+	padding-top: 0;
+	padding-bottom: 5px;
+    line-height: 12px;
+    display: block;
+}
