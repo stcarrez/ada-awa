@@ -49,8 +49,38 @@ package Atlas.Reviews.Beans is
    procedure Delete (Bean : in out Review_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
+   overriding
+   procedure Load (Bean : in out Review_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
    --  Create the Reviews_Bean bean instance.
    function Create_Review_Bean (Module : in Atlas.Reviews.Modules.Review_Module_Access)
       return Util.Beans.Basic.Readonly_Bean_Access;
+
+   type Review_List_Bean is new Atlas.Reviews.Models.Review_List_Bean with record
+      Module       : Atlas.Reviews.Modules.Review_Module_Access := null;
+      Reviews      : aliased Atlas.Reviews.Models.List_Info_List_Bean;
+      Reviews_Bean : Atlas.Reviews.Models.List_Info_List_Bean_Access;
+   end record;
+   type Review_List_Bean_Access is access all Review_List_Bean'Class;
+
+   --  Get the value identified by the name.
+   overriding
+   function Get_Value (From : in Review_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the value identified by the name.
+   overriding
+   procedure Set_Value (From  : in out Review_List_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   overriding
+   procedure Load (Into    : in out Review_List_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Create the Review_List_Bean bean instance.
+   function Create_Review_List_Bean (Module : in Atlas.Reviews.Modules.Review_Module_Access)
+                                   return Util.Beans.Basic.Readonly_Bean_Access;
 
 end Atlas.Reviews.Beans;
