@@ -45,12 +45,12 @@ package Atlas.Reviews.Modules is
    function Get_Review_Module return Review_Module_Access;
 
 
-   --  save
-   procedure save (Model  : in Review_Module;
+   --  Save the review.
+   procedure Save (Model  : in Review_Module;
                    Entity : in out Atlas.Reviews.Models.Review_Ref'Class);
 
-   --  delete
-   procedure delete (Model  : in Review_Module;
+   --  Delete the review.
+   procedure Delete (Model  : in Review_Module;
                      Entity : in out Atlas.Reviews.Models.Review_Ref'Class);
 private
 
