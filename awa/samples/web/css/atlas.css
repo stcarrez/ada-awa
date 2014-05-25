@@ -78,11 +78,15 @@ div.blog-admin {
 }
 
 dl.awa-required div.markedit textarea {
-    width: 100%;
+    width: 99%;
     padding: 0;
 }
 div.markedit div.markedit-toolbar {
-    margin-left: 1px;
+    width: 99%;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 #folder-list-editor {
