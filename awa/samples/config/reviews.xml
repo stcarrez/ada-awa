@@ -2,13 +2,20 @@
 <module version="1.0">
 
   <application>
-    <message-bundle var='reviewsMsg'>reviews</message-bundle>
+    <message-bundle var='reviewMsg'>reviews</message-bundle>
   </application>
 
   <managed-bean>
     <description>An example of a bean (change description and bean name)</description>
     <managed-bean-name>review</managed-bean-name>
     <managed-bean-class>Atlas.Reviews.Beans.Reviews_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <description>The list of reviews</description>
+    <managed-bean-name>reviewList</managed-bean-name>
+    <managed-bean-class>Atlas.Reviews.Beans.Review_List_Bean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
@@ -23,6 +30,12 @@
   </filter-mapping>
 
   <url-policy>
+    <permission>logged-user</permission>
+    <url-pattern>/reviews/edit-review.html</url-pattern>
+    <url-pattern>/reviews/forms/delete-review.html</url-pattern>
+  </url-policy>
+
+  <url-policy>
     <permission>anonymous</permission>
     <url-pattern>/reviews/.*\.html</url-pattern>
   </url-policy>
@@ -33,10 +46,10 @@
   </url-policy>
 
     <navigation-rule>
-        <from-view-id>/reviews/edit-review.xhtml</from-view-id>
+        <from-view-id>/reviews/forms/delete-review.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>success</from-outcome>
-            <to-view-id>/reviews/forms/edit-review-response.xhtml</to-view-id>
+            <to-view-id>/reviews/forms/delete-review-response.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
 
@@ -44,7 +57,8 @@
         <from-view-id>/reviews/edit-review.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>success</from-outcome>
-            <to-view-id>/reviews/forms/edit-review-response.xhtml</to-view-id>
+            <to-view-id>/reviews/list.xhtml</to-view-id>
+            <redirect/>
         </navigation-case>
     </navigation-rule>
 
@@ -54,18 +68,18 @@
 
   <entity-permission>
     <name>review-update</name>
-    <entity-type>review</entity-type>
+    <entity-type>atlas_review</entity-type>
     <sql>
-       SELECT r.id FROM atlas_reviews AS r
+       SELECT r.id FROM atlas_review AS r
        WHERE r.id = :entity_id AND r.reviewer_id = :user_id
     </sql>
   </entity-permission>
 
   <entity-permission>
     <name>review-delete</name>
-    <entity-type>review</entity-type>
+    <entity-type>atlas_review</entity-type>
     <sql>
-       SELECT r.id FROM atlas_reviews AS r
+       SELECT r.id FROM atlas_review AS r
        WHERE r.id = :entity_id AND r.reviewer_id = :user_id
     </sql>
   </entity-permission>
