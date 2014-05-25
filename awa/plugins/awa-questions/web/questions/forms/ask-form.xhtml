@@ -32,6 +32,8 @@
                          id='title' size='50' required='true' value='#{question.title}'
                          title='#{questionMsg.question_title_label}'/>
             <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
+                <dt>
+                </dt>
                 <dd>
                     <h:inputTextarea id='text' rows='15' required='false' value='#{question.description}'/>
                 </dd>
