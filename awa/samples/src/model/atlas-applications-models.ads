@@ -51,6 +51,9 @@ package Atlas.Applications.Models is
       --  the number of answers.
       Answer_Count : Integer;
 
+      --  the number of reviews.
+      Review_Count : Integer;
+
    end record;
 
    --  Get the bean attribute identified by the given name.
@@ -85,7 +88,7 @@ private
 
    package File_1 is
       new ADO.Queries.Loaders.File (Path => "user-stats.xml",
-                                    Sha1 => "3E22BF74E890B36CF9B32DCD1A6DD3427D5DE2DE");
+                                    Sha1 => "57E3C61ACCA9CC94237EF0BB1167698EA1E0E648");
 
    package Def_Userstatinfo_User_Stat is
       new ADO.Queries.Loaders.Query (Name => "user-stat",

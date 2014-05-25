@@ -47,6 +47,9 @@ package body Atlas.Applications.Models is
       if Name = "answer_count" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Answer_Count));
       end if;
+      if Name = "review_count" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Review_Count));
+      end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
 
@@ -76,6 +79,7 @@ package body Atlas.Applications.Models is
          Into.Document_Count := Stmt.Get_Integer (1);
          Into.Question_Count := Stmt.Get_Integer (2);
          Into.Answer_Count := Stmt.Get_Integer (3);
+         Into.Review_Count := Stmt.Get_Integer (4);
       end Read;
    begin
       Stmt.Execute;

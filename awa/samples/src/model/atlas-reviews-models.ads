@@ -26,6 +26,8 @@ with ADO.Objects;
 with ADO.Statements;
 with ADO.SQL;
 with ADO.Schemas;
+with ADO.Queries;
+with ADO.Queries.Loaders;
 with Ada.Calendar;
 with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded;
@@ -177,6 +179,65 @@ package Atlas.Reviews.Models is
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class);
 
+   --  --------------------
+   --  The list of reviews.
+   --  --------------------
+   type List_Info is new Util.Beans.Basic.Readonly_Bean with record
+      --  the review identifier.
+      Id : ADO.Identifier;
+
+      --  the review title.
+      Title : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the review site.
+      Site : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the review date.
+      Date : Ada.Calendar.Time;
+
+      --  the whether comments are allowed.
+      Allow_Comments : Boolean;
+
+      --  the reviewer identifier.
+      Reviewer_Id : ADO.Identifier;
+
+      --  the reviewer name.
+      Reviewer_Name : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the reviewer email address.
+      Reviewer_Email : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the review text.
+      Text : Ada.Strings.Unbounded.Unbounded_String;
+
+   end record;
+
+   --  Get the bean attribute identified by the given name.
+   overriding
+   function Get_Value (From : in List_Info;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   package List_Info_Beans is
+      new Util.Beans.Basic.Lists (Element_Type => List_Info);
+   package List_Info_Vectors renames List_Info_Beans.Vectors;
+   subtype List_Info_List_Bean is List_Info_Beans.List_Bean;
+
+   type List_Info_List_Bean_Access is access all List_Info_List_Bean;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out List_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   subtype List_Info_Vector is List_Info_Vectors.Vector;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out List_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   Query_List : constant ADO.Queries.Query_Definition_Access;
+
 
    --  --------------------
    --    create or update the review.
@@ -202,6 +263,35 @@ package Atlas.Reviews.Models is
 
    procedure Delete (Bean : in out Review_Bean;
                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   procedure Load (Bean : in out Review_Bean;
+                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   type Review_List_Bean is abstract
+     new Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with  record
+      Page : Integer;
+      Count : Integer;
+      Page_Size : Integer;
+   end record;
+
+   --  This bean provides some methods that can be used in a Method_Expression.
+   overriding
+   function Get_Method_Bindings (From : in Review_List_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access;
+
+   --  Get the value identified by the name.
+   overriding
+   function Get_Value (From : in Review_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the value identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Review_List_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   procedure Load (Bean : in out Review_List_Bean;
+                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
 
 private
@@ -279,4 +369,14 @@ private
 
    procedure Set_Field (Object : in out Review_Ref'Class;
                         Impl   : out Review_Access);
+
+   package File_1 is
+      new ADO.Queries.Loaders.File (Path => "reviews-list.xml",
+                                    Sha1 => "E5A97F945EDDB18ECD918CEED09A8EDFBAF90552");
+
+   package Def_Listinfo_List is
+      new ADO.Queries.Loaders.Query (Name => "list",
+                                     File => File_1.File'Access);
+   Query_List : constant ADO.Queries.Query_Definition_Access
+   := Def_Listinfo_List.Query'Access;
 end Atlas.Reviews.Models;

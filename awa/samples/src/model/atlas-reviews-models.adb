@@ -555,6 +555,87 @@ package body Atlas.Reviews.Models is
       ADO.Objects.Set_Created (Object);
    end Load;
 
+   --  --------------------
+   --  Get the bean attribute identified by the given name.
+   --  --------------------
+   overriding
+   function Get_Value (From : in List_Info;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
+      end if;
+      if Name = "title" then
+         return Util.Beans.Objects.To_Object (From.Title);
+      end if;
+      if Name = "site" then
+         return Util.Beans.Objects.To_Object (From.Site);
+      end if;
+      if Name = "date" then
+         return Util.Beans.Objects.Time.To_Object (From.Date);
+      end if;
+      if Name = "allow_comments" then
+         return Util.Beans.Objects.To_Object (From.Allow_Comments);
+      end if;
+      if Name = "reviewer_id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Reviewer_Id));
+      end if;
+      if Name = "reviewer_name" then
+         return Util.Beans.Objects.To_Object (From.Reviewer_Name);
+      end if;
+      if Name = "reviewer_email" then
+         return Util.Beans.Objects.To_Object (From.Reviewer_Email);
+      end if;
+      if Name = "text" then
+         return Util.Beans.Objects.To_Object (From.Text);
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+   --  --------------------
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   --  --------------------
+   procedure List (Object  : in out List_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+   begin
+      List (Object.List, Session, Context);
+   end List;
+   --  --------------------
+   --  The list of reviews.
+   --  --------------------
+   procedure List (Object  : in out List_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+      procedure Read (Into : in out List_Info);
+
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Context);
+      Pos  : Natural := 0;
+      procedure Read (Into : in out List_Info) is
+      begin
+         Into.Id := Stmt.Get_Identifier (0);
+         Into.Title := Stmt.Get_Unbounded_String (1);
+         Into.Site := Stmt.Get_Unbounded_String (2);
+         Into.Date := Stmt.Get_Time (3);
+         Into.Allow_Comments := Stmt.Get_Boolean (4);
+         Into.Reviewer_Id := Stmt.Get_Identifier (5);
+         Into.Reviewer_Name := Stmt.Get_Unbounded_String (6);
+         Into.Reviewer_Email := Stmt.Get_Unbounded_String (7);
+         Into.Text := Stmt.Get_Unbounded_String (8);
+      end Read;
+   begin
+      Stmt.Execute;
+      List_Info_Vectors.Clear (Object);
+      while Stmt.Has_Elements loop
+         Object.Insert_Space (Before => Pos);
+         Object.Update_Element (Index => Pos, Process => Read'Access);
+         Pos := Pos + 1;
+         Stmt.Next;
+      end loop;
+   end List;
+
+
    procedure Op_Save (Bean    : in out Review_Bean;
                       Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
    procedure Op_Save (Bean    : in out Review_Bean;
@@ -577,10 +658,22 @@ package body Atlas.Reviews.Models is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Review_Bean,
                                                       Method => Op_Delete,
                                                       Name   => "delete");
+   procedure Op_Load (Bean    : in out Review_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Load (Bean    : in out Review_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Review_Bean'Class (Bean).Load (Outcome);
+   end Op_Load;
+   package Binding_Review_Bean_3 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Review_Bean,
+                                                      Method => Op_Load,
+                                                      Name   => "load");
 
    Binding_Review_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
      := (1 => Binding_Review_Bean_1.Proxy'Access,
-         2 => Binding_Review_Bean_2.Proxy'Access
+         2 => Binding_Review_Bean_2.Proxy'Access,
+         3 => Binding_Review_Bean_3.Proxy'Access
      );
 
    --  This bean provides some methods that can be used in a Method_Expression.
@@ -599,6 +692,61 @@ package body Atlas.Reviews.Models is
                         Value : in Util.Beans.Objects.Object) is
    begin
       null;
+   end Set_Value;
+
+
+
+   procedure Op_Load (Bean    : in out Review_List_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Load (Bean    : in out Review_List_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Review_List_Bean'Class (Bean).Load (Outcome);
+   end Op_Load;
+   package Binding_Review_List_Bean_1 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Review_List_Bean,
+                                                      Method => Op_Load,
+                                                      Name   => "load");
+
+   Binding_Review_List_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
+     := (1 => Binding_Review_List_Bean_1.Proxy'Access
+     );
+
+   --  This bean provides some methods that can be used in a Method_Expression.
+   overriding
+   function Get_Method_Bindings (From : in Review_List_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access is
+   begin
+      return Binding_Review_List_Bean_Array'Access;
+   end Get_Method_Bindings;
+
+   function Get_Value (From : in Review_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "page" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Page));
+      elsif Name = "count" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Count));
+      elsif Name = "page_size" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Page_Size));
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+
+   --  Set the value identified by the name
+   overriding 
+   procedure Set_Value (Item  : in out Review_List_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "page" then
+         Item.Page := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "count" then
+         Item.Count := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "page_size" then
+         Item.Page_Size := Util.Beans.Objects.To_Integer (Value);
+      end if;
    end Set_Value;
 
 
