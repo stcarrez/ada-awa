@@ -1,5 +1,5 @@
 <!-- Action panel
-  -  Copyright (C) 2013 Stephane Carrez
+  -  Copyright (C) 2013, 2014 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -71,6 +71,23 @@
                 <c:otherwise>
                     <div class='atlas-button'>
                         <a href="#{contextPath}/storages/documents.html">#{atlasMsg.atlas_upload_documents}</a>
+                    </div>
+                </c:otherwise>
+            </c:choose>
+        </li>
+        <li class='atlas-action'>
+            <c:choose>
+                <c:when test="#{userStat.review_count != 0}">
+                    <div class='atlas-button'>
+                        <a href="#{contextPath}/reviews/edit-review.html">#{atlasMsg.atlas_create_review}</a>
+                    </div>
+                    <div class='atlas-badge'>
+                        #{userStat.review_count}
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class='atlas-button'>
+                        <a href="#{contextPath}/reviews/edit-review.html">#{atlasMsg.atlas_create_review}</a>
                     </div>
                 </c:otherwise>
             </c:choose>
