@@ -1,5 +1,5 @@
 <!-- Header bar at top of the page layout
-  -  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +19,11 @@
         <c:choose>
             <c:when test="#{user.isLogged}">
                 <ul id='awa-top-nav'>
+                    <li>
+                        <a href="#{contextPath}/reviews/list.html" title="#{layoutMsg.layout_reviews_title}">
+                            #{layoutMsg.layout_reviews_label}
+                        </a>
+                    </li>
                     <li>
                          <a href="#{contextPath}/questions/list.html" title="#{layoutMsg.layout_questions_title}">
                              #{layoutMsg.layout_questions_label}
