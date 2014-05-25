@@ -3,12 +3,25 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:c="http://java.sun.com/jstl/core"
                 template="/WEB-INF/layouts/layout.xhtml">
-  <ui:param name="title" value="#{layoutMsg.homePageTitle}" />
-  <ui:param name="pageStyle" value="awa"/>
-  <!-- Main page body -->
-  <ui:define name="pageBody">
-     <div id='awa-content'>
-        <a href="#{contextPath}/reviews/edit-review.html">Create a review</a>
-     </div>
-  </ui:define>
+    <ui:param name="title" value="#{reviewMsg.review_page_title}" />
+    <ui:param name="pageStyle" value=""/>
+    <!-- Main page body -->
+    <ui:define name="pageBody">
+        <f:metadata>
+            <f:viewParam id='page' value='#{reviewList.page}' required="false"/>
+            <f:viewAction action="#{reviewList.load}"/>
+        </f:metadata>
+        <div id='awa-content'>
+            <div class='grid_10'>
+                <ui:include src="views/review-nav.xhtml"/>
+                <div class='atlas-reviews'>
+                    <ui:include src="lists/review-list.xhtml">
+                        <ui:param name="pageUrl" value="reviews/list.html"/>
+                    </ui:include>
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
 </ui:composition>

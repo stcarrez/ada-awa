@@ -1,0 +1,52 @@
+<ui:composition
+        xmlns:awa="http://code.google.com/p/ada-awa/jsf"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:c="http://java.sun.com/jstl/core"
+        xmlns:u="http://code.google.com/p/ada-asf/util"
+        xmlns:h="http://java.sun.com/jsf/html">
+  <h:list var="review" value="#{reviewList.reviews}">
+    <div class='review' id="p_#{review.id}">
+        <div class='review-title'>
+            <h2><a href="#{review.site}">#{review.title}</a></h2>
+            <ul class='review-info'>
+                <li><span>By #{review.reviewer_name}</span></li>
+                <li>
+                    <h:outputText styleClass='review-date' value="#{review.date}" converter="dateConverter"/>
+                </li>
+                <h:panelGroup rendered="#{review.reviewer_id == user.id}">
+                    <li>
+                        <a href="#{contextPath}/reviews/edit-review.html?id=#{review.id}">#{reviewMsg.review_edit_label}</a>
+                    </li>
+                    <li>
+                        <a href="#"
+                           onclick="return ASF.OpenDialog(this, 'deleteDialog', '#{contextPath}/reviews/forms/delete-review.html?id=#{review.id}');">
+                           #{reviewMsg.review_delete_label}
+                        </a>
+                    </li>
+                </h:panelGroup>
+            </ul>
+        </div>
+        <awa:wiki styleClass='review-text post-text' value="#{review.text}" format="dotclear"/>
+    </div>
+  </h:list>
+    <ul class='blog-pagination'>
+        <li>
+            <h:panelGroup rendered="#{postList.page gt 1}">
+                <a href="#{contextPath}/#{pageUrl}?page=#{reviewList.page - 1}#{pageParam}"
+                        title="#{blogMsg.blog_post_previous_page_title}">#{blogMsg.blog_post_previous_page}</a>
+            </h:panelGroup>
+        </li>
+        <li>
+            <h:outputFormat value="#{blogMsg.blog_post_page_number}">
+                <f:param value="#{reviewList.page}"/>
+            </h:outputFormat>
+        </li>
+        <li>
+            <h:panelGroup rendered="#{postList.page lt postList.page_count}">
+                <a href="#{contextPath}/#{pageUrl}?page=#{reviewList.page + 1}#{pageParam}"
+                        title="#{blogMsg.blog_post_next_page_title}">#{blogMsg.blog_post_next_page}</a>
+            </h:panelGroup>
+        </li>
+    </ul>
+</ui:composition>
