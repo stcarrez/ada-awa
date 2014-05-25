@@ -3,7 +3,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:c="http://java.sun.com/jstl/core"
                 template="/WEB-INF/layouts/layout.xhtml">
-    <ui:param name="title" value="#{reviewMsg.reviews_title}" />
+    <ui:param name="title" value="#{empty review.id ? reviewMsg.review_create_page_title : reviewMsg.review_update_page_title}" />
     <ui:param name="pageStyle" value=""/>
 
     <!-- Main page body -->
