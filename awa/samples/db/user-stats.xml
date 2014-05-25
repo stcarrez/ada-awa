@@ -17,6 +17,9 @@
         <property type='Integer' name="answer_count">
             <comment>the number of answers.</comment>
         </property>
+        <property type='Integer' name="review_count">
+            <comment>the number of reviews.</comment>
+        </property>
     </class>
     <query name='user-stat'>
        <comment>Get information about what the user did.</comment>
@@ -28,7 +31,9 @@
       (SELECT COUNT(*) FROM awa_question AS question
           WHERE question.author_id = :user_id) AS nb_questions,
       (SELECT COUNT(*) FROM awa_answer AS answer
-          WHERE answer.author_id = :user_id) AS nb_answers
+          WHERE answer.author_id = :user_id) AS nb_answers,
+      (SELECT COUNT(*) FROM atlas_review AS review
+          WHERE review.reviewer_id = :user_id) AS nb_reviews
        </sql>
     </query>
 </query-mapping>
