@@ -1,26 +1,23 @@
-/* Copied from awa-comments-mysql.sql*/
-/* File generated automatically by dynamo */
-/* The Comment table records a user comment associated with a database entity.
-The comment can be associated with any other database record. */
-CREATE TABLE awa_comment (
-  /* the comment publication date */
-  `create_date` DATETIME NOT NULL,
-  /* the comment message. */
-  `message` TEXT NOT NULL,
-  /* the entity identifier to which this comment is associated */
-  `entity_id` BIGINT ,
-  /* the comment identifier */
+/* the table that contains the reviews made by users. */
+CREATE TABLE atlas_review (
+  /* the review identifier */
   `id` BIGINT NOT NULL,
-  /* the optimistic lock version. */
-  `version` INTEGER NOT NULL,
-  /* the entity type that identifies the table to which the comment is associated. */
-  `entity_type` INTEGER NOT NULL,
-  /* the comment status to decide whether the comment is visible (published) or not. */
-  `status` integer NOT NULL,
   /*  */
-  `author_id` BIGINT NOT NULL,
+  `version` INTEGER NOT NULL,
+  /* the review title. */
+  `title` VARCHAR(255) BINARY NOT NULL,
+  /* the review description */
+  `text` VARCHAR(65535) BINARY NOT NULL,
+  /* the review creation date. */
+  `create_date` DATETIME NOT NULL,
+  /* whether comments are allowed. */
+  `allow_comments` INTEGER NOT NULL,
+  /* the site, article or application being reviewed. */
+  `site` VARCHAR(255) BINARY NOT NULL,
+  /*  */
+  `reviewer_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES
-("awa_comment")
+("atlas_review")
 ;
