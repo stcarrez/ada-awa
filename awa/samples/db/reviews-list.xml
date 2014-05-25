@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<query-mapping package='Atlas.Reviews.Models'>
+    <description>
+      List of blogs
+    </description>
+    <class name="Atlas.Reviews.Models.List_Info" bean="yes">
+        <comment>The list of reviews.</comment>
+        <property type='Identifier' name="id">
+            <comment>the review identifier.</comment>
+        </property>
+        <property type='String' name="title">
+            <comment>the review title.</comment>
+        </property>
+        <property type='String' name="site">
+            <comment>the review site.</comment>
+        </property>
+        <property type='Date' name="date">
+            <comment>the review date.</comment>
+        </property>
+        <property type='Boolean' name="allow_comments">
+            <comment>the whether comments are allowed.</comment>
+        </property>
+        <property type='Identifier' name="reviewer_id">
+            <comment>the reviewer identifier.</comment>
+        </property>
+        <property type='String' name="reviewer_name">
+            <comment>the reviewer name.</comment>
+        </property>
+        <property type='String' name="reviewer_email">
+            <comment>the reviewer email address.</comment>
+        </property>
+        <property type='String' name="text">
+            <comment>the review text.</comment>
+        </property>
+    </class>
+    <query name='list'>
+       <comment>Get the list of reviews</comment>
+       <sql>
+    SELECT
+      r.id,
+      r.title,
+      r.site,
+      r.create_date,
+      r.allow_comments,
+      r.reviewer_id,
+      a.name,
+      e.email,
+      r.text
+    FROM atlas_review AS r
+    INNER JOIN awa_user AS a ON r.reviewer_id = a.id
+    INNER JOIN awa_email AS e ON a.email_id = e.id
+    ORDER BY r.create_date DESC
+    LIMIT :first, :last
+       </sql>
+       <sql-count>
+    SELECT
+      count(r.id)
+    FROM atlas_review AS r
+       </sql-count>
+    </query>
+</query-mapping>
