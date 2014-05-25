@@ -691,7 +691,7 @@ package body AWA.Wikis.Parsers is
          Flush_Text (P);
          P.Document.Add_Paragraph;
          P.In_Paragraph := True;
-      elsif Length (P.Text) > 0 then
+      elsif Length (P.Text) > 0 or not P.Empty_Line then
          Append (P.Text, Token);
       end if;
       P.Empty_Line := True;
