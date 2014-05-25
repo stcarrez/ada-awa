@@ -25,6 +25,8 @@ with AWA.Services.Contexts;
 with AWA.Permissions;
 package body Atlas.Reviews.Modules is
 
+   package ASC renames AWA.Services.Contexts;
+
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Atlas.Reviews.Module");
 
    package Register is new AWA.Modules.Beans (Module => Review_Module,
@@ -44,6 +46,9 @@ package body Atlas.Reviews.Modules is
       Register.Register (Plugin => Plugin,
                          Name   => "Atlas.Reviews.Beans.Reviews_Bean",
                          Handler => Atlas.Reviews.Beans.Create_Review_Bean'Access);
+      Register.Register (Plugin => Plugin,
+                         Name   => "Atlas.Reviews.Beans.Review_List_Bean",
+                         Handler => Atlas.Reviews.Beans.Create_Review_List_Bean'Access);
 
       AWA.Modules.Module (Plugin).Initialize (App, Props);
 
@@ -61,13 +66,13 @@ package body Atlas.Reviews.Modules is
 
 
    --  ------------------------------
-   --  save
+   --  Save the review.
    --  ------------------------------
-   procedure save (Model  : in Review_Module;
+   procedure Save (Model  : in Review_Module;
                    Entity : in out Atlas.Reviews.Models.Review_Ref'Class) is
       pragma Unreferenced (Model);
 
-      Ctx   : constant AWA.Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      Ctx   : constant ASC.Service_Context_Access := ASC.Current;
       DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
    begin
       Ctx.Start;
@@ -81,20 +86,23 @@ package body Atlas.Reviews.Modules is
       end if;
       Entity.Save (DB);
       Ctx.Commit;
-   end save;
+   end Save;
 
    --  ------------------------------
-   --  delete
+   --  Delete the review.
    --  ------------------------------
-   procedure delete (Model  : in Review_Module;
+   procedure Delete (Model  : in Review_Module;
                      Entity : in out Atlas.Reviews.Models.Review_Ref'Class) is
       pragma Unreferenced (Model);
 
-      Ctx   : constant AWA.Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Ctx   : constant ASC.Service_Context_Access := ASC.Current;
+      DB    : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
    begin
+      AWA.Permissions.Check (Permission => ACL_Delete_Reviews.Permission,
+                             Entity     => Entity);
       Ctx.Start;
-      Entity.Save (DB);
+      Entity.Delete (DB);
       Ctx.Commit;
-   end delete;
+   end Delete;
+
 end Atlas.Reviews.Modules;
