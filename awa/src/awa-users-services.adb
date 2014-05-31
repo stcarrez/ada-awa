@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa.users -- User registration, authentication processes
---  Copyright (C) 2009, 2010, 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -223,6 +223,9 @@ package body AWA.Users.Services is
          end if;
          if Name'Length > 0 and String '(User.Get_First_Name) = "" then
             User.Set_First_Name (Name);
+         end if;
+         if Name'Length = 0 then
+            User.Set_Name (Get_Name_From_Email (Email => Email));
          end if;
          User.Save (DB);
       end Update_User;
