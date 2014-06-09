@@ -81,7 +81,7 @@
 		}, options || {});
 
 		// no action if there are no elements
-		if(this.length == 0) {
+		if(this.length === 0) {
 			return;
 		}
 
@@ -123,7 +123,7 @@
 
 			elements.each(function() {
 				var element_name = $(this).attr('name').match(baseNameRegexp);
-				if(element_name && element_name.length == 4 && (options.deleteEmptyItems == false || $(this).val().length > 0)) {
+				if(element_name && element_name.length === 4 && (options.deleteEmptyItems == false || $(this).val().length > 0)) {
 					if(element_name[1].length > 0) {
 						var elementId = typeof element_name[2] != 'undefined'? element_name[2]: '';
 
@@ -137,7 +137,7 @@
 			});
 
 			// replace Elements with the list and save the list in the local variable elements
-			elements.last().after(html)
+			elements.last().after(html);
 			var newList = elements.last().next();
 			elements.remove();
 			elements = newList;
@@ -209,7 +209,7 @@
 									if($(this).val().length == 0) {
 										// delete Last Tag
 										var elementToRemove = elements.find('li.tagedit-listelement-old').last();
-										elementToRemove.fadeOut(options.animSpeed, function() {elementToRemove.remove();})
+										elementToRemove.fadeOut(options.animSpeed, function() {elementToRemove.remove();});
 										event.preventDefault();
 										return false;
 									}
@@ -286,7 +286,7 @@
 								.focus();
 					}
 					return false;
-				})
+				});
 		}
 
 		/**
@@ -508,5 +508,5 @@
 
 			return new Array(isNew, autoCompleteId);
 		}
-	}
+	};
 })(jQuery);
