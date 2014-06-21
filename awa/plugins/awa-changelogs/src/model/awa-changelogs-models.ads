@@ -144,20 +144,11 @@ package AWA.Changelogs.Models is
    procedure Copy (Object : in Changelog_Ref;
                    Into   : in out Changelog_Ref);
 
-   package Changelog_Vectors is
-      new Ada.Containers.Vectors (Index_Type   => Natural,
-                                  Element_Type => Changelog_Ref,
-                                  "="          => "=");
-   subtype Changelog_Vector is Changelog_Vectors.Vector;
-
-   procedure List (Object  : in out Changelog_Vector;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class);
 
 
 
 private
-   CHANGELOG_NAME : aliased constant String := "Changelog";
+   CHANGELOG_NAME : aliased constant String := "awa_changelog";
    COL_0_1_NAME : aliased constant String := "id";
    COL_1_1_NAME : aliased constant String := "date";
    COL_2_1_NAME : aliased constant String := "text";

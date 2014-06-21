@@ -441,27 +441,6 @@ package body AWA.Changelogs.Models is
 
 
 
-   procedure List (Object  : in out Changelog_Vector;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class) is
-      Stmt : ADO.Statements.Query_Statement
-        := Session.Create_Statement (Query, CHANGELOG_DEF'Access);
-   begin
-      Stmt.Execute;
-      Changelog_Vectors.Clear (Object);
-      while Stmt.Has_Elements loop
-         declare
-            Item : Changelog_Ref;
-            Impl : constant Changelog_Access := new Changelog_Impl;
-         begin
-            Impl.Load (Stmt, Session);
-            ADO.Objects.Set_Object (Item, Impl.all'Access);
-            Object.Append (Item);
-         end;
-         Stmt.Next;
-      end loop;
-   end List;
-
    --  ------------------------------
    --  Load the object from current iterator position
    --  ------------------------------
