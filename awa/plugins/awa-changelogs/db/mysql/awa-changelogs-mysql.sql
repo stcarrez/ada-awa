@@ -1,7 +1,6 @@
-/* Copied from changelogs-mysql.sql*/
 /* File generated automatically by dynamo */
 /*  */
-CREATE TABLE Changelog (
+CREATE TABLE awa_changelog (
   /* the changelog identifier. */
   `id` BIGINT NOT NULL,
   /* the changelog date. */
@@ -17,5 +16,5 @@ CREATE TABLE Changelog (
   PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES
-("Changelog")
+("awa_changelog")
 ;

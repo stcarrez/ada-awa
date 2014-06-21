@@ -1,2 +1,2 @@
 /* File generated automatically by dynamo */
-DROP TABLE IF EXISTS `Changelog`;
+DROP TABLE IF EXISTS `awa_changelog`;
