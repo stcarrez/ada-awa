@@ -43,6 +43,7 @@ with AWA.Images.Modules;
 with AWA.Questions.Modules;
 with AWA.Votes.Modules;
 with AWA.Tags.Modules;
+with AWA.Changelogs.Modules;
 
 with AWA.Converters.Dates;
 with AWA.Tests;
@@ -51,6 +52,7 @@ with AWA.Jobs.Services.Tests;
 with AWA.Jobs.Modules.Tests;
 with AWA.Settings.Modules.Tests;
 with AWA.Comments.Modules.Tests;
+with AWA.Changelogs.Modules.Tests;
 
 with ASF.Server.Web;
 with ASF.Server.Tests;
@@ -79,6 +81,8 @@ package body AWA.Testsuite is
 
    Settings       : aliased AWA.Settings.Modules.Setting_Module;
 
+   Changelogs     : aliased AWA.Changelogs.Modules.Changelog_Module;
+
    Date_Converter : aliased ASF.Converters.Dates.Date_Converter;
 
    Rel_Date_Converter : aliased AWA.Converters.Dates.Relative_Date_Converter;
@@ -104,6 +108,7 @@ package body AWA.Testsuite is
       AWA.Blogs.Modules.Tests.Add_Tests (Ret);
       AWA.Storages.Services.Tests.Add_Tests (Ret);
       AWA.Images.Services.Tests.Add_Tests (Ret);
+      AWA.Changelogs.Modules.Tests.Add_Tests (Ret);
       AWA.Votes.Modules.Tests.Add_Tests (Ret);
       AWA.Tags.Modules.Tests.Add_Tests (Ret);
       AWA.Questions.Modules.Tests.Add_Tests (Ret);
@@ -176,6 +181,11 @@ package body AWA.Testsuite is
                       Name   => AWA.Votes.Modules.NAME,
                       URI    => "votes",
                       Module => Votes'Access);
+
+            Register (App    => Application.all'Access,
+                      Name   => AWA.Changelogs.Modules.NAME,
+                      URI    => "changelogs",
+                      Module => Changelogs'Access);
 
             Register (App    => Application.all'Access,
                       Name   => AWA.Tags.Modules.NAME,
