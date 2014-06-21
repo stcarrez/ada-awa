@@ -15,10 +15,20 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Ada.Calendar;
+
+with Util.Log.Loggers;
 
 with AWA.Modules.Get;
-with Util.Log.Loggers;
+with AWA.Users.Models;
+with AWA.Services.Contexts;
+with AWA.Changelogs.Models;
+
+with ADO.Sessions;
+with ADO.Sessions.Entities;
 package body AWA.Changelogs.Modules is
+
+   package ASC renames AWA.Services.Contexts;
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Awa.Changelogs.Module");
 
@@ -45,5 +55,32 @@ package body AWA.Changelogs.Modules is
    begin
       return Get;
    end Get_Changelog_Module;
+
+   --  ------------------------------
+   --  Add the log message and associate it with the database entity identified by
+   --  the given id and the entity type.  The log message is associated with the current user.
+   --  ------------------------------
+   procedure Add_Log (Model       : in Changelog_Module;
+                      Id          : in ADO.Identifier;
+                      Entity_Type : in String;
+                      Message     : in String) is
+      pragma Unreferenced (Model);
+
+      Ctx     : constant ASC.Service_Context_Access := ASC.Current;
+      User    : constant AWA.Users.Models.User_Ref := Ctx.Get_User;
+      DB      : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Kind    : ADO.Entity_Type;
+      History : AWA.Changelogs.Models.Changelog_Ref;
+   begin
+      Ctx.Start;
+      Kind := ADO.Sessions.Entities.Find_Entity_Type (DB, Entity_Type);
+      History.Set_For_Entity_Id (Id);
+      History.Set_User (User);
+      History.Set_Date (Ada.Calendar.Clock);
+      History.Set_Entity_Type (Kind);
+      History.Set_Text (Message);
+      History.Save (DB);
+      DB.Commit;
+   end Add_Log;
 
 end AWA.Changelogs.Modules;
