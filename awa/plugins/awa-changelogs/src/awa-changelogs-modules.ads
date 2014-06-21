@@ -17,6 +17,8 @@
 -----------------------------------------------------------------------
 with ASF.Applications;
 
+with ADO;
+
 with AWA.Modules;
 package AWA.Changelogs.Modules is
 
@@ -37,6 +39,13 @@ package AWA.Changelogs.Modules is
 
    --  Get the changelogs module.
    function Get_Changelog_Module return Changelog_Module_Access;
+
+   --  Add the log message and associate it with the database entity identified by
+   --  the given id and the entity type.  The log message is associated with the current user.
+   procedure Add_Log (Model       : in Changelog_Module;
+                      Id          : in ADO.Identifier;
+                      Entity_Type : in String;
+                      Message     : in String);
 
 private
 
