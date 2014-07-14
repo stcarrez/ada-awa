@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-services -- Services
---  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -96,6 +96,14 @@ package AWA.Services.Contexts is
    --  Get the current service context.
    --  Returns null if the current thread is not associated with any service context.
    function Current return Service_Context_Access;
+
+   --  Run the process procedure on behalf of the specific user and session.
+   --  This operation changes temporarily the identity of the current user principal and
+   --  executes the <tt>Process</tt> procedure.
+   generic
+      with procedure Process;
+   procedure Run_As (User    : in AWA.Users.Models.User_Ref;
+                     Session : in AWA.Users.Models.Session_Ref);
 
 private
 
