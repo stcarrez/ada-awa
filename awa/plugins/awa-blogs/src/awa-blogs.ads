@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs -- Blogs module
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,18 @@
 
 --  == Introduction ==
 --  The *blogs* plugin is a small blog application which allows users to publish articles.
+--  A user may own several blogs, each blog having a name and its own base URI.  Within a blog,
+--  the user may write articles and publish them.  Once published, the articles are visible to
+--  anonymous users.
+--
+--  The *blogs* plugin uses the [AWA_Tags] and [AWA_Comments] modules to allow to associate
+--  tags to a post and allow users to comment on the articles.
+--
+--  == Model ==
+--  [http://ada-awa.googlecode.com/svn/wiki/awa_blogs_model.png]
+--
+--  @include awa-blogs-modules.ads
+--  @include awa-blogs-beans.ads
 --
 --  == Ada Beans ==
 --  @include blogs.xml
@@ -25,13 +37,12 @@
 --  == Queries ==
 --  @include blog-admin-post-list.xml
 --  @include blog-post-list.xml
+--  @include blog-comment-list.xml
 --  @include blog-list.xml
---
---  == Model ==
---  [http://ada-awa.googlecode.com/svn/wiki/awa_blogs_model.png]
---
---  @include Blog.hbm.xml
+--  @include blog-tags.xml
 --
 package AWA.Blogs is
+
+   pragma Pure;
 
 end AWA.Blogs;

@@ -75,7 +75,9 @@
   <managed-bean>
     <description>
        The bean to allow a user to post a new comment.  This is a specific bean because
-       the permission to create a new post is different from other permissions.
+       the permission to create a new post is different from other permissions.  If the permission
+       is granted, the comment will be created and put in the COMMENT_WAITING state.
+       An email will be sent to the post author for approval.
     </description>
     <managed-bean-name>postNewComment</managed-bean-name>
     <managed-bean-class>AWA.Comments.Beans.Comment_Bean</managed-bean-class>

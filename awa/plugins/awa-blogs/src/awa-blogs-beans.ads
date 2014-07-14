@@ -26,6 +26,11 @@ with ADO;
 with AWA.Blogs.Modules;
 with AWA.Blogs.Models;
 with AWA.Tags.Beans;
+
+--  == Blog Beans ==
+--  Several bean types are provided to represent and manage the blogs and their posts.
+--  The blog module registers the bean constructors when it is initialized.
+--  To use them, one must declare a bean definition in the application XML configuration.
 package AWA.Blogs.Beans is
 
    --  Attributes exposed by <b>Post_Bean</b>
@@ -66,6 +71,14 @@ package AWA.Blogs.Beans is
    procedure Create (Bean    : in out Blog_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
+   --  Create the Blog_Bean bean instance.
+   function Create_Blog_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
+                              return Util.Beans.Basic.Readonly_Bean_Access;
+
+   --  ------------------------------
+   --  Post Bean
+   --  ------------------------------
+   --  The <b>Post_Bean</b> is used to create or update a post associated with a blog.
    type Post_Bean is new AWA.Blogs.Models.Post_Bean with record
       Module  : AWA.Blogs.Modules.Blog_Module_Access := null;
       Blog_Id : ADO.Identifier;
@@ -106,15 +119,15 @@ package AWA.Blogs.Beans is
    procedure Load (Bean    : in out Post_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
-   --  Create the Blog_Bean bean instance.
-   function Create_Blog_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
-                              return Util.Beans.Basic.Readonly_Bean_Access;
-
    --  Create the Post_Bean bean instance.
    function Create_Post_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                               return Util.Beans.Basic.Readonly_Bean_Access;
 
-   --  List of posts visible to anybody.
+   --  ------------------------------
+   --  Post List Bean
+   --  ------------------------------
+   --  The <b>Post_List_Bean</b> gives a list of visible posts to be displayed to users.
+   --  The list can be filtered by a given tag.  The list pagination is supported.
    type Post_List_Bean is new AWA.Blogs.Models.Post_List_Bean with record
       Posts      : aliased AWA.Blogs.Models.Post_Info_List_Bean;
       Service    : Modules.Blog_Module_Access := null;
@@ -145,10 +158,6 @@ package AWA.Blogs.Beans is
    function Create_Post_List_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                                    return Util.Beans.Basic.Readonly_Bean_Access;
 
-   --  Create the Blog_Admin_Bean bean instance.
-   function Create_Blog_Admin_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
-                                   return Util.Beans.Basic.Readonly_Bean_Access;
-
    --  Get a select item list which contains a list of post status.
    function Create_Status_List (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                                 return Util.Beans.Basic.Readonly_Bean_Access;
@@ -156,6 +165,11 @@ package AWA.Blogs.Beans is
    type Init_Flag is (INIT_BLOG_LIST, INIT_POST_LIST, INIT_COMMENT_LIST);
    type Init_Map is array (Init_Flag) of Boolean;
 
+   --  ------------------------------
+   --  Admin List Bean
+   --  ------------------------------
+   --  The <b>Blog_Admin_Bean</b> is used for the administration of a blog.  It gives the
+   --  list of posts that are created, published or not.
    type Blog_Admin_Bean is new Util.Beans.Basic.Bean with record
       Module : AWA.Blogs.Modules.Blog_Module_Access := null;
 
@@ -201,5 +215,9 @@ package AWA.Blogs.Beans is
 
    --  Load the list of blogs.
    procedure Load_Blogs (List : in Blog_Admin_Bean);
+
+   --  Create the Blog_Admin_Bean bean instance.
+   function Create_Blog_Admin_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
+                                    return Util.Beans.Basic.Readonly_Bean_Access;
 
 end AWA.Blogs.Beans;

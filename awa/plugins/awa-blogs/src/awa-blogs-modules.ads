@@ -24,7 +24,22 @@ with AWA.Blogs.Models;
 
 with Security.Permissions;
 
---  The <b>Blogs.Module</b> manages the creation, update, removal of blog posts in an application.
+--  == Integration ==
+--  The <tt>Blog_Module</tt> manages the creation, update, removal of blog posts in an application.
+--  It provides operations that are used by the blog beans or other services to create and update
+--  posts.  An instance of the <tt>Blog_Module</tt> must be declared and registered in the
+--  AWA application.  The module instance can be defined as follows:
+--
+--    type Application is new AWA.Applications.Application with record
+--       Blog_Module : aliased AWA.Blogs.Modules.Blog_Module;
+--    end record;
+--
+--  And registered in the `Initialize_Modules` procedure by using:
+--
+--    Register (App    => App.Self.all'Access,
+--              Name   => AWA.Blogs.Modules.NAME,
+--              URI    => "blogs",
+--              Module => App.Blog_Module'Access);
 --
 package AWA.Blogs.Modules is
 
