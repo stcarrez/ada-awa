@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-jobs -- AWA Jobs
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,14 +26,26 @@ with ADO.Sessions;
 with AWA.Events;
 with AWA.Jobs.Models;
 
+--  == Job Service ==
+--  The <b>AWA.Jobs.Services</b> package defines the type abstractions and the core operation
+--  to define a job operation procedure, create and schedule a job and perform the job work
+--  when it is scheduled.
+--
+--  @type Abstract_Job_Type
+--
+--  @type
 package AWA.Jobs.Services is
 
+   --  The job is closed.  The status cannot be modified.
    Closed_Error   : exception;
 
+   --  The job is already scheduled.
    Schedule_Error : exception;
 
+   --  The job had an execution error.
    Execute_Error  : exception;
 
+   --  The parameter value is invalid and cannot be set on the job instance.
    Invalid_Value  : exception;
 
    --  Event posted when a job is created.
@@ -46,9 +58,14 @@ package AWA.Jobs.Services is
    --  Abstract_Job Type
    --  ------------------------------
    --  The <b>Abstract_Job_Type</b> is an abstract tagged record which defines a job that can be
-   --  scheduled and executed.
+   --  scheduled and executed.  This is the base type of any job implementation.  It defines
+   --  the <tt>Execute</tt> abstract procedure that must be implemented in concrete job types.
+   --  It provides operation to setup and retrieve the job parameter.  When the job
+   --  <tt>Execute</tt> procedure is called, it allows to set the job execution status and result.
    type Abstract_Job_Type is abstract new Ada.Finalization.Limited_Controlled with private;
    type Abstract_Job_Access is access all Abstract_Job_Type'Class;
+
+   type Work_Access is access procedure (Job : in out Abstract_Job_Type'Class);
 
    --  Execute the job.  This operation must be implemented and should perform the work
    --  represented by the job.  It should use the <tt>Get_Parameter</tt> function to retrieve
@@ -99,16 +116,39 @@ package AWA.Jobs.Services is
    procedure Set_Status (Job    : in out Abstract_Job_Type;
                          Status : in AWA.Jobs.Models.Job_Status_Type);
 
+   --  Set the job result identified by the <b>Name</b> to the value given in <b>Value</b>.
+   --  The value object can hold any kind of basic value type (integer, enum, date, strings).
+   --  If the value represents a bean, the <tt>Invalid_Value</tt> exception is raised.
+   procedure Set_Result (Job   : in out Abstract_Job_Type;
+                         Name  : in String;
+                         Value : in Util.Beans.Objects.Object);
+
+   --  Set the job result identified by the <b>Name</b> to the value given in <b>Value</b>.
+   procedure Set_Result (Job   : in out Abstract_Job_Type;
+                         Name  : in String;
+                         Value : in String);
+
    --  Save the job information in the database.  Use the database session defined by <b>DB</b>
    --  to save the job.
    procedure Save (Job : in out Abstract_Job_Type;
                    DB  : in out ADO.Sessions.Master_Session'Class);
 
    --  ------------------------------
+   --  Job Type
+   --  ------------------------------
+   --  The <tt>Job_Type</tt> is a concrete job used by the <tt>Work_Factory</tt> to execute
+   --  a simple <tt>Work_Access</tt> procedure.
+   type Job_Type is new Abstract_Job_Type with private;
+
+   overriding
+   procedure Execute (Job : in out Job_Type);
+
+   --  ------------------------------
    --  Job Factory
    --  ------------------------------
    --  The <b>Job_Factory</b> is the interface that allows to create a job instance in order
-   --  to execute a scheduled job.
+   --  to execute a scheduled job.  The <tt>Create</tt> function is called to create a new
+   --  job instance when the job is scheduled for execution.
    type Job_Factory is abstract tagged limited null record;
    type Job_Factory_Access is access all Job_Factory'Class;
 
@@ -125,22 +165,13 @@ package AWA.Jobs.Services is
    --  ------------------------------
    --  Work Factory
    --  ------------------------------
-   type Work_Access is access procedure (Job : in out Abstract_Job_Type'Class);
-
+   --  The <tt>Work_Factory</tt> is a simplified <tt>Job_Factory</tt> that allows to register
+   --  simple <tt>Work_Access</tt> procedures to execute the job.
    type Work_Factory (Work : Work_Access) is new Job_Factory with null record;
 
+   --  Create the job instance to execute the associated <tt>Work_Access</tt> procedure.
    overriding
    function Create (Factory : in Work_Factory) return Abstract_Job_Access;
-
-   --  ------------------------------
-   --
-   --  ------------------------------
-   type Job_Type is new Abstract_Job_Type with private;
-
-   procedure Set_Work (Job  : in out Job_Type;
-                       Work : in Work_Factory'Class);
-
-   procedure Execute (Job : in out Job_Type);
 
    --  ------------------------------
    --  Job Declaration
@@ -192,6 +223,11 @@ private
       Results_Modified : Boolean := False;
    end record;
 
+   --  ------------------------------
+   --  Job Type
+   --  ------------------------------
+   --  The <tt>Job_Type</tt> is a concrete job used by the <tt>Work_Factory</tt> to execute
+   --  a simple <tt>Work_Access</tt> procedure.
    type Job_Type is new Abstract_Job_Type with record
       Work : Work_Access;
    end record;
