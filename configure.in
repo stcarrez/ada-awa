@@ -65,7 +65,7 @@ if test $ENABLE_XMLADA = "yes" ; then
 fi
 
 if test $ENABLE_AWS = "yes" ; then
-  PACKAGES="$PACKAGES aws-gpl-2.10.0-src"
+  PACKAGES="$PACKAGES aws-gpl-3.1.0-src"
 fi
 
 dnl Extract the packages if necessary
@@ -258,7 +258,7 @@ if test T"$NEED_INSTALL" != T; then
    exit 0
 fi
 
-ARGS="--prefix $prefix --disable-shared"
+ARGS="--prefix $prefix"
 
 echo "Configuring ==== ada-util ===="
 (cd $DIR/util && ./configure $ARGS --enable-ahven)
