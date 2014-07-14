@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-principals -- User principals
---  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -77,6 +77,18 @@ package body AWA.Users.Principals is
       Result.User    := User;
       Result.Session := Session;
       return Result;
+   end Create;
+
+   --  ------------------------------
+   --  Create a principal for the given user.
+   --  ------------------------------
+   function Create (User    : in AWA.Users.Models.User_Ref;
+                    Session : in AWA.Users.Models.Session_Ref) return Principal is
+   begin
+      return Result : Principal do
+         Result.User    := User;
+         Result.Session := Session;
+      end return;
    end Create;
 
    --  ------------------------------
