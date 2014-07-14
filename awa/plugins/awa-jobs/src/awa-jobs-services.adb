@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-jobs -- AWA Jobs
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,7 +45,7 @@ package body AWA.Jobs.Services is
       Ctx  : constant ASC.Service_Context_Access := ASC.Current;
       DB   : constant ADO.Sessions.Session := ASC.Get_Session (Ctx);
       Stmt : ADO.Statements.Query_Statement
-        := DB.Create_Statement ("select status from awa_jobs where id = ?");
+        := DB.Create_Statement ("SELECT status FROM awa_job WHERE id = ?");
    begin
       Stmt.Add_Param (Id);
       Stmt.Execute;
@@ -84,6 +84,29 @@ package body AWA.Jobs.Services is
       Job.Props.Include (Name, Value);
       Job.Props_Modified := True;
    end Set_Parameter;
+
+   --  ------------------------------
+   --  Set the job result identified by the <b>Name</b> to the value given in <b>Value</b>.
+   --  The value object can hold any kind of basic value type (integer, enum, date, strings).
+   --  If the value represents a bean, the <tt>Invalid_Value</tt> exception is raised.
+   --  ------------------------------
+   procedure Set_Result (Job   : in out Abstract_Job_Type;
+                         Name  : in String;
+                         Value : in Util.Beans.Objects.Object) is
+   begin
+      Job.Results.Include (Name, Value);
+      Job.Results_Modified := True;
+   end Set_Result;
+
+   --  ------------------------------
+   --  Set the job result identified by the <b>Name</b> to the value given in <b>Value</b>.
+   --  ------------------------------
+   procedure Set_Result (Job   : in out Abstract_Job_Type;
+                         Name  : in String;
+                         Value : in String) is
+   begin
+      Job.Set_Result (Name, Util.Beans.Objects.To_Object (Value));
+   end Set_Result;
 
    --  ------------------------------
    --  Get the job parameter identified by the <b>Name</b> and convert the value into a string.
@@ -155,6 +178,7 @@ package body AWA.Jobs.Services is
    begin
       case Job.Job.Get_Status is
          when AWA.Jobs.Models.CANCELED | Models.FAILED | Models.TERMINATED =>
+            Log.Info ("Job {0} is closed", ADO.Identifier'Image (Job.Job.Get_Id));
             raise Closed_Error;
 
          when Models.SCHEDULED | Models.RUNNING =>
@@ -170,6 +194,10 @@ package body AWA.Jobs.Services is
    procedure Save (Job : in out Abstract_Job_Type;
                    DB  : in out ADO.Sessions.Master_Session'Class) is
    begin
+      if Job.Props_Modified then
+         Job.Job.Set_Parameters (Util.Serialize.Tools.To_JSON (Job.Props));
+         Job.Props_Modified := False;
+      end if;
       if Job.Results_Modified then
          Job.Job.Set_Results (Util.Serialize.Tools.To_JSON (Job.Results));
          Job.Results_Modified := False;
@@ -233,6 +261,7 @@ package body AWA.Jobs.Services is
       use type AWA.Jobs.Models.Job_Status_Type;
    begin
       --  Execute the job with an exception guard.
+      Log.Info ("Execute job {0}", String '(Job.Job.Get_Name));
       begin
          Job.Execute;
 
@@ -272,6 +301,7 @@ package body AWA.Jobs.Services is
       Module : constant AWA.Modules.Module_Access := App.Find_Module (AWA.Jobs.Modules.NAME);
       DB     : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
       Job    : AWA.Jobs.Models.Job_Ref;
+      Id     : constant ADO.Identifier := Event.Get_Entity_Identifier;
    begin
       if Module = null then
          Log.Warn ("There is no Job module to execute a job");
@@ -284,16 +314,17 @@ package body AWA.Jobs.Services is
 
       DB.Begin_Transaction;
       Job.Load (Session => DB,
-                Id      => Event.Get_Entity_Identifier);
+                Id      => Id);
       Job.Set_Start_Date (ADO.Nullable_Time '(Is_Null => False, Value => Ada.Calendar.Clock));
       Job.Set_Status (AWA.Jobs.Models.RUNNING);
       Job.Save (Session => DB);
       DB.Commit;
 
       declare
-         Name : constant String := Job.Get_Name;
+         Name  : constant String := Job.Get_Name;
+         Ident : constant String := ADO.Identifier'Image (Id);
       begin
-         Log.Info ("Restoring job '{0}'", Name);
+         Log.Info ("Restoring job {0} - '{1}'", Ident, Name);
          declare
             Plugin  : constant Job_Module_Access := Job_Module'Class (Module.all)'Access;
             Factory : constant Job_Factory_Access := Plugin.Find_Factory (Name);
@@ -306,7 +337,8 @@ package body AWA.Jobs.Services is
                Work.Execute (DB);
                Free (Work);
             else
-               Log.Error ("There is no factory to execute job '{0}'", Name);
+               Log.Error ("There is no factory to execute job {0} - '{1}'",
+                          Ident, Name);
                Job.Set_Status (AWA.Jobs.Models.FAILED);
                Job.Set_Finish_Date (ADO.Nullable_Time '(Is_Null => False,
                                                         Value   => Ada.Calendar.Clock));
@@ -318,23 +350,22 @@ package body AWA.Jobs.Services is
       end;
    end Execute;
 
+   --  ------------------------------
+   --  Get the job factory name.
+   --  ------------------------------
    function Get_Name (Factory : in Job_Factory'Class) return String is
    begin
       return Ada.Tags.Expanded_Name (Factory'Tag);
    end Get_Name;
-
-   procedure Set_Work (Job  : in out Job_Type;
-                       Work : in Work_Factory'Class) is
-   begin
-      Job.Work := Work.Work;
-      Job.Job.Set_Name (Work.Get_Name);
-   end Set_Work;
 
    procedure Execute (Job : in out Job_Type) is
    begin
       Job.Work (Job);
    end Execute;
 
+   --  ------------------------------
+   --  Create the job instance to execute the associated <tt>Work_Access</tt> procedure.
+   --  ------------------------------
    overriding
    function Create (Factory : in Work_Factory) return Abstract_Job_Access is
    begin
