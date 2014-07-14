@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-services -- Services
---  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -204,5 +204,20 @@ package body AWA.Services.Contexts is
    begin
       return Task_Context.Value;
    end Current;
+
+   --  ------------------------------
+   --  Run the process procedure on behalf of the specific user and session.
+   --  This operation changes temporarily the identity of the current user principal and
+   --  executes the <tt>Process</tt> procedure.
+   --  ------------------------------
+   procedure Run_As (User    : in AWA.Users.Models.User_Ref;
+                     Session : in AWA.Users.Models.Session_Ref) is
+      Ctx       : Service_Context;
+      Principal : aliased AWA.Users.Principals.Principal
+        := AWA.Users.Principals.Create (User, Session);
+   begin
+      Ctx.Principal := Principal'Unchecked_Access;
+      Process;
+   end Run_As;
 
 end AWA.Services.Contexts;
