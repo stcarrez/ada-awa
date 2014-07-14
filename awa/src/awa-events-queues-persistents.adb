@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-queues-persistents -- AWA Event Queues
---  Copyright (C) 2012, 2013 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +24,7 @@ with Util.Serialize.Tools;
 with AWA.Services.Contexts;
 with AWA.Applications;
 with AWA.Events.Services;
+with AWA.Users.Models;
 
 with ADO;
 with ADO.Sessions;
@@ -129,15 +130,27 @@ package body AWA.Events.Queues.Persistents is
 
       --  Dispatch the event.
       procedure Dispatch_Message (Msg : in out Models.Message_Ref) is
---           User    : constant AWA.Users.Models.User_Ref'Class := Msg.Get_User;
---           Session : constant AWA.Users.Models.Session_Ref'Class := Msg.Get_Session;
+         User    : constant AWA.Users.Models.User_Ref'Class := Msg.Get_User;
+         Session : constant AWA.Users.Models.Session_Ref'Class := Msg.Get_Session;
          Event   : Module_Event;
+
+         procedure Action;
+
+         procedure Action is
+         begin
+            Process (Event);
+         end Action;
+
+         procedure Run is new AWA.Services.Contexts.Run_As (Action);
+
       begin
          Event.Set_Event_Kind (AWA.Events.Find_Event_Index (Msg.Get_Message_Type.Get_Name));
          Util.Serialize.Tools.From_JSON (Msg.Get_Parameters, Event.Props);
          Event.Set_Entity_Identifier (Msg.Get_Entity_Id);
          Event.Entity_Type := Msg.Get_Entity_Type;
-         Process (Event);
+
+         --  Run the Process action on behalf of the user associated with the message.
+         Run (AWA.Users.Models.User_Ref (User), AWA.Users.Models.Session_Ref (Session));
 
       exception
          when E : others =>
