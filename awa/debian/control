@@ -29,6 +29,22 @@ Depends: ${shlibs:Depends}, libawa1.0-workspaces (= ${binary:Version}), ${misc:D
 Description: Workspace plugin for AWA (Development)
  This is the Workspace plugin for Ada Web Application.
 
+Package: libawa1.0-changelogs
+Section: libs
+Architecture: any
+Pre-Depends: multiarch-support
+Depends: ${shlibs:Depends}, ${misc:Depends}, libawa1.0 (= ${binary:Version})
+Description: Changelogs plugin for AWA (Runtime)
+ This is the Changelogs plugin for Ada Web Application.
+
+Package: libawa1.0-changelogs-dev
+Section: libdevel
+Architecture: any
+Pre-Depends: multiarch-support
+Depends: ${shlibs:Depends}, ${misc:Depends}, libawa1.0-changelogs (= ${binary:Version})
+Description: Changelogs plugin for AWA (Development)
+ This is the Changelogs plugin for Ada Web Application.
+
 Package: libawa1.0-countries
 Section: libs
 Architecture: any

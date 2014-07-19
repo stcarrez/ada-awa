@@ -30,6 +30,7 @@ LIBRARY_TYPE=dynamic
 .PHONY: binary-arch build-arch
 .PHONY: $(pkgname)$(aliversion)-dev $(pkgname)$(soversion)
 .PHONY: $(pkgname)$(aliversion)-blogs  $(pkgname)$(aliversion)-blogs-dev
+.PHONY: $(pkgname)$(aliversion)-changelogs  $(pkgname)$(aliversion)-changelogs-dev
 .PHONY: $(pkgname)$(aliversion)-comments  $(pkgname)$(aliversion)-comments-dev
 .PHONY: $(pkgname)$(aliversion)-countries  $(pkgname)$(aliversion)-countries-dev
 .PHONY: $(pkgname)$(aliversion)-images  $(pkgname)$(aliversion)-images-dev
@@ -154,6 +155,15 @@ $(pkgname)$(aliversion)-blogs-dev:	awa_blogs ada_blogs
 	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)blogs.so.$(soversion) \
 	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)blogs.so
 
+$(pkgname)$(aliversion)-changelogs:
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_install -p$@ usr/lib/$(libprefix)changelogs.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
+
+$(pkgname)$(aliversion)-changelogs-dev:	awa_changelogs ada_changelogs
+	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)changelogs.so.$(soversion) \
+	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)changelogs.so
+
 $(pkgname)$(aliversion)-comments:
 	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
 	dh_install -p$@ usr/lib/$(libprefix)comments.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
@@ -273,6 +283,8 @@ override_dh_auto_install: $(pkgname)$(aliversion) \
 						  $(pkgname)$(aliversion)-dev \
 						  $(pkgname)$(aliversion)-blogs \
 						  $(pkgname)$(aliversion)-blogs-dev \
+						  $(pkgname)$(aliversion)-changelogs \
+						  $(pkgname)$(aliversion)-changelogs-dev \
 						  $(pkgname)$(aliversion)-comments \
 						  $(pkgname)$(aliversion)-comments-dev \
 						  $(pkgname)$(aliversion)-countries \
