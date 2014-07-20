@@ -53,7 +53,7 @@
                                 <ui:param name="commentList" value="#{postComments}"/>
                             </ui:include>
                         </h:panelGroup>
-                        <h:panelGroup rendered="#{post.allow_comments}">
+                        <h:panelGroup id='comment-add' layout="div" rendered="#{post.allow_comments}">
                             <c:choose>
                                 <c:when test="#{user.isLogged}">
                                     <ajax:include styleClass="asf-container" async="true"
