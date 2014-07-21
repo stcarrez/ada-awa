@@ -1,5 +1,5 @@
 <!-- Login main page
-  -  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +25,8 @@
         <ui:include src="views/welcome-login.xhtml"/>
         <div class='awa-side1 container_6'>
           <ui:include src="forms/login-openid.xhtml">
-            <ui:param name="title" value="#{userMsg.login_openid_title}"/>
+              <ui:param name="title" value="#{userMsg.login_openid_title}"/>
+              <ui:param name="redirect" value="#{param['redirect']}"/>
           </ui:include>
         </div>
         <div class='awa-side2 container_6'>
