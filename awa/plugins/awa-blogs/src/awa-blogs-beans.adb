@@ -17,6 +17,7 @@
 -----------------------------------------------------------------------
 with Ada.Calendar;
 with Ada.Characters.Handling;
+with Ada.Strings.Maps;
 
 with Util.Dates.ISO8601;
 with Util.Beans.Objects.Time;
@@ -37,6 +38,7 @@ with ADO.Sessions.Entities;
 package body AWA.Blogs.Beans is
 
    use type ADO.Identifier;
+   use type Ada.Strings.Maps.Character_Set;
    use Ada.Strings.Unbounded;
 
    BLOG_ID_PARAMETER : constant String := "blog_id";
@@ -44,6 +46,22 @@ package body AWA.Blogs.Beans is
    --  Build the URI from the post title and the post date.
    function Get_Predefined_Uri (Title : in String;
                                 Date  : in Ada.Calendar.Time) return String;
+
+   --  Sanitize the URI before doing a search in the database.
+   --  Ignore every character that we consider to be invalid for the URL.
+   function Sanitize_Uri (Uri : in String) return String;
+
+   --  A list of character that we forbid in the URI.  This is used by the
+   --  Get_Predefined_Uri to build a default URI from the post title.
+   --  The '/' and '+' are allowed.
+   Url_Forbidden_Set : constant Ada.Strings.Maps.Character_Set
+     := Ada.Strings.Maps.To_Set (Span => (Low  => Character'Val (0),
+                                          High => ' '))
+     or
+       Ada.Strings.Maps.To_Set (Span => (Low => Character'Val (128),
+                                         High => Character'Val (255)))
+     or
+       Ada.Strings.Maps.To_Set (":?#[]@!$&'""()*,;=%`^\<>");
 
    --  ------------------------------
    --  Get the value identified by the name.
@@ -121,9 +139,7 @@ package body AWA.Blogs.Beans is
       Result (9 .. 10) := D (9 .. 10);
       Result (11) := '/';
       for I in Title'Range loop
-         if Ada.Characters.Handling.Is_Alphanumeric (Title (I))
-           or Title (I) = '-' or Title (I) = '_' or Title (I) = '$' or Title (I) = ','
-           or Title (I) = '.' or Title (I) = '+' then
+         if not Ada.Strings.Maps.Is_In (Title (I), Url_Forbidden_Set) then
             Result (I + 11) := Title (I);
          else
             Result (I + 11) := '-';
@@ -175,6 +191,23 @@ package body AWA.Blogs.Beans is
    end Delete;
 
    --  ------------------------------
+   --  Sanitize the URI before doing a search in the database.
+   --  Ignore every character that we consider to be invalid for the URI.
+   --  ------------------------------
+   function Sanitize_Uri (Uri : in String) return String is
+      Result : String (1 .. Uri'Length);
+      Pos    : Natural := 1;
+   begin
+      for I in Uri'Range loop
+         if not Ada.Strings.Maps.Is_In (Uri (I), Url_Forbidden_Set) then
+            Result (Pos) := Uri (I);
+            Pos := Pos + 1;
+         end if;
+      end loop;
+      return Result (1 .. Pos - 1);
+   end Sanitize_Uri;
+
+   --  ------------------------------
    --  Load the post from the URI.
    --  ------------------------------
    overriding
@@ -193,7 +226,7 @@ package body AWA.Blogs.Beans is
          Query.Bind_Param (1, Bean.Get_Id);
          Query.Set_Filter ("o.id = ?");
       else
-         Query.Bind_Param (1, String '(Bean.Get_Uri));
+         Query.Bind_Param (1, Sanitize_Uri (String '(Bean.Get_Uri)));
          Query.Set_Filter ("o.uri = ?");
       end if;
       Bean.Find (Session, Query, Found);
