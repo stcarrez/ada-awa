@@ -6,6 +6,7 @@
    app_facebook_secret
    app_google_plus_client_id
    app_google_plus_secret
+   app_logout_url
   -->
   <managed-bean>
     <description>This bean is used by the login form</description>
