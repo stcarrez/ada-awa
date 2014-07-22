@@ -26,7 +26,7 @@
         <div class='awa-side1 container_6'>
           <ui:include src="forms/login-openid.xhtml">
               <ui:param name="title" value="#{userMsg.login_openid_title}"/>
-              <ui:param name="redirect" value="#{param['redirect']}"/>
+              <ui:param name="redirect" value="#{empty param['redirect'] ? '' : param['redirect']}"/>
           </ui:include>
         </div>
         <div class='awa-side2 container_6'>
