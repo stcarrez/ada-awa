@@ -53,7 +53,7 @@ You will then have to build these packages as follows:
 
   cd aws && make prefix="/usr/local" setup build install
 
-After you have built XML/Ada and AWS, you must the the configure, build
+After you have built XML/Ada and AWS, you must then configure, build
 and install as follows:
 
    ./configure  --prefix=/usr/local
