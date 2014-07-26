@@ -1898,12 +1898,12 @@ test -n "$target_alias" &&
 
 
 # Current release settings
-AWA_MAJOR_VERSION=0
-AWA_MINOR_VERSION=3
+AWA_MAJOR_VERSION=1
+AWA_MINOR_VERSION=0
 AWA_MICRO_VERSION=0
 AWA_VERSION=$AWA_MAJOR_VERSION.$AWA_MINOR_VERSION.$AWA_MICRO_VERSION
 
-AWA_PACKAGES="ada-util-1.7.0 ada-el-1.5.0 ada-security-1.1.0 ada-asf-1.0.0 ada-ado-1.0.0 ada-awa-0.3.0 dynamo-0.7.0"
+AWA_PACKAGES="ada-util-1.7.1 ada-el-1.5.1 ada-security-1.1.1 ada-asf-1.0.1 ada-ado-1.0.1 ada-awa-1.0.0 dynamo-0.7.1"
 
 # checking for local tools
 ac_ext=c
@@ -2967,7 +2967,7 @@ if test $ENABLE_XMLADA = "yes" ; then
 fi
 
 if test $ENABLE_AWS = "yes" ; then
-  PACKAGES="$PACKAGES aws-gpl-2.10.0-src"
+  PACKAGES="$PACKAGES aws-gpl-3.1.0-src"
 fi
 
 for NAME in $PACKAGES ; do
@@ -3175,7 +3175,7 @@ $as_echo "(cd aws && make prefix=\"$prefix\" setup build install)" >&6; }
    exit 0
 fi
 
-ARGS="--prefix $prefix --disable-shared"
+ARGS="--prefix $prefix"
 
 echo "Configuring ==== ada-util ===="
 (cd $DIR/util && ./configure $ARGS --enable-ahven)
