@@ -12,30 +12,61 @@ To build AWA, you will need:
  - AWS          (http://libre.adacore.com/libre/tools/aws/     2.11)
  - XML/Ada      (http://libre.adacore.com/libre/tools/xmlada/  4.3)
 
-Build with the following commands:
+Build
+  Build with the following commands:
 
-   ./configure
-   make
-
-
-The samples provided in AWA is in fact a complete application
-created by Dynamo.  It can be built using:
-
-   cd samples
-   ./configure
-   make
-   
-   
-The unit tests are built using:
-
-   gnatmake -Ptests
+    ./configure
+    make
 
 
-And unit tests are executed with:
+Samples
+  The samples provided in AWA is in fact a complete application
+  created by Dynamo.  It can be built using:
 
-   bin/awa_harness -config test-mysql.properties
-or
-   bin/awa_harness -config test-sqlite.properties
+    cd samples
+    ./configure
+    make
+
+Database Creation (MySQL)
+
+   Create the tests database by using the Dynamo command.
+   (Dynamo is available at: http://code.google.com/p/ada-gen/)
+       Note: change 'root' and 'password' to a MySQL user that has admin access rights
+             ('create database' and 'grant option' privileges).
+
+    dynamo create-database db root password
+
+   The default database connection string is defined in dynamo.xml.
+   To create manually the database, you can proceed to the following steps:
+
+    1. Create the 'awa_test' database in MySQL
+
+         mysql -u root
+         mysql> create database awa_test;
+
+    2. Create the 'awa_user' user and give the access rights:
+
+         mysql> grant select, insert, update, delete,
+                      create, drop, create temporary tables, execute,
+                      show view on `awa_test`.* to awa_user@'localhost';
+         mysql> flush privileges;
+
+    3. Create the tables
+
+         mysql> use awa_test
+         mysql> source db/mysql/create-awa-mysql.sql
+
+Tests
+  The unit tests are built using:
+
+    gnatmake -Ptests
+
+
+  And unit tests are executed with:
+
+    bin/awa_harness -config test-mysql.properties
+  or
+    bin/awa_harness -config test-sqlite.properties
 
 
 Documentation
