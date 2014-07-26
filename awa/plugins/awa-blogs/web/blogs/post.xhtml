@@ -62,7 +62,7 @@
                                 <c:otherwise>
                                     <h3>#{blogMsg.blog_add_comment}</h3>
                                     #{blogMsg.blog_sign_in_add_comment}
-                                    <a id="awa-login" href="#{contextPath}/auth/login.html?redirect=#{contextPath}/blogs/post.html%3Fpost%3D#{util:urlEncode(post.uri)}">#{blogMsg.blog_sign_in_label}</a>
+                                    <a id="awa-login" href="#{contextPath}/auth/login.html?redirect=#{contextPath}/blogs/post.html%3Fpost%3D#{util:urlEncode(post.uri)}%23comment-add">#{blogMsg.blog_sign_in_label}</a>
                                 </c:otherwise>
                             </c:choose>
                         </h:panelGroup>
