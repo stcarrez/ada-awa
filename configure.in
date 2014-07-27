@@ -2,7 +2,7 @@ dnl Autoconf configure script for AWA
 dnl Copyright 2011 
 dnl
 
-AC_INIT(support/build.config.in)
+AC_INIT(Makefile.in)
 
 AC_CANONICAL_SYSTEM
 AC_EXEEXT
@@ -282,5 +282,5 @@ echo "Configuring ==== ada-awa ===="
 (cd $DIR/awa && ./configure --with-ada-util=../util --with-ada-el=../el --with-ada-asf=../asf --with-ada-security=../security --with-ada-ado=../ado $ARGS)
 
 AC_OUTPUT(
-Makefile support/build.config
+Makefile
 )
