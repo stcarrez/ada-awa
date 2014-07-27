@@ -19,7 +19,7 @@ top_builddir = .
 SUBDIRS=util el security asf ado dynamo awa
 
 # Build executables for all mains defined by the project.
-test build:
+build test:
 	D=`pwd`; \
 	for i in $(SUBDIRS); do \
 	   cd "$$D/$$i" && \
