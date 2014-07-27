@@ -561,7 +561,7 @@ PACKAGE_STRING=
 PACKAGE_BUGREPORT=
 PACKAGE_URL=
 
-ac_unique_file="support/build.config.in"
+ac_unique_file="Makefile.in"
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
 EXEC_PREFIX
@@ -3198,7 +3198,7 @@ echo "Configuring ==== dynamo ===="
 echo "Configuring ==== ada-awa ===="
 (cd $DIR/awa && ./configure --with-ada-util=../util --with-ada-el=../el --with-ada-asf=../asf --with-ada-security=../security --with-ada-ado=../ado $ARGS)
 
-ac_config_files="$ac_config_files Makefile support/build.config"
+ac_config_files="$ac_config_files Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -3919,7 +3919,6 @@ for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-    "support/build.config") CONFIG_FILES="$CONFIG_FILES support/build.config" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
