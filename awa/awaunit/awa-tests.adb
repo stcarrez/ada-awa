@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  AWA tests - AWA Tests Framework
---  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,6 +27,7 @@ with Util.Log.Loggers;
 with ASF.Tests;
 
 with AWA.Applications.Factory;
+with AWA.Tests.Helpers.Users;
 package body AWA.Tests is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Tests");
@@ -67,6 +68,15 @@ package body AWA.Tests is
    begin
       ASF.Server.Tests.Set_Context (Application.all'Access);
    end Set_Up;
+
+   --  ------------------------------
+   --  Cleanup after the test execution.
+   --  ------------------------------
+   overriding
+   procedure Tear_Down (T : in out Test) is
+   begin
+      AWA.Tests.Helpers.Users.Tear_Down;
+   end Tear_Down;
 
    procedure Initialize (Props : in Util.Properties.Manager) is
    begin
