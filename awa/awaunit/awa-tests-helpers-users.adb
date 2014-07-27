@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  files.tests -- Unit tests for files
---  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,10 +28,16 @@ with ADO.SQL;
 package body AWA.Tests.Helpers.Users is
 
    use AWA.Users.Services;
+   use type AWA.Users.Principals.Principal_Access;
 
-   use Util.Log;
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Tests.Helpers.Users");
 
-   Log : constant Loggers.Logger := Loggers.Create ("AWA.Tests.Helpers.Users");
+   MAX_USERS    : constant Positive := 10;
+   Logged_Users : array (1 .. MAX_USERS) of AWA.Users.Principals.Principal_Access;
+
+   procedure Free is
+     new Ada.Unchecked_Deallocation (Object => AWA.Users.Principals.Principal'Class,
+                                     Name   => AWA.Users.Principals.Principal_Access);
 
    --  ------------------------------
    --  Initialize the service context.
@@ -177,6 +183,17 @@ package body AWA.Tests.Helpers.Users is
       Context.Set_Context (App, Principal);
       Sec_Context.Set_Context (Manager   => App.Get_Security_Manager,
                                Principal => Principal.all'Access);
+
+      --  Keep track of the Principal instance so that Tear_Down will release it.
+      --  Most tests will call Login but don't call Logout because there is no real purpose
+      --  for the test in doing that and it allows to keep the unit test simple.  This creates
+      --  memory leak because the Principal instance is not freed.
+      for I in Logged_Users'Range loop
+         if Logged_Users (I) = null then
+            Logged_Users (I) := Principal;
+            exit;
+         end if;
+      end loop;
    end Login;
 
    --  ------------------------------
@@ -194,11 +211,21 @@ package body AWA.Tests.Helpers.Users is
 
    overriding
    procedure Finalize (Principal : in out Test_User) is
-      procedure Free is
-         new Ada.Unchecked_Deallocation (Object => AWA.Users.Principals.Principal'Class,
-                                         Name   => AWA.Users.Principals.Principal_Access);
    begin
       Free (Principal.Principal);
    end Finalize;
+
+   --  ------------------------------
+   --  Cleanup and release the Principal that have been allocated from the Login session
+   --  but not released because the Logout is not called from the unit test.
+   --  ------------------------------
+   procedure Tear_Down is
+   begin
+      for I in Logged_Users'Range loop
+         if Logged_Users (I) /= null then
+            Free (Logged_Users (I));
+         end if;
+      end loop;
+   end Tear_Down;
 
 end AWA.Tests.Helpers.Users;
