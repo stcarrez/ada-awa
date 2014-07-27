@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  users-tests-helpers -- Helpers for user creation
---  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -66,5 +66,9 @@ package AWA.Tests.Helpers.Users is
 
    overriding
    procedure Finalize (Principal : in out Test_User);
+
+   --  Cleanup and release the Principal that have been allocated from the Login session
+   --  but not released because the Logout is not called from the unit test.
+   procedure Tear_Down;
 
 end AWA.Tests.Helpers.Users;
