@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  AWA tests - AWA Tests Framework
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,6 +35,10 @@ package AWA.Tests is
    --  Setup the service context before executing the test.
    overriding
    procedure Set_Up (T : in out Test);
+
+   --  Cleanup after the test execution.
+   overriding
+   procedure Tear_Down (T : in out Test);
 
    --  Initialize the AWA test framework mockup.
    procedure Initialize (App         : in AWA.Applications.Application_Access;
