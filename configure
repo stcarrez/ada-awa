@@ -1263,7 +1263,7 @@ Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --enable-ahven          Enable internal Ahven support for testutil library and Ada util unit tests (disabled)
+  --enable-ahven          Enable internal Ahven support for testutil library and Ada util unit tests (enabled)
   --enable-aunit          build AUnit provided by AWA
   --enable-xmlada         build XML/Ada provided by AWA
   --enable-aws            build AWS provided by AWA
@@ -2924,7 +2924,7 @@ EXEC_PREFIX="$prefix"
 
 PACKAGES="$AWA_PACKAGES"
 
-ac_enable_ahven=no
+ac_enable_ahven=yes
 # Check whether --enable-ahven was given.
 if test "${enable_ahven+set}" = set; then :
   enableval=$enable_ahven; case "${enableval}" in
@@ -2959,7 +2959,7 @@ fi
 
 
 if test $ENABLE_AUNIT = "yes" ; then
-  PACKAGES="$PACKAGES aunit-gpl-2011-src"
+  PACKAGES="$PACKAGES aunit-gpl-2014-src"
 fi
 
 if test $ENABLE_XMLADA = "yes" ; then
@@ -2977,17 +2977,17 @@ for NAME in $PACKAGES ; do
       xmlada-gpl-4.1-src)
         DIR=xmlada-4.1-src
         TARGET=xmlada
-	TGZ=$NAME.tgz
+		TGZ=$NAME.tgz
         ;;
 
       aunit-*)
         TARGET=aunit
-	TGZ=$NAME.tgz
+		TGZ=$NAME.tgz
         ;;
 
       aws-*)
         TARGET=aws
-	TGZ=$NAME.tgz
+		TGZ=$NAME.tgz
         ;;
 
       ada-util-*)
