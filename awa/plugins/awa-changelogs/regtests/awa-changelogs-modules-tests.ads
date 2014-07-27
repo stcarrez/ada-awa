@@ -17,11 +17,13 @@
 -----------------------------------------------------------------------
 
 with Util.Tests;
+with AWA.Tests;
+
 package AWA.Changelogs.Modules.Tests is
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite);
 
-   type Test is new Util.Tests.Test with null record;
+   type Test is new AWA.Tests.Test with null record;
 
    procedure Test_Add_Log (T : in out Test);
 
