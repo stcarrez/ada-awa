@@ -706,6 +706,7 @@ package body AWA.Wikis.Parsers is
       end loop;
       Flush_Text (P);
       P.Empty_Line := True;
+      P.Quote_Level := Level;
       P.Document.Add_Blockquote (Level);
 
       --  Ignore the first white space after the quote character.
@@ -762,10 +763,24 @@ package body AWA.Wikis.Parsers is
       Put_Back (P, C);
       if Count >= 2 then
          Flush_Text (P);
+
+         --  Finish the active blockquotes if a new paragraph is started on an empty line.
+         if P.Quote_Level > 0 then
+            P.Document.Add_Blockquote (0);
+            P.Quote_Level := 0;
+         end if;
          P.Document.Add_Paragraph;
          P.In_Paragraph := True;
       elsif Length (P.Text) > 0 or not P.Empty_Line then
          Append (P.Text, Token);
+      end if;
+
+      --  Finish the active blockquotes if a new paragraph is started immediately after
+      --  the blockquote.
+      if P.Quote_Level > 0 and C /= '>' then
+         Flush_Text (P);
+         P.Document.Add_Blockquote (0);
+         P.Quote_Level := 0;
       end if;
       P.Empty_Line := True;
    end Parse_End_Line;
