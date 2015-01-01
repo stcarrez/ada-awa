@@ -1,0 +1,9 @@
+This is a paragraph:
+ A pre-formatted block line 1
+ A pre-formatted block line 2
+Another paragraph:
+///
+My block line 1
+My block line 2
+///
+A last paragraph.
