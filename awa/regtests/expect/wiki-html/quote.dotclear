@@ -1,0 +1,16 @@
+<p>Quote paragraph:
+</p><blockquote><p>Line 1
+Line 2
+Line 3
+</p></blockquote><p>Second paragraph:
+</p><blockquote><p>Line 1
+</p></blockquote><p>Third paragraph:
+</p><blockquote><blockquote><p>Another paragraph
+</p><ul><li>A list
+</li><li>Another item
+</li></ul></blockquote><p>And another quote level
+</p></blockquote><p>Preformat
+</p><pre>&gt;This is not quoted (pre-formatted)
+&gt;line 2 pre-formatted
+</pre><blockquote><p>Quote after pre line 1
+Quote after pre line 2</p></blockquote><p>New paragraph</p>
