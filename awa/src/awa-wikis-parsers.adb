@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-parsers -- Wiki parser
---  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -184,6 +184,14 @@ package body AWA.Wikis.Parsers is
       P.Empty_Line := False;
    end Parse_Text;
 
+   --  ------------------------------
+   --  Parse a pre-formatted text which starts either by a space or by a sequence
+   --  of characters.  Example:
+   --    {{{
+   --    pre-formatted
+   --    }}}
+   --    ' pre-formattted'
+   --  ------------------------------
    procedure Parse_Preformatted (P     : in out Parser;
                                  Token : in Wide_Wide_Character) is
       C          : Wide_Wide_Character;
@@ -191,60 +199,82 @@ package body AWA.Wikis.Parsers is
       Format     : Unbounded_Wide_Wide_String;
       Col        : Natural;
    begin
-      Peek (P, C);
-      if C /= Token then
-         Parse_Text (P, Token);
-         Put_Back (P, C);
-         return;
-      end if;
-      Peek (P, C);
-      if C /= Token then
-         Parse_Text (P, Token);
-         Parse_Text (P, Token);
-         Put_Back (P, C);
-         return;
+      if Token /= ' ' then
+         Peek (P, C);
+         if C /= Token then
+            Parse_Text (P, Token);
+            Put_Back (P, C);
+            return;
+         end if;
+         Peek (P, C);
+         if C /= Token then
+            Parse_Text (P, Token);
+            Parse_Text (P, Token);
+            Put_Back (P, C);
+            return;
+         end if;
       end if;
       Flush_Text (P);
-      Peek (P, C);
-      if Token = '{' then
-         if C /= LF and C /= CR then
+      if Token = ' ' then
+         Col := 1;
+         while not P.Is_Eof loop
+            Peek (P, C);
+            if Col = 0 then
+               if C /= ' ' then
+                  Put_Back (P, C);
+                  exit;
+               end if;
+               Col := Col + 1;
+            elsif C = LF or C = CR then
+               Col := 0;
+               Append (P.Text, C);
+            else
+               Col := Col + 1;
+               Append (P.Text, C);
+            end if;
+         end loop;
+      else
+         Peek (P, C);
+         if Token = '{' then
+            if C /= LF and C /= CR then
+               Put_Back (P, C);
+               P.Format (CODE) := True;
+               return;
+            end if;
+         elsif Token = '}' then
             Put_Back (P, C);
             P.Format (CODE) := True;
             return;
+         elsif Token /= ' ' then
+            while not P.Is_Eof and C /= LF and C /= CR loop
+               Append (Format, C);
+               Peek (P, C);
+            end loop;
          end if;
-      elsif Token = '}' then
-         Put_Back (P, C);
-         P.Format (CODE) := True;
-         return;
-      else
-         while not P.Is_Eof and C /= LF and C /= CR loop
-            Append (Format, C);
+         if Token = '{' then
+            Stop_Token := '}';
+         else
+            Stop_Token := Token;
+         end if;
+         Col := 0;
+         while not P.Is_Eof loop
             Peek (P, C);
+            if Stop_Token = C and Col = 0 then
+               Peek (P, C);
+               if C = Stop_Token then
+                  Peek (P, C);
+                  exit when C = Stop_Token;
+               end if;
+               Append (P.Text, Stop_Token);
+               Col := Col + 1;
+            elsif C = LF or C = CR then
+               Col := 0;
+            else
+               Col := Col + 1;
+            end if;
+            Append (P.Text, C);
          end loop;
       end if;
-      if Token = '{' then
-         Stop_Token := '}';
-      else
-         Stop_Token := Token;
-      end if;
-      Col := 0;
-      while not P.Is_Eof loop
-         Peek (P, C);
-         if C = Stop_Token and Col = 0 then
-            Peek (P, C);
-            if C = Stop_Token then
-               Peek (P, C);
-               exit when C = Stop_Token;
-            end if;
-            Append (P.Text, Stop_Token);
-            Col := Col + 1;
-         elsif C = LF or C = CR then
-            Col := 0;
-         else
-            Col := Col + 1;
-         end if;
-         Append (P.Text, C);
-      end loop;
       P.Empty_Line := True;
 
       P.Document.Add_Preformatted (P.Text, Format);
@@ -776,6 +806,7 @@ package body AWA.Wikis.Parsers is
        Character'Pos ('(') => Parse_Image'Access,
        Character'Pos ('/') => Parse_Preformatted'Access,
        Character'Pos ('%') => Parse_Line_Break'Access,
+       Character'Pos ('>') => Parse_Quote'Access,
        others => Parse_Text'Access
       );
 
