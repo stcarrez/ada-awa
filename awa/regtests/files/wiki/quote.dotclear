@@ -1,0 +1,18 @@
+Quote paragraph:
+>Line 1
+>Line 2
+>Line 3
+Second paragraph:
+>Line 1
+Third paragraph:
+>>Another paragraph
+>>* A list
+>>* Another item
+>And another quote level
+Preformat
+ >This is not quoted (pre-formatted)
+ >line 2 pre-formatted
+>Quote after pre line 1
+>Quote after pre line 2
+
+New paragraph
