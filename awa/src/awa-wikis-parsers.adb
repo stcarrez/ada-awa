@@ -213,6 +213,9 @@ package body AWA.Wikis.Parsers is
             Put_Back (P, C);
             return;
          end if;
+      elsif not P.Is_Dotclear or else not P.Empty_Line then
+         Parse_Text (P, Token);
+         return;
       end if;
       Flush_Text (P);
       if Token = ' ' then
@@ -417,6 +420,7 @@ package body AWA.Wikis.Parsers is
       elsif C /= ']' then
          Put_Back (P, C);
       end if;
+      P.Empty_Line := False;
       Flush_Text (P);
       P.Document.Add_Link (Title, Link, Language, Link_Title);
       Peek (P, C);
