@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-documents -- Wiki module
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,6 +44,11 @@ package AWA.Wikis.Documents is
    --  Add a paragraph (<p>).  Close the previous paragraph if any.
    --  The paragraph must be closed at the next paragraph or next header.
    procedure Add_Paragraph (Document : in out Document_Reader) is abstract;
+
+   --  Add a blockquote (<blockquote>).  The level indicates the blockquote nested level.
+   --  The blockquote must be closed at the next header.
+   procedure Add_Blockquote (Document : in out Document_Reader;
+                             Level    : in Natural) is abstract;
 
    --  Add a list item (<li>).  Close the previous paragraph and list item if any.
    --  The list item will be closed at the next list item, next paragraph or next header.
