@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-parsers -- Wiki parser
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -79,6 +79,7 @@ private
       Link_Double_Bracket : Boolean := False;
       Is_Dotclear         : Boolean := False;
       Header_Offset       : Integer := 0;
+      Quote_Level         : Natural := 0;
       Escape_Char         : Wide_Wide_Character;
       List_Level          : Natural := 0;
       Reader              : Input_Access := null;
