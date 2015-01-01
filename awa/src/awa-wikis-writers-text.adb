@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-writers-text -- Wiki HTML writer
---  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -67,6 +67,17 @@ package body AWA.Wikis.Writers.Text is
       Document.Need_Paragraph := True;
       Document.Add_Line_Break;
    end Add_Paragraph;
+
+   --  ------------------------------
+   --  Add a blockquote (<blockquote>).  The level indicates the blockquote nested level.
+   --  The blockquote must be closed at the next header.
+   --  ------------------------------
+   overriding
+   procedure Add_Blockquote (Document : in out Text_Writer;
+                             Level    : in Natural) is
+   begin
+      Document.Close_Paragraph;
+   end Add_Blockquote;
 
    --  ------------------------------
    --  Add a list item (<li>).  Close the previous paragraph and list item if any.
