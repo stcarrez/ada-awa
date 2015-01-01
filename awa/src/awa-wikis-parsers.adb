@@ -123,6 +123,14 @@ package body AWA.Wikis.Parsers is
    procedure Parse_Preformatted (P     : in out Parser;
                                  Token : in Wide_Wide_Character);
 
+   --  Parse a blockquote.
+   --  Example:
+   --    >>>quote level 3
+   --    >>quote level 2
+   --    >quote level 1
+   procedure Parse_Blockquote (P     : in out Parser;
+                               Token : in Wide_Wide_Character);
+
    procedure Parse_List (P     : in out Parser;
                          Token : in Wide_Wide_Character);
 
@@ -676,6 +684,37 @@ package body AWA.Wikis.Parsers is
    end Parse_List;
 
    --  ------------------------------
+   --  Parse a blockquote.
+   --  Example:
+   --    >>>quote level 3
+   --    >>quote level 2
+   --    >quote level 1
+   --  ------------------------------
+   procedure Parse_Blockquote (P     : in out Parser;
+                               Token : in Wide_Wide_Character) is
+      C     : Wide_Wide_Character;
+      Level : Natural := 1;
+   begin
+      if not P.Empty_Line then
+         Parse_Text (P, Token);
+         return;
+      end if;
+      loop
+         Peek (P, C);
+         exit when C /= '>';
+         Level := Level + 1;
+      end loop;
+      Flush_Text (P);
+      P.Empty_Line := True;
+      P.Document.Add_Blockquote (Level);
+
+      --  Ignore the first white space after the quote character.
+      if C /= ' ' and C /= HT then
+         Put_Back (P, C);
+      end if;
+   end Parse_Blockquote;
+
+   --  ------------------------------
    --  Parse a space and take necessary formatting actions.
    --  Example:
    --    item1 item2   => add space in text buffer
@@ -810,7 +849,7 @@ package body AWA.Wikis.Parsers is
        Character'Pos ('(') => Parse_Image'Access,
        Character'Pos ('/') => Parse_Preformatted'Access,
        Character'Pos ('%') => Parse_Line_Break'Access,
-       Character'Pos ('>') => Parse_Quote'Access,
+       Character'Pos ('>') => Parse_Blockquote'Access,
        others => Parse_Text'Access
       );
 
