@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-writers -- Wiki HTML writer
---  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,6 +43,7 @@ package body AWA.Wikis.Writers.Html is
                          Level    : in Positive) is
    begin
       Document.Close_Paragraph;
+      Document.Add_Blockquote (0);
       case Level is
          when 1 =>
             Document.Writer.Write_Wide_Element ("h1", Header);
@@ -87,6 +88,28 @@ package body AWA.Wikis.Writers.Html is
       Document.Close_Paragraph;
       Document.Need_Paragraph := True;
    end Add_Paragraph;
+
+   --  ------------------------------
+   --  Add a blockquote (<blockquote>).  The level indicates the blockquote nested level.
+   --  The blockquote must be closed at the next header.
+   --  ------------------------------
+   overriding
+   procedure Add_Blockquote (Document : in out Html_Writer;
+                             Level    : in Natural) is
+   begin
+      if Document.Quote_Level /= Level then
+         Document.Close_Paragraph;
+         Document.Need_Paragraph := True;
+      end if;
+      while Document.Quote_Level < Level loop
+         Document.Writer.Start_Element ("blockquote");
+         Document.Quote_Level := Document.Quote_Level + 1;
+      end loop;
+      while Document.Quote_Level > Level loop
+         Document.Writer.End_Element ("blockquote");
+         Document.Quote_Level := Document.Quote_Level - 1;
+      end loop;
+   end Add_Blockquote;
 
    --  ------------------------------
    --  Add a list item (<li>).  Close the previous paragraph and list item if any.
@@ -158,6 +181,7 @@ package body AWA.Wikis.Writers.Html is
    procedure Add_Horizontal_Rule (Document : in out Html_Writer) is
    begin
       Document.Close_Paragraph;
+      Document.Add_Blockquote (0);
       Document.Writer.Start_Element ("hr");
       Document.Writer.End_Element ("hr");
    end Add_Horizontal_Rule;
@@ -295,6 +319,7 @@ package body AWA.Wikis.Writers.Html is
    procedure Finish (Document : in out Html_Writer) is
    begin
       Document.Close_Paragraph;
+      Document.Add_Blockquote (0);
    end Finish;
 
 end AWA.Wikis.Writers.Html;
