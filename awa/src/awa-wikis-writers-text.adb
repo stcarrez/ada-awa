@@ -77,6 +77,9 @@ package body AWA.Wikis.Writers.Text is
                              Level    : in Natural) is
    begin
       Document.Close_Paragraph;
+      for I in 1 .. Level loop
+         Document.Writer.Write ("  ");
+      end loop;
    end Add_Blockquote;
 
    --  ------------------------------
