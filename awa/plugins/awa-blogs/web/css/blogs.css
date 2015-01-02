@@ -1,6 +1,6 @@
 /**
  * blogs.css - Styles for blogs module
- * Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
+ * Copyright (C) 2011, 2012, 2013, 2014, 2015 Stephane Carrez
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
 #blog-post-list, #blog-comment-list, #blog-post-list-header, #blog-comment-list-header {
@@ -148,9 +148,6 @@ div.status-COMMENT_SPAM div.comment-status, div.status-COMMENT_ARCHIVED div.comm
 div.status-COMMENT_PUBLISHED {
     color: #111;
 }
-div.comment-status-4 {
-    // opacity: 0.4;
-}
 a.spam-icon {
     background: url(../images/blogs/icon-spam-grey.png) no-repeat;
 }
@@ -165,7 +162,7 @@ div.blog-post {
 }
 div.blog-post div.post-title {
     float: left;
-    margin-top: 10px;
+    margin-top: 15px;
     width: 95%;
     border-bottom: 2px solid #47C;
     padding-bottom: 2px;
@@ -187,7 +184,6 @@ div.blog-post div.post-title h2 a:hover {
 }
 div.blog-post div.post-text {
     float: left;
-    padding-top: 10px;
     width: 100%;
 }
 
