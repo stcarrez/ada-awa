@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-beans -- Beans for blog module
---  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Ada.Calendar;
-with Ada.Characters.Handling;
 with Ada.Strings.Maps;
 
 with Util.Dates.ISO8601;
@@ -398,7 +397,7 @@ package body AWA.Blogs.Beans is
    begin
       if Name = "tag" then
          From.Tag := Util.Beans.Objects.To_Unbounded_String (Value);
-      elsif Name = "page" and not Util.Beans.Objects.Is_Empty (Value)then
+      elsif Name = "page" and not Util.Beans.Objects.Is_Empty (Value) then
          From.Page := Util.Beans.Objects.To_Integer (Value);
       end if;
    end Set_Value;
@@ -415,7 +414,6 @@ package body AWA.Blogs.Beans is
       Count_Query : ADO.Queries.Context;
       Tag_Id      : ADO.Identifier;
       First       : constant Natural  := (Into.Page - 1) * Into.Page_Size;
-      Last        : constant Positive := First + Into.Page_Size;
    begin
       AWA.Tags.Modules.Find_Tag_Id (Session, Ada.Strings.Unbounded.To_String (Into.Tag), Tag_Id);
       if Tag_Id /= ADO.NO_IDENTIFIER then
@@ -428,7 +426,7 @@ package body AWA.Blogs.Beans is
          Count_Query.Set_Count_Query (AWA.Blogs.Models.Query_Blog_Post_List);
       end if;
       Query.Bind_Param (Name => "first", Value => First);
-      Query.Bind_Param (Name => "last", Value => Last);
+      Query.Bind_Param (Name => "count", Value => Into.Page_Size);
       ADO.Sessions.Entities.Bind_Param (Params  => Query,
                                         Name    => "entity_type",
                                         Table   => AWA.Blogs.Models.POST_TABLE,
