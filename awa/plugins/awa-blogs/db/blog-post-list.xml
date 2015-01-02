@@ -45,7 +45,7 @@
     WHERE post.status > 0
     GROUP BY post.id
     ORDER BY post.create_date DESC
-    LIMIT :first, :last
+    LIMIT :first, :count
        </sql>
        <sql-count>
     SELECT
@@ -73,7 +73,7 @@
     WHERE post.status > 0
     GROUP BY post.id
     ORDER BY post.create_date DESC
-    LIMIT :first, :last
+    LIMIT :first, :count
        </sql>
        <sql-count>
     SELECT
