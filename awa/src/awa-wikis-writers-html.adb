@@ -74,8 +74,7 @@ package body AWA.Wikis.Writers.Html is
    overriding
    procedure Add_Line_Break (Document : in out Html_Writer) is
    begin
-      Document.Writer.Start_Element ("br");
-      Document.Writer.End_Element ("br");
+      Document.Writer.Write_Raw ("<br />");
    end Add_Line_Break;
 
    --  ------------------------------
