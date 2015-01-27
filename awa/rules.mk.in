@@ -48,12 +48,25 @@ prefix = @prefix@
 exec_prefix = @exec_prefix@
 top_builddir = .
 
-dynamodir=${prefix}/share/dynamo
-includedir=${prefix}/share/ada/adainclude
-projectdir=${prefix}/share/ada/adainclude
+# share/ada/adainclude
+infix_inc=@ADA_INC_BASE@
+
+# share/ada/adainclude
+infix_prj=@ADA_PRJ_BASE@
+
+# lib
+infix_lib=@ADA_LIB_BASE@
+
+# lib/ada/adalib
+infix_ali=@ADA_ALI_BASE@
+
+includedir=${prefix}/${infix_inc}
+projectdir=${prefix}/${infix_prj}
 bindir=${prefix}/bin
-libdir=${prefix}/lib
-alidir=${libdir}/ada/adalib/
+libdir=${prefix}/${infix_lib}
+alidir=${prefix}/${infix_ali}
+
+dynamodir=${prefix}/share/dynamo
 
 CPUS := @NR_CPUS@
 MAKE_ARGS=-XMODE=${MODE} -XAWA_LIBRARY_TYPE=${AWA_LIBRARY_TYPE} -XPROCESSORS=$(CPUS)
