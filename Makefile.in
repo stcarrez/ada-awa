@@ -16,30 +16,24 @@ exec_prefix = @exec_prefix@
 top_builddir = .
 
 # Directories of sub-projects in the build order.
-SUBDIRS=util el security asf ado dynamo awa
+SUBDIRS=@SUBDIRS@
 
 # Build executables for all mains defined by the project.
 build test:
-	D=`pwd`; \
 	for i in $(SUBDIRS); do \
-	   cd "$$D/$$i" && \
-	   $(MAKE) $@ ; \
+	   $(MAKE) -C "$$i" $@ ; \
 	done
 
 # Clean the root project of all build products.
 clean:
-	D=`pwd`; \
 	for i in $(SUBDIRS); do \
-	   cd "$$D/$$i" && \
-	   $(MAKE) clean ; \
+	   $(MAKE) -C "$$i" clean ; \
 	done
 
 # Clean the root project of all build products.
 install:
-	D=`pwd`; \
 	for i in $(SUBDIRS); do \
-	   cd "$$D/$$i" && \
-	   $(MAKE) install ; \
+	   $(MAKE) -C "$$i" install ; \
 	done
 
 xmlada: force
