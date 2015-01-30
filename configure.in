@@ -32,6 +32,39 @@ AC_SUBST(EXEC_PREFIX)
 
 PACKAGES="$AWA_PACKAGES"
 
+awa_util_configure=
+awa_el_configure=
+awa_security_configure=
+awa_asf_configure=
+awa_ado_configure=
+awa_dynamo_configure=
+awa_awa_configure=
+awa_xmlada_configure=
+awa_aws_configure=
+
+awa_util_name=ada-util
+awa_el_name=ada-el
+awa_security_name=ada-security
+awa_asf_name=ada-asf
+awa_ado_name=ada-ado
+awa_dynamo_name=dynamo
+awa_build_root=
+awa_xmlada_name=
+awa_aws_name=
+AC_ARG_WITH(build-root,
+  AS_HELP_STRING([--with-build-root=PATH], [Path to find the AWA libraries]),
+  [
+    awa_build_root=${withval}/
+  ],
+  [
+    awa_build_root=`pwd`
+  ])
+
+awa_build_pwd=`cd ${awa_build_root} && pwd`
+if test x${awa_build_pwd} != x${awa_build_root}; then
+  awa_build_root=${awa_build_pwd}/
+fi
+
 ac_enable_ahven=yes
 AC_ARG_ENABLE(ahven,
 [  --enable-ahven          Enable internal Ahven support for testutil library and Ada util unit tests (enabled)],
@@ -68,17 +101,21 @@ if test $ENABLE_AWS = "yes" ; then
   PACKAGES="$PACKAGES aws-gpl-3.1.0-src"
 fi
 
+SUBDIRS=
 dnl Extract the packages if necessary
 dnl - AWS, AUnit, XML/Ada are provided in 'external' directory
 dnl - AWA packages are located in 'dist'
 for NAME in $PACKAGES ; do
    TGZ=$NAME.tar.gz
+   EXTRACT_DIR=${awa_build_root}
    DIR=$NAME
    case $NAME in
       xmlada-gpl-4.1-src)
         DIR=xmlada-4.1-src
         TARGET=xmlada
 		TGZ=$NAME.tgz
+		EXTRACT_DIR=
+		awa_xmlada_name=xmlada
         ;;
 
       aunit-*)
@@ -87,32 +124,33 @@ for NAME in $PACKAGES ; do
         ;;
 
       aws-*)
+	    EXTRACT_DIR=aws
         TARGET=aws
 		TGZ=$NAME.tgz
         ;;
 
       ada-util-*)
-        TARGET=util
+        TARGET=ada-util
         ;;
 
       ada-el-*)
-        TARGET=el
+        TARGET=ada-el
         ;;
 
       ada-asf-*)
-        TARGET=asf
+        TARGET=ada-asf
         ;;
 
       ada-security-*)
-        TARGET=security
+        TARGET=ada-security
         ;;
 
       ada-ado-*)
-        TARGET=ado
+        TARGET=ada-ado
         ;;
 
       ada-awa-*)
-        TARGET=awa
+        TARGET=ada-awa
         ;;
 
       dynamo-*)
@@ -131,94 +169,77 @@ for NAME in $PACKAGES ; do
       fi
    fi
    dnl Do nothing if the target directory exist
-   if test -d $TARGET ; then
-      echo "Package $NAME already extracted."
+   if test -d ${EXTRACT_DIR}${TARGET} ; then
+      echo "Package ${TARGET} already extracted."
    else
-      if test -d $DIR ; then
-         echo "Package $NAME already extracted."
-      else
-         echo "Extracting $TGZ"
-         tar xzf $TGZ
-      fi
-      mv $DIR $TARGET
+      echo "Extracting $TGZ"
+      tar xzf $TGZ
+      mv $DIR ${EXTRACT_DIR}${TARGET}
    fi
+   case ${TARGET} in
+     xmlada|aws)
+	   ;;
+     ada-awa|awa)
+       SUBDIRS="${SUBDIRS} awa"
+	   ;;
+     *)
+       SUBDIRS="${SUBDIRS} ${EXTRACT_DIR}${TARGET}"
+	   ;;
+   esac
 done
+
+AC_SUBST(SUBDIRS)
 
 DIR=`pwd`
 NEED_INSTALL=""
 
+awa_el_configure="--with-ada-util=${awa_build_root}${awa_util_name}"
+awa_security_configure="--with-ada-util=${awa_build_root}${awa_util_name}"
+awa_ado_configure="--with-ada-util=${awa_build_root}${awa_util_name}"
+awa_asf_configure="--with-ada-util=${awa_build_root}${awa_util_name} --with-ada-el=${awa_build_root}${awa_el_name}"
+awa_asf_configure="${awa_asf_configure} --with-ada-security=${awa_build_root}${awa_security_name}"
+awa_dynamo_configure="${awa_asf_configure} --with-ada-asf=${awa_build_root}${awa_asf_name}"
+awa_dynamo_configure="${awa_dynamo_configure} --with-ada-ado=${awa_build_root}${awa_ado_name}"
+awa_awa_configure="${awa_asf_configure} --with-ada-ado=${awa_build_root}${awa_ado_name}"
+awa_awa_configure="${awa_awa_configure} --with-ada-asf=${awa_build_root}${awa_asf_name}"
+
 ##########################################
 # Check for XML Ada
 ##########################################
+AM_GNAT_FIND_PROJECT([xmlada],[XML/Ada],[xmlada],
+  [http://libre.adacore.com/libre/tools/xmlada/],
+  [],
+  [
+    XMLADA_DIR=${gnat_project_dir_xmlada}
+  ])
+AC_SUBST(XMLADA_DIR)
 
-XMLADA_DIR=
-
-AC_MSG_CHECKING([XML/Ada library (http://libre.adacore.com/libre/tools/xmlada/)])
-AC_ARG_WITH(xmlada,
-  AS_HELP_STRING([--with-xmlada=x], [Path for the XML/Ada library (http://libre.adacore.com/libre/tools/xmlada/)]),
-[
-  WITH_SERVER="with \"${withval}\";";
-  XMLADA_DIR=${withval}/
-],
-[
-  echo "with \"xmlada\"; project t is for Source_Dirs use (); end t;" > t.gpr
-  gnatmake -p -Pt >/dev/null 2>/dev/null
-  if test $? -eq 0; then
-    XMLADA_DIR=
-  else
-    XMLADA_DIR=../xmlada/
-  fi;
-  rm -f t.gpr
-])
-echo "with \"${XMLADA_DIR}xmlada\"; project t is for Source_Dirs use (); end t;" > t.gpr
-gnatmake -p -Pt >/dev/null 2>/dev/null
-if test $? -ne 0 ; then
-   rm -f t.gpr
-   AC_MSG_RESULT(Not found)
-
+if test x${gnat_project_xmlada} = xno; then
    if test $ENABLE_XMLADA != "yes" ; then
-      AC_MSG_ERROR([XML/Ada library not found and --enable-xmlada not specified])
+      AC_MSG_ERROR([XML/Ada was not found and --enable-xmlada not specified])
    fi
-   echo "Configuring ==== xmlada ===="
-   (cd $DIR/xmlada && ./configure --prefix="$prefix")
-   NEED_INSTALL="$NEED_INSTALL xmlada"
+   if test ! -d ${awa_xmlada_name}; then
+      AC_MSG_ERROR([XML/Ada extraction was not found in ${awa_xmlada_name}])
+   fi
 
-   XMLADA_DIR=
-else
-   WITH_SERVER="with \"${XMLADA_DIR}xmlada\";";
-   AC_MSG_RESULT(yes ${XMLADA_DIR})
+   echo "Configuring ==== XML/Ada ===="
+   (cd ${awa_xmlada_name};
+    ./configure --prefix=${ac_top_build_prefix}
+   )
 fi
-rm -f t.gpr
 
 ##########################################
 # Check for Ada Web Server
 ##########################################
+AM_GNAT_FIND_PROJECT([aws],[Ada Web Server],[aws],
+  [http://libre.adacore.com/libre/tools/aws/],
+  [],
+  [
+    AWS_DIR=${gnat_project_dir_aws}
+  ])
+AC_SUBST(AWS_DIR)
 
-AWS_DIR=
-
-AC_MSG_CHECKING([Ada Web Server library (http://libre.adacore.com/libre/tools/aws/)])
-AC_ARG_WITH(aws,
-  AS_HELP_STRING([--with-aws=x], [Path for the Ada Web Server library (http://libre.adacore.com/libre/tools/aws/)]),
-[
-  WITH_SERVER="with \"${withval}\";";
-  AWS_DIR=${withval}/
-],
-[
-  echo "with \"aws\"; project t is for Source_Dirs use (); end t;" > t.gpr
-  gnatmake -p -Pt >/dev/null 2>/dev/null
-  if test $? -eq 0; then
-    AWS_DIR=
-  else
-    AWS_DIR=../aws/
-  fi;
-  rm -f t.gpr
-])
-echo "with \"${AWS_DIR}aws\"; project t is for Source_Dirs use (); end t;" > t.gpr
-gnatmake -p -Pt >/dev/null 2>/dev/null
-if test $? -ne 0 ; then
-   rm -f t.gpr
-   AC_MSG_RESULT(Not found)
-
+if test x${gnat_project_aws} = xno; then
    if test $ENABLE_AWS != "yes" ; then
       AC_MSG_ERROR([Ada Web Server not found and --enable-aws not specified])
    fi
@@ -243,11 +264,7 @@ if test $? -ne 0 ; then
    NEED_INSTALL="$NEED_INSTALL aws"
 
    AWS_DIR=
-else
-   WITH_SERVER="with \"${AWS_DIR}aws\";";
-   AC_MSG_RESULT(yes ${AWS_DIR})
 fi
-rm -f t.gpr
 
 if test T"$NEED_INSTALL" != T; then
    AC_MSG_RESULT(The following packages have been configured: ${NEED_INSTALL})
@@ -255,31 +272,32 @@ if test T"$NEED_INSTALL" != T; then
    AC_MSG_RESULT(Suggested commands:)
    AC_MSG_RESULT(  (cd xmlada && make && make install))
    AC_MSG_RESULT(  (cd aws && make prefix="$prefix" setup build install))
-   exit 0
+#   exit 0
 fi
+
 
 ARGS="--prefix $prefix"
 
 echo "Configuring ==== ada-util ===="
-(cd $DIR/util && ./configure $ARGS --enable-ahven)
+(cd ${awa_build_root}${awa_util_name} && ./configure ${awa_util_configure})
 
 echo "Configuring ==== ada-el ===="
-(cd $DIR/el && ./configure --with-ada-util=../util $ARGS)
+(cd ${awa_build_root}${awa_el_name} && ./configure ${awa_el_configure})
 
 echo "Configuring ==== ada-security ===="
-(cd $DIR/security && ./configure --with-ada-util=../util $ARGS)
+(cd ${awa_build_root}${awa_security_name} && ./configure ${awa_security_configure})
 
 echo "Configuring ==== ada-asf ===="
-(cd $DIR/asf && ./configure --with-ada-util=../util --with-ada-el=../el --with-ada-security=../security $ARGS)
+(cd ${awa_build_root}${awa_asf_name} && ./configure ${awa_asf_configure})
 
 echo "Configuring ==== ada-ado ===="
-(cd $DIR/ado && ./configure --with-ada-util=../util $ARGS)
+(cd ${awa_build_root}${awa_ado_name} && ./configure ${awa_ado_configure})
 
 echo "Configuring ==== dynamo ===="
-(cd $DIR/dynamo && ./configure --with-ada-util=../util --with-ada-el=../el --with-ada-asf=../asf --with-ada-ado=../ado $ARGS)
+(cd ${awa_build_root}${awa_dynamo_name} && ./configure ${awa_dynamo_configure})
 
 echo "Configuring ==== ada-awa ===="
-(cd $DIR/awa && ./configure --with-ada-util=../util --with-ada-el=../el --with-ada-asf=../asf --with-ada-security=../security --with-ada-ado=../ado $ARGS)
+(cd ${ac_pwd}/awa/${awa_awa_name} && ./configure ${awa_awa_configure})
 
 AC_OUTPUT(
 Makefile
