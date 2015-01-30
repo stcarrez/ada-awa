@@ -3146,6 +3146,9 @@ $as_echo_n "checking Ada Utility Library... " >&6; }
 if test "${with_ada_util+set}" = set; then :
   withval=$with_ada_util;
       gnat_project_name_util=${withval}/
+      if test -d "${withval}"; then
+	    gnat_project_name_util=${withval}/util
+	  fi
 
 else
 
@@ -3208,7 +3211,8 @@ $as_echo "no" >&6; }
   else
     gnat_project_dir_util=
     gnat_project_name_util=
-    as_fn_error $? "Building Ada EL requires the Ada Utility Library.
+    if test x"Building Ada EL requires the Ada Utility Library." != x; then
+      as_fn_error $? "Building Ada EL requires the Ada Utility Library.
   You should build and install the Ada Utility Library component.
   It must be available and found by ${GNATMAKE}.
   This project was not found in the ADA_PROJECT_PATH environment variable.
@@ -3219,6 +3223,7 @@ $as_echo "no" >&6; }
     ${GNATMAKE}
     ADA_PROJECT_PATH=$ADA_PROJECT_PATH
 " "$LINENO" 5
+    fi
   fi
 
 
@@ -3234,6 +3239,9 @@ $as_echo_n "checking Ada Expression Language Library... " >&6; }
 if test "${with_ada_el+set}" = set; then :
   withval=$with_ada_el;
       gnat_project_name_el=${withval}/
+      if test -d "${withval}"; then
+	    gnat_project_name_el=${withval}/el
+	  fi
 
 else
 
@@ -3296,7 +3304,8 @@ $as_echo "no" >&6; }
   else
     gnat_project_dir_el=
     gnat_project_name_el=
-    as_fn_error $? "Building Ada Server Faces requires the Ada EL Library.
+    if test x"Building Ada Server Faces requires the Ada EL Library." != x; then
+      as_fn_error $? "Building Ada Server Faces requires the Ada EL Library.
   You should build and install the Ada Expression Language Library component.
   It must be available and found by ${GNATMAKE}.
   This project was not found in the ADA_PROJECT_PATH environment variable.
@@ -3307,6 +3316,7 @@ $as_echo "no" >&6; }
     ${GNATMAKE}
     ADA_PROJECT_PATH=$ADA_PROJECT_PATH
 " "$LINENO" 5
+    fi
   fi
 
 
@@ -3322,6 +3332,9 @@ $as_echo_n "checking Ada Security Library... " >&6; }
 if test "${with_ada_security+set}" = set; then :
   withval=$with_ada_security;
       gnat_project_name_security=${withval}/
+      if test -d "${withval}"; then
+	    gnat_project_name_security=${withval}/security
+	  fi
 
 else
 
@@ -3384,7 +3397,8 @@ $as_echo "no" >&6; }
   else
     gnat_project_dir_security=
     gnat_project_name_security=
-    as_fn_error $? "Building Ada Server Faces requires the Ada Security Library.
+    if test x"Building Ada Server Faces requires the Ada Security Library." != x; then
+      as_fn_error $? "Building Ada Server Faces requires the Ada Security Library.
   You should build and install the Ada Security Library component.
   It must be available and found by ${GNATMAKE}.
   This project was not found in the ADA_PROJECT_PATH environment variable.
@@ -3395,6 +3409,7 @@ $as_echo "no" >&6; }
     ${GNATMAKE}
     ADA_PROJECT_PATH=$ADA_PROJECT_PATH
 " "$LINENO" 5
+    fi
   fi
 
 
@@ -3410,6 +3425,9 @@ $as_echo_n "checking Ada Server Faces Library... " >&6; }
 if test "${with_ada_asf+set}" = set; then :
   withval=$with_ada_asf;
       gnat_project_name_asf=${withval}/
+      if test -d "${withval}"; then
+	    gnat_project_name_asf=${withval}/asf
+	  fi
 
 else
 
@@ -3472,7 +3490,8 @@ $as_echo "no" >&6; }
   else
     gnat_project_dir_asf=
     gnat_project_name_asf=
-    as_fn_error $? "Building Ada Web Application requires the Ada Server Faces Library.
+    if test x"Building Ada Web Application requires the Ada Server Faces Library." != x; then
+      as_fn_error $? "Building Ada Web Application requires the Ada Server Faces Library.
   You should build and install the Ada Server Faces Library component.
   It must be available and found by ${GNATMAKE}.
   This project was not found in the ADA_PROJECT_PATH environment variable.
@@ -3483,6 +3502,7 @@ $as_echo "no" >&6; }
     ${GNATMAKE}
     ADA_PROJECT_PATH=$ADA_PROJECT_PATH
 " "$LINENO" 5
+    fi
   fi
 
 
@@ -3499,6 +3519,9 @@ $as_echo_n "checking Ada Database Objects... " >&6; }
 if test "${with_ada_ado+set}" = set; then :
   withval=$with_ada_ado;
       gnat_project_name_ado=${withval}/
+      if test -d "${withval}"; then
+	    gnat_project_name_ado=${withval}/ado
+	  fi
 
 else
 
@@ -3561,7 +3584,8 @@ $as_echo "no" >&6; }
   else
     gnat_project_dir_ado=
     gnat_project_name_ado=
-    as_fn_error $? "Building Dynamo requires the Ada Database Objects Library.
+    if test x"Building Dynamo requires the Ada Database Objects Library." != x; then
+      as_fn_error $? "Building Dynamo requires the Ada Database Objects Library.
   You should build and install the Ada Database Objects component.
   It must be available and found by ${GNATMAKE}.
   This project was not found in the ADA_PROJECT_PATH environment variable.
@@ -3572,6 +3596,7 @@ $as_echo "no" >&6; }
     ${GNATMAKE}
     ADA_PROJECT_PATH=$ADA_PROJECT_PATH
 " "$LINENO" 5
+    fi
   fi
 
 
