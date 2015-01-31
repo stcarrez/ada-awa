@@ -155,5 +155,5 @@ AC_SUBST(AWA_AWS_STATUS)
 AM_UTIL_CHECK_INSTALL
 
 AC_OUTPUT(
-Makefile rules.mk awa.gpr tests.gpr awa_unit.gpr distrib/awa.gpr distrib/awa_unit.gpr
+Makefile rules.mk awa.gpr awa_tests.gpr awa_unit.gpr distrib/awa.gpr distrib/awa_unit.gpr
 )
