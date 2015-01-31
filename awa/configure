@@ -3807,7 +3807,7 @@ $as_echo "<prefix>/${ADA_PRJ_BASE}" >&6; }
 
 
 
-ac_config_files="$ac_config_files Makefile rules.mk awa.gpr tests.gpr awa_unit.gpr distrib/awa.gpr distrib/awa_unit.gpr"
+ac_config_files="$ac_config_files Makefile rules.mk awa.gpr awa_tests.gpr awa_unit.gpr distrib/awa.gpr distrib/awa_unit.gpr"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -4518,7 +4518,7 @@ do
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "rules.mk") CONFIG_FILES="$CONFIG_FILES rules.mk" ;;
     "awa.gpr") CONFIG_FILES="$CONFIG_FILES awa.gpr" ;;
-    "tests.gpr") CONFIG_FILES="$CONFIG_FILES tests.gpr" ;;
+    "awa_tests.gpr") CONFIG_FILES="$CONFIG_FILES awa_tests.gpr" ;;
     "awa_unit.gpr") CONFIG_FILES="$CONFIG_FILES awa_unit.gpr" ;;
     "distrib/awa.gpr") CONFIG_FILES="$CONFIG_FILES distrib/awa.gpr" ;;
     "distrib/awa_unit.gpr") CONFIG_FILES="$CONFIG_FILES distrib/awa_unit.gpr" ;;
