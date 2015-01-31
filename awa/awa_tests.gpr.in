@@ -20,7 +20,7 @@ with "plugins/awa-settings/awa_settings";
 with "plugins/awa-comments/awa_comments";
 with "plugins/awa-changelogs/awa_changelogs";
 
-project Tests is
+project Awa_Tests is
 
    for Languages use ("Ada", "Project file");
 
@@ -46,4 +46,4 @@ project Tests is
    package Compiler renames Config.Compiler;
    package Linker renames Config.Linker;
 
-end Tests;
+end Awa_Tests;
