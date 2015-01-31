@@ -86,7 +86,7 @@ local-build: pre-build
 	test ! -f $(GPRPATH) || $(GNATMAKE) -m -p -P "$(GPRPATH)" $(MAKE_ARGS)
 
 build-tests:
-	test ! -f tests.gpr || $(GNATMAKE) -m -p -Ptests $(MAKE_ARGS)
+	test ! -f awa_tests.gpr || $(GNATMAKE) -m -p -Pawa_tests $(MAKE_ARGS)
 
 static:
 	$(MAKE) AWA_LIBRARY_TYPE=static build
@@ -125,7 +125,7 @@ generate:  post-generate
 # Files to package in source distribution
 DISTFILES=README LICENSE.txt NOTICE.txt NEWS CHANGES ChangeLog config.guess configure config.sub \
 configure.in Makefile.in install-sh \
-awa.gpr.in tests.gpr.in samples.gpr.in config.gpr \
+awa.gpr.in awa_tests.gpr.in samples.gpr.in config.gpr \
 src samples regtests db web bundles config awaunit awaunit.gpr.in \
 distrib test-mysql.properties test-sqlite.properties dynamo.xml
 
