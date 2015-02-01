@@ -3170,6 +3170,14 @@ awa_dynamo_configure="${awa_dynamo_configure} --with-ada-ado=${awa_build_root}${
 awa_awa_configure="${awa_asf_configure} --with-ada-ado=${awa_build_root}${awa_ado_name}"
 awa_awa_configure="${awa_awa_configure} --with-ada-asf=${awa_build_root}${awa_asf_name}"
 
+awa_util_configure="${awa_util_configure} --prefix=${prefix}"
+awa_el_configure="${awa_el_configure} --prefix=${prefix}"
+awa_asf_configure="${awa_asf_configure} --prefix=${prefix}"
+awa_security_configure="${awa_security_configure} --prefix=${prefix}"
+awa_ado_configure="${awa_ado_configure} --prefix=${prefix}"
+awa_dynamo_configure="${awa_dynamo_configure} --prefix=${prefix}"
+awa_awa_configure="${awa_awa_configure} --prefix=${prefix}"
+
 ##########################################
 # Check for XML Ada
 ##########################################
