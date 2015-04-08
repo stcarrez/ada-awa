@@ -30,7 +30,7 @@ post-generate:
 
 # Generate the documentation from Ada headers comments.
 doc:
-	$(DYNAMO) build-doc wiki
+	$(DYNAMO) build-doc -markdown wiki
 
 # Build and run the unit tests
 check test:	test-mysql test-sqlite
