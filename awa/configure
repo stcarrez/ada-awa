@@ -3744,9 +3744,11 @@ $as_echo "${gnat_util_config_path}" >&6; }
       gnat_prj_dir=`dirname ${gnat_util_config_path}`
     fi
   fi
+  if test x${gnat_prj_dir} != x; then
 
   gnat_prefix=
   for dir in ${gnat_inc_dir} ${gnat_ali_dir} ${gnat_lib_dir} ${gnat_prj_dir}; do
+    dir=`echo $dir | sed -e 's,\\\\,/,g'`
     # If we have a valid path, try to identify the common path prefix.
     if test x$gnat_prefix = x; then
       gnat_prefix=$dir
@@ -3754,10 +3756,17 @@ $as_echo "${gnat_util_config_path}" >&6; }
 	  # echo "Dir=$dir"
 	  gnat_old_ifs=$IFS
 	  path=
-	  IFS=/
+	  IFS='/\'
 	  for c in $dir; do
-	    if test x"$path" = x"/"; then
-		  try="/$c"
+	    if test x"$path" = x"/" || test x"$path" = x ; then
+		  case $c in
+		    c:|C:|d:|D:|e:|E:)
+			  try="$c"
+			  ;;
+		    *)
+			  try="/$c"
+			  ;;
+		  esac
 		else
           try="$path/$c"
 		fi
@@ -3775,10 +3784,10 @@ $as_echo "${gnat_util_config_path}" >&6; }
 	  gnat_prefix=$path
     fi
   done
-  ADA_INC_BASE=`echo ${gnat_inc_dir} | sed -e s,^$gnat_prefix/,,`
-  ADA_ALI_BASE=`echo ${gnat_ali_dir} | sed -e s,^$gnat_prefix/,,`
-  ADA_LIB_BASE=`echo ${gnat_lib_dir} | sed -e s,^$gnat_prefix/,,`
-  ADA_PRJ_BASE=`echo ${gnat_prj_dir} | sed -e s,^$gnat_prefix/,,`
+  ADA_INC_BASE=`echo ${gnat_inc_dir} | sed -e 's,\\\\,/,g' | sed -e s,^$gnat_prefix/,,`
+  ADA_ALI_BASE=`echo ${gnat_ali_dir} | sed -e 's,\\\\,/,g' | sed -e s,^$gnat_prefix/,,`
+  ADA_LIB_BASE=`echo ${gnat_lib_dir} | sed -e 's,\\\\,/,g' | sed -e s,^$gnat_prefix/,,`
+  ADA_PRJ_BASE=`echo ${gnat_prj_dir} | sed -e 's,\\\\,/,g' | sed -e s,^$gnat_prefix/,,`
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking installation of Ada source files" >&5
 $as_echo_n "checking installation of Ada source files... " >&6; }
@@ -3805,6 +3814,229 @@ $as_echo "<prefix>/${ADA_PRJ_BASE}" >&6; }
 
 
 
+  else
+
+  #
+  gnat_prefix=
+  gnat_xml_inc_dir=
+  gnat_xml_ali_dir=
+  gnat_xml_lib_dir=
+  gnat_xml_prl_dir=
+
+  if test x${gnat_xml_ada} = 'x'; then
+     gnat_xml_ada=xmlada-config
+  fi
+  gnat_xml_config=`$gnat_xml_ada --sax 2>/dev/null`
+
+  # echo "Config: $gnat_xml_config"
+  for i in $gnat_xml_config; do
+	# echo "  Checking $i"
+	case $i in
+	  -aI*)
+	    name=`echo $i | sed -e 's,-aI,,'`
+	    dir=`dirname $name`
+	    name=`basename $name`
+	    if test x$name = "xxmlada"; then
+	   	   gnat_xml_inc_dir=$dir
+		else
+		   dir=''
+	    fi
+	    ;;
+
+	 -aO*)
+	    name=`echo $i | sed -e 's,-aO,,'`
+	    dir=`dirname $name`
+	    name=`basename $name`
+		case $name in
+		  xmlada)
+	        gnat_xml_ali_dir=$dir
+			;;
+
+		  static|relocatable)
+		    name=`basename $dir`
+		    dir=`dirname $dir`
+			if test x$name = "xxmlada"; then
+			   gnat_xml_ali_dir=$dir
+			else
+			   dir=''
+			fi
+		    ;;
+
+		  *)
+		    dir=''
+			;;
+
+		esac
+	    ;;
+
+	-largs)
+	    dir=''
+		;;
+
+     -L*)
+	    dir=`echo $i | sed -e 's,-L,,'`
+	    gnat_xml_lib_dir=$dir
+	    ;;
+
+	/*.a)
+		dir=`dirname $i`
+	    name=`basename $dir`
+		case $name in
+		  xmlada)
+	        dir=`dirname $dir`
+	        gnat_xml_lib_dir=$dir
+			;;
+
+		  static|relocatable)
+		    dir=`dirname $dir`
+		    name=`basename $dir`
+			if test x$name = "xxmlada"; then
+			   dir=`dirname $dir`
+			   gnat_xml_lib_dir=$dir
+			else
+			   dir=''
+			fi
+		    ;;
+
+		  *)
+		    dir=''
+			;;
+
+		esac
+		;;
+
+     *)
+	    dir=
+	    ;;
+    esac
+
+    # If we have a valid path, try to identify the common path prefix.
+    if test x$dir != "x"; then
+       if test x$gnat_prefix = x; then
+          gnat_prefix=$dir
+       else
+	   # echo "Dir=$dir"
+	   gnat_old_ifs=$IFS
+	   path=
+	   IFS=/
+	   for c in $dir; do
+	      if test x"$path" = x"/"; then
+		    try="/$c"
+		  else
+			try="$path/$c"
+		  fi
+		  # echo "gnat_prefix=$gnat_prefix try=$try path=$path c=$c"
+		  case $gnat_prefix in
+		    $try*)
+			   ;;
+		    *)
+			   break
+			   ;;
+		  esac
+		  path=$try
+	   done
+	   IFS=$gnat_old_ifs
+	   gnat_prefix=$path
+       fi
+    fi
+  done
+
+  if test -f $gnat_prefix/lib/gnat/xmlada.gpr ; then
+    gnat_xml_prj_dir=$gnat_prefix/lib/gnat
+  elif test -f $gnat_xml_inc_dir/xmlada.gpr ; then
+    gnat_xml_prj_dir=$gnat_xml_inc_dir
+  elif test -f $gnat_prefix/share/gpr/xmlada.gpr ; then
+    gnat_xml_prj_dir=$gnat_prefix/share/gpr
+  else
+    gnat_xml_prj_dir=$gnat_xml_inc_dir
+  fi
+  if test x${gnat_xml_inc_dir} = x ; then
+    gnat_xml_inc_dir='include'
+  fi
+  if test x${gnat_xml_lib_dir} = x ; then
+    gnat_xml_lib_dir='lib'
+  fi
+  if test x${gnat_xml_ali_dir} = x ; then
+    gnat_xml_ali_dir='lib'
+  fi
+  if test x${gnat_xml_prj_dir} = x ; then
+    gnat_xml_prj_dir='lib/gnat'
+  fi
+  ADA_INC_BASE=`echo $gnat_xml_inc_dir | sed -e s,^$gnat_prefix/,,`
+  ADA_LIB_BASE=`echo $gnat_xml_lib_dir | sed -e s,^$gnat_prefix/,,`
+  ADA_ALI_BASE=`echo $gnat_xml_ali_dir | sed -e s,^$gnat_prefix/,,`
+  ADA_PRJ_BASE=`echo $gnat_xml_prj_dir | sed -e s,^$gnat_prefix/,,`
+
+  gnat_prefix=
+  for dir in ${gnat_xml_inc_dir} ${gnat_xml_ali_dir} ${gnat_xml_lib_dir} ${gnat_xml_prj_dir}; do
+    dir=`echo $dir | sed -e 's,\\\\,/,g'`
+    # If we have a valid path, try to identify the common path prefix.
+    if test x$gnat_prefix = x; then
+      gnat_prefix=$dir
+    else
+	  # echo "Dir=$dir"
+	  gnat_old_ifs=$IFS
+	  path=
+	  IFS='/\'
+	  for c in $dir; do
+	    if test x"$path" = x"/" || test x"$path" = x ; then
+		  case $c in
+		    c:|C:|d:|D:|e:|E:)
+			  try="$c"
+			  ;;
+		    *)
+			  try="/$c"
+			  ;;
+		  esac
+		else
+          try="$path/$c"
+		fi
+		# echo "gnat_prefix=$gnat_prefix try=$try path=$path c=$c"
+		case $gnat_prefix in
+		  $try*)
+			;;
+		  *)
+			break
+			;;
+		esac
+		  path=$try
+	  done
+	  IFS=$gnat_old_ifs
+	  gnat_prefix=$path
+    fi
+  done
+  ADA_INC_BASE=`echo ${gnat_xml_inc_dir} | sed -e 's,\\\\,/,g' | sed -e s,^$gnat_prefix/,,`
+  ADA_ALI_BASE=`echo ${gnat_xml_ali_dir} | sed -e 's,\\\\,/,g' | sed -e s,^$gnat_prefix/,,`
+  ADA_LIB_BASE=`echo ${gnat_xml_lib_dir} | sed -e 's,\\\\,/,g' | sed -e s,^$gnat_prefix/,,`
+  ADA_PRJ_BASE=`echo ${gnat_xml_prj_dir} | sed -e 's,\\\\,/,g' | sed -e s,^$gnat_prefix/,,`
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking installation of Ada source files" >&5
+$as_echo_n "checking installation of Ada source files... " >&6; }
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: <prefix>/${ADA_INC_BASE}" >&5
+$as_echo "<prefix>/${ADA_INC_BASE}" >&6; }
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking installation of Ada ALI files" >&5
+$as_echo_n "checking installation of Ada ALI files... " >&6; }
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: <prefix>/${ADA_ALI_BASE}" >&5
+$as_echo "<prefix>/${ADA_ALI_BASE}" >&6; }
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking installation of library files" >&5
+$as_echo_n "checking installation of library files... " >&6; }
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: <prefix>/${ADA_LIB_BASE}" >&5
+$as_echo "<prefix>/${ADA_LIB_BASE}" >&6; }
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking installation of GNAT project files" >&5
+$as_echo_n "checking installation of GNAT project files... " >&6; }
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: <prefix>/${ADA_PRJ_BASE}" >&5
+$as_echo "<prefix>/${ADA_PRJ_BASE}" >&6; }
+
+
+
+
+
+
+
+  fi
 
 
 ac_config_files="$ac_config_files Makefile rules.mk awa.gpr awa_tests.gpr awa_unit.gpr distrib/awa.gpr distrib/awa_unit.gpr"

@@ -3206,7 +3206,6 @@ $as_echo "trying ${gnat_project_name_xmlada}" >&6; }
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ${gnat_project_name_xmlada} project exists in gnatmake's search path" >&5
 $as_echo_n "checking whether ${gnat_project_name_xmlada} project exists in gnatmake's search path... " >&6; }
   echo "with \"${gnat_project_name_xmlada}\"; project t is for Source_Dirs use (); end t;" > t.gpr
-
   $GNATMAKE -p -Pt >/dev/null 2>/dev/null
   if test $? -eq 0; then
     gnat_project_xmlada=yes
@@ -3240,7 +3239,7 @@ $as_echo "no" >&6; }
       fi
     done
   fi
-#  rm -f t.gpr
+  rm -f t.gpr
   if test x${gnat_project_xmlada} = xyes; then
     gnat_project_with_xmlada="with \"${gnat_project_name_xmlada}\";";
     gnat_project_dir_xmlada=`dirname ${gnat_project_name_xmlada}`
@@ -3314,7 +3313,6 @@ $as_echo "trying ${gnat_project_name_aws}" >&6; }
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ${gnat_project_name_aws} project exists in gnatmake's search path" >&5
 $as_echo_n "checking whether ${gnat_project_name_aws} project exists in gnatmake's search path... " >&6; }
   echo "with \"${gnat_project_name_aws}\"; project t is for Source_Dirs use (); end t;" > t.gpr
-
   $GNATMAKE -p -Pt >/dev/null 2>/dev/null
   if test $? -eq 0; then
     gnat_project_aws=yes
@@ -3348,7 +3346,7 @@ $as_echo "no" >&6; }
       fi
     done
   fi
-#  rm -f t.gpr
+  rm -f t.gpr
   if test x${gnat_project_aws} = xyes; then
     gnat_project_with_aws="with \"${gnat_project_name_aws}\";";
     gnat_project_dir_aws=`dirname ${gnat_project_name_aws}`
