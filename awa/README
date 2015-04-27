@@ -4,11 +4,11 @@ Ada Web Application is a framework to build a Web Application in Ada 2005.
 
 To build AWA, you will need:
 
- - Ada Util     (http://code.google.com/p/ada-util             1.7.0)
- - Ada EL       (http://code.google.com/p/ada-el               1.5.0)
- - Ada Security (http://code.google.com/p/ada-security         1.1.0)
- - ADO          (http://code.google.com/p/ada-ado              1.0.0)
- - ASF          (http://code.google.com/p/ada-asf              1.0.0)
+ - Ada Util     (https://github.com/stcarrez/ada-util             1.7.0)
+ - Ada EL       (https://github.com/stcarrez/ada-el               1.5.0)
+ - Ada Security (https://github.com/stcarrez/ada-security         1.1.0)
+ - ADO          (https://github.com/stcarrez/ada-ado              1.0.0)
+ - ASF          (https://github.com/stcarrez/ada-asf              1.0.0)
  - AWS          (http://libre.adacore.com/libre/tools/aws/     2.11)
  - XML/Ada      (http://libre.adacore.com/libre/tools/xmlada/  4.3)
 
@@ -30,7 +30,7 @@ Samples
 Database Creation (MySQL)
 
    Create the tests database by using the Dynamo command.
-   (Dynamo is available at: http://code.google.com/p/ada-gen/)
+   (Dynamo is available at: https://github.com/stcarrez/ada-gen/)
        Note: change 'root' and 'password' to a MySQL user that has admin access rights
              ('create database' and 'grant option' privileges).
 
@@ -73,6 +73,6 @@ Documentation
 
    The Ada Web Application sources as well as a wiki documentation is provided on:
 
-   http://code.google.com/p/ada-awa/
+   https://github.com/stcarrez/ada-awa/
 
 

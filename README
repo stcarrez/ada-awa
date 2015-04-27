@@ -4,12 +4,12 @@ Ada Web Application is a framework to build a Web Application in Ada 2005/2012.
 
 It integrates the following projects:
 
- - ASF           (http://code.google.com/p/ada-asf)
- - ADO           (http://code.google.com/p/ada-ado)
- - Ada Util      (http://code.google.com/p/ada-util)
- - Ada EL        (http://code.google.com/p/ada-el)
- - Ada Security  (http://code.google.com/p/ada-security)
- - Dynamo        (http://code.google.com/p/ada-gen)
+ - ASF           (https://github.com/stcarrez/ada-asf)
+ - ADO           (https://github.com/stcarrez/ada-ado)
+ - Ada Util      (https://github.com/stcarrez/ada-util)
+ - Ada EL        (https://github.com/stcarrez/ada-el)
+ - Ada Security  (https://github.com/stcarrez/ada-security)
+ - Dynamo        (https://github.com/stcarrez/ada-gen)
 
  These projects are provided as tarball in 'distrib' directory.
  These projects are distributed under the Apache License 2.0.
@@ -64,6 +64,6 @@ Documentation
 
    The Ada Web Application sources as well as a wiki documentation is provided on:
 
-   http://code.google.com/p/ada-awa/
+   https://github.com/stcarrez/ada-awa/
 
 
