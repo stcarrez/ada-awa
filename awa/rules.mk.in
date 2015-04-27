@@ -73,10 +73,10 @@ MAKE_ARGS=-XMODE=${MODE} -XAWA_LIBRARY_TYPE=${AWA_LIBRARY_TYPE} -XPROCESSORS=$(C
 
 ifeq (${BUILDS_SHARED},yes)
 all:     static shared
-install: install_static install_shared
+install: install_static install_shared install-info
 else
 all:     static
-install: install_static
+install: install_static install-info
 endif
 
 # Build executables for all mains defined by the project.
@@ -224,3 +224,12 @@ pre-uninstall:
 pre-dist-prepare:
 post-build:
 post-generate:
+
+install-info:
+	@echo "Installation directories:"
+	@echo "  Ada source files:    ${includedir}"
+	@echo "  ALI files:           ${alidir}"
+	@echo "  Libraries:           ${libdir}"
+	@echo "  GNAT project:        ${projectdir}"
+	@echo "Environment setup:"
+	@echo "  export ADA_PROJECT_PATH=${projectdir}:$$ADA_PROJECT_PATH"
