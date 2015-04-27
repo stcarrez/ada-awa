@@ -106,9 +106,9 @@ pre-dist:
 # prepare before releasing a new version of the package
 # (collect information about changes and SVN repository)
 prepare-release:
-	${SVN} update
-	${SVN} info > CHANGES
-	${SVN} log -v > ChangeLog
+	# ${SVN} update
+	# ${SVN} info > CHANGES
+	# ${SVN} log -v > ChangeLog
 
 pre-install:
 	$(MKDIR) -p ${includedir}/awa-unit
