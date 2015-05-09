@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-parsers-tests -- Unit tests for wiki parsing
---  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -218,10 +218,10 @@ package body AWA.Wikis.Parsers.Tests is
    --  ------------------------------
    procedure Test_Wiki_Line_Break (T : in out Test) is
    begin
-      Util.Tests.Assert_Equals (T, "<p>a<br></br>b</p>",
+      Util.Tests.Assert_Equals (T, "<p>a<br />b</p>",
                                 Writers.To_Html ("a%%%b", SYNTAX_DOTCLEAR),
                                 "Line break rendering invalid");
-      Util.Tests.Assert_Equals (T, "<p>a<br></br>b</p>",
+      Util.Tests.Assert_Equals (T, "<p>a<br />b</p>",
                                 Writers.To_Html ("a\\b", SYNTAX_CREOLE),
                                 "Line break rendering invalid");
       Util.Tests.Assert_Equals (T, "<p>a%%b</p>",
