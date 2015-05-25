@@ -13,6 +13,5 @@ project AWA is
 
    for Source_Dirs use (Util_Config.Includedir & "/awa");
    for Library_ALI_Dir use Util_Config.Alidir & "/awa/";
-   for Library_ALI_Dir use "INSTALL/lib/ada/adalib/awa/";
    for Externally_Built use "true";
 end AWA;
