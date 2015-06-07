@@ -47,6 +47,10 @@ package AWA.Wikis.Modules is
    --  Get the wikis module.
    function Get_Wiki_Module return Wiki_Module_Access;
 
+   --  Create the wiki space.
+   procedure Create_Wiki_Space (Module : in Wiki_Module;
+                                Wiki   : in out AWA.Wikis.Models.Wiki_Space_Ref'Class);
+
    --  Save the wiki space.
    procedure Save_Wiki_Space (Module : in Wiki_Module;
                               Wiki   : in out AWA.Wikis.Models.Wiki_Space_Ref'Class);
