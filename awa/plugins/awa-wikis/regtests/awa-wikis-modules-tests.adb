@@ -34,11 +34,14 @@ package body AWA.Wikis.Modules.Tests is
                        Test_Create_Wiki_Space'Access);
    end Add_Tests;
 
+   --  ------------------------------
    --  Test creation of a wiki space.
+   --  ------------------------------
    procedure Test_Create_Wiki_Space (T : in out Test) is
       Sec_Ctx   : Security.Contexts.Security_Context;
       Context   : AWA.Services.Contexts.Service_Context;
       W         : AWA.Wikis.Models.Wiki_Space_Ref;
+      W2        : AWA.Wikis.Models.Wiki_Space_Ref;
    begin
       AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-wiki@test.com");
 
@@ -49,6 +52,14 @@ package body AWA.Wikis.Modules.Tests is
       T.Manager.Create_Wiki_Space (W);
       T.Assert (W.Is_Inserted, "The new wiki space was not created");
 
+      W.Set_Name ("Test wiki space update");
+      W.Set_Is_Public (True);
+      T.Manager.Save_Wiki_Space (W);
+
+      T.Manager.Load_Wiki_Space (Wiki => W2,
+                                 Id   => W.Get_Id);
+      Util.Tests.Assert_Equals (T, "Test wiki space update", String '(W2.Get_Name),
+                                "Invalid wiki space name");
    end Test_Create_Wiki_Space;
 
 end AWA.Wikis.Modules.Tests;
