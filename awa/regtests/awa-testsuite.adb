@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Util testsuite - Util Testsuite
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -53,6 +53,7 @@ with AWA.Jobs.Modules.Tests;
 with AWA.Settings.Modules.Tests;
 with AWA.Comments.Modules.Tests;
 with AWA.Changelogs.Modules.Tests;
+with AWA.Wikis.Modules.Tests;
 
 with ASF.Server.Web;
 with ASF.Server.Tests;
@@ -83,6 +84,8 @@ package body AWA.Testsuite is
 
    Changelogs     : aliased AWA.Changelogs.Modules.Changelog_Module;
 
+   Wikis         : aliased AWA.Wikis.Modules.Wiki_Module;
+
    Date_Converter : aliased ASF.Converters.Dates.Date_Converter;
 
    Rel_Date_Converter : aliased AWA.Converters.Dates.Relative_Date_Converter;
@@ -112,6 +115,7 @@ package body AWA.Testsuite is
       AWA.Votes.Modules.Tests.Add_Tests (Ret);
       AWA.Tags.Modules.Tests.Add_Tests (Ret);
       AWA.Questions.Modules.Tests.Add_Tests (Ret);
+      AWA.Wikis.Modules.Tests.Add_Tests (Ret);
       return Ret;
    end Suite;
 
@@ -201,6 +205,11 @@ package body AWA.Testsuite is
                       Name   => AWA.Questions.Modules.NAME,
                       URI    => "questions",
                       Module => Questions'Access);
+
+            Register (App    => Application.all'Access,
+                      Name   => AWA.Wikis.Modules.NAME,
+                      URI    => "wikis",
+                      Module => Wikis'Access);
 
             Application.Start;
             if Props.Exists ("test.server") then
