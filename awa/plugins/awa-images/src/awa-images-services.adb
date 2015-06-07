@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-images-services -- Image service
---  Copyright (C) 2012, 2013 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -92,7 +92,7 @@ package body AWA.Images.Services is
       begin
          Width  := 0;
          Height := 0;
-         Pipe.Open (Command, Util.Processes.READ);
+         Pipe.Open (Command, Util.Processes.READ_ALL);
          Input.Initialize (null, Pipe'Unchecked_Access, 1024);
          while not Input.Is_Eof loop
             declare
