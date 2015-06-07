@@ -17,11 +17,18 @@
 -----------------------------------------------------------------------
 with ASF.Applications;
 
+with Security.Permissions;
+
 with AWA.Modules;
-package Awa.Wikis.Modules is
+package AWA.Wikis.Modules is
 
    --  The name under which the module is registered.
    NAME : constant String := "wikis";
+
+   --  Define the permissions.
+   package ACL_Create_Wiki_Space is new Security.Permissions.Definition ("wiki-space-create");
+   package ACL_Delete_Wiki_Space is new Security.Permissions.Definition ("wiki-space-delete");
+   package ACL_Update_Wiki_Space is new Security.Permissions.Definition ("wiki-space-update");
 
    --  ------------------------------
    --  Module wikis
@@ -42,4 +49,4 @@ private
 
    type Wiki_Module is new AWA.Modules.Module with null record;
 
-end Awa.Wikis.Modules;
+end AWA.Wikis.Modules;
