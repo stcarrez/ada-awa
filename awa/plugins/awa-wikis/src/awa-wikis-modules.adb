@@ -21,6 +21,8 @@ with AWA.Workspaces.Modules;
 with AWA.Modules.Get;
 with AWA.Permissions;
 with AWA.Permissions.Services;
+with AWA.Wikis.Beans;
+with AWA.Modules.Beans;
 
 with ADO.Sessions;
 
@@ -28,6 +30,9 @@ with Util.Log.Loggers;
 package body AWA.Wikis.Modules is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Awa.Wikis.Module");
+
+   package Register is new AWA.Modules.Beans (Module => Wiki_Module,
+                                              Module_Access => Wiki_Module_Access);
 
    --  ------------------------------
    --  Initialize the wikis module.
@@ -38,6 +43,11 @@ package body AWA.Wikis.Modules is
                          Props  : in ASF.Applications.Config) is
    begin
       Log.Info ("Initializing the wikis module");
+
+      --  Register here any bean class, servlet, filter.
+      Register.Register (Plugin => Plugin,
+                         Name   => "AWA.Wikis.Beans.Wiki_Space_Bean",
+                         Handler => AWA.Wikis.Beans.Create_Wiki_Space_Bean'Access);
 
       AWA.Modules.Module (Plugin).Initialize (App, Props);
 
