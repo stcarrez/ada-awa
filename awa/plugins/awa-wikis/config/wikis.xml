@@ -80,4 +80,28 @@
         </sql>
     </entity-permission>
 
+  <auth-permission>
+    <name>wiki-page-create</name>
+  </auth-permission>
+
+  <entity-permission>
+    <name>wiki-page-update</name>
+    <entity-type>wiki_page</entity-type>
+    <sql>
+       SELECT acl.id FROM awa_acl AS acl
+       WHERE acl.entity_type = :entity_type
+       AND acl.user_id = :user_id
+    </sql>
+  </entity-permission>
+
+  <entity-permission>
+    <name>wiki-page-delete</name>
+    <entity-type>wiki_page</entity-type>
+    <sql>
+       SELECT acl.id FROM awa_acl AS acl
+       WHERE acl.entity_type = :entity_type
+       AND acl.user_id = :user_id
+    </sql>
+  </entity-permission>
+
 </module>
