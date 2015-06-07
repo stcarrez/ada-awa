@@ -5,7 +5,7 @@ with "../awa-tags/awa_tags";
 project awa_wikis is
    Version      := awa.Version;
    Name         := "awa_wikis";
-   for Source_Dirs use ("src");
+   for Source_Dirs use ("src", "src/model");
    for Library_Name use Name;
    for Library_Dir use awa.Library_Dir & "/" & Name;
    for Library_Kind use awa.Library_Type;
