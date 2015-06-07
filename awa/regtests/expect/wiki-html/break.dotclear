@@ -1,2 +1,2 @@
-<h4>Pros and Cons</h4><p>+: high performance in SMP environments<br></br>+: no thread contention in Java<br></br>-: cache update can loose some entries<br></br>-: still some thread contention in Ada but limited to copying a
+<h4>Pros and Cons</h4><p>+: high performance in SMP environments<br />+: no thread contention in Java<br />-: cache update can loose some entries<br />-: still some thread contention in Ada but limited to copying a
 reference (C.Set)</p>

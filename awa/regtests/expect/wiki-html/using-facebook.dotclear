@@ -137,5 +137,5 @@ The HTTP GET operation must be made using SSL/TLS since this is part of OAuth 2.
                       Friend_Vector_Map'Access,
                       "/data",
                       List.List'Access);
-</pre><p>Now you are ready to use and access the user's data as easily as other information...</p><h3>References</h3><p><a href=" http://code.google.com/p/ada-asf/source/browse/trunk/samples/beans/facebook.ads">facebook.ads </a><br></br><a href=" http://code.google.com/p/ada-asf/source/browse/trunk/samples/beans/facebook.adb">facebook.adb </a><br></br><a href="http://developers.facebook.com/docs/reference/api/">Facebook API</a>
+</pre><p>Now you are ready to use and access the user's data as easily as other information...</p><h3>References</h3><p><a href=" http://code.google.com/p/ada-asf/source/browse/trunk/samples/beans/facebook.ads">facebook.ads </a><br /><a href=" http://code.google.com/p/ada-asf/source/browse/trunk/samples/beans/facebook.adb">facebook.adb </a><br /><a href="http://developers.facebook.com/docs/reference/api/">Facebook API</a>
 </p>
