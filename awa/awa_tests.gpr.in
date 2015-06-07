@@ -19,6 +19,7 @@ with "plugins/awa-tags/awa_tags";
 with "plugins/awa-settings/awa_settings";
 with "plugins/awa-comments/awa_comments";
 with "plugins/awa-changelogs/awa_changelogs";
+with "plugins/awa-wikis/awa_wikis";
 
 project Awa_Tests is
 
@@ -33,6 +34,7 @@ project Awa_Tests is
 	"plugins/awa-votes/regtests",
 	"plugins/awa-tags/regtests",
 	"plugins/awa-settings/regtests",
+	"plugins/awa-wikis/regtests",
 	"plugins/awa-changelogs/regtests",
 	"plugins/awa-questions/regtests");
 
