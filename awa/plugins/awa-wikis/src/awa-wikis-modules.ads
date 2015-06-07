@@ -19,7 +19,9 @@ with ASF.Applications;
 
 with Security.Permissions;
 
+with ADO;
 with AWA.Modules;
+with AWA.Wikis.Models;
 package AWA.Wikis.Modules is
 
    --  The name under which the module is registered.
@@ -44,6 +46,15 @@ package AWA.Wikis.Modules is
 
    --  Get the wikis module.
    function Get_Wiki_Module return Wiki_Module_Access;
+
+   --  Save the wiki space.
+   procedure Save_Wiki_Space (Module : in Wiki_Module;
+                              Wiki   : in out AWA.Wikis.Models.Wiki_Space_Ref'Class);
+
+   --  Load the wiki space.
+   procedure Load_Wiki_Space (Module : in Wiki_Module;
+                              Wiki   : in out AWA.Wikis.Models.Wiki_Space_Ref'Class;
+                              Id     : in ADO.Identifier);
 
 private
 
