@@ -17,15 +17,18 @@
 -----------------------------------------------------------------------
 with ASF.Applications;
 
-with Security.Permissions;
-
 with ADO;
 with AWA.Modules;
 with AWA.Wikis.Models;
+with Security.Permissions;
 package AWA.Wikis.Modules is
 
    --  The name under which the module is registered.
    NAME : constant String := "wikis";
+
+   package ACL_Create_Wiki_Pages is new Security.Permissions.Definition ("wiki-page-create");
+   package ACL_Delete_Wiki_Pages is new Security.Permissions.Definition ("wiki-page-delete");
+   package ACL_Update_Wiki_Pages is new Security.Permissions.Definition ("wiki-page-update");
 
    --  Define the permissions.
    package ACL_Create_Wiki_Space is new Security.Permissions.Definition ("wiki-space-create");
