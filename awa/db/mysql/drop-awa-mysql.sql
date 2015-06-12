@@ -8,6 +8,14 @@ DROP TABLE IF EXISTS `awa_acl`;
 DROP TABLE IF EXISTS `awa_queue`;
 DROP TABLE IF EXISTS `awa_message_type`;
 DROP TABLE IF EXISTS `awa_message`;
+/* Copied from awa-wikis-drop-mysql.sql*/
+/* File generated automatically by dynamo */
+DROP TABLE IF EXISTS `awa_wiki_space`;
+DROP TABLE IF EXISTS `awa_wiki_page`;
+DROP TABLE IF EXISTS `awa_wiki_content`;
+/* Copied from changelogs-drop-mysql.sql*/
+/* File generated automatically by dynamo */
+DROP TABLE IF EXISTS `awa_changelog`;
 /* Copied from awa-blogs-drop-mysql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `awa_post`;
