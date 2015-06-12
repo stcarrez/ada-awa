@@ -130,4 +130,45 @@ package body AWA.Wikis.Modules is
       Wiki.Load (DB, Id, Found);
    end Load_Wiki_Space;
 
+   --  ------------------------------
+   --  Create the wiki page into the wiki space.
+   --  ------------------------------
+   procedure Create_Wiki_Page (Model  : in Wiki_Module;
+                               Into   : in AWA.Wikis.Models.Wiki_Space_Ref'Class;
+                               Page   : in out Awa.Wikis.Models.Wiki_Page_Ref'Class) is
+      Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      User  : constant ADO.Identifier := Ctx.Get_User_Identifier;
+      DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+   begin
+      Log.Info ("Create wiki page {0}", String '(Page.Get_Name));
+
+      --  Check that the user has the create wiki page permission on the given wiki space.
+      AWA.Permissions.Check (Permission => ACL_Create_Wiki_Pages.Permission,
+                             Entity     => Into);
+
+      Ctx.Start;
+      Page.Set_Wiki (Into);
+      Page.Save (DB);
+      Ctx.Commit;
+   end Create_Wiki_Page;
+
+   --  ------------------------------
+   --  Save the wiki page.
+   --  ------------------------------
+   procedure Save (Model  : in Wiki_Module;
+                   Page   : in out Awa.Wikis.Models.Wiki_Page_Ref'Class) is
+      pragma Unreferenced (Model);
+
+      Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+   begin
+      --  Check that the user has the create wiki page permission on the given wiki space.
+      AWA.Permissions.Check (Permission => ACL_Update_Wiki_Pages.Permission,
+                             Entity     => Page);
+
+      Ctx.Start;
+      Page.Save (DB);
+      Ctx.Commit;
+   end Save;
+
 end AWA.Wikis.Modules;
