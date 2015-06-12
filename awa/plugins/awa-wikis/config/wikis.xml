@@ -63,9 +63,10 @@
         <entity-type>awa_wiki_space</entity-type>
         <description>Grant the edit permission on the wiki space owner only</description>
         <sql>
-            select ACL.ID from awa_acl AS ACL
-            where ACL.ENTITY_TYPE = :entity_type
-            and ACL.USER_ID = :user_id
+            SELECT acl.id FROM awa_acl AS acl
+            WHERE acl.entity_type = :entity_type
+            AND acl.user_id = :user_id
+            AND acl.entity_id = :entity_id
         </sql>
     </entity-permission>
 
@@ -74,32 +75,43 @@
         <entity-type>awa_wiki_space</entity-type>
         <description>Grant the delete permission on the wiki space owner only</description>
         <sql>
-            select ACL.ID from awa_acl AS ACL
-            where ACL.ENTITY_TYPE = :entity_type
-            and ACL.USER_ID = :user_id
+            SELECT acl.id FROM awa_acl AS acl
+            WHERE acl.entity_type = :entity_type
+            AND acl.user_id = :user_id
+            AND acl.entity_id = :entity_id
         </sql>
     </entity-permission>
 
-  <auth-permission>
-    <name>wiki-page-create</name>
-  </auth-permission>
+    <entity-permission>
+        <name>wiki-page-create</name>
+        <entity-type>awa_wiki_space</entity-type>
+        <description>Grant the create wiki page permission when an ACL link exist betwen the user and the wiki space</description>
+        <sql>
+            SELECT acl.id FROM awa_acl AS acl
+            WHERE acl.entity_type = :entity_type
+            AND acl.user_id = :user_id
+            AND acl.entity_id = :entity_id
+        </sql>
+    </entity-permission>
 
   <entity-permission>
     <name>wiki-page-update</name>
-    <entity-type>wiki_page</entity-type>
+    <entity-type>wiki_space</entity-type>
     <sql>
-       SELECT acl.id FROM awa_acl AS acl
-       WHERE acl.entity_type = :entity_type
+       SELECT acl.id FROM awa_page AS page
+       INNER JOIN awa_acl AS acl ON acl.entity_type = :entity_type AND acl.entity_id = page.wiki_space_id
+       WHERE page.id = :entity_id
        AND acl.user_id = :user_id
     </sql>
   </entity-permission>
 
   <entity-permission>
     <name>wiki-page-delete</name>
-    <entity-type>wiki_page</entity-type>
+    <entity-type>wiki_space</entity-type>
     <sql>
-       SELECT acl.id FROM awa_acl AS acl
-       WHERE acl.entity_type = :entity_type
+       SELECT acl.id FROM awa_page AS page
+       INNER JOIN awa_acl AS acl ON acl.entity_type = :entity_type AND acl.entity_id = page.wiki_space_id
+       WHERE page.id = :entity_id
        AND acl.user_id = :user_id
     </sql>
   </entity-permission>
