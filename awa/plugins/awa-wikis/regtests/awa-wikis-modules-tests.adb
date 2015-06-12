@@ -32,6 +32,8 @@ package body AWA.Wikis.Modules.Tests is
    begin
       Caller.Add_Test (Suite, "Test AWA.Wikis.Modules.Create_Wiki_Space",
                        Test_Create_Wiki_Space'Access);
+      Caller.Add_Test (Suite, "Test AWA.Wikis.Modules.Create_Wiki_Page",
+                       Test_Create_Wiki_Page'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -61,5 +63,25 @@ package body AWA.Wikis.Modules.Tests is
       Util.Tests.Assert_Equals (T, "Test wiki space update", String '(W2.Get_Name),
                                 "Invalid wiki space name");
    end Test_Create_Wiki_Space;
+
+   --  ------------------------------
+   --  Test creation of a wiki page.
+   --  ------------------------------
+   procedure Test_Create_Wiki_Page (T : in out Test) is
+      Sec_Ctx   : Security.Contexts.Security_Context;
+      Context   : AWA.Services.Contexts.Service_Context;
+      W         : AWA.Wikis.Models.Wiki_Space_Ref;
+      P         : AWA.Wikis.Models.Wiki_Page_Ref;
+   begin
+      AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-wiki@test.com");
+
+      W.Set_Name ("Test wiki space");
+      T.Manager.Create_Wiki_Space (W);
+
+      P.Set_Name ("The page");
+      P.Set_Title ("The page title");
+      T.Manager.Create_Wiki_Page (W, P);
+
+   end Test_Create_Wiki_Page;
 
 end AWA.Wikis.Modules.Tests;
