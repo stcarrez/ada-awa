@@ -21,6 +21,7 @@ with ADO;
 with AWA.Modules;
 with AWA.Wikis.Models;
 with Security.Permissions;
+with Awa.Wikis.Models;
 package AWA.Wikis.Modules is
 
    --  The name under which the module is registered.
@@ -62,6 +63,15 @@ package AWA.Wikis.Modules is
    procedure Load_Wiki_Space (Module : in Wiki_Module;
                               Wiki   : in out AWA.Wikis.Models.Wiki_Space_Ref'Class;
                               Id     : in ADO.Identifier);
+
+   --  Create the wiki page into the wiki space.
+   procedure Create_Wiki_Page (Model  : in Wiki_Module;
+                               Into   : in AWA.Wikis.Models.Wiki_Space_Ref'Class;
+                               Page   : in out Awa.Wikis.Models.Wiki_Page_Ref'Class);
+
+   --  Save the wiki page.
+   procedure Save (Model  : in Wiki_Module;
+                   Page   : in out Awa.Wikis.Models.Wiki_Page_Ref'Class);
 
 private
 
