@@ -98,8 +98,8 @@
     <name>wiki-page-update</name>
     <entity-type>awa_wiki_space</entity-type>
     <sql>
-       SELECT acl.id FROM awa_page AS page
-       INNER JOIN awa_acl AS acl ON acl.entity_type = :entity_type AND acl.entity_id = page.wiki_space_id
+       SELECT acl.id FROM awa_wiki_page AS page
+       INNER JOIN awa_acl AS acl ON acl.entity_type = :entity_type AND acl.entity_id = page.wiki_id
        WHERE page.id = :entity_id
        AND acl.user_id = :user_id
     </sql>
@@ -109,8 +109,8 @@
     <name>wiki-page-delete</name>
     <entity-type>awa_wiki_space</entity-type>
     <sql>
-       SELECT acl.id FROM awa_page AS page
-       INNER JOIN awa_acl AS acl ON acl.entity_type = :entity_type AND acl.entity_id = page.wiki_space_id
+       SELECT acl.id FROM awa_wiki_page AS page
+       INNER JOIN awa_acl AS acl ON acl.entity_type = :entity_type AND acl.entity_id = page.wiki_id
        WHERE page.id = :entity_id
        AND acl.user_id = :user_id
     </sql>
