@@ -48,6 +48,7 @@ package body AWA.Wikis.Beans is
    --  ------------------------------
    --  Create or save the wiki space.
    --  ------------------------------
+   overriding
    procedure Save (Bean    : in out Wiki_Space_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       pragma Unreferenced (Outcome);
@@ -72,5 +73,67 @@ package body AWA.Wikis.Beans is
       Object.Service   := Module;
       return Object.all'Access;
    end Create_Wiki_Space_Bean;
+
+   --  ------------------------------
+   --  Get the value identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Wiki_Page_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if From.Is_Null then
+         return Util.Beans.Objects.Null_Object;
+      else
+         return AWA.Wikis.Models.Wiki_Page_Bean (From).Get_Value (Name);
+      end if;
+   end Get_Value;
+
+   --  ------------------------------
+   --  Set the value identified by the name.
+   --  ------------------------------
+   overriding
+   procedure Set_Value (From  : in out Wiki_Page_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "name" then
+         From.Set_Name (Util.Beans.Objects.To_String (Value));
+      elsif Name = "title" then
+         From.Set_Title (Util.Beans.Objects.To_String (Value));
+      end if;
+   end Set_Value;
+
+   --  ------------------------------
+   --  Create or save the wiki page.
+   --  ------------------------------
+   overriding
+   procedure Save (Bean    : in out Wiki_Page_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      if Bean.Is_Inserted then
+         Bean.Service.Save (Bean);
+      else
+         Bean.Service.Create_Wiki_Page (Bean.Wiki_Space, Bean);
+      end if;
+   end Save;
+
+   --  Delete the wiki page.
+   overriding
+   procedure Delete (Bean    : in out Wiki_Page_Bean;
+                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      null;
+   end Delete;
+
+   --  ------------------------------
+   --  Create the Wiki_Page_Bean bean instance.
+   --  ------------------------------
+   function Create_Wiki_Page_Bean (Module : in AWA.Wikis.Modules.Wiki_Module_Access)
+                                   return Util.Beans.Basic.Readonly_Bean_Access is
+      Object : constant Wiki_Page_Bean_Access := new Wiki_Page_Bean;
+   begin
+      Object.Service   := Module;
+      return Object.all'Access;
+   end Create_Wiki_Page_Bean;
 
 end AWA.Wikis.Beans;
