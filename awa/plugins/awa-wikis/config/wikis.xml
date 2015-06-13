@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="1.0">
+
   <managed-bean>
-    <description>This bean allows to create or edit a question.</description>
-    <managed-bean-name>question</managed-bean-name>
-    <managed-bean-class>AWA.Questions.Beans.Question_Bean</managed-bean-class>
+    <description>The list of wikis and pages that the current user can access and update.</description>
+    <managed-bean-name>adminWiki</managed-bean-name>
+    <managed-bean-class>AWA.Wikis.Beans.Wiki_Admin_Bean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
