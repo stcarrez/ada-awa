@@ -73,6 +73,11 @@ package AWA.Wikis.Modules is
    procedure Save (Model  : in Wiki_Module;
                    Page   : in out Awa.Wikis.Models.Wiki_Page_Ref'Class);
 
+   --  Create a new wiki content for the wiki page.
+   procedure Create_Wiki_Content (Model   : in Wiki_Module;
+                                  Page    : in out Awa.Wikis.Models.Wiki_Page_Ref'Class;
+                                  Content : in out AWA.Wikis.Models.Wiki_Content_Ref'Class);
+
 private
 
    type Wiki_Module is new AWA.Modules.Module with null record;
