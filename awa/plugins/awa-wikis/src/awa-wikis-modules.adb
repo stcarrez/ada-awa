@@ -21,9 +21,11 @@ with AWA.Workspaces.Modules;
 with AWA.Modules.Get;
 with AWA.Permissions;
 with AWA.Permissions.Services;
+with AWA.Users.Models;
 with AWA.Wikis.Beans;
 with AWA.Modules.Beans;
 
+with Ada.Calendar;
 with ADO.Sessions;
 
 with Util.Log.Loggers;
@@ -171,5 +173,30 @@ package body AWA.Wikis.Modules is
       Page.Save (DB);
       Ctx.Commit;
    end Save;
+
+   --  ------------------------------
+   --  Create a new wiki content for the wiki page.
+   --  ------------------------------
+   procedure Create_Wiki_Content (Model   : in Wiki_Module;
+                                  Page    : in out Awa.Wikis.Models.Wiki_Page_Ref'Class;
+                                  Content : in out AWA.Wikis.Models.Wiki_Content_Ref'Class) is
+      Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      User  : AWA.Users.Models.User_Ref := Ctx.Get_User;
+   begin
+      --  Check that the user has the create wiki content permission on the given wiki page.
+      AWA.Permissions.Check (Permission => ACL_Update_Wiki_Pages.Permission,
+                             Entity     => Page);
+
+      Ctx.Start;
+      Content.Set_Page (Page);
+      Content.Set_Create_Date (Ada.Calendar.Clock);
+      Content.Set_Author (User);
+      Content.Save (DB);
+      Page.Set_Content (Content);
+      Page.Set_Last_Version (Page.Get_Last_Version + 1);
+      Page.Save (DB);
+      Ctx.Commit;
+   end Create_Wiki_Content;
 
 end AWA.Wikis.Modules;
