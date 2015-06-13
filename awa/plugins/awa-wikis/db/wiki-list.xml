@@ -1,0 +1,40 @@
+<query-mapping package='AWA.Wikis.Models'>
+    <description>
+      List of wikis
+    </description>
+
+    <class name="AWA.Wikis.Models.Wiki_Info" bean="yes">
+        <comment>The list of wikis.</comment>
+        <property type='Identifier' name="id">
+            <comment>the wiki space identifier.</comment>
+        </property>
+        <property type='String' name="name">
+            <comment>the wiki name.</comment>
+        </property>
+        <property type='Date' name="create_date">
+            <comment>the wiki creation date.</comment>
+        </property>
+        <property type='Boolean' name="is_public">
+            <comment>whether the wiki is public.</comment>
+        </property>
+        <property type='Integer' name="page_count">
+            <comment>the number of pages in the wiki.</comment>
+        </property>
+    </class>
+
+    <query name='wiki-list'>
+       <comment>Get the list of wikis that the current user can update</comment>
+       <sql>
+    SELECT
+      wiki.id,
+      wiki.name,
+      wiki.is_public,
+      wiki.create_date,
+      (SELECT count(*) FROM awa_wiki_page WHERE awa_wiki_page.wiki_id = wiki.id)
+    FROM awa_wiki_space AS wiki
+    INNER JOIN awa_acl AS acl ON acl.entity_id = wiki.id AND acl.entity_type = :table AND acl.user_id = :user_id
+    ORDER BY wiki.create_date DESC
+       </sql>
+    </query>
+
+</query-mapping>
