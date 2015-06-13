@@ -49,6 +49,8 @@ CREATE TABLE awa_wiki_space (
   `name` VARCHAR(255) BINARY NOT NULL,
   /* whether the wiki is public */
   `is_public` TINYINT NOT NULL,
+  /* the wiki creation date. */
+  `create_date` DATETIME NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
   /*  */
