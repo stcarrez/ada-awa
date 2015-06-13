@@ -34,6 +34,8 @@ package body AWA.Wikis.Modules.Tests is
                        Test_Create_Wiki_Space'Access);
       Caller.Add_Test (Suite, "Test AWA.Wikis.Modules.Create_Wiki_Page",
                        Test_Create_Wiki_Page'Access);
+      Caller.Add_Test (Suite, "Test AWA.Wikis.Modules.Create_Wiki_Content",
+                       Test_Create_Wiki_Content'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -81,7 +83,37 @@ package body AWA.Wikis.Modules.Tests is
       P.Set_Name ("The page");
       P.Set_Title ("The page title");
       T.Manager.Create_Wiki_Page (W, P);
+      T.Assert (P.Is_Inserted, "The new wiki page was not created");
 
    end Test_Create_Wiki_Page;
+
+   --  ------------------------------
+   --  Test creation of a wiki page content.
+   --  ------------------------------
+   procedure Test_Create_Wiki_Content (T : in out Test) is
+      Sec_Ctx   : Security.Contexts.Security_Context;
+      Context   : AWA.Services.Contexts.Service_Context;
+      W         : AWA.Wikis.Models.Wiki_Space_Ref;
+      P         : AWA.Wikis.Models.Wiki_Page_Ref;
+      C         : AWA.Wikis.Models.Wiki_Content_Ref;
+   begin
+      AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-wiki@test.com");
+
+      W.Set_Name ("Test wiki space");
+      T.Manager.Create_Wiki_Space (W);
+
+      P.Set_Name ("The page");
+      P.Set_Title ("The page title");
+      T.Manager.Create_Wiki_Page (W, P);
+
+      C.Set_Format (AWA.Wikis.Models.FORMAT_MARKDOWN);
+      C.Set_Content ("-- Title" & ASCII.LF & "A paragraph");
+      C.Set_Save_Comment ("A first version");
+      T.Manager.Create_Wiki_Content (P, C);
+      T.Assert (C.Is_Inserted, "The new wiki content was not created");
+      T.Assert (not C.Get_Author.Is_Null, "The wiki content has an author");
+      T.Assert (not C.Get_Page.Is_Null, "The wiki content is associated with the wiki page");
+
+   end Test_Create_Wiki_Content;
 
 end AWA.Wikis.Modules.Tests;
