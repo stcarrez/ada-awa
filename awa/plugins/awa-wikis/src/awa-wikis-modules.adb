@@ -86,6 +86,7 @@ package body AWA.Wikis.Modules is
       AWA.Permissions.Check (Permission => ACL_Create_Wiki_Space.Permission,
                              Entity     => WS);
       Wiki.Set_Workspace (WS);
+      Wiki.Set_Create_Date (Ada.Calendar.Clock);
       Wiki.Save (DB);
 
       --  Add the permission for the user to use the new wiki space.
