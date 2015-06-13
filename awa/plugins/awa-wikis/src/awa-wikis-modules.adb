@@ -147,6 +147,7 @@ package body AWA.Wikis.Modules is
                              Entity     => Into);
 
       Ctx.Start;
+      Page.Set_Is_Public (Into.Get_Is_Public);
       Page.Set_Wiki (Into);
       Page.Save (DB);
       Ctx.Commit;
