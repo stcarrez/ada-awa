@@ -26,6 +26,8 @@ with ADO.Objects;
 with ADO.Statements;
 with ADO.SQL;
 with ADO.Schemas;
+with ADO.Queries;
+with ADO.Queries.Loaders;
 with Ada.Calendar;
 with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded;
@@ -91,6 +93,14 @@ package AWA.Wikis.Models is
    --
    function Get_Version (Object : in Wiki_Space_Ref)
                  return Integer;
+
+   --  Set the wiki creation date.
+   procedure Set_Create_Date (Object : in out Wiki_Space_Ref;
+                              Value  : in Ada.Calendar.Time);
+
+   --  Get the wiki creation date.
+   function Get_Create_Date (Object : in Wiki_Space_Ref)
+                 return Ada.Calendar.Time;
 
    --
    procedure Set_Workspace (Object : in out Wiki_Space_Ref;
@@ -398,6 +408,53 @@ package AWA.Wikis.Models is
                    Into   : in out Wiki_Content_Ref);
 
 
+   --  --------------------
+   --  The list of wikis.
+   --  --------------------
+   type Wiki_Info is new Util.Beans.Basic.Readonly_Bean with record
+      --  the wiki space identifier.
+      Id : ADO.Identifier;
+
+      --  the wiki name.
+      Name : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the wiki creation date.
+      Create_Date : Ada.Calendar.Time;
+
+      --  whether the wiki is public.
+      Is_Public : Boolean;
+
+      --  the number of pages in the wiki.
+      Page_Count : Integer;
+
+   end record;
+
+   --  Get the bean attribute identified by the given name.
+   overriding
+   function Get_Value (From : in Wiki_Info;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   package Wiki_Info_Beans is
+      new Util.Beans.Basic.Lists (Element_Type => Wiki_Info);
+   package Wiki_Info_Vectors renames Wiki_Info_Beans.Vectors;
+   subtype Wiki_Info_List_Bean is Wiki_Info_Beans.List_Bean;
+
+   type Wiki_Info_List_Bean_Access is access all Wiki_Info_List_Bean;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Wiki_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   subtype Wiki_Info_Vector is Wiki_Info_Vectors.Vector;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Wiki_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   Query_Wiki_List : constant ADO.Queries.Query_Definition_Access;
+
 
    type Wiki_Space_Bean is abstract new AWA.Wikis.Models.Wiki_Space_Ref
      and Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with null record;
@@ -447,17 +504,19 @@ private
    COL_1_1_NAME : aliased constant String := "name";
    COL_2_1_NAME : aliased constant String := "is_public";
    COL_3_1_NAME : aliased constant String := "version";
-   COL_4_1_NAME : aliased constant String := "workspace_id";
+   COL_4_1_NAME : aliased constant String := "create_date";
+   COL_5_1_NAME : aliased constant String := "workspace_id";
 
    WIKI_SPACE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 5,
+     (Count => 6,
       Table => WIKI_SPACE_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
          2 => COL_1_1_NAME'Access,
          3 => COL_2_1_NAME'Access,
          4 => COL_3_1_NAME'Access,
-         5 => COL_4_1_NAME'Access
+         5 => COL_4_1_NAME'Access,
+         6 => COL_5_1_NAME'Access
 )
      );
    WIKI_SPACE_TABLE : constant ADO.Schemas.Class_Mapping_Access
@@ -473,6 +532,7 @@ private
        Name : Ada.Strings.Unbounded.Unbounded_String;
        Is_Public : Boolean;
        Version : Integer;
+       Create_Date : Ada.Calendar.Time;
        Workspace : AWA.Workspaces.Models.Workspace_Ref;
    end record;
 
@@ -655,4 +715,14 @@ private
 
    procedure Set_Field (Object : in out Wiki_Content_Ref'Class;
                         Impl   : out Wiki_Content_Access);
+
+   package File_1 is
+      new ADO.Queries.Loaders.File (Path => "wiki-list.xml",
+                                    Sha1 => "25D8833BBE36682B6D39ED17ACCAEC97EB3730A6");
+
+   package Def_Wikiinfo_Wiki_List is
+      new ADO.Queries.Loaders.Query (Name => "wiki-list",
+                                     File => File_1.File'Access);
+   Query_Wiki_List : constant ADO.Queries.Query_Definition_Access
+   := Def_Wikiinfo_Wiki_List.Query'Access;
 end AWA.Wikis.Models;

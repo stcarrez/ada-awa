@@ -65,6 +65,7 @@ package body AWA.Wikis.Models is
       Impl := new Wiki_Space_Impl;
       Impl.Is_Public := False;
       Impl.Version := 0;
+      Impl.Create_Date := ADO.DEFAULT_TIME;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -146,12 +147,29 @@ package body AWA.Wikis.Models is
    end Get_Version;
 
 
+   procedure Set_Create_Date (Object : in out Wiki_Space_Ref;
+                              Value  : in Ada.Calendar.Time) is
+      Impl : Wiki_Space_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Time (Impl.all, 5, Impl.Create_Date, Value);
+   end Set_Create_Date;
+
+   function Get_Create_Date (Object : in Wiki_Space_Ref)
+                  return Ada.Calendar.Time is
+      Impl : constant Wiki_Space_Access
+         := Wiki_Space_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Create_Date;
+   end Get_Create_Date;
+
+
    procedure Set_Workspace (Object : in out Wiki_Space_Ref;
                             Value  : in AWA.Workspaces.Models.Workspace_Ref'Class) is
       Impl : Wiki_Space_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 5, Impl.Workspace, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 6, Impl.Workspace, Value);
    end Set_Workspace;
 
    function Get_Workspace (Object : in Wiki_Space_Ref)
@@ -179,6 +197,7 @@ package body AWA.Wikis.Models is
             Copy.Name := Impl.Name;
             Copy.Is_Public := Impl.Is_Public;
             Copy.Version := Impl.Version;
+            Copy.Create_Date := Impl.Create_Date;
             Copy.Workspace := Impl.Workspace;
          end;
       end if;
@@ -325,9 +344,14 @@ package body AWA.Wikis.Models is
          Object.Clear_Modified (3);
       end if;
       if Object.Is_Modified (5) then
-         Stmt.Save_Field (Name  => COL_4_1_NAME, --  workspace_id
-                          Value => Object.Workspace);
+         Stmt.Save_Field (Name  => COL_4_1_NAME, --  create_date
+                          Value => Object.Create_Date);
          Object.Clear_Modified (5);
+      end if;
+      if Object.Is_Modified (6) then
+         Stmt.Save_Field (Name  => COL_5_1_NAME, --  workspace_id
+                          Value => Object.Workspace);
+         Object.Clear_Modified (6);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -367,7 +391,9 @@ package body AWA.Wikis.Models is
                         Value => Object.Is_Public);
       Query.Save_Field (Name  => COL_3_1_NAME, --  version
                         Value => Object.Version);
-      Query.Save_Field (Name  => COL_4_1_NAME, --  workspace_id
+      Query.Save_Field (Name  => COL_4_1_NAME, --  create_date
+                        Value => Object.Create_Date);
+      Query.Save_Field (Name  => COL_5_1_NAME, --  workspace_id
                         Value => Object.Workspace);
       Query.Execute (Result);
       if Result /= 1 then
@@ -401,6 +427,8 @@ package body AWA.Wikis.Models is
          return Util.Beans.Objects.To_Object (Impl.Name);
       elsif Name = "is_public" then
          return Util.Beans.Objects.To_Object (Impl.Is_Public);
+      elsif Name = "create_date" then
+         return Util.Beans.Objects.Time.To_Object (Impl.Create_Date);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -418,8 +446,9 @@ package body AWA.Wikis.Models is
       Object.Name := Stmt.Get_Unbounded_String (1);
       Object.Is_Public := Stmt.Get_Boolean (2);
       Object.Is_Public := Stmt.Get_Boolean (2);
-      if not Stmt.Is_Null (4) then
-         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (4), Session);
+      Object.Create_Date := Stmt.Get_Time (4);
+      if not Stmt.Is_Null (5) then
+         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (5), Session);
       end if;
       Object.Version := Stmt.Get_Integer (3);
       ADO.Objects.Set_Created (Object);
@@ -1390,6 +1419,71 @@ package body AWA.Wikis.Models is
       Object.Version := Stmt.Get_Integer (5);
       ADO.Objects.Set_Created (Object);
    end Load;
+
+   --  --------------------
+   --  Get the bean attribute identified by the given name.
+   --  --------------------
+   overriding
+   function Get_Value (From : in Wiki_Info;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
+      end if;
+      if Name = "name" then
+         return Util.Beans.Objects.To_Object (From.Name);
+      end if;
+      if Name = "create_date" then
+         return Util.Beans.Objects.Time.To_Object (From.Create_Date);
+      end if;
+      if Name = "is_public" then
+         return Util.Beans.Objects.To_Object (From.Is_Public);
+      end if;
+      if Name = "page_count" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Page_Count));
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+   --  --------------------
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   --  --------------------
+   procedure List (Object  : in out Wiki_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+   begin
+      List (Object.List, Session, Context);
+   end List;
+   --  --------------------
+   --  The list of wikis.
+   --  --------------------
+   procedure List (Object  : in out Wiki_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+      procedure Read (Into : in out Wiki_Info);
+
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Context);
+      Pos  : Natural := 0;
+      procedure Read (Into : in out Wiki_Info) is
+      begin
+         Into.Id := Stmt.Get_Identifier (0);
+         Into.Name := Stmt.Get_Unbounded_String (1);
+         Into.Create_Date := Stmt.Get_Time (2);
+         Into.Is_Public := Stmt.Get_Boolean (3);
+         Into.Page_Count := Stmt.Get_Integer (4);
+      end Read;
+   begin
+      Stmt.Execute;
+      Wiki_Info_Vectors.Clear (Object);
+      while Stmt.Has_Elements loop
+         Object.Insert_Space (Before => Pos);
+         Object.Update_Element (Index => Pos, Process => Read'Access);
+         Pos := Pos + 1;
+         Stmt.Next;
+      end loop;
+   end List;
+
 
    procedure Op_Save (Bean    : in out Wiki_Space_Bean;
                       Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
