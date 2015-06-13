@@ -33,4 +33,7 @@ package AWA.Wikis.Modules.Tests is
    --  Test creation of a wiki page.
    procedure Test_Create_Wiki_Page (T : in out Test);
 
+   --  Test creation of a wiki page content.
+   procedure Test_Create_Wiki_Content (T : in out Test);
+
 end AWA.Wikis.Modules.Tests;
