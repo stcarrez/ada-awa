@@ -20,6 +20,9 @@ with Ada.Strings.Unbounded;
 
 with Util.Beans.Basic;
 with Util.Beans.Objects;
+
+with ADO;
+
 with AWA.Wikis.Modules;
 with AWA.Wikis.Models;
 with AWA.Tags.Beans;
@@ -93,6 +96,50 @@ package AWA.Wikis.Beans is
 
    --  Create the Wiki_Page_Bean bean instance.
    function Create_Wiki_Page_Bean (Module : in AWA.Wikis.Modules.Wiki_Module_Access)
+                                    return Util.Beans.Basic.Readonly_Bean_Access;
+
+   type Init_Flag is (INIT_WIKI_LIST);
+   type Init_Map is array (Init_Flag) of Boolean;
+
+   --  ------------------------------
+   --  Admin List Bean
+   --  ------------------------------
+   --  The <b>Wiki_Admin_Bean</b> is used for the administration of a wiki.  It gives the
+   --  list of wikis and pages that are created, published or not.
+   type Wiki_Admin_Bean is new Util.Beans.Basic.Bean with record
+      Module : AWA.Wikis.Modules.Wiki_Module_Access := null;
+
+      --  The wiki space identifier.
+      Wiki_Id          : ADO.Identifier := ADO.NO_IDENTIFIER;
+
+      --  List of blogs.
+      Wiki_List        : aliased AWA.Wikis.Models.Wiki_Info_List_Bean;
+      Wiki_List_Bean   : AWA.Wikis.Models.Wiki_Info_List_Bean_Access;
+
+      --  Initialization flags.
+      Init_Flags       : aliased Init_Map := (others => False);
+      Flags            : access Init_Map;
+   end record;
+   type Wiki_Admin_Bean_Access is access all Wiki_Admin_Bean;
+
+   --  Get the wiki space identifier.
+   function Get_Wiki_Id (List : in Wiki_Admin_Bean) return ADO.Identifier;
+
+   overriding
+   function Get_Value (List : in Wiki_Admin_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the value identified by the name.
+   overriding
+   procedure Set_Value (From  : in out Wiki_Admin_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   --  Load the list of wikis.
+   procedure Load_Wikis (List : in Wiki_Admin_Bean);
+
+   --  Create the Wiki_Admin_Bean bean instance.
+   function Create_Wiki_Admin_Bean (Module : in AWA.Wikis.Modules.Wiki_Module_Access)
                                     return Util.Beans.Basic.Readonly_Bean_Access;
 
 end AWA.Wikis.Beans;
