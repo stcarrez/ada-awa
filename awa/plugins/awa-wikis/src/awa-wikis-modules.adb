@@ -27,6 +27,8 @@ with AWA.Modules.Beans;
 
 with Ada.Calendar;
 with ADO.Sessions;
+with ADO.Objects;
+with ADO.SQL;
 
 with Util.Log.Loggers;
 package body AWA.Wikis.Modules is
@@ -187,10 +189,67 @@ package body AWA.Wikis.Modules is
    end Save;
 
    --  ------------------------------
+   --  Load the wiki page and its content.
+   --  ------------------------------
+   procedure Load_Page (Model   : in Wiki_Module;
+                        Page    : in out AWA.Wikis.Models.Wiki_Page_Ref'Class;
+                        Content : in out AWA.Wikis.Models.Wiki_Content_Ref'Class;
+                        Tags    : in out AWA.Tags.Beans.Tag_List_Bean;
+                        Id      : in ADO.Identifier) is
+      Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB    : ADO.Sessions.Session := AWA.Services.Contexts.Get_Session (Ctx);
+      Found : Boolean;
+   begin
+      --  Check that the user has the view page permission on the given wiki page.
+      AWA.Permissions.Check (Permission => ACL_View_Wiki_Page.Permission,
+                             Entity     => Id);
+
+      Page.Load (DB, Id, Found);
+      Tags.Load_Tags (DB, Id);
+      Content := Page.Get_Content;
+      if not Content.Is_Null then
+         Content.Load (DB, Content.Get_Id, Found);
+      end if;
+   end Load_Page;
+
+   --  ------------------------------
+   --  Load the wiki page and its content from the wiki space Id and the page name.
+   --  ------------------------------
+   procedure Load_Page (Model   : in Wiki_Module;
+                        Page    : in out AWA.Wikis.Models.Wiki_Page_Ref'Class;
+                        Content : in out AWA.Wikis.Models.Wiki_Content_Ref'Class;
+                        Tags    : in out AWA.Tags.Beans.Tag_List_Bean;
+                        Wiki    : in ADO.Identifier;
+                        Name    : in String) is
+      Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB    : ADO.Sessions.Session := AWA.Services.Contexts.Get_Session (Ctx);
+      Found : Boolean;
+      Query : ADO.SQL.Query;
+   begin
+      Query.Bind_Param (1, Wiki);
+      Query.Bind_Param (2, Name);
+      Query.Set_Filter ("o.wiki_id = ? AND o.name = ?");
+      Page.Find (DB, Query, Found);
+      if not Found then
+         raise ADO.Objects.NOT_FOUND;
+      end if;
+
+      --  Check that the user has the view page permission on the given wiki page.
+      AWA.Permissions.Check (Permission => ACL_View_Wiki_Page.Permission,
+                             Entity     => Page.Get_Id);
+
+      Tags.Load_Tags (DB, Page.Get_Id);
+      Content := Page.Get_Content;
+      if not Content.Is_Null then
+         Content.Load (DB, Content.Get_Id, Found);
+      end if;
+   end Load_Page;
+
+   --  ------------------------------
    --  Create a new wiki content for the wiki page.
    --  ------------------------------
    procedure Create_Wiki_Content (Model   : in Wiki_Module;
-                                  Page    : in out Awa.Wikis.Models.Wiki_Page_Ref'Class;
+                                  Page    : in out AWA.Wikis.Models.Wiki_Page_Ref'Class;
                                   Content : in out AWA.Wikis.Models.Wiki_Content_Ref'Class) is
       Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
