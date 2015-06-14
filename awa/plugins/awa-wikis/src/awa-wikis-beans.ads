@@ -63,13 +63,17 @@ package AWA.Wikis.Beans is
 
 
    type Wiki_Page_Bean is new AWA.Wikis.Models.Wiki_Page_Bean with record
-      Service   : Modules.Wiki_Module_Access := null;
+      Service    : Modules.Wiki_Module_Access := null;
 
-      Wiki_Space : Wiki_Space_Bean;
+      --  The page content.
+      Content     : Models.Wiki_Content_Ref;
+      Has_Content : Boolean := False;
+
+      Wiki_Space  : Wiki_Space_Bean;
 
       --  List of tags associated with the question.
-      Tags      : aliased AWA.Tags.Beans.Tag_List_Bean;
-      Tags_Bean : Util.Beans.Basic.Readonly_Bean_Access;
+      Tags        : aliased AWA.Tags.Beans.Tag_List_Bean;
+      Tags_Bean   : Util.Beans.Basic.Readonly_Bean_Access;
    end record;
    type Wiki_Page_Bean_Access is access all Wiki_Page_Bean'Class;
 
@@ -87,6 +91,11 @@ package AWA.Wikis.Beans is
    --  Create or save the wiki page.
    overriding
    procedure Save (Bean    : in out Wiki_Page_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Load the wiki page.
+   overriding
+   procedure Load (Bean    : in out Wiki_Page_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
    --  Delete the wiki page.
