@@ -46,6 +46,9 @@ package body AWA.Wikis.Modules is
    begin
       Log.Info ("Initializing the wikis module");
 
+      --  Setup the resource bundles.
+      App.Register ("wikiMsg", "wikis");
+
       --  Register here any bean class, servlet, filter.
       Register.Register (Plugin => Plugin,
                          Name   => "AWA.Wikis.Beans.Wiki_Space_Bean",
