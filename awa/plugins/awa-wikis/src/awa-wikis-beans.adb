@@ -60,7 +60,11 @@ package body AWA.Wikis.Beans is
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       pragma Unreferenced (Outcome);
    begin
-      Bean.Service.Save_Wiki_Space (Bean);
+      if Bean.Is_Inserted then
+         Bean.Service.Save_Wiki_Space (Bean);
+      else
+         Bean.Service.Create_Wiki_Space (Bean);
+      end if;
    end Save;
 
    --  Delete the wiki space.
