@@ -71,6 +71,15 @@
     </navigation-case>
   </navigation-rule>
 
+  <navigation-rule>
+    <from-view-id>/wikis/admin/create-page.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/wikis/admin/view.xhtml?wiki=#{wikiPage.wikiId}&amp;page=#{wikiPage.name}</to-view-id>
+      <redirect/>
+    </navigation-case>
+  </navigation-rule>
+
   <filter-mapping>
     <filter-name>service</filter-name>
     <url-pattern>/wikis/*.html</url-pattern>
@@ -112,6 +121,18 @@
             WHERE acl.entity_type = :entity_type
             AND acl.user_id = :user_id
             AND acl.entity_id = :entity_id
+        </sql>
+    </entity-permission>
+
+    <entity-permission>
+        <name>wiki-page-view</name>
+        <entity-type>awa_wiki_space</entity-type>
+        <description>Grant the view wiki page permission when the page is public
+                     or when an ACL link exist betwen the user and the wiki space</description>
+        <sql>
+       SELECT page.id FROM awa_wiki_page AS page
+       LEFT JOIN awa_acl AS acl ON acl.entity_type = :entity_type AND acl.entity_id = page.wiki_id AND acl.user_id = :user_id
+       WHERE page.id = :entity_id AND (page.is_public OR acl.id IS NOT NULL)
         </sql>
     </entity-permission>
 
