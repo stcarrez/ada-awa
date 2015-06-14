@@ -11,11 +11,11 @@
         <property type='String' name="name">
             <comment>the wiki name.</comment>
         </property>
-        <property type='Date' name="create_date">
-            <comment>the wiki creation date.</comment>
-        </property>
         <property type='Boolean' name="is_public">
             <comment>whether the wiki is public.</comment>
+        </property>
+        <property type='Date' name="create_date">
+            <comment>the wiki creation date.</comment>
         </property>
         <property type='Integer' name="page_count">
             <comment>the number of pages in the wiki.</comment>
