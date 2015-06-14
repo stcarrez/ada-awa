@@ -1543,10 +1543,22 @@ package body AWA.Wikis.Models is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Wiki_Page_Bean,
                                                       Method => Op_Delete,
                                                       Name   => "delete");
+   procedure Op_Load (Bean    : in out Wiki_Page_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Load (Bean    : in out Wiki_Page_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Wiki_Page_Bean'Class (Bean).Load (Outcome);
+   end Op_Load;
+   package Binding_Wiki_Page_Bean_3 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Wiki_Page_Bean,
+                                                      Method => Op_Load,
+                                                      Name   => "load");
 
    Binding_Wiki_Page_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
      := (1 => Binding_Wiki_Page_Bean_1.Proxy'Access,
-         2 => Binding_Wiki_Page_Bean_2.Proxy'Access
+         2 => Binding_Wiki_Page_Bean_2.Proxy'Access,
+         3 => Binding_Wiki_Page_Bean_3.Proxy'Access
      );
 
    --  This bean provides some methods that can be used in a Method_Expression.
