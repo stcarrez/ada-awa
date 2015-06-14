@@ -1,0 +1,53 @@
+<!-- View an existing wiki page
+  -  Copyright (C) 2015 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<ui:composition template="/WEB-INF/layouts/layout.xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:awa="http://code.google.com/p/ada-awa/jsf"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:u="http://code.google.com/p/ada-asf/util"
+                xmlns:h="http://java.sun.com/jsf/html">
+    <ui:param name="title" value="#{wikiPage.title}"/>
+
+    <ui:define name="pageHeader">
+        <f:metadata>
+            <f:viewParam id='wiki' value='#{wikiPage.wikiId}'/>
+            <f:viewParam id='page' value='#{wikiPage.name}'/>
+            <f:viewAction action='#{wikiPage.load}'/>
+        </f:metadata>
+    </ui:define>
+
+    <!-- Main page body -->
+    <ui:define name="pageBody">
+      <div id='awa-content'>
+          <ui:include src="lists/menu-list.xhtml"/>
+          <div id='blog-post-edit' class='blog-edit-post'>
+              <div class='blog-post' id="p_#{wikiPage.id}">
+                  <div class='post-title'>
+                      <h2>#{wikiPage.title}</h2>
+                      <p>By #{wikiPage.username} <h:outputText id="date" value="#{wikiPage.date}" converter="dateConverter"/></p>
+                  </div>
+                  <awa:tagList value='#{wikiPage.tags}' id='qtags' styleClass="tagedit-list"
+                               tagLink="#{contextPath}/wikis/tagged.html?tag=#{tagName}"
+                               var="tagName"
+                               tagClass="tagedit-listelement tagedit-listelement-old"/>
+                  <awa:wiki styleClass='post-text' value="#{wikiPage.text}" format="dotclear"/>
+              </div>
+          </div>
+      </div>
+    </ui:define>
+</ui:composition>
