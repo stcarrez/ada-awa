@@ -18,6 +18,7 @@
 with ADO.Utils;
 with ADO.Queries;
 with ADO.Sessions;
+with ADO.Objects;
 with ADO.Sessions.Entities;
 
 with AWA.Services;
@@ -94,6 +95,20 @@ package body AWA.Wikis.Beans is
    begin
       if From.Is_Null then
          return Util.Beans.Objects.Null_Object;
+      elsif Name = "text" then
+         if From.Content.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.To_Object (String '(From.Content.Get_Content));
+         end if;
+      elsif Name = "comment" then
+         if From.Content.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.To_Object (String '(From.Content.Get_Save_Comment));
+         end if;
+      elsif Name = "tags" then
+         return Util.Beans.Objects.To_Object (From.Tags_Bean, Util.Beans.Objects.STATIC);
       else
          return AWA.Wikis.Models.Wiki_Page_Bean (From).Get_Value (Name);
       end if;
@@ -107,10 +122,25 @@ package body AWA.Wikis.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      if Name = "name" then
+      if Name = "id" then
+         declare
+            Id  : constant ADO.Identifier := ADO.Utils.To_Identifier (Value);
+         begin
+            From.Service.Load_Page (From, From.Content, From.Tags, Id);
+         end;
+      elsif Name = "wikiId" then
+         From.Wiki_Space.Set_Id (ADO.Utils.To_Identifier (Value));
+      elsif Name = "name" then
          From.Set_Name (Util.Beans.Objects.To_String (Value));
       elsif Name = "title" then
          From.Set_Title (Util.Beans.Objects.To_String (Value));
+      elsif Name = "is_public" then
+         From.Set_Is_Public (Util.Beans.Objects.To_Boolean (Value));
+      elsif Name = "text" then
+         From.Has_Content := True;
+         From.Content.Set_Content (Util.Beans.Objects.To_String (Value));
+      elsif Name = "comment" then
+         From.Content.Set_Save_Comment (Util.Beans.Objects.To_String (Value));
       end if;
    end Set_Value;
 
@@ -126,7 +156,25 @@ package body AWA.Wikis.Beans is
       else
          Bean.Service.Create_Wiki_Page (Bean.Wiki_Space, Bean);
       end if;
+      if Bean.Has_Content then
+         Bean.Service.Create_Wiki_Content (Bean, Bean.Content);
+      end if;
    end Save;
+
+   --  ------------------------------
+   --  Load the wiki page.
+   --  ------------------------------
+   overriding
+   procedure Load (Bean    : in out Wiki_Page_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Bean.Service.Load_Page (Bean, Bean.Content, Bean.Tags,
+                              Bean.Wiki_Space.Get_Id, Bean.Get_Name);
+
+   exception
+      when ADO.Objects.NOT_FOUND =>
+         Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
+   end Load;
 
    --  Delete the wiki page.
    overriding
@@ -144,6 +192,7 @@ package body AWA.Wikis.Beans is
       Object : constant Wiki_Page_Bean_Access := new Wiki_Page_Bean;
    begin
       Object.Service   := Module;
+      Object.Tags_Bean := Object.Tags'Access;
       return Object.all'Access;
    end Create_Wiki_Page_Bean;
 
