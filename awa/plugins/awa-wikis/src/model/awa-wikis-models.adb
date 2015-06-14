@@ -1433,11 +1433,11 @@ package body AWA.Wikis.Models is
       if Name = "name" then
          return Util.Beans.Objects.To_Object (From.Name);
       end if;
-      if Name = "create_date" then
-         return Util.Beans.Objects.Time.To_Object (From.Create_Date);
-      end if;
       if Name = "is_public" then
          return Util.Beans.Objects.To_Object (From.Is_Public);
+      end if;
+      if Name = "create_date" then
+         return Util.Beans.Objects.Time.To_Object (From.Create_Date);
       end if;
       if Name = "page_count" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Page_Count));
@@ -1469,8 +1469,8 @@ package body AWA.Wikis.Models is
       begin
          Into.Id := Stmt.Get_Identifier (0);
          Into.Name := Stmt.Get_Unbounded_String (1);
-         Into.Create_Date := Stmt.Get_Time (2);
-         Into.Is_Public := Stmt.Get_Boolean (3);
+         Into.Is_Public := Stmt.Get_Boolean (2);
+         Into.Create_Date := Stmt.Get_Time (3);
          Into.Page_Count := Stmt.Get_Integer (4);
       end Read;
    begin

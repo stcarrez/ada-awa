@@ -418,11 +418,11 @@ package AWA.Wikis.Models is
       --  the wiki name.
       Name : Ada.Strings.Unbounded.Unbounded_String;
 
-      --  the wiki creation date.
-      Create_Date : Ada.Calendar.Time;
-
       --  whether the wiki is public.
       Is_Public : Boolean;
+
+      --  the wiki creation date.
+      Create_Date : Ada.Calendar.Time;
 
       --  the number of pages in the wiki.
       Page_Count : Integer;
@@ -718,7 +718,7 @@ private
 
    package File_1 is
       new ADO.Queries.Loaders.File (Path => "wiki-list.xml",
-                                    Sha1 => "25D8833BBE36682B6D39ED17ACCAEC97EB3730A6");
+                                    Sha1 => "134AA901EAD20B164194D37CC198D8B6092FF0DF");
 
    package Def_Wikiinfo_Wiki_List is
       new ADO.Queries.Loaders.Query (Name => "wiki-list",
