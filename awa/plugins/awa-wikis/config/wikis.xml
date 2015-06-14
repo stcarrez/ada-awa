@@ -9,6 +9,20 @@
   </managed-bean>
 
   <managed-bean>
+    <description>The wiki space bean to create and edit the wiki space configuration.</description>
+    <managed-bean-name>adminWikiSpace</managed-bean-name>
+    <managed-bean-class>AWA.Wikis.Beans.Wiki_Space_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <description>The wiki page bean gives the full content and information about a wiki page.</description>
+    <managed-bean-name>wikiPage</managed-bean-name>
+    <managed-bean-class>AWA.Wikis.Beans.Wiki_Page_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
     <description>The wiki tag search bean.</description>
     <managed-bean-name>wikiTagSearch</managed-bean-name>
     <managed-bean-class>AWA.Tags.Beans.Tag_Search_Bean</managed-bean-class>
@@ -48,6 +62,24 @@
       <value>wiki-page-edit</value>
     </managed-property>
   </managed-bean>
+
+  <navigation-rule>
+    <from-view-id>/wikis/admin/forms/create.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/wikis/admin/forms/create-response.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <filter-mapping>
+    <filter-name>service</filter-name>
+    <url-pattern>/wikis/*.html</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>auth-filter</filter-name>
+    <url-pattern>/wikis/admin/*.html</url-pattern>
+  </filter-mapping>
 
     <entity-permission>
         <name>wiki-space-create</name>
@@ -116,5 +148,10 @@
        AND acl.user_id = :user_id
     </sql>
   </entity-permission>
+
+  <url-policy>
+    <permission>logged-user</permission>
+    <url-pattern>/wikis/admin/.*</url-pattern>
+  </url-policy>
 
 </module>
