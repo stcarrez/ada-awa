@@ -93,8 +93,12 @@ package body AWA.Wikis.Beans is
    function Get_Value (From : in Wiki_Page_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
-      if From.Is_Null then
-         return Util.Beans.Objects.Null_Object;
+      if Name = "wikiId" then
+         if From.Wiki_Space.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return ADO.Utils.To_Object (From.Wiki_Space.Get_Id);
+         end if;
       elsif Name = "text" then
          if From.Content.Is_Null then
             return Util.Beans.Objects.Null_Object;
@@ -109,6 +113,8 @@ package body AWA.Wikis.Beans is
          end if;
       elsif Name = "tags" then
          return Util.Beans.Objects.To_Object (From.Tags_Bean, Util.Beans.Objects.STATIC);
+      elsif From.Is_Null then
+         return Util.Beans.Objects.Null_Object;
       else
          return AWA.Wikis.Models.Wiki_Page_Bean (From).Get_Value (Name);
       end if;
@@ -193,6 +199,7 @@ package body AWA.Wikis.Beans is
    begin
       Object.Service   := Module;
       Object.Tags_Bean := Object.Tags'Access;
+      Object.Tags.Set_Entity_Type (AWA.Wikis.Models.WIKI_PAGE_TABLE);
       return Object.all'Access;
    end Create_Wiki_Page_Bean;
 
