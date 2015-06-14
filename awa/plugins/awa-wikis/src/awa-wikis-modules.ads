@@ -20,6 +20,7 @@ with ASF.Applications;
 with ADO;
 with AWA.Modules;
 with AWA.Wikis.Models;
+with AWA.Tags.Beans;
 with Security.Permissions;
 with AWA.Wikis.Models;
 package AWA.Wikis.Modules is
@@ -30,6 +31,7 @@ package AWA.Wikis.Modules is
    package ACL_Create_Wiki_Pages is new Security.Permissions.Definition ("wiki-page-create");
    package ACL_Delete_Wiki_Pages is new Security.Permissions.Definition ("wiki-page-delete");
    package ACL_Update_Wiki_Pages is new Security.Permissions.Definition ("wiki-page-update");
+   package ACL_View_Wiki_Page is new Security.Permissions.Definition ("wiki-page-view");
 
    --  Define the permissions.
    package ACL_Create_Wiki_Space is new Security.Permissions.Definition ("wiki-space-create");
@@ -71,7 +73,22 @@ package AWA.Wikis.Modules is
 
    --  Save the wiki page.
    procedure Save (Model  : in Wiki_Module;
-                   Page   : in out Awa.Wikis.Models.Wiki_Page_Ref'Class);
+                   Page   : in out AWA.Wikis.Models.Wiki_Page_Ref'Class);
+
+   --  Load the wiki page and its content.
+   procedure Load_Page (Model   : in Wiki_Module;
+                        Page    : in out AWA.Wikis.Models.Wiki_Page_Ref'Class;
+                        Content : in out AWA.Wikis.Models.Wiki_Content_Ref'Class;
+                        Tags    : in out AWA.Tags.Beans.Tag_List_Bean;
+                        Id      : in ADO.Identifier);
+
+   --  Load the wiki page and its content from the wiki space Id and the page name.
+   procedure Load_Page (Model   : in Wiki_Module;
+                        Page    : in out AWA.Wikis.Models.Wiki_Page_Ref'Class;
+                        Content : in out AWA.Wikis.Models.Wiki_Content_Ref'Class;
+                        Tags    : in out AWA.Tags.Beans.Tag_List_Bean;
+                        Wiki    : in ADO.Identifier;
+                        Name    : in String);
 
    --  Create a new wiki content for the wiki page.
    procedure Create_Wiki_Content (Model   : in Wiki_Module;
