@@ -1485,6 +1485,79 @@ package body AWA.Wikis.Models is
    end List;
 
 
+   --  --------------------
+   --  Get the bean attribute identified by the given name.
+   --  --------------------
+   overriding
+   function Get_Value (From : in Wiki_Page_Info;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
+      end if;
+      if Name = "name" then
+         return Util.Beans.Objects.To_Object (From.Name);
+      end if;
+      if Name = "title" then
+         return Util.Beans.Objects.To_Object (From.Title);
+      end if;
+      if Name = "is_public" then
+         return Util.Beans.Objects.To_Object (From.Is_Public);
+      end if;
+      if Name = "create_date" then
+         return Util.Beans.Objects.Time.To_Object (From.Create_Date);
+      end if;
+      if Name = "last_version" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Last_Version));
+      end if;
+      if Name = "author" then
+         return Util.Beans.Objects.To_Object (From.Author);
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+   --  --------------------
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   --  --------------------
+   procedure List (Object  : in out Wiki_Page_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+   begin
+      List (Object.List, Session, Context);
+   end List;
+   --  --------------------
+   --  The information about a wiki page.
+   --  --------------------
+   procedure List (Object  : in out Wiki_Page_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+      procedure Read (Into : in out Wiki_Page_Info);
+
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Context);
+      Pos  : Natural := 0;
+      procedure Read (Into : in out Wiki_Page_Info) is
+      begin
+         Into.Id := Stmt.Get_Identifier (0);
+         Into.Name := Stmt.Get_Unbounded_String (1);
+         Into.Title := Stmt.Get_Unbounded_String (2);
+         Into.Is_Public := Stmt.Get_Boolean (3);
+         Into.Create_Date := Stmt.Get_Time (4);
+         Into.Last_Version := Stmt.Get_Integer (5);
+         Into.Author := Stmt.Get_Unbounded_String (6);
+      end Read;
+   begin
+      Stmt.Execute;
+      Wiki_Page_Info_Vectors.Clear (Object);
+      while Stmt.Has_Elements loop
+         Object.Insert_Space (Before => Pos);
+         Object.Update_Element (Index => Pos, Process => Read'Access);
+         Pos := Pos + 1;
+         Stmt.Next;
+      end loop;
+   end List;
+
+
    procedure Op_Save (Bean    : in out Wiki_Space_Bean;
                       Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
    procedure Op_Save (Bean    : in out Wiki_Space_Bean;
@@ -1577,6 +1650,69 @@ package body AWA.Wikis.Models is
                         Value : in Util.Beans.Objects.Object) is
    begin
       null;
+   end Set_Value;
+
+
+
+   procedure Op_Load (Bean    : in out Wiki_Page_List_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Load (Bean    : in out Wiki_Page_List_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Wiki_Page_List_Bean'Class (Bean).Load (Outcome);
+   end Op_Load;
+   package Binding_Wiki_Page_List_Bean_1 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Wiki_Page_List_Bean,
+                                                      Method => Op_Load,
+                                                      Name   => "load");
+
+   Binding_Wiki_Page_List_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
+     := (1 => Binding_Wiki_Page_List_Bean_1.Proxy'Access
+     );
+
+   --  This bean provides some methods that can be used in a Method_Expression.
+   overriding
+   function Get_Method_Bindings (From : in Wiki_Page_List_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access is
+   begin
+      return Binding_Wiki_Page_List_Bean_Array'Access;
+   end Get_Method_Bindings;
+
+   function Get_Value (From : in Wiki_Page_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "page" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Page));
+      elsif Name = "count" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Count));
+      elsif Name = "page_size" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Page_Size));
+      elsif Name = "tag" then
+         return Util.Beans.Objects.To_Object (From.Tag);
+      elsif Name = "wiki_id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Wiki_Id));
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+
+   --  Set the value identified by the name
+   overriding 
+   procedure Set_Value (Item  : in out Wiki_Page_List_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "page" then
+         Item.Page := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "count" then
+         Item.Count := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "page_size" then
+         Item.Page_Size := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "tag" then
+         Item.Tag := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "wiki_id" then
+         Item.Wiki_Id := Util.Beans.Objects.To_Integer (Value);
+      end if;
    end Set_Value;
 
 

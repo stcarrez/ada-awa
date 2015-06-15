@@ -455,6 +455,59 @@ package AWA.Wikis.Models is
 
    Query_Wiki_List : constant ADO.Queries.Query_Definition_Access;
 
+   --  --------------------
+   --  The information about a wiki page.
+   --  --------------------
+   type Wiki_Page_Info is new Util.Beans.Basic.Readonly_Bean with record
+      --  the wiki page identifier.
+      Id : ADO.Identifier;
+
+      --  the wiki page name.
+      Name : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the wiki page title.
+      Title : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  whether the wiki is public.
+      Is_Public : Boolean;
+
+      --  the wiki creation date.
+      Create_Date : Ada.Calendar.Time;
+
+      --  the last version.
+      Last_Version : Integer;
+
+      --  the wiki page author.
+      Author : Ada.Strings.Unbounded.Unbounded_String;
+
+   end record;
+
+   --  Get the bean attribute identified by the given name.
+   overriding
+   function Get_Value (From : in Wiki_Page_Info;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   package Wiki_Page_Info_Beans is
+      new Util.Beans.Basic.Lists (Element_Type => Wiki_Page_Info);
+   package Wiki_Page_Info_Vectors renames Wiki_Page_Info_Beans.Vectors;
+   subtype Wiki_Page_Info_List_Bean is Wiki_Page_Info_Beans.List_Bean;
+
+   type Wiki_Page_Info_List_Bean_Access is access all Wiki_Page_Info_List_Bean;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Wiki_Page_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   subtype Wiki_Page_Info_Vector is Wiki_Page_Info_Vectors.Vector;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Wiki_Page_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   Query_Wiki_Page_List : constant ADO.Queries.Query_Definition_Access;
+
 
    type Wiki_Space_Bean is abstract new AWA.Wikis.Models.Wiki_Space_Ref
      and Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with null record;
@@ -498,6 +551,37 @@ package AWA.Wikis.Models is
                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
    procedure Load (Bean : in out Wiki_Page_Bean;
+                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   --  --------------------
+   --    Load the list items
+   --  --------------------
+   type Wiki_Page_List_Bean is abstract
+     new Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with  record
+      Page : Integer;
+      Count : Integer;
+      Page_Size : Integer;
+      Tag : Ada.Strings.Unbounded.Unbounded_String;
+      Wiki_Id : Integer;
+   end record;
+
+   --  This bean provides some methods that can be used in a Method_Expression.
+   overriding
+   function Get_Method_Bindings (From : in Wiki_Page_List_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access;
+
+   --  Get the value identified by the name.
+   overriding
+   function Get_Value (From : in Wiki_Page_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the value identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Wiki_Page_List_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   procedure Load (Bean : in out Wiki_Page_List_Bean;
                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
 
@@ -728,4 +812,14 @@ private
                                      File => File_1.File'Access);
    Query_Wiki_List : constant ADO.Queries.Query_Definition_Access
    := Def_Wikiinfo_Wiki_List.Query'Access;
+
+   package File_2 is
+      new ADO.Queries.Loaders.File (Path => "wiki-pages.xml",
+                                    Sha1 => "A120841C7F26146F8AC4EFB01C9952F3CA14CD13");
+
+   package Def_Wikipageinfo_Wiki_Page_List is
+      new ADO.Queries.Loaders.Query (Name => "wiki-page-list",
+                                     File => File_2.File'Access);
+   Query_Wiki_Page_List : constant ADO.Queries.Query_Definition_Access
+   := Def_Wikipageinfo_Wiki_Page_List.Query'Access;
 end AWA.Wikis.Models;
