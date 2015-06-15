@@ -1,0 +1,25 @@
+/* Columns in wiki page list */
+.wiki-page-name {
+    width: 20%;
+    height: 24px;
+}
+.wiki-page-title {
+    width: 25%;
+    height: 24px;
+}
+.wiki-page-date {
+    width: 15%;
+}
+.wiki-page-author {
+    width: 15%;
+}
+.wiki-page-version {
+    width: 10%;
+}
+.wiki-page-status-false, .wiki-page-status-true {
+    width: 32px;
+    height: 24px;
+}
+#wiki-page-action {
+    left: -5px;
+}
