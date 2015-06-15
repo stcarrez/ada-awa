@@ -253,3 +253,32 @@ div.awa-modal-show {
 div.awa-modal div.awa-login {
     position: relative;
 }
+
+/* List and list headers */
+.awa-list, .awa-list-header {
+    float: left;
+    padding: 0 2% 0 2%;
+    width: 96%;
+    clear: both;
+}
+.awa-list-header {
+    font-weight: bold;
+}
+.awa-list-col, .awa-header-col {
+    float: left;
+    overflow: hidden;
+    line-height: 20px;
+}
+.awa-list-item, .awa-list-header-item {
+    float: left;
+    clear: both;
+    width: 100%;
+}
+
+/**
+ * The ui.list component.
+ */
+.ui-list .awa-list-item {
+    position: relative;
+}
+
