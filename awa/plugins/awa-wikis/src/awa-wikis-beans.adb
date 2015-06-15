@@ -19,10 +19,12 @@ with ADO.Utils;
 with ADO.Queries;
 with ADO.Sessions;
 with ADO.Objects;
+with ADO.Datasets;
 with ADO.Sessions.Entities;
 
 with AWA.Services;
 with AWA.Services.Contexts;
+with AWA.Tags.Modules;
 
 package body AWA.Wikis.Beans is
 
@@ -202,6 +204,155 @@ package body AWA.Wikis.Beans is
       Object.Tags.Set_Entity_Type (AWA.Wikis.Models.WIKI_PAGE_TABLE);
       return Object.all'Access;
    end Create_Wiki_Page_Bean;
+
+   --  ------------------------------
+   --  Get the value identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Wiki_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+      Pos : Natural;
+   begin
+      if Name = "tags" then
+         Pos := From.Pages.Get_Row_Index;
+         if Pos = 0 then
+            return Util.Beans.Objects.Null_Object;
+         end if;
+         declare
+            Item : constant Models.Wiki_Page_Info := From.Pages.List.Element (Pos - 1);
+         begin
+            return From.Tags.Get_Tags (Item.Id);
+         end;
+      elsif Name = "pages" then
+         return Util.Beans.Objects.To_Object (Value   => From.Pages_Bean,
+                                              Storage => Util.Beans.Objects.STATIC);
+      elsif Name = "tag" then
+         return Util.Beans.Objects.To_Object (From.Tag);
+
+      elsif Name = "page" then
+         return Util.Beans.Objects.To_Object (From.Page);
+
+      elsif Name = "count" then
+         return Util.Beans.Objects.To_Object (From.Count);
+
+      elsif Name = "page_count" then
+         return Util.Beans.Objects.To_Object ((From.Count + From.Page_Size - 1) / From.Page_Size);
+
+      elsif Name = "wiki_id" then
+         return ADO.Utils.To_Object (From.Wiki_Id);
+
+      elsif Name = "updateDate" then
+         if From.Pages.Get_Count = 0 then
+            return Util.Beans.Objects.Null_Object;
+         else
+            declare
+               Item : constant Models.Wiki_Page_Info := From.Pages.List.Element (0);
+            begin
+               return Util.Beans.Objects.Time.To_Object (Item.Create_Date);
+            end;
+         end if;
+      else
+         return From.Pages.Get_Value (Name);
+      end if;
+   end Get_Value;
+
+   --  ------------------------------
+   --  Set the value identified by the name.
+   --  ------------------------------
+   overriding
+   procedure Set_Value (From  : in out Wiki_List_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "tag" then
+         From.Tag := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "page" and not Util.Beans.Objects.Is_Empty (Value) then
+         From.Page := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "wiki_id" and not Util.Beans.Objects.Is_Empty (Value) then
+         From.Wiki_Id := ADO.Utils.To_Identifier (Value);
+      end if;
+   end Set_Value;
+
+   overriding
+   procedure Load (From    : in out Wiki_List_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      From.Load_List;
+   end Load;
+
+   --  ------------------------------
+   --  Load the list of pages.  If a tag was set, filter the list of pages with the tag.
+   --  ------------------------------
+   procedure Load_List (Into : in out Wiki_List_Bean) is
+      use AWA.Wikis.Models;
+      use AWA.Services;
+      use type ADO.Identifier;
+
+      Ctx         : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      User        : constant ADO.Identifier := Ctx.Get_User_Identifier;
+      Session     : ADO.Sessions.Session := Into.Service.Get_Session;
+      Query       : ADO.Queries.Context;
+      Count_Query : ADO.Queries.Context;
+      Tag_Id      : ADO.Identifier;
+      First       : constant Natural  := (Into.Page - 1) * Into.Page_Size;
+   begin
+      if Into.Wiki_Id = ADO.NO_IDENTIFIER then
+         return;
+      end if;
+      AWA.Tags.Modules.Find_Tag_Id (Session, Ada.Strings.Unbounded.To_String (Into.Tag), Tag_Id);
+      if Tag_Id /= ADO.NO_IDENTIFIER then
+         Query.Set_Query (AWA.Wikis.Models.Query_Wiki_Page_List);
+         Query.Bind_Param (Name => "tag", Value => Tag_Id);
+         Count_Query.Set_Count_Query (AWA.Wikis.Models.Query_Wiki_Page_List);
+         Count_Query.Bind_Param (Name => "tag", Value => Tag_Id);
+      else
+         Query.Set_Query (AWA.Wikis.Models.Query_Wiki_Page_List);
+         Count_Query.Set_Count_Query (AWA.Wikis.Models.Query_Wiki_Page_List);
+      end if;
+      Query.Bind_Param (Name => "first", Value => First);
+      Query.Bind_Param (Name => "count", Value => Into.Page_Size);
+      Query.Bind_Param (Name => "wiki_id", Value => Into.Wiki_Id);
+      Query.Bind_Param (Name => "user_id", Value => User);
+      Count_Query.Bind_Param (Name => "wiki_id", Value => Into.Wiki_Id);
+      Count_Query.Bind_Param (Name => "user_id", Value => User);
+      ADO.Sessions.Entities.Bind_Param (Params  => Query,
+                                        Name    => "table",
+                                        Table   => AWA.Wikis.Models.WIKI_SPACE_TABLE,
+                                        Session => Session);
+      ADO.Sessions.Entities.Bind_Param (Params  => Count_Query,
+                                        Name    => "table",
+                                        Table   => AWA.Wikis.Models.WIKI_SPACE_TABLE,
+                                        Session => Session);
+      AWA.Wikis.Models.List (Into.Pages, Session, Query);
+      Into.Count := ADO.Datasets.Get_Count (Session, Count_Query);
+      declare
+         List : ADO.Utils.Identifier_Vector;
+         Iter : Wiki_Page_Info_Vectors.Cursor := Into.Pages.List.First;
+      begin
+         while Wiki_Page_Info_Vectors.Has_Element (Iter) loop
+            List.Append (Wiki_Page_Info_Vectors.Element (Iter).Id);
+            Wiki_Page_Info_Vectors.Next (Iter);
+         end loop;
+         Into.Tags.Load_Tags (Session, AWA.Wikis.Models.WIKI_PAGE_TABLE.Table.all,
+                              List);
+      end;
+   end Load_List;
+
+   --  ------------------------------
+   --  Create the Wiki_List_Bean bean instance.
+   --  ------------------------------
+   function Create_Wiki_List_Bean (Module : in AWA.Wikis.Modules.Wiki_Module_Access)
+                                   return Util.Beans.Basic.Readonly_Bean_Access is
+      Object  : constant Wiki_List_Bean_Access := new Wiki_List_Bean;
+   begin
+      Object.Service    := Module;
+      Object.Pages_Bean := Object.Pages'Access;
+      Object.Page_Size  := 20;
+      Object.Page       := 1;
+      Object.Count      := 0;
+      Object.Wiki_Id    := ADO.NO_IDENTIFIER;
+      return Object.all'Access;
+   end Create_Wiki_List_Bean;
 
    --  ------------------------------
    --  Load the list of wikis.
