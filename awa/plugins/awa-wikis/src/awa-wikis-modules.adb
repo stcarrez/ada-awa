@@ -64,6 +64,10 @@ package body AWA.Wikis.Modules is
                          Name   => "AWA.Wikis.Beans.Wiki_Page_Bean",
                          Handler => AWA.Wikis.Beans.Create_Wiki_Page_Bean'Access);
 
+      Register.Register (Plugin => Plugin,
+                         Name   => "AWA.Wikis.Beans.Wiki_List_Bean",
+                         Handler => AWA.Wikis.Beans.Create_Wiki_List_Bean'Access);
+
       AWA.Modules.Module (Plugin).Initialize (App, Props);
 
       --  Add here the creation of manager instances.
@@ -151,9 +155,8 @@ package body AWA.Wikis.Modules is
    --  ------------------------------
    procedure Create_Wiki_Page (Model  : in Wiki_Module;
                                Into   : in AWA.Wikis.Models.Wiki_Space_Ref'Class;
-                               Page   : in out Awa.Wikis.Models.Wiki_Page_Ref'Class) is
+                               Page   : in out AWA.Wikis.Models.Wiki_Page_Ref'Class) is
       Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      User  : constant ADO.Identifier := Ctx.Get_User_Identifier;
       DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
    begin
       Log.Info ("Create wiki page {0}", String '(Page.Get_Name));
@@ -173,7 +176,7 @@ package body AWA.Wikis.Modules is
    --  Save the wiki page.
    --  ------------------------------
    procedure Save (Model  : in Wiki_Module;
-                   Page   : in out Awa.Wikis.Models.Wiki_Page_Ref'Class) is
+                   Page   : in out AWA.Wikis.Models.Wiki_Page_Ref'Class) is
       pragma Unreferenced (Model);
 
       Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
@@ -253,7 +256,7 @@ package body AWA.Wikis.Modules is
                                   Content : in out AWA.Wikis.Models.Wiki_Content_Ref'Class) is
       Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
-      User  : AWA.Users.Models.User_Ref := Ctx.Get_User;
+      User  : constant AWA.Users.Models.User_Ref := Ctx.Get_User;
    begin
       --  Check that the user has the create wiki content permission on the given wiki page.
       AWA.Permissions.Check (Permission => ACL_Update_Wiki_Pages.Permission,
