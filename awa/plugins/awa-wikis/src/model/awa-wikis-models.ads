@@ -556,7 +556,7 @@ package AWA.Wikis.Models is
    --  --------------------
    --    Load the list items
    --  --------------------
-   type Wiki_Page_List_Bean is abstract
+   type Wiki_Page_List_Bean is abstract limited
      new Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with  record
       Page : Integer;
       Count : Integer;
