@@ -20,6 +20,7 @@ with Ada.Strings.Unbounded;
 
 with Util.Beans.Basic;
 with Util.Beans.Objects;
+with Util.Beans.Objects.Time;
 
 with ADO;
 
@@ -106,6 +107,40 @@ package AWA.Wikis.Beans is
    --  Create the Wiki_Page_Bean bean instance.
    function Create_Wiki_Page_Bean (Module : in AWA.Wikis.Modules.Wiki_Module_Access)
                                     return Util.Beans.Basic.Readonly_Bean_Access;
+   --  ------------------------------
+   --  Wiki List Bean
+   --  ------------------------------
+   --  The <b>Wiki_List_Bean</b> gives a list of visible wikis to be displayed to users.
+   --  The list can be filtered by a given tag.  The list pagination is supported.
+   type Wiki_List_Bean is new AWA.Wikis.Models.Wiki_Page_List_Bean with record
+      Pages      : aliased AWA.Wikis.Models.Wiki_Page_Info_List_Bean;
+      Service    : Modules.Wiki_Module_Access := null;
+      Tags       : AWA.Tags.Beans.Entity_Tag_Map;
+      Pages_Bean : AWA.Wikis.Models.Wiki_Page_Info_List_Bean_Access;
+   end record;
+   type Wiki_List_Bean_Access is access all Wiki_List_Bean'Class;
+
+   --  Get the value identified by the name.
+   overriding
+   function Get_Value (From : in Wiki_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the value identified by the name.
+   overriding
+   procedure Set_Value (From  : in out Wiki_List_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   overriding
+   procedure Load (From    : in out Wiki_List_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Load the list of pages.  If a tag was set, filter the list of pages with the tag.
+   procedure Load_List (Into : in out Wiki_List_Bean);
+
+   --  Create the Post_List_Bean bean instance.
+   function Create_Wiki_List_Bean (Module : in AWA.Wikis.Modules.Wiki_Module_Access)
+                                   return Util.Beans.Basic.Readonly_Bean_Access;
 
    type Init_Flag is (INIT_WIKI_LIST);
    type Init_Map is array (Init_Flag) of Boolean;
