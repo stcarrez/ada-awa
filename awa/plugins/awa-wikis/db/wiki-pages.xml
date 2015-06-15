@@ -1,0 +1,59 @@
+<query-mapping package='AWA.Wikis.Models'>
+    <description>
+      List of wiki pages
+    </description>
+
+    <class name="AWA.Wikis.Models.Wiki_Page_Info" bean="yes">
+        <comment>The information about a wiki page.</comment>
+        <property type='Identifier' name="id">
+            <comment>the wiki page identifier.</comment>
+        </property>
+        <property type='String' name="name">
+            <comment>the wiki page name.</comment>
+        </property>
+        <property type='String' name="title">
+            <comment>the wiki page title.</comment>
+        </property>
+        <property type='Boolean' name="is_public">
+            <comment>whether the wiki is public.</comment>
+        </property>
+        <property type='Date' name="create_date">
+            <comment>the wiki creation date.</comment>
+        </property>
+        <property type='Integer' name="last_version">
+            <comment>the last version.</comment>
+        </property>
+        <property type='String' name="author">
+            <comment>the wiki page author.</comment>
+        </property>
+    </class>
+
+    <query name='wiki-page-list'>
+       <comment>Get the list of wiki pages</comment>
+       <sql>
+    SELECT
+      page.id,
+      page.name,
+      page.title,
+      page.is_public,
+      content.create_date,
+      page.last_version,
+      user.name
+    FROM awa_wiki_page AS page
+    INNER JOIN awa_acl AS acl ON acl.entity_id = :wiki_id AND acl.entity_type = :table AND acl.user_id = :user_id
+    LEFT JOIN awa_wiki_content AS content ON page.content_id = content.id
+    LEFT JOIN awa_user AS user ON content.author_id = user.id
+    WHERE page.wiki_id = :wiki_id
+    ORDER BY content.create_date DESC
+    LIMIT :first, :count
+       </sql>
+       <sql-count>
+    SELECT
+       count(page.id)
+    FROM awa_wiki_page AS page
+    INNER JOIN awa_acl AS acl ON acl.entity_id = :wiki_id AND acl.entity_type = :table AND acl.user_id = :user_id
+    WHERE page.wiki_id = :wiki_id
+       </sql-count>
+    </query>
+
+</query-mapping>
