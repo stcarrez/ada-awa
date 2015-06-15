@@ -1711,7 +1711,7 @@ package body AWA.Wikis.Models is
       elsif Name = "tag" then
          Item.Tag := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "wiki_id" then
-         Item.Wiki_Id := Util.Beans.Objects.To_Integer (Value);
+         Item.Wiki_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
       end if;
    end Set_Value;
 

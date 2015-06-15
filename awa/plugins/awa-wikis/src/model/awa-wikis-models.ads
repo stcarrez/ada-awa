@@ -562,7 +562,7 @@ package AWA.Wikis.Models is
       Count : Integer;
       Page_Size : Integer;
       Tag : Ada.Strings.Unbounded.Unbounded_String;
-      Wiki_Id : Integer;
+      Wiki_Id : ADO.Identifier;
    end record;
 
    --  This bean provides some methods that can be used in a Method_Expression.
