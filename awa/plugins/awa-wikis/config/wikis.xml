@@ -23,6 +23,13 @@
   </managed-bean>
 
   <managed-bean>
+    <description>The list of wiki pages.</description>
+    <managed-bean-name>pages</managed-bean-name>
+    <managed-bean-class>AWA.Wikis.Beans.Wiki_List_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
     <description>The wiki tag search bean.</description>
     <managed-bean-name>wikiTagSearch</managed-bean-name>
     <managed-bean-class>AWA.Tags.Beans.Tag_Search_Bean</managed-bean-class>
