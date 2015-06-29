@@ -716,6 +716,8 @@ CREATE TABLE awa_wiki_space (
   `is_public` TINYINT NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
+  /* the wiki creation date. */
+  `create_date` DATETIME NOT NULL,
   /*  */
   `workspace_id` BIGINT NOT NULL
 );
