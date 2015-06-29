@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  AWA tests - AWA Tests Framework
---  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -123,6 +123,7 @@ package body AWA.Tests is
       ASF.Tests.Initialize (Props, Application.all'Access, Factory);
       Application.Add_Filter ("service", Service_Filter'Access);
       Application.Add_Filter_Mapping (Name => "service", Pattern => "*.html");
+      Application.Start;
    end Initialize;
 
    --  ------------------------------
@@ -171,9 +172,9 @@ package body AWA.Tests is
       Log.Info ("Initializing application filters...");
 
       AWA.Applications.Application (App).Initialize_Filters;
-      App.Add_Filter (Name => "dump", Filter => App.Dump'Access);
-      App.Add_Filter (Name => "measures", Filter => App.Measures'Access);
-      App.Add_Filter (Name => "service", Filter => App.Service_Filter'Access);
+      App.Add_Filter (Name => "dump", Filter => App.Dump'Unchecked_Access);
+      App.Add_Filter (Name => "measures", Filter => App.Measures'Unchecked_Access);
+      App.Add_Filter (Name => "service", Filter => App.Service_Filter'Unchecked_Access);
    end Initialize_Filters;
 
 end AWA.Tests;
