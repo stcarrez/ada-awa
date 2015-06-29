@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-dispatchers-tasks -- AWA Event Dispatchers
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -141,6 +141,10 @@ package body AWA.Events.Dispatchers.Tasks is
                      accept Stop do
                         Do_Work := False;
                      end Stop;
+                  or
+                     accept Start (D : in Task_Dispatcher_Access) do
+                        Dispatcher := D;
+                     end Start;
                   or
                      delay Time;
                   end select;
