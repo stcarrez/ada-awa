@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with Util.Log;
 with Util.Test_Caller;
 
 with ASF.Tests;
@@ -106,6 +107,7 @@ package body AWA.Users.Tests is
       Principal : AWA.Tests.Helpers.Users.Test_User;
    begin
       AWA.Tests.Set_Application_Context;
+      AWA.Tests.Get_Application.Dump_Routes (Util.Log.INFO_LEVEL);
       begin
          AWA.Tests.Helpers.Users.Create_User (Principal, "Joe@gmail.com");
 
