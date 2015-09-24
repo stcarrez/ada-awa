@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------
 --  atlas -- atlas applications
 -----------------------------------------------------------------------
---  Copyright (C) 2012, 2013, 2014 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2014, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -190,9 +190,9 @@ package body Atlas.Applications is
       Log.Info ("Initializing application filters...");
 
       AWA.Applications.Application (App).Initialize_Filters;
-      App.Add_Filter (Name => "dump", Filter => App.Dump'Access);
-      App.Add_Filter (Name => "measures", Filter => App.Measures'Access);
-      App.Add_Filter (Name => "service", Filter => App.Service_Filter'Access);
+      App.Add_Filter (Name => "dump", Filter => App.Self.Dump'Access);
+      App.Add_Filter (Name => "measures", Filter => App.Self.Measures'Access);
+      App.Add_Filter (Name => "service", Filter => App.Self.Service_Filter'Access);
    end Initialize_Filters;
 
    --  ------------------------------
