@@ -3223,6 +3223,10 @@ awa_ado_configure="${awa_ado_configure} --prefix=${prefix}"
 awa_dynamo_configure="${awa_dynamo_configure} --prefix=${prefix}"
 awa_awa_configure="${awa_awa_configure} --prefix=${prefix}"
 
+if test x${ac_enable_ahven} = xyes; then
+   awa_util_configure="${awa_util_configure} --enable-ahven"
+fi
+
 ##########################################
 # Check for XML Ada
 ##########################################
