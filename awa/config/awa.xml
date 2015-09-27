@@ -96,6 +96,27 @@
     </description>
   </context-param>
 
+  <managed-bean>
+    <managed-bean-name>jquery</managed-bean-name>
+    <managed-bean-class>ASF.Beans.Map_Bean</managed-bean-class>
+    <managed-bean-scope>application</managed-bean-scope>
+    <managed-property>
+      <property-name>path</property-name>
+      <property-class>String</property-class>
+      <value>#{contextPath}/js/jquery-1.11.3.js</value>
+    </managed-property>
+    <managed-property>
+      <property-name>uiPath</property-name>
+      <property-class>String</property-class>
+      <value>#{contextPath}/js/jquery-ui-1.11.4/</value>
+    </managed-property>
+    <managed-property>
+      <property-name>uiCssPath</property-name>
+      <property-class>String</property-class>
+      <value>#{contextPath}/css/redmond/jquery-ui-1.11.4.css</value>
+    </managed-property>
+  </managed-bean>
+
   <servlet-mapping>
     <servlet-name>faces</servlet-name>
     <url-pattern>*.html</url-pattern>
