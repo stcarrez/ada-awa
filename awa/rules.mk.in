@@ -8,6 +8,7 @@ AWA_LIBRARY_TYPE=static
 MODE=debug
 GNATMAKE=@GNATMAKE@
 GNATCLEAN=gnatclean
+GPRINSTALL=@GPRINSTALL@
 SVN=svn
 INSTALL=@INSTALL@
 
@@ -164,23 +165,13 @@ install_shared:
 	$(MAKE) AWA_LIBRARY_TYPE=relocatable install_lib
 
 install_lib:  pre-install
-	rm -rf ${includedir}/${NAME}
-	rm -f ${projectdir}/${NAME}.gpr
 	rm -rf ${dynamodir}/${NAME}
-	rm -rf ${alidir}/${NAME}
-	$(MKDIR) -p ${includedir}/${NAME}
-	$(MKDIR) -p ${projectdir}/
 	${MKDIR} -p ${dynamodir}/${NAME}/config
 	${MKDIR} -p ${dynamodir}/${NAME}/bundles
 	${MKDIR} -p ${dynamodir}/${NAME}/web
 	${MKDIR} -p ${dynamodir}/${NAME}/db
 	${MKDIR} -p ${dynamodir}/${NAME}/db/mysql
 	${MKDIR} -p ${dynamodir}/${NAME}/db/sqlite
-	test ! -d src || ${CP} src/*.ad[bs] ${includedir}/${NAME}
-	test ! -d src/model || ${CP} src/model/*.ad[bs] ${includedir}/${NAME}
-	test ! -f distrib/${GPRPATH} || \
-	    sed -e "s,INSTALL,${prefix},g" \
-	        -e "s,LIBRARY_TYPE,$(AWA_LIBRARY_TYPE),g" < distrib/${GPRPATH} > ${projectdir}/${GPRPATH}
 	test ! -d config || ${CP} config/*.xml ${dynamodir}/${NAME}/config/
 	${CP} dynamo.xml ${dynamodir}/${NAME}/dynamo.xml
 	test ! -f NOTICE.txt || ${CP} NOTICE.txt ${dynamodir}/${NAME}/NOTICE.txt
@@ -191,11 +182,25 @@ install_lib:  pre-install
 	test ! -d bundles || ${CP} bundles/*.properties ${dynamodir}/${NAME}/bundles/
 	test ! -d db || \
 	     (tar --exclude=.svn --exclude='*~' -cf - db)| (cd ${dynamodir}/${NAME}/ && tar xf -)
+	test ! -d web || \
+	     (tar --exclude=.svn --exclude='*~' -cf - web )| (cd ${dynamodir}/${NAME}/ && tar xf -)
+ifneq (${GPRINSTALL},)
+	$(GPRINSTALL) -p -f --prefix=${prefix} $(MAKE_ARGS) \
+		--build-name=$(AWA_LIBRARY_TYPE) $(GPRPATH)
+else
+	rm -rf ${includedir}/${NAME}
+	rm -f ${projectdir}/${NAME}.gpr
+	rm -rf ${alidir}/${NAME}
+	$(MKDIR) -p ${includedir}/${NAME}
+	$(MKDIR) -p ${projectdir}/
+	test ! -d src || ${CP} src/*.ad[bs] ${includedir}/${NAME}
+	test ! -d src/model || ${CP} src/model/*.ad[bs] ${includedir}/${NAME}
+	test ! -f distrib/${GPRPATH} || \
+	    sed -e "s,INSTALL,${prefix},g" \
+	        -e "s,LIBRARY_TYPE,$(AWA_LIBRARY_TYPE),g" < distrib/${GPRPATH} > ${projectdir}/${GPRPATH}
 	test ! -d lib/${NAME}/${AWA_LIBRARY_TYPE} || \
 	     (${MKDIR} -p ${alidir}/${NAME}/ && \
 	     ${CP} lib/${NAME}/$(AWA_LIBRARY_TYPE)/*.ali ${alidir}/${NAME}/)
-	test ! -d web || \
-	     (tar --exclude=.svn --exclude='*~' -cf - web )| (cd ${dynamodir}/${NAME}/ && tar xf -)
 ifeq ($(AWA_LIBRARY_TYPE),static)
 	test ! -f lib/${NAME}/$(AWA_LIBRARY_TYPE)/${LIBNAME}.a || \
 	     ${CP} lib/${NAME}/$(AWA_LIBRARY_TYPE)/${LIBNAME}.a ${libdir}/
@@ -206,7 +211,7 @@ else
 	      rm -f ${LIBNAME}.$(LIBEXT) && \
 	      ${LN} ${LIBNAME}.$(LIBVER) ${LIBNAME}.$(LIBEXT))
 endif
-
+endif
 
 uninstall:  pre-uninstall
 	rm -rf ${includedir}/${NAME}
