@@ -107,6 +107,12 @@ package body AWA.Wikis.Beans is
          else
             return Util.Beans.Objects.To_Object (String '(From.Content.Get_Content));
          end if;
+      elsif Name = "date" then
+         if From.Content.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return From.Content.Get_Value ("create_date");
+         end if;
       elsif Name = "comment" then
          if From.Content.Is_Null then
             return Util.Beans.Objects.Null_Object;
@@ -146,6 +152,9 @@ package body AWA.Wikis.Beans is
          From.Set_Is_Public (Util.Beans.Objects.To_Boolean (Value));
       elsif Name = "text" then
          From.Has_Content := True;
+         if From.Content.Is_Inserted then
+            From.Content := AWA.Wikis.Models.Null_Wiki_Content;
+         end if;
          From.Content.Set_Content (Util.Beans.Objects.To_String (Value));
       elsif Name = "comment" then
          From.Content.Set_Save_Comment (Util.Beans.Objects.To_String (Value));
