@@ -304,26 +304,6 @@
   </entity-permission>
 
   <servlet-mapping>
-    <servlet-name>files</servlet-name>
-    <url-pattern>*.js</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
-    <servlet-name>files</servlet-name>
-    <url-pattern>*.gif</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
-    <servlet-name>files</servlet-name>
-    <url-pattern>*.css</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
-    <servlet-name>files</servlet-name>
-    <url-pattern>*.png</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
     <servlet-name>ajax</servlet-name>
     <url-pattern>/blogs/ajax/*</url-pattern>
   </servlet-mapping>
@@ -331,26 +311,13 @@
   <filter-mapping>
     <filter-name>service</filter-name>
     <url-pattern>/blogs/*.html</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>service</filter-name>
     <url-pattern>/blogs/ajax/*</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
     <filter-name>auth-filter</filter-name>
     <url-pattern>/blogs/ajax/*</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>auth-filter</filter-name>
     <url-pattern>/blogs/admin/*.html</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>dump</filter-name>
-    <url-pattern>*.css</url-pattern>
   </filter-mapping>
 
   <policy>
