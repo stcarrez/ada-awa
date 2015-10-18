@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa -- Ada Web Application
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -186,6 +186,9 @@ package body AWA.Applications is
 
       --  Start the application.
       ASF.Applications.Main.Application (App).Start;
+
+      --  Dump the route and filters to help in configuration issues.
+      App.Dump_Routes (Util.Log.INFO_LEVEL);
    end Start;
 
    --  ------------------------------
