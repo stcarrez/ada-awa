@@ -89,12 +89,16 @@
 
   <filter-mapping>
     <filter-name>service</filter-name>
+    <url-pattern>/wikis/view/#{wikiPage.wikiId}/#{wikiPage.name}</url-pattern>
+    <url-pattern>/wikis/edit/#{wikiPage.wikiId}/#{wikiPage.name}</url-pattern>
     <url-pattern>/wikis/*.html</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
     <filter-name>auth-filter</filter-name>
-    <url-pattern>/wikis/admin/*.html</url-pattern>
+    <url-pattern>/wikis/view/#{wikiPage.wikiId}/#{wikiPage.name}</url-pattern>
+    <url-pattern>/wikis/edit/#{wikiPage.wikiId}/#{wikiPage.name}</url-pattern>
+    <url-pattern>/wikis/*.html</url-pattern>
   </filter-mapping>
 
     <entity-permission>
@@ -180,6 +184,22 @@
   <url-policy>
     <permission>logged-user</permission>
     <url-pattern>/wikis/admin/.*</url-pattern>
+    <url-pattern>/wikis/edit/.*</url-pattern>
   </url-policy>
+
+  <url-policy>
+    <permission>logged-user</permission>
+    <url-pattern>/wikis/view/.*</url-pattern>
+  </url-policy>
+
+  <url-mapping>
+    <pattern>/wikis/view/#{wikiPage.wikiId}/#{wikiPage.name}</pattern>
+    <view-id>/wikis/view.html</view-id>
+  </url-mapping>
+
+  <url-mapping>
+    <pattern>/wikis/edit/#{wikiPage.wikiId}/#{wikiPage.name}</pattern>
+    <view-id>/wikis/admin/edit.html</view-id>
+  </url-mapping>
 
 </module>
