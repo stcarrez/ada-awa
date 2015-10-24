@@ -1,0 +1,67 @@
+<!-- View an existing wiki page
+  -  Copyright (C) 2015 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<ui:composition template="/WEB-INF/layouts/layout.xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:awa="http://code.google.com/p/ada-awa/jsf"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:u="http://code.google.com/p/ada-asf/util"
+                xmlns:h="http://java.sun.com/jsf/html">
+    <ui:param name="title" value="#{wikiView.title}"/>
+
+    <ui:define name="pageHeader">
+        <f:metadata>
+            <f:viewAction action='#{wikiView.load}'/>
+        </f:metadata>
+    </ui:define>
+
+    <!-- Main page body -->
+    <ui:define name="pageBody">
+      <div id='awa-content'>
+          <ui:include src="lists/menu-list.xhtml"/>
+          <div class='wiki-page-container'>
+              <div class='wiki-page' id="p_#{wikiView.id}">
+                  <div class='wiki-title'>
+                      <ul class="wiki-page-actions">
+                          <h:panelGroup rendered="#{wikiView.acl_id gt 1}">
+                              <li>
+                                  <a class='awa-button' href="#{contextPath}/wikis/edit/#{wikiView.wikiId}/#{wikiView.name}">Edit</a>
+                              </li>
+                          </h:panelGroup>
+                          <li>
+                              <a class='awa-button' href="#{contextPath}/wikis/edit/#{wikiView.wikiId}/#{wikiView.name}">View</a>
+                          </li>
+                          <li>
+                              <a class='awa-button' href="#{contextPath}/wikis/history/#{wikiView.wikiId}/#{wikiView.name}">History</a>
+                          </li>
+                      </ul>
+                      <h2>#{wikiView.title}</h2>
+                      <div class="wiki-page-info">
+                          <p><h:outputText id="date" value="#{wikiView.date}" converter="dateConverter"/></p>
+                          <p>Version #{wikiView.version} by #{wikiView.author}</p>
+                      </div>
+                  </div>
+                  <awa:tagList value='#{wikiView.tags}' id='qtags' styleClass="tagedit-list"
+                               tagLink="#{contextPath}/wikis/tagged.html?tag=#{tagName}"
+                               var="tagName"
+                               tagClass="tagedit-listelement tagedit-listelement-old"/>
+                  <awa:wiki styleClass='wiki-text' value="#{wikiView.content}" format="dotclear"/>
+              </div>
+          </div>
+      </div>
+    </ui:define>
+</ui:composition>
