@@ -68,6 +68,10 @@ package body AWA.Wikis.Modules is
                          Name   => "AWA.Wikis.Beans.Wiki_List_Bean",
                          Handler => AWA.Wikis.Beans.Create_Wiki_List_Bean'Access);
 
+      Register.Register (Plugin => Plugin,
+                         Name   => "AWA.Wikis.Beans.Wiki_View_Bean",
+                         Handler => AWA.Wikis.Beans.Create_Wiki_View_Bean'Access);
+
       AWA.Modules.Module (Plugin).Initialize (App, Props);
 
       --  Add here the creation of manager instances.
