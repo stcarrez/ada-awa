@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -338,12 +338,15 @@ package AWA.Blogs.Models is
 
 
 
+
    Query_Blog_Tag_Cloud : constant ADO.Queries.Query_Definition_Access;
 
    --  --------------------
-   --  The Admin_Post_Info describes a post in the administration interface.
+   --    The Admin_Post_Info describes a post in the administration interface.
    --  --------------------
-   type Admin_Post_Info is new Util.Beans.Basic.Readonly_Bean with record
+   type Admin_Post_Info is
+     new Util.Beans.Basic.Bean with  record
+
       --  the post identifier.
       Id : ADO.Identifier;
 
@@ -364,13 +367,20 @@ package AWA.Blogs.Models is
 
       --  the number of comments for this post.
       Comment_Count : Natural;
-
    end record;
 
-   --  Get the bean attribute identified by the given name.
+   --  Get the bean attribute identified by the name.
    overriding
    function Get_Value (From : in Admin_Post_Info;
                        Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Admin_Post_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+
 
    package Admin_Post_Info_Beans is
       new Util.Beans.Basic.Lists (Element_Type => Admin_Post_Info);
@@ -394,9 +404,11 @@ package AWA.Blogs.Models is
    Query_Blog_Admin_Post_List : constant ADO.Queries.Query_Definition_Access;
 
    --  --------------------
-   --  The list of blogs.
+   --    The list of blogs.
    --  --------------------
-   type Blog_Info is new Util.Beans.Basic.Readonly_Bean with record
+   type Blog_Info is
+     new Util.Beans.Basic.Bean with  record
+
       --  the blog identifier.
       Id : ADO.Identifier;
 
@@ -411,13 +423,20 @@ package AWA.Blogs.Models is
 
       --  the number of posts published.
       Post_Count : Integer;
-
    end record;
 
-   --  Get the bean attribute identified by the given name.
+   --  Get the bean attribute identified by the name.
    overriding
    function Get_Value (From : in Blog_Info;
                        Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Blog_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+
 
    package Blog_Info_Beans is
       new Util.Beans.Basic.Lists (Element_Type => Blog_Info);
@@ -441,9 +460,11 @@ package AWA.Blogs.Models is
    Query_Blog_List : constant ADO.Queries.Query_Definition_Access;
 
    --  --------------------
-   --  The comment information.
+   --    The comment information.
    --  --------------------
-   type Comment_Info is new Util.Beans.Basic.Readonly_Bean with record
+   type Comment_Info is
+     new Util.Beans.Basic.Bean with  record
+
       --  the comment identifier.
       Id : ADO.Identifier;
 
@@ -464,13 +485,20 @@ package AWA.Blogs.Models is
 
       --  the comment status.
       Status : AWA.Comments.Models.Status_Type;
-
    end record;
 
-   --  Get the bean attribute identified by the given name.
+   --  Get the bean attribute identified by the name.
    overriding
    function Get_Value (From : in Comment_Info;
                        Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Comment_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+
 
    package Comment_Info_Beans is
       new Util.Beans.Basic.Lists (Element_Type => Comment_Info);
@@ -494,9 +522,11 @@ package AWA.Blogs.Models is
    Query_Comment_List : constant ADO.Queries.Query_Definition_Access;
 
    --  --------------------
-   --  The Post_Info describes a post to be displayed in the blog page
+   --    The Post_Info describes a post to be displayed in the blog page
    --  --------------------
-   type Post_Info is new Util.Beans.Basic.Readonly_Bean with record
+   type Post_Info is
+     new Util.Beans.Basic.Bean with  record
+
       --  the post identifier.
       Id : ADO.Identifier;
 
@@ -517,13 +547,20 @@ package AWA.Blogs.Models is
 
       --  the number of comments for this post.
       Comment_Count : Natural;
-
    end record;
 
-   --  Get the bean attribute identified by the given name.
+   --  Get the bean attribute identified by the name.
    overriding
    function Get_Value (From : in Post_Info;
                        Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Post_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+
 
    package Post_Info_Beans is
       new Util.Beans.Basic.Lists (Element_Type => Post_Info);
@@ -559,7 +596,7 @@ package AWA.Blogs.Models is
                                  return Util.Beans.Methods.Method_Binding_Array_Access;
 
 
-   --  Set the value identified by the name.
+   --  Set the bean attribute identified by the name.
    overriding
    procedure Set_Value (Item  : in out Blog_Bean;
                         Name  : in String;
@@ -578,7 +615,7 @@ package AWA.Blogs.Models is
                                  return Util.Beans.Methods.Method_Binding_Array_Access;
 
 
-   --  Set the value identified by the name.
+   --  Set the bean attribute identified by the name.
    overriding
    procedure Set_Value (Item  : in out Post_Bean;
                         Name  : in String;
@@ -606,12 +643,12 @@ package AWA.Blogs.Models is
    function Get_Method_Bindings (From : in Post_List_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access;
 
-   --  Get the value identified by the name.
+   --  Get the bean attribute identified by the name.
    overriding
    function Get_Value (From : in Post_List_Bean;
                        Name : in String) return Util.Beans.Objects.Object;
 
-   --  Set the value identified by the name.
+   --  Set the bean attribute identified by the name.
    overriding
    procedure Set_Value (Item  : in out Post_List_Bean;
                         Name  : in String;

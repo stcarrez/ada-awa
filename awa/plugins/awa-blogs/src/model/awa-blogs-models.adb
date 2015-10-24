@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -487,6 +487,10 @@ package body AWA.Blogs.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Blog_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -511,7 +515,6 @@ package body AWA.Blogs.Models is
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
-
 
 
    procedure List (Object  : in out Blog_Vector;
@@ -1092,6 +1095,10 @@ package body AWA.Blogs.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Post_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -1118,7 +1125,7 @@ package body AWA.Blogs.Models is
             return Util.Beans.Objects.Time.To_Object (Impl.Publish_Date.Value);
          end if;
       elsif Name = "status" then
-         return Post_Status_Type_Objects.To_Object (Impl.Status);
+         return AWA.Blogs.Models.Post_Status_Type_Objects.To_Object (Impl.Status);
       elsif Name = "allow_comments" then
          return Util.Beans.Objects.To_Object (Impl.Allow_Comments);
       end if;
@@ -1154,36 +1161,57 @@ package body AWA.Blogs.Models is
    end Load;
 
 
-   --  --------------------
-   --  Get the bean attribute identified by the given name.
-   --  --------------------
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
    overriding
    function Get_Value (From : in Admin_Post_Info;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
       if Name = "id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
-      end if;
-      if Name = "title" then
+      elsif Name = "title" then
          return Util.Beans.Objects.To_Object (From.Title);
-      end if;
-      if Name = "uri" then
+      elsif Name = "uri" then
          return Util.Beans.Objects.To_Object (From.Uri);
-      end if;
-      if Name = "date" then
+      elsif Name = "date" then
          return Util.Beans.Objects.Time.To_Object (From.Date);
-      end if;
-      if Name = "status" then
+      elsif Name = "status" then
          return AWA.Blogs.Models.Post_Status_Type_Objects.To_Object (From.Status);
-      end if;
-      if Name = "username" then
+      elsif Name = "username" then
          return Util.Beans.Objects.To_Object (From.Username);
-      end if;
-      if Name = "comment_count" then
+      elsif Name = "comment_count" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Comment_Count));
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Admin_Post_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "id" then
+         Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "title" then
+         Item.Title := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "uri" then
+         Item.Uri := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "date" then
+         Item.Date := Util.Beans.Objects.Time.To_Time (Value);
+      elsif Name = "status" then
+         Item.Status := AWA.Blogs.Models.Post_Status_Type_Objects.To_Value (Value);
+      elsif Name = "username" then
+         Item.Username := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "comment_count" then
+         Item.Comment_Count := Util.Beans.Objects.To_Integer (Value);
+      end if;
+   end Set_Value;
+
 
    --  --------------------
    --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
@@ -1194,6 +1222,7 @@ package body AWA.Blogs.Models is
    begin
       List (Object.List, Session, Context);
    end List;
+
    --  --------------------
    --  The Admin_Post_Info describes a post in the administration interface.
    --  --------------------
@@ -1227,30 +1256,50 @@ package body AWA.Blogs.Models is
    end List;
 
 
-   --  --------------------
-   --  Get the bean attribute identified by the given name.
-   --  --------------------
+
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
    overriding
    function Get_Value (From : in Blog_Info;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
       if Name = "id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
-      end if;
-      if Name = "title" then
+      elsif Name = "title" then
          return Util.Beans.Objects.To_Object (From.Title);
-      end if;
-      if Name = "uid" then
+      elsif Name = "uid" then
          return Util.Beans.Objects.To_Object (From.Uid);
-      end if;
-      if Name = "create_date" then
+      elsif Name = "create_date" then
          return Util.Beans.Objects.Time.To_Object (From.Create_Date);
-      end if;
-      if Name = "post_count" then
+      elsif Name = "post_count" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Post_Count));
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Blog_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "id" then
+         Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "title" then
+         Item.Title := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "uid" then
+         Item.Uid := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "create_date" then
+         Item.Create_Date := Util.Beans.Objects.Time.To_Time (Value);
+      elsif Name = "post_count" then
+         Item.Post_Count := Util.Beans.Objects.To_Integer (Value);
+      end if;
+   end Set_Value;
+
 
    --  --------------------
    --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
@@ -1261,6 +1310,7 @@ package body AWA.Blogs.Models is
    begin
       List (Object.List, Session, Context);
    end List;
+
    --  --------------------
    --  The list of blogs.
    --  --------------------
@@ -1292,36 +1342,58 @@ package body AWA.Blogs.Models is
    end List;
 
 
-   --  --------------------
-   --  Get the bean attribute identified by the given name.
-   --  --------------------
+
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
    overriding
    function Get_Value (From : in Comment_Info;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
       if Name = "id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
-      end if;
-      if Name = "post_id" then
+      elsif Name = "post_id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Post_Id));
-      end if;
-      if Name = "title" then
+      elsif Name = "title" then
          return Util.Beans.Objects.To_Object (From.Title);
-      end if;
-      if Name = "author" then
+      elsif Name = "author" then
          return Util.Beans.Objects.To_Object (From.Author);
-      end if;
-      if Name = "email" then
+      elsif Name = "email" then
          return Util.Beans.Objects.To_Object (From.Email);
-      end if;
-      if Name = "date" then
+      elsif Name = "date" then
          return Util.Beans.Objects.Time.To_Object (From.Date);
-      end if;
-      if Name = "status" then
+      elsif Name = "status" then
          return AWA.Comments.Models.Status_Type_Objects.To_Object (From.Status);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Comment_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "id" then
+         Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "post_id" then
+         Item.Post_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "title" then
+         Item.Title := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "author" then
+         Item.Author := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "email" then
+         Item.Email := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "date" then
+         Item.Date := Util.Beans.Objects.Time.To_Time (Value);
+      elsif Name = "status" then
+         Item.Status := AWA.Comments.Models.Status_Type_Objects.To_Value (Value);
+      end if;
+   end Set_Value;
+
 
    --  --------------------
    --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
@@ -1332,6 +1404,7 @@ package body AWA.Blogs.Models is
    begin
       List (Object.List, Session, Context);
    end List;
+
    --  --------------------
    --  The comment information.
    --  --------------------
@@ -1365,36 +1438,58 @@ package body AWA.Blogs.Models is
    end List;
 
 
-   --  --------------------
-   --  Get the bean attribute identified by the given name.
-   --  --------------------
+
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
    overriding
    function Get_Value (From : in Post_Info;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
       if Name = "id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
-      end if;
-      if Name = "title" then
+      elsif Name = "title" then
          return Util.Beans.Objects.To_Object (From.Title);
-      end if;
-      if Name = "uri" then
+      elsif Name = "uri" then
          return Util.Beans.Objects.To_Object (From.Uri);
-      end if;
-      if Name = "date" then
+      elsif Name = "date" then
          return Util.Beans.Objects.Time.To_Object (From.Date);
-      end if;
-      if Name = "username" then
+      elsif Name = "username" then
          return Util.Beans.Objects.To_Object (From.Username);
-      end if;
-      if Name = "text" then
+      elsif Name = "text" then
          return Util.Beans.Objects.To_Object (From.Text);
-      end if;
-      if Name = "comment_count" then
+      elsif Name = "comment_count" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Comment_Count));
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Post_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "id" then
+         Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "title" then
+         Item.Title := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "uri" then
+         Item.Uri := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "date" then
+         Item.Date := Util.Beans.Objects.Time.To_Time (Value);
+      elsif Name = "username" then
+         Item.Username := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "text" then
+         Item.Text := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "comment_count" then
+         Item.Comment_Count := Util.Beans.Objects.To_Integer (Value);
+      end if;
+   end Set_Value;
+
 
    --  --------------------
    --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
@@ -1405,6 +1500,7 @@ package body AWA.Blogs.Models is
    begin
       List (Object.List, Session, Context);
    end List;
+
    --  --------------------
    --  The Post_Info describes a post to be displayed in the blog page
    --  --------------------
@@ -1454,25 +1550,37 @@ package body AWA.Blogs.Models is
      := (1 => Binding_Blog_Bean_1.Proxy'Access
      );
 
+   --  ------------------------------
    --  This bean provides some methods that can be used in a Method_Expression.
+   --  ------------------------------
    overriding
    function Get_Method_Bindings (From : in Blog_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
    begin
       return Binding_Blog_Bean_Array'Access;
    end Get_Method_Bindings;
 
-
+   --  ------------------------------
    --  Set the value identified by the name
-   overriding 
+   --  ------------------------------
+   overriding
    procedure Set_Value (Item  : in out Blog_Bean;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      null;
+      if Name = "name" then
+         Item.Set_Name (Util.Beans.Objects.To_String (Value));
+      elsif Name = "uid" then
+         Item.Set_Uid (Util.Beans.Objects.To_String (Value));
+      elsif Name = "create_date" then
+         Item.Set_Create_Date (Util.Beans.Objects.Time.To_Time (Value));
+      elsif Name = "update_date" then
+         Item.Set_Update_Date (Util.Beans.Objects.Time.To_Time (Value));
+      elsif Name = "url" then
+         Item.Set_Url (Util.Beans.Objects.To_String (Value));
+      end if;
    end Set_Value;
-
-
 
    procedure Op_Save (Bean    : in out Post_Bean;
                       Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
@@ -1514,25 +1622,46 @@ package body AWA.Blogs.Models is
          3 => Binding_Post_Bean_3.Proxy'Access
      );
 
+   --  ------------------------------
    --  This bean provides some methods that can be used in a Method_Expression.
+   --  ------------------------------
    overriding
    function Get_Method_Bindings (From : in Post_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
    begin
       return Binding_Post_Bean_Array'Access;
    end Get_Method_Bindings;
 
-
+   --  ------------------------------
    --  Set the value identified by the name
-   overriding 
+   --  ------------------------------
+   overriding
    procedure Set_Value (Item  : in out Post_Bean;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      null;
+      if Name = "title" then
+         Item.Set_Title (Util.Beans.Objects.To_String (Value));
+      elsif Name = "text" then
+         Item.Set_Text (Util.Beans.Objects.To_String (Value));
+      elsif Name = "create_date" then
+         Item.Set_Create_Date (Util.Beans.Objects.Time.To_Time (Value));
+      elsif Name = "uri" then
+         Item.Set_Uri (Util.Beans.Objects.To_String (Value));
+      elsif Name = "publish_date" then
+         if Util.Beans.Objects.Is_Null (Value) then
+            Item.Set_Publish_Date (ADO.Nullable_Time '(Is_Null => True, others => <>));
+         else
+            Item.Set_Publish_Date (ADO.Nullable_Time '(Is_Null => False,
+                                        Value   => Util.Beans.Objects.Time.To_Time (Value)));
+         end if;
+      elsif Name = "status" then
+         Item.Set_Status (Post_Status_Type_Objects.To_Value (Value));
+      elsif Name = "allow_comments" then
+         Item.Set_Allow_Comments (Util.Beans.Objects.To_Boolean (Value));
+      end if;
    end Set_Value;
-
-
 
    procedure Op_Load (Bean    : in out Post_List_Bean;
                       Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
@@ -1550,14 +1679,20 @@ package body AWA.Blogs.Models is
      := (1 => Binding_Post_List_Bean_1.Proxy'Access
      );
 
+   --  ------------------------------
    --  This bean provides some methods that can be used in a Method_Expression.
+   --  ------------------------------
    overriding
    function Get_Method_Bindings (From : in Post_List_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
    begin
       return Binding_Post_List_Bean_Array'Access;
    end Get_Method_Bindings;
-
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Post_List_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
@@ -1574,8 +1709,10 @@ package body AWA.Blogs.Models is
    end Get_Value;
 
 
+   --  ------------------------------
    --  Set the value identified by the name
-   overriding 
+   --  ------------------------------
+   overriding
    procedure Set_Value (Item  : in out Post_List_Bean;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
@@ -1590,8 +1727,6 @@ package body AWA.Blogs.Models is
          Item.Page_Size := Util.Beans.Objects.To_Integer (Value);
       end if;
    end Set_Value;
-
-
 
 
 end AWA.Blogs.Models;
