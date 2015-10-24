@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-beans -- Beans for blog module
---  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -59,12 +59,6 @@ package AWA.Blogs.Beans is
    overriding
    function Get_Value (From : in Blog_Bean;
                        Name : in String) return Util.Beans.Objects.Object;
-
-   --  Set the value identified by the name.
-   overriding
-   procedure Set_Value (From  : in out Blog_Bean;
-                        Name  : in String;
-                        Value : in Util.Beans.Objects.Object);
 
    --  Create a new blog.
    overriding
