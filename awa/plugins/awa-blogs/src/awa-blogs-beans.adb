@@ -77,21 +77,6 @@ package body AWA.Blogs.Beans is
    end Get_Value;
 
    --  ------------------------------
-   --  Set the value identified by the name.
-   --  ------------------------------
-   overriding
-   procedure Set_Value (From  : in out Blog_Bean;
-                        Name  : in String;
-                        Value : in Util.Beans.Objects.Object) is
-   begin
-      if Name = "name" then
-         From.Set_Name (Util.Beans.Objects.To_String (Value));
-      elsif Name = "url" then
-         From.Set_Url (Util.Beans.Objects.To_String (Value));
-      end if;
-   end Set_Value;
-
-   --  ------------------------------
    --  Create a new blog.
    --  ------------------------------
    procedure Create (Bean    : in out Blog_Bean;
@@ -291,16 +276,8 @@ package body AWA.Blogs.Beans is
          From.Load_Post (ADO.Utils.To_Identifier (Value));
       elsif Name = POST_UID_ATTR and not Util.Beans.Objects.Is_Empty (Value) then
          From.Set_Id (ADO.Utils.To_Identifier (Value));
-      elsif Name = POST_TEXT_ATTR then
-         From.Set_Text (Util.Beans.Objects.To_Unbounded_String (Value));
-      elsif Name = POST_TITLE_ATTR then
-         From.Set_Title (Util.Beans.Objects.To_Unbounded_String (Value));
-      elsif Name = POST_URI_ATTR then
-         From.Set_Uri (Util.Beans.Objects.To_Unbounded_String (Value));
-      elsif Name = POST_STATUS_ATTR then
-         From.Set_Status (AWA.Blogs.Models.Post_Status_Type_Objects.To_Value (Value));
-      elsif Name = POST_ALLOW_COMMENTS_ATTR then
-         From.Set_Allow_Comments (Util.Beans.Objects.To_Boolean (Value));
+      else
+         AWA.Blogs.Models.Post_Bean (From).Set_Value (Name, Value);
       end if;
    end Set_Value;
 
@@ -395,10 +372,8 @@ package body AWA.Blogs.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      if Name = "tag" then
-         From.Tag := Util.Beans.Objects.To_Unbounded_String (Value);
-      elsif Name = "page" and not Util.Beans.Objects.Is_Empty (Value) then
-         From.Page := Util.Beans.Objects.To_Integer (Value);
+      if Name /= "page" or else not Util.Beans.Objects.Is_Empty (Value) then
+         AWA.Blogs.Models.Post_List_Bean (From).Set_Value (Name, Value);
       end if;
    end Set_Value;
 
