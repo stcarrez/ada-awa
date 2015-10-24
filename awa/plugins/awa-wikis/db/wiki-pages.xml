@@ -40,10 +40,10 @@
       page.last_version,
       user.name
     FROM awa_wiki_page AS page
-    INNER JOIN awa_acl AS acl ON acl.entity_id = :wiki_id AND acl.entity_type = :table AND acl.user_id = :user_id
+    LEFT JOIN awa_acl AS acl ON acl.entity_id = :wiki_id AND acl.entity_type = :table AND acl.user_id = :user_id
     LEFT JOIN awa_wiki_content AS content ON page.content_id = content.id
     LEFT JOIN awa_user AS user ON content.author_id = user.id
-    WHERE page.wiki_id = :wiki_id
+    WHERE page.wiki_id = :wiki_id AND (page.is_public OR acl.id IS NOT NULL)
     ORDER BY content.create_date DESC
     LIMIT :first, :count
        </sql>
@@ -51,8 +51,8 @@
     SELECT
        count(page.id)
     FROM awa_wiki_page AS page
-    INNER JOIN awa_acl AS acl ON acl.entity_id = :wiki_id AND acl.entity_type = :table AND acl.user_id = :user_id
-    WHERE page.wiki_id = :wiki_id
+    LEFT JOIN awa_acl AS acl ON acl.entity_id = :wiki_id AND acl.entity_type = :table AND acl.user_id = :user_id
+    WHERE page.wiki_id = :wiki_id AND (page.is_public OR acl.id IS NOT NULL)
        </sql-count>
     </query>
 
