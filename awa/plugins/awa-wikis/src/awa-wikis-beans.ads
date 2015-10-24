@@ -64,7 +64,7 @@ package AWA.Wikis.Beans is
                                   return Util.Beans.Basic.Readonly_Bean_Access;
 
    type Wiki_Space_Bean is new AWA.Wikis.Models.Wiki_Space_Bean with record
-      Service   : Modules.Wiki_Module_Access := null;
+      Module    : Modules.Wiki_Module_Access := null;
 
       --  List of tags associated with the question.
       Tags      : aliased AWA.Tags.Beans.Tag_List_Bean;
@@ -98,7 +98,7 @@ package AWA.Wikis.Beans is
 
 
    type Wiki_Page_Bean is new AWA.Wikis.Models.Wiki_Page_Bean with record
-      Service    : Modules.Wiki_Module_Access := null;
+      Module     : Modules.Wiki_Module_Access := null;
 
       --  The page content.
       Content     : Models.Wiki_Content_Ref;
@@ -147,8 +147,8 @@ package AWA.Wikis.Beans is
    --  The <b>Wiki_List_Bean</b> gives a list of visible wikis to be displayed to users.
    --  The list can be filtered by a given tag.  The list pagination is supported.
    type Wiki_List_Bean is new AWA.Wikis.Models.Wiki_Page_List_Bean with record
+      Module     : Modules.Wiki_Module_Access := null;
       Pages      : aliased AWA.Wikis.Models.Wiki_Page_Info_List_Bean;
-      Service    : Modules.Wiki_Module_Access := null;
       Tags       : AWA.Tags.Beans.Entity_Tag_Map;
       Pages_Bean : AWA.Wikis.Models.Wiki_Page_Info_List_Bean_Access;
    end record;
