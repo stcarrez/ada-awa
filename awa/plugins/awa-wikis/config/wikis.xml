@@ -31,7 +31,7 @@
 
   <managed-bean>
     <description>The list of wiki pages.</description>
-    <managed-bean-name>wikiPages</managed-bean-name>
+    <managed-bean-name>wikiList</managed-bean-name>
     <managed-bean-class>AWA.Wikis.Beans.Wiki_List_Bean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
@@ -86,24 +86,28 @@
   </navigation-rule>
 
   <navigation-rule>
-    <from-view-id>/wikis/admin/create-page.xhtml</from-view-id>
+    <from-view-id>/wikis/create.xhtml</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
-      <to-view-id>/wikis/admin/view.xhtml?wiki=#{wikiPage.wikiId}&amp;page=#{wikiPage.name}</to-view-id>
+      <to-view-id>/wikis/view/#{wikiPage.wiki_id}/#{wikiPage.name}</to-view-id>
       <redirect/>
     </navigation-case>
   </navigation-rule>
 
   <filter-mapping>
     <filter-name>service</filter-name>
-    <url-pattern>/wikis/view/#{wikiView.wikiId}/#{wikiView.name}</url-pattern>
-    <url-pattern>/wikis/edit/#{wikiPage.wikiId}/#{wikiPage.name}</url-pattern>
+    <url-pattern>/wikis/view/#{wikiView.wiki_id}/#{wikiView.name}</url-pattern>
+    <url-pattern>/wikis/edit/#{wikiPage.wiki_id}/#{wikiPage.id}</url-pattern>
+    <url-pattern>/wikis/create/#{wikiPage.wiki_id}</url-pattern>
+    <url-pattern>/wikis/list/#{wikiList.wiki_id}</url-pattern>
     <url-pattern>/wikis/*.html</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
     <filter-name>auth-filter</filter-name>
-    <url-pattern>/wikis/edit/#{wikiPage.wikiId}/#{wikiPage.name}</url-pattern>
+    <url-pattern>/wikis/edit/#{wikiPage.wiki_id}/#{wikiPage.id}</url-pattern>
+    <url-pattern>/wikis/create/#{wikiPage.wiki_id}</url-pattern>
+    <url-pattern>/wikis/edit.html</url-pattern>
     <url-pattern>/wikis/*.html</url-pattern>
   </filter-mapping>
 
@@ -191,6 +195,8 @@
     <permission>logged-user</permission>
     <url-pattern>/wikis/admin/.*</url-pattern>
     <url-pattern>/wikis/edit/.*</url-pattern>
+    <url-pattern>/wikis/create/.*</url-pattern>
+    <url-pattern>/wikis/edit.html</url-pattern>
   </url-policy>
 
   <url-policy>
@@ -199,13 +205,23 @@
   </url-policy>
 
   <url-mapping>
-    <pattern>/wikis/view/#{wikiView.wikiId}/#{wikiView.name}</pattern>
+    <pattern>/wikis/view/#{wikiView.wiki_id}/#{wikiView.name}</pattern>
     <view-id>/wikis/view.html</view-id>
   </url-mapping>
 
   <url-mapping>
-    <pattern>/wikis/edit/#{wikiPage.wikiId}/#{wikiPage.name}</pattern>
+    <pattern>/wikis/list/#{wikiList.wiki_id}</pattern>
+    <view-id>/wikis/list.html</view-id>
+  </url-mapping>
+
+  <url-mapping>
+    <pattern>/wikis/edit/#{wikiPage.wiki_id}/#{wikiPage.id}</pattern>
     <view-id>/wikis/edit.html</view-id>
+  </url-mapping>
+
+  <url-mapping>
+    <pattern>/wikis/create/#{wikiPage.wiki_id}</pattern>
+    <view-id>/wikis/create.html</view-id>
   </url-mapping>
 
 </module>
