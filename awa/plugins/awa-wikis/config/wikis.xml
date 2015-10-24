@@ -2,6 +2,13 @@
 <module version="1.0">
 
   <managed-bean>
+    <description>The wiki page with all its information to display it.</description>
+    <managed-bean-name>wikiView</managed-bean-name>
+    <managed-bean-class>AWA.Wikis.Beans.Wiki_View_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
     <description>The list of wikis and pages that the current user can access and update.</description>
     <managed-bean-name>adminWiki</managed-bean-name>
     <managed-bean-class>AWA.Wikis.Beans.Wiki_Admin_Bean</managed-bean-class>
@@ -89,14 +96,13 @@
 
   <filter-mapping>
     <filter-name>service</filter-name>
-    <url-pattern>/wikis/view/#{wikiPage.wikiId}/#{wikiPage.name}</url-pattern>
+    <url-pattern>/wikis/view/#{wikiView.wikiId}/#{wikiView.name}</url-pattern>
     <url-pattern>/wikis/edit/#{wikiPage.wikiId}/#{wikiPage.name}</url-pattern>
     <url-pattern>/wikis/*.html</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
     <filter-name>auth-filter</filter-name>
-    <url-pattern>/wikis/view/#{wikiPage.wikiId}/#{wikiPage.name}</url-pattern>
     <url-pattern>/wikis/edit/#{wikiPage.wikiId}/#{wikiPage.name}</url-pattern>
     <url-pattern>/wikis/*.html</url-pattern>
   </filter-mapping>
@@ -193,13 +199,13 @@
   </url-policy>
 
   <url-mapping>
-    <pattern>/wikis/view/#{wikiPage.wikiId}/#{wikiPage.name}</pattern>
+    <pattern>/wikis/view/#{wikiView.wikiId}/#{wikiView.name}</pattern>
     <view-id>/wikis/view.html</view-id>
   </url-mapping>
 
   <url-mapping>
     <pattern>/wikis/edit/#{wikiPage.wikiId}/#{wikiPage.name}</pattern>
-    <view-id>/wikis/admin/edit.html</view-id>
+    <view-id>/wikis/edit.html</view-id>
   </url-mapping>
 
 </module>
