@@ -27,7 +27,41 @@ with ADO;
 with AWA.Wikis.Modules;
 with AWA.Wikis.Models;
 with AWA.Tags.Beans;
+
 package AWA.Wikis.Beans is
+
+   type Wiki_View_Bean is new AWA.Wikis.Models.Wiki_View_Info with record
+      --  The wiki module instance.
+      Module        : Modules.Wiki_Module_Access := null;
+
+      --  The wiki space identifier.
+      Wiki_Space_Id : ADO.Identifier;
+
+      --  List of tags associated with the wiki page.
+      Tags          : aliased AWA.Tags.Beans.Tag_List_Bean;
+      Tags_Bean     : Util.Beans.Basic.Readonly_Bean_Access;
+   end record;
+   type Wiki_View_Bean_Access is access all Wiki_View_Bean'Class;
+
+   --  Get the value identified by the name.
+   overriding
+   function Get_Value (From : in Wiki_View_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the value identified by the name.
+   overriding
+   procedure Set_Value (From  : in out Wiki_View_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   --  Load the information about the wiki page to display it.
+   overriding
+   procedure Load (Bean    : in out Wiki_View_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Create the Wiki_View_Bean bean instance.
+   function Create_Wiki_View_Bean (Module : in AWA.Wikis.Modules.Wiki_Module_Access)
+                                  return Util.Beans.Basic.Readonly_Bean_Access;
 
    type Wiki_Space_Bean is new AWA.Wikis.Models.Wiki_Space_Bean with record
       Service   : Modules.Wiki_Module_Access := null;
