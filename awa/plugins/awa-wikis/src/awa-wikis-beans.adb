@@ -44,8 +44,10 @@ package body AWA.Wikis.Beans is
          else
             return Util.Beans.Objects.To_Object (False);
          end if;
-      elsif Name = "wikiId" then
+      elsif Name = "wiki_id" then
          return ADO.Utils.To_Object (From.Wiki_Space_Id);
+      elsif Name = "tags" then
+         return Util.Beans.Objects.To_Object (From.Tags_Bean, Util.Beans.Objects.STATIC);
       else
          return AWA.Wikis.Models.Wiki_View_Info (From).Get_Value (Name);
       end if;
@@ -59,7 +61,7 @@ package body AWA.Wikis.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      if Name = "wikiId" then
+      if Name = "wiki_id" then
          From.Wiki_Space_Id := ADO.Utils.To_Identifier (Value);
       else
          AWA.Wikis.Models.Wiki_View_Info (From).Set_Value (Name, Value);
@@ -88,6 +90,7 @@ package body AWA.Wikis.Beans is
                                         Table   => AWA.Wikis.Models.WIKI_SPACE_TABLE,
                                         Session => Session);
       Bean.Load (Session, Query);
+      Bean.Tags.Load_Tags (Session, Bean.Id);
    end Load;
 
    --  ------------------------------
@@ -98,6 +101,9 @@ package body AWA.Wikis.Beans is
       Object : constant Wiki_View_Bean_Access := new Wiki_View_Bean;
    begin
       Object.Module := Module;
+      Object.Tags_Bean := Object.Tags'Access;
+      Object.Tags.Set_Entity_Type (AWA.Wikis.Models.WIKI_PAGE_TABLE);
+      Object.Tags.Set_Permission ("wiki-page-update");
       return Object.all'Access;
    end Create_Wiki_View_Bean;
 
@@ -137,9 +143,9 @@ package body AWA.Wikis.Beans is
       pragma Unreferenced (Outcome);
    begin
       if Bean.Is_Inserted then
-         Bean.Service.Save_Wiki_Space (Bean);
+         Bean.Module.Save_Wiki_Space (Bean);
       else
-         Bean.Service.Create_Wiki_Space (Bean);
+         Bean.Module.Create_Wiki_Space (Bean);
       end if;
    end Save;
 
@@ -157,7 +163,7 @@ package body AWA.Wikis.Beans is
                                     return Util.Beans.Basic.Readonly_Bean_Access is
       Object : constant Wiki_Space_Bean_Access := new Wiki_Space_Bean;
    begin
-      Object.Service   := Module;
+      Object.Module := Module;
       return Object.all'Access;
    end Create_Wiki_Space_Bean;
 
@@ -168,7 +174,7 @@ package body AWA.Wikis.Beans is
    function Get_Value (From : in Wiki_Page_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
-      if Name = "wikiId" then
+      if Name = "wiki_id" then
          if From.Wiki_Space.Is_Null then
             return Util.Beans.Objects.Null_Object;
          else
@@ -213,16 +219,10 @@ package body AWA.Wikis.Beans is
          declare
             Id  : constant ADO.Identifier := ADO.Utils.To_Identifier (Value);
          begin
-            From.Service.Load_Page (From, From.Content, From.Tags, Id);
+            From.Module.Load_Page (From, From.Content, From.Tags, Id);
          end;
-      elsif Name = "wikiId" then
+      elsif Name = "wiki_id" then
          From.Wiki_Space.Set_Id (ADO.Utils.To_Identifier (Value));
-      elsif Name = "name" then
-         From.Set_Name (Util.Beans.Objects.To_String (Value));
-      elsif Name = "title" then
-         From.Set_Title (Util.Beans.Objects.To_String (Value));
-      elsif Name = "is_public" then
-         From.Set_Is_Public (Util.Beans.Objects.To_Boolean (Value));
       elsif Name = "text" then
          From.Has_Content := True;
          if From.Content.Is_Inserted then
@@ -231,6 +231,8 @@ package body AWA.Wikis.Beans is
          From.Content.Set_Content (Util.Beans.Objects.To_String (Value));
       elsif Name = "comment" then
          From.Content.Set_Save_Comment (Util.Beans.Objects.To_String (Value));
+      else
+         AWA.Wikis.Models.Wiki_Page_Bean (From).Set_Value (Name, Value);
       end if;
    end Set_Value;
 
@@ -240,15 +242,18 @@ package body AWA.Wikis.Beans is
    overriding
    procedure Save (Bean    : in out Wiki_Page_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      Result : ADO.Identifier;
    begin
       if Bean.Is_Inserted then
-         Bean.Service.Save (Bean);
+         Bean.Module.Save (Bean);
       else
-         Bean.Service.Create_Wiki_Page (Bean.Wiki_Space, Bean);
+         Bean.Module.Create_Wiki_Page (Bean.Wiki_Space, Bean);
       end if;
       if Bean.Has_Content then
-         Bean.Service.Create_Wiki_Content (Bean, Bean.Content);
+         Bean.Module.Create_Wiki_Content (Bean, Bean.Content);
       end if;
+      Result := Bean.Get_Id;
+      Bean.Tags.Update_Tags (Result);
    end Save;
 
    --  ------------------------------
@@ -257,9 +262,11 @@ package body AWA.Wikis.Beans is
    overriding
    procedure Load (Bean    : in out Wiki_Page_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      Session      : ADO.Sessions.Session := Bean.Module.Get_Session;
    begin
-      Bean.Service.Load_Page (Bean, Bean.Content, Bean.Tags,
+      Bean.Module.Load_Page (Bean, Bean.Content, Bean.Tags,
                               Bean.Wiki_Space.Get_Id, Bean.Get_Name);
+      Bean.Tags.Load_Tags (Session, Bean.Get_Id);
 
    exception
       when ADO.Objects.NOT_FOUND =>
@@ -281,9 +288,10 @@ package body AWA.Wikis.Beans is
                                    return Util.Beans.Basic.Readonly_Bean_Access is
       Object : constant Wiki_Page_Bean_Access := new Wiki_Page_Bean;
    begin
-      Object.Service   := Module;
+      Object.Module    := Module;
       Object.Tags_Bean := Object.Tags'Access;
       Object.Tags.Set_Entity_Type (AWA.Wikis.Models.WIKI_PAGE_TABLE);
+      Object.Tags.Set_Permission ("wiki-page-update");
       return Object.all'Access;
    end Create_Wiki_Page_Bean;
 
@@ -372,7 +380,7 @@ package body AWA.Wikis.Beans is
 
       Ctx         : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       User        : constant ADO.Identifier := Ctx.Get_User_Identifier;
-      Session     : ADO.Sessions.Session := Into.Service.Get_Session;
+      Session     : ADO.Sessions.Session := Into.Module.Get_Session;
       Query       : ADO.Queries.Context;
       Count_Query : ADO.Queries.Context;
       Tag_Id      : ADO.Identifier;
@@ -427,7 +435,7 @@ package body AWA.Wikis.Beans is
                                    return Util.Beans.Basic.Readonly_Bean_Access is
       Object  : constant Wiki_List_Bean_Access := new Wiki_List_Bean;
    begin
-      Object.Service    := Module;
+      Object.Module     := Module;
       Object.Pages_Bean := Object.Pages'Access;
       Object.Page_Size  := 20;
       Object.Page       := 1;
