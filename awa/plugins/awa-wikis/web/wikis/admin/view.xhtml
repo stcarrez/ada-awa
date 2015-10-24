@@ -38,8 +38,9 @@
           <div id='blog-post-edit' class='blog-edit-post'>
               <div class='blog-post' id="p_#{wikiPage.id}">
                   <div class='post-title'>
-                      <h2>#{wikiPage.title}</h2>
-                      <p>By #{wikiPage.username} <h:outputText id="date" value="#{wikiPage.date}" converter="dateConverter"/></p>
+                      <h2>E - #{wikiPage.title}</h2>
+                      <a href="#{contextPath}/wikis/edit/#{wikiPage.wikiId}/#{wikiPage.name}">Edit</a>
+                      <p><h:outputText id="date" value="#{wikiPage.date}" converter="dateConverter"/></p>
                   </div>
                   <awa:tagList value='#{wikiPage.tags}' id='qtags' styleClass="tagedit-list"
                                tagLink="#{contextPath}/wikis/tagged.html?tag=#{tagName}"

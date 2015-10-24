@@ -1,0 +1,72 @@
+<!-- List the wiki pages for the wiki administrator
+  -  Copyright (C) 2015 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<ui:composition template="/WEB-INF/layouts/layout.xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
+                xmlns:util="http://code.google.com/p/ada-asf/util"
+                xmlns:h="http://java.sun.com/jsf/html">
+    <ui:param name="title" value="#{wikiMsg.wiki_admin_page_list_title}"/>
+
+    <!-- Main page body -->
+    <ui:define name="pageBody">
+        <f:metadata>
+            <f:viewParam id='page' value='#{wikiList.page}' required="false"/>
+            <f:viewAction action='#{wikiList.load}'/>
+        </f:metadata>
+        <div id='awa-content'>
+            <ui:include src="lists/menu-list.xhtml">
+                <ui:param name="wikiSpaceId" value="#{wikiList.wiki_id}"/>
+            </ui:include>
+            <div class='wiki-admin awa-list-header' id="wiki-page-list-header">
+                <div class="awa-list-item-header">
+                    <div class='awa-header-col wiki-page-status'></div>
+                    <div class='awa-header-col wiki-page-name'>
+                        #{wikiMsg.wiki_page_name_label}
+                    </div>
+                    <div class='awa-header-col wiki-page-title'>
+                        #{wikiMsg.wiki_page_title_label}
+                    </div>
+                    <div class='awa-header-col wiki-page-date'>
+                        #{wikiMsg.wiki_page_date_label}
+                    </div>
+                    <div class='awa-header-col wiki-page-author'>
+                        #{wikiMsg.wiki_page_author_label}
+                    </div>
+                    <div class='awa-header-col wiki-page-comment-count'>
+                        #{wikiMsg.wiki_page_comment_label}
+                    </div>
+                </div>
+            </div>
+            <div id='wiki-page-list' class='awa-list'>
+                <ui:include src="lists/page-list.xhtml"/>
+            </div>
+            <div id='wiki-page-action' class='asf-list-action'>
+                <a href="#" class='asf-icon asf-delete' title='#{wikiMsg.wiki_page_delete_action_tooltip}'></a>
+            </div>
+        </div>
+        <util:script>
+            $('#wiki-page-list').list({
+                actionId: '#wiki-page-action',
+                itemPrefix: 'p_',
+                deleteUrl: '#{contextPath}/wikis/admin/forms/page-delete.html?page_id='
+            });
+        </util:script>
+    </ui:define>
+</ui:composition>
+

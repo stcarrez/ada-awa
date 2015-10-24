@@ -54,6 +54,10 @@
     float: left;
     padding-left: 1em;
 }
+.wiki-tag-list {
+    float: right;
+    list-style-type: none;
+}
 
 /**
  * Wiki page view style.

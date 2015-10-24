@@ -21,14 +21,14 @@
         xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
     <li>
-        <a href="#{contextPath}/wikis/admin/create-page.html?id=#{adminWiki.id}"
+        <a href="#{contextPath}/wikis/create/#{wikiSpaceId}"
            title="#{wikiMsg.wiki_admin_create_page_title}">
             <img src="#{contextPath}/images/wikis/wiki-create.png" alt="#{wikiMsg.wiki_admin_create_wiki_label}"/>
             <span>#{wikiMsg.wiki_admin_create_page_label}</span>
         </a>
     </li>
     <li>
-        <a href="#{contextPath}/wikis/admin/list.html?id=#{adminWiki.id}"
+        <a href="#{contextPath}/wikis/list/#{wikiSpaceId}"
            title="#{wikiMsg.wiki_admin_list_pages_title}">
             <img src="#{contextPath}/images/wikis/wiki-document.png" alt="#{wikiMsg.wiki_admin_list_pages_label}"/>
             <span>#{wikiMsg.wiki_admin_list_pages_label}</span>
