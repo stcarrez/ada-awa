@@ -32,6 +32,79 @@ package body AWA.Wikis.Beans is
    --  Get the value identified by the name.
    --  ------------------------------
    overriding
+   function Get_Value (From : in Wiki_View_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+      use type ADO.Identifier;
+   begin
+      if Name = "is_visible" then
+         if From.Is_Public then
+            return Util.Beans.Objects.To_Object (True);
+         elsif From.Acl_Id /= ADO.NO_IDENTIFIER then
+            return Util.Beans.Objects.To_Object (True);
+         else
+            return Util.Beans.Objects.To_Object (False);
+         end if;
+      elsif Name = "wikiId" then
+         return ADO.Utils.To_Object (From.Wiki_Space_Id);
+      else
+         return AWA.Wikis.Models.Wiki_View_Info (From).Get_Value (Name);
+      end if;
+   end Get_Value;
+
+   --  ------------------------------
+   --  Set the value identified by the name.
+   --  ------------------------------
+   overriding
+   procedure Set_Value (From  : in out Wiki_View_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "wikiId" then
+         From.Wiki_Space_Id := ADO.Utils.To_Identifier (Value);
+      else
+         AWA.Wikis.Models.Wiki_View_Info (From).Set_Value (Name, Value);
+      end if;
+   end Set_Value;
+
+   --  ------------------------------
+   --  Load the information about the wiki page to display it.
+   --  ------------------------------
+   overriding
+   procedure Load (Bean    : in out Wiki_View_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
+      package ASC renames AWA.Services.Contexts;
+
+      Ctx     : constant ASC.Service_Context_Access := ASC.Current;
+      Session : ADO.Sessions.Session := Bean.Module.Get_Session;
+      Query   : ADO.Queries.Context;
+   begin
+      Query.Set_Query (AWA.Wikis.Models.Query_Wiki_Page);
+      Query.Bind_Param ("wiki_id", Bean.Wiki_Space_Id);
+      Query.Bind_Param ("name", Bean.Name);
+      Query.Bind_Param ("user_id", Ctx.Get_User_Identifier);
+      ADO.Sessions.Entities.Bind_Param (Params  => Query,
+                                        Name    => "entity_type",
+                                        Table   => AWA.Wikis.Models.WIKI_SPACE_TABLE,
+                                        Session => Session);
+      Bean.Load (Session, Query);
+   end Load;
+
+   --  ------------------------------
+   --  Create the Wiki_View_Bean bean instance.
+   --  ------------------------------
+   function Create_Wiki_View_Bean (Module : in AWA.Wikis.Modules.Wiki_Module_Access)
+                                   return Util.Beans.Basic.Readonly_Bean_Access is
+      Object : constant Wiki_View_Bean_Access := new Wiki_View_Bean;
+   begin
+      Object.Module := Module;
+      return Object.all'Access;
+   end Create_Wiki_View_Bean;
+
+   --  ------------------------------
+   --  Get the value identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Wiki_Space_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
