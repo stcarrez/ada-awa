@@ -1,0 +1,69 @@
+<query-mapping package='AWA.Wikis.Models'>
+    <description>
+      List of wiki pages
+    </description>
+
+    <class name="AWA.Wikis.Models.Wiki_View_Info" bean="yes">
+        <comment>The information about a wiki page.</comment>
+        <property type='Identifier' name="id">
+            <comment>the wiki page identifier.</comment>
+        </property>
+        <property type='String' name="name">
+            <comment>the wiki page name.</comment>
+        </property>
+        <property type='String' name="title">
+            <comment>the wiki page title.</comment>
+        </property>
+        <property type='Boolean' name="is_public">
+            <comment>whether the wiki is public.</comment>
+        </property>
+        <property type='Integer' name="version">
+            <comment>the last version.</comment>
+        </property>
+        <property type='Date' name="date">
+            <comment>the wiki page creation date.</comment>
+        </property>
+        <property type='Integer' name="format">
+            <comment>the wiki page format.</comment>
+        </property>
+        <property type='String' name="content">
+            <comment>the wiki page content.</comment>
+        </property>
+        <property type='String' name="save_comment">
+            <comment>the wiki version comment.</comment>
+        </property>
+        <property type='String' name="author">
+            <comment>the wiki page author.</comment>
+        </property>
+        <property type='Identifier' name="acl_id">
+            <comment>the acl Id if there is one.</comment>
+        </property>
+        <method name="load">
+            <comment>load the bean</comment>
+        </method>
+    </class>
+
+    <query name='wiki-page'>
+       <comment>Get the content of a wiki page.</comment>
+       <sql>
+    SELECT
+      page.id,
+      page.name,
+      page.title,
+      page.is_public,
+      page.last_version,
+      content.create_date,
+      content.format,
+      content.content,
+      content.save_comment,
+      user.name,
+      acl.id
+    FROM awa_wiki_page AS page
+    INNER JOIN awa_wiki_content AS content ON page.content_id = content.id
+    LEFT JOIN awa_acl AS acl ON acl.entity_id = page.wiki_id AND acl.entity_type = :entity_type AND acl.user_id = :user_id
+    LEFT JOIN awa_user AS user ON content.author_id = user.id
+    WHERE page.wiki_id = :wiki_id AND page.name = :name
+       </sql>
+    </query>
+
+</query-mapping>
