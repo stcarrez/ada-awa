@@ -412,6 +412,10 @@ package body AWA.Wikis.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Wiki_Space_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -899,6 +903,10 @@ package body AWA.Wikis.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Wiki_Page_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -1373,6 +1381,10 @@ package body AWA.Wikis.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Wiki_Content_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -1389,7 +1401,7 @@ package body AWA.Wikis.Models is
       elsif Name = "content" then
          return Util.Beans.Objects.To_Object (Impl.Content);
       elsif Name = "format" then
-         return Format_Objects.To_Object (Impl.Format);
+         return AWA.Wikis.Models.Format_Objects.To_Object (Impl.Format);
       elsif Name = "save_comment" then
          return Util.Beans.Objects.To_Object (Impl.Save_Comment);
       end if;
@@ -1420,30 +1432,50 @@ package body AWA.Wikis.Models is
       ADO.Objects.Set_Created (Object);
    end Load;
 
-   --  --------------------
-   --  Get the bean attribute identified by the given name.
-   --  --------------------
+
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
    overriding
    function Get_Value (From : in Wiki_Info;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
       if Name = "id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
-      end if;
-      if Name = "name" then
+      elsif Name = "name" then
          return Util.Beans.Objects.To_Object (From.Name);
-      end if;
-      if Name = "is_public" then
+      elsif Name = "is_public" then
          return Util.Beans.Objects.To_Object (From.Is_Public);
-      end if;
-      if Name = "create_date" then
+      elsif Name = "create_date" then
          return Util.Beans.Objects.Time.To_Object (From.Create_Date);
-      end if;
-      if Name = "page_count" then
+      elsif Name = "page_count" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Page_Count));
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Wiki_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "id" then
+         Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "name" then
+         Item.Name := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "is_public" then
+         Item.Is_Public := Util.Beans.Objects.To_Boolean (Value);
+      elsif Name = "create_date" then
+         Item.Create_Date := Util.Beans.Objects.Time.To_Time (Value);
+      elsif Name = "page_count" then
+         Item.Page_Count := Util.Beans.Objects.To_Integer (Value);
+      end if;
+   end Set_Value;
+
 
    --  --------------------
    --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
@@ -1454,6 +1486,7 @@ package body AWA.Wikis.Models is
    begin
       List (Object.List, Session, Context);
    end List;
+
    --  --------------------
    --  The list of wikis.
    --  --------------------
@@ -1485,36 +1518,58 @@ package body AWA.Wikis.Models is
    end List;
 
 
-   --  --------------------
-   --  Get the bean attribute identified by the given name.
-   --  --------------------
+
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
    overriding
    function Get_Value (From : in Wiki_Page_Info;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
       if Name = "id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
-      end if;
-      if Name = "name" then
+      elsif Name = "name" then
          return Util.Beans.Objects.To_Object (From.Name);
-      end if;
-      if Name = "title" then
+      elsif Name = "title" then
          return Util.Beans.Objects.To_Object (From.Title);
-      end if;
-      if Name = "is_public" then
+      elsif Name = "is_public" then
          return Util.Beans.Objects.To_Object (From.Is_Public);
-      end if;
-      if Name = "create_date" then
+      elsif Name = "create_date" then
          return Util.Beans.Objects.Time.To_Object (From.Create_Date);
-      end if;
-      if Name = "last_version" then
+      elsif Name = "last_version" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Last_Version));
-      end if;
-      if Name = "author" then
+      elsif Name = "author" then
          return Util.Beans.Objects.To_Object (From.Author);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Wiki_Page_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "id" then
+         Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "name" then
+         Item.Name := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "title" then
+         Item.Title := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "is_public" then
+         Item.Is_Public := Util.Beans.Objects.To_Boolean (Value);
+      elsif Name = "create_date" then
+         Item.Create_Date := Util.Beans.Objects.Time.To_Time (Value);
+      elsif Name = "last_version" then
+         Item.Last_Version := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "author" then
+         Item.Author := Util.Beans.Objects.To_Unbounded_String (Value);
+      end if;
+   end Set_Value;
+
 
    --  --------------------
    --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
@@ -1525,6 +1580,7 @@ package body AWA.Wikis.Models is
    begin
       List (Object.List, Session, Context);
    end List;
+
    --  --------------------
    --  The information about a wiki page.
    --  --------------------
@@ -1557,6 +1613,137 @@ package body AWA.Wikis.Models is
       end loop;
    end List;
 
+   procedure Op_Load (Bean    : in out Wiki_View_Info;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Load (Bean    : in out Wiki_View_Info;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Wiki_View_Info'Class (Bean).Load (Outcome);
+   end Op_Load;
+   package Binding_Wiki_View_Info_1 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Wiki_View_Info,
+                                                      Method => Op_Load,
+                                                      Name   => "load");
+
+   Binding_Wiki_View_Info_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
+     := (1 => Binding_Wiki_View_Info_1.Proxy'Access
+     );
+
+   --  ------------------------------
+   --  This bean provides some methods that can be used in a Method_Expression.
+   --  ------------------------------
+   overriding
+   function Get_Method_Bindings (From : in Wiki_View_Info)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
+   begin
+      return Binding_Wiki_View_Info_Array'Access;
+   end Get_Method_Bindings;
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Wiki_View_Info;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
+      elsif Name = "name" then
+         return Util.Beans.Objects.To_Object (From.Name);
+      elsif Name = "title" then
+         return Util.Beans.Objects.To_Object (From.Title);
+      elsif Name = "is_public" then
+         return Util.Beans.Objects.To_Object (From.Is_Public);
+      elsif Name = "version" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Version));
+      elsif Name = "date" then
+         return Util.Beans.Objects.Time.To_Object (From.Date);
+      elsif Name = "format" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Format));
+      elsif Name = "content" then
+         return Util.Beans.Objects.To_Object (From.Content);
+      elsif Name = "save_comment" then
+         return Util.Beans.Objects.To_Object (From.Save_Comment);
+      elsif Name = "author" then
+         return Util.Beans.Objects.To_Object (From.Author);
+      elsif Name = "acl_id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Acl_Id));
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Wiki_View_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "id" then
+         Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "name" then
+         Item.Name := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "title" then
+         Item.Title := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "is_public" then
+         Item.Is_Public := Util.Beans.Objects.To_Boolean (Value);
+      elsif Name = "version" then
+         Item.Version := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "date" then
+         Item.Date := Util.Beans.Objects.Time.To_Time (Value);
+      elsif Name = "format" then
+         Item.Format := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "content" then
+         Item.Content := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "save_comment" then
+         Item.Save_Comment := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "author" then
+         Item.Author := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "acl_id" then
+         Item.Acl_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      end if;
+   end Set_Value;
+
+
+   --  --------------------
+   --  Read in the object the data from the query result and prepare to read the next row.
+   --  If there is no row, raise the ADO.NOT_FOUND exception.
+   --  --------------------
+   procedure Read (Into : in out Wiki_View_Info;
+                   Stmt : in out ADO.Statements.Query_Statement'Class) is
+   begin
+      if not Stmt.Has_Elements then
+         raise ADO.Objects.NOT_FOUND;
+      end if;
+      Into.Id := Stmt.Get_Identifier (0);
+      Into.Name := Stmt.Get_Unbounded_String (1);
+      Into.Title := Stmt.Get_Unbounded_String (2);
+      Into.Is_Public := Stmt.Get_Boolean (3);
+      Into.Version := Stmt.Get_Integer (4);
+      Into.Date := Stmt.Get_Time (5);
+      Into.Format := Stmt.Get_Integer (6);
+      Into.Content := Stmt.Get_Unbounded_String (7);
+      Into.Save_Comment := Stmt.Get_Unbounded_String (8);
+      Into.Author := Stmt.Get_Unbounded_String (9);
+      Into.Acl_Id := Stmt.Get_Identifier (10);
+      Stmt.Next;
+   end Read;
+   --  --------------------
+   --  Run the query controlled by <b>Context</b> and load the result in <b>Object</b>.
+   --  --------------------
+   procedure Load (Object  : in out Wiki_View_Info'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+      Stmt : ADO.Statements.Query_Statement := Session.Create_Statement (Context);
+   begin
+      Stmt.Execute;
+      Read (Object, Stmt);
+      if Stmt.Has_Elements then
+         raise ADO.Objects.NOT_FOUND;
+      end if;
+   end Load;
 
    procedure Op_Save (Bean    : in out Wiki_Space_Bean;
                       Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
@@ -1574,25 +1761,33 @@ package body AWA.Wikis.Models is
      := (1 => Binding_Wiki_Space_Bean_1.Proxy'Access
      );
 
+   --  ------------------------------
    --  This bean provides some methods that can be used in a Method_Expression.
+   --  ------------------------------
    overriding
    function Get_Method_Bindings (From : in Wiki_Space_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
    begin
       return Binding_Wiki_Space_Bean_Array'Access;
    end Get_Method_Bindings;
 
-
+   --  ------------------------------
    --  Set the value identified by the name
-   overriding 
+   --  ------------------------------
+   overriding
    procedure Set_Value (Item  : in out Wiki_Space_Bean;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      null;
+      if Name = "name" then
+         Item.Set_Name (Util.Beans.Objects.To_String (Value));
+      elsif Name = "is_public" then
+         Item.Set_Is_Public (Util.Beans.Objects.To_Boolean (Value));
+      elsif Name = "create_date" then
+         Item.Set_Create_Date (Util.Beans.Objects.Time.To_Time (Value));
+      end if;
    end Set_Value;
-
-
 
    procedure Op_Save (Bean    : in out Wiki_Page_Bean;
                       Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
@@ -1634,25 +1829,35 @@ package body AWA.Wikis.Models is
          3 => Binding_Wiki_Page_Bean_3.Proxy'Access
      );
 
+   --  ------------------------------
    --  This bean provides some methods that can be used in a Method_Expression.
+   --  ------------------------------
    overriding
    function Get_Method_Bindings (From : in Wiki_Page_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
    begin
       return Binding_Wiki_Page_Bean_Array'Access;
    end Get_Method_Bindings;
 
-
+   --  ------------------------------
    --  Set the value identified by the name
-   overriding 
+   --  ------------------------------
+   overriding
    procedure Set_Value (Item  : in out Wiki_Page_Bean;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      null;
+      if Name = "name" then
+         Item.Set_Name (Util.Beans.Objects.To_String (Value));
+      elsif Name = "last_version" then
+         Item.Set_Last_Version (Util.Beans.Objects.To_Integer (Value));
+      elsif Name = "is_public" then
+         Item.Set_Is_Public (Util.Beans.Objects.To_Boolean (Value));
+      elsif Name = "title" then
+         Item.Set_Title (Util.Beans.Objects.To_String (Value));
+      end if;
    end Set_Value;
-
-
 
    procedure Op_Load (Bean    : in out Wiki_Page_List_Bean;
                       Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
@@ -1670,14 +1875,20 @@ package body AWA.Wikis.Models is
      := (1 => Binding_Wiki_Page_List_Bean_1.Proxy'Access
      );
 
+   --  ------------------------------
    --  This bean provides some methods that can be used in a Method_Expression.
+   --  ------------------------------
    overriding
    function Get_Method_Bindings (From : in Wiki_Page_List_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
    begin
       return Binding_Wiki_Page_List_Bean_Array'Access;
    end Get_Method_Bindings;
-
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Wiki_Page_List_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
@@ -1696,8 +1907,10 @@ package body AWA.Wikis.Models is
    end Get_Value;
 
 
+   --  ------------------------------
    --  Set the value identified by the name
-   overriding 
+   --  ------------------------------
+   overriding
    procedure Set_Value (Item  : in out Wiki_Page_List_Bean;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
@@ -1714,8 +1927,6 @@ package body AWA.Wikis.Models is
          Item.Wiki_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
       end if;
    end Set_Value;
-
-
 
 
 end AWA.Wikis.Models;

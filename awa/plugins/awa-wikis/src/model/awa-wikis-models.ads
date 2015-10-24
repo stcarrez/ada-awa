@@ -409,9 +409,11 @@ package AWA.Wikis.Models is
 
 
    --  --------------------
-   --  The list of wikis.
+   --    The list of wikis.
    --  --------------------
-   type Wiki_Info is new Util.Beans.Basic.Readonly_Bean with record
+   type Wiki_Info is
+     new Util.Beans.Basic.Bean with  record
+
       --  the wiki space identifier.
       Id : ADO.Identifier;
 
@@ -426,13 +428,19 @@ package AWA.Wikis.Models is
 
       --  the number of pages in the wiki.
       Page_Count : Integer;
-
    end record;
 
-   --  Get the bean attribute identified by the given name.
+   --  Get the bean attribute identified by the name.
    overriding
    function Get_Value (From : in Wiki_Info;
                        Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Wiki_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
 
    package Wiki_Info_Beans is
       new Util.Beans.Basic.Lists (Element_Type => Wiki_Info);
@@ -456,9 +464,11 @@ package AWA.Wikis.Models is
    Query_Wiki_List : constant ADO.Queries.Query_Definition_Access;
 
    --  --------------------
-   --  The information about a wiki page.
+   --    The information about a wiki page.
    --  --------------------
-   type Wiki_Page_Info is new Util.Beans.Basic.Readonly_Bean with record
+   type Wiki_Page_Info is
+     new Util.Beans.Basic.Bean with  record
+
       --  the wiki page identifier.
       Id : ADO.Identifier;
 
@@ -479,13 +489,19 @@ package AWA.Wikis.Models is
 
       --  the wiki page author.
       Author : Ada.Strings.Unbounded.Unbounded_String;
-
    end record;
 
-   --  Get the bean attribute identified by the given name.
+   --  Get the bean attribute identified by the name.
    overriding
    function Get_Value (From : in Wiki_Page_Info;
                        Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Wiki_Page_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
 
    package Wiki_Page_Info_Beans is
       new Util.Beans.Basic.Lists (Element_Type => Wiki_Page_Info);
@@ -508,6 +524,77 @@ package AWA.Wikis.Models is
 
    Query_Wiki_Page_List : constant ADO.Queries.Query_Definition_Access;
 
+   --  --------------------
+   --    The information about a wiki page.
+   --  --------------------
+   type Wiki_View_Info is abstract
+     new Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with  record
+
+      --  the wiki page identifier.
+      Id : ADO.Identifier;
+
+      --  the wiki page name.
+      Name : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the wiki page title.
+      Title : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  whether the wiki is public.
+      Is_Public : Boolean;
+
+      --  the last version.
+      Version : Integer;
+
+      --  the wiki page creation date.
+      Date : Ada.Calendar.Time;
+
+      --  the wiki page format.
+      Format : Integer;
+
+      --  the wiki page content.
+      Content : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the wiki version comment.
+      Save_Comment : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the wiki page author.
+      Author : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the acl Id if there is one.
+      Acl_Id : ADO.Identifier;
+   end record;
+
+   --  This bean provides some methods that can be used in a Method_Expression.
+   overriding
+   function Get_Method_Bindings (From : in Wiki_View_Info)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access;
+
+   --  Get the bean attribute identified by the name.
+   overriding
+   function Get_Value (From : in Wiki_View_Info;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Wiki_View_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   procedure Load (Bean : in out Wiki_View_Info;
+                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   --  Read in the object the data from the query result and prepare to read the next row.
+   --  If there is no row, raise the ADO.NOT_FOUND exception.
+   procedure Read (Into : in out Wiki_View_Info;
+                   Stmt : in out ADO.Statements.Query_Statement'Class);
+
+   --  Run the query controlled by <b>Context</b> and load the result in <b>Object</b>.
+   procedure Load (Object  : in out Wiki_View_Info'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   Query_Wiki_Page : constant ADO.Queries.Query_Definition_Access;
+
 
    type Wiki_Space_Bean is abstract new AWA.Wikis.Models.Wiki_Space_Ref
      and Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with null record;
@@ -519,7 +606,7 @@ package AWA.Wikis.Models is
                                  return Util.Beans.Methods.Method_Binding_Array_Access;
 
 
-   --  Set the value identified by the name.
+   --  Set the bean attribute identified by the name.
    overriding
    procedure Set_Value (Item  : in out Wiki_Space_Bean;
                         Name  : in String;
@@ -538,7 +625,7 @@ package AWA.Wikis.Models is
                                  return Util.Beans.Methods.Method_Binding_Array_Access;
 
 
-   --  Set the value identified by the name.
+   --  Set the bean attribute identified by the name.
    overriding
    procedure Set_Value (Item  : in out Wiki_Page_Bean;
                         Name  : in String;
@@ -558,10 +645,20 @@ package AWA.Wikis.Models is
    --  --------------------
    type Wiki_Page_List_Bean is abstract limited
      new Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with  record
+
+      --  the page number being displayed (for pagination)
       Page : Integer;
+
+      --  The number of wiki pages
       Count : Integer;
+
+      --  the number of items in the page
       Page_Size : Integer;
+
+      --  the tag to filter the list
       Tag : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the wiki identifier
       Wiki_Id : ADO.Identifier;
    end record;
 
@@ -570,12 +667,12 @@ package AWA.Wikis.Models is
    function Get_Method_Bindings (From : in Wiki_Page_List_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access;
 
-   --  Get the value identified by the name.
+   --  Get the bean attribute identified by the name.
    overriding
    function Get_Value (From : in Wiki_Page_List_Bean;
                        Name : in String) return Util.Beans.Objects.Object;
 
-   --  Set the value identified by the name.
+   --  Set the bean attribute identified by the name.
    overriding
    procedure Set_Value (Item  : in out Wiki_Page_List_Bean;
                         Name  : in String;
@@ -822,4 +919,14 @@ private
                                      File => File_2.File'Access);
    Query_Wiki_Page_List : constant ADO.Queries.Query_Definition_Access
    := Def_Wikipageinfo_Wiki_Page_List.Query'Access;
+
+   package File_3 is
+      new ADO.Queries.Loaders.File (Path => "wiki-page.xml",
+                                    Sha1 => "2329AE96698DF9BF3E1C6D308A208ED120C17967");
+
+   package Def_Wikiviewinfo_Wiki_Page is
+      new ADO.Queries.Loaders.Query (Name => "wiki-page",
+                                     File => File_3.File'Access);
+   Query_Wiki_Page : constant ADO.Queries.Query_Definition_Access
+   := Def_Wikiviewinfo_Wiki_Page.Query'Access;
 end AWA.Wikis.Models;
