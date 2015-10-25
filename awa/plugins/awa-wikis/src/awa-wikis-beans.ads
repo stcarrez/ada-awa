@@ -96,21 +96,33 @@ package AWA.Wikis.Beans is
    function Create_Wiki_Space_Bean (Module : in AWA.Wikis.Modules.Wiki_Module_Access)
                                   return Util.Beans.Basic.Readonly_Bean_Access;
 
-
+   --  ------------------------------
+   --  Wiki Page Bean
+   --  ------------------------------
+   --  The <tt>Wiki_Page_Bean</tt> is used to edit a wiki page.  The model type inherit from
+   --  the <tt>Wiki_Page</tt> and the wiki page text is hold in the <tt>Content</tt> member.
+   --  When a new content is updated, the <tt>Set_Value</tt> procedure sets it in the
+   --  <tt>New_Content</tt> member.  It is compared to the current wiki text to decide whether
+   --  we have to create a new version or not.
    type Wiki_Page_Bean is new AWA.Wikis.Models.Wiki_Page_Bean with record
       Module     : Modules.Wiki_Module_Access := null;
 
       --  The page content.
       Content     : Models.Wiki_Content_Ref;
       Has_Content : Boolean := False;
+      New_Content : Ada.Strings.Unbounded.Unbounded_String;
 
       Wiki_Space  : Wiki_Space_Bean;
 
-      --  List of tags associated with the question.
+      --  List of tags associated with the wiki page.
       Tags        : aliased AWA.Tags.Beans.Tag_List_Bean;
       Tags_Bean   : Util.Beans.Basic.Readonly_Bean_Access;
    end record;
    type Wiki_Page_Bean_Access is access all Wiki_Page_Bean'Class;
+
+   --  Returns True if the wiki page has a new text content and requires
+   --  a new version to be created.
+   function Has_New_Content (Bean : in Wiki_Page_Bean) return Boolean;
 
    --  Get the value identified by the name.
    overriding
