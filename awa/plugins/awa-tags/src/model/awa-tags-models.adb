@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -312,6 +312,10 @@ package body AWA.Tags.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Tag_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -328,7 +332,6 @@ package body AWA.Tags.Models is
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
-
 
 
    procedure List (Object  : in out Tag_Vector;
@@ -688,6 +691,10 @@ package body AWA.Tags.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Tagged_Entity_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -706,7 +713,6 @@ package body AWA.Tags.Models is
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
-
 
 
    procedure List (Object  : in out Tagged_Entity_Vector;
@@ -746,21 +752,38 @@ package body AWA.Tags.Models is
       ADO.Objects.Set_Created (Object);
    end Load;
 
-   --  --------------------
-   --  Get the bean attribute identified by the given name.
-   --  --------------------
+
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
    overriding
    function Get_Value (From : in Tag_Info;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
       if Name = "tag" then
          return Util.Beans.Objects.To_Object (From.Tag);
-      end if;
-      if Name = "count" then
+      elsif Name = "count" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Count));
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Tag_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "tag" then
+         Item.Tag := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "count" then
+         Item.Count := Util.Beans.Objects.To_Integer (Value);
+      end if;
+   end Set_Value;
+
 
    --  --------------------
    --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
@@ -771,6 +794,7 @@ package body AWA.Tags.Models is
    begin
       List (Object.List, Session, Context);
    end List;
+
    --  --------------------
    --  The tag information.
    --  --------------------
