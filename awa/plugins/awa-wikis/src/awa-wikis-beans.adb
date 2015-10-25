@@ -225,16 +225,33 @@ package body AWA.Wikis.Beans is
          From.Wiki_Space.Set_Id (ADO.Utils.To_Identifier (Value));
       elsif Name = "text" then
          From.Has_Content := True;
-         if From.Content.Is_Inserted then
-            From.Content := AWA.Wikis.Models.Null_Wiki_Content;
-         end if;
-         From.Content.Set_Content (Util.Beans.Objects.To_String (Value));
+         From.New_Content := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "comment" then
          From.Content.Set_Save_Comment (Util.Beans.Objects.To_String (Value));
       else
          AWA.Wikis.Models.Wiki_Page_Bean (From).Set_Value (Name, Value);
       end if;
    end Set_Value;
+
+   --  ------------------------------
+   --  Returns True if the wiki page has a new text content and requires
+   --  a new version to be created.
+   --  ------------------------------
+   function Has_New_Content (Bean : in Wiki_Page_Bean) return Boolean is
+      use type Ada.Strings.Unbounded.Unbounded_String;
+   begin
+      if not Bean.Is_Inserted then
+         return True;
+      elsif not Bean.Has_Content then
+         return False;
+      else
+         declare
+            Current : constant Ada.Strings.Unbounded.Unbounded_String := Bean.Content.Get_Content;
+         begin
+            return Current /= Bean.New_Content;
+         end;
+      end if;
+   end Has_New_Content;
 
    --  ------------------------------
    --  Create or save the wiki page.
@@ -244,13 +261,15 @@ package body AWA.Wikis.Beans is
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       Result : ADO.Identifier;
    begin
-      if Bean.Is_Inserted then
-         Bean.Module.Save (Bean);
-      else
+      if not Bean.Is_Inserted then
          Bean.Module.Create_Wiki_Page (Bean.Wiki_Space, Bean);
-      end if;
-      if Bean.Has_Content then
-         Bean.Module.Create_Wiki_Content (Bean, Bean.Content);
+
+      elsif not Bean.Has_New_Content then
+         Bean.Module.Save (Bean);
+
+      else
+         Bean.Content.Set_Content (Bean.New_Content);
+         Bean.Module.Save (Bean);
       end if;
       Result := Bean.Get_Id;
       Bean.Tags.Update_Tags (Result);
