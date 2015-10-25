@@ -94,6 +94,15 @@
     </navigation-case>
   </navigation-rule>
 
+  <navigation-rule>
+    <from-view-id>/wikis/edit.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/wikis/view/#{wikiPage.wiki_id}/#{wikiPage.name}</to-view-id>
+      <redirect/>
+    </navigation-case>
+  </navigation-rule>
+
   <filter-mapping>
     <filter-name>service</filter-name>
     <url-pattern>/wikis/view/#{wikiView.wiki_id}/#{wikiView.name}</url-pattern>
@@ -197,6 +206,7 @@
     <url-pattern>/wikis/edit/.*</url-pattern>
     <url-pattern>/wikis/create/.*</url-pattern>
     <url-pattern>/wikis/edit.html</url-pattern>
+    <url-pattern>/wikis/create.html</url-pattern>
   </url-policy>
 
   <url-policy>
