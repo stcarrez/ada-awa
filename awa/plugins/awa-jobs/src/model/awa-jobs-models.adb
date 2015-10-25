@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -642,6 +642,10 @@ package body AWA.Jobs.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Job_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -654,7 +658,7 @@ package body AWA.Jobs.Models is
       if Name = "id" then
          return ADO.Objects.To_Object (Impl.Get_Key);
       elsif Name = "status" then
-         return Job_Status_Type_Objects.To_Object (Impl.Status);
+         return AWA.Jobs.Models.Job_Status_Type_Objects.To_Object (Impl.Status);
       elsif Name = "name" then
          return Util.Beans.Objects.To_Object (Impl.Name);
       elsif Name = "start_date" then
