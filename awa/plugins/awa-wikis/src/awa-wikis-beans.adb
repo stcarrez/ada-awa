@@ -15,6 +15,8 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Util.Beans.Objects.Time;
+
 with ADO.Utils;
 with ADO.Queries;
 with ADO.Sessions;
@@ -181,7 +183,9 @@ package body AWA.Wikis.Beans is
             return ADO.Utils.To_Object (From.Wiki_Space.Get_Id);
          end if;
       elsif Name = "text" then
-         if From.Content.Is_Null then
+         if From.Has_Content then
+            return Util.Beans.Objects.To_Object (From.New_Content);
+         elsif From.Content.Is_Null then
             return Util.Beans.Objects.Null_Object;
          else
             return Util.Beans.Objects.To_Object (String '(From.Content.Get_Content));
@@ -227,6 +231,7 @@ package body AWA.Wikis.Beans is
          From.Has_Content := True;
          From.New_Content := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "comment" then
+         From.New_Comment := Util.Beans.Objects.To_Unbounded_String (Value);
          From.Content.Set_Save_Comment (Util.Beans.Objects.To_String (Value));
       else
          AWA.Wikis.Models.Wiki_Page_Bean (From).Set_Value (Name, Value);
@@ -259,17 +264,23 @@ package body AWA.Wikis.Beans is
    overriding
    procedure Save (Bean    : in out Wiki_Page_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
+
       Result : ADO.Identifier;
    begin
       if not Bean.Is_Inserted then
-         Bean.Module.Create_Wiki_Page (Bean.Wiki_Space, Bean);
+         Bean.Content.Set_Content (Bean.New_Content);
+         Bean.Content.Set_Save_Comment (Bean.New_Comment);
+         Bean.Module.Create_Wiki_Page (Bean.Wiki_Space, Bean, Bean.Content);
 
       elsif not Bean.Has_New_Content then
          Bean.Module.Save (Bean);
 
       else
+         Bean.Content := AWA.Wikis.Models.Null_Wiki_Content;
          Bean.Content.Set_Content (Bean.New_Content);
-         Bean.Module.Save (Bean);
+         Bean.Content.Set_Save_Comment (Bean.New_Comment);
+         Bean.Module.Create_Wiki_Content (Bean, Bean.Content);
       end if;
       Result := Bean.Get_Id;
       Bean.Tags.Update_Tags (Result);
@@ -281,7 +292,7 @@ package body AWA.Wikis.Beans is
    overriding
    procedure Load (Bean    : in out Wiki_Page_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
-      Session      : ADO.Sessions.Session := Bean.Module.Get_Session;
+      Session      : constant ADO.Sessions.Session := Bean.Module.Get_Session;
    begin
       Bean.Module.Load_Page (Bean, Bean.Content, Bean.Tags,
                               Bean.Wiki_Space.Get_Id, Bean.Get_Name);
@@ -350,7 +361,7 @@ package body AWA.Wikis.Beans is
       elsif Name = "wiki_id" then
          return ADO.Utils.To_Object (From.Wiki_Id);
 
-      elsif Name = "updateDate" then
+      elsif Name = "update_date" then
          if From.Pages.Get_Count = 0 then
             return Util.Beans.Objects.Null_Object;
          else
