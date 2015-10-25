@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -563,6 +563,10 @@ package body AWA.Questions.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Question_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -1051,6 +1055,10 @@ package body AWA.Questions.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Answer_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -1102,42 +1110,66 @@ package body AWA.Questions.Models is
       ADO.Objects.Set_Created (Object);
    end Load;
 
-   --  --------------------
-   --  Get the bean attribute identified by the given name.
-   --  --------------------
+
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
    overriding
    function Get_Value (From : in Answer_Info;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
       if Name = "id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
-      end if;
-      if Name = "create_date" then
+      elsif Name = "create_date" then
          return Util.Beans.Objects.Time.To_Object (From.Create_Date);
-      end if;
-      if Name = "edit_date" then
+      elsif Name = "edit_date" then
          return Util.Beans.Objects.Time.To_Object (From.Edit_Date);
-      end if;
-      if Name = "answer" then
+      elsif Name = "answer" then
          return Util.Beans.Objects.To_Object (From.Answer);
-      end if;
-      if Name = "rank" then
+      elsif Name = "rank" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Rank));
-      end if;
-      if Name = "user_rating" then
+      elsif Name = "user_rating" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.User_Rating));
-      end if;
-      if Name = "author_id" then
+      elsif Name = "author_id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Author_Id));
-      end if;
-      if Name = "author_name" then
+      elsif Name = "author_name" then
          return Util.Beans.Objects.To_Object (From.Author_Name);
-      end if;
-      if Name = "author_email" then
+      elsif Name = "author_email" then
          return Util.Beans.Objects.To_Object (From.Author_Email);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Answer_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "id" then
+         Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "create_date" then
+         Item.Create_Date := Util.Beans.Objects.Time.To_Time (Value);
+      elsif Name = "edit_date" then
+         Item.Edit_Date := Util.Beans.Objects.Time.To_Time (Value);
+      elsif Name = "answer" then
+         Item.Answer := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "rank" then
+         Item.Rank := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "user_rating" then
+         Item.User_Rating := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "author_id" then
+         Item.Author_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "author_name" then
+         Item.Author_Name := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "author_email" then
+         Item.Author_Email := Util.Beans.Objects.To_Unbounded_String (Value);
+      end if;
+   end Set_Value;
+
 
    --  --------------------
    --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
@@ -1148,6 +1180,7 @@ package body AWA.Questions.Models is
    begin
       List (Object.List, Session, Context);
    end List;
+
    --  --------------------
    --  The list of answers.
    --  --------------------
@@ -1183,45 +1216,70 @@ package body AWA.Questions.Models is
    end List;
 
 
-   --  --------------------
-   --  Get the bean attribute identified by the given name.
-   --  --------------------
+
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
    overriding
    function Get_Value (From : in Question_Display_Info;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
       if Name = "id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
-      end if;
-      if Name = "title" then
+      elsif Name = "title" then
          return Util.Beans.Objects.To_Object (From.Title);
-      end if;
-      if Name = "create_date" then
+      elsif Name = "create_date" then
          return Util.Beans.Objects.Time.To_Object (From.Create_Date);
-      end if;
-      if Name = "edit_date" then
+      elsif Name = "edit_date" then
          return Util.Beans.Objects.Time.To_Object (From.Edit_Date);
-      end if;
-      if Name = "description" then
+      elsif Name = "description" then
          return Util.Beans.Objects.To_Object (From.Description);
-      end if;
-      if Name = "rating" then
+      elsif Name = "rating" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Rating));
-      end if;
-      if Name = "user_rating" then
+      elsif Name = "user_rating" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.User_Rating));
-      end if;
-      if Name = "author_id" then
+      elsif Name = "author_id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Author_Id));
-      end if;
-      if Name = "author_name" then
+      elsif Name = "author_name" then
          return Util.Beans.Objects.To_Object (From.Author_Name);
-      end if;
-      if Name = "author_email" then
+      elsif Name = "author_email" then
          return Util.Beans.Objects.To_Object (From.Author_Email);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Question_Display_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "id" then
+         Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "title" then
+         Item.Title := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "create_date" then
+         Item.Create_Date := Util.Beans.Objects.Time.To_Time (Value);
+      elsif Name = "edit_date" then
+         Item.Edit_Date := Util.Beans.Objects.Time.To_Time (Value);
+      elsif Name = "description" then
+         Item.Description := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "rating" then
+         Item.Rating := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "user_rating" then
+         Item.User_Rating := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "author_id" then
+         Item.Author_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "author_name" then
+         Item.Author_Name := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "author_email" then
+         Item.Author_Email := Util.Beans.Objects.To_Unbounded_String (Value);
+      end if;
+   end Set_Value;
+
 
    --  --------------------
    --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
@@ -1232,6 +1290,7 @@ package body AWA.Questions.Models is
    begin
       List (Object.List, Session, Context);
    end List;
+
    --  --------------------
    --  The list of questions.
    --  --------------------
@@ -1268,42 +1327,66 @@ package body AWA.Questions.Models is
    end List;
 
 
-   --  --------------------
-   --  Get the bean attribute identified by the given name.
-   --  --------------------
+
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
    overriding
    function Get_Value (From : in Question_Info;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
       if Name = "id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
-      end if;
-      if Name = "title" then
+      elsif Name = "title" then
          return Util.Beans.Objects.To_Object (From.Title);
-      end if;
-      if Name = "create_date" then
+      elsif Name = "create_date" then
          return Util.Beans.Objects.Time.To_Object (From.Create_Date);
-      end if;
-      if Name = "description" then
+      elsif Name = "description" then
          return Util.Beans.Objects.To_Object (From.Description);
-      end if;
-      if Name = "rating" then
+      elsif Name = "rating" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Rating));
-      end if;
-      if Name = "answer_count" then
+      elsif Name = "answer_count" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Answer_Count));
-      end if;
-      if Name = "author_id" then
+      elsif Name = "author_id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Author_Id));
-      end if;
-      if Name = "author_name" then
+      elsif Name = "author_name" then
          return Util.Beans.Objects.To_Object (From.Author_Name);
-      end if;
-      if Name = "author_email" then
+      elsif Name = "author_email" then
          return Util.Beans.Objects.To_Object (From.Author_Email);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Question_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "id" then
+         Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "title" then
+         Item.Title := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "create_date" then
+         Item.Create_Date := Util.Beans.Objects.Time.To_Time (Value);
+      elsif Name = "description" then
+         Item.Description := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "rating" then
+         Item.Rating := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "answer_count" then
+         Item.Answer_Count := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "author_id" then
+         Item.Author_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "author_name" then
+         Item.Author_Name := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "author_email" then
+         Item.Author_Email := Util.Beans.Objects.To_Unbounded_String (Value);
+      end if;
+   end Set_Value;
+
 
    --  --------------------
    --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
@@ -1314,6 +1397,7 @@ package body AWA.Questions.Models is
    begin
       List (Object.List, Session, Context);
    end List;
+
    --  --------------------
    --  The list of questions.
    --  --------------------
@@ -1377,25 +1461,39 @@ package body AWA.Questions.Models is
          2 => Binding_Question_Bean_2.Proxy'Access
      );
 
+   --  ------------------------------
    --  This bean provides some methods that can be used in a Method_Expression.
+   --  ------------------------------
    overriding
    function Get_Method_Bindings (From : in Question_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
    begin
       return Binding_Question_Bean_Array'Access;
    end Get_Method_Bindings;
 
-
+   --  ------------------------------
    --  Set the value identified by the name
-   overriding 
+   --  ------------------------------
+   overriding
    procedure Set_Value (Item  : in out Question_Bean;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      null;
+      if Name = "create_date" then
+         Item.Set_Create_Date (Util.Beans.Objects.Time.To_Time (Value));
+      elsif Name = "title" then
+         Item.Set_Title (Util.Beans.Objects.To_String (Value));
+      elsif Name = "description" then
+         Item.Set_Description (Util.Beans.Objects.To_String (Value));
+      elsif Name = "edit_date" then
+         Item.Set_Edit_Date (Util.Beans.Objects.Time.To_Time (Value));
+      elsif Name = "short_description" then
+         Item.Set_Short_Description (Util.Beans.Objects.To_String (Value));
+      elsif Name = "rating" then
+         Item.Set_Rating (Util.Beans.Objects.To_Integer (Value));
+      end if;
    end Set_Value;
-
-
 
    procedure Op_Save (Bean    : in out Answer_Bean;
                       Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
@@ -1425,25 +1523,40 @@ package body AWA.Questions.Models is
          2 => Binding_Answer_Bean_2.Proxy'Access
      );
 
+   --  ------------------------------
    --  This bean provides some methods that can be used in a Method_Expression.
+   --  ------------------------------
    overriding
    function Get_Method_Bindings (From : in Answer_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
    begin
       return Binding_Answer_Bean_Array'Access;
    end Get_Method_Bindings;
 
-
+   --  ------------------------------
    --  Set the value identified by the name
-   overriding 
+   --  ------------------------------
+   overriding
    procedure Set_Value (Item  : in out Answer_Bean;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      null;
+      if Name = "create_date" then
+         Item.Set_Create_Date (Util.Beans.Objects.Time.To_Time (Value));
+      elsif Name = "edit_date" then
+         if Util.Beans.Objects.Is_Null (Value) then
+            Item.Set_Edit_Date (ADO.Nullable_Time '(Is_Null => True, others => <>));
+         else
+            Item.Set_Edit_Date (ADO.Nullable_Time '(Is_Null => False,
+                                        Value   => Util.Beans.Objects.Time.To_Time (Value)));
+         end if;
+      elsif Name = "answer" then
+         Item.Set_Answer (Util.Beans.Objects.To_String (Value));
+      elsif Name = "rank" then
+         Item.Set_Rank (Util.Beans.Objects.To_Integer (Value));
+      end if;
    end Set_Value;
-
-
 
 
 end AWA.Questions.Models;

@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -328,9 +328,11 @@ package AWA.Questions.Models is
 
 
    --  --------------------
-   --  The list of answers.
+   --    The list of answers.
    --  --------------------
-   type Answer_Info is new Util.Beans.Basic.Readonly_Bean with record
+   type Answer_Info is
+     new Util.Beans.Basic.Bean with  record
+
       --  the answer identifier.
       Id : ADO.Identifier;
 
@@ -357,13 +359,20 @@ package AWA.Questions.Models is
 
       --  the author's email.
       Author_Email : Ada.Strings.Unbounded.Unbounded_String;
-
    end record;
 
-   --  Get the bean attribute identified by the given name.
+   --  Get the bean attribute identified by the name.
    overriding
    function Get_Value (From : in Answer_Info;
                        Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Answer_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+
 
    package Answer_Info_Beans is
       new Util.Beans.Basic.Lists (Element_Type => Answer_Info);
@@ -387,9 +396,11 @@ package AWA.Questions.Models is
    Query_Answer_List : constant ADO.Queries.Query_Definition_Access;
 
    --  --------------------
-   --  The list of questions.
+   --    The list of questions.
    --  --------------------
-   type Question_Display_Info is new Util.Beans.Basic.Readonly_Bean with record
+   type Question_Display_Info is
+     new Util.Beans.Basic.Bean with  record
+
       --  the question identifier.
       Id : ADO.Identifier;
 
@@ -419,13 +430,20 @@ package AWA.Questions.Models is
 
       --  the author's email.
       Author_Email : Ada.Strings.Unbounded.Unbounded_String;
-
    end record;
 
-   --  Get the bean attribute identified by the given name.
+   --  Get the bean attribute identified by the name.
    overriding
    function Get_Value (From : in Question_Display_Info;
                        Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Question_Display_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+
 
    package Question_Display_Info_Beans is
       new Util.Beans.Basic.Lists (Element_Type => Question_Display_Info);
@@ -449,9 +467,11 @@ package AWA.Questions.Models is
    Query_Question_Info : constant ADO.Queries.Query_Definition_Access;
 
    --  --------------------
-   --  The list of questions.
+   --    The list of questions.
    --  --------------------
-   type Question_Info is new Util.Beans.Basic.Readonly_Bean with record
+   type Question_Info is
+     new Util.Beans.Basic.Bean with  record
+
       --  the question identifier.
       Id : ADO.Identifier;
 
@@ -478,13 +498,20 @@ package AWA.Questions.Models is
 
       --  the author's email.
       Author_Email : Ada.Strings.Unbounded.Unbounded_String;
-
    end record;
 
-   --  Get the bean attribute identified by the given name.
+   --  Get the bean attribute identified by the name.
    overriding
    function Get_Value (From : in Question_Info;
                        Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Question_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+
 
    package Question_Info_Beans is
       new Util.Beans.Basic.Lists (Element_Type => Question_Info);
@@ -520,7 +547,7 @@ package AWA.Questions.Models is
                                  return Util.Beans.Methods.Method_Binding_Array_Access;
 
 
-   --  Set the value identified by the name.
+   --  Set the bean attribute identified by the name.
    overriding
    procedure Set_Value (Item  : in out Question_Bean;
                         Name  : in String;
@@ -542,7 +569,7 @@ package AWA.Questions.Models is
                                  return Util.Beans.Methods.Method_Binding_Array_Access;
 
 
-   --  Set the value identified by the name.
+   --  Set the bean attribute identified by the name.
    overriding
    procedure Set_Value (Item  : in out Answer_Bean;
                         Name  : in String;
