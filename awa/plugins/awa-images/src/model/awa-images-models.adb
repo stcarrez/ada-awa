@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -449,6 +449,10 @@ package body AWA.Images.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Image_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -471,7 +475,6 @@ package body AWA.Images.Models is
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
-
 
 
    procedure List (Object  : in out Image_Vector;
@@ -517,51 +520,78 @@ package body AWA.Images.Models is
       ADO.Objects.Set_Created (Object);
    end Load;
 
-   --  --------------------
-   --  Get the bean attribute identified by the given name.
-   --  --------------------
+
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
    overriding
    function Get_Value (From : in Image_Info;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
       if Name = "id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
-      end if;
-      if Name = "name" then
+      elsif Name = "name" then
          return Util.Beans.Objects.To_Object (From.Name);
-      end if;
-      if Name = "create_date" then
+      elsif Name = "create_date" then
          return Util.Beans.Objects.Time.To_Object (From.Create_Date);
-      end if;
-      if Name = "uri" then
+      elsif Name = "uri" then
          return Util.Beans.Objects.To_Object (From.Uri);
-      end if;
-      if Name = "storage" then
+      elsif Name = "storage" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Storage));
-      end if;
-      if Name = "mime_type" then
+      elsif Name = "mime_type" then
          return Util.Beans.Objects.To_Object (From.Mime_Type);
-      end if;
-      if Name = "file_size" then
+      elsif Name = "file_size" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.File_Size));
-      end if;
-      if Name = "width" then
+      elsif Name = "width" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Width));
-      end if;
-      if Name = "height" then
+      elsif Name = "height" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Height));
-      end if;
-      if Name = "thumb_width" then
+      elsif Name = "thumb_width" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Thumb_Width));
-      end if;
-      if Name = "thumb_height" then
+      elsif Name = "thumb_height" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Thumb_Height));
-      end if;
-      if Name = "thumbnail_id" then
+      elsif Name = "thumbnail_id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Thumbnail_Id));
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Image_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "id" then
+         Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "name" then
+         Item.Name := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "create_date" then
+         Item.Create_Date := Util.Beans.Objects.Time.To_Time (Value);
+      elsif Name = "uri" then
+         Item.Uri := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "storage" then
+         Item.Storage := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "mime_type" then
+         Item.Mime_Type := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "file_size" then
+         Item.File_Size := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "width" then
+         Item.Width := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "height" then
+         Item.Height := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "thumb_width" then
+         Item.Thumb_Width := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "thumb_height" then
+         Item.Thumb_Height := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "thumbnail_id" then
+         Item.Thumbnail_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      end if;
+   end Set_Value;
+
 
    --  --------------------
    --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
@@ -572,6 +602,7 @@ package body AWA.Images.Models is
    begin
       List (Object.List, Session, Context);
    end List;
+
    --  --------------------
    --  The list of images for a given folder.
    --  --------------------
