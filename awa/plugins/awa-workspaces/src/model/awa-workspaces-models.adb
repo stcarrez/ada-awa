@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -346,6 +346,10 @@ package body AWA.Workspaces.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Workspace_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -678,6 +682,10 @@ package body AWA.Workspaces.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Workspace_Feature_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -1008,6 +1016,10 @@ package body AWA.Workspaces.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Workspace_Member_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
