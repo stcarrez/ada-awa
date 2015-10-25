@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -532,6 +532,7 @@ package AWA.Storages.Models is
 
 
 
+
    Query_Storage_Get_Data : constant ADO.Queries.Query_Definition_Access;
 
    Query_Storage_Get_Local : constant ADO.Queries.Query_Definition_Access;
@@ -541,9 +542,11 @@ package AWA.Storages.Models is
    Query_Storage_Delete_Local : constant ADO.Queries.Query_Definition_Access;
 
    --  --------------------
-   --  The list of folders.
+   --    The list of folders.
    --  --------------------
-   type Folder_Info is new Util.Beans.Basic.Readonly_Bean with record
+   type Folder_Info is
+     new Util.Beans.Basic.Bean with  record
+
       --  the folder identifier.
       Id : ADO.Identifier;
 
@@ -552,13 +555,20 @@ package AWA.Storages.Models is
 
       --  the blog creation date.
       Create_Date : Ada.Calendar.Time;
-
    end record;
 
-   --  Get the bean attribute identified by the given name.
+   --  Get the bean attribute identified by the name.
    overriding
    function Get_Value (From : in Folder_Info;
                        Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Folder_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+
 
    package Folder_Info_Beans is
       new Util.Beans.Basic.Lists (Element_Type => Folder_Info);
@@ -582,9 +592,11 @@ package AWA.Storages.Models is
    Query_Storage_Folder_List : constant ADO.Queries.Query_Definition_Access;
 
    --  --------------------
-   --  The list of documents for a given folder.
+   --    The list of documents for a given folder.
    --  --------------------
-   type Storage_Info is new Util.Beans.Basic.Readonly_Bean with record
+   type Storage_Info is
+     new Util.Beans.Basic.Bean with  record
+
       --  the storage identifier.
       Id : ADO.Identifier;
 
@@ -608,13 +620,20 @@ package AWA.Storages.Models is
 
       --  the user name who uploaded the document.
       User_Name : Ada.Strings.Unbounded.Unbounded_String;
-
    end record;
 
-   --  Get the bean attribute identified by the given name.
+   --  Get the bean attribute identified by the name.
    overriding
    function Get_Value (From : in Storage_Info;
                        Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Storage_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+
 
    package Storage_Info_Beans is
       new Util.Beans.Basic.Lists (Element_Type => Storage_Info);

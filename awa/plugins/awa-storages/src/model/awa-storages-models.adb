@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -320,6 +320,10 @@ package body AWA.Storages.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Storage_Data_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -731,6 +735,10 @@ package body AWA.Storages.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Storage_Folder_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -1357,6 +1365,10 @@ package body AWA.Storages.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Storage_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -1367,7 +1379,7 @@ package body AWA.Storages.Models is
       end if;
       Impl := Storage_Impl (Obj.all)'Access;
       if Name = "storage" then
-         return Storage_Type_Objects.To_Object (Impl.Storage);
+         return AWA.Storages.Models.Storage_Type_Objects.To_Object (Impl.Storage);
       elsif Name = "create_date" then
          return Util.Beans.Objects.Time.To_Object (Impl.Create_Date);
       elsif Name = "name" then
@@ -1853,6 +1865,10 @@ package body AWA.Storages.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Store_Local_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -1902,24 +1918,41 @@ package body AWA.Storages.Models is
    end Load;
 
 
-   --  --------------------
-   --  Get the bean attribute identified by the given name.
-   --  --------------------
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
    overriding
    function Get_Value (From : in Folder_Info;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
       if Name = "id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
-      end if;
-      if Name = "name" then
+      elsif Name = "name" then
          return Util.Beans.Objects.To_Object (From.Name);
-      end if;
-      if Name = "create_date" then
+      elsif Name = "create_date" then
          return Util.Beans.Objects.Time.To_Object (From.Create_Date);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Folder_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "id" then
+         Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "name" then
+         Item.Name := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "create_date" then
+         Item.Create_Date := Util.Beans.Objects.Time.To_Time (Value);
+      end if;
+   end Set_Value;
+
 
    --  --------------------
    --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
@@ -1930,6 +1963,7 @@ package body AWA.Storages.Models is
    begin
       List (Object.List, Session, Context);
    end List;
+
    --  --------------------
    --  The list of folders.
    --  --------------------
@@ -1959,39 +1993,62 @@ package body AWA.Storages.Models is
    end List;
 
 
-   --  --------------------
-   --  Get the bean attribute identified by the given name.
-   --  --------------------
+
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
    overriding
    function Get_Value (From : in Storage_Info;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
       if Name = "id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
-      end if;
-      if Name = "name" then
+      elsif Name = "name" then
          return Util.Beans.Objects.To_Object (From.Name);
-      end if;
-      if Name = "create_date" then
+      elsif Name = "create_date" then
          return Util.Beans.Objects.Time.To_Object (From.Create_Date);
-      end if;
-      if Name = "uri" then
+      elsif Name = "uri" then
          return Util.Beans.Objects.To_Object (From.Uri);
-      end if;
-      if Name = "storage" then
+      elsif Name = "storage" then
          return AWA.Storages.Models.Storage_Type_Objects.To_Object (From.Storage);
-      end if;
-      if Name = "mime_type" then
+      elsif Name = "mime_type" then
          return Util.Beans.Objects.To_Object (From.Mime_Type);
-      end if;
-      if Name = "file_size" then
+      elsif Name = "file_size" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.File_Size));
-      end if;
-      if Name = "user_name" then
+      elsif Name = "user_name" then
          return Util.Beans.Objects.To_Object (From.User_Name);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Storage_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "id" then
+         Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "name" then
+         Item.Name := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "create_date" then
+         Item.Create_Date := Util.Beans.Objects.Time.To_Time (Value);
+      elsif Name = "uri" then
+         Item.Uri := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "storage" then
+         Item.Storage := AWA.Storages.Models.Storage_Type_Objects.To_Value (Value);
+      elsif Name = "mime_type" then
+         Item.Mime_Type := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "file_size" then
+         Item.File_Size := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "user_name" then
+         Item.User_Name := Util.Beans.Objects.To_Unbounded_String (Value);
+      end if;
+   end Set_Value;
+
 
    --  --------------------
    --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
@@ -2002,6 +2059,7 @@ package body AWA.Storages.Models is
    begin
       List (Object.List, Session, Context);
    end List;
+
    --  --------------------
    --  The list of documents for a given folder.
    --  --------------------
