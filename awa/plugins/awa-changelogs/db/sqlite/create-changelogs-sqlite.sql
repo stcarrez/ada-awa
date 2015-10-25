@@ -1,7 +1,7 @@
 /* Copied from changelogs-sqlite.sql*/
 /* File generated automatically by dynamo */
 /*  */
-CREATE TABLE Changelog (
+CREATE TABLE awa_changelog (
   /* the changelog identifier. */
   `id` BIGINT PRIMARY KEY,
   /* the changelog date. */
@@ -15,4 +15,4 @@ CREATE TABLE Changelog (
   /*  */
   `entity_type` INTEGER NOT NULL
 );
-INSERT INTO entity_type (name) VALUES ("Changelog");
+INSERT INTO entity_type (name) VALUES ("awa_changelog");
