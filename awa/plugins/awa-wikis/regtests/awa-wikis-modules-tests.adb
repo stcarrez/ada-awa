@@ -16,9 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Util.Tests;
 with Util.Test_Caller;
-with AWA.Tests;
 with AWA.Tests.Helpers;
 with AWA.Tests.Helpers.Users;
 with AWA.Services.Contexts;
@@ -74,6 +72,7 @@ package body AWA.Wikis.Modules.Tests is
       Context   : AWA.Services.Contexts.Service_Context;
       W         : AWA.Wikis.Models.Wiki_Space_Ref;
       P         : AWA.Wikis.Models.Wiki_Page_Ref;
+      C         : AWA.Wikis.Models.Wiki_Content_Ref;
    begin
       AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-wiki@test.com");
 
@@ -82,7 +81,7 @@ package body AWA.Wikis.Modules.Tests is
 
       P.Set_Name ("The page");
       P.Set_Title ("The page title");
-      T.Manager.Create_Wiki_Page (W, P);
+      T.Manager.Create_Wiki_Page (W, P, C);
       T.Assert (P.Is_Inserted, "The new wiki page was not created");
 
    end Test_Create_Wiki_Page;
@@ -104,7 +103,7 @@ package body AWA.Wikis.Modules.Tests is
 
       P.Set_Name ("The page");
       P.Set_Title ("The page title");
-      T.Manager.Create_Wiki_Page (W, P);
+      T.Manager.Create_Wiki_Page (W, P, C);
 
       C.Set_Format (AWA.Wikis.Models.FORMAT_MARKDOWN);
       C.Set_Content ("-- Title" & ASCII.LF & "A paragraph");
