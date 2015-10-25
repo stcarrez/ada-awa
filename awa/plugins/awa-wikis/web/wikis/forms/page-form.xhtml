@@ -32,11 +32,11 @@
             <h:messages styleClass='error'/>
             <w:inputText title="#{wikiMsg.wiki_page_name_label}"
                          styleClass="awa-required ui-corner-all"
-                         size='80'
+                         size='80' placeholder="#{wikiMsg.wiki_edit_name_placeholder}"
                          value="#{wikiPage.name}"/>
             <w:inputText title="#{wikiMsg.wiki_page_title_label}"
                          styleClass="awa-required ui-corner-all"
-                         size='80'
+                         size='80' placeholder="#{wikiMsg.wiki_edit_title_placeholder}"
                          value="#{wikiPage.title}"/>
             <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
                 <dt>
@@ -46,7 +46,7 @@
                     <h:inputTextarea id='text' rows='20' required='false' value='#{wikiPage.text}'/>
                 </dd>
                 <dt>
-                    <label for='qtags'>#{questionMsg.question_tags_label}</label>
+                    <label for='qtags'>#{wikiMsg.wiki_tags_label}</label>
                 </dt>
                 <dd>
                     <awa:tagList value='#{wikiPage.tags}' id='qtags'
@@ -55,7 +55,16 @@
             </dl>
             <w:inputText id='uri' title="#{wikiMsg.wiki_page_comment_label}"
                          styleClass="awa-required ui-corner-all" size='80'
+                         placeholder="#{wikiMsg.wiki_edit_comment_placeholder}"
                          value="#{wikiPage.comment}" required="false"/>
+
+            <ul class='awa-buttons'>
+                <li>
+                    <h:commandButton id='save' value='#{wikiMsg.wiki_page_save_button}'
+                                     styleClass="ui-button ui-state-default ui-corner-all"
+                                     action="#{wikiPage.save}" title="#{wikiMsg.wiki_page_save_title}"/>
+                </li>
+            </ul>
         </div>
         <div class='grid_4'>
             <dl class="awa-required">
@@ -65,28 +74,12 @@
                     <label for='page-is-public'>#{wikiMsg.wiki_page_is_public_label}</label>
                 </dd>
             </dl>
-            <dl class="awa-required">
-                <dt>
-                    <label for="post-status">#{blogMsg.blog_post_publish_date_label}</label>
-                </dt>
-                <dd>
-                    #{empty post.publish_date ? post.create_date : post.publish_date}
-                </dd>
-            </dl>
             <dl class="awa-optional">
                 <dd>
-                    <ui:include src="syntax.xhtml"/>
+                    <ui:include src="/blogs/admin/forms/syntax.xhtml"/>
                 </dd>
             </dl>
         </div>
-
-        <ul class='awa-buttons'>
-            <li>
-                <h:commandButton id='save' value='#{wikiMsg.wiki_page_save_button}'
-                                 styleClass="ui-button ui-state-default ui-corner-all"
-                                 action="#{wikiPage.save}" title="#{wikiMsg.wiki_page_save_title}"/>
-            </li>
-        </ul>
     </h:form>
       <util:script>
               // Create a MarkEdit editor on page load
