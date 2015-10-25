@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -230,10 +230,20 @@ package AWA.Votes.Models is
 
    type Vote_Bean is abstract
      new Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with  record
+
+      --  the permission name to check if the user is allowed to vote
       Permission : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the entity identifier
       Entity_Id : ADO.Identifier;
+
+      --  the user rating
       Rating : Integer;
+
+      --  the entity type
       Entity_Type : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the total rating for the entity
       Total : Integer;
    end record;
 
@@ -242,12 +252,12 @@ package AWA.Votes.Models is
    function Get_Method_Bindings (From : in Vote_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access;
 
-   --  Get the value identified by the name.
+   --  Get the bean attribute identified by the name.
    overriding
    function Get_Value (From : in Vote_Bean;
                        Name : in String) return Util.Beans.Objects.Object;
 
-   --  Set the value identified by the name.
+   --  Set the bean attribute identified by the name.
    overriding
    procedure Set_Value (Item  : in out Vote_Bean;
                         Name  : in String;

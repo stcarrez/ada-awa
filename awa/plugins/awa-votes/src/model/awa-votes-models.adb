@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -379,6 +379,10 @@ package body AWA.Votes.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Rating_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -741,6 +745,10 @@ package body AWA.Votes.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Vote_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -818,14 +826,20 @@ package body AWA.Votes.Models is
          3 => Binding_Vote_Bean_3.Proxy'Access
      );
 
+   --  ------------------------------
    --  This bean provides some methods that can be used in a Method_Expression.
+   --  ------------------------------
    overriding
    function Get_Method_Bindings (From : in Vote_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
    begin
       return Binding_Vote_Bean_Array'Access;
    end Get_Method_Bindings;
-
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Vote_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
@@ -844,8 +858,10 @@ package body AWA.Votes.Models is
    end Get_Value;
 
 
+   --  ------------------------------
    --  Set the value identified by the name
-   overriding 
+   --  ------------------------------
+   overriding
    procedure Set_Value (Item  : in out Vote_Bean;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
@@ -862,8 +878,6 @@ package body AWA.Votes.Models is
          Item.Total := Util.Beans.Objects.To_Integer (Value);
       end if;
    end Set_Value;
-
-
 
 
 end AWA.Votes.Models;
