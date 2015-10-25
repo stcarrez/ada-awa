@@ -20,7 +20,6 @@ with Ada.Strings.Unbounded;
 
 with Util.Beans.Basic;
 with Util.Beans.Objects;
-with Util.Beans.Objects.Time;
 
 with ADO;
 
@@ -111,6 +110,7 @@ package AWA.Wikis.Beans is
       Content     : Models.Wiki_Content_Ref;
       Has_Content : Boolean := False;
       New_Content : Ada.Strings.Unbounded.Unbounded_String;
+      New_Comment : Ada.Strings.Unbounded.Unbounded_String;
 
       Wiki_Space  : Wiki_Space_Bean;
 
