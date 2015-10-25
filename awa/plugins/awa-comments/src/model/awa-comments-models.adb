@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -493,6 +493,10 @@ package body AWA.Comments.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Comment_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -513,9 +517,9 @@ package body AWA.Comments.Models is
       elsif Name = "entity_type" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Entity_Type));
       elsif Name = "status" then
-         return Status_Type_Objects.To_Object (Impl.Status);
+         return AWA.Comments.Models.Status_Type_Objects.To_Object (Impl.Status);
       elsif Name = "format" then
-         return Format_Type_Objects.To_Object (Impl.Format);
+         return AWA.Comments.Models.Format_Type_Objects.To_Object (Impl.Format);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -543,33 +547,54 @@ package body AWA.Comments.Models is
       ADO.Objects.Set_Created (Object);
    end Load;
 
-   --  --------------------
-   --  Get the bean attribute identified by the given name.
-   --  --------------------
+
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
    overriding
    function Get_Value (From : in Comment_Info;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
       if Name = "id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
-      end if;
-      if Name = "author" then
+      elsif Name = "author" then
          return Util.Beans.Objects.To_Object (From.Author);
-      end if;
-      if Name = "email" then
+      elsif Name = "email" then
          return Util.Beans.Objects.To_Object (From.Email);
-      end if;
-      if Name = "date" then
+      elsif Name = "date" then
          return Util.Beans.Objects.Time.To_Object (From.Date);
-      end if;
-      if Name = "format" then
+      elsif Name = "format" then
          return AWA.Comments.Models.Format_Type_Objects.To_Object (From.Format);
-      end if;
-      if Name = "comment" then
+      elsif Name = "comment" then
          return Util.Beans.Objects.To_Object (From.Comment);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Comment_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "id" then
+         Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "author" then
+         Item.Author := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "email" then
+         Item.Email := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "date" then
+         Item.Date := Util.Beans.Objects.Time.To_Time (Value);
+      elsif Name = "format" then
+         Item.Format := AWA.Comments.Models.Format_Type_Objects.To_Value (Value);
+      elsif Name = "comment" then
+         Item.Comment := Util.Beans.Objects.To_Unbounded_String (Value);
+      end if;
+   end Set_Value;
+
 
    --  --------------------
    --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
@@ -580,6 +605,7 @@ package body AWA.Comments.Models is
    begin
       List (Object.List, Session, Context);
    end List;
+
    --  --------------------
    --  The comment information.
    --  --------------------
@@ -664,25 +690,39 @@ package body AWA.Comments.Models is
          4 => Binding_Comment_Bean_4.Proxy'Access
      );
 
+   --  ------------------------------
    --  This bean provides some methods that can be used in a Method_Expression.
+   --  ------------------------------
    overriding
    function Get_Method_Bindings (From : in Comment_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
    begin
       return Binding_Comment_Bean_Array'Access;
    end Get_Method_Bindings;
 
-
+   --  ------------------------------
    --  Set the value identified by the name
-   overriding 
+   --  ------------------------------
+   overriding
    procedure Set_Value (Item  : in out Comment_Bean;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      null;
+      if Name = "create_date" then
+         Item.Set_Create_Date (Util.Beans.Objects.Time.To_Time (Value));
+      elsif Name = "message" then
+         Item.Set_Message (Util.Beans.Objects.To_String (Value));
+      elsif Name = "entity_id" then
+         Item.Set_Entity_Id (ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value)));
+      elsif Name = "entity_type" then
+         Item.Set_Entity_Type (ADO.Entity_Type (Util.Beans.Objects.To_Integer (Value)));
+      elsif Name = "status" then
+         Item.Set_Status (Status_Type_Objects.To_Value (Value));
+      elsif Name = "format" then
+         Item.Set_Format (Format_Type_Objects.To_Value (Value));
+      end if;
    end Set_Value;
-
-
 
 
 end AWA.Comments.Models;

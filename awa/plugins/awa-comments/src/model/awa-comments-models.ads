@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -192,9 +192,11 @@ package AWA.Comments.Models is
 
 
    --  --------------------
-   --  The comment information.
+   --    The comment information.
    --  --------------------
-   type Comment_Info is new Util.Beans.Basic.Readonly_Bean with record
+   type Comment_Info is
+     new Util.Beans.Basic.Bean with  record
+
       --  the comment identifier.
       Id : ADO.Identifier;
 
@@ -212,13 +214,20 @@ package AWA.Comments.Models is
 
       --  the comment text.
       Comment : Ada.Strings.Unbounded.Unbounded_String;
-
    end record;
 
-   --  Get the bean attribute identified by the given name.
+   --  Get the bean attribute identified by the name.
    overriding
    function Get_Value (From : in Comment_Info;
                        Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Comment_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+
 
    package Comment_Info_Beans is
       new Util.Beans.Basic.Lists (Element_Type => Comment_Info);
@@ -252,7 +261,7 @@ package AWA.Comments.Models is
                                  return Util.Beans.Methods.Method_Binding_Array_Access;
 
 
-   --  Set the value identified by the name.
+   --  Set the bean attribute identified by the name.
    overriding
    procedure Set_Value (Item  : in out Comment_Bean;
                         Name  : in String;
