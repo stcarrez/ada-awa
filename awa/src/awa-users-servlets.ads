@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-servlets -- OpenID verification servlet for user authentication
---  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,7 @@ with ASF.Principals;
 with ASF.Security.Servlets;
 with ASF.Requests;
 with ASF.Responses;
+with ASF.Sessions;
 with Security.Auth;
 package AWA.Users.Servlets is
 
@@ -65,6 +66,11 @@ package AWA.Users.Servlets is
    procedure Do_Get (Server   : in Verify_Auth_Servlet;
                      Request  : in out ASF.Requests.Request'Class;
                      Response : in out ASF.Responses.Response'Class);
+
+   --  Get the redirection URL that must be used after the authentication succeeded.
+   function Get_Redirect_URL (Server  : in Verify_Auth_Servlet;
+                              Session : in ASF.Sessions.Session'Class;
+                              Request : in ASF.Requests.Request'Class) return String;
 
 private
 
