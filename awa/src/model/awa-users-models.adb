@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -413,6 +413,10 @@ package body AWA.Users.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Email_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -425,7 +429,7 @@ package body AWA.Users.Models is
       if Name = "email" then
          return Util.Beans.Objects.To_Object (Impl.Email);
       elsif Name = "status" then
-         return MailDeliveryStatus_Objects.To_Object (Impl.Status);
+         return AWA.Users.Models.MailDeliveryStatus_Objects.To_Object (Impl.Status);
       elsif Name = "last_error_date" then
          return Util.Beans.Objects.Time.To_Object (Impl.Last_Error_Date);
       elsif Name = "id" then
@@ -973,6 +977,10 @@ package body AWA.Users.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in User_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -1378,6 +1386,10 @@ package body AWA.Users.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Access_Key_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -1876,6 +1888,10 @@ package body AWA.Users.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Session_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -1896,7 +1912,7 @@ package body AWA.Users.Models is
       elsif Name = "ip_address" then
          return Util.Beans.Objects.To_Object (Impl.Ip_Address);
       elsif Name = "stype" then
-         return Session_Type_Objects.To_Object (Impl.Stype);
+         return AWA.Users.Models.Session_Type_Objects.To_Object (Impl.Stype);
       elsif Name = "server_id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Server_Id));
       elsif Name = "id" then

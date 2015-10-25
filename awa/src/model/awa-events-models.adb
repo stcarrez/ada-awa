@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -313,6 +313,10 @@ package body AWA.Events.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Message_Type_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -329,7 +333,6 @@ package body AWA.Events.Models is
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
-
 
 
    procedure List (Object  : in out Message_Type_Vector;
@@ -676,6 +679,10 @@ package body AWA.Events.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Queue_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -1377,6 +1384,10 @@ package body AWA.Events.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Message_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -1401,7 +1412,7 @@ package body AWA.Events.Models is
       elsif Name = "task_id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Task_Id));
       elsif Name = "status" then
-         return Message_Status_Type_Objects.To_Object (Impl.Status);
+         return AWA.Events.Models.Message_Status_Type_Objects.To_Object (Impl.Status);
       elsif Name = "processing_date" then
          if Impl.Processing_Date.Is_Null then
             return Util.Beans.Objects.Null_Object;
@@ -1421,7 +1432,6 @@ package body AWA.Events.Models is
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
-
 
 
    procedure List (Object  : in out Message_Vector;
@@ -1479,7 +1489,6 @@ package body AWA.Events.Models is
       Object.Version := Stmt.Get_Integer (9);
       ADO.Objects.Set_Created (Object);
    end Load;
-
 
 
 end AWA.Events.Models;

@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -421,6 +421,7 @@ package AWA.Events.Models is
    procedure List (Object  : in out Message_Vector;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class);
+
 
 
    Query_Queue_Pending_Message : constant ADO.Queries.Query_Definition_Access;
