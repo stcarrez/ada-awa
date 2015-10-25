@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-servlets -- OpenID verification servlet for user authentication
---  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,11 +19,12 @@ with Util.Beans.Objects;
 with Util.Beans.Objects.Records;
 with Util.Log.Loggers;
 
+with ASF.Cookies;
 with ASF.Servlets;
-with ASF.Sessions;
 
 with AWA.Users.Services;
 with AWA.Users.Modules;
+with AWA.Users.Filters;
 with AWA.Users.Principals;
 package body AWA.Users.Servlets is
 
@@ -109,8 +110,10 @@ package body AWA.Users.Servlets is
             Response.Send_Redirect (Location => Auth_URL);
             Session.Set_Attribute (Name  => OPENID_ASSOC_ATTRIBUTE,
                                    Value => Bean);
-            Session.Set_Attribute (Name  => REDIRECT_ATTRIBUTE,
-                                   Value => Util.Beans.Objects.To_Object (Redirect));
+            if Redirect'Length > 0 then
+               Session.Set_Attribute (Name  => REDIRECT_ATTRIBUTE,
+                                      Value => Util.Beans.Objects.To_Object (Redirect));
+            end if;
          end;
       end;
    end Do_Get;
@@ -136,6 +139,30 @@ package body AWA.Users.Servlets is
                             Principal => Principal);
       Result := Principal.all'Access;
    end Create_Principal;
+
+   --  ------------------------------
+   --  Get the redirection URL that must be used after the authentication succeeded.
+   --  ------------------------------
+   function Get_Redirect_URL (Server  : in Verify_Auth_Servlet;
+                              Session : in ASF.Sessions.Session'Class;
+                              Request : in ASF.Requests.Request'Class) return String is
+      Redir : constant Util.Beans.Objects.Object := Session.Get_Attribute (REDIRECT_ATTRIBUTE);
+      Ctx   : constant ASF.Servlets.Servlet_Registry_Access := Server.Get_Servlet_Context;
+   begin
+      if not Util.Beans.Objects.Is_Null (Redir) then
+         return Util.Beans.Objects.To_String (Redir);
+      end if;
+      declare
+         Cookies : constant ASF.Cookies.Cookie_Array := Request.Get_Cookies;
+      begin
+         for I in Cookies'Range loop
+            if ASF.Cookies.Get_Name (Cookies (I)) = AWA.Users.Filters.REDIRECT_COOKIE then
+               return ASF.Cookies.Get_Value (Cookies (I));
+            end if;
+         end loop;
+      end;
+      return Ctx.Get_Init_Parameter ("openid.success_url");
+   end Get_Redirect_URL;
 
    --  ------------------------------
    --  Verify the authentication result that was returned by the OpenID provider.
@@ -167,7 +194,6 @@ package body AWA.Users.Servlets is
       Assoc      : Association_Access;
       Credential : Security.Auth.Authentication;
       Params     : Auth_Params;
-      Ctx        : constant ASF.Servlets.Servlet_Registry_Access := Server.Get_Servlet_Context;
    begin
       Log.Info ("Verify openid authentication");
 
@@ -202,22 +228,16 @@ package body AWA.Users.Servlets is
 
       --  Get a user principal and set it on the session.
       declare
-         User : ASF.Principals.Principal_Access;
+         User     : ASF.Principals.Principal_Access;
          Redirect : constant String
-           := Util.Beans.Objects.To_String (Session.Get_Attribute (REDIRECT_ATTRIBUTE));
-         URL  : constant String := Ctx.Get_Init_Parameter ("openid.success_url");
+           := Verify_Auth_Servlet'Class (Server).Get_Redirect_URL (Session, Request);
       begin
          Verify_Auth_Servlet'Class (Server).Create_Principal (Credential, User);
          Session.Set_Principal (User);
          Session.Remove_Attribute (REDIRECT_ATTRIBUTE);
 
-         if Redirect'Length > 0 then
-            Log.Info ("Redirect user to saved redirect URL: {0}", Redirect);
-            Response.Send_Redirect (Redirect);
-         else
-            Log.Info ("Redirect user to success URL: {0}", URL);
-            Response.Send_Redirect (URL);
-         end if;
+         Log.Info ("Redirect user to URL: {0}", Redirect);
+         Response.Send_Redirect (Redirect);
       end;
    end Do_Get;
 
