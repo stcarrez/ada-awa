@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-filters -- Specific filters for authentication and key verification
---  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -98,12 +98,19 @@ package body AWA.Users.Filters is
    procedure Do_Login (Filter   : in Auth_Filter;
                        Request  : in out ASF.Requests.Request'Class;
                        Response : in out ASF.Responses.Response'Class) is
-      URI : constant String := To_String (Filter.Login_URI);
+      Login_URI : constant String := To_String (Filter.Login_URI);
+      Context   : constant String := Request.Get_Context_Path;
+      Servlet   : constant String := Request.Get_Servlet_Path;
+      URL       : constant String := Context & Servlet & Request.Get_Path_Info;
+      C         : ASF.Cookies.Cookie := ASF.Cookies.Create (REDIRECT_COOKIE, URL);
    begin
-      Log.Info ("User is not logged, redirecting to {0}", URI);
+      Log.Info ("User is not logged, redirecting to {0}", Login_URI);
 
+      ASF.Cookies.Set_Path (C, Request.Get_Context_Path);
+      ASF.Cookies.Set_Max_Age (C, 86400);
+      Response.Add_Cookie (Cookie => C);
       if Request.Get_Header ("X-Requested-With") = "" then
-         Response.Send_Redirect (Location => URI);
+         Response.Send_Redirect (Location => Login_URI);
       else
          Response.Send_Error (ASF.Responses.SC_UNAUTHORIZED);
       end if;
