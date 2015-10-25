@@ -27,7 +27,9 @@
             <f:viewAction action='#{wikiPage.load}'/>
         </f:metadata>
         <div id='awa-content'>
-            <ui:include src="lists/menu-list.xhtml"/>
+            <ui:include src="lists/menu-list.xhtml">
+                <ui:param name="wikiSpaceId" value="#{wikiPage.wiki_id}"/>
+            </ui:include>
             <div id='wiki-page-create' class='blog-edit-post'>
                 <div class='awa-post'>
                     <ui:include src="forms/page-form.xhtml">
