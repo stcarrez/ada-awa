@@ -13,6 +13,8 @@ CREATE TABLE awa_wiki_content (
   `save_comment` VARCHAR(255) NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
+  /* the wiki page version */
+  `page_version` INTEGER NOT NULL,
   /* the wiki page that this Wiki_Content belongs to */
   `page_id` BIGINT NOT NULL,
   /* the page version author */
