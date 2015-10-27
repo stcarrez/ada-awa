@@ -37,6 +37,13 @@
   </managed-bean>
 
   <managed-bean>
+    <description>The list of wiki page versions.</description>
+    <managed-bean-name>wikiVersionList</managed-bean-name>
+    <managed-bean-class>AWA.Wikis.Beans.Wiki_Version_List_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
     <description>The wiki tag search bean.</description>
     <managed-bean-name>wikiTagSearch</managed-bean-name>
     <managed-bean-class>AWA.Tags.Beans.Tag_Search_Bean</managed-bean-class>
@@ -97,6 +104,10 @@
   <navigation-rule>
     <from-view-id>/wikis/edit.xhtml</from-view-id>
     <navigation-case>
+      <from-outcome>loaded</from-outcome>
+      <to-view-id>/wikis/edit.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
       <from-outcome>success</from-outcome>
       <to-view-id>/wikis/view/#{wikiPage.wiki_id}/#{wikiPage.name}</to-view-id>
       <redirect/>
@@ -109,6 +120,7 @@
     <url-pattern>/wikis/edit/#{wikiPage.wiki_id}/#{wikiPage.id}</url-pattern>
     <url-pattern>/wikis/create/#{wikiPage.wiki_id}</url-pattern>
     <url-pattern>/wikis/list/#{wikiList.wiki_id}</url-pattern>
+    <url-pattern>/wikis/history/#{wikiVersionList.wiki_id}/#{wikiVersionList.page_id}</url-pattern>
     <url-pattern>/wikis/*.html</url-pattern>
   </filter-mapping>
 
@@ -207,6 +219,7 @@
     <url-pattern>/wikis/create/.*</url-pattern>
     <url-pattern>/wikis/edit.html</url-pattern>
     <url-pattern>/wikis/create.html</url-pattern>
+    <url-pattern>/wikis/lists/tag-search.html</url-pattern>
   </url-policy>
 
   <url-policy>
@@ -232,6 +245,11 @@
   <url-mapping>
     <pattern>/wikis/create/#{wikiPage.wiki_id}</pattern>
     <view-id>/wikis/create.html</view-id>
+  </url-mapping>
+
+  <url-mapping>
+    <pattern>/wikis/history/#{wikiVersionList.wiki_id}/#{wikiVersionList.page_id}</pattern>
+    <view-id>/wikis/history.html</view-id>
   </url-mapping>
 
 </module>
