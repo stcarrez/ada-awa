@@ -344,6 +344,14 @@ package AWA.Wikis.Models is
    function Get_Version (Object : in Wiki_Content_Ref)
                  return Integer;
 
+   --  Set the wiki page version
+   procedure Set_Page_Version (Object : in out Wiki_Content_Ref;
+                               Value  : in Integer);
+
+   --  Get the wiki page version
+   function Get_Page_Version (Object : in Wiki_Content_Ref)
+                 return Integer;
+
    --  Set the wiki page that this Wiki_Content belongs to
    procedure Set_Page (Object : in out Wiki_Content_Ref;
                        Value  : in AWA.Wikis.Models.Wiki_Page_Ref'Class);
@@ -525,6 +533,61 @@ package AWA.Wikis.Models is
    Query_Wiki_Page_List : constant ADO.Queries.Query_Definition_Access;
 
    --  --------------------
+   --    The information about a wiki page version.
+   --  --------------------
+   type Wiki_Version_Info is
+     new Util.Beans.Basic.Bean with  record
+
+      --  the wiki page identifier.
+      Id : ADO.Identifier;
+
+      --  the wiki page version comment.
+      Comment : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the wiki page creation date.
+      Create_Date : Ada.Calendar.Time;
+
+      --  the page version.
+      Page_Version : Integer;
+
+      --  the wiki page author.
+      Author : Ada.Strings.Unbounded.Unbounded_String;
+   end record;
+
+   --  Get the bean attribute identified by the name.
+   overriding
+   function Get_Value (From : in Wiki_Version_Info;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Wiki_Version_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+
+   package Wiki_Version_Info_Beans is
+      new Util.Beans.Basic.Lists (Element_Type => Wiki_Version_Info);
+   package Wiki_Version_Info_Vectors renames Wiki_Version_Info_Beans.Vectors;
+   subtype Wiki_Version_Info_List_Bean is Wiki_Version_Info_Beans.List_Bean;
+
+   type Wiki_Version_Info_List_Bean_Access is access all Wiki_Version_Info_List_Bean;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Wiki_Version_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   subtype Wiki_Version_Info_Vector is Wiki_Version_Info_Vectors.Vector;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Wiki_Version_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   Query_Wiki_Version_List : constant ADO.Queries.Query_Definition_Access;
+
+   --  --------------------
    --    The information about a wiki page.
    --  --------------------
    type Wiki_View_Info is abstract
@@ -681,6 +744,44 @@ package AWA.Wikis.Models is
    procedure Load (Bean : in out Wiki_Page_List_Bean;
                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
+   type Wiki_Version_List_Bean is abstract limited
+     new Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with  record
+
+      --  the page number.
+      Page : Integer;
+
+      --  the number of versions.
+      Count : Integer;
+
+      --  the number of wiki version per display page.
+      Page_Size : Integer;
+
+      --  the wiki identifier.
+      Wiki_Id : ADO.Identifier;
+
+      --  the wiki page id.
+      Page_Id : ADO.Identifier;
+   end record;
+
+   --  This bean provides some methods that can be used in a Method_Expression.
+   overriding
+   function Get_Method_Bindings (From : in Wiki_Version_List_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access;
+
+   --  Get the bean attribute identified by the name.
+   overriding
+   function Get_Value (From : in Wiki_Version_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Wiki_Version_List_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   procedure Load (Bean : in out Wiki_Version_List_Bean;
+                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
 
 private
    WIKI_SPACE_NAME : aliased constant String := "awa_wiki_space";
@@ -832,11 +933,12 @@ private
    COL_3_3_NAME : aliased constant String := "format";
    COL_4_3_NAME : aliased constant String := "save_comment";
    COL_5_3_NAME : aliased constant String := "version";
-   COL_6_3_NAME : aliased constant String := "page_id";
-   COL_7_3_NAME : aliased constant String := "author_id";
+   COL_6_3_NAME : aliased constant String := "page_version";
+   COL_7_3_NAME : aliased constant String := "page_id";
+   COL_8_3_NAME : aliased constant String := "author_id";
 
    WIKI_CONTENT_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 8,
+     (Count => 9,
       Table => WIKI_CONTENT_NAME'Access,
       Members => (
          1 => COL_0_3_NAME'Access,
@@ -846,7 +948,8 @@ private
          5 => COL_4_3_NAME'Access,
          6 => COL_5_3_NAME'Access,
          7 => COL_6_3_NAME'Access,
-         8 => COL_7_3_NAME'Access
+         8 => COL_7_3_NAME'Access,
+         9 => COL_8_3_NAME'Access
 )
      );
    WIKI_CONTENT_TABLE : constant ADO.Schemas.Class_Mapping_Access
@@ -864,6 +967,7 @@ private
        Format : AWA.Wikis.Models.Format;
        Save_Comment : Ada.Strings.Unbounded.Unbounded_String;
        Version : Integer;
+       Page_Version : Integer;
        Page : AWA.Wikis.Models.Wiki_Page_Ref;
        Author : AWA.Users.Models.User_Ref;
    end record;
@@ -921,12 +1025,22 @@ private
    := Def_Wikipageinfo_Wiki_Page_List.Query'Access;
 
    package File_3 is
+      new ADO.Queries.Loaders.File (Path => "wiki-history.xml",
+                                    Sha1 => "AC42BF3C04729AEE8ADED975B16EBB859D1E7276");
+
+   package Def_Wikiversioninfo_Wiki_Version_List is
+      new ADO.Queries.Loaders.Query (Name => "wiki-version-list",
+                                     File => File_3.File'Access);
+   Query_Wiki_Version_List : constant ADO.Queries.Query_Definition_Access
+   := Def_Wikiversioninfo_Wiki_Version_List.Query'Access;
+
+   package File_4 is
       new ADO.Queries.Loaders.File (Path => "wiki-page.xml",
                                     Sha1 => "2329AE96698DF9BF3E1C6D308A208ED120C17967");
 
    package Def_Wikiviewinfo_Wiki_Page is
       new ADO.Queries.Loaders.Query (Name => "wiki-page",
-                                     File => File_3.File'Access);
+                                     File => File_4.File'Access);
    Query_Wiki_Page : constant ADO.Queries.Query_Definition_Access
    := Def_Wikiviewinfo_Wiki_Page.Query'Access;
 end AWA.Wikis.Models;

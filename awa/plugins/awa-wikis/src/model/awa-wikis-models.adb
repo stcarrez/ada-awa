@@ -991,6 +991,7 @@ package body AWA.Wikis.Models is
       Impl.Create_Date := ADO.DEFAULT_TIME;
       Impl.Format := AWA.Wikis.Models.Format'First;
       Impl.Version := 0;
+      Impl.Page_Version := 0;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -1120,12 +1121,29 @@ package body AWA.Wikis.Models is
    end Get_Version;
 
 
+   procedure Set_Page_Version (Object : in out Wiki_Content_Ref;
+                               Value  : in Integer) is
+      Impl : Wiki_Content_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Integer (Impl.all, 7, Impl.Page_Version, Value);
+   end Set_Page_Version;
+
+   function Get_Page_Version (Object : in Wiki_Content_Ref)
+                  return Integer is
+      Impl : constant Wiki_Content_Access
+         := Wiki_Content_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Page_Version;
+   end Get_Page_Version;
+
+
    procedure Set_Page (Object : in out Wiki_Content_Ref;
                        Value  : in AWA.Wikis.Models.Wiki_Page_Ref'Class) is
       Impl : Wiki_Content_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 7, Impl.Page, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 8, Impl.Page, Value);
    end Set_Page;
 
    function Get_Page (Object : in Wiki_Content_Ref)
@@ -1142,7 +1160,7 @@ package body AWA.Wikis.Models is
       Impl : Wiki_Content_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 8, Impl.Author, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 9, Impl.Author, Value);
    end Set_Author;
 
    function Get_Author (Object : in Wiki_Content_Ref)
@@ -1172,6 +1190,7 @@ package body AWA.Wikis.Models is
             Copy.Format := Impl.Format;
             Copy.Save_Comment := Impl.Save_Comment;
             Copy.Version := Impl.Version;
+            Copy.Page_Version := Impl.Page_Version;
             Copy.Page := Impl.Page;
             Copy.Author := Impl.Author;
          end;
@@ -1309,14 +1328,19 @@ package body AWA.Wikis.Models is
          Object.Clear_Modified (1);
       end if;
       if Object.Is_Modified (7) then
-         Stmt.Save_Field (Name  => COL_6_3_NAME, --  page_id
-                          Value => Object.Page);
+         Stmt.Save_Field (Name  => COL_6_3_NAME, --  page_version
+                          Value => Object.Page_Version);
          Object.Clear_Modified (7);
       end if;
       if Object.Is_Modified (8) then
-         Stmt.Save_Field (Name  => COL_7_3_NAME, --  author_id
-                          Value => Object.Author);
+         Stmt.Save_Field (Name  => COL_7_3_NAME, --  page_id
+                          Value => Object.Page);
          Object.Clear_Modified (8);
+      end if;
+      if Object.Is_Modified (9) then
+         Stmt.Save_Field (Name  => COL_8_3_NAME, --  author_id
+                          Value => Object.Author);
+         Object.Clear_Modified (9);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -1360,9 +1384,11 @@ package body AWA.Wikis.Models is
                         Value => Object.Save_Comment);
       Query.Save_Field (Name  => COL_5_3_NAME, --  version
                         Value => Object.Version);
-      Query.Save_Field (Name  => COL_6_3_NAME, --  page_id
+      Query.Save_Field (Name  => COL_6_3_NAME, --  page_version
+                        Value => Object.Page_Version);
+      Query.Save_Field (Name  => COL_7_3_NAME, --  page_id
                         Value => Object.Page);
-      Query.Save_Field (Name  => COL_7_3_NAME, --  author_id
+      Query.Save_Field (Name  => COL_8_3_NAME, --  author_id
                         Value => Object.Author);
       Query.Execute (Result);
       if Result /= 1 then
@@ -1404,6 +1430,8 @@ package body AWA.Wikis.Models is
          return AWA.Wikis.Models.Format_Objects.To_Object (Impl.Format);
       elsif Name = "save_comment" then
          return Util.Beans.Objects.To_Object (Impl.Save_Comment);
+      elsif Name = "page_version" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Page_Version));
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -1422,11 +1450,12 @@ package body AWA.Wikis.Models is
       Object.Content := Stmt.Get_Unbounded_String (2);
       Object.Format := Format'Val (Stmt.Get_Integer (3));
       Object.Save_Comment := Stmt.Get_Unbounded_String (4);
-      if not Stmt.Is_Null (6) then
-         Object.Page.Set_Key_Value (Stmt.Get_Identifier (6), Session);
-      end if;
+      Object.Page_Version := Stmt.Get_Integer (6);
       if not Stmt.Is_Null (7) then
-         Object.Author.Set_Key_Value (Stmt.Get_Identifier (7), Session);
+         Object.Page.Set_Key_Value (Stmt.Get_Identifier (7), Session);
+      end if;
+      if not Stmt.Is_Null (8) then
+         Object.Author.Set_Key_Value (Stmt.Get_Identifier (8), Session);
       end if;
       Object.Version := Stmt.Get_Integer (5);
       ADO.Objects.Set_Created (Object);
@@ -1605,6 +1634,92 @@ package body AWA.Wikis.Models is
    begin
       Stmt.Execute;
       Wiki_Page_Info_Vectors.Clear (Object);
+      while Stmt.Has_Elements loop
+         Object.Insert_Space (Before => Pos);
+         Object.Update_Element (Index => Pos, Process => Read'Access);
+         Pos := Pos + 1;
+         Stmt.Next;
+      end loop;
+   end List;
+
+
+
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Wiki_Version_Info;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
+      elsif Name = "comment" then
+         return Util.Beans.Objects.To_Object (From.Comment);
+      elsif Name = "create_date" then
+         return Util.Beans.Objects.Time.To_Object (From.Create_Date);
+      elsif Name = "page_version" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Page_Version));
+      elsif Name = "author" then
+         return Util.Beans.Objects.To_Object (From.Author);
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Wiki_Version_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "id" then
+         Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "comment" then
+         Item.Comment := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "create_date" then
+         Item.Create_Date := Util.Beans.Objects.Time.To_Time (Value);
+      elsif Name = "page_version" then
+         Item.Page_Version := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "author" then
+         Item.Author := Util.Beans.Objects.To_Unbounded_String (Value);
+      end if;
+   end Set_Value;
+
+
+   --  --------------------
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   --  --------------------
+   procedure List (Object  : in out Wiki_Version_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+   begin
+      List (Object.List, Session, Context);
+   end List;
+
+   --  --------------------
+   --  The information about a wiki page version.
+   --  --------------------
+   procedure List (Object  : in out Wiki_Version_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+      procedure Read (Into : in out Wiki_Version_Info);
+
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Context);
+      Pos  : Natural := 0;
+      procedure Read (Into : in out Wiki_Version_Info) is
+      begin
+         Into.Id := Stmt.Get_Identifier (0);
+         Into.Comment := Stmt.Get_Unbounded_String (1);
+         Into.Create_Date := Stmt.Get_Time (2);
+         Into.Page_Version := Stmt.Get_Integer (3);
+         Into.Author := Stmt.Get_Unbounded_String (4);
+      end Read;
+   begin
+      Stmt.Execute;
+      Wiki_Version_Info_Vectors.Clear (Object);
       while Stmt.Has_Elements loop
          Object.Insert_Space (Before => Pos);
          Object.Update_Element (Index => Pos, Process => Read'Access);
@@ -1925,6 +2040,75 @@ package body AWA.Wikis.Models is
          Item.Tag := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "wiki_id" then
          Item.Wiki_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      end if;
+   end Set_Value;
+
+   procedure Op_Load (Bean    : in out Wiki_Version_List_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Load (Bean    : in out Wiki_Version_List_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Wiki_Version_List_Bean'Class (Bean).Load (Outcome);
+   end Op_Load;
+   package Binding_Wiki_Version_List_Bean_1 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Wiki_Version_List_Bean,
+                                                      Method => Op_Load,
+                                                      Name   => "load");
+
+   Binding_Wiki_Version_List_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
+     := (1 => Binding_Wiki_Version_List_Bean_1.Proxy'Access
+     );
+
+   --  ------------------------------
+   --  This bean provides some methods that can be used in a Method_Expression.
+   --  ------------------------------
+   overriding
+   function Get_Method_Bindings (From : in Wiki_Version_List_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
+   begin
+      return Binding_Wiki_Version_List_Bean_Array'Access;
+   end Get_Method_Bindings;
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Wiki_Version_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "page" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Page));
+      elsif Name = "count" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Count));
+      elsif Name = "page_size" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Page_Size));
+      elsif Name = "wiki_id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Wiki_Id));
+      elsif Name = "page_id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Page_Id));
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Wiki_Version_List_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "page" then
+         Item.Page := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "count" then
+         Item.Count := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "page_size" then
+         Item.Page_Size := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "wiki_id" then
+         Item.Wiki_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "page_id" then
+         Item.Page_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
       end if;
    end Set_Value;
 
