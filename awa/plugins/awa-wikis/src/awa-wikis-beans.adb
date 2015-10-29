@@ -297,6 +297,7 @@ package body AWA.Wikis.Beans is
       Bean.Module.Load_Page (Bean, Bean.Content, Bean.Tags,
                               Bean.Wiki_Space.Get_Id, Bean.Get_Name);
       Bean.Tags.Load_Tags (Session, Bean.Get_Id);
+      Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("loaded");
 
    exception
       when ADO.Objects.NOT_FOUND =>
@@ -473,6 +474,97 @@ package body AWA.Wikis.Beans is
       Object.Wiki_Id    := ADO.NO_IDENTIFIER;
       return Object.all'Access;
    end Create_Wiki_List_Bean;
+
+   --  ------------------------------
+   --  Get the value identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Wiki_Version_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "versions" then
+         return Util.Beans.Objects.To_Object (Value   => From.Versions_Bean,
+                                              Storage => Util.Beans.Objects.STATIC);
+      elsif Name = "page_count" then
+         return Util.Beans.Objects.To_Object ((From.Count + From.Page_Size - 1) / From.Page_Size);
+      else
+         return AWA.Wikis.Models.Wiki_Version_List_Bean (From).Get_Value (Name);
+      end if;
+   end Get_Value;
+
+   --  ------------------------------
+   --  Set the value identified by the name.
+   --  ------------------------------
+   overriding
+   procedure Set_Value (From  : in out Wiki_Version_List_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "page" and not Util.Beans.Objects.Is_Empty (Value) then
+         From.Page := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "wiki_id" and not Util.Beans.Objects.Is_Empty (Value) then
+         From.Wiki_Id := ADO.Utils.To_Identifier (Value);
+      elsif Name = "page_id" and not Util.Beans.Objects.Is_Empty (Value) then
+         From.Page_Id := ADO.Utils.To_Identifier (Value);
+      end if;
+   end Set_Value;
+
+   overriding
+   procedure Load (Into    : in out Wiki_Version_List_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      use AWA.Wikis.Models;
+      use AWA.Services;
+      use type ADO.Identifier;
+
+      Ctx         : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      User        : constant ADO.Identifier := Ctx.Get_User_Identifier;
+      Session     : ADO.Sessions.Session := Into.Module.Get_Session;
+      Query       : ADO.Queries.Context;
+      Count_Query : ADO.Queries.Context;
+      Tag_Id      : ADO.Identifier;
+      First       : constant Natural  := (Into.Page - 1) * Into.Page_Size;
+   begin
+      if Into.Wiki_Id = ADO.NO_IDENTIFIER or Into.Page_Id = ADO.NO_IDENTIFIER then
+         return;
+      end if;
+      Query.Set_Query (AWA.Wikis.Models.Query_Wiki_Version_List);
+      Count_Query.Set_Count_Query (AWA.Wikis.Models.Query_Wiki_Version_List);
+      Query.Bind_Param (Name => "first", Value => First);
+      Query.Bind_Param (Name => "count", Value => Into.Page_Size);
+      Query.Bind_Param (Name => "wiki_id", Value => Into.Wiki_Id);
+      Query.Bind_Param (Name => "page_id", Value => Into.Page_Id);
+      Query.Bind_Param (Name => "user_id", Value => User);
+      Count_Query.Bind_Param (Name => "wiki_id", Value => Into.Wiki_Id);
+      Count_Query.Bind_Param (Name => "page_id", Value => Into.Page_Id);
+      Count_Query.Bind_Param (Name => "user_id", Value => User);
+      ADO.Sessions.Entities.Bind_Param (Params  => Query,
+                                        Name    => "table",
+                                        Table   => AWA.Wikis.Models.WIKI_SPACE_TABLE,
+                                        Session => Session);
+      ADO.Sessions.Entities.Bind_Param (Params  => Count_Query,
+                                        Name    => "table",
+                                        Table   => AWA.Wikis.Models.WIKI_SPACE_TABLE,
+                                        Session => Session);
+      AWA.Wikis.Models.List (Into.Versions, Session, Query);
+      Into.Count := ADO.Datasets.Get_Count (Session, Count_Query);
+   end Load;
+
+   --  ------------------------------
+   --  Create the Post_List_Bean bean instance.
+   --  ------------------------------
+   function Create_Wiki_Version_List_Bean (Module : in AWA.Wikis.Modules.Wiki_Module_Access)
+                                           return Util.Beans.Basic.Readonly_Bean_Access is
+      Object  : constant Wiki_Version_List_Bean_Access := new Wiki_Version_List_Bean;
+   begin
+      Object.Module     := Module;
+      Object.Versions_Bean := Object.Versions'Access;
+      Object.Page_Size  := 20;
+      Object.Page       := 1;
+      Object.Count      := 0;
+      Object.Wiki_Id    := ADO.NO_IDENTIFIER;
+      Object.Page_Id    := ADO.NO_IDENTIFIER;
+      return Object.all'Access;
+   end Create_Wiki_Version_List_Bean;
 
    --  ------------------------------
    --  Load the list of wikis.
