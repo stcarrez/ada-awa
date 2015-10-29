@@ -285,6 +285,7 @@ package body AWA.Wikis.Modules is
       Content.Set_Page (Page);
       Content.Set_Create_Date (Ada.Calendar.Clock);
       Content.Set_Author (User);
+      Content.Set_Page_Version (Page.Get_Last_Version);
       Content.Save (DB);
       Page.Set_Content (Content);
       Page.Save (DB);
