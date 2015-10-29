@@ -211,7 +211,7 @@ package AWA.Wikis.Beans is
                         Value : in Util.Beans.Objects.Object);
 
    overriding
-   procedure Load (From    : in out Wiki_Version_List_Bean;
+   procedure Load (Into    : in out Wiki_Version_List_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
    --  Create the Post_List_Bean bean instance.
