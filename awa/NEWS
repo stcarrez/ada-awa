@@ -1,5 +1,6 @@
 Version 1.1     -
   - New wiki plugin to write online wiki-based documentation
+  - Improvement of configure, build and installation with gprinstall when available
 
 Version 1.0     - Jul 2014
   - New countries plugin to provide country/region/city data models
