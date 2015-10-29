@@ -14,12 +14,13 @@
   -  See the License for the specific language governing permissions and
   -  limitations under the License.
   -->
-<ul class='blog-action'
-        xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:c="http://java.sun.com/jstl/core"
-        xmlns:u="http://code.google.com/p/ada-asf/util"
-        xmlns:h="http://java.sun.com/jsf/html">
+<h:panelGroup rendered="#{user.isLogged}"
+              xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:f="http://java.sun.com/jsf/core"
+              xmlns:c="http://java.sun.com/jstl/core"
+              xmlns:u="http://code.google.com/p/ada-asf/util"
+              xmlns:h="http://java.sun.com/jsf/html">
+  <ul class='blog-action'>
     <li>
         <a href="#{contextPath}/wikis/create/#{wikiSpaceId}"
            title="#{wikiMsg.wiki_admin_create_page_title}">
@@ -41,6 +42,5 @@
             <span>#{wikiMsg.wiki_admin_list_comments_label}</span>
         </a>
     </li>
-
-</ul>
-
+  </ul>
+</h:panelGroup>
