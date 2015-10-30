@@ -20,6 +20,7 @@ with ASF.Applications;
 with ADO;
 with AWA.Events;
 with AWA.Modules;
+with AWA.Modules.Lifecycles;
 with AWA.Wikis.Models;
 with AWA.Tags.Beans;
 with Security.Permissions;
@@ -55,6 +56,11 @@ package AWA.Wikis.Modules is
 
    --  Event posted when a new wiki content is created.
    package Create_Content_Event is new AWA.Events.Definition (Name => "wiki-create-content");
+
+   package Wiki_Lifecycle is
+     new AWA.Modules.Lifecycles (Element_Type => AWA.Wikis.Models.Wiki_Page_Ref'Class);
+
+   subtype Listener is Wiki_Lifecycle.Listener;
 
    --  ------------------------------
    --  Module wikis
