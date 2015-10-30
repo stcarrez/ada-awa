@@ -1,6 +1,7 @@
 with "../../awa";
 with "../awa-workspaces/awa_workspaces";
 with "../awa-tags/awa_tags";
+with "../awa-images/awa_images";
 
 project awa_wikis is
    Version      := awa.Version;
