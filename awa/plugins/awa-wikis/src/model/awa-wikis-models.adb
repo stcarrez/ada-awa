@@ -622,12 +622,29 @@ package body AWA.Wikis.Models is
    end Get_Version;
 
 
+   procedure Set_Preview (Object : in out Wiki_Page_Ref;
+                          Value  : in AWA.Images.Models.Image_Ref'Class) is
+      Impl : Wiki_Page_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 7, Impl.Preview, Value);
+   end Set_Preview;
+
+   function Get_Preview (Object : in Wiki_Page_Ref)
+                  return AWA.Images.Models.Image_Ref'Class is
+      Impl : constant Wiki_Page_Access
+         := Wiki_Page_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Preview;
+   end Get_Preview;
+
+
    procedure Set_Wiki (Object : in out Wiki_Page_Ref;
                        Value  : in AWA.Wikis.Models.Wiki_Space_Ref'Class) is
       Impl : Wiki_Page_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 7, Impl.Wiki, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 8, Impl.Wiki, Value);
    end Set_Wiki;
 
    function Get_Wiki (Object : in Wiki_Page_Ref)
@@ -644,7 +661,7 @@ package body AWA.Wikis.Models is
       Impl : Wiki_Page_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 8, Impl.Content, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 9, Impl.Content, Value);
    end Set_Content;
 
    function Get_Content (Object : in Wiki_Page_Ref)
@@ -674,6 +691,7 @@ package body AWA.Wikis.Models is
             Copy.Is_Public := Impl.Is_Public;
             Copy.Title := Impl.Title;
             Copy.Version := Impl.Version;
+            Copy.Preview := Impl.Preview;
             Copy.Wiki := Impl.Wiki;
             Copy.Content := Impl.Content;
          end;
@@ -831,14 +849,19 @@ package body AWA.Wikis.Models is
          Object.Clear_Modified (5);
       end if;
       if Object.Is_Modified (7) then
-         Stmt.Save_Field (Name  => COL_6_2_NAME, --  wiki_id
-                          Value => Object.Wiki);
+         Stmt.Save_Field (Name  => COL_6_2_NAME, --  preview_id
+                          Value => Object.Preview);
          Object.Clear_Modified (7);
       end if;
       if Object.Is_Modified (8) then
-         Stmt.Save_Field (Name  => COL_7_2_NAME, --  content_id
-                          Value => Object.Content);
+         Stmt.Save_Field (Name  => COL_7_2_NAME, --  wiki_id
+                          Value => Object.Wiki);
          Object.Clear_Modified (8);
+      end if;
+      if Object.Is_Modified (9) then
+         Stmt.Save_Field (Name  => COL_8_2_NAME, --  content_id
+                          Value => Object.Content);
+         Object.Clear_Modified (9);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -882,9 +905,11 @@ package body AWA.Wikis.Models is
                         Value => Object.Title);
       Query.Save_Field (Name  => COL_5_2_NAME, --  version
                         Value => Object.Version);
-      Query.Save_Field (Name  => COL_6_2_NAME, --  wiki_id
+      Query.Save_Field (Name  => COL_6_2_NAME, --  preview_id
+                        Value => Object.Preview);
+      Query.Save_Field (Name  => COL_7_2_NAME, --  wiki_id
                         Value => Object.Wiki);
-      Query.Save_Field (Name  => COL_7_2_NAME, --  content_id
+      Query.Save_Field (Name  => COL_8_2_NAME, --  content_id
                         Value => Object.Content);
       Query.Execute (Result);
       if Result /= 1 then
@@ -946,10 +971,13 @@ package body AWA.Wikis.Models is
       Object.Is_Public := Stmt.Get_Boolean (3);
       Object.Title := Stmt.Get_Unbounded_String (4);
       if not Stmt.Is_Null (6) then
-         Object.Wiki.Set_Key_Value (Stmt.Get_Identifier (6), Session);
+         Object.Preview.Set_Key_Value (Stmt.Get_Identifier (6), Session);
       end if;
       if not Stmt.Is_Null (7) then
-         Object.Content.Set_Key_Value (Stmt.Get_Identifier (7), Session);
+         Object.Wiki.Set_Key_Value (Stmt.Get_Identifier (7), Session);
+      end if;
+      if not Stmt.Is_Null (8) then
+         Object.Content.Set_Key_Value (Stmt.Get_Identifier (8), Session);
       end if;
       Object.Version := Stmt.Get_Integer (5);
       ADO.Objects.Set_Created (Object);

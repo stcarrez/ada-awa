@@ -34,6 +34,7 @@ with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
 with Util.Beans.Objects.Enums;
 with Util.Beans.Basic.Lists;
+with AWA.Images.Models;
 with AWA.Users.Models;
 with AWA.Workspaces.Models;
 with Util.Beans.Methods;
@@ -160,6 +161,8 @@ package AWA.Wikis.Models is
    --  --------------------
    --  The wiki page represents a page with its versions.
    --  It refers to the last version which is currently visible.
+   --  It has an optional preview image which defines
+   --  the thumbnail preview of the last/current wiki content.
    --  --------------------
    --  Create an object key for Wiki_Page.
    function Wiki_Page_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
@@ -220,6 +223,14 @@ package AWA.Wikis.Models is
    --
    function Get_Version (Object : in Wiki_Page_Ref)
                  return Integer;
+
+   --  Set the wiki page preview.
+   procedure Set_Preview (Object : in out Wiki_Page_Ref;
+                          Value  : in AWA.Images.Models.Image_Ref'Class);
+
+   --  Get the wiki page preview.
+   function Get_Preview (Object : in Wiki_Page_Ref)
+                 return AWA.Images.Models.Image_Ref'Class;
 
    --  Set the wiki space that this page belongs to
    procedure Set_Wiki (Object : in out Wiki_Page_Ref;
@@ -859,11 +870,12 @@ private
    COL_3_2_NAME : aliased constant String := "is_public";
    COL_4_2_NAME : aliased constant String := "title";
    COL_5_2_NAME : aliased constant String := "version";
-   COL_6_2_NAME : aliased constant String := "wiki_id";
-   COL_7_2_NAME : aliased constant String := "content_id";
+   COL_6_2_NAME : aliased constant String := "preview_id";
+   COL_7_2_NAME : aliased constant String := "wiki_id";
+   COL_8_2_NAME : aliased constant String := "content_id";
 
    WIKI_PAGE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 8,
+     (Count => 9,
       Table => WIKI_PAGE_NAME'Access,
       Members => (
          1 => COL_0_2_NAME'Access,
@@ -873,7 +885,8 @@ private
          5 => COL_4_2_NAME'Access,
          6 => COL_5_2_NAME'Access,
          7 => COL_6_2_NAME'Access,
-         8 => COL_7_2_NAME'Access
+         8 => COL_7_2_NAME'Access,
+         9 => COL_8_2_NAME'Access
 )
      );
    WIKI_PAGE_TABLE : constant ADO.Schemas.Class_Mapping_Access
@@ -891,6 +904,7 @@ private
        Is_Public : Boolean;
        Title : Ada.Strings.Unbounded.Unbounded_String;
        Version : Integer;
+       Preview : AWA.Images.Models.Image_Ref;
        Wiki : AWA.Wikis.Models.Wiki_Space_Ref;
        Content : AWA.Wikis.Models.Wiki_Content_Ref;
    end record;
