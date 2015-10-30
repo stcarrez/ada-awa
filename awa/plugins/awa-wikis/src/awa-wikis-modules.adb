@@ -273,13 +273,14 @@ package body AWA.Wikis.Modules is
    procedure Save_Wiki_Content (Model   : in Wiki_Module;
                                 Page    : in out AWA.Wikis.Models.Wiki_Page_Ref'Class;
                                 Content : in out AWA.Wikis.Models.Wiki_Content_Ref'Class) is
-      Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
-      User  : constant AWA.Users.Models.User_Ref := Ctx.Get_User;
+      Ctx     : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB      : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      User    : constant AWA.Users.Models.User_Ref := Ctx.Get_User;
+      Created : constant Boolean := not Page.Is_Inserted;
    begin
       Ctx.Start;
       Page.Set_Last_Version (Page.Get_Last_Version + 1);
-      if not Page.Is_Inserted then
+      if Created then
          Page.Save (DB);
       end if;
       Content.Set_Page (Page);
@@ -289,6 +290,12 @@ package body AWA.Wikis.Modules is
       Content.Save (DB);
       Page.Set_Content (Content);
       Page.Save (DB);
+
+      if Created then
+         Wiki_Lifecycle.Notify_Create (Model, Page);
+      else
+         Wiki_Lifecycle.Notify_Update (Model, Page);
+      end if;
       Ctx.Commit;
    end Save_Wiki_Content;
 
