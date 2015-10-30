@@ -18,10 +18,23 @@
 with ASF.Applications;
 
 with ADO;
+with AWA.Events;
 with AWA.Modules;
 with AWA.Wikis.Models;
 with AWA.Tags.Beans;
 with Security.Permissions;
+
+--  == Events ==
+--  The <tt>wikis</tt> exposes a number of events which are posted when some action
+--  are performed at the service level.
+--
+--  === wiki-create-page ===
+--  This event is posted when a new wiki page is created.
+--
+--  === wiki-create-content ===
+--  This event is posted when a new wiki page content is created.  Each time a wiki page is
+--  modified, a new wiki page content is created and this event is posted.
+--
 package AWA.Wikis.Modules is
 
    --  The name under which the module is registered.
@@ -36,6 +49,12 @@ package AWA.Wikis.Modules is
    package ACL_Create_Wiki_Space is new Security.Permissions.Definition ("wiki-space-create");
    package ACL_Delete_Wiki_Space is new Security.Permissions.Definition ("wiki-space-delete");
    package ACL_Update_Wiki_Space is new Security.Permissions.Definition ("wiki-space-update");
+
+   --  Event posted when a new wiki page is created.
+   package Create_Page_Event is new AWA.Events.Definition (Name => "wiki-create-page");
+
+   --  Event posted when a new wiki content is created.
+   package Create_Content_Event is new AWA.Events.Definition (Name => "wiki-create-content");
 
    --  ------------------------------
    --  Module wikis
