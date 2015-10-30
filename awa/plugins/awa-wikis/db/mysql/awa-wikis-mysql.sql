@@ -22,7 +22,9 @@ CREATE TABLE awa_wiki_content (
   PRIMARY KEY (`id`)
 );
 /* The wiki page represents a page with its versions.
-It refers to the last version which is currently visible. */
+It refers to the last version which is currently visible.
+It has an optional preview image which defines
+the thumbnail preview of the last/current wiki content. */
 CREATE TABLE awa_wiki_page (
   /* the wiki page identifier */
   `id` BIGINT NOT NULL,
@@ -36,6 +38,8 @@ CREATE TABLE awa_wiki_page (
   `title` VARCHAR(255) BINARY NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
+  /* the wiki page preview. */
+  `preview_id` BIGINT ,
   /* the wiki space that this page belongs to */
   `wiki_id` BIGINT NOT NULL,
   /* the current content (or last version) */
