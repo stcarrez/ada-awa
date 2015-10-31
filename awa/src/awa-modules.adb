@@ -92,6 +92,26 @@ package body AWA.Modules is
    end Get_Config;
 
    --  ------------------------------
+   --  Get the module configuration property identified by the <tt>Config</tt> parameter.
+   --  If the property does not exist, the default configuration value is returned.
+   --  ------------------------------
+   function Get_Config (Plugin  : in Module;
+                        Name    : in String;
+                        Default : in String := "")
+                        return EL.Expressions.Expression is
+      Ctx   : EL.Contexts.Default.Default_Context;
+      Value : constant String := Plugin.Get_Config (Name, Default);
+   begin
+      return EL.Expressions.Create_Expression (Value, Ctx);
+
+   exception
+      when E : others =>
+         Log.Error ("Invalid parameter ", E, True);
+         return EL.Expressions.Create_Expression ("", Ctx);
+
+   end Get_Config;
+
+   --  ------------------------------
    --  Send the event to the module
    --  ------------------------------
    procedure Send_Event (Plugin  : in Module;
