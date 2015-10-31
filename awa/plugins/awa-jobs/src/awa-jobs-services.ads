@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-jobs -- AWA Jobs
---  Copyright (C) 2012, 2014 Stephane Carrez
+--  Copyright (C) 2012, 2014, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +22,7 @@ with Util.Beans.Objects;
 with Util.Beans.Objects.Maps;
 
 with ADO.Sessions;
+with ADO.Objects;
 
 with AWA.Events;
 with AWA.Jobs.Models;
@@ -83,6 +84,11 @@ package AWA.Jobs.Services is
                             Value : in Integer);
 
    --  Set the job parameter identified by the <b>Name</b> to the value given in <b>Value</b>.
+   procedure Set_Parameter (Job   : in out Abstract_Job_Type;
+                            Name  : in String;
+                            Value : in ADO.Objects.Object_Ref'Class);
+
+   --  Set the job parameter identified by the <b>Name</b> to the value given in <b>Value</b>.
    --  The value object can hold any kind of basic value type (integer, enum, date, strings).
    --  If the value represents a bean, the <tt>Invalid_Value</tt> exception is raised.
    procedure Set_Parameter (Job   : in out Abstract_Job_Type;
@@ -132,17 +138,6 @@ package AWA.Jobs.Services is
    --  to save the job.
    procedure Save (Job : in out Abstract_Job_Type;
                    DB  : in out ADO.Sessions.Master_Session'Class);
-
-   --  ------------------------------
-   --  Job Type
-   --  ------------------------------
-   --  The <tt>Job_Type</tt> is a concrete job used by the <tt>Work_Factory</tt> to execute
-   --  a simple <tt>Work_Access</tt> procedure.
-   type Job_Type is new Abstract_Job_Type with private;
-
-   overriding
-   procedure Execute (Job : in out Job_Type);
-
    --  ------------------------------
    --  Job Factory
    --  ------------------------------
@@ -161,6 +156,17 @@ package AWA.Jobs.Services is
    --  Schedule the job.
    procedure Schedule (Job        : in out Abstract_Job_Type;
                        Definition : in Job_Factory'Class);
+
+   --  ------------------------------
+   --  Job Type
+   --  ------------------------------
+   --  The <tt>Job_Type</tt> is a concrete job used by the <tt>Work_Factory</tt> to execute
+   --  a simple <tt>Work_Access</tt> procedure.
+   type Job_Type is new Abstract_Job_Type with private;
+
+   overriding
+   procedure Execute (Job : in out Job_Type);
+
 
    --  ------------------------------
    --  Work Factory
