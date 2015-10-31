@@ -77,15 +77,21 @@ package body AWA.Wikis.Beans is
    procedure Load (Bean    : in out Wiki_View_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       pragma Unreferenced (Outcome);
+      use type ADO.Identifier;
       package ASC renames AWA.Services.Contexts;
 
       Ctx     : constant ASC.Service_Context_Access := ASC.Current;
       Session : ADO.Sessions.Session := Bean.Module.Get_Session;
       Query   : ADO.Queries.Context;
    begin
-      Query.Set_Query (AWA.Wikis.Models.Query_Wiki_Page);
       Query.Bind_Param ("wiki_id", Bean.Wiki_Space_Id);
-      Query.Bind_Param ("name", Bean.Name);
+      if Bean.Id /= ADO.NO_IDENTIFIER then
+         Query.Bind_Param ("id", Bean.Id);
+         Query.Set_Query (AWA.Wikis.Models.Query_Wiki_Page_Id);
+      else
+         Query.Bind_Param ("name", Bean.Name);
+         Query.Set_Query (AWA.Wikis.Models.Query_Wiki_Page);
+      end if;
       Query.Bind_Param ("user_id", Ctx.Get_User_Identifier);
       ADO.Sessions.Entities.Bind_Param (Params  => Query,
                                         Name    => "entity_type",
@@ -106,6 +112,7 @@ package body AWA.Wikis.Beans is
       Object.Tags_Bean := Object.Tags'Access;
       Object.Tags.Set_Entity_Type (AWA.Wikis.Models.WIKI_PAGE_TABLE);
       Object.Tags.Set_Permission ("wiki-page-update");
+      Object.Id := ADO.NO_IDENTIFIER;
       return Object.all'Access;
    end Create_Wiki_View_Bean;
 
