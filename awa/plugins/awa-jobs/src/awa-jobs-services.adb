@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-jobs -- AWA Jobs
---  Copyright (C) 2012, 2014 Stephane Carrez
+--  Copyright (C) 2012, 2014, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -70,6 +70,20 @@ package body AWA.Jobs.Services is
                             Value : in Integer) is
    begin
       Job.Set_Parameter (Name, Util.Beans.Objects.To_Object (Value));
+   end Set_Parameter;
+
+   --  ------------------------------
+   --  Set the job parameter identified by the <b>Name</b> to the value given in <b>Value</b>.
+   --  ------------------------------
+   procedure Set_Parameter (Job   : in out Abstract_Job_Type;
+                            Name  : in String;
+                            Value : in ADO.Objects.Object_Ref'Class) is
+   begin
+      if Value.Is_Null then
+         Job.Set_Parameter (Name, Util.Beans.Objects.Null_Object);
+      else
+         Job.Set_Parameter (Name, ADO.Objects.To_Object (Value.Get_Key));
+      end if;
    end Set_Parameter;
 
    --  ------------------------------
