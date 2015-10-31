@@ -214,12 +214,16 @@ endif
 endif
 
 uninstall:  pre-uninstall
+	rm -rf ${dynamodir}/${NAME}
+ifneq (${GPRINSTALL},)
+	-$(GPRINSTALL) -q -f --prefix=${prefix} $(MAKE_ARGS) --uninstall $(GPRPATH)
+else
 	rm -rf ${includedir}/${NAME}
 	rm -f ${libdir}/${LIBNAME}.a
 	rm -f ${libdir}/${LIBNAME}.$(LIBVER)
 	rm -f ${projectdir}/${NAME}.gpr
-	rm -rf ${dynamodir}/${NAME}
 	rm -rf ${alidir}/${NAME}
+endif
 
 
 pre-clean:
