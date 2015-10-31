@@ -59,16 +59,7 @@ package body AWA.Images.Services is
    begin
       AWA.Modules.Module_Manager (Service).Initialize (Module);
 
-      declare
-         Ctx     : EL.Contexts.Default.Default_Context;
-         Command : constant String := Module.Get_Config (PARAM_THUMBNAIL_COMMAND);
-      begin
-         Service.Thumbnail_Command := EL.Expressions.Create_Expression (Command, Ctx);
-
-      exception
-         when E : others =>
-            Log.Error ("Invalid thumbnail command: ", E, True);
-      end;
+      Service.Thumbnail_Command := Module.Get_Config (PARAM_THUMBNAIL_COMMAND);
    end Initialize;
 
    procedure Create_Thumbnail (Service : in Image_Service;
