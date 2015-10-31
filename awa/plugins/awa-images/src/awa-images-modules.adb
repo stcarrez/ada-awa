@@ -15,7 +15,6 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
---  with AWA.Modules.Beans;
 with AWA.Modules.Get;
 with AWA.Applications;
 with AWA.Storages.Modules;
@@ -25,9 +24,6 @@ with Util.Log.Loggers;
 package body AWA.Images.Modules is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Images.Module");
-
---     package Register is new AWA.Modules.Beans (Module        => Image_Module,
---                                                Module_Access => Image_Module_Access);
 
    --  ------------------------------
    --  Initialize the image module.
@@ -42,26 +38,9 @@ package body AWA.Images.Modules is
       --  Setup the resource bundles.
       App.Register ("imageMsg", "images");
 
---        Register.Register (Plugin  => Plugin,
---                           Name    => "AWA.Storages.Beans.Upload_Bean",
---                           Handler => AWA.Storages.Beans.Factories.Create_Upload_Bean'Access);
-
---        App.Add_Servlet ("storage", Plugin.Storage_Servlet'Unchecked_Access);
-
       AWA.Modules.Module (Plugin).Initialize (App, Props);
 
-      --  Register the image module as listener to the storage module events.
-      declare
-         use AWA.Storages.Modules;
-
-         Storage : constant Storage_Module_Access := AWA.Storages.Modules.Get_Storage_Module;
-      begin
-         if Storage = null then
-            Log.Error ("Cannot initialize the image module: there is no storage module.");
-         else
-            Storage.Add_Listener (Plugin'Unchecked_Access);
-         end if;
-      end;
+      Plugin.Add_Listener (AWA.Storages.Modules.NAME, Plugin'Unchecked_Access);
    end Initialize;
 
    --  ------------------------------
