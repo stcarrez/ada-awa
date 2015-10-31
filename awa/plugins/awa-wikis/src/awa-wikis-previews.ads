@@ -19,6 +19,7 @@ with ASF.Applications;
 
 with AWA.Modules;
 with AWA.Jobs.Services;
+with AWA.Jobs.Modules;
 with AWA.Wikis.Modules;
 with AWA.Wikis.Models;
 
@@ -67,9 +68,15 @@ package AWA.Wikis.Previews is
    procedure On_Delete (Instance : in Preview_Module;
                         Item     : in AWA.Wikis.Models.Wiki_Page_Ref'Class);
 
+   --  Create a preview job and schedule the job to generate a new thumbnail preview for the page.
+   procedure Make_Preview_Job (Plugin : in Preview_Module;
+                               Page   : in AWA.Wikis.Models.Wiki_Page_Ref'Class);
+
 private
 
    type Preview_Module is new AWA.Modules.Module
-     and AWA.Wikis.Modules.Wiki_Lifecycle.Listener with null record;
+     and AWA.Wikis.Modules.Wiki_Lifecycle.Listener with record
+      Job_Module : AWA.Jobs.Modules.Job_Module_Access;
+   end record;
 
 end AWA.Wikis.Previews;
