@@ -22,6 +22,7 @@ with Ada.Tags;
 with Ada.Calendar;
 with Ada.Unchecked_Deallocation;
 
+with ADO.Utils;
 with ADO.Sessions.Entities;
 with ADO.Statements;
 
@@ -153,6 +154,29 @@ package body AWA.Jobs.Services is
          end;
       else
          return Default;
+      end if;
+   end Get_Parameter;
+
+   --  ------------------------------
+   --  Get the job parameter identified by the <b>Name</b> and convert the value as a database
+   --  identifier.  If the parameter is not defined, return the <tt>ADO.NO_IDENTIFIER</tt>.
+   --  ------------------------------
+   function Get_Parameter (Job     : in Abstract_Job_Type;
+                           Name    : in String) return ADO.Identifier is
+      Pos : constant Util.Beans.Objects.Maps.Cursor := Job.Props.Find (Name);
+   begin
+      if Util.Beans.Objects.Maps.Has_Element (Pos) then
+         declare
+            Value : constant Util.Beans.Objects.Object := Util.Beans.Objects.Maps.Element (Pos);
+         begin
+            if Util.Beans.Objects.Is_Null (Value) then
+               return ADO.NO_IDENTIFIER;
+            else
+               return ADO.Utils.To_Identifier (Value);
+            end if;
+         end;
+      else
+         return ADO.NO_IDENTIFIER;
       end if;
    end Get_Parameter;
 
