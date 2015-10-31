@@ -105,6 +105,11 @@ package AWA.Jobs.Services is
                            Name    : in String;
                            Default : in Integer) return Integer;
 
+   --  Get the job parameter identified by the <b>Name</b> and convert the value as a database
+   --  identifier.  If the parameter is not defined, return the <tt>ADO.NO_IDENTIFIER</tt>.
+   function Get_Parameter (Job     : in Abstract_Job_Type;
+                           Name    : in String) return ADO.Identifier;
+
    --  Get the job parameter identified by the <b>Name</b> and return it as a typed object.
    function Get_Parameter (Job  : in Abstract_Job_Type;
                            Name : in String) return Util.Beans.Objects.Object;
