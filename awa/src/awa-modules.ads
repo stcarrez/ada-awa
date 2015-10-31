@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-modules -- Application Module
---  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -176,6 +176,12 @@ package AWA.Modules is
    --  depending on events or actions that occur in the module.
    procedure Add_Listener (Into : in out Module;
                            Item : in Util.Listeners.Listener_Access);
+
+   --  Find the module with the given name in the application and add the listener to the
+   --  module listener list.
+   procedure Add_Listener (Plugin : in Module;
+                           Name   : in String;
+                           Item   : in Util.Listeners.Listener_Access);
 
    --  Remove a listener from the module listener list.
    procedure Remove_Listener (Into : in out Module;
