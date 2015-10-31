@@ -66,4 +66,27 @@
        </sql>
     </query>
 
+    <query name='wiki-page-id'>
+       <comment>Get the content of a wiki page.</comment>
+       <sql>
+    SELECT
+      page.id,
+      page.name,
+      page.title,
+      page.is_public,
+      page.last_version,
+      content.create_date,
+      content.format,
+      content.content,
+      content.save_comment,
+      user.name,
+      acl.id
+    FROM awa_wiki_page AS page
+    INNER JOIN awa_wiki_content AS content ON page.content_id = content.id
+    LEFT JOIN awa_acl AS acl ON acl.entity_id = page.wiki_id AND acl.entity_type = :entity_type AND acl.user_id = :user_id
+    LEFT JOIN awa_user AS user ON content.author_id = user.id
+    WHERE page.wiki_id = :wiki_id AND page.id = :id
+       </sql>
+    </query>
+
 </query-mapping>
