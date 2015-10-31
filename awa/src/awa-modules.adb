@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa -- Ada Web Application
---  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -333,6 +333,22 @@ package body AWA.Modules is
                            Item : in Util.Listeners.Listener_Access) is
    begin
       Util.Listeners.Add_Listener (Into.Listeners, Item);
+   end Add_Listener;
+
+   --  ------------------------------
+   --  Find the module with the given name in the application and add the listener to the
+   --  module listener list.
+   --  ------------------------------
+   procedure Add_Listener (Plugin : in Module;
+                           Name   : in String;
+                           Item   : in Util.Listeners.Listener_Access) is
+      M : constant Module_Access := Plugin.App.Find_Module (Name);
+   begin
+      if M = null then
+         Log.Error ("Cannot find module {0} to add a lifecycle listener", Name);
+      else
+         M.Add_Listener (Item);
+      end if;
    end Add_Listener;
 
    --  ------------------------------
