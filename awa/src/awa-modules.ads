@@ -27,6 +27,8 @@ with Util.Beans.Objects;
 with Util.Serialize.IO;
 with Util.Listeners;
 
+with EL.Expressions;
+
 with ASF.Beans;
 with ASF.Applications;
 with ADO.Sessions;
@@ -135,6 +137,13 @@ package AWA.Modules is
    --  If the property does not exist, the default configuration value is returned.
    function Get_Config (Plugin : in Module;
                         Config : in ASF.Applications.Config_Param) return String;
+
+   --  Get the module configuration property identified by the <tt>Config</tt> parameter.
+   --  If the configuration property does not exist, returns the default value.
+   function Get_Config (Plugin  : in Module;
+                        Name    : in String;
+                        Default : in String := "")
+                        return EL.Expressions.Expression;
 
    procedure Initialize (Manager : in out Module_Manager;
                          Module  : in AWA.Modules.Module'Class);
