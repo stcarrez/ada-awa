@@ -20,7 +20,6 @@ with Util.Log.Loggers;
 
 with Ada.Tags;
 with Ada.Calendar;
-with Ada.Unchecked_Deallocation;
 
 with ADO.Utils;
 with ADO.Sessions.Entities;
@@ -337,13 +336,10 @@ package body AWA.Jobs.Services is
    --  ------------------------------
    --  Execute the job associated with the given event.
    --  ------------------------------
-   procedure Execute (Event : in AWA.Events.Module_Event'Class) is
+   procedure Execute (Event  : in AWA.Events.Module_Event'Class;
+                      Result : in out Job_Ref) is
       use AWA.Jobs.Modules;
       use type AWA.Modules.Module_Access;
-
-      procedure Free is
-         new Ada.Unchecked_Deallocation (Object => Abstract_Job_Type'Class,
-                                         Name   => Abstract_Job_Access);
 
       Ctx    : constant ASC.Service_Context_Access := ASC.Current;
       App    : constant AWA.Applications.Application_Access := Ctx.Get_Application;
@@ -377,14 +373,14 @@ package body AWA.Jobs.Services is
          declare
             Plugin  : constant Job_Module_Access := Job_Module'Class (Module.all)'Access;
             Factory : constant Job_Factory_Access := Plugin.Find_Factory (Name);
-            Work    : AWA.Jobs.Services.Abstract_Job_Access := null;
+            Work    : AWA.Jobs.Services.Abstract_Job_Type_Access := null;
          begin
             if Factory /= null then
                Work := Factory.Create;
                Work.Job := Job;
                Event.Copy (Work.Props);
+               Result := Job_Ref '(Job_Refs.Create (Work) with others => <>);
                Work.Execute (DB);
-               Free (Work);
             else
                Log.Error ("There is no factory to execute job {0} - '{1}'",
                           Ident, Name);
@@ -398,6 +394,20 @@ package body AWA.Jobs.Services is
          end;
       end;
    end Execute;
+
+   --  ------------------------------
+   --  Get the job parameter identified by the <b>Name</b> and return it as a typed object.
+   --  Return the Null_Object if the job is empty or there is no such parameter.
+   --  ------------------------------
+   function Get_Parameter (Job  : in Job_Ref;
+                           Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Job.Is_Null then
+         return Util.Beans.Objects.Null_Object;
+      else
+         return Job.Value.all.Get_Parameter (Name);
+      end if;
+   end Get_Parameter;
 
    --  ------------------------------
    --  Get the job factory name.
@@ -416,9 +426,9 @@ package body AWA.Jobs.Services is
    --  Create the job instance to execute the associated <tt>Work_Access</tt> procedure.
    --  ------------------------------
    overriding
-   function Create (Factory : in Work_Factory) return Abstract_Job_Access is
+   function Create (Factory : in Work_Factory) return Abstract_Job_Type_Access is
    begin
-      return new Job_Type '(Ada.Finalization.Limited_Controlled with
+      return new Job_Type '(Util.Refs.Ref_Entity with
                               Work => Factory.Work,
                               others => <>);
    end Create;
@@ -430,7 +440,7 @@ package body AWA.Jobs.Services is
    --  register the new job definition.
    package body Definition is
 
-      function Create (Factory : in Job_Type_Factory) return Abstract_Job_Access is
+      function Create (Factory : in Job_Type_Factory) return Abstract_Job_Type_Access is
          pragma Unreferenced (Factory);
       begin
          return new T;
