@@ -15,17 +15,19 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+
 with Util.Beans.Objects;
 with Util.Beans.Basic;
 with Util.Beans.Methods;
 
 with AWA.Events;
+with AWA.Jobs.Services;
 with AWA.Jobs.Modules;
 package AWA.Jobs.Beans is
 
    --  The <tt>Process_Bean</tt> is the Ada bean that receives the job event and
    --  performs the job action associated with it.
-   type Process_Bean is new Util.Beans.Basic.Bean
+   type Process_Bean is limited new Util.Beans.Basic.Bean
      and Util.Beans.Methods.Method_Bean with private;
    type Process_Bean_Access is access all Process_Bean'Class;
 
@@ -55,9 +57,10 @@ package AWA.Jobs.Beans is
 
 private
 
-   type Process_Bean is new Util.Beans.Basic.Bean
+   type Process_Bean is limited new Util.Beans.Basic.Bean
      and Util.Beans.Methods.Method_Bean with record
       Module : AWA.Jobs.Modules.Job_Module_Access;
+      Job    : AWA.Jobs.Services.Job_Ref;
    end record;
 
 end AWA.Jobs.Beans;
