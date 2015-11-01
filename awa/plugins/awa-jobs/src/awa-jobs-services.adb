@@ -124,6 +124,17 @@ package body AWA.Jobs.Services is
    end Set_Result;
 
    --  ------------------------------
+   --  Get the value identified by the name.
+   --  If the name cannot be found, the method should return the Null object.
+   --  ------------------------------
+   overriding
+   function Get_Value (Job  : in Abstract_Job_Type;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      return Job.Get_Parameter (Name);
+   end Get_Value;
+
+   --  ------------------------------
    --  Get the job parameter identified by the <b>Name</b> and convert the value into a string.
    --  ------------------------------
    function Get_Parameter (Job  : in Abstract_Job_Type;
