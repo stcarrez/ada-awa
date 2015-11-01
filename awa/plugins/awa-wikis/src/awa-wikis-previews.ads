@@ -15,6 +15,8 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with EL.Expressions;
+
 with ASF.Applications;
 
 with AWA.Modules;
@@ -33,6 +35,12 @@ package AWA.Wikis.Previews is
 
    --  The name under which the module is registered.
    NAME : constant String := "wiki-previews";
+
+   --  The configuration parameter that defines how to build the wiki preview template path.
+   PARAM_PREVIEW_TEMPLATE : constant String := "wiki.preview.template";
+
+   --  The configuration parameter to build the preview command to execute.
+   PARAM_PREVIEW_COMMAND : constant String := "wiki.preview.command";
 
    --  The worker procedure that performs the preview job.
    procedure Preview_Worker (Job : in out AWA.Jobs.Services.Abstract_Job_Type'Class);
@@ -76,6 +84,8 @@ private
 
    type Preview_Module is new AWA.Modules.Module
      and AWA.Wikis.Modules.Wiki_Lifecycle.Listener with record
+      Template   : EL.Expressions.Expression;
+      Command    : EL.Expressions.Expression;
       Job_Module : AWA.Jobs.Modules.Job_Module_Access;
    end record;
 
