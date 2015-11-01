@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-jobs-beans -- AWA Jobs Ada Beans
---  Copyright (C) 2012, 2013 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,6 @@
 -----------------------------------------------------------------------
 
 with AWA.Events.Action_Method;
-with AWA.Jobs.Services;
 package body AWA.Jobs.Beans is
 
    package Execute_Binding is
@@ -34,9 +33,8 @@ package body AWA.Jobs.Beans is
    overriding
    function Get_Value (From : in Process_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
-      pragma Unreferenced (From, Name);
    begin
-      return Util.Beans.Objects.Null_Object;
+      return AWA.Jobs.Services.Get_Parameter (From.Job, Name);
    end Get_Value;
 
    --  ------------------------------
@@ -66,9 +64,8 @@ package body AWA.Jobs.Beans is
    --  ------------------------------
    procedure Execute (Bean    : in out Process_Bean;
                       Event   : in AWA.Events.Module_Event'Class) is
-      pragma Unreferenced (Bean);
    begin
-      AWA.Jobs.Services.Execute (Event);
+      AWA.Jobs.Services.Execute (Event, Bean.Job);
    end Execute;
 
    --  ------------------------------
