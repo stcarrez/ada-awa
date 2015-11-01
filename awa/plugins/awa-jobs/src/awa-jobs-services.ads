@@ -16,11 +16,10 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Ada.Finalization;
-
 with Util.Beans.Basic;
 with Util.Beans.Objects;
 with Util.Beans.Objects.Maps;
+with Util.Refs;
 
 with ADO.Sessions;
 with ADO.Objects;
@@ -64,9 +63,9 @@ package AWA.Jobs.Services is
    --  the <tt>Execute</tt> abstract procedure that must be implemented in concrete job types.
    --  It provides operation to setup and retrieve the job parameter.  When the job
    --  <tt>Execute</tt> procedure is called, it allows to set the job execution status and result.
-   type Abstract_Job_Type is abstract new Ada.Finalization.Limited_Controlled
+   type Abstract_Job_Type is abstract new Util.Refs.Ref_Entity
      and Util.Beans.Basic.Readonly_Bean with private;
-   type Abstract_Job_Access is access all Abstract_Job_Type'Class;
+   type Abstract_Job_Type_Access is access all Abstract_Job_Type'Class;
 
    type Work_Access is access procedure (Job : in out Abstract_Job_Type'Class);
 
@@ -162,7 +161,7 @@ package AWA.Jobs.Services is
    type Job_Factory_Access is access all Job_Factory'Class;
 
    --  Create the job instance using the job factory.
-   function Create (Factory : in Job_Factory) return Abstract_Job_Access is abstract;
+   function Create (Factory : in Job_Factory) return Abstract_Job_Type_Access is abstract;
 
    --  Get the job factory name.
    function Get_Name (Factory : in Job_Factory'Class) return String;
@@ -191,7 +190,7 @@ package AWA.Jobs.Services is
 
    --  Create the job instance to execute the associated <tt>Work_Access</tt> procedure.
    overriding
-   function Create (Factory : in Work_Factory) return Abstract_Job_Access;
+   function Create (Factory : in Work_Factory) return Abstract_Job_Type_Access;
 
    --  ------------------------------
    --  Job Declaration
@@ -204,7 +203,7 @@ package AWA.Jobs.Services is
       type Job_Type_Factory is new Job_Factory with null record;
 
       overriding
-      function Create (Factory : in Job_Type_Factory) return Abstract_Job_Access;
+      function Create (Factory : in Job_Type_Factory) return Abstract_Job_Type_Access;
 
       --  The job factory.
       Factory : constant Job_Factory_Access;
@@ -226,8 +225,16 @@ package AWA.Jobs.Services is
       Factory  : constant Job_Factory_Access := Instance'Access;
    end Work_Definition;
 
+   type Job_Ref is private;
+
+   --  Get the job parameter identified by the <b>Name</b> and return it as a typed object.
+   --  Return the Null_Object if the job is empty or there is no such parameter.
+   function Get_Parameter (Job  : in Job_Ref;
+                           Name : in String) return Util.Beans.Objects.Object;
+
    --  Execute the job associated with the given event.
-   procedure Execute (Event : in AWA.Events.Module_Event'Class);
+   procedure Execute (Event  : in AWA.Events.Module_Event'Class;
+                      Result : in out Job_Ref);
 
 private
 
@@ -235,7 +242,7 @@ private
    procedure Execute (Job : in out Abstract_Job_Type'Class;
                       DB  : in out ADO.Sessions.Master_Session'Class);
 
-   type Abstract_Job_Type is abstract new Ada.Finalization.Limited_Controlled
+   type Abstract_Job_Type is abstract new Util.Refs.Ref_Entity
      and Util.Beans.Basic.Readonly_Bean with record
       Job              : AWA.Jobs.Models.Job_Ref;
       Props            : Util.Beans.Objects.Maps.Map;
@@ -252,5 +259,12 @@ private
    type Job_Type is new Abstract_Job_Type with record
       Work : Work_Access;
    end record;
+
+   package Job_Refs is
+     new Util.Refs.Indefinite_References (Element_Type   => Abstract_Job_Type'Class,
+                                          Element_Access => Abstract_Job_Type_Access);
+
+   type Job_Ref is new Job_Refs.Ref with null record;
+   --  subtype Job_Ref is Job_Refs.Ref;
 
 end AWA.Jobs.Services;
