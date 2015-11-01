@@ -74,10 +74,10 @@ MAKE_ARGS=-XMODE=${MODE} -XAWA_LIBRARY_TYPE=${AWA_LIBRARY_TYPE} -XPROCESSORS=$(C
 
 ifeq (${BUILDS_SHARED},yes)
 all:     static shared
-install: install_static install_shared install-info
+install: install_static install_shared install-bin install-info
 else
 all:     static
-install: install_static install-info
+install: install_static install-bin install-info
 endif
 
 # Build executables for all mains defined by the project.
@@ -225,6 +225,10 @@ else
 	rm -rf ${alidir}/${NAME}
 endif
 
+install-bin:
+ifneq (${EXECS},)
+	$(INSTALL) -m 755 $(EXECS) ${bindir}/
+endif
 
 pre-clean:
 pre-build:
