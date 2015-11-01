@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-dispatchers-actions -- Event dispatcher to Ada bean actions
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,7 @@ with Util.Beans.Basic;
 with Util.Log.Loggers;
 
 with EL.Contexts;
-with EL.Contexts.Default;
+with EL.Contexts.TLS;
 with EL.Variables;
 with EL.Variables.Default;
 
@@ -171,7 +171,7 @@ package body AWA.Events.Dispatchers.Actions is
 
       Local_Event    : aliased Event_Bean;
       Resolver       : aliased Event_ELResolver;
-      ELContext      : aliased EL.Contexts.Default.Default_Context;
+      ELContext      : aliased EL.Contexts.TLS.TLS_Context;
 
       --  ------------------------------
       --  Dispatch the event to the event action identified by <b>Action</b>.
