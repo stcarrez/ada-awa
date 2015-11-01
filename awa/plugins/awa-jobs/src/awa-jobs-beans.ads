@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-jobs-beans -- AWA Jobs Ada Beans
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
