@@ -18,6 +18,7 @@
 
 with Ada.Finalization;
 
+with Util.Beans.Basic;
 with Util.Beans.Objects;
 with Util.Beans.Objects.Maps;
 
@@ -63,7 +64,8 @@ package AWA.Jobs.Services is
    --  the <tt>Execute</tt> abstract procedure that must be implemented in concrete job types.
    --  It provides operation to setup and retrieve the job parameter.  When the job
    --  <tt>Execute</tt> procedure is called, it allows to set the job execution status and result.
-   type Abstract_Job_Type is abstract new Ada.Finalization.Limited_Controlled with private;
+   type Abstract_Job_Type is abstract new Ada.Finalization.Limited_Controlled
+     and Util.Beans.Basic.Readonly_Bean with private;
    type Abstract_Job_Access is access all Abstract_Job_Type'Class;
 
    type Work_Access is access procedure (Job : in out Abstract_Job_Type'Class);
@@ -94,6 +96,12 @@ package AWA.Jobs.Services is
    procedure Set_Parameter (Job   : in out Abstract_Job_Type;
                             Name  : in String;
                             Value : in Util.Beans.Objects.Object);
+
+   --  Get the value identified by the name.
+   --  If the name cannot be found, the method should return the Null object.
+   overriding
+   function Get_Value (Job  : in Abstract_Job_Type;
+                       Name : in String) return Util.Beans.Objects.Object;
 
    --  Get the job parameter identified by the <b>Name</b> and convert the value into a string.
    function Get_Parameter (Job  : in Abstract_Job_Type;
@@ -143,6 +151,7 @@ package AWA.Jobs.Services is
    --  to save the job.
    procedure Save (Job : in out Abstract_Job_Type;
                    DB  : in out ADO.Sessions.Master_Session'Class);
+
    --  ------------------------------
    --  Job Factory
    --  ------------------------------
@@ -226,7 +235,8 @@ private
    procedure Execute (Job : in out Abstract_Job_Type'Class;
                       DB  : in out ADO.Sessions.Master_Session'Class);
 
-   type Abstract_Job_Type is abstract new Ada.Finalization.Limited_Controlled with record
+   type Abstract_Job_Type is abstract new Ada.Finalization.Limited_Controlled
+     and Util.Beans.Basic.Readonly_Bean with record
       Job              : AWA.Jobs.Models.Job_Ref;
       Props            : Util.Beans.Objects.Maps.Map;
       Results          : Util.Beans.Objects.Maps.Map;
