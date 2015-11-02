@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------
 --  atlas -- atlas applications
 -----------------------------------------------------------------------
---  Copyright (C) 2012, 2013, 2014 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2014, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,6 +36,7 @@ with AWA.Workspaces.Modules;
 with AWA.Storages.Modules;
 with AWA.Images.Modules;
 with AWA.Questions.Modules;
+with AWA.Wikis.Modules;
 with AWA.Votes.Modules;
 with AWA.Tags.Modules;
 with AWA.Comments.Modules;
@@ -121,6 +122,7 @@ private
       Question_Module   : aliased AWA.Questions.Modules.Question_Module;
       Tag_Module        : aliased AWA.Tags.Modules.Tag_Module;
       Comment_Module    : aliased AWA.Comments.Modules.Comment_Module;
+      Wiki_Module       : aliased AWA.Wikis.Modules.Wiki_Module;
 
       Microblog_Module  : aliased Atlas.Microblog.Modules.Microblog_Module;
       Review_Module     : aliased Atlas.Reviews.Modules.Review_Module;
