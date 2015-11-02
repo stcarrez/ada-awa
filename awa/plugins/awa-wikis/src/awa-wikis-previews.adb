@@ -15,10 +15,26 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with Util.Log.Loggers;
+with Ada.Strings.Unbounded;
 
-with AWA.Jobs.Services;
-with AWA.Jobs.Modules;
+with Util.Log.Loggers;
+with Util.Beans.Objects;
+with Util.Files;
+with Util.Processes;
+with Util.Streams.Pipes;
+with Util.Streams.Texts;
+
+with ADO;
+
+with EL.Contexts.TLS;
+
+with ASF.Servlets;
+with ASF.Requests.Mockup;
+with ASF.Responses.Mockup;
+
+with AWA.Applications;
+with AWA.Services.Contexts;
+with AWA.Modules.Get;
 package body AWA.Wikis.Previews is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Wikis.Preview");
@@ -27,8 +43,9 @@ package body AWA.Wikis.Previews is
    --  The worker procedure that performs the preview job.
    --  ------------------------------
    procedure Preview_Worker (Job : in out AWA.Jobs.Services.Abstract_Job_Type'Class) is
+      Previewer : constant Preview_Module_Access := Get_Preview_Module;
    begin
-      null;
+      Previewer.Do_Preview_Job (Job);
    end Preview_Worker;
 
    --  ------------------------------
@@ -42,10 +59,76 @@ package body AWA.Wikis.Previews is
       Log.Info ("Initializing the wiki preview module");
 
       AWA.Modules.Module (Plugin).Initialize (App, Props);
+   end Initialize;
+
+   --  ------------------------------
+   --  Configures the module after its initialization and after having read its XML configuration.
+   --  ------------------------------
+   overriding
+   procedure Configure (Plugin : in out Preview_Module;
+                        Props  : in ASF.Applications.Config) is
+   begin
+      Plugin.Template := Plugin.Get_Config (PARAM_PREVIEW_TEMPLATE);
+      Plugin.Command := Plugin.Get_Config (PARAM_PREVIEW_COMMAND);
+      Plugin.Html := Plugin.Get_Config (PARAM_PREVIEW_HTML);
       Plugin.Add_Listener (AWA.Wikis.Modules.NAME, Plugin'Unchecked_Access);
       Plugin.Job_Module := AWA.Jobs.Modules.Get_Job_Module;
       Plugin.Job_Module.Register (Definition => Preview_Job_Definition.Factory);
-   end Initialize;
+   end Configure;
+
+   --  ------------------------------
+   --  Execute the preview job and make the thumbnail preview.  The page is first rendered in
+   --  an HTML text file and the preview is rendered by using an external command.
+   --  ------------------------------
+   procedure Do_Preview_Job (Plugin : in Preview_Module;
+                             Job    : in out AWA.Jobs.Services.Abstract_Job_Type'Class) is
+      use Util.Beans.Objects;
+
+      Ctx       : constant EL.Contexts.ELContext_Access := EL.Contexts.TLS.Current;
+      Template  : constant String := To_String (Plugin.Template.Get_Value (Ctx.all));
+      Command   : constant String := To_String (Plugin.Command.Get_Value (Ctx.all));
+      Html_File : constant String := To_String (Plugin.Html.Get_Value (Ctx.all));
+      Tmp       : constant String := Plugin.Get_Config (PARAM_PREVIEW_TMPDIR);
+   begin
+      Log.Info ("Preview {0} with {1}", Template, Command);
+      declare
+         Req       : ASF.Requests.Mockup.Request;
+         Reply     : ASF.Responses.Mockup.Response;
+         Dispatcher : constant ASF.Servlets.Request_Dispatcher
+           := Plugin.Get_Application.Get_Request_Dispatcher (Template);
+         Result : Ada.Strings.Unbounded.Unbounded_String;
+      begin
+         Req.Set_Request_URI (Template);
+         Req.Set_Method ("GET");
+
+         ASF.Servlets.Forward (Dispatcher, Req, Reply);
+         Reply.Read_Content (Result);
+         Util.Files.Write_File (Html_File, Result);
+      end;
+
+      declare
+         Pipe    : aliased Util.Streams.Pipes.Pipe_Stream;
+         Input   : Util.Streams.Texts.Reader_Stream;
+      begin
+         Log.Info ("Running preview command {0}", Command);
+
+         Pipe.Open (Command, Util.Processes.READ_ALL);
+         Input.Initialize (null, Pipe'Unchecked_Access, 1024);
+         while not Input.Is_Eof loop
+            declare
+               Line : Ada.Strings.Unbounded.Unbounded_String;
+            begin
+               Input.Read_Line (Line, False);
+               Log.Info ("Received: {0}", Line);
+            end;
+         end loop;
+         Pipe.Close;
+         if Pipe.Get_Exit_Status /= 0 then
+            Log.Error ("Command {0} exited with status {1}", Command,
+                       Integer'Image (Pipe.Get_Exit_Status));
+         end if;
+      end;
+   end Do_Preview_Job;
 
    --  ------------------------------
    --  Create a preview job and schedule the job to generate a new thumbnail preview for the page.
@@ -66,7 +149,7 @@ package body AWA.Wikis.Previews is
    procedure On_Create (Instance : in Preview_Module;
                         Item     : in AWA.Wikis.Models.Wiki_Page_Ref'Class) is
    begin
-      null;
+      Instance.Make_Preview_Job (Item);
    end On_Create;
 
    --  ------------------------------
@@ -76,7 +159,7 @@ package body AWA.Wikis.Previews is
    procedure On_Update (Instance : in Preview_Module;
                         Item     : in AWA.Wikis.Models.Wiki_Page_Ref'Class) is
    begin
-      null;
+      Instance.Make_Preview_Job (Item);
    end On_Update;
 
    --  ------------------------------
@@ -88,5 +171,14 @@ package body AWA.Wikis.Previews is
    begin
       null;
    end On_Delete;
+
+   --  ------------------------------
+   --  Get the preview module instance associated with the current application.
+   --  ------------------------------
+   function Get_Preview_Module return Preview_Module_Access is
+      function Get is new AWA.Modules.Get (Preview_Module, Preview_Module_Access, NAME);
+   begin
+      return Get;
+   end Get_Preview_Module;
 
 end AWA.Wikis.Previews;
