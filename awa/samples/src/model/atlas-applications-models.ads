@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2014 Stephane Carrez
+--  Copyright (C) 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,9 +36,11 @@ pragma Warnings (On, "unit * is not referenced");
 package Atlas.Applications.Models is
 
    --  --------------------
-   --  Stats about what the user did.
+   --    Stats about what the user did.
    --  --------------------
-   type User_Stat_Info is new Util.Beans.Basic.Readonly_Bean with record
+   type User_Stat_Info is
+     new Util.Beans.Basic.Bean with  record
+
       --  the number of posts.
       Post_Count : Integer;
 
@@ -53,13 +55,19 @@ package Atlas.Applications.Models is
 
       --  the number of reviews.
       Review_Count : Integer;
-
    end record;
 
-   --  Get the bean attribute identified by the given name.
+   --  Get the bean attribute identified by the name.
    overriding
    function Get_Value (From : in User_Stat_Info;
                        Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out User_Stat_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
 
    package User_Stat_Info_Beans is
       new Util.Beans.Basic.Lists (Element_Type => User_Stat_Info);

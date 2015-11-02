@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2014 Stephane Carrez
+--  Copyright (C) 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,30 +28,50 @@ package body Atlas.Applications.Models is
    use type ADO.Objects.Object_Record;
 
 
-   --  --------------------
-   --  Get the bean attribute identified by the given name.
-   --  --------------------
+
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
    overriding
    function Get_Value (From : in User_Stat_Info;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
       if Name = "post_count" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Post_Count));
-      end if;
-      if Name = "document_count" then
+      elsif Name = "document_count" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Document_Count));
-      end if;
-      if Name = "question_count" then
+      elsif Name = "question_count" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Question_Count));
-      end if;
-      if Name = "answer_count" then
+      elsif Name = "answer_count" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Answer_Count));
-      end if;
-      if Name = "review_count" then
+      elsif Name = "review_count" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Review_Count));
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out User_Stat_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "post_count" then
+         Item.Post_Count := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "document_count" then
+         Item.Document_Count := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "question_count" then
+         Item.Question_Count := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "answer_count" then
+         Item.Answer_Count := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "review_count" then
+         Item.Review_Count := Util.Beans.Objects.To_Integer (Value);
+      end if;
+   end Set_Value;
+
 
    --  --------------------
    --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
@@ -62,6 +82,7 @@ package body Atlas.Applications.Models is
    begin
       List (Object.List, Session, Context);
    end List;
+
    --  --------------------
    --  Stats about what the user did.
    --  --------------------

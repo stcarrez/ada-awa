@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2014 Stephane Carrez
+--  Copyright (C) 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -487,6 +487,10 @@ package body Atlas.Reviews.Models is
       Stmt.Execute;
    end Delete;
 
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Review_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
       Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
@@ -511,7 +515,6 @@ package body Atlas.Reviews.Models is
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
-
 
 
    procedure List (Object  : in out Review_Vector;
@@ -555,42 +558,66 @@ package body Atlas.Reviews.Models is
       ADO.Objects.Set_Created (Object);
    end Load;
 
-   --  --------------------
-   --  Get the bean attribute identified by the given name.
-   --  --------------------
+
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
    overriding
    function Get_Value (From : in List_Info;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
       if Name = "id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
-      end if;
-      if Name = "title" then
+      elsif Name = "title" then
          return Util.Beans.Objects.To_Object (From.Title);
-      end if;
-      if Name = "site" then
+      elsif Name = "site" then
          return Util.Beans.Objects.To_Object (From.Site);
-      end if;
-      if Name = "date" then
+      elsif Name = "date" then
          return Util.Beans.Objects.Time.To_Object (From.Date);
-      end if;
-      if Name = "allow_comments" then
+      elsif Name = "allow_comments" then
          return Util.Beans.Objects.To_Object (From.Allow_Comments);
-      end if;
-      if Name = "reviewer_id" then
+      elsif Name = "reviewer_id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Reviewer_Id));
-      end if;
-      if Name = "reviewer_name" then
+      elsif Name = "reviewer_name" then
          return Util.Beans.Objects.To_Object (From.Reviewer_Name);
-      end if;
-      if Name = "reviewer_email" then
+      elsif Name = "reviewer_email" then
          return Util.Beans.Objects.To_Object (From.Reviewer_Email);
-      end if;
-      if Name = "text" then
+      elsif Name = "text" then
          return Util.Beans.Objects.To_Object (From.Text);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out List_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "id" then
+         Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "title" then
+         Item.Title := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "site" then
+         Item.Site := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "date" then
+         Item.Date := Util.Beans.Objects.Time.To_Time (Value);
+      elsif Name = "allow_comments" then
+         Item.Allow_Comments := Util.Beans.Objects.To_Boolean (Value);
+      elsif Name = "reviewer_id" then
+         Item.Reviewer_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "reviewer_name" then
+         Item.Reviewer_Name := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "reviewer_email" then
+         Item.Reviewer_Email := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "text" then
+         Item.Text := Util.Beans.Objects.To_Unbounded_String (Value);
+      end if;
+   end Set_Value;
+
 
    --  --------------------
    --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
@@ -601,6 +628,7 @@ package body Atlas.Reviews.Models is
    begin
       List (Object.List, Session, Context);
    end List;
+
    --  --------------------
    --  The list of reviews.
    --  --------------------
@@ -676,25 +704,37 @@ package body Atlas.Reviews.Models is
          3 => Binding_Review_Bean_3.Proxy'Access
      );
 
+   --  ------------------------------
    --  This bean provides some methods that can be used in a Method_Expression.
+   --  ------------------------------
    overriding
    function Get_Method_Bindings (From : in Review_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
    begin
       return Binding_Review_Bean_Array'Access;
    end Get_Method_Bindings;
 
-
+   --  ------------------------------
    --  Set the value identified by the name
-   overriding 
+   --  ------------------------------
+   overriding
    procedure Set_Value (Item  : in out Review_Bean;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      null;
+      if Name = "title" then
+         Item.Set_Title (Util.Beans.Objects.To_String (Value));
+      elsif Name = "text" then
+         Item.Set_Text (Util.Beans.Objects.To_String (Value));
+      elsif Name = "create_date" then
+         Item.Set_Create_Date (Util.Beans.Objects.Time.To_Time (Value));
+      elsif Name = "allow_comments" then
+         Item.Set_Allow_Comments (Util.Beans.Objects.To_Integer (Value));
+      elsif Name = "site" then
+         Item.Set_Site (Util.Beans.Objects.To_String (Value));
+      end if;
    end Set_Value;
-
-
 
    procedure Op_Load (Bean    : in out Review_List_Bean;
                       Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
@@ -712,14 +752,20 @@ package body Atlas.Reviews.Models is
      := (1 => Binding_Review_List_Bean_1.Proxy'Access
      );
 
+   --  ------------------------------
    --  This bean provides some methods that can be used in a Method_Expression.
+   --  ------------------------------
    overriding
    function Get_Method_Bindings (From : in Review_List_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
    begin
       return Binding_Review_List_Bean_Array'Access;
    end Get_Method_Bindings;
-
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Review_List_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
@@ -734,8 +780,10 @@ package body Atlas.Reviews.Models is
    end Get_Value;
 
 
+   --  ------------------------------
    --  Set the value identified by the name
-   overriding 
+   --  ------------------------------
+   overriding
    procedure Set_Value (Item  : in out Review_List_Bean;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
@@ -748,8 +796,6 @@ package body Atlas.Reviews.Models is
          Item.Page_Size := Util.Beans.Objects.To_Integer (Value);
       end if;
    end Set_Value;
-
-
 
 
 end Atlas.Reviews.Models;

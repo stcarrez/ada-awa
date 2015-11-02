@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2014 Stephane Carrez
+--  Copyright (C) 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -180,9 +180,11 @@ package Atlas.Reviews.Models is
                    Query   : in ADO.SQL.Query'Class);
 
    --  --------------------
-   --  The list of reviews.
+   --    The list of reviews.
    --  --------------------
-   type List_Info is new Util.Beans.Basic.Readonly_Bean with record
+   type List_Info is
+     new Util.Beans.Basic.Bean with  record
+
       --  the review identifier.
       Id : ADO.Identifier;
 
@@ -209,13 +211,19 @@ package Atlas.Reviews.Models is
 
       --  the review text.
       Text : Ada.Strings.Unbounded.Unbounded_String;
-
    end record;
 
-   --  Get the bean attribute identified by the given name.
+   --  Get the bean attribute identified by the name.
    overriding
    function Get_Value (From : in List_Info;
                        Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out List_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
 
    package List_Info_Beans is
       new Util.Beans.Basic.Lists (Element_Type => List_Info);
@@ -252,7 +260,7 @@ package Atlas.Reviews.Models is
                                  return Util.Beans.Methods.Method_Binding_Array_Access;
 
 
-   --  Set the value identified by the name.
+   --  Set the bean attribute identified by the name.
    overriding
    procedure Set_Value (Item  : in out Review_Bean;
                         Name  : in String;
@@ -279,12 +287,12 @@ package Atlas.Reviews.Models is
    function Get_Method_Bindings (From : in Review_List_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access;
 
-   --  Get the value identified by the name.
+   --  Get the bean attribute identified by the name.
    overriding
    function Get_Value (From : in Review_List_Bean;
                        Name : in String) return Util.Beans.Objects.Object;
 
-   --  Set the value identified by the name.
+   --  Set the bean attribute identified by the name.
    overriding
    procedure Set_Value (Item  : in out Review_List_Bean;
                         Name  : in String;
