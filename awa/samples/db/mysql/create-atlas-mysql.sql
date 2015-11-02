@@ -451,40 +451,6 @@ CREATE TABLE awa_image (
 INSERT INTO entity_type (name) VALUES
 ("awa_image")
 ;
-/* Copied from awa-votes-mysql.sql*/
-/* File generated automatically by dynamo */
-/*  */
-CREATE TABLE awa_rating (
-  /* the rating identifier */
-  `id` BIGINT NOT NULL,
-  /* the rating taking into account all votes */
-  `rating` INTEGER NOT NULL,
-  /* the number of votes */
-  `vote_count` INTEGER NOT NULL,
-  /*  */
-  `for_entity_id` BIGINT NOT NULL,
-  /* the entity type */
-  `for_entity_type` INTEGER NOT NULL,
-  PRIMARY KEY (`id`)
-);
-/* The vote table tracks a vote action by a user on a given database entity.
-The primary key is made of the user, the entity id and entity type.
- */
-CREATE TABLE awa_vote (
-  /*  */
-  `rating` INTEGER NOT NULL,
-  /*  */
-  `id` BIGINT NOT NULL,
-  /*  */
-  `entity_id` BIGINT NOT NULL,
-  /*  */
-  `user_id` BIGINT NOT NULL,
-  PRIMARY KEY (`id`)
-);
-INSERT INTO entity_type (name) VALUES
-("awa_rating")
-,("awa_vote")
-;
 /* Copied from awa-questions-mysql.sql*/
 /* File generated automatically by dynamo */
 /* The answer table gives a list of anwsers to the question.
@@ -543,6 +509,148 @@ the question short description. */
 INSERT INTO entity_type (name) VALUES
 ("awa_answer")
 ,("awa_question")
+;
+/* Copied from awa-votes-mysql.sql*/
+/* File generated automatically by dynamo */
+/*  */
+CREATE TABLE awa_rating (
+  /* the rating identifier */
+  `id` BIGINT NOT NULL,
+  /* the rating taking into account all votes */
+  `rating` INTEGER NOT NULL,
+  /* the number of votes */
+  `vote_count` INTEGER NOT NULL,
+  /*  */
+  `for_entity_id` BIGINT NOT NULL,
+  /* the entity type */
+  `for_entity_type` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
+);
+/* The vote table tracks a vote action by a user on a given database entity.
+The primary key is made of the user, the entity id and entity type.
+ */
+CREATE TABLE awa_vote (
+  /*  */
+  `rating` INTEGER NOT NULL,
+  /*  */
+  `id` BIGINT NOT NULL,
+  /*  */
+  `entity_id` BIGINT NOT NULL,
+  /*  */
+  `user_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
+);
+INSERT INTO entity_type (name) VALUES
+("awa_rating")
+,("awa_vote")
+;
+/* Copied from awa-jobs-mysql.sql*/
+/* File generated automatically by dynamo */
+/* The job is associated with a dispatching queue. */
+CREATE TABLE awa_job (
+  /* the job identifier */
+  `id` BIGINT NOT NULL,
+  /* the job status */
+  `status` TINYINT NOT NULL,
+  /* the job name */
+  `name` VARCHAR(255) BINARY NOT NULL,
+  /* the job start date */
+  `start_date` DATETIME ,
+  /* the job creation date */
+  `create_date` DATETIME NOT NULL,
+  /* the job finish date */
+  `finish_date` DATETIME ,
+  /* the job progress indicator */
+  `progress` INTEGER NOT NULL,
+  /* the job parameters */
+  `parameters` TEXT NOT NULL,
+  /* the job result */
+  `results` TEXT NOT NULL,
+  /*  */
+  `version` INTEGER NOT NULL,
+  /* the job priority */
+  `priority` INTEGER NOT NULL,
+  /*  */
+  `user_id` BIGINT ,
+  /*  */
+  `event_id` BIGINT ,
+  /*  */
+  `session_id` BIGINT ,
+  PRIMARY KEY (`id`)
+);
+INSERT INTO entity_type (name) VALUES
+("awa_job")
+;
+/* Copied from awa-wikis-mysql.sql*/
+/* File generated automatically by dynamo */
+/*  */
+CREATE TABLE awa_wiki_content (
+  /* the wiki page content identifier */
+  `id` BIGINT NOT NULL,
+  /* the wiki content creation date */
+  `create_date` DATETIME NOT NULL,
+  /* the wiki text content */
+  `content` TEXT NOT NULL,
+  /* the format type used used by the wiki content */
+  `format` TINYINT NOT NULL,
+  /* the content comment string */
+  `save_comment` VARCHAR(255) BINARY NOT NULL,
+  /*  */
+  `version` INTEGER NOT NULL,
+  /* the wiki page version */
+  `page_version` INTEGER NOT NULL,
+  /* the wiki page that this Wiki_Content belongs to */
+  `page_id` BIGINT NOT NULL,
+  /* the page version author */
+  `author_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
+);
+/* The wiki page represents a page with its versions.
+It refers to the last version which is currently visible.
+It has an optional preview image which defines
+the thumbnail preview of the last/current wiki content. */
+CREATE TABLE awa_wiki_page (
+  /* the wiki page identifier */
+  `id` BIGINT NOT NULL,
+  /* the wiki page name */
+  `name` VARCHAR(255) BINARY NOT NULL,
+  /* the last page version number */
+  `last_version` INTEGER NOT NULL,
+  /* whether the wiki page is public */
+  `is_public` TINYINT NOT NULL,
+  /* the page title */
+  `title` VARCHAR(255) BINARY NOT NULL,
+  /*  */
+  `version` INTEGER NOT NULL,
+  /* the wiki page preview. */
+  `preview_id` BIGINT ,
+  /* the wiki space that this page belongs to */
+  `wiki_id` BIGINT NOT NULL,
+  /* the current content (or last version) */
+  `content_id` BIGINT ,
+  PRIMARY KEY (`id`)
+);
+/* Permission is granted to display a wiki page if there is
+an ACL entry between the wiki space and the user. */
+CREATE TABLE awa_wiki_space (
+  /* the wiki space identifier */
+  `id` BIGINT NOT NULL,
+  /* the wiki name */
+  `name` VARCHAR(255) BINARY NOT NULL,
+  /* whether the wiki is public */
+  `is_public` TINYINT NOT NULL,
+  /*  */
+  `version` INTEGER NOT NULL,
+  /* the wiki creation date. */
+  `create_date` DATETIME NOT NULL,
+  /*  */
+  `workspace_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
+);
+INSERT INTO entity_type (name) VALUES
+("awa_wiki_content")
+,("awa_wiki_page")
+,("awa_wiki_space")
 ;
 /* Copied from atlas-mysql.sql*/
 /* File generated automatically by dynamo */

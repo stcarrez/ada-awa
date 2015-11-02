@@ -2,14 +2,22 @@
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `atlas_review`;
 DROP TABLE IF EXISTS `mblog`;
-/* Copied from awa-questions-drop-mysql.sql*/
+/* Copied from awa-wikis-drop-mysql.sql*/
 /* File generated automatically by dynamo */
-DROP TABLE IF EXISTS `awa_question`;
-DROP TABLE IF EXISTS `awa_answer`;
+DROP TABLE IF EXISTS `awa_wiki_space`;
+DROP TABLE IF EXISTS `awa_wiki_page`;
+DROP TABLE IF EXISTS `awa_wiki_content`;
+/* Copied from awa-jobs-drop-mysql.sql*/
+/* File generated automatically by dynamo */
+DROP TABLE IF EXISTS `awa_job`;
 /* Copied from awa-votes-drop-mysql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `awa_vote`;
 DROP TABLE IF EXISTS `awa_rating`;
+/* Copied from awa-questions-drop-mysql.sql*/
+/* File generated automatically by dynamo */
+DROP TABLE IF EXISTS `awa_question`;
+DROP TABLE IF EXISTS `awa_answer`;
 /* Copied from awa-images-drop-mysql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `awa_image`;
