@@ -34,13 +34,19 @@ with AWA.Wikis.Models;
 package AWA.Wikis.Previews is
 
    --  The name under which the module is registered.
-   NAME : constant String := "wiki-previews";
+   NAME : constant String := "wiki_previews";
 
    --  The configuration parameter that defines how to build the wiki preview template path.
-   PARAM_PREVIEW_TEMPLATE : constant String := "wiki.preview.template";
+   PARAM_PREVIEW_TEMPLATE : constant String := "wiki_preview_template";
 
    --  The configuration parameter to build the preview command to execute.
-   PARAM_PREVIEW_COMMAND : constant String := "wiki.preview.command";
+   PARAM_PREVIEW_COMMAND  : constant String := "wiki_preview_command";
+
+   --  The configuration parameter that defines how to build the HTML preview path.
+   PARAM_PREVIEW_HTML     : constant String := "wiki_preview_html";
+
+   --  The configuration parameter that defines the path for the tmp directory.
+   PARAM_PREVIEW_TMPDIR   : constant String := "wiki_preview_tmp";
 
    --  The worker procedure that performs the preview job.
    procedure Preview_Worker (Job : in out AWA.Jobs.Services.Abstract_Job_Type'Class);
@@ -61,6 +67,11 @@ package AWA.Wikis.Previews is
                          App    : in AWA.Modules.Application_Access;
                          Props  : in ASF.Applications.Config);
 
+   --  Configures the module after its initialization and after having read its XML configuration.
+   overriding
+   procedure Configure (Plugin : in out Preview_Module;
+                        Props  : in ASF.Applications.Config);
+
    --  The `On_Create` procedure is called by `Notify_Create` to notify the creation of the page.
    overriding
    procedure On_Create (Instance : in Preview_Module;
@@ -80,12 +91,21 @@ package AWA.Wikis.Previews is
    procedure Make_Preview_Job (Plugin : in Preview_Module;
                                Page   : in AWA.Wikis.Models.Wiki_Page_Ref'Class);
 
+   --  Execute the preview job and make the thumbnail preview.  The page is first rendered in
+   --  an HTML text file and the preview is rendered by using an external command.
+   procedure Do_Preview_Job (Plugin : in Preview_Module;
+                             Job    : in out AWA.Jobs.Services.Abstract_Job_Type'Class);
+
+   --  Get the preview module instance associated with the current application.
+   function Get_Preview_Module return Preview_Module_Access;
+
 private
 
    type Preview_Module is new AWA.Modules.Module
      and AWA.Wikis.Modules.Wiki_Lifecycle.Listener with record
       Template   : EL.Expressions.Expression;
       Command    : EL.Expressions.Expression;
+      Html       : EL.Expressions.Expression;
       Job_Module : AWA.Jobs.Modules.Job_Module_Access;
    end record;
 
