@@ -36,6 +36,8 @@ CREATE TABLE awa_wiki_page (
   `title` VARCHAR(255) BINARY NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
+  /* the wiki page preview. */
+  `preview_id` BIGINT ,
   /* the wiki space that this page belongs to */
   `wiki_id` BIGINT NOT NULL,
   /* the current content (or last version) */
