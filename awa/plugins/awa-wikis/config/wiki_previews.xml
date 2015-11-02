@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="1.0">
+
+  <context-param>
+    <param-name>wiki_previews.wiki_preview_tmp</param-name>
+    <param-value>tmp</param-value>
+  </context-param>
+
+  <context-param>
+    <param-name>wiki_previews.wiki_preview_dir</param-name>
+    <param-value>web/preview</param-value>
+  </context-param>
+
+  <context-param>
+    <param-name>wiki_previews.wiki_preview_template</param-name>
+    <param-value>/wikis/previewer/\#{jobHandler.wiki_space_id}/\#{jobHandler.wiki_page_id}</param-value>
+  </context-param>
+
+  <context-param>
+    <param-name>wiki_previews.wiki_preview_html</param-name>
+    <param-value>tmp/\#{jobHandler.wiki_page_id}.html</param-value>
+  </context-param>
+
+  <context-param>
+    <param-name>wiki_previews.wiki_preview_command</param-name>
+    <param-value>awa-wiki-preview.sh web/preview/wiki.css tmp/\#{jobHandler.wiki_page_id}.html web/preview/\#{jobHandler.wiki_space_id}/\#{jobHandler.wiki_page_id}.png</param-value>
+  </context-param>
+
+  <url-policy>
+    <permission>anonymous</permission>
+    <url-pattern>/wikis/previewer/.*</url-pattern>
+  </url-policy>
+
+  <url-mapping>
+    <pattern>/wikis/previewer/#{wikiView.wiki_id}/#{wikiView.id}</pattern>
+    <view-id>/wikis/previewer/view.html</view-id>
+  </url-mapping>
+
+</module>
