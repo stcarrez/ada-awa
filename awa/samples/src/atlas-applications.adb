@@ -256,6 +256,11 @@ package body Atlas.Applications is
                 Module => App.Question_Module'Access);
 
       Register (App    => App.Self.all'Access,
+                Name   => AWA.Wikis.Modules.NAME,
+                URI    => "wikis",
+                Module => App.Wiki_Module'Access);
+
+      Register (App    => App.Self.all'Access,
                 Name   => Atlas.Microblog.Modules.NAME,
                 URI    => "microblog",
                 Module => App.Microblog_Module'Access);
