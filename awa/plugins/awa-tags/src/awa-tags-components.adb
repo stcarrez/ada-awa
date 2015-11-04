@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-tags-components -- Tags component
---  Copyright (C) 2013, 2014 Stephane Carrez
+--  Copyright (C) 2013, 2014, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,6 +42,9 @@ package body AWA.Tags.Components is
 
    function Create_Tag return ASF.Components.Base.UIComponent_Access;
    function Create_Cloud return ASF.Components.Base.UIComponent_Access;
+   procedure Swap (Item1 : in out AWA.Tags.Models.Tag_Info;
+                   Item2 : in out AWA.Tags.Models.Tag_Info);
+   procedure Dispatch (List : in out Tag_Info_Array);
 
    --  ------------------------------
    --  Create an Tag_UIInput component
@@ -548,6 +551,37 @@ package body AWA.Tags.Components is
       end loop;
    end Compute_Cloud_Weight;
 
+   procedure Swap (Item1 : in out AWA.Tags.Models.Tag_Info;
+                   Item2 : in out AWA.Tags.Models.Tag_Info) is
+      Tmp : AWA.Tags.Models.Tag_Info := Item2;
+   begin
+      Item2 := Item1;
+      Item1 := Tmp;
+   end Swap;
+
+   --  ------------------------------
+   --  A basic algorithm to dispatch the tags in the list.
+   --  The original list is sorted on the tag count (due to the Tag_Ordered_Sets).
+   --  We try to dispatch the first tags somewhere in the first or second halves of the list.
+   --  ------------------------------
+   procedure Dispatch (List : in out Tag_Info_Array) is
+      Middle  : constant Natural := List'First + List'Length / 2;
+      Quarter : Natural := List'Length / 4;
+      Target  : Natural := Middle;
+      Pos     : Natural := 0;
+   begin
+      while Target <= List'Last and List'First + Pos < Middle and Quarter /= 0 loop
+         Swap (List (List'First + Pos), List (Target));
+         Pos := Pos + 1;
+         if Target <= Middle then
+            Target := List'Last - Quarter;
+         else
+            Target := List'First + Quarter;
+            Quarter := Quarter / 2;
+         end if;
+      end loop;
+   end Dispatch;
+
    --  ------------------------------
    --  Render the tag cloud component.
    --  ------------------------------
@@ -569,6 +603,7 @@ package body AWA.Tags.Components is
          use type Util.Beans.Basic.List_Bean_Access;
 
          Max   : constant Integer := UI.Get_Attribute ("rows", Context, 1000);
+         Layout : constant String := UI.Get_Attribute ("layout", Context);
          Bean  : constant Util.Beans.Basic.List_Bean_Access
            := ASF.Components.Utils.Get_List_Bean (UI, "value", Context);
          Count : Natural;
@@ -610,7 +645,10 @@ package body AWA.Tags.Components is
          --  Pass 2: Assign weight to each tag.
          UI.Compute_Cloud_Weight (Table.all, Context);
 
-         --  Pass 3: Sort the tags on their name.
+         --  Pass 3: Dispatch the tags using some layout algorithm.
+         if layout = "dispatch" then
+            Dispatch (Table.all);
+         end if;
 
          --  Pass 4: Render each tag.
          UI.Render_Cloud (Table.all, Context);
