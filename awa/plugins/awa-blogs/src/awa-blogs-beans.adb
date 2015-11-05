@@ -60,7 +60,7 @@ package body AWA.Blogs.Beans is
        Ada.Strings.Maps.To_Set (Span => (Low => Character'Val (128),
                                          High => Character'Val (255)))
      or
-       Ada.Strings.Maps.To_Set (":?#[]@!$&'""()*,;=%`^\<>");
+       Ada.Strings.Maps.To_Set ("?#[]@!$&'""()*,;=%`^\<>");
 
    --  ------------------------------
    --  Get the value identified by the name.
