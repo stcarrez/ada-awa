@@ -15,9 +15,10 @@
   -  limitations under the License.
   -->
 <ui:composition xmlns:util="http://code.google.com/p/ada-asf/util"
-        xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:w="http://code.google.com/p/ada-asf/widget"
-        xmlns:h="http://java.sun.com/jsf/html">
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:w="http://code.google.com/p/ada-asf/widget"
+                xmlns:h="http://java.sun.com/jsf/html">
 
   <div class='ui-widget awa-form'>
     <h:form id='post'>
@@ -27,6 +28,15 @@
             <w:inputText styleClass="awa-required"
                          id='title' size='50' required='true' value='#{adminWikiSpace.name}'
                          title='#{wikiMsg.wiki_admin_wiki_title_label}'/>
+            <dl class="awa-required">
+                <dt><label for='page-is-public'>#{wikiMsg.wiki_admin_is_public_label}</label></dt>
+                <dd>
+                    <h:selectOneRadio styleClass="awa-radio" id="page-is-public" value="#{adminWikiSpace.is_public}">
+                        <f:selectItem id="page-public-yes" name="page-is-public" itemLabel="#{layoutMsg.layout_yes_label}" itemValue="TRUE" />
+                        <f:selectItem id="page-public-no" name="page-is-public" itemLabel="#{layoutMsg.layout_no_label}" itemValue="FALSE" />
+                    </h:selectOneRadio>
+                </dd>
+            </dl>
             <div class="grid_6">
                 <dl class="awa-required#{util:hasMessage('left_side') ? ' awa-error' : ''}">
                     <dt>
