@@ -64,10 +64,12 @@
                         <f:selectItems value="#{postStatusList}"/>
                     </h:selectOneMenu>
                 </dd>
-                <dt></dt>
+                <dt><label for='allow-comment'>#{blogMsg.blog_post_allow_comments_label}</label></dt>
                 <dd>
-                    <h:selectBooleanCheckbox id="allow-comment" value="#{post.allow_comments}"/>
-                    <label for='allow-comment'>#{blogMsg.blog_post_allow_comments_label}</label>
+                    <h:selectOneRadio styleClass="awa-radio" id="allow-comment" value="#{post.allow_comments}">
+                        <f:selectItem id="page-public-yes" name="allow-comment" itemLabel="#{layoutMsg.layout_yes_label}" itemValue="TRUE" />
+                        <f:selectItem id="page-public-no" name="allow-comment" itemLabel="#{layoutMsg.layout_no_label}" itemValue="FALSE" />
+                    </h:selectOneRadio>
                 </dd>
             </dl>
             <dl class="awa-required">
