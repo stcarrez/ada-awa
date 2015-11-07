@@ -18,6 +18,7 @@
 with ASF.Applications;
 
 with ADO;
+with ADO.Sessions;
 with AWA.Events;
 with AWA.Modules;
 with AWA.Modules.Lifecycles;
@@ -61,6 +62,10 @@ package AWA.Wikis.Modules is
      new AWA.Modules.Lifecycles (Element_Type => AWA.Wikis.Models.Wiki_Page_Ref'Class);
 
    subtype Listener is Wiki_Lifecycle.Listener;
+
+   --  The configuration parameter that defines a list of wiki page ID to copy when a new
+   --  wiki space is created.
+   PARAM_WIKI_COPY_LIST : constant String := "wiki_copy_list";
 
    --  ------------------------------
    --  Module wikis
@@ -126,6 +131,23 @@ package AWA.Wikis.Modules is
                                 Content : in out AWA.Wikis.Models.Wiki_Content_Ref'Class);
 
 private
+   --  Copy the wiki page with its last version to the wiki space.
+   procedure Copy_Page (Module  : in Wiki_Module;
+                        DB      : in out ADO.Sessions.Master_Session;
+                        Wiki    : in AWA.Wikis.Models.Wiki_Space_Ref'Class;
+                        Page_Id : in ADO.Identifier);
+
+   --  Copy the wiki page with its last version to the wiki space.
+   procedure Copy_Page (Module  : in Wiki_Module;
+                        DB      : in out ADO.Sessions.Master_Session;
+                        Wiki    : in AWA.Wikis.Models.Wiki_Space_Ref'Class;
+                        Page    : in AWA.Wikis.Models.Wiki_Page_Ref'Class);
+
+   --  Save a new wiki content for the wiki page.
+   procedure Save_Wiki_Content (Model   : in Wiki_Module;
+                                DB      : in out ADO.Sessions.Master_Session;
+                                Page    : in out AWA.Wikis.Models.Wiki_Page_Ref'Class;
+                                Content : in out AWA.Wikis.Models.Wiki_Content_Ref'Class);
 
    type Wiki_Module is new AWA.Modules.Module with null record;
 
