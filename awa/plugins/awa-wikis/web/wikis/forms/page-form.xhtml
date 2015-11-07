@@ -69,9 +69,12 @@
         <div class='grid_4'>
             <dl class="awa-required">
                 <dt></dt>
+                <label for='page-is-public'>#{wikiMsg.wiki_page_is_public_label}</label>
                 <dd>
-                    <h:selectBooleanCheckbox id="page-is-public" value="#{wikiPage.is_public}"/>
-                    <label for='page-is-public'>#{wikiMsg.wiki_page_is_public_label}</label>
+                    <h:selectOneRadio styleClass="awa-radio" id="page-is-public" value="#{wikiPage.is_public}">
+                        <f:selectItem id="page-public-yes" name="page-is-public" itemLabel="Yes" itemValue="TRUE" />
+                        <f:selectItem id="page-public-no" name="page-is-public" itemLabel="No" itemValue="FALSE" />
+                    </h:selectOneRadio>
                 </dd>
             </dl>
             <dl class="awa-optional">
