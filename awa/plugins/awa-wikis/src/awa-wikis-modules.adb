@@ -25,12 +25,14 @@ with AWA.Users.Models;
 with AWA.Wikis.Beans;
 with AWA.Modules.Beans;
 
+with Ada.Strings;
 with Ada.Calendar;
 with ADO.Sessions;
 with ADO.Objects;
 with ADO.SQL;
 
 with Util.Log.Loggers;
+with Util.Strings.Tokenizers;
 package body AWA.Wikis.Modules is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Awa.Wikis.Module");
@@ -97,10 +99,26 @@ package body AWA.Wikis.Modules is
                                 Wiki   : in out AWA.Wikis.Models.Wiki_Space_Ref'Class) is
       pragma Unreferenced (Module);
 
+      procedure Copy_Page (Item : in String;
+                           Done : out Boolean);
+
       Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       User  : constant ADO.Identifier := Ctx.Get_User_Identifier;
       DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       WS    : AWA.Workspaces.Models.Workspace_Ref;
+
+      procedure Copy_Page (Item : in String;
+                           Done : out Boolean) is
+      begin
+         Module.Copy_Page (DB, Wiki, ADO.Identifier'Value (Item));
+         Done := False;
+
+      exception
+         when Constraint_Error =>
+            Log.Error ("Invalid configuration wiki page id {0}", Item);
+
+      end Copy_Page;
+
    begin
       Log.Info ("Creating new wiki space {0}", String '(Wiki.Get_Name));
 
@@ -118,6 +136,12 @@ package body AWA.Wikis.Modules is
       AWA.Permissions.Services.Add_Permission (Session => DB,
                                                User    => User,
                                                Entity  => Wiki);
+
+      Util.Strings.Tokenizers.Iterate_Tokens (Content => Module.Get_Config (PARAM_WIKI_COPY_LIST),
+                                              Pattern => ",",
+                                              Process => Copy_Page'Access,
+                                              Going   => Ada.Strings.Forward);
+
       Ctx.Commit;
 
       Log.Info ("Wiki {0} created for user {1}",
@@ -268,17 +292,68 @@ package body AWA.Wikis.Modules is
    end Create_Wiki_Content;
 
    --  ------------------------------
+   --  Copy the wiki page with its last version to the wiki space.
+   --  ------------------------------
+   procedure Copy_Page (Module  : in Wiki_Module;
+                        DB      : in out ADO.Sessions.Master_Session;
+                        Wiki    : in AWA.Wikis.Models.Wiki_Space_Ref'Class;
+                        Page_Id : in ADO.Identifier) is
+      Page    : AWA.Wikis.Models.Wiki_Page_Ref;
+      Found   : Boolean;
+   begin
+      Page.Load (DB, Page_Id, Found);
+      if not Found then
+         Log.Warn ("Wiki page copy is abandoned: page {0} was not found",
+                   ADO.Identifier'Image (Page_Id));
+         return;
+      end if;
+      Module.Copy_Page (DB, Wiki, Page);
+   end Copy_Page;
+
+   --  ------------------------------
+   --  Copy the wiki page with its last version to the wiki space.
+   --  ------------------------------
+   procedure Copy_Page (Module  : in Wiki_Module;
+                        DB      : in out ADO.Sessions.Master_Session;
+                        Wiki    : in AWA.Wikis.Models.Wiki_Space_Ref'Class;
+                        Page    : in AWA.Wikis.Models.Wiki_Page_Ref'Class) is
+      New_Content : AWA.Wikis.Models.Wiki_Content_Ref;
+      New_Page    : AWA.Wikis.Models.Wiki_Page_Ref;
+   begin
+      New_Page.Set_Wiki (Wiki);
+      New_Page.Set_Title (String '(Page.Get_Title));
+      New_Page.Set_Name (String '(Page.Get_Name));
+      New_Page.Set_Is_Public (Wiki.Get_Is_Public);
+      New_Page.Set_Last_Version (0);
+      New_Content.Set_Content (String '(Page.Get_Content.Get_Content));
+      Module.Save_Wiki_Content (DB, New_Page, New_Content);
+   end Copy_Page;
+
+   --  ------------------------------
    --  Save a new wiki content for the wiki page.
    --  ------------------------------
    procedure Save_Wiki_Content (Model   : in Wiki_Module;
                                 Page    : in out AWA.Wikis.Models.Wiki_Page_Ref'Class;
                                 Content : in out AWA.Wikis.Models.Wiki_Content_Ref'Class) is
+      Ctx : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB  : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+   begin
+      Ctx.Start;
+      Model.Save_Wiki_Content (DB, Page, Content);
+      Ctx.Commit;
+   end Save_Wiki_Content;
+
+   --  ------------------------------
+   --  Save a new wiki content for the wiki page.
+   --  ------------------------------
+   procedure Save_Wiki_Content (Model   : in Wiki_Module;
+                                DB      : in out ADO.Sessions.Master_Session;
+                                Page    : in out AWA.Wikis.Models.Wiki_Page_Ref'Class;
+                                Content : in out AWA.Wikis.Models.Wiki_Content_Ref'Class) is
       Ctx     : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      DB      : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       User    : constant AWA.Users.Models.User_Ref := Ctx.Get_User;
       Created : constant Boolean := not Page.Is_Inserted;
    begin
-      Ctx.Start;
       Page.Set_Last_Version (Page.Get_Last_Version + 1);
       if Created then
          Page.Save (DB);
@@ -296,7 +371,6 @@ package body AWA.Wikis.Modules is
       else
          Wiki_Lifecycle.Notify_Update (Model, Page);
       end if;
-      Ctx.Commit;
    end Save_Wiki_Content;
 
 end AWA.Wikis.Modules;
