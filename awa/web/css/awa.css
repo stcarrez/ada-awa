@@ -282,3 +282,35 @@ div.awa-modal div.awa-login {
     position: relative;
 }
 
+.awa-button {
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    padding: 0.5em;
+    border: 1px solid #47C;
+    text-decoration: none;
+    font-weight: bold;
+}
+.awa-button:hover {
+    text-decoration: none;
+    background: #e6e6e3;
+}
+.awa-radio input {
+    display: none;
+}
+.awa-radio {
+    border-spacing: 5px 5px;
+    border-collapse: separate;
+}
+.awa-radio input + label {
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    padding: 0.5em;
+    border: 1px solid #c5dbec;
+    text-decoration: none;
+    font-weight: bold;
+    background: #e6e6e3;
+}
+.awa-radio input:checked + label {
+    border: 1px solid #c5dbec;
+    background: #dfeffc;
+}
