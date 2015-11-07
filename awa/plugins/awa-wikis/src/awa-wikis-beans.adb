@@ -138,8 +138,10 @@ package body AWA.Wikis.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      if Name = "name" then
-         From.Set_Name (Util.Beans.Objects.To_String (Value));
+      if Name /= "id" then
+         AWA.Wikis.Models.Wiki_Space_Bean (From).Set_Value (Name, Value);
+      elsif Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
+         From.Module.Load_Wiki_Space (From, ADO.Utils.To_Identifier (Value));
       end if;
    end Set_Value;
 
@@ -157,6 +159,17 @@ package body AWA.Wikis.Beans is
          Bean.Module.Create_Wiki_Space (Bean);
       end if;
    end Save;
+
+   --  ------------------------------
+   --  Load the wiki space information.
+   --  ------------------------------
+   overriding
+   procedure Load (Bean    : in out Wiki_Space_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Bean.Module.Load_Wiki_Space (Bean, Bean.Get_Id);
+      Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("loaded");
+   end Load;
 
    --  Delete the wiki space.
    procedure Delete (Bean    : in out Wiki_Space_Bean;
