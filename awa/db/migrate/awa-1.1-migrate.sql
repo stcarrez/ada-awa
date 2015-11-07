@@ -53,10 +53,15 @@ CREATE TABLE awa_wiki_space (
   `name` VARCHAR(255) BINARY NOT NULL,
   /* whether the wiki is public */
   `is_public` TINYINT NOT NULL,
-  /* the wiki creation date. */
-  `create_date` DATETIME NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
+  /* the wiki creation date. */
+  `create_date` DATETIME NOT NULL,
+  /* the left panel side wiki text for every page. */
+  `left_side` TEXT NOT NULL,
+  /* the right panel wiki text for every page.
+ */
+  `right_side` TEXT NOT NULL,
   /*  */
   `workspace_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
