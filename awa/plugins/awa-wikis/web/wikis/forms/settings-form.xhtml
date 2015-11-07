@@ -1,0 +1,73 @@
+<!-- Form to update the wiki space configuration
+  -  Copyright (C) 2015 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<ui:composition xmlns:util="http://code.google.com/p/ada-asf/util"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:w="http://code.google.com/p/ada-asf/widget"
+        xmlns:h="http://java.sun.com/jsf/html">
+
+  <div class='ui-widget awa-form'>
+    <h:form id='post'>
+        <h:inputHidden id='wiki-space-id' value='#{adminWikiSpace.id}' required='false'/>
+        <div class='grid_8'>
+            <h:messages styleClass='error'/>
+            <w:inputText styleClass="awa-required"
+                         id='title' size='50' required='true' value='#{adminWikiSpace.name}'
+                         title='#{wikiMsg.wiki_admin_wiki_title_label}'/>
+            <div class="grid_6">
+                <dl class="awa-required#{util:hasMessage('left_side') ? ' awa-error' : ''}">
+                    <dt>
+                        <label for='text'>#{wikiMsg.wiki_page_left_side_label}</label>
+                    </dt>
+                    <dd>
+                        <h:inputTextarea id='left_side' rows='20' required='false' value='#{adminWikiSpace.left_side}'/>
+                    </dd>
+                </dl>
+            </div>
+            <div class="grid_6">
+                <dl class="awa-required#{util:hasMessage('right_side') ? ' awa-error' : ''}">
+                    <dt>
+                        <label for='text'>#{wikiMsg.wiki_page_right_side_label}</label>
+                    </dt>
+                    <dd>
+                         <h:inputTextarea id='right_side' rows='20' required='false' value='#{adminWikiSpace.right_side}'/>
+                    </dd>
+                </dl>
+            </div>
+            <ul class='awa-buttons'>
+                <li>
+                    <h:commandButton id='save'
+                                     value='#{empty adminWikiSpace.id ? wikiMsg.wiki_admin_create_button : wikiMsg.wiki_admin_update_button}'
+                                     styleClass="ui-button ui-state-default ui-corner-all"
+                                     action="#{adminWikiSpace.save}"/>
+                </li>
+            </ul>
+        </div>
+    </h:form>
+      <util:script>
+              // Create a MarkEdit editor on page load
+              $(function(){
+                 $('textarea').markedit({ 'preview': false,
+                  'toolbar' : {
+                    'backgroundMode': 'light',
+                    'layout': 'bold italic underline strike | quote code | numberlist bulletlist heading line'
+                  }
+                 });
+              });
+      </util:script>
+  </div>
+</ui:composition>
+
