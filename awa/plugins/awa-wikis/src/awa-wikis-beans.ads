@@ -87,6 +87,11 @@ package AWA.Wikis.Beans is
    procedure Save (Bean    : in out Wiki_Space_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
+   --  Load the wiki space information.
+   overriding
+   procedure Load (Bean    : in out Wiki_Space_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
    --  Delete the wiki space.
    procedure Delete (Bean    : in out Wiki_Space_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
