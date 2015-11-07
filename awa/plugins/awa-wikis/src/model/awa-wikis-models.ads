@@ -103,6 +103,30 @@ package AWA.Wikis.Models is
    function Get_Create_Date (Object : in Wiki_Space_Ref)
                  return Ada.Calendar.Time;
 
+   --  Set the left panel side wiki text for every page.
+   procedure Set_Left_Side (Object : in out Wiki_Space_Ref;
+                            Value  : in Ada.Strings.Unbounded.Unbounded_String);
+   procedure Set_Left_Side (Object : in out Wiki_Space_Ref;
+                            Value : in String);
+
+   --  Get the left panel side wiki text for every page.
+   function Get_Left_Side (Object : in Wiki_Space_Ref)
+                 return Ada.Strings.Unbounded.Unbounded_String;
+   function Get_Left_Side (Object : in Wiki_Space_Ref)
+                 return String;
+
+   --  Set the right panel wiki text for every page.
+   procedure Set_Right_Side (Object : in out Wiki_Space_Ref;
+                             Value  : in Ada.Strings.Unbounded.Unbounded_String);
+   procedure Set_Right_Side (Object : in out Wiki_Space_Ref;
+                             Value : in String);
+
+   --  Get the right panel wiki text for every page.
+   function Get_Right_Side (Object : in Wiki_Space_Ref)
+                 return Ada.Strings.Unbounded.Unbounded_String;
+   function Get_Right_Side (Object : in Wiki_Space_Ref)
+                 return String;
+
    --
    procedure Set_Workspace (Object : in out Wiki_Space_Ref;
                             Value  : in AWA.Workspaces.Models.Workspace_Ref'Class);
@@ -631,6 +655,12 @@ package AWA.Wikis.Models is
       --  the wiki version comment.
       Save_Comment : Ada.Strings.Unbounded.Unbounded_String;
 
+      --  the wiki page left side panel.
+      Left_Side : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the wiki page right side panel.
+      Right_Side : Ada.Strings.Unbounded.Unbounded_String;
+
       --  the wiki page author.
       Author : Ada.Strings.Unbounded.Unbounded_String;
 
@@ -689,6 +719,9 @@ package AWA.Wikis.Models is
                         Value : in Util.Beans.Objects.Object);
 
    procedure Save (Bean : in out Wiki_Space_Bean;
+                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   procedure Load (Bean : in out Wiki_Space_Bean;
                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
    type Wiki_Page_Bean is abstract new AWA.Wikis.Models.Wiki_Page_Ref
@@ -803,10 +836,12 @@ private
    COL_2_1_NAME : aliased constant String := "is_public";
    COL_3_1_NAME : aliased constant String := "version";
    COL_4_1_NAME : aliased constant String := "create_date";
-   COL_5_1_NAME : aliased constant String := "workspace_id";
+   COL_5_1_NAME : aliased constant String := "left_side";
+   COL_6_1_NAME : aliased constant String := "right_side";
+   COL_7_1_NAME : aliased constant String := "workspace_id";
 
    WIKI_SPACE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 6,
+     (Count => 8,
       Table => WIKI_SPACE_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
@@ -814,7 +849,9 @@ private
          3 => COL_2_1_NAME'Access,
          4 => COL_3_1_NAME'Access,
          5 => COL_4_1_NAME'Access,
-         6 => COL_5_1_NAME'Access
+         6 => COL_5_1_NAME'Access,
+         7 => COL_6_1_NAME'Access,
+         8 => COL_7_1_NAME'Access
 )
      );
    WIKI_SPACE_TABLE : constant ADO.Schemas.Class_Mapping_Access
@@ -831,6 +868,8 @@ private
        Is_Public : Boolean;
        Version : Integer;
        Create_Date : Ada.Calendar.Time;
+       Left_Side : Ada.Strings.Unbounded.Unbounded_String;
+       Right_Side : Ada.Strings.Unbounded.Unbounded_String;
        Workspace : AWA.Workspaces.Models.Workspace_Ref;
    end record;
 
@@ -1052,7 +1091,7 @@ private
 
    package File_4 is
       new ADO.Queries.Loaders.File (Path => "wiki-page.xml",
-                                    Sha1 => "2329AE96698DF9BF3E1C6D308A208ED120C17967");
+                                    Sha1 => "DE60CFB372FFCE936CAD78B90485588D3F2F90F3");
 
    package Def_Wikiviewinfo_Wiki_Page is
       new ADO.Queries.Loaders.Query (Name => "wiki-page",

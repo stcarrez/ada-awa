@@ -164,12 +164,72 @@ package body AWA.Wikis.Models is
    end Get_Create_Date;
 
 
+   procedure Set_Left_Side (Object : in out Wiki_Space_Ref;
+                             Value : in String) is
+      Impl : Wiki_Space_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_String (Impl.all, 6, Impl.Left_Side, Value);
+   end Set_Left_Side;
+
+   procedure Set_Left_Side (Object : in out Wiki_Space_Ref;
+                            Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : Wiki_Space_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 6, Impl.Left_Side, Value);
+   end Set_Left_Side;
+
+   function Get_Left_Side (Object : in Wiki_Space_Ref)
+                 return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (Object.Get_Left_Side);
+   end Get_Left_Side;
+   function Get_Left_Side (Object : in Wiki_Space_Ref)
+                  return Ada.Strings.Unbounded.Unbounded_String is
+      Impl : constant Wiki_Space_Access
+         := Wiki_Space_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Left_Side;
+   end Get_Left_Side;
+
+
+   procedure Set_Right_Side (Object : in out Wiki_Space_Ref;
+                              Value : in String) is
+      Impl : Wiki_Space_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_String (Impl.all, 7, Impl.Right_Side, Value);
+   end Set_Right_Side;
+
+   procedure Set_Right_Side (Object : in out Wiki_Space_Ref;
+                             Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : Wiki_Space_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 7, Impl.Right_Side, Value);
+   end Set_Right_Side;
+
+   function Get_Right_Side (Object : in Wiki_Space_Ref)
+                 return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (Object.Get_Right_Side);
+   end Get_Right_Side;
+   function Get_Right_Side (Object : in Wiki_Space_Ref)
+                  return Ada.Strings.Unbounded.Unbounded_String is
+      Impl : constant Wiki_Space_Access
+         := Wiki_Space_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Right_Side;
+   end Get_Right_Side;
+
+
    procedure Set_Workspace (Object : in out Wiki_Space_Ref;
                             Value  : in AWA.Workspaces.Models.Workspace_Ref'Class) is
       Impl : Wiki_Space_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 6, Impl.Workspace, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 8, Impl.Workspace, Value);
    end Set_Workspace;
 
    function Get_Workspace (Object : in Wiki_Space_Ref)
@@ -198,6 +258,8 @@ package body AWA.Wikis.Models is
             Copy.Is_Public := Impl.Is_Public;
             Copy.Version := Impl.Version;
             Copy.Create_Date := Impl.Create_Date;
+            Copy.Left_Side := Impl.Left_Side;
+            Copy.Right_Side := Impl.Right_Side;
             Copy.Workspace := Impl.Workspace;
          end;
       end if;
@@ -349,9 +411,19 @@ package body AWA.Wikis.Models is
          Object.Clear_Modified (5);
       end if;
       if Object.Is_Modified (6) then
-         Stmt.Save_Field (Name  => COL_5_1_NAME, --  workspace_id
-                          Value => Object.Workspace);
+         Stmt.Save_Field (Name  => COL_5_1_NAME, --  left_side
+                          Value => Object.Left_Side);
          Object.Clear_Modified (6);
+      end if;
+      if Object.Is_Modified (7) then
+         Stmt.Save_Field (Name  => COL_6_1_NAME, --  right_side
+                          Value => Object.Right_Side);
+         Object.Clear_Modified (7);
+      end if;
+      if Object.Is_Modified (8) then
+         Stmt.Save_Field (Name  => COL_7_1_NAME, --  workspace_id
+                          Value => Object.Workspace);
+         Object.Clear_Modified (8);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -393,7 +465,11 @@ package body AWA.Wikis.Models is
                         Value => Object.Version);
       Query.Save_Field (Name  => COL_4_1_NAME, --  create_date
                         Value => Object.Create_Date);
-      Query.Save_Field (Name  => COL_5_1_NAME, --  workspace_id
+      Query.Save_Field (Name  => COL_5_1_NAME, --  left_side
+                        Value => Object.Left_Side);
+      Query.Save_Field (Name  => COL_6_1_NAME, --  right_side
+                        Value => Object.Right_Side);
+      Query.Save_Field (Name  => COL_7_1_NAME, --  workspace_id
                         Value => Object.Workspace);
       Query.Execute (Result);
       if Result /= 1 then
@@ -433,6 +509,10 @@ package body AWA.Wikis.Models is
          return Util.Beans.Objects.To_Object (Impl.Is_Public);
       elsif Name = "create_date" then
          return Util.Beans.Objects.Time.To_Object (Impl.Create_Date);
+      elsif Name = "left_side" then
+         return Util.Beans.Objects.To_Object (Impl.Left_Side);
+      elsif Name = "right_side" then
+         return Util.Beans.Objects.To_Object (Impl.Right_Side);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -451,8 +531,10 @@ package body AWA.Wikis.Models is
       Object.Is_Public := Stmt.Get_Boolean (2);
       Object.Is_Public := Stmt.Get_Boolean (2);
       Object.Create_Date := Stmt.Get_Time (4);
-      if not Stmt.Is_Null (5) then
-         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (5), Session);
+      Object.Left_Side := Stmt.Get_Unbounded_String (5);
+      Object.Right_Side := Stmt.Get_Unbounded_String (6);
+      if not Stmt.Is_Null (7) then
+         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (7), Session);
       end if;
       Object.Version := Stmt.Get_Integer (3);
       ADO.Objects.Set_Created (Object);
@@ -1807,6 +1889,10 @@ package body AWA.Wikis.Models is
          return Util.Beans.Objects.To_Object (From.Content);
       elsif Name = "save_comment" then
          return Util.Beans.Objects.To_Object (From.Save_Comment);
+      elsif Name = "left_side" then
+         return Util.Beans.Objects.To_Object (From.Left_Side);
+      elsif Name = "right_side" then
+         return Util.Beans.Objects.To_Object (From.Right_Side);
       elsif Name = "author" then
          return Util.Beans.Objects.To_Object (From.Author);
       elsif Name = "acl_id" then
@@ -1842,6 +1928,10 @@ package body AWA.Wikis.Models is
          Item.Content := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "save_comment" then
          Item.Save_Comment := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "left_side" then
+         Item.Left_Side := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "right_side" then
+         Item.Right_Side := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "author" then
          Item.Author := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "acl_id" then
@@ -1869,8 +1959,10 @@ package body AWA.Wikis.Models is
       Into.Format := Stmt.Get_Integer (6);
       Into.Content := Stmt.Get_Unbounded_String (7);
       Into.Save_Comment := Stmt.Get_Unbounded_String (8);
-      Into.Author := Stmt.Get_Unbounded_String (9);
-      Into.Acl_Id := Stmt.Get_Identifier (10);
+      Into.Left_Side := Stmt.Get_Unbounded_String (9);
+      Into.Right_Side := Stmt.Get_Unbounded_String (10);
+      Into.Author := Stmt.Get_Unbounded_String (11);
+      Into.Acl_Id := Stmt.Get_Identifier (12);
       Stmt.Next;
    end Read;
    --  --------------------
@@ -1899,9 +1991,21 @@ package body AWA.Wikis.Models is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Wiki_Space_Bean,
                                                       Method => Op_Save,
                                                       Name   => "save");
+   procedure Op_Load (Bean    : in out Wiki_Space_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Load (Bean    : in out Wiki_Space_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Wiki_Space_Bean'Class (Bean).Load (Outcome);
+   end Op_Load;
+   package Binding_Wiki_Space_Bean_2 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Wiki_Space_Bean,
+                                                      Method => Op_Load,
+                                                      Name   => "load");
 
    Binding_Wiki_Space_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
-     := (1 => Binding_Wiki_Space_Bean_1.Proxy'Access
+     := (1 => Binding_Wiki_Space_Bean_1.Proxy'Access,
+         2 => Binding_Wiki_Space_Bean_2.Proxy'Access
      );
 
    --  ------------------------------
@@ -1929,6 +2033,10 @@ package body AWA.Wikis.Models is
          Item.Set_Is_Public (Util.Beans.Objects.To_Boolean (Value));
       elsif Name = "create_date" then
          Item.Set_Create_Date (Util.Beans.Objects.Time.To_Time (Value));
+      elsif Name = "left_side" then
+         Item.Set_Left_Side (Util.Beans.Objects.To_String (Value));
+      elsif Name = "right_side" then
+         Item.Set_Right_Side (Util.Beans.Objects.To_String (Value));
       end if;
    end Set_Value;
 
