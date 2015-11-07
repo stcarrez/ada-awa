@@ -32,6 +32,12 @@
         <property type='String' name="save_comment">
             <comment>the wiki version comment.</comment>
         </property>
+        <property type='String' name="left_side">
+            <comment>the wiki page left side panel.</comment>
+        </property>
+        <property type='String' name="right_side">
+            <comment>the wiki page right side panel.</comment>
+        </property>
         <property type='String' name="author">
             <comment>the wiki page author.</comment>
         </property>
@@ -56,10 +62,13 @@
       content.format,
       content.content,
       content.save_comment,
+      wiki.left_side,
+      wiki.right_side,
       user.name,
       acl.id
     FROM awa_wiki_page AS page
     INNER JOIN awa_wiki_content AS content ON page.content_id = content.id
+    INNER JOIN awa_wiki_space AS wiki ON page.wiki_id = wiki.id
     LEFT JOIN awa_acl AS acl ON acl.entity_id = page.wiki_id AND acl.entity_type = :entity_type AND acl.user_id = :user_id
     LEFT JOIN awa_user AS user ON content.author_id = user.id
     WHERE page.wiki_id = :wiki_id AND page.name = :name
@@ -79,10 +88,13 @@
       content.format,
       content.content,
       content.save_comment,
+      wiki.left_side,
+      wiki.right_side,
       user.name,
       acl.id
     FROM awa_wiki_page AS page
     INNER JOIN awa_wiki_content AS content ON page.content_id = content.id
+    INNER JOIN awa_wiki_space AS wiki ON page.wiki_id = wiki.id
     LEFT JOIN awa_acl AS acl ON acl.entity_id = page.wiki_id AND acl.entity_type = :entity_type AND acl.user_id = :user_id
     LEFT JOIN awa_user AS user ON content.author_id = user.id
     WHERE page.wiki_id = :wiki_id AND page.id = :id
