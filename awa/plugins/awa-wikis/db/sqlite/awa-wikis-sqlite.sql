@@ -57,6 +57,11 @@ CREATE TABLE awa_wiki_space (
   `version` INTEGER NOT NULL,
   /* the wiki creation date. */
   `create_date` DATETIME NOT NULL,
+  /* the left panel side wiki text for every page. */
+  `left_side` TEXT NOT NULL,
+  /* the right panel wiki text for every page.
+ */
+  `right_side` TEXT NOT NULL,
   /*  */
   `workspace_id` BIGINT NOT NULL
 );
