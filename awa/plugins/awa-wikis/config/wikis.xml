@@ -93,6 +93,19 @@
   </navigation-rule>
 
   <navigation-rule>
+    <from-view-id>/wikis/settings.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>loaded</from-outcome>
+      <to-view-id>/wikis/settings.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/wikis/list/#{adminWikiSpace.id}</to-view-id>
+      <redirect/>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
     <from-view-id>/wikis/create.xhtml</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
@@ -121,6 +134,7 @@
     <url-pattern>/wikis/create/#{wikiPage.wiki_id}</url-pattern>
     <url-pattern>/wikis/list/#{wikiList.wiki_id}</url-pattern>
     <url-pattern>/wikis/history/#{wikiVersionList.wiki_id}/#{wikiVersionList.page_id}</url-pattern>
+    <url-pattern>/wikis/settings/#{adminWikiSpace.id}</url-pattern>
     <url-pattern>/wikis/*.html</url-pattern>
   </filter-mapping>
 
@@ -129,6 +143,8 @@
     <url-pattern>/wikis/edit/#{wikiPage.wiki_id}/#{wikiPage.id}</url-pattern>
     <url-pattern>/wikis/create/#{wikiPage.wiki_id}</url-pattern>
     <url-pattern>/wikis/edit.html</url-pattern>
+    <url-pattern>/wikis/settings.html</url-pattern>
+    <url-pattern>/wikis/settings/#{adminWikiSpace.id}</url-pattern>
     <url-pattern>/wikis/*.html</url-pattern>
   </filter-mapping>
 
@@ -216,8 +232,10 @@
     <permission>logged-user</permission>
     <url-pattern>/wikis/admin/.*</url-pattern>
     <url-pattern>/wikis/edit/.*</url-pattern>
+    <url-pattern>/wikis/settings/.*</url-pattern>
     <url-pattern>/wikis/create/.*</url-pattern>
     <url-pattern>/wikis/edit.html</url-pattern>
+    <url-pattern>/wikis/settings.html</url-pattern>
     <url-pattern>/wikis/create.html</url-pattern>
     <url-pattern>/wikis/lists/tag-search.html</url-pattern>
   </url-policy>
@@ -250,6 +268,11 @@
   <url-mapping>
     <pattern>/wikis/history/#{wikiVersionList.wiki_id}/#{wikiVersionList.page_id}</pattern>
     <view-id>/wikis/history.html</view-id>
+  </url-mapping>
+
+  <url-mapping>
+    <pattern>/wikis/settings/#{adminWikiSpace.id}</pattern>
+    <view-id>/wikis/settings.html</view-id>
   </url-mapping>
 
 </module>
