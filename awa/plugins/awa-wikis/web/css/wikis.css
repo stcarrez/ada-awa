@@ -23,16 +23,57 @@
 #wiki-page-action {
     left: -5px;
 }
+.wiki-page-grid {
+    float: left;
+    margin: 0.5em;
+}
+.wiki-page-grid-info {
+    float: left;
+    display: block;
+    width: 256px;
+    padding: 5px;
+    border: 1px solid #47C;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+}
+.wiki-page-grid-info a {
+    display: block;
+}
+.wiki-page-grid-info .wiki-page-name, .wiki-page-grid-info .wiki-page-title, .wiki-page-grid-info .wiki-page-version {
+    display: block;
+    float: left;
+    clear: both;
+    overflow: hidden;
+    height: 1em;
+    white-space: nowrap;
+    width: 100%;
+    text-align: center;
+}
+.wiki-page-grid-info .wiki-page-title {
+    font-weight: bold;
+}
+
+.wiki-nav {
+    float: left;
+    width: 98%;
+    padding-left: 1%;
+    padding-right: 1%;
+    list-style-type: none;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 10px;
+}
+.wiki-nav-left {
+    float: left;
+    padding-right: 10px;
+}
+.wiki-nav-right {
+    float: right;
+    padding-left: 10px;
+}
 
 /**
  * Wiki page global style.
  */
-.wiki-page {
-    float: left;
-    width: 96%;
-    padding-right: 2%;
-    padding-left: 2%;
-}
 .wiki-title {
     float: left;
     margin-top: 15px;
