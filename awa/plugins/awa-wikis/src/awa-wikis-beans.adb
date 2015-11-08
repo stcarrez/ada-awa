@@ -442,10 +442,18 @@ package body AWA.Wikis.Beans is
       end if;
       AWA.Tags.Modules.Find_Tag_Id (Session, Ada.Strings.Unbounded.To_String (Into.Tag), Tag_Id);
       if Tag_Id /= ADO.NO_IDENTIFIER then
-         Query.Set_Query (AWA.Wikis.Models.Query_Wiki_Page_List);
+         Query.Set_Query (AWA.Wikis.Models.Query_Wiki_Page_Tag_List);
          Query.Bind_Param (Name => "tag", Value => Tag_Id);
-         Count_Query.Set_Count_Query (AWA.Wikis.Models.Query_Wiki_Page_List);
+         Count_Query.Set_Count_Query (AWA.Wikis.Models.Query_Wiki_Page_Tag_List);
          Count_Query.Bind_Param (Name => "tag", Value => Tag_Id);
+         ADO.Sessions.Entities.Bind_Param (Params  => Query,
+                                           Name    => "page_table",
+                                           Table   => AWA.Wikis.Models.WIKI_PAGE_TABLE,
+                                           Session => Session);
+         ADO.Sessions.Entities.Bind_Param (Params  => Count_Query,
+                                           Name    => "page_table",
+                                           Table   => AWA.Wikis.Models.WIKI_PAGE_TABLE,
+                                           Session => Session);
       else
          Query.Set_Query (AWA.Wikis.Models.Query_Wiki_Page_List);
          Count_Query.Set_Count_Query (AWA.Wikis.Models.Query_Wiki_Page_List);
