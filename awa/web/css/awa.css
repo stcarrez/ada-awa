@@ -314,3 +314,22 @@ div.awa-modal div.awa-login {
     border: 1px solid #c5dbec;
     background: #dfeffc;
 }
+/**
+ * Navigation icons
+ */
+.awa-nav-icon {
+    width: 100px;
+    display: block;
+}
+.awa-nav-icon span {
+    display: block;
+    float: left;
+    width: 100%;
+    text-align: center;
+}
+.awa-nav-icon img {
+    display: block;
+    width: 64px;
+    margin-left: auto;
+    margin-right: auto;
+}
