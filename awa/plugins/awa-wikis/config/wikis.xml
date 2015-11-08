@@ -231,16 +231,15 @@
 
   <filter-mapping>
     <filter-name>auth-filter</filter-name>
+    <url-pattern>/wikis/view/#{wikiView.wiki_id}/#{wikiView.name}</url-pattern>
     <url-pattern>/wikis/edit/#{wikiPage.wiki_id}/#{wikiPage.id}</url-pattern>
     <url-pattern>/wikis/create/#{wikiPage.wiki_id}</url-pattern>
-    <url-pattern>/wikis/edit.html</url-pattern>
-    <url-pattern>/wikis/settings.html</url-pattern>
-    <url-pattern>/wikis/settings/#{adminWikiSpace.id}</url-pattern>
-    <url-pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}</url-pattern>
     <url-pattern>/wikis/list/#{wikiList.wiki_id}</url-pattern>
     <url-pattern>/wikis/list/#{wikiList.wiki_id}/grid</url-pattern>
+    <url-pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}</url-pattern>
+    <url-pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}/grid</url-pattern>
     <url-pattern>/wikis/history/#{wikiVersionList.wiki_id}/#{wikiVersionList.page_id}</url-pattern>
-    <url-pattern>/wikis/view/.*</url-pattern>
+    <url-pattern>/wikis/settings/#{adminWikiSpace.id}</url-pattern>
     <url-pattern>/wikis/*.html</url-pattern>
   </filter-mapping>
 
