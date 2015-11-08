@@ -18,7 +18,7 @@
                 xmlns:awa="http://code.google.com/p/ada-awa/jsf">
     <h2>#{blogMsg.blog_tags_title}</h2>
     <awa:tagCloud
-            value="#{blogTagCloud}" styleClass="tag-cloud"
-            var="tagName" maxWeight="24" minWeight="12"
+            value="#{blogTagCloud}" styleClass="tag-cloud" layout="dispatch"
+            var="tagName" maxWeight="48" minWeight="16" rows="60"
             tagLink="#{contextPath}/blogs/tagged.html?tag=#{tagName}"/>
 </ui:composition>
