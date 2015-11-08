@@ -35,22 +35,6 @@ ul.blog-action li {
     float: left;
     padding-right: 10px;
 }
-ul.blog-action a {
-    width: 100px;
-    display: block;
-}
-ul.blog-action a span {
-    display: block;
-    float: left;
-    width: 100%;
-    text-align: center;
-}
-ul.blog-action a img {
-    display: block;
-    width: 64px;
-    margin-left: auto;
-    margin-right: auto;
-}
 div.blog-admin {
     float: left;
     clear: both;
