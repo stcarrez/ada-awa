@@ -99,6 +99,7 @@ package body AWA.Wikis.Beans is
                                         Session => Session);
       Bean.Load (Session, Query);
       Bean.Tags.Load_Tags (Session, Bean.Id);
+      Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("loaded");
    end Load;
 
    --  ------------------------------
@@ -543,6 +544,7 @@ package body AWA.Wikis.Beans is
       use AWA.Wikis.Models;
       use AWA.Services;
       use type ADO.Identifier;
+      use type Ada.Strings.Unbounded.Unbounded_String;
 
       Ctx         : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       User        : constant ADO.Identifier := Ctx.Get_User_Identifier;
@@ -551,10 +553,21 @@ package body AWA.Wikis.Beans is
       Count_Query : ADO.Queries.Context;
       Tag_Id      : ADO.Identifier;
       First       : constant Natural  := (Into.Page - 1) * Into.Page_Size;
+      Page        : constant Wiki_View_Bean_Access := Get_Wiki_View_Bean ("wikiView");
    begin
       if Into.Wiki_Id = ADO.NO_IDENTIFIER or Into.Page_Id = ADO.NO_IDENTIFIER then
          return;
       end if;
+
+      --  Load the wiki page first.
+      Page.Wiki_Space_Id := Into.Wiki_Id;
+      Page.Id := Into.Page_Id;
+      Page.Load (Outcome);
+      if Outcome /= "loaded" then
+         return;
+      end if;
+
+      --  Get the list of versions associated with the wiki page.
       Query.Set_Query (AWA.Wikis.Models.Query_Wiki_Version_List);
       Count_Query.Set_Count_Query (AWA.Wikis.Models.Query_Wiki_Version_List);
       Query.Bind_Param (Name => "first", Value => First);
