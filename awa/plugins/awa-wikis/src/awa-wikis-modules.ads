@@ -105,6 +105,10 @@ package AWA.Wikis.Modules is
    procedure Save (Model  : in Wiki_Module;
                    Page   : in out AWA.Wikis.Models.Wiki_Page_Ref'Class);
 
+   --  Delete the wiki page as well as all its versions.
+   procedure Delete (Model  : in Wiki_Module;
+                     Page   : in out AWA.Wikis.Models.Wiki_Page_Ref'Class);
+
    --  Load the wiki page and its content.
    procedure Load_Page (Model   : in Wiki_Module;
                         Page    : in out AWA.Wikis.Models.Wiki_Page_Ref'Class;
