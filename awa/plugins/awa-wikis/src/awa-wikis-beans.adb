@@ -325,12 +325,14 @@ package body AWA.Wikis.Beans is
          Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
    end Load;
 
+   --  ------------------------------
    --  Delete the wiki page.
+   --  ------------------------------
    overriding
    procedure Delete (Bean    : in out Wiki_Page_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
    begin
-      null;
+      Bean.Module.Delete (Bean);
    end Delete;
 
    --  ------------------------------
