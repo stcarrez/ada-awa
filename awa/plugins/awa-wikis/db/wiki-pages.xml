@@ -56,4 +56,34 @@
        </sql-count>
     </query>
 
+    <query name='wiki-page-tag-list'>
+       <comment>Get the list of wiki pages filtered by a tag</comment>
+       <sql>
+    SELECT
+      page.id,
+      page.name,
+      page.title,
+      page.is_public,
+      content.create_date,
+      page.last_version,
+      user.name
+    FROM awa_wiki_page AS page
+    INNER JOIN awa_tagged_entity AS e ON e.for_entity_id = page.id AND e.entity_type = :page_table AND e.tag_id = :tag
+    LEFT JOIN awa_acl AS acl ON acl.entity_id = :wiki_id AND acl.entity_type = :table AND acl.user_id = :user_id
+    LEFT JOIN awa_wiki_content AS content ON page.content_id = content.id
+    LEFT JOIN awa_user AS user ON content.author_id = user.id
+    WHERE page.wiki_id = :wiki_id AND (page.is_public OR acl.id IS NOT NULL)
+    ORDER BY content.create_date DESC
+    LIMIT :first, :count
+       </sql>
+       <sql-count>
+    SELECT
+       count(page.id)
+    FROM awa_wiki_page AS page
+    INNER JOIN awa_tagged_entity AS e ON e.for_entity_id = page.id AND e.entity_type = :page_table AND e.tag_id = :tag
+    LEFT JOIN awa_acl AS acl ON acl.entity_id = :wiki_id AND acl.entity_type = :table AND acl.user_id = :user_id
+    WHERE page.wiki_id = :wiki_id AND (page.is_public OR acl.id IS NOT NULL)
+       </sql-count>
+    </query>
+
 </query-mapping>
