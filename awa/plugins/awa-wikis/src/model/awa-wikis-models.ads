@@ -567,6 +567,8 @@ package AWA.Wikis.Models is
 
    Query_Wiki_Page_List : constant ADO.Queries.Query_Definition_Access;
 
+   Query_Wiki_Page_Tag_List : constant ADO.Queries.Query_Definition_Access;
+
    --  --------------------
    --    The information about a wiki page version.
    --  --------------------
@@ -1078,6 +1080,12 @@ private
                                      File => File_2.File'Access);
    Query_Wiki_Page_List : constant ADO.Queries.Query_Definition_Access
    := Def_Wikipageinfo_Wiki_Page_List.Query'Access;
+
+   package Def_Wikipageinfo_Wiki_Page_Tag_List is
+      new ADO.Queries.Loaders.Query (Name => "wiki-page-tag-list",
+                                     File => File_2.File'Access);
+   Query_Wiki_Page_Tag_List : constant ADO.Queries.Query_Definition_Access
+   := Def_Wikipageinfo_Wiki_Page_Tag_List.Query'Access;
 
    package File_3 is
       new ADO.Queries.Loaders.File (Path => "wiki-history.xml",
