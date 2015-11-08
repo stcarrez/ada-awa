@@ -127,27 +127,6 @@
     </navigation-case>
   </navigation-rule>
 
-  <filter-mapping>
-    <filter-name>service</filter-name>
-    <url-pattern>/wikis/view/#{wikiView.wiki_id}/#{wikiView.name}</url-pattern>
-    <url-pattern>/wikis/edit/#{wikiPage.wiki_id}/#{wikiPage.id}</url-pattern>
-    <url-pattern>/wikis/create/#{wikiPage.wiki_id}</url-pattern>
-    <url-pattern>/wikis/list/#{wikiList.wiki_id}</url-pattern>
-    <url-pattern>/wikis/history/#{wikiVersionList.wiki_id}/#{wikiVersionList.page_id}</url-pattern>
-    <url-pattern>/wikis/settings/#{adminWikiSpace.id}</url-pattern>
-    <url-pattern>/wikis/*.html</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>auth-filter</filter-name>
-    <url-pattern>/wikis/edit/#{wikiPage.wiki_id}/#{wikiPage.id}</url-pattern>
-    <url-pattern>/wikis/create/#{wikiPage.wiki_id}</url-pattern>
-    <url-pattern>/wikis/edit.html</url-pattern>
-    <url-pattern>/wikis/settings.html</url-pattern>
-    <url-pattern>/wikis/settings/#{adminWikiSpace.id}</url-pattern>
-    <url-pattern>/wikis/*.html</url-pattern>
-  </filter-mapping>
-
     <entity-permission>
         <name>wiki-space-create</name>
         <entity-type>awa_workspace</entity-type>
@@ -228,6 +207,30 @@
     </sql>
   </entity-permission>
 
+  <filter-mapping>
+    <filter-name>service</filter-name>
+    <url-pattern>/wikis/view/#{wikiView.wiki_id}/#{wikiView.name}</url-pattern>
+    <url-pattern>/wikis/edit/#{wikiPage.wiki_id}/#{wikiPage.id}</url-pattern>
+    <url-pattern>/wikis/create/#{wikiPage.wiki_id}</url-pattern>
+    <url-pattern>/wikis/list/#{wikiList.wiki_id}</url-pattern>
+    <url-pattern>/wikis/list/#{wikiList.wiki_id}/grid</url-pattern>
+    <url-pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}</url-pattern>
+    <url-pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}/grid</url-pattern>
+    <url-pattern>/wikis/history/#{wikiVersionList.wiki_id}/#{wikiVersionList.page_id}</url-pattern>
+    <url-pattern>/wikis/settings/#{adminWikiSpace.id}</url-pattern>
+    <url-pattern>/wikis/*.html</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>auth-filter</filter-name>
+    <url-pattern>/wikis/edit/#{wikiPage.wiki_id}/#{wikiPage.id}</url-pattern>
+    <url-pattern>/wikis/create/#{wikiPage.wiki_id}</url-pattern>
+    <url-pattern>/wikis/edit.html</url-pattern>
+    <url-pattern>/wikis/settings.html</url-pattern>
+    <url-pattern>/wikis/settings/#{adminWikiSpace.id}</url-pattern>
+    <url-pattern>/wikis/*.html</url-pattern>
+  </filter-mapping>
+
   <url-policy>
     <permission>logged-user</permission>
     <url-pattern>/wikis/admin/.*</url-pattern>
@@ -238,11 +241,8 @@
     <url-pattern>/wikis/settings.html</url-pattern>
     <url-pattern>/wikis/create.html</url-pattern>
     <url-pattern>/wikis/lists/tag-search.html</url-pattern>
-  </url-policy>
-
-  <url-policy>
-    <permission>logged-user</permission>
     <url-pattern>/wikis/view/.*</url-pattern>
+    <url-pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}</url-pattern>
   </url-policy>
 
   <url-mapping>
@@ -253,6 +253,21 @@
   <url-mapping>
     <pattern>/wikis/list/#{wikiList.wiki_id}</pattern>
     <view-id>/wikis/list.html</view-id>
+  </url-mapping>
+
+  <url-mapping>
+    <pattern>/wikis/list/#{wikiList.wiki_id}/grid</pattern>
+    <view-id>/wikis/grid.html</view-id>
+  </url-mapping>
+
+  <url-mapping>
+    <pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}</pattern>
+    <view-id>/wikis/tagged.html</view-id>
+  </url-mapping>
+
+  <url-mapping>
+    <pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}/grid</pattern>
+    <view-id>/wikis/tagged-grid.html</view-id>
   </url-mapping>
 
   <url-mapping>
