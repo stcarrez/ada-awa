@@ -23,6 +23,8 @@ with Util.Beans.Objects;
 
 with ADO;
 
+with ASF.Helpers.Beans;
+
 with AWA.Wikis.Modules;
 with AWA.Wikis.Models;
 with AWA.Tags.Beans;
@@ -61,6 +63,10 @@ package AWA.Wikis.Beans is
    --  Create the Wiki_View_Bean bean instance.
    function Create_Wiki_View_Bean (Module : in AWA.Wikis.Modules.Wiki_Module_Access)
                                   return Util.Beans.Basic.Readonly_Bean_Access;
+
+   function Get_Wiki_View_Bean is
+     new ASF.Helpers.Beans.Get_Bean (Element_Type   => Wiki_View_Bean,
+                                     Element_Access => Wiki_View_Bean_Access);
 
    type Wiki_Space_Bean is new AWA.Wikis.Models.Wiki_Space_Bean with record
       Module    : Modules.Wiki_Module_Access := null;
