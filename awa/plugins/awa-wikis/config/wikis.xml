@@ -127,6 +127,14 @@
     </navigation-case>
   </navigation-rule>
 
+  <navigation-rule>
+    <from-view-id>/wikis/forms/delete-page.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/wikis/forms/delete-page-response.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
     <entity-permission>
         <name>wiki-space-create</name>
         <entity-type>awa_workspace</entity-type>
@@ -228,8 +236,24 @@
     <url-pattern>/wikis/edit.html</url-pattern>
     <url-pattern>/wikis/settings.html</url-pattern>
     <url-pattern>/wikis/settings/#{adminWikiSpace.id}</url-pattern>
+    <url-pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}</url-pattern>
+    <url-pattern>/wikis/list/#{wikiList.wiki_id}</url-pattern>
+    <url-pattern>/wikis/list/#{wikiList.wiki_id}/grid</url-pattern>
+    <url-pattern>/wikis/history/#{wikiVersionList.wiki_id}/#{wikiVersionList.page_id}</url-pattern>
+    <url-pattern>/wikis/view/.*</url-pattern>
     <url-pattern>/wikis/*.html</url-pattern>
   </filter-mapping>
+
+  <url-policy>
+    <description>
+      Security rule to allow anonymous users to display the wiki page.
+    </description>
+    <permission>anonymous</permission>
+    <url-pattern>/wikis/view/.*</url-pattern>
+    <url-pattern>/wikis/tags/.*</url-pattern>
+    <url-pattern>/wikis/list/.*</url-pattern>
+    <url-pattern>/wikis/history/.*</url-pattern>
+  </url-policy>
 
   <url-policy>
     <permission>logged-user</permission>
@@ -243,6 +267,7 @@
     <url-pattern>/wikis/lists/tag-search.html</url-pattern>
     <url-pattern>/wikis/view/.*</url-pattern>
     <url-pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}</url-pattern>
+    <url-pattern>/wikis/forms/.*</url-pattern>
   </url-policy>
 
   <url-mapping>
