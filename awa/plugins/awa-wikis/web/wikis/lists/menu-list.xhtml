@@ -1,4 +1,4 @@
-<!-- Wiki admin menus
+<!-- Wiki navigation menu
   -  Copyright (C) 2015 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
@@ -14,33 +14,31 @@
   -  See the License for the specific language governing permissions and
   -  limitations under the License.
   -->
-<h:panelGroup rendered="#{user.isLogged}"
-              xmlns:ui="http://java.sun.com/jsf/facelets"
-              xmlns:f="http://java.sun.com/jsf/core"
-              xmlns:c="http://java.sun.com/jstl/core"
-              xmlns:u="http://code.google.com/p/ada-asf/util"
-              xmlns:h="http://java.sun.com/jsf/html">
-  <ul class='blog-action'>
-    <li>
-        <a href="#{contextPath}/wikis/create/#{wikiSpaceId}"
-           title="#{wikiMsg.wiki_admin_create_page_title}">
-            <img src="#{contextPath}/images/wikis/wiki-create.png" alt="#{wikiMsg.wiki_admin_create_wiki_label}"/>
-            <span>#{wikiMsg.wiki_admin_create_page_label}</span>
-        </a>
-    </li>
-    <li>
-        <a href="#{contextPath}/wikis/list/#{wikiSpaceId}"
-           title="#{wikiMsg.wiki_admin_list_pages_title}">
-            <img src="#{contextPath}/images/wikis/wiki-document.png" alt="#{wikiMsg.wiki_admin_list_pages_label}"/>
-            <span>#{wikiMsg.wiki_admin_list_pages_label}</span>
-        </a>
-    </li>
-    <li>
-        <a href="#{contextPath}/wikis/admin/list-comments.html?id=#{adminWiki.id}"
-           title="#{wikiMsg.wiki_admin_list_comments_title}">
-            <img src="#{contextPath}/images/blogs/comments-b.png" alt="#{wikiMsg.wiki_admin_list_comments_label}"/>
-            <span>#{wikiMsg.wiki_admin_list_comments_label}</span>
-        </a>
-    </li>
-  </ul>
-</h:panelGroup>
+<ul class='wiki-nav'
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:panelGroup rendered="#{user.isLogged}">
+        <li class="wiki-nav-left">
+            <a href="#{contextPath}/wikis/create/#{wikiSpaceId}"
+               title="#{wikiMsg.wiki_admin_create_page_title}">
+                <img src="#{contextPath}/images/wikis/wiki-create.png" alt="#{wikiMsg.wiki_admin_create_wiki_label}"/>
+                <span>#{wikiMsg.wiki_admin_create_page_label}</span>
+            </a>
+        </li>
+        <li class="wiki-nav-left">
+            <a href="#{contextPath}/wikis/list/#{wikiSpaceId}"
+               title="#{wikiMsg.wiki_admin_list_pages_title}">
+                <img src="#{contextPath}/images/wikis/wiki-document.png" alt="#{wikiMsg.wiki_admin_list_pages_label}"/>
+                <span>#{wikiMsg.wiki_admin_list_pages_label}</span>
+            </a>
+        </li>
+        <li class="wiki-nav-left">
+            <a href="#{contextPath}/wikis/admin/list-comments.html?id=#{adminWiki.id}"
+               title="#{wikiMsg.wiki_admin_list_comments_title}">
+                <img src="#{contextPath}/images/blogs/comments-b.png" alt="#{wikiMsg.wiki_admin_list_comments_label}"/>
+                <span>#{wikiMsg.wiki_admin_list_comments_label}</span>
+            </a>
+        </li>
+    </h:panelGroup>
+    <ui:insert name="page-nav"/>
+</ul>
