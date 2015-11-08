@@ -1,4 +1,4 @@
-<!-- List the wiki pages for the wiki administrator
+<!-- List the wiki pages displayed as a preview grid
   -  Copyright (C) 2015 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
@@ -30,15 +30,15 @@
             <f:viewAction action='#{wikiList.load}'/>
         </f:metadata>
         <div id='awa-content'>
-            <ui:decorate template="lists/list.xhtml">
+            <ui:decorate template="lists/grid.xhtml">
                 <ui:param name="wikiSpaceId" value="#{wikiList.wiki_id}"/>
                 <ui:define name="page-nav">
                     <li class="wiki-nav-right">
-                        <a href="#{contextPath}/wikis/list/#{wikiList.wiki_id}/grid">Grid</a>
+                        <a href="#{contextPath}/wikis/list/#{wikiList.wiki_id}">List</a>
                     </li>
                 </ui:define>
             </ui:decorate>
         </div>
-   </ui:define>
+    </ui:define>
 </ui:composition>
 

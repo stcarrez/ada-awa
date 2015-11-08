@@ -14,31 +14,33 @@
   -  See the License for the specific language governing permissions and
   -  limitations under the License.
   -->
-<ui:composition template="/WEB-INF/layouts/layout.xhtml"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:c="http://java.sun.com/jstl/core"
                 xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
                 xmlns:util="http://code.google.com/p/ada-asf/util"
                 xmlns:h="http://java.sun.com/jsf/html">
-    <ui:param name="title" value="#{wikiMsg.wiki_admin_page_list_title}"/>
-
-    <!-- Main page body -->
-    <ui:define name="pageBody">
-        <f:metadata>
-            <f:viewParam id='page' value='#{wikiList.page}' required="false"/>
-            <f:viewAction action='#{wikiList.load}'/>
-        </f:metadata>
-        <div id='awa-content'>
-            <ui:decorate template="lists/list.xhtml">
-                <ui:param name="wikiSpaceId" value="#{wikiList.wiki_id}"/>
-                <ui:define name="page-nav">
-                    <li class="wiki-nav-right">
-                        <a href="#{contextPath}/wikis/list/#{wikiList.wiki_id}/grid">Grid</a>
-                    </li>
-                </ui:define>
-            </ui:decorate>
+    <ui:decorate template="menu-list.xhtml">
+        <ui:param name="wikiSpaceId" value="#{wikiList.wiki_id}"/>
+    </ui:decorate>
+    <h:panelGroup rendered="#{wikiList.count == 0}">
+        #{wikiMsg.wiki_admin_list_pages_empty_message}
+    </h:panelGroup>
+    <h:panelGroup rendered="#{wikiList.count != 0}">
+        <ui:include src="../views/list-header.xhtml"/>
+        <div id='wiki-page-list' class='awa-list'>
+            <ui:include src="page-list.xhtml"/>
         </div>
-   </ui:define>
+    </h:panelGroup>
+    <div id='wiki-page-action' class='asf-list-action'>
+        <a href="#" class='asf-icon asf-delete' title='#{wikiMsg.wiki_page_delete_action_tooltip}'></a>
+    </div>
+    <util:script>
+            $('#wiki-page-list').list({
+                actionId: '#wiki-page-action',
+                itemPrefix: 'p_',
+                deleteUrl: '#{contextPath}/wikis/admin/forms/page-delete.html?page_id='
+            });
+    </util:script>
 </ui:composition>
 
