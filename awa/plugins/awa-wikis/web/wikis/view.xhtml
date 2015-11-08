@@ -68,7 +68,7 @@
                       </div>
                   </div>
                   <awa:tagList value='#{wikiView.tags}' id='qtags' styleClass="wiki-tag-list tagedit-list"
-                               tagLink="#{contextPath}/wikis/tagged.html?tag=#{tagName}"
+                               tagLink="#{contextPath}/wikis/tags/#{wikiView.wiki_id}/#{tagName}"
                                var="tagName"
                                tagClass="tagedit-listelement tagedit-listelement-old"/>
                   <awa:wiki styleClass='wiki-text' value="#{wikiView.content}" format="dotclear"/>
