@@ -27,9 +27,9 @@ with AWA.Modules.Beans;
 
 with Ada.Strings;
 with Ada.Calendar;
-with ADO.Sessions;
 with ADO.Objects;
 with ADO.SQL;
+with ADO.Statements;
 
 with Util.Log.Loggers;
 with Util.Strings.Tokenizers;
@@ -97,7 +97,6 @@ package body AWA.Wikis.Modules is
    --  ------------------------------
    procedure Create_Wiki_Space (Module : in Wiki_Module;
                                 Wiki   : in out AWA.Wikis.Models.Wiki_Space_Ref'Class) is
-      pragma Unreferenced (Module);
 
       procedure Copy_Page (Item : in String;
                            Done : out Boolean);
@@ -153,6 +152,8 @@ package body AWA.Wikis.Modules is
    --  ------------------------------
    procedure Save_Wiki_Space (Module : in Wiki_Module;
                               Wiki   : in out AWA.Wikis.Models.Wiki_Space_Ref'Class) is
+      pragma Unreferenced (Module);
+
       Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
    begin
@@ -221,6 +222,36 @@ package body AWA.Wikis.Modules is
    end Save;
 
    --  ------------------------------
+   --  Delete the wiki page as well as all its versions.
+   --  ------------------------------
+   procedure Delete (Model  : in Wiki_Module;
+                     Page   : in out AWA.Wikis.Models.Wiki_Page_Ref'Class) is
+      Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+   begin
+      --  Check that the user has the delete wiki page permission on the given wiki page.
+      AWA.Permissions.Check (Permission => ACL_Delete_Wiki_Pages.Permission,
+                             Entity     => Page);
+
+      Ctx.Start;
+
+      --  Before deleting the wiki page, delete the version content.
+      declare
+         Stmt : ADO.Statements.Delete_Statement
+           := DB.Create_Statement (AWA.Wikis.Models.WIKI_CONTENT_TABLE);
+      begin
+         Stmt.Set_Filter (Filter => "page_id = ?");
+         Stmt.Add_Param (Value => Page);
+         Stmt.Execute;
+      end;
+
+      --  Notify the deletion of the wiki page (before the real delete).
+      Wiki_Lifecycle.Notify_Delete (Model, Page);
+      Page.Delete (DB);
+      Ctx.Commit;
+   end Delete;
+
+   --  ------------------------------
    --  Load the wiki page and its content.
    --  ------------------------------
    procedure Load_Page (Model   : in Wiki_Module;
@@ -228,8 +259,7 @@ package body AWA.Wikis.Modules is
                         Content : in out AWA.Wikis.Models.Wiki_Content_Ref'Class;
                         Tags    : in out AWA.Tags.Beans.Tag_List_Bean;
                         Id      : in ADO.Identifier) is
-      Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      DB    : ADO.Sessions.Session := AWA.Services.Contexts.Get_Session (Ctx);
+      DB    : ADO.Sessions.Session := Model.Get_Session;
       Found : Boolean;
    begin
       --  Check that the user has the view page permission on the given wiki page.
@@ -253,8 +283,7 @@ package body AWA.Wikis.Modules is
                         Tags    : in out AWA.Tags.Beans.Tag_List_Bean;
                         Wiki    : in ADO.Identifier;
                         Name    : in String) is
-      Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      DB    : ADO.Sessions.Session := AWA.Services.Contexts.Get_Session (Ctx);
+      DB    : ADO.Sessions.Session := Model.Get_Session;
       Found : Boolean;
       Query : ADO.SQL.Query;
    begin
