@@ -20,7 +20,7 @@
                 xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
                 xmlns:util="http://code.google.com/p/ada-asf/util"
                 xmlns:h="http://java.sun.com/jsf/html">
-    <ui:decorate template="menu-list.xhtml">
+    <ui:decorate template="../views/wiki-nav.xhtml">
         <ui:param name="wikiSpaceId" value="#{wikiList.wiki_id}"/>
     </ui:decorate>
     <h:panelGroup rendered="#{wikiList.count == 0}">

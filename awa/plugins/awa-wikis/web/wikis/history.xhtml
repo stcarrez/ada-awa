@@ -29,7 +29,7 @@
             <f:viewAction action='#{wikiVersionList.load}'/>
         </f:metadata>
         <div id='awa-content'>
-            <ui:include src="lists/menu-list.xhtml">
+            <ui:include src="views/wiki-nav.xhtml">
                 <ui:param name="wikiSpaceId" value="#{wikiVersionList.wiki_id}"/>
             </ui:include>
             <div class='wiki-page' id="p_#{wikiView.id}">
