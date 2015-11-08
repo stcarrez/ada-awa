@@ -50,16 +50,8 @@
                               </li>
                           </h:panelGroup>
                           <li>
-                              <a class='awa-button' href="#{contextPath}/wikis/edit/#{wikiView.wiki_id}/#{wikiView.name}">#{wikiMsg.wiki_page_view_label}</a>
-                          </li>
-                          <li>
                               <a class='awa-button' href="#{contextPath}/wikis/history/#{wikiView.wiki_id}/#{wikiView.id}">#{wikiMsg.wiki_page_history_label}</a>
                           </li>
-                          <h:panelGroup rendered="#{wikiView.acl_id gt 1}">
-                              <li>
-                                  <a class='awa-button' href="#{contextPath}/wikis/settings/#{wikiView.wiki_id}">#{wikiMsg.wiki_page_settings_label}</a>
-                              </li>
-                          </h:panelGroup>
                       </ul>
                       <h2>#{wikiView.title}</h2>
                       <div class="wiki-page-info">

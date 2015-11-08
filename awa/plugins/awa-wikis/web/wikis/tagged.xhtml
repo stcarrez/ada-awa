@@ -33,7 +33,9 @@
             <ui:decorate template="lists/list.xhtml">
                 <ui:define name="page-nav">
                     <li class="wiki-nav-right">
-                        <a href="#{contextPath}/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}">tag #{wikiList.tag}</a>
+                        <a href="#{contextPath}/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}/grid" title="#{wikiMsg.wiki_page_grid_view_label}">
+                            <img src="#{contextPath}/images/wikis/wiki-grid.png" alt="#{wikiMsg.wiki_page_grid_view_label}"/>
+                        </a>
                     </li>
                 </ui:define>
             </ui:decorate>

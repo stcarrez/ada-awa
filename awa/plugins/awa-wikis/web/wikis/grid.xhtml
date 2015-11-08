@@ -34,7 +34,9 @@
                 <ui:param name="wikiSpaceId" value="#{wikiList.wiki_id}"/>
                 <ui:define name="page-nav">
                     <li class="wiki-nav-right">
-                        <a href="#{contextPath}/wikis/list/#{wikiList.wiki_id}">List</a>
+                        <a href="#{contextPath}/wikis/list/#{wikiList.wiki_id}" title="#{wikiMsg.wiki_page_list_view_label}">
+                            <img src="#{contextPath}/images/wikis/wiki-list.png" alt="#{wikiMsg.wiki_page_list_view_label}"/>
+                        </a>
                     </li>
                 </ui:define>
             </ui:decorate>

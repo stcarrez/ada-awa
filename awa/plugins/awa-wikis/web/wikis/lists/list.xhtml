@@ -24,7 +24,9 @@
         <ui:param name="wikiSpaceId" value="#{wikiList.wiki_id}"/>
     </ui:decorate>
     <h:panelGroup rendered="#{wikiList.count == 0}">
-        #{wikiMsg.wiki_admin_list_pages_empty_message}
+        <ui:insert name="empty">
+            #{wikiMsg.wiki_list_pages_empty_message}
+        </ui:insert>
     </h:panelGroup>
     <h:panelGroup rendered="#{wikiList.count != 0}">
         <ui:include src="../views/list-header.xhtml"/>
@@ -32,15 +34,17 @@
             <ui:include src="page-list.xhtml"/>
         </div>
     </h:panelGroup>
-    <div id='wiki-page-action' class='asf-list-action'>
-        <a href="#" class='asf-icon asf-delete' title='#{wikiMsg.wiki_page_delete_action_tooltip}'></a>
-    </div>
-    <util:script>
-            $('#wiki-page-list').list({
-                actionId: '#wiki-page-action',
-                itemPrefix: 'p_',
-                deleteUrl: '#{contextPath}/wikis/admin/forms/page-delete.html?page_id='
-            });
-    </util:script>
+    <h:panelGroup rendered="#{user.isLogged}">
+        <div id='wiki-page-action' class='asf-list-action'>
+            <a href="#" class='asf-icon asf-delete' title='#{wikiMsg.wiki_page_delete_action_tooltip}'></a>
+        </div>
+        <util:script>
+                $('#wiki-page-list').list({
+                    actionId: '#wiki-page-action',
+                    itemPrefix: 'p_',
+                    deleteUrl: '#{contextPath}/wikis/forms/delete-page.html?id='
+                });
+        </util:script>
+    </h:panelGroup>
 </ui:composition>
 

@@ -1,4 +1,4 @@
-<!-- List the wiki pages for the wiki administrator
+<!-- List the wiki pages filtered by a tag.
   -  Copyright (C) 2015 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
@@ -30,17 +30,16 @@
             <f:viewAction action='#{wikiList.load}'/>
         </f:metadata>
         <div id='awa-content'>
-            <ui:decorate template="lists/list.xhtml">
-                <ui:param name="wikiSpaceId" value="#{wikiList.wiki_id}"/>
+            <ui:decorate template="lists/grid.xhtml">
                 <ui:define name="page-nav">
                     <li class="wiki-nav-right">
-                        <a href="#{contextPath}/wikis/list/#{wikiList.wiki_id}/grid" title="#{wikiMsg.wiki_page_grid_view_label}">
-                            <img src="#{contextPath}/images/wikis/wiki-grid.png" alt="#{wikiMsg.wiki_page_grid_view_label}"/>
+                        <a href="#{contextPath}/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}" title="#{wikiMsg.wiki_page_list_view_label}">
+                            <img src="#{contextPath}/images/wikis/wiki-list.png" alt="#{wikiMsg.wiki_page_list_view_label}"/>
                         </a>
                     </li>
                 </ui:define>
             </ui:decorate>
         </div>
-   </ui:define>
+    </ui:define>
 </ui:composition>
 

@@ -17,6 +17,7 @@
 <ui:composition template="/WEB-INF/layouts/layout.xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:awa="http://code.google.com/p/ada-awa/jsf"
                 xmlns:c="http://java.sun.com/jstl/core"
                 xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
                 xmlns:util="http://code.google.com/p/ada-asf/util"
@@ -32,49 +33,58 @@
             <ui:include src="views/wiki-nav.xhtml">
                 <ui:param name="wikiSpaceId" value="#{wikiVersionList.wiki_id}"/>
             </ui:include>
-            <div class='wiki-page' id="p_#{wikiView.id}">
-                <div class='wiki-title'>
-                    <ul class="wiki-page-actions">
-                        <h:panelGroup rendered="#{wikiView.acl_id gt 1}">
+            <div class='wiki-page-container'>
+                <h:panelGroup rendered="#{not empty wikiView.left_side}">
+                    <div class="grid_2">
+                        <awa:wiki styleClass='wiki-text' value="#{wikiView.left_side}" format="dotclear"/>
+                    </div>
+                </h:panelGroup>
+                <div class="#{not empty wikiView.left_side ? (not empty wikiView.right_side ? 'grid_8' : 'grid_10') : 'grid_12'}" id="p_#{wikiView.id}">
+                    <div class='wiki-title'>
+                        <ul class="wiki-page-actions">
+                            <h:panelGroup rendered="#{wikiView.acl_id gt 1}">
+                                <li>
+                                    <a class='awa-button' href="#{contextPath}/wikis/edit/#{wikiView.wiki_id}/#{wikiView.id}">Edit</a>
+                                </li>
+                            </h:panelGroup>
                             <li>
-                                <a class='awa-button' href="#{contextPath}/wikis/edit/#{wikiView.wiki_id}/#{wikiView.id}">Edit</a>
+                                <a class='awa-button' href="#{contextPath}/wikis/view/#{wikiView.wiki_id}/#{wikiView.name}">View</a>
                             </li>
-                        </h:panelGroup>
-                        <li>
-                            <a class='awa-button' href="#{contextPath}/wikis/edit/#{wikiView.wiki_id}/#{wikiView.name}">View</a>
-                        </li>
-                        <li>
-                            <a class='awa-button' href="#{contextPath}/wikis/history/#{wikiView.wiki_id}/#{wikiView.id}">History</a>
-                        </li>
-                    </ul>
-                    <h2>#{wikiView.title}</h2>
-                    <div class="wiki-page-info">
-                        <p><h:outputText id="date" value="#{wikiView.date}" converter="dateConverter"/></p>
-                        <p>Version #{wikiView.version} by #{wikiView.author}</p>
-                    </div>
-                </div>
-                <div class='wiki-admin awa-list-header' id="wiki-page-list-header">
-                    <div class="awa-list-item-header">
-                        <div class='awa-header-col wiki-page-name'>
-                            #{wikiMsg.wiki_history_version_label}
-                        </div>
-                        <div class='awa-header-col wiki-page-title'>
-                            #{wikiMsg.wiki_history_comment_label}
-                        </div>
-                        <div class='awa-header-col wiki-page-date'>
-                            #{wikiMsg.wiki_history_date_label}
-                        </div>
-                        <div class='awa-header-col wiki-page-author'>
-                            #{wikiMsg.wiki_history_author_label}
+                        </ul>
+                        <h2>#{wikiView.title}</h2>
+                        <div class="wiki-page-info">
+                            <p><h:outputText id="date" value="#{wikiView.date}" converter="dateConverter"/></p>
+                            <p>Version #{wikiView.version} by #{wikiView.author}</p>
                         </div>
                     </div>
+                    <div class='wiki-admin awa-list-header' id="wiki-page-list-header">
+                        <div class="awa-list-item-header">
+                            <div class='awa-header-col wiki-page-name'>
+                                #{wikiMsg.wiki_history_version_label}
+                            </div>
+                            <div class='awa-header-col wiki-page-title'>
+                                #{wikiMsg.wiki_history_comment_label}
+                            </div>
+                            <div class='awa-header-col wiki-page-date'>
+                                #{wikiMsg.wiki_history_date_label}
+                            </div>
+                            <div class='awa-header-col wiki-page-author'>
+                                #{wikiMsg.wiki_history_author_label}
+                            </div>
+                        </div>
+                    </div>
+                    <div id='wiki-page-list' class='awa-list'>
+                        <ui:include src="lists/version-list.xhtml"/>
+                    </div>
+                    <div id='wiki-page-action' class='asf-list-action'>
+                        <a href="#" class='asf-icon asf-delete' title='#{wikiMsg.wiki_page_delete_action_tooltip}'></a>
+                    </div>
                 </div>
-                <div id='wiki-page-list' class='awa-list'>
-                    <ui:include src="lists/version-list.xhtml"/>
-                </div>
-                <div id='wiki-page-action' class='asf-list-action'>
-                    <a href="#" class='asf-icon asf-delete' title='#{wikiMsg.wiki_page_delete_action_tooltip}'></a>
-                </div>
+                <h:panelGroup rendered="#{not empty wikiView.right_side}">
+                    <div class="grid_2">
+                        <awa:wiki styleClass='wiki-text' value="#{wikiView.right_side}" format="dotclear"/>
+                    </div>
+                </h:panelGroup>
             </div>
         </div>
         <util:script>

@@ -15,28 +15,36 @@
   -  limitations under the License.
   -->
 <ul class='wiki-nav'
+    xmlns:auth="http://code.google.com/p/ada-awa/auth"
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:panelGroup rendered="#{user.isLogged}">
         <li class="wiki-nav-left">
-            <a href="#{contextPath}/wikis/create/#{wikiSpaceId}"
+            <a href="#{contextPath}/wikis/create/#{wikiSpaceId}" class="awa-nav-icon"
                title="#{wikiMsg.wiki_admin_create_page_title}">
                 <img src="#{contextPath}/images/wikis/wiki-create.png" alt="#{wikiMsg.wiki_admin_create_wiki_label}"/>
                 <span>#{wikiMsg.wiki_admin_create_page_label}</span>
             </a>
         </li>
         <li class="wiki-nav-left">
-            <a href="#{contextPath}/wikis/list/#{wikiSpaceId}"
+            <a href="#{contextPath}/wikis/list/#{wikiSpaceId}" class="awa-nav-icon"
                title="#{wikiMsg.wiki_admin_list_pages_title}">
                 <img src="#{contextPath}/images/wikis/wiki-document.png" alt="#{wikiMsg.wiki_admin_list_pages_label}"/>
                 <span>#{wikiMsg.wiki_admin_list_pages_label}</span>
             </a>
         </li>
         <li class="wiki-nav-left">
-            <a href="#{contextPath}/wikis/admin/list-comments.html?id=#{adminWiki.id}"
+            <a href="#{contextPath}/wikis/admin/list-comments.html?id=#{adminWiki.id}" class="awa-nav-icon"
                title="#{wikiMsg.wiki_admin_list_comments_title}">
                 <img src="#{contextPath}/images/blogs/comments-b.png" alt="#{wikiMsg.wiki_admin_list_comments_label}"/>
                 <span>#{wikiMsg.wiki_admin_list_comments_label}</span>
+            </a>
+        </li>
+    </h:panelGroup>
+    <h:panelGroup rendered="#{auth:hasPermission('wiki-space-update',wikiSpaceId)}">
+        <li class="wiki-nav-right">
+            <a class='awa-buttonx' href="#{contextPath}/wikis/settings/#{wikiSpaceId}" title="#{wikiMsg.wiki_page_settings_label}">
+                <img src="#{contextPath}/images/wikis/wiki-settings.png" alt="#{wikiMsg.wiki_page_settings_label}"/>
             </a>
         </li>
     </h:panelGroup>

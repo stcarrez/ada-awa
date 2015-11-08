@@ -23,22 +23,12 @@
         <ui:param name="wikiSpaceId" value="#{wikiList.wiki_id}"/>
     </ui:decorate>
     <h:panelGroup rendered="#{wikiList.count == 0}">
-        #{wikiMsg.wiki_admin_list_pages_empty_message}
+        #{wikiMsg.wiki_list_pages_empty_message}
     </h:panelGroup>
     <h:panelGroup rendered="#{wikiList.count != 0}">
         <div id='wiki-page-list' class='awa-list'>
             <ui:include src="page-grid.xhtml"/>
         </div>
     </h:panelGroup>
-    <div id='wiki-page-action' class='asf-list-action'>
-        <a href="#" class='asf-icon asf-delete' title='#{wikiMsg.wiki_page_delete_action_tooltip}'></a>
-    </div>
-    <util:script>
-            $('#wiki-page-list').list({
-                actionId: '#wiki-page-action',
-                itemPrefix: 'p_',
-                deleteUrl: '#{contextPath}/wikis/admin/forms/page-delete.html?page_id='
-            });
-    </util:script>
 </ui:composition>
 
