@@ -8,6 +8,7 @@ with "@ADO_DIR@ado";
 with "awa";
 with "awa_unit";
 with "plugins/awa-workspaces/awa_workspaces";
+with "plugins/awa-counters/awa_counters";
 with "plugins/awa-storages/awa_storages";
 with "plugins/awa-images/awa_images";
 with "plugins/awa-mail/awa_mail";
@@ -20,6 +21,7 @@ with "plugins/awa-settings/awa_settings";
 with "plugins/awa-comments/awa_comments";
 with "plugins/awa-changelogs/awa_changelogs";
 with "plugins/awa-wikis/awa_wikis";
+with "plugins/awa-counters/awa_counters";
 
 project Awa_Tests is
 
@@ -28,6 +30,7 @@ project Awa_Tests is
    Mains := ("awa_harness.adb");
 
    for Source_Dirs use ("regtests",
+    "plugins/awa-counters/regtests",
 	"plugins/awa-storages/regtests",
 	"plugins/awa-images/regtests",
 	"plugins/awa-comments/regtests",
