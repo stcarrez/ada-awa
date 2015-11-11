@@ -1,0 +1,20 @@
+<query-mapping package='AWA.Counters.Models'>
+    <description>
+      Queries to update counters
+    </description>
+
+    <query name='counter-update'>
+       <comment>Update counter</comment>
+       <sql driver='mysql'>
+    INSERT INTO awa_counter (object_id, definition_id, date, counter) VALUES(:id, :definition, :date, :counter)
+    ON DUPLICATE KEY UPDATE counter = counter + :counter
+       </sql>
+
+       <sql driver='sqlite'>
+    INSERT OR REPLACE INTO awa_counter (object_id, definition_id, date, counter)
+    VALUES(:id, :definition, :date,
+           COALESCE((SELECT counter + :counter FROM awa_counter WHERE object_id = :id AND definition_id = :definition AND date = :date),:counter))
+       </sql>
+    </query>
+
+</query-mapping>
