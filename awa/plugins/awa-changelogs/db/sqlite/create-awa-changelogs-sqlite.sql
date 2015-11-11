@@ -25,7 +25,7 @@ INSERT INTO entity_type (name) VALUES ("sequence");
 /*  */
 CREATE TABLE awa_message (
   /* the message identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the message creation date */
   `create_date` DATETIME NOT NULL,
   /* the message priority */
@@ -57,29 +57,32 @@ CREATE TABLE awa_message (
   /* the optional user who triggered the event message creation */
   `user_id` BIGINT ,
   /* the optional user session that triggered the message creation */
-  `session_id` BIGINT 
+  `session_id` BIGINT ,
+  PRIMARY KEY (`id`)
 );
 /*  */
 CREATE TABLE awa_message_type (
   /*  */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the message type name */
-  `name` VARCHAR(255) NOT NULL
+  `name` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /* The message queue tracks the event messages that must be dispatched by
 a given server. */
 CREATE TABLE awa_queue (
   /*  */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /*  */
   `server_id` INTEGER NOT NULL,
   /* the message queue name */
-  `name` VARCHAR(255) NOT NULL
+  `name` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /* The ACL table records permissions which are granted for a user to access a given database entity. */
 CREATE TABLE awa_acl (
   /* the ACL identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the entity identifier to which the ACL applies */
   `entity_id` BIGINT NOT NULL,
   /* the writeable flag */
@@ -87,7 +90,8 @@ CREATE TABLE awa_acl (
   /*  */
   `user_id` BIGINT NOT NULL,
   /* the entity type concerned by the ACL. */
-  `entity_type` INTEGER NOT NULL
+  `entity_type` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /*  */
 CREATE TABLE awa_access_key (
@@ -96,11 +100,12 @@ CREATE TABLE awa_access_key (
   /* the access key expiration date. */
   `expire_date` DATE NOT NULL,
   /* the access key identifier. */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
   /*  */
-  `user_id` BIGINT NOT NULL
+  `user_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /* The Email entity defines the user email addresses.
 The user has a primary email address that is obtained
@@ -116,9 +121,10 @@ CREATE TABLE awa_email (
   /*  */
   `version` INTEGER NOT NULL,
   /* the email primary key. */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the user. */
-  `user_id` BIGINT NOT NULL
+  `user_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /*  */
 CREATE TABLE awa_session (
@@ -135,11 +141,12 @@ CREATE TABLE awa_session (
   /*  */
   `server_id` INTEGER NOT NULL,
   /*  */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /*  */
   `auth_id` BIGINT ,
   /*  */
-  `user_id` BIGINT NOT NULL
+  `user_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /* The User entity represents a user that can access and use the application.
  */
@@ -159,9 +166,10 @@ CREATE TABLE awa_user (
   /* version number. */
   `version` INTEGER NOT NULL,
   /* the user identifier. */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /*  */
-  `email_id` BIGINT NOT NULL
+  `email_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_message");
 INSERT INTO entity_type (name) VALUES ("awa_message_type");
@@ -176,7 +184,7 @@ INSERT INTO entity_type (name) VALUES ("awa_user");
 /*  */
 CREATE TABLE awa_changelog (
   /* the changelog identifier. */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the changelog date. */
   `date` DATETIME NOT NULL,
   /* the changelog text. */
@@ -186,6 +194,7 @@ CREATE TABLE awa_changelog (
   /*  */
   `user_id` BIGINT NOT NULL,
   /*  */
-  `entity_type` INTEGER NOT NULL
+  `entity_type` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_changelog");

@@ -2,7 +2,7 @@
 /*  */
 CREATE TABLE awa_changelog (
   /* the changelog identifier. */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the changelog date. */
   `date` DATETIME NOT NULL,
   /* the changelog text. */
@@ -12,6 +12,7 @@ CREATE TABLE awa_changelog (
   /*  */
   `user_id` BIGINT NOT NULL,
   /*  */
-  `entity_type` INTEGER NOT NULL
+  `entity_type` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_changelog");
