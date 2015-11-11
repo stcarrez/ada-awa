@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events -- AWA Events
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +23,8 @@ with Util.Beans.Basic;
 with Util.Beans.Objects.Maps;
 
 with ADO;
+
+with AWA.Index_Arrays;
 
 --  == Introduction ==
 --  The <b>AWA.Events</b> package defines an event framework for modules to post events
@@ -96,26 +98,20 @@ package AWA.Events is
    type Queue_Index is new Natural;
    type Event_Index is new Natural;
 
-   --  ------------------------------
-   --  Event kind definition
-   --  ------------------------------
-   --  This package must be instantiated for each event that a module can post.
+   package Event_Arrays is new AWA.Index_Arrays (Event_Index);
+
    generic
-      Name : String;
-   package Definition is
-      function Kind return Event_Index;
-      pragma Inline_Always (Kind);
-   end Definition;
+   package Definition renames Event_Arrays.Definition;
 
    --  Exception raised if an event name is not found.
-   Not_Found : exception;
+   Not_Found : exception renames Event_Arrays.Not_Found;
 
    --  Identifies an invalid event.
-   Invalid_Event : constant Event_Index := 0;
+   -- Invalid_Event : constant Event_Index := 0;
 
    --  Find the event runtime index given the event name.
    --  Raises Not_Found exception if the event name is not recognized.
-   function Find_Event_Index (Name : in String) return Event_Index;
+   function Find_Event_Index (Name : in String) return Event_Index renames Event_Arrays.Find;
 
    --  ------------------------------
    --  Module event
@@ -159,17 +155,18 @@ package AWA.Events is
 private
 
    type Module_Event is new Util.Events.Event and Util.Beans.Basic.Readonly_Bean with record
-      Kind        : Event_Index := Invalid_Event;
+      Kind        : Event_Index := Event_Arrays.Invalid_Index;
       Props       : Util.Beans.Objects.Maps.Map;
       Entity      : ADO.Identifier  := ADO.NO_IDENTIFIER;
       Entity_Type : ADO.Entity_Type := ADO.NO_ENTITY_TYPE;
    end record;
 
    --  The index of the last event definition.
-   Last_Event : Event_Index := 0;
+   --  Last_Event : Event_Index := 0;
 
    --  Get the event type name.
-   function Get_Event_Type_Name (Index : in Event_Index) return Util.Strings.Name_Access;
+   function Get_Event_Type_Name (Index : in Event_Index) return Util.Strings.Name_Access
+                                 renames Event_Arrays.Get_Name;
 
    --  Make and return a copy of the event.
    function Copy (Event : in Module_Event) return Module_Event_Access;
