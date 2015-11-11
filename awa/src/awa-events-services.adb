@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-services -- AWA Event Manager
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,9 +27,9 @@ with AWA.Events.Dispatchers.Tasks;
 with AWA.Events.Dispatchers.Actions;
 package body AWA.Events.Services is
 
-   use Util.Log;
+   use type Util.Strings.Name_Access;
 
-   Log : constant Loggers.Logger := Loggers.Create ("AWA.Events.Services");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Events.Services");
 
    --  ------------------------------
    --  Send the event to the modules that subscribed to it.
@@ -50,8 +50,9 @@ package body AWA.Events.Services is
          end if;
       end Send_Queue;
 
+      Name : constant Util.Strings.Name_Access := Get_Event_Type_Name (Event.Kind);
    begin
-      if Event.Kind = Invalid_Event or Event.Kind > Manager.Actions'Last then
+      if Name = null then
          Log.Error ("Cannot send event type {0}", Event_Index'Image (Event.Kind));
          raise Not_Found;
       end if;
@@ -60,7 +61,6 @@ package body AWA.Events.Services is
       --  Some queue can dispatch the event immediately while some others may dispatched it
       --  asynchronously.
       declare
-         Name : constant Util.Strings.Name_Access := Get_Event_Type_Name (Event.Kind);
          Pos  : Queue_Dispatcher_Lists.Cursor := Manager.Actions (Event.Kind).Queues.First;
       begin
          if not Queue_Dispatcher_Lists.Has_Element (Pos) then
@@ -83,7 +83,7 @@ package body AWA.Events.Services is
                                Event   : in out AWA.Events.Models.Message_Ref;
                                Kind    : in Event_Index) is
    begin
-      if Kind = Invalid_Event or Kind > Manager.Actions'Last then
+      if not Event_Arrays.Is_Valid (Kind) then
          Log.Error ("Cannot send event type {0}", Event_Index'Image (Kind));
          raise Not_Found;
       end if;
@@ -123,14 +123,14 @@ package body AWA.Events.Services is
          end if;
       end Find_Queue;
 
+      Name : constant Util.Strings.Name_Access := Get_Event_Type_Name (Event.Kind);
    begin
-      if Event.Kind = Invalid_Event or Event.Kind > Manager.Actions'Last then
+      if Name = null then
          Log.Error ("Cannot dispatch event type {0}", Event_Index'Image (Event.Kind));
          raise Not_Found;
       end if;
 
       declare
-         Name : constant Util.Strings.Name_Access := Get_Event_Type_Name (Event.Kind);
          Pos  : Queue_Dispatcher_Lists.Cursor := Manager.Actions (Event.Kind).Queues.First;
       begin
          if not Queue_Dispatcher_Lists.Has_Element (Pos) then
@@ -291,11 +291,11 @@ package body AWA.Events.Services is
 
       DB : ADO.Sessions.Master_Session := App.Get_Master_Session;
    begin
-      Log.Info ("Initializing {0} events", Event_Index'Image (Last_Event));
+      Log.Info ("Initializing {0} events", Event_Index'Image (Event_Arrays.Get_Last));
 
       Manager.Application := App;
       DB.Begin_Transaction;
-      Manager.Actions := new Event_Queues_Array (1 .. Last_Event);
+      Manager.Actions := new Event_Queues_Array (1 .. Event_Arrays.Get_Last);
 
       AWA.Events.Models.List (Object  => Msg_Types,
                               Session => DB,
