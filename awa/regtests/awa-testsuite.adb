@@ -30,6 +30,7 @@ with AWA.Images.Services.Tests;
 with AWA.Votes.Modules.Tests;
 with AWA.Tags.Modules.Tests;
 with AWA.Questions.Modules.Tests;
+with AWA.Counters.Modules.Tests;
 with AWA.Modules.Tests;
 
 with ASF.Converters.Dates;
@@ -44,6 +45,7 @@ with AWA.Questions.Modules;
 with AWA.Votes.Modules;
 with AWA.Tags.Modules;
 with AWA.Changelogs.Modules;
+with AWA.Counters.Modules;
 
 with AWA.Converters.Dates;
 with AWA.Tests;
@@ -84,7 +86,9 @@ package body AWA.Testsuite is
 
    Changelogs     : aliased AWA.Changelogs.Modules.Changelog_Module;
 
-   Wikis         : aliased AWA.Wikis.Modules.Wiki_Module;
+   Wikis          : aliased AWA.Wikis.Modules.Wiki_Module;
+
+   Counters       : aliased AWA.Counters.Modules.Counter_Module;
 
    Date_Converter : aliased ASF.Converters.Dates.Date_Converter;
 
@@ -101,6 +105,7 @@ package body AWA.Testsuite is
       AWA.Mail.Modules.Tests.Add_Tests (Ret);
       AWA.Users.Services.Tests.Add_Tests (Ret);
       AWA.Users.Tests.Add_Tests (Ret);
+      AWA.Counters.Modules.Tests.Add_Tests (Ret);
       AWA.Wikis.Parsers.Tests.Add_Tests (Ret);
       AWA.Wikis.Writers.Tests.Add_Tests (Ret);
       AWA.Helpers.Selectors.Tests.Add_Tests (Ret);
@@ -155,6 +160,11 @@ package body AWA.Testsuite is
                       Name   => "workspaces",
                       URI    => "workspaces",
                       Module => Workspaces'Access);
+
+            Register (App    => Application.all'Access,
+                      Name   => AWA.Counters.Modules.NAME,
+                      URI    => "counters",
+                      Module => Counters'Access);
 
             Register (App    => Application.all'Access,
                       Name   => AWA.Comments.Modules.NAME,
