@@ -5,7 +5,7 @@ with "@ADO_DIR@ado";
 with "@ASF_DIR@asf";
 with "@SECURITY_DIR@security";
 
-project Awa is
+library project Awa is
 
    Name    := "awa";
    Version := "@AWA_VERSION@";
@@ -29,6 +29,5 @@ project Awa is
    package Binder renames Config.Binder;
    package Builder renames Config.Builder;
    package Compiler renames Config.Compiler;
-   package Linker renames Config.Linker;
 
 end Awa;
