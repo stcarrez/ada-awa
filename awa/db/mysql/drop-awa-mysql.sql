@@ -63,6 +63,10 @@ DROP TABLE IF EXISTS `awa_workspace`;
 /* Copied from awa-comments-drop-mysql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `awa_comment`;
+/* Copied from awa_counters-drop-mysql.sql*/
+/* File generated automatically by dynamo */
+DROP TABLE IF EXISTS `awa_counter_definition`;
+DROP TABLE IF EXISTS `awa_counter`;
 /* Copied from ado-drop-mysql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `sequence`;

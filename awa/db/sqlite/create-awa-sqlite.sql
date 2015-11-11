@@ -25,7 +25,7 @@ INSERT INTO entity_type (name) VALUES ("sequence");
 /*  */
 CREATE TABLE awa_message (
   /* the message identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the message creation date */
   `create_date` DATETIME NOT NULL,
   /* the message priority */
@@ -57,29 +57,32 @@ CREATE TABLE awa_message (
   /* the optional user who triggered the event message creation */
   `user_id` BIGINT ,
   /* the optional user session that triggered the message creation */
-  `session_id` BIGINT 
+  `session_id` BIGINT ,
+  PRIMARY KEY (`id`)
 );
 /*  */
 CREATE TABLE awa_message_type (
   /*  */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the message type name */
-  `name` VARCHAR(255) NOT NULL
+  `name` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /* The message queue tracks the event messages that must be dispatched by
 a given server. */
 CREATE TABLE awa_queue (
   /*  */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /*  */
   `server_id` INTEGER NOT NULL,
   /* the message queue name */
-  `name` VARCHAR(255) NOT NULL
+  `name` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /* The ACL table records permissions which are granted for a user to access a given database entity. */
 CREATE TABLE awa_acl (
   /* the ACL identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the entity identifier to which the ACL applies */
   `entity_id` BIGINT NOT NULL,
   /* the writeable flag */
@@ -87,7 +90,8 @@ CREATE TABLE awa_acl (
   /*  */
   `user_id` BIGINT NOT NULL,
   /* the entity type concerned by the ACL. */
-  `entity_type` INTEGER NOT NULL
+  `entity_type` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /*  */
 CREATE TABLE awa_access_key (
@@ -96,11 +100,12 @@ CREATE TABLE awa_access_key (
   /* the access key expiration date. */
   `expire_date` DATE NOT NULL,
   /* the access key identifier. */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
   /*  */
-  `user_id` BIGINT NOT NULL
+  `user_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /* The Email entity defines the user email addresses.
 The user has a primary email address that is obtained
@@ -116,9 +121,10 @@ CREATE TABLE awa_email (
   /*  */
   `version` INTEGER NOT NULL,
   /* the email primary key. */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the user. */
-  `user_id` BIGINT NOT NULL
+  `user_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /*  */
 CREATE TABLE awa_session (
@@ -135,11 +141,12 @@ CREATE TABLE awa_session (
   /*  */
   `server_id` INTEGER NOT NULL,
   /*  */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /*  */
   `auth_id` BIGINT ,
   /*  */
-  `user_id` BIGINT NOT NULL
+  `user_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /* The User entity represents a user that can access and use the application.
  */
@@ -159,9 +166,10 @@ CREATE TABLE awa_user (
   /* version number. */
   `version` INTEGER NOT NULL,
   /* the user identifier. */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /*  */
-  `email_id` BIGINT NOT NULL
+  `email_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_message");
 INSERT INTO entity_type (name) VALUES ("awa_message_type");
@@ -171,6 +179,30 @@ INSERT INTO entity_type (name) VALUES ("awa_access_key");
 INSERT INTO entity_type (name) VALUES ("awa_email");
 INSERT INTO entity_type (name) VALUES ("awa_session");
 INSERT INTO entity_type (name) VALUES ("awa_user");
+/* Copied from awa_counters-sqlite.sql*/
+/* File generated automatically by dynamo */
+/*  */
+CREATE TABLE awa_counter (
+  /* the object associated with the counter. */
+  `object_id` BIGINT NOT NULL,
+  /* the day associated with the counter. */
+  `date` DATE NOT NULL,
+  /* the counter value. */
+  `counter` INTEGER NOT NULL,
+  /* the definition id. */
+  `definition_id` INTEGER NOT NULL,
+  PRIMARY KEY (`object_id`, `date`, `definition_id`)
+);
+/*  */
+CREATE TABLE awa_counter_definition (
+  /* the counter name. */
+  `name` VARCHAR(255) NOT NULL,
+  /* the counter unique id. */
+  `id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
+);
+INSERT INTO entity_type (name) VALUES ("awa_counter");
+INSERT INTO entity_type (name) VALUES ("awa_counter_definition");
 /* Copied from awa-comments-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* The Comment table records a user comment associated with a database entity.
@@ -183,7 +215,7 @@ CREATE TABLE awa_comment (
   /* the entity identifier to which this comment is associated */
   `entity_id` BIGINT ,
   /* the comment identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the optimistic lock version. */
   `version` INTEGER NOT NULL,
   /* the entity type that identifies the table to which the comment is associated. */
@@ -193,7 +225,8 @@ CREATE TABLE awa_comment (
   /* the comment format type. */
   `format` integer NOT NULL,
   /*  */
-  `author_id` BIGINT NOT NULL
+  `author_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_comment");
 /* Copied from awa-workspaces-sqlite.sql*/
@@ -204,32 +237,35 @@ several workspaces and be part of several workspaces that other
 users have created. */
 CREATE TABLE awa_workspace (
   /* the workspace identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
   /*  */
   `create_date` DATETIME NOT NULL,
   /*  */
-  `owner_id` BIGINT NOT NULL
+  `owner_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /*  */
 CREATE TABLE awa_workspace_feature (
   /*  */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /*  */
   `limit` INTEGER NOT NULL,
   /*  */
-  `workspace_id` BIGINT NOT NULL
+  `workspace_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /* The workspace member indicates the users who
 are part of the workspace. */
 CREATE TABLE awa_workspace_member (
   /*  */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /*  */
   `member_id` BIGINT NOT NULL,
   /*  */
-  `workspace_id` BIGINT NOT NULL
+  `workspace_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_workspace");
 INSERT INTO entity_type (name) VALUES ("awa_workspace_feature");
@@ -256,7 +292,7 @@ CREATE TABLE awa_storage (
   /*  */
   `version` INTEGER NOT NULL,
   /* the storage identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT ,
   /*  */
   `original_id` BIGINT ,
   /*  */
@@ -266,22 +302,24 @@ CREATE TABLE awa_storage (
   /*  */
   `workspace_id` BIGINT NOT NULL,
   /*  */
-  `folder_id` BIGINT 
+  `folder_id` BIGINT ,
+  PRIMARY KEY (`id`)
 );
 /* The storage data is created only if the storage type
 is set to DATABASE.  It holds the file content in the blob. */
 CREATE TABLE awa_storage_data (
   /* the storage data identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
   /* the storage content */
-  `data` LONGBLOB NOT NULL
+  `data` LONGBLOB NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /*  */
 CREATE TABLE awa_storage_folder (
   /* the storage folder identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
   /* the folder creation date */
@@ -291,7 +329,8 @@ CREATE TABLE awa_storage_folder (
   /*  */
   `workspace_id` BIGINT NOT NULL,
   /*  */
-  `owner_id` BIGINT NOT NULL
+  `owner_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /* The local store record is created when a copy of the data is needed on the local file system.
 The creation date refers to the date when the data was copied to the local file system.
@@ -299,7 +338,7 @@ The expiration date indicates a date after which the local file can be removed
 from the local file system. */
 CREATE TABLE awa_store_local (
   /* the local store identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
   /*  */
@@ -313,7 +352,8 @@ CREATE TABLE awa_store_local (
   /* the creation date */
   `create_date` DATETIME NOT NULL,
   /*  */
-  `storage_id` BIGINT 
+  `storage_id` BIGINT ,
+  PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_storage");
 INSERT INTO entity_type (name) VALUES ("awa_storage_data");
@@ -324,21 +364,23 @@ INSERT INTO entity_type (name) VALUES ("awa_store_local");
 /* The tag definition. */
 CREATE TABLE awa_tag (
   /* the tag identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the tag name */
-  `name` VARCHAR(255) NOT NULL
+  `name` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /*  */
 CREATE TABLE awa_tagged_entity (
   /* the tag entity identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* Title: Tag model
 Date: 2013-02-23the database entity to which the tag is associated */
   `for_entity_id` BIGINT NOT NULL,
   /* the entity type */
   `entity_type` INTEGER NOT NULL,
   /*  */
-  `tag_id` BIGINT NOT NULL
+  `tag_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_tag");
 INSERT INTO entity_type (name) VALUES ("awa_tagged_entity");
@@ -347,7 +389,7 @@ INSERT INTO entity_type (name) VALUES ("awa_tagged_entity");
 /* An image that was uploaded by a user in an image folder. */
 CREATE TABLE awa_image (
   /* the image identifier. */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the image version. */
   `version` int ,
   /* the image width. */
@@ -361,7 +403,8 @@ CREATE TABLE awa_image (
   /* the thumbnail image to display the image is an image selector. */
   `thumbnail_id` INTEGER ,
   /* the image storage file. */
-  `storage_id` INTEGER NOT NULL
+  `storage_id` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_image");
 /* Copied from awa-settings-sqlite.sql*/
@@ -373,7 +416,7 @@ which can be stored in the database.
 The global setting can be specific to a server. */
 CREATE TABLE awa_global_setting (
   /* the global setting identifier. */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the global setting value. */
   `value` VARCHAR(255) NOT NULL,
   /* the global setting optimistic lock version. */
@@ -381,7 +424,8 @@ CREATE TABLE awa_global_setting (
   /* the server to which this global setting applies. */
   `server_id` INTEGER NOT NULL,
   /* the setting that corresponds to this global setting. */
-  `setting_id` BIGINT NOT NULL
+  `setting_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /* The setting table defines all the possible settings
 that an application manages.  This table is automatically
@@ -389,9 +433,10 @@ populated when an application starts. It is not modified.
  */
 CREATE TABLE awa_setting (
   /* the setting identifier. */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the setting name. */
-  `name` VARCHAR(255) NOT NULL
+  `name` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /* The user setting holds the setting value for a given user.
 It is created the first time a user changes the default
@@ -400,7 +445,7 @@ setting value. It is updated when the user modifies the setting.
  */
 CREATE TABLE awa_user_setting (
   /* the user setting identifier. */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the setting value. */
   `value` VARCHAR(255) NOT NULL,
   /* the setting optimistic lock version. */
@@ -408,7 +453,8 @@ CREATE TABLE awa_user_setting (
   /* the setting that correspond to the value. */
   `setting_id` BIGINT NOT NULL,
   /* the user to which the setting value is associated. */
-  `user_id` BIGINT NOT NULL
+  `user_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_global_setting");
 INSERT INTO entity_type (name) VALUES ("awa_setting");
@@ -418,7 +464,7 @@ INSERT INTO entity_type (name) VALUES ("awa_user_setting");
 /*  */
 CREATE TABLE awa_rating (
   /* the rating identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the rating taking into account all votes */
   `rating` INTEGER NOT NULL,
   /* the number of votes */
@@ -426,7 +472,8 @@ CREATE TABLE awa_rating (
   /*  */
   `for_entity_id` BIGINT NOT NULL,
   /* the entity type */
-  `for_entity_type` INTEGER NOT NULL
+  `for_entity_type` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /* The vote table tracks a vote action by a user on a given database entity.
 The primary key is made of the user, the entity id and entity type.
@@ -435,11 +482,12 @@ CREATE TABLE awa_vote (
   /*  */
   `rating` INTEGER NOT NULL,
   /*  */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /*  */
   `entity_id` BIGINT NOT NULL,
   /*  */
-  `user_id` BIGINT NOT NULL
+  `user_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_rating");
 INSERT INTO entity_type (name) VALUES ("awa_vote");
@@ -448,7 +496,7 @@ INSERT INTO entity_type (name) VALUES ("awa_vote");
 /* The job is associated with a dispatching queue. */
 CREATE TABLE awa_job (
   /* the job identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the job status */
   `status` TINYINT NOT NULL,
   /* the job name */
@@ -474,7 +522,8 @@ CREATE TABLE awa_job (
   /*  */
   `event_id` BIGINT ,
   /*  */
-  `session_id` BIGINT 
+  `session_id` BIGINT ,
+  PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_job");
 /* Copied from awa-countries-sqlite.sql*/
@@ -482,7 +531,7 @@ INSERT INTO entity_type (name) VALUES ("awa_job");
 /*  */
 CREATE TABLE awa_city (
   /* the city identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the city name */
   `name` VARCHAR(255) NOT NULL,
   /* the city ZIP code */
@@ -494,13 +543,14 @@ CREATE TABLE awa_city (
   /* the region that this city belongs to */
   `region_id` BIGINT NOT NULL,
   /* the country that this city belongs to */
-  `country_id` BIGINT NOT NULL
+  `country_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /* The country model is a system data model for the application.
 In theory, it never changes. */
 CREATE TABLE awa_country (
   /* the country identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the country name */
   `name` VARCHAR(255) NOT NULL,
   /* the continent name */
@@ -516,28 +566,31 @@ CREATE TABLE awa_country (
   /* the TLD associated with this country */
   `tld` VARCHAR(3) NOT NULL,
   /* the currency code */
-  `currency_code` VARCHAR(3) NOT NULL
+  `currency_code` VARCHAR(3) NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /* The country neighbor defines what countries
 are neigbors with each other */
 CREATE TABLE awa_country_neighbor (
   /*  */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /*  */
   `neighbor_of_id` BIGINT NOT NULL,
   /*  */
-  `neighbor_id` BIGINT NOT NULL
+  `neighbor_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /* Region defines an area within a country. */
 CREATE TABLE awa_region (
   /* the region identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the region name */
   `name` VARCHAR(255) NOT NULL,
   /* the region geonameid */
   `geonameid` INTEGER NOT NULL,
   /* the country that this region belongs to */
-  `country_id` BIGINT NOT NULL
+  `country_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_city");
 INSERT INTO entity_type (name) VALUES ("awa_country");
@@ -558,13 +611,14 @@ CREATE TABLE awa_answer (
   /* the anwser rank number. */
   `rank` INTEGER NOT NULL,
   /* the answer identifier. */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
   /* the user who wrote the answer. */
   `author_id` BIGINT NOT NULL,
   /*  */
-  `question_id` BIGINT NOT NULL
+  `question_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /* The question table holds a single question asked by a user to the community.
 The short description is used to give an overview of the question in long lists
@@ -586,7 +640,7 @@ the question short description. */
   /* the question rating. */
   `rating` INTEGER NOT NULL,
   /* the question identifier. */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the optimistic locking version. */
   `version` INTEGER NOT NULL,
   /* the user who asked the question. */
@@ -594,7 +648,8 @@ the question short description. */
   /*  */
   `workspace_id` BIGINT NOT NULL,
   /*  */
-  `accepted_answer_id` BIGINT 
+  `accepted_answer_id` BIGINT ,
+  PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_answer");
 INSERT INTO entity_type (name) VALUES ("awa_question");
@@ -603,7 +658,7 @@ INSERT INTO entity_type (name) VALUES ("awa_question");
 /*  */
 CREATE TABLE awa_blog (
   /* the blog identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the blog name */
   `name` VARCHAR(255) NOT NULL,
   /* the version */
@@ -617,12 +672,13 @@ CREATE TABLE awa_blog (
   /* The blog base URL. */
   `url` VARCHAR(255) NOT NULL,
   /* the workspace that this blog belongs to */
-  `workspace_id` BIGINT NOT NULL
+  `workspace_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /*  */
 CREATE TABLE awa_post (
   /* the post identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the post title */
   `title` VARCHAR(255) NOT NULL,
   /* the post text content */
@@ -642,7 +698,8 @@ CREATE TABLE awa_post (
   /*  */
   `author_id` BIGINT NOT NULL,
   /*  */
-  `blog_id` BIGINT NOT NULL
+  `blog_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_blog");
 INSERT INTO entity_type (name) VALUES ("awa_post");
@@ -651,7 +708,7 @@ INSERT INTO entity_type (name) VALUES ("awa_post");
 /*  */
 CREATE TABLE awa_changelog (
   /* the changelog identifier. */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the changelog date. */
   `date` DATETIME NOT NULL,
   /* the changelog text. */
@@ -661,7 +718,8 @@ CREATE TABLE awa_changelog (
   /*  */
   `user_id` BIGINT NOT NULL,
   /*  */
-  `entity_type` INTEGER NOT NULL
+  `entity_type` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_changelog");
 /* Copied from awa-wikis-sqlite.sql*/
@@ -669,7 +727,7 @@ INSERT INTO entity_type (name) VALUES ("awa_changelog");
 /*  */
 CREATE TABLE awa_wiki_content (
   /* the wiki page content identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the wiki content creation date */
   `create_date` DATETIME NOT NULL,
   /* the wiki text content */
@@ -685,7 +743,8 @@ CREATE TABLE awa_wiki_content (
   /* the wiki page that this Wiki_Content belongs to */
   `page_id` BIGINT NOT NULL,
   /* the page version author */
-  `author_id` BIGINT NOT NULL
+  `author_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /* The wiki page represents a page with its versions.
 It refers to the last version which is currently visible.
@@ -693,7 +752,7 @@ It has an optional preview image which defines
 the thumbnail preview of the last/current wiki content. */
 CREATE TABLE awa_wiki_page (
   /* the wiki page identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the wiki page name */
   `name` VARCHAR(255) NOT NULL,
   /* the last page version number */
@@ -709,13 +768,14 @@ CREATE TABLE awa_wiki_page (
   /* the wiki space that this page belongs to */
   `wiki_id` BIGINT NOT NULL,
   /* the current content (or last version) */
-  `content_id` BIGINT 
+  `content_id` BIGINT ,
+  PRIMARY KEY (`id`)
 );
 /* Permission is granted to display a wiki page if there is
 an ACL entry between the wiki space and the user. */
 CREATE TABLE awa_wiki_space (
   /* the wiki space identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the wiki name */
   `name` VARCHAR(255) NOT NULL,
   /* whether the wiki is public */
@@ -730,7 +790,8 @@ CREATE TABLE awa_wiki_space (
  */
   `right_side` TEXT NOT NULL,
   /*  */
-  `workspace_id` BIGINT NOT NULL
+  `workspace_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_wiki_content");
 INSERT INTO entity_type (name) VALUES ("awa_wiki_page");
