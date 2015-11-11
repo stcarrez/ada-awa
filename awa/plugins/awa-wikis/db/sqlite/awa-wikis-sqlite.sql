@@ -2,7 +2,7 @@
 /*  */
 CREATE TABLE awa_wiki_content (
   /* the wiki page content identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the wiki content creation date */
   `create_date` DATETIME NOT NULL,
   /* the wiki text content */
@@ -18,7 +18,8 @@ CREATE TABLE awa_wiki_content (
   /* the wiki page that this Wiki_Content belongs to */
   `page_id` BIGINT NOT NULL,
   /* the page version author */
-  `author_id` BIGINT NOT NULL
+  `author_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /* The wiki page represents a page with its versions.
 It refers to the last version which is currently visible.
@@ -26,7 +27,7 @@ It has an optional preview image which defines
 the thumbnail preview of the last/current wiki content. */
 CREATE TABLE awa_wiki_page (
   /* the wiki page identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the wiki page name */
   `name` VARCHAR(255) NOT NULL,
   /* the last page version number */
@@ -42,13 +43,14 @@ CREATE TABLE awa_wiki_page (
   /* the wiki space that this page belongs to */
   `wiki_id` BIGINT NOT NULL,
   /* the current content (or last version) */
-  `content_id` BIGINT 
+  `content_id` BIGINT ,
+  PRIMARY KEY (`id`)
 );
 /* Permission is granted to display a wiki page if there is
 an ACL entry between the wiki space and the user. */
 CREATE TABLE awa_wiki_space (
   /* the wiki space identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the wiki name */
   `name` VARCHAR(255) NOT NULL,
   /* whether the wiki is public */
@@ -63,7 +65,8 @@ CREATE TABLE awa_wiki_space (
  */
   `right_side` TEXT NOT NULL,
   /*  */
-  `workspace_id` BIGINT NOT NULL
+  `workspace_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_wiki_content");
 INSERT INTO entity_type (name) VALUES ("awa_wiki_page");
