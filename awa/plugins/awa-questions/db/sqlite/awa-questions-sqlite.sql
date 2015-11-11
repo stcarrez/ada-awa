@@ -12,13 +12,14 @@ CREATE TABLE awa_answer (
   /* the anwser rank number. */
   `rank` INTEGER NOT NULL,
   /* the answer identifier. */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
   /* the user who wrote the answer. */
   `author_id` BIGINT NOT NULL,
   /*  */
-  `question_id` BIGINT NOT NULL
+  `question_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /* The question table holds a single question asked by a user to the community.
 The short description is used to give an overview of the question in long lists
@@ -40,7 +41,7 @@ the question short description. */
   /* the question rating. */
   `rating` INTEGER NOT NULL,
   /* the question identifier. */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the optimistic locking version. */
   `version` INTEGER NOT NULL,
   /* the user who asked the question. */
@@ -48,7 +49,8 @@ the question short description. */
   /*  */
   `workspace_id` BIGINT NOT NULL,
   /*  */
-  `accepted_answer_id` BIGINT 
+  `accepted_answer_id` BIGINT ,
+  PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_answer");
 INSERT INTO entity_type (name) VALUES ("awa_question");

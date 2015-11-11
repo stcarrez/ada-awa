@@ -2,7 +2,7 @@
 /* The job is associated with a dispatching queue. */
 CREATE TABLE awa_job (
   /* the job identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /* the job status */
   `status` TINYINT NOT NULL,
   /* the job name */
@@ -28,6 +28,7 @@ CREATE TABLE awa_job (
   /*  */
   `event_id` BIGINT ,
   /*  */
-  `session_id` BIGINT 
+  `session_id` BIGINT ,
+  PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_job");

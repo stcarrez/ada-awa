@@ -19,7 +19,7 @@ CREATE TABLE awa_storage (
   /*  */
   `version` INTEGER NOT NULL,
   /* the storage identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT ,
   /*  */
   `original_id` BIGINT ,
   /*  */
@@ -29,22 +29,24 @@ CREATE TABLE awa_storage (
   /*  */
   `workspace_id` BIGINT NOT NULL,
   /*  */
-  `folder_id` BIGINT 
+  `folder_id` BIGINT ,
+  PRIMARY KEY (`id`)
 );
 /* The storage data is created only if the storage type
 is set to DATABASE.  It holds the file content in the blob. */
 CREATE TABLE awa_storage_data (
   /* the storage data identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
   /* the storage content */
-  `data` LONGBLOB NOT NULL
+  `data` LONGBLOB NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /*  */
 CREATE TABLE awa_storage_folder (
   /* the storage folder identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
   /* the folder creation date */
@@ -54,7 +56,8 @@ CREATE TABLE awa_storage_folder (
   /*  */
   `workspace_id` BIGINT NOT NULL,
   /*  */
-  `owner_id` BIGINT NOT NULL
+  `owner_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /* The local store record is created when a copy of the data is needed on the local file system.
 The creation date refers to the date when the data was copied to the local file system.
@@ -62,7 +65,7 @@ The expiration date indicates a date after which the local file can be removed
 from the local file system. */
 CREATE TABLE awa_store_local (
   /* the local store identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
   /*  */
@@ -76,7 +79,8 @@ CREATE TABLE awa_store_local (
   /* the creation date */
   `create_date` DATETIME NOT NULL,
   /*  */
-  `storage_id` BIGINT 
+  `storage_id` BIGINT ,
+  PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_storage");
 INSERT INTO entity_type (name) VALUES ("awa_storage_data");
