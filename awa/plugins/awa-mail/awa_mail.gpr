@@ -1,6 +1,6 @@
 with "../../awa";
 
-project Awa_Mail is
+library project Awa_Mail is
 
    Version      := Awa.Version;
    Name         := "awa_mail";
@@ -27,6 +27,5 @@ project Awa_Mail is
    package Binder renames AWA.Binder;
    package Builder renames AWA.Builder;
    package Compiler renames AWA.Compiler;
-   package Linker renames AWA.Linker;
 
 end Awa_Mail;

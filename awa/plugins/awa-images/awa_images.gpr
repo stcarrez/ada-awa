@@ -1,6 +1,6 @@
 with "../../awa";
 with "../awa-storages/awa_storages";
-project awa_images is
+library project awa_images is
    Version      := awa.Version;
    Name         := "awa_images";
    for Source_Dirs use ("src", "src/model");
@@ -14,5 +14,4 @@ project awa_images is
    package Binder renames awa.Binder;
    package Builder renames awa.Builder;
    package Compiler renames awa.Compiler;
-   package Linker renames awa.Linker;
 end awa_images;

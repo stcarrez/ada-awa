@@ -1,6 +1,5 @@
 with "../../awa";
-
-project Awa_Comments is
+library project Awa_Comments is
 
    Version      := awa.Version;
    Name         := "awa_comments";
@@ -19,6 +18,5 @@ project Awa_Comments is
    package Binder renames AWA.Binder;
    package Builder renames AWA.Builder;
    package Compiler renames AWA.Compiler;
-   package Linker renames AWA.Linker;
 
 end Awa_Comments;

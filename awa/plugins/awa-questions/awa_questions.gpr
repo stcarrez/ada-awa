@@ -1,7 +1,7 @@
 with "../../awa";
 with "../awa-workspaces/awa_workspaces";
 with "../awa-tags/awa_tags";
-project awa_questions is
+library project awa_questions is
    Version      := awa.Version;
    Name         := "awa_questions";
    for Source_Dirs use ("src", "src/model");
@@ -14,5 +14,4 @@ project awa_questions is
    package Binder renames awa.Binder;
    package Builder renames awa.Builder;
    package Compiler renames awa.Compiler;
-   package Linker renames awa.Linker;
 end awa_questions;
