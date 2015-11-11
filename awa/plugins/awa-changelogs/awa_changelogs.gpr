@@ -1,5 +1,5 @@
 with "../../awa";
-project awa_changelogs is
+library project awa_changelogs is
    Version      := awa.Version;
    Name         := "awa_changelogs";
    for Source_Dirs use ("src", "src/model");
@@ -13,5 +13,4 @@ project awa_changelogs is
    package Binder renames awa.Binder;
    package Builder renames awa.Builder;
    package Compiler renames awa.Compiler;
-   package Linker renames awa.Linker;
 end awa_changelogs;
