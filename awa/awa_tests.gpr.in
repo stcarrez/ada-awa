@@ -25,7 +25,7 @@ with "plugins/awa-counters/awa_counters";
 
 project Awa_Tests is
 
-   for Languages use ("Ada", "Project file");
+   for Languages use ("Ada");
 
    Mains := ("awa_harness.adb");
 
