@@ -98,7 +98,10 @@ package AWA.Events is
    type Queue_Index is new Natural;
    type Event_Index is new Natural;
 
-   package Event_Arrays is new AWA.Index_Arrays (Event_Index);
+   package Event_Arrays is new AWA.Index_Arrays (Event_Index, String);
+
+   use type Event_Arrays.Element_Type_Access;
+   subtype Name_Access is Event_Arrays.Element_Type_Access;
 
    generic
    package Definition renames Event_Arrays.Definition;
@@ -165,8 +168,8 @@ private
    --  Last_Event : Event_Index := 0;
 
    --  Get the event type name.
-   function Get_Event_Type_Name (Index : in Event_Index) return Util.Strings.Name_Access
-                                 renames Event_Arrays.Get_Name;
+   function Get_Event_Type_Name (Index : in Event_Index) return Name_Access
+                                 renames Event_Arrays.Get_Element;
 
    --  Make and return a copy of the event.
    function Copy (Event : in Module_Event) return Module_Event_Access;
