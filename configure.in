@@ -13,7 +13,7 @@ AWA_MINOR_VERSION=0
 AWA_MICRO_VERSION=0
 AWA_VERSION=$AWA_MAJOR_VERSION.$AWA_MINOR_VERSION.$AWA_MICRO_VERSION
 
-AWA_PACKAGES="ada-util-1.7.1 ada-el-1.5.1 ada-security-1.1.1 ada-asf-1.0.1 ada-ado-1.0.1 ada-awa-1.0.0 dynamo-0.7.1"
+AWA_PACKAGES="ada-util-1.7.1 ada-el-1.5.1 ada-wiki-1.0.0 ada-security-1.1.1 ada-asf-1.0.1 ada-ado-1.0.1 ada-awa-1.0.0 dynamo-0.7.1"
 
 # checking for local tools
 AC_PROG_CC
@@ -46,6 +46,7 @@ awa_util_configure=
 awa_el_configure=
 awa_security_configure=
 awa_asf_configure=
+awa_wiki_configure=
 awa_ado_configure=
 awa_dynamo_configure=
 awa_awa_configure=
@@ -57,6 +58,7 @@ awa_el_name=ada-el
 awa_security_name=ada-security
 awa_asf_name=ada-asf
 awa_ado_name=ada-ado
+awa_wiki_name=ada-wiki
 awa_dynamo_name=dynamo
 awa_build_root=
 awa_xmlada_name=
@@ -151,6 +153,10 @@ for NAME in $PACKAGES ; do
         TARGET=ada-asf
         ;;
 
+      ada-wiki-*)
+        TARGET=ada-wiki
+        ;;
+
       ada-security-*)
         TARGET=ada-security
         ;;
@@ -204,6 +210,7 @@ DIR=`pwd`
 NEED_INSTALL=""
 
 awa_el_configure="--with-ada-util=${awa_build_root}${awa_util_name}"
+awa_wiki_configure="--with-ada-util=${awa_build_root}${awa_util_name}"
 awa_security_configure="--with-ada-util=${awa_build_root}${awa_util_name}"
 awa_ado_configure="--with-ada-util=${awa_build_root}${awa_util_name}"
 awa_asf_configure="--with-ada-util=${awa_build_root}${awa_util_name} --with-ada-el=${awa_build_root}${awa_el_name}"
@@ -212,9 +219,11 @@ awa_dynamo_configure="${awa_asf_configure} --with-ada-asf=${awa_build_root}${awa
 awa_dynamo_configure="${awa_dynamo_configure} --with-ada-ado=${awa_build_root}${awa_ado_name}"
 awa_awa_configure="${awa_asf_configure} --with-ada-ado=${awa_build_root}${awa_ado_name}"
 awa_awa_configure="${awa_awa_configure} --with-ada-asf=${awa_build_root}${awa_asf_name}"
+awa_awa_configure="${awa_awa_configure} --with-ada-wiki=${awa_build_root}${awa_wiki_name}"
 
 awa_util_configure="${awa_util_configure} --prefix=${prefix}"
 awa_el_configure="${awa_el_configure} --prefix=${prefix}"
+awa_wiki_configure="${awa_wiki_configure} --prefix=${prefix}"
 awa_asf_configure="${awa_asf_configure} --prefix=${prefix}"
 awa_security_configure="${awa_security_configure} --prefix=${prefix}"
 awa_ado_configure="${awa_ado_configure} --prefix=${prefix}"
@@ -305,6 +314,9 @@ echo "Configuring ==== ada-util ===="
 
 echo "Configuring ==== ada-el ===="
 (cd ${awa_build_root}${awa_el_name} && ./configure ${awa_el_configure})
+
+echo "Configuring ==== ada-wiki ===="
+(cd ${awa_build_root}${awa_wiki_name} && ./configure ${awa_wiki_configure})
 
 echo "Configuring ==== ada-security ===="
 (cd ${awa_build_root}${awa_security_name} && ./configure ${awa_security_configure})
