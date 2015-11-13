@@ -17,23 +17,29 @@
 -----------------------------------------------------------------------
 with ADO.Objects;
 with ADO.Schemas;
+with Util.Strings;
 with AWA.Index_Arrays;
 package AWA.Counters is
 
    type Counter_Index_Type is new Natural;
 
-   package Counter_Arrays is new AWA.Index_Arrays (Counter_Index_Type);
-
-   generic
-      Table : ADO.Schemas.Class_Mapping_Access;
-      Field : String;
-   package Definition is
-      function Kind return Counter_Index_Type;
-   end Definition;
-
    --  Increment the counter identified by <tt>Counter</tt> and associated with the
    --  database object <tt>Object</tt>.
    procedure Increment (Counter : in Counter_Index_Type;
                         Object  : in ADO.Objects.Object_Ref'Class);
+
+private
+
+   type Counter_Def is record
+      Table : ADO.Schemas.Class_Mapping_Access;
+      Field : Util.Strings.Name_Access;
+   end record;
+
+   function "=" (Left, Right : in Counter_Def) return Boolean;
+   function "<" (Left, Right : in Counter_Def) return Boolean;
+   function "&" (Left  : in String;
+                 Right : in Counter_Def) return String;
+
+   package Counter_Arrays is new AWA.Index_Arrays (Counter_Index_Type, Counter_Def);
 
 end AWA.Counters;
