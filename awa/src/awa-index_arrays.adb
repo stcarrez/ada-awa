@@ -23,18 +23,18 @@ package body AWA.Index_Arrays is
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Index_Arrays");
 
    type Name_Pair is record
-      Name  : Util.Strings.Name_Access := null;
-      Index : Index_Type               := Index_Type'First;
+      Name  : Element_Type_Access := null;
+      Index : Index_Type          := Index_Type'First;
    end record;
 
    type Name_Pair_Array is array (Index_Type range <>) of Name_Pair;
    type Name_Pair_Array_Access is access all Name_Pair_Array;
 
-   type Name_Array is array (Index_Type range <>) of Util.Strings.Name_Access;
+   type Name_Array is array (Index_Type range <>) of Element_Type_Access;
    type Name_Array_Access is access all Name_Array;
 
    --  Register a definition by its name and allocate a unique runtime index.
-   procedure Add_Index (Name  : in Util.Strings.Name_Access;
+   procedure Add_Index (Name  : in Element_Type_Access;
                         Index : out Index_Type);
 
    --  A static list of names.  This array is created during the elaboration
@@ -50,7 +50,7 @@ package body AWA.Index_Arrays is
    --  ------------------------------
    --  Register a definition by its name and allocate a unique runtime index.
    --  ------------------------------
-   procedure Add_Index (Name  : in Util.Strings.Name_Access;
+   procedure Add_Index (Name  : in Element_Type_Access;
                         Index : out Index_Type) is
       procedure Free is
          new Ada.Unchecked_Deallocation (Object => Name_Pair_Array,
@@ -86,10 +86,10 @@ package body AWA.Index_Arrays is
       while Left <= Right loop
          declare
             Pos  : constant Index_Type := (Left + Right + 1) / 2;
-            Item : constant Util.Strings.Name_Access := Indexes (Pos).Name;
+            Item : constant Element_Type_Access := Indexes (Pos).Name;
          begin
             if Name.all = Item.all then
-               Log.Error ("Definition {0} is already registered.", Name.all);
+               Log.Error ("Definition " & Name.all & " is already registered.");
                Index := Indexes (Pos).Index;
                return;
             elsif Name.all < Item.all then
@@ -113,7 +113,7 @@ package body AWA.Index_Arrays is
       Indexes (Left).Index := Last_Index;
       Names (Last_Index) := Name;
       Index := Last_Index;
-      Log.Debug ("Definition {0} index is {1}", Name.all, Index_Type'Image (Index));
+      Log.Debug ("Definition " & Name.all & " index is {0}", Index_Type'Image (Index));
    end Add_Index;
 
    --  ------------------------------
@@ -122,7 +122,7 @@ package body AWA.Index_Arrays is
    package body Definition is
       Index : Index_Type;
 
-      Index_Name : aliased constant String := Name;
+      Index_Name : aliased constant Element_Type := Name;
 
       function Kind return Index_Type is
       begin
@@ -137,14 +137,14 @@ package body AWA.Index_Arrays is
    --  Find the runtime index given the name.
    --  Raises Not_Found exception if the name is not recognized.
    --  ------------------------------
-   function Find (Name : in String) return Index_Type is
+   function Find (Name : in Element_Type) return Index_Type is
       Left    : Index_Type := 1;
       Right   : Index_Type := Last_Index;
    begin
       while Left <= Right loop
          declare
             Pos  : constant Index_Type := (Left + Right + 1) / 2;
-            Item : constant Util.Strings.Name_Access := Indexes (Pos).Name;
+            Item : constant Element_Type_Access := Indexes (Pos).Name;
          begin
             if Name = Item.all then
                return Indexes (Pos).Index;
@@ -155,21 +155,21 @@ package body AWA.Index_Arrays is
             end if;
          end;
       end loop;
-      Log.Error ("Definition {0} not recognized.", Name);
+      Log.Error ("Definition " & Name & " not recognized.");
       raise Not_Found with "Definition " & Name & " not found";
    end Find;
 
    --  ------------------------------
-   --  Get the name associated with the index.
+   --  Get the element associated with the index.
    --  ------------------------------
-   function Get_Name (Index : in Index_Type) return Util.Strings.Name_Access is
+   function Get_Element (Index : in Index_Type) return Element_Type_Access is
    begin
       if Index = Invalid_Index or Index > Last_Index then
          Log.Error ("Index {0} is out of bounds", Index_Type'Image (Index));
          raise Not_Found;
       end if;
       return Names (Index);
-   end Get_Name;
+   end Get_Element;
 
    --  ------------------------------
    --  Check if the index is a valid index.
