@@ -19,19 +19,30 @@
 with AWA.Counters.Modules;
 package body AWA.Counters is
 
-   package body Definition is
+   use type Util.Strings.Name_Access;
+   use type ADO.Schemas.Class_Mapping_Access;
 
-      package Def is new Counter_Arrays.Definition (Table.Table.all);
+   function "&" (Left  : in String;
+                 Right : in Counter_Def) return String is
+   begin
+      return Left & "[" & Right.Table.Table.all & ", " & Right.Field.all & "]";
+   end "&";
 
-      function Kind return Counter_Index_Type is
-      begin
-         return Def.Kind;
-      end Kind;
+   function "=" (Left, Right : in Counter_Def) return Boolean is
+   begin
+      return Left.Table = Right.Table and Left.Field = Right.Field;
+   end "=";
 
-   end Definition;
+   function "<" (Left, Right : in Counter_Def) return Boolean is
+   begin
+      return Left.Table.Table.all < Right.Table.Table.all
+        or (Left.Table = Right.Table and Left.Field.all < Right.Field.all);
+   end "<";
 
+   --  ------------------------------
    --  Increment the counter identified by <tt>Counter</tt> and associated with the
    --  database object <tt>Object</tt>.
+   --  ------------------------------
    procedure Increment (Counter : in Counter_Index_Type;
                         Object  : in ADO.Objects.Object_Ref'Class) is
       Module : constant AWA.Counters.Modules.Counter_Module_Access
