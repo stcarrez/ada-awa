@@ -1,6 +1,7 @@
 with "@UTIL_DIR@config";
 with "@UTIL_DIR@util";
 with "@EL_DIR@el";
+with "@WIKI_DIR@wiki";
 with "@ADO_DIR@ado";
 with "@ASF_DIR@asf";
 with "@SECURITY_DIR@security";
