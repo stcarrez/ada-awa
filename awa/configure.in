@@ -100,6 +100,17 @@ AM_GNAT_FIND_PROJECT([ada-el],[Ada Expression Language Library],[el],
 AC_SUBST(EL_DIR)
 
 ##########################################
+# Ada Wiki library
+##########################################
+AM_GNAT_FIND_PROJECT([ada-wiki],[Ada Wiki Library],[wiki],
+  [git@github.com:stcarrez/ada-wiki.git],
+  [Building Ada Web Application requires the Ada Wiki Library.],
+  [
+    WIKI_DIR=${gnat_project_dir_wiki}
+  ])
+AC_SUBST(WIKI_DIR)
+
+##########################################
 # Ada Security library
 ##########################################
 AM_GNAT_FIND_PROJECT([ada-security],[Ada Security Library],[security],
