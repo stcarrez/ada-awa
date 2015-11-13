@@ -2,6 +2,7 @@ with "@UTIL_DIR@config";
 with "@UTIL_DIR@util";
 with "@UTIL_DIR@util_unit";
 with "@EL_DIR@el";
+with "@WIKI_DIR@wiki";
 with "@ASF_DIR@asf_core";
 with "@ASF_DIR@asf_unit";
 with "@ADO_DIR@ado";
