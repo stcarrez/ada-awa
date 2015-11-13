@@ -21,6 +21,7 @@ with Util.Test_Caller;
 with AWA.Tests.Helpers;
 with AWA.Tests.Helpers.Users;
 with AWA.Services.Contexts;
+with AWA.Counters.Definition;
 with Security.Contexts;
 
 package body AWA.Counters.Modules.Tests is
@@ -48,7 +49,7 @@ package body AWA.Counters.Modules.Tests is
    begin
       AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-wiki@test.com");
 
-      AWA.Counters.Increment (User_Counter.Kind, Context.Get_User);
+      AWA.Counters.Increment (User_Counter.Index, Context.Get_User);
       T.Manager := AWA.Counters.Modules.Get_Counter_Module;
       T.Assert (T.Manager /= null, "There is no counter plugin");
 
@@ -58,7 +59,7 @@ package body AWA.Counters.Modules.Tests is
          S : Util.Measures.Stamp;
       begin
          for I in 1 .. 1_000 loop
-            AWA.Counters.Increment (User_Counter.Kind, Context.Get_User);
+            AWA.Counters.Increment (User_Counter.Index, Context.Get_User);
          end loop;
          Util.Measures.Report (S, "AWA.Counters.Increment", 1000);
       end;
