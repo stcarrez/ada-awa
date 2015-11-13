@@ -50,7 +50,7 @@ package body AWA.Events.Services is
          end if;
       end Send_Queue;
 
-      Name : constant Util.Strings.Name_Access := Get_Event_Type_Name (Event.Kind);
+      Name : constant Name_Access := Get_Event_Type_Name (Event.Kind);
    begin
       if Name = null then
          Log.Error ("Cannot send event type {0}", Event_Index'Image (Event.Kind));
@@ -123,7 +123,7 @@ package body AWA.Events.Services is
          end if;
       end Find_Queue;
 
-      Name : constant Util.Strings.Name_Access := Get_Event_Type_Name (Event.Kind);
+      Name : constant Name_Access := Get_Event_Type_Name (Event.Kind);
    begin
       if Name = null then
          Log.Error ("Cannot dispatch event type {0}", Event_Index'Image (Event.Kind));
@@ -312,7 +312,7 @@ package body AWA.Events.Services is
       for I in Manager.Actions'Range loop
          if Manager.Actions (I).Event.Is_Null then
             declare
-               Name : constant Util.Strings.Name_Access := Get_Event_Type_Name (I);
+               Name : constant Name_Access := Get_Event_Type_Name (I);
             begin
                Log.Info ("Creating event type {0} in database", Name.all);
                Manager.Actions (I).Event.Set_Name (Name.all);
