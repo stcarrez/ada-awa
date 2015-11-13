@@ -597,6 +597,7 @@ MYSQL
 ADO_DIR
 ASF_DIR
 SECURITY_DIR
+WIKI_DIR
 EL_DIR
 UTIL_DIR
 BUILDS_SHARED
@@ -679,6 +680,7 @@ with_gprbuild
 enable_shared
 with_ada_util
 with_ada_el
+with_ada_wiki
 with_ada_security
 with_ada_asf
 with_ada_ado
@@ -1311,6 +1313,7 @@ Optional Packages:
   --with-gprbuild         Use gprbuild instead of gnatmake for the compilation
   --with-ada-util=x       Path for Ada Utility Library
   --with-ada-el=x         Path for Ada Expression Language Library
+  --with-ada-wiki=x       Path for Ada Wiki Library
   --with-ada-security=x   Path for Ada Security Library
   --with-ada-asf=x        Path for Ada Server Faces Library
   --with-ada-ado=x        Path for Ada Database Objects
@@ -3313,6 +3316,99 @@ $as_echo "no" >&6; }
   This project was not found in ../el nor in ../ada-el-*.
   The component is available at git@github.com:stcarrez/ada-el.git.
   Please, download and configure Ada Expression Language Library.
+  The current configuration was using:
+    ${GNATMAKE}
+    ADA_PROJECT_PATH=$ADA_PROJECT_PATH
+" "$LINENO" 5
+    fi
+  fi
+
+
+
+##########################################
+# Ada Wiki library
+##########################################
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking Ada Wiki Library" >&5
+$as_echo_n "checking Ada Wiki Library... " >&6; }
+
+# Check whether --with-ada-wiki was given.
+if test "${with_ada_wiki+set}" = set; then :
+  withval=$with_ada_wiki;
+      gnat_project_name_wiki=${withval}/
+      if test -d "${withval}"; then
+	    gnat_project_name_wiki=${withval}/wiki
+	  fi
+
+else
+
+      gnat_project_name_wiki=wiki
+
+fi
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: trying ${gnat_project_name_wiki}" >&5
+$as_echo "trying ${gnat_project_name_wiki}" >&6; }
+
+  # Search in the GNAT project path.
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ${gnat_project_name_wiki} project exists in gnatmake's search path" >&5
+$as_echo_n "checking whether ${gnat_project_name_wiki} project exists in gnatmake's search path... " >&6; }
+  echo "with \"${gnat_project_name_wiki}\"; project t is for Source_Dirs use (); end t;" > t.gpr
+  $GNATMAKE -p -Pt >/dev/null 2>/dev/null
+  if test $? -eq 0; then
+    gnat_project_wiki=yes
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+  else
+    gnat_project_wiki=no
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+    # Search in ../ada-wiki-*/wiki.gpr
+    files=`ls -r ../ada-wiki/wiki.gpr ../wiki/wiki.gpr ../ada-wiki-*/wiki.gpr 2>/dev/null`
+    for name in $files; do
+      dir=`dirname $name`
+      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for Ada Wiki Library project in ${dir}" >&5
+$as_echo_n "checking for Ada Wiki Library project in ${dir}... " >&6; }
+      echo "with \"${name}\"; project t is for Source_Dirs use (); end t;" > t.gpr
+	  # echo ""
+	  # cat t.gpr
+      $GNATMAKE -p -Pt >/dev/null 2>/dev/null
+      if test $? -eq 0; then
+         gnat_project_wiki=yes
+		 gnat_project_name_wiki=${name}
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+         break
+      else
+         gnat_project_wiki=no
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+      fi
+    done
+  fi
+  rm -f t.gpr
+  if test x${gnat_project_wiki} = xyes; then
+    gnat_project_with_wiki="with \"${gnat_project_name_wiki}\";";
+    gnat_project_dir_wiki=`dirname ${gnat_project_name_wiki}`
+    if test ${gnat_project_dir_wiki} = . ; then
+       gnat_project_dir_wiki=
+    else
+       gnat_project_dir_wiki="${gnat_project_dir_wiki}/"
+    fi
+
+    WIKI_DIR=${gnat_project_dir_wiki}
+
+  else
+    gnat_project_dir_wiki=
+    gnat_project_name_wiki=
+    if test x"Building Ada Web Application requires the Ada Wiki Library." != x; then
+      as_fn_error $? "Building Ada Web Application requires the Ada Wiki Library.
+  You should build and install the Ada Wiki Library component.
+  It must be available and found by ${GNATMAKE}.
+  This project was not found in the ADA_PROJECT_PATH environment variable.
+  This project was not found in ../wiki nor in ../ada-wiki-*.
+  The component is available at git@github.com:stcarrez/ada-wiki.git.
+  Please, download and configure Ada Wiki Library.
   The current configuration was using:
     ${GNATMAKE}
     ADA_PROJECT_PATH=$ADA_PROJECT_PATH
