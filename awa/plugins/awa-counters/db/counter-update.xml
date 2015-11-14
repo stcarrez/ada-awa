@@ -17,4 +17,11 @@
        </sql>
     </query>
 
+    <query name='counter-update-field'>
+       <comment>Update a target field counter</comment>
+       <sql>
+    UPDATE :table SET :field = :field + :counter WHERE id = :id
+       </sql>
+    </query>
+
 </query-mapping>
