@@ -19,7 +19,7 @@
 --  The <tt>AWA.Counters.Definition</tt> package is instantiated for each counter definition.
 generic
    Table : ADO.Schemas.Class_Mapping_Access;
-   Field : String;
+   Field : String := "";
 package AWA.Counters.Definition is
 
    Def_Name : aliased constant String := Field;
