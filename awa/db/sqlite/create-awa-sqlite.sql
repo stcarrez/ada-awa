@@ -193,12 +193,16 @@ CREATE TABLE awa_counter (
   `definition_id` INTEGER NOT NULL,
   PRIMARY KEY (`object_id`, `date`, `definition_id`)
 );
-/*  */
+/* A counter definition defines what the counter represents. It uniquely identifies
+the counter for the Counter table. A counter may be associated with a database
+table. In that case, the counter definition has a relation to the corresponding Entity_Type. */
 CREATE TABLE awa_counter_definition (
   /* the counter name. */
   `name` VARCHAR(255) NOT NULL,
   /* the counter unique id. */
   `id` BIGINT NOT NULL,
+  /*  */
+  `entity_type` INTEGER ,
   PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_counter");
@@ -703,7 +707,7 @@ CREATE TABLE awa_post (
 );
 INSERT INTO entity_type (name) VALUES ("awa_blog");
 INSERT INTO entity_type (name) VALUES ("awa_post");
-/* Copied from changelogs-sqlite.sql*/
+/* Copied from awa-changelogs-sqlite.sql*/
 /* File generated automatically by dynamo */
 /*  */
 CREATE TABLE awa_changelog (
@@ -763,6 +767,8 @@ CREATE TABLE awa_wiki_page (
   `title` VARCHAR(255) NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
+  /* a read counter which indicates how many times the page was read. */
+  `read_count` INTEGER NOT NULL,
   /* the wiki page preview. */
   `preview_id` BIGINT ,
   /* the wiki space that this page belongs to */

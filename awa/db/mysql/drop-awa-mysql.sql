@@ -13,7 +13,7 @@ DROP TABLE IF EXISTS `awa_message`;
 DROP TABLE IF EXISTS `awa_wiki_space`;
 DROP TABLE IF EXISTS `awa_wiki_page`;
 DROP TABLE IF EXISTS `awa_wiki_content`;
-/* Copied from changelogs-drop-mysql.sql*/
+/* Copied from awa-changelogs-drop-mysql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `awa_changelog`;
 /* Copied from awa-blogs-drop-mysql.sql*/
