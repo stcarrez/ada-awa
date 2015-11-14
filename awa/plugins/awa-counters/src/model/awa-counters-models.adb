@@ -428,6 +428,7 @@ package body AWA.Counters.Models is
       Impl : Counter_Definition_Access;
    begin
       Impl := new Counter_Definition_Impl;
+      Impl.Entity_Type := 0;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -481,6 +482,23 @@ package body AWA.Counters.Models is
       return Impl.Get_Key_Value;
    end Get_Id;
 
+
+   procedure Set_Entity_Type (Object : in out Counter_Definition_Ref;
+                              Value  : in ADO.Entity_Type) is
+      Impl : Counter_Definition_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Entity_Type (Impl.all, 3, Impl.Entity_Type, Value);
+   end Set_Entity_Type;
+
+   function Get_Entity_Type (Object : in Counter_Definition_Ref)
+                  return ADO.Entity_Type is
+      Impl : constant Counter_Definition_Access
+         := Counter_Definition_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Entity_Type;
+   end Get_Entity_Type;
+
    --  Copy of the object.
    procedure Copy (Object : in Counter_Definition_Ref;
                    Into   : in out Counter_Definition_Ref) is
@@ -496,6 +514,7 @@ package body AWA.Counters.Models is
             ADO.Objects.Set_Object (Result, Copy.all'Access);
             Copy.Copy (Impl.all);
             Copy.Name := Impl.Name;
+            Copy.Entity_Type := Impl.Entity_Type;
          end;
       end if;
       Into := Result;
@@ -635,6 +654,11 @@ package body AWA.Counters.Models is
                           Value => Object.Get_Key);
          Object.Clear_Modified (2);
       end if;
+      if Object.Is_Modified (3) then
+         Stmt.Save_Field (Name  => COL_2_2_NAME, --  entity_type
+                          Value => Object.Entity_Type);
+         Object.Clear_Modified (3);
+      end if;
       if Stmt.Has_Save_Fields then
          Stmt.Set_Filter (Filter => "id = ?");
          Stmt.Add_Param (Value => Object.Get_Key);
@@ -662,6 +686,8 @@ package body AWA.Counters.Models is
       Session.Allocate (Id => Object);
       Query.Save_Field (Name  => COL_1_2_NAME, --  id
                         Value => Object.Get_Key);
+      Query.Save_Field (Name  => COL_2_2_NAME, --  entity_type
+                        Value => Object.Entity_Type);
       Query.Execute (Result);
       if Result /= 1 then
          raise ADO.Objects.INSERT_ERROR;
@@ -696,6 +722,8 @@ package body AWA.Counters.Models is
          return Util.Beans.Objects.To_Object (Impl.Name);
       elsif Name = "id" then
          return ADO.Objects.To_Object (Impl.Get_Key);
+      elsif Name = "entity_type" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Entity_Type));
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -708,10 +736,10 @@ package body AWA.Counters.Models is
    procedure Load (Object  : in out Counter_Definition_Impl;
                    Stmt    : in out ADO.Statements.Query_Statement'Class;
                    Session : in out ADO.Sessions.Session'Class) is
-      pragma Unreferenced (Session);
    begin
       Object.Name := Stmt.Get_Unbounded_String (0);
       Object.Set_Key_Value (Stmt.Get_Identifier (1));
+      Object.Entity_Type := ADO.Entity_Type (Stmt.Get_Integer (2));
       ADO.Objects.Set_Created (Object);
    end Load;
 

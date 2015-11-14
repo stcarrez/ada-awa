@@ -127,6 +127,11 @@ package AWA.Counters.Models is
    procedure Copy (Object : in Counter_Ref;
                    Into   : in out Counter_Ref);
 
+   --  --------------------
+   --  A counter definition defines what the counter represents. It uniquely identifies
+   --  the counter for the Counter table. A counter may be associated with a database
+   --  table. In that case, the counter definition has a relation to the corresponding Entity_Type.
+   --  --------------------
    --  Create an object key for Counter_Definition.
    function Counter_Definition_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
    --  Create an object key for Counter_Definition from a string.
@@ -155,6 +160,14 @@ package AWA.Counters.Models is
    --  Get the counter unique id.
    function Get_Id (Object : in Counter_Definition_Ref)
                  return ADO.Identifier;
+
+   --
+   procedure Set_Entity_Type (Object : in out Counter_Definition_Ref;
+                              Value  : in ADO.Entity_Type);
+
+   --
+   function Get_Entity_Type (Object : in Counter_Definition_Ref)
+                 return ADO.Entity_Type;
 
    --  Load the entity identified by 'Id'.
    --  Raises the NOT_FOUND exception if it does not exist.
@@ -206,6 +219,8 @@ package AWA.Counters.Models is
 
 
    Query_Counter_Update : constant ADO.Queries.Query_Definition_Access;
+
+   Query_Counter_Update_Field : constant ADO.Queries.Query_Definition_Access;
 
 
 
@@ -275,13 +290,15 @@ private
    COUNTER_DEFINITION_NAME : aliased constant String := "awa_counter_definition";
    COL_0_2_NAME : aliased constant String := "name";
    COL_1_2_NAME : aliased constant String := "id";
+   COL_2_2_NAME : aliased constant String := "entity_type";
 
    COUNTER_DEFINITION_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 2,
+     (Count => 3,
       Table => COUNTER_DEFINITION_NAME'Access,
       Members => (
          1 => COL_0_2_NAME'Access,
-         2 => COL_1_2_NAME'Access
+         2 => COL_1_2_NAME'Access,
+         3 => COL_2_2_NAME'Access
 )
      );
    COUNTER_DEFINITION_TABLE : constant ADO.Schemas.Class_Mapping_Access
@@ -295,6 +312,7 @@ private
                                      Of_Class => COUNTER_DEFINITION_DEF'Access)
    with record
        Name : Ada.Strings.Unbounded.Unbounded_String;
+       Entity_Type : ADO.Entity_Type;
    end record;
 
    type Counter_Definition_Access is access all Counter_Definition_Impl;
@@ -338,4 +356,10 @@ private
                                      File => File_1.File'Access);
    Query_Counter_Update : constant ADO.Queries.Query_Definition_Access
    := Def_Counter_Update.Query'Access;
+
+   package Def_Counter_Update_Field is
+      new ADO.Queries.Loaders.Query (Name => "counter-update-field",
+                                     File => File_1.File'Access);
+   Query_Counter_Update_Field : constant ADO.Queries.Query_Definition_Access
+   := Def_Counter_Update_Field.Query'Access;
 end AWA.Counters.Models;
