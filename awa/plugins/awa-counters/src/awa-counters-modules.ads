@@ -21,7 +21,6 @@ with Ada.Calendar;
 with ASF.Applications;
 
 with AWA.Modules;
-with AWA.Users.Models;
 package AWA.Counters.Modules is
 
    --  The name under which the module is registered.
@@ -68,6 +67,9 @@ package AWA.Counters.Modules is
 
 private
 
+   type Definition_Array_Type is array (Counter_Index_Type range <>) of Natural;
+   type Definition_Array_Type_Access is access all Definition_Array_Type;
+
    --  The counter map tracks a counter associated with a database object.
    --  All the database objects refer to the same counter.
    package Counter_Maps is
@@ -108,15 +110,20 @@ private
       function Need_Flush (Limit   : in Natural;
                            Seconds : in Duration) return Boolean;
 
+      --  Get the definition ID associated with the counter.
+      procedure Get_Definition (Counter : in Counter_Index_Type;
+                                Result  : out Natural);
+
    private
       Day         : Ada.Calendar.Time;
       Day_End     : Ada.Calendar.Time;
       Counters    : Counter_Map_Array_Access;
+      Definitions : Definition_Array_Type_Access;
       Nb_Counters : Natural := 0;
    end Counter_Table;
 
    type Counter_Module is new AWA.Modules.Module with record
-      Counters : Counter_Table;
+      Counters      : Counter_Table;
 
       Counter_Limit : Natural  := DEFAULT_COUNTER_LIMIT;
       Age_Limit     : Duration := DEFAULT_AGE_LIMIT;
