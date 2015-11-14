@@ -59,6 +59,7 @@ CREATE TABLE awa_message (
   /* the optional user session that triggered the message creation */
   `session_id` BIGINT ,
   PRIMARY KEY (`id`)
+);
 /*  */
 CREATE TABLE awa_message_type (
   /*  */
@@ -66,6 +67,7 @@ CREATE TABLE awa_message_type (
   /* the message type name */
   `name` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`)
+);
 /* The message queue tracks the event messages that must be dispatched by
 a given server. */
 CREATE TABLE awa_queue (
@@ -76,6 +78,7 @@ CREATE TABLE awa_queue (
   /* the message queue name */
   `name` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`)
+);
 /* The ACL table records permissions which are granted for a user to access a given database entity. */
 CREATE TABLE awa_acl (
   /* the ACL identifier */
@@ -89,6 +92,7 @@ CREATE TABLE awa_acl (
   /* the entity type concerned by the ACL. */
   `entity_type` INTEGER NOT NULL,
   PRIMARY KEY (`id`)
+);
 /*  */
 CREATE TABLE awa_access_key (
   /* the secure access key. */
@@ -102,6 +106,7 @@ CREATE TABLE awa_access_key (
   /*  */
   `user_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
+);
 /* The Email entity defines the user email addresses.
 The user has a primary email address that is obtained
 from the registration process (either through a form
@@ -120,6 +125,7 @@ CREATE TABLE awa_email (
   /* the user. */
   `user_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
+);
 /*  */
 CREATE TABLE awa_session (
   /*  */
@@ -141,6 +147,7 @@ CREATE TABLE awa_session (
   /*  */
   `user_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
+);
 /* The User entity represents a user that can access and use the application.
  */
 CREATE TABLE awa_user (
@@ -186,12 +193,16 @@ CREATE TABLE awa_counter (
   `definition_id` INTEGER NOT NULL,
   PRIMARY KEY (`object_id`, `date`, `definition_id`)
 );
-/*  */
+/* A counter definition defines what the counter represents. It uniquely identifies
+the counter for the Counter table. A counter may be associated with a database
+table. In that case, the counter definition has a relation to the corresponding Entity_Type. */
 CREATE TABLE awa_counter_definition (
   /* the counter name. */
   `name` VARCHAR(255) NOT NULL,
   /* the counter unique id. */
   `id` BIGINT NOT NULL,
+  /*  */
+  `entity_type` INTEGER ,
   PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_counter");
