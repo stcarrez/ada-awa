@@ -248,6 +248,14 @@ package AWA.Wikis.Models is
    function Get_Version (Object : in Wiki_Page_Ref)
                  return Integer;
 
+   --  Set a read counter which indicates how many times the page was read.
+   procedure Set_Read_Count (Object : in out Wiki_Page_Ref;
+                             Value  : in Integer);
+
+   --  Get a read counter which indicates how many times the page was read.
+   function Get_Read_Count (Object : in Wiki_Page_Ref)
+                 return Integer;
+
    --  Set the wiki page preview.
    procedure Set_Preview (Object : in out Wiki_Page_Ref;
                           Value  : in AWA.Images.Models.Image_Ref'Class);
@@ -913,12 +921,13 @@ private
    COL_3_2_NAME : aliased constant String := "is_public";
    COL_4_2_NAME : aliased constant String := "title";
    COL_5_2_NAME : aliased constant String := "version";
-   COL_6_2_NAME : aliased constant String := "preview_id";
-   COL_7_2_NAME : aliased constant String := "wiki_id";
-   COL_8_2_NAME : aliased constant String := "content_id";
+   COL_6_2_NAME : aliased constant String := "read_count";
+   COL_7_2_NAME : aliased constant String := "preview_id";
+   COL_8_2_NAME : aliased constant String := "wiki_id";
+   COL_9_2_NAME : aliased constant String := "content_id";
 
    WIKI_PAGE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 9,
+     (Count => 10,
       Table => WIKI_PAGE_NAME'Access,
       Members => (
          1 => COL_0_2_NAME'Access,
@@ -929,7 +938,8 @@ private
          6 => COL_5_2_NAME'Access,
          7 => COL_6_2_NAME'Access,
          8 => COL_7_2_NAME'Access,
-         9 => COL_8_2_NAME'Access
+         9 => COL_8_2_NAME'Access,
+         10 => COL_9_2_NAME'Access
 )
      );
    WIKI_PAGE_TABLE : constant ADO.Schemas.Class_Mapping_Access
@@ -947,6 +957,7 @@ private
        Is_Public : Boolean;
        Title : Ada.Strings.Unbounded.Unbounded_String;
        Version : Integer;
+       Read_Count : Integer;
        Preview : AWA.Images.Models.Image_Ref;
        Wiki : AWA.Wikis.Models.Wiki_Space_Ref;
        Content : AWA.Wikis.Models.Wiki_Content_Ref;
