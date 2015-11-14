@@ -38,6 +38,8 @@ CREATE TABLE awa_wiki_page (
   `title` VARCHAR(255) BINARY NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
+  /* a read counter which indicates how many times the page was read. */
+  `read_count` INTEGER NOT NULL,
   /* the wiki page preview. */
   `preview_id` BIGINT ,
   /* the wiki space that this page belongs to */
