@@ -22,6 +22,7 @@ with AWA.Tests.Helpers;
 with AWA.Tests.Helpers.Users;
 with AWA.Services.Contexts;
 with AWA.Counters.Definition;
+with AWA.Users.Models;
 with Security.Contexts;
 
 package body AWA.Counters.Modules.Tests is
