@@ -91,14 +91,14 @@ package AWA.Questions.Models is
 
    --  Set the date when the question was edited.
    procedure Set_Edit_Date (Object : in out Question_Ref;
-                            Value  : in Ada.Calendar.Time);
+                            Value  : in ADO.Nullable_Time);
 
    --  Get the date when the question was edited.
    function Get_Edit_Date (Object : in Question_Ref)
-                 return Ada.Calendar.Time;
+                 return ADO.Nullable_Time;
 
    --  Set Title: Questions and Answers model
-   --  Date: 2014-01-01
+   --  Date: 2015-11-15
    --  the question short description.
    procedure Set_Short_Description (Object : in out Question_Ref;
                                     Value  : in Ada.Strings.Unbounded.Unbounded_String);
@@ -106,7 +106,7 @@ package AWA.Questions.Models is
                                     Value : in String);
 
    --  Get Title: Questions and Answers model
-   --  Date: 2014-01-01
+   --  Date: 2015-11-15
    --  the question short description.
    function Get_Short_Description (Object : in Question_Ref)
                  return Ada.Strings.Unbounded.Unbounded_String;
@@ -373,7 +373,6 @@ package AWA.Questions.Models is
                         Value : in Util.Beans.Objects.Object);
 
 
-
    package Answer_Info_Beans is
       new Util.Beans.Basic.Lists (Element_Type => Answer_Info);
    package Answer_Info_Vectors renames Answer_Info_Beans.Vectors;
@@ -444,7 +443,6 @@ package AWA.Questions.Models is
                         Value : in Util.Beans.Objects.Object);
 
 
-
    package Question_Display_Info_Beans is
       new Util.Beans.Basic.Lists (Element_Type => Question_Display_Info);
    package Question_Display_Info_Vectors renames Question_Display_Info_Beans.Vectors;
@@ -510,7 +508,6 @@ package AWA.Questions.Models is
    procedure Set_Value (Item  : in out Question_Info;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object);
-
 
 
    package Question_Info_Beans is
@@ -626,7 +623,7 @@ private
        Create_Date : Ada.Calendar.Time;
        Title : Ada.Strings.Unbounded.Unbounded_String;
        Description : Ada.Strings.Unbounded.Unbounded_String;
-       Edit_Date : Ada.Calendar.Time;
+       Edit_Date : ADO.Nullable_Time;
        Short_Description : Ada.Strings.Unbounded.Unbounded_String;
        Rating : Integer;
        Version : Integer;

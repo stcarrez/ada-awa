@@ -64,7 +64,7 @@ package body AWA.Questions.Models is
    begin
       Impl := new Question_Impl;
       Impl.Create_Date := ADO.DEFAULT_TIME;
-      Impl.Edit_Date := ADO.DEFAULT_TIME;
+      Impl.Edit_Date.Is_Null := True;
       Impl.Rating := 0;
       Impl.Version := 0;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
@@ -152,7 +152,7 @@ package body AWA.Questions.Models is
 
 
    procedure Set_Edit_Date (Object : in out Question_Ref;
-                            Value  : in Ada.Calendar.Time) is
+                            Value  : in ADO.Nullable_Time) is
       Impl : Question_Access;
    begin
       Set_Field (Object, Impl);
@@ -160,7 +160,7 @@ package body AWA.Questions.Models is
    end Set_Edit_Date;
 
    function Get_Edit_Date (Object : in Question_Ref)
-                  return Ada.Calendar.Time is
+                  return ADO.Nullable_Time is
       Impl : constant Question_Access
          := Question_Impl (Object.Get_Load_Object.all)'Access;
    begin
@@ -583,7 +583,11 @@ package body AWA.Questions.Models is
       elsif Name = "description" then
          return Util.Beans.Objects.To_Object (Impl.Description);
       elsif Name = "edit_date" then
-         return Util.Beans.Objects.Time.To_Object (Impl.Edit_Date);
+         if Impl.Edit_Date.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.Time.To_Object (Impl.Edit_Date.Value);
+         end if;
       elsif Name = "short_description" then
          return Util.Beans.Objects.To_Object (Impl.Short_Description);
       elsif Name = "rating" then
@@ -1487,7 +1491,12 @@ package body AWA.Questions.Models is
       elsif Name = "description" then
          Item.Set_Description (Util.Beans.Objects.To_String (Value));
       elsif Name = "edit_date" then
-         Item.Set_Edit_Date (Util.Beans.Objects.Time.To_Time (Value));
+         if Util.Beans.Objects.Is_Null (Value) then
+            Item.Set_Edit_Date (ADO.Nullable_Time '(Is_Null => True, others => <>));
+         else
+            Item.Set_Edit_Date (ADO.Nullable_Time '(Is_Null => False,
+                                        Value   => Util.Beans.Objects.Time.To_Time (Value)));
+         end if;
       elsif Name = "short_description" then
          Item.Set_Short_Description (Util.Beans.Objects.To_String (Value));
       elsif Name = "rating" then
