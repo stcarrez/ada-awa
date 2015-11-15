@@ -90,11 +90,25 @@ package body AWA.Counters.Modules is
    procedure Increment (Plugin  : in out Counter_Module;
                         Counter : in Counter_Index_Type;
                         Object  : in ADO.Objects.Object_Ref'Class) is
+      Key : constant ADO.Objects.Object_Key := Object.Get_Key;
    begin
       if Plugin.Counters.Need_Flush (Plugin.Counter_Limit, Plugin.Age_Limit) then
          Plugin.Flush;
       end if;
-      Plugin.Counters.Increment (Counter, Object);
+      Plugin.Counters.Increment (Counter, Key);
+   end Increment;
+
+   --  ------------------------------
+   --  Increment the counter identified by <tt>Counter</tt>.
+   --  ------------------------------
+   procedure Increment (Plugin  : in out Counter_Module;
+                        Counter : in Counter_Index_Type) is
+      Key : ADO.Objects.Object_Key (ADO.Objects.KEY_INTEGER, null);
+   begin
+      if Plugin.Counters.Need_Flush (Plugin.Counter_Limit, Plugin.Age_Limit) then
+         Plugin.Flush;
+      end if;
+      Plugin.Counters.Increment (Counter, Key);
    end Increment;
 
    --  ------------------------------
@@ -122,10 +136,10 @@ package body AWA.Counters.Modules is
 
       --  ------------------------------
       --  Increment the counter identified by <tt>Counter</tt> and associated with the
-      --  database object <tt>Object</tt>.
+      --  database object <tt>Key</tt>.
       --  ------------------------------
       procedure Increment (Counter : in Counter_Index_Type;
-                           Object  : in ADO.Objects.Object_Ref'Class) is
+                           Key     : in ADO.Objects.Object_Key) is
 
          procedure Increment (Key     : in ADO.Objects.Object_Key;
                               Element : in out Positive);
@@ -137,7 +151,6 @@ package body AWA.Counters.Modules is
             Element := Element + 1;
          end Increment;
 
-         Key : constant ADO.Objects.Object_Key := Object.Get_Key;
          Pos : Counter_Maps.Cursor;
       begin
          if Counters = null then
