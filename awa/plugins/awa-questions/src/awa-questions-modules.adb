@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-questions-modules -- Module questions
---  Copyright (C) 2012, 2013 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -133,7 +133,8 @@ package body AWA.Questions.Modules is
       if not Question.Is_Inserted then
          Question.Set_Create_Date (Ada.Calendar.Clock);
       else
-         Question.Set_Edit_Date (Ada.Calendar.Clock);
+         Question.Set_Edit_Date (ADO.Nullable_Time '(Is_Null => False,
+                                                     Value => Ada.Calendar.Clock));
       end if;
       Question.Save (DB);
       Ctx.Commit;
