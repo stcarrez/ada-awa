@@ -25,7 +25,11 @@ package body AWA.Counters is
    function "&" (Left  : in String;
                  Right : in Counter_Def) return String is
    begin
-      return Left & "[" & Right.Table.Table.all & ", " & Right.Field.all & "]";
+      if Right.Table = null then
+         return Left & "[" & Right.Field.all & "]";
+      else
+         return Left & "[" & Right.Table.Table.all & ", " & Right.Field.all & "]";
+      end if;
    end "&";
 
    function "=" (Left, Right : in Counter_Def) return Boolean is
@@ -35,8 +39,15 @@ package body AWA.Counters is
 
    function "<" (Left, Right : in Counter_Def) return Boolean is
    begin
-      return Left.Table.Table.all < Right.Table.Table.all
-        or (Left.Table = Right.Table and Left.Field.all < Right.Field.all);
+      if Left.Table = Right.Table then
+         return Left.Field.all < Right.Field.all;
+      elsif Left.Table = null then
+         return False;
+      elsif Right.Table = null then
+         return True;
+      else
+         return Left.Table.Table.all < Right.Table.Table.all;
+      end if;
    end "<";
 
    --  ------------------------------
@@ -49,6 +60,16 @@ package body AWA.Counters is
         := AWA.Counters.Modules.Get_Counter_Module;
    begin
       Module.Increment (Counter, Object);
+   end Increment;
+
+   --  ------------------------------
+   --  Increment the global counter identified by <tt>Counter</tt>.
+   --  ------------------------------
+   procedure Increment (Counter : in Counter_Index_Type) is
+      Module : constant AWA.Counters.Modules.Counter_Module_Access
+        := AWA.Counters.Modules.Get_Counter_Module;
+   begin
+      Module.Increment (Counter);
    end Increment;
 
 end AWA.Counters;
