@@ -231,6 +231,7 @@ package body AWA.Counters.Modules is
       Def_Db : AWA.Counters.Models.Counter_Definition_Ref;
       Query  : ADO.SQL.Query;
       Found  : Boolean;
+      Entity : ADO.Nullable_Entity_Type;
    begin
       if Def.Table = null then
          Query.Set_Filter ("name = :name AND entity_type IS NULL");
@@ -245,7 +246,9 @@ package body AWA.Counters.Modules is
       Def_Db.Find (DB, Query, Found);
       if not Found then
          if Def.Table /= null then
-            Def_Db.Set_Entity_Type (ADO.Sessions.Entities.Find_Entity_Type (DB, Def.Table));
+            Entity.Value := ADO.Sessions.Entities.Find_Entity_Type (DB, Def.Table);
+            Entity.Is_Null := False;
+            Def_Db.Set_Entity_Type (Entity);
          end if;
          Def_Db.Set_Name (Def.Field.all);
          Def_Db.Save (DB);
