@@ -34,12 +34,16 @@ with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
 with Util.Beans.Basic.Lists;
 with AWA.Storages.Models;
+with AWA.Users.Models;
 pragma Warnings (On, "unit * is not referenced");
 package AWA.Images.Models is
    type Image_Ref is new ADO.Objects.Object_Ref with null record;
 
    --  --------------------
-   --  An image that was uploaded by a user in an image folder.
+   --  - The workspace contains one or several folders.
+   --  - Each image folder contains a set of images that have been uploaded by the user.
+   --  - An image can be visible if a user has an ACL permission to read the associated folder.
+   --  - An image marked as 'public=True' can be visible by anybody
    --  --------------------
    --  Create an object key for Image.
    function Image_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
@@ -50,62 +54,106 @@ package AWA.Images.Models is
    Null_Image : constant Image_Ref;
    function "=" (Left, Right : Image_Ref'Class) return Boolean;
 
-   --  Set the image identifier.
+   --  Set the image identifier
    procedure Set_Id (Object : in out Image_Ref;
                      Value  : in ADO.Identifier);
 
-   --  Get the image identifier.
+   --  Get the image identifier
    function Get_Id (Object : in Image_Ref)
                  return ADO.Identifier;
-   --  Get the image version.
+
+   --  Set the image width
+   procedure Set_Width (Object : in out Image_Ref;
+                        Value  : in Integer);
+
+   --  Get the image width
+   function Get_Width (Object : in Image_Ref)
+                 return Integer;
+
+   --  Set the image height
+   procedure Set_Height (Object : in out Image_Ref;
+                         Value  : in Integer);
+
+   --  Get the image height
+   function Get_Height (Object : in Image_Ref)
+                 return Integer;
+
+   --
+   procedure Set_Entityid (Object : in out Image_Ref;
+                           Value  : in Integer);
+
+   --
+   function Get_Entityid (Object : in Image_Ref)
+                 return Integer;
+
+   --  Set the thumbnail width
+   procedure Set_Thumb_Width (Object : in out Image_Ref;
+                              Value  : in Integer);
+
+   --  Get the thumbnail width
+   function Get_Thumb_Width (Object : in Image_Ref)
+                 return Integer;
+
+   --  Set the thumbnail height
+   procedure Set_Thumb_Height (Object : in out Image_Ref;
+                               Value  : in Integer);
+
+   --  Get the thumbnail height
+   function Get_Thumb_Height (Object : in Image_Ref)
+                 return Integer;
+
+   --
+   procedure Set_Path (Object : in out Image_Ref;
+                       Value  : in Ada.Strings.Unbounded.Unbounded_String);
+   procedure Set_Path (Object : in out Image_Ref;
+                       Value : in String);
+
+   --
+   function Get_Path (Object : in Image_Ref)
+                 return Ada.Strings.Unbounded.Unbounded_String;
+   function Get_Path (Object : in Image_Ref)
+                 return String;
+
+   --
+   procedure Set_Public (Object : in out Image_Ref;
+                         Value  : in Boolean);
+
+   --
+   function Get_Public (Object : in Image_Ref)
+                 return Boolean;
+   --
    function Get_Version (Object : in Image_Ref)
                  return Integer;
 
-   --  Set the image width.
-   procedure Set_Width (Object : in out Image_Ref;
-                        Value  : in Natural);
-
-   --  Get the image width.
-   function Get_Width (Object : in Image_Ref)
-                 return Natural;
-
-   --  Set the image height.
-   procedure Set_Height (Object : in out Image_Ref;
-                         Value  : in Natural);
-
-   --  Get the image height.
-   function Get_Height (Object : in Image_Ref)
-                 return Natural;
-
-   --  Set the image thumbnail height.
-   procedure Set_Thumb_Height (Object : in out Image_Ref;
-                               Value  : in Natural);
-
-   --  Get the image thumbnail height.
-   function Get_Thumb_Height (Object : in Image_Ref)
-                 return Natural;
-
-   --  Set the image thumbnail width.
-   procedure Set_Thumb_Width (Object : in out Image_Ref;
-                              Value  : in Natural);
-
-   --  Get the image thumbnail width.
-   function Get_Thumb_Width (Object : in Image_Ref)
-                 return Natural;
-
-   --  Set the thumbnail image to display the image is an image selector.
+   --
    procedure Set_Thumbnail (Object : in out Image_Ref;
                             Value  : in AWA.Storages.Models.Storage_Ref'Class);
 
-   --  Get the thumbnail image to display the image is an image selector.
+   --
    function Get_Thumbnail (Object : in Image_Ref)
                  return AWA.Storages.Models.Storage_Ref'Class;
 
-   --  Set the image storage file.
+   --
+   procedure Set_Folder (Object : in out Image_Ref;
+                         Value  : in AWA.Storages.Models.Storage_Folder_Ref'Class);
+
+   --
+   function Get_Folder (Object : in Image_Ref)
+                 return AWA.Storages.Models.Storage_Folder_Ref'Class;
+
+   --
+   procedure Set_Owner (Object : in out Image_Ref;
+                        Value  : in AWA.Users.Models.User_Ref'Class);
+
+   --
+   function Get_Owner (Object : in Image_Ref)
+                 return AWA.Users.Models.User_Ref'Class;
+
+   --
    procedure Set_Storage (Object : in out Image_Ref;
                           Value  : in AWA.Storages.Models.Storage_Ref'Class);
 
-   --  Get the image storage file.
+   --
    function Get_Storage (Object : in Image_Ref)
                  return AWA.Storages.Models.Storage_Ref'Class;
 
@@ -221,7 +269,6 @@ package AWA.Images.Models is
                         Value : in Util.Beans.Objects.Object);
 
 
-
    package Image_Info_Beans is
       new Util.Beans.Basic.Lists (Element_Type => Image_Info);
    package Image_Info_Vectors renames Image_Info_Beans.Vectors;
@@ -248,16 +295,21 @@ package AWA.Images.Models is
 private
    IMAGE_NAME : aliased constant String := "awa_image";
    COL_0_1_NAME : aliased constant String := "id";
-   COL_1_1_NAME : aliased constant String := "version";
-   COL_2_1_NAME : aliased constant String := "width";
-   COL_3_1_NAME : aliased constant String := "height";
-   COL_4_1_NAME : aliased constant String := "thumb_height";
-   COL_5_1_NAME : aliased constant String := "thumb_width";
-   COL_6_1_NAME : aliased constant String := "thumbnail_id";
-   COL_7_1_NAME : aliased constant String := "storage_id";
+   COL_1_1_NAME : aliased constant String := "width";
+   COL_2_1_NAME : aliased constant String := "height";
+   COL_3_1_NAME : aliased constant String := "entityId";
+   COL_4_1_NAME : aliased constant String := "thumb_width";
+   COL_5_1_NAME : aliased constant String := "thumb_height";
+   COL_6_1_NAME : aliased constant String := "path";
+   COL_7_1_NAME : aliased constant String := "public";
+   COL_8_1_NAME : aliased constant String := "version";
+   COL_9_1_NAME : aliased constant String := "thumbnail_id";
+   COL_10_1_NAME : aliased constant String := "folder_id";
+   COL_11_1_NAME : aliased constant String := "owner_id";
+   COL_12_1_NAME : aliased constant String := "storage_id";
 
    IMAGE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 8,
+     (Count => 13,
       Table => IMAGE_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
@@ -267,7 +319,12 @@ private
          5 => COL_4_1_NAME'Access,
          6 => COL_5_1_NAME'Access,
          7 => COL_6_1_NAME'Access,
-         8 => COL_7_1_NAME'Access
+         8 => COL_7_1_NAME'Access,
+         9 => COL_8_1_NAME'Access,
+         10 => COL_9_1_NAME'Access,
+         11 => COL_10_1_NAME'Access,
+         12 => COL_11_1_NAME'Access,
+         13 => COL_12_1_NAME'Access
 )
      );
    IMAGE_TABLE : constant ADO.Schemas.Class_Mapping_Access
@@ -280,12 +337,17 @@ private
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
                                      Of_Class => IMAGE_DEF'Access)
    with record
+       Width : Integer;
+       Height : Integer;
+       Entityid : Integer;
+       Thumb_Width : Integer;
+       Thumb_Height : Integer;
+       Path : Ada.Strings.Unbounded.Unbounded_String;
+       Public : Boolean;
        Version : Integer;
-       Width : Natural;
-       Height : Natural;
-       Thumb_Height : Natural;
-       Thumb_Width : Natural;
        Thumbnail : AWA.Storages.Models.Storage_Ref;
+       Folder : AWA.Storages.Models.Storage_Folder_Ref;
+       Owner : AWA.Users.Models.User_Ref;
        Storage : AWA.Storages.Models.Storage_Ref;
    end record;
 
