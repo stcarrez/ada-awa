@@ -62,6 +62,10 @@ package AWA.Counters.Modules is
                         Counter : in Counter_Index_Type;
                         Object  : in ADO.Objects.Object_Ref'Class);
 
+   --  Increment the counter identified by <tt>Counter</tt>.
+   procedure Increment (Plugin  : in out Counter_Module;
+                        Counter : in Counter_Index_Type);
+
    --  Get the current counter value.
    procedure Get_Counter (Plugin  : in out Counter_Module;
                           Counter : in AWA.Counters.Counter_Index_Type;
@@ -103,9 +107,9 @@ private
    protected type Counter_Table is
 
       --  Increment the counter identified by <tt>Counter</tt> and associated with the
-      --  database object <tt>Object</tt>.
+      --  database object <tt>Key</tt>.
       procedure Increment (Counter : in Counter_Index_Type;
-                           Object  : in ADO.Objects.Object_Ref'Class);
+                           Key     : in ADO.Objects.Object_Key);
 
       --  Get the counters that have been collected with the date and prepare to collect
       --  new counters.
