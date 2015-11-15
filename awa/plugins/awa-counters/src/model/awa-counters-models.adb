@@ -428,7 +428,7 @@ package body AWA.Counters.Models is
       Impl : Counter_Definition_Access;
    begin
       Impl := new Counter_Definition_Impl;
-      Impl.Entity_Type := 0;
+      Impl.Entity_Type.Is_Null := True;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -484,7 +484,7 @@ package body AWA.Counters.Models is
 
 
    procedure Set_Entity_Type (Object : in out Counter_Definition_Ref;
-                              Value  : in ADO.Entity_Type) is
+                              Value  : in ADO.Nullable_Entity_Type) is
       Impl : Counter_Definition_Access;
    begin
       Set_Field (Object, Impl);
@@ -492,7 +492,7 @@ package body AWA.Counters.Models is
    end Set_Entity_Type;
 
    function Get_Entity_Type (Object : in Counter_Definition_Ref)
-                  return ADO.Entity_Type is
+                  return ADO.Nullable_Entity_Type is
       Impl : constant Counter_Definition_Access
          := Counter_Definition_Impl (Object.Get_Load_Object.all)'Access;
    begin
@@ -723,7 +723,11 @@ package body AWA.Counters.Models is
       elsif Name = "id" then
          return ADO.Objects.To_Object (Impl.Get_Key);
       elsif Name = "entity_type" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Entity_Type));
+         if Impl.Entity_Type.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Entity_Type.Value));
+         end if;
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -739,7 +743,7 @@ package body AWA.Counters.Models is
    begin
       Object.Name := Stmt.Get_Unbounded_String (0);
       Object.Set_Key_Value (Stmt.Get_Identifier (1));
-      Object.Entity_Type := ADO.Entity_Type (Stmt.Get_Integer (2));
+      Object.Entity_Type := Stmt.Get_Nullable_Entity_Type (2);
       ADO.Objects.Set_Created (Object);
    end Load;
 

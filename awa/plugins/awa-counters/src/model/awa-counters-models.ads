@@ -163,11 +163,11 @@ package AWA.Counters.Models is
 
    --
    procedure Set_Entity_Type (Object : in out Counter_Definition_Ref;
-                              Value  : in ADO.Entity_Type);
+                              Value  : in ADO.Nullable_Entity_Type);
 
    --
    function Get_Entity_Type (Object : in Counter_Definition_Ref)
-                 return ADO.Entity_Type;
+                 return ADO.Nullable_Entity_Type;
 
    --  Load the entity identified by 'Id'.
    --  Raises the NOT_FOUND exception if it does not exist.
@@ -312,7 +312,7 @@ private
                                      Of_Class => COUNTER_DEFINITION_DEF'Access)
    with record
        Name : Ada.Strings.Unbounded.Unbounded_String;
-       Entity_Type : ADO.Entity_Type;
+       Entity_Type : ADO.Nullable_Entity_Type;
    end record;
 
    type Counter_Definition_Access is access all Counter_Definition_Impl;
