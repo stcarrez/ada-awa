@@ -35,7 +35,7 @@ CREATE TABLE awa_question (
   /* the date when the question was edited. */
   `edit_date` DATETIME ,
   /* Title: Questions and Answers model
-Date: 2014-01-01
+Date: 2015-11-15
 the question short description. */
   `short_description` VARCHAR(255) NOT NULL,
   /* the question rating. */
