@@ -33,28 +33,39 @@ package body AWA.Counters.Modules.Tests is
    package Session_Counter is
       new AWA.Counters.Definition (AWA.Users.Models.SESSION_TABLE, "count");
 
+   package Global_Counter is
+     new AWA.Counters.Definition (null, "count");
+
    package Caller is new Util.Test_Caller (Test, "Counters.Modules");
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
    begin
       Caller.Add_Test (Suite, "Test AWA.Counters.Modules.Increment",
                        Test_Increment'Access);
+      Caller.Add_Test (Suite, "Test AWA.Counters.Modules.Increment (global counter)",
+                       Test_Global_Counter'Access);
    end Add_Tests;
 
    --  ------------------------------
-   --  Test creation of a wiki space.
+   --  Test incrementing counters and flushing.
    --  ------------------------------
    procedure Test_Increment (T : in out Test) is
       Sec_Ctx   : Security.Contexts.Security_Context;
       Context   : AWA.Services.Contexts.Service_Context;
+      Before    : Integer;
+      After     : Integer;
    begin
       AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-wiki@test.com");
 
-      AWA.Counters.Increment (User_Counter.Index, Context.Get_User);
       T.Manager := AWA.Counters.Modules.Get_Counter_Module;
       T.Assert (T.Manager /= null, "There is no counter plugin");
 
+      T.Manager.Get_Counter (User_Counter.Index, Context.Get_User, Before);
+      AWA.Counters.Increment (User_Counter.Index, Context.Get_User);
       T.Manager.Flush;
+
+      T.Manager.Get_Counter (User_Counter.Index, Context.Get_User, After);
+      Util.Tests.Assert_Equals (T, Before + 1, After, "The counter must have been incremented");
 
       declare
          S : Util.Measures.Stamp;
@@ -64,72 +75,35 @@ package body AWA.Counters.Modules.Tests is
          end loop;
          Util.Measures.Report (S, "AWA.Counters.Increment", 1000);
       end;
+      AWA.Counters.Increment (User_Counter.Index, Context.Get_User);
       declare
          S : Util.Measures.Stamp;
       begin
          T.Manager.Flush;
          Util.Measures.Report (S, "AWA.Counters.Flush");
       end;
-      --        T.Manager := AWA.Wikis.Modules.Get_Wiki_Module;
---        T.Assert (T.Manager /= null, "There is no wiki manager");
---
---        W.Set_Name ("Test wiki space");
---        T.Manager.Create_Wiki_Space (W);
---        T.Assert (W.Is_Inserted, "The new wiki space was not created");
---
---        W.Set_Name ("Test wiki space update");
---        W.Set_Is_Public (True);
---        T.Manager.Save_Wiki_Space (W);
---
---        T.Manager.Load_Wiki_Space (Wiki => W2,
---                                   Id   => W.Get_Id);
---        Util.Tests.Assert_Equals (T, "Test wiki space update", String '(W2.Get_Name),
---                                  "Invalid wiki space name");
+      T.Manager.Get_Counter (User_Counter.Index, Context.Get_User, After);
+      Util.Tests.Assert_Equals (T, Before + 2 + 1_000, After,
+                                "The counter must have been incremented");
    end Test_Increment;
 
    --  ------------------------------
    --  Test creation of a wiki page.
    --  ------------------------------
-   procedure Test_Create_Wiki_Page (T : in out Test) is
+   --  Test incrementing a global counter.
+   procedure Test_Global_Counter (T : in out Test) is
       Sec_Ctx   : Security.Contexts.Security_Context;
       Context   : AWA.Services.Contexts.Service_Context;
    begin
       AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-wiki@test.com");
 
---        W.Set_Name ("Test wiki space");
---        T.Manager.Create_Wiki_Space (W);
---
---        P.Set_Name ("The page");
---        P.Set_Title ("The page title");
---        T.Manager.Create_Wiki_Page (W, P, C);
---        T.Assert (P.Is_Inserted, "The new wiki page was not created");
+      T.Manager := AWA.Counters.Modules.Get_Counter_Module;
+      T.Assert (T.Manager /= null, "There is no counter plugin");
 
-   end Test_Create_Wiki_Page;
+      --  T.Manager.Get_Counter (Global_Counter.Index, Before);
+      AWA.Counters.Increment (Global_Counter.Index);
+      T.Manager.Flush;
 
-   --  ------------------------------
-   --  Test creation of a wiki page content.
-   --  ------------------------------
-   procedure Test_Create_Wiki_Content (T : in out Test) is
-      Sec_Ctx   : Security.Contexts.Security_Context;
-      Context   : AWA.Services.Contexts.Service_Context;
-   begin
-      AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-wiki@test.com");
-
---        W.Set_Name ("Test wiki space");
---        T.Manager.Create_Wiki_Space (W);
---
---        P.Set_Name ("The page");
---        P.Set_Title ("The page title");
---        T.Manager.Create_Wiki_Page (W, P, C);
---
---        C.Set_Format (AWA.Wikis.Models.FORMAT_MARKDOWN);
---        C.Set_Content ("-- Title" & ASCII.LF & "A paragraph");
---        C.Set_Save_Comment ("A first version");
---        T.Manager.Create_Wiki_Content (P, C);
---        T.Assert (C.Is_Inserted, "The new wiki content was not created");
---        T.Assert (not C.Get_Author.Is_Null, "The wiki content has an author");
---        T.Assert (not C.Get_Page.Is_Null, "The wiki content is associated with the wiki page");
-
-   end Test_Create_Wiki_Content;
+   end Test_Global_Counter;
 
 end AWA.Counters.Modules.Tests;

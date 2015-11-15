@@ -30,10 +30,7 @@ package AWA.Counters.Modules.Tests is
    --  Test incrementing counters and flushing.
    procedure Test_Increment (T : in out Test);
 
-   --  Test creation of a wiki page.
-   procedure Test_Create_Wiki_Page (T : in out Test);
-
-   --  Test creation of a wiki page content.
-   procedure Test_Create_Wiki_Content (T : in out Test);
+   --  Test incrementing a global counter.
+   procedure Test_Global_Counter (T : in out Test);
 
 end AWA.Counters.Modules.Tests;
