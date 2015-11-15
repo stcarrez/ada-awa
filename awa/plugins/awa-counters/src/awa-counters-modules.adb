@@ -97,6 +97,27 @@ package body AWA.Counters.Modules is
       Plugin.Counters.Increment (Counter, Object);
    end Increment;
 
+   --  ------------------------------
+   --  Get the current counter value.
+   --  ------------------------------
+   procedure Get_Counter (Plugin  : in out Counter_Module;
+                          Counter : in AWA.Counters.Counter_Index_Type;
+                          Object  : in ADO.Objects.Object_Ref'Class;
+                          Result  : out Natural) is
+      Id   : constant ADO.Identifier := ADO.Objects.Get_Value (Object.Get_Key);
+      DB   : ADO.Sessions.Session := Plugin.Get_Session;
+      Stmt : ADO.Statements.Query_Statement
+        := DB.Create_Statement ("SELECT SUM(counter) FROM awa_counter WHERE "
+                                & "object_id = :id AND definition_id = :definition_id");
+      Def_Id : Natural;
+   begin
+      Plugin.Counters.Get_Definition (Counter, Def_Id);
+      Stmt.Bind_Param ("id", Id);
+      Stmt.Bind_Param ("definition_id", Def_Id);
+      Stmt.Execute;
+      Result := Stmt.Get_Result_Integer;
+   end Get_Counter;
+
    protected body Counter_Table is
 
       --  ------------------------------
