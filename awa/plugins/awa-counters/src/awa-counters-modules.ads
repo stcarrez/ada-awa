@@ -62,6 +62,12 @@ package AWA.Counters.Modules is
                         Counter : in Counter_Index_Type;
                         Object  : in ADO.Objects.Object_Ref'Class);
 
+   --  Get the current counter value.
+   procedure Get_Counter (Plugin  : in out Counter_Module;
+                          Counter : in AWA.Counters.Counter_Index_Type;
+                          Object  : in ADO.Objects.Object_Ref'Class;
+                          Result  : out Natural);
+
    --  Flush the existing counters and update all the database records refered to them.
    procedure Flush (Plugin : in out Counter_Module);
 
