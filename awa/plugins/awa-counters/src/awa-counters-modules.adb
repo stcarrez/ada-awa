@@ -20,6 +20,7 @@ with Ada.Unchecked_Deallocation;
 with ADO.Queries;
 with ADO.Statements;
 with ADO.Sessions;
+with ADO.Parameters;
 with ADO.Sessions.Entities;
 with ADO.SQL;
 
@@ -74,6 +75,9 @@ package body AWA.Counters.Modules is
    begin
       Plugin.Counter_Limit := Plugin.Get_Config (PARAM_COUNTER_LIMIT, DEFAULT_COUNTER_LIMIT);
       Plugin.Age_Limit := Duration (Plugin.Get_Config (PARAM_AGE_LIMIT, 300));
+
+      Log.Info ("Counter flush module limit is{0} counters with max age{1} seconds",
+                Natural'Image (Plugin.Counter_Limit), Duration'Image (Plugin.Age_Limit));
    end Configure;
 
    --  ------------------------------
@@ -135,7 +139,7 @@ package body AWA.Counters.Modules is
                           Object  : in ADO.Objects.Object_Ref'Class;
                           Result  : out Natural) is
       Id   : constant ADO.Identifier := ADO.Objects.Get_Value (Object.Get_Key);
-      DB   : ADO.Sessions.Session := Plugin.Get_Session;
+      DB   : constant ADO.Sessions.Session := Plugin.Get_Session;
       Stmt : ADO.Statements.Query_Statement
         := DB.Create_Statement ("SELECT SUM(counter) FROM awa_counter WHERE "
                                 & "object_id = :id AND definition_id = :definition_id");
@@ -287,9 +291,9 @@ package body AWA.Counters.Modules is
       Stmt := DB.Create_Statement (Query);
       if Counter.Table /= null then
          Query.Set_Query (AWA.Counters.Models.Query_Counter_Update_Field);
-         Update := DB.Create_Statement (Counter.Table);
-         Update.Bind_Param ("table", Counter.Table.Table.all);
-         Update.Bind_Param ("field", Counter.Field.all);
+         Update := DB.Create_Statement (Query);
+         Update.Bind_Param ("table", ADO.Parameters.Token (Counter.Table.Table.all));
+         Update.Bind_Param ("field", ADO.Parameters.Token (Counter.Field.all));
       end if;
       while Counter_Maps.Has_Element (Iter) loop
          Id := ADO.Objects.Get_Value (Counter_Maps.Key (Iter));
@@ -299,8 +303,9 @@ package body AWA.Counters.Modules is
          Stmt.Bind_Param ("definition", Integer (Def_Id));
          Stmt.Execute;
          if Counter.Table /= null then
-            Update.Bind_Param ("counter", Counter_Maps.Element (Iter));
+            --  Update.Save_Field (Counter.Field.all, Counter_Maps.Element (Iter));
             Update.Bind_Param ("id", Id);
+            Update.Bind_Param ("counter", Counter_Maps.Element (Iter));
             Update.Execute;
          end if;
          Counter_Maps.Next (Iter);
