@@ -63,6 +63,18 @@ package body AWA.Counters is
    end Increment;
 
    --  ------------------------------
+   --  Increment the counter identified by <tt>Counter</tt> and associated with the
+   --  database object key <tt>Key</tt>.
+   --  ------------------------------
+   procedure Increment (Counter : in Counter_Index_Type;
+                        Key     : in ADO.Objects.Object_Key) is
+      Module : constant AWA.Counters.Modules.Counter_Module_Access
+        := AWA.Counters.Modules.Get_Counter_Module;
+   begin
+      Module.Increment (Counter, Key);
+   end Increment;
+
+   --  ------------------------------
    --  Increment the global counter identified by <tt>Counter</tt>.
    --  ------------------------------
    procedure Increment (Counter : in Counter_Index_Type) is
