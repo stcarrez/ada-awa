@@ -28,10 +28,10 @@ with Security.Contexts;
 package body AWA.Counters.Modules.Tests is
 
    package User_Counter is
-      new AWA.Counters.Definition (AWA.Users.Models.USER_TABLE, "count");
+      new AWA.Counters.Definition (AWA.Users.Models.USER_TABLE);
 
    package Session_Counter is
-      new AWA.Counters.Definition (AWA.Users.Models.SESSION_TABLE, "count");
+      new AWA.Counters.Definition (AWA.Users.Models.SESSION_TABLE);
 
    package Global_Counter is
      new AWA.Counters.Definition (null, "count");
