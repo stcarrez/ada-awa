@@ -39,6 +39,8 @@ CREATE TABLE awa_post (
   `status` TINYINT NOT NULL,
   /*  */
   `allow_comments` TINYINT NOT NULL,
+  /* the number of times the post was read. */
+  `read_count` INTEGER NOT NULL,
   /*  */
   `author_id` BIGINT NOT NULL,
   /*  */
