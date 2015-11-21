@@ -24,6 +24,7 @@ with AWA.Modules;
 with AWA.Modules.Lifecycles;
 with AWA.Wikis.Models;
 with AWA.Tags.Beans;
+with AWA.Counters.Definition;
 with Security.Permissions;
 
 --  == Events ==
@@ -57,6 +58,9 @@ package AWA.Wikis.Modules is
 
    --  Event posted when a new wiki content is created.
    package Create_Content_Event is new AWA.Events.Definition (Name => "wiki-create-content");
+
+   --  Define the read wiki page counter.
+   package Read_Counter is new AWA.Counters.Definition (Models.WIKI_PAGE_TABLE, "read_count");
 
    package Wiki_Lifecycle is
      new AWA.Modules.Lifecycles (Element_Type => AWA.Wikis.Models.Wiki_Page_Ref'Class);
