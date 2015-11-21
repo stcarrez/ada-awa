@@ -62,6 +62,12 @@ package AWA.Counters.Modules is
                         Counter : in Counter_Index_Type;
                         Object  : in ADO.Objects.Object_Ref'Class);
 
+   --  Increment the counter identified by <tt>Counter</tt> and associated with the
+   --  database object key <tt>Key</tt>.
+   procedure Increment (Plugin  : in out Counter_Module;
+                        Counter : in Counter_Index_Type;
+                        Key     : in ADO.Objects.Object_Key);
+
    --  Increment the counter identified by <tt>Counter</tt>.
    procedure Increment (Plugin  : in out Counter_Module;
                         Counter : in Counter_Index_Type);
