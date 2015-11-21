@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="1.0">
+
+  <context-param>
+    <param-name>counters.counter_age_limit</param-name>
+    <param-value>60</param-value>
+  </context-param>
+
+  <context-param>
+    <param-name>counters.counter_limit</param-name>
+    <param-value>300</param-value>
+  </context-param>
+
+</module>
