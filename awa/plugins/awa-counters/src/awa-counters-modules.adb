@@ -29,6 +29,7 @@ with Util.Log.Loggers;
 with AWA.Services.Contexts;
 with AWA.Counters.Models;
 with AWA.Modules.Get;
+with AWA.Counters.Components;
 package body AWA.Counters.Modules is
 
    use type ADO.Schemas.Class_Mapping_Access;
@@ -57,6 +58,7 @@ package body AWA.Counters.Modules is
    begin
       Log.Info ("Initializing the counters module");
 
+      App.Add_Components (AWA.Counters.Components.Definition);
       AWA.Modules.Module (Plugin).Initialize (App, Props);
 
       --  Add here the creation of manager instances.
@@ -91,6 +93,20 @@ package body AWA.Counters.Modules is
                         Counter : in Counter_Index_Type;
                         Object  : in ADO.Objects.Object_Ref'Class) is
       Key : constant ADO.Objects.Object_Key := Object.Get_Key;
+   begin
+      if Plugin.Counters.Need_Flush (Plugin.Counter_Limit, Plugin.Age_Limit) then
+         Plugin.Flush;
+      end if;
+      Plugin.Counters.Increment (Counter, Key);
+   end Increment;
+
+   --  ------------------------------
+   --  Increment the counter identified by <tt>Counter</tt> and associated with the
+   --  database object key <tt>Key</tt>.
+   --  ------------------------------
+   procedure Increment (Plugin  : in out Counter_Module;
+                        Counter : in Counter_Index_Type;
+                        Key     : in ADO.Objects.Object_Key) is
    begin
       if Plugin.Counters.Need_Flush (Plugin.Counter_Limit, Plugin.Age_Limit) then
          Plugin.Flush;
