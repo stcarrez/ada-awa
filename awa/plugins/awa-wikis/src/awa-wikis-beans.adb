@@ -20,7 +20,6 @@ with Util.Beans.Objects.Time;
 with ADO.Utils;
 with ADO.Queries;
 with ADO.Sessions;
-with ADO.Objects;
 with ADO.Datasets;
 with ADO.Sessions.Entities;
 
@@ -50,6 +49,8 @@ package body AWA.Wikis.Beans is
          return ADO.Utils.To_Object (From.Wiki_Space_Id);
       elsif Name = "tags" then
          return Util.Beans.Objects.To_Object (From.Tags_Bean, Util.Beans.Objects.STATIC);
+      elsif Name = "counter" then
+         return Util.Beans.Objects.To_Object (From.Counter_Bean, Util.Beans.Objects.STATIC);
       else
          return AWA.Wikis.Models.Wiki_View_Info (From).Get_Value (Name);
       end if;
@@ -98,6 +99,12 @@ package body AWA.Wikis.Beans is
                                         Table   => AWA.Wikis.Models.WIKI_SPACE_TABLE,
                                         Session => Session);
       Bean.Load (Session, Query);
+
+      --  Setup the wiki page read counter bean.
+      ADO.Objects.Set_Value (Bean.Counter.Object, Bean.Id);
+      Bean.Counter.Value := Bean.Read_Count;
+
+      --  Load the wiki page tags.
       Bean.Tags.Load_Tags (Session, Bean.Id);
       Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("loaded");
    end Load;
@@ -113,6 +120,8 @@ package body AWA.Wikis.Beans is
       Object.Tags_Bean := Object.Tags'Access;
       Object.Tags.Set_Entity_Type (AWA.Wikis.Models.WIKI_PAGE_TABLE);
       Object.Tags.Set_Permission ("wiki-page-update");
+      Object.Counter_Bean := Object.Counter'Access;
+      Object.Counter.Counter := AWA.Wikis.Modules.Read_Counter.Index;
       Object.Id := ADO.NO_IDENTIFIER;
       return Object.all'Access;
    end Create_Wiki_View_Bean;
@@ -553,7 +562,6 @@ package body AWA.Wikis.Beans is
       Session     : ADO.Sessions.Session := Into.Module.Get_Session;
       Query       : ADO.Queries.Context;
       Count_Query : ADO.Queries.Context;
-      Tag_Id      : ADO.Identifier;
       First       : constant Natural  := (Into.Page - 1) * Into.Page_Size;
       Page        : constant Wiki_View_Bean_Access := Get_Wiki_View_Bean ("wikiView");
    begin
