@@ -102,3 +102,4 @@ INSERT INTO entity_type (name) VALUES
 ("awa_counter")
 ,("awa_counter_definition")
 ;
+ALTER TABLE awa_post ADD COLUMN `read_count` INTEGER NOT NULL;
