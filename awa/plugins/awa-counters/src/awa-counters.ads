@@ -28,6 +28,11 @@ package AWA.Counters is
    procedure Increment (Counter : in Counter_Index_Type;
                         Object  : in ADO.Objects.Object_Ref'Class);
 
+   --  Increment the counter identified by <tt>Counter</tt> and associated with the
+   --  database object key <tt>Key</tt>.
+   procedure Increment (Counter : in Counter_Index_Type;
+                        Key     : in ADO.Objects.Object_Key);
+
    --  Increment the global counter identified by <tt>Counter</tt>.
    procedure Increment (Counter : in Counter_Index_Type);
 
