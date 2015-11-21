@@ -251,6 +251,8 @@ package body AWA.Blogs.Beans is
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Blog_Id));
       elsif Name = POST_TAG_ATTR then
          return Util.Beans.Objects.To_Object (From.Tags_Bean, Util.Beans.Objects.STATIC);
+      elsif Name = COUNTER_ATTR then
+         return Util.Beans.Objects.To_Object (From.Counter_Bean, Util.Beans.Objects.STATIC);
       elsif From.Is_Null then
          return Util.Beans.Objects.Null_Object;
       elsif Name = POST_ID_ATTR then
@@ -290,6 +292,8 @@ package body AWA.Blogs.Beans is
    begin
       Post.Load (Session, Id);
       Post.Tags.Load_Tags (Session, Id);
+      Post.Counter.Value := Post.Get_Read_Count;
+      ADO.Objects.Set_Value (Post.Counter.Object, Id);
 
       --  SCz: 2012-05-19: workaround for ADO 0.3 limitation.  The lazy loading of
       --  objects does not work yet.  Force loading the user here while the above
@@ -313,6 +317,8 @@ package body AWA.Blogs.Beans is
       Object.Tags_Bean := Object.Tags'Access;
       Object.Tags.Set_Entity_Type (AWA.Blogs.Models.POST_TABLE);
       Object.Tags.Set_Permission ("blog-update-post");
+      Object.Counter_Bean := Object.Counter'Access;
+      Object.Counter.Counter := AWA.Blogs.Modules.Read_Counter.Index;
       return Object.all'Access;
    end Create_Post_Bean;
 
