@@ -273,6 +273,14 @@ package AWA.Blogs.Models is
    function Get_Allow_Comments (Object : in Post_Ref)
                  return Boolean;
 
+   --  Set the number of times the post was read.
+   procedure Set_Read_Count (Object : in out Post_Ref;
+                             Value  : in Integer);
+
+   --  Get the number of times the post was read.
+   function Get_Read_Count (Object : in Post_Ref)
+                 return Integer;
+
    --
    procedure Set_Author (Object : in out Post_Ref;
                          Value  : in AWA.Users.Models.User_Ref'Class);
@@ -338,7 +346,6 @@ package AWA.Blogs.Models is
 
 
 
-
    Query_Blog_Tag_Cloud : constant ADO.Queries.Query_Definition_Access;
 
    --  --------------------
@@ -379,7 +386,6 @@ package AWA.Blogs.Models is
    procedure Set_Value (Item  : in out Admin_Post_Info;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object);
-
 
 
    package Admin_Post_Info_Beans is
@@ -435,7 +441,6 @@ package AWA.Blogs.Models is
    procedure Set_Value (Item  : in out Blog_Info;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object);
-
 
 
    package Blog_Info_Beans is
@@ -499,7 +504,6 @@ package AWA.Blogs.Models is
                         Value : in Util.Beans.Objects.Object);
 
 
-
    package Comment_Info_Beans is
       new Util.Beans.Basic.Lists (Element_Type => Comment_Info);
    package Comment_Info_Vectors renames Comment_Info_Beans.Vectors;
@@ -559,7 +563,6 @@ package AWA.Blogs.Models is
    procedure Set_Value (Item  : in out Post_Info;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object);
-
 
 
    package Post_Info_Beans is
@@ -743,11 +746,12 @@ private
    COL_6_2_NAME : aliased constant String := "publish_date";
    COL_7_2_NAME : aliased constant String := "status";
    COL_8_2_NAME : aliased constant String := "allow_comments";
-   COL_9_2_NAME : aliased constant String := "author_id";
-   COL_10_2_NAME : aliased constant String := "blog_id";
+   COL_9_2_NAME : aliased constant String := "read_count";
+   COL_10_2_NAME : aliased constant String := "author_id";
+   COL_11_2_NAME : aliased constant String := "blog_id";
 
    POST_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 11,
+     (Count => 12,
       Table => POST_NAME'Access,
       Members => (
          1 => COL_0_2_NAME'Access,
@@ -760,7 +764,8 @@ private
          8 => COL_7_2_NAME'Access,
          9 => COL_8_2_NAME'Access,
          10 => COL_9_2_NAME'Access,
-         11 => COL_10_2_NAME'Access
+         11 => COL_10_2_NAME'Access,
+         12 => COL_11_2_NAME'Access
 )
      );
    POST_TABLE : constant ADO.Schemas.Class_Mapping_Access
@@ -781,6 +786,7 @@ private
        Publish_Date : ADO.Nullable_Time;
        Status : AWA.Blogs.Models.Post_Status_Type;
        Allow_Comments : Boolean;
+       Read_Count : Integer;
        Author : AWA.Users.Models.User_Ref;
        Blog : AWA.Blogs.Models.Blog_Ref;
    end record;
