@@ -653,6 +653,9 @@ package AWA.Wikis.Models is
       --  the last version.
       Version : Integer;
 
+      --  the number of times the page was displayed.
+      Read_Count : Integer;
+
       --  the wiki page creation date.
       Date : Ada.Calendar.Time;
 
@@ -1110,7 +1113,7 @@ private
 
    package File_4 is
       new ADO.Queries.Loaders.File (Path => "wiki-page.xml",
-                                    Sha1 => "DE60CFB372FFCE936CAD78B90485588D3F2F90F3");
+                                    Sha1 => "DBDC0E33875ED20E014E49619A2B23E92BDF6BFB");
 
    package Def_Wikiviewinfo_Wiki_Page is
       new ADO.Queries.Loaders.Query (Name => "wiki-page",

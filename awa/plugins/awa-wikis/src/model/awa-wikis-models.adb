@@ -1910,6 +1910,8 @@ package body AWA.Wikis.Models is
          return Util.Beans.Objects.To_Object (From.Is_Public);
       elsif Name = "version" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Version));
+      elsif Name = "read_count" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Read_Count));
       elsif Name = "date" then
          return Util.Beans.Objects.Time.To_Object (From.Date);
       elsif Name = "format" then
@@ -1949,6 +1951,8 @@ package body AWA.Wikis.Models is
          Item.Is_Public := Util.Beans.Objects.To_Boolean (Value);
       elsif Name = "version" then
          Item.Version := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "read_count" then
+         Item.Read_Count := Util.Beans.Objects.To_Integer (Value);
       elsif Name = "date" then
          Item.Date := Util.Beans.Objects.Time.To_Time (Value);
       elsif Name = "format" then
@@ -1984,14 +1988,15 @@ package body AWA.Wikis.Models is
       Into.Title := Stmt.Get_Unbounded_String (2);
       Into.Is_Public := Stmt.Get_Boolean (3);
       Into.Version := Stmt.Get_Integer (4);
-      Into.Date := Stmt.Get_Time (5);
-      Into.Format := Stmt.Get_Integer (6);
-      Into.Content := Stmt.Get_Unbounded_String (7);
-      Into.Save_Comment := Stmt.Get_Unbounded_String (8);
-      Into.Left_Side := Stmt.Get_Unbounded_String (9);
-      Into.Right_Side := Stmt.Get_Unbounded_String (10);
-      Into.Author := Stmt.Get_Unbounded_String (11);
-      Into.Acl_Id := Stmt.Get_Identifier (12);
+      Into.Read_Count := Stmt.Get_Integer (5);
+      Into.Date := Stmt.Get_Time (6);
+      Into.Format := Stmt.Get_Integer (7);
+      Into.Content := Stmt.Get_Unbounded_String (8);
+      Into.Save_Comment := Stmt.Get_Unbounded_String (9);
+      Into.Left_Side := Stmt.Get_Unbounded_String (10);
+      Into.Right_Side := Stmt.Get_Unbounded_String (11);
+      Into.Author := Stmt.Get_Unbounded_String (12);
+      Into.Acl_Id := Stmt.Get_Identifier (13);
       Stmt.Next;
    end Read;
 
