@@ -22,12 +22,14 @@ with Util.Beans.Basic;
 with Util.Beans.Objects;
 
 with ADO;
+with ADO.Objects;
 
 with ASF.Helpers.Beans;
 
 with AWA.Wikis.Modules;
 with AWA.Wikis.Models;
 with AWA.Tags.Beans;
+with AWA.Counters.Beans;
 
 package AWA.Wikis.Beans is
 
@@ -41,6 +43,11 @@ package AWA.Wikis.Beans is
       --  List of tags associated with the wiki page.
       Tags          : aliased AWA.Tags.Beans.Tag_List_Bean;
       Tags_Bean     : Util.Beans.Basic.Readonly_Bean_Access;
+
+      --  The read page counter associated with the wiki page.
+      Counter       : aliased AWA.Counters.Beans.Counter_Bean (Of_Type => ADO.Objects.KEY_INTEGER,
+                                                               Of_Class => Models.WIKI_PAGE_TABLE);
+      Counter_Bean  : Util.Beans.Basic.Readonly_Bean_Access;
    end record;
    type Wiki_View_Bean_Access is access all Wiki_View_Bean'Class;
 
