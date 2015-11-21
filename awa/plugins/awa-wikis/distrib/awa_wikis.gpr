@@ -4,6 +4,7 @@ with "awa_tags";
 with "awa_votes";
 with "awa_jobs";
 with "awa_images";
+wiht "awa_counters";
 with "util_config";
 project awa_wikis is
    Version      := awa.Version;
