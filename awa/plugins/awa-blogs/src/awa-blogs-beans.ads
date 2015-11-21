@@ -22,10 +22,12 @@ with Util.Beans.Basic;
 with Util.Beans.Objects;
 
 with ADO;
+with ADO.Objects;
 
 with AWA.Blogs.Modules;
 with AWA.Blogs.Models;
 with AWA.Tags.Beans;
+with AWA.Counters.Beans;
 
 --  == Blog Beans ==
 --  Several bean types are provided to represent and manage the blogs and their posts.
@@ -44,6 +46,7 @@ package AWA.Blogs.Beans is
    POST_USERNAME_ATTR : constant String := "username";
    POST_TAG_ATTR      : constant String := "tags";
    POST_ALLOW_COMMENTS_ATTR : constant String := "allow_comments";
+   COUNTER_ATTR             : constant String := "counter";
 
    --  ------------------------------
    --  Blog Bean
@@ -80,6 +83,11 @@ package AWA.Blogs.Beans is
       --  List of tags associated with the post.
       Tags      : aliased AWA.Tags.Beans.Tag_List_Bean;
       Tags_Bean : Util.Beans.Basic.Readonly_Bean_Access;
+
+      --  The read post counter associated with the post.
+      Counter       : aliased AWA.Counters.Beans.Counter_Bean (Of_Type => ADO.Objects.KEY_INTEGER,
+                                                               Of_Class => Models.POST_TABLE);
+      Counter_Bean  : Util.Beans.Basic.Readonly_Bean_Access;
    end record;
    type Post_Bean_Access is access all Post_Bean'Class;
 
