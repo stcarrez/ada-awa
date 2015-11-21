@@ -289,7 +289,7 @@ package body AWA.Counters.Modules is
    begin
       Query.Set_Query (AWA.Counters.Models.Query_Counter_Update);
       Stmt := DB.Create_Statement (Query);
-      if Counter.Table /= null then
+      if Counter.Table /= null and Counter.Field'Length > 0 then
          Query.Set_Query (AWA.Counters.Models.Query_Counter_Update_Field);
          Update := DB.Create_Statement (Query);
          Update.Bind_Param ("table", ADO.Parameters.Token (Counter.Table.Table.all));
@@ -302,8 +302,7 @@ package body AWA.Counters.Modules is
          Stmt.Bind_Param ("counter", Counter_Maps.Element (Iter));
          Stmt.Bind_Param ("definition", Integer (Def_Id));
          Stmt.Execute;
-         if Counter.Table /= null then
-            --  Update.Save_Field (Counter.Field.all, Counter_Maps.Element (Iter));
+         if Counter.Table /= null and Counter.Field'Length > 0 then
             Update.Bind_Param ("id", Id);
             Update.Bind_Param ("counter", Counter_Maps.Element (Iter));
             Update.Execute;
