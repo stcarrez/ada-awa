@@ -20,6 +20,9 @@
         <property type='Integer' name="version">
             <comment>the last version.</comment>
         </property>
+        <property type='Integer' name="read_count">
+            <comment>the number of times the page was displayed.</comment>
+        </property>
         <property type='Date' name="date">
             <comment>the wiki page creation date.</comment>
         </property>
@@ -58,6 +61,7 @@
       page.title,
       page.is_public,
       page.last_version,
+      page.read_count,
       content.create_date,
       content.format,
       content.content,
