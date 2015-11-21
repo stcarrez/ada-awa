@@ -217,7 +217,7 @@ CREATE TABLE awa_comment (
   /* the comment message. */
   `message` TEXT NOT NULL,
   /* the entity identifier to which this comment is associated */
-  `entity_id` BIGINT ,
+  `entity_id` BIGINT NOT NULL,
   /* the comment identifier */
   `id` BIGINT NOT NULL,
   /* the optimistic lock version. */
@@ -296,7 +296,7 @@ CREATE TABLE awa_storage (
   /*  */
   `version` INTEGER NOT NULL,
   /* the storage identifier */
-  `id` BIGINT ,
+  `id` BIGINT NOT NULL,
   /*  */
   `original_id` BIGINT ,
   /*  */
@@ -390,24 +390,38 @@ INSERT INTO entity_type (name) VALUES ("awa_tag");
 INSERT INTO entity_type (name) VALUES ("awa_tagged_entity");
 /* Copied from awa-images-sqlite.sql*/
 /* File generated automatically by dynamo */
-/* An image that was uploaded by a user in an image folder. */
+/* - The workspace contains one or several folders.
+- Each image folder contains a set of images that have been uploaded by the user.
+- An image can be visible if a user has an ACL permission to read the associated folder.
+- An image marked as 'public=True' can be visible by anybody
+ */
 CREATE TABLE awa_image (
-  /* the image identifier. */
+  /* the image identifier */
   `id` BIGINT NOT NULL,
-  /* the image version. */
-  `version` int ,
-  /* the image width. */
+  /* the image width */
   `width` INTEGER NOT NULL,
-  /* the image height. */
+  /* the image height */
   `height` INTEGER NOT NULL,
-  /* the image thumbnail height. */
-  `thumb_height` INTEGER NOT NULL,
-  /* the image thumbnail width. */
+  /*  */
+  `entityId` INTEGER NOT NULL,
+  /* the thumbnail width */
   `thumb_width` INTEGER NOT NULL,
-  /* the thumbnail image to display the image is an image selector. */
-  `thumbnail_id` INTEGER ,
-  /* the image storage file. */
-  `storage_id` INTEGER NOT NULL,
+  /* the thumbnail height */
+  `thumb_height` INTEGER NOT NULL,
+  /*  */
+  `path` VARCHAR(255) NOT NULL,
+  /*  */
+  `public` TINYINT NOT NULL,
+  /*  */
+  `version` INTEGER NOT NULL,
+  /*  */
+  `thumbnail_id` BIGINT ,
+  /*  */
+  `folder_id` BIGINT NOT NULL,
+  /*  */
+  `owner_id` BIGINT NOT NULL,
+  /*  */
+  `storage_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_image");
@@ -638,7 +652,7 @@ CREATE TABLE awa_question (
   /* the date when the question was edited. */
   `edit_date` DATETIME ,
   /* Title: Questions and Answers model
-Date: 2014-01-01
+Date: 2015-11-15
 the question short description. */
   `short_description` VARCHAR(255) NOT NULL,
   /* the question rating. */
@@ -699,6 +713,8 @@ CREATE TABLE awa_post (
   `status` TINYINT NOT NULL,
   /*  */
   `allow_comments` TINYINT NOT NULL,
+  /* the number of times the post was read. */
+  `read_count` INTEGER NOT NULL,
   /*  */
   `author_id` BIGINT NOT NULL,
   /*  */
