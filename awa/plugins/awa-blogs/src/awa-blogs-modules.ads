@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-module -- Blog and post management module
---  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +21,7 @@ with ASF.Applications;
 with ADO;
 with AWA.Modules;
 with AWA.Blogs.Models;
+with AWA.Counters.Definition;
 
 with Security.Permissions;
 
@@ -51,6 +52,9 @@ package AWA.Blogs.Modules is
    package ACL_Create_Post is new Security.Permissions.Definition ("blog-create-post");
    package ACL_Delete_Post is new Security.Permissions.Definition ("blog-delete-post");
    package ACL_Update_Post is new Security.Permissions.Definition ("blog-update-post");
+
+   --  Define the read post counter.
+   package Read_Counter is new AWA.Counters.Definition (Models.POST_TABLE, "read_count");
 
    Not_Found : exception;
 
