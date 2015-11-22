@@ -26,6 +26,10 @@ package AWA.Counters.Components is
 
    type UICounter is new ASF.Components.Html.UIHtmlComponent with private;
 
+   --  Check if the counter value is hidden.
+   function Is_Hidden (UI      : in UICounter;
+                       Context : in ASF.Contexts.Faces.Faces_Context'Class) return Boolean;
+
    --  Render the counter component.  Starts the DL/DD list and write the input
    --  component with the possible associated error message.
    overriding
