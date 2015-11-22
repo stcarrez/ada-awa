@@ -20,6 +20,9 @@
         <property type='AWA.Blogs.Models.Post_Status_Type' name="status">
             <comment>the post status.</comment>
         </property>
+        <property type='Natural' name="read_count">
+            <comment>the number of times the post was read.</comment>
+        </property>
         <property type='String' name="username">
             <comment>the user name.</comment>
         </property>
@@ -37,6 +40,7 @@
       post.uri,
       post.create_date,
       post.status,
+      post.read_count,
       user.name,
       count(cmt.id)
     FROM awa_blog as blog
