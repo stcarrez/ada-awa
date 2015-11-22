@@ -31,7 +31,7 @@
                 </h:outputFormat>
                 <h:outputText styleClass='post-date' value="#{post.date}" converter="dateConverter"/>
                 <h:panelGroup rendered="#{post.comment_count ne 0}">
-                   <a href="#{contextPath}/blogs/post.html?post=#{post.uri}#comment-1" class="post-comment-count">
+                   <a href="#{contextPath}/blogs/post.html?post=#{post.uri}#comments" class="post-comment-count">
                       <h:outputFormat value="#{blogMsg.blog_post_count}">
                          <f:param value="#{post.comment_count}"/>
                       </h:outputFormat>
@@ -45,8 +45,10 @@
                      tagClass="tagedit-listelement tagedit-listelement-old"/>
 
         <awa:wiki styleClass='post-text' value="#{post.text}" format="dotclear"/>
+        <!-- Increment the post read counter but do not display anything -->
+        <awa:counter value="#{postList.counter}" hidden="true"/>
         <h:panelGroup rendered="#{post.comment_count ne 0}" styleClass="blog-post-comment-count" layout="div">
-            <a href="#{contextPath}/blogs/post.html?post=#{post.uri}#comment-1">
+            <a href="#{contextPath}/blogs/post.html?post=#{post.uri}#comments">
                 <h:outputFormat value="#{blogMsg.blog_post_count}">
                     <f:param value="#{post.comment_count}"/>
                 </h:outputFormat>
