@@ -35,7 +35,16 @@
                 <div class='blog-post' id="p_#{post.id}">
                     <div class='post-title'>
                         <h2><a href="#{contextPath}/blogs/post.html?post=#{post.uri}">#{post.title}</a></h2>
-                        <p>By #{post.username} <h:outputText id="date" value="#{post.create_date}" converter="dateConverter"/></p>
+                        <p>
+                            <h:outputFormat value="#{blogMsg.blog_post_author}">
+                                <f:param value="#{post.username}"/>
+                            </h:outputFormat>
+                            <h:outputText styleClass="post-date" value="#{post.create_date}" converter="dateConverter"/>
+                            <h:outputFormat value="#{blogMsg.blog_post_count}" rendered="#{not empty postComments}"
+                                            styleClass="post-comment-count">
+                                <f:param value="#{postComments.count}"/>
+                            </h:outputFormat>
+                        </p>
                     </div>
                     <awa:tagList value='#{post.tags}' id='qtags' styleClass="tagedit-list"
                                  tagLink="#{contextPath}/blogs/tagged.html?tag=#{tagName}"
