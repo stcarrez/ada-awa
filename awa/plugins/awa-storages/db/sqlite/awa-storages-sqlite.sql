@@ -19,7 +19,7 @@ CREATE TABLE awa_storage (
   /*  */
   `version` INTEGER NOT NULL,
   /* the storage identifier */
-  `id` BIGINT ,
+  `id` BIGINT NOT NULL,
   /*  */
   `original_id` BIGINT ,
   /*  */
