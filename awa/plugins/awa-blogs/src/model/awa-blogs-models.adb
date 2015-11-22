@@ -1207,6 +1207,8 @@ package body AWA.Blogs.Models is
          return Util.Beans.Objects.Time.To_Object (From.Date);
       elsif Name = "status" then
          return AWA.Blogs.Models.Post_Status_Type_Objects.To_Object (From.Status);
+      elsif Name = "read_count" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Read_Count));
       elsif Name = "username" then
          return Util.Beans.Objects.To_Object (From.Username);
       elsif Name = "comment_count" then
@@ -1234,6 +1236,8 @@ package body AWA.Blogs.Models is
          Item.Date := Util.Beans.Objects.Time.To_Time (Value);
       elsif Name = "status" then
          Item.Status := AWA.Blogs.Models.Post_Status_Type_Objects.To_Value (Value);
+      elsif Name = "read_count" then
+         Item.Read_Count := Util.Beans.Objects.To_Integer (Value);
       elsif Name = "username" then
          Item.Username := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "comment_count" then
@@ -1270,8 +1274,9 @@ package body AWA.Blogs.Models is
          Into.Uri := Stmt.Get_Unbounded_String (2);
          Into.Date := Stmt.Get_Time (3);
          Into.Status := AWA.Blogs.Models.Post_Status_Type'Val (Stmt.Get_Integer (4));
-         Into.Username := Stmt.Get_Unbounded_String (5);
-         Into.Comment_Count := Stmt.Get_Natural (6);
+         Into.Read_Count := Stmt.Get_Natural (5);
+         Into.Username := Stmt.Get_Unbounded_String (6);
+         Into.Comment_Count := Stmt.Get_Natural (7);
       end Read;
    begin
       Stmt.Execute;

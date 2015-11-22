@@ -369,6 +369,9 @@ package AWA.Blogs.Models is
       --  the post status.
       Status : AWA.Blogs.Models.Post_Status_Type;
 
+      --  the number of times the post was read.
+      Read_Count : Natural;
+
       --  the user name.
       Username : Ada.Strings.Unbounded.Unbounded_String;
 
@@ -835,7 +838,7 @@ private
 
    package File_2 is
       new ADO.Queries.Loaders.File (Path => "blog-admin-post-list.xml",
-                                    Sha1 => "1B08D3E8597DB1BC2CB904CE5473D7AF7C2A3F1B");
+                                    Sha1 => "05BD01CF2BA5242266B1259502A7B26EC7ACC26D");
 
    package Def_Adminpostinfo_Blog_Admin_Post_List is
       new ADO.Queries.Loaders.Query (Name => "blog-admin-post-list",
