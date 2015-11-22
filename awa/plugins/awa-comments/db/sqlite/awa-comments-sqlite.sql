@@ -7,7 +7,7 @@ CREATE TABLE awa_comment (
   /* the comment message. */
   `message` TEXT NOT NULL,
   /* the entity identifier to which this comment is associated */
-  `entity_id` BIGINT ,
+  `entity_id` BIGINT NOT NULL,
   /* the comment identifier */
   `id` BIGINT NOT NULL,
   /* the optimistic lock version. */
