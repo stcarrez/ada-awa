@@ -57,6 +57,16 @@ package body AWA.Counters.Components is
    end Definition;
 
    --  ------------------------------
+   --  Check if the counter value is hidden.
+   --  ------------------------------
+   function Is_Hidden (UI      : in UICounter;
+                       Context : in ASF.Contexts.Faces.Faces_Context'Class) return Boolean is
+      Value : constant Util.Beans.Objects.Object := UI.Get_Attribute (Context, "hidden");
+   begin
+      return Util.Beans.Objects.To_Boolean (Value);
+   end Is_Hidden;
+
+   --  ------------------------------
    --  Render the counter component.  Starts the DL/DD list and write the input
    --  component with the possible associated error message.
    --  ------------------------------
@@ -90,7 +100,7 @@ package body AWA.Counters.Components is
                                  Key     => Counter.Object);
 
          --  Render the counter within an optional <span>.
-         if Counter.Value >= 0 then
+         if Counter.Value >= 0 and not UI.Is_Hidden (Context) then
             Writer.Start_Optional_Element ("span");
             UI.Render_Attributes (Context, TEXT_ATTRIBUTE_NAMES, Writer);
             Writer.Write_Text (Integer'Image (Counter.Value));
