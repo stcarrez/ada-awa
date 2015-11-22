@@ -220,6 +220,9 @@ package body AWA.Blogs.Beans is
       end if;
       Bean.Tags.Load_Tags (Session, Bean.Get_Id);
 
+      Bean.Counter.Value := Bean.Get_Read_Count;
+      ADO.Objects.Set_Value (Bean.Counter.Object, Bean.Get_Id);
+
       Comment := AWA.Comments.Beans.Get_Comment_Bean ("postNewComment");
       if Comment /= null then
          Comment.Set_Entity_Id (Bean.Get_Id);
