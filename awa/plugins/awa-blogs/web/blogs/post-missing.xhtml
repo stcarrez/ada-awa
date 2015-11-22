@@ -1,5 +1,5 @@
 <!-- Post not found page
-  -  Copyright (C) 2014 Stephane Carrez
+  -  Copyright (C) 2014, 2015 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,7 @@
         xmlns:c="http://java.sun.com/jstl/core"
 	    xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
-    <ui:param name="title" value="#{blogMsg.blog_page_title}"/>
+    <ui:param name="title" value="#{blogMsg.blog_post_not_found_title}"/>
 
     <!-- Main page body -->
     <ui:define name="pageBody">
@@ -30,12 +30,11 @@
             <div class='grid_9'>
                 <div class='blog-post-tag-info'>
                     <h2>
-                        Post not found
+                        #{blogMsg.blog_post_not_found_title}
                     </h2>
                 </div>
                 <p>
-                    The post you are looking for does not exist.
-
+                    #{blogMsg.blog_post_not_found}
                 </p>
             </div>
             <div class='grid_3 blog-post-info'>
