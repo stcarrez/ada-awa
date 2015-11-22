@@ -19,7 +19,6 @@ with Ada.Unchecked_Deallocation;
 
 with ADO.Queries;
 with ADO.Statements;
-with ADO.Sessions;
 with ADO.Parameters;
 with ADO.Sessions.Entities;
 with ADO.SQL;
@@ -27,15 +26,13 @@ with ADO.SQL;
 with Util.Dates;
 with Util.Log.Loggers;
 
-with AWA.Services.Contexts;
+with AWA.Applications;
 with AWA.Counters.Models;
 with AWA.Modules.Get;
 with AWA.Counters.Components;
 package body AWA.Counters.Modules is
 
    use type ADO.Schemas.Class_Mapping_Access;
-
-   package ASC renames AWA.Services.Contexts;
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Awa.Counters.Module");
 
@@ -139,13 +136,13 @@ package body AWA.Counters.Modules is
                           Object  : in ADO.Objects.Object_Ref'Class;
                           Result  : out Natural) is
       Id   : constant ADO.Identifier := ADO.Objects.Get_Value (Object.Get_Key);
-      DB   : constant ADO.Sessions.Session := Plugin.Get_Session;
+      DB   : ADO.Sessions.Master_Session := Plugin.Get_Master_Session;
       Stmt : ADO.Statements.Query_Statement
         := DB.Create_Statement ("SELECT SUM(counter) FROM awa_counter WHERE "
                                 & "object_id = :id AND definition_id = :definition_id");
       Def_Id : Natural;
    begin
-      Plugin.Counters.Get_Definition (Counter, Def_Id);
+      Plugin.Counters.Get_Definition (DB, Counter, Def_Id);
       Stmt.Bind_Param ("id", Id);
       Stmt.Bind_Param ("definition_id", Def_Id);
       Stmt.Execute;
@@ -223,7 +220,8 @@ package body AWA.Counters.Modules is
       --  ------------------------------
       --  Get the definition ID associated with the counter.
       --  ------------------------------
-      procedure Get_Definition (Counter : in Counter_Index_Type;
+      procedure Get_Definition (Session : in out ADO.Sessions.Master_Session;
+                                Counter : in Counter_Index_Type;
                                 Result  : out Natural) is
       begin
          if Definitions = null then
@@ -231,13 +229,8 @@ package body AWA.Counters.Modules is
             Definitions.all := (others => 0);
          end if;
          if Definitions (Counter) = 0 then
-            declare
-               Ctx     : constant ASC.Service_Context_Access := ASC.Current;
-               Session : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
-            begin
-               Load_Definition (Session, Counter_Arrays.Get_Element (Counter).all,
-                                Definitions (Counter));
-            end;
+            Load_Definition (Session, Counter_Arrays.Get_Element (Counter).all,
+                             Definitions (Counter));
          end if;
          Result := Definitions (Counter);
       end Get_Definition;
@@ -337,7 +330,7 @@ package body AWA.Counters.Modules is
                declare
                   Counter : constant Counter_Def := Counter_Arrays.Get_Element (I).all;
                begin
-                  Plugin.Counters.Get_Definition (I, Def_Id);
+                  Plugin.Counters.Get_Definition (DB, I, Def_Id);
                   Flush (DB, Counter, Def_Id, Counters (I), Date);
                end;
             end if;

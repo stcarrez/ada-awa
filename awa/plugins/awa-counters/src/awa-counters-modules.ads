@@ -19,7 +19,7 @@ with Ada.Containers.Indefinite_Hashed_Maps;
 with Ada.Calendar;
 
 with ASF.Applications;
-
+with ADO.Sessions;
 with AWA.Modules;
 package AWA.Counters.Modules is
 
@@ -127,7 +127,8 @@ private
                            Seconds : in Duration) return Boolean;
 
       --  Get the definition ID associated with the counter.
-      procedure Get_Definition (Counter : in Counter_Index_Type;
+      procedure Get_Definition (Session : in out ADO.Sessions.Master_Session;
+                                Counter : in Counter_Index_Type;
                                 Result  : out Natural);
 
    private
