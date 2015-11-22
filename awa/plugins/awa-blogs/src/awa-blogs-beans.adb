@@ -346,6 +346,18 @@ package body AWA.Blogs.Beans is
       elsif Name = "posts" then
          return Util.Beans.Objects.To_Object (Value   => From.Posts_Bean,
                                               Storage => Util.Beans.Objects.STATIC);
+      elsif Name = COUNTER_ATTR then
+         Pos := From.Posts.Get_Row_Index;
+         if Pos = 0 then
+            return Util.Beans.Objects.Null_Object;
+         end if;
+         declare
+            Item : constant Models.Post_Info := From.Posts.List.Element (Pos - 1);
+         begin
+            ADO.Objects.Set_Value (From.Counter_Bean.Object, Item.Id);
+         end;
+         return Util.Beans.Objects.To_Object (From.Counter_Bean, Util.Beans.Objects.STATIC);
+
       elsif Name = "tag" then
          return Util.Beans.Objects.To_Object (From.Tag);
 
@@ -454,6 +466,8 @@ package body AWA.Blogs.Beans is
       Object.Page_Size  := 20;
       Object.Page       := 1;
       Object.Count      := 0;
+      Object.Counter_Bean := Object.Counter'Access;
+      Object.Counter.Counter := AWA.Blogs.Modules.Read_Counter.Index;
       return Object.all'Access;
    end Create_Post_List_Bean;
 

@@ -135,6 +135,11 @@ package AWA.Blogs.Beans is
       Service    : Modules.Blog_Module_Access := null;
       Tags       : AWA.Tags.Beans.Entity_Tag_Map;
       Posts_Bean : AWA.Blogs.Models.Post_Info_List_Bean_Access;
+
+      --  The read post counter associated with the post.
+      Counter       : aliased AWA.Counters.Beans.Counter_Bean (Of_Type => ADO.Objects.KEY_INTEGER,
+                                                               Of_Class => Models.POST_TABLE);
+      Counter_Bean  : AWA.Counters.Beans.Counter_Bean_Access;
    end record;
    type Post_List_Bean_Access is access all Post_List_Bean'Class;
 
