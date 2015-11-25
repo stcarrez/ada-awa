@@ -69,8 +69,8 @@ alidir=${prefix}/${infix_ali}
 
 dynamodir=${prefix}/share/dynamo
 
-CPUS := @NR_CPUS@
-MAKE_ARGS=-XMODE=${MODE} -XAWA_LIBRARY_TYPE=${AWA_LIBRARY_TYPE} -XPROCESSORS=$(CPUS)
+PROCESSORS=@NR_CPUS@
+MAKE_ARGS=-XMODE=${MODE} -XAWA_LIBRARY_TYPE=${AWA_LIBRARY_TYPE} -XPROCESSORS=$(PROCESSORS)
 
 ifeq (${BUILDS_SHARED},yes)
 all:     static shared
@@ -104,8 +104,9 @@ autobuild:
 
 # Clean the root project of all build products.
 clean:  pre-clean
-	-$(GNATCLEAN) -q -P "$(GPRPATH)" -XAWA_LIBRARY_TYPE=static
-	-$(GNATCLEAN) -q -P "$(GPRPATH)" -XAWA_LIBRARY_TYPE=relocatable
+	#-$(GNATCLEAN) -q -P "$(GPRPATH)" -XAWA_LIBRARY_TYPE=static
+	#-$(GNATCLEAN) -q -P "$(GPRPATH)" -XAWA_LIBRARY_TYPE=relocatable
+	-rm -rf obj lib
 
 # Clean root project and all imported projects too.
 clean_tree:
