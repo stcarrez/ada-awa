@@ -1,5 +1,5 @@
 <!-- Form to create or update a blog post
-  -  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013, 2014, 2015 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,6 +52,14 @@
             <w:inputText id='uri' title="#{blogMsg.blog_post_url_label}"
                          styleClass="awa-required ui-corner-all" size='80'
                          value="#{post.uri}" required="false"/>
+
+            <ul class='awa-buttons'>
+                <li>
+                    <h:commandButton id='save' value='#{blogMsg.blog_post_save_button}'
+                                     styleClass="ui-button ui-state-default ui-corner-all"
+                                     action="#{post.save}" title="#{blogMsg.blog_post_save_title}"/>
+                </li>
+            </ul>
         </div>
         <div class='grid_4'>
             <dl class="awa-required">
@@ -86,14 +94,6 @@
                 </dd>
             </dl>
         </div>
-
-        <ul class='awa-buttons'>
-            <li>
-                <h:commandButton id='save' value='#{blogMsg.blog_post_save_button}'
-                                 styleClass="ui-button ui-state-default ui-corner-all"
-                                 action="#{post.save}" title="#{blogMsg.blog_post_save_title}"/>
-            </li>
-        </ul>
     </h:form>
       <util:script>
               // Create a MarkEdit editor on page load
