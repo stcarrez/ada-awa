@@ -17,11 +17,14 @@
         <property type='Boolean' name="is_public">
             <comment>whether the wiki is public.</comment>
         </property>
-        <property type='Date' name="create_date">
-            <comment>the wiki creation date.</comment>
-        </property>
         <property type='Integer' name="last_version">
             <comment>the last version.</comment>
+        </property>
+        <property type='Integer' name="read_count">
+            <comment>the read count.</comment>
+        </property>
+        <property type='Date' name="create_date">
+            <comment>the wiki creation date.</comment>
         </property>
         <property type='String' name="author">
             <comment>the wiki page author.</comment>
@@ -36,15 +39,16 @@
       page.name,
       page.title,
       page.is_public,
-      content.create_date,
       page.last_version,
+      page.read_count,
+      content.create_date,
       user.name
     FROM awa_wiki_page AS page
     LEFT JOIN awa_acl AS acl ON acl.entity_id = :wiki_id AND acl.entity_type = :table AND acl.user_id = :user_id
     LEFT JOIN awa_wiki_content AS content ON page.content_id = content.id
     LEFT JOIN awa_user AS user ON content.author_id = user.id
     WHERE page.wiki_id = :wiki_id AND (page.is_public OR acl.id IS NOT NULL)
-    ORDER BY content.create_date DESC
+    ORDER BY :order1
     LIMIT :first, :count
        </sql>
        <sql-count>
@@ -64,6 +68,7 @@
       page.name,
       page.title,
       page.is_public,
+      page.read_count,
       content.create_date,
       page.last_version,
       user.name
@@ -73,7 +78,7 @@
     LEFT JOIN awa_wiki_content AS content ON page.content_id = content.id
     LEFT JOIN awa_user AS user ON content.author_id = user.id
     WHERE page.wiki_id = :wiki_id AND (page.is_public OR acl.id IS NOT NULL)
-    ORDER BY content.create_date DESC
+    ORDER BY :order1
     LIMIT :first, :count
        </sql>
        <sql-count>
