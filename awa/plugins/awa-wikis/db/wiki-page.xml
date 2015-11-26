@@ -26,7 +26,7 @@
         <property type='Date' name="date">
             <comment>the wiki page creation date.</comment>
         </property>
-        <property type='Integer' name="format">
+        <property type='AWA.Wikis.Models.Format_Type' name="format">
             <comment>the wiki page format.</comment>
         </property>
         <property type='String' name="content">
@@ -40,6 +40,9 @@
         </property>
         <property type='String' name="right_side">
             <comment>the wiki page right side panel.</comment>
+        </property>
+        <property type='AWA.Wikis.Models.Format_Type' name="side_format">
+            <comment>the wiki side format.</comment>
         </property>
         <property type='String' name="author">
             <comment>the wiki page author.</comment>
@@ -68,6 +71,7 @@
       content.save_comment,
       wiki.left_side,
       wiki.right_side,
+      wiki.format,
       user.name,
       acl.id
     FROM awa_wiki_page AS page
@@ -88,12 +92,14 @@
       page.title,
       page.is_public,
       page.last_version,
+      page.read_count,
       content.create_date,
       content.format,
       content.content,
       content.save_comment,
       wiki.left_side,
       wiki.right_side,
+      wiki.format,
       user.name,
       acl.id
     FROM awa_wiki_page AS page
