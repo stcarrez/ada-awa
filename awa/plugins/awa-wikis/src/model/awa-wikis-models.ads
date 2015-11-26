@@ -40,10 +40,10 @@ with AWA.Workspaces.Models;
 with Util.Beans.Methods;
 pragma Warnings (On, "unit * is not referenced");
 package AWA.Wikis.Models is
-   type Format is (FORMAT_CREOLE, FORMAT_HTML, FORMAT_MARKDOWN, FORMAT_DOTCLEAR, FORMAT_MEDIAWIKI, FORMAT_PHPBB);
-   for Format use (FORMAT_CREOLE => 0, FORMAT_HTML => 1, FORMAT_MARKDOWN => 2, FORMAT_DOTCLEAR => 3, FORMAT_MEDIAWIKI => 4, FORMAT_PHPBB => 5);
-   package Format_Objects is
-      new Util.Beans.Objects.Enums (Format);
+   type Format_Type is (FORMAT_CREOLE, FORMAT_HTML, FORMAT_MARKDOWN, FORMAT_DOTCLEAR, FORMAT_MEDIAWIKI, FORMAT_PHPBB);
+   for Format_Type use (FORMAT_CREOLE => 0, FORMAT_HTML => 1, FORMAT_MARKDOWN => 2, FORMAT_DOTCLEAR => 3, FORMAT_MEDIAWIKI => 4, FORMAT_PHPBB => 5);
+   package Format_Type_Objects is
+      new Util.Beans.Objects.Enums (Format_Type);
 
    type Wiki_Space_Ref is new ADO.Objects.Object_Ref with null record;
 
@@ -126,6 +126,14 @@ package AWA.Wikis.Models is
                  return Ada.Strings.Unbounded.Unbounded_String;
    function Get_Right_Side (Object : in Wiki_Space_Ref)
                  return String;
+
+   --  Set the default wiki page format.
+   procedure Set_Format (Object : in out Wiki_Space_Ref;
+                         Value  : in AWA.Wikis.Models.Format_Type);
+
+   --  Get the default wiki page format.
+   function Get_Format (Object : in Wiki_Space_Ref)
+                 return AWA.Wikis.Models.Format_Type;
 
    --
    procedure Set_Workspace (Object : in out Wiki_Space_Ref;
@@ -366,11 +374,11 @@ package AWA.Wikis.Models is
 
    --  Set the format type used used by the wiki content
    procedure Set_Format (Object : in out Wiki_Content_Ref;
-                         Value  : in AWA.Wikis.Models.Format);
+                         Value  : in AWA.Wikis.Models.Format_Type);
 
    --  Get the format type used used by the wiki content
    function Get_Format (Object : in Wiki_Content_Ref)
-                 return AWA.Wikis.Models.Format;
+                 return AWA.Wikis.Models.Format_Type;
 
    --  Set the content comment string
    procedure Set_Save_Comment (Object : in out Wiki_Content_Ref;
@@ -660,7 +668,7 @@ package AWA.Wikis.Models is
       Date : Ada.Calendar.Time;
 
       --  the wiki page format.
-      Format : Integer;
+      Format : AWA.Wikis.Models.Format_Type;
 
       --  the wiki page content.
       Content : Ada.Strings.Unbounded.Unbounded_String;
@@ -673,6 +681,9 @@ package AWA.Wikis.Models is
 
       --  the wiki page right side panel.
       Right_Side : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the wiki side format.
+      Side_Format : AWA.Wikis.Models.Format_Type;
 
       --  the wiki page author.
       Author : Ada.Strings.Unbounded.Unbounded_String;
@@ -851,10 +862,11 @@ private
    COL_4_1_NAME : aliased constant String := "create_date";
    COL_5_1_NAME : aliased constant String := "left_side";
    COL_6_1_NAME : aliased constant String := "right_side";
-   COL_7_1_NAME : aliased constant String := "workspace_id";
+   COL_7_1_NAME : aliased constant String := "format";
+   COL_8_1_NAME : aliased constant String := "workspace_id";
 
    WIKI_SPACE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 8,
+     (Count => 9,
       Table => WIKI_SPACE_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
@@ -864,7 +876,8 @@ private
          5 => COL_4_1_NAME'Access,
          6 => COL_5_1_NAME'Access,
          7 => COL_6_1_NAME'Access,
-         8 => COL_7_1_NAME'Access
+         8 => COL_7_1_NAME'Access,
+         9 => COL_8_1_NAME'Access
 )
      );
    WIKI_SPACE_TABLE : constant ADO.Schemas.Class_Mapping_Access
@@ -883,6 +896,7 @@ private
        Create_Date : Ada.Calendar.Time;
        Left_Side : Ada.Strings.Unbounded.Unbounded_String;
        Right_Side : Ada.Strings.Unbounded.Unbounded_String;
+       Format : AWA.Wikis.Models.Format_Type;
        Workspace : AWA.Workspaces.Models.Workspace_Ref;
    end record;
 
@@ -1035,7 +1049,7 @@ private
    with record
        Create_Date : Ada.Calendar.Time;
        Content : Ada.Strings.Unbounded.Unbounded_String;
-       Format : AWA.Wikis.Models.Format;
+       Format : AWA.Wikis.Models.Format_Type;
        Save_Comment : Ada.Strings.Unbounded.Unbounded_String;
        Version : Integer;
        Page_Version : Integer;
@@ -1113,7 +1127,7 @@ private
 
    package File_4 is
       new ADO.Queries.Loaders.File (Path => "wiki-page.xml",
-                                    Sha1 => "DBDC0E33875ED20E014E49619A2B23E92BDF6BFB");
+                                    Sha1 => "AF1DAD113E5BB4F34507D92D188098C84BF1174A");
 
    package Def_Wikiviewinfo_Wiki_Page is
       new ADO.Queries.Loaders.Query (Name => "wiki-page",

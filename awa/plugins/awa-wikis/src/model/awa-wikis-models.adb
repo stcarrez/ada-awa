@@ -66,6 +66,7 @@ package body AWA.Wikis.Models is
       Impl.Is_Public := False;
       Impl.Version := 0;
       Impl.Create_Date := ADO.DEFAULT_TIME;
+      Impl.Format := AWA.Wikis.Models.Format_Type'First;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -224,12 +225,31 @@ package body AWA.Wikis.Models is
    end Get_Right_Side;
 
 
+   procedure Set_Format (Object : in out Wiki_Space_Ref;
+                         Value  : in AWA.Wikis.Models.Format_Type) is
+      procedure Set_Field_Enum is
+         new ADO.Objects.Set_Field_Operation (Format_Type);
+      Impl : Wiki_Space_Access;
+   begin
+      Set_Field (Object, Impl);
+      Set_Field_Enum (Impl.all, 8, Impl.Format, Value);
+   end Set_Format;
+
+   function Get_Format (Object : in Wiki_Space_Ref)
+                  return AWA.Wikis.Models.Format_Type is
+      Impl : constant Wiki_Space_Access
+         := Wiki_Space_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Format;
+   end Get_Format;
+
+
    procedure Set_Workspace (Object : in out Wiki_Space_Ref;
                             Value  : in AWA.Workspaces.Models.Workspace_Ref'Class) is
       Impl : Wiki_Space_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 8, Impl.Workspace, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 9, Impl.Workspace, Value);
    end Set_Workspace;
 
    function Get_Workspace (Object : in Wiki_Space_Ref)
@@ -260,6 +280,7 @@ package body AWA.Wikis.Models is
             Copy.Create_Date := Impl.Create_Date;
             Copy.Left_Side := Impl.Left_Side;
             Copy.Right_Side := Impl.Right_Side;
+            Copy.Format := Impl.Format;
             Copy.Workspace := Impl.Workspace;
          end;
       end if;
@@ -421,9 +442,14 @@ package body AWA.Wikis.Models is
          Object.Clear_Modified (7);
       end if;
       if Object.Is_Modified (8) then
-         Stmt.Save_Field (Name  => COL_7_1_NAME, --  workspace_id
-                          Value => Object.Workspace);
+         Stmt.Save_Field (Name  => COL_7_1_NAME, --  format
+                          Value => Integer (Format_Type'Pos (Object.Format)));
          Object.Clear_Modified (8);
+      end if;
+      if Object.Is_Modified (9) then
+         Stmt.Save_Field (Name  => COL_8_1_NAME, --  workspace_id
+                          Value => Object.Workspace);
+         Object.Clear_Modified (9);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -469,7 +495,9 @@ package body AWA.Wikis.Models is
                         Value => Object.Left_Side);
       Query.Save_Field (Name  => COL_6_1_NAME, --  right_side
                         Value => Object.Right_Side);
-      Query.Save_Field (Name  => COL_7_1_NAME, --  workspace_id
+      Query.Save_Field (Name  => COL_7_1_NAME, --  format
+                        Value => Integer (Format_Type'Pos (Object.Format)));
+      Query.Save_Field (Name  => COL_8_1_NAME, --  workspace_id
                         Value => Object.Workspace);
       Query.Execute (Result);
       if Result /= 1 then
@@ -513,6 +541,8 @@ package body AWA.Wikis.Models is
          return Util.Beans.Objects.To_Object (Impl.Left_Side);
       elsif Name = "right_side" then
          return Util.Beans.Objects.To_Object (Impl.Right_Side);
+      elsif Name = "format" then
+         return AWA.Wikis.Models.Format_Type_Objects.To_Object (Impl.Format);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -533,8 +563,9 @@ package body AWA.Wikis.Models is
       Object.Create_Date := Stmt.Get_Time (4);
       Object.Left_Side := Stmt.Get_Unbounded_String (5);
       Object.Right_Side := Stmt.Get_Unbounded_String (6);
-      if not Stmt.Is_Null (7) then
-         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (7), Session);
+      Object.Format := Format_Type'Val (Stmt.Get_Integer (7));
+      if not Stmt.Is_Null (8) then
+         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (8), Session);
       end if;
       Object.Version := Stmt.Get_Integer (3);
       ADO.Objects.Set_Created (Object);
@@ -1128,7 +1159,7 @@ package body AWA.Wikis.Models is
    begin
       Impl := new Wiki_Content_Impl;
       Impl.Create_Date := ADO.DEFAULT_TIME;
-      Impl.Format := AWA.Wikis.Models.Format'First;
+      Impl.Format := AWA.Wikis.Models.Format_Type'First;
       Impl.Version := 0;
       Impl.Page_Version := 0;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
@@ -1203,9 +1234,9 @@ package body AWA.Wikis.Models is
 
 
    procedure Set_Format (Object : in out Wiki_Content_Ref;
-                         Value  : in AWA.Wikis.Models.Format) is
+                         Value  : in AWA.Wikis.Models.Format_Type) is
       procedure Set_Field_Enum is
-         new ADO.Objects.Set_Field_Operation (Format);
+         new ADO.Objects.Set_Field_Operation (Format_Type);
       Impl : Wiki_Content_Access;
    begin
       Set_Field (Object, Impl);
@@ -1213,7 +1244,7 @@ package body AWA.Wikis.Models is
    end Set_Format;
 
    function Get_Format (Object : in Wiki_Content_Ref)
-                  return AWA.Wikis.Models.Format is
+                  return AWA.Wikis.Models.Format_Type is
       Impl : constant Wiki_Content_Access
          := Wiki_Content_Impl (Object.Get_Load_Object.all)'Access;
    begin
@@ -1518,7 +1549,7 @@ package body AWA.Wikis.Models is
       Query.Save_Field (Name  => COL_2_3_NAME, --  content
                         Value => Object.Content);
       Query.Save_Field (Name  => COL_3_3_NAME, --  format
-                        Value => Integer (Format'Pos (Object.Format)));
+                        Value => Integer (Format_Type'Pos (Object.Format)));
       Query.Save_Field (Name  => COL_4_3_NAME, --  save_comment
                         Value => Object.Save_Comment);
       Query.Save_Field (Name  => COL_5_3_NAME, --  version
@@ -1566,7 +1597,7 @@ package body AWA.Wikis.Models is
       elsif Name = "content" then
          return Util.Beans.Objects.To_Object (Impl.Content);
       elsif Name = "format" then
-         return AWA.Wikis.Models.Format_Objects.To_Object (Impl.Format);
+         return AWA.Wikis.Models.Format_Type_Objects.To_Object (Impl.Format);
       elsif Name = "save_comment" then
          return Util.Beans.Objects.To_Object (Impl.Save_Comment);
       elsif Name = "page_version" then
@@ -1587,7 +1618,7 @@ package body AWA.Wikis.Models is
       Object.Set_Key_Value (Stmt.Get_Identifier (0));
       Object.Create_Date := Stmt.Get_Time (1);
       Object.Content := Stmt.Get_Unbounded_String (2);
-      Object.Format := Format'Val (Stmt.Get_Integer (3));
+      Object.Format := Format_Type'Val (Stmt.Get_Integer (3));
       Object.Save_Comment := Stmt.Get_Unbounded_String (4);
       Object.Page_Version := Stmt.Get_Integer (6);
       if not Stmt.Is_Null (7) then
@@ -1915,7 +1946,7 @@ package body AWA.Wikis.Models is
       elsif Name = "date" then
          return Util.Beans.Objects.Time.To_Object (From.Date);
       elsif Name = "format" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Format));
+         return AWA.Wikis.Models.Format_Type_Objects.To_Object (From.Format);
       elsif Name = "content" then
          return Util.Beans.Objects.To_Object (From.Content);
       elsif Name = "save_comment" then
@@ -1924,6 +1955,8 @@ package body AWA.Wikis.Models is
          return Util.Beans.Objects.To_Object (From.Left_Side);
       elsif Name = "right_side" then
          return Util.Beans.Objects.To_Object (From.Right_Side);
+      elsif Name = "side_format" then
+         return AWA.Wikis.Models.Format_Type_Objects.To_Object (From.Side_Format);
       elsif Name = "author" then
          return Util.Beans.Objects.To_Object (From.Author);
       elsif Name = "acl_id" then
@@ -1956,7 +1989,7 @@ package body AWA.Wikis.Models is
       elsif Name = "date" then
          Item.Date := Util.Beans.Objects.Time.To_Time (Value);
       elsif Name = "format" then
-         Item.Format := Util.Beans.Objects.To_Integer (Value);
+         Item.Format := AWA.Wikis.Models.Format_Type_Objects.To_Value (Value);
       elsif Name = "content" then
          Item.Content := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "save_comment" then
@@ -1965,6 +1998,8 @@ package body AWA.Wikis.Models is
          Item.Left_Side := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "right_side" then
          Item.Right_Side := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "side_format" then
+         Item.Side_Format := AWA.Wikis.Models.Format_Type_Objects.To_Value (Value);
       elsif Name = "author" then
          Item.Author := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "acl_id" then
@@ -1990,13 +2025,14 @@ package body AWA.Wikis.Models is
       Into.Version := Stmt.Get_Integer (4);
       Into.Read_Count := Stmt.Get_Integer (5);
       Into.Date := Stmt.Get_Time (6);
-      Into.Format := Stmt.Get_Integer (7);
+      Into.Format := AWA.Wikis.Models.Format_Type'Val (Stmt.Get_Integer (7));
       Into.Content := Stmt.Get_Unbounded_String (8);
       Into.Save_Comment := Stmt.Get_Unbounded_String (9);
       Into.Left_Side := Stmt.Get_Unbounded_String (10);
       Into.Right_Side := Stmt.Get_Unbounded_String (11);
-      Into.Author := Stmt.Get_Unbounded_String (12);
-      Into.Acl_Id := Stmt.Get_Identifier (13);
+      Into.Side_Format := AWA.Wikis.Models.Format_Type'Val (Stmt.Get_Integer (12));
+      Into.Author := Stmt.Get_Unbounded_String (13);
+      Into.Acl_Id := Stmt.Get_Identifier (14);
       Stmt.Next;
    end Read;
 
@@ -2072,6 +2108,8 @@ package body AWA.Wikis.Models is
          Item.Set_Left_Side (Util.Beans.Objects.To_String (Value));
       elsif Name = "right_side" then
          Item.Set_Right_Side (Util.Beans.Objects.To_String (Value));
+      elsif Name = "format" then
+         Item.Set_Format (Format_Type_Objects.To_Value (Value));
       end if;
    end Set_Value;
 
