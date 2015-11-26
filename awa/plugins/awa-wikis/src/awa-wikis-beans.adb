@@ -22,6 +22,7 @@ with ADO.Queries;
 with ADO.Sessions;
 with ADO.Datasets;
 with ADO.Sessions.Entities;
+with ADO.Parameters;
 
 with AWA.Services;
 with AWA.Services.Contexts;
@@ -385,6 +386,9 @@ package body AWA.Wikis.Beans is
       elsif Name = "page" then
          return Util.Beans.Objects.To_Object (From.Page);
 
+      elsif Name = "sort" then
+         return Util.Beans.Objects.To_Object (From.Sort);
+
       elsif Name = "count" then
          return Util.Beans.Objects.To_Object (From.Count);
 
@@ -423,6 +427,8 @@ package body AWA.Wikis.Beans is
          From.Page := Util.Beans.Objects.To_Integer (Value);
       elsif Name = "wiki_id" and not Util.Beans.Objects.Is_Empty (Value) then
          From.Wiki_Id := ADO.Utils.To_Identifier (Value);
+      elsif Name = "sort" and not Util.Beans.Objects.Is_Empty (Value) then
+         From.Sort := Util.Beans.Objects.To_Unbounded_String (Value);
       end if;
    end Set_Value;
 
@@ -439,6 +445,7 @@ package body AWA.Wikis.Beans is
    procedure Load_List (Into : in out Wiki_List_Bean) is
       use AWA.Wikis.Models;
       use AWA.Services;
+      use type Ada.Strings.Unbounded.Unbounded_String;
       use type ADO.Identifier;
 
       Ctx         : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
@@ -469,6 +476,15 @@ package body AWA.Wikis.Beans is
       else
          Query.Set_Query (AWA.Wikis.Models.Query_Wiki_Page_List);
          Count_Query.Set_Count_Query (AWA.Wikis.Models.Query_Wiki_Page_List);
+      end if;
+      if Into.Sort = "name" then
+         Query.Bind_Param (Name => "order1", Value => ADO.Parameters.Token '("page.name"));
+      elsif Into.Sort = "recent" then
+         Query.Bind_Param (Name => "order1", Value => ADO.Parameters.Token '("content.create_date"));
+      elsif Into.Sort = "popular" then
+         Query.Bind_Param (Name => "order1", Value => ADO.Parameters.Token '("page.read_count"));
+      else
+         return;
       end if;
       Query.Bind_Param (Name => "first", Value => First);
       Query.Bind_Param (Name => "count", Value => Into.Page_Size);
