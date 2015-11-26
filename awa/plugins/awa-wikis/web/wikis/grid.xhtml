@@ -42,5 +42,19 @@
             </ui:decorate>
         </div>
     </ui:define>
+
+    <ui:define name="pageScript">
+        <script type="text/javascript" src="#{jquery.uiPath}selectmenu.js"></script>
+        <util:script>
+            $(function() {
+                $("#sort").selectmenu({
+                    width: 200,
+                    change: function(event, data) {
+                        document.location = "../" + data.item.value + "/grid";
+                    }
+                });
+            });
+        </util:script>
+    </ui:define>
 </ui:composition>
 

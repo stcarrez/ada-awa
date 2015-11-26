@@ -64,6 +64,7 @@
                                var="tagName"
                                tagClass="tagedit-listelement tagedit-listelement-old"/>
                   <awa:wiki styleClass='wiki-text' value="#{wikiView.content}" format="dotclear"/>
+                  Read count: <awa:counter value="#{wikiView.counter}"/>
               </div>
               <h:panelGroup rendered="#{not empty wikiView.right_side}">
                   <div class="grid_2">

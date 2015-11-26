@@ -17,6 +17,7 @@
 <ul class='wiki-nav'
     xmlns:auth="http://code.google.com/p/ada-awa/auth"
     xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
     xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:panelGroup rendered="#{user.isLogged}">
         <li class="wiki-nav-left">
@@ -49,4 +50,11 @@
         </li>
     </h:panelGroup>
     <ui:insert name="page-nav"/>
+    <li class="wiki-nav-right"><span>Sort by:</span>
+        <h:selectOneMenu id="sort" value="#{wikiList.sort}">
+            <f:selectItem itemValue="name" itemLabel="Name"/>
+            <f:selectItem itemValue="popular" itemLabel="Popular"/>
+            <f:selectItem itemValue="recent" itemLabel="Recent"/>
+        </h:selectOneMenu>
+    </li>
 </ul>
