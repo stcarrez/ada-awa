@@ -540,11 +540,14 @@ package AWA.Wikis.Models is
       --  whether the wiki is public.
       Is_Public : Boolean;
 
-      --  the wiki creation date.
-      Create_Date : Ada.Calendar.Time;
-
       --  the last version.
       Last_Version : Integer;
+
+      --  the read count.
+      Read_Count : Integer;
+
+      --  the wiki creation date.
+      Create_Date : Ada.Calendar.Time;
 
       --  the wiki page author.
       Author : Ada.Strings.Unbounded.Unbounded_String;
@@ -793,6 +796,9 @@ package AWA.Wikis.Models is
 
       --  the wiki identifier
       Wiki_Id : ADO.Identifier;
+
+      --  the sort list mode.
+      Sort : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
    --  This bean provides some methods that can be used in a Method_Expression.
@@ -1101,7 +1107,7 @@ private
 
    package File_2 is
       new ADO.Queries.Loaders.File (Path => "wiki-pages.xml",
-                                    Sha1 => "A120841C7F26146F8AC4EFB01C9952F3CA14CD13");
+                                    Sha1 => "3D026597D06A525412B37B034831E5ABC1F9EFA5");
 
    package Def_Wikipageinfo_Wiki_Page_List is
       new ADO.Queries.Loaders.Query (Name => "wiki-page-list",

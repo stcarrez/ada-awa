@@ -1733,10 +1733,12 @@ package body AWA.Wikis.Models is
          return Util.Beans.Objects.To_Object (From.Title);
       elsif Name = "is_public" then
          return Util.Beans.Objects.To_Object (From.Is_Public);
-      elsif Name = "create_date" then
-         return Util.Beans.Objects.Time.To_Object (From.Create_Date);
       elsif Name = "last_version" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Last_Version));
+      elsif Name = "read_count" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Read_Count));
+      elsif Name = "create_date" then
+         return Util.Beans.Objects.Time.To_Object (From.Create_Date);
       elsif Name = "author" then
          return Util.Beans.Objects.To_Object (From.Author);
       end if;
@@ -1760,10 +1762,12 @@ package body AWA.Wikis.Models is
          Item.Title := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "is_public" then
          Item.Is_Public := Util.Beans.Objects.To_Boolean (Value);
-      elsif Name = "create_date" then
-         Item.Create_Date := Util.Beans.Objects.Time.To_Time (Value);
       elsif Name = "last_version" then
          Item.Last_Version := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "read_count" then
+         Item.Read_Count := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "create_date" then
+         Item.Create_Date := Util.Beans.Objects.Time.To_Time (Value);
       elsif Name = "author" then
          Item.Author := Util.Beans.Objects.To_Unbounded_String (Value);
       end if;
@@ -1797,9 +1801,10 @@ package body AWA.Wikis.Models is
          Into.Name := Stmt.Get_Unbounded_String (1);
          Into.Title := Stmt.Get_Unbounded_String (2);
          Into.Is_Public := Stmt.Get_Boolean (3);
-         Into.Create_Date := Stmt.Get_Time (4);
-         Into.Last_Version := Stmt.Get_Integer (5);
-         Into.Author := Stmt.Get_Unbounded_String (6);
+         Into.Last_Version := Stmt.Get_Integer (4);
+         Into.Read_Count := Stmt.Get_Integer (5);
+         Into.Create_Date := Stmt.Get_Time (6);
+         Into.Author := Stmt.Get_Unbounded_String (7);
       end Read;
    begin
       Stmt.Execute;
@@ -2228,6 +2233,8 @@ package body AWA.Wikis.Models is
          return Util.Beans.Objects.To_Object (From.Tag);
       elsif Name = "wiki_id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Wiki_Id));
+      elsif Name = "sort" then
+         return Util.Beans.Objects.To_Object (From.Sort);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -2251,6 +2258,8 @@ package body AWA.Wikis.Models is
          Item.Tag := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "wiki_id" then
          Item.Wiki_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "sort" then
+         Item.Sort := Util.Beans.Objects.To_Unbounded_String (Value);
       end if;
    end Set_Value;
 
