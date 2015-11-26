@@ -64,6 +64,8 @@ CREATE TABLE awa_wiki_space (
   /* the right panel wiki text for every page.
  */
   `right_side` TEXT NOT NULL,
+  /* the default wiki page format. */
+  `format` TINYINT NOT NULL,
   /*  */
   `workspace_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
