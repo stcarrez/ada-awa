@@ -220,10 +220,10 @@
     <url-pattern>/wikis/view/#{wikiView.wiki_id}/#{wikiView.name}</url-pattern>
     <url-pattern>/wikis/edit/#{wikiPage.wiki_id}/#{wikiPage.id}</url-pattern>
     <url-pattern>/wikis/create/#{wikiPage.wiki_id}</url-pattern>
-    <url-pattern>/wikis/list/#{wikiList.wiki_id}</url-pattern>
-    <url-pattern>/wikis/list/#{wikiList.wiki_id}/grid</url-pattern>
-    <url-pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}</url-pattern>
-    <url-pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}/grid</url-pattern>
+    <url-pattern>/wikis/list/#{wikiList.wiki_id}/#{wikiList.sort}</url-pattern>
+    <url-pattern>/wikis/list/#{wikiList.wiki_id}/#{wikiList.sort}/grid</url-pattern>
+    <url-pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}/#{wikiList.sort}</url-pattern>
+    <url-pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}/#{wikiList.sort}/grid</url-pattern>
     <url-pattern>/wikis/history/#{wikiVersionList.wiki_id}/#{wikiVersionList.page_id}</url-pattern>
     <url-pattern>/wikis/settings/#{adminWikiSpace.id}</url-pattern>
     <url-pattern>/wikis/*.html</url-pattern>
@@ -234,10 +234,10 @@
     <url-pattern>/wikis/view/#{wikiView.wiki_id}/#{wikiView.name}</url-pattern>
     <url-pattern>/wikis/edit/#{wikiPage.wiki_id}/#{wikiPage.id}</url-pattern>
     <url-pattern>/wikis/create/#{wikiPage.wiki_id}</url-pattern>
-    <url-pattern>/wikis/list/#{wikiList.wiki_id}</url-pattern>
-    <url-pattern>/wikis/list/#{wikiList.wiki_id}/grid</url-pattern>
-    <url-pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}</url-pattern>
-    <url-pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}/grid</url-pattern>
+    <url-pattern>/wikis/list/#{wikiList.wiki_id}/#{wikiList.sort}</url-pattern>
+    <url-pattern>/wikis/list/#{wikiList.wiki_id}/#{wikiList.sort}/grid</url-pattern>
+    <url-pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}/#{wikiList.sort}</url-pattern>
+    <url-pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}/#{wikiList.sort}/grid</url-pattern>
     <url-pattern>/wikis/history/#{wikiVersionList.wiki_id}/#{wikiVersionList.page_id}</url-pattern>
     <url-pattern>/wikis/settings/#{adminWikiSpace.id}</url-pattern>
     <url-pattern>/wikis/*.html</url-pattern>
@@ -280,17 +280,17 @@
   </url-mapping>
 
   <url-mapping>
-    <pattern>/wikis/list/#{wikiList.wiki_id}/grid</pattern>
+    <pattern>/wikis/list/#{wikiList.wiki_id}/#{wikiList.sort}/grid</pattern>
     <view-id>/wikis/grid.html</view-id>
   </url-mapping>
 
   <url-mapping>
-    <pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}</pattern>
+    <pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}/#{wikiList.sort}</pattern>
     <view-id>/wikis/tagged.html</view-id>
   </url-mapping>
 
   <url-mapping>
-    <pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}/grid</pattern>
+    <pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}/#{wikiList.sort}/grid</pattern>
     <view-id>/wikis/tagged-grid.html</view-id>
   </url-mapping>
 
