@@ -23,8 +23,8 @@ with AWA.Services.Contexts;
 with AWA.Users.Models;
 with AWA.Workspaces.Models;
 with AWA.Workspaces.Modules;
-with AWA.Wikis.Parsers;
-with AWA.Wikis.Writers;
+with Wiki.Parsers;
+with Wiki.Utils;
 
 with ADO.Sessions;
 with ADO.Statements;
@@ -119,8 +119,8 @@ package body AWA.Questions.Modules is
       end if;
 
       declare
-         Text : constant String := AWA.Wikis.Writers.To_Text (To_Wide (Question.Get_Description),
-                                                              AWA.Wikis.Parsers.SYNTAX_MIX);
+         Text : constant String := Wiki.Utils.To_Text (To_Wide (Question.Get_Description),
+                                                       Wiki.Parsers.SYNTAX_MIX);
          Last : Natural;
       begin
          if Text'Length < SHORT_DESCRIPTION_LENGTH then
