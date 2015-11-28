@@ -402,8 +402,6 @@ CREATE TABLE awa_image (
   `width` INTEGER NOT NULL,
   /* the image height */
   `height` INTEGER NOT NULL,
-  /*  */
-  `entityId` INTEGER NOT NULL,
   /* the thumbnail width */
   `thumb_width` INTEGER NOT NULL,
   /* the thumbnail height */
