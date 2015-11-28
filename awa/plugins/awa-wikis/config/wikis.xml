@@ -275,7 +275,7 @@
   </url-mapping>
 
   <url-mapping>
-    <pattern>/wikis/list/#{wikiList.wiki_id}</pattern>
+    <pattern>/wikis/list/#{wikiList.wiki_id}/#{wikiList.sort}</pattern>
     <view-id>/wikis/list.html</view-id>
   </url-mapping>
 
