@@ -32,9 +32,11 @@
         <div id='awa-content'>
             <ui:decorate template="lists/grid.xhtml">
                 <ui:param name="wikiSpaceId" value="#{wikiList.wiki_id}"/>
+                <ui:param name="sort" value="#{wikiList.sort}"/>
+                <ui:param name="page_link" value="/grid"/>
                 <ui:define name="page-nav">
                     <li class="wiki-nav-right">
-                        <a href="#{contextPath}/wikis/list/#{wikiList.wiki_id}" title="#{wikiMsg.wiki_page_list_view_label}">
+                        <a href="#{contextPath}/wikis/list/#{wikiList.wiki_id}/#{wikiList.sort}" title="#{wikiMsg.wiki_page_list_view_label}">
                             <img src="#{contextPath}/images/wikis/wiki-list.png" alt="#{wikiMsg.wiki_page_list_view_label}"/>
                         </a>
                     </li>
@@ -44,17 +46,7 @@
     </ui:define>
 
     <ui:define name="pageScript">
-        <script type="text/javascript" src="#{jquery.uiPath}selectmenu.js"></script>
-        <util:script>
-            $(function() {
-                $("#sort").selectmenu({
-                    width: 200,
-                    change: function(event, data) {
-                        document.location = "../" + data.item.value + "/grid";
-                    }
-                });
-            });
-        </util:script>
+        <script type="text/javascript" src="#{jquery.chosenPath}"></script>
     </ui:define>
 </ui:composition>
 

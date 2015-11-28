@@ -18,6 +18,7 @@
     xmlns:auth="http://code.google.com/p/ada-awa/auth"
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:w="http://code.google.com/p/ada-asf/widget"
     xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:panelGroup rendered="#{user.isLogged}">
         <li class="wiki-nav-left">
@@ -50,11 +51,18 @@
         </li>
     </h:panelGroup>
     <ui:insert name="page-nav"/>
-    <li class="wiki-nav-right"><span>Sort by:</span>
-        <h:selectOneMenu id="sort" value="#{wikiList.sort}">
-            <f:selectItem itemValue="name" itemLabel="Name"/>
-            <f:selectItem itemValue="popular" itemLabel="Popular"/>
-            <f:selectItem itemValue="recent" itemLabel="Recent"/>
-        </h:selectOneMenu>
-    </li>
+    <h:panelGroup rendered="#{not empty sort}">
+        <li class="wiki-nav-right" id="wiki-nav-sort">
+            <label for="sort">#{wikiMsg.wiki_sort_by_label}</label>
+            <w:chosen id="sort" value="#{sort}">
+                <f:selectItem itemValue="name" itemLabel="#{wikiMsg.wiki_sort_by_name}"/>
+                <f:selectItem itemValue="popular" itemLabel="#{wikiMsg.wiki_sort_by_popular}"/>
+                <f:selectItem itemValue="recent" itemLabel="#{wikiMsg.wiki_sort_by_recent}"/>
+                <f:facet name="options">width: "60%",disable_search: true</f:facet>
+                <f:facet name="events">.bind("change", function() {
+                      document.location = "../" + $(this).val() + "#{page_link}";
+                })</f:facet>
+            </w:chosen>
+        </li>
+    </h:panelGroup>
 </ul>
