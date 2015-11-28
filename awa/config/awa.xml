@@ -111,9 +111,19 @@
       <value>#{contextPath}/js/jquery-ui-1.11.4/</value>
     </managed-property>
     <managed-property>
+      <property-name>chosenPath</property-name>
+      <property-class>String</property-class>
+      <value>#{contextPath}/js/jquery-chosen-1.4.2/chosen.jquery.js</value>
+    </managed-property>
+    <managed-property>
       <property-name>uiCssPath</property-name>
       <property-class>String</property-class>
       <value>#{contextPath}/css/redmond/jquery-ui-1.11.4.css</value>
+    </managed-property>
+    <managed-property>
+      <property-name>chosenCssPath</property-name>
+      <property-class>String</property-class>
+      <value>#{contextPath}/css/jquery-chosen-1.4.2/chosen.css</value>
     </managed-property>
   </managed-bean>
 
