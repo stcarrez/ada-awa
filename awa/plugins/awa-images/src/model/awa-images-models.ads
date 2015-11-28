@@ -78,14 +78,6 @@ package AWA.Images.Models is
    function Get_Height (Object : in Image_Ref)
                  return Integer;
 
-   --
-   procedure Set_Entityid (Object : in out Image_Ref;
-                           Value  : in Integer);
-
-   --
-   function Get_Entityid (Object : in Image_Ref)
-                 return Integer;
-
    --  Set the thumbnail width
    procedure Set_Thumb_Width (Object : in out Image_Ref;
                               Value  : in Integer);
@@ -297,19 +289,18 @@ private
    COL_0_1_NAME : aliased constant String := "id";
    COL_1_1_NAME : aliased constant String := "width";
    COL_2_1_NAME : aliased constant String := "height";
-   COL_3_1_NAME : aliased constant String := "entityId";
-   COL_4_1_NAME : aliased constant String := "thumb_width";
-   COL_5_1_NAME : aliased constant String := "thumb_height";
-   COL_6_1_NAME : aliased constant String := "path";
-   COL_7_1_NAME : aliased constant String := "public";
-   COL_8_1_NAME : aliased constant String := "version";
-   COL_9_1_NAME : aliased constant String := "thumbnail_id";
-   COL_10_1_NAME : aliased constant String := "folder_id";
-   COL_11_1_NAME : aliased constant String := "owner_id";
-   COL_12_1_NAME : aliased constant String := "storage_id";
+   COL_3_1_NAME : aliased constant String := "thumb_width";
+   COL_4_1_NAME : aliased constant String := "thumb_height";
+   COL_5_1_NAME : aliased constant String := "path";
+   COL_6_1_NAME : aliased constant String := "public";
+   COL_7_1_NAME : aliased constant String := "version";
+   COL_8_1_NAME : aliased constant String := "thumbnail_id";
+   COL_9_1_NAME : aliased constant String := "folder_id";
+   COL_10_1_NAME : aliased constant String := "owner_id";
+   COL_11_1_NAME : aliased constant String := "storage_id";
 
    IMAGE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 13,
+     (Count => 12,
       Table => IMAGE_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
@@ -323,8 +314,7 @@ private
          9 => COL_8_1_NAME'Access,
          10 => COL_9_1_NAME'Access,
          11 => COL_10_1_NAME'Access,
-         12 => COL_11_1_NAME'Access,
-         13 => COL_12_1_NAME'Access
+         12 => COL_11_1_NAME'Access
 )
      );
    IMAGE_TABLE : constant ADO.Schemas.Class_Mapping_Access
@@ -339,7 +329,6 @@ private
    with record
        Width : Integer;
        Height : Integer;
-       Entityid : Integer;
        Thumb_Width : Integer;
        Thumb_Height : Integer;
        Path : Ada.Strings.Unbounded.Unbounded_String;

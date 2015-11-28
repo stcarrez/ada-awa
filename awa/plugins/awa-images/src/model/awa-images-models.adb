@@ -64,7 +64,6 @@ package body AWA.Images.Models is
       Impl := new Image_Impl;
       Impl.Width := 0;
       Impl.Height := 0;
-      Impl.Entityid := 0;
       Impl.Thumb_Width := 0;
       Impl.Thumb_Height := 0;
       Impl.Public := False;
@@ -127,29 +126,12 @@ package body AWA.Images.Models is
    end Get_Height;
 
 
-   procedure Set_Entityid (Object : in out Image_Ref;
-                           Value  : in Integer) is
-      Impl : Image_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Integer (Impl.all, 4, Impl.Entityid, Value);
-   end Set_Entityid;
-
-   function Get_Entityid (Object : in Image_Ref)
-                  return Integer is
-      Impl : constant Image_Access
-         := Image_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Entityid;
-   end Get_Entityid;
-
-
    procedure Set_Thumb_Width (Object : in out Image_Ref;
                               Value  : in Integer) is
       Impl : Image_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Integer (Impl.all, 5, Impl.Thumb_Width, Value);
+      ADO.Objects.Set_Field_Integer (Impl.all, 4, Impl.Thumb_Width, Value);
    end Set_Thumb_Width;
 
    function Get_Thumb_Width (Object : in Image_Ref)
@@ -166,7 +148,7 @@ package body AWA.Images.Models is
       Impl : Image_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Integer (Impl.all, 6, Impl.Thumb_Height, Value);
+      ADO.Objects.Set_Field_Integer (Impl.all, 5, Impl.Thumb_Height, Value);
    end Set_Thumb_Height;
 
    function Get_Thumb_Height (Object : in Image_Ref)
@@ -183,7 +165,7 @@ package body AWA.Images.Models is
       Impl : Image_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 7, Impl.Path, Value);
+      ADO.Objects.Set_Field_String (Impl.all, 6, Impl.Path, Value);
    end Set_Path;
 
    procedure Set_Path (Object : in out Image_Ref;
@@ -191,7 +173,7 @@ package body AWA.Images.Models is
       Impl : Image_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 7, Impl.Path, Value);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 6, Impl.Path, Value);
    end Set_Path;
 
    function Get_Path (Object : in Image_Ref)
@@ -213,8 +195,8 @@ package body AWA.Images.Models is
       Impl : Image_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Boolean (Impl.all, 8, Impl.Public, Value);
-      ADO.Objects.Set_Field_Boolean (Impl.all, 8, Impl.Public, Value);
+      ADO.Objects.Set_Field_Boolean (Impl.all, 7, Impl.Public, Value);
+      ADO.Objects.Set_Field_Boolean (Impl.all, 7, Impl.Public, Value);
    end Set_Public;
 
    function Get_Public (Object : in Image_Ref)
@@ -240,7 +222,7 @@ package body AWA.Images.Models is
       Impl : Image_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 10, Impl.Thumbnail, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 9, Impl.Thumbnail, Value);
    end Set_Thumbnail;
 
    function Get_Thumbnail (Object : in Image_Ref)
@@ -257,7 +239,7 @@ package body AWA.Images.Models is
       Impl : Image_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 11, Impl.Folder, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 10, Impl.Folder, Value);
    end Set_Folder;
 
    function Get_Folder (Object : in Image_Ref)
@@ -274,7 +256,7 @@ package body AWA.Images.Models is
       Impl : Image_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 12, Impl.Owner, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 11, Impl.Owner, Value);
    end Set_Owner;
 
    function Get_Owner (Object : in Image_Ref)
@@ -291,7 +273,7 @@ package body AWA.Images.Models is
       Impl : Image_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 13, Impl.Storage, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 12, Impl.Storage, Value);
    end Set_Storage;
 
    function Get_Storage (Object : in Image_Ref)
@@ -318,7 +300,6 @@ package body AWA.Images.Models is
             Copy.Copy (Impl.all);
             Copy.Width := Impl.Width;
             Copy.Height := Impl.Height;
-            Copy.Entityid := Impl.Entityid;
             Copy.Thumb_Width := Impl.Thumb_Width;
             Copy.Thumb_Height := Impl.Thumb_Height;
             Copy.Path := Impl.Path;
@@ -473,49 +454,44 @@ package body AWA.Images.Models is
          Object.Clear_Modified (3);
       end if;
       if Object.Is_Modified (4) then
-         Stmt.Save_Field (Name  => COL_3_1_NAME, --  entityId
-                          Value => Object.Entityid);
+         Stmt.Save_Field (Name  => COL_3_1_NAME, --  thumb_width
+                          Value => Object.Thumb_Width);
          Object.Clear_Modified (4);
       end if;
       if Object.Is_Modified (5) then
-         Stmt.Save_Field (Name  => COL_4_1_NAME, --  thumb_width
-                          Value => Object.Thumb_Width);
+         Stmt.Save_Field (Name  => COL_4_1_NAME, --  thumb_height
+                          Value => Object.Thumb_Height);
          Object.Clear_Modified (5);
       end if;
       if Object.Is_Modified (6) then
-         Stmt.Save_Field (Name  => COL_5_1_NAME, --  thumb_height
-                          Value => Object.Thumb_Height);
+         Stmt.Save_Field (Name  => COL_5_1_NAME, --  path
+                          Value => Object.Path);
          Object.Clear_Modified (6);
       end if;
       if Object.Is_Modified (7) then
-         Stmt.Save_Field (Name  => COL_6_1_NAME, --  path
-                          Value => Object.Path);
+         Stmt.Save_Field (Name  => COL_6_1_NAME, --  public
+                          Value => Object.Public);
          Object.Clear_Modified (7);
       end if;
-      if Object.Is_Modified (8) then
-         Stmt.Save_Field (Name  => COL_7_1_NAME, --  public
-                          Value => Object.Public);
-         Object.Clear_Modified (8);
+      if Object.Is_Modified (9) then
+         Stmt.Save_Field (Name  => COL_8_1_NAME, --  thumbnail_id
+                          Value => Object.Thumbnail);
+         Object.Clear_Modified (9);
       end if;
       if Object.Is_Modified (10) then
-         Stmt.Save_Field (Name  => COL_9_1_NAME, --  thumbnail_id
-                          Value => Object.Thumbnail);
+         Stmt.Save_Field (Name  => COL_9_1_NAME, --  folder_id
+                          Value => Object.Folder);
          Object.Clear_Modified (10);
       end if;
       if Object.Is_Modified (11) then
-         Stmt.Save_Field (Name  => COL_10_1_NAME, --  folder_id
-                          Value => Object.Folder);
+         Stmt.Save_Field (Name  => COL_10_1_NAME, --  owner_id
+                          Value => Object.Owner);
          Object.Clear_Modified (11);
       end if;
       if Object.Is_Modified (12) then
-         Stmt.Save_Field (Name  => COL_11_1_NAME, --  owner_id
-                          Value => Object.Owner);
-         Object.Clear_Modified (12);
-      end if;
-      if Object.Is_Modified (13) then
-         Stmt.Save_Field (Name  => COL_12_1_NAME, --  storage_id
+         Stmt.Save_Field (Name  => COL_11_1_NAME, --  storage_id
                           Value => Object.Storage);
-         Object.Clear_Modified (13);
+         Object.Clear_Modified (12);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -553,25 +529,23 @@ package body AWA.Images.Models is
                         Value => Object.Width);
       Query.Save_Field (Name  => COL_2_1_NAME, --  height
                         Value => Object.Height);
-      Query.Save_Field (Name  => COL_3_1_NAME, --  entityId
-                        Value => Object.Entityid);
-      Query.Save_Field (Name  => COL_4_1_NAME, --  thumb_width
+      Query.Save_Field (Name  => COL_3_1_NAME, --  thumb_width
                         Value => Object.Thumb_Width);
-      Query.Save_Field (Name  => COL_5_1_NAME, --  thumb_height
+      Query.Save_Field (Name  => COL_4_1_NAME, --  thumb_height
                         Value => Object.Thumb_Height);
-      Query.Save_Field (Name  => COL_6_1_NAME, --  path
+      Query.Save_Field (Name  => COL_5_1_NAME, --  path
                         Value => Object.Path);
-      Query.Save_Field (Name  => COL_7_1_NAME, --  public
+      Query.Save_Field (Name  => COL_6_1_NAME, --  public
                         Value => Object.Public);
-      Query.Save_Field (Name  => COL_8_1_NAME, --  version
+      Query.Save_Field (Name  => COL_7_1_NAME, --  version
                         Value => Object.Version);
-      Query.Save_Field (Name  => COL_9_1_NAME, --  thumbnail_id
+      Query.Save_Field (Name  => COL_8_1_NAME, --  thumbnail_id
                         Value => Object.Thumbnail);
-      Query.Save_Field (Name  => COL_10_1_NAME, --  folder_id
+      Query.Save_Field (Name  => COL_9_1_NAME, --  folder_id
                         Value => Object.Folder);
-      Query.Save_Field (Name  => COL_11_1_NAME, --  owner_id
+      Query.Save_Field (Name  => COL_10_1_NAME, --  owner_id
                         Value => Object.Owner);
-      Query.Save_Field (Name  => COL_12_1_NAME, --  storage_id
+      Query.Save_Field (Name  => COL_11_1_NAME, --  storage_id
                         Value => Object.Storage);
       Query.Execute (Result);
       if Result /= 1 then
@@ -609,8 +583,6 @@ package body AWA.Images.Models is
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Width));
       elsif Name = "height" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Height));
-      elsif Name = "entityId" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Entityid));
       elsif Name = "thumb_width" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Thumb_Width));
       elsif Name = "thumb_height" then
@@ -655,25 +627,24 @@ package body AWA.Images.Models is
       Object.Set_Key_Value (Stmt.Get_Identifier (0));
       Object.Width := Stmt.Get_Integer (1);
       Object.Height := Stmt.Get_Integer (2);
-      Object.Entityid := Stmt.Get_Integer (3);
-      Object.Thumb_Width := Stmt.Get_Integer (4);
-      Object.Thumb_Height := Stmt.Get_Integer (5);
-      Object.Path := Stmt.Get_Unbounded_String (6);
-      Object.Public := Stmt.Get_Boolean (7);
-      Object.Public := Stmt.Get_Boolean (7);
+      Object.Thumb_Width := Stmt.Get_Integer (3);
+      Object.Thumb_Height := Stmt.Get_Integer (4);
+      Object.Path := Stmt.Get_Unbounded_String (5);
+      Object.Public := Stmt.Get_Boolean (6);
+      Object.Public := Stmt.Get_Boolean (6);
+      if not Stmt.Is_Null (8) then
+         Object.Thumbnail.Set_Key_Value (Stmt.Get_Identifier (8), Session);
+      end if;
       if not Stmt.Is_Null (9) then
-         Object.Thumbnail.Set_Key_Value (Stmt.Get_Identifier (9), Session);
+         Object.Folder.Set_Key_Value (Stmt.Get_Identifier (9), Session);
       end if;
       if not Stmt.Is_Null (10) then
-         Object.Folder.Set_Key_Value (Stmt.Get_Identifier (10), Session);
+         Object.Owner.Set_Key_Value (Stmt.Get_Identifier (10), Session);
       end if;
       if not Stmt.Is_Null (11) then
-         Object.Owner.Set_Key_Value (Stmt.Get_Identifier (11), Session);
+         Object.Storage.Set_Key_Value (Stmt.Get_Identifier (11), Session);
       end if;
-      if not Stmt.Is_Null (12) then
-         Object.Storage.Set_Key_Value (Stmt.Get_Identifier (12), Session);
-      end if;
-      Object.Version := Stmt.Get_Integer (8);
+      Object.Version := Stmt.Get_Integer (7);
       ADO.Objects.Set_Created (Object);
    end Load;
 
