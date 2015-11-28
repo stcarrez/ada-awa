@@ -15,11 +15,9 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-
 with Util.Strings;
-with Util.Beans.Objects;
 
-with Ada.Strings.Wide_Wide_Unbounded;
+with Ada.Characters.Conversions;
 with ASF.Contexts.Writer;
 with ASF.Utils;
 
@@ -27,14 +25,11 @@ with Wiki.Render.Html;
 with Wiki.Writers;
 package body AWA.Components.Wikis is
 
-   use Ada.Strings.Wide_Wide_Unbounded;
-
    WIKI_ATTRIBUTE_NAMES  : Util.Strings.String_Set.Set;
 
    type Html_Writer_Type is limited new Wiki.Writers.Html_Writer_Type with record
       Writer : ASF.Contexts.Writer.Response_Writer_Access;
    end record;
-   type Html_Writer_Type_Access is access all Html_Writer_Type'Class;
 
    overriding
    procedure Write (Writer  : in out Html_Writer_Type;
@@ -187,12 +182,32 @@ package body AWA.Components.Wikis is
    end Get_Wiki_Style;
 
    --  ------------------------------
+   --  Get the links renderer that must be used to render image and page links.
+   --  ------------------------------
+   function Get_Links_Renderer (UI      : in UIWiki;
+                                Context : in Faces_Context'Class)
+                                return Wiki.Render.Link_Renderer_Access is
+      Value : constant Util.Beans.Objects.Object := UI.Get_Attribute (Context, LINKS_NAME);
+      Bean  : constant access Util.Beans.Basic.Readonly_Bean'Class
+           := Util.Beans.Objects.To_Bean (Value);
+   begin
+      if Bean = null then
+         return null;
+      elsif not (Bean.all in Link_Renderer_Bean'Class) then
+         return null;
+      else
+         return Link_Renderer_Bean'Class (Bean.all)'Access;
+      end if;
+   end Get_Links_Renderer;
+
+   --  ------------------------------
    --  Render the wiki text
    --  ------------------------------
    overriding
    procedure Encode_Begin (UI      : in UIWiki;
                            Context : in out Faces_Context'Class) is
       use ASF.Contexts.Writer;
+      use type Wiki.Render.Link_Renderer_Access;
    begin
       if not UI.Is_Rendered (Context) then
          return;
@@ -203,12 +218,17 @@ package body AWA.Components.Wikis is
          Renderer : aliased Wiki.Render.Html.Html_Renderer;
          Format   : constant Wiki.Parsers.Wiki_Syntax_Type := UI.Get_Wiki_Style (Context);
          Value    : constant Util.Beans.Objects.Object := UI.Get_Attribute (Context, VALUE_NAME);
+         Links    : Wiki.Render.Link_Renderer_Access;
       begin
          Html.Writer := Writer;
          Writer.Start_Element ("div");
          UI.Render_Attributes (Context, WIKI_ATTRIBUTE_NAMES, Writer);
 
          if not Util.Beans.Objects.Is_Empty (Value) then
+            Links := UI.Get_Links_Renderer (Context);
+            if Links /= null then
+               Renderer.Set_Link_Renderer (Links);
+            end if;
             Renderer.Set_Writer (Html'Unchecked_Access);
             Wiki.Parsers.Parse (Renderer'Unchecked_Access,
                                 Util.Beans.Objects.To_Wide_Wide_String (Value),
@@ -217,6 +237,74 @@ package body AWA.Components.Wikis is
          Writer.End_Element ("div");
       end;
    end Encode_Begin;
+
+   --  ------------------------------
+   --  Get the value identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Link_Renderer_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+   function Starts_With (Content : in Unbounded_Wide_Wide_String;
+                         Item    : in String) return Boolean is
+      use Ada.Characters.Conversions;
+
+      Pos : Positive := 1;
+   begin
+      if Length (Content) < Item'Length then
+         return False;
+      end if;
+      for I in Item'Range loop
+         if Item (I) /= To_Character (Element (Content, Pos)) then
+            return False;
+         end if;
+         Pos := Pos + 1;
+      end loop;
+      return True;
+   end Starts_With;
+
+   procedure Make_Link (Renderer : in Link_Renderer_Bean;
+                        Link     : in Unbounded_Wide_Wide_String;
+                        Prefix   : in Unbounded_Wide_Wide_String;
+                        URI      : out Unbounded_Wide_Wide_String) is
+   begin
+      if Starts_With (Link, "http://") or Starts_With (Link, "https://") then
+         URI := Link;
+      else
+         URI := Prefix & Link;
+      end if;
+   end Make_Link;
+
+   --  ------------------------------
+   --  Get the image link that must be rendered from the wiki image link.
+   --  ------------------------------
+   overriding
+   procedure Make_Image_Link (Renderer : in Link_Renderer_Bean;
+                              Link     : in Unbounded_Wide_Wide_String;
+                              URI      : out Unbounded_Wide_Wide_String;
+                              Width    : out Natural;
+                              Height   : out Natural) is
+   begin
+      Renderer.Make_Link (Link, Renderer.Image_Prefix, URI);
+      Width  := 0;
+      Height := 0;
+   end Make_Image_Link;
+
+   --  ------------------------------
+   --  Get the page link that must be rendered from the wiki page link.
+   --  ------------------------------
+   overriding
+   procedure Make_Page_Link (Renderer : in Link_Renderer_Bean;
+                             Link     : in Unbounded_Wide_Wide_String;
+                             URI      : out Unbounded_Wide_Wide_String;
+                             Exists   : out Boolean) is
+   begin
+      Renderer.Make_Link (Link, Renderer.Page_Prefix, URI);
+      Exists := True;
+   end Make_Page_Link;
 
 begin
    ASF.Utils.Set_Text_Attributes (WIKI_ATTRIBUTE_NAMES);
