@@ -73,6 +73,20 @@
 #wiki-nav-sort {
     width: 20%;
 }
+.wiki-page-footer {
+    float: left;
+    width: 98%;
+    font-size: 0.8em;
+    padding-bottom: 1em;
+    padding-top: 0.5em;
+    margin-top: 2em;
+    border-top: 1px solid #ccc;
+}
+.wiki-page-read-count {
+    display: inline-block;
+    float: right;
+    padding-right: 5em;
+}
 
 /**
  * Wiki page global style.
