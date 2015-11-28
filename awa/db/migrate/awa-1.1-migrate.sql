@@ -105,3 +105,7 @@ INSERT INTO entity_type (name) VALUES
 ,("awa_counter_definition")
 ;
 ALTER TABLE awa_post ADD COLUMN `read_count` INTEGER NOT NULL;
+ALTER TABLE awa_image ADD COLUMN `owner_id` BIGINT NOT NULL;
+ALTER TABLE awa_image ADD COLUMN `folder_id` BIGINT NOT NULL;
+ALTER TABLE awa_image ADD COLUMN `public` TINYINT NOT NULL;
+ALTER TABLE awa_image ADD COLUMN `path` VARCHAR(255) BINARY NOT NULL;
