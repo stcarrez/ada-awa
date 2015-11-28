@@ -20,7 +20,7 @@ with ASF.Contexts.Faces;
 with ASF.Components;
 with ASF.Components.Html;
 
-with AWA.Wikis.Parsers;
+with Wiki.Parsers;
 package AWA.Components.Wikis is
 
    use ASF.Contexts.Faces;
@@ -44,7 +44,7 @@ package AWA.Components.Wikis is
    --  attribute name.
    function Get_Wiki_Style (UI      : in UIWiki;
                             Context : in Faces_Context'Class)
-                            return AWA.Wikis.Parsers.Wiki_Syntax_Type;
+                            return Wiki.Parsers.Wiki_Syntax_Type;
 
    --  Render the wiki text
    overriding
