@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-components-wikis -- Wiki rendering component
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,12 +15,17 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Ada.Strings.Wide_Wide_Unbounded;
+
+with Util.Beans.Basic;
+with Util.Beans.Objects;
 
 with ASF.Contexts.Faces;
 with ASF.Components;
 with ASF.Components.Html;
 
 with Wiki.Parsers;
+with Wiki.Render;
 package AWA.Components.Wikis is
 
    use ASF.Contexts.Faces;
@@ -30,6 +35,9 @@ package AWA.Components.Wikis is
    FORMAT_NAME : constant String := "format";
 
    VALUE_NAME  : constant String := ASF.Components.VALUE_NAME;
+
+   --  The link renderer bean that controls the generation of page and image links.
+   LINKS_NAME  : constant String := "links";
 
    --  ------------------------------
    --  Wiki component
@@ -46,9 +54,53 @@ package AWA.Components.Wikis is
                             Context : in Faces_Context'Class)
                             return Wiki.Parsers.Wiki_Syntax_Type;
 
+   --  Get the links renderer that must be used to render image and page links.
+   function Get_Links_Renderer (UI      : in UIWiki;
+                                Context : in Faces_Context'Class)
+                                return Wiki.Render.Link_Renderer_Access;
+
    --  Render the wiki text
    overriding
    procedure Encode_Begin (UI      : in UIWiki;
                            Context : in out Faces_Context'Class);
+
+   use Ada.Strings.Wide_Wide_Unbounded;
+
+   type Link_Renderer_Bean is new Util.Beans.Basic.Readonly_Bean
+     and Wiki.Render.Link_Renderer with record
+      Page_Prefix  : Unbounded_Wide_Wide_String;
+      Image_Prefix : Unbounded_Wide_Wide_String;
+   end record;
+
+   --  Make a link adding a prefix unless the link is already absolute.
+   procedure Make_Link (Renderer : in Link_Renderer_Bean;
+                        Link     : in Unbounded_Wide_Wide_String;
+                        Prefix   : in Unbounded_Wide_Wide_String;
+                        URI      : out Unbounded_Wide_Wide_String);
+
+   --  Get the value identified by the name.
+   overriding
+   function Get_Value (From : in Link_Renderer_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Get the image link that must be rendered from the wiki image link.
+   overriding
+   procedure Make_Image_Link (Renderer : in Link_Renderer_Bean;
+                              Link     : in Unbounded_Wide_Wide_String;
+                              URI      : out Unbounded_Wide_Wide_String;
+                              Width    : out Natural;
+                              Height   : out Natural);
+
+   --  Get the page link that must be rendered from the wiki page link.
+   overriding
+   procedure Make_Page_Link (Renderer : in Link_Renderer_Bean;
+                             Link     : in Unbounded_Wide_Wide_String;
+                             URI      : out Unbounded_Wide_Wide_String;
+                             Exists   : out Boolean);
+
+private
+
+   function Starts_With (Content : in Unbounded_Wide_Wide_String;
+                         Item    : in String) return Boolean;
 
 end AWA.Components.Wikis;
