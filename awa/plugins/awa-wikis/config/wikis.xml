@@ -117,7 +117,7 @@
     </navigation-case>
     <navigation-case>
       <from-outcome>success</from-outcome>
-      <to-view-id>/wikis/list/#{adminWikiSpace.id}</to-view-id>
+      <to-view-id>/wikis/list/#{adminWikiSpace.id}/recent/grid</to-view-id>
       <redirect/>
     </navigation-case>
   </navigation-rule>
