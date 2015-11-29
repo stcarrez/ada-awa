@@ -17,6 +17,7 @@
 -----------------------------------------------------------------------
 
 with Ada.Strings.Unbounded;
+with Ada.Strings.Wide_Wide_Unbounded;
 
 with Util.Beans.Basic;
 with Util.Beans.Objects;
@@ -30,8 +31,31 @@ with AWA.Wikis.Modules;
 with AWA.Wikis.Models;
 with AWA.Tags.Beans;
 with AWA.Counters.Beans;
+with AWA.Components.Wikis;
 
 package AWA.Wikis.Beans is
+
+   use Ada.Strings.Wide_Wide_Unbounded;
+
+   type Wiki_Links_Bean is new AWA.Components.Wikis.Link_Renderer_Bean with record
+      --  The wiki space identifier.
+      Wiki_Space_Id : ADO.Identifier;
+   end record;
+
+   --  Get the image link that must be rendered from the wiki image link.
+   overriding
+   procedure Make_Image_Link (Renderer : in Wiki_Links_Bean;
+                              Link     : in Unbounded_Wide_Wide_String;
+                              URI      : out Unbounded_Wide_Wide_String;
+                              Width    : out Natural;
+                              Height   : out Natural);
+
+   --  Get the page link that must be rendered from the wiki page link.
+   overriding
+   procedure Make_Page_Link (Renderer : in Wiki_Links_Bean;
+                             Link     : in Unbounded_Wide_Wide_String;
+                             URI      : out Unbounded_Wide_Wide_String;
+                             Exists   : out Boolean);
 
    type Wiki_View_Bean is new AWA.Wikis.Models.Wiki_View_Info with record
       --  The wiki module instance.
@@ -48,6 +72,10 @@ package AWA.Wikis.Beans is
       Counter       : aliased AWA.Counters.Beans.Counter_Bean (Of_Type => ADO.Objects.KEY_INTEGER,
                                                                Of_Class => Models.WIKI_PAGE_TABLE);
       Counter_Bean  : Util.Beans.Basic.Readonly_Bean_Access;
+
+      --  The wiki page links.
+      Links         : aliased Wiki_Links_Bean;
+      Links_Bean    : Util.Beans.Basic.Readonly_Bean_Access;
    end record;
    type Wiki_View_Bean_Access is access all Wiki_View_Bean'Class;
 
