@@ -21,6 +21,10 @@
 
     <!-- Main page body -->
     <ui:define name="pageBody">
+        <f:metadata>
+            <f:viewAction action='#{wikiPage.setup}'/>
+        </f:metadata>
+
         <div id='awa-content'>
             <ui:include src="views/wiki-nav.xhtml">
                 <ui:param name="wikiSpaceId" value="#{wikiPage.wiki_id}"/>
