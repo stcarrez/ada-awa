@@ -293,7 +293,9 @@ package body AWA.Components.Wikis is
    function Is_Link_Absolute (Renderer : in Link_Renderer_Bean;
                               Link     : in Unbounded_Wide_Wide_String) return Boolean is
    begin
-      return Starts_With (Link, "http://") or Starts_With (Link, "https://");
+      return Element (Link, 1) = '/'
+        or else Starts_With (Link, "http://")
+        or else Starts_With (Link, "https://");
    end Is_Link_Absolute;
 
    procedure Make_Link (Renderer : in Link_Renderer_Bean;
