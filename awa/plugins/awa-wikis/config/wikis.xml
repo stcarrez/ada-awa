@@ -19,6 +19,13 @@
   </managed-bean>
 
   <managed-bean>
+    <description>A localized list of wiki page formats to be used for a f:selectItems</description>
+    <managed-bean-name>wikiFormatList</managed-bean-name>
+    <managed-bean-class>AWA.Wikis.Beans.Format_List_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
     <description>The list of wikis and pages that the current user can access and update.</description>
     <managed-bean-name>adminWiki</managed-bean-name>
     <managed-bean-class>AWA.Wikis.Beans.Wiki_Admin_Bean</managed-bean-class>
