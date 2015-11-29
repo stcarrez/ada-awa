@@ -79,7 +79,7 @@ package body AWA.Components.Wikis is
    procedure Write (Writer  : in out Html_Writer_Type;
                     Content : in Wide_Wide_String) is
    begin
-      Writer.Writer.Write_Wide_Text (Content);
+      Writer.Writer.Write_Wide_Raw (Content);
    end Write;
 
    --  ------------------------------
@@ -166,15 +166,15 @@ package body AWA.Components.Wikis is
                                                     Context => Context,
                                                     Default => "dotclear");
    begin
-      if Format = "dotclear" then
+      if Format = "dotclear" or Format = "FORMAT_DOTCLEAR" then
          return Wiki.Parsers.SYNTAX_DOTCLEAR;
       elsif Format = "google" then
          return Wiki.Parsers.SYNTAX_GOOGLE;
-      elsif Format = "phpbb" then
+      elsif Format = "phpbb" or Format = "FORMAT_PHPBB" then
          return Wiki.Parsers.SYNTAX_PHPBB;
-      elsif Format = "creole" then
+      elsif Format = "creole" or Format = "FORMAT_CREOLE" then
          return Wiki.Parsers.SYNTAX_CREOLE;
-      elsif Format = "mediawiki" then
+      elsif Format = "mediawiki" or Format = "FORMAT_MEDIAWIKI" then
          return Wiki.Parsers.SYNTAX_MEDIA_WIKI;
       else
          return Wiki.Parsers.SYNTAX_MIX;
