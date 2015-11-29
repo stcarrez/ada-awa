@@ -25,10 +25,10 @@
             <div class='wiki-page-info awa-list-item' id="p_#{page.id}">
                 <div class='awa-list-col wiki-page-status-#{page.is_public}' title="#{page.is_public ? wikiMsg.wiki_page_public_title : wikiMsg.wiki_page_private_title}"></div>
                 <div class='awa-list-col wiki-page-name'>
-                    <a href="#{contextPath}/wikis/edit/#{wikiList.wiki_id}/#{page.id}">#{page.name}</a>
+                    <a href="#{contextPath}/wikis/view/#{wikiList.wiki_id}/#{page.name}">#{page.name}</a>
                 </div>
                 <div class='awa-list-col wiki-page-title'>
-                    <a href="#{contextPath}/wikis/edit/#{wikiList.wiki_id}/#{page.name}">#{page.title}</a>
+                    <a href="#{contextPath}/wikis/view/#{wikiList.wiki_id}/#{page.name}">#{page.title}</a>
                 </div>
                 <div class='awa-list-col wiki-page-date'>
                     <h:outputText value="#{page.create_date}"/>
@@ -40,8 +40,8 @@
                     #{page.last_version}
                 </div>
                 <div class='post-view'>
-                    <a href="#{contextPath}/wikis/view/#{wikiList.wiki_id}/#{page.name}">
-                        #{blogMsg.blog_post_preview_label}
+                    <a href="#{contextPath}/wikis/edit/#{wikiList.wiki_id}/#{page.name}">
+                        #{wikiMsg.wiki_page_edit_label}
                     </a>
                 </div>
             </div>

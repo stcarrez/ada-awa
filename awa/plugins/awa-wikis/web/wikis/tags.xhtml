@@ -1,4 +1,4 @@
-<!-- List the wiki pages filtered by a tag.
+<!-- List the wiki page tags.
   -  Copyright (C) 2015 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
@@ -17,6 +17,7 @@
 <ui:composition template="/WEB-INF/layouts/layout.xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:awa="http://code.google.com/p/ada-awa/jsf"
                 xmlns:c="http://java.sun.com/jstl/core"
                 xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
                 xmlns:util="http://code.google.com/p/ada-asf/util"
@@ -25,36 +26,17 @@
 
     <!-- Main page body -->
     <ui:define name="pageBody">
-        <f:metadata>
-            <f:viewParam id='page' value='#{wikiList.page}' required="false"/>
-            <f:viewAction action='#{wikiList.load}'/>
-        </f:metadata>
         <div id='awa-content'>
-            <ui:decorate template="lists/list.xhtml">
+            <ui:decorate template="views/wiki-nav.xhtml">
                 <ui:param name="wikiSpaceId" value="#{wikiList.wiki_id}"/>
                 <ui:param name="sort" value="#{wikiList.sort}"/>
                 <ui:param name="page_link" value=""/>
-                <ui:define name="page-nav">
-                    <li class="wiki-nav-right">
-                        <a href="#{contextPath}/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}/#{wikiList.sort}/grid" title="#{wikiMsg.wiki_page_grid_view_label}">
-                            <img src="#{contextPath}/images/wikis/wiki-grid.png" alt="#{wikiMsg.wiki_page_grid_view_label}"/>
-                        </a>
-                    </li>
-                </ui:define>
-                <ui:define name="page-info">
-                    <div class='grid_12 wiki-page-tag-info'>
-                        <h2>
-                            <h:outputFormat value="#{wikiMsg.wiki_tag_page_title}">
-                                <f:param value="#{wikiList.tag}"/>
-                            </h:outputFormat>
-                        </h2>
-                    </div>
-                </ui:define>
             </ui:decorate>
+            <awa:tagCloud
+                    value="#{wikiTagCloud}" styleClass="tag-cloud" layout="dispatch"
+                    var="tagName" maxWeight="48" minWeight="16" rows="60"
+                    tagLink="#{contextPath}/wikis/tags/#{wikiList.wiki_id}/#{tagName}/recent"/>
         </div>
-    </ui:define>
-    <ui:define name="pageScript">
-        <script type="text/javascript" src="#{jquery.chosenPath}"></script>
     </ui:define>
 </ui:composition>
 

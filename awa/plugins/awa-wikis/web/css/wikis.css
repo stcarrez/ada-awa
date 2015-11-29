@@ -98,7 +98,9 @@
     font-size: 1.15em;
 
 }
-
+.wiki-list-message {
+    padding-left: 1%;
+}
 /**
  * Wiki page global style.
  */

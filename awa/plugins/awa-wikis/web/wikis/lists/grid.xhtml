@@ -24,7 +24,14 @@
     </ui:decorate>
     <ui:insert name="page-info"/>
     <h:panelGroup rendered="#{wikiList.count == 0}">
-        #{wikiMsg.wiki_list_pages_empty_message}
+        <div class="wiki-list-message">
+            <h:panelGroup rendered="#{user.isLogged}">
+                #{wikiMsg.wiki_list_pages_empty_message}
+            </h:panelGroup>
+            <h:panelGroup rendered="#{not user.isLogged}">
+                #{wikiMsg.wiki_list_public_pages_empty_message}
+            </h:panelGroup>
+        </div>
     </h:panelGroup>
     <h:panelGroup rendered="#{wikiList.count != 0}">
         <div id='wiki-page-list' class='awa-list'>
