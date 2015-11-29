@@ -15,7 +15,10 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Ada.Characters.Conversions;
+
 with Util.Beans.Objects.Time;
+with Util.Strings;
 
 with ADO.Utils;
 with ADO.Queries;
@@ -29,6 +32,46 @@ with AWA.Services.Contexts;
 with AWA.Tags.Modules;
 
 package body AWA.Wikis.Beans is
+
+   --  ------------------------------
+   --  Get the image link that must be rendered from the wiki image link.
+   --  ------------------------------
+   overriding
+   procedure Make_Image_Link (Renderer : in Wiki_Links_Bean;
+                              Link     : in Unbounded_Wide_Wide_String;
+                              URI      : out Unbounded_Wide_Wide_String;
+                              Width    : out Natural;
+                              Height   : out Natural) is
+      use Ada.Characters.Conversions;
+   begin
+      if Renderer.Is_Link_Absolute (Link) then
+         URI := Link;
+      else
+         URI := Renderer.Image_Prefix;
+         Append (URI, Link);
+      end if;
+      Width  := 0;
+      Height := 0;
+   end Make_Image_Link;
+
+   --  ------------------------------
+   --  Get the page link that must be rendered from the wiki page link.
+   --  ------------------------------
+   overriding
+   procedure Make_Page_Link (Renderer : in Wiki_Links_Bean;
+                             Link     : in Unbounded_Wide_Wide_String;
+                             URI      : out Unbounded_Wide_Wide_String;
+                             Exists   : out Boolean) is
+      use Ada.Characters.Conversions;
+   begin
+      if Renderer.Is_Link_Absolute (Link) then
+         URI := Link;
+      else
+         URI := Renderer.Image_Prefix;
+         Append (URI, Link);
+      end if;
+      Exists := True;
+   end Make_Page_Link;
 
    --  ------------------------------
    --  Get the value identified by the name.
@@ -50,6 +93,8 @@ package body AWA.Wikis.Beans is
          return ADO.Utils.To_Object (From.Wiki_Space_Id);
       elsif Name = "tags" then
          return Util.Beans.Objects.To_Object (From.Tags_Bean, Util.Beans.Objects.STATIC);
+      elsif Name = "links" then
+         return Util.Beans.Objects.To_Object (From.Links_Bean, Util.Beans.Objects.STATIC);
       elsif Name = "counter" then
          return Util.Beans.Objects.To_Object (From.Counter_Bean, Util.Beans.Objects.STATIC);
       else
@@ -67,6 +112,10 @@ package body AWA.Wikis.Beans is
    begin
       if Name = "wiki_id" then
          From.Wiki_Space_Id := ADO.Utils.To_Identifier (Value);
+         Append (From.Links.Page_Prefix, Util.Beans.Objects.To_Wide_Wide_String (Value));
+         Append (From.Links.Page_Prefix, "/");
+         Append (From.Links.Image_Prefix, Util.Beans.Objects.To_Wide_Wide_String (Value));
+         Append (From.Links.Image_Prefix, "/");
       else
          AWA.Wikis.Models.Wiki_View_Info (From).Set_Value (Name, Value);
       end if;
@@ -123,6 +172,7 @@ package body AWA.Wikis.Beans is
       Object.Tags.Set_Permission ("wiki-page-update");
       Object.Counter_Bean := Object.Counter'Access;
       Object.Counter.Counter := AWA.Wikis.Modules.Read_Counter.Index;
+      Object.Links_Bean := Object.Links'Access;
       Object.Id := ADO.NO_IDENTIFIER;
       return Object.all'Access;
    end Create_Wiki_View_Bean;
