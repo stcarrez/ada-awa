@@ -257,7 +257,7 @@
   <filter-mapping>
     <filter-name>service</filter-name>
     <url-pattern>/wikis/view/#{wikiView.wiki_id}/#{wikiView.name}</url-pattern>
-    <url-pattern>/wikis/edit/#{wikiPage.wiki_id}/#{wikiPage.id}</url-pattern>
+    <url-pattern>/wikis/edit/#{wikiPage.wiki_id}/#{wikiPage.name}</url-pattern>
     <url-pattern>/wikis/create/#{wikiPage.wiki_id}</url-pattern>
     <url-pattern>/wikis/create/#{wikiPage.wiki_id}/#{wikiPage.name}</url-pattern>
     <url-pattern>/wikis/list/#{wikiList.wiki_id}/#{wikiList.sort}</url-pattern>
@@ -272,7 +272,7 @@
   <filter-mapping>
     <filter-name>auth-filter</filter-name>
     <url-pattern>/wikis/view/#{wikiView.wiki_id}/#{wikiView.name}</url-pattern>
-    <url-pattern>/wikis/edit/#{wikiPage.wiki_id}/#{wikiPage.id}</url-pattern>
+    <url-pattern>/wikis/edit/#{wikiPage.wiki_id}/#{wikiPage.name}</url-pattern>
     <url-pattern>/wikis/create/#{wikiPage.wiki_id}</url-pattern>
     <url-pattern>/wikis/create/#{wikiPage.wiki_id}/#{wikiPage.name}</url-pattern>
     <url-pattern>/wikis/list/#{wikiList.wiki_id}/#{wikiList.sort}</url-pattern>
@@ -336,7 +336,7 @@
   </url-mapping>
 
   <url-mapping>
-    <pattern>/wikis/edit/#{wikiPage.wiki_id}/#{wikiPage.id}</pattern>
+    <pattern>/wikis/edit/#{wikiPage.wiki_id}/#{wikiPage.name}</pattern>
     <view-id>/wikis/edit.html</view-id>
   </url-mapping>
 
