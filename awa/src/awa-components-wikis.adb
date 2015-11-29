@@ -245,7 +245,13 @@ package body AWA.Components.Wikis is
    function Get_Value (From : in Link_Renderer_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
-      return Util.Beans.Objects.Null_Object;
+      if Name = IMAGE_PREFIX_ATTR then
+         return Util.Beans.Objects.To_Object (From.Image_Prefix);
+      elsif Name = PAGE_PREFIX_ATTR then
+         return Util.Beans.Objects.To_Object (From.Page_Prefix);
+      else
+         return Util.Beans.Objects.Null_Object;
+      end if;
    end Get_Value;
 
    function Starts_With (Content : in Unbounded_Wide_Wide_String;
