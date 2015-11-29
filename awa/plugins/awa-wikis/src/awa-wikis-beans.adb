@@ -15,10 +15,8 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with Ada.Characters.Conversions;
 
 with Util.Beans.Objects.Time;
-with Util.Strings;
 
 with ADO.Utils;
 with ADO.Queries;
@@ -43,7 +41,7 @@ package body AWA.Wikis.Beans is
                               URI      : out Unbounded_Wide_Wide_String;
                               Width    : out Natural;
                               Height   : out Natural) is
-      use Ada.Characters.Conversions;
+--      use Ada.Characters.Conversions;
    begin
       if Renderer.Is_Link_Absolute (Link) then
          URI := Link;
@@ -63,7 +61,7 @@ package body AWA.Wikis.Beans is
                              Link     : in Unbounded_Wide_Wide_String;
                              URI      : out Unbounded_Wide_Wide_String;
                              Exists   : out Boolean) is
-      use Ada.Characters.Conversions;
+--      use Ada.Characters.Conversions;
    begin
       if Renderer.Is_Link_Absolute (Link) then
          URI := Link;
@@ -295,6 +293,14 @@ package body AWA.Wikis.Beans is
          else
             return From.Content.Get_Value ("create_date");
          end if;
+      elsif Name = "format" then
+         if not From.Content.Is_Null then
+            return From.Content.Get_Value ("format");
+         elsif not From.Wiki_Space.Is_Null then
+            return From.Wiki_Space.Get_Value ("format");
+         else
+            return Util.Beans.Objects.Null_Object;
+         end if;
       elsif Name = "comment" then
          if From.Content.Is_Null then
             return Util.Beans.Objects.Null_Object;
@@ -303,6 +309,14 @@ package body AWA.Wikis.Beans is
          end if;
       elsif Name = "tags" then
          return Util.Beans.Objects.To_Object (From.Tags_Bean, Util.Beans.Objects.STATIC);
+      elsif Name = "is_public" then
+         if not From.Is_Null then
+            return AWA.Wikis.Models.Wiki_Page_Bean (From).Get_Value (Name);
+         elsif not From.Wiki_Space.Is_Null then
+            return From.Wiki_Space.Get_Value (Name);
+         else
+            return Util.Beans.Objects.Null_Object;
+         end if;
       elsif From.Is_Null then
          return Util.Beans.Objects.Null_Object;
       else
@@ -329,6 +343,8 @@ package body AWA.Wikis.Beans is
       elsif Name = "text" then
          From.Has_Content := True;
          From.New_Content := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "format" then
+         From.Format := AWA.Wikis.Models.Format_Type_Objects.To_Value (Value);
       elsif Name = "comment" then
          From.New_Comment := Util.Beans.Objects.To_Unbounded_String (Value);
          From.Content.Set_Save_Comment (Util.Beans.Objects.To_String (Value));
@@ -343,11 +359,14 @@ package body AWA.Wikis.Beans is
    --  ------------------------------
    function Has_New_Content (Bean : in Wiki_Page_Bean) return Boolean is
       use type Ada.Strings.Unbounded.Unbounded_String;
+      use type AWA.Wikis.Models.Format_Type;
    begin
       if not Bean.Is_Inserted then
          return True;
       elsif not Bean.Has_Content then
          return False;
+      elsif Bean.Content.Get_Format /= Bean.Format then
+         return True;
       else
          declare
             Current : constant Ada.Strings.Unbounded.Unbounded_String := Bean.Content.Get_Content;
@@ -379,6 +398,7 @@ package body AWA.Wikis.Beans is
          Bean.Content := AWA.Wikis.Models.Null_Wiki_Content;
          Bean.Content.Set_Content (Bean.New_Content);
          Bean.Content.Set_Save_Comment (Bean.New_Comment);
+         Bean.Content.Set_Format (Bean.Format);
          Bean.Module.Create_Wiki_Content (Bean, Bean.Content);
       end if;
       Result := Bean.Get_Id;
@@ -402,6 +422,21 @@ package body AWA.Wikis.Beans is
       when ADO.Objects.NOT_FOUND =>
          Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
    end Load;
+
+   --  ------------------------------
+   --  Setup the wiki page for the creation.
+   --  ------------------------------
+   overriding
+   procedure Setup (Bean    : in out Wiki_Page_Bean;
+                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Bean.Module.Load_Wiki_Space (Bean.Wiki_Space, Bean.Wiki_Space.Get_Id);
+      Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("loaded");
+
+   exception
+      when ADO.Objects.NOT_FOUND =>
+         Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
+   end Setup;
 
    --  ------------------------------
    --  Delete the wiki page.
@@ -546,11 +581,14 @@ package body AWA.Wikis.Beans is
          Count_Query.Set_Count_Query (AWA.Wikis.Models.Query_Wiki_Page_List);
       end if;
       if Into.Sort = "name" then
-         Query.Bind_Param (Name => "order1", Value => ADO.Parameters.Token '("page.name"));
+         Query.Bind_Param (Name  => "order1",
+                           Value => ADO.Parameters.Token '("page.name"));
       elsif Into.Sort = "recent" then
-         Query.Bind_Param (Name => "order1", Value => ADO.Parameters.Token '("content.create_date"));
+         Query.Bind_Param (Name  => "order1",
+                           Value => ADO.Parameters.Token '("content.create_date"));
       elsif Into.Sort = "popular" then
-         Query.Bind_Param (Name => "order1", Value => ADO.Parameters.Token '("page.read_count"));
+         Query.Bind_Param (Name  => "order1",
+                           Value => ADO.Parameters.Token '("page.read_count"));
       else
          return;
       end if;
