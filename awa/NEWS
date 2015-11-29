@@ -1,6 +1,8 @@
 Version 1.1     -
   - New wiki plugin to write online wiki-based documentation
   - Improvement of configure, build and installation with gprinstall when available
+  - New counter plugin to track wiki page and blog post reads
+  - Moved the wiki engine to Ada Wiki library
 
 Version 1.0     - Jul 2014
   - New countries plugin to provide country/region/city data models
