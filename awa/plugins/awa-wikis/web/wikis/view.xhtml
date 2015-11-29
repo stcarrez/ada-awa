@@ -47,7 +47,7 @@
                       <ul class="wiki-page-actions">
                           <h:panelGroup rendered="#{wikiView.acl_id gt 1}">
                               <li>
-                                  <a class='awa-button' href="#{contextPath}/wikis/edit/#{wikiView.wiki_id}/#{wikiView.id}">#{wikiMsg.wiki_page_edit_label}</a>
+                                  <a class='awa-button' href="#{contextPath}/wikis/edit/#{wikiView.wiki_id}/#{wikiView.name}">#{wikiMsg.wiki_page_edit_label}</a>
                               </li>
                           </h:panelGroup>
                           <li>
@@ -63,7 +63,7 @@
                       </div>
                   </div>
                   <awa:tagList value='#{wikiView.tags}' id='qtags' styleClass="wiki-tag-list tagedit-list"
-                               tagLink="#{contextPath}/wikis/tags/#{wikiView.wiki_id}/#{tagName}"
+                               tagLink="#{contextPath}/wikis/tags/#{wikiView.wiki_id}/#{tagName}/recent"
                                var="tagName"
                                tagClass="tagedit-listelement tagedit-listelement-old"/>
                   <awa:wiki styleClass='wiki-text' value="#{wikiView.content}" format="#{wikiView.format}"/>

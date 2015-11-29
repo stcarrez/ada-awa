@@ -23,6 +23,7 @@
     <ui:decorate template="../views/wiki-nav.xhtml">
         <ui:param name="wikiSpaceId" value="#{wikiList.wiki_id}"/>
     </ui:decorate>
+    <ui:insert name="page-info"/>
     <h:panelGroup rendered="#{wikiList.count == 0}">
         <ui:insert name="empty">
             #{wikiMsg.wiki_list_pages_empty_message}

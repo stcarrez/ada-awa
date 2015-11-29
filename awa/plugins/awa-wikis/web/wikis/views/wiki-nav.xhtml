@@ -60,7 +60,11 @@
                 <f:selectItem itemValue="recent" itemLabel="#{wikiMsg.wiki_sort_by_recent}"/>
                 <f:facet name="options">width: "60%",disable_search: true</f:facet>
                 <f:facet name="events">.bind("change", function() {
+                    if ("#{page_link}" == "") {
+                      document.location = $(this).val();
+                    } else {
                       document.location = "../" + $(this).val() + "#{page_link}";
+                    }
                 })</f:facet>
             </w:chosen>
         </li>

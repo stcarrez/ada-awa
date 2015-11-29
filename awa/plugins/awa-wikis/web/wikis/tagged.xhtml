@@ -31,15 +31,30 @@
         </f:metadata>
         <div id='awa-content'>
             <ui:decorate template="lists/list.xhtml">
+                <ui:param name="wikiSpaceId" value="#{wikiList.wiki_id}"/>
+                <ui:param name="sort" value="#{wikiList.sort}"/>
+                <ui:param name="page_link" value="#{wikiList.sort}"/>
                 <ui:define name="page-nav">
                     <li class="wiki-nav-right">
-                        <a href="#{contextPath}/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}/grid" title="#{wikiMsg.wiki_page_grid_view_label}">
+                        <a href="#{contextPath}/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}/#{wikiList.sort}/grid" title="#{wikiMsg.wiki_page_grid_view_label}">
                             <img src="#{contextPath}/images/wikis/wiki-grid.png" alt="#{wikiMsg.wiki_page_grid_view_label}"/>
                         </a>
                     </li>
                 </ui:define>
+                <ui:define name="page-info">
+                    <div class='grid_12 wiki-page-tag-info'>
+                        <h2>
+                            <h:outputFormat value="#{wikiMsg.wiki_tag_page_title}">
+                                <f:param value="#{wikiList.tag}"/>
+                            </h:outputFormat>
+                        </h2>
+                    </div>
+                </ui:define>
             </ui:decorate>
         </div>
+    </ui:define>
+    <ui:define name="pageScript">
+        <script type="text/javascript" src="#{jquery.chosenPath}"></script>
     </ui:define>
 </ui:composition>
 

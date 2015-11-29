@@ -87,6 +87,17 @@
     float: right;
     padding-right: 5em;
 }
+.wiki-page-tag-info {
+    padding-top: 1em;
+    padding-bottom: 0.5em;
+}
+.wiki-page-tag-info h2 {
+    background: #f91;
+    padding: 2px 8px;
+    color: #fff;
+    font-size: 1.15em;
+
+}
 
 /**
  * Wiki page global style.
