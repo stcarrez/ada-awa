@@ -68,9 +68,9 @@
       page.name,
       page.title,
       page.is_public,
+      page.last_version,
       page.read_count,
       content.create_date,
-      page.last_version,
       user.name
     FROM awa_wiki_page AS page
     INNER JOIN awa_tagged_entity AS e ON e.for_entity_id = page.id AND e.entity_type = :page_table AND e.tag_id = :tag
