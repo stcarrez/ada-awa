@@ -254,6 +254,21 @@ package body AWA.Components.Wikis is
       end if;
    end Get_Value;
 
+   --  ------------------------------
+   --  Set the value identified by the name.
+   --  ------------------------------
+   overriding
+   procedure Set_Value (From  : in out Link_Renderer_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = IMAGE_PREFIX_ATTR then
+         From.Image_Prefix := Util.Beans.Objects.To_Unbounded_Wide_Wide_String (Value);
+      elsif Name = PAGE_PREFIX_ATTR then
+         From.Page_Prefix := Util.Beans.Objects.To_Unbounded_Wide_Wide_String (Value);
+      end if;
+   end Set_Value;
+
    function Starts_With (Content : in Unbounded_Wide_Wide_String;
                          Item    : in String) return Boolean is
       use Ada.Characters.Conversions;
