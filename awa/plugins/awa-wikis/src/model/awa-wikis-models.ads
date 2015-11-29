@@ -751,6 +751,9 @@ package AWA.Wikis.Models is
    procedure Load (Bean : in out Wiki_Space_Bean;
                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
+   --  --------------------
+   --    setup the page bean when the wiki page is created.
+   --  --------------------
    type Wiki_Page_Bean is abstract new AWA.Wikis.Models.Wiki_Page_Ref
      and Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with null record;
 
@@ -775,6 +778,9 @@ package AWA.Wikis.Models is
 
    procedure Load (Bean : in out Wiki_Page_Bean;
                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   procedure Setup (Bean : in out Wiki_Page_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
    --  --------------------
    --    Load the list items
