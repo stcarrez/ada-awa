@@ -72,6 +72,10 @@ package AWA.Components.Wikis is
       Image_Prefix : Unbounded_Wide_Wide_String;
    end record;
 
+   --  Return true if the link is an absolute link.
+   function Is_Link_Absolute (Renderer : in Link_Renderer_Bean;
+                              Link     : in Unbounded_Wide_Wide_String) return Boolean;
+
    --  Make a link adding a prefix unless the link is already absolute.
    procedure Make_Link (Renderer : in Link_Renderer_Bean;
                         Link     : in Unbounded_Wide_Wide_String;
