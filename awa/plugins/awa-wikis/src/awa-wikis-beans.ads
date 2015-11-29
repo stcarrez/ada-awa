@@ -103,6 +103,10 @@ package AWA.Wikis.Beans is
      new ASF.Helpers.Beans.Get_Bean (Element_Type   => Wiki_View_Bean,
                                      Element_Access => Wiki_View_Bean_Access);
 
+   --  Get a select item list which contains a list of wiki formats.
+   function Create_Format_List_Bean (Module : in AWA.Wikis.Modules.Wiki_Module_Access)
+                                     return Util.Beans.Basic.Readonly_Bean_Access;
+
    type Wiki_Space_Bean is new AWA.Wikis.Models.Wiki_Space_Bean with record
       Module    : Modules.Wiki_Module_Access := null;
 
