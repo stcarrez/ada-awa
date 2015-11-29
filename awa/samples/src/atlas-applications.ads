@@ -37,6 +37,9 @@ with AWA.Storages.Modules;
 with AWA.Images.Modules;
 with AWA.Questions.Modules;
 with AWA.Wikis.Modules;
+with AWA.Wikis.Previews;
+with AWA.Jobs.Modules;
+with AWA.Counters.Modules;
 with AWA.Votes.Modules;
 with AWA.Tags.Modules;
 with AWA.Comments.Modules;
@@ -116,6 +119,7 @@ private
       Workspace_Module  : aliased AWA.Workspaces.Modules.Workspace_Module;
       Blog_Module       : aliased AWA.Blogs.Modules.Blog_Module;
       Mail_Module       : aliased AWA.Mail.Modules.Mail_Module;
+      Job_Module        : aliased AWA.Jobs.Modules.Job_Module;
       Storage_Module    : aliased AWA.Storages.Modules.Storage_Module;
       Image_Module      : aliased AWA.Images.Modules.Image_Module;
       Vote_Module       : aliased AWA.Votes.Modules.Vote_Module;
@@ -123,6 +127,8 @@ private
       Tag_Module        : aliased AWA.Tags.Modules.Tag_Module;
       Comment_Module    : aliased AWA.Comments.Modules.Comment_Module;
       Wiki_Module       : aliased AWA.Wikis.Modules.Wiki_Module;
+      Preview_Module    : aliased AWA.Wikis.Previews.Preview_Module;
+      Counter_Module    : aliased AWA.Counters.Modules.Counter_Module;
 
       Microblog_Module  : aliased Atlas.Microblog.Modules.Microblog_Module;
       Review_Module     : aliased Atlas.Reviews.Modules.Review_Module;

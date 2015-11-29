@@ -83,7 +83,7 @@ package body Atlas.Reviews.Beans is
    overriding
    procedure Load (Bean : in out Review_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
-      Session     : ADO.Sessions.Session := Bean.Module.Get_Session;
+      pragma Unreferenced (Outcome, Bean);
    begin
       null;
    end Load;
@@ -138,6 +138,8 @@ package body Atlas.Reviews.Beans is
    overriding
    procedure Load (Into    : in out Review_List_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
+
       Session     : ADO.Sessions.Session := Into.Module.Get_Session;
       Query       : ADO.Queries.Context;
       Count_Query : ADO.Queries.Context;

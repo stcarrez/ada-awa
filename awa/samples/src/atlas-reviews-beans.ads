@@ -20,7 +20,6 @@ with Ada.Strings.Unbounded;
 
 with Util.Beans.Basic;
 with Util.Beans.Objects;
-with Util.Beans.Methods;
 with Atlas.Reviews.Modules;
 with Atlas.Reviews.Models;
 package Atlas.Reviews.Beans is

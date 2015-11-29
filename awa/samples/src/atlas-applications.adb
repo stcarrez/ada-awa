@@ -221,6 +221,16 @@ package body Atlas.Applications is
                 Module => App.Mail_Module'Access);
 
       Register (App    => App.Self.all'Access,
+                Name   => AWA.Counters.Modules.NAME,
+                URI    => "counters",
+                Module => App.Counter_Module'Access);
+
+      Register (App    => App.Self.all'Access,
+                Name   => AWA.Jobs.Modules.NAME,
+                URI    => "jobs",
+                Module => App.Job_Module'Access);
+
+      Register (App    => App.Self.all'Access,
                 Name   => AWA.Tags.Modules.NAME,
                 URI    => "tags",
                 Module => App.Tag_Module'Access);
@@ -259,6 +269,11 @@ package body Atlas.Applications is
                 Name   => AWA.Wikis.Modules.NAME,
                 URI    => "wikis",
                 Module => App.Wiki_Module'Access);
+
+      Register (App    => App.Self.all'Access,
+                Name   => AWA.Wikis.Previews.NAME,
+                URI    => "wikis-preview",
+                Module => App.Preview_Module'Access);
 
       Register (App    => App.Self.all'Access,
                 Name   => Atlas.Microblog.Modules.NAME,
