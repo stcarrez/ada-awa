@@ -39,7 +39,7 @@
           <div class='wiki-page-container'>
               <h:panelGroup rendered="#{not empty wikiView.left_side}">
                   <div class="grid_2">
-                      <awa:wiki styleClass='wiki-text' value="#{wikiView.left_side}" format="dotclear"/>
+                      <awa:wiki styleClass='wiki-text' value="#{wikiView.left_side}" format="#{wikiView.side_format}"/>
                   </div>
               </h:panelGroup>
               <div class="#{not empty wikiView.left_side ? (not empty wikiView.right_side ? 'grid_8' : 'grid_10') : 'grid_12'}" id="p_#{wikiView.id}">
@@ -66,7 +66,7 @@
                                tagLink="#{contextPath}/wikis/tags/#{wikiView.wiki_id}/#{tagName}"
                                var="tagName"
                                tagClass="tagedit-listelement tagedit-listelement-old"/>
-                  <awa:wiki styleClass='wiki-text' value="#{wikiView.content}" format="dotclear"/>
+                  <awa:wiki styleClass='wiki-text' value="#{wikiView.content}" format="#{wikiView.format}"/>
                   <div class="wiki-page-footer">
                       <h:outputFormat styleClass="wiki-page-date" value="#{wikiMsg.wiki_page_info_date}">
                           <f:param value="#{wikiView.date}"/>
@@ -80,7 +80,7 @@
               </div>
               <h:panelGroup rendered="#{not empty wikiView.right_side}">
                   <div class="grid_2">
-                      <awa:wiki styleClass='wiki-text' value="#{wikiView.right_side}" format="dotclear"/>
+                      <awa:wiki styleClass='wiki-text' value="#{wikiView.right_side}" format="#{wikiView.side_format}"/>
                   </div>
               </h:panelGroup>
           </div>

@@ -28,16 +28,34 @@
             <w:inputText styleClass="awa-required"
                          id='title' size='50' required='true' value='#{adminWikiSpace.name}'
                          title='#{wikiMsg.wiki_admin_wiki_title_label}'/>
-            <dl class="awa-required">
-                <dt><label for='page-is-public'>#{wikiMsg.wiki_admin_is_public_label}</label></dt>
-                <dd>
-                    <h:selectOneRadio styleClass="awa-radio" id="page-is-public" value="#{adminWikiSpace.is_public}">
-                        <f:selectItem id="page-public-yes" name="page-is-public" itemLabel="#{layoutMsg.layout_yes_label}" itemValue="TRUE" />
-                        <f:selectItem id="page-public-no" name="page-is-public" itemLabel="#{layoutMsg.layout_no_label}" itemValue="FALSE" />
-                    </h:selectOneRadio>
-                </dd>
-            </dl>
-            <div class="grid_6">
+        <div class="grid_12">
+            <div class="grid_6 alpha">
+                <dl class="awa-required">
+                    <dt><label for='page-is-public'>#{wikiMsg.wiki_admin_is_public_label}</label></dt>
+                    <dd>
+                        <h:selectOneRadio styleClass="awa-radio" id="page-is-public" value="#{adminWikiSpace.is_public}">
+                            <f:selectItem id="page-public-yes" name="page-is-public" itemLabel="#{layoutMsg.layout_yes_label}" itemValue="TRUE" />
+                            <f:selectItem id="page-public-no" name="page-is-public" itemLabel="#{layoutMsg.layout_no_label}" itemValue="FALSE" />
+                        </h:selectOneRadio>
+                    </dd>
+                </dl>
+            </div>
+            <div class="grid_6 omega">
+                <dl class="awa-required">
+                    <dt>
+                        <label for="wiki-format">#{wikiMsg.wiki_admin_format_label}</label>
+                    </dt>
+                    <dd>
+                        <h:selectOneMenu id='wiki-format' size='10' value='#{adminWikiSpace.format}'
+                                         styleClass="ui-state-default ui-corner-all">
+                            <f:selectItems value="#{wikiFormatList}"/>
+                        </h:selectOneMenu>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+        <div class="grid_12">
+            <div class="grid_6 alpha">
                 <dl class="awa-required#{util:hasMessage('left_side') ? ' awa-error' : ''}">
                     <dt>
                         <label for='text'>#{wikiMsg.wiki_page_left_side_label}</label>
@@ -47,7 +65,7 @@
                     </dd>
                 </dl>
             </div>
-            <div class="grid_6">
+            <div class="grid_6 omega">
                 <dl class="awa-required#{util:hasMessage('right_side') ? ' awa-error' : ''}">
                     <dt>
                         <label for='text'>#{wikiMsg.wiki_page_right_side_label}</label>
@@ -57,6 +75,7 @@
                     </dd>
                 </dl>
             </div>
+        </div>
             <ul class='awa-buttons'>
                 <li>
                     <h:commandButton id='save'

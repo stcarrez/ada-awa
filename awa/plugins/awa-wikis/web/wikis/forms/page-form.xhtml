@@ -77,6 +77,17 @@
                     </h:selectOneRadio>
                 </dd>
             </dl>
+            <dl class="awa-required">
+                <dt>
+                    <label for="wiki-format">#{wikiMsg.wiki_page_format_label}</label>
+                </dt>
+                <dd>
+                    <h:selectOneMenu id='wiki-format' size='10' value='#{wikiPage.format}'
+                                     styleClass="ui-state-default ui-corner-all">
+                        <f:selectItems value="#{wikiFormatList}"/>
+                    </h:selectOneMenu>
+                </dd>
+            </dl>
             <dl class="awa-optional">
                 <dd>
                     <ui:include src="/blogs/admin/forms/syntax.xhtml"/>

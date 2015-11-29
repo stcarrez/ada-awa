@@ -24,6 +24,7 @@
         <div id='awa-content'>
             <ui:include src="views/wiki-nav.xhtml">
                 <ui:param name="wikiSpaceId" value="#{wikiPage.wiki_id}"/>
+                <ui:param name="page_link" value="recent/grid"/>
             </ui:include>
             <div id='wiki-page-create' class='blog-edit-post'>
                 <ui:include src="forms/page-create.xhtml"/>
