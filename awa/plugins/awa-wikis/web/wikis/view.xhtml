@@ -34,7 +34,7 @@
       <div id='awa-content'>
           <ui:include src="views/wiki-nav.xhtml">
               <ui:param name="wikiSpaceId" value="#{wikiView.wiki_id}"/>
-              <ui:param name="page_link" value="recent/grid"/>
+              <ui:param name="page_link" value="/grid"/>
           </ui:include>
           <div class='wiki-page-container'>
               <h:panelGroup rendered="#{not empty wikiView.left_side}">
