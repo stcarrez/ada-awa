@@ -159,6 +159,7 @@ package AWA.Wikis.Beans is
       --  The page content.
       Content     : Models.Wiki_Content_Ref;
       Has_Content : Boolean := False;
+      Format      : AWA.Wikis.Models.Format_Type := AWA.Wikis.Models.FORMAT_CREOLE;
       New_Content : Ada.Strings.Unbounded.Unbounded_String;
       New_Comment : Ada.Strings.Unbounded.Unbounded_String;
 
@@ -194,6 +195,11 @@ package AWA.Wikis.Beans is
    overriding
    procedure Load (Bean    : in out Wiki_Page_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Setup the wiki page for the creation.
+   overriding
+   procedure Setup (Bean    : in out Wiki_Page_Bean;
+                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
    --  Delete the wiki page.
    overriding
