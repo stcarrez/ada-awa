@@ -30,6 +30,7 @@ with ADO.Parameters;
 with AWA.Services;
 with AWA.Services.Contexts;
 with AWA.Tags.Modules;
+with AWA.Helpers.Selectors;
 
 package body AWA.Wikis.Beans is
 
@@ -176,6 +177,23 @@ package body AWA.Wikis.Beans is
       Object.Id := ADO.NO_IDENTIFIER;
       return Object.all'Access;
    end Create_Wiki_View_Bean;
+
+   function Create_From_Format is
+     new AWA.Helpers.Selectors.Create_From_Enum (AWA.Wikis.Models.Format_Type,
+                                                 "wiki_format_");
+
+   --  ------------------------------
+   --  Get a select item list which contains a list of wiki formats.
+   --  ------------------------------
+   function Create_Format_List_Bean (Module : in AWA.Wikis.Modules.Wiki_Module_Access)
+                                     return Util.Beans.Basic.Readonly_Bean_Access is
+      pragma Unreferenced (Module);
+      use AWA.Helpers;
+   begin
+      return Selectors.Create_Selector_Bean (Bundle  => "wikis",
+                                             Context => null,
+                                             Create  => Create_From_Format'Access).all'Access;
+   end Create_Format_List_Bean;
 
    --  ------------------------------
    --  Get the value identified by the name.
