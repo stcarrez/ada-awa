@@ -3,7 +3,7 @@
 Once posted, the message is not supposed to be changed. */
 CREATE TABLE mblog (
   /*  */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
   /* the microblog message */
@@ -11,12 +11,13 @@ CREATE TABLE mblog (
   /*  */
   `creation_date` DATETIME NOT NULL,
   /* the post author */
-  `author_id` BIGINT NOT NULL
+  `author_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 /* the table that contains the reviews made by users. */
 CREATE TABLE atlas_review (
   /* the review identifier */
-  `id` BIGINT PRIMARY KEY,
+  `id` BIGINT NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
   /* the review title. */
@@ -30,7 +31,8 @@ CREATE TABLE atlas_review (
   /* the site, article or application being reviewed. */
   `site` VARCHAR(255) NOT NULL,
   /*  */
-  `reviewer_id` BIGINT NOT NULL
+  `reviewer_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("mblog");
 INSERT INTO entity_type (name) VALUES ("atlas_review");
