@@ -66,6 +66,9 @@ package AWA.Components.Wikis is
 
    use Ada.Strings.Wide_Wide_Unbounded;
 
+   IMAGE_PREFIX_ATTR : constant String := "image_prefix";
+   PAGE_PREFIX_ATTR  : constant String := "page_prefix";
+
    type Link_Renderer_Bean is new Util.Beans.Basic.Readonly_Bean
      and Wiki.Render.Link_Renderer with record
       Page_Prefix  : Unbounded_Wide_Wide_String;
