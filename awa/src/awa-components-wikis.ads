@@ -69,7 +69,7 @@ package AWA.Components.Wikis is
    IMAGE_PREFIX_ATTR : constant String := "image_prefix";
    PAGE_PREFIX_ATTR  : constant String := "page_prefix";
 
-   type Link_Renderer_Bean is new Util.Beans.Basic.Readonly_Bean
+   type Link_Renderer_Bean is new Util.Beans.Basic.Bean
      and Wiki.Render.Link_Renderer with record
       Page_Prefix  : Unbounded_Wide_Wide_String;
       Image_Prefix : Unbounded_Wide_Wide_String;
@@ -89,6 +89,12 @@ package AWA.Components.Wikis is
    overriding
    function Get_Value (From : in Link_Renderer_Bean;
                        Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the value identified by the name.
+   overriding
+   procedure Set_Value (From  : in out Link_Renderer_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
 
    --  Get the image link that must be rendered from the wiki image link.
    overriding
