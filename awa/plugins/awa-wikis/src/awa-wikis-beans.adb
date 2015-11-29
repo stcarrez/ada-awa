@@ -411,11 +411,9 @@ package body AWA.Wikis.Beans is
    overriding
    procedure Load (Bean    : in out Wiki_Page_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
-      Session      : constant ADO.Sessions.Session := Bean.Module.Get_Session;
    begin
       Bean.Module.Load_Page (Bean, Bean.Content, Bean.Tags,
-                              Bean.Wiki_Space.Get_Id, Bean.Get_Name);
-      Bean.Tags.Load_Tags (Session, Bean.Get_Id);
+                             Bean.Wiki_Space.Get_Id, Bean.Get_Name);
       Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("loaded");
 
    exception
