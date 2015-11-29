@@ -266,12 +266,21 @@ package body AWA.Components.Wikis is
       return True;
    end Starts_With;
 
+   --  ------------------------------
+   --  Return true if the link is an absolute link.
+   --  ------------------------------
+   function Is_Link_Absolute (Renderer : in Link_Renderer_Bean;
+                              Link     : in Unbounded_Wide_Wide_String) return Boolean is
+   begin
+      return Starts_With (Link, "http://") or Starts_With (Link, "https://");
+   end Is_Link_Absolute;
+
    procedure Make_Link (Renderer : in Link_Renderer_Bean;
                         Link     : in Unbounded_Wide_Wide_String;
                         Prefix   : in Unbounded_Wide_Wide_String;
                         URI      : out Unbounded_Wide_Wide_String) is
    begin
-      if Starts_With (Link, "http://") or Starts_With (Link, "https://") then
+      if Renderer.Is_Link_Absolute (Link) then
          URI := Link;
       else
          URI := Prefix & Link;
