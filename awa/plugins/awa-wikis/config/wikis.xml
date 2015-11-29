@@ -6,6 +6,16 @@
     <managed-bean-name>wikiView</managed-bean-name>
     <managed-bean-class>AWA.Wikis.Beans.Wiki_View_Bean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>image_prefix</property-name>
+      <property-class>String</property-class>
+      <value>#{contextPath}/images/</value>
+    </managed-property>
+    <managed-property>
+      <property-name>page_prefix</property-name>
+      <property-class>String</property-class>
+      <value>#{contextPath}/wikis/view/</value>
+    </managed-property>
   </managed-bean>
 
   <managed-bean>
