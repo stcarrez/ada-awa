@@ -71,6 +71,10 @@ package body AWA.Wikis.Modules is
                          Handler => AWA.Wikis.Beans.Create_Wiki_List_Bean'Access);
 
       Register.Register (Plugin => Plugin,
+                         Name   => "AWA.Wikis.Beans.Format_List_Bean",
+                         Handler => AWA.Wikis.Beans.Create_Format_List_Bean'Access);
+
+      Register.Register (Plugin => Plugin,
                          Name   => "AWA.Wikis.Beans.Wiki_View_Bean",
                          Handler => AWA.Wikis.Beans.Create_Wiki_View_Bean'Access);
 
