@@ -3,12 +3,22 @@
 
   <context-param>
     <param-name>counters.counter_age_limit</param-name>
-    <param-value>60</param-value>
+    <param-value>300</param-value>
+    <description>
+     The maximum age limit in seconds for a pending counter increment to stay in
+     the internal table.  When a pending counter reaches this age limit, the pending
+     counter increments are flushed and the table is cleared.  The default is 5 minutes.
+    </description>
   </context-param>
 
   <context-param>
     <param-name>counters.counter_limit</param-name>
-    <param-value>300</param-value>
+    <param-value>1000</param-value>
+    <description>
+     The maximum number of different counters which can be stored in the internal
+     table before flushing the pending increments to the database. When this limit is
+     reached, the pending counter increments are flushed and the table is cleared.
+    </description>
   </context-param>
 
 </module>
