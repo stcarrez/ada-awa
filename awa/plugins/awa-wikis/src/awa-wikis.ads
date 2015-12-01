@@ -16,6 +16,23 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+--  == Introduction ==
+--  The <b>Wikis</b> module provides a complete wiki system which allows users to create
+--  their own wiki environment with their wiki pages.
+--
+--  @include awa-wikis-modules.ads
+--
+--  @include awa-wikis-beans.ads
+--
+--  == Queries ==
+--  @include wiki-page.xml
+--  @include wiki-pages.xml
+--  @include wiki-history.xml
+--  @include wiki-list.xml
+--
+--  == Model ==
+--  [images/awa_wikis_model.png]
+--
 package AWA.Wikis is
 
    pragma Preelaborate;
