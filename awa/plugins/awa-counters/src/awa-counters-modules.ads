@@ -21,6 +21,30 @@ with Ada.Calendar;
 with ASF.Applications;
 with ADO.Sessions;
 with AWA.Modules;
+
+--  == Counter Module ==
+--  The <tt>Counter_Module</tt> manages the counters associated with database entities.
+--  To avoid having to update the database each time a counter is incremented, counters
+--  are kept temporarily in a <tt>Counter_Table</tt> protected type.  The table contains
+--  only the partial increments and not the real counter values.  Counters are flushed
+--  when the table reaches some limit, or, when the table is oldest than some limit.
+--  Counters are associated with a day so that it becomes possible to gather per-day counters.
+--  The table is also flushed when a counter is incremented in a different day.
+--
+--  === Integration ===
+--  An instance of the <tt>Counter_Module</tt> must be declared and registered in the AWA application.
+--  The module instance can be defined as follows:
+--
+--    type Application is new AWA.Applications.Application with record
+--       Counter_Module : aliased AWA.Counters.Modules.Counter_Module;
+--    end record;
+--
+--  And registered in the `Initialize_Modules` procedure by using:
+--
+--    Register (App    => App.Self.all'Access,
+--              Name   => AWA.Counters.Modules.NAME,
+--              Module => App.Counter_Module'Access);
+--
 package AWA.Counters.Modules is
 
    --  The name under which the module is registered.

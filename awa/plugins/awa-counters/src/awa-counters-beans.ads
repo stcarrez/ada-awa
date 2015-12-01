@@ -19,6 +19,11 @@ with ADO.Objects;
 with ADO.Schemas;
 with Util.Beans.Objects;
 with Util.Beans.Basic;
+
+--  == Counter Bean ==
+--  The <b>Counter_Bean</b> allows to represent a counter associated with some database
+--  entity and allows its control by the <awa:counter> component.
+--
 package AWA.Counters.Beans is
 
    type Counter_Bean (Of_Type  : ADO.Objects.Object_Key_Type;
