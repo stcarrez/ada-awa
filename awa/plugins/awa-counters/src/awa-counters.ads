@@ -19,6 +19,55 @@ with ADO.Objects;
 with ADO.Schemas;
 with Util.Strings;
 with AWA.Index_Arrays;
+
+--  == Introduction ==
+--  The <b>Counters</b> module defines a general purpose counter service that allows to
+--  associate counters to database entities.  For example it can be used to track the number
+--  of times a blog post or a wiki page is accessed.  The <b>Counters</b> module maintains the
+--  counters in a table on a per-day and per-entity basis.  It allows to update the full counter
+--  in the target database entity table.
+--
+--  @include awa-counters-modules.ads
+--
+--  === Counter Declaration ===
+--  Each counter must be declared by instantiating the <b>Definition</b> package.
+--  This instantiation serves as identification of the counter and it defines the database
+--  table as well as the column in that table that will hold the total counter.  The following
+--  definition is used for the read counter of a wiki page.  The wiki page table contains a
+--  <i>read_count</i> column and it will be incremented each time the counter is incremented.
+--
+--     package Read_Counter is
+--        new AWA.Counters.Definition (AWA.Wikis.Models.WIKI_PAGE_TABLE, "read_count");
+--
+--  When the database table does not contain any counter column, the counter definition is
+--  defined as follows:
+--
+--     package Login_Counter is
+--        new AWA.Counters.Definition (AWA.Users.Models.USER_PAGE_TABLE);
+--
+--  Sometimes a counter is not associated with any database entity.  Such counters are global
+--  and they are assigned a unique name.
+--
+--     package Start_Counter is
+--        new AWA.Counters.Definition (null, "startup_counter");
+--
+--  === Incrementing the counter ===
+--  Incrementing the counter is done by calling the <b>Increment</b> operation.
+--  When the counter is associated with a database entity, the entity primary key must be given.
+--
+--     AWA.Counters.Increment (Counter => Read_Counter.Counter, Key => Id);
+--
+--  A global counter is also incremented by using the <b>Increment</b> operation.
+--
+--     AWA.Counters.Increment (Counter => Start_Counter.Counter);
+--
+--  @include awa-counters-beans.ads
+--  @include awa-counters-components.ads
+--  @include counters.xml
+--
+--  == Model ==
+--  [images/awa_counters_model.png]
+--
 package AWA.Counters is
 
    type Counter_Index_Type is new Natural;
