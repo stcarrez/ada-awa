@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions -- Permissions module
---  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,7 +46,7 @@ with ADO.Objects;
 --  acts as a barrier: it does not return anything but returns normally if the permission is
 --  granted.  If the permission is denied, it raises the `NO_PERMISSION` exception.
 --
---  Several `Check` operation exists.  Some require not argument and some others need a context
+--  Several `Check` operation exists.  Some require no argument and some others need a context
 --  such as some entity identifier to perform the check.
 --
 --    AWA.Permissions.Check (Permission => ACL_Create_Post.Permission,
