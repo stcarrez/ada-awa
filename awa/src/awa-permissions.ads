@@ -38,6 +38,8 @@ with ADO.Objects;
 --  This is a static definition of the permission that will be used to ask to verify the
 --  permission.  The permission is given a unique name that will be used in configuration files:
 --
+--    with Security.Permissions;
+--    ...
 --    package ACL_Create_Post is new Security.Permissions.Definition ("blog-create-post");
 --
 --  === Checking for a permission ===
@@ -49,6 +51,8 @@ with ADO.Objects;
 --  Several `Check` operation exists.  Some require no argument and some others need a context
 --  such as some entity identifier to perform the check.
 --
+--    with AWA.Permissions;
+--    ...
 --    AWA.Permissions.Check (Permission => ACL_Create_Post.Permission,
 --                           Entity     => Blog_Id);
 --
@@ -75,12 +79,14 @@ with ADO.Objects;
 --  Adding a permission means to create an `ACL` database record that links a given database
 --  entity to the user.  This is done easily with the `Add_Permission` procedure:
 --
+--    with AWA.Permissions.Services;
+--    ...
 --    AWA.Permissions.Services.Add_Permission (Session => DB,
 --                                             User    => User,
 --                                             Entity  => Blog);
 --
 --  == Data Model ==
---  @include Permission.hbm.xml
+--  [images/awa_permissions_model.png]
 --
 --  == Queries ==
 --  @include permissions.xml
