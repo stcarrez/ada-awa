@@ -13,6 +13,8 @@ with "@AWA_DIR@awa_questions";
 with "@AWA_DIR@awa_votes";
 with "@AWA_DIR@awa_tags";
 with "@AWA_DIR@awa_comments";
+with "@AWA_DIR@awa_jobs";
+with "@AWA_DIR@awa_counters";
 with "@AWA_DIR@awa_wikis";
 
 project atlas is
