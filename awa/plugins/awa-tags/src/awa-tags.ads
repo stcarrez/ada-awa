@@ -25,11 +25,11 @@
 --
 --  == Model ==
 --  The database model is generic and it uses the <tt>Entity_Type</tt> provided by
---  [http://ada-ado.googlecode.com ADO] to associate a tag to entities stored in different
+--  [https://github.com/stcarrez/ada-ado ADO] to associate a tag to entities stored in different
 --  tables.  The <tt>Entity_Type</tt> identifies the database table and the stored identifier
 --  in <tt>for_entity_id</tt> defines the entity in that table.
 --
---  [http://ada-awa.googlecode.com/svn/wiki/awa_tags_model.png]
+--  [images/awa_tags_model.png]
 --
 --  @include awa-tags-modules.ads
 --  @include awa-tags-beans.ads

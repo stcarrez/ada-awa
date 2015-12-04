@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-workspaces -- Module workspaces
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +28,7 @@
 --  @include workspaces.xml
 --
 --  == Data Model ==
---  @include Workspace.hbm.xml
+--  [images/awa_workspace_model.png]
 --
 package AWA.Workspaces is
 end AWA.Workspaces;

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-votes-beans -- Beans for module votes
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2013, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,7 +51,7 @@ with AWA.Votes.Models;
 --  The vote concerns entities for the <tt>awa_question</tt> entity table.
 --  The permission <tt>answer-create</tt> is used to verify that the vote is allowed.
 --
---  [http://ada-awa.googlecode.com/svn/wiki/awa_votes_bean.png]
+--  [images/awa_votes_bean.png]
 --
 --  The managed bean defines three operations that can be called: <tt>vote_up</tt>,
 --  <tt>vote_down</tt> and <tt>vote</tt> to setup specific ratings.

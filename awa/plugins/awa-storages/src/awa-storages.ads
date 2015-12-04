@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages -- Storage module
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -76,13 +76,19 @@ with Ada.Strings.Unbounded;
 --
 --    Path : constant String := Data.Get_Path;
 --
+--  @include awa-storages-modules.ads
+--  @include awa-storages-services.ads
+--
 --  == Ada Beans ==
 --  @include storages.xml
 --
 --  == Model ==
---  [http://ada-awa.googlecode.com/svn/wiki/awa_storage_model.png]
+--  [images/awa_storage_model.png]
 --
---  @include Storages.hbm.xml
+--  @include storage-list.xml
+--  @include folder-queries.xml
+--  @include storage-queries.xml
+--
 package AWA.Storages is
 
    type Storage_File is limited private;

@@ -532,7 +532,6 @@ package AWA.Storages.Models is
 
 
 
-
    Query_Storage_Get_Data : constant ADO.Queries.Query_Definition_Access;
 
    Query_Storage_Get_Local : constant ADO.Queries.Query_Definition_Access;
@@ -567,7 +566,6 @@ package AWA.Storages.Models is
    procedure Set_Value (Item  : in out Folder_Info;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object);
-
 
 
    package Folder_Info_Beans is
@@ -632,7 +630,6 @@ package AWA.Storages.Models is
    procedure Set_Value (Item  : in out Storage_Info;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object);
-
 
 
    package Storage_Info_Beans is

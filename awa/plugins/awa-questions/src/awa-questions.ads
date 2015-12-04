@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-questions -- Module questions
---  Copyright (C) 2012, 2013 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +15,17 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+
+--  == Introduction ==
+--
+--  @include questions.xml
+--  @include question-list.xml
+--  @include question-info.xml
+--  @include answer-list.xml
+--
+--  == Model ==
+--  [images/awa_questions_model.png]
+--
 package AWA.Questions is
 
    pragma Preelaborate;

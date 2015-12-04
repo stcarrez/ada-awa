@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-votes -- Module votes
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2013, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,7 @@
 --  any database entity and it is not necessary to change other entities in your data model.
 --
 --  == Model ==
---  [http://ada-awa.googlecode.com/svn/wiki/awa_votes_model.png]
+--  [images/awa_votes_model.png]
 --
 --  @include awa-votes-modules.ads
 --  @include awa-votes-beans.ads

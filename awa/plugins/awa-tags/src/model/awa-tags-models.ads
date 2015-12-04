@@ -251,7 +251,6 @@ package AWA.Tags.Models is
                         Value : in Util.Beans.Objects.Object);
 
 
-
    package Tag_Info_Beans is
       new Util.Beans.Basic.Lists (Element_Type => Tag_Info);
    package Tag_Info_Vectors renames Tag_Info_Beans.Vectors;

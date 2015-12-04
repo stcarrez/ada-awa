@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-comments -- Comments module
---  Copyright (C) 2009, 2010, 2011, 2014 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2014, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,14 +23,15 @@
 --
 --  == Model ==
 --  The database model is generic and it uses the <tt>Entity_Type</tt> provided by
---  [http://ada-ado.googlecode.com ADO] to associate a comment to entities stored in different
+--  [https://github.com/stcarrez/ada-ado ADO] to associate a comment to entities stored in different
 --  tables.  The <tt>Entity_Type</tt> identifies the database table and the stored identifier
 --  in <tt>for_entity_id</tt> defines the entity in that table.
 --
---  [http://ada-awa.googlecode.com/svn/wiki/awa_comments_model.png]
+--  [images/awa_comments_model.png]
 --
 --  @include awa-comments-modules.ads
 --  @include awa-comments-beans.ads
+--  @include comment-queries.xml
 --
 package AWA.Comments is
 

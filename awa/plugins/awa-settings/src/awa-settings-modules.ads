@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-settings-modules -- Module awa-settings
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2013, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,7 +36,7 @@ with AWA.Modules;
 --              Module => App.Setting_Module'Access);
 --
 --  == Model ==
---  [http://ada-awa.googlecode.com/svn/wiki/awa_settings_model.png]
+--  [images/awa_settings_model.png]
 package AWA.Settings.Modules is
 
    --  The name under which the module is registered.
