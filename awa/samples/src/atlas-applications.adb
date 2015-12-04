@@ -222,7 +222,6 @@ package body Atlas.Applications is
 
       Register (App    => App.Self.all'Access,
                 Name   => AWA.Counters.Modules.NAME,
-                URI    => "counters",
                 Module => App.Counter_Module'Access);
 
       Register (App    => App.Self.all'Access,
