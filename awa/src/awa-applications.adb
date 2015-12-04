@@ -33,11 +33,10 @@ with AWA.Applications.Factory;
 with AWA.Applications.Configs;
 with AWA.Helpers.Selectors;
 with AWA.Permissions.Services;
+with AWA.Permissions.Beans;
 package body AWA.Applications is
 
-   use Util.Log;
-
-   Log : constant Loggers.Logger := Loggers.Create ("AWA.Applications");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Applications");
 
    --  ------------------------------
    --  Initialize the application
@@ -91,6 +90,9 @@ package body AWA.Applications is
 
       App.Register_Class ("AWA.Helpers.Selectors.Select_List_Bean",
                           AWA.Helpers.Selectors.Create_Select_List_Bean'Access);
+
+      App.Register_Class ("AWA.Permissions.Beans.Permission_Bean",
+                          AWA.Permissions.Beans.Create_Permission_Bean'Access);
    end Initialize_Config;
 
    --  ------------------------------
