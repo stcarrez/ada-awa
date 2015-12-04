@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-module -- User management module
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,18 +23,6 @@ with AWA.Users.Filters;
 with AWA.Users.Servlets;
 
 --  == Introduction ==
---  The <b>Users.Module</b> manages the creation, update, removal and authentication of users
---  in an application.  The module provides the foundations for user management in
---  a web application.
---
---  A user can register himself by using a subscription form.  In that case, a verification mail
---  is sent and the user has to follow the verification link defined in the mail to finish
---  the registration process.  The user will authenticate using a password.
---
---  A user can also use an OpenID account and be automatically registered.
---
---  A user can have one or several permissions that allow to protect the application data.
---  User permissions are managed by the <b>Permissions.Module</b>.
 --
 --  == Configuration ==
 --  The *users* module uses a set of configuration properties to configure the OpenID
@@ -47,9 +35,8 @@ with AWA.Users.Servlets;
 --  @include users.xml
 --
 --  == Model ==
---  [http://ada-awa.googlecode.com/svn/wiki/awa_user_model.png]
+--  [images/awa_user_model.png]
 --
---  @include User.hbm.xml
 package AWA.Users.Modules is
 
    NAME : constant String := "users";
