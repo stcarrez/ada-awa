@@ -228,7 +228,6 @@ package AWA.Comments.Models is
                         Value : in Util.Beans.Objects.Object);
 
 
-
    package Comment_Info_Beans is
       new Util.Beans.Basic.Lists (Element_Type => Comment_Info);
    package Comment_Info_Vectors renames Comment_Info_Beans.Vectors;

@@ -16,6 +16,16 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+--  == Introduction ==
+--
+--  @include awa-images-modules.ads
+--  @include awa-images-services.ads
+--  @include images.xml
+--  @include image-list.xml
+--
+--  == Model ==
+--  [images/awa_images_model.png]
+--
 package AWA.Images is
 
 end AWA.Images;

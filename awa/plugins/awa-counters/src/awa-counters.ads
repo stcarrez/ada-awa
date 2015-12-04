@@ -36,29 +36,41 @@ with AWA.Index_Arrays;
 --  definition is used for the read counter of a wiki page.  The wiki page table contains a
 --  <i>read_count</i> column and it will be incremented each time the counter is incremented.
 --
+--     with AWA.Counters.Definition;
+--     ...
 --     package Read_Counter is
 --        new AWA.Counters.Definition (AWA.Wikis.Models.WIKI_PAGE_TABLE, "read_count");
 --
---  When the database table does not contain any counter column, the counter definition is
---  defined as follows:
+--  When the database table does not contain any counter column, the column field name is not
+--  given and the counter definition is defined as follows:
 --
+--     with AWA.Counters.Definition;
+--     ...
 --     package Login_Counter is
 --        new AWA.Counters.Definition (AWA.Users.Models.USER_PAGE_TABLE);
 --
 --  Sometimes a counter is not associated with any database entity.  Such counters are global
 --  and they are assigned a unique name.
 --
+--     with AWA.Counters.Definition;
+--     ...
 --     package Start_Counter is
 --        new AWA.Counters.Definition (null, "startup_counter");
 --
 --  === Incrementing the counter ===
 --  Incrementing the counter is done by calling the <b>Increment</b> operation.
 --  When the counter is associated with a database entity, the entity primary key must be given.
+--  The counter is not immediately incremented in the database so that several calls to the
+--  <b>Increment</b> operation will not trigger a database update.
 --
+--     with AWA.Counters;
+--     ...
 --     AWA.Counters.Increment (Counter => Read_Counter.Counter, Key => Id);
 --
 --  A global counter is also incremented by using the <b>Increment</b> operation.
 --
+--     with AWA.Counters;
+--     ...
 --     AWA.Counters.Increment (Counter => Start_Counter.Counter);
 --
 --  @include awa-counters-beans.ads
@@ -66,6 +78,13 @@ with AWA.Index_Arrays;
 --  @include counters.xml
 --
 --  == Model ==
+--  The <b>Counters</b> module has a simple database model which needs two tables.
+--  The <b>Counter_Definition</b> table is used to keep track of the different counters
+--  used by the application.  A row in that table is created for each counter declared by
+--  instantiating the <b>Definition</b> package.  The <b>Counter</b> table holds the counters
+--  for each database entity and for each day.  By looking at that table, it becomes possible
+--  to look at the daily access or usage of the counter.
+--
 --  [images/awa_counters_model.png]
 --
 package AWA.Counters is

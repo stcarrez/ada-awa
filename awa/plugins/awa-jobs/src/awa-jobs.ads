@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-jobs -- AWA Jobs
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -67,9 +67,12 @@
 --
 --
 --  @include awa-jobs-modules.ads
+--  @include awa-jobs-services.ads
+--
+--  @include jobs.xml
 --
 --  == Data Model ==
---  @include jobs.hbm.xml
+--  [images/awa_jobs_model.png]
 --
 package AWA.Jobs is
 

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs -- Blogs module
---  Copyright (C) 2011, 2014 Stephane Carrez
+--  Copyright (C) 2011, 2014, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +26,7 @@
 --  tags to a post and allow users to comment on the articles.
 --
 --  == Model ==
---  [http://ada-awa.googlecode.com/svn/wiki/awa_blogs_model.png]
+--  [images/awa_blogs_model.png]
 --
 --  @include awa-blogs-modules.ads
 --  @include awa-blogs-beans.ads

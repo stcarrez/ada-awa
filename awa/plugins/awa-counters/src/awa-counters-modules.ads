@@ -35,6 +35,8 @@ with AWA.Modules;
 --  An instance of the <tt>Counter_Module</tt> must be declared and registered in the AWA application.
 --  The module instance can be defined as follows:
 --
+--    with AWA.Counters.Modules;
+--    ...
 --    type Application is new AWA.Applications.Application with record
 --       Counter_Module : aliased AWA.Counters.Modules.Counter_Module;
 --    end record;
