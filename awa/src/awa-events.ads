@@ -36,6 +36,8 @@ with AWA.Index_Arrays;
 --  Modules define the events that they can generate by instantiating the <b>Definition</b>
 --  package. This is a static definition of the event.  Each event is given a unique name.
 --
+--    with AWA.Events.Definition;
+--    ...
 --    package Event_New_User is new AWA.Events.Definition ("new-user");
 --
 --  === Posting an event ===
@@ -43,6 +45,8 @@ with AWA.Index_Arrays;
 --  action occurred.  The module creates the event instance of type <b>Module_Event</b> and
 --  populates that event with useful properties for event receivers.
 --
+--    with AWA.Events;
+--    ...
 --    Event : AWA.Events.Module_Event;
 --
 --    Event.Set_Event_Kind (Event_New_User.Kind);
@@ -91,7 +95,7 @@ with AWA.Index_Arrays;
 --      been processed will be dispatched when the application is started again.
 --
 --  == Data Model ==
---  @include Queues.hbm.xml
+--  [images/awa_events_model.png]
 --
 package AWA.Events is
 
