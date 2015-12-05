@@ -31,9 +31,7 @@ with Util.Log.Loggers;
 
 package body AWA.Mail.Modules is
 
-   use Util.Log;
-
-   Log : constant Loggers.Logger := Loggers.Create ("AWA.Mail.Module");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Mail.Module");
 
    package Register is new AWA.Modules.Beans (Module => Mail_Module,
                                               Module_Access => Mail_Module_Access);
@@ -67,6 +65,7 @@ package body AWA.Mail.Modules is
                         Props  : in ASF.Applications.Config) is
       Mailer : constant String := Props.Get ("mailer", "smtp");
    begin
+      Log.Info ("Mail plugin is using {0} mailer", Mailer);
       Plugin.Mailer := AWA.Mail.Clients.Factory (Mailer, Props);
    end Configure;
 
