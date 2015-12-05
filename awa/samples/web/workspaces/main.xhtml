@@ -29,14 +29,12 @@
     <ui:define name="pageBody">
       <div id='awa-content'>
           <div class="grid_12 ui-widget">
-              <div id='form-block' class="asf-container">
+              <div id='form-block' class="grid_6 asf-container">
                   <ajax:include src="/microblog/forms/post-form.xhtml"/>
               </div>
-              <div id='atlas-user-stat' class='blog-admin'>
-                  <ui:include src="views/actions-panel.xhtml"/>
-              </div>
-          </div>
+           </div>
           <div class="grid_12 ui-widget posts">
+              <div class="grid_6">
                 <div id='forum-posts' class="asf-container ui-widget ui-widget-content ui-corner-all forum">
                     <h:list value="#{messages}" var="msg" reverse="true">
                         <div class="message">
@@ -57,6 +55,35 @@
                         </div>
                     </h:list>
                 </div>
+              </div>
+              <div class="grid_6">
+                  <div class="grid_12">
+                      <div id='atlas-user-stat' class='blog-admin'>
+                           <ui:include src="views/actions-panel.xhtml"/>
+                       </div>
+                  </div>
+                  <h2>Blogs</h2>
+                  <ui:include src="/blogs/admin/lists/menu-list.xhtml"/>
+                  <h2>Wikis</h2>
+                  <h:panelGroup rendered="#{adminWiki.wikis.count != 0}">
+                      <ui:include src="/wikis/views/wiki-nav.xhtml">
+                          <ui:param name="wikiSpaceId" value="#{adminWiki.id}"/>
+                          <ui:param name="page_link" value="/grid"/>
+                      </ui:include>
+                  </h:panelGroup>
+                  <h:panelGroup rendered="#{adminWiki.wikis.count == 0}">
+                      <ul class='blog-action'>
+                          <li>
+                              <a href="#{contextPath}/wikis/admin/list.html"
+                                 title="#{wikiMsg.wiki_admin_create_wiki_tooltip}">
+                                  <img src="#{contextPath}/images/wikis/wiki-create.png"
+                                       alt="#{wikiMsg.wiki_admin_create_wiki_label}"/>
+                                  <span>#{wikiMsg.wiki_admin_create_wiki_label}</span>
+                              </a>
+                          </li>
+                      </ul>
+                  </h:panelGroup>
+              </div>
             </div>
       </div>
     </ui:define>
