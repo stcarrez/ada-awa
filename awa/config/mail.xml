@@ -19,19 +19,19 @@
   <!--  When a user is created, send him a welcome message.  -->
   <on-event name="user-register">
      <action>#{userMail.send}</action>
-     <property name="template">/mail/register-user-message.xhtml</property>
+     <property name="template">/mail/register-user-message.html</property>
   </on-event>
 
   <!--  When a user is losts his password, send him a message with the reset password key.  -->
   <on-event name="user-lost-password">
      <action>#{userMail.send}</action>
-     <property name="template">/mail/lost-password-message.xhtml</property>
+     <property name="template">/mail/lost-password-message.html</property>
   </on-event>
 
   <!--  When a user successfully resets his password, send him a message to inform him.  -->
   <on-event name="user-reset-password">
      <action>#{userMail.send}</action>
-     <property name="template">/mail/reset-password-message.xhtml</property>
+     <property name="template">/mail/reset-password-message.html</property>
   </on-event>
 
 </module>
