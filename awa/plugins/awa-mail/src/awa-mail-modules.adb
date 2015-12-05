@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail -- Mail module
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +22,7 @@ with AWA.Mail.Beans;
 with AWA.Mail.Components.Factory;
 with AWA.Applications;
 
+with ASF.Servlets;
 with ASF.Requests.Mockup;
 with ASF.Responses.Mockup;
 with Util.Beans.Basic;
@@ -89,15 +90,17 @@ package body AWA.Mail.Modules is
       return Plugin.Get_Config (Prop_Name);
    end Get_Template;
 
+   --  ------------------------------
    --  Receive an event sent by another module with <b>Send_Event</b> method.
    --  Format and send an email.
+   --  ------------------------------
    procedure Send_Mail (Plugin   : in Mail_Module;
                         Template : in String;
                         Props    : in Util.Beans.Objects.Maps.Map;
                         Content  : in AWA.Events.Module_Event'Class) is
       Name : constant String := Content.Get_Parameter ("name");
    begin
-      Log.Info ("Receive event {0}", Name);
+      Log.Info ("Receive event {0} with template {1}", Name, Template);
 
       if Template = "" then
          Log.Debug ("No email template associated with event {0}", Name);
@@ -110,15 +113,15 @@ package body AWA.Mail.Modules is
          Ptr   : constant Util.Beans.Basic.Readonly_Bean_Access := Content'Unrestricted_Access;
          Bean  : constant Util.Beans.Objects.Object
            := Util.Beans.Objects.To_Object (Ptr, Util.Beans.Objects.STATIC);
+         Dispatcher : constant ASF.Servlets.Request_Dispatcher
+           := Plugin.Get_Application.Get_Request_Dispatcher (Template);
       begin
-         Req.Set_Path_Info (Template);
+         Req.Set_Request_URI (Template);
          Req.Set_Method ("GET");
          Req.Set_Attribute (Name => "event", Value => Bean);
          Req.Set_Attributes (Props);
 
-         Plugin.Get_Application.Dispatch (Page     => Template,
-                                          Request  => Req,
-                                          Response => Reply);
+         ASF.Servlets.Forward (Dispatcher, Req, Reply);
       end;
    end Send_Mail;
 
