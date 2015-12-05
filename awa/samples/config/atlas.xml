@@ -10,11 +10,25 @@
       <message-bundle var='atlasMsg'>atlas</message-bundle>
   </application>
 
-    <!--  When a user is created, send him a welcome message.  -->
-    <on-event name="user-create">
-       <action>#{userMail.send}</action>
-       <property name="template">/mail/welcome-message.xhtml</property>
-    </on-event>
+  <!--  When a user is created, send him a welcome message.  -->
+  <on-event name="user-create">
+    <action>#{userMail.send}</action>
+    <property name="template">/mail/welcome-message.xhtml</property>
+  </on-event>
+
+  <!--  When a user is created, add a permission to the public atlas wiki.  -->
+  <on-event name="user-create">
+    <action>#{permission.create}</action>
+    <property name="entity_type">awa_wiki_space</property>
+    <property name="entity_id">1</property>
+  </on-event>
+
+  <managed-bean>
+    <description>Bean used to create a new permission for the current user.</description>
+    <managed-bean-name>permission</managed-bean-name>
+    <managed-bean-class>AWA.Permissions.Beans.Permission_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
 
   <managed-bean>
     <description>
