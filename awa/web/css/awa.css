@@ -118,7 +118,7 @@ li.awa-error label {
 /**
  * AWA Errors
  */
-span.awa-error, dl.awa-error dt label {
+span.awa-error, dl.awa-error dt label, dl.asf-error dt label, dl.asf-error dd span {
     color: red;
 }
 span.awa-error {
