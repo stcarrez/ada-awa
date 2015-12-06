@@ -728,6 +728,8 @@ package AWA.Wikis.Models is
 
    Query_Wiki_Page_Id : constant ADO.Queries.Query_Definition_Access;
 
+   Query_Wiki_Page_Name_Count : constant ADO.Queries.Query_Definition_Access;
+
 
    type Wiki_Space_Bean is abstract new AWA.Wikis.Models.Wiki_Space_Ref
      and Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with null record;
@@ -1152,4 +1154,10 @@ private
                                      File => File_4.File'Access);
    Query_Wiki_Page_Id : constant ADO.Queries.Query_Definition_Access
    := Def_Wikiviewinfo_Wiki_Page_Id.Query'Access;
+
+   package Def_Wikiviewinfo_Wiki_Page_Name_Count is
+      new ADO.Queries.Loaders.Query (Name => "wiki-page-name-count",
+                                     File => File_4.File'Access);
+   Query_Wiki_Page_Name_Count : constant ADO.Queries.Query_Definition_Access
+   := Def_Wikiviewinfo_Wiki_Page_Name_Count.Query'Access;
 end AWA.Wikis.Models;
