@@ -110,12 +110,15 @@
     width: 95%;
     border-bottom: 2px solid #47C;
     padding-bottom: 2px;
-    background: url(../images/wikis/wiki-view.png) no-repeat;
-    padding-left: 64px;
+    background: url(../images/wikis/wiki-view-26.png) no-repeat;
+    padding-left: 28px;
 }
 .wiki-title h2 {
     line-height: 1.33em;
     font-size: 1.33em;
+}
+.wiki-page-info {
+    font-size: 0.8em;
 }
 .wiki-page-actions {
     float: right;
@@ -133,7 +136,7 @@
 /**
  * Wiki page view style.
  */
-div.blog-post div.post-title h2 a {
+/* div.blog-post div.post-title h2 a {
     color: #F91;
     text-decoration: none;
     font-weight: bold;
@@ -141,7 +144,7 @@ div.blog-post div.post-title h2 a {
 }
 div.blog-post div.post-title h2 a:hover {
     color: #A08;
-}
+} */
 .wiki-text {
     float: left;
     width: 100%;
