@@ -111,4 +111,13 @@
        </sql>
     </query>
 
+    <query name='wiki-page-name-count'>
+       <comment>Count the occurence of a wiki page name</comment>
+       <sql>
+    SELECT COUNT(*)
+    FROM awa_wiki_page
+    WHERE name = :name AND wiki_id = :wiki_id AND id != :id
+       </sql>
+    </query>
+
 </query-mapping>
