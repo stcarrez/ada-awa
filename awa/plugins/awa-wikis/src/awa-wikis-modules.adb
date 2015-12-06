@@ -29,6 +29,7 @@ with Ada.Strings;
 with Ada.Calendar;
 with ADO.Objects;
 with ADO.SQL;
+with ADO.Queries;
 with ADO.Statements;
 
 with Util.Log.Loggers;
@@ -386,7 +387,20 @@ package body AWA.Wikis.Modules is
       Ctx     : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       User    : constant AWA.Users.Models.User_Ref := Ctx.Get_User;
       Created : constant Boolean := not Page.Is_Inserted;
+      Query   : ADO.Queries.Context;
+      Stmt    : ADO.Statements.Query_Statement;
    begin
+      --  Check if the wiki page name is already used.
+      Query.Set_Query (AWA.Wikis.Models.Query_Wiki_Page_Name_Count);
+      Query.Bind_Param ("name", String '(Page.Get_Name));
+      Query.Bind_Param ("id", Page.Get_Id);
+      Query.Bind_Param ("wiki_id", Page.Get_Wiki.Get_Id);
+      Stmt := DB.Create_Statement (Query);
+      Stmt.Execute;
+      if Stmt.Get_Result_Integer /= 0 then
+         raise Name_Used;
+      end if;
+
       Page.Set_Last_Version (Page.Get_Last_Version + 1);
       if Created then
          Page.Save (DB);
