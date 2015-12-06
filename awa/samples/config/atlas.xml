@@ -40,14 +40,6 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
-  <grant-permission>
-    <name>anonymous</name>
-  </grant-permission>
-
-  <auth-permission>
-    <name>logged-user</name>
-  </auth-permission>
-
   <error-page>
     <error-code>401</error-code>
     <location>/errors/401.html</location>
