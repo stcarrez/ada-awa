@@ -71,6 +71,9 @@ package AWA.Wikis.Modules is
    --  wiki space is created.
    PARAM_WIKI_COPY_LIST : constant String := "wiki_copy_list";
 
+   --  Exception raised when a wiki page name is already used for the wiki space.
+   Name_Used : exception;
+
    --  ------------------------------
    --  Module wikis
    --  ------------------------------
