@@ -25,6 +25,8 @@ with ADO.Datasets;
 with ADO.Sessions.Entities;
 with ADO.Parameters;
 
+with ASF.Applications.Messages.Factory;
+
 with AWA.Services;
 with AWA.Services.Contexts;
 with AWA.Tags.Modules;
@@ -382,7 +384,7 @@ package body AWA.Wikis.Beans is
    overriding
    procedure Save (Bean    : in out Wiki_Page_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
-      pragma Unreferenced (Outcome);
+      use ASF.Applications;
 
       Result : ADO.Identifier;
    begin
@@ -403,6 +405,13 @@ package body AWA.Wikis.Beans is
       end if;
       Result := Bean.Get_Id;
       Bean.Tags.Update_Tags (Result);
+      Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("success");
+
+   exception
+      when AWA.Wikis.Modules.Name_Used =>
+         Messages.Factory.Add_Field_Message ("name", "wikis.wiki_page_name_used");
+         Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("failure");
+
    end Save;
 
    --  ------------------------------
