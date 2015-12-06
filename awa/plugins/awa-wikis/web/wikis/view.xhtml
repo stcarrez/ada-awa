@@ -70,7 +70,7 @@
                   <div class="wiki-page-footer">
                       <h:outputFormat styleClass="wiki-page-date" value="#{wikiMsg.wiki_page_info_date}">
                           <f:param value="#{wikiView.date}"/>
-                        <f:converter converterId="dateConverter"/>
+                          <f:converter converterId="smartDateConverter"/>
                       </h:outputFormat>
                       <h:outputFormat styleClass="wiki-page-read-count" value="#{wikiMsg.wiki_page_info_read_count}">
                           <f:param value="#{wikiView.counter.value}"/>
