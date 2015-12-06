@@ -133,6 +133,10 @@
       <to-view-id>/wikis/view/#{wikiPage.wiki_id}/#{wikiPage.name}</to-view-id>
       <redirect/>
     </navigation-case>
+    <navigation-case>
+      <from-outcome>failure</from-outcome>
+      <to-view-id>/wikis/create.xhtml</to-view-id>
+    </navigation-case>
   </navigation-rule>
 
   <navigation-rule>
@@ -153,6 +157,24 @@
     <navigation-case>
       <from-outcome>loaded</from-outcome>
       <to-view-id>/wikis/view.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>not-found</from-outcome>
+      <to-view-id>/wikis/create/#{wikiView.wiki_id}/#{wikiView.name}</to-view-id>
+      <redirect/>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>ado.objects.not_found</from-outcome>
+      <to-view-id>/wikis/create/#{wikiView.wiki_id}/#{wikiView.name}</to-view-id>
+      <redirect/>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/wikis/history.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>loaded</from-outcome>
+      <to-view-id>/wikis/history.xhtml</to-view-id>
     </navigation-case>
     <navigation-case>
       <from-outcome>not-found</from-outcome>
