@@ -34,7 +34,7 @@
                          styleClass="awa-required ui-corner-all"
                          size='80' placeholder="#{wikiMsg.wiki_edit_name_placeholder}"
                          value="#{wikiPage.name}"/>
-            <w:inputText title="#{wikiMsg.wiki_page_title_label}"
+            <w:inputText id='page-title' title="#{wikiMsg.wiki_page_title_label}"
                          styleClass="awa-required ui-corner-all"
                          size='80' placeholder="#{wikiMsg.wiki_edit_title_placeholder}"
                          value="#{wikiPage.title}"/>
@@ -53,7 +53,7 @@
                                  autoCompleteUrl='#{contextPath}/wikis/lists/tag-search.html'/>
                 </dd>
             </dl>
-            <w:inputText id='uri' title="#{wikiMsg.wiki_page_comment_label}"
+            <w:inputText id='comment' title="#{wikiMsg.wiki_page_comment_label}"
                          styleClass="awa-required ui-corner-all" size='80'
                          placeholder="#{wikiMsg.wiki_edit_comment_placeholder}"
                          value="#{wikiPage.comment}" required="false"/>
