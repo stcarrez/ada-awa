@@ -52,7 +52,7 @@ package AWA.Users.Filters is
    --  Initialize the filter and configure the redirection URIs.
    overriding
    procedure Initialize (Filter  : in out Auth_Filter;
-                         Context : in ASF.Servlets.Servlet_Registry'Class);
+                         Config  : in ASF.Servlets.Filter_Config);
 
    --  Authenticate a user by using the auto-login cookie.  This procedure is called if the
    --  current session does not have any principal.  Based on the request and the optional
@@ -94,7 +94,7 @@ package AWA.Users.Filters is
 
    --  Initialize the filter and configure the redirection URIs.
    procedure Initialize (Filter  : in out Verify_Filter;
-                         Context : in ASF.Servlets.Servlet_Registry'Class);
+                         Config  : in ASF.Servlets.Filter_Config);
 
    --  Filter a request which contains an access key and verify that the
    --  key is valid and identifies a user.  Once the user is known, create
