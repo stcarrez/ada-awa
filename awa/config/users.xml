@@ -251,6 +251,18 @@
     <description>Google+ API secret</description>
   </context-param>
 
+  <context-param>
+    <param-name>auth-filter.redirect</param-name>
+    <param-value>#{contextPath}/auth/login.html</param-value>
+    <description>URI to redirect to the login page</description>
+  </context-param>
+
+  <context-param>
+    <param-name>verify-filter.redirect</param-name>
+    <param-value>#{contextPath}/auth/login.html</param-value>
+    <description>URI to redirect to the login page</description>
+  </context-param>
+
   <servlet-mapping>
     <servlet-name>openid-auth</servlet-name>
     <url-pattern>/auth/auth/*</url-pattern>
