@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-comments-beans -- Beans for the comments module
---  Copyright (C) 2014 Stephane Carrez
+--  Copyright (C) 2014, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,7 @@
 with ADO.Sessions.Entities;
 with ADO.Queries;
 with ADO.Utils;
+with ADO.Parameters;
 with AWA.Helpers.Requests;
 package body AWA.Comments.Beans is
 
@@ -160,6 +161,12 @@ package body AWA.Comments.Beans is
          From.Permission := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "entity_id" then
          From.Load_Comments (ADO.Utils.To_Identifier (Value));
+      elsif Name = "sort" then
+         if Util.Beans.Objects.To_String (Value) = "oldest" then
+            From.Oldest_First := True;
+         else
+            From.Oldest_First := False;
+         end if;
       end if;
    end Set_Value;
 
@@ -208,6 +215,11 @@ package body AWA.Comments.Beans is
       Query.Bind_Param ("entity_type", Kind);
       Query.Bind_Param ("entity_id", For_Entity_Id);
       Query.Bind_Param ("status", Integer (Models.Status_Type'Pos (Models.COMMENT_PUBLISHED)));
+      if Into.Oldest_First then
+         Query.Bind_Param ("sort", ADO.Parameters.Token '("ASC"));
+      else
+         Query.Bind_Param ("sort", ADO.Parameters.Token '("DESC"));
+      end if;
       AWA.Comments.Models.List (Into, Session, Query);
    end Load_Comments;
 
