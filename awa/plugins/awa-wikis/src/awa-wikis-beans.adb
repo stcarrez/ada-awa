@@ -335,11 +335,13 @@ package body AWA.Wikis.Beans is
                         Value : in Util.Beans.Objects.Object) is
    begin
       if Name = "id" then
-         declare
-            Id  : constant ADO.Identifier := ADO.Utils.To_Identifier (Value);
-         begin
-            From.Module.Load_Page (From, From.Content, From.Tags, Id);
-         end;
+         if not Util.Beans.Objects.Is_Empty (Value) then
+            declare
+               Id  : constant ADO.Identifier := ADO.Utils.To_Identifier (Value);
+            begin
+               From.Module.Load_Page (From, From.Content, From.Tags, Id);
+            end;
+         end if;
       elsif Name = "wiki_id" then
          From.Wiki_Space.Set_Id (ADO.Utils.To_Identifier (Value));
       elsif Name = "text" then
