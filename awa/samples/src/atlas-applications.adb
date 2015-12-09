@@ -193,6 +193,7 @@ package body Atlas.Applications is
       App.Add_Filter (Name => "dump", Filter => App.Self.Dump'Access);
       App.Add_Filter (Name => "measures", Filter => App.Self.Measures'Access);
       App.Add_Filter (Name => "service", Filter => App.Self.Service_Filter'Access);
+      App.Add_Filter (Name => "no-cache", Filter => App.Self.No_Cache'Access);
    end Initialize_Filters;
 
    --  ------------------------------
