@@ -53,8 +53,6 @@ package body AWA.Users.Modules is
       App.Add_Filter ("verify-access-key", Plugin.Key_Filter'Unchecked_Access);
       App.Add_Filter ("auth-filter", Plugin.Auth_Filter'Unchecked_Access);
 
-      Plugin.Key_Filter.Initialize (App.all);
-
       Register.Register (Plugin  => Plugin,
                          Name    => "AWA.Users.Beans.Authenticate_Bean",
                          Handler => AWA.Users.Beans.Create_Authenticate_Bean'Access);
