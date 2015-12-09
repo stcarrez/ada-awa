@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-comments-beans -- Beans for the comments module
---  Copyright (C) 2014 Stephane Carrez
+--  Copyright (C) 2014, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,6 +52,11 @@ with AWA.Comments.Modules;
 --        <property-name>permission</property-name>
 --        <property-class>String</property-class>
 --        <value>blog-comment-post</value>
+--      </managed-property>
+--      <managed-property>
+--        <property-name>sort</property-name>
+--        <property-class>String</property-class>
+--        <value>oldest</value>
 --      </managed-property>
 --    </managed-bean>
 --
@@ -105,11 +110,12 @@ package AWA.Comments.Beans is
 
    type Comment_List_Bean is
      new AWA.Comments.Models.Comment_Info_List_Bean and Util.Beans.Basic.Bean with record
-      Module      : AWA.Comments.Modules.Comment_Module_Access;
-      Entity_Type : Ada.Strings.Unbounded.Unbounded_String;
-      Entity_Id   : ADO.Identifier;
-      Permission  : Ada.Strings.Unbounded.Unbounded_String;
-      Current     : Natural := 0;
+      Module       : AWA.Comments.Modules.Comment_Module_Access;
+      Entity_Type  : Ada.Strings.Unbounded.Unbounded_String;
+      Entity_Id    : ADO.Identifier;
+      Permission   : Ada.Strings.Unbounded.Unbounded_String;
+      Current      : Natural := 0;
+      Oldest_First : Boolean := True;
    end record;
 
    type Comment_List_Bean_Access is access all Comment_List_Bean'Class;
