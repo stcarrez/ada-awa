@@ -22,6 +22,7 @@ with ASF.Servlets.Faces;
 with ASF.Servlets.Files;
 with ASF.Servlets.Ajax;
 with ASF.Filters.Dump;
+with ASF.Filters.Cache_Control;
 with ASF.Servlets.Measures;
 
 with ASF.Security.Servlets;
@@ -105,6 +106,7 @@ private
       Dump              : aliased ASF.Filters.Dump.Dump_Filter;
       Service_Filter    : aliased AWA.Services.Filters.Service_Filter;
       Measures          : aliased ASF.Servlets.Measures.Measure_Servlet;
+      No_Cache          : aliased ASF.Filters.Cache_Control.Cache_Control_Filter;
 
       --  Authentication servlet and filter.
       Auth              : aliased ASF.Security.Servlets.Request_Auth_Servlet;
