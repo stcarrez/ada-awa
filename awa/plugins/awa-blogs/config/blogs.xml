@@ -70,6 +70,11 @@
       <property-class>String</property-class>
       <value>awa_post</value>
     </managed-property>
+    <managed-property>
+      <property-name>sort</property-name>
+      <property-class>String</property-class>
+      <value>newest</value>
+    </managed-property>
   </managed-bean>
 
   <managed-bean>
@@ -312,17 +317,18 @@
     <filter-name>service</filter-name>
     <url-pattern>/blogs/*.html</url-pattern>
     <url-pattern>/blogs/ajax/*</url-pattern>
+    <url-pattern>/blogs/admin/#{adminBlog.id}/lists</url-pattern>
+    <url-pattern>/blogs/admin/#{adminBlog.id}/preview/#{post.uid}</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
     <filter-name>auth-filter</filter-name>
     <url-pattern>/blogs/ajax/*</url-pattern>
+    <url-pattern>/blogs/forms/comment-add-form.html</url-pattern>
     <url-pattern>/blogs/admin/*.html</url-pattern>
+    <url-pattern>/blogs/admin/#{adminBlog.id}/lists</url-pattern>
+    <url-pattern>/blogs/admin/#{adminBlog.id}/preview/#{post.uid}</url-pattern>
   </filter-mapping>
-
-  <policy>
-     <url-pattern>/*</url-pattern>
-  </policy>
 
   <url-policy>
     <permission>anonymous</permission>
@@ -338,6 +344,17 @@
     <url-pattern>/blogs/admin/.*</url-pattern>
     <url-pattern>/blogs/forms/comment-add-form.html</url-pattern>
     <url-pattern>/blogs/ajax/blogPublishComment/publish</url-pattern>
+    <url-pattern>/blogs/admin/#{adminBlog.id}/preview/#{post.uid}</url-pattern>
   </url-policy>
+
+  <url-mapping>
+    <pattern>/blogs/admin/#{adminBlog.id}/lists</pattern>
+    <view-id>/blogs/admin/list.html</view-id>
+  </url-mapping>
+
+  <url-mapping>
+    <pattern>/blogs/admin/#{adminBlog.id}/preview/#{post.uid}</pattern>
+    <view-id>/blogs/admin/preview.html</view-id>
+  </url-mapping>
 
 </module>
