@@ -44,7 +44,7 @@ package AWA.Users.Filters is
 
    --  The configuration parameter which controls the redirection page
    --  when the user is not logged (this should be the login page).
-   AUTH_FILTER_REDIRECT_PARAM   : constant String := "user.auth-filter.redirect";
+   AUTH_FILTER_REDIRECT_PARAM   : constant String := "redirect";
 
    --  A temporary cookie used to store the URL for redirection after the login is successful.
    REDIRECT_COOKIE              : constant String := "RURL";
@@ -90,7 +90,7 @@ package AWA.Users.Filters is
 
    --  The configuration parameter which controls the redirection page
    --  when the access key is invalid.
-   VERIFY_FILTER_REDIRECT_PARAM : constant String := "user.verify-filter.redirect";
+   VERIFY_FILTER_REDIRECT_PARAM : constant String := "redirect";
 
    --  Initialize the filter and configure the redirection URIs.
    procedure Initialize (Filter  : in out Verify_Filter;
