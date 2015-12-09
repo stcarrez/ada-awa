@@ -68,4 +68,23 @@
         <url-pattern>/errors/.*</url-pattern>
     </url-policy>
 
+  <context-param>
+    <param-name>no-cache.header.cache-control</param-name>
+    <param-value>no-cache</param-value>
+    <description>
+       Add a Cache-Control: no-cache header in the response.
+    </description>
+  </context-param>
+
+  <filter-mapping>
+    <filter-name>no-cache</filter-name>
+    <url-pattern>/wikis/*</url-pattern>
+    <url-pattern>/blogs/*</url-pattern>
+    <url-pattern>/microblog/*</url-pattern>
+    <url-pattern>/reviews/*</url-pattern>
+    <url-pattern>/workspaces/*</url-pattern>
+    <url-pattern>/questions/*</url-pattern>
+    <url-pattern>/storages/*</url-pattern>
+  </filter-mapping>
+
 </module>
