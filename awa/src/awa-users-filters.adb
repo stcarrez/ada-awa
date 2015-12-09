@@ -43,8 +43,8 @@ package body AWA.Users.Filters is
    --  Initialize the filter and configure the redirection URIs.
    --  ------------------------------
    procedure Initialize (Filter  : in out Auth_Filter;
-                         Context : in ASF.Servlets.Servlet_Registry'Class) is
-      URI : constant String := Context.Get_Init_Parameter (AUTH_FILTER_REDIRECT_PARAM);
+                         Config  : in ASF.Servlets.Filter_Config) is
+      URI : constant String := ASF.Servlets.Get_Init_Parameter (Config, AUTH_FILTER_REDIRECT_PARAM);
    begin
       Log.Info ("Using login URI: {0}", URI);
 
@@ -52,7 +52,7 @@ package body AWA.Users.Filters is
          Log.Error ("The login URI is empty.  Redirection to the login page will not work.");
       end if;
       Filter.Login_URI := To_Unbounded_String (URI);
-      ASF.Security.Filters.Auth_Filter (Filter).Initialize (Context);
+      ASF.Security.Filters.Auth_Filter (Filter).Initialize (Config);
    end Initialize;
 
    procedure Authenticate (F         : in Auth_Filter;
@@ -121,8 +121,8 @@ package body AWA.Users.Filters is
    --  ------------------------------
    overriding
    procedure Initialize (Filter  : in out Verify_Filter;
-                         Context : in ASF.Servlets.Servlet_Registry'Class) is
-      URI : constant String := Context.Get_Init_Parameter (VERIFY_FILTER_REDIRECT_PARAM);
+                         Config  : in ASF.Servlets.Filter_Config) is
+      URI : constant String := ASF.Servlets.Get_Init_Parameter (Config, VERIFY_FILTER_REDIRECT_PARAM);
    begin
       Filter.Invalid_Key_URI := To_Unbounded_String (URI);
    end Initialize;
