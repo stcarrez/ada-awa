@@ -15,3 +15,7 @@ DROP TABLE IF EXISTS `awa_message`;
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `sequence`;
 DROP TABLE IF EXISTS `entity_type`;
+/* Copied from awa_counters-drop-mysql.sql*/
+/* File generated automatically by dynamo */
+DROP TABLE IF EXISTS `awa_counter_definition`;
+DROP TABLE IF EXISTS `awa_counter`;
