@@ -102,10 +102,11 @@
   </managed-bean>
 
   <navigation-rule>
-    <from-view-id>/wikis/admin/forms/create.xhtml</from-view-id>
+    <from-view-id>/wikis/setup.xhtml</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
-      <to-view-id>/wikis/admin/forms/create-response.xhtml</to-view-id>
+      <to-view-id>/wikis/list/#{adminWikiSpace.id}/recent/grid</to-view-id>
+      <redirect/>
     </navigation-case>
   </navigation-rule>
 
@@ -332,6 +333,7 @@
     <url-pattern>/wikis/view/.*</url-pattern>
     <url-pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}</url-pattern>
     <url-pattern>/wikis/forms/.*</url-pattern>
+    <url-pattern>/wikis/setup.html</url-pattern>
   </url-policy>
 
   <url-mapping>
