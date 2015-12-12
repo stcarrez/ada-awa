@@ -1,9 +1,5 @@
 # You may edit this makefile as long as you keep these original 
 # target names defined.
-GNATMAKE=gnatmake
-GNATCLEAN=gnatclean
-SVN=svn
-
 distdir=awa-all-@AWA_VERSION@
 
 DIST_FILE=awa-all-@AWA_VERSION@.tar.gz
@@ -70,13 +66,6 @@ dist:
 	  fi; \
 	done
 	-rm -f $(distdir)/bin/*
-	tar --exclude=.svn --exclude="*~" --exclude="*.o" --exclude="*.ali" \
+	tar --exclude=.svn --exclude=.git --exclude="*~" --exclude="*.o" --exclude="*.ali" \
 	    --exclude="*.log" --exclude="*.a" \
 	    -cvzf $(DIST_FILE) $(distdir)
-
-# prepare before releasing a new version of the package
-# (collect information about changes and SVN repository)
-prepare-release:
-	${SVN} update
-	${SVN} info > CHANGES
-	${SVN} log -v > ChangeLog
