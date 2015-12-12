@@ -660,6 +660,7 @@ ac_subst_files=''
 ac_user_opts='
 enable_option_checking
 with_build_root
+with_git
 enable_ahven
 enable_aunit
 enable_xmlada
@@ -1296,6 +1297,10 @@ Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-build-root=PATH  Path to find the AWA libraries
+  --with-git=repo         Use the git repositories for the Ada
+                          Util/EL/ASF/Wiki/ADO/Dynamo. You can indicate the
+                          git repository base (default is
+                          https://github.com/stcarrez)
   --with-xmlada=x         Path for XML/Ada
   --with-aws=x            Path for Ada Web Server
 
@@ -1778,6 +1783,10 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
+# Git repositories (when using --with-git)
+AWA_GIT="ada-util ada-el ada-wiki ada-security ada-asf ada-ado dynamo"
+AWA_GIT_BASE="https://github.com/stcarrez"
+
 ac_aux_dir=
 for ac_dir in "$srcdir" "$srcdir/.." "$srcdir/../.."; do
   if test -f "$ac_dir/install-sh"; then
@@ -1922,7 +1931,7 @@ test -n "$target_alias" &&
 
 # Current release settings
 AWA_MAJOR_VERSION=1
-AWA_MINOR_VERSION=0
+AWA_MINOR_VERSION=1
 AWA_MICRO_VERSION=0
 AWA_VERSION=$AWA_MAJOR_VERSION.$AWA_MINOR_VERSION.$AWA_MICRO_VERSION
 
@@ -3032,8 +3041,6 @@ else
    pwd_option=""
 fi
 
-PACKAGES="$AWA_PACKAGES"
-
 awa_util_configure=
 awa_el_configure=
 awa_security_configure=
@@ -3063,7 +3070,23 @@ if test "${with_build_root+set}" = set; then :
 
 else
 
-    awa_build_root=`pwd $pwd_option`
+    awa_build_root=`pwd $pwd_option`/
+
+fi
+
+
+
+# Check whether --with-git was given.
+if test "${with_git+set}" = set; then :
+  withval=$with_git;
+    awa_use_git=yes
+	if test x${withval} != xyes ; then
+	   AWA_GIT_BASE=${withval}
+    fi
+
+else
+
+    awa_use_git=no
 
 fi
 
@@ -3106,6 +3129,28 @@ else
   ENABLE_AWS=no
 fi
 
+SUBDIRS=
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to use the git repositories" >&5
+$as_echo_n "checking whether to use the git repositories... " >&6; }
+if test ${awa_use_git} = "yes" ; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${awa_use_git}" >&5
+$as_echo "${awa_use_git}" >&6; }
+  for NAME in $AWA_GIT ; do
+    if test -d ${NAME} ; then
+      echo "Git repository ${NAME} already cloned."
+    else
+      echo "Cloning Git repository ${NAME}"
+      git clone ${AWA_GIT_BASE}/${NAME} ${NAME}
+    fi
+    SUBDIRS="$SUBDIRS $NAME"
+  done
+  PACKAGES=""
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${awa_use_git}" >&5
+$as_echo "${awa_use_git}" >&6; }
+  PACKAGES="$AWA_PACKAGES"
+fi
 
 if test $ENABLE_AUNIT = "yes" ; then
   PACKAGES="$PACKAGES aunit-gpl-2014-src"
@@ -3119,7 +3164,6 @@ if test $ENABLE_AWS = "yes" ; then
   PACKAGES="$PACKAGES aws-gpl-3.1.0-src"
 fi
 
-SUBDIRS=
 for NAME in $PACKAGES ; do
    TGZ=$NAME.tar.gz
    EXTRACT_DIR=${awa_build_root}
@@ -3206,6 +3250,7 @@ for NAME in $PACKAGES ; do
    esac
 done
 
+SUBDIRS="${SUBDIRS} awa"
 
 
 DIR=`pwd`
@@ -3260,12 +3305,18 @@ fi
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: trying ${gnat_project_name_xmlada}" >&5
 $as_echo "trying ${gnat_project_name_xmlada}" >&6; }
 
+  rm -f conftest.gpr
   # Search in the GNAT project path.
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ${gnat_project_name_xmlada} project exists in gnatmake's search path" >&5
 $as_echo_n "checking whether ${gnat_project_name_xmlada} project exists in gnatmake's search path... " >&6; }
-  echo "with \"${gnat_project_name_xmlada}\"; project t is for Source_Dirs use (); end t;" > t.gpr
-  $GNATMAKE -p -Pt >/dev/null 2>/dev/null
-  if test $? -eq 0; then
+  echo "with \"${gnat_project_name_xmlada}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+  if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+  then
     gnat_project_xmlada=yes
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
@@ -3280,11 +3331,14 @@ $as_echo "no" >&6; }
       dir=`dirname $name`
       { $as_echo "$as_me:${as_lineno-$LINENO}: checking for XML/Ada project in ${dir}" >&5
 $as_echo_n "checking for XML/Ada project in ${dir}... " >&6; }
-      echo "with \"${name}\"; project t is for Source_Dirs use (); end t;" > t.gpr
-	  # echo ""
-	  # cat t.gpr
-      $GNATMAKE -p -Pt >/dev/null 2>/dev/null
-      if test $? -eq 0; then
+      echo "with \"${name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+      if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+      then
          gnat_project_xmlada=yes
 		 gnat_project_name_xmlada=${name}
          { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
@@ -3297,7 +3351,7 @@ $as_echo "no" >&6; }
       fi
     done
   fi
-  rm -f t.gpr
+  rm -f conftest.gpr
   if test x${gnat_project_xmlada} = xyes; then
     gnat_project_with_xmlada="with \"${gnat_project_name_xmlada}\";";
     gnat_project_dir_xmlada=`dirname ${gnat_project_name_xmlada}`
@@ -3367,12 +3421,18 @@ fi
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: trying ${gnat_project_name_aws}" >&5
 $as_echo "trying ${gnat_project_name_aws}" >&6; }
 
+  rm -f conftest.gpr
   # Search in the GNAT project path.
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ${gnat_project_name_aws} project exists in gnatmake's search path" >&5
 $as_echo_n "checking whether ${gnat_project_name_aws} project exists in gnatmake's search path... " >&6; }
-  echo "with \"${gnat_project_name_aws}\"; project t is for Source_Dirs use (); end t;" > t.gpr
-  $GNATMAKE -p -Pt >/dev/null 2>/dev/null
-  if test $? -eq 0; then
+  echo "with \"${gnat_project_name_aws}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+  if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+  then
     gnat_project_aws=yes
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
@@ -3387,11 +3447,14 @@ $as_echo "no" >&6; }
       dir=`dirname $name`
       { $as_echo "$as_me:${as_lineno-$LINENO}: checking for Ada Web Server project in ${dir}" >&5
 $as_echo_n "checking for Ada Web Server project in ${dir}... " >&6; }
-      echo "with \"${name}\"; project t is for Source_Dirs use (); end t;" > t.gpr
-	  # echo ""
-	  # cat t.gpr
-      $GNATMAKE -p -Pt >/dev/null 2>/dev/null
-      if test $? -eq 0; then
+      echo "with \"${name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+      if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+      then
          gnat_project_aws=yes
 		 gnat_project_name_aws=${name}
          { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
@@ -3404,7 +3467,7 @@ $as_echo "no" >&6; }
       fi
     done
   fi
-  rm -f t.gpr
+  rm -f conftest.gpr
   if test x${gnat_project_aws} = xyes; then
     gnat_project_with_aws="with \"${gnat_project_name_aws}\";";
     gnat_project_dir_aws=`dirname ${gnat_project_name_aws}`
@@ -3482,26 +3545,32 @@ ARGS="--prefix $prefix"
 
 echo "Configuring ==== ada-util ===="
 (cd ${awa_build_root}${awa_util_name} && ./configure ${awa_util_configure})
+(cd ${awa_build_root}${awa_util_name} && make setup)
 
-echo "Configuring ==== ada-el ===="
+echo "Configuring ==== ada-el ${awa_el_configure} ===="
 (cd ${awa_build_root}${awa_el_name} && ./configure ${awa_el_configure})
+(cd ${awa_build_root}${awa_el_name} && make setup)
 
-echo "Configuring ==== ada-wiki ===="
+echo "Configuring ==== ada-wiki ${awa_wiki_configure} ===="
 (cd ${awa_build_root}${awa_wiki_name} && ./configure ${awa_wiki_configure})
+(cd ${awa_build_root}${awa_wiki_name} && make setup)
 
-echo "Configuring ==== ada-security ===="
+echo "Configuring ==== ada-security ${awa_security_configure} ===="
 (cd ${awa_build_root}${awa_security_name} && ./configure ${awa_security_configure})
+(cd ${awa_build_root}${awa_security_name} && make setup)
 
-echo "Configuring ==== ada-asf ===="
+echo "Configuring ==== ada-asf ${awa_asf_configure} ===="
 (cd ${awa_build_root}${awa_asf_name} && ./configure ${awa_asf_configure})
+(cd ${awa_build_root}${awa_asf_name} && make setup)
 
-echo "Configuring ==== ada-ado ===="
+echo "Configuring ==== ada-ado ${awa_ado_configure} ===="
 (cd ${awa_build_root}${awa_ado_name} && ./configure ${awa_ado_configure})
+(cd ${awa_build_root}${awa_ado_name} && make setup)
 
-echo "Configuring ==== dynamo ===="
+echo "Configuring ==== dynamo ${awa_dynamo_configure} ===="
 (cd ${awa_build_root}${awa_dynamo_name} && ./configure ${awa_dynamo_configure})
 
-echo "Configuring ==== ada-awa ===="
+echo "Configuring ==== ada-awa ${awa_awa_configure} ===="
 (cd ${ac_pwd}/awa/${awa_awa_name} && ./configure ${awa_awa_configure})
 
 ac_config_files="$ac_config_files Makefile"
