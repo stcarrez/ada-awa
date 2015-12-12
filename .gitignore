@@ -1,6 +1,7 @@
 *~
 *.log
 config.status
+auto.cgpr
 CHANGES
 access.xml
 acc.xml
