@@ -7,6 +7,13 @@ AC_DEFUN(AM_GNAT_CHECK_GPRBUILD,
   else
     AC_CHECK_PROGS(GNATMAKE, gnatmake, "")
   fi
+
+  AC_CHECK_PROGS(GPRCLEAN, gprclean, "")
+  if test -n "$GPRCLEAN"; then
+    GNATCLEAN="$GPRCLEAN"
+  else
+    AC_CHECK_PROGS(GNATCLEAN, gnatclean, "")
+  fi
 ])
 
 # Check if a GNAT project is available.
@@ -14,17 +21,17 @@ AC_DEFUN(AM_GNAT_CHECK_GPRBUILD,
 AC_DEFUN(AM_GNAT_CHECK_PROJECT,
 [
   AC_MSG_CHECKING([whether $1 project exists])
-  echo "with \"$2\"; project t is for Source_Dirs use (); end t;" > t.gpr
-  $GNATMAKE -p -Pt >/dev/null 2>/dev/null
-  if test $? -eq 0; then
+  echo "with \"$2\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+  if AC_TRY_COMMAND([gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out])
+  then
     gnat_project_$1=yes
     AC_MSG_RESULT([yes, using $2])
     gnat_project_with_$1="with \"$2\";";
   else
     gnat_project_$1=no
     AC_MSG_RESULT(no)
-  fi;
-  rm -f t.gpr
+  fi
+  rm -f conftest.gpr
 ])
 
 # Check if a GNAT project is available.
@@ -45,11 +52,12 @@ AC_DEFUN(AM_GNAT_FIND_PROJECT,
     ])
   AC_MSG_RESULT(trying ${gnat_project_name_$3})
 
+  rm -f conftest.gpr
   # Search in the GNAT project path.
   AC_MSG_CHECKING([whether ${gnat_project_name_$3} project exists in gnatmake's search path])
-  echo "with \"${gnat_project_name_$3}\"; project t is for Source_Dirs use (); end t;" > t.gpr
-  $GNATMAKE -p -Pt >/dev/null 2>/dev/null
-  if test $? -eq 0; then
+  echo "with \"${gnat_project_name_$3}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+  if AC_TRY_COMMAND([gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out])
+  then
     gnat_project_$3=yes
     AC_MSG_RESULT(yes, using ${gnat_project_name_$3})
   else
@@ -61,11 +69,9 @@ AC_DEFUN(AM_GNAT_FIND_PROJECT,
     for name in $files; do
       dir=`dirname $name`
       AC_MSG_CHECKING([for $2 project in ${dir}])
-      echo "with \"${name}\"; project t is for Source_Dirs use (); end t;" > t.gpr
-	  # echo ""
-	  # cat t.gpr
-      $GNATMAKE -p -Pt >/dev/null 2>/dev/null
-      if test $? -eq 0; then
+      echo "with \"${name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+      if AC_TRY_COMMAND([gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out])
+      then
          gnat_project_$3=yes
 		 gnat_project_name_$3=${name}
          AC_MSG_RESULT(yes, using ${name})
@@ -76,7 +82,7 @@ AC_DEFUN(AM_GNAT_FIND_PROJECT,
       fi
     done
   fi
-  rm -f t.gpr
+  rm -f conftest.gpr
   if test x${gnat_project_$3} = xyes; then
     gnat_project_with_$3="with \"${gnat_project_name_$3}\";";
     gnat_project_dir_$3=`dirname ${gnat_project_name_$3}`
@@ -404,7 +410,6 @@ AC_DEFUN(AM_UTIL_CHECK_INSTALL,
   # echo "D:${gnat_project_with_util_config}"
   echo "${gnat_project_with_util_config} project t is for Source_Dirs use (); end t;" > t.gpr
   # cat t.gpr
-  # $GNATMAKE -vP1 -Pt 2>&1
   gnat_util_config_path=`$GNATMAKE -vP1 -Pt 2>&1 | awk '/Parsing.*util_config.gpr/ {print @S|@2}' | sed -e 's,",,g'`
   AC_MSG_RESULT(${gnat_util_config_path})
 
@@ -425,4 +430,68 @@ AC_DEFUN(AM_UTIL_CHECK_INSTALL,
   else
     AM_GNAT_CHECK_INSTALL
   fi
+])
+
+# AM_TRY_ADA and AM_HAS_INTRINSIC_SYNC_COUNTERS are imported from GNATcoll aclocal.m4
+#############################################################
+# Check whether gnatmake can compile, bind and link an Ada program
+#    AM_TRY_ADA(gnatmake,filename,content,success,failure)
+#############################################################
+
+AC_DEFUN(AM_TRY_ADA,
+[
+   cat > conftest.ada <<EOF
+[$3]
+EOF
+   if AC_TRY_COMMAND([gnatchop -q conftest.ada && $1 $2 >/dev/null 2>conftest.out])
+   then
+      : Success
+      $4
+   else
+      : Failure
+      $5
+   fi
+   rm -rf conftest.ada
+])
+
+#############################################################
+# Check whether platform/GNAT supports atomic increment/decrement
+# operations.
+# The following variable is then set:
+#     SYNC_COUNTERS_IMPL
+# to either "intrinsic" or "mutex"
+# Code comes from the PolyORB configure.ac
+#############################################################
+
+AC_DEFUN(AM_HAS_INTRINSIC_SYNC_COUNTERS,
+[
+  AC_MSG_CHECKING([whether platform supports atomic inc/dec])
+  AM_TRY_ADA([gnatmake], [check.adb],
+[
+with Interfaces; use Interfaces;
+procedure Check is
+   function Sync_Add_And_Fetch
+     (Ptr   : access Interfaces.Integer_32;
+      Value : Interfaces.Integer_32) return Interfaces.Integer_32;
+   pragma Import (Intrinsic, Sync_Add_And_Fetch, "__sync_add_and_fetch_4");
+   X : aliased Interfaces.Integer_32;
+   Y : Interfaces.Integer_32 := 0;
+   pragma Volatile (Y);
+   --  On some platforms (e.g. i386), GCC has limited support for
+   --  __sync_add_and_fetch_4 for the case where the result is not used.
+   --  Here we want to test for general availability, so make Y volatile to
+   --  prevent the store operation from being discarded.
+begin
+   Y := Sync_Add_And_Fetch (X'Access, 1);
+end Check;
+],
+[
+   AC_MSG_RESULT(yes)
+   $1
+],[
+   AC_MSG_RESULT(no)
+   $2
+])
+
+   rm -f check.adb check
 ])
