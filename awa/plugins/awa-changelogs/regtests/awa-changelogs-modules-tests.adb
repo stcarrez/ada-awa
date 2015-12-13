@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-changelogs-tests -- Tests for changelogs
---  Copyright (C) 2014 Stephane Carrez
+--  Copyright (C) 2014, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Util.Tests;
 with Util.Test_Caller;
 
 with Security.Contexts;
@@ -41,7 +40,6 @@ package body AWA.Changelogs.Modules.Tests is
       declare
          Change_Manager : constant Changelog_Module_Access := Get_Changelog_Module;
          User           : constant AWA.Users.Models.User_Ref := Context.Get_User;
-         Total        : Integer;
       begin
          T.Assert (Change_Manager /= null, "There is no changelog module");
 
