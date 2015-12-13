@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-tests -- Unit tests for blogs module
---  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -53,8 +53,7 @@ package body AWA.Blogs.Modules.Tests is
       AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-blog@test.com");
 
       Manager := AWA.Blogs.Modules.Get_Blog_Module;
-      Manager.Create_Blog (Workspace_Id => 0,
-                           Title        => "My blog",
+      Manager.Create_Blog (Title        => "My blog",
                            Result       => Blog_Id);
       T.Assert (Blog_Id > 0, "Invalid blog identifier");
    end Test_Create_Blog;
@@ -72,8 +71,7 @@ package body AWA.Blogs.Modules.Tests is
       AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-blog-post@test.com");
 
       Manager := AWA.Blogs.Modules.Get_Blog_Module;
-      Manager.Create_Blog (Workspace_Id => 0,
-                           Title        => "My blog post",
+      Manager.Create_Blog (Title        => "My blog post",
                            Result       => Blog_Id);
       T.Assert (Blog_Id > 0, "Invalid blog identifier");
 
