@@ -67,6 +67,7 @@ package body AWA.Wikis.Previews is
    overriding
    procedure Configure (Plugin : in out Preview_Module;
                         Props  : in ASF.Applications.Config) is
+      pragma Unreferenced (Props);
    begin
       Plugin.Template := Plugin.Get_Config (PARAM_PREVIEW_TEMPLATE);
       Plugin.Command := Plugin.Get_Config (PARAM_PREVIEW_COMMAND);
@@ -82,13 +83,13 @@ package body AWA.Wikis.Previews is
    --  ------------------------------
    procedure Do_Preview_Job (Plugin : in Preview_Module;
                              Job    : in out AWA.Jobs.Services.Abstract_Job_Type'Class) is
+      pragma Unreferenced (Job);
       use Util.Beans.Objects;
 
       Ctx       : constant EL.Contexts.ELContext_Access := EL.Contexts.TLS.Current;
       Template  : constant String := To_String (Plugin.Template.Get_Value (Ctx.all));
       Command   : constant String := To_String (Plugin.Command.Get_Value (Ctx.all));
       Html_File : constant String := To_String (Plugin.Html.Get_Value (Ctx.all));
-      Tmp       : constant String := Plugin.Get_Config (PARAM_PREVIEW_TMPDIR);
    begin
       Log.Info ("Preview {0} with {1}", Template, Command);
       declare
@@ -135,6 +136,8 @@ package body AWA.Wikis.Previews is
    --  ------------------------------
    procedure Make_Preview_Job (Plugin : in Preview_Module;
                                Page   : in AWA.Wikis.Models.Wiki_Page_Ref'Class) is
+      pragma Unreferenced (Plugin);
+
       J : AWA.Jobs.Services.Job_Type;
    begin
       J.Set_Parameter ("wiki_space_id", Page.Get_Wiki);

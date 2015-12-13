@@ -453,6 +453,7 @@ package body AWA.Wikis.Beans is
    overriding
    procedure Delete (Bean    : in out Wiki_Page_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
    begin
       Bean.Module.Delete (Bean);
    end Delete;
@@ -547,6 +548,7 @@ package body AWA.Wikis.Beans is
    overriding
    procedure Load (From    : in out Wiki_List_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
    begin
       From.Load_List;
    end Load;
