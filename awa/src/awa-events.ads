@@ -16,7 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Util.Strings;
 with Util.Events;
 with Util.Beans.Objects;
 with Util.Beans.Basic;
@@ -112,9 +111,6 @@ package AWA.Events is
 
    --  Exception raised if an event name is not found.
    Not_Found : exception renames Event_Arrays.Not_Found;
-
-   --  Identifies an invalid event.
-   -- Invalid_Event : constant Event_Index := 0;
 
    --  Find the event runtime index given the event name.
    --  Raises Not_Found exception if the event name is not recognized.
