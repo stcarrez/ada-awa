@@ -553,7 +553,7 @@ package body AWA.Tags.Components is
 
    procedure Swap (Item1 : in out AWA.Tags.Models.Tag_Info;
                    Item2 : in out AWA.Tags.Models.Tag_Info) is
-      Tmp : AWA.Tags.Models.Tag_Info := Item2;
+      Tmp : constant AWA.Tags.Models.Tag_Info := Item2;
    begin
       Item2 := Item1;
       Item1 := Tmp;
@@ -646,7 +646,7 @@ package body AWA.Tags.Components is
          UI.Compute_Cloud_Weight (Table.all, Context);
 
          --  Pass 3: Dispatch the tags using some layout algorithm.
-         if layout = "dispatch" then
+         if Layout = "dispatch" then
             Dispatch (Table.all);
          end if;
 
