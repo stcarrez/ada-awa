@@ -3163,12 +3163,18 @@ fi
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: trying ${gnat_project_name_util}" >&5
 $as_echo "trying ${gnat_project_name_util}" >&6; }
 
+  rm -f conftest.gpr
   # Search in the GNAT project path.
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ${gnat_project_name_util} project exists in gnatmake's search path" >&5
 $as_echo_n "checking whether ${gnat_project_name_util} project exists in gnatmake's search path... " >&6; }
-  echo "with \"${gnat_project_name_util}\"; project t is for Source_Dirs use (); end t;" > t.gpr
-  $GNATMAKE -p -Pt >/dev/null 2>/dev/null
-  if test $? -eq 0; then
+  echo "with \"${gnat_project_name_util}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+  if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+  then
     gnat_project_util=yes
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
@@ -3183,11 +3189,14 @@ $as_echo "no" >&6; }
       dir=`dirname $name`
       { $as_echo "$as_me:${as_lineno-$LINENO}: checking for Ada Utility Library project in ${dir}" >&5
 $as_echo_n "checking for Ada Utility Library project in ${dir}... " >&6; }
-      echo "with \"${name}\"; project t is for Source_Dirs use (); end t;" > t.gpr
-	  # echo ""
-	  # cat t.gpr
-      $GNATMAKE -p -Pt >/dev/null 2>/dev/null
-      if test $? -eq 0; then
+      echo "with \"${name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+      if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+      then
          gnat_project_util=yes
 		 gnat_project_name_util=${name}
          { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
@@ -3200,7 +3209,7 @@ $as_echo "no" >&6; }
       fi
     done
   fi
-  rm -f t.gpr
+  rm -f conftest.gpr
   if test x${gnat_project_util} = xyes; then
     gnat_project_with_util="with \"${gnat_project_name_util}\";";
     gnat_project_dir_util=`dirname ${gnat_project_name_util}`
@@ -3256,12 +3265,18 @@ fi
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: trying ${gnat_project_name_el}" >&5
 $as_echo "trying ${gnat_project_name_el}" >&6; }
 
+  rm -f conftest.gpr
   # Search in the GNAT project path.
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ${gnat_project_name_el} project exists in gnatmake's search path" >&5
 $as_echo_n "checking whether ${gnat_project_name_el} project exists in gnatmake's search path... " >&6; }
-  echo "with \"${gnat_project_name_el}\"; project t is for Source_Dirs use (); end t;" > t.gpr
-  $GNATMAKE -p -Pt >/dev/null 2>/dev/null
-  if test $? -eq 0; then
+  echo "with \"${gnat_project_name_el}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+  if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+  then
     gnat_project_el=yes
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
@@ -3276,11 +3291,14 @@ $as_echo "no" >&6; }
       dir=`dirname $name`
       { $as_echo "$as_me:${as_lineno-$LINENO}: checking for Ada Expression Language Library project in ${dir}" >&5
 $as_echo_n "checking for Ada Expression Language Library project in ${dir}... " >&6; }
-      echo "with \"${name}\"; project t is for Source_Dirs use (); end t;" > t.gpr
-	  # echo ""
-	  # cat t.gpr
-      $GNATMAKE -p -Pt >/dev/null 2>/dev/null
-      if test $? -eq 0; then
+      echo "with \"${name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+      if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+      then
          gnat_project_el=yes
 		 gnat_project_name_el=${name}
          { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
@@ -3293,7 +3311,7 @@ $as_echo "no" >&6; }
       fi
     done
   fi
-  rm -f t.gpr
+  rm -f conftest.gpr
   if test x${gnat_project_el} = xyes; then
     gnat_project_with_el="with \"${gnat_project_name_el}\";";
     gnat_project_dir_el=`dirname ${gnat_project_name_el}`
@@ -3349,12 +3367,18 @@ fi
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: trying ${gnat_project_name_wiki}" >&5
 $as_echo "trying ${gnat_project_name_wiki}" >&6; }
 
+  rm -f conftest.gpr
   # Search in the GNAT project path.
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ${gnat_project_name_wiki} project exists in gnatmake's search path" >&5
 $as_echo_n "checking whether ${gnat_project_name_wiki} project exists in gnatmake's search path... " >&6; }
-  echo "with \"${gnat_project_name_wiki}\"; project t is for Source_Dirs use (); end t;" > t.gpr
-  $GNATMAKE -p -Pt >/dev/null 2>/dev/null
-  if test $? -eq 0; then
+  echo "with \"${gnat_project_name_wiki}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+  if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+  then
     gnat_project_wiki=yes
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
@@ -3369,11 +3393,14 @@ $as_echo "no" >&6; }
       dir=`dirname $name`
       { $as_echo "$as_me:${as_lineno-$LINENO}: checking for Ada Wiki Library project in ${dir}" >&5
 $as_echo_n "checking for Ada Wiki Library project in ${dir}... " >&6; }
-      echo "with \"${name}\"; project t is for Source_Dirs use (); end t;" > t.gpr
-	  # echo ""
-	  # cat t.gpr
-      $GNATMAKE -p -Pt >/dev/null 2>/dev/null
-      if test $? -eq 0; then
+      echo "with \"${name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+      if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+      then
          gnat_project_wiki=yes
 		 gnat_project_name_wiki=${name}
          { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
@@ -3386,7 +3413,7 @@ $as_echo "no" >&6; }
       fi
     done
   fi
-  rm -f t.gpr
+  rm -f conftest.gpr
   if test x${gnat_project_wiki} = xyes; then
     gnat_project_with_wiki="with \"${gnat_project_name_wiki}\";";
     gnat_project_dir_wiki=`dirname ${gnat_project_name_wiki}`
@@ -3442,12 +3469,18 @@ fi
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: trying ${gnat_project_name_security}" >&5
 $as_echo "trying ${gnat_project_name_security}" >&6; }
 
+  rm -f conftest.gpr
   # Search in the GNAT project path.
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ${gnat_project_name_security} project exists in gnatmake's search path" >&5
 $as_echo_n "checking whether ${gnat_project_name_security} project exists in gnatmake's search path... " >&6; }
-  echo "with \"${gnat_project_name_security}\"; project t is for Source_Dirs use (); end t;" > t.gpr
-  $GNATMAKE -p -Pt >/dev/null 2>/dev/null
-  if test $? -eq 0; then
+  echo "with \"${gnat_project_name_security}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+  if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+  then
     gnat_project_security=yes
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
@@ -3462,11 +3495,14 @@ $as_echo "no" >&6; }
       dir=`dirname $name`
       { $as_echo "$as_me:${as_lineno-$LINENO}: checking for Ada Security Library project in ${dir}" >&5
 $as_echo_n "checking for Ada Security Library project in ${dir}... " >&6; }
-      echo "with \"${name}\"; project t is for Source_Dirs use (); end t;" > t.gpr
-	  # echo ""
-	  # cat t.gpr
-      $GNATMAKE -p -Pt >/dev/null 2>/dev/null
-      if test $? -eq 0; then
+      echo "with \"${name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+      if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+      then
          gnat_project_security=yes
 		 gnat_project_name_security=${name}
          { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
@@ -3479,7 +3515,7 @@ $as_echo "no" >&6; }
       fi
     done
   fi
-  rm -f t.gpr
+  rm -f conftest.gpr
   if test x${gnat_project_security} = xyes; then
     gnat_project_with_security="with \"${gnat_project_name_security}\";";
     gnat_project_dir_security=`dirname ${gnat_project_name_security}`
@@ -3535,12 +3571,18 @@ fi
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: trying ${gnat_project_name_asf}" >&5
 $as_echo "trying ${gnat_project_name_asf}" >&6; }
 
+  rm -f conftest.gpr
   # Search in the GNAT project path.
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ${gnat_project_name_asf} project exists in gnatmake's search path" >&5
 $as_echo_n "checking whether ${gnat_project_name_asf} project exists in gnatmake's search path... " >&6; }
-  echo "with \"${gnat_project_name_asf}\"; project t is for Source_Dirs use (); end t;" > t.gpr
-  $GNATMAKE -p -Pt >/dev/null 2>/dev/null
-  if test $? -eq 0; then
+  echo "with \"${gnat_project_name_asf}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+  if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+  then
     gnat_project_asf=yes
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
@@ -3555,11 +3597,14 @@ $as_echo "no" >&6; }
       dir=`dirname $name`
       { $as_echo "$as_me:${as_lineno-$LINENO}: checking for Ada Server Faces Library project in ${dir}" >&5
 $as_echo_n "checking for Ada Server Faces Library project in ${dir}... " >&6; }
-      echo "with \"${name}\"; project t is for Source_Dirs use (); end t;" > t.gpr
-	  # echo ""
-	  # cat t.gpr
-      $GNATMAKE -p -Pt >/dev/null 2>/dev/null
-      if test $? -eq 0; then
+      echo "with \"${name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+      if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+      then
          gnat_project_asf=yes
 		 gnat_project_name_asf=${name}
          { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
@@ -3572,7 +3617,7 @@ $as_echo "no" >&6; }
       fi
     done
   fi
-  rm -f t.gpr
+  rm -f conftest.gpr
   if test x${gnat_project_asf} = xyes; then
     gnat_project_with_asf="with \"${gnat_project_name_asf}\";";
     gnat_project_dir_asf=`dirname ${gnat_project_name_asf}`
@@ -3629,12 +3674,18 @@ fi
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: trying ${gnat_project_name_ado}" >&5
 $as_echo "trying ${gnat_project_name_ado}" >&6; }
 
+  rm -f conftest.gpr
   # Search in the GNAT project path.
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ${gnat_project_name_ado} project exists in gnatmake's search path" >&5
 $as_echo_n "checking whether ${gnat_project_name_ado} project exists in gnatmake's search path... " >&6; }
-  echo "with \"${gnat_project_name_ado}\"; project t is for Source_Dirs use (); end t;" > t.gpr
-  $GNATMAKE -p -Pt >/dev/null 2>/dev/null
-  if test $? -eq 0; then
+  echo "with \"${gnat_project_name_ado}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+  if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+  then
     gnat_project_ado=yes
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
@@ -3649,11 +3700,14 @@ $as_echo "no" >&6; }
       dir=`dirname $name`
       { $as_echo "$as_me:${as_lineno-$LINENO}: checking for Ada Database Objects project in ${dir}" >&5
 $as_echo_n "checking for Ada Database Objects project in ${dir}... " >&6; }
-      echo "with \"${name}\"; project t is for Source_Dirs use (); end t;" > t.gpr
-	  # echo ""
-	  # cat t.gpr
-      $GNATMAKE -p -Pt >/dev/null 2>/dev/null
-      if test $? -eq 0; then
+      echo "with \"${name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+      if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+      then
          gnat_project_ado=yes
 		 gnat_project_name_ado=${name}
          { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
@@ -3666,7 +3720,7 @@ $as_echo "no" >&6; }
       fi
     done
   fi
-  rm -f t.gpr
+  rm -f conftest.gpr
   if test x${gnat_project_ado} = xyes; then
     gnat_project_with_ado="with \"${gnat_project_name_ado}\";";
     gnat_project_dir_ado=`dirname ${gnat_project_name_ado}`
@@ -3846,9 +3900,14 @@ test -n "$GPRINSTALL" || GPRINSTALL=""""
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether util_config project exists" >&5
 $as_echo_n "checking whether util_config project exists... " >&6; }
-  echo "with \"util_config\"; project t is for Source_Dirs use (); end t;" > t.gpr
-  $GNATMAKE -p -Pt >/dev/null 2>/dev/null
-  if test $? -eq 0; then
+  echo "with \"util_config\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+  if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+  then
     gnat_project_util_config=yes
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes, using util_config" >&5
 $as_echo "yes, using util_config" >&6; }
@@ -3857,8 +3916,8 @@ $as_echo "yes, using util_config" >&6; }
     gnat_project_util_config=no
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-  fi;
-  rm -f t.gpr
+  fi
+  rm -f conftest.gpr
 
 
   # Search in the GNAT project path.
@@ -3867,7 +3926,6 @@ $as_echo_n "checking for util_config.gpr installation... " >&6; }
   # echo "D:${gnat_project_with_util_config}"
   echo "${gnat_project_with_util_config} project t is for Source_Dirs use (); end t;" > t.gpr
   # cat t.gpr
-  # $GNATMAKE -vP1 -Pt 2>&1
   gnat_util_config_path=`$GNATMAKE -vP1 -Pt 2>&1 | awk '/Parsing.*util_config.gpr/ {print $2}' | sed -e 's,",,g'`
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${gnat_util_config_path}" >&5
 $as_echo "${gnat_util_config_path}" >&6; }
