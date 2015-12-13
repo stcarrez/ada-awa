@@ -143,7 +143,8 @@ package body AWA.Tags.Modules.Tests is
          List := Create_Tag_List_Bean (Tag_Manager);
          Cleanup := Util.Beans.Objects.To_Object (List.all'Access);
          List.Set_Value ("entity_type", Util.Beans.Objects.To_Object (String '("awa_user")));
-         List.Set_Value ("permission", Util.Beans.Objects.To_Object (String '("workspace-create")));
+         List.Set_Value ("permission",
+                         Util.Beans.Objects.To_Object (String '("workspace-create")));
 
          --  Add 3 tags.
          Tags.Append ("user-tag-1");
