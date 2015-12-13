@@ -20,7 +20,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-pragma Warnings (Off, "unit * is not referenced");
+pragma Warnings (Off);
 with ADO.Sessions;
 with ADO.Objects;
 with ADO.Statements;
@@ -35,8 +35,11 @@ with Util.Beans.Objects;
 with Util.Beans.Objects.Enums;
 with Util.Beans.Basic.Lists;
 with AWA.Users.Models;
-pragma Warnings (On, "unit * is not referenced");
+pragma Warnings (On);
 package AWA.Events.Models is
+
+   pragma Style_Checks ("-mr");
+
    type Message_Status_Type is (QUEUED, PROCESSING, PROCESSED);
    for Message_Status_Type use (QUEUED => 0, PROCESSING => 1, PROCESSED => 2);
    package Message_Status_Type_Objects is
@@ -421,7 +424,6 @@ package AWA.Events.Models is
    procedure List (Object  : in out Message_Vector;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class);
-
 
 
    Query_Queue_Pending_Message : constant ADO.Queries.Query_Definition_Access;

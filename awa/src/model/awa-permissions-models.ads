@@ -20,7 +20,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-pragma Warnings (Off, "unit * is not referenced");
+pragma Warnings (Off);
 with ADO.Sessions;
 with ADO.Objects;
 with ADO.Statements;
@@ -32,8 +32,11 @@ with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
 with Util.Beans.Basic.Lists;
-pragma Warnings (On, "unit * is not referenced");
+pragma Warnings (On);
 package AWA.Permissions.Models is
+
+   pragma Style_Checks ("-mr");
+
    type ACL_Ref is new ADO.Objects.Object_Ref with null record;
 
    --  --------------------
@@ -134,7 +137,6 @@ package AWA.Permissions.Models is
    --  Copy of the object.
    procedure Copy (Object : in Acl_Ref;
                    Into   : in out Acl_Ref);
-
 
 
 

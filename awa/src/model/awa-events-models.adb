@@ -28,6 +28,8 @@ package body AWA.Events.Models is
    use type ADO.Objects.Object_Ref;
    use type ADO.Objects.Object_Record;
 
+   pragma Warnings (Off, "formal parameter * is not referenced");
+
    function Message_Type_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
       Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => MESSAGE_TYPE_DEF'Access);

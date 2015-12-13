@@ -20,7 +20,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-pragma Warnings (Off, "unit * is not referenced");
+pragma Warnings (Off);
 with ADO.Sessions;
 with ADO.Objects;
 with ADO.Statements;
@@ -32,8 +32,11 @@ with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
 with Util.Beans.Objects.Enums;
 with Util.Beans.Basic.Lists;
-pragma Warnings (On, "unit * is not referenced");
+pragma Warnings (On);
 package AWA.Users.Models is
+
+   pragma Style_Checks ("-mr");
+
    type MailDeliveryStatus is (UNKNOWN, VALID, SOFT_BOUNCE, HARD_BOUNCE);
    for MailDeliveryStatus use (UNKNOWN => 0, VALID => 1, SOFT_BOUNCE => 2, HARD_BOUNCE => 3);
    package MailDeliveryStatus_Objects is
