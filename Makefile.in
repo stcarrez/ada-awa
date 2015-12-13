@@ -15,21 +15,9 @@ top_builddir = .
 SUBDIRS=@SUBDIRS@
 
 # Build executables for all mains defined by the project.
-build test:
+build test clean install uninstall:
 	for i in $(SUBDIRS); do \
 	   $(MAKE) -C "$$i" $@ ; \
-	done
-
-# Clean the root project of all build products.
-clean:
-	for i in $(SUBDIRS); do \
-	   $(MAKE) -C "$$i" clean ; \
-	done
-
-# Clean the root project of all build products.
-install:
-	for i in $(SUBDIRS); do \
-	   $(MAKE) -C "$$i" install ; \
 	done
 
 xmlada: force
