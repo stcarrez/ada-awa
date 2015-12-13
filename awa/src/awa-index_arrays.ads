@@ -16,8 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Util.Strings;
-
 generic
    type Index_Type is range <>;
    type Element_Type (<>) is private;
