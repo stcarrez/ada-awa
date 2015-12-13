@@ -86,8 +86,7 @@ package body AWA.Blogs.Beans is
       Result  : ADO.Identifier;
       pragma Unreferenced (Result);
    begin
-      Bean.Module.Create_Blog (Workspace_Id => 0,
-                               Title        => Bean.Get_Name,
+      Bean.Module.Create_Blog (Title        => Bean.Get_Name,
                                Result       => Result);
    end Create;
 

@@ -90,7 +90,6 @@ package body AWA.Blogs.Modules is
    --  Create a new blog for the user workspace.
    --  ------------------------------
    procedure Create_Blog (Model        : in Blog_Module;
-                          Workspace_Id : in ADO.Identifier;
                           Title        : in String;
                           Result       : out ADO.Identifier) is
       pragma Unreferenced (Model);
