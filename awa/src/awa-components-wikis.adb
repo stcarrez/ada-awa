@@ -292,6 +292,7 @@ package body AWA.Components.Wikis is
    --  ------------------------------
    function Is_Link_Absolute (Renderer : in Link_Renderer_Bean;
                               Link     : in Unbounded_Wide_Wide_String) return Boolean is
+      pragma Unreferenced (Renderer);
    begin
       return Element (Link, 1) = '/'
         or else Starts_With (Link, "http://")
