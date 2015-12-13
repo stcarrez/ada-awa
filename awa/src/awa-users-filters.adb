@@ -44,7 +44,8 @@ package body AWA.Users.Filters is
    --  ------------------------------
    procedure Initialize (Filter  : in out Auth_Filter;
                          Config  : in ASF.Servlets.Filter_Config) is
-      URI : constant String := ASF.Servlets.Get_Init_Parameter (Config, AUTH_FILTER_REDIRECT_PARAM);
+      URI : constant String := ASF.Servlets.Get_Init_Parameter (Config,
+                                                                AUTH_FILTER_REDIRECT_PARAM);
    begin
       Log.Info ("Using login URI: {0}", URI);
 
@@ -122,7 +123,8 @@ package body AWA.Users.Filters is
    overriding
    procedure Initialize (Filter  : in out Verify_Filter;
                          Config  : in ASF.Servlets.Filter_Config) is
-      URI : constant String := ASF.Servlets.Get_Init_Parameter (Config, VERIFY_FILTER_REDIRECT_PARAM);
+      URI : constant String := ASF.Servlets.Get_Init_Parameter (Config,
+                                                                VERIFY_FILTER_REDIRECT_PARAM);
    begin
       Filter.Invalid_Key_URI := To_Unbounded_String (URI);
    end Initialize;
