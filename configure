@@ -1300,7 +1300,7 @@ Optional Packages:
   --with-git=repo         Use the git repositories for the Ada
                           Util/EL/ASF/Wiki/ADO/Dynamo. You can indicate the
                           git repository base (default is
-                          https://github.com/stcarrez)
+                          git@github.com:stcarrez)
   --with-xmlada=x         Path for XML/Ada
   --with-aws=x            Path for Ada Web Server
 
@@ -1785,7 +1785,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 # Git repositories (when using --with-git)
 AWA_GIT="ada-util ada-el ada-wiki ada-security ada-asf ada-ado dynamo"
-AWA_GIT_BASE="https://github.com/stcarrez"
+AWA_GIT_BASE="git@github.com:stcarrez"
 
 ac_aux_dir=
 for ac_dir in "$srcdir" "$srcdir/.." "$srcdir/../.."; do
@@ -3141,7 +3141,7 @@ $as_echo "${awa_use_git}" >&6; }
       echo "Git repository ${NAME} already cloned."
     else
       echo "Cloning Git repository ${NAME}"
-      git clone ${AWA_GIT_BASE}/${NAME} ${NAME}
+      git clone ${AWA_GIT_BASE}/${NAME}.git ${NAME}
     fi
     SUBDIRS="$SUBDIRS $NAME"
   done
