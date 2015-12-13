@@ -50,6 +50,12 @@ package body AWA.Images.Services is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Images.Services");
 
+   --  Save the data object contained in the <b>Data</b> part element into the
+   --  target storage represented by <b>Into</b>.
+   procedure Build_Thumbnail (Service : in Image_Service;
+                              Id      : in ADO.Identifier;
+                              File    : in AWA.Storages.Models.Storage_Ref'Class);
+
    --  ------------------------------
    --  Initializes the storage service.
    --  ------------------------------
