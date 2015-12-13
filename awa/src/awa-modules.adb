@@ -99,15 +99,44 @@ package body AWA.Modules is
                         Name    : in String;
                         Default : in String := "")
                         return EL.Expressions.Expression is
-      Ctx   : EL.Contexts.Default.Default_Context;
-      Value : constant String := Plugin.Get_Config (Name, Default);
+
+      type Event_ELResolver is new EL.Contexts.Default.Default_ELResolver with null record;
+
+      overriding
+      function Get_Value (Resolver : Event_ELResolver;
+                          Context  : EL.Contexts.ELContext'Class;
+                          Base     : access Util.Beans.Basic.Readonly_Bean'Class;
+                          Name     : Unbounded_String) return Util.Beans.Objects.Object;
+
+      --  ------------------------------
+      --  Get the value associated with a base object and a given property.
+      --  ------------------------------
+      overriding
+      function Get_Value (Resolver : Event_ELResolver;
+                          Context  : EL.Contexts.ELContext'Class;
+                          Base     : access Util.Beans.Basic.Readonly_Bean'Class;
+                          Name     : Unbounded_String) return Util.Beans.Objects.Object is
+      begin
+         if Base /= null then
+            return EL.Contexts.Default.Default_ELResolver (Resolver).Get_Value (Context, Base,
+                                                                                Name);
+         else
+            return Util.Beans.Objects.To_Object (Plugin.Get_Config (To_String (Name), ""));
+         end if;
+      end Get_Value;
+
+      Resolver : aliased Event_ELResolver;
+      Context  : EL.Contexts.Default.Default_Context;
+      Value    : constant String := Plugin.Get_Config (Name, Default);
    begin
-      return EL.Expressions.Create_Expression (Value, Ctx);
+      Context.Set_Resolver (Resolver'Unchecked_Access);
+      return EL.Expressions.Reduce_Expression (EL.Expressions.Create_Expression (Value, Context),
+                                               Context);
 
    exception
       when E : others =>
          Log.Error ("Invalid parameter ", E, True);
-         return EL.Expressions.Create_Expression ("", Ctx);
+         return EL.Expressions.Create_Expression ("", Context);
 
    end Get_Config;
 
