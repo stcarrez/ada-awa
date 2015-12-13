@@ -23,9 +23,9 @@
 --
 --  == Model ==
 --  The database model is generic and it uses the <tt>Entity_Type</tt> provided by
---  [https://github.com/stcarrez/ada-ado ADO] to associate a comment to entities stored in different
---  tables.  The <tt>Entity_Type</tt> identifies the database table and the stored identifier
---  in <tt>for_entity_id</tt> defines the entity in that table.
+--  [https://github.com/stcarrez/ada-ado ADO] to associate a comment to entities stored in
+--  different tables.  The <tt>Entity_Type</tt> identifies the database table and the stored
+--  identifier in <tt>for_entity_id</tt> defines the entity in that table.
 --
 --  [images/awa_comments_model.png]
 --
