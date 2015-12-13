@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-stores-databases -- Database store
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -68,6 +68,8 @@ package body AWA.Storages.Stores.Databases is
    procedure Delete (Storage : in Database_Store;
                      Session : in out ADO.Sessions.Master_Session;
                      From    : in out AWA.Storages.Models.Storage_Ref'Class) is
+      pragma Unreferenced (Storage);
+
       Store : AWA.Storages.Models.Storage_Data_Ref'Class := From.Get_Store_Data;
    begin
       if not Store.Is_Null then

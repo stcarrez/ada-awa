@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-stores-files -- File system store
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -99,11 +99,15 @@ package body AWA.Storages.Stores.Files is
       Into.Path := Ada.Strings.Unbounded.To_Unbounded_String (Store);
    end Load;
 
+   --  ------------------------------
    --  Create a storage
+   --  ------------------------------
    procedure Create (Storage : in File_Store;
                      Session : in out ADO.Sessions.Master_Session;
                      From    : in AWA.Storages.Models.Storage_Ref'Class;
                      Into    : in out AWA.Storages.Storage_File) is
+      pragma Unreferenced (Storage);
+
       Store : constant String := Storage.Get_Path (From);
       Dir   : constant String := Ada.Directories.Containing_Directory (Store);
    begin
