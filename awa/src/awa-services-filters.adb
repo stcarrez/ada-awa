@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-services-filters -- Setup service context in request processing flow
---  Copyright (C) 2011, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2013, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -72,6 +72,7 @@ package body AWA.Services.Filters is
       procedure Set_Session_Attribute (Ctx   : in out Context_Type;
                                        Name  : in String;
                                        Value : in Util.Beans.Objects.Object) is
+         pragma Unreferenced (Ctx);
          S : ASF.Sessions.Session := Request.Get_Session;
       begin
          S.Set_Attribute (Name, Value);
