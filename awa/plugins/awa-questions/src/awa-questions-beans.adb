@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-questions-beans -- Beans for module questions
---  Copyright (C) 2012, 2013 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,8 +19,6 @@ with ADO.Queries;
 with ADO.Utils;
 with ADO.Sessions;
 with ADO.Sessions.Entities;
-
-with Util.Beans.Lists.Strings;
 
 with AWA.Tags.Modules;
 with AWA.Services.Contexts;
