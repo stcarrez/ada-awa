@@ -20,7 +20,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-pragma Warnings (Off, "unit * is not referenced");
+pragma Warnings (Off);
 with ADO.Sessions;
 with ADO.Objects;
 with ADO.Statements;
@@ -34,8 +34,11 @@ with Util.Beans.Objects.Enums;
 with Util.Beans.Basic.Lists;
 with AWA.Events.Models;
 with AWA.Users.Models;
-pragma Warnings (On, "unit * is not referenced");
+pragma Warnings (On);
 package AWA.Jobs.Models is
+
+   pragma Style_Checks ("-mr");
+
    type Job_Status_Type is (SCHEDULED, RUNNING, CANCELED, FAILED, TERMINATED);
    for Job_Status_Type use (SCHEDULED => 0, RUNNING => 1, CANCELED => 2, FAILED => 3, TERMINATED => 4);
    package Job_Status_Type_Objects is

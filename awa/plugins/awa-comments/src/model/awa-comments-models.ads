@@ -20,7 +20,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-pragma Warnings (Off, "unit * is not referenced");
+pragma Warnings (Off);
 with ADO.Sessions;
 with ADO.Objects;
 with ADO.Statements;
@@ -36,8 +36,11 @@ with Util.Beans.Objects.Enums;
 with Util.Beans.Basic.Lists;
 with AWA.Users.Models;
 with Util.Beans.Methods;
-pragma Warnings (On, "unit * is not referenced");
+pragma Warnings (On);
 package AWA.Comments.Models is
+
+   pragma Style_Checks ("-mr");
+
    --  --------------------
    --  The format type defines the message format type.
    --  --------------------

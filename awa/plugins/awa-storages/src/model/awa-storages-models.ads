@@ -20,7 +20,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-pragma Warnings (Off, "unit * is not referenced");
+pragma Warnings (Off);
 with ADO.Sessions;
 with ADO.Objects;
 with ADO.Statements;
@@ -36,8 +36,11 @@ with Util.Beans.Objects.Enums;
 with Util.Beans.Basic.Lists;
 with AWA.Users.Models;
 with AWA.Workspaces.Models;
-pragma Warnings (On, "unit * is not referenced");
+pragma Warnings (On);
 package AWA.Storages.Models is
+
+   pragma Style_Checks ("-mr");
+
    type Storage_Type is (DATABASE, FILE, URL, TMP);
    for Storage_Type use (DATABASE => 0, FILE => 1, URL => 2, TMP => 3);
    package Storage_Type_Objects is

@@ -20,7 +20,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-pragma Warnings (Off, "unit * is not referenced");
+pragma Warnings (Off);
 with ADO.Sessions;
 with ADO.Objects;
 with ADO.Statements;
@@ -36,8 +36,11 @@ with Util.Beans.Basic.Lists;
 with AWA.Users.Models;
 with AWA.Workspaces.Models;
 with Util.Beans.Methods;
-pragma Warnings (On, "unit * is not referenced");
+pragma Warnings (On);
 package AWA.Questions.Models is
+
+   pragma Style_Checks ("-mr");
+
    type Question_Ref is new ADO.Objects.Object_Ref with null record;
 
    type Answer_Ref is new ADO.Objects.Object_Ref with null record;

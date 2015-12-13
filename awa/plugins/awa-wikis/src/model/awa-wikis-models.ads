@@ -20,7 +20,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-pragma Warnings (Off, "unit * is not referenced");
+pragma Warnings (Off);
 with ADO.Sessions;
 with ADO.Objects;
 with ADO.Statements;
@@ -38,8 +38,11 @@ with AWA.Images.Models;
 with AWA.Users.Models;
 with AWA.Workspaces.Models;
 with Util.Beans.Methods;
-pragma Warnings (On, "unit * is not referenced");
+pragma Warnings (On);
 package AWA.Wikis.Models is
+
+   pragma Style_Checks ("-mr");
+
    type Format_Type is (FORMAT_CREOLE, FORMAT_HTML, FORMAT_MARKDOWN, FORMAT_DOTCLEAR, FORMAT_MEDIAWIKI, FORMAT_PHPBB);
    for Format_Type use (FORMAT_CREOLE => 0, FORMAT_HTML => 1, FORMAT_MARKDOWN => 2, FORMAT_DOTCLEAR => 3, FORMAT_MEDIAWIKI => 4, FORMAT_PHPBB => 5);
    package Format_Type_Objects is

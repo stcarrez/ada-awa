@@ -20,7 +20,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-pragma Warnings (Off, "unit * is not referenced");
+pragma Warnings (Off);
 with ADO.Sessions;
 with ADO.Objects;
 with ADO.Statements;
@@ -38,8 +38,11 @@ with AWA.Comments.Models;
 with AWA.Users.Models;
 with AWA.Workspaces.Models;
 with Util.Beans.Methods;
-pragma Warnings (On, "unit * is not referenced");
+pragma Warnings (On);
 package AWA.Blogs.Models is
+
+   pragma Style_Checks ("-mr");
+
    type Post_Status_Type is (POST_DRAFT, POST_PUBLISHED, POST_SCHEDULED);
    for Post_Status_Type use (POST_DRAFT => 0, POST_PUBLISHED => 1, POST_SCHEDULED => 2);
    package Post_Status_Type_Objects is

@@ -20,7 +20,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-pragma Warnings (Off, "unit * is not referenced");
+pragma Warnings (Off);
 with ADO.Sessions;
 with ADO.Objects;
 with ADO.Statements;
@@ -33,8 +33,11 @@ with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
 with Util.Beans.Basic.Lists;
-pragma Warnings (On, "unit * is not referenced");
+pragma Warnings (On);
 package AWA.Counters.Models is
+
+   pragma Style_Checks ("-mr");
+
    type Counter_Ref is new ADO.Objects.Object_Ref with null record;
 
    type Counter_Definition_Ref is new ADO.Objects.Object_Ref with null record;
