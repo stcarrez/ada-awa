@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  atlas-reviews-beans -- Beans for module reviews
---  Copyright (C) 2014 Stephane.Carrez
+--  Copyright (C) 2014, 2015 Stephane.Carrez
 --  Written by Stephane.Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -128,9 +128,9 @@ package body Atlas.Reviews.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      if Name = "page" then
+      if Name = "page" and not Util.Beans.Objects.Is_Empty (Value) then
          From.Page := Util.Beans.Objects.To_Integer (Value);
-      elsif Name = "page_size" then
+      elsif Name = "page_size" and not Util.Beans.Objects.Is_Empty (Value) then
          From.Page_Size := Util.Beans.Objects.To_Integer (Value);
       end if;
    end Set_Value;
