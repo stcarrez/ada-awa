@@ -74,6 +74,7 @@ package body AWA.Tests is
    --  ------------------------------
    overriding
    procedure Tear_Down (T : in out Test) is
+      pragma Unreferenced (T);
    begin
       AWA.Tests.Helpers.Users.Tear_Down;
    end Tear_Down;
