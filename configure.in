@@ -6,7 +6,7 @@ AC_INIT(Makefile.in)
 
 # Git repositories (when using --with-git)
 AWA_GIT="ada-util ada-el ada-wiki ada-security ada-asf ada-ado dynamo"
-AWA_GIT_BASE="https://github.com/stcarrez"
+AWA_GIT_BASE="git@github.com:stcarrez"
 
 AC_CANONICAL_SYSTEM
 AC_EXEEXT
@@ -76,7 +76,7 @@ AC_ARG_WITH(build-root,
 
 AC_ARG_WITH(git,
   AS_HELP_STRING([--with-git=repo], [Use the git repositories for the Ada Util/EL/ASF/Wiki/ADO/Dynamo.
-You can indicate the git repository base (default is https://github.com/stcarrez)]),
+You can indicate the git repository base (default is git@github.com:stcarrez)]),
   [
     awa_use_git=yes
 	if test x${withval} != xyes ; then
@@ -125,7 +125,7 @@ if test ${awa_use_git} = "yes" ; then
       echo "Git repository ${NAME} already cloned."
     else
       echo "Cloning Git repository ${NAME}"
-      git clone ${AWA_GIT_BASE}/${NAME} ${NAME}
+      git clone ${AWA_GIT_BASE}/${NAME}.git ${NAME}
     fi
     SUBDIRS="$SUBDIRS $NAME"
   done
