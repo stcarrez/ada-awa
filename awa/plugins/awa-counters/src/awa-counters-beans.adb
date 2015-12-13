@@ -24,6 +24,7 @@ package body AWA.Counters.Beans is
    overriding
    function Get_Value (From : in Counter_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
+      pragma Unreferenced (Name);
    begin
       return Util.Beans.Objects.To_Object (From.Value);
    end Get_Value;

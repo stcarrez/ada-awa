@@ -32,8 +32,8 @@ with AWA.Modules;
 --  The table is also flushed when a counter is incremented in a different day.
 --
 --  === Integration ===
---  An instance of the <tt>Counter_Module</tt> must be declared and registered in the AWA application.
---  The module instance can be defined as follows:
+--  An instance of the <tt>Counter_Module</tt> must be declared and registered in the
+--  AWA application.  The module instance can be defined as follows:
 --
 --    with AWA.Counters.Modules;
 --    ...
