@@ -61,6 +61,7 @@ package body AWA.Permissions.Beans is
    overriding
    function Get_Method_Bindings (From : in Permission_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
    begin
       return Permission_Bean_Binding'Access;
    end Get_Method_Bindings;
@@ -70,6 +71,8 @@ package body AWA.Permissions.Beans is
    --  ------------------------------
    procedure Create (Bean    : in out Permission_Bean;
                      Event   : in AWA.Events.Module_Event'Class) is
+      pragma Unreferenced (Event);
+
       Ctx      : constant ASC.Service_Context_Access := ASC.Current;
       DB       : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
       Kind     : ADO.Entity_Type;
