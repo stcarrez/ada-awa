@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-applications-configs -- Read application configuration files
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,12 +28,14 @@ package AWA.Applications.Configs is
       Reader  : in out Util.Serialize.IO.XML.Parser;
       App     : in Application_Access;
       Context : in EL.Contexts.Default.Default_Context_Access;
+      Override_Context : in Boolean;
    package Reader_Config is
    end Reader_Config;
 
    --  Read the application configuration file and configure the application
    procedure Read_Configuration (App     : in out Application'Class;
                                  File    : in String;
-                                 Context : in EL.Contexts.Default.Default_Context_Access);
+                                 Context : in EL.Contexts.Default.Default_Context_Access;
+                                 Override_Context : in Boolean);
 
 end AWA.Applications.Configs;
