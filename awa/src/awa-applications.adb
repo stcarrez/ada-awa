@@ -155,7 +155,7 @@ package body AWA.Applications is
          Path  : constant String := Util.Files.Find_File_Path (File, Paths);
       begin
          Done := False;
-         AWA.Applications.Configs.Read_Configuration (App, Path, Ctx'Unchecked_Access);
+         AWA.Applications.Configs.Read_Configuration (App, Path, Ctx'Unchecked_Access, True);
 
       exception
          when Ada.IO_Exceptions.Name_Error =>
