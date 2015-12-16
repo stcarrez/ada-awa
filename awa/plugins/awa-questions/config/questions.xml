@@ -183,46 +183,24 @@
     </navigation-case>
   </navigation-rule>
 
-
     <filter-mapping>
         <filter-name>service</filter-name>
+        <url-pattern>/questions/*.html</url-pattern>
+        <url-pattern>/questions/ajax/*</url-pattern>
         <url-pattern>/questions/*.html</url-pattern>
     </filter-mapping>
 
     <filter-mapping>
         <filter-name>auth-filter</filter-name>
         <url-pattern>/questions/forms/*.html</url-pattern>
-    </filter-mapping>
-
-    <filter-mapping>
-        <filter-name>auth-filter</filter-name>
-        <url-pattern>/questions/ask.html</url-pattern>
-    </filter-mapping>
-
-    <filter-mapping>
-        <filter-name>auth-filter</filter-name>
-        <url-pattern>/questions/view.html</url-pattern>
-    </filter-mapping>
-
-    <filter-mapping>
-        <filter-name>service</filter-name>
         <url-pattern>/questions/*.html</url-pattern>
+        <url-pattern>/questions/ajax/*</url-pattern>
     </filter-mapping>
 
     <servlet-mapping>
       <servlet-name>ajax</servlet-name>
       <url-pattern>/questions/ajax/*</url-pattern>
     </servlet-mapping>
-
-    <filter-mapping>
-        <filter-name>service</filter-name>
-        <url-pattern>/questions/ajax/*</url-pattern>
-    </filter-mapping>
-
-    <filter-mapping>
-        <filter-name>auth-filter</filter-name>
-        <url-pattern>/questions/ajax/*</url-pattern>
-    </filter-mapping>
 
     <entity-permission>
         <name>question-create</name>
