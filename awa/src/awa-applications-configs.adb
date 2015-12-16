@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-applications-configs -- Read application configuration files
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,9 +27,7 @@ with AWA.Services.Contexts;
 
 package body AWA.Applications.Configs is
 
-   use Util.Log;
-
-   Log : constant Loggers.Logger := Loggers.Create ("AWA.Applications.Configs");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Applications.Configs");
 
    --  ------------------------------
    --  XML reader configuration.  By instantiating this generic package, the XML parser
@@ -41,9 +39,9 @@ package body AWA.Applications.Configs is
 
       package Bean_Config is
         new ASF.Applications.Main.Configs.Reader_Config (Reader, App_Access,
-                                                         Context.all'Access);
---        package Policy_Config is
---          new Security.Policies.Reader_Config (Reader, Sec);
+                                                         Context.all'Access,
+                                                         Override_Context);
+
       package Event_Config is
         new AWA.Events.Configs.Reader_Config (Reader  => Reader,
                                               Manager => App.Events'Unchecked_Access,
@@ -59,7 +57,8 @@ package body AWA.Applications.Configs is
    --  ------------------------------
    procedure Read_Configuration (App     : in out Application'Class;
                                  File    : in String;
-                                 Context : in EL.Contexts.Default.Default_Context_Access) is
+                                 Context : in EL.Contexts.Default.Default_Context_Access;
+                                 Override_Context : in Boolean) is
 
       Reader : Util.Serialize.IO.XML.Parser;
       Ctx    : AWA.Services.Contexts.Service_Context;
@@ -69,7 +68,8 @@ package body AWA.Applications.Configs is
       Ctx.Set_Context (App'Unchecked_Access, null);
 
       declare
-         package Config is new Reader_Config (Reader, App'Unchecked_Access, Context);
+         package Config is new Reader_Config (Reader, App'Unchecked_Access, Context,
+                                              Override_Context);
          pragma Warnings (Off, Config);
       begin
          Sec.Prepare_Config (Reader);
