@@ -30,17 +30,19 @@
    <div class='wiki-page-container'>
      <div class='wiki-page' id="p_#{wikiView.id}">
         <div class='wiki-title'>
-           <h2>#{wikiView.title}</h2>
-           <div class="wiki-page-info">
-              <p><h:outputText id="date" value="#{wikiView.date}" converter="dateConverter"/></p>
-              <p>Version #{wikiView.version} by #{wikiView.author}</p>
-           </div>
+            <h2>#{wikiView.title}</h2>
+            <div class="wiki-page-info">
+                <h:outputFormat value="#{wikiMsg.wiki_page_info}">
+                    <f:param value="#{wikiView.version}"/>
+                    <f:param value="#{wikiView.author}"/>
+                </h:outputFormat>
+            </div>
         </div>
         <awa:tagList value='#{wikiView.tags}' id='qtags' styleClass="wiki-tag-list tagedit-list"
                      tagLink="#{contextPath}/wikis/tagged.html?tag=#{tagName}"
                      var="tagName"
                      tagClass="tagedit-listelement tagedit-listelement-old"/>
-        <awa:wiki styleClass='wiki-text' value="#{wikiView.content}" format="dotclear"/>
+        <awa:wiki styleClass='wiki-text' value="#{wikiView.content}" format="#{wikiView.format}"/>
      </div>
   </div>
 </body>
