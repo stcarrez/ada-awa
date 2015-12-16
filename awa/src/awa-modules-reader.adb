@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-modules-reader -- Read module configuration files
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,7 +37,8 @@ package body AWA.Modules.Reader is
       package Config is
         new AWA.Applications.Configs.Reader_Config (Reader,
                                                     Plugin.App.all'Unchecked_Access,
-                                                    Context);
+                                                    Context,
+                                                    False);
       pragma Warnings (Off, Config);
 
       Sec    : constant Security.Policies.Policy_Manager_Access := Plugin.App.Get_Security_Manager;
