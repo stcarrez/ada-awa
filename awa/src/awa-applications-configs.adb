@@ -48,7 +48,6 @@ package body AWA.Applications.Configs is
                                               Context => Context.all'Access);
 
       pragma Warnings (Off, Bean_Config);
---        pragma Warnings (Off, Policy_Config);
       pragma Warnings (Off, Event_Config);
    end Reader_Config;
 
