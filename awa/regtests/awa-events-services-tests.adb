@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  events-tests -- Unit tests for AWA events
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -277,7 +277,8 @@ package body AWA.Events.Services.Tests is
                              Create_Action_Bean'Access);
          AWA.Applications.Configs.Read_Configuration (App     => App,
                                                       File    => Path,
-                                                      Context => Ctx'Unchecked_Access);
+                                                      Context => Ctx'Unchecked_Access,
+                                                      Override_Context => True);
          Util.Measures.Report (S, "Initialize AWA application and read config");
          App.Start;
          Util.Measures.Report (S, "Start event tasks");
