@@ -1,3 +1,11 @@
+# Ada Web Application
+
+[![Build Status](https://img.shields.io/jenkins/s/http/jenkins.vacs.fr/AWA.svg)](http://jenkins.vacs.fr/job/AWA/)
+[![Test Status](https://img.shields.io/jenkins/t/http/jenkins.vacs.fr/AWA.svg)](http://jenkins.vacs.fr/job/AWA/)
+[![Download](https://img.shields.io/badge/download-1.0.0-brightgreen.svg)](http://download.vacs.fr/ada-awa/awa-all-1.0.0.tar.gz)
+[![License](http://img.shields.io/badge/license-APACHE2-blue.svg)](LICENSE)
+![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-awa/v1.0.0.svg)
+
 Ada Web Application is a framework to build a Web Application in Ada 2005/2012.
 The framework provides several ready to use and extendable modules that are common
 to many web application.  This includes the login, authentication, users, permissions,
@@ -6,21 +14,21 @@ question and answers and a wiki module.
 
 AWA integrates the following projects:
 
- - ASF           (https://github.com/stcarrez/ada-asf)
- - ADO           (https://github.com/stcarrez/ada-ado)
- - Ada Util      (https://github.com/stcarrez/ada-util)
- - Ada Wiki      (https://github.com/stcarrez/ada-wiki)
- - Ada EL        (https://github.com/stcarrez/ada-el)
- - Ada Security  (https://github.com/stcarrez/ada-security)
- - Dynamo        (https://github.com/stcarrez/dynamo)
+* ASF           (https://github.com/stcarrez/ada-asf)
+* ADO           (https://github.com/stcarrez/ada-ado)
+* Ada Util      (https://github.com/stcarrez/ada-util)
+* Ada Wiki      (https://github.com/stcarrez/ada-wiki)
+* Ada EL        (https://github.com/stcarrez/ada-el)
+* Ada Security  (https://github.com/stcarrez/ada-security)
+* Dynamo        (https://github.com/stcarrez/dynamo)
 
 These projects are provided as tarball in 'distrib' directory.
 These projects are distributed under the Apache License 2.0.
 
 AWA relies on the following external projects:
 
- - AWS      (http://libre.adacore.com/libre/tools/aws/)
- - XMLAda   (http://libre.adacore.com/libre/tools/xmlada/)
+* AWS      (http://libre.adacore.com/libre/tools/aws/)
+* XMLAda   (http://libre.adacore.com/libre/tools/xmlada/)
 
 These projects are provided as tarball in 'external' directory.
 They are distributed under different licenses (GNU GPL).
@@ -32,40 +40,40 @@ Ada Util test framework which itself is built on top of the excellent
 Ahven test framework (Ahven sources is integrated in Ada Util).
 You may get Ahven or Aunit at:
 
- - Ahven    (http://ahven.stronglytyped.org/)
- - AUnit    (http://libre.adacore.com/libre/tools/aunit/)
+* Ahven    (http://ahven.stronglytyped.org/)
+* AUnit    (http://libre.adacore.com/libre/tools/aunit/)
 
 
 If XML/Ada and AWS are already installed in your environment, configure,
 build and install as follows:
-
+```
    ./configure  --prefix=/usr/local
    make
    make install
-
+```
 If you don't have XML/Ada or AWS, you must build them and install them first.
 You can use the XML/Ada and or AWS packages provided in the 'external' directory.
 To do this, run the configure as follows:
-
+```
    ./configure --enable-xmlada --enable-aws
-
+```
 This will extract and configure XML/Ada in 'xmlada' and AWS in 'aws'.
 You will then have to build these packages as follows:
-
+```
   cd xmlada && make && make install
 
   cd aws && make prefix="/usr/local" setup build install
-
+```
 After you have built XML/Ada and AWS, you must then configure, build
 and install as follows:
-
+```
    ./configure  --prefix=/usr/local
    make
    make install
+```
+#Documentation
 
-Documentation
-
-   The Ada Web Application sources as well as a wiki documentation is provided on:
+The Ada Web Application sources as well as a wiki documentation is provided on:
 
    https://github.com/stcarrez/ada-awa/
 
