@@ -3,6 +3,7 @@
 
   <application>
     <message-bundle var='layoutMsg'>layout</message-bundle>
+    <message-bundle var='markeditMsg'>markedit</message-bundle>
   </application>
 
   <dispatcher name="async">
