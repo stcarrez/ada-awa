@@ -90,7 +90,9 @@
             </dl>
             <dl class="awa-optional">
                 <dd>
-                    <ui:include src="/blogs/admin/forms/syntax.xhtml"/>
+                    <ui:include src="/markedit/syntax.xhtml">
+                        <ui:param name="syntax" value="#{wikiPage.format}"/>
+                    </ui:include>
                 </dd>
             </dl>
         </div>
