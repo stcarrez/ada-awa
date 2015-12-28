@@ -59,7 +59,9 @@
         <div class='grid_4'>
             <dl class="awa-optional">
                 <dd>
-                    <ui:include src="../views/syntax.xhtml"/>
+                    <ui:include src="/markedit/syntax.xhtml">
+                        <ui:param name="syntax" value="FORMAT_DOTCLEAR"/>
+                    </ui:include>
                 </dd>
             </dl>
         </div>
