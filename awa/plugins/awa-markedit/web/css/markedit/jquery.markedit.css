@@ -33,3 +33,27 @@
 .markedit-dialog input { width: 100%; }
 
 .markedit-preview { padding: 15px; }
+.markedit-syntax {
+    padding-top: 10px;
+    list-style-type: none;
+}
+.markedit-syntax li {
+    float: left;
+    clear: both;
+}
+.markedit-syntax .spare, .markedit-header {
+    padding-top: 15px;
+    font-weight: bold;
+}
+.markedit-dotclear, .markedit-markdown, .markedit-mediawiki {
+    display: none;
+}
+.FORMAT_MEDIAWIKI .markedit-mediawiki {
+    display: inline-block;
+}
+.FORMAT_DOTCLEAR .markedit-dotclear {
+    display: inline-block;
+}
+.FORMAT_MARKDOWN .markedit-markdown {
+    display: inline-block;
+}
