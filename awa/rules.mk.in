@@ -125,7 +125,7 @@ generate:  post-generate
 	test ! -d db || $(DYNAMO) generate $(DYNAMO_ARGS)
 
 # Files to package in source distribution
-DISTFILES=README LICENSE.txt NOTICE.txt NEWS CHANGES ChangeLog config.guess configure config.sub \
+DISTFILES=README LICENSE.txt NOTICE.txt NEWS CHANGES config.guess configure config.sub \
 configure.in Makefile.in install-sh \
 awa.gpr.in awa_tests.gpr.in samples.gpr.in config.gpr \
 src samples regtests db web bundles config awaunit awaunit.gpr.in \
@@ -240,10 +240,12 @@ post-build:
 post-generate:
 
 install-info:
+ifeq (${GPRINSTALL},)
 	@echo "Installation directories:"
 	@echo "  Ada source files:    ${includedir}"
 	@echo "  ALI files:           ${alidir}"
 	@echo "  Libraries:           ${libdir}"
 	@echo "  GNAT project:        ${projectdir}"
+endif
 	@echo "Environment setup:"
 	@echo "  export ADA_PROJECT_PATH=${projectdir}:$$ADA_PROJECT_PATH"
