@@ -111,11 +111,15 @@ prepare-release:
 	# ${SVN} log -v > ChangeLog
 
 pre-install:
+	$(MKDIR) -p ${dynamodir}/base/uml
+	$(MKDIR) -p ${prefix}/share/doc/awa
+ifneq (${GPRINSTALL},)
+	$(GPRINSTALL) -p -f --prefix=${prefix} $(MAKE_ARGS) \
+		--build-name=$(AWA_LIBRARY_TYPE) awa_unit.gpr
+else
 	$(MKDIR) -p ${includedir}/awa-unit
 	$(MKDIR) -p ${projectdir}/
 	${MKDIR} -p ${alidir}/awa-unit/$(AWA_LIBRARY_TYPE)
-	$(MKDIR) -p ${dynamodir}/base/uml
-	$(MKDIR) -p ${prefix}/share/doc/awa
 	${CP} awaunit/*.ad[bs] ${includedir}/awa-unit
 	sed -e "s,INSTALL,${prefix},g" -e "s,LIBRARY_TYPE,$(AWA_LIBRARY_TYPE),g" < distrib/awa_unit.gpr > ${projectdir}/awa_unit.gpr
 	${CP} lib/awaunit/$(AWA_LIBRARY_TYPE)/*.ali ${alidir}/awa-unit/
@@ -127,6 +131,7 @@ else
 	rm -f libawa_unit.$(LIBEXT) && \
 	${LN} libawa_unit.$(LIBVER) libawa_unit.$(LIBEXT)
 endif
+endif
 	for i in ${PLUGINS} ; do \
 	   $(MAKE) -C plugins/$$i install; \
 	done
@@ -134,6 +139,9 @@ endif
 	unzip -cq uml/awa.zargo awa.xmi > ${dynamodir}/base/uml/AWA.xmi
 
 pre-uninstall:
+ifneq (${GPRINSTALL},)
+	-$(GPRINSTALL) -q -f --prefix=${prefix} $(MAKE_ARGS) --uninstall awa_unit.gpr
+else
 	rm -rf ${includedir}/awa
 	rm -f ${libdir}/libada-awa.a
 	rm -f ${projectdir}/awa.gpr
@@ -141,6 +149,7 @@ pre-uninstall:
 	rm -rf ${alidir}/awa
 	rm -rf ${alidir}/awa-unit
 	rm -rf ${includedir}/awa-unit
+endif
 	for i in ${PLUGINS} ; do \
 	   $(MAKE) -C plugins/$$i uninstall; \
 	done
