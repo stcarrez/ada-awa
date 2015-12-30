@@ -55,7 +55,7 @@ with AWA.Comments.Modules.Tests;
 with AWA.Changelogs.Modules.Tests;
 with AWA.Wikis.Modules.Tests;
 
-with ASF.Server.Web;
+--  with ASF.Server.Web;
 with ASF.Server.Tests;
 package body AWA.Testsuite is
    Users          : aliased AWA.Users.Modules.User_Module;
@@ -218,21 +218,21 @@ package body AWA.Testsuite is
                       Module => Wikis'Access);
 
             Application.Start;
-            if Props.Exists ("test.server") then
-               declare
-                  WS : ASF.Server.Web.AWS_Container;
-               begin
-                  Application.Add_Converter (Name      => "dateConverter",
-                                             Converter => Date_Converter'Access);
-                  Application.Add_Converter (Name      => "smartDateConverter",
-                                             Converter => Rel_Date_Converter'Access);
-
-                  WS.Register_Application ("/asfunit", Application.all'Access);
-
-                  WS.Start;
-                  delay 6000.0;
-               end;
-            end if;
+--              if Props.Exists ("test.server") then
+--                 declare
+--                    WS : ASF.Server.Web.AWS_Container;
+--                 begin
+--                    Application.Add_Converter (Name      => "dateConverter",
+--                                               Converter => Date_Converter'Access);
+--                    Application.Add_Converter (Name      => "smartDateConverter",
+--                                               Converter => Rel_Date_Converter'Access);
+--
+--                    WS.Register_Application ("/asfunit", Application.all'Access);
+--
+--                    WS.Start;
+--                    delay 6000.0;
+--                 end;
+--              end if;
             ASF.Server.Tests.Set_Context (Application.all'Access);
          end;
       end if;
