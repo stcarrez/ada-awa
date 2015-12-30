@@ -160,11 +160,24 @@ else
 fi
 AC_SUBST(ADO_DB_SQLITE)
 
-AWA_AWS_STATUS=yes
+##########################################
+# Ada Web Server
+##########################################
+AM_GNAT_CHECK_AWS(
+  [
+    WITH_SERVER=
+    AWA_AWS_STATUS=no
+  ], [
+    AWA_AWS_STATUS=yes
+    WITH_SERVER="with \"${gnat_project_name}\";";
+  ])
+
 AC_SUBST(AWA_AWS_STATUS)
+AC_SUBST(WITH_SERVER)
 
 AM_UTIL_CHECK_INSTALL
 
 AC_OUTPUT(
 Makefile rules.mk awa.gpr awa_tests.gpr awa_unit.gpr distrib/awa.gpr distrib/awa_unit.gpr
+plugins/awa-mail/awa_mail.gpr
 )
