@@ -1,5 +1,5 @@
 with "../../awa";
-with "aws";
+@WITH_SERVER@
 
 library project Awa_Mail is
 
