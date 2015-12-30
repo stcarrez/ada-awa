@@ -589,6 +589,7 @@ ADA_ALI_BASE
 ADA_LIB_BASE
 ADA_INC_BASE
 GPRINSTALL
+WITH_SERVER
 AWA_AWS_STATUS
 ADO_DB_SQLITE
 SQLITE3
@@ -684,6 +685,8 @@ with_ada_wiki
 with_ada_security
 with_ada_asf
 with_ada_ado
+enable_aws
+with_aws
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1306,6 +1309,7 @@ Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-shared         Enable the shared libraries (disabled)
+  --enable-aws            Enable the AWS support (enabled)
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -1317,6 +1321,8 @@ Optional Packages:
   --with-ada-security=x   Path for Ada Security Library
   --with-ada-asf=x        Path for Ada Server Faces Library
   --with-ada-ado=x        Path for Ada Database Objects
+  --with-aws=x            Path for the Ada Web Server library
+                          (http://libre.adacore.com/libre/tools/aws/)
 
 Some influential environment variables:
   CC          C compiler command
@@ -3850,7 +3856,81 @@ else
 fi
 
 
-AWA_AWS_STATUS=yes
+##########################################
+# Ada Web Server
+##########################################
+
+    gnat_enable_aws=yes
+  gnat_project_aws=no
+  gnat_project_name_aws=
+  # Check whether --enable-aws was given.
+if test "${enable_aws+set}" = set; then :
+  enableval=$enable_aws; case "${enableval}" in
+      no|none)  gnat_enable_aws=no ;;
+      *)        gnat_enable_aws=yes ;;
+    esac
+fi
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking AWS support is enabled" >&5
+$as_echo_n "checking AWS support is enabled... " >&6; }
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${gnat_enable_aws}" >&5
+$as_echo "${gnat_enable_aws}" >&6; }
+
+  if test T$gnat_enable_aws = Tyes; then
+
+# Check whether --with-aws was given.
+if test "${with_aws+set}" = set; then :
+  withval=$with_aws;
+      gnat_project_name=${withval}
+
+else
+
+      gnat_project_name=aws
+
+fi
+
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether aws project exists" >&5
+$as_echo_n "checking whether aws project exists... " >&6; }
+  echo "with \"${gnat_project_name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+  if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+  then
+    gnat_project_aws=yes
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes, using ${gnat_project_name}" >&5
+$as_echo "yes, using ${gnat_project_name}" >&6; }
+    gnat_project_with_aws="with \"${gnat_project_name}\";";
+  else
+    gnat_project_aws=no
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+  fi
+  rm -f conftest.gpr
+
+    if test x$gnat_project_aws = xno; then
+      gnat_enable_aws=no
+    else
+      gnat_project_aws=aws
+    fi
+  fi
+  if test T$gnat_enable_aws = Tno; then
+
+    WITH_SERVER=
+    AWA_AWS_STATUS=no
+
+  else
+
+    AWA_AWS_STATUS=yes
+    WITH_SERVER="with \"${gnat_project_name}\";";
+
+  fi
+
+
+
 
 
 
@@ -4280,7 +4360,7 @@ $as_echo "<prefix>/${ADA_PRJ_BASE}" >&6; }
   fi
 
 
-ac_config_files="$ac_config_files Makefile rules.mk awa.gpr awa_tests.gpr awa_unit.gpr distrib/awa.gpr distrib/awa_unit.gpr"
+ac_config_files="$ac_config_files Makefile rules.mk awa.gpr awa_tests.gpr awa_unit.gpr distrib/awa.gpr distrib/awa_unit.gpr plugins/awa-mail/awa_mail.gpr"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -4995,6 +5075,7 @@ do
     "awa_unit.gpr") CONFIG_FILES="$CONFIG_FILES awa_unit.gpr" ;;
     "distrib/awa.gpr") CONFIG_FILES="$CONFIG_FILES distrib/awa.gpr" ;;
     "distrib/awa_unit.gpr") CONFIG_FILES="$CONFIG_FILES distrib/awa_unit.gpr" ;;
+    "plugins/awa-mail/awa_mail.gpr") CONFIG_FILES="$CONFIG_FILES plugins/awa-mail/awa_mail.gpr" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
