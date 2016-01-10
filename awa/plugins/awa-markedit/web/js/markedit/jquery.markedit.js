@@ -119,7 +119,60 @@
                 'linkEnd': ']',
                 'bulletPrefix': ' - '
             },
+            'markups': {
+                'creole': {
+                    'boldStart': '**',
+                    'boldEnd': '**',
+                    'italicStart': "//",
+                    'italicEnd': "//",
+                    'underlineStart': '++',
+                    'underlineEnd': '++',
+                    'strikeStart': '--',
+                    'strikeEnd': '--',
+                    'inlineCodeStart': '@@',
+                    'inlineCodeEnd': '@@',
+                    'imageLinkStart': '[',
+                    'linkStart': '[',
+                    'linkMiddle': ' ',
+                    'linkEnd': ']',
+                    'bulletPrefix': '* '
+                },
+                'dotclear': {
+                    'boldStart': '__',
+                    'boldEnd': '__',
+                    'italicStart': "//",
+                    'italicEnd': "//",
+                    'underlineStart': "''",
+                    'underlineEnd': "''",
+                    'strikeStart': '--',
+                    'strikeEnd': '--',
+                    'inlineCodeStart': '@@',
+                    'inlineCodeEnd': '@@',
+                    'imageLinkStart': '{{',
+                    'linkStart': '[[',
+                    'linkMiddle': ' ',
+                    'linkEnd': ']]',
+                    'bulletPrefix': '* '
+                },
+                'mediawiki': {
+                    'boldStart': "'''",
+                    'boldEnd': "'''",
+                    'italicStart': "''",
+                    'italicEnd': "''",
+                    'underlineStart': '__',
+                    'underlineEnd': '__',
+                    'strikeStart': '--',
+                    'strikeEnd': '--',
+                    'inlineCodeStart': '@@',
+                    'inlineCodeEnd': '@@',
+                    'imageLinkStart': '[[',
+                    'linkStart': '[[',
+                    'linkMiddle': ' ',
+                    'linkEnd': ']]',
+                    'bulletPrefix': '* '
+                },
 
+            }
         };
 
     };
@@ -137,6 +190,14 @@
     // Declare history object; Might use it later.
     var MarkEditHistory = null;
     var MarkEditIndex = 0;
+
+    //
+    //  $.markeditSetSyntax
+    //
+    $.fn.markeditSetSyntax = function(syntax) {
+        syntax = syntax.toLowerCase();
+        MarkEditLanguage.markup = MarkEditLanguage.markups[syntax];
+    };
 
    /*
         Button Definition
