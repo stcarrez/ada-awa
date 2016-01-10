@@ -107,12 +107,16 @@
                     'layout': 'bold italic underline strike | quote code | numberlist bulletlist heading line link'
                   }
                  });
-                 $('#wiki-format').change(function(ev) {
+                 function setSyntax() {
                     var syntax = $('#wiki-format').val();
                     $("#wiki-syntax ul").attr('class', 'markedit-syntax ' + syntax);
                     syntax = syntax.replace("FORMAT_", "");
                     $(area).markeditSetSyntax(syntax);
+                 };
+                 $('#wiki-format').change(function(ev) {
+                    setSyntax();
                  });
+                 setSyntax();
               });
       </util:script>
   </div>
