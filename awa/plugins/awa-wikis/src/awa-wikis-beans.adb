@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-beans -- Beans for module wikis
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2015, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -393,6 +393,7 @@ package body AWA.Wikis.Beans is
       if not Bean.Is_Inserted then
          Bean.Content.Set_Content (Bean.New_Content);
          Bean.Content.Set_Save_Comment (Bean.New_Comment);
+         Bean.Content.Set_Format (Bean.Format);
          Bean.Module.Create_Wiki_Page (Bean.Wiki_Space, Bean, Bean.Content);
 
       elsif not Bean.Has_New_Content then
