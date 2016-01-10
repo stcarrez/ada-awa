@@ -60,3 +60,6 @@
 .FORMAT_CREOLE .markedit-creole {
     display: inline-block;
 }
+.markedit-toolbar {
+    width: 98%;
+}
