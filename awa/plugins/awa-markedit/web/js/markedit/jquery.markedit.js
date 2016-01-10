@@ -135,15 +135,17 @@
                     'linkStart': '[',
                     'linkMiddle': ' ',
                     'linkEnd': ']',
-                    'bulletPrefix': '* '
+                    'bulletPrefix': '* ',
+                    'quotePrefix': '> ',
+                    'makeLinkList': false
                 },
                 'dotclear': {
                     'boldStart': '__',
                     'boldEnd': '__',
                     'italicStart': "//",
                     'italicEnd': "//",
-                    'underlineStart': "''",
-                    'underlineEnd': "''",
+                    'underlineStart': "++",
+                    'underlineEnd': "++",
                     'strikeStart': '--',
                     'strikeEnd': '--',
                     'inlineCodeStart': '@@',
@@ -152,7 +154,9 @@
                     'linkStart': '[[',
                     'linkMiddle': ' ',
                     'linkEnd': ']]',
-                    'bulletPrefix': '* '
+                    'bulletPrefix': '* ',
+                    'quotePrefix': '> ',
+                    'makeLinkList': false
                 },
                 'mediawiki': {
                     'boldStart': "'''",
@@ -169,7 +173,9 @@
                     'linkStart': '[[',
                     'linkMiddle': ' ',
                     'linkEnd': ']]',
-                    'bulletPrefix': '* '
+                    'bulletPrefix': '* ',
+                    'quotePrefix': '> ',
+                    'makeLinkList': false
                 },
 
             }
@@ -732,7 +738,7 @@
                     state.select = MarkEditLanguage.markup.linkStart + state.select;
                 }
 
-                state.select += MarkEditLanguage.markup.linkMiddle + state.links.length
+                state.select += MarkEditLanguage.markup.linkMiddle + url
                  + MarkEditLanguage.markup.linkEnd;
             }
 
@@ -824,7 +830,7 @@
         altSelects[1] = MarkEdit.RegexBulletPrefix;
 
         state = MarkEdit.setPrefix(state, MarkEdit.RegexQuotePrefix, altSelects, function(){
-            return '> ';
+            return MarkEditLanguage.markup.quotePrefix;
         });
 
         $(this).markeditSetState(state);
@@ -1106,7 +1112,11 @@
 
                 // Update textarea
                 var text = state.beforeSelect + state.select + state.afterSelect + '\n\n';
-                text += MarkEdit.makeLinkList(state.links);
+
+                // We want the Markdown list of links only for Markdown format.
+                if (MarkEditLanguage.markup.makeLinkList) {
+                    text += MarkEdit.makeLinkList(state.links);
+                }
                 $(textarea).val(text);
 
                 var selStart = state.beforeSelect.length;
@@ -1409,7 +1419,10 @@
                         var typeMatch = selectPattern.exec(list[i]);
 
                         if (typeMatch !== null) {
-                            state.select += typeMatch[2].trim() + '\n';
+                            // The line may contain the prefix but may be empty (ex: quote).
+                            if (typeMatch[2] != null) {
+                                state.select += typeMatch[2].trim() + '\n';
+                            }
                         }
                         else {
                             var prefix = getPrefixCallback(state);
