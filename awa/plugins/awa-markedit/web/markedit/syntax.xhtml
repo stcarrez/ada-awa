@@ -1,5 +1,5 @@
 <!-- Markedit syntax helper
-  -  Copyright (C) 2011, 2012, 2013, 2014, 2015 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,22 +19,22 @@
     <li>
         <span class="markedit-dotclear">!!!! #{markeditMsg.header1_label}</span>
         <span class="markedit-markdown"># #{markeditMsg.header1_label}</span>
-        <span class="markedit-mediawiki">= #{markeditMsg.header1_label} =</span>
+        <span class="markedit-mediawiki markedit-creole">= #{markeditMsg.header1_label} =</span>
     </li>
     <li>
         <span class="markedit-dotclear">!!! #{markeditMsg.header2_label}</span>
         <span class="markedit-markdown">## #{markeditMsg.header2_label}</span>
-        <span class="markedit-mediawiki">== #{markeditMsg.header2_label} ==</span>
+        <span class="markedit-mediawiki markedit-creole">== #{markeditMsg.header2_label} ==</span>
     </li>
     <li>
         <span class="markedit-dotclear">!! #{markeditMsg.header3_label}</span>
         <span class="markedit-markdown">### #{markeditMsg.header3_label}</span>
-        <span class="markedit-mediawiki">=== #{markeditMsg.header3_label} ===</span>
+        <span class="markedit-mediawiki markedit-creole">=== #{markeditMsg.header3_label} ===</span>
     </li>
     <li>
         <span class="markedit-dotclear">! #{markeditMsg.header4_label}</span>
         <span class="markedit-markdown">#### #{markeditMsg.header4_label}</span>
-        <span class="markedit-mediawiki">==== #{markeditMsg.header4_label} ====</span>
+        <span class="markedit-mediawiki markedit-creole">==== #{markeditMsg.header4_label} ====</span>
     </li>
     <li class="markedit-header">#{markeditMsg.markup_text_help}</li>
     <li>
@@ -52,27 +52,36 @@
     <li>
         <span class="markedit-dotclear">--#{markeditMsg.strike_label}--</span>
         <span class="markedit-dotclear">++#{markeditMsg.underline_label}++</span>
+        <span class="markedit-mediawiki">&lt; s&gt;#{markeditMsg.strike_label}&lt; /s&gt;</span>
+        <span class="markedit-mediawiki">&lt; u&gt;#{markeditMsg.underline_label}&lt; /u&gt;</span>
+        <span class="markedit-mediawiki">&lt; ins&gt;#{markeditMsg.insert_label}&lt; /ins&gt;</span>
+        <span class="markedit-mediawiki">&lt; del&gt;#{markeditMsg.delete_label}&lt; /del&gt;</span>
     </li>
     <li class="markedit-header">#{markeditMsg.markup_lists_help}</li>
     <li>
-        <span class="markedit-dotclear">* #{markeditMsg.bullet_label}</span>
+        <span class="markedit-dotclear markedit-mediawiki markedit-creole">* #{markeditMsg.bullet_label}</span>
         <span class="markedit-markdown"> * #{markeditMsg.bullet_label}</span>
-        <span class="markedit-mediawiki">* #{markeditMsg.bullet_label}</span>
     </li>
     <li>
-        <span class="markedit-dotclear"># #{markeditMsg.numbered_label}</span>
+        <span class="markedit-dotclear markedit-mediawiki markedit-creole"># #{markeditMsg.numbered_label}</span>
         <span class="markedit-markdown"> # #{markeditMsg.numbered_label}</span>
-        <span class="markedit-mediawiki"># #{markeditMsg.numbered_label}</span>
     </li>
     <li class='spare'></li>
-
-    <li>///</li>
-    <li>verbatim code block</li>
-    <li>///</li>
+    <li>
+        <span class="markedit-dotclear">///</span>
+        <span class="markedit-mediawiki">&lt; pre&gt;</span>
+    </li>
+    <li>
+        <span class="markedit-dotclear markedit-mediawiki">verbatim code block</span>
+    </li>
+    <li>
+        <span class="markedit-dotclear">///</span>
+        <span class="markedit-mediawiki">&lt; /pre&gt;</span>
+    </li>
     <li class="markedit-header">#{markeditMsg.markup_link_help}</li>
     <li>
         <span class="markedit-dotclear">[#{markeditMsg.link_label} | #{markeditMsg.link_url}]</span>
-        <span class="markedit-mediawiki">[[#{markeditMsg.link_url} | #{markeditMsg.link_label} ]]</span>
+        <span class="markedit-mediawiki markedit-creole">[[#{markeditMsg.link_url} | #{markeditMsg.link_label} ]]</span>
         <span class="markedit-markdown">[#{markeditMsg.link_label}](#{markeditMsg.link_url})</span>
     </li>
 </ul>

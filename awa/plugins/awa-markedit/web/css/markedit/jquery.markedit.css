@@ -57,3 +57,6 @@
 .FORMAT_MARKDOWN .markedit-markdown {
     display: inline-block;
 }
+.FORMAT_CREOLE .markedit-creole {
+    display: inline-block;
+}
