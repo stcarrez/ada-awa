@@ -88,7 +88,7 @@
                     </h:selectOneMenu>
                 </dd>
             </dl>
-            <dl class="awa-optional">
+            <dl class="awa-optional" id="wiki-syntax">
                 <dd>
                     <ui:include src="/markedit/syntax.xhtml">
                         <ui:param name="syntax" value="#{wikiPage.format}"/>
@@ -100,11 +100,18 @@
       <util:script>
               // Create a MarkEdit editor on page load
               $(function(){
-                 $('textarea').markedit({ 'preview': false,
+                 var area = $("#text");
+                 $(area).markedit({ 'preview': false,
                   'toolbar' : {
                     'backgroundMode': 'light',
-                    'layout': 'bold italic underline strike | quote code | numberlist bulletlist heading line'
+                    'layout': 'bold italic underline strike | quote code | numberlist bulletlist heading line link'
                   }
+                 });
+                 $('#wiki-format').change(function(ev) {
+                    var syntax = $('#wiki-format').val();
+                    $("#wiki-syntax ul").attr('class', 'markedit-syntax ' + syntax);
+                    syntax = syntax.replace("FORMAT_", "");
+                    $(area).markeditSetSyntax(syntax);
                  });
               });
       </util:script>
