@@ -1,5 +1,5 @@
 <!-- List of wiki pages for the wiki user
-  -  Copyright (C) 2015 Stephane Carrez
+  -  Copyright (C) 2015, 2016 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +26,7 @@
     </h:panelGroup>
     <h:panelGroup rendered="#{wikiVersionList.versions.count != 0 or true}">
         <h:list var="version" value="#{wikiVersionList.versions}">
-            <div class='wiki-page-info awa-list-item' id="v_#{version.id}">
+            <div class='awa-list-item' id="v_#{version.id}">
                 <div class='awa-list-col wiki-page-name'>
                     #{version.page_version}
                 </div>

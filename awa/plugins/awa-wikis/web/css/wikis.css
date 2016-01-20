@@ -136,15 +136,6 @@
 /**
  * Wiki page view style.
  */
-/* div.blog-post div.post-title h2 a {
-    color: #F91;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.33em;
-}
-div.blog-post div.post-title h2 a:hover {
-    color: #A08;
-} */
 .wiki-text {
     float: left;
     width: 100%;
