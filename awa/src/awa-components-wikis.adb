@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-components-wikis -- Wiki rendering component
---  Copyright (C) 2011, 2012, 2013, 2015 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2015, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,14 +21,18 @@ with Ada.Characters.Conversions;
 with ASF.Contexts.Writer;
 with ASF.Utils;
 
+with Wiki.Documents;
+with Wiki.Parsers;
+with Wiki.Helpers;
 with Wiki.Render.Html;
 with Wiki.Filters.Html;
-with Wiki.Writers;
+with Wiki.Filters.TOC;
+with Wiki.Streams.Html;
 package body AWA.Components.Wikis is
 
    WIKI_ATTRIBUTE_NAMES  : Util.Strings.String_Set.Set;
 
-   type Html_Writer_Type is limited new Wiki.Writers.Html_Writer_Type with record
+   type Html_Writer_Type is limited new Wiki.Streams.Html.Html_Output_Stream with record
       Writer : ASF.Contexts.Writer.Response_Writer_Access;
    end record;
 
@@ -40,19 +44,6 @@ package body AWA.Components.Wikis is
    overriding
    procedure Write (Writer : in out Html_Writer_Type;
                     Char   : in Wide_Wide_Character);
-
-   overriding
-   procedure Write (Writer  : in out Html_Writer_Type;
-                    Content : in Unbounded_Wide_Wide_String);
-
-
-   --  Write an XML element using the given name and with the content.
-   --  This is similar to calling <b>Start_Element</b>, <b>Write_Text</b>
-   --  and <b>End_Element</b>.
-   overriding
-   procedure Write_Wide_Element (Writer  : in out Html_Writer_Type;
-                                 Name    : in String;
-                                 Content : in Unbounded_Wide_Wide_String);
 
    --  Write an XML attribute within an XML element.
    --  The attribute value is escaped according to the XML escape rules.
@@ -66,7 +57,7 @@ package body AWA.Components.Wikis is
    overriding
    procedure Write_Wide_Attribute (Writer  : in out Html_Writer_Type;
                                    Name    : in String;
-                                   Content : in Wide_Wide_String);
+                                   Content : in Wiki.Strings.WString);
 
    --  Start an XML element with the given name.
    overriding
@@ -81,11 +72,11 @@ package body AWA.Components.Wikis is
    --  Write a text escaping any character as necessary.
    overriding
    procedure Write_Wide_Text (Writer  : in out Html_Writer_Type;
-                              Content : in Unbounded_Wide_Wide_String);
+                              Content : in Wiki.Strings.WString);
 
    overriding
    procedure Write (Writer  : in out Html_Writer_Type;
-                    Content : in Wide_Wide_String) is
+                    Content : in Wiki.Strings.WString) is
    begin
       Writer.Writer.Write_Wide_Raw (Content);
    end Write;
@@ -99,27 +90,6 @@ package body AWA.Components.Wikis is
    begin
       Writer.Writer.Write_Wide_Char (Char);
    end Write;
-
-   overriding
-   procedure Write (Writer  : in out Html_Writer_Type;
-                    Content : in Unbounded_Wide_Wide_String) is
-   begin
-      Writer.Writer.Write (Content);
-   end Write;
-
-
-   --  ------------------------------
-   --  Write an XML element using the given name and with the content.
-   --  This is similar to calling <b>Start_Element</b>, <b>Write_Text</b>
-   --  and <b>End_Element</b>.
-   --  ------------------------------
-   overriding
-   procedure Write_Wide_Element (Writer  : in out Html_Writer_Type;
-                                 Name    : in String;
-                                 Content : in Unbounded_Wide_Wide_String) is
-   begin
-      Writer.Writer.Write_Wide_Element (Name, Content);
-   end Write_Wide_Element;
 
    --  ------------------------------
    --  Write an XML attribute within an XML element.
@@ -140,7 +110,7 @@ package body AWA.Components.Wikis is
    overriding
    procedure Write_Wide_Attribute (Writer  : in out Html_Writer_Type;
                                    Name    : in String;
-                                   Content : in Wide_Wide_String) is
+                                   Content : in Wiki.Strings.WString) is
    begin
       Writer.Writer.Write_Wide_Attribute (Name, Content);
    end Write_Wide_Attribute;
@@ -170,7 +140,7 @@ package body AWA.Components.Wikis is
    --  ------------------------------
    overriding
    procedure Write_Wide_Text (Writer  : in out Html_Writer_Type;
-                              Content : in Unbounded_Wide_Wide_String) is
+                              Content : in Wiki.Strings.WString) is
    begin
       Writer.Writer.Write_Wide_Text (Content);
    end Write_Wide_Text;
@@ -181,23 +151,23 @@ package body AWA.Components.Wikis is
    --  ------------------------------
    function Get_Wiki_Style (UI      : in UIWiki;
                             Context : in Faces_Context'Class)
-                            return Wiki.Parsers.Wiki_Syntax_Type is
+                            return Wiki.Wiki_Syntax is
       Format : constant String := UI.Get_Attribute (Name    => FORMAT_NAME,
                                                     Context => Context,
                                                     Default => "dotclear");
    begin
       if Format = "dotclear" or Format = "FORMAT_DOTCLEAR" then
-         return Wiki.Parsers.SYNTAX_DOTCLEAR;
+         return Wiki.SYNTAX_DOTCLEAR;
       elsif Format = "google" then
-         return Wiki.Parsers.SYNTAX_GOOGLE;
+         return Wiki.SYNTAX_GOOGLE;
       elsif Format = "phpbb" or Format = "FORMAT_PHPBB" then
-         return Wiki.Parsers.SYNTAX_PHPBB;
+         return Wiki.SYNTAX_PHPBB;
       elsif Format = "creole" or Format = "FORMAT_CREOLE" then
-         return Wiki.Parsers.SYNTAX_CREOLE;
+         return Wiki.SYNTAX_CREOLE;
       elsif Format = "mediawiki" or Format = "FORMAT_MEDIAWIKI" then
-         return Wiki.Parsers.SYNTAX_MEDIA_WIKI;
+         return Wiki.SYNTAX_MEDIA_WIKI;
       else
-         return Wiki.Parsers.SYNTAX_MIX;
+         return Wiki.SYNTAX_MIX;
       end if;
    end Get_Wiki_Style;
 
@@ -206,7 +176,7 @@ package body AWA.Components.Wikis is
    --  ------------------------------
    function Get_Links_Renderer (UI      : in UIWiki;
                                 Context : in Faces_Context'Class)
-                                return Wiki.Render.Link_Renderer_Access is
+                                return Wiki.Render.Links.Link_Renderer_Access is
       Value : constant Util.Beans.Objects.Object := UI.Get_Attribute (Context, LINKS_NAME);
       Bean  : constant access Util.Beans.Basic.Readonly_Bean'Class
            := Util.Beans.Objects.To_Bean (Value);
@@ -227,7 +197,7 @@ package body AWA.Components.Wikis is
    procedure Encode_Begin (UI      : in UIWiki;
                            Context : in out Faces_Context'Class) is
       use ASF.Contexts.Writer;
-      use type Wiki.Render.Link_Renderer_Access;
+      use type Wiki.Render.Links.Link_Renderer_Access;
    begin
       if not UI.Is_Rendered (Context) then
          return;
@@ -235,11 +205,14 @@ package body AWA.Components.Wikis is
       declare
          Writer   : constant Response_Writer_Access := Context.Get_Response_Writer;
          Html     : aliased Html_Writer_Type;
+         Doc      : Wiki.Documents.Document;
+         TOC      : aliased Wiki.Filters.TOC.TOC_Filter;
          Renderer : aliased Wiki.Render.Html.Html_Renderer;
          Filter   : aliased Wiki.Filters.Html.Html_Filter_Type;
-         Format   : constant Wiki.Parsers.Wiki_Syntax_Type := UI.Get_Wiki_Style (Context);
+         Format   : constant Wiki.Wiki_Syntax := UI.Get_Wiki_Style (Context);
          Value    : constant Util.Beans.Objects.Object := UI.Get_Attribute (Context, VALUE_NAME);
-         Links    : Wiki.Render.Link_Renderer_Access;
+         Links    : Wiki.Render.Links.Link_Renderer_Access;
+         Engine   : Wiki.Parsers.Parser;
       begin
          Html.Writer := Writer;
          Writer.Start_Element ("div");
@@ -250,11 +223,12 @@ package body AWA.Components.Wikis is
             if Links /= null then
                Renderer.Set_Link_Renderer (Links);
             end if;
-            Filter.Set_Document (Renderer'Unchecked_Access);
-            Renderer.Set_Writer (Html'Unchecked_Access);
-            Wiki.Parsers.Parse (Filter'Unchecked_Access,
-                                Util.Beans.Objects.To_Wide_Wide_String (Value),
-                                Format);
+            Engine.Add_Filter (TOC'Unchecked_Access);
+            Engine.Add_Filter (Filter'Unchecked_Access);
+            Engine.Set_Syntax (Format);
+            Engine.Parse (Util.Beans.Objects.To_Wide_Wide_String (Value), Doc);
+            Renderer.Set_Output_Stream (Html'Unchecked_Access);
+            Renderer.Render (Doc);
          end if;
          Writer.End_Element ("div");
       end;
@@ -309,25 +283,13 @@ package body AWA.Components.Wikis is
       return True;
    end Starts_With;
 
-   --  ------------------------------
-   --  Return true if the link is an absolute link.
-   --  ------------------------------
-   function Is_Link_Absolute (Renderer : in Link_Renderer_Bean;
-                              Link     : in Unbounded_Wide_Wide_String) return Boolean is
-      pragma Unreferenced (Renderer);
-   begin
-      return Element (Link, 1) = '/'
-        or else Starts_With (Link, "http://")
-        or else Starts_With (Link, "https://");
-   end Is_Link_Absolute;
-
    procedure Make_Link (Renderer : in Link_Renderer_Bean;
-                        Link     : in Unbounded_Wide_Wide_String;
+                        Link     : in Wiki.Strings.WString;
                         Prefix   : in Unbounded_Wide_Wide_String;
                         URI      : out Unbounded_Wide_Wide_String) is
    begin
-      if Renderer.Is_Link_Absolute (Link) then
-         URI := Link;
+      if Wiki.Helpers.Is_Url (Link) then
+         URI := To_Unbounded_Wide_Wide_String (Link);
       else
          URI := Prefix & Link;
       end if;
@@ -338,7 +300,7 @@ package body AWA.Components.Wikis is
    --  ------------------------------
    overriding
    procedure Make_Image_Link (Renderer : in Link_Renderer_Bean;
-                              Link     : in Unbounded_Wide_Wide_String;
+                              Link     : in Wiki.Strings.WString;
                               URI      : out Unbounded_Wide_Wide_String;
                               Width    : out Natural;
                               Height   : out Natural) is
@@ -353,7 +315,7 @@ package body AWA.Components.Wikis is
    --  ------------------------------
    overriding
    procedure Make_Page_Link (Renderer : in Link_Renderer_Bean;
-                             Link     : in Unbounded_Wide_Wide_String;
+                             Link     : in Wiki.Strings.WString;
                              URI      : out Unbounded_Wide_Wide_String;
                              Exists   : out Boolean) is
    begin
