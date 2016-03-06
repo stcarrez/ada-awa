@@ -27,6 +27,7 @@ with ADO.Objects;
 
 with ASF.Helpers.Beans;
 
+with Wiki.Strings;
 with AWA.Wikis.Modules;
 with AWA.Wikis.Models;
 with AWA.Tags.Beans;
@@ -52,7 +53,7 @@ package AWA.Wikis.Beans is
    --  Get the image link that must be rendered from the wiki image link.
    overriding
    procedure Make_Image_Link (Renderer : in Wiki_Links_Bean;
-                              Link     : in Unbounded_Wide_Wide_String;
+                              Link     : in Wiki.Strings.WString;
                               URI      : out Unbounded_Wide_Wide_String;
                               Width    : out Natural;
                               Height   : out Natural);
@@ -60,7 +61,7 @@ package AWA.Wikis.Beans is
    --  Get the page link that must be rendered from the wiki page link.
    overriding
    procedure Make_Page_Link (Renderer : in Wiki_Links_Bean;
-                             Link     : in Unbounded_Wide_Wide_String;
+                             Link     : in Wiki.Strings.WString;
                              URI      : out Unbounded_Wide_Wide_String;
                              Exists   : out Boolean);
 
