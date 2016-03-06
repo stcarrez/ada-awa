@@ -32,6 +32,7 @@ with AWA.Services.Contexts;
 with AWA.Tags.Modules;
 with AWA.Helpers.Selectors;
 
+with Wiki.Helpers;
 package body AWA.Wikis.Beans is
 
    --  ------------------------------
@@ -39,14 +40,13 @@ package body AWA.Wikis.Beans is
    --  ------------------------------
    overriding
    procedure Make_Image_Link (Renderer : in Wiki_Links_Bean;
-                              Link     : in Unbounded_Wide_Wide_String;
+                              Link     : in Wiki.Strings.WString;
                               URI      : out Unbounded_Wide_Wide_String;
                               Width    : out Natural;
                               Height   : out Natural) is
---      use Ada.Characters.Conversions;
    begin
-      if Renderer.Is_Link_Absolute (Link) then
-         URI := Link;
+      if Wiki.Helpers.Is_Url (Link) then
+         URI := To_Unbounded_Wide_Wide_String (Link);
       else
          URI := Renderer.Image_Prefix;
          Append (URI, Link);
@@ -60,13 +60,12 @@ package body AWA.Wikis.Beans is
    --  ------------------------------
    overriding
    procedure Make_Page_Link (Renderer : in Wiki_Links_Bean;
-                             Link     : in Unbounded_Wide_Wide_String;
+                             Link     : in Wiki.Strings.WString;
                              URI      : out Unbounded_Wide_Wide_String;
                              Exists   : out Boolean) is
---      use Ada.Characters.Conversions;
    begin
-      if Renderer.Is_Link_Absolute (Link) then
-         URI := Link;
+      if Wiki.Helpers.Is_Url (Link) then
+         URI := To_Unbounded_Wide_Wide_String (Link);
       else
          URI := Renderer.Image_Prefix;
          Append (URI, Link);
