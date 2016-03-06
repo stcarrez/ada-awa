@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-questions-modules -- Module questions
---  Copyright (C) 2012, 2013, 2015 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2015, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,7 @@ with AWA.Services.Contexts;
 with AWA.Users.Models;
 with AWA.Workspaces.Models;
 with AWA.Workspaces.Modules;
-with Wiki.Parsers;
+with Wiki;
 with Wiki.Utils;
 
 with ADO.Sessions;
@@ -120,7 +120,7 @@ package body AWA.Questions.Modules is
 
       declare
          Text : constant String := Wiki.Utils.To_Text (To_Wide (Question.Get_Description),
-                                                       Wiki.Parsers.SYNTAX_MIX);
+                                                       Wiki.SYNTAX_MIX);
          Last : Natural;
       begin
          if Text'Length < SHORT_DESCRIPTION_LENGTH then
