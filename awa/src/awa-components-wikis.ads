@@ -26,6 +26,7 @@ with ASF.Components.Html;
 
 with Wiki.Strings;
 with Wiki.Render;
+with Wiki.Plugins;
 with Wiki.Render.Links;
 package AWA.Components.Wikis is
 
@@ -39,6 +40,9 @@ package AWA.Components.Wikis is
 
    --  The link renderer bean that controls the generation of page and image links.
    LINKS_NAME  : constant String := "links";
+
+   --  The plugin factory bean that must be used for Wiki plugins.
+   PLUGINS_NAME  : constant String := "plugins";
 
    --  ------------------------------
    --  Wiki component
@@ -59,6 +63,11 @@ package AWA.Components.Wikis is
    function Get_Links_Renderer (UI      : in UIWiki;
                                 Context : in Faces_Context'Class)
                                 return Wiki.Render.Links.Link_Renderer_Access;
+
+   --  Get the plugin factory that must be used by the Wiki parser.
+   function Get_Plugin_Factory (UI      : in UIWiki;
+                                Context : in Faces_Context'Class)
+                                return Wiki.Plugins.Plugin_Factory_Access;
 
    --  Render the wiki text
    overriding
