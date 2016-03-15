@@ -191,6 +191,25 @@ package body AWA.Components.Wikis is
    end Get_Links_Renderer;
 
    --  ------------------------------
+   --  Get the plugin factory that must be used by the Wiki parser.
+   --  ------------------------------
+   function Get_Plugin_Factory (UI      : in UIWiki;
+                                Context : in Faces_Context'Class)
+                                return Wiki.Plugins.Plugin_Factory_Access is
+      Value : constant Util.Beans.Objects.Object := UI.Get_Attribute (Context, LINKS_NAME);
+      Bean  : constant access Util.Beans.Basic.Readonly_Bean'Class
+           := Util.Beans.Objects.To_Bean (Value);
+   begin
+      if Bean = null then
+         return null;
+      elsif not (Bean.all in Wiki.Plugins.Plugin_Factory'Class) then
+         return null;
+      else
+         return Wiki.Plugins.Plugin_Factory'Class (Bean.all)'Access;
+      end if;
+   end Get_Plugin_Factory;
+
+   --  ------------------------------
    --  Render the wiki text
    --  ------------------------------
    overriding
@@ -198,6 +217,7 @@ package body AWA.Components.Wikis is
                            Context : in out Faces_Context'Class) is
       use ASF.Contexts.Writer;
       use type Wiki.Render.Links.Link_Renderer_Access;
+      use type Wiki.Plugins.Plugin_Factory_Access;
    begin
       if not UI.Is_Rendered (Context) then
          return;
@@ -212,6 +232,7 @@ package body AWA.Components.Wikis is
          Format   : constant Wiki.Wiki_Syntax := UI.Get_Wiki_Style (Context);
          Value    : constant Util.Beans.Objects.Object := UI.Get_Attribute (Context, VALUE_NAME);
          Links    : Wiki.Render.Links.Link_Renderer_Access;
+         Plugins  : Wiki.Plugins.Plugin_Factory_Access;
          Engine   : Wiki.Parsers.Parser;
       begin
          Html.Writer := Writer;
@@ -219,6 +240,10 @@ package body AWA.Components.Wikis is
          UI.Render_Attributes (Context, WIKI_ATTRIBUTE_NAMES, Writer);
 
          if not Util.Beans.Objects.Is_Empty (Value) then
+            Plugins := UI.Get_Plugin_Factory (Context);
+            if Plugins /= null then
+               Engine.Set_Plugin_Factory (Plugins);
+            end if;
             Links := UI.Get_Links_Renderer (Context);
             if Links /= null then
                Renderer.Set_Link_Renderer (Links);
