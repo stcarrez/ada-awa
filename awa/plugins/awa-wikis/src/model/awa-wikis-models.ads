@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -731,6 +731,8 @@ package AWA.Wikis.Models is
 
    Query_Wiki_Page_Id : constant ADO.Queries.Query_Definition_Access;
 
+   Query_Wiki_Page_Content : constant ADO.Queries.Query_Definition_Access;
+
    Query_Wiki_Page_Name_Count : constant ADO.Queries.Query_Definition_Access;
 
 
@@ -1157,6 +1159,12 @@ private
                                      File => File_4.File'Access);
    Query_Wiki_Page_Id : constant ADO.Queries.Query_Definition_Access
    := Def_Wikiviewinfo_Wiki_Page_Id.Query'Access;
+
+   package Def_Wikiviewinfo_Wiki_Page_Content is
+      new ADO.Queries.Loaders.Query (Name => "wiki-page-content",
+                                     File => File_4.File'Access);
+   Query_Wiki_Page_Content : constant ADO.Queries.Query_Definition_Access
+   := Def_Wikiviewinfo_Wiki_Page_Content.Query'Access;
 
    package Def_Wikiviewinfo_Wiki_Page_Name_Count is
       new ADO.Queries.Loaders.Query (Name => "wiki-page-name-count",
