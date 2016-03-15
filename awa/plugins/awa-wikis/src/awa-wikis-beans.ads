@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-beans -- Beans for module wikis
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2015, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,6 +28,9 @@ with ADO.Objects;
 with ASF.Helpers.Beans;
 
 with Wiki.Strings;
+with Wiki.Attributes;
+with Wiki.Plugins.Templates;
+
 with AWA.Wikis.Modules;
 with AWA.Wikis.Models;
 with AWA.Tags.Beans;
@@ -65,6 +68,24 @@ package AWA.Wikis.Beans is
                              URI      : out Unbounded_Wide_Wide_String;
                              Exists   : out Boolean);
 
+   --  The Wiki template plugin that retrieves the template content from the Wiki space.
+   type Wiki_Template_Bean is new Wiki.Plugins.Templates.Template_Plugin
+      and Util.Beans.Basic.Readonly_Bean with record
+      --  The wiki space identifier.
+      Wiki_Space_Id : ADO.Identifier;
+   end record;
+
+   --  Get the value identified by the name.
+   overriding
+   function Get_Value (From : in Wiki_Template_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Get the template content for the plugin evaluation.
+   overriding
+   procedure Get_Template (Plugin   : in out Wiki_Template_Bean;
+                           Params   : in out Wiki.Attributes.Attribute_List;
+                           Template : out Wiki.Strings.UString);
+
    type Wiki_View_Bean is new AWA.Wikis.Models.Wiki_View_Info with record
       --  The wiki module instance.
       Module        : Modules.Wiki_Module_Access := null;
@@ -84,6 +105,10 @@ package AWA.Wikis.Beans is
       --  The wiki page links.
       Links         : aliased Wiki_Links_Bean;
       Links_Bean    : Util.Beans.Basic.Readonly_Bean_Access;
+
+      --  The wiki plugins.
+      Plugins       : aliased Wiki_Template_Bean;
+      Plugins_Bean  : Util.Beans.Basic.Readonly_Bean_Access;
    end record;
    type Wiki_View_Bean_Access is access all Wiki_View_Bean'Class;
 
