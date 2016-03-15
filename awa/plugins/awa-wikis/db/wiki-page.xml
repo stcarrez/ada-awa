@@ -111,6 +111,17 @@
        </sql>
     </query>
 
+    <query name='wiki-page-content'>
+       <comment>Get only the content of a wiki page (for template evaluation).</comment>
+       <sql>
+    SELECT
+      content.content,
+    FROM awa_wiki_page AS page
+    INNER JOIN awa_wiki_content AS content ON page.content_id = content.id
+    WHERE page.wiki_id = :wiki_id AND page.name = :name
+       </sql>
+    </query>
+
     <query name='wiki-page-name-count'>
        <comment>Count the occurence of a wiki page name</comment>
        <sql>
