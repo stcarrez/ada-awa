@@ -24,6 +24,7 @@ with ADO.Sessions;
 with ADO.Datasets;
 with ADO.Sessions.Entities;
 with ADO.Parameters;
+with ADO.Statements;
 
 with ASF.Applications.Messages.Factory;
 
@@ -77,6 +78,50 @@ package body AWA.Wikis.Beans is
    --  Get the value identified by the name.
    --  ------------------------------
    overriding
+   function Get_Value (From : in Wiki_Template_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+      pragma Unreferenced (From, Name);
+   begin
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+   --  ------------------------------
+   --  Get the template content for the plugin evaluation.
+   --  ------------------------------
+   overriding
+   procedure Get_Template (Plugin   : in out Wiki_Template_Bean;
+                           Params   : in out Wiki.Attributes.Attribute_List;
+                           Template : out Wiki.Strings.UString) is
+      use Wiki.Strings;
+      use type ADO.Identifier;
+      package ASC renames AWA.Services.Contexts;
+
+      Ctx     : constant ASC.Service_Context_Access := ASC.Current;
+      Session : constant ADO.Sessions.Session := ASC.Get_Session (Ctx);
+      First   : constant Wiki.Attributes.Cursor := Wiki.Attributes.First (Params);
+      Name    : constant String := Wiki.Attributes.Get_Value (First);
+      Query   : ADO.Queries.Context;
+   begin
+      Query.Bind_Param ("wiki_id", Plugin.Wiki_Space_Id);
+      Query.Bind_Param ("name", "Template:" & Name);
+      Query.Set_Query (AWA.Wikis.Models.Query_Wiki_Page_Content);
+      declare
+         Stmt   : ADO.Statements.Query_Statement := Session.Create_Statement (Query);
+         Result : Ada.Strings.Unbounded.Unbounded_String;
+      begin
+         Stmt.Execute;
+         if Stmt.Has_Elements then
+            Result := Stmt.Get_Unbounded_String (0);
+            Template := Wiki.Strings.To_UString
+              (To_WString (Ada.Strings.Unbounded.To_String (Result)));
+         end if;
+      end;
+   end Get_Template;
+
+   --  ------------------------------
+   --  Get the value identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Wiki_View_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
       use type ADO.Identifier;
@@ -95,6 +140,8 @@ package body AWA.Wikis.Beans is
          return Util.Beans.Objects.To_Object (From.Tags_Bean, Util.Beans.Objects.STATIC);
       elsif Name = "links" then
          return Util.Beans.Objects.To_Object (From.Links_Bean, Util.Beans.Objects.STATIC);
+      elsif Name = "plugins" then
+         return Util.Beans.Objects.To_Object (From.Plugins_Bean, Util.Beans.Objects.STATIC);
       elsif Name = "counter" then
          return Util.Beans.Objects.To_Object (From.Counter_Bean, Util.Beans.Objects.STATIC);
       else
@@ -173,6 +220,7 @@ package body AWA.Wikis.Beans is
       Object.Counter_Bean := Object.Counter'Access;
       Object.Counter.Counter := AWA.Wikis.Modules.Read_Counter.Index;
       Object.Links_Bean := Object.Links'Access;
+      Object.Plugins_Bean := Object.Plugins'Access;
       Object.Id := ADO.NO_IDENTIFIER;
       return Object.all'Access;
    end Create_Wiki_View_Bean;
