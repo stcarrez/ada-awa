@@ -196,7 +196,7 @@ package body AWA.Components.Wikis is
    function Get_Plugin_Factory (UI      : in UIWiki;
                                 Context : in Faces_Context'Class)
                                 return Wiki.Plugins.Plugin_Factory_Access is
-      Value : constant Util.Beans.Objects.Object := UI.Get_Attribute (Context, LINKS_NAME);
+      Value : constant Util.Beans.Objects.Object := UI.Get_Attribute (Context, PLUGINS_NAME);
       Bean  : constant access Util.Beans.Basic.Readonly_Bean'Class
            := Util.Beans.Objects.To_Bean (Value);
    begin
