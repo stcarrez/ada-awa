@@ -185,3 +185,18 @@
 .wiki-text li {
     display: list-item;
 }
+.wiki-toc {
+    border: 1px solid #AAA;
+    display: table;
+    padding: 0.5em;
+    margin: 0.5em;
+}
+.wiki-toc-entry {
+    list-style-type: none;
+}
+.wiki-toc-level {
+    padding-right: 0.5em;
+}
+.wiki-toc-ref {
+    text-decoration: none;
+}
