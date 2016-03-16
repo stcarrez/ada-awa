@@ -118,6 +118,14 @@ package body AWA.Wikis.Beans is
       end;
    end Get_Template;
 
+   --  Find a plugin knowing its name.
+   overriding
+   function Find (Factory : in Wiki_Template_Bean;
+                  Name    : in String) return Wiki.Plugins.Wiki_Plugin_Access is
+   begin
+      return Factory'Unrestricted_Access;
+   end Find;
+
    --  ------------------------------
    --  Get the value identified by the name.
    --  ------------------------------
@@ -159,6 +167,7 @@ package body AWA.Wikis.Beans is
    begin
       if Name = "wiki_id" then
          From.Wiki_Space_Id := ADO.Utils.To_Identifier (Value);
+         From.Plugins.Wiki_Space_Id := From.Wiki_Space_Id;
          Append (From.Links.Page_Prefix, Util.Beans.Objects.To_Wide_Wide_String (Value));
          Append (From.Links.Page_Prefix, "/");
          Append (From.Links.Image_Prefix, Util.Beans.Objects.To_Wide_Wide_String (Value));
