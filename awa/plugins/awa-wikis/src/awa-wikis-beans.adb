@@ -206,13 +206,18 @@ package body AWA.Wikis.Beans is
                                         Session => Session);
       Bean.Load (Session, Query);
 
-      --  Setup the wiki page read counter bean.
-      ADO.Objects.Set_Value (Bean.Counter.Object, Bean.Id);
-      Bean.Counter.Value := Bean.Read_Count;
+      if not Bean.Is_Public and Bean.Acl_Id <= 0 then
+         Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-visible");
 
-      --  Load the wiki page tags.
-      Bean.Tags.Load_Tags (Session, Bean.Id);
-      Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("loaded");
+      else
+         --  Setup the wiki page read counter bean.
+         ADO.Objects.Set_Value (Bean.Counter.Object, Bean.Id);
+         Bean.Counter.Value := Bean.Read_Count;
+
+         --  Load the wiki page tags.
+         Bean.Tags.Load_Tags (Session, Bean.Id);
+         Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("loaded");
+      end if;
    end Load;
 
    --  ------------------------------
