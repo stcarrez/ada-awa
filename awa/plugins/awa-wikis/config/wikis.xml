@@ -160,6 +160,10 @@
       <to-view-id>/wikis/view.xhtml</to-view-id>
     </navigation-case>
     <navigation-case>
+      <from-outcome>not-visible</from-outcome>
+      <to-view-id>/wikis/protected.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
       <from-outcome>not-found</from-outcome>
       <to-view-id>/wikis/create/#{wikiView.wiki_id}/#{wikiView.name}</to-view-id>
       <redirect/>
