@@ -98,14 +98,14 @@ package body AWA.Wikis.Modules is
 
       Prefix : constant String := Plugin.Get_Config (PARAM_IMAGE_PREFIX);
    begin
-      Plugin.Image_Prefix := Ada.Strings.Unbounded.To_Unbounded_String (Prefix);
+      Plugin.Image_Prefix := Wiki.Strings.To_UString (Wiki.Strings.To_WString (Prefix));
    end Configure;
 
    --  ------------------------------
    --  Get the image prefix that was configured for the Wiki module.
    --  ------------------------------
    function Get_Image_Prefix (Module : in Wiki_Module)
-                              return Ada.Strings.Unbounded.Unbounded_String is
+                              return Wiki.Strings.UString is
    begin
       return Module.Image_Prefix;
    end Get_Image_Prefix;
