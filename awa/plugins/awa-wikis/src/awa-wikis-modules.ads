@@ -15,8 +15,6 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with Ada.Strings.Unbounded;
-
 with ASF.Applications;
 
 with ADO;
@@ -28,6 +26,7 @@ with AWA.Wikis.Models;
 with AWA.Tags.Beans;
 with AWA.Counters.Definition;
 with Security.Permissions;
+with Wiki.Strings;
 
 --  == Events ==
 --  The <tt>wikis</tt> exposes a number of events which are posted when some action
@@ -98,7 +97,7 @@ package AWA.Wikis.Modules is
 
    --  Get the image prefix that was configured for the Wiki module.
    function Get_Image_Prefix (Module : in Wiki_Module)
-                              return Ada.Strings.Unbounded.Unbounded_String;
+                              return Wiki.Strings.UString;
 
    --  Get the wikis module.
    function Get_Wiki_Module return Wiki_Module_Access;
@@ -175,7 +174,7 @@ private
                                 Content : in out AWA.Wikis.Models.Wiki_Content_Ref'Class);
 
    type Wiki_Module is new AWA.Modules.Module with record
-      Image_Prefix : Ada.Strings.Unbounded.Unbounded_String;
+      Image_Prefix : Wiki.Strings.UString;
    end record;
 
 end AWA.Wikis.Modules;
