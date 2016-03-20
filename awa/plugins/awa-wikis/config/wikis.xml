@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="1.0">
 
+  <context-param>
+    <param-name>wikis.image_prefix</param-name>
+    <param-value>#{contextPath}/wikis/images/</param-value>
+    <description>
+       The URL base prefix to be used for Wiki images.
+    </description>
+  </context-param>
+
   <managed-bean>
     <description>The wiki page with all its information to display it.</description>
     <managed-bean-name>wikiView</managed-bean-name>
