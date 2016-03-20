@@ -89,6 +89,15 @@ package body AWA.Wikis.Modules is
    end Initialize;
 
    --  ------------------------------
+   --  Get the image prefix that was configured for the Wiki module.
+   --  ------------------------------
+   function Get_Image_Prefix (Module : in Wiki_Module)
+                              return Ada.Strings.Unbounded.Unbounded_String is
+   begin
+      return Module.Image_Prefix;
+   end Get_Image_Prefix;
+
+   --  ------------------------------
    --  Get the wikis module.
    --  ------------------------------
    function Get_Wiki_Module return Wiki_Module_Access is
