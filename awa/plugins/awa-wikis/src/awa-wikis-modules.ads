@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-modules -- Module wikis
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2015, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -86,6 +86,10 @@ package AWA.Wikis.Modules is
                          App    : in AWA.Modules.Application_Access;
                          Props  : in ASF.Applications.Config);
 
+   --  Get the image prefix that was configured for the Wiki module.
+   function Get_Image_Prefix (Module : in Wiki_Module)
+                              return Ada.Strings.Unbounded.Unbounded_String;
+
    --  Get the wikis module.
    function Get_Wiki_Module return Wiki_Module_Access;
 
@@ -160,6 +164,8 @@ private
                                 Page    : in out AWA.Wikis.Models.Wiki_Page_Ref'Class;
                                 Content : in out AWA.Wikis.Models.Wiki_Content_Ref'Class);
 
-   type Wiki_Module is new AWA.Modules.Module with null record;
+   type Wiki_Module is new AWA.Modules.Module with record
+      Image_Prefix : Ada.Strings.Unbounded.Unbounded_String;
+   end record;
 
 end AWA.Wikis.Modules;
