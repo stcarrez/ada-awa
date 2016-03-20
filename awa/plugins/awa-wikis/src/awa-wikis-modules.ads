@@ -15,6 +15,8 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Ada.Strings.Unbounded;
+
 with ASF.Applications;
 
 with ADO;
@@ -42,6 +44,9 @@ package AWA.Wikis.Modules is
 
    --  The name under which the module is registered.
    NAME : constant String := "wikis";
+
+   --  The configuration parameter that defines the image link prefix in rendered HTML content.
+   PARAM_IMAGE_PREFIX : constant String := "image_prefix";
 
    package ACL_Create_Wiki_Pages is new Security.Permissions.Definition ("wiki-page-create");
    package ACL_Delete_Wiki_Pages is new Security.Permissions.Definition ("wiki-page-delete");
@@ -85,6 +90,11 @@ package AWA.Wikis.Modules is
    procedure Initialize (Plugin : in out Wiki_Module;
                          App    : in AWA.Modules.Application_Access;
                          Props  : in ASF.Applications.Config);
+
+   --  Configures the module after its initialization and after having read its XML configuration.
+   overriding
+   procedure Configure (Plugin : in out Wiki_Module;
+                        Props  : in ASF.Applications.Config);
 
    --  Get the image prefix that was configured for the Wiki module.
    function Get_Image_Prefix (Module : in Wiki_Module)
