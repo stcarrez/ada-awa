@@ -89,6 +89,19 @@ package body AWA.Wikis.Modules is
    end Initialize;
 
    --  ------------------------------
+   --  Configures the module after its initialization and after having read its XML configuration.
+   --  ------------------------------
+   overriding
+   procedure Configure (Plugin : in out Wiki_Module;
+                        Props  : in ASF.Applications.Config) is
+      pragma Unreferenced (Props);
+
+      Prefix : constant String := Plugin.Get_Config (PARAM_IMAGE_PREFIX);
+   begin
+      Plugin.Image_Prefix := Ada.Strings.Unbounded.To_Unbounded_String (Prefix);
+   end Configure;
+
+   --  ------------------------------
    --  Get the image prefix that was configured for the Wiki module.
    --  ------------------------------
    function Get_Image_Prefix (Module : in Wiki_Module)
