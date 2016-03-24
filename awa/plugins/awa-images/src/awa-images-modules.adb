@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-images-modules -- Image management module
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,12 +18,24 @@
 with AWA.Modules.Get;
 with AWA.Applications;
 with AWA.Storages.Modules;
+with AWA.Services.Contexts;
+
+with ADO.Sessions;
 
 with Util.Strings;
 with Util.Log.Loggers;
 package body AWA.Images.Modules is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Images.Module");
+
+   --  ------------------------------
+   --  Job worker procedure to identify an image and generate its thumnbnail.
+   --  ------------------------------
+   procedure Thumbnail_Worker (Job : in out AWA.Jobs.Services.Abstract_Job_Type'Class) is
+      Module : constant Image_Module_Access := Get_Image_Module;
+   begin
+      Module.Do_Thumbnail_Job (Job);
+   end Thumbnail_Worker;
 
    --  ------------------------------
    --  Initialize the image module.
@@ -53,6 +65,8 @@ package body AWA.Images.Modules is
    begin
       --  Create the image manager when everything is initialized.
       Plugin.Manager := Plugin.Create_Image_Manager;
+      Plugin.Job_Module := AWA.Jobs.Modules.Get_Job_Module;
+      Plugin.Job_Module.Register (Definition => Thumbnail_Job_Definition.Factory);
    end Configure;
 
    --  ------------------------------
@@ -77,6 +91,19 @@ package body AWA.Images.Modules is
    end Create_Image_Manager;
 
    --  ------------------------------
+   --  Create a thumbnail job for the image.
+   --  ------------------------------
+   procedure Make_Thumbnail_Job (Plugin : in Image_Module;
+                                 Image  : in AWA.Images.Models.Image_Ref'Class) is
+      pragma Unreferenced (Plugin);
+
+      J : AWA.Jobs.Services.Job_Type;
+   begin
+      J.Set_Parameter ("image_id", Image);
+      J.Schedule (Thumbnail_Job_Definition.Factory.all);
+   end Make_Thumbnail_Job;
+
+   --  ------------------------------
    --  Returns true if the storage file has an image mime type.
    --  ------------------------------
    function Is_Image (File : in AWA.Storages.Models.Storage_Ref'Class) return Boolean is
@@ -91,6 +118,26 @@ package body AWA.Images.Modules is
    end Is_Image;
 
    --  ------------------------------
+   --  Create an image instance.
+   --  ------------------------------
+   procedure Create_Image (Plugin  : in Image_Module;
+                           File    : in AWA.Storages.Models.Storage_Ref'Class) is
+      Ctx : constant AWA.Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB  : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Img : AWA.Images.Models.Image_Ref;
+   begin
+      Img.Set_Width (0);
+      Img.Set_Height (0);
+      Img.Set_Thumb_Height (0);
+      Img.Set_Thumb_Width (0);
+      Img.Set_Storage (File);
+      Img.Set_Folder (File.Get_Folder);
+      Img.Set_Owner (File.Get_Owner);
+      Img.Save (DB);
+      Plugin.Make_Thumbnail_Job (Img);
+   end Create_Image;
+
+   --  ------------------------------
    --  The `On_Create` procedure is called by `Notify_Create` to notify the creation of the item.
    --  ------------------------------
    overriding
@@ -98,7 +145,7 @@ package body AWA.Images.Modules is
                         Item     : in AWA.Storages.Models.Storage_Ref'Class) is
    begin
       if Is_Image (Item) then
-         Instance.Manager.Create_Image (Item);
+         Instance.Create_Image (Item);
       end if;
    end On_Create;
 
@@ -110,7 +157,7 @@ package body AWA.Images.Modules is
                         Item     : in AWA.Storages.Models.Storage_Ref'Class) is
    begin
       if Is_Image (Item) then
-         Instance.Manager.Create_Image (Item);
+         Instance.Create_Image (Item);
       else
          Instance.Manager.Delete_Image (Item);
       end if;
@@ -125,6 +172,16 @@ package body AWA.Images.Modules is
    begin
       Instance.Manager.Delete_Image (Item);
    end On_Delete;
+
+   --  ------------------------------
+   --  Thumbnail job to identify the image dimension and produce a thumbnail.
+   --  ------------------------------
+   procedure Do_Thumbnail_Job (Plugin : in Image_Module;
+                               Job    : in out AWA.Jobs.Services.Abstract_Job_Type'Class) is
+      Image_Id : constant ADO.Identifier := Job.Get_Parameter ("image_id");
+   begin
+      Plugin.Manager.Build_Thumbnail (Image_Id);
+   end Do_Thumbnail_Job;
 
    --  ------------------------------
    --  Get the image module instance associated with the current application.
