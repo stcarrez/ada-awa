@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-images-modules -- Image management module
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +22,9 @@ with AWA.Modules;
 with AWA.Storages.Models;
 with AWA.Storages.Services;
 with AWA.Images.Services;
+with AWA.Images.Models;
+with AWA.Jobs.Services;
+with AWA.Jobs.Modules;
 
 --  == Image Module ==
 --  The <tt>Image_Module</tt> type represents the image module.  An instance of the image
@@ -36,6 +39,12 @@ with AWA.Images.Services;
 package AWA.Images.Modules is
 
    NAME : constant String := "images";
+
+   --  Job worker procedure to identify an image and generate its thumnbnail.
+   procedure Thumbnail_Worker (Job : in out AWA.Jobs.Services.Abstract_Job_Type'Class);
+
+   package Thumbnail_Job_Definition is
+     new AWA.Jobs.Services.Work_Definition (Thumbnail_Worker'Access);
 
    type Image_Module is new AWA.Modules.Module and AWA.Storages.Services.Listener with private;
    type Image_Module_Access is access all Image_Module'Class;
@@ -75,6 +84,14 @@ package AWA.Images.Modules is
    procedure On_Delete (Instance : in Image_Module;
                         Item     : in AWA.Storages.Models.Storage_Ref'Class);
 
+   --  Create a thumbnail job for the image.
+   procedure Make_Thumbnail_Job (Plugin : in Image_Module;
+                                 Image  : in AWA.Images.Models.Image_Ref'Class);
+
+   --  Thumbnail job to identify the image dimension and produce a thumbnail.
+   procedure Do_Thumbnail_Job (Plugin : in Image_Module;
+                               Job    : in out AWA.Jobs.Services.Abstract_Job_Type'Class);
+
    --  Get the image module instance associated with the current application.
    function Get_Image_Module return Image_Module_Access;
 
@@ -87,7 +104,12 @@ package AWA.Images.Modules is
 private
 
    type Image_Module is new AWA.Modules.Module and AWA.Storages.Services.Listener with record
-      Manager         : Services.Image_Service_Access := null;
+      Manager    : Services.Image_Service_Access := null;
+      Job_Module : AWA.Jobs.Modules.Job_Module_Access;
    end record;
+
+   --  Create an image instance.
+   procedure Create_Image (Plugin  : in Image_Module;
+                           File    : in AWA.Storages.Models.Storage_Ref'Class);
 
 end AWA.Images.Modules;
