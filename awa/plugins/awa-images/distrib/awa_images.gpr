@@ -1,6 +1,7 @@
 with "awa";
 with "awa_workspaces";
 with "awa_storages";
+with "awa_jobs";
 with "util_config";
 project awa_images is
    Version      := awa.Version;
