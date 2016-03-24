@@ -27,6 +27,7 @@ with Wiki.Helpers;
 with Wiki.Render.Html;
 with Wiki.Filters.Html;
 with Wiki.Filters.TOC;
+with Wiki.Filters.Autolink;
 with Wiki.Streams.Html;
 package body AWA.Components.Wikis is
 
@@ -227,6 +228,7 @@ package body AWA.Components.Wikis is
          Html     : aliased Html_Writer_Type;
          Doc      : Wiki.Documents.Document;
          TOC      : aliased Wiki.Filters.TOC.TOC_Filter;
+         Autolink : aliased Wiki.Filters.Autolink.Autolink_Filter;
          Renderer : aliased Wiki.Render.Html.Html_Renderer;
          Filter   : aliased Wiki.Filters.Html.Html_Filter_Type;
          Format   : constant Wiki.Wiki_Syntax := UI.Get_Wiki_Style (Context);
@@ -248,11 +250,13 @@ package body AWA.Components.Wikis is
             if Links /= null then
                Renderer.Set_Link_Renderer (Links);
             end if;
+            Engine.Add_Filter (Autolink'Unchecked_Access);
             Engine.Add_Filter (TOC'Unchecked_Access);
             Engine.Add_Filter (Filter'Unchecked_Access);
             Engine.Set_Syntax (Format);
             Engine.Parse (Util.Beans.Objects.To_Wide_Wide_String (Value), Doc);
             Renderer.Set_Output_Stream (Html'Unchecked_Access);
+            Renderer.Set_Render_TOC (True);
             Renderer.Render (Doc);
          end if;
          Writer.End_Element ("div");
@@ -324,7 +328,7 @@ package body AWA.Components.Wikis is
    --  Get the image link that must be rendered from the wiki image link.
    --  ------------------------------
    overriding
-   procedure Make_Image_Link (Renderer : in Link_Renderer_Bean;
+   procedure Make_Image_Link (Renderer : in out Link_Renderer_Bean;
                               Link     : in Wiki.Strings.WString;
                               URI      : out Unbounded_Wide_Wide_String;
                               Width    : out Natural;
@@ -339,7 +343,7 @@ package body AWA.Components.Wikis is
    --  Get the page link that must be rendered from the wiki page link.
    --  ------------------------------
    overriding
-   procedure Make_Page_Link (Renderer : in Link_Renderer_Bean;
+   procedure Make_Page_Link (Renderer : in out Link_Renderer_Bean;
                              Link     : in Wiki.Strings.WString;
                              URI      : out Unbounded_Wide_Wide_String;
                              Exists   : out Boolean) is
