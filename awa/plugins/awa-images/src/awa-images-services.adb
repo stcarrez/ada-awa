@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-images-services -- Image service
---  Copyright (C) 2012, 2013, 2015 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2015, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,12 +49,6 @@ package body AWA.Images.Services is
    --  ------------------------------
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Images.Services");
-
-   --  Save the data object contained in the <b>Data</b> part element into the
-   --  target storage represented by <b>Into</b>.
-   procedure Build_Thumbnail (Service : in Image_Service;
-                              Id      : in ADO.Identifier;
-                              File    : in AWA.Storages.Models.Storage_Ref'Class);
 
    --  ------------------------------
    --  Initializes the storage service.
@@ -134,13 +128,9 @@ package body AWA.Images.Services is
       end;
    end Create_Thumbnail;
 
-   --  Save the data object contained in the <b>Data</b> part element into the
-   --  target storage represented by <b>Into</b>.
+   --  Build a thumbnail for the image identified by the Id.
    procedure Build_Thumbnail (Service : in Image_Service;
-                              Id      : in ADO.Identifier;
-                              File    : in AWA.Storages.Models.Storage_Ref'Class) is
-      pragma Unreferenced (File);
-
+                              Id      : in ADO.Identifier) is
       Storage_Service : constant AWA.Storages.Services.Storage_Service_Access
         := AWA.Storages.Modules.Get_Storage_Manager;
       Ctx         : constant ASC.Service_Context_Access := ASC.Current;
@@ -162,7 +152,6 @@ package body AWA.Images.Services is
       Img.Set_Thumb_Height (64);
       Ctx.Start;
       Img.Save (DB);
---        Storage_Service.Save (Target_File);
       Ctx.Commit;
    end Build_Thumbnail;
 
@@ -182,6 +171,8 @@ package body AWA.Images.Services is
       Img.Set_Thumb_Height (0);
       Img.Set_Thumb_Width (0);
       Img.Set_Storage (File);
+      Img.Set_Folder (File.Get_Folder);
+      Img.Set_Owner (File.Get_Owner);
       Img.Save (DB);
       Ctx.Commit;
    end Create_Image;
