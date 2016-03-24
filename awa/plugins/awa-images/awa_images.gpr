@@ -1,5 +1,6 @@
 with "../../awa";
 with "../awa-storages/awa_storages";
+with "../awa-jobs/awa_jobs";
 library project awa_images is
    Version      := awa.Version;
    Name         := "awa_images";
