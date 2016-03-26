@@ -42,6 +42,16 @@ package body AWA.Storages.Stores.Files is
    --  ------------------------------
    function Get_Path (Storage : in File_Store;
                       Store   : in AWA.Storages.Models.Storage_Ref'Class) return String is
+   begin
+      return Storage.Get_Path (Store.Get_Workspace.Get_Id, Store.Get_Id);
+   end Get_Path;
+
+   --  ------------------------------
+   --  Build a path where the file store represented by <tt>Store</tt> is saved.
+   --  ------------------------------
+   function Get_Path (Storage      : in File_Store;
+                      Workspace_Id : in ADO.Identifier;
+                      File_Id      : in ADO.Identifier) return String is
       use Interfaces;
       use type Ada.Streams.Stream_Element_Offset;
 
@@ -52,10 +62,9 @@ package body AWA.Storages.Stores.Files is
       Encoded : Ada.Streams.Stream_Element_Offset;
       Pos  : Positive := 1;
       Res : String (1 .. 16 + 5);
-      Workspace_Id : constant ADO.Identifier := Store.Get_Workspace.Get_Id;
    begin
       Util.Encoders.Encode_LEB128 (Buffer, Buffer'First, Unsigned_64 (Workspace_Id), Last);
-      Util.Encoders.Encode_LEB128 (Buffer, Last, Unsigned_64 (Store.Get_Id), Last);
+      Util.Encoders.Encode_LEB128 (Buffer, Last, Unsigned_64 (File_Id), Last);
 
       T.Transform (Data    => Buffer (1 .. Last),
                    Into    => R, Last => Last,
