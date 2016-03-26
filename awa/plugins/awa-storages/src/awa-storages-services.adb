@@ -133,6 +133,18 @@ package body AWA.Storages.Services is
    end Save;
 
    --  ------------------------------
+   --  Save the file described <b>File</b> in the storage
+   --  object represented by <b>Into</b> and managed by the storage service.
+   --  ------------------------------
+   procedure Save (Service : in Storage_Service;
+                   Into    : in out AWA.Storages.Models.Storage_Ref'Class;
+                   File    : in AWA.Storages.Storage_File;
+                   Storage : in AWA.Storages.Models.Storage_Type) is
+   begin
+      Storage_Service'Class (Service).Save (Into, AWA.Storages.Get_Path (File), Storage);
+   end Save;
+
+   --  ------------------------------
    --  Save the file pointed to by the <b>Path</b> string in the storage
    --  object represented by <b>Into</b> and managed by the storage service.
    --  ------------------------------
