@@ -161,6 +161,7 @@
     color: #346;
     font-weight: bold;
     margin-top: 1em;
+    clear: both;
 }
 .wiki-text h2 {
     font-size: 1.33em;
@@ -185,6 +186,7 @@
 .wiki-text li {
     display: list-item;
 }
+/* Table of Contents */
 .wiki-toc {
     border: 1px solid #AAA;
     display: table;
@@ -199,4 +201,28 @@
 }
 .wiki-toc-ref {
     text-decoration: none;
+}
+/* Wiki images */
+.wiki-img-thumb {
+    margin: 0.5em;
+    border: 1px solid #AAA;
+    width: auto;
+    display: block;
+    float: left;
+}
+.wiki-img-inner {
+    float: left;
+    display: block;
+    padding: 1%;
+    width: 99%;
+}
+.wiki-img-caption {
+    border-top: 1px solid #AAA;
+    text-align: center;
+}
+.wiki-img-left {
+    float: left;
+}
+.wiki-img-right {
+    float: right;
 }
