@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-stores-files -- File system store
---  Copyright (C) 2012, 2015 Stephane Carrez
+--  Copyright (C) 2012, 2015, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,9 +20,12 @@ with Ada.Directories;
 with Interfaces;
 
 with Util.Files;
+with Util.Log.Loggers;
 with Util.Encoders;
 with Util.Encoders.Base64;
 package body AWA.Storages.Stores.Files is
+
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Storages.Stores.Files");
 
    --  ------------------------------
    --  Create a file storage service and use the <tt>Root</tt> directory to store the files.
@@ -82,6 +85,7 @@ package body AWA.Storages.Stores.Files is
       Store : constant String := Storage.Get_Path (Into);
       Dir   : constant String := Ada.Directories.Containing_Directory (Store);
    begin
+      Log.Info ("Storage save {0} to {1}", Path, Store);
       Ada.Directories.Create_Path (Dir);
       Ada.Directories.Copy_File (Source_Name => Path,
                                  Target_Name => Store,
@@ -111,6 +115,7 @@ package body AWA.Storages.Stores.Files is
       Store : constant String := Storage.Get_Path (From);
       Dir   : constant String := Ada.Directories.Containing_Directory (Store);
    begin
+      Log.Info ("Storage create {0}", Store);
       Ada.Directories.Create_Path (Dir);
       Into.Path := Ada.Strings.Unbounded.To_Unbounded_String (Store);
    end Create;
@@ -126,6 +131,7 @@ package body AWA.Storages.Stores.Files is
       Store : constant String := Storage.Get_Path (From);
    begin
       if Ada.Directories.Exists (Store) then
+         Log.Info ("Storage delete {0}", Store);
          Ada.Directories.Delete_File (Store);
       end if;
    end Delete;
