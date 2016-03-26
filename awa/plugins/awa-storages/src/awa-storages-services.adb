@@ -275,6 +275,8 @@ package body AWA.Storages.Services is
          Local.Find (DB, Query, Found);
          if Found then
             Into.Path := Local.Get_Path;
+            Log.Info ("Load local file {0} path {1}", ADO.Identifier'Image (From),
+                      Ada.Strings.Unbounded.To_String (Into.Path));
             return;
          end if;
       end if;
@@ -286,6 +288,7 @@ package body AWA.Storages.Services is
                                         AWA.Workspaces.Models.WORKSPACE_TABLE, DB);
       Storage.Find (DB, Query, Found);
       if not Found then
+         Log.Info ("File Id {0} not found", ADO.Identifier'Image (From));
          raise ADO.Objects.NOT_FOUND;
       end if;
 
@@ -295,6 +298,8 @@ package body AWA.Storages.Services is
                   From    => Storage,
                   Into    => Into);
       Ctx.Commit;
+      Log.Info ("Load local file {0} path {1}", ADO.Identifier'Image (From),
+                Ada.Strings.Unbounded.To_String (Into.Path));
    end Get_Local_File;
 
    procedure Create_Local_File (Service : in Storage_Service;
