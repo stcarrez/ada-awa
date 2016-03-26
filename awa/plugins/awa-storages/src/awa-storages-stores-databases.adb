@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-stores-databases -- Database store
---  Copyright (C) 2012, 2015 Stephane Carrez
+--  Copyright (C) 2012, 2015, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,10 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Ada.Streams.Stream_IO;
+with Util.Log.Loggers;
 package body AWA.Storages.Stores.Databases is
+
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Storages.Stores.Files");
 
    --  Create a storage
    procedure Create (Storage : in Database_Store;
@@ -40,6 +43,7 @@ package body AWA.Storages.Stores.Databases is
       Store : AWA.Storages.Models.Storage_Data_Ref;
       Blob  : constant ADO.Blob_Ref := ADO.Create_Blob (Path);
    begin
+      Log.Info ("Save database file {0}", Path);
       Store.Set_Data (Blob);
       Store.Save (Session);
       Into.Set_Store_Data (Store);
@@ -54,10 +58,12 @@ package body AWA.Storages.Stores.Databases is
       DB    : ADO.Sessions.Master_Session := ADO.Sessions.Master_Session (Session);
    begin
       Storage.Tmp.Create (DB, From, Into);
+      Log.Info ("Load database file {0} to {1}",
+                ADO.Identifier'Image (Store.Get_Id), Get_Path (Into));
       Store.Load (Session, Store.Get_Id);
-      Ada.Streams.Stream_IO.Open (File => File,
-                                  Mode => Ada.Streams.Stream_IO.Out_File,
-                                  Name => Get_Path (Into));
+      Ada.Streams.Stream_IO.Create (File => File,
+                                    Mode => Ada.Streams.Stream_IO.Out_File,
+                                    Name => Get_Path (Into));
       Ada.Streams.Stream_IO.Write (File, Store.Get_Data.Value.Data);
       Ada.Streams.Stream_IO.Close (File);
    end Load;
@@ -73,6 +79,7 @@ package body AWA.Storages.Stores.Databases is
       Store : AWA.Storages.Models.Storage_Data_Ref'Class := From.Get_Store_Data;
    begin
       if not Store.Is_Null then
+         Log.Info ("Delete file {0}", ADO.Identifier'Image (From.Get_Id));
          Store.Delete (Session);
       end if;
    end Delete;
