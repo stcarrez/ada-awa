@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-services -- Storage service
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -86,6 +86,13 @@ package AWA.Storages.Services is
    procedure Save (Service : in Storage_Service;
                    Into    : in out AWA.Storages.Models.Storage_Ref'Class;
                    Data    : in ASF.Parts.Part'Class;
+                   Storage : in AWA.Storages.Models.Storage_Type);
+
+   --  Save the file described <b>File</b> in the storage
+   --  object represented by <b>Into</b> and managed by the storage service.
+   procedure Save (Service : in Storage_Service;
+                   Into    : in out AWA.Storages.Models.Storage_Ref'Class;
+                   File    : in AWA.Storages.Storage_File;
                    Storage : in AWA.Storages.Models.Storage_Type);
 
    --  Save the file pointed to by the <b>Path</b> string in the storage
