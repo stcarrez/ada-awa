@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-stores-files -- File system store
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -76,6 +76,11 @@ package AWA.Storages.Stores.Files is
    --  Build a path where the file store represented by <tt>Store</tt> is saved.
    function Get_Path (Storage : in File_Store;
                       Store   : in AWA.Storages.Models.Storage_Ref'Class) return String;
+
+   --  Build a path where the file store represented by <tt>Store</tt> is saved.
+   function Get_Path (Storage      : in File_Store;
+                      Workspace_Id : in ADO.Identifier;
+                      File_Id      : in ADO.Identifier) return String;
 
 private
 
