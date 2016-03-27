@@ -24,6 +24,8 @@ with AWA.Permissions.Services;
 with AWA.Users.Models;
 with AWA.Wikis.Beans;
 with AWA.Modules.Beans;
+with AWA.Services.Contexts;
+with AWA.Storages.Models;
 
 with Ada.Strings;
 with Ada.Calendar;
@@ -31,10 +33,13 @@ with ADO.Objects;
 with ADO.SQL;
 with ADO.Queries;
 with ADO.Statements;
+with ADO.Sessions.Entities;
 
 with Util.Log.Loggers;
 with Util.Strings.Tokenizers;
 package body AWA.Wikis.Modules is
+
+   package ASC renames AWA.Services.Contexts;
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Awa.Wikis.Module");
 
@@ -82,6 +87,8 @@ package body AWA.Wikis.Modules is
       Register.Register (Plugin => Plugin,
                          Name   => "AWA.Wikis.Beans.Wiki_Version_List_Bean",
                          Handler => AWA.Wikis.Beans.Create_Wiki_Version_List_Bean'Access);
+
+      App.Add_Servlet ("wiki-image", Plugin.Image_Servlet'Unchecked_Access);
 
       AWA.Modules.Module (Plugin).Initialize (App, Props);
 
@@ -441,5 +448,40 @@ package body AWA.Wikis.Modules is
          Wiki_Lifecycle.Notify_Update (Model, Page);
       end if;
    end Save_Wiki_Content;
+
+   procedure Load_Image (Model    : in Wiki_Module;
+                         Wiki_Id  : in ADO.Identifier;
+                         Image_Id : in ADO.Identifier;
+                         Mime     : out Ada.Strings.Unbounded.Unbounded_String;
+                         Date     : out Ada.Calendar.Time;
+                         Into     : out ADO.Blob_Ref) is
+      use type AWA.Storages.Models.Storage_Type;
+
+      Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      User  : constant ADO.Identifier := Ctx.Get_User_Identifier;
+      DB    : ADO.Sessions.Session := AWA.Services.Contexts.Get_Session (Ctx);
+      Query : ADO.Statements.Query_Statement
+        := DB.Create_Statement (Models.Query_Wiki_Image_Get_Data);
+      Kind  : AWA.Storages.Models.Storage_Type;
+   begin
+      Query.Bind_Param ("wiki_id", Wiki_Id);
+      Query.Bind_Param ("store_id", Image_Id);
+      Query.Bind_Param ("user_id", User);
+      ADO.Sessions.Entities.Bind_Param (Query, "table",
+                                        AWA.Workspaces.Models.WORKSPACE_TABLE, DB);
+      Query.Execute;
+      if not Query.Has_Elements then
+         Log.Warn ("Wiki image entity {0} not found", ADO.Identifier'Image (Image_Id));
+         raise ADO.Objects.NOT_FOUND;
+      end if;
+      Mime := Query.Get_Unbounded_String (0);
+      Date := Query.Get_Time (1);
+      Kind := AWA.Storages.Models.Storage_Type'Val (Query.Get_Integer (3));
+      if Kind = AWA.Storages.Models.DATABASE then
+         Into := Query.Get_Blob (4);
+      else
+         null;
+      end if;
+   end Load_Image;
 
 end AWA.Wikis.Modules;
