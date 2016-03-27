@@ -136,23 +136,45 @@ package body AWA.Images.Services is
       Ctx         : constant ASC.Service_Context_Access := ASC.Current;
       DB          : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
       Img         : AWA.Images.Models.Image_Ref;
+      Thumb       : AWA.Images.Models.Image_Ref;
       Target_File : AWA.Storages.Storage_File;
       Local_File  : AWA.Storages.Storage_File;
+      Thumbnail   : AWA.Storages.Models.Storage_Ref;
       Width       : Natural;
       Height      : Natural;
+      Name        : Ada.Strings.Unbounded.Unbounded_String;
    begin
       Img.Load (DB, Id);
-      Storage_Service.Get_Local_File (From => Img.Get_Storage.Get_Id, Into => Local_File);
-      Storage_Service.Create_Local_File (Target_File);
-      Service.Create_Thumbnail (AWA.Storages.Get_Path (Local_File),
-                                AWA.Storages.Get_Path (Target_File), Width, Height);
-      Img.Set_Width (Width);
-      Img.Set_Height (Height);
-      Img.Set_Thumb_Width (64);
-      Img.Set_Thumb_Height (64);
-      Ctx.Start;
-      Img.Save (DB);
-      Ctx.Commit;
+      declare
+         Image_File : constant AWA.Storages.Models.Storage_Ref'Class := Img.Get_Storage;
+      begin
+         Storage_Service.Get_Local_File (From => Image_File.Get_Id, Into => Local_File);
+         Storage_Service.Create_Local_File (Target_File);
+
+         Service.Create_Thumbnail (AWA.Storages.Get_Path (Local_File),
+                                   AWA.Storages.Get_Path (Target_File), Width, Height);
+         Thumbnail.Set_Mime_Type ("image/jpeg");
+         Thumbnail.Set_Original (Image_File);
+         Thumbnail.Set_Workspace (Image_File.Get_Workspace);
+         Thumbnail.Set_Folder (Image_File.Get_Folder);
+         Thumbnail.Set_Owner (Image_File.Get_Owner);
+         Thumbnail.Set_Name (String '(Image_File.Get_Name));
+         Storage_Service.Save (Thumbnail, Target_File, AWA.Storages.Models.DATABASE);
+         Thumb.Set_Width (64);
+         Thumb.Set_Height (64);
+         Thumb.Set_Owner (Image_File.Get_Owner);
+         Thumb.Set_Folder (Image_File.Get_Folder);
+         Thumb.Set_Storage (Thumbnail);
+         Img.Set_Width (Width);
+         Img.Set_Height (Height);
+         Img.Set_Thumb_Width (64);
+         Img.Set_Thumb_Height (64);
+         Img.Set_Thumbnail (Thumbnail);
+         Ctx.Start;
+         Img.Save (DB);
+         Thumb.Save (DB);
+         Ctx.Commit;
+      end;
    end Build_Thumbnail;
 
    --  Save the data object contained in the <b>Data</b> part element into the
