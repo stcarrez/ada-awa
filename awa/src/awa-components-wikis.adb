@@ -256,7 +256,7 @@ package body AWA.Components.Wikis is
             Engine.Set_Syntax (Format);
             Engine.Parse (Util.Beans.Objects.To_Wide_Wide_String (Value), Doc);
             Renderer.Set_Output_Stream (Html'Unchecked_Access);
-            Renderer.Set_Render_TOC (True);
+            Renderer.Set_Render_TOC (UI.Get_Attribute (TOC_NAME, Context, False));
             Renderer.Render (Doc);
          end if;
          Writer.End_Element ("div");
