@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-services -- Services
---  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,7 @@
 
 with Ada.Task_Attributes;
 with ADO.Databases;
+with Security.Contexts;
 
 package body AWA.Services.Contexts is
 
@@ -213,10 +214,12 @@ package body AWA.Services.Contexts is
    procedure Run_As (User    : in AWA.Users.Models.User_Ref;
                      Session : in AWA.Users.Models.Session_Ref) is
       Ctx       : Service_Context;
+      Sec       : Security.Contexts.Security_Context;
       Principal : aliased AWA.Users.Principals.Principal
         := AWA.Users.Principals.Create (User, Session);
    begin
       Ctx.Principal := Principal'Unchecked_Access;
+      Sec.Set_Context (Ctx.Application.Get_Security_Manager, Principal'Unchecked_Access);
       Process;
    end Run_As;
 
