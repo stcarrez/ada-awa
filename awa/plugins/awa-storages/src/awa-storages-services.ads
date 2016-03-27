@@ -18,6 +18,8 @@
 with Ada.Calendar;
 with Ada.Strings.Unbounded;
 
+with Util.Concurrent.Counters;
+
 with Security.Permissions;
 
 with ADO;
@@ -125,8 +127,8 @@ package AWA.Storages.Services is
                              Mode    : in Read_Mode := READ;
                              Into    : out Storage_File);
 
-   procedure Create_Local_File (Service : in Storage_Service;
-                                Into    : out Storage_File);
+   procedure Create_Local_File (Service : in out Storage_Service;
+                                Into    : out AWA.Storages.Storage_File);
 
    --  Deletes the storage instance.
    procedure Delete (Service : in Storage_Service;
@@ -144,6 +146,7 @@ private
    type Storage_Service is new AWA.Modules.Module_Manager with record
       Stores         : Store_Access_Array;
       Database_Store : aliased AWA.Storages.Stores.Databases.Database_Store;
+      Temp_Id        : Util.Concurrent.Counters.Counter;
    end record;
 
 end AWA.Storages.Services;
