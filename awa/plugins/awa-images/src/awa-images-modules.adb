@@ -122,19 +122,24 @@ package body AWA.Images.Modules is
    --  ------------------------------
    procedure Create_Image (Plugin  : in Image_Module;
                            File    : in AWA.Storages.Models.Storage_Ref'Class) is
-      Ctx : constant AWA.Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      DB  : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
-      Img : AWA.Images.Models.Image_Ref;
    begin
-      Img.Set_Width (0);
-      Img.Set_Height (0);
-      Img.Set_Thumb_Height (0);
-      Img.Set_Thumb_Width (0);
-      Img.Set_Storage (File);
-      Img.Set_Folder (File.Get_Folder);
-      Img.Set_Owner (File.Get_Owner);
-      Img.Save (DB);
-      Plugin.Make_Thumbnail_Job (Img);
+      if File.Get_Original.Is_Null then
+         declare
+            Ctx : constant AWA.Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+            DB  : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+            Img : AWA.Images.Models.Image_Ref;
+         begin
+            Img.Set_Width (0);
+            Img.Set_Height (0);
+            Img.Set_Thumb_Height (0);
+            Img.Set_Thumb_Width (0);
+            Img.Set_Storage (File);
+            Img.Set_Folder (File.Get_Folder);
+            Img.Set_Owner (File.Get_Owner);
+            Img.Save (DB);
+            Plugin.Make_Thumbnail_Job (Img);
+         end;
+      end if;
    end Create_Image;
 
    --  ------------------------------
