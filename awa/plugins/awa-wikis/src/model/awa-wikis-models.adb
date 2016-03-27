@@ -1638,6 +1638,82 @@ package body AWA.Wikis.Models is
    --  Get the bean attribute identified by the name.
    --  ------------------------------
    overriding
+   function Get_Value (From : in Wiki_Image_Info;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
+      elsif Name = "width" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Width));
+      elsif Name = "height" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Height));
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Wiki_Image_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "id" then
+         Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "width" then
+         Item.Width := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "height" then
+         Item.Height := Util.Beans.Objects.To_Integer (Value);
+      end if;
+   end Set_Value;
+
+
+   --  --------------------
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   --  --------------------
+   procedure List (Object  : in out Wiki_Image_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+   begin
+      List (Object.List, Session, Context);
+   end List;
+
+   --  --------------------
+   --  The information about an image used in a wiki page.
+   --  --------------------
+   procedure List (Object  : in out Wiki_Image_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+      procedure Read (Into : in out Wiki_Image_Info);
+
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Context);
+      Pos  : Natural := 0;
+      procedure Read (Into : in out Wiki_Image_Info) is
+      begin
+         Into.Id := Stmt.Get_Identifier (0);
+         Into.Width := Stmt.Get_Integer (1);
+         Into.Height := Stmt.Get_Integer (2);
+      end Read;
+   begin
+      Stmt.Execute;
+      Wiki_Image_Info_Vectors.Clear (Object);
+      while Stmt.Has_Elements loop
+         Object.Insert_Space (Before => Pos);
+         Object.Update_Element (Index => Pos, Process => Read'Access);
+         Pos := Pos + 1;
+         Stmt.Next;
+      end loop;
+   end List;
+
+
+
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Wiki_Info;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
