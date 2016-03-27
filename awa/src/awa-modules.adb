@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa -- Ada Web Application
---  Copyright (C) 2009, 2010, 2011, 2012, 2015 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2015, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,6 +29,27 @@ with EL.Contexts.Default;
 with AWA.Modules.Reader;
 with AWA.Applications;
 package body AWA.Modules is
+
+   --  ------------------------------
+   --  Get the module configuration property identified by the name.
+   --  If the configuration property does not exist, returns the default value.
+   --  ------------------------------
+   function Get_Config (Plugin  : Module_Manager;
+                        Name    : String;
+                        Default : String := "") return String is
+   begin
+      return Plugin.Module.all.Get_Config (Name, Default);
+   end Get_Config;
+
+   --  ------------------------------
+   --  Get the module configuration property identified by the <tt>Config</tt> parameter.
+   --  If the property does not exist, the default configuration value is returned.
+   --  ------------------------------
+   function Get_Config (Plugin : in Module_Manager;
+                        Config : in ASF.Applications.Config_Param) return String is
+   begin
+      return Plugin.Module.all.Get_Config (Config);
+   end Get_Config;
 
    --  ------------------------------
    --  Get the module name
