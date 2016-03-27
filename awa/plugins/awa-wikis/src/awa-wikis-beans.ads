@@ -18,6 +18,8 @@
 
 with Ada.Strings.Unbounded;
 with Ada.Strings.Wide_Wide_Unbounded;
+with Ada.Strings.Wide_Wide_Hash;
+with Ada.Containers.Indefinite_Hashed_Maps;
 
 with Util.Beans.Basic;
 with Util.Beans.Objects;
@@ -48,14 +50,35 @@ package AWA.Wikis.Beans is
 
    use Ada.Strings.Wide_Wide_Unbounded;
 
+   package Image_Info_Maps is
+     new Ada.Containers.Indefinite_Hashed_Maps (Key_Type        => Wiki.Strings.WString,
+                                                Element_Type    => AWA.Wikis.Models.Wiki_Image_Info,
+                                                Hash            => Ada.Strings.Wide_Wide_Hash,
+                                                Equivalent_Keys => "=",
+                                                "="             => AWA.Wikis.Models."=");
+
    type Wiki_Links_Bean is new AWA.Components.Wikis.Link_Renderer_Bean with record
       --  The wiki space identifier.
       Wiki_Space_Id : ADO.Identifier;
+      Images        : Image_Info_Maps.Map;
    end record;
+
+   procedure Make_Image_Link (Renderer : in out Wiki_Links_Bean;
+                              Link     : in Wiki.Strings.WString;
+                              Info     : in AWA.Wikis.Models.Wiki_Image_Info;
+                              URI      : out Unbounded_Wide_Wide_String;
+                              Width    : out Natural;
+                              Height   : out Natural);
+
+   procedure Find_Image_Link (Renderer : in out Wiki_Links_Bean;
+                              Link     : in Wiki.Strings.WString;
+                              URI      : out Unbounded_Wide_Wide_String;
+                              Width    : out Natural;
+                              Height   : out Natural);
 
    --  Get the image link that must be rendered from the wiki image link.
    overriding
-   procedure Make_Image_Link (Renderer : in Wiki_Links_Bean;
+   procedure Make_Image_Link (Renderer : in out Wiki_Links_Bean;
                               Link     : in Wiki.Strings.WString;
                               URI      : out Unbounded_Wide_Wide_String;
                               Width    : out Natural;
@@ -63,7 +86,7 @@ package AWA.Wikis.Beans is
 
    --  Get the page link that must be rendered from the wiki page link.
    overriding
-   procedure Make_Page_Link (Renderer : in Wiki_Links_Bean;
+   procedure Make_Page_Link (Renderer : in out Wiki_Links_Bean;
                              Link     : in Wiki.Strings.WString;
                              URI      : out Unbounded_Wide_Wide_String;
                              Exists   : out Boolean);
