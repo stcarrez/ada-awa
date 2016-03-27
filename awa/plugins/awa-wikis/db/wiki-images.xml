@@ -1,0 +1,53 @@
+<query-mapping package='AWA.Wikis.Models'>
+    <description>
+      List of wiki pages
+    </description>
+
+    <class name="AWA.Wikis.Models.Wiki_Image_Info" bean="yes">
+        <comment>The information about an image used in a wiki page.</comment>
+        <property type='Identifier' name="id">
+            <comment>the image storage identifier.</comment>
+        </property>
+        <property type='Integer' name="width">
+            <comment>the image width.</comment>
+        </property>
+        <property type='Integer' name="height">
+            <comment>the image height.</comment>
+        </property>
+    </class>
+
+    <query name='wiki-image'>
+       <comment>Get the description of an image used in a wiki page.</comment>
+       <sql>
+    SELECT
+      image.storage_id,
+      image.width,
+      image.height
+    FROM awa_wiki_space AS wiki 
+    INNER JOIN awa_storage_folder AS folder ON folder.workspace_id = wiki.workspace_id
+    INNER JOIN awa_image AS image ON folder.id = image.folder_id
+    INNER JOIN awa_storage AS file ON image.storage_id = file.id
+    WHERE wiki.id = :wiki_id 
+       AND folder.name = :folder_name AND file.name = :file_name
+       </sql>
+    </query>
+
+    <query name='wiki-image-get-data'>
+       <comment>Get the data content of the Wiki image.</comment>
+       <sql>
+    SELECT
+      store.mime_type,
+      store.create_date,
+      store.uri,
+      store.storage,
+      data.data
+    FROM awa_storage AS store
+    INNER JOIN awa_wiki_space AS wiki
+    LEFT JOIN awa_acl AS acl ON acl.entity_id = wiki.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
+    LEFT JOIN awa_storage_data AS data ON store.store_data_id = data.id
+    WHERE store.id = :store_id AND wiki.id = :wiki_id
+       AND (wiki.is_public OR NOT acl.id IS NULL)
+       </sql>
+    </query>
+
+</query-mapping>
