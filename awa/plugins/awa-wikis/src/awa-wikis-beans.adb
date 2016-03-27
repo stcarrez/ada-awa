@@ -17,6 +17,7 @@
 -----------------------------------------------------------------------
 
 with Util.Beans.Objects.Time;
+with Util.Strings;
 
 with ADO.Utils;
 with ADO.Queries;
@@ -36,31 +37,91 @@ with AWA.Helpers.Selectors;
 with Wiki.Helpers;
 package body AWA.Wikis.Beans is
 
-   --  ------------------------------
-   --  Get the image link that must be rendered from the wiki image link.
-   --  ------------------------------
-   overriding
-   procedure Make_Image_Link (Renderer : in Wiki_Links_Bean;
+   package ASC renames AWA.Services.Contexts;
+
+   procedure Make_Image_Link (Renderer : in out Wiki_Links_Bean;
+                              Link     : in Wiki.Strings.WString;
+                              Info     : in AWA.Wikis.Models.Wiki_Image_Info;
+                              URI      : out Unbounded_Wide_Wide_String;
+                              Width    : out Natural;
+                              Height   : out Natural) is
+      Sep : Natural;
+   begin
+      Sep := Wiki.Strings.Index (Link, "/");
+      Width  := Info.Width;
+      Height := Info.Height;
+      URI := Renderer.Image_Prefix;
+      Append (URI, Wiki.Strings.To_WString (Util.Strings.Image (Integer (Info.Id))));
+      Append (URI, "/");
+      if Sep = 0 then
+         Append (URI, Link);
+      else
+         Append (URI, Link (Sep + 1 .. Link'Last));
+      end if;
+   end Make_Image_Link;
+
+   procedure Find_Image_Link (Renderer : in out Wiki_Links_Bean;
                               Link     : in Wiki.Strings.WString;
                               URI      : out Unbounded_Wide_Wide_String;
                               Width    : out Natural;
                               Height   : out Natural) is
+      Ctx     : constant ASC.Service_Context_Access := ASC.Current;
+      Session : ADO.Sessions.Session := ASC.Get_Session (Ctx);
+      List    : AWA.Wikis.Models.Wiki_Image_Info_Vector;
+      Sep     : Natural;
+      Query   : ADO.Queries.Context;
+   begin
+      Sep := Wiki.Strings.Index (Link, "/");
+      Query.Bind_Param ("wiki_id", Renderer.Wiki_Space_Id);
+      if Sep < 0 then
+         Query.Bind_Param ("folder_name", String '("Images"));
+         Sep := Link'First - 1;
+      else
+         Query.Bind_Param ("folder_name", Wiki.Strings.To_String (Link (Link'First .. Sep - 1)));
+      end if;
+      Query.Bind_Param ("file_name", Wiki.Strings.To_String (Link (Sep + 1 .. Link'Last)));
+      Query.Set_Query (AWA.Wikis.Models.Query_Wiki_Image);
+      AWA.Wikis.Models.List (List, Session, Query);
+      if not List.Is_Empty then
+         declare
+            Info : AWA.Wikis.Models.Wiki_Image_Info := List.First_Element;
+         begin
+            Renderer.Images.Include (Link, Info);
+            Renderer.Make_Image_Link (Link, Info, URI, Width, Height);
+         end;
+      end if;
+   end Find_Image_Link;
+
+   --  ------------------------------
+   --  Get the image link that must be rendered from the wiki image link.
+   --  ------------------------------
+   overriding
+   procedure Make_Image_Link (Renderer : in out Wiki_Links_Bean;
+                              Link     : in Wiki.Strings.WString;
+                              URI      : out Unbounded_Wide_Wide_String;
+                              Width    : out Natural;
+                              Height   : out Natural) is
+      Pos : Image_Info_Maps.Cursor;
    begin
       if Wiki.Helpers.Is_Url (Link) then
-         URI := To_Unbounded_Wide_Wide_String (Link);
+         URI    := To_Unbounded_Wide_Wide_String (Link);
+         Width  := 0;
+         Height := 0;
       else
-         URI := Renderer.Image_Prefix;
-         Append (URI, Link);
+         Pos := Renderer.Images.Find (Link);
+         if Image_Info_Maps.Has_Element (Pos) then
+            Renderer.Make_Image_Link (Link, Image_Info_Maps.Element (Pos), URI, Width, Height);
+         else
+            Renderer.Find_Image_Link (Link, URI, Width, Height);
+         end if;
       end if;
-      Width  := 0;
-      Height := 0;
    end Make_Image_Link;
 
    --  ------------------------------
    --  Get the page link that must be rendered from the wiki page link.
    --  ------------------------------
    overriding
-   procedure Make_Page_Link (Renderer : in Wiki_Links_Bean;
+   procedure Make_Page_Link (Renderer : in out Wiki_Links_Bean;
                              Link     : in Wiki.Strings.WString;
                              URI      : out Unbounded_Wide_Wide_String;
                              Exists   : out Boolean) is
@@ -168,6 +229,8 @@ package body AWA.Wikis.Beans is
       if Name = "wiki_id" then
          From.Wiki_Space_Id := ADO.Utils.To_Identifier (Value);
          From.Plugins.Wiki_Space_Id := From.Wiki_Space_Id;
+         From.Links.Wiki_Space_Id := From.Wiki_Space_Id;
+         From.Links.Image_Prefix := From.Module.Get_Image_Prefix;
          Append (From.Links.Page_Prefix, Util.Beans.Objects.To_Wide_Wide_String (Value));
          Append (From.Links.Page_Prefix, "/");
          Append (From.Links.Image_Prefix, Util.Beans.Objects.To_Wide_Wide_String (Value));
