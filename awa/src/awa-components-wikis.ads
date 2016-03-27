@@ -44,6 +44,9 @@ package AWA.Components.Wikis is
    --  The plugin factory bean that must be used for Wiki plugins.
    PLUGINS_NAME  : constant String := "plugins";
 
+   --  Whether the TOC is rendered in the document.
+   TOC_NAME      : constant String := "toc";
+
    --  ------------------------------
    --  Wiki component
    --  ------------------------------
