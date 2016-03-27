@@ -289,6 +289,11 @@
     </sql>
   </entity-permission>
 
+  <servlet-mapping>
+    <servlet-name>wiki-image</servlet-name>
+    <url-pattern>/wikis/images/:wiki_id/:image_id/:name</url-pattern>
+  </servlet-mapping>
+
   <filter-mapping>
     <filter-name>service</filter-name>
     <url-pattern>/wikis/view/#{wikiView.wiki_id}/#{wikiView.name}</url-pattern>
@@ -303,6 +308,7 @@
     <url-pattern>/wikis/history/#{wikiVersionList.wiki_id}/#{wikiVersionList.page_id}</url-pattern>
     <url-pattern>/wikis/settings/#{adminWikiSpace.id}</url-pattern>
     <url-pattern>/wikis/*.html</url-pattern>
+    <url-pattern>/wikis/images/*</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
@@ -330,6 +336,7 @@
     <url-pattern>/wikis/tags/.*</url-pattern>
     <url-pattern>/wikis/list/.*</url-pattern>
     <url-pattern>/wikis/history/.*</url-pattern>
+    <url-pattern>/wikis/images/.*</url-pattern>
   </url-policy>
 
   <url-policy>
