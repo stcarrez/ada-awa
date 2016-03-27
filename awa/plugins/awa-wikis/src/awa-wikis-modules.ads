@@ -15,6 +15,9 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Ada.Strings.Unbounded;
+with Ada.Calendar;
+
 with ASF.Applications;
 
 with ADO;
@@ -23,6 +26,7 @@ with AWA.Events;
 with AWA.Modules;
 with AWA.Modules.Lifecycles;
 with AWA.Wikis.Models;
+with AWA.Wikis.Servlets;
 with AWA.Tags.Beans;
 with AWA.Counters.Definition;
 with Security.Permissions;
@@ -154,6 +158,13 @@ package AWA.Wikis.Modules is
                                 Page    : in out AWA.Wikis.Models.Wiki_Page_Ref'Class;
                                 Content : in out AWA.Wikis.Models.Wiki_Content_Ref'Class);
 
+   procedure Load_Image (Model    : in Wiki_Module;
+                         Wiki_Id  : in ADO.Identifier;
+                         Image_Id : in ADO.Identifier;
+                         Mime     : out Ada.Strings.Unbounded.Unbounded_String;
+                         Date     : out Ada.Calendar.Time;
+                         Into     : out ADO.Blob_Ref);
+
 private
    --  Copy the wiki page with its last version to the wiki space.
    procedure Copy_Page (Module  : in Wiki_Module;
@@ -174,7 +185,8 @@ private
                                 Content : in out AWA.Wikis.Models.Wiki_Content_Ref'Class);
 
    type Wiki_Module is new AWA.Modules.Module with record
-      Image_Prefix : Wiki.Strings.UString;
+      Image_Prefix  : Wiki.Strings.UString;
+      Image_Servlet : aliased AWA.Wikis.Servlets.Image_Servlet;
    end record;
 
 end AWA.Wikis.Modules;
