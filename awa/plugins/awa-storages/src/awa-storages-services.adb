@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-services -- Storage service
---  Copyright (C) 2012, 2013 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,7 @@
 -----------------------------------------------------------------------
 
 with Util.Log.Loggers;
+with Util.Strings;
 
 with ADO.Objects;
 with ADO.Queries;
@@ -314,10 +315,13 @@ package body AWA.Storages.Services is
                 Ada.Strings.Unbounded.To_String (Into.Path));
    end Get_Local_File;
 
-   procedure Create_Local_File (Service : in Storage_Service;
-                                Into    : out Storage_File) is
+   procedure Create_Local_File (Service : in out Storage_Service;
+                                Into    : out AWA.Storages.Storage_File) is
+      Tmp   : constant String := Service.Get_Config (Stores.Files.Tmp_Directory_Parameter.P);
+      Value : Integer;
    begin
-      null;
+      Util.Concurrent.Counters.Increment (Service.Temp_Id, Value);
+      Into.Path := Ada.Strings.Unbounded.To_Unbounded_String (Tmp & "/tmp-" & Util.Strings.Image (Value));
    end Create_Local_File;
 
    --  ------------------------------
