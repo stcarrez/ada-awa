@@ -186,6 +186,19 @@
 .wiki-text li {
     display: list-item;
 }
+.wiki-text dl {
+    float: left;
+    display: block;
+}
+.wiki-text dt {
+    clear: both;
+    float: left;
+}
+.wiki-text dd {
+    padding-left: 2em;
+    float: left;
+    clear: left;
+}
 /* Table of Contents */
 .wiki-toc {
     border: 1px solid #AAA;
@@ -233,6 +246,11 @@
 }
 .wiki-link-list {
     display: block;
+}
+.wiki-info-link {
+    padding: 0.3em;
+    padding-left: 0.5em;
+    display: inline-block;
 }
 .wiki-image-grid {
     float: left;
