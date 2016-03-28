@@ -61,7 +61,10 @@
                             <p>Version #{wikiView.version} by #{wikiView.author}</p>
                         </div>
                     </div>
-                    <h3 class="wiki-info">Tags</h3>
+                    <awa:tagList value='#{wikiView.tags}' id='qtags' styleClass="wiki-tag-list tagedit-list"
+                                 tagLink="#{contextPath}/wikis/tags/#{wikiView.wiki_id}/#{tagName}/recent"
+                                 var="tagName"
+                                 tagClass="tagedit-listelement tagedit-listelement-old"/>
                     <h3 class="wiki-info">Links</h3>
                     <div id="wiki-link-list" class="awa-list">
                         <ui:include src="lists/links.xhtml"/>
