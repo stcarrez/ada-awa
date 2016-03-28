@@ -76,6 +76,7 @@ package body AWA.Wikis.Beans is
       List    : AWA.Wikis.Models.Wiki_Image_Info_Vector;
       Sep     : Natural;
       Query   : ADO.Queries.Context;
+      Info    : AWA.Wikis.Models.Wiki_Image_Info;
    begin
       Sep := Wiki.Strings.Index (Link, "/");
       Query.Bind_Param ("wiki_id", Renderer.Wiki_Space_Id);
@@ -89,13 +90,14 @@ package body AWA.Wikis.Beans is
       Query.Set_Query (AWA.Wikis.Models.Query_Wiki_Image);
       AWA.Wikis.Models.List (List, Session, Query);
       if not List.Is_Empty then
-         declare
-            Info : AWA.Wikis.Models.Wiki_Image_Info := List.First_Element;
-         begin
-            Renderer.Images.Include (Link, Info);
-            Renderer.Make_Image_Link (Link, Info, URI, Width, Height);
-         end;
+         Info := List.First_Element;
+      else
+         Info.Id     := ADO.NO_IDENTIFIER;
+         Info.Width  := 0;
+         Info.Height := 0;
       end if;
+      Renderer.Images.Include (Link, Info);
+      Renderer.Make_Image_Link (Link, Info, URI, Width, Height);
    end Find_Image_Link;
 
    --  ------------------------------
