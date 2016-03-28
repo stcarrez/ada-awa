@@ -27,6 +27,13 @@
   </managed-bean>
 
   <managed-bean>
+    <description>The wiki page information bean gives the various statistics and information about a wiki page.</description>
+    <managed-bean-name>wikiPageInfo</managed-bean-name>
+    <managed-bean-class>AWA.Wikis.Beans.Wiki_Page_Info_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
     <description>A localized list of wiki page formats to be used for a f:selectItems</description>
     <managed-bean-name>wikiFormatList</managed-bean-name>
     <managed-bean-class>AWA.Wikis.Beans.Format_List_Bean</managed-bean-class>
@@ -306,6 +313,7 @@
     <url-pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}/#{wikiList.sort}</url-pattern>
     <url-pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}/#{wikiList.sort}/grid</url-pattern>
     <url-pattern>/wikis/history/#{wikiVersionList.wiki_id}/#{wikiVersionList.page_id}</url-pattern>
+    <url-pattern>/wikis/info/#{wikiPageInfo.wiki_id}/#{wikiPageInfo.page_id}</url-pattern>
     <url-pattern>/wikis/settings/#{adminWikiSpace.id}</url-pattern>
     <url-pattern>/wikis/*.html</url-pattern>
     <url-pattern>/wikis/images/*</url-pattern>
@@ -323,6 +331,7 @@
     <url-pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}/#{wikiList.sort}</url-pattern>
     <url-pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}/#{wikiList.sort}/grid</url-pattern>
     <url-pattern>/wikis/history/#{wikiVersionList.wiki_id}/#{wikiVersionList.page_id}</url-pattern>
+    <url-pattern>/wikis/info/#{wikiPageInfo.wiki_id}/#{wikiPageInfo.page_id}</url-pattern>
     <url-pattern>/wikis/settings/#{adminWikiSpace.id}</url-pattern>
     <url-pattern>/wikis/*.html</url-pattern>
   </filter-mapping>
@@ -336,6 +345,7 @@
     <url-pattern>/wikis/tags/.*</url-pattern>
     <url-pattern>/wikis/list/.*</url-pattern>
     <url-pattern>/wikis/history/.*</url-pattern>
+    <url-pattern>/wikis/info/.*</url-pattern>
     <url-pattern>/wikis/images/.*</url-pattern>
   </url-policy>
 
@@ -358,6 +368,11 @@
   <url-mapping>
     <pattern>/wikis/view/#{wikiView.wiki_id}/#{wikiView.name}</pattern>
     <view-id>/wikis/view.html</view-id>
+  </url-mapping>
+
+  <url-mapping>
+    <pattern>/wikis/info/#{wikiPageInfo.wiki_id}/#{wikiPageInfo.page_id}</pattern>
+    <view-id>/wikis/info.html</view-id>
   </url-mapping>
 
   <url-mapping>
