@@ -32,6 +32,7 @@ with ASF.Applications.Messages.Factory;
 with AWA.Services;
 with AWA.Services.Contexts;
 with AWA.Tags.Modules;
+with AWA.Tags.Models;
 with AWA.Helpers.Selectors;
 
 with Wiki.Documents;
@@ -78,7 +79,7 @@ package body AWA.Wikis.Beans is
    begin
       Sep := Wiki.Strings.Index (Link, "/");
       Query.Bind_Param ("wiki_id", Renderer.Wiki_Space_Id);
-      if Sep < 0 then
+      if Sep = 0 then
          Query.Bind_Param ("folder_name", String '("Images"));
          Sep := Link'First - 1;
       else
@@ -121,6 +122,55 @@ package body AWA.Wikis.Beans is
          end if;
       end if;
    end Make_Image_Link;
+
+   --  ------------------------------
+   --  Get the value identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Wiki_Links_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "count" then
+         return Util.Beans.Objects.To_Object (Integer (From.Images.Length));
+      else
+         return Util.Beans.Objects.Null_Object;
+      end if;
+   end Get_Value;
+
+   --  ------------------------------
+   --  Get the number of elements in the list.
+   --  ------------------------------
+   overriding
+   function Get_Count (From : Wiki_Links_Bean) return Natural is
+   begin
+      return Natural (From.Images.Length);
+   end Get_Count;
+
+   --  ------------------------------
+   --  Set the current row index.  Valid row indexes start at 1.
+   --  ------------------------------
+   overriding
+   procedure Set_Row_Index (From  : in out Wiki_Links_Bean;
+                            Index : in Natural) is
+   begin
+      if Index = 1 then
+         From.Pos := From.Images.First;
+      else
+         Image_Info_Maps.Next (From.Pos);
+      end if;
+      From.Info := Image_Info_Maps.Element (From.Pos);
+      From.Info_Bean := From.Info'Unchecked_Access;
+   end Set_Row_Index;
+
+   --  ------------------------------
+   --  Get the element at the current row index.
+   --  ------------------------------
+   overriding
+   function Get_Row (From  : in Wiki_Links_Bean) return Util.Beans.Objects.Object is
+   begin
+      return Util.Beans.Objects.To_Object (Value   => From.Info_Bean,
+                                           Storage => Util.Beans.Objects.STATIC);
+   end Get_Row;
 
    --  ------------------------------
    --  Get the page link that must be rendered from the wiki page link.
@@ -184,7 +234,9 @@ package body AWA.Wikis.Beans is
       end;
    end Get_Template;
 
+   --  ------------------------------
    --  Find a plugin knowing its name.
+   --  ------------------------------
    overriding
    function Find (Factory : in Wiki_Template_Bean;
                   Name    : in String) return Wiki.Plugins.Wiki_Plugin_Access is
@@ -224,6 +276,23 @@ package body AWA.Wikis.Beans is
    end Get_Value;
 
    --  ------------------------------
+   --  Set the wiki identifier.
+   --  ------------------------------
+   procedure Set_Wiki_Id (Into : in out Wiki_View_Bean;
+                          Id   : in ADO.Identifier) is
+      S : constant Wide_Wide_String := ADO.Identifier'Wide_Wide_Image (Id);
+   begin
+      Into.Wiki_Space_Id := Id;
+      Into.Plugins.Wiki_Space_Id := Id;
+      Into.Links.Wiki_Space_Id := Id;
+      Into.Links.Image_Prefix := Into.Module.Get_Image_Prefix;
+      Append (Into.Links.Page_Prefix, S (S'First + 1 .. S'Last));
+      Append (Into.Links.Page_Prefix, "/");
+      Append (Into.Links.Image_Prefix, S (S'First + 1 .. S'Last));
+      Append (Into.Links.Image_Prefix, "/");
+   end Set_Wiki_Id;
+
+   --  ------------------------------
    --  Set the value identified by the name.
    --  ------------------------------
    overriding
@@ -232,14 +301,7 @@ package body AWA.Wikis.Beans is
                         Value : in Util.Beans.Objects.Object) is
    begin
       if Name = "wiki_id" then
-         From.Wiki_Space_Id := ADO.Utils.To_Identifier (Value);
-         From.Plugins.Wiki_Space_Id := From.Wiki_Space_Id;
-         From.Links.Wiki_Space_Id := From.Wiki_Space_Id;
-         From.Links.Image_Prefix := From.Module.Get_Image_Prefix;
-         Append (From.Links.Page_Prefix, Util.Beans.Objects.To_Wide_Wide_String (Value));
-         Append (From.Links.Page_Prefix, "/");
-         Append (From.Links.Image_Prefix, Util.Beans.Objects.To_Wide_Wide_String (Value));
-         Append (From.Links.Image_Prefix, "/");
+         From.Set_Wiki_Id (ADO.Utils.To_Identifier (Value));
       else
          AWA.Wikis.Models.Wiki_View_Info (From).Set_Value (Name, Value);
       end if;
@@ -911,6 +973,20 @@ package body AWA.Wikis.Beans is
       if Name = "words" then
          return Util.Beans.Objects.To_Object (Value   => From.Words_Bean,
                                               Storage => Util.Beans.Objects.STATIC);
+      elsif Name = "links" then
+         return Util.Beans.Objects.To_Object (Value   => From.Links_Bean,
+                                              Storage => Util.Beans.Objects.STATIC);
+      elsif Name = "images" then
+         return Util.Beans.Objects.To_Object (Value   => From.Page.Links_Bean,
+                                              Storage => Util.Beans.Objects.STATIC);
+      elsif Name = "imageThumbnail" then
+         return Util.Beans.Objects.Null_Object;
+      elsif Name = "imageTitle" then
+         if Image_Info_Maps.Has_Element (From.Page.Links.Pos) then
+            return Util.Beans.Objects.To_Object (Image_Info_Maps.Key (From.Page.Links.Pos));
+         else
+            return Util.Beans.Objects.Null_Object;
+         end if;
       else
          return AWA.Wikis.Models.Wiki_Page_Info_Bean (From).Get_Value (Name);
       end if;
@@ -958,7 +1034,6 @@ package body AWA.Wikis.Beans is
          Links    : aliased Wiki.Filters.Collectors.Link_Collector_Type;
          Words    : aliased Wiki.Filters.Collectors.Word_Collector_Type;
          Filter   : aliased Wiki.Filters.Html.Html_Filter_Type;
-         Plugins  : Wiki.Plugins.Plugin_Factory_Access;
          Engine   : Wiki.Parsers.Parser;
 
          procedure Collect_Word (Pos : in Wiki.Filters.Collectors.Cursor) is
@@ -970,6 +1045,27 @@ package body AWA.Wikis.Beans is
             Into.Words.List.Append (Info);
          end Collect_Word;
 
+         procedure Collect_Link (Pos : in Wiki.Filters.Collectors.Cursor) is
+            Word  : constant Wiki.Strings.WString := Wiki.Filters.Collectors.WString_Maps.Key (Pos);
+            Info  : AWA.Tags.Models.Tag_Info;
+         begin
+            Info.Count := Wiki.Filters.Collectors.WString_Maps.Element (Pos);
+            Info.Tag := To_Unbounded_String (Wiki.Strings.To_String (Word));
+            Into.Links.List.Append (Info);
+         end Collect_Link;
+
+         procedure Collect_Image (Pos : in Wiki.Filters.Collectors.Cursor) is
+            Image : constant Wiki.Strings.WString := Wiki.Filters.Collectors.WString_Maps.Key (Pos);
+            Info  : AWA.Tags.Models.Tag_Info;
+            URI   : Wiki.Strings.UString;
+            W, H  : Natural;
+         begin
+            Into.Page.Links.Make_Image_Link (Link   => Image,
+                                             URI    => URI,
+                                             Width  => W,
+                                             Height => H);
+         end Collect_Image;
+
          Content : Wiki.Strings.UString;
       begin
          Content := Wiki.Strings.To_UString (Wiki.Strings.To_WString (To_String (Into.Page.Content)));
@@ -979,8 +1075,11 @@ package body AWA.Wikis.Beans is
          Engine.Add_Filter (Autolink'Unchecked_Access);
          Engine.Add_Filter (Filter'Unchecked_Access);
          Engine.Set_Syntax (Into.Page.Get_Syntax);
+         Engine.Set_Plugin_Factory (Into.Page.Plugins'Access);
          Engine.Parse (Content, Doc);
          Words.Iterate (Collect_Word'Access);
+         Links.Iterate (Collect_Link'Access);
+         Images.Iterate (Collect_Image'Access);
       end;
    end Load;
 
@@ -993,6 +1092,7 @@ package body AWA.Wikis.Beans is
    begin
       Object.Module     := Module;
       Object.Words_Bean := Object.Words'Access;
+      Object.Links_Bean := Object.Links'Access;
       Object.Page       := Get_Wiki_View_Bean ("wikiView");
       return Object.all'Access;
    end Create_Wiki_Page_Info_Bean;
