@@ -209,6 +209,28 @@
   </navigation-rule>
 
   <navigation-rule>
+    <from-view-id>/wikis/info.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>loaded</from-outcome>
+      <to-view-id>/wikis/info.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>not-visible</from-outcome>
+      <to-view-id>/wikis/protected.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>not-found</from-outcome>
+      <to-view-id>/wikis/create/#{wikiView.wiki_id}/#{wikiView.name}</to-view-id>
+      <redirect/>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>ado.objects.not_found</from-outcome>
+      <to-view-id>/wikis/create/#{wikiView.wiki_id}/#{wikiView.name}</to-view-id>
+      <redirect/>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
     <from-view-id>/wikis/forms/delete-page.xhtml</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
