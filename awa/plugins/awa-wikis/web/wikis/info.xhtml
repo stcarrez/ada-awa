@@ -65,15 +65,19 @@
                                  tagLink="#{contextPath}/wikis/tags/#{wikiView.wiki_id}/#{tagName}/recent"
                                  var="tagName"
                                  tagClass="tagedit-listelement tagedit-listelement-old"/>
-                    <h3 class="wiki-info">Links</h3>
+                    <h3 class="wiki-info">#{wikiMsg.wiki_info_pages_label}</h3>
+                    <div id="wiki-link-list" class="awa-list">
+                        <ui:include src="lists/pages.xhtml"/>
+                    </div>
+                    <h3 class="wiki-info">#{wikiMsg.wiki_info_links_label}</h3>
                     <div id="wiki-link-list" class="awa-list">
                         <ui:include src="lists/links.xhtml"/>
                     </div>
-                    <h3 class="wiki-info">Images</h3>
+                    <h3 class="wiki-info">#{wikiMsg.wiki_info_images_label}</h3>
                     <div id="wiki-image-list" class="awa-list">
                         <ui:include src="lists/images.xhtml"/>
                     </div>
-                    <h3 class="wiki-info">Words</h3>
+                    <h3 class="wiki-info">#{wikiMsg.wiki_info_words_label}</h3>
                     <div id="wiki-word-list" class="awa-list">
                         <awa:tagCloud
                                     value="#{wikiPageInfo.words}" styleClass="tag-cloud" layout="dispatch"
