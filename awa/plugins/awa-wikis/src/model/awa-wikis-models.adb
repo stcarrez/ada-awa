@@ -2422,5 +2422,62 @@ package body AWA.Wikis.Models is
       end if;
    end Set_Value;
 
+   procedure Op_Load (Bean    : in out Wiki_Page_Info_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Load (Bean    : in out Wiki_Page_Info_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Wiki_Page_Info_Bean'Class (Bean).Load (Outcome);
+   end Op_Load;
+   package Binding_Wiki_Page_Info_Bean_1 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Wiki_Page_Info_Bean,
+                                                      Method => Op_Load,
+                                                      Name   => "load");
+
+   Binding_Wiki_Page_Info_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
+     := (1 => Binding_Wiki_Page_Info_Bean_1.Proxy'Access
+     );
+
+   --  ------------------------------
+   --  This bean provides some methods that can be used in a Method_Expression.
+   --  ------------------------------
+   overriding
+   function Get_Method_Bindings (From : in Wiki_Page_Info_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
+   begin
+      return Binding_Wiki_Page_Info_Bean_Array'Access;
+   end Get_Method_Bindings;
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Wiki_Page_Info_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "wiki_id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Wiki_Id));
+      elsif Name = "page_id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Page_Id));
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Wiki_Page_Info_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "wiki_id" then
+         Item.Wiki_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "page_id" then
+         Item.Page_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      end if;
+   end Set_Value;
+
 
 end AWA.Wikis.Models;

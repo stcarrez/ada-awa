@@ -922,6 +922,35 @@ package AWA.Wikis.Models is
    procedure Load (Bean : in out Wiki_Version_List_Bean;
                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
+   type Wiki_Page_Info_Bean is abstract limited
+     new Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with  record
+
+      --  the wiki identifier.
+      Wiki_Id : ADO.Identifier;
+
+      --  the wiki page identifier.
+      Page_Id : ADO.Identifier;
+   end record;
+
+   --  This bean provides some methods that can be used in a Method_Expression.
+   overriding
+   function Get_Method_Bindings (From : in Wiki_Page_Info_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access;
+
+   --  Get the bean attribute identified by the name.
+   overriding
+   function Get_Value (From : in Wiki_Page_Info_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Wiki_Page_Info_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   procedure Load (Bean : in out Wiki_Page_Info_Bean;
+                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
 
 private
    WIKI_SPACE_NAME : aliased constant String := "awa_wiki_space";
