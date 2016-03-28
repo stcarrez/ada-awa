@@ -21,6 +21,9 @@
         xmlns:c="http://java.sun.com/jstl/core"
 	    xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
+    <h:panelGroup rendered="#{wikiPageInfo.links.count == 0}">
+        #{wikiMsg.wiki_page_info_no_link}
+    </h:panelGroup>
         <h:list var="link" value="#{wikiPageInfo.links}">
             <div class='awa-list-item' id="p_#{wikiPageInfo.links.rowIndex}">
                 <div class='awa-list-col wiki-link-name'>
