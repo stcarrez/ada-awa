@@ -979,8 +979,11 @@ package body AWA.Wikis.Beans is
       if Name = "words" then
          return Util.Beans.Objects.To_Object (Value   => From.Words_Bean,
                                               Storage => Util.Beans.Objects.STATIC);
-      elsif Name = "links" then
+      elsif Name = "pages" then
          return Util.Beans.Objects.To_Object (Value   => From.Links_Bean,
+                                              Storage => Util.Beans.Objects.STATIC);
+      elsif Name = "links" then
+         return Util.Beans.Objects.To_Object (Value   => From.Ext_Links_Bean,
                                               Storage => Util.Beans.Objects.STATIC);
       elsif Name = "images" then
          return Util.Beans.Objects.To_Object (Value   => From.Page.Links_Bean,
@@ -1052,12 +1055,16 @@ package body AWA.Wikis.Beans is
          end Collect_Word;
 
          procedure Collect_Link (Pos : in Wiki.Filters.Collectors.Cursor) is
-            Word  : constant Wiki.Strings.WString := Wiki.Filters.Collectors.WString_Maps.Key (Pos);
+            Link  : constant Wiki.Strings.WString := Wiki.Filters.Collectors.WString_Maps.Key (Pos);
             Info  : AWA.Tags.Models.Tag_Info;
          begin
             Info.Count := Wiki.Filters.Collectors.WString_Maps.Element (Pos);
-            Info.Tag := To_Unbounded_String (Wiki.Strings.To_String (Word));
-            Into.Links.List.Append (Info);
+            Info.Tag := To_Unbounded_String (Wiki.Strings.To_String (Link));
+            if Wiki.Helpers.Is_Url (Link) then
+               Into.Ext_Links.List.Append (Info);
+            else
+               Into.Links.List.Append (Info);
+            end if;
          end Collect_Link;
 
          procedure Collect_Image (Pos : in Wiki.Filters.Collectors.Cursor) is
@@ -1096,10 +1103,11 @@ package body AWA.Wikis.Beans is
                                         return Util.Beans.Basic.Readonly_Bean_Access is
       Object  : constant Wiki_Page_Info_Bean_Access := new Wiki_Page_Info_Bean;
    begin
-      Object.Module     := Module;
-      Object.Words_Bean := Object.Words'Access;
-      Object.Links_Bean := Object.Links'Access;
-      Object.Page       := Get_Wiki_View_Bean ("wikiView");
+      Object.Module         := Module;
+      Object.Words_Bean     := Object.Words'Access;
+      Object.Links_Bean     := Object.Links'Access;
+      Object.Ext_Links_Bean := Object.Ext_Links'Access;
+      Object.Page           := Get_Wiki_View_Bean ("wikiView");
       return Object.all'Access;
    end Create_Wiki_Page_Info_Bean;
 
