@@ -61,21 +61,23 @@
                             <p>Version #{wikiView.version} by #{wikiView.author}</p>
                         </div>
                     </div>
-                    <h3>Tags</h3>
-                    <h3>Links</h3>
+                    <h3 class="wiki-info">Tags</h3>
+                    <h3 class="wiki-info">Links</h3>
                     <div id="wiki-link-list" class="awa-list">
                         <ui:include src="lists/links.xhtml"/>
                     </div>
-                    <h3>Images</h3>
+                    <h3 class="wiki-info">Images</h3>
                     <div id="wiki-image-list" class="awa-list">
                         <ui:include src="lists/images.xhtml"/>
                     </div>
-                    <h3>Words</h3>
-                    <awa:tagCloud
-                                value="#{wikiPageInfo.words}" styleClass="tag-cloud" layout="dispatch"
-                                var="tagName" maxWeight="48" minWeight="16" rows="60"
-                                tagLink="#{contextPath}/wikis/tags/#{wikiPageInfo.wiki_id}/#{tagName}/recent"/>
+                    <h3 class="wiki-info">Words</h3>
+                    <div id="wiki-word-list" class="awa-list">
+                        <awa:tagCloud
+                                    value="#{wikiPageInfo.words}" styleClass="tag-cloud" layout="dispatch"
+                                    var="tagName" maxWeight="48" minWeight="16" rows="600"
+                                    tagLink="#{contextPath}/wikis/tags/#{wikiPageInfo.wiki_id}/#{tagName}/recent"/>
 
+                    </div>
                 </div>
                 <h:panelGroup rendered="#{not empty wikiView.right_side}">
                     <div class="grid_2">
