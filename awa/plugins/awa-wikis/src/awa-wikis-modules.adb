@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-modules -- Module wikis
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2015, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -71,6 +71,10 @@ package body AWA.Wikis.Modules is
       Register.Register (Plugin => Plugin,
                          Name   => "AWA.Wikis.Beans.Wiki_Page_Bean",
                          Handler => AWA.Wikis.Beans.Create_Wiki_Page_Bean'Access);
+
+      Register.Register (Plugin => Plugin,
+                         Name   => "AWA.Wikis.Beans.Wiki_Page_Info_Bean",
+                         Handler => AWA.Wikis.Beans.Create_Wiki_Page_Info_Bean'Access);
 
       Register.Register (Plugin => Plugin,
                          Name   => "AWA.Wikis.Beans.Wiki_List_Bean",
