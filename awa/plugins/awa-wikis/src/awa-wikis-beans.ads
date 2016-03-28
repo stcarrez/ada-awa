@@ -376,16 +376,20 @@ package AWA.Wikis.Beans is
    --  It analyzes the page content and extract the list of links, images, words, templates
    --  used in the page.
    type Wiki_Page_Info_Bean is new AWA.Wikis.Models.Wiki_Page_Info_Bean with record
-      Module        : Modules.Wiki_Module_Access := null;
-      Page          : Wiki_View_Bean_Access;
+      Module         : Modules.Wiki_Module_Access := null;
+      Page           : Wiki_View_Bean_Access;
 
       --  List of words contained in the wiki page.
-      Words         : aliased AWA.Tags.Beans.Tag_Info_List_Bean;
-      Words_Bean    : AWA.Tags.Beans.Tag_Info_List_Bean_Access;
+      Words          : aliased AWA.Tags.Beans.Tag_Info_List_Bean;
+      Words_Bean     : AWA.Tags.Beans.Tag_Info_List_Bean_Access;
 
-      --  List of links used in the wiki page.
-      Links         : aliased AWA.Tags.Beans.Tag_Info_List_Bean;
-      Links_Bean    : AWA.Tags.Beans.Tag_Info_List_Bean_Access;
+      --  List of wiki page links used in the wiki page.
+      Links          : aliased AWA.Tags.Beans.Tag_Info_List_Bean;
+      Links_Bean     : AWA.Tags.Beans.Tag_Info_List_Bean_Access;
+
+      --  List of external links used in the wiki page.
+      Ext_Links      : aliased AWA.Tags.Beans.Tag_Info_List_Bean;
+      Ext_Links_Bean : AWA.Tags.Beans.Tag_Info_List_Bean_Access;
    end record;
    type Wiki_Page_Info_Bean_Access is access all Wiki_Page_Info_Bean'Class;
 
