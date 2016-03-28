@@ -63,7 +63,13 @@
                     </div>
                     <h3>Tags</h3>
                     <h3>Links</h3>
+                    <div id="wiki-link-list" class="awa-list">
+                        <ui:include src="lists/links.xhtml"/>
+                    </div>
                     <h3>Images</h3>
+                    <div id="wiki-image-list" class="awa-list">
+                        <ui:include src="lists/images.xhtml"/>
+                    </div>
                     <h3>Words</h3>
                     <awa:tagCloud
                                 value="#{wikiPageInfo.words}" styleClass="tag-cloud" layout="dispatch"
