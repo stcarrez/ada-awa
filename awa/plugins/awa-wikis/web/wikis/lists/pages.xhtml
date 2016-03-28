@@ -1,0 +1,34 @@
+<!-- List of links used in a wiki page
+  -  Copyright (C) 2016 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<ui:composition
+        xmlns:awa="http://code.google.com/p/ada-awa/jsf"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:c="http://java.sun.com/jstl/core"
+	    xmlns:u="http://code.google.com/p/ada-asf/util"
+        xmlns:h="http://java.sun.com/jsf/html">
+    <h:panelGroup rendered="#{wikiPageInfo.pages.count == 0}">
+        #{wikiMsg.wiki_page_info_no_page}
+    </h:panelGroup>
+        <h:list var="link" value="#{wikiPageInfo.pages}">
+            <div class='wiki-info-link' id="p_#{wikiPageInfo.pages.rowIndex}">
+                <div class='awa-list-col wiki-link-name'>
+                    <a href="#{link.tag}">#{link.tag}</a>
+                </div>
+            </div>
+        </h:list>
+</ui:composition>
