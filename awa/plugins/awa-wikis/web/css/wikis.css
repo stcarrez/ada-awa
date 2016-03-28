@@ -226,3 +226,32 @@
 .wiki-img-right {
     float: right;
 }
+.wiki-info {
+    padding-top: 1em;
+    float: left;
+    clear: both;
+}
+.wiki-link-list {
+    display: block;
+}
+.wiki-image-grid {
+    float: left;
+    width: 160px;
+    height: 80px;
+    overflow: hidden;
+    font-size: 0.8em;
+    padding: 0.5em;
+}
+.wiki-image-grid img {
+    margin-left: auto;
+    margin-right: auto;
+    display: block
+}
+.wiki-image-grid span {
+    display: block;
+    width: 150px;
+    text-align: center;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #eee;
+}
