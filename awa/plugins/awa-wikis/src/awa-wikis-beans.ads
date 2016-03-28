@@ -35,7 +35,6 @@ with Wiki.Plugins.Templates;
 
 with AWA.Wikis.Modules;
 with AWA.Wikis.Models;
-with AWA.Tags.Models;
 with AWA.Tags.Beans;
 with AWA.Counters.Beans;
 with AWA.Components.Wikis;
@@ -58,10 +57,18 @@ package AWA.Wikis.Beans is
                                                 Equivalent_Keys => "=",
                                                 "="             => AWA.Wikis.Models."=");
 
-   type Wiki_Links_Bean is new AWA.Components.Wikis.Link_Renderer_Bean with record
+   type Wiki_Links_Bean is new AWA.Components.Wikis.Link_Renderer_Bean
+     and Util.Beans.Basic.List_Bean with record
       --  The wiki space identifier.
       Wiki_Space_Id : ADO.Identifier;
       Images        : Image_Info_Maps.Map;
+
+      --  The info bean used for the list iterator.
+      Info          : aliased AWA.Wikis.Models.Wiki_Image_Info;
+      Info_Bean     : Util.Beans.Basic.Readonly_Bean_Access;
+
+      --  Current index when iterating over the list.
+      Pos           : Image_Info_Maps.Cursor;
    end record;
 
    procedure Make_Image_Link (Renderer : in out Wiki_Links_Bean;
@@ -91,6 +98,24 @@ package AWA.Wikis.Beans is
                              Link     : in Wiki.Strings.WString;
                              URI      : out Unbounded_Wide_Wide_String;
                              Exists   : out Boolean);
+
+   --  Get the value identified by the name.
+   overriding
+   function Get_Value (From : in Wiki_Links_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Get the number of elements in the list.
+   overriding
+   function Get_Count (From : Wiki_Links_Bean) return Natural;
+
+   --  Set the current row index.  Valid row indexes start at 1.
+   overriding
+   procedure Set_Row_Index (From  : in out Wiki_Links_Bean;
+                            Index : in Natural);
+
+   --  Get the element at the current row index.
+   overriding
+   function Get_Row (From  : in Wiki_Links_Bean) return Util.Beans.Objects.Object;
 
    --  The Wiki template plugin that retrieves the template content from the Wiki space.
    type Wiki_Template_Bean is new Wiki.Plugins.Templates.Template_Plugin
@@ -141,6 +166,10 @@ package AWA.Wikis.Beans is
       Plugins_Bean  : Util.Beans.Basic.Readonly_Bean_Access;
    end record;
    type Wiki_View_Bean_Access is access all Wiki_View_Bean'Class;
+
+   --  Set the wiki identifier.
+   procedure Set_Wiki_Id (Into : in out Wiki_View_Bean;
+                          Id   : in ADO.Identifier);
 
    --  Get the value identified by the name.
    overriding
@@ -349,8 +378,14 @@ package AWA.Wikis.Beans is
    type Wiki_Page_Info_Bean is new AWA.Wikis.Models.Wiki_Page_Info_Bean with record
       Module        : Modules.Wiki_Module_Access := null;
       Page          : Wiki_View_Bean_Access;
+
+      --  List of words contained in the wiki page.
       Words         : aliased AWA.Tags.Beans.Tag_Info_List_Bean;
       Words_Bean    : AWA.Tags.Beans.Tag_Info_List_Bean_Access;
+
+      --  List of links used in the wiki page.
+      Links         : aliased AWA.Tags.Beans.Tag_Info_List_Bean;
+      Links_Bean    : AWA.Tags.Beans.Tag_Info_List_Bean_Access;
    end record;
    type Wiki_Page_Info_Bean_Access is access all Wiki_Page_Info_Bean'Class;
 
