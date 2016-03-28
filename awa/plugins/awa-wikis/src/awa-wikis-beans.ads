@@ -35,6 +35,7 @@ with Wiki.Plugins.Templates;
 
 with AWA.Wikis.Modules;
 with AWA.Wikis.Models;
+with AWA.Tags.Models;
 with AWA.Tags.Beans;
 with AWA.Counters.Beans;
 with AWA.Components.Wikis;
@@ -151,6 +152,9 @@ package AWA.Wikis.Beans is
    procedure Set_Value (From  : in out Wiki_View_Bean;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object);
+
+   --  Get the wiki syntax for the page.
+   function Get_Syntax (From : in Wiki_View_Bean) return Wiki.Wiki_Syntax;
 
    --  Load the information about the wiki page to display it.
    overriding
@@ -335,6 +339,39 @@ package AWA.Wikis.Beans is
    --  Create the Post_List_Bean bean instance.
    function Create_Wiki_Version_List_Bean (Module : in AWA.Wikis.Modules.Wiki_Module_Access)
                                            return Util.Beans.Basic.Readonly_Bean_Access;
+
+   --  ------------------------------
+   --  Wiki page info Bean
+   --  ------------------------------
+   --  The <tt>Wiki_Page_Info_Bean</tt> is used to provide information about a wiki page.
+   --  It analyzes the page content and extract the list of links, images, words, templates
+   --  used in the page.
+   type Wiki_Page_Info_Bean is new AWA.Wikis.Models.Wiki_Page_Info_Bean with record
+      Module        : Modules.Wiki_Module_Access := null;
+      Page          : Wiki_View_Bean_Access;
+      Words         : aliased AWA.Tags.Beans.Tag_Info_List_Bean;
+      Words_Bean    : AWA.Tags.Beans.Tag_Info_List_Bean_Access;
+   end record;
+   type Wiki_Page_Info_Bean_Access is access all Wiki_Page_Info_Bean'Class;
+
+   --  Get the value identified by the name.
+   overriding
+   function Get_Value (From : in Wiki_Page_Info_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the value identified by the name.
+   overriding
+   procedure Set_Value (From  : in out Wiki_Page_Info_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   overriding
+   procedure Load (Into    : in out Wiki_Page_Info_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Create the Wiki_Page_Info_Bean bean instance.
+   function Create_Wiki_Page_Info_Bean (Module : in AWA.Wikis.Modules.Wiki_Module_Access)
+                                        return Util.Beans.Basic.Readonly_Bean_Access;
 
    type Init_Flag is (INIT_WIKI_LIST);
    type Init_Map is array (Init_Flag) of Boolean;
