@@ -784,12 +784,16 @@ package body AWA.Wikis.Beans is
       Count_Query : ADO.Queries.Context;
       Tag_Id      : ADO.Identifier;
       First       : constant Natural  := (Into.Page - 1) * Into.Page_Size;
+      Tag         : constant String := Ada.Strings.Unbounded.To_String (Into.Tag);
    begin
       if Into.Wiki_Id = ADO.NO_IDENTIFIER then
          return;
       end if;
-      AWA.Tags.Modules.Find_Tag_Id (Session, Ada.Strings.Unbounded.To_String (Into.Tag), Tag_Id);
-      if Tag_Id /= ADO.NO_IDENTIFIER then
+      if Tag'Length > 0 then
+         AWA.Tags.Modules.Find_Tag_Id (Session, Tag, Tag_Id);
+         if Tag_Id = ADO.NO_IDENTIFIER then
+            return;
+         end if;
          Query.Set_Query (AWA.Wikis.Models.Query_Wiki_Page_Tag_List);
          Query.Bind_Param (Name => "tag", Value => Tag_Id);
          Count_Query.Set_Count_Query (AWA.Wikis.Models.Query_Wiki_Page_Tag_List);
@@ -1004,8 +1008,10 @@ package body AWA.Wikis.Beans is
    begin
       if Name = "wiki_id" and not Util.Beans.Objects.Is_Empty (Value) then
          From.Wiki_Id := ADO.Utils.To_Identifier (Value);
+         From.Page.Set_Wiki_Id (From.Wiki_Id);
       elsif Name = "page_id" and not Util.Beans.Objects.Is_Empty (Value) then
          From.Page_Id := ADO.Utils.To_Identifier (Value);
+         From.Page.Id := From.Page_Id;
       end if;
    end Set_Value;
 
@@ -1021,8 +1027,6 @@ package body AWA.Wikis.Beans is
       end if;
 
       --  Load the wiki page first.
-      Into.Page.Wiki_Space_Id := Into.Wiki_Id;
-      Into.Page.Id := Into.Page_Id;
       Into.Page.Load (Outcome);
       if Outcome /= "loaded" then
          return;
