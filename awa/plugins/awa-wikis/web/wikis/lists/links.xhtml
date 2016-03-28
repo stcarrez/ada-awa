@@ -25,10 +25,9 @@
         #{wikiMsg.wiki_page_info_no_link}
     </h:panelGroup>
         <h:list var="link" value="#{wikiPageInfo.links}">
-            <div class='awa-list-item' id="p_#{wikiPageInfo.links.rowIndex}">
+            <div class='wiki-info-link' id="p_#{wikiPageInfo.links.rowIndex}">
                 <div class='awa-list-col wiki-link-name'>
                     <a href="#{link.tag}">#{link.tag}</a>
-                    #{link.count}
                 </div>
             </div>
         </h:list>
