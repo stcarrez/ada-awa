@@ -34,6 +34,11 @@ with AWA.Services.Contexts;
 with AWA.Tags.Modules;
 with AWA.Helpers.Selectors;
 
+with Wiki.Documents;
+with Wiki.Parsers;
+with Wiki.Filters.Html;
+with Wiki.Filters.Autolink;
+with Wiki.Filters.Collectors;
 with Wiki.Helpers;
 package body AWA.Wikis.Beans is
 
@@ -239,6 +244,27 @@ package body AWA.Wikis.Beans is
          AWA.Wikis.Models.Wiki_View_Info (From).Set_Value (Name, Value);
       end if;
    end Set_Value;
+
+   --  ------------------------------
+   --  Get the wiki syntax for the page.
+   --  ------------------------------
+   function Get_Syntax (From : in Wiki_View_Bean) return Wiki.Wiki_Syntax is
+   begin
+      case From.Format is
+         when Models.FORMAT_CREOLE =>
+            return Wiki.SYNTAX_CREOLE;
+         when Models.FORMAT_MARKDOWN =>
+            return Wiki.SYNTAX_MARKDOWN;
+         when Models.FORMAT_HTML =>
+            return Wiki.SYNTAX_HTML;
+         when Models.FORMAT_DOTCLEAR =>
+            return Wiki.SYNTAX_DOTCLEAR;
+         when Models.FORMAT_MEDIAWIKI =>
+            return Wiki.SYNTAX_MEDIA_WIKI;
+         when Models.FORMAT_PHPBB =>
+            return Wiki.SYNTAX_PHPBB;
+      end case;
+   end Get_Syntax;
 
    --  ------------------------------
    --  Load the information about the wiki page to display it.
@@ -874,6 +900,102 @@ package body AWA.Wikis.Beans is
       Object.Page_Id    := ADO.NO_IDENTIFIER;
       return Object.all'Access;
    end Create_Wiki_Version_List_Bean;
+
+   --  ------------------------------
+   --  Get the value identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Wiki_Page_Info_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "words" then
+         return Util.Beans.Objects.To_Object (Value   => From.Words_Bean,
+                                              Storage => Util.Beans.Objects.STATIC);
+      else
+         return AWA.Wikis.Models.Wiki_Page_Info_Bean (From).Get_Value (Name);
+      end if;
+   end Get_Value;
+
+   --  ------------------------------
+   --  Set the value identified by the name.
+   --  ------------------------------
+   overriding
+   procedure Set_Value (From  : in out Wiki_Page_Info_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "wiki_id" and not Util.Beans.Objects.Is_Empty (Value) then
+         From.Wiki_Id := ADO.Utils.To_Identifier (Value);
+      elsif Name = "page_id" and not Util.Beans.Objects.Is_Empty (Value) then
+         From.Page_Id := ADO.Utils.To_Identifier (Value);
+      end if;
+   end Set_Value;
+
+   overriding
+   procedure Load (Into    : in out Wiki_Page_Info_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      use type ADO.Identifier;
+      use type Ada.Strings.Unbounded.Unbounded_String;
+   begin
+      if Into.Wiki_Id = ADO.NO_IDENTIFIER or Into.Page_Id = ADO.NO_IDENTIFIER then
+         Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
+         return;
+      end if;
+
+      --  Load the wiki page first.
+      Into.Page.Wiki_Space_Id := Into.Wiki_Id;
+      Into.Page.Id := Into.Page_Id;
+      Into.Page.Load (Outcome);
+      if Outcome /= "loaded" then
+         return;
+      end if;
+      declare
+         use Ada.Strings.Unbounded;
+
+         Doc      : Wiki.Documents.Document;
+         Autolink : aliased Wiki.Filters.Autolink.Autolink_Filter;
+         Images   : aliased Wiki.Filters.Collectors.Image_Collector_Type;
+         Links    : aliased Wiki.Filters.Collectors.Link_Collector_Type;
+         Words    : aliased Wiki.Filters.Collectors.Word_Collector_Type;
+         Filter   : aliased Wiki.Filters.Html.Html_Filter_Type;
+         Plugins  : Wiki.Plugins.Plugin_Factory_Access;
+         Engine   : Wiki.Parsers.Parser;
+
+         procedure Collect_Word (Pos : in Wiki.Filters.Collectors.Cursor) is
+            Word  : constant Wiki.Strings.WString := Wiki.Filters.Collectors.WString_Maps.Key (Pos);
+            Info  : AWA.Tags.Models.Tag_Info;
+         begin
+            Info.Count := Wiki.Filters.Collectors.WString_Maps.Element (Pos);
+            Info.Tag := To_Unbounded_String (Wiki.Strings.To_String (Word));
+            Into.Words.List.Append (Info);
+         end Collect_Word;
+
+         Content : Wiki.Strings.UString;
+      begin
+         Content := Wiki.Strings.To_UString (Wiki.Strings.To_WString (To_String (Into.Page.Content)));
+         Engine.Add_Filter (Words'Unchecked_Access);
+         Engine.Add_Filter (Links'Unchecked_Access);
+         Engine.Add_Filter (Images'Unchecked_Access);
+         Engine.Add_Filter (Autolink'Unchecked_Access);
+         Engine.Add_Filter (Filter'Unchecked_Access);
+         Engine.Set_Syntax (Into.Page.Get_Syntax);
+         Engine.Parse (Content, Doc);
+         Words.Iterate (Collect_Word'Access);
+      end;
+   end Load;
+
+   --  ------------------------------
+   --  Create the Wiki_Page_Info_Bean bean instance.
+   --  ------------------------------
+   function Create_Wiki_Page_Info_Bean (Module : in AWA.Wikis.Modules.Wiki_Module_Access)
+                                        return Util.Beans.Basic.Readonly_Bean_Access is
+      Object  : constant Wiki_Page_Info_Bean_Access := new Wiki_Page_Info_Bean;
+   begin
+      Object.Module     := Module;
+      Object.Words_Bean := Object.Words'Access;
+      Object.Page       := Get_Wiki_View_Bean ("wikiView");
+      return Object.all'Access;
+   end Create_Wiki_Page_Info_Bean;
 
    --  ------------------------------
    --  Load the list of wikis.
