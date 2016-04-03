@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-services -- AWA Event Manager
---  Copyright (C) 2012, 2015 Stephane Carrez
+--  Copyright (C) 2012, 2015, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -366,6 +366,21 @@ package body AWA.Events.Services is
          Manager.Dispatchers (I).Start;
       end loop;
    end Start;
+
+   --  ------------------------------
+   --  Stop the event manager.
+   --  ------------------------------
+   procedure Stop (Manager : in out Event_Manager) is
+      use type AWA.Events.Dispatchers.Dispatcher_Access;
+   begin
+      Log.Info ("Stopping the event manager");
+
+      --  Stop the dispatchers.
+      for I in Manager.Dispatchers'Range loop
+         exit when Manager.Dispatchers (I) = null;
+         Manager.Dispatchers (I).Stop;
+      end loop;
+   end Stop;
 
    --  ------------------------------
    --  Get the application associated with the event manager.
