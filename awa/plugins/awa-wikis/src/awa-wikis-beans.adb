@@ -198,10 +198,50 @@ package body AWA.Wikis.Beans is
    overriding
    function Get_Value (From : in Wiki_Template_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
-      pragma Unreferenced (From, Name);
    begin
-      return Util.Beans.Objects.Null_Object;
+      if Name = "count" then
+         return Util.Beans.Objects.To_Object (Natural (From.Templates.Length));
+      else
+         return Util.Beans.Objects.Null_Object;
+      end if;
    end Get_Value;
+
+   --  ------------------------------
+   --  Get the number of elements in the list.
+   --  ------------------------------
+   overriding
+   function Get_Count (From : in Wiki_Template_Bean) return Natural is
+   begin
+      return Natural (From.Templates.Length);
+   end Get_Count;
+
+   --  ------------------------------
+   --  Set the current row index.  Valid row indexes start at 1.
+   --  ------------------------------
+   overriding
+   procedure Set_Row_Index (From  : in out Wiki_Template_Bean;
+                            Index : in Natural) is
+   begin
+      if Index = 1 then
+         From.Pos := From.Templates.First;
+      else
+         Template_Maps.Next (From.Pos);
+      end if;
+      From.Info.Is_Public := False;
+      From.Info.Id := ADO.NO_IDENTIFIER;
+      From.Info.Name := Ada.Strings.Unbounded.To_Unbounded_String (Template_Maps.Key (From.Pos));
+      From.Info_Bean := From.Info'Unchecked_Access;
+   end Set_Row_Index;
+
+   --  ------------------------------
+   --  Get the element at the current row index.
+   --  ------------------------------
+   overriding
+   function Get_Row (From  : in Wiki_Template_Bean) return Util.Beans.Objects.Object is
+   begin
+      return Util.Beans.Objects.To_Object (Value   => From.Info_Bean,
+                                           Storage => Util.Beans.Objects.STATIC);
+   end Get_Row;
 
    --  ------------------------------
    --  Get the template content for the plugin evaluation.
@@ -215,7 +255,7 @@ package body AWA.Wikis.Beans is
       package ASC renames AWA.Services.Contexts;
 
       First   : constant Wiki.Attributes.Cursor := Wiki.Attributes.First (Params);
-      Name    : constant WString := "Template:" & Wiki.Attributes.Get_Wide_Value (First);
+      Name    : constant String := "Template:" & Wiki.Attributes.Get_Value (First);
       Pos     : constant Template_Maps.Cursor := Plugin.Templates.Find (Name);
       Query   : ADO.Queries.Context;
    begin
@@ -223,7 +263,7 @@ package body AWA.Wikis.Beans is
          Template := Template_Maps.Element (Pos);
       else
          Query.Bind_Param ("wiki_id", Plugin.Wiki_Space_Id);
-         Query.Bind_Param ("name", Wiki.Strings.To_String (Name));
+         Query.Bind_Param ("name", Name);
          Query.Set_Query (AWA.Wikis.Models.Query_Wiki_Page_Content);
          declare
             Ctx     : constant ASC.Service_Context_Access := ASC.Current;
