@@ -62,11 +62,17 @@ package body AWA.Images.Modules is
    procedure Configure (Plugin : in out Image_Module;
                         Props  : in ASF.Applications.Config) is
       pragma Unreferenced (Props);
+
+      use type AWA.Jobs.Modules.Job_Module_Access;
    begin
       --  Create the image manager when everything is initialized.
       Plugin.Manager := Plugin.Create_Image_Manager;
       Plugin.Job_Module := AWA.Jobs.Modules.Get_Job_Module;
-      Plugin.Job_Module.Register (Definition => Thumbnail_Job_Definition.Factory);
+      if Plugin.Job_Module = null then
+         Log.Error ("Cannot find the AWA Job module for the image thumbnail generation");
+      else
+         Plugin.Job_Module.Register (Definition => Thumbnail_Job_Definition.Factory);
+      end if;
    end Configure;
 
    --  ------------------------------
