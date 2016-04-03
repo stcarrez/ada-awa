@@ -17,6 +17,7 @@
 -----------------------------------------------------------------------
 
 with Ada.Strings.Unbounded;
+with Ada.Strings.Hash;
 with Ada.Strings.Wide_Wide_Unbounded;
 with Ada.Strings.Wide_Wide_Hash;
 with Ada.Containers.Indefinite_Hashed_Maps;
@@ -58,9 +59,9 @@ package AWA.Wikis.Beans is
                                                 "="             => AWA.Wikis.Models."=");
 
    package Template_Maps is
-     new Ada.Containers.Indefinite_Hashed_Maps (Key_Type        => Wiki.Strings.WString,
+     new Ada.Containers.Indefinite_Hashed_Maps (Key_Type        => String,
                                                 Element_Type    => Wiki.Strings.UString,
-                                                Hash            => Ada.Strings.Wide_Wide_Hash,
+                                                Hash            => Ada.Strings.Hash,
                                                 Equivalent_Keys => "=",
                                                 "="             => "=");
 
@@ -127,18 +128,38 @@ package AWA.Wikis.Beans is
    --  The Wiki template plugin that retrieves the template content from the Wiki space.
    type Wiki_Template_Bean is new Wiki.Plugins.Templates.Template_Plugin
       and Wiki.Plugins.Plugin_Factory
-      and Util.Beans.Basic.Readonly_Bean with record
+      and Util.Beans.Basic.List_Bean with record
       --  The wiki space identifier.
       Wiki_Space_Id : ADO.Identifier;
 
       --  The list of templates that have been loaded.
       Templates     : Template_Maps.Map;
+
+      --  The info bean used for the list iterator.
+      Info          : aliased AWA.Wikis.Models.Wiki_Info;
+      Info_Bean     : Util.Beans.Basic.Readonly_Bean_Access;
+
+      --  Current index when iterating over the list.
+      Pos           : Template_Maps.Cursor;
    end record;
 
    --  Get the value identified by the name.
    overriding
    function Get_Value (From : in Wiki_Template_Bean;
                        Name : in String) return Util.Beans.Objects.Object;
+
+   --  Get the number of elements in the list.
+   overriding
+   function Get_Count (From : Wiki_Template_Bean) return Natural;
+
+   --  Set the current row index.  Valid row indexes start at 1.
+   overriding
+   procedure Set_Row_Index (From  : in out Wiki_Template_Bean;
+                            Index : in Natural);
+
+   --  Get the element at the current row index.
+   overriding
+   function Get_Row (From  : in Wiki_Template_Bean) return Util.Beans.Objects.Object;
 
    --  Get the template content for the plugin evaluation.
    overriding
