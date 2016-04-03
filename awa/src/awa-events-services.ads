@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-services -- AWA Event Manager
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -102,6 +102,9 @@ package AWA.Events.Services is
    --  Start the event manager.  The dispatchers are configured to dispatch the event queues
    --  and tasks are started to process asynchronous events.
    procedure Start (Manager : in out Event_Manager);
+
+   --  Stop the event manager.
+   procedure Stop (Manager : in out Event_Manager);
 
    --  Get the application associated with the event manager.
    function Get_Application (Manager : in Event_Manager) return Application_Access;
