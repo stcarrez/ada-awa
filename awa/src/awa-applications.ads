@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa -- Ada Web Application
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2-16 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -91,6 +91,10 @@ package AWA.Applications is
    --  Start the application.  This is called by the server container when the server is started.
    overriding
    procedure Start (App : in out Application);
+
+   --  Close the application.
+   overriding
+   procedure Close (App : in out Application);
 
    --  Register the module in the application
    procedure Register (App     : in Application_Access;
