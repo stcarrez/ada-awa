@@ -214,26 +214,32 @@ package body AWA.Wikis.Beans is
       use type ADO.Identifier;
       package ASC renames AWA.Services.Contexts;
 
-      Ctx     : constant ASC.Service_Context_Access := ASC.Current;
-      Session : constant ADO.Sessions.Session := ASC.Get_Session (Ctx);
       First   : constant Wiki.Attributes.Cursor := Wiki.Attributes.First (Params);
-      Name    : constant String := Wiki.Attributes.Get_Value (First);
+      Name    : constant WString := "Template:" & Wiki.Attributes.Get_Wide_Value (First);
+      Pos     : constant Template_Maps.Cursor := Plugin.Templates.Find (Name);
       Query   : ADO.Queries.Context;
    begin
-      Query.Bind_Param ("wiki_id", Plugin.Wiki_Space_Id);
-      Query.Bind_Param ("name", "Template:" & Name);
-      Query.Set_Query (AWA.Wikis.Models.Query_Wiki_Page_Content);
-      declare
-         Stmt   : ADO.Statements.Query_Statement := Session.Create_Statement (Query);
-         Result : Ada.Strings.Unbounded.Unbounded_String;
-      begin
-         Stmt.Execute;
-         if Stmt.Has_Elements then
-            Result := Stmt.Get_Unbounded_String (0);
-            Template := Wiki.Strings.To_UString
-              (To_WString (Ada.Strings.Unbounded.To_String (Result)));
-         end if;
-      end;
+      if Template_Maps.Has_Element (Pos) then
+         Template := Template_Maps.Element (Pos);
+      else
+         Query.Bind_Param ("wiki_id", Plugin.Wiki_Space_Id);
+         Query.Bind_Param ("name", Wiki.Strings.To_String (Name));
+         Query.Set_Query (AWA.Wikis.Models.Query_Wiki_Page_Content);
+         declare
+            Ctx     : constant ASC.Service_Context_Access := ASC.Current;
+            Session : constant ADO.Sessions.Session := ASC.Get_Session (Ctx);
+            Stmt    : ADO.Statements.Query_Statement := Session.Create_Statement (Query);
+            Result  : Ada.Strings.Unbounded.Unbounded_String;
+         begin
+            Stmt.Execute;
+            if Stmt.Has_Elements then
+               Result := Stmt.Get_Unbounded_String (0);
+               Template := Wiki.Strings.To_UString
+                 (To_WString (Ada.Strings.Unbounded.To_String (Result)));
+            end if;
+            Plugin.Templates.Include (Name, Template);
+         end;
+      end if;
    end Get_Template;
 
    --  ------------------------------
@@ -242,6 +248,7 @@ package body AWA.Wikis.Beans is
    overriding
    function Find (Factory : in Wiki_Template_Bean;
                   Name    : in String) return Wiki.Plugins.Wiki_Plugin_Access is
+      pragma Unreferenced (Name);
    begin
       return Factory'Unrestricted_Access;
    end Find;
@@ -988,6 +995,9 @@ package body AWA.Wikis.Beans is
       elsif Name = "images" then
          return Util.Beans.Objects.To_Object (Value   => From.Page.Links_Bean,
                                               Storage => Util.Beans.Objects.STATIC);
+      elsif Name = "templates" then
+         return Util.Beans.Objects.To_Object (Value   => From.Page.Plugins_Bean,
+                                              Storage => Util.Beans.Objects.STATIC);
       elsif Name = "imageThumbnail" then
          return Util.Beans.Objects.Null_Object;
       elsif Name = "imageTitle" then
@@ -1069,7 +1079,6 @@ package body AWA.Wikis.Beans is
 
          procedure Collect_Image (Pos : in Wiki.Filters.Collectors.Cursor) is
             Image : constant Wiki.Strings.WString := Wiki.Filters.Collectors.WString_Maps.Key (Pos);
-            Info  : AWA.Tags.Models.Tag_Info;
             URI   : Wiki.Strings.UString;
             W, H  : Natural;
          begin
@@ -1079,9 +1088,8 @@ package body AWA.Wikis.Beans is
                                              Height => H);
          end Collect_Image;
 
-         Content : Wiki.Strings.UString;
+         Content : constant String := To_String (Into.Page.Content);
       begin
-         Content := Wiki.Strings.To_UString (Wiki.Strings.To_WString (To_String (Into.Page.Content)));
          Engine.Add_Filter (Words'Unchecked_Access);
          Engine.Add_Filter (Links'Unchecked_Access);
          Engine.Add_Filter (Images'Unchecked_Access);
