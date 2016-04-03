@@ -65,6 +65,12 @@
                                  tagLink="#{contextPath}/wikis/tags/#{wikiView.wiki_id}/#{tagName}/recent"
                                  var="tagName"
                                  tagClass="tagedit-listelement tagedit-listelement-old"/>
+                    <h:panelGroup rendered="#{wikiPageInfo.templates.count ne 0}">
+                        <h3 class="wiki-info">#{wikiMsg.wiki_info_templates_label}</h3>
+                        <div id="wiki-link-list" class="awa-list">
+                            <ui:include src="lists/templates.xhtml"/>
+                        </div>
+                    </h:panelGroup>
                     <h3 class="wiki-info">#{wikiMsg.wiki_info_pages_label}</h3>
                     <div id="wiki-link-list" class="awa-list">
                         <ui:include src="lists/pages.xhtml"/>
@@ -73,10 +79,12 @@
                     <div id="wiki-link-list" class="awa-list">
                         <ui:include src="lists/links.xhtml"/>
                     </div>
+                    <h:panelGroup rendered="#{wikiPageInfo.images.count ne 0}">
                     <h3 class="wiki-info">#{wikiMsg.wiki_info_images_label}</h3>
                     <div id="wiki-image-list" class="awa-list">
                         <ui:include src="lists/images.xhtml"/>
                     </div>
+                    </h:panelGroup>
                     <h3 class="wiki-info">#{wikiMsg.wiki_info_words_label}</h3>
                     <div id="wiki-word-list" class="awa-list">
                         <awa:tagCloud
