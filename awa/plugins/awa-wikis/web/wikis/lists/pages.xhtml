@@ -27,7 +27,7 @@
         <h:list var="link" value="#{wikiPageInfo.pages}">
             <div class='wiki-info-link' id="p_#{wikiPageInfo.pages.rowIndex}">
                 <div class='awa-list-col wiki-link-name'>
-                    <a href="#{link.tag}">#{link.tag}</a>
+                    <a href="#{contextPath}/wikis/view/#{wikiPageInfo.wiki_id}/#{link.tag}">#{link.tag}</a>
                 </div>
             </div>
         </h:list>
