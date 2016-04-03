@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions-controllers -- Permission controllers
---  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,9 +28,7 @@ with AWA.Permissions.Services;
 with AWA.Services.Contexts;
 package body AWA.Permissions.Controllers is
 
-   use Util.Log;
-
-   Log : constant Loggers.Logger := Loggers.Create ("AWA.Permissions.Controllers");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Permissions.Controllers");
 
    --  ------------------------------
    --  Returns true if the user associated with the security context <b>Context</b> has
@@ -64,7 +62,8 @@ package body AWA.Permissions.Controllers is
       end if;
 
       if not (Permission in Entity_Permission'Class) then
-         Log.Info ("Permission denied because the entity is not given.");
+         Log.Info ("Permission {0} denied because the entity is not given.",
+                   Security.Permissions.Permission_Index'Image (Permission.Id));
          return False;
       end if;
       Entity_Id := Entity_Permission'Class (Permission).Entity;
