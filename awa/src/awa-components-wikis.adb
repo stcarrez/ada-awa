@@ -254,7 +254,7 @@ package body AWA.Components.Wikis is
             Engine.Add_Filter (TOC'Unchecked_Access);
             Engine.Add_Filter (Filter'Unchecked_Access);
             Engine.Set_Syntax (Format);
-            Engine.Parse (Util.Beans.Objects.To_Wide_Wide_String (Value), Doc);
+            Engine.Parse (Util.Beans.Objects.To_String (Value), Doc);
             Renderer.Set_Output_Stream (Html'Unchecked_Access);
             Renderer.Set_Render_TOC (UI.Get_Attribute (TOC_NAME, Context, False));
             Renderer.Render (Doc);
