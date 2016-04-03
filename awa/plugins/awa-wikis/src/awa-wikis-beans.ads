@@ -52,10 +52,17 @@ package AWA.Wikis.Beans is
 
    package Image_Info_Maps is
      new Ada.Containers.Indefinite_Hashed_Maps (Key_Type        => Wiki.Strings.WString,
-                                                Element_Type    => AWA.Wikis.Models.Wiki_Image_Info,
+                                                Element_Type    => Wikis.Models.Wiki_Image_Info,
                                                 Hash            => Ada.Strings.Wide_Wide_Hash,
                                                 Equivalent_Keys => "=",
                                                 "="             => AWA.Wikis.Models."=");
+
+   package Template_Maps is
+     new Ada.Containers.Indefinite_Hashed_Maps (Key_Type        => Wiki.Strings.WString,
+                                                Element_Type    => Wiki.Strings.UString,
+                                                Hash            => Ada.Strings.Wide_Wide_Hash,
+                                                Equivalent_Keys => "=",
+                                                "="             => "=");
 
    type Wiki_Links_Bean is new AWA.Components.Wikis.Link_Renderer_Bean
      and Util.Beans.Basic.List_Bean with record
@@ -123,6 +130,9 @@ package AWA.Wikis.Beans is
       and Util.Beans.Basic.Readonly_Bean with record
       --  The wiki space identifier.
       Wiki_Space_Id : ADO.Identifier;
+
+      --  The list of templates that have been loaded.
+      Templates     : Template_Maps.Map;
    end record;
 
    --  Get the value identified by the name.
