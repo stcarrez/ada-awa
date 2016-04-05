@@ -107,9 +107,11 @@ package body AWA.Wikis.Modules is
                         Props  : in ASF.Applications.Config) is
       pragma Unreferenced (Props);
 
-      Prefix : constant String := Plugin.Get_Config (PARAM_IMAGE_PREFIX);
+      Image_Prefix : constant String := Plugin.Get_Config (PARAM_IMAGE_PREFIX);
+      Page_Prefix  : constant String := Plugin.Get_Config (PARAM_PAGE_PREFIX);
    begin
-      Plugin.Image_Prefix := Wiki.Strings.To_UString (Wiki.Strings.To_WString (Prefix));
+      Plugin.Image_Prefix := Wiki.Strings.To_UString (Wiki.Strings.To_WString (Image_Prefix));
+      Plugin.Page_Prefix  := Wiki.Strings.To_UString (Wiki.Strings.To_WString (Page_Prefix));
    end Configure;
 
    --  ------------------------------
@@ -120,6 +122,15 @@ package body AWA.Wikis.Modules is
    begin
       return Module.Image_Prefix;
    end Get_Image_Prefix;
+
+   --  ------------------------------
+   --  Get the page prefix that was configured for the Wiki module.
+   --  ------------------------------
+   function Get_Page_Prefix (Module : in Wiki_Module)
+                             return Wiki.Strings.UString is
+   begin
+      return Module.Page_Prefix;
+   end Get_Page_Prefix;
 
    --  ------------------------------
    --  Get the wikis module.
