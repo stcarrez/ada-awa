@@ -9,6 +9,14 @@
     </description>
   </context-param>
 
+  <context-param>
+    <param-name>wikis.page_prefix</param-name>
+    <param-value>#{contextPath}/wikis/view/</param-value>
+    <description>
+       The URL base prefix to be used for Wiki pages.
+    </description>
+  </context-param>
+
   <managed-bean>
     <description>The wiki page with all its information to display it.</description>
     <managed-bean-name>wikiView</managed-bean-name>
