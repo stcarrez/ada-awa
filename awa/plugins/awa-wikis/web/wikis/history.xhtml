@@ -37,7 +37,10 @@
             <div class='wiki-page-container'>
                 <h:panelGroup rendered="#{not empty wikiView.left_side}">
                     <div class="grid_2">
-                        <awa:wiki styleClass='wiki-text' value="#{wikiView.left_side}" format="dotclear"/>
+                        <awa:wiki styleClass='wiki-text'
+                                  value="#{wikiView.left_side}"
+                                  plugins="#{wikiView.plugins}"
+                                  format="#{wikiView.side_format}"/>
                     </div>
                 </h:panelGroup>
                 <div class="#{not empty wikiView.left_side ? (not empty wikiView.right_side ? 'grid_8' : 'grid_10') : 'grid_12'}" id="p_#{wikiView.id}">
@@ -86,7 +89,10 @@
                 </div>
                 <h:panelGroup rendered="#{not empty wikiView.right_side}">
                     <div class="grid_2">
-                        <awa:wiki styleClass='wiki-text' value="#{wikiView.right_side}" format="dotclear"/>
+                        <awa:wiki styleClass='wiki-text'
+                                  value="#{wikiView.right_side}"
+                                  plugins="#{wikiView.plugins}"
+                                  format="#{wikiView.side_format}"/>
                     </div>
                 </h:panelGroup>
             </div>
