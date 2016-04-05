@@ -970,8 +970,8 @@ package body AWA.Wikis.Beans is
       end if;
 
       --  Load the wiki page first.
-      Page.Wiki_Space_Id := Into.Wiki_Id;
       Page.Id := Into.Page_Id;
+      Page.Set_Wiki_Id (Into.Wiki_Id);
       Page.Load (Outcome);
       if Outcome /= "loaded" then
          return;
