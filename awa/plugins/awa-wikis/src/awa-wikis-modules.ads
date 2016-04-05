@@ -51,6 +51,9 @@ package AWA.Wikis.Modules is
    --  The configuration parameter that defines the image link prefix in rendered HTML content.
    PARAM_IMAGE_PREFIX : constant String := "image_prefix";
 
+   --  The configuration parameter that defines the page link prefix in rendered HTML content.
+   PARAM_PAGE_PREFIX : constant String := "page_prefix";
+
    package ACL_Create_Wiki_Pages is new Security.Permissions.Definition ("wiki-page-create");
    package ACL_Delete_Wiki_Pages is new Security.Permissions.Definition ("wiki-page-delete");
    package ACL_Update_Wiki_Pages is new Security.Permissions.Definition ("wiki-page-update");
@@ -101,6 +104,10 @@ package AWA.Wikis.Modules is
 
    --  Get the image prefix that was configured for the Wiki module.
    function Get_Image_Prefix (Module : in Wiki_Module)
+                              return Wiki.Strings.UString;
+
+   --  Get the page prefix that was configured for the Wiki module.
+   function Get_Page_Prefix (Module : in Wiki_Module)
                               return Wiki.Strings.UString;
 
    --  Get the wikis module.
@@ -187,6 +194,7 @@ private
    type Wiki_Module is new AWA.Modules.Module with record
       Image_Prefix  : Wiki.Strings.UString;
       Image_Servlet : aliased AWA.Wikis.Servlets.Image_Servlet;
+      Page_Prefix   : Wiki.Strings.UString;
    end record;
 
 end AWA.Wikis.Modules;
