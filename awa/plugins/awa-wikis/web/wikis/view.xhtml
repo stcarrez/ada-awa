@@ -91,7 +91,10 @@
               </div>
               <h:panelGroup rendered="#{not empty wikiView.right_side}">
                   <div class="grid_2">
-                      <awa:wiki styleClass='wiki-text' value="#{wikiView.right_side}" format="#{wikiView.side_format}"/>
+                      <awa:wiki styleClass='wiki-text'
+                                value="#{wikiView.right_side}"
+                                plugins="#{wikiView.plugins}"
+                                format="#{wikiView.side_format}"/>
                   </div>
               </h:panelGroup>
           </div>
