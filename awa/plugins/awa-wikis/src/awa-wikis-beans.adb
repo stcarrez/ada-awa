@@ -186,7 +186,7 @@ package body AWA.Wikis.Beans is
       if Wiki.Helpers.Is_Url (Link) then
          URI := To_Unbounded_Wide_Wide_String (Link);
       else
-         URI := Renderer.Image_Prefix;
+         URI := Renderer.Page_Prefix;
          Append (URI, Link);
       end if;
       Exists := True;
@@ -334,6 +334,7 @@ package body AWA.Wikis.Beans is
       Into.Wiki_Space_Id := Id;
       Into.Plugins.Wiki_Space_Id := Id;
       Into.Links.Wiki_Space_Id := Id;
+      Into.Links.Page_Prefix  := Into.Module.Get_Page_Prefix;
       Into.Links.Image_Prefix := Into.Module.Get_Image_Prefix;
       Append (Into.Links.Page_Prefix, S (S'First + 1 .. S'Last));
       Append (Into.Links.Page_Prefix, "/");
