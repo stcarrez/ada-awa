@@ -443,6 +443,48 @@ package AWA.Wikis.Beans is
    function Create_Wiki_Page_Info_Bean (Module : in AWA.Wikis.Modules.Wiki_Module_Access)
                                         return Util.Beans.Basic.Readonly_Bean_Access;
 
+   --  ------------------------------
+   --  Wiki image info Bean
+   --  ------------------------------
+   --  The <tt>Wiki_Image_Info_Bean</tt> is used to provide information about a wiki image.
+   type Wiki_Image_Info_Bean is new AWA.Wikis.Models.Wiki_Image_Bean with record
+      Module         : Modules.Wiki_Module_Access := null;
+      Page           : Wiki_View_Bean_Access;
+
+      --  The folder name and image name.
+      Folder_Name    : Ada.Strings.Unbounded.Unbounded_String;
+      Name           : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  The wiki space identifier and wiki page identifer that uses the image.
+      Wiki_Id        : ADO.Identifier := ADO.NO_IDENTIFIER;
+      Page_Id        : ADO.Identifier := ADO.NO_IDENTIFIER;
+
+      --  Information about images.
+      List           : aliased AWA.Wikis.Models.Wiki_Image_Info_List_Bean;
+      List_Bean      : AWA.Wikis.Models.Wiki_Image_Info_List_Bean_Access;
+   end record;
+   type Wiki_Image_Info_Bean_Access is access all Wiki_Image_Info_Bean'Class;
+
+   --  Get the value identified by the name.
+   overriding
+   function Get_Value (From : in Wiki_Image_Info_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the value identified by the name.
+   overriding
+   procedure Set_Value (From  : in out Wiki_Image_Info_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   --  Load the information about the image.
+   overriding
+   procedure Load (Into    : in out Wiki_Image_Info_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Create the Wiki_Image_Info_BEan bean instance.
+   function Create_Wiki_Image_Info_Bean (Module : in AWA.Wikis.Modules.Wiki_Module_Access)
+                                         return Util.Beans.Basic.Readonly_Bean_Access;
+
    type Init_Flag is (INIT_WIKI_LIST);
    type Init_Map is array (Init_Flag) of Boolean;
 
