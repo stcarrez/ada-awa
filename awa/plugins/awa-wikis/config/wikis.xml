@@ -35,6 +35,23 @@
   </managed-bean>
 
   <managed-bean>
+    <description>The information about an image used by a wiki page.</description>
+    <managed-bean-name>wikiImageInfo</managed-bean-name>
+    <managed-bean-class>AWA.Wikis.Beans.Wiki_Image_Info_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>image_prefix</property-name>
+      <property-class>String</property-class>
+      <value>#{contextPath}/images/</value>
+    </managed-property>
+    <managed-property>
+      <property-name>page_prefix</property-name>
+      <property-class>String</property-class>
+      <value>#{contextPath}/wikis/view/</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
     <description>The wiki page information bean gives the various statistics and information about a wiki page.</description>
     <managed-bean-name>wikiPageInfo</managed-bean-name>
     <managed-bean-class>AWA.Wikis.Beans.Wiki_Page_Info_Bean</managed-bean-class>
@@ -239,10 +256,40 @@
   </navigation-rule>
 
   <navigation-rule>
+    <from-view-id>/wikis/image-info.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>loaded</from-outcome>
+      <to-view-id>/wikis/image-info.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>not-visible</from-outcome>
+      <to-view-id>/wikis/protected.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>not-found</from-outcome>
+      <to-view-id>/wikis/image-info.xhtml</to-view-id>
+      <redirect/>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>ado.objects.not_found</from-outcome>
+      <to-view-id>/wikis/image-info.xhtml</to-view-id>
+      <redirect/>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
     <from-view-id>/wikis/forms/delete-page.xhtml</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
       <to-view-id>/wikis/forms/delete-page-response.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/wikis/forms/upload-form.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/wikis/forms/upload-form-response.xhtml</to-view-id>
     </navigation-case>
   </navigation-rule>
 
@@ -344,6 +391,7 @@
     <url-pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}/#{wikiList.sort}/grid</url-pattern>
     <url-pattern>/wikis/history/#{wikiVersionList.wiki_id}/#{wikiVersionList.page_id}</url-pattern>
     <url-pattern>/wikis/info/#{wikiPageInfo.wiki_id}/#{wikiPageInfo.page_id}</url-pattern>
+    <url-pattern>/wikis/image-info/#{wikiImageInfo.wiki_id}/#{wikiImageInfo.page_id}/#{wikiImageInfo.folder_name}/#{wikiImageInfo.name}</url-pattern>
     <url-pattern>/wikis/settings/#{adminWikiSpace.id}</url-pattern>
     <url-pattern>/wikis/*.html</url-pattern>
     <url-pattern>/wikis/images/*</url-pattern>
@@ -362,6 +410,7 @@
     <url-pattern>/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}/#{wikiList.sort}/grid</url-pattern>
     <url-pattern>/wikis/history/#{wikiVersionList.wiki_id}/#{wikiVersionList.page_id}</url-pattern>
     <url-pattern>/wikis/info/#{wikiPageInfo.wiki_id}/#{wikiPageInfo.page_id}</url-pattern>
+    <url-pattern>/wikis/image-info/#{wikiImageInfo.wiki_id}/#{wikiImageInfo.page_id}/#{wikiImageInfo.folder_name}/#{wikiImageInfo.name}</url-pattern>
     <url-pattern>/wikis/settings/#{adminWikiSpace.id}</url-pattern>
     <url-pattern>/wikis/*.html</url-pattern>
   </filter-mapping>
@@ -376,6 +425,7 @@
     <url-pattern>/wikis/list/.*</url-pattern>
     <url-pattern>/wikis/history/.*</url-pattern>
     <url-pattern>/wikis/info/.*</url-pattern>
+    <url-pattern>/wikis/image-info/.*</url-pattern>
     <url-pattern>/wikis/images/.*</url-pattern>
   </url-policy>
 
@@ -403,6 +453,11 @@
   <url-mapping>
     <pattern>/wikis/info/#{wikiPageInfo.wiki_id}/#{wikiPageInfo.page_id}</pattern>
     <view-id>/wikis/info.html</view-id>
+  </url-mapping>
+
+  <url-mapping>
+    <pattern>/wikis/image-info/#{wikiImageInfo.wiki_id}/#{wikiImageInfo.page_id}/#{wikiImageInfo.folder_name}/#{wikiImageInfo.name}</pattern>
+    <view-id>/wikis/image-info.html</view-id>
   </url-mapping>
 
   <url-mapping>
