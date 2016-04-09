@@ -21,6 +21,7 @@ with Util.Strings;
 
 with ADO.Objects;
 with ADO.Queries;
+with ADO.SQL;
 with ADO.Statements;
 with ADO.Sessions.Entities;
 
@@ -119,6 +120,32 @@ package body AWA.Storages.Services is
       DB        : ADO.Sessions.Session := AWA.Services.Contexts.Get_Session (Ctx);
    begin
       Storage.Load (Session => DB, Id => Id);
+   end Load_Storage;
+
+   --  ------------------------------
+   --  Load the storage instance stored in a folder and identified by a name.
+   --  ------------------------------
+   procedure Load_Storage (Service : in Storage_Service;
+                           Storage : in out AWA.Storages.Models.Storage_Ref'Class;
+                           Folder  : in ADO.Identifier;
+                           Name    : in String;
+                           Found   : out Boolean) is
+      pragma Unreferenced (Service);
+
+      Ctx   : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB    : ADO.Sessions.Session := AWA.Services.Contexts.Get_Session (Ctx);
+      Query : ADO.SQL.Query;
+   begin
+      Query.Bind_Param ("folder_id", Folder);
+      Query.Bind_Param ("name", Name);
+      Query.Set_Filter ("folder_id = :folder_id AND name = :name AND original_id IS NULL");
+      Storage.Find (Session => DB,
+                    Query   => Query,
+                    Found   => Found);
+      if not Found then
+         Log.Warn ("Storage file {0} not found in folder {1}",
+                   Name, ADO.Identifier'Image (Folder));
+      end if;
    end Load_Storage;
 
    --  ------------------------------
