@@ -27,9 +27,11 @@
     <h:list var="image" value="#{wikiPageInfo.images}">
         <div class='wiki-image-grid' id="i_#{image.id}">
             <div class='wiki-image-grid-info'>
+                <a href="#{contextPath}/wikis/image-info/#{wikiPageInfo.wiki_id}/#{wikiPageInfo.page_id}/#{wikiPageInfo.imageTitle}">
                 <img src="#{wikiPageInfo.imageThumbnail}" width="64" height="64"
                      alt="#{wikiPageInfo.imageTitle}"/>
                 <span class="wiki-image-name">#{wikiPageInfo.imageTitle}</span>
+                </a>
             </div>
         </div>
     </h:list>
