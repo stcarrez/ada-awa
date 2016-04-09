@@ -37,7 +37,7 @@ package body AWA.Storages.Beans is
                        Name : in String) return Util.Beans.Objects.Object is
    begin
       if Name = "folderId" then
-         return ADO.Objects.To_Object (From.Get_Folder.Get_Key);
+         return ADO.Utils.To_Object (From.Folder_Id);
       elsif From.Is_Null then
          return Util.Beans.Objects.Null_Object;
       else
@@ -54,14 +54,21 @@ package body AWA.Storages.Beans is
                         Value : in Util.Beans.Objects.Object) is
       Manager : constant Services.Storage_Service_Access := From.Module.Get_Storage_Manager;
       Folder  : Models.Storage_Folder_Ref;
+      Found   : Boolean;
    begin
       if Name = "folderId" then
-         Manager.Load_Folder (Folder, ADO.Utils.To_Identifier (Value));
+         From.Folder_Id := ADO.Utils.To_Identifier (Value);
+         Manager.Load_Folder (Folder, From.Folder_Id);
          From.Set_Folder (Folder);
       elsif Name = "id" then
          Manager.Load_Storage (From, ADO.Utils.To_Identifier (Value));
       elsif Name = "name" then
-         From.Set_Name (Util.Beans.Objects.To_String (Value));
+         Folder := Models.Storage_Folder_Ref (From.Get_Folder);
+         Manager.Load_Storage (From, From.Folder_Id, Util.Beans.Objects.To_String (Value), Found);
+         if not Found then
+            From.Set_Name (Util.Beans.Objects.To_String (Value));
+         end if;
+         From.Set_Folder (Folder);
       end if;
    end Set_Value;
 
