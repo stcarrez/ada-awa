@@ -1161,6 +1161,127 @@ package body AWA.Wikis.Beans is
    end Create_Wiki_Page_Info_Bean;
 
    --  ------------------------------
+   --  Get the value identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Wiki_Image_Info_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "wiki_id" then
+         return ADO.Utils.To_Object (From.Wiki_Id);
+      elsif Name = "page_id" then
+         return ADO.Utils.To_Object (From.Page.Id);
+      elsif Name = "folder_name" then
+         return Util.Beans.Objects.To_Object (From.Folder_Name);
+      elsif Name = "name" then
+         return Util.Beans.Objects.To_Object (From.Name);
+      elsif Name = "list" then
+         return Util.Beans.Objects.To_Object (Value   => From.List_Bean,
+                                              Storage => Util.Beans.Objects.STATIC);
+      elsif Name = "imageUrl" then
+         declare
+            use Ada.Strings.Unbounded;
+            Pos  : Natural := From.List.Get_Row_Index;
+
+            S : constant String := Wiki.Strings.To_String (Wiki.Strings.To_WString (From.Page.Links.Image_Prefix));
+            URI : Ada.Strings.Unbounded.Unbounded_String;
+         begin
+            URI := To_Unbounded_String (S);
+            Append (URI, Util.Strings.Image (Integer (From.Id)));
+            Append (URI, "/");
+            Append (URI, From.Name);
+            return Util.Beans.Objects.To_Object (URI);
+         end;
+      else
+         return Models.Wiki_Image_Bean (From).Get_Value (Name);
+      end if;
+   end Get_Value;
+
+   --  ------------------------------
+   --  Set the value identified by the name.
+   --  ------------------------------
+   overriding
+   procedure Set_Value (From  : in out Wiki_Image_Info_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "wiki_id" and not Util.Beans.Objects.Is_Empty (Value) then
+         From.Wiki_Id := ADO.Utils.To_Identifier (Value);
+         From.Page.Set_Wiki_Id (From.Wiki_Id);
+      elsif Name = "folder_name" then
+         From.Folder_Name := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "name" then
+         From.Name := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "page_id" and not Util.Beans.Objects.Is_Empty (Value) then
+         From.Page_Id := ADO.Utils.To_Identifier (Value);
+         From.Page.Id := From.Page_Id;
+      else
+         Models.Wiki_Image_Bean (From).Set_Value (Name, Value);
+      end if;
+   end Set_Value;
+
+   --  ------------------------------
+   --  Load the information about the image.
+   --  ------------------------------
+   overriding
+   procedure Load (Into    : in out Wiki_Image_Info_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      use type ADO.Identifier;
+      use type Ada.Containers.Count_Type;
+      use type Ada.Strings.Unbounded.Unbounded_String;
+
+      Ctx     : constant ASC.Service_Context_Access := ASC.Current;
+      Session : ADO.Sessions.Session := ASC.Get_Session (Ctx);
+      List    : AWA.Wikis.Models.Wiki_Image_Info_Vector;
+      Sep     : Natural;
+      Query   : ADO.Queries.Context;
+      Info    : AWA.Wikis.Models.Wiki_Image_Info;
+   begin
+      if Into.Wiki_Id = ADO.NO_IDENTIFIER or Into.Page_Id = ADO.NO_IDENTIFIER then
+         Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
+         return;
+      end if;
+
+      --  Load the wiki page first.
+      Into.Page.Load (Outcome);
+      if Outcome /= "loaded" then
+         return;
+      end if;
+
+      --  Get the list of versions associated with the wiki page.
+      Query.Set_Query (AWA.Wikis.Models.Query_Wiki_Image);
+      Query.Bind_Param (Name => "file_name", Value => Into.Name);
+      Query.Bind_Param (Name => "folder_name", Value => Into.Folder_Name);
+      Query.Bind_Param (Name => "wiki_id", Value => Into.Wiki_Id);
+      AWA.Wikis.Models.List (Into.List, Session, Query);
+      if Into.List.List.Length > 0 then
+         declare
+            Img : constant AWA.Wikis.Models.Wiki_Image_Info := Into.List.List.First_Element;
+         begin
+            Into.Id          := Img.Id;
+            Into.Folder_Id   := Img.Folder_Id;
+            Into.Mime_Type   := Img.Mime_Type;
+            Into.Storage     := Img.Storage;
+            Into.File_Size   := Img.File_Size;
+            Into.Create_Date := Img.Create_Date;
+         end;
+      end if;
+   end Load;
+
+   --  ------------------------------
+   --  Create the Wiki_Image_Info_BEan bean instance.
+   --  ------------------------------
+   function Create_Wiki_Image_Info_Bean (Module : in AWA.Wikis.Modules.Wiki_Module_Access)
+                                         return Util.Beans.Basic.Readonly_Bean_Access is
+      Object  : constant Wiki_Image_Info_Bean_Access := new Wiki_Image_Info_Bean;
+   begin
+      Object.Module         := Module;
+      Object.List_Bean      := Object.List'Access;
+      Object.Page           := Get_Wiki_View_Bean ("wikiView");
+      return Object.all'Access;
+   end Create_Wiki_Image_Info_Bean;
+
+   --  ------------------------------
    --  Load the list of wikis.
    --  ------------------------------
    procedure Load_Wikis (List : in Wiki_Admin_Bean) is
