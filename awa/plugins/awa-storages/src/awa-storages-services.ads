@@ -137,6 +137,10 @@ package AWA.Storages.Services is
    procedure Create_Local_File (Service : in out Storage_Service;
                                 Into    : out AWA.Storages.Storage_File);
 
+   --  Create a temporary file path.
+   procedure Create_Local_File (Service : in out Storage_Service;
+                                Into    : out AWA.Storages.Temporary_File);
+
    --  Deletes the storage instance.
    procedure Delete (Service : in Storage_Service;
                      Storage : in out AWA.Storages.Models.Storage_Ref'Class);
