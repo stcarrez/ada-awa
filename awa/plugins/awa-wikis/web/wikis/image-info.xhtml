@@ -1,0 +1,131 @@
+<!-- Information about an image used in a wiki page
+  -  Copyright (C) 2016 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<ui:composition template="/WEB-INF/layouts/layout.xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:awa="http://code.google.com/p/ada-awa/jsf"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
+                xmlns:util="http://code.google.com/p/ada-asf/util"
+                xmlns:h="http://java.sun.com/jsf/html">
+    <ui:param name="title" value="#{wikiMsg.wiki_history_list_title}"/>
+
+    <!-- Main page body -->
+    <ui:define name="pageBody">
+        <f:metadata>
+            <f:viewAction action='#{wikiImageInfo.load}'/>
+        </f:metadata>
+        <div id='awa-content'>
+            <ui:include src="views/wiki-nav.xhtml">
+                <ui:param name="wikiSpaceId" value="#{wikiImageInfo.wiki_id}"/>
+                <ui:param name="page_link" value="/grid"/>
+            </ui:include>
+            <div class='wiki-page-container'>
+                <h:panelGroup rendered="#{not empty wikiView.left_side}">
+                    <div class="grid_2">
+                        <awa:wiki styleClass='wiki-text'
+                                  value="#{wikiView.left_side}"
+                                  plugins="#{wikiView.plugins}"
+                                  links="#{wikiView.links}"
+                                  format="#{wikiView.side_format}"/>
+                    </div>
+                </h:panelGroup>
+                <div class="#{not empty wikiView.left_side ? (not empty wikiView.right_side ? 'grid_8' : 'grid_10') : 'grid_12'}" id="p_#{wikiView.id}">
+                    <div class='wiki-title'>
+                        <ul class="wiki-page-actions">
+                            <h:panelGroup rendered="#{wikiView.acl_id gt 1}">
+                                <li>
+                                    <a class='awa-button' href="#{contextPath}/wikis/edit/#{wikiView.wiki_id}/#{wikiView.name}">Edit</a>
+                                </li>
+                            </h:panelGroup>
+                            <li>
+                                <a class='awa-button' href="#{contextPath}/wikis/view/#{wikiView.wiki_id}/#{wikiView.name}">View</a>
+                            </li>
+                            <li>
+                                <a class='awa-button' href="#{contextPath}/wikis/history/#{wikiView.wiki_id}/#{wikiView.id}">#{wikiMsg.wiki_page_history_label}</a>
+                            </li>
+                        </ul>
+                        <h2>#{wikiView.title}</h2>
+                        <div class="wiki-page-info">
+                            <p><h:outputText id="date" value="#{wikiView.date}" converter="dateConverter"/></p>
+                            <p>Version #{wikiView.version} by #{wikiView.author}</p>
+                        </div>
+                    </div>
+                    <awa:tagList value='#{wikiView.tags}' id='qtags' styleClass="wiki-tag-list tagedit-list"
+                                 tagLink="#{contextPath}/wikis/tags/#{wikiView.wiki_id}/#{tagName}/recent"
+                                 var="tagName"
+                                 tagClass="tagedit-listelement tagedit-listelement-old"/>
+                    <div class="wiki-image-info">
+                        <div class="grid_6">
+                            <dl class="wiki-image-details">
+                                <dt>#{wikiMsg.wiki_image_file_label}</dt>
+                                <dd>#{wikiImageInfo.folder_name}/#{wikiImageInfo.name}</dd>
+                                <h:panelGroup rendered="#{wikiImageInfo.list.count != 0}">
+                                    <dt>#{wikiMsg.wiki_image_file_size_label}</dt>
+                                    <dd>
+                                        <h:outputText value="#{wikiImageInfo.file_size}">
+                                            <f:converter converterId="sizeConverter"/>
+                                        </h:outputText>
+                                    </dd>
+                                    <dt>#{wikiMsg.wiki_image_date_label}</dt>
+                                    <dd>
+                                        <h:outputText value="#{wikiImageInfo.create_date}">
+                                            <f:converter converterId="smartDateConverter"/>
+                                        </h:outputText>
+                                    </dd>
+                                    <dt>#{wikiMsg.wiki_image_mime_label}</dt>
+                                    <dd>#{wikiImageInfo.mime_type}</dd>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{wikiImageInfo.list.count == 0}">
+                                    <dd>#{wikiMsg.wiki_image_missing_message}</dd>
+                                </h:panelGroup>
+                            </dl>
+                        </div>
+                        <div class="grid_6">
+                            <div id='document-upload'>
+                                <iframe frameborder="0" class='wiki-image-upload'
+                                        scrolling="no"
+                                        height="80"
+                                        width="100%"
+                                        src="#{contextPath}/wikis/forms/upload-form.html?folderId=#{wikiImageInfo.folder_id}&amp;name=#{wikiImageInfo.name}"/>
+                            </div>
+                        </div>
+                        <div class="wiki-image-view">
+                            <h:list var="img" value="#{wikiImageInfo.list}">
+                            <img src="#{wikiImageInfo.imageUrl}" alt="#{img.width}x#{img.height}"/>
+                            width=#{img.width}
+                            height=#{img.height}
+                            size=#{img.file_size}
+                            mime=#{img.mime_type}
+                            </h:list>
+                        </div>
+                    </div>
+               </div>
+                <h:panelGroup rendered="#{not empty wikiView.right_side}">
+                    <div class="grid_2">
+                        <awa:wiki styleClass='wiki-text'
+                                  value="#{wikiView.right_side}"
+                                  plugins="#{wikiView.plugins}"
+                                  links="#{wikiView.links}"
+                                  format="#{wikiView.side_format}"/>
+                    </div>
+                </h:panelGroup>
+            </div>
+        </div>
+     </ui:define>
+</ui:composition>
+
