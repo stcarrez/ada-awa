@@ -49,14 +49,14 @@
                         <ul class="wiki-page-actions">
                             <h:panelGroup rendered="#{wikiView.acl_id gt 1}">
                                 <li>
-                                    <a class='awa-button' href="#{contextPath}/wikis/edit/#{wikiView.wiki_id}/#{wikiView.name}">Edit</a>
+                                    <a class='awa-button' href="#{contextPath}/wikis/edit/#{wikiView.wiki_id}/#{wikiView.name}">#{wikiMsg.wiki_page_edit_label}</a>
                                 </li>
                             </h:panelGroup>
                             <li>
                                 <a class='awa-button' href="#{contextPath}/wikis/info/#{wikiView.wiki_id}/#{wikiView.id}">#{wikiMsg.wiki_page_info_label}</a>
                             </li>
                             <li>
-                                <a class='awa-button' href="#{contextPath}/wikis/view/#{wikiView.wiki_id}/#{wikiView.name}">View</a>
+                                <a class='awa-button' href="#{contextPath}/wikis/view/#{wikiView.wiki_id}/#{wikiView.name}">#{wikiMsg.wiki_page_view_label}</a>
                             </li>
                         </ul>
                         <h2>#{wikiView.title}</h2>
