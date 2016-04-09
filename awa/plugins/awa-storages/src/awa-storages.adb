@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages -- Storage module
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-
+with Ada.Directories;
 package body AWA.Storages is
 
    --  ------------------------------
@@ -25,5 +25,22 @@ package body AWA.Storages is
    begin
       return Ada.Strings.Unbounded.To_String (File.Path);
    end Get_Path;
+
+   --  ------------------------------
+   --  Get the path to get access to the file.
+   --  ------------------------------
+   function Get_Path (File : in Temporary_File) return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (File.Path);
+   end Get_Path;
+
+   overriding
+   procedure Finalize (File : in out Temporary_File) is
+      Path : constant String := Ada.Strings.Unbounded.To_String (File.Path);
+   begin
+      if Path'Length > 0 and then Ada.Directories.Exists (Path) then
+         Ada.Directories.Delete_File (Path);
+      end if;
+   end Finalize;
 
 end AWA.Storages;
