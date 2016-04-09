@@ -1,0 +1,62 @@
+<query-mapping package='AWA.Wikis.Models'>
+    <description>
+      List of images used by wiki pages
+    </description>
+
+    <class name="AWA.Wikis.Models.Wiki_Image_Bean" bean="yes">
+        <comment>The information about an image used in a wiki page.</comment>
+        <property type='Identifier' name="folder_id">
+            <comment>the image folder identifier.</comment>
+        </property>
+        <property type='Identifier' name="id">
+            <comment>the image file identifier.</comment>
+        </property>
+        <property type='Date' name="create_date">
+            <comment>the file creation date.</comment>
+        </property>
+        <property type='String' name="uri">
+            <comment>the file storage URI.</comment>
+        </property>
+        <property type='AWA.Storages.Models.Storage_Type' name="storage">
+            <comment>the file storage URI.</comment>
+        </property>
+        <property type='String' name="mime_type">
+            <comment>the file mime type.</comment>
+        </property>
+        <property type='Integer' name="file_size">
+            <comment>the file size.</comment>
+        </property>
+        <property type='Integer' name="width">
+            <comment>the image width.</comment>
+        </property>
+        <property type='Integer' name="height">
+            <comment>the image height.</comment>
+        </property>
+        <method name="load">
+            <comment>load the bean</comment>
+        </method>
+    </class>
+
+    <query name='wiki-image'>
+       <comment>Get the description of an image used in a wiki page.</comment>
+       <sql>
+    SELECT
+      folder.id,
+      file.id,
+      file.create_date,
+      file.uri,
+      file.storage,
+      file.mime_type,
+      file.file_size,
+      image.width,
+      image.height
+    FROM awa_wiki_space AS wiki 
+    INNER JOIN awa_storage_folder AS folder ON folder.workspace_id = wiki.workspace_id
+    LEFT JOIN awa_storage AS file ON folder.id = file.folder_id AND file.name = :file_name
+    LEFT JOIN awa_image AS image ON file.id = image.storage_id
+    WHERE wiki.id = :wiki_id 
+       AND folder.name = :folder_name
+       </sql>
+    </query>
+
+</query-mapping>
