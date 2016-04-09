@@ -352,6 +352,18 @@ package body AWA.Storages.Services is
    end Create_Local_File;
 
    --  ------------------------------
+   --  Create a temporary file path.
+   --  ------------------------------
+   procedure Create_Local_File (Service : in out Storage_Service;
+                                Into    : out AWA.Storages.Temporary_File) is
+      Tmp   : constant String := Service.Get_Config (Stores.Files.Tmp_Directory_Parameter.P);
+      Value : Integer;
+   begin
+      Util.Concurrent.Counters.Increment (Service.Temp_Id, Value);
+      Into.Path := Ada.Strings.Unbounded.To_Unbounded_String (Tmp & "/tmp-" & Util.Strings.Image (Value));
+   end Create_Local_File;
+
+   --  ------------------------------
    --  Deletes the storage instance.
    --  ------------------------------
    procedure Delete (Service : in Storage_Service;
