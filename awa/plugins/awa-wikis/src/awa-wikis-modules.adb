@@ -73,6 +73,10 @@ package body AWA.Wikis.Modules is
                          Handler => AWA.Wikis.Beans.Create_Wiki_Page_Bean'Access);
 
       Register.Register (Plugin => Plugin,
+                         Name   => "AWA.Wikis.Beans.Wiki_Image_Info_Bean",
+                         Handler => AWA.Wikis.Beans.Create_Wiki_Image_Info_Bean'Access);
+
+      Register.Register (Plugin => Plugin,
                          Name   => "AWA.Wikis.Beans.Wiki_Page_Info_Bean",
                          Handler => AWA.Wikis.Beans.Create_Wiki_Page_Info_Bean'Access);
 
