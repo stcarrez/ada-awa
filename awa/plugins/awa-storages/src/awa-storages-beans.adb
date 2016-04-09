@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-beans -- Storage Ada Beans
---  Copyright (C) 2012, 2013 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -60,6 +60,8 @@ package body AWA.Storages.Beans is
          From.Set_Folder (Folder);
       elsif Name = "id" then
          Manager.Load_Storage (From, ADO.Utils.To_Identifier (Value));
+      elsif Name = "name" then
+         From.Set_Name (Util.Beans.Objects.To_String (Value));
       end if;
    end Set_Value;
 
@@ -69,8 +71,11 @@ package body AWA.Storages.Beans is
    procedure Save_Part (Bean : in out Upload_Bean;
                         Part : in ASF.Parts.Part'Class) is
       Manager : constant Services.Storage_Service_Access := Bean.Module.Get_Storage_Manager;
+      Name    : constant String := Bean.Get_Name;
    begin
-      Bean.Set_Name (Part.Get_Name);
+      if Name'Length = 0 then
+         Bean.Set_Name (Part.Get_Name);
+      end if;
       Bean.Set_Mime_Type (Part.Get_Content_Type);
       Bean.Set_File_Size (Part.Get_Size);
       Manager.Save (Bean, Part, AWA.Storages.Models.DATABASE);
