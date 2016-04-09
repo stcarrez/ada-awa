@@ -1,0 +1,64 @@
+<!-- Wiki Image Upload form
+  -  Copyright (C) 2012, 2013, 2016 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<f:view xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        contentType="text/html; charset=UTF-8">
+    <f:metadata>
+        <f:viewParam id='folderId' value='#{uploadFile.folderId}'/>
+        <f:viewParam id="name" value="#{uploadFile.name}"/>
+    </f:metadata>
+    <html>
+    <head>
+        <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/grids/reset.css"/>
+        <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/grids/fluid_grid.css"/>
+        <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/redmond/jquery-ui-1.9.2.custom.css"/>
+        <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/iframe.css"/>
+        <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/awa.css"/>
+        <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/wikis.css"/>
+    </head>
+    <body class="wiki-upload-form">
+    <h:form id='wiki-upload-form' enctype="multipart/form-data">
+        <h:inputHidden id="folder" value="#{uploadFile.folderId}"/>
+        <h:inputHidden id="name" value="#{uploadFile.name}"/>
+        <div class='wiki-uploadForm'>
+            <div class='upload'>
+                #{wikiMsg.wiki_image_upload_message}
+
+                <h:inputFile id="upload-file"
+                             styleClass="ui-button ui-corner-all"
+                             value="#{uploadFile.save}"/>
+            </div>
+            <div class="upload">
+                <h:commandButton id="upload-button"
+                                 styleClass="ui-button ui-state-default ui-corner-all"
+                                 value="#{storageMsg.storage_upload_label}"
+                                 title="#{storageMsg.storage_upload_title}"
+                                 action="#{uploadFile.upload}"/>
+            </div>
+        </div>
+    </h:form>
+
+    <script type="text/javascript">
+        function awa_upload() {
+            var f = document.forms[0];
+            f.submit();
+            return false;
+        }
+    </script>
+    </body>
+    </html>
+</f:view>
