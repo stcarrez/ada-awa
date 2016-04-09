@@ -46,6 +46,7 @@ package body AWA.Storages.Stores.Databases is
       Log.Info ("Save database file {0}", Path);
       Store.Set_Data (Blob);
       Store.Save (Session);
+      Into.Set_File_Size (Natural (Blob.Value.Len));
       Into.Set_Store_Data (Store);
    end Save;
 
