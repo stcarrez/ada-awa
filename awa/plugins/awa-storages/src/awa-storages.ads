@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages -- Storage module
---  Copyright (C) 2012, 2015 Stephane Carrez
+--  Copyright (C) 2012, 2015, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Ada.Strings.Unbounded;
+with Ada.Finalization;
 
 --  == Introduction ==
 --  The <b>Storages</b> module provides a set of storage services allowing an application
@@ -96,10 +97,22 @@ package AWA.Storages is
    --  Get the path to get access to the file.
    function Get_Path (File : in Storage_File) return String;
 
+   type Temporary_File is limited private;
+
+   --  Get the path to get access to the file.
+   function Get_Path (File : in Temporary_File) return String;
+
 private
 
    type Storage_File is limited record
       Path : Ada.Strings.Unbounded.Unbounded_String;
    end record;
+
+   type Temporary_File is limited new Ada.Finalization.Limited_Controlled with record
+      Path : Ada.Strings.Unbounded.Unbounded_String;
+   end record;
+
+   overriding
+   procedure Finalize (File : in out Temporary_File);
 
 end AWA.Storages;
