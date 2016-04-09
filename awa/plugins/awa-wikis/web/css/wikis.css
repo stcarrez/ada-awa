@@ -1,3 +1,7 @@
+.wiki-page-container {
+    float: left;
+    width: 100%;
+}
 /* Columns in wiki page list */
 .wiki-page-name {
     width: 20%;
@@ -272,4 +276,32 @@
     overflow: hidden;
     border: 1px solid #ccc;
     background-color: #eee;
+}
+/* Wiki image information page */
+.wiki-image-info, .wiki-image-view {
+    float: left;
+    clear: both;
+    width: 100%;
+}
+.wiki-image-details {
+    float: left;
+    width: 80%;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+}
+.wiki-image-details dt {
+    clear: both;
+    float: left;
+    font-style: bold;
+    width: 20%;
+}
+.wiki-image-details dd {
+    float: left;
+    width: 80%;
+}
+.wiki-image-upload {
+    height: 80px;
+}
+.wiki-upload-form {
+    background-color: #f6f6f3;
 }
