@@ -34,6 +34,7 @@ with AWA.Services.Contexts;
 with AWA.Tags.Modules;
 with AWA.Tags.Models;
 with AWA.Helpers.Selectors;
+with AWA.Images.Services;
 
 with Wiki.Documents;
 with Wiki.Parsers;
@@ -49,28 +50,44 @@ package body AWA.Wikis.Beans is
                               Link     : in Wiki.Strings.WString;
                               Info     : in AWA.Wikis.Models.Wiki_Image_Info;
                               URI      : out Unbounded_Wide_Wide_String;
-                              Width    : out Natural;
-                              Height   : out Natural) is
+                              Width    : in out Natural;
+                              Height   : in out Natural) is
       Sep : Natural;
    begin
       Sep := Wiki.Strings.Index (Link, "/");
-      Width  := Info.Width;
-      Height := Info.Height;
       URI := Renderer.Image_Prefix;
       Append (URI, Wiki.Strings.To_WString (Util.Strings.Image (Integer (Info.Id))));
       Append (URI, "/");
+      if Width = 0 and Height = 0 then
+         Append (URI, "default/");
+      elsif Width = Natural'Last or Height = Natural'Last then
+         Append (URI, "original/");
+      else
+         if Width /= 0 then
+            Append (URI, Wiki.Strings.To_WString (Util.Strings.Image (Width)));
+         end if;
+         Append (URI, "x");
+         if Height /= 0 then
+            Append (URI, Wiki.Strings.To_WString (Util.Strings.Image (Height)));
+         end if;
+         Append (URI, "/");
+      end if;
       if Sep = 0 then
          Append (URI, Link);
       else
          Append (URI, Link (Sep + 1 .. Link'Last));
       end if;
+      AWA.Images.Services.Scale (Width     => Info.Width,
+                                 Height    => Info.Height,
+                                 To_Width  => Width,
+                                 To_Height => Height);
    end Make_Image_Link;
 
    procedure Find_Image_Link (Renderer : in out Wiki_Links_Bean;
                               Link     : in Wiki.Strings.WString;
                               URI      : out Unbounded_Wide_Wide_String;
-                              Width    : out Natural;
-                              Height   : out Natural) is
+                              Width    : in out Natural;
+                              Height   : in out Natural) is
       Ctx     : constant ASC.Service_Context_Access := ASC.Current;
       Session : ADO.Sessions.Session := ASC.Get_Session (Ctx);
       List    : AWA.Wikis.Models.Wiki_Image_Info_Vector;
@@ -107,14 +124,12 @@ package body AWA.Wikis.Beans is
    procedure Make_Image_Link (Renderer : in out Wiki_Links_Bean;
                               Link     : in Wiki.Strings.WString;
                               URI      : out Unbounded_Wide_Wide_String;
-                              Width    : out Natural;
-                              Height   : out Natural) is
+                              Width    : in out Natural;
+                              Height   : in out Natural) is
       Pos : Image_Info_Maps.Cursor;
    begin
       if Wiki.Helpers.Is_Url (Link) then
          URI    := To_Unbounded_Wide_Wide_String (Link);
-         Width  := 0;
-         Height := 0;
       else
          Pos := Renderer.Images.Find (Link);
          if Image_Info_Maps.Has_Element (Pos) then
