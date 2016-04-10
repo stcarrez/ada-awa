@@ -375,7 +375,7 @@
 
   <servlet-mapping>
     <servlet-name>wiki-image</servlet-name>
-    <url-pattern>/wikis/images/:wiki_id/:image_id/:name</url-pattern>
+    <url-pattern>/wikis/images/:wiki_id/:image_id/:size/:name</url-pattern>
   </servlet-mapping>
 
   <filter-mapping>
