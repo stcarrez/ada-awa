@@ -100,7 +100,7 @@
 
   <servlet-mapping>
     <servlet-name>storage</servlet-name>
-    <url-pattern>/storages/files/*</url-pattern>
+    <url-pattern>/storages/files/:storage_id</url-pattern>
   </servlet-mapping>
 
   <filter-mapping>
