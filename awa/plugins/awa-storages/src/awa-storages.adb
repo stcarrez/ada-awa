@@ -27,19 +27,36 @@ package body AWA.Storages is
    end Get_Path;
 
    --  ------------------------------
-   --  Get the path to get access to the file.
+   --  Set the file path for the FILE, URL, CACHE or TMP storage.
    --  ------------------------------
-   function Get_Path (File : in Temporary_File) return String is
+   procedure Set (File : in out Storage_File;
+                  Path : in String) is
    begin
-      return Ada.Strings.Unbounded.To_String (File.Path);
-   end Get_Path;
+      File.Path := Ada.Strings.Unbounded.To_Unbounded_String (Path);
+   end Set;
+
+   --  ------------------------------
+   --  Set the file database storage identifier.
+   --  ------------------------------
+   procedure Set (File      : in out Storage_File;
+                  Workspace : in ADO.Identifier;
+                  Store     : in ADO.Identifier) is
+   begin
+      File.Workspace := Workspace;
+      File.Store     := Store;
+   end Set;
 
    overriding
-   procedure Finalize (File : in out Temporary_File) is
-      Path : constant String := Ada.Strings.Unbounded.To_String (File.Path);
+   procedure Finalize (File : in out Storage_File) is
    begin
-      if Path'Length > 0 and then Ada.Directories.Exists (Path) then
-         Ada.Directories.Delete_File (Path);
+      if File.Storage = TMP and then Ada.Strings.Unbounded.Length (File.Path) > 0 then
+         declare
+            Path : constant String := Ada.Strings.Unbounded.To_String (File.Path);
+         begin
+            if Ada.Directories.Exists (Path) then
+               Ada.Directories.Delete_File (Path);
+            end if;
+         end;
       end if;
    end Finalize;
 
