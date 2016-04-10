@@ -132,7 +132,7 @@ package AWA.Storages.Services is
    procedure Get_Local_File (Service : in Storage_Service;
                              From    : in ADO.Identifier;
                              Mode    : in Read_Mode := READ;
-                             Into    : out Storage_File);
+                             Into    : in out Storage_File);
 
    procedure Create_Local_File (Service : in out Storage_Service;
                                 Into    : in out AWA.Storages.Storage_File);
