@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-servlets -- Serve files saved in the storage service
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,10 +16,8 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Ada.Strings.Unbounded;
-with Ada.Calendar;
 
 with Util.Log.Loggers;
-with Util.Strings;
 
 with ADO.Objects;
 
@@ -84,34 +82,17 @@ package body AWA.Storages.Servlets is
    procedure Do_Get (Server   : in Storage_Servlet;
                      Request  : in out ASF.Requests.Request'Class;
                      Response : in out ASF.Responses.Response'Class) is
-      URI     : constant String := Request.Get_Path_Info;
-      pragma Unreferenced (Server);
-
       Data    : ADO.Blob_Ref;
       Mime    : Ada.Strings.Unbounded.Unbounded_String;
       Name    : Ada.Strings.Unbounded.Unbounded_String;
       Date    : Ada.Calendar.Time;
-      Manager : constant Services.Storage_Service_Access := Storages.Modules.Get_Storage_Manager;
-      Id      : ADO.Identifier;
-      Pos     : Natural;
    begin
-      if URI'Length <= 1 or else URI (URI'First) /= '/' then
-         Log.Info ("Invalid storage URI: {0}", URI);
+      Storage_Servlet'Class (Server).Load (Request, Name, Mime, Date, Data);
+      if Data.Is_Null then
+         Log.Info ("Storage file {0} not found", Request.Get_Request_URI);
          Response.Send_Error (ASF.Responses.SC_NOT_FOUND);
          return;
       end if;
-
-      --  Extract the storage identifier from the URI.
-      Pos := Util.Strings.Index (URI, '/', URI'First + 1);
-      if Pos = 0 then
-         Pos := URI'Last;
-      else
-         Pos := Pos - 1;
-      end if;
-      Id := ADO.Identifier'Value (URI (URI'First + 1 .. Pos));
-
-      Log.Info ("GET storage file {0}", URI);
-      Manager.Load (From => Id, Name => Name, Mime => Mime, Date => Date, Into => Data);
 
       --  Send the file.
       Response.Set_Content_Type (Ada.Strings.Unbounded.To_String (Mime));
@@ -127,9 +108,37 @@ package body AWA.Storages.Servlets is
 
    exception
       when ADO.Objects.NOT_FOUND | Constraint_Error =>
-         Log.Info ("Storage file {0} not found", URI);
+         Log.Info ("Storage file {0} not found", Request.Get_Request_URI);
          Response.Send_Error (ASF.Responses.SC_NOT_FOUND);
          return;
    end Do_Get;
+
+   --  ------------------------------
+   --  Load the data content that correspond to the GET request and get the name as well
+   --  as mime-type and date.
+   --  ------------------------------
+   procedure Load (Server   : in Storage_Servlet;
+                   Request  : in out ASF.Requests.Request'Class;
+                   Name     : out Ada.Strings.Unbounded.Unbounded_String;
+                   Mime     : out Ada.Strings.Unbounded.Unbounded_String;
+                   Date     : out Ada.Calendar.Time;
+                   Data     : out ADO.Blob_Ref) is
+      pragma Unreferenced (Server);
+
+      Store   : constant String := Request.Get_Path_Parameter (1);
+      Manager : constant Services.Storage_Service_Access := Storages.Modules.Get_Storage_Manager;
+      Id      : ADO.Identifier;
+   begin
+      if Store'Length = 0 then
+         Log.Info ("Invalid storage URI: {0}", Store);
+         return;
+      end if;
+
+      --  Extract the storage identifier from the URI.
+      Id := ADO.Identifier'Value (Store);
+
+      Log.Info ("GET storage file {0}", Store);
+      Manager.Load (From => Id, Name => Name, Mime => Mime, Date => Date, Into => Data);
+   end Load;
 
 end AWA.Storages.Servlets;
