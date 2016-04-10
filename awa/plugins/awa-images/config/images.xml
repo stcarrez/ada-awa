@@ -4,7 +4,7 @@
   <context-param>
     <param-name>images.thumbnail_command</param-name>
 <!--    "C:/Program Files/ImageMagick-6.7.8-Q8/convert.exe" -verbose -resize 64x64 -background white -gravity center -extent 64x64 -format jpg -quality 75 \#{src} \#{dst}  -->
-    <param-value>convert -verbose -resize 64x64 -background white -gravity center -extent 64x64 -format jpg -quality 75 \#{src} \#{dst}</param-value>
+    <param-value>convert -verbose -resize \#{width}x\#{height} -background white -gravity center -extent \#{width}x\#{height} -format jpg -quality 75 \#{src} \#{dst}</param-value>
   </context-param>
 
   <managed-bean>
