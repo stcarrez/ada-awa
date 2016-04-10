@@ -110,8 +110,8 @@ package AWA.Components.Wikis is
    procedure Make_Image_Link (Renderer : in out Link_Renderer_Bean;
                               Link     : in Wiki.Strings.WString;
                               URI      : out Unbounded_Wide_Wide_String;
-                              Width    : out Natural;
-                              Height   : out Natural);
+                              Width    : in out Natural;
+                              Height   : in out Natural);
 
    --  Get the page link that must be rendered from the wiki page link.
    overriding
