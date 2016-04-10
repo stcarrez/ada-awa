@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-servlets -- Serve files saved in the storage service
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +15,8 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Ada.Calendar;
+
 with ASF.Servlets;
 with ASF.Requests;
 with ASF.Responses;
@@ -70,6 +72,15 @@ package AWA.Storages.Servlets is
    procedure Do_Get (Server   : in Storage_Servlet;
                      Request  : in out ASF.Requests.Request'Class;
                      Response : in out ASF.Responses.Response'Class);
+
+   --  Load the data content that correspond to the GET request and get the name as well
+   --  as mime-type and date.
+   procedure Load (Server   : in Storage_Servlet;
+                   Request  : in out ASF.Requests.Request'Class;
+                   Name     : out Ada.Strings.Unbounded.Unbounded_String;
+                   Mime     : out Ada.Strings.Unbounded.Unbounded_String;
+                   Date     : out Ada.Calendar.Time;
+                   Data     : out ADO.Blob_Ref);
 
 private
 
