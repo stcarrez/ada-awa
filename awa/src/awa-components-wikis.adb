@@ -331,8 +331,8 @@ package body AWA.Components.Wikis is
    procedure Make_Image_Link (Renderer : in out Link_Renderer_Bean;
                               Link     : in Wiki.Strings.WString;
                               URI      : out Unbounded_Wide_Wide_String;
-                              Width    : out Natural;
-                              Height   : out Natural) is
+                              Width    : in out Natural;
+                              Height   : in out Natural) is
    begin
       Renderer.Make_Link (Link, Renderer.Image_Prefix, URI);
       Width  := 0;
