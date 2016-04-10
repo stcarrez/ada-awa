@@ -268,7 +268,7 @@ package body AWA.Storages.Services is
          declare
             Store   : Stores.Store_Access;
             Storage : AWA.Storages.Models.Storage_Ref;
-            File    : AWA.Storages.Storage_File;
+            File    : AWA.Storages.Storage_File (TMP);
             Found   : Boolean;
          begin
             Store := Storage_Service'Class (Service).Get_Store (Kind);
@@ -293,7 +293,7 @@ package body AWA.Storages.Services is
    procedure Get_Local_File (Service : in Storage_Service;
                              From    : in ADO.Identifier;
                              Mode    : in Read_Mode := READ;
-                             Into    : out Storage_File) is
+                             Into    : in out Storage_File) is
       use type Stores.Store_Access;
       use type Models.Storage_Type;
 
@@ -306,6 +306,10 @@ package body AWA.Storages.Services is
       Local   : AWA.Storages.Models.Store_Local_Ref;
       Store   : Stores.Store_Access;
    begin
+      if Into.Storage = AWA.Storages.DATABASE then
+         Log.Error ("'DATABASE' is not a valid storage type for local file");
+         return;
+      end if;
       if Mode = READ then
          Query.Set_Query (AWA.Storages.Models.Query_Storage_Get_Local);
          Query.Bind_Param ("store_id", From);
@@ -343,7 +347,7 @@ package body AWA.Storages.Services is
    end Get_Local_File;
 
    procedure Create_Local_File (Service : in out Storage_Service;
-                                Into    : out AWA.Storages.Storage_File) is
+                                Into    : in out AWA.Storages.Storage_File) is
       Tmp   : constant String := Service.Get_Config (Stores.Files.Tmp_Directory_Parameter.P);
       Value : Integer;
    begin
@@ -354,14 +358,22 @@ package body AWA.Storages.Services is
    --  ------------------------------
    --  Create a temporary file path.
    --  ------------------------------
-   procedure Create_Local_File (Service : in out Storage_Service;
-                                Into    : out AWA.Storages.Temporary_File) is
+   procedure Create (Service : in out Storage_Service;
+                     Into    : out AWA.Storages.Storage_File;
+                     Storage : in AWA.Storages.Models.Storage_Type) is
+      use type Stores.Store_Access;
+      Store     : Stores.Store_Access;
       Tmp   : constant String := Service.Get_Config (Stores.Files.Tmp_Directory_Parameter.P);
       Value : Integer;
    begin
-      Util.Concurrent.Counters.Increment (Service.Temp_Id, Value);
-      Into.Path := Ada.Strings.Unbounded.To_Unbounded_String (Tmp & "/tmp-" & Util.Strings.Image (Value));
-   end Create_Local_File;
+      Store := Storage_Service'Class (Service).Get_Store (Storage);
+      if Store = null then
+         Log.Error ("There is no store for storage {0}", Models.Storage_Type'Image (Storage));
+      end if;
+--        Store.Create (Session => ,
+--                      From    => ,
+--                      Into    => Into);
+   end Create;
 
    --  ------------------------------
    --  Deletes the storage instance.
