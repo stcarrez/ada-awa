@@ -21,6 +21,7 @@ with Util.Beans.Objects;
 with Util.Log.Loggers;
 with Util.Streams.Pipes;
 with Util.Streams.Texts;
+with Util.Strings;
 
 with ADO;
 with ADO.Sessions;
@@ -65,8 +66,8 @@ package body AWA.Images.Services is
    procedure Create_Thumbnail (Service : in Image_Service;
                                Source  : in String;
                                Into    : in String;
-                               Width   : out Natural;
-                               Height  : out Natural) is
+                               Width   : in out Natural;
+                               Height  : in out Natural) is
       Ctx       : EL.Contexts.Default.Default_Context;
       Variables : aliased EL.Variables.Default.Default_Variable_Mapper;
 
@@ -75,6 +76,8 @@ package body AWA.Images.Services is
    begin
       Variables.Bind ("src", Util.Beans.Objects.To_Object (Source));
       Variables.Bind ("dst", Util.Beans.Objects.To_Object (Into));
+      Variables.Bind ("width", Util.Beans.Objects.To_Object (Width));
+      Variables.Bind ("height", Util.Beans.Objects.To_Object (Height));
       Ctx.Set_Variable_Mapper (Variables'Unchecked_Access);
       declare
          Cmd     : constant Util.Beans.Objects.Object := Service.Thumbnail_Command.Get_Value (Ctx);
@@ -137,11 +140,11 @@ package body AWA.Images.Services is
       DB          : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
       Img         : AWA.Images.Models.Image_Ref;
       Thumb       : AWA.Images.Models.Image_Ref;
-      Target_File : AWA.Storages.Storage_File;
-      Local_File  : AWA.Storages.Storage_File;
+      Target_File : AWA.Storages.Storage_File (AWA.Storages.TMP);
+      Local_File  : AWA.Storages.Storage_File (AWA.Storages.CACHE);
       Thumbnail   : AWA.Storages.Models.Storage_Ref;
-      Width       : Natural;
-      Height      : Natural;
+      Width       : Natural := 64;
+      Height      : Natural := 64;
       Name        : Ada.Strings.Unbounded.Unbounded_String;
    begin
       Img.Load (DB, Id);
@@ -159,7 +162,8 @@ package body AWA.Images.Services is
          Thumbnail.Set_Folder (Image_File.Get_Folder);
          Thumbnail.Set_Owner (Image_File.Get_Owner);
          Thumbnail.Set_Name (String '(Image_File.Get_Name));
-         Storage_Service.Save (Thumbnail, Target_File, AWA.Storages.Models.DATABASE);
+         Storage_Service.Save (Thumbnail, AWA.Storages.Get_Path (Target_File),
+                               AWA.Storages.Models.DATABASE);
          Thumb.Set_Width (64);
          Thumb.Set_Height (64);
          Thumb.Set_Owner (Image_File.Get_Owner);
@@ -205,5 +209,60 @@ package body AWA.Images.Services is
    begin
       null;
    end Delete_Image;
+
+   --  ------------------------------
+   --  Scale the image dimension.
+   --  ------------------------------
+   procedure Scale (Width     : in Natural;
+                    Height    : in Natural;
+                    To_Width  : in out Natural;
+                    To_Height : in out Natural) is
+   begin
+      if To_Width = Natural'Last or To_Height = Natural'Last
+        or (To_Width = 0 and To_Height = 0)
+      then
+         To_Width  := Width;
+         To_Height := Height;
+      elsif To_Width = 0 then
+         To_Width := (Width * To_Height) / Height;
+      elsif To_Height = 0 then
+         To_Height := (Height * To_Width) / Width;
+      end if;
+   end Scale;
+
+   --  ------------------------------
+   --  Get the dimension represented by the string.  The string has one of the following
+   --  formats:
+   --    original          -> Width, Height := Natural'Last
+   --    default           -> Width, Height := 0
+   --    <width>x          -> Width := <width>, Height := 0
+   --    x<height>         -> Width := 0, Height := <height>
+   --    <width>x<height>  -> Width := <width>, Height := <height>
+   --  ------------------------------
+   procedure Get_Sizes (Dimension : in String;
+                        Width     : out Natural;
+                        Height    : out Natural) is
+      Pos : Natural;
+   begin
+      if Dimension = "original" then
+         Width  := Natural'Last;
+         Height := Natural'Last;
+      elsif Dimension = "default" then
+         Width  := 800;
+         Height := 0;
+      else
+         Pos := Util.Strings.Index (Dimension, 'x');
+         if Pos > Dimension'First then
+            Width := Natural'Value (Dimension (Dimension'First .. Pos - 1));
+         else
+            Width := 0;
+         end if;
+         if Pos < Dimension'Last then
+            Height := Natural'Value (Dimension (Pos + 1 .. Dimension'Last));
+         else
+            Height := 0;
+         end if;
+      end if;
+   end Get_Sizes;
 
 end AWA.Images.Services;
