@@ -83,22 +83,22 @@ package AWA.Wikis.Beans is
                               Link     : in Wiki.Strings.WString;
                               Info     : in AWA.Wikis.Models.Wiki_Image_Info;
                               URI      : out Unbounded_Wide_Wide_String;
-                              Width    : out Natural;
-                              Height   : out Natural);
+                              Width    : in out Natural;
+                              Height   : in out Natural);
 
    procedure Find_Image_Link (Renderer : in out Wiki_Links_Bean;
                               Link     : in Wiki.Strings.WString;
                               URI      : out Unbounded_Wide_Wide_String;
-                              Width    : out Natural;
-                              Height   : out Natural);
+                              Width    : in out Natural;
+                              Height   : in out Natural);
 
    --  Get the image link that must be rendered from the wiki image link.
    overriding
    procedure Make_Image_Link (Renderer : in out Wiki_Links_Bean;
                               Link     : in Wiki.Strings.WString;
                               URI      : out Unbounded_Wide_Wide_String;
-                              Width    : out Natural;
-                              Height   : out Natural);
+                              Width    : in out Natural;
+                              Height   : in out Natural);
 
    --  Get the page link that must be rendered from the wiki page link.
    overriding
