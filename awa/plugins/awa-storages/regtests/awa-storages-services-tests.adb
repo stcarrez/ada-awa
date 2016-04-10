@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-services-tests -- Unit tests for storage service
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -120,7 +120,7 @@ package body AWA.Storages.Services.Tests is
 
       T.Save;
       declare
-         File : AWA.Storages.Storage_File;
+         File : AWA.Storages.Storage_File (AWA.Storages.TMP);
       begin
          T.Manager.Get_Local_File (From => T.Id, Into => File);
          T.Assert (AWA.Storages.Get_Path (File)'Length > 0, "Invalid local file path");
