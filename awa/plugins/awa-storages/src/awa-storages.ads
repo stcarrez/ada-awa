@@ -18,6 +18,8 @@
 with Ada.Strings.Unbounded;
 with Ada.Finalization;
 
+with ADO;
+
 --  == Introduction ==
 --  The <b>Storages</b> module provides a set of storage services allowing an application
 --  to store data files, documents, images in a persistent area.  The persistent store can
@@ -92,27 +94,38 @@ with Ada.Finalization;
 --
 package AWA.Storages is
 
-   type Storage_File is limited private;
+   type Storage_Type is (DATABASE, FILE, URL, CACHE, TMP);
+
+   type Storage_File (Storage : Storage_Type) is tagged limited private;
 
    --  Get the path to get access to the file.
    function Get_Path (File : in Storage_File) return String;
 
-   type Temporary_File is limited private;
+   --  Set the file path for the FILE, URL, CACHE or TMP storage.
+   procedure Set (File : in out Storage_File;
+                  Path : in String);
 
-   --  Get the path to get access to the file.
-   function Get_Path (File : in Temporary_File) return String;
+   --  Set the file database storage identifier.
+   procedure Set (File      : in out Storage_File;
+                  Workspace : in ADO.Identifier;
+                  Store     : in ADO.Identifier);
 
 private
 
-   type Storage_File is limited record
-      Path : Ada.Strings.Unbounded.Unbounded_String;
-   end record;
+   type Storage_File (Storage : Storage_Type) is limited
+   new Ada.Finalization.Limited_Controlled with record
+      case Storage is
+         when DATABASE =>
+            Workspace : ADO.Identifier;
+            Store     : ADO.Identifier;
 
-   type Temporary_File is limited new Ada.Finalization.Limited_Controlled with record
-      Path : Ada.Strings.Unbounded.Unbounded_String;
+         when FILE | URL | CACHE | TMP =>
+            Path    : Ada.Strings.Unbounded.Unbounded_String;
+
+      end case;
    end record;
 
    overriding
-   procedure Finalize (File : in out Temporary_File);
+   procedure Finalize (File : in out Storage_File);
 
 end AWA.Storages;
