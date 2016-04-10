@@ -56,8 +56,8 @@ package AWA.Images.Services is
    procedure Create_Thumbnail (Service : in Image_Service;
                                Source  : in String;
                                Into    : in String;
-                               Width   : out Natural;
-                               Height  : out Natural);
+                               Width   : in out Natural;
+                               Height  : in out Natural);
 
    --  Build a thumbnail for the image identified by the Id.
    procedure Build_Thumbnail (Service : in Image_Service;
@@ -71,6 +71,23 @@ package AWA.Images.Services is
    --  Deletes the storage instance.
    procedure Delete_Image (Service : in Image_Service;
                            File    : in AWA.Storages.Models.Storage_Ref'Class);
+
+   --  Scale the image dimension.
+   procedure Scale (Width     : in Natural;
+                    Height    : in Natural;
+                    To_Width  : in out Natural;
+                    To_Height : in out Natural);
+
+   --  Get the dimension represented by the string.  The string has one of the following
+   --  formats:
+   --    original          -> Width, Height := Natural'Last
+   --    default           -> Width, Height := 0
+   --    <width>x          -> Width := <width>, Height := 0
+   --    x<height>         -> Width := 0, Height := <height>
+   --    <width>x<height>  -> Width := <width>, Height := <height>
+   procedure Get_Sizes (Dimension : in String;
+                        Width     : out Natural;
+                        Height    : out Natural);
 
 private
 
