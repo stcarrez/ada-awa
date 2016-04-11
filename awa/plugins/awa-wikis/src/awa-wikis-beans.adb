@@ -1055,7 +1055,23 @@ package body AWA.Wikis.Beans is
          return Util.Beans.Objects.To_Object (Value   => From.Page.Plugins_Bean,
                                               Storage => Util.Beans.Objects.STATIC);
       elsif Name = "imageThumbnail" then
-         return Util.Beans.Objects.Null_Object;
+         declare
+            use Ada.Strings.Wide_Wide_Unbounded;
+
+            URI : Ada.Strings.Wide_Wide_Unbounded.Unbounded_Wide_Wide_String;
+            W   : Natural := 64;
+            H   : Natural := 64;
+         begin
+            if Image_Info_Maps.Has_Element (From.Page.Links.Pos) then
+               From.Page.Links.Make_Image_Link (Link   => Image_Info_Maps.Key (From.Page.Links.Pos),
+                                                Info   => Image_Info_Maps.Element (From.Page.Links.Pos),
+                                                URI    => URI,
+                                                Width  => W,
+                                                Height => H);
+            end if;
+            return Util.Beans.Objects.To_Object (URI);
+         end;
+
       elsif Name = "imageTitle" then
          if Image_Info_Maps.Has_Element (From.Page.Links.Pos) then
             return Util.Beans.Objects.To_Object (Image_Info_Maps.Key (From.Page.Links.Pos));
@@ -1136,7 +1152,7 @@ package body AWA.Wikis.Beans is
          procedure Collect_Image (Pos : in Wiki.Filters.Collectors.Cursor) is
             Image : constant Wiki.Strings.WString := Wiki.Filters.Collectors.WString_Maps.Key (Pos);
             URI   : Wiki.Strings.UString;
-            W, H  : Natural;
+            W, H  : Natural := 0;
          begin
             Into.Page.Links.Make_Image_Link (Link   => Image,
                                              URI    => URI,
