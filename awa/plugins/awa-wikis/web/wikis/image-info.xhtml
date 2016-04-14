@@ -92,13 +92,18 @@
                                     </dd>
                                     <dt>#{wikiMsg.wiki_image_mime_label}</dt>
                                     <dd>#{wikiImageInfo.mime_type}</dd>
-                                    <dt>Resolutions</dt>
+                                    <dt>#{wikiMsg.wiki_image_resolution_label}</dt>
                                     <dd>
                                         <div class="wiki-image-view">
 
                                         <h:list var="img" value="#{wikiImageInfo.list}">
                                             <a href="#{wikiImageInfo.imageUrl}">
-                                                <span>#{img.width} x #{img.height} pixels</span>
+                                                <span>
+                                                    <h:outputFormat value="#{wikiMsg.wiki_image_dimension}">
+                                                        <f:param value="#{img.width}"/>
+                                                        <f:param value="#{img.height}"/>
+                                                    </h:outputFormat>
+                                                </span>
                                                 <span>(<h:outputText value="#{img.file_size}">
                                                           <f:converter converterId="sizeConverter"/>
                                                       </h:outputText>)
