@@ -305,3 +305,9 @@
 .wiki-upload-form {
     background-color: #f6f6f3;
 }
+.wiki-image-view a {
+    font-weight: bold;
+    padding-right: 0.5em;
+    padding-bottom: 0.5em;
+    display: inline-block;
+}
