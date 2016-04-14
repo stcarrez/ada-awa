@@ -1211,16 +1211,29 @@ package body AWA.Wikis.Beans is
                                               Storage => Util.Beans.Objects.STATIC);
       elsif Name = "imageUrl" then
          declare
-            use Ada.Strings.Unbounded;
-            Pos  : Natural := From.List.Get_Row_Index;
+            use Ada.Strings.Wide_Wide_Unbounded;
 
-            S : constant String := Wiki.Strings.To_String (Wiki.Strings.To_WString (From.Page.Links.Image_Prefix));
-            URI : Ada.Strings.Unbounded.Unbounded_String;
+            Pos   : Natural := From.List_Bean.Get_Row_Index;
+            Info  : AWA.Wikis.Models.Wiki_Image_Info;
+            URI   : Ada.Strings.Wide_Wide_Unbounded.Unbounded_Wide_Wide_String;
+            W     : Natural := 0;
+            H     : Natural := 0;
+            Name  : constant String := Ada.Strings.Unbounded.To_String (From.Name);
+            WName : constant Wiki.Strings.WString := Wiki.Strings.To_WString (Name);
          begin
-            URI := To_Unbounded_String (S);
-            Append (URI, Util.Strings.Image (Integer (From.Id)));
-            Append (URI, "/");
-            Append (URI, From.Name);
+            if Pos >= 0 and Pos < From.List_Bean.Get_Count then
+               Info := From.List_Bean.List.Element (Pos);
+               W := Info.Width;
+               H := Info.Height;
+            end if;
+            Info.Id     := From.Id;
+            Info.Width  := From.Width;
+            Info.Height := From.Height;
+            From.Page.Links.Make_Image_Link (Link   => WName,
+                                             Info   => Info,
+                                             URI    => URI,
+                                             Width  => W,
+                                             Height => H);
             return Util.Beans.Objects.To_Object (URI);
          end;
       else
@@ -1289,12 +1302,16 @@ package body AWA.Wikis.Beans is
          declare
             Img : constant AWA.Wikis.Models.Wiki_Image_Info := Into.List.List.First_Element;
          begin
-            Into.Id          := Img.Id;
+            if Img.Id > 0 then
+               Into.Id          := Img.Id;
+               Into.Mime_Type   := Img.Mime_Type;
+               Into.Storage     := Img.Storage;
+               Into.File_Size   := Img.File_Size;
+               Into.Create_Date := Img.Create_Date;
+               Into.Width       := Img.Width;
+               Into.Height      := Img.Height;
+            end if;
             Into.Folder_Id   := Img.Folder_Id;
-            Into.Mime_Type   := Img.Mime_Type;
-            Into.Storage     := Img.Storage;
-            Into.File_Size   := Img.File_Size;
-            Into.Create_Date := Img.Create_Date;
          end;
       end if;
    end Load;
