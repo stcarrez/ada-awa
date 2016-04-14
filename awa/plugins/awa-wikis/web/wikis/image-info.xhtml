@@ -77,7 +77,7 @@
                             <dl class="wiki-image-details">
                                 <dt>#{wikiMsg.wiki_image_file_label}</dt>
                                 <dd>#{wikiImageInfo.folder_name}/#{wikiImageInfo.name}</dd>
-                                <h:panelGroup rendered="#{wikiImageInfo.list.count != 0}">
+                                <h:panelGroup rendered="#{wikiImageInfo.id ne 0}">
                                     <dt>#{wikiMsg.wiki_image_file_size_label}</dt>
                                     <dd>
                                         <h:outputText value="#{wikiImageInfo.file_size}">
@@ -92,8 +92,23 @@
                                     </dd>
                                     <dt>#{wikiMsg.wiki_image_mime_label}</dt>
                                     <dd>#{wikiImageInfo.mime_type}</dd>
+                                    <dt>Resolutions</dt>
+                                    <dd>
+                                        <div class="wiki-image-view">
+
+                                        <h:list var="img" value="#{wikiImageInfo.list}">
+                                            <a href="#{wikiImageInfo.imageUrl}">
+                                                <span>#{img.width} x #{img.height} pixels</span>
+                                                <span>(<h:outputText value="#{img.file_size}">
+                                                          <f:converter converterId="sizeConverter"/>
+                                                      </h:outputText>)
+                                                </span>
+                                            </a>
+                                        </h:list>
+                                        </div>
+                                    </dd>
                                 </h:panelGroup>
-                                <h:panelGroup rendered="#{wikiImageInfo.list.count == 0}">
+                                <h:panelGroup rendered="#{wikiImageInfo.id eq 0 or wikiImageInfo.list.count == 0}">
                                     <dd>#{wikiMsg.wiki_image_missing_message}</dd>
                                 </h:panelGroup>
                             </dl>
@@ -107,16 +122,12 @@
                                         src="#{contextPath}/wikis/forms/upload-form.html?folderId=#{wikiImageInfo.folder_id}&amp;name=#{wikiImageInfo.name}"/>
                             </div>
                         </div>
-                        <div class="wiki-image-view">
-                            <h:list var="img" value="#{wikiImageInfo.list}">
-                            <img src="#{wikiImageInfo.imageUrl}" alt="#{img.width}x#{img.height}"/>
-                            width=#{img.width}
-                            height=#{img.height}
-                            size=#{img.file_size}
-                            mime=#{img.mime_type}
-                            </h:list>
-                        </div>
                     </div>
+                    <h:panelGroup rendered="#{wikiImageInfo.id ne 0}">
+                        <div class="wiki-image-view">
+                            <img src="#{wikiImageInfo.imageUrl}"/>
+                        </div>
+                    </h:panelGroup>
                </div>
                 <h:panelGroup rendered="#{not empty wikiView.right_side}">
                     <div class="grid_2">
