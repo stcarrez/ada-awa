@@ -10,6 +10,6 @@ GPRPATH=awa_mail.gpr
 pre-build:	src/awa-mail-clients-factory.adb
 
 # Configure the driver file
-src/awa-mail-clients-factory.adb: src/awa-mail-clients-factory.gpb Makefile
+src/awa-mail-clients-factory.adb: src/awa-mail-clients-factory.gpb Makefile ../../rules.mk
 	gnatprep -DHAVE_AWS=$(HAVE_AWS) \
 		  src/awa-mail-clients-factory.gpb $@
