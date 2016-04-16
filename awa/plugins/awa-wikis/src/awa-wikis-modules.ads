@@ -168,6 +168,8 @@ package AWA.Wikis.Modules is
    procedure Load_Image (Model    : in Wiki_Module;
                          Wiki_Id  : in ADO.Identifier;
                          Image_Id : in ADO.Identifier;
+                         Width    : in out Natural;
+                         Height   : in out Natural;
                          Mime     : out Ada.Strings.Unbounded.Unbounded_String;
                          Date     : out Ada.Calendar.Time;
                          Into     : out ADO.Blob_Ref);
