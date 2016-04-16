@@ -471,6 +471,8 @@ package body AWA.Wikis.Modules is
    procedure Load_Image (Model    : in Wiki_Module;
                          Wiki_Id  : in ADO.Identifier;
                          Image_Id : in ADO.Identifier;
+                         Width    : in out Natural;
+                         Height   : in out Natural;
                          Mime     : out Ada.Strings.Unbounded.Unbounded_String;
                          Date     : out Ada.Calendar.Time;
                          Into     : out ADO.Blob_Ref) is
@@ -479,10 +481,20 @@ package body AWA.Wikis.Modules is
       Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       User  : constant ADO.Identifier := Ctx.Get_User_Identifier;
       DB    : ADO.Sessions.Session := AWA.Services.Contexts.Get_Session (Ctx);
-      Query : ADO.Statements.Query_Statement
-        := DB.Create_Statement (Models.Query_Wiki_Image_Get_Data);
+      Query : ADO.Statements.Query_Statement;
       Kind  : AWA.Storages.Models.Storage_Type;
    begin
+      if Width = Natural'Last or Height = Natural'Last then
+         Query := DB.Create_Statement (Models.Query_Wiki_Image_Get_Data);
+      elsif Width > 0 then
+         Query := DB.Create_Statement (Models.Query_Wiki_Image_Width_Get_Data);
+         Query.Bind_Param ("width", Width);
+      elsif Height > 0 then
+         Query := DB.Create_Statement (Models.Query_Wiki_Image_Height_Get_Data);
+         Query.Bind_Param ("height", Height);
+      else
+         Query := DB.Create_Statement (Models.Query_Wiki_Image_Get_Data);
+      end if;
       Query.Bind_Param ("wiki_id", Wiki_Id);
       Query.Bind_Param ("store_id", Image_Id);
       Query.Bind_Param ("user_id", User);
@@ -493,11 +505,13 @@ package body AWA.Wikis.Modules is
          Log.Warn ("Wiki image entity {0} not found", ADO.Identifier'Image (Image_Id));
          raise ADO.Objects.NOT_FOUND;
       end if;
-      Mime := Query.Get_Unbounded_String (0);
-      Date := Query.Get_Time (1);
-      Kind := AWA.Storages.Models.Storage_Type'Val (Query.Get_Integer (3));
+      Mime   := Query.Get_Unbounded_String (0);
+      Date   := Query.Get_Time (1);
+      Width  := Query.Get_Natural (4);
+      Height := Query.Get_Natural (5);
+      Kind   := AWA.Storages.Models.Storage_Type'Val (Query.Get_Integer (3));
       if Kind = AWA.Storages.Models.DATABASE then
-         Into := Query.Get_Blob (4);
+         Into := Query.Get_Blob (6);
       else
          null;
       end if;
