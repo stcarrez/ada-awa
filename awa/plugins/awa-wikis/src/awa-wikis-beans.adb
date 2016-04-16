@@ -77,10 +77,12 @@ package body AWA.Wikis.Beans is
       else
          Append (URI, Link (Sep + 1 .. Link'Last));
       end if;
-      AWA.Images.Services.Scale (Width     => Info.Width,
-                                 Height    => Info.Height,
-                                 To_Width  => Width,
-                                 To_Height => Height);
+      if Info.Width /= 0 and Info.Height /= 0 then
+         AWA.Images.Services.Scale (Width     => Info.Width,
+                                    Height    => Info.Height,
+                                    To_Width  => Width,
+                                    To_Height => Height);
+      end if;
    end Make_Image_Link;
 
    procedure Find_Image_Link (Renderer : in out Wiki_Links_Bean;
