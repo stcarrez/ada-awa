@@ -603,6 +603,10 @@ package AWA.Wikis.Models is
 
    Query_Wiki_Image_Get_Data : constant ADO.Queries.Query_Definition_Access;
 
+   Query_Wiki_Image_Width_Get_Data : constant ADO.Queries.Query_Definition_Access;
+
+   Query_Wiki_Image_Height_Get_Data : constant ADO.Queries.Query_Definition_Access;
+
    --  --------------------
    --    The list of wikis.
    --  --------------------
@@ -1289,6 +1293,18 @@ private
                                      File => File_2.File'Access);
    Query_Wiki_Image_Get_Data : constant ADO.Queries.Query_Definition_Access
    := Def_Wikiimageinfo_Wiki_Image_Get_Data.Query'Access;
+
+   package Def_Wikiimageinfo_Wiki_Image_Width_Get_Data is
+      new ADO.Queries.Loaders.Query (Name => "wiki-image-width-get-data",
+                                     File => File_2.File'Access);
+   Query_Wiki_Image_Width_Get_Data : constant ADO.Queries.Query_Definition_Access
+   := Def_Wikiimageinfo_Wiki_Image_Width_Get_Data.Query'Access;
+
+   package Def_Wikiimageinfo_Wiki_Image_Height_Get_Data is
+      new ADO.Queries.Loaders.Query (Name => "wiki-image-height-get-data",
+                                     File => File_2.File'Access);
+   Query_Wiki_Image_Height_Get_Data : constant ADO.Queries.Query_Definition_Access
+   := Def_Wikiimageinfo_Wiki_Image_Height_Get_Data.Query'Access;
 
    package File_3 is
       new ADO.Queries.Loaders.File (Path => "wiki-list.xml",
