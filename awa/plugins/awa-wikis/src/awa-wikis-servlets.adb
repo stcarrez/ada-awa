@@ -44,6 +44,8 @@ package body AWA.Wikis.Servlets is
       File_Id   : ADO.Identifier;
       Width     : Natural;
       Height    : Natural;
+      Img_Width : Natural;
+      Img_Height : Natural;
    begin
       Wiki_Id := ADO.Identifier'Value (Wiki);
       File_Id := ADO.Identifier'Value (File);
@@ -52,8 +54,12 @@ package body AWA.Wikis.Servlets is
                                      Width     => Width,
                                      Height    => Height);
 
+      Img_Width  := Width;
+      Img_Height := Height;
       Module.Load_Image (Wiki_Id  => Wiki_Id,
                          Image_Id => File_Id,
+                         Width    => Img_Width,
+                         Height   => Img_Height,
                          Mime     => Mime,
                          Date     => Date,
                          Into     => Data);
