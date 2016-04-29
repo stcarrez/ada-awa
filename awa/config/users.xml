@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <module version="1.0">
   <!-- Application override
-   app_base_url
+   app_url_base
    app_facebook_client_id
    app_facebook_secret
    app_google_plus_client_id
