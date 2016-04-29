@@ -1328,6 +1328,10 @@ package body AWA.Wikis.Beans is
       Object.Module         := Module;
       Object.List_Bean      := Object.List'Access;
       Object.Page           := Get_Wiki_View_Bean ("wikiView");
+      Object.Id             := ADO.NO_IDENTIFIER;
+      Object.Folder_Id      := ADO.NO_IDENTIFIER;
+      Object.Width          := 0;
+      Object.Height         := 0;
       return Object.all'Access;
    end Create_Wiki_Image_Info_Bean;
 
