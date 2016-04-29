@@ -153,3 +153,5 @@ endif
 	for i in ${PLUGINS} ; do \
 	   $(MAKE) -C plugins/$$i uninstall; \
 	done
+
+post-install:	install-info
