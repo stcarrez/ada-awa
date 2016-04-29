@@ -12,7 +12,10 @@ GPRINSTALL=@GPRINSTALL@
 SVN=svn
 INSTALL=@INSTALL@
 
+HAVE_GPR=$(shell test -f ${NAME}.gpr && echo 1 || echo 0)
+ifeq (${HAVE_GPR},1)
 GPRPATH:=${NAME}.gpr
+endif
 
 BUILDS_SHARED=@BUILDS_SHARED@
 
@@ -74,10 +77,10 @@ MAKE_ARGS=-XMODE=${MODE} -XAWA_LIBRARY_TYPE=${AWA_LIBRARY_TYPE} -XPROCESSORS=$(P
 
 ifeq (${BUILDS_SHARED},yes)
 all:     static shared
-install: install_static install_shared install-bin install-info
+install: install_static install_shared install-bin post-install
 else
 all:     static
-install: install_static install-bin install-info
+install: install_static install-bin post-install
 endif
 
 # Build executables for all mains defined by the project.
@@ -185,6 +188,7 @@ install_lib:  pre-install
 	     (tar --exclude=.svn --exclude='*~' -cf - db)| (cd ${dynamodir}/${NAME}/ && tar xf -)
 	test ! -d web || \
 	     (tar --exclude=.svn --exclude='*~' -cf - web )| (cd ${dynamodir}/${NAME}/ && tar xf -)
+ifneq (${GPRPATH},)
 ifneq (${GPRINSTALL},)
 	$(GPRINSTALL) -p -f --prefix=${prefix} $(MAKE_ARGS) \
 		--build-name=$(AWA_LIBRARY_TYPE) $(GPRPATH)
@@ -213,9 +217,11 @@ else
 	      ${LN} ${LIBNAME}.$(LIBVER) ${LIBNAME}.$(LIBEXT))
 endif
 endif
+endif
 
 uninstall:  pre-uninstall
 	rm -rf ${dynamodir}/${NAME}
+ifneq (${GPRPATH},)
 ifneq (${GPRINSTALL},)
 	-$(GPRINSTALL) -q -f --prefix=${prefix} $(MAKE_ARGS) --uninstall $(GPRPATH)
 else
@@ -224,6 +230,7 @@ else
 	rm -f ${libdir}/${LIBNAME}.$(LIBVER)
 	rm -f ${projectdir}/${NAME}.gpr
 	rm -rf ${alidir}/${NAME}
+endif
 endif
 
 install-bin:
@@ -237,6 +244,7 @@ pre-install:
 pre-uninstall:
 pre-dist-prepare:
 post-build:
+post-install:
 post-generate:
 
 install-info:
