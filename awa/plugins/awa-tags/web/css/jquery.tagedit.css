@@ -10,7 +10,7 @@
 /**
  * Styles of the tagedit inputsforms
  */
-.tagedit-list {margin: 0; padding: 5px 5px 0 5px; width: auto; overflow: auto; font-size: 11px; min-height: 25px; }
+.tagedit-list {margin: 0; padding: 5px 5px 0 5px; width: auto; overflow: auto; font-size: 0.7em; min-height: 25px; }
 .awa-form .tagedit-list {border: 1px solid #ccc; margin-bottom: 5px; }
 .tagedit-list li.tagedit-listelement {list-style-type: none; float: left; margin: 0 5px 5px 0; padding: 0; }
 /* New Item input */
