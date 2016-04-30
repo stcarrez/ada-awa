@@ -26,7 +26,7 @@
     </h:panelGroup>
     <h:panelGroup rendered="#{wikiVersionList.versions.count != 0 or true}">
         <h:list var="version" value="#{wikiVersionList.versions}">
-            <div class='awa-list-item' id="v_#{version.id}">
+            <div class='awa-list-item ui-list-item' id="v_#{version.id}">
                 <div class='awa-list-col wiki-page-name'>
                     #{version.page_version}
                 </div>
