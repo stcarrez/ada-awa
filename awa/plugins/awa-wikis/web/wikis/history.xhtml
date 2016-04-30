@@ -61,8 +61,10 @@
                         </ul>
                         <h2>#{wikiView.title}</h2>
                         <div class="wiki-page-info">
-                            <p><h:outputText id="date" value="#{wikiView.date}" converter="dateConverter"/></p>
-                            <p>Version #{wikiView.version} by #{wikiView.author}</p>
+                            <h:outputFormat value="#{wikiMsg.wiki_page_info}">
+                                <f:param value="#{wikiView.version}"/>
+                                <f:param value="#{wikiView.author}"/>
+                            </h:outputFormat>
                         </div>
                     </div>
                     <div class='wiki-admin awa-list-header' id="wiki-page-list-header">
@@ -86,6 +88,15 @@
                     </div>
                     <div id='wiki-page-action' class='asf-list-action'>
                         <a href="#" class='asf-icon asf-delete' title='#{wikiMsg.wiki_page_delete_action_tooltip}'></a>
+                    </div>
+                    <div class="wiki-page-footer">
+                        <h:outputFormat styleClass="wiki-page-date" value="#{wikiMsg.wiki_page_info_date}">
+                            <f:param value="#{wikiView.date}"/>
+                            <f:converter converterId="smartDateConverter"/>
+                        </h:outputFormat>
+                        <h:outputFormat styleClass="wiki-page-read-count" value="#{wikiMsg.wiki_page_info_read_count}">
+                            <f:param value="#{wikiView.counter.value}"/>
+                        </h:outputFormat>
                     </div>
                 </div>
                 <h:panelGroup rendered="#{not empty wikiView.right_side}">
