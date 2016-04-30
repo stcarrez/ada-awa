@@ -1,6 +1,6 @@
 /*
  *  awa-storages -- Storages and folders
- *  Copyright (C) 2012, 2013 Stephane Carrez
+ *  Copyright (C) 2012, 2013, 2016 Stephane Carrez
  *  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,7 +50,7 @@ div.awa-document div.awa-title {
 }
 div.awa-document div.awa-size {
     float: right;
-    width: 100px;
+    width: 130px;
     padding-left: 10px;
 }
 div.awa-document div.awa-mime {
