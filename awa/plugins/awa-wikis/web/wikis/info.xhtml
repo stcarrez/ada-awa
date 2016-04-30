@@ -61,8 +61,10 @@
                         </ul>
                         <h2>#{wikiView.title}</h2>
                         <div class="wiki-page-info">
-                            <p><h:outputText id="date" value="#{wikiView.date}" converter="dateConverter"/></p>
-                            <p>Version #{wikiView.version} by #{wikiView.author}</p>
+                            <h:outputFormat value="#{wikiMsg.wiki_page_info}">
+                                <f:param value="#{wikiView.version}"/>
+                                <f:param value="#{wikiView.author}"/>
+                            </h:outputFormat>
                         </div>
                     </div>
                     <awa:tagList value='#{wikiView.tags}' id='qtags' styleClass="wiki-tag-list tagedit-list"
@@ -96,6 +98,15 @@
                                     var="tagName" maxWeight="48" minWeight="16" rows="600"
                                     tagLink="#{contextPath}/wikis/tags/#{wikiPageInfo.wiki_id}/#{tagName}/recent"/>
 
+                    </div>
+                    <div class="wiki-page-footer">
+                        <h:outputFormat styleClass="wiki-page-date" value="#{wikiMsg.wiki_page_info_date}">
+                            <f:param value="#{wikiView.date}"/>
+                            <f:converter converterId="smartDateConverter"/>
+                        </h:outputFormat>
+                        <h:outputFormat styleClass="wiki-page-read-count" value="#{wikiMsg.wiki_page_info_read_count}">
+                            <f:param value="#{wikiView.counter.value}"/>
+                        </h:outputFormat>
                     </div>
                 </div>
                 <h:panelGroup rendered="#{not empty wikiView.right_side}">
