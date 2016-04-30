@@ -179,13 +179,13 @@ div.post-text p {
     margin-bottom: 0.5em;
 }
 div.post-text pre {
-    line-height: 1.2em;
+    line-height: 1.1em;
     margin-bottom: 1em;
     overflow: auto;
     background: #E8F0FF;
     padding: 4px;
     border: 1px solid #AAA;
-    font-size: 1.2em;
+    font-size: 1.1em;
 }
 div.post-text h2, div.post-text h3, div.post-text h4, div.post-text h5, div.post-text h6 {
     color: #346;
@@ -237,7 +237,7 @@ div.blog-post ul.tagedit-list {
 }
 div.blog-post-tag-info {
     border: 1px solid #f91;
-    margin-bottom: 4em;
+    margin-bottom: 1em;
 }
 div.blog-post-tag-info h2 {
     background: #f91;
@@ -272,7 +272,7 @@ li.comment, div.awa-comment-form {
 }
 li.comment div.comment-gravatar, div.awa-form div.comment-gravatar {
     position: absolute;
-    left: -90px;
+    left: -70px;
     top: 0;
 }
 li.comment div.comment-author {
@@ -317,4 +317,7 @@ ul.blog-pagination li {
     padding-top: 0.5em;
     padding-bottom: 0.5em;
     font-weight: bold;
+}
+#comment-add {
+    line-height: 2em;
 }
