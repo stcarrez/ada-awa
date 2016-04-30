@@ -20,7 +20,7 @@
 .wiki-page-version {
     width: 10%;
 }
-.wiki-page-status-false, .wiki-page-status-true {
+.wiki-page-status, .wiki-page-status-false, .wiki-page-status-true {
     width: 32px;
     height: 24px;
 }
