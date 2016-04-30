@@ -1,6 +1,6 @@
 /**
  * main.css - Main style for AWA pages
- * Copyright (C) 2011, 2012, 2014 Stephane Carrez
+ * Copyright (C) 2011, 2012, 2014, 2016 Stephane Carrez
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
 html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td, label {
@@ -12,7 +12,7 @@ html, body {
 }
 body {
   font-family: Arial, Verdana, sans-serif;
-  font-size: 14px;
+  font-size: 1.2em;
   background-color: #f0f0f0;
   overflow-y: scroll;
 }
@@ -57,11 +57,10 @@ body.awa {
   padding-left: 5px;
   padding-right: 5px;
   line-height: 24px;
-  font-size: 16px;
 }
 #awa-hdr li a, #awa-hdr li {
     color: #ddd;
-    font-size: 12px;
+    font-size: 0.9em;
     text-decoration: none;
     border-bottom: 3px solid #333;
 }
@@ -122,7 +121,6 @@ span.awa-error, dl.awa-error dt label, dl.asf-error dt label, dl.asf-error dd sp
     color: red;
 }
 span.awa-error {
-    font-size: 14px;
     margin-bottom: 2px;
     margin-top: 2px;
     height: auto;
@@ -132,7 +130,6 @@ span.awa-error {
  * Form definition.
  */
 div.awa-form {
-    font-size: 16px;
     float: left;
     width: 100%;
 }
@@ -160,7 +157,7 @@ dl.awa-optional dd, dl.awa-required dd {
 dl.awa-error dt {
     color: red;
 }
-dl.awa-error span.error {
+dl.awa-error span.error, span.awa-error {
     font-size: 0.9em;
 }
 dl.awa-optional label, dl.awa-required label {
@@ -174,12 +171,10 @@ dl.awa-optional label, dl.awa-required label {
 }
 dl.awa-optional input, dl.awa-required input {
     width: 98%;
-    font-size: 16px;
     padding: 3px;
 }
 dl.awa-optional textarea, dl.awa-required textarea {
     width: 98%;
-    font-size: 16px;
     padding: 3px;
 }
 
@@ -201,7 +196,6 @@ div.awa-messages {
 div.awa-error {
     width: 640px;
     margin: auto;
-    font-size: 16px;
 }
 
 /**
@@ -274,6 +268,11 @@ div.awa-modal div.awa-login {
     clear: both;
     width: 100%;
 }
+.awa-list-item {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
 
 /**
  * The ui.list component.
@@ -318,7 +317,7 @@ div.awa-modal div.awa-login {
  * Navigation icons
  */
 .awa-nav-icon {
-    width: 100px;
+    width: 150px;
     display: block;
 }
 .awa-nav-icon span {
