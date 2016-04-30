@@ -18,7 +18,8 @@
         xmlns:c="http://java.sun.com/jstl/core"
         xmlns:f="http://java.sun.com/jsf/core">
 [
-    { "action": "removeClass" },
+    { "action": "removeClass", "data": "status-COMMENT_WAITING" },
+    { "action": "removeClass", "data": "status-COMMENT_PUBLISHED" },
     { "action": "addClass", "data": "post-info ui-list-item status-#{blogPublishComment.status}" }
 ]
 </f:view>
