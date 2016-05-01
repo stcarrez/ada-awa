@@ -282,13 +282,16 @@ li.comment div.comment-author {
 li.comment div.comment-text {
     padding-top: 5px;
 }
-.blog-post-comment-count {
+.blog-post-comment {
     float: left;
     width: 100%;
     padding-top: 5px;
     margin: 1em 0;
-    background: #fff url(../images/blogs/ico_comm.gif) no-repeat left center;
-    border-bottom: 2px solid #ddd;
+    border-top: 2px solid #ddd;
+}
+.blog-post-comment-count {
+    float: left;
+    background: url(../images/blogs/ico_comm.gif) no-repeat left center;
 }
 .post-title .post-comment-count {
     background: url(../images/blogs/ico_comm.gif) no-repeat left center;
@@ -304,6 +307,12 @@ div.blog-post-comment-count a {
     padding-left: 20px;
     color: #777;
     text-decoration: none;
+}
+.blog-post-add-comment {
+    float: left;
+    padding-left: 1em;
+    padding-top: 0.2em;
+    font-size: 0.8em;
 }
 ul.blog-pagination {
     float: left;
