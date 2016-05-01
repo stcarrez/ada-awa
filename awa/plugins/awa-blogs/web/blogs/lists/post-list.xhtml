@@ -1,5 +1,5 @@
 <!-- Display the blog posts in a list page
-  -  Copyright (C) 2011, 2012, 2013, 2014, 2015 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,8 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:c="http://java.sun.com/jstl/core"
 	    xmlns:u="http://code.google.com/p/ada-asf/util"
+        xmlns:util="http://code.google.com/p/ada-asf/util"
+        xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
         xmlns:h="http://java.sun.com/jsf/html">
   <h:list var="post" value="#{postList.posts}">
     <div class='blog-post' id="p_#{post.id}">
@@ -47,12 +49,26 @@
         <awa:wiki styleClass='post-text' value="#{post.text}" format="dotclear"/>
         <!-- Increment the post read counter but do not display anything -->
         <awa:counter value="#{postList.counter}" hidden="true"/>
-        <h:panelGroup rendered="#{post.comment_count ne 0}" styleClass="blog-post-comment-count" layout="div">
-            <a href="#{contextPath}/blogs/post.html?post=#{post.uri}#comments">
-                <h:outputFormat value="#{blogMsg.blog_post_count}">
-                    <f:param value="#{post.comment_count}"/>
-                </h:outputFormat>
-            </a>
+        <h:panelGroup layout="div" styleClass="blog-post-comment"
+                      rendered="#{post.allow_comments or post.comment_count ne 0}">
+            <h:panelGroup rendered="#{post.comment_count ne 0}" layout="div" styleClass="blog-post-comment-count">
+                <a href="#{contextPath}/blogs/post.html?post=#{post.uri}#comments">
+                    <h:outputFormat value="#{blogMsg.blog_post_count}">
+                        <f:param value="#{post.comment_count}"/>
+                    </h:outputFormat>
+                </a>
+            </h:panelGroup>
+            <h:panelGroup rendered="#{post.allow_comments}" layout="div" styleClass="blog-post-add-comment">
+                <c:choose>
+                    <c:when test="#{user.isLogged}">
+                        <a href="#{contextPath}/blogs/post.html?post=#{post.uri}#comments">#{blogMsg.blog_add_comment}</a>
+                    </c:when>
+                    <c:otherwise>
+                        #{blogMsg.blog_sign_in_add_comment}
+                        <a rel="nofollow" href="#{contextPath}/auth/login.html?redirect=#{contextPath}/blogs/post.html%3Fpost%3D#{util:urlEncode(post.uri)}%23comment-add">#{blogMsg.blog_sign_in_add_comment_label}</a>
+                    </c:otherwise>
+                </c:choose>
+            </h:panelGroup>
         </h:panelGroup>
     </div>
   </h:list>
