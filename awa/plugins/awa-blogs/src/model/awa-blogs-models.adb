@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -1494,6 +1494,8 @@ package body AWA.Blogs.Models is
          return Util.Beans.Objects.To_Object (From.Username);
       elsif Name = "text" then
          return Util.Beans.Objects.To_Object (From.Text);
+      elsif Name = "allow_comments" then
+         return Util.Beans.Objects.To_Object (From.Allow_Comments);
       elsif Name = "comment_count" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Comment_Count));
       end if;
@@ -1521,6 +1523,8 @@ package body AWA.Blogs.Models is
          Item.Username := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "text" then
          Item.Text := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "allow_comments" then
+         Item.Allow_Comments := Util.Beans.Objects.To_Boolean (Value);
       elsif Name = "comment_count" then
          Item.Comment_Count := Util.Beans.Objects.To_Integer (Value);
       end if;
@@ -1556,7 +1560,8 @@ package body AWA.Blogs.Models is
          Into.Date := Stmt.Get_Time (3);
          Into.Username := Stmt.Get_Unbounded_String (4);
          Into.Text := Stmt.Get_Unbounded_String (5);
-         Into.Comment_Count := Stmt.Get_Natural (6);
+         Into.Allow_Comments := Stmt.Get_Boolean (6);
+         Into.Comment_Count := Stmt.Get_Natural (7);
       end Read;
    begin
       Stmt.Execute;

@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -555,6 +555,9 @@ package AWA.Blogs.Models is
       --  the post text.
       Text : Ada.Strings.Unbounded.Unbounded_String;
 
+      --  the post allows to add comments.
+      Allow_Comments : Boolean;
+
       --  the number of comments for this post.
       Comment_Count : Natural;
    end record;
@@ -871,7 +874,7 @@ private
 
    package File_5 is
       new ADO.Queries.Loaders.File (Path => "blog-post-list.xml",
-                                    Sha1 => "515B28C537EF68F50513885D4E7A852716AC88D5");
+                                    Sha1 => "8DB9E20EB0AEBC97698E1BF002F64FB5279E2245");
 
    package Def_Postinfo_Blog_Post_List is
       new ADO.Queries.Loaders.Query (Name => "blog-post-list",
