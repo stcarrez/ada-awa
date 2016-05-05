@@ -353,6 +353,7 @@
     <url-pattern>/blogs/ajax/*</url-pattern>
     <url-pattern>/blogs/admin/#{adminBlog.id}/lists</url-pattern>
     <url-pattern>/blogs/admin/#{adminBlog.id}/preview/#{post.uid}</url-pattern>
+    <url-pattern>/blogs/admin/#{blogStats.blog_id}/stats</url-pattern>
     <url-pattern>/blogs/post/#{postAccessStats.entity_id}/stats/#{postAccessStats.first_date}</url-pattern>
   </filter-mapping>
 
@@ -363,6 +364,7 @@
     <url-pattern>/blogs/admin/*.html</url-pattern>
     <url-pattern>/blogs/admin/#{adminBlog.id}/lists</url-pattern>
     <url-pattern>/blogs/admin/#{adminBlog.id}/preview/#{post.uid}</url-pattern>
+    <url-pattern>/blogs/admin/#{blogStats.blog_id}/stats</url-pattern>
     <url-pattern>/blogs/post/#{postAccessStats.entity_id}/stats/#{postAccessStats.first_date}</url-pattern>
   </filter-mapping>
 
@@ -397,6 +399,11 @@
   <url-mapping>
     <pattern>/blogs/post/#{postAccessStats.entity_id}/stats/#{postAccessStats.first_date}</pattern>
     <view-id>/blogs/admin/views/post-stats.html</view-id>
+  </url-mapping>
+
+  <url-mapping>
+    <pattern>/blogs/admin/#{blogStats.blog_id}/stats</pattern>
+    <view-id>/blogs/admin/views/blog-stats.html</view-id>
   </url-mapping>
 
 </module>
