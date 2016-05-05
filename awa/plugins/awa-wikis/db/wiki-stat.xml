@@ -1,0 +1,20 @@
+<query-mapping package='AWA.Wikis.Models'>
+    <description>
+      Several queries to collect statistics about wiki pages.
+    </description>
+
+    <query name='page-access-stats'>
+       <comment>Get statistics about the wiki page access.</comment>
+       <sql>
+    SELECT
+      cnt.date,
+      cnt.counter
+    FROM awa_counter AS cnt
+    INNER JOIN awa_wiki_page AS page ON page.id = :entity_id
+    INNER JOIN awa_counter_definition AS def ON def.entity_type = :entity_type AND cnt.definition_id = def.id AND def.name = :counter_name
+    WHERE
+      cnt.object_id = :entity_id AND cnt.date &gt;= :first_date AND cnt.date &lt;= :last_date
+       </sql>
+    </query>
+
+</query-mapping>
