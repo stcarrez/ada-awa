@@ -71,6 +71,8 @@
                                  tagLink="#{contextPath}/wikis/tags/#{wikiView.wiki_id}/#{tagName}/recent"
                                  var="tagName"
                                  tagClass="tagedit-listelement tagedit-listelement-old"/>
+                    <h3 class="wiki-info">#{wikiMsg.wiki_info_access_label}</h3>
+                    <div id="page-stats" class="blog-post-graph"/>
                     <h:panelGroup rendered="#{wikiPageInfo.templates.count ne 0}">
                         <h3 class="wiki-info">#{wikiMsg.wiki_info_templates_label}</h3>
                         <div id="wiki-link-list" class="awa-list">
@@ -119,7 +121,17 @@
                     </div>
                 </h:panelGroup>
             </div>
+            <util:script>
+                $("#page-stats").post_graph({url: "#{contextPath}/wikis/stats/#{wikiView.id}/now-120"});
+            </util:script>
         </div>
      </ui:define>
+
+    <ui:define name="pageScript">
+        <script type="text/javascript" src="#{contextPath}/js/jquery.flot.js"></script>
+        <script type="text/javascript" src="#{contextPath}/js/jquery.flot.time.js"></script>
+        <script type="text/javascript" src="#{contextPath}/js/awa-blogs.js"></script>
+    </ui:define>
+
 </ui:composition>
 
