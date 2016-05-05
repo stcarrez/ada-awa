@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-beans -- Beans for blog module
---  Copyright (C) 2011, 2012, 2013, 2014, 2015 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -225,6 +225,37 @@ package AWA.Blogs.Beans is
 
    --  Create the Blog_Admin_Bean bean instance.
    function Create_Blog_Admin_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
+                                    return Util.Beans.Basic.Readonly_Bean_Access;
+
+   --  ------------------------------
+   --  Blog Statistics Bean
+   --  ------------------------------
+   --  The <b>Blog_Stat_Bean</b> is used to report various statistics about the blog or some post.
+   type Blog_Stat_Bean is new AWA.Blogs.Models.Stat_List_Bean with record
+      Module           : AWA.Blogs.Modules.Blog_Module_Access := null;
+
+      Stats            : aliased AWA.Blogs.Models.Month_Stat_Info_List_Bean;
+      Stats_Bean       : AWA.Blogs.Models.Month_Stat_Info_List_Bean_Access;
+   end record;
+   type Blog_Stat_Bean_Access is access all Blog_Stat_Bean;
+
+   overriding
+   function Get_Value (List : in Blog_Stat_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the value identified by the name.
+   overriding
+   procedure Set_Value (From  : in out Blog_Stat_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   --  Load the statistics information.
+   overriding
+   procedure Load (List    : in out Blog_Stat_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Create the Blog_Stat_Bean bean instance.
+   function Create_Blog_Stat_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                                     return Util.Beans.Basic.Readonly_Bean_Access;
 
 end AWA.Blogs.Beans;
