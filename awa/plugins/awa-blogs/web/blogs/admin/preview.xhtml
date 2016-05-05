@@ -20,6 +20,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:c="http://java.sun.com/jstl/core"
                 xmlns:u="http://code.google.com/p/ada-asf/util"
+                xmlns:util="http://code.google.com/p/ada-asf/util"
                 xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{blogMsg.blog_admin_view_post_title}"/>
 
@@ -35,6 +36,7 @@
       <div id='awa-content'>
           <ui:include src="lists/menu-list.xhtml"/>
           <div id='blog-post-edit' class='blog-edit-post'>
+              <div id="post-stats" class="blog-post-graph"/>
               <div class='blog-post' id="p_#{post.id}">
                   <div class='post-title'>
                       <h2><a href="#{contextPath}/blogs/post/#{post.uri}">#{post.title}</a></h2>
@@ -48,5 +50,14 @@
               </div>
           </div>
       </div>
+      <util:script>
+          $("#post-stats").post_graph({url: "#{contextPath}/blogs/post/#{post.id}/stats/now-120"});
+      </util:script>
+    </ui:define>
+
+    <ui:define name="pageScript">
+        <script type="text/javascript" src="#{contextPath}/js/jquery.flot.js"></script>
+        <script type="text/javascript" src="#{contextPath}/js/jquery.flot.time.js"></script>
+        <script type="text/javascript" src="#{contextPath}/js/awa-blogs.js"></script>
     </ui:define>
 </ui:composition>
