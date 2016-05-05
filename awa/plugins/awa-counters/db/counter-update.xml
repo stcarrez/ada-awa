@@ -3,6 +3,16 @@
       Queries to update counters
     </description>
 
+    <class name="AWA.Counters.Models.Stat_Info" bean="yes">
+        <comment>The month statistics.</comment>
+        <property type='Date' name="date">
+            <comment>the counter date.</comment>
+        </property>
+        <property type='Natural' name="count">
+            <comment>the counter value.</comment>
+        </property>
+    </class>
+
     <query name='counter-update'>
        <comment>Update counter</comment>
        <sql driver='mysql'>
