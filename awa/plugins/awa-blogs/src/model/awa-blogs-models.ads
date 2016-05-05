@@ -415,6 +415,8 @@ package AWA.Blogs.Models is
 
    Query_Blog_Admin_Post_List : constant ADO.Queries.Query_Definition_Access;
 
+   Query_Blog_Admin_Post_List_Date : constant ADO.Queries.Query_Definition_Access;
+
    --  --------------------
    --    The list of blogs.
    --  --------------------
@@ -530,6 +532,57 @@ package AWA.Blogs.Models is
                    Context : in out ADO.Queries.Context'Class);
 
    Query_Comment_List : constant ADO.Queries.Query_Definition_Access;
+
+   --  --------------------
+   --    The month statistics.
+   --  --------------------
+   type Month_Stat_Info is
+     new Util.Beans.Basic.Bean with  record
+
+      --  the post identifier.
+      Year : Natural;
+
+      --  the post title.
+      Month : Natural;
+
+      --  the post uri.
+      Count : Natural;
+   end record;
+
+   --  Get the bean attribute identified by the name.
+   overriding
+   function Get_Value (From : in Month_Stat_Info;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Month_Stat_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+
+   package Month_Stat_Info_Beans is
+      new Util.Beans.Basic.Lists (Element_Type => Month_Stat_Info);
+   package Month_Stat_Info_Vectors renames Month_Stat_Info_Beans.Vectors;
+   subtype Month_Stat_Info_List_Bean is Month_Stat_Info_Beans.List_Bean;
+
+   type Month_Stat_Info_List_Bean_Access is access all Month_Stat_Info_List_Bean;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Month_Stat_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   subtype Month_Stat_Info_Vector is Month_Stat_Info_Vectors.Vector;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Month_Stat_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   Query_Post_Publish_Stats : constant ADO.Queries.Query_Definition_Access;
+
+   Query_Post_Access_Stats : constant ADO.Queries.Query_Definition_Access;
 
    --  --------------------
    --    The Post_Info describes a post to be displayed in the blog page
@@ -667,6 +720,38 @@ package AWA.Blogs.Models is
                         Value : in Util.Beans.Objects.Object);
 
    procedure Load (Bean : in out Post_List_Bean;
+                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   --  --------------------
+   --    Statistics about the blog or a post.
+   --  --------------------
+   type Stat_List_Bean is abstract limited
+     new Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with  record
+
+      --  the blog identifier.
+      Blog_Id : ADO.Identifier;
+
+      --  the post identifier.
+      Post_Id : ADO.Identifier;
+   end record;
+
+   --  This bean provides some methods that can be used in a Method_Expression.
+   overriding
+   function Get_Method_Bindings (From : in Stat_List_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access;
+
+   --  Get the bean attribute identified by the name.
+   overriding
+   function Get_Value (From : in Stat_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Stat_List_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   procedure Load (Bean : in out Stat_List_Bean;
                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
 
@@ -852,6 +937,12 @@ private
    Query_Blog_Admin_Post_List : constant ADO.Queries.Query_Definition_Access
    := Def_Adminpostinfo_Blog_Admin_Post_List.Query'Access;
 
+   package Def_Adminpostinfo_Blog_Admin_Post_List_Date is
+      new ADO.Queries.Loaders.Query (Name => "blog-admin-post-list-date",
+                                     File => File_2.File'Access);
+   Query_Blog_Admin_Post_List_Date : constant ADO.Queries.Query_Definition_Access
+   := Def_Adminpostinfo_Blog_Admin_Post_List_Date.Query'Access;
+
    package File_3 is
       new ADO.Queries.Loaders.File (Path => "blog-list.xml",
                                     Sha1 => "BB41EBE10B232F150560185E9A955BDA9FB7F77F");
@@ -873,18 +964,34 @@ private
    := Def_Commentinfo_Comment_List.Query'Access;
 
    package File_5 is
+      new ADO.Queries.Loaders.File (Path => "blog-stat.xml",
+                                    Sha1 => "933526108281E4E7755E68427D69738611F833F3");
+
+   package Def_Monthstatinfo_Post_Publish_Stats is
+      new ADO.Queries.Loaders.Query (Name => "post-publish-stats",
+                                     File => File_5.File'Access);
+   Query_Post_Publish_Stats : constant ADO.Queries.Query_Definition_Access
+   := Def_Monthstatinfo_Post_Publish_Stats.Query'Access;
+
+   package Def_Monthstatinfo_Post_Access_Stats is
+      new ADO.Queries.Loaders.Query (Name => "post-access-stats",
+                                     File => File_5.File'Access);
+   Query_Post_Access_Stats : constant ADO.Queries.Query_Definition_Access
+   := Def_Monthstatinfo_Post_Access_Stats.Query'Access;
+
+   package File_6 is
       new ADO.Queries.Loaders.File (Path => "blog-post-list.xml",
                                     Sha1 => "8DB9E20EB0AEBC97698E1BF002F64FB5279E2245");
 
    package Def_Postinfo_Blog_Post_List is
       new ADO.Queries.Loaders.Query (Name => "blog-post-list",
-                                     File => File_5.File'Access);
+                                     File => File_6.File'Access);
    Query_Blog_Post_List : constant ADO.Queries.Query_Definition_Access
    := Def_Postinfo_Blog_Post_List.Query'Access;
 
    package Def_Postinfo_Blog_Post_Tag_List is
       new ADO.Queries.Loaders.Query (Name => "blog-post-tag-list",
-                                     File => File_5.File'Access);
+                                     File => File_6.File'Access);
    Query_Blog_Post_Tag_List : constant ADO.Queries.Query_Definition_Access
    := Def_Postinfo_Blog_Post_Tag_List.Query'Access;
 end AWA.Blogs.Models;

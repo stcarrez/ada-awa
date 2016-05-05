@@ -1479,6 +1479,82 @@ package body AWA.Blogs.Models is
    --  Get the bean attribute identified by the name.
    --  ------------------------------
    overriding
+   function Get_Value (From : in Month_Stat_Info;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "year" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Year));
+      elsif Name = "month" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Month));
+      elsif Name = "count" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Count));
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Month_Stat_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "year" then
+         Item.Year := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "month" then
+         Item.Month := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "count" then
+         Item.Count := Util.Beans.Objects.To_Integer (Value);
+      end if;
+   end Set_Value;
+
+
+   --  --------------------
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   --  --------------------
+   procedure List (Object  : in out Month_Stat_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+   begin
+      List (Object.List, Session, Context);
+   end List;
+
+   --  --------------------
+   --  The month statistics.
+   --  --------------------
+   procedure List (Object  : in out Month_Stat_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+      procedure Read (Into : in out Month_Stat_Info);
+
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Context);
+      Pos  : Natural := 0;
+      procedure Read (Into : in out Month_Stat_Info) is
+      begin
+         Into.Year := Stmt.Get_Natural (0);
+         Into.Month := Stmt.Get_Natural (1);
+         Into.Count := Stmt.Get_Natural (2);
+      end Read;
+   begin
+      Stmt.Execute;
+      Month_Stat_Info_Vectors.Clear (Object);
+      while Stmt.Has_Elements loop
+         Object.Insert_Space (Before => Pos);
+         Object.Update_Element (Index => Pos, Process => Read'Access);
+         Pos := Pos + 1;
+         Stmt.Next;
+      end loop;
+   end List;
+
+
+
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Post_Info;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
@@ -1768,6 +1844,63 @@ package body AWA.Blogs.Models is
          Item.Count := Util.Beans.Objects.To_Integer (Value);
       elsif Name = "page_size" then
          Item.Page_Size := Util.Beans.Objects.To_Integer (Value);
+      end if;
+   end Set_Value;
+
+   procedure Op_Load (Bean    : in out Stat_List_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Load (Bean    : in out Stat_List_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Stat_List_Bean'Class (Bean).Load (Outcome);
+   end Op_Load;
+   package Binding_Stat_List_Bean_1 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Stat_List_Bean,
+                                                      Method => Op_Load,
+                                                      Name   => "load");
+
+   Binding_Stat_List_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
+     := (1 => Binding_Stat_List_Bean_1.Proxy'Access
+     );
+
+   --  ------------------------------
+   --  This bean provides some methods that can be used in a Method_Expression.
+   --  ------------------------------
+   overriding
+   function Get_Method_Bindings (From : in Stat_List_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
+   begin
+      return Binding_Stat_List_Bean_Array'Access;
+   end Get_Method_Bindings;
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Stat_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "blog_id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Blog_Id));
+      elsif Name = "post_id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Post_Id));
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Stat_List_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "blog_id" then
+         Item.Blog_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "post_id" then
+         Item.Post_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
       end if;
    end Set_Value;
 
