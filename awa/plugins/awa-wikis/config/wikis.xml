@@ -141,6 +141,28 @@
     </managed-property>
   </managed-bean>
 
+  <managed-bean>
+    <description>The counter statistics for a wiki page</description>
+    <managed-bean-name>wikiPageStats</managed-bean-name>
+    <managed-bean-class>AWA.Counters.Beans.Stat_List_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>entity_type</property-name>
+      <property-class>String</property-class>
+      <value>awa_wiki_page</value>
+    </managed-property>
+    <managed-property>
+      <property-name>counter_name</property-name>
+      <property-class>String</property-class>
+      <value>read_count</value>
+    </managed-property>
+    <managed-property>
+      <property-name>query_name</property-name>
+      <property-class>String</property-class>
+      <value>page-access-stats</value>
+    </managed-property>
+  </managed-bean>
+
   <navigation-rule>
     <from-view-id>/wikis/setup.xhtml</from-view-id>
     <navigation-case>
@@ -381,6 +403,7 @@
   <filter-mapping>
     <filter-name>service</filter-name>
     <url-pattern>/wikis/view/#{wikiView.wiki_id}/#{wikiView.name}</url-pattern>
+    <url-pattern>/wikis/stats/#{wikiPageStats.entity_id}/#{wikiPageStats.first_date}</url-pattern>
     <url-pattern>/wikis/edit/#{wikiPage.wiki_id}/#{wikiPage.name}</url-pattern>
     <url-pattern>/wikis/create/#{wikiPage.wiki_id}</url-pattern>
     <url-pattern>/wikis/create/#{wikiPage.wiki_id}/#{wikiPage.name}</url-pattern>
@@ -400,6 +423,7 @@
   <filter-mapping>
     <filter-name>auth-filter</filter-name>
     <url-pattern>/wikis/view/#{wikiView.wiki_id}/#{wikiView.name}</url-pattern>
+    <url-pattern>/wikis/stats/#{wikiPageStats.entity_id}/#{wikiPageStats.first_date}</url-pattern>
     <url-pattern>/wikis/edit/#{wikiPage.wiki_id}/#{wikiPage.name}</url-pattern>
     <url-pattern>/wikis/create/#{wikiPage.wiki_id}</url-pattern>
     <url-pattern>/wikis/create/#{wikiPage.wiki_id}/#{wikiPage.name}</url-pattern>
@@ -421,6 +445,7 @@
     </description>
     <permission>anonymous</permission>
     <url-pattern>/wikis/view/.*</url-pattern>
+    <url-pattern>/wikis/stats/.*</url-pattern>
     <url-pattern>/wikis/tags/.*</url-pattern>
     <url-pattern>/wikis/list/.*</url-pattern>
     <url-pattern>/wikis/history/.*</url-pattern>
@@ -508,6 +533,11 @@
   <url-mapping>
     <pattern>/wikis/settings/#{adminWikiSpace.id}</pattern>
     <view-id>/wikis/settings.html</view-id>
+  </url-mapping>
+
+  <url-mapping>
+    <pattern>/wikis/stats/#{wikiPageStats.entity_id}/#{wikiPageStats.first_date}</pattern>
+    <view-id>/wikis/views/page-stats.html</view-id>
   </url-mapping>
 
 </module>
