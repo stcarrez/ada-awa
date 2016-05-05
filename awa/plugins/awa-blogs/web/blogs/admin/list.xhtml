@@ -1,5 +1,5 @@
 <!-- List the posts for the blog administrator
-  -  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013, 2014, 2016 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,6 +43,7 @@
             <h:panelGroup rendered="#{not empty adminBlog.id}">
 
             <ui:include src="lists/menu-list.xhtml"/>
+            <div id="blog-stats" class="blog-post-graph"></div>
             <div class='blog-admin post-header' id="blog-post-list-header">
                 <div class='post-status'></div>
                 <div class='post-title'>
@@ -69,13 +70,30 @@
             </div>
             </h:panelGroup>
         </div>
+        <div id="tooltip"/>
         <util:script>
             $('#blog-post-list').list({
                 actionId: '#blog-post-action',
                 itemPrefix: 'p_',
                 deleteUrl: '#{contextPath}/blogs/admin/forms/post-delete.html?post_id='
             });
+            $("#blog-stats").post_graph({url: "#{contextPath}/blogs/admin/#{post.id}/stats", barWidth: 30});
+            $("#blog-stats").bind("plothover", function(event, pos, item) {
+                if (item) {
+                    var cnt = item.datapoint[1], date = new Date(item.datapoint[0]);
+                    var year = date.getFullYear();
+                    var month = date.getMonth();
+                    $("#tooltip").html(cnt + " posts on " + year + "-" + month).css({top: item.pageY - 25, left: item.pageX + 5}).fadeIn(200);
+                } else {
+                    $("#tooltip").hide();
+                }
+            });
         </util:script>
+    </ui:define>
+    <ui:define name="pageScript">
+        <script type="text/javascript" src="#{contextPath}/js/jquery.flot.js"></script>
+        <script type="text/javascript" src="#{contextPath}/js/jquery.flot.time.js"></script>
+        <script type="text/javascript" src="#{contextPath}/js/awa-blogs.js"></script>
     </ui:define>
 </ui:composition>
 
