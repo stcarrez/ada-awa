@@ -19,7 +19,8 @@
 
     $.widget("ui.post_graph", {
         options: {
-            url: ""
+            url: "",
+            barWidth: 1
         },
         _create: function() {
             var self = this;
@@ -27,8 +28,9 @@
             self.refresh();
         },
         plot: function(series) {
+            var self = this;
             $.plot(this.element, series, {
-                bars: { show: true, barWidth: 86400 * 1000, align: "center" },
+                bars: { show: true, barWidth: self.options.barWidth * 86400 * 1000, align: "center" },
                 xaxis: {
                     mode: "time",
                     minTickSize: [1, "day"]
@@ -61,5 +63,6 @@
             });
         }
     });
+
 })(jQuery);
 
