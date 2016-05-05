@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,6 +33,7 @@ with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
 with Util.Beans.Basic.Lists;
+with Util.Beans.Methods;
 pragma Warnings (On);
 package AWA.Counters.Models is
 
@@ -220,11 +221,96 @@ package AWA.Counters.Models is
                    Into   : in out Counter_Definition_Ref);
 
 
+   --  --------------------
+   --    The month statistics.
+   --  --------------------
+   type Stat_Info is
+     new Util.Beans.Basic.Bean with  record
+
+      --  the counter date.
+      Date : Ada.Calendar.Time;
+
+      --  the counter value.
+      Count : Natural;
+   end record;
+
+   --  Get the bean attribute identified by the name.
+   overriding
+   function Get_Value (From : in Stat_Info;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Stat_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+
+   package Stat_Info_Beans is
+      new Util.Beans.Basic.Lists (Element_Type => Stat_Info);
+   package Stat_Info_Vectors renames Stat_Info_Beans.Vectors;
+   subtype Stat_Info_List_Bean is Stat_Info_Beans.List_Bean;
+
+   type Stat_Info_List_Bean_Access is access all Stat_Info_List_Bean;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Stat_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   subtype Stat_Info_Vector is Stat_Info_Vectors.Vector;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Stat_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
 
    Query_Counter_Update : constant ADO.Queries.Query_Definition_Access;
 
    Query_Counter_Update_Field : constant ADO.Queries.Query_Definition_Access;
 
+
+   --  --------------------
+   --    load the counters for the entity and the timeframe.The Stat_List_Bean is the bean that allows to retrieve the counter statistics
+   --  for a given database entity and provide the values through a bean to the
+   --  presentation layer.load the counters for the entity and the timeframe.
+   --  --------------------
+   type Stat_List_Bean is abstract limited
+     new Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with  record
+
+      --  the entity type name.
+      Entity_Type : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the first date.
+      First_Date : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the last date.
+      Last_Date : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the entity identifier.
+      Entity_Id : ADO.Identifier;
+      Counter_Name : Ada.Strings.Unbounded.Unbounded_String;
+      Query_Name : Ada.Strings.Unbounded.Unbounded_String;
+   end record;
+
+   --  This bean provides some methods that can be used in a Method_Expression.
+   overriding
+   function Get_Method_Bindings (From : in Stat_List_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access;
+
+   --  Get the bean attribute identified by the name.
+   overriding
+   function Get_Value (From : in Stat_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Stat_List_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   procedure Load (Bean : in out Stat_List_Bean;
+                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
 
 private
@@ -352,17 +438,17 @@ private
 
    package File_1 is
       new ADO.Queries.Loaders.File (Path => "counter-update.xml",
-                                    Sha1 => "9B2B599473F75F92CB5AB5045675E4CCEF926543");
+                                    Sha1 => "6C157006E7A28699E1FE0E2CB571BACA2706E58D");
 
-   package Def_Counter_Update is
+   package Def_Statinfo_Counter_Update is
       new ADO.Queries.Loaders.Query (Name => "counter-update",
                                      File => File_1.File'Access);
    Query_Counter_Update : constant ADO.Queries.Query_Definition_Access
-   := Def_Counter_Update.Query'Access;
+   := Def_Statinfo_Counter_Update.Query'Access;
 
-   package Def_Counter_Update_Field is
+   package Def_Statinfo_Counter_Update_Field is
       new ADO.Queries.Loaders.Query (Name => "counter-update-field",
                                      File => File_1.File'Access);
    Query_Counter_Update_Field : constant ADO.Queries.Query_Definition_Access
-   := Def_Counter_Update_Field.Query'Access;
+   := Def_Statinfo_Counter_Update_Field.Query'Access;
 end AWA.Counters.Models;

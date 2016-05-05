@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +22,7 @@
 -----------------------------------------------------------------------
 with Ada.Unchecked_Deallocation;
 with Util.Beans.Objects.Time;
+with ASF.Events.Faces.Actions;
 package body AWA.Counters.Models is
 
    use type ADO.Objects.Object_Record_Access;
@@ -748,6 +749,150 @@ package body AWA.Counters.Models is
       Object.Entity_Type := Stmt.Get_Nullable_Entity_Type (2);
       ADO.Objects.Set_Created (Object);
    end Load;
+
+
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Stat_Info;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "date" then
+         return Util.Beans.Objects.Time.To_Object (From.Date);
+      elsif Name = "count" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Count));
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Stat_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "date" then
+         Item.Date := Util.Beans.Objects.Time.To_Time (Value);
+      elsif Name = "count" then
+         Item.Count := Util.Beans.Objects.To_Integer (Value);
+      end if;
+   end Set_Value;
+
+
+   --  --------------------
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   --  --------------------
+   procedure List (Object  : in out Stat_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+   begin
+      List (Object.List, Session, Context);
+   end List;
+
+   --  --------------------
+   --  The month statistics.
+   --  --------------------
+   procedure List (Object  : in out Stat_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+      procedure Read (Into : in out Stat_Info);
+
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Context);
+      Pos  : Natural := 0;
+      procedure Read (Into : in out Stat_Info) is
+      begin
+         Into.Date := Stmt.Get_Time (0);
+         Into.Count := Stmt.Get_Natural (1);
+      end Read;
+   begin
+      Stmt.Execute;
+      Stat_Info_Vectors.Clear (Object);
+      while Stmt.Has_Elements loop
+         Object.Insert_Space (Before => Pos);
+         Object.Update_Element (Index => Pos, Process => Read'Access);
+         Pos := Pos + 1;
+         Stmt.Next;
+      end loop;
+   end List;
+
+
+   procedure Op_Load (Bean    : in out Stat_List_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Load (Bean    : in out Stat_List_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Stat_List_Bean'Class (Bean).Load (Outcome);
+   end Op_Load;
+   package Binding_Stat_List_Bean_1 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Stat_List_Bean,
+                                                      Method => Op_Load,
+                                                      Name   => "load");
+
+   Binding_Stat_List_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
+     := (1 => Binding_Stat_List_Bean_1.Proxy'Access
+     );
+
+   --  ------------------------------
+   --  This bean provides some methods that can be used in a Method_Expression.
+   --  ------------------------------
+   overriding
+   function Get_Method_Bindings (From : in Stat_List_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
+   begin
+      return Binding_Stat_List_Bean_Array'Access;
+   end Get_Method_Bindings;
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Stat_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "entity_type" then
+         return Util.Beans.Objects.To_Object (From.Entity_Type);
+      elsif Name = "first_date" then
+         return Util.Beans.Objects.To_Object (From.First_Date);
+      elsif Name = "last_date" then
+         return Util.Beans.Objects.To_Object (From.Last_Date);
+      elsif Name = "entity_id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Entity_Id));
+      elsif Name = "counter_name" then
+         return Util.Beans.Objects.To_Object (From.Counter_Name);
+      elsif Name = "query_name" then
+         return Util.Beans.Objects.To_Object (From.Query_Name);
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Stat_List_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "entity_type" then
+         Item.Entity_Type := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "first_date" then
+         Item.First_Date := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "last_date" then
+         Item.Last_Date := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "entity_id" then
+         Item.Entity_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "counter_name" then
+         Item.Counter_Name := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "query_name" then
+         Item.Query_Name := Util.Beans.Objects.To_Unbounded_String (Value);
+      end if;
+   end Set_Value;
 
 
 end AWA.Counters.Models;
