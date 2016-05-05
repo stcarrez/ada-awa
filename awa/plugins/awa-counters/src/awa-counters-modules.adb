@@ -26,15 +26,20 @@ with ADO.SQL;
 with Util.Dates;
 with Util.Log.Loggers;
 
+with AWA.Modules.Beans;
 with AWA.Applications;
 with AWA.Counters.Models;
 with AWA.Modules.Get;
+with AWA.Counters.Beans;
 with AWA.Counters.Components;
 package body AWA.Counters.Modules is
 
    use type ADO.Schemas.Class_Mapping_Access;
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Awa.Counters.Module");
+
+   package Register is new AWA.Modules.Beans (Module => Counter_Module,
+                                              Module_Access => Counter_Module_Access);
 
    procedure Load_Definition (DB     : in out ADO.Sessions.Master_Session;
                               Def    : in Counter_Def;
@@ -55,6 +60,10 @@ package body AWA.Counters.Modules is
                          Props  : in ASF.Applications.Config) is
    begin
       Log.Info ("Initializing the counters module");
+
+      Register.Register (Plugin  => Plugin,
+                         Name    => "AWA.Counters.Beans.Stat_List_Bean",
+                         Handler => AWA.Counters.Beans.Create_Counter_Stat_Bean'Access);
 
       App.Add_Components (AWA.Counters.Components.Definition);
       AWA.Modules.Module (Plugin).Initialize (App, Props);
