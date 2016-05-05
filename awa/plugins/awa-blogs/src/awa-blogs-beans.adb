@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-beans -- Beans for blog module
---  Copyright (C) 2011, 2012, 2013, 2014, 2015 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,6 +39,8 @@ package body AWA.Blogs.Beans is
    use type ADO.Identifier;
    use type Ada.Strings.Maps.Character_Set;
    use Ada.Strings.Unbounded;
+
+   package ASC renames AWA.Services.Contexts;
 
    BLOG_ID_PARAMETER : constant String := "blog_id";
 
@@ -646,7 +648,9 @@ package body AWA.Blogs.Beans is
       end if;
    end Get_Value;
 
+   --  ------------------------------
    --  Set the value identified by the name.
+   --  ------------------------------
    overriding
    procedure Set_Value (From  : in out Blog_Admin_Bean;
                         Name  : in String;
@@ -656,5 +660,70 @@ package body AWA.Blogs.Beans is
          From.Blog_Id := ADO.Utils.To_Identifier (Value);
       end if;
    end Set_Value;
+
+   overriding
+   function Get_Value (List : in Blog_Stat_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "stats" then
+         return Util.Beans.Objects.To_Object (Value   => List.Stats_Bean,
+                                              Storage => Util.Beans.Objects.STATIC);
+      else
+         return AWA.Blogs.Models.Stat_List_Bean (List).Get_Value (Name);
+      end if;
+   end Get_Value;
+
+   --  ------------------------------
+   --  Set the value identified by the name.
+   --  ------------------------------
+   overriding
+   procedure Set_Value (From  : in out Blog_Stat_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if not Util.Beans.Objects.Is_Empty (Value) then
+         AWA.Blogs.Models.Stat_List_Bean (From).Set_Value (Name, Value);
+      end if;
+   end Set_Value;
+
+   --  ------------------------------
+   --  Load the statistics information.
+   --  ------------------------------
+   overriding
+   procedure Load (List    : in out Blog_Stat_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
+
+      Ctx     : constant ASC.Service_Context_Access := ASC.Current;
+      User    : constant ADO.Identifier := Ctx.Get_User_Identifier;
+      Session : ADO.Sessions.Session := List.Module.Get_Session;
+      Query   : ADO.Queries.Context;
+   begin
+      if List.Blog_Id /= ADO.NO_IDENTIFIER then
+         Query.Set_Query (AWA.Blogs.Models.Query_Post_Publish_Stats);
+         Query.Bind_Param ("blog_id", List.Blog_Id);
+         Query.Bind_Param ("user_id", User);
+         ADO.Sessions.Entities.Bind_Param (Params  => Query,
+                                           Name    => "table",
+                                           Table   => AWA.Blogs.Models.BLOG_TABLE,
+                                           Session => Session);
+
+         AWA.Blogs.Models.List (List.Stats, Session, Query);
+      end if;
+   end Load;
+
+   --  ------------------------------
+   --  Create the Blog_Stat_Bean bean instance.
+   --  ------------------------------
+   function Create_Blog_Stat_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
+                                   return Util.Beans.Basic.Readonly_Bean_Access is
+      Object  : constant Blog_Stat_Bean_Access := new Blog_Stat_Bean;
+   begin
+      Object.Module     := Module;
+      Object.Stats_Bean := Object.Stats'Access;
+      Object.Post_Id    := ADO.NO_IDENTIFIER;
+      Object.Blog_Id    := ADO.NO_IDENTIFIER;
+      return Object.all'Access;
+   end Create_Blog_Stat_Bean;
 
 end AWA.Blogs.Beans;
