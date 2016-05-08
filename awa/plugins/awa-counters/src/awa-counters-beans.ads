@@ -19,6 +19,7 @@ with Ada.Strings.Unbounded;
 
 with ADO.Objects;
 with ADO.Schemas;
+with ADO.Queries;
 with Util.Beans.Objects;
 with Util.Beans.Basic;
 
@@ -52,6 +53,9 @@ package AWA.Counters.Beans is
       Stats_Bean       : AWA.Counters.Models.Stat_Info_List_Bean_Access;
    end record;
    type Counter_Stat_Bean_Access is access all Counter_Stat_Bean'Class;
+
+   --  Get the query definition to collect the counter statistics.
+   function Get_Query (From : in Counter_Stat_Bean) return ADO.Queries.Query_Definition_Access;
 
    overriding
    function Get_Value (List : in Counter_Stat_Bean;
