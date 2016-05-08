@@ -26,7 +26,6 @@ package body AWA.Counters.Beans is
 
    function Parse_Date (Date : in String;
                         Now  : in Ada.Calendar.Time) return Ada.Calendar.Time;
-   function Get_Query (From : in Counter_Stat_Bean) return ADO.Queries.Query_Definition_Access;
 
    --  ------------------------------
    --  Get the value identified by the name.
@@ -64,6 +63,9 @@ package body AWA.Counters.Beans is
       end if;
    end Set_Value;
 
+   --  ------------------------------
+   --  Get the query definition to collect the counter statistics.
+   --  ------------------------------
    function Get_Query (From : in Counter_Stat_Bean) return ADO.Queries.Query_Definition_Access is
       Name : constant String := Ada.Strings.Unbounded.To_String (From.Query_Name);
    begin
