@@ -1,0 +1,47 @@
+h1 {
+    margin-bottom: 1em;
+    padding-bottom: 0.5em;
+    border-bottom: 1px solid #424243;
+}
+h2 {
+    margin-top: 1em;
+    float: left;
+    clear: both;
+}
+.setup-container {
+    float: left;
+    padding-left: 10%;
+    padding-right: 10%;
+    width: 75%;
+}
+.setup-container div {
+    float: left;
+    clear: both;
+}
+#setup-steps {
+    list-style-type: none;
+    float: left;
+    background: #f0f0f0;
+    width: 100%;
+}
+#setup-steps li {
+    float: left;
+    padding: 0.5em;
+    padding-right: 1em;
+    border-bottom: 3px solid #f0f0f0;
+}
+.setup-database #setup-step-database,
+.setup-settings #setup-step-settings,
+.setup-oauth #setup-step-oauth {
+    background: #fff;
+    border-color: orange;
+}
+.awa-buttons {
+    width: 100%;
+}
+.awa-buttons li {
+    float: right;
+}
+.awa-buttons li.previous {
+    float: left;
+}
