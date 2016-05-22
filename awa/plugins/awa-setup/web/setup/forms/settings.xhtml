@@ -1,0 +1,67 @@
+<!-- Form to configure the application settings
+  -  Copyright (C) 2016 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<f:view contentType="text/html; charset=UTF-8"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:w="http://code.google.com/p/ada-asf/widget"
+        xmlns:h="http://java.sun.com/jsf/html">
+    <h:form id='setup-database'>
+        <h2>
+            #{setupMsg.setup_general_settings_message}
+        </h2>
+        <div>
+            <w:inputText id='app-name' title="#{setupMsg.setup_app_name}"
+                         styleClass="awa-required ui-corner-all"
+                         size='80' placeholder="#{setupMsg.setup_app_name_placeholder}"
+                         value="#{setup.app_name}"/>
+
+            <w:inputText id='app-url' title="#{setupMsg.setup_app_url}"
+                         styleClass="awa-required ui-corner-all"
+                         size='80' placeholder="#{setupMsg.setup_app_url_placeholder}"
+                         value="#{setup.app_url_base}"/>
+
+            <w:inputText id='app-mail-from' title="#{setupMsg.setup_app_mail_from}"
+                         styleClass="awa-required ui-corner-all"
+                         size='80'
+                         value="#{setup.app_mail_from}"/>
+        </div>
+        <h2>
+            #{setupMsg.setup_mail_settings_message}
+        </h2>
+        <div>
+            <w:inputText id='smtp-host' title="#{setupMsg.setup_smtp_host}"
+                         styleClass="awa-required ui-corner-all" required="false"
+                         size='80'
+                         value="#{setup['smtp.host']}"/>
+
+            <w:inputText id='smtp-port' title="#{setupMsg.setup_database_root_password}"
+                         styleClass="awa-required ui-corner-all" required="false"
+                         size='80' placeholder="#{setupMsg.setup_database_root_password_placeholder}"
+                         value="#{setup['smtp.port']}"/>
+        </div>
+        <ul class='awa-buttons'>
+            <li class="previous">
+                <input type="submit" value="Previous" class="ui-button ui-state-default ui-corner-all"
+                       onclick="return previous_step('database');"/>
+            </li>
+            <li>
+                <h:commandButton id='wiki-page-delete-button' value='#{setupMsg.setup_database_configure}'
+                                 styleClass="ui-button ui-state-default ui-corner-all"
+                                 action="#{setup.configure_database}" title="#{wikiMsg.setup_database_configure_tooltip}"/>
+            </li>
+        </ul>
+    </h:form>
+</f:view>
