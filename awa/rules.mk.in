@@ -87,7 +87,9 @@ endif
 build: local-build post-build build-tests
 
 local-build: pre-build
+ifneq (${GPRPATH},)
 	test ! -f $(GPRPATH) || $(GNATMAKE) -m -p -P "$(GPRPATH)" $(MAKE_ARGS)
+endif
 
 build-tests:
 	test ! -f awa_tests.gpr || $(GNATMAKE) -m -p -Pawa_tests $(MAKE_ARGS)
@@ -96,7 +98,9 @@ static:
 	$(MAKE) AWA_LIBRARY_TYPE=static build
 
 shared:
+ifneq (${GPRPATH},)
 	$(MAKE) AWA_LIBRARY_TYPE=relocatable build
+endif
 
 # Not intended for manual invocation.
 # Invoked if automatic builds are enabled.
