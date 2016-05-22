@@ -51,12 +51,16 @@ package body AWA.Setup.Applications is
    function Get_Value (From : in Application;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
-      if Name = "database" then
+      if Name = "database_name" then
          return Util.Beans.Objects.To_Object (From.Database.Get_Database);
       elsif Name = "database_server" then
          return Util.Beans.Objects.To_Object (From.Database.Get_Server);
       elsif Name = "database_port" then
          return Util.Beans.Objects.To_Object (From.Database.Get_Port);
+      elsif Name = "database_user" then
+         return Util.Beans.Objects.To_Object (From.Database.Get_Property ("user"));
+      elsif Name = "database_password" then
+         return Util.Beans.Objects.To_Object (From.Database.Get_Property ("password"));
       end if;
       if From.Changed.Exists (Name) then
          return Util.Beans.Objects.To_Object (String '(From.Changed.Get (Name)));
@@ -77,7 +81,19 @@ package body AWA.Setup.Applications is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      From.Changed.Set (Name, Util.Beans.Objects.To_String (Value));
+      if Name = "database_name" then
+         From.Database.Set_Database (Util.Beans.Objects.To_String (Value));
+      elsif Name = "database_server" then
+         From.Database.Set_Server (Util.Beans.Objects.To_String (Value));
+      elsif Name = "database_port" then
+         From.Database.Set_Port (Util.Beans.Objects.To_Integer (Value));
+      elsif Name = "database_user" then
+         From.Database.Set_Property ("user", Util.Beans.Objects.To_String (Value));
+      elsif Name = "database_password" then
+         From.Database.Set_Property ("password", Util.Beans.Objects.To_String (Value));
+      else
+         From.Changed.Set (Name, Util.Beans.Objects.To_String (Value));
+      end if;
    end Set_Value;
 
    --  Configure the database.
