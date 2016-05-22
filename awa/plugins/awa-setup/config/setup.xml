@@ -107,18 +107,18 @@
          Make it simple and allow such definition here.  -->
 
     <navigation-rule>
-      <from-view-id>/jsf/*</from-view-id>
+      <from-view-id>/setup/forms/database.xhtml</from-view-id>
       <navigation-case>
-        <from-outcome>compute</from-outcome>
-        <to-view-id>/forms/form-response.xhtml</to-view-id>
+        <from-outcome>success</from-outcome>
+        <to-view-id>/setup/forms/database-response.xhtml</to-view-id>
       </navigation-case>
     </navigation-rule>
 
     <navigation-rule>
-      <from-view-id>/widgets/*</from-view-id>
+      <from-view-id>/setup/forms/settings.xhtml</from-view-id>
       <navigation-case>
-        <from-outcome>compute</from-outcome>
-        <to-view-id>/forms/form-response.xhtml</to-view-id>
+        <from-outcome>success</from-outcome>
+        <to-view-id>/setup/forms/settings-response.xhtml</to-view-id>
       </navigation-case>
     </navigation-rule>
 
