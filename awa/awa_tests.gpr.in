@@ -23,6 +23,7 @@ with "plugins/awa-comments/awa_comments";
 with "plugins/awa-changelogs/awa_changelogs";
 with "plugins/awa-wikis/awa_wikis";
 with "plugins/awa-counters/awa_counters";
+with "plugins/awa-setup/awa_setup";
 
 project Awa_Tests is
 
