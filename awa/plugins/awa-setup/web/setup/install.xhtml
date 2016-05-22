@@ -22,7 +22,7 @@
                 xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
                 xmlns:u="http://code.google.com/p/ada-asf/util"
                 xmlns:h="http://java.sun.com/jsf/html">
-    <ui:param name="title" value="#{wikiView.title}"/>
+    <ui:param name="title" value="#{setupMsg.setup_install_title}"/>
 
     <ui:define name="pageHeader">
     </ui:define>
@@ -30,15 +30,27 @@
     <!-- Main page body -->
     <ui:define name="pageBody">
       <div id='awa-content'>
-          <div class='wiki-page-container'>
-
-              <dl>
-                  <dt></dt>
-                  <dd></dd>
-              </dl>
-              <ajax:include styleClass="asf-container" async="true"
+          <div class='setup-container'>
+              <h1>
+                  <h:outputFormat value="#{setupMsg.setup_configure_title}">
+                      <f:param value="#{setup.app_name}"/>
+                  </h:outputFormat>
+              </h1>
+              <ui:include src="/WEB-INF/layouts/setup-steps.xhtml"/>
+              <ajax:include id='step' styleClass="asf-container" async="true"
                             src="/setup/forms/database.html"/>
           </div>
       </div>
+        <script>
+            function previous_step(form) {
+                ASF.Update('#step', '#{contextPath}/setup/forms/' + form + ".html", null);
+                if (form == 'settings') {
+                    $('#setup-steps').removeClass('setup-oauth').addClass('setup-settings');
+                } else if (form == 'database') {
+                    $('#setup-steps').removeClass('setup-settings').addClass('setup-database');
+                }
+                return false;
+            }
+        </script>
     </ui:define>
 </ui:composition>
