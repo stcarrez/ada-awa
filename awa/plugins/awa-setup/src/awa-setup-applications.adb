@@ -91,6 +91,12 @@ package body AWA.Setup.Applications is
          From.Database.Set_Property ("user", Util.Beans.Objects.To_String (Value));
       elsif Name = "database_password" then
          From.Database.Set_Property ("password", Util.Beans.Objects.To_String (Value));
+      elsif Name = "callback_url" then
+         From.Changed.Set (Name, Util.Beans.Objects.To_String (Value));
+         From.Changed.Set ("facebook.callback_url",
+                           Util.Beans.Objects.To_String (Value) & "#{contextPath}/auth/verify");
+         From.Changed.Set ("google-plus.callback_url",
+                           Util.Beans.Objects.To_String (Value) & "#{contextPath}/auth/verify");
       else
          From.Changed.Set (Name, Util.Beans.Objects.To_String (Value));
       end if;
@@ -114,16 +120,16 @@ package body AWA.Setup.Applications is
          Pos : constant Natural := Util.Strings.Index (Line, '=');
       begin
          if Pos = 0 or else not From.Changed.Exists (Line (Line'First .. Pos - 1)) then
-            Ada.Text_IO.Put_Line (Line);
+            Ada.Text_IO.Put_Line (Output, Line);
             return;
          end if;
-         Ada.Text_IO.Put (Line (Line'First .. Pos));
-         Ada.Text_IO.Put_Line (From.Changed.Get (Line (Line'First .. Pos - 1)));
+         Ada.Text_IO.Put (Output, Line (Line'First .. Pos));
+         Ada.Text_IO.Put_Line (Output, From.Changed.Get (Line (Line'First .. Pos - 1)));
       end Read_Property;
 
    begin
       Log.Info ("Saving configuration file {0}", Path);
-      Ada.Text_IO.Create (File => Output, Name => Path);
+      Ada.Text_IO.Create (File => Output, Name => New_File);
       Util.Files.Read_File (Path, Read_Property'Access);
       Ada.Text_IO.Close (Output);
    end Save;
@@ -184,6 +190,15 @@ package body AWA.Setup.Applications is
       exception
          when Ada.IO_Exceptions.Name_Error =>
             Log.Error ("Setup configuration file '{0}' does not exist", Path);
+      end;
+
+      declare
+         URL : constant String := App.Config.Get ("google-plus.callback_url", "");
+         Pos : Natural := Util.Strings.Index (URL, '#');
+      begin
+         if Pos > 0 then
+            App.Changed.Set ("callback_url", URL (URL'First .. Pos - 1));
+         end if;
       end;
       App.Database.Set_Connection (App.Config.Get ("database", "mysql://localhost:3306/db"));
       Server.Register_Application (App.Config.Get ("contextPath"), App'Unchecked_Access);
