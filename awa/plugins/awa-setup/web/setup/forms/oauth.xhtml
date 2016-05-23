@@ -23,60 +23,41 @@
             #{setupMsg.setup_oauth_message}
         </h2>
         <div>
-            <w:inputText id='database' title="#{setupMsg.setup_facebook_client_id}"
-                         styleClass="awa-required ui-corner-all"
-                         size='80' placeholder="#{setupMsg.setup_database_name_placeholder}"
-                         value="#{setup['facebook.client_id']}"/>
 
-            <w:inputText id='user' title="#{setupMsg.setup_facebook_secret}"
+            <w:inputText id='callback' title="#{setupMsg.setup_callback_url}"
                          styleClass="awa-required ui-corner-all"
-                         size='80' placeholder="#{setupMsg.setup_database_user_placeholder}"
-                         value="#{setup['facebook.secret']}"/>
-
-            <w:inputText id='password' title="#{setupMsg.setup_facebook_callback}"
-                         styleClass="awa-required ui-corner-all"
-                         size='80' placeholder="#{setupMsg.setup_database_password_placeholder}"
-                         value="#{setup['facebook.callback_url']}"/>
+                         size='80'
+                         value="#{setup.callback_url}"/>
 
         </div>
         <h2>
             #{setupMsg.setup_facebook_auth_title}
         </h2>
         <div>
-            <w:inputText id='database' title="#{setupMsg.setup_facebook_client_id}"
+            <w:inputText id='fb-app-id' title="#{setupMsg.setup_facebook_client_id}"
                          styleClass="awa-required ui-corner-all"
                          size='80' placeholder="#{setupMsg.setup_database_name_placeholder}"
                          value="#{setup['facebook.client_id']}"/>
 
-            <w:inputText id='user' title="#{setupMsg.setup_facebook_secret}"
+            <w:inputText id='fb-user' title="#{setupMsg.setup_facebook_secret}"
                          styleClass="awa-required ui-corner-all"
                          size='80' placeholder="#{setupMsg.setup_database_user_placeholder}"
                          value="#{setup['facebook.secret']}"/>
-
-            <w:inputText id='password' title="#{setupMsg.setup_facebook_callback}"
-                         styleClass="awa-required ui-corner-all"
-                         size='80' placeholder="#{setupMsg.setup_database_password_placeholder}"
-                         value="#{setup['facebook.callback_url']}"/>
 
         </div>
         <h2>
             #{setupMsg.setup_google_auth_title}
         </h2>
         <div>
-            <w:inputText id='database' title="#{setupMsg.setup_google_client_id}"
+            <w:inputText id='google-app-id' title="#{setupMsg.setup_google_client_id}"
                          styleClass="awa-required ui-corner-all"
                          size='80' placeholder="#{setupMsg.setup_database_name_placeholder}"
                          value="#{setup['google-plus.client_id']}"/>
 
-            <w:inputText id='user' title="#{setupMsg.setup_google_secret}"
+            <w:inputText id='google-user' title="#{setupMsg.setup_google_secret}"
                          styleClass="awa-required ui-corner-all"
                          size='80' placeholder="#{setupMsg.setup_database_user_placeholder}"
                          value="#{setup['google-plus.secret']}"/>
-
-            <w:inputText id='password' title="#{setupMsg.setup_google_callback}"
-                         styleClass="awa-required ui-corner-all"
-                         size='80' placeholder="#{setupMsg.setup_database_password_placeholder}"
-                         value="#{setup['google-plus.callback_url']}"/>
 
         </div>
         <ul class='awa-buttons'>
@@ -87,7 +68,7 @@
             <li>
                 <h:commandButton id='wiki-page-delete-button' value='#{setupMsg.setup_database_configure}'
                                  styleClass="ui-button ui-state-default ui-corner-all"
-                                 action="#{setup.configure_database}" title="#{wikiMsg.setup_database_configure_tooltip}"/>
+                                 action="#{setup.save}" title="#{wikiMsg.setup_database_configure_tooltip}"/>
             </li>
         </ul>
     </h:form>
