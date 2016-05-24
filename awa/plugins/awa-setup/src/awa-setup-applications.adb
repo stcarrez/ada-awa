@@ -102,6 +102,33 @@ package body AWA.Setup.Applications is
       end if;
    end Set_Value;
 
+   --  ------------------------------
+   --  Get the database connection string to be used by the application.
+   --  ------------------------------
+   function Get_Database_URL (From : in Application) return String is
+      use Ada.Strings.Unbounded;
+
+      Result : Ada.Strings.Unbounded.Unbounded_String;
+   begin
+      Append (Result, "mysql://");
+      Append (Result, From.Database.Get_Server);
+      if From.Database.Get_Port /= 0 then
+         Append (Result, ":");
+         Append (Result, Util.Strings.Image (From.Database.Get_Port));
+      end if;
+      Append (Result, "/");
+      Append (Result, From.Database.Get_Database);
+      if From.Database.Get_Property ("user") /= "" then
+         Append (Result, "?user=");
+         Append (Result, From.Database.Get_Property ("user"));
+         if From.Database.Get_Property ("password") /= "" then
+            Append (Result, "&password=");
+            Append (Result, From.Database.Get_Property ("password"));
+         end if;
+      end if;
+      return To_String (Result);
+   end Get_Database_URL;
+
    --  Configure the database.
    procedure Configure_Database (From    : in out Application;
                                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
