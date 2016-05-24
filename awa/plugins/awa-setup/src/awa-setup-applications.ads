@@ -49,6 +49,9 @@ package AWA.Setup.Applications is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object);
 
+   --  Get the database connection string to be used by the application.
+   function Get_Database_URL (From : in Application) return String;
+
    --  Configure the database.
    procedure Configure_Database (From    : in out Application;
                                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
