@@ -17,6 +17,7 @@
 -----------------------------------------------------------------------
 with Ada.Text_IO;
 with Ada.IO_Exceptions;
+with Ada.Directories;
 with Util.Files;
 with Util.Log.Loggers;
 with Util.Strings;
@@ -47,7 +48,9 @@ package body AWA.Setup.Applications is
          Finish_Binding.Proxy'Access,
          Configure_Binding.Proxy'Access);
 
+   --  ------------------------------
    --  Get the value identified by the name.
+   --  ------------------------------
    function Get_Value (From : in Application;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
@@ -76,7 +79,9 @@ package body AWA.Setup.Applications is
          return Util.Beans.Objects.Null_Object;
    end Get_Value;
 
+   --  ------------------------------
    --  Set the value identified by the name.
+   --  ------------------------------
    procedure Set_Value (From  : in out Application;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
@@ -136,7 +141,9 @@ package body AWA.Setup.Applications is
       Log.Info ("Configure database");
    end Configure_Database;
 
+   --  ------------------------------
    --  Save the configuration.
+   --  ------------------------------
    procedure Save (From    : in out Application;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       Path     : constant String := Ada.Strings.Unbounded.To_String (From.Path);
@@ -156,9 +163,14 @@ package body AWA.Setup.Applications is
 
    begin
       Log.Info ("Saving configuration file {0}", Path);
+
+      From.Changed.Set ("database", From.Get_Database_URL);
       Ada.Text_IO.Create (File => Output, Name => New_File);
       Util.Files.Read_File (Path, Read_Property'Access);
       Ada.Text_IO.Close (Output);
+      Ada.Directories.Delete_File (Path);
+      Ada.Directories.Rename (Old_Name => New_File,
+                              New_Name => Path);
    end Save;
 
    --  Finish the setup and exit the setup.
@@ -169,7 +181,9 @@ package body AWA.Setup.Applications is
       From.Done := True;
    end Finish;
 
+   --  ------------------------------
    --  This bean provides some methods that can be used in a Method_Expression
+   --  ------------------------------
    overriding
    function Get_Method_Bindings (From : in Application)
                                  return Util.Beans.Methods.Method_Binding_Array_Access is
@@ -177,7 +191,9 @@ package body AWA.Setup.Applications is
       return Binding_Array'Access;
    end Get_Method_Bindings;
 
+   --  ------------------------------
    --  Enter in the application setup
+   --  ------------------------------
    procedure Setup (App    : in out Application;
                     Config : in String;
                     Server : in out ASF.Server.Container'Class) is
@@ -229,10 +245,10 @@ package body AWA.Setup.Applications is
       end;
       App.Database.Set_Connection (App.Config.Get ("database", "mysql://localhost:3306/db"));
       Server.Register_Application (App.Config.Get ("contextPath"), App'Unchecked_Access);
-      Server.Start;
       while not App.Done loop
          delay 5.0;
       end loop;
+      Server.Remove_Application (App'Unchecked_Access);
    end Setup;
 
 end AWA.Setup.Applications;
