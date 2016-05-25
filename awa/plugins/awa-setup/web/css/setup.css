@@ -32,7 +32,8 @@ h2 {
 }
 .setup-database #setup-step-database,
 .setup-settings #setup-step-settings,
-.setup-oauth #setup-step-oauth {
+.setup-oauth #setup-step-oauth,
+.setup-finish #setup-step-finish {
     background: #fff;
     border-color: orange;
 }
