@@ -15,9 +15,17 @@
   -  limitations under the License.
   -->
 <f:view contentType="text/html; charset=UTF-8"
+        xmlns:c="http://java.sun.com/jstl/core"
         xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:awa="http://code.google.com/p/ada-awa/jsf"
         xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:f="http://java.sun.com/jsf/core"><h:doctype rootElement="html"/>
+        xmlns:f="http://java.sun.com/jsf/core">
+<c:choose>
+    <c:when test="#{empty setup}">
+        <awa:redirect link="#{contextPath}/index.html"/>
+    </c:when>
+    <c:otherwise>
+    <h:doctype rootElement="html"/>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -63,4 +71,6 @@
 <!--DEV_END-->
 </body>
 </html>
+    </c:otherwise>
+</c:choose>
 </f:view>
