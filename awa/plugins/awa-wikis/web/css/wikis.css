@@ -108,14 +108,19 @@
 /**
  * Wiki page global style.
  */
-.wiki-title {
+.wiki-title, .wiki-title-private {
     float: left;
     margin-top: 15px;
     width: 95%;
     border-bottom: 2px solid #47C;
     padding-bottom: 2px;
-    background: url(../images/wikis/wiki-view-26.png) no-repeat;
     padding-left: 28px;
+}
+.wiki-title-private {
+    background: url(../images/wikis/wiki-private-26.png) no-repeat;
+}
+.wiki-title {
+    background: url(../images/wikis/wiki-view-26.png) no-repeat;
 }
 .wiki-title h2 {
     line-height: 1.33em;
