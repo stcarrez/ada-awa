@@ -880,10 +880,10 @@ package body AWA.Wikis.Beans is
                            Value => ADO.Parameters.Token '("page.name"));
       elsif Into.Sort = "recent" then
          Query.Bind_Param (Name  => "order1",
-                           Value => ADO.Parameters.Token '("content.create_date"));
+                           Value => ADO.Parameters.Token '("content.create_date DESC"));
       elsif Into.Sort = "popular" then
          Query.Bind_Param (Name  => "order1",
-                           Value => ADO.Parameters.Token '("page.read_count"));
+                           Value => ADO.Parameters.Token '("page.read_count DESC"));
       else
          return;
       end if;
