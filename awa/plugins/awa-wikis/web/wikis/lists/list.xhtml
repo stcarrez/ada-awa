@@ -1,5 +1,5 @@
 <!-- List the wiki pages for the wiki administrator
-  -  Copyright (C) 2015 Stephane Carrez
+  -  Copyright (C) 2015, 2016 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,13 +44,20 @@
     </h:panelGroup>
     <h:panelGroup rendered="#{user.isLogged}">
         <div id='wiki-page-action' class='asf-list-action'>
+            <a href="#" class='asf-icon wiki-edit' title='#{wikiMsg.wiki_page_edit_action_tooltip}'></a>
             <a href="#" class='asf-icon asf-delete' title='#{wikiMsg.wiki_page_delete_action_tooltip}'></a>
         </div>
         <util:script>
                 $('#wiki-page-list').list({
                     actionId: '#wiki-page-action',
                     itemPrefix: 'p_',
-                    deleteUrl: '#{contextPath}/wikis/forms/delete-page.html?id='
+                    deleteUrl: '#{contextPath}/wikis/forms/delete-page.html?id=',
+                    selectAction: function(list, node, event) {
+                        if ($(node).hasClass('wiki-edit')) {
+                            var name = $(list.currentNode).attr('data-name');
+                            document.location = '#{contextPath}/wikis/edit/#{wikiList.wiki_id}/' + name;
+                        }
+                    }
                 });
         </util:script>
     </h:panelGroup>
