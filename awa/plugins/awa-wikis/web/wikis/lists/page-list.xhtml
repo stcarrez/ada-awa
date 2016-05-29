@@ -22,11 +22,8 @@
 	    xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
         <h:list var="page" value="#{wikiList.pages}">
-            <div class='awa-list-item ui-list-item' id="p_#{page.id}">
+            <div class='awa-list-item ui-list-item' id="p_#{page.id}" data-name="#{page.name}">
                 <div class='awa-list-col wiki-page-status-#{page.is_public}' title="#{page.is_public ? wikiMsg.wiki_page_public_title : wikiMsg.wiki_page_private_title}"></div>
-                <div class='awa-list-col wiki-page-name'>
-                    <a href="#{contextPath}/wikis/view/#{wikiList.wiki_id}/#{page.name}">#{page.name}</a>
-                </div>
                 <div class='awa-list-col wiki-page-title'>
                     <a href="#{contextPath}/wikis/view/#{wikiList.wiki_id}/#{page.name}">#{page.title}</a>
                 </div>
@@ -39,11 +36,28 @@
                 <div class='awa-list-col wiki-page-version'>
                     #{page.last_version}
                 </div>
-                <div class='post-view'>
-                    <a href="#{contextPath}/wikis/edit/#{wikiList.wiki_id}/#{page.name}">
-                        #{wikiMsg.wiki_page_edit_label}
-                    </a>
+                <div class='awa-list-col wiki-page-access'>
+                    #{page.read_count}
                 </div>
             </div>
         </h:list>
+    <ul class='blog-pagination'>
+        <li>
+            <h:panelGroup rendered="#{wikiList.page gt 1}">
+                <a href="#{contextPath}/wikis/list/#{wikiList.wiki_id}/#{wikiList.sort}?page=#{wikiList.page - 1}#{pageParam}"
+                        title="#{wikiMsg.wiki_previous_page_title}">#{wikiMsg.wiki_previous_page}</a>
+            </h:panelGroup>
+        </li>
+        <li>
+            <h:outputFormat value="#{wikiMsg.wiki_list_page_number}">
+                <f:param value="#{wikiList.page}"/>
+            </h:outputFormat>
+        </li>
+        <li>
+            <h:panelGroup rendered="#{wikiList.page lt wikiList.page_count}">
+                <a href="#{contextPath}/wikis/list/#{wikiList.wiki_id}/#{wikiList.sort}?page=#{wikiList.page + 1}#{pageParam}"
+                        title="#{wikiMsg.wiki_next_page_title}">#{wikiMsg.wiki_next_page}</a>
+            </h:panelGroup>
+        </li>
+    </ul>
 </ui:composition>
