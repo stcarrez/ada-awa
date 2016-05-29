@@ -17,15 +17,20 @@
 .wiki-page-author {
     width: 20%;
 }
-.wiki-page-version {
+.wiki-page-version, .wiki-page-access {
     width: 10%;
 }
 .wiki-page-status, .wiki-page-status-false, .wiki-page-status-true {
-    width: 32px;
+    width: 64px;
     height: 24px;
 }
 #wiki-page-action {
     left: -5px;
+    width: 64px;
+}
+#wiki-page-action .wiki-edit {
+    background: url(../images/wikis/icon-edit.png) no-repeat;
+    margin-right: 10px;
 }
 .wiki-page-grid {
     float: left;
@@ -114,7 +119,7 @@
     width: 95%;
     border-bottom: 2px solid #47C;
     padding-bottom: 2px;
-    padding-left: 28px;
+    padding-left: 48px;
 }
 .wiki-title-private {
     background: url(../images/wikis/wiki-private-26.png) no-repeat;
