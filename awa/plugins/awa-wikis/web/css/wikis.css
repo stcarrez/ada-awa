@@ -21,12 +21,18 @@
     width: 10%;
 }
 .wiki-page-status, .wiki-page-status-false, .wiki-page-status-true {
-    width: 64px;
+    margin-left: 60px;
+    margin-right: 5px;
+    width: 24px;
     height: 24px;
+}
+.wiki-page-status-false {
+    background: url(../images/wikis/wiki-private.png) no-repeat;
 }
 #wiki-page-action {
     left: -5px;
     width: 64px;
+    margin-top: 4px;
 }
 #wiki-page-action .wiki-edit {
     background: url(../images/wikis/icon-edit.png) no-repeat;
