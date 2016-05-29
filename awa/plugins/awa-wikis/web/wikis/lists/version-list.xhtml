@@ -27,17 +27,17 @@
     <h:panelGroup rendered="#{wikiVersionList.versions.count != 0 or true}">
         <h:list var="version" value="#{wikiVersionList.versions}">
             <div class='awa-list-item ui-list-item' id="v_#{version.id}">
-                <div class='awa-list-col wiki-page-name'>
+                <div class='awa-list-col wiki-page-version'>
                     #{version.page_version}
-                </div>
-                <div class='awa-list-col wiki-page-title'>
-                    #{version.comment}
                 </div>
                 <div class='awa-list-col wiki-page-date'>
                     <h:outputText value="#{version.create_date}"/>
                 </div>
                 <div class='awa-list-col wiki-page-author'>
                     #{version.author}
+                </div>
+                <div class='awa-list-col wiki-page-title'>
+                    #{version.comment}
                 </div>
             </div>
         </h:list>
