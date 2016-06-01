@@ -24,6 +24,7 @@ with ADO.Sessions;
 with ADO.Objects;
 with ADO.Sessions.Entities;
 
+with AWA.Helpers.Requests;
 with AWA.Workspaces.Models;
 with AWA.Services.Contexts;
 with AWA.Storages.Services;
@@ -100,7 +101,6 @@ package body AWA.Storages.Beans is
 
    --  ------------------------------
    --  Delete the file.
-   --  @method
    --  ------------------------------
    procedure Delete (Bean    : in out Upload_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
@@ -109,6 +109,31 @@ package body AWA.Storages.Beans is
       Manager.Delete (Bean);
       Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("success");
    end Delete;
+
+   --  ------------------------------
+   --  Publish the file.
+   --  ------------------------------
+   overriding
+   procedure Publish (Bean    : in out Upload_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      Manager : constant Services.Storage_Service_Access := Bean.Module.Get_Storage_Manager;
+      Id      : constant ADO.Identifier := Helpers.Requests.Get_Parameter ("id");
+      Value   : constant Util.Beans.Objects.Object := Helpers.Requests.Get_Parameter ("status");
+   begin
+      Manager.Publish (Id, Util.Beans.Objects.To_Boolean (Value), Bean);
+      Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("success");
+   end Publish;
+
+   --  ------------------------------
+   --  Create the Upload_Bean bean instance.
+   --  ------------------------------
+   function Create_Upload_Bean (Module : in AWA.Storages.Modules.Storage_Module_Access)
+                                return Util.Beans.Basic.Readonly_Bean_Access is
+      Result : constant Upload_Bean_Access := new Upload_Bean;
+   begin
+      Result.Module := Module;
+      return Result.all'Access;
+   end Create_Upload_Bean;
 
    --  ------------------------------
    --  Get the value identified by the name.
