@@ -33,6 +33,7 @@ with ASF.Helpers.Beans;
 with Wiki.Strings;
 with Wiki.Attributes;
 with Wiki.Plugins.Templates;
+with Wiki.Plugins.Conditions;
 
 with AWA.Wikis.Modules;
 with AWA.Wikis.Models;
@@ -134,6 +135,9 @@ package AWA.Wikis.Beans is
 
       --  The list of templates that have been loaded.
       Templates     : Template_Maps.Map;
+
+      --  Condition plugin.
+      Condition     : aliased Wiki.Plugins.Conditions.Condition_Plugin;
 
       --  The info bean used for the list iterator.
       Info          : aliased AWA.Wikis.Models.Wiki_Info;
