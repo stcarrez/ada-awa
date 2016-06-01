@@ -446,4 +446,26 @@ package body AWA.Storages.Services is
       Ctx.Commit;
    end Delete;
 
+   --  ------------------------------
+   --  Publish or not the storage instance.
+   --  ------------------------------
+   procedure Publish (Service : in Storage_Service;
+                      Id      : in ADO.Identifier;
+                      State   : in Boolean;
+                      File    : in out AWA.Storages.Models.Storage_Ref'Class) is
+      Ctx  : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+   begin
+      Ctx.Start;
+
+      --  Check that the user has the permission to publish for the given comment.
+      AWA.Permissions.Check (Permission => ACL_Delete_Storage.Permission,
+                             Entity     => Id);
+
+      File.Load (DB, Id);
+      File.Set_Is_Public (State);
+      File.Save (DB);
+      Ctx.Commit;
+   end Publish;
+
 end AWA.Storages.Services;
