@@ -46,7 +46,7 @@ div.awa-document {
 div.awa-document div.awa-title {
     float: left;
     font-size: 1.1em;
-    width: 60%;
+    width: 50%;
 }
 div.awa-document div.awa-size {
     float: right;
@@ -72,6 +72,17 @@ div.awa-document div.awa-download {
     display: inline-block;
     width: 120px;
     visibility: hidden;
+}
+.awa-document .awa-doc-status {
+    float: left;
+    height: 24px;
+    width: 32px;
+}
+.awa-private .awa-doc-status {
+    background: url(../images/storages/doc-private.png) no-repeat;
+}
+.awa-public .awa-doc-status {
+    background: url(../images/storages/icon-internet.png) no-repeat;
 }
 div.asf-active-list div.asf-active div.awa-download {
     visibility: visible;
