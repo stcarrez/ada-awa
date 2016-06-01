@@ -1,5 +1,5 @@
 <!-- List of documents
-  -  Copyright (C) 2012, 2013 Stephane Carrez
+  -  Copyright (C) 2012, 2013, 2016 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +29,8 @@
                 #{storageMsg.storage_folder_empty_message}
         </h:panelGroup>
         <h:list var="document" value="#{storageList.files}">
-            <div id='store-#{document.id}' class='awa-document ui-list-item'>
+            <div id='store-#{document.id}' class="awa-document ui-list-item #{document.is_public ? 'awa-public' : 'awa-private'}">
+                <div class="awa-doc-status"></div>
                 <div class='awa-title'>#{document.name}</div>
                 <div class='awa-size'>
                     #{storageMsg.storage_size_label}
