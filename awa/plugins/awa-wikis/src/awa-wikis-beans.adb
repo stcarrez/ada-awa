@@ -305,9 +305,12 @@ package body AWA.Wikis.Beans is
    overriding
    function Find (Factory : in Wiki_Template_Bean;
                   Name    : in String) return Wiki.Plugins.Wiki_Plugin_Access is
-      pragma Unreferenced (Name);
    begin
-      return Factory'Unrestricted_Access;
+      if Name = "if" or Name = "else" or Name = "elsif" or Name = "end" then
+         return Factory.Condition'Unrestricted_Access;
+      else
+         return Factory'Unrestricted_Access;
+      end if;
    end Find;
 
    --  ------------------------------
@@ -435,6 +438,18 @@ package body AWA.Wikis.Beans is
          --  Load the wiki page tags.
          Bean.Tags.Load_Tags (Session, Bean.Id);
          Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("loaded");
+
+         if Ctx.Get_User_Identifier /= ADO.NO_IDENTIFIER then
+            Bean.Plugins.Condition.Append ("user", "");
+            Bean.Plugins.Condition.Append ("authentified", "");
+         else
+            Bean.Plugins.Condition.Append ("anonymous", "");
+         end if;
+         if Bean.Is_Public then
+            Bean.Plugins.Condition.Append ("public", "");
+         else
+            Bean.Plugins.Condition.Append ("private", "");
+         end if;
       end if;
    end Load;
 
