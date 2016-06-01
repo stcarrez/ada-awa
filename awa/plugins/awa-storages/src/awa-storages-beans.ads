@@ -34,8 +34,7 @@ package AWA.Storages.Beans is
    --  Upload Bean
    --  ------------------------------
    --  The <b>Upload_Bean</b> allows to upload a file in the storage space.
-   type Upload_Bean is new AWA.Storages.Models.Storage_Ref
-     and Util.Beans.Basic.Bean with record
+   type Upload_Bean is new AWA.Storages.Models.Upload_Bean with record
       Module    : AWA.Storages.Modules.Storage_Module_Access := null;
       Folder_Id : ADO.Identifier;
    end record;
@@ -58,14 +57,23 @@ package AWA.Storages.Beans is
                         Part : in ASF.Parts.Part'Class);
 
    --  Upload the file.
-   --  @method
+   overriding
    procedure Upload (Bean    : in out Upload_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
    --  Delete the file.
-   --  @method
+   overriding
    procedure Delete (Bean    : in out Upload_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Publish the file.
+   overriding
+   procedure Publish (Bean    : in out Upload_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Create the Upload_Bean bean instance.
+   function Create_Upload_Bean (Module : in AWA.Storages.Modules.Storage_Module_Access)
+                                return Util.Beans.Basic.Readonly_Bean_Access;
 
    --  ------------------------------
    --  Folder Bean
