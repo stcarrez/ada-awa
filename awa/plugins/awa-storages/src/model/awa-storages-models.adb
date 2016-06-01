@@ -2048,6 +2048,8 @@ package body AWA.Storages.Models is
          return Util.Beans.Objects.To_Object (From.Mime_Type);
       elsif Name = "file_size" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.File_Size));
+      elsif Name = "is_public" then
+         return Util.Beans.Objects.To_Object (From.Is_Public);
       elsif Name = "user_name" then
          return Util.Beans.Objects.To_Object (From.User_Name);
       end if;
@@ -2077,6 +2079,8 @@ package body AWA.Storages.Models is
          Item.Mime_Type := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "file_size" then
          Item.File_Size := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "is_public" then
+         Item.Is_Public := Util.Beans.Objects.To_Boolean (Value);
       elsif Name = "user_name" then
          Item.User_Name := Util.Beans.Objects.To_Unbounded_String (Value);
       end if;
@@ -2113,7 +2117,8 @@ package body AWA.Storages.Models is
          Into.Storage := AWA.Storages.Models.Storage_Type'Val (Stmt.Get_Integer (4));
          Into.Mime_Type := Stmt.Get_Unbounded_String (5);
          Into.File_Size := Stmt.Get_Integer (6);
-         Into.User_Name := Stmt.Get_Unbounded_String (7);
+         Into.Is_Public := Stmt.Get_Boolean (7);
+         Into.User_Name := Stmt.Get_Unbounded_String (8);
       end Read;
    begin
       Stmt.Execute;

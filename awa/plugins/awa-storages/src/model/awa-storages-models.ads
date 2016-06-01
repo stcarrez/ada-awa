@@ -627,6 +627,9 @@ package AWA.Storages.Models is
       --  the file size.
       File_Size : Integer;
 
+      --  whether the document is public or not.
+      Is_Public : Boolean;
+
       --  the user name who uploaded the document.
       User_Name : Ada.Strings.Unbounded.Unbounded_String;
    end record;
@@ -1001,7 +1004,7 @@ private
 
    package File_3 is
       new ADO.Queries.Loaders.File (Path => "storage-list.xml",
-                                    Sha1 => "C4BF5BFDB927D353A6FC65AC4B8ED031E25278B9");
+                                    Sha1 => "3B7504A76F354F53AF54ACD1A005F9BDB2600F81");
 
    package Def_Storageinfo_Storage_List is
       new ADO.Queries.Loaders.Query (Name => "storage-list",
