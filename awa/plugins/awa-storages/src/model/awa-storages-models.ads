@@ -36,6 +36,7 @@ with Util.Beans.Objects.Enums;
 with Util.Beans.Basic.Lists;
 with AWA.Users.Models;
 with AWA.Workspaces.Models;
+with Util.Beans.Methods;
 pragma Warnings (On);
 package AWA.Storages.Models is
 
@@ -667,6 +668,34 @@ package AWA.Storages.Models is
 
    Query_Storage_List : constant ADO.Queries.Query_Definition_Access;
 
+
+   --  --------------------
+   --    bean method to upload a document.
+   --  --------------------
+   type Upload_Bean is abstract new AWA.Storages.Models.Storage_Ref
+     and Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with null record;
+
+
+   --  This bean provides some methods that can be used in a Method_Expression.
+   overriding
+   function Get_Method_Bindings (From : in Upload_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access;
+
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Upload_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   procedure Upload (Bean : in out Upload_Bean;
+                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   procedure Delete (Bean : in out Upload_Bean;
+                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   procedure Publish (Bean : in out Upload_Bean;
+                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
 
 private

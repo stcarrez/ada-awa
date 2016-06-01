@@ -22,6 +22,7 @@
 -----------------------------------------------------------------------
 with Ada.Unchecked_Deallocation;
 with Util.Beans.Objects.Time;
+with ASF.Events.Faces.Actions;
 package body AWA.Storages.Models is
 
    use type ADO.Objects.Object_Record_Access;
@@ -2131,6 +2132,82 @@ package body AWA.Storages.Models is
       end loop;
    end List;
 
+
+   procedure Op_Upload (Bean    : in out Upload_Bean;
+                        Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Upload (Bean    : in out Upload_Bean;
+                        Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Upload_Bean'Class (Bean).Upload (Outcome);
+   end Op_Upload;
+   package Binding_Upload_Bean_1 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Upload_Bean,
+                                                      Method => Op_Upload,
+                                                      Name   => "upload");
+   procedure Op_Delete (Bean    : in out Upload_Bean;
+                        Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Delete (Bean    : in out Upload_Bean;
+                        Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Upload_Bean'Class (Bean).Delete (Outcome);
+   end Op_Delete;
+   package Binding_Upload_Bean_2 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Upload_Bean,
+                                                      Method => Op_Delete,
+                                                      Name   => "delete");
+   procedure Op_Publish (Bean    : in out Upload_Bean;
+                         Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Publish (Bean    : in out Upload_Bean;
+                         Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Upload_Bean'Class (Bean).Publish (Outcome);
+   end Op_Publish;
+   package Binding_Upload_Bean_3 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Upload_Bean,
+                                                      Method => Op_Publish,
+                                                      Name   => "publish");
+
+   Binding_Upload_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
+     := (1 => Binding_Upload_Bean_1.Proxy'Access,
+         2 => Binding_Upload_Bean_2.Proxy'Access,
+         3 => Binding_Upload_Bean_3.Proxy'Access
+     );
+
+   --  ------------------------------
+   --  This bean provides some methods that can be used in a Method_Expression.
+   --  ------------------------------
+   overriding
+   function Get_Method_Bindings (From : in Upload_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
+   begin
+      return Binding_Upload_Bean_Array'Access;
+   end Get_Method_Bindings;
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Upload_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "storage" then
+         Item.Set_Storage (Storage_Type_Objects.To_Value (Value));
+      elsif Name = "create_date" then
+         Item.Set_Create_Date (Util.Beans.Objects.Time.To_Time (Value));
+      elsif Name = "name" then
+         Item.Set_Name (Util.Beans.Objects.To_String (Value));
+      elsif Name = "file_size" then
+         Item.Set_File_Size (Util.Beans.Objects.To_Integer (Value));
+      elsif Name = "mime_type" then
+         Item.Set_Mime_Type (Util.Beans.Objects.To_String (Value));
+      elsif Name = "uri" then
+         Item.Set_Uri (Util.Beans.Objects.To_String (Value));
+      elsif Name = "is_public" then
+         Item.Set_Is_Public (Util.Beans.Objects.To_Boolean (Value));
+      end if;
+   end Set_Value;
 
 
 end AWA.Storages.Models;
