@@ -145,6 +145,12 @@ package AWA.Storages.Services is
    procedure Delete (Service : in Storage_Service;
                      Storage : in ADO.Identifier);
 
+   --  Publish or not the storage instance.
+   procedure Publish (Service : in Storage_Service;
+                      Id      : in ADO.Identifier;
+                      State   : in Boolean;
+                      File    : in out AWA.Storages.Models.Storage_Ref'Class);
+
 private
 
    type Store_Access_Array is
