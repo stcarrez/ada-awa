@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-module -- Storage management module
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,7 +44,7 @@ package body AWA.Storages.Modules is
 
       Register.Register (Plugin  => Plugin,
                          Name    => "AWA.Storages.Beans.Upload_Bean",
-                         Handler => AWA.Storages.Beans.Factories.Create_Upload_Bean'Access);
+                         Handler => AWA.Storages.Beans.Create_Upload_Bean'Access);
 
       Register.Register (Plugin  => Plugin,
                          Name    => "AWA.Storages.Beans.Folder_Bean",
