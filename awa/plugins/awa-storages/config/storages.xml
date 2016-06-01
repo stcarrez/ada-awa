@@ -66,6 +66,14 @@
     </navigation-case>
   </navigation-rule>
 
+  <navigation-rule>
+    <from-view-id>/ajax/uploadFile/publish</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/storages/forms/publish-response.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
   <entity-permission>
     <name>folder-create</name>
     <entity-type>awa_workspace</entity-type>
@@ -99,6 +107,11 @@
   </entity-permission>
 
   <servlet-mapping>
+    <servlet-name>ajax</servlet-name>
+    <url-pattern>/storages/ajax/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
     <servlet-name>storage</servlet-name>
     <url-pattern>/storages/files/:storage_id</url-pattern>
   </servlet-mapping>
@@ -106,6 +119,7 @@
   <filter-mapping>
     <filter-name>service</filter-name>
     <url-pattern>/storages/*.html</url-pattern>
+    <url-pattern>/storages/ajax/*</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
@@ -121,6 +135,7 @@
   <filter-mapping>
     <filter-name>auth-filter</filter-name>
     <url-pattern>/storages/files/*</url-pattern>
+    <url-pattern>/storages/ajax/*</url-pattern>
   </filter-mapping>
 
     <url-policy>
@@ -136,6 +151,7 @@
         <url-pattern>/storages/lists/documents.html</url-pattern>
         <url-pattern>/storages/documents.html</url-pattern>
         <url-pattern>/storages/files/.*</url-pattern>
+        <url-pattern>/storages/ajax/uploadFile/publish</url-pattern>
     </url-policy>
 
 </module>
