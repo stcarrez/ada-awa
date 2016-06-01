@@ -26,6 +26,9 @@
         <property type='Integer' name="file_size">
             <comment>the file size.</comment>
         </property>
+        <property type='Boolean' name="is_public">
+            <comment>whether the document is public or not.</comment>
+        </property>
         <property type='String' name="user_name">
             <comment>the user name who uploaded the document.</comment>
         </property>
@@ -42,6 +45,7 @@
       st.storage,
       st.mime_type,
       st.file_size,
+      st.is_public,
       user.name
     FROM awa_storage AS st
     INNER JOIN awa_acl AS acl ON acl.entity_id = st.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
