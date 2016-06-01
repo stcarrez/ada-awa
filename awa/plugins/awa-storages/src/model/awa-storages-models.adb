@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -819,6 +819,7 @@ package body AWA.Storages.Models is
       Impl.Create_Date := ADO.DEFAULT_TIME;
       Impl.File_Size := 0;
       Impl.Version := 0;
+      Impl.Is_Public := False;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -995,12 +996,30 @@ package body AWA.Storages.Models is
    end Get_Id;
 
 
+   procedure Set_Is_Public (Object : in out Storage_Ref;
+                            Value  : in Boolean) is
+      Impl : Storage_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Boolean (Impl.all, 9, Impl.Is_Public, Value);
+      ADO.Objects.Set_Field_Boolean (Impl.all, 9, Impl.Is_Public, Value);
+   end Set_Is_Public;
+
+   function Get_Is_Public (Object : in Storage_Ref)
+                  return Boolean is
+      Impl : constant Storage_Access
+         := Storage_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Is_Public;
+   end Get_Is_Public;
+
+
    procedure Set_Original (Object : in out Storage_Ref;
                            Value  : in AWA.Storages.Models.Storage_Ref'Class) is
       Impl : Storage_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 9, Impl.Original, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 10, Impl.Original, Value);
    end Set_Original;
 
    function Get_Original (Object : in Storage_Ref)
@@ -1017,7 +1036,7 @@ package body AWA.Storages.Models is
       Impl : Storage_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 10, Impl.Store_Data, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 11, Impl.Store_Data, Value);
    end Set_Store_Data;
 
    function Get_Store_Data (Object : in Storage_Ref)
@@ -1034,7 +1053,7 @@ package body AWA.Storages.Models is
       Impl : Storage_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 11, Impl.Owner, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 12, Impl.Owner, Value);
    end Set_Owner;
 
    function Get_Owner (Object : in Storage_Ref)
@@ -1051,7 +1070,7 @@ package body AWA.Storages.Models is
       Impl : Storage_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 12, Impl.Workspace, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 13, Impl.Workspace, Value);
    end Set_Workspace;
 
    function Get_Workspace (Object : in Storage_Ref)
@@ -1068,7 +1087,7 @@ package body AWA.Storages.Models is
       Impl : Storage_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 13, Impl.Folder, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 14, Impl.Folder, Value);
    end Set_Folder;
 
    function Get_Folder (Object : in Storage_Ref)
@@ -1100,6 +1119,7 @@ package body AWA.Storages.Models is
             Copy.Mime_Type := Impl.Mime_Type;
             Copy.Uri := Impl.Uri;
             Copy.Version := Impl.Version;
+            Copy.Is_Public := Impl.Is_Public;
             Copy.Original := Impl.Original;
             Copy.Store_Data := Impl.Store_Data;
             Copy.Owner := Impl.Owner;
@@ -1270,29 +1290,34 @@ package body AWA.Storages.Models is
          Object.Clear_Modified (8);
       end if;
       if Object.Is_Modified (9) then
-         Stmt.Save_Field (Name  => COL_8_3_NAME, --  original_id
-                          Value => Object.Original);
+         Stmt.Save_Field (Name  => COL_8_3_NAME, --  is_public
+                          Value => Object.Is_Public);
          Object.Clear_Modified (9);
       end if;
       if Object.Is_Modified (10) then
-         Stmt.Save_Field (Name  => COL_9_3_NAME, --  store_data_id
-                          Value => Object.Store_Data);
+         Stmt.Save_Field (Name  => COL_9_3_NAME, --  original_id
+                          Value => Object.Original);
          Object.Clear_Modified (10);
       end if;
       if Object.Is_Modified (11) then
-         Stmt.Save_Field (Name  => COL_10_3_NAME, --  owner_id
-                          Value => Object.Owner);
+         Stmt.Save_Field (Name  => COL_10_3_NAME, --  store_data_id
+                          Value => Object.Store_Data);
          Object.Clear_Modified (11);
       end if;
       if Object.Is_Modified (12) then
-         Stmt.Save_Field (Name  => COL_11_3_NAME, --  workspace_id
-                          Value => Object.Workspace);
+         Stmt.Save_Field (Name  => COL_11_3_NAME, --  owner_id
+                          Value => Object.Owner);
          Object.Clear_Modified (12);
       end if;
       if Object.Is_Modified (13) then
-         Stmt.Save_Field (Name  => COL_12_3_NAME, --  folder_id
-                          Value => Object.Folder);
+         Stmt.Save_Field (Name  => COL_12_3_NAME, --  workspace_id
+                          Value => Object.Workspace);
          Object.Clear_Modified (13);
+      end if;
+      if Object.Is_Modified (14) then
+         Stmt.Save_Field (Name  => COL_13_3_NAME, --  folder_id
+                          Value => Object.Folder);
+         Object.Clear_Modified (14);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -1340,15 +1365,17 @@ package body AWA.Storages.Models is
       Session.Allocate (Id => Object);
       Query.Save_Field (Name  => COL_7_3_NAME, --  id
                         Value => Object.Get_Key);
-      Query.Save_Field (Name  => COL_8_3_NAME, --  original_id
+      Query.Save_Field (Name  => COL_8_3_NAME, --  is_public
+                        Value => Object.Is_Public);
+      Query.Save_Field (Name  => COL_9_3_NAME, --  original_id
                         Value => Object.Original);
-      Query.Save_Field (Name  => COL_9_3_NAME, --  store_data_id
+      Query.Save_Field (Name  => COL_10_3_NAME, --  store_data_id
                         Value => Object.Store_Data);
-      Query.Save_Field (Name  => COL_10_3_NAME, --  owner_id
+      Query.Save_Field (Name  => COL_11_3_NAME, --  owner_id
                         Value => Object.Owner);
-      Query.Save_Field (Name  => COL_11_3_NAME, --  workspace_id
+      Query.Save_Field (Name  => COL_12_3_NAME, --  workspace_id
                         Value => Object.Workspace);
-      Query.Save_Field (Name  => COL_12_3_NAME, --  folder_id
+      Query.Save_Field (Name  => COL_13_3_NAME, --  folder_id
                         Value => Object.Folder);
       Query.Execute (Result);
       if Result /= 1 then
@@ -1394,6 +1421,8 @@ package body AWA.Storages.Models is
          return Util.Beans.Objects.To_Object (Impl.Uri);
       elsif Name = "id" then
          return ADO.Objects.To_Object (Impl.Get_Key);
+      elsif Name = "is_public" then
+         return Util.Beans.Objects.To_Object (Impl.Is_Public);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -1414,20 +1443,22 @@ package body AWA.Storages.Models is
       Object.Mime_Type := Stmt.Get_Unbounded_String (4);
       Object.Uri := Stmt.Get_Unbounded_String (5);
       Object.Set_Key_Value (Stmt.Get_Identifier (7));
-      if not Stmt.Is_Null (8) then
-         Object.Original.Set_Key_Value (Stmt.Get_Identifier (8), Session);
-      end if;
+      Object.Is_Public := Stmt.Get_Boolean (8);
+      Object.Is_Public := Stmt.Get_Boolean (8);
       if not Stmt.Is_Null (9) then
-         Object.Store_Data.Set_Key_Value (Stmt.Get_Identifier (9), Session);
+         Object.Original.Set_Key_Value (Stmt.Get_Identifier (9), Session);
       end if;
       if not Stmt.Is_Null (10) then
-         Object.Owner.Set_Key_Value (Stmt.Get_Identifier (10), Session);
+         Object.Store_Data.Set_Key_Value (Stmt.Get_Identifier (10), Session);
       end if;
       if not Stmt.Is_Null (11) then
-         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (11), Session);
+         Object.Owner.Set_Key_Value (Stmt.Get_Identifier (11), Session);
       end if;
       if not Stmt.Is_Null (12) then
-         Object.Folder.Set_Key_Value (Stmt.Get_Identifier (12), Session);
+         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (12), Session);
+      end if;
+      if not Stmt.Is_Null (13) then
+         Object.Folder.Set_Key_Value (Stmt.Get_Identifier (13), Session);
       end if;
       Object.Version := Stmt.Get_Integer (6);
       ADO.Objects.Set_Created (Object);

@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -320,6 +320,14 @@ package AWA.Storages.Models is
    --  Get the storage identifier
    function Get_Id (Object : in Storage_Ref)
                  return ADO.Identifier;
+
+   --  Set whether the document is public or not.
+   procedure Set_Is_Public (Object : in out Storage_Ref;
+                            Value  : in Boolean);
+
+   --  Get whether the document is public or not.
+   function Get_Is_Public (Object : in Storage_Ref)
+                 return Boolean;
 
    --
    procedure Set_Original (Object : in out Storage_Ref;
@@ -795,14 +803,15 @@ private
    COL_5_3_NAME : aliased constant String := "uri";
    COL_6_3_NAME : aliased constant String := "version";
    COL_7_3_NAME : aliased constant String := "id";
-   COL_8_3_NAME : aliased constant String := "original_id";
-   COL_9_3_NAME : aliased constant String := "store_data_id";
-   COL_10_3_NAME : aliased constant String := "owner_id";
-   COL_11_3_NAME : aliased constant String := "workspace_id";
-   COL_12_3_NAME : aliased constant String := "folder_id";
+   COL_8_3_NAME : aliased constant String := "is_public";
+   COL_9_3_NAME : aliased constant String := "original_id";
+   COL_10_3_NAME : aliased constant String := "store_data_id";
+   COL_11_3_NAME : aliased constant String := "owner_id";
+   COL_12_3_NAME : aliased constant String := "workspace_id";
+   COL_13_3_NAME : aliased constant String := "folder_id";
 
    STORAGE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 13,
+     (Count => 14,
       Table => STORAGE_NAME'Access,
       Members => (
          1 => COL_0_3_NAME'Access,
@@ -817,7 +826,8 @@ private
          10 => COL_9_3_NAME'Access,
          11 => COL_10_3_NAME'Access,
          12 => COL_11_3_NAME'Access,
-         13 => COL_12_3_NAME'Access
+         13 => COL_12_3_NAME'Access,
+         14 => COL_13_3_NAME'Access
 )
      );
    STORAGE_TABLE : constant ADO.Schemas.Class_Mapping_Access
@@ -837,6 +847,7 @@ private
        Mime_Type : Ada.Strings.Unbounded.Unbounded_String;
        Uri : Ada.Strings.Unbounded.Unbounded_String;
        Version : Integer;
+       Is_Public : Boolean;
        Original : AWA.Storages.Models.Storage_Ref;
        Store_Data : AWA.Storages.Models.Storage_Data_Ref;
        Owner : AWA.Users.Models.User_Ref;
