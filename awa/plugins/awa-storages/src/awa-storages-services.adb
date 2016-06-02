@@ -465,6 +465,15 @@ package body AWA.Storages.Services is
       File.Load (DB, Id);
       File.Set_Is_Public (State);
       File.Save (DB);
+      declare
+         Update : ADO.Statements.Update_Statement
+           := DB.Create_Statement (AWA.Storages.Models.STORAGE_TABLE);
+      begin
+         Update.Set_Filter (Filter => "original_id = ?");
+         Update.Save_Field ("is_public", State);
+         Update.Add_Param (Id);
+         Update.Execute;
+      end;
       Ctx.Commit;
    end Publish;
 
