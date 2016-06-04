@@ -34,6 +34,7 @@ with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
 with Util.Beans.Objects.Enums;
 with Util.Beans.Basic.Lists;
+with ASF.Parts;
 with AWA.Users.Models;
 with AWA.Workspaces.Models;
 with Util.Beans.Methods;
@@ -696,6 +697,9 @@ package AWA.Storages.Models is
 
    procedure Publish (Bean : in out Upload_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   procedure Save_Part (Bean : in out Upload_Bean;
+                        Part : in ASF.Parts.Part'Class) is abstract;
 
 
 private

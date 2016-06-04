@@ -23,6 +23,7 @@
 with Ada.Unchecked_Deallocation;
 with Util.Beans.Objects.Time;
 with ASF.Events.Faces.Actions;
+with ASF.Parts.Upload_Method;
 package body AWA.Storages.Models is
 
    use type ADO.Objects.Object_Record_Access;
@@ -2166,11 +2167,23 @@ package body AWA.Storages.Models is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Upload_Bean,
                                                       Method => Op_Publish,
                                                       Name   => "publish");
+   procedure Op_Save_Part (Bean    : in out Upload_Bean;
+                           Part : in ASF.Parts.Part'Class);
+   procedure Op_Save_Part (Bean    : in out Upload_Bean;
+                            Part : in ASF.Parts.Part'Class) is
+   begin
+      Upload_Bean'Class (Bean).Save_Part (Part);
+   end Op_Save_Part;
+   package Binding_Upload_Bean_4 is
+     new ASF.Parts.Upload_Method.Bind (Bean   => Upload_Bean,
+                                       Method => Op_Save_Part,
+                                       Name   => "save_part");
 
    Binding_Upload_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
      := (1 => Binding_Upload_Bean_1.Proxy'Access,
          2 => Binding_Upload_Bean_2.Proxy'Access,
-         3 => Binding_Upload_Bean_3.Proxy'Access
+         3 => Binding_Upload_Bean_3.Proxy'Access,
+         4 => Binding_Upload_Bean_4.Proxy'Access
      );
 
    --  ------------------------------
