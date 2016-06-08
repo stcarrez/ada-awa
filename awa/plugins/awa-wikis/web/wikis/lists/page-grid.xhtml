@@ -1,5 +1,5 @@
 <!-- List of wiki pages displayed as preview (grid).
-  -  Copyright (C) 2015 Stephane Carrez
+  -  Copyright (C) 2015, 2016 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,10 +27,9 @@
     <h:list var="page" value="#{wikiList.pages}">
         <div class='wiki-page-grid' id="p_#{page.id}">
             <div class='wiki-page-grid-info'>
-                <a href="#{contextPath}/wikis/view/#{wikiList.wiki_id}/#{page.name}">
+                <a href="#{contextPath}/wikis/view/#{wikiList.wiki_id}/#{page.name}" title="#{page.name}">
                     <img src="#{contextPath}/preview/#{wikiList.wiki_id}/#{page.id}.png" width="256" height="128"
                          alt="#{page.title}"/>
-                    <span class="wiki-page-name">#{page.name}</span>
                     <span class="wiki-page-title">#{page.title}</span>
                 </a>
             </div>
