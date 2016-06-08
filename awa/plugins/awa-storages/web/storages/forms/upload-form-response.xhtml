@@ -1,5 +1,5 @@
 <!-- Upload form response
-  -  Copyright (C) 2012 Stephane Carrez
+  -  Copyright (C) 2012, 2016 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +23,7 @@
     var list = parent.document.getElementById('document-list');
     var item = parent.document.createElement("div");
     item.innerHTML = '<util:escape>
+        <div class="awa-doc-status"></div>
         <div class="awa-title">#{uploadFile.name}</div>
         <div class='awa-size'>
                <h:outputText value="#{uploadFile.file_size}">
@@ -39,7 +40,7 @@
     </util:escape>';
 
     item.setAttribute("id", "store-${uploadFile.id}");
-    item.setAttribute("class", "awa-document ui-list-item");
+    item.setAttribute("class", "awa-document ui-list-item #{uploadFile.is_public ? 'awa-public' : 'awa-private'}");
     list.insertBefore(item, list.firstChild);
     document.location = "upload-form.html?folderId=#{uploadFile.folderId}";
     </script>
