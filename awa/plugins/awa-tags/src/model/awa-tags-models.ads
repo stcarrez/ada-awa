@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -302,7 +302,7 @@ private
       := TAG_DEF'Access;
 
    Null_Tag : constant Tag_Ref
-      := Tag_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := Tag_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Tag_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
@@ -362,7 +362,7 @@ private
       := TAGGED_ENTITY_DEF'Access;
 
    Null_Tagged_Entity : constant Tagged_Entity_Ref
-      := Tagged_Entity_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := Tagged_Entity_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Tagged_Entity_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
