@@ -1072,7 +1072,7 @@ private
       := WIKI_SPACE_DEF'Access;
 
    Null_Wiki_Space : constant Wiki_Space_Ref
-      := Wiki_Space_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := Wiki_Space_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Wiki_Space_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
@@ -1151,7 +1151,7 @@ private
       := WIKI_PAGE_DEF'Access;
 
    Null_Wiki_Page : constant Wiki_Page_Ref
-      := Wiki_Page_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := Wiki_Page_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Wiki_Page_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
@@ -1229,7 +1229,7 @@ private
       := WIKI_CONTENT_DEF'Access;
 
    Null_Wiki_Content : constant Wiki_Content_Ref
-      := Wiki_Content_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := Wiki_Content_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Wiki_Content_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
