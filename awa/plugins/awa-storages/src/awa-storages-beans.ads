@@ -151,12 +151,6 @@ package AWA.Storages.Beans is
    procedure Load (List    : in out Storage_List_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
-   --  Load the list of files associated with the current folder.
-   procedure Load_Files (Storage : in Storage_List_Bean);
-
-   --  Load the list of folders.
-   procedure Load_Folders (Storage : in Storage_List_Bean);
-
    --  Create the Folder_List_Bean bean instance.
    function Create_Folder_List_Bean (Module : in AWA.Storages.Modules.Storage_Module_Access)
                                      return Util.Beans.Basic.Readonly_Bean_Access;
