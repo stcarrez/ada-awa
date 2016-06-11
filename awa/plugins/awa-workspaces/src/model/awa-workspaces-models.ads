@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -320,7 +320,7 @@ private
       := WORKSPACE_DEF'Access;
 
    Null_Workspace : constant Workspace_Ref
-      := Workspace_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := Workspace_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Workspace_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
@@ -380,7 +380,7 @@ private
       := WORKSPACE_FEATURE_DEF'Access;
 
    Null_Workspace_Feature : constant Workspace_Feature_Ref
-      := Workspace_Feature_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := Workspace_Feature_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Workspace_Feature_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
@@ -439,7 +439,7 @@ private
       := WORKSPACE_MEMBER_DEF'Access;
 
    Null_Workspace_Member : constant Workspace_Member_Ref
-      := Workspace_Member_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := Workspace_Member_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Workspace_Member_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
