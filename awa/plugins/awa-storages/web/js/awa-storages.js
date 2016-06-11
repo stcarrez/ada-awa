@@ -1,6 +1,6 @@
 /*
  *  awa-storages -- Storages and folders
- *  Copyright (C) 2012 Stephane Carrez
+ *  Copyright (C) 2012, 2016 Stephane Carrez
  *  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,7 @@
  */
 var AWA = {};
 
-function init_folder_list(id, idCreate, idCurrent) {
+function init_folder_list(id, idCreate, idCurrent, page_url) {
     $(id).list({
         actionId: null,
         itemPrefix: 'folder-',
@@ -25,7 +25,7 @@ function init_folder_list(id, idCreate, idCurrent) {
         currentItem: '#folder-' + idCurrent,
         selectAction: function(element, item) {
             var id = element.getSelectedId(item);
-            return ASF.Update(this, contextPath + '/storages/lists/documents.html?folderId=' + id, '#document-list-editor');
+            return ASF.Update(this, contextPath + page_url + '?folderId=' + id, '#document-list-editor');
         }
     });
 }
