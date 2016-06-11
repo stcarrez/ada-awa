@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-tags-modules -- Module awa-tags
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2013, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with ADO.Sessions;
 with ADO.Sessions.Entities;
 with ADO.Statements;
 with ADO.Queries;
