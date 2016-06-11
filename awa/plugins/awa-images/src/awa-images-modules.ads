@@ -25,6 +25,7 @@ with AWA.Images.Services;
 with AWA.Images.Models;
 with AWA.Jobs.Services;
 with AWA.Jobs.Modules;
+with AWA.Images.Servlets;
 
 --  == Image Module ==
 --  The <tt>Image_Module</tt> type represents the image module.  An instance of the image
@@ -104,8 +105,9 @@ package AWA.Images.Modules is
 private
 
    type Image_Module is new AWA.Modules.Module and AWA.Storages.Services.Listener with record
-      Manager    : Services.Image_Service_Access := null;
-      Job_Module : AWA.Jobs.Modules.Job_Module_Access;
+      Manager       : Services.Image_Service_Access := null;
+      Job_Module    : AWA.Jobs.Modules.Job_Module_Access;
+      Image_Servlet : aliased AWA.Images.Servlets.Image_Servlet;
    end record;
 
    --  Create an image instance.
