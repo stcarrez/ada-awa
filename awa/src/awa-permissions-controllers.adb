@@ -28,7 +28,8 @@ with AWA.Permissions.Services;
 with AWA.Services.Contexts;
 package body AWA.Permissions.Controllers is
 
-   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Permissions.Controllers");
+   Log : constant Util.Log.Loggers.Logger
+     := Util.Log.Loggers.Create ("AWA.Permissions.Controllers");
 
    --  ------------------------------
    --  Returns true if the user associated with the security context <b>Context</b> has

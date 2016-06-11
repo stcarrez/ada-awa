@@ -316,6 +316,7 @@ package body AWA.Components.Wikis is
                         Link     : in Wiki.Strings.WString;
                         Prefix   : in Unbounded_Wide_Wide_String;
                         URI      : out Unbounded_Wide_Wide_String) is
+      pragma Unreferenced (Renderer);
    begin
       if Wiki.Helpers.Is_Url (Link) then
          URI := To_Unbounded_Wide_Wide_String (Link);
