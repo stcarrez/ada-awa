@@ -701,6 +701,29 @@ package AWA.Storages.Models is
    procedure Save_Part (Bean : in out Upload_Bean;
                         Part : in ASF.Parts.Part'Class) is abstract;
 
+   type Storage_List_Bean is abstract limited
+     new Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with null record;
+
+
+   --  This bean provides some methods that can be used in a Method_Expression.
+   overriding
+   function Get_Method_Bindings (From : in Storage_List_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access;
+
+   --  Get the bean attribute identified by the name.
+   overriding
+   function Get_Value (From : in Storage_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Storage_List_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   procedure Load (Bean : in out Storage_List_Bean;
+                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
 
 private
    STORAGE_DATA_NAME : aliased constant String := "awa_storage_data";
@@ -721,7 +744,7 @@ private
       := STORAGE_DATA_DEF'Access;
 
    Null_Storage_Data : constant Storage_Data_Ref
-      := Storage_Data_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := Storage_Data_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Storage_Data_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
@@ -786,7 +809,7 @@ private
       := STORAGE_FOLDER_DEF'Access;
 
    Null_Storage_Folder : constant Storage_Folder_Ref
-      := Storage_Folder_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := Storage_Folder_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Storage_Folder_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
@@ -870,7 +893,7 @@ private
       := STORAGE_DEF'Access;
 
    Null_Storage : constant Storage_Ref
-      := Storage_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := Storage_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Storage_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
@@ -950,7 +973,7 @@ private
       := STORE_LOCAL_DEF'Access;
 
    Null_Store_Local : constant Store_Local_Ref
-      := Store_Local_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := Store_Local_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Store_Local_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
