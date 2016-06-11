@@ -17,7 +17,6 @@
 -----------------------------------------------------------------------
 with Ada.Containers;
 
-with ADO;
 with ADO.Utils;
 with ADO.Queries;
 with ADO.Sessions;
@@ -295,6 +294,7 @@ package body AWA.Storages.Beans is
    overriding
    procedure Load (List    : in out Storage_List_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
    begin
       Storage_List_Bean'Class (List).Load_Folders;
       Storage_List_Bean'Class (List).Load_Files;
