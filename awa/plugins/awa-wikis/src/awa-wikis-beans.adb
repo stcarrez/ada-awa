@@ -1073,18 +1073,17 @@ package body AWA.Wikis.Beans is
                                               Storage => Util.Beans.Objects.STATIC);
       elsif Name = "imageThumbnail" then
          declare
-            use Ada.Strings.Wide_Wide_Unbounded;
-
             URI : Ada.Strings.Wide_Wide_Unbounded.Unbounded_Wide_Wide_String;
             W   : Natural := 64;
             H   : Natural := 64;
          begin
             if Image_Info_Maps.Has_Element (From.Page.Links.Pos) then
-               From.Page.Links.Make_Image_Link (Link   => Image_Info_Maps.Key (From.Page.Links.Pos),
-                                                Info   => Image_Info_Maps.Element (From.Page.Links.Pos),
-                                                URI    => URI,
-                                                Width  => W,
-                                                Height => H);
+               From.Page.Links.Make_Image_Link
+                 (Link   => Image_Info_Maps.Key (From.Page.Links.Pos),
+                  Info   => Image_Info_Maps.Element (From.Page.Links.Pos),
+                  URI    => URI,
+                  Width  => W,
+                  Height => H);
             end if;
             return Util.Beans.Objects.To_Object (URI);
          end;
@@ -1144,8 +1143,13 @@ package body AWA.Wikis.Beans is
          Filter   : aliased Wiki.Filters.Html.Html_Filter_Type;
          Engine   : Wiki.Parsers.Parser;
 
+         procedure Collect_Word (Pos : in Wiki.Filters.Collectors.Cursor);
+         procedure Collect_Link (Pos : in Wiki.Filters.Collectors.Cursor);
+         procedure Collect_Image (Pos : in Wiki.Filters.Collectors.Cursor);
+
          procedure Collect_Word (Pos : in Wiki.Filters.Collectors.Cursor) is
-            Word  : constant Wiki.Strings.WString := Wiki.Filters.Collectors.WString_Maps.Key (Pos);
+            Word  : constant Wiki.Strings.WString
+              := Wiki.Filters.Collectors.WString_Maps.Key (Pos);
             Info  : AWA.Tags.Models.Tag_Info;
          begin
             Info.Count := Wiki.Filters.Collectors.WString_Maps.Element (Pos);
@@ -1154,7 +1158,8 @@ package body AWA.Wikis.Beans is
          end Collect_Word;
 
          procedure Collect_Link (Pos : in Wiki.Filters.Collectors.Cursor) is
-            Link  : constant Wiki.Strings.WString := Wiki.Filters.Collectors.WString_Maps.Key (Pos);
+            Link  : constant Wiki.Strings.WString
+              := Wiki.Filters.Collectors.WString_Maps.Key (Pos);
             Info  : AWA.Tags.Models.Tag_Info;
          begin
             Info.Count := Wiki.Filters.Collectors.WString_Maps.Element (Pos);
@@ -1167,7 +1172,8 @@ package body AWA.Wikis.Beans is
          end Collect_Link;
 
          procedure Collect_Image (Pos : in Wiki.Filters.Collectors.Cursor) is
-            Image : constant Wiki.Strings.WString := Wiki.Filters.Collectors.WString_Maps.Key (Pos);
+            Image : constant Wiki.Strings.WString
+              := Wiki.Filters.Collectors.WString_Maps.Key (Pos);
             URI   : Wiki.Strings.UString;
             W, H  : Natural := 0;
          begin
@@ -1228,9 +1234,7 @@ package body AWA.Wikis.Beans is
                                               Storage => Util.Beans.Objects.STATIC);
       elsif Name = "imageUrl" then
          declare
-            use Ada.Strings.Wide_Wide_Unbounded;
-
-            Pos   : Natural := From.List_Bean.Get_Row_Index;
+            Pos   : constant Natural := From.List_Bean.Get_Row_Index;
             Info  : AWA.Wikis.Models.Wiki_Image_Info;
             URI   : Ada.Strings.Wide_Wide_Unbounded.Unbounded_Wide_Wide_String;
             W     : Natural := 0;
@@ -1238,7 +1242,7 @@ package body AWA.Wikis.Beans is
             Name  : constant String := Ada.Strings.Unbounded.To_String (From.Name);
             WName : constant Wiki.Strings.WString := Wiki.Strings.To_WString (Name);
          begin
-            if Pos >= 0 and Pos < From.List_Bean.Get_Count then
+            if Pos < From.List_Bean.Get_Count then
                Info := From.List_Bean.List.Element (Pos);
                W := Info.Width;
                H := Info.Height;
@@ -1293,10 +1297,7 @@ package body AWA.Wikis.Beans is
 
       Ctx     : constant ASC.Service_Context_Access := ASC.Current;
       Session : ADO.Sessions.Session := ASC.Get_Session (Ctx);
-      List    : AWA.Wikis.Models.Wiki_Image_Info_Vector;
-      Sep     : Natural;
       Query   : ADO.Queries.Context;
-      Info    : AWA.Wikis.Models.Wiki_Image_Info;
    begin
       if Into.Wiki_Id = ADO.NO_IDENTIFIER or Into.Page_Id = ADO.NO_IDENTIFIER then
          Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
