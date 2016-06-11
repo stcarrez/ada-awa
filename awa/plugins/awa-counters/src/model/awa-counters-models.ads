@@ -334,7 +334,7 @@ private
       := COUNTER_DEF'Access;
 
    Null_Counter : constant Counter_Ref
-      := Counter_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := Counter_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Counter_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_STRING,
@@ -394,7 +394,7 @@ private
       := COUNTER_DEFINITION_DEF'Access;
 
    Null_Counter_Definition : constant Counter_Definition_Ref
-      := Counter_Definition_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := Counter_Definition_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Counter_Definition_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
