@@ -12,7 +12,7 @@ GPRINSTALL=@GPRINSTALL@
 SVN=svn
 INSTALL=@INSTALL@
 
-HAVE_GPR=$(shell test -f ${NAME}.gpr && echo 1 || echo 0)
+HAVE_GPR:=$(shell test -f ${NAME}.gpr && echo 1 || echo 0)
 ifeq (${HAVE_GPR},1)
 GPRPATH:=${NAME}.gpr
 endif
@@ -88,11 +88,8 @@ build: local-build post-build build-tests
 
 local-build: pre-build
 ifneq (${GPRPATH},)
-	test ! -f $(GPRPATH) || $(GNATMAKE) -m -p -P "$(GPRPATH)" $(MAKE_ARGS)
+	$(GNATMAKE) -m -p -P "$(GPRPATH)" $(MAKE_ARGS)
 endif
-
-build-tests:
-	test ! -f awa_tests.gpr || $(GNATMAKE) -m -p -Pawa_tests $(MAKE_ARGS)
 
 static:
 	$(MAKE) AWA_LIBRARY_TYPE=static build
@@ -111,9 +108,7 @@ autobuild:
 
 # Clean the root project of all build products.
 clean:  pre-clean
-	#-$(GNATCLEAN) -q -P "$(GPRPATH)" -XAWA_LIBRARY_TYPE=static
-	#-$(GNATCLEAN) -q -P "$(GPRPATH)" -XAWA_LIBRARY_TYPE=relocatable
-	-rm -rf obj lib
+	@-rm -rf obj lib
 
 # Clean root project and all imported projects too.
 clean_tree:
@@ -250,6 +245,7 @@ pre-dist-prepare:
 post-build:
 post-install:
 post-generate:
+build-tests:
 
 install-info:
 ifeq (${GPRINSTALL},)
