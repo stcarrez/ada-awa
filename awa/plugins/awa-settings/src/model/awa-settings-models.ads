@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -362,7 +362,7 @@ private
       := SETTING_DEF'Access;
 
    Null_Setting : constant Setting_Ref
-      := Setting_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := Setting_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Setting_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
@@ -424,7 +424,7 @@ private
       := GLOBAL_SETTING_DEF'Access;
 
    Null_Global_Setting : constant Global_Setting_Ref
-      := Global_Setting_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := Global_Setting_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Global_Setting_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
@@ -489,7 +489,7 @@ private
       := USER_SETTING_DEF'Access;
 
    Null_User_Setting : constant User_Setting_Ref
-      := User_Setting_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := User_Setting_Ref'(ADO.Objects.Object_Ref with null record);
 
    type User_Setting_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
