@@ -101,6 +101,7 @@ div.document-list div.asf-active {
 #folder-list-editor {
     width: 20%;
     border: 2px solid #BCD;
+    float: left;
 }
 #folder-add {
     float: left;
