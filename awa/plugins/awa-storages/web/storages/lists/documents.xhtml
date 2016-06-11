@@ -1,5 +1,5 @@
 <!-- List of documents
-  -  Copyright (C) 2012 Stephane Carrez
+  -  Copyright (C) 2012, 2016 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,7 @@
         xmlns:h="http://java.sun.com/jsf/html">
     <f:metadata>
         <f:viewParam id='folderId' value='#{storageList.folderId}'/>
+        <f:viewAction action='#{storageList.load}'/>
     </f:metadata>
     <ui:include src="document-list.xhtml"/>
 </f:view>
