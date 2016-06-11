@@ -128,8 +128,9 @@ package AWA.Wikis.Beans is
 
    --  The Wiki template plugin that retrieves the template content from the Wiki space.
    type Wiki_Template_Bean is new Wiki.Plugins.Templates.Template_Plugin
-      and Wiki.Plugins.Plugin_Factory
-      and Util.Beans.Basic.List_Bean with record
+     and Wiki.Plugins.Plugin_Factory
+     and Util.Beans.Basic.List_Bean with record
+
       --  The wiki space identifier.
       Wiki_Space_Id : ADO.Identifier;
 
