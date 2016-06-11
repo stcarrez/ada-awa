@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -569,7 +569,7 @@ private
       := EMAIL_DEF'Access;
 
    Null_Email : constant Email_Ref
-      := Email_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := Email_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Email_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
@@ -643,7 +643,7 @@ private
       := USER_DEF'Access;
 
    Null_User : constant User_Ref
-      := User_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := User_Ref'(ADO.Objects.Object_Ref with null record);
 
    type User_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
@@ -712,7 +712,7 @@ private
       := ACCESS_KEY_DEF'Access;
 
    Null_Access_Key : constant Access_Key_Ref
-      := Access_Key_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := Access_Key_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Access_Key_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
@@ -785,7 +785,7 @@ private
       := SESSION_DEF'Access;
 
    Null_Session : constant Session_Ref
-      := Session_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := Session_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Session_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,

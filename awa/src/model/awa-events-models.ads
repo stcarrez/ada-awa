@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -447,7 +447,7 @@ private
       := MESSAGE_TYPE_DEF'Access;
 
    Null_Message_Type : constant Message_Type_Ref
-      := Message_Type_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := Message_Type_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Message_Type_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
@@ -505,7 +505,7 @@ private
       := QUEUE_DEF'Access;
 
    Null_Queue : constant Queue_Ref
-      := Queue_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := Queue_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Queue_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
@@ -592,7 +592,7 @@ private
       := MESSAGE_DEF'Access;
 
    Null_Message : constant Message_Ref
-      := Message_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := Message_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Message_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
