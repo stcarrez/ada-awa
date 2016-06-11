@@ -28,6 +28,9 @@ post-generate:
 	   $(MAKE) -C plugins/$$i generate ; \
 	done
 
+build-tests:
+	$(GNATMAKE) -m -p -Pawa_tests $(MAKE_ARGS)
+
 # Generate the documentation from Ada headers comments.
 doc:
 	$(DYNAMO) build-doc -markdown wiki
