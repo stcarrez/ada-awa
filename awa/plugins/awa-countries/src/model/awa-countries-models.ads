@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -532,7 +532,7 @@ private
       := COUNTRY_DEF'Access;
 
    Null_Country : constant Country_Ref
-      := Country_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := Country_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Country_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
@@ -605,7 +605,7 @@ private
       := CITY_DEF'Access;
 
    Null_City : constant City_Ref
-      := City_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := City_Ref'(ADO.Objects.Object_Ref with null record);
 
    type City_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
@@ -668,7 +668,7 @@ private
       := COUNTRY_NEIGHBOR_DEF'Access;
 
    Null_Country_Neighbor : constant Country_Neighbor_Ref
-      := Country_Neighbor_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := Country_Neighbor_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Country_Neighbor_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
@@ -729,7 +729,7 @@ private
       := REGION_DEF'Access;
 
    Null_Region : constant Region_Ref
-      := Region_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := Region_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Region_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
