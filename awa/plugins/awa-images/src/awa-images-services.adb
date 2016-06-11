@@ -23,7 +23,6 @@ with Util.Streams.Pipes;
 with Util.Streams.Texts;
 with Util.Strings;
 
-with ADO;
 with ADO.Sessions;
 
 with AWA.Images.Models;
@@ -145,7 +144,6 @@ package body AWA.Images.Services is
       Thumbnail   : AWA.Storages.Models.Storage_Ref;
       Width       : Natural := 64;
       Height      : Natural := 64;
-      Name        : Ada.Strings.Unbounded.Unbounded_String;
    begin
       Img.Load (DB, Id);
       declare
