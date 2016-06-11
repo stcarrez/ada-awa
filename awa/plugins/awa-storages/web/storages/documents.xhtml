@@ -26,17 +26,24 @@
 
     <!-- Main page body -->
     <ui:define name="pageBody">
+        <f:metadata>
+            <f:viewParam id='folderId' value='#{storageList.folderId}' required="false"/>
+            <f:viewAction action='#{storageList.load}'/>
+        </f:metadata>
         <util:script>
             var contextPath = '#{contextPath}';
         </util:script>
         <div id='awa-content'>
+            <ui:include src="views/storage-nav.xhtml"/>
             <c:choose>
                 <c:when test="#{not empty storageList.folder}">
                     <div id='folder-list-editor' class="ui-widget ui-corner-all">
-                        <ui:include src="lists/folders.xhtml"/>
+                        <ui:include src="lists/folders.xhtml">
+                            <ui:param name="page_url" value="/storages/lists/documents.html"/>
+                        </ui:include>
                     </div>
                     <div id='document-list-editor' class="ui-widget ui-corner-all">
-                        <ui:include src="lists/documents.xhtml"/>
+                        <ui:include src="lists/document-list.xhtml"/>
                     </div>
                     <div id='document-action' class='asf-list-action'>
                         <a href="#" class='asf-icon asf-delete' title='#{storageMsg.storage_list_delete_file_tooltip}'></a>
