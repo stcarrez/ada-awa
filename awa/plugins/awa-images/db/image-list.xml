@@ -51,7 +51,7 @@
       st.name,
       st.create_date,
       st.uri,
-      st.storage_type,
+      st.storage,
       st.mime_type,
       st.file_size,
       img.width,
@@ -60,9 +60,9 @@
       img.thumb_height,
       img.thumbnail_id
     FROM awa_storage AS st
-    INNER JOIN acl ON acl.entity_id = st.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
+    INNER JOIN awa_acl AS acl ON acl.entity_id = st.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
     INNER JOIN awa_image AS img ON img.storage_id = st.id
-    WHERE st.folder_id = :folder_id AND st.original IS NULL
+    WHERE st.folder_id = :folder_id AND st.original_id IS NULL
     ORDER BY st.create_date DESC
        </sql>
     </query>
