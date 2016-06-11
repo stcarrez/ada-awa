@@ -784,7 +784,7 @@ private
       := BLOG_DEF'Access;
 
    Null_Blog : constant Blog_Ref
-      := Blog_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := Blog_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Blog_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
@@ -866,7 +866,7 @@ private
       := POST_DEF'Access;
 
    Null_Post : constant Post_Ref
-      := Post_Ref'(ADO.Objects.Object_Ref with others => <>);
+      := Post_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Post_Impl is
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,

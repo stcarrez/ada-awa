@@ -23,6 +23,7 @@
 with Ada.Unchecked_Deallocation;
 with Util.Beans.Objects.Time;
 with ASF.Events.Faces.Actions;
+with ASF.Parts.Upload_Method;
 package body AWA.Blogs.Models is
 
    use type ADO.Objects.Object_Record_Access;
