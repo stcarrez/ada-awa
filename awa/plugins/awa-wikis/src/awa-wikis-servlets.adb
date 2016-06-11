@@ -16,13 +16,9 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Util.Log.Loggers;
-
 with AWA.Images.Services;
 with AWA.Wikis.Modules;
 package body AWA.Wikis.Servlets is
-
-   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Wikis.Servlets");
 
    --  ------------------------------
    --  Load the data content that correspond to the GET request and get the name as well
@@ -35,10 +31,11 @@ package body AWA.Wikis.Servlets is
                    Mime     : out Ada.Strings.Unbounded.Unbounded_String;
                    Date     : out Ada.Calendar.Time;
                    Data     : out ADO.Blob_Ref) is
+      pragma Unreferenced (Server, Name);
+
       Wiki      : constant String := Request.Get_Path_Parameter (1);
       File      : constant String := Request.Get_Path_Parameter (2);
       Size      : constant String := Request.Get_Path_Parameter (3);
-      File_Name : constant String := Request.Get_Path_Parameter (4);
       Module    : constant AWA.Wikis.Modules.Wiki_Module_Access := Wikis.Modules.Get_Wiki_Module;
       Wiki_Id   : ADO.Identifier;
       File_Id   : ADO.Identifier;
