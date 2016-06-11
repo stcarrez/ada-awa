@@ -290,6 +290,17 @@ package body AWA.Storages.Beans is
    end Get_Value;
 
    --  ------------------------------
+   --  Load the files and folder information.
+   --  ------------------------------
+   overriding
+   procedure Load (List    : in out Storage_List_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Storage_List_Bean'Class (List).Load_Folders;
+      Storage_List_Bean'Class (List).Load_Files;
+   end Load;
+
+   --  ------------------------------
    --  Create the Folder_List_Bean bean instance.
    --  ------------------------------
    function Create_Folder_List_Bean (Module : in AWA.Storages.Modules.Storage_Module_Access)
