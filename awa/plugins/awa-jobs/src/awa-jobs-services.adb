@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-jobs -- AWA Jobs
---  Copyright (C) 2012, 2014, 2015 Stephane Carrez
+--  Copyright (C) 2012, 2014, 2015, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -379,7 +379,7 @@ package body AWA.Jobs.Services is
                Work := Factory.Create;
                Work.Job := Job;
                Event.Copy (Work.Props);
-               Result := Job_Ref '(Job_Refs.Create (Work) with others => <>);
+               Result := Job_Ref '(Job_Refs.Create (Work) with null record);
                Work.Execute (DB);
             else
                Log.Error ("There is no factory to execute job {0} - '{1}'",
