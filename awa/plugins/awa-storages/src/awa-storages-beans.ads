@@ -107,7 +107,7 @@ package AWA.Storages.Beans is
    --  Storage List Bean
    --  ------------------------------
    --  This bean represents a list of storage files for a given folder.
-   type Storage_List_Bean is new Util.Beans.Basic.Bean with record
+   type Storage_List_Bean is new AWA.Storages.Models.Storage_List_Bean with record
       Module           : AWA.Storages.Modules.Storage_Module_Access := null;
 
       --  Current folder.
@@ -145,6 +145,11 @@ package AWA.Storages.Beans is
    procedure Set_Value (From  : in out Storage_List_Bean;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object);
+
+   --  Load the files and folder information.
+   overriding
+   procedure Load (List    : in out Storage_List_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
    --  Create the Folder_List_Bean bean instance.
    function Create_Folder_List_Bean (Module : in AWA.Storages.Modules.Storage_Module_Access)
