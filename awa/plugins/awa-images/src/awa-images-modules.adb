@@ -19,6 +19,8 @@ with AWA.Modules.Get;
 with AWA.Applications;
 with AWA.Storages.Modules;
 with AWA.Services.Contexts;
+with AWA.Modules.Beans;
+with AWA.Images.Beans;
 
 with ADO.Sessions;
 
@@ -27,6 +29,9 @@ with Util.Log.Loggers;
 package body AWA.Images.Modules is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Images.Module");
+
+   package Register is new AWA.Modules.Beans (Module        => Image_Module,
+                                              Module_Access => Image_Module_Access);
 
    --  ------------------------------
    --  Job worker procedure to identify an image and generate its thumnbnail.
@@ -49,6 +54,12 @@ package body AWA.Images.Modules is
 
       --  Setup the resource bundles.
       App.Register ("imageMsg", "images");
+
+      Register.Register (Plugin  => Plugin,
+                         Name    => "AWA.Images.Beans.Image_List_Bean",
+                         Handler => AWA.Images.Beans.Create_Image_List_Bean'Access);
+
+      App.Add_Servlet ("image", Plugin.Image_Servlet'Unchecked_Access);
 
       AWA.Modules.Module (Plugin).Initialize (App, Props);
 
