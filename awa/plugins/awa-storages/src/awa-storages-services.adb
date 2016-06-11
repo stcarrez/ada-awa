@@ -348,11 +348,13 @@ package body AWA.Storages.Services is
 
    procedure Create_Local_File (Service : in out Storage_Service;
                                 Into    : in out AWA.Storages.Storage_File) is
+      use Ada.Strings.Unbounded;
+
       Tmp   : constant String := Service.Get_Config (Stores.Files.Tmp_Directory_Parameter.P);
       Value : Integer;
    begin
       Util.Concurrent.Counters.Increment (Service.Temp_Id, Value);
-      Into.Path := Ada.Strings.Unbounded.To_Unbounded_String (Tmp & "/tmp-" & Util.Strings.Image (Value));
+      Into.Path := To_Unbounded_String (Tmp & "/tmp-" & Util.Strings.Image (Value));
    end Create_Local_File;
 
    --  ------------------------------
@@ -363,16 +365,11 @@ package body AWA.Storages.Services is
                      Storage : in AWA.Storages.Models.Storage_Type) is
       use type Stores.Store_Access;
       Store     : Stores.Store_Access;
-      Tmp   : constant String := Service.Get_Config (Stores.Files.Tmp_Directory_Parameter.P);
-      Value : Integer;
    begin
       Store := Storage_Service'Class (Service).Get_Store (Storage);
       if Store = null then
          Log.Error ("There is no store for storage {0}", Models.Storage_Type'Image (Storage));
       end if;
---        Store.Create (Session => ,
---                      From    => ,
---                      Into    => Into);
    end Create;
 
    --  ------------------------------
@@ -453,6 +450,8 @@ package body AWA.Storages.Services is
                       Id      : in ADO.Identifier;
                       State   : in Boolean;
                       File    : in out AWA.Storages.Models.Storage_Ref'Class) is
+      pragma Unreferenced (Service);
+
       Ctx  : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
    begin
