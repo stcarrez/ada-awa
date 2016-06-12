@@ -20,6 +20,10 @@ with Ada.Calendar;
 with ASF.Servlets;
 with ASF.Requests;
 with ASF.Responses;
+
+--  == Storage Servlet ==
+--  The <tt>Storage_Servlet</tt> type is the servlet that allows to retrieve the file
+--  content that was uploaded.
 package AWA.Storages.Servlets is
 
    --  The <b>Storage_Servlet</b> represents the component that will handle
