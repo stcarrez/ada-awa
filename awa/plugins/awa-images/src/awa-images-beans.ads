@@ -24,6 +24,15 @@ with Util.Beans.Basic;
 with AWA.Storages.Beans;
 with AWA.Images.Models;
 with AWA.Images.Modules;
+
+--  == Image Beans ==
+--  The <tt>Image_List_Bean</tt> type is used to represent a list of image stored in
+--  a folder.
+--
+--  The <tt>Image_Bean</tt> type holds all the data to give information about an image.
+--
+--  == Ada Beans ==
+--  @include images.xml
 package AWA.Images.Beans is
 
    --  ------------------------------
@@ -50,6 +59,10 @@ package AWA.Images.Beans is
    function Create_Image_List_Bean (Module : in AWA.Images.Modules.Image_Module_Access)
                                     return Util.Beans.Basic.Readonly_Bean_Access;
 
+   --  ------------------------------
+   --  Image Bean
+   --  ------------------------------
+   --  Information about an image (excluding the image data itself).
    type Image_Bean is new AWA.Images.Models.Image_Bean with record
       Module : AWA.Images.Modules.Image_Module_Access;
    end record;
@@ -61,6 +74,6 @@ package AWA.Images.Beans is
 
    --  Create the Image_Bean bean instance.
    function Create_Image_Bean (Module : in AWA.Images.Modules.Image_Module_Access)
-                                    return Util.Beans.Basic.Readonly_Bean_Access;
+                               return Util.Beans.Basic.Readonly_Bean_Access;
 
 end AWA.Images.Beans;
