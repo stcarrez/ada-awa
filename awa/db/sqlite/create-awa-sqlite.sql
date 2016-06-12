@@ -297,6 +297,8 @@ CREATE TABLE awa_storage (
   `version` INTEGER NOT NULL,
   /* the storage identifier */
   `id` BIGINT NOT NULL,
+  /* whether the document is public or not. */
+  `is_public` TINYINT NOT NULL,
   /*  */
   `original_id` BIGINT ,
   /*  */
