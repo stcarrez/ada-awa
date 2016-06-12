@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-images -- Image module
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,7 @@
 --
 --  @include awa-images-modules.ads
 --  @include awa-images-services.ads
+--  @include awa-images-beans.ads
 --  @include images.xml
 --  @include image-list.xml
 --
