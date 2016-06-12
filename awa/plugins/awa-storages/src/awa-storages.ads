@@ -85,6 +85,8 @@ with ADO;
 --  == Ada Beans ==
 --  @include storages.xml
 --
+--  @include awa-storages-servlets.ads
+--
 --  == Model ==
 --  [images/awa_storage_model.png]
 --
