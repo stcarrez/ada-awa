@@ -15,6 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Ada.Strings.Unbounded;
 
 with ADO;
 
@@ -47,6 +48,19 @@ package AWA.Images.Beans is
 
    --  Create the Image_List_Bean bean instance.
    function Create_Image_List_Bean (Module : in AWA.Images.Modules.Image_Module_Access)
+                                    return Util.Beans.Basic.Readonly_Bean_Access;
+
+   type Image_Bean is new AWA.Images.Models.Image_Bean with record
+      Module : AWA.Images.Modules.Image_Module_Access;
+   end record;
+   type Image_Bean_Access is access all Image_Bean'Class;
+
+   overriding
+   procedure Load (Into    : in out Image_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Create the Image_Bean bean instance.
+   function Create_Image_Bean (Module : in AWA.Images.Modules.Image_Module_Access)
                                     return Util.Beans.Basic.Readonly_Bean_Access;
 
 end AWA.Images.Beans;
