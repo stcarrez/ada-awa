@@ -15,7 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-
+with Ada.Containers;
 with ADO.Queries;
 with ADO.Sessions;
 with ADO.Objects;
@@ -26,6 +26,8 @@ with AWA.Services.Contexts;
 with AWA.Storages.Modules;
 package body AWA.Images.Beans is
 
+   package ASC renames AWA.Services.Contexts;
+
    --  ------------------------------
    --  Load the list of images associated with the current folder.
    --  ------------------------------
@@ -33,7 +35,7 @@ package body AWA.Images.Beans is
    procedure Load_Files (Storage : in Image_List_Bean) is
       use AWA.Services;
 
-      Ctx       : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      Ctx       : constant ASC.Service_Context_Access := ASC.Current;
       User      : constant ADO.Identifier := Ctx.Get_User_Identifier;
       Session   : ADO.Sessions.Session := Storage.Module.Get_Session;
       Query     : ADO.Queries.Context;
@@ -98,5 +100,40 @@ package body AWA.Images.Beans is
       Object.Flags            := Object.Init_Flags'Access;
       return Object.all'Access;
    end Create_Image_List_Bean;
+
+   overriding
+   procedure Load (Into    : in out Image_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      use type ADO.Identifier;
+      use type Ada.Containers.Count_Type;
+      use type Ada.Strings.Unbounded.Unbounded_String;
+
+      Ctx     : constant ASC.Service_Context_Access := ASC.Current;
+      User    : constant ADO.Identifier := Ctx.Get_User_Identifier;
+      Session : ADO.Sessions.Session := ASC.Get_Session (Ctx);
+      Query   : ADO.Queries.Context;
+   begin
+      if Into.Id = ADO.NO_IDENTIFIER then
+         Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
+         return;
+      end if;
+
+      --  Get the list of versions associated with the wiki page.
+      Query.Set_Query (AWA.Images.Models.Query_Image_Info);
+      Query.Bind_Param (Name => "user_id", Value => User);
+      Query.Bind_Param (Name => "file_id", Value => Into.Id);
+      ADO.Sessions.Entities.Bind_Param (Query, "table",
+                                        AWA.Workspaces.Models.WORKSPACE_TABLE, Session);
+      Into.Load (Session, Query);
+   end Load;
+
+   --  Create the Image_Bean bean instance.
+   function Create_Image_Bean (Module : in AWA.Images.Modules.Image_Module_Access)
+                                    return Util.Beans.Basic.Readonly_Bean_Access is
+      Object    : constant Image_Bean_Access := new Image_Bean;
+   begin
+      Object.Module           := Module;
+      return Object.all'Access;
+   end Create_Image_Bean;
 
 end AWA.Images.Beans;
