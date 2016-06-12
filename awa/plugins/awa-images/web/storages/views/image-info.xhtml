@@ -1,0 +1,108 @@
+<!-- Information about an image
+  -  Copyright (C) 2016 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<div class="image-info" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:awa="http://code.google.com/p/ada-awa/jsf"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
+                xmlns:util="http://code.google.com/p/ada-asf/util"
+                xmlns:h="http://java.sun.com/jsf/html">
+    <div class="grid_6">
+        <dl class="image-details">
+            <dt>#{storageMsg.image_file_label}</dt>
+            <dd>#{imageInfo.folder_name}/#{imageInfo.name}</dd>
+            <h:panelGroup rendered="#{imageInfo.id ne 0 and imageInfo.list.count != 0}">
+                <dt>#{storageMsg.image_file_size_label}</dt>
+                <dd>
+                    <h:outputText value="#{imageInfo.file_size}">
+                        <f:converter converterId="sizeConverter"/>
+                    </h:outputText>
+                </dd>
+                <dt>#{storageMsg.image_date_label}</dt>
+                <dd>
+                    <h:outputText value="#{imageInfo.create_date}">
+                        <f:converter converterId="smartDateConverter"/>
+                    </h:outputText>
+                </dd>
+                <dt>#{storageMsg.image_dimension_label}</dt>
+                <dd>#{imageInfo.width}x#{imageInfo.height}</dd>
+                <dt>#{storageMsg.image_mime_label}</dt>
+                <dd>#{imageInfo.mime_type}</dd>
+                <h:panelGroup rendered="#{imageInfo.list.count gt 1}">
+                    <dt>#{storageMsg.image_resolution_label}</dt>
+                    <dd>
+                        <div class="image-view">
+                            <h:list var="img" value="#{imageInfo.list}">
+                                <a href="#{imageInfo.imageUrl}">
+                                    <span>
+                                        <h:outputFormat value="#{storageMsg.image_dimension}">
+                                            <f:param value="#{img.width}"/>
+                                            <f:param value="#{img.height}"/>
+                                        </h:outputFormat>
+                                    </span>
+                                    <span>(<h:outputText value="#{img.file_size}">
+                                               <f:converter converterId="sizeConverter"/>
+                                           </h:outputText>)
+                                    </span>
+                                </a>
+                            </h:list>
+                        </div>
+                    </dd>
+                </h:panelGroup>
+            </h:panelGroup>
+            <h:panelGroup rendered="#{imageInfo.id eq 0 or imageInfo.list.count == 0}">
+                <dd>#{wikiMsg.wiki_image_missing_message}</dd>
+            </h:panelGroup>
+        </dl>
+    </div>
+    <div class="grid_6">
+        <div id='document-upload'>
+            <button class="ui-button ui-state-default ui-corner-all">
+                <i></i>
+                <span>Upload new image</span>
+            </button>
+            <div id="total-progress"/>
+            <h:form enctype="multipart/form-data" action="#{contextPath}/storages/forms/upload-form.html" method="POST">
+                <h:inputHidden id="folder" value="#{imageFile.folder_id}"/>
+            </h:form>
+        </div>
+        <util:script>
+            var dr = new Dropzone(document.querySelector("#document-upload"), {
+                url: "#{contextPath}/storages/forms/upload-form.html",
+                paramName: "upload-file",
+                thumbnailWidth: 80,
+                thumbnailHeight: 80,
+                params: { uploadForm: "1", folder: "#{imageInfo.folder_id}", id: "#{imageInfo.id}" }
+            });
+            dr.on("sending", function(file) {
+              // Show the total progress bar when upload starts
+              document.querySelector("#total-progress").style.opacity = "1";
+              // And disable the start button
+              file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
+            });
+            dr.on("success
+
+        </util:script>
+    </div>
+    <h:panelGroup rendered="#{imageInfo.id ne 0}">
+        <div class="image-view">
+            <img src="#{contextPath}/storages/images/#{imageInfo.id}" alt="#{imageInfo.name}"/>
+        </div>
+    </h:panelGroup>
+</div>
+
+

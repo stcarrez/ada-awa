@@ -1,0 +1,102 @@
+<!-- List the images available in the workspace
+  -  Copyright (C) 2016 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<ui:composition template="/WEB-INF/layouts/layout.xhtml"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
+        xmlns:c="http://java.sun.com/jstl/core"
+	    xmlns:util="http://code.google.com/p/ada-asf/util"
+        xmlns:h="http://java.sun.com/jsf/html">
+    <ui:param name="title" value="#{storageMsg.documents_list_title}"/>
+    <ui:param name="top_nav" value="storages"/>
+
+    <!-- Main page body -->
+    <ui:define name="pageBody">
+        <f:metadata>
+            <f:viewParam id='page' value='#{imageList.page}' required="false"/>
+            <f:viewAction action='#{imageList.load}'/>
+        </f:metadata>
+
+        <util:script>
+            var contextPath = '#{contextPath}';
+        </util:script>
+        <div id='awa-content'>
+            <ui:include src="views/storage-nav.xhtml"/>
+                <h:panelGroup rendered="#{not empty imageList.folder}">
+                    <div id='folder-list-editor' class="ui-widget ui-corner-all">
+                        <ui:include src="lists/folders.xhtml">
+                            <ui:param name="page_url" value="/storages/lists/images.html"/>
+                        </ui:include>
+                    </div>
+                    <div id='document-list-editor' class="ui-widget ui-corner-all">
+                        <ui:include src="lists/image-list.xhtml"/>
+                    </div>
+                    <div id='document-action' class='asf-list-action'>
+                        <a href="#" class='asf-icon asf-delete' title='#{storageMsg.storage_list_delete_file_tooltip}'></a>
+                    </div>
+                    <util:script>
+                        $('#folder-list-editor').resizable({
+                            minWidth: 100, maxWidth: 400,
+                            resize: function(event, ui) {
+                                var width = ui.size.width;
+                                var ow = $('#folder-list-editor').parent().outerWidth();
+                                width = ow - width - 20;
+                                if (width &lt;= 10) {
+                                    width = 10;
+                                }
+                                $('#document-list-editor').css({ width: width });
+                            }
+                        });
+                        $('#document-list-editor').list({
+                            actionId: '#document-action',
+                            deleteUrl: '#{contextPath}/storages/forms/file-delete-form.html?storeId=',
+                            itemPrefix: 'store-',
+                            selectAction: function(list, item, event) {
+                                if ($(event.target).hasClass("awa-doc-status")) {
+                                    if ($(item).hasClass("awa-public")) {
+                                        ASF.Post(item, "#{contextPath}/storages/ajax/uploadFile/publish",
+                                             "id=" + list.getSelectedId(item) + "&amp;status=FALSE");
+
+                                    } else {
+                                        ASF.Post(item, "#{contextPath}/storages/ajax/uploadFile/publish",
+                                             "id=" + list.getSelectedId(item) + "&amp;status=TRUE");
+                                    }
+                                    return false;
+                                } else {
+                                    return true;
+                                }
+                            }
+                        });
+                    </util:script>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{empty imageList.folder}">
+                    <div>
+                        <div class="grid_3">
+                            <img src="#{contextPath}/images/storages/folder.png"/>
+                        </div>
+                        <div class="grid_6">
+                            <p>#{storageMsg.storage_no_folder}</p>
+                            <div class="asf-container awa-form">
+                                <ajax:include src="/storages/forms/folder-create-first.xhtml"/>
+                            </div>
+                        </div>
+                    </div>
+                </h:panelGroup>
+        </div>
+    </ui:define>
+</ui:composition>
+
