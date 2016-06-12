@@ -25,8 +25,6 @@ with AWA.Images.Models;
 with AWA.Images.Modules;
 package AWA.Images.Beans is
 
-   FOLDER_ID_PARAMETER : constant String := "folderId";
-
    --  ------------------------------
    --  Image List Bean
    --  ------------------------------
