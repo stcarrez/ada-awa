@@ -26,6 +26,14 @@ with ADO;
 
 with Util.Beans.Objects;
 with Util.Beans.Basic;
+
+--  == Storage Beans ==
+--  The <tt>Upload_Bean</tt> type is used to upload a file in the storage space.
+--  It expect that the folder already exists.
+--
+--  The <tt>Folder_Bean</tt> type controls the creation of new folders.
+--
+--  The <tt>Storage_List_Bean</tt> type gives the files associated with a given folder.
 package AWA.Storages.Beans is
 
    FOLDER_ID_PARAMETER : constant String := "folderId";
