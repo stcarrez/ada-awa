@@ -15,7 +15,6 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with Ada.Containers;
 with ADO.Queries;
 with ADO.Sessions;
 with ADO.Objects;
@@ -105,8 +104,6 @@ package body AWA.Images.Beans is
    procedure Load (Into    : in out Image_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       use type ADO.Identifier;
-      use type Ada.Containers.Count_Type;
-      use type Ada.Strings.Unbounded.Unbounded_String;
 
       Ctx     : constant ASC.Service_Context_Access := ASC.Current;
       User    : constant ADO.Identifier := Ctx.Get_User_Identifier;
@@ -118,21 +115,29 @@ package body AWA.Images.Beans is
          return;
       end if;
 
-      --  Get the list of versions associated with the wiki page.
+      --  Get the image information.
       Query.Set_Query (AWA.Images.Models.Query_Image_Info);
       Query.Bind_Param (Name => "user_id", Value => User);
       Query.Bind_Param (Name => "file_id", Value => Into.Id);
       ADO.Sessions.Entities.Bind_Param (Query, "table",
                                         AWA.Workspaces.Models.WORKSPACE_TABLE, Session);
       Into.Load (Session, Query);
+
+   exception
+      when ADO.Objects.NOT_FOUND =>
+         Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
+
    end Load;
 
+   --  ------------------------------
    --  Create the Image_Bean bean instance.
+   --  ------------------------------
    function Create_Image_Bean (Module : in AWA.Images.Modules.Image_Module_Access)
-                                    return Util.Beans.Basic.Readonly_Bean_Access is
+                               return Util.Beans.Basic.Readonly_Bean_Access is
       Object    : constant Image_Bean_Access := new Image_Bean;
    begin
-      Object.Module           := Module;
+      Object.Module  := Module;
+      Object.Id      := ADO.NO_IDENTIFIER;
       return Object.all'Access;
    end Create_Image_Bean;
 
