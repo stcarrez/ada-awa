@@ -19,6 +19,7 @@
         contentType="text/html; charset=UTF-8">
     <f:metadata>
         <f:viewParam id='folderId' value='#{uploadFile.folderId}'/>
+        <f:viewParam id='id' value='#{uploadFile.id}' required="false"/>
     </f:metadata>
     <html>
     <head>
@@ -32,6 +33,7 @@
     <body>
     <h:form id='uploadForm' enctype="multipart/form-data">
         <h:inputHidden id="folder" value="#{uploadFile.folderId}"/>
+        <h:inputHidden id="id" value="#{uploadFile.id}"/>
         <div class='uploadForm'>
             <div class='upload'>
                 #{storageMsg.storage_upload_message}
