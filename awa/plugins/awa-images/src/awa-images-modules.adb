@@ -59,6 +59,10 @@ package body AWA.Images.Modules is
                          Name    => "AWA.Images.Beans.Image_List_Bean",
                          Handler => AWA.Images.Beans.Create_Image_List_Bean'Access);
 
+      Register.Register (Plugin  => Plugin,
+                         Name    => "AWA.Images.Beans.Image_Bean",
+                         Handler => AWA.Images.Beans.Create_Image_Bean'Access);
+
       App.Add_Servlet ("image", Plugin.Image_Servlet'Unchecked_Access);
 
       AWA.Modules.Module (Plugin).Initialize (App, Props);
