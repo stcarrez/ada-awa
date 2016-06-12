@@ -21,6 +21,13 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
+  <managed-bean>
+    <description>This bean gives the information about an image.</description>
+    <managed-bean-name>imageInfo</managed-bean-name>
+    <managed-bean-class>AWA.Images.Beans.Image_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
   <servlet-mapping>
     <servlet-name>image</servlet-name>
     <url-pattern>/storages/images/:image_id</url-pattern>
@@ -29,11 +36,13 @@
   <filter-mapping>
     <filter-name>service</filter-name>
     <url-pattern>/storages/images/:image_id</url-pattern>
+    <url-pattern>/storages/image-info/#{imageInfo.id}</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
     <filter-name>auth-filter</filter-name>
     <url-pattern>/storages/images/:image_id</url-pattern>
+    <url-pattern>/storages/image-info/#{imageInfo.id}</url-pattern>
   </filter-mapping>
 
   <url-policy>
@@ -42,6 +51,7 @@
     <url-pattern>/storages/images.html</url-pattern>
     <url-pattern>/storages/lists/images.html</url-pattern>
     <url-pattern>/storages/images/.*</url-pattern>
+    <url-pattern>/storages/image-info/#{imageInfo.id}</url-pattern>
   </url-policy>
 
   <url-mapping>
