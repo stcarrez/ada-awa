@@ -35,6 +35,7 @@ with Util.Beans.Objects;
 with Util.Beans.Basic.Lists;
 with AWA.Storages.Models;
 with AWA.Users.Models;
+with Util.Beans.Methods;
 pragma Warnings (On);
 package AWA.Images.Models is
 
@@ -210,6 +211,80 @@ package AWA.Images.Models is
                    Query   : in ADO.SQL.Query'Class);
 
    --  --------------------
+   --    The information about an image.
+   --  --------------------
+   type Image_Bean is abstract
+     new Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with  record
+
+      --  the image folder identifier.
+      Folder_Id : ADO.Identifier;
+
+      --  the image folder name.
+      Folder_Name : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the image file identifier.
+      Id : ADO.Identifier;
+
+      --  the image file name.
+      Name : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the file creation date.
+      Create_Date : Ada.Calendar.Time;
+
+      --  the file storage URI.
+      Uri : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the file storage URI.
+      Storage : AWA.Storages.Models.Storage_Type;
+
+      --  the file mime type.
+      Mime_Type : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the file size.
+      File_Size : Integer;
+
+      --  whether the image is public.
+      Is_Public : Boolean;
+
+      --  the image width.
+      Width : Integer;
+
+      --  the image height.
+      Height : Integer;
+   end record;
+
+   --  This bean provides some methods that can be used in a Method_Expression.
+   overriding
+   function Get_Method_Bindings (From : in Image_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access;
+
+   --  Get the bean attribute identified by the name.
+   overriding
+   function Get_Value (From : in Image_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Image_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   procedure Load (Bean : in out Image_Bean;
+                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   --  Read in the object the data from the query result and prepare to read the next row.
+   --  If there is no row, raise the ADO.NOT_FOUND exception.
+   procedure Read (Into : in out Image_Bean;
+                   Stmt : in out ADO.Statements.Query_Statement'Class);
+
+   --  Run the query controlled by <b>Context</b> and load the result in <b>Object</b>.
+   procedure Load (Object  : in out Image_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   Query_Image_Info : constant ADO.Queries.Query_Definition_Access;
+
+   --  --------------------
    --    The list of images for a given folder.
    --  --------------------
    type Image_Info is
@@ -376,12 +451,22 @@ private
                         Impl   : out Image_Access);
 
    package File_1 is
+      new ADO.Queries.Loaders.File (Path => "image-info.xml",
+                                    Sha1 => "34E7D6E28ABCCCD3FA2E611655FCEAD246E0160F");
+
+   package Def_Imagebean_Image_Info is
+      new ADO.Queries.Loaders.Query (Name => "image-info",
+                                     File => File_1.File'Access);
+   Query_Image_Info : constant ADO.Queries.Query_Definition_Access
+   := Def_Imagebean_Image_Info.Query'Access;
+
+   package File_2 is
       new ADO.Queries.Loaders.File (Path => "image-list.xml",
                                     Sha1 => "6A8E69BE2D48CAE5EEE4093D819F4015C272A10C");
 
    package Def_Imageinfo_Image_List is
       new ADO.Queries.Loaders.Query (Name => "image-list",
-                                     File => File_1.File'Access);
+                                     File => File_2.File'Access);
    Query_Image_List : constant ADO.Queries.Query_Definition_Access
    := Def_Imageinfo_Image_List.Query'Access;
 end AWA.Images.Models;
