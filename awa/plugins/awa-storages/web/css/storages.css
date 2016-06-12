@@ -145,3 +145,58 @@ input.asf-editable-text {
     float: left;
     padding-right: 10px;
 }
+/* Image information page */
+.image-info, .image-view {
+    float: left;
+    clear: both;
+    width: 100%;
+}
+.image-details {
+    float: left;
+    width: 80%;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+}
+.image-details dt {
+    clear: both;
+    float: left;
+    font-style: bold;
+    width: 20%;
+}
+.image-details dd {
+    float: left;
+    width: 80%;
+}
+.image-upload {
+    height: 80px;
+}
+.upload-form {
+    background-color: #f6f6f3;
+}
+.image-view {
+    padding: 1%;
+    width: 98%;
+}
+.image-view a {
+    font-weight: bold;
+    padding-right: 0.5em;
+    padding-bottom: 0.5em;
+    display: inline-block;
+}
+#document-upload {
+    display: block;
+    float: left;
+    width: 100%;
+    height: 40px;
+}
+#total-progress {
+    display: block;
+    float: left;
+    width: 100%;
+    height: 20px;
+    background: red;
+    opacity: 0;
+}
+.dz-image, .dz-details, .dz-progress {
+    float: left;
+}
