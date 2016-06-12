@@ -60,7 +60,7 @@ package body AWA.Storages.Beans is
          From.Folder_Id := ADO.Utils.To_Identifier (Value);
          Manager.Load_Folder (Folder, From.Folder_Id);
          From.Set_Folder (Folder);
-      elsif Name = "id" then
+      elsif Name = "id" and then not Util.Beans.Objects.Is_Empty (Value) then
          Manager.Load_Storage (From, ADO.Utils.To_Identifier (Value));
       elsif Name = "name" then
          Folder := Models.Storage_Folder_Ref (From.Get_Folder);
