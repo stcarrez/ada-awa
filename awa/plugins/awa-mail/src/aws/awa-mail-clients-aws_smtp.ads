@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail-clients-aws_smtp -- Mail client implementation on top of AWS SMTP client
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +22,7 @@ with Ada.Finalization;
 with Util.Properties;
 
 with AWS.SMTP;
+with AWS.SMTP.Authentication.Plain;
 
 --  The <b>AWA.Mail.Clients.AWS_SMTP</b> package provides an implementation of the
 --  mail client interfaces on top of AWS SMTP client API.
@@ -98,7 +99,10 @@ private
    type AWS_Mail_Manager is new Mail_Manager with record
       Self    : AWS_Mail_Manager_Access;
       Server  : AWS.SMTP.Receiver;
+      Creds   : aliased AWS.SMTP.Authentication.Plain.Credential;
       Enable  : Boolean := True;
+      Secure  : Boolean := False;
+      Auth    : Boolean := False;
    end record;
 
 end AWA.Mail.Clients.AWS_SMTP;
