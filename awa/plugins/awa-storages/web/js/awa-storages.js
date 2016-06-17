@@ -29,3 +29,20 @@ function init_folder_list(id, idCreate, idCurrent, page_url) {
         }
     });
 }
+function init_upload(id, folder_id, file_id, upload_url) {
+    var dr = new Dropzone(document.querySelector("#document-upload"), {
+                thumbnailWidth: 80,
+                thumbnailHeight: 80,
+                clickable: "#upload-button",
+                params: { uploadForm: "1", uploadButton: "1", folder: folder_id, id: file_id },
+                paramName: "upload-file",
+                url: upload_url,
+                previewTemplate: '<div class="dz-preview dz-file-preview"><div class="dz-image"><img data-dz-thumbnail="" /></div><div class="dz-details\"><div class="dz-size"><span data-dz-size=""></span></div><div class="dz-filename"><span data-dz-name=""></span></div></div><div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress=""></span></div><div class="dz-error-message"><span data-dz-errormessage=""></span></div><div class="dz-success-mark"></div><div class="dz-error-mark"></div></div>'
+    });
+    //  dr.on("sending", function(file) {
+    //          document.querySelector("#total-progress").style.opacity = "1";
+    //  });
+    dr.on("success", function(file, response, e) {
+        ASF.Execute($(id), response);
+    });
+}
