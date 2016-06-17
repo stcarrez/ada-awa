@@ -70,10 +70,29 @@
         </dl>
     </div>
     <div class="grid_6">
+
+        <div id="template" class="file-row">
+          <!-- This is used as the file preview template -->
+          <div>
+              <span class="preview"><img data-dz-thumbnail="" /></span>
+          </div>
+          <div>
+              <p class="name" data-dz-name=""></p>
+          </div>
+          <div>
+              <p class="size" data-dz-size=""></p>
+              <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress=""></div>
+              </div>
+          </div>
+          <div>
+
+          </div>
+        </div>
         <div id='document-upload'>
-            <button class="ui-button ui-state-default ui-corner-all">
+            <button id="upload-button" class="ui-button ui-state-default ui-corner-all">
                 <i></i>
-                <span>Upload new image</span>
+                <span>#{storageMsg.image_upload_button}</span>
             </button>
             <div id="total-progress"/>
             <h:form enctype="multipart/form-data" action="#{contextPath}/storages/forms/upload-form.html" method="POST">
@@ -81,21 +100,8 @@
             </h:form>
         </div>
         <util:script>
-            var dr = new Dropzone(document.querySelector("#document-upload"), {
-                url: "#{contextPath}/storages/forms/upload-form.html",
-                paramName: "upload-file",
-                thumbnailWidth: 80,
-                thumbnailHeight: 80,
-                params: { uploadForm: "1", folder: "#{imageInfo.folder_id}", id: "#{imageInfo.id}" }
-            });
-            dr.on("sending", function(file) {
-              // Show the total progress bar when upload starts
-              document.querySelector("#total-progress").style.opacity = "1";
-              // And disable the start button
-              file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
-            });
-            dr.on("success
-
+            init_upload('#document-upload', #{imageInfo.folder_id}, #{imageInfo.id},
+                        "#{contextPath}/storages/forms/upload-image.html");
         </util:script>
     </div>
     <h:panelGroup rendered="#{imageInfo.id ne 0}">
