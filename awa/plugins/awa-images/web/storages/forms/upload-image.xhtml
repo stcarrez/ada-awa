@@ -1,0 +1,42 @@
+<!-- Upload image form
+  -  Copyright (C) 2016 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<f:view xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        contentType="text/html; charset=UTF-8">
+    <f:metadata>
+        <f:viewParam id='folderId' value='#{uploadFile.folderId}'/>
+        <f:viewParam id='id' value='#{uploadFile.id}' required="false"/>
+    </f:metadata>
+    <h:form id='uploadForm' enctype="multipart/form-data">
+        <h:inputHidden id="folder" value="#{uploadFile.folderId}"/>
+        <h:inputHidden id="id" value="#{uploadFile.id}"/>
+        <div class='uploadForm'>
+            <div class='upload'>
+                #{storageMsg.storage_upload_message}
+
+                <h:inputFile id="upload-file"
+                             styleClass="ui-button ui-corner-all"
+                             value="#{uploadFile.save_part}"/>
+                <h:commandButton id="uploadButton"
+                                 styleClass="ui-button ui-state-default ui-corner-all"
+                                 value="#{storageMsg.storage_upload_label}"
+                                 title="#{storageMsg.storage_upload_title}"
+                                 action="#{uploadFile.upload}"/>
+            </div>
+        </div>
+    </h:form>
+</f:view>
