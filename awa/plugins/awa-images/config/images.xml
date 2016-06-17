@@ -28,6 +28,14 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
+    <navigation-rule>
+      <from-view-id>/storages/forms/upload-image.xhtml</from-view-id>
+      <navigation-case>
+        <from-outcome>success</from-outcome>
+        <to-view-id>/storages/forms/upload-image-response.xhtml</to-view-id>
+      </navigation-case>
+    </navigation-rule>
+
   <servlet-mapping>
     <servlet-name>image</servlet-name>
     <url-pattern>/storages/images/:image_id</url-pattern>
@@ -52,6 +60,7 @@
     <url-pattern>/storages/lists/images.html</url-pattern>
     <url-pattern>/storages/images/.*</url-pattern>
     <url-pattern>/storages/image-info/#{imageInfo.id}</url-pattern>
+    <url-pattern>/storages/forms/upload-image.html</url-pattern>
   </url-policy>
 
   <url-mapping>
