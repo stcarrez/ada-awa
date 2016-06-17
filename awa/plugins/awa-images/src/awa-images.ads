@@ -17,11 +17,11 @@
 -----------------------------------------------------------------------
 
 --  == Introduction ==
+--  The image plugin is an extension to the storage plugin that identifies images and
+--  provides thumbnails as well as resizing of the original image.
 --
 --  @include awa-images-modules.ads
---  @include awa-images-services.ads
 --  @include awa-images-beans.ads
---  @include images.xml
 --  @include image-list.xml
 --
 --  == Model ==
