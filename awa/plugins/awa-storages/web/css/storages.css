@@ -78,6 +78,11 @@ div.awa-document div.awa-download {
     height: 24px;
     width: 32px;
 }
+.awa-document .awa-doc-thumbnail {
+    float: left;
+    width: 64px;
+    height: 64px;
+}
 .awa-private .awa-doc-status {
     background: url(../images/storages/doc-private.png) no-repeat;
 }
