@@ -141,34 +141,24 @@ package body AWA.Mail.Clients.AWS_SMTP is
       Free (Message.To);
    end Finalize;
 
+   procedure Initialize (Client : in out AWS_Mail_Manager'Class;
+                         Props  : in Util.Properties.Manager'Class) is separate;
+
    --  ------------------------------
    --  Create a SMTP based mail manager and configure it according to the properties.
    --  ------------------------------
    function Create_Manager (Props : in Util.Properties.Manager'Class) return Mail_Manager_Access is
       Server : constant String := Props.Get (Name => "smtp.host", Default => "localhost");
       Port   : constant String := Props.Get (Name => "smtp.port", Default => "25");
-      User   : constant String := Props.Get (Name => "smtp.user", Default => "");
-      Passwd : constant String := Props.Get (Name => "smtp.password", Default => "");
       Enable : constant String := Props.Get (Name => "smtp.enable", Default => "1");
-      Secure : constant String := Props.Get (Name => "smtp.ssl", Default => "0");
       Result : constant AWS_Mail_Manager_Access := new AWS_Mail_Manager;
    begin
       Log.Info ("Creating SMTP mail manager to server {0}:{1}", Server, Port);
 
+      Result.Port   := Positive'Value (Port);
       Result.Enable := Enable = "1" or Enable = "yes" or Enable = "true";
-      Result.Secure := Secure = "1" or Secure = "yes" or Secure = "true";
-      if User'Length > 0 then
-         Result.Creds := AWS.SMTP.Authentication.Plain.Initialize (User, Passwd);
-         Result.Server := AWS.SMTP.Client.Initialize (Server_Name => Server,
-                                                      Port        => Positive'Value (Port),
-                                                      Secure      => Result.Secure,
-                                                      Credential  => Result.Creds'Access);
-      else
-         Result.Server := AWS.SMTP.Client.Initialize (Server_Name => Server,
-                                                      Port        => Positive'Value (Port),
-                                                      Secure      => Result.Secure);
-      end if;
       Result.Self   := Result;
+      Initialize (Result.all, Props);
       return Result.all'Access;
    end Create_Manager;
 
