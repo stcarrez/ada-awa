@@ -100,9 +100,13 @@ private
       Self    : AWS_Mail_Manager_Access;
       Server  : AWS.SMTP.Receiver;
       Creds   : aliased AWS.SMTP.Authentication.Plain.Credential;
+      Port    : Positive := 25;
       Enable  : Boolean := True;
       Secure  : Boolean := False;
       Auth    : Boolean := False;
    end record;
+
+   procedure Initialize (Client : in out AWS_Mail_Manager'Class;
+                         Props  : in Util.Properties.Manager'Class);
 
 end AWA.Mail.Clients.AWS_SMTP;
