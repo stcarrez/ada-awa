@@ -15,6 +15,7 @@ library project Awa is
    Exec_Dir     := "./" &  Config'Exec_Dir & "/bin";
 
    Aws_Status : Config.Yes_No := "@AWA_AWS_STATUS@";
+   SMTP_SSL_Status : Config.Yes_No := "@AWA_AWS_SECURE_MAIL@";
 
    for Source_Dirs use ("src", "src/model");
 
