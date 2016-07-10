@@ -12,6 +12,7 @@ exec_prefix = @exec_prefix@
 top_builddir = .
 
 AWS_SRC_DIR=@AWS_SRC_DIR@
+XMLADA_SRC_DIR=@XMLADA_SRC_DIR@
 
 ENABLE_AHVEN=@ENABLE_AHVEN@
 ENABLE_XMLADA=@ENABLE_XMLADA@
@@ -63,15 +64,16 @@ build test clean install uninstall:		 stamp-configure
 	   $(MAKE) -C "$$i" $@ ; \
 	done
 
-stamp-aws:
+stamp-aws:		stamp-xmlada Makefile
 ifeq (${ENABLE_AWS},yes)
-	$(MAKE) -C $(AWS_SRC_DIR) prefix="${prefix}" SOCKET="openssl" PROCESSORS="${PROCESSORS}" setup build install
+	$(MAKE) -C $(AWS_SRC_DIR) prefix="${prefix}" XMLADA="true" \
+			SOCKET="openssl" PROCESSORS="${PROCESSORS}" setup build install
 endif
 	touch $@
 
-stamp-xmlada:
+stamp-xmlada:	Makefile
 ifeq (${ENABLE_XMLADA},yes)
-	$(MAKE) -C $(XMLADA_SRC_DIR) prefix="${prefix}" build install
+	$(MAKE) -C $(XMLADA_SRC_DIR) prefix="${prefix}" all install
 endif
 	touch $@
 
