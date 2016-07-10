@@ -38,11 +38,14 @@ doc:
 # Build and run the unit tests
 check test:	test-mysql test-sqlite
 
-test-sqlite:		build regtests.db
+regtests/result/maildir:
+	mkdir -p $@
+
+test-sqlite:		build regtests.db regtests/result/maildir
 	-test T${HAVE_SQLITE} = TFalse || \
 	bin/awa_harness -p SQLite -xml awa-sqlite-aunit.xml -config test-sqlite.properties
 
-test-mysql:		build create-mysql-tests
+test-mysql:		build create-mysql-tests regtests/result/maildir
 	-test T${HAVE_MYSQL} = TFalse || \
 	bin/awa_harness -p MySQL -xml awa-mysql-aunit.xml -config test-mysql.properties
 
