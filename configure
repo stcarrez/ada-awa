@@ -587,6 +587,7 @@ LIBOBJS
 AWA_BUILD_ROOT
 AWS_SRC_DIR
 AWS_DIR
+XMLADA_SRC_DIR
 XMLADA_DIR
 NR_CPUS
 ENABLE_AWS
@@ -3125,7 +3126,7 @@ for NAME in $PACKAGES ; do
         TARGET=xmlada
 		TGZ=$NAME.tgz
 		EXTRACT_DIR=
-		awa_xmlada_name=xmlada
+		XMLADA_SRC_DIR=$DIR
         ;;
 
       aunit-*)
@@ -3262,16 +3263,17 @@ $as_echo "no" >&6; }
 
 
 
+
 if test x${gnat_project_xmlada} = xno; then
    if test $ENABLE_XMLADA != "yes" ; then
       as_fn_error $? "XML/Ada was not found and --enable-xmlada not specified" "$LINENO" 5
    fi
-   if test ! -d ${awa_xmlada_name}; then
-      as_fn_error $? "XML/Ada extraction was not found in ${awa_xmlada_name}" "$LINENO" 5
+   if test ! -d ${XMLADA_SRC_DIR}; then
+      as_fn_error $? "XML/Ada extraction was not found in ${XMLADA_SRC_DIR}" "$LINENO" 5
    fi
 
    echo "Configuring ==== XML/Ada ===="
-   (cd ${awa_xmlada_name};
+   (cd ${XMLADA_SRC_DIR};
     ./configure --prefix=${ac_top_build_prefix}
    )
 fi
