@@ -4,10 +4,6 @@ dnl
 
 AC_INIT(Makefile.in)
 
-# Git repositories (when using --with-git)
-AWA_GIT="ada-util ada-el ada-wiki ada-security ada-asf ada-ado dynamo"
-AWA_GIT_BASE="git@github.com:stcarrez"
-
 AC_CANONICAL_SYSTEM
 AC_EXEEXT
 
@@ -16,8 +12,6 @@ AWA_MAJOR_VERSION=1
 AWA_MINOR_VERSION=1
 AWA_MICRO_VERSION=0
 AWA_VERSION=$AWA_MAJOR_VERSION.$AWA_MINOR_VERSION.$AWA_MICRO_VERSION
-
-AWA_PACKAGES="ada-util-1.8.0 ada-el-1.6.0 ada-wiki-1.0.0 ada-security-1.1.2 ada-asf-1.1.0 ada-ado-1.1.0 ada-awa-1.1.0 dynamo-0.8.0"
 
 # checking for local tools
 AC_PROG_CC
@@ -44,24 +38,6 @@ else
    pwd_option=""
 fi
 
-awa_util_configure=
-awa_el_configure=
-awa_security_configure=
-awa_asf_configure=
-awa_wiki_configure=
-awa_ado_configure=
-awa_dynamo_configure=
-awa_awa_configure=
-awa_xmlada_configure=
-awa_aws_configure=
-
-awa_util_name=ada-util
-awa_el_name=ada-el
-awa_security_name=ada-security
-awa_asf_name=ada-asf
-awa_ado_name=ada-ado
-awa_wiki_name=ada-wiki
-awa_dynamo_name=dynamo
 awa_build_root=
 awa_xmlada_name=
 awa_aws_name=
@@ -74,31 +50,18 @@ AC_ARG_WITH(build-root,
     awa_build_root=`pwd $pwd_option`/
   ])
 
-AC_ARG_WITH(git,
-  AS_HELP_STRING([--with-git=repo], [Use the git repositories for the Ada Util/EL/ASF/Wiki/ADO/Dynamo.
-You can indicate the git repository base (default is git@github.com:stcarrez)]),
-  [
-    awa_use_git=yes
-	if test x${withval} != xyes ; then
-	   AWA_GIT_BASE=${withval}
-    fi
-  ],
-  [
-    awa_use_git=no
-  ])
-
 awa_build_pwd=`cd ${awa_build_root} && pwd $pwd_option`
 if test x${awa_build_pwd} != x${awa_build_root}; then
   awa_build_root=${awa_build_pwd}/
 fi
 
-ac_enable_ahven=yes
+ENABLE_AHVEN=yes
 AC_ARG_ENABLE(ahven,
 [  --enable-ahven          Enable internal Ahven support for testutil library and Ada util unit tests (enabled)],
 [case "${enableval}" in
-  no|none)  ac_enable_ahven= ;;
-  *)        ac_enable_ahven=yes
-            ac_enable_aunit=no ;;
+  no|none)  ENABLE_AHVEN= ;;
+  *)        ENABLE_AHVEN=yes
+            ENABLE_AUNIT=no ;;
 esac])dnl
 
 AC_ARG_ENABLE(aunit,
@@ -115,25 +78,16 @@ AC_ARG_ENABLE(aws,
 [  --enable-aws            build AWS provided by AWA],
 ENABLE_AWS=$enableval,
 ENABLE_AWS=no)
-SUBDIRS=
 
-AC_MSG_CHECKING([whether to use the git repositories])
-if test ${awa_use_git} = "yes" ; then
-  AC_MSG_RESULT(${awa_use_git})
-  for NAME in $AWA_GIT ; do
-    if test -d ${NAME} ; then
-      echo "Git repository ${NAME} already cloned."
-    else
-      echo "Cloning Git repository ${NAME}"
-      git clone ${AWA_GIT_BASE}/${NAME}.git ${NAME}
-    fi
-    SUBDIRS="$SUBDIRS $NAME"
-  done
-  PACKAGES=""
-else
-  AC_MSG_RESULT(${awa_use_git})
-  PACKAGES="$AWA_PACKAGES"
-fi
+AC_SUBST(ENABLE_AHVEN)
+AC_SUBST(ENABLE_AUNIT)
+AC_SUBST(ENABLE_XMLADA)
+AC_SUBST(ENABLE_AWS)
+
+AC_MSG_CHECKING([number of processors])
+NR_CPUS=`getconf _NPROCESSORS_CONF 2>/dev/null || getconf NPROCESSORS_CONF 2>/dev/null || echo 1`
+AC_MSG_RESULT($NR_CPUS)
+AC_SUBST(NR_CPUS)
 
 if test $ENABLE_AUNIT = "yes" ; then
   PACKAGES="$PACKAGES aunit-gpl-2014-src"
@@ -144,12 +98,11 @@ if test $ENABLE_XMLADA = "yes" ; then
 fi
 
 if test $ENABLE_AWS = "yes" ; then
-  PACKAGES="$PACKAGES aws-gpl-3.1.0-src"
+  PACKAGES="$PACKAGES aws-gpl-2015-src"
 fi
 
 dnl Extract the packages if necessary
 dnl - AWS, AUnit, XML/Ada are provided in 'external' directory
-dnl - AWA packages are located in 'dist'
 for NAME in $PACKAGES ; do
    TGZ=$NAME.tar.gz
    EXTRACT_DIR=${awa_build_root}
@@ -169,41 +122,9 @@ for NAME in $PACKAGES ; do
         ;;
 
       aws-*)
-	    EXTRACT_DIR=aws
-        TARGET=aws
-		TGZ=$NAME.tgz
-        ;;
-
-      ada-util-*)
-        TARGET=ada-util
-        ;;
-
-      ada-el-*)
-        TARGET=ada-el
-        ;;
-
-      ada-asf-*)
-        TARGET=ada-asf
-        ;;
-
-      ada-wiki-*)
-        TARGET=ada-wiki
-        ;;
-
-      ada-security-*)
-        TARGET=ada-security
-        ;;
-
-      ada-ado-*)
-        TARGET=ada-ado
-        ;;
-
-      ada-awa-*)
-        TARGET=ada-awa
-        ;;
-
-      dynamo-*)
-        TARGET=dynamo
+        TARGET=$DIR
+		TGZ=external/aws/$NAME.tar.gz
+		AWS_SRC_DIR=$DIR
         ;;
 
       *)
@@ -223,50 +144,10 @@ for NAME in $PACKAGES ; do
    else
       echo "Extracting $TGZ"
       tar xzf $TGZ
-      mv $DIR ${EXTRACT_DIR}${TARGET}
    fi
-   case ${TARGET} in
-     xmlada|aws)
-	   ;;
-     ada-awa|awa)
-       SUBDIRS="${SUBDIRS} awa"
-	   ;;
-     *)
-       SUBDIRS="${SUBDIRS} ${EXTRACT_DIR}${TARGET}"
-	   ;;
-   esac
 done
 
-SUBDIRS="${SUBDIRS} awa"
-AC_SUBST(SUBDIRS)
-
 DIR=`pwd`
-NEED_INSTALL=""
-
-awa_el_configure="--with-ada-util=${awa_build_root}${awa_util_name}"
-awa_wiki_configure="--with-ada-util=${awa_build_root}${awa_util_name}"
-awa_security_configure="--with-ada-util=${awa_build_root}${awa_util_name}"
-awa_ado_configure="--with-ada-util=${awa_build_root}${awa_util_name}"
-awa_asf_configure="--with-ada-util=${awa_build_root}${awa_util_name} --with-ada-el=${awa_build_root}${awa_el_name}"
-awa_asf_configure="${awa_asf_configure} --with-ada-security=${awa_build_root}${awa_security_name}"
-awa_dynamo_configure="${awa_asf_configure} --with-ada-asf=${awa_build_root}${awa_asf_name}"
-awa_dynamo_configure="${awa_dynamo_configure} --with-ada-ado=${awa_build_root}${awa_ado_name}"
-awa_awa_configure="${awa_asf_configure} --with-ada-ado=${awa_build_root}${awa_ado_name}"
-awa_awa_configure="${awa_awa_configure} --with-ada-asf=${awa_build_root}${awa_asf_name}"
-awa_awa_configure="${awa_awa_configure} --with-ada-wiki=${awa_build_root}${awa_wiki_name}"
-
-awa_util_configure="${awa_util_configure} --prefix=${prefix}"
-awa_el_configure="${awa_el_configure} --prefix=${prefix}"
-awa_wiki_configure="${awa_wiki_configure} --prefix=${prefix}"
-awa_asf_configure="${awa_asf_configure} --prefix=${prefix}"
-awa_security_configure="${awa_security_configure} --prefix=${prefix}"
-awa_ado_configure="${awa_ado_configure} --prefix=${prefix}"
-awa_dynamo_configure="${awa_dynamo_configure} --prefix=${prefix}"
-awa_awa_configure="${awa_awa_configure} --prefix=${prefix}"
-
-if test x${ac_enable_ahven} = xyes; then
-   awa_util_configure="${awa_util_configure} --enable-ahven"
-fi
 
 ##########################################
 # Check for XML Ada
@@ -303,6 +184,7 @@ AM_GNAT_FIND_PROJECT([aws],[Ada Web Server],[aws],
     AWS_DIR=${gnat_project_dir_aws}
   ])
 AC_SUBST(AWS_DIR)
+AC_SUBST(AWS_SRC_DIR)
 
 if test x${gnat_project_aws} = xno; then
    if test $ENABLE_AWS != "yes" ; then
@@ -311,7 +193,7 @@ if test x${gnat_project_aws} = xno; then
 
    NEED_AWS_PATCH=1
    echo "Configuring ==== aws ===="
-   (cd $DIR/aws;
+   (cd $DIR/$AWS_SRC_DIR;
          cp makefile.conf makefile.conf.orig
          sed -e 's,^SOCKET.*=.*,SOCKET=openssl,' \
              -e 's,^IPv6.*=.*,IPv6=true,' < makefile.conf.orig > makefile.conf
@@ -326,52 +208,11 @@ if test x${gnat_project_aws} = xno; then
          fi
          make prefix="$prefix" setup
       )
-   NEED_INSTALL="$NEED_INSTALL aws"
-
    AWS_DIR=
 fi
 
-if test T"$NEED_INSTALL" != T; then
-   AC_MSG_RESULT(The following packages have been configured: ${NEED_INSTALL})
-   AC_MSG_RESULT(You must compile and install them before configuring other packages.)
-   AC_MSG_RESULT(Suggested commands:)
-   AC_MSG_RESULT(  (cd xmlada && make && make install))
-   AC_MSG_RESULT(  (cd aws && make prefix="$prefix" setup build install))
-#   exit 0
-fi
-
-
-ARGS="--prefix $prefix"
-
-echo "Configuring ==== ada-util ===="
-(cd ${awa_build_root}${awa_util_name} && ./configure ${awa_util_configure})
-(cd ${awa_build_root}${awa_util_name} && make setup)
-
-echo "Configuring ==== ada-el ${awa_el_configure} ===="
-(cd ${awa_build_root}${awa_el_name} && ./configure ${awa_el_configure})
-(cd ${awa_build_root}${awa_el_name} && make setup)
-
-echo "Configuring ==== ada-wiki ${awa_wiki_configure} ===="
-(cd ${awa_build_root}${awa_wiki_name} && ./configure ${awa_wiki_configure})
-(cd ${awa_build_root}${awa_wiki_name} && make setup)
-
-echo "Configuring ==== ada-security ${awa_security_configure} ===="
-(cd ${awa_build_root}${awa_security_name} && ./configure ${awa_security_configure})
-(cd ${awa_build_root}${awa_security_name} && make setup)
-
-echo "Configuring ==== ada-asf ${awa_asf_configure} ===="
-(cd ${awa_build_root}${awa_asf_name} && ./configure ${awa_asf_configure})
-(cd ${awa_build_root}${awa_asf_name} && make setup)
-
-echo "Configuring ==== ada-ado ${awa_ado_configure} ===="
-(cd ${awa_build_root}${awa_ado_name} && ./configure ${awa_ado_configure})
-(cd ${awa_build_root}${awa_ado_name} && make setup)
-
-echo "Configuring ==== dynamo ${awa_dynamo_configure} ===="
-(cd ${awa_build_root}${awa_dynamo_name} && ./configure ${awa_dynamo_configure})
-
-echo "Configuring ==== ada-awa ${awa_awa_configure} ===="
-(cd ${ac_pwd}/awa/${awa_awa_name} && ./configure ${awa_awa_configure})
+AWA_BUILD_ROOT=${awa_build_root}
+AC_SUBST(AWA_BUILD_ROOT)
 
 AC_OUTPUT(
 Makefile
