@@ -22,7 +22,6 @@ AWA integrates the following projects:
 * Ada Security  (https://github.com/stcarrez/ada-security)
 * Dynamo        (https://github.com/stcarrez/dynamo)
 
-These projects are provided as tarball in 'distrib' directory.
 These projects are distributed under the Apache License 2.0.
 
 AWA relies on the following external projects:
@@ -32,7 +31,7 @@ AWA relies on the following external projects:
 
 These projects are provided as tarball in 'external' directory.
 They are distributed under different licenses (GNU GPL).
-They are not compiled.
+They are not compiled unless you tell configure to do so.
 
 The AWA framework integrates a set unit tests and provides a framework
 to build unit tests for AWA applications.   The unit tests are based on
@@ -47,7 +46,7 @@ You may get Ahven or Aunit at:
 If XML/Ada and AWS are already installed in your environment, configure,
 build and install as follows:
 ```
-   ./configure  --prefix=/usr/local
+   ./configure --prefix=/usr/local
    make
    make install
 ```
@@ -58,16 +57,9 @@ To do this, run the configure as follows:
    ./configure --enable-xmlada --enable-aws
 ```
 This will extract and configure XML/Ada in 'xmlada' and AWS in 'aws'.
-You will then have to build these packages as follows:
+The build process of XML/Ada and AWS will take care of installing these
+two packages before configuring other AWA components.
 ```
-  cd xmlada && make && make install
-
-  cd aws && make prefix="/usr/local" setup build install
-```
-After you have built XML/Ada and AWS, you must then configure, build
-and install as follows:
-```
-   ./configure  --prefix=/usr/local
    make
    make install
 ```
