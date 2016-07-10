@@ -11,20 +11,101 @@ prefix = @prefix@
 exec_prefix = @exec_prefix@
 top_builddir = .
 
+AWS_SRC_DIR=@AWS_SRC_DIR@
+
+ENABLE_AHVEN=@ENABLE_AHVEN@
+ENABLE_XMLADA=@ENABLE_XMLADA@
+ENABLE_AWS=@ENABLE_AWS@
+
+PROCESSORS=@NR_CPUS@
+
+awa_util_name=ada-util
+awa_el_name=ada-el
+awa_asf_name=ada-asf
+awa_security_name=ada-security
+awa_wiki_name=ada-wiki
+awa_ado_name=ada-ado
+awa_dynamo_name=dynamo
+
+ifeq (${ENABLE_AHVEN},yes)
+awa_util_configure="--enable-ahven"
+else
+awa_util_configure=""
+endif
+
+ifeq (${ENABLE_AWS},yes)
+ADA_PROJECT_PATH+=${prefix}/lib/gnat:${prefix}/share/gpr
+
+export ADA_PROJECT_PATH
+endif
+
+awa_build_root=@AWA_BUILD_ROOT@
+awa_el_configure="--with-ada-util=${awa_build_root}${awa_util_name}"
+awa_wiki_configure="--with-ada-util=${awa_build_root}${awa_util_name}"
+awa_security_configure="--with-ada-util=${awa_build_root}${awa_util_name}"
+awa_ado_configure="--with-ada-util=${awa_build_root}${awa_util_name}"
+awa_asf_configure="--with-ada-util=${awa_build_root}${awa_util_name} --with-ada-el=${awa_build_root}${awa_el_name}"
+awa_asf_configure="--with-ada-security=${awa_build_root}${awa_security_name}"
+awa_dynamo_configure="--with-ada-asf=${awa_build_root}${awa_asf_name}"
+awa_dynamo_configure="--with-ada-ado=${awa_build_root}${awa_ado_name}"
+awa_awa_configure="${awa_asf_configure} --with-ada-ado=${awa_build_root}${awa_ado_name}"
+awa_awa_configure+="--with-ada-asf=${awa_build_root}${awa_asf_name}"
+awa_awa_configure+="--with-ada-wiki=${awa_build_root}${awa_wiki_name}"
+
 # Directories of sub-projects in the build order.
-SUBDIRS=@SUBDIRS@
+SUBDIRS=ada-util ada-el ada-security ada-wiki ada-asf ada-ado dynamo awa
+
+DIRS=ada-util ada-el ada-security ada-wiki ada-asf ada-ado dynamo
 
 # Build executables for all mains defined by the project.
-build test clean install uninstall:
+build test clean install uninstall:		 stamp-configure
 	for i in $(SUBDIRS); do \
 	   $(MAKE) -C "$$i" $@ ; \
 	done
 
-xmlada: force
-	cd xmlada && $(MAKE)
+stamp-aws:
+ifeq (${ENABLE_AWS},yes)
+	$(MAKE) -C $(AWS_SRC_DIR) prefix="${prefix}" SOCKET="openssl" PROCESSORS="${PROCESSORS}" setup build install
+endif
+	touch $@
 
-aws:    force
-	cd aws && $(MAKE) prefix=$(prefix) setup build
+stamp-xmlada:
+ifeq (${ENABLE_XMLADA},yes)
+	$(MAKE) -C $(XMLADA_SRC_DIR) prefix="${prefix}" build install
+endif
+	touch $@
+
+stamp-configure:	stamp-aws stamp-xmlada Makefile
+	echo "Configuring ==== ada-util ===="
+	(cd ${awa_build_root}${awa_util_name} && ./configure --prefix=${prefix} ${awa_util_configure})
+	(cd ${awa_build_root}${awa_util_name} && make setup)
+
+	echo "Configuring ==== ada-el ${awa_el_configure} ===="
+	(cd ${awa_build_root}${awa_el_name} && ./configure  --prefix=${prefix} ${awa_el_configure})
+	(cd ${awa_build_root}${awa_el_name} && make setup)
+
+	echo "Configuring ==== ada-wiki ${awa_wiki_configure} ===="
+	(cd ${awa_build_root}${awa_wiki_name} && ./configure  --prefix=${prefix} ${awa_wiki_configure})
+	(cd ${awa_build_root}${awa_wiki_name} && make setup)
+
+	echo "Configuring ==== ada-security ${awa_security_configure} ===="
+	(cd ${awa_build_root}${awa_security_name} && ./configure  --prefix=${prefix} ${awa_security_configure})
+	(cd ${awa_build_root}${awa_security_name} && make setup)
+
+	echo "Configuring ==== ada-asf ${awa_asf_configure} ===="
+	(cd ${awa_build_root}${awa_asf_name} && ./configure  --prefix=${prefix} ${awa_asf_configure})
+	(cd ${awa_build_root}${awa_asf_name} && make setup)
+
+	echo "Configuring ==== ada-ado ${awa_ado_configure} ===="
+	(cd ${awa_build_root}${awa_ado_name} && ./configure  --prefix=${prefix} ${awa_ado_configure})
+	(cd ${awa_build_root}${awa_ado_name} && make setup)
+
+	echo "Configuring ==== dynamo ${awa_dynamo_configure} ===="
+	(cd ${awa_build_root}${awa_dynamo_name} && ./configure  --prefix=${prefix} ${awa_dynamo_configure})
+
+	echo "Configuring ==== ada-awa ${awa_awa_configure} ===="
+	(cd ${top_srcdir}/awa && ./configure  --prefix=${prefix} ${awa_awa_configure})
+	touch $@
 
 force:
 
@@ -32,9 +113,9 @@ force:
 rebuild: clean build
 
 # Files to package in source distribution
-DISTFILES=README LICENSE.txt NOTICE.txt CHANGES ChangeLog config.guess configure config.sub \
+DISTFILES=README.md LICENSE.txt NOTICE.txt CHANGES ChangeLog config.guess configure config.sub \
 configure.in Makefile.in install-sh \
-distrib external support
+distrib external support $(SUBDIRS)
 
 dist:
 	-rm -rf $(distdir)
@@ -57,3 +138,4 @@ dist:
 	tar --exclude=.svn --exclude=.git --exclude="*~" --exclude="*.o" --exclude="*.ali" \
 	    --exclude="*.log" --exclude="*.a" \
 	    -cvzf $(DIST_FILE) $(distdir)
+
