@@ -113,7 +113,7 @@ for NAME in $PACKAGES ; do
         TARGET=xmlada
 		TGZ=$NAME.tgz
 		EXTRACT_DIR=
-		awa_xmlada_name=xmlada
+		XMLADA_SRC_DIR=$DIR
         ;;
 
       aunit-*)
@@ -159,17 +159,18 @@ AM_GNAT_FIND_PROJECT([xmlada],[XML/Ada],[xmlada],
     XMLADA_DIR=${gnat_project_dir_xmlada}
   ])
 AC_SUBST(XMLADA_DIR)
+AC_SUBST(XMLADA_SRC_DIR)
 
 if test x${gnat_project_xmlada} = xno; then
    if test $ENABLE_XMLADA != "yes" ; then
       AC_MSG_ERROR([XML/Ada was not found and --enable-xmlada not specified])
    fi
-   if test ! -d ${awa_xmlada_name}; then
-      AC_MSG_ERROR([XML/Ada extraction was not found in ${awa_xmlada_name}])
+   if test ! -d ${XMLADA_SRC_DIR}; then
+      AC_MSG_ERROR([XML/Ada extraction was not found in ${XMLADA_SRC_DIR}])
    fi
 
    echo "Configuring ==== XML/Ada ===="
-   (cd ${awa_xmlada_name};
+   (cd ${XMLADA_SRC_DIR};
     ./configure --prefix=${ac_top_build_prefix}
    )
 fi
