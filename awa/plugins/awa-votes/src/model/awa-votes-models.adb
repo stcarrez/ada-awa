@@ -22,7 +22,6 @@
 -----------------------------------------------------------------------
 with Ada.Unchecked_Deallocation;
 with ASF.Events.Faces.Actions;
-with ASF.Parts.Upload_Method;
 package body AWA.Votes.Models is
 
    use type ADO.Objects.Object_Record_Access;
