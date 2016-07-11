@@ -10,13 +10,14 @@ library project Awa_Mail is
 
    package Naming is
      case Awa.Aws_Status is
-	   when "yes" =>
-         case Awa.Aws_Status is
-	       when "yes" =>
+       when "yes" =>
+
+         case Awa.SMTP_SSL_Status is
+           when "yes" =>
              for Implementation ("AWA.Mail.Clients.AWS_SMTP.Initialize")
                    use "awa-mail-clients-aws_smtp-initialize_ssl.adb";
 
-	       when "no" =>
+           when "no" =>
              for Implementation ("AWA.Mail.Clients.AWS_SMTP.Initialize")
                    use "awa-mail-clients-aws_smtp-initialize_nossl.adb";
 
@@ -29,11 +30,11 @@ library project Awa_Mail is
    end Naming;
 
    case Awa.Aws_Status is
-	when "yes" =>
-	     for Source_Dirs use Project'Source_Dirs & ("src/aws");
+    when "yes" =>
+         for Source_Dirs use Project'Source_Dirs & ("src/aws");
 
-	when "no" =>
-	     null;
+    when "no" =>
+         null;
    end case;
 
    for Library_Name use Name;
