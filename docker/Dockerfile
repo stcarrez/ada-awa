@@ -1,10 +1,6 @@
-FROM debian:jessie
+FROM ciceron/gnat:latest
 
 MAINTAINER Stephane Carrez <Stephane.Carrez@gmail.com>
-
-RUN apt-get update \
-   && apt-get install -y make gcc gnat gprbuild libaws3.2.0-dev \
-         libsqlite3-dev libcurl4-openssl-dev git unzip
 
 RUN mkdir -p /usr/src \
    && cd /usr/src \
