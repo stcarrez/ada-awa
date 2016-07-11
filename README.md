@@ -42,6 +42,18 @@ You may get Ahven or Aunit at:
 * Ahven    (http://ahven.stronglytyped.org/)
 * AUnit    (http://libre.adacore.com/libre/tools/aunit/)
 
+# Using git
+
+The AWA framework uses git submodules to integrate several other
+projects.  To get all the sources, use the following commands:
+```
+   git clone git@github.com:stcarrez/ada-awa.git
+   cd ada-awa
+   git submodule init
+   git submodule update
+```
+
+# Building AWA
 
 If XML/Ada and AWS are already installed in your environment, configure,
 build and install as follows:
@@ -67,6 +79,6 @@ two packages before configuring other AWA components.
 
 The Ada Web Application sources as well as a wiki documentation is provided on:
 
-   https://github.com/stcarrez/ada-awa/
+   https://github.com/stcarrez/ada-awa/wiki/Documentation
 
 
