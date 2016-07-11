@@ -688,7 +688,7 @@ with_ada_asf
 with_ada_ado
 enable_aws
 with_aws
-enable_traceback
+enable_aws_secure_mail
 '
       ac_precious_vars='build_alias
 host_alias
@@ -3939,9 +3939,9 @@ $as_echo "no" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking using AWS secure mail client" >&5
 $as_echo_n "checking using AWS secure mail client... " >&6; }
 ac_enable_aws_secure_mail=yes
-# Check whether --enable-traceback was given.
-if test "${enable_traceback+set}" = set; then :
-  enableval=$enable_traceback; case "${enableval}" in
+# Check whether --enable-aws-secure-mail was given.
+if test "${enable_aws_secure_mail+set}" = set; then :
+  enableval=$enable_aws_secure_mail; case "${enableval}" in
   no|none)  ac_enable_aws_secure_mail=no ;;
   *)        ac_enable_aws_secure_mail=yes ;;
 esac
