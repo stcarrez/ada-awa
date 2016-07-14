@@ -19,6 +19,8 @@ with Ada.Strings.Unbounded;
 with ASF.Applications.Main;
 with ASF.Servlets.Faces;
 with ASF.Servlets.Files;
+with ASF.Requests;
+with ASF.Responses;
 with ASF.Server;
 with Util.Beans.Objects;
 with Util.Beans.Basic;
@@ -26,10 +28,20 @@ with Util.Beans.Methods;
 with ADO.Drivers.Connections;
 package AWA.Setup.Applications is
 
+   --  The <b>Servlet</b> represents the component that will handle
+   --  an HTTP request received by the server.
+   type Redirect_Servlet is new ASF.Servlets.Servlet with null record;
+
+   overriding
+   procedure Do_Get (Server   : in Redirect_Servlet;
+                     Request  : in out ASF.Requests.Request'Class;
+                     Response : in out ASF.Responses.Response'Class);
+
    type Application is new ASF.Applications.Main.Application and Util.Beans.Basic.Bean
      and Util.Beans.Methods.Method_Bean with record
       Faces    : aliased ASF.Servlets.Faces.Faces_Servlet;
       Files    : aliased ASF.Servlets.Files.File_Servlet;
+      Redirect : aliased Redirect_Servlet;
       Config   : ASF.Applications.Config;
       Changed  : ASF.Applications.Config;
       Factory  : ASF.Applications.Main.Application_Factory;
