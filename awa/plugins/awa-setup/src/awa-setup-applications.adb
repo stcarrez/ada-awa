@@ -48,6 +48,15 @@ package body AWA.Setup.Applications is
          Finish_Binding.Proxy'Access,
          Configure_Binding.Proxy'Access);
 
+   overriding
+   procedure Do_Get (Server   : in Redirect_Servlet;
+                     Request  : in out ASF.Requests.Request'Class;
+                     Response : in out ASF.Responses.Response'Class) is
+      Context_Path : constant String := Request.Get_Context_Path;
+   begin
+      Response.Send_Redirect (Context_Path & "/setup/install.html");
+   end Do_Get;
+
    --  ------------------------------
    --  Get the value identified by the name.
    --  ------------------------------
@@ -64,6 +73,8 @@ package body AWA.Setup.Applications is
          return Util.Beans.Objects.To_Object (From.Database.Get_Property ("user"));
       elsif Name = "database_password" then
          return Util.Beans.Objects.To_Object (From.Database.Get_Property ("password"));
+      elsif Name = "database_driver" then
+         return Util.Beans.Objects.To_Object (String '("sqlite"));
       end if;
       if From.Changed.Exists (Name) then
          return Util.Beans.Objects.To_Object (String '(From.Changed.Get (Name)));
@@ -139,6 +150,7 @@ package body AWA.Setup.Applications is
                                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
    begin
       Log.Info ("Configure database");
+      --  dynamo create-database db sqlite:///atlas.db
    end Configure_Database;
 
    --  ------------------------------
@@ -209,15 +221,20 @@ package body AWA.Setup.Applications is
             Log.Error ("Cannot read application configuration file: {0}", Config);
       end;
       App.Initialize (App.Config, App.Factory);
+      App.Set_Error_Page (ASF.Responses.SC_NOT_FOUND, "/setup/install.html");
       App.Set_Global ("contextPath", App.Config.Get ("contextPath"));
       App.Set_Global ("setup",
                       Util.Beans.Objects.To_Object (App'Unchecked_Access,
                         Util.Beans.Objects.STATIC));
+      App.Add_Servlet (Name   => "redirect",
+                       Server => App.Redirect'Unchecked_Access);
       App.Add_Servlet (Name   => "faces",
                        Server => App.Faces'Unchecked_Access);
       App.Add_Servlet (Name   => "files",
                        Server => App.Files'Unchecked_Access);
       App.Add_Mapping (Pattern => "*.html",
+                       Name    => "redirect");
+      App.Add_Mapping (Pattern => "/setup/*.html",
                        Name    => "faces");
       App.Add_Mapping (Pattern => "*.css",
                        Name    => "files");
