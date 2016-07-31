@@ -14,28 +14,28 @@
   -  See the License for the specific language governing permissions and
   -  limitations under the License.
   -->
-<ul class='wiki-nav'
+<ul class='awa-nav'
     xmlns:auth="http://code.google.com/p/ada-awa/auth"
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:w="http://code.google.com/p/ada-asf/widget"
     xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:panelGroup rendered="#{user.isLogged}">
-        <li class="wiki-nav-left">
+        <li class="awa-nav-left">
             <a href="#{contextPath}/wikis/create/#{wikiSpaceId}" class="awa-nav-icon"
                title="#{wikiMsg.wiki_admin_create_page_title}">
                 <img src="#{contextPath}/images/wikis/wiki-create.png" alt="#{wikiMsg.wiki_admin_create_wiki_label}"/>
                 <span>#{wikiMsg.wiki_admin_create_page_label}</span>
             </a>
         </li>
-        <li class="wiki-nav-left">
+        <li class="awa-nav-left">
             <a href="#{contextPath}/wikis/list/#{wikiSpaceId}/recent#{page_link}" class="awa-nav-icon"
                title="#{wikiMsg.wiki_admin_list_pages_title}">
                 <img src="#{contextPath}/images/wikis/wiki-document.png" alt="#{wikiMsg.wiki_admin_list_pages_label}"/>
                 <span>#{wikiMsg.wiki_admin_list_pages_label}</span>
             </a>
         </li>
-        <li class="wiki-nav-left">
+        <li class="awa-nav-left">
             <a href="#{contextPath}/wikis/tags/#{wikiSpaceId}" class="awa-nav-icon"
                title="#{wikiMsg.wiki_admin_list_tags_title}">
                 <img src="#{contextPath}/images/wikis/wiki-cloud.png" alt="#{wikiMsg.wiki_admin_list_comments_label}"/>
@@ -44,7 +44,7 @@
         </li>
     </h:panelGroup>
     <h:panelGroup rendered="#{auth:hasPermission('wiki-space-update',wikiSpaceId)}">
-        <li class="wiki-nav-right">
+        <li class="awa-nav-right">
             <a class='awa-buttonx' href="#{contextPath}/wikis/settings/#{wikiSpaceId}" title="#{wikiMsg.wiki_page_settings_label}">
                 <img src="#{contextPath}/images/wikis/wiki-settings.png" alt="#{wikiMsg.wiki_page_settings_label}"/>
             </a>
@@ -52,7 +52,7 @@
     </h:panelGroup>
     <ui:insert name="page-nav"/>
     <h:panelGroup rendered="#{not empty sort}">
-        <li class="wiki-nav-right" id="wiki-nav-sort">
+        <li class="awa-nav-right" id="wiki-nav-sort">
             <label for="sort">#{wikiMsg.wiki_sort_by_label}</label>
             <w:chosen id="sort" value="#{sort}">
                 <f:selectItem itemValue="name" itemLabel="#{wikiMsg.wiki_sort_by_name}"/>
