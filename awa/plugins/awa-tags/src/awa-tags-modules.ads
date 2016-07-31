@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-tags-modules -- Module awa-tags
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2013, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,7 +32,7 @@ with AWA.Modules;
 --  The module instance can be defined as follows:
 --
 --    type Application is new AWA.Applications.Application with record
---       Tag_Module : aliased AWA.Votes.Modules.Tag_Module;
+--       Tag_Module : aliased AWA.Tags.Modules.Tag_Module;
 --    end record;
 --
 --  And registered in the `Initialize_Modules` procedure by using:
