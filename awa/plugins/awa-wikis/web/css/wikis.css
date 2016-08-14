@@ -68,23 +68,6 @@
     font-weight: bold;
 }
 
-.wiki-nav {
-    float: left;
-    width: 98%;
-    padding-left: 1%;
-    padding-right: 1%;
-    list-style-type: none;
-    border-bottom: 2px solid #ccc;
-    padding-bottom: 10px;
-}
-.wiki-nav-left {
-    float: left;
-    padding-right: 10px;
-}
-.wiki-nav-right {
-    float: right;
-    padding-left: 10px;
-}
 #wiki-nav-sort {
     width: 20%;
 }

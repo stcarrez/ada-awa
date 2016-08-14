@@ -1,5 +1,5 @@
 <!-- List the wiki pages for the wiki administrator
-  -  Copyright (C) 2015 Stephane Carrez
+  -  Copyright (C) 2015, 2016 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,7 +36,7 @@
                 <ui:param name="sort" value="#{wikiList.sort}"/>
                 <ui:param name="page_link" value=""/>
                 <ui:define name="page-nav">
-                    <li class="wiki-nav-right">
+                    <li class="awa-nav-right">
                         <a href="#{contextPath}/wikis/list/#{wikiList.wiki_id}/#{wikiList.sort}/grid" title="#{wikiMsg.wiki_page_grid_view_label}">
                             <img src="#{contextPath}/images/wikis/wiki-grid.png" alt="#{wikiMsg.wiki_page_grid_view_label}"/>
                         </a>

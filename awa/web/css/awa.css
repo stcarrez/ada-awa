@@ -316,6 +316,23 @@ div.awa-modal div.awa-login {
 /**
  * Navigation icons
  */
+.awa-nav {
+    float: left;
+    width: 98%;
+    padding-left: 1%;
+    padding-right: 1%;
+    list-style-type: none;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 10px;
+}
+.awa-nav-left {
+    float: left;
+    padding-right: 10px;
+}
+.awa-nav-right {
+    float: right;
+    padding-left: 10px;
+}
 .awa-nav-icon {
     width: 150px;
     display: block;
@@ -331,4 +348,20 @@ div.awa-modal div.awa-login {
     width: 64px;
     margin-left: auto;
     margin-right: auto;
+}
+
+/**
+ * Page action and tag presentation lists (general purpose presentation).
+ */
+.awa-page-actions {
+    float: right;
+    list-style-type: none;
+}
+.awa-page-actions li {
+    float: left;
+    padding-left: 1em;
+}
+.awa-tag-list {
+    float: right;
+    list-style-type: none;
 }

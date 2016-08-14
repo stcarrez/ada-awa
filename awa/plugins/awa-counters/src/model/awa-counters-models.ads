@@ -43,6 +43,8 @@ package AWA.Counters.Models is
 
    type Counter_Definition_Ref is new ADO.Objects.Object_Ref with null record;
 
+   type Visit_Ref is new ADO.Objects.Object_Ref with null record;
+
    --  Create an object key for Counter.
    function Counter_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
    --  Create an object key for Counter from a string.
@@ -76,25 +78,25 @@ package AWA.Counters.Models is
    function Get_Counter (Object : in Counter_Ref)
                  return Integer;
 
-   --  Set the definition id.
+   --  Set the counter definition identifier.
    procedure Set_Definition_Id (Object : in out Counter_Ref;
-                                Value  : in Integer);
+                                Value  : in ADO.Identifier);
 
-   --  Get the definition id.
+   --  Get the counter definition identifier.
    function Get_Definition_Id (Object : in Counter_Ref)
-                 return Integer;
+                 return ADO.Identifier;
 
    --  Load the entity identified by 'Id'.
    --  Raises the NOT_FOUND exception if it does not exist.
    procedure Load (Object  : in out Counter_Ref;
                    Session : in out ADO.Sessions.Session'Class;
-                   Id      : in Integer);
+                   Id      : in ADO.Identifier);
 
    --  Load the entity identified by 'Id'.
    --  Returns True in <b>Found</b> if the object was found and False if it does not exist.
    procedure Load (Object  : in out Counter_Ref;
                    Session : in out ADO.Sessions.Session'Class;
-                   Id      : in Integer;
+                   Id      : in ADO.Identifier;
                    Found   : out Boolean);
 
    --  Find and load the entity.
@@ -165,11 +167,11 @@ package AWA.Counters.Models is
    function Get_Id (Object : in Counter_Definition_Ref)
                  return ADO.Identifier;
 
-   --
+   --  Set the optional entity type that identifies the database table.
    procedure Set_Entity_Type (Object : in out Counter_Definition_Ref;
                               Value  : in ADO.Nullable_Entity_Type);
 
-   --
+   --  Get the optional entity type that identifies the database table.
    function Get_Entity_Type (Object : in Counter_Definition_Ref)
                  return ADO.Nullable_Entity_Type;
 
@@ -220,6 +222,111 @@ package AWA.Counters.Models is
    procedure Copy (Object : in Counter_Definition_Ref;
                    Into   : in out Counter_Definition_Ref);
 
+   --  Create an object key for Visit.
+   function Visit_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
+   --  Create an object key for Visit from a string.
+   --  Raises Constraint_Error if the string cannot be converted into the object key.
+   function Visit_Key (Id : in String) return ADO.Objects.Object_Key;
+
+   Null_Visit : constant Visit_Ref;
+   function "=" (Left, Right : Visit_Ref'Class) return Boolean;
+
+   --  Set the entity identifier.
+   procedure Set_Object_Id (Object : in out Visit_Ref;
+                            Value  : in ADO.Identifier);
+
+   --  Get the entity identifier.
+   function Get_Object_Id (Object : in Visit_Ref)
+                 return ADO.Identifier;
+
+   --  Set the number of times the entity was visited by the user.
+   procedure Set_Counter (Object : in out Visit_Ref;
+                          Value  : in Integer);
+
+   --  Get the number of times the entity was visited by the user.
+   function Get_Counter (Object : in Visit_Ref)
+                 return Integer;
+
+   --  Set the date and time when the entity was last visited.
+   procedure Set_Date (Object : in out Visit_Ref;
+                       Value  : in Ada.Calendar.Time);
+
+   --  Get the date and time when the entity was last visited.
+   function Get_Date (Object : in Visit_Ref)
+                 return Ada.Calendar.Time;
+
+   --  Set the user who visited the entity.
+   procedure Set_User (Object : in out Visit_Ref;
+                       Value  : in ADO.Identifier);
+
+   --  Get the user who visited the entity.
+   function Get_User (Object : in Visit_Ref)
+                 return ADO.Identifier;
+
+   --  Set the counter definition identifier.
+   procedure Set_Definition_Id (Object : in out Visit_Ref;
+                                Value  : in ADO.Identifier);
+
+   --  Get the counter definition identifier.
+   function Get_Definition_Id (Object : in Visit_Ref)
+                 return ADO.Identifier;
+
+   --  Load the entity identified by 'Id'.
+   --  Raises the NOT_FOUND exception if it does not exist.
+   procedure Load (Object  : in out Visit_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier);
+
+   --  Load the entity identified by 'Id'.
+   --  Returns True in <b>Found</b> if the object was found and False if it does not exist.
+   procedure Load (Object  : in out Visit_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier;
+                   Found   : out Boolean);
+
+   --  Find and load the entity.
+   overriding
+   procedure Find (Object  : in out Visit_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean);
+
+   --  Save the entity.  If the entity does not have an identifier, an identifier is allocated
+   --  and it is inserted in the table.  Otherwise, only data fields which have been changed
+   --  are updated.
+   overriding
+   procedure Save (Object  : in out Visit_Ref;
+                   Session : in out ADO.Sessions.Master_Session'Class);
+
+   --  Delete the entity.
+   overriding
+   procedure Delete (Object  : in out Visit_Ref;
+                     Session : in out ADO.Sessions.Master_Session'Class);
+
+   overriding
+   function Get_Value (From : in Visit_Ref;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Table definition
+   VISIT_TABLE : constant ADO.Schemas.Class_Mapping_Access;
+
+   --  Internal method to allocate the Object_Record instance
+   overriding
+   procedure Allocate (Object : in out Visit_Ref);
+
+   --  Copy of the object.
+   procedure Copy (Object : in Visit_Ref;
+                   Into   : in out Visit_Ref);
+
+   package Visit_Vectors is
+      new Ada.Containers.Vectors (Index_Type   => Natural,
+                                  Element_Type => Visit_Ref,
+                                  "="          => "=");
+   subtype Visit_Vector is Visit_Vectors.Vector;
+
+   procedure List (Object  : in out Visit_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class);
 
    --  --------------------
    --    The month statistics.
@@ -271,7 +378,7 @@ package AWA.Counters.Models is
 
 
    --  --------------------
-   --    load the counters for the entity and the timeframe.The Stat_List_Bean is the bean that allows to retrieve the counter statistics
+   --    The Stat_List_Bean is the bean that allows to retrieve the counter statistics
    --  for a given database entity and provide the values through a bean to the
    --  presentation layer.load the counters for the entity and the timeframe.
    --  --------------------
@@ -337,7 +444,7 @@ private
       := Counter_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Counter_Impl is
-      new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_STRING,
+      new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
                                      Of_Class => COUNTER_DEF'Access)
    with record
        Object_Id : ADO.Identifier;
@@ -435,6 +542,71 @@ private
 
    procedure Set_Field (Object : in out Counter_Definition_Ref'Class;
                         Impl   : out Counter_Definition_Access);
+   VISIT_NAME : aliased constant String := "awa_visit";
+   COL_0_3_NAME : aliased constant String := "object_id";
+   COL_1_3_NAME : aliased constant String := "counter";
+   COL_2_3_NAME : aliased constant String := "date";
+   COL_3_3_NAME : aliased constant String := "user";
+   COL_4_3_NAME : aliased constant String := "definition_id";
+
+   VISIT_DEF : aliased constant ADO.Schemas.Class_Mapping :=
+     (Count => 5,
+      Table => VISIT_NAME'Access,
+      Members => (
+         1 => COL_0_3_NAME'Access,
+         2 => COL_1_3_NAME'Access,
+         3 => COL_2_3_NAME'Access,
+         4 => COL_3_3_NAME'Access,
+         5 => COL_4_3_NAME'Access
+)
+     );
+   VISIT_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := VISIT_DEF'Access;
+
+   Null_Visit : constant Visit_Ref
+      := Visit_Ref'(ADO.Objects.Object_Ref with null record);
+
+   type Visit_Impl is
+      new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
+                                     Of_Class => VISIT_DEF'Access)
+   with record
+       Object_Id : ADO.Identifier;
+       Counter : Integer;
+       Date : Ada.Calendar.Time;
+       User : ADO.Identifier;
+   end record;
+
+   type Visit_Access is access all Visit_Impl;
+
+   overriding
+   procedure Destroy (Object : access Visit_Impl);
+
+   overriding
+   procedure Find (Object  : in out Visit_Impl;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean);
+
+   overriding
+   procedure Load (Object  : in out Visit_Impl;
+                   Session : in out ADO.Sessions.Session'Class);
+   procedure Load (Object  : in out Visit_Impl;
+                   Stmt    : in out ADO.Statements.Query_Statement'Class;
+                   Session : in out ADO.Sessions.Session'Class);
+
+   overriding
+   procedure Save (Object  : in out Visit_Impl;
+                   Session : in out ADO.Sessions.Master_Session'Class);
+
+   procedure Create (Object  : in out Visit_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class);
+
+   overriding
+   procedure Delete (Object  : in out Visit_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class);
+
+   procedure Set_Field (Object : in out Visit_Ref'Class;
+                        Impl   : out Visit_Access);
 
    package File_1 is
       new ADO.Queries.Loaders.File (Path => "counter-update.xml",
