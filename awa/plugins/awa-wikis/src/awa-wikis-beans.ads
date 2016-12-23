@@ -276,6 +276,10 @@ package AWA.Wikis.Beans is
    function Create_Wiki_Space_Bean (Module : in AWA.Wikis.Modules.Wiki_Module_Access)
                                   return Util.Beans.Basic.Readonly_Bean_Access;
 
+   function Get_Wiki_Space_Bean is
+     new ASF.Helpers.Beans.Get_Bean (Element_Type   => Wiki_Space_Bean,
+                                     Element_Access => Wiki_Space_Bean_Access);
+
    --  ------------------------------
    --  Wiki Page Bean
    --  ------------------------------
