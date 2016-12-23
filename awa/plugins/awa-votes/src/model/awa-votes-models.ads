@@ -30,7 +30,6 @@ with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
 with Util.Beans.Basic.Lists;
-with AWA.Users.Models;
 with Util.Beans.Methods;
 pragma Warnings (On);
 package AWA.Votes.Models is
@@ -175,12 +174,12 @@ package AWA.Votes.Models is
                  return AWA.Votes.Models.Rating_Ref'Class;
 
    --
-   procedure Set_User (Object : in out Vote_Ref;
-                       Value  : in AWA.Users.Models.User_Ref'Class);
+   procedure Set_User_Id (Object : in out Vote_Ref;
+                          Value  : in ADO.Identifier);
 
    --
-   function Get_User (Object : in Vote_Ref)
-                 return AWA.Users.Models.User_Ref'Class;
+   function Get_User_Id (Object : in Vote_Ref)
+                 return ADO.Identifier;
 
    --  Load the entity identified by 'Id'.
    --  Raises the NOT_FOUND exception if it does not exist.
@@ -369,8 +368,8 @@ private
                                      Of_Class => VOTE_DEF'Access)
    with record
        Rating : Integer;
+       Id : ADO.Identifier;
        Entity : AWA.Votes.Models.Rating_Ref;
-       User : AWA.Users.Models.User_Ref;
    end record;
 
    type Vote_Access is access all Vote_Impl;

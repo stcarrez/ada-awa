@@ -387,12 +387,13 @@ package body AWA.Votes.Models is
    overriding
    function Get_Value (From : in Rating_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
-      Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
+      Obj  : ADO.Objects.Object_Record_Access;
       Impl : access Rating_Impl;
    begin
-      if Obj = null then
+      if From.Is_Null then
          return Util.Beans.Objects.Null_Object;
       end if;
+      Obj := From.Get_Load_Object;
       Impl := Rating_Impl (Obj.all)'Access;
       if Name = "id" then
          return ADO.Objects.To_Object (Impl.Get_Key);
@@ -459,6 +460,7 @@ package body AWA.Votes.Models is
    begin
       Impl := new Vote_Impl;
       Impl.Rating := 0;
+      Impl.Id := ADO.NO_IDENTIFIER;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -488,15 +490,15 @@ package body AWA.Votes.Models is
       Impl : Vote_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Key_Value (Impl.all, 2, Value);
+      ADO.Objects.Set_Field_Identifier (Impl.all, 2, Impl.Id, Value);
    end Set_Id;
 
    function Get_Id (Object : in Vote_Ref)
                   return ADO.Identifier is
       Impl : constant Vote_Access
-         := Vote_Impl (Object.Get_Object.all)'Access;
+         := Vote_Impl (Object.Get_Load_Object.all)'Access;
    begin
-      return Impl.Get_Key_Value;
+      return Impl.Id;
    end Get_Id;
 
 
@@ -517,21 +519,21 @@ package body AWA.Votes.Models is
    end Get_Entity;
 
 
-   procedure Set_User (Object : in out Vote_Ref;
-                       Value  : in AWA.Users.Models.User_Ref'Class) is
+   procedure Set_User_Id (Object : in out Vote_Ref;
+                          Value  : in ADO.Identifier) is
       Impl : Vote_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 4, Impl.User, Value);
-   end Set_User;
+      ADO.Objects.Set_Field_Key_Value (Impl.all, 4, Value);
+   end Set_User_Id;
 
-   function Get_User (Object : in Vote_Ref)
-                  return AWA.Users.Models.User_Ref'Class is
+   function Get_User_Id (Object : in Vote_Ref)
+                  return ADO.Identifier is
       Impl : constant Vote_Access
-         := Vote_Impl (Object.Get_Load_Object.all)'Access;
+         := Vote_Impl (Object.Get_Object.all)'Access;
    begin
-      return Impl.User;
-   end Get_User;
+      return Impl.Get_Key_Value;
+   end Get_User_Id;
 
    --  Copy of the object.
    procedure Copy (Object : in Vote_Ref;
@@ -548,8 +550,8 @@ package body AWA.Votes.Models is
             ADO.Objects.Set_Object (Result, Copy.all'Access);
             Copy.Copy (Impl.all);
             Copy.Rating := Impl.Rating;
+            Copy.Id := Impl.Id;
             Copy.Entity := Impl.Entity;
-            Copy.User := Impl.User;
          end;
       end if;
       Into := Result;
@@ -578,7 +580,7 @@ package body AWA.Votes.Models is
       Query : ADO.SQL.Query;
    begin
       Query.Bind_Param (Position => 1, Value => Id);
-      Query.Set_Filter ("id = ?");
+      Query.Set_Filter ("user_id = ?");
       Impl.Find (Session, Query, Found);
       if not Found then
          Destroy (Impl);
@@ -595,7 +597,7 @@ package body AWA.Votes.Models is
       Query : ADO.SQL.Query;
    begin
       Query.Bind_Param (Position => 1, Value => Id);
-      Query.Set_Filter ("id = ?");
+      Query.Set_Filter ("user_id = ?");
       Impl.Find (Session, Query, Found);
       if not Found then
          Destroy (Impl);
@@ -667,7 +669,7 @@ package body AWA.Votes.Models is
       Id    : constant ADO.Identifier := Object.Get_Key_Value;
    begin
       Query.Bind_Param (Position => 1, Value => Id);
-      Query.Set_Filter ("id = ?");
+      Query.Set_Filter ("user_id = ?");
       Object.Find (Session, Query, Found);
       if not Found then
          raise ADO.Objects.NOT_FOUND;
@@ -686,7 +688,7 @@ package body AWA.Votes.Models is
       end if;
       if Object.Is_Modified (2) then
          Stmt.Save_Field (Name  => COL_1_2_NAME, --  id
-                          Value => Object.Get_Key);
+                          Value => Object.Id);
          Object.Clear_Modified (2);
       end if;
       if Object.Is_Modified (3) then
@@ -696,11 +698,11 @@ package body AWA.Votes.Models is
       end if;
       if Object.Is_Modified (4) then
          Stmt.Save_Field (Name  => COL_3_2_NAME, --  user_id
-                          Value => Object.User);
+                          Value => Object.Get_Key);
          Object.Clear_Modified (4);
       end if;
       if Stmt.Has_Save_Fields then
-         Stmt.Set_Filter (Filter => "id = ?");
+         Stmt.Set_Filter (Filter => "user_id = ?");
          Stmt.Add_Param (Value => Object.Get_Key);
          declare
             Result : Integer;
@@ -723,13 +725,13 @@ package body AWA.Votes.Models is
    begin
       Query.Save_Field (Name  => COL_0_2_NAME, --  rating
                         Value => Object.Rating);
-      Session.Allocate (Id => Object);
       Query.Save_Field (Name  => COL_1_2_NAME, --  id
-                        Value => Object.Get_Key);
+                        Value => Object.Id);
       Query.Save_Field (Name  => COL_2_2_NAME, --  entity_id
                         Value => Object.Entity);
+      Session.Allocate (Id => Object);
       Query.Save_Field (Name  => COL_3_2_NAME, --  user_id
-                        Value => Object.User);
+                        Value => Object.Get_Key);
       Query.Execute (Result);
       if Result /= 1 then
          raise ADO.Objects.INSERT_ERROR;
@@ -742,7 +744,7 @@ package body AWA.Votes.Models is
       Stmt : ADO.Statements.Delete_Statement
          := Session.Create_Statement (VOTE_DEF'Access);
    begin
-      Stmt.Set_Filter (Filter => "id = ?");
+      Stmt.Set_Filter (Filter => "user_id = ?");
       Stmt.Add_Param (Value => Object.Get_Key);
       Stmt.Execute;
    end Delete;
@@ -753,16 +755,19 @@ package body AWA.Votes.Models is
    overriding
    function Get_Value (From : in Vote_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
-      Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
+      Obj  : ADO.Objects.Object_Record_Access;
       Impl : access Vote_Impl;
    begin
-      if Obj = null then
+      if From.Is_Null then
          return Util.Beans.Objects.Null_Object;
       end if;
+      Obj := From.Get_Load_Object;
       Impl := Vote_Impl (Obj.all)'Access;
       if Name = "rating" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Rating));
       elsif Name = "id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Id));
+      elsif Name = "user_id" then
          return ADO.Objects.To_Object (Impl.Get_Key);
       end if;
       return Util.Beans.Objects.Null_Object;
@@ -778,13 +783,11 @@ package body AWA.Votes.Models is
                    Session : in out ADO.Sessions.Session'Class) is
    begin
       Object.Rating := Stmt.Get_Integer (0);
-      Object.Set_Key_Value (Stmt.Get_Identifier (1));
+      Object.Id := Stmt.Get_Identifier (1);
       if not Stmt.Is_Null (2) then
          Object.Entity.Set_Key_Value (Stmt.Get_Identifier (2), Session);
       end if;
-      if not Stmt.Is_Null (3) then
-         Object.User.Set_Key_Value (Stmt.Get_Identifier (3), Session);
-      end if;
+      Object.Set_Key_Value (Stmt.Get_Identifier (3));
       ADO.Objects.Set_Created (Object);
    end Load;
 
