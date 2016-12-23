@@ -495,12 +495,13 @@ package body AWA.Blogs.Models is
    overriding
    function Get_Value (From : in Blog_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
-      Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
+      Obj  : ADO.Objects.Object_Record_Access;
       Impl : access Blog_Impl;
    begin
-      if Obj = null then
+      if From.Is_Null then
          return Util.Beans.Objects.Null_Object;
       end if;
+      Obj := From.Get_Load_Object;
       Impl := Blog_Impl (Obj.all)'Access;
       if Name = "id" then
          return ADO.Objects.To_Object (Impl.Get_Key);
@@ -1129,12 +1130,13 @@ package body AWA.Blogs.Models is
    overriding
    function Get_Value (From : in Post_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
-      Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
+      Obj  : ADO.Objects.Object_Record_Access;
       Impl : access Post_Impl;
    begin
-      if Obj = null then
+      if From.Is_Null then
          return Util.Beans.Objects.Null_Object;
       end if;
+      Obj := From.Get_Load_Object;
       Impl := Post_Impl (Obj.all)'Access;
       if Name = "id" then
          return ADO.Objects.To_Object (Impl.Get_Key);
