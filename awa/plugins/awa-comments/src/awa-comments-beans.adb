@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-comments-beans -- Beans for the comments module
---  Copyright (C) 2014, 2015 Stephane Carrez
+--  Copyright (C) 2014, 2015, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,10 +46,7 @@ package body AWA.Comments.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      if Name = "message" then
-         From.Set_Message (Util.Beans.Objects.To_String (Value));
-
-      elsif Name = "entity_type" then
+      if Name = "entity_type" then
          From.Entity_Type := Util.Beans.Objects.To_Unbounded_String (Value);
 
       elsif Name = "entity_id" then
@@ -66,18 +63,14 @@ package body AWA.Comments.Beans is
       elsif Name = "permission" then
          From.Permission := Util.Beans.Objects.To_Unbounded_String (Value);
 
-      elsif Name = "status" then
-         From.Set_Status (AWA.Comments.Models.Status_Type_Objects.To_Value (Value));
-
-      elsif Name = "format" then
-         From.Set_Format (AWA.Comments.Models.Format_Type_Objects.To_Value (Value));
-
       elsif Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
          declare
             Id  : constant ADO.Identifier := ADO.Utils.To_Identifier (Value);
          begin
             From.Module.Load_Comment (From, Id);
          end;
+      else
+         AWA.Comments.Models.Comment_Bean (From).Set_Value (Name, Value);
       end if;
    end Set_Value;
 
