@@ -25,7 +25,7 @@ CREATE TABLE awa_vote (
   `entity_id` BIGINT NOT NULL,
   /*  */
   `user_id` BIGINT NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`, `entity_id`, `user_id`)
 );
 INSERT INTO entity_type (name) VALUES
 ("awa_rating")
