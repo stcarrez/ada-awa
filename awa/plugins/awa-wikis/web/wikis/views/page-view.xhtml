@@ -1,0 +1,84 @@
+<!-- View an existing wiki page content
+  -  Copyright (C) 2015, 2016 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<div xmlns:h="http://java.sun.com/jsf/html"
+     xmlns:awa="http://code.google.com/p/ada-awa/jsf"
+     xmlns:f="http://java.sun.com/jsf/core"
+     class='wiki-page-container'>
+    <h:panelGroup rendered="#{not empty wikiView.left_side}">
+        <div class="grid_2">
+            <awa:wiki styleClass='wiki-text'
+                      value="#{wikiView.left_side}"
+                      plugins="#{wikiView.plugins}"
+                      links="#{wikiView.links}"
+                      format="#{wikiView.side_format}"/>
+        </div>
+    </h:panelGroup>
+    <div class="#{not empty wikiView.left_side ? (not empty wikiView.right_side ? 'grid_8' : 'grid_10') : 'grid_12'}"
+         id="p_#{wikiView.id}">
+        <div class="#{wikiView.is_public ? 'wiki-title' : 'wiki-title-private'}">
+            <ul class="wiki-page-actions">
+                <h:panelGroup rendered="#{wikiView.acl_id gt 1}">
+                    <li>
+                        <a class='awa-button' href="#{contextPath}/wikis/edit/#{wikiView.wiki_id}/#{wikiView.name}">#{wikiMsg.wiki_page_edit_label}</a>
+                    </li>
+                </h:panelGroup>
+                <li>
+                    <a class='awa-button' href="#{contextPath}/wikis/info/#{wikiView.wiki_id}/#{wikiView.id}">#{wikiMsg.wiki_page_info_label}</a>
+                </li>
+                <li>
+                    <a class='awa-button' href="#{contextPath}/wikis/history/#{wikiView.wiki_id}/#{wikiView.id}">#{wikiMsg.wiki_page_history_label}</a>
+                </li>
+            </ul>
+            <h2>#{wikiView.title}</h2>
+            <div class="wiki-page-info">
+                <h:outputFormat value="#{wikiMsg.wiki_page_info}">
+                    <f:param value="#{wikiView.version}"/>
+                    <f:param value="#{wikiView.author}"/>
+                </h:outputFormat>
+            </div>
+        </div>
+        <awa:tagList value='#{wikiView.tags}' id='qtags' styleClass="wiki-tag-list tagedit-list"
+                     tagLink="#{contextPath}/wikis/tags/#{wikiView.wiki_id}/#{tagName}/recent"
+                     var="tagName"
+                     tagClass="tagedit-listelement tagedit-listelement-old"/>
+        <awa:wiki styleClass='wiki-text'
+                  value="#{wikiView.content}"
+                  toc="true"
+                  links="#{wikiView.links}"
+                  plugins="#{wikiView.plugins}"
+                  format="#{wikiView.format}"/>
+        <div class="wiki-page-footer">
+            <h:outputFormat styleClass="wiki-page-date" value="#{wikiMsg.wiki_page_info_date}">
+                <f:param value="#{wikiView.date}"/>
+                <f:converter converterId="smartDateConverter"/>
+            </h:outputFormat>
+            <h:outputFormat styleClass="wiki-page-read-count" value="#{wikiMsg.wiki_page_info_read_count}">
+                <f:param value="#{wikiView.counter.value}"/>
+            </h:outputFormat>
+            <awa:counter value="#{wikiView.counter}" hidden="true"/>
+        </div>
+    </div>
+    <h:panelGroup rendered="#{not empty wikiView.right_side}">
+        <div class="grid_2">
+            <awa:wiki styleClass='wiki-text'
+                      value="#{wikiView.right_side}"
+                      plugins="#{wikiView.plugins}"
+                      links="#{wikiView.links}"
+                      format="#{wikiView.side_format}"/>
+        </div>
+    </h:panelGroup>
+</div>
