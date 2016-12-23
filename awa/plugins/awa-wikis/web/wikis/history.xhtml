@@ -1,5 +1,5 @@
 <!-- List the wiki pages
-  -  Copyright (C) 2015 Stephane Carrez
+  -  Copyright (C) 2015, 2016 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,89 +35,8 @@
                 <ui:param name="wikiSpaceId" value="#{wikiVersionList.wiki_id}"/>
                 <ui:param name="page_link" value="/grid"/>
             </ui:include>
-            <div class='wiki-page-container'>
-                <h:panelGroup rendered="#{not empty wikiView.left_side}">
-                    <div class="grid_2">
-                        <awa:wiki styleClass='wiki-text'
-                                  value="#{wikiView.left_side}"
-                                  plugins="#{wikiView.plugins}"
-                                  links="#{wikiView.links}"
-                                  format="#{wikiView.side_format}"/>
-                    </div>
-                </h:panelGroup>
-                <div class="#{not empty wikiView.left_side ? (not empty wikiView.right_side ? 'grid_8' : 'grid_10') : 'grid_12'}" id="p_#{wikiView.id}">
-                    <div class='wiki-title'>
-                        <ul class="wiki-page-actions">
-                            <h:panelGroup rendered="#{wikiView.acl_id gt 1}">
-                                <li>
-                                    <a class='awa-button' href="#{contextPath}/wikis/edit/#{wikiView.wiki_id}/#{wikiView.name}">#{wikiMsg.wiki_page_edit_label}</a>
-                                </li>
-                            </h:panelGroup>
-                            <li>
-                                <a class='awa-button' href="#{contextPath}/wikis/info/#{wikiView.wiki_id}/#{wikiView.id}">#{wikiMsg.wiki_page_info_label}</a>
-                            </li>
-                            <li>
-                                <a class='awa-button' href="#{contextPath}/wikis/view/#{wikiView.wiki_id}/#{wikiView.name}">#{wikiMsg.wiki_page_view_label}</a>
-                            </li>
-                        </ul>
-                        <h2>#{wikiView.title}</h2>
-                        <div class="wiki-page-info">
-                            <h:outputFormat value="#{wikiMsg.wiki_page_info}">
-                                <f:param value="#{wikiView.version}"/>
-                                <f:param value="#{wikiView.author}"/>
-                            </h:outputFormat>
-                        </div>
-                    </div>
-                    <div class='wiki-admin awa-list-header' id="wiki-page-list-header">
-                        <div class="awa-list-item-header">
-                            <div class='awa-header-col wiki-page-version'>
-                                #{wikiMsg.wiki_history_version_label}
-                            </div>
-                            <div class='awa-header-col wiki-page-date'>
-                                #{wikiMsg.wiki_history_date_label}
-                            </div>
-                            <div class='awa-header-col wiki-page-author'>
-                                #{wikiMsg.wiki_history_author_label}
-                            </div>
-                            <div class='awa-header-col wiki-page-title'>
-                                #{wikiMsg.wiki_history_comment_label}
-                            </div>
-                        </div>
-                    </div>
-                    <div id='wiki-page-list' class='awa-list'>
-                        <ui:include src="lists/version-list.xhtml"/>
-                    </div>
-                    <div id='wiki-page-action' class='asf-list-action'>
-                        <a href="#" class='asf-icon asf-delete' title='#{wikiMsg.wiki_page_delete_action_tooltip}'></a>
-                    </div>
-                    <div class="wiki-page-footer">
-                        <h:outputFormat styleClass="wiki-page-date" value="#{wikiMsg.wiki_page_info_date}">
-                            <f:param value="#{wikiView.date}"/>
-                            <f:converter converterId="smartDateConverter"/>
-                        </h:outputFormat>
-                        <h:outputFormat styleClass="wiki-page-read-count" value="#{wikiMsg.wiki_page_info_read_count}">
-                            <f:param value="#{wikiView.counter.value}"/>
-                        </h:outputFormat>
-                    </div>
-                </div>
-                <h:panelGroup rendered="#{not empty wikiView.right_side}">
-                    <div class="grid_2">
-                        <awa:wiki styleClass='wiki-text'
-                                  value="#{wikiView.right_side}"
-                                  plugins="#{wikiView.plugins}"
-                                  links="#{wikiView.links}"
-                                  format="#{wikiView.side_format}"/>
-                    </div>
-                </h:panelGroup>
-            </div>
+            <ui:include src="views/page-history.xhtml"/>
         </div>
-        <util:script>
-            $('#wiki-page-list').list({
-                actionId: '#wiki-page-action',
-                itemPrefix: 'p_',
-                deleteUrl: '#{contextPath}/wikis/admin/forms/page-delete.html?page_id='
-            });
-        </util:script>
     </ui:define>
 </ui:composition>
 
