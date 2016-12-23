@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-votes-modules -- Module votes
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2013, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,6 @@ with AWA.Modules.Get;
 with AWA.Votes.Beans;
 with AWA.Permissions;
 with AWA.Services.Contexts;
-with AWA.Users.Models;
 with AWA.Votes.Models;
 
 with ADO.SQL;
@@ -82,7 +81,7 @@ package body AWA.Votes.Modules is
       pragma Unreferenced (Model);
 
       Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      User   : constant AWA.Users.Models.User_Ref := Ctx.Get_User;
+      User   : constant ADO.Identifier := Ctx.Get_User_Identifier;
       DB     : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Kind   : ADO.Entity_Type;
       Rating : AWA.Votes.Models.Rating_Ref;
@@ -96,7 +95,7 @@ package body AWA.Votes.Modules is
                              Entity     => Id);
 
       Log.Info ("User {0} votes for {1} rating {2}",
-                ADO.Identifier'Image (User.Get_Id), Ident,
+                ADO.Identifier'Image (User), Ident,
                 Integer'Image (Value));
 
       Ctx.Start;
@@ -108,7 +107,7 @@ package body AWA.Votes.Modules is
                         & "and o.user_id = :user_id");
       Query.Bind_Param ("id", Id);
       Query.Bind_Param ("type", Kind);
-      Query.Bind_Param ("user_id", User.Get_Id);
+      Query.Bind_Param ("user_id", User);
       Vote.Find (DB, Query, Found);
       if not Found then
          Query.Clear;
@@ -133,7 +132,7 @@ package body AWA.Votes.Modules is
          end if;
          Rating.Save (DB);
 
-         Vote.Set_User (User);
+         Vote.Set_User_Id (User);
          Vote.Set_Entity (Rating);
       else
          Rating := AWA.Votes.Models.Rating_Ref (Vote.Get_Entity);
