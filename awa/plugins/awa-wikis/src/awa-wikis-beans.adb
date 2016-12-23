@@ -469,6 +469,7 @@ package body AWA.Wikis.Beans is
       Object.Links_Bean := Object.Links'Access;
       Object.Plugins_Bean := Object.Plugins'Access;
       Object.Id := ADO.NO_IDENTIFIER;
+      Object.Wiki_Space_Id := ADO.NO_IDENTIFIER;
       return Object.all'Access;
    end Create_Wiki_View_Bean;
 
