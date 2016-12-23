@@ -571,12 +571,13 @@ package body AWA.Questions.Models is
    overriding
    function Get_Value (From : in Question_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
-      Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
+      Obj  : ADO.Objects.Object_Record_Access;
       Impl : access Question_Impl;
    begin
-      if Obj = null then
+      if From.Is_Null then
          return Util.Beans.Objects.Null_Object;
       end if;
+      Obj := From.Get_Load_Object;
       Impl := Question_Impl (Obj.all)'Access;
       if Name = "create_date" then
          return Util.Beans.Objects.Time.To_Object (Impl.Create_Date);
@@ -1067,12 +1068,13 @@ package body AWA.Questions.Models is
    overriding
    function Get_Value (From : in Answer_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
-      Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
+      Obj  : ADO.Objects.Object_Record_Access;
       Impl : access Answer_Impl;
    begin
-      if Obj = null then
+      if From.Is_Null then
          return Util.Beans.Objects.Null_Object;
       end if;
+      Obj := From.Get_Load_Object;
       Impl := Answer_Impl (Obj.all)'Access;
       if Name = "create_date" then
          return Util.Beans.Objects.Time.To_Object (Impl.Create_Date);
