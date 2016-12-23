@@ -177,12 +177,54 @@ package AWA.Wikis.Beans is
    function Find (Factory : in Wiki_Template_Bean;
                   Name    : in String) return Wiki.Plugins.Wiki_Plugin_Access;
 
+   type Wiki_Space_Bean is new AWA.Wikis.Models.Wiki_Space_Bean with record
+      Module    : Modules.Wiki_Module_Access := null;
+
+      --  List of tags associated with the question.
+      Tags      : aliased AWA.Tags.Beans.Tag_List_Bean;
+      Tags_Bean : Util.Beans.Basic.Readonly_Bean_Access;
+   end record;
+   type Wiki_Space_Bean_Access is access all Wiki_Space_Bean'Class;
+
+   --  Get the value identified by the name.
+   overriding
+   function Get_Value (From : in Wiki_Space_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the value identified by the name.
+   overriding
+   procedure Set_Value (From  : in out Wiki_Space_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   --  Create or save the wiki space.
+   overriding
+   procedure Save (Bean    : in out Wiki_Space_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Load the wiki space information.
+   overriding
+   procedure Load (Bean    : in out Wiki_Space_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Delete the wiki space.
+   procedure Delete (Bean    : in out Wiki_Space_Bean;
+                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Create the Wiki_Space_Bean bean instance.
+   function Create_Wiki_Space_Bean (Module : in AWA.Wikis.Modules.Wiki_Module_Access)
+                                  return Util.Beans.Basic.Readonly_Bean_Access;
+
+   function Get_Wiki_Space_Bean is
+     new ASF.Helpers.Beans.Get_Bean (Element_Type   => Wiki_Space_Bean,
+                                     Element_Access => Wiki_Space_Bean_Access);
+
    type Wiki_View_Bean is new AWA.Wikis.Models.Wiki_View_Info with record
       --  The wiki module instance.
       Module        : Modules.Wiki_Module_Access := null;
 
       --  The wiki space identifier.
-      Wiki_Space_Id : ADO.Identifier;
+      Wiki_Space    : Wiki_Space_Bean_Access;
 
       --  List of tags associated with the wiki page.
       Tags          : aliased AWA.Tags.Beans.Tag_List_Bean;
@@ -238,48 +280,6 @@ package AWA.Wikis.Beans is
    function Create_Format_List_Bean (Module : in AWA.Wikis.Modules.Wiki_Module_Access)
                                      return Util.Beans.Basic.Readonly_Bean_Access;
 
-   type Wiki_Space_Bean is new AWA.Wikis.Models.Wiki_Space_Bean with record
-      Module    : Modules.Wiki_Module_Access := null;
-
-      --  List of tags associated with the question.
-      Tags      : aliased AWA.Tags.Beans.Tag_List_Bean;
-      Tags_Bean : Util.Beans.Basic.Readonly_Bean_Access;
-   end record;
-   type Wiki_Space_Bean_Access is access all Wiki_Space_Bean'Class;
-
-   --  Get the value identified by the name.
-   overriding
-   function Get_Value (From : in Wiki_Space_Bean;
-                       Name : in String) return Util.Beans.Objects.Object;
-
-   --  Set the value identified by the name.
-   overriding
-   procedure Set_Value (From  : in out Wiki_Space_Bean;
-                        Name  : in String;
-                        Value : in Util.Beans.Objects.Object);
-
-   --  Create or save the wiki space.
-   overriding
-   procedure Save (Bean    : in out Wiki_Space_Bean;
-                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
-
-   --  Load the wiki space information.
-   overriding
-   procedure Load (Bean    : in out Wiki_Space_Bean;
-                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
-
-   --  Delete the wiki space.
-   procedure Delete (Bean    : in out Wiki_Space_Bean;
-                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
-
-   --  Create the Wiki_Space_Bean bean instance.
-   function Create_Wiki_Space_Bean (Module : in AWA.Wikis.Modules.Wiki_Module_Access)
-                                  return Util.Beans.Basic.Readonly_Bean_Access;
-
-   function Get_Wiki_Space_Bean is
-     new ASF.Helpers.Beans.Get_Bean (Element_Type   => Wiki_Space_Bean,
-                                     Element_Access => Wiki_Space_Bean_Access);
-
    --  ------------------------------
    --  Wiki Page Bean
    --  ------------------------------
@@ -298,7 +298,7 @@ package AWA.Wikis.Beans is
       New_Content : Ada.Strings.Unbounded.Unbounded_String;
       New_Comment : Ada.Strings.Unbounded.Unbounded_String;
 
-      Wiki_Space  : Wiki_Space_Bean;
+      Wiki_Space  : Wiki_Space_Bean_Access;
 
       --  List of tags associated with the wiki page.
       Tags        : aliased AWA.Tags.Beans.Tag_List_Bean;
