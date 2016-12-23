@@ -362,12 +362,13 @@ package body AWA.Counters.Models is
    overriding
    function Get_Value (From : in Counter_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
-      Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
+      Obj  : ADO.Objects.Object_Record_Access;
       Impl : access Counter_Impl;
    begin
-      if Obj = null then
+      if From.Is_Null then
          return Util.Beans.Objects.Null_Object;
       end if;
+      Obj := From.Get_Load_Object;
       Impl := Counter_Impl (Obj.all)'Access;
       if Name = "object_id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Object_Id));
@@ -713,12 +714,13 @@ package body AWA.Counters.Models is
    overriding
    function Get_Value (From : in Counter_Definition_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
-      Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
+      Obj  : ADO.Objects.Object_Record_Access;
       Impl : access Counter_Definition_Impl;
    begin
-      if Obj = null then
+      if From.Is_Null then
          return Util.Beans.Objects.Null_Object;
       end if;
+      Obj := From.Get_Load_Object;
       Impl := Counter_Definition_Impl (Obj.all)'Access;
       if Name = "name" then
          return Util.Beans.Objects.To_Object (Impl.Name);
@@ -1105,12 +1107,13 @@ package body AWA.Counters.Models is
    overriding
    function Get_Value (From : in Visit_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
-      Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
+      Obj  : ADO.Objects.Object_Record_Access;
       Impl : access Visit_Impl;
    begin
-      if Obj = null then
+      if From.Is_Null then
          return Util.Beans.Objects.Null_Object;
       end if;
+      Obj := From.Get_Load_Object;
       Impl := Visit_Impl (Obj.all)'Access;
       if Name = "object_id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Object_Id));
