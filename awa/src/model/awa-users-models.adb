@@ -421,12 +421,13 @@ package body AWA.Users.Models is
    overriding
    function Get_Value (From : in Email_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
-      Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
+      Obj  : ADO.Objects.Object_Record_Access;
       Impl : access Email_Impl;
    begin
-      if Obj = null then
+      if From.Is_Null then
          return Util.Beans.Objects.Null_Object;
       end if;
+      Obj := From.Get_Load_Object;
       Impl := Email_Impl (Obj.all)'Access;
       if Name = "email" then
          return Util.Beans.Objects.To_Object (Impl.Email);
@@ -985,12 +986,13 @@ package body AWA.Users.Models is
    overriding
    function Get_Value (From : in User_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
-      Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
+      Obj  : ADO.Objects.Object_Record_Access;
       Impl : access User_Impl;
    begin
-      if Obj = null then
+      if From.Is_Null then
          return Util.Beans.Objects.Null_Object;
       end if;
+      Obj := From.Get_Load_Object;
       Impl := User_Impl (Obj.all)'Access;
       if Name = "first_name" then
          return Util.Beans.Objects.To_Object (Impl.First_Name);
@@ -1394,12 +1396,13 @@ package body AWA.Users.Models is
    overriding
    function Get_Value (From : in Access_Key_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
-      Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
+      Obj  : ADO.Objects.Object_Record_Access;
       Impl : access Access_Key_Impl;
    begin
-      if Obj = null then
+      if From.Is_Null then
          return Util.Beans.Objects.Null_Object;
       end if;
+      Obj := From.Get_Load_Object;
       Impl := Access_Key_Impl (Obj.all)'Access;
       if Name = "access_key" then
          return Util.Beans.Objects.To_Object (Impl.Access_Key);
@@ -1896,12 +1899,13 @@ package body AWA.Users.Models is
    overriding
    function Get_Value (From : in Session_Ref;
                        Name : in String) return Util.Beans.Objects.Object is
-      Obj  : constant ADO.Objects.Object_Record_Access := From.Get_Load_Object;
+      Obj  : ADO.Objects.Object_Record_Access;
       Impl : access Session_Impl;
    begin
-      if Obj = null then
+      if From.Is_Null then
          return Util.Beans.Objects.Null_Object;
       end if;
+      Obj := From.Get_Load_Object;
       Impl := Session_Impl (Obj.all)'Access;
       if Name = "start_date" then
          return Util.Beans.Objects.Time.To_Object (Impl.Start_Date);
