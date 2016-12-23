@@ -330,7 +330,7 @@ package body AWA.Wikis.Beans is
             return Util.Beans.Objects.To_Object (False);
          end if;
       elsif Name = "wiki_id" then
-         return ADO.Utils.To_Object (From.Wiki_Space_Id);
+         return ADO.Utils.To_Object (From.Wiki_Space.Get_Id);
       elsif Name = "tags" then
          return Util.Beans.Objects.To_Object (From.Tags_Bean, Util.Beans.Objects.STATIC);
       elsif Name = "links" then
@@ -351,7 +351,7 @@ package body AWA.Wikis.Beans is
                           Id   : in ADO.Identifier) is
       S : constant Wide_Wide_String := ADO.Identifier'Wide_Wide_Image (Id);
    begin
-      Into.Wiki_Space_Id := Id;
+      Into.Wiki_Space.Set_Id (Id);
       Into.Plugins.Wiki_Space_Id := Id;
       Into.Links.Wiki_Space_Id := Id;
       Into.Links.Page_Prefix  := Into.Module.Get_Page_Prefix;
@@ -412,7 +412,7 @@ package body AWA.Wikis.Beans is
       Session : ADO.Sessions.Session := Bean.Module.Get_Session;
       Query   : ADO.Queries.Context;
    begin
-      Query.Bind_Param ("wiki_id", Bean.Wiki_Space_Id);
+      Query.Bind_Param ("wiki_id", Bean.Wiki_Space.Get_Id);
       if Bean.Id /= ADO.NO_IDENTIFIER then
          Query.Bind_Param ("id", Bean.Id);
          Query.Set_Query (AWA.Wikis.Models.Query_Wiki_Page_Id);
@@ -469,7 +469,8 @@ package body AWA.Wikis.Beans is
       Object.Links_Bean := Object.Links'Access;
       Object.Plugins_Bean := Object.Plugins'Access;
       Object.Id := ADO.NO_IDENTIFIER;
-      Object.Wiki_Space_Id := ADO.NO_IDENTIFIER;
+      Object.Wiki_Space := Get_Wiki_Space_Bean ("adminWikiSpace");
+      --  Object.Wiki_Space_Id := ADO.NO_IDENTIFIER;
       return Object.all'Access;
    end Create_Wiki_View_Bean;
 
@@ -689,7 +690,7 @@ package body AWA.Wikis.Beans is
          Bean.Content.Set_Content (Bean.New_Content);
          Bean.Content.Set_Save_Comment (Bean.New_Comment);
          Bean.Content.Set_Format (Bean.Format);
-         Bean.Module.Create_Wiki_Page (Bean.Wiki_Space, Bean, Bean.Content);
+         Bean.Module.Create_Wiki_Page (Bean.Wiki_Space.all, Bean, Bean.Content);
 
       elsif not Bean.Has_New_Content then
          Bean.Module.Save (Bean);
@@ -735,7 +736,7 @@ package body AWA.Wikis.Beans is
    procedure Setup (Bean    : in out Wiki_Page_Bean;
                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
    begin
-      Bean.Module.Load_Wiki_Space (Bean.Wiki_Space, Bean.Wiki_Space.Get_Id);
+      Bean.Module.Load_Wiki_Space (Bean.Wiki_Space.all, Bean.Wiki_Space.Get_Id);
       Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("loaded");
 
    exception
@@ -765,6 +766,7 @@ package body AWA.Wikis.Beans is
       Object.Tags_Bean := Object.Tags'Access;
       Object.Tags.Set_Entity_Type (AWA.Wikis.Models.WIKI_PAGE_TABLE);
       Object.Tags.Set_Permission ("wiki-page-update");
+      Object.Wiki_Space := Get_Wiki_Space_Bean ("adminWikiSpace");
       return Object.all'Access;
    end Create_Wiki_Page_Bean;
 
