@@ -355,6 +355,9 @@ package AWA.Wikis.Beans is
       Pages      : aliased AWA.Wikis.Models.Wiki_Page_Info_List_Bean;
       Tags       : AWA.Tags.Beans.Entity_Tag_Map;
       Pages_Bean : AWA.Wikis.Models.Wiki_Page_Info_List_Bean_Access;
+
+      --  The wiki space identifier.
+      Wiki_Space : Wiki_Space_Bean_Access;
    end record;
    type Wiki_List_Bean_Access is access all Wiki_List_Bean'Class;
 
