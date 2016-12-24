@@ -872,6 +872,7 @@ package body AWA.Wikis.Beans is
       if Into.Wiki_Id = ADO.NO_IDENTIFIER then
          return;
       end if;
+      Into.Wiki_Space.Set_Id (Into.Wiki_Id);
       if Tag'Length > 0 then
          AWA.Tags.Modules.Find_Tag_Id (Session, Tag, Tag_Id);
          if Tag_Id = ADO.NO_IDENTIFIER then
@@ -947,6 +948,7 @@ package body AWA.Wikis.Beans is
       Object.Page       := 1;
       Object.Count      := 0;
       Object.Wiki_Id    := ADO.NO_IDENTIFIER;
+      Object.Wiki_Space := Get_Wiki_Space_Bean ("adminWikiSpace");
       return Object.all'Access;
    end Create_Wiki_List_Bean;
 
@@ -1011,6 +1013,7 @@ package body AWA.Wikis.Beans is
       if Outcome /= "loaded" then
          return;
       end if;
+      Page.Wiki_Space.Set_Id (Into.Wiki_Id);
 
       --  Get the list of versions associated with the wiki page.
       Query.Set_Query (AWA.Wikis.Models.Query_Wiki_Version_List);
