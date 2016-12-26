@@ -15,6 +15,7 @@ include rules.mk
 
 DYNAMO_ARGS=--package AWA.Users.Models \
   --package AWA.Events.Models \
+  --package AWA.OAuth.Models \
   --package AWA.Permissions.Models \
   db uml/awa.zargo
 
