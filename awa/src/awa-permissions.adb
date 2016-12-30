@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions -- Permissions module
---  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -76,16 +76,6 @@ package body AWA.Permissions is
       end if;
       Check (Permission, ADO.Objects.Get_Value (Entity.Get_Key));
    end Check;
-
-   type Controller_Config is record
-      Name     : Util.Beans.Objects.Object;
-      SQL      : Util.Beans.Objects.Object;
-      Entity   : ADO.Entity_Type := 0;
-      Entities : Entity_Type_Array := (others => ADO.NO_ENTITY_TYPE);
-      Count    : Natural := 0;
-      Manager  : Entity_Policy_Access;
-      Session  : ADO.Sessions.Session;
-   end record;
 
    type Config_Fields is (FIELD_NAME, FIELD_ENTITY_TYPE, FIELD_ENTITY_PERMISSION, FIELD_SQL);
 
@@ -190,7 +180,7 @@ package body AWA.Permissions is
    overriding
    procedure Prepare_Config (Policy : in out Entity_Policy;
                              Reader : in out Util.Serialize.IO.XML.Parser) is
-      Config : constant Controller_Config_Access := new Controller_Config;
+      Config : constant Controller_Config_Access := Policy.Config'Unchecked_Access;
    begin
       Reader.Add_Mapping ("policy-rules", Mapper'Access);
       Reader.Add_Mapping ("module", Mapper'Access);

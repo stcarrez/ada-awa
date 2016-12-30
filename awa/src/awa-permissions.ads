@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions -- Permissions module
---  Copyright (C) 2011, 2012, 2013, 2014, 2015 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,9 +20,11 @@ with Security.Permissions;
 with Security.Policies;
 
 with Util.Serialize.IO.XML;
+private with Util.Beans.Objects;
 
 with ADO;
 with ADO.Objects;
+private with ADO.Sessions;
 
 --  == Introduction ==
 --  The *AWA.Permissions* framework defines and controls the permissions used by an application
@@ -129,8 +131,22 @@ private
       Entity : ADO.Identifier;
    end record;
 
-   type Entity_Policy is new Security.Policies.Policy with null record;
+   type Entity_Policy;
    type Entity_Policy_Access is access all Entity_Policy'Class;
+
+   type Controller_Config is record
+      Name     : Util.Beans.Objects.Object;
+      SQL      : Util.Beans.Objects.Object;
+      Entity   : ADO.Entity_Type := 0;
+      Entities : Entity_Type_Array := (others => ADO.NO_ENTITY_TYPE);
+      Count    : Natural := 0;
+      Manager  : Entity_Policy_Access;
+      Session  : ADO.Sessions.Session;
+   end record;
+
+   type Entity_Policy is new Security.Policies.Policy with record
+      Config : aliased Controller_Config;
+   end record;
 
    --  Get the policy name.
    overriding
