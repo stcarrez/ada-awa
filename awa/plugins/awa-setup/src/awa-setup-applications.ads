@@ -39,17 +39,19 @@ package AWA.Setup.Applications is
 
    type Application is new ASF.Applications.Main.Application and Util.Beans.Basic.Bean
      and Util.Beans.Methods.Method_Bean with record
-      Faces    : aliased ASF.Servlets.Faces.Faces_Servlet;
-      Files    : aliased ASF.Servlets.Files.File_Servlet;
-      Redirect : aliased Redirect_Servlet;
-      Config   : ASF.Applications.Config;
-      Changed  : ASF.Applications.Config;
-      Factory  : ASF.Applications.Main.Application_Factory;
-      Path     : Ada.Strings.Unbounded.Unbounded_String;
-      Database : ADO.Drivers.Connections.Configuration;
-      Driver   : Util.Beans.Objects.Object;
-      Result   : Util.Beans.Objects.Object;
-      Done     : Boolean := False;
+      Faces       : aliased ASF.Servlets.Faces.Faces_Servlet;
+      Files       : aliased ASF.Servlets.Files.File_Servlet;
+      Redirect    : aliased Redirect_Servlet;
+      Config      : ASF.Applications.Config;
+      Changed     : ASF.Applications.Config;
+      Factory     : ASF.Applications.Main.Application_Factory;
+      Path        : Ada.Strings.Unbounded.Unbounded_String;
+      Database    : ADO.Drivers.Connections.Configuration;
+      Driver      : Util.Beans.Objects.Object;
+      Result      : Util.Beans.Objects.Object;
+      Root_User   : Util.Beans.Objects.Object;
+      Root_Passwd : Util.Beans.Objects.Object;
+      Done        : Boolean := False;
       pragma Atomic (Done);
       pragma Volatile (Done);
    end record;
@@ -65,6 +67,9 @@ package AWA.Setup.Applications is
 
    --  Get the database connection string to be used by the application.
    function Get_Database_URL (From : in Application) return String;
+
+   --  Get the command to configure the database.
+   function Get_Configure_Command (From : in Application) return String;
 
    --  Configure the database.
    procedure Configure_Database (From    : in out Application;
