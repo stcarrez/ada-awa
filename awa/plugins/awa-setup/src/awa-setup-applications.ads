@@ -47,6 +47,8 @@ package AWA.Setup.Applications is
       Factory  : ASF.Applications.Main.Application_Factory;
       Path     : Ada.Strings.Unbounded.Unbounded_String;
       Database : ADO.Drivers.Connections.Configuration;
+      Driver   : Util.Beans.Objects.Object;
+      Result   : Util.Beans.Objects.Object;
       Done     : Boolean := False;
       pragma Atomic (Done);
       pragma Volatile (Done);
