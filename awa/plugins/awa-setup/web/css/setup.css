@@ -47,3 +47,14 @@ h2 {
 .awa-buttons li.previous {
     float: left;
 }
+.setup-description {
+    margin: 1em;
+}
+#callback input {
+    float: left;
+    width: 75%;
+}
+#callback-fixed {
+    float: left;
+    width: 20%;
+}

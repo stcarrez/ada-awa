@@ -23,12 +23,32 @@
             #{setupMsg.setup_oauth_message}
         </h2>
         <div>
+            <p class="setup-description">
+                The OAuth configuration form allows you to configure the Google+ and Facebook authentication.
+                If you want to use this authentication method you must have created an
+                application in
+                <a href="https://console.developers.google.com/" target="google-plus">
+                    GoogleAPIs Console
+                </a>
+                or
+                <a href="https://developers.facebook.com/" target="facebook">
+                    Facebook for developpers
+                </a>
+                .
+            </p>
 
+            <p class="setup-description">
+                You will register there a callback URL that Google+ and Facebook will
+                use to return back to the application after authentication is finished.
+                Google+ and Facebook impose that it is a public URL with a valid
+                hostname that you own (IP addresses are refused).
+            </p>
             <w:inputText id='callback' title="#{setupMsg.setup_callback_url}"
                          styleClass="awa-required ui-corner-all"
-                         size='80'
-                         value="#{setup.callback_url}"/>
-
+                         size='80' required="false"
+                         value="#{setup.callback_url}">
+                <span id="callback-fixed">#{contextPath}/auth/verify</span>
+            </w:inputText>
         </div>
         <h2>
             #{setupMsg.setup_facebook_auth_title}

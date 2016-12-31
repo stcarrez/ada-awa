@@ -23,9 +23,17 @@
             #{setupMsg.setup_finish_message}
         </h2>
 
+        <div>
+            <p class="setup-description">
+                Congratulations, the #{setup.app_name} application is now configured.
+            </p>
+            <p class="setup-description">
+                You can re-enter in the setup by stopping the server and starting it again.
+            </p>
+        </div>
         <ul class='awa-buttons'>
             <li>
-                <h:commandButton id='wiki-page-delete-button' value='#{setupMsg.setup_finish_button}'
+                <h:commandButton id='setup-finish-button' value='#{setupMsg.setup_finish_button}'
                                  styleClass="ui-button ui-state-default ui-corner-all"
                                  action="#{setup.finish}" title="#{setupMsg.setup_finish_tooltip}"/>
             </li>
