@@ -19,7 +19,10 @@ with Ada.Text_IO;
 with Ada.IO_Exceptions;
 with Ada.Directories;
 with Util.Files;
+with Util.Processes;
 with Util.Log.Loggers;
+with Util.Streams.Pipes;
+with Util.Streams.Buffered;
 with Util.Strings;
 with ASF.Events.Faces.Actions;
 with ASF.Applications.Main.Configs;
@@ -74,7 +77,7 @@ package body AWA.Setup.Applications is
       elsif Name = "database_password" then
          return Util.Beans.Objects.To_Object (From.Database.Get_Property ("password"));
       elsif Name = "database_driver" then
-         return Util.Beans.Objects.To_Object (String '("sqlite"));
+         return From.Driver; --  Util.Beans.Objects.To_Object (From.Database.Get_Driver);
       end if;
       if From.Changed.Exists (Name) then
          return Util.Beans.Objects.To_Object (String '(From.Changed.Get (Name)));
@@ -107,6 +110,8 @@ package body AWA.Setup.Applications is
          From.Database.Set_Property ("user", Util.Beans.Objects.To_String (Value));
       elsif Name = "database_password" then
          From.Database.Set_Property ("password", Util.Beans.Objects.To_String (Value));
+      elsif Name = "database_driver" then
+         From.Driver := Value;
       elsif Name = "callback_url" then
          From.Changed.Set (Name, Util.Beans.Objects.To_String (Value));
          From.Changed.Set ("facebook.callback_url",
@@ -125,12 +130,20 @@ package body AWA.Setup.Applications is
       use Ada.Strings.Unbounded;
 
       Result : Ada.Strings.Unbounded.Unbounded_String;
+      Driver : constant String := Util.Beans.Objects.To_String (From.Driver);
    begin
-      Append (Result, "mysql://");
-      Append (Result, From.Database.Get_Server);
-      if From.Database.Get_Port /= 0 then
-         Append (Result, ":");
-         Append (Result, Util.Strings.Image (From.Database.Get_Port));
+      if Driver = "" then
+         Append (Result, "mysql");
+      else
+         Append (Result, Driver);
+      end if;
+      Append (Result, "://");
+      if Driver /= "sqlite" then
+         Append (Result, From.Database.Get_Server);
+         if From.Database.Get_Port /= 0 then
+            Append (Result, ":");
+            Append (Result, Util.Strings.Image (From.Database.Get_Port));
+         end if;
       end if;
       Append (Result, "/");
       Append (Result, From.Database.Get_Database);
@@ -142,15 +155,28 @@ package body AWA.Setup.Applications is
             Append (Result, From.Database.Get_Property ("password"));
          end if;
       end if;
+      if Driver = "sqlite" then
+         Append (Result, "synchronous=OFF&encoding=UTF-8");
+      end if;
       return To_String (Result);
    end Get_Database_URL;
 
    --  Configure the database.
    procedure Configure_Database (From    : in out Application;
                                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      Database : constant String := From.Get_Database_URL;
+      Command  : constant String := "dynamo create-database db '" & Database & "'";
+      Pipe     : aliased Util.Streams.Pipes.Pipe_Stream;
+      Buffer   : Util.Streams.Buffered.Buffered_Stream;
+      Content  : Ada.Strings.Unbounded.Unbounded_String;
    begin
-      Log.Info ("Configure database");
-      --  dynamo create-database db sqlite:///atlas.db
+      Log.Info ("Configure database with {0}", Command);
+
+      Pipe.Open (Command, Util.Processes.READ);
+      Buffer.Initialize (null, Pipe'Unchecked_Access, 64*1024);
+      Buffer.Read (Content);
+      Pipe.Close;
+      From.Result := Util.Beans.Objects.To_Object (Content);
    end Configure_Database;
 
    --  ------------------------------
@@ -254,13 +280,14 @@ package body AWA.Setup.Applications is
 
       declare
          URL : constant String := App.Config.Get ("google-plus.callback_url", "");
-         Pos : Natural := Util.Strings.Index (URL, '#');
+         Pos : constant Natural := Util.Strings.Index (URL, '#');
       begin
          if Pos > 0 then
             App.Changed.Set ("callback_url", URL (URL'First .. Pos - 1));
          end if;
       end;
       App.Database.Set_Connection (App.Config.Get ("database", "mysql://localhost:3306/db"));
+      App.Driver := Util.Beans.Objects.To_Object (App.Database.Get_Driver);
       Server.Register_Application (App.Config.Get ("contextPath"), App'Unchecked_Access);
       while not App.Done loop
          delay 5.0;
