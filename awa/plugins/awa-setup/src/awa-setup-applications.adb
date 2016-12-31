@@ -78,6 +78,12 @@ package body AWA.Setup.Applications is
          return Util.Beans.Objects.To_Object (From.Database.Get_Property ("password"));
       elsif Name = "database_driver" then
          return From.Driver; --  Util.Beans.Objects.To_Object (From.Database.Get_Driver);
+      elsif Name = "database_root_user" then
+         return From.Root_User;
+      elsif Name = "database_root_password" then
+         return From.Root_Passwd;
+      elsif Name = "result" then
+         return From.Result;
       end if;
       if From.Changed.Exists (Name) then
          return Util.Beans.Objects.To_Object (String '(From.Changed.Get (Name)));
@@ -112,6 +118,10 @@ package body AWA.Setup.Applications is
          From.Database.Set_Property ("password", Util.Beans.Objects.To_String (Value));
       elsif Name = "database_driver" then
          From.Driver := Value;
+      elsif Name = "database_root_user" then
+         From.Root_User := Value;
+      elsif Name = "database_root_password" then
+         From.Root_Passwd := Value;
       elsif Name = "callback_url" then
          From.Changed.Set (Name, Util.Beans.Objects.To_String (Value));
          From.Changed.Set ("facebook.callback_url",
@@ -161,14 +171,34 @@ package body AWA.Setup.Applications is
       return To_String (Result);
    end Get_Database_URL;
 
-   --  Configure the database.
-   procedure Configure_Database (From    : in out Application;
-                                 Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   --  ------------------------------
+   --  Get the command to configure the database.
+   --  ------------------------------
+   function Get_Configure_Command (From : in Application) return String is
+      Driver   : constant String := Util.Beans.Objects.To_String (From.Driver);
       Database : constant String := From.Get_Database_URL;
       Command  : constant String := "dynamo create-database db '" & Database & "'";
+      Root     : constant String := Util.Beans.Objects.To_String (From.Root_User);
+      Passwd   : constant String := Util.Beans.Objects.To_String (From.Root_Passwd);
+   begin
+      if Root = "" then
+         return Command;
+      elsif Passwd = "" then
+         return Command & " " & Root;
+      else
+         return Command & " " & Root & " " & Passwd;
+      end if;
+   end Get_Configure_Command;
+
+   --  ------------------------------
+   --  Configure the database.
+   --  ------------------------------
+   procedure Configure_Database (From    : in out Application;
+                                 Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       Pipe     : aliased Util.Streams.Pipes.Pipe_Stream;
       Buffer   : Util.Streams.Buffered.Buffered_Stream;
       Content  : Ada.Strings.Unbounded.Unbounded_String;
+      Command  : constant String := From.Get_Configure_Command;
    begin
       Log.Info ("Configure database with {0}", Command);
 
