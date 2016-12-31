@@ -22,59 +22,101 @@
         #{setupMsg.setup_database_title}
     </h2>
     <h:form id='setup-database'>
+        <h2>Database driver</h2>
+        <div class="awa-required">
+            <w:chosen id="database-driver" value="#{setup.database_driver}">
+                <f:selectItem itemValue="mysql" itemLabel="MySQL"/>
+                <f:selectItem itemValue="sqlite" itemLabel="SQLite"/>
+                <f:facet name="options">width: "60%", disable_search: true</f:facet>
+                <f:facet name="events">.bind("change", function() {
+                    var db = $(this).val();
+                    if (db == "mysql") {
+                        $("sqlite-db").hide();
+                        $("#mysql-db").show();
+                    } else {
+                        $("#mysql-db").hide();
+                        $("#sqlite-db").show();
+                    }
+                })
+                </f:facet>
+            </w:chosen>
+        </div>
         <h2>
             #{setupMsg.setup_database_server_message}
         </h2>
-        <div>
-            <w:inputText id='server' title="#{setupMsg.setup_database_server}"
-                         styleClass="awa-required ui-corner-all"
-                         size='80' placeholder="#{setupMsg.setup_database_server_placeholder}"
-                         value="#{setup.database_server}"/>
+        <div id="mysql-db">
+            <div>
+                <w:inputText id='server' title="#{setupMsg.setup_database_server}"
+                             styleClass="awa-required ui-corner-all"
+                             size='80' placeholder="#{setupMsg.setup_database_server_placeholder}"
+                             value="#{setup.database_server}"/>
 
-            <w:inputText id='server' title="#{setupMsg.setup_database_port}"
-                         styleClass="awa-required ui-corner-all"
-                         size='80' placeholder="#{setupMsg.setup_database_port_placeholder}"
-                         value="#{setup.database_port}"/>
+                <w:inputText id='server' title="#{setupMsg.setup_database_port}"
+                             styleClass="awa-required ui-corner-all"
+                             size='80' placeholder="#{setupMsg.setup_database_port_placeholder}"
+                             value="#{setup.database_port}"/>
+            </div>
+            <h2>
+                #{setupMsg.setup_database_admin_message}
+            </h2>
+            <div>
+                <w:inputText id='name' title="#{setupMsg.setup_database_root_user}"
+                             styleClass="awa-required ui-corner-all" required="false"
+                             size='80' placeholder="#{setupMsg.setup_database_root_user_placeholder}"
+                             value="#{setup.database_root_user}"/>
+
+                <w:inputText id='root_password' title="#{setupMsg.setup_database_root_password}"
+                             styleClass="awa-required ui-corner-all" required="false"
+                             size='80' placeholder="#{setupMsg.setup_database_root_password_placeholder}"
+                             value="#{setup.database_root_password}"/>
+            </div>
+            <h2>
+                #{setupMsg.setup_database_message}
+            </h2>
+            <div>
+                <w:inputText id='database' title="#{setupMsg.setup_database_name}"
+                             styleClass="awa-required ui-corner-all"
+                             size='80' placeholder="#{setupMsg.setup_database_name_placeholder}"
+                             value="#{setup.database_name}"/>
+
+                <w:inputText id='user' title="#{setupMsg.setup_database_user}"
+                             styleClass="awa-required ui-corner-all"
+                             size='80' placeholder="#{setupMsg.setup_database_user_placeholder}"
+                             value="#{setup.database_user}"/>
+
+                <w:inputText id='password' title="#{setupMsg.setup_database_password}"
+                             styleClass="awa-required ui-corner-all"
+                             size='80' placeholder="#{setupMsg.setup_database_password_placeholder}"
+                             value="#{setup.database_password}"/>
+            </div>
         </div>
-        <h2>
-            #{setupMsg.setup_database_admin_message}
-        </h2>
-        <div>
-            <w:inputText id='name' title="#{setupMsg.setup_database_root_user}"
-                         styleClass="awa-required ui-corner-all" required="false"
-                         size='80' placeholder="#{setupMsg.setup_database_root_user_placeholder}"
-                         value="#{setup.database_root_user}"/>
+        <div id="sqlite-db">
+              <h2>
+                 #{setupMsg.setup_database_message}
+             </h2>
+             <div>
+                 <w:inputText id='database' title="#{setupMsg.setup_database_name}"
+                              styleClass="awa-required ui-corner-all"
+                              size='80' placeholder="#{setupMsg.setup_database_name_placeholder}"
+                              value="#{setup.database_name}"/>
 
-            <w:inputText id='root_password' title="#{setupMsg.setup_database_root_password}"
-                         styleClass="awa-required ui-corner-all" required="false"
-                         size='80' placeholder="#{setupMsg.setup_database_root_password_placeholder}"
-                         value="#{setup.database_root_password}"/>
-        </div>
-        <h2>
-            #{setupMsg.setup_database_message}
-        </h2>
-        <div>
-            <w:inputText id='database' title="#{setupMsg.setup_database_name}"
-                         styleClass="awa-required ui-corner-all"
-                         size='80' placeholder="#{setupMsg.setup_database_name_placeholder}"
-                         value="#{setup.database_name}"/>
+                 <w:inputText id='user' title="#{setupMsg.setup_database_user}"
+                              styleClass="awa-required ui-corner-all"
+                              size='80' placeholder="#{setupMsg.setup_database_user_placeholder}"
+                              value="#{setup.database_user}"/>
 
-            <w:inputText id='user' title="#{setupMsg.setup_database_user}"
-                         styleClass="awa-required ui-corner-all"
-                         size='80' placeholder="#{setupMsg.setup_database_user_placeholder}"
-                         value="#{setup.database_user}"/>
-
-            <w:inputText id='password' title="#{setupMsg.setup_database_password}"
-                         styleClass="awa-required ui-corner-all"
-                         size='80' placeholder="#{setupMsg.setup_database_password_placeholder}"
-                         value="#{setup.database_password}"/>
-
-        </div>
+                 <w:inputText id='password' title="#{setupMsg.setup_database_password}"
+                              styleClass="awa-required ui-corner-all"
+                              size='80' placeholder="#{setupMsg.setup_database_password_placeholder}"
+                              value="#{setup.database_password}"/>
+             </div>
+         </div>
         <ul class='awa-buttons'>
             <li>
                 <h:commandButton id='wiki-page-delete-button' value='#{setupMsg.setup_database_configure}'
                                  styleClass="ui-button ui-state-default ui-corner-all"
-                                 action="#{setup.configure_database}" title="#{wikiMsg.setup_database_configure_tooltip}"/>
+                                 action="#{setup.configure_database}"
+                                 title="#{setupMsg.setup_database_configure_tooltip}"/>
             </li>
         </ul>
     </h:form>
