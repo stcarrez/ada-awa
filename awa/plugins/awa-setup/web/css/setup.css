@@ -17,6 +17,7 @@ h2 {
 .setup-container div {
     float: left;
     clear: both;
+    width: 100%;
 }
 #setup-steps {
     list-style-type: none;
