@@ -139,8 +139,9 @@ package body AWA.Setup.Applications is
    function Get_Database_URL (From : in Application) return String is
       use Ada.Strings.Unbounded;
 
-      Result : Ada.Strings.Unbounded.Unbounded_String;
-      Driver : constant String := Util.Beans.Objects.To_String (From.Driver);
+      Result   : Ada.Strings.Unbounded.Unbounded_String;
+      Driver   : constant String := Util.Beans.Objects.To_String (From.Driver);
+      User     : constant String := From.Database.Get_Property ("user");
    begin
       if Driver = "" then
          Append (Result, "mysql");
@@ -157,15 +158,20 @@ package body AWA.Setup.Applications is
       end if;
       Append (Result, "/");
       Append (Result, From.Database.Get_Database);
-      if From.Database.Get_Property ("user") /= "" then
+      if User /= "" then
          Append (Result, "?user=");
-         Append (Result, From.Database.Get_Property ("user"));
+         Append (Result, User);
          if From.Database.Get_Property ("password") /= "" then
             Append (Result, "&password=");
             Append (Result, From.Database.Get_Property ("password"));
          end if;
       end if;
       if Driver = "sqlite" then
+         if User /= "" then
+            Append (Result, "&");
+         else
+            Append (Result, "?");
+         end if;
          Append (Result, "synchronous=OFF&encoding=UTF-8");
       end if;
       return To_String (Result);
@@ -314,6 +320,8 @@ package body AWA.Setup.Applications is
       begin
          if Pos > 0 then
             App.Changed.Set ("callback_url", URL (URL'First .. Pos - 1));
+         else
+            App.Changed.Set ("callback_url", "http://mydomain.com/oauth");
          end if;
       end;
       App.Database.Set_Connection (App.Config.Get ("database", "mysql://localhost:3306/db"));
