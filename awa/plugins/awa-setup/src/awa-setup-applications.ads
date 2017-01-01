@@ -51,6 +51,9 @@ package AWA.Setup.Applications is
       Result      : Util.Beans.Objects.Object;
       Root_User   : Util.Beans.Objects.Object;
       Root_Passwd : Util.Beans.Objects.Object;
+      Db_Host     : Util.Beans.Objects.Object;
+      Db_Port     : Util.Beans.Objects.Object;
+      Has_Error   : Boolean := False;
       Done        : Boolean := False;
       pragma Atomic (Done);
       pragma Volatile (Done);
@@ -74,6 +77,9 @@ package AWA.Setup.Applications is
    --  Configure the database.
    procedure Configure_Database (From    : in out Application;
                                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Validate the database configuration parameters.
+   procedure Validate (From : in out Application);
 
    --  Save the configuration.
    procedure Save (From    : in out Application;
