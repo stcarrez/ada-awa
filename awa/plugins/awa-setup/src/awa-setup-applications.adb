@@ -25,9 +25,13 @@ with Util.Streams.Pipes;
 with Util.Streams.Buffered;
 with Util.Strings;
 with ASF.Events.Faces.Actions;
+with ASF.Contexts.Faces;
 with ASF.Applications.Main.Configs;
+with ASF.Applications.Messages.Factory;
 with AWA.Applications;
 package body AWA.Setup.Applications is
+
+   use ASF.Applications;
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Setup.Applications");
 
@@ -69,15 +73,15 @@ package body AWA.Setup.Applications is
       if Name = "database_name" then
          return Util.Beans.Objects.To_Object (From.Database.Get_Database);
       elsif Name = "database_server" then
-         return Util.Beans.Objects.To_Object (From.Database.Get_Server);
+         return From.Db_Host;
       elsif Name = "database_port" then
-         return Util.Beans.Objects.To_Object (From.Database.Get_Port);
+         return From.Db_Port;
       elsif Name = "database_user" then
          return Util.Beans.Objects.To_Object (From.Database.Get_Property ("user"));
       elsif Name = "database_password" then
          return Util.Beans.Objects.To_Object (From.Database.Get_Property ("password"));
       elsif Name = "database_driver" then
-         return From.Driver; --  Util.Beans.Objects.To_Object (From.Database.Get_Driver);
+         return From.Driver;
       elsif Name = "database_root_user" then
          return From.Root_User;
       elsif Name = "database_root_password" then
@@ -109,9 +113,9 @@ package body AWA.Setup.Applications is
       if Name = "database_name" then
          From.Database.Set_Database (Util.Beans.Objects.To_String (Value));
       elsif Name = "database_server" then
-         From.Database.Set_Server (Util.Beans.Objects.To_String (Value));
+         From.Db_Host := Value;
       elsif Name = "database_port" then
-         From.Database.Set_Port (Util.Beans.Objects.To_Integer (Value));
+         From.Db_Port := Value;
       elsif Name = "database_user" then
          From.Database.Set_Property ("user", Util.Beans.Objects.To_String (Value));
       elsif Name = "database_password" then
@@ -197,22 +201,66 @@ package body AWA.Setup.Applications is
    end Get_Configure_Command;
 
    --  ------------------------------
+   --  Validate the database configuration parameters.
+   --  ------------------------------
+   procedure Validate (From : in out Application) is
+      Driver   : constant String := Util.Beans.Objects.To_String (From.Driver);
+   begin
+      From.Has_Error := False;
+      if Driver = "sqlite" then
+         return;
+      end if;
+      begin
+         From.Database.Set_Port (Util.Beans.Objects.To_Integer (From.Db_Port));
+
+      exception
+         when others =>
+            From.Has_Error := True;
+            Messages.Factory.Add_Field_Message ("db-port", "setup.setup_database_port_error",
+                                                Messages.ERROR);
+
+      end;
+      begin
+         From.Database.Set_Server (Util.Beans.Objects.To_String (From.Db_Host));
+
+      exception
+         when others =>
+            From.Has_Error := True;
+            Messages.Factory.Add_Field_Message ("db-server", "setup.setup_database_host_error",
+                                                Messages.ERROR);
+
+      end;
+   end Validate;
+
+   --  ------------------------------
    --  Configure the database.
    --  ------------------------------
    procedure Configure_Database (From    : in out Application;
                                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
-      Pipe     : aliased Util.Streams.Pipes.Pipe_Stream;
-      Buffer   : Util.Streams.Buffered.Buffered_Stream;
-      Content  : Ada.Strings.Unbounded.Unbounded_String;
-      Command  : constant String := From.Get_Configure_Command;
    begin
-      Log.Info ("Configure database with {0}", Command);
+      From.Validate;
+      if From.Has_Error then
+         Ada.Strings.Unbounded.Set_Unbounded_String (Outcome, "failure");
+         return;
+      end if;
+      declare
+         Pipe     : aliased Util.Streams.Pipes.Pipe_Stream;
+         Buffer   : Util.Streams.Buffered.Buffered_Stream;
+         Content  : Ada.Strings.Unbounded.Unbounded_String;
+         Command  : constant String := From.Get_Configure_Command;
+      begin
+         Log.Info ("Configure database with {0}", Command);
 
-      Pipe.Open (Command, Util.Processes.READ);
-      Buffer.Initialize (null, Pipe'Unchecked_Access, 64*1024);
-      Buffer.Read (Content);
-      Pipe.Close;
-      From.Result := Util.Beans.Objects.To_Object (Content);
+         Pipe.Open (Command, Util.Processes.READ);
+         Buffer.Initialize (null, Pipe'Unchecked_Access, 64*1024);
+         Buffer.Read (Content);
+         Pipe.Close;
+         From.Result := Util.Beans.Objects.To_Object (Content);
+         From.Has_Error := Pipe.Get_Exit_Status /= 0;
+         if From.Has_Error then
+            Messages.Factory.Add_Message ("setup.database_setup_error", Messages.ERROR);
+         end if;
+      end;
    end Configure_Database;
 
    --  ------------------------------
@@ -326,6 +374,13 @@ package body AWA.Setup.Applications is
       end;
       App.Database.Set_Connection (App.Config.Get ("database", "mysql://localhost:3306/db"));
       App.Driver := Util.Beans.Objects.To_Object (App.Database.Get_Driver);
+      if App.Database.Get_Driver = "mysql" then
+         App.Db_Host := Util.Beans.Objects.To_Object (App.Database.Get_Server);
+         App.Db_Port := Util.Beans.Objects.To_Object (App.Database.Get_Port);
+      else
+         App.Db_Host := Util.Beans.Objects.To_Object (String '("localhost"));
+         App.Db_Port := Util.Beans.Objects.To_Object (Integer (3306));
+      end if;
       Server.Register_Application (App.Config.Get ("contextPath"), App'Unchecked_Access);
       while not App.Done loop
          delay 5.0;
