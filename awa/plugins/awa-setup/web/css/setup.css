@@ -58,3 +58,11 @@ h2 {
     float: left;
     width: 20%;
 }
+.setup-result {
+    float: left;
+    width: 80%;
+    border: 1px solid #ccc;
+    background: #eee;
+    margin: 0.5em;
+    padding: 1%;
+}
