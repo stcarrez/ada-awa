@@ -118,4 +118,17 @@ package AWA.Setup.Applications is
                     Config : in String;
                     Server : in out ASF.Server.Container'Class);
 
+   --  Configure the application by using the setup application, allowing the administrator to
+   --  setup the application database, define the application admin parameters.  After the
+   --  configuration is done, register the application in the server container and start it.
+   generic
+      type Application_Type (<>) is new ASF.Servlets.Servlet_Registry with private;
+      type Application_Access is access all Application_Type'Class;
+      with procedure Initialize (App    : in Application_Access;
+                                 Config : in ASF.Applications.Config);
+   procedure Configure (Server : in out ASF.Server.Container'Class;
+                        App    : in Application_Access;
+                        Config : in String;
+                        URI    : in String);
+
 end AWA.Setup.Applications;
