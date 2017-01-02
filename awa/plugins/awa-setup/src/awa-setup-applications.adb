@@ -39,6 +39,10 @@ package body AWA.Setup.Applications is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Application,
                                                       Method => Save,
                                                       Name   => "save");
+   package Start_Binding is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Application,
+                                                      Method => Start,
+                                                      Name   => "start");
 
    package Finish_Binding is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Application,
@@ -52,6 +56,7 @@ package body AWA.Setup.Applications is
 
    Binding_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
      := (Save_Binding.Proxy'Access,
+         Start_Binding.Proxy'Access,
          Finish_Binding.Proxy'Access,
          Configure_Binding.Proxy'Access);
 
@@ -67,7 +72,7 @@ package body AWA.Setup.Applications is
       --  ------------------------------
       --  Wait until the server application is initialized and ready.
       --  ------------------------------
-      entry Wait_Ready when Value /= READY is
+      entry Wait_Ready when Value = READY is
       begin
          null;
       end Wait_Ready;
@@ -339,13 +344,24 @@ package body AWA.Setup.Applications is
    end Save;
 
    --  ------------------------------
+   --  Finish the setup to start the application.
+   --  ------------------------------
+   procedure Start (From    : in out Application;
+                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
+   begin
+      Log.Info ("Waiting for application to be started");
+      From.Status.Wait_Ready;
+   end Start;
+
+   --  ------------------------------
    --  Finish the setup and exit the setup.
    --  ------------------------------
    procedure Finish (From    : in out Application;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
-      pragma Unreferenced (Outcome);
    begin
       Log.Info ("Finish configuration");
+      From.Save (Outcome);
       From.Status.Set (STARTING);
    end Finish;
 
