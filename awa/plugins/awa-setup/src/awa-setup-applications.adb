@@ -24,6 +24,7 @@ with Util.Log.Loggers;
 with Util.Streams.Pipes;
 with Util.Streams.Buffered;
 with Util.Strings;
+with Util.Properties;
 with ASF.Events.Faces.Actions;
 with ASF.Applications.Main.Configs;
 with ASF.Applications.Messages.Factory;
@@ -53,6 +54,33 @@ package body AWA.Setup.Applications is
      := (Save_Binding.Proxy'Access,
          Finish_Binding.Proxy'Access,
          Configure_Binding.Proxy'Access);
+
+   protected body State is
+      --  ------------------------------
+      --  Wait until the configuration is finished.
+      --  ------------------------------
+      entry Wait_Configuring when Value /= CONFIGURING is
+      begin
+         null;
+      end Wait_Configuring;
+
+      --  ------------------------------
+      --  Wait until the server application is initialized and ready.
+      --  ------------------------------
+      entry Wait_Ready when Value /= READY is
+      begin
+         null;
+      end Wait_Ready;
+
+      --  ------------------------------
+      --  Set the configuration state.
+      --  ------------------------------
+      procedure Set (V : in Configure_State) is
+      begin
+         Value := V;
+      end Set;
+
+   end State;
 
    overriding
    procedure Do_Get (Server   : in Redirect_Servlet;
@@ -318,7 +346,7 @@ package body AWA.Setup.Applications is
       pragma Unreferenced (Outcome);
    begin
       Log.Info ("Finish configuration");
-      From.Done := True;
+      From.Status.Set (STARTING);
    end Finish;
 
    --  ------------------------------
@@ -403,10 +431,8 @@ package body AWA.Setup.Applications is
          App.Db_Port := Util.Beans.Objects.To_Object (Integer (3306));
       end if;
       Server.Register_Application (App.Config.Get ("contextPath"), App'Unchecked_Access);
-      while not App.Done loop
-         delay 5.0;
-      end loop;
-      Server.Remove_Application (App'Unchecked_Access);
+      App.Status.Wait_Configuring;
+      Log.Info ("Application setup is now finished");
    end Setup;
 
 end AWA.Setup.Applications;
