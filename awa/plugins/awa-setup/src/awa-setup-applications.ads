@@ -37,6 +37,27 @@ package AWA.Setup.Applications is
                      Request  : in out ASF.Requests.Request'Class;
                      Response : in out ASF.Responses.Response'Class);
 
+   --  The configuration state starts in the <tt>CONFIGURING</tt> state and moves to the
+   --  <tt>STARTING</tt> state after the application is configured and it is started.
+   --  Once the application is initialized and registered in the server container, the
+   --  state is changed to <tt>READY</tt>.
+   type Configure_State is (CONFIGURING, STARTING, READY);
+
+   --  Maintains the state of the configuration between the main task and the http configuration
+   --  requests.
+   protected type State is
+      --  Wait until the configuration is finished.
+      entry Wait_Configuring;
+
+      --  Wait until the server application is initialized and ready.
+      entry Wait_Ready;
+
+      --  Set the configuration state.
+      procedure Set (V : in Configure_State);
+   private
+      Value : Configure_State := CONFIGURING;
+   end State;
+
    type Application is new ASF.Applications.Main.Application and Util.Beans.Basic.Bean
      and Util.Beans.Methods.Method_Bean with record
       Faces       : aliased ASF.Servlets.Faces.Faces_Servlet;
@@ -54,9 +75,7 @@ package AWA.Setup.Applications is
       Db_Host     : Util.Beans.Objects.Object;
       Db_Port     : Util.Beans.Objects.Object;
       Has_Error   : Boolean := False;
-      Done        : Boolean := False;
-      pragma Atomic (Done);
-      pragma Volatile (Done);
+      Status      : State;
    end record;
 
    --  Get the value identified by the name.
