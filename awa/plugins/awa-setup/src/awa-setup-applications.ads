@@ -104,7 +104,11 @@ package AWA.Setup.Applications is
    procedure Save (From    : in out Application;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
-   --  Finish the setup and exit the setup.
+   --  Finish the setup to start the application.
+   procedure Start (From    : in out Application;
+                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Finish the setup and wait for the application to be started.
    procedure Finish (From    : in out Application;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
