@@ -18,12 +18,12 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:w="http://code.google.com/p/ada-asf/widget"
         xmlns:h="http://java.sun.com/jsf/html">
-    <h:form id='setup-finish'>
+    <h:form id='setup-finish-form'>
         <h2>
             #{setupMsg.setup_finish_message}
         </h2>
 
-        <div>
+        <div id="setup-finish">
             <p class="setup-description">
                 Congratulations, the #{setup.app_name} application is now configured.
             </p>
@@ -31,8 +31,11 @@
                 You can re-enter in the setup by stopping the server and starting it again.
             </p>
         </div>
+        <div id="setup-starting" style="display: none;">
+            Starting the #{setup.app_name} application...
+        </div>
         <ul class='awa-buttons'>
-            <li>
+            <li class="finish">
                 <h:commandButton id='setup-finish-button' value='#{setupMsg.setup_finish_button}'
                                  styleClass="ui-button ui-state-default ui-corner-all"
                                  action="#{setup.finish}" title="#{setupMsg.setup_finish_tooltip}"/>

@@ -47,6 +47,10 @@ h2 {
 .awa-buttons li.previous {
     float: left;
 }
+.awa-buttons li.finish {
+    float: left;
+    margin-left: 5em;
+}
 .setup-description {
     margin: 1em;
 }
