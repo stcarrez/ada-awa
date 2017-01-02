@@ -29,7 +29,7 @@ begin
       Client.Creds  := AWS.SMTP.Authentication.Plain.Initialize (User, Passwd);
       Client.Server := AWS.SMTP.Client.Initialize (Server_Name => Server,
                                                    Port        => Client.Port,
-                                                   Credential  => Client.Creds'Access);
+                                                   Credential  => Client.Creds'Unchecked_Access);
    else
       Client.Server := AWS.SMTP.Client.Initialize (Server_Name => Server,
                                                    Port        => Client.Port);
