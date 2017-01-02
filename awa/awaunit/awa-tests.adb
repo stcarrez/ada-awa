@@ -99,6 +99,7 @@ package body AWA.Tests is
          Application.Close;
          Free (Application);
       end if;
+      ASF.Tests.Finish (Status);
    end Finish;
 
    --  ------------------------------
