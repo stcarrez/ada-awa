@@ -435,4 +435,40 @@ package body AWA.Setup.Applications is
       Log.Info ("Application setup is now finished");
    end Setup;
 
+   --  ------------------------------
+   --  Configure the application by using the setup application, allowing the administrator to
+   --  setup the application database, define the application admin parameters.  After the
+   --  configuration is done, register the application in the server container and start it.
+   --  ------------------------------
+   procedure Configure (Server : in out ASF.Server.Container'Class;
+                        App    : in Application_Access;
+                        Config : in String;
+                        URI    : in String) is
+      S : aliased Application;
+      C : ASF.Applications.Config;
+   begin
+      --  Do the application setup.
+      S.Setup (Config, Server);
+
+      --  Load the application configuration file that was configured during the setup process.
+      begin
+         C.Load_Properties (Config);
+         Util.Log.Loggers.Initialize (Util.Properties.Manager (C));
+
+      exception
+         when Ada.IO_Exceptions.Name_Error =>
+            Log.Error ("Cannot read application configuration file {0}", Config);
+      end;
+
+      --  Initialize the application and register it.
+      Log.Info ("Initializing application {0}", URI);
+      Initialize (App, C);
+      Server.Register_Application (URI, App.all'Access);
+      S.Status.Set (READY);
+      delay 2.0;
+
+      --  Now we can remove the setup application.
+      Server.Remove_Application (S'Unchecked_Access);
+   end Configure;
+
 end AWA.Setup.Applications;
