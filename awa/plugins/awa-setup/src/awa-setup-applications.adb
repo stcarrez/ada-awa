@@ -25,7 +25,6 @@ with Util.Streams.Pipes;
 with Util.Streams.Buffered;
 with Util.Strings;
 with ASF.Events.Faces.Actions;
-with ASF.Contexts.Faces;
 with ASF.Applications.Main.Configs;
 with ASF.Applications.Messages.Factory;
 with AWA.Applications;
@@ -59,6 +58,8 @@ package body AWA.Setup.Applications is
    procedure Do_Get (Server   : in Redirect_Servlet;
                      Request  : in out ASF.Requests.Request'Class;
                      Response : in out ASF.Responses.Response'Class) is
+      pragma Unreferenced (Server);
+
       Context_Path : constant String := Request.Get_Context_Path;
    begin
       Response.Send_Redirect (Context_Path & "/setup/install.html");
@@ -185,7 +186,6 @@ package body AWA.Setup.Applications is
    --  Get the command to configure the database.
    --  ------------------------------
    function Get_Configure_Command (From : in Application) return String is
-      Driver   : constant String := Util.Beans.Objects.To_String (From.Driver);
       Database : constant String := From.Get_Database_URL;
       Command  : constant String := "dynamo create-database db '" & Database & "'";
       Root     : constant String := Util.Beans.Objects.To_String (From.Root_User);
@@ -205,6 +205,7 @@ package body AWA.Setup.Applications is
    --  ------------------------------
    procedure Validate (From : in out Application) is
       Driver   : constant String := Util.Beans.Objects.To_String (From.Driver);
+      Server   : constant String := Util.Beans.Objects.To_String (From.Db_Host);
    begin
       From.Has_Error := False;
       if Driver = "sqlite" then
@@ -220,16 +221,12 @@ package body AWA.Setup.Applications is
                                                 Messages.ERROR);
 
       end;
-      begin
-         From.Database.Set_Server (Util.Beans.Objects.To_String (From.Db_Host));
-
-      exception
-         when others =>
-            From.Has_Error := True;
-            Messages.Factory.Add_Field_Message ("db-server", "setup.setup_database_host_error",
-                                                Messages.ERROR);
-
-      end;
+      if Server'Length = 0 then
+         From.Has_Error := True;
+         Messages.Factory.Add_Field_Message ("db-server", "setup.setup_database_host_error",
+                                             Messages.ERROR);
+      end if;
+      From.Database.Set_Server (Server);
    end Validate;
 
    --  ------------------------------
@@ -239,28 +236,29 @@ package body AWA.Setup.Applications is
                                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
    begin
       From.Validate;
+      if not From.Has_Error then
+         declare
+            Pipe     : aliased Util.Streams.Pipes.Pipe_Stream;
+            Buffer   : Util.Streams.Buffered.Buffered_Stream;
+            Content  : Ada.Strings.Unbounded.Unbounded_String;
+            Command  : constant String := From.Get_Configure_Command;
+         begin
+            Log.Info ("Configure database with {0}", Command);
+
+            Pipe.Open (Command, Util.Processes.READ);
+            Buffer.Initialize (null, Pipe'Unchecked_Access, 64 * 1024);
+            Buffer.Read (Content);
+            Pipe.Close;
+            From.Result := Util.Beans.Objects.To_Object (Content);
+            From.Has_Error := Pipe.Get_Exit_Status /= 0;
+            if From.Has_Error then
+               Messages.Factory.Add_Message ("setup.database_setup_error", Messages.ERROR);
+            end if;
+         end;
+      end if;
       if From.Has_Error then
          Ada.Strings.Unbounded.Set_Unbounded_String (Outcome, "failure");
-         return;
       end if;
-      declare
-         Pipe     : aliased Util.Streams.Pipes.Pipe_Stream;
-         Buffer   : Util.Streams.Buffered.Buffered_Stream;
-         Content  : Ada.Strings.Unbounded.Unbounded_String;
-         Command  : constant String := From.Get_Configure_Command;
-      begin
-         Log.Info ("Configure database with {0}", Command);
-
-         Pipe.Open (Command, Util.Processes.READ);
-         Buffer.Initialize (null, Pipe'Unchecked_Access, 64*1024);
-         Buffer.Read (Content);
-         Pipe.Close;
-         From.Result := Util.Beans.Objects.To_Object (Content);
-         From.Has_Error := Pipe.Get_Exit_Status /= 0;
-         if From.Has_Error then
-            Messages.Factory.Add_Message ("setup.database_setup_error", Messages.ERROR);
-         end if;
-      end;
    end Configure_Database;
 
    --  ------------------------------
@@ -268,6 +266,12 @@ package body AWA.Setup.Applications is
    --  ------------------------------
    procedure Save (From    : in out Application;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
+
+      procedure Save_Property (Name  : in Ada.Strings.Unbounded.Unbounded_String;
+                               Value : in Ada.Strings.Unbounded.Unbounded_String);
+      procedure Read_Property (Line : in String);
+
       Path     : constant String := Ada.Strings.Unbounded.To_String (From.Path);
       New_File : constant String := Path & ".tmp";
       Output   : Ada.Text_IO.File_Type;
@@ -306,9 +310,12 @@ package body AWA.Setup.Applications is
                               New_Name => Path);
    end Save;
 
+   --  ------------------------------
    --  Finish the setup and exit the setup.
+   --  ------------------------------
    procedure Finish (From    : in out Application;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
    begin
       Log.Info ("Finish configuration");
       From.Done := True;
@@ -320,6 +327,7 @@ package body AWA.Setup.Applications is
    overriding
    function Get_Method_Bindings (From : in Application)
                                  return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
    begin
       return Binding_Array'Access;
    end Get_Method_Bindings;
