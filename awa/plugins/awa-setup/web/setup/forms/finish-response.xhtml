@@ -20,7 +20,6 @@
 [
     { "action": "hide", "id": "#setup-finish" },
     { "action": "show", "id": "#setup-starting" },
-    { "action": "script", "script": "setTimeout(function(){ document.location = action.url;}, 5000);",
-      "url": "#{contextPath}/index.html" }
+    { "action": "get", "url": "#{contextPath}/setup/forms/finish-redirect.html" }
 ]
 </f:view>
