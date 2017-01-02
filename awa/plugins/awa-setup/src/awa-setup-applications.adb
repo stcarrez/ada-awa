@@ -271,24 +271,35 @@ package body AWA.Setup.Applications is
       Path     : constant String := Ada.Strings.Unbounded.To_String (From.Path);
       New_File : constant String := Path & ".tmp";
       Output   : Ada.Text_IO.File_Type;
+      Changed  : ASF.Applications.Config := From.Changed;
 
       procedure Read_Property (Line : in String) is
          Pos : constant Natural := Util.Strings.Index (Line, '=');
       begin
-         if Pos = 0 or else not From.Changed.Exists (Line (Line'First .. Pos - 1)) then
+         if Pos = 0 or else not Changed.Exists (Line (Line'First .. Pos - 1)) then
             Ada.Text_IO.Put_Line (Output, Line);
             return;
          end if;
          Ada.Text_IO.Put (Output, Line (Line'First .. Pos));
-         Ada.Text_IO.Put_Line (Output, From.Changed.Get (Line (Line'First .. Pos - 1)));
+         Ada.Text_IO.Put_Line (Output, Changed.Get (Line (Line'First .. Pos - 1)));
+         Changed.Remove (Line (Line'First .. Pos - 1));
       end Read_Property;
+
+      procedure Save_Property (Name  : in Ada.Strings.Unbounded.Unbounded_String;
+                               Value : in Ada.Strings.Unbounded.Unbounded_String) is
+      begin
+         Ada.Text_IO.Put (Output, Ada.Strings.Unbounded.To_String (Name));
+         Ada.Text_IO.Put (Output, "=");
+         Ada.Text_IO.Put_Line (Output, Ada.Strings.Unbounded.To_String (Value));
+      end Save_Property;
 
    begin
       Log.Info ("Saving configuration file {0}", Path);
 
-      From.Changed.Set ("database", From.Get_Database_URL);
+      Changed.Set ("database", From.Get_Database_URL);
       Ada.Text_IO.Create (File => Output, Name => New_File);
       Util.Files.Read_File (Path, Read_Property'Access);
+      Changed.Iterate (Save_Property'Access);
       Ada.Text_IO.Close (Output);
       Ada.Directories.Delete_File (Path);
       Ada.Directories.Rename (Old_Name => New_File,
@@ -349,6 +360,8 @@ package body AWA.Setup.Applications is
       App.Add_Mapping (Pattern => "*.css",
                        Name    => "files");
       App.Add_Mapping (Pattern => "*.js",
+                       Name    => "files");
+      App.Add_Mapping (Pattern => "*.png",
                        Name    => "files");
 
       declare
