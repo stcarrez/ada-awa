@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-setup -- Setup and installation
---  Copyright (C) 2016 Stephane Carrez
+--  Copyright (C) 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -53,6 +53,10 @@ package body AWA.Setup.Applications is
                                                       Method => Configure_Database,
                                                       Name   => "configure_database");
 
+   --  The application base URL.
+   package P_Base_URL is
+     new ASF.Applications.Main.Configs.Parameter ("app_base_url",
+                                                  "http://localhost:8080/#{contextPath}");
 
    Binding_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
      := (Save_Binding.Proxy'Access,
@@ -447,6 +451,7 @@ package body AWA.Setup.Applications is
          App.Db_Port := Util.Beans.Objects.To_Object (Integer (3306));
       end if;
       Server.Register_Application (App.Config.Get ("contextPath"), App'Unchecked_Access);
+      Log.Info ("Connect your browser to {0}/index.html", App.Get_Config (P_Base_URL.P));
       App.Status.Wait_Configuring;
       Log.Info ("Application setup is now finished");
    end Setup;
