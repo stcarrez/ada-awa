@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-queues-persistents -- AWA Event Queues
---  Copyright (C) 2012, 2013, 2014 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2014, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -132,6 +132,7 @@ package body AWA.Events.Queues.Persistents is
       procedure Dispatch_Message (Msg : in out Models.Message_Ref) is
          User    : constant AWA.Users.Models.User_Ref'Class := Msg.Get_User;
          Session : constant AWA.Users.Models.Session_Ref'Class := Msg.Get_Session;
+         Name    : constant String := Msg.Get_Message_Type.Get_Name;
          Event   : Module_Event;
 
          procedure Action;
@@ -144,17 +145,20 @@ package body AWA.Events.Queues.Persistents is
          procedure Run is new AWA.Services.Contexts.Run_As (Action);
 
       begin
-         Event.Set_Event_Kind (AWA.Events.Find_Event_Index (Msg.Get_Message_Type.Get_Name));
+         Event.Set_Event_Kind (AWA.Events.Find_Event_Index (Name));
          Util.Serialize.Tools.From_JSON (Msg.Get_Parameters, Event.Props);
          Event.Set_Entity_Identifier (Msg.Get_Entity_Id);
          Event.Entity_Type := Msg.Get_Entity_Type;
+
+         Log.Info ("Dispatching event 0} for user{1} session{2}", Name,
+                   ADO.Identifier'Image (User.Get_Id), ADO.Identifier'Image (Session.Get_Id));
 
          --  Run the Process action on behalf of the user associated with the message.
          Run (AWA.Users.Models.User_Ref (User), AWA.Users.Models.Session_Ref (Session));
 
       exception
          when E : others =>
-            Log.Error ("Exception when processing event", E, True);
+            Log.Error ("Exception when processing event " & Name, E, True);
 
       end Dispatch_Message;
 
