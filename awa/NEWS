@@ -1,4 +1,6 @@
 Version 1.1     -
+  - New setup plugin for AWA application setup
+  - Moved the samples to a separate project
   - New wiki plugin to write online wiki-based documentation
   - New flotcharts plugin to integraph jQuery Flot to display various graphs
   - Improvement of configure, build and installation with gprinstall when available
