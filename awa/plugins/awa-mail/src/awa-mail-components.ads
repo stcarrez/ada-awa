@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail-components -- Mail UI Components
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,6 +40,12 @@ with AWA.Mail.Clients;
 --  and initialized by rendering the inner components.  The body and other components can use
 --  other application UI components to render useful content.  The email is send after
 --  the <b>mail:message</b> has finished to render its inner children.
+--
+--  The <b>mail:subject</b> component describes the mail subject.
+--
+--  The <b>mail:to</b> component define the mail recipient.  There can be several recepients.
+--
+--  The <b>mail:body</b> component contains the mail body.
 package AWA.Mail.Components is
 
    type UIMailComponent is new ASF.Components.Core.UIComponentBase with private;

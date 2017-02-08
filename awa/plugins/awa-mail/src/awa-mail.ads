@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail -- Mail module
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+--  @include awa-mail-modules.ads
 package AWA.Mail is
 
 end AWA.Mail;
