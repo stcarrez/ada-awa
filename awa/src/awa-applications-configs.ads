@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-applications-configs -- Read application configuration files
---  Copyright (C) 2011, 2012, 2015 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2015, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,5 +37,12 @@ package AWA.Applications.Configs is
                                  File    : in String;
                                  Context : in EL.Contexts.Default.Default_Context_Access;
                                  Override_Context : in Boolean);
+
+   --  Get the configuration path for the application name.
+   --  The configuration path is search from:
+   --  o the current directory,
+   --  o the 'config' directory,
+   --  o the Dynamo installation directory in share/dynamo
+   function Get_Config_Path (Name : in String) return String;
 
 end AWA.Applications.Configs;
