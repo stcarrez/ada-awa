@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-applications-configs -- Read application configuration files
---  Copyright (C) 2011, 2012, 2015 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2015, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,11 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Ada.Command_Line;
+with Ada.Directories;
+with Ada.Strings.Unbounded;
 
+with Util.Files;
 with Util.Log.Loggers;
 
 with ASF.Contexts.Faces;
@@ -88,5 +92,28 @@ package body AWA.Applications.Configs is
          Log.Error ("Error while reading {0}", File);
          raise;
    end Read_Configuration;
+
+   --  ------------------------------
+   --  Get the configuration path for the application name.
+   --  The configuration path is search from:
+   --  o the current directory,
+   --  o the 'config' directory,
+   --  o the Dynamo installation directory in share/dynamo
+   --  ------------------------------
+   function Get_Config_Path (Name : in String) return String is
+      use Ada.Strings.Unbounded;
+      use Ada.Directories;
+
+      Command : constant String := Ada.Command_Line.Command_Name;
+      Path    : constant String := Ada.Directories.Containing_Directory (Command);
+      Dir     : constant String := Containing_Directory (Path);
+      Paths   : Ada.Strings.Unbounded.Unbounded_String;
+   begin
+      Append (Paths, ".;");
+      Append (Paths, Util.Files.Compose (Dir, "config"));
+      Append (Paths, ";");
+      Append (Paths, Util.Files.Compose (Dir, "share/dynamo/" & Name));
+      return Util.Files.Find_File_Path (Name & ".properties", To_String (Paths));
+   end Get_Config_Path;
 
 end AWA.Applications.Configs;
