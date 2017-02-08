@@ -29,6 +29,8 @@ with ASF.Events.Faces.Actions;
 with ASF.Applications.Main.Configs;
 with ASF.Applications.Messages.Factory;
 with AWA.Applications;
+with AWA.Applications.Configs;
+with AWA.Components.Factory;
 package body AWA.Setup.Applications is
 
    use ASF.Applications;
@@ -386,16 +388,17 @@ package body AWA.Setup.Applications is
    procedure Setup (App    : in out Application;
                     Config : in String;
                     Server : in out ASF.Server.Container'Class) is
+      Path : constant String := AWA.Applications.Configs.Get_Config_Path (Config);
    begin
-      Log.Info ("Entering configuration for {0}", Config);
-      App.Path := Ada.Strings.Unbounded.To_Unbounded_String (Config);
+      Log.Info ("Entering configuration for {0}", Path);
+      App.Path := Ada.Strings.Unbounded.To_Unbounded_String (Path);
       begin
-         App.Config.Load_Properties (Config);
-         Util.Log.Loggers.Initialize (Config);
+         App.Config.Load_Properties (Path);
+         Util.Log.Loggers.Initialize (Path);
 
       exception
          when Ada.IO_Exceptions.Name_Error =>
-            Log.Error ("Cannot read application configuration file: {0}", Config);
+            Log.Error ("Cannot read application configuration file: {0}", Path);
       end;
       App.Initialize (App.Config, App.Factory);
       App.Set_Error_Page (ASF.Responses.SC_NOT_FOUND, "/setup/install.html");
@@ -419,6 +422,7 @@ package body AWA.Setup.Applications is
                        Name    => "files");
       App.Add_Mapping (Pattern => "*.png",
                        Name    => "files");
+      App.Add_Components (AWA.Components.Factory.Definition);
 
       declare
          Paths : constant String := App.Get_Config (AWA.Applications.P_Module_Dir.P);
