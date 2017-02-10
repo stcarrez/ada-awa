@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-beans -- Beans for blog module
---  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,6 @@ with Util.Dates.ISO8601;
 with Util.Beans.Objects.Time;
 
 with AWA.Services.Contexts;
-with AWA.Helpers.Requests;
 with AWA.Helpers.Selectors;
 with AWA.Tags.Modules;
 with AWA.Comments.Beans;
@@ -41,8 +40,6 @@ package body AWA.Blogs.Beans is
    use Ada.Strings.Unbounded;
 
    package ASC renames AWA.Services.Contexts;
-
-   BLOG_ID_PARAMETER : constant String := "blog_id";
 
    --  Build the URI from the post title and the post date.
    function Get_Predefined_Uri (Title : in String;
@@ -93,18 +90,31 @@ package body AWA.Blogs.Beans is
    end Create;
 
    --  ------------------------------
+   --  Handle an event to create the blog entry automatically.
+   --  ------------------------------
+   overriding
+   procedure Create_Default (Bean    : in out Blog_Bean;
+                             Event   : in AWA.Events.Module_Event'Class) is
+      pragma Unreferenced (Event);
+
+      Result  : ADO.Identifier;
+      pragma Unreferenced (Result);
+   begin
+      Bean.Module.Create_Blog (Title        => Bean.Get_Name,
+                               Result       => Result);
+   end Create_Default;
+
+   --  ------------------------------
    --  Create the Blog_Bean bean instance.
    --  ------------------------------
    function Create_Blog_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                               return Util.Beans.Basic.Readonly_Bean_Access is
 
-      Blog_Id : constant ADO.Identifier := AWA.Helpers.Requests.Get_Parameter (BLOG_ID_PARAMETER);
       Object  : constant Blog_Bean_Access := new Blog_Bean;
-      Session : ADO.Sessions.Session := Module.Get_Session;
    begin
-      if Blog_Id /= ADO.NO_IDENTIFIER then
-         Object.Load (Session, Blog_Id);
-      end if;
+      --  if Blog_Id /= ADO.NO_IDENTIFIER then
+      --    Object.Load (Session, Blog_Id);
+      --  end if;
       Object.Module := Module;
       return Object.all'Access;
    end Create_Blog_Bean;
@@ -174,6 +184,19 @@ package body AWA.Blogs.Beans is
    begin
       Bean.Module.Delete_Post (Post_Id => Bean.Get_Id);
    end Delete;
+
+   procedure Create (Bean : in out Post_Bean;
+                     Req  : in out ASF.Rest.Request'Class;
+                     Reply : in out ASF.Rest.Response'Class) is
+   begin
+      null;
+   end Create;
+   procedure Update (Bean : in out Post_Bean;
+                     Req  : in out ASF.Rest.Request'Class;
+                     Reply : in out ASF.Rest.Response'Class) is
+   begin
+      null;
+   end Update;
 
    --  ------------------------------
    --  Sanitize the URI before doing a search in the database.
