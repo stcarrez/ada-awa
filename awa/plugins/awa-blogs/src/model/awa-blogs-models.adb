@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2016 Stephane Carrez
+--  Copyright (C) 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +23,7 @@
 with Ada.Unchecked_Deallocation;
 with Util.Beans.Objects.Time;
 with ASF.Events.Faces.Actions;
+with AWA.Events.Action_Method;
 package body AWA.Blogs.Models is
 
    use type ADO.Objects.Object_Record_Access;
@@ -1664,9 +1665,21 @@ package body AWA.Blogs.Models is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Blog_Bean,
                                                       Method => Op_Create,
                                                       Name   => "create");
+   procedure Op_Create_Default (Bean  : in out Blog_Bean;
+                                Event : in AWA.Events.Module_Event'Class);
+   procedure Op_Create_Default (Bean  : in out Blog_Bean;
+                                Event : in AWA.Events.Module_Event'Class) is
+   begin
+      Blog_Bean'Class (Bean).Create_Default (Event);
+   end Op_Create_Default;
+   package Binding_Blog_Bean_2 is
+     new AWA.Events.Action_Method.Bind (Bean   => Blog_Bean,
+                                        Method => Op_Create_Default,
+                                        Name   => "create_default");
 
    Binding_Blog_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
-     := (1 => Binding_Blog_Bean_1.Proxy'Access
+     := (1 => Binding_Blog_Bean_1.Proxy'Access,
+         2 => Binding_Blog_Bean_2.Proxy'Access
      );
 
    --  ------------------------------

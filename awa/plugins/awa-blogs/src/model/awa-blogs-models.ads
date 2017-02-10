@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2016 Stephane Carrez
+--  Copyright (C) 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,6 +35,7 @@ with Util.Beans.Objects;
 with Util.Beans.Objects.Enums;
 with Util.Beans.Basic.Lists;
 with AWA.Comments.Models;
+with AWA.Events;
 with AWA.Users.Models;
 with AWA.Workspaces.Models;
 with Util.Beans.Methods;
@@ -669,6 +670,9 @@ package AWA.Blogs.Models is
 
    procedure Create (Bean : in out Blog_Bean;
                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   procedure Create_Default (Bean  : in out Blog_Bean;
+                             Event : in AWA.Events.Module_Event'Class) is abstract;
 
    type Post_Bean is abstract new AWA.Blogs.Models.Post_Ref
      and Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with null record;
