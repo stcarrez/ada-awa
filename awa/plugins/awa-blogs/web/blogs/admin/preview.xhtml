@@ -1,5 +1,5 @@
 <!-- View an existing post
-  -  Copyright (C) 2011, 2013 Stephane Carrez
+  -  Copyright (C) 2011, 2013, 2017 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,7 @@
 <ui:composition template="/WEB-INF/layouts/layout.xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:awa="http://code.google.com/p/ada-awa/jsf"
+                xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:c="http://java.sun.com/jstl/core"
                 xmlns:u="http://code.google.com/p/ada-asf/util"
@@ -39,6 +40,11 @@
               <div id="post-stats" class="blog-post-graph"/>
               <div class='blog-post' id="p_#{post.id}">
                   <div class='post-title'>
+                      <ul class="awa-page-actions">
+                          <li>
+                              <a class='awa-button' href="#{contextPath}/blogs/admin/edit.html?blog_id=#{adminBlog.id}&amp;post_id=#{post.id}">#{wikiMsg.wiki_page_edit_label}</a>
+                          </li>
+                      </ul>
                       <h2><a href="#{contextPath}/blogs/post/#{post.uri}">#{post.title}</a></h2>
                       <p>By #{post.username} <h:outputText id="date" value="#{post.date}" converter="dateConverter"/></p>
                   </div>
@@ -47,6 +53,20 @@
                                var="tagName"
                                tagClass="tagedit-listelement tagedit-listelement-old"/>
                   <awa:wiki styleClass='post-text' value="#{post.text}" format="dotclear"/>
+                  <div class='post-comments' id="comments">
+                      <ajax:include styleClass="asf-container" async="true"
+                                    src="/blogs/forms/comment-add-form.html?id=#{post.id}"/>
+                      <h:panelGroup rendered="#{not empty postComments}">
+                          <h3>
+                              <h:outputFormat value="#{blogMsg.blog_comment_list}">
+                                  <f:param value="#{postComments.count}"/>
+                              </h:outputFormat>
+                          </h3>
+                          <ui:include src="/comments/lists/comment-list.xhtml">
+                              <ui:param name="commentList" value="#{postComments}"/>
+                          </ui:include>
+                      </h:panelGroup>
+                  </div>
               </div>
           </div>
       </div>
