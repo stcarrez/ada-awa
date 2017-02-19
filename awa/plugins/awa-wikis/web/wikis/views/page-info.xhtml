@@ -33,7 +33,7 @@
     </h:panelGroup>
     <div class="#{not empty wikiView.left_side ? (not empty wikiView.right_side ? 'grid_8' : 'grid_10') : 'grid_12'}"
          id="p_#{wikiView.id}">
-        <div class='wiki-title'>
+        <div class="#{wikiView.is_public ? 'wiki-title' : 'wiki-title-private'}">
             <ul class="wiki-page-actions">
                 <h:panelGroup rendered="#{wikiView.acl_id ge 1}">
                     <li>
