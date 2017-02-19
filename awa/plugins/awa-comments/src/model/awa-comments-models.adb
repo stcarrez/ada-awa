@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2016 Stephane Carrez
+--  Copyright (C) 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -570,6 +570,8 @@ package body AWA.Comments.Models is
          return AWA.Comments.Models.Format_Type_Objects.To_Object (From.Format);
       elsif Name = "comment" then
          return Util.Beans.Objects.To_Object (From.Comment);
+      elsif Name = "status" then
+         return AWA.Comments.Models.Status_Type_Objects.To_Object (From.Status);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -595,6 +597,8 @@ package body AWA.Comments.Models is
          Item.Format := AWA.Comments.Models.Format_Type_Objects.To_Value (Value);
       elsif Name = "comment" then
          Item.Comment := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "status" then
+         Item.Status := AWA.Comments.Models.Status_Type_Objects.To_Value (Value);
       end if;
    end Set_Value;
 
@@ -628,6 +632,7 @@ package body AWA.Comments.Models is
          Into.Date := Stmt.Get_Time (3);
          Into.Format := AWA.Comments.Models.Format_Type'Val (Stmt.Get_Integer (4));
          Into.Comment := Stmt.Get_Unbounded_String (5);
+         Into.Status := AWA.Comments.Models.Status_Type'Val (Stmt.Get_Integer (6));
       end Read;
    begin
       Stmt.Execute;

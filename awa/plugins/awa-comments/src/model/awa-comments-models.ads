@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2016 Stephane Carrez
+--  Copyright (C) 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -217,6 +217,9 @@ package AWA.Comments.Models is
 
       --  the comment text.
       Comment : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the comment status.
+      Status : AWA.Comments.Models.Status_Type;
    end record;
 
    --  Get the bean attribute identified by the name.
@@ -251,6 +254,8 @@ package AWA.Comments.Models is
                    Context : in out ADO.Queries.Context'Class);
 
    Query_Comment_List : constant ADO.Queries.Query_Definition_Access;
+
+   Query_All_Comment_List : constant ADO.Queries.Query_Definition_Access;
 
 
    type Comment_Bean is abstract new AWA.Comments.Models.Comment_Ref
@@ -363,11 +368,17 @@ private
 
    package File_1 is
       new ADO.Queries.Loaders.File (Path => "comment-queries.xml",
-                                    Sha1 => "4B683D52B3B47805957572BAE1B1DAF794DB0B85");
+                                    Sha1 => "80302F51E2EC9855EFAFB43954D724A697C1F8E6");
 
    package Def_Commentinfo_Comment_List is
       new ADO.Queries.Loaders.Query (Name => "comment-list",
                                      File => File_1.File'Access);
    Query_Comment_List : constant ADO.Queries.Query_Definition_Access
    := Def_Commentinfo_Comment_List.Query'Access;
+
+   package Def_Commentinfo_All_Comment_List is
+      new ADO.Queries.Loaders.Query (Name => "all-comment-list",
+                                     File => File_1.File'Access);
+   Query_All_Comment_List : constant ADO.Queries.Query_Definition_Access
+   := Def_Commentinfo_All_Comment_List.Query'Access;
 end AWA.Comments.Models;
