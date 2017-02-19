@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-comments-beans -- Beans for the comments module
---  Copyright (C) 2014, 2015 Stephane Carrez
+--  Copyright (C) 2014, 2015, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -57,6 +57,11 @@ with AWA.Comments.Modules;
 --        <property-name>sort</property-name>
 --        <property-class>String</property-class>
 --        <value>oldest</value>
+--      </managed-property>
+--      <managed-property>
+--        <property-name>status</property-name>
+--        <property-class>String</property-class>
+--        <value>published</value>
 --      </managed-property>
 --    </managed-bean>
 --
@@ -116,6 +121,7 @@ package AWA.Comments.Beans is
       Permission   : Ada.Strings.Unbounded.Unbounded_String;
       Current      : Natural := 0;
       Oldest_First : Boolean := True;
+      Publish_Only : Boolean := True;
    end record;
 
    type Comment_List_Bean_Access is access all Comment_List_Bean'Class;
