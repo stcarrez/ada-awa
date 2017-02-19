@@ -320,6 +320,18 @@ div.awa-modal div.awa-login {
     background: #dfeffc;
 }
 /**
+ * Page actions at the right side of titles (wiki, blog).
+ */
+.awa-page-actions {
+    float: right;
+    list-style-type: none;
+}
+.awa-page-actions li {
+    float: left;
+    padding-left: 1em;
+}
+
+/**
  * Navigation icons
  */
 .awa-nav {
