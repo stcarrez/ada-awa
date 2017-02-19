@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-comments-beans -- Beans for the comments module
---  Copyright (C) 2014, 2015, 2016 Stephane Carrez
+--  Copyright (C) 2014, 2015, 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -160,6 +160,12 @@ package body AWA.Comments.Beans is
          else
             From.Oldest_First := False;
          end if;
+      elsif Name = "status" then
+         if Util.Beans.Objects.To_String (Value) = "published" then
+            From.Publish_Only := True;
+         else
+            From.Publish_Only := False;
+         end if;
       end if;
    end Set_Value;
 
@@ -204,10 +210,14 @@ package body AWA.Comments.Beans is
       Query       : ADO.Queries.Context;
    begin
       Into.Entity_Id := For_Entity_Id;
-      Query.Set_Query (AWA.Comments.Models.Query_Comment_List);
+      if Into.Publish_Only then
+         Query.Set_Query (AWA.Comments.Models.Query_Comment_List);
+         Query.Bind_Param ("status", Integer (Models.Status_Type'Pos (Models.COMMENT_PUBLISHED)));
+      else
+         Query.Set_Query (AWA.Comments.Models.Query_All_Comment_List);
+      end if;
       Query.Bind_Param ("entity_type", Kind);
       Query.Bind_Param ("entity_id", For_Entity_Id);
-      Query.Bind_Param ("status", Integer (Models.Status_Type'Pos (Models.COMMENT_PUBLISHED)));
       if Into.Oldest_First then
          Query.Bind_Param ("sort", ADO.Parameters.Token '("ASC"));
       else
