@@ -216,11 +216,11 @@ package body AWA.Blogs.Beans is
    end Sanitize_Uri;
 
    --  ------------------------------
-   --  Load the post from the URI.
+   --  Load the post from the URI either with visible comments or with all comments.
    --  ------------------------------
-   overriding
-   procedure Load (Bean    : in out Post_Bean;
-                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   procedure Load (Bean         : in out Post_Bean;
+                   Outcome      : in out Ada.Strings.Unbounded.Unbounded_String;
+                   Publish_Only : in Boolean) is
       use type AWA.Comments.Beans.Comment_Bean_Access;
       use type AWA.Comments.Beans.Comment_List_Bean_Access;
 
@@ -253,6 +253,7 @@ package body AWA.Blogs.Beans is
       end if;
       Comment_List := AWA.Comments.Beans.Get_Comment_List_Bean ("postComments");
       if Comment_List /= null then
+         Comment_List.Publish_Only := Publish_Only;
          Comment_List.Load_Comments (Bean.Get_Id);
       end if;
 
@@ -266,6 +267,26 @@ package body AWA.Blogs.Beans is
          null;
       end;
    end Load;
+
+   --  ------------------------------
+   --  Load the post from the URI for the public display.
+   --  ------------------------------
+   overriding
+   procedure Load (Bean    : in out Post_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Bean.Load (Outcome, True);
+   end Load;
+
+   --  ------------------------------
+   --  Load the post from the URI for the administrator.
+   --  ------------------------------
+   overriding
+   procedure Load_Admin (Bean    : in out Post_Bean;
+                         Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Bean.Load (Outcome, False);
+   end Load_Admin;
 
    --  ------------------------------
    --  Get the value identified by the name.
