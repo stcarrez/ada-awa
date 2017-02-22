@@ -674,6 +674,9 @@ package AWA.Blogs.Models is
    procedure Create_Default (Bean  : in out Blog_Bean;
                              Event : in AWA.Events.Module_Event'Class) is abstract;
 
+   --  --------------------
+   --    load the post for the administrator
+   --  --------------------
    type Post_Bean is abstract new AWA.Blogs.Models.Post_Ref
      and Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with null record;
 
@@ -698,6 +701,9 @@ package AWA.Blogs.Models is
 
    procedure Load (Bean : in out Post_Bean;
                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   procedure Load_Admin (Bean : in out Post_Bean;
+                        Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
    type Post_List_Bean is abstract limited
      new Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with  record

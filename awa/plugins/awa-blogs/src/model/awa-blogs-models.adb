@@ -1747,11 +1747,23 @@ package body AWA.Blogs.Models is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Post_Bean,
                                                       Method => Op_Load,
                                                       Name   => "load");
+   procedure Op_Load_Admin (Bean    : in out Post_Bean;
+                            Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Load_Admin (Bean    : in out Post_Bean;
+                            Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Post_Bean'Class (Bean).Load_Admin (Outcome);
+   end Op_Load_Admin;
+   package Binding_Post_Bean_4 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Post_Bean,
+                                                      Method => Op_Load_Admin,
+                                                      Name   => "load_admin");
 
    Binding_Post_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
      := (1 => Binding_Post_Bean_1.Proxy'Access,
          2 => Binding_Post_Bean_2.Proxy'Access,
-         3 => Binding_Post_Bean_3.Proxy'Access
+         3 => Binding_Post_Bean_3.Proxy'Access,
+         4 => Binding_Post_Bean_4.Proxy'Access
      );
 
    --  ------------------------------
