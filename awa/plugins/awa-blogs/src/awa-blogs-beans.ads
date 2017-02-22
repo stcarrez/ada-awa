@@ -124,10 +124,20 @@ package AWA.Blogs.Beans is
    procedure Delete (Bean    : in out Post_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
-   --  Load the post.
+   --  Load the post from the URI for the public display.
    overriding
    procedure Load (Bean    : in out Post_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Load the post from the URI for the administrator.
+   overriding
+   procedure Load_Admin (Bean    : in out Post_Bean;
+                         Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Load the post from the URI either with visible comments or with all comments.
+   procedure Load (Bean         : in out Post_Bean;
+                   Outcome      : in out Ada.Strings.Unbounded.Unbounded_String;
+                   Publish_Only : in Boolean);
 
    --  Create the Post_Bean bean instance.
    function Create_Post_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
