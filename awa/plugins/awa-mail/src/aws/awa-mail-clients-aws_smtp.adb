@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail-clients-aws_smtp -- Mail client implementation on top of AWS SMTP client
---  Copyright (C) 2012, 2016 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -124,6 +124,10 @@ package body AWA.Mail.Clients.AWS_SMTP is
                                Subject => To_String (Message.Subject),
                                Message => To_String (Message.Content),
                                Status  => Result);
+         if not AWS.SMTP.Is_Ok (Result) then
+            Log.Error ("Cannot send email: {0}",
+                       AWS.SMTP.Status_Message (Result));
+         end if;
 
       else
          Log.Info ("Disable send email from {0} to {1}",
