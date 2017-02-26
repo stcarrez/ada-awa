@@ -1,5 +1,5 @@
 <!-- Form to create or comment
-  -  Copyright (C) 2014 Stephane Carrez
+  -  Copyright (C) 2014, 2017 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,32 +22,34 @@
         xmlns:c="http://java.sun.com/jstl/core"
         xmlns:h="http://java.sun.com/jsf/html">
 
-  <div class='awa-comment-form awa-form'>
-    <h:form id='post'>
-        <h:inputHidden id='entity-id' value='#{comment.entity_id}' required='false'/>
-        <h:inputHidden id='comment-id' value='#{comment.id}' required='false'/>
-        <ui:insert name="comment-input"/>
-        <div class='comment-gravatar'>
-            <w:gravatar email="#{user.email}" size="60"/>
-        </div>
-        <div class='comment-form'>
-            <h:messages styleClass='error'/>
-            <dl class="awa-required#{util:hasMessage('text') ? ' awa-error' : ''}">
-                <dd>
-                    <h:inputTextarea id='text' rows='10' required='true' value='#{comment.message}'/>
-                </dd>
-            </dl>
-            <ul class='awa-buttons'>
-                <li>
-                    <h:commandButton id='create'
-                                     value='#{commentMsg.comment_add_button}'
-                                     styleClass="ui-button ui-state-default ui-corner-all"
-                                     action="#{comment.create}"/>
-                </li>
-            </ul>
-        </div>
-    </h:form>
-  </div>
+    <div class='awa-comment-form awa-form'>
+        <h:form id='post'>
+            <h:inputHidden id='entity-id' value='#{comment.entity_id}' required='false'/>
+            <h:inputHidden id='comment-id' value='#{comment.id}' required='false'/>
+            <div class="awa-comment">
+                <ui:insert name="comment-input"/>
+                <div class='comment-gravatar'>
+                    <w:gravatar email="#{user.email}" size="60"/>
+                </div>
+                <div class='comment-form'>
+                    <h:messages styleClass='error'/>
+                    <dl class="awa-required#{util:hasMessage('text') ? ' awa-error' : ''}">
+                        <dd>
+                            <h:inputTextarea id='text' rows='10' required='true' value='#{comment.message}'/>
+                        </dd>
+                    </dl>
+                    <ul class='awa-buttons'>
+                        <li>
+                            <h:commandButton id='create'
+                                             value='#{commentMsg.comment_add_button}'
+                                             styleClass="ui-button ui-state-default ui-corner-all"
+                                             action="#{comment.create}"/>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </h:form>
+    </div>
 
 </ui:composition>
 
