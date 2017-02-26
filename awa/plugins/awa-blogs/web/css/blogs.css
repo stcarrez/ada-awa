@@ -256,31 +256,67 @@ div.post-comments h3 {
     font-weight: normal;
     font-size: 1.3em;
 }
-ol.comment-list {
+.awa-comment-list {
     margin-left: 10%;
     float: left;
     width: 90%;
+}
+.awa-comment {
+    float: left;
+    width: 90%;
+    padding-left: 10%;
 }
 div.awa-comment-form {
-    margin-left: 10%;
+    /* padding-left: 10%; */
+    padding-left: 2%;
+    padding-right: 2%;
     float: left;
-    width: 90%;
+    width: 96%;
 }
-li.comment, div.awa-comment-form {
+.awa-comment, div.awa-comment-form {
     position: relative;
     padding-bottom: 50px;
 }
-li.comment div.comment-gravatar, div.awa-form div.comment-gravatar {
+.awa-comment div.comment-gravatar, div.awa-form div.comment-gravatar {
     position: absolute;
-    left: -70px;
+    left: 0px;
     top: 0;
 }
-li.comment div.comment-author {
+.awa-comment div.comment-author {
     font-weight: bold;
     color: #777;
 }
-li.comment div.comment-text {
+.awa-comment .comment-text {
     padding-top: 5px;
+    clear: both;
+    float: left;
+    display: block;
+}
+.awa-comment-actions {
+    list-style-type: none;
+    float: left;
+}
+.awa-comment-actions li {
+    float: left;
+    padding-left: 2em;
+}
+.awa-comment-actions a, .awa-comment-actions a:visited, .awa-comment-actions a:hover {
+    text-decoration: none;
+    font-weight: bold;
+}
+.comment-COMMENT_SPAM {
+    opacity: 0.2;
+}
+.comment-COMMENT_WAITING {
+    opacity: 0.5;
+}
+.comment-COMMENT_WAITING {
+}
+.comment-COMMENT_PUBLISHED .comment-action-spam,
+.comment-COMMENT_WAITING .comment-action-waiting,
+.comment-COMMENT_SPAM .comment-action-spam,
+.comment-COMMENT_PUBLISHED .comment-action-publish {
+    display: none;
 }
 .blog-post-comment {
     float: left;
