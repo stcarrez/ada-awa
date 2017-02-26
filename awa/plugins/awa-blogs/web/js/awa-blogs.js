@@ -1,6 +1,6 @@
 /*
  *  awa-blogs -- Blogs and post
- *  Copyright (C) 2016 Stephane Carrez
+ *  Copyright (C) 2016, 2017 Stephane Carrez
  *  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,91 @@
  *  limitations under the License.
  */
 (function($, undefined) {
+    $.widget("ui.blog_comment_list", $.ui.list, {
+        currentNode: null,
+        editInput: null,
 
+        _create: function() {
+            var self = this;
+
+            $.ui.list.prototype._create.apply(this, arguments);
+            if (self.options.selectAction === null) {
+                self.options.selectAction = function(node, event) {
+                    return self.selectAction(node, event);
+                }
+            }
+        },
+        getSelectedId: function(node) {
+            while (node) {
+                if ($(node).hasClass("awa-comment")) {
+                    var id = $(node).attr('id');
+                    return id == null ? null : id.substring(this.options.itemPrefix.length);
+                }
+                node = node.parentNode;
+            }
+            return null;
+        },
+        doPublish: function(node) {
+            var id = this.getSelectedId(this.activeItem);
+
+            return ASF.Post(this.activeItem, this.options.statusUrl, "id=" + id + "&status=COMMENT_PUBLISHED");
+        },
+
+        doSpam: function(node) {
+            var id = this.getSelectedId(this.activeItem);
+
+            return ASF.Post(this.activeItem, this.options.statusUrl, "id=" + id + "&status=COMMENT_SPAM");
+        },
+
+        doWait: function(node) {
+            var id = this.getSelectedId(this.activeItem);
+
+            return ASF.Post(this.activeItem, this.options.statusUrl, "id=" + id + "&status=COMMENT_WAITING");
+        },
+
+        editTask: function(node) {
+            var list = this,
+                id   = this.getSelectedId(this.activeItem),
+                url  = this.options.editTaskUrl + "?id=" + id;
+
+            ASF.Popup(node, 'vdo-edit-popup', url, {
+                triggerHandler: function triggerHandler(action, node) {
+                                    if (action == "open") {
+                                        list.setMouseOver(false);
+                                    } else {
+                                        list.setMouseOver(true);
+                                    }
+                                },
+                attachment: node
+            });
+            return false;
+        },
+
+        /**
+         * Select the list item identified by <tt>node</tt> as the current selected item.
+         *
+         * @param node the list item to select
+         */
+        selectAction: function(node, event) {
+            if ($(node).hasClass("comment-action-publish")) {
+                return this.doPublish(node);
+            } else if ($(node).hasClass("comment-action-spam")) {
+                return this.doSpam(node);
+            } else if ($(node).hasClass("comment-action-waiting")) {
+                return this.doWait(node);
+            } else if ($(node).hasClass("vdo-pause-task")) {
+                return this.pauseTask(node);
+            } else {
+                var t = event.target;
+
+                if ($(t).hasClass("time-day")) {
+                    return this.editTime($(t));
+                } else {
+                    return this._super("selectAction", node);
+                }
+            }
+        }
+    });
     $.widget("ui.post_graph", {
         options: {
             url: "",
