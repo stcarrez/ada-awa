@@ -105,6 +105,28 @@
   </managed-bean>
 
   <managed-bean>
+    <description>A list of all comments associated with a post (for admin purposes).</description>
+    <managed-bean-name>postAdminComments</managed-bean-name>
+    <managed-bean-class>AWA.Comments.Beans.Comment_List_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>entity_type</property-name>
+      <property-class>String</property-class>
+      <value>awa_post</value>
+    </managed-property>
+    <managed-property>
+      <property-name>sort</property-name>
+      <property-class>String</property-class>
+      <value>newest</value>
+    </managed-property>
+    <managed-property>
+      <property-name>status</property-name>
+      <property-class>String</property-class>
+      <value>all</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
     <description>
        The bean to allow a user to post a new comment.  This is a specific bean because
        the permission to create a new post is different from other permissions.  If the permission
@@ -152,6 +174,25 @@
       <property-name>permission</property-name>
       <property-class>String</property-class>
       <value>blog-publish-comment</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <description>
+       The bean to allow the blog administrator to change the publication status of a comment.
+    </description>
+    <managed-bean-name>blogDeleteComment</managed-bean-name>
+    <managed-bean-class>AWA.Comments.Beans.Comment_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>entity_type</property-name>
+      <property-class>String</property-class>
+      <value>awa_post</value>
+    </managed-property>
+    <managed-property>
+      <property-name>permission</property-name>
+      <property-class>String</property-class>
+      <value>blog-delete-comment</value>
     </managed-property>
   </managed-bean>
 
@@ -334,6 +375,19 @@
     <entity-type>awa_blog</entity-type>
     <entity-type>awa_post</entity-type>
     <description>Permission to change the publish status of a comment.</description>
+    <sql>
+       SELECT acl.id FROM awa_comment AS cmt
+       INNER JOIN awa_post AS blog_post ON cmt.entity_id = blog_post.id
+       INNER JOIN awa_acl AS acl ON acl.entity_id = blog_post.blog_id AND acl.entity_type = :entity_type_1
+       WHERE cmt.id = :entity_id AND cmt.entity_type = :entity_type_2 AND acl.user_id = :user_id
+    </sql>
+  </entity-permission>
+
+  <entity-permission>
+    <name>blog-delete-comment</name>
+    <entity-type>awa_blog</entity-type>
+    <entity-type>awa_post</entity-type>
+    <description>Permission to delete the comment.</description>
     <sql>
        SELECT acl.id FROM awa_comment AS cmt
        INNER JOIN awa_post AS blog_post ON cmt.entity_id = blog_post.id
