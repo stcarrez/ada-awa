@@ -1,5 +1,5 @@
 <!-- Display a list of comments
-  -  Copyright (C) 2014 Stephane Carrez
+  -  Copyright (C) 2014, 2017 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,19 +17,28 @@
 <h:list xmlns:w="http://code.google.com/p/ada-asf/widget"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:awa="http://code.google.com/p/ada-awa/jsf"
-        styleClass="comment-list" var="cmt" value="#{commentList}" layout="orderedList" itemStyleClass="comment">
-    <div class='comment-gravatar'>
-        <w:gravatar email="#{cmt.email}" size="60"/>
+        var="cmt" value="#{commentList}">
+    <div id='c_#{cmt.id}' class="awa-comment comment-#{cmt.status}">
+        <div class='comment-gravatar'>
+            <w:gravatar email="#{cmt.email}" size="60"/>
+        </div>
+        <div class='comment-author'>
+            #{cmt.author} on
+            <h:outputText styleClass='comment-date' value="#{cmt.date}"
+                          converter="dateConverter"/>
+            said:
+        </div>
+        <ul class="awa-comment-actions">
+            <li><a href="" class="comment-action-edit">Edit</a></li>
+            <li><a href="" class="comment-action-publish">Publish</a></li>
+            <li><a href="" class="comment-action-spam">Spam</a></li>
+            <li><a href="" class="comment-action-waiting">Waiting</a></li>
+            <li><a href="" class="comment-action-delete">Delete</a></li>
+        </ul>
+        <h:panelGroup rendered="#{cmt.format ne 'FORMAT_WIKI'}" styleClass='comment-text'>
+            <h:outputText escape="#{cmt.format ne 'FORMAT_HTML'}" value="#{cmt.comment}"/>
+        </h:panelGroup>
+        <awa:wiki rendered="#{cmt.format eq 'FORMAT_WIKI'}"
+                  styleClass='comment-text' value="#{cmt.comment}" format="dotclear"/>
     </div>
-    <div class='comment-author'>
-        #{cmt.author} on
-        <h:outputText styleClass='comment-date' value="#{cmt.date}"
-                      converter="dateConverter"/>
-        said:
-    </div>
-    <h:panelGroup rendered="#{cmt.format ne 'FORMAT_WIKI'}" styleClass='comment-text'>
-        <h:outputText escape="#{cmt.format ne 'FORMAT_HTML'}" value="#{cmt.comment}"/>
-    </h:panelGroup>
-    <awa:wiki rendered="#{cmt.format eq 'FORMAT_WIKI'}"
-              styleClass='comment-text' value="#{cmt.comment}" format="dotclear"/>
 </h:list>
