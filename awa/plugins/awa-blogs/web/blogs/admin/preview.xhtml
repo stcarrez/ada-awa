@@ -28,7 +28,7 @@
     <ui:define name="pageHeader">
         <f:metadata>
             <f:viewParam id='post_id' value='#{post.uid}'/>
-            <f:viewAction action='#{post.load}'/>
+            <f:viewAction action='#{post.load_admin}'/>
         </f:metadata>
     </ui:define>
 
@@ -45,9 +45,18 @@
                               <a class='awa-button' href="#{contextPath}/blogs/admin/edit.html?blog_id=#{adminBlog.id}&amp;post_id=#{post.id}">#{wikiMsg.wiki_page_edit_label}</a>
                           </li>
                       </ul>
-                      <h2><a href="#{contextPath}/blogs/post/#{post.uri}">#{post.title}</a></h2>
-                      <p>By #{post.username} <h:outputText id="date" value="#{post.date}" converter="dateConverter"/></p>
-                  </div>
+                       <h2><a href="#{contextPath}/blogs/post.html?post=#{post.uri}">#{post.title}</a></h2>
+                       <p>
+                           <h:outputFormat value="#{blogMsg.blog_post_author}">
+                               <f:param value="#{post.username}"/>
+                           </h:outputFormat>
+                           <h:outputText styleClass="post-date" value="#{post.create_date}" converter="dateConverter"/>
+                           <h:outputFormat value="#{blogMsg.blog_post_count}" rendered="#{not empty postComments}"
+                                           styleClass="post-comment-count">
+                               <f:param value="#{postComments.count}"/>
+                           </h:outputFormat>
+                       </p>
+                   </div>
                   <awa:tagList value='#{post.tags}' id='qtags' styleClass="tagedit-list"
                                tagLink="#{contextPath}/blogs/tagged.html?tag=#{tagName}"
                                var="tagName"
@@ -62,15 +71,25 @@
                                   <f:param value="#{postComments.count}"/>
                               </h:outputFormat>
                           </h3>
+                          <div id='blog-comment-list' class='blog-admin'>
                           <ui:include src="/comments/lists/comment-list.xhtml">
                               <ui:param name="commentList" value="#{postComments}"/>
                           </ui:include>
+                          </div>
                       </h:panelGroup>
+                      <div id='blog-comment-action' class='asf-list-action'>
+                      </div>
                   </div>
               </div>
           </div>
       </div>
       <util:script>
+          $('#blog-comment-list').blog_comment_list({
+                  actionId: '#blog-comment-action',
+                  itemPrefix: 'c_',
+                  statusUrl: "#{contextPath}/blogs/ajax/blogPublishComment/publish",
+                  deleteUrl: '#{contextPath}/blogs/admin/forms/comment-delete.html?id=',
+              });
           $("#post-stats").post_graph({url: "#{contextPath}/blogs/post/#{post.id}/stats/now-120"});
       </util:script>
     </ui:define>
