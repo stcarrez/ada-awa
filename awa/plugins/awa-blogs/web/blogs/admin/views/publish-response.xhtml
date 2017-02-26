@@ -1,5 +1,5 @@
 <!-- Response sent after a user changes the publication status of a comment
-  -  Copyright (C) 2014 Stephane Carrez
+  -  Copyright (C) 2014, 2017 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,8 +18,9 @@
         xmlns:c="http://java.sun.com/jstl/core"
         xmlns:f="http://java.sun.com/jsf/core">
 [
-    { "action": "removeClass", "data": "status-COMMENT_WAITING" },
-    { "action": "removeClass", "data": "status-COMMENT_PUBLISHED" },
-    { "action": "addClass", "data": "post-info ui-list-item status-#{blogPublishComment.status}" }
+    { "action": "removeClass", "data": "comment-COMMENT_SPAM" },
+    { "action": "removeClass", "data": "comment-COMMENT_WAITING" },
+    { "action": "removeClass", "data": "comment-COMMENT_PUBLISHED" },
+    { "action": "addClass", "data": "comment-#{blogPublishComment.status}" }
 ]
 </f:view>
