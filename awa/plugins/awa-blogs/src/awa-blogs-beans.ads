@@ -66,6 +66,12 @@ package AWA.Blogs.Beans is
    function Get_Value (From : in Blog_Bean;
                        Name : in String) return Util.Beans.Objects.Object;
 
+   --  Set the value identified by the name.
+   overriding
+   procedure Set_Value (From  : in out Blog_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
    --  Create a new blog.
    overriding
    procedure Create (Bean    : in out Blog_Bean;
