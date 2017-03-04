@@ -1,5 +1,5 @@
 <!-- Create a new post page
-  -  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013, 2017 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,8 +22,9 @@
     <!-- Main page body -->
     <ui:define name="pageBody">
         <f:metadata>
-            <f:viewParam id='id' value='#{post.blogId}'/>
-            <f:viewParam id='id' value='#{adminBlog.id}'/>
+            <f:viewParam id='id' value='#{post.blogId}' required="false"/>
+            <f:viewParam id='id' value='#{blog.id}' required="false"/>
+            <f:viewAction action="#{blog.load}"/>
         </f:metadata>
         <div id='awa-content'>
             <ui:include src="lists/menu-list.xhtml"/>
@@ -32,5 +33,11 @@
             </div>
         </div>
     </ui:define>
+
+    <ui:define name="pageScript">
+        <script type="text/javascript" src="#{contextPath}/js/markedit/showdown.js"></script>
+        <script type="text/javascript" src="#{contextPath}/js/markedit/jquery.markedit.js"></script>
+    </ui:define>
+
 </ui:composition>
 
