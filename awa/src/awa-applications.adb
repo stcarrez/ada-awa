@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa -- Ada Web Application
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -84,7 +84,7 @@ package body AWA.Applications is
       end if;
       ASF.Applications.Main.Application (App).Initialize_Config (Conf);
       ADO.Drivers.Initialize (Conf);
-      App.DB_Factory.Create (Conf.Get ("database"));
+      App.DB_Factory.Create (Conf.Get (P_Database.P));
       App.Events.Initialize (App'Unchecked_Access);
       AWA.Modules.Initialize (App.Modules, Conf);
 
