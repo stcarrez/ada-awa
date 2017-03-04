@@ -83,11 +83,34 @@ package body AWA.Blogs.Beans is
       pragma Unreferenced (Outcome);
 
       Result  : ADO.Identifier;
-      pragma Unreferenced (Result);
    begin
       Bean.Module.Create_Blog (Title        => Bean.Get_Name,
                                Result       => Result);
+      Bean.Set_Id (Result);
    end Create;
+
+   --  ------------------------------
+   --  Load the blog information.
+   --  ------------------------------
+   overriding
+   procedure Load (Bean    : in out Blog_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      Session : ADO.Sessions.Session := Bean.Module.Get_Session;
+      Found   : Boolean;
+      Query   : ADO.SQL.Query;
+   begin
+      if not Bean.Is_Null and then Bean.Get_Id /= ADO.NO_IDENTIFIER then
+         Query.Bind_Param (1, Bean.Get_Id);
+         Query.Set_Filter ("o.id = ?");
+         Bean.Find (Session, Query, Found);
+      else
+         Found := False;
+      end if;
+      if not Found then
+         Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
+         return;
+      end if;
+   end Load;
 
    --  ------------------------------
    --  Handle an event to create the blog entry automatically.
@@ -112,9 +135,6 @@ package body AWA.Blogs.Beans is
 
       Object  : constant Blog_Bean_Access := new Blog_Bean;
    begin
-      --  if Blog_Id /= ADO.NO_IDENTIFIER then
-      --    Object.Load (Session, Blog_Id);
-      --  end if;
       Object.Module := Module;
       return Object.all'Access;
    end Create_Blog_Bean;
