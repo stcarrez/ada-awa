@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa -- Ada Web Application
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2-16 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,6 +40,11 @@ package AWA.Applications is
    --  are initialized.
    package P_Plugin_Config_File is
      new ASF.Applications.Main.Configs.Parameter ("app.config.plugins", "");
+
+   --  The database connection string to connect to the database.
+   package P_Database is
+     new ASF.Applications.Main.Configs.Parameter ("database",
+                                                  "mysql://localhost:3306/db");
 
    --  Module manager
    --
