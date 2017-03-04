@@ -57,7 +57,7 @@ package body AWA.Setup.Applications is
 
    --  The application base URL.
    package P_Base_URL is
-     new ASF.Applications.Main.Configs.Parameter ("app_base_url",
+     new ASF.Applications.Main.Configs.Parameter ("app_url_base",
                                                   "http://localhost:8080/#{contextPath}");
 
    Binding_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
@@ -445,7 +445,7 @@ package body AWA.Setup.Applications is
             App.Changed.Set ("callback_url", "http://mydomain.com/oauth");
          end if;
       end;
-      App.Database.Set_Connection (App.Config.Get ("database", "mysql://localhost:3306/db"));
+      App.Database.Set_Connection (App.Get_Config (AWA.Applications.P_Database.P));
       App.Driver := Util.Beans.Objects.To_Object (App.Database.Get_Driver);
       if App.Database.Get_Driver = "mysql" then
          App.Db_Host := Util.Beans.Objects.To_Object (App.Database.Get_Server);
@@ -454,7 +454,8 @@ package body AWA.Setup.Applications is
          App.Db_Host := Util.Beans.Objects.To_Object (String '("localhost"));
          App.Db_Port := Util.Beans.Objects.To_Object (Integer (3306));
       end if;
-      Server.Register_Application (App.Config.Get ("contextPath"), App'Unchecked_Access);
+      Server.Register_Application (App.Get_Config (AWA.Applications.P_Context_Path.P),
+                                   App'Unchecked_Access);
       Log.Info ("Connect your browser to {0}/index.html", App.Get_Config (P_Base_URL.P));
       App.Status.Wait_Configuring;
       Log.Info ("Application setup is now finished");
