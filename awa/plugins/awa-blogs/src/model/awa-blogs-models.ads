@@ -652,6 +652,9 @@ package AWA.Blogs.Models is
    Query_Blog_Post_Tag_List : constant ADO.Queries.Query_Definition_Access;
 
 
+   --  --------------------
+   --    load the blog instance.
+   --  --------------------
    type Blog_Bean is abstract new AWA.Blogs.Models.Blog_Ref
      and Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with null record;
 
@@ -673,6 +676,9 @@ package AWA.Blogs.Models is
 
    procedure Create_Default (Bean  : in out Blog_Bean;
                              Event : in AWA.Events.Module_Event'Class) is abstract;
+
+   procedure Load (Bean : in out Blog_Bean;
+                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
    --  --------------------
    --    load the post for the administrator

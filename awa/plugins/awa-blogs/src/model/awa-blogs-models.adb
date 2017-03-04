@@ -1676,10 +1676,22 @@ package body AWA.Blogs.Models is
      new AWA.Events.Action_Method.Bind (Bean   => Blog_Bean,
                                         Method => Op_Create_Default,
                                         Name   => "create_default");
+   procedure Op_Load (Bean    : in out Blog_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Load (Bean    : in out Blog_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Blog_Bean'Class (Bean).Load (Outcome);
+   end Op_Load;
+   package Binding_Blog_Bean_3 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Blog_Bean,
+                                                      Method => Op_Load,
+                                                      Name   => "load");
 
    Binding_Blog_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
      := (1 => Binding_Blog_Bean_1.Proxy'Access,
-         2 => Binding_Blog_Bean_2.Proxy'Access
+         2 => Binding_Blog_Bean_2.Proxy'Access,
+         3 => Binding_Blog_Bean_3.Proxy'Access
      );
 
    --  ------------------------------
