@@ -71,6 +71,11 @@ package AWA.Blogs.Beans is
    procedure Create (Bean    : in out Blog_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
+   --  Load the blog information.
+   overriding
+   procedure Load (Bean    : in out Blog_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
    --  Handle an event to create the blog entry automatically.
    overriding
    procedure Create_Default (Bean    : in out Blog_Bean;
@@ -86,7 +91,7 @@ package AWA.Blogs.Beans is
    --  The <b>Post_Bean</b> is used to create or update a post associated with a blog.
    type Post_Bean is new AWA.Blogs.Models.Post_Bean with record
       Module  : AWA.Blogs.Modules.Blog_Module_Access := null;
-      Blog_Id : ADO.Identifier;
+      Blog_Id : ADO.Identifier := ADO.NO_IDENTIFIER;
 
       --  List of tags associated with the post.
       Tags      : aliased AWA.Tags.Beans.Tag_List_Bean;
