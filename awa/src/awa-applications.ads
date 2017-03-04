@@ -46,6 +46,11 @@ package AWA.Applications is
      new ASF.Applications.Main.Configs.Parameter ("database",
                                                   "mysql://localhost:3306/db");
 
+   --  The application contextPath configuration that gives the base URL of the application.
+   package P_Context_Path is
+     new ASF.Applications.Main.Configs.Parameter ("contextPath",
+                                                  "");
+
    --  Module manager
    --
    --  The <b>Module_Manager</b> represents the root of the logic manager
