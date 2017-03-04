@@ -18,7 +18,7 @@
 
     <query name='post-publish-stats'>
        <comment>Get statistics about the post publication on a blog.</comment>
-       <sql>
+       <sql driver='mysql'>
     SELECT
       YEAR(p.publish_date) AS Y,
       MONTH(p.publish_date) AS M,
@@ -29,6 +29,19 @@
       p.blog_id = :blog_id AND p.status > 0
     GROUP BY Y, M ORDER BY Y, M
        </sql>
+
+       <sql driver='sqlite'>
+    SELECT
+      STRFTIME("%Y", p.publish_date) AS Y,
+      STRFTIME("%m", p.publish_date) AS M,
+      COUNT(p.id)
+    FROM awa_post AS p
+    INNER JOIN awa_acl AS acl ON acl.entity_id = :blog_id AND acl.entity_type = :table AND acl.user_id = :user_id
+    WHERE
+      p.blog_id = :blog_id AND p.status > 0
+    GROUP BY Y, M ORDER BY Y, M
+       </sql>
+
     </query>
 
     <query name='post-access-stats'>
