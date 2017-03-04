@@ -470,20 +470,21 @@ package body AWA.Setup.Applications is
                         App    : in Application_Access;
                         Config : in String;
                         URI    : in String) is
-      S : aliased Application;
-      C : ASF.Applications.Config;
+      Path : constant String := AWA.Applications.Configs.Get_Config_Path (Config);
+      S    : aliased Application;
+      C    : ASF.Applications.Config;
    begin
       --  Do the application setup.
       S.Setup (Config, Server);
 
       --  Load the application configuration file that was configured during the setup process.
       begin
-         C.Load_Properties (Config);
+         C.Load_Properties (Path);
          Util.Log.Loggers.Initialize (Util.Properties.Manager (C));
 
       exception
          when Ada.IO_Exceptions.Name_Error =>
-            Log.Error ("Cannot read application configuration file {0}", Config);
+            Log.Error ("Cannot read application configuration file {0}", Path);
       end;
 
       --  Initialize the application and register it.
