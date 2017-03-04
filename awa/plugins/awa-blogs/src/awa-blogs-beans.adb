@@ -76,6 +76,21 @@ package body AWA.Blogs.Beans is
    end Get_Value;
 
    --  ------------------------------
+   --  Set the value identified by the name.
+   --  ------------------------------
+   overriding
+   procedure Set_Value (From  : in out Blog_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
+         From.Set_Id (ADO.Utils.To_Identifier (Value));
+      else
+         AWA.Blogs.Models.Blog_Bean (From).Set_Value (Name, Value);
+      end if;
+   end Set_Value;
+
+   --  ------------------------------
    --  Create a new blog.
    --  ------------------------------
    procedure Create (Bean    : in out Blog_Bean;
@@ -108,7 +123,8 @@ package body AWA.Blogs.Beans is
       end if;
       if not Found then
          Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
-         return;
+      else
+         Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("loaded");
       end if;
    end Load;
 
