@@ -1,5 +1,5 @@
 <!-- Display the blog posts in a list page
-  -  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -72,6 +72,7 @@
         </h:panelGroup>
     </div>
   </h:list>
+    <h:panelGroup rendered="#{postList.page_count gt 1}">
     <ul class='blog-pagination'>
         <li>
             <h:panelGroup rendered="#{postList.page gt 1}">
@@ -91,5 +92,6 @@
             </h:panelGroup>
         </li>
     </ul>
+    </h:panelGroup>
 </ui:composition>
 
