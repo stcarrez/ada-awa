@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2016 Stephane Carrez
+--  Copyright (C) 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,6 +38,8 @@ package AWA.Workspaces.Models is
    pragma Style_Checks ("-mr");
 
    type Workspace_Ref is new ADO.Objects.Object_Ref with null record;
+
+   type Invitation_Ref is new ADO.Objects.Object_Ref with null record;
 
    type Workspace_Feature_Ref is new ADO.Objects.Object_Ref with null record;
 
@@ -131,6 +133,145 @@ package AWA.Workspaces.Models is
    --  Copy of the object.
    procedure Copy (Object : in Workspace_Ref;
                    Into   : in out Workspace_Ref);
+
+   --  Create an object key for Invitation.
+   function Invitation_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
+   --  Create an object key for Invitation from a string.
+   --  Raises Constraint_Error if the string cannot be converted into the object key.
+   function Invitation_Key (Id : in String) return ADO.Objects.Object_Key;
+
+   Null_Invitation : constant Invitation_Ref;
+   function "=" (Left, Right : Invitation_Ref'Class) return Boolean;
+
+   --  Set the invitation identifier.
+   procedure Set_Id (Object : in out Invitation_Ref;
+                     Value  : in ADO.Identifier);
+
+   --  Get the invitation identifier.
+   function Get_Id (Object : in Invitation_Ref)
+                 return ADO.Identifier;
+   --  Get version optimistic lock.
+   function Get_Version (Object : in Invitation_Ref)
+                 return Integer;
+
+   --  Set date when the invitation was created and sent.
+   procedure Set_Create_Date (Object : in out Invitation_Ref;
+                              Value  : in Ada.Calendar.Time);
+
+   --  Get date when the invitation was created and sent.
+   function Get_Create_Date (Object : in Invitation_Ref)
+                 return Ada.Calendar.Time;
+
+   --  Set the email address to which the invitation was sent.
+   procedure Set_Email (Object : in out Invitation_Ref;
+                        Value  : in Ada.Strings.Unbounded.Unbounded_String);
+   procedure Set_Email (Object : in out Invitation_Ref;
+                        Value : in String);
+
+   --  Get the email address to which the invitation was sent.
+   function Get_Email (Object : in Invitation_Ref)
+                 return Ada.Strings.Unbounded.Unbounded_String;
+   function Get_Email (Object : in Invitation_Ref)
+                 return String;
+
+   --  Set the invitation message.
+   procedure Set_Message (Object : in out Invitation_Ref;
+                          Value  : in Ada.Strings.Unbounded.Unbounded_String);
+   procedure Set_Message (Object : in out Invitation_Ref;
+                          Value : in String);
+
+   --  Get the invitation message.
+   function Get_Message (Object : in Invitation_Ref)
+                 return Ada.Strings.Unbounded.Unbounded_String;
+   function Get_Message (Object : in Invitation_Ref)
+                 return String;
+
+   --  Set the date when the invitation was accepted.
+   procedure Set_Acceptance_Date (Object : in out Invitation_Ref;
+                                  Value  : in ADO.Nullable_Time);
+
+   --  Get the date when the invitation was accepted.
+   function Get_Acceptance_Date (Object : in Invitation_Ref)
+                 return ADO.Nullable_Time;
+
+   --  Set the workspace where the user is invited.
+   procedure Set_Workspace (Object : in out Invitation_Ref;
+                            Value  : in AWA.Workspaces.Models.Workspace_Ref'Class);
+
+   --  Get the workspace where the user is invited.
+   function Get_Workspace (Object : in Invitation_Ref)
+                 return AWA.Workspaces.Models.Workspace_Ref'Class;
+
+   --
+   procedure Set_Access_Key (Object : in out Invitation_Ref;
+                             Value  : in AWA.Users.Models.Access_Key_Ref'Class);
+
+   --
+   function Get_Access_Key (Object : in Invitation_Ref)
+                 return AWA.Users.Models.Access_Key_Ref'Class;
+
+   --  Set the user being invited.
+   procedure Set_Invitee (Object : in out Invitation_Ref;
+                          Value  : in AWA.Users.Models.User_Ref'Class);
+
+   --  Get the user being invited.
+   function Get_Invitee (Object : in Invitation_Ref)
+                 return AWA.Users.Models.User_Ref'Class;
+
+   --
+   procedure Set_Inviter (Object : in out Invitation_Ref;
+                          Value  : in AWA.Users.Models.User_Ref'Class);
+
+   --
+   function Get_Inviter (Object : in Invitation_Ref)
+                 return AWA.Users.Models.User_Ref'Class;
+
+   --  Load the entity identified by 'Id'.
+   --  Raises the NOT_FOUND exception if it does not exist.
+   procedure Load (Object  : in out Invitation_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier);
+
+   --  Load the entity identified by 'Id'.
+   --  Returns True in <b>Found</b> if the object was found and False if it does not exist.
+   procedure Load (Object  : in out Invitation_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier;
+                   Found   : out Boolean);
+
+   --  Find and load the entity.
+   overriding
+   procedure Find (Object  : in out Invitation_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean);
+
+   --  Save the entity.  If the entity does not have an identifier, an identifier is allocated
+   --  and it is inserted in the table.  Otherwise, only data fields which have been changed
+   --  are updated.
+   overriding
+   procedure Save (Object  : in out Invitation_Ref;
+                   Session : in out ADO.Sessions.Master_Session'Class);
+
+   --  Delete the entity.
+   overriding
+   procedure Delete (Object  : in out Invitation_Ref;
+                     Session : in out ADO.Sessions.Master_Session'Class);
+
+   overriding
+   function Get_Value (From : in Invitation_Ref;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Table definition
+   INVITATION_TABLE : constant ADO.Schemas.Class_Mapping_Access;
+
+   --  Internal method to allocate the Object_Record instance
+   overriding
+   procedure Allocate (Object : in out Invitation_Ref);
+
+   --  Copy of the object.
+   procedure Copy (Object : in Invitation_Ref;
+                   Into   : in out Invitation_Ref);
 
    --  Create an object key for Workspace_Feature.
    function Workspace_Feature_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
@@ -362,18 +503,98 @@ private
 
    procedure Set_Field (Object : in out Workspace_Ref'Class;
                         Impl   : out Workspace_Access);
-   WORKSPACE_FEATURE_NAME : aliased constant String := "awa_workspace_feature";
+   INVITATION_NAME : aliased constant String := "awa_invitation";
    COL_0_2_NAME : aliased constant String := "id";
-   COL_1_2_NAME : aliased constant String := "limit";
-   COL_2_2_NAME : aliased constant String := "workspace_id";
+   COL_1_2_NAME : aliased constant String := "version";
+   COL_2_2_NAME : aliased constant String := "create_date";
+   COL_3_2_NAME : aliased constant String := "email";
+   COL_4_2_NAME : aliased constant String := "message";
+   COL_5_2_NAME : aliased constant String := "acceptance_date";
+   COL_6_2_NAME : aliased constant String := "workspace_id";
+   COL_7_2_NAME : aliased constant String := "access_key_id";
+   COL_8_2_NAME : aliased constant String := "invitee_id";
+   COL_9_2_NAME : aliased constant String := "inviter_id";
+
+   INVITATION_DEF : aliased constant ADO.Schemas.Class_Mapping :=
+     (Count => 10,
+      Table => INVITATION_NAME'Access,
+      Members => (
+         1 => COL_0_2_NAME'Access,
+         2 => COL_1_2_NAME'Access,
+         3 => COL_2_2_NAME'Access,
+         4 => COL_3_2_NAME'Access,
+         5 => COL_4_2_NAME'Access,
+         6 => COL_5_2_NAME'Access,
+         7 => COL_6_2_NAME'Access,
+         8 => COL_7_2_NAME'Access,
+         9 => COL_8_2_NAME'Access,
+         10 => COL_9_2_NAME'Access
+)
+     );
+   INVITATION_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := INVITATION_DEF'Access;
+
+   Null_Invitation : constant Invitation_Ref
+      := Invitation_Ref'(ADO.Objects.Object_Ref with null record);
+
+   type Invitation_Impl is
+      new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
+                                     Of_Class => INVITATION_DEF'Access)
+   with record
+       Version : Integer;
+       Create_Date : Ada.Calendar.Time;
+       Email : Ada.Strings.Unbounded.Unbounded_String;
+       Message : Ada.Strings.Unbounded.Unbounded_String;
+       Acceptance_Date : ADO.Nullable_Time;
+       Workspace : AWA.Workspaces.Models.Workspace_Ref;
+       Access_Key : AWA.Users.Models.Access_Key_Ref;
+       Invitee : AWA.Users.Models.User_Ref;
+       Inviter : AWA.Users.Models.User_Ref;
+   end record;
+
+   type Invitation_Access is access all Invitation_Impl;
+
+   overriding
+   procedure Destroy (Object : access Invitation_Impl);
+
+   overriding
+   procedure Find (Object  : in out Invitation_Impl;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean);
+
+   overriding
+   procedure Load (Object  : in out Invitation_Impl;
+                   Session : in out ADO.Sessions.Session'Class);
+   procedure Load (Object  : in out Invitation_Impl;
+                   Stmt    : in out ADO.Statements.Query_Statement'Class;
+                   Session : in out ADO.Sessions.Session'Class);
+
+   overriding
+   procedure Save (Object  : in out Invitation_Impl;
+                   Session : in out ADO.Sessions.Master_Session'Class);
+
+   procedure Create (Object  : in out Invitation_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class);
+
+   overriding
+   procedure Delete (Object  : in out Invitation_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class);
+
+   procedure Set_Field (Object : in out Invitation_Ref'Class;
+                        Impl   : out Invitation_Access);
+   WORKSPACE_FEATURE_NAME : aliased constant String := "awa_workspace_feature";
+   COL_0_3_NAME : aliased constant String := "id";
+   COL_1_3_NAME : aliased constant String := "limit";
+   COL_2_3_NAME : aliased constant String := "workspace_id";
 
    WORKSPACE_FEATURE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count => 3,
       Table => WORKSPACE_FEATURE_NAME'Access,
       Members => (
-         1 => COL_0_2_NAME'Access,
-         2 => COL_1_2_NAME'Access,
-         3 => COL_2_2_NAME'Access
+         1 => COL_0_3_NAME'Access,
+         2 => COL_1_3_NAME'Access,
+         3 => COL_2_3_NAME'Access
 )
      );
    WORKSPACE_FEATURE_TABLE : constant ADO.Schemas.Class_Mapping_Access
@@ -422,17 +643,17 @@ private
    procedure Set_Field (Object : in out Workspace_Feature_Ref'Class;
                         Impl   : out Workspace_Feature_Access);
    WORKSPACE_MEMBER_NAME : aliased constant String := "awa_workspace_member";
-   COL_0_3_NAME : aliased constant String := "id";
-   COL_1_3_NAME : aliased constant String := "member_id";
-   COL_2_3_NAME : aliased constant String := "workspace_id";
+   COL_0_4_NAME : aliased constant String := "id";
+   COL_1_4_NAME : aliased constant String := "member_id";
+   COL_2_4_NAME : aliased constant String := "workspace_id";
 
    WORKSPACE_MEMBER_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count => 3,
       Table => WORKSPACE_MEMBER_NAME'Access,
       Members => (
-         1 => COL_0_3_NAME'Access,
-         2 => COL_1_3_NAME'Access,
-         3 => COL_2_3_NAME'Access
+         1 => COL_0_4_NAME'Access,
+         2 => COL_1_4_NAME'Access,
+         3 => COL_2_4_NAME'Access
 )
      );
    WORKSPACE_MEMBER_TABLE : constant ADO.Schemas.Class_Mapping_Access
