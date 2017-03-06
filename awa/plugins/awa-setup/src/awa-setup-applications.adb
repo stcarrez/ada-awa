@@ -291,7 +291,13 @@ package body AWA.Setup.Applications is
             From.Result := Util.Beans.Objects.To_Object (Content);
             From.Has_Error := Pipe.Get_Exit_Status /= 0;
             if From.Has_Error then
-               Messages.Factory.Add_Message ("setup.database_setup_error", Messages.ERROR);
+               Log.Error ("Command {0} exited with status {1}", Command,
+                          Util.Strings.Image (Pipe.Get_Exit_Status));
+               Messages.Factory.Add_Message ("setup.setup_database_error", Messages.ERROR);
+               if Pipe.Get_Exit_Status = 127 then
+                  Messages.Factory.Add_Message ("setup.setup_dynamo_missing_error",
+                                                Messages.ERROR);
+               end if;
             end if;
          end;
       end if;
@@ -480,7 +486,7 @@ package body AWA.Setup.Applications is
       --  Load the application configuration file that was configured during the setup process.
       begin
          C.Load_Properties (Path);
-         Util.Log.Loggers.Initialize (Util.Properties.Manager (C));
+         --  Util.Log.Loggers.Initialize (Util.Properties.Manager (C));
 
       exception
          when Ada.IO_Exceptions.Name_Error =>
