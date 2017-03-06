@@ -1,5 +1,5 @@
 <!-- Document actions
-  -  Copyright (C) 2016 Stephane Carrez
+  -  Copyright (C) 2016, 2017 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,20 +14,20 @@
   -  See the License for the specific language governing permissions and
   -  limitations under the License.
   -->
-<ul class='storage-action'
+<ul class='awa-nav'
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:c="http://java.sun.com/jstl/core"
         xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
-    <li>
+    <li class='awa-nav-left'>
         <a href="#{contextPath}/storages/documents.html" class="awa-nav-icon"
            title="#{storageMsg.storage_files_title}">
             <img src="#{contextPath}/images/storages/icon-folder.png" alt="#{storageMsg.storage_files_label}"/>
             <span>#{storageMsg.storage_files_label}</span>
         </a>
     </li>
-    <li>
+    <li class='awa-nav-left'>
         <a href="#{contextPath}/storages/images.html" class="awa-nav-icon"
            title="#{storageMsg.storage_images_title}">
             <img src="#{contextPath}/images/storages/icon-images.png" alt="#{storageMsg.storage_images_label}"/>
