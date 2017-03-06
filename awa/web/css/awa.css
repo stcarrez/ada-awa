@@ -1,6 +1,6 @@
 /**
  * main.css - Main style for AWA pages
- * Copyright (C) 2011, 2012, 2014, 2016 Stephane Carrez
+ * Copyright (C) 2011, 2012, 2014, 2016, 2017 Stephane Carrez
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
 html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td, label {
@@ -130,6 +130,18 @@ span.awa-error {
     margin-bottom: 2px;
     margin-top: 2px;
     height: auto;
+}
+ul.awa-error {
+    list-style-type: none;
+    float: left;
+    width: 100%;
+    color: red;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+ul.awa-error li {
+    float: left;
+    width: 100%;
 }
 
 /**
