@@ -139,10 +139,12 @@
 
                     data = data.data;
                     data.pop();
-                    for (i = 0; i < data.length; i++) {
-                        data[i][0] = new Date(data[i][0]).getTime();
+                    if (data.length > 1) {
+                       for (i = 0; i < data.length; i++) {
+                          data[i][0] = new Date(data[i][0]).getTime();
+                       }
+                       self.plot([data]);
                     }
-                    self.plot([data]);
                 }
             });
         }
