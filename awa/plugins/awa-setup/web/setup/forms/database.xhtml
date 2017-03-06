@@ -1,5 +1,5 @@
 <!-- Form to configure the database access
-  -  Copyright (C) 2016 Stephane Carrez
+  -  Copyright (C) 2016, 2017 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,12 +17,19 @@
 <f:view contentType="text/html; charset=UTF-8"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:w="http://code.google.com/p/ada-asf/widget"
+        xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
     <h2>
         #{setupMsg.setup_database_title}
     </h2>
     <h:form id='setup-database'>
-        <h2>Database driver</h2>
+        <h2>#{setupMsg.setup_database_driver}</h2>
+	<h:messages styleClass='awa-error' globalOnly="true"/>
+	<h:panelGroup rendered="#{util:hasMessage('') and not empty setup.result}">
+           <div class="setup-result">
+               <pre>#{setup.result}</pre>
+           </div>
+	</h:panelGroup>
         <div class="awa-required">
             <w:chosen id="database-driver" value="#{setup.database_driver}">
                 <f:selectItem itemValue="mysql" itemLabel="MySQL"/>
