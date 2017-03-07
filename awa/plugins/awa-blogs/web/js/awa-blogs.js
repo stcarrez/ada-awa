@@ -88,8 +88,8 @@
                 return this.doSpam(node);
             } else if ($(node).hasClass("comment-action-waiting")) {
                 return this.doWait(node);
-            } else if ($(node).hasClass("vdo-pause-task")) {
-                return this.pauseTask(node);
+            } else if ($(node).hasClass("comment-action-delete")) {
+                return this.enterDelete(node);
             } else {
                 var t = event.target;
 
