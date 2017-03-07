@@ -20,7 +20,7 @@
         xmlns:awa="http://code.google.com/p/ada-awa/jsf"
         xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
         xmlns:c="http://java.sun.com/jstl/core"
-	    xmlns:util="http://code.google.com/p/ada-asf/util"
+        xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{post.title}"/>
 
@@ -47,7 +47,7 @@
                         </p>
                     </div>
                     <awa:tagList value='#{post.tags}' id='qtags' styleClass="tagedit-list"
-                                 tagLink="#{contextPath}/blogs/tagged.html?tag=#{tagName}"
+                                 tagLink="#{contextPath}/blogs/tagged.html?tag=#{util:urlEncode(tagName)}"
                                  var="tagName"
                                  tagClass="tagedit-listelement tagedit-listelement-old"/>
                     <awa:wiki styleClass='post-text' value="#{post.text}" format="dotclear"/>
