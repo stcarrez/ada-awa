@@ -24,7 +24,6 @@ with Util.Log.Loggers;
 with Util.Streams.Pipes;
 with Util.Streams.Buffered;
 with Util.Strings;
-with Util.Properties;
 with ASF.Events.Faces.Actions;
 with ASF.Applications.Main.Configs;
 with ASF.Applications.Messages.Factory;
@@ -395,6 +394,8 @@ package body AWA.Setup.Applications is
                     Config : in String;
                     Server : in out ASF.Server.Container'Class) is
       Path : constant String := AWA.Applications.Configs.Get_Config_Path (Config);
+      Dir  : constant String := Ada.Directories.Containing_Directory (Path);
+      Done : constant String := Ada.Directories.Compose (Dir, ".initialized");
    begin
       Log.Info ("Entering configuration for {0}", Path);
       App.Path := Ada.Strings.Unbounded.To_Unbounded_String (Path);
@@ -406,6 +407,14 @@ package body AWA.Setup.Applications is
          when Ada.IO_Exceptions.Name_Error =>
             Log.Error ("Cannot read application configuration file: {0}", Path);
       end;
+
+      --  If the Done file marker exists, the installation was done and we don't want
+      --  to enter in it again.
+      if Ada.Directories.Exists (Done) then
+         Log.Info ("Application {0} is already initialized.", Config);
+         Log.Info ("Remove {0} if you want to enter in the installation again.", Done);
+         return;
+      end if;
       App.Initialize (App.Config, App.Factory);
       App.Set_Error_Page (ASF.Responses.SC_NOT_FOUND, "/setup/install.html");
       App.Set_Global ("contextPath", App.Config.Get ("contextPath"));
@@ -464,7 +473,10 @@ package body AWA.Setup.Applications is
                                    App'Unchecked_Access);
       Log.Info ("Connect your browser to {0}/index.html", App.Get_Config (P_Base_URL.P));
       App.Status.Wait_Configuring;
+
       Log.Info ("Application setup is now finished");
+      Log.Info ("Creating the installation marker file {0}", Done);
+      Util.Files.Write_File (Done, "installed");
    end Setup;
 
    --  ------------------------------
@@ -486,7 +498,6 @@ package body AWA.Setup.Applications is
       --  Load the application configuration file that was configured during the setup process.
       begin
          C.Load_Properties (Path);
-         --  Util.Log.Loggers.Initialize (Util.Properties.Manager (C));
 
       exception
          when Ada.IO_Exceptions.Name_Error =>
