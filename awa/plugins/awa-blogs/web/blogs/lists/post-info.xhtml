@@ -15,10 +15,11 @@
   -  limitations under the License.
   -->
 <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+	        xmlns:util="http://code.google.com/p/ada-asf/util"
                 xmlns:awa="http://code.google.com/p/ada-awa/jsf">
     <h2>#{blogMsg.blog_tags_title}</h2>
     <awa:tagCloud
             value="#{blogTagCloud}" styleClass="tag-cloud" layout="dispatch"
             var="tagName" maxWeight="48" minWeight="16" rows="60"
-            tagLink="#{contextPath}/blogs/tagged.html?tag=#{tagName}"/>
+            tagLink="#{contextPath}/blogs/tagged.html?tag=#{util:urlEncode(tagName)}"/>
 </ui:composition>
