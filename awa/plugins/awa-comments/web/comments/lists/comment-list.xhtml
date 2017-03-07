@@ -29,11 +29,11 @@
             said:
         </div>
         <ul class="awa-comment-actions">
-            <li><a href="" class="comment-action-edit">Edit</a></li>
-            <li><a href="" class="comment-action-publish">Publish</a></li>
-            <li><a href="" class="comment-action-spam">Spam</a></li>
-            <li><a href="" class="comment-action-waiting">Waiting</a></li>
-            <li><a href="" class="comment-action-delete">Delete</a></li>
+            <li><a href="" class="comment-action-edit">#{commentMsg.comment_edit_label}</a></li>
+            <li><a href="" class="comment-action-publish">#{commentMsg.comment_publish_label}</a></li>
+            <li><a href="" class="comment-action-spam">#{commentMsg.comment_spam_label}</a></li>
+            <li><a href="" class="comment-action-waiting">#{commentMsg.comment_wait_label}</a></li>
+            <li><a href="" class="comment-action-delete">#{commentMsg.comment_delete_label}</a></li>
         </ul>
         <h:panelGroup rendered="#{cmt.format ne 'FORMAT_WIKI'}" styleClass='comment-text'>
             <h:outputText escape="#{cmt.format ne 'FORMAT_HTML'}" value="#{cmt.comment}"/>
