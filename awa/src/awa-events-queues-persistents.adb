@@ -150,8 +150,12 @@ package body AWA.Events.Queues.Persistents is
          Event.Set_Entity_Identifier (Msg.Get_Entity_Id);
          Event.Entity_Type := Msg.Get_Entity_Type;
 
-         Log.Info ("Dispatching event 0} for user{1} session{2}", Name,
-                   ADO.Identifier'Image (User.Get_Id), ADO.Identifier'Image (Session.Get_Id));
+         if not User.Is_Null then
+            Log.Info ("Dispatching event {0} for user{1} session{2}", Name,
+                      ADO.Identifier'Image (User.Get_Id), ADO.Identifier'Image (Session.Get_Id));
+         else
+            Log.Info ("Dispatching event {0}", Name);
+         end if;
 
          --  Run the Process action on behalf of the user associated with the message.
          Run (AWA.Users.Models.User_Ref (User), AWA.Users.Models.Session_Ref (Session));
