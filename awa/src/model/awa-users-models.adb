@@ -708,12 +708,42 @@ package body AWA.Users.Models is
    end Get_Id;
 
 
+   procedure Set_Salt (Object : in out User_Ref;
+                        Value : in String) is
+      Impl : User_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_String (Impl.all, 9, Impl.Salt, Value);
+   end Set_Salt;
+
+   procedure Set_Salt (Object : in out User_Ref;
+                       Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : User_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 9, Impl.Salt, Value);
+   end Set_Salt;
+
+   function Get_Salt (Object : in User_Ref)
+                 return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (Object.Get_Salt);
+   end Get_Salt;
+   function Get_Salt (Object : in User_Ref)
+                  return Ada.Strings.Unbounded.Unbounded_String is
+      Impl : constant User_Access
+         := User_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Salt;
+   end Get_Salt;
+
+
    procedure Set_Email (Object : in out User_Ref;
                         Value  : in AWA.Users.Models.Email_Ref'Class) is
       Impl : User_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 9, Impl.Email, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 10, Impl.Email, Value);
    end Set_Email;
 
    function Get_Email (Object : in User_Ref)
@@ -745,6 +775,7 @@ package body AWA.Users.Models is
             Copy.Country := Impl.Country;
             Copy.Name := Impl.Name;
             Copy.Version := Impl.Version;
+            Copy.Salt := Impl.Salt;
             Copy.Email := Impl.Email;
          end;
       end if;
@@ -911,9 +942,14 @@ package body AWA.Users.Models is
          Object.Clear_Modified (8);
       end if;
       if Object.Is_Modified (9) then
-         Stmt.Save_Field (Name  => COL_8_2_NAME, --  email_id
-                          Value => Object.Email);
+         Stmt.Save_Field (Name  => COL_8_2_NAME, --  salt
+                          Value => Object.Salt);
          Object.Clear_Modified (9);
+      end if;
+      if Object.Is_Modified (10) then
+         Stmt.Save_Field (Name  => COL_9_2_NAME, --  email_id
+                          Value => Object.Email);
+         Object.Clear_Modified (10);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -961,7 +997,9 @@ package body AWA.Users.Models is
       Session.Allocate (Id => Object);
       Query.Save_Field (Name  => COL_7_2_NAME, --  id
                         Value => Object.Get_Key);
-      Query.Save_Field (Name  => COL_8_2_NAME, --  email_id
+      Query.Save_Field (Name  => COL_8_2_NAME, --  salt
+                        Value => Object.Salt);
+      Query.Save_Field (Name  => COL_9_2_NAME, --  email_id
                         Value => Object.Email);
       Query.Execute (Result);
       if Result /= 1 then
@@ -1008,6 +1046,8 @@ package body AWA.Users.Models is
          return Util.Beans.Objects.To_Object (Impl.Name);
       elsif Name = "id" then
          return ADO.Objects.To_Object (Impl.Get_Key);
+      elsif Name = "salt" then
+         return Util.Beans.Objects.To_Object (Impl.Salt);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -1028,8 +1068,9 @@ package body AWA.Users.Models is
       Object.Country := Stmt.Get_Unbounded_String (4);
       Object.Name := Stmt.Get_Unbounded_String (5);
       Object.Set_Key_Value (Stmt.Get_Identifier (7));
-      if not Stmt.Is_Null (8) then
-         Object.Email.Set_Key_Value (Stmt.Get_Identifier (8), Session);
+      Object.Salt := Stmt.Get_Unbounded_String (8);
+      if not Stmt.Is_Null (9) then
+         Object.Email.Set_Key_Value (Stmt.Get_Identifier (9), Session);
       end if;
       Object.Version := Stmt.Get_Integer (6);
       ADO.Objects.Set_Created (Object);

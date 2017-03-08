@@ -264,6 +264,18 @@ package AWA.Users.Models is
    function Get_Id (Object : in User_Ref)
                  return ADO.Identifier;
 
+   --  Set the password salt.
+   procedure Set_Salt (Object : in out User_Ref;
+                       Value  : in Ada.Strings.Unbounded.Unbounded_String);
+   procedure Set_Salt (Object : in out User_Ref;
+                       Value : in String);
+
+   --  Get the password salt.
+   function Get_Salt (Object : in User_Ref)
+                 return Ada.Strings.Unbounded.Unbounded_String;
+   function Get_Salt (Object : in User_Ref)
+                 return String;
+
    --
    procedure Set_Email (Object : in out User_Ref;
                         Value  : in AWA.Users.Models.Email_Ref'Class);
@@ -622,10 +634,11 @@ private
    COL_5_2_NAME : aliased constant String := "name";
    COL_6_2_NAME : aliased constant String := "version";
    COL_7_2_NAME : aliased constant String := "id";
-   COL_8_2_NAME : aliased constant String := "email_id";
+   COL_8_2_NAME : aliased constant String := "salt";
+   COL_9_2_NAME : aliased constant String := "email_id";
 
    USER_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 9,
+     (Count => 10,
       Table => USER_NAME'Access,
       Members => (
          1 => COL_0_2_NAME'Access,
@@ -636,7 +649,8 @@ private
          6 => COL_5_2_NAME'Access,
          7 => COL_6_2_NAME'Access,
          8 => COL_7_2_NAME'Access,
-         9 => COL_8_2_NAME'Access
+         9 => COL_8_2_NAME'Access,
+         10 => COL_9_2_NAME'Access
 )
      );
    USER_TABLE : constant ADO.Schemas.Class_Mapping_Access
@@ -656,6 +670,7 @@ private
        Country : Ada.Strings.Unbounded.Unbounded_String;
        Name : Ada.Strings.Unbounded.Unbounded_String;
        Version : Integer;
+       Salt : Ada.Strings.Unbounded.Unbounded_String;
        Email : AWA.Users.Models.Email_Ref;
    end record;
 
