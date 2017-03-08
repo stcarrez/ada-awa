@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa.users -- User registration, authentication processes
---  Copyright (C) 2009, 2010, 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +22,7 @@ with AWA.Users.Principals;
 with AWA.Modules;
 with AWA.Events;
 with Security.Auth;
+with Security.Random;
 
 with ADO;
 with ADO.Sessions;
@@ -99,16 +100,16 @@ package AWA.Users.Services is
    function Get_Authenticate_Id (Model  : in User_Service;
                                  Cookie : in String) return ADO.Identifier;
 
-   --  Get the password hash.  The password is signed using HMAC-SHA1 with the email address.
+   --  Get the password hash.  The password is signed using HMAC-SHA1 with the salt.
    function Get_Password_Hash (Model    : in User_Service;
                                Password : in String;
-                               Email    : in String)
+                               Salt     : in String)
                                return String;
 
    --  Create a user in the database with the given user information and
    --  the associated email address.  Verify that no such user already exist.
    --  Raises User_Exist exception if a user with such email is already registered.
-   procedure Create_User (Model : in User_Service;
+   procedure Create_User (Model : in out User_Service;
                           User  : in out User_Ref'Class;
                           Email : in out Email_Ref'Class);
 
@@ -157,13 +158,12 @@ package AWA.Users.Services is
    --  the given email address and send that user a password reset key
    --  in an email.
    --  Raises Not_Found exception if no user with such email exist
-   procedure Lost_Password (Model : in User_Service;
+   procedure Lost_Password (Model : in out User_Service;
                             Email : in String);
 
    --  Reset the password of the user associated with the secure key.
-   --  to the user in an email.
    --  Raises Not_Found if there is no key or if the user does not have any email
-   procedure Reset_Password (Model    : in User_Service;
+   procedure Reset_Password (Model    : in out User_Service;
                              Key      : in String;
                              Password : in String;
                              IpAddr   : in String;
@@ -198,6 +198,9 @@ package AWA.Users.Services is
 
 private
 
+   function Create_Key (Model  : in out User_Service;
+                        Number : in ADO.Identifier) return String;
+
    procedure Create_Session (Model   : in User_Service;
                              DB      : in out ADO.Sessions.Master_Session;
                              Session : out Session_Ref'Class;
@@ -207,6 +210,7 @@ private
 
    type User_Service is new AWA.Modules.Module_Manager with record
       Server_Id : Integer := 0;
+      Random    : Security.Random.Generator;
       Auth_Key  : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
