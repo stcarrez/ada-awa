@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-modules -- Module wikis
---  Copyright (C) 2015, 2016 Stephane Carrez
+--  Copyright (C) 2015, 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -246,7 +246,6 @@ package body AWA.Wikis.Modules is
       AWA.Permissions.Check (Permission => ACL_Create_Wiki_Pages.Permission,
                              Entity     => Into);
 
-      Page.Set_Is_Public (Into.Get_Is_Public);
       Page.Set_Wiki (Into);
       Model.Save_Wiki_Content (Page, Content);
    end Create_Wiki_Page;
