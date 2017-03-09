@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  files.tests -- Unit tests for files
---  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,8 @@ with Ada.Unchecked_Deallocation;
 with Util.Tests;
 with Util.Log.Loggers;
 
+with ASF.Tests;
+with ASF.Responses.Mockup;
 with AWA.Applications;
 with AWA.Tests;
 with AWA.Users.Modules;
@@ -194,6 +196,25 @@ package body AWA.Tests.Helpers.Users is
             exit;
          end if;
       end loop;
+   end Login;
+
+   --  ------------------------------
+   --  Simulate a user login on the request.  Upon successful login, a session that is
+   --  authentified is associated with the request object.
+   --  ------------------------------
+   procedure Login (Email   : in String;
+                    Request : in out ASF.Requests.Mockup.Request) is
+      User  : Test_User;
+      Reply : ASF.Responses.Mockup.Response;
+   begin
+      Create_User (User, Email);
+      ASF.Tests.Do_Get (Request, Reply, "/auth/login.html", "login-user-1.html");
+
+      Request.Set_Parameter ("email", Email);
+      Request.Set_Parameter ("password", "admin");
+      Request.Set_Parameter ("login", "1");
+      Request.Set_Parameter ("login-button", "1");
+      ASF.Tests.Do_Post (Request, Reply, "/auth/login.html", "login-user-2.html");
    end Login;
 
    --  ------------------------------
