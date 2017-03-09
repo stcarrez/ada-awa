@@ -984,6 +984,12 @@ package body AWA.Wikis.Beans is
       elsif Name = "page_id" and not Util.Beans.Objects.Is_Empty (Value) then
          From.Page_Id := ADO.Utils.To_Identifier (Value);
       end if;
+
+   exception
+      when Constraint_Error =>
+         From.Wiki_Id := ADO.NO_IDENTIFIER;
+         From.Page_Id := ADO.NO_IDENTIFIER;
+
    end Set_Value;
 
    overriding
@@ -1120,6 +1126,12 @@ package body AWA.Wikis.Beans is
          From.Page_Id := ADO.Utils.To_Identifier (Value);
          From.Page.Id := From.Page_Id;
       end if;
+      
+   exception
+      when Constraint_Error =>
+         From.Wiki_Id := ADO.NO_IDENTIFIER;
+         From.Page_Id := ADO.NO_IDENTIFIER;
+
    end Set_Value;
 
    overriding
