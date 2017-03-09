@@ -17,12 +17,19 @@
 -----------------------------------------------------------------------
 
 with Util.Test_Caller;
+with Util.Strings;
+with ASF.Tests;
+with ASF.Requests.Mockup;
+with ASF.Responses.Mockup;
 with AWA.Tests.Helpers;
 with AWA.Tests.Helpers.Users;
 with AWA.Services.Contexts;
 with Security.Contexts;
 
 package body AWA.Wikis.Modules.Tests is
+
+   use ASF.Tests;
+   use Util.Tests;
 
    package Caller is new Util.Test_Caller (Test, "Wikis.Modules");
 
@@ -34,6 +41,8 @@ package body AWA.Wikis.Modules.Tests is
                        Test_Create_Wiki_Page'Access);
       Caller.Add_Test (Suite, "Test AWA.Wikis.Modules.Create_Wiki_Content",
                        Test_Create_Wiki_Content'Access);
+      Caller.Add_Test (Suite, "Test AWA.Wikis.Modules.Wiki_Page",
+                       Test_Wiki_Page'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -79,10 +88,19 @@ package body AWA.Wikis.Modules.Tests is
       W.Set_Name ("Test wiki space");
       T.Manager.Create_Wiki_Space (W);
 
-      P.Set_Name ("The page");
+      P.Set_Name ("Private");
       P.Set_Title ("The page title");
       T.Manager.Create_Wiki_Page (W, P, C);
       T.Assert (P.Is_Inserted, "The new wiki page was not created");
+
+      C := AWA.Wikis.Models.Null_Wiki_Content;
+      P := AWA.Wikis.Models.Null_Wiki_Page;
+      P.Set_Name ("Public");
+      P.Set_Title ("The page title (public)");
+      P.Set_Is_Public (True);
+      T.Manager.Create_Wiki_Page (W, P, C);
+      T.Assert (P.Is_Inserted, "The new wiki page was not created");
+      T.Assert (P.Get_Is_Public, "The new wiki page is not public");
 
    end Test_Create_Wiki_Page;
 
@@ -100,11 +118,15 @@ package body AWA.Wikis.Modules.Tests is
 
       W.Set_Name ("Test wiki space");
       T.Manager.Create_Wiki_Space (W);
+      T.Wiki_Id := W.Get_Id;
 
-      P.Set_Name ("The page");
+      P.Set_Name ("PrivatePage");
       P.Set_Title ("The page title");
+      P.Set_Is_Public (False);
       T.Manager.Create_Wiki_Page (W, P, C);
+      T.Private_Id := P.Get_Id;
 
+      C := AWA.Wikis.Models.Null_Wiki_Content;
       C.Set_Format (AWA.Wikis.Models.FORMAT_MARKDOWN);
       C.Set_Content ("-- Title" & ASCII.LF & "A paragraph");
       C.Set_Save_Comment ("A first version");
@@ -113,6 +135,66 @@ package body AWA.Wikis.Modules.Tests is
       T.Assert (not C.Get_Author.Is_Null, "The wiki content has an author");
       T.Assert (not C.Get_Page.Is_Null, "The wiki content is associated with the wiki page");
 
+      P := AWA.Wikis.Models.Null_Wiki_Page;
+      C := AWA.Wikis.Models.Null_Wiki_Content;
+      P.Set_Name ("PublicPage");
+      P.Set_Title ("The public page title");
+      P.Set_Is_Public (True);
+      T.Manager.Create_Wiki_Page (W, P, C);
+      T.Public_Id := P.Get_Id;
+
+      C.Set_Format (AWA.Wikis.Models.FORMAT_MARKDOWN);
+      C.Set_Content ("-- Title" & ASCII.LF & "A paragraph" & ASCII.LF
+                     & "[Link](http://mylink.com)" & ASCII.LF
+                     & "[Image](my-image.png)");
+      C.Set_Save_Comment ("A first version");
+      T.Manager.Create_Wiki_Content (P, C);
+      T.Assert (C.Is_Inserted, "The new wiki content was not created");
+      T.Assert (not C.Get_Author.Is_Null, "The wiki content has an author");
+      T.Assert (not C.Get_Page.Is_Null, "The wiki content is associated with the wiki page");
+
    end Test_Create_Wiki_Content;
+
+   procedure Test_Wiki_Page (T : in out Test) is
+      Request   : ASF.Requests.Mockup.Request;
+      Reply     : ASF.Responses.Mockup.Response;
+      Ident     : constant String := Util.Strings.Image (Natural (T.Wiki_Id));
+      Pub_Ident : constant String := Util.Strings.Image (Natural (T.Public_Id));
+   begin
+      ASF.Tests.Do_Get (Request, Reply, "/wikis/view/" & Ident & "/PublicPage", "wiki-public-1.html");
+      Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status, "Invalid response (PublicPage)");
+      Assert_Matches (T, ".*The public page title.*", Reply, "Invalid PublicPage page returned",
+                      Status => ASF.Responses.SC_OK);
+
+      ASF.Tests.Do_Get (Request, Reply, "/wikis/info/" & Ident & "/" & Pub_Ident,
+                        "wiki-public-info-1.html");
+      Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status, "Invalid response (PublicPage info)");
+      Assert_Matches (T, ".*The public page title.*", Reply, "Invalid PublicPage info page returned",
+                      Status => ASF.Responses.SC_OK);
+
+      ASF.Tests.Do_Get (Request, Reply, "/wikis/history/" & Ident & "/" & Pub_Ident,
+                        "wiki-public-history-1.html");
+      Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status, "Invalid response (PublicPage history)");
+      Assert_Matches (T, ".*The public page title.*", Reply, "Invalid PublicPage info page returned",
+                      Status => ASF.Responses.SC_OK);
+
+      Request.Remove_Attribute ("wikiView");
+      ASF.Tests.Do_Get (Request, Reply, "/wikis/view/" & Ident & "/PrivatePage", "wiki-private-1.html");
+      Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status, "Invalid response (PrivatePage)");
+      Assert_Matches (T, ".*Protected Wiki Page.*", Reply, "Invalid PrivatePage page returned",
+                      Status => ASF.Responses.SC_OK);
+
+      ASF.Tests.Do_Get (Request, Reply, "/wikis/list/" & Ident & "/recent", "wiki-list-recent-1.html");
+      Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status, "Invalid response (list/recent)");
+
+      ASF.Tests.Do_Get (Request, Reply, "/wikis/list/" & Ident & "/recent/grid", "wiki-list-grid-1.html");
+      Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status, "Invalid response (list/recent/grid)");
+
+      ASF.Tests.Do_Get (Request, Reply, "/wikis/list/" & Ident & "/popular", "wiki-list-popular-1.html");
+      Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status, "Invalid response (list/popular)");
+
+      ASF.Tests.Do_Get (Request, Reply, "/wikis/list/" & Ident & "/popular/grid", "wiki-list-popular-1.html");
+      Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status, "Invalid response (list/popular/grid)");
+   end Test_Wiki_Page;
 
 end AWA.Wikis.Modules.Tests;
