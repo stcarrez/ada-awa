@@ -35,6 +35,7 @@ project Awa_Tests is
     "plugins/awa-counters/regtests",
 	"plugins/awa-storages/regtests",
 	"plugins/awa-images/regtests",
+	"plugins/awa-blogs/regtests",
 	"plugins/awa-comments/regtests",
 	"plugins/awa-votes/regtests",
 	"plugins/awa-tags/regtests",
