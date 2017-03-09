@@ -22,7 +22,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <!--DEV_START-->
+    <!--dynamo-merge link="/css/all.css" prefix="#{contextPath}" -->
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/grids/reset.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/grids/fluid_grid.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/asf.css"/>
@@ -33,7 +33,7 @@
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/blogs.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/questions.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/jquery.tagedit.css"/>
-    <!--DEV_END-->
+    <!--dynamo-end-->
 
     <ui:insert name="pageHeader"/>
     <title><h:outputText value="#{title}"/></title>
@@ -44,11 +44,11 @@
 <ui:include src="top-bar.xhtml"/>
 
 <div id='awa-page' class='container_12'>
-    <ui:include src="header.xhtml"/>
     <ui:insert name="pageBody"/>
     <div id="awa-clfooter"></div>
 </div>
 <ui:include src="footer.xhtml"/>
+<!--dynamo-merge link="/js/all.js" prefix="#{contextPath}" -->
 <script type="text/javascript" src="#{jQuery.path}"></script>
 <script type="text/javascript" src="#{jquery.uiPath}core.js"></script>
 <script type="text/javascript" src="#{jquery.uiPath}widget.js"></script>
@@ -61,6 +61,7 @@
 <script type="text/javascript" src="#{jquery.uiPath}tabs.js"></script>
 <script type="text/javascript" src="#{contextPath}/js/asf-message.js"></script>
 <script type="text/javascript" src="#{contextPath}/js/asf.js"></script>
+<!--dynamo-end-->
 <ui:insert name="pageScript"/>
 
 <!--DEV_START-->
