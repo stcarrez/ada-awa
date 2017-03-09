@@ -1,0 +1,15 @@
+<mail:message xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:mail="http://code.google.com/p/ada-awa/mail">
+  <mail:from name="John Balt">John.Balt@nowhere.com</mail:from>
+  <mail:to>#{email}</mail:to>
+  <mail:cc address="#{email}" name="New User"/>
+  <mail:cc address="Joe@nowhere.com"/>
+  <mail:subject>Hello from a test application</mail:subject>
+
+  <mail:body>
+Dear #{name},
+
+   Welcome to this application
+
+  </mail:body>
+</mail:message>
