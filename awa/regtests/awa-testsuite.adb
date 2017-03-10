@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Util testsuite - Util Testsuite
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +19,7 @@
 with AWA.Users.Services.Tests;
 with AWA.Users.Tests;
 with AWA.Blogs.Modules.Tests;
+with AWA.Blogs.Tests;
 with AWA.Helpers.Selectors.Tests;
 with AWA.Storages.Services.Tests;
 with AWA.Events.Services.Tests;
@@ -110,6 +111,7 @@ package body AWA.Testsuite is
       AWA.Settings.Modules.Tests.Add_Tests (Ret);
       AWA.Comments.Modules.Tests.Add_Tests (Ret);
       AWA.Blogs.Modules.Tests.Add_Tests (Ret);
+      AWA.Blogs.Tests.Add_Tests (Ret);
       AWA.Storages.Services.Tests.Add_Tests (Ret);
       AWA.Images.Services.Tests.Add_Tests (Ret);
       AWA.Changelogs.Modules.Tests.Add_Tests (Ret);
@@ -217,6 +219,10 @@ package body AWA.Testsuite is
                       URI    => "wikis",
                       Module => Wikis'Access);
 
+            Application.Add_Converter (Name      => "dateConverter",
+                                       Converter => Date_Converter'Access);
+            Application.Add_Converter (Name      => "smartDateConverter",
+                                       Converter => Rel_Date_Converter'Access);
             Application.Start;
 --              if Props.Exists ("test.server") then
 --                 declare
