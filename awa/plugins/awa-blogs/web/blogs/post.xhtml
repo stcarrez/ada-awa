@@ -27,7 +27,7 @@
     <!-- Main page body -->
     <ui:define name="pageBody">
         <f:metadata>
-            <f:viewParam id='post' value='#{post.uri}'/>
+            <f:viewParam id='post' value='#{post.uri}' required='false'/>
             <f:viewAction action='#{post.load}'/>
         </f:metadata>
         <div id='awa-content'>
