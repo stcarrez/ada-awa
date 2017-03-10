@@ -199,6 +199,7 @@ package body AWA.Blogs.Beans is
                                   Comment => Bean.Get_Allow_Comments,
                                   Status  => Bean.Get_Status,
                                   Result  => Result);
+         Bean.Set_Id (Result);
       else
          Bean.Module.Update_Post (Post_Id => Bean.Get_Id,
                                   Title   => Bean.Get_Title,
