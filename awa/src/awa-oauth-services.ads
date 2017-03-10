@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  awa-tests-helpers - Helpers for AWA unit tests
---  Copyright (C) 2011, 2017 Stephane Carrez
+--  awa-oauth-services -- OAuth Server Side
+--  Copyright (C) 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,17 +15,16 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with ASF.Responses.Mockup;
-with Ada.Strings.Unbounded;
-package AWA.Tests.Helpers is
+with Security.OAuth.Servers;
+package AWA.OAuth.Services is
 
-   --  Extract from the Location header the part that is after the given base string.
-   --  If the Location header does not start with the base string, returns the empty
-   --  string.
-   function Extract_Redirect (Reply : in ASF.Responses.Mockup.Response'Class;
-                              Base  : in String) return String;
+   type Auth_Manager is new Security.OAuth.Servers.Auth_Manager with private;
+   type Auth_Manager_Access is access all Auth_Manager'Class;
 
-   function Extract_Redirect (Reply : in ASF.Responses.Mockup.Response'Class;
-                              Base  : in String) return Ada.Strings.Unbounded.Unbounded_String;
+private
 
-end AWA.Tests.Helpers;
+   type Auth_Manager is new Security.OAuth.Servers.Auth_Manager with record
+     N : Natural;   
+   end record;
+
+end AWA.OAuth.Services;

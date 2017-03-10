@@ -15,17 +15,31 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with ASF.Responses.Mockup;
-with Ada.Strings.Unbounded;
-package AWA.Tests.Helpers is
 
+package body AWA.Tests.Helpers is
+
+   --  ------------------------------
    --  Extract from the Location header the part that is after the given base string.
    --  If the Location header does not start with the base string, returns the empty
    --  string.
+   --  ------------------------------
    function Extract_Redirect (Reply : in ASF.Responses.Mockup.Response'Class;
-                              Base  : in String) return String;
+                              Base  : in String) return String is
+      R : constant String := Reply.Get_Header ("Location");
+   begin
+      if R'Length < Base'Length then
+         return "";
+      elsif R (R'First .. R'First + Base'Length - 1) /= Base then
+         return "";
+      else
+         return R (R'First + Base'Length .. R'Last);
+      end if;
+   end Extract_Redirect;
 
    function Extract_Redirect (Reply : in ASF.Responses.Mockup.Response'Class;
-                              Base  : in String) return Ada.Strings.Unbounded.Unbounded_String;
+                              Base  : in String) return Ada.Strings.Unbounded.Unbounded_String is
+   begin
+      return Ada.Strings.Unbounded.To_Unbounded_String (Extract_Redirect (Reply, Base));
+   end Extract_Redirect;
 
 end AWA.Tests.Helpers;

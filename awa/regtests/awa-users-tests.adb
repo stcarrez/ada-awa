@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  files.tests -- Unit tests for files
---  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -81,8 +81,9 @@ package body AWA.Users.Tests is
       begin
          AWA.Tests.Helpers.Users.Find_Access_Key (Principal, Email, Key);
          T.Assert (not Key.Is_Null, "There is no access key associated with the user");
-         Request.Set_Parameter ("key", Key.Get_Access_Key);
-         Do_Get (Request, Reply, "/auth/validate.html", "validate-user-1.html");
+
+         Do_Get (Request, Reply, "/auth/validate.html?key=" & Key.Get_Access_Key,
+                 "validate-user-1.html");
 
          T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
       end;

@@ -235,7 +235,7 @@
     <from-view-id>/blogs/admin/edit.xhtml</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
-      <to-view-id>/blogs/admin/list.xhtml?blog_id=#{post.blogId}</to-view-id>
+      <to-view-id>/blogs/admin/#{post.blogId}/preview/#{post.id}</to-view-id>
       <redirect/>
     </navigation-case>
   </navigation-rule>
@@ -261,7 +261,7 @@
     </navigation-case>
     <navigation-case>
       <from-outcome>success</from-outcome>
-      <to-view-id>/blogs/admin/list.xhtml?blog_id=#{post.blogId}</to-view-id>
+      <to-view-id>/blogs/admin/#{post.blogId}/preview/#{post.id}</to-view-id>
       <redirect/>
     </navigation-case>
   </navigation-rule>
