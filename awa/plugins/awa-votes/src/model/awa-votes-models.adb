@@ -678,8 +678,9 @@ package body AWA.Votes.Models is
          Object.Clear_Modified (3);
       end if;
       if Stmt.Has_Save_Fields then
-         Stmt.Set_Filter (Filter => "user_id = ?");
+         Stmt.Set_Filter (Filter => "user_id = ? AND entity_id = ?");
          Stmt.Add_Param (Value => Object.Get_Key);
+         Stmt.Add_Param (Value => Object.Entity);
          declare
             Result : Integer;
          begin
