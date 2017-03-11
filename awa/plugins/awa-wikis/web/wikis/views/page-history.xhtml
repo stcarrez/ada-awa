@@ -56,6 +56,10 @@
                 </h:outputFormat>
             </div>
         </div>
+        <awa:tagList value='#{wikiView.tags}' id='qtags' styleClass="wiki-tag-list tagedit-list"
+                     tagLink="#{contextPath}/wikis/tags/#{wikiView.wiki_id}/#{tagName}/recent"
+                     var="tagName"
+                     tagClass="tagedit-listelement tagedit-listelement-old"/>
         <div class='wiki-admin awa-list-header' id="wiki-page-list-header">
             <div class="awa-list-item-header">
                 <div class='awa-header-col wiki-page-version'>
