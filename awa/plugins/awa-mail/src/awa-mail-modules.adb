@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail -- Mail module
---  Copyright (C) 2011, 2012, 2015 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2015, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -77,17 +77,6 @@ package body AWA.Mail.Modules is
    begin
       return Plugin.Mailer.Create_Message;
    end Create_Message;
-
-   --  ------------------------------
-   --  Get the mail template that must be used for the given event name.
-   --  The mail template is configured by the property: <i>module</i>.template.<i>event</i>.
-   --  ------------------------------
-   function Get_Template (Plugin : in Mail_Module;
-                          Name   : in String) return String is
-      Prop_Name : constant String := Plugin.Get_Name & ".template." & Name;
-   begin
-      return Plugin.Get_Config (Prop_Name);
-   end Get_Template;
 
    --  ------------------------------
    --  Receive an event sent by another module with <b>Send_Event</b> method.
