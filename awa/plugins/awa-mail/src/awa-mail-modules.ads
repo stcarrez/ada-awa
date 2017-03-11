@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail -- Mail module
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -82,11 +82,6 @@ package AWA.Mail.Modules is
    --  Create a new mail message.
    function Create_Message (Plugin : in Mail_Module)
                             return AWA.Mail.Clients.Mail_Message_Access;
-
-   --  Get the mail template that must be used for the given event name.
-   --  The mail template is configured by the property: <i>module</i>.template.<i>event</i>.
-   function Get_Template (Plugin : in Mail_Module;
-                          Name   : in String) return String;
 
    --  Format and send an email.
    procedure Send_Mail (Plugin   : in Mail_Module;
