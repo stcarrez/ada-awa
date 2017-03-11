@@ -219,3 +219,7 @@ INSERT INTO entity_type (name) VALUES
 ("awa_application")
 ,("awa_callback")
 ,("awa_oauth_session");
+
+ALTER TABLE awa_vote DROP PRIMARY KEY,
+  ADD PRIMARY KEY (`entity_id`, `user_id`);
+ALTER TABLE awa_vote DROP COLUMN `id`;
