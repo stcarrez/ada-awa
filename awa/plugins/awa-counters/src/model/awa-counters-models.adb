@@ -309,8 +309,10 @@ package body AWA.Counters.Models is
          Object.Clear_Modified (4);
       end if;
       if Stmt.Has_Save_Fields then
-         Stmt.Set_Filter (Filter => "definition_id = ?");
+         Stmt.Set_Filter (Filter => "definition_id = ? AND object_id = ? AND date = ?");
          Stmt.Add_Param (Value => Object.Get_Key);
+         Stmt.Add_Param (Value => Object.Object_Id);
+         Stmt.Add_Param (Value => Object.Date);
          declare
             Result : Integer;
          begin
@@ -1051,8 +1053,10 @@ package body AWA.Counters.Models is
          Object.Clear_Modified (5);
       end if;
       if Stmt.Has_Save_Fields then
-         Stmt.Set_Filter (Filter => "definition_id = ?");
+         Stmt.Set_Filter (Filter => "definition_id = ? AND object_id = ? AND user = ?");
          Stmt.Add_Param (Value => Object.Get_Key);
+         Stmt.Add_Param (Value => Object.Object_Id);
+         Stmt.Add_Param (Value => Object.User);
          declare
             Result : Integer;
          begin
