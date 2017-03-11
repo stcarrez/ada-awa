@@ -128,3 +128,94 @@ ALTER TABLE awa_image ADD COLUMN `path` VARCHAR(255) BINARY NOT NULL;
 ALTER TABLE awa_storage ADD COLUMN `is_public` TINYINT NOT NULL DEFAULT 0;
 
 ALTER TABLE awa_user ADD COLUMN `salt` VARCHAR(255) NOT NULL;
+
+/*  */
+CREATE TABLE awa_invitation (
+  /* the invitation identifier. */
+  `id` BIGINT NOT NULL,
+  /* version optimistic lock. */
+  `version` INTEGER NOT NULL,
+  /* date when the invitation was created and sent. */
+  `create_date` DATETIME NOT NULL,
+  /* the email address to which the invitation was sent. */
+  `email` VARCHAR(255) BINARY NOT NULL,
+  /* the invitation message. */
+  `message` text NOT NULL,
+  /* the date when the invitation was accepted. */
+  `acceptance_date` DATETIME ,
+  /* the workspace where the user is invited. */
+  `workspace_id` BIGINT NOT NULL,
+  /*  */
+  `access_key_id` BIGINT ,
+  /* the user being invited. */
+  `invitee_id` BIGINT ,
+  /*  */
+  `inviter_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
+);
+INSERT INTO entity_type (name) VALUES ("awa_invitation");
+
+/* The application that is granted access to the database.
+ */
+CREATE TABLE awa_application (
+  /* the application identifier. */
+  `id` BIGINT NOT NULL,
+  /* the application name. */
+  `name` VARCHAR(255) BINARY NOT NULL,
+  /* the application secret key. */
+  `secret_key` VARCHAR(255) BINARY NOT NULL,
+  /* the application public identifier. */
+  `client_id` VARCHAR(255) BINARY NOT NULL,
+  /* the optimistic lock version. */
+  `version` INTEGER NOT NULL,
+  /* the application create date. */
+  `create_date` DATETIME NOT NULL,
+  /* the application update date. */
+  `update_date` DATETIME NOT NULL,
+  /* the application title displayed in the OAuth login form. */
+  `title` VARCHAR(255) BINARY NOT NULL,
+  /* the application description. */
+  `description` VARCHAR(255) BINARY NOT NULL,
+  /* the optional login URL. */
+  `app_login_url` VARCHAR(255) BINARY NOT NULL,
+  /* the application logo URL. */
+  `app_logo_url` VARCHAR(255) BINARY NOT NULL,
+  /*  */
+  `user_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
+);
+/*  */
+CREATE TABLE awa_callback (
+  /*  */
+  `id` BIGINT NOT NULL,
+  /*  */
+  `url` VARCHAR(255) BINARY NOT NULL,
+  /* the optimistic lock version. */
+  `version` INTEGER NOT NULL,
+  /*  */
+  `application_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
+);
+/* The session is created when the user has granted an access to an application
+or when the application has refreshed its access token. */
+CREATE TABLE awa_oauth_session (
+  /* the session identifier. */
+  `id` BIGINT NOT NULL,
+  /* the session creation date. */
+  `create_date` DATETIME NOT NULL,
+  /* a random salt string to access/request token generation. */
+  `salt` VARCHAR(255) BINARY NOT NULL,
+  /* the expiration date. */
+  `expire_date` DATETIME NOT NULL,
+  /* the application that is granted access. */
+  `application_id` BIGINT NOT NULL,
+  /*  */
+  `user_id` BIGINT NOT NULL,
+  /*  */
+  `session_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
+);
+INSERT INTO entity_type (name) VALUES
+("awa_application")
+,("awa_callback")
+,("awa_oauth_session");
