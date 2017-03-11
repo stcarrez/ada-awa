@@ -42,4 +42,7 @@ package AWA.Blogs.Tests is
    --  Test updating a post by simulating web requests.
    procedure Test_Update_Post (T : in out Test);
 
+   --  Test listing the blog posts.
+   procedure Test_Admin_List_Posts (T : in out Test);
+
 end AWA.Blogs.Tests;
