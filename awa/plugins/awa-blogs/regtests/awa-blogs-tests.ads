@@ -45,4 +45,7 @@ package AWA.Blogs.Tests is
    --  Test listing the blog posts.
    procedure Test_Admin_List_Posts (T : in out Test);
 
+   --  Test listing the blog comments.
+   procedure Test_Admin_List_Comments (T : in out Test);
+
 end AWA.Blogs.Tests;
