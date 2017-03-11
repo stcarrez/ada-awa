@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2016 Stephane Carrez
+--  Copyright (C) 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -336,7 +336,6 @@ package body AWA.Counters.Models is
                         Value => Object.Date);
       Query.Save_Field (Name  => COL_2_1_NAME, --  counter
                         Value => Object.Counter);
-      Session.Allocate (Id => Object);
       Query.Save_Field (Name  => COL_3_1_NAME, --  definition_id
                         Value => Object.Get_Key);
       Query.Execute (Result);
@@ -1081,7 +1080,6 @@ package body AWA.Counters.Models is
                         Value => Object.Date);
       Query.Save_Field (Name  => COL_3_3_NAME, --  user
                         Value => Object.User);
-      Session.Allocate (Id => Object);
       Query.Save_Field (Name  => COL_4_3_NAME, --  definition_id
                         Value => Object.Get_Key);
       Query.Execute (Result);
