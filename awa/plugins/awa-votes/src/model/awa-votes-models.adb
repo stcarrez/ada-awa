@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2016 Stephane Carrez
+--  Copyright (C) 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -729,7 +729,6 @@ package body AWA.Votes.Models is
                         Value => Object.Id);
       Query.Save_Field (Name  => COL_2_2_NAME, --  entity_id
                         Value => Object.Entity);
-      Session.Allocate (Id => Object);
       Query.Save_Field (Name  => COL_3_2_NAME, --  user_id
                         Value => Object.Get_Key);
       Query.Execute (Result);
