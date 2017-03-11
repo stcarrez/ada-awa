@@ -158,14 +158,6 @@ package AWA.Votes.Models is
                  return Integer;
 
    --
-   procedure Set_Id (Object : in out Vote_Ref;
-                     Value  : in ADO.Identifier);
-
-   --
-   function Get_Id (Object : in Vote_Ref)
-                 return ADO.Identifier;
-
-   --
    procedure Set_Entity (Object : in out Vote_Ref;
                          Value  : in AWA.Votes.Models.Rating_Ref'Class);
 
@@ -343,18 +335,16 @@ private
                         Impl   : out Rating_Access);
    VOTE_NAME : aliased constant String := "awa_vote";
    COL_0_2_NAME : aliased constant String := "rating";
-   COL_1_2_NAME : aliased constant String := "id";
-   COL_2_2_NAME : aliased constant String := "entity_id";
-   COL_3_2_NAME : aliased constant String := "user_id";
+   COL_1_2_NAME : aliased constant String := "entity_id";
+   COL_2_2_NAME : aliased constant String := "user_id";
 
    VOTE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 4,
+     (Count => 3,
       Table => VOTE_NAME'Access,
       Members => (
          1 => COL_0_2_NAME'Access,
          2 => COL_1_2_NAME'Access,
-         3 => COL_2_2_NAME'Access,
-         4 => COL_3_2_NAME'Access
+         3 => COL_2_2_NAME'Access
 )
      );
    VOTE_TABLE : constant ADO.Schemas.Class_Mapping_Access
@@ -368,7 +358,6 @@ private
                                      Of_Class => VOTE_DEF'Access)
    with record
        Rating : Integer;
-       Id : ADO.Identifier;
        Entity : AWA.Votes.Models.Rating_Ref;
    end record;
 

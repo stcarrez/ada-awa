@@ -460,7 +460,6 @@ package body AWA.Votes.Models is
    begin
       Impl := new Vote_Impl;
       Impl.Rating := 0;
-      Impl.Id := ADO.NO_IDENTIFIER;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -485,29 +484,12 @@ package body AWA.Votes.Models is
    end Get_Rating;
 
 
-   procedure Set_Id (Object : in out Vote_Ref;
-                     Value  : in ADO.Identifier) is
-      Impl : Vote_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Identifier (Impl.all, 2, Impl.Id, Value);
-   end Set_Id;
-
-   function Get_Id (Object : in Vote_Ref)
-                  return ADO.Identifier is
-      Impl : constant Vote_Access
-         := Vote_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Id;
-   end Get_Id;
-
-
    procedure Set_Entity (Object : in out Vote_Ref;
                          Value  : in AWA.Votes.Models.Rating_Ref'Class) is
       Impl : Vote_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 3, Impl.Entity, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 2, Impl.Entity, Value);
    end Set_Entity;
 
    function Get_Entity (Object : in Vote_Ref)
@@ -524,7 +506,7 @@ package body AWA.Votes.Models is
       Impl : Vote_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Key_Value (Impl.all, 4, Value);
+      ADO.Objects.Set_Field_Key_Value (Impl.all, 3, Value);
    end Set_User_Id;
 
    function Get_User_Id (Object : in Vote_Ref)
@@ -550,7 +532,6 @@ package body AWA.Votes.Models is
             ADO.Objects.Set_Object (Result, Copy.all'Access);
             Copy.Copy (Impl.all);
             Copy.Rating := Impl.Rating;
-            Copy.Id := Impl.Id;
             Copy.Entity := Impl.Entity;
          end;
       end if;
@@ -687,19 +668,14 @@ package body AWA.Votes.Models is
          Object.Clear_Modified (1);
       end if;
       if Object.Is_Modified (2) then
-         Stmt.Save_Field (Name  => COL_1_2_NAME, --  id
-                          Value => Object.Id);
+         Stmt.Save_Field (Name  => COL_1_2_NAME, --  entity_id
+                          Value => Object.Entity);
          Object.Clear_Modified (2);
       end if;
       if Object.Is_Modified (3) then
-         Stmt.Save_Field (Name  => COL_2_2_NAME, --  entity_id
-                          Value => Object.Entity);
-         Object.Clear_Modified (3);
-      end if;
-      if Object.Is_Modified (4) then
-         Stmt.Save_Field (Name  => COL_3_2_NAME, --  user_id
+         Stmt.Save_Field (Name  => COL_2_2_NAME, --  user_id
                           Value => Object.Get_Key);
-         Object.Clear_Modified (4);
+         Object.Clear_Modified (3);
       end if;
       if Stmt.Has_Save_Fields then
          Stmt.Set_Filter (Filter => "user_id = ?");
@@ -725,11 +701,9 @@ package body AWA.Votes.Models is
    begin
       Query.Save_Field (Name  => COL_0_2_NAME, --  rating
                         Value => Object.Rating);
-      Query.Save_Field (Name  => COL_1_2_NAME, --  id
-                        Value => Object.Id);
-      Query.Save_Field (Name  => COL_2_2_NAME, --  entity_id
+      Query.Save_Field (Name  => COL_1_2_NAME, --  entity_id
                         Value => Object.Entity);
-      Query.Save_Field (Name  => COL_3_2_NAME, --  user_id
+      Query.Save_Field (Name  => COL_2_2_NAME, --  user_id
                         Value => Object.Get_Key);
       Query.Execute (Result);
       if Result /= 1 then
@@ -764,8 +738,6 @@ package body AWA.Votes.Models is
       Impl := Vote_Impl (Obj.all)'Access;
       if Name = "rating" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Rating));
-      elsif Name = "id" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Id));
       elsif Name = "user_id" then
          return ADO.Objects.To_Object (Impl.Get_Key);
       end if;
@@ -782,11 +754,10 @@ package body AWA.Votes.Models is
                    Session : in out ADO.Sessions.Session'Class) is
    begin
       Object.Rating := Stmt.Get_Integer (0);
-      Object.Id := Stmt.Get_Identifier (1);
-      if not Stmt.Is_Null (2) then
-         Object.Entity.Set_Key_Value (Stmt.Get_Identifier (2), Session);
+      if not Stmt.Is_Null (1) then
+         Object.Entity.Set_Key_Value (Stmt.Get_Identifier (1), Session);
       end if;
-      Object.Set_Key_Value (Stmt.Get_Identifier (3));
+      Object.Set_Key_Value (Stmt.Get_Identifier (2));
       ADO.Objects.Set_Created (Object);
    end Load;
 
