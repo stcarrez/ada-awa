@@ -339,7 +339,11 @@ package body AWA.Blogs.Beans is
       elsif Name = COUNTER_ATTR then
          return Util.Beans.Objects.To_Object (From.Counter_Bean, Util.Beans.Objects.STATIC);
       elsif From.Is_Null then
-         return Util.Beans.Objects.Null_Object;
+         if Name = POST_ALLOW_COMMENTS_ATTR then
+            return Util.Beans.Objects.To_Object (False);
+         else
+            return Util.Beans.Objects.Null_Object;
+         end if;
       elsif Name = POST_ID_ATTR then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Get_Id));
       elsif Name = POST_USERNAME_ATTR then
