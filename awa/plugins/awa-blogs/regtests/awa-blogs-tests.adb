@@ -46,6 +46,8 @@ package body AWA.Blogs.Tests is
                        Test_Admin_List_Posts'Access);
       Caller.Add_Test (Suite, "Test AWA.Blogs.Beans.List_Comments (Admin)",
                        Test_Admin_List_Comments'Access);
+      Caller.Add_Test (Suite, "Test AWA.Blogs.Beans.Stats (Admin)",
+                       Test_Admin_Blog_Stats'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -187,5 +189,20 @@ package body AWA.Blogs.Tests is
       ASF.Tests.Assert_Contains (T, "blog-comment-list-header", Reply,
                                  "Blog admin comments page is invalid");
    end Test_Admin_List_Comments;
+
+   --  ------------------------------
+   --  Test getting the JSON blog stats (for graphs).
+   --  ------------------------------
+   procedure Test_Admin_Blog_Stats (T : in out Test) is
+      Request : ASF.Requests.Mockup.Request;
+      Reply   : ASF.Responses.Mockup.Response;
+      Ident   : constant String := To_String (T.Blog_Ident);
+   begin
+      AWA.Tests.Helpers.Users.Login ("test-wiki@test.com", Request);
+      ASF.Tests.Do_Get (Request, Reply, "/blogs/admin/" & Ident & "/stats",
+                        "blog-stats.html");
+      ASF.Tests.Assert_Contains (T, "data", Reply,
+                                 "Blog admin stats page is invalid");
+   end Test_Admin_Blog_Stats;
 
 end AWA.Blogs.Tests;
