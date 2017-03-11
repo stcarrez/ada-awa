@@ -36,10 +36,14 @@ package body AWA.Blogs.Tests is
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
    begin
+      Caller.Add_Test (Suite, "Test AWA.Blogs.Beans.List_Post (Anonymous)",
+                       Test_Anonymous_Access'Access);
       Caller.Add_Test (Suite, "Test AWA.Blogs.Beans.Create_Blog",
                        Test_Create_Blog'Access);
       Caller.Add_Test (Suite, "Test AWA.Blogs.Beans.Update_Post",
                        Test_Update_Post'Access);
+      Caller.Add_Test (Suite, "Test AWA.Blogs.Beans.List_Post (Admin)",
+                       Test_Admin_List_Posts'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -123,7 +127,9 @@ package body AWA.Blogs.Tests is
       T.Verify_Anonymous (Uuid);
    end Test_Create_Blog;
 
+   --  ------------------------------
    --  Test updating a post by simulating web requests.
+   --  ------------------------------
    procedure Test_Update_Post (T : in out Test) is
       Request    : ASF.Requests.Mockup.Request;
       Reply      : ASF.Responses.Mockup.Response;
@@ -151,5 +157,18 @@ package body AWA.Blogs.Tests is
                                 "Invalid post identifier returned after post update");
       T.Verify_Anonymous (Uuid);
    end Test_Update_Post;
+
+   --  ------------------------------
+   --  Test listing the blog posts.
+   --  ------------------------------
+   procedure Test_Admin_List_Posts (T : in out Test) is
+      Request : ASF.Requests.Mockup.Request;
+      Reply   : ASF.Responses.Mockup.Response;
+      Ident   : constant String := To_String (T.Blog_Ident);
+   begin
+      AWA.Tests.Helpers.Users.Login ("test-wiki@test.com", Request);
+      ASF.Tests.Do_Get (Request, Reply, "/blogs/admin/list.html?id=" & Ident, "blog-list.html");
+      ASF.Tests.Assert_Contains (T, "blog-post-list-header", Reply, "Blog admin page is invalid");
+   end Test_Admin_List_Posts;
 
 end AWA.Blogs.Tests;
