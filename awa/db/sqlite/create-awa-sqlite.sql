@@ -606,12 +606,10 @@ CREATE TABLE awa_vote (
   /*  */
   `rating` INTEGER NOT NULL,
   /*  */
-  `id` BIGINT NOT NULL,
-  /*  */
   `entity_id` BIGINT NOT NULL,
   /*  */
   `user_id` BIGINT NOT NULL,
-  PRIMARY KEY (`id`, `entity_id`, `user_id`)
+  PRIMARY KEY (`entity_id`, `user_id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_rating");
 INSERT INTO entity_type (name) VALUES ("awa_vote");
