@@ -48,4 +48,7 @@ package AWA.Blogs.Tests is
    --  Test listing the blog comments.
    procedure Test_Admin_List_Comments (T : in out Test);
 
+   --  Test getting the JSON blog stats (for graphs).
+   procedure Test_Admin_Blog_Stats (T : in out Test);
+
 end AWA.Blogs.Tests;
