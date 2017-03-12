@@ -2,6 +2,9 @@ FROM ciceron/gnat:latest
 
 MAINTAINER Stephane Carrez <Stephane.Carrez@gmail.com>
 
+RUN apt-get update \
+   && apt-get install -y sqlite3 unzip imagemagick pngcrush libjpeg-progs yui-compressor
+
 RUN mkdir -p /usr/src \
    && cd /usr/src \
    && git clone https://github.com/stcarrez/ada-awa.git ada-awa \
@@ -12,4 +15,4 @@ RUN mkdir -p /usr/src \
    && make -s \
    && make -s install
 
-WORKDIR /app
+WORKDIR /usr/src/ada-awa
