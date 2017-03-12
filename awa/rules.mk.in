@@ -151,10 +151,9 @@ dist-prepare:   pre-dist-prepare
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
-	mkdir $(distdir)/bin
-	mkdir $(distdir)/obj
-	mkdir $(distdir)/lib
-
+	mkdir -p $(distdir)/bin
+	mkdir -p $(distdir)/obj
+	mkdir -p $(distdir)/lib
 dist:   pre-dist dist-prepare
 	tar --exclude=.svn --exclude="*~" --exclude="*.o" --exclude="*.ali" \
 	    --exclude="*.log" --exclude="*.a" --exclude=".project" \
