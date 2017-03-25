@@ -4,7 +4,8 @@
 AWA_LIBRARY_TYPE=static
 
 PLUGINS=awa-workspaces awa-mail awa-counters awa-storages awa-images awa-comments \
-        awa-jobs awa-votes awa-tags awa-flotcharts awa-wikis awa-blogs awa-markedit awa-questions \
+        awa-jobs awa-votes awa-tags awa-flotcharts awa-wikis awa-blogs awa-markedit \
+        awa-trumbowyg awa-questions \
 	awa-countries awa-settings awa-changelogs awa-setup
 
 NAME=awa
