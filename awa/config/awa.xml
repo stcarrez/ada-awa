@@ -155,6 +155,16 @@
 
   <servlet-mapping>
     <servlet-name>files</servlet-name>
+    <url-pattern>*.woff</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>files</servlet-name>
+    <url-pattern>*.ttf</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>files</servlet-name>
     <url-pattern>*.jpg</url-pattern>
   </servlet-mapping>
 
