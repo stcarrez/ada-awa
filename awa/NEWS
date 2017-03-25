@@ -1,4 +1,5 @@
 Version 1.1     -
+  - New trumbowyg plugin for WYSIWYG Javascript editor
   - New setup plugin for AWA application setup
   - Moved the samples to a separate project
   - New wiki plugin to write online wiki-based documentation
