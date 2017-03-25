@@ -1,0 +1,7 @@
+<project>
+    <name>awa_trumbowyg</name>
+    <property name="author_email">contact@alex-d.fr</property>
+    <property name="license">none</property>
+    <property name="author">Alexandre Demode</property>
+    <property name="is_plugin">TRUE</property>
+</project>
