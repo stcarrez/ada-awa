@@ -195,6 +195,13 @@ dl.awa-optional textarea, dl.awa-required textarea {
     width: 98%;
     padding: 3px;
 }
+.awa-required .trumbowyg-modal-box input {
+    width: 70%;
+}
+.awa-required .trumbowyg-modal-box label {
+    display: block;
+    width: 93%;
+}
 
 /**
  * Error messages
