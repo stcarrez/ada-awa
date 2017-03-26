@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+--  == AWA Mail ==
 --  @include awa-mail-modules.ads
 package AWA.Mail is
 
