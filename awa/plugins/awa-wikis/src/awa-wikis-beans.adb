@@ -412,6 +412,10 @@ package body AWA.Wikis.Beans is
       Session : ADO.Sessions.Session := Bean.Module.Get_Session;
       Query   : ADO.Queries.Context;
    begin
+      if Bean.Wiki_Space.Is_Null then
+         Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
+         return;
+      end if;
       Query.Bind_Param ("wiki_id", Bean.Wiki_Space.Get_Id);
       if Bean.Id /= ADO.NO_IDENTIFIER then
          Query.Bind_Param ("id", Bean.Id);
@@ -1126,7 +1130,7 @@ package body AWA.Wikis.Beans is
          From.Page_Id := ADO.Utils.To_Identifier (Value);
          From.Page.Id := From.Page_Id;
       end if;
-      
+
    exception
       when Constraint_Error =>
          From.Wiki_Id := ADO.NO_IDENTIFIER;
