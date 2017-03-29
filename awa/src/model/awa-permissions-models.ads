@@ -39,6 +39,8 @@ package AWA.Permissions.Models is
 
    type ACL_Ref is new ADO.Objects.Object_Ref with null record;
 
+   type Permission_Ref is new ADO.Objects.Object_Ref with null record;
+
    --  --------------------
    --  The ACL table records permissions which are granted for a user to access a given database entity.
    --  --------------------
@@ -91,6 +93,14 @@ package AWA.Permissions.Models is
    function Get_Entity_Type (Object : in Acl_Ref)
                  return ADO.Entity_Type;
 
+   --  Set the permission that is granted.
+   procedure Set_Permission (Object : in out Acl_Ref;
+                             Value  : in ADO.Identifier);
+
+   --  Get the permission that is granted.
+   function Get_Permission (Object : in Acl_Ref)
+                 return ADO.Identifier;
+
    --  Load the entity identified by 'Id'.
    --  Raises the NOT_FOUND exception if it does not exist.
    procedure Load (Object  : in out Acl_Ref;
@@ -138,6 +148,87 @@ package AWA.Permissions.Models is
    procedure Copy (Object : in Acl_Ref;
                    Into   : in out Acl_Ref);
 
+   --  --------------------
+   --  The permission table lists all the application permissions that are defined.
+   --  This is a system table shared by every user and workspace.
+   --  The list of permission is fixed and never changes.
+   --  --------------------
+   --  Create an object key for Permission.
+   function Permission_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
+   --  Create an object key for Permission from a string.
+   --  Raises Constraint_Error if the string cannot be converted into the object key.
+   function Permission_Key (Id : in String) return ADO.Objects.Object_Key;
+
+   Null_Permission : constant Permission_Ref;
+   function "=" (Left, Right : Permission_Ref'Class) return Boolean;
+
+   --  Set the permission database identifier.
+   procedure Set_Id (Object : in out Permission_Ref;
+                     Value  : in ADO.Identifier);
+
+   --  Get the permission database identifier.
+   function Get_Id (Object : in Permission_Ref)
+                 return ADO.Identifier;
+
+   --  Set the permission name
+   procedure Set_Name (Object : in out Permission_Ref;
+                       Value  : in Ada.Strings.Unbounded.Unbounded_String);
+   procedure Set_Name (Object : in out Permission_Ref;
+                       Value : in String);
+
+   --  Get the permission name
+   function Get_Name (Object : in Permission_Ref)
+                 return Ada.Strings.Unbounded.Unbounded_String;
+   function Get_Name (Object : in Permission_Ref)
+                 return String;
+
+   --  Load the entity identified by 'Id'.
+   --  Raises the NOT_FOUND exception if it does not exist.
+   procedure Load (Object  : in out Permission_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier);
+
+   --  Load the entity identified by 'Id'.
+   --  Returns True in <b>Found</b> if the object was found and False if it does not exist.
+   procedure Load (Object  : in out Permission_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier;
+                   Found   : out Boolean);
+
+   --  Find and load the entity.
+   overriding
+   procedure Find (Object  : in out Permission_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean);
+
+   --  Save the entity.  If the entity does not have an identifier, an identifier is allocated
+   --  and it is inserted in the table.  Otherwise, only data fields which have been changed
+   --  are updated.
+   overriding
+   procedure Save (Object  : in out Permission_Ref;
+                   Session : in out ADO.Sessions.Master_Session'Class);
+
+   --  Delete the entity.
+   overriding
+   procedure Delete (Object  : in out Permission_Ref;
+                     Session : in out ADO.Sessions.Master_Session'Class);
+
+   overriding
+   function Get_Value (From : in Permission_Ref;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Table definition
+   PERMISSION_TABLE : constant ADO.Schemas.Class_Mapping_Access;
+
+   --  Internal method to allocate the Object_Record instance
+   overriding
+   procedure Allocate (Object : in out Permission_Ref);
+
+   --  Copy of the object.
+   procedure Copy (Object : in Permission_Ref;
+                   Into   : in out Permission_Ref);
+
 
 
    Query_Check_Entity_Permission : constant ADO.Queries.Query_Definition_Access;
@@ -157,16 +248,18 @@ private
    COL_2_1_NAME : aliased constant String := "writeable";
    COL_3_1_NAME : aliased constant String := "user_id";
    COL_4_1_NAME : aliased constant String := "entity_type";
+   COL_5_1_NAME : aliased constant String := "permission";
 
    ACL_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 5,
+     (Count => 6,
       Table => ACL_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
          2 => COL_1_1_NAME'Access,
          3 => COL_2_1_NAME'Access,
          4 => COL_3_1_NAME'Access,
-         5 => COL_4_1_NAME'Access
+         5 => COL_4_1_NAME'Access,
+         6 => COL_5_1_NAME'Access
 )
      );
    ACL_TABLE : constant ADO.Schemas.Class_Mapping_Access
@@ -183,6 +276,7 @@ private
        Writeable : Boolean;
        User_Id : ADO.Identifier;
        Entity_Type : ADO.Entity_Type;
+       Permission : ADO.Identifier;
    end record;
 
    type Acl_Access is access all Acl_Impl;
@@ -216,6 +310,62 @@ private
 
    procedure Set_Field (Object : in out Acl_Ref'Class;
                         Impl   : out Acl_Access);
+   PERMISSION_NAME : aliased constant String := "awa_permission";
+   COL_0_2_NAME : aliased constant String := "id";
+   COL_1_2_NAME : aliased constant String := "name";
+
+   PERMISSION_DEF : aliased constant ADO.Schemas.Class_Mapping :=
+     (Count => 2,
+      Table => PERMISSION_NAME'Access,
+      Members => (
+         1 => COL_0_2_NAME'Access,
+         2 => COL_1_2_NAME'Access
+)
+     );
+   PERMISSION_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := PERMISSION_DEF'Access;
+
+   Null_Permission : constant Permission_Ref
+      := Permission_Ref'(ADO.Objects.Object_Ref with null record);
+
+   type Permission_Impl is
+      new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
+                                     Of_Class => PERMISSION_DEF'Access)
+   with record
+       Name : Ada.Strings.Unbounded.Unbounded_String;
+   end record;
+
+   type Permission_Access is access all Permission_Impl;
+
+   overriding
+   procedure Destroy (Object : access Permission_Impl);
+
+   overriding
+   procedure Find (Object  : in out Permission_Impl;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean);
+
+   overriding
+   procedure Load (Object  : in out Permission_Impl;
+                   Session : in out ADO.Sessions.Session'Class);
+   procedure Load (Object  : in out Permission_Impl;
+                   Stmt    : in out ADO.Statements.Query_Statement'Class;
+                   Session : in out ADO.Sessions.Session'Class);
+
+   overriding
+   procedure Save (Object  : in out Permission_Impl;
+                   Session : in out ADO.Sessions.Master_Session'Class);
+
+   procedure Create (Object  : in out Permission_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class);
+
+   overriding
+   procedure Delete (Object  : in out Permission_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class);
+
+   procedure Set_Field (Object : in out Permission_Ref'Class;
+                        Impl   : out Permission_Access);
 
    package File_1 is
       new ADO.Queries.Loaders.File (Path => "permissions.xml",
