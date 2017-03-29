@@ -223,3 +223,16 @@ INSERT INTO entity_type (name) VALUES
 ALTER TABLE awa_vote DROP PRIMARY KEY,
   ADD PRIMARY KEY (`entity_id`, `user_id`);
 ALTER TABLE awa_vote DROP COLUMN `id`;
+
+/* The permission table lists all the application permissions that are defined.
+This is a system table shared by every user and workspace.
+The list of permission is fixed and never changes. */
+CREATE TABLE awa_permission (
+  /* the permission database identifier. */
+  `id` BIGINT NOT NULL,
+  /* the permission name */
+  `name` VARCHAR(255) BINARY NOT NULL,
+  PRIMARY KEY (`id`)
+);
+INSERT INTO entity_type (name) VALUES
+("awa_permission");
