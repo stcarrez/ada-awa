@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-workspaces-module -- Module workspaces
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,6 +45,10 @@ package AWA.Workspaces.Modules is
    procedure Get_Workspace (Session   : in out ADO.Sessions.Master_Session;
                             Context   : in AWA.Services.Contexts.Service_Context_Access;
                             Workspace : out AWA.Workspaces.Models.Workspace_Ref);
+
+   --  Send the invitation to the user.
+   procedure Send_Invitation (Module : in Workspace_Module;
+                              Invitation : in out AWA.Workspaces.Models.Invitation_Ref'Class);
 
 private
 
