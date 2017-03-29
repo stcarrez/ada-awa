@@ -155,6 +155,18 @@ CREATE TABLE awa_acl (
   `user_id` BIGINT NOT NULL,
   /* the entity type concerned by the ACL. */
   `entity_type` INTEGER NOT NULL,
+  /* the permission that is granted. */
+  `permission` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
+);
+/* The permission table lists all the application permissions that are defined.
+This is a system table shared by every user and workspace.
+The list of permission is fixed and never changes. */
+CREATE TABLE awa_permission (
+  /* the permission database identifier. */
+  `id` BIGINT NOT NULL,
+  /* the permission name */
+  `name` VARCHAR(255) BINARY NOT NULL,
   PRIMARY KEY (`id`)
 );
 /*  */
@@ -245,6 +257,7 @@ INSERT INTO entity_type (name) VALUES
 ,("awa_callback")
 ,("awa_oauth_session")
 ,("awa_acl")
+,("awa_permission")
 ,("awa_access_key")
 ,("awa_email")
 ,("awa_session")

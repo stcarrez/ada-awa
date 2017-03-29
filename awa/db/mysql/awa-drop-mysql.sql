@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS `awa_user`;
 DROP TABLE IF EXISTS `awa_session`;
 DROP TABLE IF EXISTS `awa_email`;
 DROP TABLE IF EXISTS `awa_access_key`;
+DROP TABLE IF EXISTS `awa_permission`;
 DROP TABLE IF EXISTS `awa_acl`;
 DROP TABLE IF EXISTS `awa_oauth_session`;
 DROP TABLE IF EXISTS `awa_callback`;
