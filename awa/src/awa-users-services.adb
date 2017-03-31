@@ -404,6 +404,23 @@ package body AWA.Users.Services is
    end Authenticate;
 
    --  ------------------------------
+   --  Create and generate a new access key for the user.  The access key is saved in the
+   --  database and it will expire after the expiration delay.
+   --  ------------------------------
+   procedure Create_Access_Key (Model   : in out User_Service;
+                                User    : in AWA.Users.Models.User_Ref'Class;
+                                Key     : in out AWA.Users.Models.Access_Key_Ref;
+                                Expire  : in Duration;
+                                Session : in out ADO.Sessions.Master_Session) is
+      use type Ada.Calendar.Time;
+   begin
+      Key.Set_Access_Key (Model.Create_Key (User.Get_Id));
+      Key.Set_Expire_Date (Ada.Calendar.Clock + Expire);
+      Key.Set_User (User);
+      Key.Save (Session);
+   end Create_Access_Key;
+
+   --  ------------------------------
    --  Start the lost password process for a user.  Find the user having
    --  the given email address and send that user a password reset key
    --  in an email.
@@ -440,9 +457,10 @@ package body AWA.Users.Services is
       Stmt.Execute;
 
       --  Create the secure key to change the password
-      Key.Set_Access_Key (Model.Create_Key (User.Get_Id));
-      Key.Set_User (User);
-      Key.Save (DB);
+      Model.Create_Access_Key (User    => User,
+                               Key     => Key,
+                               Expire  => 86400.0,
+                               Session => DB);
 
       --  Send the email with the reset password key
       declare
@@ -567,9 +585,10 @@ package body AWA.Users.Services is
       Email.Save (DB);
 
       --  Create the access key
-      Key.Set_Access_Key (Model.Create_Key (Email.Get_Id));
-      Key.Set_User (User);
-      Key.Save (DB);
+      Model.Create_Access_Key (User    => User,
+                               Key     => Key,
+                               Expire  => 86400.0,
+                               Session => DB);
 
       --  Send the email with the access key to finish the user registration.
       declare
