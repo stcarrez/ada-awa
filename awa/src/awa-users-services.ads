@@ -186,6 +186,14 @@ package AWA.Users.Services is
                             Id     : in ADO.Identifier;
                             Logout : in Boolean := False);
 
+   --  Create and generate a new access key for the user.  The access key is saved in the
+   --  database and it will expire after the expiration delay.
+   procedure Create_Access_Key (Model   : in out User_Service;
+                                User    : in AWA.Users.Models.User_Ref'Class;
+                                Key     : in out AWA.Users.Models.Access_Key_Ref;
+                                Expire  : in Duration;
+                                Session : in out ADO.Sessions.Master_Session);
+
    procedure Send_Alert (Model : in User_Service;
                          Kind  : in AWA.Events.Event_Index;
                          User  : in User_Ref'Class;
