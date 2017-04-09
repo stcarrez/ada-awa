@@ -1,4 +1,28 @@
 /* File generated automatically by dynamo */
+/*  */
+CREATE TABLE awa_invitation (
+  /* the invitation identifier. */
+  `id` BIGINT NOT NULL,
+  /* version optimistic lock. */
+  `version` INTEGER NOT NULL,
+  /* date when the invitation was created and sent. */
+  `create_date` DATETIME NOT NULL,
+  /* the email address to which the invitation was sent. */
+  `email` VARCHAR(255) NOT NULL,
+  /* the invitation message. */
+  `message` text NOT NULL,
+  /* the date when the invitation was accepted. */
+  `acceptance_date` DATETIME ,
+  /* the workspace where the user is invited. */
+  `workspace_id` BIGINT NOT NULL,
+  /*  */
+  `access_key_id` BIGINT ,
+  /* the user being invited. */
+  `invitee_id` BIGINT ,
+  /*  */
+  `inviter_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
+);
 /* The workspace controls the features available in the application
 for a set of users: the workspace members.  A user could create
 several workspaces and be part of several workspaces that other
@@ -35,6 +59,7 @@ CREATE TABLE awa_workspace_member (
   `workspace_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
+INSERT INTO entity_type (name) VALUES ("awa_invitation");
 INSERT INTO entity_type (name) VALUES ("awa_workspace");
 INSERT INTO entity_type (name) VALUES ("awa_workspace_feature");
 INSERT INTO entity_type (name) VALUES ("awa_workspace_member");
