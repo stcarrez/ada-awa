@@ -22,6 +22,7 @@
 -----------------------------------------------------------------------
 with Ada.Unchecked_Deallocation;
 with Util.Beans.Objects.Time;
+with ASF.Events.Faces.Actions;
 package body AWA.Workspaces.Models is
 
    use type ADO.Objects.Object_Record_Access;
@@ -1614,6 +1615,81 @@ package body AWA.Workspaces.Models is
       end if;
       ADO.Objects.Set_Created (Object);
    end Load;
+
+   procedure Op_Load (Bean    : in out Invitation_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Load (Bean    : in out Invitation_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Invitation_Bean'Class (Bean).Load (Outcome);
+   end Op_Load;
+   package Binding_Invitation_Bean_1 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Invitation_Bean,
+                                                      Method => Op_Load,
+                                                      Name   => "load");
+   procedure Op_Accept_Invitation (Bean    : in out Invitation_Bean;
+                                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Accept_Invitation (Bean    : in out Invitation_Bean;
+                                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Invitation_Bean'Class (Bean).Accept_Invitation (Outcome);
+   end Op_Accept_Invitation;
+   package Binding_Invitation_Bean_2 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Invitation_Bean,
+                                                      Method => Op_Accept_Invitation,
+                                                      Name   => "accept_invitation");
+   procedure Op_Send (Bean    : in out Invitation_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Send (Bean    : in out Invitation_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Invitation_Bean'Class (Bean).Send (Outcome);
+   end Op_Send;
+   package Binding_Invitation_Bean_3 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Invitation_Bean,
+                                                      Method => Op_Send,
+                                                      Name   => "send");
+
+   Binding_Invitation_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
+     := (1 => Binding_Invitation_Bean_1.Proxy'Access,
+         2 => Binding_Invitation_Bean_2.Proxy'Access,
+         3 => Binding_Invitation_Bean_3.Proxy'Access
+     );
+
+   --  ------------------------------
+   --  This bean provides some methods that can be used in a Method_Expression.
+   --  ------------------------------
+   overriding
+   function Get_Method_Bindings (From : in Invitation_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
+   begin
+      return Binding_Invitation_Bean_Array'Access;
+   end Get_Method_Bindings;
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Invitation_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "create_date" then
+         Item.Set_Create_Date (Util.Beans.Objects.Time.To_Time (Value));
+      elsif Name = "email" then
+         Item.Set_Email (Util.Beans.Objects.To_String (Value));
+      elsif Name = "message" then
+         Item.Set_Message (Util.Beans.Objects.To_String (Value));
+      elsif Name = "acceptance_date" then
+         if Util.Beans.Objects.Is_Null (Value) then
+            Item.Set_Acceptance_Date (ADO.Nullable_Time '(Is_Null => True, others => <>));
+         else
+            Item.Set_Acceptance_Date (ADO.Nullable_Time '(Is_Null => False,
+                                        Value   => Util.Beans.Objects.Time.To_Time (Value)));
+         end if;
+      end if;
+   end Set_Value;
 
 
 end AWA.Workspaces.Models;

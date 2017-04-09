@@ -32,6 +32,7 @@ with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
 with Util.Beans.Basic.Lists;
 with AWA.Users.Models;
+with Util.Beans.Methods;
 pragma Warnings (On);
 package AWA.Workspaces.Models is
 
@@ -438,6 +439,34 @@ package AWA.Workspaces.Models is
                    Into   : in out Workspace_Member_Ref);
 
 
+
+   --  --------------------
+   --    Operation to load the invitation.
+   --  --------------------
+   type Invitation_Bean is abstract new AWA.Workspaces.Models.Invitation_Ref
+     and Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with null record;
+
+
+   --  This bean provides some methods that can be used in a Method_Expression.
+   overriding
+   function Get_Method_Bindings (From : in Invitation_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access;
+
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Invitation_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   procedure Load (Bean : in out Invitation_Bean;
+                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   procedure Accept_Invitation (Bean : in out Invitation_Bean;
+                               Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   procedure Send (Bean : in out Invitation_Bean;
+                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
 
 private
