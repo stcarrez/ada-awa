@@ -25,6 +25,27 @@ with AWA.Events.Action_Method;
 with AWA.Services.Contexts;
 package body AWA.Workspaces.Beans is
 
+   overriding
+   procedure Load (Bean : in out Invitation_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      null;
+   end Load;
+
+   overriding
+   procedure Accept_Invitation (Bean    : in out Invitation_Bean;
+                                Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      null;
+   end Accept_Invitation;
+
+   overriding
+   procedure Send (Bean    : in out Invitation_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      null;
+   end Send;
+
    --  ------------------------------
    --  Example of action method.
    --  ------------------------------
