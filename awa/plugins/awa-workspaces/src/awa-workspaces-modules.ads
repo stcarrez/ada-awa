@@ -23,6 +23,7 @@ with ASF.Applications;
 with AWA.Modules;
 with AWA.Services.Contexts;
 with AWA.Workspaces.Models;
+with AWA.Users.Services;
 package AWA.Workspaces.Modules is
 
    --  The name under which the module is registered.
@@ -52,6 +53,8 @@ package AWA.Workspaces.Modules is
 
 private
 
-   type Workspace_Module is new AWA.Modules.Module with null record;
+   type Workspace_Module is new AWA.Modules.Module with record
+      User_Manager : AWA.Users.Services.User_Service_Access;
+   end record;
 
 end AWA.Workspaces.Modules;
