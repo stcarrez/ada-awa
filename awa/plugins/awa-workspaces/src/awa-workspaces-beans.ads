@@ -23,8 +23,26 @@ with Util.Beans.Objects;
 with Util.Beans.Methods;
 
 with AWA.Events;
+with AWA.Workspaces.Models;
 with AWA.Workspaces.Modules;
 package AWA.Workspaces.Beans is
+
+   type Invitation_Bean is new AWA.Workspaces.Models.Invitation_Bean with record
+      Module : AWA.Workspaces.Modules.Workspace_Module_Access := null;
+   end record;
+   type Invitation_Bean_Access is access all Invitation_Bean'Class;
+
+   overriding
+   procedure Load (Bean : in out Invitation_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   overriding
+   procedure Accept_Invitation (Bean    : in out Invitation_Bean;
+                                Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   overriding
+   procedure Send (Bean    : in out Invitation_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
    type Workspaces_Bean is new Util.Beans.Basic.Bean
      and Util.Beans.Methods.Method_Bean with record
