@@ -24,8 +24,11 @@ with AWA.Permissions.Services;
 
 with ADO.SQL;
 with Util.Log.Loggers;
+with AWA.Users.Modules;
 with AWA.Workspaces.Beans;
 package body AWA.Workspaces.Modules is
+
+   package ASC renames AWA.Services.Contexts;
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Awa.Workspaces.Module");
 
@@ -49,6 +52,7 @@ package body AWA.Workspaces.Modules is
 
       AWA.Modules.Module (Plugin).Initialize (App, Props);
 
+      Plugin.User_Manager := AWA.Users.Modules.Get_User_Manager;
       --  Add here the creation of manager instances.
    end Initialize;
 
@@ -91,5 +95,43 @@ package body AWA.Workspaces.Modules is
 
       Workspace := WS;
    end Get_Workspace;
+
+   --  ------------------------------
+   --  Send the invitation to the user.
+   --  ------------------------------
+   procedure Send_Invitation (Module     : in Workspace_Module;
+                              Invitation : in out AWA.Workspaces.Models.Invitation_Ref'Class) is
+      Ctx   : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      User  : constant AWA.Users.Models.User_Ref := Ctx.Get_User;
+      WS    : AWA.Workspaces.Models.Workspace_Ref;
+      Query : ADO.SQL.Query;
+      Found : Boolean;
+      Key   : AWA.Users.Models.Access_Key_Ref;
+   begin
+      Log.Info ("Sending invitation to {0}", String '(Invitation.Get_Email));
+
+      Ctx.Start;
+      if User.Is_Null then
+         Log.Error ("There is no current user.  The workspace cannot be identified");
+         return;
+      end if;
+
+      --  Find the workspace associated with the current user.
+      Query.Add_Param (User.Get_Id);
+      Query.Set_Filter ("o.owner_id = ?");
+      WS.Find (DB, Query, Found);
+      if not Found then
+         return;
+      end if;
+      Key := AWA.Users.Models.Access_Key_Ref (Invitation.Get_Access_Key);
+      --  Key.Set_Key_Value
+      Key.Save (DB);
+      Invitation.Set_Inviter (User);
+      Invitation.Set_Workspace (WS);
+      Invitation.Set_Create_Date (Ada.Calendar.Clock);
+      Invitation.Save (DB);
+      Ctx.Commit;
+   end Send_Invitation;
 
 end AWA.Workspaces.Modules;
