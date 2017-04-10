@@ -1810,5 +1810,66 @@ package body AWA.Workspaces.Models is
       end if;
    end Set_Value;
 
+   procedure Op_Load (Bean    : in out Member_List_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Load (Bean    : in out Member_List_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Member_List_Bean'Class (Bean).Load (Outcome);
+   end Op_Load;
+   package Binding_Member_List_Bean_1 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Member_List_Bean,
+                                                      Method => Op_Load,
+                                                      Name   => "load");
+
+   Binding_Member_List_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
+     := (1 => Binding_Member_List_Bean_1.Proxy'Access
+     );
+
+   --  ------------------------------
+   --  This bean provides some methods that can be used in a Method_Expression.
+   --  ------------------------------
+   overriding
+   function Get_Method_Bindings (From : in Member_List_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
+   begin
+      return Binding_Member_List_Bean_Array'Access;
+   end Get_Method_Bindings;
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Member_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "page_size" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Page_Size));
+      elsif Name = "count" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Count));
+      elsif Name = "page" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Page));
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Member_List_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "page_size" then
+         Item.Page_Size := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "count" then
+         Item.Count := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "page" then
+         Item.Page := Util.Beans.Objects.To_Integer (Value);
+      end if;
+   end Set_Value;
+
 
 end AWA.Workspaces.Models;
