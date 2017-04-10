@@ -509,14 +509,21 @@ package AWA.Workspaces.Models is
    --    Operation to load the invitation.
    --  --------------------
    type Invitation_Bean is abstract new AWA.Workspaces.Models.Invitation_Ref
-     and Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with null record;
+     and Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with  record
 
+      --  the access key
+      Key : Ada.Strings.Unbounded.Unbounded_String;
+   end record;
 
    --  This bean provides some methods that can be used in a Method_Expression.
    overriding
    function Get_Method_Bindings (From : in Invitation_Bean)
                                  return Util.Beans.Methods.Method_Binding_Array_Access;
 
+   --  Get the bean attribute identified by the name.
+   overriding
+   function Get_Value (From : in Invitation_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
 
    --  Set the bean attribute identified by the name.
    overriding

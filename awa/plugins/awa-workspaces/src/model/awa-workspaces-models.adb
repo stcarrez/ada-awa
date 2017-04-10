@@ -1785,6 +1785,19 @@ package body AWA.Workspaces.Models is
    begin
       return Binding_Invitation_Bean_Array'Access;
    end Get_Method_Bindings;
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Invitation_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "key" then
+         return Util.Beans.Objects.To_Object (From.Key);
+      end if;
+      return Awa.Workspaces.Models.Invitation_Ref (From).Get_Value (Name);
+   end Get_Value;
+
 
    --  ------------------------------
    --  Set the value identified by the name
@@ -1794,7 +1807,9 @@ package body AWA.Workspaces.Models is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      if Name = "create_date" then
+      if Name = "key" then
+         Item.Key := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "create_date" then
          Item.Set_Create_Date (Util.Beans.Objects.Time.To_Time (Value));
       elsif Name = "email" then
          Item.Set_Email (Util.Beans.Objects.To_String (Value));
