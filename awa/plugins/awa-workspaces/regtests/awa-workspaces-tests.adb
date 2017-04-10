@@ -85,6 +85,9 @@ package body AWA.Workspaces.Tests is
       Request   : ASF.Requests.Mockup.Request;
       Reply     : ASF.Responses.Mockup.Response;
       Invite    : AWA.Workspaces.Beans.Invitation_Bean_Access;
+      Check     : AWA.Workspaces.Beans.Invitation_Bean;
+      Key       : AWA.Users.Models.Access_Key_Ref;
+      Outcome   : Ada.Strings.Unbounded.Unbounded_String;
    begin
       AWA.Tests.Helpers.Users.Login ("test-invite@test.com", Request);
       Request.Set_Parameter ("email", "invited-user@test.com");
@@ -101,6 +104,10 @@ package body AWA.Workspaces.Tests is
       T.Assert (Invite /= null, "Null inviteUser bean");
       T.Assert (Invite.Get_Id /= ADO.NO_IDENTIFIER, "The invite ID is invalid");
       T.Assert (not Invite.Get_Access_Key.Is_Null, "The invite access key is null");
+      Check.Key := Invite.Get_Access_Key.Get_Access_Key;
+      Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("success");
+      Check.Load (Outcome);
+      Util.Tests.Assert_Equals (T, "success", To_String (Outcome), "Invalid invitation key");
    end Test_Invite_User;
 
 end AWA.Workspaces.Tests;
