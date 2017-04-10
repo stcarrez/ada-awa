@@ -1314,6 +1314,7 @@ package body AWA.Workspaces.Models is
       Impl : Workspace_Member_Access;
    begin
       Impl := new Workspace_Member_Impl;
+      Impl.Join_Date.Is_Null := True;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -1338,12 +1339,29 @@ package body AWA.Workspaces.Models is
    end Get_Id;
 
 
+   procedure Set_Join_Date (Object : in out Workspace_Member_Ref;
+                            Value  : in ADO.Nullable_Time) is
+      Impl : Workspace_Member_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Time (Impl.all, 2, Impl.Join_Date, Value);
+   end Set_Join_Date;
+
+   function Get_Join_Date (Object : in Workspace_Member_Ref)
+                  return ADO.Nullable_Time is
+      Impl : constant Workspace_Member_Access
+         := Workspace_Member_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Join_Date;
+   end Get_Join_Date;
+
+
    procedure Set_Member (Object : in out Workspace_Member_Ref;
                          Value  : in AWA.Users.Models.User_Ref'Class) is
       Impl : Workspace_Member_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 2, Impl.Member, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 3, Impl.Member, Value);
    end Set_Member;
 
    function Get_Member (Object : in Workspace_Member_Ref)
@@ -1360,7 +1378,7 @@ package body AWA.Workspaces.Models is
       Impl : Workspace_Member_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 3, Impl.Workspace, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 4, Impl.Workspace, Value);
    end Set_Workspace;
 
    function Get_Workspace (Object : in Workspace_Member_Ref)
@@ -1385,6 +1403,7 @@ package body AWA.Workspaces.Models is
          begin
             ADO.Objects.Set_Object (Result, Copy.all'Access);
             Copy.Copy (Impl.all);
+            Copy.Join_Date := Impl.Join_Date;
             Copy.Member := Impl.Member;
             Copy.Workspace := Impl.Workspace;
          end;
@@ -1522,14 +1541,19 @@ package body AWA.Workspaces.Models is
          Object.Clear_Modified (1);
       end if;
       if Object.Is_Modified (2) then
-         Stmt.Save_Field (Name  => COL_1_4_NAME, --  member_id
-                          Value => Object.Member);
+         Stmt.Save_Field (Name  => COL_1_4_NAME, --  join_date
+                          Value => Object.Join_Date);
          Object.Clear_Modified (2);
       end if;
       if Object.Is_Modified (3) then
-         Stmt.Save_Field (Name  => COL_2_4_NAME, --  workspace_id
-                          Value => Object.Workspace);
+         Stmt.Save_Field (Name  => COL_2_4_NAME, --  member_id
+                          Value => Object.Member);
          Object.Clear_Modified (3);
+      end if;
+      if Object.Is_Modified (4) then
+         Stmt.Save_Field (Name  => COL_3_4_NAME, --  workspace_id
+                          Value => Object.Workspace);
+         Object.Clear_Modified (4);
       end if;
       if Stmt.Has_Save_Fields then
          Stmt.Set_Filter (Filter => "id = ?");
@@ -1556,9 +1580,11 @@ package body AWA.Workspaces.Models is
       Session.Allocate (Id => Object);
       Query.Save_Field (Name  => COL_0_4_NAME, --  id
                         Value => Object.Get_Key);
-      Query.Save_Field (Name  => COL_1_4_NAME, --  member_id
+      Query.Save_Field (Name  => COL_1_4_NAME, --  join_date
+                        Value => Object.Join_Date);
+      Query.Save_Field (Name  => COL_2_4_NAME, --  member_id
                         Value => Object.Member);
-      Query.Save_Field (Name  => COL_2_4_NAME, --  workspace_id
+      Query.Save_Field (Name  => COL_3_4_NAME, --  workspace_id
                         Value => Object.Workspace);
       Query.Execute (Result);
       if Result /= 1 then
@@ -1593,6 +1619,12 @@ package body AWA.Workspaces.Models is
       Impl := Workspace_Member_Impl (Obj.all)'Access;
       if Name = "id" then
          return ADO.Objects.To_Object (Impl.Get_Key);
+      elsif Name = "join_date" then
+         if Impl.Join_Date.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.Time.To_Object (Impl.Join_Date.Value);
+         end if;
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -1607,14 +1639,101 @@ package body AWA.Workspaces.Models is
                    Session : in out ADO.Sessions.Session'Class) is
    begin
       Object.Set_Key_Value (Stmt.Get_Identifier (0));
-      if not Stmt.Is_Null (1) then
-         Object.Member.Set_Key_Value (Stmt.Get_Identifier (1), Session);
-      end if;
+      Object.Join_Date := Stmt.Get_Time (1);
       if not Stmt.Is_Null (2) then
-         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (2), Session);
+         Object.Member.Set_Key_Value (Stmt.Get_Identifier (2), Session);
+      end if;
+      if not Stmt.Is_Null (3) then
+         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (3), Session);
       end if;
       ADO.Objects.Set_Created (Object);
    end Load;
+
+
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Member_Info;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
+      elsif Name = "title" then
+         return Util.Beans.Objects.To_Object (From.Title);
+      elsif Name = "email" then
+         return Util.Beans.Objects.To_Object (From.Email);
+      elsif Name = "join_date" then
+         return Util.Beans.Objects.Time.To_Object (From.Join_Date);
+      elsif Name = "invite_date" then
+         return Util.Beans.Objects.Time.To_Object (From.Invite_Date);
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Member_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "id" then
+         Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "title" then
+         Item.Title := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "email" then
+         Item.Email := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "join_date" then
+         Item.Join_Date := Util.Beans.Objects.Time.To_Time (Value);
+      elsif Name = "invite_date" then
+         Item.Invite_Date := Util.Beans.Objects.Time.To_Time (Value);
+      end if;
+   end Set_Value;
+
+
+   --  --------------------
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   --  --------------------
+   procedure List (Object  : in out Member_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+   begin
+      List (Object.List, Session, Context);
+   end List;
+
+   --  --------------------
+   --  The Member_Info describes a member of the workspace.
+   --  --------------------
+   procedure List (Object  : in out Member_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+      procedure Read (Into : in out Member_Info);
+
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Context);
+      Pos  : Natural := 0;
+      procedure Read (Into : in out Member_Info) is
+      begin
+         Into.Id := Stmt.Get_Identifier (0);
+         Into.Title := Stmt.Get_Unbounded_String (1);
+         Into.Email := Stmt.Get_Unbounded_String (2);
+         Into.Join_Date := Stmt.Get_Time (3);
+         Into.Invite_Date := Stmt.Get_Time (4);
+      end Read;
+   begin
+      Stmt.Execute;
+      Member_Info_Vectors.Clear (Object);
+      while Stmt.Has_Elements loop
+         Object.Insert_Space (Before => Pos);
+         Object.Update_Element (Index => Pos, Process => Read'Access);
+         Pos := Pos + 1;
+         Stmt.Next;
+      end loop;
+   end List;
+
 
    procedure Op_Load (Bean    : in out Invitation_Bean;
                       Outcome : in out Ada.Strings.Unbounded.Unbounded_String);

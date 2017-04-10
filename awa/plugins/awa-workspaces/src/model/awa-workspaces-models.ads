@@ -26,6 +26,8 @@ with ADO.Objects;
 with ADO.Statements;
 with ADO.SQL;
 with ADO.Schemas;
+with ADO.Queries;
+with ADO.Queries.Loaders;
 with Ada.Calendar;
 with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded;
@@ -375,6 +377,14 @@ package AWA.Workspaces.Models is
    function Get_Id (Object : in Workspace_Member_Ref)
                  return ADO.Identifier;
 
+   --  Set the date when the user has joined the workspace.
+   procedure Set_Join_Date (Object : in out Workspace_Member_Ref;
+                            Value  : in ADO.Nullable_Time);
+
+   --  Get the date when the user has joined the workspace.
+   function Get_Join_Date (Object : in Workspace_Member_Ref)
+                 return ADO.Nullable_Time;
+
    --
    procedure Set_Member (Object : in out Workspace_Member_Ref;
                          Value  : in AWA.Users.Models.User_Ref'Class);
@@ -438,6 +448,61 @@ package AWA.Workspaces.Models is
    procedure Copy (Object : in Workspace_Member_Ref;
                    Into   : in out Workspace_Member_Ref);
 
+
+   --  --------------------
+   --    The Member_Info describes a member of the workspace.
+   --  --------------------
+   type Member_Info is
+     new Util.Beans.Basic.Bean with  record
+
+      --  the user identifier.
+      Id : ADO.Identifier;
+
+      --  the user name.
+      Title : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the user email address.
+      Email : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the date when the user joined the workspace.
+      Join_Date : Ada.Calendar.Time;
+
+      --  the date when the invitation was sent to the user.
+      Invite_Date : Ada.Calendar.Time;
+   end record;
+
+   --  Get the bean attribute identified by the name.
+   overriding
+   function Get_Value (From : in Member_Info;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Member_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+
+   package Member_Info_Beans is
+      new Util.Beans.Basic.Lists (Element_Type => Member_Info);
+   package Member_Info_Vectors renames Member_Info_Beans.Vectors;
+   subtype Member_Info_List_Bean is Member_Info_Beans.List_Bean;
+
+   type Member_Info_List_Bean_Access is access all Member_Info_List_Bean;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Member_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   subtype Member_Info_Vector is Member_Info_Vectors.Vector;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Member_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   Query_Workspace_Member_List : constant ADO.Queries.Query_Definition_Access;
 
 
    --  --------------------
@@ -673,16 +738,18 @@ private
                         Impl   : out Workspace_Feature_Access);
    WORKSPACE_MEMBER_NAME : aliased constant String := "awa_workspace_member";
    COL_0_4_NAME : aliased constant String := "id";
-   COL_1_4_NAME : aliased constant String := "member_id";
-   COL_2_4_NAME : aliased constant String := "workspace_id";
+   COL_1_4_NAME : aliased constant String := "join_date";
+   COL_2_4_NAME : aliased constant String := "member_id";
+   COL_3_4_NAME : aliased constant String := "workspace_id";
 
    WORKSPACE_MEMBER_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 3,
+     (Count => 4,
       Table => WORKSPACE_MEMBER_NAME'Access,
       Members => (
          1 => COL_0_4_NAME'Access,
          2 => COL_1_4_NAME'Access,
-         3 => COL_2_4_NAME'Access
+         3 => COL_2_4_NAME'Access,
+         4 => COL_3_4_NAME'Access
 )
      );
    WORKSPACE_MEMBER_TABLE : constant ADO.Schemas.Class_Mapping_Access
@@ -695,6 +762,7 @@ private
       new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
                                      Of_Class => WORKSPACE_MEMBER_DEF'Access)
    with record
+       Join_Date : ADO.Nullable_Time;
        Member : AWA.Users.Models.User_Ref;
        Workspace : AWA.Workspaces.Models.Workspace_Ref;
    end record;
@@ -730,4 +798,14 @@ private
 
    procedure Set_Field (Object : in out Workspace_Member_Ref'Class;
                         Impl   : out Workspace_Member_Access);
+
+   package File_1 is
+      new ADO.Queries.Loaders.File (Path => "member-list.xml",
+                                    Sha1 => "5407080D632209F60F81752F988D50FBC9F8954F");
+
+   package Def_Memberinfo_Workspace_Member_List is
+      new ADO.Queries.Loaders.Query (Name => "workspace-member-list",
+                                     File => File_1.File'Access);
+   Query_Workspace_Member_List : constant ADO.Queries.Query_Definition_Access
+   := Def_Memberinfo_Workspace_Member_List.Query'Access;
 end AWA.Workspaces.Models;
