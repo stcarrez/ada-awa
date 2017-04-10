@@ -236,3 +236,5 @@ CREATE TABLE awa_permission (
 );
 INSERT INTO entity_type (name) VALUES
 ("awa_permission");
+
+ALTER TABLE awa_workspace_member ADD COLUMN join_date DATETIME;
