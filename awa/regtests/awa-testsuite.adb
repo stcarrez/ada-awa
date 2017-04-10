@@ -30,6 +30,7 @@ with AWA.Votes.Modules.Tests;
 with AWA.Tags.Modules.Tests;
 with AWA.Questions.Modules.Tests;
 with AWA.Counters.Modules.Tests;
+with AWA.Workspaces.Tests;
 with AWA.Modules.Tests;
 
 with ASF.Converters.Dates;
@@ -104,6 +105,7 @@ package body AWA.Testsuite is
       AWA.Mail.Modules.Tests.Add_Tests (Ret);
       AWA.Users.Services.Tests.Add_Tests (Ret);
       AWA.Users.Tests.Add_Tests (Ret);
+      AWA.Workspaces.Tests.Add_Tests (Ret);
       AWA.Counters.Modules.Tests.Add_Tests (Ret);
       AWA.Helpers.Selectors.Tests.Add_Tests (Ret);
       AWA.Jobs.Modules.Tests.Add_Tests (Ret);
