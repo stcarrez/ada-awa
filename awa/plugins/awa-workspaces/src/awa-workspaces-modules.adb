@@ -103,6 +103,42 @@ package body AWA.Workspaces.Modules is
    end Get_Workspace;
 
    --  ------------------------------
+   --  Load the invitation from the access key and verify that the key is still valid.
+   --  ------------------------------
+   procedure Load_Invitation (Module     : in Workspace_Module;
+                              Key        : in String;
+                              Invitation : in out AWA.Workspaces.Models.Invitation_Ref'Class) is
+      use type Ada.Calendar.Time;
+
+      Ctx    : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB     : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Query  : ADO.SQL.Query;
+      DB_Key : AWA.Users.Models.Access_Key_Ref;
+      Found  : Boolean;
+   begin
+      Log.Debug ("Loading invitation from key {0}", Key);
+
+      Query.Set_Filter ("o.access_key = :key");
+      Query.Bind_Param ("key", Key);
+      DB_Key.Find (DB, Query, Found);
+      if not Found then
+         Log.Info ("Invitation key {0} does not exist");
+         raise Not_Found;
+      end if;
+      if DB_Key.Get_Expire_Date < Ada.Calendar.Clock then
+         Log.Info ("Invitation key {0} has expired");
+         raise Not_Found;
+      end if;
+      Query.Set_Filter ("o.id = :user");
+      Query.Bind_Param ("user", DB_Key.Get_User.Get_Id);
+      Invitation.Find (DB, Query, Found);
+      if not Found then
+         Log.Warn ("Invitation key {0} has been withdawn");
+         raise Not_Found;
+      end if;
+   end Load_Invitation;
+
+   --  ------------------------------
    --  Send the invitation to the user.
    --  ------------------------------
    procedure Send_Invitation (Module     : in Workspace_Module;
