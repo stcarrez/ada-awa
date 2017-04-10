@@ -48,7 +48,7 @@ package body AWA.Workspaces.Tests is
    end Add_Tests;
 
    --  ------------------------------
-   --  Get some access on the blog as anonymous users.
+   --  Verify the anonymous access for the invitation page.
    --  ------------------------------
    procedure Verify_Anonymous (T    : in out Test;
                                Key  : in String) is
@@ -56,22 +56,25 @@ package body AWA.Workspaces.Tests is
       Reply     : ASF.Responses.Mockup.Response;
    begin
       ASF.Tests.Do_Get (Request, Reply, "/auth/invitation.html", "invitation-view.html");
-      ASF.Tests.Assert_Contains (T, "Blog posts", Reply, "This invitation is invalid");
+      ASF.Tests.Assert_Contains (T, "Bad or invalid invitation", Reply,
+                                 "This invitation is invalid");
 
       ASF.Tests.Do_Get (Request, Reply, "/auth/invitation.html?key=test", "invitation-bad.html");
-      ASF.Tests.Assert_Contains (T, "Tag - test", Reply, "Blog tag page is invalid");
+      ASF.Tests.Assert_Contains (T, "This invitation is invalid or has expired", Reply,
+                                 "This invitation is invalid (key)");
 
       ASF.Tests.Do_Get (Request, Reply, "/auth/invitation.html?key=x" & key,
                         "invitation-bad2.html");
-      ASF.Tests.Assert_Contains (T, "The post you are looking for does not exist",
-                                 Reply, "Blog post missing page is invalid");
+      ASF.Tests.Assert_Contains (T, "This invitation is invalid or has expired",
+                                 Reply, "This invitation is invalid (key)");
 
       if Key = "" then
          return;
       end if;
 
       ASF.Tests.Do_Get (Request, Reply, "/auth/invitation.html?key=" & Key, "invitation-ok.html");
-      ASF.Tests.Assert_Contains (T, "post-title", Reply, "Blog post page is invalid");
+      ASF.Tests.Assert_Contains (T, "Accept invitation", Reply,
+                                 "Accept invitation page is invalid");
 
    end Verify_Anonymous;
 
@@ -86,8 +89,6 @@ package body AWA.Workspaces.Tests is
       Reply     : ASF.Responses.Mockup.Response;
       Invite    : AWA.Workspaces.Beans.Invitation_Bean_Access;
       Check     : AWA.Workspaces.Beans.Invitation_Bean;
-      Key       : AWA.Users.Models.Access_Key_Ref;
-      Outcome   : Ada.Strings.Unbounded.Unbounded_String;
    begin
       AWA.Tests.Helpers.Users.Login ("test-invite@test.com", Request);
       Request.Set_Parameter ("email", "invited-user@test.com");
@@ -105,9 +106,7 @@ package body AWA.Workspaces.Tests is
       T.Assert (Invite.Get_Id /= ADO.NO_IDENTIFIER, "The invite ID is invalid");
       T.Assert (not Invite.Get_Access_Key.Is_Null, "The invite access key is null");
       Check.Key := Invite.Get_Access_Key.Get_Access_Key;
-      Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("success");
-      Check.Load (Outcome);
-      Util.Tests.Assert_Equals (T, "success", To_String (Outcome), "Invalid invitation key");
+      T.Verify_Anonymous (Invite.Get_Access_Key.Get_Access_Key);
    end Test_Invite_User;
 
 end AWA.Workspaces.Tests;
