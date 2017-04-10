@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-workspaces-beans -- Beans for module workspaces
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,12 +18,19 @@
 
 with ASF.Events.Faces.Actions;
 
+with ADO.Utils;
+with ADO.Sessions.Entities;
 with ADO.Sessions;
+with ADO.Queries;
+with ADO.Datasets;
 
+with AWA.Services.Contexts;
 with AWA.Workspaces.Models;
 with AWA.Events.Action_Method;
 with AWA.Services.Contexts;
 package body AWA.Workspaces.Beans is
+
+   package ASC renames AWA.Services.Contexts;
 
    overriding
    procedure Load (Bean : in out Invitation_Bean;
@@ -134,5 +141,30 @@ package body AWA.Workspaces.Beans is
       Object.Module := Module;
       return Object.all'Access;
    end Create_Workspaces_Bean;
+
+   --  ------------------------------
+   --  Load the list of members.
+   --  ------------------------------
+   overriding
+   procedure Load (Into    : in out Member_List_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      Ctx         : constant ASC.Service_Context_Access := ASC.Current;
+      User        : constant ADO.Identifier := Ctx.Get_User_Identifier;
+      Session     : ADO.Sessions.Session := Into.Module.Get_Session;
+      Query       : ADO.Queries.Context;
+      Count_Query : ADO.Queries.Context;
+      First       : constant Natural  := (Into.Page - 1) * Into.Page_Size;
+   begin
+      Query.Set_Query (AWA.Workspaces.Models.Query_Workspace_Member_List);
+      Count_Query.Set_Count_Query (AWA.Workspaces.Models.Query_Workspace_Member_List);
+--        ADO.Sessions.Entities.Bind_Param (Params  => Query,
+--                                          Name    => "page_table",
+--                                          Table   => AWA.Wikis.Models.WIKI_PAGE_TABLE,
+--                                          Session => Session);
+      Query.Bind_Param (Name => "user_id", Value => User);
+      Count_Query.Bind_Param (Name => "user_id", Value => User);
+      AWA.Workspaces.Models.List (Into.Members, Session, Query);
+      Into.Count := ADO.Datasets.Get_Count (Session, Count_Query);
+   end Load;
 
 end AWA.Workspaces.Beans;
