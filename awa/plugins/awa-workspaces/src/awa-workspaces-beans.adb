@@ -36,7 +36,12 @@ package body AWA.Workspaces.Beans is
    procedure Load (Bean : in out Invitation_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
    begin
-      null;
+      Bean.Module.Load_Invitation (Key        => Ada.Strings.Unbounded.To_String (Bean.Key),
+                                   Invitation => Bean);
+
+   exception
+      when others =>
+         Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
    end Load;
 
    overriding
