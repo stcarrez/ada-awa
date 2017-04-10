@@ -1,0 +1,49 @@
+<!-- Accept Invitation form
+  -  Copyright (C) 2017 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<div xmlns:util="http://code.google.com/p/ada-asf/util"
+     class='awa-login ui-widget ui-widget-content ui-corner-all'>
+    <h2>#{title}</h2>
+    <div>
+        <p>
+            #{inviteUser.message}
+        </p>
+    </div>
+    <ul class='openid-login'>
+        <li>
+            <a href="#{contextPath}/auth/auth/yahoo?redirect=#{contextPath}/auth/" title="#{userMsg.openid_yahoo_auth}" class='openid-yahoo'>
+                <em/>
+            </a>
+        </li>
+        <li>
+            <a href="#{contextPath}/auth/auth/google-plus?redirect=#{util:urlEncode(redirect)}" title="#{userMsg.openid_google_plus_auth}" class='openid-google-plus'>
+                <em/>
+            </a>
+        </li>
+        <li>
+            <a href="#{contextPath}/auth/auth/facebook?redirect=#{util:urlEncode(redirect)}" title="#{userMsg.openid_facebook_auth}" class='openid-facebook'>
+                <em/>
+            </a>
+        </li>
+        <li>
+            <a href="#{contextPath}/auth/auth/orange?redirect=#{util:urlEncode(redirect)}" title="#{userMsg.openid_orange_auth}" class='openid-orange'>
+                <em/>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
