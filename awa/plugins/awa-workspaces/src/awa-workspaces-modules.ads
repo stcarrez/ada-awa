@@ -47,6 +47,11 @@ package AWA.Workspaces.Modules is
                             Context   : in AWA.Services.Contexts.Service_Context_Access;
                             Workspace : out AWA.Workspaces.Models.Workspace_Ref);
 
+   --  Load the invitation from the access key and verify that the key is still valid.
+   procedure Load_Invitation (Module     : in Workspace_Module;
+                              Key        : in String;
+                              Invitation : in out AWA.Workspaces.Models.Invitation_Ref'Class);
+
    --  Send the invitation to the user.
    procedure Send_Invitation (Module : in Workspace_Module;
                               Invitation : in out AWA.Workspaces.Models.Invitation_Ref'Class);
