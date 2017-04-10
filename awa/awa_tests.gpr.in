@@ -41,6 +41,7 @@ project Awa_Tests is
 	"plugins/awa-tags/regtests",
 	"plugins/awa-settings/regtests",
 	"plugins/awa-wikis/regtests",
+	"plugins/awa-workspaces/regtests",
 	"plugins/awa-changelogs/regtests",
 	"plugins/awa-questions/regtests");
 
