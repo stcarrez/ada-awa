@@ -129,7 +129,7 @@ package body AWA.Workspaces.Modules is
          Log.Info ("Invitation key {0} has expired");
          raise Not_Found;
       end if;
-      Query.Set_Filter ("o.id = :user");
+      Query.Set_Filter ("o.invitee_id = :user");
       Query.Bind_Param ("user", DB_Key.Get_User.Get_Id);
       Invitation.Find (DB, Query, Found);
       if not Found then
@@ -143,13 +143,15 @@ package body AWA.Workspaces.Modules is
    --  ------------------------------
    procedure Send_Invitation (Module     : in Workspace_Module;
                               Invitation : in out AWA.Workspaces.Models.Invitation_Ref'Class) is
-      Ctx   : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
-      DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
-      User  : constant AWA.Users.Models.User_Ref := Ctx.Get_User;
-      WS    : AWA.Workspaces.Models.Workspace_Ref;
-      Query : ADO.SQL.Query;
-      Found : Boolean;
-      Key   : AWA.Users.Models.Access_Key_Ref;
+      Ctx     : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB      : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      User    : constant AWA.Users.Models.User_Ref := Ctx.Get_User;
+      WS      : AWA.Workspaces.Models.Workspace_Ref;
+      Query   : ADO.SQL.Query;
+      Found   : Boolean;
+      Key     : AWA.Users.Models.Access_Key_Ref;
+      Email   : AWA.Users.Models.Email_Ref;
+      Invitee : AWA.Users.Models.User_Ref;
    begin
       Log.Info ("Sending invitation to {0}", String '(Invitation.Get_Email));
 
@@ -166,11 +168,27 @@ package body AWA.Workspaces.Modules is
       if not Found then
          return;
       end if;
+
+      Query.Clear;
+      Query.Set_Filter ("o.email = ?");
+      Query.Add_Param (String '(Invitation.Get_Email));
+      Email.Find (DB, Query, Found);
+      if not Found then
+         Email.Set_User_Id (0);
+         Email.Set_Email (String '(Invitation.Get_Email));
+         Email.Save (DB);
+         Invitee.Set_Email (Email);
+         Invitee.Set_Name (String '(Invitation.Get_Email));
+         Invitee.Save (DB);
+      else
+         Invitee.Load (DB, Email.Get_User_Id);
+      end if;
       Key := AWA.Users.Models.Access_Key_Ref (Invitation.Get_Access_Key);
-      Module.User_Manager.Create_Access_Key (User, Key, 365 * 86400.0, DB);
+      Module.User_Manager.Create_Access_Key (Invitee, Key, 365 * 86400.0, DB);
       Key.Save (DB);
       Invitation.Set_Access_Key (Key);
       Invitation.Set_Inviter (User);
+      Invitation.Set_Invitee (Invitee);
       Invitation.Set_Workspace (WS);
       Invitation.Set_Create_Date (Ada.Calendar.Clock);
       Invitation.Save (DB);
