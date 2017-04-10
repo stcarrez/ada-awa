@@ -44,6 +44,10 @@ package AWA.Workspaces.Beans is
    procedure Send (Bean    : in out Invitation_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
+   --  Create the Invitation_Bean bean instance.
+   function Create_Invitation_Bean (Module : in AWA.Workspaces.Modules.Workspace_Module_Access)
+                                     return Util.Beans.Basic.Readonly_Bean_Access;
+
    type Workspaces_Bean is new Util.Beans.Basic.Bean
      and Util.Beans.Methods.Method_Bean with record
       Module : AWA.Workspaces.Modules.Workspace_Module_Access := null;
