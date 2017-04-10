@@ -133,6 +133,7 @@ package body AWA.Workspaces.Modules is
       Key := AWA.Users.Models.Access_Key_Ref (Invitation.Get_Access_Key);
       Module.User_Manager.Create_Access_Key (User, Key, 365 * 86400.0, DB);
       Key.Save (DB);
+      Invitation.Set_Access_Key (Key);
       Invitation.Set_Inviter (User);
       Invitation.Set_Workspace (WS);
       Invitation.Set_Create_Date (Ada.Calendar.Clock);
