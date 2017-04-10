@@ -25,6 +25,10 @@ package AWA.Workspaces.Tests is
 
    type Test is new AWA.Tests.Test with null record;
 
+   --  Verify the anonymous access for the invitation page.
+   procedure Verify_Anonymous (T    : in out Test;
+                               Key  : in String);
+
    --  Test sending an invitation.
    procedure Test_Invite_User (T : in out Test);
 
