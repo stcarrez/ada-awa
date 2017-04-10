@@ -54,6 +54,17 @@ package body AWA.Workspaces.Beans is
    end Send;
 
    --  ------------------------------
+   --  Create the Invitation_Bean bean instance.
+   --  ------------------------------
+   function Create_Invitation_Bean (Module : in AWA.Workspaces.Modules.Workspace_Module_Access)
+                                    return Util.Beans.Basic.Readonly_Bean_Access is
+      Object  : constant Invitation_Bean_Access := new Invitation_Bean;
+   begin
+      Object.Module := Module;
+      return Object;
+   end Create_Invitation_Bean;
+
+   --  ------------------------------
    --  Example of action method.
    --  ------------------------------
    procedure Action (Bean    : in out Workspaces_Bean;
