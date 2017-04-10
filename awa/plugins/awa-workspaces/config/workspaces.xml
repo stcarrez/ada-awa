@@ -8,19 +8,18 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
+  <managed-bean>
+    <description>The list of workspace members.</description>
+    <managed-bean-name>memberList</managed-bean-name>
+    <managed-bean-class>AWA.Workspaces.Beans.Member_List_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
   <!--  When a user is created, also create a workspace area.  -->
   <on-event name="user-create">
      <action>#{workspace.create}</action>
   </on-event>
 
-  <filter-mapping>
-    <filter-name>service</filter-name>
-    <url-pattern>/workspaces/*.html</url-pattern>
-  </filter-mapping>
-  <filter-mapping>
-    <filter-name>auth-filter</filter-name>
-    <url-pattern>/workspaces/*.html</url-pattern>
-  </filter-mapping>
   <entity-permission>
     <name>workspaces-create</name>
     <entity-type>awa_workspace</entity-type>
@@ -31,12 +30,24 @@
     </sql>
   </entity-permission>
 
-    <url-policy>
-        <description>
+  <filter-mapping>
+    <filter-name>service</filter-name>
+    <url-pattern>/workspaces/*.html</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>auth-filter</filter-name>
+    <url-pattern>/workspaces/*.html</url-pattern>
+  </filter-mapping>
+
+  <url-policy>
+    <description>
            Security rule to allow only logged users to access the workspace.
-        </description>
-        <permission>logged-user</permission>
-        <url-pattern>/workspaces/main.html</url-pattern>
-    </url-policy>
+    </description>
+    <permission>logged-user</permission>
+    <url-pattern>/workspaces/main.html</url-pattern>
+    <url-pattern>/workspaces/members.html</url-pattern>
+    <url-pattern>/workspaces/invite.html</url-pattern>
+  </url-policy>
 
 </module>
