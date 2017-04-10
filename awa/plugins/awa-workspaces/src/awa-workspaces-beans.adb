@@ -50,7 +50,7 @@ package body AWA.Workspaces.Beans is
    procedure Send (Bean    : in out Invitation_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
    begin
-      null;
+      Bean.Module.Send_Invitation (Bean);
    end Send;
 
    --  ------------------------------
