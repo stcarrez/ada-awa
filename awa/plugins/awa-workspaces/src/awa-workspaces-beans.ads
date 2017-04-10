@@ -86,10 +86,15 @@ package AWA.Workspaces.Beans is
       Members      : aliased AWA.Workspaces.Models.Member_Info_List_Bean;
       Members_Bean : Util.Beans.Basic.Readonly_Bean_Access;
    end record;
+   type Member_List_Bean_Access is access all Member_List_Bean'Class;
 
    --  Load the list of members.
    overriding
    procedure Load (Into    : in out Member_List_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Create the Member_List_Bean bean instance.
+   function Create_Member_List_Bean (Module : in AWA.Workspaces.Modules.Workspace_Module_Access)
+                                     return Util.Beans.Basic.Readonly_Bean_Access;
 
 end AWA.Workspaces.Beans;
