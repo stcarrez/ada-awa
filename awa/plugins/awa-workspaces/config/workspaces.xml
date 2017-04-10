@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="1.0">
 
+  <application>
+    <message-bundle var='workspaceMsg'>workspaces</message-bundle>
+  </application>
+
   <managed-bean>
     <description>This bean allows to perform some general workspace actions</description>
     <managed-bean-name>workspace</managed-bean-name>
@@ -26,6 +30,18 @@
   <on-event name="user-create">
      <action>#{workspace.create}</action>
   </on-event>
+
+  <navigation-rule>
+    <from-view-id>/auth/invitation.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/auth/invitation.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>not-found</from-outcome>
+      <to-view-id>/auth/invitation-invalid.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
 
   <entity-permission>
     <name>workspaces-create</name>
