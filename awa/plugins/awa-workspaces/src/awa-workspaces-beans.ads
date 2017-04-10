@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-workspaces-beans -- Beans for module workspaces
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -80,12 +80,16 @@ package AWA.Workspaces.Beans is
       return Util.Beans.Basic.Readonly_Bean_Access;
 
    type Member_List_Bean is new AWA.Workspaces.Models.Member_List_Bean with record
-      Module : AWA.Workspaces.Modules.Workspace_Module_Access;
+      Module       : AWA.Workspaces.Modules.Workspace_Module_Access;
+
+      --  The list of workspace members.
+      Members      : aliased AWA.Workspaces.Models.Member_Info_List_Bean;
+      Members_Bean : Util.Beans.Basic.Readonly_Bean_Access;
    end record;
 
    --  Load the list of members.
    overriding
-   procedure Load (Bean    : in out Workspaces_Bean;
+   procedure Load (Into    : in out Member_List_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
 end AWA.Workspaces.Beans;
