@@ -1,0 +1,52 @@
+<!-- Form to send an invitation to someone
+  -  Copyright (C) 2017 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<ui:composition
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:w="http://code.google.com/p/ada-asf/widget"
+        xmlns:h="http://java.sun.com/jsf/html">
+
+  <div class='ui-widget awa-form'>
+    <h:form id='invite'>
+        <h:inputHidden id='invite-id' value='#{inviteUser.id}' required='false'/>
+        <div class='grid_8'>
+            <h:messages styleClass='error'/>
+            <w:inputText styleClass="awa-required"
+                         id='email' size='50' required='true' value='#{inviteUser.email}'
+                         title='#{workspaceMsg.workspace_invite_email_label}'/>
+            <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
+                 <dt>
+                     <label for='text'>#{workspaceMsg.workspace_invite_text_label}</label>
+                 </dt>
+                 <dd>
+                     <h:inputTextarea id='text' rows='20' required='false'
+                                      value='#{inviteUser.message}'/>
+                 </dd>
+            </dl>
+            <ul class='awa-buttons'>
+                <li>
+                    <h:commandButton id='send'
+                                     title="#{workspaceMsg.workspace_invite_user_tooltip}"
+                                     value='#{workspaceMsg.workspace_invite_user_button}'
+                                     styleClass="ui-button ui-state-default ui-corner-all"
+                                     action="#{inviteUser.send}"/>
+                </li>
+            </ul>
+        </div>
+    </h:form>
+  </div>
+</ui:composition>
+
