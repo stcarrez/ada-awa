@@ -167,4 +167,19 @@ package body AWA.Workspaces.Beans is
       Into.Count := ADO.Datasets.Get_Count (Session, Count_Query);
    end Load;
 
+   --  ------------------------------
+   --  Create the Member_List_Bean bean instance.
+   --  ------------------------------
+   function Create_Member_List_Bean (Module : in AWA.Workspaces.Modules.Workspace_Module_Access)
+                                     return Util.Beans.Basic.Readonly_Bean_Access is
+      Object  : constant Member_List_Bean_Access := new Member_List_Bean;
+   begin
+      Object.Module     := Module;
+      Object.Members_Bean := Object.Members'Access;
+      Object.Page_Size  := 20;
+      Object.Page       := 1;
+      Object.Count      := 0;
+      return Object.all'Access;
+   end Create_Member_List_Bean;
+
 end AWA.Workspaces.Beans;
