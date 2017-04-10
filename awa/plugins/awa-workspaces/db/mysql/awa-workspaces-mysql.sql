@@ -53,6 +53,8 @@ are part of the workspace. */
 CREATE TABLE awa_workspace_member (
   /*  */
   `id` BIGINT NOT NULL,
+  /* the date when the user has joined the workspace. */
+  `join_date` DATETIME ,
   /*  */
   `member_id` BIGINT NOT NULL,
   /*  */

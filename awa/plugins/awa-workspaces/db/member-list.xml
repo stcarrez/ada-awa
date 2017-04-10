@@ -1,0 +1,43 @@
+<query-mapping package='AWA.Workspaces.Models'>
+    <description>
+      The list of workspace members for the workspace administrator.
+    </description>
+
+    <class name="AWA.Workspaces.Models.Member_Info" bean="yes">
+        <comment>The Member_Info describes a member of the workspace.</comment>
+        <property type='Identifier' name="id">
+            <comment>the user identifier.</comment>
+        </property>
+        <property type='String' name="title">
+            <comment>the user name.</comment>
+        </property>
+        <property type='String' name="email">
+            <comment>the user email address.</comment>
+        </property>
+        <property type='Date' name="join_date">
+            <comment>the date when the user joined the workspace.</comment>
+        </property>
+        <property type='Date' name="invite_date">
+            <comment>the date when the invitation was sent to the user.</comment>
+        </property>
+    </class>
+
+    <query name='workspace-member-list'>
+       <comment>Get the list of workspace members</comment>
+       <sql>
+    SELECT
+      user.id,
+      user.name,
+      email.email,
+      wm.join_date,
+      invite.create_date
+    FROM awa_workspace_member as wm
+    INNER JOIN awa_user AS user ON wm.member_id = user.id
+    INNER JOIN awa_email AS email ON user.email_id = email.id
+    LEFT JOIN awa_invitation AS invite ON invite.workspace_id = :workspace_id AND invite.invitee_id = user.id
+    WHERE wm.workspace_id = :workspace_id
+    ORDER BY post.id DESC
+       </sql>
+    </query>
+
+</query-mapping>
