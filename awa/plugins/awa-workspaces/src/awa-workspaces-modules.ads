@@ -26,6 +26,8 @@ with AWA.Workspaces.Models;
 with AWA.Users.Services;
 package AWA.Workspaces.Modules is
 
+   Not_Found : exception;
+
    --  The name under which the module is registered.
    NAME : constant String := "workspaces";
 
