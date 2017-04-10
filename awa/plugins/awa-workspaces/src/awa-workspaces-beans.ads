@@ -79,4 +79,13 @@ package AWA.Workspaces.Beans is
    function Create_Workspaces_Bean (Module : in AWA.Workspaces.Modules.Workspace_Module_Access)
       return Util.Beans.Basic.Readonly_Bean_Access;
 
+   type Member_List_Bean is new AWA.Workspaces.Models.Member_List_Bean with record
+      Module : AWA.Workspaces.Modules.Workspace_Module_Access;
+   end record;
+
+   --  Load the list of members.
+   overriding
+   procedure Load (Bean    : in out Workspaces_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
 end AWA.Workspaces.Beans;
