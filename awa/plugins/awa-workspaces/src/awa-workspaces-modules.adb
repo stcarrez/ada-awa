@@ -125,7 +125,7 @@ package body AWA.Workspaces.Modules is
          return;
       end if;
       Key := AWA.Users.Models.Access_Key_Ref (Invitation.Get_Access_Key);
-      --  Key.Set_Key_Value
+      Module.User_Manager.Create_Access_Key (User, Key, 365 * 86400.0, DB);
       Key.Save (DB);
       Invitation.Set_Inviter (User);
       Invitation.Set_Workspace (WS);
