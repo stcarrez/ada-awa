@@ -52,6 +52,9 @@ package body AWA.Workspaces.Modules is
       Register.Register (Plugin => Plugin,
                          Name   => "AWA.Workspaces.Beans.Member_List_Bean",
                          Handler => AWA.Workspaces.Beans.Create_Member_List_Bean'Access);
+      Register.Register (Plugin => Plugin,
+                         Name   => "AWA.Workspaces.Beans.Invitation_Bean",
+                         Handler => AWA.Workspaces.Beans.Create_Invitation_Bean'Access);
 
       AWA.Modules.Module (Plugin).Initialize (App, Props);
 
