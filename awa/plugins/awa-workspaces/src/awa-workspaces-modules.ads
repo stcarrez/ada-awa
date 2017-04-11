@@ -54,6 +54,10 @@ package AWA.Workspaces.Modules is
                               Key        : in String;
                               Invitation : in out AWA.Workspaces.Models.Invitation_Ref'Class);
 
+   --  Accept the invitation identified by the access key.
+   procedure Accept_Invitation (Module     : in Workspace_Module;
+                                Key        : in String);
+
    --  Send the invitation to the user.
    procedure Send_Invitation (Module : in Workspace_Module;
                               Invitation : in out AWA.Workspaces.Models.Invitation_Ref'Class);
