@@ -17,6 +17,7 @@
 <ui:composition
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:w="http://code.google.com/p/ada-asf/widget"
+        xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
 
   <div class='ui-widget awa-form'>
@@ -29,10 +30,10 @@
                          title='#{workspaceMsg.workspace_invite_email_label}'/>
             <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
                  <dt>
-                     <label for='text'>#{workspaceMsg.workspace_invite_text_label}</label>
+                     <label for='message'>#{workspaceMsg.workspace_invite_text_label}</label>
                  </dt>
                  <dd>
-                     <h:inputTextarea id='text' rows='20' required='false'
+                     <h:inputTextarea id='message' rows='20' required='false'
                                       value='#{inviteUser.message}'/>
                  </dd>
             </dl>
