@@ -1,0 +1,53 @@
+<!-- List the workspace members for the administrator
+  -  Copyright (C) 2017 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<ui:composition template="/WEB-INF/layouts/layout.xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
+                xmlns:util="http://code.google.com/p/ada-asf/util"
+                xmlns:h="http://java.sun.com/jsf/html">
+    <ui:param name="title" value="#{workspaceMsg.workspace_member_list_title}"/>
+    <ui:param name="pageStyle" value="page-members"/>
+
+    <!-- Main page body -->
+    <ui:define name="pageBody">
+        <f:metadata>
+            <f:viewParam id='page' value='#{wikiList.page}' required="false"/>
+            <f:viewAction action='#{wikiList.load}'/>
+        </f:metadata>
+        <div id='awa-content'>
+            <ui:decorate template="lists/list.xhtml">
+                <ui:param name="wikiSpaceId" value="#{wikiList.wiki_id}"/>
+                <ui:param name="sort" value="#{wikiList.sort}"/>
+                <ui:param name="page_link" value=""/>
+                <ui:define name="page-nav">
+                    <li class="awa-nav-right">
+                        <a href="#{contextPath}/wikis/list/#{wikiList.wiki_id}/#{wikiList.sort}/grid" title="#{wikiMsg.wiki_page_grid_view_label}">
+                            <img src="#{contextPath}/images/wikis/wiki-grid.png" alt="#{wikiMsg.wiki_page_grid_view_label}"/>
+                        </a>
+                    </li>
+                </ui:define>
+            </ui:decorate>
+        </div>
+   </ui:define>
+
+    <ui:define name="pageScript">
+        <script type="text/javascript" src="#{jquery.chosenPath}"></script>
+    </ui:define>
+</ui:composition>
+
