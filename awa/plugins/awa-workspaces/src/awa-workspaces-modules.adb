@@ -180,6 +180,8 @@ package body AWA.Workspaces.Modules is
          Invitee.Set_Email (Email);
          Invitee.Set_Name (String '(Invitation.Get_Email));
          Invitee.Save (DB);
+         Email.Set_User_Id (Invitee.Get_Id);
+         Email.Save (DB);
       else
          Invitee.Load (DB, Email.Get_User_Id);
       end if;
