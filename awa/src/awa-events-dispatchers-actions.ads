@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-dispatchers-actions -- Event dispatcher to Ada bean actions
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,10 +34,11 @@ package AWA.Events.Dispatchers.Actions is
    --  ------------------------------
 
    type Action_Dispatcher (Application : AWA.Applications.Application_Access) is
-     new Dispatcher  with private;
+     new Dispatcher with private;
 
    --  Dispatch the event identified by <b>Event</b>.
    --  The event actions which are associated with the event are executed synchronously.
+   overriding
    procedure Dispatch (Manager : in Action_Dispatcher;
                        Event   : in Module_Event'Class);
 
@@ -45,6 +46,7 @@ package AWA.Events.Dispatchers.Actions is
    --  When the event queue dispatches the event, the Ada bean identified by the method action
    --  represented by <b>Action</b> is created and initialized by evaluating and setting the
    --  parameters defined in <b>Params</b>.  The action method is then invoked.
+   overriding
    procedure Add_Action (Manager : in out Action_Dispatcher;
                          Action  : in EL.Expressions.Method_Expression;
                          Params  : in EL.Beans.Param_Vectors.Vector);
