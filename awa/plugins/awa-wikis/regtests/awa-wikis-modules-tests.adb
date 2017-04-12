@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-modules-tests -- Unit tests for wikis service
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2015, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,6 +43,8 @@ package body AWA.Wikis.Modules.Tests is
                        Test_Create_Wiki_Content'Access);
       Caller.Add_Test (Suite, "Test AWA.Wikis.Modules.Wiki_Page",
                        Test_Wiki_Page'Access);
+      Caller.Add_Test (Suite, "Test AWA.Wikis.Beans.Save",
+                       Test_Update_Page'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -199,5 +201,59 @@ package body AWA.Wikis.Modules.Tests is
       ASF.Tests.Do_Get (Request, Reply, "/wikis/list/" & Ident & "/popular/grid", "wiki-list-popular-1.html");
       Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status, "Invalid response (list/popular/grid)");
    end Test_Wiki_Page;
+
+   --  ------------------------------
+   --  Test updating the wiki page through a POST request.
+   --  ------------------------------
+   procedure Test_Update_Page (T : in out Test) is
+      Request   : ASF.Requests.Mockup.Request;
+      Reply     : ASF.Responses.Mockup.Response;
+      Ident     : constant String := Util.Strings.Image (Natural (T.Wiki_Id));
+      Pub_Ident : constant String := Util.Strings.Image (Natural (T.Public_Id));
+   begin
+      AWA.Tests.Helpers.Users.Login ("test-wiki@test.com", Request);
+      Request.Set_Parameter ("title", "The Blog Title");
+      Request.Set_Parameter ("page-id", Pub_Ident);
+      Request.Set_Parameter ("page-wiki-id", Ident);
+      Request.Set_Parameter ("name", "NewPageName");
+      Request.Set_Parameter ("page-title", "New Page Title");
+      Request.Set_Parameter ("text", "== Title ==" & ASCII.LF & "A paragraph" & ASCII.LF
+                             & "[[http://mylink.com|Link]]" & ASCII.LF
+                             & "[[Image:my-image.png|My Picture]]" & ASCII.LF
+                             & "== Last header ==" & ASCII.LF);
+      Request.Set_Parameter ("comment", "Update through test post simulation");
+      Request.Set_Parameter ("page-is-public", "TRUE");
+      Request.Set_Parameter ("wiki-format", "FORMAT_MEDIAWIKI");
+      Request.Set_Parameter ("qtags[1]", "Test-Tag");
+      Request.Set_Parameter ("save", "1");
+      Request.Set_Parameter ("post", "1");
+      ASF.Tests.Do_Post (Request, Reply, "/wikis/edit/" & Ident & "/PublicPage",
+                         "update-wiki.html");
+
+      T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY,
+                "Invalid response after wiki update");
+       declare
+         Result : constant String
+            := AWA.Tests.Helpers.Extract_Redirect (Reply, "/asfunit/wikis/view/");
+      begin
+         Util.Tests.Assert_Equals (T, Ident & "/NewPageName", Result,
+                                   "The page name was not updated");
+
+         ASF.Tests.Do_Get (Request, Reply, "/wikis/view/" & Result, "wiki-public-2.html");
+         Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status,
+                        "Invalid response (NewPageName)");
+         Assert_Matches (T, ".*Last header.*", Reply,
+                         "Last header is present in the response",
+                         Status => ASF.Responses.SC_OK);
+
+         ASF.Tests.Do_Get (Request, Reply, "/wikis/info/" & Ident & "/"
+                           & Pub_Ident, "wiki-info-2.html");
+         Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status,
+                        "Invalid response (info NewPageName)");
+         Assert_Matches (T, ".*wiki-image-name.*my-image.png.*", Reply,
+                         "The info page must list the image",
+                         Status => ASF.Responses.SC_OK);
+      end;
+   end Test_Update_Page;
 
 end AWA.Wikis.Modules.Tests;
