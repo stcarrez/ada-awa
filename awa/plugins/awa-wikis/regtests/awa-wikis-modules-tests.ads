@@ -43,4 +43,7 @@ package AWA.Wikis.Modules.Tests is
    --  Test getting the wiki page as well as info, history pages.
    procedure Test_Wiki_Page (T : in out Test);
 
+   --  Test updating the wiki page through a POST request.
+   procedure Test_Update_Page (T : in out Test);
+
 end AWA.Wikis.Modules.Tests;
