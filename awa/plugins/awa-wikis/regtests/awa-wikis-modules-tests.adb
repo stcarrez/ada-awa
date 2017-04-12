@@ -155,6 +155,9 @@ package body AWA.Wikis.Modules.Tests is
 
    end Test_Create_Wiki_Content;
 
+   --  ------------------------------
+   --  Test getting the wiki page as well as info, history pages.
+   --  ------------------------------
    procedure Test_Wiki_Page (T : in out Test) is
       Request   : ASF.Requests.Mockup.Request;
       Reply     : ASF.Responses.Mockup.Response;
