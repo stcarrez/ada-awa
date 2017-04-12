@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-dispatchers-tasks -- AWA Event Dispatchers
---  Copyright (C) 2012, 2015 Stephane Carrez
+--  Copyright (C) 2012, 2015, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,6 +30,7 @@ package body AWA.Events.Dispatchers.Tasks is
    --  ------------------------------
    --  Start the dispatcher.
    --  ------------------------------
+   overriding
    procedure Start (Manager : in out Task_Dispatcher) is
    begin
       if Manager.Queues.Get_Count > 0 then
@@ -50,6 +51,7 @@ package body AWA.Events.Dispatchers.Tasks is
    --  ------------------------------
    --  Stop the dispatcher.
    --  ------------------------------
+   overriding
    procedure Stop (Manager : in out Task_Dispatcher) is
       procedure Free is
         new Ada.Unchecked_Deallocation (Object => Consumer_Array,
