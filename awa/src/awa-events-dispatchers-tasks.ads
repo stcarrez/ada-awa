@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-dispatchers-tasks -- AWA Event Dispatchers
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,12 +27,15 @@ package AWA.Events.Dispatchers.Tasks is
    type Task_Dispatcher_Access is access all Task_Dispatcher;
 
    --  Start the dispatcher.
+   overriding
    procedure Start (Manager : in out Task_Dispatcher);
 
    --  Stop the dispatcher.
+   overriding
    procedure Stop (Manager : in out Task_Dispatcher);
 
    --  Add the queue to the dispatcher.
+   overriding
    procedure Add_Queue (Manager : in out Task_Dispatcher;
                         Queue   : in AWA.Events.Queues.Queue_Ref;
                         Added   : out Boolean);
