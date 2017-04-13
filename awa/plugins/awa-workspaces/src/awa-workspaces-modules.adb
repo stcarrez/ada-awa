@@ -184,6 +184,8 @@ package body AWA.Workspaces.Modules is
    --  ------------------------------
    procedure Send_Invitation (Module     : in Workspace_Module;
                               Invitation : in out AWA.Workspaces.Models.Invitation_Ref'Class) is
+      use type ADO.Identifier;
+
       Ctx     : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
       DB      : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       User    : constant AWA.Users.Models.User_Ref := Ctx.Get_User;
@@ -193,6 +195,7 @@ package body AWA.Workspaces.Modules is
       Key     : AWA.Users.Models.Access_Key_Ref;
       Email   : AWA.Users.Models.Email_Ref;
       Invitee : AWA.Users.Models.User_Ref;
+      Invit   : AWA.Workspaces.Models.Invitation_Ref;
    begin
       Log.Info ("Sending invitation to {0}", String '(Invitation.Get_Email));
 
@@ -225,6 +228,20 @@ package body AWA.Workspaces.Modules is
          Email.Save (DB);
       else
          Invitee.Load (DB, Email.Get_User_Id);
+      end if;
+
+      --  Check for a previous invitation for the user and delete it.
+      Query.Clear;
+      Query.Set_Filter ("o.invitee_id = ? AND o.workspace_id = ?");
+      Query.Add_Param (Invitee.Get_Id);
+      Query.Add_Param (WS.Get_Id);
+      Invit.Find (DB, Query, Found);
+      if Found then
+         Key := AWA.Users.Models.Access_Key_Ref (Invit.Get_Access_Key);
+         Key.Delete (DB);
+         if not Invitation.Is_Inserted or else Invit.Get_Id /= Invitation.Get_Id then
+            Invit.Delete (DB);
+         end if;
       end if;
       Key := AWA.Users.Models.Access_Key_Ref (Invitation.Get_Access_Key);
       Module.User_Manager.Create_Access_Key (Invitee, Key, 365 * 86400.0, DB);
