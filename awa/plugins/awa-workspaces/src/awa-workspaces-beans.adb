@@ -66,7 +66,7 @@ package body AWA.Workspaces.Beans is
       Object  : constant Invitation_Bean_Access := new Invitation_Bean;
    begin
       Object.Module := Module;
-      return Object;
+      return Object.all'Access;
    end Create_Invitation_Bean;
 
    --  ------------------------------
