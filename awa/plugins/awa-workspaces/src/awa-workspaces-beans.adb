@@ -181,11 +181,13 @@ package body AWA.Workspaces.Beans is
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       Ctx         : constant ASC.Service_Context_Access := ASC.Current;
       User        : constant ADO.Identifier := Ctx.Get_User_Identifier;
-      Session     : ADO.Sessions.Session := Into.Module.Get_Session;
+      Session     : ADO.Sessions.Master_Session := Into.Module.Get_Master_Session;
       Query       : ADO.Queries.Context;
       Count_Query : ADO.Queries.Context;
       First       : constant Natural  := (Into.Page - 1) * Into.Page_Size;
+      WS          : AWA.Workspaces.Models.Workspace_Ref;
    begin
+      AWA.Workspaces.Modules.Get_Workspace (Session, Ctx, WS);
       Query.Set_Query (AWA.Workspaces.Models.Query_Workspace_Member_List);
       Count_Query.Set_Count_Query (AWA.Workspaces.Models.Query_Workspace_Member_List);
 --        ADO.Sessions.Entities.Bind_Param (Params  => Query,
@@ -193,7 +195,9 @@ package body AWA.Workspaces.Beans is
 --                                          Table   => AWA.Wikis.Models.WIKI_PAGE_TABLE,
 --                                          Session => Session);
       Query.Bind_Param (Name => "user_id", Value => User);
+      Query.Bind_Param (Name => "workspace_id", Value => WS.Get_Id);
       Count_Query.Bind_Param (Name => "user_id", Value => User);
+      Count_Query.Bind_Param (Name => "workspace_id", Value => WS.Get_Id);
       AWA.Workspaces.Models.List (Into.Members, Session, Query);
       Into.Count := ADO.Datasets.Get_Count (Session, Count_Query);
    end Load;
