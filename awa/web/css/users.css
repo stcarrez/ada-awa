@@ -165,3 +165,8 @@ div.openid-retry {
 .member-date {
     width: 15%;
 }
+.invite-message p {
+    padding: 4px;
+    background: #e8f0ff;
+    white-space: pre;
+}
