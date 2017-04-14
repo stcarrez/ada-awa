@@ -24,6 +24,7 @@ with AWA.Modules;
 with AWA.Services.Contexts;
 with AWA.Workspaces.Models;
 with AWA.Users.Services;
+with AWA.Users.Models;
 with AWA.Events;
 package AWA.Workspaces.Modules is
 
@@ -55,7 +56,8 @@ package AWA.Workspaces.Modules is
    --  Load the invitation from the access key and verify that the key is still valid.
    procedure Load_Invitation (Module     : in Workspace_Module;
                               Key        : in String;
-                              Invitation : in out AWA.Workspaces.Models.Invitation_Ref'Class);
+                              Invitation : in out AWA.Workspaces.Models.Invitation_Ref'Class;
+                              Inviter    : in out AWA.Users.Models.User_Ref);
 
    --  Accept the invitation identified by the access key.
    procedure Accept_Invitation (Module     : in Workspace_Module;
