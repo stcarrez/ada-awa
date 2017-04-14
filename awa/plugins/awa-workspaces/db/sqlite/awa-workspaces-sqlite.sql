@@ -55,6 +55,8 @@ CREATE TABLE awa_workspace_member (
   `id` BIGINT NOT NULL,
   /* the date when the user has joined the workspace. */
   `join_date` DATETIME ,
+  /* the member role. */
+  `role` VARCHAR(255) NOT NULL,
   /*  */
   `member_id` BIGINT NOT NULL,
   /*  */
