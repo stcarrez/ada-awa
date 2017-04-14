@@ -31,7 +31,35 @@
             <f:viewAction action='#{memberList.load}'/>
         </f:metadata>
         <div id='awa-content'>
-            <ui:include src="lists/member-list.xhtml"/>
+            <div class="awa-nav">
+                <ul class="awa-page-actions">
+                    <li>
+                        <a href="#{contextPath}/workspaces/invite.html" class="awa-button">Invite</a>
+                    </li>
+                </ul>
+            </div>
+            <div class='member-list awa-list-header' id="member-list-header">
+                <div class="awa-list-item-header">
+                    <div class='awa-header-col member-status'>
+                        #{workspaceMsg.workspace_member_status_label}
+                    </div>
+                    <div class='awa-header-col member-title'>
+                        #{workspaceMsg.workspace_member_title_label}
+                    </div>
+                    <div class='awa-header-col member-email'>
+                        #{workspaceMsg.workspace_member_email_label}
+                    </div>
+                    <div class='awa-header-col member-role'>
+                        #{workspaceMsg.workspace_member_role_label}
+                    </div>
+                    <div class='awa-header-col member-date'>
+                        #{workspaceMsg.workspace_member_date_label}
+                    </div>
+                </div>
+            </div>
+            <div class="member-list">
+                <ui:include src="lists/member-list.xhtml"/>
+            </div>
         </div>
    </ui:define>
 
