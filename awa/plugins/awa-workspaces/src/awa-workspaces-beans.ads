@@ -23,14 +23,21 @@ with Util.Beans.Objects;
 with Util.Beans.Methods;
 
 with AWA.Events;
+with AWA.Users.Models;
 with AWA.Workspaces.Models;
 with AWA.Workspaces.Modules;
 package AWA.Workspaces.Beans is
 
    type Invitation_Bean is new AWA.Workspaces.Models.Invitation_Bean with record
-      Module : AWA.Workspaces.Modules.Workspace_Module_Access := null;
+      Module  : AWA.Workspaces.Modules.Workspace_Module_Access := null;
+      Inviter : AWA.Users.Models.User_Ref;
    end record;
    type Invitation_Bean_Access is access all Invitation_Bean'Class;
+
+   --  Get the value identified by the name.
+   overriding
+   function Get_Value (From : in Invitation_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
 
    overriding
    procedure Load (Bean : in out Invitation_Bean;
