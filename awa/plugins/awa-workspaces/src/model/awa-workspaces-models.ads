@@ -385,6 +385,18 @@ package AWA.Workspaces.Models is
    function Get_Join_Date (Object : in Workspace_Member_Ref)
                  return ADO.Nullable_Time;
 
+   --  Set the member role.
+   procedure Set_Role (Object : in out Workspace_Member_Ref;
+                       Value  : in Ada.Strings.Unbounded.Unbounded_String);
+   procedure Set_Role (Object : in out Workspace_Member_Ref;
+                       Value : in String);
+
+   --  Get the member role.
+   function Get_Role (Object : in Workspace_Member_Ref)
+                 return Ada.Strings.Unbounded.Unbounded_String;
+   function Get_Role (Object : in Workspace_Member_Ref)
+                 return String;
+
    --
    procedure Set_Member (Object : in out Workspace_Member_Ref;
                          Value  : in AWA.Users.Models.User_Ref'Class);
@@ -459,10 +471,13 @@ package AWA.Workspaces.Models is
       Id : ADO.Identifier;
 
       --  the user name.
-      Title : Ada.Strings.Unbounded.Unbounded_String;
+      Name : Ada.Strings.Unbounded.Unbounded_String;
 
       --  the user email address.
       Email : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the user's role.
+      Role : Ada.Strings.Unbounded.Unbounded_String;
 
       --  the date when the user joined the workspace.
       Join_Date : Ada.Calendar.Time;
@@ -510,8 +525,6 @@ package AWA.Workspaces.Models is
    --  --------------------
    type Invitation_Bean is abstract new AWA.Workspaces.Models.Invitation_Ref
      and Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with  record
-
-      --  the access key
       Key : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
@@ -781,17 +794,19 @@ private
    WORKSPACE_MEMBER_NAME : aliased constant String := "awa_workspace_member";
    COL_0_4_NAME : aliased constant String := "id";
    COL_1_4_NAME : aliased constant String := "join_date";
-   COL_2_4_NAME : aliased constant String := "member_id";
-   COL_3_4_NAME : aliased constant String := "workspace_id";
+   COL_2_4_NAME : aliased constant String := "role";
+   COL_3_4_NAME : aliased constant String := "member_id";
+   COL_4_4_NAME : aliased constant String := "workspace_id";
 
    WORKSPACE_MEMBER_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 4,
+     (Count => 5,
       Table => WORKSPACE_MEMBER_NAME'Access,
       Members => (
          1 => COL_0_4_NAME'Access,
          2 => COL_1_4_NAME'Access,
          3 => COL_2_4_NAME'Access,
-         4 => COL_3_4_NAME'Access
+         4 => COL_3_4_NAME'Access,
+         5 => COL_4_4_NAME'Access
 )
      );
    WORKSPACE_MEMBER_TABLE : constant ADO.Schemas.Class_Mapping_Access
@@ -805,6 +820,7 @@ private
                                      Of_Class => WORKSPACE_MEMBER_DEF'Access)
    with record
        Join_Date : ADO.Nullable_Time;
+       Role : Ada.Strings.Unbounded.Unbounded_String;
        Member : AWA.Users.Models.User_Ref;
        Workspace : AWA.Workspaces.Models.Workspace_Ref;
    end record;
@@ -843,7 +859,7 @@ private
 
    package File_1 is
       new ADO.Queries.Loaders.File (Path => "member-list.xml",
-                                    Sha1 => "5407080D632209F60F81752F988D50FBC9F8954F");
+                                    Sha1 => "4642156FB1AF8ADD59694CE017A200117375F927");
 
    package Def_Memberinfo_Workspace_Member_List is
       new ADO.Queries.Loaders.Query (Name => "workspace-member-list",

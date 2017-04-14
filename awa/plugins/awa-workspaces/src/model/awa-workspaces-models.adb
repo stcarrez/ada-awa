@@ -1356,12 +1356,42 @@ package body AWA.Workspaces.Models is
    end Get_Join_Date;
 
 
+   procedure Set_Role (Object : in out Workspace_Member_Ref;
+                        Value : in String) is
+      Impl : Workspace_Member_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_String (Impl.all, 3, Impl.Role, Value);
+   end Set_Role;
+
+   procedure Set_Role (Object : in out Workspace_Member_Ref;
+                       Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : Workspace_Member_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 3, Impl.Role, Value);
+   end Set_Role;
+
+   function Get_Role (Object : in Workspace_Member_Ref)
+                 return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (Object.Get_Role);
+   end Get_Role;
+   function Get_Role (Object : in Workspace_Member_Ref)
+                  return Ada.Strings.Unbounded.Unbounded_String is
+      Impl : constant Workspace_Member_Access
+         := Workspace_Member_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Role;
+   end Get_Role;
+
+
    procedure Set_Member (Object : in out Workspace_Member_Ref;
                          Value  : in AWA.Users.Models.User_Ref'Class) is
       Impl : Workspace_Member_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 3, Impl.Member, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 4, Impl.Member, Value);
    end Set_Member;
 
    function Get_Member (Object : in Workspace_Member_Ref)
@@ -1378,7 +1408,7 @@ package body AWA.Workspaces.Models is
       Impl : Workspace_Member_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 4, Impl.Workspace, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 5, Impl.Workspace, Value);
    end Set_Workspace;
 
    function Get_Workspace (Object : in Workspace_Member_Ref)
@@ -1404,6 +1434,7 @@ package body AWA.Workspaces.Models is
             ADO.Objects.Set_Object (Result, Copy.all'Access);
             Copy.Copy (Impl.all);
             Copy.Join_Date := Impl.Join_Date;
+            Copy.Role := Impl.Role;
             Copy.Member := Impl.Member;
             Copy.Workspace := Impl.Workspace;
          end;
@@ -1546,14 +1577,19 @@ package body AWA.Workspaces.Models is
          Object.Clear_Modified (2);
       end if;
       if Object.Is_Modified (3) then
-         Stmt.Save_Field (Name  => COL_2_4_NAME, --  member_id
-                          Value => Object.Member);
+         Stmt.Save_Field (Name  => COL_2_4_NAME, --  role
+                          Value => Object.Role);
          Object.Clear_Modified (3);
       end if;
       if Object.Is_Modified (4) then
-         Stmt.Save_Field (Name  => COL_3_4_NAME, --  workspace_id
-                          Value => Object.Workspace);
+         Stmt.Save_Field (Name  => COL_3_4_NAME, --  member_id
+                          Value => Object.Member);
          Object.Clear_Modified (4);
+      end if;
+      if Object.Is_Modified (5) then
+         Stmt.Save_Field (Name  => COL_4_4_NAME, --  workspace_id
+                          Value => Object.Workspace);
+         Object.Clear_Modified (5);
       end if;
       if Stmt.Has_Save_Fields then
          Stmt.Set_Filter (Filter => "id = ?");
@@ -1582,9 +1618,11 @@ package body AWA.Workspaces.Models is
                         Value => Object.Get_Key);
       Query.Save_Field (Name  => COL_1_4_NAME, --  join_date
                         Value => Object.Join_Date);
-      Query.Save_Field (Name  => COL_2_4_NAME, --  member_id
+      Query.Save_Field (Name  => COL_2_4_NAME, --  role
+                        Value => Object.Role);
+      Query.Save_Field (Name  => COL_3_4_NAME, --  member_id
                         Value => Object.Member);
-      Query.Save_Field (Name  => COL_3_4_NAME, --  workspace_id
+      Query.Save_Field (Name  => COL_4_4_NAME, --  workspace_id
                         Value => Object.Workspace);
       Query.Execute (Result);
       if Result /= 1 then
@@ -1625,6 +1663,8 @@ package body AWA.Workspaces.Models is
          else
             return Util.Beans.Objects.Time.To_Object (Impl.Join_Date.Value);
          end if;
+      elsif Name = "role" then
+         return Util.Beans.Objects.To_Object (Impl.Role);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -1640,11 +1680,12 @@ package body AWA.Workspaces.Models is
    begin
       Object.Set_Key_Value (Stmt.Get_Identifier (0));
       Object.Join_Date := Stmt.Get_Time (1);
-      if not Stmt.Is_Null (2) then
-         Object.Member.Set_Key_Value (Stmt.Get_Identifier (2), Session);
-      end if;
+      Object.Role := Stmt.Get_Unbounded_String (2);
       if not Stmt.Is_Null (3) then
-         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (3), Session);
+         Object.Member.Set_Key_Value (Stmt.Get_Identifier (3), Session);
+      end if;
+      if not Stmt.Is_Null (4) then
+         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (4), Session);
       end if;
       ADO.Objects.Set_Created (Object);
    end Load;
@@ -1659,10 +1700,12 @@ package body AWA.Workspaces.Models is
    begin
       if Name = "id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
-      elsif Name = "title" then
-         return Util.Beans.Objects.To_Object (From.Title);
+      elsif Name = "name" then
+         return Util.Beans.Objects.To_Object (From.Name);
       elsif Name = "email" then
          return Util.Beans.Objects.To_Object (From.Email);
+      elsif Name = "role" then
+         return Util.Beans.Objects.To_Object (From.Role);
       elsif Name = "join_date" then
          return Util.Beans.Objects.Time.To_Object (From.Join_Date);
       elsif Name = "invite_date" then
@@ -1682,10 +1725,12 @@ package body AWA.Workspaces.Models is
    begin
       if Name = "id" then
          Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
-      elsif Name = "title" then
-         Item.Title := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "name" then
+         Item.Name := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "email" then
          Item.Email := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "role" then
+         Item.Role := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "join_date" then
          Item.Join_Date := Util.Beans.Objects.Time.To_Time (Value);
       elsif Name = "invite_date" then
@@ -1718,10 +1763,11 @@ package body AWA.Workspaces.Models is
       procedure Read (Into : in out Member_Info) is
       begin
          Into.Id := Stmt.Get_Identifier (0);
-         Into.Title := Stmt.Get_Unbounded_String (1);
+         Into.Name := Stmt.Get_Unbounded_String (1);
          Into.Email := Stmt.Get_Unbounded_String (2);
-         Into.Join_Date := Stmt.Get_Time (3);
-         Into.Invite_Date := Stmt.Get_Time (4);
+         Into.Role := Stmt.Get_Unbounded_String (3);
+         Into.Join_Date := Stmt.Get_Time (4);
+         Into.Invite_Date := Stmt.Get_Time (5);
       end Read;
    begin
       Stmt.Execute;
