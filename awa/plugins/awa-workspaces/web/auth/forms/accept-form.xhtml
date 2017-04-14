@@ -17,6 +17,7 @@
 <div xmlns:util="http://code.google.com/p/ada-asf/util"
      xmlns:f="http://java.sun.com/jsf/core"
      xmlns:c="http://java.sun.com/jstl/core"
+     xmlns:util="http://code.google.com/p/ada-asf/util"
      xmlns:h="http://java.sun.com/jsf/html"
      class='awa-login ui-widget ui-widget-content ui-corner-all'>
     <h2>
@@ -25,16 +26,14 @@
         </h:outputFormat>
     </h2>
     <div class="invite-message">
-        <p>
-            #{inviteUser.message}
-        </p>
+        <p>#{inviteUser.message}</p>
     </div>
     <div class="invite-action">
         <p>
             #{workspaceMsg.workspace_accept_invitation_message}
         </p>
     </div>
-    <c:set var="redirect" value="#{contextPath}/workspaces/accept-invitation.html?key=#{inviteUser.key}"/>
+    <util:set var="redirect" value="#{contextPath}/workspaces/accept-invitation.html?key=#{inviteUser.key}"/>
     <ul class='openid-login'>
         <li>
             <a href="#{contextPath}/auth/auth/yahoo?redirect=#{util:urlEncode(redirect)}" title="#{userMsg.openid_yahoo_auth}" class='openid-yahoo'>
