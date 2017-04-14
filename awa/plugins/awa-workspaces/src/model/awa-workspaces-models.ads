@@ -480,10 +480,10 @@ package AWA.Workspaces.Models is
       Role : Ada.Strings.Unbounded.Unbounded_String;
 
       --  the date when the user joined the workspace.
-      Join_Date : Ada.Calendar.Time;
+      Join_Date : ADO.Nullable_Time;
 
       --  the date when the invitation was sent to the user.
-      Invite_Date : Ada.Calendar.Time;
+      Invite_Date : ADO.Nullable_Time;
    end record;
 
    --  Get the bean attribute identified by the name.
@@ -859,7 +859,7 @@ private
 
    package File_1 is
       new ADO.Queries.Loaders.File (Path => "member-list.xml",
-                                    Sha1 => "4642156FB1AF8ADD59694CE017A200117375F927");
+                                    Sha1 => "92963A3CF0D75191459FD3407DDC2985A513D204");
 
    package Def_Memberinfo_Workspace_Member_List is
       new ADO.Queries.Loaders.Query (Name => "workspace-member-list",

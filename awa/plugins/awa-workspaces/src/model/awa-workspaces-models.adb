@@ -1707,9 +1707,17 @@ package body AWA.Workspaces.Models is
       elsif Name = "role" then
          return Util.Beans.Objects.To_Object (From.Role);
       elsif Name = "join_date" then
-         return Util.Beans.Objects.Time.To_Object (From.Join_Date);
+         if From.Join_Date.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.Time.To_Object (From.Join_Date.Value);
+         end if;
       elsif Name = "invite_date" then
-         return Util.Beans.Objects.Time.To_Object (From.Invite_Date);
+         if From.Invite_Date.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.Time.To_Object (From.Invite_Date.Value);
+         end if;
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -1732,9 +1740,19 @@ package body AWA.Workspaces.Models is
       elsif Name = "role" then
          Item.Role := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "join_date" then
-         Item.Join_Date := Util.Beans.Objects.Time.To_Time (Value);
+         if Util.Beans.Objects.Is_Null (Value) then
+            Item.Join_Date := ADO.Nullable_Time '(Is_Null => True, others => <>);
+         else
+            Item.Join_Date := ADO.Nullable_Time '(Is_Null => False,
+                                        Value   => Util.Beans.Objects.Time.To_Time (Value));
+         end if;
       elsif Name = "invite_date" then
-         Item.Invite_Date := Util.Beans.Objects.Time.To_Time (Value);
+         if Util.Beans.Objects.Is_Null (Value) then
+            Item.Invite_Date := ADO.Nullable_Time '(Is_Null => True, others => <>);
+         else
+            Item.Invite_Date := ADO.Nullable_Time '(Is_Null => False,
+                                        Value   => Util.Beans.Objects.Time.To_Time (Value));
+         end if;
       end if;
    end Set_Value;
 
