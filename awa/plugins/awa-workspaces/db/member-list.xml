@@ -17,10 +17,10 @@
         <property type='String' name="role">
             <comment>the user's role.</comment>
         </property>
-        <property type='Date' name="join_date">
+        <property type='Nullable_Date' name="join_date">
             <comment>the date when the user joined the workspace.</comment>
         </property>
-        <property type='Date' name="invite_date">
+        <property type='Nullable_Date' name="invite_date">
             <comment>the date when the invitation was sent to the user.</comment>
         </property>
     </class>
