@@ -42,7 +42,7 @@ package body AWA.Workspaces.Beans is
       if Name = "inviter" then
          return From.Inviter.Get_Value ("name");
       else
-         return AWA.Workspaces.Models.Invitation_Ref (From).Get_Value (Name);
+         return AWA.Workspaces.Models.Invitation_Bean (From).Get_Value (Name);
       end if;
    end Get_Value;
 
