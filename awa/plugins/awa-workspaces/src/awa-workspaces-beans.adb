@@ -63,7 +63,7 @@ package body AWA.Workspaces.Beans is
    procedure Accept_Invitation (Bean    : in out Invitation_Bean;
                                 Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
    begin
-      null;
+      Bean.Module.Accept_Invitation (Key => Ada.Strings.Unbounded.To_String (Bean.Key));
    end Accept_Invitation;
 
    overriding
