@@ -15,11 +15,22 @@
   -  limitations under the License.
   -->
 <div xmlns:util="http://code.google.com/p/ada-asf/util"
+     xmlns:f="http://java.sun.com/jsf/core"
+     xmlns:h="http://java.sun.com/jsf/html"
      class='awa-login ui-widget ui-widget-content ui-corner-all'>
-    <h2>#{title}</h2>
-    <div>
+    <h2>
+        <h:outputFormat value="#{workspaceMsg.workspace_invite_message}">
+            <f:param value="#{inviteUser.inviter}"/>
+        </h:outputFormat>
+    </h2>
+    <div class="invite-message">
         <p>
             #{inviteUser.message}
+        </p>
+    </div>
+    <div class="invite-action">
+        <p>
+            #{workspaceMsg.workspace_accept_invitation_message}
         </p>
     </div>
     <ul class='openid-login'>
