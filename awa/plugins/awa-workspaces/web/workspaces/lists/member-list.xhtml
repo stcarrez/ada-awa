@@ -25,7 +25,7 @@
         #{workspaceMsg.workspace_info_no_member}
     </h:panelGroup>
     <h:list var="member" value="#{memberList.members}">
-        <div class='ui-list-item' id="p_#{member.id}">
+        <div class='awa-list-item ui-list-item' id="p_#{member.id}">
             <div class='member-status'>
             </div>
             <div class='member-title'>
@@ -34,8 +34,11 @@
             <div class='member-email'>
                 #{member.email}
             </div>
-            <div class='comment-date'>
-                <h:outputText value="#{member.join_date}"/>
+            <div class='member-role'>
+                #{member.role}
+            </div>
+            <div class='member-date'>
+                <h:outputText rendered="#{not empty member.join_date}" value="#{member.join_date}"/>
             </div>
         </div>
     </h:list>
