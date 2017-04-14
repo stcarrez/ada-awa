@@ -154,13 +154,18 @@ package body AWA.Workspaces.Modules is
    procedure Accept_Invitation (Module     : in Workspace_Module;
                                 Key        : in String) is
       use type Ada.Calendar.Time;
+      use type ADO.Identifier;
 
-      Ctx     : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
-      DB      : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
-      Query   : ADO.SQL.Query;
-      DB_Key  : AWA.Users.Models.Access_Key_Ref;
-      Found   : Boolean;
+      Ctx        : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
+      User       : constant AWA.Users.Models.User_Ref := Ctx.Get_User;
+      DB         : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Query      : ADO.SQL.Query;
+      DB_Key     : AWA.Users.Models.Access_Key_Ref;
+      Found      : Boolean;
       Invitation : AWA.Workspaces.Models.Invitation_Ref;
+      Invitee_Id : ADO.Identifier;
+      Member     : AWA.Workspaces.Models.Workspace_Member_Ref;
+      Now        : constant Ada.Calendar.Time := Ada.Calendar.Clock;
    begin
       Log.Debug ("Accept invitation with key {0}", Key);
       Ctx.Start;
@@ -171,20 +176,46 @@ package body AWA.Workspaces.Modules is
          Log.Info ("Invitation key {0} does not exist");
          raise Not_Found;
       end if;
-      if DB_Key.Get_Expire_Date < Ada.Calendar.Clock then
+      if DB_Key.Get_Expire_Date < Now then
          Log.Info ("Invitation key {0} has expired");
          raise Not_Found;
       end if;
+      Invitee_Id := DB_Key.Get_User.Get_Id;
       Query.Set_Filter ("o.invitee_id = :user");
-      Query.Bind_Param ("user", DB_Key.Get_User.Get_Id);
+      Query.Bind_Param ("user", Invitee_Id);
       Invitation.Find (DB, Query, Found);
       if not Found then
          Log.Warn ("Invitation key {0} has been withdawn");
          raise Not_Found;
       end if;
+
+      --  Update the workspace member relation.
+      Query.Clear;
+      Query.Set_Filter ("o.member_id = ? AND o.workspace_id = ?");
+      Query.Add_Param (Invitee_Id);
+      Query.Add_Param (Invitation.Get_Workspace.Get_Id);
+      Member.Find (DB, Query, Found);
+      if not Found then
+         Log.Warn ("Invitation key {0} has been withdawn");
+         raise Not_Found;
+      end if;
+
+      --  The user who received the invitation is different from the user who is
+      --  logged and accepted the validation.   Since the key is verified, this is
+      --  the same user but the user who accepted the invitation registered using
+      --  another email address.
+      if Invitee_Id /= User.Get_Id then
+         Invitation.Set_Invitee (User);
+         Member.Set_Member (User);
+         Log.Info ("Invitation accepted by user with another email address");
+      end if;
+
+      Member.Set_Join_Date (ADO.Nullable_Time '(Is_Null => False,
+                                                Value   => Now));
+      Member.Save (DB);
       DB_Key.Delete (DB);
       Invitation.Set_Acceptance_Date (ADO.Nullable_Time '(Is_Null => False,
-                                                          Value => Ada.Calendar.Clock));
+                                                          Value   => Now));
       Invitation.Save (DB);
       Ctx.Commit;
    end Accept_Invitation;
