@@ -159,6 +159,21 @@ package body AWA.Workspaces.Beans is
    end Create_Workspaces_Bean;
 
    --  ------------------------------
+   --  Get the value identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Member_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "members" then
+         return Util.Beans.Objects.To_Object (Value   => From.Members_Bean,
+                                              Storage => Util.Beans.Objects.STATIC);
+      else
+         return AWA.Workspaces.Models.Member_List_Bean (From).Get_Value (Name);
+      end if;
+   end Get_Value;
+
+   --  ------------------------------
    --  Load the list of members.
    --  ------------------------------
    overriding
