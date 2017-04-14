@@ -27,22 +27,11 @@
     <!-- Main page body -->
     <ui:define name="pageBody">
         <f:metadata>
-            <f:viewParam id='page' value='#{wikiList.page}' required="false"/>
-            <f:viewAction action='#{wikiList.load}'/>
+            <f:viewParam id='page' value='#{memberList.page}' required="false"/>
+            <f:viewAction action='#{memberList.load}'/>
         </f:metadata>
         <div id='awa-content'>
-            <ui:decorate template="lists/list.xhtml">
-                <ui:param name="wikiSpaceId" value="#{wikiList.wiki_id}"/>
-                <ui:param name="sort" value="#{wikiList.sort}"/>
-                <ui:param name="page_link" value=""/>
-                <ui:define name="page-nav">
-                    <li class="awa-nav-right">
-                        <a href="#{contextPath}/wikis/list/#{wikiList.wiki_id}/#{wikiList.sort}/grid" title="#{wikiMsg.wiki_page_grid_view_label}">
-                            <img src="#{contextPath}/images/wikis/wiki-grid.png" alt="#{wikiMsg.wiki_page_grid_view_label}"/>
-                        </a>
-                    </li>
-                </ui:define>
-            </ui:decorate>
+            <ui:include src="lists/member-list.xhtml"/>
         </div>
    </ui:define>
 
