@@ -34,4 +34,10 @@
      <property name="template">/mail/reset-password-message.html</property>
   </on-event>
 
+  <!--  When an invitation is created, send the user a message with the invitation key.  -->
+  <on-event name="invite-user">
+     <action>#{userMail.send}</action>
+     <property name="template">/mail/invite-user-message.html</property>
+  </on-event>
+
 </module>
