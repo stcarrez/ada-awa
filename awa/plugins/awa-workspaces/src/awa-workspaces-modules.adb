@@ -205,8 +205,9 @@ package body AWA.Workspaces.Modules is
       Invitee : AWA.Users.Models.User_Ref;
       Invit   : AWA.Workspaces.Models.Invitation_Ref;
       Member  : AWA.Workspaces.Models.Workspace_Member_Ref;
+      Email_Address : constant String := Invitation.Get_Email;
    begin
-      Log.Info ("Sending invitation to {0}", String '(Invitation.Get_Email));
+      Log.Info ("Sending invitation to {0}", Email_Address);
 
       Ctx.Start;
       if User.Is_Null then
@@ -224,14 +225,14 @@ package body AWA.Workspaces.Modules is
 
       Query.Clear;
       Query.Set_Filter ("o.email = ?");
-      Query.Add_Param (String '(Invitation.Get_Email));
+      Query.Add_Param (Email_Address);
       Email.Find (DB, Query, Found);
       if not Found then
          Email.Set_User_Id (0);
-         Email.Set_Email (String '(Invitation.Get_Email));
+         Email.Set_Email (Email_Address);
          Email.Save (DB);
          Invitee.Set_Email (Email);
-         Invitee.Set_Name (String '(Invitation.Get_Email));
+         Invitee.Set_Name (Email_Address);
          Invitee.Save (DB);
          Email.Set_User_Id (Invitee.Get_Id);
          Email.Save (DB);
@@ -271,6 +272,19 @@ package body AWA.Workspaces.Modules is
       Invitation.Set_Workspace (WS);
       Invitation.Set_Create_Date (Ada.Calendar.Clock);
       Invitation.Save (DB);
+
+      --  Send the email with the reset password key
+      declare
+         Event : AWA.Events.Module_Event;
+      begin
+         Event.Set_Parameter ("key", Key.Get_Access_Key);
+         Event.Set_Parameter ("email", Email_Address);
+         Event.Set_Parameter ("name", Invitee.Get_Name);
+         Event.Set_Parameter ("message", Invitation.Get_Message);
+         Event.Set_Event_Kind (Invite_User_Event.Kind);
+         Module.Send_Event (Event);
+      end;
+
       Ctx.Commit;
    end Send_Invitation;
 
