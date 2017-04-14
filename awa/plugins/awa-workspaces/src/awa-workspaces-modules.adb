@@ -115,7 +115,8 @@ package body AWA.Workspaces.Modules is
    --  ------------------------------
    procedure Load_Invitation (Module     : in Workspace_Module;
                               Key        : in String;
-                              Invitation : in out AWA.Workspaces.Models.Invitation_Ref'Class) is
+                              Invitation : in out AWA.Workspaces.Models.Invitation_Ref'Class;
+                              Inviter    : in out AWA.Users.Models.User_Ref) is
       use type Ada.Calendar.Time;
 
       Ctx    : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
@@ -144,6 +145,7 @@ package body AWA.Workspaces.Modules is
          Log.Warn ("Invitation key {0} has been withdawn");
          raise Not_Found;
       end if;
+      Inviter := AWA.Users.Models.User_Ref (Invitation.Get_Inviter);
    end Load_Invitation;
 
    --  ------------------------------
@@ -281,6 +283,7 @@ package body AWA.Workspaces.Modules is
          Event.Set_Parameter ("email", Email_Address);
          Event.Set_Parameter ("name", Invitee.Get_Name);
          Event.Set_Parameter ("message", Invitation.Get_Message);
+         Event.Set_Parameter ("inviter", User.Get_Name);
          Event.Set_Event_Kind (Invite_User_Event.Kind);
          Module.Send_Event (Event);
       end;
