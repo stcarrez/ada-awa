@@ -32,12 +32,27 @@ package body AWA.Workspaces.Beans is
 
    package ASC renames AWA.Services.Contexts;
 
+   --  ------------------------------
+   --  Get the value identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Invitation_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "inviter" then
+         return From.Inviter.Get_Value ("name");
+      else
+         return AWA.Workspaces.Models.Invitation_Ref (From).Get_Value (Name);
+      end if;
+   end Get_Value;
+
    overriding
    procedure Load (Bean : in out Invitation_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
    begin
       Bean.Module.Load_Invitation (Key        => Ada.Strings.Unbounded.To_String (Bean.Key),
-                                   Invitation => Bean);
+                                   Invitation => Bean,
+                                   Inviter    => Bean.Inviter);
 
    exception
       when others =>
