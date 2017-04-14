@@ -71,6 +71,7 @@ package body AWA.Workspaces.Modules is
                             Workspace : out AWA.Workspaces.Models.Workspace_Ref) is
       User    : constant AWA.Users.Models.User_Ref := Context.Get_User;
       WS      : AWA.Workspaces.Models.Workspace_Ref;
+      Member  : AWA.Workspaces.Models.Workspace_Member_Ref;
       Query   : ADO.SQL.Query;
       Found   : Boolean;
    begin
@@ -93,6 +94,13 @@ package body AWA.Workspaces.Modules is
       WS.Set_Owner (User);
       WS.Set_Create_Date (Ada.Calendar.Clock);
       WS.Save (Session);
+
+      --  Create the member instance for this user.
+      Member.Set_Workspace (WS);
+      Member.Set_Member (User);
+      Member.Set_Role ("Owner");
+      Member.Set_Join_Date (ADO.Nullable_Time '(Is_Null => False, Value => WS.Get_Create_Date));
+      Member.Save (Session);
 
       --  And give full control of the workspace for this user
       AWA.Permissions.Services.Add_Permission (Session => Session,
@@ -196,6 +204,7 @@ package body AWA.Workspaces.Modules is
       Email   : AWA.Users.Models.Email_Ref;
       Invitee : AWA.Users.Models.User_Ref;
       Invit   : AWA.Workspaces.Models.Invitation_Ref;
+      Member  : AWA.Workspaces.Models.Workspace_Member_Ref;
    begin
       Log.Info ("Sending invitation to {0}", String '(Invitation.Get_Email));
 
@@ -230,11 +239,21 @@ package body AWA.Workspaces.Modules is
          Invitee.Load (DB, Email.Get_User_Id);
       end if;
 
-      --  Check for a previous invitation for the user and delete it.
+      --  Create the workspace member relation.
       Query.Clear;
-      Query.Set_Filter ("o.invitee_id = ? AND o.workspace_id = ?");
+      Query.Set_Filter ("o.member_id = ? AND o.workspace_id = ?");
       Query.Add_Param (Invitee.Get_Id);
       Query.Add_Param (WS.Get_Id);
+      Member.Find (DB, Query, Found);
+      if not Found then
+         Member.Set_Member (Invitee);
+         Member.Set_Workspace (WS);
+         Member.Set_Role ("Invited");
+         Member.Save (DB);
+      end if;
+
+      --  Check for a previous invitation for the user and delete it.
+      Query.Set_Filter ("o.invitee_id = ? AND o.workspace_id = ?");
       Invit.Find (DB, Query, Found);
       if Found then
          Key := AWA.Users.Models.Access_Key_Ref (Invit.Get_Access_Key);
