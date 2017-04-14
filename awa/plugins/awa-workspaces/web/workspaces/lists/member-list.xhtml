@@ -25,14 +25,17 @@
         #{workspaceMsg.workspace_info_no_member}
     </h:panelGroup>
     <h:list var="member" value="#{memberList.members}">
-        <div class='wiki-info-link ui-list-item' id="p_#{member.id}">
-            <div class='comment-status'>
+        <div class='ui-list-item' id="p_#{member.id}">
+            <div class='member-status'>
             </div>
-            <div class='comment-title'>
-                <a href="edit.html?blog_id=#{adminBlog.id}&amp;post_id=#{cmt.post_id}">#{cmt.title}</a>
+            <div class='member-title'>
+                #{member.name}
+            </div>
+            <div class='member-email'>
+                #{member.email}
             </div>
             <div class='comment-date'>
-                <h:outputText value="#{member.date}"/>
+                <h:outputText value="#{member.join_date}"/>
             </div>
         </div>
     </h:list>
