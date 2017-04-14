@@ -1,0 +1,25 @@
+<mail:message xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:mail="http://code.google.com/p/ada-awa/mail">
+    <mail:from address="#{initParam['app_mail_name']}">#{initParam['app_mail_from']}</mail:from>
+    <mail:to address="#{event.name}">#{event.email}</mail:to>
+    <mail:subject>Invitation to join #{initParam['app_name']}</mail:subject>
+
+    <mail:body>
+Dear #{event.name},
+
+You have been invited by #{event.inviter} to join #{initParam['app_name']}.
+
+#{event.message}
+
+To accept this invitation, please go to the following URL:
+
+#{initParam['app_url_base']}/auth/invitation.html?key=#{event.key}
+
+Thank you for using #{initParam['app_name']} and we wish you much success with your projects.
+
+Sincerely,
+
+The #{initParam['app_name']} Team
+    </mail:body>
+</mail:message>
+
