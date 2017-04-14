@@ -238,3 +238,13 @@ INSERT INTO entity_type (name) VALUES
 ("awa_permission");
 
 ALTER TABLE awa_workspace_member ADD COLUMN join_date DATETIME;
+ALTER TABLE awa_workspace_member ADD COLUMN role VARCHAR(255);
+
+INSERT INTO awa_workspace_member (id, member_id, workspace_id, join_date, role)
+(SELECT acl.id, acl.user_id, ws.id, ws.create_date, 'Owner'
+   FROM awa_workspace AS ws
+   INNER JOIN entity_type AS ent
+   INNER JOIN awa_acl AS acl ON acl.entity_id = ws.id AND acl.entity_type = ent.id
+   WHERE ent.name = 'awa_workspace')
+
+
