@@ -92,6 +92,11 @@ package AWA.Workspaces.Beans is
    end record;
    type Member_List_Bean_Access is access all Member_List_Bean'Class;
 
+   --  Get the value identified by the name.
+   overriding
+   function Get_Value (From : in Member_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
    --  Load the list of members.
    overriding
    procedure Load (Into    : in out Member_List_Bean;
