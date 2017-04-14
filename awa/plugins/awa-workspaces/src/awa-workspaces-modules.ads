@@ -24,12 +24,15 @@ with AWA.Modules;
 with AWA.Services.Contexts;
 with AWA.Workspaces.Models;
 with AWA.Users.Services;
+with AWA.Events;
 package AWA.Workspaces.Modules is
 
    Not_Found : exception;
 
    --  The name under which the module is registered.
    NAME : constant String := "workspaces";
+
+   package Invite_User_Event is new AWA.Events.Definition (Name => "invite-user");
 
    --  ------------------------------
    --  Module workspaces
