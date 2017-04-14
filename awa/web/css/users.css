@@ -143,3 +143,25 @@ div.openid-retry {
 	clear: both;
 	padding-top: 30px;
 }
+/**
+ * Workspace member list
+ */
+.member-status, .member-title, .member-email, .member-role, .member-date {
+    float: left;
+    height: 1em;
+}
+.member-status {
+    width: 10%;
+}
+.member-title {
+    width: 20%;
+}
+.member-email {
+    width: 20%;
+}
+.member-role {
+    width: 20%;
+}
+.member-date {
+    width: 15%;
+}
