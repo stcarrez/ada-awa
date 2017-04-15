@@ -32,13 +32,30 @@ package body AWA.Workspaces.Beans is
 
    package ASC renames AWA.Services.Contexts;
 
+   --  ------------------------------
    --  Get the value identified by the name.
+   --  ------------------------------
    overriding
    function Get_Value (From : in Member_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
       return AWA.Workspaces.Models.Member_Bean (From).Get_Value (Name);
    end Get_Value;
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Member_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
+         Item.Set_Id (ADO.Utils.To_Identifier (Value));
+      else
+         AWA.Workspaces.Models.Member_Bean (Item).Set_Value (Name, Value);
+      end if;
+   end Set_Value;
 
    overriding
    procedure Load (Bean : in out Member_Bean;
