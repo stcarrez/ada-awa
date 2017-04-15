@@ -38,6 +38,12 @@ package AWA.Workspaces.Beans is
    function Get_Value (From : in Member_Bean;
                        Name : in String) return Util.Beans.Objects.Object;
 
+   --  Set the value identified by the name
+   overriding
+   procedure Set_Value (Item  : in out Member_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
    overriding
    procedure Load (Bean : in out Member_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
