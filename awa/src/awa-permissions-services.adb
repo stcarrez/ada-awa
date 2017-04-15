@@ -256,7 +256,7 @@ package body AWA.Permissions.Services is
                                  User      : in ADO.Identifier;
                                  Workspace : in ADO.Identifier) is
       Stmt   : ADO.Statements.Delete_Statement
-        := Session.Create_Statement (Models.PERMISSION_TABLE);
+        := Session.Create_Statement (Models.ACL_TABLE);
       Result : Natural;
    begin
       Stmt.Set_Filter (Filter => "workspace_id = ? AND user_id = ?");
