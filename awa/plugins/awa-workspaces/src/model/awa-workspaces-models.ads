@@ -467,8 +467,11 @@ package AWA.Workspaces.Models is
    type Member_Info is
      new Util.Beans.Basic.Bean with  record
 
-      --  the user identifier.
+      --  the member identifier.
       Id : ADO.Identifier;
+
+      --  the user identifier.
+      User_Id : ADO.Identifier;
 
       --  the user name.
       Name : Ada.Strings.Unbounded.Unbounded_String;
@@ -884,7 +887,7 @@ private
 
    package File_1 is
       new ADO.Queries.Loaders.File (Path => "member-list.xml",
-                                    Sha1 => "92963A3CF0D75191459FD3407DDC2985A513D204");
+                                    Sha1 => "D92F1CB6DBE47F7A72E83CD4AE8E39F2048D0728");
 
    package Def_Memberinfo_Workspace_Member_List is
       new ADO.Queries.Loaders.Query (Name => "workspace-member-list",

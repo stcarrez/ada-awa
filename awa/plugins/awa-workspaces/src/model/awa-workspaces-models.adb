@@ -1700,6 +1700,8 @@ package body AWA.Workspaces.Models is
    begin
       if Name = "id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
+      elsif Name = "user_id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.User_Id));
       elsif Name = "name" then
          return Util.Beans.Objects.To_Object (From.Name);
       elsif Name = "email" then
@@ -1733,6 +1735,8 @@ package body AWA.Workspaces.Models is
    begin
       if Name = "id" then
          Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "user_id" then
+         Item.User_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
       elsif Name = "name" then
          Item.Name := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "email" then
@@ -1781,11 +1785,12 @@ package body AWA.Workspaces.Models is
       procedure Read (Into : in out Member_Info) is
       begin
          Into.Id := Stmt.Get_Identifier (0);
-         Into.Name := Stmt.Get_Unbounded_String (1);
-         Into.Email := Stmt.Get_Unbounded_String (2);
-         Into.Role := Stmt.Get_Unbounded_String (3);
-         Into.Join_Date := Stmt.Get_Time (4);
-         Into.Invite_Date := Stmt.Get_Time (5);
+         Into.User_Id := Stmt.Get_Identifier (1);
+         Into.Name := Stmt.Get_Unbounded_String (2);
+         Into.Email := Stmt.Get_Unbounded_String (3);
+         Into.Role := Stmt.Get_Unbounded_String (4);
+         Into.Join_Date := Stmt.Get_Time (5);
+         Into.Invite_Date := Stmt.Get_Time (6);
       end Read;
    begin
       Stmt.Execute;
