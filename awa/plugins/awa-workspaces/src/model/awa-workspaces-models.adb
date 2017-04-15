@@ -1950,5 +1950,64 @@ package body AWA.Workspaces.Models is
       end if;
    end Set_Value;
 
+   procedure Op_Load (Bean    : in out Member_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Load (Bean    : in out Member_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Member_Bean'Class (Bean).Load (Outcome);
+   end Op_Load;
+   package Binding_Member_Bean_1 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Member_Bean,
+                                                      Method => Op_Load,
+                                                      Name   => "load");
+   procedure Op_Delete (Bean    : in out Member_Bean;
+                        Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Delete (Bean    : in out Member_Bean;
+                        Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Member_Bean'Class (Bean).Delete (Outcome);
+   end Op_Delete;
+   package Binding_Member_Bean_2 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Member_Bean,
+                                                      Method => Op_Delete,
+                                                      Name   => "delete");
+
+   Binding_Member_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
+     := (1 => Binding_Member_Bean_1.Proxy'Access,
+         2 => Binding_Member_Bean_2.Proxy'Access
+     );
+
+   --  ------------------------------
+   --  This bean provides some methods that can be used in a Method_Expression.
+   --  ------------------------------
+   overriding
+   function Get_Method_Bindings (From : in Member_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
+   begin
+      return Binding_Member_Bean_Array'Access;
+   end Get_Method_Bindings;
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Member_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "join_date" then
+         if Util.Beans.Objects.Is_Null (Value) then
+            Item.Set_Join_Date (ADO.Nullable_Time '(Is_Null => True, others => <>));
+         else
+            Item.Set_Join_Date (ADO.Nullable_Time '(Is_Null => False,
+                                        Value   => Util.Beans.Objects.Time.To_Time (Value)));
+         end if;
+      elsif Name = "role" then
+         Item.Set_Role (Util.Beans.Objects.To_String (Value));
+      end if;
+   end Set_Value;
+
 
 end AWA.Workspaces.Models;

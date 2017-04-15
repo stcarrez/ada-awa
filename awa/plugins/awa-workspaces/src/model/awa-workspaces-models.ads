@@ -588,6 +588,31 @@ package AWA.Workspaces.Models is
    procedure Load (Bean : in out Member_List_Bean;
                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
+   --  --------------------
+   --    load the member information.
+   --  --------------------
+   type Member_Bean is abstract new AWA.Workspaces.Models.Workspace_Member_Ref
+     and Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with null record;
+
+
+   --  This bean provides some methods that can be used in a Method_Expression.
+   overriding
+   function Get_Method_Bindings (From : in Member_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access;
+
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Member_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   procedure Load (Bean : in out Member_Bean;
+                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   procedure Delete (Bean : in out Member_Bean;
+                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
 
 private
    WORKSPACE_NAME : aliased constant String := "awa_workspace";
