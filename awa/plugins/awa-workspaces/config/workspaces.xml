@@ -50,6 +50,23 @@
     </navigation-case>
   </navigation-rule>
 
+  <navigation-rule>
+    <from-view-id>/workspaces/invite.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/workspaces/members.xhtml</to-view-id>
+      <redirect/>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/workspaces/forms/delete-member.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/workspaces/forms/delete-member-response.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
   <entity-permission>
     <name>workspaces-create</name>
     <entity-type>awa_workspace</entity-type>
@@ -79,7 +96,7 @@
     <url-pattern>/workspaces/members.html</url-pattern>
     <url-pattern>/workspaces/invite.html</url-pattern>
     <url-pattern>/workspaces/accept-invitation.html</url-pattern>
-    <url-pattern>/workspaces/forms/delete-member-form.html</url-pattern>
+    <url-pattern>/workspaces/forms/delete-member.html</url-pattern>
   </url-policy>
 
 </module>
