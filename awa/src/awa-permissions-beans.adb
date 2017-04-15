@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions-beans -- Permission beans
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2015, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,6 +52,8 @@ package body AWA.Permissions.Beans is
          From.Permission := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "entity_type" then
          From.Kind := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "workspace_id" then
+         From.Set_Workspace_Id (ADO.Utils.To_Identifier (Value));
       end if;
    end Set_Value;
 
@@ -82,7 +84,8 @@ package body AWA.Permissions.Beans is
       AWA.Permissions.Services.Add_Permission (Session    => DB,
                                                Entity     => Bean.Get_Entity_Id,
                                                Kind       => Kind,
-                                               User       => Ctx.Get_User_Identifier);
+                                               User       => Ctx.Get_User_Identifier,
+                                               Workspace  => Bean.Get_Workspace_Id);
       Ctx.Commit;
    end Create;
 
