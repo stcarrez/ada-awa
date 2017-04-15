@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions-services -- Permissions controller
---  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,10 +50,11 @@ package AWA.Permissions.Services is
                               App : in AWA.Applications.Application_Access);
 
    --  Add a permission for the current user to access the entity identified by
-   --  <b>Entity</b> and <b>Kind</b>.
+   --  <b>Entity</b> and <b>Kind</b> in the <b>Workspace</b>.
    procedure Add_Permission (Manager    : in Permission_Manager;
                              Entity     : in ADO.Identifier;
                              Kind       : in ADO.Entity_Type;
+                             Workspace  : in ADO.Identifier;
                              Permission : in Permission_Type);
 
    --  Check that the current user has the specified permission.
@@ -69,6 +70,7 @@ package AWA.Permissions.Services is
                              User       : in ADO.Identifier;
                              Entity     : in ADO.Identifier;
                              Kind       : in ADO.Entity_Type;
+                             Workspace  : in ADO.Identifier;
                              Permission : in Permission_Type := READ);
 
    --  Add a permission for the user <b>User</b> to access the entity identified by
@@ -76,6 +78,7 @@ package AWA.Permissions.Services is
    procedure Add_Permission (Session    : in out ADO.Sessions.Master_Session;
                              User       : in ADO.Identifier;
                              Entity     : in ADO.Objects.Object_Ref'Class;
+                             Workspace  : in ADO.Identifier;
                              Permission : in Permission_Type := READ);
 
    --  Create a permission manager for the given application.
