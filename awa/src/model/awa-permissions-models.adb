@@ -66,7 +66,7 @@ package body AWA.Permissions.Models is
       Impl.Entity_Id := ADO.NO_IDENTIFIER;
       Impl.Writeable := False;
       Impl.User_Id := ADO.NO_IDENTIFIER;
-      Impl.Workspace := ADO.NO_IDENTIFIER;
+      Impl.Workspace_Id := ADO.NO_IDENTIFIER;
       Impl.Entity_Type := 0;
       Impl.Permission := ADO.NO_IDENTIFIER;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
@@ -145,21 +145,21 @@ package body AWA.Permissions.Models is
    end Get_User_Id;
 
 
-   procedure Set_Workspace (Object : in out Acl_Ref;
-                            Value  : in ADO.Identifier) is
+   procedure Set_Workspace_Id (Object : in out Acl_Ref;
+                               Value  : in ADO.Identifier) is
       Impl : Acl_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Identifier (Impl.all, 5, Impl.Workspace, Value);
-   end Set_Workspace;
+      ADO.Objects.Set_Field_Identifier (Impl.all, 5, Impl.Workspace_Id, Value);
+   end Set_Workspace_Id;
 
-   function Get_Workspace (Object : in Acl_Ref)
+   function Get_Workspace_Id (Object : in Acl_Ref)
                   return ADO.Identifier is
       Impl : constant Acl_Access
          := Acl_Impl (Object.Get_Load_Object.all)'Access;
    begin
-      return Impl.Workspace;
-   end Get_Workspace;
+      return Impl.Workspace_Id;
+   end Get_Workspace_Id;
 
 
    procedure Set_Entity_Type (Object : in out Acl_Ref;
@@ -212,7 +212,7 @@ package body AWA.Permissions.Models is
             Copy.Entity_Id := Impl.Entity_Id;
             Copy.Writeable := Impl.Writeable;
             Copy.User_Id := Impl.User_Id;
-            Copy.Workspace := Impl.Workspace;
+            Copy.Workspace_Id := Impl.Workspace_Id;
             Copy.Entity_Type := Impl.Entity_Type;
             Copy.Permission := Impl.Permission;
          end;
@@ -365,8 +365,8 @@ package body AWA.Permissions.Models is
          Object.Clear_Modified (4);
       end if;
       if Object.Is_Modified (5) then
-         Stmt.Save_Field (Name  => COL_4_1_NAME, --  workspace
-                          Value => Object.Workspace);
+         Stmt.Save_Field (Name  => COL_4_1_NAME, --  workspace_id
+                          Value => Object.Workspace_Id);
          Object.Clear_Modified (5);
       end if;
       if Object.Is_Modified (6) then
@@ -410,8 +410,8 @@ package body AWA.Permissions.Models is
                         Value => Object.Writeable);
       Query.Save_Field (Name  => COL_3_1_NAME, --  user_id
                         Value => Object.User_Id);
-      Query.Save_Field (Name  => COL_4_1_NAME, --  workspace
-                        Value => Object.Workspace);
+      Query.Save_Field (Name  => COL_4_1_NAME, --  workspace_id
+                        Value => Object.Workspace_Id);
       Query.Save_Field (Name  => COL_5_1_NAME, --  entity_type
                         Value => Object.Entity_Type);
       Query.Save_Field (Name  => COL_6_1_NAME, --  permission
@@ -455,8 +455,8 @@ package body AWA.Permissions.Models is
          return Util.Beans.Objects.To_Object (Impl.Writeable);
       elsif Name = "user_id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.User_Id));
-      elsif Name = "workspace" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Workspace));
+      elsif Name = "workspace_id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Workspace_Id));
       elsif Name = "entity_type" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Entity_Type));
       elsif Name = "permission" then
@@ -479,7 +479,7 @@ package body AWA.Permissions.Models is
       Object.Writeable := Stmt.Get_Boolean (2);
       Object.Writeable := Stmt.Get_Boolean (2);
       Object.User_Id := Stmt.Get_Identifier (3);
-      Object.Workspace := Stmt.Get_Identifier (4);
+      Object.Workspace_Id := Stmt.Get_Identifier (4);
       Object.Entity_Type := ADO.Entity_Type (Stmt.Get_Integer (5));
       Object.Permission := Stmt.Get_Identifier (6);
       ADO.Objects.Set_Created (Object);

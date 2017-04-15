@@ -86,11 +86,11 @@ package AWA.Permissions.Models is
                  return ADO.Identifier;
 
    --
-   procedure Set_Workspace (Object : in out Acl_Ref;
-                            Value  : in ADO.Identifier);
+   procedure Set_Workspace_Id (Object : in out Acl_Ref;
+                               Value  : in ADO.Identifier);
 
    --
-   function Get_Workspace (Object : in Acl_Ref)
+   function Get_Workspace_Id (Object : in Acl_Ref)
                  return ADO.Identifier;
 
    --  Set the entity type concerned by the ACL.
@@ -255,7 +255,7 @@ private
    COL_1_1_NAME : aliased constant String := "entity_id";
    COL_2_1_NAME : aliased constant String := "writeable";
    COL_3_1_NAME : aliased constant String := "user_id";
-   COL_4_1_NAME : aliased constant String := "workspace";
+   COL_4_1_NAME : aliased constant String := "workspace_id";
    COL_5_1_NAME : aliased constant String := "entity_type";
    COL_6_1_NAME : aliased constant String := "permission";
 
@@ -285,7 +285,7 @@ private
        Entity_Id : ADO.Identifier;
        Writeable : Boolean;
        User_Id : ADO.Identifier;
-       Workspace : ADO.Identifier;
+       Workspace_Id : ADO.Identifier;
        Entity_Type : ADO.Entity_Type;
        Permission : ADO.Identifier;
    end record;
