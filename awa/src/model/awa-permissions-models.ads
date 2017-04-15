@@ -85,6 +85,14 @@ package AWA.Permissions.Models is
    function Get_User_Id (Object : in Acl_Ref)
                  return ADO.Identifier;
 
+   --
+   procedure Set_Workspace (Object : in out Acl_Ref;
+                            Value  : in ADO.Identifier);
+
+   --
+   function Get_Workspace (Object : in Acl_Ref)
+                 return ADO.Identifier;
+
    --  Set the entity type concerned by the ACL.
    procedure Set_Entity_Type (Object : in out Acl_Ref;
                               Value  : in ADO.Entity_Type);
@@ -247,11 +255,12 @@ private
    COL_1_1_NAME : aliased constant String := "entity_id";
    COL_2_1_NAME : aliased constant String := "writeable";
    COL_3_1_NAME : aliased constant String := "user_id";
-   COL_4_1_NAME : aliased constant String := "entity_type";
-   COL_5_1_NAME : aliased constant String := "permission";
+   COL_4_1_NAME : aliased constant String := "workspace";
+   COL_5_1_NAME : aliased constant String := "entity_type";
+   COL_6_1_NAME : aliased constant String := "permission";
 
    ACL_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 6,
+     (Count => 7,
       Table => ACL_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
@@ -259,7 +268,8 @@ private
          3 => COL_2_1_NAME'Access,
          4 => COL_3_1_NAME'Access,
          5 => COL_4_1_NAME'Access,
-         6 => COL_5_1_NAME'Access
+         6 => COL_5_1_NAME'Access,
+         7 => COL_6_1_NAME'Access
 )
      );
    ACL_TABLE : constant ADO.Schemas.Class_Mapping_Access
@@ -275,6 +285,7 @@ private
        Entity_Id : ADO.Identifier;
        Writeable : Boolean;
        User_Id : ADO.Identifier;
+       Workspace : ADO.Identifier;
        Entity_Type : ADO.Entity_Type;
        Permission : ADO.Identifier;
    end record;
