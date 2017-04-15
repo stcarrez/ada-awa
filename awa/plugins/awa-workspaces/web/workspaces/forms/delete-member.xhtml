@@ -1,0 +1,40 @@
+<!-- Dialog box to confirm the deletion of a workspace member.
+  -  Copyright (C) 2017 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<f:view contentType="text/html; charset=UTF-8"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html">
+    <f:metadata>
+        <f:viewParam id='id' value='#{workspaceMember.id}'/>
+    </f:metadata>
+    <h2>
+        #{workspaceMsg.workspace_member_delete_title}
+    </h2>
+    <h:form id='delete-member-form'>
+        <h:inputHidden id='member-id' value="#{workspaceMember.id}"/>
+        <p>
+            #{workspaceMsg.workspace_member_confirm_delete_message}
+        </p>
+        <ul class='awa-buttons'>
+            <li>
+                <h:commandButton id='delete' value='#{workspaceMsg.workspace_member_delete_button}'
+                                 title="#{workspaceMsg.workspace_member_delete_tooltip}"
+                                 action="#{workspaceMember.delete}"
+                                 styleClass="ui-button ui-state-default ui-corner-all"/>
+            </li>
+        </ul>
+    </h:form>
+</f:view>
