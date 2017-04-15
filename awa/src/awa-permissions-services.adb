@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions-services -- Permissions controller
---  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -130,6 +130,7 @@ package body AWA.Permissions.Services is
    procedure Add_Permission (Manager    : in Permission_Manager;
                              Entity     : in ADO.Identifier;
                              Kind       : in ADO.Entity_Type;
+                             Workspace  : in ADO.Identifier;
                              Permission : in Permission_Type) is
       pragma Unreferenced (Manager);
 
@@ -145,6 +146,7 @@ package body AWA.Permissions.Services is
       Perm.Set_User_Id (Ctx.Get_User_Identifier);
       Perm.Set_Entity_Id (Entity);
       Perm.Set_Writeable (Permission = AWA.Permissions.WRITE);
+      Perm.Set_Workspace_Id (Workspace);
       Perm.Save (DB);
       Ctx.Commit;
    end Add_Permission;
@@ -190,6 +192,7 @@ package body AWA.Permissions.Services is
                              User       : in ADO.Identifier;
                              Entity     : in ADO.Identifier;
                              Kind       : in ADO.Entity_Type;
+                             Workspace  : in ADO.Identifier;
                              Permission : in Permission_Type := READ) is
       Acl : AWA.Permissions.Models.ACL_Ref;
    begin
@@ -197,6 +200,7 @@ package body AWA.Permissions.Services is
       Acl.Set_Entity_Type (Kind);
       Acl.Set_Entity_Id (Entity);
       Acl.Set_Writeable (Permission = WRITE);
+      Acl.Set_Workspace_Id (Workspace);
       Acl.Save (Session);
 
       Log.Info ("Permission created for {0} to access {1}, entity type {2}",
@@ -212,13 +216,14 @@ package body AWA.Permissions.Services is
    procedure Add_Permission (Session    : in out ADO.Sessions.Master_Session;
                              User       : in ADO.Identifier;
                              Entity     : in ADO.Objects.Object_Ref'Class;
+                             Workspace  : in ADO.Identifier;
                              Permission : in Permission_Type := READ) is
       Key  : constant ADO.Objects.Object_Key := Entity.Get_Key;
       Kind : constant ADO.Entity_Type
         := ADO.Sessions.Entities.Find_Entity_Type (Session => Session,
                                                    Object  => Key);
    begin
-      Add_Permission (Session, User, ADO.Objects.Get_Value (Key), Kind, Permission);
+      Add_Permission (Session, User, ADO.Objects.Get_Value (Key), Kind, Workspace, Permission);
    end Add_Permission;
 
    --  ------------------------------
