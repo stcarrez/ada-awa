@@ -26,6 +26,13 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
+  <managed-bean>
+    <description>The workspace member bean.</description>
+    <managed-bean-name>workspaceMember</managed-bean-name>
+    <managed-bean-class>AWA.Workspaces.Beans.Member_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
   <!--  When a user is created, also create a workspace area.  -->
   <on-event name="user-create">
      <action>#{workspace.create}</action>
