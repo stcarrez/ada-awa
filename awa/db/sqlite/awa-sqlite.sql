@@ -126,6 +126,8 @@ CREATE TABLE awa_acl (
   `writeable` TINYINT NOT NULL,
   /*  */
   `user_id` BIGINT NOT NULL,
+  /*  */
+  `workspace_id` BIGINT NOT NULL,
   /* the entity type concerned by the ACL. */
   `entity_type` INTEGER NOT NULL,
   /* the permission that is granted. */

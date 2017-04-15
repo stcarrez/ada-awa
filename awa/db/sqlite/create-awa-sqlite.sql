@@ -150,6 +150,8 @@ CREATE TABLE awa_acl (
   `writeable` TINYINT NOT NULL,
   /*  */
   `user_id` BIGINT NOT NULL,
+  /*  */
+  `workspace_id` BIGINT NOT NULL,
   /* the entity type concerned by the ACL. */
   `entity_type` INTEGER NOT NULL,
   /* the permission that is granted. */
@@ -385,6 +387,8 @@ CREATE TABLE awa_workspace_member (
   `id` BIGINT NOT NULL,
   /* the date when the user has joined the workspace. */
   `join_date` DATETIME ,
+  /* the member role. */
+  `role` VARCHAR(255) NOT NULL,
   /*  */
   `member_id` BIGINT NOT NULL,
   /*  */

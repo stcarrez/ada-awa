@@ -248,3 +248,20 @@ INSERT INTO awa_workspace_member (id, member_id, workspace_id, join_date, role)
    WHERE ent.name = 'awa_workspace')
 
 ALTER TABLE awa_acl ADD COLUMN permission BIGINT NOT NULL;
+ALTER TABLE awa_acl ADD COLUMN workspace_id BIGINT NOT NULL;
+
+UPDATE awa_acl
+  INNER JOIN entity_type ON awa_acl.entity_type = entity_type.id AND entity_type.name = 'awa_workspace'
+  SET awa_acl.workspace_id = awa_acl.entity_id;
+
+UPDATE awa_acl
+  INNER JOIN entity_type ON awa_acl.entity_type = entity_type.id AND entity_type.name = 'awa_wiki_space'
+  INNER JOIN awa_wiki_space ON awa_acl.entity_id = awa_wiki_space.id
+  SET awa_acl.workspace_id = awa_wiki_space.workspace_id;
+
+UPDATE awa_acl
+  INNER JOIN entity_type ON awa_acl.entity_type = entity_type.id AND entity_type.name = 'awa_blog'
+  INNER JOIN awa_blog ON awa_acl.entity_id = awa_blog.id
+  SET awa_acl.workspace_id = awa_blog.workspace_id;
+
+
