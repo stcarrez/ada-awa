@@ -21,10 +21,18 @@
     xmlns:w="http://code.google.com/p/ada-asf/widget"
     xmlns:ui="http://java.sun.com/jsf/facelets">
     <li class="awa-nav-left">
+        <a href="#{contextPath}/workspaces/invite.html" class="awa-nav-icon"
+           title="#{workspaceMsg.workspace_list_members_title}">
+            <img src="#{contextPath}/images/workspaces/icon-add-members-64.png"
+                 alt="#{workspaceMsg.workspace_add_members_label}"/>
+            <span>#{workspaceMsg.workspace_add_members_label}</span>
+        </a>
+    </li>
+    <li class="awa-nav-left">
         <a href="#{contextPath}/workspaces/members.html" class="awa-nav-icon"
            title="#{workspaceMsg.workspace_list_members_title}">
             <img src="#{contextPath}/images/workspaces/icon-members-64.png"
-                 alt="#{wikiMsg.wiki_admin_create_wiki_label}"/>
+                 alt="#{workspaceMsg.workspace_list_members_label}"/>
             <span>#{workspaceMsg.workspace_list_members_label}</span>
         </a>
     </li>
