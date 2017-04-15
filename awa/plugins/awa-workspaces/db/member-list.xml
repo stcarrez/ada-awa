@@ -29,25 +29,27 @@
        <comment>Get the list of workspace members</comment>
        <sql>
     SELECT
-      user.id,
+      wm.id,
       user.name,
       email.email,
       wm.role,
       wm.join_date,
       invite.create_date
-    FROM awa_workspace_member as wm
+    FROM awa_workspace_member AS user_member
+    INNER JOIN awa_workspace_member AS wm ON wm.workspace_id = user_member.workspace_id
     INNER JOIN awa_user AS user ON wm.member_id = user.id
     INNER JOIN awa_email AS email ON user.email_id = email.id
     LEFT JOIN awa_invitation AS invite ON invite.workspace_id = :workspace_id AND invite.invitee_id = user.id
-    WHERE wm.workspace_id = :workspace_id
+    WHERE user_member.id = :user_id
        </sql>
        <sql-count>
     SELECT
       COUNT(*)
-    FROM awa_workspace_member as wm
+    FROM awa_workspace_member AS user_member
+    INNER JOIN awa_workspace_member AS wm ON wm.workspace_id = user_member.workspace_id
     INNER JOIN awa_user AS user ON wm.member_id = user.id
     INNER JOIN awa_email AS email ON user.email_id = email.id
-    WHERE wm.workspace_id = :workspace_id
+    WHERE user_member.id = :user_id
        </sql-count>
     </query>
 
