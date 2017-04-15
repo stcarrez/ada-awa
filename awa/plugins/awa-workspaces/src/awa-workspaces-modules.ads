@@ -67,6 +67,11 @@ package AWA.Workspaces.Modules is
    procedure Send_Invitation (Module : in Workspace_Module;
                               Invitation : in out AWA.Workspaces.Models.Invitation_Ref'Class);
 
+   --  Delete the member from the workspace.  Remove the invitation if there is one.
+   procedure Delete_Member (Module       : in Workspace_Module;
+                            User_Id      : in ADO.Identifier;
+                            Workspace_Id : in ADO.Identifier);
+
 private
 
    type Workspace_Module is new AWA.Modules.Module with record
