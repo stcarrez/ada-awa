@@ -92,6 +92,11 @@ package AWA.Permissions.Services is
                             Entity : in Util.Beans.Objects.Object)
                             return Util.Beans.Objects.Object;
 
+   --  Delete all the permissions for a user and on the given workspace.
+   procedure Delete_Permissions (Session   : in out ADO.Sessions.Master_Session;
+                                 User      : in ADO.Identifier;
+                                 Workspace : in ADO.Identifier);
+
 private
 
    type Permission_Manager is new Security.Policies.Policy_Manager with record
