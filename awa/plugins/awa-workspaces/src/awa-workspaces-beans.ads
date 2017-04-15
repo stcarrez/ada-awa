@@ -28,6 +28,28 @@ with AWA.Workspaces.Models;
 with AWA.Workspaces.Modules;
 package AWA.Workspaces.Beans is
 
+   type Member_Bean is new AWA.Workspaces.Models.Member_Bean with record
+      Module  : AWA.Workspaces.Modules.Workspace_Module_Access := null;
+   end record;
+   type Member_Bean_Access is access all Member_Bean'Class;
+
+   --  Get the value identified by the name.
+   overriding
+   function Get_Value (From : in Member_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   overriding
+   procedure Load (Bean : in out Member_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   overriding
+   procedure Delete (Bean : in out Member_Bean;
+                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Create the Member_Bean bean instance.
+   function Create_Member_Bean (Module : in AWA.Workspaces.Modules.Workspace_Module_Access)
+                                return Util.Beans.Basic.Readonly_Bean_Access;
+
    type Invitation_Bean is new AWA.Workspaces.Models.Invitation_Bean with record
       Module  : AWA.Workspaces.Modules.Workspace_Module_Access := null;
       Inviter : AWA.Users.Models.User_Ref;
