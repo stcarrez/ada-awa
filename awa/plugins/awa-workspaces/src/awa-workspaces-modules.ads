@@ -69,8 +69,7 @@ package AWA.Workspaces.Modules is
 
    --  Delete the member from the workspace.  Remove the invitation if there is one.
    procedure Delete_Member (Module       : in Workspace_Module;
-                            User_Id      : in ADO.Identifier;
-                            Workspace_Id : in ADO.Identifier);
+                            Member_Id    : in ADO.Identifier);
 
 private
 
