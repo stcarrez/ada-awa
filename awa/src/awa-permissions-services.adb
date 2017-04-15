@@ -249,4 +249,23 @@ package body AWA.Permissions.Services is
       return Result.all'Access;
    end Create_Permission_Manager;
 
+   --  ------------------------------
+   --  Delete all the permissions for a user and on the given workspace.
+   --  ------------------------------
+   procedure Delete_Permissions (Session   : in out ADO.Sessions.Master_Session;
+                                 User      : in ADO.Identifier;
+                                 Workspace : in ADO.Identifier) is
+      Stmt   : ADO.Statements.Delete_Statement
+        := Session.Create_Statement (Models.PERMISSION_TABLE);
+      Result : Natural;
+   begin
+      Stmt.Set_Filter (Filter => "workspace_id = ? AND user_id = ?");
+      Stmt.Add_Param (Value => Workspace);
+      Stmt.Add_Param (Value => User);
+      Stmt.Execute (Result);
+      Log.Info ("Deleted {0} permissions for user {1} in workspace {2}",
+                Natural'Image (Result), ADO.Identifier'Image (User),
+                ADO.Identifier'Image (Workspace));
+   end Delete_Permissions;
+
 end AWA.Permissions.Services;
