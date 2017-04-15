@@ -72,6 +72,7 @@
     <url-pattern>/workspaces/members.html</url-pattern>
     <url-pattern>/workspaces/invite.html</url-pattern>
     <url-pattern>/workspaces/accept-invitation.html</url-pattern>
+    <url-pattern>/workspaces/forms/delete-member-form.html</url-pattern>
   </url-policy>
 
 </module>
