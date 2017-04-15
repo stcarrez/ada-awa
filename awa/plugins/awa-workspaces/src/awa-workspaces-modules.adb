@@ -349,8 +349,7 @@ package body AWA.Workspaces.Modules is
    --  Delete the member from the workspace.  Remove the invitation if there is one.
    --  ------------------------------
    procedure Delete_Member (Module       : in Workspace_Module;
-                            User_Id      : in ADO.Identifier;
-                            Workspace_Id : in ADO.Identifier) is
+                            Member_Id    : in ADO.Identifier) is
 
       Ctx          : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
       DB           : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
@@ -360,26 +359,31 @@ package body AWA.Workspaces.Modules is
       Key          : AWA.Users.Models.Access_Key_Ref;
       Member       : AWA.Workspaces.Models.Workspace_Member_Ref;
       Invitation   : AWA.Workspaces.Models.Invitation_Ref;
+      User_Id      : ADO.Identifier;
+      Workspace_Id : ADO.Identifier;
    begin
-      Log.Info ("Delete user member {0}", ADO.Identifier'Image (User_Id));
+      Log.Info ("Delete user member {0}", ADO.Identifier'Image (Member_Id));
+
+      --  Get the workspace member instance for the user and remove it.
+      Member.Load (DB, Member_Id, Found);
+      if not Found then
+         return;
+      end if;
+
+      User_Id := Member.Get_Member.Get_Id;
+      Workspace_Id := Member.Get_Workspace.Get_Id;
 
       if User.Get_Id = User_Id then
          Log.Warn ("Refusing to delete the current user");
          return;
       end if;
       Ctx.Start;
-
-      --  Get the workspace member instance for the user and remove it.
-      Query.Set_Filter ("o.member_id = ? AND o.workspace_id = ?");
-      Query.Add_Param (User_Id);
-      Query.Add_Param (Workspace_Id);
-      Member.Find (DB, Query, Found);
-      if Found then
-         Member.Delete (DB);
-      end if;
+      Member.Delete (DB);
 
       --  Get the invitation and remove it.
       Query.Set_Filter ("o.invitee_id = ? AND o.workspace_id = ?");
+      Query.Add_Param (User_Id);
+      Query.Add_Param (Workspace_Id);
       Invitation.Find (DB, Query, Found);
       if Found then
          Key := AWA.Users.Models.Access_Key_Ref (Invitation.Get_Access_Key);
