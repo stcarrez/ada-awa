@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-module -- Blog and post management module
---  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -120,9 +120,10 @@ package body AWA.Blogs.Modules is
       Blog.Save (DB);
 
       --  Add the permission for the user to use the new blog.
-      AWA.Permissions.Services.Add_Permission (Session => DB,
-                                               User    => User,
-                                               Entity  => Blog);
+      AWA.Permissions.Services.Add_Permission (Session   => DB,
+                                               User      => User,
+                                               Entity    => Blog,
+                                               Workspace => WS.Get_Id);
       Ctx.Commit;
 
       Result := Blog.Get_Id;
