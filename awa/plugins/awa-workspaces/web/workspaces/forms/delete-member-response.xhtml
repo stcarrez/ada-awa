@@ -1,0 +1,11 @@
+<f:view contentType="application/json"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:c="http://java.sun.com/jstl/core"
+        xmlns:util="http://code.google.com/p/ada-asf/util"
+        xmlns:h="http://java.sun.com/jsf/html">
+[
+    { "action": "delete", "id": "#m_#{workspaceMember.id}" },
+    { "action": "closeDialog", "id": "#deleteDialog_#{workspaceMember.id}" },
+    { "action": "clear", "id": "#message" }
+]
+</f:view>
