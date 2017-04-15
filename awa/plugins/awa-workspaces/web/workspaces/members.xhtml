@@ -31,13 +31,7 @@
             <f:viewAction action='#{memberList.load}'/>
         </f:metadata>
         <div id='awa-content'>
-            <div class="awa-nav">
-                <ul class="awa-page-actions">
-                    <li>
-                        <a href="#{contextPath}/workspaces/invite.html" class="awa-button">Invite</a>
-                    </li>
-                </ul>
-            </div>
+            <ui:include src="views/workspace-nav.xhtml"/>
             <div class='member-list awa-list-header' id="member-list-header">
                 <div class="awa-list-item-header">
                     <div class='awa-header-col member-status'>
@@ -57,9 +51,19 @@
                     </div>
                 </div>
             </div>
-            <div class="member-list">
+            <div id='member-list' class="awa-list member-list">
                 <ui:include src="lists/member-list.xhtml"/>
             </div>
+            <div id='member-list-action' class='asf-list-action'>
+                <a href="#" class='asf-icon asf-delete' title='#{blogMsg.blog_post_delete_action_tooltip}'></a>
+            </div>
+            <util:script>
+                $('#member-list').list({
+                    actionId: '#member-list-action',
+                    itemPrefix: 'm_',
+                    deleteUrl: '#{contextPath}/workspaces/forms/delete-member.html?id='
+                });
+            </util:script>
         </div>
    </ui:define>
 
