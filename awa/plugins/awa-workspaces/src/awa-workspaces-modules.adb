@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-workspaces-module -- Module workspaces
---  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,6 +27,8 @@ with Util.Log.Loggers;
 with AWA.Users.Modules;
 with AWA.Workspaces.Beans;
 package body AWA.Workspaces.Modules is
+
+   use type ADO.Identifier;
 
    package ASC renames AWA.Services.Contexts;
 
@@ -103,9 +105,10 @@ package body AWA.Workspaces.Modules is
       Member.Save (Session);
 
       --  And give full control of the workspace for this user
-      AWA.Permissions.Services.Add_Permission (Session => Session,
-                                               User    => User.Get_Id,
-                                               Entity  => WS);
+      AWA.Permissions.Services.Add_Permission (Session   => Session,
+                                               User      => User.Get_Id,
+                                               Entity    => WS,
+                                               Workspace => WS.Get_Id);
 
       Workspace := WS;
    end Get_Workspace;
@@ -154,7 +157,6 @@ package body AWA.Workspaces.Modules is
    procedure Accept_Invitation (Module     : in Workspace_Module;
                                 Key        : in String) is
       use type Ada.Calendar.Time;
-      use type ADO.Identifier;
 
       Ctx          : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
       User         : constant AWA.Users.Models.User_Ref := Ctx.Get_User;
@@ -247,7 +249,6 @@ package body AWA.Workspaces.Modules is
    --  ------------------------------
    procedure Send_Invitation (Module     : in Workspace_Module;
                               Invitation : in out AWA.Workspaces.Models.Invitation_Ref'Class) is
-      use type ADO.Identifier;
 
       Ctx     : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
       DB      : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
@@ -343,5 +344,52 @@ package body AWA.Workspaces.Modules is
 
       Ctx.Commit;
    end Send_Invitation;
+
+   --  ------------------------------
+   --  Delete the member from the workspace.  Remove the invitation if there is one.
+   --  ------------------------------
+   procedure Delete_Member (Module       : in Workspace_Module;
+                            User_Id      : in ADO.Identifier;
+                            Workspace_Id : in ADO.Identifier) is
+
+      Ctx          : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB           : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      User         : constant AWA.Users.Models.User_Ref := Ctx.Get_User;
+      Query        : ADO.SQL.Query;
+      Found        : Boolean;
+      Key          : AWA.Users.Models.Access_Key_Ref;
+      Member       : AWA.Workspaces.Models.Workspace_Member_Ref;
+      Invitation   : AWA.Workspaces.Models.Invitation_Ref;
+   begin
+      Log.Info ("Delete user member {0}", ADO.Identifier'Image (User_Id));
+
+      if User.Get_Id = User_Id then
+         Log.Warn ("Refusing to delete the current user");
+         return;
+      end if;
+      Ctx.Start;
+
+      --  Get the workspace member instance for the user and remove it.
+      Query.Set_Filter ("o.member_id = ? AND o.workspace_id = ?");
+      Query.Add_Param (User_Id);
+      Query.Add_Param (Workspace_Id);
+      Member.Find (DB, Query, Found);
+      if Found then
+         Member.Delete (DB);
+      end if;
+
+      --  Get the invitation and remove it.
+      Query.Set_Filter ("o.invitee_id = ? AND o.workspace_id = ?");
+      Invitation.Find (DB, Query, Found);
+      if Found then
+         Key := AWA.Users.Models.Access_Key_Ref (Invitation.Get_Access_Key);
+         Key.Delete (DB);
+         Invitation.Delete (DB);
+      end if;
+
+      --  Remove all permissions assigned to the user in the workspace.
+      AWA.Permissions.Services.Delete_Permissions (DB, User_Id, Workspace_Id);
+      Ctx.Commit;
+   end Delete_Member;
 
 end AWA.Workspaces.Modules;
