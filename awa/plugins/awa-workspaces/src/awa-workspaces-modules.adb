@@ -199,18 +199,10 @@ package body AWA.Workspaces.Modules is
          Log.Warn ("Invitation key {0} has been withdawn", Key);
          raise Not_Found;
       end if;
+      Member := AWA.Workspaces.Models.Workspace_Member_Ref (Invitation.Get_Member);
       Workspace_Id := Invitation.Get_Workspace.Get_Id;
 
       --  Update the workspace member relation.
-      Query.Clear;
-      Query.Set_Filter ("o.member_id = ? AND o.workspace_id = ?");
-      Query.Add_Param (Invitee_Id);
-      Query.Add_Param (Workspace_Id);
-      Member.Find (DB, Query, Found);
-      if not Found then
-         Log.Warn ("Invitation key {0} has been withdawn", Key);
-         raise Not_Found;
-      end if;
       Member.Set_Join_Date (ADO.Nullable_Time '(Is_Null => False,
                                                 Value   => Now));
       Invitation.Set_Acceptance_Date (ADO.Nullable_Time '(Is_Null => False,
@@ -234,8 +226,8 @@ package body AWA.Workspaces.Modules is
          else
             Member.Set_Member (User);
             Log.Info ("Invitation accepted by user with another email address");
+            Invitation.Set_Invitee (User);
          end if;
-         Invitation.Set_Invitee (User);
       end if;
       if not Member.Is_Null then
          Member.Save (DB);
@@ -330,6 +322,7 @@ package body AWA.Workspaces.Modules is
       Invitation.Set_Invitee (Invitee);
       Invitation.Set_Workspace (WS);
       Invitation.Set_Create_Date (Ada.Calendar.Clock);
+      Invitation.Set_Member (Member);
       Invitation.Save (DB);
 
       --  Send the email with the reset password key
@@ -364,12 +357,14 @@ package body AWA.Workspaces.Modules is
       Invitation   : AWA.Workspaces.Models.Invitation_Ref;
       User_Id      : ADO.Identifier;
       Workspace_Id : ADO.Identifier;
+      User_Image   : constant String := ADO.Identifier'Image (Member_Id);
    begin
-      Log.Info ("Delete user member {0}", ADO.Identifier'Image (Member_Id));
+      Log.Info ("Delete user member {0}", User_Image);
 
       --  Get the workspace member instance for the user and remove it.
       Member.Load (DB, Member_Id, Found);
       if not Found then
+         Log.Error ("User member {0} does not exist", User_Image);
          return;
       end if;
 
@@ -377,16 +372,15 @@ package body AWA.Workspaces.Modules is
       Workspace_Id := Member.Get_Workspace.Get_Id;
 
       if User.Get_Id = User_Id then
-         Log.Warn ("Refusing to delete the current user");
+         Log.Warn ("Refusing to delete the current user {0}", User_Image);
          return;
       end if;
       Ctx.Start;
       Member.Delete (DB);
 
       --  Get the invitation and remove it.
-      Query.Set_Filter ("o.invitee_id = ? AND o.workspace_id = ?");
-      Query.Add_Param (User_Id);
-      Query.Add_Param (Workspace_Id);
+      Query.Set_Filter ("o.member_id = ?");
+      Query.Add_Param (Member_Id);
       Invitation.Find (DB, Query, Found);
       if Found then
          Key := AWA.Users.Models.Access_Key_Ref (Invitation.Get_Access_Key);
