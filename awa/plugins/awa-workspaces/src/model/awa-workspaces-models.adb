@@ -388,898 +388,6 @@ package body AWA.Workspaces.Models is
       Object.Version := Stmt.Get_Integer (1);
       ADO.Objects.Set_Created (Object);
    end Load;
-   function Invitation_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
-                                       Of_Class => INVITATION_DEF'Access);
-   begin
-      ADO.Objects.Set_Value (Result, Id);
-      return Result;
-   end Invitation_Key;
-
-   function Invitation_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
-                                       Of_Class => INVITATION_DEF'Access);
-   begin
-      ADO.Objects.Set_Value (Result, Id);
-      return Result;
-   end Invitation_Key;
-
-   function "=" (Left, Right : Invitation_Ref'Class) return Boolean is
-   begin
-      return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
-   end "=";
-
-   procedure Set_Field (Object : in out Invitation_Ref'Class;
-                        Impl   : out Invitation_Access) is
-      Result : ADO.Objects.Object_Record_Access;
-   begin
-      Object.Prepare_Modify (Result);
-      Impl := Invitation_Impl (Result.all)'Access;
-   end Set_Field;
-
-   --  Internal method to allocate the Object_Record instance
-   procedure Allocate (Object : in out Invitation_Ref) is
-      Impl : Invitation_Access;
-   begin
-      Impl := new Invitation_Impl;
-      Impl.Version := 0;
-      Impl.Create_Date := ADO.DEFAULT_TIME;
-      Impl.Acceptance_Date.Is_Null := True;
-      ADO.Objects.Set_Object (Object, Impl.all'Access);
-   end Allocate;
-
-   -- ----------------------------------------
-   --  Data object: Invitation
-   -- ----------------------------------------
-
-   procedure Set_Id (Object : in out Invitation_Ref;
-                     Value  : in ADO.Identifier) is
-      Impl : Invitation_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
-   end Set_Id;
-
-   function Get_Id (Object : in Invitation_Ref)
-                  return ADO.Identifier is
-      Impl : constant Invitation_Access
-         := Invitation_Impl (Object.Get_Object.all)'Access;
-   begin
-      return Impl.Get_Key_Value;
-   end Get_Id;
-
-
-   function Get_Version (Object : in Invitation_Ref)
-                  return Integer is
-      Impl : constant Invitation_Access
-         := Invitation_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Version;
-   end Get_Version;
-
-
-   procedure Set_Create_Date (Object : in out Invitation_Ref;
-                              Value  : in Ada.Calendar.Time) is
-      Impl : Invitation_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Time (Impl.all, 3, Impl.Create_Date, Value);
-   end Set_Create_Date;
-
-   function Get_Create_Date (Object : in Invitation_Ref)
-                  return Ada.Calendar.Time is
-      Impl : constant Invitation_Access
-         := Invitation_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Create_Date;
-   end Get_Create_Date;
-
-
-   procedure Set_Email (Object : in out Invitation_Ref;
-                         Value : in String) is
-      Impl : Invitation_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 4, Impl.Email, Value);
-   end Set_Email;
-
-   procedure Set_Email (Object : in out Invitation_Ref;
-                        Value  : in Ada.Strings.Unbounded.Unbounded_String) is
-      Impl : Invitation_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 4, Impl.Email, Value);
-   end Set_Email;
-
-   function Get_Email (Object : in Invitation_Ref)
-                 return String is
-   begin
-      return Ada.Strings.Unbounded.To_String (Object.Get_Email);
-   end Get_Email;
-   function Get_Email (Object : in Invitation_Ref)
-                  return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Invitation_Access
-         := Invitation_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Email;
-   end Get_Email;
-
-
-   procedure Set_Message (Object : in out Invitation_Ref;
-                           Value : in String) is
-      Impl : Invitation_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 5, Impl.Message, Value);
-   end Set_Message;
-
-   procedure Set_Message (Object : in out Invitation_Ref;
-                          Value  : in Ada.Strings.Unbounded.Unbounded_String) is
-      Impl : Invitation_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 5, Impl.Message, Value);
-   end Set_Message;
-
-   function Get_Message (Object : in Invitation_Ref)
-                 return String is
-   begin
-      return Ada.Strings.Unbounded.To_String (Object.Get_Message);
-   end Get_Message;
-   function Get_Message (Object : in Invitation_Ref)
-                  return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Invitation_Access
-         := Invitation_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Message;
-   end Get_Message;
-
-
-   procedure Set_Acceptance_Date (Object : in out Invitation_Ref;
-                                  Value  : in ADO.Nullable_Time) is
-      Impl : Invitation_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Time (Impl.all, 6, Impl.Acceptance_Date, Value);
-   end Set_Acceptance_Date;
-
-   function Get_Acceptance_Date (Object : in Invitation_Ref)
-                  return ADO.Nullable_Time is
-      Impl : constant Invitation_Access
-         := Invitation_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Acceptance_Date;
-   end Get_Acceptance_Date;
-
-
-   procedure Set_Workspace (Object : in out Invitation_Ref;
-                            Value  : in AWA.Workspaces.Models.Workspace_Ref'Class) is
-      Impl : Invitation_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 7, Impl.Workspace, Value);
-   end Set_Workspace;
-
-   function Get_Workspace (Object : in Invitation_Ref)
-                  return AWA.Workspaces.Models.Workspace_Ref'Class is
-      Impl : constant Invitation_Access
-         := Invitation_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Workspace;
-   end Get_Workspace;
-
-
-   procedure Set_Access_Key (Object : in out Invitation_Ref;
-                             Value  : in AWA.Users.Models.Access_Key_Ref'Class) is
-      Impl : Invitation_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 8, Impl.Access_Key, Value);
-   end Set_Access_Key;
-
-   function Get_Access_Key (Object : in Invitation_Ref)
-                  return AWA.Users.Models.Access_Key_Ref'Class is
-      Impl : constant Invitation_Access
-         := Invitation_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Access_Key;
-   end Get_Access_Key;
-
-
-   procedure Set_Invitee (Object : in out Invitation_Ref;
-                          Value  : in AWA.Users.Models.User_Ref'Class) is
-      Impl : Invitation_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 9, Impl.Invitee, Value);
-   end Set_Invitee;
-
-   function Get_Invitee (Object : in Invitation_Ref)
-                  return AWA.Users.Models.User_Ref'Class is
-      Impl : constant Invitation_Access
-         := Invitation_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Invitee;
-   end Get_Invitee;
-
-
-   procedure Set_Inviter (Object : in out Invitation_Ref;
-                          Value  : in AWA.Users.Models.User_Ref'Class) is
-      Impl : Invitation_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 10, Impl.Inviter, Value);
-   end Set_Inviter;
-
-   function Get_Inviter (Object : in Invitation_Ref)
-                  return AWA.Users.Models.User_Ref'Class is
-      Impl : constant Invitation_Access
-         := Invitation_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Inviter;
-   end Get_Inviter;
-
-   --  Copy of the object.
-   procedure Copy (Object : in Invitation_Ref;
-                   Into   : in out Invitation_Ref) is
-      Result : Invitation_Ref;
-   begin
-      if not Object.Is_Null then
-         declare
-            Impl : constant Invitation_Access
-              := Invitation_Impl (Object.Get_Load_Object.all)'Access;
-            Copy : constant Invitation_Access
-              := new Invitation_Impl;
-         begin
-            ADO.Objects.Set_Object (Result, Copy.all'Access);
-            Copy.Copy (Impl.all);
-            Copy.Version := Impl.Version;
-            Copy.Create_Date := Impl.Create_Date;
-            Copy.Email := Impl.Email;
-            Copy.Message := Impl.Message;
-            Copy.Acceptance_Date := Impl.Acceptance_Date;
-            Copy.Workspace := Impl.Workspace;
-            Copy.Access_Key := Impl.Access_Key;
-            Copy.Invitee := Impl.Invitee;
-            Copy.Inviter := Impl.Inviter;
-         end;
-      end if;
-      Into := Result;
-   end Copy;
-
-   procedure Find (Object  : in out Invitation_Ref;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class;
-                   Found   : out Boolean) is
-      Impl  : constant Invitation_Access := new Invitation_Impl;
-   begin
-      Impl.Find (Session, Query, Found);
-      if Found then
-         ADO.Objects.Set_Object (Object, Impl.all'Access);
-      else
-         ADO.Objects.Set_Object (Object, null);
-         Destroy (Impl);
-      end if;
-   end Find;
-
-   procedure Load (Object  : in out Invitation_Ref;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Id      : in ADO.Identifier) is
-      Impl  : constant Invitation_Access := new Invitation_Impl;
-      Found : Boolean;
-      Query : ADO.SQL.Query;
-   begin
-      Query.Bind_Param (Position => 1, Value => Id);
-      Query.Set_Filter ("id = ?");
-      Impl.Find (Session, Query, Found);
-      if not Found then
-         Destroy (Impl);
-         raise ADO.Objects.NOT_FOUND;
-      end if;
-      ADO.Objects.Set_Object (Object, Impl.all'Access);
-   end Load;
-
-   procedure Load (Object  : in out Invitation_Ref;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Id      : in ADO.Identifier;
-                   Found   : out Boolean) is
-      Impl  : constant Invitation_Access := new Invitation_Impl;
-      Query : ADO.SQL.Query;
-   begin
-      Query.Bind_Param (Position => 1, Value => Id);
-      Query.Set_Filter ("id = ?");
-      Impl.Find (Session, Query, Found);
-      if not Found then
-         Destroy (Impl);
-      else
-         ADO.Objects.Set_Object (Object, Impl.all'Access);
-      end if;
-   end Load;
-
-   procedure Save (Object  : in out Invitation_Ref;
-                   Session : in out ADO.Sessions.Master_Session'Class) is
-      Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
-   begin
-      if Impl = null then
-         Impl := new Invitation_Impl;
-         ADO.Objects.Set_Object (Object, Impl);
-      end if;
-      if not ADO.Objects.Is_Created (Impl.all) then
-         Impl.Create (Session);
-      else
-         Impl.Save (Session);
-      end if;
-   end Save;
-
-   procedure Delete (Object  : in out Invitation_Ref;
-                     Session : in out ADO.Sessions.Master_Session'Class) is
-      Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
-   begin
-      if Impl /= null then
-         Impl.Delete (Session);
-      end if;
-   end Delete;
-
-   --  --------------------
-   --  Free the object
-   --  --------------------
-   procedure Destroy (Object : access Invitation_Impl) is
-      type Invitation_Impl_Ptr is access all Invitation_Impl;
-      procedure Unchecked_Free is new Ada.Unchecked_Deallocation
-              (Invitation_Impl, Invitation_Impl_Ptr);
-      pragma Warnings (Off, "*redundant conversion*");
-      Ptr : Invitation_Impl_Ptr := Invitation_Impl (Object.all)'Access;
-      pragma Warnings (On, "*redundant conversion*");
-   begin
-      Unchecked_Free (Ptr);
-   end Destroy;
-
-   procedure Find (Object  : in out Invitation_Impl;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class;
-                   Found   : out Boolean) is
-      Stmt : ADO.Statements.Query_Statement
-          := Session.Create_Statement (Query, INVITATION_DEF'Access);
-   begin
-      Stmt.Execute;
-      if Stmt.Has_Elements then
-         Object.Load (Stmt, Session);
-         Stmt.Next;
-         Found := not Stmt.Has_Elements;
-      else
-         Found := False;
-      end if;
-   end Find;
-
-   overriding
-   procedure Load (Object  : in out Invitation_Impl;
-                   Session : in out ADO.Sessions.Session'Class) is
-      Found : Boolean;
-      Query : ADO.SQL.Query;
-      Id    : constant ADO.Identifier := Object.Get_Key_Value;
-   begin
-      Query.Bind_Param (Position => 1, Value => Id);
-      Query.Set_Filter ("id = ?");
-      Object.Find (Session, Query, Found);
-      if not Found then
-         raise ADO.Objects.NOT_FOUND;
-      end if;
-   end Load;
-
-   procedure Save (Object  : in out Invitation_Impl;
-                   Session : in out ADO.Sessions.Master_Session'Class) is
-      Stmt : ADO.Statements.Update_Statement
-         := Session.Create_Statement (INVITATION_DEF'Access);
-   begin
-      if Object.Is_Modified (1) then
-         Stmt.Save_Field (Name  => COL_0_2_NAME, --  id
-                          Value => Object.Get_Key);
-         Object.Clear_Modified (1);
-      end if;
-      if Object.Is_Modified (3) then
-         Stmt.Save_Field (Name  => COL_2_2_NAME, --  create_date
-                          Value => Object.Create_Date);
-         Object.Clear_Modified (3);
-      end if;
-      if Object.Is_Modified (4) then
-         Stmt.Save_Field (Name  => COL_3_2_NAME, --  email
-                          Value => Object.Email);
-         Object.Clear_Modified (4);
-      end if;
-      if Object.Is_Modified (5) then
-         Stmt.Save_Field (Name  => COL_4_2_NAME, --  message
-                          Value => Object.Message);
-         Object.Clear_Modified (5);
-      end if;
-      if Object.Is_Modified (6) then
-         Stmt.Save_Field (Name  => COL_5_2_NAME, --  acceptance_date
-                          Value => Object.Acceptance_Date);
-         Object.Clear_Modified (6);
-      end if;
-      if Object.Is_Modified (7) then
-         Stmt.Save_Field (Name  => COL_6_2_NAME, --  workspace_id
-                          Value => Object.Workspace);
-         Object.Clear_Modified (7);
-      end if;
-      if Object.Is_Modified (8) then
-         Stmt.Save_Field (Name  => COL_7_2_NAME, --  access_key_id
-                          Value => Object.Access_Key);
-         Object.Clear_Modified (8);
-      end if;
-      if Object.Is_Modified (9) then
-         Stmt.Save_Field (Name  => COL_8_2_NAME, --  invitee_id
-                          Value => Object.Invitee);
-         Object.Clear_Modified (9);
-      end if;
-      if Object.Is_Modified (10) then
-         Stmt.Save_Field (Name  => COL_9_2_NAME, --  inviter_id
-                          Value => Object.Inviter);
-         Object.Clear_Modified (10);
-      end if;
-      if Stmt.Has_Save_Fields then
-         Object.Version := Object.Version + 1;
-         Stmt.Save_Field (Name  => "version",
-                          Value => Object.Version);
-         Stmt.Set_Filter (Filter => "id = ? and version = ?");
-         Stmt.Add_Param (Value => Object.Get_Key);
-         Stmt.Add_Param (Value => Object.Version - 1);
-         declare
-            Result : Integer;
-         begin
-            Stmt.Execute (Result);
-            if Result /= 1 then
-               if Result /= 0 then
-                  raise ADO.Objects.UPDATE_ERROR;
-               else
-                  raise ADO.Objects.LAZY_LOCK;
-               end if;
-            end if;
-         end;
-      end if;
-   end Save;
-
-   procedure Create (Object  : in out Invitation_Impl;
-                     Session : in out ADO.Sessions.Master_Session'Class) is
-      Query : ADO.Statements.Insert_Statement
-                  := Session.Create_Statement (INVITATION_DEF'Access);
-      Result : Integer;
-   begin
-      Object.Version := 1;
-      Session.Allocate (Id => Object);
-      Query.Save_Field (Name  => COL_0_2_NAME, --  id
-                        Value => Object.Get_Key);
-      Query.Save_Field (Name  => COL_1_2_NAME, --  version
-                        Value => Object.Version);
-      Query.Save_Field (Name  => COL_2_2_NAME, --  create_date
-                        Value => Object.Create_Date);
-      Query.Save_Field (Name  => COL_3_2_NAME, --  email
-                        Value => Object.Email);
-      Query.Save_Field (Name  => COL_4_2_NAME, --  message
-                        Value => Object.Message);
-      Query.Save_Field (Name  => COL_5_2_NAME, --  acceptance_date
-                        Value => Object.Acceptance_Date);
-      Query.Save_Field (Name  => COL_6_2_NAME, --  workspace_id
-                        Value => Object.Workspace);
-      Query.Save_Field (Name  => COL_7_2_NAME, --  access_key_id
-                        Value => Object.Access_Key);
-      Query.Save_Field (Name  => COL_8_2_NAME, --  invitee_id
-                        Value => Object.Invitee);
-      Query.Save_Field (Name  => COL_9_2_NAME, --  inviter_id
-                        Value => Object.Inviter);
-      Query.Execute (Result);
-      if Result /= 1 then
-         raise ADO.Objects.INSERT_ERROR;
-      end if;
-      ADO.Objects.Set_Created (Object);
-   end Create;
-
-   procedure Delete (Object  : in out Invitation_Impl;
-                     Session : in out ADO.Sessions.Master_Session'Class) is
-      Stmt : ADO.Statements.Delete_Statement
-         := Session.Create_Statement (INVITATION_DEF'Access);
-   begin
-      Stmt.Set_Filter (Filter => "id = ?");
-      Stmt.Add_Param (Value => Object.Get_Key);
-      Stmt.Execute;
-   end Delete;
-
-   --  ------------------------------
-   --  Get the bean attribute identified by the name.
-   --  ------------------------------
-   overriding
-   function Get_Value (From : in Invitation_Ref;
-                       Name : in String) return Util.Beans.Objects.Object is
-      Obj  : ADO.Objects.Object_Record_Access;
-      Impl : access Invitation_Impl;
-   begin
-      if From.Is_Null then
-         return Util.Beans.Objects.Null_Object;
-      end if;
-      Obj := From.Get_Load_Object;
-      Impl := Invitation_Impl (Obj.all)'Access;
-      if Name = "id" then
-         return ADO.Objects.To_Object (Impl.Get_Key);
-      elsif Name = "create_date" then
-         return Util.Beans.Objects.Time.To_Object (Impl.Create_Date);
-      elsif Name = "email" then
-         return Util.Beans.Objects.To_Object (Impl.Email);
-      elsif Name = "message" then
-         return Util.Beans.Objects.To_Object (Impl.Message);
-      elsif Name = "acceptance_date" then
-         if Impl.Acceptance_Date.Is_Null then
-            return Util.Beans.Objects.Null_Object;
-         else
-            return Util.Beans.Objects.Time.To_Object (Impl.Acceptance_Date.Value);
-         end if;
-      end if;
-      return Util.Beans.Objects.Null_Object;
-   end Get_Value;
-
-
-
-   --  ------------------------------
-   --  Load the object from current iterator position
-   --  ------------------------------
-   procedure Load (Object  : in out Invitation_Impl;
-                   Stmt    : in out ADO.Statements.Query_Statement'Class;
-                   Session : in out ADO.Sessions.Session'Class) is
-   begin
-      Object.Set_Key_Value (Stmt.Get_Identifier (0));
-      Object.Create_Date := Stmt.Get_Time (2);
-      Object.Email := Stmt.Get_Unbounded_String (3);
-      Object.Message := Stmt.Get_Unbounded_String (4);
-      Object.Acceptance_Date := Stmt.Get_Time (5);
-      if not Stmt.Is_Null (6) then
-         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (6), Session);
-      end if;
-      if not Stmt.Is_Null (7) then
-         Object.Access_Key.Set_Key_Value (Stmt.Get_Identifier (7), Session);
-      end if;
-      if not Stmt.Is_Null (8) then
-         Object.Invitee.Set_Key_Value (Stmt.Get_Identifier (8), Session);
-      end if;
-      if not Stmt.Is_Null (9) then
-         Object.Inviter.Set_Key_Value (Stmt.Get_Identifier (9), Session);
-      end if;
-      Object.Version := Stmt.Get_Integer (1);
-      ADO.Objects.Set_Created (Object);
-   end Load;
-   function Workspace_Feature_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
-                                       Of_Class => WORKSPACE_FEATURE_DEF'Access);
-   begin
-      ADO.Objects.Set_Value (Result, Id);
-      return Result;
-   end Workspace_Feature_Key;
-
-   function Workspace_Feature_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
-                                       Of_Class => WORKSPACE_FEATURE_DEF'Access);
-   begin
-      ADO.Objects.Set_Value (Result, Id);
-      return Result;
-   end Workspace_Feature_Key;
-
-   function "=" (Left, Right : Workspace_Feature_Ref'Class) return Boolean is
-   begin
-      return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
-   end "=";
-
-   procedure Set_Field (Object : in out Workspace_Feature_Ref'Class;
-                        Impl   : out Workspace_Feature_Access) is
-      Result : ADO.Objects.Object_Record_Access;
-   begin
-      Object.Prepare_Modify (Result);
-      Impl := Workspace_Feature_Impl (Result.all)'Access;
-   end Set_Field;
-
-   --  Internal method to allocate the Object_Record instance
-   procedure Allocate (Object : in out Workspace_Feature_Ref) is
-      Impl : Workspace_Feature_Access;
-   begin
-      Impl := new Workspace_Feature_Impl;
-      Impl.Limit := 0;
-      ADO.Objects.Set_Object (Object, Impl.all'Access);
-   end Allocate;
-
-   -- ----------------------------------------
-   --  Data object: Workspace_Feature
-   -- ----------------------------------------
-
-   procedure Set_Id (Object : in out Workspace_Feature_Ref;
-                     Value  : in ADO.Identifier) is
-      Impl : Workspace_Feature_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
-   end Set_Id;
-
-   function Get_Id (Object : in Workspace_Feature_Ref)
-                  return ADO.Identifier is
-      Impl : constant Workspace_Feature_Access
-         := Workspace_Feature_Impl (Object.Get_Object.all)'Access;
-   begin
-      return Impl.Get_Key_Value;
-   end Get_Id;
-
-
-   procedure Set_Limit (Object : in out Workspace_Feature_Ref;
-                        Value  : in Integer) is
-      Impl : Workspace_Feature_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Integer (Impl.all, 2, Impl.Limit, Value);
-   end Set_Limit;
-
-   function Get_Limit (Object : in Workspace_Feature_Ref)
-                  return Integer is
-      Impl : constant Workspace_Feature_Access
-         := Workspace_Feature_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Limit;
-   end Get_Limit;
-
-
-   procedure Set_Workspace (Object : in out Workspace_Feature_Ref;
-                            Value  : in AWA.Workspaces.Models.Workspace_Ref'Class) is
-      Impl : Workspace_Feature_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 3, Impl.Workspace, Value);
-   end Set_Workspace;
-
-   function Get_Workspace (Object : in Workspace_Feature_Ref)
-                  return AWA.Workspaces.Models.Workspace_Ref'Class is
-      Impl : constant Workspace_Feature_Access
-         := Workspace_Feature_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Workspace;
-   end Get_Workspace;
-
-   --  Copy of the object.
-   procedure Copy (Object : in Workspace_Feature_Ref;
-                   Into   : in out Workspace_Feature_Ref) is
-      Result : Workspace_Feature_Ref;
-   begin
-      if not Object.Is_Null then
-         declare
-            Impl : constant Workspace_Feature_Access
-              := Workspace_Feature_Impl (Object.Get_Load_Object.all)'Access;
-            Copy : constant Workspace_Feature_Access
-              := new Workspace_Feature_Impl;
-         begin
-            ADO.Objects.Set_Object (Result, Copy.all'Access);
-            Copy.Copy (Impl.all);
-            Copy.Limit := Impl.Limit;
-            Copy.Workspace := Impl.Workspace;
-         end;
-      end if;
-      Into := Result;
-   end Copy;
-
-   procedure Find (Object  : in out Workspace_Feature_Ref;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class;
-                   Found   : out Boolean) is
-      Impl  : constant Workspace_Feature_Access := new Workspace_Feature_Impl;
-   begin
-      Impl.Find (Session, Query, Found);
-      if Found then
-         ADO.Objects.Set_Object (Object, Impl.all'Access);
-      else
-         ADO.Objects.Set_Object (Object, null);
-         Destroy (Impl);
-      end if;
-   end Find;
-
-   procedure Load (Object  : in out Workspace_Feature_Ref;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Id      : in ADO.Identifier) is
-      Impl  : constant Workspace_Feature_Access := new Workspace_Feature_Impl;
-      Found : Boolean;
-      Query : ADO.SQL.Query;
-   begin
-      Query.Bind_Param (Position => 1, Value => Id);
-      Query.Set_Filter ("id = ?");
-      Impl.Find (Session, Query, Found);
-      if not Found then
-         Destroy (Impl);
-         raise ADO.Objects.NOT_FOUND;
-      end if;
-      ADO.Objects.Set_Object (Object, Impl.all'Access);
-   end Load;
-
-   procedure Load (Object  : in out Workspace_Feature_Ref;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Id      : in ADO.Identifier;
-                   Found   : out Boolean) is
-      Impl  : constant Workspace_Feature_Access := new Workspace_Feature_Impl;
-      Query : ADO.SQL.Query;
-   begin
-      Query.Bind_Param (Position => 1, Value => Id);
-      Query.Set_Filter ("id = ?");
-      Impl.Find (Session, Query, Found);
-      if not Found then
-         Destroy (Impl);
-      else
-         ADO.Objects.Set_Object (Object, Impl.all'Access);
-      end if;
-   end Load;
-
-   procedure Save (Object  : in out Workspace_Feature_Ref;
-                   Session : in out ADO.Sessions.Master_Session'Class) is
-      Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
-   begin
-      if Impl = null then
-         Impl := new Workspace_Feature_Impl;
-         ADO.Objects.Set_Object (Object, Impl);
-      end if;
-      if not ADO.Objects.Is_Created (Impl.all) then
-         Impl.Create (Session);
-      else
-         Impl.Save (Session);
-      end if;
-   end Save;
-
-   procedure Delete (Object  : in out Workspace_Feature_Ref;
-                     Session : in out ADO.Sessions.Master_Session'Class) is
-      Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
-   begin
-      if Impl /= null then
-         Impl.Delete (Session);
-      end if;
-   end Delete;
-
-   --  --------------------
-   --  Free the object
-   --  --------------------
-   procedure Destroy (Object : access Workspace_Feature_Impl) is
-      type Workspace_Feature_Impl_Ptr is access all Workspace_Feature_Impl;
-      procedure Unchecked_Free is new Ada.Unchecked_Deallocation
-              (Workspace_Feature_Impl, Workspace_Feature_Impl_Ptr);
-      pragma Warnings (Off, "*redundant conversion*");
-      Ptr : Workspace_Feature_Impl_Ptr := Workspace_Feature_Impl (Object.all)'Access;
-      pragma Warnings (On, "*redundant conversion*");
-   begin
-      Unchecked_Free (Ptr);
-   end Destroy;
-
-   procedure Find (Object  : in out Workspace_Feature_Impl;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class;
-                   Found   : out Boolean) is
-      Stmt : ADO.Statements.Query_Statement
-          := Session.Create_Statement (Query, WORKSPACE_FEATURE_DEF'Access);
-   begin
-      Stmt.Execute;
-      if Stmt.Has_Elements then
-         Object.Load (Stmt, Session);
-         Stmt.Next;
-         Found := not Stmt.Has_Elements;
-      else
-         Found := False;
-      end if;
-   end Find;
-
-   overriding
-   procedure Load (Object  : in out Workspace_Feature_Impl;
-                   Session : in out ADO.Sessions.Session'Class) is
-      Found : Boolean;
-      Query : ADO.SQL.Query;
-      Id    : constant ADO.Identifier := Object.Get_Key_Value;
-   begin
-      Query.Bind_Param (Position => 1, Value => Id);
-      Query.Set_Filter ("id = ?");
-      Object.Find (Session, Query, Found);
-      if not Found then
-         raise ADO.Objects.NOT_FOUND;
-      end if;
-   end Load;
-
-   procedure Save (Object  : in out Workspace_Feature_Impl;
-                   Session : in out ADO.Sessions.Master_Session'Class) is
-      Stmt : ADO.Statements.Update_Statement
-         := Session.Create_Statement (WORKSPACE_FEATURE_DEF'Access);
-   begin
-      if Object.Is_Modified (1) then
-         Stmt.Save_Field (Name  => COL_0_3_NAME, --  id
-                          Value => Object.Get_Key);
-         Object.Clear_Modified (1);
-      end if;
-      if Object.Is_Modified (2) then
-         Stmt.Save_Field (Name  => COL_1_3_NAME, --  limit
-                          Value => Object.Limit);
-         Object.Clear_Modified (2);
-      end if;
-      if Object.Is_Modified (3) then
-         Stmt.Save_Field (Name  => COL_2_3_NAME, --  workspace_id
-                          Value => Object.Workspace);
-         Object.Clear_Modified (3);
-      end if;
-      if Stmt.Has_Save_Fields then
-         Stmt.Set_Filter (Filter => "id = ?");
-         Stmt.Add_Param (Value => Object.Get_Key);
-         declare
-            Result : Integer;
-         begin
-            Stmt.Execute (Result);
-            if Result /= 1 then
-               if Result /= 0 then
-                  raise ADO.Objects.UPDATE_ERROR;
-               end if;
-            end if;
-         end;
-      end if;
-   end Save;
-
-   procedure Create (Object  : in out Workspace_Feature_Impl;
-                     Session : in out ADO.Sessions.Master_Session'Class) is
-      Query : ADO.Statements.Insert_Statement
-                  := Session.Create_Statement (WORKSPACE_FEATURE_DEF'Access);
-      Result : Integer;
-   begin
-      Session.Allocate (Id => Object);
-      Query.Save_Field (Name  => COL_0_3_NAME, --  id
-                        Value => Object.Get_Key);
-      Query.Save_Field (Name  => COL_1_3_NAME, --  limit
-                        Value => Object.Limit);
-      Query.Save_Field (Name  => COL_2_3_NAME, --  workspace_id
-                        Value => Object.Workspace);
-      Query.Execute (Result);
-      if Result /= 1 then
-         raise ADO.Objects.INSERT_ERROR;
-      end if;
-      ADO.Objects.Set_Created (Object);
-   end Create;
-
-   procedure Delete (Object  : in out Workspace_Feature_Impl;
-                     Session : in out ADO.Sessions.Master_Session'Class) is
-      Stmt : ADO.Statements.Delete_Statement
-         := Session.Create_Statement (WORKSPACE_FEATURE_DEF'Access);
-   begin
-      Stmt.Set_Filter (Filter => "id = ?");
-      Stmt.Add_Param (Value => Object.Get_Key);
-      Stmt.Execute;
-   end Delete;
-
-   --  ------------------------------
-   --  Get the bean attribute identified by the name.
-   --  ------------------------------
-   overriding
-   function Get_Value (From : in Workspace_Feature_Ref;
-                       Name : in String) return Util.Beans.Objects.Object is
-      Obj  : ADO.Objects.Object_Record_Access;
-      Impl : access Workspace_Feature_Impl;
-   begin
-      if From.Is_Null then
-         return Util.Beans.Objects.Null_Object;
-      end if;
-      Obj := From.Get_Load_Object;
-      Impl := Workspace_Feature_Impl (Obj.all)'Access;
-      if Name = "id" then
-         return ADO.Objects.To_Object (Impl.Get_Key);
-      elsif Name = "limit" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Limit));
-      end if;
-      return Util.Beans.Objects.Null_Object;
-   end Get_Value;
-
-
-
-   --  ------------------------------
-   --  Load the object from current iterator position
-   --  ------------------------------
-   procedure Load (Object  : in out Workspace_Feature_Impl;
-                   Stmt    : in out ADO.Statements.Query_Statement'Class;
-                   Session : in out ADO.Sessions.Session'Class) is
-   begin
-      Object.Set_Key_Value (Stmt.Get_Identifier (0));
-      Object.Limit := Stmt.Get_Integer (1);
-      if not Stmt.Is_Null (2) then
-         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (2), Session);
-      end if;
-      ADO.Objects.Set_Created (Object);
-   end Load;
    function Workspace_Member_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
       Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => WORKSPACE_MEMBER_DEF'Access);
@@ -1567,27 +675,27 @@ package body AWA.Workspaces.Models is
          := Session.Create_Statement (WORKSPACE_MEMBER_DEF'Access);
    begin
       if Object.Is_Modified (1) then
-         Stmt.Save_Field (Name  => COL_0_4_NAME, --  id
+         Stmt.Save_Field (Name  => COL_0_2_NAME, --  id
                           Value => Object.Get_Key);
          Object.Clear_Modified (1);
       end if;
       if Object.Is_Modified (2) then
-         Stmt.Save_Field (Name  => COL_1_4_NAME, --  join_date
+         Stmt.Save_Field (Name  => COL_1_2_NAME, --  join_date
                           Value => Object.Join_Date);
          Object.Clear_Modified (2);
       end if;
       if Object.Is_Modified (3) then
-         Stmt.Save_Field (Name  => COL_2_4_NAME, --  role
+         Stmt.Save_Field (Name  => COL_2_2_NAME, --  role
                           Value => Object.Role);
          Object.Clear_Modified (3);
       end if;
       if Object.Is_Modified (4) then
-         Stmt.Save_Field (Name  => COL_3_4_NAME, --  member_id
+         Stmt.Save_Field (Name  => COL_3_2_NAME, --  member_id
                           Value => Object.Member);
          Object.Clear_Modified (4);
       end if;
       if Object.Is_Modified (5) then
-         Stmt.Save_Field (Name  => COL_4_4_NAME, --  workspace_id
+         Stmt.Save_Field (Name  => COL_4_2_NAME, --  workspace_id
                           Value => Object.Workspace);
          Object.Clear_Modified (5);
       end if;
@@ -1614,15 +722,15 @@ package body AWA.Workspaces.Models is
       Result : Integer;
    begin
       Session.Allocate (Id => Object);
-      Query.Save_Field (Name  => COL_0_4_NAME, --  id
+      Query.Save_Field (Name  => COL_0_2_NAME, --  id
                         Value => Object.Get_Key);
-      Query.Save_Field (Name  => COL_1_4_NAME, --  join_date
+      Query.Save_Field (Name  => COL_1_2_NAME, --  join_date
                         Value => Object.Join_Date);
-      Query.Save_Field (Name  => COL_2_4_NAME, --  role
+      Query.Save_Field (Name  => COL_2_2_NAME, --  role
                         Value => Object.Role);
-      Query.Save_Field (Name  => COL_3_4_NAME, --  member_id
+      Query.Save_Field (Name  => COL_3_2_NAME, --  member_id
                         Value => Object.Member);
-      Query.Save_Field (Name  => COL_4_4_NAME, --  workspace_id
+      Query.Save_Field (Name  => COL_4_2_NAME, --  workspace_id
                         Value => Object.Workspace);
       Query.Execute (Result);
       if Result /= 1 then
@@ -1686,6 +794,926 @@ package body AWA.Workspaces.Models is
       end if;
       if not Stmt.Is_Null (4) then
          Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (4), Session);
+      end if;
+      ADO.Objects.Set_Created (Object);
+   end Load;
+   function Invitation_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
+                                       Of_Class => INVITATION_DEF'Access);
+   begin
+      ADO.Objects.Set_Value (Result, Id);
+      return Result;
+   end Invitation_Key;
+
+   function Invitation_Key (Id : in String) return ADO.Objects.Object_Key is
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
+                                       Of_Class => INVITATION_DEF'Access);
+   begin
+      ADO.Objects.Set_Value (Result, Id);
+      return Result;
+   end Invitation_Key;
+
+   function "=" (Left, Right : Invitation_Ref'Class) return Boolean is
+   begin
+      return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
+   end "=";
+
+   procedure Set_Field (Object : in out Invitation_Ref'Class;
+                        Impl   : out Invitation_Access) is
+      Result : ADO.Objects.Object_Record_Access;
+   begin
+      Object.Prepare_Modify (Result);
+      Impl := Invitation_Impl (Result.all)'Access;
+   end Set_Field;
+
+   --  Internal method to allocate the Object_Record instance
+   procedure Allocate (Object : in out Invitation_Ref) is
+      Impl : Invitation_Access;
+   begin
+      Impl := new Invitation_Impl;
+      Impl.Version := 0;
+      Impl.Create_Date := ADO.DEFAULT_TIME;
+      Impl.Acceptance_Date.Is_Null := True;
+      ADO.Objects.Set_Object (Object, Impl.all'Access);
+   end Allocate;
+
+   -- ----------------------------------------
+   --  Data object: Invitation
+   -- ----------------------------------------
+
+   procedure Set_Id (Object : in out Invitation_Ref;
+                     Value  : in ADO.Identifier) is
+      Impl : Invitation_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
+   end Set_Id;
+
+   function Get_Id (Object : in Invitation_Ref)
+                  return ADO.Identifier is
+      Impl : constant Invitation_Access
+         := Invitation_Impl (Object.Get_Object.all)'Access;
+   begin
+      return Impl.Get_Key_Value;
+   end Get_Id;
+
+
+   function Get_Version (Object : in Invitation_Ref)
+                  return Integer is
+      Impl : constant Invitation_Access
+         := Invitation_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Version;
+   end Get_Version;
+
+
+   procedure Set_Create_Date (Object : in out Invitation_Ref;
+                              Value  : in Ada.Calendar.Time) is
+      Impl : Invitation_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Time (Impl.all, 3, Impl.Create_Date, Value);
+   end Set_Create_Date;
+
+   function Get_Create_Date (Object : in Invitation_Ref)
+                  return Ada.Calendar.Time is
+      Impl : constant Invitation_Access
+         := Invitation_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Create_Date;
+   end Get_Create_Date;
+
+
+   procedure Set_Email (Object : in out Invitation_Ref;
+                         Value : in String) is
+      Impl : Invitation_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_String (Impl.all, 4, Impl.Email, Value);
+   end Set_Email;
+
+   procedure Set_Email (Object : in out Invitation_Ref;
+                        Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : Invitation_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 4, Impl.Email, Value);
+   end Set_Email;
+
+   function Get_Email (Object : in Invitation_Ref)
+                 return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (Object.Get_Email);
+   end Get_Email;
+   function Get_Email (Object : in Invitation_Ref)
+                  return Ada.Strings.Unbounded.Unbounded_String is
+      Impl : constant Invitation_Access
+         := Invitation_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Email;
+   end Get_Email;
+
+
+   procedure Set_Message (Object : in out Invitation_Ref;
+                           Value : in String) is
+      Impl : Invitation_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_String (Impl.all, 5, Impl.Message, Value);
+   end Set_Message;
+
+   procedure Set_Message (Object : in out Invitation_Ref;
+                          Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : Invitation_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 5, Impl.Message, Value);
+   end Set_Message;
+
+   function Get_Message (Object : in Invitation_Ref)
+                 return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (Object.Get_Message);
+   end Get_Message;
+   function Get_Message (Object : in Invitation_Ref)
+                  return Ada.Strings.Unbounded.Unbounded_String is
+      Impl : constant Invitation_Access
+         := Invitation_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Message;
+   end Get_Message;
+
+
+   procedure Set_Acceptance_Date (Object : in out Invitation_Ref;
+                                  Value  : in ADO.Nullable_Time) is
+      Impl : Invitation_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Time (Impl.all, 6, Impl.Acceptance_Date, Value);
+   end Set_Acceptance_Date;
+
+   function Get_Acceptance_Date (Object : in Invitation_Ref)
+                  return ADO.Nullable_Time is
+      Impl : constant Invitation_Access
+         := Invitation_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Acceptance_Date;
+   end Get_Acceptance_Date;
+
+
+   procedure Set_Workspace (Object : in out Invitation_Ref;
+                            Value  : in AWA.Workspaces.Models.Workspace_Ref'Class) is
+      Impl : Invitation_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 7, Impl.Workspace, Value);
+   end Set_Workspace;
+
+   function Get_Workspace (Object : in Invitation_Ref)
+                  return AWA.Workspaces.Models.Workspace_Ref'Class is
+      Impl : constant Invitation_Access
+         := Invitation_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Workspace;
+   end Get_Workspace;
+
+
+   procedure Set_Access_Key (Object : in out Invitation_Ref;
+                             Value  : in AWA.Users.Models.Access_Key_Ref'Class) is
+      Impl : Invitation_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 8, Impl.Access_Key, Value);
+   end Set_Access_Key;
+
+   function Get_Access_Key (Object : in Invitation_Ref)
+                  return AWA.Users.Models.Access_Key_Ref'Class is
+      Impl : constant Invitation_Access
+         := Invitation_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Access_Key;
+   end Get_Access_Key;
+
+
+   procedure Set_Invitee (Object : in out Invitation_Ref;
+                          Value  : in AWA.Users.Models.User_Ref'Class) is
+      Impl : Invitation_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 9, Impl.Invitee, Value);
+   end Set_Invitee;
+
+   function Get_Invitee (Object : in Invitation_Ref)
+                  return AWA.Users.Models.User_Ref'Class is
+      Impl : constant Invitation_Access
+         := Invitation_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Invitee;
+   end Get_Invitee;
+
+
+   procedure Set_Inviter (Object : in out Invitation_Ref;
+                          Value  : in AWA.Users.Models.User_Ref'Class) is
+      Impl : Invitation_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 10, Impl.Inviter, Value);
+   end Set_Inviter;
+
+   function Get_Inviter (Object : in Invitation_Ref)
+                  return AWA.Users.Models.User_Ref'Class is
+      Impl : constant Invitation_Access
+         := Invitation_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Inviter;
+   end Get_Inviter;
+
+
+   procedure Set_Member (Object : in out Invitation_Ref;
+                         Value  : in AWA.Workspaces.Models.Workspace_Member_Ref'Class) is
+      Impl : Invitation_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 11, Impl.Member, Value);
+   end Set_Member;
+
+   function Get_Member (Object : in Invitation_Ref)
+                  return AWA.Workspaces.Models.Workspace_Member_Ref'Class is
+      Impl : constant Invitation_Access
+         := Invitation_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Member;
+   end Get_Member;
+
+   --  Copy of the object.
+   procedure Copy (Object : in Invitation_Ref;
+                   Into   : in out Invitation_Ref) is
+      Result : Invitation_Ref;
+   begin
+      if not Object.Is_Null then
+         declare
+            Impl : constant Invitation_Access
+              := Invitation_Impl (Object.Get_Load_Object.all)'Access;
+            Copy : constant Invitation_Access
+              := new Invitation_Impl;
+         begin
+            ADO.Objects.Set_Object (Result, Copy.all'Access);
+            Copy.Copy (Impl.all);
+            Copy.Version := Impl.Version;
+            Copy.Create_Date := Impl.Create_Date;
+            Copy.Email := Impl.Email;
+            Copy.Message := Impl.Message;
+            Copy.Acceptance_Date := Impl.Acceptance_Date;
+            Copy.Workspace := Impl.Workspace;
+            Copy.Access_Key := Impl.Access_Key;
+            Copy.Invitee := Impl.Invitee;
+            Copy.Inviter := Impl.Inviter;
+            Copy.Member := Impl.Member;
+         end;
+      end if;
+      Into := Result;
+   end Copy;
+
+   procedure Find (Object  : in out Invitation_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean) is
+      Impl  : constant Invitation_Access := new Invitation_Impl;
+   begin
+      Impl.Find (Session, Query, Found);
+      if Found then
+         ADO.Objects.Set_Object (Object, Impl.all'Access);
+      else
+         ADO.Objects.Set_Object (Object, null);
+         Destroy (Impl);
+      end if;
+   end Find;
+
+   procedure Load (Object  : in out Invitation_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier) is
+      Impl  : constant Invitation_Access := new Invitation_Impl;
+      Found : Boolean;
+      Query : ADO.SQL.Query;
+   begin
+      Query.Bind_Param (Position => 1, Value => Id);
+      Query.Set_Filter ("id = ?");
+      Impl.Find (Session, Query, Found);
+      if not Found then
+         Destroy (Impl);
+         raise ADO.Objects.NOT_FOUND;
+      end if;
+      ADO.Objects.Set_Object (Object, Impl.all'Access);
+   end Load;
+
+   procedure Load (Object  : in out Invitation_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier;
+                   Found   : out Boolean) is
+      Impl  : constant Invitation_Access := new Invitation_Impl;
+      Query : ADO.SQL.Query;
+   begin
+      Query.Bind_Param (Position => 1, Value => Id);
+      Query.Set_Filter ("id = ?");
+      Impl.Find (Session, Query, Found);
+      if not Found then
+         Destroy (Impl);
+      else
+         ADO.Objects.Set_Object (Object, Impl.all'Access);
+      end if;
+   end Load;
+
+   procedure Save (Object  : in out Invitation_Ref;
+                   Session : in out ADO.Sessions.Master_Session'Class) is
+      Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
+   begin
+      if Impl = null then
+         Impl := new Invitation_Impl;
+         ADO.Objects.Set_Object (Object, Impl);
+      end if;
+      if not ADO.Objects.Is_Created (Impl.all) then
+         Impl.Create (Session);
+      else
+         Impl.Save (Session);
+      end if;
+   end Save;
+
+   procedure Delete (Object  : in out Invitation_Ref;
+                     Session : in out ADO.Sessions.Master_Session'Class) is
+      Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
+   begin
+      if Impl /= null then
+         Impl.Delete (Session);
+      end if;
+   end Delete;
+
+   --  --------------------
+   --  Free the object
+   --  --------------------
+   procedure Destroy (Object : access Invitation_Impl) is
+      type Invitation_Impl_Ptr is access all Invitation_Impl;
+      procedure Unchecked_Free is new Ada.Unchecked_Deallocation
+              (Invitation_Impl, Invitation_Impl_Ptr);
+      pragma Warnings (Off, "*redundant conversion*");
+      Ptr : Invitation_Impl_Ptr := Invitation_Impl (Object.all)'Access;
+      pragma Warnings (On, "*redundant conversion*");
+   begin
+      Unchecked_Free (Ptr);
+   end Destroy;
+
+   procedure Find (Object  : in out Invitation_Impl;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean) is
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Query, INVITATION_DEF'Access);
+   begin
+      Stmt.Execute;
+      if Stmt.Has_Elements then
+         Object.Load (Stmt, Session);
+         Stmt.Next;
+         Found := not Stmt.Has_Elements;
+      else
+         Found := False;
+      end if;
+   end Find;
+
+   overriding
+   procedure Load (Object  : in out Invitation_Impl;
+                   Session : in out ADO.Sessions.Session'Class) is
+      Found : Boolean;
+      Query : ADO.SQL.Query;
+      Id    : constant ADO.Identifier := Object.Get_Key_Value;
+   begin
+      Query.Bind_Param (Position => 1, Value => Id);
+      Query.Set_Filter ("id = ?");
+      Object.Find (Session, Query, Found);
+      if not Found then
+         raise ADO.Objects.NOT_FOUND;
+      end if;
+   end Load;
+
+   procedure Save (Object  : in out Invitation_Impl;
+                   Session : in out ADO.Sessions.Master_Session'Class) is
+      Stmt : ADO.Statements.Update_Statement
+         := Session.Create_Statement (INVITATION_DEF'Access);
+   begin
+      if Object.Is_Modified (1) then
+         Stmt.Save_Field (Name  => COL_0_3_NAME, --  id
+                          Value => Object.Get_Key);
+         Object.Clear_Modified (1);
+      end if;
+      if Object.Is_Modified (3) then
+         Stmt.Save_Field (Name  => COL_2_3_NAME, --  create_date
+                          Value => Object.Create_Date);
+         Object.Clear_Modified (3);
+      end if;
+      if Object.Is_Modified (4) then
+         Stmt.Save_Field (Name  => COL_3_3_NAME, --  email
+                          Value => Object.Email);
+         Object.Clear_Modified (4);
+      end if;
+      if Object.Is_Modified (5) then
+         Stmt.Save_Field (Name  => COL_4_3_NAME, --  message
+                          Value => Object.Message);
+         Object.Clear_Modified (5);
+      end if;
+      if Object.Is_Modified (6) then
+         Stmt.Save_Field (Name  => COL_5_3_NAME, --  acceptance_date
+                          Value => Object.Acceptance_Date);
+         Object.Clear_Modified (6);
+      end if;
+      if Object.Is_Modified (7) then
+         Stmt.Save_Field (Name  => COL_6_3_NAME, --  workspace_id
+                          Value => Object.Workspace);
+         Object.Clear_Modified (7);
+      end if;
+      if Object.Is_Modified (8) then
+         Stmt.Save_Field (Name  => COL_7_3_NAME, --  access_key_id
+                          Value => Object.Access_Key);
+         Object.Clear_Modified (8);
+      end if;
+      if Object.Is_Modified (9) then
+         Stmt.Save_Field (Name  => COL_8_3_NAME, --  invitee_id
+                          Value => Object.Invitee);
+         Object.Clear_Modified (9);
+      end if;
+      if Object.Is_Modified (10) then
+         Stmt.Save_Field (Name  => COL_9_3_NAME, --  inviter_id
+                          Value => Object.Inviter);
+         Object.Clear_Modified (10);
+      end if;
+      if Object.Is_Modified (11) then
+         Stmt.Save_Field (Name  => COL_10_3_NAME, --  member_id
+                          Value => Object.Member);
+         Object.Clear_Modified (11);
+      end if;
+      if Stmt.Has_Save_Fields then
+         Object.Version := Object.Version + 1;
+         Stmt.Save_Field (Name  => "version",
+                          Value => Object.Version);
+         Stmt.Set_Filter (Filter => "id = ? and version = ?");
+         Stmt.Add_Param (Value => Object.Get_Key);
+         Stmt.Add_Param (Value => Object.Version - 1);
+         declare
+            Result : Integer;
+         begin
+            Stmt.Execute (Result);
+            if Result /= 1 then
+               if Result /= 0 then
+                  raise ADO.Objects.UPDATE_ERROR;
+               else
+                  raise ADO.Objects.LAZY_LOCK;
+               end if;
+            end if;
+         end;
+      end if;
+   end Save;
+
+   procedure Create (Object  : in out Invitation_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class) is
+      Query : ADO.Statements.Insert_Statement
+                  := Session.Create_Statement (INVITATION_DEF'Access);
+      Result : Integer;
+   begin
+      Object.Version := 1;
+      Session.Allocate (Id => Object);
+      Query.Save_Field (Name  => COL_0_3_NAME, --  id
+                        Value => Object.Get_Key);
+      Query.Save_Field (Name  => COL_1_3_NAME, --  version
+                        Value => Object.Version);
+      Query.Save_Field (Name  => COL_2_3_NAME, --  create_date
+                        Value => Object.Create_Date);
+      Query.Save_Field (Name  => COL_3_3_NAME, --  email
+                        Value => Object.Email);
+      Query.Save_Field (Name  => COL_4_3_NAME, --  message
+                        Value => Object.Message);
+      Query.Save_Field (Name  => COL_5_3_NAME, --  acceptance_date
+                        Value => Object.Acceptance_Date);
+      Query.Save_Field (Name  => COL_6_3_NAME, --  workspace_id
+                        Value => Object.Workspace);
+      Query.Save_Field (Name  => COL_7_3_NAME, --  access_key_id
+                        Value => Object.Access_Key);
+      Query.Save_Field (Name  => COL_8_3_NAME, --  invitee_id
+                        Value => Object.Invitee);
+      Query.Save_Field (Name  => COL_9_3_NAME, --  inviter_id
+                        Value => Object.Inviter);
+      Query.Save_Field (Name  => COL_10_3_NAME, --  member_id
+                        Value => Object.Member);
+      Query.Execute (Result);
+      if Result /= 1 then
+         raise ADO.Objects.INSERT_ERROR;
+      end if;
+      ADO.Objects.Set_Created (Object);
+   end Create;
+
+   procedure Delete (Object  : in out Invitation_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class) is
+      Stmt : ADO.Statements.Delete_Statement
+         := Session.Create_Statement (INVITATION_DEF'Access);
+   begin
+      Stmt.Set_Filter (Filter => "id = ?");
+      Stmt.Add_Param (Value => Object.Get_Key);
+      Stmt.Execute;
+   end Delete;
+
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Invitation_Ref;
+                       Name : in String) return Util.Beans.Objects.Object is
+      Obj  : ADO.Objects.Object_Record_Access;
+      Impl : access Invitation_Impl;
+   begin
+      if From.Is_Null then
+         return Util.Beans.Objects.Null_Object;
+      end if;
+      Obj := From.Get_Load_Object;
+      Impl := Invitation_Impl (Obj.all)'Access;
+      if Name = "id" then
+         return ADO.Objects.To_Object (Impl.Get_Key);
+      elsif Name = "create_date" then
+         return Util.Beans.Objects.Time.To_Object (Impl.Create_Date);
+      elsif Name = "email" then
+         return Util.Beans.Objects.To_Object (Impl.Email);
+      elsif Name = "message" then
+         return Util.Beans.Objects.To_Object (Impl.Message);
+      elsif Name = "acceptance_date" then
+         if Impl.Acceptance_Date.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.Time.To_Object (Impl.Acceptance_Date.Value);
+         end if;
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+
+
+   --  ------------------------------
+   --  Load the object from current iterator position
+   --  ------------------------------
+   procedure Load (Object  : in out Invitation_Impl;
+                   Stmt    : in out ADO.Statements.Query_Statement'Class;
+                   Session : in out ADO.Sessions.Session'Class) is
+   begin
+      Object.Set_Key_Value (Stmt.Get_Identifier (0));
+      Object.Create_Date := Stmt.Get_Time (2);
+      Object.Email := Stmt.Get_Unbounded_String (3);
+      Object.Message := Stmt.Get_Unbounded_String (4);
+      Object.Acceptance_Date := Stmt.Get_Time (5);
+      if not Stmt.Is_Null (6) then
+         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (6), Session);
+      end if;
+      if not Stmt.Is_Null (7) then
+         Object.Access_Key.Set_Key_Value (Stmt.Get_Identifier (7), Session);
+      end if;
+      if not Stmt.Is_Null (8) then
+         Object.Invitee.Set_Key_Value (Stmt.Get_Identifier (8), Session);
+      end if;
+      if not Stmt.Is_Null (9) then
+         Object.Inviter.Set_Key_Value (Stmt.Get_Identifier (9), Session);
+      end if;
+      if not Stmt.Is_Null (10) then
+         Object.Member.Set_Key_Value (Stmt.Get_Identifier (10), Session);
+      end if;
+      Object.Version := Stmt.Get_Integer (1);
+      ADO.Objects.Set_Created (Object);
+   end Load;
+   function Workspace_Feature_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
+                                       Of_Class => WORKSPACE_FEATURE_DEF'Access);
+   begin
+      ADO.Objects.Set_Value (Result, Id);
+      return Result;
+   end Workspace_Feature_Key;
+
+   function Workspace_Feature_Key (Id : in String) return ADO.Objects.Object_Key is
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
+                                       Of_Class => WORKSPACE_FEATURE_DEF'Access);
+   begin
+      ADO.Objects.Set_Value (Result, Id);
+      return Result;
+   end Workspace_Feature_Key;
+
+   function "=" (Left, Right : Workspace_Feature_Ref'Class) return Boolean is
+   begin
+      return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
+   end "=";
+
+   procedure Set_Field (Object : in out Workspace_Feature_Ref'Class;
+                        Impl   : out Workspace_Feature_Access) is
+      Result : ADO.Objects.Object_Record_Access;
+   begin
+      Object.Prepare_Modify (Result);
+      Impl := Workspace_Feature_Impl (Result.all)'Access;
+   end Set_Field;
+
+   --  Internal method to allocate the Object_Record instance
+   procedure Allocate (Object : in out Workspace_Feature_Ref) is
+      Impl : Workspace_Feature_Access;
+   begin
+      Impl := new Workspace_Feature_Impl;
+      Impl.Limit := 0;
+      ADO.Objects.Set_Object (Object, Impl.all'Access);
+   end Allocate;
+
+   -- ----------------------------------------
+   --  Data object: Workspace_Feature
+   -- ----------------------------------------
+
+   procedure Set_Id (Object : in out Workspace_Feature_Ref;
+                     Value  : in ADO.Identifier) is
+      Impl : Workspace_Feature_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
+   end Set_Id;
+
+   function Get_Id (Object : in Workspace_Feature_Ref)
+                  return ADO.Identifier is
+      Impl : constant Workspace_Feature_Access
+         := Workspace_Feature_Impl (Object.Get_Object.all)'Access;
+   begin
+      return Impl.Get_Key_Value;
+   end Get_Id;
+
+
+   procedure Set_Limit (Object : in out Workspace_Feature_Ref;
+                        Value  : in Integer) is
+      Impl : Workspace_Feature_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Integer (Impl.all, 2, Impl.Limit, Value);
+   end Set_Limit;
+
+   function Get_Limit (Object : in Workspace_Feature_Ref)
+                  return Integer is
+      Impl : constant Workspace_Feature_Access
+         := Workspace_Feature_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Limit;
+   end Get_Limit;
+
+
+   procedure Set_Workspace (Object : in out Workspace_Feature_Ref;
+                            Value  : in AWA.Workspaces.Models.Workspace_Ref'Class) is
+      Impl : Workspace_Feature_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 3, Impl.Workspace, Value);
+   end Set_Workspace;
+
+   function Get_Workspace (Object : in Workspace_Feature_Ref)
+                  return AWA.Workspaces.Models.Workspace_Ref'Class is
+      Impl : constant Workspace_Feature_Access
+         := Workspace_Feature_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Workspace;
+   end Get_Workspace;
+
+   --  Copy of the object.
+   procedure Copy (Object : in Workspace_Feature_Ref;
+                   Into   : in out Workspace_Feature_Ref) is
+      Result : Workspace_Feature_Ref;
+   begin
+      if not Object.Is_Null then
+         declare
+            Impl : constant Workspace_Feature_Access
+              := Workspace_Feature_Impl (Object.Get_Load_Object.all)'Access;
+            Copy : constant Workspace_Feature_Access
+              := new Workspace_Feature_Impl;
+         begin
+            ADO.Objects.Set_Object (Result, Copy.all'Access);
+            Copy.Copy (Impl.all);
+            Copy.Limit := Impl.Limit;
+            Copy.Workspace := Impl.Workspace;
+         end;
+      end if;
+      Into := Result;
+   end Copy;
+
+   procedure Find (Object  : in out Workspace_Feature_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean) is
+      Impl  : constant Workspace_Feature_Access := new Workspace_Feature_Impl;
+   begin
+      Impl.Find (Session, Query, Found);
+      if Found then
+         ADO.Objects.Set_Object (Object, Impl.all'Access);
+      else
+         ADO.Objects.Set_Object (Object, null);
+         Destroy (Impl);
+      end if;
+   end Find;
+
+   procedure Load (Object  : in out Workspace_Feature_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier) is
+      Impl  : constant Workspace_Feature_Access := new Workspace_Feature_Impl;
+      Found : Boolean;
+      Query : ADO.SQL.Query;
+   begin
+      Query.Bind_Param (Position => 1, Value => Id);
+      Query.Set_Filter ("id = ?");
+      Impl.Find (Session, Query, Found);
+      if not Found then
+         Destroy (Impl);
+         raise ADO.Objects.NOT_FOUND;
+      end if;
+      ADO.Objects.Set_Object (Object, Impl.all'Access);
+   end Load;
+
+   procedure Load (Object  : in out Workspace_Feature_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier;
+                   Found   : out Boolean) is
+      Impl  : constant Workspace_Feature_Access := new Workspace_Feature_Impl;
+      Query : ADO.SQL.Query;
+   begin
+      Query.Bind_Param (Position => 1, Value => Id);
+      Query.Set_Filter ("id = ?");
+      Impl.Find (Session, Query, Found);
+      if not Found then
+         Destroy (Impl);
+      else
+         ADO.Objects.Set_Object (Object, Impl.all'Access);
+      end if;
+   end Load;
+
+   procedure Save (Object  : in out Workspace_Feature_Ref;
+                   Session : in out ADO.Sessions.Master_Session'Class) is
+      Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
+   begin
+      if Impl = null then
+         Impl := new Workspace_Feature_Impl;
+         ADO.Objects.Set_Object (Object, Impl);
+      end if;
+      if not ADO.Objects.Is_Created (Impl.all) then
+         Impl.Create (Session);
+      else
+         Impl.Save (Session);
+      end if;
+   end Save;
+
+   procedure Delete (Object  : in out Workspace_Feature_Ref;
+                     Session : in out ADO.Sessions.Master_Session'Class) is
+      Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
+   begin
+      if Impl /= null then
+         Impl.Delete (Session);
+      end if;
+   end Delete;
+
+   --  --------------------
+   --  Free the object
+   --  --------------------
+   procedure Destroy (Object : access Workspace_Feature_Impl) is
+      type Workspace_Feature_Impl_Ptr is access all Workspace_Feature_Impl;
+      procedure Unchecked_Free is new Ada.Unchecked_Deallocation
+              (Workspace_Feature_Impl, Workspace_Feature_Impl_Ptr);
+      pragma Warnings (Off, "*redundant conversion*");
+      Ptr : Workspace_Feature_Impl_Ptr := Workspace_Feature_Impl (Object.all)'Access;
+      pragma Warnings (On, "*redundant conversion*");
+   begin
+      Unchecked_Free (Ptr);
+   end Destroy;
+
+   procedure Find (Object  : in out Workspace_Feature_Impl;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean) is
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Query, WORKSPACE_FEATURE_DEF'Access);
+   begin
+      Stmt.Execute;
+      if Stmt.Has_Elements then
+         Object.Load (Stmt, Session);
+         Stmt.Next;
+         Found := not Stmt.Has_Elements;
+      else
+         Found := False;
+      end if;
+   end Find;
+
+   overriding
+   procedure Load (Object  : in out Workspace_Feature_Impl;
+                   Session : in out ADO.Sessions.Session'Class) is
+      Found : Boolean;
+      Query : ADO.SQL.Query;
+      Id    : constant ADO.Identifier := Object.Get_Key_Value;
+   begin
+      Query.Bind_Param (Position => 1, Value => Id);
+      Query.Set_Filter ("id = ?");
+      Object.Find (Session, Query, Found);
+      if not Found then
+         raise ADO.Objects.NOT_FOUND;
+      end if;
+   end Load;
+
+   procedure Save (Object  : in out Workspace_Feature_Impl;
+                   Session : in out ADO.Sessions.Master_Session'Class) is
+      Stmt : ADO.Statements.Update_Statement
+         := Session.Create_Statement (WORKSPACE_FEATURE_DEF'Access);
+   begin
+      if Object.Is_Modified (1) then
+         Stmt.Save_Field (Name  => COL_0_4_NAME, --  id
+                          Value => Object.Get_Key);
+         Object.Clear_Modified (1);
+      end if;
+      if Object.Is_Modified (2) then
+         Stmt.Save_Field (Name  => COL_1_4_NAME, --  limit
+                          Value => Object.Limit);
+         Object.Clear_Modified (2);
+      end if;
+      if Object.Is_Modified (3) then
+         Stmt.Save_Field (Name  => COL_2_4_NAME, --  workspace_id
+                          Value => Object.Workspace);
+         Object.Clear_Modified (3);
+      end if;
+      if Stmt.Has_Save_Fields then
+         Stmt.Set_Filter (Filter => "id = ?");
+         Stmt.Add_Param (Value => Object.Get_Key);
+         declare
+            Result : Integer;
+         begin
+            Stmt.Execute (Result);
+            if Result /= 1 then
+               if Result /= 0 then
+                  raise ADO.Objects.UPDATE_ERROR;
+               end if;
+            end if;
+         end;
+      end if;
+   end Save;
+
+   procedure Create (Object  : in out Workspace_Feature_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class) is
+      Query : ADO.Statements.Insert_Statement
+                  := Session.Create_Statement (WORKSPACE_FEATURE_DEF'Access);
+      Result : Integer;
+   begin
+      Session.Allocate (Id => Object);
+      Query.Save_Field (Name  => COL_0_4_NAME, --  id
+                        Value => Object.Get_Key);
+      Query.Save_Field (Name  => COL_1_4_NAME, --  limit
+                        Value => Object.Limit);
+      Query.Save_Field (Name  => COL_2_4_NAME, --  workspace_id
+                        Value => Object.Workspace);
+      Query.Execute (Result);
+      if Result /= 1 then
+         raise ADO.Objects.INSERT_ERROR;
+      end if;
+      ADO.Objects.Set_Created (Object);
+   end Create;
+
+   procedure Delete (Object  : in out Workspace_Feature_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class) is
+      Stmt : ADO.Statements.Delete_Statement
+         := Session.Create_Statement (WORKSPACE_FEATURE_DEF'Access);
+   begin
+      Stmt.Set_Filter (Filter => "id = ?");
+      Stmt.Add_Param (Value => Object.Get_Key);
+      Stmt.Execute;
+   end Delete;
+
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Workspace_Feature_Ref;
+                       Name : in String) return Util.Beans.Objects.Object is
+      Obj  : ADO.Objects.Object_Record_Access;
+      Impl : access Workspace_Feature_Impl;
+   begin
+      if From.Is_Null then
+         return Util.Beans.Objects.Null_Object;
+      end if;
+      Obj := From.Get_Load_Object;
+      Impl := Workspace_Feature_Impl (Obj.all)'Access;
+      if Name = "id" then
+         return ADO.Objects.To_Object (Impl.Get_Key);
+      elsif Name = "limit" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Limit));
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+
+
+   --  ------------------------------
+   --  Load the object from current iterator position
+   --  ------------------------------
+   procedure Load (Object  : in out Workspace_Feature_Impl;
+                   Stmt    : in out ADO.Statements.Query_Statement'Class;
+                   Session : in out ADO.Sessions.Session'Class) is
+   begin
+      Object.Set_Key_Value (Stmt.Get_Identifier (0));
+      Object.Limit := Stmt.Get_Integer (1);
+      if not Stmt.Is_Null (2) then
+         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (2), Session);
       end if;
       ADO.Objects.Set_Created (Object);
    end Load;
