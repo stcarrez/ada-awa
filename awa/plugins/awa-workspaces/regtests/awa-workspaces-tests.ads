@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with Ada.Strings.Unbounded;
 with Util.Tests;
 with ADO;
 with AWA.Tests;
@@ -26,6 +27,7 @@ package AWA.Workspaces.Tests is
 
    type Test is new AWA.Tests.Test with record
       Member_Id : ADO.Identifier;
+      Key       : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
    --  Verify the anonymous access for the invitation page.
@@ -37,5 +39,8 @@ package AWA.Workspaces.Tests is
 
    --  Test deleting the member.
    procedure Test_Delete_Member (T : in out Test);
+
+   --  Test accepting the invitation.
+   procedure Test_Accept_Invitation (T : in out Test);
 
 end AWA.Workspaces.Tests;
