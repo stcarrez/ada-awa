@@ -264,4 +264,5 @@ UPDATE awa_acl
   INNER JOIN awa_blog ON awa_acl.entity_id = awa_blog.id
   SET awa_acl.workspace_id = awa_blog.workspace_id;
 
+ALTER TABLE awa_invitation ADD COLUMN member_id BIGINT NOT NULL;
 
