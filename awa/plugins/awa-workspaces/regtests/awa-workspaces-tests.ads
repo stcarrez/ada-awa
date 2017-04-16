@@ -17,13 +17,16 @@
 -----------------------------------------------------------------------
 
 with Util.Tests;
+with ADO;
 with AWA.Tests;
 
 package AWA.Workspaces.Tests is
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite);
 
-   type Test is new AWA.Tests.Test with null record;
+   type Test is new AWA.Tests.Test with record
+      Member_Id : ADO.Identifier;
+   end record;
 
    --  Verify the anonymous access for the invitation page.
    procedure Verify_Anonymous (T    : in out Test;
@@ -31,5 +34,8 @@ package AWA.Workspaces.Tests is
 
    --  Test sending an invitation.
    procedure Test_Invite_User (T : in out Test);
+
+   --  Test deleting the member.
+   procedure Test_Delete_Member (T : in out Test);
 
 end AWA.Workspaces.Tests;
