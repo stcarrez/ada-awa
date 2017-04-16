@@ -99,7 +99,7 @@ package body AWA.Workspaces.Tests is
       Request.Set_Parameter ("invite", "1");
       ASF.Tests.Do_Post (Request, Reply, "/workspaces/invite.html", "invite.html");
 
-      T.Assert (Reply.Get_Status = ASF.Responses.SC_TEMPORARY_REDIRECT,
+      T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY,
                 "Invalid response after invitation creation");
 
       --  Verify the invitation by looking at the inviteUser bean.
@@ -107,8 +107,11 @@ package body AWA.Workspaces.Tests is
       T.Assert (Invite /= null, "Null inviteUser bean");
       T.Assert (Invite.Get_Id /= ADO.NO_IDENTIFIER, "The invite ID is invalid");
       T.Assert (not Invite.Get_Access_Key.Is_Null, "The invite access key is null");
+      T.Assert (Invite.Get_Member.Is_Inserted, "The invitation has a workspace member");
       Check.Key := Invite.Get_Access_Key.Get_Access_Key;
       T.Verify_Anonymous (Invite.Get_Access_Key.Get_Access_Key);
+
+      T.Member_ID := Invite.Get_Member.Get_Id;
    end Test_Invite_User;
 
    --  ------------------------------
@@ -128,6 +131,8 @@ package body AWA.Workspaces.Tests is
 
       T.Assert (Reply.Get_Status = ASF.Responses.SC_OK,
                 "Invalid response after delete member operation");
+      ASF.Tests.Assert_Contains (T, "deleteDialog_" & ADO.Identifier'Image (T.Member_Id), Reply,
+                                 "Delete member dialog operation response is invalid");
    end Test_Delete_Member;
 
 end AWA.Workspaces.Tests;
