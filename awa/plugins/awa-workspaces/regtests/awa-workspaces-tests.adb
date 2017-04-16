@@ -97,7 +97,7 @@ package body AWA.Workspaces.Tests is
       Request.Set_Parameter ("invite", "1");
       ASF.Tests.Do_Post (Request, Reply, "/workspaces/invite.html", "invite.html");
 
-      T.Assert (Reply.Get_Status = ASF.Responses.SC_OK,
+      T.Assert (Reply.Get_Status = ASF.Responses.SC_TEMPORARY_REDIRECT,
                 "Invalid response after invitation creation");
 
       --  Verify the invitation by looking at the inviteUser bean.
