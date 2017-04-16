@@ -45,6 +45,8 @@ package body AWA.Workspaces.Tests is
    begin
       Caller.Add_Test (Suite, "Test AWA.Workspaces.Beans.Send",
                        Test_Invite_User'Access);
+      Caller.Add_Test (Suite, "Test AWA.Workspaces.Beans.Delete",
+                       Test_Delete_Member'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -108,5 +110,24 @@ package body AWA.Workspaces.Tests is
       Check.Key := Invite.Get_Access_Key.Get_Access_Key;
       T.Verify_Anonymous (Invite.Get_Access_Key.Get_Access_Key);
    end Test_Invite_User;
+
+   --  ------------------------------
+   --  Test deleting the member.
+   --  ------------------------------
+   procedure Test_Delete_Member (T : in out Test) is
+      Request   : ASF.Requests.Mockup.Request;
+      Reply     : ASF.Responses.Mockup.Response;
+   begin
+      T.Test_Invite_User;
+      AWA.Tests.Helpers.Users.Login ("test-invite@test.com", Request);
+      Request.Set_Parameter ("member-id", ADO.Identifier'Image (T.Member_Id));
+      Request.Set_Parameter ("delete", "1");
+      Request.Set_Parameter ("delete-member-form", "1");
+      ASF.Tests.Do_Post (Request, Reply, "/workspaces/forms/delete-member.html",
+                         "delete-member.html");
+
+      T.Assert (Reply.Get_Status = ASF.Responses.SC_OK,
+                "Invalid response after delete member operation");
+   end Test_Delete_Member;
 
 end AWA.Workspaces.Tests;
