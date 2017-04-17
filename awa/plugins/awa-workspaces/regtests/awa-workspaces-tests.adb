@@ -47,6 +47,8 @@ package body AWA.Workspaces.Tests is
                        Test_Invite_User'Access);
       Caller.Add_Test (Suite, "Test AWA.Workspaces.Beans.Delete",
                        Test_Delete_Member'Access);
+      Caller.Add_Test (Suite, "Test AWA.Workspaces.Beans.Accept",
+                       Test_Accept_Invitation'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -109,6 +111,7 @@ package body AWA.Workspaces.Tests is
       T.Assert (not Invite.Get_Access_Key.Is_Null, "The invite access key is null");
       T.Assert (Invite.Get_Member.Is_Inserted, "The invitation has a workspace member");
       Check.Key := Invite.Get_Access_Key.Get_Access_Key;
+      T.Key := Invite.Get_Access_Key.Get_Access_Key;
       T.Verify_Anonymous (Invite.Get_Access_Key.Get_Access_Key);
 
       T.Member_ID := Invite.Get_Member.Get_Id;
@@ -123,16 +126,39 @@ package body AWA.Workspaces.Tests is
    begin
       T.Test_Invite_User;
       AWA.Tests.Helpers.Users.Login ("test-invite@test.com", Request);
-      Request.Set_Parameter ("member-id", ADO.Identifier'Image (T.Member_Id));
-      Request.Set_Parameter ("delete", "1");
-      Request.Set_Parameter ("delete-member-form", "1");
-      ASF.Tests.Do_Post (Request, Reply, "/workspaces/forms/delete-member.html",
-                         "delete-member.html");
+      declare
+         Id : constant String := ADO.Identifier'Image (T.Member_Id);
+      begin
+         Request.Set_Parameter ("member-id", Id);
+         Request.Set_Parameter ("delete", "1");
+         Request.Set_Parameter ("delete-member-form", "1");
+         ASF.Tests.Do_Post (Request, Reply, "/workspaces/forms/delete-member.html",
+                            "delete-member.html");
 
-      T.Assert (Reply.Get_Status = ASF.Responses.SC_OK,
-                "Invalid response after delete member operation");
-      ASF.Tests.Assert_Contains (T, "deleteDialog_" & ADO.Identifier'Image (T.Member_Id), Reply,
-                                 "Delete member dialog operation response is invalid");
+         T.Assert (Reply.Get_Status = ASF.Responses.SC_OK,
+                   "Invalid response after delete member operation");
+         ASF.Tests.Assert_Contains (T, "deleteDialog_" & Id (Id'First + 1 .. Id'Last), Reply,
+                                    "Delete member dialog operation response is invalid");
+      end;
    end Test_Delete_Member;
+
+   --  ------------------------------
+   --  Test accepting the invitation.
+   --  ------------------------------
+   procedure Test_Accept_Invitation (T : in out Test) is
+      Request   : ASF.Requests.Mockup.Request;
+      Reply     : ASF.Responses.Mockup.Response;
+   begin
+      T.Test_Invite_User;
+      AWA.Tests.Helpers.Users.Recover_Password ("invited-user@test.com");
+      AWA.Tests.Helpers.Users.Login ("invited-user@test.com", Request);
+      ASF.Tests.Do_Get (Request, Reply, "/workspaces/accept-invitation.html?key="
+                        & To_String (T.Key),
+                        "accept-member.html");
+      T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY,
+                "Accept invitation page failed");
+      Util.Tests.Assert_Equals (T, "/asfunit/workspaces/main.html", Reply.Get_Header ("Location"),
+                                "The accept invitation page must redirect to the workspace");
+   end Test_Accept_Invitation;
 
 end AWA.Workspaces.Tests;
