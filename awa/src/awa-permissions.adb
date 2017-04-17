@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions -- Permissions module
---  Copyright (C) 2011, 2012, 2013, 2014, 2016 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,6 @@
 -----------------------------------------------------------------------
 
 with Util.Log.Loggers;
-with Util.Beans.Objects;
 with Util.Serialize.Mappers.Record_Mapper;
 
 with ADO.Schemas.Entities;
