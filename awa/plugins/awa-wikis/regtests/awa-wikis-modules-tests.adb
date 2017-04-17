@@ -166,40 +166,56 @@ package body AWA.Wikis.Modules.Tests is
       Ident     : constant String := Util.Strings.Image (Natural (T.Wiki_Id));
       Pub_Ident : constant String := Util.Strings.Image (Natural (T.Public_Id));
    begin
-      ASF.Tests.Do_Get (Request, Reply, "/wikis/view/" & Ident & "/PublicPage", "wiki-public-1.html");
-      Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status, "Invalid response (PublicPage)");
-      Assert_Matches (T, ".*The public page title.*", Reply, "Invalid PublicPage page returned",
+      ASF.Tests.Do_Get (Request, Reply, "/wikis/view/" & Ident & "/PublicPage",
+                        "wiki-public-1.html");
+      Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status,
+                     "Invalid response (PublicPage)");
+      Assert_Matches (T, ".*The public page title.*", Reply,
+                      "Invalid PublicPage page returned",
                       Status => ASF.Responses.SC_OK);
 
       ASF.Tests.Do_Get (Request, Reply, "/wikis/info/" & Ident & "/" & Pub_Ident,
                         "wiki-public-info-1.html");
-      Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status, "Invalid response (PublicPage info)");
-      Assert_Matches (T, ".*The public page title.*", Reply, "Invalid PublicPage info page returned",
+      Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status,
+                     "Invalid response (PublicPage info)");
+      Assert_Matches (T, ".*The public page title.*", Reply,
+                      "Invalid PublicPage info page returned",
                       Status => ASF.Responses.SC_OK);
 
       ASF.Tests.Do_Get (Request, Reply, "/wikis/history/" & Ident & "/" & Pub_Ident,
                         "wiki-public-history-1.html");
-      Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status, "Invalid response (PublicPage history)");
-      Assert_Matches (T, ".*The public page title.*", Reply, "Invalid PublicPage info page returned",
+      Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status,
+                     "Invalid response (PublicPage history)");
+      Assert_Matches (T, ".*The public page title.*", Reply,
+                      "Invalid PublicPage info page returned",
                       Status => ASF.Responses.SC_OK);
 
       Request.Remove_Attribute ("wikiView");
-      ASF.Tests.Do_Get (Request, Reply, "/wikis/view/" & Ident & "/PrivatePage", "wiki-private-1.html");
+      ASF.Tests.Do_Get (Request, Reply, "/wikis/view/" & Ident & "/PrivatePage",
+                        "wiki-private-1.html");
       Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status, "Invalid response (PrivatePage)");
       Assert_Matches (T, ".*Protected Wiki Page.*", Reply, "Invalid PrivatePage page returned",
                       Status => ASF.Responses.SC_OK);
 
-      ASF.Tests.Do_Get (Request, Reply, "/wikis/list/" & Ident & "/recent", "wiki-list-recent-1.html");
-      Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status, "Invalid response (list/recent)");
+      ASF.Tests.Do_Get (Request, Reply, "/wikis/list/" & Ident & "/recent",
+                        "wiki-list-recent-1.html");
+      Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status,
+                     "Invalid response (list/recent)");
 
-      ASF.Tests.Do_Get (Request, Reply, "/wikis/list/" & Ident & "/recent/grid", "wiki-list-grid-1.html");
-      Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status, "Invalid response (list/recent/grid)");
+      ASF.Tests.Do_Get (Request, Reply, "/wikis/list/" & Ident & "/recent/grid",
+                        "wiki-list-grid-1.html");
+      Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status,
+                     "Invalid response (list/recent/grid)");
 
-      ASF.Tests.Do_Get (Request, Reply, "/wikis/list/" & Ident & "/popular", "wiki-list-popular-1.html");
-      Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status, "Invalid response (list/popular)");
+      ASF.Tests.Do_Get (Request, Reply, "/wikis/list/" & Ident & "/popular",
+                        "wiki-list-popular-1.html");
+      Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status,
+                     "Invalid response (list/popular)");
 
-      ASF.Tests.Do_Get (Request, Reply, "/wikis/list/" & Ident & "/popular/grid", "wiki-list-popular-1.html");
-      Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status, "Invalid response (list/popular/grid)");
+      ASF.Tests.Do_Get (Request, Reply, "/wikis/list/" & Ident & "/popular/grid",
+                        "wiki-list-popular-1.html");
+      Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status,
+                     "Invalid response (list/popular/grid)");
    end Test_Wiki_Page;
 
    --  ------------------------------
@@ -232,7 +248,7 @@ package body AWA.Wikis.Modules.Tests is
 
       T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY,
                 "Invalid response after wiki update");
-       declare
+      declare
          Result : constant String
             := AWA.Tests.Helpers.Extract_Redirect (Reply, "/asfunit/wikis/view/");
       begin
