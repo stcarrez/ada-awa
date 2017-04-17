@@ -294,9 +294,8 @@ package body AWA.Users.Services is
 
       --  Find the user registered under the given email address & password.
       Query.Bind_Param (1, Email);
-      --  Query.Bind_Param (2, Hash);
       Query.Set_Join ("INNER JOIN awa_email e ON e.user_id = o.id");
-      Query.Set_Filter ("e.email = ?"); -- AND o.password = ?");
+      Query.Set_Filter ("e.email = ?");
       User.Find (DB, Query, Found);
       if not Found then
          Log.Warn ("No user registered under email address {0} or invalid password",
@@ -410,12 +409,14 @@ package body AWA.Users.Services is
    procedure Create_Access_Key (Model   : in out User_Service;
                                 User    : in AWA.Users.Models.User_Ref'Class;
                                 Key     : in out AWA.Users.Models.Access_Key_Ref;
+                                Kind    : in AWA.Users.Models.Key_Type;
                                 Expire  : in Duration;
                                 Session : in out ADO.Sessions.Master_Session) is
       use type Ada.Calendar.Time;
    begin
       Key.Set_Access_Key (Model.Create_Key (User.Get_Id));
       Key.Set_Expire_Date (Ada.Calendar.Clock + Expire);
+      Key.Set_Kind (Kind);
       Key.Set_User (User);
       Key.Save (Session);
    end Create_Access_Key;
@@ -450,15 +451,17 @@ package body AWA.Users.Services is
          raise Not_Found with "No user registered under email: " & Email;
       end if;
 
-      --  Delete any previous access key for the user.
+      --  Delete any previous reset password access key for the user.
       Stmt := DB.Create_Statement (AWA.Users.Models.ACCESS_KEY_TABLE);
-      Stmt.Set_Filter ("user_id = ?");
+      Stmt.Set_Filter ("user_id = ? and kind = ?");
       Stmt.Bind_Param (1, User.Get_Id);
+      Stmt.Bind_Param (2, Integer (Models.Key_Type'Pos (Models.RESET_PASSWORD_KEY)));
       Stmt.Execute;
 
       --  Create the secure key to change the password
       Model.Create_Access_Key (User    => User,
                                Key     => Key,
+                               Kind    => AWA.Users.Models.RESET_PASSWORD_KEY,
                                Expire  => 86400.0,
                                Session => DB);
 
@@ -587,6 +590,7 @@ package body AWA.Users.Services is
       --  Create the access key
       Model.Create_Access_Key (User    => User,
                                Key     => Key,
+                               Kind    => AWA.Users.Models.SIGNUP_KEY,
                                Expire  => 86400.0,
                                Session => DB);
 
