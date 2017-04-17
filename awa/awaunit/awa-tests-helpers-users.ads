@@ -70,6 +70,9 @@ package AWA.Tests.Helpers.Users is
    procedure Anonymous (Context     : in out AWA.Services.Contexts.Service_Context'Class;
                         Sec_Context : in out Security.Contexts.Security_Context);
 
+   --  Simulate the recovery password process for the given user.
+   procedure Recover_Password (Email : in String);
+
    overriding
    procedure Finalize (Principal : in out Test_User);
 
