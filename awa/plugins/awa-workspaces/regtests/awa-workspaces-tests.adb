@@ -49,6 +49,8 @@ package body AWA.Workspaces.Tests is
                        Test_Delete_Member'Access);
       Caller.Add_Test (Suite, "Test AWA.Workspaces.Beans.Accept",
                        Test_Accept_Invitation'Access);
+      Caller.Add_Test (Suite, "Test AWA.Workspaces.Beans.Member_List",
+                       Test_List_Members'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -160,5 +162,22 @@ package body AWA.Workspaces.Tests is
       Util.Tests.Assert_Equals (T, "/asfunit/workspaces/main.html", Reply.Get_Header ("Location"),
                                 "The accept invitation page must redirect to the workspace");
    end Test_Accept_Invitation;
+
+   --  ------------------------------
+   --  Test listing the members of the workspace.
+   --  ------------------------------
+   procedure Test_List_Members (T : in out Test) is
+      Request   : ASF.Requests.Mockup.Request;
+      Reply     : ASF.Responses.Mockup.Response;
+   begin
+      T.Test_Invite_User;
+      AWA.Tests.Helpers.Users.Login ("test-invite@test.com", Request);
+      ASF.Tests.Do_Get (Request, Reply, "/workspaces/members.html",
+                        "member-list.html");
+      ASF.Tests.Assert_Contains (T, "invited-user@test.com", Reply,
+                                 "The invited user is listed in the members page");
+      ASF.Tests.Assert_Contains (T, "test-invite@test.com", Reply,
+                                 "The invite user (owner) is listed in the members page");
+   end Test_List_Members;
 
 end AWA.Workspaces.Tests;
