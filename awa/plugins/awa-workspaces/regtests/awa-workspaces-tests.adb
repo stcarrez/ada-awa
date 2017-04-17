@@ -15,19 +15,13 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with Ada.Strings.Unbounded;
 with Util.Test_Caller;
-with Util.Strings;
-with ADO;
 with ASF.Requests.Mockup;
 with ASF.Responses.Mockup;
-with ASF.Principals;
 with ASF.Helpers.Beans;
 with ASF.Tests;
 with AWA.Users.Models;
-with AWA.Services.Contexts;
 with AWA.Tests.Helpers.Users;
-with Security.Contexts;
 with AWA.Workspaces.Beans;
 
 package body AWA.Workspaces.Tests is
@@ -94,7 +88,6 @@ package body AWA.Workspaces.Tests is
       Request   : ASF.Requests.Mockup.Request;
       Reply     : ASF.Responses.Mockup.Response;
       Invite    : AWA.Workspaces.Beans.Invitation_Bean_Access;
-      Check     : AWA.Workspaces.Beans.Invitation_Bean;
    begin
       AWA.Tests.Helpers.Users.Login ("test-invite@test.com", Request);
       Request.Set_Parameter ("email", "invited-user@test.com");
@@ -112,7 +105,6 @@ package body AWA.Workspaces.Tests is
       T.Assert (Invite.Get_Id /= ADO.NO_IDENTIFIER, "The invite ID is invalid");
       T.Assert (not Invite.Get_Access_Key.Is_Null, "The invite access key is null");
       T.Assert (Invite.Get_Member.Is_Inserted, "The invitation has a workspace member");
-      Check.Key := Invite.Get_Access_Key.Get_Access_Key;
       T.Key := Invite.Get_Access_Key.Get_Access_Key;
       T.Verify_Anonymous (Invite.Get_Access_Key.Get_Access_Key);
 
