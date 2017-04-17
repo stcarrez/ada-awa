@@ -17,9 +17,11 @@
 -----------------------------------------------------------------------
 
 with ASF.Events.Faces.Actions;
+with ASF.Contexts.Flash;
+with ASF.Contexts.Faces;
+with ASF.Applications.Messages.Factory;
 
 with ADO.Utils;
-with ADO.Sessions.Entities;
 with ADO.Sessions;
 with ADO.Queries;
 with ADO.Datasets;
@@ -29,6 +31,8 @@ with AWA.Workspaces.Models;
 with AWA.Events.Action_Method;
 with AWA.Services.Contexts;
 package body AWA.Workspaces.Beans is
+
+   use ASF.Applications;
 
    package ASC renames AWA.Services.Contexts;
 
@@ -112,15 +116,25 @@ package body AWA.Workspaces.Beans is
    overriding
    procedure Accept_Invitation (Bean    : in out Invitation_Bean;
                                 Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      Ctx   : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
+      Flash : constant ASF.Contexts.Faces.Flash_Context_Access := Ctx.Get_Flash;
    begin
       Bean.Module.Accept_Invitation (Key => Ada.Strings.Unbounded.To_String (Bean.Key));
+      Flash.Set_Keep_Messages (True);
+      Messages.Factory.Add_Message (Ctx.all, "workspaces.workspace_welcome_message",
+                                    Messages.INFO);
    end Accept_Invitation;
 
    overriding
    procedure Send (Bean    : in out Invitation_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      Ctx   : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
+      Flash : constant ASF.Contexts.Faces.Flash_Context_Access := Ctx.Get_Flash;
    begin
       Bean.Module.Send_Invitation (Bean);
+      Flash.Set_Keep_Messages (True);
+      Messages.Factory.Add_Message (Ctx.all, "workspaces.workspace_invitation_sent",
+                                    Messages.INFO);
    end Send;
 
    --  ------------------------------
@@ -253,10 +267,6 @@ package body AWA.Workspaces.Beans is
    begin
       Query.Set_Query (AWA.Workspaces.Models.Query_Workspace_Member_List);
       Count_Query.Set_Count_Query (AWA.Workspaces.Models.Query_Workspace_Member_List);
---        ADO.Sessions.Entities.Bind_Param (Params  => Query,
---                                          Name    => "page_table",
---                                          Table   => AWA.Wikis.Models.WIKI_PAGE_TABLE,
---                                          Session => Session);
       Query.Bind_Param (Name => "user_id", Value => User);
       Count_Query.Bind_Param (Name => "user_id", Value => User);
       AWA.Workspaces.Models.List (Into.Members, Session, Query);
