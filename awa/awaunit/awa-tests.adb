@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  AWA tests - AWA Tests Framework
---  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -88,8 +88,6 @@ package body AWA.Tests is
    --  Called when the testsuite execution has finished.
    --  ------------------------------
    procedure Finish (Status : in Util.XUnit.Status) is
-      pragma Unreferenced (Status);
-
       procedure Free is
         new Ada.Unchecked_Deallocation (Object => AWA.Applications.Application'Class,
                                         Name   => AWA.Applications.Application_Access);
