@@ -191,6 +191,7 @@ package AWA.Users.Services is
    procedure Create_Access_Key (Model   : in out User_Service;
                                 User    : in AWA.Users.Models.User_Ref'Class;
                                 Key     : in out AWA.Users.Models.Access_Key_Ref;
+                                Kind    : in AWA.Users.Models.Key_Type;
                                 Expire  : in Duration;
                                 Session : in out ADO.Sessions.Master_Session);
 
