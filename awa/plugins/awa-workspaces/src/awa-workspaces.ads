@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-workspaces -- Module workspaces
---  Copyright (C) 2011, 2012, 2015 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2015, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +23,8 @@
 --  to provide and implement multi-tenancy in a web application.  By using the workspace plugin,
 --  application data from different customers can be kept separate from each other in the
 --  same database.
+--
+--  @include awa-workspaces-modules.ads
 --
 --  == Ada Beans ==
 --  @include workspaces.xml
