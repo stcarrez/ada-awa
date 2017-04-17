@@ -37,6 +37,11 @@ package AWA.Users.Models is
 
    pragma Style_Checks ("-mr");
 
+   type Key_Type is (RESET_PASSWORD_KEY, SIGNUP_KEY, INVITATION_KEY);
+   for Key_Type use (RESET_PASSWORD_KEY => 0, SIGNUP_KEY => 1, INVITATION_KEY => 2);
+   package Key_Type_Objects is
+      new Util.Beans.Objects.Enums (Key_Type);
+
    type MailDeliveryStatus is (UNKNOWN, VALID, SOFT_BOUNCE, HARD_BOUNCE);
    for MailDeliveryStatus use (UNKNOWN => 0, VALID => 1, SOFT_BOUNCE => 2, HARD_BOUNCE => 3);
    package MailDeliveryStatus_Objects is
@@ -370,6 +375,14 @@ package AWA.Users.Models is
    --
    function Get_Version (Object : in Access_Key_Ref)
                  return Integer;
+
+   --  Set the access key type.
+   procedure Set_Kind (Object : in out Access_Key_Ref;
+                       Value  : in AWA.Users.Models.Key_Type);
+
+   --  Get the access key type.
+   function Get_Kind (Object : in Access_Key_Ref)
+                 return AWA.Users.Models.Key_Type;
 
    --
    procedure Set_User (Object : in out Access_Key_Ref;
@@ -710,17 +723,19 @@ private
    COL_1_3_NAME : aliased constant String := "expire_date";
    COL_2_3_NAME : aliased constant String := "id";
    COL_3_3_NAME : aliased constant String := "version";
-   COL_4_3_NAME : aliased constant String := "user_id";
+   COL_4_3_NAME : aliased constant String := "kind";
+   COL_5_3_NAME : aliased constant String := "user_id";
 
    ACCESS_KEY_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 5,
+     (Count => 6,
       Table => ACCESS_KEY_NAME'Access,
       Members => (
          1 => COL_0_3_NAME'Access,
          2 => COL_1_3_NAME'Access,
          3 => COL_2_3_NAME'Access,
          4 => COL_3_3_NAME'Access,
-         5 => COL_4_3_NAME'Access
+         5 => COL_4_3_NAME'Access,
+         6 => COL_5_3_NAME'Access
 )
      );
    ACCESS_KEY_TABLE : constant ADO.Schemas.Class_Mapping_Access
@@ -736,6 +751,7 @@ private
        Access_Key : Ada.Strings.Unbounded.Unbounded_String;
        Expire_Date : Ada.Calendar.Time;
        Version : Integer;
+       Kind : AWA.Users.Models.Key_Type;
        User : AWA.Users.Models.User_Ref;
    end record;
 

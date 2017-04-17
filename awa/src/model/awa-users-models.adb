@@ -1111,6 +1111,7 @@ package body AWA.Users.Models is
       Impl := new Access_Key_Impl;
       Impl.Expire_Date := ADO.DEFAULT_TIME;
       Impl.Version := 0;
+      Impl.Kind := AWA.Users.Models.Key_Type'First;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -1191,12 +1192,31 @@ package body AWA.Users.Models is
    end Get_Version;
 
 
+   procedure Set_Kind (Object : in out Access_Key_Ref;
+                       Value  : in AWA.Users.Models.Key_Type) is
+      procedure Set_Field_Enum is
+         new ADO.Objects.Set_Field_Operation (Key_Type);
+      Impl : Access_Key_Access;
+   begin
+      Set_Field (Object, Impl);
+      Set_Field_Enum (Impl.all, 5, Impl.Kind, Value);
+   end Set_Kind;
+
+   function Get_Kind (Object : in Access_Key_Ref)
+                  return AWA.Users.Models.Key_Type is
+      Impl : constant Access_Key_Access
+         := Access_Key_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Kind;
+   end Get_Kind;
+
+
    procedure Set_User (Object : in out Access_Key_Ref;
                        Value  : in AWA.Users.Models.User_Ref'Class) is
       Impl : Access_Key_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 5, Impl.User, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 6, Impl.User, Value);
    end Set_User;
 
    function Get_User (Object : in Access_Key_Ref)
@@ -1224,6 +1244,7 @@ package body AWA.Users.Models is
             Copy.Access_Key := Impl.Access_Key;
             Copy.Expire_Date := Impl.Expire_Date;
             Copy.Version := Impl.Version;
+            Copy.Kind := Impl.Kind;
             Copy.User := Impl.User;
          end;
       end if;
@@ -1370,9 +1391,14 @@ package body AWA.Users.Models is
          Object.Clear_Modified (3);
       end if;
       if Object.Is_Modified (5) then
-         Stmt.Save_Field (Name  => COL_4_3_NAME, --  user_id
-                          Value => Object.User);
+         Stmt.Save_Field (Name  => COL_4_3_NAME, --  kind
+                          Value => Integer (Key_Type'Pos (Object.Kind)));
          Object.Clear_Modified (5);
+      end if;
+      if Object.Is_Modified (6) then
+         Stmt.Save_Field (Name  => COL_5_3_NAME, --  user_id
+                          Value => Object.User);
+         Object.Clear_Modified (6);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -1412,7 +1438,9 @@ package body AWA.Users.Models is
                         Value => Object.Get_Key);
       Query.Save_Field (Name  => COL_3_3_NAME, --  version
                         Value => Object.Version);
-      Query.Save_Field (Name  => COL_4_3_NAME, --  user_id
+      Query.Save_Field (Name  => COL_4_3_NAME, --  kind
+                        Value => Integer (Key_Type'Pos (Object.Kind)));
+      Query.Save_Field (Name  => COL_5_3_NAME, --  user_id
                         Value => Object.User);
       Query.Execute (Result);
       if Result /= 1 then
@@ -1451,6 +1479,8 @@ package body AWA.Users.Models is
          return Util.Beans.Objects.Time.To_Object (Impl.Expire_Date);
       elsif Name = "id" then
          return ADO.Objects.To_Object (Impl.Get_Key);
+      elsif Name = "kind" then
+         return AWA.Users.Models.Key_Type_Objects.To_Object (Impl.Kind);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -1467,8 +1497,9 @@ package body AWA.Users.Models is
       Object.Access_Key := Stmt.Get_Unbounded_String (0);
       Object.Expire_Date := Stmt.Get_Time (1);
       Object.Set_Key_Value (Stmt.Get_Identifier (2));
-      if not Stmt.Is_Null (4) then
-         Object.User.Set_Key_Value (Stmt.Get_Identifier (4), Session);
+      Object.Kind := Key_Type'Val (Stmt.Get_Integer (4));
+      if not Stmt.Is_Null (5) then
+         Object.User.Set_Key_Value (Stmt.Get_Identifier (5), Session);
       end if;
       Object.Version := Stmt.Get_Integer (3);
       ADO.Objects.Set_Created (Object);
