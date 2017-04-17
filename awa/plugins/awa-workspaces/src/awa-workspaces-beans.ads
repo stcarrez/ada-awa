@@ -110,10 +110,6 @@ package AWA.Workspaces.Beans is
    procedure Create (Bean  : in out Workspaces_Bean;
                      Event : in AWA.Events.Module_Event'Class);
 
-   --  Example of action method.
-   procedure Action (Bean    : in out Workspaces_Bean;
-                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
-
    --  Create the Workspaces_Bean bean instance.
    function Create_Workspaces_Bean (Module : in AWA.Workspaces.Modules.Workspace_Module_Access)
       return Util.Beans.Basic.Readonly_Bean_Access;
