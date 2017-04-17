@@ -17,15 +17,10 @@
 -----------------------------------------------------------------------
 
 with Util.Test_Caller;
-with Util.Strings;
 with ASF.Requests.Mockup;
 with ASF.Responses.Mockup;
-with ASF.Principals;
 with ASF.Tests;
-with AWA.Users.Models;
-with AWA.Services.Contexts;
 with AWA.Tests.Helpers.Users;
-with Security.Contexts;
 
 package body AWA.Blogs.Tests is
 
