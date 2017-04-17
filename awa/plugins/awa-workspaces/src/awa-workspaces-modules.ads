@@ -26,6 +26,23 @@ with AWA.Workspaces.Models;
 with AWA.Users.Services;
 with AWA.Users.Models;
 with AWA.Events;
+
+--  == Events ==
+--  The *workspaces* module provides several events that are posted when some action are performed.
+--
+--  === invite-user ===
+--  This event is posted when an invitation is created for a user.  The event can be used to
+--  send the associated invitation email to the invitee.  The event contains the following
+--  attributes:
+--
+--  key
+--  email
+--  name
+--  message
+--  inviter
+--
+--  === accept-invitation ===
+--  This event is posted when an invitation is accepted by a user.
 package AWA.Workspaces.Modules is
 
    Not_Found : exception;
@@ -34,6 +51,7 @@ package AWA.Workspaces.Modules is
    NAME : constant String := "workspaces";
 
    package Invite_User_Event is new AWA.Events.Definition (Name => "invite-user");
+   package Accept_Invitation_Event is new AWA.Events.Definition (Name => "accept-invitation");
 
    --  ------------------------------
    --  Module workspaces
