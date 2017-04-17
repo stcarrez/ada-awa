@@ -43,4 +43,7 @@ package AWA.Workspaces.Tests is
    --  Test accepting the invitation.
    procedure Test_Accept_Invitation (T : in out Test);
 
+   --  Test listing the members of the workspace.
+   procedure Test_List_Members (T : in out Test);
+
 end AWA.Workspaces.Tests;
