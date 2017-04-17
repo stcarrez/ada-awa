@@ -154,6 +154,8 @@ CREATE TABLE awa_access_key (
   `id` BIGINT NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
+  /* the access key type. */
+  `kind` TINYINT NOT NULL,
   /*  */
   `user_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)

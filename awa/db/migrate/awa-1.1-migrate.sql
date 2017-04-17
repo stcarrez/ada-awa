@@ -266,3 +266,5 @@ UPDATE awa_acl
 
 ALTER TABLE awa_invitation ADD COLUMN member_id BIGINT NOT NULL;
 
+ALTER TABLE awa_access_key ADD COLUMN kind TINYINT NOT NULL;
+
