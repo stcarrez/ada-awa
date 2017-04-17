@@ -26,9 +26,7 @@ with ADO.Queries;
 with ADO.Datasets;
 
 with AWA.Services.Contexts;
-with AWA.Workspaces.Models;
 with AWA.Events.Action_Method;
-with AWA.Services.Contexts;
 package body AWA.Workspaces.Beans is
 
    use ASF.Applications;
@@ -63,6 +61,7 @@ package body AWA.Workspaces.Beans is
    overriding
    procedure Load (Bean : in out Member_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
    begin
       null;
    end Load;
@@ -70,6 +69,7 @@ package body AWA.Workspaces.Beans is
    overriding
    procedure Delete (Bean : in out Member_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
    begin
       Bean.Module.Delete_Member (Bean.Get_Id);
    end Delete;
@@ -115,6 +115,8 @@ package body AWA.Workspaces.Beans is
    overriding
    procedure Accept_Invitation (Bean    : in out Invitation_Bean;
                                 Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
+
       Ctx   : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
       Flash : constant ASF.Contexts.Faces.Flash_Context_Access := Ctx.Get_Flash;
    begin
@@ -127,6 +129,8 @@ package body AWA.Workspaces.Beans is
    overriding
    procedure Send (Bean    : in out Invitation_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
+
       Ctx   : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
       Flash : constant ASF.Contexts.Faces.Flash_Context_Access := Ctx.Get_Flash;
    begin
@@ -243,12 +247,13 @@ package body AWA.Workspaces.Beans is
    overriding
    procedure Load (Into    : in out Member_List_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
+
       Ctx         : constant ASC.Service_Context_Access := ASC.Current;
       User        : constant ADO.Identifier := Ctx.Get_User_Identifier;
       Session     : ADO.Sessions.Session := Into.Module.Get_Session;
       Query       : ADO.Queries.Context;
       Count_Query : ADO.Queries.Context;
-      First       : constant Natural  := (Into.Page - 1) * Into.Page_Size;
    begin
       Query.Set_Query (AWA.Workspaces.Models.Query_Workspace_Member_List);
       Count_Query.Set_Count_Query (AWA.Workspaces.Models.Query_Workspace_Member_List);
