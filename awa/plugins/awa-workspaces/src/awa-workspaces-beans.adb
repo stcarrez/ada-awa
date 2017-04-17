@@ -16,7 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with ASF.Events.Faces.Actions;
 with ASF.Contexts.Flash;
 with ASF.Contexts.Faces;
 with ASF.Applications.Messages.Factory;
@@ -149,15 +148,6 @@ package body AWA.Workspaces.Beans is
    end Create_Invitation_Bean;
 
    --  ------------------------------
-   --  Example of action method.
-   --  ------------------------------
-   procedure Action (Bean    : in out Workspaces_Bean;
-                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
-   begin
-      null;
-   end Action;
-
-   --  ------------------------------
    --  Event action called to create the workspace when the given event is posted.
    --  ------------------------------
    procedure Create (Bean  : in out Workspaces_Bean;
@@ -175,18 +165,13 @@ package body AWA.Workspaces.Beans is
       Ctx.Commit;
    end Create;
 
-   package Action_Binding is
-     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Workspaces_Bean,
-                                                      Method => Action,
-                                                      Name   => "action");
-
    package Create_Binding is
       new AWA.Events.Action_Method.Bind (Name   => "create",
                                          Bean   => Workspaces_Bean,
                                          Method => Create);
 
    Workspaces_Bean_Binding : aliased constant Util.Beans.Methods.Method_Binding_Array
-     := (Action_Binding.Proxy'Access, Create_Binding.Proxy'Access);
+     := (1 => Create_Binding.Proxy'Access);
 
    --  ------------------------------
    --  Get the value identified by the name.
