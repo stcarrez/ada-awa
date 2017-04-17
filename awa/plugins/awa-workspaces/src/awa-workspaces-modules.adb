@@ -18,7 +18,6 @@
 
 with Ada.Calendar;
 
-with AWA.Users.Models;
 with AWA.Modules.Beans;
 with AWA.Permissions.Services;
 
@@ -123,6 +122,7 @@ package body AWA.Workspaces.Modules is
                               Key        : in String;
                               Invitation : in out AWA.Workspaces.Models.Invitation_Ref'Class;
                               Inviter    : in out AWA.Users.Models.User_Ref) is
+      pragma Unreferenced (Module);
       use type Ada.Calendar.Time;
 
       Ctx    : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
@@ -159,6 +159,7 @@ package body AWA.Workspaces.Modules is
    --  ------------------------------
    procedure Accept_Invitation (Module     : in Workspace_Module;
                                 Key        : in String) is
+      pragma Unreferenced (Module);
       use type Ada.Calendar.Time;
 
       Ctx          : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
@@ -347,6 +348,7 @@ package body AWA.Workspaces.Modules is
    --  ------------------------------
    procedure Delete_Member (Module       : in Workspace_Module;
                             Member_Id    : in ADO.Identifier) is
+      pragma Unreferenced (Module);
 
       Ctx          : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
       DB           : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
