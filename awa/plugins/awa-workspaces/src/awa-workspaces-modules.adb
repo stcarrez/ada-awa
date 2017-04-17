@@ -159,7 +159,6 @@ package body AWA.Workspaces.Modules is
    --  ------------------------------
    procedure Accept_Invitation (Module     : in Workspace_Module;
                                 Key        : in String) is
-      pragma Unreferenced (Module);
       use type Ada.Calendar.Time;
 
       Ctx          : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
@@ -236,7 +235,21 @@ package body AWA.Workspaces.Modules is
       DB_Key.Delete (DB);
       if not Invitation.Is_Null then
          Invitation.Save (DB);
+
+         --  Send the accepted invitation event.
+         declare
+            Event : AWA.Events.Module_Event;
+         begin
+            Event.Set_Parameter ("invitee_email", User.Get_Email.Get_Email);
+            Event.Set_Parameter ("invitee_name", User.Get_Name);
+            Event.Set_Parameter ("message", Invitation.Get_Message);
+            Event.Set_Parameter ("inviter_email", Invitation.Get_Inviter.Get_Email.Get_Email);
+            Event.Set_Parameter ("inviter_name", Invitation.Get_Inviter.Get_Name);
+            Event.Set_Event_Kind (Accept_Invitation_Event.Kind);
+            Module.Send_Event (Event);
+         end;
       end if;
+
       Ctx.Commit;
    end Accept_Invitation;
 
