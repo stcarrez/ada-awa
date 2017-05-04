@@ -1,5 +1,5 @@
 <!-- OpenID login form
-  -  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013, 2014, 2017 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,22 +18,22 @@
      class='awa-login ui-widget ui-widget-content ui-corner-all'>
     <h2>#{title}</h2>
     <ul class='openid-login'>
-        <li>
+        <li class="awa-login-yahoo">
             <a href="#{contextPath}/auth/auth/yahoo?redirect=#{util:urlEncode(redirect)}" title="#{userMsg.openid_yahoo_auth}" class='openid-yahoo'>
                 <em/>
             </a>
         </li>
-        <li>
+        <li class="awa-login-google">
             <a href="#{contextPath}/auth/auth/google-plus?redirect=#{util:urlEncode(redirect)}" title="#{userMsg.openid_google_plus_auth}" class='openid-google-plus'>
                 <em/>
             </a>
         </li>
-        <li>
+        <li class="awa-login-facebook">
             <a href="#{contextPath}/auth/auth/facebook?redirect=#{util:urlEncode(redirect)}" title="#{userMsg.openid_facebook_auth}" class='openid-facebook'>
                 <em/>
             </a>
         </li>
-        <li>
+        <li class="awa-login-orange">
             <a href="#{contextPath}/auth/auth/orange?redirect=#{util:urlEncode(redirect)}" title="#{userMsg.openid_orange_auth}" class='openid-orange'>
                 <em/>
             </a>
