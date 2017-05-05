@@ -20,7 +20,7 @@ CREATE TABLE awa_wiki_content (
   /* the page version author */
   `author_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The wiki page represents a page with its versions.
 It refers to the last version which is currently visible.
 It has an optional preview image which defines
@@ -47,7 +47,7 @@ CREATE TABLE awa_wiki_page (
   /* the current content (or last version) */
   `content_id` BIGINT ,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* Permission is granted to display a wiki page if there is
 an ACL entry between the wiki space and the user. */
 CREATE TABLE awa_wiki_space (
@@ -71,7 +71,7 @@ CREATE TABLE awa_wiki_space (
   /*  */
   `workspace_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_wiki_content")
 ,("awa_wiki_page")
