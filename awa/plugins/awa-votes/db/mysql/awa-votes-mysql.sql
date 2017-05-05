@@ -12,7 +12,7 @@ CREATE TABLE awa_rating (
   /* the entity type */
   `for_entity_type` INTEGER NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The vote table tracks a vote action by a user on a given database entity.
 The primary key is made of the user, the entity id and entity type.
  */
@@ -24,7 +24,7 @@ CREATE TABLE awa_vote (
   /*  */
   `user_id` BIGINT NOT NULL,
   PRIMARY KEY (`entity_id`, `user_id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_rating")
 ,("awa_vote")
