@@ -20,7 +20,7 @@ CREATE TABLE awa_answer (
   /*  */
   `question_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The question table holds a single question asked by a user to the community.
 The short description is used to give an overview of the question in long lists
 while the description contains the full question text.  The rating is updating
@@ -51,7 +51,7 @@ the question short description. */
   /*  */
   `accepted_answer_id` BIGINT ,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_answer")
 ,("awa_question")
