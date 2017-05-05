@@ -16,7 +16,7 @@ CREATE TABLE awa_global_setting (
   /* the setting that corresponds to this global setting. */
   `setting_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The setting table defines all the possible settings
 that an application manages.  This table is automatically
 populated when an application starts. It is not modified.
@@ -27,7 +27,7 @@ CREATE TABLE awa_setting (
   /* the setting name. */
   `name` VARCHAR(255) BINARY NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The user setting holds the setting value for a given user.
 It is created the first time a user changes the default
 setting value. It is updated when the user modifies the setting.
@@ -45,7 +45,7 @@ CREATE TABLE awa_user_setting (
   /* the user to which the setting value is associated. */
   `user_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_global_setting")
 ,("awa_setting")
