@@ -33,7 +33,7 @@ CREATE TABLE awa_storage (
   /*  */
   `folder_id` BIGINT ,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The storage data is created only if the storage type
 is set to DATABASE.  It holds the file content in the blob. */
 CREATE TABLE awa_storage_data (
@@ -44,7 +44,7 @@ CREATE TABLE awa_storage_data (
   /* the storage content */
   `data` LONGBLOB NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
 CREATE TABLE awa_storage_folder (
   /* the storage folder identifier */
@@ -60,7 +60,7 @@ CREATE TABLE awa_storage_folder (
   /*  */
   `owner_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The local store record is created when a copy of the data is needed on the local file system.
 The creation date refers to the date when the data was copied to the local file system.
 The expiration date indicates a date after which the local file can be removed
@@ -83,7 +83,7 @@ CREATE TABLE awa_store_local (
   /*  */
   `storage_id` BIGINT ,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_storage")
 ,("awa_storage_data")
