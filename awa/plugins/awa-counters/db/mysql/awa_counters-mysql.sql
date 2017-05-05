@@ -10,7 +10,7 @@ CREATE TABLE awa_counter (
   /* the counter definition identifier. */
   `definition_id` BIGINT NOT NULL,
   PRIMARY KEY (`object_id`, `date`, `definition_id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* A counter definition defines what the counter represents. It uniquely identifies
 the counter for the Counter table. A counter may be associated with a database
 table. In that case, the counter definition has a relation to the corresponding Entity_Type. */
@@ -22,7 +22,7 @@ CREATE TABLE awa_counter_definition (
   /* the optional entity type that identifies the database table. */
   `entity_type` INTEGER ,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
 CREATE TABLE awa_visit (
   /* the entity identifier. */
@@ -36,7 +36,7 @@ CREATE TABLE awa_visit (
   /* the counter definition identifier. */
   `definition_id` BIGINT NOT NULL,
   PRIMARY KEY (`object_id`, `user`, `definition_id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_counter")
 ,("awa_counter_definition")
