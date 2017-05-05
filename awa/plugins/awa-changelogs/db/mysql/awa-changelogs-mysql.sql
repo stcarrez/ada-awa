@@ -14,7 +14,7 @@ CREATE TABLE awa_changelog (
   /*  */
   `entity_type` INTEGER NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_changelog")
 ;
