@@ -18,7 +18,7 @@ CREATE TABLE awa_blog (
   /* the workspace that this blog belongs to */
   `workspace_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
 CREATE TABLE awa_post (
   /* the post identifier */
@@ -46,7 +46,7 @@ CREATE TABLE awa_post (
   /*  */
   `blog_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_blog")
 ,("awa_post")
