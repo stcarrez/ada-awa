@@ -63,7 +63,7 @@ CREATE TABLE awa_message (
   /* the optional user session that triggered the message creation */
   `session_id` BIGINT ,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
 CREATE TABLE awa_message_type (
   /*  */
@@ -71,7 +71,7 @@ CREATE TABLE awa_message_type (
   /* the message type name */
   `name` VARCHAR(255) BINARY NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The message queue tracks the event messages that must be dispatched by
 a given server. */
 CREATE TABLE awa_queue (
@@ -82,7 +82,7 @@ CREATE TABLE awa_queue (
   /* the message queue name */
   `name` VARCHAR(255) BINARY NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The application that is granted access to the database.
  */
 CREATE TABLE awa_application (
@@ -111,7 +111,7 @@ CREATE TABLE awa_application (
   /*  */
   `user_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
 CREATE TABLE awa_callback (
   /*  */
@@ -123,7 +123,7 @@ CREATE TABLE awa_callback (
   /*  */
   `application_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The session is created when the user has granted an access to an application
 or when the application has refreshed its access token. */
 CREATE TABLE awa_oauth_session (
@@ -142,7 +142,7 @@ CREATE TABLE awa_oauth_session (
   /*  */
   `session_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The ACL table records permissions which are granted for a user to access a given database entity. */
 CREATE TABLE awa_acl (
   /* the ACL identifier */
@@ -160,7 +160,7 @@ CREATE TABLE awa_acl (
   /* the permission that is granted. */
   `permission` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The permission table lists all the application permissions that are defined.
 This is a system table shared by every user and workspace.
 The list of permission is fixed and never changes. */
@@ -170,7 +170,7 @@ CREATE TABLE awa_permission (
   /* the permission name */
   `name` VARCHAR(255) BINARY NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
 CREATE TABLE awa_access_key (
   /* the secure access key. */
@@ -186,7 +186,7 @@ CREATE TABLE awa_access_key (
   /*  */
   `user_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The Email entity defines the user email addresses.
 The user has a primary email address that is obtained
 from the registration process (either through a form
@@ -205,7 +205,7 @@ CREATE TABLE awa_email (
   /* the user. */
   `user_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
 CREATE TABLE awa_session (
   /*  */
@@ -227,7 +227,7 @@ CREATE TABLE awa_session (
   /*  */
   `user_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The User entity represents a user that can access and use the application.
  */
 CREATE TABLE awa_user (
@@ -252,7 +252,7 @@ CREATE TABLE awa_user (
   /*  */
   `email_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_message")
 ,("awa_message_type")
@@ -280,7 +280,7 @@ CREATE TABLE awa_counter (
   /* the counter definition identifier. */
   `definition_id` BIGINT NOT NULL,
   PRIMARY KEY (`object_id`, `date`, `definition_id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* A counter definition defines what the counter represents. It uniquely identifies
 the counter for the Counter table. A counter may be associated with a database
 table. In that case, the counter definition has a relation to the corresponding Entity_Type. */
@@ -292,7 +292,7 @@ CREATE TABLE awa_counter_definition (
   /* the optional entity type that identifies the database table. */
   `entity_type` INTEGER ,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
 CREATE TABLE awa_visit (
   /* the entity identifier. */
@@ -306,7 +306,7 @@ CREATE TABLE awa_visit (
   /* the counter definition identifier. */
   `definition_id` BIGINT NOT NULL,
   PRIMARY KEY (`object_id`, `user`, `definition_id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_counter")
 ,("awa_counter_definition")
@@ -336,7 +336,7 @@ CREATE TABLE awa_comment (
   /*  */
   `author_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_comment")
 ;
@@ -367,7 +367,7 @@ CREATE TABLE awa_invitation (
   /*  */
   `member_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The workspace controls the features available in the application
 for a set of users: the workspace members.  A user could create
 several workspaces and be part of several workspaces that other
@@ -382,7 +382,7 @@ CREATE TABLE awa_workspace (
   /*  */
   `owner_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
 CREATE TABLE awa_workspace_feature (
   /*  */
@@ -392,7 +392,7 @@ CREATE TABLE awa_workspace_feature (
   /*  */
   `workspace_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The workspace member indicates the users who
 are part of the workspace. The join_date is NULL when
 a user was invited but has not accepted the invitation. */
@@ -408,7 +408,7 @@ CREATE TABLE awa_workspace_member (
   /*  */
   `workspace_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_invitation")
 ,("awa_workspace")
@@ -451,7 +451,7 @@ CREATE TABLE awa_storage (
   /*  */
   `folder_id` BIGINT ,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The storage data is created only if the storage type
 is set to DATABASE.  It holds the file content in the blob. */
 CREATE TABLE awa_storage_data (
@@ -462,7 +462,7 @@ CREATE TABLE awa_storage_data (
   /* the storage content */
   `data` LONGBLOB NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
 CREATE TABLE awa_storage_folder (
   /* the storage folder identifier */
@@ -478,7 +478,7 @@ CREATE TABLE awa_storage_folder (
   /*  */
   `owner_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The local store record is created when a copy of the data is needed on the local file system.
 The creation date refers to the date when the data was copied to the local file system.
 The expiration date indicates a date after which the local file can be removed
@@ -501,7 +501,7 @@ CREATE TABLE awa_store_local (
   /*  */
   `storage_id` BIGINT ,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_storage")
 ,("awa_storage_data")
@@ -517,7 +517,7 @@ CREATE TABLE awa_tag (
   /* the tag name */
   `name` VARCHAR(255) BINARY NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
 CREATE TABLE awa_tagged_entity (
   /* the tag entity identifier */
@@ -530,7 +530,7 @@ Date: 2013-02-23the database entity to which the tag is associated */
   /*  */
   `tag_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_tag")
 ,("awa_tagged_entity")
@@ -568,7 +568,7 @@ CREATE TABLE awa_image (
   /*  */
   `storage_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_image")
 ;
@@ -591,7 +591,7 @@ CREATE TABLE awa_global_setting (
   /* the setting that corresponds to this global setting. */
   `setting_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The setting table defines all the possible settings
 that an application manages.  This table is automatically
 populated when an application starts. It is not modified.
@@ -602,7 +602,7 @@ CREATE TABLE awa_setting (
   /* the setting name. */
   `name` VARCHAR(255) BINARY NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The user setting holds the setting value for a given user.
 It is created the first time a user changes the default
 setting value. It is updated when the user modifies the setting.
@@ -620,7 +620,7 @@ CREATE TABLE awa_user_setting (
   /* the user to which the setting value is associated. */
   `user_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_global_setting")
 ,("awa_setting")
@@ -641,7 +641,7 @@ CREATE TABLE awa_rating (
   /* the entity type */
   `for_entity_type` INTEGER NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The vote table tracks a vote action by a user on a given database entity.
 The primary key is made of the user, the entity id and entity type.
  */
@@ -653,7 +653,7 @@ CREATE TABLE awa_vote (
   /*  */
   `user_id` BIGINT NOT NULL,
   PRIMARY KEY (`entity_id`, `user_id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_rating")
 ,("awa_vote")
@@ -691,7 +691,7 @@ CREATE TABLE awa_job (
   /*  */
   `session_id` BIGINT ,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_job")
 ;
@@ -714,7 +714,7 @@ CREATE TABLE awa_city (
   /* the country that this city belongs to */
   `country_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The country model is a system data model for the application.
 In theory, it never changes. */
 CREATE TABLE awa_country (
@@ -737,7 +737,7 @@ CREATE TABLE awa_country (
   /* the currency code */
   `currency_code` VARCHAR(3) BINARY NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The country neighbor defines what countries
 are neigbors with each other */
 CREATE TABLE awa_country_neighbor (
@@ -748,7 +748,7 @@ CREATE TABLE awa_country_neighbor (
   /*  */
   `neighbor_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* Region defines an area within a country. */
 CREATE TABLE awa_region (
   /* the region identifier */
@@ -760,7 +760,7 @@ CREATE TABLE awa_region (
   /* the country that this region belongs to */
   `country_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_city")
 ,("awa_country")
@@ -790,7 +790,7 @@ CREATE TABLE awa_answer (
   /*  */
   `question_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The question table holds a single question asked by a user to the community.
 The short description is used to give an overview of the question in long lists
 while the description contains the full question text.  The rating is updating
@@ -821,7 +821,7 @@ the question short description. */
   /*  */
   `accepted_answer_id` BIGINT ,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_answer")
 ,("awa_question")
@@ -847,7 +847,7 @@ CREATE TABLE awa_blog (
   /* the workspace that this blog belongs to */
   `workspace_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
 CREATE TABLE awa_post (
   /* the post identifier */
@@ -875,7 +875,7 @@ CREATE TABLE awa_post (
   /*  */
   `blog_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_blog")
 ,("awa_post")
@@ -897,7 +897,7 @@ CREATE TABLE awa_changelog (
   /*  */
   `entity_type` INTEGER NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_changelog")
 ;
@@ -924,7 +924,7 @@ CREATE TABLE awa_wiki_content (
   /* the page version author */
   `author_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The wiki page represents a page with its versions.
 It refers to the last version which is currently visible.
 It has an optional preview image which defines
@@ -951,7 +951,7 @@ CREATE TABLE awa_wiki_page (
   /* the current content (or last version) */
   `content_id` BIGINT ,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* Permission is granted to display a wiki page if there is
 an ACL entry between the wiki space and the user. */
 CREATE TABLE awa_wiki_space (
@@ -975,7 +975,7 @@ CREATE TABLE awa_wiki_space (
   /*  */
   `workspace_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_wiki_content")
 ,("awa_wiki_page")

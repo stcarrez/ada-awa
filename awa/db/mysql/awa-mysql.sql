@@ -36,7 +36,7 @@ CREATE TABLE awa_message (
   /* the optional user session that triggered the message creation */
   `session_id` BIGINT ,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
 CREATE TABLE awa_message_type (
   /*  */
@@ -44,7 +44,7 @@ CREATE TABLE awa_message_type (
   /* the message type name */
   `name` VARCHAR(255) BINARY NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The message queue tracks the event messages that must be dispatched by
 a given server. */
 CREATE TABLE awa_queue (
@@ -55,7 +55,7 @@ CREATE TABLE awa_queue (
   /* the message queue name */
   `name` VARCHAR(255) BINARY NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The application that is granted access to the database.
  */
 CREATE TABLE awa_application (
@@ -84,7 +84,7 @@ CREATE TABLE awa_application (
   /*  */
   `user_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
 CREATE TABLE awa_callback (
   /*  */
@@ -96,7 +96,7 @@ CREATE TABLE awa_callback (
   /*  */
   `application_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The session is created when the user has granted an access to an application
 or when the application has refreshed its access token. */
 CREATE TABLE awa_oauth_session (
@@ -115,7 +115,7 @@ CREATE TABLE awa_oauth_session (
   /*  */
   `session_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The ACL table records permissions which are granted for a user to access a given database entity. */
 CREATE TABLE awa_acl (
   /* the ACL identifier */
@@ -133,7 +133,7 @@ CREATE TABLE awa_acl (
   /* the permission that is granted. */
   `permission` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The permission table lists all the application permissions that are defined.
 This is a system table shared by every user and workspace.
 The list of permission is fixed and never changes. */
@@ -143,7 +143,7 @@ CREATE TABLE awa_permission (
   /* the permission name */
   `name` VARCHAR(255) BINARY NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
 CREATE TABLE awa_access_key (
   /* the secure access key. */
@@ -159,7 +159,7 @@ CREATE TABLE awa_access_key (
   /*  */
   `user_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The Email entity defines the user email addresses.
 The user has a primary email address that is obtained
 from the registration process (either through a form
@@ -178,7 +178,7 @@ CREATE TABLE awa_email (
   /* the user. */
   `user_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
 CREATE TABLE awa_session (
   /*  */
@@ -200,7 +200,7 @@ CREATE TABLE awa_session (
   /*  */
   `user_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The User entity represents a user that can access and use the application.
  */
 CREATE TABLE awa_user (
@@ -225,7 +225,7 @@ CREATE TABLE awa_user (
   /*  */
   `email_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_message")
 ,("awa_message_type")
