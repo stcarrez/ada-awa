@@ -30,7 +30,7 @@ CREATE TABLE awa_job (
   /*  */
   `session_id` BIGINT ,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_job")
 ;
