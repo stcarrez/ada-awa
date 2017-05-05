@@ -24,7 +24,7 @@ CREATE TABLE awa_invitation (
   /*  */
   `member_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The workspace controls the features available in the application
 for a set of users: the workspace members.  A user could create
 several workspaces and be part of several workspaces that other
@@ -39,7 +39,7 @@ CREATE TABLE awa_workspace (
   /*  */
   `owner_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
 CREATE TABLE awa_workspace_feature (
   /*  */
@@ -49,7 +49,7 @@ CREATE TABLE awa_workspace_feature (
   /*  */
   `workspace_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The workspace member indicates the users who
 are part of the workspace. The join_date is NULL when
 a user was invited but has not accepted the invitation. */
@@ -65,7 +65,7 @@ CREATE TABLE awa_workspace_member (
   /*  */
   `workspace_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_invitation")
 ,("awa_workspace")
