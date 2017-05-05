@@ -16,7 +16,7 @@ CREATE TABLE awa_city (
   /* the country that this city belongs to */
   `country_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The country model is a system data model for the application.
 In theory, it never changes. */
 CREATE TABLE awa_country (
@@ -39,7 +39,7 @@ CREATE TABLE awa_country (
   /* the currency code */
   `currency_code` VARCHAR(3) BINARY NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The country neighbor defines what countries
 are neigbors with each other */
 CREATE TABLE awa_country_neighbor (
@@ -50,7 +50,7 @@ CREATE TABLE awa_country_neighbor (
   /*  */
   `neighbor_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* Region defines an area within a country. */
 CREATE TABLE awa_region (
   /* the region identifier */
@@ -62,7 +62,7 @@ CREATE TABLE awa_region (
   /* the country that this region belongs to */
   `country_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_city")
 ,("awa_country")
