@@ -245,7 +245,7 @@ INSERT INTO awa_workspace_member (id, member_id, workspace_id, join_date, role)
    FROM awa_workspace AS ws
    INNER JOIN entity_type AS ent
    INNER JOIN awa_acl AS acl ON acl.entity_id = ws.id AND acl.entity_type = ent.id
-   WHERE ent.name = 'awa_workspace')
+   WHERE ent.name = 'awa_workspace');
 
 ALTER TABLE awa_acl ADD COLUMN permission BIGINT NOT NULL;
 ALTER TABLE awa_acl ADD COLUMN workspace_id BIGINT NOT NULL;
