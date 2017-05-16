@@ -3456,7 +3456,23 @@ if test $ENABLE_XMLADA = "yes" ; then
 fi
 
 if test $ENABLE_AWS = "yes" ; then
-  PACKAGES="$PACKAGES aws-gpl-2015-src"
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for GNAT compiler version" >&5
+$as_echo_n "checking for GNAT compiler version... " >&6; }
+  version=`$GNATMAKE --version | grep GNATMAKE | sed -e 's,GNATMAKE ,,'`
+  case "$version" in
+   4.7* | 4.8* | 4.9*)
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: $version" >&5
+$as_echo "$version" >&6; }
+      PACKAGES="$PACKAGES aws-gpl-2015-src"
+      ;;
+
+   *)
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: $version" >&5
+$as_echo "$version" >&6; }
+      PACKAGES="$PACKAGES aws-gpl-2016-src"
+      ;;
+
+  esac
 fi
 
 for NAME in $PACKAGES ; do
