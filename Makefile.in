@@ -35,7 +35,8 @@ awa_util_configure=""
 endif
 
 ifeq (${ENABLE_AWS},yes)
-ADA_PROJECT_PATH+=${prefix}/lib/gnat:${prefix}/share/gpr
+-include aws-gpl-2015-src/makefile.setup
+ADA_PROJECT_PATH+=${prefix}/lib/gnat:${prefix}/${TARGET}/lib/gnat:${prefix}/${TARGET}/share/gpr
 
 export ADA_PROJECT_PATH
 endif
