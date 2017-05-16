@@ -116,7 +116,20 @@ if test $ENABLE_XMLADA = "yes" ; then
 fi
 
 if test $ENABLE_AWS = "yes" ; then
-  PACKAGES="$PACKAGES aws-gpl-2015-src"
+  AC_MSG_CHECKING([for GNAT compiler version])
+  version=`$GNATMAKE --version | grep GNATMAKE | sed -e 's,GNATMAKE ,,'`
+  case "$version" in
+   4.7* | 4.8* | 4.9*)
+      AC_MSG_RESULT($version)
+      PACKAGES="$PACKAGES aws-gpl-2015-src"
+      ;;
+
+   *)
+      AC_MSG_RESULT($version)
+      PACKAGES="$PACKAGES aws-gpl-2016-src"
+      ;;
+
+  esac
 fi
 
 dnl Extract the packages if necessary
