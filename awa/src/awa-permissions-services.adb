@@ -249,6 +249,7 @@ package body AWA.Permissions.Services is
       RE : constant Entity_Policy_Access
         := new Entity_Policy;
    begin
+      Result.Roles := RP;
       Result.Add_Policy (RP.all'Access);
       Result.Add_Policy (RU.all'Access);
       Result.Add_Policy (RE.all'Access);
