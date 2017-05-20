@@ -65,6 +65,11 @@ package AWA.Permissions.Services is
                                Kind       : in ADO.Entity_Type;
                                Permission : in Permission_Type);
 
+   --  Get the role names that grant the given permission.
+   function Get_Role_Names (Manager : in Permission_Manager;
+                            Permission : in Security.Permissions.Permission_Index)
+                            return Security.Policies.Roles.Role_Name_Array;
+
    --  Add a permission for the user <b>User</b> to access the entity identified by
    --  <b>Entity</b> which is of type <b>Kind</b>.
    procedure Add_Permission (Session    : in out ADO.Sessions.Master_Session;
