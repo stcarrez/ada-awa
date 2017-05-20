@@ -21,7 +21,6 @@ with ADO.Sessions.Entities;
 with ADO.Statements;
 with Util.Log.Loggers;
 
-with Security.Policies.Roles;
 with Security.Policies.URLs;
 
 with AWA.Permissions.Models;
@@ -183,6 +182,16 @@ package body AWA.Permissions.Services is
          end if;
       end;
    end Check_Permission;
+
+   --  ------------------------------
+   --  Get the role names that grant the given permission.
+   --  ------------------------------
+   function Get_Role_Names (Manager : in Permission_Manager;
+                            Permission : in Security.Permissions.Permission_Index)
+                            return Security.Policies.Roles.Role_Name_Array is
+   begin
+      return Manager.Roles.Get_Role_Names (Manager.Roles.Get_Grants (Permission));
+   end Get_Role_Names;
 
    --  ------------------------------
    --  Add a permission for the user <b>User</b> to access the entity identified by
