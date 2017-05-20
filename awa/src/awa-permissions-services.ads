@@ -28,6 +28,7 @@ with ADO.Objects;
 
 with Security.Policies;
 with Security.Contexts;
+with Security.Policies.Roles;
 package AWA.Permissions.Services is
 
    --  Register the security EL functions in the EL mapper.
@@ -100,7 +101,8 @@ package AWA.Permissions.Services is
 private
 
    type Permission_Manager is new Security.Policies.Policy_Manager with record
-      App : AWA.Applications.Application_Access := null;
+      App   : AWA.Applications.Application_Access;
+      Roles : Security.Policies.Roles.Role_Policy_Access;
    end record;
 
 end AWA.Permissions.Services;
