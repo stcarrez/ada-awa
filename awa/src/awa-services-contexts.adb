@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-services -- Services
---  Copyright (C) 2011, 2012, 2013, 2014, 2016 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,12 +17,11 @@
 -----------------------------------------------------------------------
 
 with Ada.Task_Attributes;
-with ADO.Databases;
 with Security.Contexts;
 
 package body AWA.Services.Contexts is
 
-   use type ADO.Databases.Connection_Status;
+   use type ADO.Sessions.Connection_Status;
    use type AWA.Users.Principals.Principal_Access;
 
    package Task_Context is new Ada.Task_Attributes
@@ -43,10 +42,10 @@ package body AWA.Services.Contexts is
    function Get_Session (Ctx : in Service_Context_Access) return ADO.Sessions.Session is
    begin
       --  If a master database session was created, use it.
-      if Ctx.Master.Get_Status = ADO.Databases.OPEN then
+      if Ctx.Master.Get_Status = ADO.Sessions.OPEN then
          return ADO.Sessions.Session (Ctx.Master);
 
-      elsif Ctx.Slave.Get_Status /= ADO.Databases.OPEN then
+      elsif Ctx.Slave.Get_Status /= ADO.Sessions.OPEN then
          Ctx.Slave  := Ctx.Application.Get_Session;
       end if;
       return Ctx.Slave;
@@ -58,7 +57,7 @@ package body AWA.Services.Contexts is
    function Get_Master_Session (Ctx : in Service_Context_Access)
                                 return ADO.Sessions.Master_Session is
    begin
-      if Ctx.Master.Get_Status /= ADO.Databases.OPEN then
+      if Ctx.Master.Get_Status /= ADO.Sessions.OPEN then
          Ctx.Master := Ctx.Application.Get_Master_Session;
       end if;
       return Ctx.Master;
