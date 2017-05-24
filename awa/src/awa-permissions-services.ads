@@ -16,8 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with AWA.Applications;
-
 with Util.Beans.Objects;
 
 with EL.Functions;
@@ -29,7 +27,12 @@ with ADO.Objects;
 with Security.Policies;
 with Security.Contexts;
 with Security.Policies.Roles;
+
+with AWA.Applications;
+with AWA.Services.Contexts;
 package AWA.Permissions.Services is
+
+   package ASC renames AWA.Services.Contexts;
 
    --  Register the security EL functions in the EL mapper.
    procedure Set_Functions (Mapper : in out EL.Functions.Function_Mapper'Class);
@@ -40,6 +43,11 @@ package AWA.Permissions.Services is
    --  Get the permission manager associated with the security context.
    --  Returns null if there is none.
    function Get_Permission_Manager (Context : in Security.Contexts.Security_Context'Class)
+                                    return Permission_Manager_Access;
+
+   --  Get the permission manager associated with the security context.
+   --  Returns null if there is none.
+   function Get_Permission_Manager (Context : in ASC.Service_Context_Access)
                                     return Permission_Manager_Access;
 
    --  Get the application instance.
@@ -59,7 +67,7 @@ package AWA.Permissions.Services is
                              Entity     : in ADO.Identifier;
                              Kind       : in ADO.Entity_Type;
                              Workspace  : in ADO.Identifier;
-                             Permission : in Permission_Type);
+                             Permission : in Security.Permissions.Permission_Index);
 
    --  Check that the current user has the specified permission.
    --  Raise NO_PERMISSION exception if the user does not have the permission.
@@ -75,20 +83,22 @@ package AWA.Permissions.Services is
 
    --  Add a permission for the user <b>User</b> to access the entity identified by
    --  <b>Entity</b> which is of type <b>Kind</b>.
-   procedure Add_Permission (Session    : in out ADO.Sessions.Master_Session;
+   procedure Add_Permission (Manager    : in Permission_Manager;
+                             Session    : in out ADO.Sessions.Master_Session;
                              User       : in ADO.Identifier;
                              Entity     : in ADO.Identifier;
                              Kind       : in ADO.Entity_Type;
                              Workspace  : in ADO.Identifier;
-                             Permission : in Permission_Type := READ);
+                             Permission : in Security.Permissions.Permission_Index);
 
    --  Add a permission for the user <b>User</b> to access the entity identified by
    --  <b>Entity</b>.
-   procedure Add_Permission (Session    : in out ADO.Sessions.Master_Session;
+   procedure Add_Permission (Manager    : in Permission_Manager;
+                             Session    : in out ADO.Sessions.Master_Session;
                              User       : in ADO.Identifier;
                              Entity     : in ADO.Objects.Object_Ref'Class;
                              Workspace  : in ADO.Identifier;
-                             Permission : in Permission_Type := READ);
+                             Permission : in Security.Permissions.Permission_Index);
 
    --  Create a permission manager for the given application.
    function Create_Permission_Manager (App : in AWA.Applications.Application_Access)
@@ -108,9 +118,14 @@ package AWA.Permissions.Services is
 
 private
 
+   type Permission_Array is array (Security.Permissions.Permission_Index) of ADO.Identifier;
+
    type Permission_Manager is new Security.Policies.Policy_Manager with record
       App   : AWA.Applications.Application_Access;
       Roles : Security.Policies.Roles.Role_Policy_Access;
+
+      --  Mapping between the application permission index and the database permission identifier.
+      Map   : Permission_Array := (others => 0);
    end record;
 
 end AWA.Permissions.Services;
