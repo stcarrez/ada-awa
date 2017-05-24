@@ -32,7 +32,7 @@
       blog.create_date,
       (SELECT count(*) FROM awa_post WHERE awa_post.blog_id = blog.id AND awa_post.status = 1)
     FROM awa_blog AS blog
-    INNER JOIN awa_acl AS acl ON acl.entity_id = blog.id AND acl.entity_type = :table AND acl.user_id = :user_id
+    INNER JOIN awa_acl AS acl ON acl.entity_id = blog.id AND acl.entity_type = :table AND acl.user_id = :user_id AND acl.permission = $permission[blog-create-post]
     ORDER BY blog.create_date DESC
        </sql>
     </query>
