@@ -80,7 +80,9 @@
     <sql>
        SELECT acl.id FROM awa_acl AS acl
        WHERE acl.entity_type = :entity_type
-       AND acl.user_id = :user_id   
+       AND acl.entity_id = :entity_id
+       AND acl.user_id = :user_id
+       AND acl.permission = $permission[folder-create]
     </sql>
   </entity-permission>
 
@@ -90,7 +92,9 @@
     <sql>
        SELECT acl.id FROM awa_acl AS acl
        WHERE acl.entity_type = :entity_type
-       AND acl.user_id = :user_id   
+       AND acl.entity_id = :entity_id
+       AND acl.user_id = :user_id
+       AND acl.permission = $permission[storage-create]
     </sql>
   </entity-permission>
 
@@ -101,7 +105,8 @@
        SELECT acl.id FROM awa_storage
        INNER JOIN awa_acl AS acl ON acl.entity_id = awa_storage.workspace_id
        WHERE acl.entity_type = :entity_type
-       AND acl.user_id = :user_id   
+       AND acl.user_id = :user_id
+       AND acl.permission = $permission[storage-delete]
        AND awa_storage.id = :entity_id
     </sql>
   </entity-permission>
