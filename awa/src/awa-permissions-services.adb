@@ -19,7 +19,9 @@
 with ADO.Queries;
 with ADO.Sessions.Entities;
 with ADO.Statements;
+with ADO.Caches.Discrete;
 with Util.Log.Loggers;
+with Util.Strings;
 
 with Security.Policies.URLs;
 
@@ -30,6 +32,9 @@ package body AWA.Permissions.Services is
    use ADO.Sessions;
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Permissions.Services");
+
+   package Permission_Cache is
+     new ADO.Caches.Discrete (Element_Type => Integer);
 
    --  ------------------------------
    --  Check if the permission with the name <tt>Name</tt> is granted for the current user.
@@ -121,6 +126,76 @@ package body AWA.Permissions.Services is
    begin
       Manager.App := App;
    end Set_Application;
+
+   --  ------------------------------
+   --  Initialize the permissions.
+   --  ------------------------------
+   procedure Start (Manager : in out Permission_Manager) is
+      package Perm renames Security.Permissions;
+
+      DB         : ADO.Sessions.Master_Session := Manager.App.Get_Master_Session;
+      Cache      : constant Permission_Cache.Cache_Type_Access := new Permission_Cache.Cache_Type;
+      Count      : constant Perm.Permission_Index := Perm.Get_Last_Permission_Index;
+      Last       : Natural := 0;
+      Insert     : ADO.Statements.Insert_Statement;
+      Stmt       : ADO.Statements.Query_Statement;
+      Load_Count : Natural := 0;
+      Add_Count  : Natural := 0;
+   begin
+      Log.Info ("Initializing {0} permissions", Perm.Permission_Index'Image (Count));
+
+      DB.Begin_Transaction;
+
+      --  Step 1: load the permissions from the database.
+      Stmt := DB.Create_Statement ("SELECT id, name FROM awa_permission");
+      Stmt.Execute;
+      while Stmt.Has_Elements loop
+         declare
+            Id   : constant Integer := Stmt.Get_Integer (0);
+            Name : constant String := Stmt.Get_String (1);
+         begin
+            Log.Debug ("Loaded permission {0} as {1}", Name, Util.Strings.Image (Id));
+            Permission_Cache.Insert (Cache.all, Name, Id);
+            Load_Count := Load_Count + 1;
+            if Id > Last then
+               Last := Id;
+            end if;
+         end;
+         Stmt.Next;
+      end loop;
+
+      --  Step 2: Check that every application permission is defined in the database.
+      --  Create the new entries and allocate them the last id.
+      for I in 1 .. Count loop
+         declare
+            Name   : constant String := Perm.Get_Name (I);
+            Result : Integer;
+         begin
+            Result := Cache.Find (Name);
+
+         exception
+            when ADO.Caches.No_Value =>
+               Last := Last + 1;
+               Log.Info ("Adding permission {0} as {1}", Name, Util.Strings.Image (Last));
+               Insert := DB.Create_Statement (AWA.Permissions.Models.PERMISSION_TABLE);
+               Insert.Save_Field (Name => "id", Value => Last);
+               Insert.Save_Field (Name => "name", Value => Name);
+               Insert.Execute (Result);
+               Cache.Insert (Name, Last);
+               Add_Count := Add_Count + 1;
+
+         end;
+      end loop;
+      DB.Add_Cache ("permission", Cache.all'Access);
+      DB.Commit;
+      if Add_Count > 0 then
+         Log.Info ("Found {0} permissions in the database and created {1} permissions",
+                   Util.Strings.Image (Load_Count), Util.Strings.Image (Add_Count));
+      else
+         Log.Info ("Found {0} permissions in the database",
+                   Util.Strings.Image (Load_Count));
+      end if;
+   end Start;
 
    --  ------------------------------
    --  Add a permission for the current user to access the entity identified by
