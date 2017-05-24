@@ -81,11 +81,11 @@ package body AWA.Permissions.Beans is
    begin
       Ctx.Start;
       Kind := ADO.Sessions.Entities.Find_Entity_Type (DB, To_String (Bean.Kind));
-      AWA.Permissions.Services.Add_Permission (Session    => DB,
-                                               Entity     => Bean.Get_Entity_Id,
-                                               Kind       => Kind,
-                                               User       => Ctx.Get_User_Identifier,
-                                               Workspace  => Bean.Get_Workspace_Id);
+--      AWA.Permissions.Services.Add_Permission (Session    => DB,
+--                                               Entity     => Bean.Get_Entity_Id,
+--                                               Kind       => Kind,
+--                                               User       => Ctx.Get_User_Identifier,
+--                                               Workspace  => Bean.Get_Workspace_Id);
       Ctx.Commit;
    end Create;
 
