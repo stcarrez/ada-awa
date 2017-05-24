@@ -44,6 +44,19 @@
      <action>#{workspace.create}</action>
   </on-event>
 
+  <entity-permission>
+    <name>workspace-create</name>
+    <entity-type>awa_workspace</entity-type>
+    <description>Permission to create a workspace.</description>
+    <sql>
+       SELECT acl.id FROM awa_acl AS acl
+       WHERE acl.entity_type = :entity_type
+       AND acl.user_id = :user_id
+       AND acl.permission = $permission[workspace-create]
+    </sql>
+    <grant>SELECT id FROM awa_workspace WHERE id = :workspace_id</grant>
+  </entity-permission>
+
   <navigation-rule>
     <from-view-id>/auth/invitation.xhtml</from-view-id>
     <navigation-case>
