@@ -45,6 +45,7 @@
       user.name
     FROM awa_wiki_page AS page
     LEFT JOIN awa_acl AS acl ON acl.entity_id = :wiki_id AND acl.entity_type = :table AND acl.user_id = :user_id
+      AND acl.permission = $permission[wiki-page-view]
     LEFT JOIN awa_wiki_content AS content ON page.content_id = content.id
     LEFT JOIN awa_user AS user ON content.author_id = user.id
     WHERE page.wiki_id = :wiki_id AND (page.is_public OR acl.id IS NOT NULL)
@@ -56,6 +57,7 @@
        count(page.id)
     FROM awa_wiki_page AS page
     LEFT JOIN awa_acl AS acl ON acl.entity_id = :wiki_id AND acl.entity_type = :table AND acl.user_id = :user_id
+      AND acl.permission = $permission[wiki-page-view]
     WHERE page.wiki_id = :wiki_id AND (page.is_public OR acl.id IS NOT NULL)
        </sql-count>
     </query>
@@ -75,6 +77,7 @@
     FROM awa_wiki_page AS page
     INNER JOIN awa_tagged_entity AS e ON e.for_entity_id = page.id AND e.entity_type = :page_table AND e.tag_id = :tag
     LEFT JOIN awa_acl AS acl ON acl.entity_id = :wiki_id AND acl.entity_type = :table AND acl.user_id = :user_id
+      AND acl.permission = $permission[wiki-page-view]
     LEFT JOIN awa_wiki_content AS content ON page.content_id = content.id
     LEFT JOIN awa_user AS user ON content.author_id = user.id
     WHERE page.wiki_id = :wiki_id AND (page.is_public OR acl.id IS NOT NULL)
@@ -87,6 +90,7 @@
     FROM awa_wiki_page AS page
     INNER JOIN awa_tagged_entity AS e ON e.for_entity_id = page.id AND e.entity_type = :page_table AND e.tag_id = :tag
     LEFT JOIN awa_acl AS acl ON acl.entity_id = :wiki_id AND acl.entity_type = :table AND acl.user_id = :user_id
+      AND acl.permission = $permission[wiki-page-view]
     WHERE page.wiki_id = :wiki_id AND (page.is_public OR acl.id IS NOT NULL)
        </sql-count>
     </query>
