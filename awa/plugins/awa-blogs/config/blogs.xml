@@ -332,7 +332,9 @@
     <sql>
        SELECT acl.id FROM awa_acl AS acl
        WHERE acl.entity_type = :entity_type
+       AND acl.entity_id = :entity_id
        AND acl.user_id = :user_id
+       AND acl.permission = $permission[blog-create]
     </sql>
   </entity-permission>
 
@@ -345,6 +347,7 @@
        WHERE acl.entity_type = :entity_type
        AND acl.user_id = :user_id
        AND acl.entity_id = :entity_id
+       AND acl.permission = $permission[blog-delete]
     </sql>
   </entity-permission>
 
@@ -357,6 +360,7 @@
        WHERE acl.entity_type = :entity_type
        AND acl.user_id = :user_id
        AND acl.entity_id = :entity_id
+       AND acl.permission = $permission[blog-create-post]
     </sql>
   </entity-permission>
 
@@ -370,6 +374,7 @@
        WHERE acl.entity_type = :entity_type
        AND acl.user_id = :user_id
        AND blog_post.id = :entity_id
+       AND acl.permission = $permission[blog-update-post]
     </sql>
   </entity-permission>
 
@@ -383,6 +388,7 @@
        WHERE acl.entity_type = :entity_type
        AND acl.user_id = :user_id
        AND blog_post.id = :entity_id
+       AND acl.permission = $permission[blog-delete-post]
     </sql>
   </entity-permission>
 
@@ -405,6 +411,7 @@
        SELECT acl.id FROM awa_comment AS cmt
        INNER JOIN awa_post AS blog_post ON cmt.entity_id = blog_post.id
        INNER JOIN awa_acl AS acl ON acl.entity_id = blog_post.blog_id AND acl.entity_type = :entity_type_1
+          AND acl.permission = $permission[blog-publish-comment]
        WHERE cmt.id = :entity_id AND cmt.entity_type = :entity_type_2 AND acl.user_id = :user_id
     </sql>
   </entity-permission>
@@ -418,6 +425,7 @@
        SELECT acl.id FROM awa_comment AS cmt
        INNER JOIN awa_post AS blog_post ON cmt.entity_id = blog_post.id
        INNER JOIN awa_acl AS acl ON acl.entity_id = blog_post.blog_id AND acl.entity_type = :entity_type_1
+          AND acl.permission = $permission[blog-delete-comment]
        WHERE cmt.id = :entity_id AND cmt.entity_type = :entity_type_2 AND acl.user_id = :user_id
     </sql>
   </entity-permission>
