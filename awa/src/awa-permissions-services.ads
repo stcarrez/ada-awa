@@ -50,6 +50,9 @@ package AWA.Permissions.Services is
    procedure Set_Application (Manager : in out Permission_Manager;
                               App : in AWA.Applications.Application_Access);
 
+   --  Initialize the permissions.
+   procedure Start (Manager : in out Permission_Manager);
+
    --  Add a permission for the current user to access the entity identified by
    --  <b>Entity</b> and <b>Kind</b> in the <b>Workspace</b>.
    procedure Add_Permission (Manager    : in Permission_Manager;
