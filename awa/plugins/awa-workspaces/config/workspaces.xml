@@ -5,6 +5,12 @@
     <message-bundle var='workspaceMsg'>workspaces</message-bundle>
   </application>
 
+  <context-param>
+    <!-- List of permissions to grant to the owner when the workspace is created -->
+    <param-name>workspaces.permissions_list</param-name>
+    <param-value>blog-create,wiki-space-create</param-value>
+  </context-param>
+
   <managed-bean>
     <description>This bean allows to perform some general workspace actions</description>
     <managed-bean-name>workspace</managed-bean-name>
