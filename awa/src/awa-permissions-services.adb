@@ -26,10 +26,10 @@ with Util.Strings;
 with Security.Policies.URLs;
 
 with AWA.Permissions.Models;
-with AWA.Services.Contexts;
 package body AWA.Permissions.Services is
 
    use ADO.Sessions;
+   use type ADO.Identifier;
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Permissions.Services");
 
@@ -110,6 +110,18 @@ package body AWA.Permissions.Services is
    end Get_Permission_Manager;
 
    --  ------------------------------
+   --  Get the permission manager associated with the security context.
+   --  Returns null if there is none.
+   --  ------------------------------
+   function Get_Permission_Manager (Context : in ASC.Service_Context_Access)
+                                    return Permission_Manager_Access is
+      Manager : constant Security.Policies.Policy_Manager_Access
+        := Context.Get_Application.Get_Security_Manager;
+   begin
+      return Permission_Manager'Class (Manager.all)'Access;
+   end Get_Permission_Manager;
+
+   --  ------------------------------
    --  Get the application instance.
    --  ------------------------------
    function Get_Application (Manager : in Permission_Manager)
@@ -136,7 +148,7 @@ package body AWA.Permissions.Services is
       DB         : ADO.Sessions.Master_Session := Manager.App.Get_Master_Session;
       Cache      : constant Permission_Cache.Cache_Type_Access := new Permission_Cache.Cache_Type;
       Count      : constant Perm.Permission_Index := Perm.Get_Last_Permission_Index;
-      Last       : Natural := 0;
+      Last       : ADO.Identifier := 0;
       Insert     : ADO.Statements.Insert_Statement;
       Stmt       : ADO.Statements.Query_Statement;
       Load_Count : Natural := 0;
@@ -157,8 +169,8 @@ package body AWA.Permissions.Services is
             Log.Debug ("Loaded permission {0} as {1}", Name, Util.Strings.Image (Id));
             Permission_Cache.Insert (Cache.all, Name, Id);
             Load_Count := Load_Count + 1;
-            if Id > Last then
-               Last := Id;
+            if ADO.Identifier (Id) > Last then
+               Last := ADO.Identifier (Id);
             end if;
          end;
          Stmt.Next;
@@ -171,17 +183,18 @@ package body AWA.Permissions.Services is
             Name   : constant String := Perm.Get_Name (I);
             Result : Integer;
          begin
-            Result := Cache.Find (Name);
+            Manager.Map (I) := ADO.Identifier (Cache.Find (Name));
 
          exception
             when ADO.Caches.No_Value =>
                Last := Last + 1;
-               Log.Info ("Adding permission {0} as {1}", Name, Util.Strings.Image (Last));
+               Log.Info ("Adding permission {0} as {1}", Name, ADO.Identifier'Image (Last));
                Insert := DB.Create_Statement (AWA.Permissions.Models.PERMISSION_TABLE);
                Insert.Save_Field (Name => "id", Value => Last);
                Insert.Save_Field (Name => "name", Value => Name);
                Insert.Execute (Result);
-               Cache.Insert (Name, Last);
+               Cache.Insert (Name, Integer (Last));
+               Manager.Map (I) := Last;
                Add_Count := Add_Count + 1;
 
          end;
@@ -205,9 +218,7 @@ package body AWA.Permissions.Services is
                              Entity     : in ADO.Identifier;
                              Kind       : in ADO.Entity_Type;
                              Workspace  : in ADO.Identifier;
-                             Permission : in Permission_Type) is
-      pragma Unreferenced (Manager);
-
+                             Permission : in Security.Permissions.Permission_Index) is
       Ctx  : constant AWA.Services.Contexts.Service_Context_Access
         := AWA.Services.Contexts.Current;
       DB   : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
@@ -219,8 +230,9 @@ package body AWA.Permissions.Services is
       Perm.Set_Entity_Type (Kind);
       Perm.Set_User_Id (Ctx.Get_User_Identifier);
       Perm.Set_Entity_Id (Entity);
-      Perm.Set_Writeable (Permission = AWA.Permissions.WRITE);
+      Perm.Set_Writeable (False);
       Perm.Set_Workspace_Id (Workspace);
+      Perm.Set_Permission (Manager.Map (Permission));
       Perm.Save (DB);
       Ctx.Commit;
    end Add_Permission;
@@ -272,19 +284,21 @@ package body AWA.Permissions.Services is
    --  Add a permission for the user <b>User</b> to access the entity identified by
    --  <b>Entity</b> which is of type <b>Kind</b>.
    --  ------------------------------
-   procedure Add_Permission (Session    : in out ADO.Sessions.Master_Session;
+   procedure Add_Permission (Manager    : in Permission_Manager;
+                             Session    : in out ADO.Sessions.Master_Session;
                              User       : in ADO.Identifier;
                              Entity     : in ADO.Identifier;
                              Kind       : in ADO.Entity_Type;
                              Workspace  : in ADO.Identifier;
-                             Permission : in Permission_Type := READ) is
+                             Permission : in Security.Permissions.Permission_Index) is
       Acl : AWA.Permissions.Models.ACL_Ref;
    begin
       Acl.Set_User_Id (User);
       Acl.Set_Entity_Type (Kind);
       Acl.Set_Entity_Id (Entity);
-      Acl.Set_Writeable (Permission = WRITE);
+      Acl.Set_Writeable (False);
       Acl.Set_Workspace_Id (Workspace);
+      Acl.Set_Permission (Manager.Map (Permission));
       Acl.Save (Session);
 
       Log.Info ("Permission created for {0} to access {1}, entity type {2}",
@@ -297,17 +311,19 @@ package body AWA.Permissions.Services is
    --  Add a permission for the user <b>User</b> to access the entity identified by
    --  <b>Entity</b>.
    --  ------------------------------
-   procedure Add_Permission (Session    : in out ADO.Sessions.Master_Session;
+   procedure Add_Permission (Manager    : in Permission_Manager;
+                             Session    : in out ADO.Sessions.Master_Session;
                              User       : in ADO.Identifier;
                              Entity     : in ADO.Objects.Object_Ref'Class;
                              Workspace  : in ADO.Identifier;
-                             Permission : in Permission_Type := READ) is
+                             Permission : in Security.Permissions.Permission_Index) is
       Key  : constant ADO.Objects.Object_Key := Entity.Get_Key;
       Kind : constant ADO.Entity_Type
         := ADO.Sessions.Entities.Find_Entity_Type (Session => Session,
                                                    Object  => Key);
    begin
-      Add_Permission (Session, User, ADO.Objects.Get_Value (Key), Kind, Workspace, Permission);
+      Manager.Add_Permission (Session, User, ADO.Objects.Get_Value (Key),
+                              Kind, Workspace, Permission);
    end Add_Permission;
 
    --  ------------------------------
