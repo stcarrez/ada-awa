@@ -20,8 +20,13 @@ with Ada.Calendar;
 
 with AWA.Modules.Beans;
 with AWA.Permissions.Services;
+with AWA.Modules.Get;
 
 with ADO.SQL;
+with ADO.Sessions.Entities;
+with ADO.Queries;
+with ADO.Statements;
+with Security.Policies.Roles;
 with Util.Log.Loggers;
 with AWA.Users.Modules;
 with AWA.Workspaces.Beans;
@@ -67,6 +72,35 @@ package body AWA.Workspaces.Modules is
    end Initialize;
 
    --  ------------------------------
+   --  Configures the module after its initialization and after having read its XML configuration.
+   --  ------------------------------
+   overriding
+   procedure Configure (Plugin : in out Workspace_Module;
+                        Props  : in ASF.Applications.Config) is
+      pragma Unreferenced (Props);
+
+      List : constant String := Plugin.Get_Config (PARAM_PERMISSIONS_LIST);
+   begin
+      Plugin.Owner_Permissions := Ada.Strings.Unbounded.To_Unbounded_String (List);
+   end Configure;
+
+   --  ------------------------------
+   --  Get the list of permissions for the workspace owner.
+   --  ------------------------------
+   function Get_Owner_Permissions (Manager : in Workspace_Module) return Permission_Index_Array is
+      use Ada.Strings.Unbounded;
+   begin
+      return Security.Permissions.Get_Permission_Array (To_String (Manager.Owner_Permissions));
+   end Get_Owner_Permissions;
+
+   --  Get the workspace module.
+   function Get_Workspace_Module return Workspace_Module_Access is
+      function Get is new AWA.Modules.Get (Workspace_Module, Workspace_Module_Access, NAME);
+   begin
+      return Get;
+   end Get_Workspace_Module;
+
+   --  ------------------------------
    --  Get the current workspace associated with the current user.
    --  If the user has not workspace, create one.
    --  ------------------------------
@@ -78,6 +112,9 @@ package body AWA.Workspaces.Modules is
       Member  : AWA.Workspaces.Models.Workspace_Member_Ref;
       Query   : ADO.SQL.Query;
       Found   : Boolean;
+      Manager : constant AWA.Permissions.Services.Permission_Manager_Access
+        := AWA.Permissions.Services.Get_Permission_Manager (Context);
+      Plugin  : Workspace_Module_Access := Get_Workspace_Module;
    begin
       if User.Is_Null then
          Log.Error ("There is no current user.  The workspace cannot be identified");
@@ -107,10 +144,11 @@ package body AWA.Workspaces.Modules is
       Member.Save (Session);
 
       --  And give full control of the workspace for this user
-      AWA.Permissions.Services.Add_Permission (Session   => Session,
-                                               User      => User.Get_Id,
-                                               Entity    => WS,
-                                               Workspace => WS.Get_Id);
+      Add_Permission (Session   => Session,
+                      User      => User.Get_Id,
+                      Entity    => WS,
+                      Workspace => WS.Get_Id,
+                      List      => Plugin.Get_Owner_Permissions);
 
       Workspace := WS;
    end Get_Workspace;
@@ -408,5 +446,75 @@ package body AWA.Workspaces.Modules is
       AWA.Permissions.Services.Delete_Permissions (DB, User_Id, Workspace_Id);
       Ctx.Commit;
    end Delete_Member;
+
+   --  ------------------------------
+   --  Add a list of permissions for all the users of the workspace that have the appropriate
+   --  role.  Workspace members will be able to access the given database entity for the
+   --  specified list of permissions.
+   --  ------------------------------
+   procedure Add_Permission (Session    : in out ADO.Sessions.Master_Session;
+                             User       : in ADO.Identifier;
+                             Entity     : in ADO.Objects.Object_Ref'Class;
+                             Workspace  : in ADO.Identifier;
+                             List       : in Security.Permissions.Permission_Index_Array) is
+      Ctx  : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
+      Key  : constant ADO.Objects.Object_Key := Entity.Get_Key;
+      Id   : constant ADO.Identifier := ADO.Objects.Get_Value (Key);
+      Kind : constant ADO.Entity_Type
+        := ADO.Sessions.Entities.Find_Entity_Type (Session => Session,
+                                                   Object  => Key);
+      Manager : constant AWA.Permissions.Services.Permission_Manager_Access
+        := AWA.Permissions.Services.Get_Permission_Manager (Ctx);
+   begin
+      for Perm of List loop
+         declare
+            Member   : ADO.Identifier;
+            Query    : ADO.Queries.Context;
+            Names    : constant Security.Policies.Roles.Role_Name_Array
+              := Manager.Get_Role_Names (Perm);
+            Need_Sep : Boolean := False;
+            User_Added : Boolean := False;
+         begin
+            if Names'Length > 0 then
+               Query.Set_Query (AWA.Workspaces.Models.Query_Member_In_Role);
+               ADO.SQL.Append (Query.Filter, "user_member.workspace_id = :workspace_id");
+               ADO.SQL.Append (Query.Filter, " AND user_member.member_id IN (");
+               for Name of Names loop
+                  ADO.SQL.Append (Query.Filter, (if Need_Sep then ",?" else "?"));
+                  Query.Add_Param (Name.all);
+                  Need_Sep := True;
+               end loop;
+               Query.Bind_Param ("workspace_id", Workspace);
+               ADO.SQL.Append (Query.Filter, ")");
+               declare
+                  Stmt : ADO.Statements.Query_Statement := Session.Create_Statement (Query);
+               begin
+                  Stmt.Execute;
+                  while Stmt.Has_Elements loop
+                     Member := Stmt.Get_Identifier (0);
+                     if Member = User then
+                        User_Added := True;
+                     end if;
+                     Manager.Add_Permission (Session    => Session,
+                                             User       => Member,
+                                             Entity     => Id,
+                                             Kind       => Kind,
+                                             Workspace  => Workspace,
+                                             Permission => Perm);
+                     Stmt.Next;
+                  end loop;
+               end;
+            end if;
+            if not User_Added then
+               Manager.Add_Permission (Session    => Session,
+                                       User       => User,
+                                       Entity     => Id,
+                                       Kind       => Kind,
+                                       Workspace  => Workspace,
+                                       Permission => Perm);
+            end if;
+         end;
+      end loop;
+   end Add_Permission;
 
 end AWA.Workspaces.Modules;
