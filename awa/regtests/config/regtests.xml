@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<module version="1.0">
+
+  <security-role>
+    <role-name>Owner</role-name>
+  </security-role>
+
+  <security-role>
+    <role-name>member</role-name>
+  </security-role>
+
+  <role-permission>
+    <name>wiki-page-create</name>
+    <role>member</role>
+    <role>Owner</role>
+  </role-permission>
+
+  <role-permission>
+    <name>wiki-page-delete</name>
+    <role>member</role>
+    <role>Owner</role>
+  </role-permission>
+
+  <role-permission>
+    <name>wiki-page-update</name>
+    <role>member</role>
+    <role>Owner</role>
+  </role-permission>
+
+  <role-permission>
+    <name>wiki-page-view</name>
+    <role>member</role>
+    <role>Owner</role>
+  </role-permission>
+
+  <role-permission>
+    <name>blog-create-post</name>
+    <role>member</role>
+    <role>Owner</role>
+  </role-permission>
+
+  <role-permission>
+    <name>blog-delete-post</name>
+    <role>member</role>
+    <role>Owner</role>
+  </role-permission>
+
+  <role-permission>
+    <name>blog-update-post</name>
+    <role>member</role>
+    <role>Owner</role>
+  </role-permission>
+
+</module>
