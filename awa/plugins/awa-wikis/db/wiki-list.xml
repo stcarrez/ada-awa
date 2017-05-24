@@ -33,6 +33,7 @@
       (SELECT count(*) FROM awa_wiki_page WHERE awa_wiki_page.wiki_id = wiki.id)
     FROM awa_wiki_space AS wiki
     INNER JOIN awa_acl AS acl ON acl.entity_id = wiki.id AND acl.entity_type = :table AND acl.user_id = :user_id
+       AND acl.permission = $permission[wiki-page-update]
     ORDER BY wiki.create_date DESC
        </sql>
     </query>
