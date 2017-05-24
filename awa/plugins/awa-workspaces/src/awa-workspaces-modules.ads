@@ -15,8 +15,10 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-
+with ADO.Objects;
 with ADO.Sessions;
+
+with Security.Permissions;
 
 with ASF.Applications;
 
@@ -26,6 +28,7 @@ with AWA.Workspaces.Models;
 with AWA.Users.Services;
 with AWA.Users.Models;
 with AWA.Events;
+private with Ada.Strings.Unbounded;
 
 --  == Events ==
 --  The *workspaces* module provides several events that are posted when some action are performed.
@@ -45,10 +48,16 @@ with AWA.Events;
 --  This event is posted when an invitation is accepted by a user.
 package AWA.Workspaces.Modules is
 
+   subtype Permission_Index_Array is Security.Permissions.Permission_Index_Array;
+
    Not_Found : exception;
 
    --  The name under which the module is registered.
    NAME : constant String := "workspaces";
+
+   --  The configuration parameter that defines the list of permissions to grant
+   --  to a user when his workspace is created.
+   PARAM_PERMISSIONS_LIST : constant String := "permissions_list";
 
    package Invite_User_Event is new AWA.Events.Definition (Name => "invite-user");
    package Accept_Invitation_Event is new AWA.Events.Definition (Name => "accept-invitation");
@@ -64,6 +73,17 @@ package AWA.Workspaces.Modules is
    procedure Initialize (Plugin : in out Workspace_Module;
                          App    : in AWA.Modules.Application_Access;
                          Props  : in ASF.Applications.Config);
+
+   --  Configures the module after its initialization and after having read its XML configuration.
+   overriding
+   procedure Configure (Plugin : in out Workspace_Module;
+                        Props  : in ASF.Applications.Config);
+
+   --  Get the list of permissions for the workspace owner.
+   function Get_Owner_Permissions (Manager : in Workspace_Module) return Permission_Index_Array;
+
+   --  Get the workspace module.
+   function Get_Workspace_Module return Workspace_Module_Access;
 
    --  Get the current workspace associated with the current user.
    --  If the user has not workspace, create one.
@@ -89,10 +109,22 @@ package AWA.Workspaces.Modules is
    procedure Delete_Member (Module       : in Workspace_Module;
                             Member_Id    : in ADO.Identifier);
 
+   --  Add a list of permissions for all the users of the workspace that have the appropriate
+   --  role.  Workspace members will be able to access the given database entity for the
+   --  specified list of permissions.
+   procedure Add_Permission (Session    : in out ADO.Sessions.Master_Session;
+                             User       : in ADO.Identifier;
+                             Entity     : in ADO.Objects.Object_Ref'Class;
+                             Workspace  : in ADO.Identifier;
+                             List       : in Security.Permissions.Permission_Index_Array);
+
 private
 
    type Workspace_Module is new AWA.Modules.Module with record
       User_Manager : AWA.Users.Services.User_Service_Access;
+
+      --  The list of permissions to grant to a user who creates the workspace.
+      Owner_Permissions : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
 end AWA.Workspaces.Modules;
