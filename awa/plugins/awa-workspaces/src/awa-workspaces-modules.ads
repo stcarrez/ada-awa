@@ -59,6 +59,9 @@ package AWA.Workspaces.Modules is
    --  to a user when his workspace is created.
    PARAM_PERMISSIONS_LIST : constant String := "permissions_list";
 
+   --  Permission to create a workspace.
+   package ACL_Create_Workspace is new Security.Permissions.Definition ("workspace-create");
+
    package Invite_User_Event is new AWA.Events.Definition (Name => "invite-user");
    package Accept_Invitation_Event is new AWA.Events.Definition (Name => "accept-invitation");
 
