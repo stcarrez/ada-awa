@@ -181,10 +181,16 @@ package body AWA.Wikis.Modules is
       Wiki.Save (DB);
 
       --  Add the permission for the user to use the new wiki space.
-      AWA.Permissions.Services.Add_Permission (Session   => DB,
-                                               User      => User,
-                                               Entity    => Wiki,
-                                               Workspace => WS.Get_Id);
+      AWA.Workspaces.Modules.Add_Permission (Session   => DB,
+                                             User      => User,
+                                             Entity    => Wiki,
+                                             Workspace => WS.Get_Id,
+                                             List      => (ACL_Update_Wiki_Space.Permission,
+                                                           ACL_Delete_Wiki_Space.Permission,
+                                                           ACL_Create_Wiki_Pages.Permission,
+                                                           ACL_Delete_Wiki_Pages.Permission,
+                                                           ACL_Update_Wiki_Pages.Permission,
+                                                           ACL_View_Wiki_Page.Permission));
 
       Util.Strings.Tokenizers.Iterate_Tokens (Content => Module.Get_Config (PARAM_WIKI_COPY_LIST),
                                               Pattern => ",",
