@@ -131,6 +131,10 @@ package body AWA.Workspaces.Modules is
          return;
       end if;
 
+      --  Check that the user has the permission to create a new workspace.
+      AWA.Permissions.Check (Permission => ACL_Create_Workspace.Permission,
+                             Entity     => User);
+
       --  Create a workspace for this user.
       WS.Set_Owner (User);
       WS.Set_Create_Date (Ada.Calendar.Clock);
