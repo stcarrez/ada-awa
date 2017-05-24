@@ -28,6 +28,7 @@ with AWA.Permissions.Services;
 with AWA.Workspaces.Models;
 with AWA.Workspaces.Modules;
 
+with ADO.Objects;
 with ADO.Sessions;
 
 with Ada.Calendar;
@@ -120,10 +121,14 @@ package body AWA.Blogs.Modules is
       Blog.Save (DB);
 
       --  Add the permission for the user to use the new blog.
-      AWA.Permissions.Services.Add_Permission (Session   => DB,
-                                               User      => User,
-                                               Entity    => Blog,
-                                               Workspace => WS.Get_Id);
+      AWA.Workspaces.Modules.Add_Permission (Session   => DB,
+                                             User      => User,
+                                             Entity    => Blog,
+                                             Workspace => WS.Get_Id,
+                                             List      => (ACL_Delete_Blog.Permission,
+                                                           ACL_Update_Post.Permission,
+                                                           ACL_Create_Post.Permission,
+                                                           ACL_Delete_Post.Permission));
       Ctx.Commit;
 
       Result := Blog.Get_Id;
