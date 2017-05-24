@@ -48,6 +48,7 @@
     FROM awa_storage AS store
     INNER JOIN awa_wiki_space AS wiki
     LEFT JOIN awa_acl AS acl ON acl.entity_id = wiki.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
+       AND acl.permission = $permission[wiki-page-view]
     LEFT JOIN awa_storage_data AS data ON store.store_data_id = data.id
     WHERE store.id = :store_id AND wiki.id = :wiki_id
        AND (store.is_public OR wiki.is_public OR NOT acl.id IS NULL)
@@ -69,6 +70,7 @@
     INNER JOIN awa_storage AS store ON image.storage_id = store.id
     INNER JOIN awa_wiki_space AS wiki ON store.workspace_id = wiki.workspace_id AND wiki.id = :wiki_id
     LEFT JOIN awa_acl AS acl ON acl.entity_id = wiki.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
+       AND acl.permission = $permission[wiki-page-view]
     LEFT JOIN awa_storage_data AS data ON store.store_data_id = data.id
     WHERE (store.is_public OR wiki.is_public OR NOT acl.id IS NULL)
        AND ((store.original_id = :store_id AND image.width = :width) OR store.id = :store_id)
@@ -91,6 +93,7 @@
     INNER JOIN awa_storage AS store ON image.storage_id = store.id
     INNER JOIN awa_wiki_space AS wiki ON store.workspace_id = wiki.workspace_id AND wiki.id = :wiki_id
     LEFT JOIN awa_acl AS acl ON acl.entity_id = wiki.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
+       AND acl.permission = $permission[wiki-page-view]
     LEFT JOIN awa_storage_data AS data ON store.store_data_id = data.id
     WHERE (store.is_public OR wiki.is_public OR NOT acl.id IS NULL)
        AND ((store.original_id = :store_id AND image.height = :height) OR store.id = :store_id)
