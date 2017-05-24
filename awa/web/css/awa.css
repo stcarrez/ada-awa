@@ -351,6 +351,7 @@ div.awa-modal div.awa-login {
 .awa-page-actions li {
     float: left;
     padding-left: 1em;
+    height: 2em;
 }
 
 /**
@@ -393,14 +394,6 @@ div.awa-modal div.awa-login {
 /**
  * Page action and tag presentation lists (general purpose presentation).
  */
-.awa-page-actions {
-    float: right;
-    list-style-type: none;
-}
-.awa-page-actions li {
-    float: left;
-    padding-left: 1em;
-}
 .awa-tag-list {
     float: right;
     list-style-type: none;
