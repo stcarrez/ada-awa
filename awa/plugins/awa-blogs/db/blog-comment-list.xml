@@ -37,7 +37,9 @@
       c.create_date,
       c.status
     FROM awa_post AS post
-    INNER JOIN awa_acl AS acl ON acl.entity_id = post.blog_id AND acl.entity_type = :table AND acl.user_id = :user_id
+    INNER JOIN awa_acl AS acl ON acl.entity_id = post.blog_id
+         AND acl.entity_type = :table AND acl.user_id = :user_id
+         AND acl.permission = $permission[blog-update-post]
     INNER JOIN awa_comment AS c ON c.entity_type = :entity_type AND c.entity_id = post.id
     INNER JOIN awa_user AS u ON c.author_id = u.id
     INNER JOIN awa_email AS e ON u.email_id = e.id
