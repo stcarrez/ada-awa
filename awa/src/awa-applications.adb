@@ -24,6 +24,8 @@ with EL.Contexts.Default;
 with Util.Files;
 with Util.Log.Loggers;
 
+with Security.Policies;
+
 with ASF.Server;
 with ASF.Servlets;
 
@@ -182,7 +184,12 @@ package body AWA.Applications is
    --  ------------------------------
    overriding
    procedure Start (App : in out Application) is
+      Manager : constant Security.Policies.Policy_Manager_Access
+        := App.Get_Security_Manager;
    begin
+      --  Start the security manager.
+      AWA.Permissions.Services.Permission_Manager'Class (Manager.all).Start;
+
       --  Start the event service.
       App.Events.Start;
 
