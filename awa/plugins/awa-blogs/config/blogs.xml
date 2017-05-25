@@ -336,6 +336,7 @@
        AND acl.user_id = :user_id
        AND acl.permission = $permission[blog-create]
     </sql>
+    <grant>SELECT id FROM awa_workspace WHERE id = :workspace_id</grant>
   </entity-permission>
 
   <entity-permission>
@@ -349,6 +350,7 @@
        AND acl.entity_id = :entity_id
        AND acl.permission = $permission[blog-delete]
     </sql>
+    <grant>SELECT id FROM awa_blog WHERE workspace_id = :workspace_id</grant>
   </entity-permission>
 
   <entity-permission>
@@ -362,6 +364,7 @@
        AND acl.entity_id = :entity_id
        AND acl.permission = $permission[blog-create-post]
     </sql>
+    <grant>SELECT id FROM awa_blog WHERE workspace_id = :workspace_id</grant>
   </entity-permission>
 
   <entity-permission>
@@ -376,6 +379,7 @@
        AND blog_post.id = :entity_id
        AND acl.permission = $permission[blog-update-post]
     </sql>
+    <grant>SELECT id FROM awa_blog WHERE workspace_id = :workspace_id</grant>
   </entity-permission>
 
   <entity-permission>
@@ -390,16 +394,20 @@
        AND blog_post.id = :entity_id
        AND acl.permission = $permission[blog-delete-post]
     </sql>
+    <grant>SELECT id FROM awa_blog WHERE workspace_id = :workspace_id</grant>
   </entity-permission>
 
   <entity-permission>
     <name>blog-add-comment</name>
-    <entity-type>awa_post</entity-type>
+    <entity-type>awa_blog</entity-type>
     <sql>
       SELECT user.id FROM awa_user as user
       INNER JOIN awa_post AS blog_post ON blog_post.id = :entity_id
-      WHERE user.id = :user_id AND blog_post.allow_comments = 1
+      LEFT JOIN awa_acl AS acl ON acl.entity_id = blog_post.blog_id AND acl.entity_type = :entity_type
+          AND acl.permission = $permission[blog-publish-comment]
+      WHERE user.id = :user_id AND (blog_post.allow_comments = 1 OR acl.id IS NOT NULL)
     </sql>
+    <grant>SELECT id FROM awa_blog WHERE workspace_id = :workspace_id</grant>
   </entity-permission>
 
   <entity-permission>
@@ -414,6 +422,7 @@
           AND acl.permission = $permission[blog-publish-comment]
        WHERE cmt.id = :entity_id AND cmt.entity_type = :entity_type_2 AND acl.user_id = :user_id
     </sql>
+    <grant>SELECT id FROM awa_blog WHERE workspace_id = :workspace_id</grant>
   </entity-permission>
 
   <entity-permission>
@@ -428,6 +437,7 @@
           AND acl.permission = $permission[blog-delete-comment]
        WHERE cmt.id = :entity_id AND cmt.entity_type = :entity_type_2 AND acl.user_id = :user_id
     </sql>
+    <grant>SELECT id FROM awa_blog WHERE workspace_id = :workspace_id</grant>
   </entity-permission>
 
   <servlet-mapping>
