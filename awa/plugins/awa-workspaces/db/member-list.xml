@@ -44,7 +44,7 @@
     INNER JOIN awa_user AS user ON wm.member_id = user.id
     INNER JOIN awa_email AS email ON user.email_id = email.id
     LEFT JOIN awa_invitation AS invite ON invite.workspace_id = wm.workspace_id AND invite.invitee_id = user.id
-    WHERE user_member.id = :user_id
+    WHERE user_member.member_id = :user_id
        </sql>
        <sql-count>
     SELECT
@@ -53,7 +53,7 @@
     INNER JOIN awa_workspace_member AS wm ON wm.workspace_id = user_member.workspace_id
     INNER JOIN awa_user AS user ON wm.member_id = user.id
     INNER JOIN awa_email AS email ON user.email_id = email.id
-    WHERE user_member.id = :user_id
+    WHERE user_member.member_id = :user_id
        </sql-count>
     </query>
 
