@@ -268,3 +268,77 @@ ALTER TABLE awa_invitation ADD COLUMN member_id BIGINT NOT NULL;
 
 ALTER TABLE awa_access_key ADD COLUMN kind TINYINT NOT NULL;
 
+
+INSERT INTO awa_permission (id, name) VALUES
+ (1, 'blog-create'),
+ (2, 'blog-delete'),
+ (3, 'blog-create-post'),
+ (4, 'blog-delete-post'),
+ (5, 'blog-add-comment'),
+ (6, 'blog-publish-comment'),
+ (7, 'blog-delete-comment'),
+ (8, 'blog-update-post'),
+ (9, 'workspace-create'),
+ (10, 'wiki-page-create'),
+ (11, 'wiki-page-delete'),
+ (12, 'wiki-page-update'),
+ (13, 'wiki-page-view'),
+ (14, 'wiki-space-create'),
+ (15, 'wiki-space-delete'),
+ (16, 'wiki-space-update'),
+ (17, 'storage-create'),
+ (18, 'storage-delete'),
+ (19, 'folder-create');
+
+CREATE TEMPORARY TABLE new_acl (
+  id integer auto_increment primary key,
+  entity_id BIGINT NOT NULL,
+  user_id BIGINT NOT NULL,
+  workspace_id BIGINT NOT NULL,
+  entity_type INTEGER NOT NULL,
+  permission INTEGER NOT NULL
+);
+
+/* Permissions on the workspace.  */
+INSERT INTO new_acl (entity_id, user_id, workspace_id, entity_type, permission)
+  SELECT
+    acl.entity_id, acl.user_id, acl.workspace_id, acl.entity_type, perm.id
+  FROM awa_acl AS acl
+  INNER JOIN entity_type AS e ON acl.entity_type = e.id AND acl.permission <= 0
+  INNER JOIN awa_permission AS perm ON perm.name
+      IN ('blog-create', 'wiki-space-create', 'storage-create', 'folder-create', 'storage-delete')
+  WHERE e.name = 'awa_workspace';
+
+/* Permissions on the blog entries */
+INSERT INTO new_acl (entity_id, user_id, workspace_id, entity_type, permission)
+  SELECT
+    acl.entity_id, acl.user_id, acl.workspace_id, acl.entity_type, perm.id
+  FROM awa_acl AS acl
+  INNER JOIN entity_type AS e ON acl.entity_type = e.id AND acl.permission <= 0
+  INNER JOIN awa_permission AS perm ON perm.name
+    IN ('blog-update-post', 'blog-delete', 'blog-create-post', 'blog-delete-post',
+        'blog-add-comment', 'blog-publish-comment', 'blog-delete-comment')
+  WHERE e.name = 'awa_blog';
+
+/* Permissions on the wiki entries */
+INSERT INTO new_acl (entity_id, user_id, workspace_id, entity_type, permission)
+  SELECT
+    acl.entity_id, acl.user_id, acl.workspace_id, acl.entity_type, perm.id
+  FROM awa_acl AS acl
+  INNER JOIN entity_type AS e ON acl.entity_type = e.id AND acl.permission <= 0
+  INNER JOIN awa_permission AS perm ON perm.name
+    IN ('wiki-space-update', 'wiki-space-delete', 'wiki-page-create', 'wiki-page-delete',
+        'wiki-page-update', 'wiki-page-view')
+  WHERE e.name = 'awa_wiki_space';
+
+/* Install the new permissions.  */
+DELETE FROM awa_acl;
+INSERT INTO awa_acl (id, entity_id, user_id, workspace_id, entity_type, permission)
+  SELECT id, entity_id, user_id, workspace_id, entity_type, permission FROM new_acl;
+
+UPDATE sequence
+  SET value = GREATEST((SELECT COUNT(*) FROM new_acl), sequence.value)
+  WHERE sequence.name = 'awa_acl';
+
+DROP TEMPORARY TABLE new_acl;
+
