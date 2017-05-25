@@ -1,5 +1,5 @@
 <!-- List the wiki pages for the wiki administrator
-  -  Copyright (C) 2015, 2016 Stephane Carrez
+  -  Copyright (C) 2015, 2016, 2017 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,7 @@
 <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:auth="http://code.google.com/p/ada-awa/auth"
                 xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
                 xmlns:util="http://code.google.com/p/ada-asf/util"
                 xmlns:h="http://java.sun.com/jsf/html">
@@ -42,7 +43,7 @@
             <ui:include src="page-list.xhtml"/>
         </div>
     </h:panelGroup>
-    <h:panelGroup rendered="#{user.isLogged}">
+    <h:panelGroup rendered="#{user.isLogged and auth:hasPermission('wiki-page-update',wikiSpaceId)}">
         <div id='wiki-page-action' class='asf-list-action'>
             <a href="#" class='asf-icon wiki-edit' title='#{wikiMsg.wiki_page_edit_action_tooltip}'></a>
             <a href="#" class='asf-icon asf-delete' title='#{wikiMsg.wiki_page_delete_action_tooltip}'></a>
