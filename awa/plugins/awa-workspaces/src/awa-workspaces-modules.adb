@@ -158,6 +158,57 @@ package body AWA.Workspaces.Modules is
    end Get_Workspace;
 
    --  ------------------------------
+   --  Create a workspace for the user.
+   --  ------------------------------
+   procedure Create_Workspace (Module    : in Workspace_Module;
+                               Workspace : out AWA.Workspaces.Models.Workspace_Ref) is
+      Ctx     : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
+      User    : constant AWA.Users.Models.User_Ref := Ctx.Get_User;
+      DB      : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      WS      : AWA.Workspaces.Models.Workspace_Ref;
+      Member  : AWA.Workspaces.Models.Workspace_Member_Ref;
+      Query   : ADO.SQL.Query;
+      Found   : Boolean;
+      Manager : constant AWA.Permissions.Services.Permission_Manager_Access
+        := AWA.Permissions.Services.Get_Permission_Manager (Ctx);
+      Plugin  : Workspace_Module_Access := Get_Workspace_Module;
+   begin
+      if User.Is_Null then
+         Log.Error ("There is no current user.  The workspace cannot be identified");
+         Workspace := AWA.Workspaces.Models.Null_Workspace;
+         return;
+      end if;
+
+      --  Check that the user has the permission to create a new workspace.
+      AWA.Permissions.Check (Permission => ACL_Create_Workspace.Permission,
+                             Entity     => User);
+
+      DB.Begin_Transaction;
+
+      --  Create a workspace for this user.
+      WS.Set_Owner (User);
+      WS.Set_Create_Date (Ada.Calendar.Clock);
+      WS.Save (DB);
+
+      --  Create the member instance for this user.
+      Member.Set_Workspace (WS);
+      Member.Set_Member (User);
+      Member.Set_Role ("Owner");
+      Member.Set_Join_Date (ADO.Nullable_Time '(Is_Null => False, Value => WS.Get_Create_Date));
+      Member.Save (DB);
+
+      --  And give full control of the workspace for this user
+      Add_Permission (Session   => DB,
+                      User      => User.Get_Id,
+                      Entity    => WS,
+                      Workspace => WS.Get_Id,
+                      List      => Plugin.Get_Owner_Permissions);
+
+      Workspace := WS;
+      DB.Commit;
+   end Create_Workspace;
+
+   --  ------------------------------
    --  Load the invitation from the access key and verify that the key is still valid.
    --  ------------------------------
    procedure Load_Invitation (Module     : in Workspace_Module;
