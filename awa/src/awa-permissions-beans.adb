@@ -15,6 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Security.Permissions;
 
 with ADO.Utils;
 with ADO.Sessions;
@@ -76,16 +77,23 @@ package body AWA.Permissions.Beans is
       pragma Unreferenced (Event);
 
       Ctx      : constant ASC.Service_Context_Access := ASC.Current;
+      Manager  : constant Services.Permission_Manager_Access
+        := Services.Get_Permission_Manager (Ctx);
+      List     : constant Security.Permissions.Permission_Index_Array
+        := Security.Permissions.Get_Permission_Array (To_String (Bean.Permission));
       DB       : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
       Kind     : ADO.Entity_Type;
    begin
       Ctx.Start;
       Kind := ADO.Sessions.Entities.Find_Entity_Type (DB, To_String (Bean.Kind));
---      AWA.Permissions.Services.Add_Permission (Session    => DB,
---                                               Entity     => Bean.Get_Entity_Id,
---                                               Kind       => Kind,
---                                               User       => Ctx.Get_User_Identifier,
---                                               Workspace  => Bean.Get_Workspace_Id);
+      for Perm of List loop
+         Manager.Add_Permission (Session    => DB,
+                                 User       => Ctx.Get_User_Identifier,
+                                 Entity     => Bean.Get_Entity_Id,
+                                 Kind       => Kind,
+                                 Workspace  => Bean.Get_Workspace_Id,
+                                 Permission => Perm);
+      end loop;
       Ctx.Commit;
    end Create;
 
