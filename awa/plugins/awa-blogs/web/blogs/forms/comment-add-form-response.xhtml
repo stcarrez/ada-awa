@@ -1,5 +1,5 @@
 <!-- Response sent after a new comment is added
-  -  Copyright (C) 2014, 2015 Stephane Carrez
+  -  Copyright (C) 2014, 2015, 2017 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,11 +16,13 @@
   -->
 <f:view contentType="application/json"
         xmlns:c="http://java.sun.com/jstl/core"
+        xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:f="http://java.sun.com/jsf/core">
     [
 <c:choose>
     <c:when test="#{postNewComment.status ne 0}">
-        { "action": "prepend", "id": ".post-comments", "data": "#{blogMsg.blog_comment_submitted_for_approval}" },
+        { "action": "prepend", "id": ".post-comments",
+          "data": "${util:escapeJavaScript(blogMsg.blog_comment_submitted_for_approval)}" },
         { "action": "hide" }
     </c:when>
     <c:otherwise>
