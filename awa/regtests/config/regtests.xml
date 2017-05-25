@@ -1,6 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <module version="1.0">
 
+  <!--  When a user is created, also create a workspace area.  -->
+  <on-event name="user-create">
+     <action>#{workspace.create}</action>
+  </on-event>
+
   <security-role>
     <role-name>Owner</role-name>
   </security-role>
