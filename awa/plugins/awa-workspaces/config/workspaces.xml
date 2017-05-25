@@ -39,11 +39,6 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
-  <!--  When a user is created, also create a workspace area.  -->
-  <on-event name="user-create">
-     <action>#{workspace.create}</action>
-  </on-event>
-
   <entity-permission>
     <name>workspace-create</name>
     <entity-type>awa_workspace</entity-type>
