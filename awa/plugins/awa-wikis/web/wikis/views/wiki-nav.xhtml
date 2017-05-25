@@ -1,5 +1,5 @@
 <!-- Wiki navigation menu
-  -  Copyright (C) 2015 Stephane Carrez
+  -  Copyright (C) 2015, 2017 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,7 @@
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:w="http://code.google.com/p/ada-asf/widget"
     xmlns:ui="http://java.sun.com/jsf/facelets">
-    <h:panelGroup rendered="#{user.isLogged}">
+    <h:panelGroup rendered="#{user.isLogged and auth:hasPermission('wiki-page-create',wikiSpaceId)">
         <li class="awa-nav-left">
             <a href="#{contextPath}/wikis/create/#{wikiSpaceId}" class="awa-nav-icon"
                title="#{wikiMsg.wiki_admin_create_page_title}">
