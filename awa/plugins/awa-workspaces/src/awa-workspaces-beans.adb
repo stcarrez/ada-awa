@@ -159,14 +159,8 @@ package body AWA.Workspaces.Beans is
       pragma Unreferenced (Bean, Event);
 
       WS  : AWA.Workspaces.Models.Workspace_Ref;
-      Ctx : constant AWA.Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      DB  : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
    begin
-      Ctx.Start;
-      AWA.Workspaces.Modules.Get_Workspace (Session   => DB,
-                                            Context   => Ctx,
-                                            Workspace => WS);
-      Ctx.Commit;
+      Bean.Module.Create_Workspace (WS);
    end Create;
 
    package Create_Binding is
