@@ -94,6 +94,10 @@ package AWA.Workspaces.Modules is
                             Context   : in AWA.Services.Contexts.Service_Context_Access;
                             Workspace : out AWA.Workspaces.Models.Workspace_Ref);
 
+   --  Create a workspace for the user.
+   procedure Create_Workspace (Module    : in Workspace_Module;
+                               Workspace : out AWA.Workspaces.Models.Workspace_Ref);
+
    --  Load the invitation from the access key and verify that the key is still valid.
    procedure Load_Invitation (Module     : in Workspace_Module;
                               Key        : in String;
