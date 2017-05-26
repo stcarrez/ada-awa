@@ -27,6 +27,7 @@ with AWA.Services.Contexts;
 with AWA.Workspaces.Models;
 with AWA.Users.Services;
 with AWA.Users.Models;
+with AWA.Permissions.Services;
 with AWA.Events;
 private with Ada.Strings.Unbounded;
 
@@ -59,6 +60,11 @@ package AWA.Workspaces.Modules is
    --  to a user when his workspace is created.
    PARAM_PERMISSIONS_LIST : constant String := "permissions_list";
 
+   --  A boolean configuration parameter that indicates that new users can create
+   --  a workspace.  When a user is created, the 'workspace-create' permission is
+   --  added so that they can create the workspace.
+   PARAM_ALLOW_WORKSPACE_CREATE : constant String := "allow_workspace_create";
+
    --  Permission to create a workspace.
    package ACL_Create_Workspace is new Security.Permissions.Definition ("workspace-create");
    package ACL_Invite_User is new Security.Permissions.Definition ("workspace-invite-user");
@@ -70,7 +76,7 @@ package AWA.Workspaces.Modules is
    --  ------------------------------
    --  Module workspaces
    --  ------------------------------
-   type Workspace_Module is new AWA.Modules.Module with private;
+   type Workspace_Module is new AWA.Modules.Module and AWA.Users.Services.Listener with private;
    type Workspace_Module_Access is access all Workspace_Module'Class;
 
    --  Initialize the workspaces module.
@@ -127,13 +133,34 @@ package AWA.Workspaces.Modules is
                              Workspace  : in ADO.Identifier;
                              List       : in Security.Permissions.Permission_Index_Array);
 
+   --  The `On_Create` procedure is called by `Notify_Create` to notify the creation of the user.
+   overriding
+   procedure On_Create (Module : in Workspace_Module;
+                        User   : in AWA.Users.Models.User_Ref'Class);
+
+   --  The `On_Update` procedure is called by `Notify_Update` to notify the update of the user.
+   overriding
+   procedure On_Update (Module : in Workspace_Module;
+                        User   : in AWA.Users.Models.User_Ref'Class) is null;
+
+   --  The `On_Delete` procedure is called by `Notify_Delete` to notify the deletion of the user.
+   overriding
+   procedure On_Delete (Module : in Workspace_Module;
+                        User   : in AWA.Users.Models.User_Ref'Class) is null;
+
 private
 
-   type Workspace_Module is new AWA.Modules.Module with record
-      User_Manager : AWA.Users.Services.User_Service_Access;
+   type Workspace_Module is new AWA.Modules.Module and AWA.Users.Services.Listener with record
+      User_Manager      : AWA.Users.Services.User_Service_Access;
+
+      --  The permission manager.
+      Perm_Manager      : AWA.Permissions.Services.Permission_Manager_Access;
 
       --  The list of permissions to grant to a user who creates the workspace.
       Owner_Permissions : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  When set, allow new users to create a workspace.
+      Allow_WS_Create   : Boolean := False;
    end record;
 
 end AWA.Workspaces.Modules;
