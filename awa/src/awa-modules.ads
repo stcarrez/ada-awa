@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-modules -- Application Module
---  Copyright (C) 2009, 2010, 2011, 2012, 2015, 2016 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2015, 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -143,6 +143,12 @@ package AWA.Modules is
    function Get_Config (Plugin  : Module;
                         Name    : String;
                         Default : Integer := -1) return Integer;
+
+   --  Get the module configuration property identified by the name.
+   --  If the configuration property does not exist, returns the default value.
+   function Get_Config (Plugin  : Module;
+                        Name    : String;
+                        Default : Boolean := False) return Boolean;
 
    --  Get the module configuration property identified by the <tt>Config</tt> parameter.
    --  If the property does not exist, the default configuration value is returned.
