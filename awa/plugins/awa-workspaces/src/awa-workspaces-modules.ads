@@ -62,6 +62,7 @@ package AWA.Workspaces.Modules is
    --  Permission to create a workspace.
    package ACL_Create_Workspace is new Security.Permissions.Definition ("workspace-create");
    package ACL_Invite_User is new Security.Permissions.Definition ("workspace-invite-user");
+   package ACL_Delete_User is new Security.Permissions.Definition ("workspace-delete-user");
 
    package Invite_User_Event is new AWA.Events.Definition (Name => "invite-user");
    package Accept_Invitation_Event is new AWA.Events.Definition (Name => "accept-invitation");
