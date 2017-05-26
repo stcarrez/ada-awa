@@ -19,7 +19,6 @@
 with Ada.Calendar;
 
 with AWA.Modules.Beans;
-with AWA.Permissions.Services;
 with AWA.Modules.Get;
 
 with ADO.SQL;
@@ -48,6 +47,8 @@ package body AWA.Workspaces.Modules is
    procedure Initialize (Plugin : in out Workspace_Module;
                          App    : in AWA.Modules.Application_Access;
                          Props  : in ASF.Applications.Config) is
+      Sec_Manager : constant Security.Policies.Policy_Manager_Access
+         := Plugin.Get_Application.Get_Security_Manager;
    begin
       Log.Info ("Initializing the workspaces module");
 
@@ -68,7 +69,8 @@ package body AWA.Workspaces.Modules is
       AWA.Modules.Module (Plugin).Initialize (App, Props);
 
       Plugin.User_Manager := AWA.Users.Modules.Get_User_Manager;
-      --  Add here the creation of manager instances.
+      Plugin.Perm_Manager := Permissions.Services.Permission_Manager'Class (Sec_Manager.all)'Access;
+      Plugin.Add_Listener (AWA.Users.Modules.NAME, Plugin'Unchecked_Access);
    end Initialize;
 
    --  ------------------------------
@@ -82,6 +84,7 @@ package body AWA.Workspaces.Modules is
       List : constant String := Plugin.Get_Config (PARAM_PERMISSIONS_LIST);
    begin
       Plugin.Owner_Permissions := Ada.Strings.Unbounded.To_Unbounded_String (List);
+      Plugin.Allow_WS_Create := Plugin.Get_Config (PARAM_ALLOW_WORKSPACE_CREATE);
    end Configure;
 
    --  ------------------------------
@@ -112,9 +115,7 @@ package body AWA.Workspaces.Modules is
       Member  : AWA.Workspaces.Models.Workspace_Member_Ref;
       Query   : ADO.SQL.Query;
       Found   : Boolean;
-      Manager : constant AWA.Permissions.Services.Permission_Manager_Access
-        := AWA.Permissions.Services.Get_Permission_Manager (Context);
-      Plugin  : Workspace_Module_Access := Get_Workspace_Module;
+      Plugin  : constant Workspace_Module_Access := Get_Workspace_Module;
    begin
       if User.Is_Null then
          Log.Error ("There is no current user.  The workspace cannot be identified");
@@ -167,11 +168,6 @@ package body AWA.Workspaces.Modules is
       DB      : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       WS      : AWA.Workspaces.Models.Workspace_Ref;
       Member  : AWA.Workspaces.Models.Workspace_Member_Ref;
-      Query   : ADO.SQL.Query;
-      Found   : Boolean;
-      Manager : constant AWA.Permissions.Services.Permission_Manager_Access
-        := AWA.Permissions.Services.Get_Permission_Manager (Ctx);
-      Plugin  : Workspace_Module_Access := Get_Workspace_Module;
    begin
       if User.Is_Null then
          Log.Error ("There is no current user.  The workspace cannot be identified");
@@ -202,7 +198,7 @@ package body AWA.Workspaces.Modules is
                       User      => User.Get_Id,
                       Entity    => WS,
                       Workspace => WS.Get_Id,
-                      List      => Plugin.Get_Owner_Permissions);
+                      List      => Module.Get_Owner_Permissions);
 
       Workspace := WS;
       DB.Commit;
@@ -582,5 +578,31 @@ package body AWA.Workspaces.Modules is
          end;
       end loop;
    end Add_Permission;
+
+   --  ------------------------------
+   --  The `On_Create` procedure is called by `Notify_Create` to notify the creation of the user.
+   --  ------------------------------
+   overriding
+   procedure On_Create (Module : in Workspace_Module;
+                        User   : in AWA.Users.Models.User_Ref'Class) is
+      Ctx      : constant ASC.Service_Context_Access := ASC.Current;
+      Kind     : ADO.Entity_Type;
+   begin
+      if Module.Allow_WS_Create then
+         declare
+            DB       : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
+         begin
+            Ctx.Start;
+            Kind := ADO.Sessions.Entities.Find_Entity_Type (DB, Models.WORKSPACE_TABLE);
+            Module.Perm_Manager.Add_Permission (Session    => DB,
+                                                User       => User.Get_Id,
+                                                Entity     => ADO.NO_IDENTIFIER,
+                                                Kind       => Kind,
+                                                Workspace  => ADO.NO_IDENTIFIER,
+                                                Permission => ACL_Create_Workspace.Permission);
+            Ctx.Commit;
+         end;
+      end if;
+   end On_Create;
 
 end AWA.Workspaces.Modules;
