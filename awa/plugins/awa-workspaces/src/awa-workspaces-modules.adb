@@ -367,20 +367,26 @@ package body AWA.Workspaces.Modules is
    begin
       Log.Info ("Sending invitation to {0}", Email_Address);
 
-      Ctx.Start;
       if User.Is_Null then
          Log.Error ("There is no current user.  The workspace cannot be identified");
          return;
       end if;
 
       --  Find the workspace associated with the current user.
+      Query.Set_Join ("INNER JOIN awa_workspace_member AS m ON m.workspace_id = o.id");
+      Query.Set_Filter ("m.member_id = ?");
       Query.Add_Param (User.Get_Id);
-      Query.Set_Filter ("o.owner_id = ?");
       WS.Find (DB, Query, Found);
       if not Found then
+         Log.Error ("The current user has no associated workspace");
          return;
       end if;
 
+      --  Check that the user has the permission to invite users in the workspace.
+      AWA.Permissions.Check (Permission => ACL_Invite_User.Permission,
+                             Entity     => WS);
+
+      Ctx.Start;
       Query.Clear;
       Query.Set_Filter ("o.email = ?");
       Query.Add_Param (Email_Address);
