@@ -490,6 +490,11 @@ package body AWA.Workspaces.Modules is
          Log.Warn ("Refusing to delete the current user {0}", User_Image);
          return;
       end if;
+
+      --  Check that the user has the permission to delete users from the workspace.
+      AWA.Permissions.Check (Permission => ACL_Delete_User.Permission,
+                             Entity     => Workspace_Id);
+
       Ctx.Start;
       Member.Delete (DB);
 
