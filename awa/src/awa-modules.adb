@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa -- Ada Web Application
---  Copyright (C) 2009, 2010, 2011, 2012, 2015, 2016 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2015, 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -96,6 +96,26 @@ package body AWA.Modules is
       Value : constant String := Plugin.Config.Get (Name, Integer'Image (Default));
    begin
       return Integer'Value (Value);
+
+   exception
+      when Constraint_Error =>
+         return Default;
+   end Get_Config;
+
+   --  ------------------------------
+   --  Get the module configuration property identified by the name.
+   --  If the configuration property does not exist, returns the default value.
+   --  ------------------------------
+   function Get_Config (Plugin  : in Module;
+                        Name    : in String;
+                        Default : in Boolean := False) return Boolean is
+      Value : constant String := Plugin.Config.Get (Name, Boolean'Image (Default));
+   begin
+      if Value in "yes" | "true" | "1" then
+         return True;
+      else
+         return False;
+      end if;
 
    exception
       when Constraint_Error =>
