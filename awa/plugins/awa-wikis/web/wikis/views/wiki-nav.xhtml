@@ -20,7 +20,7 @@
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:w="http://code.google.com/p/ada-asf/widget"
     xmlns:ui="http://java.sun.com/jsf/facelets">
-    <h:panelGroup rendered="#{user.isLogged and auth:hasPermission('wiki-page-create',wikiSpaceId)">
+    <h:panelGroup rendered="#{user.isLogged and auth:hasPermission('wiki-page-create',wikiSpaceId)}">
         <li class="awa-nav-left">
             <a href="#{contextPath}/wikis/create/#{wikiSpaceId}" class="awa-nav-icon"
                title="#{wikiMsg.wiki_admin_create_page_title}">
