@@ -19,7 +19,9 @@ with Ada.Strings.Unbounded;
 
 with AWA.Users.Models;
 with AWA.Users.Principals;
+with AWA.Permissions.Services;
 with AWA.Modules;
+with AWA.Modules.Lifecycles;
 with AWA.Events;
 with Security.Auth;
 with Security.Random;
@@ -58,6 +60,11 @@ package AWA.Users.Services is
    package User_Register_Event is new AWA.Events.Definition (Name => "user-register");
    package User_Lost_Password_Event is new AWA.Events.Definition (Name => "user-lost-password");
    package User_Reset_Password_Event is new AWA.Events.Definition (Name => "user-reset-password");
+
+   package User_Lifecycle is
+     new AWA.Modules.Lifecycles (Element_Type => AWA.Users.Models.User_Ref'Class);
+
+   subtype Listener is User_Lifecycle.Listener;
 
    NAME : constant String := "User_Service";
 
@@ -218,9 +225,10 @@ private
                              Principal : out AWA.Users.Principals.Principal_Access);
 
    type User_Service is new AWA.Modules.Module_Manager with record
-      Server_Id : Integer := 0;
-      Random    : Security.Random.Generator;
-      Auth_Key  : Ada.Strings.Unbounded.Unbounded_String;
+      Server_Id   : Integer := 0;
+      Random      : Security.Random.Generator;
+      Auth_Key    : Ada.Strings.Unbounded.Unbounded_String;
+      Permissions : AWA.Permissions.Services.Permission_Manager_Access;
    end record;
 
 end AWA.Users.Services;
