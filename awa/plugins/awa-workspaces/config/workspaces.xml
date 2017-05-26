@@ -11,6 +11,12 @@
     <param-value>blog-create,wiki-space-create</param-value>
   </context-param>
 
+  <context-param>
+    <!-- List of permissions to grant to the owner when the workspace is created -->
+    <param-name>workspaces.allow_workspace_create</param-name>
+    <param-value>0</param-value>
+  </context-param>
+
   <managed-bean>
     <description>This bean allows to perform some general workspace actions</description>
     <managed-bean-name>workspace</managed-bean-name>
@@ -48,6 +54,33 @@
        WHERE acl.entity_type = :entity_type
        AND acl.user_id = :user_id
        AND acl.permission = $permission[workspace-create]
+    </sql>
+  </entity-permission>
+
+  <entity-permission>
+    <name>workspace-invite-user</name>
+    <entity-type>awa_workspace</entity-type>
+    <description>Permission to invite a user in the workspace.</description>
+    <sql>
+       SELECT acl.id FROM awa_acl AS acl
+       WHERE acl.entity_type = :entity_type
+       AND acl.user_id = :user_id
+       AND acl.permission = $permission[workspace-invite-user]
+       AND acl.entity_id = :entity_id
+    </sql>
+    <grant>SELECT id FROM awa_workspace WHERE id = :workspace_id</grant>
+  </entity-permission>
+
+  <entity-permission>
+    <name>workspace-delete-user</name>
+    <entity-type>awa_workspace</entity-type>
+    <description>Permission to delete a user from the workspace.</description>
+    <sql>
+       SELECT acl.id FROM awa_acl AS acl
+       WHERE acl.entity_type = :entity_type
+       AND acl.user_id = :user_id
+       AND acl.permission = $permission[workspace-delete-user]
+       AND acl.entity_id = :entity_id
     </sql>
     <grant>SELECT id FROM awa_workspace WHERE id = :workspace_id</grant>
   </entity-permission>
