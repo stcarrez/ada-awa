@@ -470,6 +470,9 @@ package AWA.Workspaces.Models is
                    Into   : in out Workspace_Feature_Ref);
 
 
+
+   Query_Member_In_Role : constant ADO.Queries.Query_Definition_Access;
+
    --  --------------------
    --    The Member_Info describes a member of the workspace.
    --  --------------------
@@ -898,12 +901,22 @@ private
                         Impl   : out Workspace_Feature_Access);
 
    package File_1 is
+      new ADO.Queries.Loaders.File (Path => "workspace-permissions.xml",
+                                    Sha1 => "9B2B599473F75F92CB5AB5045675E4CCEF926543");
+
+   package Def_Member_In_Role is
+      new ADO.Queries.Loaders.Query (Name => "member-in-role",
+                                     File => File_1.File'Access);
+   Query_Member_In_Role : constant ADO.Queries.Query_Definition_Access
+   := Def_Member_In_Role.Query'Access;
+
+   package File_2 is
       new ADO.Queries.Loaders.File (Path => "member-list.xml",
                                     Sha1 => "D92F1CB6DBE47F7A72E83CD4AE8E39F2048D0728");
 
    package Def_Memberinfo_Workspace_Member_List is
       new ADO.Queries.Loaders.Query (Name => "workspace-member-list",
-                                     File => File_1.File'Access);
+                                     File => File_2.File'Access);
    Query_Workspace_Member_List : constant ADO.Queries.Query_Definition_Access
    := Def_Memberinfo_Workspace_Member_List.Query'Access;
 end AWA.Workspaces.Models;
