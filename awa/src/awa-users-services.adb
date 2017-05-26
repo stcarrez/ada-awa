@@ -27,6 +27,9 @@ with ADO.SQL;
 with ADO.Statements;
 with ADO.Objects;
 
+with Security.Contexts;
+with Security.Policies;
+
 with AWA.Services;
 with AWA.Services.Contexts;
 package body AWA.Users.Services is
@@ -241,6 +244,7 @@ package body AWA.Users.Services is
             E.Set_User_Id (User.Get_Id);
             E.Save (DB);
          end;
+         User_Lifecycle.Notify_Create (Model, User);
       else
          Update_User;
 
@@ -255,6 +259,7 @@ package body AWA.Users.Services is
                E.Save (DB);
             end if;
          end;
+         User_Lifecycle.Notify_Update (Model, User);
       end if;
 
       Create_Session (Model, DB, Session, User, IpAddr, Principal);
@@ -643,14 +648,18 @@ package body AWA.Users.Services is
       Email := Email_Ref (User.Get_Email);
 
       Access_Key.Delete (DB);
+      User_Lifecycle.Notify_Create (Model, User);
 
       --  Create the authentication session.
       Create_Session (Model, DB, Session, User, IpAddr, Principal);
 
       --  Post the user creation event once the user is registered.
       declare
-         Event : AWA.Events.Module_Event;
+         Sec_Ctx : Security.Contexts.Security_Context;
+         Event   : AWA.Events.Module_Event;
       begin
+         Sec_Ctx.Set_Context (Manager   => Model.Permissions.all'Access,
+                              Principal => Principal.all'Access);
          Event.Set_Parameter ("email", Email.Get_Email);
          Model.Send_Alert (User_Create_Event.Kind, User, Event);
       end;
@@ -765,9 +774,12 @@ package body AWA.Users.Services is
    procedure Initialize (Model  : in out User_Service;
                          Module : in AWA.Modules.Module'Class) is
       DEFAULT_KEY : constant String := "8ef60aad66977c68b12f4f8acab5a4e00a77f6e8";
+      Sec_Manager : constant Security.Policies.Policy_Manager_Access
+         := Module.Get_Application.Get_Security_Manager;
    begin
       AWA.Modules.Module_Manager (Model).Initialize (Module);
 
+      Model.Permissions := Permissions.Services.Permission_Manager'Class (Sec_Manager.all)'Access;
       Model.Server_Id := Module.Get_Config ("app.server.id", 1);
       Set_Unbounded_String (Model.Auth_Key,
                             Module.Get_Config ("app.server.key", DEFAULT_KEY));
