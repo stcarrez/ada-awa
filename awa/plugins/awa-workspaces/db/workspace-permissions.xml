@@ -1,0 +1,17 @@
+<query-mapping package='AWA.Workspaces.Models'>
+    <description>
+      The list of workspace members for the workspace administrator.
+    </description>
+
+    <query name='member-in-role'>
+       <comment>Get the list of workspace members having a given role</comment>
+       <sql>
+    SELECT
+      user_member.member_id
+    FROM awa_workspace_member AS user_member
+       </sql>
+       <sql-filter>user_member.workspace_id = :workspace_id</sql-filter>
+    </query>
+
+</query-mapping>
+
