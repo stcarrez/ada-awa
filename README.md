@@ -6,11 +6,18 @@
 [![License](http://img.shields.io/badge/license-APACHE2-blue.svg)](LICENSE)
 ![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-awa/v1.0.0.svg)
 
-Ada Web Application is a framework to build a Web Application in Ada 2005/2012.
+Ada Web Application is a framework to build a Web Application in Ada 2012.
 The framework provides several ready to use and extendable modules that are common
 to many web application.  This includes the login, authentication, users, permissions,
 managing comments, tags, votes, documents, images.  It provides a complete blog,
 question and answers and a wiki module.
+
+AWA simplifies the Web Application development by taking care of user management with
+Google+, Facebook authentication and by providing the foundations on top of which you
+can construct your own application.  AWA provides a powerful permission management
+that gives flexibility to applications to grant access and protect your user's resources.
+
+![AWA Features](images/awa-features.png)
 
 AWA integrates the following projects:
 
@@ -102,3 +109,8 @@ setting up and building an Ada Web Application:
   * Step 3: [Review Web Application: Creating a review](http://blog.vacs.fr/vacs/blogs/post.html?post=2014/06/14/Review-Web-Application-Creating-a-review)
   * Step 4: [Review Web Application: Listing the reviews](http://blog.vacs.fr/vacs/blogs/post.html?post=2014/07/19/Review-Web-Application-Listing-the-reviews)
 
+# Sites Using AWA
+
+  * [Java 2 Ada](https://blog.vacs.fr/)
+  * [Ada France](http://www.ada-france.org/adafr/index.html)
+  * [Atlas](http://demo.vacs.fr/atlas/index.html)
