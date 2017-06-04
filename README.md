@@ -17,7 +17,7 @@ Google+, Facebook authentication and by providing the foundations on top of whic
 can construct your own application.  AWA provides a powerful permission management
 that gives flexibility to applications to grant access and protect your user's resources.
 
-![AWA Features](images/awa-features.png)
+![AWA Features](wiki/images/awa-features.png)
 
 AWA integrates the following projects:
 
