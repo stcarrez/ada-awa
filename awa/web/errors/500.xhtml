@@ -1,5 +1,5 @@
 <!-- Server error page
-  -  Copyright (C) 2013 Stephane Carrez
+  -  Copyright (C) 2013, 2017 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,6 +41,22 @@
               <div id='awa-content'>
                   <div class='awa-error'>
                       <p>#{layoutMsg.layout_error_internal_error}</p>
+                      <dl class="awa-error-details">
+                          <dt>#{layoutMsg.layout_exception_status_code_label}</dt>
+                          <dd>
+                              #{requestScope['servlet.error.status_code']}
+                          </dd>
+                          <dt>#{layoutMsg.layout_exception_type_label}</dt>
+                          <dd>
+                              #{requestScope['servlet.error.exception_type']}
+                          </dd>
+                          <dt>#{layoutMsg.layout_exception_message_label}</dt>
+                          <dd>
+                              #{requestScope['servlet.error.message']}
+                          </dd>
+                          <dt>#{layoutMsg.layout_exception_trace_label}</dt>
+                          <dd class="awa-error-traceback">#{requestScope['servlet.error.exception']}</dd>
+                      </dl>
                   </div>
               </div>
             </ui:define>
