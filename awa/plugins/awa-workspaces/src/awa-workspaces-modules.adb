@@ -27,6 +27,7 @@ with ADO.Queries;
 with ADO.Statements;
 with Security.Policies.Roles;
 with Util.Log.Loggers;
+with Util.Mail;
 with AWA.Users.Modules;
 with AWA.Workspaces.Beans;
 package body AWA.Workspaces.Modules is
@@ -96,7 +97,9 @@ package body AWA.Workspaces.Modules is
       return Security.Permissions.Get_Permission_Array (To_String (Manager.Owner_Permissions));
    end Get_Owner_Permissions;
 
+   --  ------------------------------
    --  Get the workspace module.
+   --  ------------------------------
    function Get_Workspace_Module return Workspace_Module_Access is
       function Get is new AWA.Modules.Get (Workspace_Module, Workspace_Module_Access, NAME);
    begin
@@ -359,9 +362,11 @@ package body AWA.Workspaces.Modules is
       Invitee : AWA.Users.Models.User_Ref;
       Invit   : AWA.Workspaces.Models.Invitation_Ref;
       Member  : AWA.Workspaces.Models.Workspace_Member_Ref;
-      Email_Address : constant String := Invitation.Get_Email;
+      Invite_Address : constant String := Invitation.Get_Email;
+      Email_Address  : constant Util.Mail.Email_Address
+        := Util.Mail.Parse_Address (Invite_Address);
    begin
-      Log.Info ("Sending invitation to {0}", Email_Address);
+      Log.Info ("Sending invitation to {0}", Invite_Address);
 
       if User.Is_Null then
          Log.Error ("There is no current user.  The workspace cannot be identified");
@@ -385,14 +390,14 @@ package body AWA.Workspaces.Modules is
       Ctx.Start;
       Query.Clear;
       Query.Set_Filter ("o.email = ?");
-      Query.Add_Param (Email_Address);
+      Query.Add_Param (Email_Address.Address);
       Email.Find (DB, Query, Found);
       if not Found then
          Email.Set_User_Id (0);
-         Email.Set_Email (Email_Address);
+         Email.Set_Email (Email_Address.Address);
          Email.Save (DB);
          Invitee.Set_Email (Email);
-         Invitee.Set_Name (Email_Address);
+         Invitee.Set_Name (Email_Address.Name);
          Invitee.Save (DB);
          Email.Set_User_Id (Invitee.Get_Id);
          Email.Save (DB);
@@ -440,7 +445,7 @@ package body AWA.Workspaces.Modules is
          Event : AWA.Events.Module_Event;
       begin
          Event.Set_Parameter ("key", Key.Get_Access_Key);
-         Event.Set_Parameter ("email", Email_Address);
+         Event.Set_Parameter ("email", Ada.Strings.Unbounded.To_String (Email_Address.Address));
          Event.Set_Parameter ("name", Invitee.Get_Name);
          Event.Set_Parameter ("message", Invitation.Get_Message);
          Event.Set_Parameter ("inviter", User.Get_Name);
