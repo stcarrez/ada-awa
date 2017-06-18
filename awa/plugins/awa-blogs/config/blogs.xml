@@ -464,6 +464,10 @@
     <url-pattern>/blogs/admin/#{adminBlog.id}/preview/#{post.uid}</url-pattern>
     <url-pattern>/blogs/admin/#{blogStats.blog_id}/stats</url-pattern>
     <url-pattern>/blogs/post/#{postAccessStats.entity_id}/stats/#{postAccessStats.first_date}</url-pattern>
+    <url-pattern>/blogs/view.html</url-pattern>
+    <url-pattern>/blogs/post.html</url-pattern>
+    <url-pattern>/blogs/tagged.html</url-pattern>
+    <url-pattern>/blogs/index.html</url-pattern>
   </filter-mapping>
 
   <url-policy>
