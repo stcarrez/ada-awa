@@ -225,6 +225,19 @@ div.awa-error {
     width: 640px;
     margin: auto;
 }
+.awa-error-details {
+    width: 100%;
+}
+.awa-error-details dt {
+    margin-top: 0.5em;
+}
+.awa-error-details dd {
+    margin-bottom: 0.3em;
+}
+.awa-error-traceback {
+    font-family: monospace;
+    white-space: pre;
+}
 
 /**
  * Modal box
