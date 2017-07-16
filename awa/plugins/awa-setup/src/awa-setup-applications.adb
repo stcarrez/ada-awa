@@ -20,6 +20,7 @@ with Ada.IO_Exceptions;
 with Ada.Directories;
 with Util.Files;
 with Util.Processes;
+with Util.Properties;
 with Util.Log.Loggers;
 with Util.Streams.Pipes;
 with Util.Streams.Buffered;
@@ -312,8 +313,8 @@ package body AWA.Setup.Applications is
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       pragma Unreferenced (Outcome);
 
-      procedure Save_Property (Name  : in Ada.Strings.Unbounded.Unbounded_String;
-                               Value : in Ada.Strings.Unbounded.Unbounded_String);
+      procedure Save_Property (Name  : in String;
+                               Value : in Util.Properties.Value);
       procedure Read_Property (Line : in String);
 
       Path     : constant String := Ada.Strings.Unbounded.To_String (From.Path);
@@ -333,12 +334,12 @@ package body AWA.Setup.Applications is
          Changed.Remove (Line (Line'First .. Pos - 1));
       end Read_Property;
 
-      procedure Save_Property (Name  : in Ada.Strings.Unbounded.Unbounded_String;
-                               Value : in Ada.Strings.Unbounded.Unbounded_String) is
+      procedure Save_Property (Name  : in String;
+                               Value : in Util.Properties.Value) is
       begin
-         Ada.Text_IO.Put (Output, Ada.Strings.Unbounded.To_String (Name));
+         Ada.Text_IO.Put (Output, Name);
          Ada.Text_IO.Put (Output, "=");
-         Ada.Text_IO.Put_Line (Output, Ada.Strings.Unbounded.To_String (Value));
+         Ada.Text_IO.Put_Line (Output, Util.Properties.To_String (Value));
       end Save_Property;
 
    begin
