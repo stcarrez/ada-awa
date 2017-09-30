@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions -- Permissions module
---  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,7 @@
 with Security.Permissions;
 with Security.Policies;
 
-with Util.Serialize.IO.XML;
+with Util.Serialize.Mappers;
 private with Util.Beans.Objects;
 
 with ADO;
@@ -137,6 +137,7 @@ private
    type Controller_Config is record
       Name     : Util.Beans.Objects.Object;
       SQL      : Util.Beans.Objects.Object;
+      Grant    : Util.Beans.Objects.Object;
       Entity   : ADO.Entity_Type := 0;
       Entities : Entity_Type_Array := (others => ADO.NO_ENTITY_TYPE);
       Count    : Natural := 0;
@@ -155,6 +156,6 @@ private
    --  Setup the XML parser to read the <b>policy</b> description.
    overriding
    procedure Prepare_Config (Policy : in out Entity_Policy;
-                             Reader : in out Util.Serialize.IO.XML.Parser);
+                             Mapper : in out Util.Serialize.Mappers.Processing);
 
 end AWA.Permissions;
