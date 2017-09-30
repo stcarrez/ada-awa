@@ -16,7 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with EL.Contexts.Default;
-with Util.Serialize.IO.XML;
+with Util.Serialize.Mappers;
 
 --  The <b>AWA.Applications.Configs</b> package reads the application configuration files.
 package AWA.Applications.Configs is
@@ -25,7 +25,7 @@ package AWA.Applications.Configs is
    --  gets initialized to read the configuration for servlets, filters, managed beans,
    --  permissions, events and other configuration elements.
    generic
-      Reader  : in out Util.Serialize.IO.XML.Parser;
+      Mapper  : in out Util.Serialize.Mappers.Processing;
       App     : in Application_Access;
       Context : in EL.Contexts.Default.Default_Context_Access;
       Override_Context : in Boolean;
