@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-configs -- Event configuration
---  Copyright (C) 2012, 2013 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,7 @@
 with Ada.Strings.Unbounded;
 
 with Util.Beans.Objects;
-with Util.Serialize.IO.XML;
+with Util.Serialize.Mappers;
 with EL.Expressions;
 with EL.Beans;
 with EL.Contexts;
@@ -87,7 +87,7 @@ package AWA.Events.Configs is
    --  The Ada bean <b>mail</b> is created and is populated with the <b>user</b> and
    --  <b>template</b> properties.  The Ada bean action method <b>send</b> is called.
    generic
-      Reader  : in out Util.Serialize.IO.XML.Parser;
+      Mapper  : in out Util.Serialize.Mappers.Processing;
       Manager : in AWA.Events.Services.Event_Manager_Access;
       Context : in EL.Contexts.ELContext_Access;
    package Reader_Config is
