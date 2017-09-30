@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-modules-reader -- Read module configuration files
---  Copyright (C) 2011, 2012, 2015 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2015, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,7 @@
 -----------------------------------------------------------------------
 
 with Util.Serialize.IO.XML;
+with Util.Serialize.Mappers;
 
 with AWA.Applications.Configs;
 with Security.Policies;
@@ -33,9 +34,10 @@ package body AWA.Modules.Reader is
                                  Context : in EL.Contexts.Default.Default_Context_Access) is
 
       Reader : Util.Serialize.IO.XML.Parser;
+      Mapper : Util.Serialize.Mappers.Processing;
 
       package Config is
-        new AWA.Applications.Configs.Reader_Config (Reader,
+        new AWA.Applications.Configs.Reader_Config (Mapper,
                                                     Plugin.App.all'Unchecked_Access,
                                                     Context,
                                                     False);
@@ -45,13 +47,13 @@ package body AWA.Modules.Reader is
    begin
       Log.Info ("Reading module configuration file {0}", File);
 
-      Sec.Prepare_Config (Reader);
+      Sec.Prepare_Config (Mapper);
       if AWA.Modules.Log.Get_Level >= Util.Log.DEBUG_LEVEL then
-         Util.Serialize.IO.Dump (Reader, AWA.Modules.Log);
+         Util.Serialize.Mappers.Dump (Mapper, AWA.Modules.Log);
       end if;
 
       --  Read the configuration file and record managed beans, navigation rules.
-      Reader.Parse (File);
+      Reader.Parse (File, Mapper);
       Sec.Finish_Config (Reader);
 
    exception
