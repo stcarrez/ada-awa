@@ -78,10 +78,10 @@ MAKE_ARGS=-XMODE=${MODE} -XCOVERAGE=${COVERAGE} -XAWA_LIBRARY_TYPE=${AWA_LIBRARY
 
 ifeq (${BUILDS_SHARED},yes)
 all:     static shared
-install: install_static install_shared install-bin post-install
+install: uninstall install_static install_shared install-bin post-install
 else
 all:     static
-install: install_static install-bin post-install
+install: uninstall install_static install-bin post-install
 endif
 
 # Build executables for all mains defined by the project.
