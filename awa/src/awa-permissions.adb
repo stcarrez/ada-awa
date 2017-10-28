@@ -76,7 +76,8 @@ package body AWA.Permissions is
       Check (Permission, ADO.Objects.Get_Value (Entity.Get_Key));
    end Check;
 
-   type Config_Fields is (FIELD_NAME, FIELD_ENTITY_TYPE, FIELD_ENTITY_PERMISSION, FIELD_SQL);
+   type Config_Fields is (FIELD_NAME, FIELD_ENTITY_TYPE, FIELD_ENTITY_PERMISSION, FIELD_SQL,
+                          FIELD_GRANT);
 
    type Controller_Config_Access is access all Controller_Config;
 
@@ -101,6 +102,9 @@ package body AWA.Permissions is
 
          when FIELD_SQL =>
             Into.SQL := Value;
+
+         when FIELD_GRANT =>
+            Into.Grant := Value;
 
          when FIELD_ENTITY_TYPE =>
             declare
@@ -148,7 +152,7 @@ package body AWA.Permissions is
                                                Fields              => Config_Fields,
                                                Set_Member          => Set_Member);
 
-   Mapper : aliased Config_Mapper.Mapper;
+   Perm_Mapper : aliased Config_Mapper.Mapper;
 
    --  ------------------------------
    --  Setup the XML parser to read the <b>entity-permission</b> description.  For example:
@@ -178,19 +182,20 @@ package body AWA.Permissions is
    --  ------------------------------
    overriding
    procedure Prepare_Config (Policy : in out Entity_Policy;
-                             Reader : in out Util.Serialize.IO.XML.Parser) is
+                             Mapper : in out Util.Serialize.Mappers.Processing) is
       Config : constant Controller_Config_Access := Policy.Config'Unchecked_Access;
    begin
-      Reader.Add_Mapping ("policy-rules", Mapper'Access);
-      Reader.Add_Mapping ("module", Mapper'Access);
+      Mapper.Add_Mapping ("policy-rules", Perm_Mapper'Access);
+      Mapper.Add_Mapping ("module", Perm_Mapper'Access);
       Config.Manager := Policy'Unchecked_Access;
       Config.Session := AWA.Services.Contexts.Get_Session (AWA.Services.Contexts.Current);
-      Config_Mapper.Set_Context (Reader, Config);
+      Config_Mapper.Set_Context (Mapper, Config);
    end Prepare_Config;
 
 begin
-   Mapper.Add_Mapping ("entity-permission", FIELD_ENTITY_PERMISSION);
-   Mapper.Add_Mapping ("entity-permission/name", FIELD_NAME);
-   Mapper.Add_Mapping ("entity-permission/entity-type", FIELD_ENTITY_TYPE);
-   Mapper.Add_Mapping ("entity-permission/sql", FIELD_SQL);
+   Perm_Mapper.Add_Mapping ("entity-permission", FIELD_ENTITY_PERMISSION);
+   Perm_Mapper.Add_Mapping ("entity-permission/name", FIELD_NAME);
+   Perm_Mapper.Add_Mapping ("entity-permission/entity-type", FIELD_ENTITY_TYPE);
+   Perm_Mapper.Add_Mapping ("entity-permission/sql", FIELD_SQL);
+   Perm_Mapper.Add_Mapping ("entity-permission/grant", FIELD_GRANT);
 end AWA.Permissions;

@@ -21,6 +21,7 @@ with Ada.Strings.Unbounded;
 
 with Util.Files;
 with Util.Log.Loggers;
+with Util.Serialize.IO.XML;
 
 with ASF.Contexts.Faces;
 with ASF.Applications.Main.Configs;
@@ -42,12 +43,12 @@ package body AWA.Applications.Configs is
       App_Access : constant ASF.Contexts.Faces.Application_Access := App.all'Unchecked_Access;
 
       package Bean_Config is
-        new ASF.Applications.Main.Configs.Reader_Config (Reader, App_Access,
+        new ASF.Applications.Main.Configs.Reader_Config (Mapper, App_Access,
                                                          Context.all'Access,
                                                          Override_Context);
 
       package Event_Config is
-        new AWA.Events.Configs.Reader_Config (Reader  => Reader,
+        new AWA.Events.Configs.Reader_Config (Mapper  => Mapper,
                                               Manager => App.Events'Unchecked_Access,
                                               Context => Context.all'Access);
 
@@ -64,6 +65,7 @@ package body AWA.Applications.Configs is
                                  Override_Context : in Boolean) is
 
       Reader : Util.Serialize.IO.XML.Parser;
+      Mapper : Util.Serialize.Mappers.Processing;
       Ctx    : AWA.Services.Contexts.Service_Context;
       Sec    : constant Security.Policies.Policy_Manager_Access := App.Get_Security_Manager;
    begin
@@ -71,21 +73,21 @@ package body AWA.Applications.Configs is
       Ctx.Set_Context (App'Unchecked_Access, null);
 
       declare
-         package Config is new Reader_Config (Reader, App'Unchecked_Access, Context,
+         package Config is new Reader_Config (Mapper, App'Unchecked_Access, Context,
                                               Override_Context);
          pragma Warnings (Off, Config);
       begin
-         Sec.Prepare_Config (Reader);
+         Sec.Prepare_Config (Mapper);
 
          --  Initialize the parser with the module configuration mappers (if any).
          Initialize_Parser (App, Reader);
 
          if Log.Get_Level >= Util.Log.DEBUG_LEVEL then
-            Util.Serialize.IO.Dump (Reader, Log);
+            Util.Serialize.Mappers.Dump (Mapper, Log);
          end if;
 
          --  Read the configuration file and record managed beans, navigation rules.
-         Reader.Parse (File);
+         Reader.Parse (File, Mapper);
       end;
    exception
       when others =>

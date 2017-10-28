@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-configs -- Event configuration
---  Copyright (C) 2012, 2013 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -149,7 +149,7 @@ package body AWA.Events.Configs is
                                                Fields              => Config_Fields,
                                                Set_Member          => Set_Member);
 
-   Mapper : aliased Config_Mapper.Mapper;
+   Event_Mapper : aliased Config_Mapper.Mapper;
 
    --  Setup the XML parser to read the <b>queue</b> and <b>on-event</b> description.
    --  For example:
@@ -169,28 +169,28 @@ package body AWA.Events.Configs is
    --  <b>template</b> properties.  The Ada bean action method <b>send</b> is called.
    package body Reader_Config is
    begin
-      Reader.Add_Mapping ("module", Mapper'Access);
+      Mapper.Add_Mapping ("module", Event_Mapper'Access);
       Config.Manager     := Manager;
       Config.Context     := Context;
       Config.Session     := AWA.Services.Contexts.Get_Session (AWA.Services.Contexts.Current);
-      Config_Mapper.Set_Context (Reader, Config'Unchecked_Access);
+      Config_Mapper.Set_Context (Mapper, Config'Unchecked_Access);
    end Reader_Config;
 
 begin
-   Mapper.Add_Mapping ("queue", FIELD_QUEUE);
-   Mapper.Add_Mapping ("queue/@name", FIELD_NAME);
-   Mapper.Add_Mapping ("queue/@type", FIELD_TYPE);
-   Mapper.Add_Mapping ("queue/property/@name", FIELD_PROPERTY_NAME);
-   Mapper.Add_Mapping ("queue/property", FIELD_PROPERTY_VALUE);
-   Mapper.Add_Mapping ("on-event", FIELD_ON_EVENT);
-   Mapper.Add_Mapping ("on-event/@name", FIELD_NAME);
-   Mapper.Add_Mapping ("on-event/@queue", FIELD_QUEUE_NAME);
-   Mapper.Add_Mapping ("on-event/property/@name", FIELD_PROPERTY_NAME);
-   Mapper.Add_Mapping ("on-event/property", FIELD_PROPERTY_VALUE);
-   Mapper.Add_Mapping ("on-event/action", FIELD_ACTION);
-   Mapper.Add_Mapping ("dispatcher", FIELD_DISPATCHER);
-   Mapper.Add_Mapping ("dispatcher/@name", FIELD_NAME);
-   Mapper.Add_Mapping ("dispatcher/queue/@match", FIELD_DISPATCHER_QUEUE);
-   Mapper.Add_Mapping ("dispatcher/priority", FIELD_DISPATCHER_PRIORITY);
-   Mapper.Add_Mapping ("dispatcher/count", FIELD_DISPATCHER_COUNT);
+   Event_Mapper.Add_Mapping ("queue", FIELD_QUEUE);
+   Event_Mapper.Add_Mapping ("queue/@name", FIELD_NAME);
+   Event_Mapper.Add_Mapping ("queue/@type", FIELD_TYPE);
+   Event_Mapper.Add_Mapping ("queue/property/@name", FIELD_PROPERTY_NAME);
+   Event_Mapper.Add_Mapping ("queue/property", FIELD_PROPERTY_VALUE);
+   Event_Mapper.Add_Mapping ("on-event", FIELD_ON_EVENT);
+   Event_Mapper.Add_Mapping ("on-event/@name", FIELD_NAME);
+   Event_Mapper.Add_Mapping ("on-event/@queue", FIELD_QUEUE_NAME);
+   Event_Mapper.Add_Mapping ("on-event/property/@name", FIELD_PROPERTY_NAME);
+   Event_Mapper.Add_Mapping ("on-event/property", FIELD_PROPERTY_VALUE);
+   Event_Mapper.Add_Mapping ("on-event/action", FIELD_ACTION);
+   Event_Mapper.Add_Mapping ("dispatcher", FIELD_DISPATCHER);
+   Event_Mapper.Add_Mapping ("dispatcher/@name", FIELD_NAME);
+   Event_Mapper.Add_Mapping ("dispatcher/queue/@match", FIELD_DISPATCHER_QUEUE);
+   Event_Mapper.Add_Mapping ("dispatcher/priority", FIELD_DISPATCHER_PRIORITY);
+   Event_Mapper.Add_Mapping ("dispatcher/count", FIELD_DISPATCHER_COUNT);
 end AWA.Events.Configs;
