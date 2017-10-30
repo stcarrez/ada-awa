@@ -90,7 +90,7 @@ and building all required packages.  To use the AWA docker container you can
 run the following commands:
 
 ```
-   sudo docker pull ciceron/awa
+   sudo docker pull ciceron/ada-awa
 ```
 
 # Documentation
