@@ -65,6 +65,10 @@ package AWA.Settings.Modules is
                   Default : in String;
                   Value   : out Ada.Strings.Unbounded.Unbounded_String);
 
+   --  Release the memory allocated for the settings.
+   overriding
+   procedure Finalize (Manager : in out Setting_Manager);
+
    --  Get the current setting manager for the current user.
    function Current return Setting_Manager_Access;
 
