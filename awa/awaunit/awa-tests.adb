@@ -123,8 +123,6 @@ package body AWA.Tests is
 
       ASF.Tests.Initialize (Props, Application.all'Access, Factory);
       Application.Add_Filter ("service", Service_Filter'Access);
-      Application.Add_Filter_Mapping (Name => "service", Pattern => "*.html");
-      Application.Start;
    end Initialize;
 
    --  ------------------------------
@@ -158,8 +156,6 @@ package body AWA.Tests is
       App.Add_Servlet (Name => "files", Server => App.Files'Unchecked_Access);
       App.Add_Servlet (Name => "ajax", Server => App.Ajax'Unchecked_Access);
       App.Add_Servlet (Name => "measures", Server => App.Measures'Unchecked_Access);
---        App.Add_Servlet (Name => "auth", Server => App.Auth'Unchecked_Access);
---        App.Add_Servlet (Name => "verify-auth", Server => App.Self.Verify_Auth'Access);
    end Initialize_Servlets;
 
    --  ------------------------------
