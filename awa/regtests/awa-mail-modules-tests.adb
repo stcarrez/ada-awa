@@ -22,7 +22,7 @@ with AWA.Events;
 
 package body AWA.Mail.Modules.Tests is
 
-   package Caller is new Util.Test_Caller (Test, "Mail.Clients");
+   package Caller is new Util.Test_Caller (Test, "Mail.Modules");
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
    begin
