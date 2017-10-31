@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-settings-modules -- Module awa-settings
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2013, 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -66,6 +66,15 @@ package body AWA.Settings.Modules is
    begin
       Manager.Data.Get (Name, Default, Value);
    end Get;
+
+   --  ------------------------------
+   --  Release the memory allocated for the settings.
+   --  ------------------------------
+   overriding
+   procedure Finalize (Manager : in out Setting_Manager) is
+   begin
+      Manager.Data.Clear;
+   end Finalize;
 
    --  ------------------------------
    --  Get the current setting manager for the current user.
@@ -192,6 +201,7 @@ package body AWA.Settings.Modules is
                Value := Item.Value;
                if Previous /= null then
                   Previous.Next_Setting := Item.Next_Setting;
+                  Item.Next_Setting := First;
                   First := Item;
                end if;
                return;
@@ -216,6 +226,7 @@ package body AWA.Settings.Modules is
             if Item.Name = Name then
                if Previous /= null then
                   Previous.Next_Setting := Item.Next_Setting;
+                  Item.Next_Setting := First;
                   First := Item;
                end if;
                if Item.Value = Value then
