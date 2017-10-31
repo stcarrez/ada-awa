@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-settings-modules -- Module awa-settings
---  Copyright (C) 2013, 2015 Stephane Carrez
+--  Copyright (C) 2013, 2015, 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,7 +40,7 @@ with AWA.Modules;
 package AWA.Settings.Modules is
 
    --  The name under which the module is registered.
-   NAME : constant String := "awa-settings";
+   NAME : constant String := "settings";
 
    --  The name of the HTTP session attribute that contains user settings.
    SESSION_ATTR_NAME : constant String := "AWA.Settings";
@@ -82,7 +82,6 @@ package AWA.Settings.Modules is
 
    --  Get the settings module.
    function Get_Setting_Module return Setting_Module_Access;
-
 
 private
 
