@@ -1,5 +1,5 @@
 dnl Autoconf configure script for Ada Server Faces
-dnl Copyright (C) 2009, 2010, 2011, 2012, 2013, 2015, 2016 Stephane Carrez
+dnl Copyright (C) 2009, 2010, 2011, 2012, 2013, 2015, 2016, 2017 Stephane Carrez
 dnl Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 dnl
 dnl  Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,7 +37,22 @@ if test x"$UNZIP_CHECK" != x"yes" ; then
     AC_MSG_ERROR([Please install unzip before installing Dynamo.])
 fi
 
-# Set the version number of GtkAda
+# Check that Magick or convert are available but do not abort if they are not available
+USE_CONVERT="-unused"
+USE_MAGICK="-unused"
+AC_CHECK_PROG(MAGICK_CHECK,magick,yes)
+if test x"$MAGICK_CHECK" != x"yes" ; then
+    AC_CHECK_PROG(CONVERT_CHECK,convert,yes)
+    if test x"$CONVERT_CHECK" = x"yes" ; then
+       USE_CONVERT=""
+    fi
+else
+   USE_MAGICK=""
+fi
+AC_SUBST(USE_MAGICK)
+AC_SUBST(USE_CONVERT)
+
+# Set the version number of AWA
 AC_SUBST(AWA_VERSION)
 AC_SUBST(AWA_MAJOR_VERSION)
 AC_SUBST(AWA_MINOR_VERSION)
@@ -192,5 +207,5 @@ AM_UTIL_CHECK_INSTALL
 
 AC_OUTPUT(
 Makefile rules.mk awa.gpr awa_tests.gpr awa_unit.gpr distrib/awa.gpr distrib/awa_unit.gpr
-plugins/awa-mail/awa_mail.gpr
+plugins/awa-mail/awa_mail.gpr plugins/awa-images/config/images.xml
 )
