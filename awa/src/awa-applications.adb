@@ -19,6 +19,7 @@
 with Ada.IO_Exceptions;
 
 with ADO.Drivers;
+with ADO.Sessions.Sources;
 
 with EL.Contexts.Default;
 with Util.Files;
@@ -72,6 +73,7 @@ package body AWA.Applications is
    overriding
    procedure Initialize_Config (App  : in out Application;
                                 Conf : in out ASF.Applications.Config) is
+      Connection : ADO.Sessions.Sources.Data_Source;
    begin
       Log.Info ("Initializing configuration");
 
@@ -86,7 +88,10 @@ package body AWA.Applications is
       end if;
       ASF.Applications.Main.Application (App).Initialize_Config (Conf);
       ADO.Drivers.Initialize (Conf);
-      App.DB_Factory.Create (Conf.Get (P_Database.P));
+      Connection.Set_Connection (Conf.Get (P_Database.P));
+      Connection.Set_Property ("ado.queries.paths", Conf.Get ("ado.queries.paths", ""));
+      Connection.Set_Property ("ado.queries.load", Conf.Get ("ado.queries.load", ""));
+      App.DB_Factory.Create (Connection);
       App.Events.Initialize (App'Unchecked_Access);
       AWA.Modules.Initialize (App.Modules, Conf);
 
