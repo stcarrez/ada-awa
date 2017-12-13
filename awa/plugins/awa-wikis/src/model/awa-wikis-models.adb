@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2016 Stephane Carrez
+--  Copyright (C) 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,6 +31,514 @@ package body AWA.Wikis.Models is
 
    pragma Warnings (Off, "formal parameter * is not referenced");
 
+   function Wiki_Content_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
+                                       Of_Class => WIKI_CONTENT_DEF'Access);
+   begin
+      ADO.Objects.Set_Value (Result, Id);
+      return Result;
+   end Wiki_Content_Key;
+
+   function Wiki_Content_Key (Id : in String) return ADO.Objects.Object_Key is
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
+                                       Of_Class => WIKI_CONTENT_DEF'Access);
+   begin
+      ADO.Objects.Set_Value (Result, Id);
+      return Result;
+   end Wiki_Content_Key;
+
+   function "=" (Left, Right : Wiki_Content_Ref'Class) return Boolean is
+   begin
+      return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
+   end "=";
+
+   procedure Set_Field (Object : in out Wiki_Content_Ref'Class;
+                        Impl   : out Wiki_Content_Access) is
+      Result : ADO.Objects.Object_Record_Access;
+   begin
+      Object.Prepare_Modify (Result);
+      Impl := Wiki_Content_Impl (Result.all)'Access;
+   end Set_Field;
+
+   --  Internal method to allocate the Object_Record instance
+   procedure Allocate (Object : in out Wiki_Content_Ref) is
+      Impl : Wiki_Content_Access;
+   begin
+      Impl := new Wiki_Content_Impl;
+      Impl.Create_Date := ADO.DEFAULT_TIME;
+      Impl.Format := AWA.Wikis.Models.Format_Type'First;
+      Impl.Version := 0;
+      Impl.Page_Version := 0;
+      Impl.Page_Id := ADO.NO_IDENTIFIER;
+      ADO.Objects.Set_Object (Object, Impl.all'Access);
+   end Allocate;
+
+   -- ----------------------------------------
+   --  Data object: Wiki_Content
+   -- ----------------------------------------
+
+   procedure Set_Id (Object : in out Wiki_Content_Ref;
+                     Value  : in ADO.Identifier) is
+      Impl : Wiki_Content_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
+   end Set_Id;
+
+   function Get_Id (Object : in Wiki_Content_Ref)
+                  return ADO.Identifier is
+      Impl : constant Wiki_Content_Access
+         := Wiki_Content_Impl (Object.Get_Object.all)'Access;
+   begin
+      return Impl.Get_Key_Value;
+   end Get_Id;
+
+
+   procedure Set_Create_Date (Object : in out Wiki_Content_Ref;
+                              Value  : in Ada.Calendar.Time) is
+      Impl : Wiki_Content_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Time (Impl.all, 2, Impl.Create_Date, Value);
+   end Set_Create_Date;
+
+   function Get_Create_Date (Object : in Wiki_Content_Ref)
+                  return Ada.Calendar.Time is
+      Impl : constant Wiki_Content_Access
+         := Wiki_Content_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Create_Date;
+   end Get_Create_Date;
+
+
+   procedure Set_Content (Object : in out Wiki_Content_Ref;
+                           Value : in String) is
+      Impl : Wiki_Content_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_String (Impl.all, 3, Impl.Content, Value);
+   end Set_Content;
+
+   procedure Set_Content (Object : in out Wiki_Content_Ref;
+                          Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : Wiki_Content_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 3, Impl.Content, Value);
+   end Set_Content;
+
+   function Get_Content (Object : in Wiki_Content_Ref)
+                 return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (Object.Get_Content);
+   end Get_Content;
+   function Get_Content (Object : in Wiki_Content_Ref)
+                  return Ada.Strings.Unbounded.Unbounded_String is
+      Impl : constant Wiki_Content_Access
+         := Wiki_Content_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Content;
+   end Get_Content;
+
+
+   procedure Set_Format (Object : in out Wiki_Content_Ref;
+                         Value  : in AWA.Wikis.Models.Format_Type) is
+      procedure Set_Field_Enum is
+         new ADO.Objects.Set_Field_Operation (Format_Type);
+      Impl : Wiki_Content_Access;
+   begin
+      Set_Field (Object, Impl);
+      Set_Field_Enum (Impl.all, 4, Impl.Format, Value);
+   end Set_Format;
+
+   function Get_Format (Object : in Wiki_Content_Ref)
+                  return AWA.Wikis.Models.Format_Type is
+      Impl : constant Wiki_Content_Access
+         := Wiki_Content_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Format;
+   end Get_Format;
+
+
+   procedure Set_Save_Comment (Object : in out Wiki_Content_Ref;
+                                Value : in String) is
+      Impl : Wiki_Content_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_String (Impl.all, 5, Impl.Save_Comment, Value);
+   end Set_Save_Comment;
+
+   procedure Set_Save_Comment (Object : in out Wiki_Content_Ref;
+                               Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : Wiki_Content_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 5, Impl.Save_Comment, Value);
+   end Set_Save_Comment;
+
+   function Get_Save_Comment (Object : in Wiki_Content_Ref)
+                 return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (Object.Get_Save_Comment);
+   end Get_Save_Comment;
+   function Get_Save_Comment (Object : in Wiki_Content_Ref)
+                  return Ada.Strings.Unbounded.Unbounded_String is
+      Impl : constant Wiki_Content_Access
+         := Wiki_Content_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Save_Comment;
+   end Get_Save_Comment;
+
+
+   function Get_Version (Object : in Wiki_Content_Ref)
+                  return Integer is
+      Impl : constant Wiki_Content_Access
+         := Wiki_Content_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Version;
+   end Get_Version;
+
+
+   procedure Set_Page_Version (Object : in out Wiki_Content_Ref;
+                               Value  : in Integer) is
+      Impl : Wiki_Content_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Integer (Impl.all, 7, Impl.Page_Version, Value);
+   end Set_Page_Version;
+
+   function Get_Page_Version (Object : in Wiki_Content_Ref)
+                  return Integer is
+      Impl : constant Wiki_Content_Access
+         := Wiki_Content_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Page_Version;
+   end Get_Page_Version;
+
+
+   procedure Set_Page_Id (Object : in out Wiki_Content_Ref;
+                          Value  : in ADO.Identifier) is
+      Impl : Wiki_Content_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Identifier (Impl.all, 8, Impl.Page_Id, Value);
+   end Set_Page_Id;
+
+   function Get_Page_Id (Object : in Wiki_Content_Ref)
+                  return ADO.Identifier is
+      Impl : constant Wiki_Content_Access
+         := Wiki_Content_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Page_Id;
+   end Get_Page_Id;
+
+
+   procedure Set_Author (Object : in out Wiki_Content_Ref;
+                         Value  : in AWA.Users.Models.User_Ref'Class) is
+      Impl : Wiki_Content_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 9, Impl.Author, Value);
+   end Set_Author;
+
+   function Get_Author (Object : in Wiki_Content_Ref)
+                  return AWA.Users.Models.User_Ref'Class is
+      Impl : constant Wiki_Content_Access
+         := Wiki_Content_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Author;
+   end Get_Author;
+
+   --  Copy of the object.
+   procedure Copy (Object : in Wiki_Content_Ref;
+                   Into   : in out Wiki_Content_Ref) is
+      Result : Wiki_Content_Ref;
+   begin
+      if not Object.Is_Null then
+         declare
+            Impl : constant Wiki_Content_Access
+              := Wiki_Content_Impl (Object.Get_Load_Object.all)'Access;
+            Copy : constant Wiki_Content_Access
+              := new Wiki_Content_Impl;
+         begin
+            ADO.Objects.Set_Object (Result, Copy.all'Access);
+            Copy.Copy (Impl.all);
+            Copy.Create_Date := Impl.Create_Date;
+            Copy.Content := Impl.Content;
+            Copy.Format := Impl.Format;
+            Copy.Save_Comment := Impl.Save_Comment;
+            Copy.Version := Impl.Version;
+            Copy.Page_Version := Impl.Page_Version;
+            Copy.Page_Id := Impl.Page_Id;
+            Copy.Author := Impl.Author;
+         end;
+      end if;
+      Into := Result;
+   end Copy;
+
+   procedure Find (Object  : in out Wiki_Content_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean) is
+      Impl  : constant Wiki_Content_Access := new Wiki_Content_Impl;
+   begin
+      Impl.Find (Session, Query, Found);
+      if Found then
+         ADO.Objects.Set_Object (Object, Impl.all'Access);
+      else
+         ADO.Objects.Set_Object (Object, null);
+         Destroy (Impl);
+      end if;
+   end Find;
+
+   procedure Load (Object  : in out Wiki_Content_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier) is
+      Impl  : constant Wiki_Content_Access := new Wiki_Content_Impl;
+      Found : Boolean;
+      Query : ADO.SQL.Query;
+   begin
+      Query.Bind_Param (Position => 1, Value => Id);
+      Query.Set_Filter ("id = ?");
+      Impl.Find (Session, Query, Found);
+      if not Found then
+         Destroy (Impl);
+         raise ADO.Objects.NOT_FOUND;
+      end if;
+      ADO.Objects.Set_Object (Object, Impl.all'Access);
+   end Load;
+
+   procedure Load (Object  : in out Wiki_Content_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier;
+                   Found   : out Boolean) is
+      Impl  : constant Wiki_Content_Access := new Wiki_Content_Impl;
+      Query : ADO.SQL.Query;
+   begin
+      Query.Bind_Param (Position => 1, Value => Id);
+      Query.Set_Filter ("id = ?");
+      Impl.Find (Session, Query, Found);
+      if not Found then
+         Destroy (Impl);
+      else
+         ADO.Objects.Set_Object (Object, Impl.all'Access);
+      end if;
+   end Load;
+
+   procedure Save (Object  : in out Wiki_Content_Ref;
+                   Session : in out ADO.Sessions.Master_Session'Class) is
+      Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
+   begin
+      if Impl = null then
+         Impl := new Wiki_Content_Impl;
+         ADO.Objects.Set_Object (Object, Impl);
+      end if;
+      if not ADO.Objects.Is_Created (Impl.all) then
+         Impl.Create (Session);
+      else
+         Impl.Save (Session);
+      end if;
+   end Save;
+
+   procedure Delete (Object  : in out Wiki_Content_Ref;
+                     Session : in out ADO.Sessions.Master_Session'Class) is
+      Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
+   begin
+      if Impl /= null then
+         Impl.Delete (Session);
+      end if;
+   end Delete;
+
+   --  --------------------
+   --  Free the object
+   --  --------------------
+   procedure Destroy (Object : access Wiki_Content_Impl) is
+      type Wiki_Content_Impl_Ptr is access all Wiki_Content_Impl;
+      procedure Unchecked_Free is new Ada.Unchecked_Deallocation
+              (Wiki_Content_Impl, Wiki_Content_Impl_Ptr);
+      pragma Warnings (Off, "*redundant conversion*");
+      Ptr : Wiki_Content_Impl_Ptr := Wiki_Content_Impl (Object.all)'Access;
+      pragma Warnings (On, "*redundant conversion*");
+   begin
+      Unchecked_Free (Ptr);
+   end Destroy;
+
+   procedure Find (Object  : in out Wiki_Content_Impl;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean) is
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Query, WIKI_CONTENT_DEF'Access);
+   begin
+      Stmt.Execute;
+      if Stmt.Has_Elements then
+         Object.Load (Stmt, Session);
+         Stmt.Next;
+         Found := not Stmt.Has_Elements;
+      else
+         Found := False;
+      end if;
+   end Find;
+
+   overriding
+   procedure Load (Object  : in out Wiki_Content_Impl;
+                   Session : in out ADO.Sessions.Session'Class) is
+      Found : Boolean;
+      Query : ADO.SQL.Query;
+      Id    : constant ADO.Identifier := Object.Get_Key_Value;
+   begin
+      Query.Bind_Param (Position => 1, Value => Id);
+      Query.Set_Filter ("id = ?");
+      Object.Find (Session, Query, Found);
+      if not Found then
+         raise ADO.Objects.NOT_FOUND;
+      end if;
+   end Load;
+
+   procedure Save (Object  : in out Wiki_Content_Impl;
+                   Session : in out ADO.Sessions.Master_Session'Class) is
+      Stmt : ADO.Statements.Update_Statement
+         := Session.Create_Statement (WIKI_CONTENT_DEF'Access);
+   begin
+      if Object.Is_Modified (1) then
+         Stmt.Save_Field (Name  => COL_0_1_NAME, --  id
+                          Value => Object.Get_Key);
+         Object.Clear_Modified (1);
+      end if;
+      if Object.Is_Modified (7) then
+         Stmt.Save_Field (Name  => COL_6_1_NAME, --  page_version
+                          Value => Object.Page_Version);
+         Object.Clear_Modified (7);
+      end if;
+      if Object.Is_Modified (8) then
+         Stmt.Save_Field (Name  => COL_7_1_NAME, --  page_id
+                          Value => Object.Page_Id);
+         Object.Clear_Modified (8);
+      end if;
+      if Object.Is_Modified (9) then
+         Stmt.Save_Field (Name  => COL_8_1_NAME, --  author_id
+                          Value => Object.Author);
+         Object.Clear_Modified (9);
+      end if;
+      if Stmt.Has_Save_Fields then
+         Object.Version := Object.Version + 1;
+         Stmt.Save_Field (Name  => "version",
+                          Value => Object.Version);
+         Stmt.Set_Filter (Filter => "id = ? and version = ?");
+         Stmt.Add_Param (Value => Object.Get_Key);
+         Stmt.Add_Param (Value => Object.Version - 1);
+         declare
+            Result : Integer;
+         begin
+            Stmt.Execute (Result);
+            if Result /= 1 then
+               if Result /= 0 then
+                  raise ADO.Objects.UPDATE_ERROR;
+               else
+                  raise ADO.Objects.LAZY_LOCK;
+               end if;
+            end if;
+         end;
+      end if;
+   end Save;
+
+   procedure Create (Object  : in out Wiki_Content_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class) is
+      Query : ADO.Statements.Insert_Statement
+                  := Session.Create_Statement (WIKI_CONTENT_DEF'Access);
+      Result : Integer;
+   begin
+      Object.Version := 1;
+      Session.Allocate (Id => Object);
+      Query.Save_Field (Name  => COL_0_1_NAME, --  id
+                        Value => Object.Get_Key);
+      Query.Save_Field (Name  => COL_1_1_NAME, --  create_date
+                        Value => Object.Create_Date);
+      Query.Save_Field (Name  => COL_2_1_NAME, --  content
+                        Value => Object.Content);
+      Query.Save_Field (Name  => COL_3_1_NAME, --  format
+                        Value => Integer (Format_Type'Pos (Object.Format)));
+      Query.Save_Field (Name  => COL_4_1_NAME, --  save_comment
+                        Value => Object.Save_Comment);
+      Query.Save_Field (Name  => COL_5_1_NAME, --  version
+                        Value => Object.Version);
+      Query.Save_Field (Name  => COL_6_1_NAME, --  page_version
+                        Value => Object.Page_Version);
+      Query.Save_Field (Name  => COL_7_1_NAME, --  page_id
+                        Value => Object.Page_Id);
+      Query.Save_Field (Name  => COL_8_1_NAME, --  author_id
+                        Value => Object.Author);
+      Query.Execute (Result);
+      if Result /= 1 then
+         raise ADO.Objects.INSERT_ERROR;
+      end if;
+      ADO.Objects.Set_Created (Object);
+   end Create;
+
+   procedure Delete (Object  : in out Wiki_Content_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class) is
+      Stmt : ADO.Statements.Delete_Statement
+         := Session.Create_Statement (WIKI_CONTENT_DEF'Access);
+   begin
+      Stmt.Set_Filter (Filter => "id = ?");
+      Stmt.Add_Param (Value => Object.Get_Key);
+      Stmt.Execute;
+   end Delete;
+
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Wiki_Content_Ref;
+                       Name : in String) return Util.Beans.Objects.Object is
+      Obj  : ADO.Objects.Object_Record_Access;
+      Impl : access Wiki_Content_Impl;
+   begin
+      if From.Is_Null then
+         return Util.Beans.Objects.Null_Object;
+      end if;
+      Obj := From.Get_Load_Object;
+      Impl := Wiki_Content_Impl (Obj.all)'Access;
+      if Name = "id" then
+         return ADO.Objects.To_Object (Impl.Get_Key);
+      elsif Name = "create_date" then
+         return Util.Beans.Objects.Time.To_Object (Impl.Create_Date);
+      elsif Name = "content" then
+         return Util.Beans.Objects.To_Object (Impl.Content);
+      elsif Name = "format" then
+         return AWA.Wikis.Models.Format_Type_Objects.To_Object (Impl.Format);
+      elsif Name = "save_comment" then
+         return Util.Beans.Objects.To_Object (Impl.Save_Comment);
+      elsif Name = "page_version" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Page_Version));
+      elsif Name = "page_id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Page_Id));
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+
+
+   --  ------------------------------
+   --  Load the object from current iterator position
+   --  ------------------------------
+   procedure Load (Object  : in out Wiki_Content_Impl;
+                   Stmt    : in out ADO.Statements.Query_Statement'Class;
+                   Session : in out ADO.Sessions.Session'Class) is
+   begin
+      Object.Set_Key_Value (Stmt.Get_Identifier (0));
+      Object.Create_Date := Stmt.Get_Time (1);
+      Object.Content := Stmt.Get_Unbounded_String (2);
+      Object.Format := Format_Type'Val (Stmt.Get_Integer (3));
+      Object.Save_Comment := Stmt.Get_Unbounded_String (4);
+      Object.Page_Version := Stmt.Get_Integer (6);
+      Object.Page_Id := Stmt.Get_Identifier (7);
+      if not Stmt.Is_Null (8) then
+         Object.Author.Set_Key_Value (Stmt.Get_Identifier (8), Session);
+      end if;
+      Object.Version := Stmt.Get_Integer (5);
+      ADO.Objects.Set_Created (Object);
+   end Load;
    function Wiki_Space_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
       Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => WIKI_SPACE_DEF'Access);
@@ -414,42 +922,42 @@ package body AWA.Wikis.Models is
          := Session.Create_Statement (WIKI_SPACE_DEF'Access);
    begin
       if Object.Is_Modified (1) then
-         Stmt.Save_Field (Name  => COL_0_1_NAME, --  id
+         Stmt.Save_Field (Name  => COL_0_2_NAME, --  id
                           Value => Object.Get_Key);
          Object.Clear_Modified (1);
       end if;
       if Object.Is_Modified (2) then
-         Stmt.Save_Field (Name  => COL_1_1_NAME, --  name
+         Stmt.Save_Field (Name  => COL_1_2_NAME, --  name
                           Value => Object.Name);
          Object.Clear_Modified (2);
       end if;
       if Object.Is_Modified (3) then
-         Stmt.Save_Field (Name  => COL_2_1_NAME, --  is_public
+         Stmt.Save_Field (Name  => COL_2_2_NAME, --  is_public
                           Value => Object.Is_Public);
          Object.Clear_Modified (3);
       end if;
       if Object.Is_Modified (5) then
-         Stmt.Save_Field (Name  => COL_4_1_NAME, --  create_date
+         Stmt.Save_Field (Name  => COL_4_2_NAME, --  create_date
                           Value => Object.Create_Date);
          Object.Clear_Modified (5);
       end if;
       if Object.Is_Modified (6) then
-         Stmt.Save_Field (Name  => COL_5_1_NAME, --  left_side
+         Stmt.Save_Field (Name  => COL_5_2_NAME, --  left_side
                           Value => Object.Left_Side);
          Object.Clear_Modified (6);
       end if;
       if Object.Is_Modified (7) then
-         Stmt.Save_Field (Name  => COL_6_1_NAME, --  right_side
+         Stmt.Save_Field (Name  => COL_6_2_NAME, --  right_side
                           Value => Object.Right_Side);
          Object.Clear_Modified (7);
       end if;
       if Object.Is_Modified (8) then
-         Stmt.Save_Field (Name  => COL_7_1_NAME, --  format
+         Stmt.Save_Field (Name  => COL_7_2_NAME, --  format
                           Value => Integer (Format_Type'Pos (Object.Format)));
          Object.Clear_Modified (8);
       end if;
       if Object.Is_Modified (9) then
-         Stmt.Save_Field (Name  => COL_8_1_NAME, --  workspace_id
+         Stmt.Save_Field (Name  => COL_8_2_NAME, --  workspace_id
                           Value => Object.Workspace);
          Object.Clear_Modified (9);
       end if;
@@ -483,23 +991,23 @@ package body AWA.Wikis.Models is
    begin
       Object.Version := 1;
       Session.Allocate (Id => Object);
-      Query.Save_Field (Name  => COL_0_1_NAME, --  id
+      Query.Save_Field (Name  => COL_0_2_NAME, --  id
                         Value => Object.Get_Key);
-      Query.Save_Field (Name  => COL_1_1_NAME, --  name
+      Query.Save_Field (Name  => COL_1_2_NAME, --  name
                         Value => Object.Name);
-      Query.Save_Field (Name  => COL_2_1_NAME, --  is_public
+      Query.Save_Field (Name  => COL_2_2_NAME, --  is_public
                         Value => Object.Is_Public);
-      Query.Save_Field (Name  => COL_3_1_NAME, --  version
+      Query.Save_Field (Name  => COL_3_2_NAME, --  version
                         Value => Object.Version);
-      Query.Save_Field (Name  => COL_4_1_NAME, --  create_date
+      Query.Save_Field (Name  => COL_4_2_NAME, --  create_date
                         Value => Object.Create_Date);
-      Query.Save_Field (Name  => COL_5_1_NAME, --  left_side
+      Query.Save_Field (Name  => COL_5_2_NAME, --  left_side
                         Value => Object.Left_Side);
-      Query.Save_Field (Name  => COL_6_1_NAME, --  right_side
+      Query.Save_Field (Name  => COL_6_2_NAME, --  right_side
                         Value => Object.Right_Side);
-      Query.Save_Field (Name  => COL_7_1_NAME, --  format
+      Query.Save_Field (Name  => COL_7_2_NAME, --  format
                         Value => Integer (Format_Type'Pos (Object.Format)));
-      Query.Save_Field (Name  => COL_8_1_NAME, --  workspace_id
+      Query.Save_Field (Name  => COL_8_2_NAME, --  workspace_id
                         Value => Object.Workspace);
       Query.Execute (Result);
       if Result /= 1 then
@@ -959,47 +1467,47 @@ package body AWA.Wikis.Models is
          := Session.Create_Statement (WIKI_PAGE_DEF'Access);
    begin
       if Object.Is_Modified (1) then
-         Stmt.Save_Field (Name  => COL_0_2_NAME, --  id
+         Stmt.Save_Field (Name  => COL_0_3_NAME, --  id
                           Value => Object.Get_Key);
          Object.Clear_Modified (1);
       end if;
       if Object.Is_Modified (2) then
-         Stmt.Save_Field (Name  => COL_1_2_NAME, --  name
+         Stmt.Save_Field (Name  => COL_1_3_NAME, --  name
                           Value => Object.Name);
          Object.Clear_Modified (2);
       end if;
       if Object.Is_Modified (3) then
-         Stmt.Save_Field (Name  => COL_2_2_NAME, --  last_version
+         Stmt.Save_Field (Name  => COL_2_3_NAME, --  last_version
                           Value => Object.Last_Version);
          Object.Clear_Modified (3);
       end if;
       if Object.Is_Modified (4) then
-         Stmt.Save_Field (Name  => COL_3_2_NAME, --  is_public
+         Stmt.Save_Field (Name  => COL_3_3_NAME, --  is_public
                           Value => Object.Is_Public);
          Object.Clear_Modified (4);
       end if;
       if Object.Is_Modified (5) then
-         Stmt.Save_Field (Name  => COL_4_2_NAME, --  title
+         Stmt.Save_Field (Name  => COL_4_3_NAME, --  title
                           Value => Object.Title);
          Object.Clear_Modified (5);
       end if;
       if Object.Is_Modified (7) then
-         Stmt.Save_Field (Name  => COL_6_2_NAME, --  read_count
+         Stmt.Save_Field (Name  => COL_6_3_NAME, --  read_count
                           Value => Object.Read_Count);
          Object.Clear_Modified (7);
       end if;
       if Object.Is_Modified (8) then
-         Stmt.Save_Field (Name  => COL_7_2_NAME, --  preview_id
+         Stmt.Save_Field (Name  => COL_7_3_NAME, --  preview_id
                           Value => Object.Preview);
          Object.Clear_Modified (8);
       end if;
       if Object.Is_Modified (9) then
-         Stmt.Save_Field (Name  => COL_8_2_NAME, --  wiki_id
+         Stmt.Save_Field (Name  => COL_8_3_NAME, --  wiki_id
                           Value => Object.Wiki);
          Object.Clear_Modified (9);
       end if;
       if Object.Is_Modified (10) then
-         Stmt.Save_Field (Name  => COL_9_2_NAME, --  content_id
+         Stmt.Save_Field (Name  => COL_9_3_NAME, --  content_id
                           Value => Object.Content);
          Object.Clear_Modified (10);
       end if;
@@ -1033,25 +1541,25 @@ package body AWA.Wikis.Models is
    begin
       Object.Version := 1;
       Session.Allocate (Id => Object);
-      Query.Save_Field (Name  => COL_0_2_NAME, --  id
+      Query.Save_Field (Name  => COL_0_3_NAME, --  id
                         Value => Object.Get_Key);
-      Query.Save_Field (Name  => COL_1_2_NAME, --  name
+      Query.Save_Field (Name  => COL_1_3_NAME, --  name
                         Value => Object.Name);
-      Query.Save_Field (Name  => COL_2_2_NAME, --  last_version
+      Query.Save_Field (Name  => COL_2_3_NAME, --  last_version
                         Value => Object.Last_Version);
-      Query.Save_Field (Name  => COL_3_2_NAME, --  is_public
+      Query.Save_Field (Name  => COL_3_3_NAME, --  is_public
                         Value => Object.Is_Public);
-      Query.Save_Field (Name  => COL_4_2_NAME, --  title
+      Query.Save_Field (Name  => COL_4_3_NAME, --  title
                         Value => Object.Title);
-      Query.Save_Field (Name  => COL_5_2_NAME, --  version
+      Query.Save_Field (Name  => COL_5_3_NAME, --  version
                         Value => Object.Version);
-      Query.Save_Field (Name  => COL_6_2_NAME, --  read_count
+      Query.Save_Field (Name  => COL_6_3_NAME, --  read_count
                         Value => Object.Read_Count);
-      Query.Save_Field (Name  => COL_7_2_NAME, --  preview_id
+      Query.Save_Field (Name  => COL_7_3_NAME, --  preview_id
                         Value => Object.Preview);
-      Query.Save_Field (Name  => COL_8_2_NAME, --  wiki_id
+      Query.Save_Field (Name  => COL_8_3_NAME, --  wiki_id
                         Value => Object.Wiki);
-      Query.Save_Field (Name  => COL_9_2_NAME, --  content_id
+      Query.Save_Field (Name  => COL_9_3_NAME, --  content_id
                         Value => Object.Content);
       Query.Execute (Result);
       if Result /= 1 then
@@ -1124,513 +1632,6 @@ package body AWA.Wikis.Models is
       end if;
       if not Stmt.Is_Null (9) then
          Object.Content.Set_Key_Value (Stmt.Get_Identifier (9), Session);
-      end if;
-      Object.Version := Stmt.Get_Integer (5);
-      ADO.Objects.Set_Created (Object);
-   end Load;
-   function Wiki_Content_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
-                                       Of_Class => WIKI_CONTENT_DEF'Access);
-   begin
-      ADO.Objects.Set_Value (Result, Id);
-      return Result;
-   end Wiki_Content_Key;
-
-   function Wiki_Content_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
-                                       Of_Class => WIKI_CONTENT_DEF'Access);
-   begin
-      ADO.Objects.Set_Value (Result, Id);
-      return Result;
-   end Wiki_Content_Key;
-
-   function "=" (Left, Right : Wiki_Content_Ref'Class) return Boolean is
-   begin
-      return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
-   end "=";
-
-   procedure Set_Field (Object : in out Wiki_Content_Ref'Class;
-                        Impl   : out Wiki_Content_Access) is
-      Result : ADO.Objects.Object_Record_Access;
-   begin
-      Object.Prepare_Modify (Result);
-      Impl := Wiki_Content_Impl (Result.all)'Access;
-   end Set_Field;
-
-   --  Internal method to allocate the Object_Record instance
-   procedure Allocate (Object : in out Wiki_Content_Ref) is
-      Impl : Wiki_Content_Access;
-   begin
-      Impl := new Wiki_Content_Impl;
-      Impl.Create_Date := ADO.DEFAULT_TIME;
-      Impl.Format := AWA.Wikis.Models.Format_Type'First;
-      Impl.Version := 0;
-      Impl.Page_Version := 0;
-      ADO.Objects.Set_Object (Object, Impl.all'Access);
-   end Allocate;
-
-   -- ----------------------------------------
-   --  Data object: Wiki_Content
-   -- ----------------------------------------
-
-   procedure Set_Id (Object : in out Wiki_Content_Ref;
-                     Value  : in ADO.Identifier) is
-      Impl : Wiki_Content_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
-   end Set_Id;
-
-   function Get_Id (Object : in Wiki_Content_Ref)
-                  return ADO.Identifier is
-      Impl : constant Wiki_Content_Access
-         := Wiki_Content_Impl (Object.Get_Object.all)'Access;
-   begin
-      return Impl.Get_Key_Value;
-   end Get_Id;
-
-
-   procedure Set_Create_Date (Object : in out Wiki_Content_Ref;
-                              Value  : in Ada.Calendar.Time) is
-      Impl : Wiki_Content_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Time (Impl.all, 2, Impl.Create_Date, Value);
-   end Set_Create_Date;
-
-   function Get_Create_Date (Object : in Wiki_Content_Ref)
-                  return Ada.Calendar.Time is
-      Impl : constant Wiki_Content_Access
-         := Wiki_Content_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Create_Date;
-   end Get_Create_Date;
-
-
-   procedure Set_Content (Object : in out Wiki_Content_Ref;
-                           Value : in String) is
-      Impl : Wiki_Content_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 3, Impl.Content, Value);
-   end Set_Content;
-
-   procedure Set_Content (Object : in out Wiki_Content_Ref;
-                          Value  : in Ada.Strings.Unbounded.Unbounded_String) is
-      Impl : Wiki_Content_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 3, Impl.Content, Value);
-   end Set_Content;
-
-   function Get_Content (Object : in Wiki_Content_Ref)
-                 return String is
-   begin
-      return Ada.Strings.Unbounded.To_String (Object.Get_Content);
-   end Get_Content;
-   function Get_Content (Object : in Wiki_Content_Ref)
-                  return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Wiki_Content_Access
-         := Wiki_Content_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Content;
-   end Get_Content;
-
-
-   procedure Set_Format (Object : in out Wiki_Content_Ref;
-                         Value  : in AWA.Wikis.Models.Format_Type) is
-      procedure Set_Field_Enum is
-         new ADO.Objects.Set_Field_Operation (Format_Type);
-      Impl : Wiki_Content_Access;
-   begin
-      Set_Field (Object, Impl);
-      Set_Field_Enum (Impl.all, 4, Impl.Format, Value);
-   end Set_Format;
-
-   function Get_Format (Object : in Wiki_Content_Ref)
-                  return AWA.Wikis.Models.Format_Type is
-      Impl : constant Wiki_Content_Access
-         := Wiki_Content_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Format;
-   end Get_Format;
-
-
-   procedure Set_Save_Comment (Object : in out Wiki_Content_Ref;
-                                Value : in String) is
-      Impl : Wiki_Content_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 5, Impl.Save_Comment, Value);
-   end Set_Save_Comment;
-
-   procedure Set_Save_Comment (Object : in out Wiki_Content_Ref;
-                               Value  : in Ada.Strings.Unbounded.Unbounded_String) is
-      Impl : Wiki_Content_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 5, Impl.Save_Comment, Value);
-   end Set_Save_Comment;
-
-   function Get_Save_Comment (Object : in Wiki_Content_Ref)
-                 return String is
-   begin
-      return Ada.Strings.Unbounded.To_String (Object.Get_Save_Comment);
-   end Get_Save_Comment;
-   function Get_Save_Comment (Object : in Wiki_Content_Ref)
-                  return Ada.Strings.Unbounded.Unbounded_String is
-      Impl : constant Wiki_Content_Access
-         := Wiki_Content_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Save_Comment;
-   end Get_Save_Comment;
-
-
-   function Get_Version (Object : in Wiki_Content_Ref)
-                  return Integer is
-      Impl : constant Wiki_Content_Access
-         := Wiki_Content_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Version;
-   end Get_Version;
-
-
-   procedure Set_Page_Version (Object : in out Wiki_Content_Ref;
-                               Value  : in Integer) is
-      Impl : Wiki_Content_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Integer (Impl.all, 7, Impl.Page_Version, Value);
-   end Set_Page_Version;
-
-   function Get_Page_Version (Object : in Wiki_Content_Ref)
-                  return Integer is
-      Impl : constant Wiki_Content_Access
-         := Wiki_Content_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Page_Version;
-   end Get_Page_Version;
-
-
-   procedure Set_Page (Object : in out Wiki_Content_Ref;
-                       Value  : in AWA.Wikis.Models.Wiki_Page_Ref'Class) is
-      Impl : Wiki_Content_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 8, Impl.Page, Value);
-   end Set_Page;
-
-   function Get_Page (Object : in Wiki_Content_Ref)
-                  return AWA.Wikis.Models.Wiki_Page_Ref'Class is
-      Impl : constant Wiki_Content_Access
-         := Wiki_Content_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Page;
-   end Get_Page;
-
-
-   procedure Set_Author (Object : in out Wiki_Content_Ref;
-                         Value  : in AWA.Users.Models.User_Ref'Class) is
-      Impl : Wiki_Content_Access;
-   begin
-      Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 9, Impl.Author, Value);
-   end Set_Author;
-
-   function Get_Author (Object : in Wiki_Content_Ref)
-                  return AWA.Users.Models.User_Ref'Class is
-      Impl : constant Wiki_Content_Access
-         := Wiki_Content_Impl (Object.Get_Load_Object.all)'Access;
-   begin
-      return Impl.Author;
-   end Get_Author;
-
-   --  Copy of the object.
-   procedure Copy (Object : in Wiki_Content_Ref;
-                   Into   : in out Wiki_Content_Ref) is
-      Result : Wiki_Content_Ref;
-   begin
-      if not Object.Is_Null then
-         declare
-            Impl : constant Wiki_Content_Access
-              := Wiki_Content_Impl (Object.Get_Load_Object.all)'Access;
-            Copy : constant Wiki_Content_Access
-              := new Wiki_Content_Impl;
-         begin
-            ADO.Objects.Set_Object (Result, Copy.all'Access);
-            Copy.Copy (Impl.all);
-            Copy.Create_Date := Impl.Create_Date;
-            Copy.Content := Impl.Content;
-            Copy.Format := Impl.Format;
-            Copy.Save_Comment := Impl.Save_Comment;
-            Copy.Version := Impl.Version;
-            Copy.Page_Version := Impl.Page_Version;
-            Copy.Page := Impl.Page;
-            Copy.Author := Impl.Author;
-         end;
-      end if;
-      Into := Result;
-   end Copy;
-
-   procedure Find (Object  : in out Wiki_Content_Ref;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class;
-                   Found   : out Boolean) is
-      Impl  : constant Wiki_Content_Access := new Wiki_Content_Impl;
-   begin
-      Impl.Find (Session, Query, Found);
-      if Found then
-         ADO.Objects.Set_Object (Object, Impl.all'Access);
-      else
-         ADO.Objects.Set_Object (Object, null);
-         Destroy (Impl);
-      end if;
-   end Find;
-
-   procedure Load (Object  : in out Wiki_Content_Ref;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Id      : in ADO.Identifier) is
-      Impl  : constant Wiki_Content_Access := new Wiki_Content_Impl;
-      Found : Boolean;
-      Query : ADO.SQL.Query;
-   begin
-      Query.Bind_Param (Position => 1, Value => Id);
-      Query.Set_Filter ("id = ?");
-      Impl.Find (Session, Query, Found);
-      if not Found then
-         Destroy (Impl);
-         raise ADO.Objects.NOT_FOUND;
-      end if;
-      ADO.Objects.Set_Object (Object, Impl.all'Access);
-   end Load;
-
-   procedure Load (Object  : in out Wiki_Content_Ref;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Id      : in ADO.Identifier;
-                   Found   : out Boolean) is
-      Impl  : constant Wiki_Content_Access := new Wiki_Content_Impl;
-      Query : ADO.SQL.Query;
-   begin
-      Query.Bind_Param (Position => 1, Value => Id);
-      Query.Set_Filter ("id = ?");
-      Impl.Find (Session, Query, Found);
-      if not Found then
-         Destroy (Impl);
-      else
-         ADO.Objects.Set_Object (Object, Impl.all'Access);
-      end if;
-   end Load;
-
-   procedure Save (Object  : in out Wiki_Content_Ref;
-                   Session : in out ADO.Sessions.Master_Session'Class) is
-      Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
-   begin
-      if Impl = null then
-         Impl := new Wiki_Content_Impl;
-         ADO.Objects.Set_Object (Object, Impl);
-      end if;
-      if not ADO.Objects.Is_Created (Impl.all) then
-         Impl.Create (Session);
-      else
-         Impl.Save (Session);
-      end if;
-   end Save;
-
-   procedure Delete (Object  : in out Wiki_Content_Ref;
-                     Session : in out ADO.Sessions.Master_Session'Class) is
-      Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
-   begin
-      if Impl /= null then
-         Impl.Delete (Session);
-      end if;
-   end Delete;
-
-   --  --------------------
-   --  Free the object
-   --  --------------------
-   procedure Destroy (Object : access Wiki_Content_Impl) is
-      type Wiki_Content_Impl_Ptr is access all Wiki_Content_Impl;
-      procedure Unchecked_Free is new Ada.Unchecked_Deallocation
-              (Wiki_Content_Impl, Wiki_Content_Impl_Ptr);
-      pragma Warnings (Off, "*redundant conversion*");
-      Ptr : Wiki_Content_Impl_Ptr := Wiki_Content_Impl (Object.all)'Access;
-      pragma Warnings (On, "*redundant conversion*");
-   begin
-      Unchecked_Free (Ptr);
-   end Destroy;
-
-   procedure Find (Object  : in out Wiki_Content_Impl;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class;
-                   Found   : out Boolean) is
-      Stmt : ADO.Statements.Query_Statement
-          := Session.Create_Statement (Query, WIKI_CONTENT_DEF'Access);
-   begin
-      Stmt.Execute;
-      if Stmt.Has_Elements then
-         Object.Load (Stmt, Session);
-         Stmt.Next;
-         Found := not Stmt.Has_Elements;
-      else
-         Found := False;
-      end if;
-   end Find;
-
-   overriding
-   procedure Load (Object  : in out Wiki_Content_Impl;
-                   Session : in out ADO.Sessions.Session'Class) is
-      Found : Boolean;
-      Query : ADO.SQL.Query;
-      Id    : constant ADO.Identifier := Object.Get_Key_Value;
-   begin
-      Query.Bind_Param (Position => 1, Value => Id);
-      Query.Set_Filter ("id = ?");
-      Object.Find (Session, Query, Found);
-      if not Found then
-         raise ADO.Objects.NOT_FOUND;
-      end if;
-   end Load;
-
-   procedure Save (Object  : in out Wiki_Content_Impl;
-                   Session : in out ADO.Sessions.Master_Session'Class) is
-      Stmt : ADO.Statements.Update_Statement
-         := Session.Create_Statement (WIKI_CONTENT_DEF'Access);
-   begin
-      if Object.Is_Modified (1) then
-         Stmt.Save_Field (Name  => COL_0_3_NAME, --  id
-                          Value => Object.Get_Key);
-         Object.Clear_Modified (1);
-      end if;
-      if Object.Is_Modified (7) then
-         Stmt.Save_Field (Name  => COL_6_3_NAME, --  page_version
-                          Value => Object.Page_Version);
-         Object.Clear_Modified (7);
-      end if;
-      if Object.Is_Modified (8) then
-         Stmt.Save_Field (Name  => COL_7_3_NAME, --  page_id
-                          Value => Object.Page);
-         Object.Clear_Modified (8);
-      end if;
-      if Object.Is_Modified (9) then
-         Stmt.Save_Field (Name  => COL_8_3_NAME, --  author_id
-                          Value => Object.Author);
-         Object.Clear_Modified (9);
-      end if;
-      if Stmt.Has_Save_Fields then
-         Object.Version := Object.Version + 1;
-         Stmt.Save_Field (Name  => "version",
-                          Value => Object.Version);
-         Stmt.Set_Filter (Filter => "id = ? and version = ?");
-         Stmt.Add_Param (Value => Object.Get_Key);
-         Stmt.Add_Param (Value => Object.Version - 1);
-         declare
-            Result : Integer;
-         begin
-            Stmt.Execute (Result);
-            if Result /= 1 then
-               if Result /= 0 then
-                  raise ADO.Objects.UPDATE_ERROR;
-               else
-                  raise ADO.Objects.LAZY_LOCK;
-               end if;
-            end if;
-         end;
-      end if;
-   end Save;
-
-   procedure Create (Object  : in out Wiki_Content_Impl;
-                     Session : in out ADO.Sessions.Master_Session'Class) is
-      Query : ADO.Statements.Insert_Statement
-                  := Session.Create_Statement (WIKI_CONTENT_DEF'Access);
-      Result : Integer;
-   begin
-      Object.Version := 1;
-      Session.Allocate (Id => Object);
-      Query.Save_Field (Name  => COL_0_3_NAME, --  id
-                        Value => Object.Get_Key);
-      Query.Save_Field (Name  => COL_1_3_NAME, --  create_date
-                        Value => Object.Create_Date);
-      Query.Save_Field (Name  => COL_2_3_NAME, --  content
-                        Value => Object.Content);
-      Query.Save_Field (Name  => COL_3_3_NAME, --  format
-                        Value => Integer (Format_Type'Pos (Object.Format)));
-      Query.Save_Field (Name  => COL_4_3_NAME, --  save_comment
-                        Value => Object.Save_Comment);
-      Query.Save_Field (Name  => COL_5_3_NAME, --  version
-                        Value => Object.Version);
-      Query.Save_Field (Name  => COL_6_3_NAME, --  page_version
-                        Value => Object.Page_Version);
-      Query.Save_Field (Name  => COL_7_3_NAME, --  page_id
-                        Value => Object.Page);
-      Query.Save_Field (Name  => COL_8_3_NAME, --  author_id
-                        Value => Object.Author);
-      Query.Execute (Result);
-      if Result /= 1 then
-         raise ADO.Objects.INSERT_ERROR;
-      end if;
-      ADO.Objects.Set_Created (Object);
-   end Create;
-
-   procedure Delete (Object  : in out Wiki_Content_Impl;
-                     Session : in out ADO.Sessions.Master_Session'Class) is
-      Stmt : ADO.Statements.Delete_Statement
-         := Session.Create_Statement (WIKI_CONTENT_DEF'Access);
-   begin
-      Stmt.Set_Filter (Filter => "id = ?");
-      Stmt.Add_Param (Value => Object.Get_Key);
-      Stmt.Execute;
-   end Delete;
-
-   --  ------------------------------
-   --  Get the bean attribute identified by the name.
-   --  ------------------------------
-   overriding
-   function Get_Value (From : in Wiki_Content_Ref;
-                       Name : in String) return Util.Beans.Objects.Object is
-      Obj  : ADO.Objects.Object_Record_Access;
-      Impl : access Wiki_Content_Impl;
-   begin
-      if From.Is_Null then
-         return Util.Beans.Objects.Null_Object;
-      end if;
-      Obj := From.Get_Load_Object;
-      Impl := Wiki_Content_Impl (Obj.all)'Access;
-      if Name = "id" then
-         return ADO.Objects.To_Object (Impl.Get_Key);
-      elsif Name = "create_date" then
-         return Util.Beans.Objects.Time.To_Object (Impl.Create_Date);
-      elsif Name = "content" then
-         return Util.Beans.Objects.To_Object (Impl.Content);
-      elsif Name = "format" then
-         return AWA.Wikis.Models.Format_Type_Objects.To_Object (Impl.Format);
-      elsif Name = "save_comment" then
-         return Util.Beans.Objects.To_Object (Impl.Save_Comment);
-      elsif Name = "page_version" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Page_Version));
-      end if;
-      return Util.Beans.Objects.Null_Object;
-   end Get_Value;
-
-
-
-   --  ------------------------------
-   --  Load the object from current iterator position
-   --  ------------------------------
-   procedure Load (Object  : in out Wiki_Content_Impl;
-                   Stmt    : in out ADO.Statements.Query_Statement'Class;
-                   Session : in out ADO.Sessions.Session'Class) is
-   begin
-      Object.Set_Key_Value (Stmt.Get_Identifier (0));
-      Object.Create_Date := Stmt.Get_Time (1);
-      Object.Content := Stmt.Get_Unbounded_String (2);
-      Object.Format := Format_Type'Val (Stmt.Get_Integer (3));
-      Object.Save_Comment := Stmt.Get_Unbounded_String (4);
-      Object.Page_Version := Stmt.Get_Integer (6);
-      if not Stmt.Is_Null (7) then
-         Object.Page.Set_Key_Value (Stmt.Get_Identifier (7), Session);
-      end if;
-      if not Stmt.Is_Null (8) then
-         Object.Author.Set_Key_Value (Stmt.Get_Identifier (8), Session);
       end if;
       Object.Version := Stmt.Get_Integer (5);
       ADO.Objects.Set_Created (Object);

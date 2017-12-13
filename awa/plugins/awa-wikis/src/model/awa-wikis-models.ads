@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2016 Stephane Carrez
+--  Copyright (C) 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,11 +49,142 @@ package AWA.Wikis.Models is
    package Format_Type_Objects is
       new Util.Beans.Objects.Enums (Format_Type);
 
+   type Wiki_Content_Ref is new ADO.Objects.Object_Ref with null record;
+
    type Wiki_Space_Ref is new ADO.Objects.Object_Ref with null record;
 
    type Wiki_Page_Ref is new ADO.Objects.Object_Ref with null record;
 
-   type Wiki_Content_Ref is new ADO.Objects.Object_Ref with null record;
+   --  Create an object key for Wiki_Content.
+   function Wiki_Content_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
+   --  Create an object key for Wiki_Content from a string.
+   --  Raises Constraint_Error if the string cannot be converted into the object key.
+   function Wiki_Content_Key (Id : in String) return ADO.Objects.Object_Key;
+
+   Null_Wiki_Content : constant Wiki_Content_Ref;
+   function "=" (Left, Right : Wiki_Content_Ref'Class) return Boolean;
+
+   --  Set the wiki page content identifier
+   procedure Set_Id (Object : in out Wiki_Content_Ref;
+                     Value  : in ADO.Identifier);
+
+   --  Get the wiki page content identifier
+   function Get_Id (Object : in Wiki_Content_Ref)
+                 return ADO.Identifier;
+
+   --  Set the wiki content creation date
+   procedure Set_Create_Date (Object : in out Wiki_Content_Ref;
+                              Value  : in Ada.Calendar.Time);
+
+   --  Get the wiki content creation date
+   function Get_Create_Date (Object : in Wiki_Content_Ref)
+                 return Ada.Calendar.Time;
+
+   --  Set the wiki text content
+   procedure Set_Content (Object : in out Wiki_Content_Ref;
+                          Value  : in Ada.Strings.Unbounded.Unbounded_String);
+   procedure Set_Content (Object : in out Wiki_Content_Ref;
+                          Value : in String);
+
+   --  Get the wiki text content
+   function Get_Content (Object : in Wiki_Content_Ref)
+                 return Ada.Strings.Unbounded.Unbounded_String;
+   function Get_Content (Object : in Wiki_Content_Ref)
+                 return String;
+
+   --  Set the format type used used by the wiki content
+   procedure Set_Format (Object : in out Wiki_Content_Ref;
+                         Value  : in AWA.Wikis.Models.Format_Type);
+
+   --  Get the format type used used by the wiki content
+   function Get_Format (Object : in Wiki_Content_Ref)
+                 return AWA.Wikis.Models.Format_Type;
+
+   --  Set the content comment string
+   procedure Set_Save_Comment (Object : in out Wiki_Content_Ref;
+                               Value  : in Ada.Strings.Unbounded.Unbounded_String);
+   procedure Set_Save_Comment (Object : in out Wiki_Content_Ref;
+                               Value : in String);
+
+   --  Get the content comment string
+   function Get_Save_Comment (Object : in Wiki_Content_Ref)
+                 return Ada.Strings.Unbounded.Unbounded_String;
+   function Get_Save_Comment (Object : in Wiki_Content_Ref)
+                 return String;
+   --
+   function Get_Version (Object : in Wiki_Content_Ref)
+                 return Integer;
+
+   --  Set the wiki page version
+   procedure Set_Page_Version (Object : in out Wiki_Content_Ref;
+                               Value  : in Integer);
+
+   --  Get the wiki page version
+   function Get_Page_Version (Object : in Wiki_Content_Ref)
+                 return Integer;
+
+   --  Set the wiki page that this Wiki_Content belongs to
+   procedure Set_Page_Id (Object : in out Wiki_Content_Ref;
+                          Value  : in ADO.Identifier);
+
+   --  Get the wiki page that this Wiki_Content belongs to
+   function Get_Page_Id (Object : in Wiki_Content_Ref)
+                 return ADO.Identifier;
+
+   --  Set the page version author
+   procedure Set_Author (Object : in out Wiki_Content_Ref;
+                         Value  : in AWA.Users.Models.User_Ref'Class);
+
+   --  Get the page version author
+   function Get_Author (Object : in Wiki_Content_Ref)
+                 return AWA.Users.Models.User_Ref'Class;
+
+   --  Load the entity identified by 'Id'.
+   --  Raises the NOT_FOUND exception if it does not exist.
+   procedure Load (Object  : in out Wiki_Content_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier);
+
+   --  Load the entity identified by 'Id'.
+   --  Returns True in <b>Found</b> if the object was found and False if it does not exist.
+   procedure Load (Object  : in out Wiki_Content_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier;
+                   Found   : out Boolean);
+
+   --  Find and load the entity.
+   overriding
+   procedure Find (Object  : in out Wiki_Content_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean);
+
+   --  Save the entity.  If the entity does not have an identifier, an identifier is allocated
+   --  and it is inserted in the table.  Otherwise, only data fields which have been changed
+   --  are updated.
+   overriding
+   procedure Save (Object  : in out Wiki_Content_Ref;
+                   Session : in out ADO.Sessions.Master_Session'Class);
+
+   --  Delete the entity.
+   overriding
+   procedure Delete (Object  : in out Wiki_Content_Ref;
+                     Session : in out ADO.Sessions.Master_Session'Class);
+
+   overriding
+   function Get_Value (From : in Wiki_Content_Ref;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Table definition
+   WIKI_CONTENT_TABLE : constant ADO.Schemas.Class_Mapping_Access;
+
+   --  Internal method to allocate the Object_Record instance
+   overriding
+   procedure Allocate (Object : in out Wiki_Content_Ref);
+
+   --  Copy of the object.
+   procedure Copy (Object : in Wiki_Content_Ref;
+                   Into   : in out Wiki_Content_Ref);
 
    --  --------------------
    --  Permission is granted to display a wiki page if there is
@@ -338,137 +469,6 @@ package AWA.Wikis.Models is
    --  Copy of the object.
    procedure Copy (Object : in Wiki_Page_Ref;
                    Into   : in out Wiki_Page_Ref);
-
-   --  Create an object key for Wiki_Content.
-   function Wiki_Content_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
-   --  Create an object key for Wiki_Content from a string.
-   --  Raises Constraint_Error if the string cannot be converted into the object key.
-   function Wiki_Content_Key (Id : in String) return ADO.Objects.Object_Key;
-
-   Null_Wiki_Content : constant Wiki_Content_Ref;
-   function "=" (Left, Right : Wiki_Content_Ref'Class) return Boolean;
-
-   --  Set the wiki page content identifier
-   procedure Set_Id (Object : in out Wiki_Content_Ref;
-                     Value  : in ADO.Identifier);
-
-   --  Get the wiki page content identifier
-   function Get_Id (Object : in Wiki_Content_Ref)
-                 return ADO.Identifier;
-
-   --  Set the wiki content creation date
-   procedure Set_Create_Date (Object : in out Wiki_Content_Ref;
-                              Value  : in Ada.Calendar.Time);
-
-   --  Get the wiki content creation date
-   function Get_Create_Date (Object : in Wiki_Content_Ref)
-                 return Ada.Calendar.Time;
-
-   --  Set the wiki text content
-   procedure Set_Content (Object : in out Wiki_Content_Ref;
-                          Value  : in Ada.Strings.Unbounded.Unbounded_String);
-   procedure Set_Content (Object : in out Wiki_Content_Ref;
-                          Value : in String);
-
-   --  Get the wiki text content
-   function Get_Content (Object : in Wiki_Content_Ref)
-                 return Ada.Strings.Unbounded.Unbounded_String;
-   function Get_Content (Object : in Wiki_Content_Ref)
-                 return String;
-
-   --  Set the format type used used by the wiki content
-   procedure Set_Format (Object : in out Wiki_Content_Ref;
-                         Value  : in AWA.Wikis.Models.Format_Type);
-
-   --  Get the format type used used by the wiki content
-   function Get_Format (Object : in Wiki_Content_Ref)
-                 return AWA.Wikis.Models.Format_Type;
-
-   --  Set the content comment string
-   procedure Set_Save_Comment (Object : in out Wiki_Content_Ref;
-                               Value  : in Ada.Strings.Unbounded.Unbounded_String);
-   procedure Set_Save_Comment (Object : in out Wiki_Content_Ref;
-                               Value : in String);
-
-   --  Get the content comment string
-   function Get_Save_Comment (Object : in Wiki_Content_Ref)
-                 return Ada.Strings.Unbounded.Unbounded_String;
-   function Get_Save_Comment (Object : in Wiki_Content_Ref)
-                 return String;
-   --
-   function Get_Version (Object : in Wiki_Content_Ref)
-                 return Integer;
-
-   --  Set the wiki page version
-   procedure Set_Page_Version (Object : in out Wiki_Content_Ref;
-                               Value  : in Integer);
-
-   --  Get the wiki page version
-   function Get_Page_Version (Object : in Wiki_Content_Ref)
-                 return Integer;
-
-   --  Set the wiki page that this Wiki_Content belongs to
-   procedure Set_Page (Object : in out Wiki_Content_Ref;
-                       Value  : in AWA.Wikis.Models.Wiki_Page_Ref'Class);
-
-   --  Get the wiki page that this Wiki_Content belongs to
-   function Get_Page (Object : in Wiki_Content_Ref)
-                 return AWA.Wikis.Models.Wiki_Page_Ref'Class;
-
-   --  Set the page version author
-   procedure Set_Author (Object : in out Wiki_Content_Ref;
-                         Value  : in AWA.Users.Models.User_Ref'Class);
-
-   --  Get the page version author
-   function Get_Author (Object : in Wiki_Content_Ref)
-                 return AWA.Users.Models.User_Ref'Class;
-
-   --  Load the entity identified by 'Id'.
-   --  Raises the NOT_FOUND exception if it does not exist.
-   procedure Load (Object  : in out Wiki_Content_Ref;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Id      : in ADO.Identifier);
-
-   --  Load the entity identified by 'Id'.
-   --  Returns True in <b>Found</b> if the object was found and False if it does not exist.
-   procedure Load (Object  : in out Wiki_Content_Ref;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Id      : in ADO.Identifier;
-                   Found   : out Boolean);
-
-   --  Find and load the entity.
-   overriding
-   procedure Find (Object  : in out Wiki_Content_Ref;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class;
-                   Found   : out Boolean);
-
-   --  Save the entity.  If the entity does not have an identifier, an identifier is allocated
-   --  and it is inserted in the table.  Otherwise, only data fields which have been changed
-   --  are updated.
-   overriding
-   procedure Save (Object  : in out Wiki_Content_Ref;
-                   Session : in out ADO.Sessions.Master_Session'Class);
-
-   --  Delete the entity.
-   overriding
-   procedure Delete (Object  : in out Wiki_Content_Ref;
-                     Session : in out ADO.Sessions.Master_Session'Class);
-
-   overriding
-   function Get_Value (From : in Wiki_Content_Ref;
-                       Name : in String) return Util.Beans.Objects.Object;
-
-   --  Table definition
-   WIKI_CONTENT_TABLE : constant ADO.Schemas.Class_Mapping_Access;
-
-   --  Internal method to allocate the Object_Record instance
-   overriding
-   procedure Allocate (Object : in out Wiki_Content_Ref);
-
-   --  Copy of the object.
-   procedure Copy (Object : in Wiki_Content_Ref;
-                   Into   : in out Wiki_Content_Ref);
 
 
 
@@ -1042,20 +1042,20 @@ package AWA.Wikis.Models is
 
 
 private
-   WIKI_SPACE_NAME : aliased constant String := "awa_wiki_space";
+   WIKI_CONTENT_NAME : aliased constant String := "awa_wiki_content";
    COL_0_1_NAME : aliased constant String := "id";
-   COL_1_1_NAME : aliased constant String := "name";
-   COL_2_1_NAME : aliased constant String := "is_public";
-   COL_3_1_NAME : aliased constant String := "version";
-   COL_4_1_NAME : aliased constant String := "create_date";
-   COL_5_1_NAME : aliased constant String := "left_side";
-   COL_6_1_NAME : aliased constant String := "right_side";
-   COL_7_1_NAME : aliased constant String := "format";
-   COL_8_1_NAME : aliased constant String := "workspace_id";
+   COL_1_1_NAME : aliased constant String := "create_date";
+   COL_2_1_NAME : aliased constant String := "content";
+   COL_3_1_NAME : aliased constant String := "format";
+   COL_4_1_NAME : aliased constant String := "save_comment";
+   COL_5_1_NAME : aliased constant String := "version";
+   COL_6_1_NAME : aliased constant String := "page_version";
+   COL_7_1_NAME : aliased constant String := "page_id";
+   COL_8_1_NAME : aliased constant String := "author_id";
 
-   WIKI_SPACE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
+   WIKI_CONTENT_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count => 9,
-      Table => WIKI_SPACE_NAME'Access,
+      Table => WIKI_CONTENT_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
          2 => COL_1_1_NAME'Access,
@@ -1066,6 +1066,83 @@ private
          7 => COL_6_1_NAME'Access,
          8 => COL_7_1_NAME'Access,
          9 => COL_8_1_NAME'Access
+)
+     );
+   WIKI_CONTENT_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := WIKI_CONTENT_DEF'Access;
+
+   Null_Wiki_Content : constant Wiki_Content_Ref
+      := Wiki_Content_Ref'(ADO.Objects.Object_Ref with null record);
+
+   type Wiki_Content_Impl is
+      new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
+                                     Of_Class => WIKI_CONTENT_DEF'Access)
+   with record
+       Create_Date : Ada.Calendar.Time;
+       Content : Ada.Strings.Unbounded.Unbounded_String;
+       Format : AWA.Wikis.Models.Format_Type;
+       Save_Comment : Ada.Strings.Unbounded.Unbounded_String;
+       Version : Integer;
+       Page_Version : Integer;
+       Page_Id : ADO.Identifier;
+       Author : AWA.Users.Models.User_Ref;
+   end record;
+
+   type Wiki_Content_Access is access all Wiki_Content_Impl;
+
+   overriding
+   procedure Destroy (Object : access Wiki_Content_Impl);
+
+   overriding
+   procedure Find (Object  : in out Wiki_Content_Impl;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean);
+
+   overriding
+   procedure Load (Object  : in out Wiki_Content_Impl;
+                   Session : in out ADO.Sessions.Session'Class);
+   procedure Load (Object  : in out Wiki_Content_Impl;
+                   Stmt    : in out ADO.Statements.Query_Statement'Class;
+                   Session : in out ADO.Sessions.Session'Class);
+
+   overriding
+   procedure Save (Object  : in out Wiki_Content_Impl;
+                   Session : in out ADO.Sessions.Master_Session'Class);
+
+   procedure Create (Object  : in out Wiki_Content_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class);
+
+   overriding
+   procedure Delete (Object  : in out Wiki_Content_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class);
+
+   procedure Set_Field (Object : in out Wiki_Content_Ref'Class;
+                        Impl   : out Wiki_Content_Access);
+   WIKI_SPACE_NAME : aliased constant String := "awa_wiki_space";
+   COL_0_2_NAME : aliased constant String := "id";
+   COL_1_2_NAME : aliased constant String := "name";
+   COL_2_2_NAME : aliased constant String := "is_public";
+   COL_3_2_NAME : aliased constant String := "version";
+   COL_4_2_NAME : aliased constant String := "create_date";
+   COL_5_2_NAME : aliased constant String := "left_side";
+   COL_6_2_NAME : aliased constant String := "right_side";
+   COL_7_2_NAME : aliased constant String := "format";
+   COL_8_2_NAME : aliased constant String := "workspace_id";
+
+   WIKI_SPACE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
+     (Count => 9,
+      Table => WIKI_SPACE_NAME'Access,
+      Members => (
+         1 => COL_0_2_NAME'Access,
+         2 => COL_1_2_NAME'Access,
+         3 => COL_2_2_NAME'Access,
+         4 => COL_3_2_NAME'Access,
+         5 => COL_4_2_NAME'Access,
+         6 => COL_5_2_NAME'Access,
+         7 => COL_6_2_NAME'Access,
+         8 => COL_7_2_NAME'Access,
+         9 => COL_8_2_NAME'Access
 )
      );
    WIKI_SPACE_TABLE : constant ADO.Schemas.Class_Mapping_Access
@@ -1120,31 +1197,31 @@ private
    procedure Set_Field (Object : in out Wiki_Space_Ref'Class;
                         Impl   : out Wiki_Space_Access);
    WIKI_PAGE_NAME : aliased constant String := "awa_wiki_page";
-   COL_0_2_NAME : aliased constant String := "id";
-   COL_1_2_NAME : aliased constant String := "name";
-   COL_2_2_NAME : aliased constant String := "last_version";
-   COL_3_2_NAME : aliased constant String := "is_public";
-   COL_4_2_NAME : aliased constant String := "title";
-   COL_5_2_NAME : aliased constant String := "version";
-   COL_6_2_NAME : aliased constant String := "read_count";
-   COL_7_2_NAME : aliased constant String := "preview_id";
-   COL_8_2_NAME : aliased constant String := "wiki_id";
-   COL_9_2_NAME : aliased constant String := "content_id";
+   COL_0_3_NAME : aliased constant String := "id";
+   COL_1_3_NAME : aliased constant String := "name";
+   COL_2_3_NAME : aliased constant String := "last_version";
+   COL_3_3_NAME : aliased constant String := "is_public";
+   COL_4_3_NAME : aliased constant String := "title";
+   COL_5_3_NAME : aliased constant String := "version";
+   COL_6_3_NAME : aliased constant String := "read_count";
+   COL_7_3_NAME : aliased constant String := "preview_id";
+   COL_8_3_NAME : aliased constant String := "wiki_id";
+   COL_9_3_NAME : aliased constant String := "content_id";
 
    WIKI_PAGE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count => 10,
       Table => WIKI_PAGE_NAME'Access,
       Members => (
-         1 => COL_0_2_NAME'Access,
-         2 => COL_1_2_NAME'Access,
-         3 => COL_2_2_NAME'Access,
-         4 => COL_3_2_NAME'Access,
-         5 => COL_4_2_NAME'Access,
-         6 => COL_5_2_NAME'Access,
-         7 => COL_6_2_NAME'Access,
-         8 => COL_7_2_NAME'Access,
-         9 => COL_8_2_NAME'Access,
-         10 => COL_9_2_NAME'Access
+         1 => COL_0_3_NAME'Access,
+         2 => COL_1_3_NAME'Access,
+         3 => COL_2_3_NAME'Access,
+         4 => COL_3_3_NAME'Access,
+         5 => COL_4_3_NAME'Access,
+         6 => COL_5_3_NAME'Access,
+         7 => COL_6_3_NAME'Access,
+         8 => COL_7_3_NAME'Access,
+         9 => COL_8_3_NAME'Access,
+         10 => COL_9_3_NAME'Access
 )
      );
    WIKI_PAGE_TABLE : constant ADO.Schemas.Class_Mapping_Access
@@ -1199,83 +1276,6 @@ private
 
    procedure Set_Field (Object : in out Wiki_Page_Ref'Class;
                         Impl   : out Wiki_Page_Access);
-   WIKI_CONTENT_NAME : aliased constant String := "awa_wiki_content";
-   COL_0_3_NAME : aliased constant String := "id";
-   COL_1_3_NAME : aliased constant String := "create_date";
-   COL_2_3_NAME : aliased constant String := "content";
-   COL_3_3_NAME : aliased constant String := "format";
-   COL_4_3_NAME : aliased constant String := "save_comment";
-   COL_5_3_NAME : aliased constant String := "version";
-   COL_6_3_NAME : aliased constant String := "page_version";
-   COL_7_3_NAME : aliased constant String := "page_id";
-   COL_8_3_NAME : aliased constant String := "author_id";
-
-   WIKI_CONTENT_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 9,
-      Table => WIKI_CONTENT_NAME'Access,
-      Members => (
-         1 => COL_0_3_NAME'Access,
-         2 => COL_1_3_NAME'Access,
-         3 => COL_2_3_NAME'Access,
-         4 => COL_3_3_NAME'Access,
-         5 => COL_4_3_NAME'Access,
-         6 => COL_5_3_NAME'Access,
-         7 => COL_6_3_NAME'Access,
-         8 => COL_7_3_NAME'Access,
-         9 => COL_8_3_NAME'Access
-)
-     );
-   WIKI_CONTENT_TABLE : constant ADO.Schemas.Class_Mapping_Access
-      := WIKI_CONTENT_DEF'Access;
-
-   Null_Wiki_Content : constant Wiki_Content_Ref
-      := Wiki_Content_Ref'(ADO.Objects.Object_Ref with null record);
-
-   type Wiki_Content_Impl is
-      new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
-                                     Of_Class => WIKI_CONTENT_DEF'Access)
-   with record
-       Create_Date : Ada.Calendar.Time;
-       Content : Ada.Strings.Unbounded.Unbounded_String;
-       Format : AWA.Wikis.Models.Format_Type;
-       Save_Comment : Ada.Strings.Unbounded.Unbounded_String;
-       Version : Integer;
-       Page_Version : Integer;
-       Page : AWA.Wikis.Models.Wiki_Page_Ref;
-       Author : AWA.Users.Models.User_Ref;
-   end record;
-
-   type Wiki_Content_Access is access all Wiki_Content_Impl;
-
-   overriding
-   procedure Destroy (Object : access Wiki_Content_Impl);
-
-   overriding
-   procedure Find (Object  : in out Wiki_Content_Impl;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Query   : in ADO.SQL.Query'Class;
-                   Found   : out Boolean);
-
-   overriding
-   procedure Load (Object  : in out Wiki_Content_Impl;
-                   Session : in out ADO.Sessions.Session'Class);
-   procedure Load (Object  : in out Wiki_Content_Impl;
-                   Stmt    : in out ADO.Statements.Query_Statement'Class;
-                   Session : in out ADO.Sessions.Session'Class);
-
-   overriding
-   procedure Save (Object  : in out Wiki_Content_Impl;
-                   Session : in out ADO.Sessions.Master_Session'Class);
-
-   procedure Create (Object  : in out Wiki_Content_Impl;
-                     Session : in out ADO.Sessions.Master_Session'Class);
-
-   overriding
-   procedure Delete (Object  : in out Wiki_Content_Impl;
-                     Session : in out ADO.Sessions.Master_Session'Class);
-
-   procedure Set_Field (Object : in out Wiki_Content_Ref'Class;
-                        Impl   : out Wiki_Content_Access);
 
    package File_1 is
       new ADO.Queries.Loaders.File (Path => "wiki-stat.xml",
