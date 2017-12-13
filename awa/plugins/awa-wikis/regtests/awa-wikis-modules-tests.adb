@@ -30,6 +30,7 @@ package body AWA.Wikis.Modules.Tests is
 
    use ASF.Tests;
    use Util.Tests;
+   use type ADO.Identifier;
 
    package Caller is new Util.Test_Caller (Test, "Wikis.Modules");
 
@@ -87,14 +88,19 @@ package body AWA.Wikis.Modules.Tests is
    begin
       AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-wiki@test.com");
 
+      T.Manager := AWA.Wikis.Modules.Get_Wiki_Module;
+      T.Assert (T.Manager /= null, "There is no wiki manager");
+
       W.Set_Name ("Test wiki space");
       T.Manager.Create_Wiki_Space (W);
 
       P.Set_Name ("Private");
       P.Set_Title ("The page title");
+      C.Set_Content ("Something");
       T.Manager.Create_Wiki_Page (W, P, C);
       T.Assert (P.Is_Inserted, "The new wiki page was not created");
 
+      P.Set_Content (AWA.Wikis.Models.Null_Wiki_Content);
       C := AWA.Wikis.Models.Null_Wiki_Content;
       P := AWA.Wikis.Models.Null_Wiki_Page;
       P.Set_Name ("Public");
@@ -104,6 +110,7 @@ package body AWA.Wikis.Modules.Tests is
       T.Assert (P.Is_Inserted, "The new wiki page was not created");
       T.Assert (P.Get_Is_Public, "The new wiki page is not public");
 
+      P.Set_Content (AWA.Wikis.Models.Null_Wiki_Content);
    end Test_Create_Wiki_Page;
 
    --  ------------------------------
@@ -117,6 +124,9 @@ package body AWA.Wikis.Modules.Tests is
       C         : AWA.Wikis.Models.Wiki_Content_Ref;
    begin
       AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-wiki@test.com");
+
+      T.Manager := AWA.Wikis.Modules.Get_Wiki_Module;
+      T.Assert (T.Manager /= null, "There is no wiki manager");
 
       W.Set_Name ("Test wiki space");
       T.Manager.Create_Wiki_Space (W);
@@ -135,7 +145,8 @@ package body AWA.Wikis.Modules.Tests is
       T.Manager.Create_Wiki_Content (P, C);
       T.Assert (C.Is_Inserted, "The new wiki content was not created");
       T.Assert (not C.Get_Author.Is_Null, "The wiki content has an author");
-      T.Assert (not C.Get_Page.Is_Null, "The wiki content is associated with the wiki page");
+      T.Assert (C.Get_Page_Id /= ADO.NO_IDENTIFIER,
+                "The wiki content is associated with the wiki page");
 
       P := AWA.Wikis.Models.Null_Wiki_Page;
       C := AWA.Wikis.Models.Null_Wiki_Content;
@@ -153,8 +164,8 @@ package body AWA.Wikis.Modules.Tests is
       T.Manager.Create_Wiki_Content (P, C);
       T.Assert (C.Is_Inserted, "The new wiki content was not created");
       T.Assert (not C.Get_Author.Is_Null, "The wiki content has an author");
-      T.Assert (not C.Get_Page.Is_Null, "The wiki content is associated with the wiki page");
-
+      T.Assert (C.Get_Page_Id /= ADO.NO_IDENTIFIER,
+                "The wiki content is associated with the wiki page");
    end Test_Create_Wiki_Content;
 
    --  ------------------------------
