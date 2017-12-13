@@ -455,7 +455,7 @@ package body AWA.Wikis.Modules is
       if Created then
          Page.Save (DB);
       end if;
-      Content.Set_Page (Page);
+      Content.Set_Page_Id (ADO.Objects.Get_Value (Page.Get_Key));
       Content.Set_Create_Date (Ada.Calendar.Clock);
       Content.Set_Author (User);
       Content.Set_Page_Version (Page.Get_Last_Version);
