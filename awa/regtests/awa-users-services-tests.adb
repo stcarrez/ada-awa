@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  users - User creation, password tests
---  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,7 @@
 
 with Util.Test_Caller;
 with Util.Measures;
+with Util.Log.Loggers;
 
 with ADO;
 with ADO.Sessions;
@@ -32,6 +33,8 @@ package body AWA.Users.Services.Tests is
    use Util.Tests;
    use ADO;
    use ADO.Objects;
+
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Users.Services.Tests");
 
    package Caller is new Util.Test_Caller (Test, "Users.Services");
 
@@ -146,9 +149,14 @@ package body AWA.Users.Services.Tests is
       --  Create the user
       T1 := Ada.Calendar.Clock;
       AWA.Tests.Helpers.Users.Create_User (Principal);
+      Log.Info ("Created user and session is {0}",
+                ADO.Identifier'Image (Principal.Session.Get_Id));
       AWA.Tests.Helpers.Users.Logout (Principal);
 
+      delay 1.0;
       AWA.Tests.Helpers.Users.Login (Principal);
+      Log.Info ("Logout and login with session {0}",
+                ADO.Identifier'Image (Principal.Session.Get_Id));
 
       T.Assert (not Principal.User.Is_Null, "User is created");
       T.Assert (Principal.User.Get_Id > 0, "User has an allocated key");
