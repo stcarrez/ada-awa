@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-questions-beans -- Beans for module questions
---  Copyright (C) 2012, 2013, 2015 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2015, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -185,7 +185,7 @@ package body AWA.Questions.Beans is
             return Util.Beans.Objects.Null_Object;
          end if;
          declare
-            Item : constant Models.Question_Info := From.Questions.List.Element (Pos - 1);
+            Item : constant Models.Question_Info := From.Questions.List.Element (Pos);
          begin
             return From.Tags.Get_Tags (Item.Id);
          end;
@@ -259,17 +259,9 @@ package body AWA.Questions.Beans is
       use AWA.Services;
 
       Object  : constant Question_List_Bean_Access := new Question_List_Bean;
---        Session : ADO.Sessions.Session := Module.Get_Session;
---        Query   : ADO.Queries.Context;
    begin
       Object.Service := Module;
       Object.Questions_Bean := Object.Questions'Unchecked_Access;
---        Query.Set_Query (AWA.Questions.Models.Query_Question_List);
---        ADO.Sessions.Entities.Bind_Param (Params  => Query,
---                                          Name    => "entity_type",
---                                          Table   => AWA.Questions.Models.QUESTION_TABLE,
---                                          Session => Session);
---        AWA.Questions.Models.List (Object.Questions, Session, Query);
       Object.Load_List;
       return Object.all'Access;
    end Create_Question_List_Bean;
@@ -327,7 +319,7 @@ package body AWA.Questions.Beans is
                                               Session => Session);
             AWA.Questions.Models.List (List, Session, Query);
             if not List.List.Is_Empty then
-               From.Question := List.List.Element (0);
+               From.Question := List.List.Element (1);
             end if;
             Query.Clear;
             Query.Bind_Param ("question_id", Util.Beans.Objects.To_Integer (Value));
