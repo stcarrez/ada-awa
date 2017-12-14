@@ -629,7 +629,7 @@ package body AWA.Tags.Components is
 
          --  Pass 1: Collect the tags and keep the most used.
          for I in 1 .. Count loop
-            Tags.Insert (List.List.Element (I - 1));
+            Tags.Insert (List.List.Element (I));
             if Integer (Tags.Length) > Max then
                Tags.Delete_Last;
             end if;
