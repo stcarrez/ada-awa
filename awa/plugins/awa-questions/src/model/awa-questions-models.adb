@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2016 Stephane Carrez
+--  Copyright (C) 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -1199,7 +1199,7 @@ package body AWA.Questions.Models is
 
       Stmt : ADO.Statements.Query_Statement
           := Session.Create_Statement (Context);
-      Pos  : Natural := 0;
+      Pos  : Positive := 1;
       procedure Read (Into : in out Answer_Info) is
       begin
          Into.Id := Stmt.Get_Identifier (0);
@@ -1309,7 +1309,7 @@ package body AWA.Questions.Models is
 
       Stmt : ADO.Statements.Query_Statement
           := Session.Create_Statement (Context);
-      Pos  : Natural := 0;
+      Pos  : Positive := 1;
       procedure Read (Into : in out Question_Display_Info) is
       begin
          Into.Id := Stmt.Get_Identifier (0);
@@ -1416,7 +1416,7 @@ package body AWA.Questions.Models is
 
       Stmt : ADO.Statements.Query_Statement
           := Session.Create_Statement (Context);
-      Pos  : Natural := 0;
+      Pos  : Positive := 1;
       procedure Read (Into : in out Question_Info) is
       begin
          Into.Id := Stmt.Get_Identifier (0);
