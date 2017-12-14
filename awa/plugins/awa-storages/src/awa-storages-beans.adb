@@ -185,7 +185,7 @@ package body AWA.Storages.Beans is
       Load_Folders (Storage);
       if Storage.Folder_List.List.Length > 0 then
          Manager.Load_Folder (Storage.Folder_Bean.all,
-                              Storage.Folder_List.List.Element (0).Id);
+                              Storage.Folder_List.List.Element (1).Id);
 
       end if;
       Storage.Flags (INIT_FOLDER) := True;
