@@ -425,7 +425,7 @@ package body AWA.Blogs.Beans is
             return Util.Beans.Objects.Null_Object;
          end if;
          declare
-            Item : constant Models.Post_Info := From.Posts.List.Element (Pos - 1);
+            Item : constant Models.Post_Info := From.Posts.List.Element (Pos);
          begin
             return From.Tags.Get_Tags (Item.Id);
          end;
@@ -438,7 +438,7 @@ package body AWA.Blogs.Beans is
             return Util.Beans.Objects.Null_Object;
          end if;
          declare
-            Item : constant Models.Post_Info := From.Posts.List.Element (Pos - 1);
+            Item : constant Models.Post_Info := From.Posts.List.Element (Pos);
          begin
             ADO.Objects.Set_Value (From.Counter_Bean.Object, Item.Id);
          end;
@@ -625,7 +625,7 @@ package body AWA.Blogs.Beans is
             Load_Blogs (List);
          end if;
          if not List.Blog_List.List.Is_Empty then
-            return List.Blog_List.List.Element (0).Id;
+            return List.Blog_List.List.Element (1).Id;
          end if;
       end if;
       return List.Blog_Id;
