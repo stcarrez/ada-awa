@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-beans -- Beans for module wikis
---  Copyright (C) 2015, 2016 Stephane Carrez
+--  Copyright (C) 2015, 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -788,7 +788,7 @@ package body AWA.Wikis.Beans is
             return Util.Beans.Objects.Null_Object;
          end if;
          declare
-            Item : constant Models.Wiki_Page_Info := From.Pages.List.Element (Pos - 1);
+            Item : constant Models.Wiki_Page_Info := From.Pages.List.Element (Pos);
          begin
             return From.Tags.Get_Tags (Item.Id);
          end;
@@ -818,7 +818,7 @@ package body AWA.Wikis.Beans is
             return Util.Beans.Objects.Null_Object;
          else
             declare
-               Item : constant Models.Wiki_Page_Info := From.Pages.List.Element (0);
+               Item : constant Models.Wiki_Page_Info := From.Pages.List.Element (1);
             begin
                return Util.Beans.Objects.Time.To_Object (Item.Create_Date);
             end;
@@ -1406,7 +1406,7 @@ package body AWA.Wikis.Beans is
             Load_Wikis (List);
          end if;
          if not List.Wiki_List.List.Is_Empty then
-            return List.Wiki_List.List.Element (0).Id;
+            return List.Wiki_List.List.Element (1).Id;
          end if;
       end if;
       return List.Wiki_Id;
