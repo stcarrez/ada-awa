@@ -1840,7 +1840,7 @@ package body AWA.Wikis.Models is
 
       Stmt : ADO.Statements.Query_Statement
           := Session.Create_Statement (Context);
-      Pos  : Natural := 0;
+      Pos  : Positive := 1;
       procedure Read (Into : in out Wiki_Image_Info) is
       begin
          Into.Folder_Id := Stmt.Get_Identifier (0);
@@ -1930,7 +1930,7 @@ package body AWA.Wikis.Models is
 
       Stmt : ADO.Statements.Query_Statement
           := Session.Create_Statement (Context);
-      Pos  : Natural := 0;
+      Pos  : Positive := 1;
       procedure Read (Into : in out Wiki_Info) is
       begin
          Into.Id := Stmt.Get_Identifier (0);
@@ -2028,7 +2028,7 @@ package body AWA.Wikis.Models is
 
       Stmt : ADO.Statements.Query_Statement
           := Session.Create_Statement (Context);
-      Pos  : Natural := 0;
+      Pos  : Positive := 1;
       procedure Read (Into : in out Wiki_Page_Info) is
       begin
          Into.Id := Stmt.Get_Identifier (0);
@@ -2117,7 +2117,7 @@ package body AWA.Wikis.Models is
 
       Stmt : ADO.Statements.Query_Statement
           := Session.Create_Statement (Context);
-      Pos  : Natural := 0;
+      Pos  : Positive := 1;
       procedure Read (Into : in out Wiki_Version_Info) is
       begin
          Into.Id := Stmt.Get_Identifier (0);
