@@ -1221,7 +1221,7 @@ package body AWA.Counters.Models is
 
       Stmt : ADO.Statements.Query_Statement
           := Session.Create_Statement (Context);
-      Pos  : Natural := 0;
+      Pos  : Positive := 1;
       procedure Read (Into : in out Stat_Info) is
       begin
          Into.Date := Stmt.Get_Time (0);
