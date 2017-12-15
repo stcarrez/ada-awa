@@ -322,7 +322,7 @@ package body AWA.Questions.Beans is
                From.Question := List.List.Element (1);
             end if;
             Query.Clear;
-            Query.Bind_Param ("question_id", Util.Beans.Objects.To_Integer (Value));
+            Query.Bind_Param ("question_id", Id);
             Query.Bind_Param ("user_id", Ctx.Get_User_Identifier);
             ADO.Sessions.Entities.Bind_Param (Params  => Query,
                                               Name    => "entity_type",
