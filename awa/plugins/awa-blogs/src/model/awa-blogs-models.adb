@@ -1482,6 +1482,112 @@ package body AWA.Blogs.Models is
    --  Get the bean attribute identified by the name.
    --  ------------------------------
    overriding
+   function Get_Value (From : in Image_Info;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "folder_id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Folder_Id));
+      elsif Name = "id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
+      elsif Name = "create_date" then
+         return Util.Beans.Objects.Time.To_Object (From.Create_Date);
+      elsif Name = "uri" then
+         return Util.Beans.Objects.To_Object (From.Uri);
+      elsif Name = "storage" then
+         return AWA.Storages.Models.Storage_Type_Objects.To_Object (From.Storage);
+      elsif Name = "mime_type" then
+         return Util.Beans.Objects.To_Object (From.Mime_Type);
+      elsif Name = "file_size" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.File_Size));
+      elsif Name = "width" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Width));
+      elsif Name = "height" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Height));
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Image_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "folder_id" then
+         Item.Folder_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "id" then
+         Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "create_date" then
+         Item.Create_Date := Util.Beans.Objects.Time.To_Time (Value);
+      elsif Name = "uri" then
+         Item.Uri := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "storage" then
+         Item.Storage := AWA.Storages.Models.Storage_Type_Objects.To_Value (Value);
+      elsif Name = "mime_type" then
+         Item.Mime_Type := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "file_size" then
+         Item.File_Size := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "width" then
+         Item.Width := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "height" then
+         Item.Height := Util.Beans.Objects.To_Integer (Value);
+      end if;
+   end Set_Value;
+
+
+   --  --------------------
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   --  --------------------
+   procedure List (Object  : in out Image_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+   begin
+      List (Object.List, Session, Context);
+   end List;
+
+   --  --------------------
+   --  The information about an image used in a wiki page.
+   --  --------------------
+   procedure List (Object  : in out Image_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+      procedure Read (Into : in out Image_Info);
+
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Context);
+      Pos  : Positive := 1;
+      procedure Read (Into : in out Image_Info) is
+      begin
+         Into.Folder_Id := Stmt.Get_Identifier (0);
+         Into.Id := Stmt.Get_Identifier (1);
+         Into.Create_Date := Stmt.Get_Time (2);
+         Into.Uri := Stmt.Get_Unbounded_String (3);
+         Into.Storage := AWA.Storages.Models.Storage_Type'Val (Stmt.Get_Integer (4));
+         Into.Mime_Type := Stmt.Get_Unbounded_String (5);
+         Into.File_Size := Stmt.Get_Integer (6);
+         Into.Width := Stmt.Get_Integer (7);
+         Into.Height := Stmt.Get_Integer (8);
+      end Read;
+   begin
+      Stmt.Execute;
+      Image_Info_Vectors.Clear (Object);
+      while Stmt.Has_Elements loop
+         Object.Insert_Space (Before => Pos);
+         Object.Update_Element (Index => Pos, Process => Read'Access);
+         Pos := Pos + 1;
+         Stmt.Next;
+      end loop;
+   end List;
+
+
+
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Month_Stat_Info;
                        Name : in String) return Util.Beans.Objects.Object is
    begin

@@ -36,6 +36,7 @@ with Util.Beans.Objects.Enums;
 with Util.Beans.Basic.Lists;
 with AWA.Comments.Models;
 with AWA.Events;
+with AWA.Storages.Models;
 with AWA.Users.Models;
 with AWA.Workspaces.Models;
 with Util.Beans.Methods;
@@ -350,6 +351,13 @@ package AWA.Blogs.Models is
 
 
 
+   Query_Blog_Image_Get_Data : constant ADO.Queries.Query_Definition_Access;
+
+   Query_Blog_Image_Width_Get_Data : constant ADO.Queries.Query_Definition_Access;
+
+   Query_Blog_Image_Height_Get_Data : constant ADO.Queries.Query_Definition_Access;
+
+
    Query_Blog_Tag_Cloud : constant ADO.Queries.Query_Definition_Access;
 
    --  --------------------
@@ -533,6 +541,73 @@ package AWA.Blogs.Models is
                    Context : in out ADO.Queries.Context'Class);
 
    Query_Comment_List : constant ADO.Queries.Query_Definition_Access;
+
+   --  --------------------
+   --    The information about an image used in a wiki page.
+   --  --------------------
+   type Image_Info is
+     new Util.Beans.Basic.Bean with  record
+
+      --  the image folder identifier.
+      Folder_Id : ADO.Identifier;
+
+      --  the image file identifier.
+      Id : ADO.Identifier;
+
+      --  the file creation date.
+      Create_Date : Ada.Calendar.Time;
+
+      --  the file storage URI.
+      Uri : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the file storage URI.
+      Storage : AWA.Storages.Models.Storage_Type;
+
+      --  the file mime type.
+      Mime_Type : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the file size.
+      File_Size : Integer;
+
+      --  the image width.
+      Width : Integer;
+
+      --  the image height.
+      Height : Integer;
+   end record;
+
+   --  Get the bean attribute identified by the name.
+   overriding
+   function Get_Value (From : in Image_Info;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Image_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+
+   package Image_Info_Beans is
+      new Util.Beans.Basic.Lists (Element_Type => Image_Info);
+   package Image_Info_Vectors renames Image_Info_Beans.Vectors;
+   subtype Image_Info_List_Bean is Image_Info_Beans.List_Bean;
+
+   type Image_Info_List_Bean_Access is access all Image_Info_List_Bean;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Image_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   subtype Image_Info_Vector is Image_Info_Vectors.Vector;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Image_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   Query_Blog_Image : constant ADO.Queries.Query_Definition_Access;
 
    --  --------------------
    --    The month statistics.
@@ -934,80 +1009,112 @@ private
                         Impl   : out Post_Access);
 
    package File_1 is
+      new ADO.Queries.Loaders.File (Path => "blog-images.xml",
+                                    Sha1 => "9B2B599473F75F92CB5AB5045675E4CCEF926543");
+
+   package Def_Blog_Image_Get_Data is
+      new ADO.Queries.Loaders.Query (Name => "blog-image-get-data",
+                                     File => File_1.File'Access);
+   Query_Blog_Image_Get_Data : constant ADO.Queries.Query_Definition_Access
+   := Def_Blog_Image_Get_Data.Query'Access;
+
+   package Def_Blog_Image_Width_Get_Data is
+      new ADO.Queries.Loaders.Query (Name => "blog-image-width-get-data",
+                                     File => File_1.File'Access);
+   Query_Blog_Image_Width_Get_Data : constant ADO.Queries.Query_Definition_Access
+   := Def_Blog_Image_Width_Get_Data.Query'Access;
+
+   package Def_Blog_Image_Height_Get_Data is
+      new ADO.Queries.Loaders.Query (Name => "blog-image-height-get-data",
+                                     File => File_1.File'Access);
+   Query_Blog_Image_Height_Get_Data : constant ADO.Queries.Query_Definition_Access
+   := Def_Blog_Image_Height_Get_Data.Query'Access;
+
+   package File_2 is
       new ADO.Queries.Loaders.File (Path => "blog-tags.xml",
                                     Sha1 => "9B2B599473F75F92CB5AB5045675E4CCEF926543");
 
    package Def_Blog_Tag_Cloud is
       new ADO.Queries.Loaders.Query (Name => "blog-tag-cloud",
-                                     File => File_1.File'Access);
+                                     File => File_2.File'Access);
    Query_Blog_Tag_Cloud : constant ADO.Queries.Query_Definition_Access
    := Def_Blog_Tag_Cloud.Query'Access;
 
-   package File_2 is
+   package File_3 is
       new ADO.Queries.Loaders.File (Path => "blog-admin-post-list.xml",
                                     Sha1 => "05BD01CF2BA5242266B1259502A7B26EC7ACC26D");
 
    package Def_Adminpostinfo_Blog_Admin_Post_List is
       new ADO.Queries.Loaders.Query (Name => "blog-admin-post-list",
-                                     File => File_2.File'Access);
+                                     File => File_3.File'Access);
    Query_Blog_Admin_Post_List : constant ADO.Queries.Query_Definition_Access
    := Def_Adminpostinfo_Blog_Admin_Post_List.Query'Access;
 
    package Def_Adminpostinfo_Blog_Admin_Post_List_Date is
       new ADO.Queries.Loaders.Query (Name => "blog-admin-post-list-date",
-                                     File => File_2.File'Access);
+                                     File => File_3.File'Access);
    Query_Blog_Admin_Post_List_Date : constant ADO.Queries.Query_Definition_Access
    := Def_Adminpostinfo_Blog_Admin_Post_List_Date.Query'Access;
 
-   package File_3 is
+   package File_4 is
       new ADO.Queries.Loaders.File (Path => "blog-list.xml",
                                     Sha1 => "BB41EBE10B232F150560185E9A955BDA9FB7F77F");
 
    package Def_Bloginfo_Blog_List is
       new ADO.Queries.Loaders.Query (Name => "blog-list",
-                                     File => File_3.File'Access);
+                                     File => File_4.File'Access);
    Query_Blog_List : constant ADO.Queries.Query_Definition_Access
    := Def_Bloginfo_Blog_List.Query'Access;
 
-   package File_4 is
+   package File_5 is
       new ADO.Queries.Loaders.File (Path => "blog-comment-list.xml",
                                     Sha1 => "44E136D659FBA9859F2F077995D82161C743CAF3");
 
    package Def_Commentinfo_Comment_List is
       new ADO.Queries.Loaders.Query (Name => "comment-list",
-                                     File => File_4.File'Access);
+                                     File => File_5.File'Access);
    Query_Comment_List : constant ADO.Queries.Query_Definition_Access
    := Def_Commentinfo_Comment_List.Query'Access;
 
-   package File_5 is
+   package File_6 is
+      new ADO.Queries.Loaders.File (Path => "blog-images-info.xml",
+                                    Sha1 => "D82CB845BBF166F3A4EC77BDDB3C5633D227B603");
+
+   package Def_Imageinfo_Blog_Image is
+      new ADO.Queries.Loaders.Query (Name => "blog-image",
+                                     File => File_6.File'Access);
+   Query_Blog_Image : constant ADO.Queries.Query_Definition_Access
+   := Def_Imageinfo_Blog_Image.Query'Access;
+
+   package File_7 is
       new ADO.Queries.Loaders.File (Path => "blog-stat.xml",
                                     Sha1 => "933526108281E4E7755E68427D69738611F833F3");
 
    package Def_Monthstatinfo_Post_Publish_Stats is
       new ADO.Queries.Loaders.Query (Name => "post-publish-stats",
-                                     File => File_5.File'Access);
+                                     File => File_7.File'Access);
    Query_Post_Publish_Stats : constant ADO.Queries.Query_Definition_Access
    := Def_Monthstatinfo_Post_Publish_Stats.Query'Access;
 
    package Def_Monthstatinfo_Post_Access_Stats is
       new ADO.Queries.Loaders.Query (Name => "post-access-stats",
-                                     File => File_5.File'Access);
+                                     File => File_7.File'Access);
    Query_Post_Access_Stats : constant ADO.Queries.Query_Definition_Access
    := Def_Monthstatinfo_Post_Access_Stats.Query'Access;
 
-   package File_6 is
+   package File_8 is
       new ADO.Queries.Loaders.File (Path => "blog-post-list.xml",
                                     Sha1 => "8DB9E20EB0AEBC97698E1BF002F64FB5279E2245");
 
    package Def_Postinfo_Blog_Post_List is
       new ADO.Queries.Loaders.Query (Name => "blog-post-list",
-                                     File => File_6.File'Access);
+                                     File => File_8.File'Access);
    Query_Blog_Post_List : constant ADO.Queries.Query_Definition_Access
    := Def_Postinfo_Blog_Post_List.Query'Access;
 
    package Def_Postinfo_Blog_Post_Tag_List is
       new ADO.Queries.Loaders.Query (Name => "blog-post-tag-list",
-                                     File => File_6.File'Access);
+                                     File => File_8.File'Access);
    Query_Blog_Post_Tag_List : constant ADO.Queries.Query_Definition_Access
    := Def_Postinfo_Blog_Post_Tag_List.Query'Access;
 end AWA.Blogs.Models;
