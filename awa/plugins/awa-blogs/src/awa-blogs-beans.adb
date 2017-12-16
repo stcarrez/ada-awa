@@ -18,9 +18,13 @@
 with Ada.Calendar;
 with Ada.Strings.Maps;
 
+with Util.Strings;
 with Util.Dates.ISO8601;
 with Util.Beans.Objects.Time;
 
+with Wiki.Helpers;
+
+with AWA.Images.Services;
 with AWA.Services.Contexts;
 with AWA.Helpers.Selectors;
 with AWA.Tags.Modules;
@@ -60,6 +64,122 @@ package body AWA.Blogs.Beans is
                                          High => Character'Val (255)))
      or
        Ada.Strings.Maps.To_Set ("?#[]@!$&'""()*,;=%`^\<>");
+
+   procedure Make_Image_Link (Renderer : in out Post_Links_Bean;
+                              Link     : in Wiki.Strings.WString;
+                              Info     : in AWA.Blogs.Models.Image_Info;
+                              URI      : out Unbounded_Wide_Wide_String;
+                              Width    : in out Natural;
+                              Height   : in out Natural) is
+      Sep : Natural;
+   begin
+      Sep := Wiki.Strings.Index (Link, "/");
+      URI := Renderer.Image_Prefix;
+      Append (URI, Wiki.Strings.To_WString (Util.Strings.Image (Integer (Renderer.Post_Id))));
+      Append (URI, "/");
+      Append (URI, Wiki.Strings.To_WString (Util.Strings.Image (Integer (Info.Id))));
+      Append (URI, "/");
+      if Width = 0 and Height = 0 then
+         Append (URI, "default/");
+      elsif Width = Natural'Last or Height = Natural'Last then
+         Append (URI, "original/");
+      else
+         if Width /= 0 then
+            Append (URI, Wiki.Strings.To_WString (Util.Strings.Image (Width)));
+         end if;
+         Append (URI, "x");
+         if Height /= 0 then
+            Append (URI, Wiki.Strings.To_WString (Util.Strings.Image (Height)));
+         end if;
+         Append (URI, "/");
+      end if;
+      if Sep = 0 then
+         Append (URI, Link);
+      else
+         Append (URI, Link (Sep + 1 .. Link'Last));
+      end if;
+      if Info.Width /= 0 and Info.Height /= 0 then
+         AWA.Images.Services.Scale (Width     => Info.Width,
+                                    Height    => Info.Height,
+                                    To_Width  => Width,
+                                    To_Height => Height);
+      end if;
+   end Make_Image_Link;
+
+   procedure Find_Image_Link (Renderer : in out Post_Links_Bean;
+                              Link     : in Wiki.Strings.WString;
+                              URI      : out Unbounded_Wide_Wide_String;
+                              Width    : in out Natural;
+                              Height   : in out Natural) is
+      Ctx     : constant ASC.Service_Context_Access := ASC.Current;
+      Session : ADO.Sessions.Session := ASC.Get_Session (Ctx);
+      List    : AWA.Blogs.Models.Image_Info_Vector;
+      Sep     : Natural;
+      Query   : ADO.Queries.Context;
+      Info    : AWA.Blogs.Models.Image_Info;
+   begin
+      Sep := Wiki.Strings.Index (Link, "/");
+      Query.Bind_Param ("post_id", Renderer.Post_Id);
+      if Sep = 0 then
+         Query.Bind_Param ("folder_name", String '("Images"));
+         Sep := Link'First - 1;
+      else
+         Query.Bind_Param ("folder_name", Wiki.Strings.To_String (Link (Link'First .. Sep - 1)));
+      end if;
+      Query.Bind_Param ("file_name", Wiki.Strings.To_String (Link (Sep + 1 .. Link'Last)));
+      Query.Set_Query (AWA.Blogs.Models.Query_Blog_Image);
+      AWA.Blogs.Models.List (List, Session, Query);
+      if not List.Is_Empty then
+         Info := List.First_Element;
+      else
+         Info.Id     := ADO.NO_IDENTIFIER;
+         Info.Width  := 0;
+         Info.Height := 0;
+      end if;
+      Renderer.Images.Include (Link, Info);
+      Renderer.Make_Image_Link (Link, Info, URI, Width, Height);
+   end Find_Image_Link;
+
+   --  ------------------------------
+   --  Get the image link that must be rendered from the wiki image link.
+   --  ------------------------------
+   overriding
+   procedure Make_Image_Link (Renderer : in out Post_Links_Bean;
+                              Link     : in Wiki.Strings.WString;
+                              URI      : out Unbounded_Wide_Wide_String;
+                              Width    : in out Natural;
+                              Height   : in out Natural) is
+      Pos : Image_Info_Maps.Cursor;
+   begin
+      if Wiki.Helpers.Is_Url (Link) or Link (Link'First) = '/' then
+         URI    := To_Unbounded_Wide_Wide_String (Link);
+      else
+         Pos := Renderer.Images.Find (Link);
+         if Image_Info_Maps.Has_Element (Pos) then
+            Renderer.Make_Image_Link (Link, Image_Info_Maps.Element (Pos), URI, Width, Height);
+         else
+            Renderer.Find_Image_Link (Link, URI, Width, Height);
+         end if;
+      end if;
+   end Make_Image_Link;
+
+   --  ------------------------------
+   --  Get the page link that must be rendered from the wiki page link.
+   --  ------------------------------
+   overriding
+   procedure Make_Page_Link (Renderer : in out Post_Links_Bean;
+                             Link     : in Wiki.Strings.WString;
+                             URI      : out Unbounded_Wide_Wide_String;
+                             Exists   : out Boolean) is
+   begin
+      if Wiki.Helpers.Is_Url (Link) then
+         URI := To_Unbounded_Wide_Wide_String (Link);
+      else
+         URI := Renderer.Page_Prefix;
+         Append (URI, Link);
+      end if;
+      Exists := True;
+   end Make_Page_Link;
 
    --  ------------------------------
    --  Get the value identified by the name.
@@ -283,6 +403,7 @@ package body AWA.Blogs.Beans is
 
       Bean.Counter.Value := Bean.Get_Read_Count;
       ADO.Objects.Set_Value (Bean.Counter.Object, Bean.Get_Id);
+      Bean.Links.Post_Id := Bean.Get_Id;
 
       Comment := AWA.Comments.Beans.Get_Comment_Bean ("postNewComment");
       if Comment /= null then
@@ -348,6 +469,8 @@ package body AWA.Blogs.Beans is
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Get_Id));
       elsif Name = POST_USERNAME_ATTR then
          return Util.Beans.Objects.To_Object (String '(From.Get_Author.Get_Name));
+      elsif Name = "links" then
+         return Util.Beans.Objects.To_Object (From.Links_Bean, Util.Beans.Objects.STATIC);
       else
          return AWA.Blogs.Models.Post_Bean (From).Get_Value (Name);
       end if;
@@ -408,6 +531,8 @@ package body AWA.Blogs.Beans is
       Object.Tags.Set_Permission ("blog-update-post");
       Object.Counter_Bean := Object.Counter'Access;
       Object.Counter.Counter := AWA.Blogs.Modules.Read_Counter.Index;
+      Object.Links_Bean := Object.Links'Access;
+      Object.Links.Image_Prefix := Module.Get_Image_Prefix;
       return Object.all'Access;
    end Create_Post_Bean;
 
@@ -455,6 +580,18 @@ package body AWA.Blogs.Beans is
 
       elsif Name = "page_count" then
          return Util.Beans.Objects.To_Object ((From.Count + From.Page_Size - 1) / From.Page_Size);
+
+      elsif Name = "links" then
+         Pos := From.Posts.Get_Row_Index;
+         if Pos = 0 then
+            return Util.Beans.Objects.Null_Object;
+         end if;
+         declare
+            Item : constant Models.Post_Info := From.Posts.List.Element (Pos);
+         begin
+            From.Links_Bean.Post_Id := Item.Id;
+            return Util.Beans.Objects.To_Object (From.Links_Bean, Util.Beans.Objects.STATIC);
+         end;
 
       elsif Name = "updateDate" then
          if From.Posts.Get_Count = 0 then
@@ -552,6 +689,8 @@ package body AWA.Blogs.Beans is
       Object.Page_Size  := 20;
       Object.Page       := 1;
       Object.Count      := 0;
+      Object.Links_Bean := Object.Links'Access;
+      Object.Links.Image_Prefix := Module.Get_Image_Prefix;
       Object.Counter_Bean := Object.Counter'Access;
       Object.Counter.Counter := AWA.Blogs.Modules.Read_Counter.Index;
       return Object.all'Access;
