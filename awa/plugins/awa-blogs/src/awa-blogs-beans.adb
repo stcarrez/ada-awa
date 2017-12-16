@@ -461,7 +461,7 @@ package body AWA.Blogs.Beans is
             return Util.Beans.Objects.Null_Object;
          else
             declare
-               Item : constant Models.Post_Info := From.Posts.List.Element (0);
+               Item : constant Models.Post_Info := From.Posts.List.Element (1);
             begin
                return Util.Beans.Objects.Time.To_Object (Item.Date);
             end;
