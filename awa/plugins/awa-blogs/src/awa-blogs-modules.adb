@@ -79,6 +79,8 @@ package body AWA.Blogs.Modules is
                          Name    => "AWA.Blogs.Beans.Stat_Bean",
                          Handler => AWA.Blogs.Beans.Create_Blog_Stat_Bean'Access);
 
+      App.Add_Servlet ("blog-image", Plugin.Image_Servlet'Unchecked_Access);
+
       AWA.Modules.Module (Plugin).Initialize (App, Props);
    end Initialize;
 
