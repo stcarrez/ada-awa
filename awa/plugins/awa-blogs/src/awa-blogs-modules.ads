@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-module -- Blog and post management module
---  Copyright (C) 2011, 2012, 2013, 2014, 2015 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,8 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-
+with Ada.Strings.Unbounded;
+with Ada.Calendar;
 with ASF.Applications;
 
 with ADO;
@@ -97,6 +98,17 @@ package AWA.Blogs.Modules is
    --  Delete the post identified by the given identifier.
    procedure Delete_Post (Model   : in Blog_Module;
                           Post_Id : in ADO.Identifier);
+
+   --  Load the image data associated with a blog post.  The image must be public and the
+   --  post visible for the image to be retrieved by anonymous users.
+   procedure Load_Image (Model    : in Blog_Module;
+                         Post_Id  : in ADO.Identifier;
+                         Image_Id : in ADO.Identifier;
+                         Width    : in out Natural;
+                         Height   : in out Natural;
+                         Mime     : out Ada.Strings.Unbounded.Unbounded_String;
+                         Date     : out Ada.Calendar.Time;
+                         Into     : out ADO.Blob_Ref);
 
 private
 
