@@ -20,6 +20,7 @@ with Ada.Calendar;
 with ASF.Applications;
 
 with ADO;
+with Wiki.Strings;
 with AWA.Modules;
 with AWA.Blogs.Models;
 with AWA.Counters.Definition;
@@ -47,6 +48,9 @@ package AWA.Blogs.Modules is
 
    NAME : constant String := "blogs";
 
+   --  The configuration parameter that defines the image link prefix in rendered HTML content.
+   PARAM_IMAGE_PREFIX : constant String := "image_prefix";
+
    --  Define the permissions.
    package ACL_Create_Blog is new Security.Permissions.Definition ("blog-create");
    package ACL_Delete_Blog is new Security.Permissions.Definition ("blog-delete");
@@ -67,6 +71,11 @@ package AWA.Blogs.Modules is
    procedure Initialize (Plugin : in out Blog_Module;
                          App    : in AWA.Modules.Application_Access;
                          Props  : in ASF.Applications.Config);
+
+   --  Configures the module after its initialization and after having read its XML configuration.
+   overriding
+   procedure Configure (Plugin : in out Blog_Module;
+                        Props  : in ASF.Applications.Config);
 
    --  Get the blog module instance associated with the current application.
    function Get_Blog_Module return Blog_Module_Access;
@@ -112,6 +121,8 @@ package AWA.Blogs.Modules is
 
 private
 
-   type Blog_Module is new AWA.Modules.Module with null record;
+   type Blog_Module is new AWA.Modules.Module with record
+      Image_Prefix : Wiki.Strings.UString;
+   end record;
 
 end AWA.Blogs.Modules;
