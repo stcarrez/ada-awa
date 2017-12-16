@@ -80,6 +80,10 @@ package AWA.Blogs.Modules is
    --  Get the blog module instance associated with the current application.
    function Get_Blog_Module return Blog_Module_Access;
 
+   --  Get the image prefix that was configured for the Blog module.
+   function Get_Image_Prefix (Module : in Blog_Module)
+                              return Wiki.Strings.UString;
+
    --  Create a new blog for the user workspace.
    procedure Create_Blog (Model        : in Blog_Module;
                           Title        : in String;
