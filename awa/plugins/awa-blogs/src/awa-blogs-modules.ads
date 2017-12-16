@@ -24,6 +24,7 @@ with Wiki.Strings;
 with AWA.Modules;
 with AWA.Blogs.Models;
 with AWA.Counters.Definition;
+with AWA.Blogs.Servlets;
 
 with Security.Permissions;
 
@@ -127,6 +128,7 @@ private
 
    type Blog_Module is new AWA.Modules.Module with record
       Image_Prefix : Wiki.Strings.UString;
+      Image_Servlet : aliased AWA.Blogs.Servlets.Image_Servlet;
    end record;
 
 end AWA.Blogs.Modules;
