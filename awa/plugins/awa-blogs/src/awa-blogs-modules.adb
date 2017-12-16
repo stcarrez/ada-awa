@@ -105,6 +105,15 @@ package body AWA.Blogs.Modules is
    end Get_Blog_Module;
 
    --  ------------------------------
+   --  Get the image prefix that was configured for the Blog module.
+   --  ------------------------------
+   function Get_Image_Prefix (Module : in Blog_Module)
+                              return Wiki.Strings.UString is
+   begin
+      return Module.Image_Prefix;
+   end Get_Image_Prefix;
+
+   --  ------------------------------
    --  Create a new blog for the user workspace.
    --  ------------------------------
    procedure Create_Blog (Model        : in Blog_Module;
