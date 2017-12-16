@@ -1,0 +1,78 @@
+<query-mapping package='AWA.Blogs.Models'>
+    <description>
+      Queries to display images in blog posts
+    </description>
+
+    <query name='blog-image-get-data'>
+       <comment>Get the data content of the Wiki image (original image).</comment>
+       <sql>
+    SELECT
+      store.mime_type,
+      store.create_date,
+      store.uri,
+      store.storage,
+      0,
+      0,
+      data.data
+    FROM awa_storage AS store
+    INNER JOIN awa_post AS post ON post.id = :post_id
+    INNER JOIN awa_blog AS blog ON store.workspace_id = blog.workspace_id AND blog.id = post.blog_id
+    LEFT JOIN awa_acl AS acl ON acl.entity_id = blog.workspace_id
+       AND acl.entity_type = $entity_type[awa_blog] AND acl.user_id = :user_id
+       AND acl.permission = $permission[blog-update-post]
+    LEFT JOIN awa_storage_data AS data ON store.store_data_id = data.id
+    WHERE store.id = :store_id
+       AND ((store.is_public AND post.status > 0) OR NOT acl.id IS NULL)
+       </sql>
+    </query>
+
+    <query name='blog-image-width-get-data'>
+       <comment>Get the data content of the Wiki image for an image with a given width.</comment>
+       <sql>
+    SELECT
+      store.mime_type,
+      store.create_date,
+      store.uri,
+      store.storage,
+      image.width,
+      image.height,
+      data.data
+    FROM awa_image AS image
+    INNER JOIN awa_storage AS store ON image.storage_id = store.id
+    INNER JOIN awa_post AS post ON post.id = :post_id
+    INNER JOIN awa_blog AS blog ON store.workspace_id = blog.workspace_id AND blog.id = post.blog_id
+    LEFT JOIN awa_acl AS acl ON acl.entity_id = blog.workspace_id
+       AND acl.entity_type = $entity_type[awa_blog] AND acl.user_id = :user_id
+       AND acl.permission = $permission[blog-update-post]
+    LEFT JOIN awa_storage_data AS data ON store.store_data_id = data.id
+    WHERE ((store.is_public AND post.status > 0) OR NOT acl.id IS NULL)
+       AND ((store.original_id = :store_id AND image.width = :width) OR store.id = :store_id)
+    ORDER BY store.id DESC LIMIT 1
+       </sql>
+    </query>
+
+    <query name='blog-image-height-get-data'>
+       <comment>Get the data content of the Wiki image for an image with a given height.</comment>
+       <sql>
+    SELECT
+      store.mime_type,
+      store.create_date,
+      store.uri,
+      store.storage,
+      image.width,
+      image.height,
+      data.data
+    INNER JOIN awa_storage AS store ON image.storage_id = store.id
+    INNER JOIN awa_post AS post ON post.id = :post_id
+    INNER JOIN awa_blog AS blog ON store.workspace_id = blog.workspace_id AND blog.id = post.blog_id
+    LEFT JOIN awa_acl AS acl ON acl.entity_id = blog.workspace_id
+       AND acl.entity_type = $entity_type[awa_blog] AND acl.user_id = :user_id
+       AND acl.permission = $permission[blog-update-post]
+    LEFT JOIN awa_storage_data AS data ON store.store_data_id = data.id
+    WHERE ((store.is_public AND post.status > 0) OR NOT acl.id IS NULL)
+       AND ((store.original_id = :store_id AND image.height = :height) OR store.id = :store_id)
+    ORDER BY store.id DESC LIMIT 1
+       </sql>
+    </query>
+
+</query-mapping>
