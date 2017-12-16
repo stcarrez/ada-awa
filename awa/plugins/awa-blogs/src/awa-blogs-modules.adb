@@ -83,6 +83,19 @@ package body AWA.Blogs.Modules is
    end Initialize;
 
    --  ------------------------------
+   --  Configures the module after its initialization and after having read its XML configuration.
+   --  ------------------------------
+   overriding
+   procedure Configure (Plugin : in out Blog_Module;
+                        Props  : in ASF.Applications.Config) is
+      pragma Unreferenced (Props);
+
+      Image_Prefix : constant String := Plugin.Get_Config (PARAM_IMAGE_PREFIX);
+   begin
+      Plugin.Image_Prefix := Wiki.Strings.To_UString (Wiki.Strings.To_WString (Image_Prefix));
+   end Configure;
+
+   --  ------------------------------
    --  Get the blog module instance associated with the current application.
    --  ------------------------------
    function Get_Blog_Module return Blog_Module_Access is
