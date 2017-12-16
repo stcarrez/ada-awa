@@ -46,7 +46,10 @@
                      var="tagName"
                      tagClass="tagedit-listelement tagedit-listelement-old"/>
 
-        <awa:wiki styleClass='post-text' value="#{post.text}" format="dotclear"/>
+        <awa:wiki styleClass='post-text'
+                  value="#{post.text}"
+                  links="#{postList.links}"
+                  format="dotclear"/>
         <!-- Increment the post read counter but do not display anything -->
         <awa:counter value="#{postList.counter}" hidden="true"/>
         <h:panelGroup layout="div" styleClass="blog-post-comment"

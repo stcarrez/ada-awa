@@ -50,7 +50,10 @@
                                  tagLink="#{contextPath}/blogs/tagged.html?tag=#{util:urlEncode(tagName)}"
                                  var="tagName"
                                  tagClass="tagedit-listelement tagedit-listelement-old"/>
-                    <awa:wiki styleClass='post-text' value="#{post.text}" format="dotclear"/>
+                    <awa:wiki styleClass='post-text'
+                              value="#{post.text}"
+                              links="#{post.links}"
+                              format="dotclear"/>
                     <!-- Increment the post read counter but do not display anything -->
                     <awa:counter value="#{post.counter}" hidden="true"/>
                     <div class='post-comments' id="comments">
