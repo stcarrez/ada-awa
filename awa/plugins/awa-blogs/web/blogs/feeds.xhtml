@@ -1,5 +1,5 @@
 <!-- Atom page to give the published blog entries
-  -  Copyright (C) 2014 Stephane Carrez
+  -  Copyright (C) 2014, 2017 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -63,7 +63,10 @@
             </h:list>
             <content type="html">
                 <u:escape mode='xml'>
-                    <awa:wiki styleClass='post-text' value="#{post.text}" format="dotclear"/>
+                    <awa:wiki styleClass='post-text'
+                              value="#{post.text}"
+                              links="#{postList.links}"
+                              format="dotclear"/>
                 </u:escape>
             </content>
         </entry>
