@@ -1,6 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <module version="1.0">
 
+  <context-param>
+    <param-name>blogs.image_prefix</param-name>
+    <param-value>#{contextPath}/blogs/images/</param-value>
+    <description>
+       The URL base prefix to be used for blog post images.
+    </description>
+  </context-param>
+
   <managed-bean>
     <description>This bean describes a blog post for the creation or the update</description>
     <managed-bean-name>post</managed-bean-name>
@@ -445,6 +453,11 @@
     <url-pattern>/blogs/ajax/*</url-pattern>
   </servlet-mapping>
 
+  <servlet-mapping>
+    <servlet-name>blog-image</servlet-name>
+    <url-pattern>/blogs/images/:post_id/:image_id/:size/:name</url-pattern>
+  </servlet-mapping>
+
   <filter-mapping>
     <filter-name>service</filter-name>
     <url-pattern>/blogs/*.html</url-pattern>
@@ -453,6 +466,7 @@
     <url-pattern>/blogs/admin/#{adminBlog.id}/preview/#{post.uid}</url-pattern>
     <url-pattern>/blogs/admin/#{blogStats.blog_id}/stats</url-pattern>
     <url-pattern>/blogs/post/#{postAccessStats.entity_id}/stats/#{postAccessStats.first_date}</url-pattern>
+    <url-pattern>/blogs/images/*</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
@@ -477,6 +491,7 @@
     <url-pattern>/blogs/tagged.html</url-pattern>
     <url-pattern>/blogs/index.html</url-pattern>
     <url-pattern>/blogs/feeds.html</url-pattern>
+    <url-pattern>/blogs/images/.*</url-pattern>
   </url-policy>
 
   <url-policy>
