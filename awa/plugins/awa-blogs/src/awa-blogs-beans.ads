@@ -17,6 +17,9 @@
 -----------------------------------------------------------------------
 
 with Ada.Strings.Unbounded;
+with Ada.Containers.Indefinite_Hashed_Maps;
+with Ada.Strings.Wide_Wide_Hash;
+with Ada.Strings.Wide_Wide_Unbounded;
 
 with Util.Beans.Basic;
 with Util.Beans.Objects;
@@ -24,11 +27,14 @@ with Util.Beans.Objects;
 with ADO;
 with ADO.Objects;
 
+with Wiki.Strings;
+
 with AWA.Blogs.Modules;
 with AWA.Blogs.Models;
 with AWA.Tags.Beans;
 with AWA.Counters.Beans;
 with AWA.Events;
+with AWA.Components.Wikis;
 
 with ASF.Rest.Definition;
 
@@ -50,6 +56,49 @@ package AWA.Blogs.Beans is
    POST_TAG_ATTR      : constant String := "tags";
    POST_ALLOW_COMMENTS_ATTR : constant String := "allow_comments";
    COUNTER_ATTR             : constant String := "counter";
+
+   use Ada.Strings.Wide_Wide_Unbounded;
+
+   package Image_Info_Maps is
+     new Ada.Containers.Indefinite_Hashed_Maps (Key_Type        => Wiki.Strings.WString,
+                                                Element_Type    => Models.Image_Info,
+                                                Hash            => Ada.Strings.Wide_Wide_Hash,
+                                                Equivalent_Keys => "=",
+                                                "="             => Models."=");
+
+   type Post_Links_Bean is new AWA.Components.Wikis.Link_Renderer_Bean with record
+      --  The wiki space identifier.
+      Post_Id : ADO.Identifier;
+      Images  : Image_Info_Maps.Map;
+   end record;
+
+   procedure Make_Image_Link (Renderer : in out Post_Links_Bean;
+                              Link     : in Wiki.Strings.WString;
+                              Info     : in AWA.Blogs.Models.Image_Info;
+                              URI      : out Unbounded_Wide_Wide_String;
+                              Width    : in out Natural;
+                              Height   : in out Natural);
+
+   procedure Find_Image_Link (Renderer : in out Post_Links_Bean;
+                              Link     : in Wiki.Strings.WString;
+                              URI      : out Unbounded_Wide_Wide_String;
+                              Width    : in out Natural;
+                              Height   : in out Natural);
+
+   --  Get the image link that must be rendered from the wiki image link.
+   overriding
+   procedure Make_Image_Link (Renderer : in out Post_Links_Bean;
+                              Link     : in Wiki.Strings.WString;
+                              URI      : out Unbounded_Wide_Wide_String;
+                              Width    : in out Natural;
+                              Height   : in out Natural);
+
+   --  Get the page link that must be rendered from the wiki page link.
+   overriding
+   procedure Make_Page_Link (Renderer : in out Post_Links_Bean;
+                             Link     : in Wiki.Strings.WString;
+                             URI      : out Unbounded_Wide_Wide_String;
+                             Exists   : out Boolean);
 
    --  ------------------------------
    --  Blog Bean
@@ -102,6 +151,10 @@ package AWA.Blogs.Beans is
       --  List of tags associated with the post.
       Tags      : aliased AWA.Tags.Beans.Tag_List_Bean;
       Tags_Bean : Util.Beans.Basic.Readonly_Bean_Access;
+
+      --  The post page links.
+      Links         : aliased Post_Links_Bean;
+      Links_Bean    : Util.Beans.Basic.Readonly_Bean_Access;
 
       --  The read post counter associated with the post.
       Counter       : aliased AWA.Counters.Beans.Counter_Bean (Of_Type => ADO.Objects.KEY_INTEGER,
@@ -181,6 +234,10 @@ package AWA.Blogs.Beans is
       Service    : Modules.Blog_Module_Access := null;
       Tags       : AWA.Tags.Beans.Entity_Tag_Map;
       Posts_Bean : AWA.Blogs.Models.Post_Info_List_Bean_Access;
+
+      --  The post page links.
+      Links         : aliased Post_Links_Bean;
+      Links_Bean    : access Post_Links_Bean;
 
       --  The read post counter associated with the post.
       Counter       : aliased AWA.Counters.Beans.Counter_Bean (Of_Type => ADO.Objects.KEY_INTEGER,
