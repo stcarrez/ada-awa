@@ -1,5 +1,5 @@
 <!-- Markedit syntax helper
-  -  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -83,6 +83,9 @@
         <span class="markedit-dotclear">[#{markeditMsg.link_label} | #{markeditMsg.link_url}]</span>
         <span class="markedit-mediawiki markedit-creole">[[#{markeditMsg.link_url} | #{markeditMsg.link_label} ]]</span>
         <span class="markedit-markdown">[#{markeditMsg.link_label}](#{markeditMsg.link_url})</span>
+    </li>
+    <li>
+        <span class="markedit-dotclear">((#{markeditMsg.image_link} | #{markeditMsg.image_label}))</span>
     </li>
 </ul>
 
