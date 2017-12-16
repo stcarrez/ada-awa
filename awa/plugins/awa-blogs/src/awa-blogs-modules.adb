@@ -27,11 +27,11 @@ with AWA.Permissions;
 with AWA.Permissions.Services;
 with AWA.Workspaces.Models;
 with AWA.Workspaces.Modules;
+with AWA.Storages.Models;
 
 with ADO.Objects;
 with ADO.Sessions;
-
-with Ada.Calendar;
+with ADO.Statements;
 
 package body AWA.Blogs.Modules is
 
@@ -258,5 +258,57 @@ package body AWA.Blogs.Modules is
       Post.Delete (Session => DB);
       Ctx.Commit;
    end Delete_Post;
+
+   --  ------------------------------
+   --  Load the image data associated with a blog post.  The image must be public and the
+   --  post visible for the image to be retrieved by anonymous users.
+   --  ------------------------------
+   procedure Load_Image (Model    : in Blog_Module;
+                         Post_Id  : in ADO.Identifier;
+                         Image_Id : in ADO.Identifier;
+                         Width    : in out Natural;
+                         Height   : in out Natural;
+                         Mime     : out Ada.Strings.Unbounded.Unbounded_String;
+                         Date     : out Ada.Calendar.Time;
+                         Into     : out ADO.Blob_Ref) is
+      pragma Unreferenced (Model);
+      use type AWA.Storages.Models.Storage_Type;
+
+      Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      User  : constant ADO.Identifier := Ctx.Get_User_Identifier;
+      DB    : constant ADO.Sessions.Session := AWA.Services.Contexts.Get_Session (Ctx);
+      Query : ADO.Statements.Query_Statement;
+      Kind  : AWA.Storages.Models.Storage_Type;
+   begin
+      if Width = Natural'Last or Height = Natural'Last then
+         Query := DB.Create_Statement (Models.Query_Blog_Image_Get_Data);
+      elsif Width > 0 then
+         Query := DB.Create_Statement (Models.Query_Blog_Image_Width_Get_Data);
+         Query.Bind_Param ("width", Width);
+      elsif Height > 0 then
+         Query := DB.Create_Statement (Models.Query_Blog_Image_Height_Get_Data);
+         Query.Bind_Param ("height", Height);
+      else
+         Query := DB.Create_Statement (Models.Query_Blog_Image_Get_Data);
+      end if;
+      Query.Bind_Param ("post_id", Post_Id);
+      Query.Bind_Param ("store_id", Image_Id);
+      Query.Bind_Param ("user_id", User);
+      Query.Execute;
+      if not Query.Has_Elements then
+         Log.Warn ("Blog post image entity {0} not found", ADO.Identifier'Image (Image_Id));
+         raise ADO.Objects.NOT_FOUND;
+      end if;
+      Mime   := Query.Get_Unbounded_String (0);
+      Date   := Query.Get_Time (1);
+      Width  := Query.Get_Natural (4);
+      Height := Query.Get_Natural (5);
+      Kind   := AWA.Storages.Models.Storage_Type'Val (Query.Get_Integer (3));
+      if Kind = AWA.Storages.Models.DATABASE then
+         Into := Query.Get_Blob (6);
+      else
+         null;
+      end if;
+   end Load_Image;
 
 end AWA.Blogs.Modules;
