@@ -8,6 +8,7 @@ Version 1.1     -
   - New counter plugin to track wiki page and blog post reads
   - Moved the wiki engine to Ada Wiki library
   - Support to display images in blog post
+  - New image selector for wiki and blog post editors
 
 Version 1.0     - Jul 2014
   - New countries plugin to provide country/region/city data models
