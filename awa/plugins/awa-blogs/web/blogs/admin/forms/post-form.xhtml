@@ -25,7 +25,8 @@
 
   <div class='awa-post ui-widget ui-widget-content ui-corner-all awa-form'>
     <h2>#{title}</h2>
-    <h:form id='post'>
+      <div id="image-selector"/>
+      <h:form id='post'>
         <h:inputHidden id='post-id' value='#{post.id}' required='false'/>
         <h:inputHidden id='post-blog-id' value='#{post.blogId}'/>
         <div class='grid_8'>
@@ -98,18 +99,40 @@
             </dl>
         </div>
     </h:form>
-      <util:script>
-              // Create a MarkEdit editor on page load
-              $(function(){
-                 $('textarea').markedit({ 'preview': false,
-                  'toolbar' : {
-                    'backgroundMode': 'light',
-                    'layout': 'bold italic underline strike | quote code | numberlist bulletlist heading line link'
-                  }
-                 });
-              });
-      </util:script>
   </div>
+    <util:script>
+        contextPath = "#{contextPath}";
+        // Create a MarkEdit editor on page load
+        $(function(){
+            $('textarea').markedit({
+                'preview': false,
+                'syntax': 'dotclear',
+                'toolbar' : {
+                    'backgroundMode': 'light',
+                    'layout': 'bold italic underline strike | quote code | numberlist bulletlist heading line link image',
+                    imageSelector: function(config, defaultValue, okCallback, cancelCallback) {
+                        $('#image-selector').imageSelector({
+                            autoOpen: false,
+                            show: "blind",
+                            hide: "explode",
+                            minWidth: 800,
+                            minHeight: 400,
+                            modal: true,
+                            buttons: [
+                              { "text": "Select",
+                                "click": function() {
+                                    var value = $('#image-selector').imageSelector("value");
+                                    okCallback(value);
+                                    $(this).imageSelector("close");
+                                }
+                              }
+                            ]
+                        }).imageSelector("openSelector");
+                    }
+                },
+            });
+        });
+    </util:script>
 
 </ui:composition>
 
