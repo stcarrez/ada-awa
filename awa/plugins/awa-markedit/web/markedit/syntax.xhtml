@@ -14,7 +14,7 @@
   -  See the License for the specific language governing permissions and
   -  limitations under the License.
   -->
-<ul class="markedit-syntax #{syntax}">
+<ul xmlns:h="http://java.sun.com/jsf/html" class="markedit-syntax #{syntax}">
     <li class="markedit-header">#{markeditMsg.markup_header_help}</li>
     <li>
         <span class="markedit-dotclear">!!!! #{markeditMsg.header1_label}</span>
@@ -52,10 +52,10 @@
     <li>
         <span class="markedit-dotclear">--#{markeditMsg.strike_label}--</span>
         <span class="markedit-dotclear">++#{markeditMsg.underline_label}++</span>
-        <span class="markedit-mediawiki">&lt; s&gt;#{markeditMsg.strike_label}&lt; /s&gt;</span>
-        <span class="markedit-mediawiki">&lt; u&gt;#{markeditMsg.underline_label}&lt; /u&gt;</span>
-        <span class="markedit-mediawiki">&lt; ins&gt;#{markeditMsg.insert_label}&lt; /ins&gt;</span>
-        <span class="markedit-mediawiki">&lt; del&gt;#{markeditMsg.delete_label}&lt; /del&gt;</span>
+        <span class="markedit-mediawiki"><h:outputText value="&lt;s&gt;"/>#{markeditMsg.strike_label}<h:outputText value="&lt;/s&gt;"/></span>
+        <span class="markedit-mediawiki"><h:outputText value="&lt;u&gt;"/>#{markeditMsg.underline_label}<h:outputText value="&lt;/u&gt;"/></span>
+        <span class="markedit-mediawiki"><h:outputText value="&lt;ins&gt;"/>#{markeditMsg.insert_label}<h:outputText value="&lt;/ins&gt;"/></span>
+        <span class="markedit-mediawiki"><h:outputText value="&lt;del&gt;"/>#{markeditMsg.delete_label}<h:outputText value="&lt;/del&gt;"/></span>
     </li>
     <li class="markedit-header">#{markeditMsg.markup_lists_help}</li>
     <li>
@@ -69,14 +69,14 @@
     <li class='spare'></li>
     <li>
         <span class="markedit-dotclear">///</span>
-        <span class="markedit-mediawiki">&lt; pre&gt;</span>
+        <span class="markedit-mediawiki"><h:outputText value="&lt;pre&gt;"/></span>
     </li>
     <li>
         <span class="markedit-dotclear markedit-mediawiki">verbatim code block</span>
     </li>
     <li>
         <span class="markedit-dotclear">///</span>
-        <span class="markedit-mediawiki">&lt; /pre&gt;</span>
+        <span class="markedit-mediawiki"><h:outputText value="&lt;/pre&gt;"/></span>
     </li>
     <li class="markedit-header">#{markeditMsg.markup_link_help}</li>
     <li>
@@ -86,6 +86,7 @@
     </li>
     <li>
         <span class="markedit-dotclear">((#{markeditMsg.image_link} | #{markeditMsg.image_label}))</span>
+        <span class="markedit-mediawiki markedit-creole">((#{markeditMsg.image_link} | #{markeditMsg.image_label} ))</span>
     </li>
 </ul>
 
