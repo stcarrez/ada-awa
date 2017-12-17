@@ -1,5 +1,5 @@
 <!-- Form to create or update a wiki page
-  -  Copyright (C) 2015 Stephane Carrez
+  -  Copyright (C) 2015, 2017 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,8 +24,9 @@
         xmlns:h="http://java.sun.com/jsf/html">
 
   <div class='awa-post ui-widget ui-widget-content ui-corner-all awa-form'>
-    <h2>#{title}</h2>
-    <h:form id='post'>
+      <h2>#{title}</h2>
+      <div id="image-selector"/>
+      <h:form id='post'>
         <h:inputHidden id='page-id' value='#{wikiPage.id}' required='false'/>
         <h:inputHidden id='page-wiki-id' value='#{wikiPage.wiki_id}'/>
         <div class='grid_8'>
@@ -97,29 +98,51 @@
             </dl>
         </div>
     </h:form>
-      <util:script>
-              // Create a MarkEdit editor on page load
-              $(function(){
-                 var area = $("#text");
-                 $(area).markedit({ 'preview': false,
-                  'toolbar' : {
-                    'backgroundMode': 'light',
-                    'layout': 'bold italic underline strike | quote code | numberlist bulletlist heading line link'
-                  }
-                 });
-                 function setSyntax() {
-                    var syntax = $('#wiki-format').val();
-                    $("#wiki-syntax ul").attr('class', 'markedit-syntax ' + syntax);
-                    syntax = syntax.replace("FORMAT_", "");
-                    $(area).markeditSetSyntax(syntax);
-                 };
-                 $('#wiki-format').change(function(ev) {
-                    setSyntax();
-                 });
-                 setSyntax();
-              });
-      </util:script>
   </div>
+    <util:script>
+        contextPath = "#{contextPath}";
+        // Create a MarkEdit editor on page load
+        $(function(){
+            var area = $("#text");
+            $(area).markedit({
+                'preview': false,
+                'syntax': 'dotclear',
+                'toolbar' : {
+                    'backgroundMode': 'light',
+                    'layout': 'bold italic underline strike | quote code | numberlist bulletlist heading line link image',
+                    imageSelector: function(config, defaultValue, okCallback, cancelCallback) {
+                        $('#image-selector').imageSelector({
+                            autoOpen: false,
+                            show: "blind",
+                            hide: "explode",
+                            minWidth: 800,
+                            minHeight: 400,
+                            modal: true,
+                            buttons: [
+                              { "text": "Select",
+                                "click": function() {
+                                    var value = $('#image-selector').imageSelector("value");
+                                    okCallback(value);
+                                    $(this).imageSelector("close");
+                                }
+                              }
+                            ]
+                        }).imageSelector("openSelector");
+                    }
+                },
+            });
+            function setSyntax() {
+                var syntax = $('#wiki-format').val();
+                $("#wiki-syntax ul").attr('class', 'markedit-syntax ' + syntax);
+                syntax = syntax.replace("FORMAT_", "");
+                $(area).markeditSetSyntax(syntax);
+            };
+            $('#wiki-format').change(function(ev) {
+                setSyntax();
+            });
+            setSyntax();
+        });
+    </util:script>
 
 </ui:composition>
 
