@@ -167,13 +167,13 @@
                     'boldEnd': "'''",
                     'italicStart': "''",
                     'italicEnd': "''",
-                    'underlineStart': '__',
-                    'underlineEnd': '__',
-                    'strikeStart': '--',
-                    'strikeEnd': '--',
+                    'underlineStart': '<u>',
+                    'underlineEnd': '</u>',
+                    'strikeStart': '<s>',
+                    'strikeEnd': '</s>',
                     'inlineCodeStart': '@@',
                     'inlineCodeEnd': '@@',
-                    'imageLinkStart': '[[Image',
+                    'imageLinkStart': '[[Image:',
                     'imageLinkEnd': ']]',
                     'linkStart': '[[',
                     'linkMiddle': ' ',
@@ -751,7 +751,7 @@
 
                 if (image) {
                     state.select = MarkEditLanguage.markup.imageLinkStart + state.select;
-                    state.select += url
+                    state.select += url + "|"
                         + MarkEditLanguage.markup.imageLinkEnd;
                 }
                 else {
