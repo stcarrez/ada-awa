@@ -96,6 +96,7 @@
                 'inlineCodeStart': '@@',
                 'inlineCodeEnd': '@@',
                 'imageLinkStart': '[',
+                'imageLinkEnd': ']',
                 'linkStart': '[',
                 'linkMiddle': ' ',
                 'linkEnd': ']',
@@ -114,6 +115,7 @@
                 'inlineCodeStart': '`',
                 'inlineCodeEnd': '`',
                 'imageLinkStart': '![',
+                'imageLinkEnd': ']',
                 'linkStart': '[',
                 'linkMiddle': '][',
                 'linkEnd': ']',
@@ -132,6 +134,7 @@
                     'inlineCodeStart': '@@',
                     'inlineCodeEnd': '@@',
                     'imageLinkStart': '[',
+                    'imageLinkEnd': ']',
                     'linkStart': '[',
                     'linkMiddle': ' ',
                     'linkEnd': ']',
@@ -150,7 +153,8 @@
                     'strikeEnd': '--',
                     'inlineCodeStart': '@@',
                     'inlineCodeEnd': '@@',
-                    'imageLinkStart': '{{',
+                    'imageLinkStart': '((',
+                    'imageLinkEnd': '))',
                     'linkStart': '[[',
                     'linkMiddle': ' ',
                     'linkEnd': ']]',
@@ -169,7 +173,8 @@
                     'strikeEnd': '--',
                     'inlineCodeStart': '@@',
                     'inlineCodeEnd': '@@',
-                    'imageLinkStart': '[[',
+                    'imageLinkStart': '[[Image',
+                    'imageLinkEnd': ']]',
                     'linkStart': '[[',
                     'linkMiddle': ' ',
                     'linkEnd': ']]',
@@ -405,6 +410,9 @@
             // Fire preload event
             options.preload(parent.get(0));
 
+            if (options.syntax != null) {
+                $(this).markeditSetSyntax(options.syntax);
+            }
             // Adjust toolbar based on options
             if (options.history && options.addHistoryButtons) {
                 options.toolbar.layout += ' | undo redo';
@@ -672,7 +680,7 @@
     //
     //  $.markeditSetLinkOrImage
     //
-    $.fn.markeditSetLinkOrImage = function(image, url, text, overwriteSelection) {
+    $.fn.markeditSetLinkOrImage = function(image, options, url, text, overwriteSelection) {
 
         var state = $(this).markeditGetState();
 
@@ -695,18 +703,28 @@
         // If no URL open up the dialog and initialize callback
         if (typeof(url) === 'undefined') {
 
-            var defaultValue = 'http://';
+            var defaultValue = 'https://';
             var config = null;
+            var handler = MarkEdit.basicPrompt;
 
-            if (image) { config = MarkEditLanguage.dialog.insertImage; }
-            else { config = MarkEditLanguage.dialog.insertLink; }
+            if (image) {
+                config = MarkEditLanguage.dialog.insertImage;
+                if (options.imageSelector != null) {
+                    handler = options.imageSelector;
+                }
+            } else {
+                config = MarkEditLanguage.dialog.insertLink;
+                if (options.linkSelector != null) {
+                    handler = options.linkSelector;
+                }
+            }
             if (selUrl.length > 0) { defaultValue = selUrl; }
 
             var parent_tag = this;
-            MarkEdit.basicPrompt(config, defaultValue, function(promptValue) {  // Ok Click:
+            handler(config, defaultValue, function(promptValue) {  // Ok Click:
                 // IE will loose the selection state unless we re-apply it
                 $(parent_tag).markeditSetState(state);
-                $(parent_tag).markeditSetLinkOrImage(image, promptValue, text, overwriteSelection);
+                $(parent_tag).markeditSetLinkOrImage(image, options, promptValue, text, overwriteSelection);
             }, function(){  // Cancel Click:
                 // IE will loose the selection state unless we re-apply it
                 $(parent_tag).markeditSetState(state);
@@ -733,13 +751,14 @@
 
                 if (image) {
                     state.select = MarkEditLanguage.markup.imageLinkStart + state.select;
+                    state.select += url
+                        + MarkEditLanguage.markup.imageLinkEnd;
                 }
                 else {
                     state.select = MarkEditLanguage.markup.linkStart + state.select;
+                    state.select += MarkEditLanguage.markup.linkMiddle + url
+                        + MarkEditLanguage.markup.linkEnd;
                 }
-
-                state.select += MarkEditLanguage.markup.linkMiddle + url
-                 + MarkEditLanguage.markup.linkEnd;
             }
 
             $(this).markeditSetState(state);
@@ -1639,14 +1658,14 @@
                         return {
                             'id':'link',
                             'tip': MarkEditLanguage.defaultButtons.link.tip,
-                            'click': function() { $(textarea_tag).markeditSetLinkOrImage(false); }
+                            'click': function() { $(textarea_tag).markeditSetLinkOrImage(false, options); }
                         };
 
                     case 'image':
                         return {
                             'id':'image',
                             'tip': MarkEditLanguage.defaultButtons.image.tip,
-                            'click': function() { $(textarea_tag).markeditSetLinkOrImage(true); }
+                            'click': function() { $(textarea_tag).markeditSetLinkOrImage(true, options); }
                         };
 
                     case 'code':
