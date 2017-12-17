@@ -205,3 +205,16 @@ input.asf-editable-text {
 .dz-image, .dz-details, .dz-progress {
     float: left;
 }
+.awa-folder-list-editor {
+    float: left;
+    width: 30%;
+}
+.awa-image-list-editor {
+    float: right;
+    width: 69%;
+    height: 350px;
+    overflow-y: scroll;
+}
+.awa-image-list-editor .active {
+    background-color: #ccc;
+}
