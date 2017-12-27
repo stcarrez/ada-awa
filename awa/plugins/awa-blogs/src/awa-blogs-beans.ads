@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with Ada.Calendar;
 with Ada.Strings.Unbounded;
 with Ada.Containers.Indefinite_Hashed_Maps;
 with Ada.Strings.Wide_Wide_Hash;
@@ -162,6 +163,10 @@ package AWA.Blogs.Beans is
       Counter_Bean  : Util.Beans.Basic.Readonly_Bean_Access;
    end record;
    type Post_Bean_Access is access all Post_Bean'Class;
+
+   --  Build the URI from the post title and the post date.
+   function Get_Predefined_Uri (Title : in String;
+                                Date  : in Ada.Calendar.Time) return String;
 
    --  Get the value identified by the name.
    overriding
