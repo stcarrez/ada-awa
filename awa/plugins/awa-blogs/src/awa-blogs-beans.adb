@@ -15,7 +15,9 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with Ada.Strings.Maps;
+with Ada.Characters.Conversions;
+with Ada.Strings.Wide_Wide_Maps;
+with Ada.Strings.UTF_Encoding.Wide_Wide_Strings;
 
 with Util.Strings;
 with Util.Dates.ISO8601;
@@ -38,11 +40,16 @@ with ADO.Sessions.Entities;
 
 package body AWA.Blogs.Beans is
 
+   pragma Wide_Character_Encoding (UTF8);
+
    use type ADO.Identifier;
-   use type Ada.Strings.Maps.Character_Set;
+   use type Ada.Strings.Wide_Wide_Maps.Wide_Wide_Character_Set;
    use Ada.Strings.Unbounded;
 
    package ASC renames AWA.Services.Contexts;
+
+   function To_Wide (C : in Character) return Wide_Wide_Character
+     renames Ada.Characters.Conversions.To_Wide_Wide_Character;
 
    --  Sanitize the URI before doing a search in the database.
    --  Ignore every character that we consider to be invalid for the URL.
@@ -51,14 +58,21 @@ package body AWA.Blogs.Beans is
    --  A list of character that we forbid in the URI.  This is used by the
    --  Get_Predefined_Uri to build a default URI from the post title.
    --  The '/' and '+' are allowed.
-   Url_Forbidden_Set : constant Ada.Strings.Maps.Character_Set
-     := Ada.Strings.Maps.To_Set (Span => (Low  => Character'Val (0),
+   Url_Forbidden_Set : constant Ada.Strings.Wide_Wide_Maps.Wide_Wide_Character_Set
+     := Ada.Strings.Wide_Wide_Maps.To_Set (Span => (Low  => Wide_Wide_Character'Val (0),
                                           High => ' '))
      or
-       Ada.Strings.Maps.To_Set (Span => (Low => Character'Val (128),
-                                         High => Character'Val (255)))
+       Ada.Strings.Wide_Wide_Maps.To_Set (Span => (Low => Wide_Wide_Character'Val (128),
+                                         High => Wide_Wide_Character'Last))
      or
-       Ada.Strings.Maps.To_Set ("?#[]@!$&'""()*,;=%`^\<>");
+       Ada.Strings.Wide_Wide_Maps.To_Set ("?#[]@!$&'""()*,;=%`^\<>");
+
+   --  Translate several UTF-8 accented letters to some Latin-1 equivalents.
+   --  The translation is done to build the URL from the title.
+   Regular_Map : constant Ada.Strings.Wide_Wide_Maps.Wide_Wide_Character_Mapping
+     := Ada.Strings.Wide_Wide_Maps.To_Mapping
+       (From => "ŠŽšžŸÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðñòóôõöùúûüýÿ",
+        To   => "SZszYAAAAAACEEEEIIIIDNOOOOOUUUUYaaaaaaceeeeiiiidnooooouuuuyy");
 
    procedure Make_Image_Link (Renderer : in out Post_Links_Bean;
                               Link     : in Wiki.Strings.WString;
@@ -276,7 +290,11 @@ package body AWA.Blogs.Beans is
    function Get_Predefined_Uri (Title : in String;
                                 Date  : in Ada.Calendar.Time) return String is
       D      : constant String := Util.Dates.ISO8601.Image (Date);
-      Result : String (1 .. Title'Length + 11);
+      C      : Wide_Wide_Character;
+      S      : constant Wide_Wide_String
+        := Ada.Strings.UTF_Encoding.Wide_Wide_Strings.Decode (Title);
+      Result : String (1 .. S'Length + 11);
+      Len    : Positive := 11;
    begin
       Result (1 .. 4) := D (1 .. 4);
       Result (5) := '/';
@@ -284,14 +302,18 @@ package body AWA.Blogs.Beans is
       Result (8) := '/';
       Result (9 .. 10) := D (9 .. 10);
       Result (11) := '/';
-      for I in Title'Range loop
-         if not Ada.Strings.Maps.Is_In (Title (I), Url_Forbidden_Set) then
-            Result (I + 11) := Title (I);
-         else
-            Result (I + 11) := '-';
+      Len := 11;
+      for I in S'Range loop
+         C := Ada.Strings.Wide_Wide_Maps.Value (Regular_Map, S (I));
+         if not Ada.Strings.Wide_Wide_Maps.Is_In (C, Url_Forbidden_Set) then
+            Len := Len + 1;
+            Result (Len) := Ada.Characters.Conversions.To_Character (C);
+         elsif Result(Len) /= '-' then
+            Len := Len + 1;
+            Result (Len) := '-';
          end if;
       end loop;
-      return Result;
+      return Result (Result'First .. Len);
    end Get_Predefined_Uri;
 
    --  ------------------------------
@@ -359,7 +381,7 @@ package body AWA.Blogs.Beans is
       Pos    : Natural := 1;
    begin
       for I in Uri'Range loop
-         if not Ada.Strings.Maps.Is_In (Uri (I), Url_Forbidden_Set) then
+         if not Ada.Strings.Wide_Wide_Maps.Is_In (To_Wide (Uri (I)), Url_Forbidden_Set) then
             Result (Pos) := Uri (I);
             Pos := Pos + 1;
          end if;
