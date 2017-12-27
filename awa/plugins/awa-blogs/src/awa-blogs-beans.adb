@@ -15,7 +15,6 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with Ada.Calendar;
 with Ada.Strings.Maps;
 
 with Util.Strings;
@@ -44,10 +43,6 @@ package body AWA.Blogs.Beans is
    use Ada.Strings.Unbounded;
 
    package ASC renames AWA.Services.Contexts;
-
-   --  Build the URI from the post title and the post date.
-   function Get_Predefined_Uri (Title : in String;
-                                Date  : in Ada.Calendar.Time) return String;
 
    --  Sanitize the URI before doing a search in the database.
    --  Ignore every character that we consider to be invalid for the URL.
