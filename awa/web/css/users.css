@@ -148,7 +148,7 @@ div.openid-retry {
  */
 .member-status, .member-title, .member-email, .member-role, .member-date {
     float: left;
-    height: 1em;
+    height: 1.2em;
 }
 .member-status {
     width: 10%;

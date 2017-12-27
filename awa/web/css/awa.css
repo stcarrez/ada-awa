@@ -304,7 +304,7 @@ div.awa-modal div.awa-login {
     overflow: hidden;
     line-height: 20px;
 }
-.awa-list-item, .awa-list-header-item {
+.awa-list-item, .awa-list-item-header {
     float: left;
     clear: both;
     width: 100%;
@@ -313,6 +313,10 @@ div.awa-modal div.awa-login {
     border-bottom: 1px solid #ccc;
     padding-bottom: 5px;
     padding-top: 5px;
+}
+.awa-list-item-header {
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 /**
