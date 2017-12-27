@@ -50,7 +50,7 @@
     LEFT JOIN awa_comment AS cmt ON cmt.entity_id = post.id AND cmt.entity_type = :entity_type
     WHERE blog.id = :blog_id
     GROUP BY post.id
-    ORDER BY post.id DESC
+    ORDER BY post.create_date DESC
        </sql>
     </query>
 
