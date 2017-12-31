@@ -114,7 +114,7 @@ package body AWA.Wikis.Previews is
          Log.Info ("Running preview command {0}", Command);
 
          Pipe.Open (Command, Util.Processes.READ_ALL);
-         Input.Initialize (null, Pipe'Unchecked_Access, 1024);
+         Input.Initialize (Pipe'Unchecked_Access, 1024);
          while not Input.Is_Eof loop
             declare
                Line : Ada.Strings.Unbounded.Unbounded_String;
