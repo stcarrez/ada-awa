@@ -278,14 +278,14 @@ package body AWA.Setup.Applications is
       if not From.Has_Error then
          declare
             Pipe     : aliased Util.Streams.Pipes.Pipe_Stream;
-            Buffer   : Util.Streams.Buffered.Buffered_Stream;
+            Buffer   : Util.Streams.Buffered.Input_Buffer_Stream;
             Content  : Ada.Strings.Unbounded.Unbounded_String;
             Command  : constant String := From.Get_Configure_Command;
          begin
             Log.Info ("Configure database with {0}", Command);
 
             Pipe.Open (Command, Util.Processes.READ);
-            Buffer.Initialize (null, Pipe'Unchecked_Access, 64 * 1024);
+            Buffer.Initialize (Pipe'Unchecked_Access, 64 * 1024);
             Buffer.Read (Content);
             Pipe.Close;
             From.Result := Util.Beans.Objects.To_Object (Content);
