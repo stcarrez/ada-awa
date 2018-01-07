@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-workspaces-tests -- Unit tests for workspaces and invitations
---  Copyright (C) 2017 Stephane Carrez
+--  Copyright (C) 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,6 +42,9 @@ package AWA.Workspaces.Tests is
 
    --  Test accepting the invitation.
    procedure Test_Accept_Invitation (T : in out Test);
+
+   --  Test accepting the invitation with a email and password process.
+   procedure Test_Accept_Invitation_With_Email (T : in out Test);
 
    --  Test listing the members of the workspace.
    procedure Test_List_Members (T : in out Test);
