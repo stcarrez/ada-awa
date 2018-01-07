@@ -1,5 +1,5 @@
 <!-- Signup form
-  -  Copyright (C) 2011, 2012 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,13 +14,14 @@
   -  See the License for the specific language governing permissions and
   -  limitations under the License.
   -->
-<div class='awa-login awa-form'
+<ui:composition
         xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
 
-    <h2>#{userMsg.signup_classic_title}</h2>
     <h:form id='register'>
+        <h:inputHidden id='key' value="#{login.key}" required='false'/>
         <div class='awa-messages'>
               <h:message styleClass='awa-error'/>
           </div>
@@ -103,5 +104,4 @@
         </ul>
     </h:form>
 
-</div>
-
+</ui:composition>
