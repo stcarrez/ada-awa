@@ -118,8 +118,20 @@ package AWA.Users.Services is
    --  Raises User_Exist exception if a user with such email is already registered.
    procedure Create_User (Model : in out User_Service;
                           User  : in out User_Ref'Class;
-                          Email : in out Email_Ref'Class;
-                          Key   : in String := "");
+                          Email : in out Email_Ref'Class);
+
+   --  Create a user in the database with the given user information and
+   --  the associated email address and for the given access key.  The access key is first
+   --  verified and the user instance associated with it is retrieved.  Verify that the email
+   --  address is unique and can be used by the user.  Since the access key is verified,
+   --  grant immediately the access by opening a session and setting up the principal instance.
+   --  Raises User_Exist exception if a user with such email is already registered.
+   procedure Create_User (Model     : in out User_Service;
+                          User      : in out User_Ref'Class;
+                          Email     : in out Email_Ref'Class;
+                          Key       : in String;
+                          IpAddr    : in String;
+                          Principal : out AWA.Users.Principals.Principal_Access);
 
    --  Verify the access key and retrieve the user associated with that key.
    --  Starts a new session associated with the given IP address.
