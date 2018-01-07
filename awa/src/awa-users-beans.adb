@@ -23,6 +23,7 @@ with ASF.Sessions;
 with ASF.Events.Faces.Actions;
 with ASF.Contexts.Faces;
 with ASF.Contexts.Flash;
+with ASF.Requests;
 with ASF.Cookies;
 with ASF.Applications.Messages.Factory;
 with ASF.Security.Filters;
@@ -50,18 +51,35 @@ package body AWA.Users.Beans is
       Email : Email_Ref;
       Ctx   : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
       Flash : constant ASF.Contexts.Faces.Flash_Context_Access := Ctx.Get_Flash;
+      Key   : constant String := To_String (Data.Access_Key);
+      Principal : AWA.Users.Principals.Principal_Access;
    begin
       Email.Set_Email (Data.Email);
       User.Set_First_Name (Data.First_Name);
       User.Set_Last_Name (Data.Last_Name);
       User.Set_Password (Data.Password);
-      Data.Manager.Create_User (User  => User,
-                                Email => Email);
-      Outcome := To_Unbounded_String ("success");
+      if Key'Length > 0 then
+         Data.Manager.Create_User (User      => User,
+                                   Email     => Email,
+                                   Key       => Key,
+                                   IpAddr    => "",
+                                   Principal => Principal);
+         Outcome := To_Unbounded_String ("success-key");
+         Data.Set_Session_Principal (Principal);
+         Data.Set_Authenticate_Cookie (Principal);
 
-      --  Add a message to the flash context so that it will be displayed on the next page.
-      Flash.Set_Keep_Messages (True);
-      Messages.Factory.Add_Message (Ctx.all, "users.message_signup_sent", Messages.INFO);
+         --  Add a message to the flash context so that it will be displayed on the next page.
+         Flash.Set_Keep_Messages (True);
+         Messages.Factory.Add_Message (Ctx.all, "users.message_signup_sent", Messages.INFO);
+      else
+         Data.Manager.Create_User (User  => User,
+                                   Email => Email);
+         Outcome := To_Unbounded_String ("success");
+
+         --  Add a message to the flash context so that it will be displayed on the next page.
+         Flash.Set_Keep_Messages (True);
+         Messages.Factory.Add_Message (Ctx.all, "users.message_signup_sent", Messages.INFO);
+      end if;
 
    exception
       when Services.User_Exist =>
