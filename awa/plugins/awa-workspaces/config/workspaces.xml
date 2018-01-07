@@ -92,6 +92,10 @@
       <to-view-id>/auth/invitation.xhtml</to-view-id>
     </navigation-case>
     <navigation-case>
+      <from-outcome>success-key</from-outcome>
+      <to-view-id>/auth/accept-invitation.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
       <from-outcome>not-found</from-outcome>
       <to-view-id>/auth/invitation-invalid.xhtml</to-view-id>
     </navigation-case>
