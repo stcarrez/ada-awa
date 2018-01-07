@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-workspaces-tests -- Unit tests for workspaces and invitations
---  Copyright (C) 2017 Stephane Carrez
+--  Copyright (C) 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,6 +43,8 @@ package body AWA.Workspaces.Tests is
                        Test_Delete_Member'Access);
       Caller.Add_Test (Suite, "Test AWA.Workspaces.Beans.Accept",
                        Test_Accept_Invitation'Access);
+      Caller.Add_Test (Suite, "Test AWA.Workspaces.Beans.Accept (with Email)",
+                       Test_Accept_Invitation_With_Email'Access);
       Caller.Add_Test (Suite, "Test AWA.Workspaces.Beans.Member_List",
                        Test_List_Members'Access);
    end Add_Tests;
@@ -154,6 +156,43 @@ package body AWA.Workspaces.Tests is
       Util.Tests.Assert_Equals (T, "/asfunit/workspaces/main.html", Reply.Get_Header ("Location"),
                                 "The accept invitation page must redirect to the workspace");
    end Test_Accept_Invitation;
+
+   --  ------------------------------
+   --  Test accepting the invitation with a email and password process.
+   --  ------------------------------
+   procedure Test_Accept_Invitation_With_Email (T : in out Test) is
+      Request   : ASF.Requests.Mockup.Request;
+      Reply     : ASF.Responses.Mockup.Response;
+   begin
+      T.Test_Invite_User;
+      Request.Set_Parameter ("key", To_String (T.Key));
+      ASF.Tests.Do_Get (Request, Reply, "/auth/invitation.html?key="
+                        & To_String (T.Key),
+                        "accept-invitation-email-1.html");
+      ASF.Tests.Assert_Contains (T, "input type=""hidden"" name=""key"" value="""
+                                 & To_String (T.Key),
+                                 Reply,
+                                 "The invitation form must setup the invitation key form");
+
+      Request.Set_Parameter ("key", To_String (T.Key));
+      Request.Set_Parameter ("register", "1");
+      Request.Set_Parameter ("register-button", "1");
+      Request.Set_Parameter ("firstName", "Invitee");
+      Request.Set_Parameter ("lastName", "With_Email");
+      Request.Set_Parameter ("email", "accept-invitation@test.com");
+      Request.Set_Parameter ("email", "invited-user@test.com");
+      Request.Set_Parameter ("password", "admin");
+      Request.Set_Parameter ("password2", "admin");
+
+      ASF.Tests.Do_Post (Request, Reply, "/auth/invitation.html",
+                         "accept-invitation-email-2.html");
+      T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY,
+                "Accept invitation page failed");
+      Util.Tests.Assert_Equals (T, "/asfunit/workspaces/accept-invitation.html?key=" &
+                                To_String (T.Key),
+                                Reply.Get_Header ("Location"),
+                                "The accept invitation page must redirect to the workspace");
+   end Test_Accept_Invitation_With_Email;
 
    --  ------------------------------
    --  Test listing the members of the workspace.
