@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa.users -- User registration, authentication processes
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2017 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -557,15 +557,16 @@ package body AWA.Users.Services is
                           Email : in out Email_Ref'Class) is
       COUNT_SQL : constant String := "SELECT COUNT(*) FROM awa_email WHERE email = ?";
 
-      Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      DB     : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
-      Key    : Access_Key_Ref;
-      Stmt   : Query_Statement := DB.Create_Statement (COUNT_SQL);
+      Ctx           : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB            : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Access_Key    : Access_Key_Ref;
+      Query         : ADO.SQL.Query;
+      Stmt          : Query_Statement := DB.Create_Statement (COUNT_SQL);
       Email_Address : constant String := Email.Get_Email;
       Password      : constant String := User.Get_Password;
+      Found         : Boolean;
    begin
       Log.Info ("Create user {0}", Email_Address);
-
       Ctx.Start;
 
       --  Check first if this user is already known
@@ -594,7 +595,7 @@ package body AWA.Users.Services is
 
       --  Create the access key
       Model.Create_Access_Key (User    => User,
-                               Key     => Key,
+                               Key     => Access_Key,
                                Kind    => AWA.Users.Models.SIGNUP_KEY,
                                Expire  => 86400.0,
                                Session => DB);
@@ -603,9 +604,90 @@ package body AWA.Users.Services is
       declare
          Event : AWA.Events.Module_Event;
       begin
-         Event.Set_Parameter ("key", Key.Get_Access_Key);
+         Event.Set_Parameter ("key", Access_Key.Get_Access_Key);
          Event.Set_Parameter ("email", Email_Address);
          Model.Send_Alert (User_Register_Event.Kind, User, Event);
+      end;
+
+      Ctx.Commit;
+   end Create_User;
+
+   --  ------------------------------
+   --  Create a user in the database with the given user information and
+   --  the associated email address and for the given access key.  The access key is first
+   --  verified and the user instance associated with it is retrieved.  Verify that the email
+   --  address is unique and can be used by the user.  Since the access key is verified,
+   --  grant immediately the access by opening a session and setting up the principal instance.
+   --  Raises User_Exist exception if a user with such email is already registered.
+   --  ------------------------------
+   procedure Create_User (Model     : in out User_Service;
+                          User      : in out User_Ref'Class;
+                          Email     : in out Email_Ref'Class;
+                          Key       : in String;
+                          IpAddr    : in String;
+                          Principal : out AWA.Users.Principals.Principal_Access) is
+      use type ADO.Identifier;
+
+      Ctx           : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB            : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Access_Key    : Access_Key_Ref;
+      Query         : ADO.SQL.Query;
+      Session       : Session_Ref;
+      Exist_Email   : Email_Ref;
+      Email_Address : constant String := Email.Get_Email;
+      Password      : constant String := User.Get_Password;
+      Found         : Boolean;
+   begin
+      Log.Info ("Create user {0} with key {1}", Email_Address, Key);
+      Ctx.Start;
+
+      --  Verify the access key validity.
+      Query.Bind_Param (1, Key);
+      Query.Set_Filter ("access_key = ?");
+      Access_Key.Find (DB, Query, Found);
+      if not Found then
+         Log.Warn ("No access key {0}", Key);
+         raise Not_Found with "No access key: " & Key;
+      end if;
+      User.Set_Id (Access_Key.Get_User.Get_Id);
+      Email.Set_Id (Access_Key.Get_User.Get_Email.Get_Id);
+
+      --  Check first if the email address is not used by another user.
+      Query.Bind_Param (1, Email_Address);
+      Query.Set_Filter ("email = ?");
+      Exist_Email.Find (DB, Query, Found);
+      if Found and then Exist_Email.Get_Id /= Email.Get_Id then
+         Log.Warn ("Email address {0} already registered", Email_Address);
+         raise User_Exist with "Email address " & Email_Address & "' already used";
+      end if;
+
+      --  Save the email and the user
+      Email.Set_User_Id (User.Get_Id);
+      Email.Save (DB);
+      User.Set_Email (Email);
+      if String '(User.Get_Name) = "" then
+         User.Set_Name (String '(User.Get_First_Name) & " " & String '(User.Get_Last_Name));
+      end if;
+
+      --  Make a random salt and generate the password hash.
+      User.Set_Salt (Model.Create_Key (User.Get_Id));
+      User.Set_Password (User_Service'Class (Model).Get_Password_Hash (User.Get_Salt, Password));
+      User.Save (DB);
+
+      User_Lifecycle.Notify_Create (Model, User);
+
+      --  Create the authentication session.
+      Create_Session (Model, DB, Session, User, IpAddr, Principal);
+
+      --  Post the user creation event once the user is registered.
+      declare
+         Sec_Ctx : Security.Contexts.Security_Context;
+         Event   : AWA.Events.Module_Event;
+      begin
+         Sec_Ctx.Set_Context (Manager   => Model.Permissions.all'Access,
+                              Principal => Principal.all'Access);
+         Event.Set_Parameter ("email", Email.Get_Email);
+         Model.Send_Alert (User_Create_Event.Kind, User, Event);
       end;
 
       Ctx.Commit;
