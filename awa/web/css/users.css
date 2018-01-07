@@ -19,7 +19,7 @@ li.message {
     overflow: hidden;
 }
 
-div.awa-login h2 {
+div.awa-login h2, div.awa-login h3 {
     float: left;
     width: 96%;
     background: white;
@@ -28,6 +28,7 @@ div.awa-login h2 {
     -moz-border-radius-topright: 6px;
     -webkit-border-top-right-radius: 6px;
     -webkit-border-top-left-radius: 6px;
+    box-sizing: content-box;
 }
 div.awa-login {
   border: 2px solid #A6C9E2;
@@ -38,6 +39,7 @@ div.awa-login {
   margin: 5px;
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px 6px;
+  box-sizing: content-box;
 }
 div.awa-lost-password {
     width: 50%;
@@ -142,6 +144,28 @@ div.openid-retry {
 	float: left;
 	clear: both;
 	padding-top: 30px;
+}
+.openid-separator {
+    float: left;
+    clear: both;
+    padding-top: 1em;
+    width: 96%;
+    padding-top: 10px;
+    padding-left: 2%;
+    padding-right: 2%;
+}
+.openid-sep-left, .openid-sep-right {
+    float: left;
+    width: 40%;
+    height: 2px;
+    border-top: 1px solid #b5b5b5;
+    margin-top: 10px;
+}
+.openid-sep-text {
+    float: left;
+    width: auto;
+    padding-left: 1em;
+    padding-right: 1em;
 }
 /**
  * Workspace member list
