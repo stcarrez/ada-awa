@@ -1,5 +1,5 @@
 <!-- Accept Invitation form
-  -  Copyright (C) 2017 Stephane Carrez
+  -  Copyright (C) 2017, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,7 @@
   -->
 <div xmlns:util="http://code.google.com/p/ada-asf/util"
      xmlns:f="http://java.sun.com/jsf/core"
+     xmlns:ui="http://java.sun.com/jsf/facelets"
      xmlns:c="http://java.sun.com/jstl/core"
      xmlns:util="http://code.google.com/p/ada-asf/util"
      xmlns:h="http://java.sun.com/jsf/html"
@@ -34,7 +35,7 @@
         </p>
     </div>
     <util:set var="redirect" value="#{contextPath}/workspaces/accept-invitation.html?key=#{inviteUser.key}"/>
-    <ul class='openid-login'>
+    <ul class='openid-login openid-invite'>
         <li>
             <a href="#{contextPath}/auth/auth/yahoo?redirect=#{util:urlEncode(redirect)}" title="#{userMsg.openid_yahoo_auth}" class='openid-yahoo'>
                 <em/>
@@ -56,6 +57,15 @@
             </a>
         </li>
     </ul>
+    <div class="openid-separator">
+        <div class="openid-sep-left"/>
+        <div class="openid-sep-text">#{workspaceMsg.workspace_invite_alternate_or_message}</div>
+        <div class="openid-sep-right"/>
+    </div>
+    <div class="invite-action">
+        <p>#{workspaceMsg.workspace_invite_signup_alternative_message}</p>
+    </div>
+    <ui:include src="register-form.xhtml"/>
 </div>
 
 
