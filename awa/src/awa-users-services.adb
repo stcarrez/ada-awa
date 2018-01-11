@@ -695,6 +695,33 @@ package body AWA.Users.Services is
    end Create_User;
 
    --  ------------------------------
+   --  Load the user and email address from the invitation key.
+   --  ------------------------------
+   procedure Load_User (Model     : in out User_Service;
+                        User      : in out User_Ref'Class;
+                        Email     : in out Email_Ref'Class;
+                        Key       : in String) is
+      Ctx           : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB            : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Access_Key    : Access_Key_Ref;
+      Query         : ADO.SQL.Query;
+      Found         : Boolean;
+   begin
+      Log.Info ("Get user from key {1}", Key);
+
+      --  Verify the access key validity.
+      Query.Bind_Param (1, Key);
+      Query.Set_Filter ("access_key = ?");
+      Access_Key.Find (DB, Query, Found);
+      if not Found then
+         Log.Warn ("No access key {0}", Key);
+         raise Not_Found with "No access key: " & Key;
+      end if;
+      User := Access_Key.Get_User;
+      Email := User.Get_Email;
+   end Load_User;
+
+   --  ------------------------------
    --  Verify the access key and retrieve the user associated with that key.
    --  Starts a new session associated with the given IP address.
    --  Raises Not_Found if the access key does not exist.
