@@ -261,6 +261,20 @@ package body AWA.Users.Beans is
    end Logout_User;
 
    --  ------------------------------
+   --  Helper to send a remove cookie in the current response
+   --  ------------------------------
+   procedure Load_User (Data    : in out Authenticate_Bean;
+                        Outcome : in out Unbounded_String) is
+      User  : User_Ref;
+      Email : Email_Ref;
+   begin
+      Data.Manager.Load_User (User, Email, To_String (Data.Access_Key));
+      Data.First_Name := User.Get_First_Name;
+      Data.Last_Name := User.Get_Last_Name;
+      Data.Email := Email.Get_Email;
+   end Load_User;
+
+   --  ------------------------------
    --  Create an authenticate bean.
    --  ------------------------------
    function Create_Authenticate_Bean (Module : in AWA.Users.Modules.User_Module_Access)
@@ -304,13 +318,19 @@ package body AWA.Users.Beans is
                                                       Method => Logout_User,
                                                       Name   => "logout");
 
+   package Load_Binding is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
+                                                      Method => Load_User,
+                                                      Name   => "load");
+
    Binding_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
      := (Authenticate_Binding.Proxy'Access,
          Register_Binding.Proxy'Access,
          Verify_Binding.Proxy'Access,
          Lost_Password_Binding.Proxy'Access,
          Reset_Password_Binding.Proxy'Access,
-         Logout_Binding.Proxy'Access);
+         Logout_Binding.Proxy'Access,
+         Load_Binding.Proxy'Access);
 
    --  ------------------------------
    --  Get the value identified by the name.
