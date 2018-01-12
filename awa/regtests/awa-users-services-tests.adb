@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  users - User creation, password tests
---  Copyright (C) 2009, 2010, 2011, 2012, 2017 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -68,19 +68,23 @@ package body AWA.Users.Services.Tests is
 
       --  Verify the user session
       declare
+      use type Ada.Calendar.Time;
          S1 : Session_Ref;
          U1 : User_Ref;
+         T1 : constant Ada.Calendar.Time := Principal.Session.Get_Start_Date;
       begin
          Principal.Manager.Verify_Session (Id => Principal.Session.Get_Id,
                                            Session => S1, User => U1);
 
          T.Assert (not S1.Is_Null, "Null session returned by Verify_Session");
          T.Assert (not U1.Is_Null, "Null user returned by Verify_Session");
---           T.Assert (not S1.Get_Start_Date.Is_Null, "Session must be started");
          T.Assert (S1.Get_End_Date.Is_Null, "Session must not be finished");
-         Util.Tests.Assert_Equals (T, Principal.Session.Get_Start_Date,
-                                   S1.Get_Start_Date,
-                                   "Invalid start date");
+
+         --  After we read the date/time from the database, we can loose
+         --  the sub-second precision and we can't safely compare with the
+         --  original.
+         T.Assert (T1 - 1.0 <= S1.Get_Start_Date, "Invalid start date");
+         T.Assert (T1 + 1.0 >= S1.Get_Start_Date, "Invalid start date");
 
          Principal.Manager.Close_Session (Principal.Session.Get_Id);
       end;
@@ -167,6 +171,7 @@ package body AWA.Users.Services.Tests is
       declare
          S1 : Session_Ref;
          U1 : User_Ref;
+         Ts : constant Ada.Calendar.Time := Principal.Session.Get_Start_Date;
          T2 : constant Ada.Calendar.Time := Ada.Calendar.Clock;
       begin
          Principal.Manager.Verify_Session (Id => Principal.Session.Get_Id,
@@ -174,11 +179,9 @@ package body AWA.Users.Services.Tests is
 
          T.Assert (not S1.Is_Null, "Null session returned by Verify_Session");
          T.Assert (not U1.Is_Null, "Null user returned by Verify_Session");
---           T.Assert (not S1.Get_Start_Date.Is_Null, "Session start date must not be null");
          T.Assert (S1.Get_End_Date.Is_Null, "Session end date must be null");
-         Util.Tests.Assert_Equals (T, Principal.Session.Get_Start_Date,
-                                   S1.Get_Start_Date,
-                                   "Invalid start date");
+         T.Assert (Ts - 1.0 <= S1.Get_Start_Date, "Invalid start date 1");
+         T.Assert (Ts + 1.0 >= S1.Get_Start_Date, "Invalid start date 2");
 
          --  Storing a date in the database will loose some precision.
          T.Assert (S1.Get_Start_Date >= T1 - 1.0, "Start date is invalid 1");
