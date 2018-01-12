@@ -52,16 +52,21 @@ package body AWA.Storages.Beans is
    procedure Set_Value (From  : in out Upload_Bean;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
+      use type ADO.Identifier;
       Manager : constant Services.Storage_Service_Access := From.Module.Get_Storage_Manager;
       Folder  : Models.Storage_Folder_Ref;
       Found   : Boolean;
+      Id      : ADO.Identifier;
    begin
       if Name = "folderId" then
          From.Folder_Id := ADO.Utils.To_Identifier (Value);
          Manager.Load_Folder (Folder, From.Folder_Id);
          From.Set_Folder (Folder);
       elsif Name = "id" and then not Util.Beans.Objects.Is_Empty (Value) then
-         Manager.Load_Storage (From, ADO.Utils.To_Identifier (Value));
+         Id := ADO.Utils.To_Identifier (Value);
+         if Id /= ADO.NO_IDENTIFIER then
+            Manager.Load_Storage (From, Id);
+         end if;
       elsif Name = "name" then
          Folder := Models.Storage_Folder_Ref (From.Get_Folder);
          Manager.Load_Storage (From, From.Folder_Id, Util.Beans.Objects.To_String (Value), Found);
