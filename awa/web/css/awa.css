@@ -415,3 +415,10 @@ div.awa-modal div.awa-login {
     float: right;
     list-style-type: none;
 }
+
+.awa-empty-message {
+    float: left;
+    width: 100%;
+    padding: 1em;
+    box-sizing: content-box;
+}
