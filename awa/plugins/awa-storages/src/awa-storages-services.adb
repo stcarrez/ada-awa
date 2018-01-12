@@ -199,6 +199,10 @@ package body AWA.Storages.Services is
 
       if not Into.Is_Null then
          Workspace := AWA.Workspaces.Models.Workspace_Ref (Into.Get_Workspace);
+         if Workspace.Is_Null and not Into.Get_Folder.Is_Null then
+            Workspace := AWA.Workspaces.Models.Workspace_Ref (Into.Get_Folder.Get_Workspace);
+            Into.Set_Workspace (Workspace);
+         end if;
       end if;
       if Workspace.Is_Null then
          AWA.Workspaces.Modules.Get_Workspace (DB, Ctx, Workspace);
