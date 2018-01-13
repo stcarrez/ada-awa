@@ -1,5 +1,5 @@
 <!-- List the images available in the workspace
-  -  Copyright (C) 2016 Stephane Carrez
+  -  Copyright (C) 2016, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,9 +38,7 @@
             <ui:include src="views/storage-nav.xhtml"/>
                 <h:panelGroup rendered="#{not empty imageList.folder}">
                     <div id='folder-list-editor' class="ui-widget ui-corner-all">
-                        <ui:include src="lists/folders.xhtml">
-                            <ui:param name="page_url" value="/storages/lists/images.html"/>
-                        </ui:include>
+                        <ui:include src="lists/folders.xhtml"/>
                     </div>
                     <div id='document-list-editor' class="ui-widget ui-corner-all">
                         <ui:include src="lists/image-list.xhtml"/>
@@ -49,6 +47,15 @@
                         <a href="#" class='asf-icon asf-delete' title='#{storageMsg.storage_list_delete_file_tooltip}'></a>
                     </div>
                     <util:script>
+                        $('#folder-list').folder({
+                            selectClass: 'asf-selected',
+                            editUrl: '#{contextPath}/storages/forms/create-folder-form.html',
+                            currentItem: '#folder-' + #{not empty storageList.folder ? storageList.folder.id : 'null'},
+                            selectUrl: '#{contextPath}/storages/lists/images.html',
+                            uploadButton: '#awa-upload-button',
+                            uploadUrl: '#{contextPath}/storages/forms/upload-image.html',
+                            dictDefaultMessage: "#{storageMsg.storage_upload_image_form_message}"
+                        });
                         $('#folder-list-editor').resizable({
                             minWidth: 100, maxWidth: 400,
                             resize: function(event, ui) {
@@ -97,6 +104,9 @@
                     </div>
                 </h:panelGroup>
         </div>
+    </ui:define>
+    <ui:define name="pageScript">
+        <script type="text/javascript" src="#{contextPath}/js/dropzone.js"></script>
     </ui:define>
 </ui:composition>
 
