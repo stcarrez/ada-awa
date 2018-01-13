@@ -38,9 +38,7 @@
             <c:choose>
                 <c:when test="#{not empty storageList.folder}">
                     <div id='folder-list-editor' class="ui-widget ui-corner-all">
-                        <ui:include src="lists/folders.xhtml">
-                            <ui:param name="page_url" value="/storages/lists/documents.html"/>
-                        </ui:include>
+                        <ui:include src="lists/folders.xhtml"/>
                     </div>
                     <div id='document-list-editor' class="ui-widget ui-corner-all">
                         <ui:include src="lists/document-list.xhtml"/>
@@ -49,6 +47,15 @@
                         <a href="#" class='asf-icon asf-delete' title='#{storageMsg.storage_list_delete_file_tooltip}'></a>
                     </div>
                     <util:script>
+                        $('#folder-list').folder({
+                            selectClass: 'asf-selected',
+                            editUrl: '#{contextPath}/storages/forms/create-folder-form.html',
+                            currentItem: '#folder-' + #{not empty storageList.folder ? storageList.folder.id : 'null'},
+                            selectUrl: '#{contextPath}/storages/lists/documents.html',
+                            uploadButton: '#awa-upload-button',
+                            uploadUrl: '#{contextPath}/storages/forms/upload-form.html',
+                            dictDefaultMessage: "#{storageMsg.storage_upload_form_message}"
+                        });
                         $('#folder-list-editor').resizable({
                             minWidth: 100, maxWidth: 400,
                             resize: function(event, ui) {
