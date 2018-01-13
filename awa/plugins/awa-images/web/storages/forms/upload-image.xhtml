@@ -1,5 +1,5 @@
 <!-- Upload image form
-  -  Copyright (C) 2016 Stephane Carrez
+  -  Copyright (C) 2016, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,22 +21,15 @@
         <f:viewParam id='folderId' value='#{uploadFile.folderId}'/>
         <f:viewParam id='id' value='#{uploadFile.id}' required="false"/>
     </f:metadata>
-    <h:form id='uploadForm' enctype="multipart/form-data">
+    <h2>#{storageMsg.storage_upload_image_form_title}</h2>
+    <h:form id='uploadForm' enctype="multipart/form-data" styleClass="dropzone">
         <h:inputHidden id="folder" value="#{uploadFile.folderId}"/>
         <h:inputHidden id="id" value="#{uploadFile.id}"/>
         <div class='uploadForm'>
-            <div class='upload'>
-                #{storageMsg.storage_upload_message}
-
-                <h:inputFile id="upload-file"
-                             styleClass="ui-button ui-corner-all"
-                             value="#{uploadFile.save_part}"/>
-                <h:commandButton id="uploadButton"
-                                 styleClass="ui-button ui-state-default ui-corner-all"
-                                 value="#{storageMsg.storage_upload_label}"
-                                 title="#{storageMsg.storage_upload_title}"
-                                 action="#{uploadFile.upload}"/>
-            </div>
+            <h:inputFile id="upload-file"
+                         value="#{uploadFile.save_part}"/>
+            <h:commandButton id="upload-button"
+                             action="#{uploadFile.upload}"/>
         </div>
     </h:form>
 </f:view>
