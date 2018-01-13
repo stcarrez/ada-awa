@@ -18,7 +18,7 @@
      xmlns:h="http://java.sun.com/jsf/html">
     <div id='document-list' class='document-list ui-list'>
         <h:panelGroup rendered="#{empty storageList.files and not empty storageList.folder}">
-                #{storageMsg.storage_folder_empty_message}
+          <div class="awa-empty-message">#{storageMsg.storage_folder_empty_message}</div>
         </h:panelGroup>
         <h:list var="document" value="#{storageList.files}">
             <div id='store-#{document.id}' class="awa-document ui-list-item #{document.is_public ? 'awa-public' : 'awa-private'}">
@@ -27,6 +27,7 @@
                     <img src="#{contextPath}/storages/images/#{document.id}" width="64" height="64"
                                          alt="#{document.name}"/>
                 </div>
+                <div class="awa-doc-info">
                 <div class='awa-title'>#{document.name}</div>
                 <div class='awa-size'>
                     #{storageMsg.storage_size_label}
@@ -46,6 +47,7 @@
                 </div>
                 <div class='awa-download'>
                     <a href="#{contextPath}/storages/files/#{document.id}">#{storageMsg.storage_download_label}</a>
+                </div>
                 </div>
             </div>
         </h:list>
