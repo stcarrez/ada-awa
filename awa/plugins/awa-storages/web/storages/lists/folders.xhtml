@@ -24,14 +24,4 @@
         <ui:include src="folder-list.xhtml"/>
     </div>
     <ajax:include id='folder-add' src="/storages/forms/folder-create.xhtml"/>
-    <util:script>
-        $('#folder-list').folder({
-            editUrl: '#{contextPath}/storages/forms/create-folder-form.html',
-            currentItem: '#folder-' + #{not empty storageList.folder ? storageList.folder.id : 'null'},
-            selectUrl: '#{contextPath}#{page_url}',
-            uploadButton: '#awa-upload-button',
-            uploadUrl: '#{contextPath}/storages/forms/upload-form.html',
-            dictDefaultMessage: "#{storageMsg.storage_upload_form_message}"
-        });
-    </util:script>
 </div>
