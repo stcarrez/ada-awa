@@ -109,6 +109,7 @@
                                 return { "upload-button": "1", "uploadForm": "1" }
                             },
                             success: function(file, response) {
+                                ASF.Execute(self.currentNode, response);
                                 $(div).dialog('close');
                             }
                         });
