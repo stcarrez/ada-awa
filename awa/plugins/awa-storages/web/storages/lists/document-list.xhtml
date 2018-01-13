@@ -1,5 +1,5 @@
 <!-- List of documents
-  -  Copyright (C) 2012, 2013, 2016 Stephane Carrez
+  -  Copyright (C) 2012, 2013, 2016, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,14 +16,6 @@
   -->
 <div xmlns:f="http://java.sun.com/jsf/core"
      xmlns:h="http://java.sun.com/jsf/html">
-
-    <div id='document-upload'>
-        <iframe frameborder="0" class='documentUpload'
-                scrolling="no"
-                height="25"
-                width="100%"
-                src="#{contextPath}/storages/forms/upload-form.html?folderId=#{storageList.folder.id}"/>
-    </div>
     <div id='document-list' class='document-list ui-list'>
         <h:panelGroup rendered="#{empty storageList.files and not empty storageList.folder}">
                 #{storageMsg.storage_folder_empty_message}
@@ -31,6 +23,10 @@
         <h:list var="document" value="#{storageList.files}">
             <div id='store-#{document.id}' class="awa-document ui-list-item #{document.is_public ? 'awa-public' : 'awa-private'}">
                 <div class="awa-doc-status"></div>
+                <div class="awa-doc-thumbnail">
+                    <img src="#{contextPath}/storages/images/#{document.id}" width="64" height="64"
+                                         alt="#{document.name}"/>
+                </div>
                 <div class='awa-title'>#{document.name}</div>
                 <div class='awa-size'>
                     #{storageMsg.storage_size_label}
