@@ -1,5 +1,5 @@
 <!-- List of images used in a wiki page (grid preview).
-  -  Copyright (C) 2016 Stephane Carrez
+  -  Copyright (C) 2016, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,15 +21,8 @@
         xmlns:c="http://java.sun.com/jstl/core"
 	    xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
-    <div id='document-upload'>
-        <iframe frameborder="0" class='documentUpload'
-                scrolling="no"
-                height="25"
-                width="100%"
-                src="#{contextPath}/storages/forms/upload-form.html?folderId=#{storageList.folder.id}"/>
-    </div>
     <h:panelGroup rendered="#{imageList.images.count == 0}">
-        #{wikiMsg.wiki_page_info_no_image}
+        <div class="awa-empty-message">#{wikiMsg.wiki_page_info_no_image}</div>
     </h:panelGroup>
     <h:list var="image" value="#{imageList.images}">
         <div class='wiki-image-grid' id="i_#{image.id}">
