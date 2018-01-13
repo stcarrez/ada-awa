@@ -20,8 +20,9 @@
     $.widget("ui.folder", $.ui.list, {
         options: {
             actionId: null,
-            itemPrefix: 'folder-',
+            itemPrefix: 'folder-'
         },
+        selectedItem: null,
 
         _create: function() {
             var self = this;
@@ -35,14 +36,17 @@
                 }
                 return false;
             });
+            self.options.selectAction = self.selectAction;
         },
         selectAction: function(node, event) {
             var id = this.getSelectedId(node);
+            if (this.selectedItem) {
+                $(this.selectedItem).removeClass(this.options.selectClass);
+            }
             this.currentNode = node;
+            this.selectedItem = node;
+            $(this.selectedItem).addClass(this.options.selectClass);
             return ASF.Update(this, this.options.selectUrl + '?folderId=' + id, '#document-list-editor');
-        },
-        value: function() {
-            return this.currentItem;
         },
         uploadDialog: function(folderId) {
             var self = this;
