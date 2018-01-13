@@ -77,17 +77,24 @@ div.awa-document div.awa-download {
     float: left;
     height: 24px;
     width: 32px;
+    cursor: pointer;
 }
 .awa-document .awa-doc-thumbnail {
     float: left;
     width: 64px;
     height: 64px;
+    overflow: hidden;
 }
 .awa-private .awa-doc-status {
     background: url(../images/storages/doc-private.png) no-repeat;
 }
 .awa-public .awa-doc-status {
     background: url(../images/storages/icon-internet.png) no-repeat;
+}
+.awa-document .awa-doc-info {
+    float: left;
+    padding-left: 10px;
+    width: calc(100% - 110px);
 }
 div.asf-active-list div.asf-active div.awa-download {
     visibility: visible;
@@ -197,6 +204,12 @@ input.asf-editable-text {
     background-color: #ccc;
 }
 /* Dropzone style */
+.dropzone {
+    border: 2px dashed #A6C9E2;
+    border-radius: 5px;
+    padding: 1em;
+    background: #e8f3fd;
+}
 .dropzone input {
     display: none;
 }
