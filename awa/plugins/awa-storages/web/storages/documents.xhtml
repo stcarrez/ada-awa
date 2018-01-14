@@ -54,7 +54,8 @@
                             selectUrl: '#{contextPath}/storages/lists/documents.html',
                             uploadButton: '#awa-upload-button',
                             uploadUrl: '#{contextPath}/storages/forms/upload-form.html',
-                            dictDefaultMessage: "#{util:escapeJavaScript(storageMsg.storage_upload_form_message)}"
+                            dictDefaultMessage: "#{util:escapeJavaScript(storageMsg.storage_upload_form_message)}",
+                            dictInvalidFileType: "#{util:escapeJavaScript(storageMsg.storage_upload_form_invalid_file_message)}"
                         });
                         $('#folder-list-editor').resizable({
                             minWidth: 100, maxWidth: 400,
