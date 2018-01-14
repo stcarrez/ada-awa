@@ -48,13 +48,15 @@
                     </div>
                     <util:script>
                         $('#folder-list').folder({
+                            acceptedFiles: "image/jpeg,image/png,image/gif",
                             selectClass: 'asf-selected',
                             editUrl: '#{contextPath}/storages/forms/create-folder-form.html',
                             currentItem: '#folder-' + #{not empty storageList.folder ? storageList.folder.id : 'null'},
                             selectUrl: '#{contextPath}/storages/lists/images.html',
                             uploadButton: '#awa-upload-button',
                             uploadUrl: '#{contextPath}/storages/forms/upload-image.html',
-                            dictDefaultMessage: "#{util:escapeJavaScript(storageMsg.storage_upload_image_form_message)}"
+                            dictDefaultMessage: "#{util:escapeJavaScript(storageMsg.storage_upload_image_form_message)}",
+                            dictInvalidFileType: "#{util:escapeJavaScript(storageMsg.storage_upload_form_invalid_file_message)}"
                         });
                         $('#folder-list-editor').resizable({
                             minWidth: 100, maxWidth: 400,
