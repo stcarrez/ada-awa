@@ -1,5 +1,5 @@
 <!-- Form to create or update a blog post
-  -  Copyright (C) 2011, 2012, 2013, 2014, 2015 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,13 +35,16 @@
                          title="#{blogMsg.blog_post_title_label}"
                          styleClass="awa-required ui-corner-all"
                          size='80'
+                         placeholder="#{blogMsg.blog_post_title_placeholder}"
                          value="#{post.title}"/>
             <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
                 <dt>
                     <label for='text'>#{blogMsg.blog_post_text_label}</label>
                 </dt>
                 <dd>
-                    <h:inputTextarea id='text' rows='20' required='false' value='#{post.text}'/>
+                    <h:inputTextarea id='text' rows='20' required='false'
+                                     placeholder="#{blogMsg.blog_post_text_placeholder}"
+                                     value='#{post.text}'/>
                 </dd>
                 <dt>
                     <label for='qtags'>#{blogMsg.blog_tags_label}</label>
@@ -53,6 +56,7 @@
             </dl>
             <w:inputText id='uri' title="#{blogMsg.blog_post_url_label}"
                          styleClass="awa-required ui-corner-all" size='80'
+                         placeholder="#{blogMsg.blog_post_url_placeholder}"
                          value="#{post.uri}" required="false"/>
 
             <ul class='awa-buttons'>
@@ -115,7 +119,7 @@
                             autoOpen: false,
                             show: "blind",
                             hide: "explode",
-                            minWidth: 800,
+                            minWidth: 900,
                             minHeight: 400,
                             modal: true,
                             buttons: [
