@@ -20,7 +20,8 @@
     $.widget("ui.folder", $.ui.list, {
         options: {
             actionId: null,
-            itemPrefix: 'folder-'
+            itemPrefix: 'folder-',
+            acceptedFiles: "*/*"
         },
         selectedItem: null,
 
@@ -30,7 +31,7 @@
 
             $.ui.list.prototype._create.apply(this, arguments);
             $(upload).bind('click', function(event) {
-                var id = self.getSelectedId(self.currentNode);
+                var id = self.getSelectedId(self.selectedItem);
                 if (id != null) {
                     self.uploadDialog(id);
                 }
@@ -107,6 +108,8 @@
                         $("#uploadForm").dropzone({
                             url: self.options.uploadUrl,
                             dictDefaultMessage: self.options.dictDefaultMessage,
+                            dictInvalidFileType: self.options.dictInvalidFileType,
+                            acceptedFiles: self.options.acceptedFiles,
                             maxFiles: 1,
                             paramName: "upload-file",
                             params: function(files, xhr, chunk) {
