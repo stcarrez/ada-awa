@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-beans -- Storage Ada Beans
---  Copyright (C) 2012, 2013, 2016 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2016, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -90,7 +90,11 @@ package body AWA.Storages.Beans is
       end if;
       Bean.Set_Mime_Type (Part.Get_Content_Type);
       Bean.Set_File_Size (Part.Get_Size);
-      Manager.Save (Bean, Part, AWA.Storages.Models.DATABASE);
+      if Part.Get_Size > 100_000 then
+         Manager.Save (Bean, Part, AWA.Storages.Models.FILE);
+      else
+         Manager.Save (Bean, Part, AWA.Storages.Models.DATABASE);
+      end if;
    end Save_Part;
 
    --  ------------------------------
