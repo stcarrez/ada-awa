@@ -34,6 +34,7 @@
             <span>#{storageMsg.storage_images_label}</span>
         </a>
     </li>
+    <h:panelGroup rendered="#{top_nav eq 'storages'}">
     <li class='awa-nav-left'>
         <a href="#" class="awa-nav-icon" id="awa-upload-button" onclick="return false;"
            title="#{storageMsg.storage_upload_title}">
@@ -41,5 +42,6 @@
             <span>#{storageMsg.storage_upload_label}</span>
         </a>
     </li>
+    </h:panelGroup>
 </ul>
 
