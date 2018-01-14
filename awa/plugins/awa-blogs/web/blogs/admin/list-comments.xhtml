@@ -44,18 +44,16 @@
 
             <ui:include src="lists/menu-list.xhtml"/>
             <div class='blog-admin post-header' id="blog-comment-list-header">
-                <div class='post-status'></div>
-                <div class='post-title'>
+                <div class='comment-status'></div>
+                <div class='comment-title'>
                     #{blogMsg.blog_post_title_label}
                 </div>
-                <div class='post-date'>
+                <div class='comment-date'>
                     #{blogMsg.blog_post_date_label}
                 </div>
-                <div class='post-author'>
+                <div class='comment-gravatar'></div>
+                <div class='comment-author'>
                     #{blogMsg.blog_post_author_label}
-                </div>
-                <div class='post-comment-count'>
-                    #{blogMsg.blog_post_comment_label}
                 </div>
             </div>
             <div id='blog-comment-list' class='blog-admin'>
