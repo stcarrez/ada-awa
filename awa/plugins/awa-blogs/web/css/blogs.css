@@ -1,6 +1,6 @@
 /**
  * blogs.css - Styles for blogs module
- * Copyright (C) 2011, 2012, 2013, 2014, 2015, 2017 Stephane Carrez
+ * Copyright (C) 2011-218 Stephane Carrez
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
 #blog-post-list, #blog-comment-list, #blog-post-list-header, #blog-comment-list-header {
@@ -121,6 +121,9 @@ div.status-COMMENT_SPAM div.comment-status, div.status-COMMENT_ARCHIVED div.comm
 }
 div.status-COMMENT_PUBLISHED {
     color: #111;
+}
+.post-header .comment-status {
+    background: none;
 }
 a.spam-icon {
     background: url(../images/blogs/icon-spam-grey.png) no-repeat;
