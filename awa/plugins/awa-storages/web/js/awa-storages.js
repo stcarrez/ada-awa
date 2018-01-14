@@ -21,7 +21,7 @@
         options: {
             actionId: null,
             itemPrefix: 'folder-',
-            acceptedFiles: "*/*"
+            acceptedFiles: null
         },
         selectedItem: null,
 
