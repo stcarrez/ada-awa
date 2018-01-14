@@ -220,3 +220,6 @@ input.asf-editable-text {
     font-weight: bold;
     padding: 2em 0;
 }
+.dropzone .dz-success-mark, .dropzone .dz-error-mark {
+    float: left;
+}
