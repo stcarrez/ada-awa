@@ -164,7 +164,7 @@ input.asf-editable-text {
 .image-details dt {
     clear: both;
     float: left;
-    font-style: bold;
+    font-weight: bold;
     width: 20%;
 }
 .image-details dd {
@@ -173,9 +173,6 @@ input.asf-editable-text {
 }
 .image-upload {
     height: 80px;
-}
-.upload-form {
-    background-color: #f6f6f3;
 }
 .image-view {
     padding: 1%;
