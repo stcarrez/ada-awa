@@ -16,10 +16,6 @@ body {
   background-color: #f0f0f0;
   overflow-y: scroll;
 }
-/* IE 6 min-height hack */
-* html #pam-page-content {
-    height: 100%;
-}
 body.awa {
   background-color: #81CFB7;
 }
@@ -116,13 +112,11 @@ ul.buttons, ul.awa-buttons {
     padding-right: 2%;
 }
 
-li.awa-error label {
-    color: red;
-}
-
 /**
  * AWA Errors
  */
+li.awa-error label,
+dl.awa-error dt,
 span.awa-error, dl.awa-error dt label, dl.asf-error dt label, dl.asf-error dd span {
     color: red;
 }
@@ -171,9 +165,6 @@ dl.awa-optional dd, dl.awa-required dd {
     float: left;
     clear: both;
     width: 100%;
-}
-dl.awa-error dt {
-    color: red;
 }
 dl.awa-error span.error, span.awa-error {
     font-size: 0.9em;
@@ -317,6 +308,23 @@ div.awa-modal div.awa-login {
 .awa-list-item-header {
     padding-top: 5px;
     padding-bottom: 5px;
+}
+
+/**
+ * Pagination for lists
+ */
+ul.awa-pagination {
+    float: left;
+    width: 96%;
+    list-style-type: none;
+}
+ul.awa-pagination li {
+    float: left;
+    margin-left: 10%;
+    margin-right: 10%;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    font-weight: bold;
 }
 
 /**
