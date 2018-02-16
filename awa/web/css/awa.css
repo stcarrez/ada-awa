@@ -141,7 +141,7 @@ ul.awa-error li {
 /**
  * Form definition.
  */
-div.awa-form {
+div.awa-form, .awa-container {
     float: left;
     width: 100%;
 }
