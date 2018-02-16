@@ -1,5 +1,5 @@
 <!-- Form to create or update a wiki page
-  -  Copyright (C) 2015 Stephane Carrez
+  -  Copyright (C) 2015, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +29,7 @@
         <h:inputHidden id='page-id' value='#{wikiPage.id}' required='false'/>
         <h:inputHidden id='page-wiki-id' value='#{wikiPage.wikiId}'/>
         <div class='grid_8'>
-            <h:messages styleClass='error'/>
+            <h:messages styleClass='awa-error'/>
             <w:inputText title="#{wikiMsg.wiki_page_name_label}"
                          styleClass="awa-required ui-corner-all"
                          size='80'
