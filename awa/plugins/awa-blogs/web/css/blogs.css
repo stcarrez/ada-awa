@@ -1,6 +1,6 @@
 /**
  * blogs.css - Styles for blogs module
- * Copyright (C) 2011-218 Stephane Carrez
+ * Copyright (C) 2011-2018 Stephane Carrez
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
 #blog-post-list, #blog-comment-list, #blog-post-list-header, #blog-comment-list-header {
@@ -8,7 +8,7 @@
     padding: 0 2% 0 2%;
     width: 96%;
 }
-div.post-info, div.post-header {
+div.blog-post div.post-text, div.blog-edit-post, div.post-info, div.post-header {
     float: left;
     width: 100%;
 }
@@ -44,9 +44,11 @@ div.blog-admin div.comment-gravatar, .blog-admin .post-read-count {
     line-height: 20px;
 
 }
-div.blog-admin div.post-title {
+div.blog-admin div.post-title,
+div.blog-admin div.comment-title {
     width: 45%;
 }
+div.blog-admin div.post-date,
 div.blog-admin div.post-author {
     width: 15%;
 }
@@ -54,24 +56,12 @@ div.blog-admin div.post-ref {
     width: 40px;
     padding-left: 30px;
 }
-div.blog-admin div.post-date {
-    width: 15%;
-}
-div.blog-admin div.post-comment-count, .blog-admin .post-read-count {
+div.blog-admin div.comment-gravatar,
+div.blog-admin div.post-view, div.blog-admin div.post-comment-count, .blog-admin .post-read-count {
     width: 5%;
-}
-div.blog-admin div.post-view {
-    width: 5%;
-}
-
-div.blog-admin div.comment-title {
-    width: 45%;
 }
 div.blog-admin div.comment-author, div.blog-admin div.comment-date {
     width: 20%;
-}
-div.blog-admin div.comment-gravatar {
-    width: 5%;
 }
 
 div.post-header {
@@ -97,6 +87,9 @@ div.blog-info div.blog-date {
     font-size: 0.7em;
 }
 
+/**
+ * Comment list and admin.
+ */
 div.comment-status,
 div.post-status, div.post-status-POST_DRAFT, div.post-status-POST_PUBLISHED, div.post-status-POST_SCHEDULED {
     width: 26px;
@@ -110,7 +103,7 @@ div.status-COMMENT_PUBLISHED div.comment-status,
 div.post-status-POST_PUBLISHED {
     background: url(../images/blogs/icon-check-box-green.png) no-repeat;
 }
-div.post-status {
+.post-header .comment-status, div.post-status {
     background: none;
 }
 div.comment-status {
@@ -121,9 +114,6 @@ div.status-COMMENT_SPAM div.comment-status, div.status-COMMENT_ARCHIVED div.comm
 }
 div.status-COMMENT_PUBLISHED {
     color: #111;
-}
-.post-header .comment-status {
-    background: none;
 }
 a.spam-icon {
     background: url(../images/blogs/icon-spam-grey.png) no-repeat;
@@ -159,11 +149,6 @@ div.blog-post div.post-title h2 a {
 div.blog-post div.post-title h2 a:hover {
     color: #A08;
 }
-div.blog-post div.post-text {
-    float: left;
-    width: 100%;
-}
-
 div.post-text {
     line-height: 1.5em;
 }
@@ -213,11 +198,6 @@ div.post-text img {
     height: auto;
     max-width: 100%;
 }
-
-div.blog-edit-post {
-    float: left;
-    width: 100%;
-}
 ul.blog-syntax {
     padding-top: 5px;
     list-style-type: none;
@@ -254,71 +234,8 @@ div.post-comments h3 {
     font-weight: normal;
     font-size: 1.3em;
 }
-.awa-comment-list {
-    margin-left: 10%;
-    float: left;
-    width: 90%;
-}
-.awa-comment {
-    float: left;
-    width: 90%;
-    padding-left: 10%;
-}
-div.awa-comment-form {
-    /* padding-left: 10%; */
-    padding-left: 2%;
-    padding-right: 2%;
-    float: left;
-    width: 96%;
-}
-.awa-comment, div.awa-comment-form {
-    position: relative;
-    padding-bottom: 50px;
-}
-.awa-comment div.comment-gravatar, div.awa-form div.comment-gravatar {
-    position: absolute;
-    left: 0px;
-    top: 0;
-}
-.awa-comment div.comment-author {
-    font-weight: bold;
-    color: #777;
-}
-.awa-comment .comment-text {
-    padding-top: 5px;
-    clear: both;
-    float: left;
-    display: block;
-}
-.awa-comment-actions {
-    display: none;
-    list-style-type: none;
-    float: left;
-}
-.awa-comment-actions li {
-    float: left;
-    padding-left: 2em;
-}
 .awa-blog-admin .awa-comment-actions {
     display: block;
-}
-.awa-comment-actions a, .awa-comment-actions a:visited, .awa-comment-actions a:hover {
-    text-decoration: none;
-    font-weight: bold;
-}
-.comment-COMMENT_SPAM {
-    opacity: 0.2;
-}
-.comment-COMMENT_WAITING {
-    opacity: 0.5;
-}
-.comment-COMMENT_WAITING {
-}
-.comment-COMMENT_PUBLISHED .comment-action-spam,
-.comment-COMMENT_WAITING .comment-action-waiting,
-.comment-COMMENT_SPAM .comment-action-spam,
-.comment-COMMENT_PUBLISHED .comment-action-publish {
-    display: none;
 }
 .blog-post-comment {
     float: left;
@@ -351,25 +268,6 @@ div.blog-post-comment-count a {
     padding-left: 1em;
     padding-top: 0.2em;
     font-size: 0.8em;
-}
-ul.blog-pagination {
-    float: left;
-    width: 96%;
-    list-style-type: none;
-}
-ul.blog-pagination li {
-    float: left;
-    margin-left: 10%;
-    margin-right: 10%;
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
-    font-weight: bold;
-}
-#comment-add {
-    float: left;
-    clear: both;
-    line-height: 2em;
-    width: 100%;
 }
 .blog-post-graph {
     display: block;
