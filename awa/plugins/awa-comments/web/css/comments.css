@@ -13,8 +13,7 @@
     width: 90%;
     padding-left: 10%;
 }
-div.awa-comment-form {
-    /* padding-left: 10%; */
+.awa-comment-form {
     padding-left: 2%;
     padding-right: 2%;
     float: left;
@@ -57,8 +56,6 @@ div.awa-comment-form {
 }
 .comment-COMMENT_WAITING {
     opacity: 0.5;
-}
-.comment-COMMENT_WAITING {
 }
 .comment-COMMENT_PUBLISHED .comment-action-spam,
 .comment-COMMENT_WAITING .comment-action-waiting,
