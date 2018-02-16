@@ -316,3 +316,9 @@
     padding-bottom: 0.5em;
     display: inline-block;
 }
+.wiki-post-graph {
+    display: block;
+    float: left;
+    width: 100%;
+    height: 100px;
+}
