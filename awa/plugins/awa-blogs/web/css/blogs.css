@@ -8,7 +8,7 @@
     padding: 0 2% 0 2%;
     width: 96%;
 }
-div.blog-post div.post-text, div.blog-edit-post, div.post-info, div.post-header {
+div.blog-post div.post-text, div.post-info, div.post-header {
     float: left;
     width: 100%;
 }
