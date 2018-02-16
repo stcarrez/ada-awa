@@ -98,7 +98,7 @@ body.awa {
   float: right;
   margin-right: 20px;
 }
-ul.buttons, ul.awa-buttons {
+ul.awa-buttons {
     float: left;
     list-style-type: none;
     margin-top: 1em;
@@ -166,7 +166,7 @@ dl.awa-optional dd, dl.awa-required dd {
     clear: both;
     width: 100%;
 }
-dl.awa-error span.error, span.awa-error {
+dl.awa-error span.awa-error, span.awa-error {
     font-size: 0.9em;
 }
 dl.awa-optional label, dl.awa-required label {
