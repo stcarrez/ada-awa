@@ -1,5 +1,5 @@
 <!-- Form to send an invitation to someone
-  -  Copyright (C) 2017 Stephane Carrez
+  -  Copyright (C) 2017, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,7 @@
     <h:form id='invite'>
         <h:inputHidden id='invite-id' value='#{inviteUser.id}' required='false'/>
         <div class='grid_8'>
-            <h:messages styleClass='error'/>
+            <h:messages styleClass='awa-error'/>
             <w:inputText styleClass="awa-required"
                          id='email' size='50' required='true' value='#{inviteUser.email}'
                          placeholder="#{workspaceMsg.workspace_invite_email_placeholder}"
