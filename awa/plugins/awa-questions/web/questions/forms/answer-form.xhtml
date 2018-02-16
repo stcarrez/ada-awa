@@ -1,5 +1,5 @@
 <!-- Form to create or edit answer
-  -  Copyright (C) 2013 Stephane Carrez
+  -  Copyright (C) 2013, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,11 +26,11 @@
         <h:inputHidden id='question-id' value='#{answer.question_id}' required='false'/>
         <h:inputHidden id='answer-id' value='#{answer.id}' required='false'/>
         <div class='grid_8'>
-            <h:messages styleClass='error'/>
+            <h:messages styleClass='awa-error'/>
             <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
                 <dt>
                     <label for='title'>#{questionMsg.question_anwser_title_label}</label>
-                    <h:message for='text' styleClass='error'/>
+                    <h:message for='text' styleClass='awa-error'/>
                 </dt>
                 <dd>
                     <h:inputTextarea id='text' rows='15' required='false' value='#{answer.answer}'/>
