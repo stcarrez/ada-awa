@@ -101,54 +101,6 @@
             }
         }
     });
-    $.widget("ui.post_graph", {
-        options: {
-            url: "",
-            barWidth: 1
-        },
-        _create: function() {
-            var self = this;
-
-            self.refresh();
-        },
-        plot: function(series) {
-            var self = this;
-            $.plot(this.element, series, {
-                bars: { show: true, barWidth: self.options.barWidth * 86400 * 1000, align: "center" },
-                xaxis: {
-                    mode: "time",
-                    minTickSize: [1, "day"]
-                },
-                yaxis: {
-                    tickDecimals: 0
-                },
-                grid: {
-                    hoverable: true
-                }
-            });
-        },
-        refresh: function() {
-            var self = this;
-
-            jQuery.ajax({
-                url:  self.options.url,
-                type: "GET",
-                dataType: "json",
-                success: function(data, status, jqXHDR) {
-                    var i;
-
-                    data = data.data;
-                    data.pop();
-                    if (data.length > 1) {
-                       for (i = 0; i < data.length; i++) {
-                          data[i][0] = new Date(data[i][0]).getTime();
-                       }
-                       self.plot([data]);
-                    }
-                }
-            });
-        }
-    });
 
 })(jQuery);
 
