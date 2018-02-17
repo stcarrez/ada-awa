@@ -92,7 +92,7 @@ div.post-status, div.post-status-POST_DRAFT, div.post-status-POST_PUBLISHED, div
     margin-right: 2px;
     background: url(../images/blogs/icon-check-box-orange.png) no-repeat;
 }
-div.status-COMMENT_PUBLISHED div.comment-status,
+div.comment-COMMENT_PUBLISHED div.comment-status,
 div.post-status-POST_PUBLISHED {
     background: url(../images/blogs/icon-check-box-green.png) no-repeat;
 }
@@ -101,11 +101,12 @@ div.post-status-POST_PUBLISHED {
 }
 div.comment-status {
     margin-left: 50px;
+    cursor: pointer;
 }
-div.status-COMMENT_SPAM div.comment-status, div.status-COMMENT_ARCHIVED div.comment-status {
+div.comment-COMMENT_SPAM div.comment-status, div.comment-COMMENT_ARCHIVED div.comment-status {
     background: url(../images/blogs/icon-spam-red.png) no-repeat;
 }
-div.status-COMMENT_PUBLISHED {
+div.comment-COMMENT_PUBLISHED {
     color: #111;
 }
 a.spam-icon {
