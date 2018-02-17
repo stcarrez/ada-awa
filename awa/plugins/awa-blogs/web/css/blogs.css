@@ -15,13 +15,6 @@ div.blog-post div.post-text, div.post-info, div.post-header {
 div.post-info div.asf-list-action {
     left: -5px;
 }
-div.post-comments {
-    float: left;
-    width: 95%;
-    padding-top: 1em;
-    padding-left: 30px;
-    border-top: 2px solid #ddd;
-}
 /*
  * Admin section
  */
@@ -229,7 +222,7 @@ div.blog-post-info h2 {
     color: #346;
 }
 
-div.post-comments h3 {
+.awa-comment-list h3 {
     color: #a08;
     font-weight: normal;
     font-size: 1.3em;
