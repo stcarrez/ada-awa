@@ -4,9 +4,11 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
 .awa-comment-list {
-    margin-left: 10%;
     float: left;
-    width: 90%;
+    width: 95%;
+    padding-top: 1em;
+    padding-left: 30px;
+    border-top: 2px solid #ddd;
 }
 .awa-comment {
     float: left;
