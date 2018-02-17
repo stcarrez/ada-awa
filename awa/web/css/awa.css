@@ -477,11 +477,6 @@ ul.awa-pagination li {
         padding: 0;
     }
 }
-@media screen and (min-width: 960px) {
-    #awa-top-nav li {
-        width: 15%;
-    }
-}
 @media screen and (max-width: 600px) {
     body{
         font-size:100%;
