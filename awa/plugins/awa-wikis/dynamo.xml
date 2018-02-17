@@ -12,4 +12,10 @@
     <depend name="asf"></depend>
     <depend name="awa-workspaces"></depend>
     <depend name="awa-tags"></depend>
+    <depend name="awa-storages"></depend>
+    <depend name="awa-jobs"></depend>
+    <depend name="awa-images"></depend>
+    <depend name="awa_counters"></depend>
+    <depend name="awa_markedit"></depend>
+    <depend name="awa_flotcharts"></depend>
 </project>
