@@ -6,4 +6,16 @@
     <property name="author">Stephane Carrez</property>
     <depend name="awa_markedit"></depend>
     <depend name="awa_flotcharts"></depend>
+    <depend name="util"></depend>
+    <depend name="ado"></depend>
+    <depend name="security"></depend>
+    <depend name="asf"></depend>
+    <depend name="awa"></depend>
+    <depend name="awa-workspaces"></depend>
+    <depend name="awa-tags"></depend>
+    <depend name="awa-comments"></depend>
+    <depend name="awa-storages"></depend>
+    <depend name="awa-jobs"></depend>
+    <depend name="awa-images"></depend>
+    <depend name="awa_counters"></depend>
 </project>
