@@ -10,4 +10,5 @@
     <depend name="asf"></depend>
     <depend name="awa-workspaces"></depend>
     <depend name="awa-storages"></depend>
+    <depend name="awa-jobs"></depend>
 </project>
