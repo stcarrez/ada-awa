@@ -28,7 +28,7 @@
         </c:when>
         <c:otherwise>
            <h:list var="cmt" value="#{adminBlog.comments}">
-                <div class='post-info ui-list-item status-#{cmt.status}' id="p_#{cmt.id}">
+                <div class='post-info ui-list-item comment-#{cmt.status}' id="p_#{cmt.id}">
                     <div class='comment-status'>
                     </div>
                     <div class='comment-title'>
