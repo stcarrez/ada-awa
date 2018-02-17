@@ -1,5 +1,5 @@
 <!-- View a single post
-  -  Copyright (C) 2014, 2015, 2016, 2017 Stephane Carrez
+  -  Copyright (C) 2014, 2015, 2016, 2017, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -56,7 +56,7 @@
                               format="dotclear"/>
                     <!-- Increment the post read counter but do not display anything -->
                     <awa:counter value="#{post.counter}" hidden="true"/>
-                    <div class='post-comments' id="comments">
+                    <div class='awa-comment-list' id="comments">
                         <h:panelGroup rendered="#{not empty postComments}">
                             <h3>
                                 <h:outputFormat value="#{blogMsg.blog_comment_list}">
