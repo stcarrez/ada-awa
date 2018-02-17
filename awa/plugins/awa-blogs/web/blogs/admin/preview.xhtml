@@ -64,7 +64,7 @@
                             value="#{post.text}"
                             links="#{post.links}"
                             format="dotclear"/>
-                  <div class='post-comments' id="comments">
+                  <div class='awa-comment-list' id="comments">
                       <ajax:include styleClass="asf-container" async="true"
                                     src="/blogs/forms/comment-add-form.html?id=#{post.id}"/>
                       <h:panelGroup rendered="#{not empty postComments}">
