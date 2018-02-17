@@ -430,3 +430,67 @@ ul.awa-pagination li {
     padding: 1em;
     box-sizing: content-box;
 }
+
+/**
+ * Responsive style for mobile and tablets.
+ */
+@media screen and (max-width: 768px) {
+    @-ms-viewport { width: 320px; }
+    #awa-top-nav li a {
+        font-size: 100%;
+        padding-left: 5px;
+        padding: 5px;
+        padding-bottom: 2px;
+    }
+    #awa-footer, body {
+        background-image: none;
+        font-size: 100%;
+    }
+    #awa-top-nav {
+        width: 99%;
+    }
+    #awa-hdr ul {
+        padding-right: 0;
+    }
+    #awa-hdr li {
+        line-height: 0.9em;
+    }
+    .wiki-page-container .grid_2, .wiki-page-container .grid_10,
+    .tagedit-list, .container_12 .grid_9, .container_12 .grid_3 {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+    .tagedit-list li.tagedit-listelement {
+        float: right;
+    }
+    h3 {
+        overflow: hidden;
+        width: 100%;
+    }
+    div.post-text div {
+        max-width: 95%;
+        overflow: hidden;
+    }
+    div.awa-side1, div.awa-side2 {
+        width: 100%;
+        padding: 0;
+    }
+}
+@media screen and (min-width: 960px) {
+    #awa-top-nav li {
+        width: 15%;
+    }
+}
+@media screen and (max-width: 600px) {
+    body{
+        font-size:100%;
+    }
+    div.awa-modal {
+        top: 5%;
+        left: 5%;
+        width: 90%;
+        max-width: 530px;
+        min-width: 320px;
+    }
+}
