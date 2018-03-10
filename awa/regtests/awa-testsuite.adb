@@ -57,8 +57,7 @@ with AWA.Comments.Modules.Tests;
 with AWA.Changelogs.Modules.Tests;
 with AWA.Wikis.Modules.Tests;
 
---  with ASF.Server.Web;
-with Servlet.Server.Tests;
+with Servlet.Server;
 package body AWA.Testsuite is
    Users          : aliased AWA.Users.Modules.User_Module;
 
@@ -241,7 +240,7 @@ package body AWA.Testsuite is
 --                    delay 6000.0;
 --                 end;
 --              end if;
-            ASF.Server.Tests.Set_Context (Application.all'Access);
+            Servlet.Server.Set_Context (Application.all'Access);
          end;
       end if;
    end Initialize;
