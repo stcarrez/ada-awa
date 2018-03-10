@@ -37,8 +37,6 @@ with AWA.Counters.Beans;
 with AWA.Events;
 with AWA.Components.Wikis;
 
-with ASF.Rest.Definition;
-
 --  == Blog Beans ==
 --  Several bean types are provided to represent and manage the blogs and their posts.
 --  The blog module registers the bean constructors when it is initialized.
@@ -211,23 +209,6 @@ package AWA.Blogs.Beans is
    --  Create the Post_Bean bean instance.
    function Create_Post_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                               return Util.Beans.Basic.Readonly_Bean_Access;
-
-   procedure Create (Bean : in out Post_Bean;
-                     Req  : in out ASF.Rest.Request'Class;
-                     Reply : in out ASF.Rest.Response'Class);
-   procedure Update (Bean : in out Post_Bean;
-                     Req  : in out ASF.Rest.Request'Class;
-                     Reply : in out ASF.Rest.Response'Class);
-
-   package Post_API is
-     new ASF.Rest.Definition (Object_Type => Post_Bean,
-                              URI         => "/blogs/:blog_id/posts");
---
---     package API_Post_Create is
---        new Post_API.Definition (Create'Access, ASF.Rest.POST, "");
---
---     package API_Post_Update is
---        new Post_API.Definition (Update'Access, ASF.Rest.PUT, ":id");
 
    --  ------------------------------
    --  Post List Bean
