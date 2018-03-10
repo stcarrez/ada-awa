@@ -21,6 +21,7 @@ with Ada.Calendar;
 
 with Util.Log.Loggers;
 with Util.Strings;
+with Util.Mail;
 with Util.Encoders.HMAC.SHA1;
 
 with ADO.SQL;
@@ -90,6 +91,16 @@ package body AWA.Users.Services is
    end Get_Password_Hash;
 
    --  ------------------------------
+   --  Get the user name from the email address.
+   --  Returns the possible user name from his email address.
+   --  ------------------------------
+   function Get_Name_From_Email (Email : in String) return String is
+      E : constant Util.Mail.Email_Address := Util.Mail.Parse_Address (Email);
+   begin
+      return To_String (E.Name);
+   end Get_Name_From_Email;
+
+   --  ------------------------------
    --  Get the authenticate identifier from the cookie.
    --  Verify that the cookie is valid, the signature is correct.
    --  Returns the identified or NO_IDENTIFIER
@@ -114,24 +125,6 @@ package body AWA.Users.Services is
       when others =>
          return ADO.NO_IDENTIFIER;
    end Get_Authenticate_Id;
-
-   --  ------------------------------
-   --  Get the user name from the email address.
-   --  Returns the possible user name from his email address.
-   --  ------------------------------
-   function Get_Name_From_Email (Email : in String) return String is
-      Pos : Natural := Util.Strings.Index (Email, '<');
-   begin
-      if Pos > 0 then
-         return Email (Email'First .. Pos - 1);
-      end if;
-      Pos := Util.Strings.Index (Email, '@');
-      if Pos > 0 then
-         return Email (Email'First .. Pos - 1);
-      else
-         return Email;
-      end if;
-   end Get_Name_From_Email;
 
    procedure Create_Session (Model   : in User_Service;
                              DB      : in out Master_Session;
@@ -637,6 +630,8 @@ package body AWA.Users.Services is
       Email_Address : constant String := Email.Get_Email;
       Password      : constant String := User.Get_Password;
       Found         : Boolean;
+      Cur_User      : User_Ref;
+      Cur_Email     : Email_Ref;
    begin
       Log.Info ("Create user {0} with key {1}", Email_Address, Key);
       Ctx.Start;
@@ -649,31 +644,37 @@ package body AWA.Users.Services is
          Log.Warn ("No access key {0}", Key);
          raise Not_Found with "No access key: " & Key;
       end if;
-      User.Set_Id (Access_Key.Get_User.Get_Id);
-      Email.Set_Id (Access_Key.Get_User.Get_Email.Get_Id);
+      Cur_User := User_Ref (Access_Key.Get_User);
+      Cur_Email := Email_Ref (Cur_User.Get_Email);
 
       --  Check first if the email address is not used by another user.
       Query.Bind_Param (1, Email_Address);
       Query.Set_Filter ("email = ?");
       Exist_Email.Find (DB, Query, Found);
-      if Found and then Exist_Email.Get_Id /= Email.Get_Id then
+      if Found and then Exist_Email.Get_Id /= Cur_Email.Get_Id then
          Log.Warn ("Email address {0} already registered", Email_Address);
          raise User_Exist with "Email address " & Email_Address & "' already used";
       end if;
 
       --  Save the email and the user
-      Email.Set_User_Id (User.Get_Id);
-      Email.Save (DB);
-      User.Set_Email (Email);
+      Cur_Email.Set_User_Id (Cur_User.Get_Id);
+      Cur_Email.Set_Email (Email_Address);
+      Cur_Email.Save (DB);
+
+      Cur_User.Set_Name (String '(User.Get_Name));
+      Cur_User.Set_First_Name (String '(User.Get_First_Name));
+      Cur_User.Set_Last_Name (String '(User.Get_Last_Name));
       if String '(User.Get_Name) = "" then
          User.Set_Name (String '(User.Get_First_Name) & " " & String '(User.Get_Last_Name));
       end if;
 
       --  Make a random salt and generate the password hash.
-      User.Set_Salt (Model.Create_Key (User.Get_Id));
-      User.Set_Password (User_Service'Class (Model).Get_Password_Hash (User.Get_Salt, Password));
-      User.Save (DB);
+      Cur_User.Set_Salt (Model.Create_Key (Cur_User.Get_Id));
+      Cur_User.Set_Password (User_Service'Class (Model).Get_Password_Hash (Cur_User.Get_Salt, Password));
+      Cur_User.Save (DB);
 
+      User_Ref (User) := Cur_User;
+      Email_Ref (Email) := Cur_Email;
       User_Lifecycle.Notify_Create (Model, User);
 
       --  Create the authentication session.
@@ -692,6 +693,33 @@ package body AWA.Users.Services is
 
       Ctx.Commit;
    end Create_User;
+
+   --  ------------------------------
+   --  Load the user and email address from the invitation key.
+   --  ------------------------------
+   procedure Load_User (Model     : in out User_Service;
+                        User      : in out User_Ref'Class;
+                        Email     : in out Email_Ref'Class;
+                        Key       : in String) is
+      Ctx           : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB            : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Access_Key    : Access_Key_Ref;
+      Query         : ADO.SQL.Query;
+      Found         : Boolean;
+   begin
+      Log.Info ("Get user from key {1}", Key);
+
+      --  Verify the access key validity.
+      Query.Bind_Param (1, Key);
+      Query.Set_Filter ("access_key = ?");
+      Access_Key.Find (DB, Query, Found);
+      if not Found then
+         Log.Warn ("No access key {0}", Key);
+         raise Not_Found with "No access key: " & Key;
+      end if;
+      User := Access_Key.Get_User;
+      Email := User.Get_Email;
+   end Load_User;
 
    --  ------------------------------
    --  Verify the access key and retrieve the user associated with that key.

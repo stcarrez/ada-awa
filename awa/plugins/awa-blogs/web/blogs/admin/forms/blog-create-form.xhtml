@@ -1,5 +1,5 @@
 <!-- Form to create a blog
-  -  Copyright (C) 2011, 2017 Stephane Carrez
+  -  Copyright (C) 2011, 2017, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,12 +30,12 @@
             <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
                 <dt>
                     <label for='title'>#{blogMsg.blog_admin_blog_title_label}</label>
-                    <h:message for='title' styleClass='error'/>
+                    <h:message for='title' styleClass='awa-error'/>
                 </dt>
                 <dd>
                     <h:inputText id='title' size='50' required='true' value='#{blog.name}'
-                                 validatorMessage='blogs.blog_name_invalid'
-                                 requiredMessage='blogs.blog_name_required'>
+                                 validatorMessage='#{blogMsg.blog_name_invalid}'
+                                 requiredMessage='#{blogMsg.blog_name_required}'>
                         <f:validateLength minimum='1' maximum='50'/>
                     </h:inputText>
                 </dd>

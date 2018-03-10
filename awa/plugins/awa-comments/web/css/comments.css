@@ -1,0 +1,73 @@
+/**
+ * comments.css - Styles for comments module
+ * Copyright (C) 2011-2018 Stephane Carrez
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ */
+.awa-comment-list {
+    float: left;
+    width: 95%;
+    padding-top: 1em;
+    padding-left: 30px;
+    border-top: 2px solid #ddd;
+}
+.awa-comment {
+    float: left;
+    width: 90%;
+    padding-left: 10%;
+}
+.awa-comment-form {
+    padding-left: 2%;
+    padding-right: 2%;
+    float: left;
+    width: 96%;
+}
+.awa-comment, div.awa-comment-form {
+    position: relative;
+    padding-bottom: 50px;
+}
+.awa-comment div.comment-gravatar, div.awa-form div.comment-gravatar {
+    position: absolute;
+    left: 0px;
+    top: 0;
+}
+.awa-comment div.comment-author {
+    font-weight: bold;
+    color: #777;
+}
+.awa-comment .comment-text {
+    padding-top: 5px;
+    clear: both;
+    float: left;
+    display: block;
+}
+.awa-comment-actions {
+    display: none;
+    list-style-type: none;
+    float: left;
+}
+.awa-comment-actions li {
+    float: left;
+    padding-left: 2em;
+}
+.awa-comment-actions a, .awa-comment-actions a:visited, .awa-comment-actions a:hover {
+    text-decoration: none;
+    font-weight: bold;
+}
+.comment-COMMENT_SPAM {
+    opacity: 0.2;
+}
+.comment-COMMENT_WAITING {
+    opacity: 0.5;
+}
+.comment-COMMENT_PUBLISHED .comment-action-spam,
+.comment-COMMENT_WAITING .comment-action-waiting,
+.comment-COMMENT_SPAM .comment-action-spam,
+.comment-COMMENT_PUBLISHED .comment-action-publish {
+    display: none;
+}
+#comment-add {
+    float: left;
+    clear: both;
+    line-height: 2em;
+    width: 100%;
+}

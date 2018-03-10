@@ -1,5 +1,5 @@
 <!-- Upload form response
-  -  Copyright (C) 2012, 2016 Stephane Carrez
+  -  Copyright (C) 2012, 2016, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,34 +14,40 @@
   -  See the License for the specific language governing permissions and
   -  limitations under the License.
   -->
-<f:view contentType="text/html; charset=UTF-8"
-        xmlns:f="http://java.sun.com/jsf/core"
+<f:view contentType="application/json"
         xmlns:util="http://code.google.com/p/ada-asf/util"
-        xmlns:h="http://java.sun.com/jsf/html">
-    <script type="text/javascript">
-
-    var list = parent.document.getElementById('document-list');
-    var item = parent.document.createElement("div");
-    item.innerHTML = '<util:escape>
-        <div class="awa-doc-status"></div>
-        <div class="awa-title">#{uploadFile.name}</div>
-        <div class='awa-size'>
-               <h:outputText value="#{uploadFile.file_size}">
-                   <f:converter converterId="sizeConverter"/>
-               </h:outputText>
-           </div>
-        <div class="awa-mime">#{uploadFile.mime_type}</div>
-        <div class="awa-date"><h:outputText value="#{uploadFile.create_date}">
-                   <f:converter converterId="smartDateConverter"/>
-               </h:outputText></div>
-        <div class='awa-download'>
-            <a href="#{contextPath}/storages/files/#{uploadFile.id}">#{storageMsg.storage_download_label}</a>
-        </div>
-    </util:escape>';
-
-    item.setAttribute("id", "store-${uploadFile.id}");
-    item.setAttribute("class", "awa-document ui-list-item #{uploadFile.is_public ? 'awa-public' : 'awa-private'}");
-    list.insertBefore(item, list.firstChild);
-    document.location = "upload-form.html?folderId=#{uploadFile.folderId}";
-    </script>
+        xmlns:c="http://java.sun.com/jstl/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core">
+[
+    { "action": "prepend", "id": "#document-list", "data": "<util:escape>
+    <div id='store-#{uploadFile.id}' class="awa-document ui-list-item awa-private">
+         <div class="awa-doc-status"></div>
+         <div class="awa-doc-thumbnail">
+             <img src="#{contextPath}/storages/images/#{uploadFile.id}" width="64" height="64"
+                                  alt="#{uploadFile.name}"/>
+         </div>
+         <div class='awa-title'>#{uploadFile.name}</div>
+         <div class='awa-size'>
+             #{storageMsg.storage_size_label}
+             <h:outputText value="#{uploadFile.file_size}">
+                 <f:converter converterId="sizeConverter"/>
+             </h:outputText>
+         </div>
+         <div class='awa-owner'>
+             #{storageMsg.storage_by_label}
+             #{uploadFile.user_name}
+         </div>
+         <div class='awa-mime'>#{uploadFile.mime_type}</div>
+         <div class='awa-date'>
+             <h:outputText value="#{uploadFile.create_date}">
+                 <f:converter converterId="smartDateConverter"/>
+             </h:outputText>
+         </div>
+         <div class='awa-download'>
+             <a href="#{contextPath}/storages/files/#{uploadFile.id}">#{storageMsg.storage_download_label}</a>
+         </div>
+     </div>
+</util:escape>" }
+]
 </f:view>

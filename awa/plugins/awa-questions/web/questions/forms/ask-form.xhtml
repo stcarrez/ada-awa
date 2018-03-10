@@ -1,5 +1,5 @@
 <!-- Form to create or edit a question
-  -  Copyright (C) 2013 Stephane Carrez
+  -  Copyright (C) 2013, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +27,7 @@
     <h:form id='post'>
         <h:inputHidden id='question-id' value='#{question.id}' required='false'/>
         <div class='grid_8'>
-            <h:messages styleClass='error'/>
+            <h:messages styleClass='awa-error'/>
             <w:inputText styleClass="awa-required"
                          id='title' size='50' required='true' value='#{question.title}'
                          title='#{questionMsg.question_title_label}'/>

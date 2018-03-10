@@ -1,5 +1,5 @@
 <!-- Response sent after a new comment is added
-  -  Copyright (C) 2014, 2015, 2017 Stephane Carrez
+  -  Copyright (C) 2014, 2015, 2017, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,7 @@
     [
 <c:choose>
     <c:when test="#{postNewComment.status ne 0}">
-        { "action": "prepend", "id": ".post-comments",
+        { "action": "prepend", "id": ".awa-comment-list",
           "data": "${util:escapeJavaScript(blogMsg.blog_comment_submitted_for_approval)}" },
         { "action": "hide" }
     </c:when>

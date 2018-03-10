@@ -44,25 +44,23 @@
 
             <ui:include src="lists/menu-list.xhtml"/>
             <div class='blog-admin post-header' id="blog-comment-list-header">
-                <div class='post-status'></div>
-                <div class='post-title'>
+                <div class='comment-status'></div>
+                <div class='comment-title'>
                     #{blogMsg.blog_post_title_label}
                 </div>
-                <div class='post-date'>
+                <div class='comment-date'>
                     #{blogMsg.blog_post_date_label}
                 </div>
-                <div class='post-author'>
+                <div class='comment-gravatar'></div>
+                <div class='comment-author'>
                     #{blogMsg.blog_post_author_label}
-                </div>
-                <div class='post-comment-count'>
-                    #{blogMsg.blog_post_comment_label}
                 </div>
             </div>
             <div id='blog-comment-list' class='blog-admin'>
                 <ui:include src="lists/comment-list.xhtml"/>
             </div>
             <div id='blog-comment-action' class='asf-list-action'>
-                <a href="#" class='asf-icon spam-icon' title='#{blogMsg.blog_comment_delete_action_tooltip}'></a>
+                <a href="#" class='asf-icon spam-icon' title='#{blogMsg.blog_comment_spam_action_tooltip}'></a>
             </div>
             </h:panelGroup>
         </div>
@@ -73,7 +71,7 @@
                 deleteUrl: '#{contextPath}/blogs/admin/forms/post-delete.html?post_id=',
                 selectAction: function(list, item, event) {
                     if ($(event.target).hasClass("comment-status")) {
-                        if ($(item).hasClass("status-COMMENT_WAITING")) {
+                        if ($(item).hasClass("comment-COMMENT_WAITING")) {
                             ASF.Post(item, "#{contextPath}/blogs/ajax/blogPublishComment/publish",
                                      "id=" + list.getSelectedId(item) + "&amp;status=COMMENT_PUBLISHED");
 
@@ -84,7 +82,7 @@
                         return false;
                     } else if ($(event.target).hasClass("spam-icon")) {
                         item = $(list.currentNode);
-                        if ($(item).hasClass("status-COMMENT_SPAM")) {
+                        if ($(item).hasClass("comment-COMMENT_SPAM")) {
                             ASF.Post(item, "#{contextPath}/blogs/ajax/blogPublishComment/publish",
                                     "id=" + list.getSelectedId(item) + "&amp;status=COMMENT_WAITING");
                         } else {

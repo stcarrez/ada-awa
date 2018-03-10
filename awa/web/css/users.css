@@ -1,6 +1,6 @@
 /**
  * users.css - Style for users module
- * Copyright (C) 2011 Stephane Carrez
+ * Copyright (C) 2011-2018 Stephane Carrez
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
 div.awa-side1, div.awa-side2 {
@@ -173,18 +173,19 @@ div.openid-retry {
 .member-status, .member-title, .member-email, .member-role, .member-date {
     float: left;
     height: 1.2em;
+    overflow: hidden;
 }
 .member-status {
     width: 10%;
 }
 .member-title {
-    width: 20%;
+    width: 30%;
 }
 .member-email {
-    width: 20%;
+    width: 30%;
 }
 .member-role {
-    width: 20%;
+    width: 15%;
 }
 .member-date {
     width: 15%;
@@ -193,4 +194,8 @@ div.openid-retry {
     padding: 4px;
     background: #e8f0ff;
     white-space: pre;
+}
+.member-list div.asf-list-action {
+    left: -24px;
+    width: 24px;
 }

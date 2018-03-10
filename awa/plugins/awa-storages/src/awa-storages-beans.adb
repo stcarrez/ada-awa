@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-beans -- Storage Ada Beans
---  Copyright (C) 2012, 2013, 2016 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2016, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,16 +52,21 @@ package body AWA.Storages.Beans is
    procedure Set_Value (From  : in out Upload_Bean;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
+      use type ADO.Identifier;
       Manager : constant Services.Storage_Service_Access := From.Module.Get_Storage_Manager;
       Folder  : Models.Storage_Folder_Ref;
       Found   : Boolean;
+      Id      : ADO.Identifier;
    begin
       if Name = "folderId" then
          From.Folder_Id := ADO.Utils.To_Identifier (Value);
          Manager.Load_Folder (Folder, From.Folder_Id);
          From.Set_Folder (Folder);
       elsif Name = "id" and then not Util.Beans.Objects.Is_Empty (Value) then
-         Manager.Load_Storage (From, ADO.Utils.To_Identifier (Value));
+         Id := ADO.Utils.To_Identifier (Value);
+         if Id /= ADO.NO_IDENTIFIER then
+            Manager.Load_Storage (From, Id);
+         end if;
       elsif Name = "name" then
          Folder := Models.Storage_Folder_Ref (From.Get_Folder);
          Manager.Load_Storage (From, From.Folder_Id, Util.Beans.Objects.To_String (Value), Found);
@@ -85,7 +90,11 @@ package body AWA.Storages.Beans is
       end if;
       Bean.Set_Mime_Type (Part.Get_Content_Type);
       Bean.Set_File_Size (Part.Get_Size);
-      Manager.Save (Bean, Part, AWA.Storages.Models.DATABASE);
+      if Part.Get_Size > 100_000 then
+         Manager.Save (Bean, Part, AWA.Storages.Models.FILE);
+      else
+         Manager.Save (Bean, Part, AWA.Storages.Models.DATABASE);
+      end if;
    end Save_Part;
 
    --  ------------------------------

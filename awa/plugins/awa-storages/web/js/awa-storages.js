@@ -1,6 +1,6 @@
 /*
  *  awa-storages -- Storages and folders
- *  Copyright (C) 2012, 2016 Stephane Carrez
+ *  Copyright (C) 2012, 2016, 2018 Stephane Carrez
  *  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,34 +15,121 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-var AWA = {};
+(function($, undefined) {
 
-function init_folder_list(id, idCreate, idCurrent, page_url) {
-    $(id).list({
-        actionId: null,
-        itemPrefix: 'folder-',
-        editUrl: contextPath + '/storages/forms/create-folder-form.html',
-        currentItem: '#folder-' + idCurrent,
-        selectAction: function(element, item) {
-            var id = element.getSelectedId(item);
-            return ASF.Update(this, contextPath + page_url + '?folderId=' + id, '#document-list-editor');
+    $.widget("ui.folder", $.ui.list, {
+        options: {
+            actionId: null,
+            itemPrefix: 'folder-',
+            acceptedFiles: null
+        },
+        selectedItem: null,
+
+        _create: function() {
+            var self = this;
+            var upload = $(self.options.uploadButton);
+
+            $.ui.list.prototype._create.apply(this, arguments);
+            $(upload).bind('click', function(event) {
+                var id = self.getSelectedId(self.selectedItem);
+                if (id != null) {
+                    self.uploadDialog(id);
+                }
+                return false;
+            });
+            self.options.selectAction = self.selectAction;
+        },
+        selectAction: function(node, event) {
+            var id = this.getSelectedId(node);
+            if (this.selectedItem) {
+                $(this.selectedItem).removeClass(this.options.selectClass);
+            }
+            this.currentNode = node;
+            this.selectedItem = node;
+            $(this.selectedItem).addClass(this.options.selectClass);
+            return ASF.Update(this, this.options.selectUrl + '?folderId=' + id, '#document-list-editor');
+        },
+        uploadDialog: function(folderId) {
+            var self = this;
+            var div = document.createElement("div");
+            div.id = 'upload-dialog';
+            div = $(div);
+
+            var d = $(document.body);
+            if (d.length == 0) {
+                return false;
+            }
+
+            $(d).append($(div));
+
+            /* Perform the HTTP GET */
+            jQuery.ajax({
+                url: this.options.uploadUrl + "?folderId=" + folderId,
+                context: document.body,
+                success: function(data, status, jqXHDR) {
+                    var contentType = jqXHDR.getResponseHeader('Content-type');
+                    if (contentType == null) {
+                        contentType = "text/html";
+                    }
+                    if (contentType.match(/^text\/(html|xml)(;.*)?$/i)) {
+                        $(div).dialog({
+                            autoOpen: false,
+                            show: "blind",
+                            hide: "explode",
+                            minWidth: 600,
+                            close: function() {
+                                $(div).dialog('destroy');
+                                $(div).remove();
+                            }
+                        });
+
+                        $(div).html(jqXHDR.responseText);
+
+                        /**
+                        * Extract a title from the inner form to setup the dialog box.
+                        */
+                        var dTitle, dBox = $(div).children('div');
+                        if (dBox.length == 0) {
+                            dTitle = $(div).children('h2');
+                        } else {
+                            dTitle = $(dBox).children('h2');
+                        }
+                        if (dTitle.length > 0) {
+                            $(div).dialog("option", "title", dTitle.html());
+                            dTitle.remove();
+                        } else {
+                            dTitle = $(div).children('div').attr('title');
+                            if (dTitle != null) {
+                                $(div).dialog("option", "title", dTitle );
+                                /* $(div).attr('title', title); */
+                            }
+                        }
+                        $(div).dialog('open');
+                        $("#uploadForm").dropzone({
+                            url: self.options.uploadUrl,
+                            dictDefaultMessage: self.options.dictDefaultMessage,
+                            dictInvalidFileType: self.options.dictInvalidFileType,
+                            acceptedFiles: self.options.acceptedFiles,
+                            maxFiles: 1,
+                            paramName: "upload-file",
+                            params: function(files, xhr, chunk) {
+                                return { "upload-button": "1", "uploadForm": "1" }
+                            },
+                            success: function(file, response) {
+                                ASF.Execute(self.currentNode, response);
+                                $(div).dialog('close');
+                            }
+                        });
+
+                    } else if (contentType.match(/^application\/json(;.*)?$/i)) {
+                        ASF.Execute(self.currentNode, data);
+                    }
+                },
+                error: function(jqXHDR, status, error) {
+                    ASF.AjaxError(jqXHDR, status, error, d);
+                }
+            });
         }
     });
-}
-function init_upload(id, folder_id, file_id, upload_url) {
-    var dr = new Dropzone(document.querySelector("#document-upload"), {
-                thumbnailWidth: 80,
-                thumbnailHeight: 80,
-                clickable: "#upload-button",
-                params: { uploadForm: "1", uploadButton: "1", folder: folder_id, id: file_id },
-                paramName: "upload-file",
-                url: upload_url,
-                previewTemplate: '<div class="dz-preview dz-file-preview"><div class="dz-image"><img data-dz-thumbnail="" /></div><div class="dz-details\"><div class="dz-size"><span data-dz-size=""></span></div><div class="dz-filename"><span data-dz-name=""></span></div></div><div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress=""></span></div><div class="dz-error-message"><span data-dz-errormessage=""></span></div><div class="dz-success-mark"></div><div class="dz-error-mark"></div></div>'
-    });
-    //  dr.on("sending", function(file) {
-    //          document.querySelector("#total-progress").style.opacity = "1";
-    //  });
-    dr.on("success", function(file, response, e) {
-        ASF.Execute($(id), response);
-    });
-}
+
+})( jQuery );

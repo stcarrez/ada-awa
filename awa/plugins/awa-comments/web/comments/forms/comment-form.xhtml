@@ -1,5 +1,5 @@
 <!-- Form to create or comment
-  -  Copyright (C) 2014, 2017 Stephane Carrez
+  -  Copyright (C) 2014, 2017, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,7 +32,7 @@
                     <w:gravatar email="#{user.email}" size="60"/>
                 </div>
                 <div class='comment-form'>
-                    <h:messages styleClass='error'/>
+                    <h:messages styleClass='awa-error'/>
                     <dl class="awa-required#{util:hasMessage('text') ? ' awa-error' : ''}">
                         <dd>
                             <h:inputTextarea id='text' rows='10' required='true' value='#{comment.message}'/>

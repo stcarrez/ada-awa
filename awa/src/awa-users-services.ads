@@ -133,6 +133,12 @@ package AWA.Users.Services is
                           IpAddr    : in String;
                           Principal : out AWA.Users.Principals.Principal_Access);
 
+   --  Load the user and email address from the invitation key.
+   procedure Load_User (Model     : in out User_Service;
+                        User      : in out User_Ref'Class;
+                        Email     : in out Email_Ref'Class;
+                        Key       : in String);
+
    --  Verify the access key and retrieve the user associated with that key.
    --  Starts a new session associated with the given IP address.
    --  The authenticated user is identified by a principal instance allocated

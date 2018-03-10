@@ -1,5 +1,5 @@
 <!-- Edit an existing post
-  -  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013, 2014, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +23,7 @@
     <ui:define name="pageScript">
         <script type="text/javascript" src="#{contextPath}/js/markedit/showdown.js"></script>
         <script type="text/javascript" src="#{contextPath}/js/markedit/jquery.markedit.js"></script>
+        <script type="text/javascript" src="#{contextPath}/js/dropzone.js"></script>
     </ui:define>
 
     <!-- Main page body -->
@@ -34,7 +35,7 @@
 
         <div id='awa-content'>
             <ui:include src="lists/menu-list.xhtml"/>
-            <div id='blog-post-edit' class='blog-edit-post'>
+            <div id='blog-post-edit' class='awa-container'>
                 <div class='awa-post'>
                     <ui:include src="forms/post-form.xhtml">
                         <ui:param name="title" value="#{blogMsg.blog_post_update_title}"/>

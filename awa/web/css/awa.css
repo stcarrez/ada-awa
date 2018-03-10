@@ -16,10 +16,6 @@ body {
   background-color: #f0f0f0;
   overflow-y: scroll;
 }
-/* IE 6 min-height hack */
-* html #pam-page-content {
-    height: 100%;
-}
 body.awa {
   background-color: #81CFB7;
 }
@@ -102,7 +98,7 @@ body.awa {
   float: right;
   margin-right: 20px;
 }
-ul.buttons, ul.awa-buttons {
+ul.awa-buttons {
     float: left;
     list-style-type: none;
     margin-top: 1em;
@@ -116,13 +112,11 @@ ul.buttons, ul.awa-buttons {
     padding-right: 2%;
 }
 
-li.awa-error label {
-    color: red;
-}
-
 /**
  * AWA Errors
  */
+li.awa-error label,
+dl.awa-error dt,
 span.awa-error, dl.awa-error dt label, dl.asf-error dt label, dl.asf-error dd span {
     color: red;
 }
@@ -147,7 +141,7 @@ ul.awa-error li {
 /**
  * Form definition.
  */
-div.awa-form {
+div.awa-form, .awa-container {
     float: left;
     width: 100%;
 }
@@ -172,10 +166,7 @@ dl.awa-optional dd, dl.awa-required dd {
     clear: both;
     width: 100%;
 }
-dl.awa-error dt {
-    color: red;
-}
-dl.awa-error span.error, span.awa-error {
+dl.awa-error span.awa-error, span.awa-error {
     font-size: 0.9em;
 }
 dl.awa-optional label, dl.awa-required label {
@@ -320,6 +311,23 @@ div.awa-modal div.awa-login {
 }
 
 /**
+ * Pagination for lists
+ */
+ul.awa-pagination {
+    float: left;
+    width: 96%;
+    list-style-type: none;
+}
+ul.awa-pagination li {
+    float: left;
+    margin-left: 10%;
+    margin-right: 10%;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    font-weight: bold;
+}
+
+/**
  * The ui.list component.
  */
 .ui-list .awa-list-item {
@@ -414,4 +422,70 @@ div.awa-modal div.awa-login {
 .awa-tag-list {
     float: right;
     list-style-type: none;
+}
+
+.awa-empty-message {
+    float: left;
+    width: 100%;
+    padding: 1em;
+    box-sizing: content-box;
+}
+
+/**
+ * Responsive style for mobile and tablets.
+ */
+@media screen and (max-width: 768px) {
+    @-ms-viewport { width: 320px; }
+    #awa-top-nav li a {
+        font-size: 100%;
+        padding-left: 5px;
+        padding: 5px;
+        padding-bottom: 2px;
+    }
+    #awa-footer, body {
+        background-image: none;
+        font-size: 100%;
+    }
+    #awa-top-nav {
+        width: 99%;
+    }
+    #awa-hdr ul {
+        padding-right: 0;
+    }
+    #awa-hdr li {
+        line-height: 0.9em;
+    }
+    .wiki-page-container .grid_2, .wiki-page-container .grid_10,
+    .tagedit-list, .container_12 .grid_9, .container_12 .grid_3 {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+    .tagedit-list li.tagedit-listelement {
+        float: right;
+    }
+    h3 {
+        overflow: hidden;
+        width: 100%;
+    }
+    div.post-text div {
+        max-width: 95%;
+        overflow: hidden;
+    }
+    div.awa-side1, div.awa-side2 {
+        width: 100%;
+        padding: 0;
+    }
+}
+@media screen and (max-width: 600px) {
+    body{
+        font-size:100%;
+    }
+    div.awa-modal {
+        top: 5%;
+        left: 5%;
+        width: 90%;
+        max-width: 530px;
+        min-width: 320px;
+    }
 }

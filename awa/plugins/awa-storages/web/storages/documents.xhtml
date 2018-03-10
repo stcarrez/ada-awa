@@ -1,5 +1,5 @@
 <!-- List the documents available in the workspace
-  -  Copyright (C) 2012, 2013, 2016 Stephane Carrez
+  -  Copyright (C) 2012, 2013, 2016, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,9 +38,7 @@
             <c:choose>
                 <c:when test="#{not empty storageList.folder}">
                     <div id='folder-list-editor' class="ui-widget ui-corner-all">
-                        <ui:include src="lists/folders.xhtml">
-                            <ui:param name="page_url" value="/storages/lists/documents.html"/>
-                        </ui:include>
+                        <ui:include src="lists/folders.xhtml"/>
                     </div>
                     <div id='document-list-editor' class="ui-widget ui-corner-all">
                         <ui:include src="lists/document-list.xhtml"/>
@@ -49,6 +47,16 @@
                         <a href="#" class='asf-icon asf-delete' title='#{storageMsg.storage_list_delete_file_tooltip}'></a>
                     </div>
                     <util:script>
+                        $('#folder-list').folder({
+                            selectClass: 'asf-selected',
+                            editUrl: '#{contextPath}/storages/forms/create-folder-form.html',
+                            currentItem: '#folder-' + #{not empty storageList.folder ? storageList.folder.id : 'null'},
+                            selectUrl: '#{contextPath}/storages/lists/documents.html',
+                            uploadButton: '#awa-upload-button',
+                            uploadUrl: '#{contextPath}/storages/forms/upload-form.html',
+                            dictDefaultMessage: "#{util:escapeJavaScript(storageMsg.storage_upload_form_message)}",
+                            dictInvalidFileType: "#{util:escapeJavaScript(storageMsg.storage_upload_form_invalid_file_message)}"
+                        });
                         $('#folder-list-editor').resizable({
                             minWidth: 100, maxWidth: 400,
                             resize: function(event, ui) {
@@ -100,7 +108,7 @@
         </div>
     </ui:define>
     <ui:define name="pageScript">
-         <script type="text/javascript" src="#{contextPath}/js/dropzone.js"></script>
+        <script type="text/javascript" src="#{contextPath}/js/dropzone.js"></script>
     </ui:define>
 </ui:composition>
 

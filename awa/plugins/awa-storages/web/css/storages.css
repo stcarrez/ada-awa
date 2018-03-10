@@ -1,6 +1,6 @@
 /*
  *  awa-storages -- Storages and folders
- *  Copyright (C) 2012, 2013, 2016 Stephane Carrez
+ *  Copyright (C) 2012, 2013, 2016, 2018 Stephane Carrez
  *  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -77,17 +77,24 @@ div.awa-document div.awa-download {
     float: left;
     height: 24px;
     width: 32px;
+    cursor: pointer;
 }
 .awa-document .awa-doc-thumbnail {
     float: left;
     width: 64px;
     height: 64px;
+    overflow: hidden;
 }
 .awa-private .awa-doc-status {
     background: url(../images/storages/doc-private.png) no-repeat;
 }
 .awa-public .awa-doc-status {
     background: url(../images/storages/icon-internet.png) no-repeat;
+}
+.awa-document .awa-doc-info {
+    float: left;
+    padding-left: 10px;
+    width: calc(100% - 110px);
 }
 div.asf-active-list div.asf-active div.awa-download {
     visibility: visible;
@@ -100,13 +107,11 @@ div.document-list {
 div.document-list div.asf-active {
     background-color: #FFC;
 }
-.documentUpload {
-    height: 40px;
-}
 #folder-list-editor {
     width: 20%;
     border: 2px solid #BCD;
     float: left;
+    margin-top: 15px;
 }
 #folder-add {
     float: left;
@@ -117,13 +122,7 @@ div.document-list div.asf-active {
     width: 79%;
     border: 2px solid #BCD;
     margin-left: 5px;
-}
-
-#upload-file {
-    margin-right: 20px;
-}
-#upload-button {
-    margin-left: 10px;
+    margin-top: 15px;
 }
 #document-action {
     width: 24px;
@@ -165,7 +164,7 @@ input.asf-editable-text {
 .image-details dt {
     clear: both;
     float: left;
-    font-style: bold;
+    font-weight: bold;
     width: 20%;
 }
 .image-details dd {
@@ -174,9 +173,6 @@ input.asf-editable-text {
 }
 .image-upload {
     height: 80px;
-}
-.upload-form {
-    background-color: #f6f6f3;
 }
 .image-view {
     padding: 1%;
@@ -187,20 +183,6 @@ input.asf-editable-text {
     padding-right: 0.5em;
     padding-bottom: 0.5em;
     display: inline-block;
-}
-#document-upload {
-    display: block;
-    float: left;
-    width: 100%;
-    height: 40px;
-}
-#total-progress {
-    display: block;
-    float: left;
-    width: 100%;
-    height: 20px;
-    background: red;
-    opacity: 0;
 }
 .dz-image, .dz-details, .dz-progress {
     float: left;
@@ -217,4 +199,24 @@ input.asf-editable-text {
 }
 .awa-image-list-editor .active {
     background-color: #ccc;
+}
+/* Dropzone style */
+.dropzone {
+    border: 2px dashed #A6C9E2;
+    border-radius: 5px;
+    padding: 1em;
+    background: #e8f3fd;
+}
+.dropzone input {
+    display: none;
+}
+.dropzone.dz-clickable .dz-message {
+    cursor: pointer;
+}
+.dropzone .dz-message {
+    font-weight: bold;
+    padding: 2em 0;
+}
+.dropzone .dz-success-mark, .dropzone .dz-error-mark {
+    float: left;
 }

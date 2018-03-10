@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-services -- Storage service
---  Copyright (C) 2012, 2013, 2016 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2016, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -199,6 +199,10 @@ package body AWA.Storages.Services is
 
       if not Into.Is_Null then
          Workspace := AWA.Workspaces.Models.Workspace_Ref (Into.Get_Workspace);
+         if Workspace.Is_Null and not Into.Get_Folder.Is_Null then
+            Workspace := AWA.Workspaces.Models.Workspace_Ref (Into.Get_Folder.Get_Workspace);
+            Into.Set_Workspace (Workspace);
+         end if;
       end if;
       if Workspace.Is_Null then
          AWA.Workspaces.Modules.Get_Workspace (DB, Ctx, Workspace);
@@ -268,7 +272,8 @@ package body AWA.Storages.Services is
          declare
             Store   : Stores.Store_Access;
             Storage : AWA.Storages.Models.Storage_Ref;
-            File    : AWA.Storages.Storage_File (TMP);
+            Mode    : constant Storage_Type := (if Kind = Models.FILE then Storages.FILE else TMP);
+            File    : AWA.Storages.Storage_File (Mode);
             Found   : Boolean;
          begin
             Store := Storage_Service'Class (Service).Get_Store (Kind);
@@ -356,21 +361,6 @@ package body AWA.Storages.Services is
       Util.Concurrent.Counters.Increment (Service.Temp_Id, Value);
       Into.Path := To_Unbounded_String (Tmp & "/tmp-" & Util.Strings.Image (Value));
    end Create_Local_File;
-
-   --  ------------------------------
-   --  Create a temporary file path.
-   --  ------------------------------
-   procedure Create (Service : in out Storage_Service;
-                     Into    : out AWA.Storages.Storage_File;
-                     Storage : in AWA.Storages.Models.Storage_Type) is
-      use type Stores.Store_Access;
-      Store     : Stores.Store_Access;
-   begin
-      Store := Storage_Service'Class (Service).Get_Store (Storage);
-      if Store = null then
-         Log.Error ("There is no store for storage {0}", Models.Storage_Type'Image (Storage));
-      end if;
-   end Create;
 
    --  ------------------------------
    --  Deletes the storage instance.
