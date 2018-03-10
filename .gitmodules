@@ -19,3 +19,6 @@
 [submodule "dynamo"]
 	path = dynamo
 	url = git://github.com/stcarrez/dynamo.git
+[submodule "ada-servlet"]
+	path = ada-servlet
+	url = git://github.com/stcarrez/ada-servlet.git
