@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  AWA tests - AWA Tests Framework
---  Copyright (C) 2011, 2012, 2014 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2014, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,9 +25,9 @@ with Util.XUnit;
 
 with ASF.Filters.Dump;
 with ASF.Servlets.Faces;
-with ASF.Servlets.Files;
+with Servlet.Core.Files;
 with ASF.Servlets.Ajax;
-with ASF.Servlets.Measures;
+with Servlet.Core.Measures;
 package AWA.Tests is
 
    type Test is abstract new Util.Tests.Test with null record;
@@ -62,10 +62,10 @@ package AWA.Tests is
       --  Application servlets and filters (add new servlet and filter instances here).
       Faces             : aliased ASF.Servlets.Faces.Faces_Servlet;
       Ajax              : aliased ASF.Servlets.Ajax.Ajax_Servlet;
-      Files             : aliased ASF.Servlets.Files.File_Servlet;
+      Files             : aliased Servlet.Core.Files.File_Servlet;
       Dump              : aliased ASF.Filters.Dump.Dump_Filter;
       Service_Filter    : aliased AWA.Services.Filters.Service_Filter;
-      Measures          : aliased ASF.Servlets.Measures.Measure_Servlet;
+      Measures          : aliased Servlet.Core.Measures.Measure_Servlet;
    end record;
 
    --  Initialize the servlets provided by the application.
