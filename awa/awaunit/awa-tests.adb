@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  AWA tests - AWA Tests Framework
---  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,12 +20,11 @@ with Ada.Task_Identification;
 with Ada.Exceptions;
 with Ada.Unchecked_Deallocation;
 
-with ASF.Server.Tests;
-
 with Util.Log.Loggers;
 
 with ASF.Tests;
 
+with Servlet.Tests;
 with AWA.Applications.Factory;
 with AWA.Tests.Helpers.Users;
 package body AWA.Tests is
@@ -66,7 +65,7 @@ package body AWA.Tests is
    procedure Set_Up (T : in out Test) is
       pragma Unreferenced (T);
    begin
-      ASF.Server.Tests.Set_Context (Application.all'Access);
+      Servlet.Tests.Set_Context (Application.all'Access);
    end Set_Up;
 
    --  ------------------------------
@@ -138,7 +137,7 @@ package body AWA.Tests is
    --  ------------------------------
    procedure Set_Application_Context is
    begin
-      ASF.Server.Tests.Set_Context (Application.all'Access);
+      Servlet.Tests.Set_Context (Application.all'Access);
    end Set_Application_Context;
 
    --  ------------------------------

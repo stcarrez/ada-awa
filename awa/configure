@@ -598,6 +598,7 @@ ADO_DB_MYSQL
 MYSQL
 ADO_DIR
 ASF_DIR
+SERVLET_DIR
 SECURITY_DIR
 WIKI_DIR
 EL_DIR
@@ -660,6 +661,7 @@ infodir
 docdir
 oldincludedir
 includedir
+runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -688,6 +690,7 @@ with_ada_util
 with_ada_el
 with_ada_wiki
 with_ada_security
+with_ada_servlet
 with_ada_asf
 with_ada_ado
 enable_aws
@@ -740,6 +743,7 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
+runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE}'
@@ -992,6 +996,15 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
+  -runstatedir | --runstatedir | --runstatedi | --runstated \
+  | --runstate | --runstat | --runsta | --runst | --runs \
+  | --run | --ru | --r)
+    ac_prev=runstatedir ;;
+  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
+  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
+  | --run=* | --ru=* | --r=*)
+    runstatedir=$ac_optarg ;;
+
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1129,7 +1142,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir
+		libdir localedir mandir runstatedir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1282,6 +1295,7 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -1326,6 +1340,7 @@ Optional Packages:
   --with-ada-el=x         Path for Ada Expression Language Library
   --with-ada-wiki=x       Path for Ada Wiki Library
   --with-ada-security=x   Path for Ada Security Library
+  --with-ada-servlet=x    Path for Ada Servlet Library
   --with-ada-asf=x        Path for Ada Server Faces Library
   --with-ada-ado=x        Path for Ada Database Objects
   --with-aws=x            Path for the Ada Web Server library
@@ -3638,6 +3653,108 @@ $as_echo "no" >&6; }
   This project was not found in ../security nor in ../ada-security-*.
   The component is available at git@github.com:stcarrez/ada-security.git.
   Please, download and configure Ada Security Library.
+  The current configuration was using:
+    ${GNATMAKE}
+    ADA_PROJECT_PATH=$ADA_PROJECT_PATH
+" "$LINENO" 5
+    fi
+  fi
+
+
+
+##########################################
+# Ada Servlet library
+##########################################
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking Ada Servlet Library" >&5
+$as_echo_n "checking Ada Servlet Library... " >&6; }
+
+# Check whether --with-ada-servlet was given.
+if test "${with_ada_servlet+set}" = set; then :
+  withval=$with_ada_servlet;
+      gnat_project_name_servlet=${withval}/
+      if test -d "${withval}"; then
+	    gnat_project_name_servlet=${withval}/servlet
+	  fi
+
+else
+
+      gnat_project_name_servlet=servlet
+
+fi
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: trying ${gnat_project_name_servlet}" >&5
+$as_echo "trying ${gnat_project_name_servlet}" >&6; }
+
+  rm -f conftest.gpr
+  # Search in the GNAT project path.
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ${gnat_project_name_servlet} project exists in gnatmake's search path" >&5
+$as_echo_n "checking whether ${gnat_project_name_servlet} project exists in gnatmake's search path... " >&6; }
+  echo "with \"${gnat_project_name_servlet}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+  if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+  then
+    gnat_project_servlet=yes
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+  else
+    gnat_project_servlet=no
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+    # Search in ../ada-servlet-*/servlet.gpr
+    files=`ls -r ../ada-servlet/servlet.gpr ../servlet/servlet.gpr ../ada-servlet-*/servlet.gpr 2>/dev/null`
+    for name in $files; do
+      dir=`dirname $name`
+      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for Ada Servlet Library project in ${dir}" >&5
+$as_echo_n "checking for Ada Servlet Library project in ${dir}... " >&6; }
+      echo "with \"${name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+      if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+      then
+         gnat_project_servlet=yes
+		 gnat_project_name_servlet=${name}
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+         break
+      else
+         gnat_project_servlet=no
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+      fi
+    done
+  fi
+  rm -f conftest.gpr
+  if test x${gnat_project_servlet} = xyes; then
+    gnat_project_with_servlet="with \"${gnat_project_name_servlet}\";";
+    gnat_project_dir_servlet=`dirname ${gnat_project_name_servlet}`
+    if test ${gnat_project_dir_servlet} = . ; then
+       gnat_project_dir_servlet=
+    else
+       gnat_project_dir_servlet="${gnat_project_dir_servlet}/"
+    fi
+
+    SERVLET_DIR=${gnat_project_dir_servlet}
+
+  else
+    gnat_project_dir_servlet=
+    gnat_project_name_servlet=
+    if test x"Building Ada Web Application requires the Ada Servlet Library." != x; then
+      as_fn_error $? "Building Ada Web Application requires the Ada Servlet Library.
+  You should build and install the Ada Servlet Library component.
+  It must be available and found by ${GNATMAKE}.
+  This project was not found in the ADA_PROJECT_PATH environment variable.
+  This project was not found in ../servlet nor in ../ada-servlet-*.
+  The component is available at git@github.com:stcarrez/ada-servlet.git.
+  Please, download and configure Ada Servlet Library.
   The current configuration was using:
     ${GNATMAKE}
     ADA_PROJECT_PATH=$ADA_PROJECT_PATH

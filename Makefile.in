@@ -22,6 +22,7 @@ PROCESSORS=@NR_CPUS@
 
 awa_util_name=ada-util
 awa_el_name=ada-el
+awa_servlet_name=ada-servlet
 awa_asf_name=ada-asf
 awa_security_name=ada-security
 awa_wiki_name=ada-wiki
@@ -47,9 +48,13 @@ awa_wiki_configure=--with-ada-util=${awa_build_root}${awa_util_name}
 awa_security_configure=--with-ada-util=${awa_build_root}${awa_util_name}
 awa_dynamo_configure=--with-ada-util=${awa_build_root}${awa_util_name}
 awa_ado_configure=--with-ada-util=${awa_build_root}${awa_util_name}
+awa_servlet_configure=--with-ada-util=${awa_build_root}${awa_util_name}
+awa_servlet_configure += --with-ada-el=${awa_build_root}${awa_el_name}
+awa_servlet_configure += --with-ada-security=${awa_build_root}${awa_security_name}
 awa_asf_configure=--with-ada-util=${awa_build_root}${awa_util_name}
 awa_asf_configure += --with-ada-el=${awa_build_root}${awa_el_name}
 awa_asf_configure += --with-ada-security=${awa_build_root}${awa_security_name}
+awa_asf_configure += --with-ada-servlet=${awa_build_root}${awa_servlet_name}
 awa_dynamo_configure += --with-ada-el=${awa_build_root}${awa_el_name}
 awa_dynamo_configure += --with-ada-asf=${awa_build_root}${awa_asf_name}
 awa_dynamo_configure += --with-ada-ado=${awa_build_root}${awa_ado_name}
@@ -59,9 +64,9 @@ awa_awa_configure += --with-ada-asf=${awa_build_root}${awa_asf_name}
 awa_awa_configure += --with-ada-wiki=${awa_build_root}${awa_wiki_name}
 
 # Directories of sub-projects in the build order.
-SUBDIRS=ada-util ada-el ada-security ada-wiki ada-asf ada-ado dynamo awa
+SUBDIRS=ada-util ada-el ada-security ada-wiki ada-servlet ada-asf ada-ado dynamo awa
 
-DIRS=ada-util ada-el ada-security ada-wiki ada-asf ada-ado dynamo
+DIRS=ada-util ada-el ada-security ada-wiki ada-servlet ada-asf ada-ado dynamo
 
 # Build executables for all mains defined by the project.
 build test clean install uninstall:		 stamp-configure
@@ -98,6 +103,10 @@ stamp-configure:	stamp-aws stamp-xmlada Makefile
 	echo "Configuring ==== ada-security ${awa_security_configure} ===="
 	(cd ${awa_build_root}${awa_security_name} && ./configure  --prefix=${prefix} ${awa_security_configure})
 	(cd ${awa_build_root}${awa_security_name} && make setup)
+
+	echo "Configuring ==== ada-servlet ${awa_servlet_configure} ===="
+	(cd ${awa_build_root}${awa_servlet_name} && ./configure  --prefix=${prefix} ${awa_servlet_configure})
+	(cd ${awa_build_root}${awa_servlet_name} && make setup)
 
 	echo "Configuring ==== ada-asf ${awa_asf_configure} ===="
 	(cd ${awa_build_root}${awa_asf_name} && ./configure  --prefix=${prefix} ${awa_asf_configure})

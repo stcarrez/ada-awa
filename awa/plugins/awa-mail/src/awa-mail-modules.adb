@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail -- Mail module
---  Copyright (C) 2011, 2012, 2015, 2017 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2015, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,7 @@ with AWA.Mail.Beans;
 with AWA.Mail.Components.Factory;
 with AWA.Applications;
 
-with ASF.Servlets;
+with Servlet.Core;
 with ASF.Requests.Mockup;
 with ASF.Responses.Mockup;
 with Util.Beans.Basic;
@@ -101,7 +101,7 @@ package body AWA.Mail.Modules is
          Ptr   : constant Util.Beans.Basic.Readonly_Bean_Access := Content'Unrestricted_Access;
          Bean  : constant Util.Beans.Objects.Object
            := Util.Beans.Objects.To_Object (Ptr, Util.Beans.Objects.STATIC);
-         Dispatcher : constant ASF.Servlets.Request_Dispatcher
+         Dispatcher : constant Servlet.Core.Request_Dispatcher
            := Plugin.Get_Application.Get_Request_Dispatcher (Template);
       begin
          Req.Set_Request_URI (Template);
@@ -109,7 +109,7 @@ package body AWA.Mail.Modules is
          Req.Set_Attribute (Name => "event", Value => Bean);
          Req.Set_Attributes (Props);
 
-         ASF.Servlets.Forward (Dispatcher, Req, Reply);
+         Servlet.Core.Forward (Dispatcher, Req, Reply);
       end;
    end Send_Mail;
 
