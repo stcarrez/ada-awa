@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-servlets -- Serve files saved in the storage service
---  Copyright (C) 2012, 2016 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,7 @@
 -----------------------------------------------------------------------
 with Ada.Calendar;
 
-with ASF.Servlets;
+with Servlet.Core;
 with ASF.Requests;
 with ASF.Responses;
 
@@ -28,13 +28,13 @@ package AWA.Storages.Servlets is
 
    --  The <b>Storage_Servlet</b> represents the component that will handle
    --  an HTTP request received by the server.
-   type Storage_Servlet is new ASF.Servlets.Servlet with private;
+   type Storage_Servlet is new Servlet.Core.Servlet with private;
 
    --  Called by the servlet container to indicate to a servlet that the servlet
    --  is being placed into service.
    overriding
    procedure Initialize (Server  : in out Storage_Servlet;
-                         Context : in ASF.Servlets.Servlet_Registry'Class);
+                         Context : in Servlet.Core.Servlet_Registry'Class);
 
    --  Called by the server (via the service method) to allow a servlet to handle
    --  a GET request.
@@ -88,6 +88,6 @@ package AWA.Storages.Servlets is
 
 private
 
-   type Storage_Servlet is new ASF.Servlets.Servlet with null record;
+   type Storage_Servlet is new Servlet.Core.Servlet with null record;
 
 end AWA.Storages.Servlets;
