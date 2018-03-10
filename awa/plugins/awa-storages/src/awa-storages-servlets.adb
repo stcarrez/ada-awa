@@ -35,7 +35,7 @@ package body AWA.Storages.Servlets is
    --  ------------------------------
    overriding
    procedure Initialize (Server  : in out Storage_Servlet;
-                         Context : in ASF.Servlets.Servlet_Registry'Class) is
+                         Context : in Servlet.Core.Servlet_Registry'Class) is
    begin
       null;
    end Initialize;
