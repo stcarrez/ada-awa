@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-previews -- Wiki preview management
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2015, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +28,7 @@ with ADO;
 
 with EL.Contexts.TLS;
 
-with ASF.Servlets;
+with Servlet.Core;
 with ASF.Requests.Mockup;
 with ASF.Responses.Mockup;
 
@@ -95,14 +95,14 @@ package body AWA.Wikis.Previews is
       declare
          Req       : ASF.Requests.Mockup.Request;
          Reply     : ASF.Responses.Mockup.Response;
-         Dispatcher : constant ASF.Servlets.Request_Dispatcher
+         Dispatcher : constant Servlet.Core.Request_Dispatcher
            := Plugin.Get_Application.Get_Request_Dispatcher (Template);
          Result : Ada.Strings.Unbounded.Unbounded_String;
       begin
          Req.Set_Request_URI (Template);
          Req.Set_Method ("GET");
 
-         ASF.Servlets.Forward (Dispatcher, Req, Reply);
+         Servlet.Core.Forward (Dispatcher, Req, Reply);
          Reply.Read_Content (Result);
          Util.Files.Write_File (Html_File, Result);
       end;
