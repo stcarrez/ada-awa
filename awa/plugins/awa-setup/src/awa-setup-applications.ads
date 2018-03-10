@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-setup-applications -- Setup and installation
---  Copyright (C) 2016, 2017 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,7 @@
 with Ada.Strings.Unbounded;
 with ASF.Applications.Main;
 with ASF.Servlets.Faces;
-with ASF.Servlets.Files;
+with Servlet.Core.Files;
 with ASF.Requests;
 with ASF.Responses;
 with ASF.Server;
@@ -61,7 +61,7 @@ package AWA.Setup.Applications is
 
    --  The <b>Servlet</b> represents the component that will handle
    --  an HTTP request received by the server.
-   type Redirect_Servlet is new ASF.Servlets.Servlet with null record;
+   type Redirect_Servlet is new Servlet.Core.Servlet with null record;
 
    overriding
    procedure Do_Get (Server   : in Redirect_Servlet;
@@ -92,7 +92,7 @@ package AWA.Setup.Applications is
    type Application is new ASF.Applications.Main.Application and Util.Beans.Basic.Bean
      and Util.Beans.Methods.Method_Bean with record
       Faces       : aliased ASF.Servlets.Faces.Faces_Servlet;
-      Files       : aliased ASF.Servlets.Files.File_Servlet;
+      Files       : aliased Servlet.Core.Files.File_Servlet;
       Redirect    : aliased Redirect_Servlet;
       Config      : ASF.Applications.Config;
       Changed     : ASF.Applications.Config;
