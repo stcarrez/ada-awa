@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Util testsuite - Util Testsuite
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -58,7 +58,7 @@ with AWA.Changelogs.Modules.Tests;
 with AWA.Wikis.Modules.Tests;
 
 --  with ASF.Server.Web;
-with ASF.Server.Tests;
+with Servlet.Server.Tests;
 package body AWA.Testsuite is
    Users          : aliased AWA.Users.Modules.User_Module;
 
