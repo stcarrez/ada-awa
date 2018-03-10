@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-tests -- Unit tests for blogs module
---  Copyright (C) 2017 Stephane Carrez
+--  Copyright (C) 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,13 +17,14 @@
 -----------------------------------------------------------------------
 
 with Util.Tests;
+with AWA.Tests;
 with Ada.Strings.Unbounded;
 
 package AWA.Blogs.Tests is
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite);
 
-   type Test is new Util.Tests.Test with record
+   type Test is new AWA.Tests.Test with record
       Blog_Ident : Ada.Strings.Unbounded.Unbounded_String;
       Post_Ident : Ada.Strings.Unbounded.Unbounded_String;
       Post_Uri   : Ada.Strings.Unbounded.Unbounded_String;
