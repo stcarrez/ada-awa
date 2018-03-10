@@ -22,6 +22,7 @@ that gives flexibility to applications to grant access and protect your user's r
 AWA integrates the following projects:
 
 * ASF           (https://github.com/stcarrez/ada-asf)
+* Ada Servlet   (https://github.com/stcarrez/ada-servlet)
 * ADO           (https://github.com/stcarrez/ada-ado)
 * Ada Util      (https://github.com/stcarrez/ada-util)
 * Ada Wiki      (https://github.com/stcarrez/ada-wiki)
