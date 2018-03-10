@@ -24,7 +24,9 @@ with Util.Log.Loggers;
 
 with ASF.Tests;
 
+with Servlet.Server;
 with Servlet.Tests;
+with ASF.Applications;
 with AWA.Applications.Factory;
 with AWA.Tests.Helpers.Users;
 package body AWA.Tests is
@@ -65,7 +67,8 @@ package body AWA.Tests is
    procedure Set_Up (T : in out Test) is
       pragma Unreferenced (T);
    begin
-      Servlet.Tests.Set_Context (Application.all'Access);
+      Servlet.Server.Set_Context (Application.all'Access);
+      null;
    end Set_Up;
 
    --  ------------------------------
@@ -107,6 +110,8 @@ package body AWA.Tests is
                          Add_Modules : in Boolean) is
       pragma Unreferenced (Add_Modules);
       use AWA.Applications;
+      C        : ASF.Applications.Config;
+      Empty    : Util.Properties.Manager;
    begin
       --  Create the application unless it is specified as argument.
       --  Install a shutdown hook to delete the application when the primary task exits.
@@ -119,8 +124,11 @@ package body AWA.Tests is
       else
          Application := App;
       end if;
+      C.Copy (Props);
+      Application.Initialize (C, Factory);
+      Application.Set_Global ("contextPath", "/asfunit");
+      Servlet.Tests.Initialize (Empty, "/asfunit", Application.all'Access);
 
-      ASF.Tests.Initialize (Props, Application.all'Access, Factory);
       Application.Add_Filter ("service", Service_Filter'Access);
    end Initialize;
 
@@ -137,7 +145,7 @@ package body AWA.Tests is
    --  ------------------------------
    procedure Set_Application_Context is
    begin
-      Servlet.Tests.Set_Context (Application.all'Access);
+      Servlet.Server.Set_Context (Application.all'Access);
    end Set_Application_Context;
 
    --  ------------------------------
