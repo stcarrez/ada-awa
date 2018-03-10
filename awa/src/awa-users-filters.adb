@@ -18,8 +18,9 @@
 
 with Util.Log.Loggers;
 
+with ASF.Applications.Main;
 with ASF.Cookies;
-
+with Servlet.Core;
 with AWA.Users.Services;
 with AWA.Users.Modules;
 
@@ -44,8 +45,12 @@ package body AWA.Users.Filters is
    --  ------------------------------
    procedure Initialize (Filter  : in out Auth_Filter;
                          Config  : in ASF.Servlets.Filter_Config) is
-      URI : constant String := ASF.Servlets.Get_Init_Parameter (Config,
-                                                                AUTH_FILTER_REDIRECT_PARAM);
+      use ASF.Applications.Main;
+      Context : constant Servlet.Core.Servlet_Registry_Access
+        := Servlet.Core.Get_Servlet_Context (Config);
+      URI : constant String
+        := ASF.Servlets.Get_Init_Parameter (Config,
+                                            AUTH_FILTER_REDIRECT_PARAM);
    begin
       Log.Info ("Using login URI: {0}", URI);
 
@@ -54,6 +59,9 @@ package body AWA.Users.Filters is
       end if;
       Filter.Login_URI := To_Unbounded_String (URI);
       ASF.Security.Filters.Auth_Filter (Filter).Initialize (Config);
+      if Context.all in Application'Class then
+         Filter.Set_Permission_Manager (Application'Class (Context.all).Get_Security_Manager);
+      end if;
    end Initialize;
 
    procedure Authenticate (F         : in Auth_Filter;
