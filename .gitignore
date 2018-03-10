@@ -8,7 +8,7 @@ acc.xml
 *.cproject
 *.gb_project
 *.project
-*.log
+*.db
 ChangeLog
 .settings
 configure.lineno
