@@ -359,19 +359,6 @@ package body AWA.Blogs.Beans is
       Bean.Module.Delete_Post (Post_Id => Bean.Get_Id);
    end Delete;
 
-   procedure Create (Bean : in out Post_Bean;
-                     Req  : in out ASF.Rest.Request'Class;
-                     Reply : in out ASF.Rest.Response'Class) is
-   begin
-      null;
-   end Create;
-   procedure Update (Bean : in out Post_Bean;
-                     Req  : in out ASF.Rest.Request'Class;
-                     Reply : in out ASF.Rest.Response'Class) is
-   begin
-      null;
-   end Update;
-
    --  ------------------------------
    --  Sanitize the URI before doing a search in the database.
    --  Ignore every character that we consider to be invalid for the URI.
