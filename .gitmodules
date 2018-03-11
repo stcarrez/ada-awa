@@ -22,3 +22,6 @@
 [submodule "ada-servlet"]
 	path = ada-servlet
 	url = git://github.com/stcarrez/ada-servlet.git
+[submodule "swagger-ada"]
+	path = swagger-ada
+	url = git://github.com/stcarrez/swagger-ada.git
