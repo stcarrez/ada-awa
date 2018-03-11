@@ -5,7 +5,6 @@ dnl
 AC_INIT(Makefile.in)
 
 AC_CANONICAL_SYSTEM
-AC_EXEEXT
 
 # Current release settings
 AWA_MAJOR_VERSION=1
@@ -17,14 +16,14 @@ AWA_VERSION=$AWA_MAJOR_VERSION.$AWA_MINOR_VERSION.$AWA_MICRO_VERSION
 # Check to enable/disable shared library
 ##########################################
 AM_SHARED_LIBRARY_SUPPORT
+AM_DISTRIB_SUPPORT
+AM_COVERAGE_SUPPORT
 
 AM_GNAT_CHECK_GPRBUILD
 
 # checking for local tools
-AC_PROG_CC
 AC_PROG_MAKE_SET
 AC_PROG_INSTALL
-AC_PROG_RANLIB
 
 # Set the version number of GtkAda
 AC_SUBST(AWA_VERSION)
@@ -34,8 +33,6 @@ AC_SUBST(AWA_MICRO_VERSION)
 
 EXEC_PREFIX="$prefix"
 AC_SUBST(EXEC_PREFIX)
-
-AC_CHECK_PROGS(GNATMAKE, gnatmake, "")
 
 AC_CHECK_PROG(UNZIP_CHECK,unzip,yes)
 if test x"$UNZIP_CHECK" != x"yes" ; then
@@ -75,7 +72,7 @@ fi
 
 ENABLE_AHVEN=yes
 AC_ARG_ENABLE(ahven,
-[  --enable-ahven          Enable internal Ahven support for testutil library and Ada util unit tests (enabled)],
+[  --enable-ahven          Enable internal Ahven support for Ada util unit tests (enabled)],
 [case "${enableval}" in
   no|none)  ENABLE_AHVEN= ;;
   *)        ENABLE_AHVEN=yes
