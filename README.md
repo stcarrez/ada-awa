@@ -23,6 +23,7 @@ AWA integrates the following projects:
 
 * ASF           (https://github.com/stcarrez/ada-asf)
 * Ada Servlet   (https://github.com/stcarrez/ada-servlet)
+* Swagger Ada   (https://github.com/stcarrez/swagger-ada)
 * ADO           (https://github.com/stcarrez/ada-ado)
 * Ada Util      (https://github.com/stcarrez/ada-util)
 * Ada Wiki      (https://github.com/stcarrez/ada-wiki)
