@@ -28,7 +28,6 @@ AWA_MICRO_VERSION=0
 AWA_VERSION=$AWA_MAJOR_VERSION.$AWA_MINOR_VERSION.$AWA_MICRO_VERSION
 
 # checking for local tools
-AC_PROG_CC
 AC_PROG_MAKE_SET
 AC_PROG_INSTALL
 AC_PROG_LN_S
@@ -91,6 +90,8 @@ esac
 # Check to enable/disable shared library
 ##########################################
 AM_SHARED_LIBRARY_SUPPORT
+AM_DISTRIB_SUPPORT
+AM_COVERAGE_SUPPORT
 
 ##########################################
 # Ada Util library
