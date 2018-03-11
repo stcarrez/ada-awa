@@ -128,6 +128,48 @@ AC_DEFUN(AM_SHARED_LIBRARY_SUPPORT,
   AC_SUBST(BUILDS_SHARED)
 ])
 
+dnl Check whether the coverage support is enabled.
+AC_DEFUN(AM_COVERAGE_SUPPORT,
+[
+  AC_MSG_CHECKING([coverage support])
+  ac_enable_coverage=no
+  AC_ARG_ENABLE(coverage,
+    [  --enable-coverage       build with coverage support -fprofile-arcs -ftest-coverage (disabled)],
+    [case "${enableval}" in
+      no|none)  ac_enable_coverage=no ;;
+      *)        ac_enable_coverage=yes ;;
+    esac])dnl
+
+  AC_MSG_RESULT(${ac_enable_coverage})
+  BUILDS_COVERAGE=$ac_enable_coverage
+  AC_SUBST(BUILDS_COVERAGE)
+])
+
+dnl Check whether the distrib/debug build is enabled.
+AC_DEFUN(AM_DISTRIB_SUPPORT,
+[
+  AC_MSG_CHECKING([distribution build])
+  ac_enable_distrib=yes
+  ac_build_mode=distrib
+  AC_ARG_ENABLE(distrib,
+    [  --enable-distrib        build for distribution, optimized and strip symbols (enabled)],
+    [case "${enableval}" in
+      no|none)  ac_enable_distrib=no
+                ac_build_mode=debug
+                ;;
+      *)        ac_enable_distrib=yes
+                ac_build_mode=distrib
+                ;;
+    esac])dnl
+
+  AC_MSG_RESULT(${ac_enable_distrib})
+  BUILDS_DISTRIB=$ac_enable_distrib
+  AC_SUBST(BUILDS_DISTRIB)
+
+  MODE=$ac_build_mode
+  AC_SUBST(MODE)
+])
+
 dnl Check whether the AWS support is enabled and find the aws GNAT project.
 AC_DEFUN(AM_GNAT_CHECK_AWS,
 [
