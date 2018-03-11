@@ -5,7 +5,7 @@ AWA_LIBRARY_TYPE=static
 
 # You may edit this makefile as long as you keep these original 
 # target names defined.
-MODE=debug
+MODE=@MODE@
 GNATMAKE=@GNATMAKE@
 GNATCLEAN=gnatclean
 GPRINSTALL=@GPRINSTALL@
@@ -72,7 +72,7 @@ alidir=${prefix}/${infix_ali}
 
 dynamodir=${prefix}/share/dynamo
 
-COVERAGE=no
+COVERAGE=@BUILDS_COVERAGE@
 PROCESSORS=@NR_CPUS@
 MAKE_ARGS=-XMODE=${MODE} -XCOVERAGE=${COVERAGE} -XAWA_LIBRARY_TYPE=${AWA_LIBRARY_TYPE} -XPROCESSORS=$(PROCESSORS)
 
