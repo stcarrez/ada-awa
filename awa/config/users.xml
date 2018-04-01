@@ -97,7 +97,7 @@
 
   <context-param>
     <param-name>openid.realm</param-name>
-    <param-value>#{app_url_base}#{contextPath}/auth</param-value>
+    <param-value>#{app_url_base}/auth</param-value>
     <description>
        The REALM URL used by OpenID providers to verify the validity of the verification callback.
     </description>
@@ -105,7 +105,7 @@
 
   <context-param>
     <param-name>openid.callback_url</param-name>
-    <param-value>#{app_url_base}#{contextPath}/auth/verify</param-value>
+    <param-value>#{app_url_base}/auth/verify</param-value>
     <description>
        The verification callback URI used by the OpenID provider to redirect the user
        after authentication.
