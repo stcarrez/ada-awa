@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-images-modules -- Image management module
---  Copyright (C) 2012, 2016 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,11 +21,12 @@ with ASF.Applications;
 with AWA.Modules;
 with AWA.Storages.Models;
 with AWA.Storages.Services;
-with AWA.Images.Services;
 with AWA.Images.Models;
 with AWA.Jobs.Services;
 with AWA.Jobs.Modules;
 with AWA.Images.Servlets;
+with ADO;
+private with EL.Expressions;
 
 --  == Image Module ==
 --  The <tt>Image_Module</tt> type represents the image module.  An instance of the image
@@ -40,6 +41,8 @@ with AWA.Images.Servlets;
 package AWA.Images.Modules is
 
    NAME : constant String := "images";
+
+   PARAM_THUMBNAIL_COMMAND : constant String := "thumbnail_command";
 
    --  Job worker procedure to identify an image and generate its thumnbnail.
    procedure Thumbnail_Worker (Job : in out AWA.Jobs.Services.Abstract_Job_Type'Class);
@@ -60,15 +63,6 @@ package AWA.Images.Modules is
    overriding
    procedure Configure (Plugin : in out Image_Module;
                         Props  : in ASF.Applications.Config);
-
-   --  Get the image manager.
-   function Get_Image_Manager (Plugin : in Image_Module)
-                                 return Services.Image_Service_Access;
-
-   --  Create an image manager.  This operation can be overridden to provide another
-   --  image service implementation.
-   function Create_Image_Manager (Plugin : in Image_Module)
-                                    return Services.Image_Service_Access;
 
    --  The `On_Create` procedure is called by `Notify_Create` to notify the creation of the item.
    overriding
@@ -96,22 +90,51 @@ package AWA.Images.Modules is
    --  Get the image module instance associated with the current application.
    function Get_Image_Module return Image_Module_Access;
 
-   --  Get the image manager instance associated with the current application.
-   function Get_Image_Manager return Services.Image_Service_Access;
-
    --  Returns true if the storage file has an image mime type.
    function Is_Image (File : in AWA.Storages.Models.Storage_Ref'Class) return Boolean;
+
+   procedure Create_Thumbnail (Service : in Image_Module;
+                               Source  : in String;
+                               Into    : in String;
+                               Width   : in out Natural;
+                               Height  : in out Natural);
+
+   --  Build a thumbnail for the image identified by the Id.
+   procedure Build_Thumbnail (Service : in Image_Module;
+                              Id      : in ADO.Identifier);
+
+   --  Save the data object contained in the <b>Data</b> part element into the
+   --  target storage represented by <b>Into</b>.
+   procedure Create_Image (Plugin : in Image_Module;
+                           File    : in AWA.Storages.Models.Storage_Ref'Class);
+
+   --  Deletes the storage instance.
+   procedure Delete_Image (Service : in Image_Module;
+                           File    : in AWA.Storages.Models.Storage_Ref'Class);
+
+   --  Scale the image dimension.
+   procedure Scale (Width     : in Natural;
+                    Height    : in Natural;
+                    To_Width  : in out Natural;
+                    To_Height : in out Natural);
+
+   --  Get the dimension represented by the string.  The string has one of the following
+   --  formats:
+   --    original          -> Width, Height := Natural'Last
+   --    default           -> Width, Height := 0
+   --    <width>x          -> Width := <width>, Height := 0
+   --    x<height>         -> Width := 0, Height := <height>
+   --    <width>x<height>  -> Width := <width>, Height := <height>
+   procedure Get_Sizes (Dimension : in String;
+                        Width     : out Natural;
+                        Height    : out Natural);
 
 private
 
    type Image_Module is new AWA.Modules.Module and AWA.Storages.Services.Listener with record
-      Manager       : Services.Image_Service_Access := null;
-      Job_Module    : AWA.Jobs.Modules.Job_Module_Access;
-      Image_Servlet : aliased AWA.Images.Servlets.Image_Servlet;
+      Thumbnail_Command : EL.Expressions.Expression;
+      Job_Module        : AWA.Jobs.Modules.Job_Module_Access;
+      Image_Servlet     : aliased AWA.Images.Servlets.Image_Servlet;
    end record;
-
-   --  Create an image instance.
-   procedure Create_Image (Plugin  : in Image_Module;
-                           File    : in AWA.Storages.Models.Storage_Ref'Class);
 
 end AWA.Images.Modules;
