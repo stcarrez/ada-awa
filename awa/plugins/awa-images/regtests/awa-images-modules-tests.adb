@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  awa-storages-services-tests -- Unit tests for storage service
+--  awa-storages-modules-tests -- Unit tests for storage service
 --  Copyright (C) 2012, 2013, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -23,7 +23,7 @@ with Security.Contexts;
 with AWA.Services.Contexts;
 with AWA.Tests.Helpers.Users;
 with AWA.Images.Modules;
-package body AWA.Images.Services.Tests is
+package body AWA.Images.Modules.Tests is
 
    use Util.Tests;
    use ADO;
@@ -49,11 +49,11 @@ package body AWA.Images.Services.Tests is
       Height    : Natural := 64;
    begin
       AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-storage@test.com");
-      T.Manager := AWA.Images.Modules.Get_Image_Manager;
+      T.Manager := AWA.Images.Modules.Get_Image_Module;
 
       T.Manager.Create_Thumbnail (Source, Thumb, Width, Height);
       Util.Tests.Assert_Equals (T, 1720, Width, "Invalid image width");
       Util.Tests.Assert_Equals (T, 1098, Height, "Invalid image height");
    end Test_Create_Image;
 
-end AWA.Images.Services.Tests;
+end AWA.Images.Modules.Tests;
