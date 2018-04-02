@@ -666,6 +666,10 @@ package body AWA.Wikis.Beans is
       else
          AWA.Wikis.Models.Wiki_Page_Bean (From).Set_Value (Name, Value);
       end if;
+
+   exception
+      when others =>
+         null;
    end Set_Value;
 
    --  ------------------------------
@@ -850,12 +854,18 @@ package body AWA.Wikis.Beans is
       if Name = "tag" then
          From.Tag := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "page" and not Util.Beans.Objects.Is_Empty (Value) then
+         From.Page := 1;
          From.Page := Util.Beans.Objects.To_Integer (Value);
       elsif Name = "wiki_id" and not Util.Beans.Objects.Is_Empty (Value) then
+         From.Wiki_Id := ADO.NO_IDENTIFIER;
          From.Wiki_Id := ADO.Utils.To_Identifier (Value);
       elsif Name = "sort" and not Util.Beans.Objects.Is_Empty (Value) then
          From.Sort := Util.Beans.Objects.To_Unbounded_String (Value);
       end if;
+
+   exception
+      when Constraint_Error =>
+         null;
    end Set_Value;
 
    overriding
@@ -1295,6 +1305,7 @@ package body AWA.Wikis.Beans is
                         Value : in Util.Beans.Objects.Object) is
    begin
       if Name = "wiki_id" and not Util.Beans.Objects.Is_Empty (Value) then
+         From.Wiki_Id := ADO.NO_IDENTIFIER;
          From.Wiki_Id := ADO.Utils.To_Identifier (Value);
          From.Page.Set_Wiki_Id (From.Wiki_Id);
       elsif Name = "folder_name" then
@@ -1302,11 +1313,16 @@ package body AWA.Wikis.Beans is
       elsif Name = "name" then
          From.Name := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "page_id" and not Util.Beans.Objects.Is_Empty (Value) then
+         From.Page_Id := ADO.NO_IDENTIFIER;
          From.Page_Id := ADO.Utils.To_Identifier (Value);
          From.Page.Id := From.Page_Id;
       else
          Models.Wiki_Image_Bean (From).Set_Value (Name, Value);
       end if;
+
+   exception
+      when Constraint_Error =>
+         null;
    end Set_Value;
 
    --  ------------------------------
@@ -1446,8 +1462,13 @@ package body AWA.Wikis.Beans is
                         Value : in Util.Beans.Objects.Object) is
    begin
       if Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
+         From.Wiki_Id := ADO.NO_IDENTIFIER;
          From.Wiki_Id := ADO.Utils.To_Identifier (Value);
       end if;
+
+   exception
+      when Constraint_Error =>
+         null;
    end Set_Value;
 
    --  ------------------------------
