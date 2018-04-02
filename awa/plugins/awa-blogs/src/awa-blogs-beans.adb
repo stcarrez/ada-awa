@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-beans -- Beans for blog module
---  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +25,7 @@ with Util.Beans.Objects.Time;
 
 with Wiki.Helpers;
 
-with AWA.Images.Services;
+with AWA.Images.Modules;
 with AWA.Services.Contexts;
 with AWA.Helpers.Selectors;
 with AWA.Tags.Modules;
@@ -108,10 +108,10 @@ package body AWA.Blogs.Beans is
          Append (URI, Link (Sep + 1 .. Link'Last));
       end if;
       if Info.Width /= 0 and Info.Height /= 0 then
-         AWA.Images.Services.Scale (Width     => Info.Width,
-                                    Height    => Info.Height,
-                                    To_Width  => Width,
-                                    To_Height => Height);
+         AWA.Images.Modules.Scale (Width     => Info.Width,
+                                   Height    => Info.Height,
+                                   To_Width  => Width,
+                                   To_Height => Height);
       end if;
    end Make_Image_Link;
 
@@ -308,7 +308,7 @@ package body AWA.Blogs.Beans is
          if not Ada.Strings.Wide_Wide_Maps.Is_In (C, Url_Forbidden_Set) then
             Len := Len + 1;
             Result (Len) := Ada.Characters.Conversions.To_Character (C);
-         elsif Result(Len) /= '-' then
+         elsif Result (Len) /= '-' then
             Len := Len + 1;
             Result (Len) := '-';
          end if;
