@@ -74,13 +74,13 @@
       wiki.format,
       user.name,
       acl.id
-    FROM awa_wiki_page AS page
-    INNER JOIN awa_wiki_content AS content ON page.content_id = content.id
-    INNER JOIN awa_wiki_space AS wiki ON page.wiki_id = wiki.id
-    LEFT JOIN awa_acl AS acl ON acl.entity_id = page.wiki_id AND acl.entity_type = :entity_type
+    FROM awa_wiki_space as wiki
+    LEFT JOIN awa_acl AS acl ON acl.entity_id = wiki.id AND acl.entity_type = :entity_type
       AND acl.user_id = :user_id AND acl.permission = $permission[wiki-page-view]
+    LEFT JOIN awa_wiki_page AS page ON wiki.id = page.wiki_id AND page.name = :name
+    LEFT JOIN awa_wiki_content AS content ON page.content_id = content.id
     LEFT JOIN awa_user AS user ON content.author_id = user.id
-    WHERE page.wiki_id = :wiki_id AND page.name = :name
+    WHERE wiki.id = :wiki_id
        </sql>
     </query>
 
@@ -103,13 +103,13 @@
       wiki.format,
       user.name,
       acl.id
-    FROM awa_wiki_page AS page
-    INNER JOIN awa_wiki_content AS content ON page.content_id = content.id
-    INNER JOIN awa_wiki_space AS wiki ON page.wiki_id = wiki.id
-    LEFT JOIN awa_acl AS acl ON acl.entity_id = page.wiki_id AND acl.entity_type = :entity_type
+    FROM awa_wiki_space as wiki
+    LEFT JOIN awa_acl AS acl ON acl.entity_id = wiki.id AND acl.entity_type = :entity_type
       AND acl.user_id = :user_id AND acl.permission = $permission[wiki-page-view]
+    LEFT JOIN awa_wiki_page AS page ON wiki.id = page.wiki_id AND page.id = :id
+    LEFT JOIN awa_wiki_content AS content ON page.content_id = content.id
     LEFT JOIN awa_user AS user ON content.author_id = user.id
-    WHERE page.wiki_id = :wiki_id AND page.id = :id
+    WHERE wiki.id = :wiki_id
        </sql>
     </query>
 
