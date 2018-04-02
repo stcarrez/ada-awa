@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-beans -- Beans for module wikis
---  Copyright (C) 2015, 2016, 2017 Stephane Carrez
+--  Copyright (C) 2015, 2016, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -375,6 +375,11 @@ package body AWA.Wikis.Beans is
       else
          AWA.Wikis.Models.Wiki_View_Info (From).Set_Value (Name, Value);
       end if;
+
+   exception
+      when Constraint_Error =>
+         From.Set_Wiki_Id (ADO.NO_IDENTIFIER);
+
    end Set_Value;
 
    --  ------------------------------
@@ -411,6 +416,7 @@ package body AWA.Wikis.Beans is
       Ctx     : constant ASC.Service_Context_Access := ASC.Current;
       Session : ADO.Sessions.Session := Bean.Module.Get_Session;
       Query   : ADO.Queries.Context;
+      Name    : constant Ada.Strings.Unbounded.Unbounded_String := Bean.Name;
    begin
       if Bean.Wiki_Space.Is_Null then
          Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
@@ -421,7 +427,7 @@ package body AWA.Wikis.Beans is
          Query.Bind_Param ("id", Bean.Id);
          Query.Set_Query (AWA.Wikis.Models.Query_Wiki_Page_Id);
       else
-         Query.Bind_Param ("name", Bean.Name);
+         Query.Bind_Param ("name", Name);
          Query.Set_Query (AWA.Wikis.Models.Query_Wiki_Page);
       end if;
       Query.Bind_Param ("user_id", Ctx.Get_User_Identifier);
@@ -431,7 +437,12 @@ package body AWA.Wikis.Beans is
                                         Session => Session);
       Bean.Load (Session, Query);
 
-      if not Bean.Is_Public and Bean.Acl_Id <= 0 then
+      if Bean.Id <= 0 then
+         Bean.Name := Name;
+         Bean.Title := Name;
+         Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-created");
+
+      elsif not Bean.Is_Public and Bean.Acl_Id <= 0 then
          Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-visible");
 
       else
@@ -984,16 +995,16 @@ package body AWA.Wikis.Beans is
       if Name = "page" and not Util.Beans.Objects.Is_Empty (Value) then
          From.Page := Util.Beans.Objects.To_Integer (Value);
       elsif Name = "wiki_id" and not Util.Beans.Objects.Is_Empty (Value) then
+         From.Wiki_Id := ADO.NO_IDENTIFIER;
          From.Wiki_Id := ADO.Utils.To_Identifier (Value);
       elsif Name = "page_id" and not Util.Beans.Objects.Is_Empty (Value) then
+         From.Page_Id := ADO.NO_IDENTIFIER;
          From.Page_Id := ADO.Utils.To_Identifier (Value);
       end if;
 
    exception
       when Constraint_Error =>
-         From.Wiki_Id := ADO.NO_IDENTIFIER;
-         From.Page_Id := ADO.NO_IDENTIFIER;
-
+         null;
    end Set_Value;
 
    overriding
@@ -1012,10 +1023,6 @@ package body AWA.Wikis.Beans is
       First       : constant Natural  := (Into.Page - 1) * Into.Page_Size;
       Page        : constant Wiki_View_Bean_Access := Get_Wiki_View_Bean ("wikiView");
    begin
-      if Into.Wiki_Id = ADO.NO_IDENTIFIER or Into.Page_Id = ADO.NO_IDENTIFIER then
-         return;
-      end if;
-
       --  Load the wiki page first.
       Page.Id := Into.Page_Id;
       Page.Set_Wiki_Id (Into.Wiki_Id);
@@ -1144,11 +1151,6 @@ package body AWA.Wikis.Beans is
       use type ADO.Identifier;
       use type Ada.Strings.Unbounded.Unbounded_String;
    begin
-      if Into.Wiki_Id = ADO.NO_IDENTIFIER or Into.Page_Id = ADO.NO_IDENTIFIER then
-         Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
-         return;
-      end if;
-
       --  Load the wiki page first.
       Into.Page.Load (Outcome);
       if Outcome /= "loaded" then
@@ -1321,11 +1323,6 @@ package body AWA.Wikis.Beans is
       Session : ADO.Sessions.Session := ASC.Get_Session (Ctx);
       Query   : ADO.Queries.Context;
    begin
-      if Into.Wiki_Id = ADO.NO_IDENTIFIER or Into.Page_Id = ADO.NO_IDENTIFIER then
-         Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
-         return;
-      end if;
-
       --  Load the wiki page first.
       Into.Page.Load (Outcome);
       if Outcome /= "loaded" then
