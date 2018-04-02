@@ -226,9 +226,8 @@
       <to-view-id>/wikis/protected.xhtml</to-view-id>
     </navigation-case>
     <navigation-case>
-      <from-outcome>not-found</from-outcome>
-      <to-view-id>/wikis/create/#{wikiView.wiki_id}/#{wikiView.name}</to-view-id>
-      <redirect/>
+      <from-outcome>not-created</from-outcome>
+      <to-view-id>/wikis/missing.xhtml</to-view-id>
     </navigation-case>
     <navigation-case>
       <from-outcome>ado.objects.not_found</from-outcome>
@@ -249,6 +248,10 @@
       <redirect/>
     </navigation-case>
     <navigation-case>
+      <from-outcome>not-created</from-outcome>
+      <to-view-id>/wikis/missing.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
       <from-outcome>ado.objects.not_found</from-outcome>
       <to-view-id>/wikis/create/#{wikiView.wiki_id}/#{wikiView.name}</to-view-id>
       <redirect/>
@@ -264,6 +267,10 @@
     <navigation-case>
       <from-outcome>not-visible</from-outcome>
       <to-view-id>/wikis/protected.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>not-created</from-outcome>
+      <to-view-id>/wikis/missing.xhtml</to-view-id>
     </navigation-case>
     <navigation-case>
       <from-outcome>not-found</from-outcome>
