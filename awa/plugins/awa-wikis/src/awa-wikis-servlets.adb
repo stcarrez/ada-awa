@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-servlets -- Serve files saved in the storage service
---  Copyright (C) 2016 Stephane Carrez
+--  Copyright (C) 2016, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with AWA.Images.Services;
+with AWA.Images.Modules;
 with AWA.Wikis.Modules;
 package body AWA.Wikis.Servlets is
 
@@ -47,9 +47,9 @@ package body AWA.Wikis.Servlets is
       Wiki_Id := ADO.Identifier'Value (Wiki);
       File_Id := ADO.Identifier'Value (File);
 
-      AWA.Images.Services.Get_Sizes (Dimension => Size,
-                                     Width     => Width,
-                                     Height    => Height);
+      AWA.Images.Modules.Get_Sizes (Dimension => Size,
+                                    Width     => Width,
+                                    Height    => Height);
 
       Img_Width  := Width;
       Img_Height := Height;

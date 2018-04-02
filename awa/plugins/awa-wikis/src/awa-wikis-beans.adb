@@ -34,7 +34,7 @@ with AWA.Services.Contexts;
 with AWA.Tags.Modules;
 with AWA.Tags.Models;
 with AWA.Helpers.Selectors;
-with AWA.Images.Services;
+with AWA.Images.Modules;
 
 with Wiki.Documents;
 with Wiki.Parsers;
@@ -78,10 +78,10 @@ package body AWA.Wikis.Beans is
          Append (URI, Link (Sep + 1 .. Link'Last));
       end if;
       if Info.Width /= 0 and Info.Height /= 0 then
-         AWA.Images.Services.Scale (Width     => Info.Width,
-                                    Height    => Info.Height,
-                                    To_Width  => Width,
-                                    To_Height => Height);
+         AWA.Images.Modules.Scale (Width     => Info.Width,
+                                   Height    => Info.Height,
+                                   To_Width  => Width,
+                                   To_Height => Height);
       end if;
    end Make_Image_Link;
 
