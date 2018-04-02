@@ -25,7 +25,7 @@ with AWA.Storages.Services.Tests;
 with AWA.Events.Services.Tests;
 with AWA.Mail.Clients.Tests;
 with AWA.Mail.Modules.Tests;
-with AWA.Images.Services.Tests;
+with AWA.Images.Modules.Tests;
 with AWA.Votes.Modules.Tests;
 with AWA.Tags.Modules.Tests;
 with AWA.Questions.Modules.Tests;
@@ -114,7 +114,7 @@ package body AWA.Testsuite is
       AWA.Blogs.Modules.Tests.Add_Tests (Ret);
       AWA.Blogs.Tests.Add_Tests (Ret);
       AWA.Storages.Services.Tests.Add_Tests (Ret);
-      AWA.Images.Services.Tests.Add_Tests (Ret);
+      AWA.Images.Modules.Tests.Add_Tests (Ret);
       AWA.Changelogs.Modules.Tests.Add_Tests (Ret);
       AWA.Votes.Modules.Tests.Add_Tests (Ret);
       AWA.Tags.Modules.Tests.Add_Tests (Ret);
