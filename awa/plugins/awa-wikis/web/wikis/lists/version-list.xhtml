@@ -1,5 +1,5 @@
 <!-- List of wiki pages for the wiki user
-  -  Copyright (C) 2015, 2016 Stephane Carrez
+  -  Copyright (C) 2015, 2016, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,7 @@
 	    xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
     <h:panelGroup rendered="#{wikiVersionList.versions.count == 0}">
-        #{wikiMsg.wiki_admin_list_pages_empty_message} - #{wikiPages.count}
+        #{wikiMsg.wiki_page_no_version}
     </h:panelGroup>
     <h:panelGroup rendered="#{wikiVersionList.versions.count != 0 or true}">
         <h:list var="version" value="#{wikiVersionList.versions}">
