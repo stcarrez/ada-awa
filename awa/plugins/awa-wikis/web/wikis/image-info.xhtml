@@ -1,5 +1,5 @@
 <!-- Information about an image used in a wiki page
-  -  Copyright (C) 2016, 2017 Stephane Carrez
+  -  Copyright (C) 2016, 2017, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -78,7 +78,7 @@
                             <dl class="wiki-image-details">
                                 <dt>#{wikiMsg.wiki_image_file_label}</dt>
                                 <dd>#{wikiImageInfo.folder_name}/#{wikiImageInfo.name}</dd>
-                                <h:panelGroup rendered="#{wikiImageInfo.id ne 0 and wikiImageInfo.list.count != 0}">
+                                <h:panelGroup rendered="#{wikiImageInfo.id gt 0 and wikiImageInfo.list.count != 0}">
                                     <dt>#{wikiMsg.wiki_image_file_size_label}</dt>
                                     <dd>
                                         <h:outputText value="#{wikiImageInfo.file_size}">
@@ -114,7 +114,7 @@
                                         </div>
                                     </dd>
                                 </h:panelGroup>
-                                <h:panelGroup rendered="#{wikiImageInfo.id eq 0 or wikiImageInfo.list.count == 0}">
+                                <h:panelGroup rendered="#{wikiImageInfo.id le 0 or wikiImageInfo.list.count == 0}">
                                     <dd>#{wikiMsg.wiki_image_missing_message}</dd>
                                 </h:panelGroup>
                             </dl>
