@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  awa-images-services-tests -- Unit tests for image service
---  Copyright (C) 2012, 2013 Stephane Carrez
+--  awa-images-modules-tests -- Unit tests for image service
+--  Copyright (C) 2012, 2013, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,16 +19,16 @@
 with Util.Tests;
 with AWA.Tests;
 with ADO;
-package AWA.Images.Services.Tests is
+package AWA.Images.Modules.Tests is
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite);
 
    type Test is new AWA.Tests.Test with record
       Id      : ADO.Identifier;
-      Manager : AWA.Images.Services.Image_Service_Access;
+      Manager : AWA.Images.Modules.Image_Module_Access;
    end record;
 
    --  Test creation of a storage object
    procedure Test_Create_Image (T : in out Test);
 
-end AWA.Images.Services.Tests;
+end AWA.Images.Modules.Tests;
