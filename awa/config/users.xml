@@ -186,7 +186,7 @@
 
   <context-param>
     <param-name>facebook.scope</param-name>
-    <param-value>read_stream,email</param-value>
+    <param-value>public_profile,email</param-value>
     <description>Facebook permission scope</description>
   </context-param>
 
