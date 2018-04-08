@@ -224,10 +224,12 @@
     <navigation-case>
       <from-outcome>not-visible</from-outcome>
       <to-view-id>/wikis/protected.xhtml</to-view-id>
+      <status>403</status>
     </navigation-case>
     <navigation-case>
       <from-outcome>not-created</from-outcome>
       <to-view-id>/wikis/missing.xhtml</to-view-id>
+      <status>404</status>
     </navigation-case>
     <navigation-case>
       <from-outcome>ado.objects.not_found</from-outcome>
@@ -249,6 +251,7 @@
     </navigation-case>
     <navigation-case>
       <from-outcome>not-created</from-outcome>
+      <status>404</status>
       <to-view-id>/wikis/missing.xhtml</to-view-id>
     </navigation-case>
     <navigation-case>
@@ -267,10 +270,12 @@
     <navigation-case>
       <from-outcome>not-visible</from-outcome>
       <to-view-id>/wikis/protected.xhtml</to-view-id>
+      <status>403</status>
     </navigation-case>
     <navigation-case>
       <from-outcome>not-created</from-outcome>
       <to-view-id>/wikis/missing.xhtml</to-view-id>
+      <status>404</status>
     </navigation-case>
     <navigation-case>
       <from-outcome>not-found</from-outcome>
@@ -293,6 +298,7 @@
     <navigation-case>
       <from-outcome>not-visible</from-outcome>
       <to-view-id>/wikis/protected.xhtml</to-view-id>
+      <status>403</status>      
     </navigation-case>
     <navigation-case>
       <from-outcome>not-found</from-outcome>
