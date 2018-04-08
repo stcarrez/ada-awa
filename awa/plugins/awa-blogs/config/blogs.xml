@@ -236,6 +236,7 @@
     <navigation-case>
       <from-outcome>not-found</from-outcome>
       <to-view-id>/blogs/post-missing.xhtml</to-view-id>
+      <status>404</status>
     </navigation-case>
   </navigation-rule>
 
