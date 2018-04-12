@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-module -- Blog and post management module
---  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2017 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -107,6 +107,7 @@ package AWA.Blogs.Modules is
                           URI     : in String;
                           Text    : in String;
                           Comment : in Boolean;
+                          Publish_Date : in ADO.Nullable_Time;
                           Status  : in AWA.Blogs.Models.Post_Status_Type);
 
    --  Delete the post identified by the given identifier.
