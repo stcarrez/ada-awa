@@ -343,6 +343,7 @@ package body AWA.Blogs.Beans is
                                   URI     => Bean.Get_Uri,
                                   Text    => Bean.Get_Text,
                                   Comment => Bean.Get_Allow_Comments,
+                                  Publish_Date => Bean.Get_Publish_Date,
                                   Status  => Bean.Get_Status);
          Result := Bean.Get_Id;
       end if;
