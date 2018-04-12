@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-module -- Blog and post management module
---  Copyright (C) 2011, 2012, 2013, 2017 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -223,6 +223,7 @@ package body AWA.Blogs.Modules is
                           URI     : in String;
                           Text    : in String;
                           Comment : in Boolean;
+                          Publish_Date : in ADO.Nullable_Time;
                           Status  : in AWA.Blogs.Models.Post_Status_Type) is
       pragma Unreferenced (Model);
       use type AWA.Blogs.Models.Post_Status_Type;
@@ -243,6 +244,9 @@ package body AWA.Blogs.Modules is
       AWA.Permissions.Check (Permission => ACL_Update_Post.Permission,
                              Entity     => Post);
 
+      if not Publish_Date.Is_Null then
+         Post.Set_Publish_Date (Publish_Date);
+      end if;
       if Status = AWA.Blogs.Models.POST_PUBLISHED and then Post.Get_Publish_Date.Is_Null then
          Post.Set_Publish_Date (ADO.Nullable_Time '(Is_Null => False,
                                                     Value   => Ada.Calendar.Clock));
