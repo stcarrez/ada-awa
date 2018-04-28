@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-tags-components -- Tags component
---  Copyright (C) 2013, 2014, 2015 Stephane Carrez
+--  Copyright (C) 2013, 2014, 2015, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -279,8 +279,8 @@ package body AWA.Tags.Components is
       Writer : constant Response_Writer_Access := Context.Get_Response_Writer;
    begin
       Writer.Start_Element ("div");
+      UI.Render_Attributes (Context, Writer);
       if Count > 0 then
-         UI.Render_Attributes (Context, Writer);
          for I in 1 .. Count loop
             List.Set_Row_Index (I);
             Tag_UIInput'Class (UI).Render_Form_Tag (Id & "[" & Util.Strings.Image (I) & "]",
