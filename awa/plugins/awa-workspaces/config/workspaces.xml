@@ -98,7 +98,6 @@
     <navigation-case>
       <from-outcome>not-found</from-outcome>
       <to-view-id>/auth/invitation-invalid.xhtml</to-view-id>
-      <status>404</status>
     </navigation-case>
   </navigation-rule>
 
