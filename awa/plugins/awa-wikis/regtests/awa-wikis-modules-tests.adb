@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-modules-tests -- Unit tests for wikis service
---  Copyright (C) 2015, 2017 Stephane Carrez
+--  Copyright (C) 2015, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -204,9 +204,9 @@ package body AWA.Wikis.Modules.Tests is
       Request.Remove_Attribute ("wikiView");
       ASF.Tests.Do_Get (Request, Reply, "/wikis/view/" & Ident & "/PrivatePage",
                         "wiki-private-1.html");
-      Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status, "Invalid response (PrivatePage)");
+      Assert_Equals (T, ASF.Responses.SC_FORBIDDEN, Reply.Get_Status, "Invalid response (PrivatePage)");
       Assert_Matches (T, ".*Protected Wiki Page.*", Reply, "Invalid PrivatePage page returned",
-                      Status => ASF.Responses.SC_OK);
+                      Status => ASF.Responses.SC_FORBIDDEN);
 
       ASF.Tests.Do_Get (Request, Reply, "/wikis/list/" & Ident & "/recent",
                         "wiki-list-recent-1.html");
