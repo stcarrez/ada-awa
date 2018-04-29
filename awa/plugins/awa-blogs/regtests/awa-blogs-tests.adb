@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-tests -- Unit tests for blogs module
---  Copyright (C) 2017 Stephane Carrez
+--  Copyright (C) 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,6 +43,8 @@ package body AWA.Blogs.Tests is
                        Test_Admin_List_Comments'Access);
       Caller.Add_Test (Suite, "Test AWA.Blogs.Beans.Stats (Admin)",
                        Test_Admin_Blog_Stats'Access);
+      Caller.Add_Test (Suite, "Test AWA.Blogs.Beans.Update_Post (Publish_Date)",
+                       Test_Update_Publish_Date'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -60,15 +62,18 @@ package body AWA.Blogs.Tests is
       ASF.Tests.Assert_Contains (T, "Tag - test", Reply, "Blog tag page is invalid");
 
       ASF.Tests.Do_Get (Request, Reply, "/blogs/post.html?post=missing", "blog-missing.html");
-      ASF.Tests.Assert_Contains (T, "The post you are looking for does not exist",
-                                 Reply, "Blog post missing page is invalid");
+      ASF.Tests.Assert_Matches (T, "The post you are looking for does not exist",
+                                Reply, "Blog post missing page is invalid",
+                                ASF.Responses.SC_NOT_FOUND);
 
       if Post = "" then
          return;
       end if;
 
       ASF.Tests.Do_Get (Request, Reply, "/blogs/post.html?post=" & Post, "blog-post.html");
-      ASF.Tests.Assert_Contains (T, "post-title", Reply, "Blog post page is invalid");
+      ASF.Tests.Assert_Matches (T, ".*The blog post.*content.*", Reply,
+                                "Blog post page is invalid"
+                                );
 
    end Verify_Anonymous;
 
@@ -145,7 +150,7 @@ package body AWA.Blogs.Tests is
       Request.Set_Parameter ("text", "The blog post new content.");
       Request.Set_Parameter ("uri", Uuid);
       Request.Set_Parameter ("save", "1");
-      Request.Set_Parameter ("post-status", "1");
+      Request.Set_Parameter ("post-status", "POST_PUBLISHED");
       Request.Set_Parameter ("allow-comment", "0");
       ASF.Tests.Do_Post (Request, Reply, "/blogs/admin/edit.html", "edit-post.html");
 
@@ -156,6 +161,41 @@ package body AWA.Blogs.Tests is
                                 "Invalid post identifier returned after post update");
       T.Verify_Anonymous (Uuid);
    end Test_Update_Post;
+
+   --  ------------------------------
+   --  Test updating the publication date by simulating web requests.
+   --  ------------------------------
+   procedure Test_Update_Publish_Date (T : in out Test) is
+      Request    : ASF.Requests.Mockup.Request;
+      Reply      : ASF.Responses.Mockup.Response;
+      Uuid       : constant String := Util.Tests.Get_Uuid;
+      Ident      : constant String := To_String (T.Blog_Ident);
+      Post_Ident : Unbounded_String;
+   begin
+      AWA.Tests.Helpers.Users.Login ("test-wiki@test.com", Request);
+      Request.Set_Parameter ("post_id", To_String (T.Post_Ident));
+      Request.Set_Parameter ("blog_id", Ident);
+      ASF.Tests.Do_Get (Request, Reply, "/blogs/admin/edit.html", "edit-post-form.html");
+
+      Request.Set_Parameter ("post-blog-id", Ident);
+      Request.Set_Parameter ("post-id", To_String (T.Post_Ident));
+      Request.Set_Parameter ("post", "1");
+      Request.Set_Parameter ("post-title", "New post title");
+      Request.Set_Parameter ("text", "The blog post new content.");
+      Request.Set_Parameter ("uri", Uuid);
+      Request.Set_Parameter ("save", "POST_PUBLISHED");
+      Request.Set_Parameter ("post-status", "1");
+      Request.Set_Parameter ("allow-comment", "0");
+      Request.Set_Parameter ("publish-date", "");
+      ASF.Tests.Do_Post (Request, Reply, "/blogs/admin/edit.html", "edit-post.html");
+
+      Post_Ident := Helpers.Extract_Redirect (Reply, "/asfunit/blogs/admin/"
+                                              & Ident & "/preview/");
+
+      Util.Tests.Assert_Equals (T, To_String (T.Post_Ident), To_String (Post_Ident),
+                                "Invalid post identifier returned after post update");
+      T.Verify_Anonymous (Uuid);
+   end Test_Update_Publish_Date;
 
    --  ------------------------------
    --  Test listing the blog posts.
