@@ -173,6 +173,7 @@ package body AWA.Blogs.Modules is
                           Result  : out ADO.Identifier) is
       pragma Unreferenced (Model);
       use type ADO.Identifier;
+      use type AWA.Blogs.Models.Post_Status_Type;
 
       Ctx   : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
       User  : constant ADO.Identifier := Ctx.Get_User_Identifier;
@@ -201,6 +202,10 @@ package body AWA.Blogs.Modules is
       Post.Set_Title (Title);
       Post.Set_Text (Text);
       Post.Set_Create_Date (Ada.Calendar.Clock);
+      if Status = AWA.Blogs.Models.POST_PUBLISHED then
+         Post.Set_Publish_Date (ADO.Nullable_Time '(Is_Null => False,
+                                                    Value   => Ada.Calendar.Clock));
+      end if;
       Post.Set_Uri (URI);
       Post.Set_Author (Ctx.Get_User);
       Post.Set_Status (Status);
