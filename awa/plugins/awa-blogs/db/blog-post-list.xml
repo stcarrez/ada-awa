@@ -38,7 +38,7 @@
       post.id,
       post.title,
       post.uri,
-      post.create_date,
+      post.publish_date,
       user.name,
       post.text,
       post.allow_comments,
@@ -48,7 +48,7 @@
     LEFT JOIN awa_comment AS cmt ON cmt.entity_id = post.id AND cmt.entity_type = :entity_type AND cmt.status = 0
     WHERE post.status > 0
     GROUP BY post.id
-    ORDER BY post.create_date DESC
+    ORDER BY post.publish_date DESC
     LIMIT :first, :count
        </sql>
        <sql-count>
@@ -66,7 +66,7 @@
       post.id,
       post.title,
       post.uri,
-      post.create_date,
+      post.publish_date,
       user.name,
       post.text,
       post.allow_comments,
@@ -77,7 +77,7 @@
     LEFT JOIN awa_comment AS cmt ON cmt.entity_id = post.id AND cmt.entity_type = :entity_type AND cmt.status = 0
     WHERE post.status > 0
     GROUP BY post.id
-    ORDER BY post.create_date DESC
+    ORDER BY post.publish_date DESC
     LIMIT :first, :count
        </sql>
        <sql-count>
