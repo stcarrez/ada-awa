@@ -14,7 +14,9 @@ div.blog-post div.post-text, div.post-info, div.post-header {
 }
 div.post-info div.asf-list-action {
     left: -5px;
+    top: 3px;
 }
+
 /*
  * Admin section
  */
@@ -34,7 +36,7 @@ div.blog-admin div.comment-title, div.blog-admin div.comment-author, div.blog-ad
 div.blog-admin div.comment-gravatar, .blog-admin .post-read-count {
     float: left;
     overflow: hidden;
-    line-height: 20px;
+    line-height: 26px;
 
 }
 div.blog-admin div.post-title,
@@ -272,7 +274,10 @@ div.blog-post-comment-count a {
 #post-stats, #blog-stats {
     height: 100px;
 }
-#tooltip {
+#blog-post-edit {
+    margin-top: 0.5em;
+}
+#blog-graph-tooltip {
     position: absolute;
     display: none;
     border: 1px solid orange;
