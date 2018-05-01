@@ -72,6 +72,18 @@
   </managed-bean>
 
   <managed-bean>
+    <description>Information about the RSS feed blog.</description>
+    <managed-bean-name>feed_blog</managed-bean-name>
+    <managed-bean-class>AWA.Blogs.Beans.Blog_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>id</property-name>
+      <property-class>String</property-class>
+      <value>1</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
     <description>The blog tag search bean.</description>
     <managed-bean-name>blogTagSearch</managed-bean-name>
     <managed-bean-class>AWA.Tags.Beans.Tag_Search_Bean</managed-bean-class>
