@@ -479,6 +479,7 @@
     <url-pattern>/blogs/admin/#{adminBlog.id}/preview/#{post.uid}</url-pattern>
     <url-pattern>/blogs/admin/#{blogStats.blog_id}/stats</url-pattern>
     <url-pattern>/blogs/post/#{postAccessStats.entity_id}/stats/#{postAccessStats.first_date}</url-pattern>
+    <url-pattern>/blogs/feeds</url-pattern>
     <url-pattern>/blogs/images/*</url-pattern>
   </filter-mapping>
 
@@ -491,6 +492,7 @@
     <url-pattern>/blogs/admin/#{adminBlog.id}/preview/#{post.uid}</url-pattern>
     <url-pattern>/blogs/admin/#{blogStats.blog_id}/stats</url-pattern>
     <url-pattern>/blogs/post/#{postAccessStats.entity_id}/stats/#{postAccessStats.first_date}</url-pattern>
+    <url-pattern>/blogs/feeds</url-pattern>
     <url-pattern>/blogs/view.html</url-pattern>
     <url-pattern>/blogs/post.html</url-pattern>
     <url-pattern>/blogs/tagged.html</url-pattern>
@@ -504,6 +506,7 @@
     <url-pattern>/blogs/tagged.html</url-pattern>
     <url-pattern>/blogs/index.html</url-pattern>
     <url-pattern>/blogs/feeds.html</url-pattern>
+    <url-pattern>/blogs/feeds</url-pattern>
     <url-pattern>/blogs/images/.*</url-pattern>
   </url-policy>
 
@@ -534,6 +537,11 @@
   <url-mapping>
     <pattern>/blogs/admin/#{blogStats.blog_id}/stats</pattern>
     <view-id>/blogs/admin/views/blog-stats.html</view-id>
+  </url-mapping>
+
+  <url-mapping>
+    <pattern>/blogs/feeds</pattern>
+    <view-id>/blogs/feeds.html</view-id>
   </url-mapping>
 
 </module>
