@@ -51,6 +51,7 @@
                 </dt>
                 <dd>
                     <awa:tagList value='#{post.tags}' id='qtags'
+                                 styleClass="ui-corner-all awa-tag-input"
                                  autoCompleteUrl='#{contextPath}/blogs/admin/lists/tag-search.html'/>
                 </dd>
             </dl>
@@ -86,14 +87,19 @@
                     </h:selectOneRadio>
                 </dd>
             </dl>
-            <dl class="awa-required">
-                <dt>
-                    <label for="post-status">#{blogMsg.blog_post_publish_date_label}</label>
-                </dt>
-                <dd>
-                    #{empty post.publish_date ? post.create_date : post.publish_date}
-                </dd>
-            </dl>
+                <dl class="awa-required" style="#{empty post.id ? 'display: none' : ''}">
+                    <dt>
+                        <label for="post-status">#{blogMsg.blog_post_publish_date_label}</label>
+                    </dt>
+                    <dd>
+                        <h:inputText id="publish-date"
+                                     required="false"
+                                     styleClass="ui-corner-all"
+                                     value="#{post.publish_date}">
+                            <f:convertDateTime pattern="%Y-%m-%d %H:%M"/>
+                        </h:inputText>
+                    </dd>
+                </dl>
             <dl class="awa-optional">
                 <dd>
                     <ui:include src="/markedit/syntax.xhtml">
@@ -134,6 +140,15 @@
                         }).imageSelector("openSelector");
                     }
                 },
+            });
+            $("#publish-date").datetimepicker({
+                format: 'Y-m-d H:i',
+                dayOfWeekStart: 1,
+                timepicker: true,
+                datepicker: true,
+                onSelect: function(date, picker) {
+                     /* alert(date); */
+                }
             });
         });
     </util:script>
