@@ -19,6 +19,13 @@
         xmlns:f="http://java.sun.com/jsf/core">
     <ui:param name="title" value="#{blogMsg.blog_admin_create_post_title}"/>
 
+    <ui:define name="pageScript">
+        <script type="text/javascript" src="#{contextPath}/js/markedit/showdown.js"></script>
+        <script type="text/javascript" src="#{contextPath}/js/markedit/jquery.markedit.js"></script>
+        <script type="text/javascript" src="#{contextPath}/js/dropzone.js"></script>
+        <script type="text/javascript" src="#{contextPath}/js/jquery.datetimepicker.js"></script>
+    </ui:define>
+
     <!-- Main page body -->
     <ui:define name="pageBody">
         <f:metadata>
@@ -32,11 +39,6 @@
                 <ui:include src="forms/post-create.xhtml"/>
             </div>
         </div>
-    </ui:define>
-
-    <ui:define name="pageScript">
-        <script type="text/javascript" src="#{contextPath}/js/markedit/showdown.js"></script>
-        <script type="text/javascript" src="#{contextPath}/js/markedit/jquery.markedit.js"></script>
     </ui:define>
 
 </ui:composition>
