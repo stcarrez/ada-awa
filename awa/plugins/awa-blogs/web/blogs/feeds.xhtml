@@ -32,11 +32,11 @@
           xml:lang="en">]]>
     <h:panelGroup rendered="#{empty postList.tag}">
         <title type="html">#{feed_blog.name}</title>
-        <link href="#{feed_blog.url}#{contextPath}/blogs/feeds.html" rel="self" type="application/atom+xml"/>
+        <link href="#{feed_blog.url}#{contextPath}/blogs/feeds" rel="self" type="application/atom+xml"/>
     </h:panelGroup>
     <h:panelGroup rendered="#{not empty postList.tag}">
         <title type="html">#{feed_blog.name} - Tag #{postList.tag}</title>
-        <link href="#{feed_blog.url}#{contextPath}/blogs/feeds.html?tag=#{postList.tag}/atom" rel="self" type="application/atom+xml"/>
+        <link href="#{feed_blog.url}#{contextPath}/blogs/feeds?tag=#{postList.tag}/atom" rel="self" type="application/atom+xml"/>
     </h:panelGroup>
     <updated><h:outputText value="#{postList.updateDate}">
         <f:convertDateTime pattern="%FT%T+%z"/>
