@@ -39,7 +39,7 @@
                             <h:outputFormat value="#{blogMsg.blog_post_author}">
                                 <f:param value="#{post.username}"/>
                             </h:outputFormat>
-                            <h:outputText styleClass="post-date" value="#{post.create_date}" converter="dateConverter"/>
+                            <h:outputText styleClass="post-date" value="#{post.publish_date}" converter="dateConverter"/>
                             <h:outputFormat value="#{blogMsg.blog_post_count}" rendered="#{not empty postComments}"
                                             styleClass="post-comment-count">
                                 <f:param value="#{postComments.count}"/>
