@@ -1,5 +1,5 @@
 <!-- Atom page to give the published blog entries
-  -  Copyright (C) 2014, 2017 Stephane Carrez
+  -  Copyright (C) 2014, 2017, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,8 @@
         xmlns:awa="http://code.google.com/p/ada-awa/jsf"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"><f:metadata>
-       <f:viewParam id='tag' value='#{postList.tag}'/>
+       <f:viewParam id='tag' value='#{postList.tag}' required="false"/>
+       <f:viewAction action="#{feed_blog.load}"/>
        <f:viewAction action="#{postList.load}"/>
     </f:metadata><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"
@@ -30,27 +31,27 @@
           xmlns:wfw="http://wellformedweb.org/CommentAPI/"
           xml:lang="en">]]>
     <h:panelGroup rendered="#{empty postList.tag}">
-        <title type="html">#{blog.name}</title>
-        <link href="#{blog.url}/#{contextPath}/blogs/feeds.html" rel="self" type="application/atom+xml"/>
+        <title type="html">#{feed_blog.name}</title>
+        <link href="#{feed_blog.url}#{contextPath}/blogs/feeds.html" rel="self" type="application/atom+xml"/>
     </h:panelGroup>
     <h:panelGroup rendered="#{not empty postList.tag}">
-        <title type="html">#{blog.name} - Tag #{postList.tag}</title>
-        <link href="#{blog.url}/#{contextPath}/blogs/feeds.html?tag=#{postList.tag}/atom" rel="self" type="application/atom+xml"/>
+        <title type="html">#{feed_blog.name} - Tag #{postList.tag}</title>
+        <link href="#{feed_blog.url}#{contextPath}/blogs/feeds.html?tag=#{postList.tag}/atom" rel="self" type="application/atom+xml"/>
     </h:panelGroup>
     <updated><h:outputText value="#{postList.updateDate}">
         <f:convertDateTime pattern="%FT%T+%z"/>
     </h:outputText></updated>
     <author>
-      <name>#{blog.author}</name>
+      <name>#{feed_blog.author eq '' ? feed_blog.author : feed_blog.name}</name>
     </author>
-    <id>urn:md5:#{blog.uid}</id>
+    <id>urn:sha256:#{u:sha256(feed_blog.uid)}</id>
     <generator uri="http://code.google.com/p/ada-awa/">AWA</generator>
     <h:list var="post" value="#{postList.posts}">
         <entry>
             <title>#{post.title}</title>
-            <link href="#{blog.url}#{contextPath}/blogs/post.html?post=#{post.uri}"
+            <link href="#{feed_blog.url}#{contextPath}/blogs/post.html?post=#{post.uri}"
                     rel="alternate" type="text/html" title="#{post.title}"/>
-            <id>urn:md5:#{post.id}</id>
+            <id>urn:sha256:#{u:sha256(post.uri)}</id>
             <published><h:outputText value="#{post.date}">
                 <f:convertDateTime pattern="%FT%T+%z"/>
             </h:outputText></published>
