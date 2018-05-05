@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-counters-beans -- Counter bean definition
---  Copyright (C) 2015, 2016 Stephane Carrez
+--  Copyright (C) 2015, 2016, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -103,7 +103,7 @@ package body AWA.Counters.Beans is
       Now         : constant Ada.Calendar.Time := Ada.Calendar.Clock;
       Def         : constant ADO.Queries.Query_Definition_Access := List.Get_Query;
       Entity_Type : constant String := Ada.Strings.Unbounded.To_String (List.Entity_Type);
-      Session     : ADO.Sessions.Session := List.Module.Get_Session;
+      Session     : ADO.Sessions.Session := ASC.Get_Session (Ctx);
       Kind        : ADO.Entity_Type;
       First_Date  : Ada.Calendar.Time;
       Last_Date   : Ada.Calendar.Time;
