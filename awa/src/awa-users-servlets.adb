@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-servlets -- OpenID verification servlet for user authentication
---  Copyright (C) 2011, 2012, 2013, 2014, 2015 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,7 +38,7 @@ package body AWA.Users.Servlets is
    OPENID_ASSOC_ATTRIBUTE : constant String := "openid-assoc";
 
    --  The logger
-   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Security.Servlets");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Users.Servlets");
 
    --  Make a package to store the Association in the session.
    package Association_Bean is new Util.Beans.Objects.Records (Security.Auth.Association);
@@ -77,7 +77,7 @@ package body AWA.Users.Servlets is
       Name     : constant String := Get_Provider_URL (Server, Request);
       URL      : constant String := Ctx.Get_Init_Parameter ("auth.url." & Name);
    begin
-      Log.Info ("Request OpenId authentication to {0} - {1}", Name, URL);
+      Log.Info ("GET: request OpenId authentication to {0} - {1}", Name, URL);
 
       if Name'Length = 0 or URL'Length = 0 then
          Response.Set_Status (ASF.Responses.SC_NOT_FOUND);
@@ -195,7 +195,7 @@ package body AWA.Users.Servlets is
       Credential : Security.Auth.Authentication;
       Params     : Auth_Params;
    begin
-      Log.Info ("Verify openid authentication");
+      Log.Info ("GET: verify openid authentication");
 
       if not Session.Is_Valid then
          Log.Warn ("Session has expired during OpenID authentication process");
