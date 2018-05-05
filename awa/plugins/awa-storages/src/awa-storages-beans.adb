@@ -29,6 +29,8 @@ with AWA.Services.Contexts;
 with AWA.Storages.Services;
 package body AWA.Storages.Beans is
 
+   package ASC renames AWA.Services.Contexts;
+
    --  ------------------------------
    --  Get the value identified by the name.
    --  ------------------------------
@@ -210,7 +212,7 @@ package body AWA.Storages.Beans is
 
       Ctx     : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       User    : constant ADO.Identifier := Ctx.Get_User_Identifier;
-      Session : ADO.Sessions.Session := Storage.Module.Get_Session;
+      Session : ADO.Sessions.Session := ASC.Get_Session (Ctx);
       Query   : ADO.Queries.Context;
    begin
       Query.Set_Query (AWA.Storages.Models.Query_Storage_Folder_List);
@@ -230,7 +232,7 @@ package body AWA.Storages.Beans is
 
       Ctx       : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       User      : constant ADO.Identifier := Ctx.Get_User_Identifier;
-      Session   : ADO.Sessions.Session := Storage.Module.Get_Session;
+      Session   : ADO.Sessions.Session := ASC.Get_Session (Ctx);
       Query     : ADO.Queries.Context;
    begin
       if not Storage.Init_Flags (INIT_FOLDER) then
@@ -322,7 +324,7 @@ package body AWA.Storages.Beans is
       User  : constant ADO.Identifier := Ctx.Get_User_Identifier;
 
       Object  : constant Folder_Info_List_Bean_Access := new Folder_Info_List_Bean;
-      Session : ADO.Sessions.Session := Module.Get_Session;
+      Session : ADO.Sessions.Session := ASC.Get_Session (Ctx);
       Query   : ADO.Queries.Context;
    begin
       Query.Set_Query (AWA.Storages.Models.Query_Storage_Folder_List);
