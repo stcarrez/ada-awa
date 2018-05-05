@@ -742,7 +742,7 @@ package body AWA.Blogs.Beans is
 
       Ctx     : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       User    : constant ADO.Identifier := Ctx.Get_User_Identifier;
-      Session : ADO.Sessions.Session := List.Module.Get_Session;
+      Session : ADO.Sessions.Session := ASC.Get_Session (Ctx);
       Query   : ADO.Queries.Context;
    begin
       Query.Set_Query (AWA.Blogs.Models.Query_Blog_List);
@@ -784,7 +784,7 @@ package body AWA.Blogs.Beans is
 
       Ctx     : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       User    : constant ADO.Identifier := Ctx.Get_User_Identifier;
-      Session : ADO.Sessions.Session := List.Module.Get_Session;
+      Session : ADO.Sessions.Session := ASC.Get_Session (Ctx);
       Query   : ADO.Queries.Context;
       Blog_Id : constant ADO.Identifier := List.Get_Blog_Id;
    begin
@@ -815,7 +815,7 @@ package body AWA.Blogs.Beans is
 
       Ctx     : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       User    : constant ADO.Identifier := Ctx.Get_User_Identifier;
-      Session : ADO.Sessions.Session := List.Module.Get_Session;
+      Session : ADO.Sessions.Session := ASC.Get_Session (Ctx);
       Query   : ADO.Queries.Context;
       Blog_Id : constant ADO.Identifier := List.Get_Blog_Id;
    begin
@@ -925,7 +925,7 @@ package body AWA.Blogs.Beans is
 
       Ctx     : constant ASC.Service_Context_Access := ASC.Current;
       User    : constant ADO.Identifier := Ctx.Get_User_Identifier;
-      Session : ADO.Sessions.Session := List.Module.Get_Session;
+      Session : ADO.Sessions.Session := ASC.Get_Session (Ctx);
       Query   : ADO.Queries.Context;
    begin
       if List.Blog_Id /= ADO.NO_IDENTIFIER then
