@@ -414,7 +414,7 @@ package body AWA.Wikis.Beans is
       package ASC renames AWA.Services.Contexts;
 
       Ctx     : constant ASC.Service_Context_Access := ASC.Current;
-      Session : ADO.Sessions.Session := Bean.Module.Get_Session;
+      Session : ADO.Sessions.Session := ASC.Get_Session (Ctx);
       Query   : ADO.Queries.Context;
       Name    : constant Ada.Strings.Unbounded.Unbounded_String := Bean.Name;
    begin
@@ -887,7 +887,7 @@ package body AWA.Wikis.Beans is
 
       Ctx         : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       User        : constant ADO.Identifier := Ctx.Get_User_Identifier;
-      Session     : ADO.Sessions.Session := Into.Module.Get_Session;
+      Session     : ADO.Sessions.Session := ASC.Get_Session (Ctx);
       Query       : ADO.Queries.Context;
       Count_Query : ADO.Queries.Context;
       Tag_Id      : ADO.Identifier;
@@ -1027,7 +1027,7 @@ package body AWA.Wikis.Beans is
 
       Ctx         : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       User        : constant ADO.Identifier := Ctx.Get_User_Identifier;
-      Session     : ADO.Sessions.Session := Into.Module.Get_Session;
+      Session     : ADO.Sessions.Session := ASC.Get_Session (Ctx);
       Query       : ADO.Queries.Context;
       Count_Query : ADO.Queries.Context;
       First       : constant Natural  := (Into.Page - 1) * Into.Page_Size;
@@ -1395,7 +1395,7 @@ package body AWA.Wikis.Beans is
 
       Ctx     : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       User    : constant ADO.Identifier := Ctx.Get_User_Identifier;
-      Session : ADO.Sessions.Session := List.Module.Get_Session;
+      Session : ADO.Sessions.Session := ASC.Get_Session (Ctx);
       Query   : ADO.Queries.Context;
    begin
       Query.Set_Query (AWA.Wikis.Models.Query_Wiki_List);
