@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-images-beans -- Image Ada Beans
---  Copyright (C) 2016 Stephane Carrez
+--  Copyright (C) 2016, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,7 +36,7 @@ package body AWA.Images.Beans is
 
       Ctx       : constant ASC.Service_Context_Access := ASC.Current;
       User      : constant ADO.Identifier := Ctx.Get_User_Identifier;
-      Session   : ADO.Sessions.Session := Storage.Module.Get_Session;
+      Session   : ADO.Sessions.Session := ASC.Get_Session (Ctx);
       Query     : ADO.Queries.Context;
    begin
       if not Storage.Init_Flags (AWA.Storages.Beans.INIT_FOLDER) then
