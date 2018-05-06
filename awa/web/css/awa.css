@@ -19,16 +19,19 @@ body {
 body.awa {
   background-color: #81CFB7;
 }
-
+* {
+    box-sizing: border-box;
+}
 #awa-page {
   position: relative;
   min-height:100%;
-  margin-left: 1%;
-  margin-right: 1%;
+  /* margin-left: 1%;
+  margin-right: 1%; */
+  margin: 0;
   background-color: white;
   margin-bottom: -30px; /* See #awa-clfooter height */
   display: block;
-  width: 98%;
+  width: 100%; /* 98%; */
 }
 .awa #awa-page {
   background-color: #99DFCA;
@@ -69,6 +72,15 @@ body.awa {
 }
 #awa-content {
   padding-top: 50px;
+}
+.awa-side-panel {
+    display: flex;
+    flex-direction: row;
+}
+.awa-left-panel {
+}
+.awa-right-panel {
+    flex-grow: 1;
 }
 .awa-ok {
   float: left;
@@ -141,9 +153,13 @@ ul.awa-error li {
 /**
  * Form definition.
  */
-div.awa-form, .awa-container {
+div.awa-form, .awa-container, .awa-form-container {
     float: left;
     width: 100%;
+}
+.awa-form-container {
+    padding-left: 1%;
+    padding-right: 1%;
 }
 
 /**
@@ -152,7 +168,7 @@ div.awa-form, .awa-container {
  *  - dd contains the input field
  */
 dl.awa-optional, dl.awa-required {
-    width: 96%;
+    width: 100%;
     padding-left: 2%;
     padding-right: 2%;
 }
@@ -178,12 +194,13 @@ dl.awa-optional label, dl.awa-required label {
     font-weight: bold;
     padding-right: 5px;
 }
+.awa-tag-input,
 dl.awa-optional input, dl.awa-required input {
-    width: 98%;
+    width: 100%;
     padding: 3px;
 }
 dl.awa-optional textarea, dl.awa-required textarea {
-    width: 98%;
+    width: 100%;
     padding: 3px;
 }
 .awa-required .trumbowyg-modal-box input {
@@ -384,7 +401,7 @@ ul.awa-pagination li {
  */
 .awa-nav {
     float: left;
-    width: 98%;
+    width: 100%;
     padding-left: 1%;
     padding-right: 1%;
     list-style-type: none;
@@ -428,7 +445,6 @@ ul.awa-pagination li {
     float: left;
     width: 100%;
     padding: 1em;
-    box-sizing: content-box;
 }
 
 /**
