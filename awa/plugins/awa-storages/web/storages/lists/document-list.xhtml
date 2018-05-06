@@ -15,8 +15,7 @@
   -  limitations under the License.
   -->
 <div xmlns:f="http://java.sun.com/jsf/core"
-     xmlns:h="http://java.sun.com/jsf/html">
-    <div id='document-list' class='document-list ui-list'>
+     xmlns:h="http://java.sun.com/jsf/html" id='document-list' class='document-list ui-list'>
         <h:panelGroup rendered="#{empty storageList.files and not empty storageList.folder}">
           <div class="awa-empty-message">#{storageMsg.storage_folder_empty_message}</div>
         </h:panelGroup>
@@ -51,5 +50,4 @@
                 </div>
             </div>
         </h:list>
-    </div>
 </div>
