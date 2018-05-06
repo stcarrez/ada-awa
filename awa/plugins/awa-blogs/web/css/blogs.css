@@ -16,7 +16,12 @@ div.post-info div.asf-list-action {
     left: -5px;
     top: 3px;
 }
-
+.awa-post {
+    float: left;
+    padding-left: 1%;
+    padding-right: 1%;
+    width: 98%;
+}
 /*
  * Admin section
  */
@@ -122,6 +127,7 @@ div.blog-post {
     width: 96%;
     padding-left: 2%;
     padding-right: 2%;
+    box-sizing: content-box;
 }
 div.blog-post div.post-title {
     float: left;
@@ -274,8 +280,12 @@ div.blog-post-comment-count a {
 #post-stats, #blog-stats {
     height: 100px;
 }
-#blog-post-edit {
+#blog-post-edit, #blog-post-preview {
     margin-top: 0.5em;
+}
+#blog-post-preview {
+    margin-left: 1em;
+    margin-right: 1em;
 }
 #blog-graph-tooltip {
     position: absolute;
