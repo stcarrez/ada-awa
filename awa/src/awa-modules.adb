@@ -27,8 +27,11 @@ with Util.Properties;
 with EL.Contexts.Default;
 
 with AWA.Modules.Reader;
+with AWA.Services.Contexts;
 with AWA.Applications;
 package body AWA.Modules is
+
+   package ASC renames AWA.Services.Contexts;
 
    --  ------------------------------
    --  Get the module configuration property identified by the name.
@@ -402,8 +405,9 @@ package body AWA.Modules is
    --  ------------------------------
    function Get_Session (Manager : Module)
                             return ADO.Sessions.Session is
+      Ctx : constant ASC.Service_Context_Access := ASC.Current;
    begin
-      return Manager.App.Get_Session;
+      return ASC.Get_Session (Ctx);
    end Get_Session;
 
    --  ------------------------------
@@ -411,8 +415,9 @@ package body AWA.Modules is
    --  ------------------------------
    function Get_Master_Session (Manager : Module)
                                 return ADO.Sessions.Master_Session is
+      Ctx : constant ASC.Service_Context_Access := ASC.Current;
    begin
-      return Manager.App.Get_Master_Session;
+      return ASC.Get_Master_Session (Ctx);
    end Get_Master_Session;
 
    --  ------------------------------
