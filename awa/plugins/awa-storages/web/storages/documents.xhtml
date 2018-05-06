@@ -15,6 +15,7 @@
   -  limitations under the License.
   -->
 <ui:composition template="/WEB-INF/layouts/layout.xhtml"
+        xmlns:auth="http://code.google.com/p/ada-awa/auth"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
@@ -98,7 +99,8 @@
                         });
                 </util:script>
             </c:when>
-            <c:otherwise>
+
+            <c:when test="#{auth:hasPermission('folder-create')}">
                 <div>
                     <div class="grid_3">
                         <img src="#{contextPath}/images/storages/folder.png"/>
@@ -108,6 +110,16 @@
                         <div class="asf-container awa-form">
                             <ajax:include src="/storages/forms/folder-create-first.xhtml"/>
                         </div>
+                    </div>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <div>
+                    <div class="grid_3">
+                        <img src="#{contextPath}/images/storages/folder.png"/>
+                    </div>
+                    <div class="grid_6">
+                        <p>#{storageMsg.storage_no_visible_folder}</p>
                     </div>
                 </div>
             </c:otherwise>
