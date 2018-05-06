@@ -14,7 +14,7 @@
   -  See the License for the specific language governing permissions and
   -  limitations under the License.
   -->
-<div class='ui-widget awa-form'
+<div class='ui-widget ui-widget-content ui-corner-all awa-form'
      xmlns:ui="http://java.sun.com/jsf/facelets"
      xmlns:w="http://code.google.com/p/ada-asf/widget"
      xmlns:util="http://code.google.com/p/ada-asf/util"
@@ -24,7 +24,7 @@
         <h:inputHidden id='invite-id' value='#{inviteUser.id}' required='false'/>
         <div class='grid_8'>
             <h:messages styleClass='awa-error'/>
-            <w:inputText styleClass="awa-required"
+            <w:inputText styleClass="awa-required ui-corner-all"
                          id='email' size='50' required='true' value='#{inviteUser.email}'
                          placeholder="#{workspaceMsg.workspace_invite_email_placeholder}"
                          title='#{workspaceMsg.workspace_invite_email_label}'/>
@@ -34,6 +34,7 @@
                 </dt>
                 <dd>
                     <h:inputTextarea id='message' rows='20' required='false'
+                                     styleClass="awa-required ui-corner-all"
                                      placeholder="#{workspaceMsg.workspace_invite_message_placeholder}"
                                      value='#{inviteUser.message}'/>
                 </dd>
