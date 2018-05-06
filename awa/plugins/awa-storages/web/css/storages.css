@@ -15,16 +15,18 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-div.folder {
-    float: left;
-    clear: both;
-    width: 100%;
+.awa-right-panel .awa-nav {
+    margin-top: 1em;
 }
-
 div.folder-list {
     float: left;
     width: 100%;
     overflow: hidden;
+}
+div.folder-list .awa-folder-name {
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+    padding: 1em;
 }
 div.folder-list div.asf-active {
     background-color: #DFEFFC;
@@ -32,7 +34,18 @@ div.folder-list div.asf-active {
 div.folder-list div.asf-selected {
     background-color: #A6C9E2;
 }
-
+.awa-folder-title {
+    font-weight: bold;
+    font-size: 1.2em;
+    padding: 1em;
+    border-bottom: 1px solid #A6C9E2;
+}
+#awa-doc-message-notif {
+    padding: 1em;
+    background: #DFEFFC;
+    border: 1px solid red;
+    border-radius: 0.5em;
+}
 div.awa-document {
     float: left;
     clear: both;
@@ -58,11 +71,7 @@ div.awa-document div.awa-mime {
     width: 100px;
     padding-left: 10px;
 }
-div.awa-document div.awa-date {
-    float: right;
-    padding-left: 10px;
-}
-div.awa-document div.awa-owner {
+div.awa-document div.awa-date, div.awa-document div.awa-owner {
     float: right;
     padding-left: 10px;
 }
@@ -101,17 +110,25 @@ div.asf-active-list div.asf-active div.awa-download {
 }
 div.document-list {
     float: left;
-    width: 99%;
+    width: 98%;
     padding-left: 1%;
 }
 div.document-list div.asf-active {
     background-color: #FFC;
 }
-#folder-list-editor {
+#awa-folder-left-panel {
     width: 20%;
-    border: 2px solid #BCD;
+    background: #f3f9fe;
+    border-right: 3px solid #A6C9E2;
+}
+#awa-list-right-panel {
+    width: 99%;
+}
+#folder-list-editor {
     float: left;
+    width: 95%;
     margin-top: 15px;
+    margin-left: 5%;
 }
 #folder-add {
     float: left;
@@ -119,10 +136,12 @@ div.document-list div.asf-active {
 }
 #document-list-editor {
     float: left;
-    width: 79%;
+    /*width: 79%;
     border: 2px solid #BCD;
     margin-left: 5px;
-    margin-top: 15px;
+    margin-top: 15px;*/
+    width: 100%;
+    padding-top: 1em;
 }
 #document-action {
     width: 24px;
@@ -149,6 +168,7 @@ input.asf-editable-text {
     float: left;
     padding-right: 10px;
 }
+
 /* Image information page */
 .image-info, .image-view {
     float: left;
@@ -184,9 +204,7 @@ input.asf-editable-text {
     padding-bottom: 0.5em;
     display: inline-block;
 }
-.dz-image, .dz-details, .dz-progress {
-    float: left;
-}
+
 .awa-folder-list-editor {
     float: left;
     width: 30%;
@@ -217,6 +235,6 @@ input.asf-editable-text {
     font-weight: bold;
     padding: 2em 0;
 }
-.dropzone .dz-success-mark, .dropzone .dz-error-mark {
+.dz-image, .dz-details, .dz-progress, .dropzone .dz-success-mark, .dropzone .dz-error-mark {
     float: left;
 }
