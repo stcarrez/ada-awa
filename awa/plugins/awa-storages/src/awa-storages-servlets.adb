@@ -82,6 +82,7 @@ package body AWA.Storages.Servlets is
    procedure Do_Get (Server   : in Storage_Servlet;
                      Request  : in out ASF.Requests.Request'Class;
                      Response : in out ASF.Responses.Response'Class) is
+      URI     : constant String := Request.Get_Request_URI;
       Data    : ADO.Blob_Ref;
       Mime    : Ada.Strings.Unbounded.Unbounded_String;
       Name    : Ada.Strings.Unbounded.Unbounded_String;
@@ -89,10 +90,11 @@ package body AWA.Storages.Servlets is
    begin
       Storage_Servlet'Class (Server).Load (Request, Name, Mime, Date, Data);
       if Data.Is_Null then
-         Log.Info ("Storage file {0} not found", Request.Get_Request_URI);
+         Log.Info ("GET: {0}: storage file not found", URI);
          Response.Send_Error (ASF.Responses.SC_NOT_FOUND);
          return;
       end if;
+      Log.Info ("GET: {0}", URI);
 
       --  Send the file.
       Response.Set_Content_Type (Ada.Strings.Unbounded.To_String (Mime));
@@ -108,7 +110,7 @@ package body AWA.Storages.Servlets is
 
    exception
       when ADO.Objects.NOT_FOUND | Constraint_Error =>
-         Log.Info ("Storage file {0} not found", Request.Get_Request_URI);
+         Log.Info ("GET: {0}: Storage file not found", URI);
          Response.Send_Error (ASF.Responses.SC_NOT_FOUND);
          return;
    end Do_Get;
