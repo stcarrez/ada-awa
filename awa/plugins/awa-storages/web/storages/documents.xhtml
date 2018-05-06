@@ -33,20 +33,27 @@
         <util:script>
             var contextPath = '#{contextPath}';
         </util:script>
-        <div id='awa-content'>
-            <ui:include src="views/storage-nav.xhtml"/>
-            <c:choose>
-                <c:when test="#{not empty storageList.folder}">
-                    <div id='folder-list-editor' class="ui-widget ui-corner-all">
-                        <ui:include src="lists/folders.xhtml"/>
+        <c:choose>
+            <c:when test="#{not empty storageList.folder}">
+                <div class="awa-side-panel">
+                    <div id='awa-folder-left-panel' class="awa-left-panel">
+                        <div class="awa-folder-title">Folder</div>
+                        <div id='folder-list-editor' class="ui-widget ui-corner-all">
+                            <ui:include src="lists/folders.xhtml"/>
+                        </div>
                     </div>
-                    <div id='document-list-editor' class="ui-widget ui-corner-all">
-                        <ui:include src="lists/document-list.xhtml"/>
+                    <div id='awa-list-right-panel' class="awa-right-panel">
+                        <ui:include src="views/storage-nav.xhtml"/>
+                        <div id='document-list-editor' class="ui-widget ui-corner-all">
+                            <ui:include src="lists/document-list.xhtml"/>
+                        </div>
+                        <div id='document-action' class='asf-list-action'>
+                            <a href="#" class='asf-icon asf-delete'
+                               title='#{storageMsg.storage_list_delete_file_tooltip}'></a>
+                        </div>
                     </div>
-                    <div id='document-action' class='asf-list-action'>
-                        <a href="#" class='asf-icon asf-delete' title='#{storageMsg.storage_list_delete_file_tooltip}'></a>
-                    </div>
-                    <util:script>
+                </div>
+                <util:script>
                         $('#folder-list').folder({
                             selectClass: 'asf-selected',
                             editUrl: '#{contextPath}/storages/forms/create-folder-form.html',
@@ -57,16 +64,16 @@
                             dictDefaultMessage: "#{util:escapeJavaScript(storageMsg.storage_upload_form_message)}",
                             dictInvalidFileType: "#{util:escapeJavaScript(storageMsg.storage_upload_form_invalid_file_message)}"
                         });
-                        $('#folder-list-editor').resizable({
+                        $('#awa-folder-left-panel').resizable({
                             minWidth: 100, maxWidth: 400,
                             resize: function(event, ui) {
                                 var width = ui.size.width;
-                                var ow = $('#folder-list-editor').parent().outerWidth();
+                                var ow = $('#awa-folder-left-panel').parent().outerWidth();
                                 width = ow - width - 20;
                                 if (width &lt;= 10) {
                                     width = 10;
                                 }
-                                $('#document-list-editor').css({ width: width });
+                                $('#awa-list-right-panel').css({ width: width });
                             }
                         });
                         $('#document-list-editor').list({
@@ -89,23 +96,22 @@
                                 }
                             }
                         });
-                    </util:script>
-                </c:when>
-                <c:otherwise>
-                    <div>
-                        <div class="grid_3">
-                            <img src="#{contextPath}/images/storages/folder.png"/>
-                        </div>
-                        <div class="grid_6">
-                            <p>#{storageMsg.storage_no_folder}</p>
-                            <div class="asf-container awa-form">
-                                <ajax:include src="/storages/forms/folder-create-first.xhtml"/>
-                            </div>
+                </util:script>
+            </c:when>
+            <c:otherwise>
+                <div>
+                    <div class="grid_3">
+                        <img src="#{contextPath}/images/storages/folder.png"/>
+                    </div>
+                    <div class="grid_6">
+                        <p>#{storageMsg.storage_no_folder}</p>
+                        <div class="asf-container awa-form">
+                            <ajax:include src="/storages/forms/folder-create-first.xhtml"/>
                         </div>
                     </div>
-                </c:otherwise>
-            </c:choose>
-        </div>
+                </div>
+            </c:otherwise>
+        </c:choose>
     </ui:define>
     <ui:define name="pageScript">
         <script type="text/javascript" src="#{contextPath}/js/dropzone.js"></script>
