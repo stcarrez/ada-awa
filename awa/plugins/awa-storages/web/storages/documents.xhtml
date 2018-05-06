@@ -37,7 +37,7 @@
             <c:when test="#{not empty storageList.folder}">
                 <div class="awa-side-panel">
                     <div id='awa-folder-left-panel' class="awa-left-panel">
-                        <div class="awa-folder-title">Folder</div>
+                        <div class="awa-folder-title">#{storageMsg.storage_folder_title}</div>
                         <div id='folder-list-editor' class="ui-widget ui-corner-all">
                             <ui:include src="lists/folders.xhtml"/>
                         </div>
