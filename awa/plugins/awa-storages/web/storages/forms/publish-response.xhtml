@@ -1,5 +1,5 @@
 <!-- Response sent after a user changes the publication status of a document
-  -  Copyright (C) 2016 Stephane Carrez
+  -  Copyright (C) 2016, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,8 @@
 [
     { "action": "removeClass", "data": "awa-public" },
     { "action": "removeClass", "data": "awa-private" },
+    { "action": "notification", "attach": "#awa-doc-message", "id": "#awa-doc-message-notif",
+      "data": "#{uploadFile.is_public ? storageMsg.storage_file_becomes_public_message : storageMsg.storage_file_becomes_private_message}" },
     { "action": "addClass", "data": "post-info ui-list-item #{uploadFile.is_public ? 'awa-public' : 'awa-private'}" }
 ]
 </f:view>
