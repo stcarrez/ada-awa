@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users -- Users module
---  Copyright (C) 2009, 2010, 2011, 2015 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2015, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
---  == Introduction ==
+--  = Users Module =
 --  The <b>Users.Module</b> manages the creation, update, removal and authentication of users
 --  in an application.  The module provides the foundations for user management in
 --  a web application.

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-modules -- Application Module
---  Copyright (C) 2009, 2010, 2011, 2012, 2015, 2016, 2017 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2015, 2016, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,7 +36,7 @@ with ADO.Sessions;
 with AWA.Events;
 limited with AWA.Applications;
 
---  == Introduction ==
+--  == AWA Modules ==
 --  A module is a software component that can be integrated in the
 --  web application.  The module can bring a set of service APIs,
 --  some Ada beans and some presentation files.  The AWA framework
@@ -47,7 +47,7 @@ limited with AWA.Applications;
 --  An application will be made of several modules, some will be
 --  generic some others specific to the application.
 --
---  == Registration ==
+--  === Registration ===
 --  The module should have only one instance per application and it must
 --  be registered when the application is initialized.  The module
 --  instance should be added to the application record as follows:
@@ -71,7 +71,7 @@ limited with AWA.Applications;
 --  The module is registered under a unique name.  That name is used
 --  to load the module configuration.
 --
---  == Configuration ==
+--  === Configuration ===
 --  The module is configured by using an XML or a properties file.
 --  The configuration file is used to define:
 --

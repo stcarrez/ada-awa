@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions -- Permissions module
---  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +26,7 @@ with ADO;
 with ADO.Objects;
 private with ADO.Sessions;
 
---  == Introduction ==
+--  == AWA Permissions ==
 --  The *AWA.Permissions* framework defines and controls the permissions used by an application
 --  to verify and grant access to the data and application service.  The framework provides a
 --  set of services and API that helps an application in enforcing its specific permissions.
@@ -87,10 +87,10 @@ private with ADO.Sessions;
 --                                             User    => User,
 --                                             Entity  => Blog);
 --
---  == Data Model ==
+--  === Data Model ===
 --  [images/awa_permissions_model.png]
 --
---  == Queries ==
+--  === Queries ===
 --  @include permissions.xml
 --
 package AWA.Permissions is

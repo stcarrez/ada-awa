@@ -24,18 +24,16 @@ with AWA.Users.Servlets;
 
 --  == Introduction ==
 --
+--  @include awa-users-services.ads
+--
 --  == Configuration ==
 --  The *users* module uses a set of configuration properties to configure the OpenID
 --  integration.
 --
 --  @include users.xml
 --
---  @include awa-users-services.ads
---
---  @include users.xml
---
 --  == Model ==
---  [images/awa_user_model.png]
+--  [images/awa_users_model.png]
 --
 package AWA.Users.Modules is
 

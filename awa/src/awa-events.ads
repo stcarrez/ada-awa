@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events -- AWA Events
---  Copyright (C) 2012, 2015 Stephane Carrez
+--  Copyright (C) 2012, 2015, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +25,7 @@ with ADO;
 
 with AWA.Index_Arrays;
 
---  == Introduction ==
+--  == AWA Events ==
 --  The <b>AWA.Events</b> package defines an event framework for modules to post events
 --  and have Ada bean methods be invoked when these events are dispatched.  Subscription to
 --  events is done through configuration files.  This allows to configure the modules and
@@ -93,7 +93,7 @@ with AWA.Index_Arrays;
 --      saves them in the database.  If the application is stopped, events that have not yet
 --      been processed will be dispatched when the application is started again.
 --
---  == Data Model ==
+--  === Data Model ===
 --  [images/awa_events_model.png]
 --
 package AWA.Events is
