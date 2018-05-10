@@ -2,8 +2,19 @@
 <module version="1.0">
 
   <context-param>
-    <param-name>storages.rootdir</param-name>
-    <param-value>storage-root</param-value>
+    <param-name>storages.storage_root</param-name>
+    <param-value>storage</param-value>
+    <description>
+       The path of the directory that contains storage files stored on the local filesystem.
+    </description>
+  </context-param>
+
+  <context-param>
+    <param-name>storages.tmp_storage_root</param-name>
+    <param-value>tmp</param-value>
+    <description>
+       The path of the directory that contains temporary storage files on the local filesystem.
+    </description>
   </context-param>
 
   <managed-bean>
@@ -142,6 +153,16 @@
     <url-pattern>/storages/files/*</url-pattern>
     <url-pattern>/storages/ajax/*</url-pattern>
   </filter-mapping>
+
+  <url-policy>
+    <description>
+      Security rule to allow anonymous users to display the documents.
+    </description>
+    <permission>anonymous</permission>
+    <url-pattern>/storages/documents.html</url-pattern>
+    <url-pattern>/storages/lists/documents.html</url-pattern>
+    <url-pattern>/storages/files/.*</url-pattern>
+  </url-policy>
 
     <url-policy>
         <description>
