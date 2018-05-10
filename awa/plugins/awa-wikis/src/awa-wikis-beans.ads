@@ -46,8 +46,11 @@ with AWA.Components.Wikis;
 --  The blog module registers the bean constructors when it is initialized.
 --  To use them, one must declare a bean definition in the application XML configuration.
 --
---  == Ada Beans ==
---  @include wikis.xml
+--  @include-bean wikis.xml
+--  @include-bean wiki-page.xml
+--  @include-bean wiki-pages.xml
+--  @include-bean wiki-history.xml
+--  @include-bean wiki-list.xml
 package AWA.Wikis.Beans is
 
    use Ada.Strings.Wide_Wide_Unbounded;

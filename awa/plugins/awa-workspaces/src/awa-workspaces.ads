@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-workspaces -- Module workspaces
---  Copyright (C) 2011, 2012, 2015, 2017 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2015, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
---  == Introduction ==
+--  = Workspaces Module =
 --  The *workspaces* plugin defines a workspace area for other plugins.
 --  The workspace is intended to link together all the data objects that an application
 --  manages for a given user or group of users.  A workspace is a possible mechanism

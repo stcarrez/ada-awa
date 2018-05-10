@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-votes -- Module votes
---  Copyright (C) 2013, 2015 Stephane Carrez
+--  Copyright (C) 2013, 2015, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
---  == Introduction ==
+--  = Votes Module =
 --  The <b>Votes</b> module allows users to vote for objects defined in the application.
 --  Users can vote by setting a rating value on an item (+1, -1 or any other integer value).
 --  The Votes module makes sure that users can vote only once for an item.  A global rating
