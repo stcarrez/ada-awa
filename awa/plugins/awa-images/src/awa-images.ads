@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-images -- Image module
---  Copyright (C) 2012, 2016 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
---  == Introduction ==
+--  = Images Module =
 --  The image plugin is an extension to the storage plugin that identifies images and
 --  provides thumbnails as well as resizing of the original image.
 --

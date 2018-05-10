@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages -- Storage module
---  Copyright (C) 2012, 2015, 2016 Stephane Carrez
+--  Copyright (C) 2012, 2015, 2016, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,7 @@ with Ada.Finalization;
 
 with ADO;
 
---  == Introduction ==
+--  = Storages Module =
 --  The <b>Storages</b> module provides a set of storage services allowing an application
 --  to store data files, documents, images in a persistent area.  The persistent store can
 --  be on a file system, in the database or provided by a remote service such as

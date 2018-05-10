@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-setup -- Setup and installation
---  Copyright (C) 2016, 2017 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
---  == Setup Application ==
+--  = Setup Application =
 --  The <tt>AWA.Setup</tt> package implements a simple setup application
 --  that allows to configure the database, the Google and Facebook application
 --  identifiers and some other configuration parameters.  It is intended to

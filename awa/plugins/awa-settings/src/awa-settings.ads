@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-settings --  Settings module
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2013, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
---  == Introduction ==
+--  = Settings Module =
 --  The <b>Settings</b> module provides management of application and user settings.
 --  A setting is identified by a unique name in the application.  It is saved in
 --  the database and associated with a user.

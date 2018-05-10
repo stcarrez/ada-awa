@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-changelogs -- Changelog module
---  Copyright (C) 2014 Stephane Carrez
+--  Copyright (C) 2014, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
---  == Introduction ==
+--  = Changelogs Module =
 --  The <b>Changelog</b> module associate logs produced by users to any database entity.
 --  It is intended to be used to track changes and produce a change log for actions performed
 --  by users.  The change log entry can be associated with specific database entities so

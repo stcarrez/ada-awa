@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-tags -- Tags management
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2013, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
---  == Introduction ==
+--  = Tags Module =
 --  The <b>Tags</b> module allows to associate general purpose tags to any database entity.
 --  It provides a JSF component that allows to insert easily a list of tags in a page and
 --  in a form.  An application can use the bean types defined in <tt>AWA.Tags.Beans</tt>

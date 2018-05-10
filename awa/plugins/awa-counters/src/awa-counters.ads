@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-counters --
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2015, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,7 @@ with ADO.Schemas;
 with Util.Strings;
 with AWA.Index_Arrays;
 
---  == Introduction ==
+--  = Counters Module =
 --  The <b>Counters</b> module defines a general purpose counter service that allows to
 --  associate counters to database entities.  For example it can be used to track the number
 --  of times a blog post or a wiki page is accessed.  The <b>Counters</b> module maintains the

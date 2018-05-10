@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-comments -- Comments module
---  Copyright (C) 2009, 2010, 2011, 2014, 2015 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2014, 2015, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
---  == Introduction ==
+--  = Comments Module =
 --  The <b>Comments</b> module is a general purpose module that allows to associate user comments
 --  to any database entity.  The module defines several bean types that allow to display a list
 --  of comments or edit and publish a new comment.

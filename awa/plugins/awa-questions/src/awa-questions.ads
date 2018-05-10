@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-questions -- Module questions
---  Copyright (C) 2012, 2013, 2015 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2015, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
---  == Introduction ==
+--  = Questions Module =
 --
 --  @include questions.xml
 --  @include question-list.xml

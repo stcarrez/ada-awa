@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs -- Blogs module
---  Copyright (C) 2011, 2014, 2015 Stephane Carrez
+--  Copyright (C) 2011, 2014, 2015, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
---  == Introduction ==
+--  = Blogs Module =
 --  The *blogs* plugin is a small blog application which allows users to publish articles.
 --  A user may own several blogs, each blog having a name and its own base URI.  Within a blog,
 --  the user may write articles and publish them.  Once published, the articles are visible to
