@@ -68,6 +68,9 @@ NR_CPUS=`getconf _NPROCESSORS_CONF 2>/dev/null || getconf NPROCESSORS_CONF 2>/de
 AC_MSG_RESULT($NR_CPUS)
 AC_SUBST(NR_CPUS)
 
+AC_CHECK_PROG(HAVE_PANDOC,pandoc,yes)
+AC_CHECK_PROG(HAVE_DYNAMO,dynamo,yes)
+
 ADO_USE_GPRBUILD=no
 AC_ARG_WITH(gprbuild,
 AS_HELP_STRING([--with-gprbuild], [Use gprbuild instead of gnatmake for the compilation]),
