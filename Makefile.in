@@ -115,7 +115,13 @@ SUBDIRS=ada-util ada-el ada-security ada-wiki ada-servlet swagger-ada ada-asf ad
 DIRS=ada-util ada-el ada-security ada-wiki ada-servlet swagger-ada ada-asf ada-ado dynamo
 
 # Build executables for all mains defined by the project.
-build test clean install uninstall:		 stamp-configure
+build test clean:		 stamp-configure
+	for i in $(SUBDIRS); do \
+	   $(MAKE) -C "$$i" $@ ; \
+	done
+
+install uninstall:
+	cd AdaYaml && make $@ prefix="${prefix}"
 	for i in $(SUBDIRS); do \
 	   $(MAKE) -C "$$i" $@ ; \
 	done
@@ -135,7 +141,7 @@ endif
 
 stamp-yaml:     Makefile
 	@echo "Building ==== AdaYaml ===="
-	cd AdaYaml && make && touch $@
+	cd AdaYaml && make && touch ../$@
 
 stamp-configure:	stamp-aws stamp-xmlada stamp-yaml Makefile
 	@echo "Configuring ==== ada-util ===="
