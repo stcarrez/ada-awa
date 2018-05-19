@@ -1,0 +1,20 @@
+site_name: Ada Web Application
+docs_dir: docs
+pages:
+  - Introduction: index.md
+  - Installation: Installation.md
+  - AWA: AWA.md
+  - Users: AWA_Users.md
+  - Jobs: AWA_Jobs.md
+  - Mail: AWA_Mail.md
+  - Storages: AWA_Storages.md
+  - Images: AWA_Images.md
+  - Wikis: AWA_Wikis.md
+  - Blogs: AWA_Blogs.md
+  - Counters: AWA_Counters.md
+  - Votes: AWA_Votes.md
+  - Tags: AWA_Tags.md
+  - Comments: AWA_Comments.md
+  - Settings: AWA_Settings.md
+  - Setup: AWA_Setup.md
+theme: readthedocs
