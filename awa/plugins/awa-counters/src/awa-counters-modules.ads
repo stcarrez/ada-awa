@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-counters-modules -- Module counters
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2015, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,16 +23,16 @@ with ADO.Sessions;
 with AWA.Modules;
 
 --  == Counter Module ==
---  The <tt>Counter_Module</tt> manages the counters associated with database entities.
+--  The `Counter_Module` manages the counters associated with database entities.
 --  To avoid having to update the database each time a counter is incremented, counters
---  are kept temporarily in a <tt>Counter_Table</tt> protected type.  The table contains
+--  are kept temporarily in a `Counter_Table` protected type.  The table contains
 --  only the partial increments and not the real counter values.  Counters are flushed
 --  when the table reaches some limit, or, when the table is oldest than some limit.
 --  Counters are associated with a day so that it becomes possible to gather per-day counters.
 --  The table is also flushed when a counter is incremented in a different day.
 --
---  === Integration ===
---  An instance of the <tt>Counter_Module</tt> must be declared and registered in the
+--  == Integration ==
+--  An instance of the `Counter_Module` must be declared and registered in the
 --  AWA application.  The module instance can be defined as follows:
 --
 --    with AWA.Counters.Modules;

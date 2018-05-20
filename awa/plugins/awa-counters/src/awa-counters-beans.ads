@@ -26,7 +26,7 @@ with Util.Beans.Basic;
 with AWA.Counters.Modules;
 with AWA.Counters.Models;
 
---  == Counter Bean ==
+--  == Ada Bean ==
 --  The <b>Counter_Bean</b> allows to represent a counter associated with some database
 --  entity and allows its control by the <awa:counter> component.
 --

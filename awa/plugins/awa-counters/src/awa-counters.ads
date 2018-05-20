@@ -21,20 +21,21 @@ with Util.Strings;
 with AWA.Index_Arrays;
 
 --  = Counters Module =
---  The <b>Counters</b> module defines a general purpose counter service that allows to
+--  The `Counters` module defines a general purpose counter service that allows to
 --  associate counters to database entities.  For example it can be used to track the number
---  of times a blog post or a wiki page is accessed.  The <b>Counters</b> module maintains the
+--  of times a blog post or a wiki page is accessed.  The `Counters` module maintains the
 --  counters in a table on a per-day and per-entity basis.  It allows to update the full counter
 --  in the target database entity table.
 --
 --  @include awa-counters-modules.ads
+--  @include counters.xml
 --
---  === Counter Declaration ===
---  Each counter must be declared by instantiating the <b>Definition</b> package.
+--  == Counter Declaration ==
+--  Each counter must be declared by instantiating the `Definition` package.
 --  This instantiation serves as identification of the counter and it defines the database
 --  table as well as the column in that table that will hold the total counter.  The following
 --  definition is used for the read counter of a wiki page.  The wiki page table contains a
---  <i>read_count</i> column and it will be incremented each time the counter is incremented.
+--  `read_count` column and it will be incremented each time the counter is incremented.
 --
 --     with AWA.Counters.Definition;
 --     ...
@@ -57,17 +58,17 @@ with AWA.Index_Arrays;
 --     package Start_Counter is
 --        new AWA.Counters.Definition (null, "startup_counter");
 --
---  === Incrementing the counter ===
---  Incrementing the counter is done by calling the <b>Increment</b> operation.
+--  == Incrementing the counter ==
+--  Incrementing the counter is done by calling the `Increment` operation.
 --  When the counter is associated with a database entity, the entity primary key must be given.
 --  The counter is not immediately incremented in the database so that several calls to the
---  <b>Increment</b> operation will not trigger a database update.
+--  `Increment` operation will not trigger a database update.
 --
 --     with AWA.Counters;
 --     ...
 --     AWA.Counters.Increment (Counter => Read_Counter.Counter, Key => Id);
 --
---  A global counter is also incremented by using the <b>Increment</b> operation.
+--  A global counter is also incremented by using the `Increment` operation.
 --
 --     with AWA.Counters;
 --     ...
@@ -75,13 +76,12 @@ with AWA.Index_Arrays;
 --
 --  @include awa-counters-beans.ads
 --  @include awa-counters-components.ads
---  @include counters.xml
 --
---  == Model ==
---  The <b>Counters</b> module has a simple database model which needs two tables.
---  The <b>Counter_Definition</b> table is used to keep track of the different counters
+--  == Data model ==
+--  The `Counters` module has a simple database model which needs two tables.
+--  The `Counter_Definition` table is used to keep track of the different counters
 --  used by the application.  A row in that table is created for each counter declared by
---  instantiating the <b>Definition</b> package.  The <b>Counter</b> table holds the counters
+--  instantiating the `Definition` package.  The `Counter` table holds the counters
 --  for each database entity and for each day.  By looking at that table, it becomes possible
 --  to look at the daily access or usage of the counter.
 --

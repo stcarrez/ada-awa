@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-counters-components -- Counter UI component
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2015, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,17 +20,17 @@ with ASF.Factory;
 with ASF.Contexts.Faces;
 with ASF.Components.Html;
 
---  == Counter Component ==
+--  == HTML components ==
 --  The counter component is an Ada Server Faces component that allows to increment
---  and display easily the counter.  The component works by using the <b>Counter_Bean</b>
+--  and display easily the counter.  The component works by using the `Counter_Bean`
 --  Ada bean object which describes the counter in terms of counter definition, the
 --  associated database entity, and the current counter value.
 --
 --    <awa:counter value="#{wikiPage.counter}"/>
 --
---  When the component is included in a page the <b>Counter_Bean</b> instance associated
---  with the EL <b>value</b> attribute is used to increment the counter.  This is similar
---  to calling the <b>AWA.Counters.Increment</b> operation from the Ada code.
+--  When the component is included in a page the `Counter_Bean` instance associated
+--  with the EL `value` attribute is used to increment the counter.  This is similar
+--  to calling the `AWA.Counters.Increment` operation from the Ada code.
 package AWA.Counters.Components is
 
    type UICounter is new ASF.Components.Html.UIHtmlComponent with private;
