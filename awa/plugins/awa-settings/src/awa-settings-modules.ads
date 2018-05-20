@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-settings-modules -- Module awa-settings
---  Copyright (C) 2013, 2015, 2016, 2017 Stephane Carrez
+--  Copyright (C) 2013, 2015, 2016, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,8 +20,8 @@ with Ada.Strings.Unbounded;
 with AWA.Modules;
 
 --  == Integration ==
---  The <tt>Setting_Module</tt> manages the application and user settings.  An instance of the
---  the <tt>Setting_Module</tt> must be declared and registered in the AWA application.
+--  The `Setting_Module` manages the application and user settings.  An instance of the
+--  the `Setting_Module` must be declared and registered in the AWA application.
 --  The module instance can be defined as follows:
 --
 --    type Application is new AWA.Applications.Application with record
@@ -34,9 +34,6 @@ with AWA.Modules;
 --              Name   => AWA.Settings.Modules.NAME,
 --              URI    => "settings",
 --              Module => App.Setting_Module'Access);
---
---  == Model ==
---  [images/awa_settings_model.png]
 package AWA.Settings.Modules is
 
    --  The name under which the module is registered.
