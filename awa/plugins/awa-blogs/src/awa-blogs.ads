@@ -17,29 +17,33 @@
 -----------------------------------------------------------------------
 
 --  = Blogs Module =
---  The *blogs* plugin is a small blog application which allows users to publish articles.
+--  The `blogs` module is a small blog application which allows users to publish articles.
 --  A user may own several blogs, each blog having a name and its own base URI.  Within a blog,
 --  the user may write articles and publish them.  Once published, the articles are visible to
 --  anonymous users.
 --
---  The *blogs* plugin uses the [AWA_Tags] and [AWA_Comments] modules to allow to associate
+--  The `blogs` module uses the [AWA_Tags] and [AWA_Comments] modules to allow to associate
 --  tags to a post and allow users to comment on the articles.
 --
---  == Model ==
---  [images/awa_blogs_model.png]
---
 --  @include awa-blogs-modules.ads
---  @include awa-blogs-beans.ads
 --
---  == Ada Beans ==
---  @include blogs.xml
+--  @include awa-blogs-beans.ads
+--  @include-bean blogs.xml
+--  @include-bean blog-admin-post-list.xml
+--  @include-bean blog-post-list.xml
+--  @include-bean blog-comment-list.xml
+--  @include-bean blog-list.xml
+--  @include-bean blog-tags.xml
 --
 --  == Queries ==
---  @include blog-admin-post-list.xml
---  @include blog-post-list.xml
---  @include blog-comment-list.xml
---  @include blog-list.xml
---  @include blog-tags.xml
+--  @include-query blog-admin-post-list.xml
+--  @include-query blog-post-list.xml
+--  @include-query blog-comment-list.xml
+--  @include-query blog-list.xml
+--  @include-query blog-tags.xml
+--
+--  == Data model ==
+--  [images/awa_blogs_model.png]
 --
 package AWA.Blogs is
 

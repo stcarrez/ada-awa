@@ -29,11 +29,18 @@ with AWA.Blogs.Servlets;
 with Security.Permissions;
 
 --  == Integration ==
---  The <tt>Blog_Module</tt> manages the creation, update, removal of blog posts in an application.
+--  To be able to use the `Blogs` module, you will need to add the following line in your
+--  GNAT project file:
+--
+--    with "awa_blogs";
+--
+--  The `Blog_Module` type manages the creation, update, removal of blog posts in an application.
 --  It provides operations that are used by the blog beans or other services to create and update
---  posts.  An instance of the <tt>Blog_Module</tt> must be declared and registered in the
+--  posts.  An instance of the `Blog_Module` must be declared and registered in the
 --  AWA application.  The module instance can be defined as follows:
 --
+--    with AWA.Blogs.Modules;
+--    ...
 --    type Application is new AWA.Applications.Application with record
 --       Blog_Module : aliased AWA.Blogs.Modules.Blog_Module;
 --    end record;

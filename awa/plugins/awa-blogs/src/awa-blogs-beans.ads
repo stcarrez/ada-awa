@@ -37,7 +37,7 @@ with AWA.Counters.Beans;
 with AWA.Events;
 with AWA.Components.Wikis;
 
---  == Blog Beans ==
+--  == Ada Beans ==
 --  Several bean types are provided to represent and manage the blogs and their posts.
 --  The blog module registers the bean constructors when it is initialized.
 --  To use them, one must declare a bean definition in the application XML configuration.
