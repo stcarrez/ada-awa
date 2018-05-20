@@ -38,6 +38,8 @@ private with EL.Expressions;
 --  module to be notified when a storage file is created, updated or removed.  When a file
 --  is added, it looks at the file type and extracts the image information if the storage file
 --  is an image.
+--
+--  @include-config images.xml
 package AWA.Images.Modules is
 
    NAME : constant String := "images";

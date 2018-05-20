@@ -22,9 +22,12 @@
 --
 --  @include awa-images-modules.ads
 --  @include awa-images-beans.ads
---  @include image-list.xml
 --
---  == Model ==
+--  == Queries ==
+--  @include-query image-info.xml
+--  @include-query image-list.xml
+--
+--  == Data model ==
 --  [images/awa_images_model.png]
 --
 package AWA.Images is

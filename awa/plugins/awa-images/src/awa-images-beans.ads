@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-images-beans -- Image Ada Beans
---  Copyright (C) 2016 Stephane Carrez
+--  Copyright (C) 2016, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,14 +25,15 @@ with AWA.Storages.Beans;
 with AWA.Images.Models;
 with AWA.Images.Modules;
 
---  == Image Beans ==
---  The <tt>Image_List_Bean</tt> type is used to represent a list of image stored in
+--  == Ada Beans ==
+--  The `Image_List_Bean` type is used to represent a list of image stored in
 --  a folder.
 --
---  The <tt>Image_Bean</tt> type holds all the data to give information about an image.
+--  The `Image_Bean` type holds all the data to give information about an image.
 --
---  == Ada Beans ==
---  @include images.xml
+--  @include-bean images.xml
+--  @include-bean image-info.xml
+--  @include-bean image-list.xml
 package AWA.Images.Beans is
 
    --  ------------------------------
