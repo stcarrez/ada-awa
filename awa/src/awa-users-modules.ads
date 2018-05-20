@@ -32,9 +32,6 @@ with AWA.Users.Servlets;
 --
 --  @include users.xml
 --
---  == Model ==
---  [images/awa_users_model.png]
---
 package AWA.Users.Modules is
 
    NAME : constant String := "users";

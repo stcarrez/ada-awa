@@ -31,6 +31,10 @@
 --  User permissions are managed by the `Permissions.Module`.
 --
 --  @include awa-users-modules.ads
+--
+--  == Data model ==
+--  [images/awa_users_model.png]
+--
 package AWA.Users is
 
    pragma Preelaborate;
