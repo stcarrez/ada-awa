@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-comments-beans -- Beans for the comments module
---  Copyright (C) 2014, 2015, 2017 Stephane Carrez
+--  Copyright (C) 2014, 2015, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,14 +29,14 @@ with ASF.Helpers.Beans;
 with AWA.Comments.Models;
 with AWA.Comments.Modules;
 
---  == Comment Beans ==
+--  == Ada Beans ==
 --  Several bean types are provided to represent and manage a list of tags.
 --  The tag module registers the bean constructors when it is initialized.
 --  To use them, one must declare a bean definition in the application XML configuration.
 --
 --  === Comment_List_Bean ===
---  The <tt>Comment_List_Bean</tt> holds a list of comments and provides operations used by the
---  <tt>awa:tagList</tt> component to add or remove tags within a <tt>h:form</tt> component.
+--  The `Comment_List_Bean` holds a list of comments and provides operations used by the
+--  `awa:tagList` component to add or remove tags within a `h:form` component.
 --  A bean can be declared and configured as follows in the XML application configuration file:
 --
 --    <managed-bean>
@@ -65,10 +65,11 @@ with AWA.Comments.Modules;
 --      </managed-property>
 --    </managed-bean>
 --
---  The <tt>entity_type</tt> property defines the name of the database table to which the comments
---  are assigned.  The <tt>permission</tt> property defines the permission name that must be used
+--  The `entity_type` property defines the name of the database table to which the comments
+--  are assigned.  The `permission` property defines the permission name that must be used
 --  to verify that the user has the permission do add or remove the comment.
 --
+--  @include-bean comment-queries.xml
 package AWA.Comments.Beans is
 
    type Comment_Bean is new AWA.Comments.Models.Comment_Bean with record

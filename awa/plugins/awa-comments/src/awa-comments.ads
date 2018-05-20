@@ -17,21 +17,21 @@
 -----------------------------------------------------------------------
 
 --  = Comments Module =
---  The <b>Comments</b> module is a general purpose module that allows to associate user comments
+--  The `Comments` module is a general purpose module that allows to associate user comments
 --  to any database entity.  The module defines several bean types that allow to display a list
 --  of comments or edit and publish a new comment.
 --
---  == Model ==
---  The database model is generic and it uses the <tt>Entity_Type</tt> provided by
---  [https://github.com/stcarrez/ada-ado ADO] to associate a comment to entities stored in
---  different tables.  The <tt>Entity_Type</tt> identifies the database table and the stored
---  identifier in <tt>for_entity_id</tt> defines the entity in that table.
---
---  [images/awa_comments_model.png]
---
 --  @include awa-comments-modules.ads
 --  @include awa-comments-beans.ads
---  @include comment-queries.xml
+--  @include-query comment-queries.xml
+--
+--  == Data model ==
+--  The database model is generic and it uses the `Entity_Type` provided by
+--  Ada Database Objects to associate a comment to entities stored in
+--  different tables.  The `Entity_Type` identifies the database table and the stored
+--  identifier in `for_entity_id` defines the entity in that table.
+--
+--  [images/awa_comments_model.png]
 --
 package AWA.Comments is
 
