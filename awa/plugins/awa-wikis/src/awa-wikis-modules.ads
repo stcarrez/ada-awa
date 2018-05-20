@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-modules -- Module wikis
---  Copyright (C) 2015, 2016 Stephane Carrez
+--  Copyright (C) 2015, 2016, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,16 +32,36 @@ with AWA.Counters.Definition;
 with Security.Permissions;
 with Wiki.Strings;
 
+--  == Integration ==
+--  The `Wiki_Module` manages the creation, update, removal of wiki pages in an application.
+--  It provides operations that are used by the wiki beans or other services to create and update
+--  wiki pages.  An instance of the `Wiki_Module` must be declared and registered in the
+--  AWA application.  The module instance can be defined as follows:
+--
+--    type Application is new AWA.Applications.Application with record
+--       Wiki_Module : aliased AWA.Wikis.Modules.Wiki_Module;
+--    end record;
+--
+--  And registered in the `Initialize_Modules` procedure by using:
+--
+--    Register (App    => App.Self.all'Access,
+--              Name   => AWA.Wikis.Modules.NAME,
+--              URI    => "wikis",
+--              Module => App.Wiki_Module'Access);
+--
+--  == Configuration ==
+--  @include-config wikis.xml
+--
 --  == Events ==
---  The <tt>wikis</tt> exposes a number of events which are posted when some action
+--  The `wikis` exposes a number of events which are posted when some action
 --  are performed at the service level.
 --
---  === wiki-create-page ===
---  This event is posted when a new wiki page is created.
---
---  === wiki-create-content ===
---  This event is posted when a new wiki page content is created.  Each time a wiki page is
---  modified, a new wiki page content is created and this event is posted.
+--  | Event name          | Description                                                   |
+--  |:--------------------|:--------------------------------------------------------------|
+--  | wiki-create-page    | This event is posted when a new wiki page is created.         |
+--  | wiki-create-content | This event is posted when a new wiki page content is created. |
+--  |                     | Each time a wiki page is modified, a new wiki page content    |
+--  |                     | is created and this event is posted.                          |
 --
 package AWA.Wikis.Modules is
 

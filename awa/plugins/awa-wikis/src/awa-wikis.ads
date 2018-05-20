@@ -17,10 +17,9 @@
 -----------------------------------------------------------------------
 
 --  = Wikis Module =
---  The <b>Wikis</b> module provides a complete wiki system which allows users to create
+--  The `Wikis` module provides a complete wiki system which allows users to create
 --  their own wiki environment with their wiki pages.
 --
---  @include-config wikis.xml
 --  @include awa-wikis-modules.ads
 --
 --  @include awa-wikis-beans.ads
@@ -31,7 +30,7 @@
 --  @include-query wiki-history.xml
 --  @include-query wiki-list.xml
 --
---  == Model ==
+--  == Data model ==
 --  [images/awa_wikis_model.png]
 --
 package AWA.Wikis is
