@@ -21,7 +21,7 @@ with Ada.Finalization;
 with ADO;
 
 --  = Storages Module =
---  The <b>Storages</b> module provides a set of storage services allowing an application
+--  The `Storages` module provides a set of storage services allowing an application
 --  to store data files, documents, images in a persistent area.  The persistent store can
 --  be on a file system, in the database or provided by a remote service such as
 --  Amazon Simple Storage Service.
@@ -61,7 +61,7 @@ with ADO;
 --      When the application has to read the data, opening a read stream connection is
 --      the most efficient mechanism.
 --
---  === Local file ===
+--  == Local file ==
 --  To access the data by using a local file, we must define a local storage reference:
 --
 --    Data : AWA.Storages.Models.Store_Local_Ref;
@@ -83,16 +83,20 @@ with ADO;
 --  @include awa-storages-services.ads
 --
 --  == Ada Beans ==
---  @include storages.xml
+--  @include-bean storages.xml
+--  @include-bean storage-list.xml
+--  @include-bean folder-queries.xml
+--  @include-bean storage-queries.xml
 --
 --  @include awa-storages-servlets.ads
 --
---  == Model ==
---  [images/awa_storage_model.png]
+--  == Queries ==
+--  @include-query storage-list.xml
+--  @include-query folder-queries.xml
+--  @include-query storage-queries.xml
 --
---  @include storage-list.xml
---  @include folder-queries.xml
---  @include storage-queries.xml
+--  == Data model ==
+--  [images/awa_storage_model.png]
 --
 package AWA.Storages is
 

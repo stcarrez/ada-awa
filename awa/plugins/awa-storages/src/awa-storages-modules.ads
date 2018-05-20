@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-modules -- Storage management module
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,10 +23,13 @@ with AWA.Storages.Services;
 with AWA.Storages.Servlets;
 
 --  == Storage Module ==
---  The <tt>Storage_Module</tt> type represents the storage module.  An instance of the storage
+--  The `Storage_Module` type represents the storage module.  An instance of the storage
 --  module must be declared and registered when the application is created and initialized.
 --  The storage module is associated with the storage service which provides and implements
 --  the storage management operations.
+--
+--  @include-permission storages.xml
+--  @include-config storages.xml
 package AWA.Storages.Modules is
 
    NAME : constant String := "storages";
