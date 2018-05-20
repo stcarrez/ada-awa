@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-votes-beans -- Beans for module votes
---  Copyright (C) 2013, 2015 Stephane Carrez
+--  Copyright (C) 2013, 2015, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,14 +22,14 @@ with Util.Beans.Basic;
 with AWA.Votes.Modules;
 with AWA.Votes.Models;
 
---  === Vote Beans ===
---  The <tt>Vote_Bean</tt> is a bean intended to be used in presentation files (XHTML facelet
+--  == Ada Beans ==
+--  The `Vote_Bean` is a bean intended to be used in presentation files (XHTML facelet
 --  files) to vote for an item.  The managed bean can be easily configured in the application XML
---  configuration file.  The <b>permission</b> and <b>entity_type</b> are the two properties
---  that should be defined in the configuration.  The <b>permission</b> is the name of the
+--  configuration file.  The `permission` and `entity_type` are the two properties
+--  that should be defined in the configuration.  The `permission` is the name of the
 --  permission that must be used to verify that the user is allowed to vote for the item.
---  The <b>entity_type</b> is the name of the entity (table name) used by the item.
---  The example below defines the bean <tt>questionVote</tt> defined by the question module.
+--  The `entity_type` is the name of the entity (table name) used by the item.
+--  The example below defines the bean `questionVote` defined by the question module.
 --
 --    <managed-bean>
 --      <description>The vote bean that allows to vote for a question.</description>
@@ -48,13 +48,13 @@ with AWA.Votes.Models;
 --      </managed-property>
 --    </managed-bean>
 --
---  The vote concerns entities for the <tt>awa_question</tt> entity table.
---  The permission <tt>answer-create</tt> is used to verify that the vote is allowed.
+--  The vote concerns entities for the `awa_question` entity table.
+--  The permission `answer-create` is used to verify that the vote is allowed.
 --
 --  [images/awa_votes_bean.png]
 --
---  The managed bean defines three operations that can be called: <tt>vote_up</tt>,
---  <tt>vote_down</tt> and <tt>vote</tt> to setup specific ratings.
+--  The managed bean defines three operations that can be called: `vote_up`,
+--  `vote_down` and `vote` to setup specific ratings.
 package AWA.Votes.Beans is
 
    type Vote_Bean is new AWA.Votes.Models.Vote_Bean with private;
