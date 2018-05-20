@@ -1,5 +1,5 @@
 # Users Module
-The <b>Users.Module</b> manages the creation, update, removal and authentication of users
+The `Users.Module` manages the creation, update, removal and authentication of users
 in an application.  The module provides the foundations for user management in
 a web application.
 
@@ -10,7 +10,7 @@ the registration process.  The user will authenticate using a password.
 A user can also use an OpenID account and be automatically registered.
 
 A user can have one or several permissions that allow to protect the application data.
-User permissions are managed by the <b>Permissions.Module</b>.
+User permissions are managed by the `Permissions.Module`.
 
 ## Introduction
 
@@ -121,8 +121,9 @@ integration.
 
 
 
-## Model
-![](images/awa_users_model.png)
 
+
+## Data model
+![](images/awa_users_model.png)
 
 

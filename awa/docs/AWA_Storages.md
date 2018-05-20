@@ -176,6 +176,6 @@ content that was uploaded.
 
 
 ## Data model
-![](images/awa_storage_model.png)
+![](images/awa_storages_model.png)
 
 

@@ -1,19 +1,28 @@
 # Blogs Module
-The *blogs* plugin is a small blog application which allows users to publish articles.
+The `blogs` module is a small blog application which allows users to publish articles.
 A user may own several blogs, each blog having a name and its own base URI.  Within a blog,
 the user may write articles and publish them.  Once published, the articles are visible to
 anonymous users.
 
-The *blogs* plugin uses the [[|AWA_Tags]]] and [[|AWA_Comments]]] modules to allow to associate
+The `blogs` module uses the [[|AWA_Tags]]] and [[|AWA_Comments]]] modules to allow to associate
 tags to a post and allow users to comment on the articles.
 
 ## Integration
-The `Blog_Module` manages the creation, update, removal of blog posts in an application.
+To be able to use the `Blogs` module, you will need to add the following line in your
+GNAT project file:
+
+```Ada
+with "awa_blogs";
+```
+
+The `Blog_Module` type manages the creation, update, removal of blog posts in an application.
 It provides operations that are used by the blog beans or other services to create and update
 posts.  An instance of the `Blog_Module` must be declared and registered in the
 AWA application.  The module instance can be defined as follows:
 
 ```Ada
+with AWA.Blogs.Modules;
+...
 type Application is new AWA.Applications.Application with record
    Blog_Module : aliased AWA.Blogs.Modules.Blog_Module;
 end record;
@@ -138,7 +147,7 @@ The list of blogs.
 
 
 
-## Model
+## Data model
 ![](images/awa_blogs_model.png)
 
 

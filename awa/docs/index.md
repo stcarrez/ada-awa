@@ -40,32 +40,32 @@ The **System Components** represent the core components onto which all other com
 These component don't provide any real functionality for a final user but they are necessary for
 the Web application to operate.  These components include:
 
-* The [Users Module] manages the creation, update, removal and authentication of users,
-* The [Mail Module] allows an application to format and send a mail,
-* The [Jobs Module] provides a batch job framework for modules to execute long running actions,
+* The [Users Module](AWA_Users.md) manages the creation, update, removal and authentication of users,
+* The [Mail Module](AWA_Mail.md) allows an application to format and send a mail,
+* The [Jobs Module](AWA_Jobs.md) provides a batch job framework for modules to execute long running actions,
 * The [Events Module] implements an eventing system to share events with other modules,
-* The [Workspace Module] defines a workspace area for other plugins to connect and plug into.
+* The [Workspace Module](AWA_Workspaces.md) defines a workspace area for other plugins to connect and plug into.
 
 ## General Purpose Components
 
 The **General Purpose Components** are components which provide generic functionalities that can
 be plugged and used by functional components.
 
-* The [Tags Module] allows to associate general purpose tags to any database entity,
-* The [Votes Module] allows users to vote for objects defined in the application,
-* The [Comments Module] is a general purpose module that allows to associate user comments to any database entity,
-* The [Counters Module] defines a general purpose counter service allowing to associate counters to database entities,
-* The [Changelogs Module] associates logs produced by users to any database entity.
+* The [Tags Module](AWA_Tags.md) allows to associate general purpose tags to any database entity,
+* The [Votes Module](AWA_Votes.md) allows users to vote for objects defined in the application,
+* The [Comments Module](AWA_Comments.md) is a general purpose module that allows to associate user comments to any database entity,
+* The [Counters Module](AWA_Counters.md) defines a general purpose counter service allowing to associate counters to database entities,
+* The [Changelogs Module](AWA_Changelogs.md) associates logs produced by users to any database entity.
 
 ## Functional Components
 
 The **Functional Components** implement a final functionality for a user.  They are using the
-system components such as [[AWA_Users]] for the user management but also general purpose components
+system components such as [User Model](AWA_Users.md) for the user management but also general purpose components
 such as [[AWA_Tags]] or [[AWA_Counters]].
 
-* The [Questions Module] is a simple question and answer system,
-* The [Blogs Module] is a small blog application which allows users to publish articles,
-* The [Wikis Module] provides a complete Wiki system allowing users to create their own Wiki environment.
+* The [Questions Module](AWA_Questions.md) is a simple question and answer system,
+* The [Blogs Module](AWA_Blogs.md) is a small blog application which allows users to publish articles,
+* The [Wikis Module](AWA_Wikis.md) provides a complete Wiki system allowing users to create their own Wiki environment.
 
 To in the installation process of final applications, the [Setup Application] is a special
 component that you can decide to customize to provide an installation and configuration process

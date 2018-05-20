@@ -23,6 +23,7 @@ Register (App    => App.Self.all'Access,
           Module => App.Wiki_Module'Access);
 ```
 
+## Configuration
 | Name                      | Description                                                    |
 |:--------------------------|:---------------------------------------------------------------|
 |wikis.image_prefix|The URL base prefix to be used for Wiki images.|
