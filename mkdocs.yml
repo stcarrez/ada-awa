@@ -1,5 +1,5 @@
 site_name: Ada Web Application
-docs_dir: docs
+docs_dir: awa/docs
 pages:
   - Introduction: index.md
   - Installation: Installation.md
