@@ -30,7 +30,7 @@ with ASF.Factory;
 
 with AWA.Tags.Models;
 
---  == Tags Component ==
+--  == HTML components ==
 --
 --  === Displaying a list of tags ===
 --  The <tt>awa:tagList</tt> component displays a list of tags.  Each tag can be rendered as

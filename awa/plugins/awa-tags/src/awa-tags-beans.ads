@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-tags-beans -- Beans for the tags module
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2013, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,14 +33,14 @@ with ADO.Sessions;
 with AWA.Tags.Models;
 with AWA.Tags.Modules;
 
---  == Tag Beans ==
+--  == Ada Beans ==
 --  Several bean types are provided to represent and manage a list of tags.
 --  The tag module registers the bean constructors when it is initialized.
 --  To use them, one must declare a bean definition in the application XML configuration.
 --
 --  === Tag_List_Bean ===
---  The <tt>Tag_List_Bean</tt> holds a list of tags and provides operations used by the
---  <tt>awa:tagList</tt> component to add or remove tags within a <tt>h:form</tt> component.
+--  The `Tag_List_Bean` holds a list of tags and provides operations used by the
+--  `awa:tagList` component to add or remove tags within a `h:form` component.
 --  A bean can be declared and configured as follows in the XML application configuration file:
 --
 --    <managed-bean>
@@ -59,17 +59,17 @@ with AWA.Tags.Modules;
 --      </managed-property>
 --    </managed-bean>
 --
---  The <tt>entity_type</tt> property defines the name of the database table to which the tags
---  are assigned.  The <tt>permission</tt> property defines the permission name that must be used
+--  The `entity_type` property defines the name of the database table to which the tags
+--  are assigned.  The `permission` property defines the permission name that must be used
 --  to verify that the user has the permission do add or remove the tag.  Such permission is
---  verified only when the <tt>awa:tagList</tt> component is used within a form.
+--  verified only when the `awa:tagList` component is used within a form.
 --
 --  === Tag_Search_Bean ===
---  The <tt>Tag_Search_Bean</tt> is dedicated to searching for tags that start with a given
---  pattern.  The auto complete feature of the <tt>awa:tagList</tt> component can use this
+--  The `Tag_Search_Bean` is dedicated to searching for tags that start with a given
+--  pattern.  The auto complete feature of the `awa:tagList` component can use this
 --  bean type to look in the database for tags matching a start pattern.  The declaration of the
 --  bean should define the database table to search for tags associated with a given database
---  table.  This is done in the XML configuration with the <tt>entity_type</tt> property.
+--  table.  This is done in the XML configuration with the `entity_type` property.
 --
 --    <managed-bean>
 --      <managed-bean-name>questionTagSearch</managed-bean-name>
@@ -97,6 +97,7 @@ with AWA.Tags.Modules;
 --      </managed-property>
 --    </managed-bean>
 --
+--  @include-bean tag-queries.xml
 package AWA.Tags.Beans is
 
    --  Compare two tags on their count and name.
