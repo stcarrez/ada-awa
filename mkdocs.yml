@@ -3,6 +3,7 @@ docs_dir: awa/docs
 pages:
   - Introduction: index.md
   - Installation: Installation.md
+  - Tutorial: Tutorial.md
   - AWA: AWA.md
   - Users: AWA_Users.md
   - Jobs: AWA_Jobs.md
