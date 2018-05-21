@@ -9,6 +9,7 @@ Version 1.1     -
   - Moved the wiki engine to Ada Wiki library
   - Support to display images in blog post
   - New image selector for wiki and blog post editors
+  - Add a programmer's guide
 
 Version 1.0     - Jul 2014
   - New countries plugin to provide country/region/city data models
