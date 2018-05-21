@@ -2,7 +2,7 @@
 
 Ada Web Application is a framework to build a Web Application in Ada 2012.
 The framework provides several ready to use and extendable modules that are common
-to many web application.  This includes the login, authentication, users, permissions,
+to many web applications.  This includes the login, authentication, users, permissions,
 managing comments, tags, votes, documents, images.  It provides a complete blog,
 question and answers and a wiki module.
 
@@ -19,10 +19,10 @@ Because your application sits on top of AWA framework, it benefits of all the fu
 that AWA uses for its implementation:
 
 * The Web server is built on top of the Ada Web Server library,
-* The presentation layer is using Ada Server Faces which allows to use the same design pattern as the Java Server Faces,
-* The database access is provided by Ada Database Objects
+* The presentation layer is using [Ada Server Faces](https://github.com/stcarrez/ada-asf) which allows to use the same design pattern as the Java Server Faces,
+* The database access is provided by [Ada Database Objects](https://github.com/stcarrez/ada-ado)
 
-Apart from this architecture, the Dynamo tool is used to generate code automatically and help
+Apart from this architecture, the [Dynamo](https://github.com/stcarrez/dynamo) tool is used to generate code automatically and help
 starting the project quickly.
 
 AWA is composed of several configuration components also called modules or plugins.
@@ -60,15 +60,17 @@ be plugged and used by functional components.
 ## Functional Components
 
 The **Functional Components** implement a final functionality for a user.  They are using the
-system components such as [User Model](AWA_Users.md) for the user management but also general purpose components
-such as [[AWA_Tags]] or [[AWA_Counters]].
+system components such as [User Module](AWA_Users.md) for the user management but also general purpose components
+such as [Tags Module](AWA_Tags.md) or [Counters Module](AWA_Counters.md).
 
 * The [Questions Module](AWA_Questions.md) is a simple question and answer system,
 * The [Blogs Module](AWA_Blogs.md) is a small blog application which allows users to publish articles,
 * The [Wikis Module](AWA_Wikis.md) provides a complete Wiki system allowing users to create their own Wiki environment.
 
-To in the installation process of final applications, the [Setup Application] is a special
+To help in the installation process of final applications,
+the [Setup Application](AWA_Setup.md) is a special
 component that you can decide to customize to provide an installation and configuration process
 to your own application.
+
 
 

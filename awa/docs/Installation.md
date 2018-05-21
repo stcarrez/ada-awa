@@ -1,19 +1,30 @@
 # Installation
 
-This chapter explains how to build and install the library.
+This chapter explains how to build and install the Ada Web Application framework.
 
 ## Before Building
 
-Before building the library, you will need:
+Before building the framework, you will need:
 
+* The [GNAT Ada compiler](http://libre.adacore.com/tools/gnat-gpl-edition/),
 * Either the MySQL or SQLite development headers installed,
 * [XML/Ada](http://libre.adacore.com/libre/tools/xmlada/),
 * [Ada Web Server](http://libre.adacore.com/libre/tools/aws/).
 
-First get, build and install the above libraries.
+First get, build and install the above tools and libraries.
+
+The build process may also need the following commands:
+
+* make (GNU make),
+* gprbuild,
+* unzip,
+* sqlite3,
+* mysql,
+* xsltproc
 
 The Ada Web Application library also uses the following projects:
 
+* [AdaYaml](https://github.com/stcarrez/AdaYaml),
 * [Ada Utility Library](https://github.com/stcarrez/ada-util),
 * [Ada Expression Language Library](https://github.com/stcarrez/ada-el),
 * [Ada Security Library](https://github.com/stcarrez/ada-security),
@@ -23,6 +34,7 @@ The Ada Web Application library also uses the following projects:
 * [Ada Database Objects Library](https://github.com/stcarrez/ada-ado),
 * [Dynamo](https://github.com/stcarrez/dynamo)
 
+They are integrated as Git submodules
 
 ## Configuration
 
@@ -37,21 +49,23 @@ and you may use:
   * `--enable-distrib` to build for a distribution and strip symbols,
   * `--disable-distrib` to build with debugging support,
   * `--enable-coverage` to build with code coverage support (`-fprofile-arcs -ftest-coverage`),
-  * `--enable-aws` to build with the support of AWS,
+  * `--enable-aws` to build the AWS version provided by the AWA package,
+  * `--enable-xmlada` to build the XML/Ada version provided by the AWA package,
   * `--enable-aws-secure-mail` to build with the support of AWS SMTPS,
-  * `--with-ada-util=PATH` to control the installation path of Ada Utility Library,
-  * `--with-ada-el=PATH` to control the installation path of Ada Expression Language Library,
-  * `--with-ada-servlet=PATH` to control the installation path of Ada Servlet Library,
-  * `--with-ada-security=PATH` to control the installation path of Ada Security Library,
-  * `--with-ada-asf=PATH` to control the installation path of Ada Server Faces Library,
-  * `--with-ada-wiki=PATH` to control the installation path of Ada Wiki Library,
-  * `--with-ada-ado=PATH` to control the installation path of Ada Database Objects Library,
   * `--with-aws=PATH` to control the installation path of Ada Web Server,
+  * `--with-xmlada=PATH` to control the installation path of XML/Ada,
   * `--help` to get a detailed list of supported options.
 
 In most cases you will configure with the following command:
 ```
 ./configure
+```
+
+By default, the framework will be installed in `/usr/local` directory.
+If you want to install the framework in a specific directory, use the `--prefix` option as follows:
+
+```
+./configure --prefix=/opt/install-awa
 ```
 
 ## Build
@@ -61,25 +75,12 @@ After configuration is successful, you can build the library by running:
 make
 ```
 
-After building, it is good practice to run the unit tests before installing the library.
-The unit tests are built and executed using:
-```
-make test
-```
-And unit tests are executed by running the `bin/util_harness` test program.
 
 ## Installation
 The installation is done by running the `install` target:
 
 ```
 make install
-```
-
-If you want to install on a specific place, you can change the `prefix` and indicate the installation
-direction as follows:
-
-```
-make install prefix=/opt
 ```
 
 ## Using
