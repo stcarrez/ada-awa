@@ -34,7 +34,7 @@ The Ada Web Application library also uses the following projects:
 * [Ada Database Objects Library](https://github.com/stcarrez/ada-ado),
 * [Dynamo](https://github.com/stcarrez/dynamo)
 
-They are integrated as Git submodules
+They are integrated as Git submodules.
 
 ## Configuration
 

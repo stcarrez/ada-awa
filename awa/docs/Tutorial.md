@@ -8,7 +8,6 @@ The tutorial assumes that you have already installed the following software on y
 computer:
 
 * The [GNAT Ada compiler](http://libre.adacore.com/tools/gnat-gpl-edition/),
-* The [Eclipse and GNATbench](http://libre.adacore.com/tools/gnatbench/) plugin,
 * The [ArgoUML](http://argouml.tigris.org/) modelization tool,
 * The Ada Web Application framework and its associated dependencies ([XML/Ada](http://libre.adacore.com/tools/xmlada/) and [AWS](https://github.com/AdaCore/aws)),
 * The [Dynamo](https://github.com/stcarrez/dynamo) code generator.
@@ -286,7 +285,7 @@ the tables that are necessary for the application.  It also creates the `demo`
 user and give it the necessary MySQL grants to connect to the `demo_atlas`
 database.
 
-## Adding the review creation form
+## Adding a creation form
 
 We will start with the presentation layer by adding two pages in our web application.
 A first page will contain the list of reviews and the second page will contain a form to create
@@ -517,6 +516,36 @@ The __request__ scope means that the Ada bean object is created once for each re
 on the same session.  The __application__ scope means that the Ada bean object is global to the application, shared by
 every request and every session.
 
+### Navigation rules
+
+We have seen that when the review creation form is submitted the `<h:commandButton>`
+component has invoked the `Save` procedure of our `Review_Bean` object.
+The review object has been created and saved in the database and we kept the relation between
+the new review and the user.
+
+We must now decide what should happen for the user to see the result.
+We could display a new form, update some page content or redirect to a new page.
+All this is defined by the navigation rules.
+
+The navigation rules is the [Java Server Faces](http://en.wikipedia.org/wiki/JavaServer_Faces)
+mechanism that controls and defines what is the next page or view that must be displayed to a user.
+The navigation rules are configured in the module XML configuration file.
+
+In the definition below, the navigation rule defines that the user is redirected to
+the page `/reviews/list.xhtml` if the current page was `/reviews/edit-review.xhtml`
+and the operation returned `success`.
+```
+<navigation-rule>
+  <from-view-id>/reviews/edit-review.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/reviews/list.xhtml</to-view-id>
+      <redirect/>
+    </navigation-case>
+</navigation-rule>
+```
+
+## Creating the module
 
 ### Adding the module operations
 
@@ -691,35 +720,6 @@ statement to verify the permission. The SQL statement has three parameters:
 
 At the end, the above SQL statement verifies that the review exists and was created by
 the current user.
-
-### A word about navigation rules
-
-We have seen that when the review creation form is submitted the `<h:commandButton>`
-component has invoked the `Save` procedure of our `Review_Bean` object.
-The review object has been created and saved in the database and we kept the relation between
-the new review and the user.
-
-We must now decide what should happen for the user to see the result.
-We could display a new form, update some page content or redirect to a new page.
-All this is defined by the navigation rules.
-
-The navigation rules is the [Java Server Faces](http://en.wikipedia.org/wiki/JavaServer_Faces)
-mechanism that controls and defines what is the next page or view that must be displayed to a user.
-The navigation rules are configured in the module XML configuration file.
-
-In the definition below, the navigation rule defines that the user is redirected to
-the page `/reviews/list.xhtml` if the current page was `/reviews/edit-review.xhtml`
-and the operation returned `success`.
-```
-<navigation-rule>
-  <from-view-id>/reviews/edit-review.xhtml</from-view-id>
-    <navigation-case>
-      <from-outcome>success</from-outcome>
-      <to-view-id>/reviews/list.xhtml</to-view-id>
-      <redirect/>
-    </navigation-case>
-</navigation-rule>
-```
 
 ## Using database queries
 
