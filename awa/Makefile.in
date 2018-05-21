@@ -48,6 +48,8 @@ AWA_DOC= \
   pagebreak.tex \
   Installation.md \
   pagebreak.tex \
+  Tutorial.md \
+  pagebreak.tex \
   AWA.md \
   pagebreak.tex \
   AWA_Users.md \
@@ -77,7 +79,7 @@ AWA_DOC= \
   AWA_Setup.md \
   pagebreak.tex
 
-DOC_OPTIONS=-f markdown -o awa-book.pdf --listings --number-sections --toc
+DOC_OPTIONS=-f markdown -o awa-book.pdf --listings --number-sections --toc --filter ./filter.py
 HTML_OPTIONS=-f markdown -o awa-book.html --listings --number-sections --toc --css pandoc.css
 
 docs/awa-book.pdf:  force
