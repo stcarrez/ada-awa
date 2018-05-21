@@ -96,7 +96,7 @@ with ADO;
 --  @include-query storage-queries.xml
 --
 --  == Data model ==
---  [images/awa_storage_model.png]
+--  [images/awa_storages_model.png]
 --
 package AWA.Storages is
 
