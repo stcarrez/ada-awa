@@ -97,9 +97,12 @@ run the following commands:
 
 # Documentation
 
-The Ada Web Application sources as well as a wiki documentation is provided on:
+The Ada Web Application programmer's guide describes how to setup the framework,
+how you can setup and design your first web application with it,
+and it provides detailed description of AWA components:
 
-   https://github.com/stcarrez/ada-awa/wiki/Documentation
+  * [Ada Web Application programmer's guide](http://ada-awa.readthedocs.io/en/latest/)
+  * https://github.com/stcarrez/ada-awa/wiki/Documentation
 
 # Tutorial
 
