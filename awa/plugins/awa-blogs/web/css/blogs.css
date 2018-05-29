@@ -3,11 +3,6 @@
  * Copyright (C) 2011-2018 Stephane Carrez
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-#blog-post-list, #blog-comment-list, #blog-post-list-header, #blog-comment-list-header {
-    float: left;
-    padding: 0 2% 0 2%;
-    width: 96%;
-}
 div.blog-post div.post-text, div.post-info, div.post-header {
     float: left;
     width: 100%;
@@ -26,9 +21,7 @@ div.post-info div.asf-list-action {
  * Admin section
  */
 div.blog-admin {
-    float: left;
     clear: both;
-    width: 100%;
 }
 div.blog-admin div.post-info {
     border-bottom: 1px solid #ccc;
@@ -124,15 +117,14 @@ a.spam-icon {
  */
 div.blog-post {
     float: left;
-    width: 96%;
+    width: 100%;
     padding-left: 2%;
     padding-right: 2%;
-    box-sizing: content-box;
 }
 div.blog-post div.post-title {
     float: left;
     margin-top: 15px;
-    width: 95%;
+    width: 100%;
     border-bottom: 2px solid #47C;
     padding-bottom: 2px;
     background: url(../images/blogs/ico_entry.gif) no-repeat;
@@ -286,6 +278,7 @@ div.blog-post-comment-count a {
 #blog-post-preview {
     margin-left: 1em;
     margin-right: 1em;
+    width: auto;
 }
 #blog-graph-tooltip {
     position: absolute;

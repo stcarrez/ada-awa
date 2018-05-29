@@ -13,18 +13,20 @@
 }
 .awa-comment {
     float: left;
-    width: 90%;
-    padding-left: 10%;
+    width: 100%;
+    padding-left: 80px;
 }
 .awa-comment-form {
-    padding-left: 2%;
     padding-right: 2%;
     float: left;
-    width: 96%;
+    width: 100%;
 }
 .awa-comment, div.awa-comment-form {
     position: relative;
     padding-bottom: 50px;
+}
+.awa-comment-form dl {
+    padding-left: 0;
 }
 .awa-comment div.comment-gravatar, div.awa-form div.comment-gravatar {
     position: absolute;
