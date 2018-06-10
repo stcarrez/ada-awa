@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-configs -- Event configuration
---  Copyright (C) 2012, 2013, 2017 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,6 @@ with Util.Serialize.Mappers.Record_Mapper;
 
 with EL.Utils;
 
-with AWA.Services.Contexts;
 package body AWA.Events.Configs is
 
    use AWA.Events.Queues;
@@ -151,30 +150,12 @@ package body AWA.Events.Configs is
 
    Event_Mapper : aliased Config_Mapper.Mapper;
 
-   --  Setup the XML parser to read the <b>queue</b> and <b>on-event</b> description.
-   --  For example:
-   --
-   --  <queue name="async" type="fifo">
-   --     <property name="size">254</property>
-   --  </queue>
-   --
-   --  <on-event name="create-user" queue="async">
-   --     <action>#{mail.send}</action>
-   --     <property name="user">#{event.name}</property>
-   --     <property name="template">mail/welcome.xhtml</property>
-   --  </on-event>
-   --
-   --  This defines an event action called when the <b>create-user</b> event is posted.
-   --  The Ada bean <b>mail</b> is created and is populated with the <b>user</b> and
-   --  <b>template</b> properties.  The Ada bean action method <b>send</b> is called.
-   package body Reader_Config is
+   procedure Add_Mapping (Mapper : in out Util.Serialize.Mappers.Processing;
+                          Config : in Controller_Config_Access) is
    begin
       Mapper.Add_Mapping ("module", Event_Mapper'Access);
-      Config.Manager     := Manager;
-      Config.Context     := Context;
-      Config.Session     := AWA.Services.Contexts.Get_Session (AWA.Services.Contexts.Current);
-      Config_Mapper.Set_Context (Mapper, Config'Unchecked_Access);
-   end Reader_Config;
+      Config_Mapper.Set_Context (Mapper, Config);
+   end Add_Mapping;
 
 begin
    Event_Mapper.Add_Mapping ("queue", FIELD_QUEUE);
