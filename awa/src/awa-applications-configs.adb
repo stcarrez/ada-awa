@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-applications-configs -- Read application configuration files
---  Copyright (C) 2011, 2012, 2015, 2017 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2015, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +27,7 @@ with ASF.Contexts.Faces;
 with ASF.Applications.Main.Configs;
 
 with Security.Policies;
-with AWA.Events.Configs;
+with AWA.Events.Configs.Reader_Config;
 with AWA.Services.Contexts;
 
 package body AWA.Applications.Configs is
@@ -54,6 +54,9 @@ package body AWA.Applications.Configs is
 
       pragma Warnings (Off, Bean_Config);
       pragma Warnings (Off, Event_Config);
+
+   begin
+      Event_Config.Initialize;
    end Reader_Config;
 
    --  ------------------------------
