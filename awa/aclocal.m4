@@ -537,3 +537,30 @@ end Check;
 
    rm -f check.adb check
 ])
+
+# Prepare for using the GNAT project 
+# AM_GNAT_LIBRARY_PROJECT([name])
+AC_DEFUN(AM_GNAT_LIBRARY_PROJECT,
+[
+  # checking for local tools
+  AM_GNAT_CHECK_GPRBUILD
+
+  AC_PROG_MAKE_SET
+  AC_PROG_INSTALL
+  AC_PROG_LN_S
+  AM_SHARED_LIBRARY_SUPPORT
+  AM_DISTRIB_SUPPORT
+  AM_COVERAGE_SUPPORT
+
+  AC_MSG_CHECKING([number of processors])
+  NR_CPUS=`getconf _NPROCESSORS_CONF 2>/dev/null || getconf NPROCESSORS_CONF 2>/dev/null || echo 1`
+  AC_MSG_RESULT($NR_CPUS)
+  AC_SUBST(NR_CPUS)
+
+  AM_UTIL_CHECK_INSTALL
+
+  AC_MSG_CHECKING([preparing for GNAT project $1])
+  mkdir -p obj/$1/static obj/$1/relocatable lib/$1/static lib/$1/relocatable
+  AC_MSG_RESULT(done)
+])
+
