@@ -57,7 +57,7 @@ awa_servlet_configure=--with-ada-util=${awa_build_root}${awa_util_name}
 awa_servlet_configure += --with-ada-el=${awa_build_root}${awa_el_name}
 awa_servlet_configure += --with-ada-security=${awa_build_root}${awa_security_name}
 awa_swagger_configure=--with-ada-util=${awa_build_root}${awa_util_name}
-awa_swagger_configure += --with-ada-el=${awa_build_root}${awa_el_name}
+# awa_swagger_configure += --with-ada-el=${awa_build_root}${awa_el_name}
 awa_swagger_configure += --with-ada-security=${awa_build_root}${awa_security_name}
 awa_swagger_configure += --with-ada-servlet=${awa_build_root}${awa_servlet_name}
 awa_asf_configure=--with-ada-util=${awa_build_root}${awa_util_name}
