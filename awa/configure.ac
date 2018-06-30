@@ -28,12 +28,9 @@ AWA_MICRO_VERSION=0
 AWA_VERSION=$AWA_MAJOR_VERSION.$AWA_MINOR_VERSION.$AWA_MICRO_VERSION
 
 # checking for local tools
-AC_PROG_MAKE_SET
-AC_PROG_INSTALL
-AC_PROG_LN_S
 AC_CHECK_PROG(UNZIP_CHECK,unzip,yes)
 if test x"$UNZIP_CHECK" != x"yes" ; then
-    AC_MSG_ERROR([Please install unzip before installing Dynamo.])
+    AC_MSG_ERROR([Please install unzip before installing AWA.])
 fi
 
 # Check that Magick or convert are available but do not abort if they are not available
@@ -63,11 +60,6 @@ AC_SUBST(EXEC_PREFIX)
 AWA_LIBDIR="lib"
 AC_SUBST(AWA_LIBDIR)
 
-AC_MSG_CHECKING([number of processors])
-NR_CPUS=`getconf _NPROCESSORS_CONF 2>/dev/null || getconf NPROCESSORS_CONF 2>/dev/null || echo 1`
-AC_MSG_RESULT($NR_CPUS)
-AC_SUBST(NR_CPUS)
-
 AC_CHECK_PROG(HAVE_PANDOC,pandoc,yes)
 AC_CHECK_PROG(HAVE_DYNAMO,dynamo,yes)
 
@@ -92,16 +84,14 @@ esac
 ##########################################
 # Check to enable/disable shared library
 ##########################################
-AM_SHARED_LIBRARY_SUPPORT
-AM_DISTRIB_SUPPORT
-AM_COVERAGE_SUPPORT
+AM_GNAT_LIBRARY_PROJECT(awa)
 
 ##########################################
 # Ada Util library
 ##########################################
 AM_GNAT_FIND_PROJECT([ada-util],[Ada Utility Library],[util],
   [git@github.com:stcarrez/ada-util.git],
-  [Building Ada EL requires the Ada Utility Library.],
+  [Building Ada Web Application requires the Ada Utility Library.],
   [
     UTIL_DIR=${gnat_project_dir_util}
   ])
@@ -112,7 +102,7 @@ AC_SUBST(UTIL_DIR)
 ##########################################
 AM_GNAT_FIND_PROJECT([ada-el],[Ada Expression Language Library],[el],
   [git@github.com:stcarrez/ada-el.git],
-  [Building Ada Server Faces requires the Ada EL Library.],
+  [Building Ada Web Application requires the Ada EL Library.],
   [
     EL_DIR=${gnat_project_dir_el}
   ])
@@ -134,7 +124,7 @@ AC_SUBST(WIKI_DIR)
 ##########################################
 AM_GNAT_FIND_PROJECT([ada-security],[Ada Security Library],[security],
   [git@github.com:stcarrez/ada-security.git],
-  [Building Ada Server Faces requires the Ada Security Library.],
+  [Building Ada Web Application requires the Ada Security Library.],
   [
     SECURITY_DIR=${gnat_project_dir_security}
   ])
@@ -143,11 +133,11 @@ AC_SUBST(SECURITY_DIR)
 ##########################################
 # Ada Servlet library
 ##########################################
-AM_GNAT_FIND_PROJECT([ada-servlet],[Ada Servlet Library],[servlet],
+AM_GNAT_FIND_PROJECT([ada-servlet],[Ada Servlet Library],[servlet_core],
   [git@github.com:stcarrez/ada-servlet.git],
   [Building Ada Web Application requires the Ada Servlet Library.],
   [
-    SERVLET_DIR=${gnat_project_dir_servlet}
+    SERVLET_DIR=${gnat_project_dir_servlet_core}
   ])
 AC_SUBST(SERVLET_DIR)
 
@@ -168,7 +158,7 @@ AC_SUBST(ASF_DIR)
 ##########################################
 AM_GNAT_FIND_PROJECT([ada-ado],[Ada Database Objects],[ado],
   [git@github.com:stcarrez/ada-ado.git],
-  [Building Dynamo requires the Ada Database Objects Library.],
+  [Building Ada Web Application requires the Ada Database Objects Library.],
   [
     ADO_DIR=${gnat_project_dir_ado}
   ])
@@ -217,8 +207,6 @@ esac])dnl
 AC_MSG_RESULT(${ac_enable_aws_secure_mail})
 AWA_AWS_SECURE_MAIL=$ac_enable_aws_secure_mail
 AC_SUBST(AWA_AWS_SECURE_MAIL)
-
-AM_UTIL_CHECK_INSTALL
 
 AC_OUTPUT(
 Makefile rules.mk awa.gpr awa_tests.gpr awa_unit.gpr distrib/awa.gpr distrib/awa_unit.gpr
