@@ -76,6 +76,21 @@ COVERAGE=@BUILDS_COVERAGE@
 PROCESSORS=@NR_CPUS@
 MAKE_ARGS=-XMODE=${MODE} -XCOVERAGE=${COVERAGE} -XAWA_LIBRARY_TYPE=${AWA_LIBRARY_TYPE} -XPROCESSORS=$(PROCESSORS)
 
+ifeq ($(AWA_LIBRARY_TYPE),relocatable)
+MAKE_ARGS += -XUTIL_BUILD=relocatable -XUTIL_LIBRARY_TYPE=relocatable
+MAKE_ARGS += -XEL_BUILD=relocatable -XEL_LIBRARY_TYPE=relocatable
+MAKE_ARGS += -XSECURITY_BUILD=relocatable -XSECURITY_LIBRARY_TYPE=relocatable
+MAKE_ARGS += -XSERVLET_CORE_BUILD=relocatable -XSERVLET_LIBRARY_TYPE=relocatable
+MAKE_ARGS += -XSERVLET_UNIT_BUILD=relocatable -XSERVLET_UNIT_LIBRARY_TYPE=relocatable
+MAKE_ARGS += -XWIKI_BUILD=relocatable -XWIKI_LIBRARY_TYPE=relocatable
+MAKE_ARGS += -XASF_BUILD=relocatable -XASF_LIBRARY_TYPE=relocatable
+MAKE_ARGS += -XADO_BUILD=relocatable -XADO_LIBRARY_TYPE=relocatable
+MAKE_ARGS += -XXMLADA_BUILD=relocatable -XAWS_BUILD=relocatable
+MAKE_ARGS += -XUTIL_HTTP_AWS_BUILD=relocatable -XUTIL_HTTP_AWS_LIBRARY_TYPE=relocatable
+MAKE_ARGS += -XUTIL_UNIT_BUILD=relocatable -XUTIL_UNIT_LIBRARY_TYPE=relocatable
+MAKE_ARGS += -XLIBRARY_TYPE=relocatable
+endif
+
 ifeq (${BUILDS_SHARED},yes)
 all:     static shared
 install: uninstall install_static install_shared install-bin post-install
