@@ -24,14 +24,6 @@ with AWA.Modules;
 with AWA.Events;
 with AWA.Mail.Clients;
 
---  == Documentation ==
---  The *mail* module allows an application to format and send a mail
---  to users.  This module does not define any web interface.  It provides
---  a set of services and methods to send a mail when an event is
---  received.  All this is done through configuration.  The module
---  defines a set of specific ASF components to format and prepare the
---  email.
---
 --  == Configuration ==
 --  The *mail* module needs some properties to configure the SMTP
 --  server.
