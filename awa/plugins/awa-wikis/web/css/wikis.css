@@ -242,9 +242,11 @@
 }
 .wiki-img-left {
     float: left;
+    padding-right: 1em;
 }
 .wiki-img-right {
     float: right;
+    padding-left: 1em;
 }
 .wiki-info {
     padding-top: 1em;
