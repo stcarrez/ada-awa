@@ -64,6 +64,7 @@
     <url-pattern>/storages/images/.*</url-pattern>
     <url-pattern>/storages/image-info/#{imageInfo.id}</url-pattern>
     <url-pattern>/storages/forms/upload-image.html</url-pattern>
+    <url-pattern>/storages/image-selector.html</url-pattern>
   </url-policy>
 
   <url-mapping>
