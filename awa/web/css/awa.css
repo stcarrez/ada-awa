@@ -202,6 +202,7 @@ dl.awa-optional input, dl.awa-required input {
 dl.awa-optional textarea, dl.awa-required textarea {
     width: 100%;
     padding: 3px;
+    font-family: courier;
 }
 .awa-required .trumbowyg-modal-box input {
     width: 70%;
