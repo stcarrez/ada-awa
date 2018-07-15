@@ -1,9 +1,10 @@
-FROM ciceron/gnat:latest
+FROM ciceron/ada-bionic:latest
 
 MAINTAINER Stephane Carrez <Stephane.Carrez@gmail.com>
 
 RUN apt-get update \
-   && apt-get install -y sqlite3 unzip imagemagick pngcrush libjpeg-progs yui-compressor
+   && apt-get install -y sqlite3 unzip imagemagick pngcrush libjpeg-progs \
+      yui-compressor
 
 RUN mkdir -p /usr/src \
    && cd /usr/src \
