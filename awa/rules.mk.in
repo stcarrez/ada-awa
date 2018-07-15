@@ -142,40 +142,6 @@ rebuild: clean build
 generate:  post-generate
 	test ! -d db || $(DYNAMO) generate $(DYNAMO_ARGS)
 
-# Files to package in source distribution
-DISTFILES=README LICENSE.txt NOTICE.txt NEWS CHANGES config.guess configure config.sub \
-configure.in Makefile.in install-sh \
-awa.gpr.in awa_tests.gpr.in samples.gpr.in config.gpr \
-src samples regtests db web bundles config awaunit awaunit.gpr.in \
-distrib test-mysql.properties test-sqlite.properties dynamo.xml
-
-dist-prepare:   pre-dist-prepare
-	-rm -rf $(distdir)
-	mkdir $(distdir)
-	-chmod 777 $(distdir)
-	here=`cd $(top_builddir) && pwd`; \
-	top_distdir=`cd $(distdir) && pwd`; \
-	distdir=`cd $(distdir) && pwd`; \
-	for file in $(DISTFILES); do \
-	  d=$(srcdir); \
-	  if test -d $$d/$$file; then \
-	    cp -pr $$d/$$file $(distdir)/$$file; \
-	  else \
-	    test -f $(distdir)/$$file \
-	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
-	    || cp -p $$d/$$file $(distdir)/$$file || :; \
-	  fi; \
-	done
-	mkdir -p $(distdir)/bin
-	mkdir -p $(distdir)/obj
-	mkdir -p $(distdir)/lib
-dist:   pre-dist dist-prepare
-	tar --exclude=.svn --exclude="*~" --exclude="*.o" --exclude="*.ali" \
-	    --exclude="*.log" --exclude="*.a" --exclude=".project" \
-	    --exclude=".cproject" --exclude='autom4te.cache' \
-	    --exclude=".gb_project" \
-	    -cvzf $(DIST_FILE) $(distdir)
-
 install_static:
 	$(MAKE) AWA_LIBRARY_TYPE=static install_lib
 
@@ -256,7 +222,6 @@ pre-clean:
 pre-build:
 pre-install:
 pre-uninstall:
-pre-dist-prepare:
 post-build:
 post-install:
 post-generate:
