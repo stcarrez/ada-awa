@@ -9,7 +9,7 @@ with "@ASF_DIR@asf_unit";
 with "@ADO_DIR@ado";
 with "awa";
 
-project Awa_Unit is
+library project Awa_Unit is
 
    Version := "@AWA_VERSION@";
    Library_Dir := "lib";
@@ -21,8 +21,8 @@ project Awa_Unit is
    for Library_Kind use Library_Type;
    for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
 
-   for Library_Dir use "lib/awaunit/" & Project'Library_Kind;
-   for Object_Dir use "obj/awaunit/" & Project'Library_Kind;
+   for Library_Dir use "lib/awa_unit/" & Project'Library_Kind;
+   for Object_Dir use "obj/awa_unit/" & Project'Library_Kind;
 
    for Exec_Dir use "./" & Config'Exec_Dir & "/bin";
 
