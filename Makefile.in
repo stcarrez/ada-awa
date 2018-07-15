@@ -121,7 +121,8 @@ build test clean:		 stamp-configure
 	done
 
 install uninstall:
-	cd AdaYaml && make $@ prefix="${prefix}"
+	# SCz: AdaYaml does not build on gnat-6 and crashes anyway at runtime.
+        # cd AdaYaml && make $@ prefix="${prefix}"
 	for i in $(SUBDIRS); do \
 	   $(MAKE) -C "$$i" $@ ; \
 	done
@@ -140,8 +141,8 @@ endif
 	touch $@
 
 stamp-yaml:     Makefile
-	@echo "Building ==== AdaYaml ===="
-	cd AdaYaml && make && touch ../$@
+	# @echo "Building ==== AdaYaml ===="
+	# cd AdaYaml && make && touch ../$@
 
 stamp-configure:	stamp-aws stamp-xmlada stamp-yaml Makefile
 	@echo "Configuring ==== ada-util ===="
