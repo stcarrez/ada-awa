@@ -227,8 +227,8 @@
         <entity-type>awa_question</entity-type>
         <description>Grant the delete permission to author only</description>
         <sql>
-            select q.id from awa_question as q
-            where q.id = :entity_id and q.author_id = :user_id
+            SELECT q.id FROM awa_question AS q
+            WHERE q.id = :entity_id AND q.author_id = :user_id
         </sql>
     </entity-permission>
 
@@ -236,7 +236,7 @@
         <name>answer-create</name>
         <entity-type>awa_question</entity-type>
         <sql>
-            select user.id from awa_user as user where user.id = :user_id
+            SELECT u.id FROM awa_user AS u WHERE u.id = :user_id
         </sql>
     </entity-permission>
 
@@ -245,8 +245,8 @@
         <entity-type>awa_answer</entity-type>
         <description>Grant the edit permission to author only</description>
         <sql>
-            select a.id from awa_answer as a
-            where a.id = :entity_id and a.author_id = :user_id
+            SELECT a.id FROM awa_answer AS a
+            WHERE a.id = :entity_id AND a.author_id = :user_id
         </sql>
     </entity-permission>
 
@@ -255,8 +255,8 @@
         <entity-type>awa_answer</entity-type>
         <description>Grant the delete permission to author only</description>
         <sql>
-            select a.id from awa_answer as a
-            where a.id = :entity_id and a.author_id = :user_id
+            SELECT a.id FROM awa_answer AS a
+            WHERE a.id = :entity_id AND a.author_id = :user_id
         </sql>
     </entity-permission>
 
@@ -265,9 +265,9 @@
         <entity-type>awa_answer</entity-type>
         <description>The question author is the only one who can accept an answer.</description>
         <sql>
-            select a.id from awa_answer as a
-            inner join awa_question as q on a.question_id = q.id
-            where a.id = :entity_id and q.author_id = :user_id
+            SELECT a.id FROM awa_answer AS a
+            INNER JOIN awa_question AS q ON a.question_id = q.id
+            WHERE a.id = :entity_id AND q.author_id = :user_id
         </sql>
     </entity-permission>
 
@@ -275,7 +275,7 @@
         <name>answer-edit</name>
         <entity-type>awa_answer</entity-type>
         <sql>
-            select user.id from awa_user as user where user.id = :user_id
+            SELECT u.id FROM awa_user AS u WHERE u.id = :user_id
         </sql>
     </entity-permission>
 
