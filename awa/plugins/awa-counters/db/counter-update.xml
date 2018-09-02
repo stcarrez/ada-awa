@@ -20,6 +20,12 @@
     ON DUPLICATE KEY UPDATE counter = counter + :counter
        </sql>
 
+       <sql driver='postgresql'>
+    INSERT INTO awa_counter (object_id, definition_id, date, counter) VALUES(:id, :definition, :date, :counter)
+    ON CONFLICT (object_id, definition_id, date) DO UPDATE
+    SET counter = awa_counter.counter + :counter
+       </sql>
+
        <sql driver='sqlite'>
     INSERT OR REPLACE INTO awa_counter (object_id, definition_id, date, counter)
     VALUES(:id, :definition, :date,
