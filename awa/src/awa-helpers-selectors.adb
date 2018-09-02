@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-helpers -- Helpers for AWA applications
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -107,7 +107,7 @@ package body AWA.Helpers.Selectors is
                            Of_Type : in ADO.Schemas.Column_Type) return String is
       begin
          case Of_Type is
-            when T_CHAR | T_VARCHAR =>
+            when T_UNKNOWN | T_CHAR | T_VARCHAR =>
                return Query.Get_String (Id);
 
             when T_INTEGER | T_TINYINT | T_SMALLINT | T_ENUM =>
