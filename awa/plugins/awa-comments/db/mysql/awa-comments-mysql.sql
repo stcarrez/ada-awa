@@ -15,9 +15,9 @@ CREATE TABLE awa_comment (
   /* the entity type that identifies the table to which the comment is associated. */
   `entity_type` INTEGER NOT NULL,
   /* the comment status to decide whether the comment is visible (published) or not. */
-  `status` integer NOT NULL,
+  `status` INTEGER NOT NULL,
   /* the comment format type. */
-  `format` integer NOT NULL,
+  `format` INTEGER NOT NULL,
   /*  */
   `author_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
