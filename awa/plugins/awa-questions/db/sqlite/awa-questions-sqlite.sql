@@ -1,7 +1,6 @@
 /* File generated automatically by dynamo */
 /* The answer table gives a list of anwsers to the question.
-Ranking is updating according to users voting for the anwser.
- */
+Ranking is updating according to users voting for the anwser. */
 CREATE TABLE awa_answer (
   /* the answer creation date. */
   `create_date` DATETIME NOT NULL,
