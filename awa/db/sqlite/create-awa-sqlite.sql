@@ -80,8 +80,7 @@ CREATE TABLE awa_queue (
   `name` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`)
 );
-/* The application that is granted access to the database.
- */
+/* The application that is granted access to the database. */
 CREATE TABLE awa_application (
   /* the application identifier. */
   `id` BIGINT NOT NULL,
@@ -225,8 +224,7 @@ CREATE TABLE awa_session (
   `user_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
-/* The User entity represents a user that can access and use the application.
- */
+/* The User entity represents a user that can access and use the application. */
 CREATE TABLE awa_user (
   /* the user first name. */
   `first_name` VARCHAR(255) NOT NULL,
@@ -323,9 +321,9 @@ CREATE TABLE awa_comment (
   /* the entity type that identifies the table to which the comment is associated. */
   `entity_type` INTEGER NOT NULL,
   /* the comment status to decide whether the comment is visible (published) or not. */
-  `status` integer NOT NULL,
+  `status` INTEGER NOT NULL,
   /* the comment format type. */
-  `format` integer NOT NULL,
+  `format` INTEGER NOT NULL,
   /*  */
   `author_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
@@ -525,8 +523,7 @@ INSERT INTO entity_type (name) VALUES ("awa_tagged_entity");
 /* - The workspace contains one or several folders.
 - Each image folder contains a set of images that have been uploaded by the user.
 - An image can be visible if a user has an ACL permission to read the associated folder.
-- An image marked as 'public=True' can be visible by anybody
- */
+- An image marked as 'public=True' can be visible by anybody */
 CREATE TABLE awa_image (
   /* the image identifier */
   `id` BIGINT NOT NULL,
@@ -577,8 +574,7 @@ CREATE TABLE awa_global_setting (
 );
 /* The setting table defines all the possible settings
 that an application manages.  This table is automatically
-populated when an application starts. It is not modified.
- */
+populated when an application starts. It is not modified. */
 CREATE TABLE awa_setting (
   /* the setting identifier. */
   `id` BIGINT NOT NULL,
@@ -588,9 +584,7 @@ CREATE TABLE awa_setting (
 );
 /* The user setting holds the setting value for a given user.
 It is created the first time a user changes the default
-setting value. It is updated when the user modifies the setting.
-
- */
+setting value. It is updated when the user modifies the setting. */
 CREATE TABLE awa_user_setting (
   /* the user setting identifier. */
   `id` BIGINT NOT NULL,
@@ -624,8 +618,7 @@ CREATE TABLE awa_rating (
   PRIMARY KEY (`id`)
 );
 /* The vote table tracks a vote action by a user on a given database entity.
-The primary key is made of the user, the entity id and entity type.
- */
+The primary key is made of the user, the entity id and entity type. */
 CREATE TABLE awa_vote (
   /*  */
   `rating` INTEGER NOT NULL,
@@ -745,8 +738,7 @@ INSERT INTO entity_type (name) VALUES ("awa_region");
 /* Copied from awa-questions-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* The answer table gives a list of anwsers to the question.
-Ranking is updating according to users voting for the anwser.
- */
+Ranking is updating according to users voting for the anwser. */
 CREATE TABLE awa_answer (
   /* the answer creation date. */
   `create_date` DATETIME NOT NULL,
@@ -936,8 +928,7 @@ CREATE TABLE awa_wiki_space (
   `create_date` DATETIME NOT NULL,
   /* the left panel side wiki text for every page. */
   `left_side` TEXT NOT NULL,
-  /* the right panel wiki text for every page.
- */
+  /* the right panel wiki text for every page. */
   `right_side` TEXT NOT NULL,
   /* the default wiki page format. */
   `format` TINYINT NOT NULL,

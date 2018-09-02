@@ -56,8 +56,7 @@ CREATE TABLE awa_queue (
   `name` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`)
 );
-/* The application that is granted access to the database.
- */
+/* The application that is granted access to the database. */
 CREATE TABLE awa_application (
   /* the application identifier. */
   `id` BIGINT NOT NULL,
@@ -201,8 +200,7 @@ CREATE TABLE awa_session (
   `user_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
-/* The User entity represents a user that can access and use the application.
- */
+/* The User entity represents a user that can access and use the application. */
 CREATE TABLE awa_user (
   /* the user first name. */
   `first_name` VARCHAR(255) NOT NULL,

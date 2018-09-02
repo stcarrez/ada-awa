@@ -2,239 +2,239 @@
 /*  */
 CREATE TABLE awa_message (
   /* the message identifier */
-  `id` BIGINT NOT NULL,
+  "id" BIGINT NOT NULL,
   /* the message creation date */
-  `create_date` DATETIME NOT NULL,
+  "create_date" TIMESTAMP NOT NULL,
   /* the message priority */
-  `priority` INTEGER NOT NULL,
+  "priority" INTEGER NOT NULL,
   /* the message count */
-  `count` INTEGER NOT NULL,
+  "count" INTEGER NOT NULL,
   /* the message parameters */
-  `parameters` VARCHAR(255) BINARY NOT NULL,
+  "parameters" VARCHAR(255) NOT NULL,
   /* the server identifier which processes the message */
-  `server_id` INTEGER NOT NULL,
+  "server_id" INTEGER NOT NULL,
   /* the task identfier on the server which processes the message */
-  `task_id` INTEGER NOT NULL,
+  "task_id" INTEGER NOT NULL,
   /* the message status */
-  `status` TINYINT NOT NULL,
+  "status" SMALLINT NOT NULL,
   /* the message processing date */
-  `processing_date` DATETIME ,
+  "processing_date" TIMESTAMP ,
   /*  */
-  `version` INTEGER NOT NULL,
+  "version" INTEGER NOT NULL,
   /* the entity identifier to which this event is associated. */
-  `entity_id` BIGINT NOT NULL,
+  "entity_id" BIGINT NOT NULL,
   /* the entity type of the entity identifier to which this event is associated. */
-  `entity_type` INTEGER NOT NULL,
+  "entity_type" INTEGER NOT NULL,
   /* the date and time when the event was finished to be processed. */
-  `finish_date` DATETIME ,
+  "finish_date" TIMESTAMP ,
   /*  */
-  `queue_id` BIGINT NOT NULL,
+  "queue_id" BIGINT NOT NULL,
   /* the message type */
-  `message_type_id` BIGINT NOT NULL,
+  "message_type_id" BIGINT NOT NULL,
   /* the optional user who triggered the event message creation */
-  `user_id` BIGINT ,
+  "user_id" BIGINT ,
   /* the optional user session that triggered the message creation */
-  `session_id` BIGINT ,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  "session_id" BIGINT ,
+  PRIMARY KEY ("id")
+);
 /*  */
 CREATE TABLE awa_message_type (
   /*  */
-  `id` BIGINT NOT NULL,
+  "id" BIGINT NOT NULL,
   /* the message type name */
-  `name` VARCHAR(255) BINARY NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  "name" VARCHAR(255) NOT NULL,
+  PRIMARY KEY ("id")
+);
 /* The message queue tracks the event messages that must be dispatched by
 a given server. */
 CREATE TABLE awa_queue (
   /*  */
-  `id` BIGINT NOT NULL,
+  "id" BIGINT NOT NULL,
   /*  */
-  `server_id` INTEGER NOT NULL,
+  "server_id" INTEGER NOT NULL,
   /* the message queue name */
-  `name` VARCHAR(255) BINARY NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  "name" VARCHAR(255) NOT NULL,
+  PRIMARY KEY ("id")
+);
 /* The application that is granted access to the database. */
 CREATE TABLE awa_application (
   /* the application identifier. */
-  `id` BIGINT NOT NULL,
+  "id" BIGINT NOT NULL,
   /* the application name. */
-  `name` VARCHAR(255) BINARY NOT NULL,
+  "name" VARCHAR(255) NOT NULL,
   /* the application secret key. */
-  `secret_key` VARCHAR(255) BINARY NOT NULL,
+  "secret_key" VARCHAR(255) NOT NULL,
   /* the application public identifier. */
-  `client_id` VARCHAR(255) BINARY NOT NULL,
+  "client_id" VARCHAR(255) NOT NULL,
   /* the optimistic lock version. */
-  `version` INTEGER NOT NULL,
+  "version" INTEGER NOT NULL,
   /* the application create date. */
-  `create_date` DATETIME NOT NULL,
+  "create_date" TIMESTAMP NOT NULL,
   /* the application update date. */
-  `update_date` DATETIME NOT NULL,
+  "update_date" TIMESTAMP NOT NULL,
   /* the application title displayed in the OAuth login form. */
-  `title` VARCHAR(255) BINARY NOT NULL,
+  "title" VARCHAR(255) NOT NULL,
   /* the application description. */
-  `description` VARCHAR(255) BINARY NOT NULL,
+  "description" VARCHAR(255) NOT NULL,
   /* the optional login URL. */
-  `app_login_url` VARCHAR(255) BINARY NOT NULL,
+  "app_login_url" VARCHAR(255) NOT NULL,
   /* the application logo URL. */
-  `app_logo_url` VARCHAR(255) BINARY NOT NULL,
+  "app_logo_url" VARCHAR(255) NOT NULL,
   /*  */
-  `user_id` BIGINT NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  "user_id" BIGINT NOT NULL,
+  PRIMARY KEY ("id")
+);
 /*  */
 CREATE TABLE awa_callback (
   /*  */
-  `id` BIGINT NOT NULL,
+  "id" BIGINT NOT NULL,
   /*  */
-  `url` VARCHAR(255) BINARY NOT NULL,
+  "url" VARCHAR(255) NOT NULL,
   /* the optimistic lock version. */
-  `version` INTEGER NOT NULL,
+  "version" INTEGER NOT NULL,
   /*  */
-  `application_id` BIGINT NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  "application_id" BIGINT NOT NULL,
+  PRIMARY KEY ("id")
+);
 /* The session is created when the user has granted an access to an application
 or when the application has refreshed its access token. */
 CREATE TABLE awa_oauth_session (
   /* the session identifier. */
-  `id` BIGINT NOT NULL,
+  "id" BIGINT NOT NULL,
   /* the session creation date. */
-  `create_date` DATETIME NOT NULL,
+  "create_date" TIMESTAMP NOT NULL,
   /* a random salt string to access/request token generation. */
-  `salt` VARCHAR(255) BINARY NOT NULL,
+  "salt" VARCHAR(255) NOT NULL,
   /* the expiration date. */
-  `expire_date` DATETIME NOT NULL,
+  "expire_date" TIMESTAMP NOT NULL,
   /* the application that is granted access. */
-  `application_id` BIGINT NOT NULL,
+  "application_id" BIGINT NOT NULL,
   /*  */
-  `user_id` BIGINT NOT NULL,
+  "user_id" BIGINT NOT NULL,
   /*  */
-  `session_id` BIGINT NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  "session_id" BIGINT NOT NULL,
+  PRIMARY KEY ("id")
+);
 /* The ACL table records permissions which are granted for a user to access a given database entity. */
 CREATE TABLE awa_acl (
   /* the ACL identifier */
-  `id` BIGINT NOT NULL,
+  "id" BIGINT NOT NULL,
   /* the entity identifier to which the ACL applies */
-  `entity_id` BIGINT NOT NULL,
+  "entity_id" BIGINT NOT NULL,
   /* the writeable flag */
-  `writeable` TINYINT NOT NULL,
+  "writeable" BOOLEAN NOT NULL,
   /*  */
-  `user_id` BIGINT NOT NULL,
+  "user_id" BIGINT NOT NULL,
   /*  */
-  `workspace_id` BIGINT NOT NULL,
+  "workspace_id" BIGINT NOT NULL,
   /* the entity type concerned by the ACL. */
-  `entity_type` INTEGER NOT NULL,
+  "entity_type" INTEGER NOT NULL,
   /* the permission that is granted. */
-  `permission` BIGINT NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  "permission" BIGINT NOT NULL,
+  PRIMARY KEY ("id")
+);
 /* The permission table lists all the application permissions that are defined.
 This is a system table shared by every user and workspace.
 The list of permission is fixed and never changes. */
 CREATE TABLE awa_permission (
   /* the permission database identifier. */
-  `id` BIGINT NOT NULL,
+  "id" BIGINT NOT NULL,
   /* the permission name */
-  `name` VARCHAR(255) BINARY NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  "name" VARCHAR(255) NOT NULL,
+  PRIMARY KEY ("id")
+);
 /*  */
 CREATE TABLE awa_access_key (
   /* the secure access key. */
-  `access_key` VARCHAR(255) BINARY NOT NULL,
+  "access_key" VARCHAR(255) NOT NULL,
   /* the access key expiration date. */
-  `expire_date` DATE NOT NULL,
+  "expire_date" DATE NOT NULL,
   /* the access key identifier. */
-  `id` BIGINT NOT NULL,
+  "id" BIGINT NOT NULL,
   /*  */
-  `version` INTEGER NOT NULL,
+  "version" INTEGER NOT NULL,
   /* the access key type. */
-  `kind` TINYINT NOT NULL,
+  "kind" SMALLINT NOT NULL,
   /*  */
-  `user_id` BIGINT NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  "user_id" BIGINT NOT NULL,
+  PRIMARY KEY ("id")
+);
 /* The Email entity defines the user email addresses.
 The user has a primary email address that is obtained
 from the registration process (either through a form
 submission or through OpenID authentication). */
 CREATE TABLE awa_email (
   /* the email address. */
-  `email` VARCHAR(255) BINARY NOT NULL,
+  "email" VARCHAR(255) NOT NULL,
   /* the last mail delivery status (if known). */
-  `status` TINYINT NOT NULL,
+  "status" SMALLINT NOT NULL,
   /* the date when the last email error was detected. */
-  `last_error_date` DATETIME NOT NULL,
+  "last_error_date" TIMESTAMP NOT NULL,
   /*  */
-  `version` INTEGER NOT NULL,
+  "version" INTEGER NOT NULL,
   /* the email primary key. */
-  `id` BIGINT NOT NULL,
+  "id" BIGINT NOT NULL,
   /* the user. */
-  `user_id` BIGINT NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  "user_id" BIGINT NOT NULL,
+  PRIMARY KEY ("id")
+);
 /*  */
 CREATE TABLE awa_session (
   /*  */
-  `start_date` DATETIME NOT NULL,
+  "start_date" TIMESTAMP NOT NULL,
   /*  */
-  `end_date` DATETIME ,
+  "end_date" TIMESTAMP ,
   /*  */
-  `ip_address` VARCHAR(255) BINARY NOT NULL,
+  "ip_address" VARCHAR(255) NOT NULL,
   /*  */
-  `stype` TINYINT NOT NULL,
+  "stype" SMALLINT NOT NULL,
   /*  */
-  `version` INTEGER NOT NULL,
+  "version" INTEGER NOT NULL,
   /*  */
-  `server_id` INTEGER NOT NULL,
+  "server_id" INTEGER NOT NULL,
   /*  */
-  `id` BIGINT NOT NULL,
+  "id" BIGINT NOT NULL,
   /*  */
-  `auth_id` BIGINT ,
+  "auth_id" BIGINT ,
   /*  */
-  `user_id` BIGINT NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  "user_id" BIGINT NOT NULL,
+  PRIMARY KEY ("id")
+);
 /* The User entity represents a user that can access and use the application. */
 CREATE TABLE awa_user (
   /* the user first name. */
-  `first_name` VARCHAR(255) BINARY NOT NULL,
+  "first_name" VARCHAR(255) NOT NULL,
   /* the user last name. */
-  `last_name` VARCHAR(255) BINARY NOT NULL,
+  "last_name" VARCHAR(255) NOT NULL,
   /* the user password hash. */
-  `password` VARCHAR(255) BINARY NOT NULL,
+  "password" VARCHAR(255) NOT NULL,
   /* the user OpenID identifier. */
-  `open_id` VARCHAR(255) BINARY NOT NULL,
+  "open_id" VARCHAR(255) NOT NULL,
   /* the user country. */
-  `country` VARCHAR(255) BINARY NOT NULL,
+  "country" VARCHAR(255) NOT NULL,
   /* the user display name. */
-  `name` VARCHAR(255) BINARY NOT NULL,
+  "name" VARCHAR(255) NOT NULL,
   /* version number. */
-  `version` INTEGER NOT NULL,
+  "version" INTEGER NOT NULL,
   /* the user identifier. */
-  `id` BIGINT NOT NULL,
+  "id" BIGINT NOT NULL,
   /* the password salt. */
-  `salt` VARCHAR(255) BINARY NOT NULL,
+  "salt" VARCHAR(255) NOT NULL,
   /*  */
-  `email_id` BIGINT NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  "email_id" BIGINT NOT NULL,
+  PRIMARY KEY ("id")
+);
 INSERT INTO entity_type (name) VALUES
-("awa_message")
-,("awa_message_type")
-,("awa_queue")
-,("awa_application")
-,("awa_callback")
-,("awa_oauth_session")
-,("awa_acl")
-,("awa_permission")
-,("awa_access_key")
-,("awa_email")
-,("awa_session")
-,("awa_user")
+('awa_message')
+,('awa_message_type')
+,('awa_queue')
+,('awa_application')
+,('awa_callback')
+,('awa_oauth_session')
+,('awa_acl')
+,('awa_permission')
+,('awa_access_key')
+,('awa_email')
+,('awa_session')
+,('awa_user')
 ;
