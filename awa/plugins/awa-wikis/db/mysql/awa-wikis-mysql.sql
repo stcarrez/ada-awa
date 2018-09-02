@@ -63,8 +63,7 @@ CREATE TABLE awa_wiki_space (
   `create_date` DATETIME NOT NULL,
   /* the left panel side wiki text for every page. */
   `left_side` TEXT NOT NULL,
-  /* the right panel wiki text for every page.
- */
+  /* the right panel wiki text for every page. */
   `right_side` TEXT NOT NULL,
   /* the default wiki page format. */
   `format` TINYINT NOT NULL,
