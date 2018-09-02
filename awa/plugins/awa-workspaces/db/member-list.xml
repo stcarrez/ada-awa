@@ -33,17 +33,17 @@
        <sql>
     SELECT
       wm.id,
-      user.id,
-      user.name,
+      u.id,
+      u.name,
       email.email,
       wm.role,
       wm.join_date,
       invite.create_date
     FROM awa_workspace_member AS user_member
     INNER JOIN awa_workspace_member AS wm ON wm.workspace_id = user_member.workspace_id
-    INNER JOIN awa_user AS user ON wm.member_id = user.id
-    INNER JOIN awa_email AS email ON user.email_id = email.id
-    LEFT JOIN awa_invitation AS invite ON invite.workspace_id = wm.workspace_id AND invite.invitee_id = user.id
+    INNER JOIN awa_user AS u ON wm.member_id = u.id
+    INNER JOIN awa_email AS email ON u.email_id = email.id
+    LEFT JOIN awa_invitation AS invite ON invite.workspace_id = wm.workspace_id AND invite.invitee_id = u.id
     WHERE user_member.member_id = :user_id
        </sql>
        <sql-count>
@@ -51,8 +51,8 @@
       COUNT(*)
     FROM awa_workspace_member AS user_member
     INNER JOIN awa_workspace_member AS wm ON wm.workspace_id = user_member.workspace_id
-    INNER JOIN awa_user AS user ON wm.member_id = user.id
-    INNER JOIN awa_email AS email ON user.email_id = email.id
+    INNER JOIN awa_user AS u ON wm.member_id = u.id
+    INNER JOIN awa_email AS email ON u.email_id = email.id
     WHERE user_member.member_id = :user_id
        </sql-count>
     </query>
