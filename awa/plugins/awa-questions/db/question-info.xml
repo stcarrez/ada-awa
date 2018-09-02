@@ -49,10 +49,10 @@
       coalesce(r.rating,0),
       coalesce(v.rating,0),
       q.author_id,
-      user.name,
+      u.name,
       email.email
     FROM awa_question AS q
-    INNER JOIN awa_user AS user ON q.author_id = user.id
+    INNER JOIN awa_user AS u ON q.author_id = u.id
     INNER JOIN awa_email AS email ON q.author_id = email.user_id
     LEFT JOIN awa_rating AS r ON r.for_entity_id = q.id AND r.for_entity_type = :entity_type
     LEFT JOIN awa_vote AS v ON v.entity_id = r.id AND v.user_id = :user_id
