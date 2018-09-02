@@ -29,6 +29,12 @@
        AND acl.user_id = :user_id AND acl.permission = $permission[storage-create]
     WHERE o.storage_id = :store_id AND o.shared = 1
        </sql>
+       <sql driver='postgresql'>
+    INNER JOIN awa_storage AS store ON o.storage_id = store.id AND o.store_version = store.version
+    INNER JOIN awa_acl AS acl ON acl.entity_id = store.workspace_id AND acl.entity_type = :table
+       AND acl.user_id = :user_id AND acl.permission = $permission[storage-create]
+    WHERE o.storage_id = :store_id AND o.shared = TRUE
+       </sql>
     </query>
 
     <query name='storage-get-storage'>
