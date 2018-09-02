@@ -92,18 +92,25 @@ endif
 endif
 
 # Build and run the unit tests
-check test:	test-mysql test-sqlite
+check test:	test-mysql test-sqlite test-postgresql
 
 regtests/result/maildir:
 	mkdir -p $@
 
 test-sqlite:		build regtests.db regtests/result/maildir
-	-test T${HAVE_SQLITE} = TFalse || \
+ifeq (${HAVE_SQLITE},True)
 	bin/awa_harness -p SQLite -xml awa-sqlite-aunit.xml -config test-sqlite.properties
+endif
 
 test-mysql:		build create-mysql-tests regtests/result/maildir
-	-test T${HAVE_MYSQL} = TFalse || \
+ifeq (${HAVE_MYSQL},True)
 	bin/awa_harness -p MySQL -xml awa-mysql-aunit.xml -config test-mysql.properties
+endif
+
+test-postgresql:		build create-postgresql-tests regtests/result/maildir
+ifeq (${HAVE_POSTGRESQL},True)
+	bin/awa_harness -p Postgresql -xml awa-postgresql-aunit.xml -config test-postgresql.properties
+endif
 
 # Create the test sqlite database
 regtests.db:
@@ -114,11 +121,20 @@ regtests.db:
 # Create the tables in the database.
 # (The database itself must have been created)
 create-mysql-tests:
-	-test T${HAVE_MYSQL} = TFalse || \
+ifeq (${HAVE_MYSQL},True)
 	mysql --defaults-extra-file=db/mysql/mysql.cnf < db/mysql/drop-awa-mysql.sql
-	test T${HAVE_MYSQL} = TFalse || \
 	mysql --defaults-extra-file=db/mysql/mysql.cnf < db/mysql/create-awa-mysql.sql
+endif
 
+# Create the tables in the database.
+# (The database itself must have been created)
+create-postgresql-tests:
+ifeq (${HAVE_POSTGRESQL},True)
+	psql -q "postgresql://localhost:5432/awa_test?user=awa_user&password=awa_pass" \
+           --file=db/postgresql/drop-awa-postgresql.sql
+	psql -q "postgresql://localhost:5432/awa_test?user=awa_user&password=awa_pass" \
+           --file=db/postgresql/create-awa-postgresql.sql
+endif
 
 # Clean the root project of all build products.
 pre-clean:
