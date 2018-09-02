@@ -30,6 +30,18 @@
     GROUP BY Y, M ORDER BY Y, M
        </sql>
 
+       <sql driver='postgresql'>
+    SELECT
+      EXTRACT(YEAR FROM p.publish_date) AS Y,
+      EXTRACT(MONTH FROM p.publish_date) AS M,
+      COUNT(p.id)
+    FROM awa_post AS p
+    INNER JOIN awa_acl AS acl ON acl.entity_id = :blog_id AND acl.entity_type = :table AND acl.user_id = :user_id AND acl.permission = $permission[blog-create-post]
+    WHERE
+      p.blog_id = :blog_id AND p.status > 0
+    GROUP BY Y, M ORDER BY Y, M
+       </sql>
+
        <sql driver='sqlite'>
     SELECT
       STRFTIME("%Y", p.publish_date) AS Y,

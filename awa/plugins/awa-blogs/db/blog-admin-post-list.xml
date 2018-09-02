@@ -41,15 +41,15 @@
       post.create_date,
       post.status,
       post.read_count,
-      user.name,
+      u.name,
       count(cmt.id)
     FROM awa_blog as blog
     INNER JOIN awa_acl AS acl ON acl.entity_id = blog.id AND acl.entity_type = :table AND acl.user_id = :user_id AND acl.permission = $permission[blog-update-post]
     INNER JOIN awa_post AS post ON blog.id = post.blog_id
-    INNER JOIN awa_user AS user ON post.author_id = user.id
+    INNER JOIN awa_user AS u ON post.author_id = u.id
     LEFT JOIN awa_comment AS cmt ON cmt.entity_id = post.id AND cmt.entity_type = :entity_type
     WHERE blog.id = :blog_id
-    GROUP BY post.id
+    GROUP BY post.id, u.id
     ORDER BY post.create_date DESC
        </sql>
     </query>
@@ -64,7 +64,7 @@
       post.create_date,
       post.status,
       post.read_count,
-      user.name,
+      u.name,
       count(cmt.id)
     FROM awa_blog as blog
     INNER JOIN awa_acl AS acl ON acl.entity_id = blog.id AND acl.entity_type = :table AND acl.user_id = :user_id AND acl.permission = $permission[blog-update-post]
@@ -73,7 +73,7 @@
     LEFT JOIN awa_comment AS cmt ON cmt.entity_id = post.id AND cmt.entity_type = :entity_type
     WHERE blog.id = :blog_id
       AND post.publish_date &gt;= :first_date AND post.publish_date &lt;= :last_date
-    GROUP BY post.id
+    GROUP BY post.id, u.id
     ORDER BY post.id DESC
        </sql>
     </query>
