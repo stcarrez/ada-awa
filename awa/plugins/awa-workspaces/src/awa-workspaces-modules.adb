@@ -547,7 +547,7 @@ package body AWA.Workspaces.Modules is
             if Names'Length > 0 then
                Query.Set_Query (AWA.Workspaces.Models.Query_Member_In_Role);
                ADO.SQL.Append (Query.Filter, "user_member.workspace_id = :workspace_id");
-               ADO.SQL.Append (Query.Filter, " AND user_member.member_id IN (");
+               ADO.SQL.Append (Query.Filter, " AND user_member.role IN (");
                for Name of Names loop
                   ADO.SQL.Append (Query.Filter, (if Need_Sep then ",?" else "?"));
                   Query.Add_Param (Name.all);
