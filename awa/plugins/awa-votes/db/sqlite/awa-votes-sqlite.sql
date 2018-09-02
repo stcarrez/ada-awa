@@ -14,8 +14,7 @@ CREATE TABLE awa_rating (
   PRIMARY KEY (`id`)
 );
 /* The vote table tracks a vote action by a user on a given database entity.
-The primary key is made of the user, the entity id and entity type.
- */
+The primary key is made of the user, the entity id and entity type. */
 CREATE TABLE awa_vote (
   /*  */
   `rating` INTEGER NOT NULL,
