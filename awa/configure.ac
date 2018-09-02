@@ -180,6 +180,14 @@ else
 fi
 AC_SUBST(ADO_DB_SQLITE)
 
+AC_CHECK_PROGS(PSQL, psql)
+if test "X$PSQL" != "X" ; then
+  ADO_DB_POSTGRESQL=True
+else
+  ADO_DB_POSTGRESQL=False
+fi
+AC_SUBST(ADO_DB_POSTGRESQL)
+
 ##########################################
 # Ada Web Server
 ##########################################
