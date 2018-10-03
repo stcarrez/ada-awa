@@ -29,6 +29,7 @@ awa/awa_unit.gpr
 awa/regtests.db
 awa/Makefile
 awa/awa-tests.xml
+awa/awa-*-aunit.xml
 awa/regtests/result
 awa/distrib/awa.gpr
 awa/distrib/awa_unit.gpr
