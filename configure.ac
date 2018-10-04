@@ -1,5 +1,5 @@
 dnl Autoconf configure script for AWA
-dnl Copyright 2011 
+dnl Copyright 2011-2018 
 dnl
 
 AC_INIT(Makefile.in)
@@ -41,8 +41,9 @@ fi
 
 AC_CHECK_PROGS(MYSQL, mysql)
 AC_CHECK_PROGS(SQLITE3, sqlite3)
-if test "X$MYSQL" = "X" && test "X$SQLITE3" = "X"; then
-    AC_MSG_ERROR([Please install either MySQL/MariaDB or SQLite.])
+AC_CHECK_PROGS(POSTGRESQL, psql)
+if test "X$MYSQL" = "X" && test "X$SQLITE3" = "X" && "X$POSTGRESQL" = "X"; then
+    AC_MSG_ERROR([Please install either Postgresql, MySQL/MariaDB or SQLite.])
 fi
 
 dnl Check if we are running under Windows with msys to use pwd -W which produces Windows paths such as d:/tool instead of /d/tool
