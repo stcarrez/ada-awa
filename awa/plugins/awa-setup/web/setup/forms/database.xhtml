@@ -93,7 +93,7 @@
                          size='80' placeholder="#{setupMsg.setup_database_name_placeholder}"
                          value="#{setup.database_name}"/>
         </div>
-        <div class="mysql-db" style="#{setup.database_driver ne 'sqlite' ? '' : 'display: none'}">
+        <div class="server-db" style="#{setup.database_driver ne 'sqlite' ? '' : 'display: none'}">
             <w:inputText id='db-user' title="#{setupMsg.setup_database_user}"
                          styleClass="awa-required ui-corner-all mysql-db" required="false"
                          size='80' placeholder="#{setupMsg.setup_database_user_placeholder}"
