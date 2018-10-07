@@ -1,5 +1,5 @@
 <!-- Form to configure the database access
-  -  Copyright (C) 2016, 2017 Stephane Carrez
+  -  Copyright (C) 2016, 2017, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,19 +34,25 @@
             <w:chosen id="database-driver" value="#{setup.database_driver}">
                 <f:selectItem itemValue="mysql" itemLabel="MySQL"/>
                 <f:selectItem itemValue="sqlite" itemLabel="SQLite"/>
+                <f:selectItem itemValue="postgresql" itemLabel="Postgresql"/>
                 <f:facet name="options">width: "60%", disable_search: true</f:facet>
                 <f:facet name="events">.bind("change", function() {
                     var db = $(this).val();
                     if (db == "mysql") {
-                        $(".mysql-db").show();
+                        $(".server-db").show();
+                        $(".server-root-db").show();
+                    } else if (db == "postgresql") {
+                        $(".server-db").show();
+                        $(".server-root-db").hide();
                     } else {
-                        $(".mysql-db").hide();
+                        $(".server-db").hide();
+                        $(".server-root-db").hide();
                     }
                 })
                 </f:facet>
             </w:chosen>
         </div>
-        <div class="mysql-db" style="#{setup.database_driver eq 'mysql' ? '' : 'display: none'}">
+        <div class="server-db" style="#{setup.database_driver ne 'sqlite' ? '' : 'display: none'}">
             <h2>
                 #{setupMsg.setup_database_server_message}
             </h2>
@@ -61,6 +67,8 @@
                              size='80' placeholder="#{setupMsg.setup_database_port_placeholder}"
                              value="#{setup.database_port}"/>
             </div>
+        </div>
+        <div class="server-root-db" style="#{setup.database_driver ne 'sqlite' ? '' : 'display: none'}">
             <h2>
                 #{setupMsg.setup_database_admin_message}
             </h2>
@@ -85,7 +93,7 @@
                          size='80' placeholder="#{setupMsg.setup_database_name_placeholder}"
                          value="#{setup.database_name}"/>
         </div>
-        <div class="mysql-db" style="#{setup.database_driver eq 'mysql' ? '' : 'display: none'}">
+        <div class="mysql-db" style="#{setup.database_driver ne 'sqlite' ? '' : 'display: none'}">
             <w:inputText id='db-user' title="#{setupMsg.setup_database_user}"
                          styleClass="awa-required ui-corner-all mysql-db" required="false"
                          size='80' placeholder="#{setupMsg.setup_database_user_placeholder}"
