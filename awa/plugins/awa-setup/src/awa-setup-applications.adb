@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-setup -- Setup and installation
---  Copyright (C) 2016, 2017 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -165,7 +165,7 @@ package body AWA.Setup.Applications is
       elsif Name = "database_root_user" then
          From.Root_User := Value;
       elsif Name = "database_root_password" then
-         From.Root_Passwd := Value;
+         From.Root_Passwd := (if Util.Beans.Objects.Is_Null (Value) then Empty else Value);
       elsif Name = "callback_url" then
          From.Changed.Set (Name, Util.Beans.Objects.To_String (Value));
          From.Changed.Set ("facebook.callback_url",

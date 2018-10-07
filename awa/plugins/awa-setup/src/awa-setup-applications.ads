@@ -59,6 +59,8 @@ with ADO.Drivers.Connections;
 --  To run again the installation, remove manually the <tt>.initialized</tt> file.
 package AWA.Setup.Applications is
 
+   Empty : constant Util.Beans.Objects.Object := Util.Beans.Objects.To_Object (String '(""));
+
    --  The <b>Servlet</b> represents the component that will handle
    --  an HTTP request received by the server.
    type Redirect_Servlet is new Servlet.Core.Servlet with null record;
@@ -101,8 +103,8 @@ package AWA.Setup.Applications is
       Database    : ADO.Drivers.Connections.Configuration;
       Driver      : Util.Beans.Objects.Object;
       Result      : Util.Beans.Objects.Object;
-      Root_User   : Util.Beans.Objects.Object;
-      Root_Passwd : Util.Beans.Objects.Object;
+      Root_User   : Util.Beans.Objects.Object := Empty;
+      Root_Passwd : Util.Beans.Objects.Object := Empty;
       Db_Host     : Util.Beans.Objects.Object;
       Db_Port     : Util.Beans.Objects.Object;
       Has_Error   : Boolean := False;
