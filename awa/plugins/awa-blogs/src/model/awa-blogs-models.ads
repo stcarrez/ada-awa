@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2017 Stephane Carrez
+--  Copyright (C) 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -858,8 +858,8 @@ private
    COL_7_1_NAME : aliased constant String := "workspace_id";
 
    BLOG_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 8,
-      Table => BLOG_NAME'Access,
+     (Count   => 8,
+      Table   => BLOG_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
          2 => COL_1_1_NAME'Access,
@@ -868,11 +868,11 @@ private
          5 => COL_4_1_NAME'Access,
          6 => COL_5_1_NAME'Access,
          7 => COL_6_1_NAME'Access,
-         8 => COL_7_1_NAME'Access
-)
+         8 => COL_7_1_NAME'Access)
      );
    BLOG_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := BLOG_DEF'Access;
+
 
    Null_Blog : constant Blog_Ref
       := Blog_Ref'(ADO.Objects.Object_Ref with null record);
@@ -936,8 +936,8 @@ private
    COL_11_2_NAME : aliased constant String := "blog_id";
 
    POST_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 12,
-      Table => POST_NAME'Access,
+     (Count   => 12,
+      Table   => POST_NAME'Access,
       Members => (
          1 => COL_0_2_NAME'Access,
          2 => COL_1_2_NAME'Access,
@@ -950,11 +950,11 @@ private
          9 => COL_8_2_NAME'Access,
          10 => COL_9_2_NAME'Access,
          11 => COL_10_2_NAME'Access,
-         12 => COL_11_2_NAME'Access
-)
+         12 => COL_11_2_NAME'Access)
      );
    POST_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := POST_DEF'Access;
+
 
    Null_Post : constant Post_Ref
       := Post_Ref'(ADO.Objects.Object_Ref with null record);

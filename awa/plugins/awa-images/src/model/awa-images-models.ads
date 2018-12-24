@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2017 Stephane Carrez
+--  Copyright (C) 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -378,8 +378,8 @@ private
    COL_11_1_NAME : aliased constant String := "storage_id";
 
    IMAGE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 12,
-      Table => IMAGE_NAME'Access,
+     (Count   => 12,
+      Table   => IMAGE_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
          2 => COL_1_1_NAME'Access,
@@ -392,11 +392,11 @@ private
          9 => COL_8_1_NAME'Access,
          10 => COL_9_1_NAME'Access,
          11 => COL_10_1_NAME'Access,
-         12 => COL_11_1_NAME'Access
-)
+         12 => COL_11_1_NAME'Access)
      );
    IMAGE_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := IMAGE_DEF'Access;
+
 
    Null_Image : constant Image_Ref
       := Image_Ref'(ADO.Objects.Object_Ref with null record);

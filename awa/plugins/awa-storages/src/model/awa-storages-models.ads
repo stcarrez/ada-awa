@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2017 Stephane Carrez
+--  Copyright (C) 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -732,16 +732,16 @@ private
    COL_2_1_NAME : aliased constant String := "data";
 
    STORAGE_DATA_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 3,
-      Table => STORAGE_DATA_NAME'Access,
+     (Count   => 3,
+      Table   => STORAGE_DATA_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
          2 => COL_1_1_NAME'Access,
-         3 => COL_2_1_NAME'Access
-)
+         3 => COL_2_1_NAME'Access)
      );
    STORAGE_DATA_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := STORAGE_DATA_DEF'Access;
+
 
    Null_Storage_Data : constant Storage_Data_Ref
       := Storage_Data_Ref'(ADO.Objects.Object_Ref with null record);
@@ -794,19 +794,19 @@ private
    COL_5_2_NAME : aliased constant String := "owner_id";
 
    STORAGE_FOLDER_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 6,
-      Table => STORAGE_FOLDER_NAME'Access,
+     (Count   => 6,
+      Table   => STORAGE_FOLDER_NAME'Access,
       Members => (
          1 => COL_0_2_NAME'Access,
          2 => COL_1_2_NAME'Access,
          3 => COL_2_2_NAME'Access,
          4 => COL_3_2_NAME'Access,
          5 => COL_4_2_NAME'Access,
-         6 => COL_5_2_NAME'Access
-)
+         6 => COL_5_2_NAME'Access)
      );
    STORAGE_FOLDER_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := STORAGE_FOLDER_DEF'Access;
+
 
    Null_Storage_Folder : constant Storage_Folder_Ref
       := Storage_Folder_Ref'(ADO.Objects.Object_Ref with null record);
@@ -870,8 +870,8 @@ private
    COL_13_3_NAME : aliased constant String := "folder_id";
 
    STORAGE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 14,
-      Table => STORAGE_NAME'Access,
+     (Count   => 14,
+      Table   => STORAGE_NAME'Access,
       Members => (
          1 => COL_0_3_NAME'Access,
          2 => COL_1_3_NAME'Access,
@@ -886,11 +886,11 @@ private
          11 => COL_10_3_NAME'Access,
          12 => COL_11_3_NAME'Access,
          13 => COL_12_3_NAME'Access,
-         14 => COL_13_3_NAME'Access
-)
+         14 => COL_13_3_NAME'Access)
      );
    STORAGE_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := STORAGE_DEF'Access;
+
 
    Null_Storage : constant Storage_Ref
       := Storage_Ref'(ADO.Objects.Object_Ref with null record);
@@ -956,8 +956,8 @@ private
    COL_7_4_NAME : aliased constant String := "storage_id";
 
    STORE_LOCAL_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 8,
-      Table => STORE_LOCAL_NAME'Access,
+     (Count   => 8,
+      Table   => STORE_LOCAL_NAME'Access,
       Members => (
          1 => COL_0_4_NAME'Access,
          2 => COL_1_4_NAME'Access,
@@ -966,11 +966,11 @@ private
          5 => COL_4_4_NAME'Access,
          6 => COL_5_4_NAME'Access,
          7 => COL_6_4_NAME'Access,
-         8 => COL_7_4_NAME'Access
-)
+         8 => COL_7_4_NAME'Access)
      );
    STORE_LOCAL_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := STORE_LOCAL_DEF'Access;
+
 
    Null_Store_Local : constant Store_Local_Ref
       := Store_Local_Ref'(ADO.Objects.Object_Ref with null record);

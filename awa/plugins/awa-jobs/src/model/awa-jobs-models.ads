@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2016 Stephane Carrez
+--  Copyright (C) 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -245,8 +245,8 @@ private
    COL_13_1_NAME : aliased constant String := "session_id";
 
    JOB_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 14,
-      Table => JOB_NAME'Access,
+     (Count   => 14,
+      Table   => JOB_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
          2 => COL_1_1_NAME'Access,
@@ -261,11 +261,11 @@ private
          11 => COL_10_1_NAME'Access,
          12 => COL_11_1_NAME'Access,
          13 => COL_12_1_NAME'Access,
-         14 => COL_13_1_NAME'Access
-)
+         14 => COL_13_1_NAME'Access)
      );
    JOB_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := JOB_DEF'Access;
+
 
    Null_Job : constant Job_Ref
       := Job_Ref'(ADO.Objects.Object_Ref with null record);

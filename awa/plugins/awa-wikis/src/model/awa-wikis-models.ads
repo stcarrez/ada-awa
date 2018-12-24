@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2017 Stephane Carrez
+--  Copyright (C) 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,6 +34,7 @@ with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
 with Util.Beans.Objects.Enums;
 with Util.Beans.Basic.Lists;
+with ADO.Audits;
 with AWA.Images.Models;
 with AWA.Storages.Models;
 with AWA.Users.Models;
@@ -1054,8 +1055,8 @@ private
    COL_8_1_NAME : aliased constant String := "author_id";
 
    WIKI_CONTENT_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 9,
-      Table => WIKI_CONTENT_NAME'Access,
+     (Count   => 9,
+      Table   => WIKI_CONTENT_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
          2 => COL_1_1_NAME'Access,
@@ -1065,11 +1066,11 @@ private
          6 => COL_5_1_NAME'Access,
          7 => COL_6_1_NAME'Access,
          8 => COL_7_1_NAME'Access,
-         9 => COL_8_1_NAME'Access
-)
+         9 => COL_8_1_NAME'Access)
      );
    WIKI_CONTENT_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := WIKI_CONTENT_DEF'Access;
+
 
    Null_Wiki_Content : constant Wiki_Content_Ref
       := Wiki_Content_Ref'(ADO.Objects.Object_Ref with null record);
@@ -1131,8 +1132,8 @@ private
    COL_8_2_NAME : aliased constant String := "workspace_id";
 
    WIKI_SPACE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 9,
-      Table => WIKI_SPACE_NAME'Access,
+     (Count   => 9,
+      Table   => WIKI_SPACE_NAME'Access,
       Members => (
          1 => COL_0_2_NAME'Access,
          2 => COL_1_2_NAME'Access,
@@ -1142,18 +1143,29 @@ private
          6 => COL_5_2_NAME'Access,
          7 => COL_6_2_NAME'Access,
          8 => COL_7_2_NAME'Access,
-         9 => COL_8_2_NAME'Access
-)
+         9 => COL_8_2_NAME'Access)
      );
    WIKI_SPACE_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := WIKI_SPACE_DEF'Access;
+
+   WIKI_SPACE_AUDIT_DEF : aliased constant ADO.Audits.Auditable_Mapping :=
+     (Count    => 3,
+      Of_Class => WIKI_SPACE_DEF'Access,
+      Members  => (
+         1 => 1,
+         2 => 2,
+         3 => 7)
+     );
+   WIKI_SPACE_AUDIT_TABLE : constant ADO.Audits.Auditable_Mapping_Access
+      := WIKI_SPACE_AUDIT_DEF'Access;
 
    Null_Wiki_Space : constant Wiki_Space_Ref
       := Wiki_Space_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Wiki_Space_Impl is
-      new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
-                                     Of_Class => WIKI_SPACE_DEF'Access)
+      new ADO.Audits.Auditable_Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
+                                     Of_Class => WIKI_SPACE_DEF'Access,
+                                     With_Audit => WIKI_SPACE_AUDIT_DEF'Access)
    with record
        Name : Ada.Strings.Unbounded.Unbounded_String;
        Is_Public : Boolean;
@@ -1209,8 +1221,8 @@ private
    COL_9_3_NAME : aliased constant String := "content_id";
 
    WIKI_PAGE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 10,
-      Table => WIKI_PAGE_NAME'Access,
+     (Count   => 10,
+      Table   => WIKI_PAGE_NAME'Access,
       Members => (
          1 => COL_0_3_NAME'Access,
          2 => COL_1_3_NAME'Access,
@@ -1221,18 +1233,30 @@ private
          7 => COL_6_3_NAME'Access,
          8 => COL_7_3_NAME'Access,
          9 => COL_8_3_NAME'Access,
-         10 => COL_9_3_NAME'Access
-)
+         10 => COL_9_3_NAME'Access)
      );
    WIKI_PAGE_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := WIKI_PAGE_DEF'Access;
+
+   WIKI_PAGE_AUDIT_DEF : aliased constant ADO.Audits.Auditable_Mapping :=
+     (Count    => 4,
+      Of_Class => WIKI_PAGE_DEF'Access,
+      Members  => (
+         1 => 1,
+         2 => 2,
+         3 => 3,
+         4 => 4)
+     );
+   WIKI_PAGE_AUDIT_TABLE : constant ADO.Audits.Auditable_Mapping_Access
+      := WIKI_PAGE_AUDIT_DEF'Access;
 
    Null_Wiki_Page : constant Wiki_Page_Ref
       := Wiki_Page_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Wiki_Page_Impl is
-      new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
-                                     Of_Class => WIKI_PAGE_DEF'Access)
+      new ADO.Audits.Auditable_Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
+                                     Of_Class => WIKI_PAGE_DEF'Access,
+                                     With_Audit => WIKI_PAGE_AUDIT_DEF'Access)
    with record
        Name : Ada.Strings.Unbounded.Unbounded_String;
        Last_Version : Integer;

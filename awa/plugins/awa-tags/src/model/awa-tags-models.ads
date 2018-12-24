@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2017 Stephane Carrez
+--  Copyright (C) 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -291,15 +291,15 @@ private
    COL_1_1_NAME : aliased constant String := "name";
 
    TAG_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 2,
-      Table => TAG_NAME'Access,
+     (Count   => 2,
+      Table   => TAG_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
-         2 => COL_1_1_NAME'Access
-)
+         2 => COL_1_1_NAME'Access)
      );
    TAG_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := TAG_DEF'Access;
+
 
    Null_Tag : constant Tag_Ref
       := Tag_Ref'(ADO.Objects.Object_Ref with null record);
@@ -349,17 +349,17 @@ private
    COL_3_2_NAME : aliased constant String := "tag_id";
 
    TAGGED_ENTITY_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 4,
-      Table => TAGGED_ENTITY_NAME'Access,
+     (Count   => 4,
+      Table   => TAGGED_ENTITY_NAME'Access,
       Members => (
          1 => COL_0_2_NAME'Access,
          2 => COL_1_2_NAME'Access,
          3 => COL_2_2_NAME'Access,
-         4 => COL_3_2_NAME'Access
-)
+         4 => COL_3_2_NAME'Access)
      );
    TAGGED_ENTITY_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := TAGGED_ENTITY_DEF'Access;
+
 
    Null_Tagged_Entity : constant Tagged_Entity_Ref
       := Tagged_Entity_Ref'(ADO.Objects.Object_Ref with null record);

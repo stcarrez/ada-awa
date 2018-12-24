@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2017 Stephane Carrez
+--  Copyright (C) 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +27,6 @@ package body AWA.Wikis.Models is
 
    use type ADO.Objects.Object_Record_Access;
    use type ADO.Objects.Object_Ref;
-   use type ADO.Objects.Object_Record;
 
    pragma Warnings (Off, "formal parameter * is not referenced");
 
@@ -606,7 +605,7 @@ package body AWA.Wikis.Models is
       Impl : Wiki_Space_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 2, Impl.Name, Value);
+      ADO.Audits.Set_Field_String (Impl.all, 2, Impl.Name, Value);
    end Set_Name;
 
    procedure Set_Name (Object : in out Wiki_Space_Ref;
@@ -614,7 +613,7 @@ package body AWA.Wikis.Models is
       Impl : Wiki_Space_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 2, Impl.Name, Value);
+      ADO.Audits.Set_Field_Unbounded_String (Impl.all, 2, Impl.Name, Value);
    end Set_Name;
 
    function Get_Name (Object : in Wiki_Space_Ref)
@@ -636,8 +635,8 @@ package body AWA.Wikis.Models is
       Impl : Wiki_Space_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Boolean (Impl.all, 3, Impl.Is_Public, Value);
-      ADO.Objects.Set_Field_Boolean (Impl.all, 3, Impl.Is_Public, Value);
+      ADO.Audits.Set_Field_Boolean (Impl.all, 3, Impl.Is_Public, Value);
+      ADO.Audits.Set_Field_Boolean (Impl.all, 3, Impl.Is_Public, Value);
    end Set_Is_Public;
 
    function Get_Is_Public (Object : in Wiki_Space_Ref)
@@ -738,7 +737,8 @@ package body AWA.Wikis.Models is
    procedure Set_Format (Object : in out Wiki_Space_Ref;
                          Value  : in AWA.Wikis.Models.Format_Type) is
       procedure Set_Field_Enum is
-         new ADO.Objects.Set_Field_Operation (Format_Type);
+         new ADO.Audits.Set_Field_Operation (Format_Type,
+                                             Format_Type_Objects.To_Object);
       Impl : Wiki_Space_Access;
    begin
       Set_Field (Object, Impl);
@@ -979,6 +979,7 @@ package body AWA.Wikis.Models is
                   raise ADO.Objects.LAZY_LOCK;
                end if;
             end if;
+            ADO.Audits.Save (Object, Session);
          end;
       end if;
    end Save;
@@ -1014,6 +1015,7 @@ package body AWA.Wikis.Models is
          raise ADO.Objects.INSERT_ERROR;
       end if;
       ADO.Objects.Set_Created (Object);
+      ADO.Audits.Save (Object, Session);
    end Create;
 
    procedure Delete (Object  : in out Wiki_Space_Impl;
@@ -1148,7 +1150,7 @@ package body AWA.Wikis.Models is
       Impl : Wiki_Page_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 2, Impl.Name, Value);
+      ADO.Audits.Set_Field_String (Impl.all, 2, Impl.Name, Value);
    end Set_Name;
 
    procedure Set_Name (Object : in out Wiki_Page_Ref;
@@ -1156,7 +1158,7 @@ package body AWA.Wikis.Models is
       Impl : Wiki_Page_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 2, Impl.Name, Value);
+      ADO.Audits.Set_Field_Unbounded_String (Impl.all, 2, Impl.Name, Value);
    end Set_Name;
 
    function Get_Name (Object : in Wiki_Page_Ref)
@@ -1178,7 +1180,7 @@ package body AWA.Wikis.Models is
       Impl : Wiki_Page_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Integer (Impl.all, 3, Impl.Last_Version, Value);
+      ADO.Audits.Set_Field_Integer (Impl.all, 3, Impl.Last_Version, Value);
    end Set_Last_Version;
 
    function Get_Last_Version (Object : in Wiki_Page_Ref)
@@ -1195,8 +1197,8 @@ package body AWA.Wikis.Models is
       Impl : Wiki_Page_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Boolean (Impl.all, 4, Impl.Is_Public, Value);
-      ADO.Objects.Set_Field_Boolean (Impl.all, 4, Impl.Is_Public, Value);
+      ADO.Audits.Set_Field_Boolean (Impl.all, 4, Impl.Is_Public, Value);
+      ADO.Audits.Set_Field_Boolean (Impl.all, 4, Impl.Is_Public, Value);
    end Set_Is_Public;
 
    function Get_Is_Public (Object : in Wiki_Page_Ref)
@@ -1213,7 +1215,7 @@ package body AWA.Wikis.Models is
       Impl : Wiki_Page_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 5, Impl.Title, Value);
+      ADO.Audits.Set_Field_String (Impl.all, 5, Impl.Title, Value);
    end Set_Title;
 
    procedure Set_Title (Object : in out Wiki_Page_Ref;
@@ -1221,7 +1223,7 @@ package body AWA.Wikis.Models is
       Impl : Wiki_Page_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 5, Impl.Title, Value);
+      ADO.Audits.Set_Field_Unbounded_String (Impl.all, 5, Impl.Title, Value);
    end Set_Title;
 
    function Get_Title (Object : in Wiki_Page_Ref)
@@ -1529,6 +1531,7 @@ package body AWA.Wikis.Models is
                   raise ADO.Objects.LAZY_LOCK;
                end if;
             end if;
+            ADO.Audits.Save (Object, Session);
          end;
       end if;
    end Save;
@@ -1566,6 +1569,7 @@ package body AWA.Wikis.Models is
          raise ADO.Objects.INSERT_ERROR;
       end if;
       ADO.Objects.Set_Created (Object);
+      ADO.Audits.Save (Object, Session);
    end Create;
 
    procedure Delete (Object  : in out Wiki_Page_Impl;

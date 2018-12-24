@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2016 Stephane Carrez
+--  Copyright (C) 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -514,8 +514,8 @@ private
    COL_8_1_NAME : aliased constant String := "currency_code";
 
    COUNTRY_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 9,
-      Table => COUNTRY_NAME'Access,
+     (Count   => 9,
+      Table   => COUNTRY_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
          2 => COL_1_1_NAME'Access,
@@ -525,11 +525,11 @@ private
          6 => COL_5_1_NAME'Access,
          7 => COL_6_1_NAME'Access,
          8 => COL_7_1_NAME'Access,
-         9 => COL_8_1_NAME'Access
-)
+         9 => COL_8_1_NAME'Access)
      );
    COUNTRY_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := COUNTRY_DEF'Access;
+
 
    Null_Country : constant Country_Ref
       := Country_Ref'(ADO.Objects.Object_Ref with null record);
@@ -589,8 +589,8 @@ private
    COL_6_2_NAME : aliased constant String := "country_id";
 
    CITY_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 7,
-      Table => CITY_NAME'Access,
+     (Count   => 7,
+      Table   => CITY_NAME'Access,
       Members => (
          1 => COL_0_2_NAME'Access,
          2 => COL_1_2_NAME'Access,
@@ -598,11 +598,11 @@ private
          4 => COL_3_2_NAME'Access,
          5 => COL_4_2_NAME'Access,
          6 => COL_5_2_NAME'Access,
-         7 => COL_6_2_NAME'Access
-)
+         7 => COL_6_2_NAME'Access)
      );
    CITY_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := CITY_DEF'Access;
+
 
    Null_City : constant City_Ref
       := City_Ref'(ADO.Objects.Object_Ref with null record);
@@ -656,16 +656,16 @@ private
    COL_2_3_NAME : aliased constant String := "neighbor_id";
 
    COUNTRY_NEIGHBOR_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 3,
-      Table => COUNTRY_NEIGHBOR_NAME'Access,
+     (Count   => 3,
+      Table   => COUNTRY_NEIGHBOR_NAME'Access,
       Members => (
          1 => COL_0_3_NAME'Access,
          2 => COL_1_3_NAME'Access,
-         3 => COL_2_3_NAME'Access
-)
+         3 => COL_2_3_NAME'Access)
      );
    COUNTRY_NEIGHBOR_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := COUNTRY_NEIGHBOR_DEF'Access;
+
 
    Null_Country_Neighbor : constant Country_Neighbor_Ref
       := Country_Neighbor_Ref'(ADO.Objects.Object_Ref with null record);
@@ -716,17 +716,17 @@ private
    COL_3_4_NAME : aliased constant String := "country_id";
 
    REGION_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 4,
-      Table => REGION_NAME'Access,
+     (Count   => 4,
+      Table   => REGION_NAME'Access,
       Members => (
          1 => COL_0_4_NAME'Access,
          2 => COL_1_4_NAME'Access,
          3 => COL_2_4_NAME'Access,
-         4 => COL_3_4_NAME'Access
-)
+         4 => COL_3_4_NAME'Access)
      );
    REGION_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := REGION_DEF'Access;
+
 
    Null_Region : constant Region_Ref
       := Region_Ref'(ADO.Objects.Object_Ref with null record);

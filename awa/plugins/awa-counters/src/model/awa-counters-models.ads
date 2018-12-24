@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2017 Stephane Carrez
+--  Copyright (C) 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -428,17 +428,17 @@ private
    COL_3_1_NAME : aliased constant String := "definition_id";
 
    COUNTER_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 4,
-      Table => COUNTER_NAME'Access,
+     (Count   => 4,
+      Table   => COUNTER_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
          2 => COL_1_1_NAME'Access,
          3 => COL_2_1_NAME'Access,
-         4 => COL_3_1_NAME'Access
-)
+         4 => COL_3_1_NAME'Access)
      );
    COUNTER_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := COUNTER_DEF'Access;
+
 
    Null_Counter : constant Counter_Ref
       := Counter_Ref'(ADO.Objects.Object_Ref with null record);
@@ -489,16 +489,16 @@ private
    COL_2_2_NAME : aliased constant String := "entity_type";
 
    COUNTER_DEFINITION_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 3,
-      Table => COUNTER_DEFINITION_NAME'Access,
+     (Count   => 3,
+      Table   => COUNTER_DEFINITION_NAME'Access,
       Members => (
          1 => COL_0_2_NAME'Access,
          2 => COL_1_2_NAME'Access,
-         3 => COL_2_2_NAME'Access
-)
+         3 => COL_2_2_NAME'Access)
      );
    COUNTER_DEFINITION_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := COUNTER_DEFINITION_DEF'Access;
+
 
    Null_Counter_Definition : constant Counter_Definition_Ref
       := Counter_Definition_Ref'(ADO.Objects.Object_Ref with null record);
@@ -550,18 +550,18 @@ private
    COL_4_3_NAME : aliased constant String := "definition_id";
 
    VISIT_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 5,
-      Table => VISIT_NAME'Access,
+     (Count   => 5,
+      Table   => VISIT_NAME'Access,
       Members => (
          1 => COL_0_3_NAME'Access,
          2 => COL_1_3_NAME'Access,
          3 => COL_2_3_NAME'Access,
          4 => COL_3_3_NAME'Access,
-         5 => COL_4_3_NAME'Access
-)
+         5 => COL_4_3_NAME'Access)
      );
    VISIT_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := VISIT_DEF'Access;
+
 
    Null_Visit : constant Visit_Ref
       := Visit_Ref'(ADO.Objects.Object_Ref with null record);

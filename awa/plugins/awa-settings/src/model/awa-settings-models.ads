@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2017 Stephane Carrez
+--  Copyright (C) 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -351,15 +351,15 @@ private
    COL_1_1_NAME : aliased constant String := "name";
 
    SETTING_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 2,
-      Table => SETTING_NAME'Access,
+     (Count   => 2,
+      Table   => SETTING_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
-         2 => COL_1_1_NAME'Access
-)
+         2 => COL_1_1_NAME'Access)
      );
    SETTING_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := SETTING_DEF'Access;
+
 
    Null_Setting : constant Setting_Ref
       := Setting_Ref'(ADO.Objects.Object_Ref with null record);
@@ -410,18 +410,18 @@ private
    COL_4_2_NAME : aliased constant String := "setting_id";
 
    GLOBAL_SETTING_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 5,
-      Table => GLOBAL_SETTING_NAME'Access,
+     (Count   => 5,
+      Table   => GLOBAL_SETTING_NAME'Access,
       Members => (
          1 => COL_0_2_NAME'Access,
          2 => COL_1_2_NAME'Access,
          3 => COL_2_2_NAME'Access,
          4 => COL_3_2_NAME'Access,
-         5 => COL_4_2_NAME'Access
-)
+         5 => COL_4_2_NAME'Access)
      );
    GLOBAL_SETTING_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := GLOBAL_SETTING_DEF'Access;
+
 
    Null_Global_Setting : constant Global_Setting_Ref
       := Global_Setting_Ref'(ADO.Objects.Object_Ref with null record);
@@ -475,18 +475,18 @@ private
    COL_4_3_NAME : aliased constant String := "user_id";
 
    USER_SETTING_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 5,
-      Table => USER_SETTING_NAME'Access,
+     (Count   => 5,
+      Table   => USER_SETTING_NAME'Access,
       Members => (
          1 => COL_0_3_NAME'Access,
          2 => COL_1_3_NAME'Access,
          3 => COL_2_3_NAME'Access,
          4 => COL_3_3_NAME'Access,
-         5 => COL_4_3_NAME'Access
-)
+         5 => COL_4_3_NAME'Access)
      );
    USER_SETTING_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := USER_SETTING_DEF'Access;
+
 
    Null_User_Setting : constant User_Setting_Ref
       := User_Setting_Ref'(ADO.Objects.Object_Ref with null record);
