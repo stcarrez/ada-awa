@@ -93,6 +93,7 @@ package body AWA.Applications is
       Connection.Set_Property ("ado.queries.load", Conf.Get ("ado.queries.load", ""));
       App.DB_Factory.Create (Connection);
       App.DB_Factory.Set_Audit_Manager (App.Audits'Unchecked_Access);
+      App.Audits.Initialize (App'Unchecked_Access);
       App.Events.Initialize (App'Unchecked_Access);
       AWA.Modules.Initialize (App.Modules, Conf);
 
