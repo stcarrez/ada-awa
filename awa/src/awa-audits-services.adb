@@ -25,6 +25,7 @@ with Util.Log.Loggers;
 
 with ADO.Objects;
 with ADO.Schemas;
+with ADO.Statements;
 with ADO.Sessions.Entities;
 with AWA.Audits.Models;
 with AWA.Services.Contexts;
@@ -90,7 +91,7 @@ package body AWA.Audits.Services is
    --  ------------------------------
    function Get_Audit_Field (Manager : in Audit_Manager;
                              Name    : in String;
-                             Entity  : in ADO.Entity_Type) return ADO.Identifier is
+                             Entity  : in ADO.Entity_Type) return Integer is
       Key : constant Field_Key := Field_Key '(Len    => Name'Length,
                                               Name   => Name,
                                               Entity => Entity);
@@ -99,9 +100,37 @@ package body AWA.Audits.Services is
       if Audit_Field_Maps.Has_Element (Pos) then
          return Audit_Field_Maps.Element (Pos);
       else
-         Log.Warn ("Audit field {0} for {1} not found", Name, ADO.Entity_Type'Image (Entity));
-         return ADO.NO_IDENTIFIER;
+         Log.Warn ("Audit field {0} for{1} not found", Name, ADO.Entity_Type'Image (Entity));
+         return 0;
       end if;
    end Get_Audit_Field;
+
+   --  ------------------------------
+   --  Initialize the audit manager.
+   --  ------------------------------
+   procedure Initialize (Manager : in out Audit_Manager;
+                         App     : in Application_Access) is
+      DB    : constant ADO.Sessions.Session := App.Get_Session;
+      Stmt  : ADO.Statements.Query_Statement
+        := DB.Create_Statement ("SELECT id, entity_type, name FROM awa_audit_field");
+      Count : Natural := 0;
+   begin
+      Stmt.Execute;
+      while Stmt.Has_Elements loop
+         declare
+            Id   : constant Integer := Stmt.Get_Integer (0);
+            Kind : constant ADO.Entity_Type := ADO.Entity_Type (Stmt.Get_Integer (1));
+            Name : constant String := Stmt.Get_String (2);
+         begin
+            Log.Debug ("Field {0} of{1} ={2}",
+                       Name, ADO.Entity_Type'Image (Kind), Integer'Image (Id));
+            Manager.Fields.Insert (Key => (Len => Name'Length, Name => Name, Entity => Kind),
+                                   New_Item => Id);
+         end;
+         Count := Count + 1;
+         Stmt.Next;
+      end loop;
+      Log.Info ("Loaded{0} audit fields", Natural'Image (Count));
+   end Initialize;
 
 end AWA.Audits.Services;
