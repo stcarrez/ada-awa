@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  awa -- Ada Web Application
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017 Stephane Carrez
+--  awa-applications -- Ada Web Application
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +23,7 @@ with ADO.Sessions.Factory;
 with AWA.Modules;
 with AWA.Events;
 with AWA.Events.Services;
+with AWA.Audits.Services;
 package AWA.Applications is
 
    --  Directories where the configuration files are searched.
@@ -153,6 +154,7 @@ private
       DB_Factory : ADO.Sessions.Factory.Session_Factory;
       Modules    : aliased AWA.Modules.Module_Registry;
       Events     : aliased AWA.Events.Services.Event_Manager;
+      Audits     : aliased AWA.Audits.Services.Audit_Manager;
    end record;
 
 end AWA.Applications;
