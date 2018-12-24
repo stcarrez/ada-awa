@@ -11,4 +11,5 @@ DROP TABLE IF EXISTS `awa_application`;
 DROP TABLE IF EXISTS `awa_queue`;
 DROP TABLE IF EXISTS `awa_message_type`;
 DROP TABLE IF EXISTS `awa_message`;
+DROP TABLE IF EXISTS `awa_audit_field`;
 DROP TABLE IF EXISTS `awa_audit`;

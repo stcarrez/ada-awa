@@ -1,5 +1,8 @@
 /* File generated automatically by dynamo */
-/*  */
+/* The Audit table records the changes made on database on behalf of a user.
+The record indicates the database table and row, the field being updated,
+the old and new value. The old and new values are converted to a string
+and they truncated if necessary to 256 characters. */
 CREATE TABLE awa_audit (
   /* the audit identifier */
   `id` BIGINT NOT NULL,
@@ -11,9 +14,22 @@ CREATE TABLE awa_audit (
   `new_value` VARCHAR(255) BINARY ,
   /* the database entity identifier to which the audit is associated. */
   `entity_id` BIGINT NOT NULL,
+  /*  */
+  `field` INTEGER NOT NULL,
   /* the user session under which the field was modified. */
   `session_id` BIGINT ,
   /* the entity type. */
+  `entity_type` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/* The Audit_Field table describes
+the database field being updated. */
+CREATE TABLE awa_audit_field (
+  /* the audit field identifier. */
+  `id` INTEGER NOT NULL AUTO_INCREMENT,
+  /* the audit field name. */
+  `name` VARCHAR(255) BINARY NOT NULL,
+  /* the entity type */
   `entity_type` INTEGER NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -244,6 +260,7 @@ CREATE TABLE awa_user (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("awa_audit")
+,("awa_audit_field")
 ,("awa_message")
 ,("awa_message_type")
 ,("awa_queue")

@@ -23,7 +23,10 @@ INSERT INTO entity_type (name) VALUES ("entity_type");
 INSERT INTO entity_type (name) VALUES ("sequence");
 /* Copied from awa-sqlite.sql*/
 /* File generated automatically by dynamo */
-/*  */
+/* The Audit table records the changes made on database on behalf of a user.
+The record indicates the database table and row, the field being updated,
+the old and new value. The old and new values are converted to a string
+and they truncated if necessary to 256 characters. */
 CREATE TABLE awa_audit (
   /* the audit identifier */
   `id` BIGINT NOT NULL,
@@ -35,12 +38,23 @@ CREATE TABLE awa_audit (
   `new_value` VARCHAR(255) ,
   /* the database entity identifier to which the audit is associated. */
   `entity_id` BIGINT NOT NULL,
+  /*  */
+  `field` INTEGER NOT NULL,
   /* the user session under which the field was modified. */
   `session_id` BIGINT ,
   /* the entity type. */
   `entity_type` INTEGER NOT NULL,
   PRIMARY KEY (`id`)
 );
+/* The Audit_Field table describes
+the database field being updated. */
+CREATE TABLE awa_audit_field (
+  /* the audit field identifier. */
+  `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  /* the audit field name. */
+  `name` VARCHAR(255) NOT NULL,
+  /* the entity type */
+  `entity_type` INTEGER NOT NULL);
 /*  */
 CREATE TABLE awa_message (
   /* the message identifier */
@@ -267,6 +281,7 @@ CREATE TABLE awa_user (
   PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_audit");
+INSERT INTO entity_type (name) VALUES ("awa_audit_field");
 INSERT INTO entity_type (name) VALUES ("awa_message");
 INSERT INTO entity_type (name) VALUES ("awa_message_type");
 INSERT INTO entity_type (name) VALUES ("awa_queue");
@@ -958,3 +973,17 @@ CREATE TABLE awa_wiki_space (
 INSERT INTO entity_type (name) VALUES ("awa_wiki_content");
 INSERT INTO entity_type (name) VALUES ("awa_wiki_page");
 INSERT INTO entity_type (name) VALUES ("awa_wiki_space");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "name");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "last_version");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "is_public");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "title");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_space"), "name");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_space"), "is_public");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_space"), "format");
