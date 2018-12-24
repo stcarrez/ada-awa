@@ -11,6 +11,8 @@ CREATE TABLE awa_audit (
   `old_value` VARCHAR(255) BINARY ,
   /* the new field value. */
   `new_value` VARCHAR(255) BINARY ,
+  /*  */
+  `field` INTEGER NOT NULL,
   /* the database entity identifier to which the audit is associated. */
   `entity_id` BIGINT NOT NULL,
   /* the user session under which the field was modified. */
@@ -19,4 +21,51 @@ CREATE TABLE awa_audit (
   `entity_type` INTEGER NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/* The Audit_Field table describes
+the database field being updated. */
+CREATE TABLE awa_audit_field (
+  /* the audit field identifier. */
+  `id` INTEGER NOT NULL AUTO_INCREMENT,
+  /* the audit field name. */
+  `name` VARCHAR(255) BINARY NOT NULL,
+  /* the entity type */
+  `entity_type` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 INSERT INTO entity_type (name) VALUES ("awa_audit");
+INSERT INTO entity_type (name) VALUES ("awa_audit_field");
+
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "name");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "last_version");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "is_public");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "title");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_space"), "name");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_space"), "is_public");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_space"), "format");
+
+/* Blog migration: audit support */
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "name");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "uid");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "url");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "title");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "uri");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "publish_date");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "status");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "allow_comments");
