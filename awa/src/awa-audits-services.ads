@@ -19,8 +19,10 @@ with Ada.Containers.Indefinite_Hashed_Maps;
 
 with ADO.Audits;
 with ADO.Sessions;
-
+limited with AWA.Applications;
 package AWA.Audits.Services is
+
+   type Application_Access is access all AWA.Applications.Application'Class;
 
    --  ------------------------------
    --  Event manager
@@ -42,7 +44,11 @@ package AWA.Audits.Services is
    --  Find the audit field identification number from the entity type and field name.
    function Get_Audit_Field (Manager : in Audit_Manager;
                              Name    : in String;
-                             Entity  : in ADO.Entity_Type) return ADO.Identifier;
+                             Entity  : in ADO.Entity_Type) return Integer;
+
+   --  Initialize the audit manager.
+   procedure Initialize (Manager : in out Audit_Manager;
+                         App     : in Application_Access);
 
 private
 
@@ -55,10 +61,9 @@ private
 
    package Audit_Field_Maps is
      new Ada.Containers.Indefinite_Hashed_Maps (Key_Type        => Field_Key,
-                                                Element_Type    => ADO.Identifier,
+                                                Element_Type    => Integer,
                                                 Hash            => Hash,
-                                                Equivalent_Keys => "=",
-                                                "="             => ADO."=");
+                                                Equivalent_Keys => "=");
 
    type Audit_Manager is limited new ADO.Audits.Audit_Manager with record
       Fields : Audit_Field_Maps.Map;
