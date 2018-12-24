@@ -27,7 +27,6 @@ with AWA.Workspaces.Beans;
 package body AWA.Workspaces.Tests is
 
    use Ada.Strings.Unbounded;
-   use AWA.Tests;
 
    function Get_Invitation_Bean is
      new ASF.Helpers.Beans.Get_Request_Bean (Element_Type   => Beans.Invitation_Bean,
