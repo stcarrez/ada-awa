@@ -67,6 +67,7 @@ package body AWA.Audits.Models is
       Impl.Old_Value.Is_Null := True;
       Impl.New_Value.Is_Null := True;
       Impl.Entity_Id := ADO.NO_IDENTIFIER;
+      Impl.Field := ADO.NO_IDENTIFIER;
       Impl.Entity_Type := 0;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
@@ -196,12 +197,29 @@ package body AWA.Audits.Models is
    end Get_Entity_Id;
 
 
+   procedure Set_Field (Object : in out Audit_Ref;
+                        Value  : in ADO.Identifier) is
+      Impl : Audit_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Identifier (Impl.all, 6, Impl.Field, Value);
+   end Set_Field;
+
+   function Get_Field (Object : in Audit_Ref)
+                  return ADO.Identifier is
+      Impl : constant Audit_Access
+         := Audit_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Field;
+   end Get_Field;
+
+
    procedure Set_Session (Object : in out Audit_Ref;
                           Value  : in AWA.Users.Models.Session_Ref'Class) is
       Impl : Audit_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 6, Impl.Session, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 7, Impl.Session, Value);
    end Set_Session;
 
    function Get_Session (Object : in Audit_Ref)
@@ -218,7 +236,7 @@ package body AWA.Audits.Models is
       Impl : Audit_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Entity_Type (Impl.all, 7, Impl.Entity_Type, Value);
+      ADO.Objects.Set_Field_Entity_Type (Impl.all, 8, Impl.Entity_Type, Value);
    end Set_Entity_Type;
 
    function Get_Entity_Type (Object : in Audit_Ref)
@@ -247,6 +265,7 @@ package body AWA.Audits.Models is
             Copy.Old_Value := Impl.Old_Value;
             Copy.New_Value := Impl.New_Value;
             Copy.Entity_Id := Impl.Entity_Id;
+            Copy.Field := Impl.Field;
             Copy.Session := Impl.Session;
             Copy.Entity_Type := Impl.Entity_Type;
          end;
@@ -379,14 +398,19 @@ package body AWA.Audits.Models is
          := Session.Create_Statement (AUDIT_DEF'Access);
    begin
       if Object.Is_Modified (6) then
-         Stmt.Save_Field (Name  => COL_5_1_NAME, --  session_id
-                          Value => Object.Session);
+         Stmt.Save_Field (Name  => COL_5_1_NAME, --  field
+                          Value => Object.Field);
          Object.Clear_Modified (6);
       end if;
       if Object.Is_Modified (7) then
-         Stmt.Save_Field (Name  => COL_6_1_NAME, --  entity_type
-                          Value => Object.Entity_Type);
+         Stmt.Save_Field (Name  => COL_6_1_NAME, --  session_id
+                          Value => Object.Session);
          Object.Clear_Modified (7);
+      end if;
+      if Object.Is_Modified (8) then
+         Stmt.Save_Field (Name  => COL_7_1_NAME, --  entity_type
+                          Value => Object.Entity_Type);
+         Object.Clear_Modified (8);
       end if;
       if Stmt.Has_Save_Fields then
          Stmt.Set_Filter (Filter => "id = ?");
@@ -421,9 +445,11 @@ package body AWA.Audits.Models is
                         Value => Object.New_Value);
       Query.Save_Field (Name  => COL_4_1_NAME, --  entity_id
                         Value => Object.Entity_Id);
-      Query.Save_Field (Name  => COL_5_1_NAME, --  session_id
+      Query.Save_Field (Name  => COL_5_1_NAME, --  field
+                        Value => Object.Field);
+      Query.Save_Field (Name  => COL_6_1_NAME, --  session_id
                         Value => Object.Session);
-      Query.Save_Field (Name  => COL_6_1_NAME, --  entity_type
+      Query.Save_Field (Name  => COL_7_1_NAME, --  entity_type
                         Value => Object.Entity_Type);
       Query.Execute (Result);
       if Result /= 1 then
@@ -474,6 +500,8 @@ package body AWA.Audits.Models is
          end if;
       elsif Name = "entity_id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Entity_Id));
+      elsif Name = "field" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Field));
       elsif Name = "entity_type" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Entity_Type));
       end if;
@@ -514,10 +542,11 @@ package body AWA.Audits.Models is
       Object.Old_Value := Stmt.Get_Nullable_String (2);
       Object.New_Value := Stmt.Get_Nullable_String (3);
       Object.Entity_Id := Stmt.Get_Identifier (4);
-      if not Stmt.Is_Null (5) then
-         Object.Session.Set_Key_Value (Stmt.Get_Identifier (5), Session);
+      Object.Field := Stmt.Get_Identifier (5);
+      if not Stmt.Is_Null (6) then
+         Object.Session.Set_Key_Value (Stmt.Get_Identifier (6), Session);
       end if;
-      Object.Entity_Type := ADO.Entity_Type (Stmt.Get_Integer (6));
+      Object.Entity_Type := ADO.Entity_Type (Stmt.Get_Integer (7));
       ADO.Objects.Set_Created (Object);
    end Load;
    function Audit_Field_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is

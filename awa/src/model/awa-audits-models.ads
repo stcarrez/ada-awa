@@ -104,6 +104,14 @@ package AWA.Audits.Models is
    function Get_Entity_Id (Object : in Audit_Ref)
                  return ADO.Identifier;
 
+   --
+   procedure Set_Field (Object : in out Audit_Ref;
+                        Value  : in ADO.Identifier);
+
+   --
+   function Get_Field (Object : in Audit_Ref)
+                 return ADO.Identifier;
+
    --  Set the user session under which the field was modified.
    procedure Set_Session (Object : in out Audit_Ref;
                           Value  : in AWA.Users.Models.Session_Ref'Class);
@@ -274,11 +282,12 @@ private
    COL_2_1_NAME : aliased constant String := "old_value";
    COL_3_1_NAME : aliased constant String := "new_value";
    COL_4_1_NAME : aliased constant String := "entity_id";
-   COL_5_1_NAME : aliased constant String := "session_id";
-   COL_6_1_NAME : aliased constant String := "entity_type";
+   COL_5_1_NAME : aliased constant String := "field";
+   COL_6_1_NAME : aliased constant String := "session_id";
+   COL_7_1_NAME : aliased constant String := "entity_type";
 
    AUDIT_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count   => 7,
+     (Count   => 8,
       Table   => AUDIT_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
@@ -287,7 +296,8 @@ private
          4 => COL_3_1_NAME'Access,
          5 => COL_4_1_NAME'Access,
          6 => COL_5_1_NAME'Access,
-         7 => COL_6_1_NAME'Access)
+         7 => COL_6_1_NAME'Access,
+         8 => COL_7_1_NAME'Access)
      );
    AUDIT_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := AUDIT_DEF'Access;
@@ -304,6 +314,7 @@ private
        Old_Value : ADO.Nullable_String;
        New_Value : ADO.Nullable_String;
        Entity_Id : ADO.Identifier;
+       Field : ADO.Identifier;
        Session : AWA.Users.Models.Session_Ref;
        Entity_Type : ADO.Entity_Type;
    end record;
