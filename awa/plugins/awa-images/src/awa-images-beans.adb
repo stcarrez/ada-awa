@@ -32,8 +32,6 @@ package body AWA.Images.Beans is
    --  ------------------------------
    overriding
    procedure Load_Files (Storage : in Image_List_Bean) is
-      use AWA.Services;
-
       Ctx       : constant ASC.Service_Context_Access := ASC.Current;
       User      : constant ADO.Identifier := Ctx.Get_User_Identifier;
       Session   : ADO.Sessions.Session := ASC.Get_Session (Ctx);
