@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  awa -- Ada Web Application
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Stephane Carrez
+--  awa-applications -- Ada Web Application
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -92,6 +92,7 @@ package body AWA.Applications is
       Connection.Set_Property ("ado.queries.paths", Conf.Get ("ado.queries.paths", ""));
       Connection.Set_Property ("ado.queries.load", Conf.Get ("ado.queries.load", ""));
       App.DB_Factory.Create (Connection);
+      App.DB_Factory.Set_Audit_Manager (App.Audits'Unchecked_Access);
       App.Events.Initialize (App'Unchecked_Access);
       AWA.Modules.Initialize (App.Modules, Conf);
 
