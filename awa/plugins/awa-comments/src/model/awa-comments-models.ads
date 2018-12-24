@@ -34,6 +34,7 @@ with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
 with Util.Beans.Objects.Enums;
 with Util.Beans.Basic.Lists;
+with ADO.Audits;
 with AWA.Users.Models;
 with Util.Beans.Methods;
 pragma Warnings (On);
@@ -316,13 +317,24 @@ private
    COMMENT_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := COMMENT_DEF'Access;
 
+   COMMENT_AUDIT_DEF : aliased constant ADO.Audits.Auditable_Mapping :=
+     (Count    => 3,
+      Of_Class => COMMENT_DEF'Access,
+      Members  => (
+         1 => 1,
+         2 => 6,
+         3 => 7)
+     );
+   COMMENT_AUDIT_TABLE : constant ADO.Audits.Auditable_Mapping_Access
+      := COMMENT_AUDIT_DEF'Access;
 
    Null_Comment : constant Comment_Ref
       := Comment_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Comment_Impl is
-      new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
-                                     Of_Class => COMMENT_DEF'Access)
+      new ADO.Audits.Auditable_Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
+                                     Of_Class => COMMENT_DEF'Access,
+                                     With_Audit => COMMENT_AUDIT_DEF'Access)
    with record
        Create_Date : Ada.Calendar.Time;
        Message : Ada.Strings.Unbounded.Unbounded_String;

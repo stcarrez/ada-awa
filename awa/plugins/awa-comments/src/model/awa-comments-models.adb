@@ -99,7 +99,7 @@ package body AWA.Comments.Models is
       Impl : Comment_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 2, Impl.Message, Value);
+      ADO.Audits.Set_Field_String (Impl.all, 2, Impl.Message, Value);
    end Set_Message;
 
    procedure Set_Message (Object : in out Comment_Ref;
@@ -107,7 +107,7 @@ package body AWA.Comments.Models is
       Impl : Comment_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 2, Impl.Message, Value);
+      ADO.Audits.Set_Field_Unbounded_String (Impl.all, 2, Impl.Message, Value);
    end Set_Message;
 
    function Get_Message (Object : in Comment_Ref)
@@ -187,7 +187,8 @@ package body AWA.Comments.Models is
    procedure Set_Status (Object : in out Comment_Ref;
                          Value  : in AWA.Comments.Models.Status_Type) is
       procedure Set_Field_Enum is
-         new ADO.Objects.Set_Field_Operation (Status_Type);
+         new ADO.Audits.Set_Field_Operation (Status_Type,
+                                             Status_Type_Objects.To_Object);
       Impl : Comment_Access;
    begin
       Set_Field (Object, Impl);
@@ -206,7 +207,8 @@ package body AWA.Comments.Models is
    procedure Set_Format (Object : in out Comment_Ref;
                          Value  : in AWA.Comments.Models.Format_Type) is
       procedure Set_Field_Enum is
-         new ADO.Objects.Set_Field_Operation (Format_Type);
+         new ADO.Audits.Set_Field_Operation (Format_Type,
+                                             Format_Type_Objects.To_Object);
       Impl : Comment_Access;
    begin
       Set_Field (Object, Impl);
@@ -399,20 +401,10 @@ package body AWA.Comments.Models is
                           Value => Object.Message);
          Object.Clear_Modified (2);
       end if;
-      if Object.Is_Modified (3) then
-         Stmt.Save_Field (Name  => COL_2_1_NAME, --  entity_id
-                          Value => Object.Entity_Id);
-         Object.Clear_Modified (3);
-      end if;
       if Object.Is_Modified (4) then
          Stmt.Save_Field (Name  => COL_3_1_NAME, --  id
                           Value => Object.Get_Key);
          Object.Clear_Modified (4);
-      end if;
-      if Object.Is_Modified (6) then
-         Stmt.Save_Field (Name  => COL_5_1_NAME, --  entity_type
-                          Value => Object.Entity_Type);
-         Object.Clear_Modified (6);
       end if;
       if Object.Is_Modified (7) then
          Stmt.Save_Field (Name  => COL_6_1_NAME, --  status
@@ -447,6 +439,7 @@ package body AWA.Comments.Models is
                   raise ADO.Objects.LAZY_LOCK;
                end if;
             end if;
+            ADO.Audits.Save (Object, Session);
          end;
       end if;
    end Save;
@@ -482,6 +475,7 @@ package body AWA.Comments.Models is
          raise ADO.Objects.INSERT_ERROR;
       end if;
       ADO.Objects.Set_Created (Object);
+      ADO.Audits.Save (Object, Session);
    end Create;
 
    procedure Delete (Object  : in out Comment_Impl;
@@ -720,10 +714,6 @@ package body AWA.Comments.Models is
          Item.Set_Create_Date (Util.Beans.Objects.Time.To_Time (Value));
       elsif Name = "message" then
          Item.Set_Message (Util.Beans.Objects.To_String (Value));
-      elsif Name = "entity_id" then
-         Item.Set_Entity_Id (ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value)));
-      elsif Name = "entity_type" then
-         Item.Set_Entity_Type (ADO.Entity_Type (Util.Beans.Objects.To_Integer (Value)));
       elsif Name = "status" then
          Item.Set_Status (Status_Type_Objects.To_Value (Value));
       elsif Name = "format" then
