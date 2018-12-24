@@ -188,7 +188,6 @@ package body AWA.Storages.Beans is
    --  ------------------------------
    procedure Load_Folder (Storage : in Storage_List_Bean) is
       use AWA.Storages.Models;
-      use AWA.Services;
       use type Ada.Containers.Count_Type;
 
       Manager : constant Services.Storage_Service_Access := Storage.Module.Get_Storage_Manager;
@@ -208,7 +207,6 @@ package body AWA.Storages.Beans is
    procedure Load_Folders (Storage : in Storage_List_Bean) is
       use AWA.Storages.Models;
       use AWA.Services;
-      use type ADO.Identifier;
 
       Ctx     : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       User    : constant ADO.Identifier := Ctx.Get_User_Identifier;
@@ -316,9 +314,9 @@ package body AWA.Storages.Beans is
    --  ------------------------------
    function Create_Folder_List_Bean (Module : in AWA.Storages.Modules.Storage_Module_Access)
                                      return Util.Beans.Basic.Readonly_Bean_Access is
+      pragma Unreferenced (Module);
       use AWA.Storages.Models;
       use AWA.Services;
-      use type ADO.Identifier;
 
       Ctx   : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       User  : constant ADO.Identifier := Ctx.Get_User_Identifier;

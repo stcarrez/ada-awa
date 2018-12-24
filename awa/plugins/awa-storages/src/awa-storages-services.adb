@@ -180,7 +180,6 @@ package body AWA.Storages.Services is
                    Into    : in out AWA.Storages.Models.Storage_Ref'Class;
                    Path    : in String;
                    Storage : in AWA.Storages.Models.Storage_Type) is
-      use type AWA.Storages.Models.Storage_Type;
       use type Stores.Store_Access;
 
       Ctx       : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
@@ -300,7 +299,6 @@ package body AWA.Storages.Services is
                              Mode    : in Read_Mode := READ;
                              Into    : in out Storage_File) is
       use type Stores.Store_Access;
-      use type Models.Storage_Type;
 
       Ctx     : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       User    : constant ADO.Identifier := Ctx.Get_User_Identifier;
