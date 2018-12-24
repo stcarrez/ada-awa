@@ -106,11 +106,11 @@ package AWA.Audits.Models is
 
    --
    procedure Set_Field (Object : in out Audit_Ref;
-                        Value  : in ADO.Identifier);
+                        Value  : in Integer);
 
    --
    function Get_Field (Object : in Audit_Ref)
-                 return ADO.Identifier;
+                 return Integer;
 
    --  Set the user session under which the field was modified.
    procedure Set_Session (Object : in out Audit_Ref;
@@ -199,11 +199,11 @@ package AWA.Audits.Models is
 
    --  Set the audit field identifier.
    procedure Set_Id (Object : in out Audit_Field_Ref;
-                     Value  : in ADO.Identifier);
+                     Value  : in Integer);
 
    --  Get the audit field identifier.
    function Get_Id (Object : in Audit_Field_Ref)
-                 return ADO.Identifier;
+                 return Integer;
 
    --  Set the audit field name.
    procedure Set_Name (Object : in out Audit_Field_Ref;
@@ -217,11 +217,11 @@ package AWA.Audits.Models is
    function Get_Name (Object : in Audit_Field_Ref)
                  return String;
 
-   --
+   --  Set the entity type
    procedure Set_Entity_Type (Object : in out Audit_Field_Ref;
                               Value  : in ADO.Entity_Type);
 
-   --
+   --  Get the entity type
    function Get_Entity_Type (Object : in Audit_Field_Ref)
                  return ADO.Entity_Type;
 
@@ -229,13 +229,13 @@ package AWA.Audits.Models is
    --  Raises the NOT_FOUND exception if it does not exist.
    procedure Load (Object  : in out Audit_Field_Ref;
                    Session : in out ADO.Sessions.Session'Class;
-                   Id      : in ADO.Identifier);
+                   Id      : in Integer);
 
    --  Load the entity identified by 'Id'.
    --  Returns True in <b>Found</b> if the object was found and False if it does not exist.
    procedure Load (Object  : in out Audit_Field_Ref;
                    Session : in out ADO.Sessions.Session'Class;
-                   Id      : in ADO.Identifier;
+                   Id      : in Integer;
                    Found   : out Boolean);
 
    --  Find and load the entity.
@@ -314,7 +314,7 @@ private
        Old_Value : ADO.Nullable_String;
        New_Value : ADO.Nullable_String;
        Entity_Id : ADO.Identifier;
-       Field : ADO.Identifier;
+       Field : Integer;
        Session : AWA.Users.Models.Session_Ref;
        Entity_Type : ADO.Entity_Type;
    end record;
@@ -371,7 +371,7 @@ private
       := Audit_Field_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Audit_Field_Impl is
-      new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
+      new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_STRING,
                                      Of_Class => AUDIT_FIELD_DEF'Access)
    with record
        Name : Ada.Strings.Unbounded.Unbounded_String;

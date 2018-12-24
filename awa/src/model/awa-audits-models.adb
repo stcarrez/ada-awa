@@ -67,7 +67,7 @@ package body AWA.Audits.Models is
       Impl.Old_Value.Is_Null := True;
       Impl.New_Value.Is_Null := True;
       Impl.Entity_Id := ADO.NO_IDENTIFIER;
-      Impl.Field := ADO.NO_IDENTIFIER;
+      Impl.Field := 0;
       Impl.Entity_Type := 0;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
@@ -198,15 +198,15 @@ package body AWA.Audits.Models is
 
 
    procedure Set_Field (Object : in out Audit_Ref;
-                        Value  : in ADO.Identifier) is
+                        Value  : in Integer) is
       Impl : Audit_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Identifier (Impl.all, 6, Impl.Field, Value);
+      ADO.Objects.Set_Field_Integer (Impl.all, 6, Impl.Field, Value);
    end Set_Field;
 
    function Get_Field (Object : in Audit_Ref)
-                  return ADO.Identifier is
+                  return Integer is
       Impl : constant Audit_Access
          := Audit_Impl (Object.Get_Load_Object.all)'Access;
    begin
@@ -542,7 +542,7 @@ package body AWA.Audits.Models is
       Object.Old_Value := Stmt.Get_Nullable_String (2);
       Object.New_Value := Stmt.Get_Nullable_String (3);
       Object.Entity_Id := Stmt.Get_Identifier (4);
-      Object.Field := Stmt.Get_Identifier (5);
+      Object.Field := Stmt.Get_Integer (5);
       if not Stmt.Is_Null (6) then
          Object.Session.Set_Key_Value (Stmt.Get_Identifier (6), Session);
       end if;
@@ -550,7 +550,7 @@ package body AWA.Audits.Models is
       ADO.Objects.Set_Created (Object);
    end Load;
    function Audit_Field_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
                                        Of_Class => AUDIT_FIELD_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -558,7 +558,7 @@ package body AWA.Audits.Models is
    end Audit_Field_Key;
 
    function Audit_Field_Key (Id : in String) return ADO.Objects.Object_Key is
-      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_STRING,
                                        Of_Class => AUDIT_FIELD_DEF'Access);
    begin
       ADO.Objects.Set_Value (Result, Id);
@@ -592,19 +592,19 @@ package body AWA.Audits.Models is
    -- ----------------------------------------
 
    procedure Set_Id (Object : in out Audit_Field_Ref;
-                     Value  : in ADO.Identifier) is
+                     Value  : in Integer) is
       Impl : Audit_Field_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
+      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, ADO.Identifier (Value));
    end Set_Id;
 
    function Get_Id (Object : in Audit_Field_Ref)
-                  return ADO.Identifier is
+                  return Integer is
       Impl : constant Audit_Field_Access
          := Audit_Field_Impl (Object.Get_Object.all)'Access;
    begin
-      return Impl.Get_Key_Value;
+      return Integer (ADO.Identifier '(Impl.Get_Key_Value));
    end Get_Id;
 
 
@@ -692,7 +692,7 @@ package body AWA.Audits.Models is
 
    procedure Load (Object  : in out Audit_Field_Ref;
                    Session : in out ADO.Sessions.Session'Class;
-                   Id      : in ADO.Identifier) is
+                   Id      : in Integer) is
       Impl  : constant Audit_Field_Access := new Audit_Field_Impl;
       Found : Boolean;
       Query : ADO.SQL.Query;
@@ -709,7 +709,7 @@ package body AWA.Audits.Models is
 
    procedure Load (Object  : in out Audit_Field_Ref;
                    Session : in out ADO.Sessions.Session'Class;
-                   Id      : in ADO.Identifier;
+                   Id      : in Integer;
                    Found   : out Boolean) is
       Impl  : constant Audit_Field_Access := new Audit_Field_Impl;
       Query : ADO.SQL.Query;
@@ -784,7 +784,7 @@ package body AWA.Audits.Models is
                    Session : in out ADO.Sessions.Session'Class) is
       Found : Boolean;
       Query : ADO.SQL.Query;
-      Id    : constant ADO.Identifier := Object.Get_Key_Value;
+      Id    : constant Integer := Integer (ADO.Identifier '(Object.Get_Key_Value));
    begin
       Query.Bind_Param (Position => 1, Value => Id);
       Query.Set_Filter ("id = ?");
@@ -893,7 +893,7 @@ package body AWA.Audits.Models is
                    Stmt    : in out ADO.Statements.Query_Statement'Class;
                    Session : in out ADO.Sessions.Session'Class) is
    begin
-      Object.Set_Key_Value (Stmt.Get_Identifier (0));
+      Object.Set_Key_Value (Stmt.Get_Unbounded_String (0));
       Object.Name := Stmt.Get_Unbounded_String (1);
       Object.Entity_Type := ADO.Entity_Type (Stmt.Get_Integer (2));
       ADO.Objects.Set_Created (Object);
