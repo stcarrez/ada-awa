@@ -44,7 +44,6 @@ package body AWA.Blogs.Beans is
 
    use type ADO.Identifier;
    use type Ada.Strings.Wide_Wide_Maps.Wide_Wide_Character_Set;
-   use Ada.Strings.Unbounded;
 
    package ASC renames AWA.Services.Contexts;
 
@@ -631,7 +630,6 @@ package body AWA.Blogs.Beans is
    --  ------------------------------
    procedure Load_List (Into : in out Post_List_Bean) is
       use AWA.Blogs.Models;
-      use AWA.Services;
 
       Session     : ADO.Sessions.Session := Into.Service.Get_Session;
       Query       : ADO.Queries.Context;
