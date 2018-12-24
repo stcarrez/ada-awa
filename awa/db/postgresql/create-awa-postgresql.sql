@@ -27,6 +27,24 @@ INSERT INTO entity_type (name) VALUES
 /* Copied from awa-postgresql.sql*/
 /* File generated automatically by dynamo */
 /*  */
+CREATE TABLE awa_audit (
+  /* the audit identifier */
+  "id" BIGINT NOT NULL,
+  /* the date when the field was modified. */
+  "date" TIMESTAMP NOT NULL,
+  /* the old field value. */
+  "old_value" VARCHAR(255) ,
+  /* the new field value. */
+  "new_value" VARCHAR(255) ,
+  /* the database entity identifier to which the audit is associated. */
+  "entity_id" BIGINT NOT NULL,
+  /* the user session under which the field was modified. */
+  "session_id" BIGINT ,
+  /* the entity type. */
+  "entity_type" INTEGER NOT NULL,
+  PRIMARY KEY ("id")
+);
+/*  */
 CREATE TABLE awa_message (
   /* the message identifier */
   "id" BIGINT NOT NULL,
@@ -252,7 +270,8 @@ CREATE TABLE awa_user (
   PRIMARY KEY ("id")
 );
 INSERT INTO entity_type (name) VALUES
-('awa_message')
+('awa_audit')
+,('awa_message')
 ,('awa_message_type')
 ,('awa_queue')
 ,('awa_application')
