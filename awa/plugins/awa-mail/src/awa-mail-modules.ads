@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail -- Mail module
---  Copyright (C) 2011, 2012, 2017 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,9 +28,11 @@ with AWA.Mail.Clients;
 --  The *mail* module needs some properties to configure the SMTP
 --  server.
 --
---  ||mail.smtp.host||localhost||Defines the SMTP server host name||
---  ||mail.smtp.port||25||Defines the SMTP connection port||
---  ||mail.smtp.enable||1|||Defines whether sending email is enabled or not||
+--  |Configuration    | Default   | Description                                     |
+--  | --------------- | --------- | ----------------------------------------------- |
+--  |mail.smtp.host   | localhost | Defines the SMTP server host name               |
+--  |mail.smtp.port   | 25        | Defines the SMTP connection port                |
+--  |mail.smtp.enable | 1         | Defines whether sending email is enabled or not |
 --
 --  == Sending an email ==
 --  Sending an email when an event is posted can be done by using
