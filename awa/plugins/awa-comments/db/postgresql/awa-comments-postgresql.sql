@@ -25,3 +25,9 @@ CREATE TABLE awa_comment (
 INSERT INTO entity_type (name) VALUES
 ('awa_comment')
 ;
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_comment"), "message");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_comment"), "status");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_comment"), "format");
