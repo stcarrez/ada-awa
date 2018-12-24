@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-services -- AWA Event Manager
---  Copyright (C) 2012, 2015, 2016 Stephane Carrez
+--  Copyright (C) 2012, 2015, 2016, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,8 +26,6 @@ with ADO.Sessions;
 with AWA.Events.Dispatchers.Tasks;
 with AWA.Events.Dispatchers.Actions;
 package body AWA.Events.Services is
-
-   use type Util.Strings.Name_Access;
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Events.Services");
 
