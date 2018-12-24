@@ -17,8 +17,14 @@
 -----------------------------------------------------------------------
 
 with Ada.Calendar;
+with Ada.Strings.Hash;
+
+with Util.Strings;
 with Util.Beans.Objects;
+with Util.Log.Loggers;
+
 with ADO.Objects;
+with ADO.Schemas;
 with ADO.Sessions.Entities;
 with AWA.Audits.Models;
 with AWA.Services.Contexts;
@@ -29,6 +35,14 @@ package body AWA.Audits.Services is
 
    use type ASC.Service_Context_Access;
 
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Audits.Services");
+
+   function Hash (Item : in Field_Key) return Ada.Containers.Hash_Type is
+      use type Ada.Containers.Hash_Type;
+   begin
+      return Ada.Containers.Hash_Type (Item.Entity) + Ada.Strings.Hash (Item.Name);
+   end Hash;
+
    --  ------------------------------
    --  Save the audit changes in the database.
    --  ------------------------------
@@ -37,19 +51,21 @@ package body AWA.Audits.Services is
                    Session : in out ADO.Sessions.Master_Session'Class;
                    Object  : in ADO.Audits.Auditable_Object_Record'Class;
                    Changes : in ADO.Audits.Audit_Array) is
-      pragma Unreferenced (Manager);
-
       Context : constant ASC.Service_Context_Access := ASC.Current;
       Now     : constant Ada.Calendar.Time := Ada.Calendar.Clock;
+      Class   : constant ADO.Schemas.Class_Mapping_Access
+        := Object.Get_Key.Of_Class;
       Kind    : constant ADO.Entity_Type
         := ADO.Sessions.Entities.Find_Entity_Type (Session, Object.Get_Key);
    begin
       for C of Changes loop
          declare
             Audit : AWA.Audits.Models.Audit_Ref;
+            Field : constant Util.Strings.Name_Access := Class.Members (C.Field);
          begin
             Audit.Set_Entity_Id (ADO.Objects.Get_Value (Object.Get_Key));
             Audit.Set_Entity_Type (Kind);
+            Audit.Set_Field (Manager.Get_Audit_Field (Field.all, Kind));
             if UBO.Is_Null (C.Old_Value) then
                Audit.Set_Old_Value (ADO.Null_String);
             else
@@ -68,5 +84,24 @@ package body AWA.Audits.Services is
          end;
       end loop;
    end Save;
+
+   --  ------------------------------
+   --  Find the audit field identification number from the entity type and field name.
+   --  ------------------------------
+   function Get_Audit_Field (Manager : in Audit_Manager;
+                             Name    : in String;
+                             Entity  : in ADO.Entity_Type) return ADO.Identifier is
+      Key : constant Field_Key := Field_Key '(Len    => Name'Length,
+                                              Name   => Name,
+                                              Entity => Entity);
+      Pos : constant Audit_Field_Maps.Cursor := Manager.Fields.Find (Key);
+   begin
+      if Audit_Field_Maps.Has_Element (Pos) then
+         return Audit_Field_Maps.Element (Pos);
+      else
+         Log.Warn ("Audit field {0} for {1} not found", Name, ADO.Entity_Type'Image (Entity));
+         return ADO.NO_IDENTIFIER;
+      end if;
+   end Get_Audit_Field;
 
 end AWA.Audits.Services;
