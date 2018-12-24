@@ -83,7 +83,7 @@ At this step, you may even build your new project and start it. The `make` comma
 files and create the `bin/atlas-server` executable that represents the web application.
 
 ```
-make
+make generate build
 bin/atlas-server
 ```
 
