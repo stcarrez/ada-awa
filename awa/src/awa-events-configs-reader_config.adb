@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with AWA.Events.Queues;
 with AWA.Services.Contexts;
 package body AWA.Events.Configs.Reader_Config is
 
