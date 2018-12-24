@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-oauth-filters -- OAuth filter
---  Copyright (C) 2017 Stephane Carrez
+--  Copyright (C) 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,17 +16,12 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Ada.Strings.Unbounded;
-
 with ASF.Requests;
 with ASF.Responses;
 with ASF.Sessions;
-with ASF.Principals;
 with ASF.Filters;
 with ASF.Servlets;
-with ASF.Security.Filters;
 
-with AWA.Users.Principals;
 with AWA.OAuth.Services;
 package AWA.OAuth.Filters is
 
@@ -58,8 +53,6 @@ package AWA.OAuth.Filters is
                         Chain    : in out ASF.Servlets.Filter_Chain);
 
 private
-
-   use Ada.Strings.Unbounded;
 
    type Auth_Filter is new ASF.Filters.Filter with record
       Realm : AWA.OAuth.Services.Auth_Manager_Access;
