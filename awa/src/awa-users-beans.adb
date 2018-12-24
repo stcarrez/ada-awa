@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-beans -- ASF Beans for user module
---  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,6 @@ with ASF.Sessions;
 with ASF.Events.Faces.Actions;
 with ASF.Contexts.Faces;
 with ASF.Contexts.Flash;
-with ASF.Requests;
 with ASF.Cookies;
 with ASF.Applications.Messages.Factory;
 with ASF.Security.Filters;
@@ -265,6 +264,7 @@ package body AWA.Users.Beans is
    --  ------------------------------
    procedure Load_User (Data    : in out Authenticate_Bean;
                         Outcome : in out Unbounded_String) is
+      pragma Unreferenced (Outcome);
       User  : User_Ref;
       Email : Email_Ref;
    begin
