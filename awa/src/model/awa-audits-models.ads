@@ -39,6 +39,14 @@ package AWA.Audits.Models is
 
    type Audit_Ref is new ADO.Objects.Object_Ref with null record;
 
+   type Audit_Field_Ref is new ADO.Objects.Object_Ref with null record;
+
+   --  --------------------
+   --  The Audit table records the changes made on database on behalf of a user.
+   --  The record indicates the database table and row, the field being updated,
+   --  the old and new value. The old and new values are converted to a string
+   --  and they truncated if necessary to 256 characters.
+   --  --------------------
    --  Create an object key for Audit.
    function Audit_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
    --  Create an object key for Audit from a string.
@@ -168,6 +176,94 @@ package AWA.Audits.Models is
    procedure List (Object  : in out Audit_Vector;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class);
+   --  --------------------
+   --  The Audit_Field table describes
+   --  the database field being updated.
+   --  --------------------
+   --  Create an object key for Audit_Field.
+   function Audit_Field_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
+   --  Create an object key for Audit_Field from a string.
+   --  Raises Constraint_Error if the string cannot be converted into the object key.
+   function Audit_Field_Key (Id : in String) return ADO.Objects.Object_Key;
+
+   Null_Audit_Field : constant Audit_Field_Ref;
+   function "=" (Left, Right : Audit_Field_Ref'Class) return Boolean;
+
+   --  Set the audit field identifier.
+   procedure Set_Id (Object : in out Audit_Field_Ref;
+                     Value  : in ADO.Identifier);
+
+   --  Get the audit field identifier.
+   function Get_Id (Object : in Audit_Field_Ref)
+                 return ADO.Identifier;
+
+   --  Set the audit field name.
+   procedure Set_Name (Object : in out Audit_Field_Ref;
+                       Value  : in Ada.Strings.Unbounded.Unbounded_String);
+   procedure Set_Name (Object : in out Audit_Field_Ref;
+                       Value : in String);
+
+   --  Get the audit field name.
+   function Get_Name (Object : in Audit_Field_Ref)
+                 return Ada.Strings.Unbounded.Unbounded_String;
+   function Get_Name (Object : in Audit_Field_Ref)
+                 return String;
+
+   --
+   procedure Set_Entity_Type (Object : in out Audit_Field_Ref;
+                              Value  : in ADO.Entity_Type);
+
+   --
+   function Get_Entity_Type (Object : in Audit_Field_Ref)
+                 return ADO.Entity_Type;
+
+   --  Load the entity identified by 'Id'.
+   --  Raises the NOT_FOUND exception if it does not exist.
+   procedure Load (Object  : in out Audit_Field_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier);
+
+   --  Load the entity identified by 'Id'.
+   --  Returns True in <b>Found</b> if the object was found and False if it does not exist.
+   procedure Load (Object  : in out Audit_Field_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier;
+                   Found   : out Boolean);
+
+   --  Find and load the entity.
+   overriding
+   procedure Find (Object  : in out Audit_Field_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean);
+
+   --  Save the entity.  If the entity does not have an identifier, an identifier is allocated
+   --  and it is inserted in the table.  Otherwise, only data fields which have been changed
+   --  are updated.
+   overriding
+   procedure Save (Object  : in out Audit_Field_Ref;
+                   Session : in out ADO.Sessions.Master_Session'Class);
+
+   --  Delete the entity.
+   overriding
+   procedure Delete (Object  : in out Audit_Field_Ref;
+                     Session : in out ADO.Sessions.Master_Session'Class);
+
+   overriding
+   function Get_Value (From : in Audit_Field_Ref;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Table definition
+   AUDIT_FIELD_TABLE : constant ADO.Schemas.Class_Mapping_Access;
+
+   --  Internal method to allocate the Object_Record instance
+   overriding
+   procedure Allocate (Object : in out Audit_Field_Ref);
+
+   --  Copy of the object.
+   procedure Copy (Object : in Audit_Field_Ref;
+                   Into   : in out Audit_Field_Ref);
+
 
 
 
@@ -243,4 +339,63 @@ private
 
    procedure Set_Field (Object : in out Audit_Ref'Class;
                         Impl   : out Audit_Access);
+   AUDIT_FIELD_NAME : aliased constant String := "awa_audit_field";
+   COL_0_2_NAME : aliased constant String := "id";
+   COL_1_2_NAME : aliased constant String := "name";
+   COL_2_2_NAME : aliased constant String := "entity_type";
+
+   AUDIT_FIELD_DEF : aliased constant ADO.Schemas.Class_Mapping :=
+     (Count   => 3,
+      Table   => AUDIT_FIELD_NAME'Access,
+      Members => (
+         1 => COL_0_2_NAME'Access,
+         2 => COL_1_2_NAME'Access,
+         3 => COL_2_2_NAME'Access)
+     );
+   AUDIT_FIELD_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := AUDIT_FIELD_DEF'Access;
+
+
+   Null_Audit_Field : constant Audit_Field_Ref
+      := Audit_Field_Ref'(ADO.Objects.Object_Ref with null record);
+
+   type Audit_Field_Impl is
+      new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
+                                     Of_Class => AUDIT_FIELD_DEF'Access)
+   with record
+       Name : Ada.Strings.Unbounded.Unbounded_String;
+       Entity_Type : ADO.Entity_Type;
+   end record;
+
+   type Audit_Field_Access is access all Audit_Field_Impl;
+
+   overriding
+   procedure Destroy (Object : access Audit_Field_Impl);
+
+   overriding
+   procedure Find (Object  : in out Audit_Field_Impl;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean);
+
+   overriding
+   procedure Load (Object  : in out Audit_Field_Impl;
+                   Session : in out ADO.Sessions.Session'Class);
+   procedure Load (Object  : in out Audit_Field_Impl;
+                   Stmt    : in out ADO.Statements.Query_Statement'Class;
+                   Session : in out ADO.Sessions.Session'Class);
+
+   overriding
+   procedure Save (Object  : in out Audit_Field_Impl;
+                   Session : in out ADO.Sessions.Master_Session'Class);
+
+   procedure Create (Object  : in out Audit_Field_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class);
+
+   overriding
+   procedure Delete (Object  : in out Audit_Field_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class);
+
+   procedure Set_Field (Object : in out Audit_Field_Ref'Class;
+                        Impl   : out Audit_Field_Access);
 end AWA.Audits.Models;
