@@ -18,6 +18,7 @@
 with Security;
 with Security.OAuth.Servers;
 with Util.Beans.Objects;
+with ASF.Principals;
 with AWA.Applications;
 with AWA.Services.Contexts;
 package body AWA.OAuth.Filters is
