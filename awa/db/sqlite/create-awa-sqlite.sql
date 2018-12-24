@@ -294,6 +294,14 @@ INSERT INTO entity_type (name) VALUES ("awa_access_key");
 INSERT INTO entity_type (name) VALUES ("awa_email");
 INSERT INTO entity_type (name) VALUES ("awa_session");
 INSERT INTO entity_type (name) VALUES ("awa_user");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "first_name");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "last_name");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "country");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "name");
 /* Copied from awa_counters-sqlite.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -363,6 +371,12 @@ CREATE TABLE awa_comment (
   PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_comment");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_comment"), "message");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_comment"), "status");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_comment"), "format");
 /* Copied from awa-workspaces-sqlite.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -877,6 +891,22 @@ CREATE TABLE awa_post (
 );
 INSERT INTO entity_type (name) VALUES ("awa_blog");
 INSERT INTO entity_type (name) VALUES ("awa_post");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "name");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "uid");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "url");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "title");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "uri");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "publish_date");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "status");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "allow_comments");
 /* Copied from awa-changelogs-sqlite.sql*/
 /* File generated automatically by dynamo */
 /*  */

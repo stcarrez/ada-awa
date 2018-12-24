@@ -270,3 +270,11 @@ INSERT INTO entity_type (name) VALUES ("awa_access_key");
 INSERT INTO entity_type (name) VALUES ("awa_email");
 INSERT INTO entity_type (name) VALUES ("awa_session");
 INSERT INTO entity_type (name) VALUES ("awa_user");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "first_name");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "last_name");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "country");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "name");
