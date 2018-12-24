@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-workspaces-beans -- Beans for module workspaces
---  Copyright (C) 2011, 2012, 2017 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -156,7 +156,7 @@ package body AWA.Workspaces.Beans is
    --  ------------------------------
    procedure Create (Bean  : in out Workspaces_Bean;
                      Event : in AWA.Events.Module_Event'Class) is
-      pragma Unreferenced (Bean, Event);
+      pragma Unreferenced (Event);
 
       WS  : AWA.Workspaces.Models.Workspace_Ref;
    begin
