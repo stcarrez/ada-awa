@@ -34,6 +34,7 @@ with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
 with Util.Beans.Objects.Enums;
 with Util.Beans.Basic.Lists;
+with ADO.Audits;
 with AWA.Comments.Models;
 with AWA.Events;
 with AWA.Storages.Models;
@@ -873,13 +874,24 @@ private
    BLOG_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := BLOG_DEF'Access;
 
+   BLOG_AUDIT_DEF : aliased constant ADO.Audits.Auditable_Mapping :=
+     (Count    => 3,
+      Of_Class => BLOG_DEF'Access,
+      Members  => (
+         1 => 1,
+         2 => 3,
+         3 => 6)
+     );
+   BLOG_AUDIT_TABLE : constant ADO.Audits.Auditable_Mapping_Access
+      := BLOG_AUDIT_DEF'Access;
 
    Null_Blog : constant Blog_Ref
       := Blog_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Blog_Impl is
-      new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
-                                     Of_Class => BLOG_DEF'Access)
+      new ADO.Audits.Auditable_Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
+                                     Of_Class => BLOG_DEF'Access,
+                                     With_Audit => BLOG_AUDIT_DEF'Access)
    with record
        Name : Ada.Strings.Unbounded.Unbounded_String;
        Version : Integer;
@@ -955,13 +967,26 @@ private
    POST_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := POST_DEF'Access;
 
+   POST_AUDIT_DEF : aliased constant ADO.Audits.Auditable_Mapping :=
+     (Count    => 5,
+      Of_Class => POST_DEF'Access,
+      Members  => (
+         1 => 1,
+         2 => 4,
+         3 => 6,
+         4 => 7,
+         5 => 8)
+     );
+   POST_AUDIT_TABLE : constant ADO.Audits.Auditable_Mapping_Access
+      := POST_AUDIT_DEF'Access;
 
    Null_Post : constant Post_Ref
       := Post_Ref'(ADO.Objects.Object_Ref with null record);
 
    type Post_Impl is
-      new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
-                                     Of_Class => POST_DEF'Access)
+      new ADO.Audits.Auditable_Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
+                                     Of_Class => POST_DEF'Access,
+                                     With_Audit => POST_AUDIT_DEF'Access)
    with record
        Title : Ada.Strings.Unbounded.Unbounded_String;
        Text : Ada.Strings.Unbounded.Unbounded_String;

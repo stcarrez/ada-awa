@@ -97,7 +97,7 @@ package body AWA.Blogs.Models is
       Impl : Blog_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 2, Impl.Name, Value);
+      ADO.Audits.Set_Field_String (Impl.all, 2, Impl.Name, Value);
    end Set_Name;
 
    procedure Set_Name (Object : in out Blog_Ref;
@@ -105,7 +105,7 @@ package body AWA.Blogs.Models is
       Impl : Blog_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 2, Impl.Name, Value);
+      ADO.Audits.Set_Field_Unbounded_String (Impl.all, 2, Impl.Name, Value);
    end Set_Name;
 
    function Get_Name (Object : in Blog_Ref)
@@ -136,7 +136,7 @@ package body AWA.Blogs.Models is
       Impl : Blog_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 4, Impl.Uid, Value);
+      ADO.Audits.Set_Field_String (Impl.all, 4, Impl.Uid, Value);
    end Set_Uid;
 
    procedure Set_Uid (Object : in out Blog_Ref;
@@ -144,7 +144,7 @@ package body AWA.Blogs.Models is
       Impl : Blog_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 4, Impl.Uid, Value);
+      ADO.Audits.Set_Field_Unbounded_String (Impl.all, 4, Impl.Uid, Value);
    end Set_Uid;
 
    function Get_Uid (Object : in Blog_Ref)
@@ -200,7 +200,7 @@ package body AWA.Blogs.Models is
       Impl : Blog_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 7, Impl.Url, Value);
+      ADO.Audits.Set_Field_String (Impl.all, 7, Impl.Url, Value);
    end Set_Url;
 
    procedure Set_Url (Object : in out Blog_Ref;
@@ -208,7 +208,7 @@ package body AWA.Blogs.Models is
       Impl : Blog_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 7, Impl.Url, Value);
+      ADO.Audits.Set_Field_Unbounded_String (Impl.all, 7, Impl.Url, Value);
    end Set_Url;
 
    function Get_Url (Object : in Blog_Ref)
@@ -444,6 +444,7 @@ package body AWA.Blogs.Models is
                   raise ADO.Objects.LAZY_LOCK;
                end if;
             end if;
+            ADO.Audits.Save (Object, Session);
          end;
       end if;
    end Save;
@@ -477,6 +478,7 @@ package body AWA.Blogs.Models is
          raise ADO.Objects.INSERT_ERROR;
       end if;
       ADO.Objects.Set_Created (Object);
+      ADO.Audits.Save (Object, Session);
    end Create;
 
    procedure Delete (Object  : in out Blog_Impl;
@@ -629,7 +631,7 @@ package body AWA.Blogs.Models is
       Impl : Post_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 2, Impl.Title, Value);
+      ADO.Audits.Set_Field_String (Impl.all, 2, Impl.Title, Value);
    end Set_Title;
 
    procedure Set_Title (Object : in out Post_Ref;
@@ -637,7 +639,7 @@ package body AWA.Blogs.Models is
       Impl : Post_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 2, Impl.Title, Value);
+      ADO.Audits.Set_Field_Unbounded_String (Impl.all, 2, Impl.Title, Value);
    end Set_Title;
 
    function Get_Title (Object : in Post_Ref)
@@ -706,7 +708,7 @@ package body AWA.Blogs.Models is
       Impl : Post_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 5, Impl.Uri, Value);
+      ADO.Audits.Set_Field_String (Impl.all, 5, Impl.Uri, Value);
    end Set_Uri;
 
    procedure Set_Uri (Object : in out Post_Ref;
@@ -714,7 +716,7 @@ package body AWA.Blogs.Models is
       Impl : Post_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 5, Impl.Uri, Value);
+      ADO.Audits.Set_Field_Unbounded_String (Impl.all, 5, Impl.Uri, Value);
    end Set_Uri;
 
    function Get_Uri (Object : in Post_Ref)
@@ -745,7 +747,7 @@ package body AWA.Blogs.Models is
       Impl : Post_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Time (Impl.all, 7, Impl.Publish_Date, Value);
+      ADO.Audits.Set_Field_Time (Impl.all, 7, Impl.Publish_Date, Value);
    end Set_Publish_Date;
 
    function Get_Publish_Date (Object : in Post_Ref)
@@ -760,7 +762,8 @@ package body AWA.Blogs.Models is
    procedure Set_Status (Object : in out Post_Ref;
                          Value  : in AWA.Blogs.Models.Post_Status_Type) is
       procedure Set_Field_Enum is
-         new ADO.Objects.Set_Field_Operation (Post_Status_Type);
+         new ADO.Audits.Set_Field_Operation (Post_Status_Type,
+                                             Post_Status_Type_Objects.To_Object);
       Impl : Post_Access;
    begin
       Set_Field (Object, Impl);
@@ -781,8 +784,8 @@ package body AWA.Blogs.Models is
       Impl : Post_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Boolean (Impl.all, 9, Impl.Allow_Comments, Value);
-      ADO.Objects.Set_Field_Boolean (Impl.all, 9, Impl.Allow_Comments, Value);
+      ADO.Audits.Set_Field_Boolean (Impl.all, 9, Impl.Allow_Comments, Value);
+      ADO.Audits.Set_Field_Boolean (Impl.all, 9, Impl.Allow_Comments, Value);
    end Set_Allow_Comments;
 
    function Get_Allow_Comments (Object : in Post_Ref)
@@ -1071,6 +1074,7 @@ package body AWA.Blogs.Models is
                   raise ADO.Objects.LAZY_LOCK;
                end if;
             end if;
+            ADO.Audits.Save (Object, Session);
          end;
       end if;
    end Save;
@@ -1112,6 +1116,7 @@ package body AWA.Blogs.Models is
          raise ADO.Objects.INSERT_ERROR;
       end if;
       ADO.Objects.Set_Created (Object);
+      ADO.Audits.Save (Object, Session);
    end Create;
 
    procedure Delete (Object  : in out Post_Impl;
