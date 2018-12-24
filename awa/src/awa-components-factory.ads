@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-components-factory -- Factory for AWA UI Components
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,8 +18,6 @@
 
 with ASF.Factory;
 package AWA.Components.Factory is
-
-   use ASF;
 
    --  Get the AWA component factory.
    function Definition return ASF.Factory.Factory_Bindings_Access;
