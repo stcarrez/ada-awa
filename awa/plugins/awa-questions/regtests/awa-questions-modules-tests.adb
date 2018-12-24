@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-questions-modules-tests -- Unit tests for storage service
---  Copyright (C) 2013, 2014 Stephane Carrez
+--  Copyright (C) 2013, 2014, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,7 +35,6 @@ with AWA.Tests.Helpers.Users;
 package body AWA.Questions.Modules.Tests is
 
    use Util.Tests;
-   use ADO;
 
    package Caller is new Util.Test_Caller (Test, "Questions.Services");
 
@@ -107,8 +106,6 @@ package body AWA.Questions.Modules.Tests is
    --  Test list of questions.
    --  ------------------------------
    procedure Test_List_Questions (T : in out Test) is
-      use AWA.Questions.Models;
-      use AWA.Questions.Beans;
       use type Util.Beans.Basic.Readonly_Bean_Access;
 
       Sec_Ctx   : Security.Contexts.Security_Context;
