@@ -32,6 +32,7 @@ with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
 with Util.Beans.Objects.Enums;
 with Util.Beans.Basic.Lists;
+with ADO.Audits;
 pragma Warnings (On);
 package AWA.Users.Models is
 
@@ -668,13 +669,25 @@ private
    USER_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := USER_DEF'Access;
 
+   USER_AUDIT_DEF : aliased constant ADO.Audits.Auditable_Mapping :=
+     (Count    => 4,
+      Of_Class => USER_DEF'Access,
+      Members  => (
+         1 => 0,
+         2 => 1,
+         3 => 4,
+         4 => 5)
+     );
+   USER_AUDIT_TABLE : constant ADO.Audits.Auditable_Mapping_Access
+      := USER_AUDIT_DEF'Access;
 
    Null_User : constant User_Ref
       := User_Ref'(ADO.Objects.Object_Ref with null record);
 
    type User_Impl is
-      new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
-                                     Of_Class => USER_DEF'Access)
+      new ADO.Audits.Auditable_Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
+                                     Of_Class => USER_DEF'Access,
+                                     With_Audit => USER_AUDIT_DEF'Access)
    with record
        First_Name : Ada.Strings.Unbounded.Unbounded_String;
        Last_Name : Ada.Strings.Unbounded.Unbounded_String;

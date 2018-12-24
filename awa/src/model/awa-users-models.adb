@@ -506,7 +506,7 @@ package body AWA.Users.Models is
       Impl : User_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 1, Impl.First_Name, Value);
+      ADO.Audits.Set_Field_String (Impl.all, 1, Impl.First_Name, Value);
    end Set_First_Name;
 
    procedure Set_First_Name (Object : in out User_Ref;
@@ -514,7 +514,7 @@ package body AWA.Users.Models is
       Impl : User_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 1, Impl.First_Name, Value);
+      ADO.Audits.Set_Field_Unbounded_String (Impl.all, 1, Impl.First_Name, Value);
    end Set_First_Name;
 
    function Get_First_Name (Object : in User_Ref)
@@ -536,7 +536,7 @@ package body AWA.Users.Models is
       Impl : User_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 2, Impl.Last_Name, Value);
+      ADO.Audits.Set_Field_String (Impl.all, 2, Impl.Last_Name, Value);
    end Set_Last_Name;
 
    procedure Set_Last_Name (Object : in out User_Ref;
@@ -544,7 +544,7 @@ package body AWA.Users.Models is
       Impl : User_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 2, Impl.Last_Name, Value);
+      ADO.Audits.Set_Field_Unbounded_String (Impl.all, 2, Impl.Last_Name, Value);
    end Set_Last_Name;
 
    function Get_Last_Name (Object : in User_Ref)
@@ -626,7 +626,7 @@ package body AWA.Users.Models is
       Impl : User_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 5, Impl.Country, Value);
+      ADO.Audits.Set_Field_String (Impl.all, 5, Impl.Country, Value);
    end Set_Country;
 
    procedure Set_Country (Object : in out User_Ref;
@@ -634,7 +634,7 @@ package body AWA.Users.Models is
       Impl : User_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 5, Impl.Country, Value);
+      ADO.Audits.Set_Field_Unbounded_String (Impl.all, 5, Impl.Country, Value);
    end Set_Country;
 
    function Get_Country (Object : in User_Ref)
@@ -656,7 +656,7 @@ package body AWA.Users.Models is
       Impl : User_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 6, Impl.Name, Value);
+      ADO.Audits.Set_Field_String (Impl.all, 6, Impl.Name, Value);
    end Set_Name;
 
    procedure Set_Name (Object : in out User_Ref;
@@ -664,7 +664,7 @@ package body AWA.Users.Models is
       Impl : User_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 6, Impl.Name, Value);
+      ADO.Audits.Set_Field_Unbounded_String (Impl.all, 6, Impl.Name, Value);
    end Set_Name;
 
    function Get_Name (Object : in User_Ref)
@@ -968,6 +968,7 @@ package body AWA.Users.Models is
                   raise ADO.Objects.LAZY_LOCK;
                end if;
             end if;
+            ADO.Audits.Save (Object, Session);
          end;
       end if;
    end Save;
@@ -1005,6 +1006,7 @@ package body AWA.Users.Models is
          raise ADO.Objects.INSERT_ERROR;
       end if;
       ADO.Objects.Set_Created (Object);
+      ADO.Audits.Save (Object, Session);
    end Create;
 
    procedure Delete (Object  : in out User_Impl;
