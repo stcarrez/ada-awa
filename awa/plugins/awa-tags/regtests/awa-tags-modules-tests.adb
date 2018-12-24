@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-tags-modules-tests -- Unit tests for tags module
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2013, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,9 +27,6 @@ with AWA.Services.Contexts;
 with AWA.Tests.Helpers.Users;
 with AWA.Tags.Beans;
 package body AWA.Tags.Modules.Tests is
-
-   use Util.Tests;
-   use ADO;
 
    package Caller is new Util.Test_Caller (Test, "Tags.Modules");
 
