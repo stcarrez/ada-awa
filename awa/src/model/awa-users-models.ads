@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2017 Stephane Carrez
+--  Copyright (C) 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -579,19 +579,19 @@ private
    COL_5_1_NAME : aliased constant String := "user_id";
 
    EMAIL_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 6,
-      Table => EMAIL_NAME'Access,
+     (Count   => 6,
+      Table   => EMAIL_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
          2 => COL_1_1_NAME'Access,
          3 => COL_2_1_NAME'Access,
          4 => COL_3_1_NAME'Access,
          5 => COL_4_1_NAME'Access,
-         6 => COL_5_1_NAME'Access
-)
+         6 => COL_5_1_NAME'Access)
      );
    EMAIL_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := EMAIL_DEF'Access;
+
 
    Null_Email : constant Email_Ref
       := Email_Ref'(ADO.Objects.Object_Ref with null record);
@@ -651,8 +651,8 @@ private
    COL_9_2_NAME : aliased constant String := "email_id";
 
    USER_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 10,
-      Table => USER_NAME'Access,
+     (Count   => 10,
+      Table   => USER_NAME'Access,
       Members => (
          1 => COL_0_2_NAME'Access,
          2 => COL_1_2_NAME'Access,
@@ -663,11 +663,11 @@ private
          7 => COL_6_2_NAME'Access,
          8 => COL_7_2_NAME'Access,
          9 => COL_8_2_NAME'Access,
-         10 => COL_9_2_NAME'Access
-)
+         10 => COL_9_2_NAME'Access)
      );
    USER_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := USER_DEF'Access;
+
 
    Null_User : constant User_Ref
       := User_Ref'(ADO.Objects.Object_Ref with null record);
@@ -727,19 +727,19 @@ private
    COL_5_3_NAME : aliased constant String := "user_id";
 
    ACCESS_KEY_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 6,
-      Table => ACCESS_KEY_NAME'Access,
+     (Count   => 6,
+      Table   => ACCESS_KEY_NAME'Access,
       Members => (
          1 => COL_0_3_NAME'Access,
          2 => COL_1_3_NAME'Access,
          3 => COL_2_3_NAME'Access,
          4 => COL_3_3_NAME'Access,
          5 => COL_4_3_NAME'Access,
-         6 => COL_5_3_NAME'Access
-)
+         6 => COL_5_3_NAME'Access)
      );
    ACCESS_KEY_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := ACCESS_KEY_DEF'Access;
+
 
    Null_Access_Key : constant Access_Key_Ref
       := Access_Key_Ref'(ADO.Objects.Object_Ref with null record);
@@ -798,8 +798,8 @@ private
    COL_8_4_NAME : aliased constant String := "user_id";
 
    SESSION_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 9,
-      Table => SESSION_NAME'Access,
+     (Count   => 9,
+      Table   => SESSION_NAME'Access,
       Members => (
          1 => COL_0_4_NAME'Access,
          2 => COL_1_4_NAME'Access,
@@ -809,11 +809,11 @@ private
          6 => COL_5_4_NAME'Access,
          7 => COL_6_4_NAME'Access,
          8 => COL_7_4_NAME'Access,
-         9 => COL_8_4_NAME'Access
-)
+         9 => COL_8_4_NAME'Access)
      );
    SESSION_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := SESSION_DEF'Access;
+
 
    Null_Session : constant Session_Ref
       := Session_Ref'(ADO.Objects.Object_Ref with null record);

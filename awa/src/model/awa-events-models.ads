@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2017 Stephane Carrez
+--  Copyright (C) 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -436,15 +436,15 @@ private
    COL_1_1_NAME : aliased constant String := "name";
 
    MESSAGE_TYPE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 2,
-      Table => MESSAGE_TYPE_NAME'Access,
+     (Count   => 2,
+      Table   => MESSAGE_TYPE_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
-         2 => COL_1_1_NAME'Access
-)
+         2 => COL_1_1_NAME'Access)
      );
    MESSAGE_TYPE_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := MESSAGE_TYPE_DEF'Access;
+
 
    Null_Message_Type : constant Message_Type_Ref
       := Message_Type_Ref'(ADO.Objects.Object_Ref with null record);
@@ -493,16 +493,16 @@ private
    COL_2_2_NAME : aliased constant String := "name";
 
    QUEUE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 3,
-      Table => QUEUE_NAME'Access,
+     (Count   => 3,
+      Table   => QUEUE_NAME'Access,
       Members => (
          1 => COL_0_2_NAME'Access,
          2 => COL_1_2_NAME'Access,
-         3 => COL_2_2_NAME'Access
-)
+         3 => COL_2_2_NAME'Access)
      );
    QUEUE_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := QUEUE_DEF'Access;
+
 
    Null_Queue : constant Queue_Ref
       := Queue_Ref'(ADO.Objects.Object_Ref with null record);
@@ -566,8 +566,8 @@ private
    COL_16_3_NAME : aliased constant String := "session_id";
 
    MESSAGE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 17,
-      Table => MESSAGE_NAME'Access,
+     (Count   => 17,
+      Table   => MESSAGE_NAME'Access,
       Members => (
          1 => COL_0_3_NAME'Access,
          2 => COL_1_3_NAME'Access,
@@ -585,11 +585,11 @@ private
          14 => COL_13_3_NAME'Access,
          15 => COL_14_3_NAME'Access,
          16 => COL_15_3_NAME'Access,
-         17 => COL_16_3_NAME'Access
-)
+         17 => COL_16_3_NAME'Access)
      );
    MESSAGE_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := MESSAGE_DEF'Access;
+
 
    Null_Message : constant Message_Ref
       := Message_Ref'(ADO.Objects.Object_Ref with null record);

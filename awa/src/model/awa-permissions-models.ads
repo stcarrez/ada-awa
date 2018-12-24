@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2017 Stephane Carrez
+--  Copyright (C) 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -260,8 +260,8 @@ private
    COL_6_1_NAME : aliased constant String := "permission";
 
    ACL_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 7,
-      Table => ACL_NAME'Access,
+     (Count   => 7,
+      Table   => ACL_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
          2 => COL_1_1_NAME'Access,
@@ -269,11 +269,11 @@ private
          4 => COL_3_1_NAME'Access,
          5 => COL_4_1_NAME'Access,
          6 => COL_5_1_NAME'Access,
-         7 => COL_6_1_NAME'Access
-)
+         7 => COL_6_1_NAME'Access)
      );
    ACL_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := ACL_DEF'Access;
+
 
    Null_ACL : constant ACL_Ref
       := ACL_Ref'(ADO.Objects.Object_Ref with null record);
@@ -326,15 +326,15 @@ private
    COL_1_2_NAME : aliased constant String := "name";
 
    PERMISSION_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count => 2,
-      Table => PERMISSION_NAME'Access,
+     (Count   => 2,
+      Table   => PERMISSION_NAME'Access,
       Members => (
          1 => COL_0_2_NAME'Access,
-         2 => COL_1_2_NAME'Access
-)
+         2 => COL_1_2_NAME'Access)
      );
    PERMISSION_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := PERMISSION_DEF'Access;
+
 
    Null_Permission : constant Permission_Ref
       := Permission_Ref'(ADO.Objects.Object_Ref with null record);
