@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-questions-services-tests -- Unit tests for storage service
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2013, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,9 +25,6 @@ with AWA.Services.Contexts;
 with AWA.Votes.Modules;
 with AWA.Tests.Helpers.Users;
 package body AWA.Votes.Modules.Tests is
-
-   use Util.Tests;
-   use ADO;
 
    package Caller is new Util.Test_Caller (Test, "Votes.Services");
 
