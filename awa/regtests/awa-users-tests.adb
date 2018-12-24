@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  files.tests -- Unit tests for files
---  Copyright (C) 2009, 2010, 2011, 2012, 2017 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +29,6 @@ with ASF.Principals;
 package body AWA.Users.Tests is
 
    use ASF.Tests;
-   use AWA.Tests;
 
    package Caller is new Util.Test_Caller (Test, "Users.Tests");
 

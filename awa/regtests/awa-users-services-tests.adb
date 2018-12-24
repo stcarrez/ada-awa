@@ -30,7 +30,6 @@ with AWA.Users.Modules;
 with AWA.Tests.Helpers.Users;
 package body AWA.Users.Services.Tests is
 
-   use Util.Tests;
    use ADO;
    use ADO.Objects;
 
@@ -68,7 +67,7 @@ package body AWA.Users.Services.Tests is
 
       --  Verify the user session
       declare
-      use type Ada.Calendar.Time;
+         use type Ada.Calendar.Time;
          S1 : Session_Ref;
          U1 : User_Ref;
          T1 : constant Ada.Calendar.Time := Principal.Session.Get_Start_Date;
