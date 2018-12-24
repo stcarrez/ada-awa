@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa -- Ada Web Application
---  Copyright (C) 2009, 2010, 2011, 2012, 2015, 2016, 2017 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2015, 2016, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -404,7 +404,9 @@ package body AWA.Modules is
    --  Get the database connection for reading
    --  ------------------------------
    function Get_Session (Manager : Module)
-                            return ADO.Sessions.Session is
+                         return ADO.Sessions.Session is
+      pragma Unreferenced (Manager);
+
       Ctx : constant ASC.Service_Context_Access := ASC.Current;
    begin
       return ASC.Get_Session (Ctx);
@@ -415,6 +417,8 @@ package body AWA.Modules is
    --  ------------------------------
    function Get_Master_Session (Manager : Module)
                                 return ADO.Sessions.Master_Session is
+      pragma Unreferenced (Manager);
+
       Ctx : constant ASC.Service_Context_Access := ASC.Current;
    begin
       return ASC.Get_Master_Session (Ctx);
