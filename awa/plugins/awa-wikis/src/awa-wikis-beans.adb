@@ -268,7 +268,6 @@ package body AWA.Wikis.Beans is
                            Params   : in out Wiki.Attributes.Attribute_List;
                            Template : out Wiki.Strings.UString) is
       use Wiki.Strings;
-      use type ADO.Identifier;
       package ASC renames AWA.Services.Contexts;
 
       First   : constant Wiki.Attributes.Cursor := Wiki.Attributes.First (Params);
@@ -1022,7 +1021,6 @@ package body AWA.Wikis.Beans is
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       use AWA.Wikis.Models;
       use AWA.Services;
-      use type ADO.Identifier;
       use type Ada.Strings.Unbounded.Unbounded_String;
 
       Ctx         : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
@@ -1158,7 +1156,6 @@ package body AWA.Wikis.Beans is
    overriding
    procedure Load (Into    : in out Wiki_Page_Info_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
-      use type ADO.Identifier;
       use type Ada.Strings.Unbounded.Unbounded_String;
    begin
       --  Load the wiki page first.

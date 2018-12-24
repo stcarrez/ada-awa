@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-modules -- Module wikis
---  Copyright (C) 2015, 2016, 2017 Stephane Carrez
+--  Copyright (C) 2015, 2016, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,6 @@ with AWA.Workspaces.Models;
 with AWA.Workspaces.Modules;
 with AWA.Modules.Get;
 with AWA.Permissions;
-with AWA.Permissions.Services;
 with AWA.Users.Models;
 with AWA.Wikis.Beans;
 with AWA.Modules.Beans;
