@@ -15,16 +15,10 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with Ada.Strings.Unbounded;
 
-with Util.Beans.Objects;
 with Util.Serialize.Mappers;
-with EL.Expressions;
-with EL.Beans;
 with EL.Contexts;
-with ADO.Sessions;
 
-with AWA.Events.Queues;
 with AWA.Events.Services;
 
 --  Setup the XML parser to read the <b>queue</b> and <b>on-event</b> description.
