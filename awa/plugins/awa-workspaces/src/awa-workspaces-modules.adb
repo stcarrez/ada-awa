@@ -34,9 +34,10 @@ package body AWA.Workspaces.Modules is
 
    use type ADO.Identifier;
 
+   package APS renames AWA.Permissions.Services;
    package ASC renames AWA.Services.Contexts;
 
-   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Awa.Workspaces.Module");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Workspaces.Module");
 
    package Register is new AWA.Modules.Beans (Module => Workspace_Module,
                                               Module_Access => Workspace_Module_Access);
@@ -70,7 +71,7 @@ package body AWA.Workspaces.Modules is
       AWA.Modules.Module (Plugin).Initialize (App, Props);
 
       Plugin.User_Manager := AWA.Users.Modules.Get_User_Manager;
-      Plugin.Perm_Manager := Permissions.Services.Permission_Manager'Class (Sec_Manager.all)'Access;
+      Plugin.Perm_Manager := APS.Permission_Manager'Class (Sec_Manager.all)'Access;
       Plugin.Add_Listener (AWA.Users.Modules.NAME, Plugin'Unchecked_Access);
    end Initialize;
 
