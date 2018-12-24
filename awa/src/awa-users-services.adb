@@ -553,11 +553,9 @@ package body AWA.Users.Services is
       Ctx           : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB            : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Access_Key    : Access_Key_Ref;
-      Query         : ADO.SQL.Query;
       Stmt          : Query_Statement := DB.Create_Statement (COUNT_SQL);
       Email_Address : constant String := Email.Get_Email;
       Password      : constant String := User.Get_Password;
-      Found         : Boolean;
    begin
       Log.Info ("Create user {0}", Email_Address);
       Ctx.Start;
@@ -670,7 +668,8 @@ package body AWA.Users.Services is
 
       --  Make a random salt and generate the password hash.
       Cur_User.Set_Salt (Model.Create_Key (Cur_User.Get_Id));
-      Cur_User.Set_Password (User_Service'Class (Model).Get_Password_Hash (Cur_User.Get_Salt, Password));
+      Cur_User.Set_Password
+        (User_Service'Class (Model).Get_Password_Hash (Cur_User.Get_Salt, Password));
       Cur_User.Save (DB);
 
       User_Ref (User) := Cur_User;
@@ -701,6 +700,8 @@ package body AWA.Users.Services is
                         User      : in out User_Ref'Class;
                         Email     : in out Email_Ref'Class;
                         Key       : in String) is
+      pragma Unreferenced (Model);
+
       Ctx           : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB            : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Access_Key    : Access_Key_Ref;
