@@ -24,7 +24,6 @@ with AWA.Blogs.Beans;
 with AWA.Applications;
 with AWA.Services.Contexts;
 with AWA.Permissions;
-with AWA.Permissions.Services;
 with AWA.Workspaces.Models;
 with AWA.Workspaces.Modules;
 with AWA.Storages.Models;
@@ -122,7 +121,6 @@ package body AWA.Blogs.Modules is
                           Title        : in String;
                           Result       : out ADO.Identifier) is
       pragma Unreferenced (Model);
-      use type ADO.Identifier;
 
       Ctx   : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
       User  : constant ADO.Identifier := Ctx.Get_User_Identifier;
@@ -172,7 +170,6 @@ package body AWA.Blogs.Modules is
                           Status  : in AWA.Blogs.Models.Post_Status_Type;
                           Result  : out ADO.Identifier) is
       pragma Unreferenced (Model);
-      use type ADO.Identifier;
       use type AWA.Blogs.Models.Post_Status_Type;
 
       Ctx   : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
