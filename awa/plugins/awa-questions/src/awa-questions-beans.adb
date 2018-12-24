@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-questions-beans -- Beans for module questions
---  Copyright (C) 2012, 2013, 2015, 2017 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2015, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -218,7 +218,6 @@ package body AWA.Questions.Beans is
    --  ------------------------------
    procedure Load_List (Into : in out Question_List_Bean) is
       use AWA.Questions.Models;
-      use AWA.Services;
       use type ADO.Identifier;
 
       Session : ADO.Sessions.Session := Into.Service.Get_Session;
@@ -255,9 +254,6 @@ package body AWA.Questions.Beans is
    --  ------------------------------
    function Create_Question_List_Bean (Module : in AWA.Questions.Modules.Question_Module_Access)
                                        return Util.Beans.Basic.Readonly_Bean_Access is
-      use AWA.Questions.Models;
-      use AWA.Services;
-
       Object  : constant Question_List_Bean_Access := new Question_List_Bean;
    begin
       Object.Service := Module;
@@ -302,7 +298,6 @@ package body AWA.Questions.Beans is
          declare
             package ASC renames AWA.Services.Contexts;
             use AWA.Questions.Models;
-            use AWA.Services;
 
             Session : ADO.Sessions.Session := From.Service.Get_Session;
             Query   : ADO.Queries.Context;
