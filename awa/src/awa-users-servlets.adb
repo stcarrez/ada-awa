@@ -128,7 +128,6 @@ package body AWA.Users.Servlets is
                                Auth   : in Security.Auth.Authentication;
                                Result : out ASF.Principals.Principal_Access) is
       pragma Unreferenced (Server);
-      use AWA.Users.Modules;
       use AWA.Users.Services;
 
       Manager   : constant User_Service_Access := AWA.Users.Modules.Get_User_Manager;
