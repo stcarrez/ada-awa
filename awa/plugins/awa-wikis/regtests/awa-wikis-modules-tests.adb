@@ -204,7 +204,8 @@ package body AWA.Wikis.Modules.Tests is
       Request.Remove_Attribute ("wikiView");
       ASF.Tests.Do_Get (Request, Reply, "/wikis/view/" & Ident & "/PrivatePage",
                         "wiki-private-1.html");
-      Assert_Equals (T, ASF.Responses.SC_FORBIDDEN, Reply.Get_Status, "Invalid response (PrivatePage)");
+      Assert_Equals (T, ASF.Responses.SC_FORBIDDEN, Reply.Get_Status,
+                     "Invalid response (PrivatePage)");
       Assert_Matches (T, ".*Protected Wiki Page.*", Reply, "Invalid PrivatePage page returned",
                       Status => ASF.Responses.SC_FORBIDDEN);
 
