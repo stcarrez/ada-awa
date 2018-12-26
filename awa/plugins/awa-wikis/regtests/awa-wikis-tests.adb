@@ -37,6 +37,8 @@ package body AWA.Wikis.Tests is
                        Test_Anonymous_Access'Access);
       Caller.Add_Test (Suite, "Test AWA.Wikis.Beans.Save",
                        Test_Create_Wiki'Access);
+      Caller.Add_Test (Suite, "Test AWA.Wikis.Beans.Load (missing)",
+                       Test_Missing_Page'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -162,5 +164,23 @@ package body AWA.Wikis.Tests is
       T.Verify_Anonymous ("WikiThirdPageName", "Wiki page title3");
 
    end Test_Create_Wiki;
+
+   --  ------------------------------
+   --  Test getting a wiki page which does not exist.
+   --  ------------------------------
+   procedure Test_Missing_Page (T : in out Test) is
+      Wiki      : constant String := To_String (T.Wiki_Ident);
+      Request   : ASF.Requests.Mockup.Request;
+      Reply     : ASF.Responses.Mockup.Response;
+   begin
+      ASF.Tests.Do_Get (Request, Reply, "/wikis/view/" & Wiki & "/MissingPage",
+                        "wiki-page-missing.html");
+      ASF.Tests.Assert_Matches (T, ".title.Wiki page does not exist./title.", Reply,
+                                "Wiki page 'MissingPage' is invalid",
+                                ASF.Responses.SC_NOT_FOUND);
+      ASF.Tests.Assert_Matches (T, ".h2.MissingPage./h2.", Reply,
+                                "Wiki page 'MissingPage' header is invalid",
+                                ASF.Responses.SC_NOT_FOUND);
+   end Test_Missing_Page;
 
 end AWA.Wikis.Tests;
