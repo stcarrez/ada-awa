@@ -48,6 +48,11 @@ package AWA.Storages.Models is
    package Storage_Type_Objects is
       new Util.Beans.Objects.Enums (Storage_Type);
 
+   type Nullable_Storage_Type is record
+      Is_Null : Boolean := True;
+      Value   : Storage_Type;
+   end record;
+
    type Storage_Data_Ref is new ADO.Objects.Object_Ref with null record;
 
    type Storage_Folder_Ref is new ADO.Objects.Object_Ref with null record;
