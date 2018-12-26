@@ -5,34 +5,34 @@
 
     <class name="AWA.Wikis.Models.Wiki_View_Info" bean="yes">
         <comment>The information about a wiki page.</comment>
-        <property type='Identifier' name="id">
+        <property type='Identifier' name="id" not-null="no">
             <comment>the wiki page identifier.</comment>
         </property>
-        <property type='String' name="name">
+        <property type='String' name="name" not-null="no">
             <comment>the wiki page name.</comment>
         </property>
-        <property type='String' name="title">
+        <property type='String' name="title" not-null="no">
             <comment>the wiki page title.</comment>
         </property>
-        <property type='Boolean' name="is_public">
+        <property type='Boolean' name="is_public" not-null="no">
             <comment>whether the wiki is public.</comment>
         </property>
-        <property type='Integer' name="version">
+        <property type='Nullable_Integer' name="version" not-null="no">
             <comment>the last version.</comment>
         </property>
-        <property type='Integer' name="read_count">
+        <property type='Nullable_Integer' name="read_count" not-null="no">
             <comment>the number of times the page was displayed.</comment>
         </property>
-        <property type='Date' name="date">
+        <property type='Nullable_Date' name="date" not-null="no">
             <comment>the wiki page creation date.</comment>
         </property>
-        <property type='AWA.Wikis.Models.Format_Type' name="format">
+        <property type='AWA.Wikis.Models.Format_Type' name="format" not-null="no">
             <comment>the wiki page format.</comment>
         </property>
-        <property type='String' name="content">
+        <property type='String' name="content" not-null="no">
             <comment>the wiki page content.</comment>
         </property>
-        <property type='String' name="save_comment">
+        <property type='String' name="save_comment" not-null="no">
             <comment>the wiki version comment.</comment>
         </property>
         <property type='String' name="left_side">
@@ -44,7 +44,7 @@
         <property type='AWA.Wikis.Models.Format_Type' name="side_format">
             <comment>the wiki side format.</comment>
         </property>
-        <property type='String' name="author">
+        <property type='String' name="author" not-null="no">
             <comment>the wiki page author.</comment>
         </property>
         <property type='Identifier' name="acl_id">
