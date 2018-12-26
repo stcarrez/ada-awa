@@ -321,12 +321,10 @@ package body AWA.Wikis.Beans is
       use type ADO.Identifier;
    begin
       if Name = "is_visible" then
-         if From.Is_Public then
-            return Util.Beans.Objects.To_Object (True);
-         elsif From.Acl_Id /= ADO.NO_IDENTIFIER then
-            return Util.Beans.Objects.To_Object (True);
-         else
+         if From.Is_Public.Is_Null or else From.Acl_Id /= ADO.NO_IDENTIFIER then
             return Util.Beans.Objects.To_Object (False);
+         else
+            return Util.Beans.Objects.To_Object (From.Is_Public.Value);
          end if;
       elsif Name = "wiki_id" then
          return ADO.Utils.To_Object (From.Wiki_Space.Get_Id);
@@ -386,7 +384,7 @@ package body AWA.Wikis.Beans is
    --  ------------------------------
    function Get_Syntax (From : in Wiki_View_Bean) return Wiki.Wiki_Syntax is
    begin
-      case From.Format is
+      case (if From.Format.Is_Null then From.Side_Format else From.Format.Value) is
          when Models.FORMAT_CREOLE =>
             return Wiki.SYNTAX_CREOLE;
          when Models.FORMAT_MARKDOWN =>
@@ -415,7 +413,7 @@ package body AWA.Wikis.Beans is
       Ctx     : constant ASC.Service_Context_Access := ASC.Current;
       Session : ADO.Sessions.Session := ASC.Get_Session (Ctx);
       Query   : ADO.Queries.Context;
-      Name    : constant Ada.Strings.Unbounded.Unbounded_String := Bean.Name;
+      Name    : constant Ada.Strings.Unbounded.Unbounded_String := Bean.Name.Value;
    begin
       if Bean.Wiki_Space.Is_Null then
          Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
@@ -436,18 +434,20 @@ package body AWA.Wikis.Beans is
                                         Session => Session);
       Bean.Load (Session, Query);
 
-      if Bean.Id <= 0 then
-         Bean.Name := Name;
-         Bean.Title := Name;
+      if Bean.Id <= 0 or Bean.Is_Public.Is_Null then
+         Bean.Name.Is_Null := False;
+         Bean.Name.Value := Name;
+         Bean.Title.Is_Null := False;
+         Bean.Title.Value := Name;
          Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-created");
 
-      elsif not Bean.Is_Public and Bean.Acl_Id <= 0 then
+      elsif not Bean.Is_Public.Value and Bean.Acl_Id <= 0 then
          Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-visible");
 
       else
          --  Setup the wiki page read counter bean.
          ADO.Objects.Set_Value (Bean.Counter.Object, Bean.Id);
-         Bean.Counter.Value := Bean.Read_Count;
+         Bean.Counter.Value := Bean.Read_Count.Value;
 
          --  Load the wiki page tags.
          Bean.Tags.Load_Tags (Session, Bean.Id);
@@ -459,7 +459,7 @@ package body AWA.Wikis.Beans is
          else
             Bean.Plugins.Condition.Append ("anonymous", "");
          end if;
-         if Bean.Is_Public then
+         if Bean.Is_Public.Value then
             Bean.Plugins.Condition.Append ("public", "");
          else
             Bean.Plugins.Condition.Append ("private", "");
@@ -1214,7 +1214,7 @@ package body AWA.Wikis.Beans is
                                              Height => H);
          end Collect_Image;
 
-         Content : constant String := To_String (Into.Page.Content);
+         Content : constant String := To_String (Into.Page.Content.Value);
       begin
          Engine.Add_Filter (Words'Unchecked_Access);
          Engine.Add_Filter (Links'Unchecked_Access);
