@@ -44,4 +44,7 @@ package AWA.Wikis.Tests is
    --  Test creation of wiki space and page by simulating web requests.
    procedure Test_Create_Wiki (T : in out Test);
 
+   --  Test getting a wiki page which does not exist.
+   procedure Test_Missing_Page (T : in out Test);
+
 end AWA.Wikis.Tests;
