@@ -1771,18 +1771,14 @@ package body AWA.Workspaces.Models is
       elsif Name = "role" then
          Item.Role := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "join_date" then
-         if Util.Beans.Objects.Is_Null (Value) then
-            Item.Join_Date := ADO.Nullable_Time '(Is_Null => True, others => <>);
-         else
-            Item.Join_Date := ADO.Nullable_Time '(Is_Null => False,
-                                        Value   => Util.Beans.Objects.Time.To_Time (Value));
+         Item.Join_Date.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.Join_Date.Is_Null then
+            Item.Join_Date.Value := Util.Beans.Objects.Time.To_Time (Value);
          end if;
       elsif Name = "invite_date" then
-         if Util.Beans.Objects.Is_Null (Value) then
-            Item.Invite_Date := ADO.Nullable_Time '(Is_Null => True, others => <>);
-         else
-            Item.Invite_Date := ADO.Nullable_Time '(Is_Null => False,
-                                        Value   => Util.Beans.Objects.Time.To_Time (Value));
+         Item.Invite_Date.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.Invite_Date.Is_Null then
+            Item.Invite_Date.Value := Util.Beans.Objects.Time.To_Time (Value);
          end if;
       end if;
    end Set_Value;
