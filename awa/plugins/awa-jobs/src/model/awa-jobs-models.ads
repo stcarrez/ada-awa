@@ -44,6 +44,11 @@ package AWA.Jobs.Models is
    package Job_Status_Type_Objects is
       new Util.Beans.Objects.Enums (Job_Status_Type);
 
+   type Nullable_Job_Status_Type is record
+      Is_Null : Boolean := True;
+      Value   : Job_Status_Type;
+   end record;
+
    type Job_Ref is new ADO.Objects.Object_Ref with null record;
 
    --  --------------------
