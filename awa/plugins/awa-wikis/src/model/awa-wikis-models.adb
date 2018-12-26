@@ -2177,23 +2177,59 @@ package body AWA.Wikis.Models is
       if Name = "id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
       elsif Name = "name" then
-         return Util.Beans.Objects.To_Object (From.Name);
+         if From.Name.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.To_Object (From.Name.Value);
+         end if;
       elsif Name = "title" then
-         return Util.Beans.Objects.To_Object (From.Title);
+         if From.Title.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.To_Object (From.Title.Value);
+         end if;
       elsif Name = "is_public" then
-         return Util.Beans.Objects.To_Object (From.Is_Public);
+         if From.Is_Public.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.To_Object (From.Is_Public.Value);
+         end if;
       elsif Name = "version" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Version));
+         if From.Version.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Version.Value));
+         end if;
       elsif Name = "read_count" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Read_Count));
+         if From.Read_Count.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Read_Count.Value));
+         end if;
       elsif Name = "date" then
-         return Util.Beans.Objects.Time.To_Object (From.Date);
+         if From.Date.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.Time.To_Object (From.Date.Value);
+         end if;
       elsif Name = "format" then
-         return AWA.Wikis.Models.Format_Type_Objects.To_Object (From.Format);
+         if From.Format.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Format_Type_Objects.To_Object (From.Format.Value);
+         end if;
       elsif Name = "content" then
-         return Util.Beans.Objects.To_Object (From.Content);
+         if From.Content.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.To_Object (From.Content.Value);
+         end if;
       elsif Name = "save_comment" then
-         return Util.Beans.Objects.To_Object (From.Save_Comment);
+         if From.Save_Comment.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.To_Object (From.Save_Comment.Value);
+         end if;
       elsif Name = "left_side" then
          return Util.Beans.Objects.To_Object (From.Left_Side);
       elsif Name = "right_side" then
@@ -2201,7 +2237,11 @@ package body AWA.Wikis.Models is
       elsif Name = "side_format" then
          return AWA.Wikis.Models.Format_Type_Objects.To_Object (From.Side_Format);
       elsif Name = "author" then
-         return Util.Beans.Objects.To_Object (From.Author);
+         if From.Author.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.To_Object (From.Author.Value);
+         end if;
       elsif Name = "acl_id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Acl_Id));
       end if;
@@ -2220,23 +2260,50 @@ package body AWA.Wikis.Models is
       if Name = "id" then
          Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
       elsif Name = "name" then
-         Item.Name := Util.Beans.Objects.To_Unbounded_String (Value);
+         Item.Name.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.Name.Is_Null then
+            Item.Name.Value := Util.Beans.Objects.To_Unbounded_String (Value);
+         end if;
       elsif Name = "title" then
-         Item.Title := Util.Beans.Objects.To_Unbounded_String (Value);
+         Item.Title.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.Title.Is_Null then
+            Item.Title.Value := Util.Beans.Objects.To_Unbounded_String (Value);
+         end if;
       elsif Name = "is_public" then
-         Item.Is_Public := Util.Beans.Objects.To_Boolean (Value);
+         Item.Is_Public.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.Is_Public.Is_Null then
+            Item.Is_Public.Value := Util.Beans.Objects.To_Boolean (Value);
+         end if;
       elsif Name = "version" then
-         Item.Version := Util.Beans.Objects.To_Integer (Value);
+         Item.Version.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.Version.Is_Null then
+            Item.Version.Value := Util.Beans.Objects.To_Integer (Value);
+         end if;
       elsif Name = "read_count" then
-         Item.Read_Count := Util.Beans.Objects.To_Integer (Value);
+         Item.Read_Count.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.Read_Count.Is_Null then
+            Item.Read_Count.Value := Util.Beans.Objects.To_Integer (Value);
+         end if;
       elsif Name = "date" then
-         Item.Date := Util.Beans.Objects.Time.To_Time (Value);
+         Item.Date.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.Date.Is_Null then
+            Item.Date.Value := Util.Beans.Objects.Time.To_Time (Value);
+         end if;
       elsif Name = "format" then
-         Item.Format := AWA.Wikis.Models.Format_Type_Objects.To_Value (Value);
+         Item.Format.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.Format.Is_Null then
+            Item.Format.Value := Format_Type_Objects.To_Value (Value);
+         end if;
       elsif Name = "content" then
-         Item.Content := Util.Beans.Objects.To_Unbounded_String (Value);
+         Item.Content.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.Content.Is_Null then
+            Item.Content.Value := Util.Beans.Objects.To_Unbounded_String (Value);
+         end if;
       elsif Name = "save_comment" then
-         Item.Save_Comment := Util.Beans.Objects.To_Unbounded_String (Value);
+         Item.Save_Comment.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.Save_Comment.Is_Null then
+            Item.Save_Comment.Value := Util.Beans.Objects.To_Unbounded_String (Value);
+         end if;
       elsif Name = "left_side" then
          Item.Left_Side := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "right_side" then
@@ -2244,7 +2311,10 @@ package body AWA.Wikis.Models is
       elsif Name = "side_format" then
          Item.Side_Format := AWA.Wikis.Models.Format_Type_Objects.To_Value (Value);
       elsif Name = "author" then
-         Item.Author := Util.Beans.Objects.To_Unbounded_String (Value);
+         Item.Author.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.Author.Is_Null then
+            Item.Author.Value := Util.Beans.Objects.To_Unbounded_String (Value);
+         end if;
       elsif Name = "acl_id" then
          Item.Acl_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
       end if;
@@ -2262,19 +2332,22 @@ package body AWA.Wikis.Models is
          raise ADO.Objects.NOT_FOUND;
       end if;
       Into.Id := Stmt.Get_Identifier (0);
-      Into.Name := Stmt.Get_Unbounded_String (1);
-      Into.Title := Stmt.Get_Unbounded_String (2);
-      Into.Is_Public := Stmt.Get_Boolean (3);
-      Into.Version := Stmt.Get_Integer (4);
-      Into.Read_Count := Stmt.Get_Integer (5);
+      Into.Name := Stmt.Get_Nullable_String (1);
+      Into.Title := Stmt.Get_Nullable_String (2);
+      Into.Is_Public := Stmt.Get_Nullable_Boolean (3);
+      Into.Version := Stmt.Get_Nullable_Integer (4);
+      Into.Read_Count := Stmt.Get_Nullable_Integer (5);
       Into.Date := Stmt.Get_Time (6);
-      Into.Format := AWA.Wikis.Models.Format_Type'Val (Stmt.Get_Integer (7));
-      Into.Content := Stmt.Get_Unbounded_String (8);
-      Into.Save_Comment := Stmt.Get_Unbounded_String (9);
+      Into.Format.Is_Null := Stmt.Is_Null (7);
+      if not Into.Format.Is_Null then
+         Into.Format.Value := AWA.Wikis.Models.Format_Type'Val (Stmt.Get_Integer (7));
+      end if;
+      Into.Content := Stmt.Get_Nullable_String (8);
+      Into.Save_Comment := Stmt.Get_Nullable_String (9);
       Into.Left_Side := Stmt.Get_Unbounded_String (10);
       Into.Right_Side := Stmt.Get_Unbounded_String (11);
       Into.Side_Format := AWA.Wikis.Models.Format_Type'Val (Stmt.Get_Integer (12));
-      Into.Author := Stmt.Get_Unbounded_String (13);
+      Into.Author := Stmt.Get_Nullable_String (13);
       Into.Acl_Id := Stmt.Get_Identifier (14);
       Stmt.Next;
    end Read;

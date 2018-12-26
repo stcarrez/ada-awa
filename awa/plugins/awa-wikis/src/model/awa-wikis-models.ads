@@ -50,6 +50,11 @@ package AWA.Wikis.Models is
    package Format_Type_Objects is
       new Util.Beans.Objects.Enums (Format_Type);
 
+   type Nullable_Format_Type is record
+      Is_Null : Boolean := True;
+      Value   : Format_Type;
+   end record;
+
    type Wiki_Content_Ref is new ADO.Objects.Object_Ref with null record;
 
    type Wiki_Space_Ref is new ADO.Objects.Object_Ref with null record;
@@ -797,31 +802,31 @@ package AWA.Wikis.Models is
       Id : ADO.Identifier;
 
       --  the wiki page name.
-      Name : Ada.Strings.Unbounded.Unbounded_String;
+      Name : ADO.Nullable_String;
 
       --  the wiki page title.
-      Title : Ada.Strings.Unbounded.Unbounded_String;
+      Title : ADO.Nullable_String;
 
       --  whether the wiki is public.
-      Is_Public : Boolean;
+      Is_Public : ADO.Nullable_Boolean;
 
       --  the last version.
-      Version : Integer;
+      Version : ADO.Nullable_Integer;
 
       --  the number of times the page was displayed.
-      Read_Count : Integer;
+      Read_Count : ADO.Nullable_Integer;
 
       --  the wiki page creation date.
-      Date : Ada.Calendar.Time;
+      Date : ADO.Nullable_Time;
 
       --  the wiki page format.
-      Format : AWA.Wikis.Models.Format_Type;
+      Format : Nullable_Format_Type;
 
       --  the wiki page content.
-      Content : Ada.Strings.Unbounded.Unbounded_String;
+      Content : ADO.Nullable_String;
 
       --  the wiki version comment.
-      Save_Comment : Ada.Strings.Unbounded.Unbounded_String;
+      Save_Comment : ADO.Nullable_String;
 
       --  the wiki page left side panel.
       Left_Side : Ada.Strings.Unbounded.Unbounded_String;
@@ -833,7 +838,7 @@ package AWA.Wikis.Models is
       Side_Format : AWA.Wikis.Models.Format_Type;
 
       --  the wiki page author.
-      Author : Ada.Strings.Unbounded.Unbounded_String;
+      Author : ADO.Nullable_String;
 
       --  the acl Id if there is one.
       Acl_Id : ADO.Identifier;
@@ -1381,7 +1386,7 @@ private
 
    package File_7 is
       new ADO.Queries.Loaders.File (Path => "wiki-page.xml",
-                                    Sha1 => "AF1DAD113E5BB4F34507D92D188098C84BF1174A");
+                                    Sha1 => "22207D56B65DA5B8AD7DA81FDADE5742133A8770");
 
    package Def_Wikiviewinfo_Wiki_Page is
       new ADO.Queries.Loaders.Query (Name => "wiki-page",
