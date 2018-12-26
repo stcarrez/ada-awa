@@ -43,10 +43,20 @@ package AWA.Users.Models is
    package Key_Type_Objects is
       new Util.Beans.Objects.Enums (Key_Type);
 
+   type Nullable_Key_Type is record
+      Is_Null : Boolean := True;
+      Value   : Key_Type;
+   end record;
+
    type MailDeliveryStatus is (UNKNOWN, VALID, SOFT_BOUNCE, HARD_BOUNCE);
    for MailDeliveryStatus use (UNKNOWN => 0, VALID => 1, SOFT_BOUNCE => 2, HARD_BOUNCE => 3);
    package MailDeliveryStatus_Objects is
       new Util.Beans.Objects.Enums (MailDeliveryStatus);
+
+   type Nullable_MailDeliveryStatus is record
+      Is_Null : Boolean := True;
+      Value   : MailDeliveryStatus;
+   end record;
 
    --  --------------------
    --  The Auth_Session is created when a user is authentified.
@@ -57,6 +67,11 @@ package AWA.Users.Models is
    for Session_Type use (CONNECT_SESSION => 0, AUTH_SESSION => 1, USED_SESSION => 2);
    package Session_Type_Objects is
       new Util.Beans.Objects.Enums (Session_Type);
+
+   type Nullable_Session_Type is record
+      Is_Null : Boolean := True;
+      Value   : Session_Type;
+   end record;
 
    type Email_Ref is new ADO.Objects.Object_Ref with null record;
 

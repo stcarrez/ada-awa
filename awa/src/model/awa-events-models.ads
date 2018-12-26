@@ -45,6 +45,11 @@ package AWA.Events.Models is
    package Message_Status_Type_Objects is
       new Util.Beans.Objects.Enums (Message_Status_Type);
 
+   type Nullable_Message_Status_Type is record
+      Is_Null : Boolean := True;
+      Value   : Message_Status_Type;
+   end record;
+
    type Message_Type_Ref is new ADO.Objects.Object_Ref with null record;
 
    type Queue_Ref is new ADO.Objects.Object_Ref with null record;
