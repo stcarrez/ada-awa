@@ -66,6 +66,17 @@ package body AWA.Wikis.Tests is
                            "wiki-page-" & Page & ".html");
          ASF.Tests.Assert_Contains (T, "The wiki page content", Reply,
                                     "Wiki page " & Page & " is invalid");
+         declare
+            Stream  : Servlet.Streams.Print_Stream := Reply.Get_Output_Stream;
+            Content : Ada.Strings.Unbounded.Unbounded_String;
+         begin
+            Reply.Read_Content (Content);
+            Stream.Write (Content);
+            declare
+               Link : constant String := AWA.Tests.Helpers.Extract_Link (To_String (Content), "Info");
+            begin
+            end;
+         end;
       end if;
    end Verify_Anonymous;
 
@@ -85,6 +96,30 @@ package body AWA.Wikis.Tests is
       ASF.Tests.Assert_Contains (T, "/wikis/view/" & To_String (T.Wiki_Ident)
                                  & "/" & Page, Reply,
                                  "Wiki list recent page does not reference the page");
+
+      ASF.Tests.Do_Get (Request, Reply, "/wikis/list/" & Wiki & "/popular",
+                        "wiki-list-popular.html");
+      ASF.Tests.Assert_Contains (T, "List of pages", Reply,
+                                 "Wiki list popular page is invalid");
+      ASF.Tests.Assert_Contains (T, "/wikis/view/" & To_String (T.Wiki_Ident)
+                                 & "/" & Page, Reply,
+                                 "Wiki list popular page does not reference the page");
+
+      ASF.Tests.Do_Get (Request, Reply, "/wikis/list/" & Wiki & "/name",
+                        "wiki-list-name.html");
+      ASF.Tests.Assert_Contains (T, "List of pages", Reply,
+                                 "Wiki list name page is invalid");
+      ASF.Tests.Assert_Contains (T, "/wikis/view/" & To_String (T.Wiki_Ident)
+                                 & "/" & Page, Reply,
+                                 "Wiki list name page does not reference the page");
+
+      ASF.Tests.Do_Get (Request, Reply, "/wikis/list/" & Wiki & "/name/grid",
+                        "wiki-list-name-grid.html");
+      ASF.Tests.Assert_Contains (T, "List of pages", Reply,
+                                 "Wiki list name/grid page is invalid");
+      ASF.Tests.Assert_Contains (T, "/wikis/view/" & To_String (T.Wiki_Ident)
+                                 & "/" & Page, Reply,
+                                 "Wiki list name/grid page does not reference the page");
 
    end Verify_List_Contains;
 
