@@ -50,6 +50,11 @@ package AWA.Comments.Models is
    package Format_Type_Objects is
       new Util.Beans.Objects.Enums (Format_Type);
 
+   type Nullable_Format_Type is record
+      Is_Null : Boolean := True;
+      Value   : Format_Type;
+   end record;
+
    --  --------------------
    --  The status type defines whether the comment is visible or not.
    --  The comment can be put in the COMMENT_WAITING state so that
@@ -60,6 +65,11 @@ package AWA.Comments.Models is
    for Status_Type use (COMMENT_PUBLISHED => 0, COMMENT_WAITING => 1, COMMENT_SPAM => 2, COMMENT_BLOCKED => 3, COMMENT_ARCHIVED => 4);
    package Status_Type_Objects is
       new Util.Beans.Objects.Enums (Status_Type);
+
+   type Nullable_Status_Type is record
+      Is_Null : Boolean := True;
+      Value   : Status_Type;
+   end record;
 
    type Comment_Ref is new ADO.Objects.Object_Ref with null record;
 
