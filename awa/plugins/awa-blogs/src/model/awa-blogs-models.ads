@@ -51,6 +51,11 @@ package AWA.Blogs.Models is
    package Post_Status_Type_Objects is
       new Util.Beans.Objects.Enums (Post_Status_Type);
 
+   type Nullable_Post_Status_Type is record
+      Is_Null : Boolean := True;
+      Value   : Post_Status_Type;
+   end record;
+
    type Blog_Ref is new ADO.Objects.Object_Ref with null record;
 
    type Post_Ref is new ADO.Objects.Object_Ref with null record;
