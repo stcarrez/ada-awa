@@ -19,6 +19,7 @@
 with Util.Test_Caller;
 with Util.Strings;
 
+with Servlet.Streams;
 with ASF.Requests.Mockup;
 with ASF.Responses.Mockup;
 with ASF.Tests;
@@ -47,9 +48,21 @@ package body AWA.Wikis.Tests is
    procedure Verify_Anonymous (T     : in out Test;
                                Page  : in String;
                                Title : in String) is
+      function Get_Link (Title : in String) return String;
+
       Wiki      : constant String := To_String (T.Wiki_Ident);
       Request   : ASF.Requests.Mockup.Request;
       Reply     : ASF.Responses.Mockup.Response;
+
+      function Get_Link (Title : in String) return String is
+         Stream  : Servlet.Streams.Print_Stream := Reply.Get_Output_Stream;
+         Content : Ada.Strings.Unbounded.Unbounded_String;
+      begin
+         Reply.Read_Content (Content);
+         Stream.Write (Content);
+         return AWA.Tests.Helpers.Extract_Link (To_String (Content), Title);
+      end Get_Link;
+
    begin
       ASF.Tests.Do_Get (Request, Reply, "/wikis/list/" & Wiki & "/recent",
                         "wiki-list-recent.html");
@@ -67,15 +80,26 @@ package body AWA.Wikis.Tests is
          ASF.Tests.Assert_Contains (T, "The wiki page content", Reply,
                                     "Wiki page " & Page & " is invalid");
          declare
-            Stream  : Servlet.Streams.Print_Stream := Reply.Get_Output_Stream;
-            Content : Ada.Strings.Unbounded.Unbounded_String;
+            Info    : constant String := Get_Link ("Info");
+            History : constant String := Get_Link ("History");
          begin
-            Reply.Read_Content (Content);
-            Stream.Write (Content);
-            declare
-               Link : constant String := AWA.Tests.Helpers.Extract_Link (To_String (Content), "Info");
-            begin
-            end;
+            Util.Tests.Assert_Matches (T, "/asfunit/wikis/info/[0-9]+/[0-9]+$", Info,
+                                    "Invalid wiki info link in the response");
+            Util.Tests.Assert_Matches (T, "/asfunit/wikis/history/[0-9]+/[0-9]+$", History,
+                                       "Invalid wiki history link in the response");
+
+            --  Get the information page.
+            ASF.Tests.Do_Get (Request, Reply, Info (Info'First + 8 .. Info'Last),
+                              "wiki-info-" & Page & ".html");
+            ASF.Tests.Assert_Contains (T, "wiki-word-list", Reply,
+                                       "Wiki info page " & Page & " is invalid");
+
+            --  Get the history page.
+            ASF.Tests.Do_Get (Request, Reply, History (History'First + 8 .. History'Last),
+                              "wiki-history-" & Page & ".html");
+            ASF.Tests.Assert_Contains (T, "wiki-page-version", Reply,
+                                       "Wiki history page " & Page & " is invalid");
+
          end;
       end if;
    end Verify_Anonymous;
