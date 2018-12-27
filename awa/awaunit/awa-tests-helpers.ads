@@ -28,4 +28,8 @@ package AWA.Tests.Helpers is
    function Extract_Redirect (Reply : in ASF.Responses.Mockup.Response'Class;
                               Base  : in String) return Ada.Strings.Unbounded.Unbounded_String;
 
+   --  Extract from the response content a link with a given title.
+   function Extract_Link (Content : in String;
+                          Title   : in String) return String;
+
 end AWA.Tests.Helpers;
