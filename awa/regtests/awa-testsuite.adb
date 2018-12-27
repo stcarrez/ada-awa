@@ -56,6 +56,7 @@ with AWA.Settings.Modules.Tests;
 with AWA.Comments.Modules.Tests;
 with AWA.Changelogs.Modules.Tests;
 with AWA.Wikis.Modules.Tests;
+with AWA.Wikis.Tests;
 
 with Servlet.Server;
 package body AWA.Testsuite is
@@ -120,6 +121,7 @@ package body AWA.Testsuite is
       AWA.Tags.Modules.Tests.Add_Tests (Ret);
       AWA.Questions.Modules.Tests.Add_Tests (Ret);
       AWA.Wikis.Modules.Tests.Add_Tests (Ret);
+      AWA.Wikis.Tests.Add_Tests (Ret);
       return Ret;
    end Suite;
 
