@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-tests-helpers - Helpers for AWA unit tests
---  Copyright (C) 2011, 2017 Stephane Carrez
+--  Copyright (C) 2011, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-
+with GNAT.Regpat;
 package body AWA.Tests.Helpers is
 
    --  ------------------------------
@@ -41,5 +41,23 @@ package body AWA.Tests.Helpers is
    begin
       return Ada.Strings.Unbounded.To_Unbounded_String (Extract_Redirect (Reply, Base));
    end Extract_Redirect;
+
+   --  ------------------------------
+   --  Extract from the response content a link with a given title.
+   --  ------------------------------
+   function Extract_Link (Content : in String;
+                          Title   : in String) return String is
+      use GNAT.Regpat;
+
+      Pattern : constant String := " href=""([a-zA-Z0-9/]+)"">" & Title & "</a>";
+      Regexp  : constant Pattern_Matcher := Compile (Expression => Pattern);
+      Result  : GNAT.Regpat.Match_Array (0 .. 1);
+   begin
+      Match (Regexp, Content, Result);
+      if Result (1) = GNAT.Regpat.No_Match then
+         return "";
+      end if;
+      return Content (Result (1).First .. Result (1).Last);
+   end Extract_Link;
 
 end AWA.Tests.Helpers;
