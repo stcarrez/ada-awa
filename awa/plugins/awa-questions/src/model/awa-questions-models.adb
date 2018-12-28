@@ -1130,7 +1130,11 @@ package body AWA.Questions.Models is
       elsif Name = "create_date" then
          return Util.Beans.Objects.Time.To_Object (From.Create_Date);
       elsif Name = "edit_date" then
-         return Util.Beans.Objects.Time.To_Object (From.Edit_Date);
+         if From.Edit_Date.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.Time.To_Object (From.Edit_Date.Value);
+         end if;
       elsif Name = "answer" then
          return Util.Beans.Objects.To_Object (From.Answer);
       elsif Name = "rank" then
@@ -1161,7 +1165,10 @@ package body AWA.Questions.Models is
       elsif Name = "create_date" then
          Item.Create_Date := Util.Beans.Objects.Time.To_Time (Value);
       elsif Name = "edit_date" then
-         Item.Edit_Date := Util.Beans.Objects.Time.To_Time (Value);
+         Item.Edit_Date.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.Edit_Date.Is_Null then
+            Item.Edit_Date.Value := Util.Beans.Objects.Time.To_Time (Value);
+         end if;
       elsif Name = "answer" then
          Item.Answer := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "rank" then
@@ -1238,7 +1245,11 @@ package body AWA.Questions.Models is
       elsif Name = "create_date" then
          return Util.Beans.Objects.Time.To_Object (From.Create_Date);
       elsif Name = "edit_date" then
-         return Util.Beans.Objects.Time.To_Object (From.Edit_Date);
+         if From.Edit_Date.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.Time.To_Object (From.Edit_Date.Value);
+         end if;
       elsif Name = "description" then
          return Util.Beans.Objects.To_Object (From.Description);
       elsif Name = "rating" then
@@ -1271,7 +1282,10 @@ package body AWA.Questions.Models is
       elsif Name = "create_date" then
          Item.Create_Date := Util.Beans.Objects.Time.To_Time (Value);
       elsif Name = "edit_date" then
-         Item.Edit_Date := Util.Beans.Objects.Time.To_Time (Value);
+         Item.Edit_Date.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.Edit_Date.Is_Null then
+            Item.Edit_Date.Value := Util.Beans.Objects.Time.To_Time (Value);
+         end if;
       elsif Name = "description" then
          Item.Description := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "rating" then

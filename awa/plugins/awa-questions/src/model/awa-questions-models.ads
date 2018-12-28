@@ -343,7 +343,7 @@ package AWA.Questions.Models is
       Create_Date : Ada.Calendar.Time;
 
       --  the answer edit date.
-      Edit_Date : Ada.Calendar.Time;
+      Edit_Date : ADO.Nullable_Time;
 
       --  the answer description.
       Answer : Ada.Strings.Unbounded.Unbounded_String;
@@ -413,7 +413,7 @@ package AWA.Questions.Models is
       Create_Date : Ada.Calendar.Time;
 
       --  the question edit date.
-      Edit_Date : Ada.Calendar.Time;
+      Edit_Date : ADO.Nullable_Time;
 
       --  the question description.
       Description : Ada.Strings.Unbounded.Unbounded_String;
@@ -743,7 +743,7 @@ private
 
    package File_1 is
       new ADO.Queries.Loaders.File (Path => "answer-list.xml",
-                                    Sha1 => "D9D27E1C16B0B7CFE836C21746FF3E5B205262CC");
+                                    Sha1 => "2EDE0E19B5963DDEE7C4F8CE3A1B331A0063EC0A");
 
    package Def_Answerinfo_Answer_List is
       new ADO.Queries.Loaders.Query (Name => "answer-list",
@@ -753,7 +753,7 @@ private
 
    package File_2 is
       new ADO.Queries.Loaders.File (Path => "question-info.xml",
-                                    Sha1 => "A1D5F5A8FB625A12FB09D9A6587CF1B217883596");
+                                    Sha1 => "EEBB96CEACAFAD6A3C4CBFCE81E28E885E0740A2");
 
    package Def_Questiondisplayinfo_Question_Info is
       new ADO.Queries.Loaders.Query (Name => "question-info",
