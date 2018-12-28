@@ -19,7 +19,12 @@
   border-right: 2px solid #EEEEEE;
   font-size: 1em;
 }
-.tagedit-list li.tagedit-listelement {list-style-type: none; float: left; margin: 0 5px 5px 0; padding: 0; }
+.tagedit-list li.tagedit-listelement {list-style-type: none; float: left; margin: 0 5px 5px 0; padding: 0;}
+
+.awa-form .tagedit-list li.tagedit-listelement {
+  height: 1em;
+}
+
 /* New Item input */
 .tagedit-list li.tagedit-listelement-new input {border: 0; height: 100%; padding: 2px 5px; width: 15px; background: #fff;}
 .tagedit-list li.tagedit-listelement-new input:focus {outline: none;}
