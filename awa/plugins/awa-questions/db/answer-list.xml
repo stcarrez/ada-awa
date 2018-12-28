@@ -11,7 +11,7 @@
         <property type='Date' name="create_date">
             <comment>the answer creation date.</comment>
         </property>
-        <property type='Date' name="edit_date">
+        <property type='Nullable_Date' name="edit_date" not-null="no">
             <comment>the answer edit date.</comment>
         </property>
         <property type='String' name="answer">
