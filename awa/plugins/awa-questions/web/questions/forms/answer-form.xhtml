@@ -21,7 +21,7 @@
         xmlns:c="http://java.sun.com/jstl/core"
         xmlns:h="http://java.sun.com/jsf/html">
 
-  <div class='awa-post awa-form'>
+  <div class='awa-post ui-widget ui-widget-content ui-corner-all awa-form'>
     <h:form id='post'>
         <h:inputHidden id='question-id' value='#{answer.question_id}' required='false'/>
         <h:inputHidden id='answer-id' value='#{answer.id}' required='false'/>
@@ -33,7 +33,9 @@
                     <h:message for='text' styleClass='awa-error'/>
                 </dt>
                 <dd>
-                    <h:inputTextarea id='text' rows='15' required='false' value='#{answer.answer}'/>
+                    <h:inputTextarea id='text' rows='15' required='false'
+                                     placeholder="#{questionMsg.question_answer_placeholder}"
+                                     value='#{answer.answer}'/>
                 </dd>
             </dl>
             <ul class='awa-buttons'>

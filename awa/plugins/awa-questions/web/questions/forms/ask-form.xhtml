@@ -23,19 +23,22 @@
         xmlns:awa="http://code.google.com/p/ada-awa/jsf"
         xmlns:h="http://java.sun.com/jsf/html">
 
-  <div class='awa-post ui-widget awa-form'>
+  <div class='awa-post ui-widget ui-widget-content ui-corner-all awa-form'>
     <h:form id='post'>
         <h:inputHidden id='question-id' value='#{question.id}' required='false'/>
         <div class='grid_8'>
             <h:messages styleClass='awa-error'/>
-            <w:inputText styleClass="awa-required"
+            <w:inputText styleClass="awa-required ui-corner-all"
                          id='title' size='50' required='true' value='#{question.title}'
+                         placeholder="#{questionMsg.question_title_placeholder}"
                          title='#{questionMsg.question_title_label}'/>
             <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
                 <dt>
                 </dt>
                 <dd>
-                    <h:inputTextarea id='text' rows='15' required='false' value='#{question.description}'/>
+                    <h:inputTextarea id='text' rows='15' required='false'
+                                     placeholder="#{questionMsg.question_description_placeholder}"
+                                     value='#{question.description}'/>
                 </dd>
             </dl>
             <dl class="awa-required">

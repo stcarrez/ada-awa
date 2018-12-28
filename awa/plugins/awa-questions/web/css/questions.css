@@ -1,6 +1,6 @@
 /*
  *  awa-questions -- Questions and answers
- *  Copyright (C) 2013 Stephane Carrez
+ *  Copyright (C) 2013, 2018 Stephane Carrez
  *  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -129,7 +129,6 @@ div.vote-stat, div.answer-stat {
 div.vote-stat span, div.answer-stat span {
     display: inline-block;
     width: 70px;
-    color: #824222;
     color: #C5DBEC;
 }
 
@@ -152,20 +151,11 @@ ul.question-nav {
 ul.question-nav li {
     list-style-type: none;
     float: right;
-    height: 20px;
 }
-#question-nav-ask {
-    margin-right: 100px;
-    margin-bottom: 5px;
+ul.question-nav a {
     background: #DFEFFC;
-    border: 1px solid #C5DBEC;
-    color: #2E6E9E;
-    border-radius: 5px;
 }
 #question-nav-ask a {
-    display: block;
-    padding: 5px;
-    line-height: 12px;
     color: #2E6E9E;
     font-weight: bold;
     text-decoration: none;
