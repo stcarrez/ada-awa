@@ -44,8 +44,8 @@
 
        <sql driver='sqlite'>
     SELECT
-      STRFTIME("%Y", p.publish_date) AS Y,
-      STRFTIME("%m", p.publish_date) AS M,
+      CAST(STRFTIME("%Y", p.publish_date) AS INTEGER) AS Y,
+      CAST(STRFTIME("%m", p.publish_date) AS INTEGER) AS M,
       COUNT(p.id)
     FROM awa_post AS p
     INNER JOIN awa_acl AS acl ON acl.entity_id = :blog_id AND acl.entity_type = :table AND acl.user_id = :user_id AND acl.permission = $permission[blog-create-post]
