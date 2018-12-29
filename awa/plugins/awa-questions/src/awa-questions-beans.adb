@@ -18,11 +18,12 @@
 with ADO.Queries;
 with ADO.Utils;
 with ADO.Sessions;
-with ADO.Sessions.Entities;
 
 with AWA.Tags.Modules;
 with AWA.Services.Contexts;
 package body AWA.Questions.Beans is
+
+   use type ADO.Identifier;
 
    package ASC renames AWA.Services.Contexts;
 
@@ -57,20 +58,38 @@ package body AWA.Questions.Beans is
          From.Set_Description (Util.Beans.Objects.To_String (Value));
 
       elsif Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
-         declare
-            Ctx : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
-            DB  : constant ADO.Sessions.Session := AWA.Services.Contexts.Get_Session (Ctx);
-            Id  : constant ADO.Identifier := ADO.Utils.To_Identifier (Value);
-         begin
-            From.Service.Load_Question (From, Id);
-            From.Tags.Load_Tags (DB, Id);
-         end;
+         From.Set_Id (ADO.Utils.To_Identifier (Value));
       end if;
+
+   exception
+      when Constraint_Error =>
+         From.Set_Id (ADO.NO_IDENTIFIER);
+
    end Set_Value;
+
+   --  ------------------------------
+   --  Load question.
+   --  ------------------------------
+   overriding
+   procedure Load (Bean    : in out Question_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      Ctx   : constant ASC.Service_Context_Access := ASC.Current;
+      DB    : constant ADO.Sessions.Session := ASC.Get_Session (Ctx);
+      Found : Boolean;
+   begin
+      Bean.Service.Load_Question (Bean, Bean.Get_Id, Found);
+      if not Found then
+         Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
+      else
+         Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("loaded");
+         Bean.Tags.Load_Tags (DB, Bean.Id);
+      end if;
+   end Load;
 
    --  ------------------------------
    --  Create or save the question.
    --  ------------------------------
+   overriding
    procedure Save (Bean    : in out Question_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       pragma Unreferenced (Outcome);
@@ -82,6 +101,7 @@ package body AWA.Questions.Beans is
    --  ------------------------------
    --  Delete the question.
    --  ------------------------------
+   overriding
    procedure Delete (Bean    : in out Question_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       pragma Unreferenced (Outcome);
@@ -103,8 +123,9 @@ package body AWA.Questions.Beans is
       return Object.all'Access;
    end Create_Question_Bean;
 
-
+   --  ------------------------------
    --  Get the value identified by the name.
+   --  ------------------------------
    overriding
    function Get_Value (From : in Answer_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
@@ -127,21 +148,47 @@ package body AWA.Questions.Beans is
                         Value : in Util.Beans.Objects.Object) is
    begin
       if Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
-         From.Service.Load_Answer (From, From.Question,
-                                   ADO.Utils.To_Identifier (Value));
+         From.Set_Id (ADO.Utils.To_Identifier (Value));
 
       elsif Name = "answer" then
          From.Set_Answer (Util.Beans.Objects.To_String (Value));
 
       elsif Name = "question_id" and not Util.Beans.Objects.Is_Null (Value) then
-         From.Service.Load_Question (From.Question,
-                                     ADO.Utils.To_Identifier (Value));
+         From.Question.Set_Id (ADO.Utils.To_Identifier (Value));
+
       end if;
+
+   exception
+      when Constraint_Error =>
+         null;
    end Set_Value;
+
+   --  ------------------------------
+   --  Load the answer.
+   --  ------------------------------
+   overriding
+   procedure Load (Bean    : in out Answer_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      Found : Boolean;
+   begin
+      if not Bean.is_Null and then Bean.Get_Id /= ADO.NO_IDENTIFIER then
+         Bean.Service.Load_Answer (Bean, Bean.Question, Bean.Get_Id, Found);
+      elsif not Bean.Question.Is_Null and then Bean.Question.Get_Id /= ADO.NO_IDENTIFIER then
+         Bean.Service.Load_Question (Bean.Question, Bean.Question_Id, Found);
+      else
+         Found := False;
+      end if;
+      if not Found then
+         Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
+      else
+         Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("loaded");
+      end if;
+   end Load;
 
    --  ------------------------------
    --  Create or save the answer.
    --  ------------------------------
+   overriding
    procedure Save (Bean    : in out Answer_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       pragma Unreferenced (Outcome);
@@ -153,6 +200,7 @@ package body AWA.Questions.Beans is
    --  ------------------------------
    --  Delete the question.
    --  ------------------------------
+   overriding
    procedure Delete (Bean    : in out Answer_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       pragma Unreferenced (Outcome);
@@ -209,7 +257,6 @@ package body AWA.Questions.Beans is
    begin
       if Name = "tag" then
          From.Tag := Util.Beans.Objects.To_Unbounded_String (Value);
-         From.Load_List;
       end if;
    end Set_Value;
 
@@ -218,7 +265,6 @@ package body AWA.Questions.Beans is
    --  ------------------------------
    procedure Load_List (Into : in out Question_List_Bean) is
       use AWA.Questions.Models;
-      use type ADO.Identifier;
 
       Session : ADO.Sessions.Session := Into.Service.Get_Session;
       Query   : ADO.Queries.Context;
@@ -231,10 +277,6 @@ package body AWA.Questions.Beans is
       else
          Query.Set_Query (AWA.Questions.Models.Query_Question_List);
       end if;
-      ADO.Sessions.Entities.Bind_Param (Params  => Query,
-                                        Name    => "entity_type",
-                                        Table   => AWA.Questions.Models.QUESTION_TABLE,
-                                        Session => Session);
       AWA.Questions.Models.List (Into.Questions, Session, Query);
       declare
          List : ADO.Utils.Identifier_Vector;
@@ -248,6 +290,16 @@ package body AWA.Questions.Beans is
                               List);
       end;
    end Load_List;
+
+   --  ------------------------------
+   --  Load the list of questions.
+   --  ------------------------------
+   overriding
+   procedure Load (Bean    : in out Question_List_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Bean.Load_List;
+   end Load;
 
    --  ------------------------------
    --  Create the Question_Info_List_Bean bean instance.
@@ -295,43 +347,49 @@ package body AWA.Questions.Beans is
                         Value : in Util.Beans.Objects.Object) is
    begin
       if Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
-         declare
-            package ASC renames AWA.Services.Contexts;
-            use AWA.Questions.Models;
-
-            Session : ADO.Sessions.Session := From.Service.Get_Session;
-            Query   : ADO.Queries.Context;
-            List    : AWA.Questions.Models.Question_Display_Info_List_Bean;
-            Ctx     : constant ASC.Service_Context_Access := ASC.Current;
-            Id      : constant ADO.Identifier := ADO.Utils.To_Identifier (Value);
-         begin
-            Query.Set_Query (AWA.Questions.Models.Query_Question_Info);
-            Query.Bind_Param ("question_id", Id);
-            Query.Bind_Param ("user_id", Ctx.Get_User_Identifier);
-            ADO.Sessions.Entities.Bind_Param (Params  => Query,
-                                              Name    => "entity_type",
-                                              Table   => AWA.Questions.Models.QUESTION_TABLE,
-                                              Session => Session);
-            AWA.Questions.Models.List (List, Session, Query);
-            if not List.List.Is_Empty then
-               From.Question := List.List.Element (1);
-            end if;
-            Query.Clear;
-            Query.Bind_Param ("question_id", Id);
-            Query.Bind_Param ("user_id", Ctx.Get_User_Identifier);
-            ADO.Sessions.Entities.Bind_Param (Params  => Query,
-                                              Name    => "entity_type",
-                                              Table   => AWA.Questions.Models.ANSWER_TABLE,
-                                              Session => Session);
-
-            Query.Set_Query (AWA.Questions.Models.Query_Answer_List);
-            AWA.Questions.Models.List (From.Answer_List, Session, Query);
-
-            --  Load the tags if any.
-            From.Tags.Load_Tags (Session, Id);
-         end;
+         From.Id := ADO.Utils.To_Identifier (Value);
+         From.Answer := Get_Answer_Bean ("answer");
+         From.Answer.Set_Value ("question_id", Value);
       end if;
+
+   exception
+      when Constraint_Error =>
+         null;
    end Set_Value;
+
+   --  ------------------------------
+   --  Load the question and its answers.
+   --  ------------------------------
+   overriding
+   procedure Load (Bean    : in out Question_Display_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      package ASC renames AWA.Services.Contexts;
+      use AWA.Questions.Models;
+
+      Session : ADO.Sessions.Session := Bean.Service.Get_Session;
+      Query   : ADO.Queries.Context;
+      List    : AWA.Questions.Models.Question_Display_Info_List_Bean;
+      Ctx     : constant ASC.Service_Context_Access := ASC.Current;
+   begin
+      Query.Set_Query (AWA.Questions.Models.Query_Question_Info);
+      Query.Bind_Param ("question_id", Bean.Id);
+      Query.Bind_Param ("user_id", Ctx.Get_User_Identifier);
+      AWA.Questions.Models.List (List, Session, Query);
+      if List.List.Is_Empty then
+         Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
+         return;
+      end if;
+      Bean.Question := List.List.Element (1);
+
+      Query.Clear;
+      Query.Bind_Param ("question_id", Bean.Id);
+      Query.Bind_Param ("user_id", Ctx.Get_User_Identifier);
+      Query.Set_Query (AWA.Questions.Models.Query_Answer_List);
+      AWA.Questions.Models.List (Bean.Answer_List, Session, Query);
+
+      --  Load the tags if any.
+      Bean.Tags.Load_Tags (Session, Bean.Id);
+   end Load;
 
    --  ------------------------------
    --  Create the Question_Display_Bean bean instance.
