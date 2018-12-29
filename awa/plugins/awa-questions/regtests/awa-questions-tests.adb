@@ -30,7 +30,7 @@ package body AWA.Questions.Tests is
    use Ada.Strings.Unbounded;
    use AWA.Tests;
 
-   package Caller is new Util.Test_Caller (Test, "Questions");
+   package Caller is new Util.Test_Caller (Test, "Questions.Beans");
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
    begin
