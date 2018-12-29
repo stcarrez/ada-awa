@@ -40,6 +40,8 @@ package body AWA.Questions.Tests is
                        Test_Create_Question'Access);
       Caller.Add_Test (Suite, "Test AWA.Questions.Beans.Load (missing)",
                        Test_Missing_Page'Access);
+      Caller.Add_Test (Suite, "Test AWA.Questions.Beans.Save (answer)",
+                       Test_Answer_Question'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -77,8 +79,6 @@ package body AWA.Questions.Tests is
          ASF.Tests.Do_Get (Request, Reply, "/questions/view/" & Page,
                            "question-page-" & Page & ".html");
          ASF.Tests.Assert_Contains (T, Title, Reply,
-                                    "Question page " & Page & " is invalid");
-         ASF.Tests.Assert_Contains (T, "<h2>" & Title & "</h2>", Reply,
                                     "Question page " & Page & " is invalid");
          ASF.Tests.Assert_Matches (T, ".input type=.hidden. name=.question-id. "
                                    & "value=.[0-9]+. id=.question-id.../input", Reply,
@@ -177,5 +177,50 @@ package body AWA.Questions.Tests is
                                 "Question page content '12345678' is invalid",
                                 ASF.Responses.SC_NOT_FOUND);
    end Test_Missing_Page;
+
+   --  ------------------------------
+   --  Test answer of question by simulating web requests.
+   --  ------------------------------
+   procedure Test_Answer_Question (T : in out Test) is
+      procedure Create_Answer (Content : in String);
+
+      Request   : ASF.Requests.Mockup.Request;
+      Reply     : ASF.Responses.Mockup.Response;
+
+      procedure Create_Answer (Content : in String) is
+      begin
+         Request.Set_Parameter ("post", "1");
+         Request.Set_Parameter ("question-id", To_String (T.Question_Ident));
+         Request.Set_Parameter ("answer-id", "");
+         Request.Set_Parameter ("text", Content);
+         Request.Set_Parameter ("save", "1");
+         ASF.Tests.Do_Post (Request, Reply, "/questions/forms/answer-form.html",
+                            "questions-answer.html");
+
+         ASF.Tests.Assert_Contains (T, "/questions/view/" &  To_String (T.Question_Ident),
+                                    Reply,
+                                    "Answer response is invalid");
+
+         --  Remove the 'question' bean from the request so that we get a new instance
+         --  for the next call.
+         Request.Remove_Attribute ("answer");
+      end Create_Answer;
+
+   begin
+      AWA.Tests.Helpers.Users.Login ("test-answer@test.com", Request);
+
+      Create_Answer ("Answer content 1");
+      T.Verify_Anonymous (To_String (T.Question_Ident), "Answer content 1");
+
+      Create_Answer ("Answer content 2");
+      T.Verify_Anonymous (To_String (T.Question_Ident), "Answer content 1");
+      T.Verify_Anonymous (To_String (T.Question_Ident), "Answer content 2");
+
+      Create_Answer ("Answer content 3");
+      T.Verify_Anonymous (To_String (T.Question_Ident), "Answer content 1");
+      T.Verify_Anonymous (To_String (T.Question_Ident), "Answer content 2");
+      T.Verify_Anonymous (To_String (T.Question_Ident), "Answer content 3");
+
+   end Test_Answer_Question;
 
 end AWA.Questions.Tests;
