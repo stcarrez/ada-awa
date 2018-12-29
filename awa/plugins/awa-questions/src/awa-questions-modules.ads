@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-questions-modules -- Module questions
---  Copyright (C) 2012, 2013 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -64,7 +64,8 @@ package AWA.Questions.Modules is
    --  Load the question.
    procedure Load_Question (Model    : in Question_Module;
                             Question : in out AWA.Questions.Models.Question_Ref'Class;
-                            Id       : in ADO.Identifier);
+                            Id       : in ADO.Identifier;
+                            Found    : out Boolean);
 
    --  Create or save the answer.
    procedure Save_Answer (Model    : in Question_Module;
@@ -79,7 +80,8 @@ package AWA.Questions.Modules is
    procedure Load_Answer (Model    : in Question_Module;
                           Answer   : in out AWA.Questions.Models.Answer_Ref'Class;
                           Question : in out AWA.Questions.Models.Question_Ref'Class;
-                          Id       : in ADO.Identifier);
+                          Id       : in ADO.Identifier;
+                          Found    : out Boolean);
 
 private
 
