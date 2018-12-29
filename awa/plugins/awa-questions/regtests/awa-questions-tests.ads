@@ -44,6 +44,9 @@ package AWA.Questions.Tests is
    --  Test creation of question by simulating web requests.
    procedure Test_Create_Question (T : in out Test);
 
+   --  Test answer of question by simulating web requests.
+   procedure Test_Answer_Question (T : in out Test);
+
    --  Test getting a wiki page which does not exist.
    procedure Test_Missing_Page (T : in out Test);
 
