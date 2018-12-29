@@ -29,6 +29,7 @@ with AWA.Images.Modules.Tests;
 with AWA.Votes.Modules.Tests;
 with AWA.Tags.Modules.Tests;
 with AWA.Questions.Modules.Tests;
+with AWA.Questions.Tests;
 with AWA.Counters.Modules.Tests;
 with AWA.Workspaces.Tests;
 with AWA.Modules.Tests;
@@ -120,6 +121,7 @@ package body AWA.Testsuite is
       AWA.Votes.Modules.Tests.Add_Tests (Ret);
       AWA.Tags.Modules.Tests.Add_Tests (Ret);
       AWA.Questions.Modules.Tests.Add_Tests (Ret);
+      AWA.Questions.Tests.Add_Tests (Ret);
       AWA.Wikis.Modules.Tests.Add_Tests (Ret);
       AWA.Wikis.Tests.Add_Tests (Ret);
       return Ret;
