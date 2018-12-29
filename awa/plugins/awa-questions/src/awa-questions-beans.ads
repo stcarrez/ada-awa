@@ -31,7 +31,6 @@ package AWA.Questions.Beans is
 
    type Question_Bean is new AWA.Questions.Models.Question_Bean with record
       Service   : Modules.Question_Module_Access := null;
-      Id        : ADO.Identifier := ADO.NO_IDENTIFIER;
 
       --  List of tags associated with the question.
       Tags      : aliased AWA.Tags.Beans.Tag_List_Bean;

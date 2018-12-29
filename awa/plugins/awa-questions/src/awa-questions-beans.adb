@@ -82,7 +82,7 @@ package body AWA.Questions.Beans is
          Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
       else
          Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("loaded");
-         Bean.Tags.Load_Tags (DB, Bean.Id);
+         Bean.Tags.Load_Tags (DB, Bean.Get_Id);
       end if;
    end Load;
 
@@ -297,6 +297,7 @@ package body AWA.Questions.Beans is
    overriding
    procedure Load (Bean    : in out Question_List_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      pragma Unreferenced (Outcome);
    begin
       Bean.Load_List;
    end Load;
