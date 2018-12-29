@@ -107,16 +107,33 @@
     <from-view-id>/questions/ask.xhtml</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
-      <to-view-id>/questions/view.xhtml?id=#{question.id}</to-view-id>
+      <to-view-id>/questions/view/#{question.id}</to-view-id>
       <redirect/>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/questions/view.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>loaded</from-outcome>
+      <to-view-id>/questions/view.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>not-found</from-outcome>
+      <status>404</status>
+      <to-view-id>/questions/missing.xhtml</to-view-id>
     </navigation-case>
   </navigation-rule>
 
   <navigation-rule>
     <from-view-id>/questions/edit.xhtml</from-view-id>
     <navigation-case>
+      <from-outcome>loaded</from-outcome>
+      <to-view-id>/questions/edit.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
       <from-outcome>success</from-outcome>
-      <to-view-id>/questions/view.xhtml?id=#{question.id}</to-view-id>
+      <to-view-id>/questions/view/#{question.id}</to-view-id>
       <redirect/>
     </navigation-case>
   </navigation-rule>
@@ -124,8 +141,12 @@
   <navigation-rule>
     <from-view-id>/questions/edit-answer.xhtml</from-view-id>
     <navigation-case>
+      <from-outcome>loaded</from-outcome>
+      <to-view-id>/questions/edit-answer.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
       <from-outcome>success</from-outcome>
-      <to-view-id>/questions/view.xhtml?id=#{answer.question_id}</to-view-id>
+      <to-view-id>/questions/view/#{answer.question_id}</to-view-id>
       <redirect/>
     </navigation-case>
   </navigation-rule>
@@ -183,24 +204,27 @@
     </navigation-case>
   </navigation-rule>
 
-    <filter-mapping>
-        <filter-name>service</filter-name>
-        <url-pattern>/questions/*.html</url-pattern>
-        <url-pattern>/questions/ajax/*</url-pattern>
-        <url-pattern>/questions/*.html</url-pattern>
-    </filter-mapping>
+  <filter-mapping>
+    <filter-name>service</filter-name>
+    <url-pattern>/questions/*.html</url-pattern>
+    <url-pattern>/questions/ajax/*</url-pattern>
+    <url-pattern>/questions/*.html</url-pattern>
+    <url-pattern>/questions/</url-pattern>
+    <url-pattern>/questions/view/#{questionInfo.id}</url-pattern>
+    <url-pattern>/questions/tags/#{questionList.tag}</url-pattern>
+  </filter-mapping>
 
-    <filter-mapping>
-        <filter-name>auth-filter</filter-name>
-        <url-pattern>/questions/forms/*.html</url-pattern>
-        <url-pattern>/questions/*.html</url-pattern>
-        <url-pattern>/questions/ajax/*</url-pattern>
-    </filter-mapping>
+  <filter-mapping>
+    <filter-name>auth-filter</filter-name>
+    <url-pattern>/questions/forms/*.html</url-pattern>
+    <url-pattern>/questions/*.html</url-pattern>
+    <url-pattern>/questions/ajax/*</url-pattern>
+  </filter-mapping>
 
-    <servlet-mapping>
-      <servlet-name>ajax</servlet-name>
-      <url-pattern>/questions/ajax/*</url-pattern>
-    </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ajax</servlet-name>
+    <url-pattern>/questions/ajax/*</url-pattern>
+  </servlet-mapping>
 
     <entity-permission>
         <name>question-create</name>
@@ -279,30 +303,48 @@
         </sql>
     </entity-permission>
 
-    <url-policy>
-        <description>
-           Security rule to allow anonymous users to display the questions.
-        </description>
-        <permission>anonymous</permission>
-        <url-pattern>/questions/view.html</url-pattern>
-        <url-pattern>/questions/list.html</url-pattern>
-        <url-pattern>/questions/tagged.html</url-pattern>
-        <url-pattern>/questions/ajax/questionVote/vote</url-pattern>
-        <url-pattern>/questions/ajax/answerVote/vote</url-pattern>
-    </url-policy>
+  <url-mapping>
+    <pattern>/questions/view/#{questionInfo.id}</pattern>
+    <view-id>/questions/view.html</view-id>
+  </url-mapping>
 
-    <url-policy>
-        <description>
-           Security rule to allow only logged users to post and edit questions.
-        </description>
-        <permission>logged-user</permission>
-        <url-pattern>/questions/ask.html</url-pattern>
-        <url-pattern>/questions/edit.html</url-pattern>
-        <url-pattern>/questions/forms/delete-question.html</url-pattern>
-        <url-pattern>/questions/forms/delete-answer.html</url-pattern>
-        <url-pattern>/questions/forms/answer-form.html</url-pattern>
-        <url-pattern>/questions/edit-answer.html</url-pattern>
-        <url-pattern>/questions/lists/tag-search.html</url-pattern>
-    </url-policy>
+  <url-mapping>
+    <pattern>/questions/edit/#{question.id}</pattern>
+    <view-id>/questions/edit.html</view-id>
+  </url-mapping>
+
+  <url-mapping>
+    <pattern>/questions/tags/#{questionList.tag}</pattern>
+    <view-id>/questions/tagged.html</view-id>
+  </url-mapping>
+
+  <url-policy>
+    <description>
+      Security rule to allow anonymous users to display the questions.
+    </description>
+    <permission>anonymous</permission>
+    <url-pattern>/questions/view/#{questionInfo.id}</url-pattern>
+    <url-pattern>/questions/tags/#{questionList.tag}</url-pattern>
+    <url-pattern>/questions/view.html</url-pattern>
+    <url-pattern>/questions/list.html</url-pattern>
+    <url-pattern>/questions/tagged.html</url-pattern>
+    <url-pattern>/questions/ajax/questionVote/vote</url-pattern>
+    <url-pattern>/questions/ajax/answerVote/vote</url-pattern>
+  </url-policy>
+
+  <url-policy>
+    <description>
+      Security rule to allow only logged users to post and edit questions.
+    </description>
+    <permission>logged-user</permission>
+    <url-pattern>/questions/ask.html</url-pattern>
+    <url-pattern>/questions/edit.html</url-pattern>
+    <url-pattern>/questions/edit/#{question.id}</url-pattern>
+    <url-pattern>/questions/forms/delete-question.html</url-pattern>
+    <url-pattern>/questions/forms/delete-answer.html</url-pattern>
+    <url-pattern>/questions/forms/answer-form.html</url-pattern>
+    <url-pattern>/questions/edit-answer.html</url-pattern>
+    <url-pattern>/questions/lists/tag-search.html</url-pattern>
+  </url-policy>
 
 </module>
