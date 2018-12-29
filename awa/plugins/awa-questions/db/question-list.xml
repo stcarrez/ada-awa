@@ -50,7 +50,7 @@
     FROM awa_question AS q
     INNER JOIN awa_user AS u ON q.author_id = u.id
     INNER JOIN awa_email AS email ON q.author_id = email.user_id
-    LEFT JOIN awa_rating AS r ON r.for_entity_id = q.id AND r.for_entity_type = :entity_type
+    LEFT JOIN awa_rating AS r ON r.for_entity_id = q.id AND r.for_entity_type = $entity_type[awa_question]
     ORDER BY q.create_date DESC
        </sql>
     </query>
@@ -71,8 +71,8 @@
     FROM awa_question AS q
     INNER JOIN awa_user AS u ON q.author_id = u.id
     INNER JOIN awa_email AS email ON q.author_id = email.user_id
-    INNER JOIN awa_tagged_entity AS e ON e.for_entity_id = q.id AND e.entity_type = :entity_type AND e.tag_id = :tag
-    LEFT JOIN awa_rating AS r ON r.for_entity_id = q.id AND r.for_entity_type = :entity_type
+    INNER JOIN awa_tagged_entity AS e ON e.for_entity_id = q.id AND e.entity_type = $entity_type[awa_question] AND e.tag_id = :tag
+    LEFT JOIN awa_rating AS r ON r.for_entity_id = q.id AND r.for_entity_type = $entity_type[awa_question]
     ORDER BY q.create_date DESC
        </sql>
     </query>
