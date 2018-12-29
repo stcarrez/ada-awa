@@ -6,21 +6,15 @@ received.  All this is done through configuration.  The module
 defines a set of specific ASF components to format and prepare the
 email.
 
-## Documentation
-The *mail* module allows an application to format and send a mail
-to users.  This module does not define any web interface.  It provides
-a set of services and methods to send a mail when an event is
-received.  All this is done through configuration.  The module
-defines a set of specific ASF components to format and prepare the
-email.
-
 ## Configuration
 The *mail* module needs some properties to configure the SMTP
 server.
 
-||mail.smtp.host||localhost||Defines the SMTP server host name||
-||mail.smtp.port||25||Defines the SMTP connection port||
-||mail.smtp.enable||1|||Defines whether sending email is enabled or not||
+|Configuration    | Default   | Description                                     |
+| --------------- | --------- | ----------------------------------------------- |
+|mail.smtp.host   | localhost | Defines the SMTP server host name               |
+|mail.smtp.port   | 25        | Defines the SMTP connection port                |
+|mail.smtp.enable | 1         | Defines whether sending email is enabled or not |
 
 ## Sending an email
 Sending an email when an event is posted can be done by using
