@@ -1,5 +1,5 @@
 <!-- List the questions
-  -  Copyright (C) 2013 Stephane Carrez
+  -  Copyright (C) 2013, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,9 +21,15 @@
 	    xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{questionMsg.question_list_title}"/>
+    <ui:param name="pageStyle" value="page-question"/>
 
     <!-- Main page body -->
     <ui:define name="pageBody">
+        <f:metadata>
+            <f:viewParam id='page' value='#{questionList.page}' required="false"/>
+            <f:viewAction action='#{questionList.load}'/>
+        </f:metadata>
+
         <div id='awa-content'>
             <div class='grid_10'>
                 <ui:include src="views/question-nav.xhtml"/>

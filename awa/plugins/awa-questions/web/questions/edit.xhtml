@@ -1,5 +1,5 @@
 <!-- Edit a question
-  -  Copyright (C) 2013 Stephane Carrez
+  -  Copyright (C) 2013, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,11 +21,13 @@
 	    xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{question.title}"/>
+    <ui:param name="pageStyle" value="page-question"/>
 
     <!-- Main page body -->
     <ui:define name="pageBody">
         <f:metadata>
             <f:viewParam id='id' value='#{question.id}'/>
+            <f:viewAction action='#{question.load}'/>
         </f:metadata>
         <div id='awa-content'>
             <ui:include src="forms/ask-form.xhtml"/>

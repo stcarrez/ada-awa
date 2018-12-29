@@ -1,5 +1,5 @@
 <!-- Edit an answer
-  -  Copyright (C) 2013 Stephane Carrez
+  -  Copyright (C) 2013, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,6 +26,7 @@
     <ui:define name="pageBody">
         <f:metadata>
             <f:viewParam id='id' value='#{answer.id}'/>
+            <f:viewAction action='#{answer.load}'/>
         </f:metadata>
         <div id='awa-content'>
             <ui:include src="forms/answer-form.xhtml"/>

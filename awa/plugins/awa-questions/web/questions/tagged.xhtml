@@ -21,11 +21,13 @@
 	    xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{questionMsg.question_list_title}"/>
+    <ui:param name="pageStyle" value="page-question"/>
 
     <!-- Main page body -->
     <ui:define name="pageBody">
         <f:metadata>
             <f:viewParam id='tag' value='#{questionList.tag}'/>
+            <f:viewAction action='#{questionList.load}'/>
         </f:metadata>
         <div id='awa-content'>
             <div class='grid_8 blog-post-tag-info'>
