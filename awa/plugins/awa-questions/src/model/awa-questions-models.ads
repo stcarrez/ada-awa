@@ -559,6 +559,9 @@ package AWA.Questions.Models is
    procedure Delete (Bean : in out Question_Bean;
                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
+   procedure Load (Bean : in out Question_Bean;
+                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
    type Answer_Bean is abstract new AWA.Questions.Models.Answer_Ref
      and Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with null record;
 
@@ -580,6 +583,68 @@ package AWA.Questions.Models is
 
    procedure Delete (Bean : in out Answer_Bean;
                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   procedure Load (Bean : in out Answer_Bean;
+                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   --  --------------------
+   --    load the list of questions
+   --  --------------------
+   type Question_List_Bean is abstract limited
+     new Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with  record
+
+      --  the optional tag to filter questions.
+      Tag : Ada.Strings.Unbounded.Unbounded_String;
+      Page : Integer;
+
+      --  the number of questions per page.
+      Page_Size : Integer;
+
+      --  the number of questions.
+      Count : Integer;
+   end record;
+
+   --  This bean provides some methods that can be used in a Method_Expression.
+   overriding
+   function Get_Method_Bindings (From : in Question_List_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access;
+
+   --  Get the bean attribute identified by the name.
+   overriding
+   function Get_Value (From : in Question_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Question_List_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   procedure Load (Bean : in out Question_List_Bean;
+                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   type Question_Display_Bean is abstract limited
+     new Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with null record;
+
+
+   --  This bean provides some methods that can be used in a Method_Expression.
+   overriding
+   function Get_Method_Bindings (From : in Question_Display_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access;
+
+   --  Get the bean attribute identified by the name.
+   overriding
+   function Get_Value (From : in Question_Display_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Question_Display_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   procedure Load (Bean : in out Question_Display_Bean;
+                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
 
 private
