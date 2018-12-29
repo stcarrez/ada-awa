@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-questions-modules -- Module questions
---  Copyright (C) 2012, 2013, 2015, 2016 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2015, 2016, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -174,12 +174,9 @@ package body AWA.Questions.Modules is
    --  ------------------------------
    procedure Load_Question (Model    : in Question_Module;
                             Question : in out AWA.Questions.Models.Question_Ref'Class;
-                            Id       : in ADO.Identifier) is
-      pragma Unreferenced (Model);
-
-      Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      DB    : ADO.Sessions.Session := AWA.Services.Contexts.Get_Session (Ctx);
-      Found : Boolean;
+                            Id       : in ADO.Identifier;
+                            Found    : out Boolean) is
+      DB : ADO.Sessions.Session := Model.Get_Session;
    begin
       Question.Load (DB, Id, Found);
    end Load_Question;
@@ -247,12 +244,9 @@ package body AWA.Questions.Modules is
    procedure Load_Answer (Model    : in Question_Module;
                           Answer   : in out AWA.Questions.Models.Answer_Ref'Class;
                           Question : in out AWA.Questions.Models.Question_Ref'Class;
-                          Id       : in ADO.Identifier) is
-      pragma Unreferenced (Model);
-
-      Ctx   : constant Services.Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      DB    : ADO.Sessions.Session := AWA.Services.Contexts.Get_Session (Ctx);
-      Found : Boolean;
+                          Id       : in ADO.Identifier;
+                          Found    : out Boolean) is
+      DB : ADO.Sessions.Session := Model.Get_Session;
    begin
       Answer.Load (DB, Id, Found);
       Question := Answer.Get_Question;
