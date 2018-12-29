@@ -219,6 +219,8 @@
     <url-pattern>/questions/forms/*.html</url-pattern>
     <url-pattern>/questions/*.html</url-pattern>
     <url-pattern>/questions/ajax/*</url-pattern>
+    <url-pattern>/questions/view/#{questionInfo.id}</url-pattern>
+    <url-pattern>/questions/tags/#{questionList.tag}</url-pattern>
   </filter-mapping>
 
   <servlet-mapping>
@@ -323,8 +325,8 @@
       Security rule to allow anonymous users to display the questions.
     </description>
     <permission>anonymous</permission>
-    <url-pattern>/questions/view/#{questionInfo.id}</url-pattern>
-    <url-pattern>/questions/tags/#{questionList.tag}</url-pattern>
+    <url-pattern>/questions/view/.*</url-pattern>
+    <url-pattern>/questions/tags/.*</url-pattern>
     <url-pattern>/questions/view.html</url-pattern>
     <url-pattern>/questions/list.html</url-pattern>
     <url-pattern>/questions/tagged.html</url-pattern>
