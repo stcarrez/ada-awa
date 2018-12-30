@@ -22,10 +22,21 @@
         xmlns:h="http://java.sun.com/jsf/html">
 
   <div class='awa-post ui-widget ui-widget-content ui-corner-all awa-form'>
+
     <h:form id='post'>
         <h:inputHidden id='question-id' value='#{answer.question_id}' required='false'/>
         <h:inputHidden id='answer-id' value='#{answer.id}' required='false'/>
         <div class='grid_8'>
+            <dl class="awa-required">
+                <dt></dt>
+                <dd>
+                    <h2>#{answer.title}</h2>
+                    <div class='question-summary'>
+                       #{answer.description}
+                    </div>
+                </dd>
+            </dl>
+
             <h:messages styleClass='awa-error'/>
             <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
                 <dt>
