@@ -31,6 +31,7 @@ package AWA.Questions.Beans is
 
    type Question_Bean is new AWA.Questions.Models.Question_Bean with record
       Service   : Modules.Question_Module_Access := null;
+      Found     : Boolean := False;
 
       --  List of tags associated with the question.
       Tags      : aliased AWA.Tags.Beans.Tag_List_Bean;
@@ -71,6 +72,7 @@ package AWA.Questions.Beans is
    type Answer_Bean is new AWA.Questions.Models.Answer_Bean with record
       Service     : Modules.Question_Module_Access := null;
       Question_Id : ADO.Identifier := ADO.NO_IDENTIFIER;
+      Found       : Boolean := False;
       Question    : AWA.Questions.Models.Question_Ref;
    end record;
    type Answer_Bean_Access is access all Answer_Bean'Class;

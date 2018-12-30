@@ -59,6 +59,7 @@ package body AWA.Questions.Beans is
 
       elsif Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
          From.Set_Id (ADO.Utils.To_Identifier (Value));
+         From.Service.Load_Question (From, From.Get_Id, From.Found);
       end if;
 
    exception
@@ -75,10 +76,9 @@ package body AWA.Questions.Beans is
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       Ctx   : constant ASC.Service_Context_Access := ASC.Current;
       DB    : constant ADO.Sessions.Session := ASC.Get_Session (Ctx);
-      Found : Boolean;
    begin
-      Bean.Service.Load_Question (Bean, Bean.Get_Id, Found);
-      if not Found then
+      Bean.Service.Load_Question (Bean, Bean.Get_Id, Bean.Found);
+      if not Bean.Found then
          Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
       else
          Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("loaded");
@@ -134,6 +134,8 @@ package body AWA.Questions.Beans is
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Question.Get_Id));
       elsif From.Is_Null then
          return Util.Beans.Objects.Null_Object;
+      elsif Name = "title" or Name = "description" then
+         return From.Question.Get_Value (Name);
       else
          return AWA.Questions.Models.Answer_Bean (From).Get_Value (Name);
       end if;
@@ -149,12 +151,14 @@ package body AWA.Questions.Beans is
    begin
       if Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
          From.Set_Id (ADO.Utils.To_Identifier (Value));
+         From.Service.Load_Answer (From, From.Question, From.Get_Id, From.Found);
 
       elsif Name = "answer" then
          From.Set_Answer (Util.Beans.Objects.To_String (Value));
 
       elsif Name = "question_id" and not Util.Beans.Objects.Is_Null (Value) then
          From.Question.Set_Id (ADO.Utils.To_Identifier (Value));
+         From.Service.Load_Question (From.Question, From.Question_Id, From.Found);
 
       end if;
 
