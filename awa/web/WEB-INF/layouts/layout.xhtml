@@ -17,6 +17,7 @@
 <f:view contentType="text/html; charset=UTF-8"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html"><h:doctype rootElement="html"/>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -50,7 +51,7 @@
 </div>
 <ui:include src="footer.xhtml"/>
 <!--dynamo-merge link="/js/all.js" prefix="#{contextPath}" -->
-<script type="text/javascript" src="#{jQuery.path}"></script>
+<script type="text/javascript" src="#{jquery.path}"></script>
 <script type="text/javascript" src="#{jquery.uiPath}core.js"></script>
 <script type="text/javascript" src="#{jquery.uiPath}widget.js"></script>
 <script type="text/javascript" src="#{jquery.uiPath}position.js"></script>
@@ -70,6 +71,7 @@
 <!--DEV_START-->
 <ui:debug/>
 <!--DEV_END-->
+<util:flush/>
 </body>
 </html>
 </f:view>
