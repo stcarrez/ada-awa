@@ -20,7 +20,7 @@ with Ada.Strings;
 with Ada.Calendar;
 
 with Util.Log.Loggers;
-with Util.Strings;
+with Util.Strings.Transforms;
 with Util.Mail;
 with Util.Encoders.HMAC.SHA1;
 
@@ -95,9 +95,15 @@ package body AWA.Users.Services is
    --  Returns the possible user name from his email address.
    --  ------------------------------
    function Get_Name_From_Email (Email : in String) return String is
-      E : constant Util.Mail.Email_Address := Util.Mail.Parse_Address (Email);
+      E    : constant Util.Mail.Email_Address := Util.Mail.Parse_Address (Email);
+      Name : String := To_String (E.Name);
    begin
-      return To_String (E.Name);
+      for I in Name'Range loop
+         if Name (I) = '.' then
+            Name (I) := ' ';
+         end if;
+      end loop;
+      return Util.Strings.Transforms.Capitalize (Name);
    end Get_Name_From_Email;
 
    --  ------------------------------
