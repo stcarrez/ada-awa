@@ -24,6 +24,7 @@
         xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{storageMsg.documents_list_title}"/>
     <ui:param name="top_nav" value="storages"/>
+    <ui:param name="pageStyle" value="page-storages"/>
 
     <!-- Main page body -->
     <ui:define name="pageBody">
@@ -100,8 +101,8 @@
                 </util:script>
             </c:when>
 
-            <c:when test="#{auth:hasPermission('folder-create')}">
-                <div>
+            <c:when test="#{auth:hasPermission('folder-create',0)}">
+                <div class="awa-container">
                     <div class="grid_3">
                         <img src="#{contextPath}/images/storages/folder.png"/>
                     </div>
@@ -114,7 +115,7 @@
                 </div>
             </c:when>
             <c:otherwise>
-                <div>
+                <div class="awa-container">
                     <div class="grid_3">
                         <img src="#{contextPath}/images/storages/folder.png"/>
                     </div>

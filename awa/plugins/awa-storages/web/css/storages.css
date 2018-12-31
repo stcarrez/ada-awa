@@ -15,6 +15,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+.page-storages #ada-page {
+    height: 100%;
+}
 .awa-right-panel .awa-nav {
     margin-top: 1em;
 }

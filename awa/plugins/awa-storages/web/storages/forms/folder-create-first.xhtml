@@ -1,5 +1,5 @@
 <!-- Create first folder form
-  -  Copyright (C) 2013 Stephane Carrez
+  -  Copyright (C) 2013, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,6 +29,7 @@
             </dt>
             <dd>
                 <h:inputText id='foldername' size='30' maxlength="50" required="true"
+                             styleClass="ui-corner-all"
                              validatorMessage='storages.storage_folder_name_required'
                              requiredMessage='storages.storage_folder_name_required'
                              value='#{storageFolder.name}'>
