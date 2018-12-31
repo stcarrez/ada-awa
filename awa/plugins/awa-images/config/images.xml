@@ -37,6 +37,10 @@
         <from-outcome>success</from-outcome>
         <to-view-id>/storages/forms/upload-image-response.xhtml</to-view-id>
       </navigation-case>
+      <navigation-case>
+        <from-outcome>failure</from-outcome>
+        <to-view-id>/storages/forms/upload-image-failed-response.xhtml</to-view-id>
+      </navigation-case>
     </navigation-rule>
 
   <servlet-mapping>
