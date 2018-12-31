@@ -1,0 +1,29 @@
+<!-- Response sent when an image is uploaded
+  -  Copyright (C) 2018 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<f:view contentType="application/json"
+        xmlns:util="http://code.google.com/p/ada-asf/util"
+        xmlns:c="http://java.sun.com/jstl/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core">
+[
+    { "action": "message", "attach": "#awa-upload-button", "data": "<util:escape>
+    <div class='awa-message'>
+      <h:messages styleClass='awa-message-error' globalOnly="true"/>
+    </div>
+</util:escape>" }
+]
+</f:view>
