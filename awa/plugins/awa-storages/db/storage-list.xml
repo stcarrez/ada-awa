@@ -48,7 +48,7 @@
       st.is_public,
       u.name
     FROM awa_storage AS st
-    INNER JOIN awa_acl AS acl ON acl.entity_id = st.workspace_id AND acl.entity_type = :table
+    INNER JOIN awa_acl AS acl ON acl.entity_id = st.workspace_id AND acl.entity_type = $entity_type[awa_workspace]
       AND acl.user_id = :user_id AND acl.permission = $permission[storage-create]
     INNER JOIN awa_user AS u ON st.owner_id = u.id
     WHERE st.folder_id = :folder_id AND st.original_id IS NULL
