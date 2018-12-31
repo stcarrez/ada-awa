@@ -18,9 +18,7 @@
 with ADO.Queries;
 with ADO.Sessions;
 with ADO.Objects;
-with ADO.Sessions.Entities;
 
-with AWA.Workspaces.Models;
 with AWA.Services.Contexts;
 with AWA.Storages.Modules;
 package body AWA.Images.Beans is
@@ -42,8 +40,6 @@ package body AWA.Images.Beans is
       end if;
       Query.Set_Query (AWA.Images.Models.Query_Image_List);
       Query.Bind_Param ("user_id", User);
-      ADO.Sessions.Entities.Bind_Param (Query, "table",
-                                        AWA.Workspaces.Models.WORKSPACE_TABLE, Session);
       if Storage.Folder_Bean.Is_Null then
          Query.Bind_Null_Param ("folder_id");
       else
@@ -117,8 +113,6 @@ package body AWA.Images.Beans is
       Query.Set_Query (AWA.Images.Models.Query_Image_Info);
       Query.Bind_Param (Name => "user_id", Value => User);
       Query.Bind_Param (Name => "file_id", Value => Into.Id);
-      ADO.Sessions.Entities.Bind_Param (Query, "table",
-                                        AWA.Workspaces.Models.WORKSPACE_TABLE, Session);
       Into.Load (Session, Query);
 
    exception
