@@ -74,6 +74,10 @@ body.awa {
 .awa-side-panel {
     display: flex;
     flex-direction: row;
+    width: 100%;
+    height: -webkit-fill-available;
+    height: -moz-available;
+    border-bottom: 1px solid #b5b5b5;
 }
 .awa-left-panel {
 }
@@ -223,8 +227,12 @@ div.awa-messages {
     padding-left: 2%;
     padding-right: 2%;
 }
+
 #asf-message div.awa-message {
     width: 400px;
+}
+.awa-message .awa-message-error li {
+    list-style-type: none
 }
 
 /**
