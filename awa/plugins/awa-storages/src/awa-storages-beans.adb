@@ -17,19 +17,24 @@
 -----------------------------------------------------------------------
 with Ada.Containers;
 
+with Util.Log.Loggers;
+
 with ADO.Utils;
 with ADO.Queries;
 with ADO.Sessions;
 with ADO.Objects;
-with ADO.Sessions.Entities;
 
+with AWA.Permissions;
 with AWA.Helpers.Requests;
-with AWA.Workspaces.Models;
 with AWA.Services.Contexts;
 with AWA.Storages.Services;
 package body AWA.Storages.Beans is
 
+   use Ada.Strings.Unbounded;
+
    package ASC renames AWA.Services.Contexts;
+
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Storages.Beans");
 
    --  ------------------------------
    --  Get the value identified by the name.
@@ -97,6 +102,18 @@ package body AWA.Storages.Beans is
       else
          Manager.Save (Bean, Part, AWA.Storages.Models.DATABASE);
       end if;
+
+   exception
+      when AWA.Permissions.NO_PERMISSION =>
+         Bean.Error := True;
+         Log.Error ("Saving document is refused by the permission controller");
+         raise;
+
+      when E : others =>
+         Bean.Error := True;
+         Log.Error ("Exception when saving the document", E);
+         raise;
+
    end Save_Part;
 
    --  ------------------------------
@@ -104,9 +121,8 @@ package body AWA.Storages.Beans is
    --  ------------------------------
    procedure Upload (Bean    : in out Upload_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
-      pragma Unreferenced (Bean);
    begin
-      Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("success");
+      Outcome := To_Unbounded_String (if Bean.Error then "failure" else "success");
    end Upload;
 
    --  ------------------------------
@@ -215,8 +231,6 @@ package body AWA.Storages.Beans is
    begin
       Query.Set_Query (AWA.Storages.Models.Query_Storage_Folder_List);
       Query.Bind_Param ("user_id", User);
-      ADO.Sessions.Entities.Bind_Param (Query, "table",
-                                        AWA.Workspaces.Models.WORKSPACE_TABLE, Session);
       AWA.Storages.Models.List (Storage.Folder_List_Bean.all, Session, Query);
       Storage.Flags (INIT_FOLDER_LIST) := True;
    end Load_Folders;
@@ -238,8 +252,6 @@ package body AWA.Storages.Beans is
       end if;
       Query.Set_Query (AWA.Storages.Models.Query_Storage_List);
       Query.Bind_Param ("user_id", User);
-      ADO.Sessions.Entities.Bind_Param (Query, "table",
-                                        AWA.Workspaces.Models.WORKSPACE_TABLE, Session);
       if Storage.Folder_Bean.Is_Null then
          Query.Bind_Null_Param ("folder_id");
       else
@@ -327,8 +339,6 @@ package body AWA.Storages.Beans is
    begin
       Query.Set_Query (AWA.Storages.Models.Query_Storage_Folder_List);
       Query.Bind_Param ("user_id", User);
-      ADO.Sessions.Entities.Bind_Param (Query, "table",
-                                        AWA.Workspaces.Models.WORKSPACE_TABLE, Session);
       AWA.Storages.Models.List (Object.all, Session, Query);
       return Object.all'Access;
    end Create_Folder_List_Bean;
