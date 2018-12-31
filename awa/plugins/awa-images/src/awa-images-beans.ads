@@ -17,8 +17,6 @@
 -----------------------------------------------------------------------
 with Ada.Strings.Unbounded;
 
-with ADO;
-
 with Util.Beans.Objects;
 with Util.Beans.Basic;
 with AWA.Storages.Beans;
