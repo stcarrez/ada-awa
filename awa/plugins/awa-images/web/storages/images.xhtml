@@ -23,11 +23,13 @@
         xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{storageMsg.documents_list_title}"/>
     <ui:param name="top_nav" value="storages"/>
+    <ui:param name="pageStyle" value="page-storages"/>
 
     <!-- Main page body -->
     <ui:define name="pageBody">
         <f:metadata>
             <f:viewParam id='page' value='#{imageList.page}' required="false"/>
+            <f:viewParam id='folderId' value='#{imageList.folderId}' required="false"/>
             <f:viewAction action='#{imageList.load}'/>
         </f:metadata>
 
@@ -66,16 +68,16 @@
                             dictDefaultMessage: "#{util:escapeJavaScript(storageMsg.storage_upload_image_form_message)}",
                             dictInvalidFileType: "#{util:escapeJavaScript(storageMsg.storage_upload_form_invalid_file_message)}"
                         });
-                        $('#folder-list-editor').resizable({
+                        $('#awa-folder-left-panel').resizable({
                             minWidth: 100, maxWidth: 400,
                             resize: function(event, ui) {
                                 var width = ui.size.width;
-                                var ow = $('#folder-list-editor').parent().outerWidth();
+                                var ow = $('#awa-folder-left-panel').parent().outerWidth();
                                 width = ow - width - 20;
                                 if (width &lt;= 10) {
                                     width = 10;
                                 }
-                                $('#document-list-editor').css({ width: width });
+                                $('#awa-list-right-panel').css({ width: width });
                             }
                         });
                         $('#document-list-editor').list({
