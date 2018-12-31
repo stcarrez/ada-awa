@@ -63,7 +63,8 @@
       image.width,
       image.height
     FROM awa_storage AS file
-    INNER JOIN awa_acl AS acl ON acl.entity_id = file.workspace_id AND acl.entity_type = :table AND acl.user_id = :user_id
+    INNER JOIN awa_acl AS acl ON acl.entity_id = file.workspace_id
+      AND acl.entity_type = $entity_type[awa_workspace] AND acl.user_id = :user_id
     INNER JOIN awa_storage_folder AS folder ON folder.id = file.folder_id
     INNER JOIN awa_image AS image ON file.id = image.storage_id
     WHERE file.id = :file_id
