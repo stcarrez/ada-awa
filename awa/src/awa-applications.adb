@@ -97,6 +97,10 @@ package body AWA.Applications is
       App.Events.Initialize (App'Unchecked_Access);
       AWA.Modules.Initialize (App.Modules, Conf);
 
+      --  Use a specific error message when the NO_PERMISSION exception is raised.
+      App.Get_Exception_Handler.Set_Message ("AWA.PERMISSIONS.NO_PERMISSION",
+                                             "layout.exception_no_permission");
+
       App.Register_Class ("AWA.Helpers.Selectors.Select_List_Bean",
                           AWA.Helpers.Selectors.Create_Select_List_Bean'Access);
 
