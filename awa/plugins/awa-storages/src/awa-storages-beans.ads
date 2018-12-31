@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-beans -- Storage Ada Beans
---  Copyright (C) 2012, 2016 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,6 +45,7 @@ package AWA.Storages.Beans is
    type Upload_Bean is new AWA.Storages.Models.Upload_Bean with record
       Module    : AWA.Storages.Modules.Storage_Module_Access := null;
       Folder_Id : ADO.Identifier;
+      Error     : Boolean := False;
    end record;
    type Upload_Bean_Access is access all Upload_Bean'Class;
 
