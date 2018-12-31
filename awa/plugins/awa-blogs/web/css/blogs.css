@@ -39,7 +39,7 @@ div.blog-admin div.comment-gravatar, .blog-admin .post-read-count {
 }
 div.blog-admin div.post-title,
 div.blog-admin div.comment-title {
-    width: 45%;
+    width: 40%;
 }
 div.blog-admin div.post-date,
 div.blog-admin div.post-author {
@@ -49,9 +49,11 @@ div.blog-admin div.post-ref {
     width: 40px;
     padding-left: 30px;
 }
-div.blog-admin div.comment-gravatar,
-div.blog-admin div.post-view, div.blog-admin div.post-comment-count, .blog-admin .post-read-count {
+div.blog-admin div.comment-gravatar {
     width: 5%;
+}
+div.blog-admin div.post-view, div.blog-admin div.post-comment-count, .blog-admin .post-read-count {
+    width: 8%;
 }
 div.blog-admin div.comment-author, div.blog-admin div.comment-date {
     width: 20%;
