@@ -28,8 +28,16 @@
         <div class='wiki-image-grid' id="i_#{image.id}">
             <div class='wiki-image-grid-info'>
                 <a href="#{contextPath}/storages/image-info/#{image.id}">
-                <img src="#{contextPath}/storages/images/#{image.thumbnail_id}" width="64" height="64"
-                     alt="#{image.name}"/>
+                <h:panelGroup rendered="#{image.thumbnail_id ge 0}">
+                  <img src="#{contextPath}/storages/images/#{image.thumbnail_id}"
+                       width="64" height="64"
+                       alt="#{image.name}"/>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{image.thumbnail_id lt 0}">
+                  <img src="#{contextPath}/images/storages/icon-gallery-64.png"
+                       width="64" height="64"
+                       alt="#{image.name}"/>
+                </h:panelGroup>
                 <span class="wiki-image-name">#{image.name}</span>
                 </a>
             </div>
