@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-module -- Storage management module
---  Copyright (C) 2012, 2016 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -57,6 +57,10 @@ package body AWA.Storages.Modules is
       Register.Register (Plugin  => Plugin,
                          Name    => "AWA.Storages.Beans.Storage_List_Bean",
                          Handler => AWA.Storages.Beans.Create_Storage_List_Bean'Access);
+
+      Register.Register (Plugin  => Plugin,
+                         Name    => "AWA.Storages.Beans.Storage_Bean",
+                         Handler => AWA.Storages.Beans.Create_Storage_Bean'Access);
 
       App.Add_Servlet ("storage", Plugin.Storage_Servlet'Unchecked_Access);
 
