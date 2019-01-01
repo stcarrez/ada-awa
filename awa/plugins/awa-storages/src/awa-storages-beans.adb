@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-beans -- Storage Ada Beans
---  Copyright (C) 2012, 2013, 2016, 2018 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2016, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -357,5 +357,44 @@ package body AWA.Storages.Beans is
       Object.Flags            := Object.Init_Flags'Access;
       return Object.all'Access;
    end Create_Storage_List_Bean;
+
+   overriding
+   procedure Load (Into    : in out Storage_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      use type ADO.Identifier;
+
+      Ctx     : constant ASC.Service_Context_Access := ASC.Current;
+      User    : constant ADO.Identifier := Ctx.Get_User_Identifier;
+      Session : ADO.Sessions.Session := ASC.Get_Session (Ctx);
+      Query   : ADO.Queries.Context;
+   begin
+      if Into.Id = ADO.NO_IDENTIFIER then
+         Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
+         return;
+      end if;
+
+      --  Get the image information.
+      Query.Set_Query (AWA.Storages.Models.Query_Storage_Info);
+      Query.Bind_Param (Name => "user_id", Value => User);
+      Query.Bind_Param (Name => "file_id", Value => Into.Id);
+      Into.Load (Session, Query);
+
+   exception
+      when ADO.Objects.NOT_FOUND =>
+         Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
+
+   end Load;
+
+   --  ------------------------------
+   --  Create the Storage_Bean bean instance.
+   --  ------------------------------
+   function Create_Storage_Bean (Module : in AWA.Storages.Modules.Storage_Module_Access)
+                               return Util.Beans.Basic.Readonly_Bean_Access is
+      Object    : constant Storage_Bean_Access := new Storage_Bean;
+   begin
+      Object.Module  := Module;
+      Object.Id      := ADO.NO_IDENTIFIER;
+      return Object.all'Access;
+   end Create_Storage_Bean;
 
 end AWA.Storages.Beans;
