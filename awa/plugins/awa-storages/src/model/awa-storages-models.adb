@@ -2030,6 +2030,143 @@ package body AWA.Storages.Models is
       end loop;
    end List;
 
+   procedure Op_Load (Bean    : in out Storage_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Load (Bean    : in out Storage_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Storage_Bean'Class (Bean).Load (Outcome);
+   end Op_Load;
+   package Binding_Storage_Bean_1 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Storage_Bean,
+                                                      Method => Op_Load,
+                                                      Name   => "load");
+
+   Binding_Storage_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
+     := (1 => Binding_Storage_Bean_1.Proxy'Access
+     );
+
+   --  ------------------------------
+   --  This bean provides some methods that can be used in a Method_Expression.
+   --  ------------------------------
+   overriding
+   function Get_Method_Bindings (From : in Storage_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
+   begin
+      return Binding_Storage_Bean_Array'Access;
+   end Get_Method_Bindings;
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Storage_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "folder_id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Folder_Id));
+      elsif Name = "folder_name" then
+         return Util.Beans.Objects.To_Object (From.Folder_Name);
+      elsif Name = "id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
+      elsif Name = "name" then
+         return Util.Beans.Objects.To_Object (From.Name);
+      elsif Name = "create_date" then
+         return Util.Beans.Objects.Time.To_Object (From.Create_Date);
+      elsif Name = "uri" then
+         return Util.Beans.Objects.To_Object (From.Uri);
+      elsif Name = "storage" then
+         return AWA.Storages.Models.Storage_Type_Objects.To_Object (From.Storage);
+      elsif Name = "mime_type" then
+         return Util.Beans.Objects.To_Object (From.Mime_Type);
+      elsif Name = "file_size" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.File_Size));
+      elsif Name = "is_public" then
+         return Util.Beans.Objects.To_Object (From.Is_Public);
+      elsif Name = "width" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Width));
+      elsif Name = "height" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Height));
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Storage_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "folder_id" then
+         Item.Folder_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "folder_name" then
+         Item.Folder_Name := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "id" then
+         Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "name" then
+         Item.Name := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "create_date" then
+         Item.Create_Date := Util.Beans.Objects.Time.To_Time (Value);
+      elsif Name = "uri" then
+         Item.Uri := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "storage" then
+         Item.Storage := AWA.Storages.Models.Storage_Type_Objects.To_Value (Value);
+      elsif Name = "mime_type" then
+         Item.Mime_Type := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "file_size" then
+         Item.File_Size := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "is_public" then
+         Item.Is_Public := Util.Beans.Objects.To_Boolean (Value);
+      elsif Name = "width" then
+         Item.Width := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "height" then
+         Item.Height := Util.Beans.Objects.To_Integer (Value);
+      end if;
+   end Set_Value;
+
+
+   --  --------------------
+   --  Read in the object the data from the query result and prepare to read the next row.
+   --  If there is no row, raise the ADO.NOT_FOUND exception.
+   --  --------------------
+   procedure Read (Into : in out Storage_Bean;
+                   Stmt : in out ADO.Statements.Query_Statement'Class) is
+   begin
+      if not Stmt.Has_Elements then
+         raise ADO.Objects.NOT_FOUND;
+      end if;
+      Into.Folder_Id := Stmt.Get_Identifier (0);
+      Into.Folder_Name := Stmt.Get_Unbounded_String (1);
+      Into.Id := Stmt.Get_Identifier (2);
+      Into.Name := Stmt.Get_Unbounded_String (3);
+      Into.Create_Date := Stmt.Get_Time (4);
+      Into.Uri := Stmt.Get_Unbounded_String (5);
+      Into.Storage := AWA.Storages.Models.Storage_Type'Val (Stmt.Get_Integer (6));
+      Into.Mime_Type := Stmt.Get_Unbounded_String (7);
+      Into.File_Size := Stmt.Get_Integer (8);
+      Into.Is_Public := Stmt.Get_Boolean (9);
+      Into.Width := Stmt.Get_Integer (10);
+      Into.Height := Stmt.Get_Integer (11);
+      Stmt.Next;
+   end Read;
+
+   --  --------------------
+   --  Run the query controlled by <b>Context</b> and load the result in <b>Object</b>.
+   --  --------------------
+   procedure Load (Object  : in out Storage_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+      Stmt : ADO.Statements.Query_Statement := Session.Create_Statement (Context);
+   begin
+      Stmt.Execute;
+      Read (Object, Stmt);
+      if Stmt.Has_Elements then
+         raise ADO.Objects.NOT_FOUND;
+      end if;
+   end Load;
 
 
    --  ------------------------------

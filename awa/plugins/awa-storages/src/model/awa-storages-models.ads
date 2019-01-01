@@ -608,6 +608,80 @@ package AWA.Storages.Models is
    Query_Storage_Folder_List : constant ADO.Queries.Query_Definition_Access;
 
    --  --------------------
+   --    The information about a document.
+   --  --------------------
+   type Storage_Bean is abstract
+     new Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with  record
+
+      --  the document folder identifier.
+      Folder_Id : ADO.Identifier;
+
+      --  the document folder name.
+      Folder_Name : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the document file identifier.
+      Id : ADO.Identifier;
+
+      --  the document file name.
+      Name : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the file creation date.
+      Create_Date : Ada.Calendar.Time;
+
+      --  the file storage URI.
+      Uri : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the file storage URI.
+      Storage : AWA.Storages.Models.Storage_Type;
+
+      --  the file mime type.
+      Mime_Type : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the file size.
+      File_Size : Integer;
+
+      --  whether the document is public.
+      Is_Public : Boolean;
+
+      --  the image width.
+      Width : Integer;
+
+      --  the image height.
+      Height : Integer;
+   end record;
+
+   --  This bean provides some methods that can be used in a Method_Expression.
+   overriding
+   function Get_Method_Bindings (From : in Storage_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access;
+
+   --  Get the bean attribute identified by the name.
+   overriding
+   function Get_Value (From : in Storage_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Storage_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   procedure Load (Bean : in out Storage_Bean;
+                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   --  Read in the object the data from the query result and prepare to read the next row.
+   --  If there is no row, raise the ADO.NOT_FOUND exception.
+   procedure Read (Into : in out Storage_Bean;
+                   Stmt : in out ADO.Statements.Query_Statement'Class);
+
+   --  Run the query controlled by <b>Context</b> and load the result in <b>Object</b>.
+   procedure Load (Object  : in out Storage_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   Query_Storage_Info : constant ADO.Queries.Query_Definition_Access;
+
+   --  --------------------
    --    The list of documents for a given folder.
    --  --------------------
    type Storage_Info is
@@ -1073,12 +1147,22 @@ private
    := Def_Folderinfo_Storage_Folder_List.Query'Access;
 
    package File_3 is
+      new ADO.Queries.Loaders.File (Path => "storage-info.xml",
+                                    Sha1 => "91766026921B59D0C5801C51A45BE3FF65799682");
+
+   package Def_Storagebean_Storage_Info is
+      new ADO.Queries.Loaders.Query (Name => "storage-info",
+                                     File => File_3.File'Access);
+   Query_Storage_Info : constant ADO.Queries.Query_Definition_Access
+   := Def_Storagebean_Storage_Info.Query'Access;
+
+   package File_4 is
       new ADO.Queries.Loaders.File (Path => "storage-list.xml",
                                     Sha1 => "F8592003BD552D8745BD53B46E9CC11D85820AC6");
 
    package Def_Storageinfo_Storage_List is
       new ADO.Queries.Loaders.Query (Name => "storage-list",
-                                     File => File_3.File'Access);
+                                     File => File_4.File'Access);
    Query_Storage_List : constant ADO.Queries.Query_Definition_Access
    := Def_Storageinfo_Storage_List.Query'Access;
 end AWA.Storages.Models;
