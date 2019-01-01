@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2018 Stephane Carrez
+--  Copyright (C) 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -2057,6 +2057,12 @@ package body AWA.Storages.Models is
          return Util.Beans.Objects.To_Object (From.Is_Public);
       elsif Name = "user_name" then
          return Util.Beans.Objects.To_Object (From.User_Name);
+      elsif Name = "thumb_width" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Thumb_Width));
+      elsif Name = "thumb_height" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Thumb_Height));
+      elsif Name = "thumbnail_id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Thumbnail_Id));
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -2088,6 +2094,12 @@ package body AWA.Storages.Models is
          Item.Is_Public := Util.Beans.Objects.To_Boolean (Value);
       elsif Name = "user_name" then
          Item.User_Name := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "thumb_width" then
+         Item.Thumb_Width := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "thumb_height" then
+         Item.Thumb_Height := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "thumbnail_id" then
+         Item.Thumbnail_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
       end if;
    end Set_Value;
 
@@ -2124,6 +2136,9 @@ package body AWA.Storages.Models is
          Into.File_Size := Stmt.Get_Integer (6);
          Into.Is_Public := Stmt.Get_Boolean (7);
          Into.User_Name := Stmt.Get_Unbounded_String (8);
+         Into.Thumb_Width := Stmt.Get_Integer (9);
+         Into.Thumb_Height := Stmt.Get_Integer (10);
+         Into.Thumbnail_Id := Stmt.Get_Identifier (11);
       end Read;
    begin
       Stmt.Execute;

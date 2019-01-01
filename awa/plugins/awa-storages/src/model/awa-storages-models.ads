@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2018 Stephane Carrez
+--  Copyright (C) 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -639,6 +639,15 @@ package AWA.Storages.Models is
 
       --  the user name who uploaded the document.
       User_Name : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the image thumbnail width (or 0).
+      Thumb_Width : Integer;
+
+      --  the image thumbnail height (or 0).
+      Thumb_Height : Integer;
+
+      --  the image thumbnail identifier.
+      Thumbnail_Id : ADO.Identifier;
    end record;
 
    --  Get the bean attribute identified by the name.
@@ -1065,7 +1074,7 @@ private
 
    package File_3 is
       new ADO.Queries.Loaders.File (Path => "storage-list.xml",
-                                    Sha1 => "3B7504A76F354F53AF54ACD1A005F9BDB2600F81");
+                                    Sha1 => "F8592003BD552D8745BD53B46E9CC11D85820AC6");
 
    package Def_Storageinfo_Storage_List is
       new ADO.Queries.Loaders.Query (Name => "storage-list",
