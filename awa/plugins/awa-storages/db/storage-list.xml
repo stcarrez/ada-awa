@@ -32,6 +32,15 @@
         <property type='String' name="user_name">
             <comment>the user name who uploaded the document.</comment>
         </property>
+        <property type='Integer' name="thumb_width">
+            <comment>the image thumbnail width (or 0).</comment>
+        </property>
+        <property type='Integer' name="thumb_height">
+            <comment>the image thumbnail height (or 0).</comment>
+        </property>
+        <property type='Identifier' name="thumbnail_id">
+            <comment>the image thumbnail identifier.</comment>
+        </property>
     </class>
 
     <query name='storage-list'>
@@ -46,11 +55,16 @@
       st.mime_type,
       st.file_size,
       st.is_public,
-      u.name
+      u.name,
+      COALESCE(img.thumb_width, 0),
+      COALESCE(img.thumb_height, 0),
+      img.thumbnail_id
     FROM awa_storage AS st
-    INNER JOIN awa_acl AS acl ON acl.entity_id = st.workspace_id AND acl.entity_type = $entity_type[awa_workspace]
+    INNER JOIN awa_acl AS acl ON acl.entity_id = st.workspace_id
+      AND acl.entity_type = $entity_type[awa_workspace]
       AND acl.user_id = :user_id AND acl.permission = $permission[storage-create]
     INNER JOIN awa_user AS u ON st.owner_id = u.id
+    LEFT JOIN awa_image AS img ON img.storage_id = st.id
     WHERE st.folder_id = :folder_id AND st.original_id IS NULL
     ORDER BY st.create_date DESC
        </sql>
