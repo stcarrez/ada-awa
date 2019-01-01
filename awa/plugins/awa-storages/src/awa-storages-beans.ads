@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-beans -- Storage Ada Beans
---  Copyright (C) 2012, 2016, 2018 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -167,5 +167,22 @@ package AWA.Storages.Beans is
    --  Create the Storage_List_Bean bean instance.
    function Create_Storage_List_Bean (Module : in AWA.Storages.Modules.Storage_Module_Access)
                                       return Util.Beans.Basic.Readonly_Bean_Access;
+
+   --  ------------------------------
+   --  Storage Bean
+   --  ------------------------------
+   --  Information about a document (excluding the document data itself).
+   type Storage_Bean is new AWA.Storages.Models.Storage_Bean with record
+      Module : AWA.Storages.Modules.Storage_Module_Access;
+   end record;
+   type Storage_Bean_Access is access all Storage_Bean'Class;
+
+   overriding
+   procedure Load (Into    : in out Storage_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Create the Storage_Bean bean instance.
+   function Create_Storage_Bean (Module : in AWA.Storages.Modules.Storage_Module_Access)
+                               return Util.Beans.Basic.Readonly_Bean_Access;
 
 end AWA.Storages.Beans;
