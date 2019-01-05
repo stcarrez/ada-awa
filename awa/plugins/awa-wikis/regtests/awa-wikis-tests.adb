@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-tests -- Unit tests for wikis module
---  Copyright (C) 2018 Stephane Carrez
+--  Copyright (C) 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,6 +48,7 @@ package body AWA.Wikis.Tests is
    procedure Verify_Anonymous (T     : in out Test;
                                Page  : in String;
                                Title : in String) is
+      pragma Unreferenced (Title);
       function Get_Link (Title : in String) return String;
 
       Wiki      : constant String := To_String (T.Wiki_Ident);
@@ -163,7 +164,6 @@ package body AWA.Wikis.Tests is
 
       Request   : ASF.Requests.Mockup.Request;
       Reply     : ASF.Responses.Mockup.Response;
-      Uuid      : constant String := Util.Tests.Get_Uuid;
 
       procedure Create_Page (Name : in String; Title : in String) is
       begin
