@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-questions-tests -- Unit tests for questions module
---  Copyright (C) 2018 Stephane Carrez
+--  Copyright (C) 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,9 +17,7 @@
 -----------------------------------------------------------------------
 
 with Util.Test_Caller;
-with Util.Strings;
 
-with Servlet.Streams;
 with ASF.Requests.Mockup;
 with ASF.Responses.Mockup;
 with ASF.Tests;
@@ -50,20 +48,8 @@ package body AWA.Questions.Tests is
    procedure Verify_Anonymous (T     : in out Test;
                                Page  : in String;
                                Title : in String) is
-      function Get_Link (Title : in String) return String;
-
       Request   : ASF.Requests.Mockup.Request;
       Reply     : ASF.Responses.Mockup.Response;
-
-      function Get_Link (Title : in String) return String is
-         Stream  : Servlet.Streams.Print_Stream := Reply.Get_Output_Stream;
-         Content : Ada.Strings.Unbounded.Unbounded_String;
-      begin
-         Reply.Read_Content (Content);
-         Stream.Write (Content);
-         return AWA.Tests.Helpers.Extract_Link (To_String (Content), Title);
-      end Get_Link;
-
    begin
       ASF.Tests.Do_Get (Request, Reply, "/questions/list.html",
                         "question-list.html");
@@ -122,7 +108,6 @@ package body AWA.Questions.Tests is
 
       Request   : ASF.Requests.Mockup.Request;
       Reply     : ASF.Responses.Mockup.Response;
-      Uuid      : constant String := Util.Tests.Get_Uuid;
 
       procedure Create_Question (Title : in String) is
       begin
