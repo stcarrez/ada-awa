@@ -11,7 +11,7 @@ RUN mkdir -p /usr/src \
    && git clone https://github.com/stcarrez/ada-awa.git ada-awa \
    && cd ada-awa \
    && git submodule init \
-   && git submodule update \
+   && git submodule update --recursive --remote \
    && ./configure --enable-ahven --disable-shared --prefix=/usr \
    && make -s \
    && make -s install
