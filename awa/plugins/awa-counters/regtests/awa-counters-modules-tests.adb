@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-modules-tests -- Unit tests for wikis service
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2015, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -72,6 +72,14 @@ package body AWA.Counters.Modules.Tests is
       begin
          for I in 1 .. 1_000 loop
             AWA.Counters.Increment (User_Counter.Index, Context.Get_User);
+         end loop;
+         Util.Measures.Report (S, "AWA.Counters.Increment", 1000);
+      end;
+      declare
+         S : Util.Measures.Stamp;
+      begin
+         for I in 1 .. 1_000 loop
+            AWA.Counters.Increment (Session_Counter.Index, Context.Get_User_Session);
          end loop;
          Util.Measures.Report (S, "AWA.Counters.Increment", 1000);
       end;
