@@ -1,6 +1,6 @@
 /*
  *  awa-storages -- Storages and folders
- *  Copyright (C) 2012, 2013, 2016, 2018 Stephane Carrez
+ *  Copyright (C) 2012, 2013, 2016, 2018, 2019 Stephane Carrez
  *  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -71,7 +71,6 @@ div.awa-document div.awa-size {
 }
 div.awa-document div.awa-mime {
     float: right;
-/*    width: 100px;*/
     padding-left: 10px;
 }
 div.awa-document div.awa-date, div.awa-document div.awa-owner {
@@ -138,10 +137,6 @@ div.document-list div.asf-active {
 }
 #document-list-editor {
     float: left;
-    /*width: 79%;
-    border: 2px solid #BCD;
-    margin-left: 5px;
-    margin-top: 15px;*/
     width: 100%;
     padding-top: 1em;
 }
@@ -192,6 +187,18 @@ input.asf-editable-text {
 .image-details dd {
     float: left;
     width: 80%;
+}
+.awa-upload {
+    float: left;
+    width: 100%;
+    padding-top: 2em;
+}
+#awa-reupload-button {
+    background: #DFEFFC;
+}
+.awa-file-info {
+    float: left;
+    width: 100%;
 }
 .image-upload {
     height: 80px;
