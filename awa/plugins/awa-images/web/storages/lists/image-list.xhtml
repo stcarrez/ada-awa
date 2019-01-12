@@ -29,7 +29,7 @@
             <div class='wiki-image-grid-info'>
                 <a href="#{contextPath}/storages/image-info/#{image.id}">
                 <h:panelGroup rendered="#{image.thumbnail_id ge 0}">
-                  <img src="#{contextPath}/storages/images/#{image.thumbnail_id}"
+                  <img src="#{contextPath}/storages/images/#{image.thumbnail_id}/view/#{image.name}"
                        width="64" height="64"
                        alt="#{image.name}"/>
                 </h:panelGroup>

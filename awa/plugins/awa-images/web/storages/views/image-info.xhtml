@@ -1,5 +1,5 @@
 <!-- Information about an image
-  -  Copyright (C) 2016 Stephane Carrez
+  -  Copyright (C) 2016, 2018 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -106,7 +106,7 @@
     </div>
     <h:panelGroup rendered="#{imageInfo.id ne 0}">
         <div class="image-view">
-            <img src="#{contextPath}/storages/images/#{imageInfo.id}" alt="#{imageInfo.name}"/>
+            <img src="#{contextPath}/storages/images/#{imageInfo.id}/view/#{imageInfo.name}" alt="#{imageInfo.name}"/>
         </div>
     </h:panelGroup>
 </div>
