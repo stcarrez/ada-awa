@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-servlets -- Serve files saved in the storage service
---  Copyright (C) 2012, 2016 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +21,7 @@ with Util.Log.Loggers;
 
 with ADO.Objects;
 
+with Servlet.Routes;
 with ASF.Streams;
 
 with AWA.Storages.Services;
@@ -82,12 +83,37 @@ package body AWA.Storages.Servlets is
    procedure Do_Get (Server   : in Storage_Servlet;
                      Request  : in out ASF.Requests.Request'Class;
                      Response : in out ASF.Responses.Response'Class) is
+
+      type Get_Type is (DEFAULT, AS_CONTENT_DISPOSITION, INVALID);
+
+      function Get_Format return Get_Type;
+
+      function Get_Format return Get_Type is
+         Format : constant String := Request.Get_Path_Parameter (2);
+      begin
+         if Format = "view" then
+            return DEFAULT;
+         elsif Format = "download" then
+            return AS_CONTENT_DISPOSITION;
+         else
+            return INVALID;
+         end if;
+      end Get_Format;
+
       URI     : constant String := Request.Get_Request_URI;
       Data    : ADO.Blob_Ref;
       Mime    : Ada.Strings.Unbounded.Unbounded_String;
       Name    : Ada.Strings.Unbounded.Unbounded_String;
       Date    : Ada.Calendar.Time;
+      Format  : Get_Type;
    begin
+      Format := Get_Format;
+      if Format = INVALID then
+         Log.Info ("GET: {0}: invalid format", URI);
+         Response.Send_Error (ASF.Responses.SC_NOT_FOUND);
+         return;
+      end if;
+
       Storage_Servlet'Class (Server).Load (Request, Name, Mime, Date, Data);
       if Data.Is_Null then
          Log.Info ("GET: {0}: storage file not found", URI);
@@ -98,7 +124,7 @@ package body AWA.Storages.Servlets is
 
       --  Send the file.
       Response.Set_Content_Type (Ada.Strings.Unbounded.To_String (Mime));
-      if Ada.Strings.Unbounded.Length (Name) > 0 then
+      if Format = AS_CONTENT_DISPOSITION and Ada.Strings.Unbounded.Length (Name) > 0 then
          Response.Add_Header ("Content-Disposition",
                               "attachment; filename=" & Ada.Strings.Unbounded.To_String (Name));
       end if;
@@ -109,6 +135,11 @@ package body AWA.Storages.Servlets is
       end;
 
    exception
+      when Servlet.Routes.No_Parameter =>
+         Log.Info ("GET: {0}: Invalid servlet-mapping, a path parameter is missing", URI);
+         Response.Send_Error (ASF.Responses.SC_NOT_FOUND);
+         return;
+
       when ADO.Objects.NOT_FOUND | Constraint_Error =>
          Log.Info ("GET: {0}: Storage file not found", URI);
          Response.Send_Error (ASF.Responses.SC_NOT_FOUND);
