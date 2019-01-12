@@ -62,6 +62,7 @@
       image.width,
       image.height,
       data.data
+    FROM awa_image AS image
     INNER JOIN awa_storage AS store ON image.storage_id = store.id
     INNER JOIN awa_post AS post ON post.id = :post_id
     INNER JOIN awa_blog AS blog ON store.workspace_id = blog.workspace_id AND blog.id = post.blog_id
