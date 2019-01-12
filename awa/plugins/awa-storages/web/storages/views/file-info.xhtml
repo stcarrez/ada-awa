@@ -1,0 +1,97 @@
+<!-- Information about a file
+  -  Copyright (C) 2018, 2019 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<div class="file-info" xmlns:ui="http://java.sun.com/jsf/facelets"
+     xmlns:f="http://java.sun.com/jsf/core"
+     xmlns:awa="http://code.google.com/p/ada-awa/jsf"
+     xmlns:c="http://java.sun.com/jstl/core"
+     xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
+     xmlns:util="http://code.google.com/p/ada-asf/util"
+     xmlns:h="http://java.sun.com/jsf/html">
+    <div class="grid_6">
+        <dl class="image-details">
+            <dt>#{storageMsg.image_file_label}</dt>
+            <dd>#{storageInfo.folder_name}/#{storageInfo.name}</dd>
+            <h:panelGroup rendered="#{storageInfo.id ne 0 and storageInfo.list.count != 0}">
+                <dt>#{storageMsg.image_file_size_label}</dt>
+                <dd>
+                    <h:outputText value="#{storageInfo.file_size}">
+                        <f:converter converterId="sizeConverter"/>
+                    </h:outputText>
+                </dd>
+                <dt>#{storageMsg.image_date_label}</dt>
+                <dd>
+                    <h:outputText value="#{storageInfo.create_date}">
+                        <f:converter converterId="smartDateConverter"/>
+                    </h:outputText>
+                </dd>
+                <dt>#{storageMsg.image_dimension_label}</dt>
+                <dd>#{storageInfo.width}x#{storageInfo.height}</dd>
+                <dt>#{storageMsg.image_mime_label}</dt>
+                <dd>#{storageInfo.mime_type}</dd>
+
+            </h:panelGroup>
+            <h:panelGroup rendered="#{storageInfo.id eq 0 or storageInfo.list.count == 0}">
+                <dd>#{wikiMsg.wiki_image_missing_message}</dd>
+            </h:panelGroup>
+        </dl>
+    </div>
+    <div class="grid_6">
+
+        <div id="template" class="file-row">
+            <!-- This is used as the file preview template -->
+            <div>
+                <span class="preview"><img data-dz-thumbnail=""/></span>
+            </div>
+            <div>
+                <p class="name" data-dz-name=""></p>
+            </div>
+            <div>
+                <p class="size" data-dz-size=""></p>
+                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+                     aria-valuenow="0">
+                    <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress=""></div>
+                </div>
+            </div>
+            <div>
+
+            </div>
+        </div>
+        <div id='document-upload'>
+            <button id="upload-button" class="ui-button ui-state-default ui-corner-all">
+                <i></i>
+                <span>#{storageMsg.image_upload_button}</span>
+            </button>
+            <div id="total-progress"/>
+            <h:form enctype="multipart/form-data" action="#{contextPath}/storages/forms/upload-form.html" method="POST">
+                <h:inputHidden id="folder" value="#{storageInfo.folder_id}"/>
+            </h:form>
+        </div>
+        <util:script>
+            /* init_upload('#document-upload', #{imageInfo.folder_id}, #{imageInfo.id},
+            "#{contextPath}/storages/forms/upload-image.html"); */
+        </util:script>
+    </div>
+    <h:panelGroup rendered="#{storageInfo.id ne 0}">
+        <h:panelGroup rendered="#{storageInfo.mime_type eq 'application/pdf'}">
+            <iframe src="#{contextPath}/storages/files/#{storageInfo.id}/view/#{storageInfo.name}"
+                    class="awa-doc-viewport"></iframe>
+
+        </h:panelGroup>
+    </h:panelGroup>
+</div>
+
+
