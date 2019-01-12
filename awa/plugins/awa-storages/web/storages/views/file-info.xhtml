@@ -14,7 +14,7 @@
   -  See the License for the specific language governing permissions and
   -  limitations under the License.
   -->
-<div class="file-info" xmlns:ui="http://java.sun.com/jsf/facelets"
+<div class="awa-file-info" xmlns:ui="http://java.sun.com/jsf/facelets"
      xmlns:f="http://java.sun.com/jsf/core"
      xmlns:awa="http://code.google.com/p/ada-awa/jsf"
      xmlns:c="http://java.sun.com/jstl/core"
@@ -50,43 +50,23 @@
         </dl>
     </div>
     <div class="grid_6">
-
-        <div id="template" class="file-row">
-            <!-- This is used as the file preview template -->
-            <div>
-                <span class="preview"><img data-dz-thumbnail=""/></span>
-            </div>
-            <div>
-                <p class="name" data-dz-name=""></p>
-            </div>
-            <div>
-                <p class="size" data-dz-size=""></p>
-                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100"
-                     aria-valuenow="0">
-                    <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress=""></div>
-                </div>
-            </div>
-            <div>
-
-            </div>
-        </div>
-        <div id='document-upload'>
-            <button id="upload-button" class="ui-button ui-state-default ui-corner-all">
-                <i></i>
-                <span>#{storageMsg.image_upload_button}</span>
-            </button>
-            <div id="total-progress"/>
-            <h:form enctype="multipart/form-data" action="#{contextPath}/storages/forms/upload-form.html" method="POST">
-                <h:inputHidden id="folder" value="#{storageInfo.folder_id}"/>
-            </h:form>
+        <div class='awa-upload'>
+            <a id="awa-reupload-button" class="awa-button">
+                #{storageMsg.storage_upload_label}
+            </a>
         </div>
         <util:script>
-            /* init_upload('#document-upload', #{imageInfo.folder_id}, #{imageInfo.id},
-            "#{contextPath}/storages/forms/upload-image.html"); */
+            $("#awa-reupload-button").uploader({
+                folderId: "#{storageInfo.folder_id}",
+                fileId: "#{storageInfo.id}",
+                uploadUrl: '#{contextPath}/storages/forms/upload-form.html',
+                dictDefaultMessage: "#{util:escapeJavaScript(storageMsg.storage_upload_form_message)}",
+                dictInvalidFileType: "#{util:escapeJavaScript(storageMsg.storage_upload_form_invalid_file_message)}"
+            });
         </util:script>
     </div>
     <h:panelGroup rendered="#{storageInfo.id ne 0}">
-        <h:panelGroup rendered="#{storageInfo.mime_type eq 'application/pdf'}">
+        <h:panelGroup rendered="#{storageInfo.mime_type eq 'application/pdf' or storageInfo.image_width gt 0}">
             <iframe src="#{contextPath}/storages/files/#{storageInfo.id}/view/#{storageInfo.name}"
                     class="awa-doc-viewport"></iframe>
 

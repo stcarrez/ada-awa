@@ -1,5 +1,5 @@
 <!-- Upload form response
-  -  Copyright (C) 2012, 2016, 2018 Stephane Carrez
+  -  Copyright (C) 2012, 2016, 2018, 2019 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,31 +22,43 @@
 [
     { "action": "prepend", "id": "#document-list", "data": "<util:escape>
     <div id='store-#{uploadFile.id}' class="awa-document ui-list-item awa-private">
-         <div class="awa-doc-status"></div>
-         <div class="awa-doc-thumbnail">
-             <img src="#{contextPath}/storages/images/#{uploadFile.id}" width="64" height="64"
-                                  alt="#{uploadFile.name}"/>
-         </div>
-         <div class='awa-title'>#{uploadFile.name}</div>
-         <div class='awa-size'>
-             #{storageMsg.storage_size_label}
-             <h:outputText value="#{uploadFile.file_size}">
-                 <f:converter converterId="sizeConverter"/>
-             </h:outputText>
-         </div>
-         <div class='awa-owner'>
-             #{storageMsg.storage_by_label}
-             #{uploadFile.user_name}
-         </div>
-         <div class='awa-mime'>#{uploadFile.mime_type}</div>
-         <div class='awa-date'>
-             <h:outputText value="#{uploadFile.create_date}">
-                 <f:converter converterId="smartDateConverter"/>
-             </h:outputText>
-         </div>
-         <div class='awa-download'>
-             <a href="#{contextPath}/storages/files/#{uploadFile.id}">#{storageMsg.storage_download_label}</a>
-         </div>
+        <div class="awa-doc-status"></div>
+        <div class="awa-doc-thumbnail">
+            <h:panelGroup rendered="#{uploadFile.thumbnail_id ge 0}">
+                <img src="#{contextPath}/storages/images/#{uploadFile.thumbnail_id}/view/thumb"
+                     width="#{uploadFile.thumb_width}" height="#{uploadFile.thumb_height}"
+                     alt="#{uploadFile.name}"/>
+            </h:panelGroup>
+            <h:panelGroup rendered="#{uploadFile.thumbnail_id lt 0}">
+                <img src="#{contextPath}/images/storages/icon-document-64.png"
+                     width="64" height="64" alt="#{uploadFile.name}"/>
+            </h:panelGroup>
+        </div>
+        <div class="awa-doc-info">
+            <div class='awa-title'>
+                <a href="#{contextPath}/storages/file-info/#{uploadFile.id}">#{uploadFile.name}</a>
+            </div>
+            <div class='awa-size'>
+                #{storageMsg.storage_size_label}
+                <h:outputText value="#{uploadFile.file_size}">
+                    <f:converter converterId="sizeConverter"/>
+                </h:outputText>
+            </div>
+            <div class='awa-owner'>
+                #{storageMsg.storage_by_label}
+                #{uploadFile.user_name}
+            </div>
+            <div class='awa-date'>
+                <h:outputText value="#{uploadFile.create_date}">
+                    <f:converter converterId="smartDateConverter"/>
+                </h:outputText>
+            </div>
+            <div class='awa-download'>
+                <a href="#{contextPath}/storages/files/#{uploadFile.id}/download/#{uploadFile.name}"
+                   download="#{uploadFile.name}">#{storageMsg.storage_download_label}</a>
+                #{uploadFile.mime_type}
+            </div>
+        </div>
      </div>
 </util:escape>" }
 ]

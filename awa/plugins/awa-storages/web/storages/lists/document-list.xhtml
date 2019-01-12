@@ -1,5 +1,5 @@
 <!-- List of documents
-  -  Copyright (C) 2012, 2013, 2016, 2018 Stephane Carrez
+  -  Copyright (C) 2012, 2013, 2016, 2018, 2019 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,24 +16,25 @@
   -->
 <div xmlns:f="http://java.sun.com/jsf/core"
      xmlns:h="http://java.sun.com/jsf/html" id='document-list' class='document-list ui-list'>
-        <h:panelGroup rendered="#{empty storageList.files and not empty storageList.folder}">
-          <div class="awa-empty-message">#{storageMsg.storage_folder_empty_message}</div>
-        </h:panelGroup>
-        <h:list var="document" value="#{storageList.files}">
-            <div id='store-#{document.id}' class="awa-document ui-list-item #{document.is_public ? 'awa-public' : 'awa-private'}">
-                <div class="awa-doc-status"></div>
-                <div class="awa-doc-thumbnail">
-                    <h:panelGroup rendered="#{document.thumbnail_id ge 0}">
-                        <img src="#{contextPath}/storages/images/#{document.thumbnail_id}"
-                             width="#{document.thumb_width}" height="#{document.thumb_height}"
-                             alt="#{document.name}"/>
-                    </h:panelGroup>
-                    <h:panelGroup rendered="#{document.thumbnail_id lt 0}">
-                        <img src="#{contextPath}/images/storages/icon-document.png"
-                             width="64" height="64" alt="#{document.name}"/>
-                    </h:panelGroup>
-                </div>
-                <div class="awa-doc-info">
+    <h:panelGroup rendered="#{empty storageList.files and not empty storageList.folder}">
+        <div class="awa-empty-message">#{storageMsg.storage_folder_empty_message}</div>
+    </h:panelGroup>
+    <h:list var="document" value="#{storageList.files}">
+        <div id='store-#{document.id}'
+             class="awa-document ui-list-item #{document.is_public ? 'awa-public' : 'awa-private'}">
+            <div class="awa-doc-status"></div>
+            <div class="awa-doc-thumbnail">
+                <h:panelGroup rendered="#{document.thumbnail_id ge 0}">
+                    <img src="#{contextPath}/storages/images/#{document.thumbnail_id}/view/thumb"
+                         width="#{document.thumb_width}" height="#{document.thumb_height}"
+                         alt="#{document.name}"/>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{document.thumbnail_id lt 0}">
+                    <img src="#{contextPath}/images/storages/icon-document-64.png"
+                         width="64" height="64" alt="#{document.name}"/>
+                </h:panelGroup>
+            </div>
+            <div class="awa-doc-info">
                 <div class='awa-title'>
                     <a href="#{contextPath}/storages/file-info/#{document.id}">#{document.name}</a>
                 </div>
@@ -57,7 +58,7 @@
                        download="#{document.name}">#{storageMsg.storage_download_label}</a>
                     #{document.mime_type}
                 </div>
-                </div>
             </div>
-        </h:list>
+        </div>
+    </h:list>
 </div>
