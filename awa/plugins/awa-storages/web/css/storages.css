@@ -71,7 +71,7 @@ div.awa-document div.awa-size {
 }
 div.awa-document div.awa-mime {
     float: right;
-    width: 100px;
+/*    width: 100px;*/
     padding-left: 10px;
 }
 div.awa-document div.awa-date, div.awa-document div.awa-owner {
@@ -82,7 +82,6 @@ div.awa-document div.awa-download {
     float: left;
     clear: left;
     display: inline-block;
-    width: 120px;
     visibility: hidden;
 }
 .awa-document .awa-doc-status {
@@ -240,4 +239,9 @@ input.asf-editable-text {
 }
 .dz-image, .dz-details, .dz-progress, .dropzone .dz-success-mark, .dropzone .dz-error-mark {
     float: left;
+}
+.awa-doc-viewport {
+    height: 100vh;
+    width: 100vw;
+    display: block;
 }
