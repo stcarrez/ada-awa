@@ -1,6 +1,6 @@
 /*
  *  awa-storages -- Storages and folders
- *  Copyright (C) 2012, 2016, 2018 Stephane Carrez
+ *  Copyright (C) 2012, 2016, 2018, 2019 Stephane Carrez
  *  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,125 @@
  */
 (function($, undefined) {
 
+    /**
+     * @class ui.uploader
+     *
+     * Upload button
+     */
+    $.widget("ui.uploader", {
+        options: {
+            /**
+             * @cfg {String} acceptedFiles the list of mime types which are accepted.
+             */
+            acceptedFiles: null,
+
+            /**
+             * @cfg {String} folderId the current folder id.
+             */
+            folderId: null,
+
+            /**
+             * @cfg {String} fileId the file id.
+             */
+            fileId: null
+        },
+
+        _create: function() {
+            var self = this;
+
+            this.element.on('click', function(event) {
+                self.uploadDialog(self.options.folderId, self.options.fileId);
+                return false;
+            });
+        },
+        uploadDialog: function(folderId, fileId) {
+            var self = this;
+            var div = document.createElement("div");
+            div.id = 'upload-dialog';
+            div = $(div);
+
+            var d = $(document.body);
+            if (d.length == 0) {
+                return false;
+            }
+
+            $(d).append($(div));
+
+            var params = "?folderId=" + folderId;
+            if (fileId != "") {
+               params += "&id=" + fileId;
+            }
+
+            /* Perform the HTTP GET */
+            jQuery.ajax({
+                url: this.options.uploadUrl + params,
+                context: document.body,
+                success: function(data, status, jqXHDR) {
+                    var contentType = jqXHDR.getResponseHeader('Content-type');
+                    if (contentType == null) {
+                        contentType = "text/html";
+                    }
+                    if (contentType.match(/^text\/(html|xml)(;.*)?$/i)) {
+                        $(div).dialog({
+                            autoOpen: false,
+                            show: "blind",
+                            hide: "explode",
+                            minWidth: 600,
+                            close: function() {
+                                $(div).dialog('destroy');
+                                $(div).remove();
+                            }
+                        });
+
+                        $(div).html(jqXHDR.responseText);
+
+                        /**
+                        * Extract a title from the inner form to setup the dialog box.
+                        */
+                        var dTitle, dBox = $(div).children('div');
+                        if (dBox.length == 0) {
+                            dTitle = $(div).children('h2');
+                        } else {
+                            dTitle = $(dBox).children('h2');
+                        }
+                        if (dTitle.length > 0) {
+                            $(div).dialog("option", "title", dTitle.html());
+                            dTitle.remove();
+                        } else {
+                            dTitle = $(div).children('div').attr('title');
+                            if (dTitle != null) {
+                                $(div).dialog("option", "title", dTitle );
+                                /* $(div).attr('title', title); */
+                            }
+                        }
+                        $(div).dialog('open');
+                        $("#uploadForm").dropzone({
+                            url: self.options.uploadUrl,
+                            dictDefaultMessage: self.options.dictDefaultMessage,
+                            dictInvalidFileType: self.options.dictInvalidFileType,
+                            acceptedFiles: self.options.acceptedFiles,
+                            maxFiles: 1,
+                            paramName: "upload-file",
+                            params: function(files, xhr, chunk) {
+                                return { "upload-button": "1", "uploadForm": "1" }
+                            },
+                            success: function(file, response) {
+                                ASF.Execute(self.currentNode, response);
+                                $(div).dialog('close');
+                            }
+                        });
+
+                    } else if (contentType.match(/^application\/json(;.*)?$/i)) {
+                        ASF.Execute(self.currentNode, data);
+                    }
+                },
+                error: function(jqXHDR, status, error) {
+                    ASF.AjaxError(jqXHDR, status, error, d);
+                }
+            });
+        }
+    });
+
     $.widget("ui.folder", $.ui.list, {
         options: {
             actionId: null,
@@ -30,7 +149,7 @@
             var upload = $(self.options.uploadButton);
 
             $.ui.list.prototype._create.apply(this, arguments);
-            $(upload).bind('click', function(event) {
+            $(upload).on('click', function(event) {
                 var id = self.getSelectedId(self.selectedItem);
                 if (id != null) {
                     self.uploadDialog(id);
