@@ -136,7 +136,7 @@
 
   <servlet-mapping>
     <servlet-name>storage</servlet-name>
-    <url-pattern>/storages/files/:storage_id</url-pattern>
+    <url-pattern>/storages/files/:storage_id/:mode/:filename</url-pattern>
   </servlet-mapping>
 
   <filter-mapping>
