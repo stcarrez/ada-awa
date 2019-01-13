@@ -1,5 +1,5 @@
 <!-- Information about an image
-  -  Copyright (C) 2016, 2018 Stephane Carrez
+  -  Copyright (C) 2016, 2018, 2019 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,13 +14,11 @@
   -  See the License for the specific language governing permissions and
   -  limitations under the License.
   -->
-<div class="image-info" xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:awa="http://code.google.com/p/ada-awa/jsf"
-                xmlns:c="http://java.sun.com/jstl/core"
-                xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
-                xmlns:util="http://code.google.com/p/ada-asf/util"
-                xmlns:h="http://java.sun.com/jsf/html">
+<div class="storage-file-info" xmlns:ui="http://java.sun.com/jsf/facelets"
+     xmlns:f="http://java.sun.com/jsf/core"
+     xmlns:c="http://java.sun.com/jstl/core"
+     xmlns:util="http://code.google.com/p/ada-asf/util"
+     xmlns:h="http://java.sun.com/jsf/html">
     <div class="grid_6">
         <dl class="image-details">
             <dt>#{storageMsg.image_file_label}</dt>
@@ -70,45 +68,25 @@
         </dl>
     </div>
     <div class="grid_6">
-
-        <div id="template" class="file-row">
-          <!-- This is used as the file preview template -->
-          <div>
-              <span class="preview"><img data-dz-thumbnail="" /></span>
-          </div>
-          <div>
-              <p class="name" data-dz-name=""></p>
-          </div>
-          <div>
-              <p class="size" data-dz-size=""></p>
-              <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress=""></div>
-              </div>
-          </div>
-          <div>
-
-          </div>
-        </div>
-        <div id='document-upload'>
-            <button id="upload-button" class="ui-button ui-state-default ui-corner-all">
-                <i></i>
-                <span>#{storageMsg.image_upload_button}</span>
-            </button>
-            <div id="total-progress"/>
-            <h:form enctype="multipart/form-data" action="#{contextPath}/storages/forms/upload-form.html" method="POST">
-                <h:inputHidden id="folder" value="#{imageFile.folder_id}"/>
-            </h:form>
+        <div class='storage-upload'>
+            <a id="storage-reupload-button" class="awa-button">
+                #{storageMsg.storage_upload_new_version_label}
+            </a>
         </div>
         <util:script>
-            /* init_upload('#document-upload', #{imageInfo.folder_id}, #{imageInfo.id},
-                        "#{contextPath}/storages/forms/upload-image.html"); */
+            $("#storage-reupload-button").uploader({
+                acceptedFiles: "image/jpeg,image/png,image/gif,image/svg+xml",
+                folderId: "#{imageInfo.folder_id}",
+                fileId: "#{imageInfo.id}",
+                uploadUrl: '#{contextPath}/storages/forms/upload-image.html',
+                uploadDoneAction: function() {
+                    document.location = document.location;
+                },
+                dictDefaultMessage: "#{util:escapeJavaScript(storageMsg.storage_upload_form_message)}",
+                dictInvalidFileType: "#{util:escapeJavaScript(storageMsg.storage_upload_form_invalid_file_message)}"
+            });
         </util:script>
     </div>
-    <h:panelGroup rendered="#{imageInfo.id ne 0}">
-        <div class="image-view">
-            <img src="#{contextPath}/storages/images/#{imageInfo.id}/view/#{imageInfo.name}" alt="#{imageInfo.name}"/>
-        </div>
-    </h:panelGroup>
 </div>
 
 

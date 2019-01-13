@@ -39,54 +39,54 @@
         <c:choose>
             <c:when test="#{not empty storageList.folder}">
                 <div class="awa-side-panel">
-                    <div id='awa-folder-left-panel' class="awa-left-panel">
-                        <div class="awa-folder-title">#{storageMsg.storage_folder_title}</div>
-                        <div id='folder-list-editor' class="ui-widget ui-corner-all">
+                    <div id='storage-folder-left-panel' class="awa-left-panel">
+                        <div class="storage-folder-title">#{storageMsg.storage_folder_title}</div>
+                        <div id='storage-folder-list-editor' class="ui-widget ui-corner-all">
                             <ui:include src="lists/folders.xhtml"/>
                         </div>
                     </div>
-                    <div id='awa-list-right-panel' class="awa-right-panel">
+                    <div id='storage-list-right-panel' class="awa-right-panel">
                         <ui:include src="views/storage-nav.xhtml"/>
-                        <div id='document-list-editor' class="ui-widget ui-corner-all">
+                        <div id='storage-list-editor' class="ui-widget ui-corner-all">
                             <ui:include src="lists/image-list.xhtml"/>
                         </div>
-                        <div id='document-action' class='asf-list-action'>
+                        <div id='storage-action' class='asf-list-action'>
                             <a href="#" class='asf-icon asf-delete'
                                title='#{storageMsg.storage_list_delete_file_tooltip}'></a>
                         </div>
                     </div>
                 </div>
                 <util:script>
-                        $('#folder-list').folder({
-                            acceptedFiles: "image/jpeg,image/png,image/gif",
+                        $('#storage-folder-list').folder({
+                            acceptedFiles: "image/jpeg,image/png,image/gif,image/svg+xml",
                             selectClass: 'asf-selected',
                             editUrl: '#{contextPath}/storages/forms/create-folder-form.html',
                             currentItem: '#folder-' + #{not empty storageList.folder ? storageList.folder.id : 'null'},
                             selectUrl: '#{contextPath}/storages/lists/images.html',
-                            uploadButton: '#awa-upload-button',
+                            uploadButton: '#storage-upload-button',
                             uploadUrl: '#{contextPath}/storages/forms/upload-image.html',
                             dictDefaultMessage: "#{util:escapeJavaScript(storageMsg.storage_upload_image_form_message)}",
                             dictInvalidFileType: "#{util:escapeJavaScript(storageMsg.storage_upload_form_invalid_file_message)}"
                         });
-                        $('#awa-folder-left-panel').resizable({
+                        $('#storage-folder-left-panel').resizable({
                             minWidth: 100, maxWidth: 400,
                             resize: function(event, ui) {
                                 var width = ui.size.width;
-                                var ow = $('#awa-folder-left-panel').parent().outerWidth();
+                                var ow = $('#storage-folder-left-panel').parent().outerWidth();
                                 width = ow - width - 20;
                                 if (width &lt;= 10) {
                                     width = 10;
                                 }
-                                $('#awa-list-right-panel').css({ width: width });
+                                $('#storage-list-right-panel').css({ width: width });
                             }
                         });
-                        $('#document-list-editor').list({
-                            actionId: '#document-action',
+                        $('#storage-list-editor').list({
+                            actionId: '#storage-action',
                             deleteUrl: '#{contextPath}/storages/forms/file-delete-form.html?storeId=',
                             itemPrefix: 'store-',
                             selectAction: function(list, item, event) {
-                                if ($(event.target).hasClass("awa-doc-status")) {
-                                    if ($(item).hasClass("awa-public")) {
+                                if ($(event.target).hasClass("storage-doc-status")) {
+                                    if ($(item).hasClass("storage-public")) {
                                         ASF.Post(item, "#{contextPath}/storages/ajax/uploadFile/publish",
                                              "id=" + list.getSelectedId(item) + "&amp;status=FALSE");
 
