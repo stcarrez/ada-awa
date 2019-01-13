@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-images-beans -- Image Ada Beans
---  Copyright (C) 2016, 2018 Stephane Carrez
+--  Copyright (C) 2016, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +29,7 @@ package body AWA.Images.Beans is
    --  Load the list of images associated with the current folder.
    --  ------------------------------
    overriding
-   procedure Load_Files (Storage : in Image_List_Bean) is
+   procedure Load_Files (Storage : in out Image_List_Bean) is
       Ctx       : constant ASC.Service_Context_Access := ASC.Current;
       User      : constant ADO.Identifier := Ctx.Get_User_Identifier;
       Session   : ADO.Sessions.Session := ASC.Get_Session (Ctx);
