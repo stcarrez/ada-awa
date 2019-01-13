@@ -178,11 +178,19 @@ package AWA.Storages.Beans is
    type Storage_Bean_Access is access all Storage_Bean'Class;
 
    overriding
+   function Get_Value (From : in Storage_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   overriding
    procedure Load (Into    : in out Storage_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
    --  Create the Storage_Bean bean instance.
    function Create_Storage_Bean (Module : in AWA.Storages.Modules.Storage_Module_Access)
                                return Util.Beans.Basic.Readonly_Bean_Access;
+
+   --  Returns true if the given mime type can be displayed by a browser.
+   --  Mime types: application/pdf, text/*, image/*
+   function Is_Browser_Visible (Mime_Type : in String) return Boolean;
 
 end AWA.Storages.Beans;
