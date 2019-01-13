@@ -122,6 +122,7 @@ package AWA.Storages.Beans is
       --  Current folder.
       Folder           : aliased Folder_Bean;
       Folder_Bean      : Folder_Bean_Access;
+      Folder_Id        : ADO.Identifier := ADO.NO_IDENTIFIER;
 
       --  List of folders.
       Folder_List      : aliased AWA.Storages.Models.Folder_Info_List_Bean;
@@ -137,13 +138,13 @@ package AWA.Storages.Beans is
    type Storage_List_Bean_Access is access all Storage_List_Bean'Class;
 
    --  Load the folder instance.
-   procedure Load_Folder (Storage : in Storage_List_Bean);
+   procedure Load_Folder (Storage : in out Storage_List_Bean);
 
    --  Load the list of folders.
-   procedure Load_Folders (Storage : in Storage_List_Bean);
+   procedure Load_Folders (Storage : in out Storage_List_Bean);
 
    --  Load the list of files associated with the current folder.
-   procedure Load_Files (Storage : in Storage_List_Bean);
+   procedure Load_Files (Storage : in out Storage_List_Bean);
 
    overriding
    function Get_Value (List : in Storage_List_Bean;
