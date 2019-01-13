@@ -1,0 +1,49 @@
+<!-- Display the file content
+  -  Copyright (C) 2019 Stephane Carrez
+  -  Written by Stephane Carrez (Stepfhane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<div class="storage-file-content"
+     xmlns:ui="http://java.sun.com/jsf/facelets"
+     xmlns:f="http://java.sun.com/jsf/core"
+     xmlns:c="http://java.sun.com/jstl/core"
+     xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+     xmlns:util="http://code.google.com/p/ada-asf/util"
+     xmlns:h="http://java.sun.com/jsf/html">
+    <h:panelGroup rendered="#{fn:startsWith(storageInfo.mime_type, 'text/')}">
+        <pre id="storage-file-content" class="storage-content" />
+        <util:script>
+            $("#storage-file-content").viewer({
+               url: "#{contextPath}/storages/files/#{storageInfo.id}/view/#{storageInfo.name}"
+            });
+        </util:script>
+    </h:panelGroup>
+    <h:panelGroup rendered="#{fn:startsWith(storageInfo.mime_type, 'image/') and storageInfo.width ne 0}">
+        <img class="storage-image-content"
+             alt="#{storageInfo.name}"
+             src="#{contextPath}/storages/files/#{storageInfo.id}/view/#{storageInfo.name}"
+             width="#{storageInfo.width}" height="#{storageInfo.height}" />
+    </h:panelGroup>
+    <h:panelGroup rendered="#{fn:startsWith(storageInfo.mime_type, 'image/') and storageInfo.width eq 0}">
+        <img class="storage-image-content"
+             alt="#{storageInfo.name}"
+             src="#{contextPath}/storages/files/#{storageInfo.id}/view/#{storageInfo.name}" />
+    </h:panelGroup>
+    <h:panelGroup rendered="#{storageInfo.mime_type eq 'application/pdf'}">
+        <iframe src="#{contextPath}/storages/files/#{storageInfo.id}/view/#{storageInfo.name}"
+                class="storage-doc-viewport"></iframe>
+    </h:panelGroup>
+</div>
+
+
