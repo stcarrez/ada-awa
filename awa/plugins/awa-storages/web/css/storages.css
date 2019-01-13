@@ -32,7 +32,7 @@
 div.storage-folder-list div.asf-active {
     background-color: #DFEFFC;
 }
-.storage-folder-list div.asf-selected {
+div.storage-folder-list div.asf-selected {
     background-color: #A6C9E2;
 }
 .storage-folder-title {
