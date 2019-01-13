@@ -16,7 +16,7 @@
   -->
 <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html">
-   <h:list var="folder" value="#{storageList.folders}">
+   <h:list var="folder" value="#{folderList}">
        <div id='folder-#{folder.id}' class='storage-folder-name'>
            <div>#{folder.name}</div>
        </div>
