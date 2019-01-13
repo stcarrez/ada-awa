@@ -18,38 +18,36 @@
 .page-storages #ada-page {
     height: 100%;
 }
-.awa-right-panel .awa-nav {
-    margin-top: 1em;
-}
-div.folder-list {
+.storage-folder-list {
     float: left;
     width: 100%;
     overflow: hidden;
 }
-div.folder-list .awa-folder-name {
+.storage-folder-list .storage-folder-name {
     border-bottom-left-radius: 10px;
     border-top-left-radius: 10px;
     padding: 1em;
+    cursor: pointer;
 }
-div.folder-list div.asf-active {
+div.storage-folder-list div.asf-active {
     background-color: #DFEFFC;
 }
-div.folder-list div.asf-selected {
+.storage-folder-list div.asf-selected {
     background-color: #A6C9E2;
 }
-.awa-folder-title {
+.storage-folder-title {
     font-weight: bold;
     font-size: 1.2em;
     padding: 1em;
     border-bottom: 1px solid #A6C9E2;
 }
-#awa-doc-message-notif {
+#storage-doc-message-notif {
     padding: 1em;
     background: #DFEFFC;
     border: 1px solid red;
     border-radius: 0.5em;
 }
-div.awa-document {
+.storage-document {
     float: left;
     clear: both;
     width: 92%;
@@ -59,100 +57,99 @@ div.awa-document {
     padding-left: 4%;
     padding-right: 2%;
 }
-div.awa-document div.awa-title {
+.storage-document storage-title {
     float: left;
     font-size: 1.1em;
     width: 50%;
 }
-div.awa-document div.awa-size {
+.storage-document .storage-size {
     float: right;
     width: 130px;
     padding-left: 10px;
 }
-div.awa-document div.awa-mime {
+.storage-document .storage-mime, .storage-document .storage-date, .storage-document .storage-owner {
     float: right;
     padding-left: 10px;
 }
-div.awa-document div.awa-date, div.awa-document div.awa-owner {
-    float: right;
-    padding-left: 10px;
-}
-div.awa-document div.awa-download {
+.storage-document .storage-download {
     float: left;
     clear: left;
     display: inline-block;
     visibility: hidden;
 }
-.awa-document .awa-doc-status {
+.storage-document .storage-doc-status {
     float: left;
     height: 24px;
     width: 32px;
     cursor: pointer;
 }
-.awa-document .awa-doc-thumbnail {
+.storage-document .storage-doc-thumbnail {
     float: left;
     width: 64px;
     height: 64px;
     overflow: hidden;
 }
-.awa-private .awa-doc-status {
+.storage-private .storage-doc-status {
     background: url(../images/storages/doc-private.png) no-repeat;
 }
-.awa-public .awa-doc-status {
+.storage-public .storage-doc-status {
     background: url(../images/storages/icon-internet.png) no-repeat;
 }
-.awa-document .awa-doc-info {
+.storage-document .storage-doc-info {
     float: left;
     padding-left: 10px;
     width: calc(100% - 110px);
 }
-div.asf-active-list div.asf-active div.awa-download {
+div.asf-active-list div.asf-active .storage-download {
     visibility: visible;
 }
-div.document-list {
+.storage-document-list {
     float: left;
     width: 98%;
     padding-left: 1%;
 }
-div.document-list div.asf-active {
+.storage-document-list div.asf-active {
     background-color: #FFC;
 }
-#awa-folder-left-panel {
+#storage-folder-left-panel {
     width: 20%;
     background: #f3f9fe;
     border-right: 3px solid #A6C9E2;
+    min-height: 100%;
+    height: -webkit-fill-available;
+    height: -moz-available;
 }
-#awa-list-right-panel {
+#storage-list-right-panel {
     width: 99%;
 }
-#folder-list-editor {
+#storage-folder-list-editor {
     float: left;
     width: 95%;
     margin-top: 15px;
     margin-left: 5%;
 }
-#folder-add {
+#storage-folder-add, .storage-file-info {
     float: left;
     width: 100%;
 }
-#document-list-editor {
+#storage-list-editor {
     float: left;
     width: 100%;
     padding-top: 1em;
 }
-#document-action {
+#storage-action {
     width: 24px;
     left:  -4px;
 }
-#folder-create {
+#storage-folder-create {
     width: 96%;
     padding: 2%;
 }
-input.asf-editable-text {
+#storage-folder-add input.asf-editable-text {
     width: 98%;
     margin-bottom: 10px;
 }
-#folder-create-button {
+#storage-folder-create-button {
     margin-bottom: 10px;
 }
 .storage-action {
@@ -165,7 +162,24 @@ input.asf-editable-text {
     float: left;
     padding-right: 10px;
 }
-
+.storage-file-content {
+    float: left;
+    width: 100%;
+    border-top: 1px solid #ccc;
+    padding: 0.5em;
+}
+.storage-content {
+    margin-left: 0.5em;
+}
+.storage-image-content {
+    border: 1px solid #ccc;
+}
+.storage-doc-viewport {
+    height: 1500px;
+    width: 100%;
+    display: block;
+    overflow: hidden;
+}
 /* Image information page */
 .image-info, .image-view {
     float: left;
@@ -174,7 +188,7 @@ input.asf-editable-text {
 }
 .image-details {
     float: left;
-    width: 80%;
+    width: 100%;
     padding-top: 0.5em;
     padding-bottom: 0.5em;
 }
@@ -188,17 +202,13 @@ input.asf-editable-text {
     float: left;
     width: 80%;
 }
-.awa-upload {
+.storage-upload {
     float: left;
     width: 100%;
     padding-top: 2em;
 }
-#awa-reupload-button {
+#storage-reupload-button {
     background: #DFEFFC;
-}
-.awa-file-info {
-    float: left;
-    width: 100%;
 }
 .image-upload {
     height: 80px;
@@ -214,17 +224,17 @@ input.asf-editable-text {
     display: inline-block;
 }
 
-.awa-folder-list-editor {
+.storage-folder-list-editor {
     float: left;
     width: 30%;
 }
-.awa-image-list-editor {
+.storage-image-list-editor {
     float: right;
     width: 69%;
     height: 350px;
     overflow-y: scroll;
 }
-.awa-image-list-editor .active {
+.storage-image-list-editor .active {
     background-color: #ccc;
 }
 /* Dropzone style */
@@ -246,9 +256,4 @@ input.asf-editable-text {
 }
 .dz-image, .dz-details, .dz-progress, .dropzone .dz-success-mark, .dropzone .dz-error-mark {
     float: left;
-}
-.awa-doc-viewport {
-    height: 100vh;
-    width: 100vw;
-    display: block;
 }

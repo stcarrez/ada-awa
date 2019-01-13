@@ -1,6 +1,6 @@
 <!-- Information about a file
   -  Copyright (C) 2018, 2019 Stephane Carrez
-  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -  Written by Stephane Carrez (Stepfhane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
   -  you may not use this file except in compliance with the License.
@@ -14,18 +14,16 @@
   -  See the License for the specific language governing permissions and
   -  limitations under the License.
   -->
-<div class="awa-file-info" xmlns:ui="http://java.sun.com/jsf/facelets"
+<div class="storage-file-info" xmlns:ui="http://java.sun.com/jsf/facelets"
      xmlns:f="http://java.sun.com/jsf/core"
-     xmlns:awa="http://code.google.com/p/ada-awa/jsf"
      xmlns:c="http://java.sun.com/jstl/core"
-     xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
      xmlns:util="http://code.google.com/p/ada-asf/util"
      xmlns:h="http://java.sun.com/jsf/html">
     <div class="grid_6">
         <dl class="image-details">
             <dt>#{storageMsg.image_file_label}</dt>
             <dd>#{storageInfo.folder_name}/#{storageInfo.name}</dd>
-            <h:panelGroup rendered="#{storageInfo.id ne 0 and storageInfo.list.count != 0}">
+            <h:panelGroup rendered="#{storageInfo.id ne 0 and storageInfo.list.count ne 0}">
                 <dt>#{storageMsg.image_file_size_label}</dt>
                 <dd>
                     <h:outputText value="#{storageInfo.file_size}">
@@ -38,40 +36,35 @@
                         <f:converter converterId="smartDateConverter"/>
                     </h:outputText>
                 </dd>
-                <dt>#{storageMsg.image_dimension_label}</dt>
-                <dd>#{storageInfo.width}x#{storageInfo.height}</dd>
+                <h:panelGroup rendered="#{storageInfo.width ne 0 or storageInfo.height ne 0}">
+                    <dt>#{storageMsg.image_dimension_label}</dt>
+                    <dd>#{storageInfo.width}x#{storageInfo.height}</dd>
+                </h:panelGroup>
                 <dt>#{storageMsg.image_mime_label}</dt>
                 <dd>#{storageInfo.mime_type}</dd>
 
             </h:panelGroup>
-            <h:panelGroup rendered="#{storageInfo.id eq 0 or storageInfo.list.count == 0}">
-                <dd>#{wikiMsg.wiki_image_missing_message}</dd>
-            </h:panelGroup>
         </dl>
     </div>
     <div class="grid_6">
-        <div class='awa-upload'>
-            <a id="awa-reupload-button" class="awa-button">
-                #{storageMsg.storage_upload_label}
+        <div class='storage-upload'>
+            <a id="storage-reupload-button" class="awa-button">
+                #{storageMsg.storage_upload_new_version_label}
             </a>
         </div>
         <util:script>
-            $("#awa-reupload-button").uploader({
+            $("#storage-reupload-button").uploader({
                 folderId: "#{storageInfo.folder_id}",
                 fileId: "#{storageInfo.id}",
                 uploadUrl: '#{contextPath}/storages/forms/upload-form.html',
+                uploadDoneAction: function() {
+                    document.location = document.location;
+                },
                 dictDefaultMessage: "#{util:escapeJavaScript(storageMsg.storage_upload_form_message)}",
                 dictInvalidFileType: "#{util:escapeJavaScript(storageMsg.storage_upload_form_invalid_file_message)}"
             });
         </util:script>
     </div>
-    <h:panelGroup rendered="#{storageInfo.id ne 0}">
-        <h:panelGroup rendered="#{storageInfo.mime_type eq 'application/pdf' or storageInfo.image_width gt 0}">
-            <iframe src="#{contextPath}/storages/files/#{storageInfo.id}/view/#{storageInfo.name}"
-                    class="awa-doc-viewport"></iframe>
-
-        </h:panelGroup>
-    </h:panelGroup>
 </div>
 
 

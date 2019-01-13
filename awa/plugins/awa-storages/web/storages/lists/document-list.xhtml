@@ -15,15 +15,15 @@
   -  limitations under the License.
   -->
 <div xmlns:f="http://java.sun.com/jsf/core"
-     xmlns:h="http://java.sun.com/jsf/html" id='document-list' class='document-list ui-list'>
+     xmlns:h="http://java.sun.com/jsf/html" id='storage-list' class='storage-document-list ui-list'>
     <h:panelGroup rendered="#{empty storageList.files and not empty storageList.folder}">
         <div class="awa-empty-message">#{storageMsg.storage_folder_empty_message}</div>
     </h:panelGroup>
     <h:list var="document" value="#{storageList.files}">
         <div id='store-#{document.id}'
-             class="awa-document ui-list-item #{document.is_public ? 'awa-public' : 'awa-private'}">
-            <div class="awa-doc-status"></div>
-            <div class="awa-doc-thumbnail">
+             class="storage-document ui-list-item #{document.is_public ? 'storage-public' : 'storage-private'}">
+            <div class="storage-doc-status"></div>
+            <div class="storage-doc-thumbnail">
                 <h:panelGroup rendered="#{document.thumbnail_id ge 0}">
                     <img src="#{contextPath}/storages/images/#{document.thumbnail_id}/view/thumb"
                          width="#{document.thumb_width}" height="#{document.thumb_height}"
@@ -34,26 +34,26 @@
                          width="64" height="64" alt="#{document.name}"/>
                 </h:panelGroup>
             </div>
-            <div class="awa-doc-info">
-                <div class='awa-title'>
+            <div class="storage-doc-info">
+                <div class='storage-title'>
                     <a href="#{contextPath}/storages/file-info/#{document.id}">#{document.name}</a>
                 </div>
-                <div class='awa-size'>
+                <div class='storage-size'>
                     #{storageMsg.storage_size_label}
                     <h:outputText value="#{document.file_size}">
                         <f:converter converterId="sizeConverter"/>
                     </h:outputText>
                 </div>
-                <div class='awa-owner'>
+                <div class='storage-owner'>
                     #{storageMsg.storage_by_label}
                     #{document.user_name}
                 </div>
-                <div class='awa-date'>
+                <div class='storage-date'>
                     <h:outputText value="#{document.create_date}">
                         <f:converter converterId="smartDateConverter"/>
                     </h:outputText>
                 </div>
-                <div class='awa-download'>
+                <div class='storage-download'>
                     <a href="#{contextPath}/storages/files/#{document.id}/download/#{document.name}"
                        download="#{document.name}">#{storageMsg.storage_download_label}</a>
                     #{document.mime_type}

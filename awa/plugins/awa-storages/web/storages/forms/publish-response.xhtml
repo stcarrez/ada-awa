@@ -1,5 +1,5 @@
 <!-- Response sent after a user changes the publication status of a document
-  -  Copyright (C) 2016, 2018 Stephane Carrez
+  -  Copyright (C) 2016, 2018, 2019 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,12 +16,13 @@
   -->
 <f:view contentType="application/json"
         xmlns:c="http://java.sun.com/jstl/core"
+        xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:f="http://java.sun.com/jsf/core">
 [
-    { "action": "removeClass", "data": "awa-public" },
-    { "action": "removeClass", "data": "awa-private" },
-    { "action": "notification", "attach": "#awa-doc-message", "id": "#awa-doc-message-notif",
-      "data": "#{uploadFile.is_public ? storageMsg.storage_file_becomes_public_message : storageMsg.storage_file_becomes_private_message}" },
-    { "action": "addClass", "data": "post-info ui-list-item #{uploadFile.is_public ? 'awa-public' : 'awa-private'}" }
+    { "action": "removeClass", "data": "storage-public" },
+    { "action": "removeClass", "data": "storage-private" },
+    { "action": "notification", "attach": "#storage-doc-message", "id": "#storage-doc-message-notif",
+      "data": "#{util:escapeJavaScript(uploadFile.is_public ? storageMsg.storage_file_becomes_public_message : storageMsg.storage_file_becomes_private_message)}" },
+    { "action": "addClass", "data": "storage-document ui-list-item #{uploadFile.is_public ? 'storage-public' : 'storage-private'}" }
 ]
 </f:view>

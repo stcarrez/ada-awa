@@ -122,11 +122,61 @@
                             success: function(file, response) {
                                 ASF.Execute(self.currentNode, response);
                                 $(div).dialog('close');
+                                if (self.options.uploadDoneAction) {
+                                    self.options.uploadDoneAction();
+                                }
                             }
                         });
 
                     } else if (contentType.match(/^application\/json(;.*)?$/i)) {
                         ASF.Execute(self.currentNode, data);
+                    }
+                },
+                error: function(jqXHDR, status, error) {
+                    ASF.AjaxError(jqXHDR, status, error, d);
+                }
+            });
+        }
+    });
+
+    /**
+     * @class ui.viewer
+     *
+     * Upload button
+     */
+    $.widget("ui.viewer", {
+        options: {
+            url: null,
+
+            /**
+             * @cfg {String} fileId the file id.
+             */
+            fileId: null
+        },
+
+        _create: function() {
+            var self = this;
+
+            self.displayFile(self.options.url);
+        },
+        displayFile: function(url) {
+            var self = this;
+
+            /* Perform the HTTP GET */
+            jQuery.ajax({
+                url: url,
+                dataType: 'text',
+                context: document.body,
+                success: function(data, status, jqXHDR) {
+                    var contentType = jqXHDR.getResponseHeader('Content-type');
+                    if (contentType == null) {
+                        contentType = "text/html";
+                    }
+                    if (contentType.match(/^text\/(html|xml)(;.*)?$/i)) {
+                        $(self.element).text(data);
+
+                    } else {
+                        $(self.element).text(data);
                     }
                 },
                 error: function(jqXHDR, status, error) {
@@ -166,8 +216,12 @@
             this.currentNode = node;
             this.selectedItem = node;
             $(this.selectedItem).addClass(this.options.selectClass);
-            return ASF.Update(this, this.options.selectUrl + '?folderId=' + id, '#document-list-editor');
+            if (this.options.folderAction) {
+                return this.options.folderAction(id);
+            }
+            return ASF.Update(this, this.options.selectUrl + '?folderId=' + id, '#storage-list-editor');
         },
+
         uploadDialog: function(folderId) {
             var self = this;
             var div = document.createElement("div");

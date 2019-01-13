@@ -1,5 +1,5 @@
 <!-- Folder creation response
-  -  Copyright (C) 2012, 2018 Stephane Carrez
+  -  Copyright (C) 2012, 2018, 2019 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,12 +19,12 @@
         xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
 [
- { "action": "append", "id": "#folder-list", "data": "<util:escape>
-    <div class="awa-folder-name" id="folder-#{storageFolder.id}">
+ { "action": "append", "id": "#storage-folder-list", "data": "<util:escape>
+    <div class="storage-folder-name" id="folder-#{storageFolder.id}">
         <div>#{storageFolder.name}</div>
     </div>
     </util:escape>" },
  { "action": "clear", "id": "#message" },
- { "action": "script", "script": "$('#folder-list').folder('selectAction', $('#folder-#{storageFolder.id}'));" }
+ { "action": "script", "script": "$('#storage-folder-list').folder('selectAction', $('#folder-#{storageFolder.id}'));" }
 ]
 </f:view>

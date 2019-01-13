@@ -20,40 +20,33 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:f="http://java.sun.com/jsf/core">
 [
-    { "action": "prepend", "id": "#document-list", "data": "<util:escape>
-    <div id='store-#{uploadFile.id}' class="awa-document ui-list-item awa-private">
-        <div class="awa-doc-status"></div>
-        <div class="awa-doc-thumbnail">
-            <h:panelGroup rendered="#{uploadFile.thumbnail_id ge 0}">
-                <img src="#{contextPath}/storages/images/#{uploadFile.thumbnail_id}/view/thumb"
-                     width="#{uploadFile.thumb_width}" height="#{uploadFile.thumb_height}"
-                     alt="#{uploadFile.name}"/>
-            </h:panelGroup>
-            <h:panelGroup rendered="#{uploadFile.thumbnail_id lt 0}">
-                <img src="#{contextPath}/images/storages/icon-document-64.png"
-                     width="64" height="64" alt="#{uploadFile.name}"/>
-            </h:panelGroup>
+    { "action": "prepend", "id": "#storage-list", "data": "<util:escape>
+    <div id='store-#{uploadFile.id}' class="storage-document ui-list-item storage-private">
+        <div class="storage-doc-status"></div>
+        <div class="storage-doc-thumbnail">
+            <img src="#{contextPath}/images/storages/icon-document-64.png"
+                 width="64" height="64" alt="#{uploadFile.name}"/>
         </div>
-        <div class="awa-doc-info">
-            <div class='awa-title'>
+        <div class="storage-doc-info">
+            <div class='storage-title'>
                 <a href="#{contextPath}/storages/file-info/#{uploadFile.id}">#{uploadFile.name}</a>
             </div>
-            <div class='awa-size'>
+            <div class='storage-size'>
                 #{storageMsg.storage_size_label}
                 <h:outputText value="#{uploadFile.file_size}">
                     <f:converter converterId="sizeConverter"/>
                 </h:outputText>
             </div>
-            <div class='awa-owner'>
+            <div class='storage-owner'>
                 #{storageMsg.storage_by_label}
                 #{uploadFile.user_name}
             </div>
-            <div class='awa-date'>
+            <div class='storage-date'>
                 <h:outputText value="#{uploadFile.create_date}">
                     <f:converter converterId="smartDateConverter"/>
                 </h:outputText>
             </div>
-            <div class='awa-download'>
+            <div class='storage-download'>
                 <a href="#{contextPath}/storages/files/#{uploadFile.id}/download/#{uploadFile.name}"
                    download="#{uploadFile.name}">#{storageMsg.storage_download_label}</a>
                 #{uploadFile.mime_type}

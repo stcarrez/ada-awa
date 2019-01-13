@@ -1,5 +1,5 @@
 <!-- Response sent when a file is deleted
-  -  Copyright (C) 2012, 2018 Stephane Carrez
+  -  Copyright (C) 2012, 2018, 2019 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,7 @@
 [
  { "action": "delete", "id": "#store-#{uploadFile.id}" },
  { "action": "closeDialog", "id": "#deleteDialog_#{uploadFile.id}" },
- { "action": "notification", "attach": "#awa-doc-message", "id": "#awa-doc-message-notif",
+ { "action": "notification", "attach": "#storage-doc-message", "id": "#storage-doc-message-notif",
    "data": "<util:escape>
      <h:outputFormat value="#{storageMsg.storage_file_was_deleted_message}">
          <f:param value="#{uploadFile.name}"/>

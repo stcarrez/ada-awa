@@ -23,16 +23,56 @@
                 xmlns:util="http://code.google.com/p/ada-asf/util"
                 xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{storageMsg.storage_info_title}"/>
+    <ui:param name="top_nav" value="storages"/>
     <ui:param name="pageStyle" value="page-storages"/>
 
     <!-- Main page body -->
     <ui:define name="pageBody">
         <f:metadata>
             <f:viewAction action='#{storageInfo.load}'/>
+            <f:viewAction action='#{storageList.load}'/>
         </f:metadata>
-        <ui:include src="views/storage-nav.xhtml"/>
-        <div class='awa-side-panel'>
-            <ui:include src="views/file-info.xhtml"/>
+        <div class="awa-side-panel">
+            <div id='storage-folder-left-panel' class="awa-left-panel">
+                <div class="storage-folder-title">#{storageMsg.storage_folder_title}</div>
+                <div id='storage-folder-list-editor' class="ui-widget ui-corner-all">
+                    <ui:include src="lists/folders.xhtml"/>
+                </div>
+            </div>
+            <div id='storage-list-right-panel' class="awa-right-panel">
+                <ui:include src="views/storage-nav.xhtml"/>
+                <ui:include src="views/file-info.xhtml"/>
+                <ui:include src="views/file-content.xhtml"/>
+            </div>
+            <util:script>
+                    $('#storage-folder-list').folder({
+                        selectClass: 'asf-selected',
+                        editUrl: '#{contextPath}/storages/forms/create-folder-form.html',
+                        currentItem: '#folder-' + #{storageInfo.folder_id},
+                        folderAction: function(id) {
+                            if (id != #{storageInfo.folder_id}) {
+                                document.location = "#{contextPath}/storages/documents.html?folderId=" + id;
+                            }
+                            return false;
+                        },
+                        uploadButton: '#storage-upload-button',
+                        uploadUrl: '#{contextPath}/storages/forms/upload-form.html',
+                        dictDefaultMessage: "#{util:escapeJavaScript(storageMsg.storage_upload_form_message)}",
+                        dictInvalidFileType: "#{util:escapeJavaScript(storageMsg.storage_upload_form_invalid_file_message)}"
+                    });
+                    $('#storage-folder-left-panel').resizable({
+                        minWidth: 100, maxWidth: 400,
+                        resize: function(event, ui) {
+                            var width = ui.size.width;
+                            var ow = $('#storage-folder-left-panel').parent().outerWidth();
+                            width = ow - width - 20;
+                            if (width &lt;= 10) {
+                                width = 10;
+                            }
+                            $('#storage-list-right-panel').css({ width: width });
+                        }
+                    });
+            </util:script>
         </div>
      </ui:define>
     <ui:define name="pageScript">
