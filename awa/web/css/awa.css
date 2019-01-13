@@ -1,6 +1,6 @@
 /**
  * main.css - Main style for AWA pages
- * Copyright (C) 2011, 2012, 2014, 2016, 2017 Stephane Carrez
+ * Copyright (C) 2011, 2012, 2014, 2016, 2017, 2019 Stephane Carrez
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
 html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td, label {
@@ -75,14 +75,16 @@ body.awa {
     display: flex;
     flex-direction: row;
     width: 100%;
-    height: -webkit-fill-available;
-    height: -moz-available;
+    min-height: 100%;
     border-bottom: 1px solid #b5b5b5;
 }
 .awa-left-panel {
 }
 .awa-right-panel {
     flex-grow: 1;
+}
+.awa-right-panel .awa-nav {
+    margin-top: 1em;
 }
 .awa-ok {
   float: left;
@@ -214,6 +216,10 @@ dl.awa-optional textarea, dl.awa-required textarea {
 .awa-required .trumbowyg-modal-box label {
     display: block;
     width: 93%;
+}
+
+.awa-editable-message {
+    cursor: pointer;
 }
 
 /**
@@ -367,6 +373,7 @@ ul.awa-pagination li {
     border: 1px solid #47C;
     text-decoration: none;
     font-weight: bold;
+    cursor: pointer;
 }
 .awa-button:hover {
     text-decoration: none;
