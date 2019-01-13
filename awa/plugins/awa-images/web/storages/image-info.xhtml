@@ -30,13 +30,15 @@
     <ui:define name="pageBody">
         <f:metadata>
             <f:viewAction action='#{imageInfo.load}'/>
-            <f:viewAction action='#{storageList.load}'/>
+            <f:viewAction action='#{imageList.load}'/>
         </f:metadata>
         <div class="awa-side-panel">
             <div id='storage-folder-left-panel' class="awa-left-panel">
                 <div class="storage-folder-title">#{storageMsg.storage_folder_title}</div>
                 <div id='storage-folder-list-editor' class="ui-widget ui-corner-all">
-                    <ui:include src="lists/folders.xhtml"/>
+                    <ui:include src="lists/folders.xhtml">
+                        <ui:param name="folderList" value="#{imageList.folders}"/>
+                    </ui:include>
                 </div>
             </div>
             <div id='storage-list-right-panel' class="awa-right-panel">

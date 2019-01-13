@@ -1,5 +1,5 @@
 <!-- List the images available in the workspace
-  -  Copyright (C) 2016, 2018 Stephane Carrez
+  -  Copyright (C) 2016, 2018, 2019 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,86 +36,100 @@
         <util:script>
             var contextPath = '#{contextPath}';
         </util:script>
-        <c:choose>
-            <c:when test="#{not empty storageList.folder}">
-                <div class="awa-side-panel">
-                    <div id='storage-folder-left-panel' class="awa-left-panel">
-                        <div class="storage-folder-title">#{storageMsg.storage_folder_title}</div>
-                        <div id='storage-folder-list-editor' class="ui-widget ui-corner-all">
-                            <ui:include src="lists/folders.xhtml"/>
-                        </div>
-                    </div>
-                    <div id='storage-list-right-panel' class="awa-right-panel">
-                        <ui:include src="views/storage-nav.xhtml"/>
-                        <div id='storage-list-editor' class="ui-widget ui-corner-all">
-                            <ui:include src="lists/image-list.xhtml"/>
-                        </div>
-                        <div id='storage-action' class='asf-list-action'>
-                            <a href="#" class='asf-icon asf-delete'
-                               title='#{storageMsg.storage_list_delete_file_tooltip}'></a>
-                        </div>
+        <h:panelGroup rendered="#{not empty imageList.folder}">
+            <div class="awa-side-panel">
+                <div id='storage-folder-left-panel' class="awa-left-panel">
+                    <div class="storage-folder-title">#{storageMsg.storage_folder_title}</div>
+                    <div id='storage-folder-list-editor' class="ui-widget ui-corner-all">
+                        <ui:include src="lists/folders.xhtml">
+                            <ui:param name="folderList" value="#{imageList.folders}"/>
+                        </ui:include>
                     </div>
                 </div>
-                <util:script>
-                        $('#storage-folder-list').folder({
-                            acceptedFiles: "image/jpeg,image/png,image/gif,image/svg+xml",
-                            selectClass: 'asf-selected',
-                            editUrl: '#{contextPath}/storages/forms/create-folder-form.html',
-                            currentItem: '#folder-' + #{not empty storageList.folder ? storageList.folder.id : 'null'},
-                            selectUrl: '#{contextPath}/storages/lists/images.html',
-                            uploadButton: '#storage-upload-button',
-                            uploadUrl: '#{contextPath}/storages/forms/upload-image.html',
-                            dictDefaultMessage: "#{util:escapeJavaScript(storageMsg.storage_upload_image_form_message)}",
-                            dictInvalidFileType: "#{util:escapeJavaScript(storageMsg.storage_upload_form_invalid_file_message)}"
-                        });
-                        $('#storage-folder-left-panel').resizable({
-                            minWidth: 100, maxWidth: 400,
-                            resize: function(event, ui) {
-                                var width = ui.size.width;
-                                var ow = $('#storage-folder-left-panel').parent().outerWidth();
-                                width = ow - width - 20;
-                                if (width &lt;= 10) {
-                                    width = 10;
-                                }
-                                $('#storage-list-right-panel').css({ width: width });
+                <div id='storage-list-right-panel' class="awa-right-panel">
+                    <ui:include src="views/storage-nav.xhtml"/>
+                    <div id='storage-list-editor' class="ui-widget ui-corner-all">
+                        <ui:include src="lists/image-list.xhtml"/>
+                    </div>
+                    <div id='storage-action' class='asf-list-action'>
+                        <a href="#" class='asf-icon asf-delete'
+                           title='#{storageMsg.storage_list_delete_file_tooltip}'></a>
+                    </div>
+                </div>
+            </div>
+            <util:script>
+                    $('#storage-folder-list').folder({
+                        acceptedFiles: "image/jpeg,image/png,image/gif,image/svg+xml",
+                        selectClass: 'asf-selected',
+                        editUrl: '#{contextPath}/storages/forms/create-folder-form.html',
+                        currentItem: '#folder-' + #{not empty imageList.folder ? imageList.folder.id : 'null'},
+                        selectUrl: '#{contextPath}/storages/lists/images.html',
+                        uploadButton: '#storage-upload-button',
+                        uploadUrl: '#{contextPath}/storages/forms/upload-image.html',
+                        dictDefaultMessage: "#{util:escapeJavaScript(storageMsg.storage_upload_image_form_message)}",
+                        dictInvalidFileType: "#{util:escapeJavaScript(storageMsg.storage_upload_form_invalid_file_message)}"
+                    });
+                    $('#storage-folder-left-panel').resizable({
+                        minWidth: 100, maxWidth: 400,
+                        resize: function(event, ui) {
+                            var width = ui.size.width;
+                            var ow = $('#storage-folder-left-panel').parent().outerWidth();
+                            width = ow - width - 20;
+                            if (width &lt;= 10) {
+                                width = 10;
                             }
-                        });
-                        $('#storage-list-editor').list({
-                            actionId: '#storage-action',
-                            deleteUrl: '#{contextPath}/storages/forms/file-delete-form.html?storeId=',
-                            itemPrefix: 'store-',
-                            selectAction: function(list, item, event) {
-                                if ($(event.target).hasClass("storage-doc-status")) {
-                                    if ($(item).hasClass("storage-public")) {
-                                        ASF.Post(item, "#{contextPath}/storages/ajax/uploadFile/publish",
-                                             "id=" + list.getSelectedId(item) + "&amp;status=FALSE");
+                            $('#storage-list-right-panel').css({ width: width });
+                        }
+                    });
+                    $('#storage-list-editor').list({
+                        actionId: '#storage-action',
+                        deleteUrl: '#{contextPath}/storages/forms/file-delete-form.html?storeId=',
+                        itemPrefix: 'store-',
+                        selectAction: function(list, item, event) {
+                            if ($(event.target).hasClass("storage-doc-status")) {
+                                if ($(item).hasClass("storage-public")) {
+                                    ASF.Post(item, "#{contextPath}/storages/ajax/uploadFile/publish",
+                                         "id=" + list.getSelectedId(item) + "&amp;status=FALSE");
 
-                                    } else {
-                                        ASF.Post(item, "#{contextPath}/storages/ajax/uploadFile/publish",
-                                             "id=" + list.getSelectedId(item) + "&amp;status=TRUE");
-                                    }
-                                    return false;
                                 } else {
-                                    return true;
+                                    ASF.Post(item, "#{contextPath}/storages/ajax/uploadFile/publish",
+                                         "id=" + list.getSelectedId(item) + "&amp;status=TRUE");
                                 }
+                                return false;
+                            } else {
+                                return true;
                             }
-                        });
-                </util:script>
-            </c:when>
-            <c:otherwise>
-                <div class="awa-container">
-                    <div class="grid_3">
-                        <img src="#{contextPath}/images/storages/folder.png"/>
-                    </div>
-                    <div class="grid_6">
-                        <p>#{storageMsg.storage_no_folder}</p>
-                        <div class="asf-container awa-form">
-                            <ajax:include src="/storages/forms/folder-create-first.xhtml"/>
+                        }
+                    });
+            </util:script>
+        </h:panelGroup>
+        <h:panelGroup rendered="#{empty imageList.folder}">
+            <c:choose>
+                <c:when test="#{auth:hasPermission('folder-create',0)}">
+                    <div class="awa-container">
+                        <div class="grid_3">
+                            <img src="#{contextPath}/images/storages/folder.png"/>
+                        </div>
+                        <div class="grid_6">
+                            <p>#{storageMsg.storage_no_folder}</p>
+                            <div class="asf-container awa-form">
+                                <ajax:include src="/storages/forms/folder-create-first.xhtml"/>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </c:otherwise>
-        </c:choose>
+                </c:when>
+                <c:otherwise>
+                    <div class="awa-container">
+                        <div class="grid_3">
+                            <img src="#{contextPath}/images/storages/folder.png"/>
+                        </div>
+                        <div class="grid_6">
+                            <p>#{storageMsg.storage_no_visible_folder}</p>
+                        </div>
+                    </div>
+                </c:otherwise>
+            </c:choose>
+        </h:panelGroup>
     </ui:define>
     <ui:define name="pageScript">
         <script type="text/javascript" src="#{contextPath}/js/dropzone.js"></script>

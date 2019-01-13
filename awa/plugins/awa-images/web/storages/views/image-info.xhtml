@@ -36,8 +36,10 @@
                         <f:converter converterId="smartDateConverter"/>
                     </h:outputText>
                 </dd>
+                <h:panelGroup rendered="#{imageInfo.width ne 0 or imageInfo.height ne 0}">
                 <dt>#{storageMsg.image_dimension_label}</dt>
                 <dd>#{imageInfo.width}x#{imageInfo.height}</dd>
+                </h:panelGroup>
                 <dt>#{storageMsg.image_mime_label}</dt>
                 <dd>#{imageInfo.mime_type}</dd>
                 <h:panelGroup rendered="#{imageInfo.list.count gt 1}">
@@ -70,7 +72,7 @@
     <div class="grid_6">
         <div class='storage-upload'>
             <a id="storage-reupload-button" class="awa-button">
-                #{storageMsg.storage_upload_new_version_label}
+                #{storageMsg.storage_upload_new_image_version_label}
             </a>
         </div>
         <util:script>
