@@ -32,6 +32,7 @@ with AWA.Storages.Services;
 package body AWA.Storages.Beans is
 
    use Ada.Strings.Unbounded;
+   use type ADO.Identifier;
 
    package ASC renames AWA.Services.Contexts;
 
@@ -60,7 +61,6 @@ package body AWA.Storages.Beans is
    procedure Set_Value (From  : in out Upload_Bean;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
-      use type ADO.Identifier;
       Manager : constant Services.Storage_Service_Access := From.Module.Get_Storage_Manager;
       Folder  : Models.Storage_Folder_Ref;
       Found   : Boolean;
@@ -203,14 +203,18 @@ package body AWA.Storages.Beans is
    --  ------------------------------
    --  Load the folder instance.
    --  ------------------------------
-   procedure Load_Folder (Storage : in Storage_List_Bean) is
+   procedure Load_Folder (Storage : in out Storage_List_Bean) is
       use AWA.Storages.Models;
       use type Ada.Containers.Count_Type;
 
       Manager : constant Services.Storage_Service_Access := Storage.Module.Get_Storage_Manager;
    begin
-      Load_Folders (Storage);
-      if Storage.Folder_List.List.Length > 0 then
+      if Storage.Folder_Id /= ADO.NO_IDENTIFIER then
+         Manager.Load_Folder (Storage.Folder_Bean.all,
+                              Storage.Folder_Id);
+
+
+      elsif Storage.Folder_List.List.Length > 0 then
          Manager.Load_Folder (Storage.Folder_Bean.all,
                               Storage.Folder_List.List.Element (1).Id);
 
@@ -221,7 +225,7 @@ package body AWA.Storages.Beans is
    --  ------------------------------
    --  Load the list of folders.
    --  ------------------------------
-   procedure Load_Folders (Storage : in Storage_List_Bean) is
+   procedure Load_Folders (Storage : in out Storage_List_Bean) is
       use AWA.Storages.Models;
       use AWA.Services;
 
@@ -239,7 +243,7 @@ package body AWA.Storages.Beans is
    --  ------------------------------
    --  Load the list of files associated with the current folder.
    --  ------------------------------
-   procedure Load_Files (Storage : in Storage_List_Bean) is
+   procedure Load_Files (Storage : in out Storage_List_Bean) is
       use AWA.Storages.Models;
       use AWA.Services;
 
@@ -272,8 +276,7 @@ package body AWA.Storages.Beans is
       Manager : constant Services.Storage_Service_Access := From.Module.Get_Storage_Manager;
    begin
       if Name = "folderId" and not Util.Beans.Objects.Is_Empty (Value) then
-         Manager.Load_Folder (From.Folder, ADO.Identifier (Util.Beans.Objects.To_Integer (Value)));
-         From.Flags (INIT_FOLDER) := True;
+         From.Folder_Id := ADO.Utils.To_Identifier (Value);
       end if;
    end Set_Value;
 
@@ -282,23 +285,14 @@ package body AWA.Storages.Beans is
                        Name : in String) return Util.Beans.Objects.Object is
    begin
       if Name = "files" then
-         if not List.Init_Flags (INIT_FILE_LIST) then
-            Load_Files (List);
-         end if;
          return Util.Beans.Objects.To_Object (Value   => List.Files_List_Bean,
                                               Storage => Util.Beans.Objects.STATIC);
 
       elsif Name = "folders" then
-         if not List.Init_Flags (INIT_FOLDER_LIST) then
-            Load_Folders (List);
-         end if;
          return Util.Beans.Objects.To_Object (Value   => List.Folder_List_Bean,
                                               Storage => Util.Beans.Objects.STATIC);
 
       elsif Name = "folder" then
-         if not List.Init_Flags (INIT_FOLDER) then
-            Load_Folder (List);
-         end if;
          if List.Folder_Bean.Is_Null then
             return Util.Beans.Objects.Null_Object;
          end if;
@@ -319,6 +313,7 @@ package body AWA.Storages.Beans is
       pragma Unreferenced (Outcome);
    begin
       Storage_List_Bean'Class (List).Load_Folders;
+      Storage_List_Bean'Class (List).Load_Folder;
       Storage_List_Bean'Class (List).Load_Files;
    end Load;
 
