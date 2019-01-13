@@ -18,6 +18,7 @@
 with Ada.Containers;
 
 with Util.Log.Loggers;
+with Util.Strings;
 
 with ADO.Utils;
 with ADO.Queries;
@@ -357,6 +358,35 @@ package body AWA.Storages.Beans is
       Object.Flags            := Object.Init_Flags'Access;
       return Object.all'Access;
    end Create_Storage_List_Bean;
+
+   --  ------------------------------
+   --  Returns true if the given mime type can be displayed by a browser.
+   --  Mime types: application/pdf, text/*, image/*
+   --  ------------------------------
+   function Is_Browser_Visible (Mime_Type : in String) return Boolean is
+   begin
+      if Mime_Type = "application/pdf" then
+         return True;
+      end if;
+      if Util.Strings.Starts_With (Mime_Type, Prefix => "text/") then
+         return True;
+      end if;
+      if Util.Strings.Starts_With (Mime_Type, Prefix => "image/") then
+         return True;
+      end if;
+      return False;
+   end Is_Browser_Visible;
+
+   overriding
+   function Get_Value (From : in Storage_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "isBrowserVisible" then
+         return Util.Beans.Objects.To_Object (Is_Browser_Visible (To_String (From.Mime_Type)));
+      else
+         return AWA.Storages.Models.Storage_Bean (From).Get_Value (Name);
+      end if;
+   end Get_Value;
 
    overriding
    procedure Load (Into    : in out Storage_Bean;
