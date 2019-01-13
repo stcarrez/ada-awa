@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-images-beans -- Image Ada Beans
---  Copyright (C) 2016, 2018 Stephane Carrez
+--  Copyright (C) 2016, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,7 +48,7 @@ package AWA.Images.Beans is
 
    --  Load the list of images associated with the current folder.
    overriding
-   procedure Load_Files (Storage : in Image_List_Bean);
+   procedure Load_Files (Storage : in out Image_List_Bean);
 
    overriding
    function Get_Value (List : in Image_List_Bean;
