@@ -12,7 +12,7 @@
   </context-param>
 
   <context-param>
-    <!-- List of permissions to grant to the owner when the workspace is created -->
+    <!-- When set, allow new users to create their workspace -->
     <param-name>workspaces.allow_workspace_create</param-name>
     <param-value>0</param-value>
   </context-param>
