@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2018 Stephane Carrez
+--  Copyright (C) 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -114,7 +114,6 @@ package body AWA.Permissions.Models is
       Impl : Acl_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Boolean (Impl.all, 3, Impl.Writeable, Value);
       ADO.Objects.Set_Field_Boolean (Impl.all, 3, Impl.Writeable, Value);
    end Set_Writeable;
 
@@ -475,7 +474,6 @@ package body AWA.Permissions.Models is
    begin
       Object.Set_Key_Value (Stmt.Get_Identifier (0));
       Object.Entity_Id := Stmt.Get_Identifier (1);
-      Object.Writeable := Stmt.Get_Boolean (2);
       Object.Writeable := Stmt.Get_Boolean (2);
       Object.User_Id := Stmt.Get_Identifier (3);
       Object.Workspace_Id := Stmt.Get_Identifier (4);
