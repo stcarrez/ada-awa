@@ -1,5 +1,5 @@
 <!-- Signup form
-  -  Copyright (C) 2011, 2012, 2018 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2018, 2019 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,78 +23,83 @@
     <h:form id='register'>
         <h:inputHidden id='key' value="#{login.key}" required='false'/>
         <div class='awa-messages'>
-              <h:message styleClass='awa-error'/>
-          </div>
-          <dl class="awa-required#{util:hasMessage('firstName') ? ' awa-error' : ''}">
-              <dt>
-                  <label for='firstName'>#{userMsg.signup_firstname_label}</label>
-                  <h:message for='firstName'/>
-              </dt>
-              <dd>
-                  <h:inputText id='firstName' size='50' maxlength="100" required="true"
-                               validatorMessage='#{userMsg.signup_invalid_firstname}'
-                               requiredMessage='#{userMsg.signup_invalid_firstname}'
-                               value='#{login.firstName}'>
-                      <f:validateLength minimum='1' maximum='100'/>
-                  </h:inputText>
-              </dd>
-          </dl>
-          <dl class="awa-required#{util:hasMessage('lastName') ? ' awa-error' : ''}">
-              <dt>
-                  <label for='lastName'>#{userMsg.signup_lastname_label}</label>
-                  <h:message for='lastName'/>
-              </dt>
-              <dd>
-                  <h:inputText id='lastName' size='50' maxlength="100" required="true"
-                               validatorMessage='#{userMsg.signup_invalid_lastname}'
-                               requiredMessage='#{userMsg.signup_invalid_lastname}'
-                               value='#{login.lastName}'>
-                      <f:validateLength minimum='1' maximum='100'/>
-                  </h:inputText>
-              </dd>
-          </dl>
-          <dl class="awa-required#{util:hasMessage('email') ? ' awa-error' : ''}">
-              <dt>
-                  <label for='email'>#{userMsg.signup_email_label}</label>
-                  <h:message for='email'/>
-              </dt>
-              <dd>
-                  <h:inputText id='email' size='50' maxlength="180" required="true"
-                               validatorMessage='#{userMsg.signup_invalid_email}'
-                               requiredMessage='#{userMsg.signup_invalid_email}'
-                               value='#{login.email}'>
-                      <f:validateLength minimum='1' maximum='180'/>
-                  </h:inputText>
-              </dd>
-          </dl>
-          <dl class="awa-required#{util:hasMessage('password') ? ' awa-error' : ''}">
-              <dt>
-                  <label for='password'>#{userMsg.signup_password_label}</label>
-                  <h:message for='password'/>
-              </dt>
-              <dd>
-                  <h:inputSecret id='password' size='20' maxlength="20" required="true" autocomplete="off"
+            <h:message styleClass='awa-error'/>
+        </div>
+        <dl class="awa-required#{util:hasMessage('firstName') ? ' awa-error' : ''}">
+            <dt>
+                <label for='firstName'>#{userMsg.signup_firstname_label}</label>
+                <h:message for='firstName'/>
+            </dt>
+            <dd>
+                <h:inputText id='firstName' size='50' maxlength="100" required="true"
+                             styleClass="ui-corner-all"
+                             validatorMessage='#{userMsg.signup_invalid_firstname}'
+                             requiredMessage='#{userMsg.signup_invalid_firstname}'
+                             value='#{login.firstName}'>
+                    <f:validateLength minimum='1' maximum='100'/>
+                </h:inputText>
+            </dd>
+        </dl>
+        <dl class="awa-required#{util:hasMessage('lastName') ? ' awa-error' : ''}">
+            <dt>
+                <label for='lastName'>#{userMsg.signup_lastname_label}</label>
+                <h:message for='lastName'/>
+            </dt>
+            <dd>
+                <h:inputText id='lastName' size='50' maxlength="100" required="true"
+                             styleClass="ui-corner-all"
+                             validatorMessage='#{userMsg.signup_invalid_lastname}'
+                             requiredMessage='#{userMsg.signup_invalid_lastname}'
+                             value='#{login.lastName}'>
+                    <f:validateLength minimum='1' maximum='100'/>
+                </h:inputText>
+            </dd>
+        </dl>
+        <dl class="awa-required#{util:hasMessage('email') ? ' awa-error' : ''}">
+            <dt>
+                <label for='email'>#{userMsg.signup_email_label}</label>
+                <h:message for='email'/>
+            </dt>
+            <dd>
+                <h:inputText id='email' size='50' maxlength="180" required="true"
+                             styleClass="ui-corner-all"
+                             validatorMessage='#{userMsg.signup_invalid_email}'
+                             requiredMessage='#{userMsg.signup_invalid_email}'
+                             value='#{login.email}'>
+                    <f:validateLength minimum='1' maximum='180'/>
+                </h:inputText>
+            </dd>
+        </dl>
+        <dl class="awa-required#{util:hasMessage('password') ? ' awa-error' : ''}">
+            <dt>
+                <label for='password'>#{userMsg.signup_password_label}</label>
+                <h:message for='password'/>
+            </dt>
+            <dd>
+                <h:inputSecret id='password' size='20' maxlength="20" required="true" autocomplete="off"
+                               styleClass="ui-corner-all"
                                validatorMessage='#{userMsg.signup_invalid_password}'
                                requiredMessage='#{userMsg.signup_invalid_password}'
                                value='#{login.password}'>
-                      <f:validateLength minimum='3' maximum='20'/>
-                  </h:inputSecret>
-              </dd>
-          </dl>
-          <dl class="awa-required#{util:hasMessage('password2') ? ' awa-error' : ''}">
-              <dt>
-                  <label for='password2'>#{userMsg.signup_retype_password_label}</label>
-                  <h:message for='password2'/>
-              </dt>
-              <dd>
-                  <h:inputSecret id='password2' size='20' maxlength="20" required="true" autocomplete="off"
+                    <f:validateLength minimum='3' maximum='20'/>
+                </h:inputSecret>
+            </dd>
+        </dl>
+        <dl class="awa-required#{util:hasMessage('password2') ? ' awa-error' : ''}">
+            <dt>
+                <label for='password2'>#{userMsg.signup_retype_password_label}</label>
+                <h:message for='password2'/>
+            </dt>
+            <dd>
+                <h:inputSecret id='password2' size='20' maxlength="20" required="true" autocomplete="off"
+                               styleClass="ui-corner-all"
                                validatorMessage='#{userMsg.signup_invalid_password}'
                                requiredMessage='#{userMsg.signup_invalid_password}'
                                value='#{lostPassword.password2}'>
-                      <f:validateLength minimum='3' maximum='20'/>
-                  </h:inputSecret>
-              </dd>
-          </dl>
+                    <f:validateLength minimum='3' maximum='20'/>
+                </h:inputSecret>
+            </dd>
+        </dl>
         <ul class='awa-buttons'>
             <li>
                 <h:commandButton id='register-button' value='#{userMsg.signup_register_button}'
