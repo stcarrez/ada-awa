@@ -1005,7 +1005,6 @@ package body AWA.Storages.Models is
    begin
       Set_Field (Object, Impl);
       ADO.Objects.Set_Field_Boolean (Impl.all, 9, Impl.Is_Public, Value);
-      ADO.Objects.Set_Field_Boolean (Impl.all, 9, Impl.Is_Public, Value);
    end Set_Is_Public;
 
    function Get_Is_Public (Object : in Storage_Ref)
@@ -1448,7 +1447,6 @@ package body AWA.Storages.Models is
       Object.Uri := Stmt.Get_Unbounded_String (5);
       Object.Set_Key_Value (Stmt.Get_Identifier (7));
       Object.Is_Public := Stmt.Get_Boolean (8);
-      Object.Is_Public := Stmt.Get_Boolean (8);
       if not Stmt.Is_Null (9) then
          Object.Original.Set_Key_Value (Stmt.Get_Identifier (9), Session);
       end if;
@@ -1561,7 +1559,6 @@ package body AWA.Storages.Models is
       Impl : Store_Local_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Boolean (Impl.all, 4, Impl.Shared, Value);
       ADO.Objects.Set_Field_Boolean (Impl.all, 4, Impl.Shared, Value);
    end Set_Shared;
 
@@ -1943,7 +1940,6 @@ package body AWA.Storages.Models is
    begin
       Object.Set_Key_Value (Stmt.Get_Identifier (0));
       Object.Store_Version := Stmt.Get_Integer (2);
-      Object.Shared := Stmt.Get_Boolean (3);
       Object.Shared := Stmt.Get_Boolean (3);
       Object.Path := Stmt.Get_Unbounded_String (4);
       Object.Expire_Date := Stmt.Get_Time (5);
