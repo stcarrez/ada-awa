@@ -123,7 +123,7 @@
   <!--  OpenID Orange -->
   <context-param>
     <param-name>auth.url.orange</param-name>
-    <param-value>http://openid.orange.fr</param-value>
+    <param-value>https://openid.orange.fr</param-value>
     <description>Orange OpenID access point</description>
   </context-param>
 
@@ -136,7 +136,7 @@
   <!--  OpenID Yahoo! -->
   <context-param>
     <param-name>auth.url.yahoo</param-name>
-    <param-value>http://open.login.yahooapis.com/openid20/www.yahoo.com/xrds</param-value>
+    <param-value>https://open.login.yahooapis.com/openid20/www.yahoo.com/xrds</param-value>
     <description>Yahoo! OpenID access point</description>
   </context-param>
 
