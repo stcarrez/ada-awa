@@ -1,5 +1,5 @@
 <!-- Traditional email/password login form
-  -  Copyright (C) 2011, 2012 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2019 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,7 +31,8 @@
                 <h:message for='email'/>
             </dt>
             <dd>
-                <h:inputText id='email' size='50' required='false' value='#{login.email}'/>
+                <h:inputText id='email' styleClass="ui-corner-all"
+                             size='50' required='false' value='#{login.email}'/>
             </dd>
         </dl>
         <dl class="awa-required#{util:hasMessage('password') ? ' awa-error' : ''}">
@@ -39,7 +40,8 @@
                 <label for='password'>#{userMsg.login_password_label}</label>
             </dt>
             <dd>
-                <h:inputSecret id='password' size='20' autocomplete="off" required='false' value='#{login.password}'/>
+                <h:inputSecret id='password' styleClass="ui-corner-all"
+                               size='20' autocomplete="off" required='false' value='#{login.password}'/>
             </dd>
         </dl>
         <ul class='awa-buttons'>
