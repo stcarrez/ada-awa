@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-filters -- Specific filters for authentication and key verification
---  Copyright (C) 2011, 2012, 2013, 2015 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2015, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +21,9 @@ with Util.Log.Loggers;
 with ASF.Applications.Main;
 with ASF.Cookies;
 with Servlet.Core;
+
+with AWA.Services.Contexts;
+with AWA.Applications;
 with AWA.Users.Services;
 with AWA.Users.Modules;
 
@@ -60,6 +63,7 @@ package body AWA.Users.Filters is
       Filter.Login_URI := To_Unbounded_String (URI);
       ASF.Security.Filters.Auth_Filter (Filter).Initialize (Config);
       if Context.all in Application'Class then
+         Filter.Application := AWA.Applications.Application'Class (Context.all)'Access;
          Filter.Set_Permission_Manager (Application'Class (Context.all).Get_Security_Manager);
       end if;
    end Initialize;
@@ -70,14 +74,20 @@ package body AWA.Users.Filters is
                            Session   : in ASF.Sessions.Session;
                            Auth_Id   : in String;
                            Principal : out ASF.Principals.Principal_Access) is
-      pragma Unreferenced (F, Session);
+      pragma Unreferenced (Session);
 
       use AWA.Users.Modules;
       use AWA.Users.Services;
 
-      Manager : constant User_Service_Access := AWA.Users.Modules.Get_User_Manager;
-      P       : AWA.Users.Principals.Principal_Access;
+      Context     : aliased AWA.Services.Contexts.Service_Context;
+      Application : AWA.Applications.Application_Access;
+      Manager     : User_Service_Access;
+      P           : AWA.Users.Principals.Principal_Access;
    begin
+      --  Setup the service context.
+      Context.Set_Context (F.Application, null);
+
+      Manager := AWA.Users.Modules.Get_User_Manager;
       Manager.Authenticate (Cookie  => Auth_Id,
                             Ip_Addr => "",
                             Principal => P);
