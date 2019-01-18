@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa.users -- User registration, authentication processes
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2017, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -264,8 +264,13 @@ package body AWA.Users.Services is
       Create_Session (Model, DB, Session, User, IpAddr, Principal);
       if not Found then
          declare
-            Event : AWA.Events.Module_Event;
+            Event   : AWA.Events.Module_Event;
+            Sec_Ctx : Security.Contexts.Security_Context;
          begin
+            --  Make a security context with the user's credential.
+            Sec_Ctx.Set_Context (Manager   => Model.Permissions.all'Access,
+                                 Principal => Principal.all'Access);
+
             --  Send the event to indicate a new user was created.
             Event.Set_Parameter ("email", Email);
             Model.Send_Alert (User_Create_Event.Kind, User, Event);
@@ -336,17 +341,18 @@ package body AWA.Users.Services is
                            Cookie   : in String;
                            Ip_Addr  : in String;
                            Principal : out AWA.Users.Principals.Principal_Access) is
-
+      use type Contexts.Service_Context_Access;
       use type ADO.Identifier;
 
       Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      DB     : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      DB     : Master_Session;
       Found  : Boolean;
 
       Cookie_Session : Session_Ref;
       Auth_Session   : Session_Ref;
       Session        : Session_Ref;
       User           : User_Ref;
+      Query          : ADO.SQL.Query;
       Id             : constant ADO.Identifier := Model.Get_Authenticate_Id (Cookie);
    begin
       Log.Info ("Authenticate cookie {0}", Cookie);
@@ -355,9 +361,13 @@ package body AWA.Users.Services is
          Log.Warn ("Invalid authenticate cookie: {0}", Cookie);
          raise Not_Found with "Invalid cookie";
       end if;
-      Ctx.Start;
+      DB := Model.Get_Master_Session;
 
-      Cookie_Session.Load (DB, Id, Found);
+      --  Find the user registered under the given email address & password.
+      Query.Bind_Param (1, Id);
+      Query.Set_Join ("INNER JOIN awa_user AS u ON u.id = o.user_id");
+      Query.Set_Filter ("o.id = ? AND o.end_date IS NULL");
+      Cookie_Session.Find (DB, Query, Found);
       if not Found then
          Log.Warn ("Authenticate session {0} not found in database", ADO.Identifier'Image (Id));
          raise Not_Found with "Invalid cookie";
@@ -385,7 +395,9 @@ package body AWA.Users.Services is
       Session.Save (DB);
 
       Principal := AWA.Users.Principals.Create (User, Session);
-      Ctx.Set_Context (Ctx.Get_Application, Principal);
+      if Ctx /= null then
+         Ctx.Set_Context (Ctx.Get_Application, Principal);
+      end if;
 
       --  Mark the cookie session as used.
       Cookie_Session.Set_Stype (Users.Models.USED_SESSION);
@@ -395,7 +407,6 @@ package body AWA.Users.Services is
       end if;
       Cookie_Session.Save (DB);
 
-      Ctx.Commit;
       Log.Info ("Session {0} created for user {1}",
                 ADO.Identifier'Image (Session.Get_Id), ADO.Identifier'Image (User.Get_Id));
 
