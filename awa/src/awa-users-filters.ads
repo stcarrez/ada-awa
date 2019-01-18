@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-filters -- Specific filters for authentication and key verification
---  Copyright (C) 2011, 2012, 2015 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2015, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,6 +26,7 @@ with ASF.Filters;
 with ASF.Servlets;
 with ASF.Security.Filters;
 
+with AWA.Applications;
 with AWA.Users.Principals;
 package AWA.Users.Filters is
 
@@ -113,7 +114,8 @@ private
    use Ada.Strings.Unbounded;
 
    type Auth_Filter is new ASF.Security.Filters.Auth_Filter with record
-      Login_URI : Unbounded_String;
+      Login_URI   : Unbounded_String;
+      Application : AWA.Applications.Application_Access;
    end record;
 
    type Verify_Filter is new ASF.Filters.Filter with record
