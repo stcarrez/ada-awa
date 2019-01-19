@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2018 Stephane Carrez
+--  Copyright (C) 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -197,7 +197,6 @@ package body AWA.Images.Models is
       Impl : Image_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Boolean (Impl.all, 7, Impl.Public, Value);
       ADO.Objects.Set_Field_Boolean (Impl.all, 7, Impl.Public, Value);
    end Set_Public;
 
@@ -633,7 +632,6 @@ package body AWA.Images.Models is
       Object.Thumb_Width := Stmt.Get_Integer (3);
       Object.Thumb_Height := Stmt.Get_Integer (4);
       Object.Path := Stmt.Get_Unbounded_String (5);
-      Object.Public := Stmt.Get_Boolean (6);
       Object.Public := Stmt.Get_Boolean (6);
       if not Stmt.Is_Null (8) then
          Object.Thumbnail.Set_Key_Value (Stmt.Get_Identifier (8), Session);
