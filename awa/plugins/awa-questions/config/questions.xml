@@ -265,7 +265,7 @@
             SELECT u.id FROM awa_user AS u WHERE u.id = :user_id
         </sql>
     </entity-permission>
-
+<!--
     <entity-permission>
         <name>answer-edit</name>
         <entity-type>awa_answer</entity-type>
@@ -274,7 +274,17 @@
             SELECT a.id FROM awa_answer AS a
             WHERE a.id = :entity_id AND a.author_id = :user_id
         </sql>
+    </entity-permission> -->
+
+    <entity-permission>
+        <name>answer-edit</name>
+        <entity-type>awa_answer</entity-type>
+        <description>Grant the edit permission to any user who is authenticated</description>
+        <sql>
+            SELECT u.id FROM awa_user AS u WHERE u.id = :user_id
+        </sql>
     </entity-permission>
+
 
     <entity-permission>
         <name>answer-delete</name>
@@ -294,14 +304,6 @@
             SELECT a.id FROM awa_answer AS a
             INNER JOIN awa_question AS q ON a.question_id = q.id
             WHERE a.id = :entity_id AND q.author_id = :user_id
-        </sql>
-    </entity-permission>
-
-    <entity-permission>
-        <name>answer-edit</name>
-        <entity-type>awa_answer</entity-type>
-        <sql>
-            SELECT u.id FROM awa_user AS u WHERE u.id = :user_id
         </sql>
     </entity-permission>
 
