@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2018 Stephane Carrez
+--  Copyright (C) 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -785,7 +785,6 @@ package body AWA.Blogs.Models is
    begin
       Set_Field (Object, Impl);
       ADO.Audits.Set_Field_Boolean (Impl.all, 9, Impl.Allow_Comments, Value);
-      ADO.Audits.Set_Field_Boolean (Impl.all, 9, Impl.Allow_Comments, Value);
    end Set_Allow_Comments;
 
    function Get_Allow_Comments (Object : in Post_Ref)
@@ -1185,7 +1184,6 @@ package body AWA.Blogs.Models is
       Object.Uri := Stmt.Get_Unbounded_String (4);
       Object.Publish_Date := Stmt.Get_Time (6);
       Object.Status := Post_Status_Type'Val (Stmt.Get_Integer (7));
-      Object.Allow_Comments := Stmt.Get_Boolean (8);
       Object.Allow_Comments := Stmt.Get_Boolean (8);
       Object.Read_Count := Stmt.Get_Integer (9);
       if not Stmt.Is_Null (10) then
