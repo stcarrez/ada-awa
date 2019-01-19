@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2018 Stephane Carrez
+--  Copyright (C) 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -636,7 +636,6 @@ package body AWA.Wikis.Models is
    begin
       Set_Field (Object, Impl);
       ADO.Audits.Set_Field_Boolean (Impl.all, 3, Impl.Is_Public, Value);
-      ADO.Audits.Set_Field_Boolean (Impl.all, 3, Impl.Is_Public, Value);
    end Set_Is_Public;
 
    function Get_Is_Public (Object : in Wiki_Space_Ref)
@@ -1072,7 +1071,6 @@ package body AWA.Wikis.Models is
       Object.Set_Key_Value (Stmt.Get_Identifier (0));
       Object.Name := Stmt.Get_Unbounded_String (1);
       Object.Is_Public := Stmt.Get_Boolean (2);
-      Object.Is_Public := Stmt.Get_Boolean (2);
       Object.Create_Date := Stmt.Get_Time (4);
       Object.Left_Side := Stmt.Get_Unbounded_String (5);
       Object.Right_Side := Stmt.Get_Unbounded_String (6);
@@ -1197,7 +1195,6 @@ package body AWA.Wikis.Models is
       Impl : Wiki_Page_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Audits.Set_Field_Boolean (Impl.all, 4, Impl.Is_Public, Value);
       ADO.Audits.Set_Field_Boolean (Impl.all, 4, Impl.Is_Public, Value);
    end Set_Is_Public;
 
@@ -1624,7 +1621,6 @@ package body AWA.Wikis.Models is
       Object.Set_Key_Value (Stmt.Get_Identifier (0));
       Object.Name := Stmt.Get_Unbounded_String (1);
       Object.Last_Version := Stmt.Get_Integer (2);
-      Object.Is_Public := Stmt.Get_Boolean (3);
       Object.Is_Public := Stmt.Get_Boolean (3);
       Object.Title := Stmt.Get_Unbounded_String (4);
       Object.Read_Count := Stmt.Get_Integer (6);
