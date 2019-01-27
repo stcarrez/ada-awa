@@ -83,23 +83,6 @@ package body AWA.Storages.Servlets is
    procedure Do_Get (Server   : in Storage_Servlet;
                      Request  : in out ASF.Requests.Request'Class;
                      Response : in out ASF.Responses.Response'Class) is
-
-      type Get_Type is (DEFAULT, AS_CONTENT_DISPOSITION, INVALID);
-
-      function Get_Format return Get_Type;
-
-      function Get_Format return Get_Type is
-         Format : constant String := Request.Get_Path_Parameter (2);
-      begin
-         if Format = "view" then
-            return DEFAULT;
-         elsif Format = "download" then
-            return AS_CONTENT_DISPOSITION;
-         else
-            return INVALID;
-         end if;
-      end Get_Format;
-
       URI     : constant String := Request.Get_Request_URI;
       Data    : ADO.Blob_Ref;
       Mime    : Ada.Strings.Unbounded.Unbounded_String;
@@ -107,7 +90,7 @@ package body AWA.Storages.Servlets is
       Date    : Ada.Calendar.Time;
       Format  : Get_Type;
    begin
-      Format := Get_Format;
+      Format := Storage_Servlet'Class (Server).Get_Format (Request);
       if Format = INVALID then
          Log.Info ("GET: {0}: invalid format", URI);
          Response.Send_Error (ASF.Responses.SC_NOT_FOUND);
@@ -173,5 +156,23 @@ package body AWA.Storages.Servlets is
       Log.Info ("GET storage file {0}", Store);
       Manager.Load (From => Id, Name => Name, Mime => Mime, Date => Date, Into => Data);
    end Load;
+
+   --  ------------------------------
+   --  Get the expected return mode (content disposition for download or inline).
+   --  ------------------------------
+   function Get_Format (Server   : in Storage_Servlet;
+                        Request  : in ASF.Requests.Request'Class) return Get_Type is
+      pragma Unreferenced (Server);
+
+      Format : constant String := Request.Get_Path_Parameter (2);
+   begin
+      if Format = "view" then
+         return DEFAULT;
+      elsif Format = "download" then
+         return AS_CONTENT_DISPOSITION;
+      else
+         return INVALID;
+      end if;
+   end Get_Format;
 
 end AWA.Storages.Servlets;
