@@ -63,4 +63,16 @@ package body AWA.Wikis.Servlets is
 
    end Load;
 
+   --  ------------------------------
+   --  Get the expected return mode (content disposition for download or inline).
+   --  ------------------------------
+   overriding
+   function Get_Format (Server   : in Image_Servlet;
+                        Request  : in ASF.Requests.Request'Class)
+                        return AWA.Storages.Servlets.Get_Type is
+      pragma Unreferenced (Server, Request);
+   begin
+      return AWA.Storages.Servlets.DEFAULT;
+   end Get_Format;
+
 end AWA.Wikis.Servlets;
