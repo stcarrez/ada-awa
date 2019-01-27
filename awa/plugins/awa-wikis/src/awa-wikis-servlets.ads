@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-servlets -- Serve files saved in the storage service
---  Copyright (C) 2016 Stephane Carrez
+--  Copyright (C) 2016, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,12 +30,19 @@ package AWA.Wikis.Servlets is
 
    --  Load the data content that correspond to the GET request and get the name as well
    --  as mime-type and date.
+   overriding
    procedure Load (Server   : in Image_Servlet;
                    Request  : in out ASF.Requests.Request'Class;
                    Name     : out Ada.Strings.Unbounded.Unbounded_String;
                    Mime     : out Ada.Strings.Unbounded.Unbounded_String;
                    Date     : out Ada.Calendar.Time;
                    Data     : out ADO.Blob_Ref);
+
+   --  Get the expected return mode (content disposition for download or inline).
+   overriding
+   function Get_Format (Server   : in Image_Servlet;
+                        Request  : in ASF.Requests.Request'Class)
+                        return AWA.Storages.Servlets.Get_Type;
 
 private
 
