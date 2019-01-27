@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-services -- Storage service
---  Copyright (C) 2012, 2013, 2016, 2018 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2016, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -288,6 +288,33 @@ package body AWA.Storages.Services is
             Into := ADO.Create_Blob (AWA.Storages.Get_Path (File));
          end;
       end if;
+   end Load;
+
+   procedure Load (Service : in Storage_Service;
+                   From    : in ADO.Identifier;
+                   Kind    : in AWA.Storages.Models.Storage_Type;
+                   Into    : out ADO.Blob_Ref) is
+      use type Stores.Store_Access;
+      use type Models.Storage_Type;
+
+      Mode    : constant Storage_Type := (if Kind = Models.FILE then Storages.FILE else TMP);
+      DB      : ADO.Sessions.Session := Service.Get_Session;
+      Store   : Stores.Store_Access;
+      Storage : AWA.Storages.Models.Storage_Ref;
+      File    : AWA.Storages.Storage_File (Mode);
+      Found   : Boolean;
+   begin
+      Store := Storage_Service'Class (Service).Get_Store (Kind);
+      if Store = null then
+         Log.Error ("There is no store for storage {0}", Models.Storage_Type'Image (Kind));
+      end if;
+      Storage.Load (DB, From, Found);
+      if not Found then
+         Log.Warn ("Storage entity {0} not found", ADO.Identifier'Image (From));
+         raise ADO.Objects.NOT_FOUND;
+      end if;
+      Store.Load (DB, Storage, File);
+      Into := ADO.Create_Blob (AWA.Storages.Get_Path (File));
    end Load;
 
    --  Load the storage content into a file.  If the data is not stored in a file, a temporary
