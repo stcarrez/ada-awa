@@ -1,5 +1,5 @@
 <!-- Information about an image used in a wiki page
-  -  Copyright (C) 2016, 2017, 2018 Stephane Carrez
+  -  Copyright (C) 2016, 2017, 2018, 2019 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -73,62 +73,8 @@
                                  tagLink="#{contextPath}/wikis/tags/#{wikiView.wiki_id}/#{tagName}/recent"
                                  var="tagName"
                                  tagClass="tagedit-listelement tagedit-listelement-old"/>
-                    <div class="wiki-image-info">
-                        <div class="grid_6">
-                            <dl class="wiki-image-details">
-                                <dt>#{wikiMsg.wiki_image_file_label}</dt>
-                                <dd>#{wikiImageInfo.folder_name}/#{wikiImageInfo.name}</dd>
-                                <h:panelGroup rendered="#{wikiImageInfo.id gt 0 and wikiImageInfo.list.count != 0}">
-                                    <dt>#{wikiMsg.wiki_image_file_size_label}</dt>
-                                    <dd>
-                                        <h:outputText value="#{wikiImageInfo.file_size}">
-                                            <f:converter converterId="sizeConverter"/>
-                                        </h:outputText>
-                                    </dd>
-                                    <dt>#{wikiMsg.wiki_image_date_label}</dt>
-                                    <dd>
-                                        <h:outputText value="#{wikiImageInfo.create_date}">
-                                            <f:converter converterId="smartDateConverter"/>
-                                        </h:outputText>
-                                    </dd>
-                                    <dt>#{wikiMsg.wiki_image_mime_label}</dt>
-                                    <dd>#{wikiImageInfo.mime_type}</dd>
-                                    <dt>#{wikiMsg.wiki_image_resolution_label}</dt>
-                                    <dd>
-                                        <div class="wiki-image-view">
+                    <ui:include src="views/image-info.xhtml"/>
 
-                                        <h:list var="img" value="#{wikiImageInfo.list}">
-                                            <a href="#{wikiImageInfo.imageUrl}">
-                                                <span>
-                                                    <h:outputFormat value="#{wikiMsg.wiki_image_dimension}">
-                                                        <f:param value="#{img.width}"/>
-                                                        <f:param value="#{img.height}"/>
-                                                    </h:outputFormat>
-                                                </span>
-                                                <span>(<h:outputText value="#{img.file_size}">
-                                                          <f:converter converterId="sizeConverter"/>
-                                                      </h:outputText>)
-                                                </span>
-                                            </a>
-                                        </h:list>
-                                        </div>
-                                    </dd>
-                                </h:panelGroup>
-                                <h:panelGroup rendered="#{wikiImageInfo.id le 0 or wikiImageInfo.list.count == 0}">
-                                    <dd>#{wikiMsg.wiki_image_missing_message}</dd>
-                                </h:panelGroup>
-                            </dl>
-                        </div>
-                        <div class="grid_6">
-                            <div id='document-upload'>
-                                <iframe frameborder="0" class='wiki-image-upload'
-                                        scrolling="no"
-                                        height="80"
-                                        width="100%"
-                                        src="#{contextPath}/wikis/forms/upload-form.html?folderId=#{wikiImageInfo.folder_id}&amp;name=#{wikiImageInfo.name}"/>
-                            </div>
-                        </div>
-                    </div>
                     <h:panelGroup rendered="#{wikiImageInfo.id ne 0}">
                         <div class="wiki-image-view">
                             <img src="#{wikiImageInfo.imageUrl}"/>
@@ -147,5 +93,10 @@
             </div>
         </div>
      </ui:define>
+
+    <ui:define name="pageScript">
+        <script type="text/javascript" src="#{contextPath}/js/dropzone.js"></script>
+    </ui:define>
+
 </ui:composition>
 
