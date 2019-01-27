@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-servlets -- Serve files saved in the storage service
---  Copyright (C) 2017 Stephane Carrez
+--  Copyright (C) 2017, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,6 +36,12 @@ package AWA.Blogs.Servlets is
                    Mime     : out Ada.Strings.Unbounded.Unbounded_String;
                    Date     : out Ada.Calendar.Time;
                    Data     : out ADO.Blob_Ref);
+
+   --  Get the expected return mode (content disposition for download or inline).
+   overriding
+   function Get_Format (Server   : in Image_Servlet;
+                        Request  : in ASF.Requests.Request'Class)
+                        return AWA.Storages.Servlets.Get_Type;
 
 private
 
