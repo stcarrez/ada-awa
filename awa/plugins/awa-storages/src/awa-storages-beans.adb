@@ -213,7 +213,6 @@ package body AWA.Storages.Beans is
          Manager.Load_Folder (Storage.Folder_Bean.all,
                               Storage.Folder_Id);
 
-
       elsif Storage.Folder_List.List.Length > 0 then
          Manager.Load_Folder (Storage.Folder_Bean.all,
                               Storage.Folder_List.List.Element (1).Id);
@@ -273,7 +272,6 @@ package body AWA.Storages.Beans is
    procedure Set_Value (From  : in out Storage_List_Bean;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
-      Manager : constant Services.Storage_Service_Access := From.Module.Get_Storage_Manager;
    begin
       if Name = "folderId" and not Util.Beans.Objects.Is_Empty (Value) then
          From.Folder_Id := ADO.Utils.To_Identifier (Value);
@@ -386,8 +384,6 @@ package body AWA.Storages.Beans is
    overriding
    procedure Load (Into    : in out Storage_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
-      use type ADO.Identifier;
-
       Ctx     : constant ASC.Service_Context_Access := ASC.Current;
       User    : constant ADO.Identifier := Ctx.Get_User_Identifier;
       Session : ADO.Sessions.Session := ASC.Get_Session (Ctx);
