@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-modules -- Module wikis
---  Copyright (C) 2015, 2016, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2015, 2016, 2017, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,13 +24,14 @@ with AWA.Users.Models;
 with AWA.Wikis.Beans;
 with AWA.Modules.Beans;
 with AWA.Storages.Models;
+with AWA.Storages.Services;
+with AWA.Storages.Modules;
 
 with Ada.Strings;
 with ADO.Objects;
 with ADO.SQL;
 with ADO.Queries;
 with ADO.Statements;
-with ADO.Sessions.Entities;
 
 with Util.Log.Loggers;
 with Util.Strings.Tokenizers;
@@ -500,22 +501,26 @@ package body AWA.Wikis.Modules is
       Query.Bind_Param ("wiki_id", Wiki_Id);
       Query.Bind_Param ("store_id", Image_Id);
       Query.Bind_Param ("user_id", User);
-      ADO.Sessions.Entities.Bind_Param (Query, "table",
-                                        AWA.Workspaces.Models.WORKSPACE_TABLE, DB);
+
       Query.Execute;
       if not Query.Has_Elements then
          Log.Warn ("Wiki image entity {0} not found", ADO.Identifier'Image (Image_Id));
          raise ADO.Objects.NOT_FOUND;
       end if;
-      Mime   := Query.Get_Unbounded_String (0);
-      Date   := Query.Get_Time (1);
-      Width  := Query.Get_Natural (4);
-      Height := Query.Get_Natural (5);
-      Kind   := AWA.Storages.Models.Storage_Type'Val (Query.Get_Integer (3));
+      Mime   := Query.Get_Unbounded_String (1);
+      Date   := Query.Get_Time (2);
+      Width  := Query.Get_Natural (5);
+      Height := Query.Get_Natural (6);
+      Kind   := AWA.Storages.Models.Storage_Type'Val (Query.Get_Integer (4));
       if Kind = AWA.Storages.Models.DATABASE then
-         Into := Query.Get_Blob (6);
+         Into := Query.Get_Blob (7);
       else
-         null;
+         declare
+            Storage : AWA.Storages.Services.Storage_Service_Access
+              := AWA.Storages.Modules.Get_Storage_Manager;
+         begin
+            Storage.Load (Query.Get_Identifier (0), Kind, Into);
+         end;
       end if;
    end Load_Image;
 
