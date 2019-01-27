@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-services -- Storage service
---  Copyright (C) 2012, 2016 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -123,6 +123,11 @@ package AWA.Storages.Services is
                    Name    : out Ada.Strings.Unbounded.Unbounded_String;
                    Mime    : out Ada.Strings.Unbounded.Unbounded_String;
                    Date    : out Ada.Calendar.Time;
+                   Into    : out ADO.Blob_Ref);
+
+   procedure Load (Service : in Storage_Service;
+                   From    : in ADO.Identifier;
+                   Kind    : in AWA.Storages.Models.Storage_Type;
                    Into    : out ADO.Blob_Ref);
 
    --  Load the storage content into a file.  If the data is not stored in a file, a temporary
