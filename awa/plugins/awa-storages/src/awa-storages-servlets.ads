@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-servlets -- Serve files saved in the storage service
---  Copyright (C) 2012, 2016, 2018 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +25,8 @@ with ASF.Responses;
 --  The <tt>Storage_Servlet</tt> type is the servlet that allows to retrieve the file
 --  content that was uploaded.
 package AWA.Storages.Servlets is
+
+   type Get_Type is (DEFAULT, AS_CONTENT_DISPOSITION, INVALID);
 
    --  The <b>Storage_Servlet</b> represents the component that will handle
    --  an HTTP request received by the server.
@@ -85,6 +87,10 @@ package AWA.Storages.Servlets is
                    Mime     : out Ada.Strings.Unbounded.Unbounded_String;
                    Date     : out Ada.Calendar.Time;
                    Data     : out ADO.Blob_Ref);
+
+   --  Get the expected return mode (content disposition for download or inline).
+   function Get_Format (Server   : in Storage_Servlet;
+                        Request  : in ASF.Requests.Request'Class) return Get_Type;
 
 private
 
