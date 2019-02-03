@@ -114,8 +114,13 @@ setting up and building an Ada Web Application:
   * Step 3: [Review Web Application: Creating a review](http://blog.vacs.fr/vacs/blogs/post.html?post=2014/06/14/Review-Web-Application-Creating-a-review)
   * Step 4: [Review Web Application: Listing the reviews](http://blog.vacs.fr/vacs/blogs/post.html?post=2014/07/19/Review-Web-Application-Listing-the-reviews)
 
+# Presentations
+
+  * [Secure Web Applications with AWA](https://fr.slideshare.net/StephaneCarrez1/secure-web-applications-with-awa) FOSDEM 2019
+
 # Sites Using AWA
 
   * [Java 2 Ada](https://blog.vacs.fr/)
-  * [Ada France](http://www.ada-france.org/adafr/index.html)
-  * [Atlas](http://demo.vacs.fr/atlas/index.html)
+  * [Ada France](https://www.ada-france.org/adafr/index.html)
+  * [Atlas](https://demo.vacs.fr/atlas/index.html)
+  * [Jason](https://vdo/vdo/index.html)
