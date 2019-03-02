@@ -1,8 +1,9 @@
 with "@UTIL_DIR@config";
-with "@UTIL_DIR@util";
-with "@EL_DIR@el";
-with "@WIKI_DIR@wiki";
+with "@UTIL_DIR@utilada_sys";
+with "@EL_DIR@elada";
+with "@WIKI_DIR@wikiada";
 with "@ADO_DIR@ado";
+with "@ADO_DIR@ado_all";
 with "@ASF_DIR@asf";
 with "@SECURITY_DIR@security";
 
