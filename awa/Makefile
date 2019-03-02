@@ -2,8 +2,25 @@
 ##   relocatable
 ##   static
 AWA_LIBRARY_TYPE=static
-HAVE_PANDOC=@HAVE_PANDOC@
-HAVE_DYNAMO=@HAVE_DYNAMO@
+HAVE_PANDOC=yes
+HAVE_DYNAMO=yes
+
+-include Makefile.conf
+
+STATIC_MAKE_ARGS = $(MAKE_ARGS) -XAWA_LIBRARY_TYPE=static
+SHARED_MAKE_ARGS = $(MAKE_ARGS) -XAWA_LIBRARY_TYPE=relocatable
+SHARED_MAKE_ARGS += -XELADA_BUILD=relocatable -XEL_LIBRARY_TYPE=relocatable
+SHARED_MAKE_ARGS += -XSECURITYADA_BUILD=relocatable -XSECURITY_LIBRARY_TYPE=relocatable
+SHARED_MAKE_ARGS += -XUTILADA_BASE_BUILD=relocatable -XUTIL_LIBRARY_TYPE=relocatable
+SHARED_MAKE_ARGS += -XXMLADA_BUILD=relocatable
+SHARED_MAKE_ARGS += -XXMLADA_BUILD=relocatable -XAWS_BUILD=relocatable
+SHARED_MAKE_ARGS += -XUTILADA_HTTP_AWS_BUILD=relocatable
+SHARED_MAKE_ARGS += -XUTILADA_HTTP_AWS_LIBRARY_TYPE=relocatable
+SHARED_MAKE_ARGS += -XUTILADA_UNIT_BUILD=relocatable
+SHARED_MAKE_ARGS += -XUTIL_UNIT_LIBRARY_TYPE=relocatable
+SHARED_MAKE_ARGS += -XLIBRARY_TYPE=relocatable
+
+include Makefile.defaults
 
 PLUGINS=awa-workspaces awa-mail awa-counters awa-storages awa-images awa-comments \
         awa-jobs awa-votes awa-tags awa-flotcharts awa-wikis awa-blogs awa-markedit \
@@ -13,8 +30,7 @@ PLUGINS=awa-workspaces awa-mail awa-counters awa-storages awa-images awa-comment
 NAME=awa
 LIBNAME=lib${NAME}
 
-include rules.mk
-
+# include rules.mk
 
 DYNAMO_ARGS=--package AWA.Users.Models \
   --package AWA.Events.Models \
@@ -33,14 +49,11 @@ post-generate:
 	   $(MAKE) -C plugins/$$i generate ; \
 	done
 
-build-tests:
+build-test:: setup
 	$(GNATMAKE) -m -p -Pawa_tests $(MAKE_ARGS)
 
 ifeq (${HAVE_PANDOC},yes)
 ifeq (${HAVE_DYNAMO},yes)
-# Generate the documentation from Ada headers comments.
-doc:
-	$(DYNAMO) build-doc -markdown wiki
 
 AWA_DOC= \
   title.md \
@@ -190,7 +203,9 @@ endif
 
 post-install:	install-info
 
-dist:
-	cd .. && git archive -o $(DIST_FILE) --prefix=$(distdir)/ HEAD:awa
+$(eval $(call ada_library,awa))
+$(eval $(call ada_library,awa_unit))
 
-force:
+ROOTDIR=.
+
+$(foreach PLUGIN,$(PLUGINS),$(eval include plugins/$(PLUGIN)/Makefile))
