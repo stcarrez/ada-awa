@@ -1,5 +1,5 @@
 dnl Autoconf configure script for Ada Server Faces
-dnl Copyright (C) 2009 - 2018 Stephane Carrez
+dnl Copyright (C) 2009 - 2019 Stephane Carrez
 dnl Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 dnl
 dnl  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,9 +17,6 @@ dnl
 dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT(src/awa.ads)
-
-AC_CANONICAL_SYSTEM
-dnl AM_MAINTAINER_MODE
 
 # Current release settings
 AWA_MAJOR_VERSION=1
@@ -60,6 +57,8 @@ AC_SUBST(EXEC_PREFIX)
 AWA_LIBDIR="lib"
 AC_SUBST(AWA_LIBDIR)
 
+AM_GNAT_LIBRARY_PROJECT(awa)
+
 AC_CHECK_PROG(HAVE_PANDOC,pandoc,yes)
 AC_CHECK_PROG(HAVE_DYNAMO,dynamo,yes)
 
@@ -82,40 +81,35 @@ case "$ADO_USE_GPRBUILD" in
 esac
 
 ##########################################
-# Check to enable/disable shared library
-##########################################
-AM_GNAT_LIBRARY_PROJECT(awa)
-
-##########################################
 # Ada Util library
 ##########################################
-AM_GNAT_FIND_PROJECT([ada-util],[Ada Utility Library],[util],
+AM_GNAT_FIND_PROJECT([ada-util],[Ada Utility Library],[utilada_base],
   [git@github.com:stcarrez/ada-util.git],
   [Building Ada Web Application requires the Ada Utility Library.],
   [
-    UTIL_DIR=${gnat_project_dir_util}
+    UTIL_DIR=${gnat_project_dir_utilada_base}
   ])
 AC_SUBST(UTIL_DIR)
 
 ##########################################
 # Ada Expression Language library
 ##########################################
-AM_GNAT_FIND_PROJECT([ada-el],[Ada Expression Language Library],[el],
+AM_GNAT_FIND_PROJECT([ada-el],[Ada Expression Language Library],[elada],
   [git@github.com:stcarrez/ada-el.git],
   [Building Ada Web Application requires the Ada EL Library.],
   [
-    EL_DIR=${gnat_project_dir_el}
+    EL_DIR=${gnat_project_dir_elada}
   ])
 AC_SUBST(EL_DIR)
 
 ##########################################
 # Ada Wiki library
 ##########################################
-AM_GNAT_FIND_PROJECT([ada-wiki],[Ada Wiki Library],[wiki],
+AM_GNAT_FIND_PROJECT([ada-wiki],[Ada Wiki Library],[wikiada],
   [git@github.com:stcarrez/ada-wiki.git],
   [Building Ada Web Application requires the Ada Wiki Library.],
   [
-    WIKI_DIR=${gnat_project_dir_wiki}
+    WIKI_DIR=${gnat_project_dir_wikiada}
   ])
 AC_SUBST(WIKI_DIR)
 
@@ -133,11 +127,11 @@ AC_SUBST(SECURITY_DIR)
 ##########################################
 # Ada Servlet library
 ##########################################
-AM_GNAT_FIND_PROJECT([ada-servlet],[Ada Servlet Library],[servlet_core],
+AM_GNAT_FIND_PROJECT([ada-servlet],[Ada Servlet Library],[servletada_core],
   [git@github.com:stcarrez/ada-servlet.git],
   [Building Ada Web Application requires the Ada Servlet Library.],
   [
-    SERVLET_DIR=${gnat_project_dir_servlet_core}
+    SERVLET_DIR=${gnat_project_dir_servletada_core}
   ])
 AC_SUBST(SERVLET_DIR)
 
@@ -217,6 +211,11 @@ AWA_AWS_SECURE_MAIL=$ac_enable_aws_secure_mail
 AC_SUBST(AWA_AWS_SECURE_MAIL)
 
 AC_OUTPUT(
-Makefile rules.mk awa.gpr awa_tests.gpr awa_unit.gpr distrib/awa.gpr distrib/awa_unit.gpr
-plugins/awa-mail/awa_mail.gpr plugins/awa-images/config/images.xml
+Makefile.conf
+rules.mk
+awa.gpr
+awa_tests.gpr
+awa_unit.gpr
+plugins/awa-mail/awa_mail.gpr
+plugins/awa-images/config/images.xml
 )
