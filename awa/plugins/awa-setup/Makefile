@@ -1,7 +1,9 @@
-NAME=awa_setup
+ROOTDIR ?= ../..
 
-LIBNAME=lib${NAME}
+include $(ROOTDIR)/Makefile.defaults
 
-include ../../rules.mk
+awa_setup_dir=$(ROOTDIR)/plugins/awa-setup
+awa_setup_install_dirs=config bundles web
 
-GPRPATH=awa_setup.gpr
+$(eval $(call awa_plugin,awa_setup))
+

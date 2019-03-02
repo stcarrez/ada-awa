@@ -1,9 +1,10 @@
-NAME=awa_tags
+ROOTDIR ?= ../..
 
-LIBNAME=lib${NAME}
+include $(ROOTDIR)/Makefile.defaults
 
-include ../../rules.mk
+awa_tags_dir=$(ROOTDIR)/plugins/awa-tags
+awa_tags_dynamo=--package AWA.Tags.Models db $(ROOTDIR)/uml/awa.zargo
+awa_tags_install_dirs=config db bundles web
 
-DYNAMO_ARGS=--package AWA.Tags.Models db ../../uml/awa.zargo
+$(eval $(call awa_plugin,awa_tags))
 
-GPRPATH=awa_tags.gpr

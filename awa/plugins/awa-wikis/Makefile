@@ -1,11 +1,9 @@
-NAME=awa_wikis
+ROOTDIR ?= ../..
 
-LIBNAME=lib${NAME}
+include $(ROOTDIR)/Makefile.defaults
 
-EXECS=bin/awa-wiki-preview.sh
+awa_wikis_dir=$(ROOTDIR)/plugins/awa-wikis
+awa_wikis_dynamo=--package AWA.Wikis.Models db $(ROOTDIR)/uml/awa.zargo
+awa_wikis_install_dirs=config db bundles web
 
-include ../../rules.mk
-
-DYNAMO_ARGS=--package AWA.Wikis.Models db ../../uml/awa.zargo
-
-GPRPATH=awa_wikis.gpr
+$(eval $(call awa_plugin,awa_wikis))

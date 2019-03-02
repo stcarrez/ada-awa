@@ -1,9 +1,10 @@
-NAME=awa_settings
+ROOTDIR ?= ../..
 
-LIBNAME=lib${NAME}
+include $(ROOTDIR)/Makefile.defaults
 
-include ../../rules.mk
+awa_settings_dir=$(ROOTDIR)/plugins/awa-settings
+awa_settings_dynamo=--package AWA.Settings.Models db $(ROOTDIR)/uml/awa.zargo
+awa_settings_install_dirs=config db
 
-DYNAMO_ARGS=--package AWA.Settings.Models db ../../uml/awa.zargo
+$(eval $(call awa_plugin,awa_settings))
 
-GPRPATH=awa_settings.gpr

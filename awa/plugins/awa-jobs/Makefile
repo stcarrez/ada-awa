@@ -1,9 +1,9 @@
-NAME=awa_jobs
+ROOTDIR ?= ../..
 
-LIBNAME=lib${NAME}
+include $(ROOTDIR)/Makefile.defaults
 
-include ../../rules.mk
+awa_jobs_dir=$(ROOTDIR)/plugins/awa-jobs
+awa_jobs_dynamo=--package AWA.Jobs.Models db $(ROOTDIR)/uml/awa.zargo
+awa_jobs_install_dirs=config db
 
-DYNAMO_ARGS=--package AWA.Jobs.Models db ../../uml/awa.zargo
-
-GPRPATH=awa_jobs.gpr
+$(eval $(call awa_plugin,awa_jobs))

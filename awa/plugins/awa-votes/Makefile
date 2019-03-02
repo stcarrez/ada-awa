@@ -1,9 +1,10 @@
-NAME=awa_votes
+ROOTDIR ?= ../..
 
-LIBNAME=lib${NAME}
+include $(ROOTDIR)/Makefile.defaults
 
-include ../../rules.mk
+awa_votes_dir=$(ROOTDIR)/plugins/awa-votes
+awa_votes_dynamo=--package AWA.Workspaces.Models db $(ROOTDIR)/uml/awa.zargo
+awa_votes_install_dirs=config db web
 
-DYNAMO_ARGS=--package AWA.Votes.Models db ../../uml/awa.zargo
+$(eval $(call awa_plugin,awa_votes))
 
-GPRPATH=awa_votes.gpr

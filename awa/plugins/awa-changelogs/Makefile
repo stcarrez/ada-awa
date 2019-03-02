@@ -1,9 +1,9 @@
-NAME=awa_changelogs
+ROOTDIR ?= ../..
 
-LIBNAME=lib${NAME}
+include $(ROOTDIR)/Makefile.defaults
 
-include ../../rules.mk
+awa_changelogs_dir=$(ROOTDIR)/plugins/awa-changelogs
+awa_changelogs_dynamo=--package AWA.Changelogs.Models db $(ROOTDIR)/uml/awa.zargo
+awa_changelogs_install_dirs=config db
 
-DYNAMO_ARGS=--package AWA.Changelogs.Models db ../../uml/awa.zargo
-
-GPRPATH=awa_changelogs.gpr
+$(eval $(call awa_plugin,awa_changelogs))

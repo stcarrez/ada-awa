@@ -1,13 +1,10 @@
+ROOTDIR ?= ../..
 
-NAME=awa_storages
+include $(ROOTDIR)/Makefile.defaults
 
-LIBNAME=lib${NAME}
+awa_storages_dir=$(ROOTDIR)/plugins/awa-storages
+awa_storages_dynamo=--package AWA.Storages.Models db $(ROOTDIR)/uml/awa.zargo
+awa_storages_install_dirs=config db bundles web
 
-include ../../rules.mk
+$(eval $(call awa_plugin,awa_storages))
 
-DYNAMO_ARGS=--package AWA.Storages.Models db ../../uml/awa.zargo
-
-GPRPATH=awa_storages.gpr
-
-pre-build:
-	echo Building

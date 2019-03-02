@@ -1,9 +1,9 @@
-NAME=awa_countries
+ROOTDIR ?= ../..
 
-LIBNAME=lib${NAME}
+include $(ROOTDIR)/Makefile.defaults
 
-include ../../rules.mk
+awa_countries_dir=$(ROOTDIR)/plugins/awa-countries
+awa_countries_dynamo=--package AWA.Countries.Models db $(ROOTDIR)/uml/awa.zargo
+awa_countries_install_dirs=db
 
-DYNAMO_ARGS=--package AWA.Countries.Models db ../../uml/awa.zargo
-
-GPRPATH=awa_countries.gpr
+$(eval $(call awa_plugin,awa_countries))

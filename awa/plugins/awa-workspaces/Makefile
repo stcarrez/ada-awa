@@ -1,9 +1,10 @@
-NAME=awa_workspaces
+ROOTDIR ?= ../..
 
-LIBNAME=lib${NAME}
+include $(ROOTDIR)/Makefile.defaults
 
-include ../../rules.mk
+awa_workspaces_dir=$(ROOTDIR)/plugins/awa-workspaces
+awa_workspaces_dynamo=--package AWA.Workspaces.Models db $(ROOTDIR)/uml/awa.zargo
+awa_workspaces_install_dirs=config db bundles web
 
-DYNAMO_ARGS=--package AWA.Workspaces.Models db ../../uml/awa.zargo
+$(eval $(call awa_plugin,awa_workspaces))
 
-GPRPATH=awa_workspaces.gpr

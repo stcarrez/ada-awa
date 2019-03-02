@@ -1,11 +1,9 @@
+ROOTDIR ?= ../..
 
-NAME=awa_comments
+include $(ROOTDIR)/Makefile.defaults
 
-LIBNAME=lib${NAME}
+awa_comments_dir=$(ROOTDIR)/plugins/awa-comments
+awa_comments_dynamo=--package AWA.Comments.Models db $(ROOTDIR)/uml/awa.zargo
+awa_comments_install_dirs=config db bundles web
 
-include ../../rules.mk
-
-DYNAMO_ARGS=--package AWA.Comments.Models db ../../uml/awa.zargo
-
-GPRPATH=awa_comments.gpr
-
+$(eval $(call awa_plugin,awa_comments))

@@ -1,12 +1,9 @@
+ROOTDIR ?= ../..
 
-NAME=awa_images
+include $(ROOTDIR)/Makefile.defaults
 
-LIBNAME=lib${NAME}
+awa_images_dir=$(ROOTDIR)/plugins/awa-images
+awa_images_dynamo=--package AWA.Images.Models db $(ROOTDIR)/uml/awa.zargo
+awa_images_install_dirs=config db web
 
-include ../../rules.mk
-
-DYNAMO_ARGS=--package AWA.Images.Models db ../../uml/awa.zargo
-
-GPRPATH=awa_images.gpr
-
-
+$(eval $(call awa_plugin,awa_images))
