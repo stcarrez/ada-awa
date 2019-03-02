@@ -131,6 +131,9 @@ The list of documents for a given folder.
 ||Integer|file_size|the file size.|
 ||Boolean|is_public|whether the document is public or not.|
 ||String|user_name|the user name who uploaded the document.|
+||Integer|thumb_width|the image thumbnail width (or 0).|
+||Integer|thumb_height|the image thumbnail height (or 0).|
+||Identifier|thumbnail_id|the image thumbnail identifier.|
 
 
 

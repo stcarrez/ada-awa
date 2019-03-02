@@ -73,11 +73,11 @@ integration.
 |openid.success_url|The URI where the user is redirected after a successful authentication.|
 | |#{contextPath}/workspaces/main.html|
 |auth.url.orange|Orange OpenID access point|
-| |http://openid.orange.fr|
+| |https://openid.orange.fr|
 |auth.provider.orange|Auth provider to use for Orange|
 | |openid|
 |auth.url.yahoo|Yahoo! OpenID access point|
-| |http://open.login.yahooapis.com/openid20/www.yahoo.com/xrds|
+| |https://open.login.yahooapis.com/openid20/www.yahoo.com/xrds|
 |auth.provider.yahoo|Auth provider to use for Yahoo!|
 | |openid|
 |auth.url.google|Google OpenID access point|

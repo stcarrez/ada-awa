@@ -33,10 +33,9 @@
 |question-edit|awa_question|Grant the edit permission to author only|
 |question-delete|awa_question|Grant the delete permission to author only|
 |answer-create|awa_question||
-|answer-edit|awa_answer|Grant the edit permission to author only|
+|answer-edit|awa_answer|Grant the edit permission to any user who is authenticated|
 |answer-delete|awa_answer|Grant the delete permission to author only|
 |answer-accept|awa_answer|The question author is the only one who can accept an answer.|
-|answer-edit|awa_answer||
 
 
 
@@ -87,7 +86,7 @@ The list of questions.
 ||Identifier|id|the question identifier.|
 ||String|title|the question title.|
 ||Date|create_date|the question creation date.|
-||Date|edit_date|the question edit date.|
+||Nullable_Date|edit_date|the question edit date.|
 ||String|description|the question description.|
 ||Integer|rating|the question rating.|
 ||Integer|user_rating|the question rating as voted by the current user.|
@@ -115,7 +114,7 @@ The list of answers.
 |:---------|:---------|:-----------|:--------------------------------------------------------|
 ||Identifier|id|the answer identifier.|
 ||Date|create_date|the answer creation date.|
-||Date|edit_date|the answer edit date.|
+||Nullable_Date|edit_date|the answer edit date.|
 ||String|answer|the answer description.|
 ||Integer|rank|the answer rank.|
 ||Integer|user_rating|the question rating as voted by the current user.|

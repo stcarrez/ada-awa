@@ -64,9 +64,9 @@ The information about a wiki page.
 ||String|name|the wiki page name.|
 ||String|title|the wiki page title.|
 ||Boolean|is_public|whether the wiki is public.|
-||Integer|version|the last version.|
-||Integer|read_count|the number of times the page was displayed.|
-||Date|date|the wiki page creation date.|
+||Nullable_Integer|version|the last version.|
+||Nullable_Integer|read_count|the number of times the page was displayed.|
+||Nullable_Date|date|the wiki page creation date.|
 ||AWA.Wikis.Models.Format_Type|format|the wiki page format.|
 ||String|content|the wiki page content.|
 ||String|save_comment|the wiki version comment.|
