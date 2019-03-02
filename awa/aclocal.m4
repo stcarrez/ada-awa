@@ -150,15 +150,18 @@ AC_DEFUN(AM_DISTRIB_SUPPORT,
 [
   AC_MSG_CHECKING([distribution build])
   ac_enable_distrib=yes
+  ac_quiet_mode=-q
   ac_build_mode=distrib
   AC_ARG_ENABLE(distrib,
     [  --enable-distrib        build for distribution, optimized and strip symbols (enabled)],
     [case "${enableval}" in
       no|none)  ac_enable_distrib=no
                 ac_build_mode=debug
+                ac_quiet_mode=
                 ;;
       *)        ac_enable_distrib=yes
                 ac_build_mode=distrib
+                ac_quiet_mode=-q
                 ;;
     esac])dnl
 
@@ -168,6 +171,9 @@ AC_DEFUN(AM_DISTRIB_SUPPORT,
 
   MODE=$ac_build_mode
   AC_SUBST(MODE)
+  
+  BUILDS_QUIET=$ac_quiet_mode
+  AC_SUBST(BUILDS_QUIET)
 ])
 
 dnl Check whether the AWS support is enabled and find the aws GNAT project.
@@ -539,10 +545,20 @@ end Check;
 ])
 
 # Prepare for using the GNAT project 
+# AM_GNAT_LIBRARY_SETUP([name])
+AC_DEFUN(AM_GNAT_LIBRARY_SETUP,
+[
+  AC_MSG_CHECKING([preparing for GNAT project $1])
+  mkdir -p obj/$1/static obj/$1/relocatable lib/$1/static lib/$1/relocatable
+  AC_MSG_RESULT(done)
+])
+
+# Prepare for using the GNAT project 
 # AM_GNAT_LIBRARY_PROJECT([name])
 AC_DEFUN(AM_GNAT_LIBRARY_PROJECT,
 [
   # checking for local tools
+  AC_CANONICAL_SYSTEM
   AM_GNAT_CHECK_GPRBUILD
 
   AC_PROG_MAKE_SET
@@ -559,8 +575,6 @@ AC_DEFUN(AM_GNAT_LIBRARY_PROJECT,
 
   AM_UTIL_CHECK_INSTALL
 
-  AC_MSG_CHECKING([preparing for GNAT project $1])
-  mkdir -p obj/$1/static obj/$1/relocatable lib/$1/static lib/$1/relocatable
-  AC_MSG_RESULT(done)
+  AM_GNAT_LIBRARY_SETUP($1)
 ])
 
