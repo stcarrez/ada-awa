@@ -8,6 +8,7 @@ GNATMAKE?=gprbuild
 GNATCLEAN?=gnatclean
 GPRINSTALL?=gprinstall
 INSTALL?=install
+DYNAMO?=dynamo
 PROCESSORS?=1
 MKDIR?=mkdir
 CP?=cp
@@ -74,7 +75,8 @@ clean_tree:
 
 # Clean the root project of all build products.
 clean::
-	-rm -rf lib obj bin
+	-rm -rf lib obj bin $(CLEAN_FILES)
+	-rm -rf regtests/result
 
 doc::
 	$(DYNAMO) build-doc -markdown wiki
@@ -154,6 +156,12 @@ define awa_plugin
 
 $(eval $(call ada_library,$(strip $(1)),$($(1)_dir)/))
 $(eval $(call awa_install_plugin,$(strip $(1))))
+
+ifdef $(1)_dynamo
+
+generate::
+	cd $($(1)_dir) && $(DYNAMO) generate $($(1)_dynamo)
+endif
 
 clean::
 	$(RM) -r $($(1)_dir)/dynamo.log $($(1)_dir)/obj $($(1)_dir)/lib
