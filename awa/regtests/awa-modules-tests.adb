@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-modules-tests - Unit tests for Modules
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -188,13 +188,14 @@ package body AWA.Modules.Tests is
    --  ------------------------------
    procedure Test_Create_Application_Module (T : in out Test) is
       use ASF.Beans;
-      use type Util.Beans.Basic.Readonly_Bean_Access;
 
       procedure Check (Name : in String;
                        Kind : in ASF.Beans.Scope_Type);
 
       procedure Check (Name : in String;
                        Kind : in ASF.Beans.Scope_Type) is
+         use type Util.Beans.Basic.Readonly_Bean_Access;
+
          Value : Util.Beans.Objects.Object;
          Bean  : Util.Beans.Basic.Readonly_Bean_Access;
          Scope : ASF.Beans.Scope_Type;
@@ -245,9 +246,6 @@ package body AWA.Modules.Tests is
    --  Test module and navigation rules
    --  ------------------------------
    procedure Test_Module_Navigation (T : in out Test) is
-      use ASF.Beans;
-      use type Util.Beans.Basic.Readonly_Bean_Access;
-
       M   : aliased Test_Module;
       Ctx : AWA.Services.Contexts.Service_Context;
    begin
