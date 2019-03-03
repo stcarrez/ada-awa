@@ -18,4 +18,5 @@
     <depend name="awa_counters"></depend>
     <depend name="awa_markedit"></depend>
     <depend name="awa_flotcharts"></depend>
+    <depend name="servlet"></depend>
 </project>
