@@ -4114,7 +4114,7 @@ $as_echo "${ac_enable_aws_secure_mail}" >&6; }
 AWA_AWS_SECURE_MAIL=$ac_enable_aws_secure_mail
 
 
-ac_config_files="$ac_config_files Makefile.conf rules.mk awa.gpr awa_tests.gpr awa_unit.gpr plugins/awa-mail/awa_mail.gpr plugins/awa-images/config/images.xml"
+ac_config_files="$ac_config_files Makefile.conf awa.gpr awa_tests.gpr awa_unit.gpr plugins/awa-mail/awa_mail.gpr plugins/awa-images/config/images.xml"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -4823,7 +4823,6 @@ for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
     "Makefile.conf") CONFIG_FILES="$CONFIG_FILES Makefile.conf" ;;
-    "rules.mk") CONFIG_FILES="$CONFIG_FILES rules.mk" ;;
     "awa.gpr") CONFIG_FILES="$CONFIG_FILES awa.gpr" ;;
     "awa_tests.gpr") CONFIG_FILES="$CONFIG_FILES awa_tests.gpr" ;;
     "awa_unit.gpr") CONFIG_FILES="$CONFIG_FILES awa_unit.gpr" ;;
