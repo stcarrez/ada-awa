@@ -11,6 +11,10 @@ STATIC_MAKE_ARGS = $(MAKE_ARGS) -XAWA_LIBRARY_TYPE=static
 SHARED_MAKE_ARGS = $(MAKE_ARGS) -XAWA_LIBRARY_TYPE=relocatable
 SHARED_MAKE_ARGS += -XELADA_BUILD=relocatable -XEL_LIBRARY_TYPE=relocatable
 SHARED_MAKE_ARGS += -XSECURITYADA_BUILD=relocatable -XSECURITY_LIBRARY_TYPE=relocatable
+SHARED_MAKE_ARGS += -XWIKIADA_BUILD=relocatable -XWIKI_LIBRARY_TYPE=relocatable
+SHARED_MAKE_ARGS += -XASF_BUILD=relocatable -XASF_LIBRARY_TYPE=relocatable
+SHARED_MAKE_ARGS += -XSERVLETADA_BUILD=relocatable -XSERVLET_LIBRARY_TYPE=relocatable
+SHARED_MAKE_ARGS += -XADO_BUILD=relocatable -XADO_LIBRARY_TYPE=relocatable
 SHARED_MAKE_ARGS += -XUTILADA_BASE_BUILD=relocatable -XUTIL_LIBRARY_TYPE=relocatable
 SHARED_MAKE_ARGS += -XXMLADA_BUILD=relocatable
 SHARED_MAKE_ARGS += -XXMLADA_BUILD=relocatable -XAWS_BUILD=relocatable
@@ -39,18 +43,8 @@ DYNAMO_ARGS=--package AWA.Users.Models \
   --package AWA.Audits.Models \
   db uml/awa.zargo
 
-post-build:
-	for i in ${PLUGINS} ; do \
-	   $(MAKE) -C plugins/$$i ; \
-	done
-
-post-generate:
-	for i in ${PLUGINS} ; do \
-	   $(MAKE) -C plugins/$$i generate ; \
-	done
-
 build-test:: setup
-	$(GNATMAKE) -m -p -Pawa_tests $(MAKE_ARGS)
+	$(GNATMAKE) $(GPRFLAGS) -m -p -Pawa_tests $(MAKE_ARGS)
 
 ifeq (${HAVE_PANDOC},yes)
 ifeq (${HAVE_DYNAMO},yes)
@@ -150,58 +144,14 @@ ifeq (${HAVE_POSTGRESQL},True)
            --file=db/postgresql/create-awa-postgresql.sql
 endif
 
-# Clean the root project of all build products.
-pre-clean:
-	-rm -rf obj/* lib/*
-	for i in ${PLUGINS} ; do \
-	   $(MAKE) -C plugins/$$i clean ; \
-	done
-
-pre-install:
+install::
 	$(MKDIR) -p ${dynamodir}/base/uml
 	$(MKDIR) -p ${prefix}/share/doc/awa
-ifneq (${GPRINSTALL},)
-	$(GPRINSTALL) -p -f --prefix=${prefix} $(MAKE_ARGS) \
-		--build-name=$(AWA_LIBRARY_TYPE) awa_unit.gpr
-else
-	$(MKDIR) -p ${includedir}/awa-unit
-	$(MKDIR) -p ${projectdir}/
-	${MKDIR} -p ${alidir}/awa-unit/$(AWA_LIBRARY_TYPE)
-	${CP} awaunit/*.ad[bs] ${includedir}/awa-unit
-	sed -e "s,INSTALL,${prefix},g" -e "s,LIBRARY_TYPE,$(AWA_LIBRARY_TYPE),g" < distrib/awa_unit.gpr > ${projectdir}/awa_unit.gpr
-	${CP} lib/awaunit/$(AWA_LIBRARY_TYPE)/*.ali ${alidir}/awa-unit/
-ifeq ($(AWA_LIBRARY_TYPE),static)
-	${CP} lib/awaunit/$(AWA_LIBRARY_TYPE)/libawa_unit.a ${libdir}/
-else
-	${CP} -p lib/awaunit/$(AWA_LIBRARY_TYPE)/libawa_unit.$(LIBVER) ${libdir}/
-	cd ${libdir} && \
-	rm -f libawa_unit.$(LIBEXT) && \
-	${LN} libawa_unit.$(LIBVER) libawa_unit.$(LIBEXT)
-endif
-endif
-	for i in ${PLUGINS} ; do \
-	   $(MAKE) -C plugins/$$i install; \
-	done
 	# Install the AWA UML model in Dynamo UML search path
 	unzip -cq uml/awa.zargo awa.xmi > ${dynamodir}/base/uml/AWA.xmi
 
-pre-uninstall:
-ifneq (${GPRINSTALL},)
-	-$(GPRINSTALL) -q -f --prefix=${prefix} $(MAKE_ARGS) --uninstall awa_unit.gpr
-else
-	rm -rf ${includedir}/awa
-	rm -f ${libdir}/libada-awa.a
-	rm -f ${projectdir}/awa.gpr
+uninstall::
 	rm -rf ${dynamodir}/awa
-	rm -rf ${alidir}/awa
-	rm -rf ${alidir}/awa-unit
-	rm -rf ${includedir}/awa-unit
-endif
-	for i in ${PLUGINS} ; do \
-	   $(MAKE) -C plugins/$$i uninstall; \
-	done
-
-post-install:	install-info
 
 $(eval $(call ada_library,awa))
 $(eval $(call ada_library,awa_unit))
