@@ -37,26 +37,22 @@
         <from-outcome>success</from-outcome>
         <to-view-id>/storages/forms/upload-image-response.xhtml</to-view-id>
       </navigation-case>
-      <navigation-case>
-        <from-outcome>failure</from-outcome>
-        <to-view-id>/storages/forms/upload-image-failed-response.xhtml</to-view-id>
-      </navigation-case>
     </navigation-rule>
 
   <servlet-mapping>
     <servlet-name>image</servlet-name>
-    <url-pattern>/storages/images/:image_id/:mode/:filename</url-pattern>
+    <url-pattern>/storages/images/:image_id</url-pattern>
   </servlet-mapping>
 
   <filter-mapping>
     <filter-name>service</filter-name>
-    <url-pattern>/storages/images/:image_id/:mode/:filename</url-pattern>
+    <url-pattern>/storages/images/:image_id</url-pattern>
     <url-pattern>/storages/image-info/#{imageInfo.id}</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
     <filter-name>auth-filter</filter-name>
-    <url-pattern>/storages/images/:image_id/:mode/:filename</url-pattern>
+    <url-pattern>/storages/images/:image_id</url-pattern>
     <url-pattern>/storages/image-info/#{imageInfo.id}</url-pattern>
   </filter-mapping>
 
@@ -76,5 +72,3 @@
   </url-mapping>
 
 </module>
-
-
