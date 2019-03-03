@@ -212,7 +212,6 @@ AC_SUBST(AWA_AWS_SECURE_MAIL)
 
 AC_OUTPUT(
 Makefile.conf
-rules.mk
 awa.gpr
 awa_tests.gpr
 awa_unit.gpr
