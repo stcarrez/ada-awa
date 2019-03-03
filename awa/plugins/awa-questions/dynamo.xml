@@ -12,4 +12,5 @@
     <depend name="asf"></depend>
     <depend name="awa-workspaces"></depend>
     <depend name="awa-tags"></depend>
+    <depend name="servlet"></depend>
 </project>
