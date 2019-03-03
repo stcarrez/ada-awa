@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-setup-applications -- Setup and installation
---  Copyright (C) 2016, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,10 +22,10 @@ with Servlet.Core.Files;
 with ASF.Requests;
 with ASF.Responses;
 with ASF.Server;
+with ADO.Connections;
 with Util.Beans.Objects;
 with Util.Beans.Basic;
 with Util.Beans.Methods;
-with ADO.Drivers.Connections;
 
 --  == Setup Procedure Instantiation==
 --  The setup process is managed by the *Configure* generic procedure.  The procedure must
@@ -100,7 +100,7 @@ package AWA.Setup.Applications is
       Changed     : ASF.Applications.Config;
       Factory     : ASF.Applications.Main.Application_Factory;
       Path        : Ada.Strings.Unbounded.Unbounded_String;
-      Database    : ADO.Drivers.Connections.Configuration;
+      Database    : ADO.Connections.Configuration;
       Driver      : Util.Beans.Objects.Object;
       Result      : Util.Beans.Objects.Object;
       Root_User   : Util.Beans.Objects.Object := Empty;
