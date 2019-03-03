@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-comments-modules-tests -- Unit tests for comments module
---  Copyright (C) 2014 Stephane Carrez
+--  Copyright (C) 2014, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,7 +30,6 @@ with AWA.Tests.Helpers.Users;
 with AWA.Comments.Beans;
 package body AWA.Comments.Modules.Tests is
 
-   use Util.Tests;
    use ADO;
 
    package Caller is new Util.Test_Caller (Test, "Comments.Modules");

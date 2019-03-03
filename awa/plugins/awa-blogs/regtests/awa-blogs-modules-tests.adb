@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-tests -- Unit tests for blogs module
---  Copyright (C) 2011, 2012, 2013, 2014, 2015 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +27,6 @@ with AWA.Blogs.Modules;
 with AWA.Tests.Helpers.Users;
 package body AWA.Blogs.Modules.Tests is
 
-   use Util.Tests;
    use ADO;
 
    package Caller is new Util.Test_Caller (Test, "Blogs.Services");
@@ -104,7 +103,8 @@ package body AWA.Blogs.Modules.Tests is
                                  Title   => "Something",
                                  Text    => "Content",
                                  URI     => "testing-blog-title",
-                                 Publish_Date => ADO.Nullable_Time '(Is_Null => True, others => <>),
+                                 Publish_Date => ADO.Nullable_Time '(Is_Null => True,
+                                                                     others => <>),
                                  Comment => True,
                                  Status  => AWA.Blogs.Models.POST_DRAFT);
             T.Assert (False, "Exception Not_Found was not raised");

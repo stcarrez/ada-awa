@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-settings-modules-tests -- Unit tests for settings module
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2013, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,8 +24,6 @@ with Security.Contexts;
 with AWA.Tests.Helpers.Users;
 with AWA.Tests.Helpers.Contexts;
 package body AWA.Settings.Modules.Tests is
-
-   use Util.Tests;
 
    package Caller is new Util.Test_Caller (Test, "Settings.Services");
 

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-services-tests -- Unit tests for storage service
---  Copyright (C) 2012, 2016 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,7 +31,6 @@ with AWA.Storages.Beans.Factories;
 with AWA.Tests.Helpers.Users;
 package body AWA.Storages.Services.Tests is
 
-   use Util.Tests;
    use ADO;
 
    package Caller is new Util.Test_Caller (Test, "Storages.Services");
