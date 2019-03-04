@@ -25,6 +25,3 @@
 [submodule "swagger-ada"]
 	path = swagger-ada
 	url = git://github.com/stcarrez/swagger-ada.git
-[submodule "AdaYaml"]
-	path = AdaYaml
-	url = git://github.com/stcarrez/AdaYaml.git
