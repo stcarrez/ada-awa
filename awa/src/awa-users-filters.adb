@@ -23,7 +23,6 @@ with ASF.Cookies;
 with Servlet.Core;
 
 with AWA.Services.Contexts;
-with AWA.Applications;
 with AWA.Users.Services;
 with AWA.Users.Modules;
 
@@ -76,11 +75,9 @@ package body AWA.Users.Filters is
                            Principal : out ASF.Principals.Principal_Access) is
       pragma Unreferenced (Session);
 
-      use AWA.Users.Modules;
       use AWA.Users.Services;
 
       Context     : aliased AWA.Services.Contexts.Service_Context;
-      Application : AWA.Applications.Application_Access;
       Manager     : User_Service_Access;
       P           : AWA.Users.Principals.Principal_Access;
    begin
