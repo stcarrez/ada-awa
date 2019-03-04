@@ -516,7 +516,7 @@ package body AWA.Wikis.Modules is
          Into := Query.Get_Blob (7);
       else
          declare
-            Storage : AWA.Storages.Services.Storage_Service_Access
+            Storage : constant AWA.Storages.Services.Storage_Service_Access
               := AWA.Storages.Modules.Get_Storage_Manager;
          begin
             Storage.Load (Query.Get_Identifier (0), Kind, Into);

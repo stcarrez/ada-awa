@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-tags-components -- Tags component
---  Copyright (C) 2013, 2014, 2015, 2018 Stephane Carrez
+--  Copyright (C) 2013, 2014, 2015, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -307,8 +307,6 @@ package body AWA.Tags.Components is
          return;
       end if;
       declare
-         use AWA.Tags.Beans;
-
          Value    : constant Util.Beans.Objects.Object := Tag_UIInput'Class (UI).Get_Value;
          Bean     : constant access Util.Beans.Basic.Readonly_Bean'Class
            := Util.Beans.Objects.To_Bean (Value);
