@@ -27,7 +27,7 @@ awa/awa.gpr
 awa/awa_tests.gpr
 awa/awa_unit.gpr
 awa/regtests.db
-awa/Makefile
+awa/Makefile.conf
 awa/awa-tests.xml
 awa/awa-*-aunit.xml
 awa/regtests/result
