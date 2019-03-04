@@ -123,8 +123,9 @@ endif
 # Create the test sqlite database
 regtests.db:
 	-rm -f $@
-	test T${HAVE_SQLITE} = TTrue && \
+ifeq (${HAVE_SQLITE},True)
 	sqlite3 $@ < db/sqlite/create-awa-sqlite.sql
+endif
 
 # Create the tables in the database.
 # (The database itself must have been created)
