@@ -1,0 +1,179 @@
+ifndef MAKEFILE_DEFAULTS
+MAKEFILE_DEFAULTS=1
+
+# You may edit this makefile as long as you keep these original 
+# target names defined.
+MODE?=distrib
+GNATMAKE?=gprbuild
+GNATCLEAN?=gnatclean
+GPRINSTALL?=gprinstall
+INSTALL?=install
+DYNAMO?=dynamo
+PROCESSORS?=1
+MKDIR?=mkdir
+CP?=cp
+LN?=ln -s
+
+BUILDS_SHARED?=no
+COVERAGE?=no
+
+ifeq (${OS},Windows_NT)
+LIBEXT?=dll
+LIBVER?=dll
+else
+LIBEXT?=so
+LIBVER?=so.$(SO_VERSION)
+endif
+
+srcdir ?= .
+top_builddir ?= .
+prefix ?= /usr/local
+exec_prefix ?= ${prefix}
+top_builddir ?= .
+
+includedir?=${prefix}/${infix_inc}
+projectdir?=${prefix}/${infix_prj}
+bindir?=${prefix}/bin
+libdir?=${prefix}/${infix_lib}
+alidir?=${prefix}/${infix_ali}
+samplesdir?=${prefix}/share/doc/${docdir}
+dynamodir=${prefix}/share/dynamo
+
+MAKE_ARGS += -XMODE=$(MODE) -XCOVERAGE=$(COVERAGE) -XPROCESSORS=$(PROCESSORS)
+
+build:: all
+
+ifeq ($(BUILDS_SHARED),yes)
+all::     static shared build-test
+install:: uninstall install-shared install-static install-info
+else
+all::     static build-test
+install:: uninstall install-static install-info
+endif
+
+static::
+shared::
+
+# Not intended for manual invocation.
+# Invoked if automatic builds are enabled.
+# Analyzes only on those sources that have changed.
+# Does not build executables.
+autobuild:
+	$(GNATMAKE) $(MAKE_ARGS) -gnatc -c -k  -P "$(GPRPATH)"
+
+# Clean, then build executables for all mains defined by the project.
+rebuild: clean all
+
+# Check *all* sources for errors, even those not changed.
+# Does not build executables.
+analyze:
+	$(GNATMAKE) $(MAKE_ARGS) -f  -gnatc -c -k  -P "$(GPRPATH)"
+
+# Clean root project and all imported projects too.
+clean_tree:
+	$(GNATCLEAN) -q -P "$(GPRPATH)" -r
+
+# Clean the root project of all build products.
+clean::
+	-rm -rf lib obj bin $(CLEAN_FILES)
+	-rm -rf regtests/result
+
+doc::
+	$(DYNAMO) build-doc -markdown wiki
+
+dist:
+	git archive -o $(DIST_FILE) --prefix=$(DIST_DIR)/ HEAD
+
+install-info:
+	@echo "Environment setup:"
+	@echo "  export ADA_PROJECT_PATH=${projectdir}:$$ADA_PROJECT_PATH"
+
+define ada_library
+  static:: setup
+	$(GNATMAKE) $(GPRFLAGS) -p -P$(2)$(1).gpr $(STATIC_MAKE_ARGS)
+
+  install-static::
+	$(GPRINSTALL) -p -f --prefix=${prefix} \
+          $(STATIC_MAKE_ARGS) \
+          --build-name=static $(2)$(1).gpr  
+
+  setup:: obj/$(1)/static
+
+  obj/$(1)/static:
+	$(MKDIR) -p obj/$(1)/static
+
+ifeq ($(BUILDS_SHARED),yes)
+  shared:: setup
+	$(GNATMAKE) $(GPRFLAGS) -p -P$(2)$(1).gpr $(SHARED_MAKE_ARGS)
+
+  install-shared::
+	$(GPRINSTALL) -p -f --prefix=${prefix} \
+          $(SHARED_MAKE_ARGS) \
+          --build-name=relocatable $(2)$(1).gpr
+endif
+
+  uninstall::
+	-$(GPRINSTALL) --uninstall -q -f --prefix=${prefix} $(MAKE_ARGS) $(1).gpr
+
+endef
+
+define awa_install_dir
+
+install:: | $(dynamodir)/$(1)/$(2)
+	(cd $(3) && tar --exclude='*~' -cf - $(2)) \
+       | (cd $(dynamodir)/$(1)/ && tar xf -)
+
+$(dynamodir)/$(1)/$(2):
+	$(MKDIR) -p $(dynamodir)/$(1)/$(2)
+
+endef
+
+define awa_install_file
+
+install:: | $(dynamodir)/$(1)
+	$(CP) $(3)/$(2) $(dynamodir)/$(1)/$(2)
+
+endef
+
+define awa_install_plugin
+
+uninstall::
+	rm -rf $(dynamodir)/$(strip $(1))
+
+$(foreach dir,$($(1)_install_dirs),$(eval $(call awa_install_dir,$(strip $(1)),$(dir),$($(1)_dir))))
+
+$(foreach dir,$($(1)_install_files),$(eval $(call awa_install_file,$(strip $(1)),$(dir),$($(1)_dir))))
+
+$(dynamodir)/$(1):
+	$(MKDIR) -p $(dynamodir)/$(1)
+
+install:: | $(dynamodir)/$(1)
+	$(CP) $($(1)_dir)/dynamo.xml $(dynamodir)/$(strip $(1))/dynamo.xml
+
+endef
+
+define awa_plugin
+
+$(eval $(call ada_library,$(strip $(1)),$($(1)_dir)/))
+$(eval $(call awa_install_plugin,$(strip $(1))))
+
+ifdef $(1)_dynamo
+
+generate::
+	cd $($(1)_dir) && $(DYNAMO) generate $($(1)_dynamo)
+endif
+
+clean::
+	$(RM) -r $($(1)_dir)/dynamo.log $($(1)_dir)/obj $($(1)_dir)/lib
+
+endef
+
+force:
+
+build-test::
+
+uninstall::
+
+install-static::
+
+endif
