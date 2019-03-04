@@ -18,8 +18,8 @@
 
 with Ada.IO_Exceptions;
 
-with ADO.Drivers;
 with ADO.Sessions.Sources;
+with ADO.Configs;
 
 with EL.Contexts.Default;
 with Util.Files;
@@ -86,8 +86,8 @@ package body AWA.Applications is
       if Conf.Get ("ado.queries.paths", "") = "" then
          Conf.Set ("ado.queries.paths", "#{fn:composePath(app_search_dirs,'db')}");
       end if;
+      ADO.Configs.Initialize (Conf);
       ASF.Applications.Main.Application (App).Initialize_Config (Conf);
-      ADO.Drivers.Initialize (Conf);
       Connection.Set_Connection (Conf.Get (P_Database.P));
       Connection.Set_Property ("ado.queries.paths", Conf.Get ("ado.queries.paths", ""));
       Connection.Set_Property ("ado.queries.load", Conf.Get ("ado.queries.load", ""));
