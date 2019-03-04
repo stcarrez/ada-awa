@@ -23,7 +23,7 @@ BUILDS_SHARED=@BUILDS_SHARED@
 BUILDS_COVERAGE=@BUILDS_COVERAGE@
 BUILDS_DISTRIB=@BUILDS_DISTRIB@
 
-awa_yaml_name=AdaYaml
+awa_lzma_name=ada-lzma
 awa_util_name=ada-util
 awa_el_name=ada-el
 awa_servlet_name=ada-servlet
@@ -48,6 +48,7 @@ export ADA_PROJECT_PATH
 endif
 
 awa_build_root=@AWA_BUILD_ROOT@
+awa_util_configure=--with-ada-lzma=${awa_build_root}${awa_lzma_name}
 awa_el_configure=--with-ada-util=${awa_build_root}${awa_util_name}
 awa_wiki_configure=--with-ada-util=${awa_build_root}${awa_util_name}
 awa_security_configure=--with-ada-util=${awa_build_root}${awa_util_name}
@@ -110,9 +111,9 @@ awa_awa_configure += --disable-distrib
 endif
 
 # Directories of sub-projects in the build order.
-SUBDIRS=ada-util ada-el ada-security ada-wiki ada-servlet swagger-ada ada-asf ada-ado dynamo awa
+SUBDIRS=ada-lzma ada-util ada-el ada-security ada-wiki ada-servlet swagger-ada ada-asf ada-ado dynamo awa
 
-DIRS=ada-util ada-el ada-security ada-wiki ada-servlet swagger-ada ada-asf ada-ado dynamo
+DIRS=ada-lzma ada-util ada-el ada-security ada-wiki ada-servlet swagger-ada ada-asf ada-ado dynamo
 
 # Build executables for all mains defined by the project.
 build test clean:		 stamp-configure
@@ -121,8 +122,6 @@ build test clean:		 stamp-configure
 	done
 
 install uninstall:
-	# SCz: AdaYaml does not build on gnat-6 and crashes anyway at runtime.
-        # cd AdaYaml && make $@ prefix="${prefix}"
 	for i in $(SUBDIRS); do \
 	   $(MAKE) -C "$$i" $@ ; \
 	done
@@ -140,11 +139,12 @@ ifeq (${BUILD_XMLADA},yes)
 endif
 	touch $@
 
-stamp-yaml:     Makefile
-	# @echo "Building ==== AdaYaml ===="
-	# cd AdaYaml && make && touch ../$@
+stamp-configure:	stamp-aws stamp-xmlada Makefile
+	@echo "Configuring ==== ada-lzma ===="
+	@echo "${awa_lzma_configure}"
+	(cd ${awa_build_root}${awa_lzma_name} && ./configure --prefix=${prefix} ${awa_lzma_configure})
+	(cd ${awa_build_root}${awa_lzma_name} && make setup)
 
-stamp-configure:	stamp-aws stamp-xmlada stamp-yaml Makefile
 	@echo "Configuring ==== ada-util ===="
 	@echo "${awa_util_configure}"
 	(cd ${awa_build_root}${awa_util_name} && ./configure --prefix=${prefix} ${awa_util_configure})
@@ -210,8 +210,10 @@ dist:
 	gzip $(distdir).tar
 
 sync-configure:
-	for i in $(DIRS); do \
+	for i in $(SUBDIRS); do \
            echo "Updating configure in $$i" && \
            cp aclocal.m4 $$i/aclocal.m4 && \
            (cd $$i && autoconf); \
+           echo "Updating Makefile.defaults in $$i" && \
+           cp Makefile.defaults $$i/Makefile.defaults ; \
         done
