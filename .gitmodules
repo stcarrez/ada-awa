@@ -25,3 +25,6 @@
 [submodule "swagger-ada"]
 	path = swagger-ada
 	url = git://github.com/stcarrez/swagger-ada.git
+[submodule "ada-lzma"]
+	path = ada-lzma
+	url = git://github.com/stcarrez/ada-lzma.git
