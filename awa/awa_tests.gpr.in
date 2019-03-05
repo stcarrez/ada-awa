@@ -3,7 +3,7 @@ with "@UTIL_DIR@utilada_base";
 with "@UTIL_DIR@utilada_unit";
 with "@EL_DIR@elada";
 with "@WIKI_DIR@wikiada";
-with "@SERVLET_DIR@servletada_core";
+with "@SERVLET_DIR@servletada";
 with "@SERVLET_DIR@servletada_unit";
 with "@ASF_DIR@asf";
 with "@ASF_DIR@asf_unit";
