@@ -156,6 +156,13 @@ uninstall::
 
 $(eval $(call ada_library,awa))
 $(eval $(call ada_library,awa_unit))
+$(eval $(call awa_install_dir,awa,config,./))
+$(eval $(call awa_install_dir,awa,db,./))
+$(eval $(call awa_install_dir,awa,bundles,./))
+$(eval $(call awa_install_dir,awa,web,./))
+$(eval $(call awa_install_file,awa,dynamo.xml,./))
+$(eval $(call awa_install_file,awa,NOTICE.txt,./))
+$(eval $(call awa_install_file,awa,LICENSE.txt,./))
 
 ROOTDIR=.
 
