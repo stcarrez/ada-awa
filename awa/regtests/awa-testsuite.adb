@@ -59,6 +59,7 @@ with AWA.Changelogs.Modules.Tests;
 with AWA.Wikis.Modules.Tests;
 with AWA.Wikis.Tests;
 
+with ADO.Drivers;
 with Servlet.Server;
 package body AWA.Testsuite is
    Users          : aliased AWA.Users.Modules.User_Module;
@@ -140,6 +141,7 @@ package body AWA.Testsuite is
                          Add_Modules : in Boolean) is
       use AWA.Applications;
    begin
+      ADO.Drivers.Initialize;
       AWA.Tests.Initialize (App, Props, Add_Modules);
 
       if Add_Modules then
