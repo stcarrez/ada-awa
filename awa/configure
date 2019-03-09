@@ -3577,25 +3577,25 @@ $as_echo_n "checking Ada Servlet Library... " >&6; }
 # Check whether --with-ada-servlet was given.
 if test "${with_ada_servlet+set}" = set; then :
   withval=$with_ada_servlet;
-      gnat_project_name_servletada_core=${withval}/
+      gnat_project_name_servletada=${withval}/
       if test -d "${withval}"; then
-	    gnat_project_name_servletada_core=${withval}/servletada_core
+	    gnat_project_name_servletada=${withval}/servletada
 	  fi
 
 else
 
-      gnat_project_name_servletada_core=servletada_core
+      gnat_project_name_servletada=servletada
 
 fi
 
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: trying ${gnat_project_name_servletada_core}" >&5
-$as_echo "trying ${gnat_project_name_servletada_core}" >&6; }
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: trying ${gnat_project_name_servletada}" >&5
+$as_echo "trying ${gnat_project_name_servletada}" >&6; }
 
   rm -f conftest.gpr
   # Search in the GNAT project path.
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ${gnat_project_name_servletada_core} project exists in gnatmake's search path" >&5
-$as_echo_n "checking whether ${gnat_project_name_servletada_core} project exists in gnatmake's search path... " >&6; }
-  echo "with \"${gnat_project_name_servletada_core}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ${gnat_project_name_servletada} project exists in gnatmake's search path" >&5
+$as_echo_n "checking whether ${gnat_project_name_servletada} project exists in gnatmake's search path... " >&6; }
+  echo "with \"${gnat_project_name_servletada}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
   if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
@@ -3603,16 +3603,16 @@ $as_echo_n "checking whether ${gnat_project_name_servletada_core} project exists
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; }
   then
-    gnat_project_servletada_core=yes
+    gnat_project_servletada=yes
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
   else
-    gnat_project_servletada_core=no
+    gnat_project_servletada=no
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-    # Search in ../ada-servlet-*/servletada_core.gpr
-    files=`ls -r ../ada-servlet/servletada_core.gpr ../servletada_core/servletada_core.gpr ../ada-servlet-*/servletada_core.gpr 2>/dev/null`
+    # Search in ../ada-servlet-*/servletada.gpr
+    files=`ls -r ../ada-servlet/servletada.gpr ../servletada/servletada.gpr ../ada-servlet-*/servletada.gpr 2>/dev/null`
     for name in $files; do
       dir=`dirname $name`
       { $as_echo "$as_me:${as_lineno-$LINENO}: checking for Ada Servlet Library project in ${dir}" >&5
@@ -3625,39 +3625,39 @@ $as_echo_n "checking for Ada Servlet Library project in ${dir}... " >&6; }
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; }
       then
-         gnat_project_servletada_core=yes
-		 gnat_project_name_servletada_core=${name}
+         gnat_project_servletada=yes
+		 gnat_project_name_servletada=${name}
          { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
          break
       else
-         gnat_project_servletada_core=no
+         gnat_project_servletada=no
          { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
       fi
     done
   fi
   rm -f conftest.gpr
-  if test x${gnat_project_servletada_core} = xyes; then
-    gnat_project_with_servletada_core="with \"${gnat_project_name_servletada_core}\";";
-    gnat_project_dir_servletada_core=`dirname ${gnat_project_name_servletada_core}`
-    if test ${gnat_project_dir_servletada_core} = . ; then
-       gnat_project_dir_servletada_core=
+  if test x${gnat_project_servletada} = xyes; then
+    gnat_project_with_servletada="with \"${gnat_project_name_servletada}\";";
+    gnat_project_dir_servletada=`dirname ${gnat_project_name_servletada}`
+    if test ${gnat_project_dir_servletada} = . ; then
+       gnat_project_dir_servletada=
     else
-       gnat_project_dir_servletada_core="${gnat_project_dir_servletada_core}/"
+       gnat_project_dir_servletada="${gnat_project_dir_servletada}/"
     fi
 
-    SERVLET_DIR=${gnat_project_dir_servletada_core}
+    SERVLET_DIR=${gnat_project_dir_servletada}
 
   else
-    gnat_project_dir_servletada_core=
-    gnat_project_name_servletada_core=
+    gnat_project_dir_servletada=
+    gnat_project_name_servletada=
     if test x"Building Ada Web Application requires the Ada Servlet Library." != x; then
       as_fn_error $? "Building Ada Web Application requires the Ada Servlet Library.
   You should build and install the Ada Servlet Library component.
   It must be available and found by ${GNATMAKE}.
   This project was not found in the ADA_PROJECT_PATH environment variable.
-  This project was not found in ../servletada_core nor in ../ada-servlet-*.
+  This project was not found in ../servletada nor in ../ada-servlet-*.
   The component is available at git@github.com:stcarrez/ada-servlet.git.
   Please, download and configure Ada Servlet Library.
   The current configuration was using:
