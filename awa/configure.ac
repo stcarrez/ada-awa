@@ -127,11 +127,11 @@ AC_SUBST(SECURITY_DIR)
 ##########################################
 # Ada Servlet library
 ##########################################
-AM_GNAT_FIND_PROJECT([ada-servlet],[Ada Servlet Library],[servletada_core],
+AM_GNAT_FIND_PROJECT([ada-servlet],[Ada Servlet Library],[servletada],
   [git@github.com:stcarrez/ada-servlet.git],
   [Building Ada Web Application requires the Ada Servlet Library.],
   [
-    SERVLET_DIR=${gnat_project_dir_servletada_core}
+    SERVLET_DIR=${gnat_project_dir_servletada}
   ])
 AC_SUBST(SERVLET_DIR)
 
