@@ -93,7 +93,7 @@ define ada_library
 	$(GNATMAKE) $(GPRFLAGS) -p -P$(2)$(1).gpr $(STATIC_MAKE_ARGS)
 
   install-static::
-	$(GPRINSTALL) -p -f --prefix=${prefix} \
+	$(GPRINSTALL) -p -f --prefix=$(DESTDIR)${prefix} \
           $(STATIC_MAKE_ARGS) \
           --build-name=static $(2)$(1).gpr  
 
@@ -107,48 +107,48 @@ ifeq ($(BUILDS_SHARED),yes)
 	$(GNATMAKE) $(GPRFLAGS) -p -P$(2)$(1).gpr $(SHARED_MAKE_ARGS)
 
   install-shared::
-	$(GPRINSTALL) -p -f --prefix=${prefix} \
+	$(GPRINSTALL) -p -f --prefix=$(DESTDIR)${prefix} \
           $(SHARED_MAKE_ARGS) \
           --build-name=relocatable $(2)$(1).gpr
 endif
 
   uninstall::
-	-$(GPRINSTALL) --uninstall -q -f --prefix=${prefix} $(MAKE_ARGS) $(1).gpr
+	-$(GPRINSTALL) --uninstall -q -f --prefix=$(DESTDIR)${prefix} $(MAKE_ARGS) $(1).gpr
 
 endef
 
 define awa_install_dir
 
-install:: | $(dynamodir)/$(1)/$(2)
+install:: | $(DESTDIR)$(dynamodir)/$(1)/$(2)
 	(cd $(3) && tar --exclude='*~' -cf - $(2)) \
-       | (cd $(dynamodir)/$(1)/ && tar xf -)
+       | (cd $(DESTDIR)$(dynamodir)/$(1)/ && tar xf -)
 
-$(dynamodir)/$(1)/$(2):
-	$(MKDIR) -p $(dynamodir)/$(1)/$(2)
+$(DESTDIR)$(dynamodir)/$(1)/$(2):
+	$(MKDIR) -p $(DESTDIR)$(dynamodir)/$(1)/$(2)
 
 endef
 
 define awa_install_file
 
-install:: | $(dynamodir)/$(1)
-	$(CP) $(3)/$(2) $(dynamodir)/$(1)/$(2)
+install:: | $(DESTDIR)$(dynamodir)/$(1)
+	$(CP) $(3)/$(2) $(DESTDIR)$(dynamodir)/$(1)/$(2)
 
 endef
 
 define awa_install_plugin
 
 uninstall::
-	rm -rf $(dynamodir)/$(strip $(1))
+	rm -rf $(DESTDIR)$(dynamodir)/$(strip $(1))
 
 $(foreach dir,$($(1)_install_dirs),$(eval $(call awa_install_dir,$(strip $(1)),$(dir),$($(1)_dir))))
 
 $(foreach dir,$($(1)_install_files),$(eval $(call awa_install_file,$(strip $(1)),$(dir),$($(1)_dir))))
 
-$(dynamodir)/$(1):
-	$(MKDIR) -p $(dynamodir)/$(1)
+$(DESTDIR)$(dynamodir)/$(1):
+	$(MKDIR) -p $(DESTDIR)$(dynamodir)/$(1)
 
-install:: | $(dynamodir)/$(1)
-	$(CP) $($(1)_dir)/dynamo.xml $(dynamodir)/$(strip $(1))/dynamo.xml
+install:: | $(DESTDIR)$(dynamodir)/$(1)
+	$(CP) $($(1)_dir)/dynamo.xml $(DESTDIR)$(dynamodir)/$(strip $(1))/dynamo.xml
 
 endef
 
