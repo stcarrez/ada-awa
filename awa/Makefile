@@ -146,13 +146,13 @@ ifeq (${HAVE_POSTGRESQL},True)
 endif
 
 install::
-	$(MKDIR) -p ${dynamodir}/base/uml
-	$(MKDIR) -p ${prefix}/share/doc/awa
+	$(MKDIR) -p $(DESTDIR)${dynamodir}/base/uml
+	$(MKDIR) -p $(DESTDIR)${prefix}/share/doc/awa
 	# Install the AWA UML model in Dynamo UML search path
-	unzip -cq uml/awa.zargo awa.xmi > ${dynamodir}/base/uml/AWA.xmi
+	unzip -cq uml/awa.zargo awa.xmi > $(DESTDIR)${dynamodir}/base/uml/AWA.xmi
 
 uninstall::
-	rm -rf ${dynamodir}/awa
+	rm -rf $(DESTDIR)${dynamodir}/awa
 
 $(eval $(call ada_library,awa))
 $(eval $(call ada_library,awa_unit))
@@ -164,8 +164,8 @@ $(eval $(call awa_install_file,awa,dynamo.xml,./))
 $(eval $(call awa_install_file,awa,NOTICE.txt,./))
 $(eval $(call awa_install_file,awa,LICENSE.txt,./))
 
-$(dynamodir)/awa:
-	$(MKDIR) -p $(dynamodir)/awa
+$(DESTDIR)$(dynamodir)/awa:
+	$(MKDIR) -p $(DESTDIR)$(dynamodir)/awa
 
 ROOTDIR=.
 
