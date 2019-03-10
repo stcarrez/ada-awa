@@ -164,6 +164,9 @@ $(eval $(call awa_install_file,awa,dynamo.xml,./))
 $(eval $(call awa_install_file,awa,NOTICE.txt,./))
 $(eval $(call awa_install_file,awa,LICENSE.txt,./))
 
+$(dynamodir)/awa:
+	$(MKDIR) -p $(dynamodir)/awa
+
 ROOTDIR=.
 
 $(foreach PLUGIN,$(PLUGINS),$(eval include plugins/$(PLUGIN)/Makefile))
