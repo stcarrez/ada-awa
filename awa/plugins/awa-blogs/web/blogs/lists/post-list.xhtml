@@ -47,9 +47,12 @@
                      tagClass="tagedit-listelement tagedit-listelement-old"/>
 
         <awa:wiki styleClass='post-text'
-                  value="#{post.text}"
+                  value="#{empty post.summary ? post.text : post.summary}"
                   links="#{postList.links}"
-                  format="dotclear"/>
+                  format="#{post.format}"/>
+        <h:panelGroup rendered="#{not empty post.summary}">
+            <a href="#{contextPath}/blogs/post.html?post=#{post.uri}">Read more</a>
+        </h:panelGroup>
         <!-- Increment the post read counter but do not display anything -->
         <awa:counter value="#{postList.counter}" hidden="true"/>
         <h:panelGroup layout="div" styleClass="blog-post-comment"
