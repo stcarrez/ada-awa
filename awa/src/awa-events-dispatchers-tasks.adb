@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-dispatchers-tasks -- AWA Event Dispatchers
---  Copyright (C) 2012, 2015, 2017 Stephane Carrez
+--  Copyright (C) 2012, 2015, 2017, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -98,7 +98,6 @@ package body AWA.Events.Dispatchers.Tasks is
       Dispatcher : Task_Dispatcher_Access;
       Time       : Duration := 0.01;
       Do_Work    : Boolean := True;
-      Context    : AWA.Services.Contexts.Service_Context;
    begin
       Log.Info ("Event consumer is ready");
       select
@@ -107,15 +106,17 @@ package body AWA.Events.Dispatchers.Tasks is
          end Start;
          Log.Info ("Event consumer is started");
 
-         --  Set the service context.
-         Context.Set_Context (Application => Dispatcher.Manager.Get_Application.all'Access,
-                              Principal   => null);
          while Do_Work loop
             declare
                Nb_Queues : constant Natural := Dispatcher.Queues.Get_Count;
                Queue     : AWA.Events.Queues.Queue_Ref;
                Nb_Events : Natural := 0;
+               Context   : AWA.Services.Contexts.Service_Context;
             begin
+               --  Set the service context.
+               Context.Set_Context (Application => Dispatcher.Manager.Get_Application.all'Access,
+                                    Principal   => null);
+
                --  We can have several tasks that dispatch events from several queues.
                --  Each queue in the list must be given the same polling quota.
                --  Pick a queue and dispatch some pending events.
