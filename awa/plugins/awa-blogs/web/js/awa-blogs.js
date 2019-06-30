@@ -1,6 +1,6 @@
 /*
  *  awa-blogs -- Blogs and post
- *  Copyright (C) 2016, 2017 Stephane Carrez
+ *  Copyright (C) 2016, 2017, 2019 Stephane Carrez
  *  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -98,6 +98,71 @@
                 } else {
                     return this._super("selectAction", node);
                 }
+            }
+        }
+    });
+
+    /**
+     * Editor configuration for the blog post.  Create and configure either the
+     * MarkEdit text editor or the Wysiwyg editor with Trumbwowg.
+     */
+    $.widget("ui.blog_post_editor", {
+        options: {
+            syntax: "dotclear"
+        },
+        _create: function() {
+            var self = this;
+            var syntax = self.options.syntax;
+            if (self.options.syntax == 'FORMAT_DOTCLEAR') {
+                syntax = 'dotclear';
+            }
+            if (self.options.syntax == 'FORMAT_MEDIAWIKI') {
+                syntax = 'mediawiki';
+            }
+            if (syntax == 'dotclear' || syntax == 'mediawiki') {
+
+            // Create a MarkEdit editor on page load
+                this.element.find('textarea').markedit({
+                'preview': false,
+                'syntax': syntax,
+                'toolbar' : {
+                    'backgroundMode': 'light',
+                    'layout': 'bold italic underline strike | quote code | numberlist bulletlist heading line link image',
+                    imageSelector: function(config, defaultValue, okCallback, cancelCallback) {
+                        $('#image-selector').imageSelector({
+                            autoOpen: false,
+                            show: "blind",
+                            hide: "explode",
+                            minWidth: 900,
+                            minHeight: 400,
+                            modal: true,
+                            buttons: [
+                            { "text": "Select",
+                               "click": function() {
+                                    var value = $('#image-selector').imageSelector("value");
+                                    okCallback(value);
+                                    $(this).imageSelector("close");
+                                }
+                            }
+                        ]}).imageSelector("openSelector");
+                    }
+                },
+                });
+            } else {
+                this.element.find('textarea').trumbowyg({
+                    minimalLinks: true,
+                    autogrow: true,
+                    btns: [['viewHTML'], ['undo', 'redo'],
+                    ['formatting', '|', 'link', '|', 'image', 'btnGrp-justify', '|', 'btnGrp-semantic', '|', 'btnGrp-lists'],
+                    ['strong', 'em', 'del'], ['insertImage'],
+                    ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+                    ['unorderedList', 'orderedList'],
+                    ['preformatted'],
+                    ['fontfamily'],
+                    ['horizontalRule'],
+                    ['removeformat'],
+                    ['fullscreen']]
+                });
             }
         }
     });
