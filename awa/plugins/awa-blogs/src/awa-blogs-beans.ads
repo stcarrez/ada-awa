@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-beans -- Beans for blog module
---  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,7 +52,8 @@ package AWA.Blogs.Beans is
    POST_URI_ATTR     : constant String := "uri";
    POST_STATUS_ATTR  : constant String := "status";
    POST_USERNAME_ATTR : constant String := "username";
-   POST_TAG_ATTR      : constant String := "tags";
+   POST_DESCRIPTION_ATTR    : constant String := "description";
+   POST_TAG_ATTR            : constant String := "tags";
    POST_ALLOW_COMMENTS_ATTR : constant String := "allow_comments";
    COUNTER_ATTR             : constant String := "counter";
 
@@ -142,7 +143,7 @@ package AWA.Blogs.Beans is
    --  ------------------------------
    --  Post Bean
    --  ------------------------------
-   --  The <b>Post_Bean</b> is used to create or update a post associated with a blog.
+   --  The <b>Post_Bean</b> is used to create, update or display a post associated with a blog.
    type Post_Bean is new AWA.Blogs.Models.Post_Bean with record
       Module  : AWA.Blogs.Modules.Blog_Module_Access := null;
       Blog_Id : ADO.Identifier := ADO.NO_IDENTIFIER;
@@ -159,12 +160,18 @@ package AWA.Blogs.Beans is
       Counter       : aliased AWA.Counters.Beans.Counter_Bean (Of_Type => ADO.Objects.KEY_INTEGER,
                                                                Of_Class => Models.POST_TABLE);
       Counter_Bean  : Util.Beans.Basic.Readonly_Bean_Access;
+
+      --  The post description generated from the content.
+      Description   : Ada.Strings.Unbounded.Unbounded_String;
    end record;
    type Post_Bean_Access is access all Post_Bean'Class;
 
    --  Build the URI from the post title and the post date.
    function Get_Predefined_Uri (Title : in String;
                                 Date  : in Ada.Calendar.Time) return String;
+
+   --  Make the post description from the summary or the content.
+   procedure Make_Description (From : in out Post_Bean);
 
    --  Get the value identified by the name.
    overriding
