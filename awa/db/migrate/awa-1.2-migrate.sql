@@ -87,3 +87,9 @@ INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "country");
 INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "name");
+
+/* Add summary and image_id columns in the blog awa_post table */
+ALTER TABLE awa_post ADD COLUMN `summary` VARCHAR(255) BINARY NOT NULL;
+ALTER TABLE awa_post ADD COLUMN `image_id` BIGINT;
+ALTER TABLE awa_post ADD COLUMN `format` TINYINT NOT NULL DEFAULT 0;
+
