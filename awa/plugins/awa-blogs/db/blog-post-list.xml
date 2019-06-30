@@ -20,6 +20,12 @@
         <property type='String' name="username">
             <comment>the user name.</comment>
         </property>
+        <property type='AWA.Blogs.Models.Format_Type' name="format" not-null="yes">
+            <comment>the post page format.</comment>
+        </property>
+        <property type='String' name="summary">
+            <comment>the post summary.</comment>
+        </property>
         <property type='String' name="text">
             <comment>the post text.</comment>
         </property>
@@ -40,6 +46,8 @@
       post.uri,
       post.publish_date,
       u.name,
+      post.format,
+      post.summary,
       post.text,
       post.allow_comments,
       count(cmt.id)
@@ -68,6 +76,8 @@
       post.uri,
       post.publish_date,
       u.name,
+      post.format,
+      post.summary,
       post.text,
       post.allow_comments,
       count(distinct cmt.id)
