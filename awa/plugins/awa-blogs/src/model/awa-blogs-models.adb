@@ -602,6 +602,7 @@ package body AWA.Blogs.Models is
       Impl.Status := AWA.Blogs.Models.Post_Status_Type'First;
       Impl.Allow_Comments := False;
       Impl.Read_Count := 0;
+      Impl.Format := AWA.Blogs.Models.Format_Type'First;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -813,12 +814,61 @@ package body AWA.Blogs.Models is
    end Get_Read_Count;
 
 
+   procedure Set_Summary (Object : in out Post_Ref;
+                           Value : in String) is
+      Impl : Post_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_String (Impl.all, 11, Impl.Summary, Value);
+   end Set_Summary;
+
+   procedure Set_Summary (Object : in out Post_Ref;
+                          Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : Post_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 11, Impl.Summary, Value);
+   end Set_Summary;
+
+   function Get_Summary (Object : in Post_Ref)
+                 return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (Object.Get_Summary);
+   end Get_Summary;
+   function Get_Summary (Object : in Post_Ref)
+                  return Ada.Strings.Unbounded.Unbounded_String is
+      Impl : constant Post_Access
+         := Post_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Summary;
+   end Get_Summary;
+
+
+   procedure Set_Format (Object : in out Post_Ref;
+                         Value  : in AWA.Blogs.Models.Format_Type) is
+      procedure Set_Field_Enum is
+         new ADO.Objects.Set_Field_Operation (Format_Type);
+      Impl : Post_Access;
+   begin
+      Set_Field (Object, Impl);
+      Set_Field_Enum (Impl.all, 12, Impl.Format, Value);
+   end Set_Format;
+
+   function Get_Format (Object : in Post_Ref)
+                  return AWA.Blogs.Models.Format_Type is
+      Impl : constant Post_Access
+         := Post_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Format;
+   end Get_Format;
+
+
    procedure Set_Author (Object : in out Post_Ref;
                          Value  : in AWA.Users.Models.User_Ref'Class) is
       Impl : Post_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 11, Impl.Author, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 13, Impl.Author, Value);
    end Set_Author;
 
    function Get_Author (Object : in Post_Ref)
@@ -835,7 +885,7 @@ package body AWA.Blogs.Models is
       Impl : Post_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 12, Impl.Blog, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 14, Impl.Blog, Value);
    end Set_Blog;
 
    function Get_Blog (Object : in Post_Ref)
@@ -845,6 +895,23 @@ package body AWA.Blogs.Models is
    begin
       return Impl.Blog;
    end Get_Blog;
+
+
+   procedure Set_Image (Object : in out Post_Ref;
+                        Value  : in AWA.Images.Models.Image_Ref'Class) is
+      Impl : Post_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 15, Impl.Image, Value);
+   end Set_Image;
+
+   function Get_Image (Object : in Post_Ref)
+                  return AWA.Images.Models.Image_Ref'Class is
+      Impl : constant Post_Access
+         := Post_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Image;
+   end Get_Image;
 
    --  Copy of the object.
    procedure Copy (Object : in Post_Ref;
@@ -869,8 +936,11 @@ package body AWA.Blogs.Models is
             Copy.Status := Impl.Status;
             Copy.Allow_Comments := Impl.Allow_Comments;
             Copy.Read_Count := Impl.Read_Count;
+            Copy.Summary := Impl.Summary;
+            Copy.Format := Impl.Format;
             Copy.Author := Impl.Author;
             Copy.Blog := Impl.Blog;
+            Copy.Image := Impl.Image;
          end;
       end if;
       Into := Result;
@@ -1046,14 +1116,29 @@ package body AWA.Blogs.Models is
          Object.Clear_Modified (10);
       end if;
       if Object.Is_Modified (11) then
-         Stmt.Save_Field (Name  => COL_10_2_NAME, --  author_id
-                          Value => Object.Author);
+         Stmt.Save_Field (Name  => COL_10_2_NAME, --  summary
+                          Value => Object.Summary);
          Object.Clear_Modified (11);
       end if;
       if Object.Is_Modified (12) then
-         Stmt.Save_Field (Name  => COL_11_2_NAME, --  blog_id
-                          Value => Object.Blog);
+         Stmt.Save_Field (Name  => COL_11_2_NAME, --  format
+                          Value => Integer (Format_Type'Pos (Object.Format)));
          Object.Clear_Modified (12);
+      end if;
+      if Object.Is_Modified (13) then
+         Stmt.Save_Field (Name  => COL_12_2_NAME, --  author_id
+                          Value => Object.Author);
+         Object.Clear_Modified (13);
+      end if;
+      if Object.Is_Modified (14) then
+         Stmt.Save_Field (Name  => COL_13_2_NAME, --  blog_id
+                          Value => Object.Blog);
+         Object.Clear_Modified (14);
+      end if;
+      if Object.Is_Modified (15) then
+         Stmt.Save_Field (Name  => COL_14_2_NAME, --  image_id
+                          Value => Object.Image);
+         Object.Clear_Modified (15);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -1106,10 +1191,16 @@ package body AWA.Blogs.Models is
                         Value => Object.Allow_Comments);
       Query.Save_Field (Name  => COL_9_2_NAME, --  read_count
                         Value => Object.Read_Count);
-      Query.Save_Field (Name  => COL_10_2_NAME, --  author_id
+      Query.Save_Field (Name  => COL_10_2_NAME, --  summary
+                        Value => Object.Summary);
+      Query.Save_Field (Name  => COL_11_2_NAME, --  format
+                        Value => Integer (Format_Type'Pos (Object.Format)));
+      Query.Save_Field (Name  => COL_12_2_NAME, --  author_id
                         Value => Object.Author);
-      Query.Save_Field (Name  => COL_11_2_NAME, --  blog_id
+      Query.Save_Field (Name  => COL_13_2_NAME, --  blog_id
                         Value => Object.Blog);
+      Query.Save_Field (Name  => COL_14_2_NAME, --  image_id
+                        Value => Object.Image);
       Query.Execute (Result);
       if Result /= 1 then
          raise ADO.Objects.INSERT_ERROR;
@@ -1164,6 +1255,10 @@ package body AWA.Blogs.Models is
          return Util.Beans.Objects.To_Object (Impl.Allow_Comments);
       elsif Name = "read_count" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Read_Count));
+      elsif Name = "summary" then
+         return Util.Beans.Objects.To_Object (Impl.Summary);
+      elsif Name = "format" then
+         return AWA.Blogs.Models.Format_Type_Objects.To_Object (Impl.Format);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -1186,11 +1281,16 @@ package body AWA.Blogs.Models is
       Object.Status := Post_Status_Type'Val (Stmt.Get_Integer (7));
       Object.Allow_Comments := Stmt.Get_Boolean (8);
       Object.Read_Count := Stmt.Get_Integer (9);
-      if not Stmt.Is_Null (10) then
-         Object.Author.Set_Key_Value (Stmt.Get_Identifier (10), Session);
+      Object.Summary := Stmt.Get_Unbounded_String (10);
+      Object.Format := Format_Type'Val (Stmt.Get_Integer (11));
+      if not Stmt.Is_Null (12) then
+         Object.Author.Set_Key_Value (Stmt.Get_Identifier (12), Session);
       end if;
-      if not Stmt.Is_Null (11) then
-         Object.Blog.Set_Key_Value (Stmt.Get_Identifier (11), Session);
+      if not Stmt.Is_Null (13) then
+         Object.Blog.Set_Key_Value (Stmt.Get_Identifier (13), Session);
+      end if;
+      if not Stmt.Is_Null (14) then
+         Object.Image.Set_Key_Value (Stmt.Get_Identifier (14), Session);
       end if;
       Object.Version := Stmt.Get_Integer (5);
       ADO.Objects.Set_Created (Object);
@@ -1679,6 +1779,10 @@ package body AWA.Blogs.Models is
          return Util.Beans.Objects.Time.To_Object (From.Date);
       elsif Name = "username" then
          return Util.Beans.Objects.To_Object (From.Username);
+      elsif Name = "format" then
+         return AWA.Blogs.Models.Format_Type_Objects.To_Object (From.Format);
+      elsif Name = "summary" then
+         return Util.Beans.Objects.To_Object (From.Summary);
       elsif Name = "text" then
          return Util.Beans.Objects.To_Object (From.Text);
       elsif Name = "allow_comments" then
@@ -1708,6 +1812,10 @@ package body AWA.Blogs.Models is
          Item.Date := Util.Beans.Objects.Time.To_Time (Value);
       elsif Name = "username" then
          Item.Username := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "format" then
+         Item.Format := AWA.Blogs.Models.Format_Type_Objects.To_Value (Value);
+      elsif Name = "summary" then
+         Item.Summary := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "text" then
          Item.Text := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "allow_comments" then
@@ -1746,9 +1854,11 @@ package body AWA.Blogs.Models is
          Into.Uri := Stmt.Get_Unbounded_String (2);
          Into.Date := Stmt.Get_Time (3);
          Into.Username := Stmt.Get_Unbounded_String (4);
-         Into.Text := Stmt.Get_Unbounded_String (5);
-         Into.Allow_Comments := Stmt.Get_Boolean (6);
-         Into.Comment_Count := Stmt.Get_Natural (7);
+         Into.Format := AWA.Blogs.Models.Format_Type'Val (Stmt.Get_Integer (5));
+         Into.Summary := Stmt.Get_Unbounded_String (6);
+         Into.Text := Stmt.Get_Unbounded_String (7);
+         Into.Allow_Comments := Stmt.Get_Boolean (8);
+         Into.Comment_Count := Stmt.Get_Natural (9);
       end Read;
    begin
       Stmt.Execute;
@@ -1926,6 +2036,10 @@ package body AWA.Blogs.Models is
          Item.Set_Allow_Comments (Util.Beans.Objects.To_Boolean (Value));
       elsif Name = "read_count" then
          Item.Set_Read_Count (Util.Beans.Objects.To_Integer (Value));
+      elsif Name = "summary" then
+         Item.Set_Summary (Util.Beans.Objects.To_String (Value));
+      elsif Name = "format" then
+         Item.Set_Format (Format_Type_Objects.To_Value (Value));
       end if;
    end Set_Value;
 

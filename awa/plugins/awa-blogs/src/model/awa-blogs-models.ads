@@ -37,6 +37,7 @@ with Util.Beans.Basic.Lists;
 with ADO.Audits;
 with AWA.Comments.Models;
 with AWA.Events;
+with AWA.Images.Models;
 with AWA.Storages.Models;
 with AWA.Users.Models;
 with AWA.Workspaces.Models;
@@ -45,6 +46,16 @@ pragma Warnings (On);
 package AWA.Blogs.Models is
 
    pragma Style_Checks ("-mr");
+
+   type Format_Type is (FORMAT_DOTCLEAR, FORMAT_HTML, FORMAT_MARKDOWN, FORMAT_MEDIAWIKI, FORMAT_CREOLE);
+   for Format_Type use (FORMAT_DOTCLEAR => 0, FORMAT_HTML => 1, FORMAT_MARKDOWN => 2, FORMAT_MEDIAWIKI => 3, FORMAT_CREOLE => 4);
+   package Format_Type_Objects is
+      new Util.Beans.Objects.Enums (Format_Type);
+
+   type Nullable_Format_Type is record
+      Is_Null : Boolean := True;
+      Value   : Format_Type;
+   end record;
 
    type Post_Status_Type is (POST_DRAFT, POST_PUBLISHED, POST_SCHEDULED);
    for Post_Status_Type use (POST_DRAFT => 0, POST_PUBLISHED => 1, POST_SCHEDULED => 2);
@@ -292,6 +303,26 @@ package AWA.Blogs.Models is
    function Get_Read_Count (Object : in Post_Ref)
                  return Integer;
 
+   --  Set the post summary.
+   procedure Set_Summary (Object : in out Post_Ref;
+                          Value  : in Ada.Strings.Unbounded.Unbounded_String);
+   procedure Set_Summary (Object : in out Post_Ref;
+                          Value : in String);
+
+   --  Get the post summary.
+   function Get_Summary (Object : in Post_Ref)
+                 return Ada.Strings.Unbounded.Unbounded_String;
+   function Get_Summary (Object : in Post_Ref)
+                 return String;
+
+   --  Set the blog post format.
+   procedure Set_Format (Object : in out Post_Ref;
+                         Value  : in AWA.Blogs.Models.Format_Type);
+
+   --  Get the blog post format.
+   function Get_Format (Object : in Post_Ref)
+                 return AWA.Blogs.Models.Format_Type;
+
    --
    procedure Set_Author (Object : in out Post_Ref;
                          Value  : in AWA.Users.Models.User_Ref'Class);
@@ -307,6 +338,14 @@ package AWA.Blogs.Models is
    --
    function Get_Blog (Object : in Post_Ref)
                  return AWA.Blogs.Models.Blog_Ref'Class;
+
+   --
+   procedure Set_Image (Object : in out Post_Ref;
+                        Value  : in AWA.Images.Models.Image_Ref'Class);
+
+   --
+   function Get_Image (Object : in Post_Ref)
+                 return AWA.Images.Models.Image_Ref'Class;
 
    --  Load the entity identified by 'Id'.
    --  Raises the NOT_FOUND exception if it does not exist.
@@ -687,6 +726,12 @@ package AWA.Blogs.Models is
       --  the user name.
       Username : Ada.Strings.Unbounded.Unbounded_String;
 
+      --  the post page format.
+      Format : AWA.Blogs.Models.Format_Type;
+
+      --  the post summary.
+      Summary : Ada.Strings.Unbounded.Unbounded_String;
+
       --  the post text.
       Text : Ada.Strings.Unbounded.Unbounded_String;
 
@@ -949,11 +994,14 @@ private
    COL_7_2_NAME : aliased constant String := "status";
    COL_8_2_NAME : aliased constant String := "allow_comments";
    COL_9_2_NAME : aliased constant String := "read_count";
-   COL_10_2_NAME : aliased constant String := "author_id";
-   COL_11_2_NAME : aliased constant String := "blog_id";
+   COL_10_2_NAME : aliased constant String := "summary";
+   COL_11_2_NAME : aliased constant String := "format";
+   COL_12_2_NAME : aliased constant String := "author_id";
+   COL_13_2_NAME : aliased constant String := "blog_id";
+   COL_14_2_NAME : aliased constant String := "image_id";
 
    POST_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count   => 12,
+     (Count   => 15,
       Table   => POST_NAME'Access,
       Members => (
          1 => COL_0_2_NAME'Access,
@@ -967,7 +1015,10 @@ private
          9 => COL_8_2_NAME'Access,
          10 => COL_9_2_NAME'Access,
          11 => COL_10_2_NAME'Access,
-         12 => COL_11_2_NAME'Access)
+         12 => COL_11_2_NAME'Access,
+         13 => COL_12_2_NAME'Access,
+         14 => COL_13_2_NAME'Access,
+         15 => COL_14_2_NAME'Access)
      );
    POST_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := POST_DEF'Access;
@@ -1002,8 +1053,11 @@ private
        Status : AWA.Blogs.Models.Post_Status_Type;
        Allow_Comments : Boolean;
        Read_Count : Integer;
+       Summary : Ada.Strings.Unbounded.Unbounded_String;
+       Format : AWA.Blogs.Models.Format_Type;
        Author : AWA.Users.Models.User_Ref;
        Blog : AWA.Blogs.Models.Blog_Ref;
+       Image : AWA.Images.Models.Image_Ref;
    end record;
 
    type Post_Access is access all Post_Impl;
@@ -1134,7 +1188,7 @@ private
 
    package File_8 is
       new ADO.Queries.Loaders.File (Path => "blog-post-list.xml",
-                                    Sha1 => "8DB9E20EB0AEBC97698E1BF002F64FB5279E2245");
+                                    Sha1 => "24E5EBFA169F82908DA31BF4FF4C7688FA714CC3");
 
    package Def_Postinfo_Blog_Post_List is
       new ADO.Queries.Loaders.Query (Name => "blog-post-list",
