@@ -76,6 +76,8 @@ The Post_Info describes a post to be displayed in the blog page
 ||String|uri|the post uri.|
 ||Date|date|the post publish date.|
 ||String|username|the user name.|
+||AWA.Blogs.Models.Format_Type|format|the post page format.|
+||String|summary|the post summary.|
 ||String|text|the post text.|
 ||Boolean|allow_comments|the post allows to add comments.|
 ||Natural|comment_count|the number of comments for this post.|
