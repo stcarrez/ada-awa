@@ -20,137 +20,200 @@
         xmlns:w="http://code.google.com/p/ada-asf/widget"
         xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:awa="http://code.google.com/p/ada-awa/jsf"
+        xmlns:w="http://code.google.com/p/ada-asf/widget"
         xmlns:c="http://java.sun.com/jstl/core"
         xmlns:h="http://java.sun.com/jsf/html">
 
-  <div class='awa-post ui-widget ui-widget-content ui-corner-all awa-form'>
-    <h2>#{title}</h2>
-      <div id="image-selector"/>
-      <h:form id='post'>
-        <h:inputHidden id='post-id' value='#{post.id}' required='false'/>
-        <h:inputHidden id='post-blog-id' value='#{post.blogId}'/>
-        <div class='grid_8'>
-            <h:messages styleClass='awa-error'/>
-            <w:inputText id='post-title'
-                         title="#{blogMsg.blog_post_title_label}"
-                         styleClass="awa-required ui-corner-all"
-                         size='80'
-                         placeholder="#{blogMsg.blog_post_title_placeholder}"
-                         value="#{post.title}"/>
-            <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
-                <dt>
-                    <label for='text'>#{blogMsg.blog_post_text_label}</label>
-                </dt>
-                <dd>
-                    <h:inputTextarea id='text' rows='20' required='false'
-                                     placeholder="#{blogMsg.blog_post_text_placeholder}"
-                                     value='#{post.text}'/>
-                </dd>
-                <dt>
-                    <label for='qtags'>#{blogMsg.blog_tags_label}</label>
-                </dt>
-                <dd>
-                    <awa:tagList value='#{post.tags}' id='qtags'
-                                 styleClass="ui-corner-all awa-tag-input"
-                                 autoCompleteUrl='#{contextPath}/blogs/admin/lists/tag-search.html'/>
-                </dd>
-            </dl>
-            <w:inputText id='uri' title="#{blogMsg.blog_post_url_label}"
-                         styleClass="awa-required ui-corner-all" size='80'
-                         placeholder="#{blogMsg.blog_post_url_placeholder}"
-                         value="#{post.uri}" required="false"/>
+    <div id='awa-post-editor' class='awa-post ui-widget ui-widget-content ui-corner-all awa-form'>
+        <div id="image-selector"/>
+        <h:form id='post'>
+            <h:inputHidden id='post-id' value='#{post.id}' required='false'/>
+            <h:inputHidden id='post-blog-id' value='#{post.blogId}'/>
+            <div class="awa-post-buttons">
+                <h2>#{title}</h2>
+                <ul class='awa-buttons'>
+                    <li>
+                        <h:commandButton id='save' value='#{blogMsg.blog_post_save_button}'
+                                         styleClass="ui-button ui-state-default ui-corner-all"
+                                         action="#{post.save}" title="#{blogMsg.blog_post_save_title}"/>
+                    </li>
+                </ul>
+            </div>
+            <div class="awa-post-editor post-text">
+                <h:messages styleClass='awa-error'/>
+                <w:tabView header='Ada Lovelace' closable="false" toggleable="true"
+                           effect="blind" collapsible="false">
+                    <w:tab title="Summary">
+                        <w:inputText id='post-title'
+                                     title="#{blogMsg.blog_post_title_label}"
+                                     styleClass="awa-required ui-corner-all"
+                                     size='80'
+                                     placeholder="#{blogMsg.blog_post_title_placeholder}"
+                                     value="#{post.title}"/>
 
-            <ul class='awa-buttons'>
-                <li>
-                    <h:commandButton id='save' value='#{blogMsg.blog_post_save_button}'
-                                     styleClass="ui-button ui-state-default ui-corner-all"
-                                     action="#{post.save}" title="#{blogMsg.blog_post_save_title}"/>
-                </li>
-            </ul>
-        </div>
-        <div class='grid_4'>
-            <dl class="awa-required">
-                <dt>
-                    <label for="post-status">#{blogMsg.blog_post_status_label}</label>
-                </dt>
-                <dd>
-                    <h:selectOneMenu id='post-status' size='10' value='#{post.status}'
-                                     styleClass="ui-state-default ui-corner-all">
-                        <f:selectItems value="#{postStatusList}"/>
-                    </h:selectOneMenu>
-                </dd>
-                <dt><label for='allow-comment'>#{blogMsg.blog_post_allow_comments_label}</label></dt>
-                <dd>
-                    <h:selectOneRadio styleClass="awa-radio" id="allow-comment" value="#{post.allow_comments}">
-                        <f:selectItem id="page-public-yes" name="allow-comment" itemLabel="#{layoutMsg.layout_yes_label}" itemValue="TRUE" />
-                        <f:selectItem id="page-public-no" name="allow-comment" itemLabel="#{layoutMsg.layout_no_label}" itemValue="FALSE" />
-                    </h:selectOneRadio>
-                </dd>
-            </dl>
-                <dl class="awa-required" style="#{empty post.id ? 'display: none' : ''}">
-                    <dt>
-                        <label for="post-status">#{blogMsg.blog_post_publish_date_label}</label>
-                    </dt>
+                        <dl class="awa-required#{util:hasMessage('summary') ? ' awa-error' : ''}">
+                            <dt>
+                                <label for='summary'>Summary</label>
+                            </dt>
+                            <dd>
+                                <h:inputTextarea id='summary' rows='5' required='false'
+                                                 placeholder="#{blogMsg.blog_post_text_placeholder}"
+                                                 styleClass="awa-required ui-corner-all"
+                                                 value='#{post.summary}'/>
+                            </dd>
+                        </dl>
+                    </w:tab>
+                    <w:tab title="Article">
+                        <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
+                            <dd>
+                                <h:inputTextarea id='text' rows='30' required='false'
+                                                 placeholder="#{blogMsg.blog_post_text_placeholder}"
+                                                 value='#{post.text}'/>
+                            </dd>
+                        </dl>
+                    </w:tab>
+                    <w:tab title="Tags">
+                        <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
+                            <dt>
+                                <label for='qtags'>#{blogMsg.blog_tags_label}</label>
+                            </dt>
+                            <dd>
+                                <awa:tagList value='#{post.tags}' id='qtags'
+                                             styleClass="ui-corner-all awa-tag-input"
+                                             autoCompleteUrl='#{contextPath}/blogs/admin/lists/tag-search.html'/>
+                            </dd>
+                        </dl>
+                    </w:tab>
+                    <w:tab title="Options">
+                        <dl class="awa-required">
+                            <dt>
+                                <label for="wiki-format">#{wikiMsg.wiki_page_format_label}</label>
+                            </dt>
+                            <dd>
+                                <h:selectOneMenu id='wiki-format' size='10' value='#{post.format}'
+                                                 styleClass="ui-state-default ui-corner-all">
+                                    <f:selectItems value="#{wikiFormatList}"/>
+                                </h:selectOneMenu>
+                            </dd>
+                        </dl>
+                        <w:inputText id='uri' title="#{blogMsg.blog_post_url_label}"
+                                     styleClass="awa-required ui-corner-all" size='80'
+                                     placeholder="#{blogMsg.blog_post_url_placeholder}"
+                                     value="#{post.uri}" required="false"/>
+                        <dl class="awa-required">
+                            <dt>
+                                <label for="post-status">#{blogMsg.blog_post_status_label}</label>
+                            </dt>
+                            <dd>
+                                <h:selectOneMenu id='post-status' size='10' value='#{post.status}'
+                                                 styleClass="ui-state-default ui-corner-all">
+                                    <f:selectItems value="#{postStatusList}"/>
+                                </h:selectOneMenu>
+                            </dd>
+                            <dt><label for='allow-comment'>#{blogMsg.blog_post_allow_comments_label}</label></dt>
+                            <dd>
+                                <h:selectOneRadio styleClass="awa-radio" id="allow-comment" value="#{post.allow_comments}">
+                                    <f:selectItem id="page-public-yes" name="allow-comment" itemLabel="#{layoutMsg.layout_yes_label}" itemValue="TRUE" />
+                                    <f:selectItem id="page-public-no" name="allow-comment" itemLabel="#{layoutMsg.layout_no_label}" itemValue="FALSE" />
+                                </h:selectOneRadio>
+                            </dd>
+                        </dl>
+                        <dl class="awa-required" style="#{empty post.id ? 'display: none' : ''}">
+                            <dt>
+                                <label for="post-status">#{blogMsg.blog_post_publish_date_label}</label>
+                            </dt>
+                            <dd>
+                                <h:inputText id="publish-date"
+                                             required="false"
+                                             styleClass="ui-corner-all"
+                                             value="#{post.publish_date}">
+                                    <f:convertDateTime pattern="%Y-%m-%d %H:%M"/>
+                                </h:inputText>
+                            </dd>
+                        </dl>
+                    </w:tab>
+                </w:tabView>
+            </div>
+<!--
+            <div class='grid_4'>
+
+                <dl class="awa-optional">
                     <dd>
-                        <h:inputText id="publish-date"
-                                     required="false"
-                                     styleClass="ui-corner-all"
-                                     value="#{post.publish_date}">
-                            <f:convertDateTime pattern="%Y-%m-%d %H:%M"/>
-                        </h:inputText>
+                        <ui:include src="/markedit/syntax.xhtml">
+                            <ui:param name="syntax" value="FORMAT_DOTCLEAR"/>
+                        </ui:include>
                     </dd>
                 </dl>
-            <dl class="awa-optional">
-                <dd>
-                    <ui:include src="/markedit/syntax.xhtml">
-                        <ui:param name="syntax" value="FORMAT_DOTCLEAR"/>
-                    </ui:include>
-                </dd>
-            </dl>
-        </div>
-    </h:form>
-  </div>
+            </div> -->
+        </h:form>
+    </div>
     <util:script>
         contextPath = "#{contextPath}";
         // Create a MarkEdit editor on page load
         $(function(){
-            $('textarea').markedit({
-                'preview': false,
-                'syntax': 'dotclear',
-                'toolbar' : {
-                    'backgroundMode': 'light',
-                    'layout': 'bold italic underline strike | quote code | numberlist bulletlist heading line link image',
-                    imageSelector: function(config, defaultValue, okCallback, cancelCallback) {
-                        $('#image-selector').imageSelector({
-                            autoOpen: false,
-                            show: "blind",
-                            hide: "explode",
-                            minWidth: 900,
-                            minHeight: 400,
-                            modal: true,
-                            buttons: [
-                              { "text": "Select",
-                                "click": function() {
-                                    var value = $('#image-selector').imageSelector("value");
-                                    okCallback(value);
-                                    $(this).imageSelector("close");
-                                }
-                              }
-                            ]
-                        }).imageSelector("openSelector");
-                    }
-                },
+            $("#awa-post-editor").blog_post_editor({
+                'syntax': "#{post.format}",
             });
-            $("#publish-date").datetimepicker({
-                format: 'Y-m-d H:i',
-                dayOfWeekStart: 1,
-                timepicker: true,
-                datepicker: true,
-                onSelect: function(date, picker) {
-                     /* alert(date); */
-                }
-            });
+
+
+        $("#publish-date").datetimepicker({
+            format: 'Y-m-d H:i',
+            dayOfWeekStart: 1,
+            timepicker: true,
+            datepicker: true,
+            onSelect: function(date, picker) {
+                /* alert(date); */
+            }
         });
+
+        });
+
+
+        /*
+        $('#text-old').markedit({
+        'preview': false,
+        'syntax': 'dotclear',
+        'toolbar' : {
+        'backgroundMode': 'light',
+        'layout': 'bold italic underline strike | quote code | numberlist bulletlist heading line link image',
+        imageSelector: function(config, defaultValue, okCallback, cancelCallback) {
+        $('#image-selector').imageSelector({
+        autoOpen: false,
+        show: "blind",
+        hide: "explode",
+        minWidth: 900,
+        minHeight: 400,
+        modal: true,
+        buttons: [
+        { "text": "Select",
+        "click": function() {
+        var value = $('#image-selector').imageSelector("value");
+        okCallback(value);
+        $(this).imageSelector("close");
+        }
+        }
+        ]
+        }).imageSelector("openSelector");
+        }
+        },
+        });
+        */
+
+/*
+        $('#text').trumbowyg({ minimalLinks: true,
+        autogrow: true,
+        btns: [['viewHTML'], ['undo', 'redo'],
+        ['formatting', '|', 'link', '|', 'image',
+        'btnGrp-justify', '|', 'btnGrp-semantic', '|', 'btnGrp-lists'],
+        ['strong', 'em', 'del'], ['insertImage'],
+        ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+        ['unorderedList', 'orderedList'],
+        ['preformatted'],
+        ['fontfamily'],
+        ['horizontalRule'],
+        ['removeformat'],
+        ['fullscreen']]});
+        }); */
     </util:script>
 
 </ui:composition>

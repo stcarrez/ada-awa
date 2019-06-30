@@ -292,3 +292,23 @@ div.blog-post-comment-count a {
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
 }
+.awa-form .ui-tabs .ui-tabs-panel {
+    overflow: hidden;
+    padding: 0;
+}
+.awa-post-editor, .awa-post-buttons {
+    float: left;
+    width: 100%;
+}
+.awa-post-buttons {
+    padding-bottom: 0.5em;
+}
+.awa-post-buttons .awa-buttons {
+    float: right;
+    width: auto;
+    margin: 0;
+}
+.awa-post-buttons h2 {
+    float: left;
+    padding: .4em 0;
+}
