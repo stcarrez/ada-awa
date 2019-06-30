@@ -2,6 +2,7 @@ Version 1.2     -
   - New audit manager for database auditing
   - Support for Postgresql
   - Improvements of images and storage plugins
+  - Update Trumbowyg editor to version 2.18.0
 
 Version 1.1     - Jul 2018
   - New trumbowyg plugin for WYSIWYG Javascript editor
