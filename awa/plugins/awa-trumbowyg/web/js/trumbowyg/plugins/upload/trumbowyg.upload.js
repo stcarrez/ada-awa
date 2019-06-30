@@ -15,7 +15,7 @@
     'use strict';
 
     var defaultOptions = {
-        serverPath: './src/plugins/upload/trumbowyg.upload.php',
+        serverPath: '',
         fileFieldName: 'fileToUpload',
         data: [],                       // Additional data for ajax [{name: 'key', value: 'value'}]
         headers: {},                    // Additional headers
@@ -23,7 +23,8 @@
         urlPropertyName: 'file',        // How to get url from the json response (for instance 'url' for {url: ....})
         statusPropertyName: 'success',  // How to get status from the json response 
         success: undefined,             // Success callback: function (data, trumbowyg, $modal, values) {}
-        error: undefined                // Error callback: function () {}
+        error: undefined,               // Error callback: function () {}
+        imageWidthModalEdit: false      // Add ability to edit image width
     };
 
     function getDeep(object, propertyParts) {
@@ -52,6 +53,16 @@
                 file: 'File',
                 uploadError: 'Error'
             },
+            da: {
+                upload: 'Upload',
+                file: 'Fil',
+                uploadError: 'Fejl'
+            },
+            de: {
+                upload: 'Hochladen',
+                file: 'Datei',
+                uploadError: 'Fehler'
+            },
             sk: {
                 upload: 'Nahrať',
                 file: 'Súbor',
@@ -72,11 +83,36 @@
                 file: '文件',
                 uploadError: '错误'
             },
+            zh_tw: {
+                upload: '上傳',
+                file: '文件',
+                uploadError: '錯誤'
+            },
             ru: {
                 upload: 'Загрузка',
                 file: 'Файл',
                 uploadError: 'Ошибка'
-            }
+            },
+            ja: {
+                upload: 'アップロード',
+                file: 'ファイル',
+                uploadError: 'エラー'
+            },
+            pt_br: {
+                upload: 'Enviar do local',
+                file: 'Arquivo',
+                uploadError: 'Erro'
+            },
+            tr: {
+                upload: 'Yükle',
+                file: 'Dosya',
+                uploadError: 'Hata'
+            },
+            ko: {
+                upload: '그림 올리기',
+                file: '파일',
+                uploadError: '에러'
+            },
         },
         // jshint camelcase:true
 
@@ -91,24 +127,32 @@
                             var file,
                                 prefix = trumbowyg.o.prefix;
 
+                            var fields = {
+                                file: {
+                                    type: 'file',
+                                    required: true,
+                                    attributes: {
+                                        accept: 'image/*'
+                                    }
+                                },
+                                alt: {
+                                    label: 'description',
+                                    value: trumbowyg.getRangeText()
+                                }
+                            };
+
+                            if (trumbowyg.o.plugins.upload.imageWidthModalEdit) {
+                                fields.width = {
+                                    value: ''
+                                };
+                            }
+
                             var $modal = trumbowyg.openModalInsert(
                                 // Title
                                 trumbowyg.lang.upload,
 
                                 // Fields
-                                {
-                                    file: {
-                                        type: 'file',
-                                        required: true,
-                                        attributes: {
-                                            accept: 'image/*'
-                                        }
-                                    },
-                                    alt: {
-                                        label: 'description',
-                                        value: trumbowyg.getRangeText()
-                                    }
-                                },
+                                fields,
 
                                 // Callback
                                 function (values) {
@@ -117,6 +161,12 @@
 
                                     trumbowyg.o.plugins.upload.data.map(function (cur) {
                                         data.append(cur.name, cur.value);
+                                    });
+
+                                    $.map(values, function (curr, key) {
+                                        if (key !== 'file') {
+                                            data.append(key, curr);
+                                        }
                                     });
 
                                     if ($('.' + prefix + 'progress', $modal).length === 0) {
@@ -144,9 +194,7 @@
                                         contentType: false,
 
                                         progressUpload: function (e) {
-                                            $('.' + prefix + 'progress-bar').stop().animate({
-                                                width: Math.round(e.loaded * 100 / e.total) + '%'
-                                            }, 200);
+                                            $('.' + prefix + 'progress-bar').css('width', Math.round(e.loaded * 100 / e.total) + '%');
                                         },
 
                                         success: function (data) {
@@ -155,8 +203,14 @@
                                             } else {
                                                 if (!!getDeep(data, trumbowyg.o.plugins.upload.statusPropertyName.split('.'))) {
                                                     var url = getDeep(data, trumbowyg.o.plugins.upload.urlPropertyName.split('.'));
-                                                    trumbowyg.execCmd('insertImage', url);
-                                                    $('img[src="' + url + '"]:not([alt])', trumbowyg.$box).attr('alt', values.alt);
+                                                    trumbowyg.execCmd('insertImage', url, false, true);
+                                                    var $img = $('img[src="' + url + '"]:not([alt])', trumbowyg.$box);
+                                                    $img.attr('alt', values.alt);
+                                                    if (trumbowyg.o.imageWidthModalEdit && parseInt(values.width) > 0) {
+                                                        $img.attr({
+                                                            width: values.width
+                                                        });
+                                                    }
                                                     setTimeout(function () {
                                                         trumbowyg.closeModal();
                                                     }, 250);
@@ -200,14 +254,14 @@
         }
     });
 
-
     function addXhrProgressEvent() {
-        if (!$.trumbowyg && !$.trumbowyg.addedXhrProgressEvent) {   // Avoid adding progress event multiple times
+        if (!$.trumbowyg.addedXhrProgressEvent) {   // Avoid adding progress event multiple times
             var originalXhr = $.ajaxSettings.xhr;
             $.ajaxSetup({
                 xhr: function () {
-                    var req = originalXhr(),
-                        that = this;
+                    var that = this,
+                        req = originalXhr();
+
                     if (req && typeof req.upload === 'object' && that.progressUpload !== undefined) {
                         req.upload.addEventListener('progress', function (e) {
                             that.progressUpload(e);
