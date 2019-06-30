@@ -79,6 +79,8 @@ package body AWA.Blogs.Modules.Tests is
                               Title   => "Testing blog title",
                               URI     => "testing-blog-title",
                               Text    => "The blog content",
+                              Summary => "Summary",
+                              Format  => AWA.Blogs.Models.FORMAT_DOTCLEAR,
                               Comment => False,
                               Status  => AWA.Blogs.Models.POST_DRAFT,
                               Result  => Post_Id);
@@ -88,6 +90,8 @@ package body AWA.Blogs.Modules.Tests is
                               Title   => "New blog post title",
                               URI     => "testing-blog-title",
                               Text    => "The new post content",
+                              Summary => "New summary",
+                              Format  => AWA.Blogs.Models.FORMAT_DOTCLEAR,
                               Publish_Date => ADO.Nullable_Time '(Is_Null => True, others => <>),
                               Comment => True,
                               Status  => AWA.Blogs.Models.POST_DRAFT);
@@ -102,6 +106,8 @@ package body AWA.Blogs.Modules.Tests is
             Manager.Update_Post (Post_Id => Post_Id,
                                  Title   => "Something",
                                  Text    => "Content",
+                                 Summary => "Summary",
+                                 Format  => AWA.Blogs.Models.FORMAT_DOTCLEAR,
                                  URI     => "testing-blog-title",
                                  Publish_Date => ADO.Nullable_Time '(Is_Null => True,
                                                                      others => <>),
