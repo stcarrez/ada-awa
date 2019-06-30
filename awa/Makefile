@@ -85,6 +85,8 @@ AWA_DOC= \
   AWA_Settings.md \
   pagebreak.tex \
   AWA_Setup.md \
+  pagebreak.tex \
+  Tips.md \
   pagebreak.tex
 
 DOC_OPTIONS=-f markdown -o awa-book.pdf --listings --number-sections --toc --filter ./filter.py
