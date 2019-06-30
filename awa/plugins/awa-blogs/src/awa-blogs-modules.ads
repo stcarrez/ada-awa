@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-module -- Blog and post management module
---  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2017, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -103,6 +103,8 @@ package AWA.Blogs.Modules is
                           Title   : in String;
                           URI     : in String;
                           Text    : in String;
+                          Summary : in String;
+                          Format  : in AWA.Blogs.Models.Format_Type;
                           Comment : in Boolean;
                           Status  : in AWA.Blogs.Models.Post_Status_Type;
                           Result  : out ADO.Identifier);
@@ -111,8 +113,10 @@ package AWA.Blogs.Modules is
    procedure Update_Post (Model   : in Blog_Module;
                           Post_Id : in ADO.Identifier;
                           Title   : in String;
+                          Summary : in String;
                           URI     : in String;
                           Text    : in String;
+                          Format  : in AWA.Blogs.Models.Format_Type;
                           Comment : in Boolean;
                           Publish_Date : in ADO.Nullable_Time;
                           Status  : in AWA.Blogs.Models.Post_Status_Type);
