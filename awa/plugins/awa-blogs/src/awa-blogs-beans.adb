@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-beans -- Beans for blog module
---  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +24,13 @@ with Util.Dates.ISO8601;
 with Util.Beans.Objects.Time;
 
 with Wiki.Helpers;
+with Wiki.Documents;
+with Wiki.Filters.Autolink;
+with Wiki.Filters.Html;
+with Wiki.Render.Text;
+with Wiki.Render.Links;
+with Wiki.Streams.Builders;
+with Wiki.Parsers;
 
 with AWA.Images.Modules;
 with AWA.Services.Contexts;
@@ -332,6 +339,8 @@ package body AWA.Blogs.Beans is
                                   Title   => Bean.Get_Title,
                                   URI     => Bean.Get_Uri,
                                   Text    => Bean.Get_Text,
+                                  Summary => Bean.Get_Summary,
+                                  Format  => Bean.Get_Format,
                                   Comment => Bean.Get_Allow_Comments,
                                   Status  => Bean.Get_Status,
                                   Result  => Result);
@@ -341,6 +350,8 @@ package body AWA.Blogs.Beans is
                                   Title   => Bean.Get_Title,
                                   URI     => Bean.Get_Uri,
                                   Text    => Bean.Get_Text,
+                                  Summary => Bean.Get_Summary,
+                                  Format  => Bean.Get_Format,
                                   Comment => Bean.Get_Allow_Comments,
                                   Publish_Date => Bean.Get_Publish_Date,
                                   Status  => Bean.Get_Status);
@@ -375,6 +386,34 @@ package body AWA.Blogs.Beans is
       end loop;
       return Result (1 .. Pos - 1);
    end Sanitize_Uri;
+
+   --  ------------------------------
+   --  Make the post description from the summary or the content.
+   --  ------------------------------
+   procedure Make_Description (From : in out Post_Bean) is
+      Doc      : Wiki.Documents.Document;
+      Engine   : Wiki.Parsers.Parser;
+      Autolink : aliased Wiki.Filters.Autolink.Autolink_Filter;
+      Renderer : aliased Wiki.Render.Text.Text_Renderer;
+      Filter   : aliased Wiki.Filters.Html.Html_Filter_Type;
+      Format   : constant Wiki.Wiki_Syntax := Wiki.SYNTAX_DOTCLEAR;
+      Links    : Wiki.Render.Links.Link_Renderer_Access;
+      Stream   : aliased Wiki.Streams.Builders.Output_Builder_Stream;
+      Summary  : constant String := From.Get_Summary;
+   begin
+      Engine.Add_Filter (Autolink'Unchecked_Access);
+      Engine.Add_Filter (Filter'Unchecked_Access);
+      Engine.Set_Syntax (Format);
+      if Summary'Length > 0 then
+         Engine.Parse (Summary, Doc);
+      else
+         Engine.Parse (From.Get_Text, Doc);
+      end if;
+      Renderer.Set_Output_Stream (Stream'Unchecked_Access);
+      Renderer.Set_No_Newline (True);
+      Renderer.Render (Doc);
+      From.Description := Ada.Strings.Unbounded.To_Unbounded_String (Stream.To_String);
+   end Make_Description;
 
    --  ------------------------------
    --  Load the post from the URI either with visible comments or with all comments.
@@ -419,15 +458,7 @@ package body AWA.Blogs.Beans is
          Comment_List.Load_Comments (Bean.Get_Id);
       end if;
 
-      --  SCz: 2012-05-19: workaround for ADO 0.3 limitation.  The lazy loading of
-      --  objects does not work yet.  Force loading the user here while the above
-      --  session is still open.
-      declare
-         A : constant String := String '(Bean.Get_Author.Get_Name);
-         pragma Unreferenced (A);
-      begin
-         null;
-      end;
+      Make_Description (Bean);
    end Load;
 
    --  ------------------------------
@@ -473,6 +504,8 @@ package body AWA.Blogs.Beans is
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Get_Id));
       elsif Name = POST_USERNAME_ATTR then
          return Util.Beans.Objects.To_Object (String '(From.Get_Author.Get_Name));
+      elsif Name = POST_DESCRIPTION_ATTR then
+         return Util.Beans.Objects.To_Object (From.Description);
       elsif Name = "links" then
          return Util.Beans.Objects.To_Object (From.Links_Bean, Util.Beans.Objects.STATIC);
       else
@@ -510,16 +543,6 @@ package body AWA.Blogs.Beans is
       Post.Tags.Load_Tags (Session, Id);
       Post.Counter.Value := Post.Get_Read_Count;
       ADO.Objects.Set_Value (Post.Counter.Object, Id);
-
-      --  SCz: 2012-05-19: workaround for ADO 0.3 limitation.  The lazy loading of
-      --  objects does not work yet.  Force loading the user here while the above
-      --  session is still open.
-      declare
-         A : constant String := String '(Post.Get_Author.Get_Name);
-         pragma Unreferenced (A);
-      begin
-         null;
-      end;
    end Load_Post;
 
    --  ------------------------------
