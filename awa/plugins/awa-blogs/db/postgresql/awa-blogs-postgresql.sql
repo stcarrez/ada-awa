@@ -41,10 +41,16 @@ CREATE TABLE awa_post (
   "allow_comments" BOOLEAN NOT NULL,
   /* the number of times the post was read. */
   "read_count" INTEGER NOT NULL,
+  /* the post summary. */
+  "summary" VARCHAR(255) NOT NULL,
+  /* the blog post format. */
+  "format"  NOT NULL,
   /*  */
   "author_id" BIGINT NOT NULL,
   /*  */
   "blog_id" BIGINT NOT NULL,
+  /*  */
+  "image_id" BIGINT ,
   PRIMARY KEY ("id")
 );
 INSERT INTO entity_type (name) VALUES
