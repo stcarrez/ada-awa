@@ -172,3 +172,6 @@ $(DESTDIR)$(dynamodir)/awa:
 ROOTDIR=.
 
 $(foreach PLUGIN,$(PLUGINS),$(eval include plugins/$(PLUGIN)/Makefile))
+
+generate::
+	$(DYNAMO) generate $(DYNAMO_ARGS)
