@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-beans -- Beans for module wikis
---  Copyright (C) 2015, 2016, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2015, 2016, 2017, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -1279,8 +1279,8 @@ package body AWA.Wikis.Beans is
                H := Info.Height;
             end if;
             Info.Id     := From.Id;
-            Info.Width  := From.Width;
-            Info.Height := From.Height;
+            Info.Width  := (if From.Width.Is_Null then 0 else From.Width.Value);
+            Info.Height := (if From.Height.Is_Null then 0 else From.Height.Value);
             From.Page.Links.Make_Image_Link (Link   => WName,
                                              Info   => Info,
                                              URI    => URI,
@@ -1358,8 +1358,8 @@ package body AWA.Wikis.Beans is
                Into.Storage     := Img.Storage;
                Into.File_Size   := Img.File_Size;
                Into.Create_Date := Img.Create_Date;
-               Into.Width       := Img.Width;
-               Into.Height      := Img.Height;
+               Into.Width       := (Is_Null => False, Value => Img.Width);
+               Into.Height      := (Is_Null => False, Value => Img.Height);
             end if;
             Into.Folder_Id   := Img.Folder_Id;
          end;
@@ -1378,8 +1378,8 @@ package body AWA.Wikis.Beans is
       Object.Page           := Get_Wiki_View_Bean ("wikiView");
       Object.Id             := ADO.NO_IDENTIFIER;
       Object.Folder_Id      := ADO.NO_IDENTIFIER;
-      Object.Width          := 0;
-      Object.Height         := 0;
+      Object.Width          := (Is_Null => True, Value => 0);
+      Object.Height         := (Is_Null => True, Value => 0);
       return Object.all'Access;
    end Create_Wiki_Image_Info_Bean;
 
