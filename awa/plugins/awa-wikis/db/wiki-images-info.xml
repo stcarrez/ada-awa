@@ -26,10 +26,10 @@
         <property type='Integer' name="file_size">
             <comment>the file size.</comment>
         </property>
-        <property type='Integer' name="width">
+        <property type='Integer' name="width" not-null="no">
             <comment>the image width.</comment>
         </property>
-        <property type='Integer' name="height">
+        <property type='Integer' name="height" not-null="no">
             <comment>the image height.</comment>
         </property>
         <method name="load">
