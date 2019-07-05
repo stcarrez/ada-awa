@@ -1684,9 +1684,17 @@ package body AWA.Wikis.Models is
       elsif Name = "file_size" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.File_Size));
       elsif Name = "width" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Width));
+         if From.Width.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Width.Value));
+         end if;
       elsif Name = "height" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Height));
+         if From.Height.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Height.Value));
+         end if;
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -1715,9 +1723,15 @@ package body AWA.Wikis.Models is
       elsif Name = "file_size" then
          Item.File_Size := Util.Beans.Objects.To_Integer (Value);
       elsif Name = "width" then
-         Item.Width := Util.Beans.Objects.To_Integer (Value);
+         Item.Width.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.Width.Is_Null then
+            Item.Width.Value := Util.Beans.Objects.To_Integer (Value);
+         end if;
       elsif Name = "height" then
-         Item.Height := Util.Beans.Objects.To_Integer (Value);
+         Item.Height.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.Height.Is_Null then
+            Item.Height.Value := Util.Beans.Objects.To_Integer (Value);
+         end if;
       end if;
    end Set_Value;
 
@@ -1739,8 +1753,8 @@ package body AWA.Wikis.Models is
       Into.Storage := AWA.Storages.Models.Storage_Type'Val (Stmt.Get_Integer (4));
       Into.Mime_Type := Stmt.Get_Unbounded_String (5);
       Into.File_Size := Stmt.Get_Integer (6);
-      Into.Width := Stmt.Get_Integer (7);
-      Into.Height := Stmt.Get_Integer (8);
+      Into.Width := Stmt.Get_Nullable_Integer (7);
+      Into.Height := Stmt.Get_Nullable_Integer (8);
       Stmt.Next;
    end Read;
 

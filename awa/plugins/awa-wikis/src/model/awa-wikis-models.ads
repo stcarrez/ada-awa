@@ -508,10 +508,10 @@ package AWA.Wikis.Models is
       File_Size : Integer;
 
       --  the image width.
-      Width : Integer;
+      Width : ADO.Nullable_Integer;
 
       --  the image height.
-      Height : Integer;
+      Height : ADO.Nullable_Integer;
    end record;
 
    --  This bean provides some methods that can be used in a Method_Expression.
