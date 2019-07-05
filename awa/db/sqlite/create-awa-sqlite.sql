@@ -886,7 +886,7 @@ CREATE TABLE awa_post (
   /* the post summary. */
   `summary` VARCHAR(255) NOT NULL,
   /* the blog post format. */
-  `format`  NOT NULL,
+  `format` TINYINT NOT NULL,
   /*  */
   `author_id` BIGINT NOT NULL,
   /*  */
@@ -913,6 +913,10 @@ INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "status");
 INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "allow_comments");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "summary");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "format");
 /* Copied from awa-changelogs-sqlite.sql*/
 /* File generated automatically by dynamo */
 /*  */
