@@ -819,7 +819,7 @@ package body AWA.Blogs.Models is
       Impl : Post_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_String (Impl.all, 11, Impl.Summary, Value);
+      ADO.Audits.Set_Field_String (Impl.all, 11, Impl.Summary, Value);
    end Set_Summary;
 
    procedure Set_Summary (Object : in out Post_Ref;
@@ -827,7 +827,7 @@ package body AWA.Blogs.Models is
       Impl : Post_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Unbounded_String (Impl.all, 11, Impl.Summary, Value);
+      ADO.Audits.Set_Field_Unbounded_String (Impl.all, 11, Impl.Summary, Value);
    end Set_Summary;
 
    function Get_Summary (Object : in Post_Ref)
@@ -847,7 +847,8 @@ package body AWA.Blogs.Models is
    procedure Set_Format (Object : in out Post_Ref;
                          Value  : in AWA.Blogs.Models.Format_Type) is
       procedure Set_Field_Enum is
-         new ADO.Objects.Set_Field_Operation (Format_Type);
+         new ADO.Audits.Set_Field_Operation (Format_Type,
+                                             Format_Type_Objects.To_Object);
       Impl : Post_Access;
    begin
       Set_Field (Object, Impl);
