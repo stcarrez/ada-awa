@@ -93,3 +93,7 @@ ALTER TABLE awa_post ADD COLUMN `summary` VARCHAR(255) BINARY NOT NULL;
 ALTER TABLE awa_post ADD COLUMN `image_id` BIGINT;
 ALTER TABLE awa_post ADD COLUMN `format` TINYINT NOT NULL DEFAULT 0;
 
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "summary");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "format");
