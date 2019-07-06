@@ -1,5 +1,5 @@
 <!-- List of blog posts for the blog administrator
-  -  Copyright (C) 2011, 2012, 2013, 2014, 2017 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013, 2014, 2017, 2019 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,7 +30,7 @@
                 <div class='post-info ui-list-item' id="p_#{post.id}">
                     <div class='post-status-#{post.status}' title="#{post.status eq 'POST_PUBLISHED' ? blogMsg.blog_post_published_title : blogMsg.blog_post_pending_title}"></div>
                     <div class='post-title'>
-                        <a href="edit.html?blog_id=#{adminBlog.id}&amp;post_id=#{post.id}">#{post.title}</a>
+                        <a href="edit/#{adminBlog.id}/#{post.id}">#{post.title}</a>
                     </div>
                     <div class='post-date'>
                         <h:outputText value="#{post.date}"/>

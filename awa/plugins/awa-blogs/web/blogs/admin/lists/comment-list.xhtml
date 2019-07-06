@@ -1,5 +1,5 @@
 <!-- List of blog comments for the blog administrator
-  -  Copyright (C) 2014 Stephane Carrez
+  -  Copyright (C) 2014, 2019 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,7 +32,7 @@
                     <div class='comment-status'>
                     </div>
                     <div class='comment-title'>
-                        <a href="edit.html?blog_id=#{adminBlog.id}&amp;post_id=#{cmt.post_id}">#{cmt.title}</a>
+                        <a href="edit/#{adminBlog.id}/#{cmt.post_id}">#{cmt.title}</a>
                     </div>
                     <div class='comment-date'>
                         <h:outputText value="#{cmt.date}"/>
