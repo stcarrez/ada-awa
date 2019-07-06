@@ -886,6 +886,10 @@ CREATE TABLE awa_blog (
   `update_date` DATETIME NOT NULL,
   /* The blog base URL. */
   `url` VARCHAR(255) BINARY NOT NULL,
+  /* the default post format. */
+  `format` TINYINT NOT NULL,
+  /* the default image URL to be used */
+  `default_image_url` VARCHAR(255) BINARY NOT NULL,
   /* the workspace that this blog belongs to */
   `workspace_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
@@ -934,6 +938,10 @@ INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "uid");
 INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "url");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "format");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "default_image_url");
 INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "title");
 INSERT INTO awa_audit_field (entity_type, name)
