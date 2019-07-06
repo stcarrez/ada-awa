@@ -186,7 +186,7 @@ package body AWA.Blogs.Tests is
       Request.Set_Parameter ("text", "The blog post new content.");
       Request.Set_Parameter ("uri", Uuid);
       Request.Set_Parameter ("save", "POST_PUBLISHED");
-      Request.Set_Parameter ("format", "dotclear");
+      Request.Set_Parameter ("post-format", "dotclear");
       Request.Set_Parameter ("post-status", "1");
       Request.Set_Parameter ("allow-comment", "0");
       Request.Set_Parameter ("publish-date", "");
