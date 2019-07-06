@@ -97,3 +97,13 @@ INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "summary");
 INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "format");
+
+/* Add format and default_image_url in the awa_blog table.  */
+ALTER TABLE awa_blog ADD COLUMN `default_image_url` VARCHAR(255) BINARY NOT NULL;
+ALTER TABLE awa_blog ADD COLUMN `format` TINYINT NOT NULL DEFAULT 0;
+
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "format");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "default_image_url");
+
