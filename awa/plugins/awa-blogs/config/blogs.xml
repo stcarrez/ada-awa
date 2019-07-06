@@ -485,6 +485,8 @@
     <url-pattern>/blogs/admin/#{adminBlog.id}/lists</url-pattern>
     <url-pattern>/blogs/admin/#{adminBlog.id}/preview/#{post.uid}</url-pattern>
     <url-pattern>/blogs/admin/#{blogStats.blog_id}/stats</url-pattern>
+    <url-pattern>/blogs/admin/create/#{post.blogId}</url-pattern>
+    <url-pattern>/blogs/admin/edit/#{post.blogId}/#{post.id}</url-pattern>
     <url-pattern>/blogs/post/#{postAccessStats.entity_id}/stats/#{postAccessStats.first_date}</url-pattern>
     <url-pattern>/blogs/feeds</url-pattern>
     <url-pattern>/blogs/images/*</url-pattern>
@@ -499,6 +501,8 @@
     <url-pattern>/blogs/admin/#{adminBlog.id}/preview/#{post.uid}</url-pattern>
     <url-pattern>/blogs/admin/#{blogStats.blog_id}/stats</url-pattern>
     <url-pattern>/blogs/post/#{postAccessStats.entity_id}/stats/#{postAccessStats.first_date}</url-pattern>
+    <url-pattern>/blogs/admin/create/#{post.blogId}</url-pattern>
+    <url-pattern>/blogs/admin/edit/#{post.blogId}/#{post.id}</url-pattern>
     <url-pattern>/blogs/feeds</url-pattern>
     <url-pattern>/blogs/view.html</url-pattern>
     <url-pattern>/blogs/post.html</url-pattern>
@@ -523,8 +527,20 @@
     <url-pattern>/blogs/forms/comment-add-form.html</url-pattern>
     <url-pattern>/blogs/ajax/blogPublishComment/publish</url-pattern>
     <url-pattern>/blogs/admin/#{adminBlog.id}/preview/#{post.uid}</url-pattern>
+    <url-pattern>/blogs/admin/create/#{post.blogId}</url-pattern>
+    <url-pattern>/blogs/admin/edit/#{post.blogId}/#{post.id}</url-pattern>
     <url-pattern>/blogs/post/.*/stats/.*</url-pattern>
   </url-policy>
+
+  <url-mapping>
+    <pattern>/blogs/admin/create/#{post.blogId}</pattern>
+    <view-id>/blogs/admin/create.html</view-id>
+  </url-mapping>
+
+  <url-mapping>
+    <pattern>/blogs/admin/edit/#{post.blogId}/#{post.id}</pattern>
+    <view-id>/blogs/admin/edit.html</view-id>
+  </url-mapping>
 
   <url-mapping>
     <pattern>/blogs/admin/#{adminBlog.id}/lists</pattern>
