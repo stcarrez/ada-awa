@@ -30,6 +30,8 @@ with ADO.Objects;
 
 with Wiki.Strings;
 
+with ASF.Helpers.Beans;
+
 with AWA.Blogs.Modules;
 with AWA.Blogs.Models;
 with AWA.Tags.Beans;
@@ -59,6 +61,10 @@ package AWA.Blogs.Beans is
    COUNTER_ATTR             : constant String := "counter";
 
    use Ada.Strings.Wide_Wide_Unbounded;
+
+   --  Get a select item list which contains a list of blog post formats.
+   function Create_Format_List_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
+                                     return Util.Beans.Basic.Readonly_Bean_Access;
 
    package Image_Info_Maps is
      new Ada.Containers.Indefinite_Hashed_Maps (Key_Type        => Wiki.Strings.WString,
@@ -141,6 +147,10 @@ package AWA.Blogs.Beans is
    function Create_Blog_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
                               return Util.Beans.Basic.Readonly_Bean_Access;
 
+   function Get_Blog_Bean is
+     new ASF.Helpers.Beans.Get_Bean (Element_Type   => Blog_Bean,
+                                     Element_Access => Blog_Bean_Access);
+
    --  ------------------------------
    --  Post Bean
    --  ------------------------------
@@ -204,6 +214,11 @@ package AWA.Blogs.Beans is
    overriding
    procedure Load (Bean    : in out Post_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Setup the bean to create a new post.
+   overriding
+   procedure Setup (Bean    : in out Post_Bean;
+                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
    --  Load the post from the URI for the administrator.
    overriding
