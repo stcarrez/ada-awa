@@ -277,12 +277,13 @@
 }
 .wiki-image-grid span {
     display: block;
-    width: 150px;
+    width: 140px;
     text-align: center;
     overflow: hidden;
     border: 1px solid #ccc;
     background-color: #eee;
     white-space: nowrap;
+    text-overflow: ellipsis;
 }
 /* Wiki image information page */
 .wiki-image-info, .wiki-image-view {
