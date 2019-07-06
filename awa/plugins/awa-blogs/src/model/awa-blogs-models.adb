@@ -68,6 +68,7 @@ package body AWA.Blogs.Models is
       Impl.Version := 0;
       Impl.Create_Date := ADO.DEFAULT_TIME;
       Impl.Update_Date := ADO.DEFAULT_TIME;
+      Impl.Format := AWA.Blogs.Models.Format_Type'First;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -225,12 +226,62 @@ package body AWA.Blogs.Models is
    end Get_Url;
 
 
+   procedure Set_Format (Object : in out Blog_Ref;
+                         Value  : in AWA.Blogs.Models.Format_Type) is
+      procedure Set_Field_Enum is
+         new ADO.Audits.Set_Field_Operation (Format_Type,
+                                             Format_Type_Objects.To_Object);
+      Impl : Blog_Access;
+   begin
+      Set_Field (Object, Impl);
+      Set_Field_Enum (Impl.all, 8, Impl.Format, Value);
+   end Set_Format;
+
+   function Get_Format (Object : in Blog_Ref)
+                  return AWA.Blogs.Models.Format_Type is
+      Impl : constant Blog_Access
+         := Blog_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Format;
+   end Get_Format;
+
+
+   procedure Set_Default_Image_Url (Object : in out Blog_Ref;
+                                     Value : in String) is
+      Impl : Blog_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Audits.Set_Field_String (Impl.all, 9, Impl.Default_Image_Url, Value);
+   end Set_Default_Image_Url;
+
+   procedure Set_Default_Image_Url (Object : in out Blog_Ref;
+                                    Value  : in Ada.Strings.Unbounded.Unbounded_String) is
+      Impl : Blog_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Audits.Set_Field_Unbounded_String (Impl.all, 9, Impl.Default_Image_Url, Value);
+   end Set_Default_Image_Url;
+
+   function Get_Default_Image_Url (Object : in Blog_Ref)
+                 return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (Object.Get_Default_Image_Url);
+   end Get_Default_Image_Url;
+   function Get_Default_Image_Url (Object : in Blog_Ref)
+                  return Ada.Strings.Unbounded.Unbounded_String is
+      Impl : constant Blog_Access
+         := Blog_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Default_Image_Url;
+   end Get_Default_Image_Url;
+
+
    procedure Set_Workspace (Object : in out Blog_Ref;
                             Value  : in AWA.Workspaces.Models.Workspace_Ref'Class) is
       Impl : Blog_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 8, Impl.Workspace, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 10, Impl.Workspace, Value);
    end Set_Workspace;
 
    function Get_Workspace (Object : in Blog_Ref)
@@ -261,6 +312,8 @@ package body AWA.Blogs.Models is
             Copy.Create_Date := Impl.Create_Date;
             Copy.Update_Date := Impl.Update_Date;
             Copy.Url := Impl.Url;
+            Copy.Format := Impl.Format;
+            Copy.Default_Image_Url := Impl.Default_Image_Url;
             Copy.Workspace := Impl.Workspace;
          end;
       end if;
@@ -422,9 +475,19 @@ package body AWA.Blogs.Models is
          Object.Clear_Modified (7);
       end if;
       if Object.Is_Modified (8) then
-         Stmt.Save_Field (Name  => COL_7_1_NAME, --  workspace_id
-                          Value => Object.Workspace);
+         Stmt.Save_Field (Name  => COL_7_1_NAME, --  format
+                          Value => Integer (Format_Type'Pos (Object.Format)));
          Object.Clear_Modified (8);
+      end if;
+      if Object.Is_Modified (9) then
+         Stmt.Save_Field (Name  => COL_8_1_NAME, --  default_image_url
+                          Value => Object.Default_Image_Url);
+         Object.Clear_Modified (9);
+      end if;
+      if Object.Is_Modified (10) then
+         Stmt.Save_Field (Name  => COL_9_1_NAME, --  workspace_id
+                          Value => Object.Workspace);
+         Object.Clear_Modified (10);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -471,7 +534,11 @@ package body AWA.Blogs.Models is
                         Value => Object.Update_Date);
       Query.Save_Field (Name  => COL_6_1_NAME, --  url
                         Value => Object.Url);
-      Query.Save_Field (Name  => COL_7_1_NAME, --  workspace_id
+      Query.Save_Field (Name  => COL_7_1_NAME, --  format
+                        Value => Integer (Format_Type'Pos (Object.Format)));
+      Query.Save_Field (Name  => COL_8_1_NAME, --  default_image_url
+                        Value => Object.Default_Image_Url);
+      Query.Save_Field (Name  => COL_9_1_NAME, --  workspace_id
                         Value => Object.Workspace);
       Query.Execute (Result);
       if Result /= 1 then
@@ -517,6 +584,10 @@ package body AWA.Blogs.Models is
          return Util.Beans.Objects.Time.To_Object (Impl.Update_Date);
       elsif Name = "url" then
          return Util.Beans.Objects.To_Object (Impl.Url);
+      elsif Name = "format" then
+         return AWA.Blogs.Models.Format_Type_Objects.To_Object (Impl.Format);
+      elsif Name = "default_image_url" then
+         return Util.Beans.Objects.To_Object (Impl.Default_Image_Url);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -556,8 +627,10 @@ package body AWA.Blogs.Models is
       Object.Create_Date := Stmt.Get_Time (4);
       Object.Update_Date := Stmt.Get_Time (5);
       Object.Url := Stmt.Get_Unbounded_String (6);
-      if not Stmt.Is_Null (7) then
-         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (7), Session);
+      Object.Format := Format_Type'Val (Stmt.Get_Integer (7));
+      Object.Default_Image_Url := Stmt.Get_Unbounded_String (8);
+      if not Stmt.Is_Null (9) then
+         Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (9), Session);
       end if;
       Object.Version := Stmt.Get_Integer (2);
       ADO.Objects.Set_Created (Object);
@@ -1942,6 +2015,10 @@ package body AWA.Blogs.Models is
          Item.Set_Update_Date (Util.Beans.Objects.Time.To_Time (Value));
       elsif Name = "url" then
          Item.Set_Url (Util.Beans.Objects.To_String (Value));
+      elsif Name = "format" then
+         Item.Set_Format (Format_Type_Objects.To_Value (Value));
+      elsif Name = "default_image_url" then
+         Item.Set_Default_Image_Url (Util.Beans.Objects.To_String (Value));
       end if;
    end Set_Value;
 
@@ -1989,12 +2066,24 @@ package body AWA.Blogs.Models is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Post_Bean,
                                                       Method => Op_Load_Admin,
                                                       Name   => "load_admin");
+   procedure Op_Setup (Bean    : in out Post_Bean;
+                       Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Setup (Bean    : in out Post_Bean;
+                       Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Post_Bean'Class (Bean).Setup (Outcome);
+   end Op_Setup;
+   package Binding_Post_Bean_5 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Post_Bean,
+                                                      Method => Op_Setup,
+                                                      Name   => "setup");
 
    Binding_Post_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
      := (1 => Binding_Post_Bean_1.Proxy'Access,
          2 => Binding_Post_Bean_2.Proxy'Access,
          3 => Binding_Post_Bean_3.Proxy'Access,
-         4 => Binding_Post_Bean_4.Proxy'Access
+         4 => Binding_Post_Bean_4.Proxy'Access,
+         5 => Binding_Post_Bean_5.Proxy'Access
      );
 
    --  ------------------------------

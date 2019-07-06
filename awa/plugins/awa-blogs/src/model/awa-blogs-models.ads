@@ -143,6 +143,26 @@ package AWA.Blogs.Models is
    function Get_Url (Object : in Blog_Ref)
                  return String;
 
+   --  Set the default post format.
+   procedure Set_Format (Object : in out Blog_Ref;
+                         Value  : in AWA.Blogs.Models.Format_Type);
+
+   --  Get the default post format.
+   function Get_Format (Object : in Blog_Ref)
+                 return AWA.Blogs.Models.Format_Type;
+
+   --  Set the default image URL to be used
+   procedure Set_Default_Image_Url (Object : in out Blog_Ref;
+                                    Value  : in Ada.Strings.Unbounded.Unbounded_String);
+   procedure Set_Default_Image_Url (Object : in out Blog_Ref;
+                                    Value : in String);
+
+   --  Get the default image URL to be used
+   function Get_Default_Image_Url (Object : in Blog_Ref)
+                 return Ada.Strings.Unbounded.Unbounded_String;
+   function Get_Default_Image_Url (Object : in Blog_Ref)
+                 return String;
+
    --  Set the workspace that this blog belongs to
    procedure Set_Workspace (Object : in out Blog_Ref;
                             Value  : in AWA.Workspaces.Models.Workspace_Ref'Class);
@@ -837,6 +857,9 @@ package AWA.Blogs.Models is
    procedure Load_Admin (Bean : in out Post_Bean;
                         Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
+   procedure Setup (Bean : in out Post_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
    type Post_List_Bean is abstract limited
      new Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with  record
       Tag : Ada.Strings.Unbounded.Unbounded_String;
@@ -906,10 +929,12 @@ private
    COL_4_1_NAME : aliased constant String := "create_date";
    COL_5_1_NAME : aliased constant String := "update_date";
    COL_6_1_NAME : aliased constant String := "url";
-   COL_7_1_NAME : aliased constant String := "workspace_id";
+   COL_7_1_NAME : aliased constant String := "format";
+   COL_8_1_NAME : aliased constant String := "default_image_url";
+   COL_9_1_NAME : aliased constant String := "workspace_id";
 
    BLOG_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count   => 8,
+     (Count   => 10,
       Table   => BLOG_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
@@ -919,18 +944,22 @@ private
          5 => COL_4_1_NAME'Access,
          6 => COL_5_1_NAME'Access,
          7 => COL_6_1_NAME'Access,
-         8 => COL_7_1_NAME'Access)
+         8 => COL_7_1_NAME'Access,
+         9 => COL_8_1_NAME'Access,
+         10 => COL_9_1_NAME'Access)
      );
    BLOG_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := BLOG_DEF'Access;
 
    BLOG_AUDIT_DEF : aliased constant ADO.Audits.Auditable_Mapping :=
-     (Count    => 3,
+     (Count    => 5,
       Of_Class => BLOG_DEF'Access,
       Members  => (
          1 => 1,
          2 => 3,
-         3 => 6)
+         3 => 6,
+         4 => 7,
+         5 => 8)
      );
    BLOG_AUDIT_TABLE : constant ADO.Audits.Auditable_Mapping_Access
       := BLOG_AUDIT_DEF'Access;
@@ -949,6 +978,8 @@ private
        Create_Date : Ada.Calendar.Time;
        Update_Date : Ada.Calendar.Time;
        Url : Ada.Strings.Unbounded.Unbounded_String;
+       Format : AWA.Blogs.Models.Format_Type;
+       Default_Image_Url : Ada.Strings.Unbounded.Unbounded_String;
        Workspace : AWA.Workspaces.Models.Workspace_Ref;
    end record;
 
