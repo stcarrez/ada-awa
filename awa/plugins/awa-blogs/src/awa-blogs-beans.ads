@@ -52,6 +52,7 @@ package AWA.Blogs.Beans is
    POST_URI_ATTR     : constant String := "uri";
    POST_STATUS_ATTR  : constant String := "status";
    POST_USERNAME_ATTR : constant String := "username";
+   POST_IMAGE_ATTR          : constant String := "image";
    POST_DESCRIPTION_ATTR    : constant String := "description";
    POST_TAG_ATTR            : constant String := "tags";
    POST_ALLOW_COMMENTS_ATTR : constant String := "allow_comments";
@@ -163,6 +164,7 @@ package AWA.Blogs.Beans is
 
       --  The post description generated from the content.
       Description   : Ada.Strings.Unbounded.Unbounded_String;
+      Image_Link    : Wiki.Strings.UString;
    end record;
    type Post_Bean_Access is access all Post_Bean'Class;
 
