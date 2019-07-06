@@ -257,3 +257,27 @@ div.asf-active-list div.asf-active .storage-download {
 .dz-image, .dz-details, .dz-progress, .dropzone .dz-success-mark, .dropzone .dz-error-mark {
     float: left;
 }
+
+/**
+ * Image selector.
+ */
+.awa-folder-list-editor .storage-folder-list .storage-folder-name {
+    padding: 5px;
+}
+.awa-folder-list-editor {
+    float: left;
+    width: 30%;
+}
+.awa-image-list-editor {
+    float: left;
+    width: 70%;
+}
+.awa-image-list-editor .active {
+    background-color: #A6C9E2;
+}
+.wiki-image-grid-info {
+    overflow: hidden;
+}
+.awa-image-list-editor a {
+    text-decoration: none;
+}
