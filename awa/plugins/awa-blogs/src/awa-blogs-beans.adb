@@ -27,6 +27,7 @@ with Wiki.Helpers;
 with Wiki.Documents;
 with Wiki.Filters.Autolink;
 with Wiki.Filters.Html;
+with Wiki.Filters.Collectors;
 with Wiki.Render.Text;
 with Wiki.Render.Links;
 with Wiki.Streams.Builders;
@@ -391,17 +392,35 @@ package body AWA.Blogs.Beans is
    --  Make the post description from the summary or the content.
    --  ------------------------------
    procedure Make_Description (From : in out Post_Bean) is
+
+      procedure Collect_Image (Pos : in Wiki.Filters.Collectors.Cursor);
+
       Doc      : Wiki.Documents.Document;
       Engine   : Wiki.Parsers.Parser;
       Autolink : aliased Wiki.Filters.Autolink.Autolink_Filter;
       Renderer : aliased Wiki.Render.Text.Text_Renderer;
       Filter   : aliased Wiki.Filters.Html.Html_Filter_Type;
       Format   : constant Wiki.Wiki_Syntax := Wiki.SYNTAX_DOTCLEAR;
-      Links    : Wiki.Render.Links.Link_Renderer_Access;
+      Images   : aliased Wiki.Filters.Collectors.Image_Collector_Type;
       Stream   : aliased Wiki.Streams.Builders.Output_Builder_Stream;
       Summary  : constant String := From.Get_Summary;
+
+      procedure Collect_Image (Pos : in Wiki.Filters.Collectors.Cursor) is
+         Image : constant Wiki.Strings.WString
+           := Wiki.Filters.Collectors.WString_Maps.Key (Pos);
+         W, H  : Natural := 0;
+      begin
+         if Length (From.Image_Link) = 0 then
+            From.Links.Make_Image_Link (Link   => Image,
+                                        URI    => From.Image_Link,
+                                        Width  => W,
+                                        Height => H);
+         end if;
+      end Collect_Image;
+
    begin
       Engine.Add_Filter (Autolink'Unchecked_Access);
+      Engine.Add_Filter (Images'Unchecked_Access);
       Engine.Add_Filter (Filter'Unchecked_Access);
       Engine.Set_Syntax (Format);
       if Summary'Length > 0 then
@@ -413,6 +432,7 @@ package body AWA.Blogs.Beans is
       Renderer.Set_No_Newline (True);
       Renderer.Render (Doc);
       From.Description := Ada.Strings.Unbounded.To_Unbounded_String (Stream.To_String);
+      Images.Iterate (Collect_Image'Access);
    end Make_Description;
 
    --  ------------------------------
@@ -506,6 +526,8 @@ package body AWA.Blogs.Beans is
          return Util.Beans.Objects.To_Object (String '(From.Get_Author.Get_Name));
       elsif Name = POST_DESCRIPTION_ATTR then
          return Util.Beans.Objects.To_Object (From.Description);
+      elsif Name = POST_IMAGE_ATTR then
+         return Util.Beans.Objects.To_Object (From.Image_Link);
       elsif Name = "links" then
          return Util.Beans.Objects.To_Object (From.Links_Bean, Util.Beans.Objects.STATIC);
       else
