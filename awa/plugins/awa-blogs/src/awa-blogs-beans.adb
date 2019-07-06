@@ -29,7 +29,6 @@ with Wiki.Filters.Autolink;
 with Wiki.Filters.Html;
 with Wiki.Filters.Collectors;
 with Wiki.Render.Text;
-with Wiki.Render.Links;
 with Wiki.Streams.Builders;
 with Wiki.Parsers;
 
@@ -80,6 +79,23 @@ package body AWA.Blogs.Beans is
      := Ada.Strings.Wide_Wide_Maps.To_Mapping
        (From => "ŠŽšžŸÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðñòóôõöùúûüýÿ",
         To   => "SZszYAAAAAACEEEEIIIIDNOOOOOUUUUYaaaaaaceeeeiiiidnooooouuuuyy");
+
+   function Create_From_Format is
+     new AWA.Helpers.Selectors.Create_From_Enum (AWA.Blogs.Models.Format_Type,
+                                                 "blog_format_");
+
+   --  ------------------------------
+   --  Get a select item list which contains a list of blog post formats.
+   --  ------------------------------
+   function Create_Format_List_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)
+                                     return Util.Beans.Basic.Readonly_Bean_Access is
+      pragma Unreferenced (Module);
+      use AWA.Helpers;
+   begin
+      return Selectors.Create_Selector_Bean (Bundle  => "blogs",
+                                             Context => null,
+                                             Create  => Create_From_Format'Access).all'Access;
+   end Create_Format_List_Bean;
 
    procedure Make_Image_Link (Renderer : in out Post_Links_Bean;
                               Link     : in Wiki.Strings.WString;
@@ -443,6 +459,7 @@ package body AWA.Blogs.Beans is
                    Publish_Only : in Boolean) is
       use type AWA.Comments.Beans.Comment_Bean_Access;
       use type AWA.Comments.Beans.Comment_List_Bean_Access;
+      use Wiki.Strings;
 
       Session      : ADO.Sessions.Session := Bean.Module.Get_Session;
       Query        : ADO.SQL.Query;
@@ -479,6 +496,9 @@ package body AWA.Blogs.Beans is
       end if;
 
       Make_Description (Bean);
+      if Wiki.Strings.Length (Bean.Image_Link) = 0 then
+         Bean.Image_Link := To_UString (To_WString (Bean.Get_Blog.Get_Default_Image_Url));
+      end if;
    end Load;
 
    --  ------------------------------
@@ -490,6 +510,23 @@ package body AWA.Blogs.Beans is
    begin
       Bean.Load (Outcome, True);
    end Load;
+
+   --  ------------------------------
+   --  Setup the bean to create a new post.
+   --  ------------------------------
+   overriding
+   procedure Setup (Bean    : in out Post_Bean;
+                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      Blog : constant Blog_Bean_Access := Get_Blog_Bean ("blog");
+   begin
+      if Blog = null or else Bean.Blog_Id = ADO.NO_IDENTIFIER then
+         Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
+         return;
+      end if;
+      Blog.Set_Id (Bean.Blog_Id);
+      Blog.Load (Outcome);
+      Bean.Set_Format (Blog.Get_Format);
+   end Setup;
 
    --  ------------------------------
    --  Load the post from the URI for the administrator.
