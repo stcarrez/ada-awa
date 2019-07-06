@@ -1,5 +1,5 @@
 <!-- Form to create or update a blog post
-  -  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2018 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2018, 2019 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,9 +41,9 @@
             </div>
             <div class="awa-post-editor post-text">
                 <h:messages styleClass='awa-error'/>
-                <w:tabView header='Ada Lovelace' closable="false" toggleable="true"
+                <w:tabView closable="false" toggleable="true"
                            effect="blind" collapsible="false">
-                    <w:tab title="Summary">
+                    <w:tab title="#{blogMsg.blog_post_tab_summary_label}">
                         <w:inputText id='post-title'
                                      title="#{blogMsg.blog_post_title_label}"
                                      styleClass="awa-required ui-corner-all"
@@ -53,7 +53,7 @@
 
                         <dl class="awa-required#{util:hasMessage('summary') ? ' awa-error' : ''}">
                             <dt>
-                                <label for='summary'>Summary</label>
+                                <label for='summary'>#{blogMsg.blog_post_tab_summary_label}</label>
                             </dt>
                             <dd>
                                 <h:inputTextarea id='summary' rows='5' required='false'
@@ -63,7 +63,7 @@
                             </dd>
                         </dl>
                     </w:tab>
-                    <w:tab title="Article">
+                    <w:tab title="#{blogMsg.blog_post_tab_article_label}">
                         <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
                             <dt></dt>
                             <dd>
@@ -73,7 +73,7 @@
                             </dd>
                         </dl>
                     </w:tab>
-                    <w:tab title="Tags">
+                    <w:tab title="#{blogMsg.blog_post_tab_tags_label}">
                         <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
                             <dt>
                                 <label for='qtags'>#{blogMsg.blog_tags_label}</label>
@@ -85,15 +85,15 @@
                             </dd>
                         </dl>
                     </w:tab>
-                    <w:tab title="Options">
+                    <w:tab title="#{blogMsg.blog_post_tab_options_label}">
                         <dl class="awa-required">
                             <dt>
-                                <label for="wiki-format">#{wikiMsg.wiki_page_format_label}</label>
+                                <label for="post-format">#{blogMsg.blog_page_format_label}</label>
                             </dt>
                             <dd>
-                                <h:selectOneMenu id='wiki-format' size='10' value='#{post.format}'
+                                <h:selectOneMenu id='post-format' size='10' value='#{post.format}'
                                                  styleClass="ui-state-default ui-corner-all">
-                                    <f:selectItems value="#{wikiFormatList}"/>
+                                    <f:selectItems value="#{blogFormatList}"/>
                                 </h:selectOneMenu>
                             </dd>
                         </dl>
