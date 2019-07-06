@@ -24,14 +24,17 @@
         <script type="text/javascript" src="#{contextPath}/js/markedit/jquery.markedit.js"></script>
         <script type="text/javascript" src="#{contextPath}/js/dropzone.js"></script>
         <script type="text/javascript" src="#{contextPath}/js/jquery.datetimepicker.js"></script>
+        <script type="text/javascript" src="#{contextPath}/js/trumbowyg/trumbowyg.js"></script>
+        <script type="text/javascript" src="#{contextPath}/js/trumbowyg/plugins/fontfamily/trumbowyg.fontfamily.js"></script>
+        <script type="text/javascript" src="#{contextPath}/js/trumbowyg/plugins/preformatted/trumbowyg.preformatted.js"></script>
+        <script type="text/javascript" src="#{contextPath}/js/awa-blogs.js"></script>
     </ui:define>
 
     <!-- Main page body -->
     <ui:define name="pageBody">
         <f:metadata>
             <f:viewParam id='id' value='#{post.blogId}' required="false"/>
-            <f:viewParam id='id' value='#{blog.id}' required="false"/>
-            <f:viewAction action="#{blog.load}"/>
+            <f:viewAction action="#{post.setup}"/>
         </f:metadata>
         <div id='awa-content'>
             <ui:include src="lists/menu-list.xhtml"/>
