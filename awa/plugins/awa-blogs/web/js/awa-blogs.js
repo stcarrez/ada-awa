@@ -153,7 +153,7 @@
                     minimalLinks: true,
                     autogrow: true,
                     btns: [['viewHTML'], ['undo', 'redo'],
-                    ['formatting', '|', 'link', '|', 'image', 'btnGrp-justify', '|', 'btnGrp-semantic', '|', 'btnGrp-lists'],
+                    ['formatting', '|', 'link', '|', 'image'],
                     ['strong', 'em', 'del'], ['insertImage'],
                     ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
                     ['unorderedList', 'orderedList'],
