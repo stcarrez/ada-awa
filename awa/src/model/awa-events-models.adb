@@ -1474,10 +1474,10 @@ package body AWA.Events.Models is
       Object.Server_Id := Stmt.Get_Integer (5);
       Object.Task_Id := Stmt.Get_Integer (6);
       Object.Status := Message_Status_Type'Val (Stmt.Get_Integer (7));
-      Object.Processing_Date := Stmt.Get_Time (8);
+      Object.Processing_Date := Stmt.Get_Nullable_Time (8);
       Object.Entity_Id := Stmt.Get_Identifier (10);
       Object.Entity_Type := ADO.Entity_Type (Stmt.Get_Integer (11));
-      Object.Finish_Date := Stmt.Get_Time (12);
+      Object.Finish_Date := Stmt.Get_Nullable_Time (12);
       if not Stmt.Is_Null (13) then
          Object.Queue.Set_Key_Value (Stmt.Get_Identifier (13), Session);
       end if;

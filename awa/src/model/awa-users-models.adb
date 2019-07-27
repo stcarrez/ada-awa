@@ -2010,7 +2010,7 @@ package body AWA.Users.Models is
                    Session : in out ADO.Sessions.Session'Class) is
    begin
       Object.Start_Date := Stmt.Get_Time (0);
-      Object.End_Date := Stmt.Get_Time (1);
+      Object.End_Date := Stmt.Get_Nullable_Time (1);
       Object.Ip_Address := Stmt.Get_Unbounded_String (2);
       Object.Stype := Session_Type'Val (Stmt.Get_Integer (3));
       Object.Server_Id := Stmt.Get_Integer (5);
