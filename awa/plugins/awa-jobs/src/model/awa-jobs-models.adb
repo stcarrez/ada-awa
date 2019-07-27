@@ -701,9 +701,9 @@ package body AWA.Jobs.Models is
       Object.Set_Key_Value (Stmt.Get_Identifier (0));
       Object.Status := Job_Status_Type'Val (Stmt.Get_Integer (1));
       Object.Name := Stmt.Get_Unbounded_String (2);
-      Object.Start_Date := Stmt.Get_Time (3);
+      Object.Start_Date := Stmt.Get_Nullable_Time (3);
       Object.Create_Date := Stmt.Get_Time (4);
-      Object.Finish_Date := Stmt.Get_Time (5);
+      Object.Finish_Date := Stmt.Get_Nullable_Time (5);
       Object.Progress := Stmt.Get_Integer (6);
       Object.Parameters := Stmt.Get_Unbounded_String (7);
       Object.Results := Stmt.Get_Unbounded_String (8);

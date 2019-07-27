@@ -1351,7 +1351,7 @@ package body AWA.Blogs.Models is
       Object.Text := Stmt.Get_Unbounded_String (2);
       Object.Create_Date := Stmt.Get_Time (3);
       Object.Uri := Stmt.Get_Unbounded_String (4);
-      Object.Publish_Date := Stmt.Get_Time (6);
+      Object.Publish_Date := Stmt.Get_Nullable_Time (6);
       Object.Status := Post_Status_Type'Val (Stmt.Get_Integer (7));
       Object.Allow_Comments := Stmt.Get_Boolean (8);
       Object.Read_Count := Stmt.Get_Integer (9);

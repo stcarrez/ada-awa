@@ -612,7 +612,7 @@ package body AWA.Questions.Models is
       Object.Create_Date := Stmt.Get_Time (0);
       Object.Title := Stmt.Get_Unbounded_String (1);
       Object.Description := Stmt.Get_Unbounded_String (2);
-      Object.Edit_Date := Stmt.Get_Time (3);
+      Object.Edit_Date := Stmt.Get_Nullable_Time (3);
       Object.Short_Description := Stmt.Get_Unbounded_String (4);
       Object.Rating := Stmt.Get_Integer (5);
       Object.Set_Key_Value (Stmt.Get_Identifier (6));
@@ -1103,7 +1103,7 @@ package body AWA.Questions.Models is
                    Session : in out ADO.Sessions.Session'Class) is
    begin
       Object.Create_Date := Stmt.Get_Time (0);
-      Object.Edit_Date := Stmt.Get_Time (1);
+      Object.Edit_Date := Stmt.Get_Nullable_Time (1);
       Object.Answer := Stmt.Get_Unbounded_String (2);
       Object.Rank := Stmt.Get_Integer (3);
       Object.Set_Key_Value (Stmt.Get_Identifier (4));
@@ -1210,7 +1210,7 @@ package body AWA.Questions.Models is
       begin
          Into.Id := Stmt.Get_Identifier (0);
          Into.Create_Date := Stmt.Get_Time (1);
-         Into.Edit_Date := Stmt.Get_Time (2);
+         Into.Edit_Date := Stmt.Get_Nullable_Time (2);
          Into.Answer := Stmt.Get_Unbounded_String (3);
          Into.Rank := Stmt.Get_Integer (4);
          Into.User_Rating := Stmt.Get_Integer (5);
@@ -1328,7 +1328,7 @@ package body AWA.Questions.Models is
          Into.Id := Stmt.Get_Identifier (0);
          Into.Title := Stmt.Get_Unbounded_String (1);
          Into.Create_Date := Stmt.Get_Time (2);
-         Into.Edit_Date := Stmt.Get_Time (3);
+         Into.Edit_Date := Stmt.Get_Nullable_Time (3);
          Into.Description := Stmt.Get_Unbounded_String (4);
          Into.Rating := Stmt.Get_Integer (5);
          Into.User_Rating := Stmt.Get_Integer (6);

@@ -786,7 +786,7 @@ package body AWA.Workspaces.Models is
                    Session : in out ADO.Sessions.Session'Class) is
    begin
       Object.Set_Key_Value (Stmt.Get_Identifier (0));
-      Object.Join_Date := Stmt.Get_Time (1);
+      Object.Join_Date := Stmt.Get_Nullable_Time (1);
       Object.Role := Stmt.Get_Unbounded_String (2);
       if not Stmt.Is_Null (3) then
          Object.Member.Set_Key_Value (Stmt.Get_Identifier (3), Session);
@@ -1361,7 +1361,7 @@ package body AWA.Workspaces.Models is
       Object.Create_Date := Stmt.Get_Time (2);
       Object.Email := Stmt.Get_Unbounded_String (3);
       Object.Message := Stmt.Get_Unbounded_String (4);
-      Object.Acceptance_Date := Stmt.Get_Time (5);
+      Object.Acceptance_Date := Stmt.Get_Nullable_Time (5);
       if not Stmt.Is_Null (6) then
          Object.Workspace.Set_Key_Value (Stmt.Get_Identifier (6), Session);
       end if;
@@ -1812,8 +1812,8 @@ package body AWA.Workspaces.Models is
          Into.Name := Stmt.Get_Unbounded_String (2);
          Into.Email := Stmt.Get_Unbounded_String (3);
          Into.Role := Stmt.Get_Unbounded_String (4);
-         Into.Join_Date := Stmt.Get_Time (5);
-         Into.Invite_Date := Stmt.Get_Time (6);
+         Into.Join_Date := Stmt.Get_Nullable_Time (5);
+         Into.Invite_Date := Stmt.Get_Nullable_Time (6);
       end Read;
    begin
       Stmt.Execute;
