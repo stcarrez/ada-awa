@@ -1674,15 +1674,31 @@ package body AWA.Wikis.Models is
       elsif Name = "id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
       elsif Name = "create_date" then
-         return Util.Beans.Objects.Time.To_Object (From.Create_Date);
+         if From.Create_Date.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.Time.To_Object (From.Create_Date.Value);
+         end if;
       elsif Name = "uri" then
-         return Util.Beans.Objects.To_Object (From.Uri);
+         if From.Uri.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.To_Object (From.Uri.Value);
+         end if;
       elsif Name = "storage" then
          return AWA.Storages.Models.Storage_Type_Objects.To_Object (From.Storage);
       elsif Name = "mime_type" then
-         return Util.Beans.Objects.To_Object (From.Mime_Type);
+         if From.Mime_Type.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.To_Object (From.Mime_Type.Value);
+         end if;
       elsif Name = "file_size" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.File_Size));
+         if From.File_Size.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.To_Object (Long_Long_Integer (From.File_Size.Value));
+         end if;
       elsif Name = "width" then
          if From.Width.Is_Null then
             return Util.Beans.Objects.Null_Object;
@@ -1713,15 +1729,27 @@ package body AWA.Wikis.Models is
       elsif Name = "id" then
          Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
       elsif Name = "create_date" then
-         Item.Create_Date := Util.Beans.Objects.Time.To_Time (Value);
+         Item.Create_Date.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.Create_Date.Is_Null then
+            Item.Create_Date.Value := Util.Beans.Objects.Time.To_Time (Value);
+         end if;
       elsif Name = "uri" then
-         Item.Uri := Util.Beans.Objects.To_Unbounded_String (Value);
+         Item.Uri.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.Uri.Is_Null then
+            Item.Uri.Value := Util.Beans.Objects.To_Unbounded_String (Value);
+         end if;
       elsif Name = "storage" then
          Item.Storage := AWA.Storages.Models.Storage_Type_Objects.To_Value (Value);
       elsif Name = "mime_type" then
-         Item.Mime_Type := Util.Beans.Objects.To_Unbounded_String (Value);
+         Item.Mime_Type.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.Mime_Type.Is_Null then
+            Item.Mime_Type.Value := Util.Beans.Objects.To_Unbounded_String (Value);
+         end if;
       elsif Name = "file_size" then
-         Item.File_Size := Util.Beans.Objects.To_Integer (Value);
+         Item.File_Size.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.File_Size.Is_Null then
+            Item.File_Size.Value := Util.Beans.Objects.To_Integer (Value);
+         end if;
       elsif Name = "width" then
          Item.Width.Is_Null := Util.Beans.Objects.Is_Null (Value);
          if not Item.Width.Is_Null then
@@ -1748,11 +1776,11 @@ package body AWA.Wikis.Models is
       end if;
       Into.Folder_Id := Stmt.Get_Identifier (0);
       Into.Id := Stmt.Get_Identifier (1);
-      Into.Create_Date := Stmt.Get_Time (2);
-      Into.Uri := Stmt.Get_Unbounded_String (3);
+      Into.Create_Date := Stmt.Get_Nullable_Time (2);
+      Into.Uri := Stmt.Get_Nullable_String (3);
       Into.Storage := AWA.Storages.Models.Storage_Type'Val (Stmt.Get_Integer (4));
-      Into.Mime_Type := Stmt.Get_Unbounded_String (5);
-      Into.File_Size := Stmt.Get_Integer (6);
+      Into.Mime_Type := Stmt.Get_Nullable_String (5);
+      Into.File_Size := Stmt.Get_Nullable_Integer (6);
       Into.Width := Stmt.Get_Nullable_Integer (7);
       Into.Height := Stmt.Get_Nullable_Integer (8);
       Stmt.Next;
@@ -1786,19 +1814,43 @@ package body AWA.Wikis.Models is
       elsif Name = "id" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
       elsif Name = "create_date" then
-         return Util.Beans.Objects.Time.To_Object (From.Create_Date);
+         if From.Create_Date.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.Time.To_Object (From.Create_Date.Value);
+         end if;
       elsif Name = "uri" then
-         return Util.Beans.Objects.To_Object (From.Uri);
+         if From.Uri.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.To_Object (From.Uri.Value);
+         end if;
       elsif Name = "storage" then
          return AWA.Storages.Models.Storage_Type_Objects.To_Object (From.Storage);
       elsif Name = "mime_type" then
-         return Util.Beans.Objects.To_Object (From.Mime_Type);
+         if From.Mime_Type.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.To_Object (From.Mime_Type.Value);
+         end if;
       elsif Name = "file_size" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.File_Size));
+         if From.File_Size.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.To_Object (Long_Long_Integer (From.File_Size.Value));
+         end if;
       elsif Name = "width" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Width));
+         if From.Width.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Width.Value));
+         end if;
       elsif Name = "height" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Height));
+         if From.Height.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Height.Value));
+         end if;
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -1817,19 +1869,37 @@ package body AWA.Wikis.Models is
       elsif Name = "id" then
          Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
       elsif Name = "create_date" then
-         Item.Create_Date := Util.Beans.Objects.Time.To_Time (Value);
+         Item.Create_Date.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.Create_Date.Is_Null then
+            Item.Create_Date.Value := Util.Beans.Objects.Time.To_Time (Value);
+         end if;
       elsif Name = "uri" then
-         Item.Uri := Util.Beans.Objects.To_Unbounded_String (Value);
+         Item.Uri.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.Uri.Is_Null then
+            Item.Uri.Value := Util.Beans.Objects.To_Unbounded_String (Value);
+         end if;
       elsif Name = "storage" then
          Item.Storage := AWA.Storages.Models.Storage_Type_Objects.To_Value (Value);
       elsif Name = "mime_type" then
-         Item.Mime_Type := Util.Beans.Objects.To_Unbounded_String (Value);
+         Item.Mime_Type.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.Mime_Type.Is_Null then
+            Item.Mime_Type.Value := Util.Beans.Objects.To_Unbounded_String (Value);
+         end if;
       elsif Name = "file_size" then
-         Item.File_Size := Util.Beans.Objects.To_Integer (Value);
+         Item.File_Size.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.File_Size.Is_Null then
+            Item.File_Size.Value := Util.Beans.Objects.To_Integer (Value);
+         end if;
       elsif Name = "width" then
-         Item.Width := Util.Beans.Objects.To_Integer (Value);
+         Item.Width.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.Width.Is_Null then
+            Item.Width.Value := Util.Beans.Objects.To_Integer (Value);
+         end if;
       elsif Name = "height" then
-         Item.Height := Util.Beans.Objects.To_Integer (Value);
+         Item.Height.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.Height.Is_Null then
+            Item.Height.Value := Util.Beans.Objects.To_Integer (Value);
+         end if;
       end if;
    end Set_Value;
 
@@ -1859,13 +1929,13 @@ package body AWA.Wikis.Models is
       begin
          Into.Folder_Id := Stmt.Get_Identifier (0);
          Into.Id := Stmt.Get_Identifier (1);
-         Into.Create_Date := Stmt.Get_Time (2);
-         Into.Uri := Stmt.Get_Unbounded_String (3);
+         Into.Create_Date := Stmt.Get_Nullable_Time (2);
+         Into.Uri := Stmt.Get_Nullable_String (3);
          Into.Storage := AWA.Storages.Models.Storage_Type'Val (Stmt.Get_Integer (4));
-         Into.Mime_Type := Stmt.Get_Unbounded_String (5);
-         Into.File_Size := Stmt.Get_Integer (6);
-         Into.Width := Stmt.Get_Integer (7);
-         Into.Height := Stmt.Get_Integer (8);
+         Into.Mime_Type := Stmt.Get_Nullable_String (5);
+         Into.File_Size := Stmt.Get_Nullable_Integer (6);
+         Into.Width := Stmt.Get_Nullable_Integer (7);
+         Into.Height := Stmt.Get_Nullable_Integer (8);
       end Read;
    begin
       Stmt.Execute;
@@ -2347,7 +2417,7 @@ package body AWA.Wikis.Models is
       Into.Is_Public := Stmt.Get_Nullable_Boolean (3);
       Into.Version := Stmt.Get_Nullable_Integer (4);
       Into.Read_Count := Stmt.Get_Nullable_Integer (5);
-      Into.Date := Stmt.Get_Time (6);
+      Into.Date := Stmt.Get_Nullable_Time (6);
       Into.Format.Is_Null := Stmt.Is_Null (7);
       if not Into.Format.Is_Null then
          Into.Format.Value := AWA.Wikis.Models.Format_Type'Val (Stmt.Get_Integer (7));

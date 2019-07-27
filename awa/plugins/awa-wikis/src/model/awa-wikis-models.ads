@@ -493,19 +493,19 @@ package AWA.Wikis.Models is
       Id : ADO.Identifier;
 
       --  the file creation date.
-      Create_Date : Ada.Calendar.Time;
+      Create_Date : ADO.Nullable_Time;
 
       --  the file storage URI.
-      Uri : Ada.Strings.Unbounded.Unbounded_String;
+      Uri : ADO.Nullable_String;
 
       --  the file storage URI.
       Storage : AWA.Storages.Models.Storage_Type;
 
       --  the file mime type.
-      Mime_Type : Ada.Strings.Unbounded.Unbounded_String;
+      Mime_Type : ADO.Nullable_String;
 
       --  the file size.
-      File_Size : Integer;
+      File_Size : ADO.Nullable_Integer;
 
       --  the image width.
       Width : ADO.Nullable_Integer;
@@ -558,25 +558,25 @@ package AWA.Wikis.Models is
       Id : ADO.Identifier;
 
       --  the file creation date.
-      Create_Date : Ada.Calendar.Time;
+      Create_Date : ADO.Nullable_Time;
 
       --  the file storage URI.
-      Uri : Ada.Strings.Unbounded.Unbounded_String;
+      Uri : ADO.Nullable_String;
 
       --  the file storage URI.
       Storage : AWA.Storages.Models.Storage_Type;
 
       --  the file mime type.
-      Mime_Type : Ada.Strings.Unbounded.Unbounded_String;
+      Mime_Type : ADO.Nullable_String;
 
       --  the file size.
-      File_Size : Integer;
+      File_Size : ADO.Nullable_Integer;
 
       --  the image width.
-      Width : Integer;
+      Width : ADO.Nullable_Integer;
 
       --  the image height.
-      Height : Integer;
+      Height : ADO.Nullable_Integer;
    end record;
 
    --  Get the bean attribute identified by the name.
@@ -1318,7 +1318,7 @@ private
 
    package File_2 is
       new ADO.Queries.Loaders.File (Path => "wiki-images-info.xml",
-                                    Sha1 => "ACC06A1E40987526FBEB39D13B94AC44B833D516");
+                                    Sha1 => "D7213D2A931D1393B673EF8B6028E5B6D36D2C22");
 
    package Def_Wikiimagebean_Wiki_Image is
       new ADO.Queries.Loaders.Query (Name => "wiki-image",
@@ -1328,7 +1328,7 @@ private
 
    package File_3 is
       new ADO.Queries.Loaders.File (Path => "wiki-images.xml",
-                                    Sha1 => "63109B4E802BF3B5AD1680973D6E7E348C4E57D2");
+                                    Sha1 => "4282148DEBAB32E79BAC617BA9932D330B5FAFCC");
 
    package Def_Wikiimageinfo_Wiki_Image_Get_Data is
       new ADO.Queries.Loaders.Query (Name => "wiki-image-get-data",
