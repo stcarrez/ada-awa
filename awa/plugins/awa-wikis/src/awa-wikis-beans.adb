@@ -77,9 +77,9 @@ package body AWA.Wikis.Beans is
       else
          Append (URI, Link (Sep + 1 .. Link'Last));
       end if;
-      if Info.Width /= 0 and Info.Height /= 0 then
-         AWA.Images.Modules.Scale (Width     => Info.Width,
-                                   Height    => Info.Height,
+      if not Info.Width.Is_Null and not Info.Height.Is_Null then
+         AWA.Images.Modules.Scale (Width     => Info.Width.Value,
+                                   Height    => Info.Height.Value,
                                    To_Width  => Width,
                                    To_Height => Height);
       end if;
@@ -112,8 +112,8 @@ package body AWA.Wikis.Beans is
          Info := List.First_Element;
       else
          Info.Id     := ADO.NO_IDENTIFIER;
-         Info.Width  := 0;
-         Info.Height := 0;
+         Info.Width.Is_Null := True;
+         Info.Height.Is_Null := True;
       end if;
       Renderer.Images.Include (Link, Info);
       Renderer.Make_Image_Link (Link, Info, URI, Width, Height);
@@ -1275,12 +1275,14 @@ package body AWA.Wikis.Beans is
          begin
             if Pos < From.List_Bean.Get_Count then
                Info := From.List_Bean.List.Element (Pos);
-               W := Info.Width;
-               H := Info.Height;
+               if not Info.Width.Is_Null and not Info.Height.Is_Null then
+                  W := Info.Width.Value;
+                  H := Info.Height.Value;
+               end if;
             end if;
             Info.Id     := From.Id;
-            Info.Width  := (if From.Width.Is_Null then 0 else From.Width.Value);
-            Info.Height := (if From.Height.Is_Null then 0 else From.Height.Value);
+            Info.Width  := From.Width;
+            Info.Height := From.Height;
             From.Page.Links.Make_Image_Link (Link   => WName,
                                              Info   => Info,
                                              URI    => URI,
@@ -1358,8 +1360,8 @@ package body AWA.Wikis.Beans is
                Into.Storage     := Img.Storage;
                Into.File_Size   := Img.File_Size;
                Into.Create_Date := Img.Create_Date;
-               Into.Width       := (Is_Null => False, Value => Img.Width);
-               Into.Height      := (Is_Null => False, Value => Img.Height);
+               Into.Width       := Img.Width;
+               Into.Height      := Img.Height;
             end if;
             Into.Folder_Id   := Img.Folder_Id;
          end;
