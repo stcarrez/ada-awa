@@ -11,19 +11,19 @@
         <property type='Identifier' name="id">
             <comment>the image file identifier.</comment>
         </property>
-        <property type='Date' name="create_date">
+        <property type='Nullable_Date' name="create_date" not-null="no">
             <comment>the file creation date.</comment>
         </property>
-        <property type='String' name="uri">
+        <property type='String' name="uri" not-null="no">
             <comment>the file storage URI.</comment>
         </property>
         <property type='AWA.Storages.Models.Storage_Type' name="storage">
             <comment>the file storage URI.</comment>
         </property>
-        <property type='String' name="mime_type">
+        <property type='String' name="mime_type" not-null="no">
             <comment>the file mime type.</comment>
         </property>
-        <property type='Integer' name="file_size">
+        <property type='Integer' name="file_size" not-null="no">
             <comment>the file size.</comment>
         </property>
         <property type='Integer' name="width" not-null="no">
@@ -45,7 +45,7 @@
       file.id,
       file.create_date,
       file.uri,
-      file.storage,
+      COALESCE(file.storage, 0),
       file.mime_type,
       file.file_size,
       image.width,

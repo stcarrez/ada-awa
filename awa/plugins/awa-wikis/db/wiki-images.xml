@@ -11,25 +11,25 @@
         <property type='Identifier' name="id">
             <comment>the image file identifier.</comment>
         </property>
-        <property type='Date' name="create_date">
+        <property type='Nullable_Date' name="create_date" not-null="no">
             <comment>the file creation date.</comment>
         </property>
-        <property type='String' name="uri">
+        <property type='String' name="uri" not-null="no">
             <comment>the file storage URI.</comment>
         </property>
         <property type='AWA.Storages.Models.Storage_Type' name="storage">
             <comment>the file storage URI.</comment>
         </property>
-        <property type='String' name="mime_type">
+        <property type='String' name="mime_type" not-null="no">
             <comment>the file mime type.</comment>
         </property>
-        <property type='Integer' name="file_size">
+        <property type='Nullable_Integer' name="file_size" not-null="no">
             <comment>the file size.</comment>
         </property>
-        <property type='Integer' name="width">
+        <property type='Nullable_Integer' name="width" not-null="no">
             <comment>the image width.</comment>
         </property>
-        <property type='Integer' name="height">
+        <property type='Nullable_Integer' name="height" not-null="no">
             <comment>the image height.</comment>
         </property>
     </class>
