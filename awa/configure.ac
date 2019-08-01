@@ -158,6 +158,17 @@ AM_GNAT_FIND_PROJECT([ada-ado],[Ada Database Objects],[ado],
   ])
 AC_SUBST(ADO_DIR)
 
+##########################################
+# Ada Swagger library
+##########################################
+AM_GNAT_FIND_PROJECT([swagger-ada],[Swagger Ada Library],[swagger],
+  [git@github.com:stcarrez/swagger-ada.git],
+  [Building AWA requires the Ada Swagger Library.],
+  [
+    SWAGGER_DIR=${gnat_project_dir_swagger}
+  ])
+AC_SUBST(SWAGGER_DIR)
+
 AC_CHECK_PROGS(MYSQL, mysql)
 if test "X$MYSQL" != "X" ; then
   ADO_DB_MYSQL=True
@@ -216,5 +227,6 @@ awa.gpr
 awa_tests.gpr
 awa_unit.gpr
 plugins/awa-mail/awa_mail.gpr
+plugins/awa-sysadmin/awa_sysadmin.gpr
 plugins/awa-images/config/images.xml
 )
