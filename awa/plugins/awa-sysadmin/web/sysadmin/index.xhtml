@@ -1,0 +1,39 @@
+<ui:composition xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jstl/core"
+                template="/WEB-INF/layouts/layout.xhtml">
+  <ui:param name="title" value="#{layoutMsg.homePageTitle}" />
+  <ui:param name="pageStyle" value=""/>
+
+  <!-- Page header (optional) -->
+  <ui:define name="pageHeader">
+    <meta name="author" content=""/>
+  </ui:define>
+
+  <!-- Main page body -->
+  <ui:define name="pageBody">
+     <div id='awa-content'>
+         <div
+             v-for="user in info"
+             class="currency"
+           >
+             {{ currency.description }}:
+             <span class="lighten">
+               <span v-html="currency.symbol"></span>{{ currency.rate_float | currencydecimal }}
+             </span>
+           </div>
+
+         {{ info }}
+     </div>
+  </ui:define>
+
+  <!-- Page specific Javascript (optional) -->
+  <ui:define name="pageScript">
+      <script type="text/javascript" src="#{contextPath}/js/vue.js"></script>
+      <script type="text/javascript" src="#{contextPath}/js/axios.js"></script>
+      <script type="text/javascript" src="#{contextPath}/js/vuetable-2.js"></script>
+      <script type="text/javascript" src="#{contextPath}/js/awa-sysadmin.js"></script>
+  </ui:define>
+
+</ui:composition>

@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<module version="1.0">
+
+  <managed-bean>
+    <description>The Sysadmin authentication bean for the sysadmin login form.
+  The user must also be logged.
+    </description>
+    <managed-bean-name>sysadminLogin</managed-bean-name>
+    <managed-bean-class>AWA.Sysadmin.Beans.Authenticate_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <navigation-rule>
+    <from-view-id>/sysadmin/login.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/sysadmin/index.xhtml</to-view-id>
+      <redirect/>
+    </navigation-case>
+  </navigation-rule>
+
+  <context-param>
+    <param-name>sysadmin-filter.redirect</param-name>
+    <param-value>/sysadmin/login.html</param-value>
+    <description>URI to redirect to the sysadmin login page</description>
+  </context-param>
+
+  <filter-mapping>
+    <filter-name>auth-filter</filter-name>
+    <url-pattern>/sysadmin/*.html</url-pattern>
+    <url-pattern>/sysadmin/api/*</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>sysadmin-filter</filter-name>
+    <url-pattern>/sysadmin/*.html</url-pattern>
+    <url-pattern>/sysadmin/api/*</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>service</filter-name>
+    <url-pattern>/sysadmin/*</url-pattern>
+  </filter-mapping>
+
+  <url-policy>
+    <permission>logged-user</permission>
+    <url-pattern>/sysadmin/index.html</url-pattern>
+    <url-pattern>/sysadmin/login.html</url-pattern>
+    <url-pattern>/sysadmin/api/v1/users</url-pattern>
+  </url-policy>
+
+</module>
+
+
+
+
