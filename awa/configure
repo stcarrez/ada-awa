@@ -593,6 +593,7 @@ ADO_DB_SQLITE
 SQLITE3
 ADO_DB_MYSQL
 MYSQL
+SWAGGER_DIR
 ADO_DIR
 ASF_DIR
 SERVLET_DIR
@@ -698,6 +699,7 @@ with_ada_security
 with_ada_servlet
 with_ada_asf
 with_ada_ado
+with_swagger_ada
 enable_aws
 with_aws
 enable_aws_secure_mail
@@ -1345,6 +1347,7 @@ Optional Packages:
   --with-ada-servlet=x    Path for Ada Servlet Library
   --with-ada-asf=x        Path for Ada Server Faces Library
   --with-ada-ado=x        Path for Ada Database Objects
+  --with-swagger-ada=x    Path for Swagger Ada Library
   --with-aws=x            Path for the Ada Web Server library
                           (http://libre.adacore.com/libre/tools/aws/)
 
@@ -3874,6 +3877,108 @@ $as_echo "no" >&6; }
 
 
 
+##########################################
+# Ada Swagger library
+##########################################
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking Swagger Ada Library" >&5
+$as_echo_n "checking Swagger Ada Library... " >&6; }
+
+# Check whether --with-swagger-ada was given.
+if test "${with_swagger_ada+set}" = set; then :
+  withval=$with_swagger_ada;
+      gnat_project_name_swagger=${withval}/
+      if test -d "${withval}"; then
+	    gnat_project_name_swagger=${withval}/swagger
+	  fi
+
+else
+
+      gnat_project_name_swagger=swagger
+
+fi
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: trying ${gnat_project_name_swagger}" >&5
+$as_echo "trying ${gnat_project_name_swagger}" >&6; }
+
+  rm -f conftest.gpr
+  # Search in the GNAT project path.
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ${gnat_project_name_swagger} project exists in gnatmake's search path" >&5
+$as_echo_n "checking whether ${gnat_project_name_swagger} project exists in gnatmake's search path... " >&6; }
+  echo "with \"${gnat_project_name_swagger}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+  if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+  then
+    gnat_project_swagger=yes
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+  else
+    gnat_project_swagger=no
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+    # Search in ../swagger-ada-*/swagger.gpr
+    files=`ls -r ../swagger-ada/swagger.gpr ../swagger/swagger.gpr ../swagger-ada-*/swagger.gpr 2>/dev/null`
+    for name in $files; do
+      dir=`dirname $name`
+      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for Swagger Ada Library project in ${dir}" >&5
+$as_echo_n "checking for Swagger Ada Library project in ${dir}... " >&6; }
+      echo "with \"${name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+      if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+      then
+         gnat_project_swagger=yes
+		 gnat_project_name_swagger=${name}
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+         break
+      else
+         gnat_project_swagger=no
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+      fi
+    done
+  fi
+  rm -f conftest.gpr
+  if test x${gnat_project_swagger} = xyes; then
+    gnat_project_with_swagger="with \"${gnat_project_name_swagger}\";";
+    gnat_project_dir_swagger=`dirname ${gnat_project_name_swagger}`
+    if test ${gnat_project_dir_swagger} = . ; then
+       gnat_project_dir_swagger=
+    else
+       gnat_project_dir_swagger="${gnat_project_dir_swagger}/"
+    fi
+
+    SWAGGER_DIR=${gnat_project_dir_swagger}
+
+  else
+    gnat_project_dir_swagger=
+    gnat_project_name_swagger=
+    if test x"Building AWA requires the Ada Swagger Library." != x; then
+      as_fn_error $? "Building AWA requires the Ada Swagger Library.
+  You should build and install the Swagger Ada Library component.
+  It must be available and found by ${GNATMAKE}.
+  This project was not found in the ADA_PROJECT_PATH environment variable.
+  This project was not found in ../swagger nor in ../swagger-ada-*.
+  The component is available at git@github.com:stcarrez/swagger-ada.git.
+  Please, download and configure Swagger Ada Library.
+  The current configuration was using:
+    ${GNATMAKE}
+    ADA_PROJECT_PATH=$ADA_PROJECT_PATH
+" "$LINENO" 5
+    fi
+  fi
+
+
+
 for ac_prog in mysql
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
@@ -4114,7 +4219,7 @@ $as_echo "${ac_enable_aws_secure_mail}" >&6; }
 AWA_AWS_SECURE_MAIL=$ac_enable_aws_secure_mail
 
 
-ac_config_files="$ac_config_files Makefile.conf awa.gpr awa_tests.gpr awa_unit.gpr plugins/awa-mail/awa_mail.gpr plugins/awa-images/config/images.xml"
+ac_config_files="$ac_config_files Makefile.conf awa.gpr awa_tests.gpr awa_unit.gpr plugins/awa-mail/awa_mail.gpr plugins/awa-sysadmin/awa_sysadmin.gpr plugins/awa-images/config/images.xml"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -4827,6 +4932,7 @@ do
     "awa_tests.gpr") CONFIG_FILES="$CONFIG_FILES awa_tests.gpr" ;;
     "awa_unit.gpr") CONFIG_FILES="$CONFIG_FILES awa_unit.gpr" ;;
     "plugins/awa-mail/awa_mail.gpr") CONFIG_FILES="$CONFIG_FILES plugins/awa-mail/awa_mail.gpr" ;;
+    "plugins/awa-sysadmin/awa_sysadmin.gpr") CONFIG_FILES="$CONFIG_FILES plugins/awa-sysadmin/awa_sysadmin.gpr" ;;
     "plugins/awa-images/config/images.xml") CONFIG_FILES="$CONFIG_FILES plugins/awa-images/config/images.xml" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
