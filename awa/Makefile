@@ -29,7 +29,8 @@ include Makefile.defaults
 PLUGINS=awa-workspaces awa-mail awa-counters awa-storages awa-images awa-comments \
         awa-jobs awa-votes awa-tags awa-flotcharts awa-wikis awa-blogs awa-markedit \
         awa-trumbowyg awa-questions \
-	awa-countries awa-settings awa-changelogs awa-setup
+	awa-countries awa-settings awa-changelogs \
+    awa-setup awa-sysadmin
 
 NAME=awa
 LIBNAME=lib${NAME}
