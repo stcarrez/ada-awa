@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-jobs -- AWA Jobs
---  Copyright (C) 2012, 2014, 2015, 2016 Stephane Carrez
+--  Copyright (C) 2012, 2014, 2015, 2016, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -405,7 +405,7 @@ package body AWA.Jobs.Services is
       if Job.Is_Null then
          return Util.Beans.Objects.Null_Object;
       else
-         return Job.Value.all.Get_Parameter (Name);
+         return Job.Value.Get_Parameter (Name);
       end if;
    end Get_Parameter;
 
