@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-services -- AWA Event Manager
---  Copyright (C) 2012, 2015, 2016, 2018 Stephane Carrez
+--  Copyright (C) 2012, 2015, 2016, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,7 +41,7 @@ package body AWA.Events.Services is
 
       procedure Send_Queue (Queue : in Queue_Dispatcher) is
       begin
-         if Queue.Queue.Is_Null then
+         if not Queue.Queue.Has_Queue then
             Queue.Dispatcher.Dispatch (Event);
          else
             Queue.Queue.Enqueue (Event);
