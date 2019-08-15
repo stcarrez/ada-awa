@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-queues -- AWA Event Queues
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Util.Refs;
+private with Util.Refs;
 
 with EL.Beans;
 with EL.Contexts;
@@ -34,9 +34,8 @@ package AWA.Events.Queues is
    procedure Dequeue (From    : in Queue_Ref;
                       Process : access procedure (Event : in Module_Event'Class));
 
-   --  Returns true if the reference does not contain any element.
-   function Is_Null (Queue : in Queue_Ref'Class) return Boolean;
-   --  pragma Inline_Always (Is_Null);  SCz 2012-03-17: disabled since gnat crashes.
+   --  Returns true if the queue is available.
+   function Has_Queue (Queue : in Queue_Ref'Class) return Boolean;
 
    --  Returns the queue name.
    function Get_Name (Queue : in Queue_Ref'Class) return String;
@@ -91,6 +90,8 @@ private
 
    package Queue_Refs is
      new Util.Refs.Indefinite_References (Queue_Info, Queue_Info_Access);
+
+   subtype Queue_Info_Accessor is Queue_Refs.Element_Accessor;
 
    type Queue_Ref is new Queue_Refs.Ref with null record;
 
