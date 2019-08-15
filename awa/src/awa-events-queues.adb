@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-queues -- AWA Event Queues
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,12 +28,16 @@ package body AWA.Events.Queues is
    --  ------------------------------
    procedure Enqueue (Into  : in Queue_Ref;
                       Event : in AWA.Events.Module_Event'Class) is
-      Q : constant Queue_Info_Access := Into.Value;
    begin
-      if Q = null or else Q.Queue = null then
-         return;
+      if not Into.Is_Null then
+         declare
+            Q : constant Queue_Info_Accessor := Into.Value;
+         begin
+            if Q.Queue /= null then
+               Q.Queue.Enqueue (Event);
+            end if;
+         end;
       end if;
-      Q.Queue.Enqueue (Event);
    end Enqueue;
 
    --  ------------------------------
@@ -41,33 +45,35 @@ package body AWA.Events.Queues is
    --  ------------------------------
    procedure Dequeue (From    : in Queue_Ref;
                       Process : access procedure (Event : in Module_Event'Class)) is
-      Q : constant Queue_Info_Access := From.Value;
    begin
-      if Q = null or else Q.Queue = null then
-         return;
+      if not From.Is_Null then
+         declare
+            Q : constant Queue_Info_Accessor := From.Value;
+         begin
+            if Q.Queue /= null then
+               From.Value.Queue.Dequeue (Process);
+            end if;
+         end;
       end if;
-      Q.Queue.Dequeue (Process);
    end Dequeue;
 
    --  ------------------------------
-   --  Returns true if the reference does not contain any element.
+   --  Returns true if the queue is available.
    --  ------------------------------
-   function Is_Null (Queue : in Queue_Ref'Class) return Boolean is
-      Q : constant Queue_Info_Access := Queue.Value;
+   function Has_Queue (Queue : in Queue_Ref'Class) return Boolean is
    begin
-      return Q = null or else Q.Queue = null;
-   end Is_Null;
+      return Queue.Is_Null or else Queue.Value.Queue = null;
+   end Has_Queue;
 
    --  ------------------------------
    --  Returns the queue name.
    --  ------------------------------
    function Get_Name (Queue : in Queue_Ref'Class) return String is
-      Q : constant Queue_Info_Access := Queue.Value;
    begin
-      if Q = null then
+      if Queue.Is_Null then
          return "";
       else
-         return Q.Name;
+         return Queue.Value.Name;
       end if;
    end Get_Name;
 
@@ -76,12 +82,11 @@ package body AWA.Events.Queues is
    --  Returns a null object if the queue is not persistent.
    --  ------------------------------
    function Get_Queue (Queue : in Queue_Ref'Class) return AWA.Events.Models.Queue_Ref is
-      Q : constant Queue_Info_Access := Queue.Value;
    begin
-      if Q = null or else Q.Queue = null then
+      if Queue.Is_Null or else Queue.Value.Queue = null then
          return AWA.Events.Models.Null_Queue;
       else
-         return Q.Queue.Get_Queue;
+         return Queue.Value.Queue.Get_Queue;
       end if;
    end Get_Queue;
 
