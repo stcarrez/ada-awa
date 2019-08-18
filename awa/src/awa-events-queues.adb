@@ -62,7 +62,7 @@ package body AWA.Events.Queues is
    --  ------------------------------
    function Has_Queue (Queue : in Queue_Ref'Class) return Boolean is
    begin
-      return Queue.Is_Null or else Queue.Value.Queue = null;
+      return not Queue.Is_Null and then Queue.Value.Queue /= null;
    end Has_Queue;
 
    --  ------------------------------
