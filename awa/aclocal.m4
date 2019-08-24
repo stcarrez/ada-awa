@@ -14,88 +14,94 @@ AC_DEFUN(AM_GNAT_CHECK_GPRBUILD,
   else
     AC_CHECK_PROGS(GNATCLEAN, gnatclean, "")
   fi
+
+  AC_CHECK_PROGS(GPRINSTALL, gprinstall, "")
 ])
 
 # Check if a GNAT project is available.
 # dnl AM_GNAT_CHECK_PROJECT([name],[path])
 AC_DEFUN(AM_GNAT_CHECK_PROJECT,
 [
-  AC_MSG_CHECKING([whether $1 project exists])
-  echo "with \"$2\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-  if AC_TRY_COMMAND([gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out])
-  then
-    gnat_project_$1=yes
-    AC_MSG_RESULT([yes, using $2])
-    gnat_project_with_$1="with \"$2\";";
-  else
-    gnat_project_$1=no
-    AC_MSG_RESULT(no)
-  fi
-  rm -f conftest.gpr
+  AC_CACHE_CHECK([whether $1 project exists],[ac_cv_gnat_project_$1],[
+    echo "with \"$2\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+    if AC_TRY_COMMAND([gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out])
+    then
+      ac_cv_gnat_project_$1=yes
+      ac_cv_gnat_project_with_$1="with \"$2\";";
+    else
+      ac_cv_gnat_project_$1=no
+    fi
+    rm -f conftest.gpr])
 ])
 
 # Check if a GNAT project is available.
 # AM_GNAT_FIND_PROJECT([ada-util],[Ada Utility Library],[util],[link],[code-fail],[code-ok])
 AC_DEFUN(AM_GNAT_FIND_PROJECT,
 [
-  AC_MSG_CHECKING([$2])
   AC_ARG_WITH($1,
     AS_HELP_STRING([--with-$1=x], [Path for $2]),
     [
-      gnat_project_name_$3=${withval}/
+      ac_cv_gnat_project_name_$3=${withval}/
       if test -d "${withval}"; then
-	    gnat_project_name_$3=${withval}/$3
+	    ac_cv_gnat_project_name_$3=${withval}/$3
 	  fi
     ],
     [
-      gnat_project_name_$3=$3
+      ac_cv_gnat_project_name_$3=$3
     ])
-  AC_MSG_RESULT(trying ${gnat_project_name_$3})
+#  AC_MSG_CHECKING([whether ${ac_cv_gnat_project_name_$3} project exists in gnatmake's search path])
+#  AC_MSG_RESULT(trying ${ac_cv_gnat_project_name_$3})
 
-  rm -f conftest.gpr
-  # Search in the GNAT project path.
-  AC_MSG_CHECKING([whether ${gnat_project_name_$3} project exists in gnatmake's search path])
-  echo "with \"${gnat_project_name_$3}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-  if AC_TRY_COMMAND([gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out])
-  then
-    gnat_project_$3=yes
-    AC_MSG_RESULT(yes, using ${gnat_project_name_$3})
-  else
-    gnat_project_$3=no
-    AC_MSG_RESULT(no)
-
-    # Search in ../$1-*/$3.gpr
-    files=`ls -r ../$1/$3.gpr ../$3/$3.gpr ../$1-*/$3.gpr 2>/dev/null`
-    for name in $files; do
-      dir=`dirname $name`
-      AC_MSG_CHECKING([for $2 project in ${dir}])
-      echo "with \"${name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-      if AC_TRY_COMMAND([gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out])
-      then
-         gnat_project_$3=yes
-		 gnat_project_name_$3=${name}
-         AC_MSG_RESULT(yes, using ${name})
-         break
-      else
-         gnat_project_$3=no
-         AC_MSG_RESULT(no)
-      fi
-    done
-  fi
-  rm -f conftest.gpr
-  if test x${gnat_project_$3} = xyes; then
-    gnat_project_with_$3="with \"${gnat_project_name_$3}\";";
-    gnat_project_dir_$3=`dirname ${gnat_project_name_$3}`
-    if test ${gnat_project_dir_$3} = . ; then
-       gnat_project_dir_$3=
+  AC_CACHE_CHECK([$2],[ac_cv_gnat_project_$3],[
+    rm -f conftest.gpr
+    # Search in the GNAT project path.
+    echo "with \"${ac_cv_gnat_project_name_$3}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+    if AC_TRY_COMMAND([gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out])
+    then
+      ac_cv_gnat_project_$3=yes
     else
-       gnat_project_dir_$3="${gnat_project_dir_$3}/"
+      ac_cv_gnat_project_$3=no
+
+      # Search in ../$1-*/$3.gpr
+      dir=`realpath ..`
+      files=`ls -r $dir/$1/$3.gpr $dir/$3/$3.gpr $dir/$1-*/$3.gpr 2>/dev/null`
+      for name in $files; do
+        dir=`dirname $name`
+        # AC_MSG_CHECKING([for $2 project in ${dir}])
+        echo "with \"${name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+        if AC_TRY_COMMAND([gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out])
+        then
+           ac_cv_gnat_project_$3=yes
+		   ac_cv_gnat_project_name_$3=${name}
+           # AC_MSG_RESULT(yes, using ${name})
+           break
+        else
+           ac_cv_gnat_project_$3=no
+           # AC_MSG_RESULT(no)
+        fi
+      done
     fi
+    rm -f conftest.gpr
+
+    if test x${ac_cv_gnat_project_$3} = xyes; then
+      ac_cv_gnat_project_with_$3="with \"${ac_cv_gnat_project_name_$3}\";";
+      ac_cv_gnat_project_dir_$3=`dirname ${ac_cv_gnat_project_name_$3}`
+      if test ${ac_cv_gnat_project_dir_$3} = . ; then
+        ac_cv_gnat_project_dir_$3=
+      else
+        ac_cv_gnat_project_dir_$3="${ac_cv_gnat_project_dir_$3}/"
+      fi
+    else
+      ac_cv_gnat_project_dir_$3=
+      ac_cv_gnat_project_name_$3=
+    fi
+  ])
+
+  if test x${ac_cv_gnat_project_$3} = xyes; then
     $6
   else
-    gnat_project_dir_$3=
-    gnat_project_name_$3=
     if test x"$5" != x; then
+      AC_MSG_RESULT(no)
       AC_MSG_ERROR([$5
   You should build and install the $2 component.
   It must be available and found by ${GNATMAKE}.
@@ -109,6 +115,185 @@ AC_DEFUN(AM_GNAT_FIND_PROJECT,
 ])
     fi
   fi
+])
+
+dnl Check for utilada_base GNAT project
+AC_DEFUN(AM_GNAT_FIND_ADA_UTIL,
+[
+  AM_GNAT_FIND_PROJECT([ada-util],[Ada Utility Library],[utilada_base],
+    [git@github.com:stcarrez/ada-util.git],
+    [Building $1 requires the Ada Utility Library.],
+    [
+      UTIL_DIR=${ac_cv_gnat_project_dir_utilada_base}
+    ])
+  AC_SUBST(UTIL_DIR)
+])
+
+dnl Check for elada GNAT project
+AC_DEFUN(AM_GNAT_FIND_ADA_EL,
+[
+  AM_GNAT_FIND_PROJECT([ada-el],[Ada Expression Language Library],[elada],
+    [git@github.com:stcarrez/ada-el.git],
+    [Building $1 requires the Ada EL Library.],
+    [
+      EL_DIR=${ac_cv_gnat_project_dir_elada}
+    ])
+  AC_SUBST(EL_DIR)
+])
+
+dnl Check for security GNAT project
+AC_DEFUN(AM_GNAT_FIND_ADA_SECURITY,
+[
+  AM_GNAT_FIND_PROJECT([ada-security],[Ada Security Library],[security],
+    [git@github.com:stcarrez/ada-security.git],
+    [Building $1 requires the Ada Security Library.],
+    [
+      SECURITY_DIR=${ac_cv_gnat_project_dir_security}
+    ])
+  AC_SUBST(SECURITY_DIR)
+])
+
+dnl Check for servletada GNAT project
+AC_DEFUN(AM_GNAT_FIND_ADA_SERVLET,
+[
+  AM_GNAT_FIND_PROJECT([ada-servlet],[Ada Servlet Library],[servletada],
+    [git@github.com:stcarrez/ada-servlet.git],
+    [Building $1 requires the Ada Servlet Library.],
+    [
+      SERVLET_DIR=${ac_cv_gnat_project_dir_servletada}
+    ])
+  AC_SUBST(SERVLET_DIR)
+])
+
+dnl Check for asf GNAT project
+AC_DEFUN(AM_GNAT_FIND_ADA_SERVER_FACES,
+[
+  AM_GNAT_FIND_PROJECT([ada-asf],[Ada Server Faces],[asf],
+    [git@github.com:stcarrez/ada-asf.git],
+    [Building $1 requires the Ada Server Faces Library.],
+    [
+      ASF_DIR=${ac_cv_gnat_project_dir_asf}
+    ])
+  AC_SUBST(ASF_DIR)
+])
+
+dnl Check for ado GNAT project
+AC_DEFUN(AM_GNAT_FIND_ADA_ADO,
+[
+  AM_GNAT_FIND_PROJECT([ada-ado],[Ada Database Objects],[ado],
+    [git@github.com:stcarrez/ada-ado.git],
+    [Building $1 requires the Ada Database Objects Library.],
+    [
+      ADO_DIR=${ac_cv_gnat_project_dir_ado}
+    ])
+  AC_SUBST(ADO_DIR)
+])
+
+dnl Check for wikiada GNAT project
+AC_DEFUN(AM_GNAT_FIND_ADA_WIKI,
+[
+  AM_GNAT_FIND_PROJECT([ada-wiki],[Ada Wiki Library],[wikiada],
+    [git@github.com:stcarrez/ada-wiki.git],
+    [Building $1 requires the Ada Wiki Library.],
+    [
+      WIKI_DIR=${ac_cv_gnat_project_dir_wikiada}
+    ])
+  AC_SUBST(WIKI_DIR)
+])
+
+dnl Check for swaggerada GNAT project
+AC_DEFUN(AM_GNAT_FIND_ADA_SWAGGER,
+[
+  AM_GNAT_FIND_PROJECT([swagger-ada],[Swagger Ada Library],[swagger],
+    [git@github.com:stcarrez/swagger-ada.git],
+    [Building $1 requires the Ada Swagger Library.],
+    [
+      SWAGGER_DIR=${ac_cv_gnat_project_dir_swagger}
+    ])
+  AC_SUBST(SWAGGER_DIR)
+])
+
+dnl Check for XML/Ada_base GNAT project
+dnl AM_GNAT_FIND_PROJECT([code-found],[not-found])
+AC_DEFUN(AM_GNAT_FIND_XML_ADA,
+[
+  gnat_xml_ada=xmlada-config
+  AC_ARG_WITH(xmlada,
+  AS_HELP_STRING([--with-xmlada=], [Path for XML/Ada]),
+  [
+    if test T${withval} = Tno ; then
+      HAVE_XML_ADA=no;
+    else
+      gnat_xml_ada=${withval}/xmlada-config;
+      WITH_XML_ADA="with \"${withval}\";";
+      HAVE_XML_ADA='yes';
+    fi
+  ],
+  [
+    WITH_XML_ADA='';
+    HAVE_XML_ADA='yes';
+  ])
+
+  if test T$HAVE_XML_ADA = Tyes ; then
+
+    AM_GNAT_CHECK_PROJECT([xmlada_sax],[xmlada_sax])
+    if test T$ac_cv_gnat_project_xmlada_sax = Tno; then
+      AM_GNAT_CHECK_PROJECT([xmlada],[xmlada])
+    fi
+
+    AC_CACHE_CHECK([XML/Ada version],[ac_cv_gnat_xmlada_version],[
+      if test T$HAVE_XML_ADA = Tyes ; then
+        gnat_xmlada_version=`$gnat_xml_ada --version 2>/dev/null | sed -e 's, ,-,g'`
+      else
+        gnat_xmlada_version=none
+      fi
+
+      case $gnat_xmlada_version in
+      XmlAda-3.2*)
+        ac_cv_gnat_xmlada_version='3'
+        ;;
+
+      XmlAda-4.*|XmlAda-2013|XmlAda-2014)
+        ac_cv_gnat_xmlada_version='4'
+        ;;
+
+      *)
+        ac_cv_gnat_xmlada_version='none'
+        ;;
+
+      esac
+
+      if test T$ac_cv_gnat_project_xmlada_sax = Tno; then
+        if test T$ac_cv_gnat_project_xmlada != Tyes; then
+          ac_cv_gnat_xmlada_version='none'
+        fi
+      else
+        ac_cv_gnat_xmlada_version='4'
+      fi
+
+    ])
+  else
+    ac_cv_gnat_project_xmlada_sax='no'
+  fi
+
+  if test T$ac_cv_gnat_project_xmlada = Tyes; then
+    WITH_XML_ADA="with \"xmlada\";";
+  fi
+  if test T$ac_cv_gnat_project_xmlada_sax = Tyes; then
+    WITH_XML_ADA="with \"xmlada_sax\";";
+  fi
+
+  VERSION_XML_ADA=$ac_cv_gnat_xmlada_version
+
+  if test T$HAVE_XML_ADA = Tno; then
+    WITH_XML_ADA='';
+    VERSION_XML_ADA='none';
+    HAVE_XML_ADA='no';
+  fi
+
+  AC_SUBST(WITH_XML_ADA)
+  AC_SUBST(VERSION_XML_ADA)
+  AC_SUBST(HAVE_XML_ADA)
 ])
 
 dnl Check whether the shared library support is enabled.
@@ -204,7 +389,7 @@ AC_DEFUN(AM_GNAT_CHECK_AWS,
       gnat_project_name=aws
     ])
     AM_GNAT_CHECK_PROJECT([aws],[${gnat_project_name}])
-    if test x$gnat_project_aws = xno; then
+    if test x$ac_cv_gnat_project_aws = xno; then
       gnat_enable_aws=no
     else
       gnat_project_aws=aws
@@ -294,20 +479,19 @@ dnl *.prj     <prefix>/lib/gnat          <prefix>/usr/share/adainclude
 AC_DEFUN(AM_GNAT_CHECK_INSTALL,
 [
   #
-  gnat_prefix=
-  gnat_xml_inc_dir=
-  gnat_xml_ali_dir=
-  gnat_xml_lib_dir=
-  gnat_xml_prl_dir=
+  ac_cv_gnat_prefix=
+  ac_cv_gnat_xml_inc_dir=
+  ac_cv_gnat_xml_ali_dir=
+  ac_cv_gnat_xml_lib_dir=
+  ac_cv_gnat_xml_prl_dir=
 
-  AC_CHECK_PROGS(GPRINSTALL, gprinstall, "")
-  if test x${gnat_xml_ada} = 'x'; then
-     gnat_xml_ada=xmlada-config
+  if test x${ac_cv_gnat_xml_ada} = 'x'; then
+     ac_cv_gnat_xml_ada=xmlada-config
   fi
-  gnat_xml_config=`$gnat_xml_ada --sax 2>/dev/null`
+  ac_cv_gnat_xml_config=`$gnat_xml_ada --sax 2>/dev/null`
 
   # echo "Config: $gnat_xml_config"
-  for i in $gnat_xml_config; do
+  for i in $ac_cv_gnat_xml_config; do
 	# echo "  Checking $i"
 	case $i in
 	  -aI*)
@@ -315,7 +499,7 @@ AC_DEFUN(AM_GNAT_CHECK_INSTALL,
 	    dir=`dirname $name`
 	    name=`basename $name`
 	    if test x$name = "xxmlada"; then
-	   	   gnat_xml_inc_dir=$dir
+	   	   ac_cv_gnat_xml_inc_dir=$dir
 		else
 		   dir=''
 	    fi
@@ -327,14 +511,14 @@ AC_DEFUN(AM_GNAT_CHECK_INSTALL,
 	    name=`basename $name`
 		case $name in
 		  xmlada)
-	        gnat_xml_ali_dir=$dir
+	        ac_cv_gnat_xml_ali_dir=$dir
 			;;
 
 		  static|relocatable)
 		    name=`basename $dir`
 		    dir=`dirname $dir`
 			if test x$name = "xxmlada"; then
-			   gnat_xml_ali_dir=$dir
+			   ac_cv_gnat_xml_ali_dir=$dir
 			else
 			   dir=''
 			fi
@@ -353,7 +537,7 @@ AC_DEFUN(AM_GNAT_CHECK_INSTALL,
 
      -L*)
 	    dir=`echo $i | sed -e 's,-L,,'`
-	    gnat_xml_lib_dir=$dir
+	    ac_cv_gnat_xml_lib_dir=$dir
 	    ;;
 
 	/*.a)
@@ -362,7 +546,7 @@ AC_DEFUN(AM_GNAT_CHECK_INSTALL,
 		case $name in
 		  xmlada)
 	        dir=`dirname $dir`
-	        gnat_xml_lib_dir=$dir
+	        ac_cv_gnat_xml_lib_dir=$dir
 			;;
 
 		  static|relocatable)
@@ -370,7 +554,7 @@ AC_DEFUN(AM_GNAT_CHECK_INSTALL,
 		    name=`basename $dir`
 			if test x$name = "xxmlada"; then
 			   dir=`dirname $dir`
-			   gnat_xml_lib_dir=$dir
+			   ac_cv_gnat_xml_lib_dir=$dir
 			else
 			   dir=''
 			fi
@@ -390,8 +574,8 @@ AC_DEFUN(AM_GNAT_CHECK_INSTALL,
 
     # If we have a valid path, try to identify the common path prefix.
     if test x$dir != "x"; then
-       if test x$gnat_prefix = x; then
-          gnat_prefix=$dir
+       if test x$ac_cv_gnat_prefix = x; then
+          ac_cv_gnat_prefix=$dir
        else
 	   # echo "Dir=$dir"
 	   gnat_old_ifs=$IFS
@@ -404,7 +588,7 @@ AC_DEFUN(AM_GNAT_CHECK_INSTALL,
 			try="$path/$c"
 		  fi
 		  # echo "gnat_prefix=$gnat_prefix try=$try path=$path c=$c"
-		  case $gnat_prefix in
+		  case $ac_cv_gnat_prefix in
 		    $try*)
 			   ;;
 		    *)
@@ -414,70 +598,37 @@ AC_DEFUN(AM_GNAT_CHECK_INSTALL,
 		  path=$try
 	   done
 	   IFS=$gnat_old_ifs
-	   gnat_prefix=$path
+	   ac_cv_gnat_prefix=$path
        fi
     fi
   done
 
-  if test -f $gnat_prefix/lib/gnat/xmlada.gpr ; then
-    gnat_xml_prj_dir=$gnat_prefix/lib/gnat
+  if test -f $ac_cv_gnat_prefix/lib/gnat/xmlada.gpr ; then
+    ac_cv_gnat_xml_prj_dir=$ac_cv_gnat_prefix/lib/gnat
   elif test -f $gnat_xml_inc_dir/xmlada.gpr ; then
-    gnat_xml_prj_dir=$gnat_xml_inc_dir
-  elif test -f $gnat_prefix/share/gpr/xmlada.gpr ; then
-    gnat_xml_prj_dir=$gnat_prefix/share/gpr
+    ac_cv_gnat_xml_prj_dir=$ac_cv_gnat_xml_inc_dir
+  elif test -f $ac_cv_gnat_prefix/share/gpr/xmlada.gpr ; then
+    ac_cv_gnat_xml_prj_dir=$ac_cv_gnat_prefix/share/gpr
   else
-    gnat_xml_prj_dir=$gnat_xml_inc_dir
+    ac_cv_gnat_xml_prj_dir=$gnat_xml_inc_dir
   fi
-  if test x${gnat_xml_inc_dir} = x ; then
-    gnat_xml_inc_dir='include'
+  if test x${ac_cv_gnat_xml_inc_dir} = x ; then
+    ac_cv_gnat_xml_inc_dir='include'
   fi
-  if test x${gnat_xml_lib_dir} = x ; then
-    gnat_xml_lib_dir='lib'
+  if test x${ac_cv_gnat_xml_lib_dir} = x ; then
+    ac_cv_gnat_xml_lib_dir='lib'
   fi
-  if test x${gnat_xml_ali_dir} = x ; then
-    gnat_xml_ali_dir='lib'
+  if test x${ac_cv_gnat_xml_ali_dir} = x ; then
+    ac_cv_gnat_xml_ali_dir='lib'
   fi
-  if test x${gnat_xml_prj_dir} = x ; then
-    gnat_xml_prj_dir='lib/gnat'
+  if test x${ac_cv_gnat_xml_prj_dir} = x ; then
+    ac_cv_gnat_xml_prj_dir='lib/gnat'
   fi
-  ADA_INC_BASE=`echo $gnat_xml_inc_dir | sed -e s,^$gnat_prefix/,,`
-  ADA_LIB_BASE=`echo $gnat_xml_lib_dir | sed -e s,^$gnat_prefix/,,`
-  ADA_ALI_BASE=`echo $gnat_xml_ali_dir | sed -e s,^$gnat_prefix/,,`
-  ADA_PRJ_BASE=`echo $gnat_xml_prj_dir | sed -e s,^$gnat_prefix/,,`
-  AM_UTIL_INSTALL([${gnat_xml_inc_dir}],[${gnat_xml_ali_dir}],[${gnat_xml_lib_dir}],[${gnat_xml_prj_dir}])
-])
-
-dnl Guess the installation path
-AC_DEFUN(AM_UTIL_CHECK_INSTALL,
-[
-  AC_CHECK_PROGS(GPRINSTALL, gprinstall, "")
-  AM_GNAT_CHECK_PROJECT([util_config],[util_config])
-
-  # Search in the GNAT project path.
-  AC_MSG_CHECKING([for util_config.gpr installation])
-  # echo "D:${gnat_project_with_util_config}"
-  echo "${gnat_project_with_util_config} project t is for Source_Dirs use (); end t;" > t.gpr
-  # cat t.gpr
-  gnat_util_config_path=`$GNATMAKE -vP1 -Pt 2>&1 | awk '/Parsing.*util_config.gpr/ {print @S|@2}' | sed -e 's,",,g'`
-  AC_MSG_RESULT(${gnat_util_config_path})
-
-  gnat_inc_dir=
-  gnat_ali_dir=
-  gnat_prj_dir=
-  gnat_lib_dir=
-  if test x${gnat_util_config_path} != x; then
-    if test -f ${gnat_util_config_path}; then
-      gnat_inc_dir=`awk '/Includedir/ {print @S|@3}' ${gnat_util_config_path} | sed -e 's,",,g' -e 's,;,,'`
-      gnat_lib_dir=`awk '/Libdir/ {print @S|@3}' ${gnat_util_config_path} | sed -e 's,",,g' -e 's,;,,'`
-      gnat_ali_dir=`awk '/Alidir/ {print @S|@3}' ${gnat_util_config_path} | sed -e 's,",,g' -e 's,;,,'`
-      gnat_prj_dir=`dirname ${gnat_util_config_path}`
-    fi
-  fi
-  if test x${gnat_prj_dir} != x; then
-    AM_UTIL_INSTALL([${gnat_inc_dir}],[${gnat_ali_dir}],[${gnat_lib_dir}],[${gnat_prj_dir}])
-  else
-    AM_GNAT_CHECK_INSTALL
-  fi
+  ADA_INC_BASE=`echo $ac_cv_gnat_xml_inc_dir | sed -e s,^$ac_cv_gnat_prefix/,,`
+  ADA_LIB_BASE=`echo $ac_cv_gnat_xml_lib_dir | sed -e s,^$ac_cv_gnat_prefix/,,`
+  ADA_ALI_BASE=`echo $ac_cv_gnat_xml_ali_dir | sed -e s,^$ac_cv_gnat_prefix/,,`
+  ADA_PRJ_BASE=`echo $ac_cv_gnat_xml_prj_dir | sed -e s,^$ac_cv_gnat_prefix/,,`
+  AM_UTIL_INSTALL([${ac_cv_gnat_xml_inc_dir}],[${ac_cv_gnat_xml_ali_dir}],[${ac_cv_gnat_xml_lib_dir}],[${ac_cv_gnat_xml_prj_dir}])
 ])
 
 # AM_TRY_ADA and AM_HAS_INTRINSIC_SYNC_COUNTERS are imported from GNATcoll aclocal.m4
@@ -568,13 +719,47 @@ AC_DEFUN(AM_GNAT_LIBRARY_PROJECT,
   AM_DISTRIB_SUPPORT
   AM_COVERAGE_SUPPORT
 
-  AC_MSG_CHECKING([number of processors])
-  NR_CPUS=`getconf _NPROCESSORS_CONF 2>/dev/null || getconf NPROCESSORS_CONF 2>/dev/null || echo 1`
-  AC_MSG_RESULT($NR_CPUS)
+  AC_CACHE_CHECK([number of processors],[ac_cv_proc_count],[
+    ac_cv_proc_count=`getconf _NPROCESSORS_CONF 2>/dev/null || getconf NPROCESSORS_CONF 2>/dev/null || echo 1`
+  ])
+  NR_CPUS=$ac_cv_proc_count
   AC_SUBST(NR_CPUS)
-
-  AM_UTIL_CHECK_INSTALL
 
   AM_GNAT_LIBRARY_SETUP($1)
 ])
 
+dnl Check and retrieve the Ada Web Server version
+dnl HTTP Delete is supported after 2017
+AC_DEFUN(AM_GNAT_AWS_VERSION,
+[
+  AC_CACHE_CHECK([checking AWS version],[ac_cv_gnat_aws_version],[
+
+    cat > conftest.adb <<EOF
+with AWS;
+with Ada.Text_IO;
+procedure Conftest is
+begin
+  Ada.Text_IO.Put_Line (AWS.Version);
+end Conftest;
+EOF
+
+    cat > conftest.gpr <<EOF
+with "aws";
+project t is
+  for Main use ("conftest.adb");
+end t;
+EOF
+
+    if AC_TRY_COMMAND([gnatmake -Pconftest.gpr >/dev/null 2>conftest.out])
+    then
+       ac_cv_gnat_aws_version=`./conftest`
+    else
+       ac_cv_gnat_aws_version='none'
+    fi
+    rm -f conftest.gpr conftest.adb conftest.o conftest.ali
+    rm -f b__conftest.ads b__conftest.adb b__conftest.o b__conftest.ali
+  ])
+
+  AWS_VERSION=$ac_cv_gnat_aws_version
+  AC_SUBST(AWS_VERSION)
+])
