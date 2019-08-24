@@ -7,7 +7,7 @@ This chapter explains how to build and install the Ada Web Application framework
 Before building the framework, you will need:
 
 * The [GNAT Ada compiler](http://libre.adacore.com/tools/gnat-gpl-edition/),
-* Either the MySQL or SQLite development headers installed,
+* Either the MySQL, PostgreSQL or SQLite development headers installed,
 * [XML/Ada](http://libre.adacore.com/libre/tools/xmlada/),
 * [Ada Web Server](http://libre.adacore.com/libre/tools/aws/).
 
@@ -17,14 +17,15 @@ The build process may also need the following commands:
 
 * make (GNU make),
 * gprbuild,
+* gprinstall,
 * unzip,
 * sqlite3,
 * mysql,
+* psql,
 * xsltproc
 
 The Ada Web Application library also uses the following projects:
 
-* [AdaYaml](https://github.com/stcarrez/AdaYaml),
 * [Ada Utility Library](https://github.com/stcarrez/ada-util),
 * [Ada Expression Language Library](https://github.com/stcarrez/ada-el),
 * [Ada Security Library](https://github.com/stcarrez/ada-security),
@@ -32,9 +33,85 @@ The Ada Web Application library also uses the following projects:
 * [Ada Server Faces Library](https://github.com/stcarrez/ada-asf),
 * [Ada Wiki Library](https://github.com/stcarrez/ada-wiki),
 * [Ada Database Objects Library](https://github.com/stcarrez/ada-ado),
+* [Swagger Ada Library](https://github.com/stcarrez/swagger-ada),
 * [Dynamo](https://github.com/stcarrez/dynamo)
 
 They are integrated as Git submodules.
+
+## Development Host Installation
+
+The PostgreSQL, MySQL and SQLite development headers and runtime are necessary
+for building the Ada Database Objects driver.  The configure script will use
+them to enable the ADO drivers. The configure script will fail if it does not
+find any database driver.
+
+### Ubuntu
+
+First to get the LZMA and CURL support, it is necessary to install the following
+packages before configuring AWA:
+
+```
+sudo apt-get install liblzma-dev libcurl4-openssl-dev
+```
+
+MySQL Development installation
+```
+sudo apt-get install libmysqlclient-dev
+```
+
+MariaDB Development installation
+```
+sudo apt-get install mariadb-client libmariadb-client-lgpl-dev
+```
+
+SQLite Development installation
+```
+sudo apt-get install libsqlite3-dev
+```
+
+PostgreSQL Development installation
+```
+sudo apt-get install postgresql-client libpq-dev
+```
+
+### Windows
+
+For Windows, the installation is a little bit more complex and manual.
+You may either download the files from MySQL and SQLite download sites
+or you may use the files provided by Ada Database Objects in the `win32` directory.
+
+It is recommended to use msys2 available at https://www.msys2.org/
+and use the `pacman` command to install the required packages.
+
+```
+pacman -S git
+pacman -S make
+pacman -S unzip
+pacman -S base-devel --needed
+pacman -S mingw-w64-x86_64-sqlite3
+```
+
+If your GNAT 2019 compiler is installed in `C:/GNAT/2019`, you may
+install the MySQL and SQLite libraries by using msys cp with:
+
+```
+cp ada-ado/win32/*.dll C:/GNAT/2019/bin
+cp ada-ado/win32/*.dll C:/GNAT/2019/lib
+cp ada-ado/win32/*.lib C:/GNAT/2019/lib
+cp ada-ado/win32/*.a C:/GNAT/2019/lib
+```
+
+## Getting the sources
+
+The AWA framework uses git submodules to integrate several other
+projects.  To get all the sources, use the following commands:
+
+```
+   git clone git@github.com:stcarrez/ada-awa.git
+   cd ada-awa
+   git submodule init
+   git submodule update
+```
 
 ## Configuration
 
@@ -95,13 +172,15 @@ Depending on your application, you may also need to add the following GNAT proje
 are provided by one or several of the libraries that Ada Web Application relies on:
 
 ```
-with "util";
-with "el";
+with "utilada";
+with "elada";
 with "security";
-with "servlet";
-with "servlet_aws";
+with "servletada";
+with "servletada_aws";
 with "asf";
-with "ado";
+with "ado_mysql";
+with "ado_sqlite";
+with "ado_postgresql";
 ```
 
 The library comes with several optional modules that you decide to use according to your needs.
