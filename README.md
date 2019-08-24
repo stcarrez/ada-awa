@@ -22,7 +22,7 @@ that gives flexibility to applications to grant access and protect your user's r
 
 AWA integrates the following projects:
 
-* ASF           (https://github.com/stcarrez/ada-asf)
+* Ada Server Faces (https://github.com/stcarrez/ada-asf)
 * Ada Servlet   (https://github.com/stcarrez/ada-servlet)
 * Swagger Ada   (https://github.com/stcarrez/swagger-ada)
 * ADO           (https://github.com/stcarrez/ada-ado)
@@ -30,9 +30,10 @@ AWA integrates the following projects:
 * Ada Wiki      (https://github.com/stcarrez/ada-wiki)
 * Ada EL        (https://github.com/stcarrez/ada-el)
 * Ada Security  (https://github.com/stcarrez/ada-security)
+* Ada LZMA      (https://github.com/stcarrez/ada-lzma)
 * Dynamo        (https://github.com/stcarrez/dynamo)
 
-These projects are distributed under the Apache License 2.0.
+These projects are distributed under the Apache License 2.0 or MIT license for Ada LZMA.
 
 AWA relies on the following external projects:
 
@@ -41,7 +42,6 @@ AWA relies on the following external projects:
 
 These projects are provided as tarball in 'external' directory.
 They are distributed under different licenses (GNU GPL).
-They are not compiled unless you tell configure to do so.
 
 The AWA framework integrates a set unit tests and provides a framework
 to build unit tests for AWA applications.   The unit tests are based on
