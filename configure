@@ -581,7 +581,7 @@ PACKAGE_STRING=
 PACKAGE_BUGREPORT=
 PACKAGE_URL=
 
-ac_unique_file="Makefile.in"
+ac_unique_file="Makefile.conf.in"
 enable_option_checking=no
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
