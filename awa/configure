@@ -632,6 +632,7 @@ build_os
 build_vendor
 build_cpu
 build
+awa_has_msys
 AWA_LIBDIR
 AWA_MICRO_VERSION
 AWA_MINOR_VERSION
@@ -684,6 +685,7 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
+with_build_root
 enable_shared
 enable_distrib
 enable_coverage
@@ -1332,6 +1334,7 @@ Optional Features:
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-build-root=PATH  Path to find the Ada libraries
   --with-ada-util=x       Path for Ada Utility Library
   --with-ada-el=x         Path for Ada Expression Language Library
   --with-ada-security=x   Path for Ada Security Library
@@ -2149,6 +2152,74 @@ test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL}'
 test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
 
+
+# Check whether --with-build-root was given.
+if test "${with_build_root+set}" = set; then :
+  withval=$with_build_root;
+      awa_build_root=${withval}/
+
+else
+
+      awa_build_root=''
+
+fi
+
+
+  if test x${awa_build_root} != x; then
+
+  if test x${awa_host_pwd_check} != xyes; then
+    # Extract the first word of "msysinfo", so it can be a program name with args.
+set dummy msysinfo; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_awa_has_msys+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$awa_has_msys"; then
+  ac_cv_prog_awa_has_msys="$awa_has_msys" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_awa_has_msys="yes"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  test -z "$ac_cv_prog_awa_has_msys" && ac_cv_prog_awa_has_msys="no"
+fi
+fi
+awa_has_msys=$ac_cv_prog_awa_has_msys
+if test -n "$awa_has_msys"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $awa_has_msys" >&5
+$as_echo "$awa_has_msys" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+    if test x${awa_has_msys} = xyes; then
+      awa_pwd_option="-W"
+    else
+      awa_pwd_option=""
+    fi
+    awa_host_pwd_check=yes
+  fi
+
+    awa_build_pwd=`cd ${awa_build_root} && pwd $pwd_option`
+    if test x${awa_build_pwd} != x${awa_build_root}; then
+      awa_build_root=${awa_build_pwd}/
+    fi
+  fi
+
   # checking for local tools
 
 
@@ -2599,12 +2670,10 @@ if test "${with_ada_util+set}" = set; then :
 
 else
 
-      ac_cv_gnat_project_name_utilada_base=utilada_base
+      ac_cv_gnat_project_name_utilada_base=${awa_build_root}utilada_base
 
 fi
 
-#  AC_MSG_CHECKING([whether ${ac_cv_gnat_project_name_utilada_base} project exists in gnatmake's search path])
-#  AC_MSG_RESULT(trying ${ac_cv_gnat_project_name_utilada_base})
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking Ada Utility Library" >&5
 $as_echo_n "checking Ada Utility Library... " >&6; }
@@ -2627,7 +2696,7 @@ else
       ac_cv_gnat_project_utilada_base=no
 
       # Search in ../ada-util-*/utilada_base.gpr
-      dir=`realpath ..`
+      dir=`cd .. && pwd ${awa_pwd_option}`
       files=`ls -r $dir/ada-util/utilada_base.gpr $dir/utilada_base/utilada_base.gpr $dir/ada-util-*/utilada_base.gpr 2>/dev/null`
       for name in $files; do
         dir=`dirname $name`
@@ -2706,12 +2775,10 @@ if test "${with_ada_el+set}" = set; then :
 
 else
 
-      ac_cv_gnat_project_name_elada=elada
+      ac_cv_gnat_project_name_elada=${awa_build_root}elada
 
 fi
 
-#  AC_MSG_CHECKING([whether ${ac_cv_gnat_project_name_elada} project exists in gnatmake's search path])
-#  AC_MSG_RESULT(trying ${ac_cv_gnat_project_name_elada})
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking Ada Expression Language Library" >&5
 $as_echo_n "checking Ada Expression Language Library... " >&6; }
@@ -2734,7 +2801,7 @@ else
       ac_cv_gnat_project_elada=no
 
       # Search in ../ada-el-*/elada.gpr
-      dir=`realpath ..`
+      dir=`cd .. && pwd ${awa_pwd_option}`
       files=`ls -r $dir/ada-el/elada.gpr $dir/elada/elada.gpr $dir/ada-el-*/elada.gpr 2>/dev/null`
       for name in $files; do
         dir=`dirname $name`
@@ -2813,12 +2880,10 @@ if test "${with_ada_security+set}" = set; then :
 
 else
 
-      ac_cv_gnat_project_name_security=security
+      ac_cv_gnat_project_name_security=${awa_build_root}security
 
 fi
 
-#  AC_MSG_CHECKING([whether ${ac_cv_gnat_project_name_security} project exists in gnatmake's search path])
-#  AC_MSG_RESULT(trying ${ac_cv_gnat_project_name_security})
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking Ada Security Library" >&5
 $as_echo_n "checking Ada Security Library... " >&6; }
@@ -2841,7 +2906,7 @@ else
       ac_cv_gnat_project_security=no
 
       # Search in ../ada-security-*/security.gpr
-      dir=`realpath ..`
+      dir=`cd .. && pwd ${awa_pwd_option}`
       files=`ls -r $dir/ada-security/security.gpr $dir/security/security.gpr $dir/ada-security-*/security.gpr 2>/dev/null`
       for name in $files; do
         dir=`dirname $name`
@@ -2920,12 +2985,10 @@ if test "${with_ada_servlet+set}" = set; then :
 
 else
 
-      ac_cv_gnat_project_name_servletada=servletada
+      ac_cv_gnat_project_name_servletada=${awa_build_root}servletada
 
 fi
 
-#  AC_MSG_CHECKING([whether ${ac_cv_gnat_project_name_servletada} project exists in gnatmake's search path])
-#  AC_MSG_RESULT(trying ${ac_cv_gnat_project_name_servletada})
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking Ada Servlet Library" >&5
 $as_echo_n "checking Ada Servlet Library... " >&6; }
@@ -2948,7 +3011,7 @@ else
       ac_cv_gnat_project_servletada=no
 
       # Search in ../ada-servlet-*/servletada.gpr
-      dir=`realpath ..`
+      dir=`cd .. && pwd ${awa_pwd_option}`
       files=`ls -r $dir/ada-servlet/servletada.gpr $dir/servletada/servletada.gpr $dir/ada-servlet-*/servletada.gpr 2>/dev/null`
       for name in $files; do
         dir=`dirname $name`
@@ -3027,12 +3090,10 @@ if test "${with_ada_asf+set}" = set; then :
 
 else
 
-      ac_cv_gnat_project_name_asf=asf
+      ac_cv_gnat_project_name_asf=${awa_build_root}asf
 
 fi
 
-#  AC_MSG_CHECKING([whether ${ac_cv_gnat_project_name_asf} project exists in gnatmake's search path])
-#  AC_MSG_RESULT(trying ${ac_cv_gnat_project_name_asf})
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking Ada Server Faces" >&5
 $as_echo_n "checking Ada Server Faces... " >&6; }
@@ -3055,7 +3116,7 @@ else
       ac_cv_gnat_project_asf=no
 
       # Search in ../ada-asf-*/asf.gpr
-      dir=`realpath ..`
+      dir=`cd .. && pwd ${awa_pwd_option}`
       files=`ls -r $dir/ada-asf/asf.gpr $dir/asf/asf.gpr $dir/ada-asf-*/asf.gpr 2>/dev/null`
       for name in $files; do
         dir=`dirname $name`
@@ -3134,12 +3195,10 @@ if test "${with_ada_ado+set}" = set; then :
 
 else
 
-      ac_cv_gnat_project_name_ado=ado
+      ac_cv_gnat_project_name_ado=${awa_build_root}ado
 
 fi
 
-#  AC_MSG_CHECKING([whether ${ac_cv_gnat_project_name_ado} project exists in gnatmake's search path])
-#  AC_MSG_RESULT(trying ${ac_cv_gnat_project_name_ado})
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking Ada Database Objects" >&5
 $as_echo_n "checking Ada Database Objects... " >&6; }
@@ -3162,7 +3221,7 @@ else
       ac_cv_gnat_project_ado=no
 
       # Search in ../ada-ado-*/ado.gpr
-      dir=`realpath ..`
+      dir=`cd .. && pwd ${awa_pwd_option}`
       files=`ls -r $dir/ada-ado/ado.gpr $dir/ado/ado.gpr $dir/ada-ado-*/ado.gpr 2>/dev/null`
       for name in $files; do
         dir=`dirname $name`
@@ -3241,12 +3300,10 @@ if test "${with_ada_wiki+set}" = set; then :
 
 else
 
-      ac_cv_gnat_project_name_wikiada=wikiada
+      ac_cv_gnat_project_name_wikiada=${awa_build_root}wikiada
 
 fi
 
-#  AC_MSG_CHECKING([whether ${ac_cv_gnat_project_name_wikiada} project exists in gnatmake's search path])
-#  AC_MSG_RESULT(trying ${ac_cv_gnat_project_name_wikiada})
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking Ada Wiki Library" >&5
 $as_echo_n "checking Ada Wiki Library... " >&6; }
@@ -3269,7 +3326,7 @@ else
       ac_cv_gnat_project_wikiada=no
 
       # Search in ../ada-wiki-*/wikiada.gpr
-      dir=`realpath ..`
+      dir=`cd .. && pwd ${awa_pwd_option}`
       files=`ls -r $dir/ada-wiki/wikiada.gpr $dir/wikiada/wikiada.gpr $dir/ada-wiki-*/wikiada.gpr 2>/dev/null`
       for name in $files; do
         dir=`dirname $name`
@@ -3348,12 +3405,10 @@ if test "${with_swagger_ada+set}" = set; then :
 
 else
 
-      ac_cv_gnat_project_name_swagger=swagger
+      ac_cv_gnat_project_name_swagger=${awa_build_root}swagger
 
 fi
 
-#  AC_MSG_CHECKING([whether ${ac_cv_gnat_project_name_swagger} project exists in gnatmake's search path])
-#  AC_MSG_RESULT(trying ${ac_cv_gnat_project_name_swagger})
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking Swagger Ada Library" >&5
 $as_echo_n "checking Swagger Ada Library... " >&6; }
@@ -3376,7 +3431,7 @@ else
       ac_cv_gnat_project_swagger=no
 
       # Search in ../swagger-ada-*/swagger.gpr
-      dir=`realpath ..`
+      dir=`cd .. && pwd ${awa_pwd_option}`
       files=`ls -r $dir/swagger-ada/swagger.gpr $dir/swagger/swagger.gpr $dir/swagger-ada-*/swagger.gpr 2>/dev/null`
       for name in $files; do
         dir=`dirname $name`
