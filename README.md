@@ -1,9 +1,10 @@
 # Ada Web Application
 
-[![Build Status](https://img.shields.io/jenkins/s/http/jenkins.vacs.fr/AWA.svg)](http://jenkins.vacs.fr/job/AWA/)
-[![Test Status](https://img.shields.io/jenkins/t/http/jenkins.vacs.fr/AWA.svg)](http://jenkins.vacs.fr/job/AWA/)
+[![Build Status](https://img.shields.io/jenkins/s/http/jenkins.vacs.fr/AWA.svg)](https://jenkins.vacs.fr/job/AWA/)
+[![Test Status](https://img.shields.io/jenkins/t/http/jenkins.vacs.fr/AWA.svg)](https://jenkins.vacs.fr/job/AWA/)
+[![Documentation Status](https://readthedocs.org/projects/ada-awa/badge/?version=latest)](https://ada-awa.readthedocs.io/en/latest/?badge=latest)
 [![Download](https://img.shields.io/badge/download-1.1.0-brightgreen.svg)](http://download.vacs.fr/ada-awa/awa-all-1.1.0.tar.gz)
-[![License](http://img.shields.io/badge/license-APACHE2-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-APACHE2-blue.svg)](LICENSE)
 ![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-awa/1.1.0.svg)
 
 Ada Web Application is a framework to build a Web Application in Ada 2012.
@@ -35,8 +36,8 @@ These projects are distributed under the Apache License 2.0.
 
 AWA relies on the following external projects:
 
-* AWS      (http://libre.adacore.com/libre/tools/aws/)
-* XMLAda   (http://libre.adacore.com/libre/tools/xmlada/)
+* AWS      (https://libre.adacore.com/libre/tools/aws/)
+* XMLAda   (https://libre.adacore.com/libre/tools/xmlada/)
 
 These projects are provided as tarball in 'external' directory.
 They are distributed under different licenses (GNU GPL).
@@ -49,7 +50,7 @@ Ahven test framework (Ahven sources is integrated in Ada Util).
 You may get Ahven or Aunit at:
 
 * Ahven    (http://ahven.stronglytyped.org/)
-* AUnit    (http://libre.adacore.com/libre/tools/aunit/)
+* AUnit    (https://libre.adacore.com/libre/tools/aunit/)
 
 # Using git
 
@@ -90,7 +91,9 @@ The Ada Web Application programmer's guide describes how to setup the framework,
 how you can setup and design your first web application with it,
 and it provides detailed description of AWA components:
 
-  * [Ada Web Application programmer's guide](http://ada-awa.readthedocs.io/en/latest/)
+  * [Ada Web Application programmer's guide](https://ada-awa.readthedocs.io/en/latest/)
+  * [Ada Database Objects Programmer's Guide](https://ada-ado.readthedocs.io/en/latest/)
+  * [Ada Security Programmer's Guide](https://ada-security.readthedocs.io/en/latest/)
   * https://github.com/stcarrez/ada-awa/wiki/Documentation
 
 # Tutorial
@@ -98,10 +101,10 @@ and it provides detailed description of AWA components:
 You may read the following tutorials to lean more about the technical details about
 setting up and building an Ada Web Application:
 
-  * Step 1: [Ada Web Application: Setting up the project](http://blog.vacs.fr/vacs/blogs/post.html?post=2014/05/08/Ada-Web-Application-Setting-up-the-project)
-  * Step 2: [Ada Web Application: Building the UML model](http://blog.vacs.fr/vacs/blogs/post.html?post=2014/05/18/Ada-Web-Application--Building-the-UML-model)
-  * Step 3: [Review Web Application: Creating a review](http://blog.vacs.fr/vacs/blogs/post.html?post=2014/06/14/Review-Web-Application-Creating-a-review)
-  * Step 4: [Review Web Application: Listing the reviews](http://blog.vacs.fr/vacs/blogs/post.html?post=2014/07/19/Review-Web-Application-Listing-the-reviews)
+  * Step 1: [Ada Web Application: Setting up the project](https://blog.vacs.fr/vacs/blogs/post.html?post=2014/05/08/Ada-Web-Application-Setting-up-the-project)
+  * Step 2: [Ada Web Application: Building the UML model](https://blog.vacs.fr/vacs/blogs/post.html?post=2014/05/18/Ada-Web-Application--Building-the-UML-model)
+  * Step 3: [Review Web Application: Creating a review](https://blog.vacs.fr/vacs/blogs/post.html?post=2014/06/14/Review-Web-Application-Creating-a-review)
+  * Step 4: [Review Web Application: Listing the reviews](https://blog.vacs.fr/vacs/blogs/post.html?post=2014/07/19/Review-Web-Application-Listing-the-reviews)
 
 # Presentations
 
