@@ -55,12 +55,7 @@ if test "X$MYSQL" = "X" && test "X$SQLITE3" = "X" && "X$POSTGRESQL" = "X"; then
 fi
 
 dnl Check if we are running under Windows with msys to use pwd -W which produces Windows paths such as d:/tool instead of /d/tool
-AC_CHECK_PROG(awa_has_msys, msysinfo, yes, no)
-if test x${awa_has_msys} = xyes; then
-   pwd_option="-W"
-else
-   pwd_option=""
-fi
+AM_CHECK_HOST_PWD
 
 ENABLE_AHVEN=yes
 AC_ARG_ENABLE(ahven,
@@ -90,6 +85,7 @@ AM_GNAT_FIND_PROJECT([aws],[Ada Web Server],[aws],
 AC_SUBST(AWS_DIR)
 AC_SUBST(AWS_SRC_DIR)
 
+ac_configure_args=--with-build-root=`pwd`
 AC_CONFIG_SUBDIRS(ada-lzma ada-util ada-el ada-security ada-wiki ada-ado ada-servlet swagger-ada ada-asf dynamo awa)
 
 AM_GNAT_AWS_VERSION
