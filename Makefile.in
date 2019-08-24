@@ -118,7 +118,7 @@ SUBDIRS=ada-lzma ada-util ada-el ada-security ada-wiki ada-servlet swagger-ada a
 DIRS=ada-lzma ada-util ada-el ada-security ada-wiki ada-servlet swagger-ada ada-asf ada-ado dynamo
 
 # Build executables for all mains defined by the project.
-build test clean:		 stamp-configure
+build test clean:
 	for i in $(SUBDIRS); do \
 	   $(MAKE) -C "$$i" $@ ; \
 	done
