@@ -213,6 +213,18 @@ AC_DEFUN(AM_GNAT_FIND_ADA_SWAGGER,
   AC_SUBST(SWAGGER_DIR)
 ])
 
+dnl Check for AWA GNAT project
+AC_DEFUN(AM_GNAT_FIND_ADA_AWA,
+[
+  AM_GNAT_FIND_PROJECT([awa],[Ada Web Application],[awa],
+    [git@github.com:stcarrez/ada-awa.git],
+    [Building $1 requires the Ada Web Application Library.],
+    [
+      AWA_DIR=${ac_cv_gnat_project_dir_awa}
+    ])
+  AC_SUBST(AWA_DIR)
+])
+
 dnl Check for XML/Ada_base GNAT project
 dnl AM_GNAT_FIND_PROJECT([code-found],[not-found])
 AC_DEFUN(AM_GNAT_FIND_XML_ADA,
