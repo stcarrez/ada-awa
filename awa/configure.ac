@@ -51,9 +51,6 @@ AC_SUBST(AWA_MAJOR_VERSION)
 AC_SUBST(AWA_MINOR_VERSION)
 AC_SUBST(AWA_MICRO_VERSION)
 
-EXEC_PREFIX="$prefix"
-AC_SUBST(EXEC_PREFIX)
-
 AWA_LIBDIR="lib"
 AC_SUBST(AWA_LIBDIR)
 
@@ -62,112 +59,14 @@ AM_GNAT_LIBRARY_PROJECT(awa)
 AC_CHECK_PROG(HAVE_PANDOC,pandoc,yes)
 AC_CHECK_PROG(HAVE_DYNAMO,dynamo,yes)
 
-ADO_USE_GPRBUILD=no
-AC_ARG_WITH(gprbuild,
-AS_HELP_STRING([--with-gprbuild], [Use gprbuild instead of gnatmake for the compilation]),
-[
-  ADO_USE_GPRBUILD=${withval}
-])
-case "$ADO_USE_GPRBUILD" in
-  yes)
-    AC_CHECK_PROGS(GNATMAKE, gprbuild, "")
-    AC_CHECK_PROGS(GNATCLEAN, gprclean, "")
-	;;
-
-  *)
-	AC_CHECK_PROGS(GNATMAKE, gnatmake, "")
-	AC_CHECK_PROGS(GNATCLEAN, gnatclean, "")
-   ;;
-esac
-
-##########################################
-# Ada Util library
-##########################################
-AM_GNAT_FIND_PROJECT([ada-util],[Ada Utility Library],[utilada_base],
-  [git@github.com:stcarrez/ada-util.git],
-  [Building Ada Web Application requires the Ada Utility Library.],
-  [
-    UTIL_DIR=${gnat_project_dir_utilada_base}
-  ])
-AC_SUBST(UTIL_DIR)
-
-##########################################
-# Ada Expression Language library
-##########################################
-AM_GNAT_FIND_PROJECT([ada-el],[Ada Expression Language Library],[elada],
-  [git@github.com:stcarrez/ada-el.git],
-  [Building Ada Web Application requires the Ada EL Library.],
-  [
-    EL_DIR=${gnat_project_dir_elada}
-  ])
-AC_SUBST(EL_DIR)
-
-##########################################
-# Ada Wiki library
-##########################################
-AM_GNAT_FIND_PROJECT([ada-wiki],[Ada Wiki Library],[wikiada],
-  [git@github.com:stcarrez/ada-wiki.git],
-  [Building Ada Web Application requires the Ada Wiki Library.],
-  [
-    WIKI_DIR=${gnat_project_dir_wikiada}
-  ])
-AC_SUBST(WIKI_DIR)
-
-##########################################
-# Ada Security library
-##########################################
-AM_GNAT_FIND_PROJECT([ada-security],[Ada Security Library],[security],
-  [git@github.com:stcarrez/ada-security.git],
-  [Building Ada Web Application requires the Ada Security Library.],
-  [
-    SECURITY_DIR=${gnat_project_dir_security}
-  ])
-AC_SUBST(SECURITY_DIR)
-
-##########################################
-# Ada Servlet library
-##########################################
-AM_GNAT_FIND_PROJECT([ada-servlet],[Ada Servlet Library],[servletada],
-  [git@github.com:stcarrez/ada-servlet.git],
-  [Building Ada Web Application requires the Ada Servlet Library.],
-  [
-    SERVLET_DIR=${gnat_project_dir_servletada}
-  ])
-AC_SUBST(SERVLET_DIR)
-
-##########################################
-# Ada Server Faces library
-##########################################
-AM_GNAT_FIND_PROJECT([ada-asf],[Ada Server Faces Library],[asf],
-  [git@github.com:stcarrez/ada-asf.git],
-  [Building Ada Web Application requires the Ada Server Faces Library.],
-  [
-    ASF_DIR=${gnat_project_dir_asf}
-  ])
-AC_SUBST(ASF_DIR)
-
-
-##########################################
-# Ada Database Objects library
-##########################################
-AM_GNAT_FIND_PROJECT([ada-ado],[Ada Database Objects],[ado],
-  [git@github.com:stcarrez/ada-ado.git],
-  [Building Ada Web Application requires the Ada Database Objects Library.],
-  [
-    ADO_DIR=${gnat_project_dir_ado}
-  ])
-AC_SUBST(ADO_DIR)
-
-##########################################
-# Ada Swagger library
-##########################################
-AM_GNAT_FIND_PROJECT([swagger-ada],[Swagger Ada Library],[swagger],
-  [git@github.com:stcarrez/swagger-ada.git],
-  [Building AWA requires the Ada Swagger Library.],
-  [
-    SWAGGER_DIR=${gnat_project_dir_swagger}
-  ])
-AC_SUBST(SWAGGER_DIR)
+AM_GNAT_FIND_ADA_UTIL([Ada Web Application])
+AM_GNAT_FIND_ADA_EL([Ada Web Application])
+AM_GNAT_FIND_ADA_SECURITY([Ada Web Application])
+AM_GNAT_FIND_ADA_SERVLET([Ada Web Application])
+AM_GNAT_FIND_ADA_SERVER_FACES([Ada Web Application])
+AM_GNAT_FIND_ADA_ADO([Ada Web Application])
+AM_GNAT_FIND_ADA_WIKI([Ada Web Application])
+AM_GNAT_FIND_ADA_SWAGGER([Ada Web Application])
 
 AC_CHECK_PROGS(MYSQL, mysql)
 if test "X$MYSQL" != "X" ; then
@@ -202,23 +101,30 @@ AM_GNAT_CHECK_AWS(
     AWA_AWS_STATUS=no
   ], [
     AWA_AWS_STATUS=yes
-    WITH_SERVER="with \"${gnat_project_name}\";";
+    WITH_SERVER=$ac_cv_gnat_project_with_aws
   ])
 
 AC_SUBST(AWA_AWS_STATUS)
 AC_SUBST(WITH_SERVER)
+AM_GNAT_AWS_VERSION
 
 AC_MSG_CHECKING([using AWS secure mail client])
-ac_enable_aws_secure_mail=yes
-AC_ARG_ENABLE(aws-secure-mail,
-[  --enable-aws-secure-mail      Enable the support for secure SMTP client by AWS (enabled)],
-[case "${enableval}" in
-  no|none)  ac_enable_aws_secure_mail=no ;;
-  *)        ac_enable_aws_secure_mail=yes ;;
-esac])dnl
+AWA_AWS_SECURE_MAIL=no
+case $AWS_VERSION in
+  *2015*|*2016*|*2017*|*2018*|*2019*|*202*)
+     AWA_AWS_SECURE_MAIL=yes
+     ;;
 
-AC_MSG_RESULT(${ac_enable_aws_secure_mail})
-AWA_AWS_SECURE_MAIL=$ac_enable_aws_secure_mail
+  3.2.0|3.3.2)
+     AWA_AWS_SECURE_MAIL=yes
+     ;;
+
+  *)
+     AWA_AWS_SECURE_MAIL=no
+     ;;
+esac
+
+AC_MSG_RESULT(${AWA_AWS_SECURE_MAIL})
 AC_SUBST(AWA_AWS_SECURE_MAIL)
 
 AC_OUTPUT(
