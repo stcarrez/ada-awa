@@ -81,7 +81,8 @@ clean::
 doc::
 	$(DYNAMO) build-doc -markdown wiki
 
-dist:
+dist::
+	rm -f $(DIST_FILE)
 	git archive -o $(DIST_FILE) --prefix=$(DIST_DIR)/ HEAD
 
 install-info:
