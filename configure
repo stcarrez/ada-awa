@@ -582,40 +582,40 @@ PACKAGE_BUGREPORT=
 PACKAGE_URL=
 
 ac_unique_file="Makefile.in"
+enable_option_checking=no
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
-AWA_BUILD_ROOT
+AWS_VERSION
+subdirs
 AWS_SRC_DIR
 AWS_DIR
-XMLADA_SRC_DIR
-XMLADA_DIR
-NR_CPUS
-ENABLE_AWS
-ENABLE_XMLADA
-ENABLE_AUNIT
-ENABLE_AHVEN
+HAVE_XML_ADA
+VERSION_XML_ADA
+WITH_XML_ADA
 awa_has_msys
 POSTGRESQL
 SQLITE3
 MYSQL
 UNZIP_CHECK
-EXEC_PREFIX
 AWA_MICRO_VERSION
 AWA_MINOR_VERSION
 AWA_MAJOR_VERSION
 AWA_VERSION
+BUILDS_COVERAGE
+BUILDS_QUIET
+MODE
+BUILDS_DISTRIB
+BUILDS_SHARED
+LN_S
 INSTALL_DATA
 INSTALL_SCRIPT
 INSTALL_PROGRAM
 SET_MAKE
+GPRINSTALL
 GNATCLEAN
 GPRCLEAN
 GNATMAKE
 GPRBUILD
-BUILDS_COVERAGE
-MODE
-BUILDS_DISTRIB
-BUILDS_SHARED
 target_os
 target_vendor
 target_cpu
@@ -673,18 +673,14 @@ enable_option_checking
 enable_shared
 enable_distrib
 enable_coverage
-with_build_root
 enable_ahven
-enable_aunit
-enable_xmlada
-enable_aws
 with_xmlada
 with_aws
 '
       ac_precious_vars='build_alias
 host_alias
 target_alias'
-
+ac_subdirs_all='ada-lzma ada-util ada-el ada-security ada-wiki ada-ado ada-servlet swagger-ada ada-asf dynamo awa'
 
 # Initialize some variables set by options.
 ac_init_help=
@@ -1311,15 +1307,11 @@ Optional Features:
   --enable-distrib        build for distribution, optimized and strip symbols (enabled)
   --enable-coverage       build with coverage support -fprofile-arcs -ftest-coverage (disabled)
   --enable-ahven          Enable internal Ahven support for Ada util unit tests (enabled)
-  --enable-aunit          build AUnit provided by AWA
-  --enable-xmlada         build XML/Ada provided by AWA
-  --enable-aws            build AWS provided by AWA
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --with-build-root=PATH  Path to find the AWA libraries
-  --with-xmlada=x         Path for XML/Ada
+  --with-xmlada=          Path for XML/Ada
   --with-aws=x            Path for Ada Web Server
 
 Report bugs to the package provider.
@@ -1751,6 +1743,14 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
+cache_file=config.cache
+
+# Current release settings
+AWA_MAJOR_VERSION=1
+AWA_MINOR_VERSION=1
+AWA_MICRO_VERSION=0
+AWA_VERSION=$AWA_MAJOR_VERSION.$AWA_MINOR_VERSION.$AWA_MICRO_VERSION
+
 ac_aux_dir=
 for ac_dir in "$srcdir" "$srcdir/.." "$srcdir/../.."; do
   if test -f "$ac_dir/install-sh"; then
@@ -1890,76 +1890,6 @@ test -n "$target_alias" &&
   test "$program_prefix$program_suffix$program_transform_name" = \
     NONENONEs,x,x, &&
   program_prefix=${target_alias}-
-
-
-# Current release settings
-AWA_MAJOR_VERSION=1
-AWA_MINOR_VERSION=1
-AWA_MICRO_VERSION=0
-AWA_VERSION=$AWA_MAJOR_VERSION.$AWA_MINOR_VERSION.$AWA_MICRO_VERSION
-
-##########################################
-# Check to enable/disable shared library
-##########################################
-
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking shared library support" >&5
-$as_echo_n "checking shared library support... " >&6; }
-  ac_enable_shared=no
-  # Check whether --enable-shared was given.
-if test "${enable_shared+set}" = set; then :
-  enableval=$enable_shared; case "${enableval}" in
-      no|none)  ac_enable_shared=no ;;
-      *)        ac_enable_shared=yes ;;
-    esac
-fi
-
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ac_enable_shared}" >&5
-$as_echo "${ac_enable_shared}" >&6; }
-  BUILDS_SHARED=$ac_enable_shared
-
-
-
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking distribution build" >&5
-$as_echo_n "checking distribution build... " >&6; }
-  ac_enable_distrib=yes
-  ac_build_mode=distrib
-  # Check whether --enable-distrib was given.
-if test "${enable_distrib+set}" = set; then :
-  enableval=$enable_distrib; case "${enableval}" in
-      no|none)  ac_enable_distrib=no
-                ac_build_mode=debug
-                ;;
-      *)        ac_enable_distrib=yes
-                ac_build_mode=distrib
-                ;;
-    esac
-fi
-
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ac_enable_distrib}" >&5
-$as_echo "${ac_enable_distrib}" >&6; }
-  BUILDS_DISTRIB=$ac_enable_distrib
-
-
-  MODE=$ac_build_mode
-
-
-
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking coverage support" >&5
-$as_echo_n "checking coverage support... " >&6; }
-  ac_enable_coverage=no
-  # Check whether --enable-coverage was given.
-if test "${enable_coverage+set}" = set; then :
-  enableval=$enable_coverage; case "${enableval}" in
-      no|none)  ac_enable_coverage=no ;;
-      *)        ac_enable_coverage=yes ;;
-    esac
-fi
-
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ac_enable_coverage}" >&5
-$as_echo "${ac_enable_coverage}" >&6; }
-  BUILDS_COVERAGE=$ac_enable_coverage
-
-
 
 
   for ac_prog in gprbuild
@@ -2144,6 +2074,50 @@ test -n "$GNATCLEAN" || GNATCLEAN=""""
 
   fi
 
+  for ac_prog in gprinstall
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_GPRINSTALL+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$GPRINSTALL"; then
+  ac_cv_prog_GPRINSTALL="$GPRINSTALL" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_GPRINSTALL="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+GPRINSTALL=$ac_cv_prog_GPRINSTALL
+if test -n "$GPRINSTALL"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GPRINSTALL" >&5
+$as_echo "$GPRINSTALL" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$GPRINSTALL" && break
+done
+test -n "$GPRINSTALL" || GPRINSTALL=""""
+
+
 
 # checking for local tools
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ${MAKE-make} sets \$(MAKE)" >&5
@@ -2270,14 +2244,86 @@ test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL}'
 
 test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ln -s works" >&5
+$as_echo_n "checking whether ln -s works... " >&6; }
+LN_S=$as_ln_s
+if test "$LN_S" = "ln -s"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no, using $LN_S" >&5
+$as_echo "no, using $LN_S" >&6; }
+fi
 
-# Set the version number of GtkAda
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking shared library support" >&5
+$as_echo_n "checking shared library support... " >&6; }
+  ac_enable_shared=no
+  # Check whether --enable-shared was given.
+if test "${enable_shared+set}" = set; then :
+  enableval=$enable_shared; case "${enableval}" in
+      no|none)  ac_enable_shared=no ;;
+      *)        ac_enable_shared=yes ;;
+    esac
+fi
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ac_enable_shared}" >&5
+$as_echo "${ac_enable_shared}" >&6; }
+  BUILDS_SHARED=$ac_enable_shared
+
+
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking distribution build" >&5
+$as_echo_n "checking distribution build... " >&6; }
+  ac_enable_distrib=yes
+  ac_quiet_mode=-q
+  ac_build_mode=distrib
+  # Check whether --enable-distrib was given.
+if test "${enable_distrib+set}" = set; then :
+  enableval=$enable_distrib; case "${enableval}" in
+      no|none)  ac_enable_distrib=no
+                ac_build_mode=debug
+                ac_quiet_mode=
+                ;;
+      *)        ac_enable_distrib=yes
+                ac_build_mode=distrib
+                ac_quiet_mode=-q
+                ;;
+    esac
+fi
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ac_enable_distrib}" >&5
+$as_echo "${ac_enable_distrib}" >&6; }
+  BUILDS_DISTRIB=$ac_enable_distrib
+
+
+  MODE=$ac_build_mode
+
+
+  BUILDS_QUIET=$ac_quiet_mode
+
+
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking coverage support" >&5
+$as_echo_n "checking coverage support... " >&6; }
+  ac_enable_coverage=no
+  # Check whether --enable-coverage was given.
+if test "${enable_coverage+set}" = set; then :
+  enableval=$enable_coverage; case "${enableval}" in
+      no|none)  ac_enable_coverage=no ;;
+      *)        ac_enable_coverage=yes ;;
+    esac
+fi
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ac_enable_coverage}" >&5
+$as_echo "${ac_enable_coverage}" >&6; }
+  BUILDS_COVERAGE=$ac_enable_coverage
 
 
 
 
 
-EXEC_PREFIX="$prefix"
+
 
 
 # Extract the first word of "unzip", so it can be a program name with args.
@@ -2495,27 +2541,6 @@ else
    pwd_option=""
 fi
 
-awa_build_root=
-awa_xmlada_name=
-awa_aws_name=
-
-# Check whether --with-build-root was given.
-if test "${with_build_root+set}" = set; then :
-  withval=$with_build_root;
-    awa_build_root=${withval}/
-
-else
-
-    awa_build_root=`pwd $pwd_option`/
-
-fi
-
-
-awa_build_pwd=`cd ${awa_build_root} && pwd $pwd_option`
-if test x${awa_build_pwd} != x${awa_build_root}; then
-  awa_build_root=${awa_build_pwd}/
-fi
-
 ENABLE_AHVEN=yes
 # Check whether --enable-ahven was given.
 if test "${enable_ahven+set}" = set; then :
@@ -2526,318 +2551,241 @@ if test "${enable_ahven+set}" = set; then :
 esac
 fi
 
-# Check whether --enable-aunit was given.
-if test "${enable_aunit+set}" = set; then :
-  enableval=$enable_aunit; ENABLE_AUNIT=$enableval
-else
-  ENABLE_AUNIT=no
-fi
 
-
-# Check whether --enable-xmlada was given.
-if test "${enable_xmlada+set}" = set; then :
-  enableval=$enable_xmlada; ENABLE_XMLADA=$enableval
-else
-  ENABLE_XMLADA=no
-fi
-
-
-# Check whether --enable-aws was given.
-if test "${enable_aws+set}" = set; then :
-  enableval=$enable_aws; ENABLE_AWS=$enableval
-else
-  ENABLE_AWS=no
-fi
-
-
-
-
-
-
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking number of processors" >&5
-$as_echo_n "checking number of processors... " >&6; }
-NR_CPUS=`getconf _NPROCESSORS_CONF 2>/dev/null || getconf NPROCESSORS_CONF 2>/dev/null || echo 1`
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $NR_CPUS" >&5
-$as_echo "$NR_CPUS" >&6; }
-
-
-if test $ENABLE_AUNIT = "yes" ; then
-  PACKAGES="$PACKAGES aunit-gpl-2014-src"
-fi
-
-if test $ENABLE_XMLADA = "yes" ; then
-  PACKAGES="$PACKAGES xmlada-gpl-4.1-src"
-fi
-
-if test $ENABLE_AWS = "yes" ; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for GNAT compiler version" >&5
-$as_echo_n "checking for GNAT compiler version... " >&6; }
-  version=`$GNATMAKE --version | grep GNATMAKE | sed -e 's,GNATMAKE ,,'`
-  case "$version" in
-   4.7* | 4.8* | 4.9*)
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: $version" >&5
-$as_echo "$version" >&6; }
-      PACKAGES="$PACKAGES aws-gpl-2015-src"
-      ;;
-
-   *)
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: $version" >&5
-$as_echo "$version" >&6; }
-      PACKAGES="$PACKAGES aws-gpl-2016-src"
-      ;;
-
-  esac
-fi
-
-for NAME in $PACKAGES ; do
-   TGZ=$NAME.tar.gz
-   EXTRACT_DIR=${awa_build_root}
-   DIR=$NAME
-   case $NAME in
-      xmlada-gpl-4.1-src)
-        DIR=xmlada-4.1-src
-        TARGET=xmlada
-		TGZ=$NAME.tgz
-		EXTRACT_DIR=
-		XMLADA_SRC_DIR=$DIR
-        ;;
-
-      aunit-*)
-        TARGET=aunit
-		TGZ=$NAME.tgz
-        ;;
-
-      aws-*)
-        TARGET=$DIR
-		TGZ=external/aws/$NAME.tar.gz
-		AWS_SRC_DIR=$DIR
-        ;;
-
-      *)
-        TARGET=$NAME
-        ;;
-   esac
-   if test -f distrib/$TGZ ; then
-      TGZ="distrib/$TGZ"
-   else
-      if test -f external/$TARGET/$TGZ ; then
-         TGZ="external/$TARGET/$TGZ"
-      fi
-   fi
-      if test -d ${EXTRACT_DIR}${TARGET} ; then
-      echo "Package ${TARGET} already extracted."
-   else
-      echo "Extracting $TGZ"
-      tar xzf $TGZ
-   fi
-done
-
-DIR=`pwd`
-
-##########################################
-# Check for XML Ada
-##########################################
-
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking XML/Ada" >&5
-$as_echo_n "checking XML/Ada... " >&6; }
+  gnat_xml_ada=xmlada-config
 
 # Check whether --with-xmlada was given.
 if test "${with_xmlada+set}" = set; then :
   withval=$with_xmlada;
-      gnat_project_name_xmlada=${withval}/
-      if test -d "${withval}"; then
-	    gnat_project_name_xmlada=${withval}/xmlada
-	  fi
+    if test T${withval} = Tno ; then
+      HAVE_XML_ADA=no;
+    else
+      gnat_xml_ada=${withval}/xmlada-config;
+      WITH_XML_ADA="with \"${withval}\";";
+      HAVE_XML_ADA='yes';
+    fi
 
 else
 
-      gnat_project_name_xmlada=xmlada
+    WITH_XML_ADA='';
+    HAVE_XML_ADA='yes';
 
 fi
 
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: trying ${gnat_project_name_xmlada}" >&5
-$as_echo "trying ${gnat_project_name_xmlada}" >&6; }
 
-  rm -f conftest.gpr
-  # Search in the GNAT project path.
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ${gnat_project_name_xmlada} project exists in gnatmake's search path" >&5
-$as_echo_n "checking whether ${gnat_project_name_xmlada} project exists in gnatmake's search path... " >&6; }
-  echo "with \"${gnat_project_name_xmlada}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-  if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
+  if test T$HAVE_XML_ADA = Tyes ; then
+
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether xmlada_sax project exists" >&5
+$as_echo_n "checking whether xmlada_sax project exists... " >&6; }
+if ${ac_cv_gnat_project_xmlada_sax+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+    echo "with \"xmlada_sax\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+    if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; }
-  then
-    gnat_project_xmlada=yes
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-  else
-    gnat_project_xmlada=no
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-    # Search in ../xmlada-*/xmlada.gpr
-    files=`ls -r ../xmlada/xmlada.gpr ../xmlada/xmlada.gpr ../xmlada-*/xmlada.gpr 2>/dev/null`
-    for name in $files; do
-      dir=`dirname $name`
-      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for XML/Ada project in ${dir}" >&5
-$as_echo_n "checking for XML/Ada project in ${dir}... " >&6; }
-      echo "with \"${name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-      if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
-  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; }
-      then
-         gnat_project_xmlada=yes
-		 gnat_project_name_xmlada=${name}
-         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-         break
-      else
-         gnat_project_xmlada=no
-         { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-      fi
-    done
-  fi
-  rm -f conftest.gpr
-  if test x${gnat_project_xmlada} = xyes; then
-    gnat_project_with_xmlada="with \"${gnat_project_name_xmlada}\";";
-    gnat_project_dir_xmlada=`dirname ${gnat_project_name_xmlada}`
-    if test ${gnat_project_dir_xmlada} = . ; then
-       gnat_project_dir_xmlada=
+    then
+      ac_cv_gnat_project_xmlada_sax=yes
+      ac_cv_gnat_project_with_xmlada_sax="with \"xmlada_sax\";";
     else
-       gnat_project_dir_xmlada="${gnat_project_dir_xmlada}/"
+      ac_cv_gnat_project_xmlada_sax=no
+    fi
+    rm -f conftest.gpr
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_gnat_project_xmlada_sax" >&5
+$as_echo "$ac_cv_gnat_project_xmlada_sax" >&6; }
+
+    if test T$ac_cv_gnat_project_xmlada_sax = Tno; then
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether xmlada project exists" >&5
+$as_echo_n "checking whether xmlada project exists... " >&6; }
+if ${ac_cv_gnat_project_xmlada+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+    echo "with \"xmlada\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+    if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+    then
+      ac_cv_gnat_project_xmlada=yes
+      ac_cv_gnat_project_with_xmlada="with \"xmlada\";";
+    else
+      ac_cv_gnat_project_xmlada=no
+    fi
+    rm -f conftest.gpr
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_gnat_project_xmlada" >&5
+$as_echo "$ac_cv_gnat_project_xmlada" >&6; }
+
     fi
 
-    XMLADA_DIR=${gnat_project_dir_xmlada}
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking XML/Ada version" >&5
+$as_echo_n "checking XML/Ada version... " >&6; }
+if ${ac_cv_gnat_xmlada_version+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
 
+      if test T$HAVE_XML_ADA = Tyes ; then
+        gnat_xmlada_version=`$gnat_xml_ada --version 2>/dev/null | sed -e 's, ,-,g'`
+      else
+        gnat_xmlada_version=none
+      fi
+
+      case $gnat_xmlada_version in
+      XmlAda-3.2*)
+        ac_cv_gnat_xmlada_version='3'
+        ;;
+
+      XmlAda-4.*|XmlAda-2013|XmlAda-2014)
+        ac_cv_gnat_xmlada_version='4'
+        ;;
+
+      *)
+        ac_cv_gnat_xmlada_version='none'
+        ;;
+
+      esac
+
+      if test T$ac_cv_gnat_project_xmlada_sax = Tno; then
+        if test T$ac_cv_gnat_project_xmlada != Tyes; then
+          ac_cv_gnat_xmlada_version='none'
+        fi
+      else
+        ac_cv_gnat_xmlada_version='4'
+      fi
+
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_gnat_xmlada_version" >&5
+$as_echo "$ac_cv_gnat_xmlada_version" >&6; }
   else
-    gnat_project_dir_xmlada=
-    gnat_project_name_xmlada=
-    if test x"" != x; then
-      as_fn_error $? "
-  You should build and install the XML/Ada component.
-  It must be available and found by ${GNATMAKE}.
-  This project was not found in the ADA_PROJECT_PATH environment variable.
-  This project was not found in ../xmlada nor in ../xmlada-*.
-  The component is available at http://libre.adacore.com/libre/tools/xmlada/.
-  Please, download and configure XML/Ada.
-  The current configuration was using:
-    ${GNATMAKE}
-    ADA_PROJECT_PATH=$ADA_PROJECT_PATH
-" "$LINENO" 5
-    fi
+    ac_cv_gnat_project_xmlada_sax='no'
+  fi
+
+  if test T$ac_cv_gnat_project_xmlada = Tyes; then
+    WITH_XML_ADA="with \"xmlada\";";
+  fi
+  if test T$ac_cv_gnat_project_xmlada_sax = Tyes; then
+    WITH_XML_ADA="with \"xmlada_sax\";";
+  fi
+
+  VERSION_XML_ADA=$ac_cv_gnat_xmlada_version
+
+  if test T$HAVE_XML_ADA = Tno; then
+    WITH_XML_ADA='';
+    VERSION_XML_ADA='none';
+    HAVE_XML_ADA='no';
   fi
 
 
 
 
-if test x${gnat_project_xmlada} = xno; then
-   if test $ENABLE_XMLADA != "yes" ; then
-      as_fn_error $? "XML/Ada was not found and --enable-xmlada not specified" "$LINENO" 5
-   fi
-   if test ! -d ${XMLADA_SRC_DIR}; then
-      as_fn_error $? "XML/Ada extraction was not found in ${XMLADA_SRC_DIR}" "$LINENO" 5
-   fi
 
-   echo "Configuring ==== XML/Ada ===="
-   (cd ${XMLADA_SRC_DIR};
-    ./configure --prefix=${ac_top_build_prefix}
-   )
-fi
+
+DIR=`pwd`
 
 ##########################################
 # Check for Ada Web Server
 ##########################################
 
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking Ada Web Server" >&5
-$as_echo_n "checking Ada Web Server... " >&6; }
 
 # Check whether --with-aws was given.
 if test "${with_aws+set}" = set; then :
   withval=$with_aws;
-      gnat_project_name_aws=${withval}/
+      ac_cv_gnat_project_name_aws=${withval}/
       if test -d "${withval}"; then
-	    gnat_project_name_aws=${withval}/aws
+	    ac_cv_gnat_project_name_aws=${withval}/aws
 	  fi
 
 else
 
-      gnat_project_name_aws=aws
+      ac_cv_gnat_project_name_aws=aws
 
 fi
 
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: trying ${gnat_project_name_aws}" >&5
-$as_echo "trying ${gnat_project_name_aws}" >&6; }
+#  AC_MSG_CHECKING([whether ${ac_cv_gnat_project_name_aws} project exists in gnatmake's search path])
+#  AC_MSG_RESULT(trying ${ac_cv_gnat_project_name_aws})
 
-  rm -f conftest.gpr
-  # Search in the GNAT project path.
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ${gnat_project_name_aws} project exists in gnatmake's search path" >&5
-$as_echo_n "checking whether ${gnat_project_name_aws} project exists in gnatmake's search path... " >&6; }
-  echo "with \"${gnat_project_name_aws}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-  if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking Ada Web Server" >&5
+$as_echo_n "checking Ada Web Server... " >&6; }
+if ${ac_cv_gnat_project_aws+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+    rm -f conftest.gpr
+    # Search in the GNAT project path.
+    echo "with \"${ac_cv_gnat_project_name_aws}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+    if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; }
-  then
-    gnat_project_aws=yes
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-  else
-    gnat_project_aws=no
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-    # Search in ../aws-*/aws.gpr
-    files=`ls -r ../aws/aws.gpr ../aws/aws.gpr ../aws-*/aws.gpr 2>/dev/null`
-    for name in $files; do
-      dir=`dirname $name`
-      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for Ada Web Server project in ${dir}" >&5
-$as_echo_n "checking for Ada Web Server project in ${dir}... " >&6; }
-      echo "with \"${name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-      if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
-  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; }
-      then
-         gnat_project_aws=yes
-		 gnat_project_name_aws=${name}
-         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-         break
-      else
-         gnat_project_aws=no
-         { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-      fi
-    done
-  fi
-  rm -f conftest.gpr
-  if test x${gnat_project_aws} = xyes; then
-    gnat_project_with_aws="with \"${gnat_project_name_aws}\";";
-    gnat_project_dir_aws=`dirname ${gnat_project_name_aws}`
-    if test ${gnat_project_dir_aws} = . ; then
-       gnat_project_dir_aws=
+    then
+      ac_cv_gnat_project_aws=yes
     else
-       gnat_project_dir_aws="${gnat_project_dir_aws}/"
+      ac_cv_gnat_project_aws=no
+
+      # Search in ../aws-*/aws.gpr
+      dir=`realpath ..`
+      files=`ls -r $dir/aws/aws.gpr $dir/aws/aws.gpr $dir/aws-*/aws.gpr 2>/dev/null`
+      for name in $files; do
+        dir=`dirname $name`
+        # AC_MSG_CHECKING([for Ada Web Server project in ${dir}])
+        echo "with \"${name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+        if { ac_try='gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+        then
+           ac_cv_gnat_project_aws=yes
+		   ac_cv_gnat_project_name_aws=${name}
+           # AC_MSG_RESULT(yes, using ${name})
+           break
+        else
+           ac_cv_gnat_project_aws=no
+           # AC_MSG_RESULT(no)
+        fi
+      done
     fi
+    rm -f conftest.gpr
+
+    if test x${ac_cv_gnat_project_aws} = xyes; then
+      ac_cv_gnat_project_with_aws="with \"${ac_cv_gnat_project_name_aws}\";";
+      ac_cv_gnat_project_dir_aws=`dirname ${ac_cv_gnat_project_name_aws}`
+      if test ${ac_cv_gnat_project_dir_aws} = . ; then
+        ac_cv_gnat_project_dir_aws=
+      else
+        ac_cv_gnat_project_dir_aws="${ac_cv_gnat_project_dir_aws}/"
+      fi
+    else
+      ac_cv_gnat_project_dir_aws=
+      ac_cv_gnat_project_name_aws=
+    fi
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_gnat_project_aws" >&5
+$as_echo "$ac_cv_gnat_project_aws" >&6; }
+
+  if test x${ac_cv_gnat_project_aws} = xyes; then
 
     AWS_DIR=${gnat_project_dir_aws}
 
   else
-    gnat_project_dir_aws=
-    gnat_project_name_aws=
     if test x"" != x; then
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
       as_fn_error $? "
   You should build and install the Ada Web Server component.
   It must be available and found by ${GNATMAKE}.
@@ -2855,35 +2803,58 @@ $as_echo "no" >&6; }
 
 
 
-if test x${gnat_project_aws} = xno; then
-   if test $ENABLE_AWS != "yes" ; then
-      as_fn_error $? "Ada Web Server not found and --enable-aws not specified" "$LINENO" 5
-   fi
 
-   NEED_AWS_PATCH=1
-   echo "Configuring ==== aws ===="
-   (cd $DIR/$AWS_SRC_DIR;
-         cp makefile.conf makefile.conf.orig
-         sed -e 's,^SOCKET.*=.*,SOCKET=openssl,' \
-             -e 's,^IPv6.*=.*,IPv6=true,' < makefile.conf.orig > makefile.conf
-         if test $NEED_AWS_PATCH -eq 1 ; then
-            # Fix builder switches (others) does not seem to be recognized by gprbuild
-            cp tools/tools.gpr tools/tools.gpr.orig
-            sed -e 's,(others),("Ada"),g' < tools/tools.gpr.orig > tools/tools.gpr
 
-            # Remove -B option which is not supported by gcc 4.4
-            cp shared.gpr shared.gpr.orig
-            sed -e 's,gnaty3abBcefhiIklmnoprstx,gnaty3abcefhiIklmnoprstx,' < shared.gpr.orig > shared.gpr
-         fi
-         make prefix="$prefix" setup
-      )
-   AWS_DIR=
+subdirs="$subdirs ada-lzma ada-util ada-el ada-security ada-wiki ada-ado ada-servlet swagger-ada ada-asf dynamo awa"
+
+
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking checking AWS version" >&5
+$as_echo_n "checking checking AWS version... " >&6; }
+if ${ac_cv_gnat_aws_version+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+
+    cat > conftest.adb <<EOF
+with AWS;
+with Ada.Text_IO;
+procedure Conftest is
+begin
+  Ada.Text_IO.Put_Line (AWS.Version);
+end Conftest;
+EOF
+
+    cat > conftest.gpr <<EOF
+with "aws";
+project t is
+  for Main use ("conftest.adb");
+end t;
+EOF
+
+    if { ac_try='gnatmake -Pconftest.gpr >/dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+    then
+       ac_cv_gnat_aws_version=`./conftest`
+    else
+       ac_cv_gnat_aws_version='none'
+    fi
+    rm -f conftest.gpr conftest.adb conftest.o conftest.ali
+    rm -f b__conftest.ads b__conftest.adb b__conftest.o b__conftest.ali
+
 fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_gnat_aws_version" >&5
+$as_echo "$ac_cv_gnat_aws_version" >&6; }
 
-AWA_BUILD_ROOT=${awa_build_root}
+  AWS_VERSION=$ac_cv_gnat_aws_version
 
 
-ac_config_files="$ac_config_files Makefile"
+
+ac_config_files="$ac_config_files Makefile.conf"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -3591,7 +3562,7 @@ cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
-    "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
+    "Makefile.conf") CONFIG_FILES="$CONFIG_FILES Makefile.conf" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
@@ -4040,6 +4011,151 @@ if test "$no_create" != yes; then
   # Use ||, not &&, to avoid exiting from the if with $? = 1, which
   # would make configure fail if this is the last instruction.
   $ac_cs_success || as_fn_exit 1
+fi
+
+#
+# CONFIG_SUBDIRS section.
+#
+if test "$no_recursion" != yes; then
+
+  # Remove --cache-file, --srcdir, and --disable-option-checking arguments
+  # so they do not pile up.
+  ac_sub_configure_args=
+  ac_prev=
+  eval "set x $ac_configure_args"
+  shift
+  for ac_arg
+  do
+    if test -n "$ac_prev"; then
+      ac_prev=
+      continue
+    fi
+    case $ac_arg in
+    -cache-file | --cache-file | --cache-fil | --cache-fi \
+    | --cache-f | --cache- | --cache | --cach | --cac | --ca | --c)
+      ac_prev=cache_file ;;
+    -cache-file=* | --cache-file=* | --cache-fil=* | --cache-fi=* \
+    | --cache-f=* | --cache-=* | --cache=* | --cach=* | --cac=* | --ca=* \
+    | --c=*)
+      ;;
+    --config-cache | -C)
+      ;;
+    -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
+      ac_prev=srcdir ;;
+    -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
+      ;;
+    -prefix | --prefix | --prefi | --pref | --pre | --pr | --p)
+      ac_prev=prefix ;;
+    -prefix=* | --prefix=* | --prefi=* | --pref=* | --pre=* | --pr=* | --p=*)
+      ;;
+    --disable-option-checking)
+      ;;
+    *)
+      case $ac_arg in
+      *\'*) ac_arg=`$as_echo "$ac_arg" | sed "s/'/'\\\\\\\\''/g"` ;;
+      esac
+      as_fn_append ac_sub_configure_args " '$ac_arg'" ;;
+    esac
+  done
+
+  # Always prepend --prefix to ensure using the same prefix
+  # in subdir configurations.
+  ac_arg="--prefix=$prefix"
+  case $ac_arg in
+  *\'*) ac_arg=`$as_echo "$ac_arg" | sed "s/'/'\\\\\\\\''/g"` ;;
+  esac
+  ac_sub_configure_args="'$ac_arg' $ac_sub_configure_args"
+
+  # Pass --silent
+  if test "$silent" = yes; then
+    ac_sub_configure_args="--silent $ac_sub_configure_args"
+  fi
+
+  # Always prepend --disable-option-checking to silence warnings, since
+  # different subdirs can have different --enable and --with options.
+  ac_sub_configure_args="--disable-option-checking $ac_sub_configure_args"
+
+  ac_popdir=`pwd`
+  for ac_dir in : $subdirs; do test "x$ac_dir" = x: && continue
+
+    # Do not complain, so a configure script can configure whichever
+    # parts of a large source tree are present.
+    test -d "$srcdir/$ac_dir" || continue
+
+    ac_msg="=== configuring in $ac_dir (`pwd`/$ac_dir)"
+    $as_echo "$as_me:${as_lineno-$LINENO}: $ac_msg" >&5
+    $as_echo "$ac_msg" >&6
+    as_dir="$ac_dir"; as_fn_mkdir_p
+    ac_builddir=.
+
+case "$ac_dir" in
+.) ac_dir_suffix= ac_top_builddir_sub=. ac_top_build_prefix= ;;
+*)
+  ac_dir_suffix=/`$as_echo "$ac_dir" | sed 's|^\.[\\/]||'`
+  # A ".." for each directory in $ac_dir_suffix.
+  ac_top_builddir_sub=`$as_echo "$ac_dir_suffix" | sed 's|/[^\\/]*|/..|g;s|/||'`
+  case $ac_top_builddir_sub in
+  "") ac_top_builddir_sub=. ac_top_build_prefix= ;;
+  *)  ac_top_build_prefix=$ac_top_builddir_sub/ ;;
+  esac ;;
+esac
+ac_abs_top_builddir=$ac_pwd
+ac_abs_builddir=$ac_pwd$ac_dir_suffix
+# for backward compatibility:
+ac_top_builddir=$ac_top_build_prefix
+
+case $srcdir in
+  .)  # We are building in place.
+    ac_srcdir=.
+    ac_top_srcdir=$ac_top_builddir_sub
+    ac_abs_top_srcdir=$ac_pwd ;;
+  [\\/]* | ?:[\\/]* )  # Absolute name.
+    ac_srcdir=$srcdir$ac_dir_suffix;
+    ac_top_srcdir=$srcdir
+    ac_abs_top_srcdir=$srcdir ;;
+  *) # Relative name.
+    ac_srcdir=$ac_top_build_prefix$srcdir$ac_dir_suffix
+    ac_top_srcdir=$ac_top_build_prefix$srcdir
+    ac_abs_top_srcdir=$ac_pwd/$srcdir ;;
+esac
+ac_abs_srcdir=$ac_abs_top_srcdir$ac_dir_suffix
+
+
+    cd "$ac_dir"
+
+    # Check for guested configure; otherwise get Cygnus style configure.
+    if test -f "$ac_srcdir/configure.gnu"; then
+      ac_sub_configure=$ac_srcdir/configure.gnu
+    elif test -f "$ac_srcdir/configure"; then
+      ac_sub_configure=$ac_srcdir/configure
+    elif test -f "$ac_srcdir/configure.in"; then
+      # This should be Cygnus configure.
+      ac_sub_configure=$ac_aux_dir/configure
+    else
+      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: no configuration information is in $ac_dir" >&5
+$as_echo "$as_me: WARNING: no configuration information is in $ac_dir" >&2;}
+      ac_sub_configure=
+    fi
+
+    # The recursion is here.
+    if test -n "$ac_sub_configure"; then
+      # Make the cache file name correct relative to the subdirectory.
+      case $cache_file in
+      [\\/]* | ?:[\\/]* ) ac_sub_cache_file=$cache_file ;;
+      *) # Relative name.
+	ac_sub_cache_file=$ac_top_build_prefix$cache_file ;;
+      esac
+
+      { $as_echo "$as_me:${as_lineno-$LINENO}: running $SHELL $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_srcdir" >&5
+$as_echo "$as_me: running $SHELL $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_srcdir" >&6;}
+      # The eval makes quoting arguments work.
+      eval "\$SHELL \"\$ac_sub_configure\" $ac_sub_configure_args \
+	   --cache-file=\"\$ac_sub_cache_file\" --srcdir=\"\$ac_srcdir\"" ||
+	as_fn_error $? "$ac_sub_configure failed for $ac_dir" "$LINENO" 5
+    fi
+
+    cd "$ac_popdir"
+  done
 fi
 if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: unrecognized options: $ac_unrecognized_opts" >&5
