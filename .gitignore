@@ -12,7 +12,6 @@ acc.xml
 ChangeLog
 .settings
 configure.lineno
-Makefile
 autom4te.cache
 *.txt
 *.gcov
