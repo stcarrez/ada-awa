@@ -71,24 +71,13 @@ build and install as follows:
    make
    make install
 ```
-If you don't have XML/Ada or AWS, you must build them and install them first.
-You can use the XML/Ada and or AWS packages provided in the 'external' directory.
-To do this, run the configure as follows:
-```
-   ./configure --enable-xmlada --enable-aws
-```
-This will extract and configure XML/Ada in 'xmlada' and AWS in 'aws'.
-The build process of XML/Ada and AWS will take care of installing these
-two packages before configuring other AWA components.
-```
-   make
-   make install
-```
 
 # Docker
 
 A docker container is available for those who want to try AWA without installing
-and building all required packages.  To use the AWA docker container you can
+and building all required packages
+(See [Ada Web Application on Docker](https://hub.docker.com/r/ciceron/ada-awa/).
+To use the AWA docker container you can
 run the following commands:
 
 ```
