@@ -110,17 +110,17 @@ regtests/result/maildir:
 
 test-sqlite:		build regtests.db regtests/result/maildir
 ifeq (${HAVE_SQLITE},True)
-	bin/awa_harness -p SQLite -xml awa-sqlite-aunit.xml -config test-sqlite.properties
+	bin/awa_harness -l $(NAME):SQLite: -p SQLite -xml awa-sqlite-aunit.xml -config test-sqlite.properties
 endif
 
 test-mysql:		build create-mysql-tests regtests/result/maildir
 ifeq (${HAVE_MYSQL},True)
-	bin/awa_harness -p MySQL -xml awa-mysql-aunit.xml -config test-mysql.properties
+	bin/awa_harness -l $(NAME):MySQL: -p MySQL -xml awa-mysql-aunit.xml -config test-mysql.properties
 endif
 
 test-postgresql:		build create-postgresql-tests regtests/result/maildir
 ifeq (${HAVE_POSTGRESQL},True)
-	bin/awa_harness -p Postgresql -xml awa-postgresql-aunit.xml -config test-postgresql.properties
+	bin/awa_harness -l $(NAME):Postgresql: -p Postgresql -xml awa-postgresql-aunit.xml -config test-postgresql.properties
 endif
 
 # Create the test sqlite database
