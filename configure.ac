@@ -16,7 +16,7 @@ dnl  limitations under the License.
 dnl 
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(Makefile.in)
+AC_INIT(Makefile.conf.in)
 
 cache_file=config.cache
 
