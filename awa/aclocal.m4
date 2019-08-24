@@ -1,3 +1,17 @@
+dnl Check if we are running under Windows with msys to use pwd -W which produces Windows paths such as d:/tool instead of /d/tool
+AC_DEFUN(AM_CHECK_HOST_PWD,
+[
+  if test x${awa_host_pwd_check} != xyes; then
+    AC_CHECK_PROG(awa_has_msys, msysinfo, yes, no)
+    if test x${awa_has_msys} = xyes; then
+      awa_pwd_option="-W"
+    else
+      awa_pwd_option=""
+    fi
+    awa_host_pwd_check=yes
+  fi
+])
+
 # Check whether we can use gprbuild or gnatmake
 AC_DEFUN(AM_GNAT_CHECK_GPRBUILD,
 [
@@ -47,10 +61,8 @@ AC_DEFUN(AM_GNAT_FIND_PROJECT,
 	  fi
     ],
     [
-      ac_cv_gnat_project_name_$3=$3
+      ac_cv_gnat_project_name_$3=${awa_build_root}$3
     ])
-#  AC_MSG_CHECKING([whether ${ac_cv_gnat_project_name_$3} project exists in gnatmake's search path])
-#  AC_MSG_RESULT(trying ${ac_cv_gnat_project_name_$3})
 
   AC_CACHE_CHECK([$2],[ac_cv_gnat_project_$3],[
     rm -f conftest.gpr
@@ -63,7 +75,7 @@ AC_DEFUN(AM_GNAT_FIND_PROJECT,
       ac_cv_gnat_project_$3=no
 
       # Search in ../$1-*/$3.gpr
-      dir=`realpath ..`
+      dir=`cd .. && pwd ${awa_pwd_option}`
       files=`ls -r $dir/$1/$3.gpr $dir/$3/$3.gpr $dir/$1-*/$3.gpr 2>/dev/null`
       for name in $files; do
         dir=`dirname $name`
@@ -720,6 +732,23 @@ AC_DEFUN(AM_GNAT_LIBRARY_SETUP,
 # AM_GNAT_LIBRARY_PROJECT([name])
 AC_DEFUN(AM_GNAT_LIBRARY_PROJECT,
 [
+  AC_ARG_WITH(build-root,
+    AS_HELP_STRING([--with-build-root=PATH], [Path to find the Ada libraries]),
+    [
+      awa_build_root=${withval}/
+    ],
+    [
+      awa_build_root=''
+    ])
+
+  if test x${awa_build_root} != x; then
+    AM_CHECK_HOST_PWD
+    awa_build_pwd=`cd ${awa_build_root} && pwd $pwd_option`
+    if test x${awa_build_pwd} != x${awa_build_root}; then
+      awa_build_root=${awa_build_pwd}/
+    fi
+  fi
+
   # checking for local tools
   AC_CANONICAL_SYSTEM
   AM_GNAT_CHECK_GPRBUILD
