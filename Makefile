@@ -10,7 +10,7 @@ SUBDIRS+=ada-wiki ada-servlet swagger-ada ada-asf
 SUBDIRS+=ada-ado dynamo awa
 
 # Build executables for all mains defined by the project.
-build test clean:: Makefile.conf
+build test clean::
 	for i in $(SUBDIRS); do \
 	   $(MAKE) -C "$$i" $@ ; \
 	done
@@ -19,10 +19,6 @@ install uninstall::
 	for i in $(SUBDIRS); do \
 	   $(MAKE) -C "$$i" $@ ; \
 	done
-
-Makefile.conf:
-	@echo "Ada Web Application is not configured, running configure..."
-	./configure
 
 # Clean, then build executables for all mains defined by the project.
 rebuild: clean build
