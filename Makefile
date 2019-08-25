@@ -5,7 +5,12 @@ NAME=awa
 include Makefile.defaults
 
 # Directories of sub-projects in the build order.
-SUBDIRS=ada-lzma ada-util ada-el ada-security
+DIRS=ada-lzma ada-util ada-el ada-security
+DIRS+=ada-wiki ada-servlet swagger-ada ada-asf
+DIRS+=ada-ado dynamo
+
+# Directories of sub-projects in the build order.
+SUBDIRS=$(DIRS) awaada-lzma ada-util ada-el ada-security
 SUBDIRS+=ada-wiki ada-servlet swagger-ada ada-asf
 SUBDIRS+=ada-ado dynamo awa
 
@@ -24,12 +29,14 @@ install uninstall::
 rebuild: clean build
 
 dist::
+	rm -f $(DIST_FILE)
+	git archive -o $(DIST_DIR).tar --prefix=$(DIST_DIR)/ HEAD
 	for i in $(DIRS); do \
-	   cd $$i && git archive -o ../$$i.tar --prefix=$(distdir)/$$i/ HEAD ; \
-           cd .. && tar --concatenate --file=$(distdir).tar $$i.tar ; \
+	   cd $$i && git archive -o ../$$i.tar --prefix=$(DIST_DIR)/$$i/ HEAD ; \
+           cd .. && tar --concatenate --file=$(DIST_DIR).tar $$i.tar ; \
            rm -f $$i.tar; \
         done
-	gzip $(distdir).tar
+	gzip $(DIST_DIR).tar
 
 sync-configure:
 	for i in $(SUBDIRS); do \
