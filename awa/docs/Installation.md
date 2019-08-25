@@ -26,6 +26,7 @@ The build process may also need the following commands:
 
 The Ada Web Application library also uses the following projects:
 
+* [Ada LZMA](https://github.com/stcarrez/ada-lzma),
 * [Ada Utility Library](https://github.com/stcarrez/ada-util),
 * [Ada Expression Language Library](https://github.com/stcarrez/ada-el),
 * [Ada Security Library](https://github.com/stcarrez/ada-security),
