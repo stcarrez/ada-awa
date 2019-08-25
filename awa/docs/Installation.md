@@ -6,12 +6,16 @@ This chapter explains how to build and install the Ada Web Application framework
 
 Before building the framework, you will need:
 
-* The [GNAT Ada compiler](http://libre.adacore.com/tools/gnat-gpl-edition/),
+* The [GNAT Ada compiler](https://libre.adacore.com/tools/gnat-gpl-edition/),
 * Either the MySQL, PostgreSQL or SQLite development headers installed,
-* [XML/Ada](http://libre.adacore.com/libre/tools/xmlada/),
-* [Ada Web Server](http://libre.adacore.com/libre/tools/aws/).
+* [XML/Ada](https://libre.adacore.com/libre/tools/xmlada/),
+* [Ada Web Server](https://libre.adacore.com/libre/tools/aws/).
 
 First get, build and install the above tools and libraries.
+For the best experience, it is necessary to have the SSL support in
+[Ada Web Server](https://libre.adacore.com/libre/tools/aws/).
+Indeed, the [OpenID Authentication 2.0](https://openid.net/specs/openid-authentication-2_0.html) can only be used
+through HTTPS.
 
 The build process may also need the following commands:
 
@@ -22,7 +26,9 @@ The build process may also need the following commands:
 * sqlite3,
 * mysql,
 * psql,
-* xsltproc
+* xsltproc,
+* liblzma libraries (used by Ada LZMA),
+* CURL libraries (used by CURL support in Ada Utility Library)
 
 The Ada Web Application library also uses the following projects:
 
@@ -38,6 +44,18 @@ The Ada Web Application library also uses the following projects:
 * [Dynamo](https://github.com/stcarrez/dynamo)
 
 They are integrated as Git submodules.
+
+## Getting the sources
+
+The AWA framework uses git submodules to integrate several other
+projects.  To get all the sources, use the following commands:
+
+```
+   git clone git@github.com:stcarrez/ada-awa.git
+   cd ada-awa
+   git submodule init
+   git submodule update
+```
 
 ## Development Host Installation
 
@@ -77,10 +95,6 @@ sudo apt-get install postgresql-client libpq-dev
 
 ### Windows
 
-For Windows, the installation is a little bit more complex and manual.
-You may either download the files from MySQL and SQLite download sites
-or you may use the files provided by Ada Database Objects in the `win32` directory.
-
 It is recommended to use msys2 available at https://www.msys2.org/
 and use the `pacman` command to install the required packages.
 
@@ -92,26 +106,36 @@ pacman -S base-devel --needed
 pacman -S mingw-w64-x86_64-sqlite3
 ```
 
-If your GNAT 2019 compiler is installed in `C:/GNAT/2019`, you may
-install the MySQL and SQLite libraries by using msys cp with:
+For Windows, the installation is a little bit more complex and manual.
+You may either download the files from MySQL and SQLite download sites
+or you may use the files provided by Ada Database Objects and
+Ada LZMA in the `win32` directory.
+
+For Windows 32-bit, extract the files:
 
 ```
+cd ada-ado/win32 && unzip sqlite-dll-win32-x86-3290000.zip
+cd ada-lzma/win32 && unzip liblzma-win32-x86-5.2.4.zip
+```
+
+For Windows 64-bit, extract the files:
+
+```
+cd ada-ado/win32 && unzip sqlite-dll-win64-x64-3290000.zip
+cd ada-lzma/win32 && unzip liblzma-win64-x64-5.2.4.zip
+```
+
+If your GNAT 2019 compiler is installed in `C:/GNAT/2019`, you may
+install the liblzma, MySQL and SQLite libraries by using msys cp with:
+
+```
+cp ada-lzma/win32/*.dll C:/GNAT/2019/bin
+cp ada-lzma/win32/*.dll C:/GNAT/2019/lib
+cp ada-lzma/win32/*.a C:/GNAT/2019/lib
 cp ada-ado/win32/*.dll C:/GNAT/2019/bin
 cp ada-ado/win32/*.dll C:/GNAT/2019/lib
 cp ada-ado/win32/*.lib C:/GNAT/2019/lib
 cp ada-ado/win32/*.a C:/GNAT/2019/lib
-```
-
-## Getting the sources
-
-The AWA framework uses git submodules to integrate several other
-projects.  To get all the sources, use the following commands:
-
-```
-   git clone git@github.com:stcarrez/ada-awa.git
-   cd ada-awa
-   git submodule init
-   git submodule update
 ```
 
 ## Configuration
@@ -127,9 +151,6 @@ and you may use:
   * `--enable-distrib` to build for a distribution and strip symbols,
   * `--disable-distrib` to build with debugging support,
   * `--enable-coverage` to build with code coverage support (`-fprofile-arcs -ftest-coverage`),
-  * `--enable-aws` to build the AWS version provided by the AWA package,
-  * `--enable-xmlada` to build the XML/Ada version provided by the AWA package,
-  * `--enable-aws-secure-mail` to build with the support of AWS SMTPS,
   * `--with-aws=PATH` to control the installation path of Ada Web Server,
   * `--with-xmlada=PATH` to control the installation path of XML/Ada,
   * `--help` to get a detailed list of supported options.
