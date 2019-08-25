@@ -1,4 +1,5 @@
-Version 1.2     -
+Version 2.0     -
+  - Refactoring of build process and installation
   - New audit manager for database auditing
   - Support for Postgresql
   - Improvements of images and storage plugins
