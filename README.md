@@ -63,10 +63,91 @@ projects.  To get all the sources, use the following commands:
    git submodule update
 ```
 
+# Development Host Installation
+
+The PostgreSQL, MySQL and SQLite development headers and runtime are necessary
+for building the Ada Database Objects driver.  The configure script will use
+them to enable the ADO drivers. The configure script will fail if it does not
+find any database driver.
+
+## Ubuntu
+
+First to get the LZMA and CURL support, it is necessary to install the following
+packages before configuring AWA:
+
+```
+sudo apt-get install liblzma-dev libcurl4-openssl-dev
+```
+
+MySQL Development installation
+```
+sudo apt-get install libmysqlclient-dev
+```
+
+MariaDB Development installation
+```
+sudo apt-get install mariadb-client libmariadb-client-lgpl-dev
+```
+
+SQLite Development installation
+```
+sudo apt-get install libsqlite3-dev
+```
+
+PostgreSQL Development installation
+```
+sudo apt-get install postgresql-client libpq-dev
+```
+
+## Windows
+
+It is recommended to use msys2 available at https://www.msys2.org/
+and use the `pacman` command to install the required packages.
+
+```
+pacman -S git
+pacman -S make
+pacman -S unzip
+pacman -S base-devel --needed
+pacman -S mingw-w64-x86_64-sqlite3
+```
+
+For Windows, the installation is a little bit more complex and manual.
+You may either download the files from MySQL and SQLite download sites
+or you may use the files provided by Ada Database Objects and
+Ada LZMA in the `win32` directory.
+
+For Windows 32-bit, extract the files:
+
+```
+cd ada-ado/win32 && unzip sqlite-dll-win32-x86-3290000.zip
+cd ada-lzma/win32 && unzip liblzma-win32-x86-5.2.4.zip
+```
+
+For Windows 64-bit, extract the files:
+
+```
+cd ada-ado/win32 && unzip sqlite-dll-win64-x64-3290000.zip
+cd ada-lzma/win32 && unzip liblzma-win64-x64-5.2.4.zip
+```
+
+If your GNAT 2019 compiler is installed in `C:/GNAT/2019`, you may
+install the liblzma, MySQL and SQLite libraries by using msys cp with:
+
+```
+cp ada-lzma/win32/*.dll C:/GNAT/2019/bin
+cp ada-lzma/win32/*.dll C:/GNAT/2019/lib
+cp ada-lzma/win32/*.a C:/GNAT/2019/lib
+cp ada-ado/win32/*.dll C:/GNAT/2019/bin
+cp ada-ado/win32/*.dll C:/GNAT/2019/lib
+cp ada-ado/win32/*.lib C:/GNAT/2019/lib
+cp ada-ado/win32/*.a C:/GNAT/2019/lib
+```
+
 # Building AWA
 
-If XML/Ada and AWS are already installed in your environment, configure,
-build and install as follows:
+The framework uses the `configure` script to detect the build environment.
+In most cases you will configure, build and install with the following commands:
 ```
    ./configure --prefix=/usr/local
    make
