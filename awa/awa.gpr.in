@@ -11,7 +11,7 @@ library project Awa is
    Name    := "awa";
    Version := "@AWA_VERSION@";
    Library_Dir := "@AWA_LIBDIR@";
-   Library_Type : Config.Library_Type_Type := external ("AWA_LIBRARY_TYPE", "static");
+   Library_Type : Config.Library_Type_Type := external ("AWA_LIBRARY_TYPE", "@DEFAULT_LIBRARY_TYPE@");
    Exec_Dir     := "./" &  Config'Exec_Dir & "/bin";
 
    Aws_Status : Config.Yes_No := "@AWA_AWS_STATUS@";

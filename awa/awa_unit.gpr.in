@@ -13,7 +13,7 @@ library project Awa_Unit is
 
    Version := "@AWA_VERSION@";
    Library_Dir := "lib";
-   Library_Type : Config.Library_Type_Type := external ("AWA_LIBRARY_TYPE", "static");
+   Library_Type : Config.Library_Type_Type := external ("AWA_LIBRARY_TYPE", "@DEFAULT_LIBRARY_TYPE@");
 
    for Source_Dirs use ("awaunit");
 
