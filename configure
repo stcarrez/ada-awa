@@ -605,6 +605,7 @@ BUILDS_COVERAGE
 BUILDS_QUIET
 MODE
 BUILDS_DISTRIB
+DEFAULT_LIBRARY_TYPE
 BUILDS_SHARED
 LN_S
 INSTALL_DATA
@@ -671,6 +672,7 @@ ac_subst_files=''
 ac_user_opts='
 enable_option_checking
 enable_shared
+enable_default_shared
 enable_distrib
 enable_coverage
 enable_ahven
@@ -1304,6 +1306,7 @@ Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-shared         Enable the shared libraries (disabled)
+  --enable-default-shared Use shared libraries by default (disabled)
   --enable-distrib        build for distribution, optimized and strip symbols (enabled)
   --enable-coverage       build with coverage support -fprofile-arcs -ftest-coverage (disabled)
   --enable-ahven          Enable internal Ahven support for Ada util unit tests (enabled)
@@ -1748,7 +1751,7 @@ cache_file=config.cache
 # Current release settings
 AWA_MAJOR_VERSION=2
 AWA_MINOR_VERSION=0
-AWA_MICRO_VERSION=0b
+AWA_MICRO_VERSION=0
 AWA_VERSION=$AWA_MAJOR_VERSION.$AWA_MINOR_VERSION.$AWA_MICRO_VERSION
 
 ac_aux_dir=
@@ -2266,10 +2269,29 @@ if test "${enable_shared+set}" = set; then :
       *)        ac_enable_shared=yes ;;
     esac
 fi
+  ac_enable_default_shared=no
+  # Check whether --enable-default-shared was given.
+if test "${enable_default_shared+set}" = set; then :
+  enableval=$enable_default_shared; case "${enableval}" in
+      no|none)  ac_enable_default_shared=no ;;
+      *)        ac_enable_default_shared=yes ;;
+    esac
+fi
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ac_enable_shared}" >&5
 $as_echo "${ac_enable_shared}" >&6; }
   BUILDS_SHARED=$ac_enable_shared
+
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking default library type" >&5
+$as_echo_n "checking default library type... " >&6; }
+  if test ${ac_enable_shared} = yes && test ${ac_enable_default_shared} = yes; then
+    DEFAULT_LIBRARY_TYPE='relocatable'
+  else
+    DEFAULT_LIBRARY_TYPE='static'
+  fi
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${DEFAULT_LIBRARY_TYPE}" >&5
+$as_echo "${DEFAULT_LIBRARY_TYPE}" >&6; }
 
 
 
@@ -2806,7 +2828,7 @@ $as_echo "no" >&6; }
 
 
 
-ac_configure_args=--with-build-root=`pwd`
+ac_configure_args="${ac_configure_args} --with-build-root="`pwd`
 
 
 subdirs="$subdirs ada-lzma ada-util ada-el ada-security ada-wiki ada-ado ada-servlet swagger-ada ada-asf dynamo awa"
