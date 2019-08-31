@@ -331,10 +331,26 @@ AC_DEFUN(AM_SHARED_LIBRARY_SUPPORT,
       no|none)  ac_enable_shared=no ;;
       *)        ac_enable_shared=yes ;;
     esac])dnl
+  ac_enable_default_shared=no
+  AC_ARG_ENABLE(default-shared,
+    [  --enable-default-shared Use shared libraries by default (disabled)],
+    [case "${enableval}" in
+      no|none)  ac_enable_default_shared=no ;;
+      *)        ac_enable_default_shared=yes ;;
+    esac])dnl
 
   AC_MSG_RESULT(${ac_enable_shared})
   BUILDS_SHARED=$ac_enable_shared
   AC_SUBST(BUILDS_SHARED)
+
+  AC_MSG_CHECKING([default library type])
+  if test ${ac_enable_shared} = yes && test ${ac_enable_default_shared} = yes; then
+    DEFAULT_LIBRARY_TYPE='relocatable'
+  else
+    DEFAULT_LIBRARY_TYPE='static'
+  fi
+  AC_MSG_RESULT(${DEFAULT_LIBRARY_TYPE})
+  AC_SUBST(DEFAULT_LIBRARY_TYPE)
 ])
 
 dnl Check whether the coverage support is enabled.
