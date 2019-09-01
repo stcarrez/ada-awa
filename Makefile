@@ -20,7 +20,7 @@ build test clean::
 	   $(MAKE) -C "$$i" $@ ; \
 	done
 
-install uninstall::
+install install-data uninstall::
 	for i in $(SUBDIRS); do \
 	   $(MAKE) -C "$$i" $@ ; \
 	done
