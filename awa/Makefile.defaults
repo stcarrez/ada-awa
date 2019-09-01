@@ -76,8 +76,11 @@ clean_tree:
 
 # Clean the root project of all build products.
 clean::
-	-rm -rf lib obj bin $(CLEAN_FILES)
+	-rm -rf lib obj bin autom4te.cache $(CLEAN_FILES)
 	-rm -rf regtests/result
+
+dist-clean:: clean
+	-rm -f *.log *~ config.status Makefile.conf
 
 doc::
 	$(DYNAMO) build-doc -markdown wiki
