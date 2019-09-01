@@ -53,6 +53,7 @@ endif
 
 static::
 shared::
+install-data::
 
 # Not intended for manual invocation.
 # Invoked if automatic builds are enabled.
