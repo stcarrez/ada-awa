@@ -189,6 +189,7 @@ setting up and building an Ada Web Application:
 
 # Presentations
 
+  * [Ada for Web Development](https://fr.slideshare.net/StephaneCarrez1/ada-techdays2019awa) AdaCore Tech Days 2019
   * [Secure Web Applications with AWA](https://fr.slideshare.net/StephaneCarrez1/secure-web-applications-with-awa) FOSDEM 2019
 
 # Sites Using AWA
