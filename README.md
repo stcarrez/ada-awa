@@ -79,24 +79,48 @@ packages before configuring AWA:
 sudo apt-get install liblzma-dev libcurl4-openssl-dev
 ```
 
-MySQL Development installation
+MySQL Development installation:
 ```
 sudo apt-get install libmysqlclient-dev
 ```
 
-MariaDB Development installation
+MariaDB Development installation:
 ```
 sudo apt-get install mariadb-client libmariadb-client-lgpl-dev
 ```
 
-SQLite Development installation
+SQLite Development installation:
 ```
 sudo apt-get install libsqlite3-dev
 ```
 
-PostgreSQL Development installation
+PostgreSQL Development installation:
 ```
 sudo apt-get install postgresql-client libpq-dev
+```
+
+## FreeBSD 12
+
+First to get the LZMA, XML/Ada and CURL support, it is necessary
+to install the following packages before configuring AWA:
+
+```
+pkg install lzma-18.05 curl-7.66.0 xmlada-17.0.0_1
+```
+
+MariaDB Development installation:
+```
+pkg install mariadb104-client-10.4.7 mariadb104-server-10.4.7
+```
+
+SQLite Development installation:
+```
+pkg install sqlite3-3.29.0
+```
+
+PostgreSQL Development installation:
+```
+pkg install postgresql12-client-12.r1 postgresql12-server-12.r1
 ```
 
 ## Windows
