@@ -270,6 +270,7 @@ AC_DEFUN(AM_GNAT_FIND_XML_ADA,
         gnat_xmlada_version=`$gnat_xml_ada --version 2>/dev/null | sed -e 's, ,-,g'`
       else
         gnat_xmlada_version=none
+        HAVE_XML_ADA='no'
       fi
 
       case $gnat_xmlada_version in
@@ -283,6 +284,7 @@ AC_DEFUN(AM_GNAT_FIND_XML_ADA,
 
       *)
         ac_cv_gnat_xmlada_version='none'
+        HAVE_XML_ADA='no'
         ;;
 
       esac
@@ -290,6 +292,7 @@ AC_DEFUN(AM_GNAT_FIND_XML_ADA,
       if test T$ac_cv_gnat_project_xmlada_sax = Tno; then
         if test T$ac_cv_gnat_project_xmlada != Tyes; then
           ac_cv_gnat_xmlada_version='none'
+          HAVE_XML_ADA='no'
         fi
       else
         ac_cv_gnat_xmlada_version='4'
