@@ -296,6 +296,7 @@ AC_DEFUN(AM_GNAT_FIND_XML_ADA,
         fi
       else
         ac_cv_gnat_xmlada_version='4'
+        HAVE_XML_ADA='yes'
       fi
 
     ])
