@@ -3,7 +3,7 @@ MAKEFILE_DEFAULTS=1
 
 # You may edit this makefile as long as you keep these original 
 # target names defined.
-MODE?=distrib
+BUILD?=distrib
 GNATMAKE?=gprbuild
 GNATCLEAN?=gnatclean
 GPRINSTALL?=gprinstall
@@ -15,7 +15,6 @@ CP?=cp
 LN?=ln -s
 
 BUILDS_SHARED?=no
-COVERAGE?=no
 
 ifeq (${OS},Windows_NT)
 LIBEXT?=dll
@@ -39,7 +38,7 @@ alidir?=${prefix}/${infix_ali}
 samplesdir?=${prefix}/share/doc/${docdir}
 dynamodir=${prefix}/share/dynamo
 
-MAKE_ARGS += -XMODE=$(MODE) -XCOVERAGE=$(COVERAGE) -XPROCESSORS=$(PROCESSORS)
+MAKE_ARGS += -XBUILD=$(BUILD) -XPROCESSORS=$(PROCESSORS)
 
 build:: all
 

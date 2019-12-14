@@ -313,11 +313,19 @@ AC_DEFUN(AM_GNAT_FIND_XML_ADA,
 
   VERSION_XML_ADA=$ac_cv_gnat_xmlada_version
 
-  if test T$HAVE_XML_ADA = Tno; then
-    WITH_XML_ADA='';
-    VERSION_XML_ADA='none';
-    HAVE_XML_ADA='no';
-  fi
+  case T$HAVE_XML_ADA in
+    Tyes)
+      $1
+      ;;
+
+    Tno)
+      WITH_XML_ADA='';
+      VERSION_XML_ADA='none';
+      HAVE_XML_ADA='no'
+      $2
+      ;;
+
+  esac
 
   AC_SUBST(WITH_XML_ADA)
   AC_SUBST(VERSION_XML_ADA)
@@ -372,6 +380,9 @@ AC_DEFUN(AM_COVERAGE_SUPPORT,
   AC_MSG_RESULT(${ac_enable_coverage})
   BUILDS_COVERAGE=$ac_enable_coverage
   AC_SUBST(BUILDS_COVERAGE)
+  if test T$ac_enable_coverage = Tyes; then
+     ac_build_mode='coverage'
+  fi
 ])
 
 dnl Check whether the distrib/debug build is enabled.
@@ -398,9 +409,6 @@ AC_DEFUN(AM_DISTRIB_SUPPORT,
   BUILDS_DISTRIB=$ac_enable_distrib
   AC_SUBST(BUILDS_DISTRIB)
 
-  MODE=$ac_build_mode
-  AC_SUBST(MODE)
-  
   BUILDS_QUIET=$ac_quiet_mode
   AC_SUBST(BUILDS_QUIET)
 ])
@@ -780,6 +788,9 @@ AC_DEFUN(AM_GNAT_LIBRARY_PROJECT,
   AM_DISTRIB_SUPPORT
   AM_COVERAGE_SUPPORT
 
+  BUILD=$ac_build_mode
+  AC_SUBST(BUILD)
+  
   AC_CACHE_CHECK([number of processors],[ac_cv_proc_count],[
     ac_cv_proc_count=`getconf _NPROCESSORS_CONF 2>/dev/null || getconf NPROCESSORS_CONF 2>/dev/null || echo 1`
   ])
