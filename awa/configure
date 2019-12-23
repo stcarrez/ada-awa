@@ -2688,10 +2688,14 @@ fi
 # Check whether --with-ada-util was given.
 if test "${with_ada_util+set}" = set; then :
   withval=$with_ada_util;
-      ac_cv_gnat_project_name_utilada_base=${withval}/
-      if test -d "${withval}"; then
-	    ac_cv_gnat_project_name_utilada_base=${withval}/utilada_base
-	  fi
+      if test "${withval}/" = "yes/"; then
+        ac_cv_gnat_project_name_utilada_base=${awa_build_root}utilada_base
+      else
+        ac_cv_gnat_project_name_utilada_base=${withval}/
+        if test -d "${withval}"; then
+	      ac_cv_gnat_project_name_utilada_base=${withval}/utilada_base
+	    fi
+      fi
 
 else
 
@@ -2793,10 +2797,14 @@ $as_echo "no" >&6; }
 # Check whether --with-ada-el was given.
 if test "${with_ada_el+set}" = set; then :
   withval=$with_ada_el;
-      ac_cv_gnat_project_name_elada=${withval}/
-      if test -d "${withval}"; then
-	    ac_cv_gnat_project_name_elada=${withval}/elada
-	  fi
+      if test "${withval}/" = "yes/"; then
+        ac_cv_gnat_project_name_elada=${awa_build_root}elada
+      else
+        ac_cv_gnat_project_name_elada=${withval}/
+        if test -d "${withval}"; then
+	      ac_cv_gnat_project_name_elada=${withval}/elada
+	    fi
+      fi
 
 else
 
@@ -2898,10 +2906,14 @@ $as_echo "no" >&6; }
 # Check whether --with-ada-security was given.
 if test "${with_ada_security+set}" = set; then :
   withval=$with_ada_security;
-      ac_cv_gnat_project_name_security=${withval}/
-      if test -d "${withval}"; then
-	    ac_cv_gnat_project_name_security=${withval}/security
-	  fi
+      if test "${withval}/" = "yes/"; then
+        ac_cv_gnat_project_name_security=${awa_build_root}security
+      else
+        ac_cv_gnat_project_name_security=${withval}/
+        if test -d "${withval}"; then
+	      ac_cv_gnat_project_name_security=${withval}/security
+	    fi
+      fi
 
 else
 
@@ -3003,10 +3015,14 @@ $as_echo "no" >&6; }
 # Check whether --with-ada-servlet was given.
 if test "${with_ada_servlet+set}" = set; then :
   withval=$with_ada_servlet;
-      ac_cv_gnat_project_name_servletada=${withval}/
-      if test -d "${withval}"; then
-	    ac_cv_gnat_project_name_servletada=${withval}/servletada
-	  fi
+      if test "${withval}/" = "yes/"; then
+        ac_cv_gnat_project_name_servletada=${awa_build_root}servletada
+      else
+        ac_cv_gnat_project_name_servletada=${withval}/
+        if test -d "${withval}"; then
+	      ac_cv_gnat_project_name_servletada=${withval}/servletada
+	    fi
+      fi
 
 else
 
@@ -3108,10 +3124,14 @@ $as_echo "no" >&6; }
 # Check whether --with-ada-asf was given.
 if test "${with_ada_asf+set}" = set; then :
   withval=$with_ada_asf;
-      ac_cv_gnat_project_name_asf=${withval}/
-      if test -d "${withval}"; then
-	    ac_cv_gnat_project_name_asf=${withval}/asf
-	  fi
+      if test "${withval}/" = "yes/"; then
+        ac_cv_gnat_project_name_asf=${awa_build_root}asf
+      else
+        ac_cv_gnat_project_name_asf=${withval}/
+        if test -d "${withval}"; then
+	      ac_cv_gnat_project_name_asf=${withval}/asf
+	    fi
+      fi
 
 else
 
@@ -3213,10 +3233,14 @@ $as_echo "no" >&6; }
 # Check whether --with-ada-ado was given.
 if test "${with_ada_ado+set}" = set; then :
   withval=$with_ada_ado;
-      ac_cv_gnat_project_name_ado=${withval}/
-      if test -d "${withval}"; then
-	    ac_cv_gnat_project_name_ado=${withval}/ado
-	  fi
+      if test "${withval}/" = "yes/"; then
+        ac_cv_gnat_project_name_ado=${awa_build_root}ado
+      else
+        ac_cv_gnat_project_name_ado=${withval}/
+        if test -d "${withval}"; then
+	      ac_cv_gnat_project_name_ado=${withval}/ado
+	    fi
+      fi
 
 else
 
@@ -3318,10 +3342,14 @@ $as_echo "no" >&6; }
 # Check whether --with-ada-wiki was given.
 if test "${with_ada_wiki+set}" = set; then :
   withval=$with_ada_wiki;
-      ac_cv_gnat_project_name_wikiada=${withval}/
-      if test -d "${withval}"; then
-	    ac_cv_gnat_project_name_wikiada=${withval}/wikiada
-	  fi
+      if test "${withval}/" = "yes/"; then
+        ac_cv_gnat_project_name_wikiada=${awa_build_root}wikiada
+      else
+        ac_cv_gnat_project_name_wikiada=${withval}/
+        if test -d "${withval}"; then
+	      ac_cv_gnat_project_name_wikiada=${withval}/wikiada
+	    fi
+      fi
 
 else
 
@@ -3423,10 +3451,14 @@ $as_echo "no" >&6; }
 # Check whether --with-swagger-ada was given.
 if test "${with_swagger_ada+set}" = set; then :
   withval=$with_swagger_ada;
-      ac_cv_gnat_project_name_swagger=${withval}/
-      if test -d "${withval}"; then
-	    ac_cv_gnat_project_name_swagger=${withval}/swagger
-	  fi
+      if test "${withval}/" = "yes/"; then
+        ac_cv_gnat_project_name_swagger=${awa_build_root}swagger
+      else
+        ac_cv_gnat_project_name_swagger=${withval}/
+        if test -d "${withval}"; then
+	      ac_cv_gnat_project_name_swagger=${withval}/swagger
+	    fi
+      fi
 
 else
 
