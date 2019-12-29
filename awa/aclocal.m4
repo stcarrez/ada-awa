@@ -22,6 +22,10 @@ AC_DEFUN(AM_GNAT_CHECK_GPRBUILD,
     AC_CHECK_PROGS(GNATMAKE, gnatmake, "")
   fi
 
+  if test -z "$GNATMAKE"; then
+    AC_MSG_ERROR([gnatmake or gprbuild must be installed.])
+  fi;
+
   AC_CHECK_PROGS(GPRCLEAN, gprclean, "")
   if test -n "$GPRCLEAN"; then
     GNATCLEAN="$GPRCLEAN"
