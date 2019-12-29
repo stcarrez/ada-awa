@@ -105,7 +105,7 @@ First to get the LZMA, XML/Ada and CURL support, it is necessary
 to install the following packages before configuring AWA:
 
 ```
-pkg install lzma-18.05 curl-7.66.0 xmlada-17.0.0_1
+pkg install lzma-18.05 curl-7.66.0 xmlada-17.0.0_1 aws-17.1_2
 ```
 
 MariaDB Development installation:
@@ -122,6 +122,14 @@ PostgreSQL Development installation:
 ```
 pkg install postgresql12-client-12.r1 postgresql12-server-12.r1
 ```
+
+Once these packages are installed, you may have to setup the following
+environment variables:
+```
+export PATH=/usr/local/gcc6-aux/bin:$PATH
+export ADA_PROJECT_PATH=/usr/local/lib/gnat
+```
+
 
 ## Windows
 
