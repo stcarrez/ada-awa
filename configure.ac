@@ -86,7 +86,7 @@ AC_SUBST(AWS_DIR)
 AC_SUBST(AWS_SRC_DIR)
 
 ac_configure_args="${ac_configure_args} --with-build-root="`pwd`
-AC_CONFIG_SUBDIRS(ada-lzma ada-util ada-el ada-security ada-wiki ada-ado ada-servlet openapi-ada ada-asf dynamo awa)
+AC_CONFIG_SUBDIRS(ada-lzma ada-util ada-el ada-security ada-wiki ada-ado ada-servlet openapi-ada ada-asf ada-keystore dynamo awa)
 
 AM_GNAT_AWS_VERSION
 
