@@ -1,5 +1,5 @@
 dnl Autoconf configure script for Ada Server Faces
-dnl Copyright (C) 2009 - 2019 Stephane Carrez
+dnl Copyright (C) 2009 - 2020 Stephane Carrez
 dnl Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 dnl
 dnl  Licensed under the Apache License, Version 2.0 (the "License");
@@ -66,7 +66,8 @@ AM_GNAT_FIND_ADA_SERVLET([Ada Web Application])
 AM_GNAT_FIND_ADA_SERVER_FACES([Ada Web Application])
 AM_GNAT_FIND_ADA_ADO([Ada Web Application])
 AM_GNAT_FIND_ADA_WIKI([Ada Web Application])
-AM_GNAT_FIND_ADA_SWAGGER([Ada Web Application])
+AM_GNAT_FIND_ADA_OPENAPI([Ada Web Application])
+AM_GNAT_FIND_ADA_KEYSTORE([Ada Web Application])
 
 AC_CHECK_PROGS(MYSQL, mysql)
 if test "X$MYSQL" != "X" ; then
