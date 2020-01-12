@@ -6,12 +6,12 @@ include Makefile.defaults
 
 # Directories of sub-projects to package in the .tar.gz distribution
 DIST_DIRS=ada-lzma ada-util ada-el ada-security
-DIST_DIRS+=ada-wiki ada-servlet openapi-ada ada-asf
+DIST_DIRS+=ada-wiki ada-servlet openapi-ada ada-asf ada-keystore
 DIST_DIRS+=ada-ado dynamo
 
 # Directories of sub-projects in the build order.
 SUBDIRS=ada-lzma ada-util ada-el ada-security
-SUBDIRS+=ada-wiki ada-servlet swagger-ada ada-asf
+SUBDIRS+=ada-wiki ada-servlet openapi-ada ada-asf ada-keystore
 SUBDIRS+=ada-ado dynamo awa
 
 # Build executables for all mains defined by the project.
