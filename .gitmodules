@@ -23,8 +23,11 @@
 	path = ada-servlet
 	url = git://github.com/stcarrez/ada-servlet.git
 [submodule "swagger-ada"]
-	path = swagger-ada
+	path = openapi-ada
 	url = git://github.com/stcarrez/swagger-ada.git
 [submodule "ada-lzma"]
 	path = ada-lzma
 	url = git://github.com/stcarrez/ada-lzma.git
+[submodule "ada-keystore"]
+	path = ada-keystore
+	url = git://github.com/stcarrez/ada-keystore.git
