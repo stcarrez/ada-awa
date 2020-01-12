@@ -5,6 +5,7 @@ with "@WIKI_DIR@wikiada";
 with "@ADO_DIR@ado";
 with "@ASF_DIR@asf";
 with "@SECURITY_DIR@security";
+with "@KEYSTOREADA_DIR@keystoreada";
 
 library project Awa is
 
