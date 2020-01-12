@@ -57,10 +57,8 @@ You may get Ahven or Aunit at:
 The AWA framework uses git submodules to integrate several other
 projects.  To get all the sources, use the following commands:
 ```
-   git clone git@github.com:stcarrez/ada-awa.git
+   git clone --recursive https://github.com/stcarrez/ada-awa.git
    cd ada-awa
-   git submodule init
-   git submodule update
 ```
 
 # Development Host Installation
@@ -91,7 +89,7 @@ sudo apt-get install mariadb-client libmariadb-client-lgpl-dev
 
 SQLite Development installation:
 ```
-sudo apt-get install libsqlite3-dev
+sudo apt-get install sqlite3 libsqlite3-dev
 ```
 
 PostgreSQL Development installation:
@@ -229,4 +227,4 @@ setting up and building an Ada Web Application:
   * [Java 2 Ada](https://blog.vacs.fr/)
   * [Ada France](https://www.ada-france.org/adafr/index.html)
   * [Atlas](https://demo.vacs.fr/atlas/index.html)
-  * [Jason](https://vdo/vdo/index.html)
+  * [Jason](https://vdo.vacs.fr/vdo/index.html)
