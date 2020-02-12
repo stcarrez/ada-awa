@@ -1,17 +1,16 @@
 #!/bin/sh
-lcov --base-directory . --directory . -c -o awa.cov
-bin/awa_harness -p SQLite -xml awa-sqlite-aunit.xml -config test-sqlite.properties
-bin/awa_harness -p MySQL -xml awa-mysql-aunit.xml -config test-mysql.properties
-lcov --base-directory . --directory . -c -o awa.cov
-lcov --remove awa.cov awa/b__awa_harness.adb -o awa.cov
-lcov --remove awa.cov "/usr*" -o awa.cov
-lcov --remove awa.cov "regtests*" -o awa.cov
-lcov --remove awa.cov "awaunit*" -o awa.cov
-lcov --remove awa.cov "ada-util/*" -o awa.cov
-lcov --remove awa.cov "ada-ado/*" -o awa.cov
-lcov --remove awa.cov "ada-asf/*" -o awa.cov
-lcov --remove awa.cov "ada-el/*" -o awa.cov
-lcov --remove awa.cov "ada-security/*" -o awa.cov
+NAME=awa.cov
+lcov --base-directory . --directory . -c --include "*/awa/*" -o $NAME
+lcov --remove $NAME awa/b__awa_harness.adb -o $NAME
+lcov --remove $NAME "/usr*" -o $NAME
+lcov --remove $NAME "*/regtests/*" -o $NAME
+lcov --remove $NAME "*/awaunit/*" -o $NAME
+lcov --remove $NAME "*/ada-util/*" -o $NAME
+lcov --remove $NAME "*/ada-el/*" -o $NAME
+lcov --remove $NAME "*/ada-servlet/*" -o $NAME
+lcov --remove $NAME "*/ada-security/*" -o $NAME
+lcov --remove $NAME "*/ada-asf/*" -o $NAME
+lcov --remove $NAME "*/ada-ado/*" -o $NAME
 rm -rf cover
-genhtml -o ./cover -t "test coverage" --num-spaces 4 awa.cov
+genhtml --ignore-errors source -o ./cover -t "test coverage" --num-spaces 4 $NAME
  
