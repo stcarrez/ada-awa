@@ -603,7 +603,6 @@ AWA_MAJOR_VERSION
 AWA_VERSION
 BUILDS_COVERAGE
 BUILDS_QUIET
-MODE
 BUILDS_DISTRIB
 DEFAULT_LIBRARY_TYPE
 BUILDS_SHARED
@@ -682,7 +681,7 @@ with_aws
       ac_precious_vars='build_alias
 host_alias
 target_alias'
-ac_subdirs_all='ada-lzma ada-util ada-el ada-security ada-wiki ada-ado ada-servlet swagger-ada ada-asf dynamo awa'
+ac_subdirs_all='ada-lzma ada-util ada-el ada-security ada-wiki ada-ado ada-servlet openapi-ada ada-asf ada-keystore dynamo awa'
 
 # Initialize some variables set by options.
 ac_init_help=
@@ -1986,6 +1985,10 @@ test -n "$GNATMAKE" || GNATMAKE=""""
 
   fi
 
+  if test -z "$GNATMAKE"; then
+    as_fn_error $? "gnatmake or gprbuild must be installed." "$LINENO" 5
+  fi;
+
   for ac_prog in gprclean
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
@@ -2319,9 +2322,6 @@ $as_echo "${ac_enable_distrib}" >&6; }
   BUILDS_DISTRIB=$ac_enable_distrib
 
 
-  MODE=$ac_build_mode
-
-
   BUILDS_QUIET=$ac_quiet_mode
 
 
@@ -2341,6 +2341,9 @@ fi
 $as_echo "${ac_enable_coverage}" >&6; }
   BUILDS_COVERAGE=$ac_enable_coverage
 
+  if test T$ac_enable_coverage = Tyes; then
+     ac_build_mode='coverage'
+  fi
 
 
 
@@ -2665,6 +2668,7 @@ else
         gnat_xmlada_version=`$gnat_xml_ada --version 2>/dev/null | sed -e 's, ,-,g'`
       else
         gnat_xmlada_version=none
+        HAVE_XML_ADA='no'
       fi
 
       case $gnat_xmlada_version in
@@ -2678,6 +2682,7 @@ else
 
       *)
         ac_cv_gnat_xmlada_version='none'
+        HAVE_XML_ADA='no'
         ;;
 
       esac
@@ -2685,9 +2690,11 @@ else
       if test T$ac_cv_gnat_project_xmlada_sax = Tno; then
         if test T$ac_cv_gnat_project_xmlada != Tyes; then
           ac_cv_gnat_xmlada_version='none'
+          HAVE_XML_ADA='no'
         fi
       else
         ac_cv_gnat_xmlada_version='4'
+        HAVE_XML_ADA='yes'
       fi
 
 
@@ -2707,11 +2714,23 @@ $as_echo "$ac_cv_gnat_xmlada_version" >&6; }
 
   VERSION_XML_ADA=$ac_cv_gnat_xmlada_version
 
-  if test T$HAVE_XML_ADA = Tno; then
-    WITH_XML_ADA='';
-    VERSION_XML_ADA='none';
-    HAVE_XML_ADA='no';
-  fi
+  case T$HAVE_XML_ADA in
+    Tyes)
+
+      ;;
+
+    Tno)
+      WITH_XML_ADA='';
+      VERSION_XML_ADA='none';
+      HAVE_XML_ADA='no'
+
+   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: XML/Ada was not found." >&5
+$as_echo "$as_me: WARNING: XML/Ada was not found." >&2;}
+   as_fn_error $? "Please install XML/Ada, re-configure and re-build AWA." "$LINENO" 5
+
+      ;;
+
+  esac
 
 
 
@@ -2728,10 +2747,14 @@ DIR=`pwd`
 # Check whether --with-aws was given.
 if test "${with_aws+set}" = set; then :
   withval=$with_aws;
-      ac_cv_gnat_project_name_aws=${withval}/
-      if test -d "${withval}"; then
-	    ac_cv_gnat_project_name_aws=${withval}/aws
-	  fi
+      if test "${withval}/" = "yes/"; then
+        ac_cv_gnat_project_name_aws=${awa_build_root}aws
+      else
+        ac_cv_gnat_project_name_aws=${withval}/
+        if test -d "${withval}"; then
+	      ac_cv_gnat_project_name_aws=${withval}/aws
+	    fi
+      fi
 
 else
 
@@ -2831,7 +2854,7 @@ $as_echo "no" >&6; }
 ac_configure_args="${ac_configure_args} --with-build-root="`pwd`
 
 
-subdirs="$subdirs ada-lzma ada-util ada-el ada-security ada-wiki ada-ado ada-servlet swagger-ada ada-asf dynamo awa"
+subdirs="$subdirs ada-lzma ada-util ada-el ada-security ada-wiki ada-ado ada-servlet openapi-ada ada-asf ada-keystore dynamo awa"
 
 
 
