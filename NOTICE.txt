@@ -1,8 +1,8 @@
 Ada Web Application
-Copyright 2009-2019 Stephane Carrez
+Copyright 2009-2020 Stephane Carrez
 
 This product includes software developed by:
-Stephane Carrez (http://blog.vacs.fr/).
+Stephane Carrez (https://blog.vacs.fr/).
 
 ------------------------------------------------------------------------
 See the file LICENSE.txt
