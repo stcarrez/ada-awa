@@ -1,0 +1,23 @@
+dist: bionic
+
+language: generic
+
+install:
+
+  # Install GNAT FSF
+  - sudo apt-get -y install gnat gprbuild liblzma-dev libcurl4-openssl-dev libxmlada-sax7-dev
+
+  # Install databases for Ado
+  - sudo apt-get -y install mariadb-client libmariadb-client-lgpl-dev
+  - sudo apt-get -y install sqlite3 libsqlite3-dev
+  - sudo apt-get -y install postgresql-client libpq-dev
+
+  # Install lcov for coverage
+  - sudo apt-get -y install lcov
+
+script:
+  - ./configure --enable-coverage
+  - make -s build test
+
+after_success:
+  - make update-coverage
