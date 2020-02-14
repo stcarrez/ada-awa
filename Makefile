@@ -47,6 +47,22 @@ sync-configure:
        cp Makefile.defaults $$i/Makefile.defaults ; \
     done
 
+# run the coverage reports and send them to codecov.io
+# it assumes that CODECOV_TOKEN_<submodule> is defined in environment variable.
+update-coverage:
+	curl -s https://codecov.io/bash -o codecov-io.sh
+	for i in $(SUBDIRS); do \
+           if test -f $$i/coverage.sh; then \
+             echo "Update coverage for $$i" && \
+             (cd $$i && sh ./coverage.sh) && \
+             file=`grep '^NAME=' $$i/coverage.sh | sed -e 's,NAME=,,'` && \
+             token=`echo $$file | sed -e 's,.cov,,'` && \
+             codecov_token=CODECOV_TOKEN_$${token} && \
+             echo bash ./codecov-io.sh \
+                -f $$i/$$file -t $${codecov_token}; \
+           fi ; \
+        done
+
 ifeq ($(BUILDS_SHARED),yes)
 install-shared:
 endif
