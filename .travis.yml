@@ -2,11 +2,15 @@ dist: bionic
 
 language: generic
 
+services:
+  - mysql
+  - postgresql
+
 install:
 
   # Install GNAT FSF
   - sudo apt-get -y install gnat gprbuild liblzma-dev libcurl4-openssl-dev libxmlada-sax7-dev
-  - sudo apt-get -y install libaws3.3.2.2-dev libxmlada-sax7-dev libxmlada-dom7-dev
+  - sudo apt-get -y install libaws3.3.2.2-dev libxmlada-sax7-dev libxmlada-dom7-dev libgpr1-dev
 
   # Install databases for Ado
   - sudo apt-get -y install sqlite3 libsqlite3-dev
