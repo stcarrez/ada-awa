@@ -24,6 +24,19 @@ install:
   # Install lcov for coverage
   - sudo apt-get -y install lcov
 
+before_script:
+  - psql -c 'CREATE DATABASE ado_test;' -U postgres
+  - psql -c 'CREATE DATABASE awa_test;' -U postgres
+  - psql -c "CREATE ROLE ado WITH PASSWORD 'ado'" -U postgres
+  - psql -c "CREATE ROLE awa_user WITH PASSWORD 'awa_pass'" -U postgres
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS ado_test;'
+  - mysql -e "CREATE USER 'ado_test' IDENTIFIED BY '';"
+  - mysql -e "GRANT ALL PRIVILEGES ON 'ado_test.*' TO 'ado_test'@'%';"
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS awa_test;'
+  - mysql -e "CREATE USER 'awa_user' IDENTIFIED BY '';"
+  - mysql -e "GRANT ALL PRIVILEGES ON 'awa_user.*' TO 'awa_test'@'%';"
+  - mysql -e "FLISH PRIVILEGES;"
+
 script:
   - ./configure --enable-coverage --prefix=${TRAVIS_BUILD_DIR}/install
   - make -s build install
