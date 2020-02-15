@@ -26,7 +26,8 @@ install:
 
 script:
   - ./configure --enable-coverage --prefix=${TRAVIS_BUILD_DIR}/install
-  - make -s build install test
+  - make -s build install
+  - make -s -i test
 
 after_success:
   - make update-coverage
