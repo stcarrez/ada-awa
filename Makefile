@@ -52,16 +52,15 @@ sync-configure:
 update-coverage:
 	curl -s https://codecov.io/bash -o codecov-io.sh
 	for i in $(SUBDIRS); do \
-           if test -f $$i/coverage.sh; then \
-             echo "Update coverage for $$i" && \
-             (cd $$i && sh ./coverage.sh) && \
-             file=`grep '^NAME=' $$i/coverage.sh | sed -e 's,NAME=,,'` && \
-             token=`echo $$file | sed -e 's,.cov,,'` && \
-             codecov_token=CODECOV_TOKEN_$${token} && \
-             bash ./codecov-io.sh \
-                -f $$i/$$file -t $${!codecov_token}; \
-           fi ; \
-        done
+      if test -f $$i/coverage.sh; then \
+        echo "Update coverage for $$i" && \
+        (cd $$i && sh ./coverage.sh) && \
+        file=`grep '^NAME=' $$i/coverage.sh | sed -e 's,NAME=,,'` && \
+        token=`echo $$file | sed -e 's,.cov,,'` && \
+        codecov_token=`eval echo \\$$CODECOV_TOKEN_$$token` && \
+        bash ./codecov-io.sh -f $$i/$$file -t $$codecov_token; \
+      fi ; \
+    done
 
 ifeq ($(BUILDS_SHARED),yes)
 install-shared:
