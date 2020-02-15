@@ -61,7 +61,7 @@ update-coverage:
          commit=`git rev-parse HEAD` && \
          export TRAVIS_COMMIT=$commit && \
          export TRAVIS_REPO_SLIT=stcarrez/$$i && \
-        bash ../codecov-io.sh -f $$i/$$file -t $$codecov_token); \
+        bash ../codecov-io.sh -f $$file -t $$codecov_token); \
       fi ; \
     done
 
