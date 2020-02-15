@@ -302,6 +302,8 @@ INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "country");
 INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "name");
+/* Copied from awa-sysadmin-sqlite.sql*/
+/* File generated automatically by dynamo */
 /* Copied from awa_counters-sqlite.sql*/
 /* File generated automatically by dynamo */
 /*  */

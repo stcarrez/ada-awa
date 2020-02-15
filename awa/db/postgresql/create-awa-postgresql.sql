@@ -302,13 +302,15 @@ INSERT INTO entity_type (name) VALUES
 ,('awa_user')
 ;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "first_name");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_user'), 'first_name');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "last_name");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_user'), 'last_name');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "country");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_user'), 'country');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "name");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_user'), 'name');
+/* Copied from awa-sysadmin-postgresql.sql*/
+/* File generated automatically by dynamo */
 /* Copied from awa_counters-postgresql.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -383,11 +385,11 @@ INSERT INTO entity_type (name) VALUES
 ('awa_comment')
 ;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_comment"), "message");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_comment'), 'message');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_comment"), "status");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_comment'), 'status');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_comment"), "format");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_comment'), 'format');
 /* Copied from awa-workspaces-postgresql.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -933,29 +935,29 @@ INSERT INTO entity_type (name) VALUES
 ,('awa_post')
 ;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "name");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'name');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "uid");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'uid');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "url");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'url');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "format");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'format');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "default_image_url");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'default_image_url');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "title");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'title');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "uri");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'uri');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "publish_date");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'publish_date');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "status");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'status');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "allow_comments");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'allow_comments');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "summary");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'summary');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "format");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'format');
 /* Copied from awa-changelogs-postgresql.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -1057,16 +1059,16 @@ INSERT INTO entity_type (name) VALUES
 ,('awa_wiki_space')
 ;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "name");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'name');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "last_version");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'last_version');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "is_public");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'is_public');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "title");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'title');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_space"), "name");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_space'), 'name');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_space"), "is_public");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_space'), 'is_public');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_space"), "format");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_space'), 'format');

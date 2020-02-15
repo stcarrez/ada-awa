@@ -75,6 +75,8 @@ DROP TABLE IF EXISTS awa_comment;
 DROP TABLE IF EXISTS awa_visit;
 DROP TABLE IF EXISTS awa_counter_definition;
 DROP TABLE IF EXISTS awa_counter;
+/* Copied from awa-sysadmin-drop-postgresql.sql*/
+/* File generated automatically by dynamo */
 /* Copied from ado-drop-postgresql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS "sequence";
