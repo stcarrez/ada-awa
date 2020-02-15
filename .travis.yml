@@ -30,10 +30,10 @@ before_script:
   - psql -c "CREATE ROLE ado WITH PASSWORD 'ado'" -U postgres
   - psql -c "CREATE ROLE awa_user WITH PASSWORD 'awa_pass'" -U postgres
   - mysql -e 'CREATE DATABASE IF NOT EXISTS ado_test;'
-  - mysql -e "CREATE USER 'ado_test' IDENTIFIED BY '';"
+  - mysql -e "CREATE USER 'ado_test'@'localhost' IDENTIFIED BY '';"
   - mysql -e "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, CREATE TEMPORARY TABLES, EXECUTE, SHOW VIEW ON ado_test.* TO ado_test@localhost;"
   - mysql -e 'CREATE DATABASE IF NOT EXISTS awa_test;'
-  - mysql -e "CREATE USER 'awa_user' IDENTIFIED BY '';"
+  - mysql -e "CREATE USER 'awa_user'@'localhost' IDENTIFIED BY '';"
   - mysql -e "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, CREATE TEMPORARY TABLES, EXECUTE, SHOW VIEW ON awa_test.* TO awa_user@localhost;"
   - mysql -e "FLUSH PRIVILEGES;"
 
