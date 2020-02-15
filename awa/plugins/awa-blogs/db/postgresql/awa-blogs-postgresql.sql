@@ -62,26 +62,26 @@ INSERT INTO entity_type (name) VALUES
 ,('awa_post')
 ;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "name");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'name');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "uid");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'uid');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "url");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'url');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "format");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'format');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "default_image_url");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'default_image_url');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "title");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'title');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "uri");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'uri');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "publish_date");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'publish_date');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "status");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'status');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "allow_comments");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'allow_comments');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "summary");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'summary');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "format");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'format');
