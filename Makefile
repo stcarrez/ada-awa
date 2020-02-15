@@ -58,8 +58,8 @@ update-coverage:
              file=`grep '^NAME=' $$i/coverage.sh | sed -e 's,NAME=,,'` && \
              token=`echo $$file | sed -e 's,.cov,,'` && \
              codecov_token=CODECOV_TOKEN_$${token} && \
-             echo bash ./codecov-io.sh \
-                -f $$i/$$file -t $${codecov_token}; \
+             bash ./codecov-io.sh \
+                -f $$i/$$file -t $${!codecov_token}; \
            fi ; \
         done
 
