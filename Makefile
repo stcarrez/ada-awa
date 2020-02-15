@@ -54,11 +54,14 @@ update-coverage:
 	for i in $(SUBDIRS); do \
       if test -f $$i/coverage.sh; then \
         echo "Update coverage for $$i" && \
-        (cd $$i && sh ./coverage.sh) && \
-        file=`grep '^NAME=' $$i/coverage.sh | sed -e 's,NAME=,,'` && \
-        token=`echo $$file | sed -e 's,.cov,,'` && \
-        codecov_token=`eval echo \\$$CODECOV_TOKEN_$$token` && \
-        bash ./codecov-io.sh -f $$i/$$file -t $$codecov_token; \
+        (cd $$i && sh ./coverage.sh && \
+         file=`grep '^NAME=' ./coverage.sh | sed -e 's,NAME=,,'` && \
+         token=`echo $$file | sed -e 's,.cov,,'` && \
+         codecov_token=`eval echo \\$$CODECOV_TOKEN_$$token` && \
+         commit=`git rev-parse HEAD` && \
+         export TRAVIS_COMMIT=$commit && \
+         export TRAVIS_REPO_SLIT=stcarrez/$$i && \
+        bash ./codecov-io.sh -f $$i/$$file -t $$codecov_token); \
       fi ; \
     done
 
