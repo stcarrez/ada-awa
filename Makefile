@@ -59,8 +59,8 @@ update-coverage:
          token=`echo $$file | sed -e 's,.cov,,'` && \
          codecov_token=`eval echo \\$$CODECOV_TOKEN_$$token` && \
          commit=`git rev-parse HEAD` && \
-         export TRAVIS_COMMIT=$commit && \
-         export TRAVIS_REPO_SLIT=stcarrez/$$i && \
+         export TRAVIS_COMMIT=$$commit && \
+         export TRAVIS_REPO_SLUG=stcarrez/$$i && \
         bash ../codecov-io.sh -f $$file -t $$codecov_token); \
       fi ; \
     done
