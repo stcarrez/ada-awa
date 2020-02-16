@@ -16,6 +16,8 @@ lcov --quiet --remove $NAME "*/ada-security/*" -o $NAME
 lcov --quiet --remove $NAME "*/ada-asf/*" -o $NAME
 lcov --quiet --remove $NAME "*/ada-ado/*" -o $NAME
 lcov --quiet --remove $NAME "*/openapi-ada/*" -o $NAME
+# Ignore generated code
+lcov --quiet --remove $NAME "*/model/*" -o $NAME
 rm -rf cover
 genhtml --quiet --ignore-errors source -o ./cover -t "test coverage" --num-spaces 4 $NAME
  
