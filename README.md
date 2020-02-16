@@ -2,6 +2,7 @@
 
 [![Build Status](https://img.shields.io/jenkins/s/http/jenkins.vacs.fr/AWA.svg)](https://jenkins.vacs.fr/job/AWA/)
 [![Test Status](https://img.shields.io/jenkins/t/http/jenkins.vacs.fr/AWA.svg)](https://jenkins.vacs.fr/job/AWA/)
+[![codecov](https://codecov.io/gh/stcarrez/ada-awa/branch/master/graph/badge.svg)](https://codecov.io/gh/stcarrez/ada-awa)
 [![Documentation Status](https://readthedocs.org/projects/ada-awa/badge/?version=latest)](https://ada-awa.readthedocs.io/en/latest/?badge=latest)
 [![Download](https://img.shields.io/badge/download-1.1.0-brightgreen.svg)](http://download.vacs.fr/ada-awa/awa-all-1.1.0.tar.gz)
 [![License](https://img.shields.io/badge/license-APACHE2-blue.svg)](LICENSE)
