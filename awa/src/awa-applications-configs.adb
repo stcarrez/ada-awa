@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-applications-configs -- Read application configuration files
---  Copyright (C) 2011, 2012, 2015, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2015, 2017, 2018, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +19,8 @@ with Ada.Command_Line;
 with Ada.Directories;
 with Ada.Strings.Unbounded;
 
+with Util.Properties;
+with Util.Beans.Objects;
 with Util.Files;
 with Util.Log.Loggers;
 with Util.Serialize.IO.XML;
@@ -33,6 +35,175 @@ with AWA.Services.Contexts;
 package body AWA.Applications.Configs is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Applications.Configs");
+
+   type Wallet_Manager is limited new Util.Properties.Implementation.Manager with record
+      Wallet : Keystore.Properties.Manager;
+      Props  : ASF.Applications.Config;
+      Length : Positive;
+      Prefix : String (1 .. MAX_PREFIX_LENGTH);
+   end record;
+   type Keystore_Manager_Access is access all Wallet_Manager'Class;
+
+   --  Get the value identified by the name.
+   --  If the name cannot be found, the method should return the Null object.
+   overriding
+   function Get_Value (From : in Wallet_Manager;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the value identified by the name.
+   --  If the map contains the given name, the value changed.
+   --  Otherwise name is added to the map and the value associated with it.
+   overriding
+   procedure Set_Value (From  : in out Wallet_Manager;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   --  Returns TRUE if the property exists.
+   overriding
+   function Exists (Self : in Wallet_Manager;
+                    Name : in String)
+                    return Boolean;
+
+   --  Remove the property given its name.
+   overriding
+   procedure Remove (Self : in out Wallet_Manager;
+                     Name : in String);
+
+   --  Iterate over the properties and execute the given procedure passing the
+   --  property name and its value.
+   overriding
+   procedure Iterate (Self    : in Wallet_Manager;
+                      Process : access procedure (Name : in String;
+                                                  Item : in Util.Beans.Objects.Object));
+
+   --  Deep copy of properties stored in 'From' to 'To'.
+   function Create_Copy (Self : in Wallet_Manager)
+                         return Util.Properties.Implementation.Manager_Access;
+
+   package Shared_Manager is
+     new Util.Properties.Implementation.Shared_Implementation (Wallet_Manager);
+
+   subtype Property_Map is Shared_Manager.Manager;
+   type Property_Map_Access is access all Property_Map;
+
+   --  ------------------------------
+   --  Get the value identified by the name.
+   --  If the name cannot be found, the method should return the Null object.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Wallet_Manager;
+                       Name : in String) return Util.Beans.Objects.Object is
+      Prefixed_Name : constant String := From.Prefix (1 .. From.Length) & Name;
+   begin
+      if From.Wallet.Exists (Prefixed_Name) then
+         declare
+            Value : constant String := From.Wallet.Get (Prefixed_Name);
+         begin
+            return Util.Beans.Objects.To_Object (Value);
+         end;
+      else
+         return From.Props.Get_Value (Name);
+      end if;
+   end Get_Value;
+
+   --  ------------------------------
+   --  Set the value identified by the name.
+   --  If the map contains the given name, the value changed.
+   --  Otherwise name is added to the map and the value associated with it.
+   --  ------------------------------
+   overriding
+   procedure Set_Value (From  : in out Wallet_Manager;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+      Prefixed_Name : constant String := From.Prefix (1 .. From.Length) & Name;
+   begin
+      if From.Wallet.Exists (Prefixed_Name) then
+         From.Wallet.Set_Value (Prefixed_Name, Value);
+      else
+         From.Props.Set_Value (Name, Value);
+      end if;
+   end Set_Value;
+
+   --  ------------------------------
+   --  Returns TRUE if the property exists.
+   --  ------------------------------
+   function Exists (Self : in Wallet_Manager;
+                    Name : in String)
+                    return Boolean is
+   begin
+      return Self.Props.Exists (Name)
+        or else Self.Wallet.Exists (Self.Prefix (1 .. Self.Length) & Name);
+   end Exists;
+
+   --  ------------------------------
+   --  Remove the property given its name.
+   --  ------------------------------
+   procedure Remove (Self : in out Wallet_Manager;
+                     Name : in String) is
+      Prefixed_Name : constant String := Self.Prefix (1 .. Self.Length) & Name;
+   begin
+      if Self.Wallet.Exists (Prefixed_Name) then
+         Self.Wallet.Remove (Prefixed_Name);
+      else
+         Self.Props.Remove (Name);
+      end if;
+   end Remove;
+
+   --  ------------------------------
+   --  Iterate over the properties and execute the given procedure passing the
+   --  property name and its value.
+   --  ------------------------------
+   procedure Iterate (Self    : in Wallet_Manager;
+                      Process : access procedure (Name : in String;
+                                                  Item : in Util.Beans.Objects.Object)) is
+   begin
+      Self.Props.Iterate (Process);
+   end Iterate;
+
+   --  ------------------------------
+   --  Deep copy of properties stored in 'From' to 'To'.
+   --  ------------------------------
+   function Create_Copy (Self : in Wallet_Manager)
+                         return Util.Properties.Implementation.Manager_Access is
+      Result : constant Property_Map_Access := new Property_Map;
+   begin
+      Result.Length := Self.Length;
+      Result.Wallet := Self.Wallet;
+      Result.Props := Self.Props;
+      Result.Prefix := Self.Prefix;
+      return Result.all'Access;
+   end Create_Copy;
+
+   --  ------------------------------
+   --  Merge the configuration content and the keystore to a final configuration object.
+   --  The keystore can be used to store sensitive information such as database connection,
+   --  secret keys while the rest of the configuration remains in clear property files.
+   --  The keystore must be unlocked to have access to its content.
+   --  The prefix parameter is used to prefix names from the keystore so that the same
+   --  keystore could be used by several applications.
+   --  ------------------------------
+   procedure Merge (Into   : in out ASF.Applications.Config;
+                    Config : in out ASF.Applications.Config;
+                    Wallet : in out Keystore.Properties.Manager;
+                    Prefix : in String) is
+      function Allocate return Util.Properties.Implementation.Shared_Manager_Access;
+
+      function Allocate return Util.Properties.Implementation.Shared_Manager_Access is
+         Result : constant Property_Map_Access := new Property_Map;
+      begin
+         Result.Length := Prefix'Length;
+         Result.Wallet := Wallet;
+         Result.Props := Config;
+         Result.Prefix (1 .. Result.Length) := Prefix;
+         return Result.all'Access;
+      end Allocate;
+
+      procedure Setup is
+        new Util.Properties.Implementation.Initialize (Allocate);
+
+   begin
+      Setup (Into);
+   end Merge;
 
    --  ------------------------------
    --  XML reader configuration.  By instantiating this generic package, the XML parser
