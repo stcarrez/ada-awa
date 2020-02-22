@@ -1,0 +1,53 @@
+-----------------------------------------------------------------------
+--  awa_command - Tests for AWA command
+--  Copyright (C) 2020 Stephane Carrez
+--  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+--
+--  Licensed under the Apache License, Version 2.0 (the "License");
+--  you may not use this file except in compliance with the License.
+--  You may obtain a copy of the License at
+--
+--      http://www.apache.org/licenses/LICENSE-2.0
+--
+--  Unless required by applicable law or agreed to in writing, software
+--  distributed under the License is distributed on an "AS IS" BASIS,
+--  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+--  See the License for the specific language governing permissions and
+--  limitations under the License.
+-----------------------------------------------------------------------
+
+with Util.Commands;
+with Util.Tests;
+with AWA.Tests;
+with AWA.Commands.Drivers;
+with AWA.Commands.List;
+with AWA.Commands.Start;
+with AWA.Commands.Stop;
+with Servlet.Server;
+with AWA.Tests;
+with ADO.Drivers;
+with AWA.Testsuite;
+procedure AWA_Command is
+
+   package Server_Commands is
+     new AWA.Commands.Drivers (Driver_Name => "awa",
+                               Container_Type => Servlet.Server.Container);
+
+   package List_Command is
+      new AWA.Commands.List (Server_Commands);
+
+   package Start_Command is
+      new AWA.Commands.Start (Server_Commands);
+
+   package Stop_Command is
+      new AWA.Commands.Stop (Server_Commands);
+
+   App       : aliased AWA.Tests.Test_Application;
+   Context   : AWA.Commands.Context_Type;
+   Arguments : Util.Commands.Dynamic_Argument_List;
+   Suite     : Util.Tests.Access_Test_Suite := AWA.Testsuite.Suite;
+begin
+   ADO.Drivers.Initialize;
+   Server_Commands.WS.Register_Application ("/test", App'Unchecked_Access);
+   Server_Commands.Run (Context, Arguments);
+end AWA_Command;
