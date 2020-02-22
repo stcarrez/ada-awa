@@ -32,7 +32,7 @@ project Awa_Tests is
 
    for Languages use ("Ada");
 
-   Mains := ("awa_harness.adb");
+   Mains := ("awa_harness.adb", "awa_command.adb");
 
    for Source_Dirs use ("regtests",
     "plugins/awa-counters/regtests",
