@@ -43,6 +43,7 @@ DYNAMO_ARGS=--package AWA.Users.Models \
   --package AWA.OAuth.Models \
   --package AWA.Permissions.Models \
   --package AWA.Audits.Models \
+  --package AWA.Commands.Models \
   db uml/awa.zargo
 
 build-test:: setup
