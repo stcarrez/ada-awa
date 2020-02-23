@@ -58,6 +58,7 @@ with AWA.Comments.Modules.Tests;
 with AWA.Changelogs.Modules.Tests;
 with AWA.Wikis.Modules.Tests;
 with AWA.Wikis.Tests;
+with AWA.Commands.Tests;
 
 with ADO.Drivers;
 with Servlet.Server;
@@ -125,6 +126,7 @@ package body AWA.Testsuite is
       AWA.Questions.Tests.Add_Tests (Ret);
       AWA.Wikis.Modules.Tests.Add_Tests (Ret);
       AWA.Wikis.Tests.Add_Tests (Ret);
+      AWA.Commands.Tests.Add_Tests (Ret);
       return Ret;
    end Suite;
 
