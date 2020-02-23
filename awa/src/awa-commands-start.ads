@@ -29,6 +29,7 @@ package AWA.Commands.Start is
       Upload_Size_Limit : aliased Integer := 16#500_000#;
       Max_Connection    : aliased Integer := 5;
       TCP_No_Delay      : aliased Boolean := False;
+      Daemon            : aliased Boolean := False;
       Upload            : aliased GNAT.Strings.String_Access;
    end record;
 
