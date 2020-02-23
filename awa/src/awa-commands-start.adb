@@ -15,6 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with System;
 with Servlet.Core;
 with Servlet.Server;
 with GNAT.Sockets;
@@ -22,6 +23,8 @@ with AWA.Applications;
 package body AWA.Commands.Start is
 
    use Ada.Strings.Unbounded;
+   use GNAT.Sockets;
+   use type System.Address;
 
    --  ------------------------------
    --  Start the server and all the application that have been registered.
@@ -62,6 +65,18 @@ package body AWA.Commands.Start is
       Listen  : GNAT.Sockets.Socket_Type;
       Socket  : GNAT.Sockets.Socket_Type;
    begin
+      --  If daemon(3) is available and -d is defined, run it so that the parent
+      --  process terminates and the child process continues.
+      if Command.Daemon and Sys_Daemon'Address /= System.Null_Address then
+         declare
+            Result : constant Integer := Sys_Daemon (1, 0);
+         begin
+            if Result /= 0 then
+               Context.Console.Error ("Cannot run in background");
+            end if;
+         end;
+      end if;
+
       Config.Listening_Port := Command.Listening_Port;
       Config.Max_Connection := Command.Max_Connection;
       Config.TCP_No_Delay := Command.TCP_No_Delay;
@@ -80,7 +95,11 @@ package body AWA.Commands.Start is
 
       GNAT.Sockets.Create_Socket (Listen);
       Address.Addr := GNAT.Sockets.Loopback_Inet_Addr;
-      Address.Port := 0;
+      if Command.Management_Port > 0 then
+         Address.Port := Port_Type (Command.Management_Port);
+      else
+         Address.Port := 0;
+      end if;
       GNAT.Sockets.Bind_Socket (Listen, Address);
       GNAT.Sockets.Listen_Socket (Listen);
 
@@ -137,6 +156,13 @@ package body AWA.Commands.Start is
                         Switch => "-n",
                         Long_Switch => "--tcp-no-delay",
                         Help   => -("Enable the TCP no delay option"));
+      if Sys_Daemon'Address /= System.Null_Address then
+         GC.Define_Switch (Config => Config,
+                           Output => Command.Daemon'Access,
+                           Switch => "-d",
+                           Long_Switch => "--daemon",
+                           Help   => -("Run the server in the background"));
+      end if;
       AWA.Commands.Setup (Config, Context);
    end Setup;
 
