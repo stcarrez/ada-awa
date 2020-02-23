@@ -124,4 +124,8 @@ private
    procedure Setup (Config  : in out GC.Command_Line_Configuration;
                     Context : in out Context_Type);
 
+   function Sys_Daemon (No_Chdir : in Integer; No_Close : in Integer) return Integer
+     with Import => True, Convention => C, Link_Name => "daemon";
+   pragma Weak_External (Sys_Daemon);
+
 end AWA.Commands;
