@@ -33,6 +33,8 @@ package body AWA.Commands.Tests is
    begin
       Caller.Add_Test (Suite, "Test AWA.Commands.Start_Stop",
                        Test_Start_Stop'Access);
+      Caller.Add_Test (Suite, "Test AWA.Commands.List (tables)",
+                       Test_List_Tables'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -108,7 +110,19 @@ package body AWA.Commands.Tests is
 
       --  Wait for the task result.
       Start_Server.Wait (Result);
-      Util.Tests.Assert_Equals (T, "", Result, "AWA start command output");
+      Util.Tests.Assert_Matches (T, "Starting...", Result, "AWA start command output");
    end Test_Start_Stop;
+
+   procedure Test_List_Tables (T : in out Test) is
+      Config : constant String := Util.Tests.Get_Parameter ("test_config_path");
+      Result : Ada.Strings.Unbounded.Unbounded_String;
+   begin
+      T.Execute ("bin/awa_command -c " & Config & " list -t",
+                 "", "", Result, 0);
+      Util.Tests.Assert_Matches (T, "awa_audit *[0-9]+", Result, "Missing awa_audit");
+      Util.Tests.Assert_Matches (T, "awa_session *[0-9]+", Result, "Missing awa_session");
+      Util.Tests.Assert_Matches (T, "entity_type *[0-9]+", Result, "Missing entity_type");
+      Util.Tests.Assert_Matches (T, "awa_wiki_page *[0-9]+", Result, "Missing awa_wiki_page");
+   end Test_List_Tables;
 
 end AWA.Commands.Tests;
