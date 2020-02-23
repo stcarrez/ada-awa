@@ -28,6 +28,8 @@ package AWA.Commands.Tests is
    --  Test start and stop command.
    procedure Test_Start_Stop (T : in out Test);
 
+   procedure Test_List_Tables (T : in out Test);
+
    procedure Execute (T       : in out Test;
                       Command : in String;
                       Input   : in String;
