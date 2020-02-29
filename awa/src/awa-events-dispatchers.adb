@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-dispatchers -- AWA Event Dispatchers
---  Copyright (C) 2012, 2017 Stephane Carrez
+--  Copyright (C) 2012, 2017, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,7 +32,8 @@ package body AWA.Events.Dispatchers is
 
    --  ------------------------------
    --  Dispatch the events from the queue.
-   --  Increment the <b>Count</b> parameter to indicate the number of events that were dispatched.
+   --  Increment the `Count` parameter to indicate the number of events
+   --  that were dispatched.
    --  ------------------------------
    procedure Dispatch (Manager : in Dispatcher;
                        Queue   : in AWA.Events.Queues.Queue_Ref;
