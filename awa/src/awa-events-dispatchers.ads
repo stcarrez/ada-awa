@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-dispatchers -- AWA Event Dispatchers
---  Copyright (C) 2012, 2017 Stephane Carrez
+--  Copyright (C) 2012, 2017, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,20 +42,23 @@ package AWA.Events.Dispatchers is
                         Added   : out Boolean);
 
    --  Dispatch the events from the queue.
-   --  Increment the <b>Count</b> parameter to indicate the number of events that were dispatched.
+   --  Increment the `Count` parameter to indicate the number of events
+   --  that were dispatched.
    procedure Dispatch (Manager : in Dispatcher;
                        Queue   : in AWA.Events.Queues.Queue_Ref;
                        Count   : in out Natural);
 
-   --  Dispatch the event identified by <b>Event</b>.
-   --  The event actions which are associated with the event are executed synchronously.
+   --  Dispatch the event identified by `Event`.
+   --  The event actions which are associated with the event are executed
+   --  synchronously.
    procedure Dispatch (Manager : in Dispatcher;
                        Event   : in Module_Event'Class) is null;
 
    --  Add an action invoked when an event is dispatched through this dispatcher.
-   --  When the event queue dispatches the event, the Ada bean identified by the method action
-   --  represented by <b>Action</b> is created and initialized by evaluating and setting the
-   --  parameters defined in <b>Params</b>.  The action method is then invoked.
+   --  When the event queue dispatches the event, the Ada bean identified
+   --  by the method action represented by `Action` is created and initialized
+   --  by evaluating and setting the parameters defined in `Params`.
+   --  The action method is then invoked.
    procedure Add_Action (Manager : in out Dispatcher;
                          Action  : in EL.Expressions.Method_Expression;
                          Params  : in EL.Beans.Param_Vectors.Vector) is null;
