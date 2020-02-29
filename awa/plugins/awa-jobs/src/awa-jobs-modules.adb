@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  awa-jobs-module -- Job module
---  Copyright (C) 2012, 2013 Stephane Carrez
+--  awa-jobs-modules -- Job module
+--  Copyright (C) 2012, 2013, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,15 +16,10 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Ada.Tags;
-with Ada.Calendar;
 
 with Util.Log.Loggers;
 
-with ADO.Sessions;
-with ADO.SQL;
-
 with AWA.Applications;
-with AWA.Events.Services;
 with AWA.Modules.Get;
 with AWA.Modules.Beans;
 with AWA.Jobs.Beans;
@@ -43,34 +38,9 @@ package body AWA.Jobs.Modules is
    procedure Initialize (Plugin : in out Job_Module;
                          App    : in AWA.Modules.Application_Access;
                          Props  : in ASF.Applications.Config) is
-      procedure Process (Events : in out AWA.Events.Services.Event_Manager);
-
-      Name : constant String := Props.Get ("jobs_queue", "default");
-
-      procedure Process (Events : in out AWA.Events.Services.Event_Manager) is
-      begin
-         null;
-      end Process;
-
    begin
-      Log.Info ("Initializing the jobs module, queue {0}", Name);
+      Log.Info ("Initializing the jobs module");
 
-      App.Do_Event_Manager (Process'Access);
-
-      declare
-         DB    : ADO.Sessions.Session := App.Get_Session;
-         Query : ADO.SQL.Query;
-         Found : Boolean;
-      begin
-         Query.Set_Filter ("o.name = ?");
-         Query.Add_Param ("job-create");
-         Plugin.Message_Type.Find (Session => DB,
-                                   Query   => Query,
-                                   Found   => Found);
-         if not Found then
-            Log.Error ("Event {0} not found in database", "job-create");
-         end if;
-      end;
       Register_Beans.Register (Plugin  => Plugin,
                                Name    => "AWA.Jobs.Beans.Process_Bean",
                                Handler => AWA.Jobs.Beans.Create_Process_Bean'Access);
@@ -88,7 +58,7 @@ package body AWA.Jobs.Modules is
    end Get_Job_Module;
 
    --  ------------------------------
-   --  Registers the job work procedure represented by <b>Work</b> under the name <b>Name</b>.
+   --  Registers the job work procedure represented by `Work` under the name `Name`.
    --  ------------------------------
    procedure Register (Plugin     : in out Job_Module;
                        Definition : in AWA.Jobs.Services.Job_Factory_Access) is
@@ -101,7 +71,7 @@ package body AWA.Jobs.Modules is
    end Register;
 
    --  ------------------------------
-   --  Find the job work factory registered under the name <b>Name</b>.
+   --  Find the job work factory registered under the name `Name`.
    --  Returns null if there is no such factory.
    --  ------------------------------
    function Find_Factory (Plugin : in Job_Module;
@@ -114,17 +84,5 @@ package body AWA.Jobs.Modules is
          return null;
       end if;
    end Find_Factory;
-
-   --  ------------------------------
-   --  Create an event to schedule the job execution.
-   --  ------------------------------
-   procedure Create_Event (Event : in out AWA.Events.Models.Message_Ref) is
-      M : constant Job_Module_Access := Get_Job_Module;
-   begin
-      Event.Set_Status (AWA.Events.Models.QUEUED);
-      Event.Set_Message_Type (M.Message_Type);
-      Event.Set_Queue (M.Queue);
-      Event.Set_Create_Date (Ada.Calendar.Clock);
-   end Create_Event;
 
 end AWA.Jobs.Modules;
