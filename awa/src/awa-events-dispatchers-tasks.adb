@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-dispatchers-tasks -- AWA Event Dispatchers
---  Copyright (C) 2012, 2015, 2017, 2019 Stephane Carrez
+--  Copyright (C) 2012, 2015, 2017, 2019, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -71,6 +71,27 @@ package body AWA.Events.Dispatchers.Tasks is
       end if;
    end Stop;
 
+   --  ------------------------------
+   --  Inform the dispatch that some events may have been queued.
+   --  ------------------------------
+   overriding
+   procedure Update (Manager : in Task_Dispatcher;
+                     Queue   : in Queues.Queue_Ref) is
+      pragma Unreferenced (Queue);
+   begin
+      if Manager.Workers /= null then
+         Log.Debug ("Wakeup dispatcher tasks");
+
+         for I in Manager.Workers'Range loop
+            if Manager.Workers (I)'Callable then
+               Manager.Workers (I).Wakeup;
+            else
+               Log.Error ("Event consumer task terminated abnormally");
+            end if;
+         end loop;
+      end if;
+   end Update;
+
    procedure Add_Queue (Manager : in out Task_Dispatcher;
                         Queue   : in AWA.Events.Queues.Queue_Ref;
                         Added   : out Boolean) is
@@ -78,6 +99,7 @@ package body AWA.Events.Dispatchers.Tasks is
       Log.Info ("Adding queue {0} to the task dispatcher", Queue.Get_Name);
 
       Manager.Queues.Enqueue (Queue);
+      Queue.Add_Listener (Manager'Unchecked_Access);
       Added := True;
    end Add_Queue;
 
@@ -144,6 +166,10 @@ package body AWA.Events.Dispatchers.Tasks is
                      accept Stop do
                         Do_Work := False;
                      end Stop;
+                  or
+                     accept Wakeup do
+                        Do_Work := True;
+                     end Wakeup;
                   or
                      accept Start (D : in Task_Dispatcher_Access) do
                         Dispatcher := D;
