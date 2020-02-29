@@ -8,15 +8,8 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
-  <context-param>
-    <param-name>jobs_queue</param-name>
-    <param-value>long-running</param-value>
-    <description>
-       The job queue that execute the jobs
-    </description>
-  </context-param>
-
-  <!--  When a user is created, send him a welcome message.  -->
+  <!--  When a job is created, use the 'job-queue' and execute
+        the action by using the 'jobHandler' bean.  -->
   <on-event name="job-create" queue="job-queue">
      <action>#{jobHandler.execute}</action>
   </on-event>
