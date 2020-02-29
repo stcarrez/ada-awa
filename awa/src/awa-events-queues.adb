@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-queues -- AWA Event Queues
---  Copyright (C) 2012, 2019 Stephane Carrez
+--  Copyright (C) 2012, 2019, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +21,7 @@ with Util.Serialize.Mappers;
 
 with AWA.Events.Queues.Fifos;
 with AWA.Events.Queues.Persistents;
+with AWA.Events.Queues.Observers;
 package body AWA.Events.Queues is
 
    --  ------------------------------
@@ -35,6 +36,7 @@ package body AWA.Events.Queues is
          begin
             if Q.Queue /= null then
                Q.Queue.Enqueue (Event);
+               Observers.Notify (Q.Listeners, Into);
             end if;
          end;
       end if;
@@ -56,6 +58,21 @@ package body AWA.Events.Queues is
          end;
       end if;
    end Dequeue;
+
+   --  ------------------------------
+   --  Add a listener that will be called each time an event is queued.
+   --  ------------------------------
+   procedure Add_Listener (Into     : in Queue_Ref;
+                           Listener : in Util.Listeners.Listener_Access) is
+   begin
+      if not Into.Is_Null then
+         declare
+            Q : constant Queue_Info_Accessor := Into.Value;
+         begin
+            Q.Listeners.Append (Listener);
+         end;
+      end if;      
+   end Add_Listener;
 
    --  ------------------------------
    --  Returns true if the queue is available.
@@ -90,10 +107,6 @@ package body AWA.Events.Queues is
       end if;
    end Get_Queue;
 
-
-   FIFO_QUEUE_TYPE       : constant String := "fifo";
-   PERSISTENT_QUEUE_TYPE : constant String := "persist";
-
    --  ------------------------------
    --  Create the event queue identified by the name <b>Name</b>.  The queue factory
    --  identified by <b>Kind</b> is called to create the event queue instance.
@@ -105,16 +118,17 @@ package body AWA.Events.Queues is
                           Context : in EL.Contexts.ELContext'Class)
                           return Queue_Ref is
       Result : Queue_Ref;
-      Q      : constant Queue_Info_Access := new Queue_Info '(Util.Refs.Ref_Entity with
-                                                              Length => Name'Length,
-                                                              Name   => Name,
-                                                              others => <>);
+      Q      : constant Queue_Info_Access
+        := new Queue_Info '(Util.Refs.Ref_Entity with
+                            Length => Name'Length,
+                            Name   => Name,
+                            others => <>);
    begin
       Queue_Refs.Ref (Result) := Queue_Refs.Create (Q);
       if Kind = FIFO_QUEUE_TYPE then
-         Q.Queue := AWA.Events.Queues.Fifos.Create_Queue (Name, Props, Context);
+         Q.Queue := Queues.Fifos.Create_Queue (Name, Props, Context);
       elsif Kind = PERSISTENT_QUEUE_TYPE then
-         Q.Queue := AWA.Events.Queues.Persistents.Create_Queue (Name, Props, Context);
+         Q.Queue := Queues.Persistents.Create_Queue (Name, Props, Context);
       else
          raise Util.Serialize.Mappers.Field_Error with "Invalid queue type: " & Kind;
       end if;
