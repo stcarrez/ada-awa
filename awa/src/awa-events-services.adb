@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-services -- AWA Event Manager
---  Copyright (C) 2012, 2015, 2016, 2018, 2019 Stephane Carrez
+--  Copyright (C) 2012, 2015, 2016, 2018, 2019, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,13 +27,15 @@ with AWA.Events.Dispatchers.Tasks;
 with AWA.Events.Dispatchers.Actions;
 package body AWA.Events.Services is
 
-   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Events.Services");
+   Log : constant Util.Log.Loggers.Logger
+     := Util.Log.Loggers.Create ("AWA.Events.Services");
 
    --  ------------------------------
    --  Send the event to the modules that subscribed to it.
    --  The event is sent on each event queue.  Event queues will dispatch the event
-   --  by invoking immediately or later on the <b>Dispatch</b> operation.  The synchronous
-   --  or asynchronous reception of the event depends on the event queue.
+   --  by invoking immediately or later on the `Dispatch`> operation.
+   --  The synchronous or asynchronous reception of the event depends
+   --  on the event queue.
    --  ------------------------------
    procedure Send (Manager : in Event_Manager;
                    Event   : in Module_Event'Class) is
@@ -55,11 +57,12 @@ package body AWA.Events.Services is
          raise Not_Found;
       end if;
 
-      --  Find the event queues associated with the event.  Post the event on each queue.
-      --  Some queue can dispatch the event immediately while some others may dispatched it
-      --  asynchronously.
+      --  Find the event queues associated with the event.
+      --  Post the event on each queue.  Some queue can dispatch the event
+      --  immediately while some others may dispatched it asynchronously.
       declare
-         Pos  : Queue_Dispatcher_Lists.Cursor := Manager.Actions (Event.Kind).Queues.First;
+         Pos  : Queue_Dispatcher_Lists.Cursor
+           := Manager.Actions (Event.Kind).Queues.First;
       begin
          if not Queue_Dispatcher_Lists.Has_Element (Pos) then
             Log.Debug ("Sending event {0} but there is no listener", Name.all);
@@ -75,7 +78,7 @@ package body AWA.Events.Services is
    end Send;
 
    --  ------------------------------
-   --  Set the event message type which correspond to the <tt>Kind</tt> event index.
+   --  Set the event message type which correspond to the `Kind` event index.
    --  ------------------------------
    procedure Set_Message_Type (Manager : in Event_Manager;
                                Event   : in out AWA.Events.Models.Message_Ref;
@@ -90,8 +93,9 @@ package body AWA.Events.Services is
    end Set_Message_Type;
 
    --  ------------------------------
-   --  Set the event queue associated with the event message.  The event queue identified by
-   --  <tt>Name</tt> is searched to find the <tt>Queue_Ref</tt> instance.
+   --  Set the event queue associated with the event message.
+   --  The event queue identified by `Name` is searched to find the
+   --  `Queue_Ref` instance.
    --  ------------------------------
    procedure Set_Event_Queue (Manager : in Event_Manager;
                               Event   : in out AWA.Events.Models.Message_Ref;
@@ -102,8 +106,8 @@ package body AWA.Events.Services is
    end Set_Event_Queue;
 
    --  ------------------------------
-   --  Dispatch the event identified by <b>Event</b> and associated with the event
-   --  queue <b>Queue</b>.  The event actions which are associated with the event are
+   --  Dispatch the event identified by `Event` and associated with the event
+   --  queue `Queue`.  The event actions which are associated with the event are
    --  executed synchronously.
    --  ------------------------------
    procedure Dispatch (Manager : in Event_Manager;
@@ -129,7 +133,8 @@ package body AWA.Events.Services is
       end if;
 
       declare
-         Pos  : Queue_Dispatcher_Lists.Cursor := Manager.Actions (Event.Kind).Queues.First;
+         Pos  : Queue_Dispatcher_Lists.Cursor
+           := Manager.Actions (Event.Kind).Queues.First;
       begin
          if not Queue_Dispatcher_Lists.Has_Element (Pos) then
             Log.Debug ("Dispatching event {0} but there is no listener", Name.all);
@@ -180,11 +185,12 @@ package body AWA.Events.Services is
    end Add_Queue;
 
    --  ------------------------------
-   --  Add an action invoked when the event identified by <b>Event</b> is sent.
-   --  The event is posted on the queue identified by <b>Queue</b>.
-   --  When the event queue dispatches the event, the Ada bean identified by the method action
-   --  represented by <b>Action</b> is created and initialized by evaluating and setting the
-   --  parameters defined in <b>Params</b>.  The action method is then invoked.
+   --  Add an action invoked when the event identified by `Event` is sent.
+   --  The event is posted on the queue identified by `Queue`.
+   --  When the event queue dispatches the event, the Ada bean identified
+   --  by the method action represented by `Action` is created and initialized
+   --  by evaluating and setting the parameters defined in `Params`.
+   --  The action method is then invoked.
    --  ------------------------------
    procedure Add_Action (Manager : in out Event_Manager;
                          Event   : in String;
@@ -239,8 +245,9 @@ package body AWA.Events.Services is
    end Add_Action;
 
    --  ------------------------------
-   --  Add a dispatcher to process the event queues matching the <b>Match</b> string.
-   --  The dispatcher can create up to <b>Count</b> tasks running at the priority <b>Priority</b>.
+   --  Add a dispatcher to process the event queues matching the `Match` string.
+   --  The dispatcher can create up to `Count` tasks running at the priority
+   --  `Priority`.
    --  ------------------------------
    procedure Add_Dispatcher (Manager  : in out Event_Manager;
                              Match    : in String;
@@ -248,14 +255,15 @@ package body AWA.Events.Services is
                              Priority : in Positive) is
       use type AWA.Events.Dispatchers.Dispatcher_Access;
    begin
-      Log.Info ("Adding event dispatcher with {0} tasks prio {1} and dispatching queues '{2}'",
+      Log.Info ("Adding event dispatcher with {0} tasks prio {1} and "
+                & "dispatching queues '{2}'",
                 Positive'Image (Count), Positive'Image (Priority), Match);
 
       for I in Manager.Dispatchers'Range loop
          if Manager.Dispatchers (I) = null then
             Manager.Dispatchers (I) :=
-              AWA.Events.Dispatchers.Tasks.Create_Dispatcher (Manager'Unchecked_Access,
-                                                              Match, Count, Priority);
+              Dispatchers.Tasks.Create_Dispatcher (Manager'Unchecked_Access,
+                                                   Match, Count, Priority);
             return;
          end if;
       end loop;
@@ -268,10 +276,6 @@ package body AWA.Events.Services is
    procedure Initialize (Manager : in out Event_Manager;
                          App     : in Application_Access) is
       procedure Set_Events (Msg : in AWA.Events.Models.Message_Type_Ref);
-
-      Msg_Types : AWA.Events.Models.Message_Type_Vector;
-
-      Query     : ADO.SQL.Query;
 
       procedure Set_Events (Msg : in AWA.Events.Models.Message_Type_Ref) is
          Name : constant String := Msg.Get_Name;
@@ -287,7 +291,9 @@ package body AWA.Events.Services is
             Log.Warn ("Event {0} is no longer used", Name);
       end Set_Events;
 
-      DB : ADO.Sessions.Master_Session := App.Get_Master_Session;
+      Msg_Types : AWA.Events.Models.Message_Type_Vector;
+      Query     : ADO.SQL.Query;
+      DB        : ADO.Sessions.Master_Session := App.Get_Master_Session;
    begin
       Log.Info ("Initializing {0} events", Event_Index'Image (Event_Arrays.Get_Last));
 
@@ -301,9 +307,9 @@ package body AWA.Events.Services is
       declare
          Pos : AWA.Events.Models.Message_Type_Vectors.Cursor := Msg_Types.First;
       begin
-         while AWA.Events.Models.Message_Type_Vectors.Has_Element (Pos) loop
-            AWA.Events.Models.Message_Type_Vectors.Query_Element (Pos, Set_Events'Access);
-            AWA.Events.Models.Message_Type_Vectors.Next (Pos);
+         while Models.Message_Type_Vectors.Has_Element (Pos) loop
+            Models.Message_Type_Vectors.Query_Element (Pos, Set_Events'Access);
+            Models.Message_Type_Vectors.Next (Pos);
          end loop;
       end;
 
@@ -322,21 +328,19 @@ package body AWA.Events.Services is
    end Initialize;
 
    --  ------------------------------
-   --  Start the event manager.  The dispatchers are configured to dispatch the event queues
-   --  and tasks are started to process asynchronous events.
+   --  Start the event manager.  The dispatchers are configured to dispatch
+   --  the event queues and tasks are started to process asynchronous events.
    --  ------------------------------
    procedure Start (Manager : in out Event_Manager) is
       use type AWA.Events.Dispatchers.Dispatcher_Access;
 
-      --  Dispatch the event queues to the dispatcher according to the dispatcher configuration.
+      --  Dispatch the event queues to the dispatcher according
+      --  to the dispatcher configuration.
       procedure Associate_Dispatcher (Key   : in String;
-                                      Queue : in out AWA.Events.Queues.Queue_Ref);
+                                      Queue : in out Events.Queues.Queue_Ref);
 
-      --  ------------------------------
-      --  Dispatch the event queues to the dispatcher according to the dispatcher configuration.
-      --  ------------------------------
       procedure Associate_Dispatcher (Key   : in String;
-                                      Queue : in out AWA.Events.Queues.Queue_Ref) is
+                                      Queue : in out Events.Queues.Queue_Ref) is
          pragma Unreferenced (Key);
 
          Added : Boolean := False;
@@ -393,8 +397,8 @@ package body AWA.Events.Services is
    --  ------------------------------
    procedure Finalize (Object : in out Queue_Dispatcher) is
       procedure Free is
-         new Ada.Unchecked_Deallocation (Object => AWA.Events.Dispatchers.Dispatcher'Class,
-                                         Name   => AWA.Events.Dispatchers.Dispatcher_Access);
+         new Ada.Unchecked_Deallocation (Object => Dispatchers.Dispatcher'Class,
+                                         Name   => Dispatchers.Dispatcher_Access);
    begin
       Free (Object.Dispatcher);
    end Finalize;
@@ -428,8 +432,8 @@ package body AWA.Events.Services is
         new Ada.Unchecked_Deallocation (Object => Event_Queues_Array,
                                         Name   => Event_Queues_Array_Access);
       procedure Free is
-         new Ada.Unchecked_Deallocation (Object => AWA.Events.Dispatchers.Dispatcher'Class,
-                                         Name   => AWA.Events.Dispatchers.Dispatcher_Access);
+         new Ada.Unchecked_Deallocation (Object => Dispatchers.Dispatcher'Class,
+                                         Name   => Dispatchers.Dispatcher_Access);
    begin
       --  Stop the dispatcher first.
       for I in Manager.Dispatchers'Range loop
