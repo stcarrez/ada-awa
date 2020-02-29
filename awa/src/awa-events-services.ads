@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-services -- AWA Event Manager
---  Copyright (C) 2012, 2016 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,10 +35,10 @@ package AWA.Events.Services is
    --  ------------------------------
    --  Event manager
    --  ------------------------------
-   --  The <b>Event_Manager</b> manages the dispatch of event to the right event queue
-   --  or to the event action.  The event manager holds a list of actions that must be
-   --  triggered for a particular event/queue pair.  Such list is created and initialized
-   --  when the application is configured.  It never changes.
+   --  The `Event_Manager` manages the dispatch of event to the right event queue
+   --  or to the event action.  The event manager holds a list of actions that
+   --  must be triggered for a particular event/queue pair.  Such list is created
+   --  and initialized when the application is configured.  It never changes.
    type Event_Manager is tagged limited private;
    type Event_Manager_Access is access all Event_Manager'Class;
 
@@ -52,42 +52,46 @@ package AWA.Events.Services is
 
    --  Send the event to the modules that subscribed to it.
    --  The event is sent on each event queue.  Event queues will dispatch the event
-   --  by invoking immediately or later on the <b>Dispatch</b> operation.  The synchronous
-   --  or asynchronous reception of the event depends on the event queue.
+   --  by invoking immediately or later on the `Dispatch`> operation.
+   --  The synchronous or asynchronous reception of the event depends
+   --  on the event queue.
    procedure Send (Manager : in Event_Manager;
                    Event   : in Module_Event'Class);
 
-   --  Set the event message type which correspond to the <tt>Kind</tt> event index.
+   --  Set the event message type which correspond to the `Kind` event index.
    procedure Set_Message_Type (Manager : in Event_Manager;
                                Event   : in out AWA.Events.Models.Message_Ref;
                                Kind    : in Event_Index);
 
-   --  Set the event queue associated with the event message.  The event queue identified by
-   --  <tt>Name</tt> is searched to find the <tt>Queue_Ref</tt> instance.
+   --  Set the event queue associated with the event message.
+   --  The event queue identified by `Name` is searched to find the
+   --  `Queue_Ref` instance.
    procedure Set_Event_Queue (Manager : in Event_Manager;
                               Event   : in out AWA.Events.Models.Message_Ref;
                               Name    : in String);
 
-   --  Dispatch the event identified by <b>Event</b> and associated with the event
-   --  queue <b>Queue</b>.  The event actions which are associated with the event are
+   --  Dispatch the event identified by `Event` and associated with the event
+   --  queue `Queue`.  The event actions which are associated with the event are
    --  executed synchronously.
    procedure Dispatch (Manager : in Event_Manager;
                        Queue   : in AWA.Events.Queues.Queue_Ref;
                        Event   : in Module_Event'Class);
 
-   --  Add an action invoked when the event identified by <b>Event</b> is sent.
-   --  The event is posted on the queue identified by <b>Queue</b>.
-   --  When the event queue dispatches the event, the Ada bean identified by the method action
-   --  represented by <b>Action</b> is created and initialized by evaluating and setting the
-   --  parameters defined in <b>Params</b>.  The action method is then invoked.
+   --  Add an action invoked when the event identified by `Event` is sent.
+   --  The event is posted on the queue identified by `Queue`.
+   --  When the event queue dispatches the event, the Ada bean identified
+   --  by the method action represented by `Action` is created and initialized
+   --  by evaluating and setting the parameters defined in `Params`.
+   --  The action method is then invoked.
    procedure Add_Action (Manager : in out Event_Manager;
                          Event   : in String;
                          Queue   : in AWA.Events.Queues.Queue_Ref;
                          Action  : in EL.Expressions.Method_Expression;
                          Params  : in EL.Beans.Param_Vectors.Vector);
 
-   --  Add a dispatcher to process the event queues matching the <b>Match</b> string.
-   --  The dispatcher can create up to <b>Count</b> tasks running at the priority <b>Priority</b>.
+   --  Add a dispatcher to process the event queues matching the `Match` string.
+   --  The dispatcher can create up to `Count` tasks running at the priority
+   --  `Priority`.
    procedure Add_Dispatcher (Manager  : in out Event_Manager;
                              Match    : in String;
                              Count    : in Positive;
@@ -99,8 +103,8 @@ package AWA.Events.Services is
    procedure Initialize (Manager : in out Event_Manager;
                          App     : in Application_Access);
 
-   --  Start the event manager.  The dispatchers are configured to dispatch the event queues
-   --  and tasks are started to process asynchronous events.
+   --  Start the event manager.  The dispatchers are configured to dispatch
+   --  the event queues and tasks are started to process asynchronous events.
    procedure Start (Manager : in out Event_Manager);
 
    --  Stop the event manager.
@@ -145,7 +149,7 @@ private
       Actions     : Event_Queues_Array_Access := null;
       Queues      : AWA.Events.Queues.Maps.Map;
       Application : Application_Access := null;
-      Dispatchers : AWA.Events.Dispatchers.Dispatcher_Access_Array := (others => null);
+      Dispatchers : Events.Dispatchers.Dispatcher_Access_Array := (others => null);
    end record;
 
    --  Finalize the event manager by releasing the allocated storage.
