@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  awa-jobs-module -- Job module
---  Copyright (C) 2012 Stephane Carrez
+--  awa-jobs-modules -- Job module
+--  Copyright (C) 2012, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,6 @@ with ASF.Applications;
 
 with AWA.Modules;
 with AWA.Jobs.Services;
-with AWA.Events.Models;
 
 --  == Job Module ==
 --  The <b>Jobs.Modules</b> is the entry point for the management of asynchronous jobs.
@@ -44,17 +43,14 @@ package AWA.Jobs.Modules is
    --  Get the job module instance associated with the current application.
    function Get_Job_Module return Job_Module_Access;
 
-   --  Registers the job work procedure represented by <b>Work</b> under the name <b>Name</b>.
+   --  Registers the job work procedure represented by `Work` under the name `Name`.
    procedure Register (Plugin     : in out Job_Module;
                        Definition : in AWA.Jobs.Services.Job_Factory_Access);
 
-   --  Find the job work factory registered under the name <b>Name</b>.
+   --  Find the job work factory registered under the name `Name`.
    --  Returns null if there is no such factory.
    function Find_Factory (Plugin : in Job_Module;
                           Name   : in String) return AWA.Jobs.Services.Job_Factory_Access;
-
-   --  Create an event to schedule the job execution.
-   procedure Create_Event (Event : in out AWA.Events.Models.Message_Ref);
 
 private
 
@@ -69,8 +65,6 @@ private
 
    type Job_Module is new AWA.Modules.Module with record
       Factory      : Job_Factory_Map.Map;
-      Queue        : AWA.Events.Models.Queue_Ref;
-      Message_Type : AWA.Events.Models.Message_Type_Ref;
    end record;
 
 end AWA.Jobs.Modules;
