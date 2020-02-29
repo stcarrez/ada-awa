@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  awa-events-queues-persistents -- AWA Event Queues
---  Copyright (C) 2012 Stephane Carrez
+--  awa-events-queues-persistents -- Persistent event queues
+--  Copyright (C) 2012, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,7 +32,7 @@ private package AWA.Events.Queues.Persistents is
    --  Get the model queue reference object.
    --  Returns a null object if the queue is not persistent.
    overriding
-   function Get_Queue (From : in Persistent_Queue) return AWA.Events.Models.Queue_Ref;
+   function Get_Queue (From : in Persistent_Queue) return Events.Models.Queue_Ref;
 
    --  Queue the event.  The event is saved in the database with a relation to
    --  the user, the user session, the event queue and the event type.
