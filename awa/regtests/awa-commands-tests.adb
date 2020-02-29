@@ -75,6 +75,8 @@ package body AWA.Commands.Tests is
    --  ------------------------------
    procedure Test_Start_Stop (T : in out Test) is
 
+      Config : constant String := Util.Tests.Get_Parameter ("test_config_path");
+
       task Start_Server is
          entry Start;
          entry Wait (Result : out Ada.Strings.Unbounded.Unbounded_String);
@@ -87,7 +89,7 @@ package body AWA.Commands.Tests is
             null;
          end Start;
          begin
-            T.Execute ("bin/awa_command -c test-sqlite.properties start -m 26123",
+            T.Execute ("bin/awa_command -c " & Config & " start -m 26123",
                        "", "", Output, 0);
          exception
             when others =>
@@ -105,7 +107,7 @@ package body AWA.Commands.Tests is
       delay 5.0;
 
       --  Launch the 'stop' command, this should terminate the 'start' command.
-      T.Execute ("bin/awa_command -c test-sqlite.properties stop -m 26123",
+      T.Execute ("bin/awa_command -c " & Config & " stop -m 26123",
                  "", "", Result, 0);
 
       --  Wait for the task result.
