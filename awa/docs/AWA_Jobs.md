@@ -56,7 +56,14 @@ Resize.Schedule;
 ```
 
 ## Checking for job completion
+After a job is scheduled, a unique identifier is allocated that allows to identify it.
+It is possible to query the status of the job by using the `Get_Job_Status`
+function:
 
+```Ada
+Status : AWA.Jobs.Models.Job_Status_Type
+  := AWA.Jobs.Services.Get_Job_Status (Resize.Get_Identifier);
+```
 
 ## Job Module
 The <b>Jobs.Modules</b> is the entry point for the management of asynchronous jobs.
@@ -64,9 +71,9 @@ It maintains a list of job types that can be executed for the application and it
 manages the job dispatchers.
 
 ## Job Service
-The <b>AWA.Jobs.Services</b> package defines the type abstractions and the core operation
-to define a job operation procedure, create and schedule a job and perform the job work
-when it is scheduled.
+The `AWA.Jobs.Services` package defines the type abstractions and the
+core operation to define a job operation procedure, create and schedule
+a job and perform the job work when it is scheduled.
 
 
 
@@ -80,12 +87,6 @@ when it is scheduled.
 |jobHandler|The jobHandler is the bean that is created to execute a job.|
 |jobHandler|The jobHandler is the bean that is created to execute a job.|
 
-
-### Configuration
-| Name                      | Description                                                    |
-|:--------------------------|:---------------------------------------------------------------|
-|jobs_queue|The job queue that execute the jobs|
-| |long-running|
 
 
 
