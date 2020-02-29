@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events -- AWA Events
---  Copyright (C) 2012, 2015 Stephane Carrez
+--  Copyright (C) 2012, 2015, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-
+with ADO.Sessions.Entities;
 package body AWA.Events is
 
    --  ------------------------------
@@ -60,6 +60,15 @@ package body AWA.Events is
    end Get_Parameter;
 
    --  ------------------------------
+   --  Set the parameters of the message.
+   --  ------------------------------
+   procedure Set_Parameters (Event      : in out Module_Event;
+                             Parameters : in Util.Beans.Objects.Maps.Map) is
+   begin
+      Event.Props := Parameters;
+   end Set_Parameters;
+
+   --  ------------------------------
    --  Get the value that corresponds to the parameter with the given name.
    --  ------------------------------
    function Get_Value (Event : in Module_Event;
@@ -88,6 +97,18 @@ package body AWA.Events is
    begin
       Event.Entity := Id;
    end Set_Entity_Identifier;
+
+   --  ------------------------------
+   --  Set the database entity associated with the event.
+   --  ------------------------------
+   procedure Set_Entity (Event   : in out Module_Event;
+                         Entity  : in ADO.Objects.Object_Ref'Class;
+                         Session : in ADO.Sessions.Session'Class) is
+      Key : constant ADO.Objects.Object_Key := Entity.Get_Key;
+   begin
+      Event.Entity := ADO.Objects.Get_Value (Key);
+      Event.Entity_Type := ADO.Sessions.Entities.Find_Entity_Type (Session, Key);
+   end Set_Entity;
 
    --  ------------------------------
    --  Copy the event properties to the map passed in <tt>Into</tt>.
