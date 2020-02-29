@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-jobs -- AWA Jobs
---  Copyright (C) 2012, 2015, 2018 Stephane Carrez
+--  Copyright (C) 2012, 2015, 2018, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -64,7 +64,12 @@
 --    Resize.Schedule;
 --
 --  == Checking for job completion ==
+--  After a job is scheduled, a unique identifier is allocated that allows to identify it.
+--  It is possible to query the status of the job by using the `Get_Job_Status`
+--  function:
 --
+--    Status : AWA.Jobs.Models.Job_Status_Type
+--      := AWA.Jobs.Services.Get_Job_Status (Resize.Get_Identifier);
 --
 --  @include awa-jobs-modules.ads
 --  @include awa-jobs-services.ads
