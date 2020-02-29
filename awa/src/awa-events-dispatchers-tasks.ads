@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-dispatchers-tasks -- AWA Event Dispatchers
---  Copyright (C) 2012, 2017 Stephane Carrez
+--  Copyright (C) 2012, 2017, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,10 +20,12 @@ with Ada.Strings.Unbounded;
 with Util.Concurrent.Fifos;
 with AWA.Events.Queues;
 with AWA.Events.Services;
+with AWA.Events.Queues.Observers;
 package AWA.Events.Dispatchers.Tasks is
 
+   subtype Observer is Queues.Observers.Observer;
 
-   type Task_Dispatcher is limited new Dispatcher with private;
+   type Task_Dispatcher is limited new Dispatcher and Observer with private;
    type Task_Dispatcher_Access is access all Task_Dispatcher;
 
    --  Start the dispatcher.
@@ -39,6 +41,11 @@ package AWA.Events.Dispatchers.Tasks is
    procedure Add_Queue (Manager : in out Task_Dispatcher;
                         Queue   : in AWA.Events.Queues.Queue_Ref;
                         Added   : out Boolean);
+
+   --  Inform the dispatch that some events may have been queued.
+   overriding
+   procedure Update (Manager : in Task_Dispatcher;
+                     Queue   : in Queues.Queue_Ref);
 
    overriding
    procedure Finalize (Object : in out Task_Dispatcher) renames Stop;
@@ -58,12 +65,13 @@ private
    task type Consumer is
       entry Start (D : in Task_Dispatcher_Access);
       entry Stop;
+      entry Wakeup;
    end Consumer;
 
    type Consumer_Array is array (Positive range <>) of Consumer;
    type Consumer_Array_Access is access Consumer_Array;
 
-   type Task_Dispatcher is limited new Dispatcher with record
+   type Task_Dispatcher is limited new Dispatcher and Observer with record
       Workers     : Consumer_Array_Access;
       Queues      : Queue_Of_Queue.Fifo;
       Task_Count  : Positive;
