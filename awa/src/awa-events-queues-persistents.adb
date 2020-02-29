@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-queues-persistents -- AWA Event Queues
---  Copyright (C) 2012, 2013, 2014, 2017 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2014, 2017, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,7 +31,7 @@ with ADO.Sessions;
 with ADO.SQL;
 package body AWA.Events.Queues.Persistents is
 
-   package AC renames AWA.Services.Contexts;
+   package ASC renames AWA.Services.Contexts;
 
    use Util.Log;
 
@@ -51,7 +51,7 @@ package body AWA.Events.Queues.Persistents is
    --  Returns a null object if the queue is not persistent.
    --  ------------------------------
    overriding
-   function Get_Queue (From : in Persistent_Queue) return AWA.Events.Models.Queue_Ref is
+   function Get_Queue (From : in Persistent_Queue) return Models.Queue_Ref is
    begin
       return From.Queue;
    end Get_Queue;
@@ -65,9 +65,9 @@ package body AWA.Events.Queues.Persistents is
                       Event : in AWA.Events.Module_Event'Class) is
       procedure Set_Event (Manager : in out AWA.Events.Services.Event_Manager);
 
-      Ctx   : constant AC.Service_Context_Access := AC.Current;
+      Ctx   : constant ASC.Service_Context_Access := ASC.Current;
       App   : constant AWA.Applications.Application_Access := Ctx.Get_Application;
-      DB    : ADO.Sessions.Master_Session := AC.Get_Master_Session (Ctx);
+      DB    : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
       Msg   : AWA.Events.Models.Message_Ref;
 
       procedure Set_Event (Manager : in out AWA.Events.Services.Event_Manager) is
@@ -98,8 +98,8 @@ package body AWA.Events.Queues.Persistents is
    procedure Dequeue (From : in out Persistent_Queue;
                       Process : access procedure (Event : in Module_Event'Class)) is
 
-      --  Prepare the message by indicating in the database it is going to be processed
-      --  by the given server and task.
+      --  Prepare the message by indicating in the database it is going
+      --  to be processed by the given server and task.
       procedure Prepare_Message (Msg : in out Models.Message_Ref);
 
       --  Dispatch the event.
@@ -108,27 +108,23 @@ package body AWA.Events.Queues.Persistents is
       --  Finish processing the message by marking it as being processed.
       procedure Finish_Message (Msg : in out Models.Message_Ref);
 
-      Ctx      : constant AC.Service_Context_Access := AC.Current;
-      DB       : ADO.Sessions.Master_Session := AC.Get_Master_Session (Ctx);
+      Ctx      : constant ASC.Service_Context_Access := ASC.Current;
+      DB       : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
       Messages : Models.Message_Vector;
       Query    : ADO.SQL.Query;
       Task_Id  : constant Integer := 0;
 
-      --  ------------------------------
-      --  Prepare the message by indicating in the database it is going to be processed
-      --  by the given server and task.
-      --  ------------------------------
       procedure Prepare_Message (Msg : in out Models.Message_Ref) is
       begin
          Msg.Set_Status (Models.PROCESSING);
          Msg.Set_Server_Id (From.Server_Id);
          Msg.Set_Task_Id (Task_Id);
-         Msg.Set_Processing_Date (ADO.Nullable_Time '(Is_Null => False,
-                                                      Value   => Ada.Calendar.Clock));
+         Msg.Set_Processing_Date
+           (ADO.Nullable_Time '(Is_Null => False,
+                                Value   => Ada.Calendar.Clock));
          Msg.Save (DB);
       end Prepare_Message;
 
-      --  Dispatch the event.
       procedure Dispatch_Message (Msg : in out Models.Message_Ref) is
          User    : constant AWA.Users.Models.User_Ref'Class := Msg.Get_User;
          Session : constant AWA.Users.Models.Session_Ref'Class := Msg.Get_Session;
@@ -152,13 +148,16 @@ package body AWA.Events.Queues.Persistents is
 
          if not User.Is_Null then
             Log.Info ("Dispatching event {0} for user{1} session{2}", Name,
-                      ADO.Identifier'Image (User.Get_Id), ADO.Identifier'Image (Session.Get_Id));
+                      ADO.Identifier'Image (User.Get_Id),
+                      ADO.Identifier'Image (Session.Get_Id));
          else
             Log.Info ("Dispatching event {0}", Name);
          end if;
 
-         --  Run the Process action on behalf of the user associated with the message.
-         Run (AWA.Users.Models.User_Ref (User), AWA.Users.Models.Session_Ref (Session));
+         --  Run the Process action on behalf of the user associated
+         --  with the message.
+         Run (AWA.Users.Models.User_Ref (User),
+              AWA.Users.Models.Session_Ref (Session));
 
       exception
          when E : others =>
@@ -180,8 +179,9 @@ package body AWA.Events.Queues.Persistents is
       Count : Natural;
    begin
       Ctx.Start;
-      Query.Set_Filter ("o.status = 0 AND o.queue_id = :queue ORDER BY o.priority DESC, "
-                        & "o.id ASC LIMIT :max");
+      Query.Set_Filter ("o.status = 0 AND o.queue_id = :queue "
+                          & "ORDER BY o.priority DESC, "
+                          & "o.id ASC LIMIT :max");
       Query.Bind_Param ("queue", From.Queue.Get_Id);
       Query.Bind_Param ("max", From.Max_Batch);
       Models.List (Messages, DB, Query);
@@ -226,10 +226,9 @@ package body AWA.Events.Queues.Persistents is
                           Props   : in EL.Beans.Param_Vectors.Vector;
                           Context : in EL.Contexts.ELContext'Class) return Queue_Access is
       pragma Unreferenced (Props, Context);
-      package AC renames AWA.Services.Contexts;
 
-      Ctx     : constant AC.Service_Context_Access := AC.Current;
-      Session : ADO.Sessions.Master_Session := AC.Get_Master_Session (Ctx);
+      Ctx     : constant ASC.Service_Context_Access := ASC.Current;
+      Session : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
       Queue   : AWA.Events.Models.Queue_Ref;
       Query   : ADO.SQL.Query;
       Found   : Boolean;
