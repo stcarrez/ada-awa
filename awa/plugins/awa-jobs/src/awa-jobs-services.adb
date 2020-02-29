@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  awa-jobs -- AWA Jobs
---  Copyright (C) 2012, 2014, 2015, 2016, 2019 Stephane Carrez
+--  awa-jobs-services -- Job services
+--  Copyright (C) 2012, 2014, 2015, 2016, 2019, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,15 +22,12 @@ with Ada.Tags;
 with Ada.Calendar;
 
 with ADO.Utils;
-with ADO.Sessions.Entities;
 with ADO.Statements;
 
 with AWA.Users.Models;
-with AWA.Events.Models;
 with AWA.Services.Contexts;
 with AWA.Jobs.Modules;
 with AWA.Applications;
-with AWA.Events.Services;
 with AWA.Modules;
 package body AWA.Jobs.Services is
 
@@ -41,7 +38,7 @@ package body AWA.Jobs.Services is
    --  ------------------------------
    --  Get the job status.
    --  ------------------------------
-   function Get_Job_Status (Id : in ADO.Identifier) return AWA.Jobs.Models.Job_Status_Type is
+   function Get_Job_Status (Id : in ADO.Identifier) return Models.Job_Status_Type is
       Ctx  : constant ASC.Service_Context_Access := ASC.Current;
       DB   : constant ADO.Sessions.Session := ASC.Get_Session (Ctx);
       Stmt : ADO.Statements.Query_Statement
@@ -53,7 +50,8 @@ package body AWA.Jobs.Services is
    end Get_Job_Status;
 
    --  ------------------------------
-   --  Set the job parameter identified by the <b>Name</b> to the value given in <b>Value</b>.
+   --  Set the job parameter identified by the `Name` to the value
+   --  given in `Value`.
    --  ------------------------------
    procedure Set_Parameter (Job   : in out Abstract_Job_Type;
                             Name  : in String;
@@ -63,7 +61,8 @@ package body AWA.Jobs.Services is
    end Set_Parameter;
 
    --  ------------------------------
-   --  Set the job parameter identified by the <b>Name</b> to the value given in <b>Value</b>.
+   --  Set the job parameter identified by the `Name` to the value
+   --  given in `Value`.
    --  ------------------------------
    procedure Set_Parameter (Job   : in out Abstract_Job_Type;
                             Name  : in String;
@@ -73,7 +72,8 @@ package body AWA.Jobs.Services is
    end Set_Parameter;
 
    --  ------------------------------
-   --  Set the job parameter identified by the <b>Name</b> to the value given in <b>Value</b>.
+   --  Set the job parameter identified by the `Name` to the value
+   --  given in `Value`.
    --  ------------------------------
    procedure Set_Parameter (Job   : in out Abstract_Job_Type;
                             Name  : in String;
@@ -87,9 +87,11 @@ package body AWA.Jobs.Services is
    end Set_Parameter;
 
    --  ------------------------------
-   --  Set the job parameter identified by the <b>Name</b> to the value given in <b>Value</b>.
-   --  The value object can hold any kind of basic value type (integer, enum, date, strings).
-   --  If the value represents a bean, the <tt>Invalid_Value</tt> exception is raised.
+   --  Set the job parameter identified by the `Name` to the value
+   --  given in `Value`.
+   --  The value object can hold any kind of basic value type
+   --  (integer, enum, date, strings).  If the value represents
+   --  a bean, the `Invalid_Value` exception is raised.
    --  ------------------------------
    procedure Set_Parameter (Job   : in out Abstract_Job_Type;
                             Name  : in String;
@@ -100,9 +102,10 @@ package body AWA.Jobs.Services is
    end Set_Parameter;
 
    --  ------------------------------
-   --  Set the job result identified by the <b>Name</b> to the value given in <b>Value</b>.
-   --  The value object can hold any kind of basic value type (integer, enum, date, strings).
-   --  If the value represents a bean, the <tt>Invalid_Value</tt> exception is raised.
+   --  Set the job result identified by the `Name` to the value given
+   --  in `Value`.  The value object can hold any kind of basic value
+   --  type (integer, enum, date, strings).  If the value represents a bean,
+   --  the `Invalid_Value` exception is raised.
    --  ------------------------------
    procedure Set_Result (Job   : in out Abstract_Job_Type;
                          Name  : in String;
@@ -113,7 +116,7 @@ package body AWA.Jobs.Services is
    end Set_Result;
 
    --  ------------------------------
-   --  Set the job result identified by the <b>Name</b> to the value given in <b>Value</b>.
+   --  Set the job result identified by the `Name` to the value given in `Value`.
    --  ------------------------------
    procedure Set_Result (Job   : in out Abstract_Job_Type;
                          Name  : in String;
@@ -134,7 +137,8 @@ package body AWA.Jobs.Services is
    end Get_Value;
 
    --  ------------------------------
-   --  Get the job parameter identified by the <b>Name</b> and convert the value into a string.
+   --  Get the job parameter identified by the `Name` and convert
+   --  the value into a string.
    --  ------------------------------
    function Get_Parameter (Job  : in Abstract_Job_Type;
                            Name : in String) return String is
@@ -144,8 +148,9 @@ package body AWA.Jobs.Services is
    end Get_Parameter;
 
    --  ------------------------------
-   --  Get the job parameter identified by the <b>Name</b> and convert the value as an integer.
-   --  If the parameter is not defined, return the default value passed in <b>Default</b>.
+   --  Get the job parameter identified by the `Name` and convert
+   --  the value as an integer.  If the parameter is not defined,
+   --  return the default value passed in `Default`.
    --  ------------------------------
    function Get_Parameter (Job     : in Abstract_Job_Type;
                            Name    : in String;
@@ -168,8 +173,9 @@ package body AWA.Jobs.Services is
    end Get_Parameter;
 
    --  ------------------------------
-   --  Get the job parameter identified by the <b>Name</b> and convert the value as a database
-   --  identifier.  If the parameter is not defined, return the <tt>ADO.NO_IDENTIFIER</tt>.
+   --  Get the job parameter identified by the `Name` and convert
+   --  the value as a database identifier.  If the parameter is not defined,
+   --  return the `ADO.NO_IDENTIFIER`.
    --  ------------------------------
    function Get_Parameter (Job     : in Abstract_Job_Type;
                            Name    : in String) return ADO.Identifier is
@@ -191,7 +197,8 @@ package body AWA.Jobs.Services is
    end Get_Parameter;
 
    --  ------------------------------
-   --  Get the job parameter identified by the <b>Name</b> and return it as a typed object.
+   --  Get the job parameter identified by the `Name` and return it as
+   --  a typed object.
    --  ------------------------------
    function Get_Parameter (Job  : in Abstract_Job_Type;
                            Name : in String) return Util.Beans.Objects.Object is
@@ -202,14 +209,15 @@ package body AWA.Jobs.Services is
    --  ------------------------------
    --  Get the job status.
    --  ------------------------------
-   function Get_Status (Job : in Abstract_Job_Type) return AWA.Jobs.Models.Job_Status_Type is
+   function Get_Status (Job : in Abstract_Job_Type) return Models.Job_Status_Type is
    begin
       return Job.Job.Get_Status;
    end Get_Status;
 
    --  ------------------------------
-   --  Get the job identifier once the job was scheduled.  The job identifier allows to
-   --  retrieve the job and check its execution and completion status later on.
+   --  Get the job identifier once the job was scheduled.
+   --  The job identifier allows to retrieve the job and check its
+   --  execution and completion status later on.
    --  ------------------------------
    function Get_Identifier (Job : in Abstract_Job_Type) return ADO.Identifier is
    begin
@@ -217,9 +225,8 @@ package body AWA.Jobs.Services is
    end Get_Identifier;
 
    --  ------------------------------
-   --  Set the job status.
-   --  When the job is terminated, it is closed and the job parameters or results cannot be
-   --  changed.
+   --  Set the job status.  When the job is terminated, it is closed
+   --  and the job parameters or results cannot be changed.
    --  ------------------------------
    procedure Set_Status (Job    : in out Abstract_Job_Type;
                          Status : in AWA.Jobs.Models.Job_Status_Type) is
@@ -236,8 +243,8 @@ package body AWA.Jobs.Services is
    end Set_Status;
 
    --  ------------------------------
-   --  Save the job information in the database.  Use the database session defined by <b>DB</b>
-   --  to save the job.
+   --  Save the job information in the database.  Use the database session
+   --  defined by `DB` to save the job.
    --  ------------------------------
    procedure Save (Job : in out Abstract_Job_Type;
                    DB  : in out ADO.Sessions.Master_Session'Class) is
@@ -253,32 +260,25 @@ package body AWA.Jobs.Services is
       Job.Job.Save (DB);
    end Save;
 
+   --  ------------------------------
    --  Schedule the job.
+   --  ------------------------------
    procedure Schedule (Job        : in out Abstract_Job_Type;
                        Definition : in Job_Factory'Class) is
 
-      procedure Set_Event (Manager : in out AWA.Events.Services.Event_Manager);
-
       Ctx : constant ASC.Service_Context_Access := ASC.Current;
       DB   : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
-      Msg  : AWA.Events.Models.Message_Ref;
       User : constant AWA.Users.Models.User_Ref := Ctx.Get_User;
       Sess : constant AWA.Users.Models.Session_Ref := Ctx.Get_User_Session;
       App  : constant AWA.Applications.Application_Access := Ctx.Get_Application;
-
-      procedure Set_Event (Manager : in out AWA.Events.Services.Event_Manager) is
-      begin
-         Manager.Set_Message_Type (Msg, Job_Create_Event.Kind);
-         Manager.Set_Event_Queue (Msg, "job-queue");
-      end Set_Event;
+      Msg  : AWA.Events.Module_Event;
 
    begin
       if Job.Job.Is_Inserted then
          Log.Error ("Job is already scheduled");
          raise Schedule_Error with "The job is already scheduled.";
       end if;
-      AWA.Jobs.Modules.Create_Event (Msg);
-      Job.Job.Set_Create_Date (Msg.Get_Create_Date);
+      Job.Job.Set_Create_Date (Ada.Calendar.Clock);
 
       DB.Begin_Transaction;
       Job.Job.Set_Name (Definition.Get_Name);
@@ -287,17 +287,10 @@ package body AWA.Jobs.Services is
       Job.Save (DB);
 
       --  Create the event
-      Msg.Set_Parameters (Util.Serialize.Tools.To_JSON (Job.Props));
-      App.Do_Event_Manager (Process => Set_Event'Access);
-      Msg.Set_User (User);
-      Msg.Set_Session (Sess);
-      Msg.Set_Entity_Id (Job.Job.Get_Id);
-      Msg.Set_Entity_Type (ADO.Sessions.Entities.Find_Entity_Type (Session => DB,
-                                                                   Object  => Job.Job.Get_Key));
-      Msg.Save (DB);
-
-      Job.Job.Set_Event (Msg);
-      Job.Job.Save (DB);
+      Msg.Set_Parameters (Job.Props);
+      Msg.Set_Entity (Job.Job, DB);
+      Msg.Set_Event_Kind (Job_Create_Event.Kind);
+      App.Send_Event (Msg);
       DB.Commit;
    end Schedule;
 
@@ -360,7 +353,8 @@ package body AWA.Jobs.Services is
       DB.Begin_Transaction;
       Job.Load (Session => DB,
                 Id      => Id);
-      Job.Set_Start_Date (ADO.Nullable_Time '(Is_Null => False, Value => Ada.Calendar.Clock));
+      Job.Set_Start_Date (ADO.Nullable_Time '(Is_Null => False,
+                                              Value   => Ada.Calendar.Clock));
       Job.Set_Status (AWA.Jobs.Models.RUNNING);
       Job.Save (Session => DB);
       DB.Commit;
@@ -396,8 +390,9 @@ package body AWA.Jobs.Services is
    end Execute;
 
    --  ------------------------------
-   --  Get the job parameter identified by the <b>Name</b> and return it as a typed object.
-   --  Return the Null_Object if the job is empty or there is no such parameter.
+   --  Get the job parameter identified by the `Name` and return it as
+   --  a typed object.  Return the `Null_Object` if the job is empty
+   --  or there is no such parameter.
    --  ------------------------------
    function Get_Parameter (Job  : in Job_Ref;
                            Name : in String) return Util.Beans.Objects.Object is
@@ -423,7 +418,7 @@ package body AWA.Jobs.Services is
    end Execute;
 
    --  ------------------------------
-   --  Create the job instance to execute the associated <tt>Work_Access</tt> procedure.
+   --  Create the job instance to execute the associated `Work_Access` procedure.
    --  ------------------------------
    overriding
    function Create (Factory : in Work_Factory) return Abstract_Job_Type_Access is
@@ -436,8 +431,6 @@ package body AWA.Jobs.Services is
    --  ------------------------------
    --  Job Declaration
    --  ------------------------------
-   --  The <tt>Definition</tt> package must be instantiated with a given job type to
-   --  register the new job definition.
    package body Definition is
 
       function Create (Factory : in Job_Type_Factory) return Abstract_Job_Type_Access is
