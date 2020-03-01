@@ -33,6 +33,8 @@ package body AWA.Commands.Setup is
                       Args      : in Argument_List'Class;
                       Context   : in out Context_Type) is
       procedure Find_Application (Name : in String);
+      procedure Enable_Application (URI : in String;
+                                    App : in Servlet.Core.Servlet_Registry_Access);
 
       Count    : Natural := 0;
       Selected : Application_Access;
@@ -44,8 +46,9 @@ package body AWA.Commands.Setup is
          procedure Find (URI : in String;
                          App : in Servlet.Core.Servlet_Registry_Access) is
          begin
-            if App.all in Application'Class then
-               if URI (URI'First + 1 .. URI'Last) = Name then
+            App.Disable;
+            if URI (URI'First + 1 .. URI'Last) = Name then
+               if App.all in Application'Class then
                   Selected := Application'Class (App.all)'Unchecked_Access;
                   Count := Count + 1;
                end if;
@@ -55,6 +58,13 @@ package body AWA.Commands.Setup is
       begin
          Command_Drivers.WS.Iterate (Find'Access);
       end Find_Application;
+
+      procedure Enable_Application (URI : in String;
+                                    App : in Servlet.Core.Servlet_Registry_Access) is
+      begin
+         App.Enable;
+         App.Start;
+      end Enable_Application;
 
       S : aliased AWA.Setup.Applications.Application;
    begin
@@ -72,9 +82,12 @@ package body AWA.Commands.Setup is
             return;
          end if;
 
+         Command.Configure_Server (Context);
          Command.Start_Server (Context);
-
          S.Setup (Name, Command_Drivers.WS);
+         Command_Drivers.WS.Remove_Application (S'Unchecked_Access);
+         Command.Configure_Applications (Context);
+         Command_Drivers.WS.Iterate (Enable_Application'Access);
          Command.Wait_Server (Context);
       end;
    end Execute;
