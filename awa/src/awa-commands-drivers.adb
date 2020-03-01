@@ -20,6 +20,7 @@ with Servlet.Core;
 package body AWA.Commands.Drivers is
 
    use Ada.Strings.Unbounded;
+   use AWA.Applications;
 
    function "-" (Message : in String) return String is (Message);
 
@@ -36,7 +37,7 @@ package body AWA.Commands.Drivers is
       GC.Set_Usage (Config => Config,
                     Usage  => Command.Get_Name & " [arguments]",
                     Help   => Command.Get_Description);
-      AWA.Commands.Setup (Config, Context);
+      AWA.Commands.Setup_Command (Config, Context);
    end Setup;
 
    --  ------------------------------
@@ -65,7 +66,7 @@ package body AWA.Commands.Drivers is
                         Long_Switch => "--application=",
                         Argument => "NAME",
                         Help   => -("Defines the name or URI of the application"));
-      AWA.Commands.Setup (Config, Context);
+      AWA.Commands.Setup_Command (Config, Context);
    end Setup;
 
    function Is_Application (Command : in Application_Command_Type;
@@ -79,24 +80,24 @@ package body AWA.Commands.Drivers is
                       Name      : in String;
                       Args      : in Argument_List'Class;
                       Context   : in out Context_Type) is
-      procedure Find (URI         : in String;
-                      Application : in Servlet.Core.Servlet_Registry_Access);
+      procedure Find (URI : in String;
+                      App : in Servlet.Core.Servlet_Registry_Access);
 
       Count    : Natural := 0;
-      Selected : AWA.Applications.Application_Access;
+      Selected : Application_Access;
       App_Name : Unbounded_String;
 
-      procedure Find (URI         : in String;
-                      Application : in Servlet.Core.Servlet_Registry_Access) is
+      procedure Find (URI : in String;
+                      App : in Servlet.Core.Servlet_Registry_Access) is
       begin
-         if Application.all in AWA.Applications.Application'Class then
+         if Application.all in Application'Class then
             if Command.Is_Application (URI) then
                App_Name := To_Unbounded_String (URI (URI'First + 1 .. URI'Last));
-               Selected := AWA.Applications.Application'Class (Application.all)'Unchecked_Access;
+               Selected := Application'Class (Application.all)'Unchecked_Access;
                Count := Count + 1;
             elsif Command.Application_Name'Length = 0 then
                App_Name := To_Unbounded_String (URI (URI'First + 1 .. URI'Last));
-               Selected := AWA.Applications.Application'Class (Application.all)'Unchecked_Access;
+               Selected := Application'Class (Application.all)'Unchecked_Access;
                Count := Count + 1;
             end if;
          end if;
