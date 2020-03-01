@@ -40,6 +40,14 @@ package AWA.Commands.Start is
                       Args      : in Argument_List'Class;
                       Context   : in out Context_Type);
 
+   --  Start the server and all the application that have been registered.
+   procedure Start_Server (Command   : in out Command_Type;
+                           Context   : in out Context_Type);
+
+   --  Wait for the server to shutdown.
+   procedure Wait_Server (Command   : in out Command_Type;
+                          Context   : in out Context_Type);
+
    --  Setup the command before parsing the arguments and executing it.
    overriding
    procedure Setup (Command : in out Command_Type;
