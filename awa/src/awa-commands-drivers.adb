@@ -90,14 +90,14 @@ package body AWA.Commands.Drivers is
       procedure Find (URI : in String;
                       App : in Servlet.Core.Servlet_Registry_Access) is
       begin
-         if Application.all in Application'Class then
+         if App.all in Application'Class then
             if Command.Is_Application (URI) then
                App_Name := To_Unbounded_String (URI (URI'First + 1 .. URI'Last));
-               Selected := Application'Class (Application.all)'Unchecked_Access;
+               Selected := Application'Class (App.all)'Unchecked_Access;
                Count := Count + 1;
             elsif Command.Application_Name'Length = 0 then
                App_Name := To_Unbounded_String (URI (URI'First + 1 .. URI'Last));
-               Selected := Application'Class (Application.all)'Unchecked_Access;
+               Selected := Application'Class (App.all)'Unchecked_Access;
                Count := Count + 1;
             end if;
          end if;
