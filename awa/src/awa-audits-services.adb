@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-audits-services -- AWA Audit Manager
---  Copyright (C) 2018 Stephane Carrez
+--  Copyright (C) 2018, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -100,7 +100,8 @@ package body AWA.Audits.Services is
       if Audit_Field_Maps.Has_Element (Pos) then
          return Audit_Field_Maps.Element (Pos);
       else
-         Log.Warn ("Audit field {0} for{1} not found", Name, ADO.Entity_Type'Image (Entity));
+         Log.Warn ("Audit field {0} for{1} not found",
+                   Name, ADO.Entity_Type'Image (Entity));
          return 0;
       end if;
    end Get_Audit_Field;
@@ -121,11 +122,19 @@ package body AWA.Audits.Services is
             Id   : constant Integer := Stmt.Get_Integer (0);
             Kind : constant ADO.Entity_Type := ADO.Entity_Type (Stmt.Get_Integer (1));
             Name : constant String := Stmt.Get_String (2);
+            Key  : constant Field_Key := (Len  => Name'Length,
+                                          Name => Name,
+                                          Entity => Kind);
          begin
             Log.Debug ("Field {0} of{1} ={2}",
                        Name, ADO.Entity_Type'Image (Kind), Integer'Image (Id));
-            Manager.Fields.Insert (Key => (Len => Name'Length, Name => Name, Entity => Kind),
-                                   New_Item => Id);
+            if Manager.Fields.Contains (Key) then
+               Log.Error ("Field {0} of{1} is already defined",
+                          Name, ADO.Entity_Type'Image (Kind));
+            else
+               Manager.Fields.Insert (Key => Key,
+                                      New_Item => Id);
+            end if;
          end;
          Count := Count + 1;
          Stmt.Next;
