@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-setup -- Setup and installation
---  Copyright (C) 2016, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2018, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -409,11 +409,12 @@ package body AWA.Setup.Applications is
             Log.Error ("Cannot read application configuration file: {0}", Path);
       end;
 
-      --  If the Done file marker exists, the installation was done and we don't want
-      --  to enter in it again.
+      --  If the Done file marker exists, the installation was done
+      --  and we don't want to enter in it again.
       if Ada.Directories.Exists (Done) then
          Log.Info ("Application {0} is already initialized.", Config);
-         Log.Info ("Remove {0} if you want to enter in the installation again.", Done);
+         Log.Info ("Remove {0} if you want to enter in the installation again.",
+                   Done);
          return;
       end if;
       App.Initialize (App.Config, App.Factory);
@@ -481,9 +482,10 @@ package body AWA.Setup.Applications is
    end Setup;
 
    --  ------------------------------
-   --  Configure the application by using the setup application, allowing the administrator to
-   --  setup the application database, define the application admin parameters.  After the
-   --  configuration is done, register the application in the server container and start it.
+   --  Configure the application by using the setup application, allowing
+   --  the administrator to setup the application database, define the application
+   --  admin parameters.  After the configuration is done, register the
+   --  application in the server container and start it.
    --  ------------------------------
    procedure Configure (Server : in out ASF.Server.Container'Class;
                         App    : in Application_Access;
@@ -496,7 +498,8 @@ package body AWA.Setup.Applications is
       --  Do the application setup.
       S.Setup (Config, Server);
 
-      --  Load the application configuration file that was configured during the setup process.
+      --  Load the application configuration file that was configured
+      --  during the setup process.
       begin
          C.Load_Properties (Path);
 
