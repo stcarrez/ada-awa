@@ -121,8 +121,8 @@ private
    procedure Setup_Key_Provider (Context : in out Context_Type);
 
    --  Setup the command before parsing the arguments and executing it.
-   procedure Setup (Config  : in out GC.Command_Line_Configuration;
-                    Context : in out Context_Type);
+   procedure Setup_Command (Config  : in out GC.Command_Line_Configuration;
+                            Context : in out Context_Type);
 
    function Sys_Daemon (No_Chdir : in Integer; No_Close : in Integer) return Integer
      with Import => True, Convention => C, Link_Name => "daemon";
