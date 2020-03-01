@@ -38,7 +38,7 @@ package body AWA.Commands is
 
       exception
          when Ada.IO_Exceptions.Name_Error =>
-            Log.Error ("Cannot read application configuration file {0}",
+            Log.Error ("Cannot read server configuration file '{0}'",
                        Context.Config_File.all);
       end;
       if Context.File_Config.Exists (GPG_CRYPT_CONFIG) then
@@ -189,8 +189,8 @@ package body AWA.Commands is
    --  ------------------------------
    --  Setup the command before parsing the arguments and executing it.
    --  ------------------------------
-   procedure Setup (Config  : in out GC.Command_Line_Configuration;
-                    Context : in out Context_Type) is
+   procedure Setup_Command (Config  : in out GC.Command_Line_Configuration;
+                            Context : in out Context_Type) is
    begin
       GC.Define_Switch (Config => Config,
                         Output => Context.Wallet_File'Access,
@@ -244,7 +244,7 @@ package body AWA.Commands is
                         Long_Switch => "--wallet-key-file=",
                         Argument => "PATH",
                         Help   => -("Read the file that contains the wallet keys"));
-   end Setup;
+   end Setup_Command;
 
    procedure Setup_Password_Provider (Context : in out Context_Type) is
    begin
