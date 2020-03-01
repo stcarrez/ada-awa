@@ -34,10 +34,18 @@ package body AWA.Commands.Start is
                       Name      : in String;
                       Args      : in Argument_List'Class;
                       Context   : in out Context_Type) is
+   begin
+      Command.Start_Server (Context);
+      Command.Wait_Server (Context);
+   end Execute;
+
+   --  ------------------------------
+   --  Start the server and all the application that have been registered.
+   --  ------------------------------
+   procedure Start_Server (Command   : in out Command_Type;
+                           Context   : in out Context_Type) is
       procedure Configure (URI : in String;
                            Application : in Servlet.Core.Servlet_Registry_Access);
-      procedure Shutdown (URI : in String;
-                          Application : in Servlet.Core.Servlet_Registry_Access);
 
       Count : Natural := 0;
 
@@ -52,18 +60,7 @@ package body AWA.Commands.Start is
          end if;
       end Configure;
 
-      procedure Shutdown (URI : in String;
-                          Application : in Servlet.Core.Servlet_Registry_Access) is
-      begin
-         if Application.all in AWA.Applications.Application'Class then
-            AWA.Applications.Application'Class (Application.all).Close;
-         end if;
-      end Shutdown;
-
       Config  : Servlet.Server.Configuration;
-      Address : GNAT.Sockets.Sock_Addr_Type;
-      Listen  : GNAT.Sockets.Socket_Type;
-      Socket  : GNAT.Sockets.Socket_Type;
    begin
       --  If daemon(3) is available and -d is defined, run it so that the parent
       --  process terminates and the child process continues.
@@ -92,7 +89,28 @@ package body AWA.Commands.Start is
       end if;
       Context.Console.Notice (N_INFO, "Starting...");
       Command_Drivers.WS.Start;
+   end Start_Server;
 
+   --  ------------------------------
+   --  Wait for the server to shutdown.
+   --  ------------------------------
+   procedure Wait_Server (Command   : in out Command_Type;
+                          Context   : in out Context_Type) is
+      procedure Shutdown (URI : in String;
+                          Application : in Servlet.Core.Servlet_Registry_Access);
+
+      procedure Shutdown (URI : in String;
+                          Application : in Servlet.Core.Servlet_Registry_Access) is
+      begin
+         if Application.all in AWA.Applications.Application'Class then
+            AWA.Applications.Application'Class (Application.all).Close;
+         end if;
+      end Shutdown;
+
+      Address : GNAT.Sockets.Sock_Addr_Type;
+      Listen  : GNAT.Sockets.Socket_Type;
+      Socket  : GNAT.Sockets.Socket_Type;
+   begin
       GNAT.Sockets.Create_Socket (Listen);
       Address.Addr := GNAT.Sockets.Loopback_Inet_Addr;
       if Command.Management_Port > 0 then
@@ -111,7 +129,7 @@ package body AWA.Commands.Start is
       GNAT.Sockets.Close_Socket (Listen);
 
       Command_Drivers.WS.Iterate (Shutdown'Access);
-   end Execute;
+   end Wait_Server;
 
    --  ------------------------------
    --  Setup the command before parsing the arguments and executing it.
@@ -163,7 +181,7 @@ package body AWA.Commands.Start is
                            Long_Switch => "--daemon",
                            Help   => -("Run the server in the background"));
       end if;
-      AWA.Commands.Setup (Config, Context);
+      AWA.Commands.Setup_Command (Config, Context);
    end Setup;
 
    --  ------------------------------
