@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-setup-applications -- Setup and installation
---  Copyright (C) 2016, 2017, 2018, 2019 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2018, 2019, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,8 +28,9 @@ with Util.Beans.Basic;
 with Util.Beans.Methods;
 
 --  == Setup Procedure Instantiation==
---  The setup process is managed by the *Configure* generic procedure.  The procedure must
---  be instantiated with the application class type and the application initialize procedure.
+--  The setup process is managed by the *Configure* generic procedure.
+--  The procedure must be instantiated with the application class type and
+--  the application initialize procedure.
 --
 --     procedure Setup is
 --        new AWA.Setup.Applications.Configure (MyApp.Application'Class,
@@ -38,23 +39,24 @@ with Util.Beans.Methods;
 --
 --  == Setup Operation ==
 --  The *Setup* instantiated operation must then be called with the web container.
---  The web container is started first and the *Setup* procedure gets as parameter the
---  web container, the application instance to configure, the application name and
---  the application context path.
+--  The web container is started first and the *Setup* procedure gets as parameter
+--  the web container, the application instance to configure, the application name
+--  and the application context path.
 --
 --    Setup (WS, App, "atlas", MyApp.CONTEXT_PATH)
 --
---  The operation will install the setup application to handle the setup actions.  Through
---  the setup actions, the installer will be able to:
+--  The operation will install the setup application to handle the setup actions.
+--  Through the setup actions, the installer will be able to:
 --
 --  * Configure the database (MySQL or SQLite),
 --  * Configure the Google+ and Facebook OAuth authentication keys,
 --  * Configure the application name,
 --  * Configure the mail parameters to be able to send email.
 --
---  After the setup and configure is finished, the file <tt>.initialized</tt> is created in
---  the application directory to indicate the application is configured.  The next time the
---  *Setup* operation is called, the installation process will be skipped.
+--  After the setup and configure is finished, the file <tt>.initialized</tt>
+--  is created in the application directory to indicate the application is
+--  configured.  The next time the *Setup* operation is called, the installation
+--  process will be skipped.
 --
 --  To run again the installation, remove manually the <tt>.initialized</tt> file.
 package AWA.Setup.Applications is
@@ -70,14 +72,14 @@ package AWA.Setup.Applications is
                      Request  : in out ASF.Requests.Request'Class;
                      Response : in out ASF.Responses.Response'Class);
 
-   --  The configuration state starts in the <tt>CONFIGURING</tt> state and moves to the
-   --  <tt>STARTING</tt> state after the application is configured and it is started.
-   --  Once the application is initialized and registered in the server container, the
-   --  state is changed to <tt>READY</tt>.
+   --  The configuration state starts in the `CONFIGURING` state and moves to the
+   --  `STARTING` state after the application is configured and it is started.
+   --  Once the application is initialized and registered in the server container,
+   --  the state is changed to `READY`.
    type Configure_State is (CONFIGURING, STARTING, READY);
 
-   --  Maintains the state of the configuration between the main task and the http configuration
-   --  requests.
+   --  Maintains the state of the configuration between the main task and
+   --  the http configuration requests.
    protected type State is
       --  Wait until the configuration is finished.
       entry Wait_Configuring;
@@ -155,9 +157,10 @@ package AWA.Setup.Applications is
                     Config : in String;
                     Server : in out ASF.Server.Container'Class);
 
-   --  Configure the application by using the setup application, allowing the administrator to
-   --  setup the application database, define the application admin parameters.  After the
-   --  configuration is done, register the application in the server container and start it.
+   --  Configure the application by using the setup application, allowing
+   --  the administrator to setup the application database, define the application
+   --  admin parameters.  After the configuration is done, register the
+   --  application in the server container and start it.
    generic
       type Application_Type (<>) is new ASF.Servlets.Servlet_Registry with private;
       type Application_Access is access all Application_Type'Class;
