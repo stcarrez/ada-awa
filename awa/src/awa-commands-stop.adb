@@ -38,7 +38,7 @@ package body AWA.Commands.Stop is
                         Initial  => Command.Management_Port,
                         Argument => "NUMBER",
                         Help   => -("The server listening management port on localhost"));
-      AWA.Commands.Setup (Config, Context);
+      AWA.Commands.Setup_Command (Config, Context);
    end Setup;
 
    --  ------------------------------
