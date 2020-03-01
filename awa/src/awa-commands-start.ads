@@ -40,7 +40,15 @@ package AWA.Commands.Start is
                       Args      : in Argument_List'Class;
                       Context   : in out Context_Type);
 
-   --  Start the server and all the application that have been registered.
+   --  Configure the web server container before applications are registered.
+   procedure Configure_Server (Command   : in out Command_Type;
+                               Context   : in out Context_Type);
+
+   --  Configure all registered applications.
+   procedure Configure_Applications (Command   : in out Command_Type;
+                                     Context   : in out Context_Type);
+
+   --  Start the web server.
    procedure Start_Server (Command   : in out Command_Type;
                            Context   : in out Context_Type);
 
