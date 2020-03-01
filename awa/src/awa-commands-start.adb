@@ -35,31 +35,17 @@ package body AWA.Commands.Start is
                       Args      : in Argument_List'Class;
                       Context   : in out Context_Type) is
    begin
+      Command.Configure_Server (Context);
+      Command.Configure_Applications (Context);
       Command.Start_Server (Context);
       Command.Wait_Server (Context);
    end Execute;
 
    --  ------------------------------
-   --  Start the server and all the application that have been registered.
+   --  Configure the web server container before applications are registered.
    --  ------------------------------
-   procedure Start_Server (Command   : in out Command_Type;
-                           Context   : in out Context_Type) is
-      procedure Configure (URI : in String;
-                           Application : in Servlet.Core.Servlet_Registry_Access);
-
-      Count : Natural := 0;
-
-      procedure Configure (URI : in String;
-                           Application : in Servlet.Core.Servlet_Registry_Access) is
-      begin
-         if Application.all in AWA.Applications.Application'Class then
-            Configure (AWA.Applications.Application'Class (Application.all),
-                       URI (URI'First + 1 .. URI'Last),
-                       Context);
-            Count := Count + 1;
-         end if;
-      end Configure;
-
+   procedure Configure_Server (Command   : in out Command_Type;
+                               Context   : in out Context_Type) is
       Config  : Servlet.Server.Configuration;
    begin
       --  If daemon(3) is available and -d is defined, run it so that the parent
@@ -81,12 +67,44 @@ package body AWA.Commands.Start is
          Config.Upload_Directory := To_Unbounded_String (Command.Upload.all);
       end if;
       Command_Drivers.WS.Configure (Config);
+   end Configure_Server;
 
+   --  ------------------------------
+   --  Configure all registered applications.
+   --  ------------------------------
+   procedure Configure_Applications (Command   : in out Command_Type;
+                                     Context   : in out Context_Type) is
+      procedure Configure (URI : in String;
+                           Application : in Servlet.Core.Servlet_Registry_Access);
+
+      Count : Natural := 0;
+
+      procedure Configure (URI : in String;
+                           Application : in Servlet.Core.Servlet_Registry_Access) is
+      begin
+         if Application.all in AWA.Applications.Application'Class then
+            Configure (AWA.Applications.Application'Class (Application.all),
+                       URI (URI'First + 1 .. URI'Last),
+                       Context);
+            Count := Count + 1;
+         end if;
+      end Configure;
+
+      Config  : Servlet.Server.Configuration;
+   begin
       Command_Drivers.WS.Iterate (Configure'Access);
       if Count = 0 then
          Context.Console.Error (-("There is no application"));
          return;
       end if;
+   end Configure_Applications;
+
+   --  ------------------------------
+   --  Start the web server.
+   --  ------------------------------
+   procedure Start_Server (Command   : in out Command_Type;
+                           Context   : in out Context_Type) is
+   begin
       Context.Console.Notice (N_INFO, "Starting...");
       Command_Drivers.WS.Start;
    end Start_Server;
