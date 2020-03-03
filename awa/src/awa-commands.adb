@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Ada.IO_Exceptions;
+with Ada.Command_Line;
 with Ada.Unchecked_Deallocation;
 with Util.Log.Loggers;
 with AWA.Applications.Configs;
@@ -31,15 +32,16 @@ package body AWA.Commands is
 
    Log     : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Commands");
 
-   procedure Load_Configuration (Context : in out Context_Type) is
+   procedure Load_Configuration (Context : in out Context_Type;
+                                 Path    : in String) is
    begin
       begin
-         Context.File_Config.Load_Properties (Context.Config_File.all);
+         Context.File_Config.Load_Properties (Path);
 
       exception
          when Ada.IO_Exceptions.Name_Error =>
             Log.Error ("Cannot read server configuration file '{0}'",
-                       Context.Config_File.all);
+                       Path);
       end;
       if Context.File_Config.Exists (GPG_CRYPT_CONFIG) then
          Context.GPG.Set_Encrypt_Command (Context.File_Config.Get (GPG_CRYPT_CONFIG));
@@ -95,7 +97,8 @@ package body AWA.Commands is
          Context.Wallet.Unlock (Context.GPG, Context.Slot);
       end if;
 
-      Keystore.Properties.Initialize (Context.Secure_Config, Context.Wallet'Unchecked_Access);
+      Keystore.Properties.Initialize (Context.Secure_Config,
+                                      Context.Wallet'Unchecked_Access);
       AWA.Applications.Configs.Merge (Context.App_Config,
                                       Context.File_Config,
                                       Context.Secure_Config,
@@ -283,6 +286,60 @@ package body AWA.Commands is
          raise Error with "No keystore path";
       end if;
    end Get_Keystore_Path;
+
+   procedure Print (Context : in out Context_Type;
+                    Ex      : in Ada.Exceptions.Exception_Occurrence) is
+   begin
+      Ada.Exceptions.Reraise_Occurrence (Ex);
+
+   exception
+      when GNAT.Command_Line.Exit_From_Command_Line | GNAT.Command_Line.Invalid_Switch =>
+         Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
+
+      when Keystore.Bad_Password =>
+         Log.Error (-("Invalid password to unlock the keystore file"));
+         Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
+
+      when Keystore.No_Key_Slot =>
+         Log.Error (-("There is no available key slot to add the password"));
+         Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
+
+      when Keystore.No_Content =>
+         Log.Error (-("No content for an item of type wallet"));
+         Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
+
+      when Keystore.Corrupted =>
+         Log.Error (-("The keystore file is corrupted: invalid meta data content"));
+         Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
+
+      when Keystore.Invalid_Block =>
+         Log.Error (-("The keystore file is corrupted: invalid data block headers or signature"));
+         Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
+
+      when Keystore.Invalid_Signature =>
+         Log.Error (-("The keystore file is corrupted: invalid signature"));
+         Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
+
+      when Keystore.Invalid_Storage =>
+         Log.Error (-("The keystore file is corrupted: invalid or missing storage file"));
+         Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
+
+      when Keystore.Invalid_Keystore =>
+         Log.Error (-("The file is not a keystore"));
+         Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
+
+      when AWA.Commands.Error | Util.Commands.Not_Found =>
+         Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
+
+      when E : Ada.IO_Exceptions.Name_Error =>
+         Log.Error (-("Cannot access file: {0}"), Ada.Exceptions.Exception_Message (E));
+         Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
+
+      when E : others =>
+         Log.Error (-("Some internal error occurred"), E);
+         Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
+
+   end Print;
 
    overriding
    procedure Finalize (Context : in out Context_Type) is
