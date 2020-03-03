@@ -18,6 +18,7 @@
 with Ada.Finalization;
 with Util.Commands;
 with AWA.Applications;
+with Ada.Exceptions;
 private with Keystore.Passwords;
 private with Keystore.Passwords.GPG;
 private with Util.Commands.Consoles.Text;
@@ -62,11 +63,15 @@ package AWA.Commands is
                         Name        : in String;
                         Context     : in out Context_Type);
 
+   procedure Print (Context : in out Context_Type;
+                    Ex      : in Ada.Exceptions.Exception_Occurrence);
+
 private
 
    function "-" (Message : in String) return String is (Message);
 
-   procedure Load_Configuration (Context : in out Context_Type);
+   procedure Load_Configuration (Context : in out Context_Type;
+                                 Path    : in String);
 
    package GC renames GNAT.Command_Line;
 
