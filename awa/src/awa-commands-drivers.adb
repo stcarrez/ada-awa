@@ -150,7 +150,11 @@ package body AWA.Commands.Drivers is
       --                       Verbose => Context.Verbose);
       --end if;
 
-      Context.Load_Configuration;
+      if Context.Config_File'Length > 0 then
+         Context.Load_Configuration (Context.Config_File.all);
+      else
+         Context.Load_Configuration (Driver_Name & ".properties");
+      end if;
 
       declare
          Cmd_Name : constant String := Arguments.Get_Command_Name;
