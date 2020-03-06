@@ -35,6 +35,12 @@ package body AWA.Commands.Tests is
                        Test_Start_Stop'Access);
       Caller.Add_Test (Suite, "Test AWA.Commands.List (tables)",
                        Test_List_Tables'Access);
+      Caller.Add_Test (Suite, "Test AWA.Commands.List (users)",
+                       Test_List_Users'Access);
+      Caller.Add_Test (Suite, "Test AWA.Commands.List (sessions)",
+                       Test_List_Sessions'Access);
+      Caller.Add_Test (Suite, "Test AWA.Commands.List (jobs)",
+                       Test_List_Jobs'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -126,5 +132,43 @@ package body AWA.Commands.Tests is
       Util.Tests.Assert_Matches (T, "entity_type *[0-9]+", Result, "Missing entity_type");
       Util.Tests.Assert_Matches (T, "awa_wiki_page *[0-9]+", Result, "Missing awa_wiki_page");
    end Test_List_Tables;
+
+   --  ------------------------------
+   --  Test the list -u command.
+   --  ------------------------------
+   procedure Test_List_Users (T : in out Test) is
+      Config : constant String := Util.Tests.Get_Parameter ("test_config_path");
+      Result : Ada.Strings.Unbounded.Unbounded_String;
+   begin
+      T.Execute ("bin/awa_command -c " & Config & " list -u",
+                 "", "", Result, 0);
+      Util.Tests.Assert_Matches (T, "Joe Pot", Result, "Missing user");
+      Util.Tests.Assert_Matches (T, "test-wiki@test.com", Result, "Missing email");
+   end Test_List_Users;
+
+   --  ------------------------------
+   --  Test the list -s command.
+   --  ------------------------------
+   procedure Test_List_Sessions (T : in out Test) is
+      Config : constant String := Util.Tests.Get_Parameter ("test_config_path");
+      Result : Ada.Strings.Unbounded.Unbounded_String;
+   begin
+      T.Execute ("bin/awa_command -c " & Config & " list -s",
+                 "", "", Result, 0);
+      Util.Tests.Assert_Matches (T, "Joe Pot", Result, "Missing user");
+   end Test_List_Sessions;
+
+   --  ------------------------------
+   --  Test the list -j command.
+   --  ------------------------------
+   procedure Test_List_Jobs (T : in out Test) is
+      Config : constant String := Util.Tests.Get_Parameter ("test_config_path");
+      Result : Ada.Strings.Unbounded.Unbounded_String;
+   begin
+      T.Execute ("bin/awa_command -c " & Config & " list -j",
+                 "", "", Result, 0);
+      Util.Tests.Assert_Matches (T, "S_FACTORY", Result, "Missing factory");
+      Util.Tests.Assert_Matches (T, "Joe Pot", Result, "Missing user");
+   end Test_List_Jobs;
 
 end AWA.Commands.Tests;
