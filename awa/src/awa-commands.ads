@@ -66,6 +66,12 @@ package AWA.Commands is
    procedure Print (Context : in out Context_Type;
                     Ex      : in Ada.Exceptions.Exception_Occurrence);
 
+   --  Configure the logs.
+   procedure Configure_Logs (Root    : in String;
+                             Debug   : in Boolean;
+                             Dump    : in Boolean;
+                             Verbose : in Boolean);
+
 private
 
    function "-" (Message : in String) return String is (Message);
