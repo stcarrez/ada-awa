@@ -7,22 +7,22 @@
        <comment>Get the list of users with login sessions</comment>
        <sql>
     SELECT
-      user.id AS id,
-      user.name AS name,
+      u.id AS id,
+      u.name AS name,
       email.email AS email,
       (SELECT COUNT(*) FROM awa_acl AS acl
-         WHERE user.id = acl.user_id) AS acl_count,
+         WHERE u.id = acl.user_id) AS acl_count,
       (SELECT COUNT(*) FROM awa_session AS session
-         WHERE session.user_id = user.id AND session.stype = 1) AS auth_count,
+         WHERE session.user_id = u.id AND session.stype = 1) AS auth_count,
       (SELECT MAX(session.start_date) FROM awa_session AS session
-         WHERE session.user_id = user.id AND session.stype = 1) AS last_login
-    FROM awa_user AS user
-    LEFT JOIN awa_email AS email ON user.email_id = email.id
+         WHERE session.user_id = u.id AND session.stype = 1) AS last_login
+    FROM awa_user AS u
+    LEFT JOIN awa_email AS email ON u.email_id = email.id
        </sql>
        <sql-count>
     SELECT
-       count(user.id)
-    FROM awa_user AS user
+       count(u.id)
+    FROM awa_user AS u
        </sql-count>
     </query>
 

@@ -5,7 +5,7 @@
 
     <query name='command-job-list'>
         <comment>Get the list of jobs</comment>
-        <sql>
+        <sql driver='mysql'>
             SELECT
             job.id AS id,
             job.name AS name,
@@ -14,12 +14,35 @@
             job.start_date AS start_date,
             TIMEDIFF(job.finish_date, job.start_date) AS finish_date,
             job.user_id AS user_id,
-            user.name AS uname,
-            session.start_date,
-            session.end_date
+            user.name AS uname
             FROM awa_job AS job
             LEFT JOIN awa_user AS user ON job.user_id = user.id
-            LEFT JOIN awa_session AS session ON job.session_id = session.id
+        </sql>
+        <sql driver='postgresql'>
+            SELECT
+            job.id AS id,
+            job.name AS name,
+            job.status AS status,
+            job.create_date AS create_date,
+            job.start_date AS start_date,
+            TIMEDIFF(job.finish_date, job.start_date) AS finish_date,
+            job.user_id AS user_id,
+            u.name AS uname
+            FROM awa_job AS job
+            LEFT JOIN awa_user AS u ON job.user_id = u.id
+        </sql>
+        <sql driver='sqlite'>
+            SELECT
+            job.id AS id,
+            job.name AS name,
+            job.status AS status,
+            job.create_date AS create_date,
+            CAST((JULIANDAY(job.start_date) - JULIANDAY(job.create_date)) * 86400.0 AS INTEGER) AS start_date,
+            CAST((JULIANDAY(job.finish_date) - JULIANDAY(job.start_date)) * 86400.0 AS INTEGER) AS finish_date,
+            job.user_id AS user_id,
+            user.name AS uname
+            FROM awa_job AS job
+            LEFT JOIN awa_user AS user ON job.user_id = user.id
         </sql>
         <sql-count>
             SELECT
