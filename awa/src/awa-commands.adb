@@ -18,7 +18,11 @@
 with Ada.IO_Exceptions;
 with Ada.Command_Line;
 with Ada.Unchecked_Deallocation;
+with Ada.Strings.Unbounded;
 with Util.Log.Loggers;
+with Util.Properties;
+with Util.Strings.Tokenizers;
+with Util.Strings.Vectors;
 with AWA.Applications.Configs;
 with Keystore.Passwords.Input;
 with Keystore.Passwords.Files;
@@ -26,6 +30,7 @@ with Keystore.Passwords.Unsafe;
 with Keystore.Passwords.Cmds;
 package body AWA.Commands is
 
+   use Ada.Strings.Unbounded;
    use type Keystore.Passwords.Provider_Access;
    use type Keystore.Header_Slot_Count_Type;
    use type Keystore.Passwords.Keys.Key_Provider_Access;
@@ -37,6 +42,7 @@ package body AWA.Commands is
    begin
       begin
          Context.File_Config.Load_Properties (Path);
+         Util.Log.Loggers.Initialize (Util.Properties.Manager (Context.File_Config));
 
       exception
          when Ada.IO_Exceptions.Name_Error =>
@@ -116,6 +122,7 @@ package body AWA.Commands is
    begin
       begin
          Context.File_Config.Load_Properties (Path);
+
       exception
          when Ada.IO_Exceptions.Name_Error =>
             null;
@@ -340,6 +347,96 @@ package body AWA.Commands is
          Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
 
    end Print;
+
+   --  ------------------------------
+   --  Configure the logs.
+   --  ------------------------------
+   procedure Configure_Logs (Root    : in String;
+                             Debug   : in Boolean;
+                             Dump    : in Boolean;
+                             Verbose : in Boolean) is
+      procedure Split (Item : in String;
+                       Done : out Boolean);
+      function Make_Root (Level     : in String;
+                          Appender1 : in String;
+                          Appender2 : in String) return String;
+
+      Start : constant Natural := Util.Strings.Index (Root, ',');
+      List  : Util.Strings.Vectors.Vector;
+
+      procedure Split (Item : in String;
+                       Done : out Boolean) is
+      begin
+         Done := False;
+         List.Append (Item);
+      end Split;
+
+      function Make_Root (Level     : in String;
+                          Appender1 : in String;
+                          Appender2 : in String) return String is
+         Result : Unbounded_String;
+      begin
+         Append (Result, Level);
+         Append (Result, ",");
+         if not List.Contains (Appender1) then
+            Append (Result, Appender1);
+         end if;
+         if Appender2'Length > 0 and then not List.Contains (Appender2) then
+            Append (Result, ",");
+            Append (Result, Appender2);
+         end if;
+         for Item of List loop
+            Append (Result, ",");
+            Append (Result, Item);
+         end loop;
+         return To_String (Result);
+      end Make_Root;
+
+      Log_Config  : Util.Properties.Manager;
+   begin
+      if Start > 0 then
+         Util.Strings.Tokenizers.Iterate_Tokens (Root (Start + 1 .. Root'Last),
+                                                 ",", Split'Access);
+      end if;
+
+      Log_Config.Set ("log4j.rootCategory", Make_Root ("DEBUG", "console", ""));
+      Log_Config.Set ("log4j.appender.console", "Console");
+      Log_Config.Set ("log4j.appender.console.level", "ERROR");
+      Log_Config.Set ("log4j.appender.console.layout", "message");
+      Log_Config.Set ("log4j.appender.console.stderr", "true");
+      Log_Config.Set ("log4j.logger.Util", "FATAL");
+      Log_Config.Set ("log4j.logger.log", "ERROR");
+      if Verbose or Debug or Dump then
+         Log_Config.Set ("log4j.logger.log", "INFO");
+         Log_Config.Set ("log4j.logger.Util", "WARN");
+         Log_Config.Set ("log4j.logger.Keystore.IO", "WARN");
+         Log_Config.Set ("log4j.logger.ADO.Sessions", "WARN");
+         Log_Config.Set ("log4j.rootCategory", Make_Root ("DEBUG", "console", "verbose"));
+         Log_Config.Set ("log4j.appender.verbose", "Console");
+         Log_Config.Set ("log4j.appender.verbose.level", "INFO");
+         Log_Config.Set ("log4j.appender.verbose.layout", "level-message");
+      end if;
+      if Debug or Dump then
+         Log_Config.Set ("log4j.logger.log", "INFO");
+         Log_Config.Set ("log4j.logger.Util.Processes", "INFO");
+         Log_Config.Set ("log4j.logger.Keystore.IO", "INFO");
+         Log_Config.Set ("log4j.logger.ADO", "INFO");
+         Log_Config.Set ("log4j.rootCategory", Make_Root ("DEBUG", "console", "debug"));
+         Log_Config.Set ("log4j.appender.debug", "Console");
+         Log_Config.Set ("log4j.appender.debug.level", "DEBUG");
+         Log_Config.Set ("log4j.appender.debug.layout", "full");
+      end if;
+      if Dump then
+         Log_Config.Set ("log4j.logger.Keystore.IO", "DEBUG");
+         Log_Config.Set ("log4j.logger.AWA", "DEBUG");
+         Log_Config.Set ("log4j.logger.ADO", "DEBUG");
+         Log_Config.Set ("log4j.logger.ADO.Sessions", "WARN");
+      end if;
+
+      Util.Log.Loggers.Initialize (Log_Config);
+
+   end Configure_Logs;
+
 
    overriding
    procedure Finalize (Context : in out Context_Type) is
