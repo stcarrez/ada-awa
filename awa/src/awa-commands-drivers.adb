@@ -144,16 +144,17 @@ package body AWA.Commands.Drivers is
       GC.Getopt (Config => Context.Command_Config);
       Util.Commands.Parsers.GNAT_Parser.Get_Arguments (Arguments, GC.Get_Argument);
 
-      --if Context.Debug or Context.Verbose or Context.Dump then
-      --   AKT.Configure_Logs (Debug   => Context.Debug,
-      --                       Dump    => Context.Dump,
-      --                       Verbose => Context.Verbose);
-      --end if;
-
       if Context.Config_File'Length > 0 then
          Context.Load_Configuration (Context.Config_File.all);
       else
          Context.Load_Configuration (Driver_Name & ".properties");
+      end if;
+
+      if Context.Debug or Context.Verbose or Context.Dump then
+         Configure_Logs (Root    => Context.File_Config.Get ("log4j.rootCategory", ""),
+                         Debug   => Context.Debug,
+                         Dump    => Context.Dump,
+                         Verbose => Context.Verbose);
       end if;
 
       declare
