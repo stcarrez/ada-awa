@@ -30,6 +30,15 @@ package AWA.Commands.Tests is
 
    procedure Test_List_Tables (T : in out Test);
 
+   --  Test the list -u command.
+   procedure Test_List_Users (T : in out Test);
+
+   --  Test the list -s command.
+   procedure Test_List_Sessions (T : in out Test);
+
+   --  Test the list -j command.
+   procedure Test_List_Jobs (T : in out Test);
+
    procedure Execute (T       : in out Test;
                       Command : in String;
                       Input   : in String;
