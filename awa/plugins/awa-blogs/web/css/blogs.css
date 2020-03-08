@@ -1,9 +1,10 @@
 /**
  * blogs.css - Styles for blogs module
- * Copyright (C) 2011-2018 Stephane Carrez
+ * Copyright (C) 2011-2020 Stephane Carrez
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-div.blog-post div.post-text, div.post-info, div.post-header {
+div.blog-post div.post-text, div.post-info, div.post-header,
+.awa-post-editor, .awa-post-buttons {
     float: left;
     width: 100%;
 }
@@ -11,11 +12,15 @@ div.post-info div.asf-list-action {
     left: -5px;
     top: 3px;
 }
-.awa-post {
+.awa-post, .awa-post-more {
     float: left;
     padding-left: 1%;
     padding-right: 1%;
     width: 98%;
+}
+.awa-post-more {
+    float: right;
+    text-align: right;
 }
 /*
  * Admin section
@@ -108,9 +113,6 @@ div.comment-status {
 div.comment-COMMENT_SPAM div.comment-status, div.comment-COMMENT_ARCHIVED div.comment-status {
     background: url(../images/blogs/icon-spam-red.png) no-repeat;
 }
-div.comment-COMMENT_PUBLISHED {
-    color: #111;
-}
 a.spam-icon {
     background: url(../images/blogs/icon-spam-grey.png) no-repeat;
 }
@@ -137,13 +139,9 @@ div.blog-post div.post-title h2 {
     line-height: 1.33em;
 }
 div.blog-post div.post-title h2 a {
-    color: #F91;
     text-decoration: none;
     font-weight: bold;
     font-size: 1.33em;
-}
-div.blog-post div.post-title h2 a:hover {
-    color: #A08;
 }
 div.post-text {
     line-height: 1.5em;
@@ -156,13 +154,10 @@ div.post-text pre {
     line-height: 1.1em;
     margin-bottom: 1em;
     overflow: auto;
-    background: #E8F0FF;
     padding: 4px;
-    border: 1px solid #AAA;
     font-size: 1.1em;
 }
 div.post-text h2, div.post-text h3, div.post-text h4, div.post-text h5, div.post-text h6 {
-    color: #346;
     font-weight: bold;
     margin-top: 1em;
 }
@@ -177,7 +172,6 @@ div.post-text h4 {
 }
 div.post-text a, ul.tag-cloud a {
     font-weight: bold;
-    color: #47C;
 }
 div.post-text ul {
     padding-left: 30px;
@@ -210,23 +204,16 @@ div.blog-post ul.tagedit-list {
     list-style-type: none;
 }
 div.blog-post-tag-info {
-    border: 1px solid #f91;
     margin-bottom: 1em;
 }
 div.blog-post-tag-info h2 {
-    background: #f91;
     padding: 2px 8px;
-    color: #fff;
     font-size: 1.15em;
 }
 div.blog-post-info h2 {
     font-size: 1.15em;
-    background: #d8e7fa;
-    color: #346;
 }
-
 .awa-comment-list h3 {
-    color: #a08;
     font-weight: normal;
     font-size: 1.3em;
 }
@@ -238,7 +225,6 @@ div.blog-post-info h2 {
     width: 100%;
     padding-top: 5px;
     margin: 1em 0;
-    border-top: 2px solid #ddd;
 }
 .blog-post-comment-count {
     float: left;
@@ -248,7 +234,6 @@ div.blog-post-info h2 {
     background: url(../images/blogs/ico_comm.gif) no-repeat left center;
     padding-left: 16px;
     margin-left: 1em;
-    color: #777;
     text-decoration: none;
 }
 .post-date {
@@ -256,7 +241,6 @@ div.blog-post-info h2 {
 }
 div.blog-post-comment-count a {
     padding-left: 20px;
-    color: #777;
     text-decoration: none;
 }
 .blog-post-add-comment {
@@ -285,9 +269,7 @@ div.blog-post-comment-count a {
 #blog-graph-tooltip {
     position: absolute;
     display: none;
-    border: 1px solid orange;
     padding: 2px;
-    background-color: #fee;
     opacity: 0.8;
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
@@ -295,10 +277,6 @@ div.blog-post-comment-count a {
 .awa-form .ui-tabs .ui-tabs-panel {
     overflow: hidden;
     padding: 0;
-}
-.awa-post-editor, .awa-post-buttons {
-    float: left;
-    width: 100%;
 }
 .awa-post-buttons {
     padding-bottom: 0.5em;
@@ -311,4 +289,47 @@ div.blog-post-comment-count a {
 .awa-post-buttons h2 {
     float: left;
     padding: .4em 0;
+}
+
+/*
+ * Color and theme
+ */
+div.comment-COMMENT_PUBLISHED {
+    color: #111;
+}
+div.blog-post div.post-title h2 a {
+    color: #F91;
+}
+div.post-text pre {
+    background: #E8F0FF;
+    border: 1px solid #AAA;
+}
+div.post-text h2, div.post-text h3, div.post-text h4,
+div.post-text h5, div.post-text h6 {
+    color: #346;
+}
+div.post-text a, ul.tag-cloud a {
+    color: #47C;
+}
+div.blog-post-tag-info {
+    border: 1px solid #f91;
+}
+div.blog-post-tag-info h2 {
+    background: #f91;
+    color: #fff;
+}
+div.blog-post-info h2 {
+    background: #d8e7fa;
+    color: #346;
+}
+.blog-post-comment {
+    border-top: 2px solid #ddd;
+}
+.post-title .post-comment-count,
+div.blog-post-comment-count a {
+    color: #777;
+}
+#blog-graph-tooltip {
+    border: 1px solid orange;
+    background-color: #fee;
 }

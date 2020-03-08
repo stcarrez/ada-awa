@@ -1,4 +1,10 @@
-.wiki-page-container {
+/**
+ * wikis.css - Styles for wikis module
+ * Copyright (C) 2011-2020 Stephane Carrez
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ */
+.wiki-page-container,
+.wiki-text {
     float: left;
     width: 100%;
 }
@@ -11,10 +17,9 @@
     width: 25%;
     height: 24px;
 }
-.wiki-page-date {
-    width: 20%;
-}
-.wiki-page-author {
+.wiki-page-date,
+.wiki-page-author,
+#wiki-nav-sort {
     width: 20%;
 }
 .wiki-page-version, .wiki-page-access {
@@ -48,13 +53,10 @@
     width: 256px;
     padding: 5px;
     box-sizing: content-box;
-    border: 1px solid #47C;
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
 }
-.wiki-page-grid-info a {
-    display: inline-block;
-}
+.wiki-page-grid-info a,
 .wiki-page-grid-info img {
     display: inline-block;
 }
@@ -68,13 +70,11 @@
     width: 100%;
     text-align: center;
 }
-.wiki-page-grid-info .wiki-page-title {
+.wiki-page-grid-info .wiki-page-title,
+.wiki-text a, ul.tag-cloud a {
     font-weight: bold;
 }
 
-#wiki-nav-sort {
-    width: 20%;
-}
 .wiki-page-footer {
     float: left;
     width: 98%;
@@ -94,11 +94,8 @@
     padding-bottom: 0.5em;
 }
 .wiki-page-tag-info h2 {
-    background: #f91;
     padding: 2px 8px;
-    color: #fff;
     font-size: 1.15em;
-
 }
 .wiki-list-message {
     padding-left: 1%;
@@ -110,7 +107,6 @@
     float: left;
     margin-top: 15px;
     width: 95%;
-    border-bottom: 2px solid #47C;
     padding-bottom: 2px;
     padding-left: 48px;
 }
@@ -127,7 +123,8 @@
 .wiki-page-info {
     font-size: 0.8em;
 }
-.wiki-page-actions {
+.wiki-page-actions,
+.wiki-tag-list {
     float: right;
     list-style-type: none;
 }
@@ -135,19 +132,10 @@
     float: left;
     padding-left: 1em;
 }
-.wiki-tag-list {
-    float: right;
-    list-style-type: none;
-}
 
 /**
  * Wiki page view style.
  */
-.wiki-text {
-    float: left;
-    width: 100%;
-}
-
 .wiki-text {
     line-height: 1.5em;
 }
@@ -159,13 +147,10 @@
     line-height: 1.2em;
     margin-bottom: 1em;
     overflow: auto;
-    background: #E8F0FF;
     padding: 4px;
-    border: 1px solid #AAA;
     font-size: 1.2em;
 }
 .wiki-text h2, .wiki-text h3, .wiki-text h4, .wiki-text h5, .wiki-text h6 {
-    color: #346;
     font-weight: bold;
     margin-top: 1em;
     clear: both;
@@ -178,10 +163,6 @@
 }
 .wiki-text h4 {
     font-size: 1.0em;
-}
-.wiki-text a, ul.tag-cloud a {
-    font-weight: bold;
-    color: #47C;
 }
 .wiki-text ul {
     padding-left: 30px;
@@ -208,7 +189,6 @@
 }
 /* Table of Contents */
 .wiki-toc {
-    border: 1px solid #AAA;
     display: table;
     padding: 0.5em;
     margin: 0.5em;
@@ -225,7 +205,6 @@
 /* Wiki images */
 .wiki-img-thumb {
     margin: 0.5em;
-    border: 1px solid #AAA;
     width: auto;
     display: block;
     float: left;
@@ -237,7 +216,6 @@
     width: 99%;
 }
 .wiki-img-caption {
-    border-top: 1px solid #AAA;
     text-align: center;
 }
 .wiki-img-left {
@@ -264,7 +242,6 @@
 .wiki-image-grid {
     float: left;
     width: 160px;
-/*    height: 80px; */
     height: 98px;
     overflow: hidden;
     font-size: 0.8em;
@@ -280,8 +257,6 @@
     width: 140px;
     text-align: center;
     overflow: hidden;
-    border: 1px solid #ccc;
-    background-color: #eee;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
@@ -300,7 +275,7 @@
 .wiki-image-details dt {
     clear: both;
     float: left;
-    font-style: bold;
+    font-weight: bold;
     width: 20%;
 }
 .wiki-image-details dd {
@@ -309,9 +284,6 @@
 }
 .wiki-image-upload {
     height: 80px;
-}
-.wiki-upload-form {
-    background-color: #f6f6f3;
 }
 .wiki-image-view a {
     font-weight: bold;
@@ -324,4 +296,39 @@
     float: left;
     width: 100%;
     height: 100px;
+}
+/**
+ * Color and theme
+ */
+.wiki-page-grid-info {
+    border: 1px solid #47C;
+}
+.wiki-page-tag-info h2 {
+    background: #f91;
+    color: #fff;
+}
+.wiki-title, .wiki-title-private {
+    border-bottom: 2px solid #47C;
+}
+.wiki-text pre {
+    background: #E8F0FF;
+    border: 1px solid #AAA;
+}
+.wiki-text h2, .wiki-text h3, .wiki-text h4, .wiki-text h5, .wiki-text h6 {
+    color: #346;
+}
+.wiki-text a, ul.tag-cloud a {
+    color: #47C;
+}
+.wiki-toc,
+.wiki-img-thumb,
+.wiki-img-caption {
+    border: 1px solid #AAA;
+}
+.wiki-image-grid span {
+    border: 1px solid #ccc;
+    background-color: #eee;
+}
+.wiki-upload-form {
+    background-color: #f6f6f3;
 }

@@ -29,22 +29,13 @@
     padding: 1em;
     cursor: pointer;
 }
-div.storage-folder-list div.asf-active {
-    background-color: #DFEFFC;
-}
-div.storage-folder-list div.asf-selected {
-    background-color: #A6C9E2;
-}
 .storage-folder-title {
     font-weight: bold;
     font-size: 1.2em;
     padding: 1em;
-    border-bottom: 1px solid #A6C9E2;
 }
 #storage-doc-message-notif {
     padding: 1em;
-    background: #DFEFFC;
-    border: 1px solid red;
     border-radius: 0.5em;
 }
 .storage-document {
@@ -113,8 +104,6 @@ div.asf-active-list div.asf-active .storage-download {
 }
 #storage-folder-left-panel {
     width: 20%;
-    background: #f3f9fe;
-    border-right: 3px solid #A6C9E2;
     min-height: 100%;
     height: -webkit-fill-available;
     height: -moz-available;
@@ -171,9 +160,6 @@ div.asf-active-list div.asf-active .storage-download {
 .storage-content {
     margin-left: 0.5em;
 }
-.storage-image-content {
-    border: 1px solid #ccc;
-}
 .storage-doc-viewport {
     height: 1500px;
     width: 100%;
@@ -207,9 +193,6 @@ div.asf-active-list div.asf-active .storage-download {
     width: 100%;
     padding-top: 2em;
 }
-#storage-reupload-button {
-    background: #DFEFFC;
-}
 .image-upload {
     height: 80px;
 }
@@ -239,10 +222,8 @@ div.asf-active-list div.asf-active .storage-download {
 }
 /* Dropzone style */
 .dropzone {
-    border: 2px dashed #A6C9E2;
     border-radius: 5px;
     padding: 1em;
-    background: #e8f3fd;
 }
 .dropzone input {
     display: none;
@@ -272,12 +253,39 @@ div.asf-active-list div.asf-active .storage-download {
     float: left;
     width: 70%;
 }
-.awa-image-list-editor .active {
-    background-color: #A6C9E2;
-}
 .wiki-image-grid-info {
     overflow: hidden;
 }
 .awa-image-list-editor a {
     text-decoration: none;
+}
+/*
+ * Color and theme
+ */
+div.storage-folder-list div.asf-active,
+#storage-reupload-button {
+    background-color: #DFEFFC;
+}
+.awa-image-list-editor .active,
+div.storage-folder-list div.asf-selected {
+    background-color: #A6C9E2;
+}
+.storage-folder-title {
+    border-bottom: 1px solid #A6C9E2;
+}
+#storage-doc-message-notif {
+    background: #DFEFFC;
+    border: 1px solid red;
+}
+#storage-folder-left-panel {
+    background: #f3f9fe;
+    border-right: 3px solid #A6C9E2;
+}
+.storage-file-content,
+.storage-image-content {
+    border-top: 1px solid #ccc;
+}
+.dropzone {
+    border: 2px dashed #A6C9E2;
+    background: #e8f3fd;
 }
