@@ -4,6 +4,7 @@ Version 2.0     -
   - Support for Postgresql
   - Improvements of images and storage plugins
   - Update Trumbowyg editor to version 2.18.0
+  - Support for commands to configure, start, stop the server
 
 Version 1.1     - Jul 2018
   - New trumbowyg plugin for WYSIWYG Javascript editor
