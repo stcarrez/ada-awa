@@ -82,8 +82,8 @@ package body AWA.Commands.Start is
       procedure Configure (URI : in String;
                            Application : in Servlet.Core.Servlet_Registry_Access) is
       begin
-         if Application.all in AWA.Applications.Application'Class then
-            Configure (AWA.Applications.Application'Class (Application.all),
+         if Application.all in ASF.Applications.Main.Application'Class then
+            Configure (ASF.Applications.Main.Application'Class (Application.all),
                        URI (URI'First + 1 .. URI'Last),
                        Context);
             Count := Count + 1;
