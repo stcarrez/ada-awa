@@ -18,6 +18,7 @@
 with Ada.Finalization;
 with Util.Commands;
 with AWA.Applications;
+with ASF.Applications.Main;
 with Ada.Exceptions;
 private with Keystore.Passwords;
 private with Keystore.Passwords.GPG;
@@ -59,7 +60,7 @@ package AWA.Commands is
 
    --  Configure the application by loading its configuration file and merging it with
    --  the keystore file if there is one.
-   procedure Configure (Application : in out AWA.Applications.Application'Class;
+   procedure Configure (Application : in out ASF.Applications.Main.Application'Class;
                         Name        : in String;
                         Context     : in out Context_Type);
 
