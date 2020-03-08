@@ -50,7 +50,7 @@
                   value="#{empty post.summary ? post.text : post.summary}"
                   links="#{postList.links}"
                   format="#{post.format}"/>
-        <h:panelGroup rendered="#{not empty post.summary}">
+        <h:panelGroup rendered="#{not empty post.summary}" styleClass="awa-post-more">
             <a href="#{contextPath}/blogs/post.html?post=#{post.uri}">Read more</a>
         </h:panelGroup>
         <!-- Increment the post read counter but do not display anything -->
