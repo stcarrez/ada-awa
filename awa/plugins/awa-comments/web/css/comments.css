@@ -1,6 +1,6 @@
 /**
  * comments.css - Styles for comments module
- * Copyright (C) 2011-2018 Stephane Carrez
+ * Copyright (C) 2011-2020 Stephane Carrez
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
 .awa-comment-list {
@@ -56,10 +56,16 @@
     text-decoration: none;
     font-weight: bold;
 }
-.comment-COMMENT_SPAM {
+.comment-COMMENT_SPAM .comment-title,
+.comment-COMMENT_SPAM .comment-date,
+.comment-COMMENT_SPAM .comment-gravatar,
+.comment-COMMENT_SPAM .comment-author {
     opacity: 0.2;
 }
-.comment-COMMENT_WAITING {
+.comment-COMMENT_WAITING .comment-title,
+.comment-COMMENT_WAITING .comment-date,
+.comment-COMMENT_WAITING .comment-gravatar,
+.comment-COMMENT_WAITING .comment-author {
     opacity: 0.5;
 }
 .comment-COMMENT_PUBLISHED .comment-action-spam,
