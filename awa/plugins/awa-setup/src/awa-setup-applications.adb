@@ -362,6 +362,7 @@ package body AWA.Setup.Applications is
                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       pragma Unreferenced (Outcome);
    begin
+      From.Status.Set (STARTING);
       Log.Info ("Waiting for application to be started");
       From.Status.Wait_Ready;
    end Start;
@@ -374,7 +375,6 @@ package body AWA.Setup.Applications is
    begin
       Log.Info ("Finish configuration");
       From.Save (Outcome);
-      From.Status.Set (STARTING);
    end Finish;
 
    --  ------------------------------
