@@ -85,8 +85,10 @@ package body AWA.Commands.Setup is
          Command.Configure_Server (Context);
          Command.Start_Server (Context);
          S.Setup (Name, Command_Drivers.WS);
-         Command_Drivers.WS.Remove_Application (S'Unchecked_Access);
          Command.Configure_Applications (Context);
+         S.Status.Set (AWA.Setup.Applications.READY);
+         delay 2.0;
+         Command_Drivers.WS.Remove_Application (S'Unchecked_Access);
          Command_Drivers.WS.Iterate (Enable_Application'Access);
          Command.Wait_Server (Context);
       end;
