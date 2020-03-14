@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-modules -- Application Module
---  Copyright (C) 2009, 2010, 2011, 2012, 2015, 2016, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2009 - 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -95,7 +95,7 @@ package AWA.Modules is
    --  Module manager
    --  ------------------------------
    --
-   --  The <b>Module_Manager</b> represents the root of the logic manager
+   --  The `Module_Manager` represents the root of the logic manager
    type Module_Manager is new Ada.Finalization.Limited_Controlled
      and Util.Beans.Basic.Readonly_Bean with private;
 
@@ -108,10 +108,14 @@ package AWA.Modules is
                         Name    : String;
                         Default : String := "") return String;
 
-   --  Get the module configuration property identified by the <tt>Config</tt> parameter.
+   --  Get the module configuration property identified by the `Config` parameter.
    --  If the property does not exist, the default configuration value is returned.
    function Get_Config (Plugin : in Module_Manager;
                         Config : in ASF.Applications.Config_Param) return String;
+   function Get_Config (Plugin : in Module_Manager;
+                        Config : in ASF.Applications.Config_Param) return Integer;
+   function Get_Config (Plugin : in Module_Manager;
+                        Config : in ASF.Applications.Config_Param) return Boolean;
 
    --  ------------------------------
    --  Module
@@ -150,12 +154,16 @@ package AWA.Modules is
                         Name    : String;
                         Default : Boolean := False) return Boolean;
 
-   --  Get the module configuration property identified by the <tt>Config</tt> parameter.
+   --  Get the module configuration property identified by the `Config` parameter.
    --  If the property does not exist, the default configuration value is returned.
    function Get_Config (Plugin : in Module;
                         Config : in ASF.Applications.Config_Param) return String;
+   function Get_Config (Plugin : in Module;
+                        Config : in ASF.Applications.Config_Param) return Integer;
+   function Get_Config (Plugin : in Module;
+                        Config : in ASF.Applications.Config_Param) return Boolean;
 
-   --  Get the module configuration property identified by the <tt>Config</tt> parameter.
+   --  Get the module configuration property identified by the `Config` parameter.
    --  If the configuration property does not exist, returns the default value.
    function Get_Config (Plugin  : in Module;
                         Name    : in String;
@@ -169,7 +177,7 @@ package AWA.Modules is
                          App    : in Application_Access;
                          Props  : in ASF.Applications.Config);
 
-   --  Initialize the configuration file parser represented by <b>Parser</b> to recognize
+   --  Initialize the configuration file parser represented by `Parser` to recognize
    --  the specific configuration recognized by the module.
    procedure Initialize_Parser (Plugin : in out Module;
                                 Parser : in out Util.Serialize.IO.Parser'Class) is null;
@@ -178,7 +186,7 @@ package AWA.Modules is
    procedure Configure (Plugin : in out Module;
                         Props  : in ASF.Applications.Config) is null;
 
-   --  Send the event to the module.  The module identified by <b>To</b> is
+   --  Send the event to the module.  The module identified by `To` is
    --  found and the event is posted on its event channel.
    procedure Send_Event (Plugin  : in Module;
                          Content : in AWA.Events.Module_Event'Class);
@@ -235,7 +243,7 @@ package AWA.Modules is
    function Get_Master_Session (Manager : Module_Manager)
                                 return ADO.Sessions.Master_Session;
 
-   --  Send the event to the module.  The module identified by <b>To</b> is
+   --  Send the event to the module.  The module identified by `To` is
    --  found and the event is posted on its event channel.
    procedure Send_Event (Manager : in Module_Manager;
                          Content : in AWA.Events.Module_Event'Class);
@@ -267,7 +275,7 @@ package AWA.Modules is
    function Find_By_URI (Registry : Module_Registry;
                          URI      : String) return Module_Access;
 
-   --  Iterate over the modules that have been registered and execute the <b>Process</b>
+   --  Iterate over the modules that have been registered and execute the `Process`
    --  procedure on each of the module instance.
    procedure Iterate (Registry : in Module_Registry;
                       Process  : access procedure (Plugin : in out Module'Class));
