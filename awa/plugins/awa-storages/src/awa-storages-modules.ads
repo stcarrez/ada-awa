@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-modules -- Storage management module
---  Copyright (C) 2012, 2018 Stephane Carrez
+--  Copyright (C) 2012, 2018, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,6 +42,11 @@ package AWA.Storages.Modules is
    procedure Initialize (Plugin : in out Storage_Module;
                          App    : in AWA.Modules.Application_Access;
                          Props  : in ASF.Applications.Config);
+
+   --  Configures the module after its initialization and after having read its XML configuration.
+   overriding
+   procedure Configure (Plugin : in out Storage_Module;
+                        Props  : in ASF.Applications.Config);
 
    --  Get the storage manager.
    function Get_Storage_Manager (Plugin : in Storage_Module)
