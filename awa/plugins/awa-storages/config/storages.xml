@@ -17,6 +17,14 @@
     </description>
   </context-param>
 
+  <context-param>
+    <param-name>storages.database_max_size</param-name>
+    <param-value>100000</param-value>
+    <description>
+       The maximum size of documents store in the database storage.
+    </description>
+  </context-param>
+
   <managed-bean>
     <description>This bean allows to create a storage folder.</description>
     <managed-bean-name>storageFolder</managed-bean-name>
@@ -97,8 +105,9 @@
     <entity-type>awa_workspace</entity-type>
     <sql>
        SELECT acl.id FROM awa_acl AS acl
+       INNER JOIN awa_workspace AS workspace ON workspace.owner_id = :user_id
        WHERE acl.entity_type = :entity_type
-       AND acl.entity_id = :entity_id
+       AND acl.entity_id = workspace.id
        AND acl.user_id = :user_id
        AND acl.permission = $permission[folder-create]
     </sql>
