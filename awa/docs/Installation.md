@@ -40,7 +40,8 @@ The Ada Web Application library also uses the following projects:
 * [Ada Server Faces Library](https://github.com/stcarrez/ada-asf),
 * [Ada Wiki Library](https://github.com/stcarrez/ada-wiki),
 * [Ada Database Objects Library](https://github.com/stcarrez/ada-ado),
-* [Swagger Ada Library](https://github.com/stcarrez/swagger-ada),
+* [Ada Keystore Library](https://github.com/stcarrez/ada-keystore),
+* [OpenAPI Ada Library](https://github.com/stcarrez/swagger-ada),
 * [Dynamo](https://github.com/stcarrez/dynamo)
 
 They are integrated as Git submodules.
@@ -51,10 +52,8 @@ The AWA framework uses git submodules to integrate several other
 projects.  To get all the sources, use the following commands:
 
 ```
-   git clone git@github.com:stcarrez/ada-awa.git
+   git clone --recursive git@github.com:stcarrez/ada-awa.git
    cd ada-awa
-   git submodule init
-   git submodule update
 ```
 
 ## Development Host Installation
@@ -92,6 +91,38 @@ PostgreSQL Development installation
 ```
 sudo apt-get install postgresql-client libpq-dev
 ```
+
+### FreeBSD 12
+
+First to get the LZMA, XML/Ada and CURL support, it is necessary
+to install the following packages before configuring AWA:
+
+```
+pkg install lzma-18.05 curl-7.66.0 xmlada-17.0.0_1 aws-17.1_2
+```
+
+MariaDB Development installation:
+```
+pkg install mariadb104-client-10.4.7 mariadb104-server-10.4.7
+```
+
+SQLite Development installation:
+```
+pkg install sqlite3-3.29.0
+```
+
+PostgreSQL Development installation:
+```
+pkg install postgresql12-client-12.r1 postgresql12-server-12.r1
+```
+
+Once these packages are installed, you may have to setup the following
+environment variables:
+```
+export PATH=/usr/local/gcc6-aux/bin:$PATH
+export ADA_PROJECT_PATH=/usr/local/lib/gnat
+```
+
 
 ### Windows
 
