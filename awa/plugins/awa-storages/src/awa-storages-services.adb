@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-services -- Storage service
---  Copyright (C) 2012, 2013, 2016, 2018, 2019 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2016, 2018, 2019, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -54,12 +54,14 @@ package body AWA.Storages.Services is
                          Module  : in AWA.Modules.Module'Class) is
       Root : constant String := Module.Get_Config (Stores.Files.Root_Directory_Parameter.P);
       Tmp  : constant String := Module.Get_Config (Stores.Files.Tmp_Directory_Parameter.P);
+      Size : constant Integer := Module.Get_Config (Stores.Databases.Max_Size_Parameter.P);
    begin
       AWA.Modules.Module_Manager (Service).Initialize (Module);
       Service.Stores (Storages.Models.DATABASE) := Service.Database_Store'Unchecked_Access;
       Service.Stores (Storages.Models.FILE) := AWA.Storages.Stores.Files.Create_File_Store (Root);
       Service.Stores (Storages.Models.TMP) := AWA.Storages.Stores.Files.Create_File_Store (Tmp);
       Service.Database_Store.Tmp := Service.Stores (Storages.Models.TMP);
+      Service.Database_Max_Size := Size;
    end Initialize;
 
    --  ------------------------------
@@ -158,6 +160,17 @@ package body AWA.Storages.Services is
                    Storage : in AWA.Storages.Models.Storage_Type) is
    begin
       Storage_Service'Class (Service).Save (Into, Data.Get_Local_Filename, Storage);
+   end Save;
+
+   procedure Save (Service : in Storage_Service;
+                   Into    : in out AWA.Storages.Models.Storage_Ref'Class;
+                   Data    : in ASF.Parts.Part'Class) is
+   begin
+      if Data.Get_Size > Service.Database_Max_Size then
+         Storage_Service'Class (Service).Save (Into, Data, Models.FILE);
+      else
+         Storage_Service'Class (Service).Save (Into, Data, Models.DATABASE);
+      end if;
    end Save;
 
    --  ------------------------------
