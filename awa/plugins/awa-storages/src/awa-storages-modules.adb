@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-module -- Storage management module
---  Copyright (C) 2012, 2016, 2019 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2019, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -65,10 +65,18 @@ package body AWA.Storages.Modules is
       App.Add_Servlet ("storage", Plugin.Storage_Servlet'Unchecked_Access);
 
       AWA.Modules.Module (Plugin).Initialize (App, Props);
+   end Initialize;
 
+   --  ------------------------------
+   --  Configures the module after its initialization and after having read its XML configuration.
+   --  ------------------------------
+   overriding
+   procedure Configure (Plugin : in out Storage_Module;
+                        Props  : in ASF.Applications.Config) is
+   begin
       --  Create the storage manager when everything is initialized.
       Plugin.Manager := Plugin.Create_Storage_Manager;
-   end Initialize;
+   end Configure;
 
    --  ------------------------------
    --  Get the storage manager.
