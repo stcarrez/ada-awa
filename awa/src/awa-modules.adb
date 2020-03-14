@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  awa -- Ada Web Application
---  Copyright (C) 2009, 2010, 2011, 2012, 2015, 2016, 2017, 2018 Stephane Carrez
+--  awa-modules -- Application Module
+--  Copyright (C) 2009 - 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,11 +45,23 @@ package body AWA.Modules is
    end Get_Config;
 
    --  ------------------------------
-   --  Get the module configuration property identified by the <tt>Config</tt> parameter.
+   --  Get the module configuration property identified by the `Config` parameter.
    --  If the property does not exist, the default configuration value is returned.
    --  ------------------------------
    function Get_Config (Plugin : in Module_Manager;
                         Config : in ASF.Applications.Config_Param) return String is
+   begin
+      return Plugin.Module.all.Get_Config (Config);
+   end Get_Config;
+
+   function Get_Config (Plugin : in Module_Manager;
+                        Config : in ASF.Applications.Config_Param) return Integer is
+   begin
+      return Plugin.Module.all.Get_Config (Config);
+   end Get_Config;
+
+   function Get_Config (Plugin : in Module_Manager;
+                        Config : in ASF.Applications.Config_Param) return Boolean is
    begin
       return Plugin.Module.all.Get_Config (Config);
    end Get_Config;
@@ -126,7 +138,7 @@ package body AWA.Modules is
    end Get_Config;
 
    --  ------------------------------
-   --  Get the module configuration property identified by the <tt>Config</tt> parameter.
+   --  Get the module configuration property identified by the `Config` parameter.
    --  If the property does not exist, the default configuration value is returned.
    --  ------------------------------
    function Get_Config (Plugin : in Module;
@@ -135,8 +147,20 @@ package body AWA.Modules is
       return Plugin.Config.Get (Config);
    end Get_Config;
 
+   function Get_Config (Plugin : in Module;
+                        Config : in ASF.Applications.Config_Param) return Integer is
+   begin
+      return Plugin.Config.Get (Config);
+   end Get_Config;
+
+   function Get_Config (Plugin : in Module;
+                        Config : in ASF.Applications.Config_Param) return Boolean is
+   begin
+      return Plugin.Config.Get (Config);
+   end Get_Config;
+
    --  ------------------------------
-   --  Get the module configuration property identified by the <tt>Config</tt> parameter.
+   --  Get the module configuration property identified by the `Config` parameter.
    --  If the property does not exist, the default configuration value is returned.
    --  ------------------------------
    function Get_Config (Plugin  : in Module;
@@ -260,7 +284,7 @@ package body AWA.Modules is
    end Get_Master_Session;
 
    --  ------------------------------
-   --  Send the event to the module.  The module identified by <b>To</b> is
+   --  Send the event to the module.  The module identified by `To` is
    --  found and the event is posted on its event channel.
    --  ------------------------------
    procedure Send_Event (Manager : in Module_Manager;
@@ -387,7 +411,7 @@ package body AWA.Modules is
    end Find_By_URI;
 
    --  ------------------------------
-   --  Iterate over the modules that have been registered and execute the <b>Process</b>
+   --  Iterate over the modules that have been registered and execute the `Process`
    --  procedure on each of the module instance.
    --  ------------------------------
    procedure Iterate (Registry : in Module_Registry;
