@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-services -- Storage service
---  Copyright (C) 2012, 2016, 2019 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2019, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -89,6 +89,9 @@ package AWA.Storages.Services is
                    Into    : in out AWA.Storages.Models.Storage_Ref'Class;
                    Data    : in ASF.Parts.Part'Class;
                    Storage : in AWA.Storages.Models.Storage_Type);
+   procedure Save (Service : in Storage_Service;
+                   Into    : in out AWA.Storages.Models.Storage_Ref'Class;
+                   Data    : in ASF.Parts.Part'Class);
 
    --  Save the file described <b>File</b> in the storage
    --  object represented by <b>Into</b> and managed by the storage service.
@@ -162,9 +165,10 @@ private
      array (AWA.Storages.Models.Storage_Type) of AWA.Storages.Stores.Store_Access;
 
    type Storage_Service is new AWA.Modules.Module_Manager with record
-      Stores         : Store_Access_Array;
-      Database_Store : aliased AWA.Storages.Stores.Databases.Database_Store;
-      Temp_Id        : Util.Concurrent.Counters.Counter;
+      Stores            : Store_Access_Array;
+      Database_Store    : aliased AWA.Storages.Stores.Databases.Database_Store;
+      Database_Max_Size : Natural;
+      Temp_Id           : Util.Concurrent.Counters.Counter;
    end record;
 
 end AWA.Storages.Services;
