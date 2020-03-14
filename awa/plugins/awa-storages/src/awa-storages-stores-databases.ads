@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-stores-databases -- Database store
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,7 @@
 -----------------------------------------------------------------------
 with ADO.Sessions;
 
+with ASF.Applications.Main.Configs;
 with AWA.Storages.Models;
 
 --  === Database store ===
@@ -25,6 +26,11 @@ with AWA.Storages.Models;
 --  The database store uses another store service to temporarily save the data content
 --  in a local file when the application needs a file access to the data.
 package AWA.Storages.Stores.Databases is
+
+   --  Parameter that indicates the maximum size of files stored in the database.
+   package Max_Size_Parameter is
+     new ASF.Applications.Main.Configs.Parameter (Name    => "database_max_size",
+                                                  Default => "100000");
 
    --  ------------------------------
    --  Storage Service
