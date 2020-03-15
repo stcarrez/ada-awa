@@ -19,4 +19,5 @@
     <depend name="awa-images"></depend>
     <depend name="awa_counters"></depend>
     <depend name="servlet"></depend>
+    <depend name="keystore"></depend>
 </project>

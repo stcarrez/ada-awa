@@ -12,4 +12,5 @@
     <depend name="awa-storages"></depend>
     <depend name="awa-jobs"></depend>
     <depend name="servlet"></depend>
+    <depend name="keystore"></depend>
 </project>

@@ -11,4 +11,6 @@
     <depend name="security"></depend>
     <depend name="asf"></depend>
     <depend name="servlet"></depend>
+    <depend name="swagger"></depend>
+    <depend name="keystore"></depend>
 </project>

@@ -13,4 +13,5 @@
     <depend name="awa-workspaces"></depend>
     <depend name="awa-tags"></depend>
     <depend name="servlet"></depend>
+    <depend name="keystore"></depend>
 </project>

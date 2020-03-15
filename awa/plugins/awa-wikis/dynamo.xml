@@ -19,4 +19,5 @@
     <depend name="awa_markedit"></depend>
     <depend name="awa_flotcharts"></depend>
     <depend name="servlet"></depend>
+    <depend name="keystore"></depend>
 </project>
