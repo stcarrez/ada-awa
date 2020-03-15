@@ -1,0 +1,12 @@
+Ada Server Faces           https://github.com/stcarrez/ada-asf
+Ada Database Objects       https://github.com/stcarrez/ada-ado
+Ada Utility Library        https://github.com/stcarrez/ada-util
+Ada Wiki                   https://github.com/stcarrez/ada-wiki
+Ada EL                     https://github.com/stcarrez/ada-el
+Ada Security               https://github.com/stcarrez/ada-security
+AWS                        https://github.com/AdaCore/aws
+Dynamo                     https://github.com/stcarrez/dynamo
+Java Bean                  https://en.wikipedia.org/wiki/JavaBean
+Java Log4j                 https://logging.apache.org/log4j/2.x/
+Log4cxx                    https://logging.apache.org/log4cxx/latest_stable/index.html
+RFC7231                    https://tools.ietf.org/html/rfc7231
