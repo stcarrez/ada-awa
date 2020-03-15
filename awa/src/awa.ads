@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa -- Ada Web Application
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2015, 2018 Stephane Carrez
+--  Copyright (C) 2009 - 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,7 @@
 
 --  = AWA Core ==
 --
+--  @include awa-applications.ads
 --  @include awa-modules.ads
 --  @include awa-permissions.ads
 --  @include awa-events.ads
@@ -25,11 +26,5 @@
 package AWA is
 
    pragma Pure;
-
-   --  Library SVN identification
-   SVN_URL : constant String := "$HeadURL: file:///opt/repository/svn/ada/awa/trunk/src/awa.ads $";
-
-   --  Revision used (must run 'make version' to update)
-   SVN_REV : constant String := "$Rev: 318 $";
 
 end AWA;

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-beans -- ASF Beans for user module
---  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +25,14 @@ with AWA.Users.Services;
 with AWA.Users.Modules;
 with AWA.Users.Principals;
 
+--  == Ada Beans ==
+--  Several bean types are provided to represent and manage the users.
+--  The user module registers the bean constructors when it is initialized.
+--  To use them, one must declare a bean definition in the application
+--  XML configuration.
+--
+--  @include-bean users.xml
+--
 package AWA.Users.Beans is
 
    use Ada.Strings.Unbounded;
