@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-images-modules -- Image management module
---  Copyright (C) 2012, 2016, 2018 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2018, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,16 +28,36 @@ with AWA.Images.Servlets;
 with ADO;
 private with EL.Expressions;
 
---  == Image Module ==
---  The <tt>Image_Module</tt> type represents the image module.  An instance of the image
---  module must be declared and registered when the application is created and initialized.
---  The image module is associated with the image service which provides and implements
---  the image management operations.
+--  == Integration ==
+--  To be able to use the `Images` module, you will need to add the
+--  following line in your GNAT project file:
 --
---  When the image module is initialized, it registers itself as a listener to the storage
---  module to be notified when a storage file is created, updated or removed.  When a file
---  is added, it looks at the file type and extracts the image information if the storage file
---  is an image.
+--    with "awa_images";
+--  
+--  The `Image_Module` type represents the image module.  An instance
+--  of the image module must be declared and registered when the application
+--  is created and initialized.  The image module is associated with the image
+--  service which provides and implements the image management operations.
+--
+--    with AWA.Images.Modules;
+--    ...
+--    type Application is new AWA.Applications.Application with record
+--       Image_Module : aliased AWA.Images.Modules.Image_Module;
+--    end record;
+--
+--  And it is registered in the `Initialize_Modules` procedure by using:
+--
+--    Register (App    => App.Self.all'Access,
+--              Name   => AWA.Images.Modules.NAME,
+--              Module => App.Image_Module'Access);
+--
+--  When the image module is initialized, it registers itself as a listener
+--  to the storage module to be notified when a storage file is created,
+--  updated or removed.  When a file is added, it looks at the file type
+--  and extracts the image information if the storage file is an image.
+--
+--  == Configuration ==
+--  The `Images` module defines the following configuration parameters:
 --
 --  @include-config images.xml
 package AWA.Images.Modules is
