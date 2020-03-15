@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail -- Mail module
---  Copyright (C) 2011, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2011, 2017, 2018, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,7 @@
 -----------------------------------------------------------------------
 
 --  = Mail Module =
---  The `AWA.Mail` module allows an application to format and send a mail
+--  The `mail` module allows an application to format and send a mail
 --  to users.  This module does not define any web interface.  It provides
 --  a set of services and methods to send a mail when an event is
 --  received.  All this is done through configuration.  The module
@@ -26,5 +26,7 @@
 --
 --  @include awa-mail-modules.ads
 package AWA.Mail is
+
+   pragma Pure;
 
 end AWA.Mail;

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail -- Mail module
---  Copyright (C) 2011, 2012, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2017, 2018, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,8 +24,29 @@ with AWA.Modules;
 with AWA.Events;
 with AWA.Mail.Clients;
 
+--  == Integration ==
+--  To be able to use the `mail` module, you will need to add the following
+--  line in your GNAT project file:
+--
+--    with "awa_mail";
+--
+--  The `Mail_Module` type represents the mail module.  An instance
+--  of the mail module must be declared and registered when the application
+--  is created and initialized.  The module instance can be defined
+--  as follows:
+--
+--    type Application is new AWA.Applications.Application with record
+--       Mail_Module : aliased AWA.Mail.Modules.Mail_Module;
+--    end record;
+--
+--  And registered in the `Initialize_Modules` procedure by using:
+--
+--    Register (App    => App.Self.all'Access,
+--              Name   => AWA.Mail.Modules.NAME,
+--              Module => App.Mail_Module'Access);
+--
 --  == Configuration ==
---  The *mail* module needs some properties to configure the SMTP
+--  The `mail` module needs some properties to configure the SMTP
 --  server.
 --
 --  |Configuration    | Default   | Description                                     |
@@ -36,7 +57,7 @@ with AWA.Mail.Clients;
 --
 --  == Sending an email ==
 --  Sending an email when an event is posted can be done by using
---  an XML configuration.  Basically, the *mail* module uses the event
+--  an XML configuration.  Basically, the `mail` module uses the event
 --  framework provided by AWA.  The XML definition looks like:
 --
 --    <on-event name="user-register">
@@ -53,7 +74,7 @@ with AWA.Mail.Clients;
 --  @include awa-mail-components-messages.ads
 --
 --  == Ada Beans ==
---  @include mail.xml
+--  @include-bean mail.xml
 --
 package AWA.Mail.Modules is
 
@@ -68,7 +89,8 @@ package AWA.Mail.Modules is
                          App    : in AWA.Modules.Application_Access;
                          Props  : in ASF.Applications.Config);
 
-   --  Configures the module after its initialization and after having read its XML configuration.
+   --  Configures the module after its initialization and after having
+   --  read its XML configuration.
    overriding
    procedure Configure (Plugin : in out Mail_Module;
                         Props  : in ASF.Applications.Config);
