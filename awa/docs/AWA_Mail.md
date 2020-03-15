@@ -1,13 +1,40 @@
 # Mail Module
-The `AWA.Mail` module allows an application to format and send a mail
+The `mail` module allows an application to format and send a mail
 to users.  This module does not define any web interface.  It provides
 a set of services and methods to send a mail when an event is
 received.  All this is done through configuration.  The module
 defines a set of specific ASF components to format and prepare the
 email.
 
+## Integration
+To be able to use the `mail` module, you will need to add the following
+line in your GNAT project file:
+
+```Ada
+with "awa_mail";
+```
+
+The `Mail_Module` type represents the mail module.  An instance
+of the mail module must be declared and registered when the application
+is created and initialized.  The module instance can be defined
+as follows:
+
+```Ada
+type Application is new AWA.Applications.Application with record
+   Mail_Module : aliased AWA.Mail.Modules.Mail_Module;
+end record;
+```
+
+And registered in the `Initialize_Modules` procedure by using:
+
+```Ada
+Register (App    => App.Self.all'Access,
+          Name   => AWA.Mail.Modules.NAME,
+          Module => App.Mail_Module'Access);
+```
+
 ## Configuration
-The *mail* module needs some properties to configure the SMTP
+The `mail` module needs some properties to configure the SMTP
 server.
 
 |Configuration    | Default   | Description                                     |
@@ -18,7 +45,7 @@ server.
 
 ## Sending an email
 Sending an email when an event is posted can be done by using
-an XML configuration.  Basically, the *mail* module uses the event
+an XML configuration.  Basically, the `mail` module uses the event
 framework provided by AWA.  The XML definition looks like:
 
 ```Ada
@@ -80,20 +107,9 @@ during the render response JSF phase, that is when <tt>Encode_End</tt> are calle
 
 ## Ada Beans
 
-
-| Name           | Description                                                               |
 | Name           | Description                                                               |
 |:---------------|:--------------------------------------------------------------------------|
-|:---------------|:--------------------------------------------------------------------------|
 |userMail|Bean used to send an email with a specific template to the user.|
-|userMail|Bean used to send an email with a specific template to the user.|
-
-
-### Configuration
-| Name                      | Description                                                    |
-|:--------------------------|:---------------------------------------------------------------|
-|openid.realm|The REALM URL used by OpenID providers to verify the validity of the verification callback.|
-| |http://localhost:8080#{contextPath}/auth|
 
 
 

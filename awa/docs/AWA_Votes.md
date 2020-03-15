@@ -1,14 +1,25 @@
 # Votes Module
-The `Votes` module allows users to vote for objects defined in the application.
-Users can vote by setting a rating value on an item (+1, -1 or any other integer value).
-The Votes module makes sure that users can vote only once for an item.  A global rating
-is associated with the item to give the vote summary.  The vote can be associated with
-any database entity and it is not necessary to change other entities in your data model.
+The `votes` module allows users to vote for objects defined in the
+application.  Users can vote by setting a rating value on an item
+(+1, -1 or any other integer value).  The `votes` module makes sure
+that users can vote only once for an item.  A global rating
+is associated with the item to give the vote summary.  The vote can
+be associated with any database entity and it is not necessary to
+change other entities in your data model.
 
 ## Integration
-The `Vote_Module` manages the votes on entities.  It provides operations that are
-used by the vote beans or other services to vote for an item.  An instance of the
-`Vote_Module` must be declared and registered in the AWA application.
+To be able to use the `votes` module, you will need to add the
+following line in your GNAT project file:
+
+```Ada
+with "awa_votes";
+```
+
+The `Vote_Module` manages the votes on entities.  It provides operations
+that are used by the vote beans or other services to vote for an item.
+An instance of the `Vote_Module` must be declared and registered
+in the AWA application.
+
 The module instance can be defined as follows:
 
 ```Ada
@@ -64,10 +75,10 @@ The managed bean defines three operations that can be called: `vote_up`,
 
 
 ## Javascript integration
-The `Votes` module provides a Javascript support to help users vote for items.
-The Javascript file `/js/awa-votes.js` must be included in the Javascript page.
-It is based on jQuery and ASF.  The vote actions are activated on the page items as
-follows in XHTML facelet files:
+The `votes` module provides a Javascript support to help users vote
+for items.  The Javascript file `/js/awa-votes.js` must be included
+in the Javascript page.  It is based on jQuery and ASF.  The vote
+actions are activated on the page items as follows in XHTML facelet files:
 
 ```Ada
 <util:script>
@@ -78,9 +89,9 @@ follows in XHTML facelet files:
 </util:script>
 ```
 
-When the vote up or down HTML element is clicked, the `vote` operation of the
-managed bean `questionVote` is called.  The operation will update the user's vote
-for the selected item (in the example "a question").
+When the vote up or down HTML element is clicked, the `vote` operation
+of the managed bean `questionVote` is called.  The operation will
+update the user's vote for the selected item (in the example "a question").
 
 ## Data model
 ![](images/awa_votes_model.png)

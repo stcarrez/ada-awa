@@ -1,32 +1,22 @@
 # Questions Module
 
 
+### Beans
 
 | Name           | Description                                                               |
-| Name           | Description                                                               |
-|:---------------|:--------------------------------------------------------------------------|
 |:---------------|:--------------------------------------------------------------------------|
 |question|This bean allows to create or edit a question.|
-|question|This bean allows to create or edit a question.|
-|answer|This bean allows to create or edit an answer.|
 |answer|This bean allows to create or edit an answer.|
 |questionList|This list bean represents the list of questions.|
-|questionList|This list bean represents the list of questions.|
-|questionInfo|This list bean represents the list of questions.|
 |questionInfo|This list bean represents the list of questions.|
 |questionVote|The vote bean that allows to vote for a question.|
-|questionVote|The vote bean that allows to vote for a question.|
-|questionTagSearch|The question tag search bean.|
 |questionTagSearch|The question tag search bean.|
 |questionTagCloud|The list of tags associated with question entities.|
-|questionTagCloud|The list of tags associated with question entities.|
-|questionTags|The question tag editor bean.|
 |questionTags|The question tag editor bean.|
 |answerVote|The vote bean that allows to vote for an answer.|
-|answerVote|The vote bean that allows to vote for an answer.|
-
 
 ### Permissions
+
 | Name           | Entity type  | Description                                                |
 |:---------------|:-------------|:-----------------------------------------------------------|
 |question-create|awa_workspace||
@@ -39,8 +29,8 @@
 
 
 
-
 ### Queries
+
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |question-list|Get a list of questions.|
@@ -68,8 +58,8 @@ The list of questions.
 
 
 
-
 ### Queries
+
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |question-info|Get the detailed information for a question.|
@@ -97,8 +87,8 @@ The list of questions.
 
 
 
-
 ### Queries
+
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |answer-list|Get a list of answers.|

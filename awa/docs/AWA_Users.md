@@ -1,69 +1,45 @@
 # Users Module
-The `Users.Module` manages the creation, update, removal and authentication of users
-in an application.  The module provides the foundations for user management in
-a web application.
+The `users` module manages the creation, update, removal and authentication
+of users in an application.  The module provides the foundations for user
+management in a web application.
 
-A user can register himself by using a subscription form.  In that case, a verification mail
-is sent and the user has to follow the verification link defined in the mail to finish
-the registration process.  The user will authenticate using a password.
+A user can register himself by using a subscription form.  In that case,
+a verification mail is sent and the user has to follow the verification
+link defined in the mail to finish the registration process.  The user
+will authenticate using a password.
 
 A user can also use an OpenID account and be automatically registered.
 
-A user can have one or several permissions that allow to protect the application data.
-User permissions are managed by the `Permissions.Module`.
+A user can have one or several permissions that allow to protect the
+application data.  User permissions are managed by the `Permissions.Module`.
 
-## Introduction
+## Integration
+The `User_Module` manages the creation, update, removal of users
+in an application.  It provides operations that are used by the user
+beans or other services to create and update wiki pages.
+An instance of the `User_Module` must be declared and registered in the
+AWA application.  The module instance can be defined as follows:
 
-## Introduction
-The *users* module provides a *users* service which controls the user data model.
+```Ada
+type Application is new AWA.Applications.Application with record
+   User_Module : aliased AWA.Users.Modules.User_Module;
+end record;
+```
 
-## Events
-The *users* module exposes a number of events which are posted when some action
-are performed at the service level.
+And registered in the `Initialize_Modules` procedure by using:
 
-### user-register
-This event is posted when a new user is registered in the application.
-It can be used to send a registration email.
-
-### user-create
-This event is posted when a new user is created.  It can be used to trigger
-the pre-initialization of the application for the new user.
-
-### user-lost-password
-This event is posted when a user asks for a password reset through an
-anonymous form.  It is intended to be used to send the reset password email.
-
-### user-reset-password
-This event is posted when a user has successfully reset his password.
-It can be used to send an email.
-
+```Ada
+Register (App    => App.Self.all'Access,
+          Name   => AWA.Users.Modules.NAME,
+          Module => App.User_Module'Access);
+```
 
 
 ## Configuration
-The *users* module uses a set of configuration properties to configure the OpenID
-integration.
+The *users* module uses a set of configuration properties to configure
+the OpenID integration.
 
 
-
-| Name           | Description                                                               |
-| Name           | Description                                                               |
-|:---------------|:--------------------------------------------------------------------------|
-|:---------------|:--------------------------------------------------------------------------|
-|login|This bean is used by the login form|
-|login|This bean is used by the login form|
-|register|This bean is used by the registration form|
-|register|This bean is used by the registration form|
-|resetPassword|This bean is used by the reset password form|
-|resetPassword|This bean is used by the reset password form|
-|lostPassword|This bean is used by the lost password form|
-|lostPassword|This bean is used by the lost password form|
-|logout|This bean is used by the logout process|
-|logout|This bean is used by the logout process|
-|user|This bean allows to provide information about the current logged user.|
-|user|This bean allows to provide information about the current logged user.|
-
-
-### Configuration
 | Name                      | Description                                                    |
 |:--------------------------|:---------------------------------------------------------------|
 |openid.realm|The REALM URL used by OpenID providers to verify the validity of the verification callback.|
@@ -118,6 +94,24 @@ integration.
 | |#{contextPath}/auth/login.html|
 |verify-filter.redirect|URI to redirect to the login page|
 | |#{contextPath}/auth/login.html|
+
+
+
+## Ada Beans
+Several bean types are provided to represent and manage the users.
+The user module registers the bean constructors when it is initialized.
+To use them, one must declare a bean definition in the application
+XML configuration.
+
+
+| Name           | Description                                                               |
+|:---------------|:--------------------------------------------------------------------------|
+|login|This bean is used by the login form|
+|register|This bean is used by the registration form|
+|resetPassword|This bean is used by the reset password form|
+|lostPassword|This bean is used by the lost password form|
+|logout|This bean is used by the logout process|
+|user|This bean allows to provide information about the current logged user.|
 
 
 

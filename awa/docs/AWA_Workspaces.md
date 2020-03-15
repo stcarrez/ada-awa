@@ -26,22 +26,17 @@ This event is posted when an invitation is accepted by a user.
 
 ## Ada Beans
 
+### Beans
 
 | Name           | Description                                                               |
-| Name           | Description                                                               |
-|:---------------|:--------------------------------------------------------------------------|
 |:---------------|:--------------------------------------------------------------------------|
 |workspace|This bean allows to perform some general workspace actions|
-|workspace|This bean allows to perform some general workspace actions|
-|memberList|The list of workspace members.|
 |memberList|The list of workspace members.|
 |inviteUser|The invitation bean.|
-|inviteUser|The invitation bean.|
 |workspaceMember|The workspace member bean.|
-|workspaceMember|The workspace member bean.|
-
 
 ### Permissions
+
 | Name           | Entity type  | Description                                                |
 |:---------------|:-------------|:-----------------------------------------------------------|
 |workspace-create|awa_workspace|Permission to create a workspace.|
@@ -50,6 +45,7 @@ This event is posted when an invitation is accepted by a user.
 |workspaces-create|awa_workspace||
 
 ### Configuration
+
 | Name                      | Description                                                    |
 |:--------------------------|:---------------------------------------------------------------|
 |workspaces.permissions_list||

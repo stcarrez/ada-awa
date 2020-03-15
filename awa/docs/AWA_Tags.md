@@ -161,6 +161,7 @@ times it is used.
 
 
 ## Queries
+
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |check-tag|Check and get the tag identifier associated with a given tag and entity|
@@ -173,7 +174,7 @@ times it is used.
 
 ## Data model
 The database model is generic and it uses the `Entity_Type` provided by
-Ada Database Objects to associate a tag to entities stored in different
+[Ada Database Objects](https://github.com/stcarrez/ada-ado) to associate a tag to entities stored in different
 tables.  The `Entity_Type` identifies the database table and the stored identifier
 in `for_entity_id` defines the entity in that table.
 

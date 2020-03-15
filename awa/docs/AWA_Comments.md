@@ -85,6 +85,7 @@ The comment information.
 
 
 
+
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |comment-list|Get the list of comments associated with given database entity|
@@ -94,7 +95,7 @@ The comment information.
 
 ## Data model
 The database model is generic and it uses the `Entity_Type` provided by
-Ada Database Objects to associate a comment to entities stored in
+[Ada Database Objects](https://github.com/stcarrez/ada-ado) to associate a comment to entities stored in
 different tables.  The `Entity_Type` identifies the database table and the stored
 identifier in `for_entity_id` defines the entity in that table.
 

@@ -1,5 +1,61 @@
 # AWA Core
 
+## Initialization
+The AWA application is represented by the `Application` type which should
+be extended for the final application to provide the modules and specific
+components of the final application.
+
+The initialization of an AWA application is made in several steps
+represented by different procedures of the main `Application` type.
+The whole initialization is handled by the `Initialize` procedure
+which gets a first set of configuration properties and a factory
+to build specific component.
+
+The `Initialize` procedure will perform the following steps:
+
+* It uses the factory to allocate the ASF lifecycle handler, the navigation handler, the security manager, the OAuth manager, the exception handlers.
+* It calls the `Initialize_Components` procedure to let the application register all the ASF components.  These components must be registered before any configuration file is read.
+* It calls the `Initialize_Config` 
+* It calls the `Initialize_Servlets` procedure to allow the application to register all the servlet instances used by the application.
+* It calls the `Initialize_Filters` procedure to allow the application to register all the servlet filter instances.  The application servlets and filters must be registered before reading the global configuration file.
+* It loads the global application configuration by reading the `awa.xml` file.  By reading this configuration, some global configuration is established on the servlets, filters.
+* It calls the `Initialize_Modules` procedure so that all the application modules can be registered, configured and initialized.  Each module brings its own component, servlet and filter.  They are configured by their own XML configuration file.
+* It loads the module application configuration by reading the XML files described by the `app.config.plugins` configuration.  This last step allows the application to setup and update the configuration of all modules that have been registered.
+
+## Configuration
+The following global configuration parameter are defined:
+
+
+| Name                      | Description                                                    |
+|:--------------------------|:---------------------------------------------------------------|
+|awa_url_scheme||
+| |#{empty app_url_scheme ? 'http://' : app_url_scheme}|
+|awa_url_host||
+| |#{empty app_url_host ? 'localhost' : app_url_host}|
+|awa_url_port||
+| |#{empty app_url_port ? ':8080' : app_url_port}|
+|app_url_base||
+| |#{empty app_url_base ? 'http://localhost:8080' : app_url_base}|
+|app_oauth_url_base||
+| |http://localhost:8080|
+|view.ext||
+| |.html|
+|web.dir|Defines a list of paths separated by ';' where the XHTML files are searched. The default searches for the 'web' directory in the application search paths.|
+| |#{fn:composePath(app_search_dirs,'web')}|
+|content-type.default|Defines the default content type for the file servlet.|
+| |text/plain|
+|ado.queries.load|Controls whether the database query definitions are loaded.|
+| |true|
+|ado.queries.paths|Defines a list of paths separated by ';' where the database query files are searched. The default searches for the 'db' directory in the application search paths.|
+| |#{fn:composePath(app_search_dirs,'db')}|
+|bundle.dir|Defines a list of paths separated by ';' where the resource bundle files are searched. The default searches for the 'bundles' directory in the application search paths.|
+| |#{fn:composePath(app_search_dirs,'bundles')}|
+|app.modules.dir|Defines a list of paths separated by ';' where the module configuration files are searched. The default searches for the 'config' directory in the application search paths.|
+| |#{fn:composePath(app_search_dirs,'config')}|
+
+
+
+
 ## AWA Modules
 A module is a software component that can be integrated in the
 web application.  The module can bring a set of service APIs,
@@ -129,8 +185,8 @@ AWA.Permissions.Services.Add_Permission (Session => DB,
 
 ### Queries
 
-
 ### Queries
+
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |check-entity-permission|Get the permission for a user and an entity|
@@ -195,7 +251,7 @@ The Ada bean method and object are registered as other Ada beans.
 
 The configuration file indicates how to bind the Ada bean action and
 the event together.  The action is specified using an EL Method Expression
-(See Ada EL or JSR 245).
+(See [Ada EL](https://github.com/stcarrez/ada-el) or JSR 245).
 
 ```Ada
 <on-event name="new_user">
@@ -222,16 +278,14 @@ When the event is queued, there are two types of event queues:
 
 
 
+### Beans
 
 | Name           | Description                                                               |
-| Name           | Description                                                               |
-|:---------------|:--------------------------------------------------------------------------|
 |:---------------|:--------------------------------------------------------------------------|
 |jquery||
-|jquery||
-
 
 ### Configuration
+
 | Name                      | Description                                                    |
 |:--------------------------|:---------------------------------------------------------------|
 |awa_url_scheme||

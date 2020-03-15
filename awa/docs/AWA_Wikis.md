@@ -3,12 +3,22 @@ The `Wikis` module provides a complete wiki system which allows users to create
 their own wiki environment with their wiki pages.
 
 ## Integration
-The `Wiki_Module` manages the creation, update, removal of wiki pages in an application.
-It provides operations that are used by the wiki beans or other services to create and update
-wiki pages.  An instance of the `Wiki_Module` must be declared and registered in the
+To be able to use the `Wikis` module, you will need to add the following
+line in your GNAT project file:
+
+```Ada
+with "awa_wikis";
+```
+
+The `Wiki_Module` manages the creation, update, removal of wiki pages
+in an application. It provides operations that are used by the wiki beans
+or other services to create and update wiki pages.  An instance of
+the `Wiki_Module` must be declared and registered in the
 AWA application.  The module instance can be defined as follows:
 
 ```Ada
+with AWA.Wikis.Modules;
+...
 type Application is new AWA.Applications.Application with record
    Wiki_Module : aliased AWA.Wikis.Modules.Wiki_Module;
 end record;
@@ -24,12 +34,15 @@ Register (App    => App.Self.all'Access,
 ```
 
 ## Configuration
+
 | Name                      | Description                                                    |
 |:--------------------------|:---------------------------------------------------------------|
 |wikis.image_prefix|The URL base prefix to be used for Wiki images.|
 | |#{contextPath}/wikis/images/|
 |wikis.page_prefix|The URL base prefix to be used for Wiki pages.|
 | |#{contextPath}/wikis/view/|
+|wikis.wiki_copy_list|A list of wiki page ID top copy when a new wiki space is created.|
+| ||
 
 
 
@@ -50,6 +63,23 @@ are performed at the service level.
 Several bean types are provided to represent and manage the blogs and their posts.
 The blog module registers the bean constructors when it is initialized.
 To use them, one must declare a bean definition in the application XML configuration.
+
+
+| Name           | Description                                                               |
+|:---------------|:--------------------------------------------------------------------------|
+|wikiView|The wiki page with all its information to display it.|
+|wikiImageInfo|The information about an image used by a wiki page.|
+|wikiPageInfo|The wiki page information bean gives the various statistics and information about a wiki page.|
+|wikiFormatList|A localized list of wiki page formats to be used for a f:selectItems|
+|adminWiki|The list of wikis and pages that the current user can access and update.|
+|adminWikiSpace|The wiki space bean to create and edit the wiki space configuration.|
+|wikiPage|The wiki page bean gives the full content and information about a wiki page.|
+|wikiList|The list of wiki pages.|
+|wikiVersionList|The list of wiki page versions.|
+|wikiTagSearch|The wiki tag search bean.|
+|wikiTagCloud|The list of tags associated with a wiki page entities.|
+|wikiTags|The wiki tag editor bean.|
+|wikiPageStats|The counter statistics for a wiki page|
 
 
 
@@ -132,6 +162,7 @@ The list of wikis.
 
 
 ## Queries
+
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |wiki-page|Get the content of a wiki page.|
@@ -140,10 +171,12 @@ The list of wikis.
 |wiki-page-name-count|Count the occurence of a wiki page name|
 
 
+
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |wiki-page-list|Get the list of wiki pages|
 |wiki-page-tag-list|Get the list of wiki pages filtered by a tag|
+
 
 
 | Name              | Description                                                           |
@@ -151,9 +184,30 @@ The list of wikis.
 |wiki-version-list|Get the list of wiki page versions|
 
 
+
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |wiki-list|Get the list of wikis that the current user can update|
+
+
+
+| Name              | Description                                                           |
+|:------------------|:----------------------------------------------------------------------|
+|wiki-image-get-data|Get the data content of the Wiki image (original image).|
+|wiki-image-width-get-data|Get the data content of the Wiki image for an image with a given width.|
+|wiki-image-height-get-data|Get the data content of the Wiki image for an image with a given height.|
+
+
+
+| Name              | Description                                                           |
+|:------------------|:----------------------------------------------------------------------|
+|wiki-image|Get the description of an image used in a wiki page.|
+
+
+
+| Name              | Description                                                           |
+|:------------------|:----------------------------------------------------------------------|
+|page-access-stats|Get statistics about the wiki page access.|
 
 
 

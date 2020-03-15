@@ -1,17 +1,50 @@
 # Images Module
-The image plugin is an extension to the storage plugin that identifies images and
-provides thumbnails as well as resizing of the original image.
+The `images` module is an extension of the [Storages Module] that
+identifies images and provides thumbnails as well as resizing of
+the original image.
 
-## Image Module
-The <tt>Image_Module</tt> type represents the image module.  An instance of the image
-module must be declared and registered when the application is created and initialized.
-The image module is associated with the image service which provides and implements
-the image management operations.
+The `images` module uses several other modules:
 
-When the image module is initialized, it registers itself as a listener to the storage
-module to be notified when a storage file is created, updated or removed.  When a file
-is added, it looks at the file type and extracts the image information if the storage file
-is an image.
+* the [Storage Module] to store and manage image content,
+* the [Jobs Module] to schedule image thumbnail generation.
+
+## Integration
+To be able to use the `Images` module, you will need to add the
+following line in your GNAT project file:
+
+```Ada
+with "awa_images";
+```
+
+The `Image_Module` type represents the image module.  An instance
+of the image module must be declared and registered when the application
+is created and initialized.  The image module is associated with the image
+service which provides and implements the image management operations.
+
+```Ada
+with AWA.Images.Modules;
+...
+type Application is new AWA.Applications.Application with record
+   Image_Module : aliased AWA.Images.Modules.Image_Module;
+end record;
+```
+
+And it is registered in the `Initialize_Modules` procedure by using:
+
+```Ada
+Register (App    => App.Self.all'Access,
+          Name   => AWA.Images.Modules.NAME,
+          Module => App.Image_Module'Access);
+```
+
+When the image module is initialized, it registers itself as a listener
+to the storage module to be notified when a storage file is created,
+updated or removed.  When a file is added, it looks at the file type
+and extracts the image information if the storage file is an image.
+
+## Configuration
+The `Images` module defines the following configuration parameters:
+
 
 | Name                      | Description                                                    |
 |:--------------------------|:---------------------------------------------------------------|
@@ -25,6 +58,13 @@ The `Image_List_Bean` type is used to represent a list of image stored in
 a folder.
 
 The `Image_Bean` type holds all the data to give information about an image.
+
+
+| Name           | Description                                                               |
+|:---------------|:--------------------------------------------------------------------------|
+|storageFolder|This bean allows to create a storage folder.|
+|imageList|This bean gives the list of images associated with a given folder.|
+|imageInfo|This bean gives the information about an image.|
 
 
 
@@ -76,9 +116,11 @@ The list of images for a given folder.
 
 
 ## Queries
+
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |image-info|Get the description of an image.|
+
 
 
 | Name              | Description                                                           |
