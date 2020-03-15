@@ -23,10 +23,27 @@ with ASF.Applications;
 with AWA.Modules;
 with AWA.Jobs.Services;
 
---  == Job Module ==
---  The <b>Jobs.Modules</b> is the entry point for the management of asynchronous jobs.
---  It maintains a list of job types that can be executed for the application and it
---  manages the job dispatchers.
+--  == Integration ==
+--  To be able to use the `jobs` module, you will need to add the
+--  following line in your GNAT project file:
+--
+--    with "awa_jobs";
+--  
+--  An instance of the `Job_Module` must be declared and registered in the
+--  AWA application.  The module instance can be defined as follows:
+--
+--    with AWA.Jobs.Modules;
+--    ...
+--    type Application is new AWA.Applications.Application with record
+--       Job_Module : aliased AWA.Jobs.Modules.Job_Module;
+--    end record;
+--
+--  And registered in the `Initialize_Modules` procedure by using:
+--
+--    Register (App    => App.Self.all'Access,
+--              Name   => AWA.Jobs.Modules.NAME,
+--              Module => App.Job_Module'Access);
+--
 package AWA.Jobs.Modules is
 
    NAME : constant String := "jobs";
