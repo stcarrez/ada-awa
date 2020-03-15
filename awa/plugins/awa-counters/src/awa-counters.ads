@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-counters --
---  Copyright (C) 2015, 2018 Stephane Carrez
+--  Copyright (C) 2015, 2018, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,37 +21,39 @@ with Util.Strings;
 with AWA.Index_Arrays;
 
 --  = Counters Module =
---  The `Counters` module defines a general purpose counter service that allows to
---  associate counters to database entities.  For example it can be used to track the number
---  of times a blog post or a wiki page is accessed.  The `Counters` module maintains the
---  counters in a table on a per-day and per-entity basis.  It allows to update the full counter
+--  The `counters` module defines a general purpose counter service that
+--  allows to associate counters to database entities.  For example it
+--  can be used to track the number of times a blog post or a wiki page
+--  is accessed.  The `counters` module maintains the counters in a table
+--  on a per-day and per-entity basis.  It allows to update the full counter
 --  in the target database entity table.
 --
 --  @include awa-counters-modules.ads
---  @include counters.xml
 --
 --  == Counter Declaration ==
 --  Each counter must be declared by instantiating the `Definition` package.
---  This instantiation serves as identification of the counter and it defines the database
---  table as well as the column in that table that will hold the total counter.  The following
---  definition is used for the read counter of a wiki page.  The wiki page table contains a
---  `read_count` column and it will be incremented each time the counter is incremented.
+--  This instantiation serves as identification of the counter and it defines
+--  the database table as well as the column in that table that will hold
+--  the total counter.  The following definition is used for the read counter
+--  of a wiki page.  The wiki page table contains a `read_count` column
+--  and it will be incremented each time the counter is incremented.
 --
 --     with AWA.Counters.Definition;
 --     ...
 --     package Read_Counter is
---        new AWA.Counters.Definition (AWA.Wikis.Models.WIKI_PAGE_TABLE, "read_count");
+--        new AWA.Counters.Definition
+--           (AWA.Wikis.Models.WIKI_PAGE_TABLE, "read_count");
 --
---  When the database table does not contain any counter column, the column field name is not
---  given and the counter definition is defined as follows:
+--  When the database table does not contain any counter column, the column
+--  field name is not given and the counter definition is defined as follows:
 --
 --     with AWA.Counters.Definition;
 --     ...
 --     package Login_Counter is
 --        new AWA.Counters.Definition (AWA.Users.Models.USER_PAGE_TABLE);
 --
---  Sometimes a counter is not associated with any database entity.  Such counters are global
---  and they are assigned a unique name.
+--  Sometimes a counter is not associated with any database entity.
+--  Such counters are global and they are assigned a unique name.
 --
 --     with AWA.Counters.Definition;
 --     ...
@@ -60,9 +62,10 @@ with AWA.Index_Arrays;
 --
 --  == Incrementing the counter ==
 --  Incrementing the counter is done by calling the `Increment` operation.
---  When the counter is associated with a database entity, the entity primary key must be given.
---  The counter is not immediately incremented in the database so that several calls to the
---  `Increment` operation will not trigger a database update.
+--  When the counter is associated with a database entity, the entity
+--  primary key must be given.  The counter is not immediately incremented
+--  in the database so that several calls to the `Increment` operation will
+--  not trigger a database update.
 --
 --     with AWA.Counters;
 --     ...
@@ -78,11 +81,12 @@ with AWA.Index_Arrays;
 --  @include awa-counters-components.ads
 --
 --  == Data model ==
---  The `Counters` module has a simple database model which needs two tables.
---  The `Counter_Definition` table is used to keep track of the different counters
---  used by the application.  A row in that table is created for each counter declared by
---  instantiating the `Definition` package.  The `Counter` table holds the counters
---  for each database entity and for each day.  By looking at that table, it becomes possible
+--  The `counters` module has a simple database model which needs two tables.
+--  The `Counter_Definition` table is used to keep track of the different
+--  counters used by the application.  A row in that table is created for
+--  each counter declared by instantiating the `Definition` package.
+--  The `Counter` table holds the counters for each database entity
+--  and for each day.  By looking at that table, it becomes possible
 --  to look at the daily access or usage of the counter.
 --
 --  [images/awa_counters_model.png]
