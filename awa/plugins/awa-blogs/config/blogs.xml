@@ -46,11 +46,6 @@
       <value>read_count</value>
     </managed-property>
     <managed-property>
-      <property-name>counter_name</property-name>
-      <property-class>String</property-class>
-      <value>read_count</value>
-    </managed-property>
-    <managed-property>
       <property-name>query_name</property-name>
       <property-class>String</property-class>
       <value>post-access-stats</value>
