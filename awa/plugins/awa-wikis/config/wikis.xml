@@ -17,6 +17,14 @@
     </description>
   </context-param>
 
+  <context-param>
+    <param-name>wikis.wiki_copy_list</param-name>
+    <param-value></param-value>
+    <description>
+       A list of wiki page ID top copy when a new wiki space is created.
+    </description>
+  </context-param>
+
   <managed-bean>
     <description>The wiki page with all its information to display it.</description>
     <managed-bean-name>wikiView</managed-bean-name>
