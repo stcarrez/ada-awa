@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-votes-modules -- Module votes
---  Copyright (C) 2013, 2014, 2018 Stephane Carrez
+--  Copyright (C) 2013, 2014, 2018, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,9 +20,16 @@ with ADO;
 with AWA.Modules;
 
 --  == Integration ==
---  The `Vote_Module` manages the votes on entities.  It provides operations that are
---  used by the vote beans or other services to vote for an item.  An instance of the
---  `Vote_Module` must be declared and registered in the AWA application.
+--  To be able to use the `votes` module, you will need to add the
+--  following line in your GNAT project file:
+--
+--    with "awa_votes";
+--
+--  The `Vote_Module` manages the votes on entities.  It provides operations
+--  that are used by the vote beans or other services to vote for an item.
+--  An instance of the `Vote_Module` must be declared and registered
+--  in the AWA application.
+--
 --  The module instance can be defined as follows:
 --
 --    type Application is new AWA.Applications.Application with record
@@ -35,7 +42,7 @@ with AWA.Modules;
 --              Name   => AWA.Votes.Modules.NAME,
 --              URI    => "votes",
 --              Module => App.Vote_Module'Access);
-
+--
 package AWA.Votes.Modules is
 
    --  The name under which the module is registered.
