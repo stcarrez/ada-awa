@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-modules -- Module wikis
---  Copyright (C) 2015, 2016, 2018 Stephane Carrez
+--  Copyright (C) 2015, 2016, 2018, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,11 +33,19 @@ with Security.Permissions;
 with Wiki.Strings;
 
 --  == Integration ==
---  The `Wiki_Module` manages the creation, update, removal of wiki pages in an application.
---  It provides operations that are used by the wiki beans or other services to create and update
---  wiki pages.  An instance of the `Wiki_Module` must be declared and registered in the
+--  To be able to use the `Wikis` module, you will need to add the following
+--  line in your GNAT project file:
+--
+--    with "awa_wikis";
+--
+--  The `Wiki_Module` manages the creation, update, removal of wiki pages
+--  in an application. It provides operations that are used by the wiki beans
+--  or other services to create and update wiki pages.  An instance of
+--  the `Wiki_Module` must be declared and registered in the
 --  AWA application.  The module instance can be defined as follows:
 --
+--    with AWA.Wikis.Modules;
+--    ...
 --    type Application is new AWA.Applications.Application with record
 --       Wiki_Module : aliased AWA.Wikis.Modules.Wiki_Module;
 --    end record;
@@ -68,39 +76,50 @@ package AWA.Wikis.Modules is
    --  The name under which the module is registered.
    NAME : constant String := "wikis";
 
-   --  The configuration parameter that defines the image link prefix in rendered HTML content.
+   --  The configuration parameter that defines the image link prefix
+   --  in rendered HTML content.
    PARAM_IMAGE_PREFIX : constant String := "image_prefix";
 
-   --  The configuration parameter that defines the page link prefix in rendered HTML content.
+   --  The configuration parameter that defines the page link prefix
+   --  in rendered HTML content.
    PARAM_PAGE_PREFIX : constant String := "page_prefix";
 
-   package ACL_Create_Wiki_Pages is new Security.Permissions.Definition ("wiki-page-create");
-   package ACL_Delete_Wiki_Pages is new Security.Permissions.Definition ("wiki-page-delete");
-   package ACL_Update_Wiki_Pages is new Security.Permissions.Definition ("wiki-page-update");
-   package ACL_View_Wiki_Page is new Security.Permissions.Definition ("wiki-page-view");
+   --  The configuration parameter that defines a list of wiki page ID
+   --  to copy when a new wiki space is created.
+   PARAM_WIKI_COPY_LIST : constant String := "wiki_copy_list";
 
    --  Define the permissions.
-   package ACL_Create_Wiki_Space is new Security.Permissions.Definition ("wiki-space-create");
-   package ACL_Delete_Wiki_Space is new Security.Permissions.Definition ("wiki-space-delete");
-   package ACL_Update_Wiki_Space is new Security.Permissions.Definition ("wiki-space-update");
+   package ACL_Create_Wiki_Pages is
+     new Security.Permissions.Definition ("wiki-page-create");
+   package ACL_Delete_Wiki_Pages is
+     new Security.Permissions.Definition ("wiki-page-delete");
+   package ACL_Update_Wiki_Pages is
+     new Security.Permissions.Definition ("wiki-page-update");
+   package ACL_View_Wiki_Page is
+     new Security.Permissions.Definition ("wiki-page-view");
+   package ACL_Create_Wiki_Space is
+     new Security.Permissions.Definition ("wiki-space-create");
+   package ACL_Delete_Wiki_Space is
+     new Security.Permissions.Definition ("wiki-space-delete");
+   package ACL_Update_Wiki_Space is
+     new Security.Permissions.Definition ("wiki-space-update");
 
    --  Event posted when a new wiki page is created.
-   package Create_Page_Event is new AWA.Events.Definition (Name => "wiki-create-page");
+   package Create_Page_Event is
+     new AWA.Events.Definition (Name => "wiki-create-page");
 
    --  Event posted when a new wiki content is created.
-   package Create_Content_Event is new AWA.Events.Definition (Name => "wiki-create-content");
+   package Create_Content_Event is
+     new AWA.Events.Definition (Name => "wiki-create-content");
 
    --  Define the read wiki page counter.
-   package Read_Counter is new AWA.Counters.Definition (Models.WIKI_PAGE_TABLE, "read_count");
+   package Read_Counter is
+     new AWA.Counters.Definition (Models.WIKI_PAGE_TABLE, "read_count");
 
    package Wiki_Lifecycle is
-     new AWA.Modules.Lifecycles (Element_Type => AWA.Wikis.Models.Wiki_Page_Ref'Class);
+     new AWA.Modules.Lifecycles (Element_Type => Models.Wiki_Page_Ref'Class);
 
    subtype Listener is Wiki_Lifecycle.Listener;
-
-   --  The configuration parameter that defines a list of wiki page ID to copy when a new
-   --  wiki space is created.
-   PARAM_WIKI_COPY_LIST : constant String := "wiki_copy_list";
 
    --  Exception raised when a wiki page name is already used for the wiki space.
    Name_Used : exception;
@@ -117,7 +136,8 @@ package AWA.Wikis.Modules is
                          App    : in AWA.Modules.Application_Access;
                          Props  : in ASF.Applications.Config);
 
-   --  Configures the module after its initialization and after having read its XML configuration.
+   --  Configures the module after its initialization and after having read
+   --  its XML configuration.
    overriding
    procedure Configure (Plugin : in out Wiki_Module;
                         Props  : in ASF.Applications.Config);
@@ -135,22 +155,22 @@ package AWA.Wikis.Modules is
 
    --  Create the wiki space.
    procedure Create_Wiki_Space (Module : in Wiki_Module;
-                                Wiki   : in out AWA.Wikis.Models.Wiki_Space_Ref'Class);
+                                Wiki   : in out Models.Wiki_Space_Ref'Class);
 
    --  Save the wiki space.
    procedure Save_Wiki_Space (Module : in Wiki_Module;
-                              Wiki   : in out AWA.Wikis.Models.Wiki_Space_Ref'Class);
+                              Wiki   : in out Models.Wiki_Space_Ref'Class);
 
    --  Load the wiki space.
    procedure Load_Wiki_Space (Module : in Wiki_Module;
-                              Wiki   : in out AWA.Wikis.Models.Wiki_Space_Ref'Class;
+                              Wiki   : in out Models.Wiki_Space_Ref'Class;
                               Id     : in ADO.Identifier);
 
    --  Create the wiki page into the wiki space.
    procedure Create_Wiki_Page (Model   : in Wiki_Module;
-                               Into    : in AWA.Wikis.Models.Wiki_Space_Ref'Class;
-                               Page    : in out AWA.Wikis.Models.Wiki_Page_Ref'Class;
-                               Content : in out AWA.Wikis.Models.Wiki_Content_Ref'Class);
+                               Into    : in Models.Wiki_Space_Ref'Class;
+                               Page    : in out Models.Wiki_Page_Ref'Class;
+                               Content : in out Models.Wiki_Content_Ref'Class);
 
    --  Save the wiki page.
    procedure Save (Model  : in Wiki_Module;
@@ -177,13 +197,13 @@ package AWA.Wikis.Modules is
 
    --  Create a new wiki content for the wiki page.
    procedure Create_Wiki_Content (Model   : in Wiki_Module;
-                                  Page    : in out AWA.Wikis.Models.Wiki_Page_Ref'Class;
-                                  Content : in out AWA.Wikis.Models.Wiki_Content_Ref'Class);
+                                  Page    : in out Models.Wiki_Page_Ref'Class;
+                                  Content : in out Models.Wiki_Content_Ref'Class);
 
    --  Save a new wiki content for the wiki page.
    procedure Save_Wiki_Content (Model   : in Wiki_Module;
-                                Page    : in out AWA.Wikis.Models.Wiki_Page_Ref'Class;
-                                Content : in out AWA.Wikis.Models.Wiki_Content_Ref'Class);
+                                Page    : in out Models.Wiki_Page_Ref'Class;
+                                Content : in out Models.Wiki_Content_Ref'Class);
 
    procedure Load_Image (Model    : in Wiki_Module;
                          Wiki_Id  : in ADO.Identifier;
@@ -210,8 +230,8 @@ private
    --  Save a new wiki content for the wiki page.
    procedure Save_Wiki_Content (Model   : in Wiki_Module;
                                 DB      : in out ADO.Sessions.Master_Session;
-                                Page    : in out AWA.Wikis.Models.Wiki_Page_Ref'Class;
-                                Content : in out AWA.Wikis.Models.Wiki_Content_Ref'Class);
+                                Page    : in out Models.Wiki_Page_Ref'Class;
+                                Content : in out Models.Wiki_Content_Ref'Class);
 
    type Wiki_Module is new AWA.Modules.Module with record
       Image_Prefix  : Wiki.Strings.UString;
