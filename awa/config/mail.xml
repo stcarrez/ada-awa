@@ -8,14 +8,6 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
-  <context-param>
-    <param-name>openid.realm</param-name>
-    <param-value>http://localhost:8080#{contextPath}/auth</param-value>
-    <description>
-       The REALM URL used by OpenID providers to verify the validity of the verification callback.
-    </description>
-  </context-param>
-
   <!--  When a user is created, send him a welcome message.  -->
   <on-event name="user-register">
      <action>#{userMail.send}</action>
