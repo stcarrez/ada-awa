@@ -2,6 +2,51 @@
 
 ## UI Presentation Tips
 
+### Adding a simple page
+
+To add a new presentation page in the application, you can use the
+[Dynamo](https://github.com/stcarrez/dynamo) code generator.
+The web page is an XHTML file created under the `web` directory.
+The page name can contain a directory that will be created if necessary.
+The new web page can be configured to use a given layout.
+The layout file must exist to be used.  The default layout is `layout`.
+You can create a new layout with `add-layout` command.
+You can also write your layout by adding an XHTML file in the directory:
+
+```
+web/WEB-INF/layouts
+```
+
+To create the new web page `web/todo/list.xhtml`, you will use:
+
+```
+dynamo add-page todo/list
+```
+
+Depending on your application configuration and the URL used by the new
+page, you may have to add or modify a `url-policy`.  By default, if
+the new URL does not match an existing `url-policy`, the access will
+be denied for security reasons.  To allow anonymous users to access
+the page, use the following `url-policy`:
+
+```
+<url-policy>
+  <permission>anonymous</permission>
+  <url-pattern>/todo/list.html</url-pattern>
+</url-policy>
+```
+
+and if you want only logged users, use the following:
+
+```
+<url-policy>
+  <permission>logged-user</permission>
+  <url-pattern>/todo/list.html</url-pattern>
+</url-policy>
+```
+
+Note: make sure to replace the `.xhtml` extension by `.html`.
+
 ### Add Open Graph
 
 Use a combination of `fn:trim`, `fn:substring` and `util:escapeJavaScript`
@@ -14,6 +59,7 @@ when the description contains special characters.
 <meta property="og:description"
  content="#{util:escapeJavaScript(fn:substring(fn:trim(post.description),1,128))}"/>
 ```
+
 
 ## Configuration Tips
 
