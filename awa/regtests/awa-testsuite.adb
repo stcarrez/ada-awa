@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Util testsuite - Util Testsuite
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2009 - 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -102,15 +102,7 @@ package body AWA.Testsuite is
    function Suite return Util.Tests.Access_Test_Suite is
       Ret : constant Util.Tests.Access_Test_Suite := Tests'Access;
    begin
-      AWA.Modules.Tests.Add_Tests (Ret);
-      AWA.Events.Services.Tests.Add_Tests (Ret);
-      AWA.Mail.Clients.Tests.Add_Tests (Ret);
-      AWA.Mail.Modules.Tests.Add_Tests (Ret);
-      AWA.Users.Services.Tests.Add_Tests (Ret);
-      AWA.Users.Tests.Add_Tests (Ret);
-      AWA.Workspaces.Tests.Add_Tests (Ret);
-      AWA.Counters.Modules.Tests.Add_Tests (Ret);
-      AWA.Helpers.Selectors.Tests.Add_Tests (Ret);
+      AWA.Commands.Tests.Add_Tests (Ret);
       AWA.Jobs.Modules.Tests.Add_Tests (Ret);
       AWA.Jobs.Services.Tests.Add_Tests (Ret);
       AWA.Settings.Modules.Tests.Add_Tests (Ret);
@@ -126,7 +118,15 @@ package body AWA.Testsuite is
       AWA.Questions.Tests.Add_Tests (Ret);
       AWA.Wikis.Modules.Tests.Add_Tests (Ret);
       AWA.Wikis.Tests.Add_Tests (Ret);
-      AWA.Commands.Tests.Add_Tests (Ret);
+      AWA.Events.Services.Tests.Add_Tests (Ret);
+      AWA.Mail.Clients.Tests.Add_Tests (Ret);
+      AWA.Mail.Modules.Tests.Add_Tests (Ret);
+      AWA.Workspaces.Tests.Add_Tests (Ret);
+      AWA.Users.Services.Tests.Add_Tests (Ret);
+      AWA.Users.Tests.Add_Tests (Ret);
+      AWA.Counters.Modules.Tests.Add_Tests (Ret);
+      AWA.Helpers.Selectors.Tests.Add_Tests (Ret);
+      AWA.Modules.Tests.Add_Tests (Ret);
       return Ret;
    end Suite;
 
