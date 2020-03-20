@@ -31,6 +31,7 @@ AWA integrates the following projects:
 * Ada Wiki      (https://github.com/stcarrez/ada-wiki)
 * Ada EL        (https://github.com/stcarrez/ada-el)
 * Ada Security  (https://github.com/stcarrez/ada-security)
+* Ada Keystore  (https://github.com/stcarrez/ada-keystore)
 * Ada LZMA      (https://github.com/stcarrez/ada-lzma)
 * Dynamo        (https://github.com/stcarrez/dynamo)
 
@@ -220,8 +221,10 @@ setting up and building an Ada Web Application:
 
 # Presentations
 
+  * [Persistence with Ada Database Objects](https://fr.slideshare.net/StephaneCarrez1/persistence-with-ada-database-objects-ado) FOSDEM 2019
   * [Ada for Web Development](https://fr.slideshare.net/StephaneCarrez1/ada-techdays2019awa) AdaCore Tech Days 2019
   * [Secure Web Applications with AWA](https://fr.slideshare.net/StephaneCarrez1/secure-web-applications-with-awa) FOSDEM 2019
+  * [Protect Sensitive Data with Ada Keystore](https://fr.slideshare.net/StephaneCarrez1/protect-sensitive-data-with-ada-keystore) Ada devroom FOSDEM 2020
 
 # Sites Using AWA
 
