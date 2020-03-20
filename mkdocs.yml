@@ -8,6 +8,7 @@ pages:
   - Users: AWA_Users.md
   - Jobs: AWA_Jobs.md
   - Mail: AWA_Mail.md
+  - Workspaces: AWA_Workspaces.md
   - Storages: AWA_Storages.md
   - Images: AWA_Images.md
   - Wikis: AWA_Wikis.md
@@ -18,4 +19,5 @@ pages:
   - Comments: AWA_Comments.md
   - Settings: AWA_Settings.md
   - Setup: AWA_Setup.md
+  - Tips: Tips.md
 theme: readthedocs
