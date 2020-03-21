@@ -21,6 +21,11 @@ with Util.Test_Caller;
 
 with Security.Contexts;
 
+with ASF.Tests;
+with ASF.Requests.Mockup;
+with ASF.Responses.Mockup;
+with Servlet.Responses;
+
 with AWA.Services.Contexts;
 with AWA.Tests.Helpers.Users;
 with AWA.Images.Modules;
@@ -138,7 +143,8 @@ package body AWA.Images.Modules.Tests is
       Store   : AWA.Storages.Models.Storage_Ref;
       Mgr     : AWA.Storages.Services.Storage_Service_Access;
       Outcome : Ada.Strings.Unbounded.Unbounded_String;
-      Path    : constant String := Util.Tests.Get_Path ("regtests/files/images/bast-12.jpg");
+      Path    : constant String
+        := Util.Tests.Get_Path ("regtests/files/images/Ada-Lovelace.jpg");
    begin
       AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-storage@test.com");
 
@@ -152,8 +158,34 @@ package body AWA.Images.Modules.Tests is
 
       Store.Set_Folder (Folder);
       Store.Set_Mime_Type ("image/jpg");
-      Store.Set_Name ("bast-12.jpg");
+      Store.Set_Name ("Ada-Lovelace.jpg");
       Mgr.Save (Store, Path, AWA.Storages.Models.FILE);
+
+      declare
+         Request : ASF.Requests.Mockup.Request;
+         Reply   : ASF.Responses.Mockup.Response;
+         Id      : constant String := ADO.Identifier'Image (Store.Get_Id);
+      begin
+         AWA.Tests.Helpers.Users.Login ("test-storage@test.com", Request);
+         ASF.Tests.Do_Get (Request, Reply,
+                           "/storages/images/" & Id (Id'First + 1 .. Id'Last)
+                           & "/view/Ada-Lovelace.jpg",
+                           "image-get-Ada-Lovelace.jpg");
+         ASF.Tests.Assert_Header (T, "Content-Type", "image/jpg", Reply);
+         Util.Tests.Assert_Equals (T, Servlet.Responses.SC_OK,
+                                   Reply.Get_Status,
+                                   "Invalid response for image");
+
+         --  Try to get an invalid image
+         ASF.Tests.Do_Get (Request, Reply,
+                           "/storages/images/plop"
+                           & "/view/Ada-Lovelace.jpg",
+                           "image-get-plop.jpg");
+         Util.Tests.Assert_Equals (T, Servlet.Responses.SC_NOT_FOUND,
+                                   Reply.Get_Status,
+                                   "Invalid response for image");
+
+      end;
    end Test_Store_Image;
 
 end AWA.Images.Modules.Tests;
