@@ -24,7 +24,6 @@ with AWA.Commands.List;
 with AWA.Commands.Start;
 with AWA.Commands.Stop;
 with Servlet.Server;
-with AWA.Tests;
 with ADO.Drivers;
 with AWA.Testsuite;
 procedure AWA_Command is
@@ -46,8 +45,14 @@ procedure AWA_Command is
    Context   : AWA.Commands.Context_Type;
    Arguments : Util.Commands.Dynamic_Argument_List;
    Suite     : Util.Tests.Access_Test_Suite := AWA.Testsuite.Suite;
+   pragma Unreferenced (Suite);
 begin
    ADO.Drivers.Initialize;
    Server_Commands.WS.Register_Application ("/test", App'Unchecked_Access);
    Server_Commands.Run (Context, Arguments);
+
+exception
+   when E : others =>
+      AWA.Commands.Print (Context, E);
+
 end AWA_Command;
