@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-images-modules -- Image management module
---  Copyright (C) 2012, 2016 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -374,12 +374,24 @@ package body AWA.Images.Modules is
       else
          Pos := Util.Strings.Index (Dimension, 'x');
          if Pos > Dimension'First then
-            Width := Natural'Value (Dimension (Dimension'First .. Pos - 1));
+            begin
+               Width := Natural'Value (Dimension (Dimension'First .. Pos - 1));
+
+            exception
+               when Constraint_Error =>
+                  Width := 0;
+            end;
          else
             Width := 0;
          end if;
          if Pos < Dimension'Last then
-            Height := Natural'Value (Dimension (Pos + 1 .. Dimension'Last));
+            begin
+               Height := Natural'Value (Dimension (Pos + 1 .. Dimension'Last));
+
+            exception
+               when Constraint_Error =>
+                  Height := 0;
+            end;
          else
             Height := 0;
          end if;
