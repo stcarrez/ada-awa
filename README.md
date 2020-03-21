@@ -186,6 +186,39 @@ In most cases you will configure, build and install with the following commands:
    make install
 ```
 
+# Next steps
+
+Once you have built and installed the Ada Web Application framework,
+you can use the `dynamo` command to create your first project by using
+the `create-project` command:
+
+```
+dynamo create-project -l apache atlas your-email@domain.com
+```
+
+Then, configure and build the project by using:
+
+```
+cd atlas
+./configure
+make generate build
+```
+
+At this step, you will get the binary server in `bin/atlas-server` and you can launch
+it with:
+
+```
+./bin/atlas-server setup
+```
+
+The generated binary server provides several commands that you can use.
+The list of commands and their options is described in:
+[command (1)](https://github.com/stcarrez/ada-awa/blob/master/awa/docs/command.md).
+
+Follow the Tutorial section and the
+[Ada Web Application programmer's guide](https://ada-awa.readthedocs.io/en/latest/)
+to proceed to the next development steps.
+
 # Docker
 
 A docker container is available for those who want to try AWA without installing
