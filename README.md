@@ -196,6 +196,9 @@ the `create-project` command:
 dynamo create-project -l apache atlas your-email@domain.com
 ```
 
+Have a look at the [Dynamo(1)](https://github.com/stcarrez/dynamo/wiki/Dynamo)
+documentation for the detail of the `dynamo` command options.
+
 Then, configure and build the project by using:
 
 ```
