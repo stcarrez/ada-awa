@@ -82,7 +82,8 @@ package body AWA.Images.Modules is
    end Initialize;
 
    --  ------------------------------
-   --  Configures the module after its initialization and after having read its XML configuration.
+   --  Configures the module after its initialization and after having
+   --  read its XML configuration.
    --  ------------------------------
    overriding
    procedure Configure (Plugin : in out Image_Module;
@@ -135,7 +136,7 @@ package body AWA.Images.Modules is
    begin
       if File.Get_Original.Is_Null then
          declare
-            Ctx : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
+            Ctx : constant ASC.Service_Context_Access := ASC.Current;
             DB  : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
             Img : AWA.Images.Models.Image_Ref;
          begin
@@ -153,7 +154,8 @@ package body AWA.Images.Modules is
    end Create_Image;
 
    --  ------------------------------
-   --  The `On_Create` procedure is called by `Notify_Create` to notify the creation of the item.
+   --  The `On_Create` procedure is called by `Notify_Create` to notify
+   --  the creation of the item.
    --  ------------------------------
    overriding
    procedure On_Create (Instance : in Image_Module;
@@ -165,7 +167,8 @@ package body AWA.Images.Modules is
    end On_Create;
 
    --  ------------------------------
-   --  The `On_Update` procedure is called by `Notify_Update` to notify the update of the item.
+   --  The `On_Update` procedure is called by `Notify_Update` to notify
+   --  the update of the item.
    --  ------------------------------
    overriding
    procedure On_Update (Instance : in Image_Module;
@@ -179,7 +182,8 @@ package body AWA.Images.Modules is
    end On_Update;
 
    --  ------------------------------
-   --  The `On_Delete` procedure is called by `Notify_Delete` to notify the deletion of the item.
+   --  The `On_Delete` procedure is called by `Notify_Delete` to notify
+   --  the deletion of the item.
    --  ------------------------------
    overriding
    procedure On_Delete (Instance : in Image_Module;
@@ -245,9 +249,11 @@ package body AWA.Images.Modules is
                exit when Ada.Strings.Unbounded.Length (Line) = 0;
                Log.Info ("Received: {0}", Line);
 
-               --  The '-verbose' option of ImageMagick reports information about the original
-               --  image.  Extract the picture width and height.
-               --  image.png PNG 120x282 120x282+0+0 8-bit DirectClass 34.4KB 0.000u 0:00.018
+               --  The '-verbose' option of ImageMagick reports information
+               --  about the original image.  Extract the picture width and
+               --  height.
+               --  image.png PNG 120x282 120x282+0+0 8-bit \
+               --         DirectClass 34.4KB 0.000u 0:00.018
                Pos := Ada.Strings.Unbounded.Index (Line, " ");
                if Pos > 0 and Width = 0 then
                   Pos := Ada.Strings.Unbounded.Index (Line, " ", Pos + 1);
@@ -352,8 +358,8 @@ package body AWA.Images.Modules is
    end Scale;
 
    --  ------------------------------
-   --  Get the dimension represented by the string.  The string has one of the following
-   --  formats:
+   --  Get the dimension represented by the string.  The string has one
+   --  of the following formats:
    --    original          -> Width, Height := Natural'Last
    --    default           -> Width, Height := 0
    --    <width>x          -> Width := <width>, Height := 0
