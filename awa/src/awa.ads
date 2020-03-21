@@ -23,7 +23,6 @@
 --  @include awa-permissions.ads
 --  @include awa-events.ads
 --  @include awa-commands.ads
---  @include awa.xml
 package AWA is
 
    pragma Pure;
