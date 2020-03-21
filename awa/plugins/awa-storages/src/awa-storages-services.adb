@@ -19,6 +19,8 @@
 with Util.Log.Loggers;
 with Util.Strings;
 
+with Ada.Directories;
+
 with ADO.Objects;
 with ADO.Queries;
 with ADO.SQL;
@@ -398,6 +400,9 @@ package body AWA.Storages.Services is
    begin
       Util.Concurrent.Counters.Increment (Service.Temp_Id, Value);
       Into.Path := To_Unbounded_String (Tmp & "/tmp-" & Util.Strings.Image (Value));
+      if not Ada.Directories.Exists (Tmp) then
+         Ada.Directories.Create_Path (Tmp);
+      end if;
    end Create_Local_File;
 
    --  ------------------------------
