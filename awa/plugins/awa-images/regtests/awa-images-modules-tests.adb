@@ -81,7 +81,7 @@ package body AWA.Images.Modules.Tests is
       Util.Tests.Assert_Equals (T, 0, Height, "Invalid height");
 
       AWA.Images.Modules.Get_Sizes ("123xtoto", Width, Height);
-      Util.Tests.Assert_Equals (T, 0, Width, "Invalid width");
+      Util.Tests.Assert_Equals (T, 123, Width, "Invalid width");
       Util.Tests.Assert_Equals (T, 0, Height, "Invalid height");
 
       AWA.Images.Modules.Get_Sizes ("xtoto", Width, Height);
