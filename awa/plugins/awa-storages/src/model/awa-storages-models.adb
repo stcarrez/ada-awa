@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2019 Stephane Carrez
+--  Copyright (C) 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -2419,6 +2419,48 @@ package body AWA.Storages.Models is
                         Value : in Util.Beans.Objects.Object) is
    begin
       null;
+   end Set_Value;
+
+   procedure Op_Save (Bean    : in out Folder_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Save (Bean    : in out Folder_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Folder_Bean'Class (Bean).Save (Outcome);
+   end Op_Save;
+   package Binding_Folder_Bean_1 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Folder_Bean,
+                                                      Method => Op_Save,
+                                                      Name   => "save");
+
+   Binding_Folder_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
+     := (1 => Binding_Folder_Bean_1.Proxy'Access
+     );
+
+   --  ------------------------------
+   --  This bean provides some methods that can be used in a Method_Expression.
+   --  ------------------------------
+   overriding
+   function Get_Method_Bindings (From : in Folder_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access is
+      pragma Unreferenced (From);
+   begin
+      return Binding_Folder_Bean_Array'Access;
+   end Get_Method_Bindings;
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Folder_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "create_date" then
+         Item.Set_Create_Date (Util.Beans.Objects.Time.To_Time (Value));
+      elsif Name = "name" then
+         Item.Set_Name (Util.Beans.Objects.To_String (Value));
+      end if;
    end Set_Value;
 
 
