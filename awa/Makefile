@@ -69,6 +69,8 @@ AWA_DOC= \
   pagebreak.tex \
   AWA_Mail.md \
   pagebreak.tex \
+  AWA_Workspaces.md \
+  pagebreak.tex \
   AWA_Storages.md \
   pagebreak.tex \
   AWA_Images.md \
@@ -178,3 +180,4 @@ $(foreach PLUGIN,$(PLUGINS),$(eval include plugins/$(PLUGIN)/Makefile))
 
 generate::
 	$(DYNAMO) generate $(DYNAMO_ARGS)
+	rm -f src/models/awa-commands-models.adb
