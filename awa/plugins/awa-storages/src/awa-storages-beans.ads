@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-beans -- Storage Ada Beans
---  Copyright (C) 2012, 2016, 2018, 2019 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2018, 2019, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -88,8 +88,7 @@ package AWA.Storages.Beans is
    --  Folder Bean
    --  ------------------------------
    --  The <b>Folder_Bean</b> allows to create or update the folder name.
-   type Folder_Bean is new AWA.Storages.Models.Storage_Folder_Ref
-     and Util.Beans.Basic.Bean with record
+   type Folder_Bean is new AWA.Storages.Models.Folder_Bean with record
       Module  : AWA.Storages.Modules.Storage_Module_Access := null;
    end record;
    type Folder_Bean_Access is access all Folder_Bean'Class;
@@ -106,8 +105,13 @@ package AWA.Storages.Beans is
                         Value : in Util.Beans.Objects.Object);
 
    --  Create or save the folder.
+   overriding
    procedure Save (Bean    : in out Folder_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Create the Folder_Bean bean instance.
+   function Create_Folder_Bean (Module : in AWA.Storages.Modules.Storage_Module_Access)
+                                return Util.Beans.Basic.Readonly_Bean_Access;
 
    type Init_Flag is (INIT_FOLDER, INIT_FOLDER_LIST, INIT_FILE_LIST);
    type Init_Map is array (Init_Flag) of Boolean;
