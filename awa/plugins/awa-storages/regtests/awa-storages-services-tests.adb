@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-services-tests -- Unit tests for storage service
---  Copyright (C) 2012, 2016, 2019 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2019, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +27,7 @@ with Security.Contexts;
 
 with AWA.Services.Contexts;
 with AWA.Storages.Modules;
-with AWA.Storages.Beans.Factories;
+with AWA.Storages.Beans;
 with AWA.Tests.Helpers.Users;
 package body AWA.Storages.Services.Tests is
 
@@ -157,9 +157,9 @@ package body AWA.Storages.Services.Tests is
    procedure Test_Create_Folder (T : in out Test) is
       Sec_Ctx   : Security.Contexts.Security_Context;
       Context   : AWA.Services.Contexts.Service_Context;
-      Folder    : AWA.Storages.Beans.Factories.Folder_Bean;
+      Folder    : AWA.Storages.Beans.Folder_Bean;
       Outcome   : Ada.Strings.Unbounded.Unbounded_String;
-      Upload    : AWA.Storages.Beans.Factories.Upload_Bean;
+      Upload    : AWA.Storages.Beans.Upload_Bean;
    begin
       AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-storage@test.com");
       Folder.Module := AWA.Storages.Modules.Get_Storage_Module;
