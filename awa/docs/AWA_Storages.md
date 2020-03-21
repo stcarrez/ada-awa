@@ -93,9 +93,16 @@ a unique identifier that can be retrieved by `Get_Id` or `Get_Key`.
 Several operations are defined to retrieve the data.  Each of them has been
 designed to optimize the retrieval and
 
-  * The data can be retrieved in a local file. This mode is useful if an external program must be launched and be able to read the file.  If the storage mode of the data is `FILE`, the path of the file on the storage file system is used.  For other storage modes, the file is saved in a temporary file.  In that case the `Store_Local` database table is used to track such locally saved data.
+  * The data can be retrieved in a local file.
+ This mode is useful if an external program must be launched and be able
+ to read the file.  If the storage mode of the data is `FILE`, the path
+ of the file on the storage file system is used.  For other storage modes,
+ the file is saved in a temporary file.  In that case the `Store_Local`
+ database table is used to track such locally saved data.
 
-  * The data can be returned as a stream. When the application has to read the data, opening a read stream connection is the most efficient mechanism.
+  * The data can be returned as a stream.
+ When the application has to read the data, opening a read stream
+ connection is the most efficient mechanism.
 
 ## Local file
 To access the data by using a local file, we must define a local storage

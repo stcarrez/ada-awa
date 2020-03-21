@@ -36,8 +36,11 @@ The operation will install the setup application to handle the setup actions.
 Through the setup actions, the installer will be able to:
 
 * Configure the database (MySQL or SQLite),
+
 * Configure the Google+ and Facebook OAuth authentication keys,
+
 * Configure the application name,
+
 * Configure the mail parameters to be able to send email.
 
 After the setup and configure is finished, the file <tt>.initialized</tt>

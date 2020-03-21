@@ -157,7 +157,7 @@ a given database entity.  It needs a special managed bean configuration
 that describes the database entity type, the counter name and
 SQL query name.
 
-The example below from the [Wikis Module] declares the bean
+The example below from the [Wikis Module](AWA_Wikis.md) declares the bean
 `wikiPageStats`.  The database entity is `awa_wiki_page` which is the
 name of the database table that holds wiki page.  The SQL query
 to retrieve the result is `page-access-stats`.

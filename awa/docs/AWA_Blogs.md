@@ -7,10 +7,13 @@ anonymous users.
 
 The `blogs` module uses several other modules:
 
-* the [Counters Module] to track page display counter to a blog post,
-* the [Tags Module] to associate one or several tags to a blog post,
-* the [Comments Module] to allow users to write comments on a blog post,
-* the [Images Module] to easily add images in blog post.
+* the [Counters Module](AWA_Counters.md) to track page display counter to a blog post,
+
+* the [Tags Module](AWA_Tags.md) to associate one or several tags to a blog post,
+
+* the [Comments Module](AWA_Comments.md) to allow users to write comments on a blog post,
+
+* the [Images Module](AWA_Images.md) to easily add images in blog post.
 
 ## Integration
 To be able to use the `Blogs` module, you will need to add the following line in your

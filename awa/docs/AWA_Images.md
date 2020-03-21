@@ -5,7 +5,8 @@ the original image.
 
 The `images` module uses several other modules:
 
-* the [Storage Module] to store and manage image content,
+* the [Storage Module](AWA_Storage.md) to store and manage image content,
+
 * the [Jobs Module] to schedule image thumbnail generation.
 
 ## Integration
