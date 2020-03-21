@@ -29,6 +29,9 @@
 --  @include-query wiki-pages.xml
 --  @include-query wiki-history.xml
 --  @include-query wiki-list.xml
+--  @include-query wiki-images.xml
+--  @include-query wiki-images-info.xml
+--  @include-query wiki-stat.xml
 --
 --  == Data model ==
 --  [images/awa_wikis_model.png]
