@@ -37,4 +37,7 @@ package AWA.Images.Modules.Tests is
    --  Test the Scale operation.
    procedure Test_Scale (T : in out Test);
 
+   --  Test the creation of an image through the storage service.
+   procedure Test_Store_Image (T : in out Test);
+
 end AWA.Images.Modules.Tests;
