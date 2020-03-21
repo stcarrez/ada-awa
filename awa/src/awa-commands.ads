@@ -30,6 +30,57 @@ private with Keystore.Files;
 private with Keystore.Passwords.Keys;
 private with GNAT.Command_Line;
 private with GNAT.Strings;
+
+--  == AWA Commands ==
+--  The `AWA.Commands` package provides a simple framework with commands that
+--  allow to start, stop, configure and manage the web application.  It is also
+--  possible to provide your own commands.  The command framework handles the
+--  parsing of command line options, identification of the command to execute
+--  and execution of the selected command.
+--
+--  @include-doc docs/command.md
+--
+--  === Integration ===
+--  The `AWA.Commands` framework is split in several generic packages that
+--  must be instantiated.  The `AWA.Commands.Drivers` generic package is
+--  the primary package that must be instantiated.  It provides the core
+--  command line driver framework on top of which the commands are implemented.
+--  The instantiation needs two parameter: the name of the application and
+--  the type of the web server container.  When using Ada Web Server, the
+--  following instantiation example can be used:
+--
+--    with Servlet.Server.Web;
+--    with AWA.Commands.Drivers;
+--    ...
+--    package Server_Commands is
+--       new AWA.Commands.Drivers
+--          (Driver_Name    => "atlas",
+--           Container_Type => Servlet.Server.Web.AWS_Container);
+--
+--  The `Driver_Name` is used to print the name of the command when
+--  some usage or help is printed.  The `Container_Type` is used to
+--  declare the web container onto which applications are registered
+--  and which provides the web server core implementation.  The web
+--  server container instance is available through the `WS` variable
+--  defined in the `Server_Commands` package.
+--
+--  Once the command driver is instantiated, it is necessary to instantiate
+--  each command that you wish to integrate in the final application.
+--  For example, to integrate the `start` command, you will do:
+--
+--    with AWA.Commands.Start;
+--    ...
+--    package Start_Command is new AWA.Commands.Start (Server_Commands);
+--
+--  To integrate the `stop` command, you will do:
+--
+--    with AWA.Commands.Stop;
+--    ...
+--    package Stop_Command is new AWA.Commands.Stop (Server_Commands);
+--
+--  The instantiation of one of the command, automatically registers the
+--  command to the command driver.
+--
 package AWA.Commands is
 
    Error : exception;
@@ -58,8 +109,8 @@ package AWA.Commands is
    --  Get the keystore file path.
    function Get_Keystore_Path (Context : in out Context_Type) return String;
 
-   --  Configure the application by loading its configuration file and merging it with
-   --  the keystore file if there is one.
+   --  Configure the application by loading its configuration file and merging
+   --  it with the keystore file if there is one.
    procedure Configure (Application : in out ASF.Applications.Main.Application'Class;
                         Name        : in String;
                         Context     : in out Context_Type);
