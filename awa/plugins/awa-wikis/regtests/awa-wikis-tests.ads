@@ -30,6 +30,7 @@ package AWA.Wikis.Tests is
       Wiki_Ident  : Ada.Strings.Unbounded.Unbounded_String;
       Page_Ident  : Ada.Strings.Unbounded.Unbounded_String;
       Image_Ident : Ada.Strings.Unbounded.Unbounded_String;
+      Image_Link  : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
    --  Setup an image for the wiki page.
