@@ -77,12 +77,12 @@ package body AWA.Wikis.Tests is
       Store.Set_Folder (Folder);
       Store.Set_Is_Public (True);
       Store.Set_Mime_Type ("image/jpg");
-      Store.Set_Name ("Ada Lovelace");
+      Store.Set_Name ("Ada-Lovelace.jpg");
       Mgr.Save (Store, Path, AWA.Storages.Models.FILE);
 
       declare
-         Request : ASF.Requests.Mockup.Request;
-         Reply   : ASF.Responses.Mockup.Response;
+         Request : Servlet.Requests.Mockup.Request;
+         Reply   : Servlet.Responses.Mockup.Response;
          Id      : constant String := ADO.Identifier'Image (Store.Get_Id);
       begin
          T.Image_Ident := To_Unbounded_String (Id (Id'First + 1 .. Id'Last));
@@ -113,8 +113,8 @@ package body AWA.Wikis.Tests is
       function Get_Link (Title : in String) return String;
 
       Wiki      : constant String := To_String (T.Wiki_Ident);
-      Request   : ASF.Requests.Mockup.Request;
-      Reply     : ASF.Responses.Mockup.Response;
+      Request   : Servlet.Requests.Mockup.Request;
+      Reply     : Servlet.Responses.Mockup.Response;
 
       function Get_Link (Title : in String) return String is
          Stream  : Servlet.Streams.Print_Stream := Reply.Get_Output_Stream;
@@ -172,8 +172,8 @@ package body AWA.Wikis.Tests is
    procedure Verify_List_Contains (T    : in out Test;
                                    Page : in String) is
       Wiki      : constant String := To_String (T.Wiki_Ident);
-      Request   : ASF.Requests.Mockup.Request;
-      Reply     : ASF.Responses.Mockup.Response;
+      Request   : Servlet.Requests.Mockup.Request;
+      Reply     : Servlet.Responses.Mockup.Response;
    begin
       ASF.Tests.Do_Get (Request, Reply, "/wikis/list/" & Wiki & "/recent",
                         "wiki-list-recent.html");
@@ -221,8 +221,8 @@ package body AWA.Wikis.Tests is
    --  Create a wiki page.
    --  ------------------------------
    procedure Create_Page (T       : in out Test;
-                          Request : in out ASF.Requests.Mockup.Request;
-                          Reply   : in out ASF.Responses.Mockup.Response;
+                          Request : in out Servlet.Requests.Mockup.Request;
+                          Reply   : in out Servlet.Responses.Mockup.Response;
                           Name    : in String;
                           Title   : in String) is
    begin
@@ -256,8 +256,8 @@ package body AWA.Wikis.Tests is
    --  Test creation of blog by simulating web requests.
    --  ------------------------------
    procedure Test_Create_Wiki (T : in out Test) is
-      Request   : ASF.Requests.Mockup.Request;
-      Reply     : ASF.Responses.Mockup.Response;
+      Request   : Servlet.Requests.Mockup.Request;
+      Reply     : Servlet.Responses.Mockup.Response;
    begin
       AWA.Tests.Helpers.Users.Login ("test-wiki@test.com", Request);
       Request.Set_Parameter ("title", "The Wiki Space Title");
@@ -265,7 +265,7 @@ package body AWA.Wikis.Tests is
       Request.Set_Parameter ("create", "1");
       ASF.Tests.Do_Post (Request, Reply, "/wikis/setup.html", "setup-wiki.html");
 
-      T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY,
+      T.Assert (Reply.Get_Status = Servlet.Responses.SC_MOVED_TEMPORARILY,
                 "Invalid response after wiki space creation");
       declare
          Ident : constant String
@@ -296,25 +296,25 @@ package body AWA.Wikis.Tests is
    --  ------------------------------
    procedure Test_Missing_Page (T : in out Test) is
       Wiki      : constant String := To_String (T.Wiki_Ident);
-      Request   : ASF.Requests.Mockup.Request;
-      Reply     : ASF.Responses.Mockup.Response;
+      Request   : Servlet.Requests.Mockup.Request;
+      Reply     : Servlet.Responses.Mockup.Response;
    begin
       ASF.Tests.Do_Get (Request, Reply, "/wikis/view/" & Wiki & "/MissingPage",
                         "wiki-page-missing.html");
       ASF.Tests.Assert_Matches (T, ".title.Wiki page does not exist./title.", Reply,
                                 "Wiki page 'MissingPage' is invalid",
-                                ASF.Responses.SC_NOT_FOUND);
+                                Servlet.Responses.SC_NOT_FOUND);
       ASF.Tests.Assert_Matches (T, ".h2.MissingPage./h2.", Reply,
                                 "Wiki page 'MissingPage' header is invalid",
-                                ASF.Responses.SC_NOT_FOUND);
+                                Servlet.Responses.SC_NOT_FOUND);
    end Test_Missing_Page;
 
    --  ------------------------------
    --  Test creation of wiki page with an image.
    --  ------------------------------
    procedure Test_Page_With_Image (T : in out Test) is
-      Request   : ASF.Requests.Mockup.Request;
-      Reply     : ASF.Responses.Mockup.Response;
+      Request   : Servlet.Requests.Mockup.Request;
+      Reply     : Servlet.Responses.Mockup.Response;
       Wiki      : constant String := To_String (T.Wiki_Ident);
    begin
       AWA.Tests.Helpers.Users.Login ("test-wiki@test.com", Request);
@@ -328,7 +328,7 @@ package body AWA.Wikis.Tests is
                                 & "/default/Ada-Lovelace.jpg. alt=.Ada Lovelace.></img>",
                                 Reply,
                                 "Wiki page missing image link",
-                                ASF.Responses.SC_OK);
+                                Servlet.Responses.SC_OK);
 
       ASF.Tests.Do_Get (Request, Reply,
                         To_String (T.Image_Link),
@@ -337,6 +337,16 @@ package body AWA.Wikis.Tests is
       Util.Tests.Assert_Equals (T, Servlet.Responses.SC_OK,
                                 Reply.Get_Status,
                                 "Invalid response for image");
+
+      ASF.Tests.Do_Get (Request, Reply, "/wikis/image-info/" & Wiki & "/"
+                        & To_String (T.Image_Ident) & "/Images/Ada-Lovelace.jpg",
+                        "wiki-image-info.html");
+      ASF.Tests.Assert_Contains (T, "<title>Image information</title>", Reply,
+                                 "Wiki image information page is invalid");
+      ASF.Tests.Assert_Matches (T, "<dt>File name</dt>.*<dd>Images/Ada-Lovelace.jpg.*",
+                                Reply,
+                                "Wiki image information invalid name",
+                                Servlet.Responses.SC_OK);
 
    end Test_Page_With_Image;
 
