@@ -42,7 +42,6 @@ package body AWA.Applications.Configs is
       Length : Positive;
       Prefix : String (1 .. MAX_PREFIX_LENGTH);
    end record;
-   type Keystore_Manager_Access is access all Wallet_Manager'Class;
 
    --  Get the value identified by the name.
    --  If the name cannot be found, the method should return the Null object.

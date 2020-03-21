@@ -35,6 +35,10 @@ package body AWA.Commands.Start is
                       Args      : in Argument_List'Class;
                       Context   : in out Context_Type) is
    begin
+      if Args.Get_Count /= 0 then
+         Command.Usage (Name, Context);
+         return;
+      end if;
       Command.Configure_Server (Context);
       Command.Configure_Applications (Context);
       Command.Start_Server (Context);
@@ -74,6 +78,8 @@ package body AWA.Commands.Start is
    --  ------------------------------
    procedure Configure_Applications (Command   : in out Command_Type;
                                      Context   : in out Context_Type) is
+      pragma Unreferenced (Command);
+
       procedure Configure (URI : in String;
                            Application : in Servlet.Core.Servlet_Registry_Access);
 
@@ -90,7 +96,6 @@ package body AWA.Commands.Start is
          end if;
       end Configure;
 
-      Config  : Servlet.Server.Configuration;
    begin
       Command_Drivers.WS.Iterate (Configure'Access);
       if Count = 0 then
@@ -104,6 +109,7 @@ package body AWA.Commands.Start is
    --  ------------------------------
    procedure Start_Server (Command   : in out Command_Type;
                            Context   : in out Context_Type) is
+      pragma Unreferenced (Command);
    begin
       Context.Console.Notice (N_INFO, "Starting...");
       Command_Drivers.WS.Start;
@@ -114,11 +120,14 @@ package body AWA.Commands.Start is
    --  ------------------------------
    procedure Wait_Server (Command   : in out Command_Type;
                           Context   : in out Context_Type) is
+      pragma Unreferenced (Context);
+
       procedure Shutdown (URI : in String;
                           Application : in Servlet.Core.Servlet_Registry_Access);
 
       procedure Shutdown (URI : in String;
                           Application : in Servlet.Core.Servlet_Registry_Access) is
+         pragma Unreferenced (URI);
       begin
          if Application.all in AWA.Applications.Application'Class then
             AWA.Applications.Application'Class (Application.all).Close;

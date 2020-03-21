@@ -71,7 +71,7 @@ package body AWA.Events.Queues is
          begin
             Q.Listeners.Append (Listener);
          end;
-      end if;      
+      end if;
    end Add_Listener;
 
    --  ------------------------------

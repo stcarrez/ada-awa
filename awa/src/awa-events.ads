@@ -20,7 +20,6 @@ with Util.Events;
 with Util.Beans.Objects;
 with Util.Beans.Basic;
 with Util.Beans.Objects.Maps;
-with Util.Properties;
 
 with ADO.Objects;
 with ADO.Sessions;

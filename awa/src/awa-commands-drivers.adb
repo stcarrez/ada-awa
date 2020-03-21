@@ -80,6 +80,8 @@ package body AWA.Commands.Drivers is
                       Name      : in String;
                       Args      : in Argument_List'Class;
                       Context   : in out Context_Type) is
+      pragma Unreferenced (Name);
+
       procedure Find (URI : in String;
                       App : in Servlet.Core.Servlet_Registry_Access);
 
