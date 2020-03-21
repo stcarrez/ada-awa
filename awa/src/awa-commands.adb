@@ -210,12 +210,6 @@ package body AWA.Commands is
                         Argument => "PATH",
                         Help   => -("Defines the path for the keystore file"));
       GC.Define_Switch (Config => Config,
-                        Output => Context.Data_Path'Access,
-                        Switch => "-d:",
-                        Long_Switch => "--data-path=",
-                        Argument => "PATH",
-                        Help   => -("The directory which contains the keystore data blocks"));
-      GC.Define_Switch (Config => Config,
                         Output => Context.Password_File'Access,
                         Long_Switch => "--passfile=",
                         Argument => "PATH",
