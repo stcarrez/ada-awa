@@ -25,14 +25,16 @@ with AWA.Tests.Helpers.Users;
 with AWA.Images.Modules;
 package body AWA.Images.Modules.Tests is
 
-   package Caller is new Util.Test_Caller (Test, "Images.Services");
+   package Caller is new Util.Test_Caller (Test, "Images.Modules");
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
    begin
-      Caller.Add_Test (Suite, "Test AWA.Images.Create_Image",
+      Caller.Add_Test (Suite, "Test AWA.Images.Modules.Create_Image",
                        Test_Create_Image'Access);
-      Caller.Add_Test (Suite, "Test AWA.Images.Get_Sizes",
+      Caller.Add_Test (Suite, "Test AWA.Images.Modules.Get_Sizes",
                        Test_Get_Sizes'Access);
+      Caller.Add_Test (Suite, "Test AWA.Images.Modules.Scale",
+                       Test_Scale'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -58,7 +60,7 @@ package body AWA.Images.Modules.Tests is
    --  ------------------------------
    --  Test the Get_Sizes operation.
    --  ------------------------------
-   procedure Test_Get_Sizes (T : in out TesT) is
+   procedure Test_Get_Sizes (T : in out Test) is
       Width  : Natural;
       Height : Natural;
    begin
@@ -90,5 +92,32 @@ package body AWA.Images.Modules.Tests is
       Util.Tests.Assert_Equals (T, Natural'Last, Width, "Invalid width");
       Util.Tests.Assert_Equals (T, Natural'Last, Height, "Invalid height");
    end Test_Get_Sizes;
+
+   --  ------------------------------
+   --  Test the Scale operation.
+   --  ------------------------------
+   procedure Test_Scale (T : in out Test) is
+      Width  : Natural;
+      Height : Natural;
+   begin
+      Width := 0;
+      Height := 0;
+      AWA.Images.Modules.Scale (123, 456, Width, Height);
+      Util.Tests.Assert_Equals (T, 123, Width, "Invalid width");
+      Util.Tests.Assert_Equals (T, 456, Height, "Invalid height");
+
+      Width := 100;
+      Height := 0;
+      AWA.Images.Modules.Scale (10000, 2000, Width, Height);
+      Util.Tests.Assert_Equals (T, 100, Width, "Invalid width");
+      Util.Tests.Assert_Equals (T, 20, Height, "Invalid height");
+
+      Width := 0;
+      Height := 200;
+      AWA.Images.Modules.Scale (10000, 2000, Width, Height);
+      Util.Tests.Assert_Equals (T, 1000, Width, "Invalid width");
+      Util.Tests.Assert_Equals (T, 200, Height, "Invalid height");
+
+   end Test_Scale;
 
 end AWA.Images.Modules.Tests;
