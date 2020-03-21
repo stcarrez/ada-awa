@@ -43,7 +43,7 @@ the Web application to operate.  These components include:
 * The [Users Module](AWA_Users.md) manages the creation, update, removal and authentication of users,
 * The [Mail Module](AWA_Mail.md) allows an application to format and send a mail,
 * The [Jobs Module](AWA_Jobs.md) provides a batch job framework for modules to execute long running actions,
-* The [Events Module] implements an eventing system to share events with other modules,
+* The [Events Module](AWA_Events.md) implements an eventing system to share events with other modules,
 * The [Workspace Module](AWA_Workspaces.md) defines a workspace area for other plugins to connect and plug into.
 
 ## General Purpose Components
