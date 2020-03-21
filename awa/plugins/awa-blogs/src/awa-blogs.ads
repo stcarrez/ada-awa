@@ -45,6 +45,9 @@
 --  @include-query blog-comment-list.xml
 --  @include-query blog-list.xml
 --  @include-query blog-tags.xml
+--  @include-query blog-images.xml
+--  @include-query blog-images-info.xml
+--  @include-query blog-stat.xml
 --
 --  == Data model ==
 --  [images/awa_blogs_model.png]
