@@ -33,7 +33,7 @@ private with EL.Expressions;
 --  following line in your GNAT project file:
 --
 --    with "awa_images";
---  
+--
 --  The `Image_Module` type represents the image module.  An instance
 --  of the image module must be declared and registered when the application
 --  is created and initialized.  The image module is associated with the image

@@ -37,7 +37,7 @@
 --  [images/awa_images_model.png]
 --
 package AWA.Images is
-   
+
    pragma Pure;
 
 end AWA.Images;
