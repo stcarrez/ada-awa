@@ -15,6 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Ada.Strings.Unbounded;
 
 with Util.Test_Caller;
 
@@ -23,7 +24,12 @@ with Security.Contexts;
 with AWA.Services.Contexts;
 with AWA.Tests.Helpers.Users;
 with AWA.Images.Modules;
+with AWA.Storages.Beans;
+with AWA.Storages.Services;
+with AWA.Storages.Modules;
 package body AWA.Images.Modules.Tests is
+
+   use type AWA.Storages.Services.Storage_Service_Access;
 
    package Caller is new Util.Test_Caller (Test, "Images.Modules");
 
@@ -35,6 +41,8 @@ package body AWA.Images.Modules.Tests is
                        Test_Get_Sizes'Access);
       Caller.Add_Test (Suite, "Test AWA.Images.Modules.Scale",
                        Test_Scale'Access);
+      Caller.Add_Test (Suite, "Test AWA.Images.Modules.On_Create",
+                       Test_Store_Image'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -119,5 +127,33 @@ package body AWA.Images.Modules.Tests is
       Util.Tests.Assert_Equals (T, 200, Height, "Invalid height");
 
    end Test_Scale;
+
+   --  ------------------------------
+   --  Test the creation of an image through the storage service.
+   --  ------------------------------
+   procedure Test_Store_Image (T : in out Test) is
+      Sec_Ctx : Security.Contexts.Security_Context;
+      Context : AWA.Services.Contexts.Service_Context;
+      Folder  : AWA.Storages.Beans.Folder_Bean;
+      Store   : AWA.Storages.Models.Storage_Ref;
+      Mgr     : AWA.Storages.Services.Storage_Service_Access;
+      Outcome : Ada.Strings.Unbounded.Unbounded_String;
+      Path    : constant String := Util.Tests.Get_Path ("regtests/files/images/bast-12.jpg");
+   begin
+      AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-storage@test.com");
+
+      Mgr := AWA.Storages.Modules.Get_Storage_Manager;
+      T.Assert (Mgr /= null, "Null storage manager");
+
+      --  Make a storage folder.
+      Folder.Module := AWA.Storages.Modules.Get_Storage_Module;
+      Folder.Set_Name ("Image folder");
+      Folder.Save (Outcome);
+
+      Store.Set_Folder (Folder);
+      Store.Set_Mime_Type ("image/jpg");
+      Store.Set_Name ("bast-12.jpg");
+      Mgr.Save (Store, Path, AWA.Storages.Models.FILE);
+   end Test_Store_Image;
 
 end AWA.Images.Modules.Tests;
