@@ -188,6 +188,7 @@ package body AWA.Storages.Beans is
    --  ------------------------------
    --  Create or save the folder.
    --  ------------------------------
+   overriding
    procedure Save (Bean    : in out Folder_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       Manager : constant Services.Storage_Service_Access := Bean.Module.Get_Storage_Manager;
@@ -195,6 +196,17 @@ package body AWA.Storages.Beans is
       Manager.Save_Folder (Bean);
       Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("success");
    end Save;
+
+   --  ------------------------------
+   --  Create the Folder_Bean bean instance.
+   --  ------------------------------
+   function Create_Folder_Bean (Module : in AWA.Storages.Modules.Storage_Module_Access)
+                                return Util.Beans.Basic.Readonly_Bean_Access is
+      Result : constant Folder_Bean_Access := new Folder_Bean;
+   begin
+      Result.Module := Module;
+      return Result.all'Access;
+   end Create_Folder_Bean;
 
    --  ------------------------------
    --  Load the folder instance.
