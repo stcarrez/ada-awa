@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-modules-tests -- Unit tests for storage service
---  Copyright (C) 2012, 2013, 2016, 2019 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2016, 2019, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,6 +31,8 @@ package body AWA.Images.Modules.Tests is
    begin
       Caller.Add_Test (Suite, "Test AWA.Images.Create_Image",
                        Test_Create_Image'Access);
+      Caller.Add_Test (Suite, "Test AWA.Images.Get_Sizes",
+                       Test_Get_Sizes'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -52,5 +54,41 @@ package body AWA.Images.Modules.Tests is
       Util.Tests.Assert_Equals (T, 1720, Width, "Invalid image width");
       Util.Tests.Assert_Equals (T, 1098, Height, "Invalid image height");
    end Test_Create_Image;
+
+   --  ------------------------------
+   --  Test the Get_Sizes operation.
+   --  ------------------------------
+   procedure Test_Get_Sizes (T : in out TesT) is
+      Width  : Natural;
+      Height : Natural;
+   begin
+      AWA.Images.Modules.Get_Sizes ("default", Width, Height);
+      Util.Tests.Assert_Equals (T, 800, Width, "Default width should be 800");
+      Util.Tests.Assert_Equals (T, 0, Height, "Default height should be 0");
+
+      AWA.Images.Modules.Get_Sizes ("123x456", Width, Height);
+      Util.Tests.Assert_Equals (T, 123, Width, "Invalid width");
+      Util.Tests.Assert_Equals (T, 456, Height, "Invalid height");
+
+      AWA.Images.Modules.Get_Sizes ("x56", Width, Height);
+      Util.Tests.Assert_Equals (T, 0, Width, "Invalid width");
+      Util.Tests.Assert_Equals (T, 56, Height, "Invalid height");
+
+      AWA.Images.Modules.Get_Sizes ("123x", Width, Height);
+      Util.Tests.Assert_Equals (T, 123, Width, "Invalid width");
+      Util.Tests.Assert_Equals (T, 0, Height, "Invalid height");
+
+      AWA.Images.Modules.Get_Sizes ("123xtoto", Width, Height);
+      Util.Tests.Assert_Equals (T, 0, Width, "Invalid width");
+      Util.Tests.Assert_Equals (T, 0, Height, "Invalid height");
+
+      AWA.Images.Modules.Get_Sizes ("xtoto", Width, Height);
+      Util.Tests.Assert_Equals (T, 0, Width, "Invalid width");
+      Util.Tests.Assert_Equals (T, 0, Height, "Invalid height");
+
+      AWA.Images.Modules.Get_Sizes ("original", Width, Height);
+      Util.Tests.Assert_Equals (T, Natural'Last, Width, "Invalid width");
+      Util.Tests.Assert_Equals (T, Natural'Last, Height, "Invalid height");
+   end Test_Get_Sizes;
 
 end AWA.Images.Modules.Tests;
