@@ -18,21 +18,25 @@
   <context-param>
     <param-name>awa_url_scheme</param-name>
     <param-value>#{empty app_url_scheme ? 'http://' : app_url_scheme}</param-value>
+    <description>The application URL scheme to use when building URL.</description>
   </context-param>
 
   <context-param>
     <param-name>awa_url_host</param-name>
     <param-value>#{empty app_url_host ? 'localhost' : app_url_host}</param-value>
+    <description>The application URL host to use when building URL.</description>
   </context-param>
 
   <context-param>
     <param-name>awa_url_port</param-name>
     <param-value>#{empty app_url_port ? ':8080' : app_url_port}</param-value>
+    <description>The application TCP port to use when building URL.</description>
   </context-param>
 
   <context-param>
     <param-name>app_url_base</param-name>
     <param-value>#{empty app_url_base ? 'http://localhost:8080' : app_url_base}</param-value>
+    <description>The application URL base to use when building URL.</description>
   </context-param>
 
   <context-param>
@@ -43,6 +47,9 @@
   <context-param>
     <param-name>view.ext</param-name>
     <param-value>.html</param-value>
+    <description>
+      Defines the extension used for Ada Server Faces presentation pages.
+    </description>
   </context-param>
 
   <context-param>
