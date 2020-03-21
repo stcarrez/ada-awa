@@ -61,6 +61,7 @@ package body AWA.Commands.Setup is
 
       procedure Enable_Application (URI : in String;
                                     App : in Servlet.Core.Servlet_Registry_Access) is
+         pragma Unreferenced (URI);
       begin
          App.Enable;
          App.Start;
