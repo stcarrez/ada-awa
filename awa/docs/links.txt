@@ -10,3 +10,12 @@ Java Bean                  https://en.wikipedia.org/wiki/JavaBean
 Java Log4j                 https://logging.apache.org/log4j/2.x/
 Log4cxx                    https://logging.apache.org/log4cxx/latest_stable/index.html
 RFC7231                    https://tools.ietf.org/html/rfc7231
+Tags Module                AWA_Tags.md
+Comments Module            AWA_Comments.md
+Storage Module             AWA_Storage.md
+Images Module              AWA_Images.md
+Votes Module               AWA_Votes.md
+Users Module               AWA_Users.md
+Wikis Module               AWA_Wikis.md
+Counters Module            AWA_Counters.md
+Settings Module            AWA_Settings.md
