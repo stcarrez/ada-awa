@@ -36,7 +36,7 @@ with AWA.Modules;
 --  following line in your GNAT project file:
 --
 --    with "awa_counters";
---  
+--
 --  An instance of the `Counter_Module` must be declared and registered in the
 --  AWA application.  The module instance can be defined as follows:
 --
@@ -56,7 +56,7 @@ with AWA.Modules;
 --  The `counters` module defines the following configuration parameters:
 --
 --  @include-config counters.xml
---  
+--
 package AWA.Counters.Modules is
 
    --  The name under which the module is registered.
