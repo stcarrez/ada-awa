@@ -28,7 +28,7 @@ with AWA.Jobs.Services;
 --  following line in your GNAT project file:
 --
 --    with "awa_jobs";
---  
+--
 --  An instance of the `Job_Module` must be declared and registered in the
 --  AWA application.  The module instance can be defined as follows:
 --

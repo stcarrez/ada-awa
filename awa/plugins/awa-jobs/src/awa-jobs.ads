@@ -25,7 +25,7 @@
 --  periodically or uses other mechanisms to check for the job completion.
 --
 --  @include awa-jobs-modules.ads
---  
+--
 --  == Writing a job ==
 --  A new job type is created by implementing the `Execute` operation
 --  of the abstract `Job_Type` tagged record.
