@@ -227,6 +227,10 @@ setting up and building an Ada Web Application:
   * [Secure Web Applications with AWA](https://fr.slideshare.net/StephaneCarrez1/secure-web-applications-with-awa) FOSDEM 2019
   * [Protect Sensitive Data with Ada Keystore](https://fr.slideshare.net/StephaneCarrez1/protect-sensitive-data-with-ada-keystore) Ada devroom FOSDEM 2020
 
+# Articles
+
+  * [Use Ada for Your Web Development | Electronic Design](https://www.electronicdesign.com/technologies/embedded-revolution/article/21119177/use-ada-for-your-web-development)
+
 # Sites Using AWA
 
   * [Java 2 Ada](https://blog.vacs.fr/)
