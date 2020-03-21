@@ -100,6 +100,7 @@ with ADO;
 --  @include-query storage-list.xml
 --  @include-query folder-queries.xml
 --  @include-query storage-queries.xml
+--  @include-query storage-info.xml
 --
 --  == Data model ==
 --  [images/awa_storages_model.png]
