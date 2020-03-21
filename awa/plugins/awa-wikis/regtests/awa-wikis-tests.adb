@@ -21,8 +21,6 @@ with Util.Strings;
 
 with ADO;
 with Servlet.Streams;
-with ASF.Requests.Mockup;
-with ASF.Responses.Mockup;
 with ASF.Tests;
 with AWA.Tests.Helpers.Users;
 with AWA.Storages.Beans;
@@ -98,6 +96,10 @@ package body AWA.Wikis.Tests is
          Util.Tests.Assert_Equals (T, Servlet.Responses.SC_OK,
                                    Reply.Get_Status,
                                    "Invalid response for image");
+
+         T.Image_Link := To_Unbounded_String ("/wikis/images/" & Wiki
+                                              & "/" & Id (Id'First + 1 .. Id'Last)
+                                              & "/default/Ada-Lovelace.jpg");
       end;
    end Make_Wiki_Image;
 
@@ -327,6 +329,14 @@ package body AWA.Wikis.Tests is
                                 Reply,
                                 "Wiki page missing image link",
                                 ASF.Responses.SC_OK);
+
+      ASF.Tests.Do_Get (Request, Reply,
+                        To_String (T.Image_Link),
+                        "wiki-image-get-Ada-Lovelace.jpg");
+      ASF.Tests.Assert_Header (T, "Content-Type", "image/jpg", Reply);
+      Util.Tests.Assert_Equals (T, Servlet.Responses.SC_OK,
+                                Reply.Get_Status,
+                                "Invalid response for image");
 
    end Test_Page_With_Image;
 
