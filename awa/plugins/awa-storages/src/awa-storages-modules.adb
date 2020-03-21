@@ -20,7 +20,7 @@ with Util.Log.Loggers;
 with AWA.Modules.Get;
 with AWA.Modules.Beans;
 with AWA.Applications;
-with AWA.Storages.Beans.Factories;
+with AWA.Storages.Beans;
 
 package body AWA.Storages.Modules is
 
@@ -48,7 +48,7 @@ package body AWA.Storages.Modules is
 
       Register.Register (Plugin  => Plugin,
                          Name    => "AWA.Storages.Beans.Folder_Bean",
-                         Handler => AWA.Storages.Beans.Factories.Create_Folder_Bean'Access);
+                         Handler => AWA.Storages.Beans.Create_Folder_Bean'Access);
 
       Register.Register (Plugin  => Plugin,
                          Name    => "AWA.Storages.Beans.Folder_List_Bean",
