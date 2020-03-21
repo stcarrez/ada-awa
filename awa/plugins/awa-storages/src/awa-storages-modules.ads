@@ -53,7 +53,7 @@ with AWA.Storages.Servlets;
 --
 --  == Configuration ==
 --  The `storages` module defines the following configuration parameters:
---  
+--
 --  @include-config storages.xml
 package AWA.Storages.Modules is
 

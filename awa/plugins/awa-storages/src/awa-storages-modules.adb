@@ -73,6 +73,7 @@ package body AWA.Storages.Modules is
    overriding
    procedure Configure (Plugin : in out Storage_Module;
                         Props  : in ASF.Applications.Config) is
+      pragma Unreferenced (Props);
    begin
       --  Create the storage manager when everything is initialized.
       Plugin.Manager := Plugin.Create_Storage_Manager;
