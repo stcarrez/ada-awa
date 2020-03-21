@@ -52,7 +52,7 @@
       image.height
     FROM awa_wiki_space AS wiki 
     INNER JOIN awa_storage_folder AS folder ON folder.workspace_id = wiki.workspace_id
-    LEFT JOIN awa_storage AS file ON folder.id = file.folder_id AND file.name = :file_name
+    INNER JOIN awa_storage AS file ON folder.id = file.folder_id AND file.name = :file_name
     LEFT JOIN awa_image AS image ON file.id = image.storage_id
     WHERE wiki.id = :wiki_id 
        AND folder.name = :folder_name
