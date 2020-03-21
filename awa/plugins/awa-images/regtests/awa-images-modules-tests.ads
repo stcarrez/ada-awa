@@ -32,6 +32,9 @@ package AWA.Images.Modules.Tests is
    procedure Test_Create_Image (T : in out Test);
 
    --  Test the Get_Sizes operation.
-   procedure Test_Get_Sizes (T : in out TesT);
+   procedure Test_Get_Sizes (T : in out Test);
+
+   --  Test the Scale operation.
+   procedure Test_Scale (T : in out Test);
 
 end AWA.Images.Modules.Tests;
