@@ -35,6 +35,7 @@ with AWA.Workspaces.Tests;
 with AWA.Modules.Tests;
 
 with ASF.Converters.Dates;
+with ASF.Converters.Sizes;
 
 with AWA.Users.Modules;
 with AWA.Mail.Modules;
@@ -62,6 +63,8 @@ with AWA.Commands.Tests;
 
 with ADO.Drivers;
 with Servlet.Server;
+with Security.Auth;
+with Security.Auth.Fake;
 package body AWA.Testsuite is
    Users          : aliased AWA.Users.Modules.User_Module;
 
@@ -97,11 +100,19 @@ package body AWA.Testsuite is
 
    Rel_Date_Converter : aliased AWA.Converters.Dates.Relative_Date_Converter;
 
+   Size_Converter : aliased ASF.Converters.Sizes.Size_Converter;
+
    Tests : aliased Util.Tests.Test_Suite;
+
+   function OAuth_Provider_Factory (Name : in String) return Security.Auth.Manager_Access is
+   begin
+      return new Security.Auth.Fake.Manager;
+   end OAuth_Provider_Factory;
 
    function Suite return Util.Tests.Access_Test_Suite is
       Ret : constant Util.Tests.Access_Test_Suite := Tests'Access;
    begin
+      Security.Auth.Set_Default_Factory (OAuth_Provider_Factory'Access);
       AWA.Commands.Tests.Add_Tests (Ret);
       AWA.Jobs.Modules.Tests.Add_Tests (Ret);
       AWA.Jobs.Services.Tests.Add_Tests (Ret);
