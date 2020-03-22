@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  files.tests -- Unit tests for files
---  Copyright (C) 2009, 2010, 2011, 2012, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2017, 2018, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,6 +29,7 @@ with ASF.Principals;
 package body AWA.Users.Tests is
 
    use ASF.Tests;
+   use type ASF.Principals.Principal_Access;
 
    package Caller is new Util.Test_Caller (Test, "Users.Tests");
 
@@ -42,14 +43,14 @@ package body AWA.Users.Tests is
                        Test_Login_User'Access);
       Caller.Add_Test (Suite, "Test AWA.Users.Services.Lost_Password, Reset_Password",
                        Test_Reset_Password_User'Access);
+      Caller.Add_Test (Suite, "Test AWA.Users.Services.Authenticate",
+                       Test_OAuth_Login'Access);
    end Add_Tests;
 
    --  ------------------------------
    --  Test creation of user by simulating web requests.
    --  ------------------------------
    procedure Test_Create_User (T : in out Test) is
-      use type ASF.Principals.Principal_Access;
-
       Request   : ASF.Requests.Mockup.Request;
       Reply     : ASF.Responses.Mockup.Response;
       Email     : constant String := "Joe-" & Util.Tests.Get_Uuid & "@gmail.com";
@@ -100,8 +101,6 @@ package body AWA.Users.Tests is
    --  Test user authentication by simulating a web request.
    --  ------------------------------
    procedure Test_Login_User (T : in out Test) is
-      use type ASF.Principals.Principal_Access;
-
       Request   : ASF.Requests.Mockup.Request;
       Reply     : ASF.Responses.Mockup.Response;
       Principal : AWA.Tests.Helpers.Users.Test_User;
@@ -138,13 +137,35 @@ package body AWA.Users.Tests is
    end Test_Login_User;
 
    --  ------------------------------
+   --  Test OAuth access using a fake OAuth provider.
+   --  ------------------------------
+   procedure Test_OAuth_Login (T : in out Test) is
+      Request   : ASF.Requests.Mockup.Request;
+      Reply     : ASF.Responses.Mockup.Response;
+   begin
+      Do_Get (Request, Reply, "/auth/auth/google", "oauth-google.html");
+      T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
+
+      Request.Set_Parameter ("email", "oauth-user@fake.com");
+      Request.Set_Parameter ("id", "oauth-user-id-fake");
+      Request.Set_Parameter ("claimed_id", "oauth-user-claimed_id-fake");
+      Do_Get (Request, Reply, "/auth/verify?email=oauth-user@fake.com&"
+              & "id=oauth-user-id-fake&claimed_id=oauth-user-claimed-id-fake",
+              "oauth-verify.html");
+      T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
+
+      --  Check that the user is logged and we have a user principal now.
+      T.Assert (Request.Get_User_Principal /= null, "A user principal should be defined");
+      Util.Tests.Assert_Equals (T, "Oauth-user", Request.Get_User_Principal.Get_Name,
+                                "Invalid user name after OAuth authentication");
+   end Test_OAuth_Login;
+
+   --  ------------------------------
    --  Run the recovery password process for the given user and change the password.
    --  ------------------------------
    procedure Recover_Password (T : in out Test;
                                Email : in String;
                                Password : in String) is
-      use type ASF.Principals.Principal_Access;
-
       Request : ASF.Requests.Mockup.Request;
       Reply   : ASF.Responses.Mockup.Response;
    begin
