@@ -47,7 +47,7 @@
       0,
       data.data
     FROM awa_storage AS store
-    INNER JOIN awa_wiki_space AS wiki
+    INNER JOIN awa_wiki_space AS wiki ON store.workspace_id = wiki.workspace_id
     LEFT JOIN awa_acl AS acl ON acl.entity_id = wiki.workspace_id
        AND acl.entity_type = $entity_type[awa_workspace] AND acl.user_id = :user_id
        AND acl.permission = $permission[wiki-page-view]
