@@ -8,7 +8,9 @@ a verification mail is sent and the user has to follow the verification
 link defined in the mail to finish the registration process.  The user
 will authenticate using a password.
 
-A user can also use an OpenID account and be automatically registered.
+A user can also use an OAuth/OpenID account and be automatically authentified
+and registered to the application.  By using an external authentication
+server, passwords are not stored in the application.
 
 A user can have one or several permissions that allow to protect the
 application data.  User permissions are managed by the `Permissions.Module`.
@@ -33,6 +35,32 @@ Register (App    => App.Self.all'Access,
           Name   => AWA.Users.Modules.NAME,
           Module => App.User_Module'Access);
 ```
+
+## OAuth Authentication Flow
+The OAuth/OpenID authentication flow is implemented by using two servlets
+that participate in the authentication.  A first servlet will start
+the OAuth/OpenID authentication by building the request that the user
+must use to authenticate through the OAuth/OpenID authorization server.
+This servlet is implemented by the `AWA.Users.Servlets.Request_Auth_Servlet`
+type.  The servlet will respond to an HTTP `GET` request and it will
+redirect the user to the authorization server.
+
+![OAuth Authentication Flow](images/OAuthAuthenticateFlow.png)
+
+The user will be authenticated by the OAuth/OpenID authorization server
+and when s/he grants the application to access his or her account,
+a redirection is made to the second servlet.  The second servlet
+is implemented by `AWA.Users.Servlets.Verify_Auth_Servlet`.  It is used
+to validate the authentication result by checking its validity with
+the OAuth/OpenID authorization endpoint.  During this step, we can
+retrieve some minimal information that uniquely identifies the user
+such as a unique identifier that is specific to the OAuth/OpenID
+authorization server.  It is also possible to retrieve the
+user's name and email address.
+
+These two servlets are provided by the `User_Module` and they are
+registered under the `openid-auth` name for the first step and
+under the `openid-verify` name for the second step.
 
 
 ## Configuration
