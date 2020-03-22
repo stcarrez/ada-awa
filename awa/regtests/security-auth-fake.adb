@@ -72,6 +72,11 @@ package body Security.Auth.Fake is
       Claimed_Id : constant String := Request.Get_Parameter ("claimed_id");
       Identity   : constant String := Request.Get_Parameter ("id");
    begin
+      if Email'Length = 0 or Identity'Length = 0 then
+         Result.Status := Security.Auth.CANCEL;
+      else
+         Result.Status := Security.Auth.AUTHENTICATED;
+      end if;
       Result.Identity := To_Unbounded_String (Identity);
       Result.Claimed_Id := To_Unbounded_String (Claimed_Id);
       Result.Email := To_Unbounded_String (Email);
