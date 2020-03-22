@@ -26,12 +26,15 @@
 --  link defined in the mail to finish the registration process.  The user
 --  will authenticate using a password.
 --
---  A user can also use an OpenID account and be automatically registered.
+--  A user can also use an OAuth/OpenID account and be automatically authentified
+--  and registered to the application.  By using an external authentication
+--  server, passwords are not stored in the application.
 --
 --  A user can have one or several permissions that allow to protect the
 --  application data.  User permissions are managed by the `Permissions.Module`.
 --
 --  @include awa-users-modules.ads
+--  @include awa-users-servlets.ads
 --
 --  == Configuration ==
 --  The *users* module uses a set of configuration properties to configure

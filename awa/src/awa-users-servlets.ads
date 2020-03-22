@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-servlets -- OpenID verification servlet for user authentication
---  Copyright (C) 2011, 2012, 2013, 2014, 2015 Stephane Carrez
+--  Copyright (C) 2011 - 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,12 +22,38 @@ with ASF.Requests;
 with ASF.Responses;
 with ASF.Sessions;
 with Security.Auth;
+
+--  == OAuth Authentication Flow ==
+--  The OAuth/OpenID authentication flow is implemented by using two servlets
+--  that participate in the authentication.  A first servlet will start
+--  the OAuth/OpenID authentication by building the request that the user
+--  must use to authenticate through the OAuth/OpenID authorization server.
+--  This servlet is implemented by the `AWA.Users.Servlets.Request_Auth_Servlet`
+--  type.  The servlet will respond to an HTTP `GET` request and it will
+--  redirect the user to the authorization server.
+--
+--  ![OAuth Authentication Flow](images/OAuthAuthenticateFlow.png)
+--
+--  The user will be authenticated by the OAuth/OpenID authorization server
+--  and when s/he grants the application to access his or her account,
+--  a redirection is made to the second servlet.  The second servlet
+--  is implemented by `AWA.Users.Servlets.Verify_Auth_Servlet`.  It is used
+--  to validate the authentication result by checking its validity with
+--  the OAuth/OpenID authorization endpoint.  During this step, we can
+--  retrieve some minimal information that uniquely identifies the user
+--  such as a unique identifier that is specific to the OAuth/OpenID
+--  authorization server.  It is also possible to retrieve the
+--  user's name and email address.
+--
+--  These two servlets are provided by the `User_Module` and they are
+--  registered under the `openid-auth` name for the first step and
+--  under the `openid-verify` name for the second step.
 package AWA.Users.Servlets is
 
    --  ------------------------------
    --  OpenID Request Servlet
    --  ------------------------------
-   --  The <b>Request_Auth_Servlet</b> servlet implements the first steps of an OpenID
+   --  The `Request_Auth_Servlet` servlet implements the first steps of an OpenID
    --  authentication.
    type Request_Auth_Servlet is new ASF.Security.Servlets.Request_Auth_Servlet with null record;
 
@@ -44,16 +70,16 @@ package AWA.Users.Servlets is
    --  ------------------------------
    --  OpenID Verification Servlet
    --  ------------------------------
-   --  The <b>Verify_Auth_Servlet</b> verifies the authentication result and
-   --  extract authentication from the callback URL.  We override the default implementation
-   --  to provide our own user principal once the authentication succeeded.  At the same time,
-   --  if this is the first time we see the user, s/he will be registered by using the
-   --  user service.
+   --  The `Verify_Auth_Servlet` verifies the authentication result and
+   --  extract authentication from the callback URL.  We override the default
+   --  implementation to provide our own user principal once the authentication
+   --  succeeded.  At the same time, if this is the first time we see the user,
+   --  s/he will be registered by using the user service.
    type Verify_Auth_Servlet is new ASF.Security.Servlets.Verify_Auth_Servlet with private;
 
-   --  Create a principal object that correspond to the authenticated user identified
-   --  by the <b>Auth</b> information.  The principal will be attached to the session
-   --  and will be destroyed when the session is closed.
+   --  Create a principal object that correspond to the authenticated user
+   --  identified by the `Auth` information.  The principal will be attached
+   --  to the session and will be destroyed when the session is closed.
    overriding
    procedure Create_Principal (Server : in Verify_Auth_Servlet;
                                Auth   : in Security.Auth.Authentication;
