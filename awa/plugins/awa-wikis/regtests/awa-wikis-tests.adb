@@ -325,7 +325,7 @@ package body AWA.Wikis.Tests is
       ASF.Tests.Do_Get (Request, Reply, "/wikis/view/" & Wiki & "/WikiImageTest",
                         "wiki-image-test.html");
       ASF.Tests.Assert_Matches (T, "<img src=./wikis/images/[0-9]*/[0-9]*"
-                                & "/default/Ada-Lovelace.jpg. alt=.Ada Lovelace.></img>",
+                                & "/default/Ada-Lovelace.jpg.* alt=.Ada Lovelace.></img>",
                                 Reply,
                                 "Wiki page missing image link",
                                 Servlet.Responses.SC_OK);
@@ -343,9 +343,13 @@ package body AWA.Wikis.Tests is
                         "wiki-image-info.html");
       ASF.Tests.Assert_Contains (T, "<title>Image information</title>", Reply,
                                  "Wiki image information page is invalid");
-      ASF.Tests.Assert_Matches (T, "<dt>File name</dt>.*<dd>Images/Ada-Lovelace.jpg.*",
+      ASF.Tests.Assert_Matches (T, "<dt>File name</dt>",
                                 Reply,
-                                "Wiki image information invalid name",
+                                "Wiki image information invalid name (1)",
+                                Servlet.Responses.SC_OK);
+      ASF.Tests.Assert_Matches (T, "<dd>Images/Ada-Lovelace.jpg</dd>",
+                                Reply,
+                                "Wiki image information invalid name (2)",
                                 Servlet.Responses.SC_OK);
 
    end Test_Page_With_Image;
