@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  files.tests -- Unit tests for files
---  Copyright (C) 2009, 2010, 2011, 2012, 2013 Stephane Carrez
+--  awa-users-tests -- Unit tests for AWA users
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,6 +35,9 @@ package AWA.Users.Tests is
 
    --  Test the reset password by simulating web requests.
    procedure Test_Reset_Password_User (T : in out Test);
+
+   --  Test OAuth access using a fake OAuth provider.
+   procedure Test_OAuth_Login (T : in out Test);
 
    --  Run the recovery password process for the given user and change the password.
    procedure Recover_Password (T        : in out Test;
