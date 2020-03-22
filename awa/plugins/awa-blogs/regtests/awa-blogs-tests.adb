@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-tests -- Unit tests for blogs module
---  Copyright (C) 2017, 2018, 2019 Stephane Carrez
+--  Copyright (C) 2017, 2018, 2019, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -94,6 +94,14 @@ package body AWA.Blogs.Tests is
       Uuid      : constant String := Util.Tests.Get_Uuid;
    begin
       AWA.Tests.Helpers.Users.Login ("test-wiki@test.com", Request);
+      ASF.Tests.Do_Get (Request, Reply, "/blogs/admin/create-blog.html",
+                        "create-blog-get.html");
+      T.Assert (Reply.Get_Status = ASF.Responses.SC_OK,
+                "Invalid response after getting blog creation page");
+      ASF.Tests.Assert_Matches (T, "<dl id=.title.*<dt><label for=.title.*"
+                                & "<dd><input type=.text.*", Reply,
+                                "Blog post admin page is missing input field");
+
       Request.Set_Parameter ("title", "The Blog Title");
       Request.Set_Parameter ("create-blog", "1");
       Request.Set_Parameter ("create", "1");
