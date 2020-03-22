@@ -1,5 +1,5 @@
 <!-- Form to create a blog
-  -  Copyright (C) 2011, 2017, 2018 Stephane Carrez
+  -  Copyright (C) 2011, 2017, 2018, 2019, 2020 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,7 @@
 <ui:composition
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:util="http://code.google.com/p/ada-asf/util"
+        xmlns:w="http://code.google.com/p/ada-asf/widget"
         xmlns:h="http://java.sun.com/jsf/html">
 
     <div class='awa-post ui-widget ui-widget-content ui-corner-all awa-form'>
@@ -27,19 +27,16 @@
             <div class='awa-messages'>
                 <h:message styleClass='awa-error'/>
             </div>
-            <dl class="awa-required#{util:hasMessage('title') ? ' awa-error' : ''}">
-                <dt>
-                    <label for='title'>#{blogMsg.blog_admin_blog_title_label}</label>
-                    <h:message for='title' styleClass='awa-error'/>
-                </dt>
-                <dd>
-                    <h:inputText id='title' size='50' required='true' value='#{blog.name}'
-                                 validatorMessage='#{blogMsg.blog_name_invalid}'
-                                 requiredMessage='#{blogMsg.blog_name_required}'>
-                        <f:validateLength minimum='1' maximum='50'/>
-                    </h:inputText>
-                </dd>
-            </dl>
+            <w:inputText id='title'
+                         title="#{blogMsg.blog_admin_blog_title_label}"
+                         styleClass="awa-required ui-corner-all"
+                         size='50'
+                         requiredMessage='#{blogMsg.blog_name_required}'
+                         validatorMessage='#{blogMsg.blog_name_invalid}'
+                         placeholder="#{blogMsg.blog_post_title_placeholder}"
+                         value="#{blog.name}">
+                <f:validateLength minimum='1' maximum='50'/>
+            </w:inputText>
             <ul class='awa-buttons'>
                 <li>
                     <h:commandButton id='create' value='#{blogMsg.blog_admin_create_button}'
