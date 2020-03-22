@@ -25,7 +25,7 @@
             job.status AS status,
             job.create_date AS create_date,
             job.start_date AS start_date,
-            TIMEDIFF(job.finish_date, job.start_date) AS finish_date,
+            job.finish_date AS finish_date,
             job.user_id AS user_id,
             u.name AS uname
             FROM awa_job AS job
