@@ -18,7 +18,6 @@
 
 with Ada.Unchecked_Deallocation;
 
-with AWS.MIME;
 with AWS.SMTP.Client;
 
 with Util.Log.Loggers;
@@ -92,10 +91,10 @@ package body AWA.Mail.Clients.AWS_SMTP is
    begin
       if Length (Alternative) = 0 then
          AWS.Attachments.Add (Message.Attachments, "",
-                              AWS.Attachments.Value (Content));
+                              AWS.Attachments.Value (To_String (Content)));
       else
          AWS.Attachments.Add (Message.Attachments, "",
-                              AWS.Attachments.Value (Content,
+                              AWS.Attachments.Value (To_String (Content),
                                 Content_Type => Content_Type));
       end if;
    end Set_Body;
@@ -109,7 +108,7 @@ package body AWA.Mail.Clients.AWS_SMTP is
                              Content_Id   : in String;
                              Content_Type : in String) is
       Data : constant AWS.Attachments.Content
-        := AWS.Attachments.Value (Data => Content,
+        := AWS.Attachments.Value (Data => To_String (Content),
                                   Content_Id => Content_Id,
                                   Content_Type => Content_Type);
    begin
