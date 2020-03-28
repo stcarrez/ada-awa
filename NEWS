@@ -5,6 +5,7 @@ Version 2.0     -
   - Improvements of images and storage plugins
   - Update Trumbowyg editor to version 2.18.0
   - Support for commands to configure, start, stop the server
+  - New mail UI component <mail:attachment> to send attachments
 
 Version 1.1     - Jul 2018
   - New trumbowyg plugin for WYSIWYG Javascript editor
