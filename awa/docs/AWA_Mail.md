@@ -60,10 +60,10 @@ is formatted by using the event and application context when the
 `user-register` event is posted.
 
 ## Components
-The <b>AWA.Mail.Components</b> package defines several UI components that represent
-a mail message in an ASF view.  The components allow the creation, formatting and
-sending of a mail message using the same mechanism as the application presentation layer.
-Example:
+The `AWA.Mail.Components` package defines several UI components that represent
+a mail message in an ASF view.  The components allow the creation, formatting
+and sending of a mail message using the same mechanism as the application
+presentation layer.  Example:
 
 ```Ada
 <f:view xmlns="mail:http://code.google.com/p/ada-awa/mail">
@@ -73,20 +73,27 @@ Example:
     <mail:body>
         ...
     </mail:body>
+    <mail:attachment value="/images/mail-image.jpg"
+       fileName="image.jpg"
+       contentType="image/jpg"/>
   </mail:message>
 </f:view>
 ```
 
-When the view which contains these components is rendered, a mail message is built
-and initialized by rendering the inner components.  The body and other components can use
-other application UI components to render useful content.  The email is send after
-the <b>mail:message</b> has finished to render its inner children.
+When the view which contains these components is rendered, a mail message
+is built and initialized by rendering the inner components.  The body and
+other components can use other application UI components to render useful
+content.  The email is send after the `mail:message` has finished to render
+its inner children.
 
-The <b>mail:subject</b> component describes the mail subject.
+The `mail:subject` component describes the mail subject.
 
-The <b>mail:to</b> component define the mail recipient.  There can be several recepients.
+The `mail:to` component define the mail recipient.
+There can be several recepients.
 
-The <b>mail:body</b> component contains the mail body.
+The `mail:body` component contains the mail body.
+
+The `mail:attachment` component allows to include some attachment.
 
 ### Mail Recipients
 The <b>AWA.Mail.Components.Recipients</b> package defines the UI components
@@ -97,12 +104,33 @@ The mail message is retrieved by looking at the parent UI component until a
 during the render response JSF phase, that is when <tt>Encode_End</tt> are called.
 
 ### Mail Messages
-The <b>AWA.Mail.Components.Messages</b> package defines the UI components
+The `AWA.Mail.Components.Messages` package defines the UI components
 to represent the email message with its recipients, subject and body.
 
 The mail message is retrieved by looking at the parent UI component until a
-<tt>UIMailMessage</tt> component is found.  The mail message recipients are initialized
-during the render response JSF phase, that is when <tt>Encode_End</tt> are called.
+`UIMailMessage` component is found.  The mail message recipients are initialized
+during the render response JSF phase, that is when `Encode_End` are called.
+
+The `<mail:body>` component holds the message body.  This component can
+include a facelet labeled `alternative` in which case it will be used
+to build the `text/plain` mail message.  The default content type for
+`<mail:body>` is `text/html` but this can be changed by using the
+`type` attribute.
+
+```Ada
+<mail:body type='text/html'>
+   <facet name='alternative'>
+      The text/plain mail message.
+   </facet>
+   The text/html mail message.
+</mail:body>
+```
+
+### Mail Attachments
+The `AWA.Mail.Components.Attachments` package defines the UI components
+to represent a mail attachment.  The mail attachment can be an external
+file or may be provided by an Ada bean object.
+
 
 
 ## Ada Beans
