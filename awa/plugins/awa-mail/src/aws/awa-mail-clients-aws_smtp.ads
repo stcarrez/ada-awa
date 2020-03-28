@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail-clients-aws_smtp -- Mail client implementation on top of AWS SMTP client
---  Copyright (C) 2012, 2016 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +23,7 @@ with Util.Properties;
 
 with AWS.SMTP;
 with AWS.SMTP.Authentication.Plain;
+private with AWS.Attachments;
 
 --  The <b>AWA.Mail.Clients.AWS_SMTP</b> package provides an implementation of the
 --  mail client interfaces on top of AWS SMTP client API.
@@ -58,8 +59,17 @@ package AWA.Mail.Clients.AWS_SMTP is
 
    --  Set the body of the message.
    overriding
-   procedure Set_Body (Message : in out AWS_Mail_Message;
-                       Content : in String);
+   procedure Set_Body (Message      : in out AWS_Mail_Message;
+                       Content      : in Unbounded_String;
+                       Alternative  : in Unbounded_String;
+                       Content_Type : in String);
+
+   --  Add an attachment with the given content.
+   overriding
+   procedure Add_Attachment (Message      : in out AWS_Mail_Message;
+                             Content      : in Unbounded_String;
+                             Content_Id   : in String;
+                             Content_Type : in String);
 
    --  Send the email message.
    overriding
@@ -89,11 +99,12 @@ private
    type Recipients_Access is access all AWS.SMTP.Recipients;
 
    type AWS_Mail_Message is new Ada.Finalization.Limited_Controlled and Mail_Message with record
-      Manager : AWS_Mail_Manager_Access;
-      From    : AWS.SMTP.E_Mail_Data;
-      Subject : Ada.Strings.Unbounded.Unbounded_String;
-      Content : Ada.Strings.Unbounded.Unbounded_String;
-      To      : Recipients_Access := null;
+      Manager     : AWS_Mail_Manager_Access;
+      From        : AWS.SMTP.E_Mail_Data;
+      Subject     : Ada.Strings.Unbounded.Unbounded_String;
+      --  Content     : Ada.Strings.Unbounded.Unbounded_String;
+      To          : Recipients_Access := null;
+      Attachments : AWS.Attachments.List;
    end record;
 
    type AWS_Mail_Manager is new Mail_Manager with record
