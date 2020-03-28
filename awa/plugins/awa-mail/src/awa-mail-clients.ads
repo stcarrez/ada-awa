@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail-client -- Mail client interface
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-
+with Ada.Strings.Unbounded;
 with Util.Properties;
 
 --  The <b>AWA.Mail.Clients</b> package defines a mail client API used by the mail module.
@@ -23,6 +23,8 @@ with Util.Properties;
 --  based on an external application such as <tt>sendmail</tt> and other implementation that
 --  use an SMTP connection.
 package AWA.Mail.Clients is
+
+   use Ada.Strings.Unbounded;
 
    type Recipient_Type is (TO, CC, BCC);
 
@@ -50,8 +52,16 @@ package AWA.Mail.Clients is
                           Subject : in String) is abstract;
 
    --  Set the body of the message.
-   procedure Set_Body (Message : in out Mail_Message;
-                       Content : in String) is abstract;
+   procedure Set_Body (Message      : in out Mail_Message;
+                       Content      : in Unbounded_String;
+                       Alternative  : in Unbounded_String;
+                       Content_Type : in String := "") is abstract;
+
+   --  Add an attachment with the given content.
+   procedure Add_Attachment (Message      : in out Mail_Message;
+                             Content      : in Unbounded_String;
+                             Content_Id   : in String;
+                             Content_Type : in String) is abstract;
 
    --  Send the email message.
    procedure Send (Message : in out Mail_Message) is abstract;
