@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail-clients-files -- Mail client dump/file implementation
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,8 +22,6 @@ with Util.Files;
 with Util.Strings;
 with Util.Log.Loggers;
 package body AWA.Mail.Clients.Files is
-
-   use Ada.Strings.Unbounded;
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Mail.Clients.Files");
 
@@ -90,11 +88,50 @@ package body AWA.Mail.Clients.Files is
    --  Set the body of the message.
    --  ------------------------------
    overriding
-   procedure Set_Body (Message : in out File_Mail_Message;
-                       Content : in String) is
+   procedure Set_Body (Message      : in out File_Mail_Message;
+                       Content      : in Unbounded_String;
+                       Alternative  : in Unbounded_String;
+                       Content_Type : in String) is
    begin
-      Message.Message := To_Unbounded_String (Content);
+      if Length (Alternative) > 0 then
+         Append (Message.Message, "Content-Type: multipart/alternative; boundary=AAA"
+                 & ASCII.LF & ASCII.LF);
+         Append (Message.Message, "--AAA" & ASCII.LF);
+      end if;
+      Append (Message.Message, "Content-Type: ");
+      Append (Message.Message, Content_Type);
+      Append (Message.Message, ASCII.LF);
+      Append (Message.Message, Content);
+      if Length (Alternative) > 0 then
+         Append (Message.Message, ASCII.LF & "--AAA" & ASCII.LF);
+         Append (Message.Message, "Content-Type: text/plain; charset=utf-8" & ASCII.LF);
+         Append (Message.Message, Alternative);
+         Append (Message.Message, ASCII.LF & "--AAA" & ASCII.LF);
+      end if;
    end Set_Body;
+
+   --  ------------------------------
+   --  Add an attachment with the given content.
+   --  ------------------------------
+   overriding
+   procedure Add_Attachment (Message      : in out File_Mail_Message;
+                             Content      : in Unbounded_String;
+                             Content_Id   : in String;
+                             Content_Type : in String) is
+   begin
+      Append (Message.Message, "Content-Type: ");
+      Append (Message.Message, Content_Type);
+      Append (Message.Message, "; boundary=BBB");
+      Append (Message.Message, ASCII.LF);
+      if Content_Id'Length > 0 then
+         Append (Message.Message, "Content-Id: ");
+         Append (Message.Message, Content_Id);
+         Append (Message.Message, ASCII.LF);
+      end if;
+      Append (Message.Message, "==BBB" & ASCII.LF);
+      Append (Message.Message, Content);
+      Append (Message.Message, "==BBB" & ASCII.LF);
+   end Add_Attachment;
 
    --  ------------------------------
    --  Send the email message.
@@ -128,6 +165,7 @@ package body AWA.Mail.Clients.Files is
          Ada.Text_IO.Put (Output, "Subject: ");
          Ada.Text_IO.Put_Line (Output, To_String (Message.Subject));
          Ada.Text_IO.Put_Line (Output, To_String (Message.Message));
+         Ada.Text_IO.Put_Line (Output, To_String (Message.Attachments));
          Ada.Text_IO.Close (Output);
 
       exception
