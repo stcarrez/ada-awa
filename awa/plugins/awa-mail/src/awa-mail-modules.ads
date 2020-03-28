@@ -72,6 +72,7 @@ with AWA.Mail.Clients;
 --  @include awa-mail-components.ads
 --  @include awa-mail-components-recipients.ads
 --  @include awa-mail-components-messages.ads
+--  @include awa-mail-components-attachments.ads
 --
 --  == Ada Beans ==
 --  @include-bean mail.xml
