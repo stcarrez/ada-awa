@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail-clients-files -- Mail client dump/file implementation
---  Copyright (C) 2012, 2014 Stephane Carrez
+--  Copyright (C) 2012, 2014, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -55,8 +55,17 @@ package AWA.Mail.Clients.Files is
 
    --  Set the body of the message.
    overriding
-   procedure Set_Body (Message : in out File_Mail_Message;
-                       Content : in String);
+   procedure Set_Body (Message      : in out File_Mail_Message;
+                       Content      : in Unbounded_String;
+                       Alternative  : in Unbounded_String;
+                       Content_Type : in String);
+
+   --  Add an attachment with the given content.
+   overriding
+   procedure Add_Attachment (Message      : in out File_Mail_Message;
+                             Content      : in Unbounded_String;
+                             Content_Id   : in String;
+                             Content_Type : in String);
 
    --  Send the email message.
    overriding
@@ -87,6 +96,8 @@ private
       Bcc     : Ada.Strings.Unbounded.Unbounded_String;
       Subject : Ada.Strings.Unbounded.Unbounded_String;
       Message : Ada.Strings.Unbounded.Unbounded_String;
+      Html    : Ada.Strings.Unbounded.Unbounded_String;
+      Attachments : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
    type File_Mail_Manager is limited new Mail_Manager with record
