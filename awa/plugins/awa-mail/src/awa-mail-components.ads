@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail-components -- Mail UI Components
---  Copyright (C) 2012, 2017 Stephane Carrez
+--  Copyright (C) 2012, 2017, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,10 +21,10 @@ with ASF.Components.Core;
 with AWA.Mail.Clients;
 
 --  == Components ==
---  The <b>AWA.Mail.Components</b> package defines several UI components that represent
---  a mail message in an ASF view.  The components allow the creation, formatting and
---  sending of a mail message using the same mechanism as the application presentation layer.
---  Example:
+--  The `AWA.Mail.Components` package defines several UI components that represent
+--  a mail message in an ASF view.  The components allow the creation, formatting
+--  and sending of a mail message using the same mechanism as the application
+--  presentation layer.  Example:
 --
 --    <f:view xmlns="mail:http://code.google.com/p/ada-awa/mail">
 --      <mail:message>
@@ -33,19 +33,26 @@ with AWA.Mail.Clients;
 --        <mail:body>
 --            ...
 --        </mail:body>
+--        <mail:attachment value="/images/mail-image.jpg"
+--           fileName="image.jpg"
+--           contentType="image/jpg"/>
 --      </mail:message>
 --    </f:view>
 --
---  When the view which contains these components is rendered, a mail message is built
---  and initialized by rendering the inner components.  The body and other components can use
---  other application UI components to render useful content.  The email is send after
---  the <b>mail:message</b> has finished to render its inner children.
+--  When the view which contains these components is rendered, a mail message
+--  is built and initialized by rendering the inner components.  The body and
+--  other components can use other application UI components to render useful
+--  content.  The email is send after the `mail:message` has finished to render
+--  its inner children.
 --
---  The <b>mail:subject</b> component describes the mail subject.
+--  The `mail:subject` component describes the mail subject.
 --
---  The <b>mail:to</b> component define the mail recipient.  There can be several recepients.
+--  The `mail:to` component define the mail recipient.
+--  There can be several recepients.
 --
---  The <b>mail:body</b> component contains the mail body.
+--  The `mail:body` component contains the mail body.
+--
+--  The `mail:attachment` component allows to include some attachment.
 package AWA.Mail.Components is
 
    type UIMailComponent is new ASF.Components.Core.UIComponentBase with private;
