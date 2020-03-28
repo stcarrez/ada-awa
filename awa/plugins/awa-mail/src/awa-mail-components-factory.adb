@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail-components-factory -- Mail UI Component Factory
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +21,7 @@ with ASF.Components.Base;
 with AWA.Mail.Modules;
 with AWA.Mail.Components.Messages;
 with AWA.Mail.Components.Recipients;
+with AWA.Mail.Components.Attachments;
 
 package body AWA.Mail.Components.Factory is
 
@@ -34,6 +35,7 @@ package body AWA.Mail.Components.Factory is
    function Create_Message return UIComponent_Access;
    function Create_To return UIComponent_Access;
    function Create_Subject return UIComponent_Access;
+   function Create_Attachment return UIComponent_Access;
 
    URI                : aliased constant String := "http://code.google.com/p/ada-awa/mail";
    BCC_TAG            : aliased constant String := "bcc";
@@ -43,6 +45,7 @@ package body AWA.Mail.Components.Factory is
    MESSAGE_TAG        : aliased constant String := "message";
    SUBJECT_TAG        : aliased constant String := "subject";
    TO_TAG             : aliased constant String := "to";
+   ATTACHMENT_TAG     : aliased constant String := "attachment";
 
    --  ------------------------------
    --  Create an UIMailRecipient component
@@ -112,26 +115,37 @@ package body AWA.Mail.Components.Factory is
       return new Recipients.UIMailRecipient;
    end Create_To;
 
+   --  ------------------------------
+   --  Create an UIMailAttachment component
+   --  ------------------------------
+   function Create_Attachment return UIComponent_Access is
+   begin
+      return new Attachments.UIMailAttachment;
+   end Create_Attachment;
+
    Bindings : aliased constant ASF.Factory.Binding_Array
-     := (1 => (Name      => BCC_TAG'Access,
+     := (1 => (Name      => ATTACHMENT_TAG'Access,
+               Component => Create_Attachment'Access,
+               Tag       => Create_Component_Node'Access),
+         2 => (Name      => BCC_TAG'Access,
                Component => Create_Bcc'Access,
                Tag       => Create_Component_Node'Access),
-         2 => (Name      => BODY_TAG'Access,
+         3 => (Name      => BODY_TAG'Access,
                Component => Create_Body'Access,
                Tag       => Create_Component_Node'Access),
-         3 => (Name      => CC_TAG'Access,
+         4 => (Name      => CC_TAG'Access,
                Component => Create_Cc'Access,
                Tag       => Create_Component_Node'Access),
-         4 => (Name      => FROM_TAG'Access,
+         5 => (Name      => FROM_TAG'Access,
                Component => Create_From'Access,
                Tag       => Create_Component_Node'Access),
-         5 => (Name      => MESSAGE_TAG'Access,
+         6 => (Name      => MESSAGE_TAG'Access,
                Component => Create_Message'Access,
                Tag       => Create_Component_Node'Access),
-         6 => (Name      => SUBJECT_TAG'Access,
+         7 => (Name      => SUBJECT_TAG'Access,
                Component => Create_Subject'Access,
                Tag       => Create_Component_Node'Access),
-         7 => (Name      => TO_TAG'Access,
+         8 => (Name      => TO_TAG'Access,
                Component => Create_To'Access,
                Tag       => Create_Component_Node'Access)
         );
