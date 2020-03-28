@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail-components-recipients -- Mail UI Recipients
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,13 +18,28 @@
 with ASF.Contexts.Faces;
 
 --  === Mail Messages ===
---  The <b>AWA.Mail.Components.Messages</b> package defines the UI components
+--  The `AWA.Mail.Components.Messages` package defines the UI components
 --  to represent the email message with its recipients, subject and body.
 --
 --  The mail message is retrieved by looking at the parent UI component until a
---  <tt>UIMailMessage</tt> component is found.  The mail message recipients are initialized
---  during the render response JSF phase, that is when <tt>Encode_End</tt> are called.
+--  `UIMailMessage` component is found.  The mail message recipients are initialized
+--  during the render response JSF phase, that is when `Encode_End` are called.
+--
+--  The `<mail:body>` component holds the message body.  This component can
+--  include a facelet labeled `alternative` in which case it will be used
+--  to build the `text/plain` mail message.  The default content type for
+--  `<mail:body>` is `text/html` but this can be changed by using the
+--  `type` attribute.
+--
+--    <mail:body type='text/html'>
+--       <facet name='alternative'>
+--          The text/plain mail message.
+--       </facet>
+--       The text/html mail message.
+--    </mail:body>
 package AWA.Mail.Components.Messages is
+
+   ALTERNATIVE_NAME : constant String := "alternative";
 
    --  ------------------------------
    --  The mail recipient
