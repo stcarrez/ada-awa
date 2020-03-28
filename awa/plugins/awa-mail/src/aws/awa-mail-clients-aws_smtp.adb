@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail-clients-aws_smtp -- Mail client implementation on top of AWS SMTP client
---  Copyright (C) 2012, 2016, 2017 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2017, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,13 +18,12 @@
 
 with Ada.Unchecked_Deallocation;
 
+with AWS.MIME;
 with AWS.SMTP.Client;
 
 with Util.Log.Loggers;
 
 package body AWA.Mail.Clients.AWS_SMTP is
-
-   use Ada.Strings.Unbounded;
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Mail.Clients.AWS_SMTP");
 
@@ -86,11 +85,38 @@ package body AWA.Mail.Clients.AWS_SMTP is
    --  Set the body of the message.
    --  ------------------------------
    overriding
-   procedure Set_Body (Message : in out AWS_Mail_Message;
-                       Content : in String) is
+   procedure Set_Body (Message      : in out AWS_Mail_Message;
+                       Content      : in Unbounded_String;
+                       Alternative  : in Unbounded_String;
+                       Content_Type : in String) is
    begin
-      Message.Content := To_Unbounded_String (Content);
+      if Length (Alternative) = 0 then
+         AWS.Attachments.Add (Message.Attachments, "",
+                              AWS.Attachments.Value (Content));
+      else
+         AWS.Attachments.Add (Message.Attachments, "",
+                              AWS.Attachments.Value (Content,
+                                Content_Type => Content_Type));
+      end if;
    end Set_Body;
+
+   --  ------------------------------
+   --  Add an attachment with the given content.
+   --  ------------------------------
+   overriding
+   procedure Add_Attachment (Message      : in out AWS_Mail_Message;
+                             Content      : in Unbounded_String;
+                             Content_Id   : in String;
+                             Content_Type : in String) is
+      Data : constant AWS.Attachments.Content
+        := AWS.Attachments.Value (Data => Content,
+                                  Content_Id => Content_Id,
+                                  Content_Type => Content_Type);
+   begin
+      AWS.Attachments.Add (Attachments => Message.Attachments,
+                           Name => Content_Id,
+                           Data => Data);
+   end Add_Attachment;
 
    --  ------------------------------
    --  Get a printable representation of the email recipients.
@@ -109,7 +135,7 @@ package body AWA.Mail.Clients.AWS_SMTP is
    --  ------------------------------
    overriding
    procedure Send (Message : in out AWS_Mail_Message) is
-      Result  : AWS.SMTP.Status;
+      Result   : AWS.SMTP.Status;
    begin
       if Message.To = null then
          return;
@@ -118,11 +144,12 @@ package body AWA.Mail.Clients.AWS_SMTP is
       if Message.Manager.Enable then
          Log.Info ("Send email from {0} to {1}",
                    AWS.SMTP.Image (Message.From), Image (Message.To.all));
+
          AWS.SMTP.Client.Send (Server  => Message.Manager.Server,
                                From    => Message.From,
                                To      => Message.To.all,
                                Subject => To_String (Message.Subject),
-                               Message => To_String (Message.Content),
+                               Attachments => Message.Attachments,
                                Status  => Result);
          if not AWS.SMTP.Is_Ok (Result) then
             Log.Error ("Cannot send email: {0}",
