@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail-clients-tests -- Unit tests for Mail clients
---  Copyright (C) 2012, 2013 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -65,11 +65,13 @@ package body AWA.Mail.Clients.Tests is
 
       procedure Send is
          Msg : AWA.Mail.Clients.Mail_Message_Access := M.Create_Message;
+         C   : Ada.Strings.Unbounded.Unbounded_String;
       begin
+         Append (C, "Le palais doit etre debarasse des fantaisies humaines.");
          Msg.Set_From (Name    => "Iorek Byrnison", Address => "Iorek.Byrnison@svalbard.com");
          Msg.Add_Recipient (Kind => TO, Name => "Tous les ours", Address => "all@svalbard.com");
          Msg.Set_Subject (Subject => "Decret");
-         Msg.Set_Body (Content => "Le palais doit etre debarasse des fantaisies humaines.");
+         Msg.Set_Body (Content => C, Alternative => C);
          Msg.Send;
          Free (Msg);
       end Send;
