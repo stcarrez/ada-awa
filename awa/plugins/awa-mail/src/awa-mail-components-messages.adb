@@ -16,9 +16,15 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Ada.Unchecked_Deallocation;
+with Ada.Strings.Unbounded;
 
+with Util.Beans.Objects;
+with ASF.Components.Base;
 with AWA.Mail.Clients;
 package body AWA.Mail.Components.Messages is
+
+   use Ada.Strings.Unbounded;
+   use type ASF.Components.Base.UIComponent_Access;
 
    --  ------------------------------
    --  Set the mail message instance.
@@ -87,15 +93,35 @@ package body AWA.Mail.Components.Messages is
    overriding
    procedure Encode_Children (UI      : in UIMailBody;
                               Context : in out ASF.Contexts.Faces.Faces_Context'Class) is
-      procedure Process (Content : in String);
+      procedure Process (Content : in Unbounded_String);
+      procedure Process_Alternative (Content : in Unbounded_String);
 
-      procedure Process (Content : in String) is
-         Msg : constant AWA.Mail.Clients.Mail_Message_Access := UI.Get_Message;
+      Body_Type           : Util.Beans.Objects.Object;
+      Alternative_Content : Unbounded_String;
+
+      procedure Process_Alternative (Content : in Unbounded_String) is
       begin
-         Msg.Set_Body (Content);
+         Alternative_Content := Content;
+      end Process_Alternative;
+
+      procedure Process (Content : in Unbounded_String) is
+         Msg : constant AWA.Mail.Clients.Mail_Message_Access := UI.Get_Message;
+         Typ : constant String := Util.Beans.Objects.To_String (Body_Type);
+      begin
+         if not Util.Beans.Objects.Is_Empty (Body_Type) then
+            Msg.Set_Body (Content, Alternative_Content, Typ);
+         else
+            Msg.Set_Body (Content, Alternative_Content);
+         end if;
       end Process;
 
+      Alternative_Facet : ASF.Components.Base.UIComponent_Access;
    begin
+      Body_Type := UI.Get_Attribute (Name => "type", Context => Context);
+      Alternative_Facet := UI.Get_Facet (ALTERNATIVE_NAME);
+      if Alternative_Facet /= null then
+         Alternative_Facet.Wrap_Encode_Children (Context, Process_Alternative'Access);
+      end if;
       UI.Wrap_Encode_Children (Context, Process'Access);
    end Encode_Children;
 
