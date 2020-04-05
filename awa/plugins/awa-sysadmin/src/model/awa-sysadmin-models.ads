@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2019 Stephane Carrez
+--  Copyright (C) 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +28,6 @@ with ADO.SQL;
 with ADO.Schemas;
 with ADO.Queries;
 with ADO.Queries.Loaders;
-with Ada.Calendar;
 with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
@@ -40,69 +39,14 @@ package AWA.Sysadmin.Models is
    pragma Style_Checks ("-mr");
 
 
-   --  --------------------
-   --    The information about a wiki page.
-   --  --------------------
-   type User_Info is
-     new Util.Beans.Basic.Bean with  record
-
-      --  the user page identifier.
-      Id : ADO.Identifier;
-
-      --  the wiki page name.
-      Name : Ada.Strings.Unbounded.Unbounded_String;
-
-      --  the wiki page title.
-      Title : Ada.Strings.Unbounded.Unbounded_String;
-
-      --  whether the wiki is public.
-      Is_Public : Boolean;
-
-      --  the last version.
-      Last_Version : Integer;
-
-      --  the read count.
-      Read_Count : Integer;
-
-      --  the wiki creation date.
-      Create_Date : Ada.Calendar.Time;
-
-      --  the wiki page author.
-      Author : Ada.Strings.Unbounded.Unbounded_String;
-   end record;
-
-   --  Get the bean attribute identified by the name.
-   overriding
-   function Get_Value (From : in User_Info;
-                       Name : in String) return Util.Beans.Objects.Object;
-
-   --  Set the bean attribute identified by the name.
-   overriding
-   procedure Set_Value (Item  : in out User_Info;
-                        Name  : in String;
-                        Value : in Util.Beans.Objects.Object);
-
-
-   package User_Info_Beans is
-      new Util.Beans.Basic.Lists (Element_Type => User_Info);
-   package User_Info_Vectors renames User_Info_Beans.Vectors;
-   subtype User_Info_List_Bean is User_Info_Beans.List_Bean;
-
-   type User_Info_List_Bean_Access is access all User_Info_List_Bean;
-
-   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
-   procedure List (Object  : in out User_Info_List_Bean'Class;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Context : in out ADO.Queries.Context'Class);
-
-   subtype User_Info_Vector is User_Info_Vectors.Vector;
-
-   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
-   procedure List (Object  : in out User_Info_Vector;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Context : in out ADO.Queries.Context'Class);
 
    Query_Sysadmin_User_List : constant ADO.Queries.Query_Definition_Access;
+
+
+   Query_Sysadmin_Job_List : constant ADO.Queries.Query_Definition_Access;
+
+
+   Query_Sysadmin_Session_List : constant ADO.Queries.Query_Definition_Access;
 
 
    --  --------------------
@@ -139,11 +83,31 @@ private
 
    package File_1 is
       new ADO.Queries.Loaders.File (Path => "sysadmin-users.xml",
-                                    Sha1 => "54186E969C872FD5295A3FA31BA701F514B38284");
+                                    Sha1 => "9B2B599473F75F92CB5AB5045675E4CCEF926543");
 
-   package Def_Userinfo_Sysadmin_User_List is
+   package Def_Sysadmin_User_List is
       new ADO.Queries.Loaders.Query (Name => "sysadmin-user-list",
                                      File => File_1.File'Access);
    Query_Sysadmin_User_List : constant ADO.Queries.Query_Definition_Access
-   := Def_Userinfo_Sysadmin_User_List.Query'Access;
+   := Def_Sysadmin_User_List.Query'Access;
+
+   package File_2 is
+      new ADO.Queries.Loaders.File (Path => "sysadmin-jobs.xml",
+                                    Sha1 => "9B2B599473F75F92CB5AB5045675E4CCEF926543");
+
+   package Def_Sysadmin_Job_List is
+      new ADO.Queries.Loaders.Query (Name => "sysadmin-job-list",
+                                     File => File_2.File'Access);
+   Query_Sysadmin_Job_List : constant ADO.Queries.Query_Definition_Access
+   := Def_Sysadmin_Job_List.Query'Access;
+
+   package File_3 is
+      new ADO.Queries.Loaders.File (Path => "sysadmin-sessions.xml",
+                                    Sha1 => "9B2B599473F75F92CB5AB5045675E4CCEF926543");
+
+   package Def_Sysadmin_Session_List is
+      new ADO.Queries.Loaders.Query (Name => "sysadmin-session-list",
+                                     File => File_3.File'Access);
+   Query_Sysadmin_Session_List : constant ADO.Queries.Query_Definition_Access
+   := Def_Sysadmin_Session_List.Query'Access;
 end AWA.Sysadmin.Models;

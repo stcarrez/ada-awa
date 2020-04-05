@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2019 Stephane Carrez
+--  Copyright (C) 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Ada.Unchecked_Deallocation;
-with Util.Beans.Objects.Time;
 with ASF.Events.Faces.Actions;
 package body AWA.Sysadmin.Models is
 
@@ -29,107 +28,6 @@ package body AWA.Sysadmin.Models is
    use type ADO.Objects.Object_Ref;
 
    pragma Warnings (Off, "formal parameter * is not referenced");
-
-
-
-   --  ------------------------------
-   --  Get the bean attribute identified by the name.
-   --  ------------------------------
-   overriding
-   function Get_Value (From : in User_Info;
-                       Name : in String) return Util.Beans.Objects.Object is
-   begin
-      if Name = "id" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
-      elsif Name = "name" then
-         return Util.Beans.Objects.To_Object (From.Name);
-      elsif Name = "title" then
-         return Util.Beans.Objects.To_Object (From.Title);
-      elsif Name = "is_public" then
-         return Util.Beans.Objects.To_Object (From.Is_Public);
-      elsif Name = "last_version" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Last_Version));
-      elsif Name = "read_count" then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Read_Count));
-      elsif Name = "create_date" then
-         return Util.Beans.Objects.Time.To_Object (From.Create_Date);
-      elsif Name = "author" then
-         return Util.Beans.Objects.To_Object (From.Author);
-      end if;
-      return Util.Beans.Objects.Null_Object;
-   end Get_Value;
-
-
-   --  ------------------------------
-   --  Set the value identified by the name
-   --  ------------------------------
-   overriding
-   procedure Set_Value (Item  : in out User_Info;
-                        Name  : in String;
-                        Value : in Util.Beans.Objects.Object) is
-   begin
-      if Name = "id" then
-         Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
-      elsif Name = "name" then
-         Item.Name := Util.Beans.Objects.To_Unbounded_String (Value);
-      elsif Name = "title" then
-         Item.Title := Util.Beans.Objects.To_Unbounded_String (Value);
-      elsif Name = "is_public" then
-         Item.Is_Public := Util.Beans.Objects.To_Boolean (Value);
-      elsif Name = "last_version" then
-         Item.Last_Version := Util.Beans.Objects.To_Integer (Value);
-      elsif Name = "read_count" then
-         Item.Read_Count := Util.Beans.Objects.To_Integer (Value);
-      elsif Name = "create_date" then
-         Item.Create_Date := Util.Beans.Objects.Time.To_Time (Value);
-      elsif Name = "author" then
-         Item.Author := Util.Beans.Objects.To_Unbounded_String (Value);
-      end if;
-   end Set_Value;
-
-
-   --  --------------------
-   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
-   --  --------------------
-   procedure List (Object  : in out User_Info_List_Bean'Class;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Context : in out ADO.Queries.Context'Class) is
-   begin
-      List (Object.List, Session, Context);
-   end List;
-
-   --  --------------------
-   --  The information about a wiki page.
-   --  --------------------
-   procedure List (Object  : in out User_Info_Vector;
-                   Session : in out ADO.Sessions.Session'Class;
-                   Context : in out ADO.Queries.Context'Class) is
-      procedure Read (Into : in out User_Info);
-
-      Stmt : ADO.Statements.Query_Statement
-          := Session.Create_Statement (Context);
-      Pos  : Positive := 1;
-      procedure Read (Into : in out User_Info) is
-      begin
-         Into.Id := Stmt.Get_Identifier (0);
-         Into.Name := Stmt.Get_Unbounded_String (1);
-         Into.Title := Stmt.Get_Unbounded_String (2);
-         Into.Is_Public := Stmt.Get_Boolean (3);
-         Into.Last_Version := Stmt.Get_Integer (4);
-         Into.Read_Count := Stmt.Get_Integer (5);
-         Into.Create_Date := Stmt.Get_Time (6);
-         Into.Author := Stmt.Get_Unbounded_String (7);
-      end Read;
-   begin
-      Stmt.Execute;
-      User_Info_Vectors.Clear (Object);
-      while Stmt.Has_Elements loop
-         Object.Insert_Space (Before => Pos);
-         Object.Update_Element (Index => Pos, Process => Read'Access);
-         Pos := Pos + 1;
-         Stmt.Next;
-      end loop;
-   end List;
 
 
    procedure Op_Authenticate (Bean    : in out Authenticate_Bean;
