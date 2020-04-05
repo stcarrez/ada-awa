@@ -19,6 +19,7 @@ with Ada.Command_Line;
 with Ada.Directories;
 with Ada.Strings.Unbounded;
 
+with Util.Strings;
 with Util.Properties;
 with Util.Beans.Objects;
 with Util.Files;
@@ -155,8 +156,31 @@ package body AWA.Applications.Configs is
    procedure Iterate (Self    : in Wallet_Manager;
                       Process : access procedure (Name : in String;
                                                   Item : in Util.Beans.Objects.Object)) is
+      procedure Wallet_Filter (Name : in String;
+                               Item : in Util.Beans.Objects.Object);
+      procedure Property_Filter (Name : in String;
+                               Item : in Util.Beans.Objects.Object);
+
+      procedure Wallet_Filter (Name : in String;
+                               Item : in Util.Beans.Objects.Object) is
+      begin
+         if Util.Strings.Starts_With (Name, Self.Prefix (1 .. Self.Length)) then
+            Process (Name (Name'First + Self.Length .. Name'Last), Item);
+         end if;
+      end Wallet_Filter;
+
+      procedure Property_Filter (Name : in String;
+                               Item : in Util.Beans.Objects.Object) is
+         Prefixed_Name : constant String := Self.Prefix (1 .. Self.Length) & Name;
+      begin
+         if not Self.Wallet.Exists (Prefixed_Name) then
+            Process (Name, Item);
+         end if;
+      end Property_Filter;
+                                 
    begin
-      Self.Props.Iterate (Process);
+      Self.Props.Iterate (Property_Filter'Access);
+      Self.Wallet.Iterate (Wallet_Filter'Access);
    end Iterate;
 
    --  ------------------------------
