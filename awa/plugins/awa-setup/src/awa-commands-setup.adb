@@ -16,7 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with GNAT.Command_Line;
 with AWA.Applications;
 with AWA.Setup.Applications;
 with Servlet.Core;
@@ -32,6 +31,8 @@ package body AWA.Commands.Setup is
                       Name      : in String;
                       Args      : in Argument_List'Class;
                       Context   : in out Context_Type) is
+      pragma Unreferenced (Name);
+
       procedure Find_Application (Name : in String);
       procedure Enable_Application (URI : in String;
                                     App : in Servlet.Core.Servlet_Registry_Access);
