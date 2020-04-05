@@ -49,5 +49,6 @@ awa/plugins/awa-wikis/awa-wikis.properties
 awa/plugins/awa-wikis/wikis.properties
 awa/plugins/awa-workspaces/awa-workspaces.properties
 awa/plugins/awa-mail/awa_mail.gpr
-awa/plugsin/awa-sysadmin/awa_sysadmin.gpr
+awa/plugins/awa-sysadmin/awa-sysadmin.properties
+awa/plugins/awa-sysadmin/awa_sysadmin.gpr
 awa/plugins/awa-*/model.yaml
