@@ -39,6 +39,9 @@ package AWA.Commands.Tests is
    --  Test the list -j command.
    procedure Test_List_Jobs (T : in out Test);
 
+   --  Test the command with a secure keystore configuration.
+   procedure Test_Secure_Configuration (T : in out Test);
+
    procedure Execute (T       : in out Test;
                       Command : in String;
                       Input   : in String;
