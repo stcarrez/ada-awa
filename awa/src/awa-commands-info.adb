@@ -133,7 +133,6 @@ package body AWA.Commands.Info is
       Command.Print (Application, "app_search_dirs", ".", Context);
       Command.Print (Application, "app.modules.dir", "", Context);
       Command.Print (Application, "app_url_base", "", Context);
-      Command.Print (Application, "awa_url_base", "", Context);
       Command.Print (Application, "awa_url_host", "", Context);
       Command.Print (Application, "awa_url_port", "", Context);
       Command.Print (Application, "awa_url_scheme", "", Context);
@@ -153,7 +152,7 @@ package body AWA.Commands.Info is
       Command.Print (Application, "openid.callback_url", "", Context);
       Command.Print (Application, "openid.success_url", "", Context);
       Command.Print (Application, "auth.url.orange", "", Context);
-      Command.Print (Application, "auth.provider.oranger", "", Context);
+      Command.Print (Application, "auth.provider.orange", "", Context);
       Command.Print (Application, "auth.url.yahoo", "", Context);
       Command.Print (Application, "auth.provider.yahoo", "", Context);
       Command.Print (Application, "auth.url.google", "", Context);
