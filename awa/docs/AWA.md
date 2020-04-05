@@ -62,7 +62,7 @@ The following global configuration parameter are defined:
 | |http://localhost:8080|
 |view.ext|Defines the extension used for [Ada Server Faces](https://github.com/stcarrez/ada-asf) presentation pages.|
 | |.html|
-|web.dir|Defines a list of paths separated by ';' where the XHTML files are searched. The default searches for the 'web' directory in the application search paths.|
+|view.dir|Defines a list of paths separated by ';' where the XHTML files are searched. The default searches for the 'web' directory in the application search paths.|
 | |#{fn:composePath(app_search_dirs,'web')}|
 |content-type.default|Defines the default content type for the file servlet.|
 | |text/plain|
