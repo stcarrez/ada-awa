@@ -1,0 +1,70 @@
+<!-- Layout for the sysadmin page
+  -  Copyright (C) 2011-2020 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<f:view contentType="text/html; charset=UTF-8"
+        xmlns:c="http://java.sun.com/jstl/core"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:awa="http://code.google.com/p/ada-awa/jsf"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core">
+    <h:doctype rootElement="html"/>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/grids/reset.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/grids/fluid_grid.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/asf.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/awa.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{jquery.uiCssPath}"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{jquery.chosenCssPath}"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/users.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/jquery.tagedit.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/setup.css"/>
+    <ui:insert name="pageHeader"/>
+    <title>#{title}</title>
+</head>
+<body class="#{not empty pageStyle ? pageStyle : ''}">
+
+<div id='awa-page' class='container_12'>
+    <ui:insert name="pageBody"/>
+    <div id="awa-clfooter"></div>
+</div>
+
+<ui:include src="sysadmin-footer.xhtml"/>
+<!--dynamo-merge link="/js/all.js" prefix="#{contextPath}" -->
+<script type="text/javascript" src="#{jquery.path}"></script>
+<script type="text/javascript" src="#{jquery.uiPath}core.js"></script>
+<script type="text/javascript" src="#{jquery.uiPath}widget.js"></script>
+<script type="text/javascript" src="#{jquery.uiPath}position.js"></script>
+<script type="text/javascript" src="#{jquery.uiPath}mouse.js"></script>
+<script type="text/javascript" src="#{jquery.uiPath}draggable.js"></script>
+<script type="text/javascript" src="#{jquery.uiPath}resizable.js"></script>
+<script type="text/javascript" src="#{jquery.uiPath}sortable.js"></script>
+<script type="text/javascript" src="#{jquery.uiPath}dialog.js"></script>
+<script type="text/javascript" src="#{jquery.uiPath}tabs.js"></script>
+<script type="text/javascript" src="#{contextPath}/js/asf-message.js"></script>
+<script type="text/javascript" src="#{contextPath}/js/asf.js"></script>
+<script type="text/javascript" src="#{jquery.chosenPath}"></script>
+<!--dynamo-end-->
+<ui:insert name="pageScript"/>
+
+<!--DEV_START-->
+<ui:debug/>
+<!--DEV_END-->
+</body>
+</html>
+</f:view>
