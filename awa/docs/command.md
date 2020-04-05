@@ -200,4 +200,29 @@ The `--sessions` option triggers the list of user connection sessions.
 The `--jobs` option triggers the list of jobs that have been created
 and scheduled.
 
+##### The info command
+
+_driver_ info [--application _NAME_] [--keystore _PATH_] [--long-lines]
+
+The `info` command reports the current configuration used by the
+application.  The configuration is extracted from the AWA default
+XML configuration files and can be overriden by the application
+specific configuration.  The command allows to see what is the
+actual configuration.  The configuration is printed with the
+configuration name and its associated value.
+
+The list of configuration parameters are grouped in several categories:
+
+* `Database configuration` gives the configuration properties for the
+  database configuration.
+* `Server faces configuration` lists the configuration use by the
+  Ada Servlets and Ada Server Faces.
+* `AWA Application` lists the core AWA configuration properties.
+
+Depending on whether a module is used by the application, a number
+of modules are listed with their configuration.
+
+The `--long-lines` option triggers the list of database tables with the
+number of entries they contain.
+
 
