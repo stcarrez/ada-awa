@@ -82,7 +82,7 @@ package body AWA.Commands is
       Setup_Key_Provider (Context);
 
       Context.Wallet.Open (Path      => Context.Get_Keystore_Path,
-                           Data_Path => Context.Data_Path.all,
+                           Data_Path => "",
                            Config    => Context.Config,
                            Info      => Context.Info);
 
@@ -102,13 +102,10 @@ package body AWA.Commands is
 
          Context.Wallet.Unlock (Context.GPG, Context.Slot);
       end if;
+      Context.Keystore_Opened := True;
 
       Keystore.Properties.Initialize (Context.Secure_Config,
                                       Context.Wallet'Unchecked_Access);
-      AWA.Applications.Configs.Merge (Context.App_Config,
-                                      Context.File_Config,
-                                      Context.Secure_Config,
-                                      "");
    end Open_Keystore;
 
    --  ------------------------------
@@ -130,7 +127,13 @@ package body AWA.Commands is
       end;
 
       if Context.Use_Keystore then
-         Open_Keystore (Context);
+         if not Context.Keystore_Opened then
+            Open_Keystore (Context);
+         end if;
+         AWA.Applications.Configs.Merge (Context.App_Config,
+                                         Context.File_Config,
+                                         Context.Secure_Config,
+                                         Name & ".");
       else
          Context.App_Config := Context.File_Config;
       end if;
@@ -291,6 +294,7 @@ package body AWA.Commands is
 
    procedure Print (Context : in out Context_Type;
                     Ex      : in Ada.Exceptions.Exception_Occurrence) is
+      pragma Unreferenced (Context);
    begin
       Ada.Exceptions.Reraise_Occurrence (Ex);
 
