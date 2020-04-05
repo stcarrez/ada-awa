@@ -177,7 +177,7 @@ package body AWA.Applications.Configs is
             Process (Name, Item);
          end if;
       end Property_Filter;
-                                 
+
    begin
       Self.Props.Iterate (Property_Filter'Access);
       Self.Wallet.Iterate (Wallet_Filter'Access);

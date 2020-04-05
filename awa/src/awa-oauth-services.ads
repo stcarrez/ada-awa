@@ -24,7 +24,7 @@ package AWA.OAuth.Services is
 private
 
    type Auth_Manager is new Security.OAuth.Servers.Auth_Manager with record
-      N : Natural; 
+      N : Natural;
    end record;
 
 end AWA.OAuth.Services;

@@ -44,7 +44,7 @@ with AWA.Audits.Services;
 --  * It calls the `Initialize_Components` procedure to let the
 --    application register all the ASF components.  These components must
 --    be registered before any configuration file is read.
---  * It calls the `Initialize_Config` 
+--  * It calls the `Initialize_Config`
 --  * It calls the `Initialize_Servlets` procedure to allow the application
 --    to register all the servlet instances used by the application.
 --  * It calls the `Initialize_Filters` procedure to allow the application

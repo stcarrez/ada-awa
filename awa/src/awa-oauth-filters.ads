@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-oauth-filters -- OAuth filter
---  Copyright (C) 2017, 2018 Stephane Carrez
+--  Copyright (C) 2017, 2018, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,6 @@
 
 with ASF.Requests;
 with ASF.Responses;
-with ASF.Sessions;
 with ASF.Filters;
 with ASF.Servlets;
 

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-oauth-filters -- OAuth filter
---  Copyright (C) 2017 Stephane Carrez
+--  Copyright (C) 2017, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,20 +18,23 @@
 with Security;
 with Security.OAuth.Servers;
 with Util.Beans.Objects;
-with ASF.Principals;
-with AWA.Applications;
+with ASF.Sessions;
 with AWA.Services.Contexts;
 package body AWA.OAuth.Filters is
+
+   function Get_Access_Token (Req : in ASF.Requests.Request'Class) return String;
 
    --  Initialize the filter.
    overriding
    procedure Initialize (Filter  : in out Auth_Filter;
                          Config  : in ASF.Servlets.Filter_Config) is
+      pragma Unreferenced (Filter, Config);
    begin
       null;
    end Initialize;
 
    function Get_Access_Token (Req : in ASF.Requests.Request'Class) return String is
+      pragma Unreferenced (Req);
    begin
       return "";
    end Get_Access_Token;
@@ -51,8 +54,6 @@ package body AWA.OAuth.Filters is
                         Response : in out ASF.Responses.Response'Class;
                         Chain    : in out ASF.Servlets.Filter_Chain) is
       use type AWA.OAuth.Services.Auth_Manager_Access;
-
-      use type ASF.Principals.Principal_Access;
 
       type Context_Type is new AWA.Services.Contexts.Service_Context with null record;
 
@@ -86,10 +87,9 @@ package body AWA.OAuth.Filters is
          S.Set_Attribute (Name, Value);
       end Set_Session_Attribute;
 
-      App : constant ASF.Servlets.Servlet_Registry_Access
-        := ASF.Servlets.Get_Servlet_Context (Chain);
+      --  App : constant ASF.Servlets.Servlet_Registry_Access
+      --   := ASF.Servlets.Get_Servlet_Context (Chain);
       Bearer : constant String := Get_Access_Token (Request);
-      Auth   : Security.Principal_Access;
       Grant  : Security.OAuth.Servers.Grant_Type;
    begin
       if F.Realm = null then
@@ -97,18 +97,18 @@ package body AWA.OAuth.Filters is
       end if;
       F.Realm.Authenticate (Bearer, Grant);
 
-      declare
-         Context     : aliased Context_Type;
-         Application : AWA.Applications.Application_Access;
+      --  declare
+      --    Context     : aliased Context_Type;
+      --    Application : AWA.Applications.Application_Access;
       begin
          --  Get the application
-         if App.all in AWA.Applications.Application'Class then
-            Application := AWA.Applications.Application'Class (App.all)'Access;
-         else
-            Application := null;
-         end if;
---         Context.Set_Context (Application, Grant.Auth);
-         
+         --  if App.all in AWA.Applications.Application'Class then
+         --   Application := AWA.Applications.Application'Class (App.all)'Access;
+         --  else
+         --   Application := null;
+         --  end if;
+         --         Context.Set_Context (Application, Grant.Auth);
+
          --  Give the control to the next chain up to the servlet.
          ASF.Servlets.Do_Filter (Chain    => Chain,
                                  Request  => Request,

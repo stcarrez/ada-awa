@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions -- Permissions module
---  Copyright (C) 2011, 2012, 2013, 2014, 2016, 2017 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2016, 2017, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -94,7 +94,6 @@ package body AWA.Permissions is
                          Field : in Config_Fields;
                          Value : in Util.Beans.Objects.Object) is
       use AWA.Permissions.Controllers;
-      use type ADO.Entity_Type;
    begin
       case Field is
          when FIELD_NAME =>
