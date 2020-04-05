@@ -41,6 +41,8 @@ package body AWA.Commands.Tests is
                        Test_List_Sessions'Access);
       Caller.Add_Test (Suite, "Test AWA.Commands.List (jobs)",
                        Test_List_Jobs'Access);
+      Caller.Add_Test (Suite, "Test AWA.Commands (secure configuration)",
+                       Test_Secure_Configuration'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -170,5 +172,18 @@ package body AWA.Commands.Tests is
       Util.Tests.Assert_Matches (T, "S_FACTORY", Result, "Missing factory");
       Util.Tests.Assert_Matches (T, "Joe Pot", Result, "Missing user");
    end Test_List_Jobs;
+
+   --  ------------------------------
+   --  Test the command with a secure keystore configuration.
+   --  ------------------------------
+   procedure Test_Secure_Configuration (T : in out Test) is
+      Config   : constant String := Util.Tests.Get_Parameter ("test_config_path");
+      Keystore : constant String := Util.Tests.Get_Path ("regtests/config/secure.akt");
+      Result   : Ada.Strings.Unbounded.Unbounded_String;
+   begin
+      T.Execute ("bin/awa_command -c " & Config & " info --keystore " & Keystore
+                   & " --password=unit-test-password", "", "", Result, 0);
+      Util.Tests.Assert_Matches (T, "app_name *AWA Secure Demo", Result, "Secure property not accessed");
+   end Test_Secure_Configuration;
 
 end AWA.Commands.Tests;
