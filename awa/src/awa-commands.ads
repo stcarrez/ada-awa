@@ -165,7 +165,6 @@ private
       Zero              : aliased Boolean := False;
       Config_File       : aliased GNAT.Strings.String_Access;
       Wallet_File       : aliased GNAT.Strings.String_Access;
-      Data_Path         : aliased GNAT.Strings.String_Access;
       Wallet_Key_File   : aliased GNAT.Strings.String_Access;
       Password_File     : aliased GNAT.Strings.String_Access;
       Password_Env      : aliased GNAT.Strings.String_Access;
@@ -174,6 +173,7 @@ private
       Password_Command  : aliased GNAT.Strings.String_Access;
       Password_Askpass  : aliased Boolean := False;
       No_Password_Opt   : Boolean := False;
+      Keystore_Opened   : Boolean := False;
       Command_Config    : GC.Command_Line_Configuration;
       First_Arg         : Positive := 1;
       GPG               : Keystore.Passwords.GPG.Context_Type;
