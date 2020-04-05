@@ -24,6 +24,7 @@ package body Security.Auth.Fake is
    procedure Initialize (Realm  : in out Manager;
                          Params : in Parameters'Class;
                          Name   : in String := PROVIDER_OPENID) is
+      pragma Unreferenced (Realm, Params, Name);
    begin
       null;
    end Initialize;
@@ -37,6 +38,7 @@ package body Security.Auth.Fake is
    procedure Discover (Realm  : in out Manager;
                        Name   : in String;
                        Result : out End_Point) is
+      pragma Unreferenced (Realm, Name, Result);
    begin
       null;
    end Discover;
@@ -48,6 +50,7 @@ package body Security.Auth.Fake is
    procedure Associate (Realm  : in out Manager;
                         OP     : in End_Point;
                         Result : out Association) is
+      pragma Unreferenced (Realm, OP, Result);
    begin
       null;
    end Associate;
@@ -58,6 +61,7 @@ package body Security.Auth.Fake is
    function Get_Authentication_URL (Realm : in Manager;
                                     OP    : in End_Point;
                                     Assoc : in Association) return String is
+      pragma Unreferenced (Realm, OP, Assoc);
    begin
       return "/fake-authorization-server";
    end Get_Authentication_URL;
@@ -68,6 +72,7 @@ package body Security.Auth.Fake is
                      Assoc   : in Association;
                      Request : in Parameters'Class;
                      Result  : out Authentication) is
+      pragma Unreferenced (Realm, Assoc);
       Email      : constant String := Request.Get_Parameter ("email");
       Claimed_Id : constant String := Request.Get_Parameter ("claimed_id");
       Identity   : constant String := Request.Get_Parameter ("id");

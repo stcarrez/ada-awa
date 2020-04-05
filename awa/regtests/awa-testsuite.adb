@@ -66,6 +66,9 @@ with Servlet.Server;
 with Security.Auth;
 with Security.Auth.Fake;
 package body AWA.Testsuite is
+
+   function OAuth_Provider_Factory (Name : in String) return Security.Auth.Manager_Access;
+
    Users          : aliased AWA.Users.Modules.User_Module;
 
    Workspaces     : aliased AWA.Workspaces.Modules.Workspace_Module;
@@ -105,6 +108,7 @@ package body AWA.Testsuite is
    Tests : aliased Util.Tests.Test_Suite;
 
    function OAuth_Provider_Factory (Name : in String) return Security.Auth.Manager_Access is
+      pragma Unreferenced (Name);
    begin
       return new Security.Auth.Fake.Manager;
    end OAuth_Provider_Factory;
@@ -243,6 +247,8 @@ package body AWA.Testsuite is
                                        Converter => Date_Converter'Access);
             Application.Add_Converter (Name      => "smartDateConverter",
                                        Converter => Rel_Date_Converter'Access);
+            Application.Add_Converter (Name      => "sizeConverter",
+                                       Converter => Size_Converter'Access);
             Application.Start;
 --              if Props.Exists ("test.server") then
 --                 declare

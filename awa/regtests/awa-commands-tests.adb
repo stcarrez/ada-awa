@@ -185,9 +185,10 @@ package body AWA.Commands.Tests is
    begin
       T.Execute ("bin/awa_command -c " & Config & " info --keystore " & Keystore
                    & " --password=unit-test-password", "", "", Result, 0);
-      Util.Tests.Assert_Matches (T, "app_name *AWA Secure Demo", Result, "Secure property not accessed");
+      Util.Tests.Assert_Matches (T, "app_name *AWA Secure Demo", Result,
+                                 "Secure property not accessed");
    end Test_Secure_Configuration;
-   
+
    --  ------------------------------
    --  Test the command with various logging options.
    --  ------------------------------
@@ -196,7 +197,8 @@ package body AWA.Commands.Tests is
       Result   : Ada.Strings.Unbounded.Unbounded_String;
    begin
       T.Execute ("bin/awa_command -v -c " & Config & " info ", "", "", Result, 0);
-      Util.Tests.Assert_Matches (T, "INFO  - AWA.Applications", Result, "Missing log message");
+      Util.Tests.Assert_Matches (T, "INFO  - AWA.Applications", Result,
+                                 "Missing log message");
    end Test_Verbose_Command;
-   
+
 end AWA.Commands.Tests;
