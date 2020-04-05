@@ -10,6 +10,26 @@ the web requests during the lifetime of the installation.  As soon as the
 installation is finished, the normal application is configured and installed
 in the web container and the user is automatically redirected to it.
 
+## Integration
+To be able to use the setup application, you will need to add the following
+line in your GNAT project file:
+
+```Ada
+with "awa_setup";
+```
+
+The setup application can be integrated as an AWA command by instantiating
+the `AWA.Commands.Setup` generic package.  To integrate the `setup` command,
+you will do:
+
+```Ada
+with AWA.Commands.Start;
+with AWA.Commands.Setup;
+...
+package Start_Command is new AWA.Commands.Start (Server_Commands);
+package Setup_Command is new AWA.Commands.Setup (Start_Command);
+```
+
 ## Setup Procedure Instantiation
 The setup process is managed by the *Configure* generic procedure.
 The procedure must be instantiated with the application class type and
