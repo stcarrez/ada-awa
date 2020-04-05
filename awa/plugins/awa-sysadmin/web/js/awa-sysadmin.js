@@ -1,6 +1,6 @@
 /*
  *  awa-sysadmin -- Votes
- *  Copyright (C) 20193 Stephane Carrez
+ *  Copyright (C) 2019 Stephane Carrez
  *  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
