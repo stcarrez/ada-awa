@@ -23,6 +23,7 @@ with AWA.Commands.Drivers;
 with AWA.Commands.List;
 with AWA.Commands.Start;
 with AWA.Commands.Stop;
+with AWA.Commands.Info;
 with Servlet.Server;
 with ADO.Drivers;
 with AWA.Testsuite;
@@ -40,6 +41,9 @@ procedure AWA_Command is
 
    package Stop_Command is
       new AWA.Commands.Stop (Server_Commands);
+
+   package Info_Command is
+      new AWA.Commands.Info (Server_Commands);
 
    App       : aliased AWA.Tests.Test_Application;
    Context   : AWA.Commands.Context_Type;
