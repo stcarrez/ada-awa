@@ -53,7 +53,7 @@
   </context-param>
 
   <context-param>
-    <param-name>web.dir</param-name>
+    <param-name>view.dir</param-name>
     <param-value>#{fn:composePath(app_search_dirs,'web')}</param-value>
     <description>
       Defines a list of paths separated by ';' where the XHTML files are searched.
