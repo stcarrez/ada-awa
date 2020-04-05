@@ -1,0 +1,28 @@
+<query-mapping package='AWA.Sysadmin.Models'>
+    <description>
+      List of sessions
+    </description>
+
+    <query name='sysadmin-session-list'>
+       <comment>Get the list of sessions</comment>
+       <sql>
+    SELECT
+      user.id,
+      user.name,
+      session.id,
+      session.start_date,
+      session.end_date,
+      auth.start_date
+    FROM awa_session AS session
+    INNER JOIN awa_user AS user ON session.user_id = user.id
+    INNER JOIN awa_session AS auth ON session.auth_id = auth.id
+    WHERE session.stype = 0
+       </sql>
+       <sql-count>
+    SELECT
+       count(session.id)
+    FROM awa_session AS session WHERE session.stype = 0
+       </sql-count>
+    </query>
+
+</query-mapping>

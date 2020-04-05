@@ -3,36 +3,8 @@
       List of users pages
     </description>
 
-    <class name="AWA.Sysadmin.Models.User_Info" bean="yes">
-        <comment>The information about a wiki page.</comment>
-        <property type='Identifier' name="id">
-            <comment>the user page identifier.</comment>
-        </property>
-        <property type='String' name="name">
-            <comment>the wiki page name.</comment>
-        </property>
-        <property type='String' name="title">
-            <comment>the wiki page title.</comment>
-        </property>
-        <property type='Boolean' name="is_public">
-            <comment>whether the wiki is public.</comment>
-        </property>
-        <property type='Integer' name="last_version">
-            <comment>the last version.</comment>
-        </property>
-        <property type='Integer' name="read_count">
-            <comment>the read count.</comment>
-        </property>
-        <property type='Date' name="create_date">
-            <comment>the wiki creation date.</comment>
-        </property>
-        <property type='String' name="author">
-            <comment>the wiki page author.</comment>
-        </property>
-    </class>
-
     <query name='sysadmin-user-list'>
-       <comment>Get the list of wiki pages</comment>
+       <comment>Get the list of users with login sessions</comment>
        <sql>
     SELECT
       user.id,
@@ -40,9 +12,12 @@
       user.first_name,
       user.last_name,
       email.email,
-      (SELECT COUNT(*) FROM awa_acl AS acl WHERE user.id = acl.user_id) AS acl_count,
-      (SELECT COUNT(*) FROM awa_session AS session WHERE session.user_id = user.id
-           AND session.stype = 1) AS auth_count
+      (SELECT COUNT(*) FROM awa_acl AS acl
+         WHERE user.id = acl.user_id) AS acl_count,
+      (SELECT COUNT(*) FROM awa_session AS session
+         WHERE session.user_id = user.id AND session.stype = 1) AS auth_count,
+      (SELECT MAX(session.start_date) FROM awa_session AS session
+         WHERE session.user_id = user.id AND session.stype = 1) AS last_login
     FROM awa_user AS user
     LEFT JOIN awa_email AS email ON user.email_id = email.id
        </sql>

@@ -1,0 +1,31 @@
+<query-mapping package='AWA.Sysadmin.Models'>
+    <description>
+        List of jobs
+    </description>
+
+    <query name='sysadmin-job-list'>
+        <comment>Get the list of jobs</comment>
+        <sql>
+            SELECT
+            job.id,
+            job.name,
+            job.status,
+            job.create_date,
+            job.start_date,
+            job.finish_date,
+            job.user_id,
+            user.name,
+            session.start_date,
+            session.end_date,
+            auth.start_date
+            FROM awa_job AS job
+            LEFT JOIN awa_user AS user ON job.user_id = user.id
+        </sql>
+        <sql-count>
+            SELECT
+            count(job.id)
+            FROM awa_job AS job
+        </sql-count>
+    </query>
+
+</query-mapping>
