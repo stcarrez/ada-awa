@@ -16,15 +16,12 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Ada.Strings.Unbounded;
-
 with Util.Log.Loggers;
 with Util.Beans.Objects;
 
 with Servlet.Sessions;
 with Servlet.Cookies;
 
-with AWA.Applications;
 with AWA.Users.Filters;
 package body AWA.Sysadmin.Filters is
 
@@ -36,8 +33,6 @@ package body AWA.Sysadmin.Filters is
    overriding
    procedure Initialize (Filter  : in out Auth_Filter;
                          Config  : in Servlet.Core.Filter_Config) is
-      Context : constant Servlet.Core.Servlet_Registry_Access
-        := Servlet.Core.Get_Servlet_Context (Config);
       URI : constant String
         := Servlet.Core.Get_Init_Parameter (Config,
                                             AWA.Users.Filters.AUTH_FILTER_REDIRECT_PARAM);
@@ -86,7 +81,7 @@ package body AWA.Sysadmin.Filters is
                         Request  : in out Servlet.Requests.Request'Class;
                         Response : in out Servlet.Responses.Response'Class;
                         Chain    : in out Servlet.Core.Filter_Chain) is
-      Session : Servlet.Sessions.Session := Request.Get_Session;
+      Session  : constant Servlet.Sessions.Session := Request.Get_Session;
       Is_Admin : Util.Beans.Objects.Object;
    begin
       if not Session.Is_Valid then

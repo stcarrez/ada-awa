@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-sysadmin-modules -- Module sysadmin
---  Copyright (C) 2019 Stephane Carrez
+--  Copyright (C) 2019, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,10 +41,32 @@ package body AWA.Sysadmin.Modules is
       Stream  : in out Swagger.Servers.Output_Stream'Class;
       Context : in out Swagger.Servers.Context_Type);
 
+   procedure List_Sessions
+     (Req     : in out Swagger.Servers.Request'Class;
+      Reply   : in out Swagger.Servers.Response'Class;
+      Stream  : in out Swagger.Servers.Output_Stream'Class;
+      Context : in out Swagger.Servers.Context_Type);
+
+   procedure List_Jobs
+     (Req     : in out Swagger.Servers.Request'Class;
+      Reply   : in out Swagger.Servers.Response'Class;
+      Stream  : in out Swagger.Servers.Output_Stream'Class;
+      Context : in out Swagger.Servers.Context_Type);
+
    package API_List_Users is
      new Swagger.Servers.Operation (Handler => List_Users,
                                     Method  => Swagger.Servers.GET,
                                     URI     => "/sysadmin/api/v1/users");
+
+   package API_List_Sessions is
+     new Swagger.Servers.Operation (Handler => List_Sessions,
+                                    Method  => Swagger.Servers.GET,
+                                    URI     => "/sysadmin/api/v1/sessions");
+
+   package API_List_Jobs is
+     new Swagger.Servers.Operation (Handler => List_Jobs,
+                                    Method  => Swagger.Servers.GET,
+                                    URI     => "/sysadmin/api/v1/jobs");
 
    procedure List_Users
      (Req     : in out Swagger.Servers.Request'Class;
@@ -71,6 +93,56 @@ package body AWA.Sysadmin.Modules is
       Context.Set_Status (200);
    end List_Users;
 
+   procedure List_Sessions
+     (Req     : in out Swagger.Servers.Request'Class;
+      Reply   : in out Swagger.Servers.Response'Class;
+      Stream  : in out Swagger.Servers.Output_Stream'Class;
+      Context : in out Swagger.Servers.Context_Type) is
+      pragma Unreferenced (Req, Reply);
+
+      Module  : constant Sysadmin_Module_Access := Get_Sysadmin_Module;
+      Session : constant ADO.Sessions.Session := Module.Get_Session;
+      Query   : ADO.Queries.Context;
+
+      Stmt : ADO.Statements.Query_Statement;
+   begin
+      Log.Info ("List sessions");
+
+      Query.Set_Query (AWA.Sysadmin.Models.Query_Sysadmin_Session_List);
+      Stmt := Session.Create_Statement (Query);
+      Stmt.Execute;
+
+      Stream.Start_Document;
+      ADO.Utils.Serialize.Write_Query (Stream, "", Stmt);
+      Stream.End_Document;
+      Context.Set_Status (200);
+   end List_Sessions;
+
+   procedure List_Jobs
+     (Req     : in out Swagger.Servers.Request'Class;
+      Reply   : in out Swagger.Servers.Response'Class;
+      Stream  : in out Swagger.Servers.Output_Stream'Class;
+      Context : in out Swagger.Servers.Context_Type) is
+      pragma Unreferenced (Req, Reply);
+
+      Module  : constant Sysadmin_Module_Access := Get_Sysadmin_Module;
+      Session : constant ADO.Sessions.Session := Module.Get_Session;
+      Query   : ADO.Queries.Context;
+
+      Stmt : ADO.Statements.Query_Statement;
+   begin
+      Log.Info ("List jobs");
+
+      Query.Set_Query (AWA.Sysadmin.Models.Query_Sysadmin_Job_List);
+      Stmt := Session.Create_Statement (Query);
+      Stmt.Execute;
+
+      Stream.Start_Document;
+      ADO.Utils.Serialize.Write_Query (Stream, "", Stmt);
+      Stream.End_Document;
+      Context.Set_Status (200);
+   end List_Jobs;
+
    --  ------------------------------
    --  Initialize the sysadmin module.
    --  ------------------------------
@@ -93,6 +165,8 @@ package body AWA.Sysadmin.Modules is
       AWA.Modules.Module (Plugin).Initialize (App, Props);
 
       Servlet.Rest.Register (App.all, API_List_Users.Definition);
+      Servlet.Rest.Register (App.all, API_List_Sessions.Definition);
+      Servlet.Rest.Register (App.all, API_List_Jobs.Definition);
    end Initialize;
 
    --  ------------------------------
