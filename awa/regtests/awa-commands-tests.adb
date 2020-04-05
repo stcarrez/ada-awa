@@ -41,8 +41,10 @@ package body AWA.Commands.Tests is
                        Test_List_Sessions'Access);
       Caller.Add_Test (Suite, "Test AWA.Commands.List (jobs)",
                        Test_List_Jobs'Access);
-      Caller.Add_Test (Suite, "Test AWA.Commands (secure configuration)",
+      Caller.Add_Test (Suite, "Test AWA.Commands.Info (secure configuration)",
                        Test_Secure_Configuration'Access);
+      Caller.Add_Test (Suite, "Test AWA.Commands.Info (verbose)",
+                       Test_Verbose_Command'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -185,5 +187,16 @@ package body AWA.Commands.Tests is
                    & " --password=unit-test-password", "", "", Result, 0);
       Util.Tests.Assert_Matches (T, "app_name *AWA Secure Demo", Result, "Secure property not accessed");
    end Test_Secure_Configuration;
-
+   
+   --  ------------------------------
+   --  Test the command with various logging options.
+   --  ------------------------------
+   procedure Test_Verbose_Command (T : in out Test) is
+      Config   : constant String := Util.Tests.Get_Parameter ("test_config_path");
+      Result   : Ada.Strings.Unbounded.Unbounded_String;
+   begin
+      T.Execute ("bin/awa_command -v -c " & Config & " info ", "", "", Result, 0);
+      Util.Tests.Assert_Matches (T, "INFO  - AWA.Applications", Result, "Missing log message");
+   end Test_Verbose_Command;
+   
 end AWA.Commands.Tests;
