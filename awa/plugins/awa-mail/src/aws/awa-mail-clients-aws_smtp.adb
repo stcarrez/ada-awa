@@ -93,9 +93,17 @@ package body AWA.Mail.Clients.AWS_SMTP is
          AWS.Attachments.Add (Message.Attachments, "",
                               AWS.Attachments.Value (To_String (Content)));
       else
-         AWS.Attachments.Add (Message.Attachments, "",
-                              AWS.Attachments.Value (To_String (Content),
-                                Content_Type => Content_Type));
+         declare
+            Parts : AWS.Attachments.Alternatives;
+         begin
+            AWS.Attachments.Add (Parts,
+                                 AWS.Attachments.Value (To_String (Content),
+                                                        Content_Type => Content_Type));
+            AWS.Attachments.Add (Parts,
+                                 AWS.Attachments.Value (To_String (Alternative),
+                                                        Content_Type => "text/plain"));
+            AWS.Attachments.Add (Message.Attachments, Parts);
+         end;
       end if;
    end Set_Body;
 
