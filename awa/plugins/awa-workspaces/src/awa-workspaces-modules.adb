@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-workspaces-module -- Module workspaces
---  Copyright (C) 2011, 2012, 2013, 2017, 2018, 2019 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2017, 2018, 2019, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -390,7 +390,7 @@ package body AWA.Workspaces.Modules is
 
       Ctx.Start;
       Query.Clear;
-      Query.Set_Filter ("o.email = ?");
+      Query.Set_Filter ("LOWER(o.email) = LOWER(?)");
       Query.Add_Param (Email_Address.Address);
       Email.Find (DB, Query, Found);
       if not Found then
@@ -404,8 +404,16 @@ package body AWA.Workspaces.Modules is
          Invitee.Save (DB);
          Email.Set_User_Id (Invitee.Get_Id);
          Email.Save (DB);
-      else
+      elsif Email.Get_User_Id /= ADO.NO_IDENTIFIER then
          Invitee.Load (DB, Email.Get_User_Id);
+      else
+         Invitee.Set_Email (Email);
+         Invitee.Set_Name (Email_Address.Name);
+         Invitee.Set_First_Name (Util.Mail.Get_First_Name (Email_Address));
+         Invitee.Set_Last_Name (Util.Mail.Get_Last_Name (Email_Address));
+         Invitee.Save (DB);
+         Email.Set_User_Id (Invitee.Get_Id);
+         Email.Save (DB);         
       end if;
 
       --  Create the workspace member relation.
