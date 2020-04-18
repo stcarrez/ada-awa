@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail-components-messages -- Mail UI Message
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -67,6 +67,7 @@ package body AWA.Mail.Components.Messages is
                                          Name   => AWA.Mail.Clients.Mail_Message_Access);
    begin
       Free (UI.Message);
+      UIMailComponent (UI).Finalize;
    end Finalize;
 
    --  ------------------------------
