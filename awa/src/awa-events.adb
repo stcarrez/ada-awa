@@ -44,6 +44,12 @@ package body AWA.Events is
    begin
       Event.Props.Include (Name, Util.Beans.Objects.To_Object (Value));
    end Set_Parameter;
+   procedure Set_Parameter (Event  : in out Module_Event;
+                            Name   : in String;
+                            Value  : in Util.Beans.Objects.Object) is
+   begin
+      Event.Props.Include (Name, Value);
+   end Set_Parameter;
 
    --  ------------------------------
    --  Get the parameter with the given name.
