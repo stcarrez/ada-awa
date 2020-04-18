@@ -24,6 +24,8 @@ with Util.Log.Loggers;
 
 package body AWA.Mail.Clients.AWS_SMTP is
 
+   use AWS.SMTP;
+
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Mail.Clients.AWS_SMTP");
 
    procedure Free is
@@ -31,7 +33,7 @@ package body AWA.Mail.Clients.AWS_SMTP is
                                       Name   => Recipients_Access);
 
    --  Get a printable representation of the email recipients.
-   function Image (Recipients : in AWS.SMTP.Recipients) return String;
+   function Image (Recipients : in Recipients_Access) return String;
 
    --  ------------------------------
    --  Set the <tt>From</tt> part of the message.
@@ -53,21 +55,22 @@ package body AWA.Mail.Clients.AWS_SMTP is
                             Kind    : in Recipient_Type;
                             Name    : in String;
                             Address : in String) is
-      pragma Unreferenced (Kind);
+      List : Recipients_Access := Message.To (Kind);
    begin
-      if Message.To = null then
-         Message.To := new AWS.SMTP.Recipients (1 .. 1);
+      if List = null then
+         List := new AWS.SMTP.Recipients (1 .. 1);
       else
          declare
-            To : constant Recipients_Access := new AWS.SMTP.Recipients (1 .. Message.To'Last + 1);
+            To : constant Recipients_Access := new AWS.SMTP.Recipients (1 .. List'Last + 1);
          begin
-            To (Message.To'Range) := Message.To.all;
-            Free (Message.To);
-            Message.To := To;
+            List (List'Range) := List.all;
+            Free (List);
+            List := To;
          end;
       end if;
-      Message.To (Message.To'Last) := AWS.SMTP.E_Mail (Name    => Name,
-                                                       Address => Address);
+      List (List'Last) := AWS.SMTP.E_Mail (Name    => Name,
+                                           Address => Address);
+      Message.To (Kind) := List;
    end Add_Recipient;
 
    --  ------------------------------
@@ -96,13 +99,16 @@ package body AWA.Mail.Clients.AWS_SMTP is
          declare
             Parts : AWS.Attachments.Alternatives;
          begin
-            AWS.Attachments.Add (Parts,
-                                 AWS.Attachments.Value (To_String (Content),
-                                                        Content_Type => Content_Type));
-            AWS.Attachments.Add (Parts,
-                                 AWS.Attachments.Value (To_String (Alternative),
-                                                        Content_Type => "text/plain"));
-            AWS.Attachments.Add (Message.Attachments, Parts);
+            AWS.Attachments.Add
+              (Parts,
+               AWS.Attachments.Value (To_String (Content),
+                                      Content_Type => Content_Type));
+            AWS.Attachments.Add
+              (Parts,
+               AWS.Attachments.Value (To_String (Alternative),
+                                      Content_Type => "text/plain; charset=UTF-8"));
+            AWS.Attachments.Add
+              (Message.Attachments, Parts);
          end;
       end if;
    end Set_Body;
@@ -128,12 +134,14 @@ package body AWA.Mail.Clients.AWS_SMTP is
    --  ------------------------------
    --  Get a printable representation of the email recipients.
    --  ------------------------------
-   function Image (Recipients : in AWS.SMTP.Recipients) return String is
+   function Image (Recipients : in Recipients_Access) return String is
       Result : Unbounded_String;
    begin
-      for I in Recipients'Range loop
-         Append (Result, AWS.SMTP.Image (Recipients (I)));
-      end loop;
+      if Recipients /= null then
+         for I in Recipients'Range loop
+            Append (Result, AWS.SMTP.Image (Recipients (I)));
+         end loop;
+      end if;
       return To_String (Result);
    end Image;
 
@@ -144,20 +152,23 @@ package body AWA.Mail.Clients.AWS_SMTP is
    procedure Send (Message : in out AWS_Mail_Message) is
       Result   : AWS.SMTP.Status;
    begin
-      if Message.To = null then
+      if (for all Recipient of Message.To => Recipient = null) then
          return;
       end if;
 
       if Message.Manager.Enable then
          Log.Info ("Send email from {0} to {1}",
-                   AWS.SMTP.Image (Message.From), Image (Message.To.all));
+                   AWS.SMTP.Image (Message.From), Image (Message.To (Clients.TO)));
 
-         AWS.SMTP.Client.Send (Server  => Message.Manager.Server,
-                               From    => Message.From,
-                               To      => Message.To.all,
-                               Subject => To_String (Message.Subject),
-                               Attachments => Message.Attachments,
-                               Status  => Result);
+         AWS.SMTP.Client.Send
+           (Server  => Message.Manager.Server,
+            From    => Message.From,
+            To      => (if Message.To (Clients.TO) /= null then Message.To (Clients.TO).all else No_Recipient),
+            CC      => (if Message.To (Clients.CC) /= null then Message.To (Clients.CC).all else No_Recipient),
+            BCC     => (if Message.To (Clients.BCC) /= null then Message.To (Clients.BCC).all else No_Recipient),
+            Subject => To_String (Message.Subject),
+            Attachments => Message.Attachments,
+            Status  => Result);
          if not AWS.SMTP.Is_Ok (Result) then
             Log.Error ("Cannot send email: {0}",
                        AWS.SMTP.Status_Message (Result));
@@ -165,7 +176,7 @@ package body AWA.Mail.Clients.AWS_SMTP is
 
       else
          Log.Info ("Disable send email from {0} to {1}",
-                   AWS.SMTP.Image (Message.From), Image (Message.To.all));
+                   AWS.SMTP.Image (Message.From), Image (Message.To (Clients.TO)));
       end if;
    end Send;
 
@@ -176,7 +187,9 @@ package body AWA.Mail.Clients.AWS_SMTP is
    procedure Finalize (Message : in out AWS_Mail_Message) is
    begin
       Log.Info ("Finalize mail message");
-      Free (Message.To);
+      Free (Message.To (AWA.Mail.Clients.TO));
+      Free (Message.To (AWA.Mail.Clients.CC));
+      Free (Message.To (AWA.Mail.Clients.BCC));
    end Finalize;
 
    procedure Initialize (Client : in out AWS_Mail_Manager'Class;
