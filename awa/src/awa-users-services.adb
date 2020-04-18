@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  awa.users -- User registration, authentication processes
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2017, 2018, 2019 Stephane Carrez
+--  awa-users-services -- User registration, authentication processes
+--  Copyright (C) 2009 - 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -458,7 +458,7 @@ package body AWA.Users.Services is
 
       --  Find the user with the given email address.
       Query.Set_Join ("INNER JOIN awa_email e ON e.user_id = o.id");
-      Query.Set_Filter ("e.email = ?");
+      Query.Set_Filter ("LOWER(e.email) = LOWER(?)");
       Query.Bind_Param (1, Email);
       User.Find (DB, Query, Found);
       if not Found then
@@ -565,7 +565,7 @@ package body AWA.Users.Services is
    procedure Create_User (Model : in out User_Service;
                           User  : in out User_Ref'Class;
                           Email : in out Email_Ref'Class) is
-      COUNT_SQL : constant String := "SELECT COUNT(*) FROM awa_email WHERE email = ?";
+      COUNT_SQL : constant String := "SELECT COUNT(*) FROM awa_email WHERE LOWER(email) = LOWER(?)";
 
       Ctx           : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB            : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
@@ -664,7 +664,7 @@ package body AWA.Users.Services is
 
       --  Check first if the email address is not used by another user.
       Query.Bind_Param (1, Email_Address);
-      Query.Set_Filter ("email = ?");
+      Query.Set_Filter ("LOWER(email) = LOWER(?)");
       Exist_Email.Find (DB, Query, Found);
       if Found and then Exist_Email.Get_Id /= Cur_Email.Get_Id then
          Log.Warn ("Email address {0} already registered", Email_Address);
