@@ -327,6 +327,7 @@ div.awa-modal div.awa-login {
     float: left;
     overflow: hidden;
     line-height: 1em;
+    min-height: 1em;
 }
 .awa-list-item, .awa-list-item-header {
     float: left;
@@ -395,10 +396,12 @@ ul.awa-pagination li {
     text-decoration: none;
     font-weight: bold;
     background: #e6e6e3;
+    color: #b5b5b5;
 }
 .awa-radio input:checked + label {
     border: 1px solid #c5dbec;
     background: #dfeffc;
+    color: #333;
 }
 /**
  * Page actions at the right side of titles (wiki, blog).
