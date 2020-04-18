@@ -98,12 +98,13 @@ private
 
    type Recipients_Access is access all AWS.SMTP.Recipients;
 
+   type Recipients_Array is array (Recipient_Type) of Recipients_Access;
+
    type AWS_Mail_Message is new Ada.Finalization.Limited_Controlled and Mail_Message with record
       Manager     : AWS_Mail_Manager_Access;
       From        : AWS.SMTP.E_Mail_Data;
       Subject     : Ada.Strings.Unbounded.Unbounded_String;
-      --  Content     : Ada.Strings.Unbounded.Unbounded_String;
-      To          : Recipients_Access := null;
+      To          : Recipients_Array;
       Attachments : AWS.Attachments.List;
    end record;
 
