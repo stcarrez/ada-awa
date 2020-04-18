@@ -144,6 +144,9 @@ package AWA.Events is
    procedure Set_Parameter (Event  : in out Module_Event;
                             Name   : in String;
                             Value  : in String);
+   procedure Set_Parameter (Event  : in out Module_Event;
+                            Name   : in String;
+                            Value  : in Util.Beans.Objects.Object);
 
    --  Get the parameter with the given name.
    function Get_Parameter (Event : in Module_Event;
