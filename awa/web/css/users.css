@@ -36,8 +36,11 @@ div.awa-login {
   background: none repeat scroll 0 0 #F9FDFF;
   display: block;
   float: left;
-  width: 100%;
+  width: 98%;
   margin: 5px;
+  margin-left: 1%;
+  margin-right: 1%;
+  box-sizing: border-box;
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px 6px;
 }
