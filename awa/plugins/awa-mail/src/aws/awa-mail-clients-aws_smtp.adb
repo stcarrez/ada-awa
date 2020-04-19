@@ -106,7 +106,7 @@ package body AWA.Mail.Clients.AWS_SMTP is
             AWS.Attachments.Add
               (Parts,
                AWS.Attachments.Value (To_String (Alternative),
-                                      Content_Type => "text/plain; charset=UTF-8"));
+                                      Content_Type => "text/plain; charset='UTF-8'"));
             AWS.Attachments.Add
               (Message.Attachments, Parts);
          end;
