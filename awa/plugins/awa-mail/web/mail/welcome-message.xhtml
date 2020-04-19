@@ -1,15 +1,24 @@
-<mail:message xmlns:ui="http://java.sun.com/jsf/facelets"
-              xmlns:mail="http://code.google.com/p/ada-awa/mail">
-    <mail:from address="#{initParam['app_mail_name']}">#{initParam['app_mail_from']}</mail:from>
-    <mail:to address="#{event.name}">#{event.email}</mail:to>
-    <mail:subject>Welcome to #{initParam['app_name']}</mail:subject>
-
-    <mail:body>
+<ui:decorate template="/WEB-INF/layouts/mail.xhtml"
+             xmlns:mail="http://code.google.com/p/ada-awa/mail"
+             xmlns:h="http://java.sun.com/jsf/html"
+             xmlns:f="http://java.sun.com/jsf/core"
+             xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="subject">
+        <h:outputFormat value="Welcome to {0}">
+            <f:param value="#{initParam['app_name']}"/>
+        </h:outputFormat>
+    </ui:define>
+    <ui:define name="mailTo">
+        <mail:from address="#{initParam['app_mail_name']}">#{initParam['app_mail_from']}</mail:from>
+        <mail:to address="#{event.name}">#{event.email}</mail:to>
+    </ui:define>
+    <ui:define name="mailTextBody">
 Dear #{event.name},
 
 Welcome to the #{initParam['app_name']} application
 
-You are registered under the name #{event.first_name} #{event.last_name} with the email address #{event.email}.
+You are registered under the name #{event.first_name} #{event.last_name}
+with the email address #{event.email}.
 To go in your new application you may use the following link:
 
 #{initParam['app_url_base']}/index.html
@@ -17,6 +26,5 @@ To go in your new application you may use the following link:
 Sincerely,
 
 The #{initParam['app_name']} Team
-    </mail:body>
-</mail:message>
-
+</ui:define>
+</ui:decorate>
