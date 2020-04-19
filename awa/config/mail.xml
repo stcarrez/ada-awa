@@ -32,4 +32,11 @@
      <property name="template">/mail/invite-user-message.html</property>
   </on-event>
 
+  <url-policy>
+    <description>
+    </description>
+    <permission>logged-user</permission>
+    <url-pattern>/mail/.*</url-pattern>
+  </url-policy>
+
 </module>
