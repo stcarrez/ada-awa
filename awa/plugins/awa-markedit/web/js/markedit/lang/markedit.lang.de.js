@@ -13,16 +13,16 @@ MarkEditLanguage = function() {
 
         'defaultButtons': {
             'bold': {
-                'tip': 'Kühn'
+                'tip': 'KÃ¼hn'
             },
             'italic': {
                 'tip': 'Kursiv'
             },
             'link': {
-                'tip': 'Hyperlink einfügen'
+                'tip': 'Hyperlink einfÃ¼gen'
             },
             'image': {
-                'tip': 'Bild einfügen'
+                'tip': 'Bild einfÃ¼gen'
             },
             'code': {
                 'tip': 'Kode'
@@ -54,14 +54,14 @@ MarkEditLanguage = function() {
 
         'dialog': {
             'insertLink': {
-                'title': 'Hyperlink einfügen',
-                'helpText': 'Geben Sie die URL eingefügt werden soll.',
+                'title': 'Hyperlink einfÃ¼gen',
+                'helpText': 'Geben Sie die URL eingefÃ¼gt werden soll.',
                 'insertButton': 'Legen Sie',
                 'cancelButton': 'Abbrechen'
             },
             'insertImage': {
-                'title':'Bild einfügen',
-                'helpText': 'Geben Sie die URL des Bildes eingefügt werden soll.',
+                'title':'Bild einfÃ¼gen',
+                'helpText': 'Geben Sie die URL des Bildes eingefÃ¼gt werden soll.',
                 'insertButton': 'Legen Sie',
                 'cancelButton': 'Abbrechen'
             }
