@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail -- Mail module
---  Copyright (C) 2011, 2012, 2015, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2015, 2017, 2018, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,9 @@ with AWA.Mail.Beans;
 with AWA.Mail.Components.Factory;
 with AWA.Applications;
 
+with Security;
 with Servlet.Core;
+with Servlet.Sessions;
 with ASF.Requests.Mockup;
 with ASF.Responses.Mockup;
 with Util.Beans.Basic;
@@ -35,6 +37,22 @@ package body AWA.Mail.Modules is
 
    package Register is new AWA.Modules.Beans (Module => Mail_Module,
                                               Module_Access => Mail_Module_Access);
+
+   type Mail_Principal is new Security.Principal with null record;
+
+   --  Get the principal name.
+   overriding
+   function Get_Name (From : in Mail_Principal) return String;
+
+   --  ------------------------------
+   --  Get the principal name.
+   --  ------------------------------
+   overriding
+   function Get_Name (From : in Mail_Principal) return String is
+      pragma Unreferenced (From);
+   begin
+      return "AWA Mailer";
+   end Get_Name;
 
    --  ------------------------------
    --  Initialize the mail module.
@@ -86,7 +104,9 @@ package body AWA.Mail.Modules is
                         Template : in String;
                         Props    : in Util.Beans.Objects.Maps.Map;
                         Content  : in AWA.Events.Module_Event'Class) is
-      Name : constant String := Content.Get_Parameter ("name");
+      Name       : constant String := Content.Get_Parameter ("name");
+      Locale     : constant String := Content.Get_Parameter ("locale");
+      App     : constant AWA.Modules.Application_Access := Plugin.Get_Application;
    begin
       Log.Info ("Receive event {0} with template {1}", Name, Template);
 
@@ -96,20 +116,28 @@ package body AWA.Mail.Modules is
       end if;
 
       declare
-         Req   : ASF.Requests.Mockup.Request;
-         Reply : ASF.Responses.Mockup.Response;
-         Ptr   : constant Util.Beans.Basic.Readonly_Bean_Access := Content'Unrestricted_Access;
-         Bean  : constant Util.Beans.Objects.Object
+         Req     : ASF.Requests.Mockup.Request;
+         Reply   : ASF.Responses.Mockup.Response;
+         Session : Servlet.Sessions.Session;
+         Ptr     : constant Util.Beans.Basic.Readonly_Bean_Access := Content'Unrestricted_Access;
+         Bean    : constant Util.Beans.Objects.Object
            := Util.Beans.Objects.To_Object (Ptr, Util.Beans.Objects.STATIC);
          Dispatcher : constant Servlet.Core.Request_Dispatcher
-           := Plugin.Get_Application.Get_Request_Dispatcher (Template);
+           := App.Get_Request_Dispatcher (Template);
       begin
+         App.Create_Session (Session);
+         Session.Set_Principal (new Mail_Principal);
+
+         Req.Set_Session (Session);
          Req.Set_Request_URI (Template);
          Req.Set_Method ("GET");
          Req.Set_Attribute (Name => "event", Value => Bean);
          Req.Set_Attributes (Props);
-
+         if Locale'Length > 0 then
+            Req.Set_Header ("Accept-Language", Locale);
+         end if;
          Servlet.Core.Forward (Dispatcher, Req, Reply);
+         App.Delete_Session (Session);
       end;
    end Send_Mail;
 
