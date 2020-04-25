@@ -103,6 +103,7 @@ package body AWA.Mail.Modules is
    procedure Send_Mail (Plugin   : in Mail_Module;
                         Template : in String;
                         Props    : in Util.Beans.Objects.Maps.Map;
+                        Params   : in Util.Beans.Objects.Maps.Map;
                         Content  : in AWA.Events.Module_Event'Class) is
       Name       : constant String := Content.Get_Parameter ("name");
       Locale     : constant String := Content.Get_Parameter ("locale");
@@ -116,14 +117,16 @@ package body AWA.Mail.Modules is
       end if;
 
       declare
+         use Util.Beans.Objects;
+
          Req     : ASF.Requests.Mockup.Request;
          Reply   : ASF.Responses.Mockup.Response;
          Session : Servlet.Sessions.Session;
          Ptr     : constant Util.Beans.Basic.Readonly_Bean_Access := Content'Unrestricted_Access;
-         Bean    : constant Util.Beans.Objects.Object
-           := Util.Beans.Objects.To_Object (Ptr, Util.Beans.Objects.STATIC);
+         Bean    : constant Object := To_Object (Ptr, STATIC);
          Dispatcher : constant Servlet.Core.Request_Dispatcher
            := App.Get_Request_Dispatcher (Template);
+         Iter : Maps.Cursor := Params.First;
       begin
          App.Create_Session (Session);
          Session.Set_Principal (new Mail_Principal);
@@ -136,6 +139,12 @@ package body AWA.Mail.Modules is
          if Locale'Length > 0 then
             Req.Set_Header ("Accept-Language", Locale);
          end if;
+
+         --  Setup the request parameters.
+         while Maps.Has_Element (Iter) loop
+            Req.Set_Parameter (Maps.Key (Iter), To_String (Maps.Element (Iter)));
+            Maps.Next (Iter);
+         end loop;
          Servlet.Core.Forward (Dispatcher, Req, Reply);
          App.Delete_Session (Session);
       end;
