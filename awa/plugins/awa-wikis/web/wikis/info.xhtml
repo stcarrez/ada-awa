@@ -1,5 +1,5 @@
 <!-- Information about a wiki page
-  -  Copyright (C) 2016 Stephane Carrez
+  -  Copyright (C) 2016, 2020 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,8 +40,14 @@
      </ui:define>
 
     <ui:define name="pageScript">
+        <script type="text/javascript" src="#{contextPath}/js/jquery.canvaswrapper.js"></script>
+        <script type="text/javascript" src="#{contextPath}/js/jquery.colorhelpers.js"></script>
         <script type="text/javascript" src="#{contextPath}/js/jquery.flot.js"></script>
+        <script type="text/javascript" src="#{contextPath}/js/jquery.flot.saturated.js"></script>
+        <script type="text/javascript" src="#{contextPath}/js/jquery.flot.browser.js"></script>
         <script type="text/javascript" src="#{contextPath}/js/jquery.flot.time.js"></script>
+        <script type="text/javascript" src="#{contextPath}/js/jquery.flot.drawSeries.js"></script>
+        <script type="text/javascript" src="#{contextPath}/js/jquery.flot.uiConstants.js"></script>
         <script type="text/javascript" src="#{contextPath}/js/awa-blogs.js"></script>
     </ui:define>
 
