@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail-module-tests -- Unit tests for Mail module
---  Copyright (C) 2012, 2017 Stephane Carrez
+--  Copyright (C) 2012, 2017, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,6 +51,7 @@ package body AWA.Mail.Modules.Tests is
       Props.Insert ("email", To_Object (String '("joe.rogers@somewhere.org")));
       Mail.Send_Mail (Template => Name,
                       Props    => Props,
+                      Params   => Props,
                       Content  => Event);
 
    end Test_Mail_Message;
