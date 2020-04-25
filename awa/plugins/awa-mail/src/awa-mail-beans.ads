@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail-beans -- Beans for mail module
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,6 +32,7 @@ package AWA.Mail.Beans is
       Module   : AWA.Mail.Modules.Mail_Module_Access := null;
       Props    : Util.Beans.Objects.Maps.Map;
       Template : Ada.Strings.Unbounded.Unbounded_String;
+      Params   : Util.Beans.Objects.Maps.Map;
    end record;
    type Mail_Bean_Access is access all Mail_Bean'Class;
 
