@@ -104,6 +104,7 @@ package AWA.Mail.Modules is
    procedure Send_Mail (Plugin   : in Mail_Module;
                         Template : in String;
                         Props    : in Util.Beans.Objects.Maps.Map;
+                        Params   : in Util.Beans.Objects.Maps.Map;
                         Content  : in AWA.Events.Module_Event'Class);
 
    --  Get the mail module instance associated with the current application.
