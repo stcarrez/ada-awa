@@ -1,6 +1,6 @@
 /*
  *  awa -- AWA helpers
- *  Copyright (C) 2014, 2018 Stephane Carrez
+ *  Copyright (C) 2014, 2018, 2020 Stephane Carrez
  *  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -139,9 +139,17 @@ $.extend($.modal, {
         plot: function(series) {
             var self = this;
             $.plot(this.element, series, {
-                bars: { show: true, barWidth: self.options.barWidth * 86400 * 1000, align: "center" },
+                series: {
+                    bars: {
+                        show: true,
+                        barWidth: self.options.barWidth,
+                        align: "center"
+                    }
+                },
+                lines: { show: false },
                 xaxis: {
                     mode: "time",
+                    timeBase: "days",
                     minTickSize: [1, "day"]
                 },
                 yaxis: {
