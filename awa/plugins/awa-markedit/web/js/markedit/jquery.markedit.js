@@ -1788,8 +1788,8 @@ String.prototype.rtrim = function() {
 
 String.prototype.leftNewlineTrim = function() {
     return this.replace(/^(\r|\n)+/g, '');
-}
+};
 
 String.prototype.rightNewlineTrim = function() {
     return this.replace(/(\r|\n)+$/g, '');
-}
+};
