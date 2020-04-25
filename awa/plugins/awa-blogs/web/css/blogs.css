@@ -44,11 +44,11 @@ div.blog-admin div.comment-gravatar, .blog-admin .post-read-count {
 }
 div.blog-admin div.post-title,
 div.blog-admin div.comment-title {
-    width: 40%;
+    width: 36%;
 }
 div.blog-admin div.post-date,
 div.blog-admin div.post-author {
-    width: 15%;
+    width: 16%;
 }
 div.blog-admin div.post-ref {
     width: 40px;
