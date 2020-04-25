@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail-beans -- Beans for mail module
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Util.Strings;
 
 with AWA.Events.Action_Method;
 package body AWA.Mail.Beans is
@@ -59,6 +60,8 @@ package body AWA.Mail.Beans is
    begin
       if Name = "template" then
          From.Template := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Util.Strings.Starts_With (Name, "request.") then
+         From.Params.Include (Name (Name'First + 8 .. Name'Last), Value);
       else
          From.Props.Include (Name, Value);
       end if;
@@ -82,7 +85,8 @@ package body AWA.Mail.Beans is
                         Event   : in AWA.Events.Module_Event'Class) is
       use Ada.Strings.Unbounded;
    begin
-      Bean.Module.Send_Mail (To_String (Bean.Template), Bean.Props, Event);
+      Bean.Module.Send_Mail (To_String (Bean.Template), Bean.Props,
+                             Bean.Params, Event);
    end Send_Mail;
 
    --  ------------------------------
