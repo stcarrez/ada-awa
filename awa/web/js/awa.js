@@ -129,7 +129,7 @@ $.extend($.modal, {
     $.widget("ui.post_graph", {
         options: {
             url: "",
-            barWidth: 1
+            barWidth: 0.5
         },
         _create: function() {
             var self = this;
@@ -139,7 +139,10 @@ $.extend($.modal, {
         plot: function(series) {
             var self = this;
             $.plot(this.element, series, {
+                hoverable: true,
                 series: {
+                    hoverable: true,
+                    clickable: true,
                     bars: {
                         show: true,
                         barWidth: self.options.barWidth,
@@ -156,7 +159,8 @@ $.extend($.modal, {
                     tickDecimals: 0
                 },
                 grid: {
-                    hoverable: true
+                    hoverable: true,
+                    clickable: true
                 }
             });
         },
