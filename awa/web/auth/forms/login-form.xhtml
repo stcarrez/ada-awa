@@ -1,5 +1,5 @@
 <!-- Traditional email/password login form
-  -  Copyright (C) 2011, 2012, 2019 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2019, 2020 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +22,7 @@
   <div class='awa-login awa-form'>
     <h2>#{userMsg.login_classic_title}</h2>
     <h:form id='login'>
+        <h:inputHidden id='redirect' value="#{login.redirect}" required='false'/>
         <div class='awa-messages'>
             <h:message styleClass='awa-error'/>
         </div>
