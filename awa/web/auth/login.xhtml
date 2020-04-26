@@ -1,5 +1,5 @@
 <!-- Login main page
-  -  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013, 2014, 2020 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,13 +15,17 @@
   -  limitations under the License.
   -->
 <ui:composition template="/WEB-INF/layouts/anonymous.xhtml"
-        xmlns:ui="http://java.sun.com/jsf/facelets">
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:param name="title" value="#{userMsg.login_page_title}"/>
     <ui:param name="top_nav" value="auth"/>
 
     <!-- Main page body -->
     <ui:define name="pageBody">
-      <div id='awa-content'>
+        <f:metadata>
+            <f:viewParam id='redirect' value='#{login.redirect}' required="false"/>
+        </f:metadata>
+        <div id='awa-content'>
         <ui:include src="views/welcome-login.xhtml"/>
         <div class='awa-side1 container_6'>
           <ui:include src="forms/login-openid.xhtml">
