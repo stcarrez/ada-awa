@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-beans -- ASF Beans for user module
---  Copyright (C) 2011, 2012, 2013, 2018 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2018, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -198,6 +198,15 @@ package body AWA.Users.Beans is
 
       Data.Set_Session_Principal (Principal);
       Data.Set_Authenticate_Cookie (Principal);
+      if Length (Data.Redirect) > 0 then
+         declare
+            Context : constant ASF.Contexts.Faces.Faces_Context_Access
+              := ASF.Contexts.Faces.Current;
+         begin
+            Context.Get_Response.Send_Redirect
+              (Location => To_String (Data.Redirect));
+         end;
+      end if;
 
    exception
       when Services.Not_Found =>
@@ -251,7 +260,7 @@ package body AWA.Users.Beans is
                   Log.Error ("Exception when closing user session...");
             end;
          end if;
-         Session.Invalidate;
+         Ctx.Get_Application.Delete_Session (Session);
       end;
 
       --  Remove the session cookie.
@@ -349,6 +358,8 @@ package body AWA.Users.Beans is
          return Util.Beans.Objects.To_Object (From.Last_Name);
       elsif Name = KEY_ATTR then
          return Util.Beans.Objects.To_Object (From.Access_Key);
+      elsif Name = REDIRECT_ATTR then
+         return Util.Beans.Objects.To_Object (From.Redirect);
       else
          return Util.Beans.Objects.Null_Object;
       end if;
@@ -372,6 +383,8 @@ package body AWA.Users.Beans is
          From.Last_Name := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = KEY_ATTR then
          From.Access_Key := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = REDIRECT_ATTR then
+         From.Redirect := Util.Beans.Objects.To_Unbounded_String (Value);
       end if;
    end Set_Value;
 
