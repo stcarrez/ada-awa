@@ -77,7 +77,7 @@
                 itemPrefix: 'p_',
                 deleteUrl: '#{contextPath}/blogs/admin/forms/post-delete.html?post_id='
             });
-            $("#blog-stats").post_graph({url: "#{contextPath}/blogs/admin/#{adminBlog.id}/stats", barWidth: 30});
+            $("#blog-stats").post_graph({url: "#{contextPath}/blogs/admin/#{adminBlog.id}/stats", barWidth: 1});
             $("#blog-stats").bind("plothover", function(event, pos, item) {
                 if (item) {
                     var cnt = item.datapoint[1], date = new Date(item.datapoint[0]);
