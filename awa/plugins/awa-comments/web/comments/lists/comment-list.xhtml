@@ -1,5 +1,5 @@
 <!-- Display a list of comments
-  -  Copyright (C) 2014, 2017 Stephane Carrez
+  -  Copyright (C) 2014, 2017, 2020 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,7 @@
         var="cmt" value="#{commentList}">
     <div id='c_#{cmt.id}' class="awa-comment comment-#{cmt.status}">
         <div class='comment-gravatar'>
-            <w:gravatar email="#{cmt.email}" size="60"/>
+            <w:gravatar email="#{cmt.email}" size="60" secure="true"/>
         </div>
         <div class='comment-author'>
             #{cmt.author} on
