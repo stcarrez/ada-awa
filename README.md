@@ -176,6 +176,21 @@ cp ada-ado/win32/*.lib C:/GNAT/2019/lib
 cp ada-ado/win32/*.a C:/GNAT/2019/lib
 ```
 
+## Ada Web Server
+
+The [Ada Web Server](https://libre.adacore.com/libre/tools/aws/) should be compiled with the
+SSL support if you want to use the [OAuth 2.0](https://oauth.net/2/) protocol and integrate
+with Google or Facebook authentication systems.  The AWS version shipped with GNAT 2019
+will not work because it does not support SSL.
+
+You may build AWS by using:
+
+```
+   git clone --recursive -b 20.2 https://github.com/AdaCore/aws
+   cd aws
+   make SOCKET=openssl setup build install
+```
+
 # Building AWA
 
 The framework uses the `configure` script to detect the build environment.
