@@ -3,11 +3,11 @@
              xmlns:h="http://java.sun.com/jsf/html"
              xmlns:f="http://java.sun.com/jsf/core"
              xmlns:ui="http://java.sun.com/jsf/facelets">
-    <ui:param name="subject">
+    <ui:define name="subject">
         <h:outputFormat value="Invitation to join {0}">
             <f:param value="#{initParam['app_name']}"/>
         </h:outputFormat>
-    </ui:param>
+    </ui:define>
     <ui:define name="mailTo">
         <mail:from address="#{initParam['app_mail_name']}">#{initParam['app_mail_from']}</mail:from>
         <mail:to address="#{event.name}">#{event.email}</mail:to>
