@@ -180,7 +180,7 @@ package body AWA.Commands.Tests is
    --  ------------------------------
    procedure Test_Secure_Configuration (T : in out Test) is
       Config   : constant String := Util.Tests.Get_Parameter ("test_config_path");
-      Keystore : constant String := Util.Tests.Get_Path ("regtests/config/secure.akt");
+      Keystore : constant String := Util.Tests.Get_Parameter ("test_keystore_file");
       Result   : Ada.Strings.Unbounded.Unbounded_String;
    begin
       T.Execute ("bin/awa_command -c " & Config & " info --keystore " & Keystore
