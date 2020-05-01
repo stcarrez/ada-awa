@@ -1,0 +1,16 @@
+with "awa";
+with "awa_workspaces";
+library project Awa_Votes is
+   Version      := Awa.Version;
+   Name         := "awa_votes";
+   for Source_Dirs use ("../awa/plugins/awa-votes/src", "../awa/plugins/awa-votes/src/model");
+   for Library_Name use Name;
+   for Library_Dir use Awa.Library_Dir & "/" & Name;
+   for Library_Kind use Awa.Library_Type;
+   for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
+   for Library_Dir use "lib/" & Name & "/" & Project'Library_Kind;
+   for Object_Dir use "obj/" & Name & "/" & Project'Library_Kind;
+   package Binder renames Awa.Binder;
+   package Builder renames Awa.Builder;
+   package Compiler renames Awa.Compiler;
+end Awa_Votes;

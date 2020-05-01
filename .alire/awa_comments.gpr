@@ -1,0 +1,22 @@
+with "awa";
+library project Awa_Comments is
+
+   Version      := awa.Version;
+   Name         := "awa_comments";
+
+   for Source_Dirs use ("../awa/plugins/awa-comments/src", "../awa/plugins/awa-comments/src/model");
+
+   for Library_Name use Name;
+   for Library_Dir use Awa.Library_Dir & "/" & Name;
+   for Library_Kind use Awa.Library_Type;
+   for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
+
+   for Library_Dir use "lib/" & Name & "/" & Project'Library_Kind;
+   for Object_Dir use "obj/" & Name & "/" & Project'Library_Kind;
+   for Exec_Dir use Awa.Exec_Dir;
+
+   package Binder renames AWA.Binder;
+   package Builder renames AWA.Builder;
+   package Compiler renames AWA.Compiler;
+
+end Awa_Comments;

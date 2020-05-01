@@ -1,0 +1,15 @@
+with "awa";
+library project Awa_Counters is
+   Version      := Awa.Version;
+   Name         := "awa_counters";
+   for Source_Dirs use ("../awa/plugins/awa-counters/src", "../awa/plugins/awa-counters/src/model");
+   for Library_Name use Name;
+   for Library_Kind use Awa.Library_Type;
+   for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
+   for Library_Dir use "lib/" & Name & "/" & Project'Library_Kind;
+   for Object_Dir use "obj/" & Name & "/" & Project'Library_Kind;
+   for Exec_Dir use Awa.Exec_Dir;
+   package Binder renames Awa.Binder;
+   package Builder renames Awa.Builder;
+   package Compiler renames Awa.Compiler;
+end Awa_Counters;

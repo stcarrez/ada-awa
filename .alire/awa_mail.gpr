@@ -1,0 +1,51 @@
+with "awa";
+with "aws";
+
+library project Awa_Mail is
+
+   Version      := Awa.Version;
+   Name         := "awa_mail";
+
+   for Source_Dirs use ("../awa/plugins/awa-mail/src");
+
+   package Naming is
+     case Awa.Aws_Status is
+       when "yes" =>
+
+         case Awa.SMTP_SSL_Status is
+           when "yes" =>
+             for Implementation ("AWA.Mail.Clients.AWS_SMTP.Initialize")
+                   use "awa-mail-clients-aws_smtp-initialize_ssl.adb";
+
+           when "no" =>
+             for Implementation ("AWA.Mail.Clients.AWS_SMTP.Initialize")
+                   use "awa-mail-clients-aws_smtp-initialize_nossl.adb";
+
+         end case;
+
+       when "no" =>
+         null;
+
+     end case;
+   end Naming;
+
+   case Awa.Aws_Status is
+    when "yes" =>
+         for Source_Dirs use Project'Source_Dirs & ("../awa/plugins/awa-mail/src/aws");
+
+    when "no" =>
+         null;
+   end case;
+
+   for Library_Name use Name;
+   for Library_Kind use Awa.Library_Type;
+   for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
+
+   for Library_Dir use "lib/" & Name & "/" & Project'Library_Kind;
+   for Object_Dir use "obj/" & Name & "/" & Project'Library_Kind;
+
+   package Binder renames AWA.Binder;
+   package Builder renames AWA.Builder;
+   package Compiler renames AWA.Compiler;
+
+end Awa_Mail;

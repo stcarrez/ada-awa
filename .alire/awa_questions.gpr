@@ -1,0 +1,17 @@
+with "awa";
+with "awa_workspaces";
+with "awa_tags";
+library project Awa_Questions is
+   Version      := Awa.Version;
+   Name         := "awa_questions";
+   for Source_Dirs use ("../awa/plugins/awa-questions/src", "../awa/plugins/awa-questions/src/model");
+   for Library_Name use Name;
+   for Library_Dir use Awa.Library_Dir & "/" & Name;
+   for Library_Kind use Awa.Library_Type;
+   for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
+   for Library_Dir use "lib/" & Name & "/" & Project'Library_Kind;
+   for Object_Dir use "obj/" & Name & "/" & Project'Library_Kind;
+   package Binder renames Awa.Binder;
+   package Builder renames Awa.Builder;
+   package Compiler renames Awa.Compiler;
+end Awa_Questions;
