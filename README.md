@@ -54,15 +54,6 @@ You may get Ahven or Aunit at:
 * Ahven    (http://ahven.stronglytyped.org/)
 * AUnit    (https://libre.adacore.com/libre/tools/aunit/)
 
-# Using git
-
-The AWA framework uses git submodules to integrate several other
-projects.  To get all the sources, use the following commands:
-```
-   git clone --recursive https://github.com/stcarrez/ada-awa.git
-   cd ada-awa
-```
-
 ## Version 2.0.0 - May 2020
 
 - Refactoring of build process and installation
@@ -75,6 +66,15 @@ projects.  To get all the sources, use the following commands:
 - New mail UI component <mail:attachment> to send attachments
 
 [List all versions](https://github.com/stcarrez/ada-awa/blob/master/NEWS.md)
+
+# Using git
+
+The AWA framework uses git submodules to integrate several other
+projects.  To get all the sources, use the following commands:
+```
+   git clone --recursive https://github.com/stcarrez/ada-awa.git
+   cd ada-awa
+```
 
 # Development Host Installation
 
