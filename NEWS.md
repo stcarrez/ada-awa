@@ -1,9 +1,10 @@
-Version 2.0     -
+Version 2.0     - May 2020
   - Refactoring of build process and installation
   - New audit manager for database auditing
   - Support for Postgresql
   - Improvements of images and storage plugins
   - Update Trumbowyg editor to version 2.18.0
+  - Update Flot library to version 4.2.0
   - Support for commands to configure, start, stop the server
   - New mail UI component <mail:attachment> to send attachments
 
