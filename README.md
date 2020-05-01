@@ -4,9 +4,9 @@
 [![Test Status](https://img.shields.io/jenkins/t/https/jenkins.vacs.fr/Bionic-AWA.svg)](https://jenkins.vacs.fr/job/Bionic-AWA/)
 [![codecov](https://codecov.io/gh/stcarrez/ada-awa/branch/master/graph/badge.svg)](https://codecov.io/gh/stcarrez/ada-awa)
 [![Documentation Status](https://readthedocs.org/projects/ada-awa/badge/?version=latest)](https://ada-awa.readthedocs.io/en/latest/?badge=latest)
-[![Download](https://img.shields.io/badge/download-1.1.0-brightgreen.svg)](http://download.vacs.fr/ada-awa/awa-all-1.1.0.tar.gz)
+[![Download](https://img.shields.io/badge/download-2.0.0-brightgreen.svg)](http://download.vacs.fr/ada-awa/awa-all-2.0.0.tar.gz)
 [![License](https://img.shields.io/badge/license-APACHE2-blue.svg)](LICENSE)
-![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-awa/1.1.0.svg)
+![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-awa/2.0.0.svg)
 
 Ada Web Application is a framework to build a Web Application in Ada 2012.
 The framework provides several ready to use and extendable modules that are common
@@ -62,6 +62,19 @@ projects.  To get all the sources, use the following commands:
    git clone --recursive https://github.com/stcarrez/ada-awa.git
    cd ada-awa
 ```
+
+## Version 2.0.0 - May 2020
+
+- Refactoring of build process and installation
+- New audit manager for database auditing
+- Support for Postgresql
+- Improvements of images and storage plugins
+- Update Trumbowyg editor to version 2.18.0
+- Update Flot library to version 4.2.0
+- Support for commands to configure, start, stop the server
+- New mail UI component <mail:attachment> to send attachments
+
+[List all versions](https://github.com/stcarrez/ada-awa/blob/master/NEWS.md)
 
 # Development Host Installation
 
