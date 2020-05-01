@@ -1,0 +1,31 @@
+with "config";
+with "utilada_base";
+with "utilada_unit";
+with "elada";
+with "servletada";
+with "servletada_unit";
+with "asf";
+with "asf_unit";
+with "awa";
+
+library project Awa_Unit is
+
+   Library_Dir := "lib";
+   Library_Type : Config.Library_Type_Type := external ("AWA_LIBRARY_TYPE", "static");
+
+   for Source_Dirs use ("../../awa/awaunit");
+
+   for Library_Name use "awa_unit";
+   for Library_Kind use Library_Type;
+   for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
+
+   for Library_Dir use "lib/awa_unit/" & Project'Library_Kind;
+   for Object_Dir use "obj/awa_unit/" & Project'Library_Kind;
+
+   for Exec_Dir use "./" & Config'Exec_Dir & "/bin";
+
+   package Binder renames Config.Binder;
+   package Builder renames Config.Builder;
+   package Compiler renames Config.Compiler;
+
+end Awa_Unit;
