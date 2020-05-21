@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-beans -- Beans for blog module
---  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Stephane Carrez
+--  Copyright (C) 2011 - 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -449,6 +449,12 @@ package body AWA.Blogs.Beans is
       Renderer.Render (Doc);
       From.Description := Ada.Strings.Unbounded.To_Unbounded_String (Stream.To_String);
       Images.Iterate (Collect_Image'Access);
+
+      --  No image in the summary, scan the main contain to get one if possible.
+      if Summary'Length > 0 and then Length (From.Image_Link) = 0 then
+         Engine.Parse (From.Get_Text, Doc);
+         Images.Iterate (Collect_Image'Access);
+      end if;
    end Make_Description;
 
    --  ------------------------------
