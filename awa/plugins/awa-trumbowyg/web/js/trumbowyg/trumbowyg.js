@@ -1,5 +1,5 @@
 /**
- * Trumbowyg v2.18.0 - A lightweight WYSIWYG editor
+ * Trumbowyg v2.21.0 - A lightweight WYSIWYG editor
  * Trumbowyg core file
  * ------------------------
  * @link http://alex-d.github.io/Trumbowyg
@@ -122,13 +122,13 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
 
         plugins: {},
         urlProtocol: false,
-        minimalLinks: false
+        minimalLinks: false,
+        defaultLinkTarget: undefined
     },
     writable: false,
     enumerable: true,
     configurable: false
 });
-
 
 (function (navigator, window, document, $) {
     'use strict';
@@ -151,7 +151,7 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                 switch (options) {
                     // Exec command
                     case 'execCmd':
-                        return t.execCmd(params.cmd, params.param, params.forceCss);
+                        return t.execCmd(params.cmd, params.param, params.forceCss, params.skipTrumbowyg);
 
                     // Modal box
                     case 'openModal':
@@ -590,8 +590,7 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
 
             var ctrl = false,
                 composition = false,
-                debounceButtonPaneStatus,
-                updateEventName = 'keyup';
+                debounceButtonPaneStatus;
 
             t.$ed
                 .on('dblclick', 'img', t.o.imgDblClickHandler)
@@ -599,13 +598,12 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                     if ((e.ctrlKey || e.metaKey) && !e.altKey) {
                         ctrl = true;
                         var key = t.keys[String.fromCharCode(e.which).toUpperCase()];
-                        
+
                         try {
                             t.execCmd(key.fn, key.param);
                             return false;
                         } catch (c) {}
                     } else {
-                        
                         if (t.o.tabToIndent && e.key === 'Tab') {
                             try {
                                 if (e.shiftKey) {
@@ -621,7 +619,7 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                 .on('compositionstart compositionupdate', function () {
                     composition = true;
                 })
-                .on(updateEventName + ' compositionend', function (e) {
+                .on('keyup compositionend', function (e) {
                     if (e.type === 'compositionend') {
                         composition = false;
                     } else if (composition) {
@@ -661,10 +659,10 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                     }, 50);
                 })
                 .on('focus blur', function (e) {
-                    t.$c.trigger('tbw' + e.type);
                     if (e.type === 'blur') {
-                        t.clearButtonPaneStatus()
+                        t.clearButtonPaneStatus();
                     }
+                    t.$c.trigger('tbw' + e.type);
                     if (t.o.autogrowOnEnter) {
                         if (t.autogrowOnEnterDontClose) {
                             return;
@@ -677,6 +675,15 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                             t.$ed.css({height: t.$ed.css('min-height')});
                             t.$c.trigger('tbwresize');
                         }
+                    }
+                })
+                .on('keyup focus', function () {
+                    if (!t.$ta.val().match(/<.*>/)) {
+                        setTimeout(function () {
+                            var block = t.isIE ? '<p>' : 'p';
+                            t.doc.execCommand('formatBlock', false, block);
+                            t.syncCode();
+                        }, 0);
                     }
                 })
                 .on('cut drop', function () {
@@ -733,8 +740,8 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                     }, 0);
                 });
 
-            t.$box.on('keydown', function (e) {
-                if (e.which === 27 && $('.' + prefix + 'modal-box', t.$box).length === 1) {
+            $(t.doc.body).on('keydown.' + t.eventNamespace, function (e) {
+                if (e.which === 27 && $('.' + prefix + 'modal-box').length >= 1) {
                     t.closeModal();
                     return false;
                 }
@@ -1025,6 +1032,7 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
             $('body').removeClass(prefix + 'body-fullscreen');
             t.$c.trigger('tbwclose');
             $(window).off('scroll.' + t.eventNamespace + ' resize.' + t.eventNamespace);
+            $(t.doc.body).off('keydown.' + t.eventNamespace);
         },
 
 
@@ -1045,6 +1053,7 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
             }
 
             t.semanticCode(false, true);
+            t.$c.trigger('tbwchange');
 
             setTimeout(function () {
                 t.doc.activeElement.blur();
@@ -1119,9 +1128,9 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
             if (!force && t.$ed.is(':visible')) {
                 t.syncTextarea();
             } else {
-                // wrap the content in a div it's easier to get the innerhtml
+                // wrap the content in a div it's easier to get the inner html
                 var html = $('<div>').html(t.$ta.val());
-                //scrub the html before loading into the doc
+                // scrub the html before loading into the doc
                 var safe = $('<div>').append(html);
                 $(t.o.tagsToRemove.join(','), safe).remove();
                 t.$ed.html(safe.contents().html());
@@ -1135,11 +1144,10 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                 }
             }
             if (t.o.autogrowOnEnter) {
-                // t.autogrowEditorOnEnter();
                 t.$ed.height('auto');
-                var totalheight = t.autogrowOnEnterWasFocused ? t.$ed[0].scrollHeight : t.$ed.css('min-height');
-                if (totalheight !== t.$ta.css('height')) {
-                    t.$ed.css({height: totalheight});
+                var totalHeight = t.autogrowOnEnterWasFocused ? t.$ed[0].scrollHeight : t.$ed.css('min-height');
+                if (totalHeight !== t.$ta.css('height')) {
+                    t.$ed.css({height: totalHeight});
                     t.$c.trigger('tbwresize');
                 }
             }
@@ -1181,15 +1189,6 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                     wrapInlinesInParagraphsFrom(t.$ed.children(inlineElementsSelector).first());
 
                     t.semanticTag('div', true);
-
-                    // Unwrap paragraphs content, containing nothing useful
-                    t.$ed.find('p').filter(function () {
-                        // Don't remove currently being edited element
-                        if (t.range && this === t.range.startContainer) {
-                            return false;
-                        }
-                        return $(this).text().trim().length === 0 && $(this).children().not('br,span').length === 0;
-                    }).contents().unwrap();
 
                     // Get rid of temporary span's
                     $('[data-tbw]', t.$ed).contents().unwrap();
@@ -1237,8 +1236,9 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
         createLink: function () {
             var t = this,
                 documentSelection = t.doc.getSelection(),
+                selectedRange = documentSelection.getRangeAt(0),
                 node = documentSelection.focusNode,
-                text = new XMLSerializer().serializeToString(documentSelection.getRangeAt(0).cloneContents()),
+                text = new XMLSerializer().serializeToString(selectedRange.cloneContents()) || selectedRange + '',
                 url,
                 title,
                 target;
@@ -1253,7 +1253,7 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                 url = $a.attr('href');
                 if (!t.o.minimalLinks) {
                     title = $a.attr('title');
-                    target = $a.attr('target');
+                    target = $a.attr('target') || t.o.defaultLinkTarget;
                 }
                 var range = t.doc.createRange();
                 range.selectNode(node);
@@ -1275,7 +1275,7 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                 }
             };
             if (!t.o.minimalLinks) {
-                Object.assign(options, {
+                $.extend(options, {
                     title: {
                         label: t.lang.title,
                         value: title
@@ -1295,13 +1295,11 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
 
                 var link = $(['<a href="', url, '">', v.text || v.url, '</a>'].join(''));
 
-                if (!t.o.minimalLinks) {
-                    if (v.title.length > 0) {
-                        link.attr('title', v.title);
-                    }
-                    if (v.target.length > 0) {
-                        link.attr('target', v.target);
-                    }
+                if (v.title) {
+                    link.attr('title', v.title);
+                }
+                if (v.target || t.o.defaultLinkTarget) {
+                    link.attr('target', v.target || t.o.defaultLinkTarget);
                 }
                 t.range.deleteContents();
                 t.range.insertNode(link[0]);
@@ -1457,9 +1455,11 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
 
 
         // Open a modal box
-        openModal: function (title, content) {
+        openModal: function (title, content, buildForm) {
             var t = this,
                 prefix = t.o.prefix;
+
+            buildForm = buildForm !== false;
 
             // No open a modal box when exist other modal box
             if ($('.' + prefix + 'modal-box', t.$box).length > 0) {
@@ -1490,33 +1490,39 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
             });
 
             // Build the form
-            var $form = $('<form/>', {
-                action: '',
-                html: content
-            })
-                .on('submit', function () {
-                    $modal.trigger(CONFIRM_EVENT);
-                    return false;
+            var formOrContent;
+            if (buildForm) {
+                formOrContent = $('<form/>', {
+                    action: '',
+                    html: content
                 })
-                .on('reset', function () {
-                    $modal.trigger(CANCEL_EVENT);
-                    return false;
-                })
-                .on('submit reset', function () {
-                    if (t.o.autogrowOnEnter) {
-                        t.autogrowOnEnterDontClose = false;
-                    }
-                });
+                  .on('submit', function () {
+                      $modal.trigger(CONFIRM_EVENT);
+                      return false;
+                  })
+                  .on('reset', function () {
+                      $modal.trigger(CANCEL_EVENT);
+                      return false;
+                  })
+                  .on('submit reset', function () {
+                      if (t.o.autogrowOnEnter) {
+                          t.autogrowOnEnterDontClose = false;
+                      }
+                  });
+            } else {
+                formOrContent = content;
+            }
 
 
             // Build ModalBox and animate to show them
             var $box = $('<div/>', {
                 class: prefix + 'modal-box',
-                html: $form
+                html: formOrContent
             })
                 .css({
                     top: '-' + t.$btnPane.outerHeight(),
-                    opacity: 0
+                    opacity: 0,
+                    paddingBottom: buildForm ? null : '5%',
                 })
                 .appendTo($modal)
                 .animate({
@@ -1526,24 +1532,26 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
 
 
             // Append title
-            $('<span/>', {
-                text: title,
-                class: prefix + 'modal-title'
-            }).prependTo($box);
+            if (title) {
+                $('<span/>', {
+                    text: title,
+                    class: prefix + 'modal-title'
+                }).prependTo($box);
+            }
 
-            $modal.height($box.outerHeight() + 10);
+            if (buildForm) {
+                // Focus in modal box
+                $('input:first', $box).focus();
 
+                // Append Confirm and Cancel buttons
+                t.buildModalBtn('submit', $box);
+                t.buildModalBtn('reset', $box);
 
-            // Focus in modal box
-            $('input:first', $box).focus();
-
-
-            // Append Confirm and Cancel buttons
-            t.buildModalBtn('submit', $box);
-            t.buildModalBtn('reset', $box);
-
+                $modal.height($box.outerHeight() + 10);
+            }
 
             $(window).trigger('scroll');
+            t.$c.trigger('tbwmodalopen');
 
             return $modal;
         },
@@ -1574,11 +1582,12 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
             }, 100, function () {
                 $modalBox.parent().remove();
                 t.hideOverlay();
+                t.$c.trigger('tbwmodalclose');
             });
 
             t.restoreRange();
         },
-        // Preformatted build and management modal
+        // Pre-formatted build and management modal
         openModalInsert: function (title, fields, cmd) {
             var t = this,
                 prefix = t.o.prefix,
@@ -1802,7 +1811,7 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                 documentSelection.removeAllRanges();
             } catch (e) {
             }
-            
+
             documentSelection.addRange(range || savedRange);
         },
         getRangeText: function () {
