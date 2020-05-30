@@ -152,6 +152,10 @@
                 this.element.find('textarea').trumbowyg({
                     minimalLinks: true,
                     autogrow: true,
+                    imageWidthModalEdit: true,
+                    autogrow: false,
+                    resetCss: true,
+                    tagsToRemove: ['script', 'link'],
                     btns: [['viewHTML'], ['undo', 'redo'],
                     ['formatting', '|', 'link', '|', 'image'],
                     ['strong', 'em', 'del'], ['insertImage'],
