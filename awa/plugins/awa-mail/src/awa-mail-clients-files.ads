@@ -67,6 +67,12 @@ package AWA.Mail.Clients.Files is
                              Content_Id   : in String;
                              Content_Type : in String);
 
+   overriding
+   procedure Add_File_Attachment (Message      : in out File_Mail_Message;
+                                  Filename     : in String;
+                                  Content_Id   : in String;
+                                  Content_Type : in String);
+
    --  Send the email message.
    overriding
    procedure Send (Message : in out File_Mail_Message);
