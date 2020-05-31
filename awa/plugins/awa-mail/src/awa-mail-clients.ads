@@ -63,6 +63,12 @@ package AWA.Mail.Clients is
                              Content_Id   : in String;
                              Content_Type : in String) is abstract;
 
+   --  Add a file attachment.
+   procedure Add_File_Attachment (Message      : in out Mail_Message;
+                                  Filename     : in String;
+                                  Content_Id   : in String;
+                                  Content_Type : in String) is abstract;
+
    --  Send the email message.
    procedure Send (Message : in out Mail_Message) is abstract;
 
