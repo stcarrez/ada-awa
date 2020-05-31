@@ -134,6 +134,29 @@ package body AWA.Mail.Clients.Files is
    end Add_Attachment;
 
    --  ------------------------------
+   --  Add an attachment with the given content.
+   --  ------------------------------
+   overriding
+   procedure Add_File_Attachment (Message      : in out File_Mail_Message;
+                                  Filename     : in String;
+                                  Content_Id   : in String;
+                                  Content_Type : in String) is
+   begin
+      Append (Message.Message, "Content-Type: ");
+      Append (Message.Message, Content_Type);
+      Append (Message.Message, "; boundary=BBB");
+      Append (Message.Message, ASCII.LF);
+      if Content_Id'Length > 0 then
+         Append (Message.Message, "Content-Id: ");
+         Append (Message.Message, Content_Id);
+         Append (Message.Message, ASCII.LF);
+      end if;
+      Append (Message.Message, "==BBB" & ASCII.LF);
+      Append (Message.Message, Filename);
+      Append (Message.Message, "==BBB" & ASCII.LF);
+   end Add_File_Attachment;
+
+   --  ------------------------------
    --  Send the email message.
    --  ------------------------------
    overriding
