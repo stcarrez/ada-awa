@@ -1,3 +1,8 @@
+Version 2.1     -
+  - Update Trumbowyg editor to version 2.21.0
+  - Fix compilation issues with GNAT 2020
+  - Update mail UI component to attach external files
+
 Version 2.0     - May 2020
   - Refactoring of build process and installation
   - New audit manager for database auditing
