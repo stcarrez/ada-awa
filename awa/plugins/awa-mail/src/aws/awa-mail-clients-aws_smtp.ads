@@ -71,6 +71,13 @@ package AWA.Mail.Clients.AWS_SMTP is
                              Content_Id   : in String;
                              Content_Type : in String);
 
+   --  Add a file attachment.
+   overriding
+   procedure Add_File_Attachment (Message      : in out AWS_Mail_Message;
+                                  Filename     : in String;
+                                  Content_Id   : in String;
+                                  Content_Type : in String);
+
    --  Send the email message.
    overriding
    procedure Send (Message : in out AWS_Mail_Message);
