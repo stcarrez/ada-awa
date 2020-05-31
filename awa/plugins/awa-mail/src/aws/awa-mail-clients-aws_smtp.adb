@@ -131,6 +131,22 @@ package body AWA.Mail.Clients.AWS_SMTP is
                            Data => Data);
    end Add_Attachment;
 
+   overriding
+   procedure Add_File_Attachment (Message      : in out AWS_Mail_Message;
+                                  Filename     : in String;
+                                  Content_Id   : in String;
+                                  Content_Type : in String) is
+      Data : constant AWS.Attachments.Content
+        := AWS.Attachments.File (Filename     => Filename,
+                                 Encode       => AWS.Attachments.Base64,
+                                 Content_Id   => Content_Id,
+                                 Content_Type => Content_Type);
+   begin
+      AWS.Attachments.Add (Attachments => Message.Attachments,
+                           Name => Content_Id,
+                           Data => Data);
+   end Add_File_Attachment;
+
    --  ------------------------------
    --  Get a printable representation of the email recipients.
    --  ------------------------------
@@ -150,6 +166,13 @@ package body AWA.Mail.Clients.AWS_SMTP is
    --  ------------------------------
    overriding
    procedure Send (Message : in out AWS_Mail_Message) is
+      function Get_To return AWS.SMTP.Recipients is
+         (if Message.To (Clients.TO) /= null then Message.To (Clients.TO).all else No_Recipient);
+      function Get_Cc return AWS.SMTP.Recipients is
+         (if Message.To (Clients.CC) /= null then Message.To (Clients.CC).all else No_Recipient);
+      function Get_Bcc return AWS.SMTP.Recipients is
+         (if Message.To (Clients.BCC) /= null then Message.To (Clients.BCC).all else No_Recipient);
+
       Result   : AWS.SMTP.Status;
    begin
       if (for all Recipient of Message.To => Recipient = null) then
@@ -163,9 +186,9 @@ package body AWA.Mail.Clients.AWS_SMTP is
          AWS.SMTP.Client.Send
            (Server  => Message.Manager.Server,
             From    => Message.From,
-            To      => (if Message.To (Clients.TO) /= null then Message.To (Clients.TO).all else No_Recipient),
-            CC      => (if Message.To (Clients.CC) /= null then Message.To (Clients.CC).all else No_Recipient),
-            BCC     => (if Message.To (Clients.BCC) /= null then Message.To (Clients.BCC).all else No_Recipient),
+            To      => Get_To,
+            CC      => Get_Cc,
+            BCC     => Get_Bcc,
             Subject => To_String (Message.Subject),
             Attachments => Message.Attachments,
             Status  => Result);
