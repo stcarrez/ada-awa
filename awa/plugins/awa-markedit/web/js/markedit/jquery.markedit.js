@@ -145,8 +145,8 @@
                 'dotclear': {
                     'boldStart': '__',
                     'boldEnd': '__',
-                    'italicStart': "//",
-                    'italicEnd': "//",
+                    'italicStart': "''",
+                    'italicEnd': "''",
                     'underlineStart': "++",
                     'underlineEnd': "++",
                     'strikeStart': '--',
@@ -155,9 +155,9 @@
                     'inlineCodeEnd': '@@',
                     'imageLinkStart': '((',
                     'imageLinkEnd': '))',
-                    'linkStart': '[[',
-                    'linkMiddle': ' ',
-                    'linkEnd': ']]',
+                    'linkStart': '[',
+                    'linkMiddle': '|',
+                    'linkEnd': ']',
                     'bulletPrefix': '* ',
                     'quotePrefix': '> ',
                     'makeLinkList': false
