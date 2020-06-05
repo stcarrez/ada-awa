@@ -151,7 +151,6 @@
             } else {
                 this.element.find('textarea').trumbowyg({
                     minimalLinks: true,
-                    autogrow: true,
                     imageWidthModalEdit: true,
                     autogrow: false,
                     resetCss: true,
