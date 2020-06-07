@@ -146,10 +146,10 @@ package body AWA.Commands.Drivers is
       GC.Getopt (Config => Context.Command_Config);
       Util.Commands.Parsers.GNAT_Parser.Get_Arguments (Arguments, GC.Get_Argument);
 
-      if Context.Config_File'Length > 0 then
-         Context.Load_Configuration (Context.Config_File.all);
-      else
+      if Context.Config_File'Length = 0 then
          Context.Load_Configuration (Driver_Name & ".properties");
+      else
+         Context.Load_Configuration (Context.Config_File.all);
       end if;
 
       if Context.Debug or Context.Verbose or Context.Dump then
