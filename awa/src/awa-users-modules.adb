@@ -62,10 +62,19 @@ package body AWA.Users.Modules is
                          Handler => AWA.Users.Beans.Create_Current_User_Bean'Access);
 
       AWA.Modules.Module (Plugin).Initialize (App, Props);
+   end Initialize;
 
+   --  ------------------------------
+   --  Configures the module after its initialization and after having read its XML configuration.
+   --  ------------------------------
+   overriding
+   procedure Configure (Plugin : in out User_Module;
+                        Props  : in ASF.Applications.Config) is
+      pragma Unreferenced (Props);
+   begin
       --  Create the user manager when everything is initialized.
       Plugin.Manager := Plugin.Create_User_Manager;
-   end Initialize;
+   end Configure;
 
    --  ------------------------------
    --  Get the user manager.
