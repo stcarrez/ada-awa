@@ -107,7 +107,7 @@ endif
 endif
 
 # Build and run the unit tests
-check test:	test-mysql test-sqlite test-postgresql
+check test:	stamp-test-setup test-mysql test-sqlite test-postgresql
 
 regtests/result/maildir:
 	mkdir -p $@
@@ -133,6 +133,12 @@ regtests.db:
 ifeq (${HAVE_SQLITE},True)
 	sqlite3 $@ < db/sqlite/create-awa-sqlite.sql
 endif
+
+stamp-test-setup:
+	# Apply access constraints to the test key and directory.
+	chmod 600 regtests/config/master.key regtests/config/password.key
+	chmod 700 regtests/config
+	touch stamp-test-setup
 
 # Create the tables in the database.
 # (The database itself must have been created)
