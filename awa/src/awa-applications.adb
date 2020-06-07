@@ -87,6 +87,8 @@ package body AWA.Applications is
          Conf.Set ("ado.queries.paths", "#{fn:composePath(app_search_dirs,'db')}");
       end if;
       ADO.Configs.Initialize (Conf);
+      Log.Info ("Using application search dir: {0}", Conf.Get ("app_search_dirs", ""));
+
       ASF.Applications.Main.Application (App).Initialize_Config (Conf);
       Connection.Set_Connection (Conf.Get (P_Database.P));
       Connection.Set_Property ("ado.queries.paths", Conf.Get ("ado.queries.paths", ""));
