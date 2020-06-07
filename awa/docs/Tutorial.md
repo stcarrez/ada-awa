@@ -84,7 +84,7 @@ files and create the `bin/atlas-server` executable that represents the web appli
 
 ```
 make generate build
-bin/atlas-server
+bin/atlas-server start
 ```
 
 Once the server is started, you may point your browser to the following location:
