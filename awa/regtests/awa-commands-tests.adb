@@ -41,8 +41,10 @@ package body AWA.Commands.Tests is
                        Test_List_Sessions'Access);
       Caller.Add_Test (Suite, "Test AWA.Commands.List (jobs)",
                        Test_List_Jobs'Access);
-      Caller.Add_Test (Suite, "Test AWA.Commands.Info (secure configuration)",
+      Caller.Add_Test (Suite, "Test AWA.Commands.Info (secure configuration 1)",
                        Test_Secure_Configuration'Access);
+      Caller.Add_Test (Suite, "Test AWA.Commands.Info (secure configuration 2)",
+                       Test_Secure_Configuration_2'Access);
       Caller.Add_Test (Suite, "Test AWA.Commands.Info (verbose)",
                        Test_Verbose_Command'Access);
    end Add_Tests;
@@ -190,6 +192,22 @@ package body AWA.Commands.Tests is
    end Test_Secure_Configuration;
 
    --  ------------------------------
+   --  Test the command with a secure keystore configuration.
+   --  ------------------------------
+   procedure Test_Secure_Configuration_2 (T : in out Test) is
+      Config   : constant String := Util.Tests.Get_Parameter ("test_secure_config_path");
+      Result   : Ada.Strings.Unbounded.Unbounded_String;
+   begin
+      T.Execute ("bin/awa_command -c " & Config & " info", "", "", Result, 0);
+      Util.Tests.Assert_Matches (T, "app_name *AWA Secure Demo", Result,
+                                 "Secure property not accessed");
+      Util.Tests.Assert_Matches (T, "users.auth_key *auth-", Result,
+                                 "Secure property not accessed");
+      Util.Tests.Assert_Matches (T, "users.server_id *[123]0", Result,
+                                 "Secure property not accessed");
+   end Test_Secure_Configuration_2;
+
+   --  ------------------------------
    --  Test the command with various logging options.
    --  ------------------------------
    procedure Test_Verbose_Command (T : in out Test) is
@@ -197,7 +215,7 @@ package body AWA.Commands.Tests is
       Result   : Ada.Strings.Unbounded.Unbounded_String;
    begin
       T.Execute ("bin/awa_command -v -c " & Config & " info ", "", "", Result, 0);
-      Util.Tests.Assert_Matches (T, "INFO  - AWA.Applications", Result,
+      Util.Tests.Assert_Matches (T, "INFO : Using application search dir:", Result,
                                  "Missing log message");
    end Test_Verbose_Command;
 
