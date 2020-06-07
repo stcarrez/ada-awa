@@ -96,6 +96,22 @@
   </navigation-rule>
 
   <context-param>
+    <param-name>users.server_id</param-name>
+    <param-value>1</param-value>
+    <description>
+       The server id when several instances are used.
+    </description>
+  </context-param>
+
+  <context-param>
+    <param-name>users.auth_key</param-name>
+    <param-value>8ef60aad66977c68b12f4f8acab5a4e00a77f6e8</param-value>
+    <description>
+       An authentication key used to sign the authentication cookies.
+    </description>
+  </context-param>
+
+  <context-param>
     <param-name>openid.realm</param-name>
     <param-value>#{app_url_base}/auth</param-value>
     <description>
