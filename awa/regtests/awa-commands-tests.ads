@@ -42,6 +42,8 @@ package AWA.Commands.Tests is
    --  Test the command with a secure keystore configuration.
    procedure Test_Secure_Configuration (T : in out Test);
 
+   procedure Test_Secure_Configuration_2 (T : in out Test);
+
    --  Test the command with various logging options.
    procedure Test_Verbose_Command (T : in out Test);
 
