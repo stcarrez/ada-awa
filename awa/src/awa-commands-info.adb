@@ -176,6 +176,8 @@ package body AWA.Commands.Info is
          Command.Print (Application, "google-plus.secret", "", Context);
          Command.Print (Application, "auth-filter.redirect", "", Context);
          Command.Print (Application, "verify-filter.redirect", "", Context);
+         Command.Print (Application, "users.auth_key", "", Context);
+         Command.Print (Application, "users.server_id", "", Context);
       end if;
 
       Module := Application.Find_Module ("mail");
