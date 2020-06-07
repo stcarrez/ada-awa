@@ -268,8 +268,6 @@ package body AWA.Storages.Services is
    begin
       Query.Bind_Param ("store_id", From);
       Query.Bind_Param ("user_id", User);
-      ADO.Sessions.Entities.Bind_Param (Query, "table",
-                                        AWA.Workspaces.Models.WORKSPACE_TABLE, DB);
 
       Query.Execute;
       if not Query.Has_Elements then
@@ -359,8 +357,6 @@ package body AWA.Storages.Services is
          Query.Set_Query (AWA.Storages.Models.Query_Storage_Get_Local);
          Query.Bind_Param ("store_id", From);
          Query.Bind_Param ("user_id", User);
-         ADO.Sessions.Entities.Bind_Param (Query, "table",
-                                           AWA.Workspaces.Models.WORKSPACE_TABLE, DB);
          Local.Find (DB, Query, Found);
          if Found then
             Into.Path := Local.Get_Path;
@@ -373,8 +369,6 @@ package body AWA.Storages.Services is
       Query.Set_Query (AWA.Storages.Models.Query_Storage_Get_Storage);
       Query.Bind_Param ("store_id", From);
       Query.Bind_Param ("user_id", User);
-      ADO.Sessions.Entities.Bind_Param (Query, "table",
-                                        AWA.Workspaces.Models.WORKSPACE_TABLE, DB);
       Storage.Find (DB, Query, Found);
       if not Found then
          Log.Info ("File Id {0} not found", ADO.Identifier'Image (From));
