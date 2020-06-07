@@ -42,6 +42,18 @@ If the keystore file was locked by using GPG, it is not necessary to
 specify any specific option to unlock the keystore.  All is needed is the
 availability of the _gpg2_(1) command with the private key to unlock the keystore.
 
+The server global configuration file that is read with the `-c config-file` option
+can contain the following configuration:
+
+| Name                      | Description                                                      |
+|:--------------------------|:-----------------------------------------------------------------|
+|keystore-path              | The path to the global keystore file                             |
+|keystore-masterkey-path    | The path of the file that contains the master keys               |
+|keystore-password-path     | The path of the file that contains the keystore password         |
+|gpg-encrypt                | When GPG is used, the GPG command to encrypt some content        |
+|gpg-decrypt                | When GPG is used, the GPG command to decrypt some content        |
+|gpg-list-keys              | When GPG is used, the GPG command to list the available GPG keys |
+
 #### OPTIONS
 
 The following options are recognized by the command driver:
