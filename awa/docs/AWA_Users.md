@@ -70,6 +70,10 @@ the OpenID integration.
 
 | Name                      | Description                                                    |
 |:--------------------------|:---------------------------------------------------------------|
+|users.server_id|The server id when several instances are used.|
+| |1|
+|users.auth_key|An authentication key used to sign the authentication cookies.|
+| |8ef60aad66977c68b12f4f8acab5a4e00a77f6e8|
 |openid.realm|The REALM URL used by OpenID providers to verify the validity of the verification callback.|
 | |#{app_url_base}/auth|
 |openid.callback_url|The verification callback URI used by the OpenID provider to redirect the user after authentication.|
