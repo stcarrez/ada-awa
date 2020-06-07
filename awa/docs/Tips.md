@@ -83,3 +83,69 @@ Wiki permissions to the new user.
 </on-event>
 ```
 
+### Secure configuration
+
+Setting up the secure configuration is made by using a secure keystore with the `akt` tool.
+The secure configuration is stored in the keystore file that `akt` will protect by encrypting each
+configuration property with their own encryption key.  In order to setup and use the secure configuration
+the following steps are necessary:
+
+* Create the keystore file and protect it with a password or a GPG key,
+* Populate the keystore file with the configuration values,
+* Launch the server with specific options in order to use and access the keystore file.
+
+The two initial steps are done by using the `akt` tool.
+
+To create the keystore file, one way is to run the `akt` command and give
+it the keystore password:
+
+```
+mkdir secure
+akt create --wallet-key-file=secure/wallet.key -c 100000:300000 \
+  secure/config.akt
+```
+
+This will generate the `secure/wallet.key` file and setup the keystore file
+in `secure/config.akt`.  The password must be given to the server when it is
+started.  To avoid that, it is possible to store it in a file and make sure
+the file is protected against read and write access.  If the password is
+stored in such file, the keystore is created by using:
+
+```
+akt create --wallet-key-file=secure/wallet.key \
+  --passfile=secure/master.key -c 100000:300000 \
+  secure/config.akt
+```
+
+Once the keystore is created, the configuration are inserted.  Because the server
+command can use only one keystore and have several applications, the configuration
+parameter must be prefixed by the application name.  For example, to setup the
+`database` configuration for the `atlas` application, you will use the command:
+
+```
+akt set --wallet-key-file=secure/wallet.key \
+  --passfile=secure/master.key \
+  secure/config.akt \
+  atlas.database 'mysql://localhost:3306/atlas?user=atlas&password=PiX2ShaimohW6eno
+```
+
+To avoid having to specify several configuration parameters when launching the server,
+it is good practice to create a server global configuration file and indicate
+several parameters that the server will use.  Create a file `secure/config.properties`
+that contains:
+
+```
+keystore-path=secure/config.akt
+keystore-masterkey-path=secure/master.key
+keystore-password-path=secure/password.key
+```
+
+Then, to start the server we just need to give it the server global
+configuration path:
+
+```
+bin/atlas-server -c secure/config.properties start
+```
+
+Note that in order to use this configuration setup, the directory must have
+the `rwx------` rights and files must have the `rwx------` rights.
