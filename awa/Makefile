@@ -136,7 +136,7 @@ endif
 
 stamp-test-setup:
 	# Apply access constraints to the test key and directory.
-	chmod 600 regtests/config/master.key regtests/config/password.key
+	chmod 600 regtests/config/*.key
 	chmod 700 regtests/config
 	touch stamp-test-setup
 
