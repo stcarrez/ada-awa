@@ -40,23 +40,24 @@ package body AWA.Commands is
    procedure Load_Configuration (Context : in out Context_Type;
                                  Path    : in String) is
    begin
+      Log.Info ("Loading server configuration {0}", Path);
       begin
-         Context.File_Config.Load_Properties (Path);
-         Util.Log.Loggers.Initialize (Util.Properties.Manager (Context.File_Config));
+         Context.Global_Config.Load_Properties (Path);
+         Util.Log.Loggers.Initialize (Util.Properties.Manager (Context.Global_Config));
 
       exception
          when Ada.IO_Exceptions.Name_Error =>
             Log.Error ("Cannot read server configuration file '{0}'",
                        Path);
       end;
-      if Context.File_Config.Exists (GPG_CRYPT_CONFIG) then
-         Context.GPG.Set_Encrypt_Command (Context.File_Config.Get (GPG_CRYPT_CONFIG));
+      if Context.Exists (GPG_CRYPT_CONFIG) then
+         Context.GPG.Set_Encrypt_Command (Context.Get_Config (GPG_CRYPT_CONFIG));
       end if;
-      if Context.File_Config.Exists (GPG_DECRYPT_CONFIG) then
-         Context.GPG.Set_Decrypt_Command (Context.File_Config.Get (GPG_DECRYPT_CONFIG));
+      if Context.Exists (GPG_DECRYPT_CONFIG) then
+         Context.GPG.Set_Decrypt_Command (Context.Get_Config (GPG_DECRYPT_CONFIG));
       end if;
-      if Context.File_Config.Exists (GPG_LIST_CONFIG) then
-         Context.GPG.Set_List_Key_Command (Context.File_Config.Get (GPG_LIST_CONFIG));
+      if Context.Exists (GPG_LIST_CONFIG) then
+         Context.GPG.Set_List_Key_Command (Context.Get_Config (GPG_LIST_CONFIG));
       end if;
       Context.Config.Randomize := not Context.Zero;
    end Load_Configuration;
@@ -68,9 +69,9 @@ package body AWA.Commands is
    begin
       if Context.Wallet_File'Length > 0 then
          return True;
+      else
+         return Context.Exists (KEYSTORE_PATH);
       end if;
-
-      return Context.File_Config.Exists ("keystore.path");
    end Use_Keystore;
 
    --  ------------------------------
@@ -108,6 +109,16 @@ package body AWA.Commands is
                                       Context.Wallet'Unchecked_Access);
    end Open_Keystore;
 
+   function Get_Application_Config (Context : in Context_Type;
+                                    Name    : in String) return String is
+   begin
+      if Context.Exists (Name & ".config") then
+         return Context.Get_Config (Name & ".config");
+      else
+         return AWA.Applications.Configs.Get_Config_Path (Name);
+      end if;
+   end Get_Application_Config;
+
    --  ------------------------------
    --  Configure the application by loading its configuration file and merging it with
    --  the keystore file if there is one.
@@ -115,7 +126,7 @@ package body AWA.Commands is
    procedure Configure (Application : in out ASF.Applications.Main.Application'Class;
                         Name        : in String;
                         Context     : in out Context_Type) is
-      Path : constant String := AWA.Applications.Configs.Get_Config_Path (Name);
+      Path : constant String := Context.Get_Application_Config (Name);
    begin
       Log.Info ("Configuring {0} with {1}", Name, Path);
       begin
@@ -123,7 +134,7 @@ package body AWA.Commands is
 
       exception
          when Ada.IO_Exceptions.Name_Error =>
-            null;
+            Log.Error ("Configuration file {0} not found", Path);
       end;
 
       if Context.Use_Keystore then
@@ -266,16 +277,25 @@ package body AWA.Commands is
          Context.Provider := Keystore.Passwords.Cmds.Create (Context.Password_Command.all);
       elsif Context.Unsafe_Password'Length > 0 then
          Context.Provider := Keystore.Passwords.Unsafe.Create (Context.Unsafe_Password.all);
+      elsif Context.Exists (PASSWORD_FILE_PATH) then
+         Context.Provider := Keystore.Passwords.Files.Create
+           (Context.Get_Config (PASSWORD_FILE_PATH));
       else
          Context.No_Password_Opt := True;
       end if;
-      Context.Key_Provider := Keystore.Passwords.Keys.Create (Keystore.DEFAULT_WALLET_KEY);
    end Setup_Password_Provider;
 
    procedure Setup_Key_Provider (Context : in out Context_Type) is
    begin
       if Context.Wallet_Key_File'Length > 0 then
-         Context.Key_Provider := Keystore.Passwords.Files.Create (Context.Wallet_Key_File.all);
+         Context.Key_Provider := Keystore.Passwords.Files.Create
+           (Context.Wallet_Key_File.all);
+      elsif Context.Exists (WALLET_KEY_PATH) then
+         Context.Key_Provider := Keystore.Passwords.Files.Create
+           (Context.Get_Config (WALLET_KEY_PATH));
+      else
+         Context.Key_Provider := Keystore.Passwords.Keys.Create
+           (Keystore.DEFAULT_WALLET_KEY);
       end if;
    end Setup_Key_Provider;
 
@@ -287,6 +307,8 @@ package body AWA.Commands is
       if Context.Wallet_File'Length > 0 then
          Context.First_Arg := 1;
          return Context.Wallet_File.all;
+      elsif Context.Exists (KEYSTORE_PATH) then
+         return Context.Get_Config (KEYSTORE_PATH);
       else
          raise Error with "No keystore path";
       end if;
