@@ -18,7 +18,6 @@
 
 with Util.Commands;
 with Util.Tests;
-with AWA.Tests;
 with AWA.Commands.Drivers;
 with AWA.Commands.List;
 with AWA.Commands.Start;
@@ -27,6 +26,7 @@ with AWA.Commands.Info;
 with Servlet.Server;
 with ADO.Drivers;
 with AWA.Testsuite;
+with AWA_Test_App;
 procedure AWA_Command is
 
    package Server_Commands is
@@ -45,7 +45,7 @@ procedure AWA_Command is
    package Info_Command is
       new AWA.Commands.Info (Server_Commands);
 
-   App       : aliased AWA.Tests.Test_Application;
+   App       : aliased AWA_Test_App.Application;
    Context   : AWA.Commands.Context_Type;
    Arguments : Util.Commands.Dynamic_Argument_List;
    Suite     : Util.Tests.Access_Test_Suite := AWA.Testsuite.Suite;
