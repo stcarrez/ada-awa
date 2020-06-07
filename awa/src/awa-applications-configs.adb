@@ -165,6 +165,8 @@ package body AWA.Applications.Configs is
                                Item : in Util.Beans.Objects.Object) is
       begin
          if Util.Strings.Starts_With (Name, Self.Prefix (1 .. Self.Length)) then
+            Log.Debug ("Use wallet property {0} as {1}",
+                       Name, Name (Name'First + Self.Length .. Name'Last));
             Process (Name (Name'First + Self.Length .. Name'Last), Item);
          end if;
       end Wallet_Filter;
