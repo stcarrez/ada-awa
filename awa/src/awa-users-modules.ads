@@ -52,6 +52,12 @@ package AWA.Users.Modules is
                          App    : in AWA.Modules.Application_Access;
                          Props  : in ASF.Applications.Config);
 
+   --  Configures the module after its initialization and after having read
+   --  its XML configuration.
+   overriding
+   procedure Configure (Plugin : in out User_Module;
+                        Props  : in ASF.Applications.Config);
+
    --  Get the user manager.
    function Get_User_Manager (Plugin : in User_Module) return Services.User_Service_Access;
 
