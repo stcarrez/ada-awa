@@ -89,6 +89,9 @@ package AWA.Commands is
    GPG_CRYPT_CONFIG   : constant String := "gpg-encrypt";
    GPG_DECRYPT_CONFIG : constant String := "gpg-decrypt";
    GPG_LIST_CONFIG    : constant String := "gpg-list-keys";
+   KEYSTORE_PATH      : constant String := "keystore-path";
+   WALLET_KEY_PATH    : constant String := "keystore-masterkey-path";
+   PASSWORD_FILE_PATH : constant String := "keystore-password-path";
 
    subtype Argument_List is Util.Commands.Argument_List;
 
@@ -154,6 +157,7 @@ private
       Secure_Config     : Keystore.Properties.Manager;
       App_Config        : ASF.Applications.Config;
       File_Config       : ASF.Applications.Config;
+      Global_Config     : ASF.Applications.Config;
       Factory           : AWA.Applications.Factory.Application_Factory;
       Provider          : Keystore.Passwords.Provider_Access;
       Key_Provider      : Keystore.Passwords.Keys.Key_Provider_Access;
@@ -178,6 +182,17 @@ private
       First_Arg         : Positive := 1;
       GPG               : Keystore.Passwords.GPG.Context_Type;
    end record;
+
+   function Get_Application_Config (Context : in Context_Type;
+                                    Name    : in String) return String;
+
+   function Get_Config (Context : in Context_Type;
+                        Name    : in String) return String is
+      (Context.Global_Config.Get (Name));
+
+   function Exists (Context : in Context_Type;
+                    Name    : in String) return Boolean is
+      (Context.Global_Config.Exists (Name));
 
    procedure Setup_Password_Provider (Context : in out Context_Type);
 
