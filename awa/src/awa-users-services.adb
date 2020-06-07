@@ -140,6 +140,7 @@ package body AWA.Users.Services is
                              Principal : out AWA.Users.Principals.Principal_Access) is
       Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       Auth_Session : Session_Ref;
+      Email  : constant String := User.Get_Email.Get_Email;
    begin
       --  Create the authenticate session.
       Auth_Session.Set_Start_Date (Ada.Calendar.Clock);
@@ -908,14 +909,14 @@ package body AWA.Users.Services is
       AWA.Modules.Module_Manager (Model).Initialize (Module);
 
       Model.Permissions := Permissions.Services.Permission_Manager'Class (Sec_Manager.all)'Access;
-      Model.Server_Id := Module.Get_Config ("app.server.id", 1);
+      Model.Server_Id := Module.Get_Config ("server_id", 1);
       Set_Unbounded_String (Model.Auth_Key,
-                            Module.Get_Config ("app.server.key", DEFAULT_KEY));
+                            Module.Get_Config ("auth_key", DEFAULT_KEY));
       if Model.Auth_Key = DEFAULT_KEY then
-         Log.Info ("The 'app.server.key' configuration property not found.  Using default key.");
+         Log.Error ("The 'auth_key' configuration property not found.  Using default key.");
       end if;
 
-      Log.Info ("User server associated with server id {0}", Integer'Image (Model.Server_Id));
+      Log.Info ("User server associated with server id{0}", Integer'Image (Model.Server_Id));
 
       --  Close the connection sessions that have not been closed correctly.
       declare
