@@ -181,7 +181,6 @@
     <permission>logged-user</permission>
     <url-pattern>/storages/forms/folder-create-first.html</url-pattern>
     <url-pattern>/storages/forms/folder-create.html</url-pattern>
-    <url-pattern>/storages/forms/create-folder-form.html</url-pattern>
     <url-pattern>/storages/forms/upload-form.html</url-pattern>
     <url-pattern>/storages/forms/file-delete-form.html</url-pattern>
     <url-pattern>/storages/lists/documents.html</url-pattern>
