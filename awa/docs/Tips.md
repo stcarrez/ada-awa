@@ -60,6 +60,26 @@ when the description contains special characters.
  content="#{util:escapeJavaScript(fn:substring(fn:trim(post.description),1,128))}"/>
 ```
 
+### Formatting dates
+
+A date can easily be formatted by following the Java Server Faces patterns
+by using the `f:convertDateTime` converter.  The pattern attribute controls
+how the date is formated and it takes into account the locale used to render
+the request.  For example:
+
+```
+<h:outputText value="#{event.member.payment_date}">
+   <f:convertDateTime pattern="%A %d %B %Y"/>
+</h:outputText>
+```
+
+Sometimes, the date must be formatted within an attribute of some HTML
+element.  In that case, the `h:outputText` cannot be used but instead
+we can use the `util:formatDate` EL function.  For example:
+
+```
+date="#{util:formatDate(post.date,'%Y-%m-%d')}"
+```
 
 ## Configuration Tips
 
