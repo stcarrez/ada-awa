@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-tests-helpers - Helpers for AWA unit tests
---  Copyright (C) 2011, 2017 Stephane Carrez
+--  Copyright (C) 2011, 2017, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with ADO;
 with ASF.Responses.Mockup;
 with Ada.Strings.Unbounded;
 package AWA.Tests.Helpers is
@@ -31,5 +32,10 @@ package AWA.Tests.Helpers is
    --  Extract from the response content a link with a given title.
    function Extract_Link (Content : in String;
                           Title   : in String) return String;
+
+   --  Extract from the response content an HTML identifier that was generated
+   --  with the given prefix.   The format is assumed to be <prefix>-<number>.
+   function Extract_Identifier (Content : in String;
+                                Prefix  : in String) return ADO.Identifier;
 
 end AWA.Tests.Helpers;
