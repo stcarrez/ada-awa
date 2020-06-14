@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-tests-helpers - Helpers for AWA unit tests
---  Copyright (C) 2011, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2011, 2017, 2018, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -59,5 +59,28 @@ package body AWA.Tests.Helpers is
       end if;
       return Content (Result (1).First .. Result (1).Last);
    end Extract_Link;
+
+   --  ------------------------------
+   --  Extract from the response content an HTML identifier that was generated
+   --  with the given prefix.   The format is assumed to be <prefix>-<number>.
+   --  ------------------------------
+   function Extract_Identifier (Content : in String;
+                                Prefix  : in String) return ADO.Identifier is
+      use GNAT.Regpat;
+
+      Pattern : constant String := ".*[\\""']" & Prefix & "\-([0-9]+)[\\""']";
+      Regexp  : constant Pattern_Matcher := Compile (Expression => Pattern);
+      Result  : GNAT.Regpat.Match_Array (0 .. 1);
+   begin
+      Match (Regexp, Content, Result);
+      if Result (1) = GNAT.Regpat.No_Match then
+         return ADO.NO_IDENTIFIER;
+      end if;
+      return ADO.Identifier'Value (Content (Result (1).First .. Result (1).Last));
+
+   exception
+      when Constraint_Error =>
+         return ADO.NO_IDENTIFIER;
+   end Extract_Identifier;
 
 end AWA.Tests.Helpers;
