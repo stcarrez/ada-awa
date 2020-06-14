@@ -149,6 +149,19 @@ package body AWA.Images.Tests is
                 "Invalid response after image get");
       T.Assert_Equals ("image/jpg", Reply.Get_Content_Type,
                        "Invalid response after upload");
+
+      --  Look at the image description page.
+      ASF.Tests.Do_Get (Request, Reply, "/storages/image-info/"
+                          & Util.Strings.Image (Natural (Image_Id)),
+                        "image-file-info.html");
+      T.Assert (Reply.Get_Status = Servlet.Responses.SC_OK,
+                "Invalid response for image-info page");
+      T.Assert_Equals ("text/html; charset=UTF-8", Reply.Get_Content_Type,
+                       "Invalid response for image-info");
+      ASF.Tests.Assert_Contains (T, "/storages/files/"
+                                   & Util.Strings.Image (Natural (Image_Id)) & "/", Reply,
+                                 "Image info page is invalid (missing link)");
+
    end Test_Create_Image;
 
    --  ------------------------------
