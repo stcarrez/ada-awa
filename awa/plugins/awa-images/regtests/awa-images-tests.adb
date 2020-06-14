@@ -173,9 +173,14 @@ package body AWA.Images.Tests is
    begin
       ASF.Tests.Do_Get (Request, Reply, "/storages/images/12345345/view/missing.jpg",
                         "image-file-missing.html");
-      ASF.Tests.Assert_Matches (T, ".title.Page not found./title.", Reply,
-                                "Page for a missing document is invalid",
-                                Servlet.Responses.SC_NOT_FOUND);
+      ASF.Tests.Assert_Redirect (T, "/auth/login.html", Reply,
+                                "Invalid redirection for protected page");
+
+      AWA.Tests.Helpers.Users.Login ("test-image@test.com", Request);
+      ASF.Tests.Do_Get (Request, Reply, "/storages/images/12345345/view/missing.jpg",
+                        "image-file-missing.html");
+      T.Assert (Reply.Get_Status = Servlet.Responses.SC_NOT_FOUND,
+                "Invalid response after image get");
    end Test_Missing_Image;
 
 end AWA.Images.Tests;
