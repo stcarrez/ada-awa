@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  users-tests-helpers -- Helpers for user creation
---  Copyright (C) 2011, 2012, 2013, 2014, 2017 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2017, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -64,7 +64,7 @@ package AWA.Tests.Helpers.Users is
    --  Simulate a user login on the request.  Upon successful login, a session that is
    --  authentified is associated with the request object.
    procedure Login (Email   : in String;
-                    Request : in out ASF.Requests.Mockup.Request);
+                    Request : in out ASF.Requests.Mockup.Request'Class);
 
    --  Setup the context and security context to simulate an anonymous user.
    procedure Anonymous (Context     : in out AWA.Services.Contexts.Service_Context'Class;
