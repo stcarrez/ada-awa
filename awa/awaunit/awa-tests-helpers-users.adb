@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  files.tests -- Unit tests for files
---  Copyright (C) 2011, 2012, 2013, 2014, 2017 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2017, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -213,7 +213,7 @@ package body AWA.Tests.Helpers.Users is
    --  authentified is associated with the request object.
    --  ------------------------------
    procedure Login (Email   : in String;
-                    Request : in out ASF.Requests.Mockup.Request) is
+                    Request : in out ASF.Requests.Mockup.Request'Class) is
       User  : Test_User;
       Reply : ASF.Responses.Mockup.Response;
    begin
