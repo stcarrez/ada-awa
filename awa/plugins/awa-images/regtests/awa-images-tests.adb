@@ -15,24 +15,20 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-
+with Ada.Directories;
 with Util.Test_Caller;
 with Util.Strings;
 
 with ADO;
-with Servlet.Streams;
+with Servlet.Requests.Mockup;
+with Servlet.Responses.Mockup;
 with ASF.Tests;
 with AWA.Tests.Helpers.Users;
-with AWA.Images.Beans;
-with AWA.Images.Models;
-with AWA.Images.Modules;
-with AWA.Services.Contexts;
-with Security.Contexts;
 
 package body AWA.Images.Tests is
 
    use Ada.Strings.Unbounded;
-   use AWA.Tests;
+   use ADO;
 
    package Caller is new Util.Test_Caller (Test, "Images.Beans");
 
@@ -87,24 +83,72 @@ package body AWA.Images.Tests is
    --  Test creation of image by simulating web requests.
    --  ------------------------------
    procedure Test_Create_Image (T : in out Test) is
-      Request   : Servlet.Requests.Mockup.Request;
+      Request   : Servlet.Requests.Mockup.Part_Request (1);
       Reply     : Servlet.Responses.Mockup.Response;
+      Content   : Ada.Strings.Unbounded.Unbounded_String;
+      Folder_Id : ADO.Identifier;
+      Image_Id  : ADO.Identifier;
+      Path      : constant String := Util.Tests.Get_Test_Path ("regtests/result/upload.jpg");
    begin
       AWA.Tests.Helpers.Users.Login ("test-image@test.com", Request);
+
+      --  Create the folder.
       Request.Set_Parameter ("folder-name", "Image Folder Name");
       Request.Set_Parameter ("storage-folder-create-form", "1");
       Request.Set_Parameter ("storage-folder-create-button", "1");
-      ASF.Tests.Do_Post (Request, Reply, "/storages/forms/folder-create.html", "folder-create-form.html");
+      ASF.Tests.Do_Post (Request, Reply, "/storages/forms/folder-create.html",
+                         "folder-create-form.html");
 
       T.Assert (Reply.Get_Status = Servlet.Responses.SC_OK,
                 "Invalid response after folder creation");
-      
+
+      Reply.Read_Content (Content);
+      Folder_Id := AWA.Tests.Helpers.Extract_Identifier (To_String (Content), "#folder");
+      T.Assert (Folder_Id > 0, "Invalid folder id returned");
+
+      --  Check the list page.
       ASF.Tests.Do_Get (Request, Reply, "/storages/images.html",
                         "image-list.html");
       ASF.Tests.Assert_Contains (T, "Documents of the workspace", Reply,
                                  "List of documents is invalid (title)");
-      ASF.Tests.Assert_Contains (T, "Test Folder Name", Reply,
+      ASF.Tests.Assert_Contains (T, "Image Folder Name", Reply,
                                  "List of documents is invalid (content)");
+
+      --  Upload an image to the folder.
+      if Ada.Directories.Exists (Path) then
+         Ada.Directories.Delete_File (Path);
+      end if;
+      Ada.Directories.Copy_File (Source_Name => "regtests/files/images/Ada-Lovelace.jpg",
+                                 Target_Name => Path,
+                                 Form        => "all");
+
+      Request.Set_Parameter ("folder", ADO.Identifier'Image (Folder_Id));
+      Request.Set_Parameter ("uploadForm", "1");
+      Request.Set_Parameter ("id", "-1");
+      Request.Set_Parameter ("upload-button", "1");
+      Request.Set_Part (Position => 1, Name => "upload-file",
+                        Path => Path, Content_Type => "image/jpg");
+      ASF.Tests.Do_Post (Request, Reply, "/storages/forms/upload-form.html",
+                         "upload-image-form.html");
+
+      T.Assert (Reply.Get_Status = Servlet.Responses.SC_OK,
+                "Invalid response after image upload");
+
+      T.Assert_Equals ("application/json", Reply.Get_Content_Type,
+                       "Invalid response after upload");
+
+      Reply.Read_Content (Content);
+      Image_Id := AWA.Tests.Helpers.Extract_Identifier (To_String (Content), "store");
+      T.Assert (Image_Id > 0, "Invalid image id returned after upload");
+
+      --  Look at the image content.
+      ASF.Tests.Do_Get (Request, Reply, "/storages/images/"
+                          & Util.Strings.Image (Natural (Image_Id)) & "/view/upload.jpg",
+                        "image-file-data.jpg");
+      T.Assert (Reply.Get_Status = Servlet.Responses.SC_OK,
+                "Invalid response after image get");
+      T.Assert_Equals ("image/jpg", Reply.Get_Content_Type,
+                       "Invalid response after upload");
    end Test_Create_Image;
 
    --  ------------------------------
