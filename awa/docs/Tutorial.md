@@ -8,9 +8,13 @@ The tutorial assumes that you have already installed the following software on y
 computer:
 
 * The [GNAT Ada compiler](http://libre.adacore.com/tools/gnat-gpl-edition/),
-* The [ArgoUML](http://argouml.tigris.org/) modelization tool,
 * The Ada Web Application framework and its associated dependencies ([XML/Ada](http://libre.adacore.com/tools/xmlada/) and [AWS](https://github.com/AdaCore/aws)),
 * The [Dynamo](https://github.com/stcarrez/dynamo) code generator.
+
+The [ArgoUML](https://github.com/argouml-tigris-org/argouml) modelization tool is
+provided by the [Dynamo](https://github.com/stcarrez/dynamo) package.  Since this
+is a Java application, it uses the Java JRE (either 1.8 or 1.11, the OpenJDK 1.11
+is recommended).
 
 ## The review web application
 
@@ -143,26 +147,29 @@ The class may have relations with others classes.
 
 ### ArgoUML setup
 
-For the UML model, we are going to use [ArgoUML](http://argouml.tigris.org/)
-that is a free modelization tool that works pretty well.
-For the  [ArgoUML](http://argouml.tigris.org/) setup, we will use two profiles:
+When using a UML modelization, two specific profiles must be configured before using the tool:
 
 * The [Dynamo](https://github.com/stcarrez/dynamo) profile that describes the base data types for our UML model.  These types are necessary for the code generator to work correctly.
 * The AWA profile that describes the tables and modules provided by AWA. We will need it to get the user UML class definition.
 
 These UML profiles are located in the `/usr/share/dynamo/base/uml`
 directory after [Dynamo](https://github.com/stcarrez/dynamo) and AWA are installed.
-To configure [ArgoUML](http://argouml.tigris.org/),
+
+When you use the `argouml` command provided by the [Dynamo](https://github.com/stcarrez/dynamo) package,
+the UML profiles should already be accessible and you have nothing to setup.
+
+If you have installed ArgoUML by downloading it, you must setup these UML profiles.
+To configure [ArgoUML](https://github.com/argouml-tigris-org/argouml),
 go in the `Edit -> Settings` menu
 and add the directory in the `Default XMI directories` list.  Beware that you must
 restart [ArgoUML](http://argouml.tigris.org/) to be able to use the new profiles.
 
 ![Setting ArgoUML profiles](images/demo-awa-argouml-setup.png)
 
-Once the directory is added, restart [ArgoUML](http://argouml.tigris.org/),
+Once the directory is added, restart [ArgoUML](https://github.com/argouml-tigris-org/argouml),
 go again in `Edit -> Settings` menu and select the `AWA.xmi` and `Dynamo.xmi`
 profiles.  As soon as they are selected and applied on the configuration,
-you should restart [ArgoUML](http://argouml.tigris.org/) another time
+you should restart [ArgoUML](https://github.com/argouml-tigris-org/argouml) another time
 for these two profiles to become usable.
 
 ### Modelize the domain model in UML
