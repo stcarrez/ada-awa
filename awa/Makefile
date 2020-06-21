@@ -134,7 +134,7 @@ ifeq (${HAVE_SQLITE},True)
 	sqlite3 $@ < db/sqlite/create-awa-sqlite.sql
 endif
 
-stamp-test-setup:
+stamp-test-setup: Makefile.conf
 	# Apply access constraints to the test key and directory.
 	chmod 600 regtests/config/*.key
 	chmod 700 regtests/config
