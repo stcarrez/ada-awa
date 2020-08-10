@@ -46,7 +46,7 @@ CREATE TABLE awa_post (
   /* the number of times the post was read. */
   "read_count" INTEGER NOT NULL,
   /* the post summary. */
-  "summary" VARCHAR(255) NOT NULL,
+  "summary" VARCHAR(4096) NOT NULL,
   /* the blog post format. */
   "format" SMALLINT NOT NULL,
   /*  */
