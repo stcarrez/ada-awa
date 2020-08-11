@@ -176,7 +176,7 @@ package AWA.Audits.Models is
                    Into   : in out Audit_Ref);
 
    package Audit_Vectors is
-      new Ada.Containers.Vectors (Index_Type   => Natural,
+      new Ada.Containers.Vectors (Index_Type   => Positive,
                                   Element_Type => Audit_Ref,
                                   "="          => "=");
    subtype Audit_Vector is Audit_Vectors.Vector;

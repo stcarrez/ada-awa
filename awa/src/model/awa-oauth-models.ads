@@ -222,7 +222,7 @@ package AWA.OAuth.Models is
                    Into   : in out Application_Ref);
 
    package Application_Vectors is
-      new Ada.Containers.Vectors (Index_Type   => Natural,
+      new Ada.Containers.Vectors (Index_Type   => Positive,
                                   Element_Type => Application_Ref,
                                   "="          => "=");
    subtype Application_Vector is Application_Vectors.Vector;
@@ -318,7 +318,7 @@ package AWA.OAuth.Models is
                    Into   : in out Callback_Ref);
 
    package Callback_Vectors is
-      new Ada.Containers.Vectors (Index_Type   => Natural,
+      new Ada.Containers.Vectors (Index_Type   => Positive,
                                   Element_Type => Callback_Ref,
                                   "="          => "=");
    subtype Callback_Vector is Callback_Vectors.Vector;
@@ -447,7 +447,7 @@ package AWA.OAuth.Models is
                    Into   : in out Session_Ref);
 
    package Session_Vectors is
-      new Ada.Containers.Vectors (Index_Type   => Natural,
+      new Ada.Containers.Vectors (Index_Type   => Positive,
                                   Element_Type => Session_Ref,
                                   "="          => "=");
    subtype Session_Vector is Session_Vectors.Vector;

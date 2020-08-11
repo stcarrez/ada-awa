@@ -133,7 +133,7 @@ package AWA.Events.Models is
                    Into   : in out Message_Type_Ref);
 
    package Message_Type_Vectors is
-      new Ada.Containers.Vectors (Index_Type   => Natural,
+      new Ada.Containers.Vectors (Index_Type   => Positive,
                                   Element_Type => Message_Type_Ref,
                                   "="          => "=");
    subtype Message_Type_Vector is Message_Type_Vectors.Vector;
@@ -421,7 +421,7 @@ package AWA.Events.Models is
                    Into   : in out Message_Ref);
 
    package Message_Vectors is
-      new Ada.Containers.Vectors (Index_Type   => Natural,
+      new Ada.Containers.Vectors (Index_Type   => Positive,
                                   Element_Type => Message_Ref,
                                   "="          => "=");
    subtype Message_Vector is Message_Vectors.Vector;
