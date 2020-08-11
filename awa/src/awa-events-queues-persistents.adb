@@ -190,7 +190,7 @@ package body AWA.Events.Queues.Persistents is
       --  Prepare the event messages by marking them in the database.
       --  This makes sure that no other server or task (if any), will process them.
       if Count > 0 then
-         for I in 0 .. Count - 1 loop
+         for I in 1 .. Count loop
             Messages.Update_Element (Index   => I,
                                      Process => Prepare_Message'Access);
          end loop;
@@ -204,14 +204,14 @@ package body AWA.Events.Queues.Persistents is
       Log.Info ("Dispatching {0} events", Natural'Image (Count));
 
       --  Dispatch each event.
-      for I in 0 .. Count - 1 loop
+      for I in 1 .. Count loop
          Messages.Update_Element (Index   => I,
                                   Process => Dispatch_Message'Access);
       end loop;
 
       --  After having dispatched the events, mark them as dispatched in the queue.
       Ctx.Start;
-      for I in 0 .. Count - 1 loop
+      for I in 1 .. Count loop
          Messages.Update_Element (Index   => I,
                                   Process => Finish_Message'Access);
       end loop;
