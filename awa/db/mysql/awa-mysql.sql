@@ -3,7 +3,7 @@
 The record indicates the database table and row, the field being updated,
 the old and new value. The old and new values are converted to a string
 and they truncated if necessary to 256 characters. */
-CREATE TABLE awa_audit (
+CREATE TABLE IF NOT EXISTS awa_audit (
   /* the audit identifier */
   `id` BIGINT NOT NULL,
   /* the date when the field was modified. */
@@ -24,7 +24,7 @@ CREATE TABLE awa_audit (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The Audit_Field table describes
 the database field being updated. */
-CREATE TABLE awa_audit_field (
+CREATE TABLE IF NOT EXISTS awa_audit_field (
   /* the audit field identifier. */
   `id` INTEGER NOT NULL AUTO_INCREMENT,
   /* the audit field name. */
@@ -34,7 +34,7 @@ CREATE TABLE awa_audit_field (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
-CREATE TABLE awa_message (
+CREATE TABLE IF NOT EXISTS awa_message (
   /* the message identifier */
   `id` BIGINT NOT NULL,
   /* the message creation date */
@@ -72,7 +72,7 @@ CREATE TABLE awa_message (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
-CREATE TABLE awa_message_type (
+CREATE TABLE IF NOT EXISTS awa_message_type (
   /*  */
   `id` BIGINT NOT NULL,
   /* the message type name */
@@ -81,7 +81,7 @@ CREATE TABLE awa_message_type (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The message queue tracks the event messages that must be dispatched by
 a given server. */
-CREATE TABLE awa_queue (
+CREATE TABLE IF NOT EXISTS awa_queue (
   /*  */
   `id` BIGINT NOT NULL,
   /*  */
@@ -91,7 +91,7 @@ CREATE TABLE awa_queue (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The application that is granted access to the database. */
-CREATE TABLE awa_application (
+CREATE TABLE IF NOT EXISTS awa_application (
   /* the application identifier. */
   `id` BIGINT NOT NULL,
   /* the application name. */
@@ -119,7 +119,7 @@ CREATE TABLE awa_application (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
-CREATE TABLE awa_callback (
+CREATE TABLE IF NOT EXISTS awa_callback (
   /*  */
   `id` BIGINT NOT NULL,
   /*  */
@@ -132,7 +132,7 @@ CREATE TABLE awa_callback (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The session is created when the user has granted an access to an application
 or when the application has refreshed its access token. */
-CREATE TABLE awa_oauth_session (
+CREATE TABLE IF NOT EXISTS awa_oauth_session (
   /* the session identifier. */
   `id` BIGINT NOT NULL,
   /* the session creation date. */
@@ -150,7 +150,7 @@ CREATE TABLE awa_oauth_session (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The ACL table records permissions which are granted for a user to access a given database entity. */
-CREATE TABLE awa_acl (
+CREATE TABLE IF NOT EXISTS awa_acl (
   /* the ACL identifier */
   `id` BIGINT NOT NULL,
   /* the entity identifier to which the ACL applies */
@@ -170,7 +170,7 @@ CREATE TABLE awa_acl (
 /* The permission table lists all the application permissions that are defined.
 This is a system table shared by every user and workspace.
 The list of permission is fixed and never changes. */
-CREATE TABLE awa_permission (
+CREATE TABLE IF NOT EXISTS awa_permission (
   /* the permission database identifier. */
   `id` BIGINT NOT NULL,
   /* the permission name */
@@ -178,7 +178,7 @@ CREATE TABLE awa_permission (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
-CREATE TABLE awa_access_key (
+CREATE TABLE IF NOT EXISTS awa_access_key (
   /* the secure access key. */
   `access_key` VARCHAR(255) BINARY NOT NULL,
   /* the access key expiration date. */
@@ -197,7 +197,7 @@ CREATE TABLE awa_access_key (
 The user has a primary email address that is obtained
 from the registration process (either through a form
 submission or through OpenID authentication). */
-CREATE TABLE awa_email (
+CREATE TABLE IF NOT EXISTS awa_email (
   /* the email address. */
   `email` VARCHAR(255) BINARY NOT NULL,
   /* the last mail delivery status (if known). */
@@ -209,11 +209,11 @@ CREATE TABLE awa_email (
   /* the email primary key. */
   `id` BIGINT NOT NULL,
   /* the user. */
-  `user_id` BIGINT NOT NULL,
+  `user_id` BIGINT ,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
-CREATE TABLE awa_session (
+CREATE TABLE IF NOT EXISTS awa_session (
   /*  */
   `start_date` DATETIME NOT NULL,
   /*  */
@@ -235,7 +235,7 @@ CREATE TABLE awa_session (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The User entity represents a user that can access and use the application. */
-CREATE TABLE awa_user (
+CREATE TABLE IF NOT EXISTS awa_user (
   /* the user first name. */
   `first_name` VARCHAR(255) BINARY NOT NULL,
   /* the user last name. */
@@ -258,27 +258,13 @@ CREATE TABLE awa_user (
   `email_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT INTO entity_type (name) VALUES
-("awa_audit")
-,("awa_audit_field")
-,("awa_message")
-,("awa_message_type")
-,("awa_queue")
-,("awa_application")
-,("awa_callback")
-,("awa_oauth_session")
-,("awa_acl")
-,("awa_permission")
-,("awa_access_key")
-,("awa_email")
-,("awa_session")
-,("awa_user")
-;
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO entity_type (name) VALUES
+("awa_audit"), ("awa_audit_field"), ("awa_message"), ("awa_message_type"), ("awa_queue"), ("awa_application"), ("awa_callback"), ("awa_oauth_session"), ("awa_acl"), ("awa_permission"), ("awa_access_key"), ("awa_email"), ("awa_session"), ("awa_user");
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "first_name");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "last_name");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "country");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "name");
