@@ -4,7 +4,7 @@ application configuration parameter
 which can be stored in the database.
 
 The global setting can be specific to a server. */
-CREATE TABLE awa_global_setting (
+CREATE TABLE IF NOT EXISTS awa_global_setting (
   /* the global setting identifier. */
   "id" BIGINT NOT NULL,
   /* the global setting value. */
@@ -20,7 +20,7 @@ CREATE TABLE awa_global_setting (
 /* The setting table defines all the possible settings
 that an application manages.  This table is automatically
 populated when an application starts. It is not modified. */
-CREATE TABLE awa_setting (
+CREATE TABLE IF NOT EXISTS awa_setting (
   /* the setting identifier. */
   "id" BIGINT NOT NULL,
   /* the setting name. */
@@ -30,7 +30,7 @@ CREATE TABLE awa_setting (
 /* The user setting holds the setting value for a given user.
 It is created the first time a user changes the default
 setting value. It is updated when the user modifies the setting. */
-CREATE TABLE awa_user_setting (
+CREATE TABLE IF NOT EXISTS awa_user_setting (
   /* the user setting identifier. */
   "id" BIGINT NOT NULL,
   /* the setting value. */
@@ -44,7 +44,5 @@ CREATE TABLE awa_user_setting (
   PRIMARY KEY ("id")
 );
 INSERT INTO entity_type (name) VALUES
-('awa_global_setting')
-,('awa_setting')
-,('awa_user_setting')
-;
+('awa_global_setting'), ('awa_setting'), ('awa_user_setting')
+  ON CONFLICT DO NOTHING;

@@ -1,6 +1,6 @@
 /* File generated automatically by dynamo */
 /*  */
-CREATE TABLE awa_changelog (
+CREATE TABLE IF NOT EXISTS awa_changelog (
   /* the changelog identifier. */
   "id" BIGINT NOT NULL,
   /* the changelog date. */
@@ -17,4 +17,4 @@ CREATE TABLE awa_changelog (
 );
 INSERT INTO entity_type (name) VALUES
 ('awa_changelog')
-;
+  ON CONFLICT DO NOTHING;

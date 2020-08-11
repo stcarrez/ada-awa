@@ -1,6 +1,6 @@
 /* File generated automatically by dynamo */
 /*  */
-CREATE TABLE awa_wiki_content (
+CREATE TABLE IF NOT EXISTS awa_wiki_content (
   /* the wiki page content identifier */
   "id" BIGINT NOT NULL,
   /* the wiki content creation date */
@@ -25,7 +25,7 @@ CREATE TABLE awa_wiki_content (
 It refers to the last version which is currently visible.
 It has an optional preview image which defines
 the thumbnail preview of the last/current wiki content. */
-CREATE TABLE awa_wiki_page (
+CREATE TABLE IF NOT EXISTS awa_wiki_page (
   /* the wiki page identifier */
   "id" BIGINT NOT NULL,
   /* the wiki page name */
@@ -50,7 +50,7 @@ CREATE TABLE awa_wiki_page (
 );
 /* Permission is granted to display a wiki page if there is
 an ACL entry between the wiki space and the user. */
-CREATE TABLE awa_wiki_space (
+CREATE TABLE IF NOT EXISTS awa_wiki_space (
   /* the wiki space identifier */
   "id" BIGINT NOT NULL,
   /* the wiki name */
@@ -72,21 +72,26 @@ CREATE TABLE awa_wiki_space (
   PRIMARY KEY ("id")
 );
 INSERT INTO entity_type (name) VALUES
-('awa_wiki_content')
-,('awa_wiki_page')
-,('awa_wiki_space')
-;
+('awa_wiki_content'), ('awa_wiki_page'), ('awa_wiki_space')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'name');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'name')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'last_version');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'last_version')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'is_public');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'is_public')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'title');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'title')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_space'), 'name');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_space'), 'name')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_space'), 'is_public');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_space'), 'is_public')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_space'), 'format');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_space'), 'format')
+  ON CONFLICT DO NOTHING;

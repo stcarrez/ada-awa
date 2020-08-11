@@ -1,6 +1,6 @@
 /* File generated automatically by dynamo */
 /* The job is associated with a dispatching queue. */
-CREATE TABLE awa_job (
+CREATE TABLE IF NOT EXISTS awa_job (
   /* the job identifier */
   `id` BIGINT NOT NULL,
   /* the job status */
@@ -31,6 +31,5 @@ CREATE TABLE awa_job (
   `session_id` BIGINT ,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT INTO entity_type (name) VALUES
-("awa_job")
-;
+INSERT IGNORE INTO entity_type (name) VALUES
+("awa_job");

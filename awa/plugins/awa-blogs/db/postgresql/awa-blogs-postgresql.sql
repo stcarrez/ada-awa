@@ -1,6 +1,6 @@
 /* File generated automatically by dynamo */
 /*  */
-CREATE TABLE awa_blog (
+CREATE TABLE IF NOT EXISTS awa_blog (
   /* the blog identifier */
   "id" BIGINT NOT NULL,
   /* the blog name */
@@ -24,7 +24,7 @@ CREATE TABLE awa_blog (
   PRIMARY KEY ("id")
 );
 /*  */
-CREATE TABLE awa_post (
+CREATE TABLE IF NOT EXISTS awa_post (
   /* the post identifier */
   "id" BIGINT NOT NULL,
   /* the post title */
@@ -58,30 +58,41 @@ CREATE TABLE awa_post (
   PRIMARY KEY ("id")
 );
 INSERT INTO entity_type (name) VALUES
-('awa_blog')
-,('awa_post')
-;
+('awa_blog'), ('awa_post')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'name');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'name')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'uid');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'uid')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'url');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'url')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'format');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'format')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'default_image_url');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'default_image_url')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'title');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'title')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'uri');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'uri')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'publish_date');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'publish_date')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'status');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'status')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'allow_comments');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'allow_comments')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'summary');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'summary')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'format');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'format')
+  ON CONFLICT DO NOTHING;

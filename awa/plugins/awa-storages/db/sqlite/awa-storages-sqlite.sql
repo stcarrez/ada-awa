@@ -3,7 +3,7 @@
 
 When storage is FILE, the local file path is built by using
 the workspace identifier and the storage identifier. */
-CREATE TABLE awa_storage (
+CREATE TABLE IF NOT EXISTS awa_storage (
   /* the storage type which defines where the content is stored */
   `storage` TINYINT NOT NULL,
   /* the storage creation date */
@@ -36,7 +36,7 @@ CREATE TABLE awa_storage (
 );
 /* The storage data is created only if the storage type
 is set to DATABASE.  It holds the file content in the blob. */
-CREATE TABLE awa_storage_data (
+CREATE TABLE IF NOT EXISTS awa_storage_data (
   /* the storage data identifier */
   `id` BIGINT NOT NULL,
   /*  */
@@ -46,7 +46,7 @@ CREATE TABLE awa_storage_data (
   PRIMARY KEY (`id`)
 );
 /*  */
-CREATE TABLE awa_storage_folder (
+CREATE TABLE IF NOT EXISTS awa_storage_folder (
   /* the storage folder identifier */
   `id` BIGINT NOT NULL,
   /*  */
@@ -65,7 +65,7 @@ CREATE TABLE awa_storage_folder (
 The creation date refers to the date when the data was copied to the local file system.
 The expiration date indicates a date after which the local file can be removed
 from the local file system. */
-CREATE TABLE awa_store_local (
+CREATE TABLE IF NOT EXISTS awa_store_local (
   /* the local store identifier */
   `id` BIGINT NOT NULL,
   /*  */
@@ -84,7 +84,7 @@ CREATE TABLE awa_store_local (
   `storage_id` BIGINT ,
   PRIMARY KEY (`id`)
 );
-INSERT INTO entity_type (name) VALUES ("awa_storage");
-INSERT INTO entity_type (name) VALUES ("awa_storage_data");
-INSERT INTO entity_type (name) VALUES ("awa_storage_folder");
-INSERT INTO entity_type (name) VALUES ("awa_store_local");
+INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_storage");
+INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_storage_data");
+INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_storage_folder");
+INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_store_local");

@@ -1,6 +1,6 @@
 /* File generated automatically by dynamo */
 /*  */
-CREATE TABLE awa_city (
+CREATE TABLE IF NOT EXISTS awa_city (
   /* the city identifier */
   `id` BIGINT NOT NULL,
   /* the city name */
@@ -19,7 +19,7 @@ CREATE TABLE awa_city (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The country model is a system data model for the application.
 In theory, it never changes. */
-CREATE TABLE awa_country (
+CREATE TABLE IF NOT EXISTS awa_country (
   /* the country identifier */
   `id` BIGINT NOT NULL,
   /* the country name */
@@ -42,7 +42,7 @@ CREATE TABLE awa_country (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The country neighbor defines what countries
 are neigbors with each other */
-CREATE TABLE awa_country_neighbor (
+CREATE TABLE IF NOT EXISTS awa_country_neighbor (
   /*  */
   `id` BIGINT NOT NULL,
   /*  */
@@ -52,7 +52,7 @@ CREATE TABLE awa_country_neighbor (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* Region defines an area within a country. */
-CREATE TABLE awa_region (
+CREATE TABLE IF NOT EXISTS awa_region (
   /* the region identifier */
   `id` BIGINT NOT NULL,
   /* the region name */
@@ -63,9 +63,5 @@ CREATE TABLE awa_region (
   `country_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT INTO entity_type (name) VALUES
-("awa_city")
-,("awa_country")
-,("awa_country_neighbor")
-,("awa_region")
-;
+INSERT IGNORE INTO entity_type (name) VALUES
+("awa_city"), ("awa_country"), ("awa_country_neighbor"), ("awa_region");

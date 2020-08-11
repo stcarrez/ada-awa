@@ -1,6 +1,6 @@
 /* File generated automatically by dynamo */
 /*  */
-CREATE TABLE awa_rating (
+CREATE TABLE IF NOT EXISTS awa_rating (
   /* the rating identifier */
   "id" BIGINT NOT NULL,
   /* the rating taking into account all votes */
@@ -15,7 +15,7 @@ CREATE TABLE awa_rating (
 );
 /* The vote table tracks a vote action by a user on a given database entity.
 The primary key is made of the user, the entity id and entity type. */
-CREATE TABLE awa_vote (
+CREATE TABLE IF NOT EXISTS awa_vote (
   /*  */
   "rating" INTEGER NOT NULL,
   /*  */
@@ -25,6 +25,5 @@ CREATE TABLE awa_vote (
   PRIMARY KEY ("entity_id", "user_id")
 );
 INSERT INTO entity_type (name) VALUES
-('awa_rating')
-,('awa_vote')
-;
+('awa_rating'), ('awa_vote')
+  ON CONFLICT DO NOTHING;

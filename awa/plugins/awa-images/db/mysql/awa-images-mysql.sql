@@ -3,7 +3,7 @@
 - Each image folder contains a set of images that have been uploaded by the user.
 - An image can be visible if a user has an ACL permission to read the associated folder.
 - An image marked as 'public=True' can be visible by anybody */
-CREATE TABLE awa_image (
+CREATE TABLE IF NOT EXISTS awa_image (
   /* the image identifier */
   `id` BIGINT NOT NULL,
   /* the image width */
@@ -30,6 +30,5 @@ CREATE TABLE awa_image (
   `storage_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT INTO entity_type (name) VALUES
-("awa_image")
-;
+INSERT IGNORE INTO entity_type (name) VALUES
+("awa_image");

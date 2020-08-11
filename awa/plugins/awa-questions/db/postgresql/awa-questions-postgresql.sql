@@ -1,7 +1,7 @@
 /* File generated automatically by dynamo */
 /* The answer table gives a list of anwsers to the question.
 Ranking is updating according to users voting for the anwser. */
-CREATE TABLE awa_answer (
+CREATE TABLE IF NOT EXISTS awa_answer (
   /* the answer creation date. */
   "create_date" TIMESTAMP NOT NULL,
   /* the date when the answer was edited. */
@@ -24,7 +24,7 @@ CREATE TABLE awa_answer (
 The short description is used to give an overview of the question in long lists
 while the description contains the full question text.  The rating is updating
 according to users voting for the question. */
-CREATE TABLE awa_question (
+CREATE TABLE IF NOT EXISTS awa_question (
   /* the date when the question was created. */
   "create_date" TIMESTAMP NOT NULL,
   /* the question title. */
@@ -52,6 +52,5 @@ the question short description. */
   PRIMARY KEY ("id")
 );
 INSERT INTO entity_type (name) VALUES
-('awa_answer')
-,('awa_question')
-;
+('awa_answer'), ('awa_question')
+  ON CONFLICT DO NOTHING;

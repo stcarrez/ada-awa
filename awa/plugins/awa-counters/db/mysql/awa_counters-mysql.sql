@@ -1,6 +1,6 @@
 /* File generated automatically by dynamo */
 /*  */
-CREATE TABLE awa_counter (
+CREATE TABLE IF NOT EXISTS awa_counter (
   /* the object associated with the counter. */
   `object_id` BIGINT NOT NULL,
   /* the day associated with the counter. */
@@ -14,7 +14,7 @@ CREATE TABLE awa_counter (
 /* A counter definition defines what the counter represents. It uniquely identifies
 the counter for the Counter table. A counter may be associated with a database
 table. In that case, the counter definition has a relation to the corresponding Entity_Type. */
-CREATE TABLE awa_counter_definition (
+CREATE TABLE IF NOT EXISTS awa_counter_definition (
   /* the counter name. */
   `name` VARCHAR(255) BINARY NOT NULL,
   /* the counter unique id. */
@@ -24,7 +24,7 @@ CREATE TABLE awa_counter_definition (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
-CREATE TABLE awa_visit (
+CREATE TABLE IF NOT EXISTS awa_visit (
   /* the entity identifier. */
   `object_id` BIGINT NOT NULL,
   /* the number of times the entity was visited by the user. */
@@ -37,8 +37,5 @@ CREATE TABLE awa_visit (
   `definition_id` BIGINT NOT NULL,
   PRIMARY KEY (`object_id`, `user`, `definition_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT INTO entity_type (name) VALUES
-("awa_counter")
-,("awa_counter_definition")
-,("awa_visit")
-;
+INSERT IGNORE INTO entity_type (name) VALUES
+("awa_counter"), ("awa_counter_definition"), ("awa_visit");

@@ -1,6 +1,6 @@
 /* File generated automatically by dynamo */
 /*  */
-CREATE TABLE awa_invitation (
+CREATE TABLE IF NOT EXISTS awa_invitation (
   /* the invitation identifier. */
   `id` BIGINT NOT NULL,
   /* version optimistic lock. */
@@ -29,7 +29,7 @@ CREATE TABLE awa_invitation (
 for a set of users: the workspace members.  A user could create
 several workspaces and be part of several workspaces that other
 users have created. */
-CREATE TABLE awa_workspace (
+CREATE TABLE IF NOT EXISTS awa_workspace (
   /* the workspace identifier */
   `id` BIGINT NOT NULL,
   /*  */
@@ -41,7 +41,7 @@ CREATE TABLE awa_workspace (
   PRIMARY KEY (`id`)
 );
 /*  */
-CREATE TABLE awa_workspace_feature (
+CREATE TABLE IF NOT EXISTS awa_workspace_feature (
   /*  */
   `id` BIGINT NOT NULL,
   /*  */
@@ -53,7 +53,7 @@ CREATE TABLE awa_workspace_feature (
 /* The workspace member indicates the users who
 are part of the workspace. The join_date is NULL when
 a user was invited but has not accepted the invitation. */
-CREATE TABLE awa_workspace_member (
+CREATE TABLE IF NOT EXISTS awa_workspace_member (
   /*  */
   `id` BIGINT NOT NULL,
   /* the date when the user has joined the workspace. */
@@ -66,7 +66,7 @@ CREATE TABLE awa_workspace_member (
   `workspace_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
-INSERT INTO entity_type (name) VALUES ("awa_invitation");
-INSERT INTO entity_type (name) VALUES ("awa_workspace");
-INSERT INTO entity_type (name) VALUES ("awa_workspace_feature");
-INSERT INTO entity_type (name) VALUES ("awa_workspace_member");
+INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_invitation");
+INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_workspace");
+INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_workspace_feature");
+INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_workspace_member");
