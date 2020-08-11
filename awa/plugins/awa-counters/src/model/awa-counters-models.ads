@@ -319,7 +319,7 @@ package AWA.Counters.Models is
                    Into   : in out Visit_Ref);
 
    package Visit_Vectors is
-      new Ada.Containers.Vectors (Index_Type   => Natural,
+      new Ada.Containers.Vectors (Index_Type   => Positive,
                                   Element_Type => Visit_Ref,
                                   "="          => "=");
    subtype Visit_Vector is Visit_Vectors.Vector;

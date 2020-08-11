@@ -121,7 +121,7 @@ package AWA.Tags.Models is
                    Into   : in out Tag_Ref);
 
    package Tag_Vectors is
-      new Ada.Containers.Vectors (Index_Type   => Natural,
+      new Ada.Containers.Vectors (Index_Type   => Positive,
                                   Element_Type => Tag_Ref,
                                   "="          => "=");
    subtype Tag_Vector is Tag_Vectors.Vector;
@@ -220,7 +220,7 @@ package AWA.Tags.Models is
                    Into   : in out Tagged_Entity_Ref);
 
    package Tagged_Entity_Vectors is
-      new Ada.Containers.Vectors (Index_Type   => Natural,
+      new Ada.Containers.Vectors (Index_Type   => Positive,
                                   Element_Type => Tagged_Entity_Ref,
                                   "="          => "=");
    subtype Tagged_Entity_Vector is Tagged_Entity_Vectors.Vector;

@@ -219,7 +219,7 @@ package AWA.Blogs.Models is
                    Into   : in out Blog_Ref);
 
    package Blog_Vectors is
-      new Ada.Containers.Vectors (Index_Type   => Natural,
+      new Ada.Containers.Vectors (Index_Type   => Positive,
                                   Element_Type => Blog_Ref,
                                   "="          => "=");
    subtype Blog_Vector is Blog_Vectors.Vector;

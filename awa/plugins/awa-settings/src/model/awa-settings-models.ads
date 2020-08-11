@@ -124,7 +124,7 @@ package AWA.Settings.Models is
                    Into   : in out Setting_Ref);
 
    package Setting_Vectors is
-      new Ada.Containers.Vectors (Index_Type   => Natural,
+      new Ada.Containers.Vectors (Index_Type   => Positive,
                                   Element_Type => Setting_Ref,
                                   "="          => "=");
    subtype Setting_Vector is Setting_Vectors.Vector;
@@ -234,7 +234,7 @@ package AWA.Settings.Models is
                    Into   : in out Global_Setting_Ref);
 
    package Global_Setting_Vectors is
-      new Ada.Containers.Vectors (Index_Type   => Natural,
+      new Ada.Containers.Vectors (Index_Type   => Positive,
                                   Element_Type => Global_Setting_Ref,
                                   "="          => "=");
    subtype Global_Setting_Vector is Global_Setting_Vectors.Vector;

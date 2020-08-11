@@ -201,7 +201,7 @@ package AWA.Images.Models is
                    Into   : in out Image_Ref);
 
    package Image_Vectors is
-      new Ada.Containers.Vectors (Index_Type   => Natural,
+      new Ada.Containers.Vectors (Index_Type   => Positive,
                                   Element_Type => Image_Ref,
                                   "="          => "=");
    subtype Image_Vector is Image_Vectors.Vector;
