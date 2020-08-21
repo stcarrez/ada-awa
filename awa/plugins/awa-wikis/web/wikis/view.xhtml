@@ -28,6 +28,7 @@
         <f:metadata>
             <f:viewAction action='#{wikiView.load}'/>
         </f:metadata>
+	<link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/highlight/darcula.css"/>
     </ui:define>
 
     <!-- Main page body -->
@@ -40,4 +41,10 @@
           <ui:include src="views/page-view.xhtml"/>
       </div>
     </ui:define>
+
+    <ui:define name="pageScript">
+      <script type="text/javascript" src="#{contextPath}/js/highlight.pack.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script>
+    </ui:define>
+
 </ui:composition>
