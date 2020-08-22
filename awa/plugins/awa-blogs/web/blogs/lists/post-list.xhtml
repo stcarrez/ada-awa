@@ -48,6 +48,7 @@
 
         <awa:wiki styleClass='post-text'
                   value="#{empty post.summary ? post.text : post.summary}"
+                  plugins="#{post}"
                   links="#{postList.links}"
                   format="#{post.format}"/>
         <h:panelGroup rendered="#{not empty post.summary}" styleClass="awa-post-more">

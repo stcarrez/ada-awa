@@ -1,5 +1,5 @@
 <!-- View a single post
-  -  Copyright (C) 2014, 2015, 2016, 2017, 2018 Stephane Carrez
+  -  Copyright (C) 2014 - 2020 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,12 +24,16 @@
         xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{post.title}"/>
 
-    <!-- Main page body -->
-    <ui:define name="pageBody">
+    <ui:define name="pageHeader">
         <f:metadata>
             <f:viewParam id='post' value='#{post.uri}' required='false'/>
             <f:viewAction action='#{post.load}'/>
         </f:metadata>
+        <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/highlight/darcula.css"/>
+    </ui:define>
+
+    <!-- Main page body -->
+    <ui:define name="pageBody">
         <div id='awa-content'>
             <div class='grid_9'>
                 <div class='blog-post' id="p_#{post.id}">
@@ -54,11 +58,13 @@
                     <awa:wiki rendered="#{not empty post.summary}"
                               styleClass='post-text'
                               value="#{post.summary}"
-                              links="#{postList.links}"
+                              plugins="#{post}"
+                              links="#{post.links}"
                               format="#{post.format}"/>
 
                     <awa:wiki styleClass='post-text'
                               value="#{post.text}"
+                              plugins="#{post}"
                               links="#{post.links}"
                               format="#{post.format}"/>
                     <!-- Increment the post read counter but do not display anything -->
@@ -97,9 +103,11 @@
     </ui:define>
 
     <ui:define name="pageScript">
-        <script type="text/javascript" src="#{jquery.path}"></script>
-        <script type="text/javascript" src="#{contextPath}/js/asf.js"></script>
-        <script type="text/javascript" src="#{contextPath}/js/awa.js"></script>
+      <script type="text/javascript" src="#{contextPath}/js/highlight.pack.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script>
+      <script type="text/javascript" src="#{jquery.path}"></script>
+      <script type="text/javascript" src="#{contextPath}/js/asf.js"></script>
+      <script type="text/javascript" src="#{contextPath}/js/awa.js"></script>
     </ui:define>
 
 </ui:composition>

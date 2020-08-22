@@ -29,6 +29,7 @@
         <f:metadata>
             <f:viewAction action='#{post.load_admin}'/>
         </f:metadata>
+        <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/highlight/darcula.css"/>
     </ui:define>
 
     <!-- Main page body -->
@@ -67,11 +68,13 @@
                   <awa:wiki rendered="#{not empty post.summary}"
                             styleClass='post-text'
                             value="#{post.summary}"
+                            plugins="#{post}"
                             links="#{post.links}"
                             format="#{post.format}"/>
 
                   <awa:wiki styleClass='post-text'
                             value="#{post.text}"
+                            plugins="#{post}"
                             links="#{post.links}"
                             format="#{post.format}"/>
                   <div class='awa-comment-list' id="comments">
@@ -107,6 +110,8 @@
     </ui:define>
 
     <ui:define name="pageScript">
+      <script type="text/javascript" src="#{contextPath}/js/highlight.pack.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script>
         <script type="text/javascript" src="#{contextPath}/js/jquery.canvaswrapper.js"></script>
         <script type="text/javascript" src="#{contextPath}/js/jquery.colorhelpers.js"></script>
         <script type="text/javascript" src="#{contextPath}/js/jquery.flot.js"></script>
