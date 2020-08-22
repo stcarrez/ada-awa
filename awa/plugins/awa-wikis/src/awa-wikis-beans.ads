@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-beans -- Beans for module wikis
---  Copyright (C) 2015, 2016 Stephane Carrez
+--  Copyright (C) 2015, 2016, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,6 +34,7 @@ with Wiki.Strings;
 with Wiki.Attributes;
 with Wiki.Plugins.Templates;
 with Wiki.Plugins.Conditions;
+with Wiki.Plugins.Variables;
 
 with AWA.Wikis.Modules;
 with AWA.Wikis.Models;
@@ -142,6 +143,9 @@ package AWA.Wikis.Beans is
 
       --  Condition plugin.
       Condition     : aliased Wiki.Plugins.Conditions.Condition_Plugin;
+
+      --  Variable plugin.
+      Variable      : aliased Wiki.Plugins.Variables.Variable_Plugin;
 
       --  The info bean used for the list iterator.
       Info          : aliased AWA.Wikis.Models.Wiki_Info;
