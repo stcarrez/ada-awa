@@ -598,6 +598,22 @@ package body AWA.Blogs.Beans is
    end Set_Value;
 
    --  ------------------------------
+   --  Find a plugin knowing its name.
+   --  ------------------------------
+   overriding
+   function Find (Factory : in Post_Bean;
+                  Name    : in String) return Wiki.Plugins.Wiki_Plugin_Access is
+   begin
+      if Name = "if" or Name = "else" or Name = "elsif" or Name = "end" then
+         return Factory.Condition'Unrestricted_Access;
+      elsif Name = "set" then
+         return Factory.Variable'Unrestricted_Access;
+      else
+         return null;
+      end if;
+   end Find;
+
+   --  ------------------------------
    --  Load the post.
    --  ------------------------------
    procedure Load_Post (Post : in out Post_Bean;
