@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-beans -- Beans for blog module
---  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2019 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2019, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,6 +29,8 @@ with ADO;
 with ADO.Objects;
 
 with Wiki.Strings;
+with Wiki.Plugins.Conditions;
+with Wiki.Plugins.Variables;
 
 with ASF.Helpers.Beans;
 
@@ -155,7 +157,8 @@ package AWA.Blogs.Beans is
    --  Post Bean
    --  ------------------------------
    --  The <b>Post_Bean</b> is used to create, update or display a post associated with a blog.
-   type Post_Bean is new AWA.Blogs.Models.Post_Bean with record
+   type Post_Bean is new AWA.Blogs.Models.Post_Bean
+     and Wiki.Plugins.Plugin_Factory with record
       Module  : AWA.Blogs.Modules.Blog_Module_Access := null;
       Blog_Id : ADO.Identifier := ADO.NO_IDENTIFIER;
 
@@ -171,6 +174,12 @@ package AWA.Blogs.Beans is
       Counter       : aliased AWA.Counters.Beans.Counter_Bean (Of_Type => ADO.Objects.KEY_INTEGER,
                                                                Of_Class => Models.POST_TABLE);
       Counter_Bean  : Util.Beans.Basic.Readonly_Bean_Access;
+
+      --  Condition plugin.
+      Condition     : aliased Wiki.Plugins.Conditions.Condition_Plugin;
+
+      --  Variable plugin.
+      Variable      : aliased Wiki.Plugins.Variables.Variable_Plugin;
 
       --  The post description generated from the content.
       Description   : Ada.Strings.Unbounded.Unbounded_String;
@@ -195,6 +204,11 @@ package AWA.Blogs.Beans is
    procedure Set_Value (From  : in out Post_Bean;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object);
+
+   --  Find a plugin knowing its name.
+   overriding
+   function Find (Factory : in Post_Bean;
+                  Name    : in String) return Wiki.Plugins.Wiki_Plugin_Access;
 
    --  Load the post.
    procedure Load_Post (Post : in out Post_Bean;
