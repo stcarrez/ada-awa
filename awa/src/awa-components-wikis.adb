@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-components-wikis -- Wiki rendering component
---  Copyright (C) 2011, 2012, 2013, 2015, 2016, 2018 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2015, 2016, 2018, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,6 +28,7 @@ with Wiki.Render.Html;
 with Wiki.Filters.Html;
 with Wiki.Filters.TOC;
 with Wiki.Filters.Autolink;
+with Wiki.Filters.Variables;
 with Wiki.Streams.Html;
 package body AWA.Components.Wikis is
 
@@ -233,6 +234,7 @@ package body AWA.Components.Wikis is
          Autolink : aliased Wiki.Filters.Autolink.Autolink_Filter;
          Renderer : aliased Wiki.Render.Html.Html_Renderer;
          Filter   : aliased Wiki.Filters.Html.Html_Filter_Type;
+         Vars     : aliased Wiki.Filters.Variables.Variable_Filter;
          Format   : constant Wiki.Wiki_Syntax := UI.Get_Wiki_Style (Context);
          Value    : constant Util.Beans.Objects.Object := UI.Get_Attribute (Context, VALUE_NAME);
          Links    : Wiki.Render.Links.Link_Renderer_Access;
@@ -253,6 +255,7 @@ package body AWA.Components.Wikis is
                Renderer.Set_Link_Renderer (Links);
             end if;
             Engine.Add_Filter (Autolink'Unchecked_Access);
+            Engine.Add_Filter (Vars'Unchecked_Access);
             Engine.Add_Filter (TOC'Unchecked_Access);
             Engine.Add_Filter (Filter'Unchecked_Access);
             Engine.Set_Syntax (Format);
