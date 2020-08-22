@@ -156,7 +156,6 @@ private
       Config            : Keystore.Wallet_Config := Keystore.Secure_Config;
       Secure_Config     : Keystore.Properties.Manager;
       App_Config        : ASF.Applications.Config;
-      File_Config       : ASF.Applications.Config;
       Global_Config     : ASF.Applications.Config;
       Factory           : AWA.Applications.Factory.Application_Factory;
       Provider          : Keystore.Passwords.Provider_Access;

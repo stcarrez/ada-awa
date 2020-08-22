@@ -153,7 +153,7 @@ package body AWA.Commands.Drivers is
       end if;
 
       if Context.Debug or Context.Verbose or Context.Dump then
-         Configure_Logs (Root    => Context.File_Config.Get ("log4j.rootCategory", ""),
+         Configure_Logs (Root    => Context.Global_Config.Get ("log4j.rootCategory", ""),
                          Debug   => Context.Debug,
                          Dump    => Context.Dump,
                          Verbose => Context.Verbose);

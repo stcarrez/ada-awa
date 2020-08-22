@@ -127,10 +127,11 @@ package body AWA.Commands is
                         Name        : in String;
                         Context     : in out Context_Type) is
       Path : constant String := Context.Get_Application_Config (Name);
+      File_Config : ASF.Applications.Config;
    begin
       Log.Info ("Configuring {0} with {1}", Name, Path);
       begin
-         Context.File_Config.Load_Properties (Path);
+         File_Config.Load_Properties (Path);
 
       exception
          when Ada.IO_Exceptions.Name_Error =>
@@ -142,11 +143,11 @@ package body AWA.Commands is
             Open_Keystore (Context);
          end if;
          AWA.Applications.Configs.Merge (Context.App_Config,
-                                         Context.File_Config,
+                                         File_Config,
                                          Context.Secure_Config,
                                          Name & ".");
       else
-         Context.App_Config := Context.File_Config;
+         Context.App_Config := File_Config;
       end if;
       Application.Initialize (Context.App_Config, Context.Factory);
    end Configure;
