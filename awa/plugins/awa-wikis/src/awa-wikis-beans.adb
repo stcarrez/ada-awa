@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-beans -- Beans for module wikis
---  Copyright (C) 2015, 2016, 2017, 2018, 2019 Stephane Carrez
+--  Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -307,6 +307,8 @@ package body AWA.Wikis.Beans is
    begin
       if Name = "if" or Name = "else" or Name = "elsif" or Name = "end" then
          return Factory.Condition'Unrestricted_Access;
+      elsif Name = "set" then
+         return Factory.Variable'Unrestricted_Access;
       else
          return Factory'Unrestricted_Access;
       end if;
