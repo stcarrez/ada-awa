@@ -180,6 +180,7 @@ package AWA.Blogs.Beans is
 
       --  Variable plugin.
       Variable      : aliased Wiki.Plugins.Variables.Variable_Plugin;
+      List_Variable : aliased Wiki.Plugins.Variables.List_Variable_Plugin;
 
       --  The post description generated from the content.
       Description   : Ada.Strings.Unbounded.Unbounded_String;

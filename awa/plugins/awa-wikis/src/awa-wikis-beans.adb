@@ -309,6 +309,8 @@ package body AWA.Wikis.Beans is
          return Factory.Condition'Unrestricted_Access;
       elsif Name = "set" then
          return Factory.Variable'Unrestricted_Access;
+      elsif Name = "list" then
+         return Factory.List_Variable'Unrestricted_Access;
       else
          return Factory'Unrestricted_Access;
       end if;

@@ -146,6 +146,7 @@ package AWA.Wikis.Beans is
 
       --  Variable plugin.
       Variable      : aliased Wiki.Plugins.Variables.Variable_Plugin;
+      List_Variable : aliased Wiki.Plugins.Variables.List_Variable_Plugin;
 
       --  The info bean used for the list iterator.
       Info          : aliased AWA.Wikis.Models.Wiki_Info;
