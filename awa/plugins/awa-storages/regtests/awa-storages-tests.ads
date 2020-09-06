@@ -18,9 +18,6 @@
 
 with Util.Tests;
 with AWA.Tests;
-with Servlet.requests.Mockup;
-with Servlet.Responses.Mockup;
-with Ada.Strings.Unbounded;
 
 package AWA.Storages.Tests is
 
