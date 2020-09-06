@@ -25,7 +25,7 @@ with ADO.Objects;
 with ADO.Queries;
 with ADO.SQL;
 with ADO.Statements;
-with ADO.Sessions.Entities;
+with ADO.Sessions;
 
 with AWA.Services.Contexts;
 with AWA.Workspaces.Models;
