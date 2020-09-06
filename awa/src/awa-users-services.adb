@@ -566,7 +566,8 @@ package body AWA.Users.Services is
    procedure Create_User (Model : in out User_Service;
                           User  : in out User_Ref'Class;
                           Email : in out Email_Ref'Class) is
-      COUNT_SQL : constant String := "SELECT COUNT(*) FROM awa_email WHERE LOWER(email) = LOWER(?)";
+      COUNT_SQL : constant String
+        := "SELECT COUNT(*) FROM awa_email WHERE LOWER(email) = LOWER(?)";
 
       Ctx           : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB            : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);

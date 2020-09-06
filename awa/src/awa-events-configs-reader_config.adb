@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-configs -- Event configuration
---  Copyright (C) 2012, 2013, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2017, 2018, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with AWA.Events.Queues;
 with AWA.Services.Contexts;
 package body AWA.Events.Configs.Reader_Config is
 
