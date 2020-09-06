@@ -16,25 +16,16 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Util.Test_Caller;
-with Util.Strings;
+with Ada.Strings.Unbounded;
 
-with ADO;
-with Servlet.Streams;
+with Util.Test_Caller;
+
 with ASF.Tests;
 with AWA.Tests.Helpers.Users;
-with AWA.Storages.Beans;
-with AWA.Storages.Models;
-with AWA.Storages.Services;
-with AWA.Storages.Modules;
-with AWA.Services.Contexts;
-with Security.Contexts;
+with Servlet.requests.Mockup;
+with Servlet.Responses.Mockup;
 
 package body AWA.Storages.Tests is
-
-   use Ada.Strings.Unbounded;
-   use AWA.Tests;
-   use type AWA.Storages.Services.Storage_Service_Access;
 
    package Caller is new Util.Test_Caller (Test, "Storages.Beans");
 
@@ -96,11 +87,13 @@ package body AWA.Storages.Tests is
       Request.Set_Parameter ("folder-name", "Test Folder Name");
       Request.Set_Parameter ("storage-folder-create-form", "1");
       Request.Set_Parameter ("storage-folder-create-button", "1");
-      ASF.Tests.Do_Post (Request, Reply, "/storages/forms/folder-create.html", "folder-create-form.html");
+      ASF.Tests.Do_Post (Request, Reply,
+                         "/storages/forms/folder-create.html",
+                         "folder-create-form.html");
 
       T.Assert (Reply.Get_Status = Servlet.Responses.SC_OK,
                 "Invalid response after folder creation");
-      
+
       ASF.Tests.Do_Get (Request, Reply, "/storages/documents.html",
                         "storage-list.html");
       ASF.Tests.Assert_Contains (T, "Documents of the workspace", Reply,
