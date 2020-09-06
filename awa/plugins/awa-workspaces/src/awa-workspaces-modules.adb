@@ -413,7 +413,7 @@ package body AWA.Workspaces.Modules is
          Invitee.Set_Last_Name (Util.Mail.Get_Last_Name (Email_Address));
          Invitee.Save (DB);
          Email.Set_User_Id (Invitee.Get_Id);
-         Email.Save (DB);         
+         Email.Save (DB);
       end if;
 
       --  Create the workspace member relation.
