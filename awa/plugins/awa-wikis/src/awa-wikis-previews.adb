@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-previews -- Wiki preview management
---  Copyright (C) 2015, 2018 Stephane Carrez
+--  Copyright (C) 2015, 2018, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,8 +23,6 @@ with Util.Files;
 with Util.Processes;
 with Util.Streams.Pipes;
 with Util.Streams.Texts;
-
-with ADO;
 
 with EL.Contexts.TLS;
 
