@@ -61,6 +61,10 @@ servletada = "^1.5.0"
 servletada_aws = "^1.5.0"
 keystoreada = "^1.2.1"
 
+[[actions]]
+type = "post-fetch"
+command = ["gnatprep", "-DHAVE_AWS=yes", "awa/plugins/awa-mail/src/awa-mail-clients-factory.gpb", "awa/plugins/awa-mail/src/awa-mail-clients-factory.adb"]
+
 [gpr-externals]
 AWA_LIBRARY_TYPE = ["relocatable", "static", "static-pic"]
 BUILD = ["distrib", "debug", "optimize", "profile", "coverage"]
