@@ -2,6 +2,7 @@ description = "Ada Web Application"
 name = "awa"
 version = "2.1.0"
 tags = ["web", "users", "jobs", "wiki", "framework", "storage", "blog"]
+website = "https://gitlab.com/stcarrez/ada-awa"
 
 licenses = ["Apache 2.0"]
 authors = ["Stephane.Carrez@gmail.com"]

@@ -1,7 +1,7 @@
-[general]
 description = "Ada Web Application (Testing framework)"
 name = "awa_unit"
 tags = ["web", "users", "jobs", "framework", "testing"]
+website = "https://gitlab.com/stcarrez/ada-awa"
 
 licenses = ["Apache 2.0"]
 authors = ["Stephane.Carrez@gmail.com"]
