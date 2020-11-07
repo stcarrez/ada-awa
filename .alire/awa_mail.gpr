@@ -6,36 +6,10 @@ library project Awa_Mail is
    Version      := Awa.Version;
    Name         := "awa_mail";
 
-   for Source_Dirs use ("../awa/plugins/awa-mail/src");
+   for Source_Dirs use ("../awa/plugins/awa-mail/src", "../awa/plugins/awa-mail/src/aws");
 
-   package Naming is
-     case Awa.Aws_Status is
-       when "yes" =>
-
-         case Awa.SMTP_SSL_Status is
-           when "yes" =>
-             for Implementation ("AWA.Mail.Clients.AWS_SMTP.Initialize")
-                   use "awa-mail-clients-aws_smtp-initialize_ssl.adb";
-
-           when "no" =>
-             for Implementation ("AWA.Mail.Clients.AWS_SMTP.Initialize")
-                   use "awa-mail-clients-aws_smtp-initialize_nossl.adb";
-
-         end case;
-
-       when "no" =>
-         null;
-
-     end case;
-   end Naming;
-
-   case Awa.Aws_Status is
-    when "yes" =>
-         for Source_Dirs use Project'Source_Dirs & ("../awa/plugins/awa-mail/src/aws");
-
-    when "no" =>
-         null;
-   end case;
+   for Implementation ("AWA.Mail.Clients.AWS_SMTP.Initialize")
+     use "awa-mail-clients-aws_smtp-initialize_ssl.adb";
 
    for Library_Name use Name;
    for Library_Kind use Awa.Library_Type;
