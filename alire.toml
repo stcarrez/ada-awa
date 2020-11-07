@@ -1,4 +1,3 @@
-[general]
 description = "Ada Web Application"
 name = "awa"
 version = "2.1.0"
@@ -62,6 +61,6 @@ servletada = "^1.5.0"
 servletada_aws = "^1.5.0"
 keystoreada = "^1.2.1"
 
-[general.gpr-externals]
+[gpr-externals]
 AWA_LIBRARY_TYPE = ["relocatable", "static", "static-pic"]
 BUILD = ["distrib", "debug", "optimize", "profile", "coverage"]
