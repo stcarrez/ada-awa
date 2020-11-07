@@ -1,4 +1,4 @@
-Version 2.1     -
+Version 2.1     - Nov 2020
   - Update Trumbowyg editor to version 2.21.0
   - Fix compilation issues with GNAT 2020
   - Update mail UI component to attach external files
