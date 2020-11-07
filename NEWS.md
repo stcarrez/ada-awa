@@ -3,6 +3,9 @@ Version 2.1     - Nov 2020
   - Fix compilation issues with GNAT 2020
   - Update mail UI component to attach external files
   - Improved setup for secure configuration with Ada Keystore
+  - Use Dynamo 1.2.0, Ada Server Faces 1.4.1, Ada Servlet 1.5.0, OpenAPI Ada 0.3.0
+  - Use Ada Security 1.3.1, Ada Wiki 1.3.0, Ada Database Objects 2.1.1
+  - Use Ada Keystore 1.2.1, Ada EL 1.8.1, Ada Utility Library 2.3.0
 
 Version 2.0     - May 2020
   - Refactoring of build process and installation
