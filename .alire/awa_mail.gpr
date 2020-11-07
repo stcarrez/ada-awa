@@ -8,8 +8,10 @@ library project Awa_Mail is
 
    for Source_Dirs use ("../awa/plugins/awa-mail/src", "../awa/plugins/awa-mail/src/aws");
 
-   for Implementation ("AWA.Mail.Clients.AWS_SMTP.Initialize")
-     use "awa-mail-clients-aws_smtp-initialize_ssl.adb";
+   package Naming is
+      for Implementation ("AWA.Mail.Clients.AWS_SMTP.Initialize")
+         use "awa-mail-clients-aws_smtp-initialize_ssl.adb";
+   end Naming;
 
    for Library_Name use Name;
    for Library_Kind use Awa.Library_Type;
