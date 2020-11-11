@@ -19,8 +19,8 @@ dnl Process this file with autoconf to produce a configure script.
 AC_INIT(src/awa.ads)
 
 # Current release settings
-AWA_MAJOR_VERSION=1
-AWA_MINOR_VERSION=2
+AWA_MAJOR_VERSION=2
+AWA_MINOR_VERSION=1
 AWA_MICRO_VERSION=0
 AWA_VERSION=$AWA_MAJOR_VERSION.$AWA_MINOR_VERSION.$AWA_MICRO_VERSION
 
