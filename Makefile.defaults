@@ -181,3 +181,9 @@ uninstall::
 install-static::
 
 endif
+
+ifdef DESTDIR
+
+.NOTPARALLEL:
+
+endif
