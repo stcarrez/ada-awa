@@ -6,323 +6,105 @@
 # dh-make output file, you may use that output file without restriction.
 # This special exception was added by Craig Small in version 0.37 of dh-make.
 
-# Uncomment this to turn on verbose mode.
-#export DH_VERBOSE=1
-LIBRARY_TYPE=static
+$(foreach line,$(shell sed -n '\
+  s/^ gnat, gnat-\([0-9.]\+\),$$/ \
+    GNAT_VERSION:=\1 \
+  /p;\
+  s/^Package: libawa\([0-9.]\+\)$$/ \
+    soname:=libawa.so.\1 \
+  /p;\
+  ' debian/control),$(eval $(line)))
 
-# gnatmake can do parallel builds; we don't want make to interfere.
-.NOTPARALLEL:
+DH_VERBOSE=1
+export DH_OPTIONS=-v
 
-aliversion := $(shell sed -n -r 's/^Package: libawa([^-]*)-dev$$/\1/p' debian/control)
-soversion := $(shell sed -n -r 's/^Package: libawa([^-]+)$$/\1/p' debian/control).0
-CPUS := $(shell getconf _NPROCESSORS_ONLN)
-DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
-package=libawa-dev
-pkgname=libawa
-libname=libawa
-libprefix=$(libname)_
-
-LIBRARY_TYPE=dynamic
+DEB_BUILD_MAINT_OPTIONS := hardening=+all
+include /usr/share/dpkg/buildflags.mk
+include /usr/share/ada/debian_packaging-$(GNAT_VERSION).mk
+ADAFLAGS += -gnatafno -gnatVa -gnatwa
 
 %:
-	dh $@ 
-
-.PHONY: binary-arch build-arch
-.PHONY: $(pkgname)$(aliversion)-dev $(pkgname)$(soversion)
-.PHONY: $(pkgname)$(aliversion)-blogs  $(pkgname)$(aliversion)-blogs-dev
-.PHONY: $(pkgname)$(aliversion)-changelogs  $(pkgname)$(aliversion)-changelogs-dev
-.PHONY: $(pkgname)$(aliversion)-comments  $(pkgname)$(aliversion)-comments-dev
-.PHONY: $(pkgname)$(aliversion)-countries  $(pkgname)$(aliversion)-countries-dev
-.PHONY: $(pkgname)$(aliversion)-images  $(pkgname)$(aliversion)-images-dev
-.PHONY: $(pkgname)$(aliversion)-jobs  $(pkgname)$(aliversion)-jobs-dev
-.PHONY: $(pkgname)$(aliversion)-mail  $(pkgname)$(aliversion)-mail-dev
-.PHONY: $(pkgname)$(aliversion)-markedit  $(pkgname)$(aliversion)-markedit-dev
-.PHONY: $(pkgname)$(aliversion)-questions  $(pkgname)$(aliversion)-questions-dev
-.PHONY: $(pkgname)$(aliversion)-settings  $(pkgname)$(aliversion)-settings-dev
-.PHONY: $(pkgname)$(aliversion)-storages  $(pkgname)$(aliversion)-storages-dev
-.PHONY: $(pkgname)$(aliversion)-tags  $(pkgname)$(aliversion)-tags-dev
-.PHONY: $(pkgname)$(aliversion)-votes  $(pkgname)$(aliversion)-votes-dev
-.PHONY: $(pkgname)$(aliversion)-workspaces $(pkgname)$(aliversion)-workspaces-dev
-
-binary-arch: build-arch $(pkgname)$(aliversion)-dev $(pkgname)$(soversion)
-	: # Common to all architecture-dependent packages
-	dh_installchangelogs -a
-	dh_installdocs -a
-	dh_lintian -a
-	dh_compress -a
-	dh_fixperms -a
-	dh_makeshlibs -a
-	dh_installdeb -a
-	dh_shlibdeps -a -L$(libname)$(soversion) -ldebian/$(libname)$(soversion)/usr/lib
-	dh_gencontrol -a
-	dh_md5sums -a
-	dh_builddeb -a
-
-$(pkgname)$(aliversion):
-	$(MAKE) prefix=$(CURDIR)/debian/tmp/usr install
-	for i in $(CURDIR)/debian/tmp/usr/lib/*.so.$(soversion); do \
-	   chrpath -d $$i ; \
-	done
-	dh_installdirs -p$@ \
-		usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_install -p$@ usr/lib/$(libname).so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
-
-$(pkgname)$(aliversion)-dev:
-	: # The development package
-	sed -e "s,INSTALL,/usr,g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" \
-		< $(CURDIR)/distrib/awa.gpr > $(CURDIR)/debian/tmp/usr/share/ada/adainclude/awa.gpr
-	cp $(CURDIR)/debian/dev-postinst $(CURDIR)/debian/$@.postinst
-	cp $(CURDIR)/debian/dev-postrm $(CURDIR)/debian/$@.postrm
-	dh_installdirs -p$@ \
-		usr/lib/$(DEB_HOST_MULTIARCH) \
-		usr/share/ada/adainclude/awa \
-		usr/lib/ada/adalib/awa
-	dh_install -p$@ usr/lib/$(libname).a /usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_install -p$@ usr/lib/ada/adalib/awa/*.ali /usr/lib/ada/adalib/awa
-	dh_install -p$@ usr/share/ada/adainclude/awa/*.ad[bs] /usr/share/ada/adainclude/awa
-	dh_install -p$@ usr/share/ada/adainclude/awa.gpr /usr/share/ada/adainclude
-	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libname).so.$(soversion) \
-	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libname).so
-	dh_strip -p$@ -X.a
-	dirs=`cd $(CURDIR)/debian/tmp/usr/share/dynamo && find awa -type d`; \
-	for i in $$dirs; do \
-		dh_installdirs -p$(pkgname)$(aliversion)-dev usr/share/dynamo/$$i ; \
-	done
-	files=`cd $(CURDIR)/debian/tmp/usr/share/dynamo && find awa -type f`; \
-	for i in $$files; do \
-		dir=`dirname $$i`; \
-		dh_install -p$(pkgname)$(aliversion)-dev usr/share/dynamo/$$i usr/share/dynamo/$$dir ; \
-	done
-	dh_install -p$@ usr/share/dynamo/base/uml/AWA.xmi /usr/share/dynamo/base/uml
-
-$(pkgname)$(aliversion)-unit-dev:
-	: # The development package
-	dh_installdirs -p$@ \
-		usr/lib/$(DEB_HOST_MULTIARCH) \
-		usr/share/ada/adainclude/awa-unit \
-		usr/lib/ada/adalib/awa-unit
-	dh_install -p$@ usr/lib/$(libprefix)unit.a /usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_install -p$@ usr/lib/ada/adalib/awa-unit/*.ali /usr/lib/ada/adalib/awa-unit
-	dh_install -p$@ usr/share/ada/adainclude/awa-unit/*.ad[bs] /usr/share/ada/adainclude/awa-unit
-	dh_install -p$@ usr/share/ada/adainclude/awa_unit.gpr /usr/share/ada/adainclude
-	dh_strip -p$@ -X.a
-
-awa_%:
-	name=`echo $@ | cut -d _ -f 2` ; \
-	dh_installdirs -p$(pkgname)$(aliversion)-$$name-dev \
-		usr/lib/$(DEB_HOST_MULTIARCH) \
-		usr/share/dynamo/$@
-	name=`echo $@ | cut -d _ -f 2` ; \
-	dirs=`cd $(CURDIR)/debian/tmp/usr/share/dynamo && find $@ -type d`; \
-	for i in $$dirs; do \
-		dh_installdirs -p$(pkgname)$(aliversion)-$$name-dev usr/share/dynamo/$$i ; \
-	done
-	name=`echo $@ | cut -d _ -f 2` ; \
-	files=`cd $(CURDIR)/debian/tmp/usr/share/dynamo && find $@ -type f`; \
-	for i in $$files; do \
-		dir=`dirname $$i`; \
-		dh_install -p$(pkgname)$(aliversion)-$$name-dev usr/share/dynamo/$$i usr/share/dynamo/$$dir ; \
-	done
-
-ada_%:
-	name=`echo $@ | cut -d _ -f 2` ; \
-	sed -e "s,INSTALL,/usr,g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" \
-		< $(CURDIR)/plugins/awa-$$name/distrib/awa_$$name.gpr > $(CURDIR)/debian/tmp/usr/share/ada/adainclude/awa_$$name.gpr ; \
-	dh_installdirs -p$(pkgname)$(aliversion)-$$name-dev \
-		usr/lib/ada/adalib/awa_$$name \
-		usr/share/ada/adainclude/awa_$$name ; \
-	dh_install -p$(pkgname)$(aliversion)-$$name-dev \
-	   usr/share/ada/adainclude/awa_$$name.gpr usr/share/ada/adainclude
-	name=`echo $@ | cut -d _ -f 2` ; \
-	files=`cd $(CURDIR)/debian/tmp/usr/lib/ada/adalib && find awa_$$name -type f`; \
-	for i in $$files; do \
-		dir=`dirname $$i`; \
-		dh_install -p$(pkgname)$(aliversion)-$$name-dev usr/lib/ada/adalib/$$i usr/lib/ada/adalib/$$dir ; \
-	done
-	name=`echo $@ | cut -d _ -f 2` ; \
-	files=`cd $(CURDIR)/debian/tmp/usr/share/ada/adainclude && find awa_$$name -type f`; \
-	for i in $$files; do \
-		dir=`dirname $$i`; \
-		dh_install -p$(pkgname)$(aliversion)-$$name-dev usr/share/ada/adainclude/$$i usr/share/ada/adainclude/$$dir ; \
-	done
-
-$(pkgname)$(aliversion)-blogs:
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_install -p$@ usr/lib/$(libprefix)blogs.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
-
-$(pkgname)$(aliversion)-blogs-dev:	awa_blogs ada_blogs
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)blogs.so.$(soversion) \
-	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)blogs.so
-
-$(pkgname)$(aliversion)-changelogs:
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_install -p$@ usr/lib/$(libprefix)changelogs.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
-
-$(pkgname)$(aliversion)-changelogs-dev:	awa_changelogs ada_changelogs
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)changelogs.so.$(soversion) \
-	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)changelogs.so
-
-$(pkgname)$(aliversion)-comments:
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_install -p$@ usr/lib/$(libprefix)comments.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
-
-$(pkgname)$(aliversion)-comments-dev:	awa_comments ada_comments
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)comments.so.$(soversion) \
-	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)comments.so
-
-$(pkgname)$(aliversion)-countries:
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_install -p$@ usr/lib/$(libprefix)countries.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
-
-$(pkgname)$(aliversion)-countries-dev:	awa_countries ada_countries
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)countries.so.$(soversion) \
-	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)countries.so
-
-$(pkgname)$(aliversion)-images:
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_install -p$@ usr/lib/$(libprefix)images.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
-
-$(pkgname)$(aliversion)-images-dev:	awa_images ada_images
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)images.so.$(soversion) \
-	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)images.so
-
-$(pkgname)$(aliversion)-jobs:
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_install -p$@ usr/lib/$(libprefix)jobs.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
-
-$(pkgname)$(aliversion)-jobs-dev:	awa_jobs ada_jobs
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)jobs.so.$(soversion) \
-	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)jobs.so
-
-$(pkgname)$(aliversion)-mail:
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_install -p$@ usr/lib/$(libprefix)mail.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
-
-$(pkgname)$(aliversion)-mail-dev:	awa_mail ada_mail
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)mail.so.$(soversion) \
-	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)mail.so
-
-$(pkgname)$(aliversion)-markedit:
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-
-$(pkgname)$(aliversion)-markedit-dev:	awa_markedit
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-
-$(pkgname)$(aliversion)-questions:
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_install -p$@ usr/lib/$(libprefix)questions.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
-
-$(pkgname)$(aliversion)-questions-dev:	awa_questions ada_questions
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)questions.so.$(soversion) \
-	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)questions.so
-
-$(pkgname)$(aliversion)-settings:
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_install -p$@ usr/lib/$(libprefix)settings.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
-
-$(pkgname)$(aliversion)-settings-dev:	awa_settings ada_settings
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)settings.so.$(soversion) \
-	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)settings.so
-
-$(pkgname)$(aliversion)-storages:
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_install -p$@ usr/lib/$(libprefix)storages.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
-
-$(pkgname)$(aliversion)-storages-dev:	awa_storages ada_storages
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)storages.so.$(soversion) \
-	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)storages.so
-
-$(pkgname)$(aliversion)-tags:
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_install -p$@ usr/lib/$(libprefix)tags.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
-
-$(pkgname)$(aliversion)-tags-dev:	awa_tags ada_tags
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)tags.so.$(soversion) \
-	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)tags.so
-
-$(pkgname)$(aliversion)-votes:
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_install -p$@ usr/lib/$(libprefix)votes.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
-
-$(pkgname)$(aliversion)-votes-dev:	awa_votes ada_votes
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)votes.so.$(soversion) \
-	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)votes.so
-
-$(pkgname)$(aliversion)-workspaces:
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_install -p$@ usr/lib/$(libprefix)workspaces.so.$(soversion) /usr/lib/$(DEB_HOST_MULTIARCH)
-
-
-$(pkgname)$(aliversion)-workspaces-dev:	awa_workspaces ada_workspaces
-	dh_installdirs -p$@ usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_link -p$@ usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)workspaces.so.$(soversion) \
-	             usr/lib/$(DEB_HOST_MULTIARCH)/$(libprefix)workspaces.so
+	dh $@ --with ada-library
 
 override_dh_auto_configure:
-	dh_auto_configure -- --enable-shared --with-gprbuild
+	dh_auto_configure -- --enable-shared --enable-default-shared
 
 override_dh_auto_build:
-	dh_auto_build
+	make GPRFLAGS="-R -m -q"
 
-override_dh_auto_test:
-	dh_auto_test -- LD_LIBRARY_PATH=./lib
+override_dh_auto_test::
 
-override_dh_auto_install: $(pkgname)$(aliversion) \
-						  $(pkgname)$(aliversion)-dev \
-						  $(pkgname)$(aliversion)-blogs \
-						  $(pkgname)$(aliversion)-blogs-dev \
-						  $(pkgname)$(aliversion)-changelogs \
-						  $(pkgname)$(aliversion)-changelogs-dev \
-						  $(pkgname)$(aliversion)-comments \
-						  $(pkgname)$(aliversion)-comments-dev \
-						  $(pkgname)$(aliversion)-countries \
-						  $(pkgname)$(aliversion)-countries-dev \
-						  $(pkgname)$(aliversion)-images \
-						  $(pkgname)$(aliversion)-images-dev \
-						  $(pkgname)$(aliversion)-jobs \
-						  $(pkgname)$(aliversion)-jobs-dev \
-						  $(pkgname)$(aliversion)-mail \
-						  $(pkgname)$(aliversion)-mail-dev \
-						  $(pkgname)$(aliversion)-markedit-dev \
-						  $(pkgname)$(aliversion)-questions \
-						  $(pkgname)$(aliversion)-questions-dev \
-						  $(pkgname)$(aliversion)-settings \
-						  $(pkgname)$(aliversion)-settings-dev \
-						  $(pkgname)$(aliversion)-storages \
-						  $(pkgname)$(aliversion)-storages-dev \
-						  $(pkgname)$(aliversion)-tags \
-						  $(pkgname)$(aliversion)-tags-dev \
-						  $(pkgname)$(aliversion)-votes \
-						  $(pkgname)$(aliversion)-votes-dev \
-						  $(pkgname)$(aliversion)-workspaces \
-						  $(pkgname)$(aliversion)-workspaces-dev \
-						  $(pkgname)$(aliversion)-unit-dev
+override_dh_auto_install::
 
-override_dh_install:
-	dh_install
+ali=1
+sover=2.1.0
+pkgver=2.1.0
 
-override_dh_installchangelogs:
-	dh_installchangelogs NEWS
+awa_SRCDIR := src
+awa_LNAME = libawa
+awa_SONAME = libawa.so.$(sover)
+awa_ANAME = libawa.a
+awa_LIB_PKG = libawa$(pkgver)
+awa_DEV_PKG = libawa$(ali)-dev
+awa_GPR = awa.gpr
 
-override_dh_compress:
-	dh_compress -X.ads -X.adb -XMakefile -X.xmi
+awa_markedit_LIB_PKG = libawa-markedit$(pkgver)
+awa_trumbowyg_LIB_PKG = libawa-trumbowyg$(pkgver)
 
-override_dh_strip:
-	dh_strip --dbg-package=libawa$(aliversion)-dbg
+define awa_declare_plugin
+awa_$(plugin)_SRCDIR := plugins/awa-$(plugin)/src plugins/awa-$(plugin)/src/model
+awa_$(plugin)_LNAME = libawa_$(plugin)
+awa_$(plugin)_SONAME = libawa_$(plugin).so.$(sover)
+awa_$(plugin)_ANAME = libawa_$(plugin).a
+awa_$(plugin)_LIB_PKG = libawa-$(plugin)$(pkgver)
+awa_$(plugin)_DEV_PKG = libawa-$(plugin)$(ali)-dev
+awa_$(plugin)_GPR = awa_$(plugin).gpr
+awa_$(plugin)_DIR = plugins/awa-$(plugin)/
 
-override_dh_auto_clean:
-	rm -f $(CURDIR)/debian/$(libname)*.postinst
-	rm -f $(CURDIR)/debian/$(libname)*.postrm
-	dh_auto_clean
+endef
+
+awa_ada_plugins=blogs changelogs comments counters \
+ countries images jobs mail questions settings \
+ setup storages tags votes wikis workspaces
+
+awa_pkg_plugins=awa_blogs awa_changelogs awa_comments awa_counters \
+ awa_countries awa_images awa_jobs awa_mail awa_questions awa_settings \
+ awa_setup awa_storages awa_tags awa_votes awa_wikis awa_workspaces
+
+$(foreach plugin, \
+  $(awa_ada_plugins) \
+  ,$(eval $(call awa_declare_plugin)))
+
+awa_mail_SRCDIR = plugins/awa-mail/src plugins/awa-mail/src/aws
+awa_setup_SRCDIR = plugins/awa-setup/src
+
+$(foreach library, \
+  $(awa_pkg_plugins) \
+  ,$(eval $(call awa_plugin_template)))
+
+override_dh_install::
+	# Files installed in the dynamo/awa directory are part of the binary
+	# because they are used by servers.
+	$(MAKE) prefix=$(CURDIR)/debian/tmp/usr install
+
+define awa_plugin_web_template
+
+  override_dh_install::
+	dh_installdirs --package=$($(plugin)_LIB_PKG) \
+	   usr/share/dynamo/$(plugin)
+	dirs=`cd $(CURDIR)/debian/tmp/usr/share/dynamo && find $(plugin) -type d`; \
+	for i in $$$$dirs; do \
+		dh_installdirs --package=$($(plugin)_LIB_PKG) usr/share/dynamo/$$$$i ; \
+	done
+	files=`cd $(CURDIR)/debian/tmp/usr/share/dynamo && find $(plugin) -type f`; \
+	for i in $$$$files; do \
+	  dir=`dirname $$$$i`; \
+	  dh_install --package=$($(plugin)_LIB_PKG) \
+	     usr/share/dynamo/$$$$i usr/share/dynamo/$$$$dir ; \
+	done
+
+endef
+
+$(foreach plugin, \
+ awa_markedit awa_trumbowyg $(awa_pkg_plugins) \
+  ,$(eval $(call awa_plugin_web_template)))
