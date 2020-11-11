@@ -2,54 +2,50 @@ MODE=distrib AWA_LIBRARY_TYPE=relocatable
 awa.gpr
 
 MODE=distrib AWA_LIBRARY_TYPE=relocatable
-awa_unit.gpr
+plugins/awa-changelogs/awa_changelogs.gpr
 
 MODE=distrib AWA_LIBRARY_TYPE=relocatable
-awa_blogs.gpr
+plugins/awa-comments/awa_comments.gpr
 
 MODE=distrib AWA_LIBRARY_TYPE=relocatable
-awa_changelogs.gpr
+plugins/awa-counters/awa_counters.gpr
 
 MODE=distrib AWA_LIBRARY_TYPE=relocatable
-awa_comments.gpr
+plugins/awa-countries/awa_countries.gpr
 
 MODE=distrib AWA_LIBRARY_TYPE=relocatable
-awa_counters.gpr
+plugins/awa-tags/awa_tags.gpr
 
 MODE=distrib AWA_LIBRARY_TYPE=relocatable
-awa_countries.gpr
+plugins/awa-workspaces/awa_workspaces.gpr
 
 MODE=distrib AWA_LIBRARY_TYPE=relocatable
-awa_images.gpr
+plugins/awa-votes/awa_votes.gpr
 
 MODE=distrib AWA_LIBRARY_TYPE=relocatable
-awa_jobs.gpr
+plugins/awa-jobs/awa_jobs.gpr
 
 MODE=distrib AWA_LIBRARY_TYPE=relocatable
-awa_mail.gpr
+plugins/awa-mail/awa_mail.gpr
 
 MODE=distrib AWA_LIBRARY_TYPE=relocatable
-awa_questions.gpr
+plugins/awa-settings/awa_settings.gpr
 
 MODE=distrib AWA_LIBRARY_TYPE=relocatable
-awa_settings.gpr
+plugins/awa-setup/awa_setup.gpr
 
 MODE=distrib AWA_LIBRARY_TYPE=relocatable
-awa_setup.gpr
+plugins/awa-storages/awa_storages.gpr
 
 MODE=distrib AWA_LIBRARY_TYPE=relocatable
-awa_storages.gpr
+plugins/awa-images/awa_images.gpr
 
 MODE=distrib AWA_LIBRARY_TYPE=relocatable
-awa_tags.gpr
+plugins/awa-questions/awa_questions.gpr
 
 MODE=distrib AWA_LIBRARY_TYPE=relocatable
-awa_votes.gpr
+plugins/awa-wikis/awa_wikis.gpr
 
 MODE=distrib AWA_LIBRARY_TYPE=relocatable
-awa_wikis.gpr
-
-MODE=distrib AWA_LIBRARY_TYPE=relocatable
-awa_workspaces.gpr
-
+plugins/awa-blogs/awa_blogs.gpr
 

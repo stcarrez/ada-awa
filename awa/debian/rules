@@ -50,6 +50,7 @@ awa_GPR = awa.gpr
 
 awa_markedit_LIB_PKG = libawa-markedit$(pkgver)
 awa_trumbowyg_LIB_PKG = libawa-trumbowyg$(pkgver)
+awa_flotcharts_LIB_PKG = libawa-flotcharts$(pkgver)
 
 define awa_declare_plugin
 awa_$(plugin)_SRCDIR := plugins/awa-$(plugin)/src plugins/awa-$(plugin)/src/model
@@ -86,6 +87,7 @@ override_dh_install::
 	# Files installed in the dynamo/awa directory are part of the binary
 	# because they are used by servers.
 	$(MAKE) prefix=$(CURDIR)/debian/tmp/usr install
+	rm -rf $(CURDIR)/debian/tmp/usr/lib
 
 define awa_plugin_web_template
 
@@ -106,5 +108,5 @@ define awa_plugin_web_template
 endef
 
 $(foreach plugin, \
- awa_markedit awa_trumbowyg $(awa_pkg_plugins) \
+ awa_markedit awa_trumbowyg awa_flotcharts $(awa_pkg_plugins) \
   ,$(eval $(call awa_plugin_web_template)))
