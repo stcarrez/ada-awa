@@ -24,7 +24,6 @@ Vcs-Browser: https://github.com/stcarrez/ada-awa/tree/debian-gnat-7
 Package: libawa2.1.0
 Section: libs
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Ada Web Application (runtime)
  Ada Web Application is a framework to build a Web Application in Ada 2012.
@@ -53,7 +52,6 @@ Description: Ada Web Application (Development files)
 Package: libawa-unit2.1.0
 Section: libs
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Unit test framework for AWA (runtime)
  This library provides support and helpers for writing unit tests for AWA.
@@ -70,7 +68,6 @@ Description: Unit test framework for AWA (Development).
 Package: libawa-blogs2.1.0
 Section: libs
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${shlibs:Depends}, ${misc:Depends},
  libawa-flotcharts2.1.0 (= ${binary:Version}),
  libawa-markedit2.1.0 (= ${binary:Version})
@@ -82,7 +79,6 @@ Description: Blogs plugin for AWA (Runtime)
 Package: libawa-blogs1-dev
 Section: libdevel
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${misc:Depends}, ${ada:Depends}
 Description: Blogs plugin for AWA (Development)
  This is the Blogs plugin for Ada Web Application.  The Blogs plugin provides
@@ -92,7 +88,6 @@ Description: Blogs plugin for AWA (Development)
 Package: libawa-changelogs2.1.0
 Section: libs
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Changelogs plugin for AWA (Runtime)
  This is the Changelogs plugin for Ada Web Application.
@@ -100,7 +95,6 @@ Description: Changelogs plugin for AWA (Runtime)
 Package: libawa-changelogs1-dev
 Section: libdevel
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${misc:Depends}, ${ada:Depends}
 Description: Changelogs plugin for AWA (Development)
  This is the Changelogs plugin for Ada Web Application.
@@ -108,7 +102,6 @@ Description: Changelogs plugin for AWA (Development)
 Package: libawa-comments2.1.0
 Section: libs
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Comments plugin for AWA (Runtime)
  This is the Comments plugin for Ada Web Application.
@@ -116,7 +109,6 @@ Description: Comments plugin for AWA (Runtime)
 Package: libawa-comments1-dev
 Section: libdevel
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${misc:Depends}, ${ada:Depends}
 Description: Comments plugin for AWA (Development)
  This is the Comments plugin for Ada Web Application.
@@ -124,7 +116,6 @@ Description: Comments plugin for AWA (Development)
 Package: libawa-counters2.1.0
 Section: libs
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Counters plugin for AWA (Runtime)
  This is the Counters plugin for Ada Web Application.
@@ -132,7 +123,6 @@ Description: Counters plugin for AWA (Runtime)
 Package: libawa-counters1-dev
 Section: libdevel
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${misc:Depends}, ${ada:Depends}
 Description: Counters plugin for AWA (Development)
  This is the Counters plugin for Ada Web Application.
@@ -140,7 +130,6 @@ Description: Counters plugin for AWA (Development)
 Package: libawa-countries2.1.0
 Section: libs
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Countries plugin for AWA (Runtime)
  This is the Countries plugin for Ada Web Application.
@@ -148,7 +137,6 @@ Description: Countries plugin for AWA (Runtime)
 Package: libawa-countries1-dev
 Section: libdevel
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${misc:Depends}, ${ada:Depends}
 Description: Countries plugin for AWA (Development)
  This is the Countries plugin for Ada Web Application.
@@ -156,7 +144,6 @@ Description: Countries plugin for AWA (Development)
 Package: libawa-flotcharts2.1.0
 Section: libs
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Flotcharts plugin for AWA (Runtime)
  This is the Flotcharts plugin for Ada Web Application.
@@ -164,7 +151,6 @@ Description: Flotcharts plugin for AWA (Runtime)
 Package: libawa-images2.1.0
 Section: libs
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Images plugin for AWA (Runtime)
  This is the Images plugin for Ada Web Application.
@@ -172,7 +158,6 @@ Description: Images plugin for AWA (Runtime)
 Package: libawa-images1-dev
 Section: libdevel
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${misc:Depends}, ${ada:Depends}
 Description: Countries plugin for AWA (Development)
  This is the Countries plugin for Ada Web Application.
@@ -180,7 +165,6 @@ Description: Countries plugin for AWA (Development)
 Package: libawa-jobs2.1.0
 Section: libs
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Jobs plugin for AWA (Runtime)
  This is the Jobs plugin for Ada Web Application.
@@ -188,7 +172,6 @@ Description: Jobs plugin for AWA (Runtime)
 Package: libawa-jobs1-dev
 Section: libdevel
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${misc:Depends}, ${ada:Depends}
 Description: Jobs plugin for AWA (Development)
  This is the Jobs plugin for Ada Web Application.
@@ -196,7 +179,6 @@ Description: Jobs plugin for AWA (Development)
 Package: libawa-mail2.1.0
 Section: libs
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Mail plugin for AWA (Runtime)
  This is the Mail plugin for Ada Web Application.
@@ -204,7 +186,6 @@ Description: Mail plugin for AWA (Runtime)
 Package: libawa-mail1-dev
 Section: libdevel
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${misc:Depends}, ${ada:Depends}
 Description: Mail plugin for AWA (Development)
  This is the Mail plugin for Ada Web Application.
@@ -212,7 +193,6 @@ Description: Mail plugin for AWA (Development)
 Package: libawa-markedit2.1.0
 Section: libs
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Markedit plugin for AWA (Runtime)
  This is the Markedit plugin for Ada Web Application.
@@ -220,7 +200,6 @@ Description: Markedit plugin for AWA (Runtime)
 Package: libawa-questions2.1.0
 Section: libs
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${shlibs:Depends}, ${misc:Depends},
  libawa-markedit2.1.0 (= ${binary:Version})
 Description: Question plugin for AWA (Runtime)
@@ -229,7 +208,6 @@ Description: Question plugin for AWA (Runtime)
 Package: libawa-questions1-dev
 Section: libdevel
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${misc:Depends}, ${ada:Depends}
 Description: Question plugin for AWA (Development)
  This is the Question plugin for Ada Web Application.
@@ -237,7 +215,6 @@ Description: Question plugin for AWA (Development)
 Package: libawa-settings2.1.0
 Section: libs
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: User settings plugin for AWA (Runtime)
  This is the user settings plugin for Ada Web Application.
@@ -245,7 +222,6 @@ Description: User settings plugin for AWA (Runtime)
 Package: libawa-settings1-dev
 Section: libdevel
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${misc:Depends}, ${ada:Depends}
 Description: User settings plugin for AWA (Development)
  This is the user settings plugin for Ada Web Application.
@@ -253,7 +229,6 @@ Description: User settings plugin for AWA (Development)
 Package: libawa-setup2.1.0
 Section: libs
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Ada Web Application Setup (Runtime)
  The AWA.Setup package implements a simple setup application
@@ -265,7 +240,6 @@ Description: Ada Web Application Setup (Runtime)
 Package: libawa-setup1-dev
 Section: libdevel
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${misc:Depends}, ${ada:Depends}
 Description: Ada Web Application Setup (development)
  The AWA.Setup package implements a simple setup application
@@ -277,7 +251,6 @@ Description: Ada Web Application Setup (development)
 Package: libawa-storages2.1.0
 Section: libs
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Storage plugin for AWA (Runtime)
  This is the Storage plugin for Ada Web Application.
@@ -285,7 +258,6 @@ Description: Storage plugin for AWA (Runtime)
 Package: libawa-storages1-dev
 Section: libdevel
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${misc:Depends}, ${ada:Depends}
 Description: Storage plugin for AWA (Development)
  This is the Storage plugin for Ada Web Application.
@@ -293,7 +265,6 @@ Description: Storage plugin for AWA (Development)
 Package: libawa-tags2.1.0
 Section: libs
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Tags plugin for AWA (Runtime)
  This is the Tags plugin for Ada Web Application.  The Tags plugin
@@ -302,7 +273,6 @@ Description: Tags plugin for AWA (Runtime)
 Package: libawa-tags1-dev
 Section: libdevel
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${misc:Depends}, ${ada:Depends}
 Description: Tags plugin for AWA (Runtime)
  This is the Tags plugin for Ada Web Application.  The Tags plugin allows
@@ -311,7 +281,6 @@ Description: Tags plugin for AWA (Runtime)
 Package: libawa-trumbowyg2.1.0
 Section: libs
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Trumbowyg Javascript Editor plugin for AWA (Runtime)
  This is the Trumbowyg plugin for Ada Web Application.
@@ -319,7 +288,6 @@ Description: Trumbowyg Javascript Editor plugin for AWA (Runtime)
 Package: libawa-votes2.1.0
 Section: libs
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Votes plugin for AWA (Runtime)
  This is the Votes plugin for Ada Web Application.  The Votes plugin allows
@@ -328,7 +296,6 @@ Description: Votes plugin for AWA (Runtime)
 Package: libawa-votes1-dev
 Section: libdevel
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${misc:Depends}, ${ada:Depends}
 Description: Votes plugin for AWA (Development)
  This is the Votes plugin for Ada Web Application.  The Votes plugin allows
@@ -337,7 +304,6 @@ Description: Votes plugin for AWA (Development)
 Package: libawa-wikis2.1.0
 Section: libs
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${shlibs:Depends}, ${misc:Depends},
  libawa-markedit2.1.0 (= ${binary:Version}),
  libawa-flotcharts2.1.0 (= ${binary:Version}),
@@ -348,7 +314,6 @@ Description: Wiki plugin for AWA (Runtime)
 Package: libawa-wikis1-dev
 Section: libdevel
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${misc:Depends}, ${ada:Depends}
 Description: Wiki plugin for AWA (Development)
  This is the Wiki plugin for Ada Web Application.
@@ -356,7 +321,6 @@ Description: Wiki plugin for AWA (Development)
 Package: libawa-workspaces2.1.0
 Section: libs
 Architecture: any
-Pre-Depends: multiarch-support
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Workspace plugin for AWA (Runtime)
  This is the Workspace plugin for Ada Web Application.

@@ -46,38 +46,26 @@ awa_SONAME = libawa.so.$(sover)
 awa_ANAME = libawa.a
 awa_LIB_PKG = libawa$(pkgver)
 awa_DEV_PKG = libawa$(ali)-dev
-awa_GPR = awa.gpr
 
 awa_markedit_LIB_PKG = libawa-markedit$(pkgver)
 awa_trumbowyg_LIB_PKG = libawa-trumbowyg$(pkgver)
 awa_flotcharts_LIB_PKG = libawa-flotcharts$(pkgver)
 
 define awa_declare_plugin
-awa_$(plugin)_SRCDIR := plugins/awa-$(plugin)/src plugins/awa-$(plugin)/src/model
-awa_$(plugin)_LNAME = libawa_$(plugin)
-awa_$(plugin)_SONAME = libawa_$(plugin).so.$(sover)
-awa_$(plugin)_ANAME = libawa_$(plugin).a
 awa_$(plugin)_LIB_PKG = libawa-$(plugin)$(pkgver)
-awa_$(plugin)_DEV_PKG = libawa-$(plugin)$(ali)-dev
-awa_$(plugin)_GPR = awa_$(plugin).gpr
-awa_$(plugin)_DIR = plugins/awa-$(plugin)/
-
 endef
 
 awa_ada_plugins=blogs changelogs comments counters \
  countries images jobs mail questions settings \
  setup storages tags votes wikis workspaces
 
-awa_pkg_plugins=awa_blogs awa_changelogs awa_comments awa_counters \
+awa_pkg_plugins=awa awa_blogs awa_changelogs awa_comments awa_counters \
  awa_countries awa_images awa_jobs awa_mail awa_questions awa_settings \
  awa_setup awa_storages awa_tags awa_votes awa_wikis awa_workspaces
 
 $(foreach plugin, \
   $(awa_ada_plugins) \
   ,$(eval $(call awa_declare_plugin)))
-
-awa_mail_SRCDIR = plugins/awa-mail/src plugins/awa-mail/src/aws
-awa_setup_SRCDIR = plugins/awa-setup/src
 
 $(foreach library, \
   $(awa_pkg_plugins) \
