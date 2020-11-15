@@ -1,0 +1,17 @@
+Document: ada-web-application-guide
+Title: Ada Web Application - Programmer's Guide
+Author: Stephane Carrez
+Section: Programming/Ada
+Abstract: Ada Web Application is a framework to build a Web
+ Application in Ada 2012.  The framework provides several ready
+ to use and extendable modules that are common to many web application.
+ This includes the login, authentication, users, permissions,
+ managing comments, tags, votes, documents, images.  It provides
+ a complete blog, question and answers and a wiki module.
+ 
+ Format: HTML
+ Index: /usr/share/doc/libawa-doc/awa-book.html
+ Files: /usr/share/doc/libawa-doc/awa-book.html
+ 
+ Format: pdf
+ Files: /usr/share/doc/libawa-doc/awa-book.pdf.gz
