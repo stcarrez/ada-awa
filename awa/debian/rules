@@ -47,12 +47,12 @@ awa_ANAME = libawa.a
 awa_LIB_PKG = libawa$(pkgver)
 awa_DEV_PKG = libawa$(ali)-dev
 
-awa_markedit_LIB_PKG = libawa-markedit$(pkgver)
-awa_trumbowyg_LIB_PKG = libawa-trumbowyg$(pkgver)
-awa_flotcharts_LIB_PKG = libawa-flotcharts$(pkgver)
+awa_markedit_DEV_PKG = libawa-markedit$(pkgver)
+awa_trumbowyg_DEV_PKG = libawa-trumbowyg$(pkgver)
+awa_flotcharts_DEV_PKG = libawa-flotcharts$(pkgver)
 
 define awa_declare_plugin
-awa_$(plugin)_LIB_PKG = libawa-$(plugin)$(pkgver)
+awa_$(plugin)_DEV_PKG = libawa-$(plugin)$(ali)-dev
 endef
 
 awa_ada_plugins=blogs changelogs comments counters \
@@ -80,16 +80,16 @@ override_dh_install::
 define awa_plugin_web_template
 
   override_dh_install::
-	dh_installdirs --package=$($(plugin)_LIB_PKG) \
+	dh_installdirs --package=$($(plugin)_DEV_PKG) \
 	   usr/share/dynamo/$(plugin)
 	dirs=`cd $(CURDIR)/debian/tmp/usr/share/dynamo && find $(plugin) -type d`; \
 	for i in $$$$dirs; do \
-		dh_installdirs --package=$($(plugin)_LIB_PKG) usr/share/dynamo/$$$$i ; \
+		dh_installdirs --package=$($(plugin)_DEV_PKG) usr/share/dynamo/$$$$i ; \
 	done
 	files=`cd $(CURDIR)/debian/tmp/usr/share/dynamo && find $(plugin) -type f`; \
 	for i in $$$$files; do \
 	  dir=`dirname $$$$i`; \
-	  dh_install --package=$($(plugin)_LIB_PKG) \
+	  dh_install --package=$($(plugin)_DEV_PKG) \
 	     usr/share/dynamo/$$$$i usr/share/dynamo/$$$$dir ; \
 	done
 
@@ -98,3 +98,9 @@ endef
 $(foreach plugin, \
  awa_markedit awa_trumbowyg awa_flotcharts $(awa_pkg_plugins) \
   ,$(eval $(call awa_plugin_web_template)))
+
+.PHONY: override_dh_installdocs-indep
+
+override_dh_installdocs-indep:
+	make docs/awa-book.pdf docs/awa-book.html
+	dh_installdocs -i

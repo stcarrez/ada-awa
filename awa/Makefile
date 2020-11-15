@@ -50,7 +50,6 @@ build-test:: setup
 	$(GNATMAKE) $(GPRFLAGS) -m -p -Pawa_tests $(MAKE_ARGS)
 
 ifeq (${HAVE_PANDOC},yes)
-ifeq (${HAVE_DYNAMO},yes)
 
 AWA_DOC= \
   title.md \
@@ -98,12 +97,13 @@ DOC_OPTIONS=-f markdown -o awa-book.pdf --listings --number-sections --toc --fil
 HTML_OPTIONS=-f markdown -o awa-book.html --listings --number-sections --toc --css pandoc.css
 
 docs/awa-book.pdf:  force
+ifeq (${HAVE_DYNAMO},yes)
 	$(DYNAMO) build-doc -pandoc docs
+endif
 	cd docs && pandoc $(DOC_OPTIONS) --template=./eisvogel.tex $(AWA_DOC)
 
 docs/awa-book.html: docs/awa-book.pdf force
 	cd docs && pandoc $(HTML_OPTIONS) $(AWA_DOC)
-endif
 endif
 
 # Build and run the unit tests

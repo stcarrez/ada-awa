@@ -82,7 +82,9 @@ dist-clean:: clean
 	-rm -f *.log *~ config.status Makefile.conf
 
 doc::
+ifeq (${HAVE_DYNAMO},yes)
 	$(DYNAMO) build-doc -markdown wiki
+endif
 
 dist::
 	rm -f $(DIST_FILE)
