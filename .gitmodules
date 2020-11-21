@@ -1,44 +1,33 @@
 [submodule "ada-util"]
 	path = ada-util
 	url = git://github.com/stcarrez/ada-util.git
-	branch = debian-gnat-7
 [submodule "ada-el"]
 	path = ada-el
 	url = git://github.com/stcarrez/ada-el.git
-	branch = debian-gnat-7
 [submodule "ada-wiki"]
 	path = ada-wiki
 	url = git://github.com/stcarrez/ada-wiki.git
-	branch = debian-gnat-7
 [submodule "ada-security"]
 	path = ada-security
 	url = git://github.com/stcarrez/ada-security.git
-	branch = debian-gnat-7
 [submodule "ada-asf"]
 	path = ada-asf
 	url = git://github.com/stcarrez/ada-asf.git
-	branch = debian-gnat-7
 [submodule "ada-ado"]
 	path = ada-ado
 	url = git://github.com/stcarrez/ada-ado.git
-	branch = debian-gnat-7
 [submodule "dynamo"]
 	path = dynamo
 	url = git://github.com/stcarrez/dynamo.git
-	branch = debian-gnat-7
 [submodule "ada-servlet"]
 	path = ada-servlet
 	url = git://github.com/stcarrez/ada-servlet.git
-	branch = debian-gnat-7
 [submodule "swagger-ada"]
 	path = openapi-ada
 	url = git://github.com/stcarrez/swagger-ada.git
-	branch = debian-gnat-7
 [submodule "ada-lzma"]
 	path = ada-lzma
 	url = git://github.com/stcarrez/ada-lzma.git
-	branch = debian-gnat-7
 [submodule "ada-keystore"]
 	path = ada-keystore
 	url = git://github.com/stcarrez/ada-keystore.git
-	branch = debian-gnat-7
