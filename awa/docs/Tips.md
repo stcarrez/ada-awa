@@ -168,4 +168,4 @@ bin/atlas-server -c secure/config.properties start
 ```
 
 Note that in order to use this configuration setup, the directory must have
-the `rwx------` rights and files must have the `rwx------` rights.
+the `rwx------` rights and files must have the `rw-------` rights.
