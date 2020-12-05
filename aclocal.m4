@@ -42,7 +42,7 @@ AC_DEFUN(AM_GNAT_CHECK_PROJECT,
 [
   AC_CACHE_CHECK([whether $1 project exists],[ac_cv_gnat_project_$1],[
     echo "with \"$2\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-    if AC_TRY_COMMAND([gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out])
+    if AC_TRY_COMMAND([$GNATMAKE -Pconftest.gpr > /dev/null 2>conftest.out])
     then
       ac_cv_gnat_project_$1=yes
       ac_cv_gnat_project_with_$1="with \"$2\";";
@@ -60,7 +60,7 @@ AC_DEFUN(AM_GNAT_FIND_PROJECT,
     AS_HELP_STRING([--with-$1=x], [Path for $2]),
     [
       if test "${withval}/" = "yes/"; then
-        ac_cv_gnat_project_name_$3=${awa_build_root}$3
+        ac_cv_gnat_project_name_$3=${awa_build_root}$1
       else
         ac_cv_gnat_project_name_$3=${withval}/
         if test -d "${withval}"; then
@@ -76,7 +76,7 @@ AC_DEFUN(AM_GNAT_FIND_PROJECT,
     rm -f conftest.gpr
     # Search in the GNAT project path.
     echo "with \"${ac_cv_gnat_project_name_$3}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-    if AC_TRY_COMMAND([gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out])
+    if AC_TRY_COMMAND([$GNATMAKE -Pconftest.gpr > /dev/null 2>conftest.out])
     then
       ac_cv_gnat_project_$3=yes
     else
@@ -89,7 +89,7 @@ AC_DEFUN(AM_GNAT_FIND_PROJECT,
         dir=`dirname $name`
         # AC_MSG_CHECKING([for $2 project in ${dir}])
         echo "with \"${name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-        if AC_TRY_COMMAND([gnat ls -Pconftest.gpr system.ads > /dev/null 2>conftest.out])
+        if AC_TRY_COMMAND([$GNATMAKE -Pconftest.gpr > /dev/null 2>conftest.out])
         then
            ac_cv_gnat_project_$3=yes
 		   ac_cv_gnat_project_name_$3=${name}
@@ -100,6 +100,16 @@ AC_DEFUN(AM_GNAT_FIND_PROJECT,
            # AC_MSG_RESULT(no)
         fi
       done
+      if test x${ac_cv_gnat_project_$3} != xyes; then
+        echo "with \"$3\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+        if AC_TRY_COMMAND([$GNATMAKE -Pconftest.gpr > /dev/null 2>conftest.out])
+        then
+           ac_cv_gnat_project_$3=yes
+           ac_cv_gnat_project_name_$3=$3
+        else
+           ac_cv_gnat_project_$3=no
+        fi
+      fi
     fi
     rm -f conftest.gpr
 
