@@ -2505,8 +2505,10 @@ test -n "$GNAT" || GNAT=""""
 
   if test -n "$GNAT"; then
     GNATCHECK="$GNAT ls"
+    GNATCHECK_ARG=" system.ads"
   else
     GNATCHECK="$GNATMAKE"
+    GNATCHECK_ARG=""
   fi
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ${MAKE-make} sets \$(MAKE)" >&5
@@ -2769,7 +2771,7 @@ else
     rm -f conftest.gpr
     # Search in the GNAT project path.
     echo "with \"${ac_cv_gnat_project_name_utilada_base}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-    if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+    if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -2787,7 +2789,7 @@ else
         dir=`dirname $name`
         # AC_MSG_CHECKING([for Ada Utility Library project in ${dir}])
         echo "with \"${name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-        if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+        if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -2805,7 +2807,7 @@ else
       done
       if test x${ac_cv_gnat_project_utilada_base} != xyes; then
         echo "with \"utilada_base\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-        if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+        if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -2893,7 +2895,7 @@ else
     rm -f conftest.gpr
     # Search in the GNAT project path.
     echo "with \"${ac_cv_gnat_project_name_elada}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-    if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+    if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -2911,7 +2913,7 @@ else
         dir=`dirname $name`
         # AC_MSG_CHECKING([for Ada Expression Language Library project in ${dir}])
         echo "with \"${name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-        if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+        if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -2929,7 +2931,7 @@ else
       done
       if test x${ac_cv_gnat_project_elada} != xyes; then
         echo "with \"elada\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-        if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+        if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -3017,7 +3019,7 @@ else
     rm -f conftest.gpr
     # Search in the GNAT project path.
     echo "with \"${ac_cv_gnat_project_name_security}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-    if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+    if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -3035,7 +3037,7 @@ else
         dir=`dirname $name`
         # AC_MSG_CHECKING([for Ada Security Library project in ${dir}])
         echo "with \"${name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-        if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+        if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -3053,7 +3055,7 @@ else
       done
       if test x${ac_cv_gnat_project_security} != xyes; then
         echo "with \"security\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-        if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+        if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -3141,7 +3143,7 @@ else
     rm -f conftest.gpr
     # Search in the GNAT project path.
     echo "with \"${ac_cv_gnat_project_name_servletada}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-    if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+    if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -3159,7 +3161,7 @@ else
         dir=`dirname $name`
         # AC_MSG_CHECKING([for Ada Servlet Library project in ${dir}])
         echo "with \"${name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-        if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+        if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -3177,7 +3179,7 @@ else
       done
       if test x${ac_cv_gnat_project_servletada} != xyes; then
         echo "with \"servletada\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-        if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+        if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -3265,7 +3267,7 @@ else
     rm -f conftest.gpr
     # Search in the GNAT project path.
     echo "with \"${ac_cv_gnat_project_name_asf}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-    if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+    if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -3283,7 +3285,7 @@ else
         dir=`dirname $name`
         # AC_MSG_CHECKING([for Ada Server Faces project in ${dir}])
         echo "with \"${name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-        if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+        if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -3301,7 +3303,7 @@ else
       done
       if test x${ac_cv_gnat_project_asf} != xyes; then
         echo "with \"asf\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-        if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+        if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -3389,7 +3391,7 @@ else
     rm -f conftest.gpr
     # Search in the GNAT project path.
     echo "with \"${ac_cv_gnat_project_name_ado}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-    if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+    if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -3407,7 +3409,7 @@ else
         dir=`dirname $name`
         # AC_MSG_CHECKING([for Ada Database Objects project in ${dir}])
         echo "with \"${name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-        if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+        if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -3425,7 +3427,7 @@ else
       done
       if test x${ac_cv_gnat_project_ado} != xyes; then
         echo "with \"ado\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-        if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+        if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -3513,7 +3515,7 @@ else
     rm -f conftest.gpr
     # Search in the GNAT project path.
     echo "with \"${ac_cv_gnat_project_name_wikiada}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-    if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+    if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -3531,7 +3533,7 @@ else
         dir=`dirname $name`
         # AC_MSG_CHECKING([for Ada Wiki Library project in ${dir}])
         echo "with \"${name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-        if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+        if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -3549,7 +3551,7 @@ else
       done
       if test x${ac_cv_gnat_project_wikiada} != xyes; then
         echo "with \"wikiada\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-        if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+        if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -3637,7 +3639,7 @@ else
     rm -f conftest.gpr
     # Search in the GNAT project path.
     echo "with \"${ac_cv_gnat_project_name_swagger}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-    if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+    if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -3655,7 +3657,7 @@ else
         dir=`dirname $name`
         # AC_MSG_CHECKING([for OpenAPI Ada Library project in ${dir}])
         echo "with \"${name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-        if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+        if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -3673,7 +3675,7 @@ else
       done
       if test x${ac_cv_gnat_project_swagger} != xyes; then
         echo "with \"swagger\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-        if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+        if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -3761,7 +3763,7 @@ else
     rm -f conftest.gpr
     # Search in the GNAT project path.
     echo "with \"${ac_cv_gnat_project_name_keystoreada}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-    if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+    if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -3779,7 +3781,7 @@ else
         dir=`dirname $name`
         # AC_MSG_CHECKING([for Ada Keystore Library project in ${dir}])
         echo "with \"${name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-        if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+        if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -3797,7 +3799,7 @@ else
       done
       if test x${ac_cv_gnat_project_keystoreada} != xyes; then
         echo "with \"keystoreada\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-        if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+        if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -4043,7 +4045,7 @@ if ${ac_cv_gnat_project_aws+:} false; then :
 else
 
     echo "with \"${gnat_project_name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
-    if { ac_try='$GNATCHECK -Pconftest.gpr > /dev/null 2>conftest.out'
+    if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
   ac_status=$?
