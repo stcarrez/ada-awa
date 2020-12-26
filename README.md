@@ -88,7 +88,7 @@ First to get the LZMA and CURL support, it is necessary to install the following
 packages before configuring AWA:
 
 ```
-sudo apt-get install liblzma-dev libcurl4-openssl-dev
+sudo apt-get install unzip liblzma-dev libcurl4-openssl-dev
 ```
 
 MySQL Development installation:
