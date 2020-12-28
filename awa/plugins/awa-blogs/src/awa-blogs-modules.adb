@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-module -- Blog and post management module
---  Copyright (C) 2011, 2012, 2013, 2017, 2018, 2019 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2017, 2018, 2019, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,8 @@
 -----------------------------------------------------------------------
 
 with Util.Log.Loggers;
+with Util.Beans.Objects;
+with Util.Beans.Basic;
 
 with AWA.Modules.Get;
 with AWA.Modules.Beans;
@@ -118,6 +120,23 @@ package body AWA.Blogs.Modules is
       return Module.Image_Prefix;
    end Get_Image_Prefix;
 
+   procedure Publish_Post (Module : in Blog_Module;
+                           Post   : in AWA.Blogs.Models.Post_Ref) is
+      Current_Entity : aliased AWA.Blogs.Models.Post_Ref := Post;
+      Ptr   : constant Util.Beans.Basic.Readonly_Bean_Access
+        := Current_Entity'Unchecked_Access;
+      Bean  : constant Util.Beans.Objects.Object
+        := Util.Beans.Objects.To_Object (Ptr, Util.Beans.Objects.STATIC);
+      Event : AWA.Events.Module_Event;
+   begin
+      Event.Set_Event_Kind (Post_Publish_Event.Kind);
+      Event.Set_Parameter ("summary", Post.Get_Summary);
+      Event.Set_Parameter ("title", Post.Get_Title);
+      Event.Set_Parameter ("uri", Post.Get_Uri);
+      Event.Set_Parameter ("id", Bean);
+      Module.Send_Event (Event);
+   end Publish_Post;
+
    --  ------------------------------
    --  Create a new blog for the user workspace.
    --  ------------------------------
@@ -175,7 +194,6 @@ package body AWA.Blogs.Modules is
                           Comment : in Boolean;
                           Status  : in AWA.Blogs.Models.Post_Status_Type;
                           Result  : out ADO.Identifier) is
-      pragma Unreferenced (Model);
       use type AWA.Blogs.Models.Post_Status_Type;
 
       Ctx   : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
@@ -222,6 +240,11 @@ package body AWA.Blogs.Modules is
       Result := Post.Get_Id;
       Log.Info ("Post {0} created for user {1}",
                 ADO.Identifier'Image (Result), ADO.Identifier'Image (User));
+
+      --  The post is published, post an event to trigger specific actions.
+      if Status = AWA.Blogs.Models.POST_PUBLISHED then
+         Publish_Post (Model, Post);
+      end if;
    end Create_Post;
 
    --  ------------------------------
@@ -244,6 +267,7 @@ package body AWA.Blogs.Modules is
       DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Post  : AWA.Blogs.Models.Post_Ref;
       Found : Boolean;
+      Published : Boolean;
    begin
       Ctx.Start;
       Post.Load (Session => DB, Id => Post_Id, Found => Found);
@@ -259,7 +283,8 @@ package body AWA.Blogs.Modules is
       if not Publish_Date.Is_Null then
          Post.Set_Publish_Date (Publish_Date);
       end if;
-      if Status = AWA.Blogs.Models.POST_PUBLISHED and then Post.Get_Publish_Date.Is_Null then
+      Published := Status = AWA.Blogs.Models.POST_PUBLISHED and then Post.Get_Publish_Date.Is_Null;
+      if Published then
          Post.Set_Publish_Date (ADO.Nullable_Time '(Is_Null => False,
                                                     Value   => Ada.Calendar.Clock));
       end if;
@@ -272,6 +297,11 @@ package body AWA.Blogs.Modules is
       Post.Set_Allow_Comments (Comment);
       Post.Save (DB);
       Ctx.Commit;
+
+      --  The post is published, post an event to trigger specific actions.
+      if Published then
+         Publish_Post (Model, Post);
+      end if;
    end Update_Post;
 
    --  ------------------------------
