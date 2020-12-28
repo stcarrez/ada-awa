@@ -152,13 +152,13 @@
   <!--  OpenID Yahoo! -->
   <context-param>
     <param-name>auth.url.yahoo</param-name>
-    <param-value>https://open.login.yahooapis.com/openid20/www.yahoo.com/xrds</param-value>
+    <param-value>https://api.login.yahoo.com/oauth2/request_auth</param-value>
     <description>Yahoo! OpenID access point</description>
   </context-param>
 
   <context-param>
     <param-name>auth.provider.yahoo</param-name>
-    <param-value>openid</param-value>
+    <param-value>yahoo</param-value>
     <description>Auth provider to use for Yahoo!</description>
   </context-param>
 
