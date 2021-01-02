@@ -1,6 +1,6 @@
 /*
  *  awa-blogs -- Blogs and post
- *  Copyright (C) 2016, 2017, 2019 Stephane Carrez
+ *  Copyright (C) 2016, 2017, 2019, 2021 Stephane Carrez
  *  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -119,7 +119,10 @@
             if (self.options.syntax == 'FORMAT_MEDIAWIKI') {
                 syntax = 'mediawiki';
             }
-            if (syntax == 'dotclear' || syntax == 'mediawiki') {
+            if (self.options.syntax == 'FORMAT_MARKDOWN') {
+                syntax = 'markdown';
+            }
+            if (syntax == 'dotclear' || syntax == 'mediawiki' || syntax == 'markdown') {
 
             // Create a MarkEdit editor on page load
                 this.element.find('textarea').markedit({
