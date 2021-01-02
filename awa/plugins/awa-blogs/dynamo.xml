@@ -6,6 +6,7 @@
     <property name="author">Stephane Carrez</property>
     <depend name="awa_markedit"></depend>
     <depend name="awa_flotcharts"></depend>
+    <depend name="awa_trumbowyg"></depend>
     <depend name="util"></depend>
     <depend name="ado"></depend>
     <depend name="security"></depend>
