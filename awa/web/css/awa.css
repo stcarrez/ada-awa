@@ -74,11 +74,14 @@ body.awa {
 .awa-side-panel {
     display: flex;
     flex-direction: row;
+    flex-flow: row;
     width: 100%;
+    height: 100%;
     min-height: 100%;
     border-bottom: 1px solid #b5b5b5;
 }
-.awa-left-panel {
+.awa-left-panel, .awa-right-panel {
+    flex: 1 1 auto;
 }
 .awa-right-panel {
     flex-grow: 1;
@@ -326,7 +329,6 @@ div.awa-modal div.awa-login {
 .awa-list-col, .awa-header-col {
     float: left;
     overflow: hidden;
-    line-height: 1em;
     min-height: 1em;
 }
 .awa-list-item, .awa-list-item-header {
