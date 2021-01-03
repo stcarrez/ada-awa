@@ -133,7 +133,8 @@ package body AWA.Blogs.Modules is
       Event.Set_Parameter ("summary", Post.Get_Summary);
       Event.Set_Parameter ("title", Post.Get_Title);
       Event.Set_Parameter ("uri", Post.Get_Uri);
-      Event.Set_Parameter ("id", Bean);
+      Event.Set_Parameter ("post", Bean);
+      Event.Set_Parameter ("author", Post.Get_Author.Get_Name);
       Module.Send_Event (Event);
    end Publish_Post;
 
