@@ -52,3 +52,5 @@ awa/plugins/awa-mail/awa_mail.gpr
 awa/plugins/awa-sysadmin/awa-sysadmin.properties
 awa/plugins/awa-sysadmin/awa_sysadmin.gpr
 awa/plugins/awa-*/model.yaml
+awa/plugins/awa-images/config/images.xml
+alire.lock
