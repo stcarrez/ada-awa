@@ -138,9 +138,9 @@ package body AWA.Users.Services is
                              User    : in User_Ref'Class;
                              Ip_Addr : in String;
                              Principal : out AWA.Users.Principals.Principal_Access) is
-      Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      Ctx          : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       Auth_Session : Session_Ref;
-      Email  : constant String := User.Get_Email.Get_Email;
+      Dummy_Email  : constant String := User.Get_Email.Get_Email;
    begin
       --  Create the authenticate session.
       Auth_Session.Set_Start_Date (Ada.Calendar.Clock);
