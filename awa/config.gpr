@@ -28,11 +28,11 @@ abstract project Config is
 
          when "debug" =>
             for Default_Switches ("Ada") use defaults & warnings
-               & ("-gnata", "-gnatVaMI", "-gnaty3abcefhiklmnprstxM99");
+               & ("-gnata", "-gnatVaMI", "-gnaty3abcefhiklmnprstxM127");
 
          when "coverage" =>
             for Default_Switches ("Ada") use defaults & warnings
-               & ("-gnata", "-gnatVaMI", "-gnaty3abcefhiklmnprstxM99",
+               & ("-gnata", "-gnatVaMI", "-gnaty3abcefhiklmnprstxM127",
                   "-fprofile-arcs", "-ftest-coverage");
 
          when "optimize" =>

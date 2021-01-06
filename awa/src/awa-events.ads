@@ -105,13 +105,13 @@ with AWA.Index_Arrays;
 --  === Data Model ===
 --  [images/awa_events_model.png]
 --
+pragma Warnings (Off, "use clause for type ""Element_Type_Access"" *");
 package AWA.Events is
 
    type Queue_Index is new Natural;
    type Event_Index is new Natural;
 
    package Event_Arrays is new AWA.Index_Arrays (Event_Index, String);
-
    use type Event_Arrays.Element_Type_Access;
    subtype Name_Access is Event_Arrays.Element_Type_Access;
 
@@ -198,3 +198,4 @@ private
    function Copy (Event : in Module_Event) return Module_Event_Access;
 
 end AWA.Events;
+
