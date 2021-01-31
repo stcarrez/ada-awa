@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-commands -- AWA commands for server or admin tool
---  Copyright (C) 2019, 2020 Stephane Carrez
+--  Copyright (C) 2019, 2020, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -399,7 +399,6 @@ package body AWA.Commands is
          Result : Unbounded_String;
       begin
          Append (Result, Level);
-         Append (Result, ",");
          if not List.Contains (Appender1) then
             Append (Result, Appender1);
          end if;
