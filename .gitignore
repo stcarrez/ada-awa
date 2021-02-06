@@ -27,7 +27,7 @@ awa/regtests.db
 awa/Makefile.conf
 awa/awa-tests.xml
 awa/awa-*-aunit.xml
-awa/regtests/result
+awa/regtests/results
 awa/distrib/awa.gpr
 awa/distrib/awa_unit.gpr
 awa/plugins/awa-mail/src/awa-mail-clients-factory.adb
