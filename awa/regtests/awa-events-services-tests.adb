@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  events-tests -- Unit tests for AWA events
---  Copyright (C) 2012, 2015, 2019 Stephane Carrez
+--  Copyright (C) 2012, 2015, 2019, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -218,7 +218,7 @@ package body AWA.Events.Services.Tests is
       Factory : AWA.Applications.Factory.Application_Factory;
       Conf    : ASF.Applications.Config;
       Ctx     : aliased EL.Contexts.Default.Default_Context;
-      Path    : constant String := Util.Tests.Get_Test_Path ("regtests/config/event-test.xml");
+      Path    : constant String := Util.Tests.Get_Path ("regtests/config/event-test.xml");
       Action  : aliased Action_Bean;
    begin
       Conf.Set ("database", Util.Tests.Get_Parameter ("database"));
