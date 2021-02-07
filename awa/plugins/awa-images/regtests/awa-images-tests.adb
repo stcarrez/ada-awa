@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-images-tests -- Unit tests for images module
---  Copyright (C) 2018, 2019, 2020 Stephane Carrez
+--  Copyright (C) 2018, 2019, 2020, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,7 +46,7 @@ package body AWA.Images.Tests is
    procedure Verify_Anonymous (T     : in out Test;
                                Page  : in String;
                                Title : in String) is
-      pragma Unreferenced (Title);
+      pragma Unreferenced (Page, Title);
 
       Request   : Servlet.Requests.Mockup.Request;
       Reply     : Servlet.Responses.Mockup.Response;
@@ -62,6 +62,8 @@ package body AWA.Images.Tests is
    --  ------------------------------
    procedure Verify_List_Contains (T    : in out Test;
                                    Name : in String) is
+      pragma Unreferenced (Name);
+
       Request   : Servlet.Requests.Mockup.Request;
       Reply     : Servlet.Responses.Mockup.Response;
    begin
