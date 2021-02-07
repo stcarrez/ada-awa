@@ -43,6 +43,9 @@ package body AWA.Blogs.Modules is
    package Register is new AWA.Modules.Beans (Module => Blog_Module,
                                               Module_Access => Blog_Module_Access);
 
+   procedure Publish_Post (Module : in Blog_Module;
+                           Post   : in AWA.Blogs.Models.Post_Ref);
+
    --  ------------------------------
    --  Initialize the blog module.
    --  ------------------------------
@@ -261,7 +264,6 @@ package body AWA.Blogs.Modules is
                           Comment : in Boolean;
                           Publish_Date : in ADO.Nullable_Time;
                           Status  : in AWA.Blogs.Models.Post_Status_Type) is
-      pragma Unreferenced (Model);
       use type AWA.Blogs.Models.Post_Status_Type;
 
       Ctx   : constant ASC.Service_Context_Access := AWA.Services.Contexts.Current;
