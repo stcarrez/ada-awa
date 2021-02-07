@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-commands-setup -- Setup command to start and configure the application
---  Copyright (C) 2020 Stephane Carrez
+--  Copyright (C) 2020, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,7 +38,6 @@ package body AWA.Commands.Setup is
                                     App : in Servlet.Core.Servlet_Registry_Access);
 
       Count    : Natural := 0;
-      Selected : Application_Access;
 
       procedure Find_Application (Name : in String) is
          procedure Find (URI : in String;
@@ -50,7 +49,6 @@ package body AWA.Commands.Setup is
             App.Disable;
             if URI (URI'First + 1 .. URI'Last) = Name then
                if App.all in Application'Class then
-                  Selected := Application'Class (App.all)'Unchecked_Access;
                   Count := Count + 1;
                end if;
             end if;
