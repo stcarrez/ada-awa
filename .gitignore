@@ -54,3 +54,8 @@ awa/plugins/awa-sysadmin/awa_sysadmin.gpr
 awa/plugins/awa-*/model.yaml
 awa/plugins/awa-images/config/images.xml
 alire.lock
+awa/wiki
+alire
+awa/alire
+awa/cover
+*.cov
