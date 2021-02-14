@@ -1,7 +1,7 @@
 ---
 title: "Ada Web Application Programmer's Guide"
 author: [Stephane Carrez]
-date: 2020-04-05
+date: 2021-02-14
 subject: "Ada Web Application"
 tags: [Ada, Security, Permission, OAuth2, Web, Services, Jobs, Users, Mail, Events, Wikis]
 titlepage: true
