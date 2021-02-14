@@ -4,9 +4,9 @@
 [![Test Status](https://img.shields.io/jenkins/t/https/jenkins.vacs.fr/Bionic-AWA.svg)](https://jenkins.vacs.fr/job/Bionic-AWA/)
 [![codecov](https://codecov.io/gh/stcarrez/ada-awa/branch/master/graph/badge.svg)](https://codecov.io/gh/stcarrez/ada-awa)
 [![Documentation Status](https://readthedocs.org/projects/ada-awa/badge/?version=latest)](https://ada-awa.readthedocs.io/en/latest/?badge=latest)
-[![Download](https://img.shields.io/badge/download-2.1.0-brightgreen.svg)](http://download.vacs.fr/ada-awa/awa-all-2.1.0.tar.gz)
+[![Download](https://img.shields.io/badge/download-2.2.0-brightgreen.svg)](http://download.vacs.fr/ada-awa/awa-all-2.2.0.tar.gz)
 [![License](https://img.shields.io/badge/license-APACHE2-blue.svg)](LICENSE)
-![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-awa/2.1.0.svg)
+![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-awa/2.2.0.svg)
 
 Ada Web Application is a framework to build a Web Application in Ada 2012.
 The framework provides several ready to use and extendable modules that are common
@@ -54,15 +54,13 @@ You may get Ahven or Aunit at:
 * Ahven    (http://ahven.stronglytyped.org/)
 * AUnit    (https://libre.adacore.com/libre/tools/aunit/)
 
-## Version 2.1 - Nov 2020
+## Version 2.2     - Feb 2021
 
-- Update Trumbowyg editor to version 2.21.0
-- Fix compilation issues with GNAT 2020
-- Update mail UI component to attach external files
-- Improved setup for secure configuration with Ada Keystore
-- Use Dynamo 1.2.0, Ada Server Faces 1.4.1, Ada Servlet 1.5.0, OpenAPI Ada 0.3.0
-- Use Ada Security 1.3.1, Ada Wiki 1.3.0, Ada Database Objects 2.1.1
-- Use Ada Keystore 1.2.1, Ada EL 1.8.1, Ada Utility Library 2.3.0
+- Fixed the Markdown js editor configuration
+- Send an event when a blog post is published (allows customisation such as sending e-mails)
+- Use Dynamo 1.2.1, Ada Server Faces 1.4.2, Ada Servlet 1.5.1, OpenAPI Ada 0.4.0
+- Use Ada Security 1.4.0, Ada Wiki 1.3.1, Ada Database Objects 2.1.2
+- Use Ada Keystore 1.3.1, Ada EL 1.8.2, Ada Utility Library 2.4.0
 
 [List all versions](https://github.com/stcarrez/ada-awa/blob/master/NEWS.md)
 

@@ -1,3 +1,10 @@
+Version 2.2     - Feb 2021
+  - Fixed the Markdown js editor configuration
+  - Send an event when a blog post is published (allows customisation such as sending e-mails)
+  - Use Dynamo 1.2.1, Ada Server Faces 1.4.2, Ada Servlet 1.5.1, OpenAPI Ada 0.4.0
+  - Use Ada Security 1.4.0, Ada Wiki 1.3.1, Ada Database Objects 2.1.2
+  - Use Ada Keystore 1.3.1, Ada EL 1.8.2, Ada Utility Library 2.4.0
+
 Version 2.1     - Nov 2020
   - Update Trumbowyg editor to version 2.21.0
   - Fix compilation issues with GNAT 2020
