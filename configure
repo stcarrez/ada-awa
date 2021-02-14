@@ -611,6 +611,7 @@ INSTALL_DATA
 INSTALL_SCRIPT
 INSTALL_PROGRAM
 SET_MAKE
+GNAT
 GPRINSTALL
 GNATCLEAN
 GPRCLEAN
@@ -2124,6 +2125,56 @@ done
 test -n "$GPRINSTALL" || GPRINSTALL=""""
 
 
+for ac_prog in gnat
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_GNAT+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$GNAT"; then
+  ac_cv_prog_GNAT="$GNAT" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_GNAT="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+GNAT=$ac_cv_prog_GNAT
+if test -n "$GNAT"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GNAT" >&5
+$as_echo "$GNAT" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$GNAT" && break
+done
+test -n "$GNAT" || GNAT=""""
+
+if test -n "$GNAT"; then
+  GNATCHECK="$GNAT ls"
+  GNATCHECK_ARG=" system.ads"
+else
+  GNATCHECK="$GNATMAKE"
+  GNATCHECK_ARG=""
+fi
 
 # checking for local tools
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ${MAKE-make} sets \$(MAKE)" >&5
