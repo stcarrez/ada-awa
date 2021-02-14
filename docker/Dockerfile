@@ -4,7 +4,7 @@ MAINTAINER Stephane Carrez <Stephane.Carrez@gmail.com>
 
 RUN apt-get update \
    && apt-get install -y sqlite3 unzip imagemagick pngcrush libjpeg-progs \
-      yui-compressor liblzma-dev
+      yui-compressor liblzma-dev libfuse-dev pkg-config
 
 RUN mkdir -p /usr/src \
    && cd /usr/src \

@@ -1,5 +1,5 @@
 dnl Autoconf configure script for Ada Server Faces
-dnl Copyright (C) 2009 - 2020 Stephane Carrez
+dnl Copyright (C) 2009 - 2021 Stephane Carrez
 dnl Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 dnl
 dnl  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,7 @@ AC_INIT(src/awa.ads)
 
 # Current release settings
 AWA_MAJOR_VERSION=2
-AWA_MINOR_VERSION=1
+AWA_MINOR_VERSION=2
 AWA_MICRO_VERSION=0
 AWA_VERSION=$AWA_MAJOR_VERSION.$AWA_MINOR_VERSION.$AWA_MICRO_VERSION
 
