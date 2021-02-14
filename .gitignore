@@ -66,3 +66,7 @@ awa/debian/autoreconf.after
 awa/debian/autoreconf.before
 awa/debian/debhelper-build-stamp
 awa/debian/files
+*.deb
+*.ddeb
+*.changes
+*.buildinfo
