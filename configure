@@ -2883,7 +2883,7 @@ $as_echo "no" >&6; }
 
 
 
-ac_configure_args="${ac_configure_args} --with-build-root="`pwd`
+ac_configure_args="${ac_configure_args} --with-build-root=${DIR}"
 
 
 subdirs="$subdirs ada-lzma ada-util ada-el ada-security ada-wiki ada-ado ada-servlet openapi-ada ada-asf ada-keystore dynamo awa"
