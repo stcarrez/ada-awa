@@ -1,6 +1,6 @@
 description = "Ada Web Application (Testing framework)"
 name = "awa_unit"
-version = "2.1.0"
+version = "2.2.0"
 tags = ["web", "users", "jobs", "framework", "testing"]
 website = "https://gitlab.com/stcarrez/ada-awa"
 
@@ -29,9 +29,9 @@ unit tests for AWA applications.
 project-files = [".alire/unit/awaunit.gpr"]
 
 [[depends-on]]
-awa = "^2.1.0"
-serverfaces_unit = "^1.4.1"
-servletada_unit = "^1.5.0"
+awa = "^2.2.0"
+serverfaces_unit = "^1.4.2"
+servletada_unit = "^1.5.1"
 
 [gpr-externals]
 AWA_LIBRARY_TYPE = ["relocatable", "static", "static-pic"]
