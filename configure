@@ -2788,7 +2788,7 @@ $as_echo "$as_me: WARNING: XML/Ada was not found." >&2;}
 
 
 
-DIR=`pwd`
+DIR=`pwd $awa_pwd_option`
 
 ##########################################
 # Check for Ada Web Server

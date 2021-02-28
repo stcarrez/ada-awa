@@ -79,7 +79,7 @@ AM_GNAT_FIND_XML_ADA([],[
    AC_MSG_ERROR([Please install XML/Ada, re-configure and re-build AWA.])
  ])
 
-DIR=`pwd`
+DIR=`pwd $awa_pwd_option`
 
 ##########################################
 # Check for Ada Web Server
