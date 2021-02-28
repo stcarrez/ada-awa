@@ -19,7 +19,7 @@ install:
   - sudo apt-get -y install sqlite3 libsqlite3-dev
   - sudo apt-get -y install postgresql-client libpq-dev
   - sudo apt-get -y install libmariadb-dev
-  - sudo apt-get -y install xsltproc autotools-dev
+  - sudo apt-get -y install xsltproc autotools-dev  libfuse-dev pkg-config
 
   # Install lcov for coverage
   - sudo apt-get -y install lcov

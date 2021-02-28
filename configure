@@ -592,7 +592,6 @@ AWS_DIR
 HAVE_XML_ADA
 VERSION_XML_ADA
 WITH_XML_ADA
-awa_has_msys
 POSTGRESQL
 SQLITE3
 MYSQL
@@ -2575,49 +2574,16 @@ fi
 
 
   if test x${awa_host_pwd_check} != xyes; then
-    # Extract the first word of "msysinfo", so it can be a program name with args.
-set dummy msysinfo; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_prog_awa_has_msys+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  if test -n "$awa_has_msys"; then
-  ac_cv_prog_awa_has_msys="$awa_has_msys" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_prog_awa_has_msys="yes"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
+    case "${target_os}" in
+       mingw32*|cygwin*|mingw64*|msys)
+       awa_pwd_option="-W"
+       ;;
 
-  test -z "$ac_cv_prog_awa_has_msys" && ac_cv_prog_awa_has_msys="no"
-fi
-fi
-awa_has_msys=$ac_cv_prog_awa_has_msys
-if test -n "$awa_has_msys"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $awa_has_msys" >&5
-$as_echo "$awa_has_msys" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-    if test x${awa_has_msys} = xyes; then
-      awa_pwd_option="-W"
-    else
+     *)
       awa_pwd_option=""
-    fi
+      ;;
+
+    esac
     awa_host_pwd_check=yes
   fi
 
@@ -2788,7 +2754,7 @@ $as_echo "$as_me: WARNING: XML/Ada was not found." >&2;}
 
 
 
-DIR=`pwd`
+DIR=`pwd $awa_pwd_option`
 
 ##########################################
 # Check for Ada Web Server
@@ -2917,7 +2883,7 @@ $as_echo "no" >&6; }
 
 
 
-ac_configure_args="${ac_configure_args} --with-build-root="`pwd`
+ac_configure_args="${ac_configure_args} --with-build-root=${DIR}"
 
 
 subdirs="$subdirs ada-lzma ada-util ada-el ada-security ada-wiki ada-ado ada-servlet openapi-ada ada-asf ada-keystore dynamo awa"

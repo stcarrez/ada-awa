@@ -2,12 +2,16 @@ dnl Check if we are running under Windows with msys to use pwd -W which produces
 AC_DEFUN(AM_CHECK_HOST_PWD,
 [
   if test x${awa_host_pwd_check} != xyes; then
-    AC_CHECK_PROG(awa_has_msys, msysinfo, yes, no)
-    if test x${awa_has_msys} = xyes; then
-      awa_pwd_option="-W"
-    else
+    case "${target_os}" in
+       mingw32*|cygwin*|mingw64*|msys)
+       awa_pwd_option="-W"
+       ;;
+
+     *)
       awa_pwd_option=""
-    fi
+      ;;
+
+    esac
     awa_host_pwd_check=yes
   fi
 ])
@@ -801,7 +805,7 @@ AC_DEFUN(AM_GNAT_LIBRARY_PROJECT,
 
   if test x${awa_build_root} != x; then
     AM_CHECK_HOST_PWD
-    awa_build_pwd=`cd ${awa_build_root} && pwd $pwd_option`
+    awa_build_pwd=`cd ${awa_build_root} && pwd $awa_pwd_option`
     if test x${awa_build_pwd} != x${awa_build_root}; then
       awa_build_root=${awa_build_pwd}/
     fi
