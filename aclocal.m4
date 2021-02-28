@@ -805,7 +805,7 @@ AC_DEFUN(AM_GNAT_LIBRARY_PROJECT,
 
   if test x${awa_build_root} != x; then
     AM_CHECK_HOST_PWD
-    awa_build_pwd=`cd ${awa_build_root} && pwd $pwd_option`
+    awa_build_pwd=`cd ${awa_build_root} && pwd $awa_pwd_option`
     if test x${awa_build_pwd} != x${awa_build_root}; then
       awa_build_root=${awa_build_pwd}/
     fi
