@@ -85,9 +85,9 @@ the OpenID integration.
 |auth.provider.orange|Auth provider to use for Orange|
 | |openid|
 |auth.url.yahoo|Yahoo! OpenID access point|
-| |https://open.login.yahooapis.com/openid20/www.yahoo.com/xrds|
+| |https://api.login.yahoo.com/oauth2/request_auth|
 |auth.provider.yahoo|Auth provider to use for Yahoo!|
-| |openid|
+| |yahoo|
 |auth.url.google|Google OpenID access point|
 | |https://www.google.com/accounts/o8/id|
 |auth.provider.google|Auth provider to use for Google|

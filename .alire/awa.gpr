@@ -10,7 +10,7 @@ with "keystoreada";
 library project Awa is
 
    Name    := "awa";
-   Version := "2.1.0";
+   Version := "2.2.0";
    Library_Dir := "../lib";
    Library_Type : Awa_Config.Library_Type_Type := external ("AWA_LIBRARY_TYPE", "static");
    Exec_Dir     := "../" &  Awa_Config'Exec_Dir & "/bin";

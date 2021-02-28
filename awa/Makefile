@@ -49,8 +49,6 @@ DYNAMO_ARGS=--package AWA.Users.Models \
 build-test:: setup
 	$(GNATMAKE) $(GPRFLAGS) -m -p -Pawa_tests $(MAKE_ARGS)
 
-ifeq (${HAVE_PANDOC},yes)
-
 AWA_DOC= \
   title.md \
   pagebreak.tex \
@@ -93,18 +91,10 @@ AWA_DOC= \
   Tips.md \
   pagebreak.tex
 
-DOC_OPTIONS=-f markdown -o awa-book.pdf --listings --number-sections --toc --filter ./filter.py
-HTML_OPTIONS=-f markdown -o awa-book.html --listings --number-sections --toc --css pandoc.css
+DOC_OPTIONS=-f markdown --listings --number-sections --toc --filter ./filter.py
+HTML_OPTIONS=-f markdown --listings --number-sections --toc --css pandoc.css
 
-docs/awa-book.pdf:  force
-ifeq (${HAVE_DYNAMO},yes)
-	$(DYNAMO) build-doc -pandoc docs
-endif
-	cd docs && pandoc $(DOC_OPTIONS) --template=./eisvogel.tex $(AWA_DOC)
-
-docs/awa-book.html: docs/awa-book.pdf force
-	cd docs && pandoc $(HTML_OPTIONS) $(AWA_DOC)
-endif
+$(eval $(call pandoc_build,awa-book,$(AWA_DOC)))
 
 # Build and run the unit tests
 check test:	stamp-test-setup test-mysql test-sqlite test-postgresql
