@@ -2,6 +2,9 @@ MODE=distrib AWA_LIBRARY_TYPE=relocatable
 awa.gpr
 
 MODE=distrib AWA_LIBRARY_TYPE=relocatable
+awa_unit.gpr
+
+MODE=distrib AWA_LIBRARY_TYPE=relocatable
 plugins/awa-changelogs/awa_changelogs.gpr
 
 MODE=distrib AWA_LIBRARY_TYPE=relocatable

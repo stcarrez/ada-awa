@@ -59,3 +59,14 @@ alire
 awa/alire
 awa/cover
 *.cov
+*.substvars
+awa/debian/lib*
+awa/debian/.debhelper/
+awa/debian/autoreconf.after
+awa/debian/autoreconf.before
+awa/debian/debhelper-build-stamp
+awa/debian/files
+*.deb
+*.ddeb
+*.changes
+*.buildinfo
