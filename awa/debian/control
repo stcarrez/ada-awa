@@ -3,7 +3,7 @@ Priority: optional
 Maintainer: Stephane Carrez <Stephane.Carrez@gmail.com>
 Build-Depends: debhelper (>= 10), autotools-dev,
  dh-ada-library,
- gnat, gnat-9,
+ gnat, gnat-8,
 # This line is parsed by debian/rules.
  gprbuild (>= 2015-2),
  libasf2-dev,
@@ -20,8 +20,8 @@ Build-Depends: debhelper (>= 10), autotools-dev,
  python3-pandocfilters
 Standards-Version: 4.1.4
 Homepage: https://github.com/stcarrez/ada-awa/
-Vcs-Git: https://github.com/stcarrez/ada-awa.git -b debian-gnat-9
-Vcs-Browser: https://github.com/stcarrez/ada-awa/tree/debian-gnat-9
+Vcs-Git: https://github.com/stcarrez/ada-awa.git -b debian-gnat-8
+Vcs-Browser: https://github.com/stcarrez/ada-awa/tree/debian-gnat-8
 
 Package: libawa2.2.0
 Section: libs
