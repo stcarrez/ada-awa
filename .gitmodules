@@ -40,5 +40,6 @@
 [submodule "ada-keystore"]
 	path = ada-keystore
 	url = git://github.com/stcarrez/ada-keystore.git
+	branch = debian-gnat-8
 [submodule "openapi-ada"]
 	branch = debian-gnat-8
