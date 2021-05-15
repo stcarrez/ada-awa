@@ -1,3 +1,6 @@
+Version 2.3     -
+  - Update Trumbowyg editor to version 2.23.0
+
 Version 2.2     - Feb 2021
   - Fixed the Markdown js editor configuration
   - Send an event when a blog post is published (allows customisation such as sending e-mails)
