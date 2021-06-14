@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-components-wikis -- Wiki rendering component
---  Copyright (C) 2011, 2015, 2016 Stephane Carrez
+--  Copyright (C) 2011, 2015, 2016, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,7 +33,7 @@ package AWA.Components.Wikis is
    use ASF.Contexts.Faces;
 
    --  The wiki format of the wiki text.  The valid values are:
-   --  dotclear, google, creole, phpbb, mediawiki
+   --  dotclear, markdown, creole, mediawiki, html
    FORMAT_NAME : constant String := "format";
 
    VALUE_NAME  : constant String := ASF.Components.VALUE_NAME;
@@ -46,6 +46,9 @@ package AWA.Components.Wikis is
 
    --  Whether the TOC is rendered in the document.
    TOC_NAME      : constant String := "toc";
+
+   --  The output format when rendering the content ("text" or "html", default is "html").
+   OUTPUT_NAME   : constant String := "output";
 
    --  ------------------------------
    --  Wiki component
@@ -71,6 +74,10 @@ package AWA.Components.Wikis is
    function Get_Plugin_Factory (UI      : in UIWiki;
                                 Context : in Faces_Context'Class)
                                 return Wiki.Plugins.Plugin_Factory_Access;
+
+   --  Returns true if we must render a text content instead of html.
+   function Is_Text (UI      : in UIWiki;
+                     Context : in Faces_Context'Class) return Boolean;
 
    --  Render the wiki text
    overriding
