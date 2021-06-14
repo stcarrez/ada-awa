@@ -564,7 +564,11 @@ package body AWA.Blogs.Beans is
             return Util.Beans.Objects.Null_Object;
          end if;
       elsif Name = POST_ID_ATTR then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Get_Id));
+         if From.Get_Id /= ADO.NO_IDENTIFIER then
+            return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Get_Id));
+         else
+            return Util.Beans.Objects.Null_Object;
+         end if;
       elsif Name = POST_USERNAME_ATTR then
          return Util.Beans.Objects.To_Object (String '(From.Get_Author.Get_Name));
       elsif Name = POST_DESCRIPTION_ATTR then
