@@ -1,5 +1,6 @@
 Version 2.3     -
   - Update Trumbowyg editor to version 2.23.0
+  - Fix generation of og:image meta for blog articles written in Markdown
 
 Version 2.2     - Feb 2021
   - Fixed the Markdown js editor configuration
