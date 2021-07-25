@@ -54,13 +54,13 @@ You may get Ahven or Aunit at:
 * Ahven    (http://ahven.stronglytyped.org/)
 * AUnit    (https://libre.adacore.com/libre/tools/aunit/)
 
-## Version 2.2     - Feb 2021
-
-- Fixed the Markdown js editor configuration
-- Send an event when a blog post is published (allows customisation such as sending e-mails)
-- Use Dynamo 1.2.1, Ada Server Faces 1.4.2, Ada Servlet 1.5.1, OpenAPI Ada 0.4.0
-- Use Ada Security 1.4.0, Ada Wiki 1.3.1, Ada Database Objects 2.1.2
-- Use Ada Keystore 1.3.1, Ada EL 1.8.2, Ada Utility Library 2.4.0
+## Version 2.3     - Jul 2021
+- Update Trumbowyg editor to version 2.23.0
+- Fix generation of og:image meta for blog articles written in Markdown
+- Fix wiki preview with latest xkhtmltoimage 0.12.6
+- Use Dynamo 1.2.2, Ada Server Faces 1.4.3, Ada Servlet 1.5.2, OpenAPI Ada 0.5.0
+- Use Ada Wiki 1.3.2, Ada Database Objects 2.2.0
+- Use Ada Keystore 1.3.2, Ada EL 1.8.3, Ada Utility Library 2.4.1
 
 [List all versions](https://github.com/stcarrez/ada-awa/blob/master/NEWS.md)
 
@@ -177,20 +177,20 @@ If your GNAT 2019 compiler is installed in `C:/GNAT/2019`, you may
 install the liblzma, MySQL and SQLite libraries by using msys cp with:
 
 ```
-cp ada-lzma/win32/*.dll C:/GNAT/2019/bin
-cp ada-lzma/win32/*.dll C:/GNAT/2019/lib
-cp ada-lzma/win32/*.a C:/GNAT/2019/lib
-cp ada-ado/win32/*.dll C:/GNAT/2019/bin
-cp ada-ado/win32/*.dll C:/GNAT/2019/lib
-cp ada-ado/win32/*.lib C:/GNAT/2019/lib
-cp ada-ado/win32/*.a C:/GNAT/2019/lib
+cp ada-lzma/win32/*.dll C:/GNAT/2021/bin
+cp ada-lzma/win32/*.dll C:/GNAT/2021/lib
+cp ada-lzma/win32/*.a C:/GNAT/2021/lib
+cp ada-ado/win32/*.dll C:/GNAT/2021/bin
+cp ada-ado/win32/*.dll C:/GNAT/2021/lib
+cp ada-ado/win32/*.lib C:/GNAT/2021/lib
+cp ada-ado/win32/*.a C:/GNAT/2021/lib
 ```
 
 ## Ada Web Server
 
 The [Ada Web Server](https://libre.adacore.com/libre/tools/aws/) should be compiled with the
 SSL support if you want to use the [OAuth 2.0](https://oauth.net/2/) protocol and integrate
-with Google or Facebook authentication systems.  The AWS version shipped with GNAT 2019
+with Google or Facebook authentication systems.  The AWS version shipped with GNAT 2021
 will not work because it does not support SSL.
 
 You may build AWS by using:
