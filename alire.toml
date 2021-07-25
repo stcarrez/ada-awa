@@ -1,10 +1,10 @@
 description = "Ada Web Application"
 name = "awa"
-version = "2.2.0"
+version = "2.3.0"
 tags = ["web", "users", "jobs", "wiki", "framework", "storage", "blog"]
 website = "https://gitlab.com/stcarrez/ada-awa"
 
-licenses = ["Apache 2.0"]
+licenses = "Apache-2.0"
 authors = ["Stephane.Carrez@gmail.com"]
 maintainers = ["Stephane.Carrez@gmail.com"]
 maintainers-logins = ["stcarrez"]
@@ -50,17 +50,17 @@ project-files = [
 ]
 
 [[depends-on]]
-utilada = "^2.4.0"
-utilada_xml = "^2.4.0"
-utilada_aws = "^2.4.0"
-ado = "^2.1.2"
-wikiada = "^1.3.1"
-elada = "^1.8.2"
+utilada = "^2.4.1"
+utilada_xml = "^2.4.1"
+utilada_aws = "^2.4.1"
+ado = "^2.2.0"
+wikiada = "^1.3.2"
+elada = "^1.8.3"
 security = "^1.4.0"
-serverfaces = "^1.4.2"
-servletada = "^1.5.1"
-servletada_aws = "^1.5.1"
-keystoreada = "^1.3.1"
+serverfaces = "^1.4.3"
+servletada = "^1.5.2"
+servletada_aws = "^1.5.2"
+keystoreada = "^1.3.2"
 
 [[actions]]
 type = "post-fetch"
