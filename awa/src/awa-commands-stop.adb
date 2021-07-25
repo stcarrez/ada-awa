@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-commands-stop -- Command to stop the web server
---  Copyright (C) 2020 Stephane Carrez
+--  Copyright (C) 2020, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -58,7 +58,7 @@ package body AWA.Commands.Stop is
       Address.Addr := GNAT.Sockets.Loopback_Inet_Addr;
       Address.Port := GNAT.Sockets.Port_Type (Command.Management_Port);
       Stream.Connect (Address);
-      Writer.Initialize (Stream'Access, 1024);
+      Writer.Initialize (Stream'Unchecked_Access, 1024);
       Writer.Write ("stop" & ASCII.CR & ASCII.LF);
       Writer.Flush;
       Writer.Close;
