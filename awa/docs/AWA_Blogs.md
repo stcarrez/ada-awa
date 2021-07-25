@@ -44,12 +44,10 @@ Register (App    => App.Self.all'Access,
           URI    => "blogs",
           Module => App.Blog_Module'Access);
 ```
-
 ## Ada Beans
 Several bean types are provided to represent and manage the blogs and their posts.
 The blog module registers the bean constructors when it is initialized.
 To use them, one must declare a bean definition in the application XML configuration.
-
 
 | Name           | Description                                                               |
 |:---------------|:--------------------------------------------------------------------------|
@@ -73,7 +71,6 @@ To use them, one must declare a bean definition in the application XML configura
 
 
 
-
 #### AWA.Blogs.Models.Admin_Post_Info
 
 The Admin_Post_Info describes a post in the administration interface.
@@ -88,7 +85,6 @@ The Admin_Post_Info describes a post in the administration interface.
 ||Natural|read_count|the number of times the post was read.|
 ||String|username|the user name.|
 ||Natural|comment_count|the number of comments for this post.|
-
 
 
 
@@ -113,7 +109,6 @@ The Post_Info describes a post to be displayed in the blog page
 
 
 
-
 #### AWA.Blogs.Models.Comment_Info
 
 The comment information.
@@ -127,7 +122,6 @@ The comment information.
 ||String|email|the comment author's email.|
 ||Date|date|the comment date.|
 ||AWA.Comments.Models.Status_Type|status|the comment status.|
-
 
 
 
@@ -146,8 +140,6 @@ The list of blogs.
 
 
 
-
-
 ## Queries
 
 | Name              | Description                                                           |
@@ -156,12 +148,10 @@ The list of blogs.
 |blog-admin-post-list-date|Get the list of blog posts|
 
 
-
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |blog-post-list|Get the list of public visible posts|
 |blog-post-tag-list|Get the list of public visible posts filtered by a tag|
-
 
 
 | Name              | Description                                                           |
@@ -169,17 +159,14 @@ The list of blogs.
 |comment-list|Get the list of comments associated with given database entity|
 
 
-
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |blog-list|Get the list of blogs that the current user can update|
 
 
-
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |blog-tag-cloud|Get the list of tags associated with all the database entities of a given type|
-
 
 
 | Name              | Description                                                           |
@@ -189,18 +176,15 @@ The list of blogs.
 |blog-image-height-get-data|Get the data content of the Wiki image for an image with a given height.|
 
 
-
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |blog-image|Get the description of an image used in a blog post.|
-
 
 
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |post-publish-stats|Get statistics about the post publication on a blog.|
 |post-access-stats|Get statistics about the post publication on a blog.|
-
 
 
 ## Data model
