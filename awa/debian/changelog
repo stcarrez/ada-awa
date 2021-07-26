@@ -1,3 +1,9 @@
+libawa (2.3.0) unstable; urgency=low
+
+  * Update for Ada Web Application 2.3.0
+
+ -- Stephane Carrez <Stephane.Carrez@gmail.com>  Sun, 25 Jul 2021 18:24:07 +0100
+
 libawa (2.2.0) unstable; urgency=low
 
   * Update for Ada Web Application 2.2.0
