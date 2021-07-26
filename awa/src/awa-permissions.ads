@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions -- Permissions module
---  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -131,7 +131,7 @@ private
       Entity : ADO.Identifier;
    end record;
 
-   type Entity_Policy;
+   type Entity_Policy is tagged;
    type Entity_Policy_Access is access all Entity_Policy'Class;
 
    type Controller_Config is record

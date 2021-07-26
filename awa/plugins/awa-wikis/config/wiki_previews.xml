@@ -23,7 +23,7 @@
 
   <context-param>
     <param-name>wiki_previews.wiki_preview_command</param-name>
-    <param-value>awa-wiki-preview.sh web/preview/wiki.css tmp/\#{jobHandler.wiki_page_id}.html web/preview/\#{jobHandler.wiki_space_id}/\#{jobHandler.wiki_page_id}.png</param-value>
+    <param-value>awa-wiki-preview.sh web/preview/wikis.css tmp/\#{jobHandler.wiki_page_id}.html web/preview/\#{jobHandler.wiki_space_id}/\#{jobHandler.wiki_page_id}.png</param-value>
   </context-param>
 
   <url-policy>

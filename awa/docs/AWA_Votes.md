@@ -36,7 +36,6 @@ Register (App    => App.Self.all'Access,
           URI    => "votes",
           Module => App.Vote_Module'Access);
 ```
-
 ## Ada Beans
 The `Vote_Bean` is a bean intended to be used in presentation files (XHTML facelet
 files) to vote for an item.  The managed bean can be easily configured in the application XML
@@ -72,7 +71,6 @@ The permission `answer-create` is used to verify that the vote is allowed.
 
 The managed bean defines three operations that can be called: `vote_up`,
 `vote_down` and `vote` to setup specific ratings.
-
 
 ## Javascript integration
 The `votes` module provides a Javascript support to help users vote

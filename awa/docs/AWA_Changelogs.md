@@ -8,4 +8,3 @@ that each database entity can have its own change log history.
 ![](http://ada-awa.googlecode.com/svn/wiki/awa_changelogs_model.png)
 
 
-

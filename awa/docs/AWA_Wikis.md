@@ -45,7 +45,6 @@ Register (App    => App.Self.all'Access,
 | ||
 
 
-
 ## Events
 The `wikis` exposes a number of events which are posted when some action
 are performed at the service level.
@@ -56,7 +55,6 @@ are performed at the service level.
 | wiki-create-content | This event is posted when a new wiki page content is created. |
 |                     | Each time a wiki page is modified, a new wiki page content    |
 |                     | is created and this event is posted.                          |
-
 
 
 ## Ada Beans
@@ -80,7 +78,6 @@ To use them, one must declare a bean definition in the application XML configura
 |wikiTagCloud|The list of tags associated with a wiki page entities.|
 |wikiTags|The wiki tag editor bean.|
 |wikiPageStats|The counter statistics for a wiki page|
-
 
 
 
@@ -109,7 +106,6 @@ The information about a wiki page.
 
 
 
-
 #### AWA.Wikis.Models.Wiki_Page_Info
 
 The information about a wiki page.
@@ -124,7 +120,6 @@ The information about a wiki page.
 ||Integer|read_count|the read count.|
 ||Date|create_date|the wiki creation date.|
 ||String|author|the wiki page author.|
-
 
 
 
@@ -144,7 +139,6 @@ The information about a wiki page version.
 
 
 
-
 #### AWA.Wikis.Models.Wiki_Info
 
 The list of wikis.
@@ -159,8 +153,6 @@ The list of wikis.
 
 
 
-
-
 ## Queries
 
 | Name              | Description                                                           |
@@ -171,12 +163,10 @@ The list of wikis.
 |wiki-page-name-count|Count the occurence of a wiki page name|
 
 
-
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |wiki-page-list|Get the list of wiki pages|
 |wiki-page-tag-list|Get the list of wiki pages filtered by a tag|
-
 
 
 | Name              | Description                                                           |
@@ -184,11 +174,9 @@ The list of wikis.
 |wiki-version-list|Get the list of wiki page versions|
 
 
-
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |wiki-list|Get the list of wikis that the current user can update|
-
 
 
 | Name              | Description                                                           |
@@ -198,17 +186,14 @@ The list of wikis.
 |wiki-image-height-get-data|Get the data content of the Wiki image for an image with a given height.|
 
 
-
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |wiki-image|Get the description of an image used in a wiki page.|
 
 
-
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |page-access-stats|Get statistics about the wiki page access.|
-
 
 
 ## Data model

@@ -1,5 +1,5 @@
 <!-- Display the blog posts in a list page
-  -  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2021 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,7 +52,7 @@
                   links="#{postList.links}"
                   format="#{post.format}"/>
         <h:panelGroup rendered="#{not empty post.summary}" styleClass="awa-post-more">
-            <a href="#{contextPath}/blogs/post.html?post=#{post.uri}">Read more</a>
+            <a href="#{contextPath}/blogs/post.html?post=#{post.uri}">#{blogMsg.blog_post_read_more}</a>
         </h:panelGroup>
         <!-- Increment the post read counter but do not display anything -->
         <awa:counter value="#{postList.counter}" hidden="true"/>

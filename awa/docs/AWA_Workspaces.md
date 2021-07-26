@@ -23,7 +23,6 @@ inviter
 ### accept-invitation
 This event is posted when an invitation is accepted by a user.
 
-
 ## Ada Beans
 
 ### Beans
@@ -52,7 +51,6 @@ This event is posted when an invitation is accepted by a user.
 | |blog-create,wiki-space-create|
 |workspaces.allow_workspace_create||
 | |0|
-
 
 
 ## Data Model

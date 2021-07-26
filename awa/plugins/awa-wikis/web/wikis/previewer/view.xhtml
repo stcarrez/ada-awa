@@ -1,5 +1,5 @@
 <!-- View an existing wiki page
-  -  Copyright (C) 2015 Stephane Carrez
+  -  Copyright (C) 2015, 2021 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,7 @@
                 xmlns:awa="http://code.google.com/p/ada-awa/jsf"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:c="http://java.sun.com/jstl/core"
-                xmlns:u="http://code.google.com/p/ada-asf/util"
+                xmlns:util="http://code.google.com/p/ada-asf/util"
                 xmlns:h="http://java.sun.com/jsf/html">
     <f:metadata>
        <f:viewAction action='#{wikiView.load}'/>
@@ -39,7 +39,7 @@
             </div>
         </div>
         <awa:tagList value='#{wikiView.tags}' id='qtags' styleClass="wiki-tag-list tagedit-list"
-                     tagLink="#{contextPath}/wikis/tagged.html?tag=#{tagName}"
+                     tagLink="#{contextPath}/wikis/tagged.html?tag=#{util:urlEncode(tagName)}"
                      var="tagName"
                      tagClass="tagedit-listelement tagedit-listelement-old"/>
         <awa:wiki styleClass='wiki-text' value="#{wikiView.content}" format="#{wikiView.format}"/>
