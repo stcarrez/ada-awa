@@ -56,7 +56,7 @@
             </div>
         </div>
         <awa:tagList value='#{wikiView.tags}' id='qtags' styleClass="wiki-tag-list tagedit-list"
-                     tagLink="#{contextPath}/wikis/tags/#{wikiView.wiki_id}/#{tagName}/recent"
+                     tagLink="#{contextPath}/wikis/tags/#{wikiView.wiki_id}/#{util:urlEncode(tagName)}/recent"
                      var="tagName"
                      tagClass="tagedit-listelement tagedit-listelement-old"/>
         <h3 class="wiki-info">#{wikiMsg.wiki_info_access_label}</h3>
@@ -86,7 +86,7 @@
             <awa:tagCloud
                     value="#{wikiPageInfo.words}" styleClass="tag-cloud" layout="dispatch"
                     var="tagName" maxWeight="48" minWeight="16" rows="600"
-                    tagLink="#{contextPath}/wikis/tags/#{wikiPageInfo.wiki_id}/#{tagName}/recent"/>
+                    tagLink="#{contextPath}/wikis/tags/#{wikiPageInfo.wiki_id}/#{util:urlEncode(tagName)}/recent"/>
 
         </div>
         <div class="wiki-page-footer">

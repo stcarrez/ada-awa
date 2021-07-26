@@ -6,7 +6,7 @@ if [ $# -ne 3 ]; then
 fi
 DIR=`dirname $3`
 mkdir -p $DIR &&
-wkhtmltoimage -q --user-style-sheet $1 --zoom 1.5 --crop-h 512 --crop-w 1024 $2 $3.tmp.png &&
+wkhtmltoimage -q --enable-local-file-access --user-style-sheet $1 --zoom 1.5 --crop-h 512 --crop-w 1024 $2 $3.tmp.png &&
 convert $3.tmp.png -resize 256x128 $3 &&
 rm -f $3.tmp.png
 

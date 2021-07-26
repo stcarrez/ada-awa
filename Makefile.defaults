@@ -123,6 +123,17 @@ endif
 
 endef
 
+define ada_program
+  all:: setup
+	$(GNATMAKE) $(GPRFLAGS) -p -P$(2)$(1).gpr $(STATIC_MAKE_ARGS)
+
+  setup:: obj/$(1)/static
+
+  obj/$(1)/static:
+	$(MKDIR) -p obj/$(1)/static
+
+endef
+
 define awa_install_dir
 
 install:: | $(DESTDIR)$(dynamodir)/$(1)/$(2)

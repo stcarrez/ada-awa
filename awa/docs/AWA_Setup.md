@@ -70,4 +70,3 @@ process will be skipped.
 
 To run again the installation, remove manually the <tt>.initialized</tt> file.
 
-

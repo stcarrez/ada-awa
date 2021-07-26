@@ -1,5 +1,5 @@
 <!-- List the wiki pages
-  -  Copyright (C) 2015, 2016, 2017 Stephane Carrez
+  -  Copyright (C) 2015, 2016, 2017, 2021 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -57,7 +57,7 @@
             </div>
         </div>
         <awa:tagList value='#{wikiView.tags}' id='qtags' styleClass="wiki-tag-list tagedit-list"
-                     tagLink="#{contextPath}/wikis/tags/#{wikiView.wiki_id}/#{tagName}/recent"
+                     tagLink="#{contextPath}/wikis/tags/#{wikiView.wiki_id}/#{util:urlEncode(tagName)}/recent"
                      var="tagName"
                      tagClass="tagedit-listelement tagedit-listelement-old"/>
         <div class='wiki-admin awa-list-header' id="wiki-page-list-header">

@@ -33,7 +33,6 @@ Register (App    => App.Self.all'Access,
           Module => App.Job_Module'Access);
 ```
 
-
 ## Writing a job
 A new job type is created by implementing the `Execute` operation
 of the abstract `Job_Type` tagged record.
@@ -103,14 +102,12 @@ a job and perform the job work when it is scheduled.
 
 
 
-
 ## Ada Beans
 
 
 | Name           | Description                                                               |
 |:---------------|:--------------------------------------------------------------------------|
 |jobHandler|The jobHandler is the bean that is created to execute a job.|
-
 
 
 ## Data Model

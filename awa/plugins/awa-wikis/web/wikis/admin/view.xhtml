@@ -19,7 +19,7 @@
                 xmlns:awa="http://code.google.com/p/ada-awa/jsf"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:c="http://java.sun.com/jstl/core"
-                xmlns:u="http://code.google.com/p/ada-asf/util"
+                xmlns:util="http://code.google.com/p/ada-asf/util"
                 xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{wikiPage.title}"/>
 
@@ -43,7 +43,7 @@
                       <p><h:outputText id="date" value="#{wikiPage.date}" converter="dateConverter"/></p>
                   </div>
                   <awa:tagList value='#{wikiPage.tags}' id='qtags' styleClass="tagedit-list"
-                               tagLink="#{contextPath}/wikis/tagged.html?tag=#{tagName}"
+                               tagLink="#{contextPath}/wikis/tagged.html?tag=#{util:urlEncode(tagName)}"
                                var="tagName"
                                tagClass="tagedit-listelement tagedit-listelement-old"/>
                   <awa:wiki styleClass='post-text' value="#{wikiPage.text}" format="dotclear"/>

@@ -1,0 +1,133 @@
+/* Columns in wiki page list */
+.wiki-page-name {
+    width: 20%;
+    height: 24px;
+}
+.wiki-page-title {
+    width: 25%;
+    height: 24px;
+}
+.wiki-page-date,
+.wiki-page-author,
+#wiki-nav-sort {
+    width: 20%;
+}
+.wiki-page-version, .wiki-page-access {
+    width: 10%;
+}
+.wiki-page-status, .wiki-page-status-false, .wiki-page-status-true {
+    margin-left: 60px;
+    margin-right: 5px;
+    width: 24px;
+    height: 24px;
+}
+#wiki-page-action {
+    left: -5px;
+}
+.wiki-page-grid {
+    float: left;
+    margin: 0.5em;
+}
+.wiki-page-grid-info {
+    border: 1px solid red;
+    width: 150px;
+    height: 150px;
+}
+
+/**
+ * Wiki page global style.
+ */
+.wiki-page {
+    float: left;
+    width: 96%;
+    padding-right: 2%;
+    padding-left: 2%;
+}
+.wiki-title {
+    float: left;
+    margin-top: 15px;
+    width: 95%;
+    border-bottom: 2px solid #47C;
+    padding-bottom: 2px;
+    background: url(../images/wikis/wiki-view.png) no-repeat;
+    padding-left: 64px;
+}
+.wiki-title h2 {
+    line-height: 1.33em;
+    font-size: 1.33em;
+}
+.wiki-page-actions {
+    float: right;
+    list-style-type: none;
+}
+.wiki-page-actions li {
+    float: left;
+    padding-left: 1em;
+}
+.wiki-tag-list {
+    float: right;
+    list-style-type: none;
+}
+
+/**
+ * Wiki page view style.
+ */
+div.blog-post div.post-title h2 a {
+    color: #F91;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.33em;
+}
+div.blog-post div.post-title h2 a:hover {
+    color: #A08;
+}
+.wiki-text {
+    float: left;
+    width: 100%;
+}
+
+.wiki-text {
+    line-height: 1.5em;
+}
+.wiki-text p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+.wiki-text pre {
+    line-height: 1.2em;
+    margin-bottom: 1em;
+    overflow: auto;
+    background: #E8F0FF;
+    padding: 4px;
+    border: 1px solid #AAA;
+    font-size: 1.2em;
+}
+.wiki-text h2, .wiki-text h3, .wiki-text h4, .wiki-text h5, .wiki-text h6 {
+    color: #346;
+    font-weight: bold;
+    margin-top: 1em;
+    clear: both;
+}
+.wiki-text h2 {
+    font-size: 1.33em;
+}
+.wiki-text h3 {
+    font-size: 1.1em;
+}
+.wiki-text h4 {
+    font-size: 1.0em;
+}
+.wiki-text a, ul.tag-cloud a {
+    font-weight: bold;
+    color: #47C;
+}
+.wiki-text ul {
+    padding-left: 30px;
+}
+.wiki-text ol {
+    list-style-type: decimal;
+    padding-left: 30px;
+}
+.wiki-text li {
+    display: list-item;
+}

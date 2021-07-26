@@ -76,8 +76,6 @@ The following global configuration parameter are defined:
 | |#{fn:composePath(app_search_dirs,'config')}|
 
 
-
-
 ## AWA Modules
 A module is a software component that can be integrated in the
 web application.  The module can bring a set of service APIs,
@@ -135,7 +133,6 @@ The configuration file is used to define:
 The module configuration is located in the *config* directory
 and must be the name of the module followed by the file extension
 (example: `module-name`.xml or `module-name`.properties).
-
 
 
 ## AWA Permissions
@@ -220,8 +217,6 @@ AWA.Permissions.Services.Add_Permission (Session => DB,
 |remove-permission|Delete the permission associated with a user and an object|
 |remove-entity-permission|Delete all the permission associated with an object|
 |remove-user-permission|Delete all the permission associated with a user|
-
-
 
 
 ## AWA Events
@@ -313,7 +308,6 @@ When the event is queued, there are two types of event queues:
 ### Data Model
 ![](images/awa_events_model.png)
 
-
 ## AWA Commands
 The `AWA.Commands` package provides a simple framework with commands that
 allow to start, stop, configure and manage the web application.  It is also
@@ -344,12 +338,19 @@ unlock the keystore is necessary.  Passwords are retrieved using one
 of the following options:
 
 * by reading a file that contains the password,
+
 * by looking at an environment variable,
+
 * by using a command line argument,
+
 * by getting the password through the _ssh-askpass_(1) external command,
+
 * by running an external command,
+
 * by using a GPG private key,
+
 * by asking interactively the user for the password,
+
 * by asking through a network socket for the password.
 
 When the Ada Keystore is used, it is global to all the applications that
@@ -549,9 +550,11 @@ configuration name and its associated value.
 The list of configuration parameters are grouped in several categories:
 
 * `Database configuration` gives the configuration properties for the
-  database configuration.
+ database configuration.
+
 * `Server faces configuration` lists the configuration use by the
-  Ada Servlets and [Ada Server Faces](https://github.com/stcarrez/ada-asf).
+ Ada Servlets and [Ada Server Faces](https://github.com/stcarrez/ada-asf).
+
 * `AWA Application` lists the core AWA configuration properties.
 
 Depending on whether a module is used by the application, a number
@@ -607,6 +610,5 @@ package Stop_Command is new AWA.Commands.Stop (Server_Commands);
 
 The instantiation of one of the command, automatically registers the
 command to the command driver.
-
 
 

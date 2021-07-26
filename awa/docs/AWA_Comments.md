@@ -23,7 +23,6 @@ Register (App    => App.Self.all'Access,
           URI    => "comments",
           Module => App.Comment_Module'Access);
 ```
-
 ## Ada Beans
 Several bean types are provided to represent and manage a list of tags.
 The tag module registers the bean constructors when it is initialized.
@@ -84,13 +83,10 @@ The comment information.
 
 
 
-
-
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |comment-list|Get the list of comments associated with given database entity|
 |all-comment-list|Get the list of comments associated with given database entity|
-
 
 
 ## Data model

@@ -52,8 +52,6 @@ The `Images` module defines the following configuration parameters:
 |images.thumbnail_command|The command to execute to generate an image thumbnail for the Images module.|
 | |convert -verbose -resize \#{width}x\#{height} -background white -gravity center -extent \#{width}x\#{height} -format jpg -quality 75 \#{src} \#{dst}|
 
-
-
 ## Ada Beans
 The `Image_List_Bean` type is used to represent a list of image stored in
 a folder.
@@ -66,7 +64,6 @@ The `Image_Bean` type holds all the data to give information about an image.
 |storageFolder|This bean allows to create a storage folder.|
 |imageList|This bean gives the list of images associated with a given folder.|
 |imageInfo|This bean gives the information about an image.|
-
 
 
 
@@ -92,7 +89,6 @@ The information about an image.
 
 
 
-
 #### AWA.Images.Models.Image_Info
 
 The list of images for a given folder.
@@ -114,8 +110,6 @@ The list of images for a given folder.
 
 
 
-
-
 ## Queries
 
 | Name              | Description                                                           |
@@ -123,11 +117,9 @@ The list of images for a given folder.
 |image-info|Get the description of an image.|
 
 
-
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |image-list|Get a list of images for a given folder.|
-
 
 
 ## Data model
