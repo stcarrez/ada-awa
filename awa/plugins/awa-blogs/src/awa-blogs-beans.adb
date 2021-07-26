@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-beans -- Beans for blog module
---  Copyright (C) 2011 - 2020 Stephane Carrez
+--  Copyright (C) 2011 - 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -416,7 +416,7 @@ package body AWA.Blogs.Beans is
       Autolink : aliased Wiki.Filters.Autolink.Autolink_Filter;
       Renderer : aliased Wiki.Render.Text.Text_Renderer;
       Filter   : aliased Wiki.Filters.Html.Html_Filter_Type;
-      Format   : constant Wiki.Wiki_Syntax := Wiki.SYNTAX_DOTCLEAR;
+      Format   : Wiki.Wiki_Syntax;
       Images   : aliased Wiki.Filters.Collectors.Image_Collector_Type;
       Stream   : aliased Wiki.Streams.Builders.Output_Builder_Stream;
       Summary  : constant String := From.Get_Summary;
@@ -435,6 +435,23 @@ package body AWA.Blogs.Beans is
       end Collect_Image;
 
    begin
+      case From.Get_Format is
+         when Models.FORMAT_DOTCLEAR =>
+            Format := Wiki.SYNTAX_DOTCLEAR;
+
+         when Models.FORMAT_HTML =>
+            Format := Wiki.SYNTAX_HTML;
+
+         when Models.FORMAT_MARKDOWN =>
+            Format := Wiki.SYNTAX_MARKDOWN;
+
+         when Models.FORMAT_MEDIAWIKI =>
+            Format := Wiki.SYNTAX_MEDIA_WIKI;
+
+         when Models.FORMAT_CREOLE =>
+            Format := Wiki.SYNTAX_CREOLE;
+
+      end case;
       Engine.Add_Filter (Autolink'Unchecked_Access);
       Engine.Add_Filter (Images'Unchecked_Access);
       Engine.Add_Filter (Filter'Unchecked_Access);
@@ -564,7 +581,11 @@ package body AWA.Blogs.Beans is
             return Util.Beans.Objects.Null_Object;
          end if;
       elsif Name = POST_ID_ATTR then
-         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Get_Id));
+         if From.Get_Id /= ADO.NO_IDENTIFIER then
+            return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Get_Id));
+         else
+            return Util.Beans.Objects.Null_Object;
+         end if;
       elsif Name = POST_USERNAME_ATTR then
          return Util.Beans.Objects.To_Object (String '(From.Get_Author.Get_Name));
       elsif Name = POST_DESCRIPTION_ATTR then

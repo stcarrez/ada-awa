@@ -55,8 +55,6 @@ The `counters` module defines the following configuration parameters:
 
 
 
-
-
 ## Counter Declaration
 Each counter must be declared by instantiating the `Definition` package.
 This instantiation serves as identification of the counter and it defines
@@ -201,7 +199,6 @@ query.
   var="stat">["#{stat.date}", #{stat.count}],</h:list>[0,0]]}
 </f:view>
 ```
-
 ## HTML components
 The `<awa:counter>` component is an [Ada Server Faces](https://github.com/stcarrez/ada-asf) component that
 allows to increment and display easily the counter.  The component
@@ -217,7 +214,6 @@ When the component is included in a page the `Counter_Bean` instance
 associated with the EL `value` attribute is used to increment the counter.
 This is similar to calling the `AWA.Counters.Increment` operation
 from the Ada code.
-
 
 ## Data model
 The `counters` module has a simple database model which needs two tables.

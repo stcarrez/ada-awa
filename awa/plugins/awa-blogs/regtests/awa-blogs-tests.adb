@@ -123,9 +123,9 @@ package body AWA.Blogs.Tests is
          Request.Set_Parameter ("text", "The blog post content.");
          Request.Set_Parameter ("uri", Uuid);
          Request.Set_Parameter ("save", "1");
-         Request.Set_Parameter ("post-status", "1");
+         Request.Set_Parameter ("post-status", "POST_PUBLISHED");
          Request.Set_Parameter ("allow-comment", "0");
-         Request.Set_Parameter ("post-format", "dotclear");
+         Request.Set_Parameter ("post-format", "FORMAT_DOTCLEAR");
          ASF.Tests.Do_Post (Request, Reply, "/blogs/admin/create.html", "create-post.html");
 
          T.Post_Ident := Helpers.Extract_Redirect (Reply, "/asfunit/blogs/admin/"
@@ -160,7 +160,7 @@ package body AWA.Blogs.Tests is
       Request.Set_Parameter ("uri", Uuid);
       Request.Set_Parameter ("save", "1");
       Request.Set_Parameter ("post-status", "POST_PUBLISHED");
-      Request.Set_Parameter ("post-format", "dotclear");
+      Request.Set_Parameter ("post-format", "FORMAT_DOTCLEAR");
       Request.Set_Parameter ("allow-comment", "0");
       ASF.Tests.Do_Post (Request, Reply, "/blogs/admin/edit.html", "edit-post.html");
 
@@ -193,9 +193,9 @@ package body AWA.Blogs.Tests is
       Request.Set_Parameter ("post-title", "New post title");
       Request.Set_Parameter ("text", "The blog post new content.");
       Request.Set_Parameter ("uri", Uuid);
-      Request.Set_Parameter ("save", "POST_PUBLISHED");
-      Request.Set_Parameter ("post-format", "dotclear");
-      Request.Set_Parameter ("post-status", "1");
+      Request.Set_Parameter ("save", "1");
+      Request.Set_Parameter ("post-format", "FORMAT_DOTCLEAR");
+      Request.Set_Parameter ("post-status", "POST_PUBLISHED");
       Request.Set_Parameter ("allow-comment", "0");
       Request.Set_Parameter ("publish-date", "");
       ASF.Tests.Do_Post (Request, Reply, "/blogs/admin/edit.html", "edit-post.html");

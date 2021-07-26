@@ -94,7 +94,6 @@ There can be several recepients.
 The `mail:body` component contains the mail body.
 
 The `mail:attachment` component allows to include some attachment.
-
 ### Mail Recipients
 The <b>AWA.Mail.Components.Recipients</b> package defines the UI components
 to represent the <tt>To</tt>, <tt>From</tt>, <tt>Cc</tt> and <tt>Bcc</tt> recipients.
@@ -102,7 +101,6 @@ to represent the <tt>To</tt>, <tt>From</tt>, <tt>Cc</tt> and <tt>Bcc</tt> recipi
 The mail message is retrieved by looking at the parent UI component until a
 `UIMailMessage` component is found.  The mail message recipients are initialized
 during the render response JSF phase, that is when <tt>Encode_End</tt> are called.
-
 ### Mail Messages
 The `AWA.Mail.Components.Messages` package defines the UI components
 to represent the email message with its recipients, subject and body.
@@ -125,12 +123,10 @@ to build the `text/plain` mail message.  The default content type for
    The text/html mail message.
 </mail:body>
 ```
-
 ### Mail Attachments
 The `AWA.Mail.Components.Attachments` package defines the UI components
 to represent a mail attachment.  The mail attachment can be an external
 file or may be provided by an Ada bean object.
-
 
 
 ## Ada Beans
@@ -138,8 +134,6 @@ file or may be provided by an Ada bean object.
 | Name           | Description                                                               |
 |:---------------|:--------------------------------------------------------------------------|
 |userMail|Bean used to send an email with a specific template to the user.|
-
-
 
 
 

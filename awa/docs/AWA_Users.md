@@ -35,7 +35,6 @@ Register (App    => App.Self.all'Access,
           Name   => AWA.Users.Modules.NAME,
           Module => App.User_Module'Access);
 ```
-
 ## OAuth Authentication Flow
 The OAuth/OpenID authentication flow is implemented by using two servlets
 that participate in the authentication.  A first servlet will start
@@ -61,7 +60,6 @@ user's name and email address.
 These two servlets are provided by the `User_Module` and they are
 registered under the `openid-auth` name for the first step and
 under the `openid-verify` name for the second step.
-
 
 ## Configuration
 The *users* module uses a set of configuration properties to configure
@@ -128,7 +126,6 @@ the OpenID integration.
 | |#{contextPath}/auth/login.html|
 
 
-
 ## Ada Beans
 Several bean types are provided to represent and manage the users.
 The user module registers the bean constructors when it is initialized.
@@ -144,8 +141,6 @@ XML configuration.
 |lostPassword|This bean is used by the lost password form|
 |logout|This bean is used by the logout process|
 |user|This bean allows to provide information about the current logged user.|
-
-
 
 
 

@@ -31,7 +31,6 @@ with ASF.Requests.Mockup;
 with ASF.Responses.Mockup;
 
 with AWA.Applications;
-with AWA.Services.Contexts;
 with AWA.Modules.Get;
 package body AWA.Wikis.Previews is
 

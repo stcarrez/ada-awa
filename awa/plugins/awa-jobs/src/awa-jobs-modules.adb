@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-jobs-modules -- Job module
---  Copyright (C) 2012, 2013, 2020 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2020, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,6 @@ with Ada.Tags;
 
 with Util.Log.Loggers;
 
-with AWA.Applications;
 with AWA.Modules.Get;
 with AWA.Modules.Beans;
 with AWA.Jobs.Beans;

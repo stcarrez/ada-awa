@@ -45,7 +45,6 @@ Register (App    => App.Self.all'Access,
 |storage-delete|awa_workspace||
 
 
-
 ## Configuration
 The `storages` module defines the following configuration parameters:
 
@@ -58,8 +57,6 @@ The `storages` module defines the following configuration parameters:
 | |tmp|
 |storages.database_max_size|The maximum size of documents store in the database storage.|
 | |100000|
-
-
 
 
 ## Creating a storage
@@ -147,7 +144,6 @@ The `AWA.Storages.Stores.Databases` store uses the database to save a data conte
 The data is saved in a specific table in a database blob column.
 The database store uses another store service to temporarily save the data content
 in a local file when the application needs a file access to the data.
-
 ### File System store
 The `AWA.Storages.Stores.Files` store uses the file system to save a data content.
 Files are stored in a directory tree whose path is created from the workspace identifier
@@ -156,9 +152,6 @@ are stored in the same directory sub-tree.
 
 The root directory of the file system store is configured through the
 <b>storage_root</b> and <b>tmp_storage_root</b> configuration properties.
-
-
-
 
 ## Ada Beans
 
@@ -169,7 +162,6 @@ The root directory of the file system store is configured through the
 |folderList|This bean gives the list of storage folders in the workspace.|
 |storageList|This bean gives the list of storage files associated with a given folder.|
 |storageInfo|This bean gives some information about a document and its folder.|
-
 
 
 
@@ -195,7 +187,6 @@ The list of documents for a given folder.
 
 
 
-
 #### AWA.Storages.Models.Folder_Info
 
 The list of folders.
@@ -208,12 +199,9 @@ The list of folders.
 
 
 
-
-
 ## Storage Servlet
 The <tt>Storage_Servlet</tt> type is the servlet that allows to retrieve the file
 content that was uploaded.
-
 
 ## Queries
 
@@ -222,11 +210,9 @@ content that was uploaded.
 |storage-list|Get a list of storage files for a given folder.|
 
 
-
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |storage-folder-list|Get a list of storage folders that a user can see.|
-
 
 
 | Name              | Description                                                           |
@@ -237,11 +223,9 @@ content that was uploaded.
 |storage-delete-local|Delete the local storage data|
 
 
-
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |storage-info|Get the description of a document.|
-
 
 
 ## Data model

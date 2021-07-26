@@ -28,7 +28,6 @@
 |answer-accept|awa_answer|The question author is the only one who can accept an answer.|
 
 
-
 ### Queries
 
 | Name              | Description                                                           |
@@ -54,7 +53,6 @@ The list of questions.
 ||Identifier|author_id|the author's identifier.|
 ||String|author_name|the author's name.|
 ||String|author_email|the author's email.|
-
 
 
 
@@ -86,7 +84,6 @@ The list of questions.
 
 
 
-
 ### Queries
 
 | Name              | Description                                                           |
@@ -111,7 +108,6 @@ The list of answers.
 ||Identifier|author_id|the author's identifier.|
 ||String|author_name|the author's name.|
 ||String|author_email|the author's email.|
-
 
 
 

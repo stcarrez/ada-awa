@@ -42,7 +42,6 @@ Register (App    => App.Self.all'Access,
           Module => App.Setting_Module'Access);
 ```
 
-
 ## Data model
 ![](images/awa_settings_model.png)
 

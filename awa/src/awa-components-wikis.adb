@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-components-wikis -- Wiki rendering component
---  Copyright (C) 2011, 2012, 2013, 2015, 2016, 2018, 2020 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2015, 2016, 2018, 2020, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +25,7 @@ with Wiki.Documents;
 with Wiki.Parsers;
 with Wiki.Helpers;
 with Wiki.Render.Html;
+with Wiki.Render.Text;
 with Wiki.Filters.Html;
 with Wiki.Filters.TOC;
 with Wiki.Filters.Autolink;
@@ -170,6 +171,8 @@ package body AWA.Components.Wikis is
          return Wiki.SYNTAX_MARKDOWN;
       elsif Format = "mediawiki" or Format = "FORMAT_MEDIAWIKI" then
          return Wiki.SYNTAX_MEDIA_WIKI;
+      elsif Format = "html" or Format = "FORMAT_HTML" then
+         return Wiki.SYNTAX_HTML;
       else
          return Wiki.SYNTAX_MIX;
       end if;
@@ -214,6 +217,21 @@ package body AWA.Components.Wikis is
    end Get_Plugin_Factory;
 
    --  ------------------------------
+   --  Returns true if we must render a text content instead of html.
+   --  ------------------------------
+   function Is_Text (UI      : in UIWiki;
+                     Context : in Faces_Context'Class) return Boolean is
+      use type Util.Beans.Objects.Object;
+
+      Output : constant Util.Beans.Objects.Object := UI.Get_Attribute (Context, OUTPUT_NAME);
+   begin
+      if Util.Beans.Objects.Is_Null (Output) then
+         return False;
+      end if;
+      return Output = Util.Beans.Objects.To_Object (String '("text"));
+   end Is_Text;
+
+   --  ------------------------------
    --  Render the wiki text
    --  ------------------------------
    overriding
@@ -228,22 +246,22 @@ package body AWA.Components.Wikis is
       end if;
       declare
          Writer   : constant Response_Writer_Access := Context.Get_Response_Writer;
-         Html     : aliased Html_Writer_Type;
          Doc      : Wiki.Documents.Document;
          TOC      : aliased Wiki.Filters.TOC.TOC_Filter;
          Autolink : aliased Wiki.Filters.Autolink.Autolink_Filter;
-         Renderer : aliased Wiki.Render.Html.Html_Renderer;
          Filter   : aliased Wiki.Filters.Html.Html_Filter_Type;
          Vars     : aliased Wiki.Filters.Variables.Variable_Filter;
          Format   : constant Wiki.Wiki_Syntax := UI.Get_Wiki_Style (Context);
          Value    : constant Util.Beans.Objects.Object := UI.Get_Attribute (Context, VALUE_NAME);
+         Is_Text  : constant Boolean := UI.Is_Text (Context);
          Links    : Wiki.Render.Links.Link_Renderer_Access;
          Plugins  : Wiki.Plugins.Plugin_Factory_Access;
          Engine   : Wiki.Parsers.Parser;
       begin
-         Html.Writer := Writer;
-         Writer.Start_Element ("div");
-         UI.Render_Attributes (Context, WIKI_ATTRIBUTE_NAMES, Writer);
+         if not Is_Text then
+            Writer.Start_Element ("div");
+            UI.Render_Attributes (Context, WIKI_ATTRIBUTE_NAMES, Writer);
+         end if;
 
          if not Util.Beans.Objects.Is_Empty (Value) then
             Plugins := UI.Get_Plugin_Factory (Context);
@@ -251,20 +269,39 @@ package body AWA.Components.Wikis is
                Engine.Set_Plugin_Factory (Plugins);
             end if;
             Links := UI.Get_Links_Renderer (Context);
-            if Links /= null then
-               Renderer.Set_Link_Renderer (Links);
-            end if;
             Engine.Add_Filter (Autolink'Unchecked_Access);
             Engine.Add_Filter (Vars'Unchecked_Access);
             Engine.Add_Filter (TOC'Unchecked_Access);
             Engine.Add_Filter (Filter'Unchecked_Access);
             Engine.Set_Syntax (Format);
             Engine.Parse (Util.Beans.Objects.To_String (Value), Doc);
-            Renderer.Set_Output_Stream (Html'Unchecked_Access);
-            Renderer.Set_Render_TOC (UI.Get_Attribute (TOC_NAME, Context, False));
-            Renderer.Render (Doc);
+            if not Is_Text then
+               declare
+                  Html     : aliased Html_Writer_Type;
+                  Renderer : aliased Wiki.Render.Html.Html_Renderer;
+               begin
+                  Html.Writer := Writer;
+                  if Links /= null then
+                     Renderer.Set_Link_Renderer (Links);
+                  end if;
+                  Renderer.Set_Output_Stream (Html'Unchecked_Access);
+                  Renderer.Set_Render_TOC (UI.Get_Attribute (TOC_NAME, Context, False));
+                  Renderer.Render (Doc);
+               end;
+            else
+               declare
+                  Html     : aliased Html_Writer_Type;
+                  Renderer : aliased Wiki.Render.Text.Text_Renderer;
+               begin
+                  Html.Writer := Writer;
+                  Renderer.Set_Output_Stream (Html'Unchecked_Access);
+                  Renderer.Render (Doc);
+               end;
+            end if;
          end if;
-         Writer.End_Element ("div");
+         if not Is_Text then
+            Writer.End_Element ("div");
+         end if;
       end;
    end Encode_Begin;
 
