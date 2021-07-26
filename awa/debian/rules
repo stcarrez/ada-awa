@@ -37,8 +37,8 @@ override_dh_auto_test::
 override_dh_auto_install::
 
 ali=3
-sover=2.2.0
-pkgver=2.2.0
+sover=2.3.0
+pkgver=2.3.0
 
 awa_SRCDIR := src
 awa_LNAME = libawa
