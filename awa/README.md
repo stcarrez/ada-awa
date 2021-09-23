@@ -271,7 +271,7 @@ and it provides detailed description of AWA components:
   * [Ada Database Objects Programmer's Guide](https://ada-ado.readthedocs.io/en/latest/)
   * [Ada Security Programmer's Guide](https://ada-security.readthedocs.io/en/latest/)
   * [Ada Wiki Programmer's Guide](https://ada-wiki.readthedocs.io/en/latest/) [PDF](https://github.com/stcarrez/ada-wiki/blob/master/docs/wiki-book.pdf)
-  * [Ada Utility Library Programmer's Guide](https://ada-util.readthedocs.io/en/latest/intro/)
+  * [Ada Utility Library Programmer's Guide](https://ada-util.readthedocs.io/en/latest/)
   * https://github.com/stcarrez/ada-awa/wiki/Documentation
 
 # Tutorial
