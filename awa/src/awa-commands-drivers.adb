@@ -140,17 +140,25 @@ package body AWA.Commands.Drivers is
       Driver.Execute (Name, Args, Context);
    end Execute;
 
+   --  ------------------------------
+   --  Get the server configuration file path.
+   --  ------------------------------
+   function Get_Configuration_Path (Context : in out Context_Type) return String is
+   begin
+      if Context.Config_File'Length = 0 then
+         return Driver_Name & ".properties";
+      else
+         return Context.Config_File.all;
+      end if;
+   end Get_Configuration_Path;
+
    procedure Run (Context   : in out Context_Type;
                   Arguments : out Util.Commands.Dynamic_Argument_List) is
    begin
       GC.Getopt (Config => Context.Command_Config);
       Util.Commands.Parsers.GNAT_Parser.Get_Arguments (Arguments, GC.Get_Argument);
 
-      if Context.Config_File'Length = 0 then
-         Context.Load_Configuration (Driver_Name & ".properties");
-      else
-         Context.Load_Configuration (Context.Config_File.all);
-      end if;
+      Context.Load_Configuration (Get_Configuration_Path (Context));
 
       if Context.Debug or Context.Verbose or Context.Dump then
          Configure_Logs (Root    => Context.Global_Config.Get ("log4j.rootCategory", ""),
