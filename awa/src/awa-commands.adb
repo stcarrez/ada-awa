@@ -136,6 +136,12 @@ package body AWA.Commands is
       exception
          when Ada.IO_Exceptions.Name_Error =>
             Log.Error ("Configuration file {0} not found", Path);
+            if Context.Exists (Name & ".config") then
+               Log.Error ("Check configuration variable {0}.config", Name);
+            elsif Context.Config_File'Length > 0 then
+               Log.Error ("Add a configuration variable '{0}.config' in {1}",
+                          Name, Context.Config_File.all);
+            end if;
       end;
 
       if Context.Use_Keystore then
