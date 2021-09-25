@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-commands-drivers -- Driver for AWA commands for server or admin tool
---  Copyright (C) 2020 Stephane Carrez
+--  Copyright (C) 2020, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,6 +33,9 @@ package AWA.Commands.Drivers is
 
    subtype Help_Command_Type is Main_Driver.Help_Command_Type;
    subtype Driver_Type is Main_Driver.Driver_Type;
+
+   --  Get the server configuration file path.
+   function Get_Configuration_Path (Context : in out Context_Type) return String;
 
    type Command_Type is abstract new Main_Driver.Command_Type with null record;
 
