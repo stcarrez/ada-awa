@@ -169,3 +169,33 @@ bin/atlas-server -c secure/config.properties start
 
 Note that in order to use this configuration setup, the directory must have
 the `rwx------` rights and files must have the `rw-------` rights.
+
+## Trouble shotting Tips
+
+### No AWA service context
+
+When the AWA framework emits the following error:
+
+```
+ERROR - AWA.Services.Contexts - : No AWA service context: may be a 'filter-mapping' is missing to activate the 'service' filter in the request path
+```
+
+it is often followed by a `Constraint Error` such as:
+
+```
+CONSTRAINT_ERROR: awa-services-contexts.adb:53 access check failed
+```
+
+and it is caused by an application that uses the `AWA.Services.Contexts.Current` operation
+on an incoming request but there is no AWA service context.  In most cases, the root cause
+is that a servlet filter is missing in the configuration for the current URL request.
+You may add such servlet filter by using the configuration:
+
+```
+<filter-mapping>
+  <filter-name>service</filter-name>
+  <url-pattern>/*.html</url-pattern>
+</filter-mapping>
+```
+
+and replace the `/*.html` pattern by the URL that caused the error.
