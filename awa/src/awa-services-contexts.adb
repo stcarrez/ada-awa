@@ -17,6 +17,7 @@
 -----------------------------------------------------------------------
 
 with Ada.Task_Attributes;
+with Util.Log.Loggers;
 with Security.Contexts;
 
 package body AWA.Services.Contexts is
@@ -26,6 +27,8 @@ package body AWA.Services.Contexts is
 
    package Task_Context is new Ada.Task_Attributes
      (Service_Context_Access, null);
+
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Services.Contexts");
 
    --  ------------------------------
    --  Get the application associated with the current service operation.
@@ -41,6 +44,11 @@ package body AWA.Services.Contexts is
    --  ------------------------------
    function Get_Session (Ctx : in Service_Context_Access) return ADO.Sessions.Session is
    begin
+      if Ctx = null then
+         Log.Error ("No AWA service context: may be a 'filter-mapping'"
+                      & " is missing to activate the 'service' filter in the request path");
+      end if;
+
       --  If a master database session was created, use it.
       if Ctx.Master.Get_Status = ADO.Sessions.OPEN then
          return ADO.Sessions.Session (Ctx.Master);
