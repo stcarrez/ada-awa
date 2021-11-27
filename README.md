@@ -54,6 +54,9 @@ You may get Ahven or Aunit at:
 * Ahven    (http://ahven.stronglytyped.org/)
 * AUnit    (https://libre.adacore.com/libre/tools/aunit/)
 
+## Version 2.3.1   - Under development
+- Fix #14: Avoid using gnatprep for the configuration of mail factory
+
 ## Version 2.3     - Jul 2021
 - Update Trumbowyg editor to version 2.23.0
 - Fix generation of og:image meta for blog articles written in Markdown
