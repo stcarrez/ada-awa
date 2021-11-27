@@ -34,7 +34,8 @@ library project Awa_Mail is
          for Source_Dirs use Project'Source_Dirs & ("src/aws");
 
     when "no" =>
-         null;
+         for Source_Dirs use Project'Source_Dirs & ("src/no-aws");
+
    end case;
 
    for Library_Name use Name;

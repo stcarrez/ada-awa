@@ -16,9 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with AWA.Mail.Clients.Files;
-#if HAVE_AWS = "yes"
-with AWA.Mail.Clients.AWS_SMTP;
-#end if;
 
 separate (AWA.Mail.Clients)
 
@@ -32,10 +29,6 @@ function Factory (Name  : in String;
 begin
    if Name = AWA.Mail.Clients.Files.NAME then
       return AWA.Mail.Clients.Files.Create_Manager (Props);
-#if HAVE_AWS = "yes"
-   elsif Name = AWA.Mail.Clients.AWS_SMTP.NAME then
-      return AWA.Mail.Clients.AWS_SMTP.Create_Manager (Props);
-#end if;
    else
       return null;
    end if;
