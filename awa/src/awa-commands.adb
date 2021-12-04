@@ -164,9 +164,6 @@ package body AWA.Commands is
    overriding
    procedure Initialize (Context : in out Context_Type) is
    begin
-      GC.Set_Usage (Config => Context.Command_Config,
-                    Usage  => "[switchs] command [arguments]",
-                    Help   => -("akt - tool to store and protect your sensitive data"));
       GC.Define_Switch (Config => Context.Command_Config,
                         Output => Context.Version'Access,
                         Switch => "-V",
@@ -199,23 +196,6 @@ package body AWA.Commands is
                         Argument => "PATH",
                         Help   => -("Defines the path for configuration file"));
       GC.Initialize_Option_Scan (Stop_At_First_Non_Switch => True);
-
---      Driver.Set_Description (-("akt - tool to store and protect your sensitive data"));
---     Driver.Set_Usage (-("[-V] [-v] [-vv] [-vvv] [-c path] [-t count] [-z] " &
---                          "<command> [<args>]" & ASCII.LF &
---                          "where:" & ASCII.LF &
---                          "  -V           Print the tool version" & ASCII.LF &
---                          "  -v           Verbose execution mode" & ASCII.LF &
---                          "  -vv          Debug execution mode" & ASCII.LF &
---                          "  -vvv         Dump execution mode" & ASCII.LF &
---                          "  -c path      Defines the path for akt " &
---                          "global configuration" & ASCII.LF &
---                          "  -t count     Number of threads for the " &
---                          "encryption/decryption process" & ASCII.LF &
---                          "  -z           Erase and fill with zeros instead of random values"));
---      Driver.Add_Command ("help",
---                          -("print some help"),
---                          Help_Command'Access);
    end Initialize;
 
    --  ------------------------------
@@ -436,6 +416,7 @@ package body AWA.Commands is
       if Verbose or Debug or Dump then
          Log_Config.Set ("log4j.logger.log", "INFO");
          Log_Config.Set ("log4j.logger.Util", "WARN");
+         Log_Config.Set ("log4j.logger.AWA.Commands", "INFO");
          Log_Config.Set ("log4j.logger.Keystore.IO", "WARN");
          Log_Config.Set ("log4j.logger.ADO.Sessions", "WARN");
          Log_Config.Set ("log4j.rootCategory", Make_Root ("DEBUG", "console", "verbose"));
