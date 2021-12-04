@@ -56,6 +56,7 @@ You may get Ahven or Aunit at:
 
 ## Version 2.3.1   - Under development
 - Fix #14: Avoid using gnatprep for the configuration of mail factory
+- Fix #15: Compilation with debug mode sometimes fails due to incorrect GNAT config project
 
 ## Version 2.3     - Jul 2021
 - Update Trumbowyg editor to version 2.23.0
