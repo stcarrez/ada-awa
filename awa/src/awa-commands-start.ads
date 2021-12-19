@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-commands-start -- Command to start the web server
---  Copyright (C) 2020 Stephane Carrez
+--  Copyright (C) 2020, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,13 +24,14 @@ generic
 package AWA.Commands.Start is
 
    type Command_Type is new Command_Drivers.Command_Type with record
-      Management_Port   : aliased Integer := 0;
-      Listening_Port    : aliased Integer := 8080;
-      Upload_Size_Limit : aliased Integer := 16#500_000#;
-      Max_Connection    : aliased Integer := 5;
-      TCP_No_Delay      : aliased Boolean := False;
-      Daemon            : aliased Boolean := False;
-      Upload            : aliased GNAT.Strings.String_Access;
+      Management_Port       : aliased Integer := 0;
+      Listening_Port        : aliased Integer := 8080;
+      Upload_Size_Limit     : aliased Integer := 16#500_000#;
+      Input_Line_Size_Limit : aliased Integer := 16#10000#;
+      Max_Connection        : aliased Integer := 5;
+      TCP_No_Delay          : aliased Boolean := False;
+      Daemon                : aliased Boolean := False;
+      Upload                : aliased GNAT.Strings.String_Access;
    end record;
 
    --  Start the server and all the application that have been registered.

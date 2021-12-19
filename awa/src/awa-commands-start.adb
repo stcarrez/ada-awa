@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-commands-start -- Command to start the web server
---  Copyright (C) 2020 Stephane Carrez
+--  Copyright (C) 2020, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -67,6 +67,8 @@ package body AWA.Commands.Start is
       Config.Listening_Port := Command.Listening_Port;
       Config.Max_Connection := Command.Max_Connection;
       Config.TCP_No_Delay := Command.TCP_No_Delay;
+      Config.Input_Line_Size_Limit := Command.Input_Line_Size_Limit;
+      Config.Upload_Size_Limit := Command.Upload_Size_Limit;
       if Command.Upload'Length > 0 then
          Config.Upload_Directory := To_Unbounded_String (Command.Upload.all);
       end if;
@@ -197,10 +199,23 @@ package body AWA.Commands.Start is
                         Argument => "PATH",
                         Help   => -("The server upload directory"));
       GC.Define_Switch (Config => Config,
-                        Output => Command.TCP_No_Delay'Access,
-                        Switch => "-n",
-                        Long_Switch => "--tcp-no-delay",
-                        Help   => -("Enable the TCP no delay option"));
+                        Output => Command.Upload'Access,
+                        Switch => "-u:",
+                        Long_Switch => "--upload=",
+                        Argument => "PATH",
+                        Help   => -("The server upload directory"));
+      GC.Define_Switch (Config => Config,
+                        Output => Command.Upload_Size_Limit'Access,
+                        Switch => "-M",
+                        Long_Switch => "--max-upload-size",
+                        Initial => Command.Upload_Size_Limit,
+                        Help   => -("Maximum size of uploaded content"));
+      GC.Define_Switch (Config => Config,
+                        Output => Command.Input_Line_Size_Limit'Access,
+                        Switch => "-F",
+                        Long_Switch => "--max-form-size",
+                        Initial => Command.Input_Line_Size_Limit,
+                        Help   => -("Maximum size of form submission"));
       if Sys_Daemon'Address /= System.Null_Address then
          GC.Define_Switch (Config => Config,
                            Output => Command.Daemon'Access,
