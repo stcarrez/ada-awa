@@ -55,7 +55,9 @@ You may get Ahven or Aunit at:
 * AUnit    (https://libre.adacore.com/libre/tools/aunit/)
 
 ## Version 2.3.1   - Under development
+- Fix #13: AWA help command prints the wrong title 'akt tool to store and ...'
 - Fix #14: Avoid using gnatprep for the configuration of mail factory
+- Fix #15: Compilation with debug mode sometimes fails due to incorrect GNAT config project
 - Fix #17: Error generated when a blog article makes a reference to a non existing image
 
 ## Version 2.3     - Jul 2021

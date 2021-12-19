@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-commands-drivers -- Driver for AWA commands for server or admin tool
---  Copyright (C) 2020 Stephane Carrez
+--  Copyright (C) 2020, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Ada.Command_Line;
+with Util.Strings.Formats;
 with Servlet.Core;
 package body AWA.Commands.Drivers is
 
@@ -23,6 +24,10 @@ package body AWA.Commands.Drivers is
    use AWA.Applications;
 
    function "-" (Message : in String) return String is (Message);
+
+   function Format (Message : in String;
+                    Arg1    : in String) return String
+     renames Util.Strings.Formats.Format;
 
    Help_Command            : aliased AWA.Commands.Drivers.Help_Command_Type;
 
@@ -155,8 +160,18 @@ package body AWA.Commands.Drivers is
    procedure Run (Context   : in out Context_Type;
                   Arguments : out Util.Commands.Dynamic_Argument_List) is
    begin
+      GC.Set_Usage (Config => Context.Command_Config,
+                    Usage  => "[switchs] command [arguments]",
+                    Help   => Format (-("{0} - server commands"), Driver_Name));
       GC.Getopt (Config => Context.Command_Config);
       Util.Commands.Parsers.GNAT_Parser.Get_Arguments (Arguments, GC.Get_Argument);
+
+      if Context.Debug or Context.Verbose or Context.Dump then
+         Configure_Logs (Root    => Context.Global_Config.Get ("log4j.rootCategory", ""),
+                         Debug   => Context.Debug,
+                         Dump    => Context.Dump,
+                         Verbose => Context.Verbose);
+      end if;
 
       Context.Load_Configuration (Get_Configuration_Path (Context));
 
