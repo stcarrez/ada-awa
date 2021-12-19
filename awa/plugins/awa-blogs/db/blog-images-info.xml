@@ -41,12 +41,12 @@
       folder.id,
       file.id,
       file.create_date,
-      file.uri,
-      file.storage,
-      file.mime_type,
-      file.file_size,
-      image.width,
-      image.height
+      COALESCE(file.uri, ''),
+      COALESCE(file.storage, 0),
+      COALESCE(file.mime_type, ''),
+      COALESCE(file.file_size, 0),
+      COALESCE(image.width, 0),
+      COALESCE(image.height, 0)
     FROM awa_post AS post
     INNER JOIN awa_blog AS blog ON post.blog_id = blog.id
     INNER JOIN awa_storage_folder AS folder ON folder.workspace_id = blog.workspace_id
