@@ -1,5 +1,6 @@
 Version 2.3.1   -
   - Fix #14: Avoid using gnatprep for the configuration of mail factory
+  - Fix #17: Error generated when a blog article makes a reference to a non existing image
 
 Version 2.3     - Jul 2021
   - Update Trumbowyg editor to version 2.23.0
