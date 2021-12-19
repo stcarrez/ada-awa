@@ -58,6 +58,7 @@ You may get Ahven or Aunit at:
 - Fix #13: AWA help command prints the wrong title 'akt tool to store and ...'
 - Fix #14: Avoid using gnatprep for the configuration of mail factory
 - Fix #15: Compilation with debug mode sometimes fails due to incorrect GNAT config project
+- Fix #16: Allow the configuration of server max upload size and max form submission size
 - Fix #17: Error generated when a blog article makes a reference to a non existing image
 
 ## Version 2.3     - Jul 2021
