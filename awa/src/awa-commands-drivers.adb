@@ -175,13 +175,6 @@ package body AWA.Commands.Drivers is
 
       Context.Load_Configuration (Get_Configuration_Path (Context));
 
-      if Context.Debug or Context.Verbose or Context.Dump then
-         Configure_Logs (Root    => Context.Global_Config.Get ("log4j.rootCategory", ""),
-                         Debug   => Context.Debug,
-                         Dump    => Context.Dump,
-                         Verbose => Context.Verbose);
-      end if;
-
       declare
          Cmd_Name : constant String := Arguments.Get_Command_Name;
       begin

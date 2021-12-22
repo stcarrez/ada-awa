@@ -43,7 +43,11 @@ package body AWA.Commands is
       Log.Info ("Loading server configuration {0}", Path);
       begin
          Context.Global_Config.Load_Properties (Path);
-         Util.Log.Loggers.Initialize (Util.Properties.Manager (Context.Global_Config));
+         Configure_Logs (Util.Properties.Manager (Context.Global_Config),
+                         Root => Context.Global_Config.Get ("log4j.rootCategory", ""),
+                         Debug => Context.Debug,
+                         Dump => Context.Dump,
+                         Verbose => Context.Verbose);
 
       exception
          when Ada.IO_Exceptions.Name_Error =>
@@ -359,10 +363,11 @@ package body AWA.Commands is
    --  ------------------------------
    --  Configure the logs.
    --  ------------------------------
-   procedure Configure_Logs (Root    : in String;
-                             Debug   : in Boolean;
-                             Dump    : in Boolean;
-                             Verbose : in Boolean) is
+   procedure Configure_Logs (Log_Config  : in out Util.Properties.Manager;
+                             Root        : in String;
+                             Debug       : in Boolean;
+                             Dump        : in Boolean;
+                             Verbose     : in Boolean) is
       procedure Split (Item : in String;
                        Done : out Boolean);
       function Make_Root (Level     : in String;
@@ -399,7 +404,6 @@ package body AWA.Commands is
          return To_String (Result);
       end Make_Root;
 
-      Log_Config  : Util.Properties.Manager;
    begin
       if Start > 0 then
          Util.Strings.Tokenizers.Iterate_Tokens (Root (Start + 1 .. Root'Last),
@@ -416,6 +420,7 @@ package body AWA.Commands is
       if Verbose or Debug or Dump then
          Log_Config.Set ("log4j.logger.log", "INFO");
          Log_Config.Set ("log4j.logger.Util", "WARN");
+         Log_Config.Set ("log4j.logger.AWA", "INFO");
          Log_Config.Set ("log4j.logger.AWA.Commands", "INFO");
          Log_Config.Set ("log4j.logger.Keystore.IO", "WARN");
          Log_Config.Set ("log4j.logger.ADO.Sessions", "WARN");
@@ -445,6 +450,14 @@ package body AWA.Commands is
 
    end Configure_Logs;
 
+   procedure Configure_Logs (Root        : in String;
+                             Debug       : in Boolean;
+                             Dump        : in Boolean;
+                             Verbose     : in Boolean) is
+      Log_Config : Util.Properties.Manager;
+   begin
+      Configure_Logs (Log_Config, Root, Debug, Dump, Verbose);
+   end Configure_Logs;
 
    overriding
    procedure Finalize (Context : in out Context_Type) is

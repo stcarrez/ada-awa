@@ -17,6 +17,7 @@
 -----------------------------------------------------------------------
 with Ada.Finalization;
 with Util.Commands;
+with Util.Properties;
 with AWA.Applications;
 with ASF.Applications.Main;
 with Ada.Exceptions;
@@ -122,10 +123,15 @@ package AWA.Commands is
                     Ex      : in Ada.Exceptions.Exception_Occurrence);
 
    --  Configure the logs.
-   procedure Configure_Logs (Root    : in String;
-                             Debug   : in Boolean;
-                             Dump    : in Boolean;
-                             Verbose : in Boolean);
+   procedure Configure_Logs (Log_Config  : in out Util.Properties.Manager;
+                             Root        : in String;
+                             Debug       : in Boolean;
+                             Dump        : in Boolean;
+                             Verbose     : in Boolean);
+   procedure Configure_Logs (Root        : in String;
+                             Debug       : in Boolean;
+                             Dump        : in Boolean;
+                             Verbose     : in Boolean);
 
 private
 
