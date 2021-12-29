@@ -1,0 +1,7 @@
+<project>
+    <name>awa</name>
+    <property name="author_email">Stephane.Carrez@gmail.com</property>
+    <property name="license">apache</property>
+    <property name="author">Stephane Carrez</property>
+    <property name="base_dir">../awa</property>
+</project>
