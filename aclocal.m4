@@ -838,7 +838,7 @@ end Check;
    $2
 ])
 
-   rm -f check.adb check
+   rm -f check.adb check check.o check.ali
 ])
 
 # Prepare for using the GNAT project 
