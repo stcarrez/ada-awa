@@ -930,6 +930,26 @@ EOF
     else
        ac_cv_gnat_aws_version='none'
     fi
+
+    if test "$ac_cv_gnat_aws_version" = "20.0"; then
+      dnl The version 20.0 is sometimes wrong because used by several versions of AWS.
+      dnl The version 22.0 has the AWS.HTTP_2 constant defined and uses version 20.0.
+      dnl Check for that and fix the version.
+      cat > conftest.adb <<EOF
+with AWS;
+with Ada.Text_IO;
+procedure Conftest is
+begin
+  Ada.Text_IO.Put_Line (AWS.HTTP_2);
+end Conftest;
+EOF
+      if AC_TRY_COMMAND([gnatmake -Pconftest.gpr >/dev/null 2>conftest.out])
+      then
+         ac_cv_gnat_aws_version="22.0"
+      fi
+
+    fi
+
     rm -f conftest.gpr conftest.adb conftest.o conftest.ali
     rm -f b__conftest.ads b__conftest.adb b__conftest.o b__conftest.ali
   ])
