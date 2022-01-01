@@ -112,7 +112,7 @@ AM_GNAT_AWS_VERSION
 AC_MSG_CHECKING([using AWS secure mail client])
 AWA_AWS_SECURE_MAIL=no
 case $AWS_VERSION in
-  *2015*|*2016*|*2017*|*2018*|*2019*|*202*)
+  *2015*|*2016*|*2017*|*2018*|*2019*|*202*|20.0|22.0)
      AWA_AWS_SECURE_MAIL=yes
      ;;
 
