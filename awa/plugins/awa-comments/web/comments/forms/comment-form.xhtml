@@ -1,5 +1,5 @@
 <!-- Form to create or comment
-  -  Copyright (C) 2014, 2017, 2018 Stephane Carrez
+  -  Copyright (C) 2014, 2017, 2018, 2021 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +29,7 @@
             <div class="awa-comment">
                 <ui:insert name="comment-input"/>
                 <div class='comment-gravatar'>
-                    <w:gravatar email="#{user.email}" size="60"/>
+                    <w:gravatar email="#{user.email}" size="60" secure="true"/>
                 </div>
                 <div class='comment-form'>
                     <h:messages styleClass='awa-error'/>
