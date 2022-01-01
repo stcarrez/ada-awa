@@ -1,5 +1,5 @@
 <!-- List of blog comments for the blog administrator
-  -  Copyright (C) 2014, 2019 Stephane Carrez
+  -  Copyright (C) 2014, 2019, 2021 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,7 +38,7 @@
                         <h:outputText value="#{cmt.date}"/>
                     </div>
                     <div class='comment-gravatar'>
-                        <w:gravatar email="#{cmt.email}" size="32"/>
+                        <w:gravatar email="#{cmt.email}" size="32" secure="true"/>
                     </div>
                     <div class='comment-author'>
                         #{cmt.author}
