@@ -4084,6 +4084,28 @@ EOF
     else
        ac_cv_gnat_aws_version='none'
     fi
+
+    if test "$ac_cv_gnat_aws_version" = "20.0"; then
+                        cat > conftest.adb <<EOF
+with AWS;
+with Ada.Text_IO;
+procedure Conftest is
+begin
+  Ada.Text_IO.Put_Line (AWS.HTTP_2);
+end Conftest;
+EOF
+      if { ac_try='gnatmake -Pconftest.gpr >/dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+      then
+         ac_cv_gnat_aws_version="22.0"
+      fi
+
+    fi
+
     rm -f conftest.gpr conftest.adb conftest.o conftest.ali
     rm -f b__conftest.ads b__conftest.adb b__conftest.o b__conftest.ali
 
@@ -4099,7 +4121,7 @@ $as_echo "$ac_cv_gnat_aws_version" >&6; }
 $as_echo_n "checking using AWS secure mail client... " >&6; }
 AWA_AWS_SECURE_MAIL=no
 case $AWS_VERSION in
-  *2015*|*2016*|*2017*|*2018*|*2019*|*202*)
+  *2015*|*2016*|*2017*|*2018*|*2019*|*202*|20.0|22.0)
      AWA_AWS_SECURE_MAIL=yes
      ;;
 
