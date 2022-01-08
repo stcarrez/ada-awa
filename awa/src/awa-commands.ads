@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-commands -- AWA commands for server or admin tool
---  Copyright (C) 2019, 2020 Stephane Carrez
+--  Copyright (C) 2019, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,7 @@
 with Ada.Finalization;
 with Util.Commands;
 with Util.Properties;
+with Util.Systems.Constants;
 with AWA.Applications;
 with ASF.Applications.Main;
 with Ada.Exceptions;
@@ -208,7 +209,8 @@ private
                             Context : in out Context_Type);
 
    function Sys_Daemon (No_Chdir : in Integer; No_Close : in Integer) return Integer
-     with Import => True, Convention => C, Link_Name => "daemon";
+     with Import => True, Convention => C,
+          Link_Name => Util.Systems.Constants.SYMBOL_PREFIX & "daemon";
    pragma Weak_External (Sys_Daemon);
 
 end AWA.Commands;
