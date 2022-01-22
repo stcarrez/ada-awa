@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-tests -- Unit tests for blogs module
---  Copyright (C) 2017, 2018, 2019, 2020 Stephane Carrez
+--  Copyright (C) 2017, 2018, 2019, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,16 +16,24 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with Util.Strings;
 with Util.Test_Caller;
 with ASF.Requests.Mockup;
 with ASF.Responses.Mockup;
+with Security.Contexts;
 with ASF.Tests;
+with AWA.Services.Contexts;
 with AWA.Tests.Helpers.Users;
+with AWA.Storages.Modules;
+with AWA.Storages.Beans;
+with AWA.Storages.Models;
+with AWA.Storages.Services;
 
 package body AWA.Blogs.Tests is
 
    use Ada.Strings.Unbounded;
    use AWA.Tests;
+   use type AWA.Storages.Services.Storage_Service_Access;
 
    package Caller is new Util.Test_Caller (Test, "Blogs.Beans");
 
@@ -45,6 +53,8 @@ package body AWA.Blogs.Tests is
                        Test_Admin_Blog_Stats'Access);
       Caller.Add_Test (Suite, "Test AWA.Blogs.Beans.Update_Post (Publish_Date)",
                        Test_Update_Publish_Date'Access);
+      Caller.Add_Test (Suite, "Test AWA.Blogs.Servlets.Load",
+                       Test_Image_Blog'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -250,5 +260,55 @@ package body AWA.Blogs.Tests is
       ASF.Tests.Assert_Contains (T, "data", Reply,
                                  "Blog admin stats page is invalid");
    end Test_Admin_Blog_Stats;
+
+   --  ------------------------------
+   --  Test getting an image from the blog servlet.
+   --  ------------------------------
+   procedure Test_Image_Blog (T : in out Test) is
+      Request : ASF.Requests.Mockup.Request;
+      Reply   : ASF.Responses.Mockup.Response;
+      Post_Id : constant String := To_String (T.Post_Ident);
+      Sec_Ctx : Security.Contexts.Security_Context;
+      Context : AWA.Services.Contexts.Service_Context;
+      Folder  : AWA.Storages.Beans.Folder_Bean;
+      Store   : AWA.Storages.Models.Storage_Ref;
+      Mgr     : AWA.Storages.Services.Storage_Service_Access;
+      Outcome : Ada.Strings.Unbounded.Unbounded_String;
+      Path    : constant String
+        := Util.Tests.Get_Path ("regtests/files/images/Ada-Lovelace.jpg");
+   begin
+      AWA.Tests.Helpers.Users.Login ("test-wiki@test.com", Request);
+      AWA.Tests.Helpers.Users.Login (Context, Sec_Ctx, "test-wiki@test.com");
+
+      Mgr := AWA.Storages.Modules.Get_Storage_Manager;
+      T.Assert (Mgr /= null, "Null storage manager");
+
+      --  Make a storage folder.
+      Folder.Module := AWA.Storages.Modules.Get_Storage_Module;
+      Folder.Set_Name ("Images");
+      Folder.Save (Outcome);
+
+      Store.Set_Folder (Folder);
+      Store.Set_Mime_Type ("image/jpg");
+      Store.Set_Name ("Ada-Lovelace.jpg");
+      Mgr.Save (Store, Path, AWA.Storages.Models.FILE);
+
+      --  First test to make sure we get a 404 error.
+      ASF.Tests.Do_Get (Request, Reply, "/blogs/images/" & Post_Id & "/0/default/Ada-Lovelace.jpg",
+                        "Ada-Lovelace.jpg");
+      T.Assert (Reply.Get_Status = Servlet.Responses.SC_NOT_FOUND,
+                "Invalid response after image get");
+
+      --  Second test to get the image.
+      declare
+         Image_Ident : constant String := Util.Strings.Image (Natural (Store.Get_Id));
+      begin
+         ASF.Tests.Do_Get (Request, Reply, "/blogs/images/" & Post_Id & "/"
+                           & Image_Ident & "/default/Ada-Lovelace.jpg",
+                           "Ada-Lovelace.jpg");
+         T.Assert (Reply.Get_Status = Servlet.Responses.SC_OK,
+                   "Invalid response after image get");
+      end;
+   end Test_Image_Blog;
 
 end AWA.Blogs.Tests;
