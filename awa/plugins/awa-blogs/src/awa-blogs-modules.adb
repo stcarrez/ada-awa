@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-module -- Blog and post management module
---  Copyright (C) 2011, 2012, 2013, 2017, 2018, 2019, 2020 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2017, 2018, 2019, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,6 +29,8 @@ with AWA.Permissions;
 with AWA.Workspaces.Models;
 with AWA.Workspaces.Modules;
 with AWA.Storages.Models;
+with AWA.Storages.Modules;
+with AWA.Storages.Services;
 
 with ADO.Objects;
 with ADO.Sessions;
@@ -383,7 +385,12 @@ package body AWA.Blogs.Modules is
       if Kind = AWA.Storages.Models.DATABASE then
          Into := Query.Get_Blob (6);
       else
-         null;
+         declare
+            Mgr : constant AWA.Storages.Services.Storage_Service_Access
+               := AWA.Storages.Modules.Get_Storage_Manager;
+         begin
+            Mgr.Load (From => Image_Id, Kind => Kind, Into => Into);
+         end;
       end if;
    end Load_Image;
 
