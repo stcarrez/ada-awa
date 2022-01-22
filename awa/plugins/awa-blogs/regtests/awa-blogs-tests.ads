@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-tests -- Unit tests for blogs module
---  Copyright (C) 2017, 2018 Stephane Carrez
+--  Copyright (C) 2017, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -54,5 +54,8 @@ package AWA.Blogs.Tests is
 
    --  Test getting the JSON blog stats (for graphs).
    procedure Test_Admin_Blog_Stats (T : in out Test);
+
+   --  Test getting an image from the blog servlet.
+   procedure Test_Image_Blog (T : in out Test);
 
 end AWA.Blogs.Tests;
