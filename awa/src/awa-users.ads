@@ -26,7 +26,7 @@
 --  link defined in the mail to finish the registration process.  The user
 --  will authenticate using a password.
 --
---  A user can also use an OAuth/OpenID account and be automatically authentified
+--  A user can also use an OAuth/OpenID account and be automatically authenticated
 --  and registered to the application.  By using an external authentication
 --  server, passwords are not stored in the application.
 --
