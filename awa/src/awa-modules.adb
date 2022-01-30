@@ -449,7 +449,7 @@ package body AWA.Modules is
    end Get_Master_Session;
 
    --  ------------------------------
-   --  Add a listener to the module listner list.  The module will invoke the listner
+   --  Add a listener to the module listener list.  The module will invoke the listener
    --  depending on events or actions that occur in the module.
    --  ------------------------------
    procedure Add_Listener (Into : in out Module;
