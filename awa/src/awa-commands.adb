@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-commands -- AWA commands for server or admin tool
---  Copyright (C) 2019, 2020, 2021 Stephane Carrez
+--  Copyright (C) 2019, 2020, 2021, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,6 @@ with Ada.Command_Line;
 with Ada.Unchecked_Deallocation;
 with Ada.Strings.Unbounded;
 with Util.Log.Loggers;
-with Util.Properties;
 with Util.Strings.Tokenizers;
 with Util.Strings.Vectors;
 with AWA.Applications.Configs;
@@ -130,12 +129,18 @@ package body AWA.Commands is
    procedure Configure (Application : in out ASF.Applications.Main.Application'Class;
                         Name        : in String;
                         Context     : in out Context_Type) is
+      procedure Read_Configuration (Config_Path : in String;
+                                    Done        : out Boolean);
+
       Path : constant String := Context.Get_Application_Config (Name);
       File_Config : ASF.Applications.Config;
-   begin
-      Log.Info ("Configuring {0} with {1}", Name, Path);
+
+      procedure Read_Configuration (Config_Path : in String;
+                                    Done        : out Boolean) is
       begin
-         File_Config.Load_Properties (Path);
+         Done := False;
+         Log.Info ("Loading configuration '{0}'", Config_Path);
+         File_Config.Load_Properties (Config_Path);
 
       exception
          when Ada.IO_Exceptions.Name_Error =>
@@ -146,7 +151,16 @@ package body AWA.Commands is
                Log.Error ("Add a configuration variable '{0}.config' in {1}",
                           Name, Context.Config_File.all);
             end if;
-      end;
+      end Read_Configuration;
+
+   begin
+      Log.Info ("Configuring {0} with {1}", Name, Path);
+
+      --  The path may contain a list of configuration files to load.
+      --  This allows to override some configuration.
+      Util.Strings.Tokenizers.Iterate_Tokens (Content => Path,
+                                              Pattern => ",",
+                                              Process => Read_Configuration'Access);
 
       if Context.Use_Keystore then
          if not Context.Keystore_Opened then
