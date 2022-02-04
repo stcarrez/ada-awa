@@ -85,7 +85,7 @@ package body AWA.Users.Modules is
    end Get_User_Manager;
 
    --  ------------------------------
-   --  Create a user manager.  This operation can be overriden to provide another
+   --  Create a user manager.  This operation can be overridden to provide another
    --  user service implementation.
    --  ------------------------------
    function Create_User_Manager (Plugin : in User_Module) return Services.User_Service_Access is

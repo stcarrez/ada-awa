@@ -206,7 +206,7 @@ package AWA.Modules is
                        Name    : in String;
                        Bind    : in ASF.Beans.Class_Binding_Access);
 
-   --  Add a listener to the module listner list.  The module will invoke the listner
+   --  Add a listener to the module listener list.  The module will invoke the listener
    --  depending on events or actions that occur in the module.
    procedure Add_Listener (Into : in out Module;
                            Item : in Util.Listeners.Listener_Access);
