@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-applications -- Ada Web Application
---  Copyright (C) 2009 - 2020 Stephane Carrez
+--  Copyright (C) 2009 - 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +19,7 @@ with Util.Serialize.IO;
 
 with ASF.Applications.Main;
 with ASF.Applications.Main.Configs;
+with ADO.Queries;
 with ADO.Sessions.Factory;
 with AWA.Modules;
 with AWA.Events;
@@ -160,6 +161,10 @@ package AWA.Applications is
                        Module  : access AWA.Modules.Module'Class;
                        Name    : in String;
                        URI     : in String := "");
+
+   --  Set a static query loader to load SQL queries.
+   procedure Set_Query_Loader (App     : in out Application;
+                               Loader  : in ADO.Queries.Static_Loader_Access);
 
    --  Get the database connection for reading
    function Get_Session (App : Application)
