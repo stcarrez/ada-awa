@@ -1,6 +1,6 @@
 description = "Ada Web Application"
 name = "awa"
-version = "2.3.0"
+version = "2.4.0"
 tags = ["web", "users", "jobs", "wiki", "framework", "storage", "blog"]
 website = "https://gitlab.com/stcarrez/ada-awa"
 
