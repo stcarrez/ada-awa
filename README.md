@@ -54,21 +54,16 @@ You may get Ahven or Aunit at:
 * Ahven    (http://ahven.stronglytyped.org/)
 * AUnit    (https://libre.adacore.com/libre/tools/aunit/)
 
-## Version 2.3.1   - Under development
+## Version 2.4.0 - Under development
+- Add support for SQL queries embedded in applications with ARE
+
+## Version 2.3.1   - Feb 2022
 - Fix #13: AWA help command prints the wrong title 'akt tool to store and ...'
 - Fix #14: Avoid using gnatprep for the configuration of mail factory
 - Fix #15: Compilation with debug mode sometimes fails due to incorrect GNAT config project
 - Fix #16: Allow the configuration of server max upload size and max form submission size
 - Fix #17: Error generated when a blog article makes a reference to a non existing image
 - Fix #18: AWA blog plugin fails to serve an image when it is stored in the storage directory
-
-## Version 2.3     - Jul 2021
-- Update Trumbowyg editor to version 2.23.0
-- Fix generation of og:image meta for blog articles written in Markdown
-- Fix wiki preview with latest xkhtmltoimage 0.12.6
-- Use Dynamo 1.2.2, Ada Server Faces 1.4.3, Ada Servlet 1.5.2, OpenAPI Ada 0.5.0
-- Use Ada Wiki 1.3.2, Ada Database Objects 2.2.0
-- Use Ada Keystore 1.3.2, Ada EL 1.8.3, Ada Utility Library 2.4.1
 
 [List all versions](https://github.com/stcarrez/ada-awa/blob/master/NEWS.md)
 

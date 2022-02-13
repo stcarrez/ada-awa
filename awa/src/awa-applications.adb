@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-applications -- Ada Web Application
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2009 - 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -233,6 +233,15 @@ package body AWA.Applications is
    begin
       App.Register (Module.all'Unchecked_Access, Name, URI);
    end Register;
+
+   --  ------------------------------
+   --  Set a static query loader to load SQL queries.
+   --  ------------------------------
+   procedure Set_Query_Loader (App     : in out Application;
+                               Loader  : in ADO.Queries.Static_Loader_Access) is
+   begin
+      App.DB_Factory.Set_Query_Loader (Loader);
+   end Set_Query_Loader;
 
    --  ------------------------------
    --  Get the database connection for reading

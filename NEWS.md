@@ -1,4 +1,7 @@
-Version 2.3.1   -
+Version 2.4.0   -
+  - Add support for SQL queries embedded in applications with ARE
+
+Version 2.3.1   - Feb 2022
   - Fix #13: AWA help command prints the wrong title 'akt tool to store and ...'
   - Fix #14: Avoid using gnatprep for the configuration of mail factory
   - Fix #15: Compilation with debug mode sometimes fails due to incorrect GNAT config project
