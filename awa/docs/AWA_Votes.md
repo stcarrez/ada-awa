@@ -36,6 +36,7 @@ Register (App    => App.Self.all'Access,
           URI    => "votes",
           Module => App.Vote_Module'Access);
 ```
+
 ## Ada Beans
 The `Vote_Bean` is a bean intended to be used in presentation files (XHTML facelet
 files) to vote for an item.  The managed bean can be easily configured in the application XML

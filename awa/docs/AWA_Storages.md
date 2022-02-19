@@ -44,10 +44,8 @@ Register (App    => App.Self.all'Access,
 |storage-create|awa_workspace||
 |storage-delete|awa_workspace||
 
-
 ## Configuration
 The `storages` module defines the following configuration parameters:
-
 
 | Name                      | Description                                                    |
 |:--------------------------|:---------------------------------------------------------------|
@@ -57,7 +55,6 @@ The `storages` module defines the following configuration parameters:
 | |tmp|
 |storages.database_max_size|The maximum size of documents store in the database storage.|
 | |100000|
-
 
 ## Creating a storage
 A data in the storage is represented by a `Storage_Ref` instance.
@@ -91,15 +88,15 @@ Several operations are defined to retrieve the data.  Each of them has been
 designed to optimize the retrieval and
 
   * The data can be retrieved in a local file.
- This mode is useful if an external program must be launched and be able
- to read the file.  If the storage mode of the data is `FILE`, the path
- of the file on the storage file system is used.  For other storage modes,
- the file is saved in a temporary file.  In that case the `Store_Local`
- database table is used to track such locally saved data.
+  This mode is useful if an external program must be launched and be able
+  to read the file.  If the storage mode of the data is `FILE`, the path
+  of the file on the storage file system is used.  For other storage modes,
+  the file is saved in a temporary file.  In that case the `Store_Local`
+  database table is used to track such locally saved data.
 
   * The data can be returned as a stream.
- When the application has to read the data, opening a read stream
- connection is the most efficient mechanism.
+  When the application has to read the data, opening a read stream
+  connection is the most efficient mechanism.
 
 ## Local file
 To access the data by using a local file, we must define a local storage
@@ -144,6 +141,7 @@ The `AWA.Storages.Stores.Databases` store uses the database to save a data conte
 The data is saved in a specific table in a database blob column.
 The database store uses another store service to temporarily save the data content
 in a local file when the application needs a file access to the data.
+
 ### File System store
 The `AWA.Storages.Stores.Files` store uses the file system to save a data content.
 Files are stored in a directory tree whose path is created from the workspace identifier
@@ -162,8 +160,6 @@ The root directory of the file system store is configured through the
 |folderList|This bean gives the list of storage folders in the workspace.|
 |storageList|This bean gives the list of storage files associated with a given folder.|
 |storageInfo|This bean gives some information about a document and its folder.|
-
-
 
 #### AWA.Storages.Models.Storage_Info
 
@@ -184,9 +180,6 @@ The list of documents for a given folder.
 ||Integer|thumb_height|the image thumbnail height (or 0).|
 ||Identifier|thumbnail_id|the image thumbnail identifier.|
 
-
-
-
 #### AWA.Storages.Models.Folder_Info
 
 The list of folders.
@@ -196,8 +189,6 @@ The list of folders.
 ||Identifier|id|the folder identifier.|
 ||String|name|the folder name.|
 ||Date|create_date|the blog creation date.|
-
-
 
 ## Storage Servlet
 The <tt>Storage_Servlet</tt> type is the servlet that allows to retrieve the file
@@ -209,11 +200,9 @@ content that was uploaded.
 |:------------------|:----------------------------------------------------------------------|
 |storage-list|Get a list of storage files for a given folder.|
 
-
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |storage-folder-list|Get a list of storage folders that a user can see.|
-
 
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
@@ -222,11 +211,9 @@ content that was uploaded.
 |storage-get-storage|Get the local data storage that can be used to read locally a storage object.|
 |storage-delete-local|Delete the local storage data|
 
-
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |storage-info|Get the description of a document.|
-
 
 ## Data model
 ![](images/awa_storages_model.png)

@@ -45,15 +45,12 @@ Register (App    => App.Self.all'Access,
 ## Configuration
 The `counters` module defines the following configuration parameters:
 
-
 | Name                      | Description                                                    |
 |:--------------------------|:---------------------------------------------------------------|
 |counters.counter_age_limit|The maximum age limit in seconds for a pending counter increment to stay in the internal table. When a pending counter reaches this age limit, the pending counter increments are flushed and the table is cleared. The default is 5 minutes.|
 | |300|
 |counters.counter_limit|The maximum number of different counters which can be stored in the internal table before flushing the pending increments to the database. When this limit is reached, the pending counter increments are flushed and the table is cleared.|
 | |1000|
-
-
 
 ## Counter Declaration
 Each counter must be declared by instantiating the `Definition` package.
@@ -199,6 +196,7 @@ query.
   var="stat">["#{stat.date}", #{stat.count}],</h:list>[0,0]]}
 </f:view>
 ```
+
 ## HTML components
 The `<awa:counter>` component is an [Ada Server Faces](https://github.com/stcarrez/ada-asf) component that
 allows to increment and display easily the counter.  The component

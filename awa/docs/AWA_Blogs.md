@@ -8,11 +8,8 @@ anonymous users.
 The `blogs` module uses several other modules:
 
 * the [Counters Module](AWA_Counters.md) to track page display counter to a blog post,
-
 * the [Tags Module](AWA_Tags.md) to associate one or several tags to a blog post,
-
 * the [Comments Module](AWA_Comments.md) to allow users to write comments on a blog post,
-
 * the [Images Module](AWA_Images.md) to easily add images in blog post.
 
 ## Integration
@@ -44,6 +41,7 @@ Register (App    => App.Self.all'Access,
           URI    => "blogs",
           Module => App.Blog_Module'Access);
 ```
+
 ## Ada Beans
 Several bean types are provided to represent and manage the blogs and their posts.
 The blog module registers the bean constructors when it is initialized.
@@ -69,8 +67,6 @@ To use them, one must declare a bean definition in the application XML configura
 |commentEdit|The bean to allow a user to edit the comment. This is a specific bean because the permission to edit the comment is different from other permissions.|
 |blogStats|This bean provides statistics about the blog|
 
-
-
 #### AWA.Blogs.Models.Admin_Post_Info
 
 The Admin_Post_Info describes a post in the administration interface.
@@ -85,9 +81,6 @@ The Admin_Post_Info describes a post in the administration interface.
 ||Natural|read_count|the number of times the post was read.|
 ||String|username|the user name.|
 ||Natural|comment_count|the number of comments for this post.|
-
-
-
 
 #### AWA.Blogs.Models.Post_Info
 
@@ -106,9 +99,6 @@ The Post_Info describes a post to be displayed in the blog page
 ||Boolean|allow_comments|the post allows to add comments.|
 ||Natural|comment_count|the number of comments for this post.|
 
-
-
-
 #### AWA.Blogs.Models.Comment_Info
 
 The comment information.
@@ -123,9 +113,6 @@ The comment information.
 ||Date|date|the comment date.|
 ||AWA.Comments.Models.Status_Type|status|the comment status.|
 
-
-
-
 #### AWA.Blogs.Models.Blog_Info
 
 The list of blogs.
@@ -138,8 +125,6 @@ The list of blogs.
 ||Date|create_date|the blog creation date.|
 ||Integer|post_count|the number of posts published.|
 
-
-
 ## Queries
 
 | Name              | Description                                                           |
@@ -147,27 +132,22 @@ The list of blogs.
 |blog-admin-post-list|Get the list of blog posts|
 |blog-admin-post-list-date|Get the list of blog posts|
 
-
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |blog-post-list|Get the list of public visible posts|
 |blog-post-tag-list|Get the list of public visible posts filtered by a tag|
 
-
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |comment-list|Get the list of comments associated with given database entity|
-
 
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |blog-list|Get the list of blogs that the current user can update|
 
-
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |blog-tag-cloud|Get the list of tags associated with all the database entities of a given type|
-
 
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
@@ -175,17 +155,14 @@ The list of blogs.
 |blog-image-width-get-data|Get the data content of the Wiki image for an image with a given width.|
 |blog-image-height-get-data|Get the data content of the Wiki image for an image with a given height.|
 
-
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |blog-image|Get the description of an image used in a blog post.|
-
 
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |post-publish-stats|Get statistics about the post publication on a blog.|
 |post-access-stats|Get statistics about the post publication on a blog.|
-
 
 ## Data model
 ![](images/awa_blogs_model.png)

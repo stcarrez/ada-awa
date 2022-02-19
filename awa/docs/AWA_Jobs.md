@@ -100,15 +100,11 @@ The `AWA.Jobs.Services` package defines the type abstractions and the
 core operation to define a job operation procedure, create and schedule
 a job and perform the job work when it is scheduled.
 
-
-
 ## Ada Beans
-
 
 | Name           | Description                                                               |
 |:---------------|:--------------------------------------------------------------------------|
 |jobHandler|The jobHandler is the bean that is created to execute a job.|
-
 
 ## Data Model
 ![](images/awa_jobs_model.png)

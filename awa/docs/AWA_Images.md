@@ -6,7 +6,6 @@ the original image.
 The `images` module uses several other modules:
 
 * the [Storage Module](AWA_Storage.md) to store and manage image content,
-
 * the [Jobs Module] to schedule image thumbnail generation.
 
 ## Integration
@@ -46,7 +45,6 @@ and extracts the image information if the storage file is an image.
 ## Configuration
 The `Images` module defines the following configuration parameters:
 
-
 | Name                      | Description                                                    |
 |:--------------------------|:---------------------------------------------------------------|
 |images.thumbnail_command|The command to execute to generate an image thumbnail for the Images module.|
@@ -58,14 +56,11 @@ a folder.
 
 The `Image_Bean` type holds all the data to give information about an image.
 
-
 | Name           | Description                                                               |
 |:---------------|:--------------------------------------------------------------------------|
 |storageFolder|This bean allows to create a storage folder.|
 |imageList|This bean gives the list of images associated with a given folder.|
 |imageInfo|This bean gives the information about an image.|
-
-
 
 #### AWA.Images.Models.Image_Bean
 
@@ -86,9 +81,6 @@ The information about an image.
 ||Integer|width|the image width.|
 ||Integer|height|the image height.|
 
-
-
-
 #### AWA.Images.Models.Image_Info
 
 The list of images for a given folder.
@@ -108,19 +100,15 @@ The list of images for a given folder.
 ||Integer|thumb_height|the image thumbnail height.|
 ||Identifier|thumbnail_id|the image thumbnail identifier.|
 
-
-
 ## Queries
 
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |image-info|Get the description of an image.|
 
-
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |image-list|Get a list of images for a given folder.|
-
 
 ## Data model
 ![](images/awa_images_model.png)

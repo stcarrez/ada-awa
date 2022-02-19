@@ -44,7 +44,6 @@ Register (App    => App.Self.all'Access,
 |wikis.wiki_copy_list|A list of wiki page ID top copy when a new wiki space is created.|
 | ||
 
-
 ## Events
 The `wikis` exposes a number of events which are posted when some action
 are performed at the service level.
@@ -56,12 +55,10 @@ are performed at the service level.
 |                     | Each time a wiki page is modified, a new wiki page content    |
 |                     | is created and this event is posted.                          |
 
-
 ## Ada Beans
 Several bean types are provided to represent and manage the blogs and their posts.
 The blog module registers the bean constructors when it is initialized.
 To use them, one must declare a bean definition in the application XML configuration.
-
 
 | Name           | Description                                                               |
 |:---------------|:--------------------------------------------------------------------------|
@@ -78,8 +75,6 @@ To use them, one must declare a bean definition in the application XML configura
 |wikiTagCloud|The list of tags associated with a wiki page entities.|
 |wikiTags|The wiki tag editor bean.|
 |wikiPageStats|The counter statistics for a wiki page|
-
-
 
 #### AWA.Wikis.Models.Wiki_View_Info
 
@@ -103,9 +98,6 @@ The information about a wiki page.
 ||String|author|the wiki page author.|
 ||Identifier|acl_id|the acl Id if there is one.|
 
-
-
-
 #### AWA.Wikis.Models.Wiki_Page_Info
 
 The information about a wiki page.
@@ -121,9 +113,6 @@ The information about a wiki page.
 ||Date|create_date|the wiki creation date.|
 ||String|author|the wiki page author.|
 
-
-
-
 #### AWA.Wikis.Models.Wiki_Version_Info
 
 The information about a wiki page version.
@@ -135,9 +124,6 @@ The information about a wiki page version.
 ||Date|create_date|the wiki page creation date.|
 ||Integer|page_version|the page version.|
 ||String|author|the wiki page author.|
-
-
-
 
 #### AWA.Wikis.Models.Wiki_Info
 
@@ -151,8 +137,6 @@ The list of wikis.
 ||Date|create_date|the wiki creation date.|
 ||Integer|page_count|the number of pages in the wiki.|
 
-
-
 ## Queries
 
 | Name              | Description                                                           |
@@ -162,22 +146,18 @@ The list of wikis.
 |wiki-page-content|Get only the content of a wiki page (for template evaluation).|
 |wiki-page-name-count|Count the occurence of a wiki page name|
 
-
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |wiki-page-list|Get the list of wiki pages|
 |wiki-page-tag-list|Get the list of wiki pages filtered by a tag|
 
-
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |wiki-version-list|Get the list of wiki page versions|
 
-
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |wiki-list|Get the list of wikis that the current user can update|
-
 
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
@@ -185,16 +165,13 @@ The list of wikis.
 |wiki-image-width-get-data|Get the data content of the Wiki image for an image with a given width.|
 |wiki-image-height-get-data|Get the data content of the Wiki image for an image with a given height.|
 
-
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |wiki-image|Get the description of an image used in a wiki page.|
 
-
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |page-access-stats|Get statistics about the wiki page access.|
-
 
 ## Data model
 ![](images/awa_wikis_model.png)

@@ -23,6 +23,7 @@ Register (App    => App.Self.all'Access,
           URI    => "comments",
           Module => App.Comment_Module'Access);
 ```
+
 ## Ada Beans
 Several bean types are provided to represent and manage a list of tags.
 The tag module registers the bean constructors when it is initialized.
@@ -65,8 +66,6 @@ The `entity_type` property defines the name of the database table to which the c
 are assigned.  The `permission` property defines the permission name that must be used
 to verify that the user has the permission do add or remove the comment.
 
-
-
 #### AWA.Comments.Models.Comment_Info
 
 The comment information.
@@ -81,13 +80,10 @@ The comment information.
 ||String|comment|the comment text.|
 ||AWA.Comments.Models.Status_Type|status|the comment status.|
 
-
-
 | Name              | Description                                                           |
 |:------------------|:----------------------------------------------------------------------|
 |comment-list|Get the list of comments associated with given database entity|
 |all-comment-list|Get the list of comments associated with given database entity|
-
 
 ## Data model
 The database model is generic and it uses the `Entity_Type` provided by

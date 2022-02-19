@@ -1,6 +1,5 @@
 # Questions Module
 
-
 ### Beans
 
 | Name           | Description                                                               |
@@ -27,7 +26,6 @@
 |answer-delete|awa_answer|Grant the delete permission to author only|
 |answer-accept|awa_answer|The question author is the only one who can accept an answer.|
 
-
 ### Queries
 
 | Name              | Description                                                           |
@@ -36,7 +34,6 @@
 |question-tag-list|Get a list of questions filtered by a tag.|
 
 ### Mapping
-
 
 #### AWA.Questions.Models.Question_Info
 
@@ -54,8 +51,6 @@ The list of questions.
 ||String|author_name|the author's name.|
 ||String|author_email|the author's email.|
 
-
-
 ### Queries
 
 | Name              | Description                                                           |
@@ -63,7 +58,6 @@ The list of questions.
 |question-info|Get the detailed information for a question.|
 
 ### Mapping
-
 
 #### AWA.Questions.Models.Question_Display_Info
 
@@ -82,8 +76,6 @@ The list of questions.
 ||String|author_name|the author's name.|
 ||String|author_email|the author's email.|
 
-
-
 ### Queries
 
 | Name              | Description                                                           |
@@ -91,7 +83,6 @@ The list of questions.
 |answer-list|Get a list of answers.|
 
 ### Mapping
-
 
 #### AWA.Questions.Models.Answer_Info
 
@@ -108,8 +99,6 @@ The list of answers.
 ||Identifier|author_id|the author's identifier.|
 ||String|author_name|the author's name.|
 ||String|author_email|the author's email.|
-
-
 
 ## Model
 ![](images/awa_questions_model.png)

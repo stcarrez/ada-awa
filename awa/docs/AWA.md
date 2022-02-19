@@ -14,39 +14,31 @@ to build specific component.
 The `Initialize` procedure will perform the following steps:
 
 * It uses the factory to allocate the ASF lifecycle handler, the navigation
- handler, the security manager, the OAuth manager, the exception
- handlers.
-
+  handler, the security manager, the OAuth manager, the exception
+  handlers.
 * It calls the `Initialize_Components` procedure to let the
- application register all the ASF components.  These components must
- be registered before any configuration file is read.
-
+  application register all the ASF components.  These components must
+  be registered before any configuration file is read.
 * It calls the `Initialize_Config`
-
 * It calls the `Initialize_Servlets` procedure to allow the application
- to register all the servlet instances used by the application.
-
+  to register all the servlet instances used by the application.
 * It calls the `Initialize_Filters` procedure to allow the application
- to register all the servlet filter instances.  The application servlets
- and filters must be registered before reading the global configuration file.
-
+  to register all the servlet filter instances.  The application servlets
+  and filters must be registered before reading the global configuration file.
 * It loads the global application configuration by reading the `awa.xml`
- file.  By reading this configuration, some global configuration is
- established on the servlets, filters.
-
+  file.  By reading this configuration, some global configuration is
+  established on the servlets, filters.
 * It calls the `Initialize_Modules` procedure so that all the application
- modules can be registered, configured and initialized.  Each module
- brings its own component, servlet and filter.  They are configured
- by their own XML configuration file.
-
+  modules can be registered, configured and initialized.  Each module
+  brings its own component, servlet and filter.  They are configured
+  by their own XML configuration file.
 * It loads the module application configuration by reading the XML
- files described by the `app.config.plugins` configuration.  This last
- step allows the application to setup and update the configuration
- of all modules that have been registered.
+  files described by the `app.config.plugins` configuration.  This last
+  step allows the application to setup and update the configuration
+  of all modules that have been registered.
 
 ## Configuration
 The following global configuration parameter are defined:
-
 
 | Name                      | Description                                                    |
 |:--------------------------|:---------------------------------------------------------------|
@@ -74,7 +66,6 @@ The following global configuration parameter are defined:
 | |#{fn:composePath(app_search_dirs,'bundles')}|
 |app.modules.dir|Defines a list of paths separated by ';' where the module configuration files are searched. The default searches for the 'config' directory in the application search paths.|
 | |#{fn:composePath(app_search_dirs,'config')}|
-
 
 ## AWA Modules
 A module is a software component that can be integrated in the
@@ -120,20 +111,15 @@ The module is configured by using an XML or a properties file.
 The configuration file is used to define:
 
   * the Ada beans that the module defines and uses,
-
   * the events that the module wants to receive and the action
- that must be performed when the event is posted,
-
+  that must be performed when the event is posted,
   * the permissions that the module needs and how to check them,
-
   * the navigation rules which are used for the module web interface,
-
   * the servlet and filter mappings used by the module
 
 The module configuration is located in the *config* directory
 and must be the name of the module followed by the file extension
 (example: `module-name`.xml or `module-name`.properties).
-
 
 ## AWA Permissions
 The *AWA.Permissions* framework defines and controls the permissions used by an application
@@ -218,7 +204,6 @@ AWA.Permissions.Services.Add_Permission (Session => DB,
 |remove-entity-permission|Delete all the permission associated with an object|
 |remove-user-permission|Delete all the permission associated with a user|
 
-
 ## AWA Events
 The `AWA.Events` package defines an event framework for modules to post
 events and have Ada bean methods be invoked when these events are dispatched.
@@ -286,24 +271,24 @@ The `AWA.Events` framework posts events on queues and it uses a dispatcher
 to process them.  There are two kinds of dispatchers:
 
   * Synchronous dispatcher process the event when it is posted.
- The task which posts the event invokes the Ada bean action.
- In this dispatching mode, there is no event queue.
- If the action method raises an exception, it will however be blocked.
+  The task which posts the event invokes the Ada bean action.
+  In this dispatching mode, there is no event queue.
+  If the action method raises an exception, it will however be blocked.
 
   * Asynchronous dispatcher are executed by dedicated tasks.  The event
- is put in an event queue.  A dispatcher task processes the event and
- invokes the action method at a later time.
+  is put in an event queue.  A dispatcher task processes the event and
+  invokes the action method at a later time.
 
 When the event is queued, there are two types of event queues:
 
   * A Fifo memory queue manages the event and dispatches them in FIFO order.
- If the application is stopped, the events present in the Fifo queue
- are lost.
+  If the application is stopped, the events present in the Fifo queue
+  are lost.
 
   * A persistent event queue manages the event in a similar way as the
- FIFO queue but saves them in the database.  If the application is
- stopped, events that have not yet been processed will be dispatched
- when the application is started again.
+  FIFO queue but saves them in the database.  If the application is
+  stopped, events that have not yet been processed will be dispatched
+  when the application is started again.
 
 ### Data Model
 ![](images/awa_events_model.png)
@@ -338,19 +323,12 @@ unlock the keystore is necessary.  Passwords are retrieved using one
 of the following options:
 
 * by reading a file that contains the password,
-
 * by looking at an environment variable,
-
 * by using a command line argument,
-
 * by getting the password through the _ssh-askpass_(1) external command,
-
 * by running an external command,
-
 * by using a GPG private key,
-
 * by asking interactively the user for the password,
-
 * by asking through a network socket for the password.
 
 When the Ada Keystore is used, it is global to all the applications that
@@ -452,12 +430,9 @@ the driver sets while launching the command.
 
 Defines the path of a file which contains the wallet master key file.
 
-
 #### COMMANDS
 
-
 ##### The start command
-
 
 _driver_ start [--management-port _PORT_] [--port _PORT_] [--connection _COUNT_]
 [--upload _DIR_] [--tcp-no-delay] [--daemon] [--keystore _PATH_]
@@ -504,7 +479,6 @@ The `setup` command is very close to the `start` command but it starts
 the [Setup Application](AWA_Setup.md) to configure the application by
 using a web browser.
 
-
 ##### The stop command
 
 _driver_ stop [--management-port _PORT_] [--keystore _PATH_]
@@ -550,11 +524,9 @@ configuration name and its associated value.
 The list of configuration parameters are grouped in several categories:
 
 * `Database configuration` gives the configuration properties for the
- database configuration.
-
+  database configuration.
 * `Server faces configuration` lists the configuration use by the
- Ada Servlets and [Ada Server Faces](https://github.com/stcarrez/ada-asf).
-
+  Ada Servlets and [Ada Server Faces](https://github.com/stcarrez/ada-asf).
 * `AWA Application` lists the core AWA configuration properties.
 
 Depending on whether a module is used by the application, a number
@@ -562,7 +534,6 @@ of modules are listed with their configuration.
 
 The `--long-lines` option triggers the list of database tables with the
 number of entries they contain.
-
 
 ### Integration
 The `AWA.Commands` framework is split in several generic packages that

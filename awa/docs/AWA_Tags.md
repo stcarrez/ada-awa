@@ -26,6 +26,7 @@ Register (App    => App.Self.all'Access,
           URI    => "tags",
           Module => App.Tag_Module'Access);
 ```
+
 ## Ada Beans
 Several bean types are provided to represent and manage a list of tags.
 The tag module registers the bean constructors when it is initialized.
@@ -96,8 +97,6 @@ by the <tt>awa:tagCloud</tt> component.
 </managed-bean>
 ```
 
-
-
 #### AWA.Tags.Models.Tag_Info
 
 The tag information.
@@ -106,7 +105,6 @@ The tag information.
 |:---------|:---------|:-----------|:--------------------------------------------------------|
 ||String|tag|the tag name.|
 ||Natural|count|the number of references for the tag.|
-
 
 ## HTML components
 
@@ -165,7 +163,6 @@ times it is used.
 |tag-search|Get the list of tag names that match some string|
 |tag-list-all|Get the list of tags associated with all the database entities of a given type|
 |tag-list-for-entities|Get the list of tags associated with a set of entities of the same type.|
-
 
 ## Data model
 The database model is generic and it uses the `Entity_Type` provided by

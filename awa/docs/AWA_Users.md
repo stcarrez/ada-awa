@@ -8,7 +8,7 @@ a verification mail is sent and the user has to follow the verification
 link defined in the mail to finish the registration process.  The user
 will authenticate using a password.
 
-A user can also use an OAuth/OpenID account and be automatically authentified
+A user can also use an OAuth/OpenID account and be automatically authenticated
 and registered to the application.  By using an external authentication
 server, passwords are not stored in the application.
 
@@ -35,6 +35,7 @@ Register (App    => App.Self.all'Access,
           Name   => AWA.Users.Modules.NAME,
           Module => App.User_Module'Access);
 ```
+
 ## OAuth Authentication Flow
 The OAuth/OpenID authentication flow is implemented by using two servlets
 that participate in the authentication.  A first servlet will start
@@ -64,7 +65,6 @@ under the `openid-verify` name for the second step.
 ## Configuration
 The *users* module uses a set of configuration properties to configure
 the OpenID integration.
-
 
 | Name                      | Description                                                    |
 |:--------------------------|:---------------------------------------------------------------|
@@ -125,13 +125,11 @@ the OpenID integration.
 |verify-filter.redirect|URI to redirect to the login page|
 | |#{contextPath}/auth/login.html|
 
-
 ## Ada Beans
 Several bean types are provided to represent and manage the users.
 The user module registers the bean constructors when it is initialized.
 To use them, one must declare a bean definition in the application
 XML configuration.
-
 
 | Name           | Description                                                               |
 |:---------------|:--------------------------------------------------------------------------|
@@ -141,8 +139,6 @@ XML configuration.
 |lostPassword|This bean is used by the lost password form|
 |logout|This bean is used by the logout process|
 |user|This bean allows to provide information about the current logged user.|
-
-
 
 ## Data model
 ![](images/awa_users_model.png)

@@ -52,7 +52,6 @@ This event is posted when an invitation is accepted by a user.
 |workspaces.allow_workspace_create||
 | |0|
 
-
 ## Data Model
 ![](images/awa_workspace_model.png)
 
