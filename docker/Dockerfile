@@ -1,6 +1,10 @@
-FROM ciceron/ada-bionic:latest
+FROM ciceron/ada-focal:latest
 
 MAINTAINER Stephane Carrez <Stephane.Carrez@gmail.com>
+
+# We have to setup a timezone otherwise installation of tzdata will hang.
+ENV TZ=Europe/Paris
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get update \
    && apt-get install -y sqlite3 unzip imagemagick pngcrush libjpeg-progs \
