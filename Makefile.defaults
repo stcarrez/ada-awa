@@ -90,9 +90,11 @@ dist::
 	rm -f $(DIST_FILE)
 	git archive -o $(DIST_FILE) --prefix=$(DIST_DIR)/ HEAD
 
-install-info:
+install-info::
+ifeq (${VERBOSE},1)
 	@echo "Environment setup:"
 	@echo "  export ADA_PROJECT_PATH=${projectdir}:$$ADA_PROJECT_PATH"
+endif
 
 define ada_library
   static:: setup
