@@ -1,5 +1,6 @@
 Version 2.4.0   -
   - Add support for SQL queries embedded in applications with ARE
+  - Fix #20: Do not use git:// protocol
 
 Version 2.3.1   - Feb 2022
   - Fix #13: AWA help command prints the wrong title 'akt tool to store and ...'
