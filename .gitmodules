@@ -1,33 +1,33 @@
 [submodule "ada-util"]
 	path = ada-util
-	url = git://github.com/stcarrez/ada-util.git
+	url = https://github.com/stcarrez/ada-util.git
 [submodule "ada-el"]
 	path = ada-el
-	url = git://github.com/stcarrez/ada-el.git
+	url = https://github.com/stcarrez/ada-el.git
 [submodule "ada-wiki"]
 	path = ada-wiki
-	url = git://github.com/stcarrez/ada-wiki.git
+	url = https://github.com/stcarrez/ada-wiki.git
 [submodule "ada-security"]
 	path = ada-security
-	url = git://github.com/stcarrez/ada-security.git
+	url = https://github.com/stcarrez/ada-security.git
 [submodule "ada-asf"]
 	path = ada-asf
-	url = git://github.com/stcarrez/ada-asf.git
+	url = https://github.com/stcarrez/ada-asf.git
 [submodule "ada-ado"]
 	path = ada-ado
-	url = git://github.com/stcarrez/ada-ado.git
+	url = https://github.com/stcarrez/ada-ado.git
 [submodule "dynamo"]
 	path = dynamo
-	url = git://github.com/stcarrez/dynamo.git
+	url = https://github.com/stcarrez/dynamo.git
 [submodule "ada-servlet"]
 	path = ada-servlet
-	url = git://github.com/stcarrez/ada-servlet.git
+	url = https://github.com/stcarrez/ada-servlet.git
 [submodule "swagger-ada"]
 	path = openapi-ada
-	url = git://github.com/stcarrez/swagger-ada.git
+	url = https://github.com/stcarrez/swagger-ada.git
 [submodule "ada-lzma"]
 	path = ada-lzma
-	url = git://github.com/stcarrez/ada-lzma.git
+	url = https://github.com/stcarrez/ada-lzma.git
 [submodule "ada-keystore"]
 	path = ada-keystore
-	url = git://github.com/stcarrez/ada-keystore.git
+	url = https://github.com/stcarrez/ada-keystore.git
