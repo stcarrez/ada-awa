@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-setup -- Setup and installation
---  Copyright (C) 2016, 2017, 2018, 2020 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2018, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -59,6 +59,10 @@ package body AWA.Setup.Applications is
    package P_Base_URL is
      new ASF.Applications.Main.Configs.Parameter ("app_url_base",
                                                   "http://localhost:8080/#{contextPath}");
+
+   package P_Dynamo_Path is
+     new ASF.Applications.Main.Configs.Parameter ("dynamo_path",
+                                                  "dynamo");
 
    Binding_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
      := (Save_Binding.Proxy'Access,
@@ -226,7 +230,8 @@ package body AWA.Setup.Applications is
    --  ------------------------------
    function Get_Configure_Command (From : in Application) return String is
       Database : constant String := From.Get_Database_URL;
-      Command  : constant String := "dynamo create-database db '" & Database & "'";
+      Dynamo   : constant String := From.Get_Config (P_Dynamo_Path.P);
+      Command  : constant String := Dynamo & " create-database db '" & Database & "'";
       Root     : constant String := Util.Beans.Objects.To_String (From.Root_User);
       Passwd   : constant String := Util.Beans.Objects.To_String (From.Root_Passwd);
    begin
@@ -402,7 +407,7 @@ package body AWA.Setup.Applications is
       App.Path := Ada.Strings.Unbounded.To_Unbounded_String (Path);
       begin
          App.Config.Load_Properties (Path);
-         Util.Log.Loggers.Initialize (Path);
+         --  Util.Log.Loggers.Initialize (Path);
 
       exception
          when Ada.IO_Exceptions.Name_Error =>
@@ -511,7 +516,7 @@ package body AWA.Setup.Applications is
       --  Initialize the application and register it.
       Log.Info ("Initializing application {0}", URI);
       Initialize (App, C);
-      Server.Register_Application (URI, App.all'Access);
+      Server.Register_Application (URI, App.all'Unchecked_Access);
       S.Status.Set (READY);
       delay 2.0;
 
