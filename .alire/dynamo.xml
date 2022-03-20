@@ -4,4 +4,5 @@
     <property name="license">apache</property>
     <property name="author">Stephane Carrez</property>
     <property name="base_dir">../awa</property>
+    <property name="db_dir">../awa/db</property>
 </project>
