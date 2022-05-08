@@ -957,3 +957,149 @@ EOF
   AWS_VERSION=$ac_cv_gnat_aws_version
   AC_SUBST(AWS_VERSION)
 ])
+
+dnl Check the OS and CPU to build Ada Util configuration (UTIL_OS)
+AC_DEFUN(AM_ADA_UTIL_HARDWARE,
+[
+  AC_CANONICAL_SYSTEM
+
+  os_base='unix'
+  os_version='none'
+  AC_MSG_CHECKING([operating system])
+  case "${target_os}" in
+     linux|linux-*|solaris*|sysv-*)
+        os_version='linux'
+        ;;
+
+     netbsd*|dragonfly*)
+        os_version='netbsd'
+        ;;
+
+     openbsd*|freebsd*)
+        # Let OpenBSD people cry 
+        os_version='freebsd'
+        ;;
+
+     macos*|darwin*)
+        os_version='macos'
+        ;;
+
+     mingw32*|cygwin*|mingw64*|msys)
+        os_version='win'
+        os_base='windows'
+        ;;
+
+     mingw32*|cygwin*|mingw64*|msys)
+        os_version='win'
+        os_base='windows'
+        ;;
+
+     *)
+        # Be authoritative
+        os_version='linux'
+        ;;
+  esac
+  AC_MSG_RESULT($os_version)
+
+  AC_MSG_CHECKING([hardware platform])
+  case "${target_cpu}" in
+     x86_64)
+        os_version="${os_version}64"
+        HARDWARE_PLATFORM=${target_cpu}
+        ;;
+
+     i386|i486|i586|i686)
+        os_version="${os_version}32"
+        HARDWARE_PLATFORM='x86'
+        ;;
+
+     armv8*|aarch64*|mips64*|mipsisa64*|sh64*|riscv64*|sparc64*)
+        os_version="${os_version}64"
+        HARDWARE_PLATFORM=${target_cpu}
+        ;;
+
+     armv7*|mips*|mipsisa*|sh*|riscv32*|sparc*)
+        os_version="${os_version}32"
+        HARDWARE_PLATFORM=${target_cpu}
+        ;;
+
+     *)
+        os_version="${os_version}64"
+        HARDWARE_PLATFORM=${target_cpu}
+        ;;
+  esac
+  AC_MSG_RESULT($HARDWARE_PLATFORM)
+  AC_SUBST(HARDWARE_PLATFORM)
+
+  # Check for gcc intrinsics
+  AM_HAS_INTRINSIC_SYNC_COUNTERS(src_asm='intrinsic',src_asm='')
+  AC_MSG_CHECKING([specific processor support])
+  if test T$src_asm = T; then
+   case "${target}" in
+   ## Intel 386 machines where we don't care about the manufacturer
+     i[[34567]]86-*-* | x86_* | x86-*)
+       src_asm='x86'
+       ;;
+
+     *)
+       src_asm='none'
+       ;;
+
+   esac
+  fi
+  AC_MSG_RESULT(using $src_asm)
+  UTIL_ASM_TYPE="$src_asm"
+  AC_SUBST(UTIL_ASM_TYPE)
+
+  UTIL_OS_VERSION=$os_version
+  AC_SUBST(UTIL_OS_VERSION)
+
+])
+
+dnl Identify the AWS version for Ada Util.
+AC_DEFUN(AM_ADA_UTIL_AWS_VERSION,
+[
+AM_GNAT_CHECK_AWS(
+  [
+    UTIL_HAVE_AWS=no
+    WITH_SERVER="";
+    WITH_UTIL_AWS="";
+    UTIL_AWS_VERSION="none"
+  ], [
+    UTIL_HAVE_AWS=yes
+    WITH_UTIL_AWS="with \"utilada_aws\";";
+    WITH_SERVER=$ac_cv_gnat_project_with_aws
+    AM_GNAT_LIBRARY_SETUP(utilada_aws)
+
+    AM_GNAT_AWS_VERSION
+
+    AC_MSG_CHECKING([using Ada Util AWS http client])
+    UTIL_AWS_VERSION=1
+case $AWS_VERSION in
+  22.0)
+     UTIL_AWS_VERSION=3
+     ;;
+
+  *2017*|*2018*|*2019*|*202*|20.0)
+     UTIL_AWS_VERSION=2
+     ;;
+
+  3.3.2)
+     UTIL_AWS_VERSION=2
+     ;;
+
+  3.*|2.*)
+     UTIL_AWS_VERSION=1
+     ;;
+
+  *)
+     UTIL_AWS_VERSION=3
+     ;;
+esac
+    AC_MSG_RESULT(${UTIL_AWS_VERSION})
+
+  ])
+
+AC_SUBST(UTIL_AWS_VERSION)
+
+])
