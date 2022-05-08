@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-components-wikis -- Wiki rendering component
---  Copyright (C) 2011, 2012, 2013, 2015, 2016, 2018, 2020, 2021 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2015, 2016, 2018, 2020, 2021, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -174,7 +174,7 @@ package body AWA.Components.Wikis is
       elsif Format = "html" or Format = "FORMAT_HTML" then
          return Wiki.SYNTAX_HTML;
       else
-         return Wiki.SYNTAX_MIX;
+         return Wiki.SYNTAX_MARKDOWN;
       end if;
    end Get_Wiki_Style;
 
