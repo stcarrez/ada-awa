@@ -872,7 +872,7 @@ AC_DEFUN(AM_GNAT_LIBRARY_PROJECT,
   fi
 
   # checking for local tools
-  AC_CANONICAL_SYSTEM
+  AC_CANONICAL_TARGET
   AM_GNAT_CHECK_GPRBUILD
   AC_CHECK_PROGS(GNAT, gnat, "")
   if test -n "$GNAT"; then
@@ -931,6 +931,7 @@ EOF
        ac_cv_gnat_aws_version='none'
     fi
 
+    rm -f conftest conftest.o conftest.ali
     if test "$ac_cv_gnat_aws_version" = "20.0"; then
       dnl The version 20.0 is sometimes wrong because used by several versions of AWS.
       dnl The version 22.0 has the AWS.HTTP_2 constant defined and uses version 20.0.
@@ -961,7 +962,7 @@ EOF
 dnl Check the OS and CPU to build Ada Util configuration (UTIL_OS)
 AC_DEFUN(AM_ADA_UTIL_HARDWARE,
 [
-  AC_CANONICAL_SYSTEM
+  AC_CANONICAL_TARGET
 
   os_base='unix'
   os_version='none'
