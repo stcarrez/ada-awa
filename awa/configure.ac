@@ -16,7 +16,8 @@ dnl  limitations under the License.
 dnl 
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(src/awa.ads)
+AC_INIT
+AC_CONFIG_SRCDIR([src/awa.ads])
 
 # Current release settings
 AWA_MAJOR_VERSION=2
@@ -128,12 +129,12 @@ esac
 AC_MSG_RESULT(${AWA_AWS_SECURE_MAIL})
 AC_SUBST(AWA_AWS_SECURE_MAIL)
 
-AC_OUTPUT(
-Makefile.conf
+AC_CONFIG_FILES([Makefile.conf
 awa.gpr
 awa_tests.gpr
 awa_unit.gpr
 plugins/awa-mail/awa_mail.gpr
 plugins/awa-sysadmin/awa_sysadmin.gpr
 plugins/awa-images/config/images.xml
-)
+])
+AC_OUTPUT
