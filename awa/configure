@@ -1781,6 +1781,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
+
 # Current release settings
 AWA_MAJOR_VERSION=2
 AWA_MINOR_VERSION=3
@@ -4085,6 +4086,7 @@ EOF
        ac_cv_gnat_aws_version='none'
     fi
 
+    rm -f conftest conftest.o conftest.ali
     if test "$ac_cv_gnat_aws_version" = "20.0"; then
                         cat > conftest.adb <<EOF
 with AWS;
