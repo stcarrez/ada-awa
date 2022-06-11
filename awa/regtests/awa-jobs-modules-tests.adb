@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  jobs-tests -- Unit tests for AWA jobs
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,6 @@
 
 with Util.Test_Caller;
 
-with AWA.Jobs.Modules;
 with AWA.Jobs.Services.Tests;
 
 package body AWA.Jobs.Modules.Tests is

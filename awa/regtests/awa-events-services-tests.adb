@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  events-tests -- Unit tests for AWA events
---  Copyright (C) 2012, 2015, 2019, 2021 Stephane Carrez
+--  Copyright (C) 2012, 2015, 2019, 2021, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,7 +35,6 @@ with AWA.Events.Action_Method;
 with AWA.Services.Contexts;
 
 with AWA.Events.Queues;
-with AWA.Events.Services;
 
 package body AWA.Events.Services.Tests is
 
