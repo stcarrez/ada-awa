@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-questions-modules-tests -- Unit tests for storage service
---  Copyright (C) 2013, 2014, 2018 Stephane Carrez
+--  Copyright (C) 2013, 2014, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +28,6 @@ with ASF.Contexts.Faces.Mockup;
 
 with AWA.Permissions;
 with AWA.Services.Contexts;
-with AWA.Questions.Modules;
 with AWA.Questions.Beans;
 with AWA.Votes.Beans;
 with AWA.Tests.Helpers.Users;
