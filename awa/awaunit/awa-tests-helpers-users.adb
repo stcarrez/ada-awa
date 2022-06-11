@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  files.tests -- Unit tests for files
---  Copyright (C) 2011, 2012, 2013, 2014, 2017, 2020 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2017, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,6 @@ with ASF.Principals;
 with ASF.Tests;
 with ASF.Responses.Mockup;
 with AWA.Applications;
-with AWA.Tests;
 with AWA.Users.Modules;
 with ADO.Sessions;
 with ADO.SQL;
