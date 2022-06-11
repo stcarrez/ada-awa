@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://github.com/stcarrez/dynamo Version 1.2.3
 -----------------------------------------------------------------------
---  Copyright (C) 2021 Stephane Carrez
+--  Copyright (C) 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -199,6 +199,13 @@ package AWA.Settings.Models is
                    Id      : in ADO.Identifier;
                    Found   : out Boolean);
 
+   --  Reload from the database the same object if it was modified.
+   --  Returns True in `Updated` if the object was reloaded.
+   --  Raises the NOT_FOUND exception if it does not exist.
+   procedure Reload (Object  : in out Global_Setting_Ref;
+                     Session : in out ADO.Sessions.Session'Class;
+                     Updated : out Boolean);
+
    --  Find and load the entity.
    overriding
    procedure Find (Object  : in out Global_Setting_Ref;
@@ -307,6 +314,13 @@ package AWA.Settings.Models is
                    Session : in out ADO.Sessions.Session'Class;
                    Id      : in ADO.Identifier;
                    Found   : out Boolean);
+
+   --  Reload from the database the same object if it was modified.
+   --  Returns True in `Updated` if the object was reloaded.
+   --  Raises the NOT_FOUND exception if it does not exist.
+   procedure Reload (Object  : in out User_Setting_Ref;
+                     Session : in out ADO.Sessions.Session'Class;
+                     Updated : out Boolean);
 
    --  Find and load the entity.
    overriding
