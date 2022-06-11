@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-modules-tests -- Unit tests for storage service
---  Copyright (C) 2012, 2013, 2016, 2019, 2020 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2016, 2019, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +28,6 @@ with Servlet.Responses;
 
 with AWA.Services.Contexts;
 with AWA.Tests.Helpers.Users;
-with AWA.Images.Modules;
 with AWA.Storages.Beans;
 with AWA.Storages.Services;
 with AWA.Storages.Modules;
