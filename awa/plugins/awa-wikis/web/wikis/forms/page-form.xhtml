@@ -68,6 +68,13 @@
             </ul>
         </div>
         <div class='grid_4'>
+            <ul class='awa-buttons'>
+                <li>
+                    <h:commandButton id='save-top' value='#{wikiMsg.wiki_page_save_button}'
+                                     styleClass="ui-button ui-state-default ui-corner-all"
+                                     action="#{wikiPage.save}" title="#{wikiMsg.wiki_page_save_title}"/>
+                </li>
+            </ul>
             <dl class="awa-required">
                 <dt></dt>
                 <label for='page-is-public'>#{wikiMsg.wiki_page_is_public_label}</label>
