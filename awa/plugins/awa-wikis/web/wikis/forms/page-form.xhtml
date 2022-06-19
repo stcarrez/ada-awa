@@ -104,33 +104,11 @@
         // Create a MarkEdit editor on page load
         $(function(){
             var area = $("#text");
-            $(area).markedit({
-                'preview': false,
-                'syntax': 'dotclear',
-                'toolbar' : {
-                    'backgroundMode': 'light',
-                    'layout': 'bold italic underline strike | quote code | numberlist bulletlist heading line link image',
-                    imageSelector: function(config, defaultValue, okCallback, cancelCallback) {
-                        $('#image-selector').imageSelector({
-                            autoOpen: false,
-                            show: "blind",
-                            hide: "explode",
-                            minWidth: 800,
-                            minHeight: 400,
-                            modal: true,
-                            buttons: [
-                              { "text": "Select",
-                                "click": function() {
-                                    var value = $('#image-selector').imageSelector("value");
-                                    okCallback(value);
-                                    $(this).imageSelector("close");
-                                }
-                              }
-                            ]
-                        }).imageSelector("openSelector");
-                    }
-                },
+
+            $("#post").wiki_editor({
+                'syntax': "#{wikiPage.format}",
             });
+
             function setSyntax() {
                 var syntax = $('#wiki-format').val();
                 $("#wiki-syntax ul").attr('class', 'markedit-syntax ' + syntax);
