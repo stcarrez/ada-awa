@@ -1,5 +1,5 @@
 <!-- Form to create or update a blog post
-  -  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2018, 2019 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2018, 2019, 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -135,22 +135,19 @@
                     </w:tab>
                 </w:tabView>
             </div>
-<!--
-            <div class='grid_4'>
-
-                <dl class="awa-optional">
-                    <dd>
-                        <ui:include src="/markedit/syntax.xhtml">
-                            <ui:param name="syntax" value="FORMAT_DOTCLEAR"/>
-                        </ui:include>
-                    </dd>
-                </dl>
-            </div> -->
+            <div class="awa-post-buttons">
+                <ul class='awa-buttons'>
+                    <li>
+                        <h:commandButton id='save-bottom' value='#{blogMsg.blog_post_save_button}'
+                                         styleClass="ui-button ui-state-default ui-corner-all"
+                                         action="#{post.save}" title="#{blogMsg.blog_post_save_title}"/>
+                    </li>
+                </ul>
+            </div>
         </h:form>
     </div>
     <util:script>
         contextPath = "#{contextPath}";
-        // Create a MarkEdit editor on page load
         $(function(){
             $("#awa-post-editor").blog_post_editor({
                 'syntax': "#{post.format}",
