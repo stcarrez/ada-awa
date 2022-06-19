@@ -7,6 +7,7 @@
     <depend name="awa_markedit"></depend>
     <depend name="awa_flotcharts"></depend>
     <depend name="awa_trumbowyg"></depend>
+    <depend name="awa_easymde"></depend>
     <depend name="util"></depend>
     <depend name="ado"></depend>
     <depend name="security"></depend>

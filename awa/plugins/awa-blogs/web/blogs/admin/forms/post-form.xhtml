@@ -41,7 +41,7 @@
             </div>
             <div class="awa-post-editor post-text">
                 <h:messages styleClass='awa-error'/>
-                <w:tabView closable="false" toggleable="true"
+                <w:tabView id='form-tab' closable="false" toggleable="true"
                            effect="blind" collapsible="false">
                     <w:tab title="#{blogMsg.blog_post_tab_summary_label}">
                         <w:inputText id='post-title'
@@ -164,7 +164,10 @@
                 onSelect: function(date, picker) {
                     /* alert(date); */
                 }
-            });
+        });
+        $("#form-tab").on("tabsactivate", function(event, ui) {
+        
+        });
         });
     </util:script>
 

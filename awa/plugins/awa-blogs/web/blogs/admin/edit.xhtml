@@ -20,6 +20,11 @@
         xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{blogMsg.blog_admin_edit_post_title}"/>
 
+    <ui:define name="pageHeader">
+        <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/easymde.min.css"/>
+        <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/fontawesome.min.css"/>
+    </ui:define>
+
     <ui:define name="pageScript">
         <script type="text/javascript" src="#{contextPath}/js/markedit/showdown.js"></script>
         <script type="text/javascript" src="#{contextPath}/js/markedit/jquery.markedit.js"></script>
@@ -28,6 +33,7 @@
         <script type="text/javascript" src="#{contextPath}/js/trumbowyg/trumbowyg.js"></script>
         <script type="text/javascript" src="#{contextPath}/js/trumbowyg/plugins/fontfamily/trumbowyg.fontfamily.js"></script>
         <script type="text/javascript" src="#{contextPath}/js/trumbowyg/plugins/preformatted/trumbowyg.preformatted.js"></script>
+        <script type="text/javascript" src="#{contextPath}/js/easymde/easymde.min.js"></script>
         <script type="text/javascript" src="#{contextPath}/js/awa-images.js"></script>
         <script type="text/javascript" src="#{contextPath}/js/awa-blogs.js"></script>
     </ui:define>
