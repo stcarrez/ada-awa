@@ -172,6 +172,11 @@
 
   <servlet-mapping>
     <servlet-name>files</servlet-name>
+    <url-pattern>*.woff2</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>files</servlet-name>
     <url-pattern>*.ttf</url-pattern>
   </servlet-mapping>
 
