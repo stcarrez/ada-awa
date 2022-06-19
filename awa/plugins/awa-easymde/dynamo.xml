@@ -1,0 +1,7 @@
+<project>
+    <name>awa-easymde</name>
+    <property name="author_email">Stephane.Carrez@gmail.com</property>
+    <property name="license">MIT</property>
+    <property name="author">Stephane Carrez</property>
+    <property name="is_plugin">TRUE</property>
+</project>

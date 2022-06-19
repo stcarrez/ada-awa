@@ -31,7 +31,7 @@ PLUGINS=awa-workspaces awa-mail awa-counters awa-storages awa-images awa-comment
         awa-jobs awa-votes awa-tags awa-flotcharts awa-wikis awa-blogs awa-markedit \
         awa-trumbowyg awa-questions \
 	awa-countries awa-settings awa-changelogs \
-    awa-setup awa-sysadmin
+    awa-setup awa-sysadmin awa-easymde
 
 NAME=awa
 LIBNAME=lib${NAME}
