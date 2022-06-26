@@ -187,6 +187,13 @@
     float: left;
     clear: left;
 }
+.wiki-text hr {
+    display: block;
+    width: 100%;
+    height: 0.5em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
 /* Table of Contents */
 .wiki-toc {
     display: table;
