@@ -194,6 +194,14 @@
     margin-top: 0.5em;
     margin-bottom: 0.5em;
 }
+.wiki-text blockquote {
+  margin: .8em 0;
+  padding: 0 0 0 .8em;
+  border-left: .25em solid #bbb;
+  font-size: 1.25rem;
+  font-style: italic;
+  line-height: 1.4;
+}
 /* Table of Contents */
 .wiki-toc {
     display: table;
