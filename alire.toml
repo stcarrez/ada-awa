@@ -50,17 +50,17 @@ project-files = [
 ]
 
 [[depends-on]]
-utilada = "^2.4.1"
-utilada_xml = "^2.4.1"
-utilada_aws = "^2.4.1"
-ado = "^2.2.0"
-wikiada = "^1.3.2"
-elada = "^1.8.3"
-security = "^1.4.0"
+utilada = "^2.5.0"
+utilada_xml = "^2.5.0"
+utilada_aws = "^2.5.0"
+ado = "^2.2.1"
+wikiada = "^1.4.0"
+elada = "^1.8.4"
+security = "^1.4.1"
 serverfaces = "^1.4.3"
-servletada = "^1.5.2"
-servletada_aws = "^1.5.2"
-keystoreada = "^1.3.2"
+servletada = "^1.5.3"
+servletada_aws = "^1.5.3"
+keystoreada = "^1.3.3"
 
 [[actions]]
 type = "post-fetch"
