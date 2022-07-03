@@ -17,8 +17,8 @@ library project Awa_Mail is
    for Library_Kind use Awa.Library_Type;
    for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
 
-   for Library_Dir use "lib/" & Name & "/" & Project'Library_Kind;
-   for Object_Dir use "obj/" & Name & "/" & Project'Library_Kind;
+   for Library_Dir use "../lib/" & Name & "/" & Project'Library_Kind;
+   for Object_Dir use "../obj/" & Name & "/" & Project'Library_Kind;
 
    package Binder renames AWA.Binder;
    package Builder renames AWA.Builder;
