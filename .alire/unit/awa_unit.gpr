@@ -19,10 +19,10 @@ library project Awa_Unit is
    for Library_Kind use Library_Type;
    for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
 
-   for Library_Dir use "lib/awa_unit/" & Project'Library_Kind;
-   for Object_Dir use "obj/awa_unit/" & Project'Library_Kind;
+   for Library_Dir use "../../lib/awa_unit/" & Project'Library_Kind;
+   for Object_Dir use "../../obj/awa_unit/" & Project'Library_Kind;
 
-   for Exec_Dir use "./" & Config'Exec_Dir & "/bin";
+   for Exec_Dir use Awa.Exec_Dir;
 
    package Binder renames Config.Binder;
    package Builder renames Config.Builder;
