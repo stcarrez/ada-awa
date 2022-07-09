@@ -65,3 +65,7 @@ keystoreada = "^1.3.3"
 [gpr-externals]
 AWA_LIBRARY_TYPE = ["relocatable", "static", "static-pic"]
 BUILD = ["distrib", "debug", "optimize", "profile", "coverage"]
+
+[environment]
+DYNAMO_SEARCH_PATH.prepend = "${CRATE_ROOT}/awa/plugins"
+DYNAMO_UML_PATH.prepend = "${CRATE_ROOT}/awa/uml"
