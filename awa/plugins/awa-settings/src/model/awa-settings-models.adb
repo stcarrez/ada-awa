@@ -290,6 +290,7 @@ package body AWA.Settings.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out Setting_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -726,6 +727,7 @@ package body AWA.Settings.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out Global_Setting_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -1174,6 +1176,7 @@ package body AWA.Settings.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out User_Setting_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement

@@ -570,6 +570,7 @@ private
    procedure Save (Object  : in out Country_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
+   overriding
    procedure Create (Object  : in out Country_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 
@@ -641,6 +642,7 @@ private
    procedure Save (Object  : in out City_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
+   overriding
    procedure Create (Object  : in out City_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 
@@ -700,6 +702,7 @@ private
    procedure Save (Object  : in out Country_Neighbor_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
+   overriding
    procedure Create (Object  : in out Country_Neighbor_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 
@@ -762,6 +765,7 @@ private
    procedure Save (Object  : in out Region_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
+   overriding
    procedure Create (Object  : in out Region_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 

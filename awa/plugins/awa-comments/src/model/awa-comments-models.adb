@@ -482,6 +482,7 @@ package body AWA.Comments.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out Comment_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement

@@ -1019,6 +1019,7 @@ private
    procedure Save (Object  : in out Blog_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
+   overriding
    procedure Create (Object  : in out Blog_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 
@@ -1129,6 +1130,7 @@ private
    procedure Save (Object  : in out Post_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
+   overriding
    procedure Create (Object  : in out Post_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 

@@ -210,6 +210,7 @@ private
    procedure Save (Object  : in out Changelog_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
+   overriding
    procedure Create (Object  : in out Changelog_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 

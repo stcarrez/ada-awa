@@ -386,6 +386,7 @@ package body AWA.Changelogs.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out Changelog_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement

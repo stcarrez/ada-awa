@@ -474,6 +474,7 @@ private
    procedure Save (Object  : in out Counter_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
+   overriding
    procedure Create (Object  : in out Counter_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 
@@ -533,6 +534,7 @@ private
    procedure Save (Object  : in out Counter_Definition_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
+   overriding
    procedure Create (Object  : in out Counter_Definition_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 
@@ -598,6 +600,7 @@ private
    procedure Save (Object  : in out Visit_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
+   overriding
    procedure Create (Object  : in out Visit_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 

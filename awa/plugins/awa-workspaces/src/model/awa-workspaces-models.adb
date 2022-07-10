@@ -351,6 +351,7 @@ package body AWA.Workspaces.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out Workspace_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -750,6 +751,7 @@ package body AWA.Workspaces.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out Workspace_Member_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -1336,6 +1338,7 @@ package body AWA.Workspaces.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out Invitation_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -1715,6 +1718,7 @@ package body AWA.Workspaces.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out Workspace_Feature_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement

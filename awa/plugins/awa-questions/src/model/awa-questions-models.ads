@@ -736,6 +736,7 @@ private
    procedure Save (Object  : in out Question_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
+   overriding
    procedure Create (Object  : in out Question_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 
@@ -810,6 +811,7 @@ private
    procedure Save (Object  : in out Answer_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
+   overriding
    procedure Create (Object  : in out Answer_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 

@@ -530,6 +530,7 @@ package body AWA.Countries.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out Country_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -1004,6 +1005,7 @@ package body AWA.Countries.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out City_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -1359,6 +1361,7 @@ package body AWA.Countries.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out Country_Neighbor_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -1731,6 +1734,7 @@ package body AWA.Countries.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out Region_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement

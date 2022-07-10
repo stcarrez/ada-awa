@@ -549,6 +549,7 @@ package body AWA.Blogs.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out Blog_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -1307,6 +1308,7 @@ package body AWA.Blogs.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out Post_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement

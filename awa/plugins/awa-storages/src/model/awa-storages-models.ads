@@ -911,6 +911,7 @@ private
    procedure Save (Object  : in out Storage_Data_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
+   overriding
    procedure Create (Object  : in out Storage_Data_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 
@@ -979,6 +980,7 @@ private
    procedure Save (Object  : in out Storage_Folder_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
+   overriding
    procedure Create (Object  : in out Storage_Folder_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 
@@ -1071,6 +1073,7 @@ private
    procedure Save (Object  : in out Storage_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
+   overriding
    procedure Create (Object  : in out Storage_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 
@@ -1145,6 +1148,7 @@ private
    procedure Save (Object  : in out Store_Local_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
+   overriding
    procedure Create (Object  : in out Store_Local_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 

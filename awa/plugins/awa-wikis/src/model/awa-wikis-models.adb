@@ -478,6 +478,7 @@ package body AWA.Wikis.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out Wiki_Content_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -1052,6 +1053,7 @@ package body AWA.Wikis.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out Wiki_Space_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -1633,6 +1635,7 @@ package body AWA.Wikis.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out Wiki_Page_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement

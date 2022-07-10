@@ -552,6 +552,7 @@ package body AWA.Images.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out Image_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement

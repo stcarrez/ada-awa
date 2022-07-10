@@ -290,6 +290,7 @@ package body AWA.Tags.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out Tag_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -666,6 +667,7 @@ package body AWA.Tags.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out Tagged_Entity_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement

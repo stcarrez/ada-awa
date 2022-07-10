@@ -407,6 +407,7 @@ private
    procedure Save (Object  : in out Setting_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
+   overriding
    procedure Create (Object  : in out Setting_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 
@@ -472,6 +473,7 @@ private
    procedure Save (Object  : in out Global_Setting_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
+   overriding
    procedure Create (Object  : in out Global_Setting_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 
@@ -537,6 +539,7 @@ private
    procedure Save (Object  : in out User_Setting_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
+   overriding
    procedure Create (Object  : in out User_Setting_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 
