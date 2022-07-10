@@ -398,6 +398,7 @@ package body AWA.Permissions.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out Acl_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -743,6 +744,7 @@ package body AWA.Permissions.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out Permission_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement

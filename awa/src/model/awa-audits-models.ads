@@ -341,6 +341,7 @@ private
    procedure Save (Object  : in out Audit_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
+   overriding
    procedure Create (Object  : in out Audit_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 
@@ -400,6 +401,7 @@ private
    procedure Save (Object  : in out Audit_Field_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
+   overriding
    procedure Create (Object  : in out Audit_Field_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 

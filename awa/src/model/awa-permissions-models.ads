@@ -312,6 +312,7 @@ private
    procedure Save (Object  : in out Acl_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
+   overriding
    procedure Create (Object  : in out Acl_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 
@@ -368,6 +369,7 @@ private
    procedure Save (Object  : in out Permission_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
+   overriding
    procedure Create (Object  : in out Permission_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 

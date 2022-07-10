@@ -291,6 +291,7 @@ package body AWA.Events.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out Message_Type_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -656,6 +657,7 @@ package body AWA.Events.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out Queue_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -1365,6 +1367,7 @@ package body AWA.Events.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out Message_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement

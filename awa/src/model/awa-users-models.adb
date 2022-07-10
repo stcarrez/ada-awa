@@ -414,6 +414,7 @@ package body AWA.Users.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out Email_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -1041,6 +1042,7 @@ package body AWA.Users.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out User_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -1523,6 +1525,7 @@ package body AWA.Users.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out Access_Key_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement
@@ -2055,6 +2058,7 @@ package body AWA.Users.Models is
       end if;
    end Save;
 
+   overriding
    procedure Create (Object  : in out Session_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Query : ADO.Statements.Insert_Statement

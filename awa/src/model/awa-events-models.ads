@@ -290,11 +290,11 @@ package AWA.Events.Models is
    function Get_Server_Id (Object : in Message_Ref)
                  return Integer;
 
-   --  Set the task identfier on the server which processes the message
+   --  Set the task identifier on the server which processes the message
    procedure Set_Task_Id (Object : in out Message_Ref;
                           Value  : in Integer);
 
-   --  Get the task identfier on the server which processes the message
+   --  Get the task identifier on the server which processes the message
    function Get_Task_Id (Object : in Message_Ref)
                  return Integer;
 
@@ -490,6 +490,7 @@ private
    procedure Save (Object  : in out Message_Type_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
+   overriding
    procedure Create (Object  : in out Message_Type_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 
@@ -549,6 +550,7 @@ private
    procedure Save (Object  : in out Queue_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
+   overriding
    procedure Create (Object  : in out Queue_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 
@@ -650,6 +652,7 @@ private
    procedure Save (Object  : in out Message_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class);
 
+   overriding
    procedure Create (Object  : in out Message_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class);
 
