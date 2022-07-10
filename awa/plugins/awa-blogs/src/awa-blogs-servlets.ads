@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-servlets -- Serve files saved in the storage service
---  Copyright (C) 2017, 2019 Stephane Carrez
+--  Copyright (C) 2017, 2019, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,6 +30,7 @@ package AWA.Blogs.Servlets is
 
    --  Load the data content that correspond to the GET request and get the name as well
    --  as mime-type and date.
+   overriding
    procedure Load (Server   : in Image_Servlet;
                    Request  : in out ASF.Requests.Request'Class;
                    Name     : out Ada.Strings.Unbounded.Unbounded_String;

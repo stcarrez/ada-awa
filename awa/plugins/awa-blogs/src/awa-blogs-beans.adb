@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-beans -- Beans for blog module
---  Copyright (C) 2011 - 2021 Stephane Carrez
+--  Copyright (C) 2011 - 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -111,9 +111,9 @@ package body AWA.Blogs.Beans is
       Append (URI, "/");
       Append (URI, Wiki.Strings.To_WString (Util.Strings.Image (Integer (Info.Id))));
       Append (URI, "/");
-      if Width = 0 and Height = 0 then
+      if Width = 0 and then Height = 0 then
          Append (URI, "default/");
-      elsif Width = Natural'Last or Height = Natural'Last then
+      elsif Width = Natural'Last or else Height = Natural'Last then
          Append (URI, "original/");
       else
          if Width /= 0 then
@@ -130,7 +130,7 @@ package body AWA.Blogs.Beans is
       else
          Append (URI, Link (Sep + 1 .. Link'Last));
       end if;
-      if Info.Width /= 0 and Info.Height /= 0 then
+      if Info.Width /= 0 and then Info.Height /= 0 then
          AWA.Images.Modules.Scale (Width     => Info.Width,
                                    Height    => Info.Height,
                                    To_Width  => Width,
@@ -183,7 +183,7 @@ package body AWA.Blogs.Beans is
                               Height   : in out Natural) is
       Pos : Image_Info_Maps.Cursor;
    begin
-      if Wiki.Helpers.Is_Url (Link) or Link (Link'First) = '/' then
+      if Wiki.Helpers.Is_Url (Link) or else Link (Link'First) = '/' then
          URI    := To_Unbounded_Wide_Wide_String (Link);
       else
          Pos := Renderer.Images.Find (Link);
@@ -235,7 +235,7 @@ package body AWA.Blogs.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      if Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
+      if Name = "id" and then not Util.Beans.Objects.Is_Empty (Value) then
          From.Set_Id (ADO.Utils.To_Identifier (Value));
       else
          AWA.Blogs.Models.Blog_Bean (From).Set_Value (Name, Value);
@@ -245,6 +245,7 @@ package body AWA.Blogs.Beans is
    --  ------------------------------
    --  Create a new blog.
    --  ------------------------------
+   overriding
    procedure Create (Bean    : in out Blog_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       pragma Unreferenced (Outcome);
@@ -342,6 +343,7 @@ package body AWA.Blogs.Beans is
    --  ------------------------------
    --  Create or save the post.
    --  ------------------------------
+   overriding
    procedure Save (Bean    : in out Post_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       pragma Unreferenced (Outcome);
@@ -380,6 +382,7 @@ package body AWA.Blogs.Beans is
    --  ------------------------------
    --  Delete a post.
    --  ------------------------------
+   overriding
    procedure Delete (Bean    : in out Post_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       pragma Unreferenced (Outcome);
@@ -609,9 +612,9 @@ package body AWA.Blogs.Beans is
    begin
       if Name = BLOG_ID_ATTR then
          From.Blog_Id := ADO.Utils.To_Identifier (Value);
-      elsif Name = POST_ID_ATTR and not Util.Beans.Objects.Is_Empty (Value) then
+      elsif Name = POST_ID_ATTR and then not Util.Beans.Objects.Is_Empty (Value) then
          From.Load_Post (ADO.Utils.To_Identifier (Value));
-      elsif Name = POST_UID_ATTR and not Util.Beans.Objects.Is_Empty (Value) then
+      elsif Name = POST_UID_ATTR and then not Util.Beans.Objects.Is_Empty (Value) then
          From.Set_Id (ADO.Utils.To_Identifier (Value));
       else
          AWA.Blogs.Models.Post_Bean (From).Set_Value (Name, Value);
@@ -625,7 +628,7 @@ package body AWA.Blogs.Beans is
    function Find (Factory : in Post_Bean;
                   Name    : in String) return Wiki.Plugins.Wiki_Plugin_Access is
    begin
-      if Name = "if" or Name = "else" or Name = "elsif" or Name = "end" then
+      if Name = "if" or else Name = "else" or else Name = "elsif" or else Name = "end" then
          return Factory.Condition'Unrestricted_Access;
       elsif Name = "set" then
          return Factory.Variable'Unrestricted_Access;
@@ -1010,7 +1013,7 @@ package body AWA.Blogs.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      if Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
+      if Name = "id" and then not Util.Beans.Objects.Is_Empty (Value) then
          From.Blog_Id := ADO.Utils.To_Identifier (Value);
       end if;
    end Set_Value;

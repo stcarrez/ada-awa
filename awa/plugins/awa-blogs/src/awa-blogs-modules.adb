@@ -358,7 +358,7 @@ package body AWA.Blogs.Modules is
       Query : ADO.Statements.Query_Statement;
       Kind  : AWA.Storages.Models.Storage_Type;
    begin
-      if Width = Natural'Last or Height = Natural'Last then
+      if Width = Natural'Last or else Height = Natural'Last then
          Query := DB.Create_Statement (Models.Query_Blog_Image_Get_Data);
       elsif Width > 0 then
          Query := DB.Create_Statement (Models.Query_Blog_Image_Width_Get_Data);
