@@ -111,6 +111,7 @@ package body AWA.Setup.Applications is
    --  ------------------------------
    --  Get the value identified by the name.
    --  ------------------------------
+   overriding
    function Get_Value (From : in Application;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
@@ -150,6 +151,7 @@ package body AWA.Setup.Applications is
    --  ------------------------------
    --  Set the value identified by the name.
    --  ------------------------------
+   overriding
    procedure Set_Value (From  : in out Application;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
