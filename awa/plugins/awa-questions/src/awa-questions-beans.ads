@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-questions-beans -- Beans for module questions
---  Copyright (C) 2012, 2013, 2018 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -141,7 +141,6 @@ package AWA.Questions.Beans is
    --  Create the Question_Info_List_Bean bean instance.
    function Create_Question_List_Bean (Module : in AWA.Questions.Modules.Question_Module_Access)
                                      return Util.Beans.Basic.Readonly_Bean_Access;
-
 
    type Question_Display_Bean is new AWA.Questions.Models.Question_Display_Bean with record
       Service          : Modules.Question_Module_Access := null;

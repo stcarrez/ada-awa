@@ -233,7 +233,6 @@ package body AWA.Questions.Modules is
       AWA.Permissions.Check (Permission => ACL_Delete_Answer.Permission,
                              Entity     => Answer);
 
-
       Answer.Delete (DB);
       Ctx.Commit;
    end Delete_Answer;

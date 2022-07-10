@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-questions-beans -- Beans for module questions
---  Copyright (C) 2012, 2013, 2015, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2015, 2017, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -57,7 +57,7 @@ package body AWA.Questions.Beans is
       elsif Name = "description" then
          From.Set_Description (Util.Beans.Objects.To_String (Value));
 
-      elsif Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
+      elsif Name = "id" and then not Util.Beans.Objects.Is_Empty (Value) then
          From.Set_Id (ADO.Utils.To_Identifier (Value));
          From.Service.Load_Question (From, From.Get_Id, From.Found);
       end if;
@@ -134,7 +134,7 @@ package body AWA.Questions.Beans is
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Question.Get_Id));
       elsif From.Is_Null then
          return Util.Beans.Objects.Null_Object;
-      elsif Name = "title" or Name = "description" then
+      elsif Name = "title" or else Name = "description" then
          return From.Question.Get_Value (Name);
       else
          return AWA.Questions.Models.Answer_Bean (From).Get_Value (Name);
@@ -149,14 +149,14 @@ package body AWA.Questions.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      if Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
+      if Name = "id" and then not Util.Beans.Objects.Is_Empty (Value) then
          From.Set_Id (ADO.Utils.To_Identifier (Value));
          From.Service.Load_Answer (From, From.Question, From.Get_Id, From.Found);
 
       elsif Name = "answer" then
          From.Set_Answer (Util.Beans.Objects.To_String (Value));
 
-      elsif Name = "question_id" and not Util.Beans.Objects.Is_Null (Value) then
+      elsif Name = "question_id" and then not Util.Beans.Objects.Is_Null (Value) then
          From.Question.Set_Id (ADO.Utils.To_Identifier (Value));
          From.Service.Load_Question (From.Question, From.Question_Id, From.Found);
 
@@ -351,7 +351,7 @@ package body AWA.Questions.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      if Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
+      if Name = "id" and then not Util.Beans.Objects.Is_Empty (Value) then
          From.Id := ADO.Utils.To_Identifier (Value);
          From.Answer := Get_Answer_Bean ("answer");
          From.Answer.Set_Value ("question_id", Value);
