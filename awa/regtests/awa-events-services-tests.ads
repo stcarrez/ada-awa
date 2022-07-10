@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  events-tests -- Unit tests for AWA events
---  Copyright (C) 2012, 2019 Stephane Carrez
+--  Copyright (C) 2012, 2019, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -67,7 +67,6 @@ private
       Raise_Exception : Boolean := False;
    end record;
    type Action_Bean_Access is access all Action_Bean'Class;
-
 
    --  Get the value identified by the name.
    --  If the name cannot be found, the method should return the Null object.
