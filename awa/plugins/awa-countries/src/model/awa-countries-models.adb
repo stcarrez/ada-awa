@@ -25,7 +25,7 @@ with Ada.Unchecked_Deallocation;
 pragma Warnings (On);
 package body AWA.Countries.Models is
 
-   pragma Style_Checks ("-mr");
+   pragma Style_Checks ("-mrIu");
    pragma Warnings (Off, "formal parameter * is not referenced");
    pragma Warnings (Off, "use clause for type *");
    pragma Warnings (Off, "use clause for private type *");
@@ -63,6 +63,7 @@ package body AWA.Countries.Models is
    end Set_Field;
 
    --  Internal method to allocate the Object_Record instance
+   overriding
    procedure Allocate (Object : in out Country_Ref) is
       Impl : Country_Access;
    begin
@@ -345,6 +346,7 @@ package body AWA.Countries.Models is
       Into := Result;
    end Copy;
 
+   overriding
    procedure Find (Object  : in out Country_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -394,6 +396,7 @@ package body AWA.Countries.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Country_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -409,6 +412,7 @@ package body AWA.Countries.Models is
       end if;
    end Save;
 
+   overriding
    procedure Delete (Object  : in out Country_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -421,6 +425,7 @@ package body AWA.Countries.Models is
    --  --------------------
    --  Free the object
    --  --------------------
+   overriding
    procedure Destroy (Object : access Country_Impl) is
       type Country_Impl_Ptr is access all Country_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
@@ -432,6 +437,7 @@ package body AWA.Countries.Models is
       Unchecked_Free (Ptr);
    end Destroy;
 
+   overriding
    procedure Find (Object  : in out Country_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -464,6 +470,7 @@ package body AWA.Countries.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Country_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -563,6 +570,7 @@ package body AWA.Countries.Models is
       ADO.Objects.Set_Created (Object);
    end Create;
 
+   overriding
    procedure Delete (Object  : in out Country_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -660,6 +668,7 @@ package body AWA.Countries.Models is
    end Set_Field;
 
    --  Internal method to allocate the Object_Record instance
+   overriding
    procedure Allocate (Object : in out City_Ref) is
       Impl : City_Access;
    begin
@@ -830,6 +839,7 @@ package body AWA.Countries.Models is
       Into := Result;
    end Copy;
 
+   overriding
    procedure Find (Object  : in out City_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -879,6 +889,7 @@ package body AWA.Countries.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out City_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -894,6 +905,7 @@ package body AWA.Countries.Models is
       end if;
    end Save;
 
+   overriding
    procedure Delete (Object  : in out City_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -906,6 +918,7 @@ package body AWA.Countries.Models is
    --  --------------------
    --  Free the object
    --  --------------------
+   overriding
    procedure Destroy (Object : access City_Impl) is
       type City_Impl_Ptr is access all City_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
@@ -917,6 +930,7 @@ package body AWA.Countries.Models is
       Unchecked_Free (Ptr);
    end Destroy;
 
+   overriding
    procedure Find (Object  : in out City_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -949,6 +963,7 @@ package body AWA.Countries.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out City_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -1034,6 +1049,7 @@ package body AWA.Countries.Models is
       ADO.Objects.Set_Created (Object);
    end Create;
 
+   overriding
    procedure Delete (Object  : in out City_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -1124,6 +1140,7 @@ package body AWA.Countries.Models is
    end Set_Field;
 
    --  Internal method to allocate the Object_Record instance
+   overriding
    procedure Allocate (Object : in out Country_Neighbor_Ref) is
       Impl : Country_Neighbor_Access;
    begin
@@ -1206,6 +1223,7 @@ package body AWA.Countries.Models is
       Into := Result;
    end Copy;
 
+   overriding
    procedure Find (Object  : in out Country_Neighbor_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -1255,6 +1273,7 @@ package body AWA.Countries.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Country_Neighbor_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -1270,6 +1289,7 @@ package body AWA.Countries.Models is
       end if;
    end Save;
 
+   overriding
    procedure Delete (Object  : in out Country_Neighbor_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -1282,6 +1302,7 @@ package body AWA.Countries.Models is
    --  --------------------
    --  Free the object
    --  --------------------
+   overriding
    procedure Destroy (Object : access Country_Neighbor_Impl) is
       type Country_Neighbor_Impl_Ptr is access all Country_Neighbor_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
@@ -1293,6 +1314,7 @@ package body AWA.Countries.Models is
       Unchecked_Free (Ptr);
    end Destroy;
 
+   overriding
    procedure Find (Object  : in out Country_Neighbor_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -1325,6 +1347,7 @@ package body AWA.Countries.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Country_Neighbor_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -1382,6 +1405,7 @@ package body AWA.Countries.Models is
       ADO.Objects.Set_Created (Object);
    end Create;
 
+   overriding
    procedure Delete (Object  : in out Country_Neighbor_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -1460,6 +1484,7 @@ package body AWA.Countries.Models is
    end Set_Field;
 
    --  Internal method to allocate the Object_Record instance
+   overriding
    procedure Allocate (Object : in out Region_Ref) is
       Impl : Region_Access;
    begin
@@ -1574,6 +1599,7 @@ package body AWA.Countries.Models is
       Into := Result;
    end Copy;
 
+   overriding
    procedure Find (Object  : in out Region_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -1623,6 +1649,7 @@ package body AWA.Countries.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Region_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -1638,6 +1665,7 @@ package body AWA.Countries.Models is
       end if;
    end Save;
 
+   overriding
    procedure Delete (Object  : in out Region_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -1650,6 +1678,7 @@ package body AWA.Countries.Models is
    --  --------------------
    --  Free the object
    --  --------------------
+   overriding
    procedure Destroy (Object : access Region_Impl) is
       type Region_Impl_Ptr is access all Region_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
@@ -1661,6 +1690,7 @@ package body AWA.Countries.Models is
       Unchecked_Free (Ptr);
    end Destroy;
 
+   overriding
    procedure Find (Object  : in out Region_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -1693,6 +1723,7 @@ package body AWA.Countries.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Region_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -1757,6 +1788,7 @@ package body AWA.Countries.Models is
       ADO.Objects.Set_Created (Object);
    end Create;
 
+   overriding
    procedure Delete (Object  : in out Region_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement

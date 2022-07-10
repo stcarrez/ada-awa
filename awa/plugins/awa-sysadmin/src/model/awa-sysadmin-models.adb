@@ -26,7 +26,7 @@ with ASF.Events.Faces.Actions;
 pragma Warnings (On);
 package body AWA.Sysadmin.Models is
 
-   pragma Style_Checks ("-mr");
+   pragma Style_Checks ("-mrIu");
    pragma Warnings (Off, "formal parameter * is not referenced");
    pragma Warnings (Off, "use clause for type *");
    pragma Warnings (Off, "use clause for private type *");

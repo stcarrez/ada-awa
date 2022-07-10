@@ -33,7 +33,7 @@ with Util.Beans.Basic.Lists;
 pragma Warnings (On);
 package AWA.Countries.Models is
 
-   pragma Style_Checks ("-mr");
+   pragma Style_Checks ("-mrIu");
 
    type Country_Ref is new ADO.Objects.Object_Ref with null record;
 

@@ -28,7 +28,7 @@ with ASF.Parts.Upload_Method;
 pragma Warnings (On);
 package body AWA.Storages.Models is
 
-   pragma Style_Checks ("-mr");
+   pragma Style_Checks ("-mrIu");
    pragma Warnings (Off, "formal parameter * is not referenced");
    pragma Warnings (Off, "use clause for type *");
    pragma Warnings (Off, "use clause for private type *");
@@ -66,6 +66,7 @@ package body AWA.Storages.Models is
    end Set_Field;
 
    --  Internal method to allocate the Object_Record instance
+   overriding
    procedure Allocate (Object : in out Storage_Data_Ref) is
       Impl : Storage_Data_Access;
    begin
@@ -141,6 +142,7 @@ package body AWA.Storages.Models is
       Into := Result;
    end Copy;
 
+   overriding
    procedure Find (Object  : in out Storage_Data_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -221,6 +223,7 @@ package body AWA.Storages.Models is
       end;
    end Reload;
 
+   overriding
    procedure Save (Object  : in out Storage_Data_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -236,6 +239,7 @@ package body AWA.Storages.Models is
       end if;
    end Save;
 
+   overriding
    procedure Delete (Object  : in out Storage_Data_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -248,6 +252,7 @@ package body AWA.Storages.Models is
    --  --------------------
    --  Free the object
    --  --------------------
+   overriding
    procedure Destroy (Object : access Storage_Data_Impl) is
       type Storage_Data_Impl_Ptr is access all Storage_Data_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
@@ -259,6 +264,7 @@ package body AWA.Storages.Models is
       Unchecked_Free (Ptr);
    end Destroy;
 
+   overriding
    procedure Find (Object  : in out Storage_Data_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -291,6 +297,7 @@ package body AWA.Storages.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Storage_Data_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -350,6 +357,7 @@ package body AWA.Storages.Models is
       ADO.Objects.Set_Created (Object);
    end Create;
 
+   overriding
    procedure Delete (Object  : in out Storage_Data_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -425,6 +433,7 @@ package body AWA.Storages.Models is
    end Set_Field;
 
    --  Internal method to allocate the Object_Record instance
+   overriding
    procedure Allocate (Object : in out Storage_Folder_Ref) is
       Impl : Storage_Folder_Access;
    begin
@@ -568,6 +577,7 @@ package body AWA.Storages.Models is
       Into := Result;
    end Copy;
 
+   overriding
    procedure Find (Object  : in out Storage_Folder_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -648,6 +658,7 @@ package body AWA.Storages.Models is
       end;
    end Reload;
 
+   overriding
    procedure Save (Object  : in out Storage_Folder_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -663,6 +674,7 @@ package body AWA.Storages.Models is
       end if;
    end Save;
 
+   overriding
    procedure Delete (Object  : in out Storage_Folder_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -675,6 +687,7 @@ package body AWA.Storages.Models is
    --  --------------------
    --  Free the object
    --  --------------------
+   overriding
    procedure Destroy (Object : access Storage_Folder_Impl) is
       type Storage_Folder_Impl_Ptr is access all Storage_Folder_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
@@ -686,6 +699,7 @@ package body AWA.Storages.Models is
       Unchecked_Free (Ptr);
    end Destroy;
 
+   overriding
    procedure Find (Object  : in out Storage_Folder_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -718,6 +732,7 @@ package body AWA.Storages.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Storage_Folder_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -798,6 +813,7 @@ package body AWA.Storages.Models is
       ADO.Objects.Set_Created (Object);
    end Create;
 
+   overriding
    procedure Delete (Object  : in out Storage_Folder_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -883,6 +899,7 @@ package body AWA.Storages.Models is
    end Set_Field;
 
    --  Internal method to allocate the Object_Record instance
+   overriding
    procedure Allocate (Object : in out Storage_Ref) is
       Impl : Storage_Access;
    begin
@@ -1202,6 +1219,7 @@ package body AWA.Storages.Models is
       Into := Result;
    end Copy;
 
+   overriding
    procedure Find (Object  : in out Storage_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -1282,6 +1300,7 @@ package body AWA.Storages.Models is
       end;
    end Reload;
 
+   overriding
    procedure Save (Object  : in out Storage_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -1297,6 +1316,7 @@ package body AWA.Storages.Models is
       end if;
    end Save;
 
+   overriding
    procedure Delete (Object  : in out Storage_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -1309,6 +1329,7 @@ package body AWA.Storages.Models is
    --  --------------------
    --  Free the object
    --  --------------------
+   overriding
    procedure Destroy (Object : access Storage_Impl) is
       type Storage_Impl_Ptr is access all Storage_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
@@ -1320,6 +1341,7 @@ package body AWA.Storages.Models is
       Unchecked_Free (Ptr);
    end Destroy;
 
+   overriding
    procedure Find (Object  : in out Storage_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -1352,6 +1374,7 @@ package body AWA.Storages.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Storage_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -1488,6 +1511,7 @@ package body AWA.Storages.Models is
       ADO.Objects.Set_Created (Object);
    end Create;
 
+   overriding
    procedure Delete (Object  : in out Storage_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -1597,6 +1621,7 @@ package body AWA.Storages.Models is
    end Set_Field;
 
    --  Internal method to allocate the Object_Record instance
+   overriding
    procedure Allocate (Object : in out Store_Local_Ref) is
       Impl : Store_Local_Access;
    begin
@@ -1779,6 +1804,7 @@ package body AWA.Storages.Models is
       Into := Result;
    end Copy;
 
+   overriding
    procedure Find (Object  : in out Store_Local_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -1859,6 +1885,7 @@ package body AWA.Storages.Models is
       end;
    end Reload;
 
+   overriding
    procedure Save (Object  : in out Store_Local_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -1874,6 +1901,7 @@ package body AWA.Storages.Models is
       end if;
    end Save;
 
+   overriding
    procedure Delete (Object  : in out Store_Local_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -1886,6 +1914,7 @@ package body AWA.Storages.Models is
    --  --------------------
    --  Free the object
    --  --------------------
+   overriding
    procedure Destroy (Object : access Store_Local_Impl) is
       type Store_Local_Impl_Ptr is access all Store_Local_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
@@ -1897,6 +1926,7 @@ package body AWA.Storages.Models is
       Unchecked_Free (Ptr);
    end Destroy;
 
+   overriding
    procedure Find (Object  : in out Store_Local_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -1929,6 +1959,7 @@ package body AWA.Storages.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Store_Local_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -2023,6 +2054,7 @@ package body AWA.Storages.Models is
       ADO.Objects.Set_Created (Object);
    end Create;
 
+   overriding
    procedure Delete (Object  : in out Store_Local_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement

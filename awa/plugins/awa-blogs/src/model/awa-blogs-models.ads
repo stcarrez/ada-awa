@@ -45,7 +45,7 @@ with Util.Beans.Methods;
 pragma Warnings (On);
 package AWA.Blogs.Models is
 
-   pragma Style_Checks ("-mr");
+   pragma Style_Checks ("-mrIu");
 
    type Format_Type is (FORMAT_DOTCLEAR, FORMAT_HTML, FORMAT_MARKDOWN, FORMAT_MEDIAWIKI, FORMAT_CREOLE);
    for Format_Type use (FORMAT_DOTCLEAR => 0, FORMAT_HTML => 1, FORMAT_MARKDOWN => 2, FORMAT_MEDIAWIKI => 3, FORMAT_CREOLE => 4);

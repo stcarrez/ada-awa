@@ -28,7 +28,7 @@ with AWA.Events.Action_Method;
 pragma Warnings (On);
 package body AWA.Blogs.Models is
 
-   pragma Style_Checks ("-mr");
+   pragma Style_Checks ("-mrIu");
    pragma Warnings (Off, "formal parameter * is not referenced");
    pragma Warnings (Off, "use clause for type *");
    pragma Warnings (Off, "use clause for private type *");
@@ -66,6 +66,7 @@ package body AWA.Blogs.Models is
    end Set_Field;
 
    --  Internal method to allocate the Object_Record instance
+   overriding
    procedure Allocate (Object : in out Blog_Ref) is
       Impl : Blog_Access;
    begin
@@ -326,6 +327,7 @@ package body AWA.Blogs.Models is
       Into := Result;
    end Copy;
 
+   overriding
    procedure Find (Object  : in out Blog_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -406,6 +408,7 @@ package body AWA.Blogs.Models is
       end;
    end Reload;
 
+   overriding
    procedure Save (Object  : in out Blog_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -421,6 +424,7 @@ package body AWA.Blogs.Models is
       end if;
    end Save;
 
+   overriding
    procedure Delete (Object  : in out Blog_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -433,6 +437,7 @@ package body AWA.Blogs.Models is
    --  --------------------
    --  Free the object
    --  --------------------
+   overriding
    procedure Destroy (Object : access Blog_Impl) is
       type Blog_Impl_Ptr is access all Blog_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
@@ -444,6 +449,7 @@ package body AWA.Blogs.Models is
       Unchecked_Free (Ptr);
    end Destroy;
 
+   overriding
    procedure Find (Object  : in out Blog_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -476,6 +482,7 @@ package body AWA.Blogs.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Blog_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -586,6 +593,7 @@ package body AWA.Blogs.Models is
       ADO.Audits.Save (Object, Session);
    end Create;
 
+   overriding
    procedure Delete (Object  : in out Blog_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -703,6 +711,7 @@ package body AWA.Blogs.Models is
    end Set_Field;
 
    --  Internal method to allocate the Object_Record instance
+   overriding
    procedure Allocate (Object : in out Post_Ref) is
       Impl : Post_Access;
    begin
@@ -1060,6 +1069,7 @@ package body AWA.Blogs.Models is
       Into := Result;
    end Copy;
 
+   overriding
    procedure Find (Object  : in out Post_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -1140,6 +1150,7 @@ package body AWA.Blogs.Models is
       end;
    end Reload;
 
+   overriding
    procedure Save (Object  : in out Post_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -1155,6 +1166,7 @@ package body AWA.Blogs.Models is
       end if;
    end Save;
 
+   overriding
    procedure Delete (Object  : in out Post_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -1167,6 +1179,7 @@ package body AWA.Blogs.Models is
    --  --------------------
    --  Free the object
    --  --------------------
+   overriding
    procedure Destroy (Object : access Post_Impl) is
       type Post_Impl_Ptr is access all Post_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
@@ -1178,6 +1191,7 @@ package body AWA.Blogs.Models is
       Unchecked_Free (Ptr);
    end Destroy;
 
+   overriding
    procedure Find (Object  : in out Post_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -1210,6 +1224,7 @@ package body AWA.Blogs.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Post_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -1355,6 +1370,7 @@ package body AWA.Blogs.Models is
       ADO.Audits.Save (Object, Session);
    end Create;
 
+   overriding
    procedure Delete (Object  : in out Post_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement

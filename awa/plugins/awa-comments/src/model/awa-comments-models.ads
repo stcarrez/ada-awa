@@ -40,7 +40,7 @@ with Util.Beans.Methods;
 pragma Warnings (On);
 package AWA.Comments.Models is
 
-   pragma Style_Checks ("-mr");
+   pragma Style_Checks ("-mrIu");
 
    --  --------------------
    --  The format type defines the message format type.

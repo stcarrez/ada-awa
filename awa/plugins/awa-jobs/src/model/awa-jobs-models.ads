@@ -37,7 +37,7 @@ with AWA.Users.Models;
 pragma Warnings (On);
 package AWA.Jobs.Models is
 
-   pragma Style_Checks ("-mr");
+   pragma Style_Checks ("-mrIu");
 
    type Job_Status_Type is (SCHEDULED, RUNNING, CANCELED, FAILED, TERMINATED);
    for Job_Status_Type use (SCHEDULED => 0, RUNNING => 1, CANCELED => 2, FAILED => 3, TERMINATED => 4);

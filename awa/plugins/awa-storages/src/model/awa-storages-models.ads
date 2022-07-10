@@ -41,7 +41,7 @@ with Util.Beans.Methods;
 pragma Warnings (On);
 package AWA.Storages.Models is
 
-   pragma Style_Checks ("-mr");
+   pragma Style_Checks ("-mrIu");
 
    type Storage_Type is (DATABASE, FILE, URL, TMP);
    for Storage_Type use (DATABASE => 0, FILE => 1, URL => 2, TMP => 3);

@@ -27,7 +27,7 @@ with ASF.Events.Faces.Actions;
 pragma Warnings (On);
 package body AWA.Workspaces.Models is
 
-   pragma Style_Checks ("-mr");
+   pragma Style_Checks ("-mrIu");
    pragma Warnings (Off, "formal parameter * is not referenced");
    pragma Warnings (Off, "use clause for type *");
    pragma Warnings (Off, "use clause for private type *");
@@ -65,6 +65,7 @@ package body AWA.Workspaces.Models is
    end Set_Field;
 
    --  Internal method to allocate the Object_Record instance
+   overriding
    procedure Allocate (Object : in out Workspace_Ref) is
       Impl : Workspace_Access;
    begin
@@ -159,6 +160,7 @@ package body AWA.Workspaces.Models is
       Into := Result;
    end Copy;
 
+   overriding
    procedure Find (Object  : in out Workspace_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -239,6 +241,7 @@ package body AWA.Workspaces.Models is
       end;
    end Reload;
 
+   overriding
    procedure Save (Object  : in out Workspace_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -254,6 +257,7 @@ package body AWA.Workspaces.Models is
       end if;
    end Save;
 
+   overriding
    procedure Delete (Object  : in out Workspace_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -266,6 +270,7 @@ package body AWA.Workspaces.Models is
    --  --------------------
    --  Free the object
    --  --------------------
+   overriding
    procedure Destroy (Object : access Workspace_Impl) is
       type Workspace_Impl_Ptr is access all Workspace_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
@@ -277,6 +282,7 @@ package body AWA.Workspaces.Models is
       Unchecked_Free (Ptr);
    end Destroy;
 
+   overriding
    procedure Find (Object  : in out Workspace_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -309,6 +315,7 @@ package body AWA.Workspaces.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Workspace_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -375,6 +382,7 @@ package body AWA.Workspaces.Models is
       ADO.Objects.Set_Created (Object);
    end Create;
 
+   overriding
    procedure Delete (Object  : in out Workspace_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -454,6 +462,7 @@ package body AWA.Workspaces.Models is
    end Set_Field;
 
    --  Internal method to allocate the Object_Record instance
+   overriding
    procedure Allocate (Object : in out Workspace_Member_Ref) is
       Impl : Workspace_Member_Access;
    begin
@@ -586,6 +595,7 @@ package body AWA.Workspaces.Models is
       Into := Result;
    end Copy;
 
+   overriding
    procedure Find (Object  : in out Workspace_Member_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -635,6 +645,7 @@ package body AWA.Workspaces.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Workspace_Member_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -650,6 +661,7 @@ package body AWA.Workspaces.Models is
       end if;
    end Save;
 
+   overriding
    procedure Delete (Object  : in out Workspace_Member_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -662,6 +674,7 @@ package body AWA.Workspaces.Models is
    --  --------------------
    --  Free the object
    --  --------------------
+   overriding
    procedure Destroy (Object : access Workspace_Member_Impl) is
       type Workspace_Member_Impl_Ptr is access all Workspace_Member_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
@@ -673,6 +686,7 @@ package body AWA.Workspaces.Models is
       Unchecked_Free (Ptr);
    end Destroy;
 
+   overriding
    procedure Find (Object  : in out Workspace_Member_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -705,6 +719,7 @@ package body AWA.Workspaces.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Workspace_Member_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -776,6 +791,7 @@ package body AWA.Workspaces.Models is
       ADO.Objects.Set_Created (Object);
    end Create;
 
+   overriding
    procedure Delete (Object  : in out Workspace_Member_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -864,6 +880,7 @@ package body AWA.Workspaces.Models is
    end Set_Field;
 
    --  Internal method to allocate the Object_Record instance
+   overriding
    procedure Allocate (Object : in out Invitation_Ref) is
       Impl : Invitation_Access;
    begin
@@ -1111,6 +1128,7 @@ package body AWA.Workspaces.Models is
       Into := Result;
    end Copy;
 
+   overriding
    procedure Find (Object  : in out Invitation_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -1191,6 +1209,7 @@ package body AWA.Workspaces.Models is
       end;
    end Reload;
 
+   overriding
    procedure Save (Object  : in out Invitation_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -1206,6 +1225,7 @@ package body AWA.Workspaces.Models is
       end if;
    end Save;
 
+   overriding
    procedure Delete (Object  : in out Invitation_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -1218,6 +1238,7 @@ package body AWA.Workspaces.Models is
    --  --------------------
    --  Free the object
    --  --------------------
+   overriding
    procedure Destroy (Object : access Invitation_Impl) is
       type Invitation_Impl_Ptr is access all Invitation_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
@@ -1229,6 +1250,7 @@ package body AWA.Workspaces.Models is
       Unchecked_Free (Ptr);
    end Destroy;
 
+   overriding
    procedure Find (Object  : in out Invitation_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -1261,6 +1283,7 @@ package body AWA.Workspaces.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Invitation_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -1376,6 +1399,7 @@ package body AWA.Workspaces.Models is
       ADO.Objects.Set_Created (Object);
    end Create;
 
+   overriding
    procedure Delete (Object  : in out Invitation_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -1480,6 +1504,7 @@ package body AWA.Workspaces.Models is
    end Set_Field;
 
    --  Internal method to allocate the Object_Record instance
+   overriding
    procedure Allocate (Object : in out Workspace_Feature_Ref) is
       Impl : Workspace_Feature_Access;
    begin
@@ -1563,6 +1588,7 @@ package body AWA.Workspaces.Models is
       Into := Result;
    end Copy;
 
+   overriding
    procedure Find (Object  : in out Workspace_Feature_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -1612,6 +1638,7 @@ package body AWA.Workspaces.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Workspace_Feature_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -1627,6 +1654,7 @@ package body AWA.Workspaces.Models is
       end if;
    end Save;
 
+   overriding
    procedure Delete (Object  : in out Workspace_Feature_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -1639,6 +1667,7 @@ package body AWA.Workspaces.Models is
    --  --------------------
    --  Free the object
    --  --------------------
+   overriding
    procedure Destroy (Object : access Workspace_Feature_Impl) is
       type Workspace_Feature_Impl_Ptr is access all Workspace_Feature_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
@@ -1650,6 +1679,7 @@ package body AWA.Workspaces.Models is
       Unchecked_Free (Ptr);
    end Destroy;
 
+   overriding
    procedure Find (Object  : in out Workspace_Feature_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -1682,6 +1712,7 @@ package body AWA.Workspaces.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Workspace_Feature_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -1739,6 +1770,7 @@ package body AWA.Workspaces.Models is
       ADO.Objects.Set_Created (Object);
    end Create;
 
+   overriding
    procedure Delete (Object  : in out Workspace_Feature_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement

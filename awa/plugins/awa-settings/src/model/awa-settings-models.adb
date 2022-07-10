@@ -25,7 +25,7 @@ with Ada.Unchecked_Deallocation;
 pragma Warnings (On);
 package body AWA.Settings.Models is
 
-   pragma Style_Checks ("-mr");
+   pragma Style_Checks ("-mrIu");
    pragma Warnings (Off, "formal parameter * is not referenced");
    pragma Warnings (Off, "use clause for type *");
    pragma Warnings (Off, "use clause for private type *");
@@ -63,6 +63,7 @@ package body AWA.Settings.Models is
    end Set_Field;
 
    --  Internal method to allocate the Object_Record instance
+   overriding
    procedure Allocate (Object : in out Setting_Ref) is
       Impl : Setting_Access;
    begin
@@ -140,6 +141,7 @@ package body AWA.Settings.Models is
       Into := Result;
    end Copy;
 
+   overriding
    procedure Find (Object  : in out Setting_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -189,6 +191,7 @@ package body AWA.Settings.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Setting_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -204,6 +207,7 @@ package body AWA.Settings.Models is
       end if;
    end Save;
 
+   overriding
    procedure Delete (Object  : in out Setting_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -216,6 +220,7 @@ package body AWA.Settings.Models is
    --  --------------------
    --  Free the object
    --  --------------------
+   overriding
    procedure Destroy (Object : access Setting_Impl) is
       type Setting_Impl_Ptr is access all Setting_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
@@ -227,6 +232,7 @@ package body AWA.Settings.Models is
       Unchecked_Free (Ptr);
    end Destroy;
 
+   overriding
    procedure Find (Object  : in out Setting_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -259,6 +265,7 @@ package body AWA.Settings.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Setting_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -309,6 +316,7 @@ package body AWA.Settings.Models is
       ADO.Objects.Set_Created (Object);
    end Create;
 
+   overriding
    procedure Delete (Object  : in out Setting_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -405,6 +413,7 @@ package body AWA.Settings.Models is
    end Set_Field;
 
    --  Internal method to allocate the Object_Record instance
+   overriding
    procedure Allocate (Object : in out Global_Setting_Ref) is
       Impl : Global_Setting_Access;
    begin
@@ -530,6 +539,7 @@ package body AWA.Settings.Models is
       Into := Result;
    end Copy;
 
+   overriding
    procedure Find (Object  : in out Global_Setting_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -610,6 +620,7 @@ package body AWA.Settings.Models is
       end;
    end Reload;
 
+   overriding
    procedure Save (Object  : in out Global_Setting_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -625,6 +636,7 @@ package body AWA.Settings.Models is
       end if;
    end Save;
 
+   overriding
    procedure Delete (Object  : in out Global_Setting_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -637,6 +649,7 @@ package body AWA.Settings.Models is
    --  --------------------
    --  Free the object
    --  --------------------
+   overriding
    procedure Destroy (Object : access Global_Setting_Impl) is
       type Global_Setting_Impl_Ptr is access all Global_Setting_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
@@ -648,6 +661,7 @@ package body AWA.Settings.Models is
       Unchecked_Free (Ptr);
    end Destroy;
 
+   overriding
    procedure Find (Object  : in out Global_Setting_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -680,6 +694,7 @@ package body AWA.Settings.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Global_Setting_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -753,6 +768,7 @@ package body AWA.Settings.Models is
       ADO.Objects.Set_Created (Object);
    end Create;
 
+   overriding
    procedure Delete (Object  : in out Global_Setting_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -855,6 +871,7 @@ package body AWA.Settings.Models is
    end Set_Field;
 
    --  Internal method to allocate the Object_Record instance
+   overriding
    procedure Allocate (Object : in out User_Setting_Ref) is
       Impl : User_Setting_Access;
    begin
@@ -979,6 +996,7 @@ package body AWA.Settings.Models is
       Into := Result;
    end Copy;
 
+   overriding
    procedure Find (Object  : in out User_Setting_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -1059,6 +1077,7 @@ package body AWA.Settings.Models is
       end;
    end Reload;
 
+   overriding
    procedure Save (Object  : in out User_Setting_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -1074,6 +1093,7 @@ package body AWA.Settings.Models is
       end if;
    end Save;
 
+   overriding
    procedure Delete (Object  : in out User_Setting_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -1086,6 +1106,7 @@ package body AWA.Settings.Models is
    --  --------------------
    --  Free the object
    --  --------------------
+   overriding
    procedure Destroy (Object : access User_Setting_Impl) is
       type User_Setting_Impl_Ptr is access all User_Setting_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
@@ -1097,6 +1118,7 @@ package body AWA.Settings.Models is
       Unchecked_Free (Ptr);
    end Destroy;
 
+   overriding
    procedure Find (Object  : in out User_Setting_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -1129,6 +1151,7 @@ package body AWA.Settings.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out User_Setting_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -1202,6 +1225,7 @@ package body AWA.Settings.Models is
       ADO.Objects.Set_Created (Object);
    end Create;
 
+   overriding
    procedure Delete (Object  : in out User_Setting_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement

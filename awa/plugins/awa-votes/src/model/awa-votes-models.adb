@@ -26,7 +26,7 @@ with ASF.Events.Faces.Actions;
 pragma Warnings (On);
 package body AWA.Votes.Models is
 
-   pragma Style_Checks ("-mr");
+   pragma Style_Checks ("-mrIu");
    pragma Warnings (Off, "formal parameter * is not referenced");
    pragma Warnings (Off, "use clause for type *");
    pragma Warnings (Off, "use clause for private type *");
@@ -64,6 +64,7 @@ package body AWA.Votes.Models is
    end Set_Field;
 
    --  Internal method to allocate the Object_Record instance
+   overriding
    procedure Allocate (Object : in out Rating_Ref) is
       Impl : Rating_Access;
    begin
@@ -186,6 +187,7 @@ package body AWA.Votes.Models is
       Into := Result;
    end Copy;
 
+   overriding
    procedure Find (Object  : in out Rating_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -235,6 +237,7 @@ package body AWA.Votes.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Rating_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -250,6 +253,7 @@ package body AWA.Votes.Models is
       end if;
    end Save;
 
+   overriding
    procedure Delete (Object  : in out Rating_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -262,6 +266,7 @@ package body AWA.Votes.Models is
    --  --------------------
    --  Free the object
    --  --------------------
+   overriding
    procedure Destroy (Object : access Rating_Impl) is
       type Rating_Impl_Ptr is access all Rating_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
@@ -273,6 +278,7 @@ package body AWA.Votes.Models is
       Unchecked_Free (Ptr);
    end Destroy;
 
+   overriding
    procedure Find (Object  : in out Rating_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -305,6 +311,7 @@ package body AWA.Votes.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Rating_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -376,6 +383,7 @@ package body AWA.Votes.Models is
       ADO.Objects.Set_Created (Object);
    end Create;
 
+   overriding
    procedure Delete (Object  : in out Rating_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -460,6 +468,7 @@ package body AWA.Votes.Models is
    end Set_Field;
 
    --  Internal method to allocate the Object_Record instance
+   overriding
    procedure Allocate (Object : in out Vote_Ref) is
       Impl : Vote_Access;
    begin
@@ -543,6 +552,7 @@ package body AWA.Votes.Models is
       Into := Result;
    end Copy;
 
+   overriding
    procedure Find (Object  : in out Vote_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -592,6 +602,7 @@ package body AWA.Votes.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Vote_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -607,6 +618,7 @@ package body AWA.Votes.Models is
       end if;
    end Save;
 
+   overriding
    procedure Delete (Object  : in out Vote_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -619,6 +631,7 @@ package body AWA.Votes.Models is
    --  --------------------
    --  Free the object
    --  --------------------
+   overriding
    procedure Destroy (Object : access Vote_Impl) is
       type Vote_Impl_Ptr is access all Vote_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
@@ -630,6 +643,7 @@ package body AWA.Votes.Models is
       Unchecked_Free (Ptr);
    end Destroy;
 
+   overriding
    procedure Find (Object  : in out Vote_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -662,6 +676,7 @@ package body AWA.Votes.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Vote_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -719,6 +734,7 @@ package body AWA.Votes.Models is
       ADO.Objects.Set_Created (Object);
    end Create;
 
+   overriding
    procedure Delete (Object  : in out Vote_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement

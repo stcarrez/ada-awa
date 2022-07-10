@@ -39,7 +39,7 @@ with Util.Beans.Methods;
 pragma Warnings (On);
 package AWA.Images.Models is
 
-   pragma Style_Checks ("-mr");
+   pragma Style_Checks ("-mrIu");
 
    type Image_Ref is new ADO.Objects.Object_Ref with null record;
 

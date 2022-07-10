@@ -34,7 +34,7 @@ with AWA.Users.Models;
 pragma Warnings (On);
 package AWA.Settings.Models is
 
-   pragma Style_Checks ("-mr");
+   pragma Style_Checks ("-mrIu");
 
    type Setting_Ref is new ADO.Objects.Object_Ref with null record;
 

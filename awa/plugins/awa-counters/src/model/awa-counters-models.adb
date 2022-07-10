@@ -27,7 +27,7 @@ with ASF.Events.Faces.Actions;
 pragma Warnings (On);
 package body AWA.Counters.Models is
 
-   pragma Style_Checks ("-mr");
+   pragma Style_Checks ("-mrIu");
    pragma Warnings (Off, "formal parameter * is not referenced");
    pragma Warnings (Off, "use clause for type *");
    pragma Warnings (Off, "use clause for private type *");
@@ -65,6 +65,7 @@ package body AWA.Counters.Models is
    end Set_Field;
 
    --  Internal method to allocate the Object_Record instance
+   overriding
    procedure Allocate (Object : in out Counter_Ref) is
       Impl : Counter_Access;
    begin
@@ -168,6 +169,7 @@ package body AWA.Counters.Models is
       Into := Result;
    end Copy;
 
+   overriding
    procedure Find (Object  : in out Counter_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -217,6 +219,7 @@ package body AWA.Counters.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Counter_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -232,6 +235,7 @@ package body AWA.Counters.Models is
       end if;
    end Save;
 
+   overriding
    procedure Delete (Object  : in out Counter_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -244,6 +248,7 @@ package body AWA.Counters.Models is
    --  --------------------
    --  Free the object
    --  --------------------
+   overriding
    procedure Destroy (Object : access Counter_Impl) is
       type Counter_Impl_Ptr is access all Counter_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
@@ -255,6 +260,7 @@ package body AWA.Counters.Models is
       Unchecked_Free (Ptr);
    end Destroy;
 
+   overriding
    procedure Find (Object  : in out Counter_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -287,6 +293,7 @@ package body AWA.Counters.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Counter_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -352,6 +359,7 @@ package body AWA.Counters.Models is
       ADO.Objects.Set_Created (Object);
    end Create;
 
+   overriding
    procedure Delete (Object  : in out Counter_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -433,6 +441,7 @@ package body AWA.Counters.Models is
    end Set_Field;
 
    --  Internal method to allocate the Object_Record instance
+   overriding
    procedure Allocate (Object : in out Counter_Definition_Ref) is
       Impl : Counter_Definition_Access;
    begin
@@ -529,6 +538,7 @@ package body AWA.Counters.Models is
       Into := Result;
    end Copy;
 
+   overriding
    procedure Find (Object  : in out Counter_Definition_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -578,6 +588,7 @@ package body AWA.Counters.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Counter_Definition_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -593,6 +604,7 @@ package body AWA.Counters.Models is
       end if;
    end Save;
 
+   overriding
    procedure Delete (Object  : in out Counter_Definition_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -605,6 +617,7 @@ package body AWA.Counters.Models is
    --  --------------------
    --  Free the object
    --  --------------------
+   overriding
    procedure Destroy (Object : access Counter_Definition_Impl) is
       type Counter_Definition_Impl_Ptr is access all Counter_Definition_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
@@ -616,6 +629,7 @@ package body AWA.Counters.Models is
       Unchecked_Free (Ptr);
    end Destroy;
 
+   overriding
    procedure Find (Object  : in out Counter_Definition_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -648,6 +662,7 @@ package body AWA.Counters.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Counter_Definition_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -705,6 +720,7 @@ package body AWA.Counters.Models is
       ADO.Objects.Set_Created (Object);
    end Create;
 
+   overriding
    procedure Delete (Object  : in out Counter_Definition_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -787,6 +803,7 @@ package body AWA.Counters.Models is
    end Set_Field;
 
    --  Internal method to allocate the Object_Record instance
+   overriding
    procedure Allocate (Object : in out Visit_Ref) is
       Impl : Visit_Access;
    begin
@@ -909,6 +926,7 @@ package body AWA.Counters.Models is
       Into := Result;
    end Copy;
 
+   overriding
    procedure Find (Object  : in out Visit_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -958,6 +976,7 @@ package body AWA.Counters.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Visit_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -973,6 +992,7 @@ package body AWA.Counters.Models is
       end if;
    end Save;
 
+   overriding
    procedure Delete (Object  : in out Visit_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -985,6 +1005,7 @@ package body AWA.Counters.Models is
    --  --------------------
    --  Free the object
    --  --------------------
+   overriding
    procedure Destroy (Object : access Visit_Impl) is
       type Visit_Impl_Ptr is access all Visit_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
@@ -996,6 +1017,7 @@ package body AWA.Counters.Models is
       Unchecked_Free (Ptr);
    end Destroy;
 
+   overriding
    procedure Find (Object  : in out Visit_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -1028,6 +1050,7 @@ package body AWA.Counters.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Visit_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -1100,6 +1123,7 @@ package body AWA.Counters.Models is
       ADO.Objects.Set_Created (Object);
    end Create;
 
+   overriding
    procedure Delete (Object  : in out Visit_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
