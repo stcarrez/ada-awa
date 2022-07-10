@@ -35,7 +35,7 @@ with Util.Beans.Basic.Lists;
 pragma Warnings (On);
 package AWA.Commands.Models is
 
-   pragma Style_Checks ("-mr");
+   pragma Style_Checks ("-mrIu");
 
 
 

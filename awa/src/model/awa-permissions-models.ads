@@ -35,7 +35,7 @@ with Util.Beans.Basic.Lists;
 pragma Warnings (On);
 package AWA.Permissions.Models is
 
-   pragma Style_Checks ("-mr");
+   pragma Style_Checks ("-mrIu");
 
    type ACL_Ref is new ADO.Objects.Object_Ref with null record;
 

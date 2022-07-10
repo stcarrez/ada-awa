@@ -36,7 +36,7 @@ with ADO.Audits;
 pragma Warnings (On);
 package AWA.Users.Models is
 
-   pragma Style_Checks ("-mr");
+   pragma Style_Checks ("-mrIu");
 
    type Key_Type is (RESET_PASSWORD_KEY, SIGNUP_KEY, INVITATION_KEY);
    for Key_Type use (RESET_PASSWORD_KEY => 0, SIGNUP_KEY => 1, INVITATION_KEY => 2);

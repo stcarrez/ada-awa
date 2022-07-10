@@ -35,7 +35,7 @@ with AWA.Users.Models;
 pragma Warnings (On);
 package AWA.Audits.Models is
 
-   pragma Style_Checks ("-mr");
+   pragma Style_Checks ("-mrIu");
 
    type Audit_Ref is new ADO.Objects.Object_Ref with null record;
 

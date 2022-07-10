@@ -38,7 +38,7 @@ with AWA.Users.Models;
 pragma Warnings (On);
 package AWA.Events.Models is
 
-   pragma Style_Checks ("-mr");
+   pragma Style_Checks ("-mrIu");
 
    type Message_Status_Type is (QUEUED, PROCESSING, PROCESSED);
    for Message_Status_Type use (QUEUED => 0, PROCESSING => 1, PROCESSED => 2);

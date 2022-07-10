@@ -26,7 +26,7 @@ with Util.Beans.Objects.Time;
 pragma Warnings (On);
 package body AWA.Users.Models is
 
-   pragma Style_Checks ("-mr");
+   pragma Style_Checks ("-mrIu");
    pragma Warnings (Off, "formal parameter * is not referenced");
    pragma Warnings (Off, "use clause for type *");
    pragma Warnings (Off, "use clause for private type *");
@@ -64,6 +64,7 @@ package body AWA.Users.Models is
    end Set_Field;
 
    --  Internal method to allocate the Object_Record instance
+   overriding
    procedure Allocate (Object : in out Email_Ref) is
       Impl : Email_Access;
    begin
@@ -212,6 +213,7 @@ package body AWA.Users.Models is
       Into := Result;
    end Copy;
 
+   overriding
    procedure Find (Object  : in out Email_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -292,6 +294,7 @@ package body AWA.Users.Models is
       end;
    end Reload;
 
+   overriding
    procedure Save (Object  : in out Email_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -307,6 +310,7 @@ package body AWA.Users.Models is
       end if;
    end Save;
 
+   overriding
    procedure Delete (Object  : in out Email_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -319,6 +323,7 @@ package body AWA.Users.Models is
    --  --------------------
    --  Free the object
    --  --------------------
+   overriding
    procedure Destroy (Object : access Email_Impl) is
       type Email_Impl_Ptr is access all Email_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
@@ -330,6 +335,7 @@ package body AWA.Users.Models is
       Unchecked_Free (Ptr);
    end Destroy;
 
+   overriding
    procedure Find (Object  : in out Email_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -362,6 +368,7 @@ package body AWA.Users.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Email_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -442,6 +449,7 @@ package body AWA.Users.Models is
       ADO.Objects.Set_Created (Object);
    end Create;
 
+   overriding
    procedure Delete (Object  : in out Email_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -527,6 +535,7 @@ package body AWA.Users.Models is
    end Set_Field;
 
    --  Internal method to allocate the Object_Record instance
+   overriding
    procedure Allocate (Object : in out User_Ref) is
       Impl : User_Access;
    begin
@@ -819,6 +828,7 @@ package body AWA.Users.Models is
       Into := Result;
    end Copy;
 
+   overriding
    procedure Find (Object  : in out User_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -899,6 +909,7 @@ package body AWA.Users.Models is
       end;
    end Reload;
 
+   overriding
    procedure Save (Object  : in out User_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -914,6 +925,7 @@ package body AWA.Users.Models is
       end if;
    end Save;
 
+   overriding
    procedure Delete (Object  : in out User_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -926,6 +938,7 @@ package body AWA.Users.Models is
    --  --------------------
    --  Free the object
    --  --------------------
+   overriding
    procedure Destroy (Object : access User_Impl) is
       type User_Impl_Ptr is access all User_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
@@ -937,6 +950,7 @@ package body AWA.Users.Models is
       Unchecked_Free (Ptr);
    end Destroy;
 
+   overriding
    procedure Find (Object  : in out User_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -969,6 +983,7 @@ package body AWA.Users.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out User_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -1079,6 +1094,7 @@ package body AWA.Users.Models is
       ADO.Audits.Save (Object, Session);
    end Create;
 
+   overriding
    procedure Delete (Object  : in out User_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -1176,6 +1192,7 @@ package body AWA.Users.Models is
    end Set_Field;
 
    --  Internal method to allocate the Object_Record instance
+   overriding
    procedure Allocate (Object : in out Access_Key_Ref) is
       Impl : Access_Key_Access;
    begin
@@ -1323,6 +1340,7 @@ package body AWA.Users.Models is
       Into := Result;
    end Copy;
 
+   overriding
    procedure Find (Object  : in out Access_Key_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -1403,6 +1421,7 @@ package body AWA.Users.Models is
       end;
    end Reload;
 
+   overriding
    procedure Save (Object  : in out Access_Key_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -1418,6 +1437,7 @@ package body AWA.Users.Models is
       end if;
    end Save;
 
+   overriding
    procedure Delete (Object  : in out Access_Key_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -1430,6 +1450,7 @@ package body AWA.Users.Models is
    --  --------------------
    --  Free the object
    --  --------------------
+   overriding
    procedure Destroy (Object : access Access_Key_Impl) is
       type Access_Key_Impl_Ptr is access all Access_Key_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
@@ -1441,6 +1462,7 @@ package body AWA.Users.Models is
       Unchecked_Free (Ptr);
    end Destroy;
 
+   overriding
    procedure Find (Object  : in out Access_Key_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -1473,6 +1495,7 @@ package body AWA.Users.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Access_Key_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -1553,6 +1576,7 @@ package body AWA.Users.Models is
       ADO.Objects.Set_Created (Object);
    end Create;
 
+   overriding
    procedure Delete (Object  : in out Access_Key_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
@@ -1638,6 +1662,7 @@ package body AWA.Users.Models is
    end Set_Field;
 
    --  Internal method to allocate the Object_Record instance
+   overriding
    procedure Allocate (Object : in out Session_Ref) is
       Impl : Session_Access;
    begin
@@ -1841,6 +1866,7 @@ package body AWA.Users.Models is
       Into := Result;
    end Copy;
 
+   overriding
    procedure Find (Object  : in out Session_Ref;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -1921,6 +1947,7 @@ package body AWA.Users.Models is
       end;
    end Reload;
 
+   overriding
    procedure Save (Object  : in out Session_Ref;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -1936,6 +1963,7 @@ package body AWA.Users.Models is
       end if;
    end Save;
 
+   overriding
    procedure Delete (Object  : in out Session_Ref;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
@@ -1948,6 +1976,7 @@ package body AWA.Users.Models is
    --  --------------------
    --  Free the object
    --  --------------------
+   overriding
    procedure Destroy (Object : access Session_Impl) is
       type Session_Impl_Ptr is access all Session_Impl;
       procedure Unchecked_Free is new Ada.Unchecked_Deallocation
@@ -1959,6 +1988,7 @@ package body AWA.Users.Models is
       Unchecked_Free (Ptr);
    end Destroy;
 
+   overriding
    procedure Find (Object  : in out Session_Impl;
                    Session : in out ADO.Sessions.Session'Class;
                    Query   : in ADO.SQL.Query'Class;
@@ -1991,6 +2021,7 @@ package body AWA.Users.Models is
       end if;
    end Load;
 
+   overriding
    procedure Save (Object  : in out Session_Impl;
                    Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Update_Statement
@@ -2092,6 +2123,7 @@ package body AWA.Users.Models is
       ADO.Objects.Set_Created (Object);
    end Create;
 
+   overriding
    procedure Delete (Object  : in out Session_Impl;
                      Session : in out ADO.Sessions.Master_Session'Class) is
       Stmt : ADO.Statements.Delete_Statement
