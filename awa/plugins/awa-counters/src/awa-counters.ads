@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-counters --
---  Copyright (C) 2015, 2018, 2020 Stephane Carrez
+--  Copyright (C) 2015, 2018, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -115,6 +115,7 @@ private
       Field : Util.Strings.Name_Access;
    end record;
 
+   overriding
    function "=" (Left, Right : in Counter_Def) return Boolean;
    function "<" (Left, Right : in Counter_Def) return Boolean;
    function "&" (Left  : in String;

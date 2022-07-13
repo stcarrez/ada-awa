@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-counters --
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2015, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,9 +32,10 @@ package body AWA.Counters is
       end if;
    end "&";
 
+   overriding
    function "=" (Left, Right : in Counter_Def) return Boolean is
    begin
-      return Left.Table = Right.Table and Left.Field = Right.Field;
+      return Left.Table = Right.Table and then Left.Field = Right.Field;
    end "=";
 
    function "<" (Left, Right : in Counter_Def) return Boolean is

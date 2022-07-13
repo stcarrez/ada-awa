@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-counters-components -- Counter UI component
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2015, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -100,7 +100,7 @@ package body AWA.Counters.Components is
                                  Key     => Counter.Object);
 
          --  Render the counter within an optional <span>.
-         if Counter.Value >= 0 and not UI.Is_Hidden (Context) then
+         if Counter.Value >= 0 and then not UI.Is_Hidden (Context) then
             Writer.Start_Optional_Element ("span");
             UI.Render_Attributes (Context, TEXT_ATTRIBUTE_NAMES, Writer);
             Writer.Write_Text (Integer'Image (Counter.Value));

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-counters-beans -- Counter bean definition
---  Copyright (C) 2015, 2016, 2018 Stephane Carrez
+--  Copyright (C) 2015, 2016, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -78,7 +78,7 @@ package body AWA.Counters.Beans is
 
       Day : Natural;
    begin
-      if Date'Length = 0 or Date = "now" then
+      if Date'Length = 0 or else Date = "now" then
          return Now;
       elsif Date'Length > 5 and then Date (Date'First .. Date'First + 3) = "now-" then
          Day := Natural'Value (Date (Date'First + 4 .. Date'Last));
@@ -112,7 +112,7 @@ package body AWA.Counters.Beans is
       Kind := ADO.Sessions.Entities.Find_Entity_Type (Session, Entity_Type);
       First_Date := Parse_Date (Ada.Strings.Unbounded.To_String (List.First_Date), Now);
       Last_Date := Parse_Date (Ada.Strings.Unbounded.To_String (List.Last_Date), Now);
-      if List.Entity_Id /= ADO.NO_IDENTIFIER and Def /= null then
+      if List.Entity_Id /= ADO.NO_IDENTIFIER and then Def /= null then
          Query.Set_Query (Def);
          Query.Bind_Param ("entity_type", Kind);
          Query.Bind_Param ("entity_id", List.Entity_Id);

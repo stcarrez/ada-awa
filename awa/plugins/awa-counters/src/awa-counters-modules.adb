@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-counters-modules -- Module counters
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2015, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -221,7 +221,7 @@ package body AWA.Counters.Modules is
             declare
                Now : constant Ada.Calendar.Time := Ada.Calendar.Clock;
             begin
-               return Now > Day_End or Now - Day >= Seconds;
+               return Now > Day_End or else Now - Day >= Seconds;
             end;
          end if;
       end Need_Flush;
@@ -291,7 +291,7 @@ package body AWA.Counters.Modules is
    begin
       Query.Set_Query (AWA.Counters.Models.Query_Counter_Update);
       Stmt := DB.Create_Statement (Query);
-      if Counter.Table /= null and Counter.Field'Length > 0 then
+      if Counter.Table /= null and then Counter.Field'Length > 0 then
          Query.Set_Query (AWA.Counters.Models.Query_Counter_Update_Field);
          Update := DB.Create_Statement (Query);
       end if;
@@ -302,7 +302,7 @@ package body AWA.Counters.Modules is
          Stmt.Bind_Param ("counter", Counter_Maps.Element (Iter));
          Stmt.Bind_Param ("definition", Integer (Def_Id));
          Stmt.Execute;
-         if Counter.Table /= null and Counter.Field'Length > 0 then
+         if Counter.Table /= null and then Counter.Field'Length > 0 then
             Update.Bind_Param ("id", Id);
             Update.Bind_Param ("counter", Counter_Maps.Element (Iter));
             Update.Bind_Param ("table", ADO.Parameters.Token (Counter.Table.Table.all));
