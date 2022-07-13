@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-auth-fake -- A fake OAuth provider for unit tests
---  Copyright (C) 2020 Stephane Carrez
+--  Copyright (C) 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -77,7 +77,7 @@ package body Security.Auth.Fake is
       Claimed_Id : constant String := Request.Get_Parameter ("claimed_id");
       Identity   : constant String := Request.Get_Parameter ("id");
    begin
-      if Email'Length = 0 or Identity'Length = 0 then
+      if Email'Length = 0 or else Identity'Length = 0 then
          Result.Status := Security.Auth.CANCEL;
       else
          Result.Status := Security.Auth.AUTHENTICATED;
