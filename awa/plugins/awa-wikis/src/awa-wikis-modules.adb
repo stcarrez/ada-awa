@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-modules -- Module wikis
---  Copyright (C) 2015, 2016, 2017, 2018, 2019 Stephane Carrez
+--  Copyright (C) 2015, 2016, 2017, 2018, 2019, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -487,7 +487,7 @@ package body AWA.Wikis.Modules is
       Query : ADO.Statements.Query_Statement;
       Kind  : AWA.Storages.Models.Storage_Type;
    begin
-      if Width = Natural'Last or Height = Natural'Last then
+      if Width = Natural'Last or else Height = Natural'Last then
          Query := DB.Create_Statement (Models.Query_Wiki_Image_Get_Data);
       elsif Width > 0 then
          Query := DB.Create_Statement (Models.Query_Wiki_Image_Width_Get_Data);

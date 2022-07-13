@@ -58,9 +58,9 @@ package body AWA.Wikis.Beans is
       URI := Renderer.Image_Prefix;
       Append (URI, Wiki.Strings.To_WString (Util.Strings.Image (Integer (Info.Id))));
       Append (URI, "/");
-      if Width = 0 and Height = 0 then
+      if Width = 0 and then Height = 0 then
          Append (URI, "default/");
-      elsif Width = Natural'Last or Height = Natural'Last then
+      elsif Width = Natural'Last or else Height = Natural'Last then
          Append (URI, "original/");
       else
          if Width /= 0 then
@@ -77,7 +77,7 @@ package body AWA.Wikis.Beans is
       else
          Append (URI, Link (Sep + 1 .. Link'Last));
       end if;
-      if not Info.Width.Is_Null and not Info.Height.Is_Null then
+      if not Info.Width.Is_Null and then not Info.Height.Is_Null then
          AWA.Images.Modules.Scale (Width     => Info.Width.Value,
                                    Height    => Info.Height.Value,
                                    To_Width  => Width,
@@ -305,7 +305,7 @@ package body AWA.Wikis.Beans is
    function Find (Factory : in Wiki_Template_Bean;
                   Name    : in String) return Wiki.Plugins.Wiki_Plugin_Access is
    begin
-      if Name = "if" or Name = "else" or Name = "elsif" or Name = "end" then
+      if Name in "if" | "else" | "elsif" | "end" then
          return Factory.Condition'Unrestricted_Access;
       elsif Name = "set" then
          return Factory.Variable'Unrestricted_Access;
@@ -437,14 +437,14 @@ package body AWA.Wikis.Beans is
                                         Session => Session);
       Bean.Load (Session, Query);
 
-      if Bean.Id <= 0 or Bean.Is_Public.Is_Null then
+      if Bean.Id <= 0 or else Bean.Is_Public.Is_Null then
          Bean.Name.Is_Null := False;
          Bean.Name.Value := Name;
          Bean.Title.Is_Null := False;
          Bean.Title.Value := Name;
          Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-created");
 
-      elsif not Bean.Is_Public.Value and Bean.Acl_Id <= 0 then
+      elsif not Bean.Is_Public.Value and then Bean.Acl_Id <= 0 then
          Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-visible");
 
       else
@@ -532,7 +532,7 @@ package body AWA.Wikis.Beans is
    begin
       if Name /= "id" then
          AWA.Wikis.Models.Wiki_Space_Bean (From).Set_Value (Name, Value);
-      elsif Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
+      elsif Name = "id" and then not Util.Beans.Objects.Is_Empty (Value) then
          From.Module.Load_Wiki_Space (From, ADO.Utils.To_Identifier (Value));
       end if;
    end Set_Value;
@@ -855,13 +855,13 @@ package body AWA.Wikis.Beans is
    begin
       if Name = "tag" then
          From.Tag := Util.Beans.Objects.To_Unbounded_String (Value);
-      elsif Name = "page" and not Util.Beans.Objects.Is_Empty (Value) then
+      elsif Name = "page" and then not Util.Beans.Objects.Is_Empty (Value) then
          From.Page := 1;
          From.Page := Util.Beans.Objects.To_Integer (Value);
-      elsif Name = "wiki_id" and not Util.Beans.Objects.Is_Empty (Value) then
+      elsif Name = "wiki_id" and then not Util.Beans.Objects.Is_Empty (Value) then
          From.Wiki_Id := ADO.NO_IDENTIFIER;
          From.Wiki_Id := ADO.Utils.To_Identifier (Value);
-      elsif Name = "sort" and not Util.Beans.Objects.Is_Empty (Value) then
+      elsif Name = "sort" and then not Util.Beans.Objects.Is_Empty (Value) then
          From.Sort := Util.Beans.Objects.To_Unbounded_String (Value);
       end if;
 
@@ -1004,12 +1004,12 @@ package body AWA.Wikis.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      if Name = "page" and not Util.Beans.Objects.Is_Empty (Value) then
+      if Name = "page" and then not Util.Beans.Objects.Is_Empty (Value) then
          From.Page := Util.Beans.Objects.To_Integer (Value);
-      elsif Name = "wiki_id" and not Util.Beans.Objects.Is_Empty (Value) then
+      elsif Name = "wiki_id" and then not Util.Beans.Objects.Is_Empty (Value) then
          From.Wiki_Id := ADO.NO_IDENTIFIER;
          From.Wiki_Id := ADO.Utils.To_Identifier (Value);
-      elsif Name = "page_id" and not Util.Beans.Objects.Is_Empty (Value) then
+      elsif Name = "page_id" and then not Util.Beans.Objects.Is_Empty (Value) then
          From.Page_Id := ADO.NO_IDENTIFIER;
          From.Page_Id := ADO.Utils.To_Identifier (Value);
       end if;
@@ -1141,10 +1141,10 @@ package body AWA.Wikis.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      if Name = "wiki_id" and not Util.Beans.Objects.Is_Empty (Value) then
+      if Name = "wiki_id" and then not Util.Beans.Objects.Is_Empty (Value) then
          From.Wiki_Id := ADO.Utils.To_Identifier (Value);
          From.Page.Set_Wiki_Id (From.Wiki_Id);
-      elsif Name = "page_id" and not Util.Beans.Objects.Is_Empty (Value) then
+      elsif Name = "page_id" and then not Util.Beans.Objects.Is_Empty (Value) then
          From.Page_Id := ADO.Utils.To_Identifier (Value);
          From.Page.Id := From.Page_Id;
       end if;
@@ -1278,7 +1278,7 @@ package body AWA.Wikis.Beans is
          begin
             if Pos < From.List_Bean.Get_Count then
                Info := From.List_Bean.List.Element (Pos);
-               if not Info.Width.Is_Null and not Info.Height.Is_Null then
+               if not Info.Width.Is_Null and then not Info.Height.Is_Null then
                   W := Info.Width.Value;
                   H := Info.Height.Value;
                end if;
@@ -1306,7 +1306,7 @@ package body AWA.Wikis.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      if Name = "wiki_id" and not Util.Beans.Objects.Is_Empty (Value) then
+      if Name = "wiki_id" and then not Util.Beans.Objects.Is_Empty (Value) then
          From.Wiki_Id := ADO.NO_IDENTIFIER;
          From.Wiki_Id := ADO.Utils.To_Identifier (Value);
          From.Page.Set_Wiki_Id (From.Wiki_Id);
@@ -1314,7 +1314,7 @@ package body AWA.Wikis.Beans is
          From.Folder_Name := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "name" then
          From.Name := Util.Beans.Objects.To_Unbounded_String (Value);
-      elsif Name = "page_id" and not Util.Beans.Objects.Is_Empty (Value) then
+      elsif Name = "page_id" and then not Util.Beans.Objects.Is_Empty (Value) then
          From.Page_Id := ADO.NO_IDENTIFIER;
          From.Page_Id := ADO.Utils.To_Identifier (Value);
          From.Page.Id := From.Page_Id;
@@ -1463,7 +1463,7 @@ package body AWA.Wikis.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      if Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
+      if Name = "id" and then not Util.Beans.Objects.Is_Empty (Value) then
          From.Wiki_Id := ADO.NO_IDENTIFIER;
          From.Wiki_Id := ADO.Utils.To_Identifier (Value);
       end if;
