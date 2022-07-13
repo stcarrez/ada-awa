@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-workspaces-beans -- Beans for module workspaces
---  Copyright (C) 2011, 2012, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2017, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,7 +51,7 @@ package body AWA.Workspaces.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      if Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
+      if Name = "id" and then not Util.Beans.Objects.Is_Empty (Value) then
          Item.Set_Id (ADO.Utils.To_Identifier (Value));
       else
          AWA.Workspaces.Models.Member_Bean (Item).Set_Value (Name, Value);
