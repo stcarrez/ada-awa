@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-jobs-services -- Job services
---  Copyright (C) 2012, 2014, 2015, 2020 Stephane Carrez
+--  Copyright (C) 2012, 2014, 2015, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -193,7 +193,6 @@ package AWA.Jobs.Services is
 
    overriding
    procedure Execute (Job : in out Job_Type);
-
 
    --  ------------------------------
    --  Work Factory

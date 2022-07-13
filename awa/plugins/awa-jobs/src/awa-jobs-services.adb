@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-jobs-services -- Job services
---  Copyright (C) 2012, 2014, 2015, 2016, 2019, 2020 Stephane Carrez
+--  Copyright (C) 2012, 2014, 2015, 2016, 2019, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -314,7 +314,7 @@ package body AWA.Jobs.Services is
       end;
 
       --  If the job did not set a completion status, mark it as terminated.
-      if Job.Job.Get_Status = Models.SCHEDULED or Job.Job.Get_Status = Models.RUNNING then
+      if Job.Job.Get_Status in Models.SCHEDULED | Models.RUNNING then
          Job.Job.Set_Status (Models.TERMINATED);
       end if;
 
@@ -412,6 +412,7 @@ package body AWA.Jobs.Services is
       return Ada.Tags.Expanded_Name (Factory'Tag);
    end Get_Name;
 
+   overriding
    procedure Execute (Job : in out Job_Type) is
    begin
       Job.Work (Job);
@@ -433,6 +434,7 @@ package body AWA.Jobs.Services is
    --  ------------------------------
    package body Definition is
 
+      overriding
       function Create (Factory : in Job_Type_Factory) return Abstract_Job_Type_Access is
          pragma Unreferenced (Factory);
       begin
