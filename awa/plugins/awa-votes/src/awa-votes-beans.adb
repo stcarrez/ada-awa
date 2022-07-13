@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-votes-beans -- Beans for module votes
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2013, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -63,7 +63,7 @@ package body AWA.Votes.Beans is
    begin
       Bean.Entity_Id := AWA.Helpers.Requests.Get_Parameter ("id");
       Bean.Rating    := AWA.Helpers.Requests.Get_Parameter ("rating", 0);
-      if Bean.Rating /= 0 and Bean.Rating /= -1 and Bean.Rating /= 1 then
+      if Bean.Rating /= 0 and then Bean.Rating /= -1 and then Bean.Rating /= 1 then
          Bean.Rating := 0;
       end if;
       Bean.Module.Vote_For (Permission  => Ada.Strings.Unbounded.To_String (Bean.Permission),
