@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail-clients-aws_smtp-initialize -- Initialize SMTP client with SSL support
---  Copyright (C) 2016 Stephane Carrez
+--  Copyright (C) 2016, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +26,7 @@ procedure Initialize (Client : in out AWS_Mail_Manager'Class;
    Passwd : constant String := Props.Get (Name => "smtp.password", Default => "");
    Secure : constant String := Props.Get (Name => "smtp.ssl", Default => "0");
 begin
-   Client.Secure := Secure = "1" or Secure = "yes" or Secure = "true";
+   Client.Secure := Secure in "1" | "yes" | "true";
    if User'Length > 0 then
       Client.Creds  := AWS.SMTP.Authentication.Plain.Initialize (User, Passwd);
       Client.Server := AWS.SMTP.Client.Initialize (Server_Name => Server,

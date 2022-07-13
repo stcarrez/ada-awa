@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail-components-messages -- Mail UI Message
---  Copyright (C) 2012, 2020 Stephane Carrez
+--  Copyright (C) 2012, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,7 +52,7 @@ package body AWA.Mail.Components.Messages is
                          Context : in out ASF.Contexts.Faces.Faces_Context'Class) is
       use type AWA.Mail.Clients.Mail_Message_Access;
    begin
-      if UI.Message /= null and UI.Is_Rendered (Context) then
+      if UI.Message /= null and then UI.Is_Rendered (Context) then
          UI.Message.Send;
       end if;
    end Encode_End;

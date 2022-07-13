@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-mail-clients-aws_smtp -- Mail client implementation on top of AWS SMTP client
---  Copyright (C) 2012, 2016, 2017, 2020 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2017, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -230,7 +230,7 @@ package body AWA.Mail.Clients.AWS_SMTP is
       Log.Info ("Creating SMTP mail manager to server {0}:{1}", Server, Port);
 
       Result.Port   := Positive'Value (Port);
-      Result.Enable := Enable = "1" or Enable = "yes" or Enable = "true";
+      Result.Enable := Enable in "1" | "yes" | "true";
       Result.Self   := Result;
       Initialize (Result.all, Props);
       return Result.all'Access;
