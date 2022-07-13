@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-comments-beans -- Beans for the comments module
---  Copyright (C) 2014, 2015, 2016, 2017 Stephane Carrez
+--  Copyright (C) 2014, 2015, 2016, 2017, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -63,7 +63,7 @@ package body AWA.Comments.Beans is
       elsif Name = "permission" then
          From.Permission := Util.Beans.Objects.To_Unbounded_String (Value);
 
-      elsif Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
+      elsif Name = "id" and then not Util.Beans.Objects.Is_Empty (Value) then
          declare
             Id  : constant ADO.Identifier := ADO.Utils.To_Identifier (Value);
          begin
