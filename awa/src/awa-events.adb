@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events -- AWA Events
---  Copyright (C) 2012, 2015, 2020 Stephane Carrez
+--  Copyright (C) 2012, 2015, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -77,6 +77,7 @@ package body AWA.Events is
    --  ------------------------------
    --  Get the value that corresponds to the parameter with the given name.
    --  ------------------------------
+   overriding
    function Get_Value (Event : in Module_Event;
                        Name  : in String) return Util.Beans.Objects.Object is
    begin

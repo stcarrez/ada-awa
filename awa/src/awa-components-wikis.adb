@@ -159,19 +159,19 @@ package body AWA.Components.Wikis is
                                                     Context => Context,
                                                     Default => "dotclear");
    begin
-      if Format = "dotclear" or Format = "FORMAT_DOTCLEAR" then
+      if Format in "dotclear" | "FORMAT_DOTCLEAR" then
          return Wiki.SYNTAX_DOTCLEAR;
       elsif Format = "google" then
          return Wiki.SYNTAX_GOOGLE;
-      elsif Format = "phpbb" or Format = "FORMAT_PHPBB" then
+      elsif Format in "phpbb" | "FORMAT_PHPBB" then
          return Wiki.SYNTAX_PHPBB;
-      elsif Format = "creole" or Format = "FORMAT_CREOLE" then
+      elsif Format in "creole" | "FORMAT_CREOLE" then
          return Wiki.SYNTAX_CREOLE;
-      elsif Format = "markdown" or Format = "FORMAT_MARKDOWN" then
+      elsif Format in "markdown" | "FORMAT_MARKDOWN" then
          return Wiki.SYNTAX_MARKDOWN;
-      elsif Format = "mediawiki" or Format = "FORMAT_MEDIAWIKI" then
+      elsif Format in "mediawiki" | "FORMAT_MEDIAWIKI" then
          return Wiki.SYNTAX_MEDIA_WIKI;
-      elsif Format = "html" or Format = "FORMAT_HTML" then
+      elsif Format in "html" | "FORMAT_HTML" then
          return Wiki.SYNTAX_HTML;
       else
          return Wiki.SYNTAX_MARKDOWN;

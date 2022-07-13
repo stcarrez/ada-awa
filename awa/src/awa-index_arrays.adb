@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-index_arrays -- Static index arrays
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2015, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -164,7 +164,7 @@ package body AWA.Index_Arrays is
    --  ------------------------------
    function Get_Element (Index : in Index_Type) return Element_Type_Access is
    begin
-      if Index = Invalid_Index or Index > Last_Index then
+      if Index = Invalid_Index or else Index > Last_Index then
          Log.Error ("Index {0} is out of bounds", Index_Type'Image (Index));
          raise Not_Found;
       end if;
@@ -176,7 +176,7 @@ package body AWA.Index_Arrays is
    --  ------------------------------
    function Is_Valid (Index : in Index_Type) return Boolean is
    begin
-      return Index > Invalid_Index and Index <= Last_Index;
+      return Index > Invalid_Index and then Index <= Last_Index;
    end Is_Valid;
 
    --  ------------------------------

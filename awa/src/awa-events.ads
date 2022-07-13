@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events -- AWA Events
---  Copyright (C) 2012, 2015, 2018, 2020 Stephane Carrez
+--  Copyright (C) 2012, 2015, 2018, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -198,4 +198,3 @@ private
    function Copy (Event : in Module_Event) return Module_Event_Access;
 
 end AWA.Events;
-
