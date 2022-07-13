@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-tags-components -- Tags component
---  Copyright (C) 2013, 2014, 2015, 2018, 2019 Stephane Carrez
+--  Copyright (C) 2013, 2014, 2015, 2018, 2019, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -376,7 +376,7 @@ package body AWA.Tags.Components is
 
          procedure Process_Parameter (Name, Value : in String) is
          begin
-            if Name'Length <= Id'Length or Name (Name'Last) /= ']' then
+            if Name'Length <= Id'Length or else Name (Name'Last) /= ']' then
                return;
             end if;
             if Name (Name'First .. Name'First + Id'Length - 1) /= Id then
@@ -462,12 +462,11 @@ package body AWA.Tags.Components is
       App  : constant access ASF.Applications.Main.Application'Class := Context.Get_Application;
       Disp : constant Action_Listener_Access := App.Get_Action_Listener;
    begin
-      if Disp /= null and Event.all in Action_Event'Class then
+      if Disp /= null and then Event.all in Action_Event'Class then
          Disp.Process_Action (Event   => Action_Event (Event.all),
                               Context => Context);
       end if;
    end Broadcast;
-
 
    --  ------------------------------
    --  Render the list of tags.  If the <tt>tagLink</tt> attribute is defined, a link
@@ -568,7 +567,7 @@ package body AWA.Tags.Components is
       Target  : Natural := Middle;
       Pos     : Natural := 0;
    begin
-      while Target <= List'Last and List'First + Pos < Middle and Quarter /= 0 loop
+      while Target <= List'Last and then List'First + Pos < Middle and then Quarter /= 0 loop
          Swap (List (List'First + Pos), List (Target));
          Pos := Pos + 1;
          if Target <= Middle then
@@ -609,7 +608,7 @@ package body AWA.Tags.Components is
          List  : AWA.Tags.Beans.Tag_Info_List_Bean_Access;
       begin
          --  Check that we have a List_Bean but do not complain if we have a null value.
-         if Bean = null or Max <= 0 then
+         if Bean = null or else Max <= 0 then
             return;
          end if;
 
