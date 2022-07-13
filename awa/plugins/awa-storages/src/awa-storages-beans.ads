@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-beans -- Storage Ada Beans
---  Copyright (C) 2012, 2016, 2018, 2019, 2020 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2018, 2019, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -62,6 +62,7 @@ package AWA.Storages.Beans is
 
    --  Save the uploaded file in the storage service.
    --  @method
+   overriding
    procedure Save_Part (Bean : in out Upload_Bean;
                         Part : in ASF.Parts.Part'Class);
 

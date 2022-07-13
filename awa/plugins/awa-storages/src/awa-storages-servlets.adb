@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-servlets -- Serve files saved in the storage service
---  Copyright (C) 2012, 2016, 2019 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2019, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -107,7 +107,7 @@ package body AWA.Storages.Servlets is
 
       --  Send the file.
       Response.Set_Content_Type (Ada.Strings.Unbounded.To_String (Mime));
-      if Format = AS_CONTENT_DISPOSITION and Ada.Strings.Unbounded.Length (Name) > 0 then
+      if Format = AS_CONTENT_DISPOSITION and then Ada.Strings.Unbounded.Length (Name) > 0 then
          Response.Add_Header ("Content-Disposition",
                               "attachment; filename=" & Ada.Strings.Unbounded.To_String (Name));
       end if;

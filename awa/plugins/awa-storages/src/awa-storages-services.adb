@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-services -- Storage service
---  Copyright (C) 2012, 2013, 2016, 2018, 2019, 2020 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2016, 2018, 2019, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -213,7 +213,7 @@ package body AWA.Storages.Services is
 
       if not Into.Is_Null then
          Workspace := AWA.Workspaces.Models.Workspace_Ref (Into.Get_Workspace);
-         if Workspace.Is_Null and not Into.Get_Folder.Is_Null then
+         if Workspace.Is_Null and then not Into.Get_Folder.Is_Null then
             Workspace := AWA.Workspaces.Models.Workspace_Ref (Into.Get_Folder.Get_Workspace);
             Into.Set_Workspace (Workspace);
          end if;

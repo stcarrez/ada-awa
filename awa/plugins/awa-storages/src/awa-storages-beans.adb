@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-beans -- Storage Ada Beans
---  Copyright (C) 2012, 2013, 2016, 2018, 2019, 2020 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2016, 2018, 2019, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -88,6 +88,7 @@ package body AWA.Storages.Beans is
    --  ------------------------------
    --  Save the uploaded file in the storage service.
    --  ------------------------------
+   overriding
    procedure Save_Part (Bean : in out Upload_Bean;
                         Part : in ASF.Parts.Part'Class) is
       Manager : constant Services.Storage_Service_Access := Bean.Module.Get_Storage_Manager;
@@ -116,6 +117,7 @@ package body AWA.Storages.Beans is
    --  ------------------------------
    --  Upload the file.
    --  ------------------------------
+   overriding
    procedure Upload (Bean    : in out Upload_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
    begin
@@ -125,6 +127,7 @@ package body AWA.Storages.Beans is
    --  ------------------------------
    --  Delete the file.
    --  ------------------------------
+   overriding
    procedure Delete (Bean    : in out Upload_Bean;
                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       Manager : constant Services.Storage_Service_Access := Bean.Module.Get_Storage_Manager;
@@ -281,7 +284,7 @@ package body AWA.Storages.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
    begin
-      if Name = "folderId" and not Util.Beans.Objects.Is_Empty (Value) then
+      if Name = "folderId" and then not Util.Beans.Objects.Is_Empty (Value) then
          From.Folder_Id := ADO.Utils.To_Identifier (Value);
       end if;
    end Set_Value;
