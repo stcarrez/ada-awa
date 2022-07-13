@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-queues-persistents -- Persistent event queues
---  Copyright (C) 2012, 2020 Stephane Carrez
+--  Copyright (C) 2012, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,7 +43,6 @@ private package AWA.Events.Queues.Persistents is
    overriding
    procedure Dequeue (From    : in out Persistent_Queue;
                       Process : access procedure (Event : in Module_Event'Class));
-
 
    --  Create the queue associated with the given name and configure it by using
    --  the configuration properties.

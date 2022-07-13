@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-services -- User registration, authentication processes
---  Copyright (C) 2009 - 2020 Stephane Carrez
+--  Copyright (C) 2009 - 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -196,22 +196,22 @@ package body AWA.Users.Services is
          Last_Name  : constant String := Security.Auth.Get_Last_Name (Auth);
          Sep        : constant Natural := Util.Strings.Index (Name, ' ');
       begin
-         if Name'Length > 0 and Name /= String '(User.Get_Name) then
+         if Name'Length > 0 and then Name /= String '(User.Get_Name) then
             User.Set_Name (Name);
          end if;
-         if First_Name'Length > 0 and First_Name /= String '(User.Get_First_Name) then
+         if First_Name'Length > 0 and then First_Name /= String '(User.Get_First_Name) then
             User.Set_First_Name (First_Name);
          end if;
-         if Last_Name'Length > 0 and Last_Name /= String '(User.Get_Last_Name) then
+         if Last_Name'Length > 0 and then Last_Name /= String '(User.Get_Last_Name) then
             User.Set_Last_Name (Last_Name);
          end if;
-         if Sep > 0 and String '(User.Get_First_Name) = "" then
+         if Sep > 0 and then String '(User.Get_First_Name) = "" then
             User.Set_First_Name (Name (Name'First .. Sep - 1));
          end if;
-         if Sep > 0 and String '(User.Get_Last_Name) = "" then
+         if Sep > 0 and then String '(User.Get_Last_Name) = "" then
             User.Set_Last_Name (Name (Sep + 1 .. Name'Last));
          end if;
-         if Name'Length > 0 and String '(User.Get_First_Name) = "" then
+         if Name'Length > 0 and then String '(User.Get_First_Name) = "" then
             User.Set_First_Name (Name);
          end if;
          if Name'Length = 0 then

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-servlets -- OpenID verification servlet for user authentication
---  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2018 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -79,7 +79,7 @@ package body AWA.Users.Servlets is
    begin
       Log.Info ("GET: request OpenId authentication to {0} - {1}", Name, URL);
 
-      if Name'Length = 0 or URL'Length = 0 then
+      if Name'Length = 0 or else URL'Length = 0 then
          Response.Set_Status (ASF.Responses.SC_NOT_FOUND);
          return;
       end if;
@@ -168,6 +168,7 @@ package body AWA.Users.Servlets is
    --  If the authentication succeeded and the signature was correct, sets a
    --  user principals on the session.
    --  ------------------------------
+   overriding
    procedure Do_Get (Server   : in Verify_Auth_Servlet;
                      Request  : in out ASF.Requests.Request'Class;
                      Response : in out ASF.Responses.Response'Class) is

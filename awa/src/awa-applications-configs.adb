@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-applications-configs -- Read application configuration files
---  Copyright (C) 2011, 2012, 2015, 2017, 2018, 2020 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2015, 2017, 2018, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -77,6 +77,7 @@ package body AWA.Applications.Configs is
                                                   Item : in Util.Beans.Objects.Object));
 
    --  Deep copy of properties stored in 'From' to 'To'.
+   overriding
    function Create_Copy (Self : in Wallet_Manager)
                          return Util.Properties.Implementation.Manager_Access;
 
@@ -127,6 +128,7 @@ package body AWA.Applications.Configs is
    --  ------------------------------
    --  Returns TRUE if the property exists.
    --  ------------------------------
+   overriding
    function Exists (Self : in Wallet_Manager;
                     Name : in String)
                     return Boolean is
@@ -138,6 +140,7 @@ package body AWA.Applications.Configs is
    --  ------------------------------
    --  Remove the property given its name.
    --  ------------------------------
+   overriding
    procedure Remove (Self : in out Wallet_Manager;
                      Name : in String) is
       Prefixed_Name : constant String := Self.Prefix (1 .. Self.Length) & Name;
@@ -153,6 +156,7 @@ package body AWA.Applications.Configs is
    --  Iterate over the properties and execute the given procedure passing the
    --  property name and its value.
    --  ------------------------------
+   overriding
    procedure Iterate (Self    : in Wallet_Manager;
                       Process : access procedure (Name : in String;
                                                   Item : in Util.Beans.Objects.Object)) is
@@ -188,6 +192,7 @@ package body AWA.Applications.Configs is
    --  ------------------------------
    --  Deep copy of properties stored in 'From' to 'To'.
    --  ------------------------------
+   overriding
    function Create_Copy (Self : in Wallet_Manager)
                          return Util.Properties.Implementation.Manager_Access is
       Result : constant Property_Map_Access := new Property_Map;

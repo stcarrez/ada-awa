@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-filters -- Specific filters for authentication and key verification
---  Copyright (C) 2011, 2012, 2015, 2019 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2015, 2019, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -94,6 +94,7 @@ package AWA.Users.Filters is
    VERIFY_FILTER_REDIRECT_PARAM : constant String := "redirect";
 
    --  Initialize the filter and configure the redirection URIs.
+   overriding
    procedure Initialize (Filter  : in out Verify_Filter;
                          Config  : in ASF.Servlets.Filter_Config);
 

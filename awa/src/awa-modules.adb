@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-modules -- Application Module
---  Copyright (C) 2009 - 2020 Stephane Carrez
+--  Copyright (C) 2009 - 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -256,6 +256,7 @@ package body AWA.Modules is
       Manager.Module := Module.Self;
    end Initialize;
 
+   overriding
    function Get_Value (Manager : in Module_Manager;
                        Name    : in String) return Util.Beans.Objects.Object is
       pragma Unreferenced (Manager, Name);

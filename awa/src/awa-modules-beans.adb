@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-modules-beans -- Module beans factory
---  Copyright (C) 2009, 2010, 2011 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,7 +35,7 @@ package body AWA.Modules.Beans is
    --  Binding record
    --  ------------------------------
 
-   --
+   overriding
    procedure Create (Factory : in Module_Binding;
                      Name    : in Ada.Strings.Unbounded.Unbounded_String;
                      Result  : out Util.Beans.Basic.Readonly_Bean_Access) is

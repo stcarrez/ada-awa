@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-filters -- Specific filters for authentication and key verification
---  Copyright (C) 2011, 2012, 2013, 2015, 2019 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2015, 2019, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,7 +31,6 @@ package body AWA.Users.Filters is
    --  The logger
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Users.Filters");
 
-
    --  ------------------------------
    --  Set the user principal on the session associated with the ASF request.
    --  ------------------------------
@@ -45,6 +44,7 @@ package body AWA.Users.Filters is
    --  ------------------------------
    --  Initialize the filter and configure the redirection URIs.
    --  ------------------------------
+   overriding
    procedure Initialize (Filter  : in out Auth_Filter;
                          Config  : in ASF.Servlets.Filter_Config) is
       use ASF.Applications.Main;
@@ -67,6 +67,7 @@ package body AWA.Users.Filters is
       end if;
    end Initialize;
 
+   overriding
    procedure Authenticate (F         : in Auth_Filter;
                            Request   : in out ASF.Requests.Request'Class;
                            Response  : in out ASF.Responses.Response'Class;

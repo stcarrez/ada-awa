@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-dispatchers-tasks -- AWA Event Dispatchers
---  Copyright (C) 2012, 2015, 2017, 2019, 2020 Stephane Carrez
+--  Copyright (C) 2012, 2015, 2017, 2019, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -92,6 +92,7 @@ package body AWA.Events.Dispatchers.Tasks is
       end if;
    end Update;
 
+   overriding
    procedure Add_Queue (Manager : in out Task_Dispatcher;
                         Queue   : in AWA.Events.Queues.Queue_Ref;
                         Added   : out Boolean) is

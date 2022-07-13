@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-beans -- ASF Beans for user module
---  Copyright (C) 2011, 2012, 2013, 2018, 2020 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2018, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -113,7 +113,6 @@ package body AWA.Users.Beans is
          Messages.Factory.Add_Message (Ctx.all, "users.error_verify_register_key");
    end Verify_User;
 
-
    --  ------------------------------
    --  Action to trigger the lost password email process.
    --  ------------------------------
@@ -159,7 +158,6 @@ package body AWA.Users.Beans is
       when Services.Not_Found =>
          Messages.Factory.Add_Message (Ctx.all, "users.error_reset_password");
    end Reset_Password;
-
 
    procedure Set_Session_Principal (Data      : in Authenticate_Bean;
                                     Principal : in AWA.Users.Principals.Principal_Access) is

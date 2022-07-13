@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-commands-start -- Command to start the web server
---  Copyright (C) 2020, 2021 Stephane Carrez
+--  Copyright (C) 2020, 2021, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -54,7 +54,7 @@ package body AWA.Commands.Start is
    begin
       --  If daemon(3) is available and -d is defined, run it so that the parent
       --  process terminates and the child process continues.
-      if Command.Daemon and Sys_Daemon'Address /= System.Null_Address then
+      if Command.Daemon and then Sys_Daemon'Address /= System.Null_Address then
          declare
             Result : constant Integer := Sys_Daemon (1, 0);
          begin

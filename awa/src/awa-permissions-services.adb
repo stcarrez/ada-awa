@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions-services -- Permissions controller
---  Copyright (C) 2011, 2012, 2013, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2017, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,7 +50,7 @@ package body AWA.Permissions.Services is
       Perm    : constant String := Util.Beans.Objects.To_String (Name);
       Result  : Boolean;
    begin
-      if Util.Beans.Objects.Is_Empty (Name) or Context = null then
+      if Util.Beans.Objects.Is_Empty (Name) or else Context = null then
          Log.Error ("No security context: permission {0} is refused", Perm);
          Result := False;
 

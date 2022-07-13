@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-queues-fifos -- Fifo event queues (memory based)
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,6 +51,7 @@ package body AWA.Events.Queues.Fifos is
    --  ------------------------------
    --  Queue the event.
    --  ------------------------------
+   overriding
    procedure Enqueue (Into  : in out Fifo_Queue;
                       Event : in AWA.Events.Module_Event'Class) is
       E : constant Module_Event_Access := Copy (Event);
@@ -64,6 +65,7 @@ package body AWA.Events.Queues.Fifos is
    --  ------------------------------
    --  Dequeue an event and process it with the <b>Process</b> procedure.
    --  ------------------------------
+   overriding
    procedure Dequeue (From    : in out Fifo_Queue;
                       Process : access procedure (Event : in Module_Event'Class)) is
       E : Module_Event_Access;

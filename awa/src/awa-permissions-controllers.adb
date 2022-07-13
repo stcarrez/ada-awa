@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions-controllers -- Permission controllers
---  Copyright (C) 2011, 2012, 2013, 2014, 2016 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2016, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -118,7 +118,7 @@ package body AWA.Permissions.Controllers is
          Query.Execute;
 
          Result := Query.Get_Result_Integer;
-         if Result >= 0 and Query.Has_Elements then
+         if Result >= 0 and then Query.Has_Elements then
             Log.Info ("Permission granted to {0} on entity {1}",
                       ADO.Identifier'Image (User_Id),
                       ADO.Identifier'Image (Entity_Id));

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-commands-drivers -- Driver for AWA commands for server or admin tool
---  Copyright (C) 2020, 2021 Stephane Carrez
+--  Copyright (C) 2020, 2021, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -166,7 +166,7 @@ package body AWA.Commands.Drivers is
       GC.Getopt (Config => Context.Command_Config);
       Util.Commands.Parsers.GNAT_Parser.Get_Arguments (Arguments, GC.Get_Argument);
 
-      if Context.Debug or Context.Verbose or Context.Dump then
+      if Context.Debug or else Context.Verbose or else Context.Dump then
          Configure_Logs (Root    => Context.Global_Config.Get ("log4j.rootCategory", ""),
                          Debug   => Context.Debug,
                          Dump    => Context.Dump,

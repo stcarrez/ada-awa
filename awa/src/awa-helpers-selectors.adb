@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-helpers -- Helpers for AWA applications
---  Copyright (C) 2011, 2018 Stephane Carrez
+--  Copyright (C) 2011, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -158,6 +158,7 @@ package body AWA.Helpers.Selectors is
    --  Get the value identified by the name.
    --  If the name cannot be found, the method should return the Null object.
    --  ------------------------------
+   overriding
    function Get_Value (From : in Select_List_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
    begin
@@ -173,6 +174,7 @@ package body AWA.Helpers.Selectors is
    --  If the name cannot be found, the method should raise the No_Value
    --  exception.
    --  ------------------------------
+   overriding
    procedure Set_Value (From  : in out Select_List_Bean;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object) is
@@ -188,7 +190,7 @@ package body AWA.Helpers.Selectors is
               := ADO.Queries.Loaders.Find_Query (Query_Name);
             Query     : ADO.Queries.Context;
          begin
-            if Ctx = null or Query_Def = null then
+            if Ctx = null or else Query_Def = null then
                return;
             end if;
 

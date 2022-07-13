@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-principals -- User principals
---  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +25,7 @@ package AWA.Users.Principals is
    type Principal_Access is access all Principal'Class;
 
    --  Get the principal name.
+   overriding
    function Get_Name (From : in Principal) return String;
 
    --  Get the principal identifier (name)

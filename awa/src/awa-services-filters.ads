@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-services-filters -- Setup service context in request processing flow
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,6 +33,7 @@ package AWA.Services.Filters is
    --  Before passing the control to the next filter, initialize the service
    --  context to give access to the current application, current user and
    --  manage possible transaction rollbacks.
+   overriding
    procedure Do_Filter (F        : in Service_Filter;
                         Request  : in out ASF.Requests.Request'Class;
                         Response : in out ASF.Responses.Response'Class;
