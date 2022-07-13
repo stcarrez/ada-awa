@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-images-modules -- Image management module
---  Copyright (C) 2012, 2016, 2020 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -255,12 +255,12 @@ package body AWA.Images.Modules is
                --  image.png PNG 120x282 120x282+0+0 8-bit \
                --         DirectClass 34.4KB 0.000u 0:00.018
                Pos := Ada.Strings.Unbounded.Index (Line, " ");
-               if Pos > 0 and Width = 0 then
+               if Pos > 0 and then Width = 0 then
                   Pos := Ada.Strings.Unbounded.Index (Line, " ", Pos + 1);
                   if Pos > 0 then
                      Sep := Ada.Strings.Unbounded.Index (Line, "x", Pos + 1);
                      Last := Ada.Strings.Unbounded.Index (Line, "=", Pos + 1);
-                     if Sep > 0 and Sep < Last then
+                     if Sep > 0 and then Sep < Last then
                         Log.Info ("Dimension {0} - {1}..{2}",
                                   Ada.Strings.Unbounded.Slice (Line, Pos, Last),
                                   Natural'Image (Pos), Natural'Image (Last));
@@ -345,8 +345,8 @@ package body AWA.Images.Modules is
                     To_Width  : in out Natural;
                     To_Height : in out Natural) is
    begin
-      if To_Width = Natural'Last or To_Height = Natural'Last
-        or (To_Width = 0 and To_Height = 0)
+      if To_Width = Natural'Last or else To_Height = Natural'Last
+        or else (To_Width = 0 and then To_Height = 0)
       then
          To_Width  := Width;
          To_Height := Height;
