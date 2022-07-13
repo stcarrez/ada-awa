@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa_command - Tests for AWA command
---  Copyright (C) 2020 Stephane Carrez
+--  Copyright (C) 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,6 +44,7 @@ procedure AWA_Command is
 
    package Info_Command is
       new AWA.Commands.Info (Server_Commands);
+   pragma Unreferenced (List_Command, Start_Command, Stop_Command, Info_Command);
 
    App       : aliased AWA_Test_App.Application;
    Context   : AWA.Commands.Context_Type;
