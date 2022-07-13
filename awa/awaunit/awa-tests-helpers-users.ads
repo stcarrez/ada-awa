@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  users-tests-helpers -- Helpers for user creation
---  Copyright (C) 2011, 2012, 2013, 2014, 2017, 2020 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2017, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,6 +35,7 @@ package AWA.Tests.Helpers.Users is
    end record;
 
    --  Initialize the service context.
+   overriding
    procedure Initialize (Principal : in out Test_User);
 
    --  Create a test user associated with the given email address.

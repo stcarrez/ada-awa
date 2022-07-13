@@ -44,6 +44,7 @@ package body AWA.Tests.Helpers.Users is
    --  ------------------------------
    --  Initialize the service context.
    --  ------------------------------
+   overriding
    procedure Initialize (Principal : in out Test_User) is
    begin
       --  Setup the service context.
