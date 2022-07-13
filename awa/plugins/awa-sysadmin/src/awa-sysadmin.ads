@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  awa-sysadmin -- 
---  Copyright (C) 2019 Stephane Carrez
+--  awa-sysadmin -- sysadmin module
+--  Copyright (C) 2019, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
