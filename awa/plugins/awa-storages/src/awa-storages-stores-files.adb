@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-stores-files -- File system store
---  Copyright (C) 2012, 2015, 2016, 2018 Stephane Carrez
+--  Copyright (C) 2012, 2015, 2016, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -85,6 +85,7 @@ package body AWA.Storages.Stores.Files is
    --  Save the file represented by the `Path` variable into a store and associate that
    --  content with the storage reference represented by `Into`.
    --  ------------------------------
+   overriding
    procedure Save (Storage : in File_Store;
                    Session : in out ADO.Sessions.Master_Session;
                    Into    : in out AWA.Storages.Models.Storage_Ref'Class;
@@ -101,6 +102,7 @@ package body AWA.Storages.Stores.Files is
                                  Form        => "all");
    end Save;
 
+   overriding
    procedure Load (Storage : in File_Store;
                    Session : in out ADO.Sessions.Session'Class;
                    From    : in AWA.Storages.Models.Storage_Ref'Class;
@@ -115,6 +117,7 @@ package body AWA.Storages.Stores.Files is
    --  ------------------------------
    --  Create a storage
    --  ------------------------------
+   overriding
    procedure Create (Storage : in File_Store;
                      Session : in out ADO.Sessions.Master_Session;
                      From    : in AWA.Storages.Models.Storage_Ref'Class;
@@ -132,6 +135,7 @@ package body AWA.Storages.Stores.Files is
    --  ------------------------------
    --  Delete the content associate with the storage represented by `From`.
    --  ------------------------------
+   overriding
    procedure Delete (Storage : in File_Store;
                      Session : in out ADO.Sessions.Master_Session;
                      From    : in out AWA.Storages.Models.Storage_Ref'Class) is

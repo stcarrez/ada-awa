@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-stores-databases -- Database store
---  Copyright (C) 2012, 2020 Stephane Carrez
+--  Copyright (C) 2012, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,23 +41,27 @@ package AWA.Storages.Stores.Databases is
 
    --  Save the file represented by the `Path` variable into a store and associate that
    --  content with the storage reference represented by `Into`.
+   overriding
    procedure Save (Storage : in Database_Store;
                    Session : in out ADO.Sessions.Master_Session;
                    Into    : in out AWA.Storages.Models.Storage_Ref'Class;
                    Path    : in String);
 
+   overriding
    procedure Load (Storage : in Database_Store;
                    Session : in out ADO.Sessions.Session'Class;
                    From    : in AWA.Storages.Models.Storage_Ref'Class;
                    Into    : in out AWA.Storages.Storage_File);
 
    --  Create a storage
+   overriding
    procedure Create (Storage : in Database_Store;
                      Session : in out ADO.Sessions.Master_Session;
                      From    : in AWA.Storages.Models.Storage_Ref'Class;
                      Into    : in out AWA.Storages.Storage_File);
 
    --  Delete the content associate with the storage represented by `From`.
+   overriding
    procedure Delete (Storage : in Database_Store;
                      Session : in out ADO.Sessions.Master_Session;
                      From    : in out AWA.Storages.Models.Storage_Ref'Class);

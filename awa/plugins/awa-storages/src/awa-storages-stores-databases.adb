@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-stores-databases -- Database store
---  Copyright (C) 2012, 2015, 2016 Stephane Carrez
+--  Copyright (C) 2012, 2015, 2016, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +22,7 @@ package body AWA.Storages.Stores.Databases is
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Storages.Stores.Files");
 
    --  Create a storage
+   overriding
    procedure Create (Storage : in Database_Store;
                      Session : in out ADO.Sessions.Master_Session;
                      From    : in AWA.Storages.Models.Storage_Ref'Class;
@@ -34,6 +35,7 @@ package body AWA.Storages.Stores.Databases is
    --  Save the file represented by the `Path` variable into a store and associate that
    --  content with the storage reference represented by `Into`.
    --  ------------------------------
+   overriding
    procedure Save (Storage : in Database_Store;
                    Session : in out ADO.Sessions.Master_Session;
                    Into    : in out AWA.Storages.Models.Storage_Ref'Class;
@@ -50,6 +52,7 @@ package body AWA.Storages.Stores.Databases is
       Into.Set_Store_Data (Store);
    end Save;
 
+   overriding
    procedure Load (Storage : in Database_Store;
                    Session : in out ADO.Sessions.Session'Class;
                    From    : in AWA.Storages.Models.Storage_Ref'Class;
@@ -72,6 +75,7 @@ package body AWA.Storages.Stores.Databases is
    --  ------------------------------
    --  Delete the content associate with the storage represented by `From`.
    --  ------------------------------
+   overriding
    procedure Delete (Storage : in Database_Store;
                      Session : in out ADO.Sessions.Master_Session;
                      From    : in out AWA.Storages.Models.Storage_Ref'Class) is
