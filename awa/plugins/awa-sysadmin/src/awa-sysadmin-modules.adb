@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-sysadmin-modules -- Module sysadmin
---  Copyright (C) 2019, 2020 Stephane Carrez
+--  Copyright (C) 2019, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,6 +35,10 @@ package body AWA.Sysadmin.Modules is
    package Register is new AWA.Modules.Beans (Module => Sysadmin_Module,
                                               Module_Access => Sysadmin_Module_Access);
 
+   Mimes : aliased constant Swagger.Servers.Mime_List :=
+     (1 => Swagger.Servers.Mime_Json,
+      2 => Swagger.Servers.Mime_Xml);
+
    procedure List_Users
      (Req     : in out Swagger.Servers.Request'Class;
       Reply   : in out Swagger.Servers.Response'Class;
@@ -56,17 +60,20 @@ package body AWA.Sysadmin.Modules is
    package API_List_Users is
      new Swagger.Servers.Operation (Handler => List_Users,
                                     Method  => Swagger.Servers.GET,
-                                    URI     => "/sysadmin/api/v1/users");
+                                    URI     => "/sysadmin/api/v1/users",
+                                    Mimes   => Mimes'Access);
 
    package API_List_Sessions is
      new Swagger.Servers.Operation (Handler => List_Sessions,
                                     Method  => Swagger.Servers.GET,
-                                    URI     => "/sysadmin/api/v1/sessions");
+                                    URI     => "/sysadmin/api/v1/sessions",
+                                    Mimes   => Mimes'Access);
 
    package API_List_Jobs is
      new Swagger.Servers.Operation (Handler => List_Jobs,
                                     Method  => Swagger.Servers.GET,
-                                    URI     => "/sysadmin/api/v1/jobs");
+                                    URI     => "/sysadmin/api/v1/jobs",
+                                    Mimes   => Mimes'Access);
 
    procedure List_Users
      (Req     : in out Swagger.Servers.Request'Class;
