@@ -35,9 +35,9 @@ package body AWA.Sysadmin.Modules is
    package Register is new AWA.Modules.Beans (Module => Sysadmin_Module,
                                               Module_Access => Sysadmin_Module_Access);
 
-   Mimes : aliased constant Swagger.Servers.Mime_List :=
-     (1 => Swagger.Servers.Mime_Json,
-      2 => Swagger.Servers.Mime_Xml);
+   Mimes : aliased constant Swagger.Mime_List :=
+     (1 => Swagger.Mime_Json,
+      2 => Swagger.Mime_Xml);
 
    procedure List_Users
      (Req     : in out Swagger.Servers.Request'Class;
