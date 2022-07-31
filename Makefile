@@ -68,3 +68,6 @@ update-coverage:
 ifeq ($(BUILDS_SHARED),yes)
 install-shared:
 endif
+
+$(eval $(call alire_publish,alire.toml,aw/awa,awa-$(VERSION).toml))
+$(eval $(call alire_publish,alire-unit.toml,aw/awa_unit,awa_unit-$(VERSION).toml))
