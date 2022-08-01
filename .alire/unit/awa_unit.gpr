@@ -10,14 +10,13 @@ with "awa";
 
 library project Awa_Unit is
 
-   Library_Dir := "lib";
    Library_Type : Config.Library_Type_Type := external ("AWA_LIBRARY_TYPE", "static");
 
    for Source_Dirs use ("../../awa/awaunit");
 
    for Library_Name use "awa_unit";
    for Library_Kind use Library_Type;
-   for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
+   for Library_Version use "lib" & Project'Library_Name & ".so." & Awa.Version;
 
    for Library_Dir use "../../lib/awa_unit/" & Project'Library_Kind;
    for Object_Dir use "../../obj/awa_unit/" & Project'Library_Kind;
