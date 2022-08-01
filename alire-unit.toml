@@ -26,12 +26,12 @@ unit tests for AWA applications.
 
 """
 
-project-files = [".alire/unit/awaunit.gpr"]
+project-files = [".alire/unit/awa_unit.gpr"]
 
 [[depends-on]]
-awa = "^2.2.0"
-serverfaces_unit = "^1.4.2"
-servletada_unit = "^1.5.1"
+awa = "^2.4.0"
+serverfaces_unit = "^1.5.0"
+servletada_unit = "^1.6.0"
 
 [gpr-externals]
 AWA_LIBRARY_TYPE = ["relocatable", "static", "static-pic"]

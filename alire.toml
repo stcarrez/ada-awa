@@ -57,9 +57,9 @@ ado = "^2.2.1"
 wikiada = "^1.4.0"
 elada = "^1.8.4"
 security = "^1.4.1"
-serverfaces = "^1.4.3"
-servletada = "^1.5.3"
-servletada_aws = "^1.5.3"
+serverfaces = "^1.5.0"
+servletada = "^1.6.0"
+servletada_aws = "^1.6.0"
 keystoreada = "^1.3.3"
 
 [gpr-externals]
