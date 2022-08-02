@@ -37,8 +37,8 @@ override_dh_auto_test::
 override_dh_auto_install::
 
 ali=3
-sover=2.3.0
-pkgver=2.3.0
+sover=2.4.0
+pkgver=2.4.0
 
 awa_SRCDIR := src
 awa_LNAME = libawa
@@ -50,6 +50,7 @@ awa_DEV_PKG = libawa$(ali)-dev
 awa_markedit_DEV_PKG = libawa-markedit$(pkgver)
 awa_trumbowyg_DEV_PKG = libawa-trumbowyg$(pkgver)
 awa_flotcharts_DEV_PKG = libawa-flotcharts$(pkgver)
+awa_easymde_DEV_PKG = libawa-easymde$(pkgver)
 
 define awa_declare_plugin
 awa_$(plugin)_DEV_PKG = libawa-$(plugin)$(ali)-dev
@@ -96,7 +97,7 @@ define awa_plugin_web_template
 endef
 
 $(foreach plugin, \
- awa_markedit awa_trumbowyg awa_flotcharts $(awa_pkg_plugins) \
+ awa_markedit awa_trumbowyg awa_flotcharts awa_easymde $(awa_pkg_plugins) \
   ,$(eval $(call awa_plugin_web_template)))
 
 .PHONY: override_dh_installdocs-indep
