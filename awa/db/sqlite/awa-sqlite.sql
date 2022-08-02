@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS awa_message (
   `parameters` VARCHAR(255) NOT NULL,
   /* the server identifier which processes the message */
   `server_id` INTEGER NOT NULL,
-  /* the task identfier on the server which processes the message */
+  /* the task identifier on the server which processes the message */
   `task_id` INTEGER NOT NULL,
   /* the message status */
   `status` TINYINT NOT NULL,
