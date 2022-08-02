@@ -4,7 +4,7 @@ version = "2.4.0"
 tags = ["web", "users", "jobs", "framework", "testing"]
 website = "https://gitlab.com/stcarrez/ada-awa"
 
-licenses = ["Apache 2.0"]
+licenses = "Apache-2.0"
 authors = ["Stephane.Carrez@gmail.com"]
 maintainers = ["Stephane.Carrez@gmail.com"]
 maintainers-logins = ["stcarrez"]
