@@ -1,8 +1,11 @@
-Version 2.4.0   -
+Version 2.4.0   - Aug 2022
   - Add support for SQL queries embedded in applications with ARE
   - Fix #20: Do not use git:// protocol
   - New EasyMDE plugin to integrate the Easy Markdown Editor
   - Update AWA blog and AWA wiki to use the EasyMDE editor for Markdown
+  - Use Dynamo 1.3.0, Ada Server Faces 1.5.0, Ada Servlet 1.6.0, OpenAPI Ada 0.6.0
+  - Use Ada Wiki 1.4.0, Ada Database Objects 2.3.0
+  - Use Ada Keystore 1.3.3, Ada EL 1.8.5, Ada Utility Library 2.5.0
 
 Version 2.3.1   - Feb 2022
   - Fix #13: AWA help command prints the wrong title 'akt tool to store and ...'

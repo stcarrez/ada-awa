@@ -54,19 +54,14 @@ You may get Ahven or Aunit at:
 * Ahven    (http://ahven.stronglytyped.org/)
 * AUnit    (https://libre.adacore.com/libre/tools/aunit/)
 
-## Version 2.4.0 - Under development
+## Version 2.4.0 - Aug 2022
 - Add support for SQL queries embedded in applications with ARE
 - Fix #20: Do not use git:// protocol
 - New EasyMDE plugin to integrate the Easy Markdown Editor
 - Update AWA blog and AWA wiki to use the EasyMDE editor for Markdown
-
-## Version 2.3.1   - Feb 2022
-- Fix #13: AWA help command prints the wrong title 'akt tool to store and ...'
-- Fix #14: Avoid using gnatprep for the configuration of mail factory
-- Fix #15: Compilation with debug mode sometimes fails due to incorrect GNAT config project
-- Fix #16: Allow the configuration of server max upload size and max form submission size
-- Fix #17: Error generated when a blog article makes a reference to a non existing image
-- Fix #18: AWA blog plugin fails to serve an image when it is stored in the storage directory
+- Use Dynamo 1.3.0, Ada Server Faces 1.5.0, Ada Servlet 1.6.0, OpenAPI Ada 0.6.0
+- Use Ada Wiki 1.4.0, Ada Database Objects 2.3.0
+- Use Ada Keystore 1.3.3, Ada EL 1.8.5, Ada Utility Library 2.5.0
 
 [List all versions](https://github.com/stcarrez/ada-awa/blob/master/NEWS.md)
 
