@@ -11,37 +11,21 @@ Files: *
 Copyright: 2010-2020 Stephane Carrez <Stephane.Carrez@gmail.com>
 License: Apache-2.0
 
-Files: web/js/jquery-*.js
-Copyright (c) 2011 Paul Bakaus, http://jqueryui.com/
+Files: plugins/awa-trumbowyg/web/*
+Copyright (c) Alexandre Demode (Alex-D)
 License: MIT
 
-Files: web/js/jquery-ui-*/*
-Copyright (c) 2011 Paul Bakaus, http://jqueryui.com/
+Files: plugins/awa-flotcharts/web/*
+Copyright (c) 2007-2014 IOLA and Ole Laursen.
 License: MIT
 
-Files: web/js/jquery-chosen-*/*
-Copyright (c) 2011-2015 Harvest, http://getharvest.com
+Files: plugins/awa-markedit/web/*
+Copyright (c) 2009 John Fraser, Titus Stone, Dana Robinson
 License: MIT
 
-Files: web/js/jquery.datetimepicker.js
-Copyright (c) 2013 http://xdsoft.net
+Files: plugins/awa-easymde/web/*
+Copyright (c) 2022 Jeroen Akkerman, https://github.com/ionaru/easy-markdown-editor
 License: MIT
-
-Files: web/js/dropzone.js
-Copyright (c) 2012 Matias Meno, http://www.dropzonejs.com
-License: MIT
-
-Files: web/css/redmond/*
-Copyright (c) 2011 Paul Bakaus, http://jqueryui.com/
-License: MIT
-
-Files: web/css/grids/*
-Copyright (c) 2011 Nathan Smith, http://sonspring.com/
-License: MIT
-
-Files: samples/web/js/google-code-prettify/*
-Copyright (C) 2011 Google Inc.
-License: Apache-2.0
 
 Files: debian/*
 Copyright: 2013-2020 Stephane Carrez <Stephane.Carrez@gmail.com>
