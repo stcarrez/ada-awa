@@ -37,6 +37,7 @@ libdir?=${prefix}/${infix_lib}
 alidir?=${prefix}/${infix_ali}
 samplesdir?=${prefix}/share/doc/${docdir}
 dynamodir=${prefix}/share/dynamo
+aliredir=${prefix}/alire-index
 
 MAKE_ARGS += -XBUILD=$(BUILD) -XPROCESSORS=$(PROCESSORS)
 
@@ -184,6 +185,15 @@ endif
 
 clean::
 	$(RM) -r $($(1)_dir)/dynamo.log $($(1)_dir)/obj $($(1)_dir)/lib
+
+endef
+
+define alire_publish
+  publish::
+	-rm -f $(aliredir)/$(2)/$(3)
+	alr -f --no-tty publish --manifest $(1)
+	mkdir -p $(aliredir)/$(2)
+	cp alire/releases/$(3) $(aliredir)/$(2)/$(3)
 
 endef
 
