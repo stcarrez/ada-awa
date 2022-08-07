@@ -298,13 +298,13 @@ AC_DEFUN(AM_GNAT_FIND_ADA_WIKI,
 dnl Check for swaggerada GNAT project
 AC_DEFUN(AM_GNAT_FIND_ADA_OPENAPI,
 [
-  AM_GNAT_FIND_PROJECT([openapi-ada],[OpenAPI Ada Library],[openapi],
+  AM_GNAT_FIND_PROJECT([openapi-ada],[OpenAPI Ada Library],[swagger],
     [git@github.com:stcarrez/swagger-ada.git],
     [Building $1 requires the Ada OpenAPI Library.],
     [
-      SWAGGER_DIR=${ac_cv_gnat_project_dir_openapi}
+      SWAGGER_DIR=${ac_cv_gnat_project_dir_swagger}
     ])
-  AC_SUBST(OPENAPI_DIR)
+  AC_SUBST(SWAGGER_DIR)
 ])
 
 dnl Check for swaggerada GNAT project
