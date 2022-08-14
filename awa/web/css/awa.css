@@ -469,6 +469,31 @@ ul.awa-pagination li {
     padding: 1em;
 }
 
+.awa-page-tab {
+    float: left;
+    clear: both;
+    list-style-type: none;
+    width: 100%;
+    margin-bottom: 1em;
+    border-bottom: 2px solid #47C;
+    padding-left: 1%;
+    padding-right: 1%;
+    padding-top: 0.5em;
+}
+.awa-page-tab li {
+    float: left;
+    padding: 0.25em;
+    width: auto;
+}
+.awa-page-tab span {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    font-size: 1.2em;
+}
+.awa-page-tab a {
+    text-decoration: none;
+}
+
 /**
  * Responsive style for mobile and tablets.
  */
