@@ -170,6 +170,40 @@ bin/atlas-server -c secure/config.properties start
 Note that in order to use this configuration setup, the directory must have
 the `rwx------` rights and files must have the `rw-------` rights.
 
+### Overriding some AWA navigation rules
+
+AWA and its modules are using Ada Server Faces for the presentation pages and
+navigation.  The navigation rule describes what is the next page to render when
+a form is submitted.  In some cases, the default navigation rules provided by
+AWA or some of its module may not fit your application needs.  You can override
+them by creating an application override XML file that you configure to load
+after the `awa.xml` configuration file.  For example, to override the default
+redirection used after a login, you can use the following XML file:
+
+```
+<?xml version='1.0' encoding='UTF-8'?>
+<module version="1.0">
+
+  <navigation-rule>
+    <from-view-id>/auth/login.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/index.xhtml</to-view-id>
+      <redirect/>
+    </navigation-case>
+  </navigation-rule>
+
+</module>
+```
+
+and then configure the `app.config` property to define the list of XML
+configuration file to load.  Each name must be separated by `;`.
+For example:
+
+```
+app.config=awa.xml;app-override.xml
+```
+
 ## Trouble shotting Tips
 
 ### No AWA service context
