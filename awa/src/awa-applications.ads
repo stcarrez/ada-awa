@@ -52,8 +52,10 @@ with AWA.Audits.Services;
 --    to register all the servlet filter instances.  The application servlets
 --    and filters must be registered before reading the global configuration file.
 --  * It loads the global application configuration by reading the `awa.xml`
---    file.  By reading this configuration, some global configuration is
---    established on the servlets, filters.
+--    file as well as some application specific files.  By reading this
+--    configuration, some global configuration is established on the servlets,
+--    filters, navigation rules.  The list of XML files loaded during this
+--    step is controlled by the `app.config` configuration.
 --  * It calls the `Initialize_Modules` procedure so that all the application
 --    modules can be registered, configured and initialized.  Each module
 --    brings its own component, servlet and filter.  They are configured
