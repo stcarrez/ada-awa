@@ -175,6 +175,45 @@
     <description>Auth provider to use for Google</description>
   </context-param>
 
+  <!--  OpenID Github -->
+  <context-param>
+    <param-name>auth.url.github</param-name>
+    <param-value>https://github.com/login/oauth/authorize</param-value>
+    <description>GitHub OAuth2 Connect access point</description>
+  </context-param>
+
+  <context-param>
+    <param-name>auth.provider.github</param-name>
+    <param-value>github</param-value>
+    <description>Auth provider to use for GitHub</description>
+  </context-param>
+
+  <!--  OpenID Gitlab -->
+  <context-param>
+    <param-name>auth.url.gitlab</param-name>
+    <param-value>https://gitlab.com/oauth/authorize</param-value>
+    <description>GitLab OAuth2 Connect access point</description>
+  </context-param>
+
+  <context-param>
+    <param-name>auth.provider.gitlab</param-name>
+    <param-value>yahoo</param-value>
+    <description>Auth provider to use for GitLab</description>
+  </context-param>
+
+  <!--  OpenID Twitter -->
+  <context-param>
+    <param-name>auth.url.twitter</param-name>
+    <param-value>https://api.twitter.com/oauth/authenticate</param-value>
+    <description>Twitter OAuth2 Connect access point</description>
+  </context-param>
+
+  <context-param>
+    <param-name>auth.provider.twitter</param-name>
+    <param-value>yahoo</param-value>
+    <description>Auth provider to use for Twitter</description>
+  </context-param>
+
   <!--  Facebook Login -->
   <context-param>
     <param-name>auth.url.facebook</param-name>
@@ -277,6 +316,30 @@
     <param-name>verify-filter.redirect</param-name>
     <param-value>#{contextPath}/auth/login.html</param-value>
     <description>URI to redirect to the login page</description>
+  </context-param>
+
+  <context-param>
+    <param-name>app_login_register</param-name>
+    <param-value>#{not empty app_login_register ? app_login_register : true}</param-value>
+    <description>Enable or disable user registration through the web interface</description>
+  </context-param>
+
+  <context-param>
+    <param-name>app_login_email</param-name>
+    <param-value>#{not empty app_login_email ? app_login_email : true}</param-value>
+    <description>Enable or disable user login through the email/password form</description>
+  </context-param>
+
+  <context-param>
+    <param-name>app_login_openid</param-name>
+    <param-value>#{not empty app_login_openid ? app_login_openid : true}</param-value>
+    <description>Enable or disable user login through OpenID/OAuth2</description>
+  </context-param>
+
+  <context-param>
+    <param-name>app_login_methods</param-name>
+    <param-value>#{not empty app_login_methods ? app_login_methods : 'email,google,facebook'}</param-value>
+    <description>List of login methods which are enabled for authentication</description>
   </context-param>
 
   <servlet-mapping>

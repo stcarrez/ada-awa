@@ -14,9 +14,11 @@
   -  See the License for the specific language governing permissions and
   -  limitations under the License.
   -->
-<ui:composition template="/WEB-INF/layouts/anonymous.xhtml"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition
+  template="/WEB-INF/layouts/anonymous.xhtml"
+  xmlns:c="http://java.sun.com/jstl/core"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:param name="title" value="#{userMsg.login_page_title}"/>
     <ui:param name="top_nav" value="auth"/>
 
@@ -27,15 +29,19 @@
         </f:metadata>
         <div id='awa-content'>
         <ui:include src="views/welcome-login.xhtml"/>
-        <div class='awa-side1 container_6'>
-          <ui:include src="forms/login-openid.xhtml">
+	<c:if test="#{initParam.app_login_openid}">
+          <div class='awa-side1 container_6'>
+            <ui:include src="forms/login-openid.xhtml">
               <ui:param name="title" value="#{userMsg.login_openid_title}"/>
               <ui:param name="redirect" value="#{empty param['redirect'] ? '' : param['redirect']}"/>
-          </ui:include>
-        </div>
-        <div class='awa-side2 container_6'>
-          <ui:include src="forms/login-form.xhtml"/>
-        </div>
+            </ui:include>
+          </div>
+	</c:if>
+	<c:if test="#{initParam.app_login_email}">
+          <div class='awa-side2 container_6'>
+            <ui:include src="forms/login-form.xhtml"/>
+          </div>
+	</c:if>
       </div>
     </ui:define>
 </ui:composition>

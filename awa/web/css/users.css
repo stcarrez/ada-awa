@@ -3,19 +3,6 @@
  * Copyright (C) 2011-2018 Stephane Carrez
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-div.awa-side1, div.awa-side2 {
-    float: left;
-}
-div.awa-side1 {
-    padding-right: 1%;
-    padding-left: 1%;
-    width: 50%;
-}
-div.awa-side2 {
-    padding-left: 1%;
-    padding-right: 1%;
-    width: 50%;
-}
 li.message {
     height: 30px;
     overflow: hidden;
@@ -95,27 +82,34 @@ div.openid-login {
 }
 
 ul.openid-login a {
-	display: block;
-	height: 38px;
-	text-align: center;
+    display: block;
+    height: 38px;
+    text-align: center;
     line-height: 38px;
 }
 
+a.openid-github em,
+a.openid-gitlab em,
 a.openid-orange em,
 a.openid-facebook em,
 a.openid-google-plus em,
 a.openid-yahoo em,
 a.openid-twitter em,
 a.openid-google em {
-	display: block;
-	float: left;
-	background: url(../images/open-id-logos-2.png);
-	width: 200px;
-	height: 36px;
-	overflow: hidden;
+    display: block;
+    float: left;
+    background: url(../images/open-id-logos-3.png);
+    width: 200px;
+    height: 36px;
+    overflow: hidden;
     padding: 0;
 }
+a.openid-github em {
+  background-position: 0 0;
+  height: 34px;
+}
 a.openid-yahoo em {
+  margin-top: 3px;
   background-position: 0 -38px;
   height: 34px;
 }
@@ -123,11 +117,29 @@ a.openid-orange em {
   background-position: 0 -152px;
 }
 a.openid-facebook em {
+  margin-top: 2px;
   background-position: 0 -74px;
 }
 a.openid-twitter em {
   background-position: 0 -114px;
   height: 28px;
+}
+a.openid-google-plus em {
+  background-position: 0 -230px; /* 0 - 190 or 231 */
+  height: 40px;
+}
+a.openid-github em {
+}
+a.openid-gitlab em {
+  margin-top: 3px;
+  background-position: 0 -272px;
+  height: 33px;
+}
+a.openid-github {
+    border: 1px solid #ccc;
+}
+a.openid-gitlab {
+    border: 1px solid #ccc;
 }
 div.openid-info {
     float: left;
@@ -201,4 +213,9 @@ div.openid-retry {
 .member-list div.asf-list-action {
     left: -24px;
     width: 24px;
+}
+@media screen and (max-width: 768px) {
+    ul.openid-login li {
+	margin: 5px;
+    }
 }
