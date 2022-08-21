@@ -176,7 +176,13 @@ $(foreach PLUGIN,$(PLUGINS),$(eval include plugins/$(PLUGIN)/Makefile))
 
 generate::
 	$(DYNAMO) generate $(DYNAMO_ARGS)
-	rm -f src/models/awa-commands-models.adb
+	rm -f src/model/awa-commands-models.adb
+	rm -f db/mysql/create-awa-mysql.sql \
+              db/mysql/drop-awa-mysql.sql \
+              db/postgresql/create-awa-postgresql.sql \
+              db/postgresql/drop-awa-postgresql.sql \
+              db/sqlite/create-awa-sqlite.sql \
+              db/sqlite/drop-awa-sqlite.sql
 
 generate-test::
 	cd regtests && $(DYNAMO) generate ../db/regtests
