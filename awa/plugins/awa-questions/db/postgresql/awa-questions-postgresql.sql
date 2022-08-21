@@ -51,6 +51,6 @@ the question short description. */
   "accepted_answer_id" BIGINT ,
   PRIMARY KEY ("id")
 );
-INSERT INTO entity_type (name) VALUES
+INSERT INTO ado_entity_type (name) VALUES
 ('awa_answer'), ('awa_question')
   ON CONFLICT DO NOTHING;

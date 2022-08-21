@@ -24,6 +24,6 @@ CREATE TABLE IF NOT EXISTS awa_vote (
   "user_id" BIGINT NOT NULL,
   PRIMARY KEY ("entity_id", "user_id")
 );
-INSERT INTO entity_type (name) VALUES
+INSERT INTO ado_entity_type (name) VALUES
 ('awa_rating'), ('awa_vote')
   ON CONFLICT DO NOTHING;

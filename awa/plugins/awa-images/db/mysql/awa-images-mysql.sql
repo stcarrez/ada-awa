@@ -30,5 +30,5 @@ CREATE TABLE IF NOT EXISTS awa_image (
   `storage_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT IGNORE INTO entity_type (name) VALUES
+INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_image");

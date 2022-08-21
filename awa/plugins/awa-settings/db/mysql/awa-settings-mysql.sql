@@ -43,5 +43,5 @@ CREATE TABLE IF NOT EXISTS awa_user_setting (
   `user_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT IGNORE INTO entity_type (name) VALUES
+INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_global_setting"), ("awa_setting"), ("awa_user_setting");

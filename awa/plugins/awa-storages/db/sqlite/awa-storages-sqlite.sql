@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS awa_store_local (
   `storage_id` BIGINT ,
   PRIMARY KEY (`id`)
 );
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_storage");
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_storage_data");
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_storage_folder");
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_store_local");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_storage");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_storage_data");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_storage_folder");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_store_local");

@@ -71,19 +71,19 @@ CREATE TABLE IF NOT EXISTS awa_wiki_space (
   `workspace_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT IGNORE INTO entity_type (name) VALUES
+INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_wiki_content"), ("awa_wiki_page"), ("awa_wiki_space");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "name");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_page"), "name");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "last_version");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_page"), "last_version");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "is_public");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_page"), "is_public");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "title");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_page"), "title");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_space"), "name");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_space"), "name");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_space"), "is_public");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_space"), "is_public");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_space"), "format");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_space"), "format");

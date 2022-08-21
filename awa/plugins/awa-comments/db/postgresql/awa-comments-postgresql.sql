@@ -22,15 +22,15 @@ CREATE TABLE IF NOT EXISTS awa_comment (
   "author_id" BIGINT NOT NULL,
   PRIMARY KEY ("id")
 );
-INSERT INTO entity_type (name) VALUES
+INSERT INTO ado_entity_type (name) VALUES
 ('awa_comment')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_comment'), 'message')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_comment'), 'message')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_comment'), 'status')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_comment'), 'status')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_comment'), 'format')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_comment'), 'format')
   ON CONFLICT DO NOTHING;

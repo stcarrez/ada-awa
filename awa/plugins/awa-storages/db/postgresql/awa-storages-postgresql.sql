@@ -84,6 +84,6 @@ CREATE TABLE IF NOT EXISTS awa_store_local (
   "storage_id" BIGINT ,
   PRIMARY KEY ("id")
 );
-INSERT INTO entity_type (name) VALUES
+INSERT INTO ado_entity_type (name) VALUES
 ('awa_storage'), ('awa_storage_data'), ('awa_storage_folder'), ('awa_store_local')
   ON CONFLICT DO NOTHING;

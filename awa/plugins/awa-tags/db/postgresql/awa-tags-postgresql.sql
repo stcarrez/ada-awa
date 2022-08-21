@@ -20,6 +20,6 @@ Date: 2013-02-23the database entity to which the tag is associated */
   "tag_id" BIGINT NOT NULL,
   PRIMARY KEY ("id")
 );
-INSERT INTO entity_type (name) VALUES
+INSERT INTO ado_entity_type (name) VALUES
 ('awa_tag'), ('awa_tagged_entity')
   ON CONFLICT DO NOTHING;

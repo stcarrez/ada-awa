@@ -51,5 +51,5 @@ the question short description. */
   `accepted_answer_id` BIGINT ,
   PRIMARY KEY (`id`)
 );
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_answer");
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_question");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_answer");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_question");

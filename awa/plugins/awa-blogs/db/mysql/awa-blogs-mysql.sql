@@ -57,29 +57,29 @@ CREATE TABLE IF NOT EXISTS awa_post (
   `image_id` BIGINT ,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT IGNORE INTO entity_type (name) VALUES
+INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_blog"), ("awa_post");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "name");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_blog"), "name");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "uid");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_blog"), "uid");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "url");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_blog"), "url");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "format");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_blog"), "format");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "default_image_url");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_blog"), "default_image_url");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "title");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "title");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "uri");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "uri");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "publish_date");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "publish_date");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "status");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "status");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "allow_comments");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "allow_comments");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "summary");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "summary");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "format");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "format");

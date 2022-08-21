@@ -66,6 +66,6 @@ CREATE TABLE IF NOT EXISTS awa_workspace_member (
   "workspace_id" BIGINT NOT NULL,
   PRIMARY KEY ("id")
 );
-INSERT INTO entity_type (name) VALUES
+INSERT INTO ado_entity_type (name) VALUES
 ('awa_invitation'), ('awa_workspace'), ('awa_workspace_feature'), ('awa_workspace_member')
   ON CONFLICT DO NOTHING;

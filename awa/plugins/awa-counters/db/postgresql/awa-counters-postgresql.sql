@@ -37,6 +37,6 @@ CREATE TABLE IF NOT EXISTS awa_visit (
   "definition_id" BIGINT NOT NULL,
   PRIMARY KEY ("object_id", "user", "definition_id")
 );
-INSERT INTO entity_type (name) VALUES
+INSERT INTO ado_entity_type (name) VALUES
 ('awa_counter'), ('awa_counter_definition'), ('awa_visit')
   ON CONFLICT DO NOTHING;

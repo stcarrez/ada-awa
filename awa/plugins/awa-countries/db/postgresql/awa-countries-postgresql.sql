@@ -63,6 +63,6 @@ CREATE TABLE IF NOT EXISTS awa_region (
   "country_id" BIGINT NOT NULL,
   PRIMARY KEY ("id")
 );
-INSERT INTO entity_type (name) VALUES
+INSERT INTO ado_entity_type (name) VALUES
 ('awa_city'), ('awa_country'), ('awa_country_neighbor'), ('awa_region')
   ON CONFLICT DO NOTHING;

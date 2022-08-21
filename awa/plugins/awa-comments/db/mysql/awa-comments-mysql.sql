@@ -22,11 +22,11 @@ CREATE TABLE IF NOT EXISTS awa_comment (
   `author_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT IGNORE INTO entity_type (name) VALUES
+INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_comment");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_comment"), "message");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_comment"), "message");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_comment"), "status");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_comment"), "status");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_comment"), "format");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_comment"), "format");

@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS awa_workspace_member (
   `workspace_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_invitation");
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_workspace");
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_workspace_feature");
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_workspace_member");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_invitation");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_workspace");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_workspace_feature");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_workspace_member");

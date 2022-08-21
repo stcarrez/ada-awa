@@ -15,6 +15,6 @@ CREATE TABLE IF NOT EXISTS awa_changelog (
   "entity_type" INTEGER NOT NULL,
   PRIMARY KEY ("id")
 );
-INSERT INTO entity_type (name) VALUES
+INSERT INTO ado_entity_type (name) VALUES
 ('awa_changelog')
   ON CONFLICT DO NOTHING;

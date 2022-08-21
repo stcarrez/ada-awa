@@ -30,6 +30,6 @@ CREATE TABLE IF NOT EXISTS awa_image (
   "storage_id" BIGINT NOT NULL,
   PRIMARY KEY ("id")
 );
-INSERT INTO entity_type (name) VALUES
+INSERT INTO ado_entity_type (name) VALUES
 ('awa_image')
   ON CONFLICT DO NOTHING;

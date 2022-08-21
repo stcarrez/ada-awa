@@ -37,5 +37,5 @@ CREATE TABLE IF NOT EXISTS awa_visit (
   `definition_id` BIGINT NOT NULL,
   PRIMARY KEY (`object_id`, `user`, `definition_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT IGNORE INTO entity_type (name) VALUES
+INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_counter"), ("awa_counter_definition"), ("awa_visit");

@@ -71,27 +71,27 @@ CREATE TABLE IF NOT EXISTS awa_wiki_space (
   "workspace_id" BIGINT NOT NULL,
   PRIMARY KEY ("id")
 );
-INSERT INTO entity_type (name) VALUES
+INSERT INTO ado_entity_type (name) VALUES
 ('awa_wiki_content'), ('awa_wiki_page'), ('awa_wiki_space')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'name')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_page'), 'name')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'last_version')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_page'), 'last_version')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'is_public')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_page'), 'is_public')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'title')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_page'), 'title')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_space'), 'name')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_space'), 'name')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_space'), 'is_public')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_space'), 'is_public')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_space'), 'format')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_space'), 'format')
   ON CONFLICT DO NOTHING;

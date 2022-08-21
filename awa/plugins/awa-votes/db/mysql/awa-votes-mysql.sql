@@ -24,5 +24,5 @@ CREATE TABLE IF NOT EXISTS awa_vote (
   `user_id` BIGINT NOT NULL,
   PRIMARY KEY (`entity_id`, `user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT IGNORE INTO entity_type (name) VALUES
+INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_rating"), ("awa_vote");
