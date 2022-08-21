@@ -1,5 +1,5 @@
 <!-- Logout page
-  -  Copyright (C) 2011, 2012, 2014 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2014, 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,11 +21,11 @@
         <f:viewAction action="#{logout.logout}"/>
     </f:metadata>
 	<c:choose>
-	   <c:when test="#{empty initParam['app_logout_url']}">
+	   <c:when test="#{empty initParam.app_logout_url}">
            <awa:redirect link="#{contextPath}/auth/login.html"/>
        </c:when>
        <c:otherwise>
-           <awa:redirect link="#{initParam['app_logout_url']}"/>
+           <awa:redirect link="#{initParam.app_logout_url}"/>
        </c:otherwise>
     </c:choose>
 </f:view>

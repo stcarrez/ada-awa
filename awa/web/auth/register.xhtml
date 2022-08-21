@@ -26,7 +26,7 @@
       <div id='awa-content'>
         <ui:include src="views/welcome-register.xhtml"/>
 	<!-- if registration is enabled, show the registration form otherwise show nothing -->
-	<c:if test="#{initParam.app_allow_register}">
+	<c:if test="#{initParam.app_login_register}">
           <div class='awa-side1'>
             <ui:include src="forms/login-openid.xhtml">
               <ui:param name="title" value="#{userMsg.signup_openid_title}"/>
@@ -39,7 +39,7 @@
             </div>
           </div>
 	</c:if>
-	<c:if test="#{not initParam.app_allow_register}">
+	<c:if test="#{not initParam.app_login_register}">
 	  #{userMsg.signup_disabled_message}
 	</c:if>
       </div>
