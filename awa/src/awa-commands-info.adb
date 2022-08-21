@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  akt-commands-info -- Info command to describe the current configuration
---  Copyright (C) 2020 Stephane Carrez
+--  Copyright (C) 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -150,6 +150,10 @@ package body AWA.Commands.Info is
          Context.Console.End_Title;
          Context.Console.Notice (N_INFO, "Users Module");
          Context.Console.Notice (N_INFO, "------------");
+         Command.Print (Application, "app_login_register", "", Context);
+         Command.Print (Application, "app_login_email", "", Context);
+         Command.Print (Application, "app_login_openid", "", Context);
+         Command.Print (Application, "app_login_methods", "", Context);
          Command.Print (Application, "openid.realm", "", Context);
          Command.Print (Application, "openid.callback_url", "", Context);
          Command.Print (Application, "openid.success_url", "", Context);
