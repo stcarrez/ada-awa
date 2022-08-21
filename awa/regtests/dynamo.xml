@@ -1,0 +1,34 @@
+<project>
+    <name>regtests</name>
+    <property name="author_email">Stephane.Carrez@gmail.com</property>
+    <property name="license">apache</property>
+    <property name="author">Stephane Carrez</property>
+    <depend name="util"></depend>
+    <depend name="ado"></depend>
+    <depend name="security"></depend>
+    <depend name="servlet"></depend>
+    <depend name="asf"></depend>
+    <depend name="keystore"></depend>
+    <depend name="awa_trumbowyg"></depend>
+    <depend name="awa-counters"></depend>
+    <depend name="awa-comments"></depend>
+    <depend name="awa-wikis"></depend>
+    <depend name="awa-settings"></depend>
+    <depend name="awa-easymde"></depend>
+    <depend name="awa-workspaces"></depend>
+    <depend name="awa-votes"></depend>
+    <depend name="awa-storages"></depend>
+    <depend name="awa-setup"></depend>
+    <depend name="awa-markedit"></depend>
+    <depend name="awa-changelogs"></depend>
+    <depend name="awa-flotcharts"></depend>
+    <depend name="awa-jobs"></depend>
+    <depend name="awa-countries"></depend>
+    <depend name="awa-images"></depend>
+    <depend name="awa-questions"></depend>
+    <depend name="awa-mail"></depend>
+    <depend name="awa-sysadmin"></depend>
+    <depend name="awa-blogs"></depend>
+    <depend name="awa-tags"></depend>
+    <depend name="awa"></depend>
+</project>

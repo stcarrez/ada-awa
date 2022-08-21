@@ -121,7 +121,7 @@ endif
 regtests.db:
 	-rm -f $@
 ifeq (${HAVE_SQLITE},True)
-	sqlite3 $@ < db/sqlite/create-awa-sqlite.sql
+	sqlite3 $@ < db/regtests/sqlite/create-regtests-sqlite.sql
 endif
 
 stamp-test-setup: Makefile.conf
@@ -134,8 +134,8 @@ stamp-test-setup: Makefile.conf
 # (The database itself must have been created)
 create-mysql-tests:
 ifeq (${HAVE_MYSQL},True)
-	mysql --defaults-extra-file=db/mysql/mysql.cnf < db/mysql/drop-awa-mysql.sql
-	mysql --defaults-extra-file=db/mysql/mysql.cnf < db/mysql/create-awa-mysql.sql
+	mysql --defaults-extra-file=db/mysql/mysql.cnf < db/regtests/mysql/drop-regtests-mysql.sql
+	mysql --defaults-extra-file=db/mysql/mysql.cnf < db/regtests/mysql/create-regtests-mysql.sql
 endif
 
 # Create the tables in the database.
@@ -143,9 +143,9 @@ endif
 create-postgresql-tests:
 ifeq (${HAVE_POSTGRESQL},True)
 	psql -q "postgresql://localhost:5432/awa_test?user=awa_user&password=awa_pass" \
-           --file=db/postgresql/drop-awa-postgresql.sql
+           --file=db/regtests/postgresql/drop-regtests-postgresql.sql
 	psql -q "postgresql://localhost:5432/awa_test?user=awa_user&password=awa_pass" \
-           --file=db/postgresql/create-awa-postgresql.sql
+           --file=db/regtests/postgresql/create-regtests-postgresql.sql
 endif
 
 install::
@@ -177,3 +177,6 @@ $(foreach PLUGIN,$(PLUGINS),$(eval include plugins/$(PLUGIN)/Makefile))
 generate::
 	$(DYNAMO) generate $(DYNAMO_ARGS)
 	rm -f src/models/awa-commands-models.adb
+
+generate-test::
+	cd regtests && $(DYNAMO) generate ../db/regtests

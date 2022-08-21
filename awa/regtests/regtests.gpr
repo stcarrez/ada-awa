@@ -1,0 +1,31 @@
+--  A GNAT project for Dynamo usage only
+with "../awa";
+with "../plugins/awa-workspaces/awa_workspaces";
+with "../plugins/awa-counters/awa_counters";
+with "../plugins/awa-storages/awa_storages";
+with "../plugins/awa-images/awa_images";
+with "../plugins/awa-mail/awa_mail";
+with "../plugins/awa-jobs/awa_jobs";
+with "../plugins/awa-blogs/awa_blogs";
+with "../plugins/awa-votes/awa_votes";
+with "../plugins/awa-questions/awa_questions";
+with "../plugins/awa-tags/awa_tags";
+with "../plugins/awa-settings/awa_settings";
+with "../plugins/awa-comments/awa_comments";
+with "../plugins/awa-changelogs/awa_changelogs";
+with "../plugins/awa-wikis/awa_wikis";
+with "../plugins/awa-counters/awa_counters";
+with "../plugins/awa-setup/awa_setup";
+with "../plugins/awa-sysadmin/awa_sysadmin";
+
+project Regtests is
+
+   for Languages use ("Ada");
+
+   Mains := ();
+
+   for Source_Dirs use (".");
+
+   for Main use Mains;
+
+end Regtests;
