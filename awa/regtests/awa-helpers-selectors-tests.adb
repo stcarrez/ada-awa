@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-helpers-selectors-tests -- Unit tests for selector helpers
---  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,7 +39,7 @@ package body AWA.Helpers.Selectors.Tests is
    --  ------------------------------
    procedure Test_Create_From_Query (T : in out Test) is
       Session : constant ADO.Sessions.Session := AWA.Tests.Get_Application.Get_Session;
-      Query   : constant String := "SELECT id, name from entity_type order by id";
+      Query   : constant String := "SELECT id, name from ado_entity_type order by id";
       Stmt    : ADO.Statements.Query_Statement := Session.Create_Statement (Query);
       Result  : ASF.Models.Selects.Select_Item_List;
       Found_User : Boolean := False;
