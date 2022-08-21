@@ -258,13 +258,13 @@ CREATE TABLE IF NOT EXISTS awa_user (
   `email_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT IGNORE INTO entity_type (name) VALUES
+INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_audit"), ("awa_audit_field"), ("awa_message"), ("awa_message_type"), ("awa_queue"), ("awa_application"), ("awa_callback"), ("awa_oauth_session"), ("awa_acl"), ("awa_permission"), ("awa_access_key"), ("awa_email"), ("awa_session"), ("awa_user");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "first_name");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_user"), "first_name");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "last_name");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_user"), "last_name");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "country");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_user"), "country");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "name");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_user"), "name");

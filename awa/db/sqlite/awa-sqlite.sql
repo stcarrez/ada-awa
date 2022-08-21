@@ -256,25 +256,25 @@ CREATE TABLE IF NOT EXISTS awa_user (
   `email_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_audit");
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_audit_field");
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_message");
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_message_type");
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_queue");
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_application");
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_callback");
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_oauth_session");
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_acl");
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_permission");
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_access_key");
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_email");
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_session");
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_user");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_audit");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_audit_field");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_message");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_message_type");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_queue");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_application");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_callback");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_oauth_session");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_acl");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_permission");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_access_key");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_email");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_session");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_user");
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "first_name");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_user"), "first_name");
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "last_name");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_user"), "last_name");
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "country");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_user"), "country");
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "name");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_user"), "name");
