@@ -17,6 +17,7 @@
 -----------------------------------------------------------------------
 with Ada.Command_Line;
 with Util.Strings.Formats;
+with Asf.Applications.Main;
 with Servlet.Core;
 package body AWA.Commands.Drivers is
 
@@ -117,7 +118,10 @@ package body AWA.Commands.Drivers is
          return;
       end if;
 
-      Configure (Selected.all, To_String (App_Name), Context);
+      Configure (To_String (App_Name), Context);
+      if Command.Initialize_Application then
+         Selected.Initialize (Context.App_Config, Context.Factory);
+      end if;
       Application_Command_Type'Class (Command).Execute (Selected.all, Args, Context);
    end Execute;
 

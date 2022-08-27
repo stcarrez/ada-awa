@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-commands-drivers -- Driver for AWA commands for server or admin tool
---  Copyright (C) 2020, 2021 Stephane Carrez
+--  Copyright (C) 2020, 2021, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,7 +52,8 @@ package AWA.Commands.Drivers is
                    Context   : in out Context_Type);
 
    type Application_Command_Type is abstract new Command_Type with record
-      Application_Name : aliased GNAT.Strings.String_Access;
+      Application_Name       : aliased GNAT.Strings.String_Access;
+      Initialize_Application : Boolean := True;
    end record;
 
    function Is_Application (Command : in Application_Command_Type;

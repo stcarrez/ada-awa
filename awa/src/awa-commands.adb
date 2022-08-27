@@ -126,8 +126,7 @@ package body AWA.Commands is
    --  Configure the application by loading its configuration file and merging it with
    --  the keystore file if there is one.
    --  ------------------------------
-   procedure Configure (Application : in out ASF.Applications.Main.Application'Class;
-                        Name        : in String;
+   procedure Configure (Name        : in String;
                         Context     : in out Context_Type) is
       procedure Read_Configuration (Config_Path : in String;
                                     Done        : out Boolean);
@@ -173,7 +172,6 @@ package body AWA.Commands is
       else
          Context.App_Config := File_Config;
       end if;
-      Application.Initialize (Context.App_Config, Context.Factory);
    end Configure;
 
    --  ------------------------------

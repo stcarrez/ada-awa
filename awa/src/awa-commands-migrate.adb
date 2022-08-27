@@ -16,35 +16,46 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Util.Strings.Vectors;
+with ASF.Applications.Main;
+with ADO.Configs;
 with ADO.Sessions;
+with ADO.Sessions.Sources;
+with ADO.Sessions.Factory;
 with ADO.Schemas.Databases;
 package body AWA.Commands.Migrate is
 
    --  ------------------------------
-   --  Add, disable, enable a user.
+   --  Check and run the SQL migration scripts if necessary.
    --  ------------------------------
-   overriding
-   procedure Execute (Command   : in out Command_Type;
-                      Name      : in String;
-                      Args      : in Argument_List'Class;
-                      Context   : in out Context_Type) is
-   begin
-      Command_Drivers.Application_Command_Type (Command).Execute (Name, Args, Context);
-   end Execute;
-
    overriding
    procedure Execute (Command     : in out Command_Type;
                       Application : in out AWA.Applications.Application'Class;
                       Args        : in Argument_List'Class;
                       Context     : in out Context_Type) is
+      Connection : ADO.Sessions.Sources.Data_Source;
+      Factory : ADO.Sessions.Factory.Session_Factory;
       Session : ADO.Sessions.Master_Session;
       List    : ADO.Schemas.Databases.Upgrade_List;
       Files   : Util.Strings.Vectors.Vector;
    begin
-      Application.Load_Bundle (Name   => "commands",
-                               Locale => "en",
-                               Bundle => Command.Bundle);
-      Session := Application.Get_Master_Session;
+      --  Do a manual initialization of some components but not all of them
+      --  because we don't want to have AWA or a module that accesses the database
+      --  (the current database schema may be wrong for the application).
+      ASF.Applications.Main.Application (Application).Initialize_Components;
+      ASF.Applications.Main.Application (Application).Initialize_Config (Context.App_Config);
+      Context.App_Config.Set (ADO.Configs.NO_ENTITY_LOAD, "true");
+
+      --  Configure the database connection by usingg the computed application config.
+      ADO.Configs.Initialize (Context.App_Config);
+      Connection.Set_Connection (Context.App_Config.Get (AWA.Applications.P_Database.P));
+      Connection.Set_Property (ADO.Configs.QUERY_PATHS_CONFIG,
+                               Context.App_Config.Get (ADO.Configs.QUERY_PATHS_CONFIG, ""));
+      Connection.Set_Property (ADO.Configs.QUERY_LOAD_CONFIG, "false");
+      Connection.Set_Property (ADO.Configs.NO_ENTITY_LOAD, "true");
+      Factory.Create (Connection);
+
+      --  Get a writable database session for the migration.
+      Session := Factory.Get_Master_Session;
 
       ADO.Schemas.Databases.Scan_Migration (Session, "db/migrate", List);
       if List.Is_Empty then
@@ -58,12 +69,16 @@ package body AWA.Commands.Migrate is
             ADO.Schemas.Databases.Run_Migration
               (Session, Upgrade, Files, ADO.Sessions.Execute'Access);
          end loop;
+         Context.Console.Notice (N_INFO, "Database schema was migrated");
       else
+         Context.Console.Notice (N_INFO, "Database schema migration is necessary"
+                                   & " (launch again with --execute option)");
+         Context.Console.Notice (N_Info, "The following SQL scripts must be executed:");
          for Upgrade of List loop
             ADO.Schemas.Databases.Prepare_Migration
               (Session, Upgrade, Files);
             for Path of Files loop
-               Context.Console.Notice (N_INFO, "Run SQL script " & Path);
+               Context.Console.Notice (N_INFO, Path);
             end loop;
          end loop;
       end if;
@@ -77,6 +92,7 @@ package body AWA.Commands.Migrate is
                     Config  : in out GNAT.Command_Line.Command_Line_Configuration;
                     Context : in out Context_Type) is
    begin
+      Command.Initialize_Application := False;
       GC.Set_Usage (Config => Config,
                     Usage  => Command.Get_Name & " [arguments]",
                     Help   => Command.Get_Description);

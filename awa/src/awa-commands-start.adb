@@ -91,9 +91,7 @@ package body AWA.Commands.Start is
                            Application : in Servlet.Core.Servlet_Registry_Access) is
       begin
          if Application.all in ASF.Applications.Main.Application'Class then
-            Configure (ASF.Applications.Main.Application'Class (Application.all),
-                       URI (URI'First + 1 .. URI'Last),
-                       Context);
+            Configure (URI (URI'First + 1 .. URI'Last), Context);
             Count := Count + 1;
          end if;
       end Configure;

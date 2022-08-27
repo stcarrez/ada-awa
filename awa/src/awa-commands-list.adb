@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  akt-commands-list -- List commands to report database information for admin tool
---  Copyright (C) 2020 Stephane Carrez
+--  Copyright (C) 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,15 +36,6 @@ package body AWA.Commands.List is
    --  ------------------------------
    --  List some database information.
    --  ------------------------------
-   overriding
-   procedure Execute (Command   : in out Command_Type;
-                      Name      : in String;
-                      Args      : in Argument_List'Class;
-                      Context   : in out Context_Type) is
-   begin
-      Command_Drivers.Application_Command_Type (Command).Execute (Name, Args, Context);
-   end Execute;
-
    overriding
    procedure Execute (Command     : in out Command_Type;
                       Application : in out AWA.Applications.Application'Class;

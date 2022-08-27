@@ -116,8 +116,7 @@ package AWA.Commands is
 
    --  Configure the application by loading its configuration file and merging
    --  it with the keystore file if there is one.
-   procedure Configure (Application : in out ASF.Applications.Main.Application'Class;
-                        Name        : in String;
+   procedure Configure (Name        : in String;
                         Context     : in out Context_Type);
 
    procedure Print (Context : in out Context_Type;
