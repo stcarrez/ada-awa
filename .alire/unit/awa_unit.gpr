@@ -1,4 +1,3 @@
-with "config";
 with "utilada_base";
 with "utilada_unit";
 with "elada";
@@ -10,12 +9,10 @@ with "awa";
 
 library project Awa_Unit is
 
-   Library_Type : Config.Library_Type_Type := external ("AWA_LIBRARY_TYPE", "static");
-
    for Source_Dirs use ("../../awa/awaunit");
 
    for Library_Name use "awa_unit";
-   for Library_Kind use Library_Type;
+   for Library_Kind use Awa.Library_Type;
    for Library_Version use "lib" & Project'Library_Name & ".so." & Awa.Version;
 
    for Library_Dir use "../../lib/awa_unit/" & Project'Library_Kind;
@@ -23,8 +20,8 @@ library project Awa_Unit is
 
    for Exec_Dir use Awa.Exec_Dir;
 
-   package Binder renames Config.Binder;
-   package Builder renames Config.Builder;
-   package Compiler renames Config.Compiler;
+   package Binder renames Awa.Binder;
+   package Builder renames Awa.Builder;
+   package Compiler renames Awa.Compiler;
 
 end Awa_Unit;

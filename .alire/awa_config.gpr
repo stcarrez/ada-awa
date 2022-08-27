@@ -6,7 +6,7 @@ abstract project Awa_Config is
    type Library_Type_Type is ("relocatable", "static", "static-pic");
 
    type Build_Type is ("distrib", "debug", "optimize", "profile", "coverage");
-   Mode : Build_Type := external ("BUILD", "debug");
+   Mode : Build_Type := external ("AWA_BUILD", "debug");
 
    Processors := External ("PROCESSORS", "1");
 

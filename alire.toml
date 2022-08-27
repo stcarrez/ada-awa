@@ -68,7 +68,7 @@ command = ["sh", "./alire-setup.sh"]
 
 [gpr-externals]
 AWA_LIBRARY_TYPE = ["relocatable", "static", "static-pic"]
-BUILD = ["distrib", "debug", "optimize", "profile", "coverage"]
+AWA_BUILD = ["distrib", "debug", "optimize", "profile", "coverage"]
 
 [environment]
 DYNAMO_SEARCH_PATH.prepend = "${CRATE_ROOT}/awa/plugins"
