@@ -307,6 +307,9 @@ INSERT INTO awa_audit_field (entity_type, name)
 INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_user'), 'name')
   ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa", 1)
+  ON CONFLICT DO NOTHING;
 /* Copied from awa-workspaces-postgresql.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -379,6 +382,9 @@ CREATE TABLE IF NOT EXISTS awa_workspace_member (
 INSERT INTO ado_entity_type (name) VALUES
 ('awa_invitation'), ('awa_workspace'), ('awa_workspace_feature'), ('awa_workspace_member')
   ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-workspaces", 1)
+  ON CONFLICT DO NOTHING;
 /* Copied from awa-counters-postgresql.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -421,6 +427,9 @@ CREATE TABLE IF NOT EXISTS awa_visit (
 );
 INSERT INTO ado_entity_type (name) VALUES
 ('awa_counter'), ('awa_counter_definition'), ('awa_visit')
+  ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-counters", 1)
   ON CONFLICT DO NOTHING;
 /* Copied from awa-storages-postgresql.sql*/
 /* File generated automatically by dynamo */
@@ -512,6 +521,9 @@ CREATE TABLE IF NOT EXISTS awa_store_local (
 INSERT INTO ado_entity_type (name) VALUES
 ('awa_storage'), ('awa_storage_data'), ('awa_storage_folder'), ('awa_store_local')
   ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-storages", 1)
+  ON CONFLICT DO NOTHING;
 /* Copied from awa-jobs-postgresql.sql*/
 /* File generated automatically by dynamo */
 /* The job is associated with a dispatching queue. */
@@ -549,6 +561,9 @@ CREATE TABLE IF NOT EXISTS awa_job (
 INSERT INTO ado_entity_type (name) VALUES
 ('awa_job')
   ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-jobs", 1)
+  ON CONFLICT DO NOTHING;
 /* Copied from awa-images-postgresql.sql*/
 /* File generated automatically by dynamo */
 /* - The workspace contains one or several folders.
@@ -585,6 +600,9 @@ CREATE TABLE IF NOT EXISTS awa_image (
 INSERT INTO ado_entity_type (name) VALUES
 ('awa_image')
   ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-images", 1)
+  ON CONFLICT DO NOTHING;
 /* Copied from awa-tags-postgresql.sql*/
 /* File generated automatically by dynamo */
 /* The tag definition. */
@@ -610,6 +628,9 @@ Date: 2013-02-23the database entity to which the tag is associated */
 );
 INSERT INTO ado_entity_type (name) VALUES
 ('awa_tag'), ('awa_tagged_entity')
+  ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-tags", 1)
   ON CONFLICT DO NOTHING;
 /* Copied from awa-comments-postgresql.sql*/
 /* File generated automatically by dynamo */
@@ -647,6 +668,9 @@ INSERT INTO awa_audit_field (entity_type, name)
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_comment'), 'format')
+  ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-comments", 1)
   ON CONFLICT DO NOTHING;
 /* Copied from awa-blogs-postgresql.sql*/
 /* File generated automatically by dynamo */
@@ -747,6 +771,9 @@ INSERT INTO awa_audit_field (entity_type, name)
 INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_post'), 'format')
   ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-blogs", 1)
+  ON CONFLICT DO NOTHING;
 /* Copied from awa-votes-postgresql.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -776,6 +803,9 @@ CREATE TABLE IF NOT EXISTS awa_vote (
 );
 INSERT INTO ado_entity_type (name) VALUES
 ('awa_rating'), ('awa_vote')
+  ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-votes", 1)
   ON CONFLICT DO NOTHING;
 /* Copied from awa-questions-postgresql.sql*/
 /* File generated automatically by dynamo */
@@ -834,6 +864,9 @@ the question short description. */
 INSERT INTO ado_entity_type (name) VALUES
 ('awa_answer'), ('awa_question')
   ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-questions", 1)
+  ON CONFLICT DO NOTHING;
 /* Copied from awa-settings-postgresql.sql*/
 /* File generated automatically by dynamo */
 /* The global setting holds some generic
@@ -883,6 +916,9 @@ CREATE TABLE IF NOT EXISTS awa_user_setting (
 INSERT INTO ado_entity_type (name) VALUES
 ('awa_global_setting'), ('awa_setting'), ('awa_user_setting')
   ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-settings", 1)
+  ON CONFLICT DO NOTHING;
 /* Copied from awa-changelogs-postgresql.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -903,6 +939,9 @@ CREATE TABLE IF NOT EXISTS awa_changelog (
 );
 INSERT INTO ado_entity_type (name) VALUES
 ('awa_changelog')
+  ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-changelogs", 1)
   ON CONFLICT DO NOTHING;
 /* Copied from awa-wikis-postgresql.sql*/
 /* File generated automatically by dynamo */
@@ -1001,4 +1040,7 @@ INSERT INTO awa_audit_field (entity_type, name)
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_space'), 'format')
+  ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-wikis", 1)
   ON CONFLICT DO NOTHING;

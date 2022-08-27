@@ -311,6 +311,7 @@ INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_user"), "country");
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_user"), "name");
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa", 1);
 /* Copied from awa-workspaces-sqlite.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -384,6 +385,7 @@ INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_invitation");
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_workspace");
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_workspace_feature");
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_workspace_member");
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-workspaces", 1);
 /* Copied from awa-counters-sqlite.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -427,6 +429,7 @@ CREATE TABLE IF NOT EXISTS awa_visit (
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_counter");
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_counter_definition");
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_visit");
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-counters", 1);
 /* Copied from awa-storages-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* The uri member holds the URI if the storage type is URL.
@@ -518,6 +521,7 @@ INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_storage");
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_storage_data");
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_storage_folder");
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_store_local");
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-storages", 1);
 /* Copied from awa-jobs-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* The job is associated with a dispatching queue. */
@@ -553,6 +557,7 @@ CREATE TABLE IF NOT EXISTS awa_job (
   PRIMARY KEY (`id`)
 );
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_job");
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-jobs", 1);
 /* Copied from awa-images-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* - The workspace contains one or several folders.
@@ -587,6 +592,7 @@ CREATE TABLE IF NOT EXISTS awa_image (
   PRIMARY KEY (`id`)
 );
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_image");
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-images", 1);
 /* Copied from awa-tags-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* The tag definition. */
@@ -612,6 +618,7 @@ Date: 2013-02-23the database entity to which the tag is associated */
 );
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_tag");
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_tagged_entity");
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-tags", 1);
 /* Copied from awa-comments-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* The Comment table records a user comment associated with a database entity.
@@ -644,6 +651,7 @@ INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_comment"), "status");
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_comment"), "format");
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-comments", 1);
 /* Copied from awa-blogs-sqlite.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -730,6 +738,7 @@ INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "summary");
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "format");
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-blogs", 1);
 /* Copied from awa-votes-sqlite.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -759,6 +768,7 @@ CREATE TABLE IF NOT EXISTS awa_vote (
 );
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_rating");
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_vote");
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-votes", 1);
 /* Copied from awa-questions-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* The answer table gives a list of anwsers to the question.
@@ -815,6 +825,7 @@ the question short description. */
 );
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_answer");
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_question");
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-questions", 1);
 /* Copied from awa-settings-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* The global setting holds some generic
@@ -864,6 +875,7 @@ CREATE TABLE IF NOT EXISTS awa_user_setting (
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_global_setting");
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_setting");
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_user_setting");
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-settings", 1);
 /* Copied from awa-changelogs-sqlite.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -883,6 +895,7 @@ CREATE TABLE IF NOT EXISTS awa_changelog (
   PRIMARY KEY (`id`)
 );
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_changelog");
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-changelogs", 1);
 /* Copied from awa-wikis-sqlite.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -974,3 +987,4 @@ INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_space"), "is_public");
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_space"), "format");
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-wikis", 1);

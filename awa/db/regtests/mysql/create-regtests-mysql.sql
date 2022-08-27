@@ -301,6 +301,7 @@ INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_user"), "country");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_user"), "name");
+INSERT IGNORE INTO ado_version (name, version) VALUES ("awa", 1);
 /* Copied from awa-workspaces-mysql.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -372,6 +373,7 @@ CREATE TABLE IF NOT EXISTS awa_workspace_member (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_invitation"), ("awa_workspace"), ("awa_workspace_feature"), ("awa_workspace_member");
+INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-workspaces", 1);
 /* Copied from awa-counters-mysql.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -414,6 +416,7 @@ CREATE TABLE IF NOT EXISTS awa_visit (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_counter"), ("awa_counter_definition"), ("awa_visit");
+INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-counters", 1);
 /* Copied from awa-storages-mysql.sql*/
 /* File generated automatically by dynamo */
 /* The uri member holds the URI if the storage type is URL.
@@ -503,6 +506,7 @@ CREATE TABLE IF NOT EXISTS awa_store_local (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_storage"), ("awa_storage_data"), ("awa_storage_folder"), ("awa_store_local");
+INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-storages", 1);
 /* Copied from awa-jobs-mysql.sql*/
 /* File generated automatically by dynamo */
 /* The job is associated with a dispatching queue. */
@@ -539,6 +543,7 @@ CREATE TABLE IF NOT EXISTS awa_job (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_job");
+INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-jobs", 1);
 /* Copied from awa-images-mysql.sql*/
 /* File generated automatically by dynamo */
 /* - The workspace contains one or several folders.
@@ -574,6 +579,7 @@ CREATE TABLE IF NOT EXISTS awa_image (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_image");
+INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-images", 1);
 /* Copied from awa-tags-mysql.sql*/
 /* File generated automatically by dynamo */
 /* The tag definition. */
@@ -599,6 +605,7 @@ Date: 2013-02-23the database entity to which the tag is associated */
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_tag"), ("awa_tagged_entity");
+INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-tags", 1);
 /* Copied from awa-comments-mysql.sql*/
 /* File generated automatically by dynamo */
 /* The Comment table records a user comment associated with a database entity.
@@ -632,6 +639,7 @@ INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_comment"), "status");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_comment"), "format");
+INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-comments", 1);
 /* Copied from awa-blogs-mysql.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -718,6 +726,7 @@ INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "summary");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "format");
+INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-blogs", 1);
 /* Copied from awa-votes-mysql.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -747,6 +756,7 @@ CREATE TABLE IF NOT EXISTS awa_vote (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_rating"), ("awa_vote");
+INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-votes", 1);
 /* Copied from awa-questions-mysql.sql*/
 /* File generated automatically by dynamo */
 /* The answer table gives a list of anwsers to the question.
@@ -803,6 +813,7 @@ the question short description. */
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_answer"), ("awa_question");
+INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-questions", 1);
 /* Copied from awa-settings-mysql.sql*/
 /* File generated automatically by dynamo */
 /* The global setting holds some generic
@@ -851,6 +862,7 @@ CREATE TABLE IF NOT EXISTS awa_user_setting (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_global_setting"), ("awa_setting"), ("awa_user_setting");
+INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-settings", 1);
 /* Copied from awa-changelogs-mysql.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -871,6 +883,7 @@ CREATE TABLE IF NOT EXISTS awa_changelog (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_changelog");
+INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-changelogs", 1);
 /* Copied from awa-wikis-mysql.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -961,3 +974,4 @@ INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_space"), "is_public");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_space"), "format");
+INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-wikis", 1);

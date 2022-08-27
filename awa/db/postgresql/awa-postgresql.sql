@@ -273,3 +273,6 @@ INSERT INTO awa_audit_field (entity_type, name)
 INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_user'), 'name')
   ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa", 1)
+  ON CONFLICT DO NOTHING;
