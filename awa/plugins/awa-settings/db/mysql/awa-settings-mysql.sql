@@ -45,3 +45,4 @@ CREATE TABLE IF NOT EXISTS awa_user_setting (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_global_setting"), ("awa_setting"), ("awa_user_setting");
+INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-settings", 1);

@@ -68,3 +68,4 @@ CREATE TABLE IF NOT EXISTS awa_workspace_member (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_invitation"), ("awa_workspace"), ("awa_workspace_feature"), ("awa_workspace_member");
+INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-workspaces", 1);

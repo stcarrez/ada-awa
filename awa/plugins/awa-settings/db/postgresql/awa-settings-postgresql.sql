@@ -46,3 +46,6 @@ CREATE TABLE IF NOT EXISTS awa_user_setting (
 INSERT INTO ado_entity_type (name) VALUES
 ('awa_global_setting'), ('awa_setting'), ('awa_user_setting')
   ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-settings", 1)
+  ON CONFLICT DO NOTHING;

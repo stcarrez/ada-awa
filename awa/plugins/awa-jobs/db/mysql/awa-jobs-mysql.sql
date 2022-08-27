@@ -33,3 +33,4 @@ CREATE TABLE IF NOT EXISTS awa_job (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_job");
+INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-jobs", 1);

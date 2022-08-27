@@ -86,3 +86,4 @@ CREATE TABLE IF NOT EXISTS awa_store_local (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_storage"), ("awa_storage_data"), ("awa_storage_folder"), ("awa_store_local");
+INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-storages", 1);

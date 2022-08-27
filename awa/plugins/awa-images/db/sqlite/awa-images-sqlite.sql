@@ -31,3 +31,4 @@ CREATE TABLE IF NOT EXISTS awa_image (
   PRIMARY KEY (`id`)
 );
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_image");
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-images", 1);

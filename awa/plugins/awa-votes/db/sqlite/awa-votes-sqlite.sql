@@ -26,3 +26,4 @@ CREATE TABLE IF NOT EXISTS awa_vote (
 );
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_rating");
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_vote");
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-votes", 1);

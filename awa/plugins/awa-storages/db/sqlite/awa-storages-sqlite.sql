@@ -88,3 +88,4 @@ INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_storage");
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_storage_data");
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_storage_folder");
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_store_local");
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-storages", 1);

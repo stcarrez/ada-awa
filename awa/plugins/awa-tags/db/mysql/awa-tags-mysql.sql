@@ -22,3 +22,4 @@ Date: 2013-02-23the database entity to which the tag is associated */
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_tag"), ("awa_tagged_entity");
+INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-tags", 1);

@@ -88,3 +88,4 @@ INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_space"), "is_public");
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_space"), "format");
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-wikis", 1);

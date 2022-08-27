@@ -34,3 +34,6 @@ CREATE TABLE IF NOT EXISTS awa_job (
 INSERT INTO ado_entity_type (name) VALUES
 ('awa_job')
   ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-jobs", 1)
+  ON CONFLICT DO NOTHING;

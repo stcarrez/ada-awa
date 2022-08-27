@@ -34,3 +34,6 @@ INSERT INTO awa_audit_field (entity_type, name)
 INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_comment'), 'format')
   ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-comments", 1)
+  ON CONFLICT DO NOTHING;

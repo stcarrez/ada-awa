@@ -54,3 +54,6 @@ the question short description. */
 INSERT INTO ado_entity_type (name) VALUES
 ('awa_answer'), ('awa_question')
   ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-questions", 1)
+  ON CONFLICT DO NOTHING;

@@ -40,3 +40,6 @@ CREATE TABLE IF NOT EXISTS awa_visit (
 INSERT INTO ado_entity_type (name) VALUES
 ('awa_counter'), ('awa_counter_definition'), ('awa_visit')
   ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-counters", 1)
+  ON CONFLICT DO NOTHING;

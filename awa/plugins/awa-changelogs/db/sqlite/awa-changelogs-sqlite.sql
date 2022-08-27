@@ -16,3 +16,4 @@ CREATE TABLE IF NOT EXISTS awa_changelog (
   PRIMARY KEY (`id`)
 );
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_changelog");
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-changelogs", 1);

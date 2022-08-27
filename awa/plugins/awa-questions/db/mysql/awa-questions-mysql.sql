@@ -53,3 +53,4 @@ the question short description. */
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_answer"), ("awa_question");
+INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-questions", 1);

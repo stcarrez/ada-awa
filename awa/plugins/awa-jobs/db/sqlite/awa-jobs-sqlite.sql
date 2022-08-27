@@ -32,3 +32,4 @@ CREATE TABLE IF NOT EXISTS awa_job (
   PRIMARY KEY (`id`)
 );
 INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_job");
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-jobs", 1);

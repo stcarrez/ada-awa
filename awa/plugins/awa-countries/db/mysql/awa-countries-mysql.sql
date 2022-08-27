@@ -65,3 +65,4 @@ CREATE TABLE IF NOT EXISTS awa_region (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_city"), ("awa_country"), ("awa_country_neighbor"), ("awa_region");
+INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-countries", 1);

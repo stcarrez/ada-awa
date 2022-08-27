@@ -33,3 +33,6 @@ CREATE TABLE IF NOT EXISTS awa_image (
 INSERT INTO ado_entity_type (name) VALUES
 ('awa_image')
   ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-images", 1)
+  ON CONFLICT DO NOTHING;

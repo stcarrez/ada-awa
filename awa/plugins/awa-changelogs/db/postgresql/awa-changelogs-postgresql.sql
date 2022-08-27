@@ -18,3 +18,6 @@ CREATE TABLE IF NOT EXISTS awa_changelog (
 INSERT INTO ado_entity_type (name) VALUES
 ('awa_changelog')
   ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-changelogs", 1)
+  ON CONFLICT DO NOTHING;

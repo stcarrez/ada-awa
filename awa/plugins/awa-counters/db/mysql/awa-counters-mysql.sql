@@ -39,3 +39,4 @@ CREATE TABLE IF NOT EXISTS awa_visit (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_counter"), ("awa_counter_definition"), ("awa_visit");
+INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-counters", 1);

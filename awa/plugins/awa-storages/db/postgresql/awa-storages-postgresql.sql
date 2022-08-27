@@ -87,3 +87,6 @@ CREATE TABLE IF NOT EXISTS awa_store_local (
 INSERT INTO ado_entity_type (name) VALUES
 ('awa_storage'), ('awa_storage_data'), ('awa_storage_folder'), ('awa_store_local')
   ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-storages", 1)
+  ON CONFLICT DO NOTHING;
