@@ -90,6 +90,18 @@ the OpenID integration.
 | |https://www.google.com/accounts/o8/id|
 |auth.provider.google|Auth provider to use for Google|
 | |openid|
+|auth.url.github|GitHub OAuth2 Connect access point|
+| |https://github.com/login/oauth/authorize|
+|auth.provider.github|Auth provider to use for GitHub|
+| |github|
+|auth.url.gitlab|GitLab OAuth2 Connect access point|
+| |https://gitlab.com/oauth/authorize|
+|auth.provider.gitlab|Auth provider to use for GitLab|
+| |yahoo|
+|auth.url.twitter|Twitter OAuth2 Connect access point|
+| |https://api.twitter.com/oauth/authenticate|
+|auth.provider.twitter|Auth provider to use for Twitter|
+| |yahoo|
 |auth.url.facebook|Facebook OAuth access point|
 | |https://www.facebook.com/dialog/oauth|
 |auth.provider.facebook|Auth provider to use for Facebook|
@@ -124,6 +136,14 @@ the OpenID integration.
 | |#{contextPath}/auth/login.html|
 |verify-filter.redirect|URI to redirect to the login page|
 | |#{contextPath}/auth/login.html|
+|app_login_register|Enable or disable user registration through the web interface|
+| |#{not empty app_login_register ? app_login_register : true}|
+|app_login_email|Enable or disable user login through the email/password form|
+| |#{not empty app_login_email ? app_login_email : true}|
+|app_login_openid|Enable or disable user login through OpenID/OAuth2|
+| |#{not empty app_login_openid ? app_login_openid : true}|
+|app_login_methods|List of login methods which are enabled for authentication|
+| |#{not empty app_login_methods ? app_login_methods : 'email,google,facebook'}|
 
 ## Ada Beans
 Several bean types are provided to represent and manage the users.

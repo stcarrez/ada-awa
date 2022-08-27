@@ -26,8 +26,10 @@ The `Initialize` procedure will perform the following steps:
   to register all the servlet filter instances.  The application servlets
   and filters must be registered before reading the global configuration file.
 * It loads the global application configuration by reading the `awa.xml`
-  file.  By reading this configuration, some global configuration is
-  established on the servlets, filters.
+  file as well as some application specific files.  By reading this
+  configuration, some global configuration is established on the servlets,
+  filters, navigation rules.  The list of XML files loaded during this
+  step is controlled by the `app.config` configuration.
 * It calls the `Initialize_Modules` procedure so that all the application
   modules can be registered, configured and initialized.  Each module
   brings its own component, servlet and filter.  They are configured
@@ -488,6 +490,22 @@ The management port is used to connect to the web server container and stop it.
 The management port is local to the host and cannot be accessed remotely.
 
 The management port is configured with the `--management-port=`_PORT_ option.
+
+##### The migrate command
+
+_driver_ migrate [--application _NAME_] [--keystore _PATH_] [--execute]
+
+The `migrate` command is provided to perform the database schema migration
+when the application or one of its module is upgraded and uses a new database
+schema.  Each module is versionned and the `migrate` command handles the
+schema upgrade for each module version included and used by the application.
+It should be safe to execute this command multiple times since once a
+database schema is migrated the command will detect this and do nothing.
+
+By default the SQL migration scripts are not executed and the command prints
+the list of SQL scripts that will be executed if the migration is executed.
+
+The `--execute` option runs the SQL migration scripts.
 
 ##### The list command
 

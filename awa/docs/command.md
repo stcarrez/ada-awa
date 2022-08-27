@@ -191,6 +191,24 @@ The management port is local to the host and cannot be accessed remotely.
 
 The management port is configured with the `--management-port=`_PORT_ option.
 
+
+##### The migrate command
+
+_driver_ migrate [--application _NAME_] [--keystore _PATH_] [--execute]
+
+The `migrate` command is provided to perform the database schema migration
+when the application or one of its module is upgraded and uses a new database
+schema.  Each module is versionned and the `migrate` command handles the
+schema upgrade for each module version included and used by the application.
+It should be safe to execute this command multiple times since once a
+database schema is migrated the command will detect this and do nothing.
+
+By default the SQL migration scripts are not executed and the command prints
+the list of SQL scripts that will be executed if the migration is executed.
+
+The `--execute` option runs the SQL migration scripts.
+
+
 ##### The list command
 
 _driver_ list [--application _NAME_] [--keystore _PATH_]
