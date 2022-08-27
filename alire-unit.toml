@@ -35,4 +35,4 @@ servletada_unit = "^1.6.0"
 
 [gpr-externals]
 AWA_LIBRARY_TYPE = ["relocatable", "static", "static-pic"]
-BUILD = ["distrib", "debug", "optimize", "profile", "coverage"]
+AWA_BUILD = ["distrib", "debug", "optimize", "profile", "coverage"]
