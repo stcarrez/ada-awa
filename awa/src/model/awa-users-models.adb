@@ -541,6 +541,7 @@ package body AWA.Users.Models is
    begin
       Impl := new User_Impl;
       Impl.Version := 0;
+      Impl.Status := Status_Type'First;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -784,12 +785,33 @@ package body AWA.Users.Models is
    end Get_Salt;
 
 
+   procedure Set_Status (Object : in out User_Ref;
+                         Value  : in Status_Type) is
+      procedure Set_Field_Discrete is
+        new ADO.Audits.Set_Field_Operation
+          (Status_Type,
+           Status_Type_Objects.To_Object);
+      Impl : User_Access;
+   begin
+      Set_Field (Object, Impl);
+      Set_Field_Discrete (Impl.all, 10, Impl.Status, Value);
+   end Set_Status;
+
+   function Get_Status (Object : in User_Ref)
+                  return Status_Type is
+      Impl : constant User_Access
+         := User_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Status;
+   end Get_Status;
+
+
    procedure Set_Email (Object : in out User_Ref;
                         Value  : in Email_Ref'Class) is
       Impl : User_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 10, Impl.Email, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 11, Impl.Email, Value);
    end Set_Email;
 
    function Get_Email (Object : in User_Ref)
@@ -822,6 +844,7 @@ package body AWA.Users.Models is
             Copy.Name := Impl.Name;
             Copy.Version := Impl.Version;
             Copy.Salt := Impl.Salt;
+            Copy.Status := Impl.Status;
             Copy.Email := Impl.Email;
          end;
       end if;
@@ -1030,9 +1053,14 @@ package body AWA.Users.Models is
          Object.Clear_Modified (9);
       end if;
       if Object.Is_Modified (10) then
-         Stmt.Save_Field (Name  => COL_9_2_NAME, --  email_id
-                          Value => Object.Email);
+         Stmt.Save_Field (Name  => COL_9_2_NAME, --  status
+                          Value => Integer (Status_Type'Enum_Rep (Object.Status)));
          Object.Clear_Modified (10);
+      end if;
+      if Object.Is_Modified (11) then
+         Stmt.Save_Field (Name  => COL_10_2_NAME, --  email_id
+                          Value => Object.Email);
+         Object.Clear_Modified (11);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -1084,7 +1112,9 @@ package body AWA.Users.Models is
                         Value => Object.Get_Key);
       Query.Save_Field (Name  => COL_8_2_NAME, --  salt
                         Value => Object.Salt);
-      Query.Save_Field (Name  => COL_9_2_NAME, --  email_id
+      Query.Save_Field (Name  => COL_9_2_NAME, --  status
+                        Value => Integer (Status_Type'Enum_Rep (Object.Status)));
+      Query.Save_Field (Name  => COL_10_2_NAME, --  email_id
                         Value => Object.Email);
       Query.Execute (Result);
       if Result /= 1 then
@@ -1135,6 +1165,8 @@ package body AWA.Users.Models is
          return ADO.Objects.To_Object (Impl.Get_Key);
       elsif Name = "salt" then
          return Util.Beans.Objects.To_Object (Impl.Salt);
+      elsif Name = "status" then
+         return Status_Type_Objects.To_Object (Impl.Status);
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -1156,8 +1188,9 @@ package body AWA.Users.Models is
       Object.Name := Stmt.Get_Unbounded_String (5);
       Object.Set_Key_Value (Stmt.Get_Identifier (7));
       Object.Salt := Stmt.Get_Unbounded_String (8);
-      if not Stmt.Is_Null (9) then
-         Object.Email.Set_Key_Value (Stmt.Get_Identifier (9), Session);
+      Object.Status := Status_Type'Enum_Val (Stmt.Get_Integer (9));
+      if not Stmt.Is_Null (10) then
+         Object.Email.Set_Key_Value (Stmt.Get_Identifier (10), Session);
       end if;
       Object.Version := Stmt.Get_Integer (6);
       ADO.Objects.Set_Created (Object);

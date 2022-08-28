@@ -73,6 +73,16 @@ package AWA.Users.Models is
       Value   : Session_Type;
    end record;
 
+   type Status_Type is (USER_REGISTERED, USER_ENABLED, USER_DISABLED);
+   for Status_Type use (USER_REGISTERED => 0, USER_ENABLED => 1, USER_DISABLED => 2);
+   package Status_Type_Objects is
+      new Util.Beans.Objects.Enums (Status_Type);
+
+   type Nullable_Status_Type is record
+      Is_Null : Boolean := True;
+      Value   : Status_Type;
+   end record;
+
    type Email_Ref is new ADO.Objects.Object_Ref with null record;
 
    type User_Ref is new ADO.Objects.Object_Ref with null record;
@@ -303,6 +313,14 @@ package AWA.Users.Models is
                  return Ada.Strings.Unbounded.Unbounded_String;
    function Get_Salt (Object : in User_Ref)
                  return String;
+
+   --  Set the status of this user.
+   procedure Set_Status (Object : in out User_Ref;
+                         Value  : in Status_Type);
+
+   --  Get the status of this user.
+   function Get_Status (Object : in User_Ref)
+                 return Status_Type;
 
    --
    procedure Set_Email (Object : in out User_Ref;
@@ -693,10 +711,11 @@ private
    COL_6_2_NAME : aliased constant String := "version";
    COL_7_2_NAME : aliased constant String := "id";
    COL_8_2_NAME : aliased constant String := "salt";
-   COL_9_2_NAME : aliased constant String := "email_id";
+   COL_9_2_NAME : aliased constant String := "status";
+   COL_10_2_NAME : aliased constant String := "email_id";
 
    USER_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count   => 10,
+     (Count   => 11,
       Table   => USER_NAME'Access,
       Members => (
          1 => COL_0_2_NAME'Access,
@@ -708,19 +727,21 @@ private
          7 => COL_6_2_NAME'Access,
          8 => COL_7_2_NAME'Access,
          9 => COL_8_2_NAME'Access,
-         10 => COL_9_2_NAME'Access)
+         10 => COL_9_2_NAME'Access,
+         11 => COL_10_2_NAME'Access)
      );
    USER_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := USER_DEF'Access;
 
    USER_AUDIT_DEF : aliased constant ADO.Audits.Auditable_Mapping :=
-     (Count    => 4,
+     (Count    => 5,
       Of_Class => USER_DEF'Access,
       Members  => (
          1 => 0,
          2 => 1,
          3 => 4,
-         4 => 5)
+         4 => 5,
+         5 => 9)
      );
    USER_AUDIT_TABLE : constant ADO.Audits.Auditable_Mapping_Access
       := USER_AUDIT_DEF'Access;
@@ -741,6 +762,7 @@ private
        Name : Ada.Strings.Unbounded.Unbounded_String;
        Version : Integer;
        Salt : Ada.Strings.Unbounded.Unbounded_String;
+       Status : Status_Type;
        Email : Email_Ref;
    end record;
 
