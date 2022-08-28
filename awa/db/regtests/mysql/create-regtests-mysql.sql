@@ -287,6 +287,8 @@ CREATE TABLE IF NOT EXISTS awa_user (
   `id` BIGINT NOT NULL,
   /* the password salt. */
   `salt` VARCHAR(255) BINARY NOT NULL,
+  /* the status of this user. */
+  `status` TINYINT NOT NULL,
   /*  */
   `email_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
@@ -301,6 +303,8 @@ INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_user"), "country");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_user"), "name");
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_user"), "status");
 INSERT IGNORE INTO ado_version (name, version) VALUES ("awa", 1);
 /* Copied from awa-workspaces-mysql.sql*/
 /* File generated automatically by dynamo */
