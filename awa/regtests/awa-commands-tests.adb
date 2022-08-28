@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-commands-tests -- Test the AWA.Commands
---  Copyright (C) 2020 Stephane Carrez
+--  Copyright (C) 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,11 +17,14 @@
 -----------------------------------------------------------------------
 
 with Ada.Text_IO;
+with Ada.Exceptions;
 with Util.Processes;
 with Util.Streams.Pipes;
 with Util.Streams.Buffered;
 with Util.Test_Caller;
 with Util.Log.Loggers;
+with AWA.Tests.Helpers.Users;
+with AWA.Users.Services;
 
 package body AWA.Commands.Tests is
 
@@ -47,6 +50,8 @@ package body AWA.Commands.Tests is
                        Test_Secure_Configuration_2'Access);
       Caller.Add_Test (Suite, "Test AWA.Commands.Info (verbose)",
                        Test_Verbose_Command'Access);
+      Caller.Add_Test (Suite, "Test AWA.Commands.User (register)",
+                       Test_User_Command'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -218,5 +223,32 @@ package body AWA.Commands.Tests is
       Util.Tests.Assert_Matches (T, "INFO : Using application search dir:", Result,
                                  "Missing log message");
    end Test_Verbose_Command;
+
+   --  ------------------------------
+   --  Test the user command.
+   --  ------------------------------
+   procedure Test_User_Command (T : in out Test) is
+      Email     : constant String := "Reg-" & Util.Tests.Get_Uuid & "@register.com";
+      Config    : constant String := Util.Tests.Get_Parameter ("test_config_path");
+      Result    : Ada.Strings.Unbounded.Unbounded_String;
+   begin
+      T.Execute ("bin/awa_command -c " & Config & " user " & Email & " --register",
+                 "", "", Result, 0);
+      Util.Tests.Assert_Matches (T, "User 'Reg-.*@register.com' is now registered", Result,
+                                 "Missing notice message");
+
+      declare
+         Principal : AWA.Tests.Helpers.Users.Test_User;
+      begin
+         Principal.Email.Set_Email (Email);
+         AWA.Tests.Helpers.Users.Login (Principal);
+         T.Assert (False, "Login succeeded with a registered user");
+
+      exception
+         when E : AWA.Users.Services.User_Disabled =>
+            Util.Tests.Assert_Matches (T, "User account is not validated: Reg-.*",
+                                       Ada.Exceptions.Exception_Message (E));
+      end;
+   end Test_User_Command;
 
 end AWA.Commands.Tests;

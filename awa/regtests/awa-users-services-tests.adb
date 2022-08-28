@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  users - User creation, password tests
---  Copyright (C) 2009, 2010, 2011, 2012, 2017, 2018 Stephane Carrez
+--  awa-users-services-tests -- Unit tests for user service
+--  Copyright (C) 2009, 2010, 2011, 2012, 2017, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,6 +49,8 @@ package body AWA.Users.Services.Tests is
                        Test_Reset_Password_User'Access);
       Caller.Add_Test (Suite, "Test AWA.Users.Module.Get_User_Module",
                        Test_Get_Module'Access);
+      Caller.Add_Test (Suite, "Test AWA.Users.Services.Update_User",
+                       Test_Disable_User'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -265,5 +267,34 @@ package body AWA.Users.Services.Tests is
          T.Assert (M /= null, "Get_User_Module returned null");
       end;
    end Test_Get_Module;
+
+   --  Disable a user and check login is refused.
+   procedure Test_Disable_User (T : in out Test) is
+      Principal : AWA.Tests.Helpers.Users.Test_User;
+   begin
+      --  Create the user
+      AWA.Tests.Helpers.Users.Create_User (Principal);
+      AWA.Tests.Helpers.Users.Logout (Principal);
+
+      Principal.Manager.Update_User (Email => Principal.Email.Get_Email,
+                                     Status => Models.USER_DISABLED);
+
+      begin
+         AWA.Tests.Helpers.Users.Login (Principal);
+         T.Assert (False, "Login succeeded with a disabled user");
+
+      exception
+         when User_Disabled =>
+            null;
+      end;
+
+      Principal.Manager.Update_User (Email => Principal.Email.Get_Email,
+                                     Status => Models.USER_ENABLED);
+
+      AWA.Tests.Helpers.Users.Login (Principal);
+      T.Assert (not Principal.User.Is_Null, "User is created");
+      T.Assert (not Principal.Session.Is_Null, "Session is not created");
+
+   end Test_Disable_User;
 
 end AWA.Users.Services.Tests;

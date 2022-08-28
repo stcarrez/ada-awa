@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-commands-tests -- Test the AWA.Commands
---  Copyright (C) 2020 Stephane Carrez
+--  Copyright (C) 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,6 +46,9 @@ package AWA.Commands.Tests is
 
    --  Test the command with various logging options.
    procedure Test_Verbose_Command (T : in out Test);
+
+   --  Test the user command.
+   procedure Test_User_Command (T : in out Test);
 
    procedure Execute (T       : in out Test;
                       Command : in String;
