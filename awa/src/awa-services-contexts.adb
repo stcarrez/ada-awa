@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-services -- Services
---  Copyright (C) 2011, 2012, 2013, 2014, 2016, 2017 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2016, 2017, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -199,7 +199,13 @@ package body AWA.Services.Contexts is
       --  This means we are leaving the service in an abnormal way such as when an
       --  exception is raised.  If this is the case, rollback the transaction.
       if Ctx.Active_Transaction then
-         Ctx.Master.Rollback;
+         begin
+            Ctx.Master.Rollback;
+
+         exception
+            when E : others =>
+               Log.Error ("Transaction rollback failed: {0}", E);
+         end;
       end if;
       Task_Context.Set_Value (Ctx.Previous);
    end Finalize;
