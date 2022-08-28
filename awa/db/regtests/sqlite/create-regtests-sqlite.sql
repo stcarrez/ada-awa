@@ -315,7 +315,7 @@ INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_user"), "name");
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_user"), "status");
-INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa", 1);
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa", 2);
 /* Copied from awa-workspaces-sqlite.sql*/
 /* File generated automatically by dynamo */
 /*  */

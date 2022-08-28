@@ -313,7 +313,7 @@ INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_user'), 'status')
   ON CONFLICT DO NOTHING;
 INSERT INTO ado_version (name, version)
-  VALUES ("awa", 1)
+  VALUES ("awa", 2)
   ON CONFLICT DO NOTHING;
 /* Copied from awa-workspaces-postgresql.sql*/
 /* File generated automatically by dynamo */
