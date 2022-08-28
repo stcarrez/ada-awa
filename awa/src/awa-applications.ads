@@ -72,6 +72,9 @@ with AWA.Audits.Services;
 --
 package AWA.Applications is
 
+   --  Exception raised if something failed during configuration and start.
+   Start_Error : exception;
+
    --  Directories where the configuration files are searched.
    package P_Module_Dir is
      new ASF.Applications.Main.Configs.Parameter ("app.modules.dir",

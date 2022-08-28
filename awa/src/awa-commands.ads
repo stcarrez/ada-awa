@@ -20,7 +20,6 @@ with Util.Commands;
 with Util.Properties;
 with Util.Systems.Constants;
 with AWA.Applications;
-with ASF.Applications.Main;
 with Ada.Exceptions;
 private with Keystore.Passwords;
 private with Keystore.Passwords.GPG;

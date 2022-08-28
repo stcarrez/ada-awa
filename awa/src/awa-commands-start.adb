@@ -19,6 +19,7 @@ with System;
 with Servlet.Core;
 with Servlet.Server;
 with GNAT.Sockets;
+with ASF.Applications.Main;
 with AWA.Applications;
 package body AWA.Commands.Start is
 
@@ -92,6 +93,8 @@ package body AWA.Commands.Start is
       begin
          if Application.all in ASF.Applications.Main.Application'Class then
             Configure (URI (URI'First + 1 .. URI'Last), Context);
+            ASF.Applications.Main.Application'Class (Application.all).Initialize
+              (Context.App_Config, Context.Factory);
             Count := Count + 1;
          end if;
       end Configure;

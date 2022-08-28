@@ -197,9 +197,16 @@ package body AWA.Applications is
    --  ------------------------------
    overriding
    procedure Start (App : in out Application) is
+      use type Security.Policies.Policy_Manager_Access;
+
       Manager : constant Security.Policies.Policy_Manager_Access
         := App.Get_Security_Manager;
    begin
+      if Manager = null then
+         Log.Error ("There is no security manager configured");
+         raise Start_Error with "No security manager";
+      end if;
+
       --  Start the security manager.
       AWA.Permissions.Services.Permission_Manager'Class (Manager.all).Start;
 

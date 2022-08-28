@@ -362,6 +362,10 @@ package body AWA.Commands is
       when AWA.Commands.Error | Util.Commands.Not_Found =>
          Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
 
+      when E : AWA.Applications.Start_Error =>
+         Log.Error (-("Cannot start the server: {0}"), Ada.Exceptions.Exception_Message (E));
+         Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
+
       when E : Ada.IO_Exceptions.Name_Error =>
          Log.Error (-("Cannot access file: {0}"), Ada.Exceptions.Exception_Message (E));
          Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);

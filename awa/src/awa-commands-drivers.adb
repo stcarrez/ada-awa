@@ -17,7 +17,6 @@
 -----------------------------------------------------------------------
 with Ada.Command_Line;
 with Util.Strings.Formats;
-with Asf.Applications.Main;
 with Servlet.Core;
 package body AWA.Commands.Drivers is
 
