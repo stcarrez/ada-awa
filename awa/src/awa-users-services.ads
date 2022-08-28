@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa.users -- User registration, authentication processes
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2017, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -72,6 +72,8 @@ package AWA.Users.Services is
 
    User_Exist : exception;
 
+   User_Disabled : exception;
+
    --  The session is an authenticate session.  The user authenticated using password or OpenID.
    --  When the user logout, this session is closed as well as any connection session linked to
    --  the authenticate session.
@@ -138,6 +140,11 @@ package AWA.Users.Services is
                         User      : in out User_Ref'Class;
                         Email     : in out Email_Ref'Class;
                         Key       : in String);
+
+   --  Update the user status to enable/disable the user account.
+   procedure Update_User (Model  : in out User_Service;
+                          Email  : in String;
+                          Status : in Models.Status_type);
 
    --  Verify the access key and retrieve the user associated with that key.
    --  Starts a new session associated with the given IP address.

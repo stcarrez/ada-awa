@@ -240,12 +240,18 @@ package body AWA.Users.Services is
 
             User.Set_Email (E);
             User.Set_Open_Id (OpenId);
+            User.Set_Status (Models.USER_ENABLED);
             Update_User;
             E.Set_User_Id (User.Get_Id);
             E.Save (DB);
          end;
          User_Lifecycle.Notify_Create (Model, User);
+      elsif User.Get_Status = Models.USER_DISABLED then
+         raise User_Disabled;
       else
+         if User.Get_Status = Models.USER_REGISTERED then
+            User.Set_Status (Models.USER_ENABLED);
+         end if;
          Update_User;
 
          --  The user email address could have changed
@@ -305,17 +311,31 @@ package body AWA.Users.Services is
       --  Find the user registered under the given email address & password.
       Query.Bind_Param (1, Email);
       Query.Set_Join ("INNER JOIN awa_email e ON e.user_id = o.id");
-      Query.Set_Filter ("e.email = ?");
+      Query.Set_Filter ("LOWER(e.email) = LOWER(?)");
       User.Find (DB, Query, Found);
       if not Found then
          Log.Warn ("No user registered under email address {0} or invalid password",
                    Email);
          raise Not_Found with "No user registered under email: " & Email;
       end if;
+
+      --  Reject authentication on disabled the user account.
+      if User.Get_Status = Models.USER_DISABLED then
+         Log.Warn ("User account {0} is disabled", Email);
+         raise User_Disabled with "User account is disabled";
+      end if;
       declare
+         Salt : constant String := User.Get_Salt;
          Hash : constant String
-            := User_Service'Class (Model).Get_Password_Hash (User.Get_Salt, Password);
+            := User_Service'Class (Model).Get_Password_Hash (Salt, Password);
       begin
+         --  Reject authentication if the salt is empty: this account is not
+         --  validated yet for password authentication.
+         if Salt'Length = 0 then
+            Log.Warn ("Empty password salt for user {0}", Email);
+            raise User_Disabled with "User account is not validated: " & Email;
+         end if;
+
          if Hash /= String '(User.Get_Password) then
             Log.Warn ("Invalid password for user {0}", Email);
             raise Not_Found with "No user registered under email: " & Email;
@@ -324,6 +344,12 @@ package body AWA.Users.Services is
 
       Ctx.Start;
 
+      --  Change the user status from registerd to enabled after
+      --  a first successful authentication.
+      if User.Get_Status = Models.USER_REGISTERED then
+         User.Set_Status (Models.USER_ENABLED);
+         User.Save (DB);
+      end if;
       Create_Session (Model, DB, Session, User, IpAddr, Principal);
 
       Ctx.Commit;
@@ -372,6 +398,12 @@ package body AWA.Users.Services is
       if not Found then
          Log.Warn ("Authenticate session {0} not found in database", ADO.Identifier'Image (Id));
          raise Not_Found with "Invalid cookie";
+      end if;
+
+      --  Reject authentication on disabled the user account.
+      if User.Get_Status = Models.USER_DISABLED then
+         Log.Warn ("Authenticate session {0} is disabled", Ado.Identifier'Image (Id));
+         raise User_Disabled with "User account is disabled";
       end if;
 
       if Cookie_Session.Get_Stype /= Users.Models.CONNECT_SESSION then
@@ -467,6 +499,12 @@ package body AWA.Users.Services is
          raise Not_Found with "No user registered under email: " & Email;
       end if;
 
+      --  Reject lost password disabled the user account.
+      if User.Get_Status = Models.USER_DISABLED then
+         Log.Warn ("User account {0} is disabled", Email);
+         raise User_Disabled with "User account is disabled";
+      end if;
+
       --  Delete any previous reset password access key for the user.
       Stmt := DB.Create_Statement (AWA.Users.Models.ACCESS_KEY_TABLE);
       Stmt.Set_Filter ("user_id = ? and kind = ?");
@@ -528,6 +566,12 @@ package body AWA.Users.Services is
 
       --  Get the user primary email address.
       Email.Load (DB, User.Get_Email.Get_Id, Found);
+
+      --  Reject reset password disabled the user account.
+      if User.Get_Status = Models.USER_DISABLED then
+         Log.Warn ("User account {0} is disabled", Email.Get_Email);
+         raise User_Disabled with "User account is disabled";
+      end if;
 
       --  Delete the access key.
       Access_Key.Delete (DB);
@@ -591,13 +635,18 @@ package body AWA.Users.Services is
       Email.Set_User_Id (0);
       Email.Save (DB);
       User.Set_Email (Email);
+      User.Set_Status (Models.USER_REGISTERED);
       if String '(User.Get_Name) = "" then
          User.Set_Name (String '(User.Get_First_Name) & " " & String '(User.Get_Last_Name));
       end if;
 
       --  Make a random salt and generate the password hash.
-      User.Set_Salt (Model.Create_Key (User.Get_Id));
-      User.Set_Password (User_Service'Class (Model).Get_Password_Hash (User.Get_Salt, Password));
+      --  If there is no password, keep an empty salt/password,
+      --  this will be refused at authentication.
+      if Password'Length > 0 then
+         User.Set_Salt (Model.Create_Key (User.Get_Id));
+         User.Set_Password (User_Service'Class (Model).Get_Password_Hash (User.Get_Salt, Password));
+      end if;
       User.Save (DB);
 
       Email.Set_User_Id (User.Get_Id);
@@ -742,6 +791,37 @@ package body AWA.Users.Services is
    end Load_User;
 
    --  ------------------------------
+   --  Update the user status to enable/disable the user account.
+   --  ------------------------------
+   procedure Update_User (Model  : in out User_Service;
+                          Email  : in String;
+                          Status : in Models.Status_type) is
+      Ctx      : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB       : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      User     : User_Ref;
+      Query    : ADO.SQL.Query;
+      Session  : Session_Ref;
+      Found    : Boolean;
+   begin
+      Log.Info ("Update user status {0} to {1}", Email, Status'Image);
+      Ctx.Start;
+
+      --  Find the user associated with the email address.
+      Query.Set_Join ("INNER JOIN awa_email e ON e.user_id = o.id");
+      Query.Set_Filter ("LOWER(e.email) = LOWER(?)");
+      Query.Bind_Param (1, Email);
+      User.Find (DB, Query, Found);
+      if not Found then
+         Log.Warn ("No user with email address {0}", Email);
+         raise Not_Found with "No user registered under email: " & Email;
+      end if;
+
+      User.Set_Status (Status);
+      User.Save (Db);
+      Ctx.Commit;
+   end Update_User;
+
+   --  ------------------------------
    --  Verify the access key and retrieve the user associated with that key.
    --  Starts a new session associated with the given IP address.
    --  Raises Not_Found if the access key does not exist.
@@ -776,6 +856,12 @@ package body AWA.Users.Services is
       User := User_Ref (Access_Key.Get_User);
 
       Email := Email_Ref (User.Get_Email);
+
+      --  Reject reset password disabled the user account.
+      if User.Get_Status = Models.USER_DISABLED then
+         Log.Warn ("User account {0} is disabled", Email.Get_Email);
+         raise User_Disabled with "User account is disabled";
+      end if;
 
       Access_Key.Delete (DB);
       User_Lifecycle.Notify_Create (Model, User);

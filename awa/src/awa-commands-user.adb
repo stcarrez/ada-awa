@@ -29,15 +29,6 @@ package body AWA.Commands.User is
    --  Add, disable, enable a user.
    --  ------------------------------
    overriding
-   procedure Execute (Command   : in out Command_Type;
-                      Name      : in String;
-                      Args      : in Argument_List'Class;
-                      Context   : in out Context_Type) is
-   begin
-      Command_Drivers.Application_Command_Type (Command).Execute (Name, Args, Context);
-   end Execute;
-
-   overriding
    procedure Execute (Command     : in out Command_Type;
                       Application : in out AWA.Applications.Application'Class;
                       Args        : in Argument_List'Class;
@@ -50,7 +41,7 @@ package body AWA.Commands.User is
                                Locale => "en",
                                Bundle => Command.Bundle);
       if User_Module = null then
-         Context.Console.Error ("There is no user manager");
+         Context.Console.Error ("There is no user manager in this application");
          return;
       end if;
 
@@ -64,6 +55,12 @@ package body AWA.Commands.User is
          Context.Console.Error ("Invalid arguments for command: expecting a mail address");
          return;
       end if;
+
+      if not Command.Register and then not Command.Enable and then not Command.Disable then
+         Context.Console.Error ("Use one of --register, --enable or --disable option");
+         return;
+      end if;
+
       declare
          Service_Context : aliased AWA.Services.Contexts.Service_Context;
          Param : constant String := Args.Get_Argument (1);
@@ -77,6 +74,11 @@ package body AWA.Commands.User is
          User.Set_Last_Name (Util.Mail.Get_Last_Name (Addr));
          if Command.Register then
             Service.Create_User (User, Email);
+            Context.Console.Notice (N_INFO, "User '" & Param & "' is now registered");
+         elsif Command.Enable then
+            Service.Update_User (Param, AWA.Users.Models.USER_ENABLED);
+         elsif Command.Disable then
+            Service.Update_User (Param, AWA.Users.Models.USER_DISABLED);
          end if;
 
       exception

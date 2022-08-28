@@ -33,12 +33,6 @@ package AWA.Commands.User is
 
    --  Add, disable, enable a user.
    overriding
-   procedure Execute (Command   : in out Command_Type;
-                      Name      : in String;
-                      Args      : in Argument_List'Class;
-                      Context   : in out Context_Type);
-
-   overriding
    procedure Execute (Command     : in out Command_Type;
                       Application : in out AWA.Applications.Application'Class;
                       Args        : in Argument_List'Class;
