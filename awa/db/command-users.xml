@@ -9,6 +9,7 @@
     SELECT
       u.id AS id,
       u.name AS name,
+      u.status AS status,
       email.email AS email,
       (SELECT COUNT(*) FROM awa_acl AS acl
          WHERE u.id = acl.user_id) AS acl_count,
