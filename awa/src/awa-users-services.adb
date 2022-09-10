@@ -645,7 +645,8 @@ package body AWA.Users.Services is
       --  this will be refused at authentication.
       if Password'Length > 0 then
          User.Set_Salt (Model.Create_Key (User.Get_Id));
-         User.Set_Password (User_Service'Class (Model).Get_Password_Hash (User.Get_Salt, Password));
+         User.Set_Password
+           (User_Service'Class (Model).Get_Password_Hash (User.Get_Salt, Password));
       end if;
       User.Save (DB);
 
@@ -800,7 +801,6 @@ package body AWA.Users.Services is
       DB       : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       User     : User_Ref;
       Query    : ADO.SQL.Query;
-      Session  : Session_Ref;
       Found    : Boolean;
    begin
       Log.Info ("Update user status {0} to {1}", Email, Status'Image);
