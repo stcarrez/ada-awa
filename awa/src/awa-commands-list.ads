@@ -30,6 +30,7 @@ package AWA.Commands.List is
       List_Jobs     : aliased Boolean := False;
       List_Tables   : aliased Boolean := False;
       List_Sessions : aliased Boolean := False;
+      List_Audits   : aliased Boolean := False;
    end record;
 
    --  List some database information.

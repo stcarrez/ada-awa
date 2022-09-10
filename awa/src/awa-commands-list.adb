@@ -66,6 +66,11 @@ package body AWA.Commands.List is
          List (Command, Context, Session, Query, "command_job_list_");
       end if;
 
+      if Command.List_Audits then
+         Query.Set_Query (AWA.Commands.Models.Query_Command_Audit_List);
+         List (Command, Context, Session, Query, "command_audit_list_");
+      end if;
+
       if Command.List_Tables then
          Database_Summary (Command, Context, Session);
       end if;
@@ -204,6 +209,11 @@ package body AWA.Commands.List is
                         Switch => "-t",
                         Long_Switch => "--tables",
                         Help   => -("List the database tables"));
+      GC.Define_Switch (Config => Config,
+                        Output => Command.List_Audits'Access,
+                        Switch => "-A",
+                        Long_Switch => "--audit",
+                        Help   => -("List the last audit records"));
    end Setup;
 
    --  ------------------------------

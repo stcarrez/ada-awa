@@ -1,0 +1,28 @@
+<query-mapping package='AWA.Commands.Models'>
+    <description>
+      List audit records
+    </description>
+
+    <query name='command-audit-list'>
+       <comment>List the last audit fields</comment>
+       <sql>
+    SELECT
+      au.date,
+      au.entity_id,
+      ent.name,
+      field.name AS field,
+      au.old_value,
+      au.new_value
+    FROM awa_audit AS au
+    INNER JOIN awa_audit_field AS field ON field.id = au.field
+    INNER JOIN ado_entity_type AS ent ON ent.id = au.entity_type
+    ORDER by au.date DESC LIMIT 100
+       </sql>
+       <sql-count>
+    SELECT
+       count(au.id)
+    FROM awa_audit AS au
+       </sql-count>
+    </query>
+
+</query-mapping>

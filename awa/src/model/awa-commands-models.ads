@@ -39,45 +39,58 @@ package AWA.Commands.Models is
 
 
 
-   Query_Command_User_List : constant ADO.Queries.Query_Definition_Access;
+   Query_Command_Session_List : constant ADO.Queries.Query_Definition_Access;
+
+
+   Query_Command_Audit_List : constant ADO.Queries.Query_Definition_Access;
 
 
    Query_Command_Job_List : constant ADO.Queries.Query_Definition_Access;
 
 
-   Query_Command_Session_List : constant ADO.Queries.Query_Definition_Access;
+   Query_Command_User_List : constant ADO.Queries.Query_Definition_Access;
 
 
 
 private
 
    package File_1 is
-      new ADO.Queries.Loaders.File (Path => "command-users.xml",
-                                    Sha1 => "9B2B599473F75F92CB5AB5045675E4CCEF926543");
-
-   package Def_Command_User_List is
-      new ADO.Queries.Loaders.Query (Name => "command-user-list",
-                                     File => File_1.File'Access);
-   Query_Command_User_List : constant ADO.Queries.Query_Definition_Access
-   := Def_Command_User_List.Query'Access;
-
-   package File_2 is
-      new ADO.Queries.Loaders.File (Path => "command-jobs.xml",
-                                    Sha1 => "9B2B599473F75F92CB5AB5045675E4CCEF926543");
-
-   package Def_Command_Job_List is
-      new ADO.Queries.Loaders.Query (Name => "command-job-list",
-                                     File => File_2.File'Access);
-   Query_Command_Job_List : constant ADO.Queries.Query_Definition_Access
-   := Def_Command_Job_List.Query'Access;
-
-   package File_3 is
       new ADO.Queries.Loaders.File (Path => "command-sessions.xml",
                                     Sha1 => "9B2B599473F75F92CB5AB5045675E4CCEF926543");
 
    package Def_Command_Session_List is
       new ADO.Queries.Loaders.Query (Name => "command-session-list",
-                                     File => File_3.File'Access);
+                                     File => File_1.File'Access);
    Query_Command_Session_List : constant ADO.Queries.Query_Definition_Access
    := Def_Command_Session_List.Query'Access;
+
+   package File_2 is
+      new ADO.Queries.Loaders.File (Path => "command-audits.xml",
+                                    Sha1 => "9B2B599473F75F92CB5AB5045675E4CCEF926543");
+
+   package Def_Command_Audit_List is
+      new ADO.Queries.Loaders.Query (Name => "command-audit-list",
+                                     File => File_2.File'Access);
+   Query_Command_Audit_List : constant ADO.Queries.Query_Definition_Access
+   := Def_Command_Audit_List.Query'Access;
+
+   package File_3 is
+      new ADO.Queries.Loaders.File (Path => "command-jobs.xml",
+                                    Sha1 => "9B2B599473F75F92CB5AB5045675E4CCEF926543");
+
+   package Def_Command_Job_List is
+      new ADO.Queries.Loaders.Query (Name => "command-job-list",
+                                     File => File_3.File'Access);
+   Query_Command_Job_List : constant ADO.Queries.Query_Definition_Access
+   := Def_Command_Job_List.Query'Access;
+
+   package File_4 is
+      new ADO.Queries.Loaders.File (Path => "command-users.xml",
+                                    Sha1 => "9B2B599473F75F92CB5AB5045675E4CCEF926543");
+
+   package Def_Command_User_List is
+      new ADO.Queries.Loaders.Query (Name => "command-user-list",
+                                     File => File_4.File'Access);
+   Query_Command_User_List : constant ADO.Queries.Query_Definition_Access
+   := Def_Command_User_List.Query'Access;
 end AWA.Commands.Models;
