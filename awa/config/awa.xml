@@ -87,6 +87,15 @@
   </context-param>
 
   <context-param>
+    <param-name>ado.migrate.paths</param-name>
+    <param-value>#{fn:composePath(app_search_dirs,'db/migrate')}</param-value>
+    <description>
+      Defines a list of paths separated by ';' where the database migration files are searched.
+      The default searches for the 'db/migrate' directory in the application search paths.
+    </description>
+  </context-param>
+
+  <context-param>
     <param-name>bundle.dir</param-name>
     <param-value>#{fn:composePath(app_search_dirs,'bundles')}</param-value>
     <description>

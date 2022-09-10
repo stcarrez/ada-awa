@@ -15,6 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Util.Files;
 with Util.Strings.Vectors;
 with ASF.Applications.Main;
 with ADO.Configs;
@@ -32,11 +33,22 @@ package body AWA.Commands.Migrate is
                       Application : in out AWA.Applications.Application'Class;
                       Args        : in Argument_List'Class;
                       Context     : in out Context_Type) is
+      procedure Scan_Migration (Path : in String;
+                                Done : out Boolean);
+
       Connection : ADO.Sessions.Sources.Data_Source;
       Factory : ADO.Sessions.Factory.Session_Factory;
       Session : ADO.Sessions.Master_Session;
       List    : ADO.Schemas.Databases.Upgrade_List;
       Files   : Util.Strings.Vectors.Vector;
+
+      procedure Scan_Migration (Path : in String;
+                                Done : out Boolean) is
+      begin
+         Done := False;
+         ADO.Schemas.Databases.Scan_Migration (Session, Path, List);
+      end Scan_Migration;
+
    begin
       --  Do a manual initialization of some components but not all of them
       --  because we don't want to have AWA or a module that accesses the database
@@ -49,7 +61,11 @@ package body AWA.Commands.Migrate is
       ADO.Configs.Initialize (Context.App_Config);
       Connection.Set_Connection (Context.App_Config.Get (AWA.Applications.P_Database.P));
       Connection.Set_Property (ADO.Configs.QUERY_PATHS_CONFIG,
-                               Context.App_Config.Get (ADO.Configs.QUERY_PATHS_CONFIG, ""));
+                               Context.App_Config.Get (ADO.Configs.QUERY_PATHS_CONFIG,
+                                                       "db"));
+      Connection.Set_Property (ADO.Configs.MIGRATE_PATHS_CONFIG,
+                               Context.App_Config.Get (ADO.Configs.MIGRATE_PATHS_CONFIG,
+                                                       "db/migrate"));
       Connection.Set_Property (ADO.Configs.QUERY_LOAD_CONFIG, "false");
       Connection.Set_Property (ADO.Configs.NO_ENTITY_LOAD, "true");
       Factory.Create (Connection);
@@ -57,7 +73,8 @@ package body AWA.Commands.Migrate is
       --  Get a writable database session for the migration.
       Session := Factory.Get_Master_Session;
 
-      ADO.Schemas.Databases.Scan_Migration (Session, "db/migrate", List);
+      Util.Files.Iterate_Path (Connection.Get_Property (Ado.Configs.Migrate_Paths_config),
+                               Scan_Migration'Access);
       if List.Is_Empty then
          Context.Console.Notice (N_INFO, "Database schema is up to date");
          return;
