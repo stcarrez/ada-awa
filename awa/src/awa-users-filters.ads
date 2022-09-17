@@ -93,6 +93,11 @@ package AWA.Users.Filters is
    --  when the access key is invalid.
    VERIFY_FILTER_REDIRECT_PARAM : constant String := "redirect";
 
+   --  Configuration parameter which controls the change password
+   --  page when the access key is valid, the user is enabled but
+   --  there is no password for authentication.
+   VERIFY_FILTER_CHANGE_PASSWORD_PARAM : constant String := "change-password";
+
    --  Initialize the filter and configure the redirection URIs.
    overriding
    procedure Initialize (Filter  : in out Verify_Filter;
@@ -120,7 +125,8 @@ private
    end record;
 
    type Verify_Filter is new Servlet.Filters.Filter with record
-      Invalid_Key_URI : Unbounded_String;
+      Invalid_Key_URI     : Unbounded_String;
+      Change_Password_URI : Unbounded_String;
    end record;
 
 end AWA.Users.Filters;

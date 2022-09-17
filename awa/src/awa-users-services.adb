@@ -889,30 +889,40 @@ package body AWA.Users.Services is
 
       --  If the user is registered and has a password, it is now verified
       --  and we can enable it.
-      if User.Get_Status = Models.User_Registered
-        and then String '(User.Get_Salt)'Length > 0
-      then
-         User.Set_Status (Models.USER_ENABLED);
-         User.Save (DB);
-      end if;
-
-      Access_Key.Delete (DB);
-      User_Lifecycle.Notify_Create (Model, User);
-
-      --  Create the authentication session.
-      Create_Session (Model, DB, Session, User, IpAddr, Principal);
-
-      --  Post the user creation event once the user is registered.
       declare
-         Sec_Ctx : Security.Contexts.Security_Context;
-         Event   : AWA.Events.Module_Event;
+         Salt : constant String := User.Get_Salt;
       begin
-         Sec_Ctx.Set_Context (Manager   => Model.Permissions.all'Access,
-                              Principal => Principal.all'Access);
-         Event.Set_Parameter ("email", Email.Get_Email);
-         Model.Send_Alert (User_Create_Event.Kind, User, Event);
-      end;
+         if User.Get_Status = Models.User_Registered
+           and then Salt'Length > 0
+         then
+            User.Set_Status (Models.USER_ENABLED);
+            User.Save (DB);
+         end if;
 
+         User_Lifecycle.Notify_Create (Model, User);
+         Principal := null;
+
+         --  This account has no password, keep the key so that we can
+         --  redirect to the change password page.  Otherwise, we must
+         --  remove the access key and create the authenticate session.
+         if Salt'Length > 0 then
+            Access_Key.Delete (DB);
+
+            --  Create the authentication session.
+            Create_Session (Model, DB, Session, User, IpAddr, Principal);
+
+            --  Post the user creation event once the user is registered.
+            declare
+               Sec_Ctx : Security.Contexts.Security_Context;
+               Event   : AWA.Events.Module_Event;
+            begin
+               Sec_Ctx.Set_Context (Manager   => Model.Permissions.all'Access,
+                                    Principal => Principal.all'Access);
+               Event.Set_Parameter ("email", Email.Get_Email);
+               Model.Send_Alert (User_Create_Event.Kind, User, Event);
+            end;
+         end if;
+      end;
       Ctx.Commit;
 
    exception

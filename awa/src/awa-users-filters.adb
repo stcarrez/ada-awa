@@ -140,6 +140,8 @@ package body AWA.Users.Filters is
    overriding
    procedure Initialize (Filter  : in out Verify_Filter;
                          Config  : in Servlet.Core.Filter_Config) is
+      use Servlet.Core;
+
       URI : constant String := Servlet.Core.Get_Init_Parameter (Config,
                                                                 VERIFY_FILTER_REDIRECT_PARAM);
    begin
@@ -149,6 +151,8 @@ package body AWA.Users.Filters is
                     Servlet.Core.Get_Filter_Name (Config),
                     VERIFY_FILTER_REDIRECT_PARAM);
       end if;
+      Filter.Change_Password_Uri := Get_Init_Parameter (Config,
+                                                        VERIFY_FILTER_CHANGE_PASSWORD_PARAM);
    end Initialize;
 
    --  ------------------------------
@@ -164,6 +168,8 @@ package body AWA.Users.Filters is
                         Request  : in out Servlet.Requests.Request'Class;
                         Response : in out Servlet.Responses.Response'Class;
                         Chain    : in out Servlet.Core.Filter_Chain) is
+      use type AWA.Users.Principals.Principal_Access;
+
       Key       : constant String := Request.Get_Parameter (PARAM_ACCESS_KEY);
       Manager   : constant Users.Services.User_Service_Access := Users.Modules.Get_User_Manager;
       Principal : AWA.Users.Principals.Principal_Access;
@@ -173,6 +179,16 @@ package body AWA.Users.Filters is
       Manager.Verify_User (Key       => Key,
                            IpAddr    => "",
                            Principal => Principal);
+
+      if Principal = null then
+         declare
+            URI : constant String := To_String (Filter.Change_Password_Uri) & Key;
+         begin
+            Log.Info ("Access key verified but no password, redirecting to {0}", URI);
+            Response.Send_Redirect (Location => URI);
+            return;
+         end;
+      end if;
 
       Set_Session_Principal (Request, Principal);
 
