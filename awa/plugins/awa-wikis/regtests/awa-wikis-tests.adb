@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-tests -- Unit tests for wikis module
---  Copyright (C) 2018, 2019, 2020 Stephane Carrez
+--  Copyright (C) 2018, 2019, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -324,7 +324,7 @@ package body AWA.Wikis.Tests is
 
       ASF.Tests.Do_Get (Request, Reply, "/wikis/view/" & Wiki & "/WikiImageTest",
                         "wiki-image-test.html");
-      ASF.Tests.Assert_Matches (T, "<img src=./wikis/images/[0-9]*/[0-9]*"
+      ASF.Tests.Assert_Matches (T, "<img src=./asfunit/wikis/images/[0-9]*/[0-9]*"
                                 & "/default/Ada-Lovelace.jpg.* alt=.Ada Lovelace.></img>",
                                 Reply,
                                 "Wiki page missing image link",

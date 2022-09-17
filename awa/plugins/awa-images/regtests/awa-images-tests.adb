@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-images-tests -- Unit tests for images module
---  Copyright (C) 2018, 2019, 2020, 2021 Stephane Carrez
+--  Copyright (C) 2018, 2019, 2020, 2021, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -175,7 +175,7 @@ package body AWA.Images.Tests is
    begin
       ASF.Tests.Do_Get (Request, Reply, "/storages/images/12345345/view/missing.jpg",
                         "image-file-missing.html");
-      ASF.Tests.Assert_Redirect (T, "/auth/login.html", Reply,
+      ASF.Tests.Assert_Redirect (T, "/asfunit/auth/login.html", Reply,
                                 "Invalid redirection for protected page");
 
       AWA.Tests.Helpers.Users.Login ("test-image@test.com", Request);
