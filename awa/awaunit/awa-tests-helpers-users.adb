@@ -83,7 +83,7 @@ package body AWA.Tests.Helpers.Users is
          Principal.User.Set_Last_Name ("Pot");
          Principal.User.Set_Password ("admin");
          Principal.Email.Set_Email (Email);
-         Principal.Manager.Create_User (Principal.User, Principal.Email);
+         Principal.Manager.Create_User (Principal.User, Principal.Email, Key, True);
 
          Find_Access_Key (Principal, Email, Key);
 
@@ -112,7 +112,7 @@ package body AWA.Tests.Helpers.Users is
       Principal.User.Set_Last_Name ("Pot");
       Principal.User.Set_Password ("admin");
       Principal.Email.Set_Email (Email);
-      Principal.Manager.Create_User (Principal.User, Principal.Email);
+      Principal.Manager.Create_User (Principal.User, Principal.Email, Key, True);
 
       Find_Access_Key (Principal, Email, Key);
 
