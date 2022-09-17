@@ -67,14 +67,17 @@ package body AWA.Commands.User is
          Addr  : constant Util.Mail.Email_Address := Util.Mail.Parse_Address (Param);
          Email : AWA.Users.Models.Email_Ref;
          User  : AWA.Users.Models.User_Ref;
+         Key   : AWA.Users.Models.Access_Key_Ref;
       begin
          Service_Context.Set_Context (Application'Unchecked_Access, null);
          Email.Set_Email (Param);
          User.Set_First_Name (Util.Mail.Get_First_Name (Addr));
          User.Set_Last_Name (Util.Mail.Get_Last_Name (Addr));
          if Command.Register then
-            Service.Create_User (User, Email);
+            Service.Create_User (User, Email, Key, not Command.No_Email);
             Context.Console.Notice (N_INFO, "User '" & Param & "' is now registered");
+            Context.Console.Notice (N_INFO, "Registration key: "
+                                      & String '(Key.Get_Access_Key));
          elsif Command.Enable then
             Service.Update_User (Param, AWA.Users.Models.USER_ENABLED);
          elsif Command.Disable then
@@ -104,6 +107,10 @@ package body AWA.Commands.User is
                         Output => Command.Register'Access,
                         Long_Switch => "--register",
                         Help   => -("Register a new user"));
+      GC.Define_Switch (Config => Config,
+                        Output => Command.No_Email'Access,
+                        Long_Switch => "--no-email",
+                        Help   => -("Don't send an email to the new user"));
       GC.Define_Switch (Config => Config,
                         Output => Command.Enable'Access,
                         Long_Switch => "--enable",

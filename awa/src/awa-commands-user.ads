@@ -29,6 +29,7 @@ package AWA.Commands.User is
       Register      : aliased Boolean := False;
       Enable        : aliased Boolean := False;
       Disable       : aliased Boolean := False;
+      No_Email      : aliased Boolean := False;
    end record;
 
    --  Add, disable, enable a user.
