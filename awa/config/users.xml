@@ -313,7 +313,7 @@
   </context-param>
 
   <context-param>
-    <param-name>verify-filter.redirect</param-name>
+    <param-name>verify-access-key.redirect</param-name>
     <param-value>#{contextPath}/auth/login.html</param-value>
     <description>URI to redirect to the login page</description>
   </context-param>
