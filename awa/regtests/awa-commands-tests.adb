@@ -28,6 +28,7 @@ with ASF.Tests;
 with AWA.Tests.Helpers.Users;
 with AWA.Users.Services;
 with AWA.Users.Models;
+with AWA.Users.Principals;
 with ASF.Requests.Mockup;
 with ASF.Responses.Mockup;
 
@@ -233,6 +234,9 @@ package body AWA.Commands.Tests is
    --  Test the user command.
    --  ------------------------------
    procedure Test_User_Command (T : in out Test) is
+      use type Security.Principal_Access;
+      use type AWA.Users.Principals.Principal_Access;
+
       Email     : constant String := "Reg-" & Util.Tests.Get_Uuid & "@register.com";
       Config    : constant String := Util.Tests.Get_Parameter ("test_config_path");
       Result    : Ada.Strings.Unbounded.Unbounded_String;
@@ -258,29 +262,39 @@ package body AWA.Commands.Tests is
       end;
       AWA.Tests.Helpers.Users.Find_Access_Key (Principal, Email, Key);
 
-      --  Run the verification and get the user and its session
+      --  Run the verification but we should not get a session.
       Principal.Manager.Verify_User (Key.Get_Access_Key, "192.168.1.1",
                                      Principal.Principal);
 
       declare
-         use type Security.Principal_Access;
-
-         Request : ASF.Requests.Mockup.Request;
-         Reply   : ASF.Responses.Mockup.Response;
+         Request    : ASF.Requests.Mockup.Request;
+         Reply      : ASF.Responses.Mockup.Response;
+         Access_Key : constant String := Key.Get_Access_Key;
       begin
-         --  Simulate user clicking on the reset password link.
+         ASF.Tests.Do_Get (Request, Reply, "/auth/validate.html?key=" & Access_Key,
+                           "validate-user.html");
+
+         Util.Tests.Assert_Equals (T, ASF.Responses.Sc_Moved_Temporarily, Reply.Get_Status,
+                                      "Invalid response");
+         ASF.Tests.Assert_Redirect (T, "/asfunit/auth/change-password.html?key=" & Access_Key,
+                                    Reply, "Invalid redirect after verify");
+
+         --  Simulate a user clicking on the reset password form.
          --  This verifies the key, login the user and redirect him to the change-password page
-         Request.Set_Parameter ("key", Key.Get_Access_Key);
+         Request.Set_Parameter ("key", Access_Key);
          Request.Set_Parameter ("password", "admin");
          Request.Set_Parameter ("reset-password", "1");
          ASF.Tests.Do_Post (Request, Reply, "/auth/change-password.html", "reset-password-3.html");
 
          Util.Tests.Assert_Equals (T, ASF.Responses.Sc_Moved_Temporarily, Reply.Get_Status,
                                       "Invalid response");
+         ASF.Tests.Assert_Redirect (T, "/asfunit/auth/login.html",
+                                    Reply, "Invalid redirect after change-password");
 
          --  Check that the user is logged and we have a user principal now.
          T.Assert (Request.Get_User_Principal /= null,
                    "A user principal should be defined");
+
       end;
    end Test_User_Command;
 
