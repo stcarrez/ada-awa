@@ -1,5 +1,6 @@
 <project>
     <name>awa-storages</name>
+    <property name="model_version">1</property>
     <property name="author_email">Stephane.Carrez@gmail.com</property>
     <property name="gnat.project">awa_storages.gpr</property>
     <property name="is_plugin">TRUE</property>
