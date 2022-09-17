@@ -134,8 +134,10 @@ the OpenID integration.
 | |#{app_google_plus_secret}|
 |auth-filter.redirect|URI to redirect to the login page|
 | |#{contextPath}/auth/login.html|
-|verify-filter.redirect|URI to redirect to the login page|
+|verify-access-key.redirect|URI to redirect to the login page|
 | |#{contextPath}/auth/login.html|
+|verify-access-key.change-password|URI to redirect to the change password page when the access key is verified, the user account is registered but there is no password for authentication|
+| |#{contextPath}/auth/change-password.html?key=|
 |app_login_register|Enable or disable user registration through the web interface|
 | |#{not empty app_login_register ? app_login_register : true}|
 |app_login_email|Enable or disable user login through the email/password form|

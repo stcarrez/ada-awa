@@ -64,6 +64,8 @@ The following global configuration parameter are defined:
 | |true|
 |ado.queries.paths|Defines a list of paths separated by ';' where the database query files are searched. The default searches for the 'db' directory in the application search paths.|
 | |#{fn:composePath(app_search_dirs,'db')}|
+|ado.migrate.paths|Defines a list of paths separated by ';' where the database migration files are searched. The default searches for the 'db/migrate' directory in the application search paths.|
+| |#{fn:composePath(app_search_dirs,'db/migrate')}|
 |bundle.dir|Defines a list of paths separated by ';' where the resource bundle files are searched. The default searches for the 'bundles' directory in the application search paths.|
 | |#{fn:composePath(app_search_dirs,'bundles')}|
 |app.modules.dir|Defines a list of paths separated by ';' where the module configuration files are searched. The default searches for the 'config' directory in the application search paths.|
