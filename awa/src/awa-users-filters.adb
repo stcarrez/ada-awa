@@ -19,13 +19,15 @@
 with Util.Log.Loggers;
 
 with ASF.Applications.Main;
-with ASF.Cookies;
+with Util.Http.Cookies;
 
 with AWA.Services.Contexts;
 with AWA.Users.Services;
 with AWA.Users.Modules;
 
 package body AWA.Users.Filters is
+
+   use Util.Http;
 
    --  The logger
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Users.Filters");
@@ -93,11 +95,11 @@ package body AWA.Users.Filters is
       --  Setup a new AID cookie with the new connection session.
       declare
          Cookie : constant String := Manager.Get_Authenticate_Cookie (P.Get_Session_Identifier);
-         C      : ASF.Cookies.Cookie := ASF.Cookies.Create (Servlet.Security.Filters.AID_COOKIE,
-                                                            Cookie);
+         C      : Cookies.Cookie := Cookies.Create (Servlet.Security.Filters.AID_COOKIE,
+                                                    Cookie);
       begin
-         ASF.Cookies.Set_Path (C, Request.Get_Context_Path);
-         ASF.Cookies.Set_Max_Age (C, 15 * 86400);
+         Cookies.Set_Path (C, Request.Get_Context_Path);
+         Cookies.Set_Max_Age (C, 15 * 86400);
          Response.Add_Cookie (Cookie => C);
       end;
 
@@ -118,12 +120,12 @@ package body AWA.Users.Filters is
       Context   : constant String := Request.Get_Context_Path;
       Path      : constant String := Request.Get_Servlet_Path;
       URL       : constant String := Context & Path & Request.Get_Path_Info;
-      C         : ASF.Cookies.Cookie := ASF.Cookies.Create (REDIRECT_COOKIE, URL);
+      C         : Cookies.Cookie := Cookies.Create (REDIRECT_COOKIE, URL);
    begin
       Log.Info ("User is not logged, redirecting to {0}", Login_URI);
 
-      ASF.Cookies.Set_Path (C, Request.Get_Context_Path);
-      ASF.Cookies.Set_Max_Age (C, 86400);
+      Cookies.Set_Path (C, Request.Get_Context_Path);
+      Cookies.Set_Max_Age (C, 86400);
       Response.Add_Cookie (Cookie => C);
       if Request.Get_Header ("X-Requested-With") = "" then
          Response.Send_Redirect (Location => Login_URI);

@@ -320,7 +320,7 @@ package body AWA.Users.Services is
       end if;
 
       --  Reject authentication on disabled the user account.
-      if User.Get_Status = Models.USER_DISABLED then
+      if User.Get_Status /= Models.USER_ENABLED then
          Log.Warn ("User account {0} is disabled", Email);
          raise User_Disabled with "User account is disabled";
       end if;
@@ -564,21 +564,28 @@ package body AWA.Users.Services is
 
       User := User_Ref (Access_Key.Get_User);
 
-      --  Get the user primary email address.
-      Email.Load (DB, User.Get_Email.Get_Id, Found);
+      --  Delete the access key.
+      Access_Key.Delete (DB);
 
       --  Reject reset password disabled the user account.
       if User.Get_Status = Models.USER_DISABLED then
+         Ctx.Commit;
          Log.Warn ("User account {0} is disabled", Email.Get_Email);
          raise User_Disabled with "User account is disabled";
       end if;
 
-      --  Delete the access key.
-      Access_Key.Delete (DB);
+      --  Get the user primary email address.
+      Email.Load (DB, User.Get_Email.Get_Id, Found);
+      if not Found then
+         Ctx.Commit;
+         Log.Warn ("User email address not found {0}", Email.Get_Email);
+         raise Not_Found with "User email address not found: " & Email.Get_Email;
+      end if;
 
       --  Reset the user password
       User.Set_Salt (Model.Create_Key (User.Get_Id));
       User.Set_Password (User_Service'Class (Model).Get_Password_Hash (User.Get_Salt, Password));
+      User.Set_Status (Models.USER_ENABLED);
       User.Save (DB);
 
       --  Create the authentication session.
@@ -605,17 +612,20 @@ package body AWA.Users.Services is
    --  ------------------------------
    --  Create a user in the database with the given user information and
    --  the associated email address.  Verify that no such user already exist.
+   --  Build an access key that allows to verify the user email and finish
+   --  the account creation.
    --  Raises User_Exist exception if a user with such email is already registered.
    --  ------------------------------
    procedure Create_User (Model : in out User_Service;
                           User  : in out User_Ref'Class;
-                          Email : in out Email_Ref'Class) is
+                          Email : in out Email_Ref'Class;
+                          Key   : in out Access_Key_Ref'Class;
+                          Send  : in Boolean) is
       COUNT_SQL : constant String
         := "SELECT COUNT(*) FROM awa_email WHERE LOWER(email) = LOWER(?)";
 
       Ctx           : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB            : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
-      Access_Key    : Access_Key_Ref;
       Stmt          : Query_Statement := DB.Create_Statement (COUNT_SQL);
       Email_Address : constant String := Email.Get_Email;
       Password      : constant String := User.Get_Password;
@@ -655,19 +665,21 @@ package body AWA.Users.Services is
 
       --  Create the access key
       Model.Create_Access_Key (User    => User,
-                               Key     => Access_Key,
+                               Key     => Access_Key_Ref (Key),
                                Kind    => AWA.Users.Models.SIGNUP_KEY,
                                Expire  => 86400.0,
                                Session => DB);
 
       --  Send the email with the access key to finish the user registration.
-      declare
-         Event : AWA.Events.Module_Event;
-      begin
-         Event.Set_Parameter ("key", Access_Key.Get_Access_Key);
-         Event.Set_Parameter ("email", Email_Address);
-         Model.Send_Alert (User_Register_Event.Kind, User, Event);
-      end;
+      if Send then
+         declare
+            Event : AWA.Events.Module_Event;
+         begin
+            Event.Set_Parameter ("key", Key.Get_Access_Key);
+            Event.Set_Parameter ("email", Email_Address);
+            Model.Send_Alert (User_Register_Event.Kind, User, Event);
+         end;
+      end if;
 
       Ctx.Commit;
    end Create_User;
@@ -714,13 +726,24 @@ package body AWA.Users.Services is
       Cur_User := User_Ref (Access_Key.Get_User);
       Cur_Email := Email_Ref (Cur_User.Get_Email);
 
+      --  Invalidate the key.
+      Access_Key.Delete (DB);
+
       --  Check first if the email address is not used by another user.
       Query.Bind_Param (1, Email_Address);
       Query.Set_Filter ("LOWER(email) = LOWER(?)");
       Exist_Email.Find (DB, Query, Found);
       if Found and then Exist_Email.Get_Id /= Cur_Email.Get_Id then
+         Ctx.Commit;
          Log.Warn ("Email address {0} already registered", Email_Address);
          raise User_Exist with "Email address " & Email_Address & "' already used";
+      end if;
+
+      --  Make sure the user is not disabled.
+      if Cur_User.Get_Status = Models.USER_DISABLED then
+         Ctx.Commit;
+         Log.Warn ("User account {0} is disabled", Email_Address);
+         raise User_Disabled with "User account '" & Email_Address & "' is disabled";
       end if;
 
       --  Save the email and the user
@@ -739,6 +762,7 @@ package body AWA.Users.Services is
       Cur_User.Set_Salt (Model.Create_Key (Cur_User.Get_Id));
       Cur_User.Set_Password
         (User_Service'Class (Model).Get_Password_Hash (Cur_User.Get_Salt, Password));
+      Cur_User.Set_Status (Models.USER_ENABLED);
       Cur_User.Save (DB);
 
       User_Ref (User) := Cur_User;
@@ -861,6 +885,15 @@ package body AWA.Users.Services is
       if User.Get_Status = Models.USER_DISABLED then
          Log.Warn ("User account {0} is disabled", Email.Get_Email);
          raise User_Disabled with "User account is disabled";
+      end if;
+
+      --  If the user is registered and has a password, it is now verified
+      --  and we can enable it.
+      if User.Get_Status = Models.User_Registered
+        and then String '(User.Get_Salt)'Length > 0
+      then
+         User.Set_Status (Models.USER_ENABLED);
+         User.Save (DB);
       end if;
 
       Access_Key.Delete (DB);

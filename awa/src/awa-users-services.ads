@@ -113,14 +113,18 @@ package AWA.Users.Services is
    function Get_Password_Hash (Model    : in User_Service;
                                Password : in String;
                                Salt     : in String)
-                               return String;
+                              return String;
 
    --  Create a user in the database with the given user information and
    --  the associated email address.  Verify that no such user already exist.
+   --  Build an access key that allows to verify the user email and finish
+   --  the account creation.
    --  Raises User_Exist exception if a user with such email is already registered.
    procedure Create_User (Model : in out User_Service;
                           User  : in out User_Ref'Class;
-                          Email : in out Email_Ref'Class);
+                          Email : in out Email_Ref'Class;
+                          Key   : in out Access_Key_Ref'Class;
+                          Send  : in Boolean);
 
    --  Create a user in the database with the given user information and
    --  the associated email address and for the given access key.  The access key is first

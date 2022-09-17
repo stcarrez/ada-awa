@@ -71,8 +71,14 @@ package body AWA.Users.Beans is
          Flash.Set_Keep_Messages (True);
          Messages.Factory.Add_Message (Ctx.all, "users.message_signup_sent", Messages.INFO);
       else
-         Data.Manager.Create_User (User  => User,
-                                   Email => Email);
+         declare
+            Access_Key : Access_Key_Ref;
+         begin
+            Data.Manager.Create_User (User  => User,
+                                      Email => Email,
+                                      Key   => Access_Key,
+                                      Send  => True);
+         end;
          Outcome := To_Unbounded_String ("success");
 
          --  Add a message to the flash context so that it will be displayed on the next page.
