@@ -27,6 +27,30 @@ Sincerely,
 
 The #{initParam['app_name']} Team
 </ui:define>
+
+<ui:define name="mailBody">
+Dear #{event.name},
+
+<p>
+You have started a registration on the #{initParam['app_name']} application
+under the name #{event.first_name} #{event.last_name}
+and with the email address #{event.email}.
+</p>
+
+<p>
+To finish the registration process, click on the following link:
+</p>
+
+<a href="#{initParam['app_url_base']}/auth/validate.html?key=#{event.key}">
+#{initParam['app_url_base']}/auth/validate.html?key=#{event.key}</a>
+
+<p>
+Sincerely,
+</p>
+
+<p>
+The #{initParam['app_name']} Team
+</p>
+</ui:define>
+
 </ui:decorate>
-
-

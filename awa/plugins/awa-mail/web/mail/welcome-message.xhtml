@@ -27,4 +27,29 @@ Sincerely,
 
 The #{initParam['app_name']} Team
 </ui:define>
+
+<ui:define name="mailBody">
+Dear #{event.name},
+<p>
+Welcome to the #{initParam['app_name']} application
+</p>
+
+<p>
+You are registered under the name #{event.first_name} #{event.last_name}
+with the email address #{event.email}.
+To go in your new application you may use the following link:
+</p>
+
+<a href="#{initParam['app_url_base']}/index.html">
+#{initParam['app_url_base']}/index.html</a>
+
+<p>
+Sincerely,
+</p>
+
+<p>
+The #{initParam['app_name']} Team
+</p>
+</ui:define>
+
 </ui:decorate>

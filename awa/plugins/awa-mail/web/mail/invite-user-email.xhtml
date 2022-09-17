@@ -29,4 +29,31 @@ Sincerely,
 
 The #{initParam['app_name']} Team
     </ui:define>
+
+<ui:define name="mailBody">
+Dear #{event.name},
+
+<p>
+You have been invited by #{event.inviter} to join #{initParam['app_name']}.
+</p>
+
+#{event.message}
+
+<p>
+To accept this invitation, please go to the following URL:
+</p>
+
+<a href="#{initParam['app_url_base']}/auth/invitation.html?key=#{event.key}">
+#{initParam['app_url_base']}/auth/invitation.html?key=#{event.key}</a>
+
+<p>
+Thank you for using #{initParam['app_name']}.
+</p>
+<p>
+Sincerely,
+</p>
+<p>
+The #{initParam['app_name']} Team
+</p>
+</ui:define>
 </ui:decorate>
