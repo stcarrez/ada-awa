@@ -34,4 +34,7 @@ package AWA.Users.Services.Tests is
    --  Disable a user and check login is refused.
    procedure Test_Disable_User (T : in out Test);
 
+   --  Create a user and try to login without the verify.
+   procedure Test_Create_User_No_Verify (T : in out Test);
+
 end AWA.Users.Services.Tests;

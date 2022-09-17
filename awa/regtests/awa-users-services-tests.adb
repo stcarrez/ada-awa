@@ -51,6 +51,8 @@ package body AWA.Users.Services.Tests is
                        Test_Get_Module'Access);
       Caller.Add_Test (Suite, "Test AWA.Users.Services.Update_User",
                        Test_Disable_User'Access);
+      Caller.Add_Test (Suite, "Test AWA.Users.Services.Create_User",
+                       Test_Create_User_No_Verify'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -268,7 +270,9 @@ package body AWA.Users.Services.Tests is
       end;
    end Test_Get_Module;
 
+   --  ------------------------------
    --  Disable a user and check login is refused.
+   --  ------------------------------
    procedure Test_Disable_User (T : in out Test) is
       Principal : AWA.Tests.Helpers.Users.Test_User;
    begin
@@ -296,5 +300,30 @@ package body AWA.Users.Services.Tests is
       T.Assert (not Principal.Session.Is_Null, "Session is not created");
 
    end Test_Disable_User;
+
+   --  ------------------------------
+   --  Create a user and try to login without the verify.
+   --  ------------------------------
+   procedure Test_Create_User_No_Verify (T : in out Test) is
+      Principal : AWA.Tests.Helpers.Users.Test_User;
+      Key       : AWA.Users.Models.Access_Key_Ref;
+      Email     : constant String := "Joe-" & Util.Tests.Get_Uuid & "@gmail.com";
+   begin
+      AWA.Tests.Helpers.Users.Initialize (Principal);
+      Principal.User.Set_First_Name ("Joe");
+      Principal.User.Set_Last_Name ("Pot");
+      Principal.User.Set_Password ("admin");
+      Principal.Email.Set_Email (Email);
+      Principal.Manager.Create_User (Principal.User, Principal.Email, Key, False);
+
+      begin
+         AWA.Tests.Helpers.Users.Login (Principal);
+         T.Fail ("No User_Disabled exception was raised");
+
+      exception
+         when User_Disabled =>
+            null;
+      end;
+   end Test_Create_User_No_Verify;
 
 end AWA.Users.Services.Tests;
