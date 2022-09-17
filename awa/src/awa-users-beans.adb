@@ -211,6 +211,11 @@ package body AWA.Users.Beans is
          Outcome := To_Unbounded_String ("failure");
 
          ASF.Applications.Messages.Factory.Add_Message ("users.login_signup_fail_message");
+
+      when Services.User_Disabled =>
+         Outcome := To_Unbounded_String ("failure");
+
+         ASF.Applications.Messages.Factory.Add_Message ("users.login_signup_account_disabled_message");
    end Authenticate_User;
 
    --  ------------------------------
