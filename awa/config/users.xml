@@ -319,6 +319,14 @@
   </context-param>
 
   <context-param>
+    <param-name>verify-access-key.change-password</param-name>
+    <param-value>#{contextPath}/auth/change-password.html?key=</param-value>
+    <description>URI to redirect to the change password page when
+    the access key is verified, the user account is registered but
+    there is no password for authentication</description>
+  </context-param>
+
+  <context-param>
     <param-name>app_login_register</param-name>
     <param-value>#{not empty app_login_register ? app_login_register : true}</param-value>
     <description>Enable or disable user registration through the web interface</description>
