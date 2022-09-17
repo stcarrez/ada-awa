@@ -20,7 +20,6 @@ with Util.Log.Loggers;
 
 with ASF.Applications.Main;
 with ASF.Cookies;
-with Servlet.Core;
 
 with AWA.Services.Contexts;
 with AWA.Users.Services;
@@ -34,9 +33,9 @@ package body AWA.Users.Filters is
    --  ------------------------------
    --  Set the user principal on the session associated with the ASF request.
    --  ------------------------------
-   procedure Set_Session_Principal (Request   : in out ASF.Requests.Request'Class;
+   procedure Set_Session_Principal (Request   : in out Servlet.Requests.Request'Class;
                                     Principal : in Principals.Principal_Access) is
-      Session   : ASF.Sessions.Session := Request.Get_Session (Create => True);
+      Session   : Servlet.Sessions.Session := Request.Get_Session (Create => True);
    begin
       Session.Set_Principal (Principal.all'Access);
    end Set_Session_Principal;
@@ -46,12 +45,12 @@ package body AWA.Users.Filters is
    --  ------------------------------
    overriding
    procedure Initialize (Filter  : in out Auth_Filter;
-                         Config  : in ASF.Servlets.Filter_Config) is
+                         Config  : in Servlet.Core.Filter_Config) is
       use ASF.Applications.Main;
       Context : constant Servlet.Core.Servlet_Registry_Access
         := Servlet.Core.Get_Servlet_Context (Config);
       URI : constant String
-        := ASF.Servlets.Get_Init_Parameter (Config,
+        := Servlet.Core.Get_Init_Parameter (Config,
                                             AUTH_FILTER_REDIRECT_PARAM);
    begin
       Log.Info ("Using login URI: {0}", URI);
@@ -60,7 +59,7 @@ package body AWA.Users.Filters is
          Log.Error ("The login URI is empty.  Redirection to the login page will not work.");
       end if;
       Filter.Login_URI := To_Unbounded_String (URI);
-      ASF.Security.Filters.Auth_Filter (Filter).Initialize (Config);
+      Servlet.Security.Filters.Auth_Filter (Filter).Initialize (Config);
       if Context.all in Application'Class then
          Filter.Application := AWA.Applications.Application'Class (Context.all)'Access;
          Filter.Set_Permission_Manager (Application'Class (Context.all).Get_Security_Manager);
@@ -69,9 +68,9 @@ package body AWA.Users.Filters is
 
    overriding
    procedure Authenticate (F         : in Auth_Filter;
-                           Request   : in out ASF.Requests.Request'Class;
-                           Response  : in out ASF.Responses.Response'Class;
-                           Session   : in ASF.Sessions.Session;
+                           Request   : in out Servlet.Requests.Request'Class;
+                           Response  : in out Servlet.Responses.Response'Class;
+                           Session   : in Servlet.Sessions.Session;
                            Auth_Id   : in String;
                            Principal : out ASF.Principals.Principal_Access) is
       pragma Unreferenced (Session);
@@ -94,7 +93,7 @@ package body AWA.Users.Filters is
       --  Setup a new AID cookie with the new connection session.
       declare
          Cookie : constant String := Manager.Get_Authenticate_Cookie (P.Get_Session_Identifier);
-         C      : ASF.Cookies.Cookie := ASF.Cookies.Create (ASF.Security.Filters.AID_COOKIE,
+         C      : ASF.Cookies.Cookie := ASF.Cookies.Create (Servlet.Security.Filters.AID_COOKIE,
                                                             Cookie);
       begin
          ASF.Cookies.Set_Path (C, Request.Get_Context_Path);
@@ -113,12 +112,12 @@ package body AWA.Users.Filters is
    --  ------------------------------
    overriding
    procedure Do_Login (Filter   : in Auth_Filter;
-                       Request  : in out ASF.Requests.Request'Class;
-                       Response : in out ASF.Responses.Response'Class) is
+                       Request  : in out Servlet.Requests.Request'Class;
+                       Response : in out Servlet.Responses.Response'Class) is
       Login_URI : constant String := To_String (Filter.Login_URI);
       Context   : constant String := Request.Get_Context_Path;
-      Servlet   : constant String := Request.Get_Servlet_Path;
-      URL       : constant String := Context & Servlet & Request.Get_Path_Info;
+      Path      : constant String := Request.Get_Servlet_Path;
+      URL       : constant String := Context & Path & Request.Get_Path_Info;
       C         : ASF.Cookies.Cookie := ASF.Cookies.Create (REDIRECT_COOKIE, URL);
    begin
       Log.Info ("User is not logged, redirecting to {0}", Login_URI);
@@ -129,7 +128,7 @@ package body AWA.Users.Filters is
       if Request.Get_Header ("X-Requested-With") = "" then
          Response.Send_Redirect (Location => Login_URI);
       else
-         Response.Send_Error (ASF.Responses.SC_UNAUTHORIZED);
+         Response.Send_Error (Servlet.Responses.SC_UNAUTHORIZED);
       end if;
    end Do_Login;
 
@@ -138,11 +137,16 @@ package body AWA.Users.Filters is
    --  ------------------------------
    overriding
    procedure Initialize (Filter  : in out Verify_Filter;
-                         Config  : in ASF.Servlets.Filter_Config) is
-      URI : constant String := ASF.Servlets.Get_Init_Parameter (Config,
+                         Config  : in Servlet.Core.Filter_Config) is
+      URI : constant String := Servlet.Core.Get_Init_Parameter (Config,
                                                                 VERIFY_FILTER_REDIRECT_PARAM);
    begin
       Filter.Invalid_Key_URI := To_Unbounded_String (URI);
+      if Uri'Length = 0 then
+         Log.Error ("Missing configuration for {0}.{1}",
+                    Servlet.Core.Get_Filter_Name (Config),
+                    VERIFY_FILTER_REDIRECT_PARAM);
+      end if;
    end Initialize;
 
    --  ------------------------------
@@ -155,9 +159,9 @@ package body AWA.Users.Filters is
    --  ------------------------------
    overriding
    procedure Do_Filter (Filter   : in Verify_Filter;
-                        Request  : in out ASF.Requests.Request'Class;
-                        Response : in out ASF.Responses.Response'Class;
-                        Chain    : in out ASF.Servlets.Filter_Chain) is
+                        Request  : in out Servlet.Requests.Request'Class;
+                        Response : in out Servlet.Responses.Response'Class;
+                        Chain    : in out Servlet.Core.Filter_Chain) is
       Key       : constant String := Request.Get_Parameter (PARAM_ACCESS_KEY);
       Manager   : constant Users.Services.User_Service_Access := Users.Modules.Get_User_Manager;
       Principal : AWA.Users.Principals.Principal_Access;
@@ -171,7 +175,7 @@ package body AWA.Users.Filters is
       Set_Session_Principal (Request, Principal);
 
       --  Request is authorized, proceed to the next filter.
-      ASF.Servlets.Do_Filter (Chain    => Chain,
+      Servlet.Core.Do_Filter (Chain    => Chain,
                               Request  => Request,
                               Response => Response);
 

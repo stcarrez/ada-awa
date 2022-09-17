@@ -18,20 +18,20 @@
 
 with Ada.Strings.Unbounded;
 
-with ASF.Requests;
-with ASF.Responses;
-with ASF.Sessions;
+with Servlet.Requests;
+with Servlet.Responses;
+with Servlet.Sessions;
 with ASF.Principals;
-with ASF.Filters;
-with ASF.Servlets;
-with ASF.Security.Filters;
+with Servlet.Filters;
+with Servlet.Core;
+with Servlet.Security.Filters;
 
 with AWA.Applications;
 with AWA.Users.Principals;
 package AWA.Users.Filters is
 
    --  Set the user principal on the session associated with the ASF request.
-   procedure Set_Session_Principal (Request   : in out ASF.Requests.Request'Class;
+   procedure Set_Session_Principal (Request   : in out Servlet.Requests.Request'Class;
                                     Principal : in AWA.Users.Principals.Principal_Access);
 
    --  ------------------------------
@@ -41,7 +41,7 @@ package AWA.Users.Filters is
    --  a given page.  If the user is not logged, it tries to login automatically
    --  by using some persistent cookie.  When this fails, it redirects the
    --  user to a login page (configured by AUTH_FILTER_REDIRECT_PARAM property).
-   type Auth_Filter is new ASF.Security.Filters.Auth_Filter with private;
+   type Auth_Filter is new Servlet.Security.Filters.Auth_Filter with private;
 
    --  The configuration parameter which controls the redirection page
    --  when the user is not logged (this should be the login page).
@@ -53,7 +53,7 @@ package AWA.Users.Filters is
    --  Initialize the filter and configure the redirection URIs.
    overriding
    procedure Initialize (Filter  : in out Auth_Filter;
-                         Config  : in ASF.Servlets.Filter_Config);
+                         Config  : in Servlet.Core.Filter_Config);
 
    --  Authenticate a user by using the auto-login cookie.  This procedure is called if the
    --  current session does not have any principal.  Based on the request and the optional
@@ -64,9 +64,9 @@ package AWA.Users.Filters is
    --  The default implementation returns a null principal.
    overriding
    procedure Authenticate (F        : in Auth_Filter;
-                           Request  : in out ASF.Requests.Request'Class;
-                           Response : in out ASF.Responses.Response'Class;
-                           Session  : in ASF.Sessions.Session;
+                           Request  : in out Servlet.Requests.Request'Class;
+                           Response : in out Servlet.Responses.Response'Class;
+                           Session  : in Servlet.Sessions.Session;
                            Auth_Id  : in String;
                            Principal : out ASF.Principals.Principal_Access);
 
@@ -74,8 +74,8 @@ package AWA.Users.Filters is
    --  the user is not authenticated.
    overriding
    procedure Do_Login (Filter   : in Auth_Filter;
-                       Request  : in out ASF.Requests.Request'Class;
-                       Response : in out ASF.Responses.Response'Class);
+                       Request  : in out Servlet.Requests.Request'Class;
+                       Response : in out Servlet.Responses.Response'Class);
 
    --  ------------------------------
    --  Verify access key filter
@@ -84,7 +84,7 @@ package AWA.Users.Filters is
    --  The access key should have been sent to the user by some mechanism (email).
    --  The access key must be valid, that is an <b>Access_Key</b> database entry
    --  must exist and it must be associated with an email address and a user.
-   type Verify_Filter is new ASF.Filters.Filter with private;
+   type Verify_Filter is new Servlet.Filters.Filter with private;
 
    --  The request parameter that <b>Verify_Filter</b> will check.
    PARAM_ACCESS_KEY : constant String := "key";
@@ -96,7 +96,7 @@ package AWA.Users.Filters is
    --  Initialize the filter and configure the redirection URIs.
    overriding
    procedure Initialize (Filter  : in out Verify_Filter;
-                         Config  : in ASF.Servlets.Filter_Config);
+                         Config  : in Servlet.Core.Filter_Config);
 
    --  Filter a request which contains an access key and verify that the
    --  key is valid and identifies a user.  Once the user is known, create
@@ -106,20 +106,20 @@ package AWA.Users.Filters is
    --  <b>Invalid_Key_URI</b> associated with the filter.
    overriding
    procedure Do_Filter (Filter   : in Verify_Filter;
-                        Request  : in out ASF.Requests.Request'Class;
-                        Response : in out ASF.Responses.Response'Class;
-                        Chain    : in out ASF.Servlets.Filter_Chain);
+                        Request  : in out Servlet.Requests.Request'Class;
+                        Response : in out Servlet.Responses.Response'Class;
+                        Chain    : in out Servlet.Core.Filter_Chain);
 
 private
 
    use Ada.Strings.Unbounded;
 
-   type Auth_Filter is new ASF.Security.Filters.Auth_Filter with record
+   type Auth_Filter is new Servlet.Security.Filters.Auth_Filter with record
       Login_URI   : Unbounded_String;
       Application : AWA.Applications.Application_Access;
    end record;
 
-   type Verify_Filter is new ASF.Filters.Filter with record
+   type Verify_Filter is new Servlet.Filters.Filter with record
       Invalid_Key_URI : Unbounded_String;
    end record;
 
