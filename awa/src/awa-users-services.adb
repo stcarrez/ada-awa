@@ -344,12 +344,6 @@ package body AWA.Users.Services is
 
       Ctx.Start;
 
-      --  Change the user status from registerd to enabled after
-      --  a first successful authentication.
-      if User.Get_Status = Models.USER_REGISTERED then
-         User.Set_Status (Models.USER_ENABLED);
-         User.Save (DB);
-      end if;
       Create_Session (Model, DB, Session, User, IpAddr, Principal);
 
       Ctx.Commit;
@@ -401,7 +395,7 @@ package body AWA.Users.Services is
       end if;
 
       --  Reject authentication on disabled the user account.
-      if User.Get_Status = Models.USER_DISABLED then
+      if User.Get_Status /= Models.USER_ENABLED then
          Log.Warn ("Authenticate session {0} is disabled", Ado.Identifier'Image (Id));
          raise User_Disabled with "User account is disabled";
       end if;
@@ -892,7 +886,7 @@ package body AWA.Users.Services is
       declare
          Salt : constant String := User.Get_Salt;
       begin
-         if User.Get_Status = Models.User_Registered
+         if User.Get_Status = Models.USER_REGISTERED
            and then Salt'Length > 0
          then
             User.Set_Status (Models.USER_ENABLED);
