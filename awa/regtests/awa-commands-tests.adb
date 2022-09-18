@@ -288,7 +288,7 @@ package body AWA.Commands.Tests is
 
          Util.Tests.Assert_Equals (T, ASF.Responses.Sc_Moved_Temporarily, Reply.Get_Status,
                                       "Invalid response");
-         ASF.Tests.Assert_Redirect (T, "/asfunit/auth/login.html",
+         ASF.Tests.Assert_Redirect (T, "/asfunit/workspaces/main.html",
                                     Reply, "Invalid redirect after change-password");
 
          --  Check that the user is logged and we have a user principal now.
