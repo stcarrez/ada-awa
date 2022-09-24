@@ -33,6 +33,8 @@ package body AWA.Commands.Migrate is
                       Application : in out AWA.Applications.Application'Class;
                       Args        : in Argument_List'Class;
                       Context     : in out Context_Type) is
+      pragma Unreferenced (Args);
+
       procedure Scan_Migration (Path : in String;
                                 Done : out Boolean);
 

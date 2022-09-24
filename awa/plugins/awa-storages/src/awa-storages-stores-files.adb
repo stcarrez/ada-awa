@@ -73,7 +73,7 @@ package body AWA.Storages.Stores.Files is
       for I in 1 .. Last loop
          Res (Pos) := Character'Val (R (I));
          Pos := Pos + 1;
-         if (I mod 2) = 0 and I /= Last then
+         if (I mod 2) = 0 and then I /= Last then
             Res (Pos) := '/';
             Pos := Pos + 1;
          end if;

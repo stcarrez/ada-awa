@@ -28,7 +28,6 @@ with ASF.Tests;
 with AWA.Tests.Helpers.Users;
 with AWA.Users.Services;
 with AWA.Users.Models;
-with AWA.Users.Principals;
 with ASF.Requests.Mockup;
 with ASF.Responses.Mockup;
 
@@ -235,7 +234,6 @@ package body AWA.Commands.Tests is
    --  ------------------------------
    procedure Test_User_Command (T : in out Test) is
       use type Security.Principal_Access;
-      use type AWA.Users.Principals.Principal_Access;
 
       Email     : constant String := "Reg-" & Util.Tests.Get_Uuid & "@register.com";
       Config    : constant String := Util.Tests.Get_Parameter ("test_config_path");

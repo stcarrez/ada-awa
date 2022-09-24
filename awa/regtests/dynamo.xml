@@ -1,6 +1,8 @@
 <project>
     <name>regtests</name>
+    <property name="model_version">1</property>
     <property name="author_email">Stephane.Carrez@gmail.com</property>
+    <property name="search_dirs">.;/build/local-gnat-2021/share/dynamo/awa_easymde;/build/local-gnat-2021/share/dynamo/awa_flotcharts;/build/local-gnat-2021/share/dynamo/awa_markedit;/build/local-gnat-2021/share/dynamo/awa_trumbowyg;../plugins/awa-sysadmin;../../openapi-ada;../plugins/awa-setup;../plugins/awa-wikis;../plugins/awa-changelogs;../plugins/awa-settings;../plugins/awa-questions;../plugins/awa-votes;../plugins/awa-blogs;../plugins/awa-comments;../plugins/awa-tags;../plugins/awa-mail;../plugins/awa-images;../plugins/awa-jobs;../plugins/awa-storages;../plugins/awa-counters;../plugins/awa-workspaces;../;../../ada-keystore;../../ada-asf;../../ada-servlet;../../ada-security;../../ada-ado;../../ada-util</property>
     <property name="license">apache</property>
     <property name="author">Stephane Carrez</property>
     <depend name="util"></depend>
@@ -31,4 +33,5 @@
     <depend name="awa-blogs"></depend>
     <depend name="awa-tags"></depend>
     <depend name="awa"></depend>
+    <depend name="swagger"></depend>
 </project>

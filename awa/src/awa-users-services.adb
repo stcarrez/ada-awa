@@ -815,6 +815,8 @@ package body AWA.Users.Services is
    procedure Update_User (Model  : in out User_Service;
                           Email  : in String;
                           Status : in Models.Status_type) is
+      pragma Unreferenced (Model);
+
       Ctx      : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB       : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       User     : User_Ref;
