@@ -1,5 +1,5 @@
 <!-- Edit the wiki configuration
-  -  Copyright (C) 2015, 2018 Stephane Carrez
+  -  Copyright (C) 2015 - 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,18 +25,16 @@
         <f:metadata>
             <f:viewAction action='#{adminWikiSpace.load}'/>
         </f:metadata>
-        <div id='awa-content'>
-            <ui:include src="views/wiki-nav.xhtml">
-                <ui:param name="wikiSpaceId" value="#{adminWikiSpace.id}"/>
-                <ui:param name="page_link" value="/grid"/>
+        <ui:include src="views/wiki-nav.xhtml">
+          <ui:param name="wikiSpaceId" value="#{adminWikiSpace.id}"/>
+          <ui:param name="page_link" value="/grid"/>
+        </ui:include>
+        <div id='wiki-page-create' class='awa-container'>
+          <div class='awa-post'>
+            <ui:include src="forms/settings-form.xhtml">
+              <ui:param name="title" value="#{wikiMsg.wiki_edit_page_title}"/>
             </ui:include>
-            <div id='wiki-page-create' class='awa-container'>
-                <div class='awa-post'>
-                    <ui:include src="forms/settings-form.xhtml">
-                       <ui:param name="title" value="#{wikiMsg.wiki_edit_page_title}"/>
-                    </ui:include>
-                  </div>
-            </div>
+          </div>
         </div>
     </ui:define>
 </ui:composition>

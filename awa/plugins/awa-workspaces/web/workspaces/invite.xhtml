@@ -1,5 +1,5 @@
 <!-- Invite a user
-  -  Copyright (C) 2017 Stephane Carrez
+  -  Copyright (C) 2017 - 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,12 +26,10 @@
 
     <!-- Main page body -->
     <ui:define name="pageBody">
-        <div id='awa-content'>
-            <ui:include src="views/workspace-nav.xhtml"/>
-            <div class="awa-form-container">
-                <ui:include src="/workspaces/forms/invite-form.xhtml"/>
-            </div>
-        </div>
+      <ui:include src="views/workspace-nav.xhtml"/>
+      <div class="awa-form-container">
+        <ui:include src="/workspaces/forms/invite-form.xhtml"/>
+      </div>
    </ui:define>
 
 </ui:composition>

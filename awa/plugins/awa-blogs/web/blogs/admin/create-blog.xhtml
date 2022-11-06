@@ -1,5 +1,5 @@
 <!-- Create a new blog
-  -  Copyright (C) 2017, 2018 Stephane Carrez
+  -  Copyright (C) 2017 - 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,12 +21,10 @@
 
     <!-- Main page body -->
     <ui:define name="pageBody">
-        <div id='awa-content'>
-            <ui:include src="lists/menu-list.xhtml"/>
-            <div id='blog-post-create' class='awa-container'>
-                <ui:include src="forms/blog-create-form.xhtml"/>
-            </div>
-        </div>
+      <ui:include src="lists/menu-list.xhtml"/>
+      <div id='blog-post-create' class='awa-container'>
+        <ui:include src="forms/blog-create-form.xhtml"/>
+      </div>
     </ui:define>
 
 </ui:composition>

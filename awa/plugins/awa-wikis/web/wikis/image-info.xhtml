@@ -1,5 +1,5 @@
 <!-- Information about an image used in a wiki page
-  -  Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Stephane Carrez
+  -  Copyright (C) 2016 - 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,67 +30,65 @@
         <f:metadata>
             <f:viewAction action='#{wikiImageInfo.load}'/>
         </f:metadata>
-        <div id='awa-content'>
-            <ui:include src="views/wiki-nav.xhtml">
-                <ui:param name="wikiSpaceId" value="#{wikiImageInfo.wiki_id}"/>
-                <ui:param name="page_link" value="/grid"/>
-            </ui:include>
-            <div class='wiki-page-container'>
-                <h:panelGroup rendered="#{not empty wikiView.left_side}">
-                    <div class="grid_2">
-                        <awa:wiki styleClass='wiki-text'
-                                  value="#{wikiView.left_side}"
-                                  plugins="#{wikiView.plugins}"
-                                  links="#{wikiView.links}"
-                                  format="#{wikiView.side_format}"/>
-                    </div>
-                </h:panelGroup>
-                <div class="#{not empty wikiView.left_side ? (not empty wikiView.right_side ? 'grid_8' : 'grid_10') : 'grid_12'}" id="p_#{wikiView.id}">
-                    <div class='wiki-title'>
-                        <ul class="wiki-page-actions">
-                            <h:panelGroup rendered="#{wikiView.acl_id ge 1}">
-                                <li>
-                                    <a class='awa-button' href="#{contextPath}/wikis/edit/#{wikiView.wiki_id}/#{wikiView.name}">#{wikiMsg.wiki_page_edit_label}</a>
-                                </li>
-                            </h:panelGroup>
-                            <li>
-                                <a class='awa-button' href="#{contextPath}/wikis/view/#{wikiView.wiki_id}/#{wikiView.name}">#{wikiMsg.wiki_page_view_label}</a>
-                            </li>
-                            <li>
-                                <a class='awa-button' href="#{contextPath}/wikis/info/#{wikiView.wiki_id}/#{wikiView.id}">#{wikiMsg.wiki_page_info_label}</a>
-                            </li>
-                            <li>
-                                <a class='awa-button' href="#{contextPath}/wikis/history/#{wikiView.wiki_id}/#{wikiView.id}">#{wikiMsg.wiki_page_history_label}</a>
-                            </li>
-                        </ul>
-                        <h2>#{wikiView.title}</h2>
-                        <div class="wiki-page-info">
-                            <p><h:outputText id="date" value="#{wikiView.date}" converter="dateConverter"/></p>
-                            <p>Version #{wikiView.version} by #{wikiView.author}</p>
-                        </div>
-                    </div>
-                    <awa:tagList value='#{wikiView.tags}' id='qtags' styleClass="wiki-tag-list tagedit-list"
-                                 tagLink="#{contextPath}/wikis/tags/#{wikiView.wiki_id}/#{util:urlEncode(tagName)}/recent"
-                                 var="tagName"
-                                 tagClass="tagedit-listelement tagedit-listelement-old"/>
-                    <ui:include src="views/image-info.xhtml"/>
-
-                    <h:panelGroup rendered="#{wikiImageInfo.id ne 0}">
-                        <div class="wiki-image-view">
-                            <img src="#{wikiImageInfo.imageUrl}"/>
-                        </div>
-                    </h:panelGroup>
-               </div>
-                <h:panelGroup rendered="#{not empty wikiView.right_side}">
-                    <div class="grid_2">
-                        <awa:wiki styleClass='wiki-text'
-                                  value="#{wikiView.right_side}"
-                                  plugins="#{wikiView.plugins}"
-                                  links="#{wikiView.links}"
-                                  format="#{wikiView.side_format}"/>
-                    </div>
-                </h:panelGroup>
+        <ui:include src="views/wiki-nav.xhtml">
+          <ui:param name="wikiSpaceId" value="#{wikiImageInfo.wiki_id}"/>
+          <ui:param name="page_link" value="/grid"/>
+        </ui:include>
+        <div class='wiki-page-container'>
+          <h:panelGroup rendered="#{not empty wikiView.left_side}">
+            <div class="grid_2">
+              <awa:wiki styleClass='wiki-text'
+                        value="#{wikiView.left_side}"
+                        plugins="#{wikiView.plugins}"
+                        links="#{wikiView.links}"
+                        format="#{wikiView.side_format}"/>
             </div>
+          </h:panelGroup>
+          <div class="#{not empty wikiView.left_side ? (not empty wikiView.right_side ? 'grid_8' : 'grid_10') : 'grid_12'}" id="p_#{wikiView.id}">
+            <div class='wiki-title'>
+              <ul class="wiki-page-actions">
+                <h:panelGroup rendered="#{wikiView.acl_id ge 1}">
+                  <li>
+                    <a class='awa-button' href="#{contextPath}/wikis/edit/#{wikiView.wiki_id}/#{wikiView.name}">#{wikiMsg.wiki_page_edit_label}</a>
+                  </li>
+                </h:panelGroup>
+                <li>
+                  <a class='awa-button' href="#{contextPath}/wikis/view/#{wikiView.wiki_id}/#{wikiView.name}">#{wikiMsg.wiki_page_view_label}</a>
+                </li>
+                <li>
+                  <a class='awa-button' href="#{contextPath}/wikis/info/#{wikiView.wiki_id}/#{wikiView.id}">#{wikiMsg.wiki_page_info_label}</a>
+                </li>
+                <li>
+                  <a class='awa-button' href="#{contextPath}/wikis/history/#{wikiView.wiki_id}/#{wikiView.id}">#{wikiMsg.wiki_page_history_label}</a>
+                </li>
+              </ul>
+              <h2>#{wikiView.title}</h2>
+              <div class="wiki-page-info">
+                <p><h:outputText id="date" value="#{wikiView.date}" converter="dateConverter"/></p>
+                <p>Version #{wikiView.version} by #{wikiView.author}</p>
+              </div>
+            </div>
+            <awa:tagList value='#{wikiView.tags}' id='qtags' styleClass="wiki-tag-list tagedit-list"
+                         tagLink="#{contextPath}/wikis/tags/#{wikiView.wiki_id}/#{util:urlEncode(tagName)}/recent"
+                         var="tagName"
+                         tagClass="tagedit-listelement tagedit-listelement-old"/>
+            <ui:include src="views/image-info.xhtml"/>
+            
+            <h:panelGroup rendered="#{wikiImageInfo.id ne 0}">
+              <div class="wiki-image-view">
+                <img src="#{wikiImageInfo.imageUrl}"/>
+              </div>
+            </h:panelGroup>
+          </div>
+          <h:panelGroup rendered="#{not empty wikiView.right_side}">
+            <div class="grid_2">
+              <awa:wiki styleClass='wiki-text'
+                        value="#{wikiView.right_side}"
+                        plugins="#{wikiView.plugins}"
+                        links="#{wikiView.links}"
+                        format="#{wikiView.side_format}"/>
+            </div>
+          </h:panelGroup>
         </div>
      </ui:define>
 

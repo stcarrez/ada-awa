@@ -1,5 +1,5 @@
 <!-- List the posts for the blog administrator
-  -  Copyright (C) 2011, 2012, 2013, 2014, 2016, 2018 Stephane Carrez
+  -  Copyright (C) 2011 - 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,7 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:c="http://java.sun.com/jstl/core"
         xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
-	    xmlns:util="http://code.google.com/p/ada-asf/util"
+	xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{blogMsg.blog_admin_post_list_title}"/>
 
@@ -28,48 +28,48 @@
         <f:metadata>
             <f:viewParam id='id' value='#{adminBlog.id}'/>
         </f:metadata>
-        <div id='awa-content'>
-            <h:panelGroup rendered="#{empty adminBlog.id}">
-                <div class="grid_3">
-                    <img src="#{contextPath}/images/blogs/blog-icon.png"/>
-                </div>
-                <div class="grid_6">
-                    <p>#{blogMsg.blog_create_blog_message}</p>
-                    <div class="asf-container awa-form">
-                        <ajax:include id='blog-create' src="/blogs/admin/forms/blog-create-form.xhtml"/>
-                    </div>
-                </div>
-            </h:panelGroup>
-            <h:panelGroup rendered="#{not empty adminBlog.id}">
 
-            <ui:include src="lists/menu-list.xhtml"/>
-            <div id="blog-stats" class="blog-post-graph"></div>
-            <div class='blog-admin post-header' id="blog-post-list-header">
-                <div class='post-status'></div>
-                <div class='post-title'>
-                    #{blogMsg.blog_post_title_label}
-                </div>
-                <div class='post-date'>
-                    #{blogMsg.blog_post_date_label}
-                </div>
-                <div class='post-author'>
-                    #{blogMsg.blog_post_author_label}
-                </div>
-                <div class='post-read-count'>
-                    #{blogMsg.blog_post_read_count_label}
-                </div>
-                <div class='post-comment-count'>
-                    #{blogMsg.blog_post_comment_label}
-                </div>
+        <h:panelGroup rendered="#{empty adminBlog.id}">
+          <div class="grid_3">
+            <img src="#{contextPath}/images/blogs/blog-icon.png"/>
+          </div>
+          <div class="grid_6">
+            <p>#{blogMsg.blog_create_blog_message}</p>
+            <div class="asf-container awa-form">
+              <ajax:include id='blog-create' src="/blogs/admin/forms/blog-create-form.xhtml"/>
             </div>
-            <div id='blog-post-list' class='blog-admin awa-list'>
-                <ui:include src="lists/post-list.xhtml"/>
+          </div>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{not empty adminBlog.id}">
+          <ui:include src="lists/menu-list.xhtml"/>
+          <div id="blog-stats" class="blog-post-graph"></div>
+          <div class='blog-admin post-header' id="blog-post-list-header">
+            <div class='post-status'></div>
+            <div class='post-title'>
+              #{blogMsg.blog_post_title_label}
             </div>
-            <div id='blog-post-action' class='asf-list-action'>
-                    <a href="#" class='asf-icon asf-delete' title='#{blogMsg.blog_post_delete_action_tooltip}'></a>
+            <div class='post-date'>
+              #{blogMsg.blog_post_date_label}
             </div>
-            </h:panelGroup>
-        </div>
+            <div class='post-author'>
+              #{blogMsg.blog_post_author_label}
+            </div>
+            <div class='post-read-count'>
+              #{blogMsg.blog_post_read_count_label}
+            </div>
+            <div class='post-comment-count'>
+              #{blogMsg.blog_post_comment_label}
+            </div>
+          </div>
+          <div id='blog-post-list' class='blog-admin awa-list'>
+            <ui:include src="lists/post-list.xhtml"/>
+          </div>
+          <div id='blog-post-action' class='asf-list-action'>
+            <a href="#" class='asf-icon asf-delete' title='#{blogMsg.blog_post_delete_action_tooltip}'></a>
+          </div>
+        </h:panelGroup>
+
         <div id="blog-graph-tooltip"/>
         <util:script>
             $('#blog-post-list').list({

@@ -1,5 +1,5 @@
 <!-- List the wiki pages filtered by a tag.
-  -  Copyright (C) 2015, 2016 Stephane Carrez
+  -  Copyright (C) 2015 - 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,29 +30,27 @@
             <f:viewParam id='page' value='#{wikiList.page}' required="false"/>
             <f:viewAction action='#{wikiList.load}'/>
         </f:metadata>
-        <div id='awa-content'>
-            <ui:decorate template="lists/grid.xhtml">
-                <ui:param name="wikiSpaceId" value="#{wikiList.wiki_id}"/>
-                <ui:param name="sort" value="#{wikiList.sort}"/>
-                <ui:param name="page_link" value="/grid"/>
-                <ui:define name="page-nav">
-                    <li class="awa-nav-right">
-                        <a href="#{contextPath}/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}/#{wikiList.sort}" title="#{wikiMsg.wiki_page_list_view_label}">
-                            <img src="#{contextPath}/images/wikis/wiki-list.png" alt="#{wikiMsg.wiki_page_list_view_label}"/>
-                        </a>
-                    </li>
-                </ui:define>
-                <ui:define name="page-info">
-                    <div class='grid_12 wiki-page-tag-info'>
-                        <h2>
-                            <h:outputFormat value="#{wikiMsg.wiki_tag_page_title}">
-                                <f:param value="#{wikiList.tag}"/>
-                            </h:outputFormat>
-                        </h2>
-                    </div>
-                </ui:define>
-            </ui:decorate>
-        </div>
+        <ui:decorate template="lists/grid.xhtml">
+          <ui:param name="wikiSpaceId" value="#{wikiList.wiki_id}"/>
+          <ui:param name="sort" value="#{wikiList.sort}"/>
+          <ui:param name="page_link" value="/grid"/>
+          <ui:define name="page-nav">
+            <li class="awa-nav-right">
+              <a href="#{contextPath}/wikis/tags/#{wikiList.wiki_id}/#{wikiList.tag}/#{wikiList.sort}" title="#{wikiMsg.wiki_page_list_view_label}">
+                <img src="#{contextPath}/images/wikis/wiki-list.png" alt="#{wikiMsg.wiki_page_list_view_label}"/>
+              </a>
+            </li>
+          </ui:define>
+          <ui:define name="page-info">
+            <div class='grid_12 wiki-page-tag-info'>
+              <h2>
+                <h:outputFormat value="#{wikiMsg.wiki_tag_page_title}">
+                  <f:param value="#{wikiList.tag}"/>
+                </h:outputFormat>
+              </h2>
+            </div>
+          </ui:define>
+        </ui:decorate>
     </ui:define>
     <ui:define name="pageScript">
         <script type="text/javascript" src="#{jquery.chosenPath}"></script>

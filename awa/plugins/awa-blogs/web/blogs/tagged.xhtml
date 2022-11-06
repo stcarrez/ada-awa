@@ -1,5 +1,5 @@
 <!-- List the posts filtered by a tag
-  -  Copyright (C) 2013, 2017, 2020 Stephane Carrez
+  -  Copyright (C) 2013, 2017, 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,7 +34,6 @@
 
     <!-- Main page body -->
     <ui:define name="pageBody">
-        <div id='awa-content'>
             <div class='grid_8 blog-post-tag-info'>
                 <h2>
                     <h:outputFormat value="#{blogMsg.blog_tag_page_title}">
@@ -51,7 +50,6 @@
             <div class='grid_3 blog-post-info'>
               <ui:include src="lists/post-info.xhtml"/>
           </div>
-        </div>
     </ui:define>
 
     <ui:define name="pageScript">

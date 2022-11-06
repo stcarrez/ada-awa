@@ -1,5 +1,5 @@
 <!-- View an existing post
-  -  Copyright (C) 2011, 2013, 2017, 2018, 2019, 2020 Stephane Carrez
+  -  Copyright (C) 2011 - 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,69 +34,66 @@
 
     <!-- Main page body -->
     <ui:define name="pageBody">
-      <div id='awa-content'>
-          <ui:include src="lists/menu-list.xhtml"/>
-          <div id='blog-post-preview' class='awa-container'>
-              <div id="post-stats" class="blog-post-graph"/>
-              <div class='blog-post' id="p_#{post.id}">
-                  <div class='post-title'>
-                      <ul class="awa-page-actions">
-                          <li>
-                              <a class='awa-button' href="#{contextPath}/blogs/admin/edit/#{adminBlog.id}/#{post.id}">#{blogMsg.blog_post_edit_label}</a>
-                          </li>
-                      </ul>
-                       <h2><a href="#{contextPath}/blogs/post.html?post=#{post.uri}">#{post.title}</a></h2>
-                       <p>
-                           <h:outputFormat value="#{blogMsg.blog_post_author}">
-                               <f:param value="#{post.username}"/>
-                           </h:outputFormat>
-                           <h:outputText rendered="#{post.status eq 'POST_PUBLISHED'}" styleClass="post-date"
-                                         value="#{post.publish_date}" converter="dateConverter"/>
-                           <h:outputText rendered="#{post.status ne 'POST_PUBLISHED'}" styleClass="post-date"
-                                         value="#{post.create_date}" converter="dateConverter"/>
-                           <h:outputFormat value="#{blogMsg.blog_post_count}" rendered="#{not empty postComments}"
-                                           styleClass="post-comment-count">
-                               <f:param value="#{postComments.count}"/>
-                           </h:outputFormat>
-                       </p>
-                   </div>
-                  <awa:tagList value='#{post.tags}' id='qtags' styleClass="tagedit-list"
-                               tagLink="#{contextPath}/blogs/tagged.html?tag=#{util:urlEncode(tagName)}"
-                               var="tagName"
-                               tagClass="tagedit-listelement tagedit-listelement-old"/>
-
-                  <awa:wiki rendered="#{not empty post.summary}"
-                            styleClass='post-text'
-                            value="#{post.summary}"
-                            plugins="#{post}"
-                            links="#{post.links}"
-                            format="#{post.format}"/>
-
-                  <awa:wiki styleClass='post-text'
-                            value="#{post.text}"
-                            plugins="#{post}"
-                            links="#{post.links}"
-                            format="#{post.format}"/>
-                  <div class='awa-comment-list' id="comments">
-                      <ajax:include styleClass="asf-container" async="true"
-                                    src="/blogs/forms/comment-add-form.html?id=#{post.id}"/>
-                      <h:panelGroup rendered="#{not empty postComments}">
-                          <h3>
-                              <h:outputFormat value="#{blogMsg.blog_comment_list}">
-                                  <f:param value="#{postComments.count}"/>
-                              </h:outputFormat>
-                          </h3>
-                          <div id='blog-comment-list' class='blog-admin'>
-                          <ui:include src="/comments/lists/comment-list.xhtml">
-                              <ui:param name="commentList" value="#{postComments}"/>
-                          </ui:include>
-                          </div>
-                      </h:panelGroup>
-                      <div id='blog-comment-action' class='asf-list-action'>
-                      </div>
-                  </div>
-              </div>
+      <ui:include src="lists/menu-list.xhtml"/>
+      <div id='blog-post-preview' class='awa-container'>
+        <div id="post-stats" class="blog-post-graph"/>
+        <div class='blog-post' id="p_#{post.id}">
+          <div class='post-title'>
+            <ul class="awa-page-actions">
+              <li>
+                <a class='awa-button' href="#{contextPath}/blogs/admin/edit/#{adminBlog.id}/#{post.id}">#{blogMsg.blog_post_edit_label}</a>
+              </li>
+            </ul>
+            <h2><a href="#{contextPath}/blogs/post.html?post=#{post.uri}">#{post.title}</a></h2>
+            <p>
+              <h:outputFormat value="#{blogMsg.blog_post_author}">
+                <f:param value="#{post.username}"/>
+              </h:outputFormat>
+              <h:outputText rendered="#{post.status eq 'POST_PUBLISHED'}" styleClass="post-date"
+                            value="#{post.publish_date}" converter="dateConverter"/>
+              <h:outputText rendered="#{post.status ne 'POST_PUBLISHED'}" styleClass="post-date"
+                            value="#{post.create_date}" converter="dateConverter"/>
+              <h:outputFormat value="#{blogMsg.blog_post_count}" rendered="#{not empty postComments}"
+                              styleClass="post-comment-count">
+                <f:param value="#{postComments.count}"/>
+              </h:outputFormat>
+            </p>
           </div>
+          <awa:tagList value='#{post.tags}' id='qtags' styleClass="tagedit-list"
+                       tagLink="#{contextPath}/blogs/tagged.html?tag=#{util:urlEncode(tagName)}"
+                       var="tagName"
+                       tagClass="tagedit-listelement tagedit-listelement-old"/>
+
+          <awa:wiki rendered="#{not empty post.summary}"
+                    styleClass='post-text'
+                    value="#{post.summary}"
+                    plugins="#{post}"
+                    links="#{post.links}"
+                    format="#{post.format}"/>
+
+          <awa:wiki styleClass='post-text'
+                    value="#{post.text}"
+                    plugins="#{post}"
+                    links="#{post.links}"
+                    format="#{post.format}"/>
+          <div class='awa-comment-list' id="comments">
+            <ajax:include styleClass="asf-container" async="true"
+                          src="/blogs/forms/comment-add-form.html?id=#{post.id}"/>
+            <h:panelGroup rendered="#{not empty postComments}">
+              <h3>
+                <h:outputFormat value="#{blogMsg.blog_comment_list}">
+                  <f:param value="#{postComments.count}"/>
+                </h:outputFormat>
+              </h3>
+              <div id='blog-comment-list' class='blog-admin'>
+                <ui:include src="/comments/lists/comment-list.xhtml">
+                  <ui:param name="commentList" value="#{postComments}"/>
+                </ui:include>
+              </div>
+            </h:panelGroup>
+            <div id='blog-comment-action' class='asf-list-action'></div>
+          </div>
+        </div>
       </div>
       <util:script>
           $('#blog-comment-list').blog_comment_list({

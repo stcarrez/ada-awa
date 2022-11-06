@@ -1,5 +1,5 @@
 <!-- Information about a wiki page
-  -  Copyright (C) 2016, 2020 Stephane Carrez
+  -  Copyright (C) 2016 - 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,13 +30,11 @@
         <f:metadata>
             <f:viewAction action='#{wikiPageInfo.load}'/>
         </f:metadata>
-        <div id='awa-content'>
-            <ui:include src="views/wiki-nav.xhtml">
-                <ui:param name="wikiSpaceId" value="#{wikiPageInfo.wiki_id}"/>
-                <ui:param name="page_link" value="/grid"/>
-            </ui:include>
-            <ui:include src="views/page-info.xhtml"/>
-        </div>
+        <ui:include src="views/wiki-nav.xhtml">
+          <ui:param name="wikiSpaceId" value="#{wikiPageInfo.wiki_id}"/>
+          <ui:param name="page_link" value="/grid"/>
+        </ui:include>
+        <ui:include src="views/page-info.xhtml"/>
      </ui:define>
 
     <ui:define name="pageScript">

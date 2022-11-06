@@ -1,5 +1,5 @@
 <!-- Application Installation Page
-  -  Copyright (C) 2016 Stephane Carrez
+  -  Copyright (C) 2016 - 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,19 +29,17 @@
 
     <!-- Main page body -->
     <ui:define name="pageBody">
-      <div id='awa-content'>
-          <div class='setup-container'>
-              <h1>
-                  <h:outputFormat value="#{setupMsg.setup_configure_title}">
-                      <f:param value="#{setup.app_name}"/>
-                  </h:outputFormat>
-              </h1>
-              <ui:include src="/WEB-INF/layouts/setup-steps.xhtml"/>
-              <ajax:include id='step' styleClass="asf-container" async="true"
-                            src="/setup/forms/database.html"/>
-          </div>
+      <div class='setup-container'>
+        <h1>
+          <h:outputFormat value="#{setupMsg.setup_configure_title}">
+            <f:param value="#{setup.app_name}"/>
+          </h:outputFormat>
+        </h1>
+        <ui:include src="/WEB-INF/layouts/setup-steps.xhtml"/>
+        <ajax:include id='step' styleClass="asf-container" async="true"
+                      src="/setup/forms/database.html"/>
       </div>
-        <script>
+      <script>
             function previous_step(form) {
                 ASF.Update('#step', '#{contextPath}/setup/forms/' + form + ".html", null);
                 if (form == 'settings') {
@@ -51,6 +49,6 @@
                 }
                 return false;
             }
-        </script>
+      </script>
     </ui:define>
 </ui:composition>

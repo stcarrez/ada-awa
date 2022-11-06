@@ -1,5 +1,5 @@
 <!-- Question is missing or invalid
-  -  Copyright (C) 2018 Stephane Carrez
+  -  Copyright (C) 2018 - 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,10 +31,8 @@
 
     <!-- Main page body -->
     <ui:define name="pageBody">
-      <div id='awa-content'>
-          <div class='awa-error'>
-              <p>#{questionMsg.question_not_found}</p>
-          </div>
+      <div class='awa-error'>
+        <p>#{questionMsg.question_not_found}</p>
       </div>
     </ui:define>
 </ui:composition>

@@ -1,5 +1,5 @@
 <!-- View a single post
-  -  Copyright (C) 2014 - 2020 Stephane Carrez
+  -  Copyright (C) 2014 - 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,7 +34,6 @@
 
     <!-- Main page body -->
     <ui:define name="pageBody">
-        <div id='awa-content'>
             <div class='grid_9'>
                 <div class='blog-post' id="p_#{post.id}">
                     <div class='post-title'>
@@ -99,7 +98,6 @@
             <div class='grid_3 blog-post-info'>
               <ui:include src="lists/post-info.xhtml"/>
           </div>
-        </div>
     </ui:define>
 
     <ui:define name="pageScript">

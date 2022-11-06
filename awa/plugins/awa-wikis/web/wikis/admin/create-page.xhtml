@@ -1,5 +1,5 @@
 <!-- Create a new wiki page
-  -  Copyright (C) 2015, 2018 Stephane Carrez
+  -  Copyright (C) 2015 - 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,11 +24,9 @@
         <f:metadata>
             <f:viewParam id='id' value='#{wikiPage.wikiId}'/>
         </f:metadata>
-        <div id='awa-content'>
-            <ui:include src="lists/menu-list.xhtml"/>
-            <div id='wiki-page-create' class='awa-container'>
-                <ui:include src="forms/page-create.xhtml"/>
-            </div>
+        <ui:include src="lists/menu-list.xhtml"/>
+        <div id='wiki-page-create' class='awa-container'>
+          <ui:include src="forms/page-create.xhtml"/>
         </div>
     </ui:define>
 </ui:composition>

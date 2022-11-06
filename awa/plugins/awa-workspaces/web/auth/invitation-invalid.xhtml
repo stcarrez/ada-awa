@@ -1,5 +1,5 @@
 <!-- Accept invitation page
-  -  Copyright (C) 2017 Stephane Carrez
+  -  Copyright (C) 2017 - 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,14 +29,11 @@
 
     <!-- Main page body -->
     <ui:define name="pageBody">
-      <div id='awa-content'>
-        <ui:include src="views/welcome-login.xhtml"/>
-        <div class='awa-side1 container_6'>
-            <p>#{workspaceMsg.workspace_bad_invite_message}</p>
-        </div>
-        <div class='awa-side2 container_6'>
-        </div>
+      <ui:include src="views/welcome-login.xhtml"/>
+      <div class='awa-side1 container_6'>
+        <p>#{workspaceMsg.workspace_bad_invite_message}</p>
       </div>
+      <div class='awa-side2 container_6'></div>
     </ui:define>
 </ui:composition>
 

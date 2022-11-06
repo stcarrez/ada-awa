@@ -1,5 +1,5 @@
 <!-- Wiki page is missing and must be created
-  -  Copyright (C) 2018 Stephane Carrez
+  -  Copyright (C) 2018 - 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,51 +31,49 @@
 
     <!-- Main page body -->
     <ui:define name="pageBody">
-      <div id='awa-content'>
-          <ui:include src="views/wiki-nav.xhtml">
-              <ui:param name="wikiSpaceId" value="#{wikiView.wiki_id}"/>
-              <ui:param name="page_link" value="/grid"/>
-          </ui:include>
-          <div class='wiki-page-container'>
-              <h:panelGroup rendered="#{not empty wikiView.left_side}">
-                  <div class="grid_2">
-                      <awa:wiki styleClass='wiki-text'
-                                value="#{wikiView.left_side}"
-                                plugins="#{wikiView.plugins}"
-                                links="#{wikiView.links}"
-                                format="#{wikiView.side_format}"/>
-                  </div>
-              </h:panelGroup>
-              <div class="#{not empty wikiView.left_side ? (not empty wikiView.right_side ? 'grid_8' : 'grid_10') : 'grid_12'}" id="p_#{wikiView.id}">
-                  <div class='wiki-title'>
-                      <h2>#{empty wikiView.title ? wikiMsg.wiki_page_no_name : wikiView.title}</h2>
-                  </div>
-                  <div class="wiki-text">
-                      <p>#{wikiMsg.wiki_page_missing_message}</p>
-                      <p>#{wikiMsg.wiki_page_error_or_create_message}</p>
-                      <h:panelGroup rendered="#{user.isLogged and auth:hasPermission('wiki-page-create',wikiView.wiki_id)}">
-                          <p>#{wikiMsg.wiki_page_ask_create_message}</p>
-                          <ul class='awa-buttons'>
-                              <li>
-                                  <a class="ui-button ui-state-default ui-corner-all"
-                                     href="#{contextPath}/wikis/create/#{wikiView.wiki_id}/#{wikiView.name}">
-                                      <span>#{wikiMsg.wiki_page_create_link}</span>
-                                  </a>
-                              </li>
-                          </ul>
-                      </h:panelGroup>
-                  </div>
-              </div>
-              <h:panelGroup rendered="#{not empty wikiView.right_side}">
-                  <div class="grid_2">
-                      <awa:wiki styleClass='wiki-text'
-                                value="#{wikiView.right_side}"
-                                plugins="#{wikiView.plugins}"
-                                links="#{wikiView.links}"
-                                format="#{wikiView.side_format}"/>
-                  </div>
-              </h:panelGroup>
+      <ui:include src="views/wiki-nav.xhtml">
+        <ui:param name="wikiSpaceId" value="#{wikiView.wiki_id}"/>
+        <ui:param name="page_link" value="/grid"/>
+      </ui:include>
+      <div class='wiki-page-container'>
+        <h:panelGroup rendered="#{not empty wikiView.left_side}">
+          <div class="grid_2">
+            <awa:wiki styleClass='wiki-text'
+                      value="#{wikiView.left_side}"
+                      plugins="#{wikiView.plugins}"
+                      links="#{wikiView.links}"
+                      format="#{wikiView.side_format}"/>
           </div>
+        </h:panelGroup>
+        <div class="#{not empty wikiView.left_side ? (not empty wikiView.right_side ? 'grid_8' : 'grid_10') : 'grid_12'}" id="p_#{wikiView.id}">
+          <div class='wiki-title'>
+            <h2>#{empty wikiView.title ? wikiMsg.wiki_page_no_name : wikiView.title}</h2>
+          </div>
+          <div class="wiki-text">
+            <p>#{wikiMsg.wiki_page_missing_message}</p>
+            <p>#{wikiMsg.wiki_page_error_or_create_message}</p>
+            <h:panelGroup rendered="#{user.isLogged and auth:hasPermission('wiki-page-create',wikiView.wiki_id)}">
+              <p>#{wikiMsg.wiki_page_ask_create_message}</p>
+              <ul class='awa-buttons'>
+                <li>
+                  <a class="ui-button ui-state-default ui-corner-all"
+                     href="#{contextPath}/wikis/create/#{wikiView.wiki_id}/#{wikiView.name}">
+                    <span>#{wikiMsg.wiki_page_create_link}</span>
+                  </a>
+                </li>
+              </ul>
+            </h:panelGroup>
+          </div>
+        </div>
+        <h:panelGroup rendered="#{not empty wikiView.right_side}">
+          <div class="grid_2">
+            <awa:wiki styleClass='wiki-text'
+                      value="#{wikiView.right_side}"
+                      plugins="#{wikiView.plugins}"
+                      links="#{wikiView.links}"
+                      format="#{wikiView.side_format}"/>
+          </div>
+        </h:panelGroup>
       </div>
     </ui:define>
 </ui:composition>

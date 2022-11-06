@@ -1,5 +1,5 @@
 <!-- List the questions filtered by a tag
-  -  Copyright (C) 2013, 2018 Stephane Carrez
+  -  Copyright (C) 2013 - 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,21 +29,19 @@
             <f:viewParam id='tag' value='#{questionList.tag}' required="false"/>
             <f:viewAction action='#{questionList.load}'/>
         </f:metadata>
-        <div id='awa-content'>
-            <div class='grid_8 blog-post-tag-info'>
-                <h2>
-                    <h:outputFormat value="#{blogMsg.blog_tag_page_title}">
-                        <f:param value="#{questionList.tag}"/>
-                    </h:outputFormat>
-                </h2>
-            </div>
-            <div class='grid_10'>
-                <ui:include src="views/question-nav.xhtml"/>
-                <ui:include src="lists/question-list.xhtml"/>
-            </div>
-            <div class='grid_2 blog-post-info'>
-                <ui:include src="views/question-tags.xhtml"/>
-            </div>
+        <div class='grid_8 blog-post-tag-info'>
+          <h2>
+            <h:outputFormat value="#{blogMsg.blog_tag_page_title}">
+              <f:param value="#{questionList.tag}"/>
+            </h:outputFormat>
+          </h2>
+        </div>
+        <div class='grid_10'>
+          <ui:include src="views/question-nav.xhtml"/>
+          <ui:include src="lists/question-list.xhtml"/>
+        </div>
+        <div class='grid_2 blog-post-info'>
+          <ui:include src="views/question-tags.xhtml"/>
         </div>
     </ui:define>
 </ui:composition>

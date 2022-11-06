@@ -1,5 +1,5 @@
 <!-- List the wiki page tags.
-  -  Copyright (C) 2015, 2021 Stephane Carrez
+  -  Copyright (C) 2015 - 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,17 +27,15 @@
 
     <!-- Main page body -->
     <ui:define name="pageBody">
-        <div id='awa-content'>
-            <ui:decorate template="views/wiki-nav.xhtml">
-                <ui:param name="wikiSpaceId" value="#{wikiList.wiki_id}"/>
-                <ui:param name="sort" value="#{wikiList.sort}"/>
-                <ui:param name="page_link" value=""/>
-            </ui:decorate>
-            <awa:tagCloud
-                    value="#{wikiTagCloud}" styleClass="tag-cloud" layout="dispatch"
-                    var="tagName" maxWeight="48" minWeight="16" rows="60"
-                    tagLink="#{contextPath}/wikis/tags/#{wikiList.wiki_id}/#{util:urlEncode(tagName)}/recent"/>
-        </div>
+      <ui:decorate template="views/wiki-nav.xhtml">
+        <ui:param name="wikiSpaceId" value="#{wikiList.wiki_id}"/>
+        <ui:param name="sort" value="#{wikiList.sort}"/>
+        <ui:param name="page_link" value=""/>
+      </ui:decorate>
+      <awa:tagCloud
+        value="#{wikiTagCloud}" styleClass="tag-cloud" layout="dispatch"
+        var="tagName" maxWeight="48" minWeight="16" rows="60"
+        tagLink="#{contextPath}/wikis/tags/#{wikiList.wiki_id}/#{util:urlEncode(tagName)}/recent"/>
     </ui:define>
 </ui:composition>
 

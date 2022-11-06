@@ -1,5 +1,5 @@
 <!-- List the wiki pages for the wiki administrator
-  -  Copyright (C) 2015 Stephane Carrez
+  -  Copyright (C) 2015 - 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,43 +28,42 @@
         <f:metadata>
             <f:viewParam id='id' value='#{adminWiki.id}'/>
         </f:metadata>
-        <div id='awa-content'>
-            <h:panelGroup rendered="#{adminWiki.id &lt;= 0}">
-                <div class="grid_3">
-                    <img src="#{contextPath}/images/wikis/wiki-document.png"/>
-                </div>
-                <div class="grid_6">
-                    <p>#{wikiMsg.wiki_create_wiki_message}</p>
-                    <div class="asf-container awa-form">
-                        <ajax:include id='wiki-create' src="/wikis/admin/forms/create.xhtml"/>
-                    </div>
-                </div>
-            </h:panelGroup>
-            <h:panelGroup rendered="#{adminWiki.id &gt; 0}">
-                <ui:include src="lists/menu-list.xhtml"/>
-                <div class='wiki-admin post-header' id="wiki-page-list-header">
-                    <div class='post-status'></div>
-                    <div class='page-title'>
-                        #{wikiMsg.wiki_page_title_label}
-                    </div>
-                    <div class='wiki-date'>
-                        #{wikiMsg.wiki_page_date_label}
-                    </div>
-                    <div class='wiki-author'>
-                        #{wikiMsg.wiki_page_author_label}
-                    </div>
-                    <div class='wiki-comment-count'>
-                        #{wikiMsg.wiki_page_comment_label}
-                    </div>
-                </div>
-                <div id='wiki-page-list' class='blog-admin'>
-                    <ui:include src="lists/page-list.xhtml"/>
-                </div>
-                <div id='wiki-page-action' class='asf-list-action'>
-                    <a href="#" class='asf-icon asf-delete' title='#{wikiMsg.wiki_page_delete_action_tooltip}'></a>
-                </div>
-            </h:panelGroup>
-        </div>
+        <h:panelGroup rendered="#{adminWiki.id &lt;= 0}">
+          <div class="grid_3">
+            <img src="#{contextPath}/images/wikis/wiki-document.png"/>
+          </div>
+          <div class="grid_6">
+            <p>#{wikiMsg.wiki_create_wiki_message}</p>
+            <div class="asf-container awa-form">
+              <ajax:include id='wiki-create' src="/wikis/admin/forms/create.xhtml"/>
+            </div>
+          </div>
+        </h:panelGroup>
+        <h:panelGroup rendered="#{adminWiki.id &gt; 0}">
+          <ui:include src="lists/menu-list.xhtml"/>
+          <div class='wiki-admin post-header' id="wiki-page-list-header">
+            <div class='post-status'></div>
+            <div class='page-title'>
+              #{wikiMsg.wiki_page_title_label}
+            </div>
+            <div class='wiki-date'>
+              #{wikiMsg.wiki_page_date_label}
+            </div>
+            <div class='wiki-author'>
+              #{wikiMsg.wiki_page_author_label}
+            </div>
+            <div class='wiki-comment-count'>
+              #{wikiMsg.wiki_page_comment_label}
+            </div>
+          </div>
+          <div id='wiki-page-list' class='blog-admin'>
+            <ui:include src="lists/page-list.xhtml"/>
+          </div>
+          <div id='wiki-page-action' class='asf-list-action'>
+            <a href="#" class='asf-icon asf-delete' title='#{wikiMsg.wiki_page_delete_action_tooltip}'></a>
+          </div>
+        </h:panelGroup>
+
         <util:script>
             $('#wiki-page-list').list({
                 actionId: '#wiki-page-action',

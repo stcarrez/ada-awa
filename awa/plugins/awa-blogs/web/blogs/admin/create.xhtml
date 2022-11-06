@@ -1,5 +1,5 @@
 <!-- Create a new post page
-  -  Copyright (C) 2011, 2012, 2013, 2017, 2018 Stephane Carrez
+  -  Copyright (C) 2011 - 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,11 +37,9 @@
             <f:viewParam id='id' value='#{post.blogId}' required="false"/>
             <f:viewAction action="#{post.setup}"/>
         </f:metadata>
-        <div id='awa-content'>
-            <ui:include src="lists/menu-list.xhtml"/>
-            <div id='blog-post-create' class='awa-container'>
-                <ui:include src="forms/post-create.xhtml"/>
-            </div>
+        <ui:include src="lists/menu-list.xhtml"/>
+        <div id='blog-post-create' class='awa-container'>
+          <ui:include src="forms/post-create.xhtml"/>
         </div>
     </ui:define>
 

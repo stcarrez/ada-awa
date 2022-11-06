@@ -1,5 +1,5 @@
 <!-- View an existing wiki page
-  -  Copyright (C) 2015, 2018 Stephane Carrez
+  -  Copyright (C) 2015 - 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,22 +33,20 @@
 
     <!-- Main page body -->
     <ui:define name="pageBody">
-      <div id='awa-content'>
-          <ui:include src="lists/menu-list.xhtml"/>
-          <div id='blog-post-edit' class='awa-container'>
-              <div class='blog-post' id="p_#{wikiPage.id}">
-                  <div class='post-title'>
-                      <h2>E - #{wikiPage.title}</h2>
-                      <a href="#{contextPath}/wikis/edit/#{wikiPage.wikiId}/#{wikiPage.name}">Edit</a>
-                      <p><h:outputText id="date" value="#{wikiPage.date}" converter="dateConverter"/></p>
-                  </div>
-                  <awa:tagList value='#{wikiPage.tags}' id='qtags' styleClass="tagedit-list"
-                               tagLink="#{contextPath}/wikis/tagged.html?tag=#{util:urlEncode(tagName)}"
-                               var="tagName"
-                               tagClass="tagedit-listelement tagedit-listelement-old"/>
-                  <awa:wiki styleClass='post-text' value="#{wikiPage.text}" format="dotclear"/>
-              </div>
+      <ui:include src="lists/menu-list.xhtml"/>
+      <div id='blog-post-edit' class='awa-container'>
+        <div class='blog-post' id="p_#{wikiPage.id}">
+          <div class='post-title'>
+            <h2>E - #{wikiPage.title}</h2>
+            <a href="#{contextPath}/wikis/edit/#{wikiPage.wikiId}/#{wikiPage.name}">Edit</a>
+            <p><h:outputText id="date" value="#{wikiPage.date}" converter="dateConverter"/></p>
           </div>
+          <awa:tagList value='#{wikiPage.tags}' id='qtags' styleClass="tagedit-list"
+                       tagLink="#{contextPath}/wikis/tagged.html?tag=#{util:urlEncode(tagName)}"
+                       var="tagName"
+                       tagClass="tagedit-listelement tagedit-listelement-old"/>
+          <awa:wiki styleClass='post-text' value="#{wikiPage.text}" format="dotclear"/>
+        </div>
       </div>
     </ui:define>
 </ui:composition>

@@ -1,5 +1,5 @@
 <!-- Post not found page
-  -  Copyright (C) 2014, 2015 Stephane Carrez
+  -  Copyright (C) 2014 - 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,26 +20,20 @@
         xmlns:awa="http://code.google.com/p/ada-awa/jsf"
         xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
         xmlns:c="http://java.sun.com/jstl/core"
-	    xmlns:util="http://code.google.com/p/ada-asf/util"
+        xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{blogMsg.blog_post_not_found_title}"/>
 
     <!-- Main page body -->
     <ui:define name="pageBody">
-        <div id='awa-content'>
-            <div class='grid_9'>
-                <div class='blog-post-tag-info'>
-                    <h2>
-                        #{blogMsg.blog_post_not_found_title}
-                    </h2>
-                </div>
-                <p>
-                    #{blogMsg.blog_post_not_found}
-                </p>
-            </div>
-            <div class='grid_3 blog-post-info'>
-              <ui:include src="lists/post-info.xhtml"/>
-          </div>
+      <div class='grid_9'>
+        <div class='blog-post-tag-info'>
+          <h2>#{blogMsg.blog_post_not_found_title}</h2>
         </div>
+        <p>#{blogMsg.blog_post_not_found}</p>
+      </div>
+      <div class='grid_3 blog-post-info'>
+        <ui:include src="lists/post-info.xhtml"/>
+      </div>
     </ui:define>
 </ui:composition>

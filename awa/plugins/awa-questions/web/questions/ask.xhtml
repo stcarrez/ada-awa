@@ -1,5 +1,5 @@
 <!-- Ask a new question
-  -  Copyright (C) 2013, 2018 Stephane Carrez
+  -  Copyright (C) 2013 - 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,9 +28,7 @@
         <util:script>
             var contextPath = '#{contextPath}';
         </util:script>
-        <div id='awa-content'>
-            <ui:include src="forms/ask-form.xhtml"/>
-        </div>
+        <ui:include src="forms/ask-form.xhtml"/>
 
     </ui:define>
 </ui:composition>

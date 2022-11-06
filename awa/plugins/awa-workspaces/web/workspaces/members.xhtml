@@ -1,5 +1,5 @@
 <!-- List the workspace members for the administrator
-  -  Copyright (C) 2017, 2018 Stephane Carrez
+  -  Copyright (C) 2017 - 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,41 +30,39 @@
             <f:viewParam id='page' value='#{memberList.page}' required="false"/>
             <f:viewAction action='#{memberList.load}'/>
         </f:metadata>
-        <div id='awa-content'>
-            <ui:include src="views/workspace-nav.xhtml"/>
-            <div class='member-list awa-list-header' id="member-list-header">
-                <div class="awa-list-item-header">
-                    <div class='awa-header-col member-status'>
-                        #{workspaceMsg.workspace_member_status_label}
-                    </div>
-                    <div class='awa-header-col member-title'>
-                        #{workspaceMsg.workspace_member_title_label}
-                    </div>
-                    <div class='awa-header-col member-email'>
-                        #{workspaceMsg.workspace_member_email_label}
-                    </div>
-                    <div class='awa-header-col member-role'>
-                        #{workspaceMsg.workspace_member_role_label}
-                    </div>
-                    <div class='awa-header-col member-date'>
-                        #{workspaceMsg.workspace_member_date_label}
-                    </div>
-                </div>
+        <ui:include src="views/workspace-nav.xhtml"/>
+        <div class='member-list awa-list-header' id="member-list-header">
+          <div class="awa-list-item-header">
+            <div class='awa-header-col member-status'>
+              #{workspaceMsg.workspace_member_status_label}
             </div>
-            <div id='member-list' class="awa-list member-list">
-                <ui:include src="lists/member-list.xhtml"/>
+            <div class='awa-header-col member-title'>
+              #{workspaceMsg.workspace_member_title_label}
             </div>
-            <div id='member-list-action' class='asf-list-action'>
-                <a href="#" class='asf-icon asf-delete' title='#{workspaceMsg.workspace_member_delete_action_tooltip}'></a>
+            <div class='awa-header-col member-email'>
+              #{workspaceMsg.workspace_member_email_label}
             </div>
-            <util:script>
-                $('#member-list').list({
+            <div class='awa-header-col member-role'>
+              #{workspaceMsg.workspace_member_role_label}
+            </div>
+            <div class='awa-header-col member-date'>
+              #{workspaceMsg.workspace_member_date_label}
+            </div>
+          </div>
+        </div>
+        <div id='member-list' class="awa-list member-list">
+          <ui:include src="lists/member-list.xhtml"/>
+        </div>
+        <div id='member-list-action' class='asf-list-action'>
+          <a href="#" class='asf-icon asf-delete' title='#{workspaceMsg.workspace_member_delete_action_tooltip}'></a>
+        </div>
+        <util:script>
+          $('#member-list').list({
                     actionId: '#member-list-action',
                     itemPrefix: 'm_',
                     deleteUrl: '#{contextPath}/workspaces/forms/delete-member.html?id='
-                });
-            </util:script>
-        </div>
+          });
+        </util:script>
    </ui:define>
 
     <ui:define name="pageScript">

@@ -1,5 +1,5 @@
 <!-- Edit an existing post
-  -  Copyright (C) 2011, 2012, 2013, 2014, 2018 Stephane Carrez
+  -  Copyright (C) 2011 - 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,16 +40,14 @@
 
     <!-- Main page body -->
     <ui:define name="pageBody">
-        <div id='awa-content'>
-            <ui:include src="lists/menu-list.xhtml"/>
-            <div id='blog-post-edit' class='awa-container'>
-                <div class='awa-post'>
-                    <ui:include src="forms/post-form.xhtml">
-                        <ui:param name="title" value="#{blogMsg.blog_post_update_title}"/>
-                    </ui:include>
-                </div>
-            </div>
+      <ui:include src="lists/menu-list.xhtml"/>
+      <div id='blog-post-edit' class='awa-container'>
+        <div class='awa-post'>
+          <ui:include src="forms/post-form.xhtml">
+            <ui:param name="title" value="#{blogMsg.blog_post_update_title}"/>
+          </ui:include>
         </div>
+      </div>
     </ui:define>
 </ui:composition>
 
