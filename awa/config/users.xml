@@ -188,6 +188,30 @@
     <description>Auth provider to use for GitHub</description>
   </context-param>
 
+  <context-param>
+    <param-name>github.request_url</param-name>
+    <param-value>https://github.com/login/oauth/access_token</param-value>
+    <description>GitHub OAuth token access point</description>
+  </context-param>
+
+  <context-param>
+    <param-name>github.scope</param-name>
+    <param-value>read:user, read:email</param-value>
+    <description>GitHub OAuth scope</description>
+  </context-param>
+
+  <context-param>
+    <param-name>github.callback_url</param-name>
+    <param-value>#{app_oauth_url_base}#{contextPath}/auth/verify</param-value>
+    <description>GitHub verify callback</description>
+  </context-param>
+
+  <context-param>
+    <param-name>github.issuer</param-name>
+    <param-value>https://github.com</param-value>
+    <description>GitHub issuer identification</description>
+  </context-param>
+
   <!--  OpenID Gitlab -->
   <context-param>
     <param-name>auth.url.gitlab</param-name>
