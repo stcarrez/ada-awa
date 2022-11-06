@@ -54,6 +54,9 @@ You may get Ahven or Aunit at:
 * Ahven    (http://ahven.stronglytyped.org/)
 * AUnit    (https://libre.adacore.com/libre/tools/aunit/)
 
+## Version 2.5.0 - Under development
+- Fix #30: Configuration to authenticate with GitHub is incomplete
+
 ## Version 2.4.0 - Aug 2022
 - Add support for SQL queries embedded in applications with ARE
 - Fix #20: Do not use git:// protocol
