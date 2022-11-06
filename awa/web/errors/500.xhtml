@@ -1,5 +1,5 @@
 <!-- Server error page
-  -  Copyright (C) 2013, 2017 Stephane Carrez
+  -  Copyright (C) 2013, 2017, 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,7 +38,6 @@
 
             <!-- Main page body -->
             <ui:define name="pageBody">
-              <div id='awa-content'>
                   <div class='awa-error'>
                       <p>#{layoutMsg.layout_error_internal_error}</p>
                       <dl class="awa-error-details">
@@ -58,7 +57,6 @@
                           <dd class="awa-error-traceback">#{requestScope['servlet.error.exception']}</dd>
                       </dl>
                   </div>
-              </div>
             </ui:define>
         </ui:composition>
     </c:otherwise>

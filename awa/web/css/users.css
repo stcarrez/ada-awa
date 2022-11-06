@@ -1,6 +1,6 @@
 /**
  * users.css - Style for users module
- * Copyright (C) 2011-2018 Stephane Carrez
+ * Copyright (C) 2011-2022 Stephane Carrez
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
 li.message {
@@ -60,7 +60,14 @@ div.awa-login p {
     clear: both;
     display: block;
     margin-top: 10px;
+}
+.awa-login .awa-link-lost-password {
+    display: block;
     float: right;
+}
+.awa-login .awa-link-lost-password a {
+    margin-top: 15px;
+    display: block;
 }
 .awa-login #signup-link {
     clear: both;

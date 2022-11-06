@@ -15,21 +15,29 @@ body {
   font-size: 1.0em;
   background-color: #f0f0f0;
   overflow-y: scroll;
+  position: relative;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+main {
+    padding-top: 1em;
+    flex-grow: 1;
+    background-color: white;
+    display: block;
+    position: relative;
 }
 body.awa {
   background-color: #81CFB7;
 }
+footer {
+    width: 100%;
+    bottom: 0;
+    height: 30px;
+    clear: both;
+}
 * {
     box-sizing: border-box;
-}
-#awa-page {
-  position: relative;
-  min-height:100%;
-  margin: 0;
-  background-color: white;
-  margin-bottom: -30px; /* See #awa-clfooter height */
-  display: block;
-  width: 100%;
 }
 .awa #awa-page {
   background-color: #99DFCA;
@@ -68,9 +76,6 @@ body.awa {
 #awa-hdr #awa-top-nav {
     float: left;
 }
-#awa-content {
-  padding-top: 1em;
-}
 .awa-side-panel {
     display: flex;
     flex-direction: row;
@@ -95,13 +100,6 @@ body.awa {
   height: 48px;
   margin-left: 5px;
   margin-right: 15px;
-}
-#awa-footer {
-  float: none;
-  width: 100%;
-  position: relative;
-  bottom: 0;
-  height: 2px;
 }
 #awa-copyright {
   float: left;
@@ -519,7 +517,7 @@ ul.awa-pagination li {
         padding: 5px;
         padding-bottom: 2px;
     }
-    #awa-footer, body {
+    footer, body {
         background-image: none;
         font-size: 100%;
     }

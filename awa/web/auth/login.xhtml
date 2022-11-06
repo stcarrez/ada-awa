@@ -27,7 +27,6 @@
         <f:metadata>
             <f:viewParam id='redirect' value='#{login.redirect}' required="false"/>
         </f:metadata>
-        <div id='awa-content'>
         <ui:include src="views/welcome-login.xhtml"/>
 	<c:if test="#{initParam.app_login_openid}">
           <div class='awa-side1 container_6'>
@@ -42,7 +41,6 @@
             <ui:include src="forms/login-form.xhtml"/>
           </div>
 	</c:if>
-      </div>
     </ui:define>
 </ui:composition>
 

@@ -23,7 +23,6 @@
 
     <!-- Main page body -->
     <ui:define name="pageBody">
-      <div id='awa-content'>
         <ui:include src="views/welcome-register.xhtml"/>
 	<!-- if registration is enabled, show the registration form otherwise show nothing -->
 	<c:if test="#{initParam.app_login_register}">
@@ -42,7 +41,6 @@
 	<c:if test="#{not initParam.app_login_register}">
 	  #{userMsg.signup_disabled_message}
 	</c:if>
-      </div>
     </ui:define>
 </ui:composition>
 

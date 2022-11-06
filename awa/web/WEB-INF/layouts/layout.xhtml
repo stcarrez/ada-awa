@@ -1,5 +1,5 @@
 <!-- Layout for pages
-  -  Copyright (C) 2011, 2012, 2014, 2015, 2017, 2018 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2014, 2015, 2017, 2018, 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,15 +40,18 @@
     <ui:insert name="pageHeader"/>
     <title><h:outputText value="#{title}"/></title>
 </head>
-<body class="#{not empty pageStyle ? pageStyle : ''}">
+<body class="#{not empty pageStyle ? pageStyle : ''}#{not empty top_nav ? top_nav : ''}">
 
 <!-- Top header with user account -->
-<ui:include src="top-bar.xhtml"/>
+<header>
+  <ui:include src="top-bar.xhtml"/>
+  <ui:insert name="pageNav"/>
+</header>
 
-<div id='awa-page' class='container_12'>
+<main class='container_12'>
     <ui:insert name="pageBody"/>
     <div id="awa-clfooter"></div>
-</div>
+</main>
 <ui:include src="footer.xhtml"/>
 <!--dynamo-merge link="/js/all.js" prefix="#{contextPath}" -->
 <script type="text/javascript" src="#{jquery.path}"></script>

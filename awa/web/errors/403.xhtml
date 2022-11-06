@@ -1,5 +1,5 @@
 <!-- Permission denied error page
-  -  Copyright (C) 2013 Stephane Carrez
+  -  Copyright (C) 2013, 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,10 +38,8 @@
 
             <!-- Main page body -->
             <ui:define name="pageBody">
-              <div id='awa-content'>
-                  <div class='awa-error'>
-                      #{layoutMsg.layout_error_page_denied}
-                  </div>
+              <div class='awa-error'>
+                #{layoutMsg.layout_error_page_denied}
               </div>
             </ui:define>
         </ui:composition>

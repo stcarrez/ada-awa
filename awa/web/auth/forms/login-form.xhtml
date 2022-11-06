@@ -51,7 +51,9 @@
                 <h:commandButton id='login-button' value='#{userMsg.login_signin_button}'
                                  styleClass="ui-button ui-state-default ui-corner-all"
                                  action="#{login.authenticate}" title="#{userMsg.login_submit_login_title}"/>
-                <a id='lost-password' href='lost-password.html' title='#{userMsg.lost_password_link_title}'>
+            </li>
+            <li class='awa-link-lost-password'>
+                <a href='lost-password.html' title='#{userMsg.lost_password_link_title}'>
                     #{userMsg.lost_password_link}
                 </a>
 		<c:if test="#{initParam.app_login_register}">
