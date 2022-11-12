@@ -20,13 +20,13 @@ CREATE TABLE IF NOT EXISTS awa_image (
   `public` TINYINT NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
-  /*  */
+  /* the thumbnail storage */
   `thumbnail_id` BIGINT ,
-  /*  */
+  /* the folder where the image is stored */
   `folder_id` BIGINT NOT NULL,
-  /*  */
+  /* the user who uploaded the image */
   `owner_id` BIGINT NOT NULL,
-  /*  */
+  /* the image storage */
   `storage_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );

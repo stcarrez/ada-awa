@@ -121,35 +121,35 @@ package AWA.Images.Models is
    function Get_Version (Object : in Image_Ref)
                  return Integer;
 
-   --
+   --  Set the thumbnail storage
    procedure Set_Thumbnail (Object : in out Image_Ref;
                             Value  : in AWA.Storages.Models.Storage_Ref'Class);
 
-   --
+   --  Get the thumbnail storage
    function Get_Thumbnail (Object : in Image_Ref)
                  return AWA.Storages.Models.Storage_Ref'Class;
 
-   --
+   --  Set the folder where the image is stored
    procedure Set_Folder (Object : in out Image_Ref;
                          Value  : in AWA.Storages.Models.Storage_Folder_Ref'Class);
 
-   --
+   --  Get the folder where the image is stored
    function Get_Folder (Object : in Image_Ref)
                  return AWA.Storages.Models.Storage_Folder_Ref'Class;
 
-   --
+   --  Set the user who uploaded the image
    procedure Set_Owner (Object : in out Image_Ref;
                         Value  : in AWA.Users.Models.User_Ref'Class);
 
-   --
+   --  Get the user who uploaded the image
    function Get_Owner (Object : in Image_Ref)
                  return AWA.Users.Models.User_Ref'Class;
 
-   --
+   --  Set the image storage
    procedure Set_Storage (Object : in out Image_Ref;
                           Value  : in AWA.Storages.Models.Storage_Ref'Class);
 
-   --
+   --  Get the image storage
    function Get_Storage (Object : in Image_Ref)
                  return AWA.Storages.Models.Storage_Ref'Class;
 
