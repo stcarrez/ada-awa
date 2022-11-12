@@ -41,6 +41,9 @@ package body AWA.Users.Services is
    use Ada.Strings.Unbounded;
    use ADO.SQL;
    use AWA.Services;
+   use type ADO.Identifier;
+
+   package ASC renames AWA.Services.Contexts;
 
    Log : constant Loggers.Logger := Loggers.Create ("AWA.Users.Services");
 
@@ -136,6 +139,7 @@ package body AWA.Users.Services is
                              DB      : in out Master_Session;
                              Session : out Session_Ref'Class;
                              User    : in User_Ref'Class;
+                             Auth    : in Authenticate_Ref'Class;
                              Ip_Addr : in String;
                              Principal : out AWA.Users.Principals.Principal_Access) is
       Ctx          : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
@@ -148,6 +152,7 @@ package body AWA.Users.Services is
       Auth_Session.Set_Ip_Address (Ip_Addr);
       Auth_Session.Set_Stype (Users.Models.AUTH_SESSION);
       Auth_Session.Set_Server_Id (Model.Server_Id);
+      Auth_Session.Set_User_Auth (Auth);
       Auth_Session.Save (DB);
 
       --  Create the connection session.
@@ -157,6 +162,7 @@ package body AWA.Users.Services is
       Session.Set_Ip_Address (Ip_Addr);
       Session.Set_Stype (Users.Models.CONNECT_SESSION);
       Session.Set_Auth (Auth_Session);
+      Session.Set_User_Auth (Auth);
       Session.Set_Server_Id (Model.Server_Id);
       Session.Save (DB);
 
@@ -178,14 +184,18 @@ package body AWA.Users.Services is
       --  Update the user first name/last name
       procedure Update_User;
 
-      OpenId  : constant String := Security.Auth.Get_Claimed_Id (Auth);
-      Email   : constant String := Security.Auth.Get_Email (Auth);
-      Ctx     : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      DB      : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
-      Query   : ADO.SQL.Query;
-      Found   : Boolean;
-      User    : User_Ref;
-      Session : Session_Ref;
+      OpenId        : constant String := Security.Auth.Get_Claimed_Id (Auth);
+      Email_Address : constant String := Security.Auth.Get_Email (Auth);
+      Ctx           : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
+      DB            : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Query         : ADO.SQL.Query;
+      Found_Email   : Boolean;
+      Found_Auth    : Boolean;
+      Found_User    : Boolean;
+      User          : User_Ref;
+      Email         : Email_Ref;
+      User_Auth     : Authenticate_Ref;
+      Session       : Session_Ref;
 
       --  ------------------------------
       --  Update the user first name/last name
@@ -215,36 +225,60 @@ package body AWA.Users.Services is
             User.Set_First_Name (Name);
          end if;
          if Name'Length = 0 then
-            User.Set_Name (Get_Name_From_Email (Email => Email));
+            User.Set_Name (Get_Name_From_Email (Email => Email_Address));
          end if;
          User.Save (DB);
       end Update_User;
 
    begin
-      Log.Info ("Authenticated user {0}", Email);
+      Log.Info ("Authenticated user {0}", Email_Address);
 
       Ctx.Start;
 
-      --  Find the user registered under the given OpenID identifier.
-      Query.Bind_Param (1, OpenId);
-      Query.Set_Filter ("o.open_id = ?");
-      User.Find (DB, Query, Found);
-      if not Found then
-         Log.Info ("User {0} is not known", Email);
-         declare
-            E : Email_Ref;
-         begin
-            E.Set_Email (Email);
-            E.Set_User_Id (0);
-            E.Save (DB);
+      --  Find the email address.
+      Query.Set_Filter ("LOWER(o.email) = LOWER(:email)");
+      Query.Bind_Param ("email", Email_Address);
+      Email.Find (DB, Query, Found_Email);
 
-            User.Set_Email (E);
-            User.Set_Open_Id (OpenId);
-            User.Set_Status (Models.USER_ENABLED);
-            Update_User;
-            E.Set_User_Id (User.Get_Id);
-            E.Save (DB);
-         end;
+      --  Find the authenticate information for the given OpenID identifier.
+      Query.Clear;
+      Query.Set_Filter ("o.ident = :ident AND o.method = :method");
+      Query.Bind_Param ("ident", OpenId);
+      Query.Bind_Param ("method", Natural (1));
+      User_Auth.Find (DB, Query, Found_Auth);
+
+      if Found_Auth then
+         User := User_Ref (User_Auth.Get_User);
+         Found_User := True;
+      elsif Found_Email then
+         if Email.Get_User_Id > 0 then
+            User.Load (DB, Email.Get_User_Id, Found_User);
+         end if;
+         User_Auth.Set_Email (Email);
+      end if;
+
+      --  User is not found, registration must be enabled to create it.
+      if not Found_User and then not Model.Allow_Register then
+         Log.Warn ("Registration disabled: no user associated with email {0}",
+                   Email_Address);
+         raise Registration_Disabled;
+      end if;
+
+      --  Email is not known and we have a new user: create it.
+      if not Found_Email and not Found_User then
+         Log.Info ("Creating email record for {0}", Email_Address);
+         Email.Set_Email (Email_Address);
+         Email.Save (DB);
+      end if;
+
+      if not Found_User then
+         Log.Info ("User {0} is not known", Email_Address);
+
+         User.Set_Email (Email);
+         User.Set_Status (Models.USER_ENABLED);
+         Update_User;
+         Email.Set_User_Id (User.Get_Id);
+         Email.Save (DB);
          User_Lifecycle.Notify_Create (Model, User);
       elsif User.Get_Status = Models.USER_DISABLED then
          raise User_Disabled;
@@ -258,18 +292,26 @@ package body AWA.Users.Services is
          declare
             E : Email_Ref'Class := User.Get_Email;
          begin
-            if Email /= String '(E.Get_Email) then
+            if Email_Address /= String '(E.Get_Email) then
                Log.Info ("Changing email address from {0} to {1} for user {2}",
-                         String '(E.Get_Email), Email, OpenId);
-               E.Set_Email (Email);
+                         String '(E.Get_Email), Email_Address, OpenId);
+               E.Set_Email (Email_Address);
                E.Save (DB);
             end if;
          end;
          User_Lifecycle.Notify_Update (Model, User);
       end if;
 
-      Create_Session (Model, DB, Session, User, IpAddr, Principal);
-      if not Found then
+      if not Found_Auth then
+         User_Auth.Set_Email (Email);
+         User_Auth.Set_User (User);
+         User_Auth.Set_Ident (OpenId);
+         User_Auth.Set_Method (AUTH_OAUTH);
+         User_Auth.Save (DB);
+      end if;
+
+      Create_Session (Model, DB, Session, User, User_Auth, IpAddr, Principal);
+      if not Found_User then
          declare
             Event   : AWA.Events.Module_Event;
             Sec_Ctx : Security.Contexts.Security_Context;
@@ -279,7 +321,7 @@ package body AWA.Users.Services is
                                  Principal => Principal.all'Access);
 
             --  Send the event to indicate a new user was created.
-            Event.Set_Parameter ("email", Email);
+            Event.Set_Parameter ("email", Email_Address);
             Model.Send_Alert (User_Create_Event.Kind, User, Event);
          end;
       end if;
@@ -305,6 +347,7 @@ package body AWA.Users.Services is
       Found   : Boolean;
       User    : User_Ref;
       Session : Session_Ref;
+      Auth    : Authenticate_Ref;
    begin
       Log.Info ("Authenticate user {0}", Email);
 
@@ -324,8 +367,17 @@ package body AWA.Users.Services is
          Log.Warn ("User account {0} is disabled", Email);
          raise User_Disabled with "User account is disabled";
       end if;
+
+      Query.Clear;
+      Query.Set_Filter ("o.email_id = ? AND o.method = 0");
+      Query.Bind_Param (1, User.Get_Email.Get_Id);
+      Auth.Find (DB, Query, Found);
+      if not Found then
+         Log.Warn ("No password defined for user {0}", Email);
+         raise Not_Found with "No password defined with email: " & Email;
+      end if;
       declare
-         Salt : constant String := User.Get_Salt;
+         Salt : constant String := Auth.Get_Salt;
          Hash : constant String
             := User_Service'Class (Model).Get_Password_Hash (Salt, Password);
       begin
@@ -336,7 +388,7 @@ package body AWA.Users.Services is
             raise User_Disabled with "User account is not validated: " & Email;
          end if;
 
-         if Hash /= String '(User.Get_Password) then
+         if Hash /= String '(Auth.Get_Hash) then
             Log.Warn ("Invalid password for user {0}", Email);
             raise Not_Found with "No user registered under email: " & Email;
          end if;
@@ -344,7 +396,7 @@ package body AWA.Users.Services is
 
       Ctx.Start;
 
-      Create_Session (Model, DB, Session, User, IpAddr, Principal);
+      Create_Session (Model, DB, Session, User, Auth, IpAddr, Principal);
 
       Ctx.Commit;
       Log.Info ("Session {0} created for user {1}",
@@ -363,7 +415,6 @@ package body AWA.Users.Services is
                            Ip_Addr  : in String;
                            Principal : out AWA.Users.Principals.Principal_Access) is
       use type Contexts.Service_Context_Access;
-      use type ADO.Identifier;
 
       Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
       DB     : Master_Session;
@@ -471,8 +522,8 @@ package body AWA.Users.Services is
    --  ------------------------------
    procedure Lost_Password (Model : in out User_Service;
                             Email : in String) is
-      Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      DB     : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Ctx    : constant ASC.Service_Context_Access := ASC.Current;
+      DB     : Master_Session := ASC.Get_Master_Session (Ctx);
       User   : User_Ref;
       Key    : Access_Key_Ref;
       Query  : ADO.SQL.Query;
@@ -541,6 +592,7 @@ package body AWA.Users.Services is
       Email  : Email_Ref;
       Access_Key : Access_Key_Ref;
       User       : User_Ref;
+      Auth       : Authenticate_Ref;
       Session    : Session_Ref;
    begin
       Log.Info ("Reset password with key {0}", Key);
@@ -576,14 +628,29 @@ package body AWA.Users.Services is
          raise Not_Found with "User email address not found: " & Email.Get_Email;
       end if;
 
+      --  Get the authenticate information for the email address
+      --  (keep only AUTH_HASH_SHA1).
+      Query.Clear;
+      Query.Set_Filter ("o.method = 0 AND o.email_id = :email_id");
+      Query.Bind_Param ("email_id", Email.Get_Id);
+      Auth.Find (DB, Query, Found);
+      if not Found then
+         Auth.Set_User (User);
+         Auth.Set_Email (Email);
+         Auth.Set_Method (AUTH_HASH_SHA1);
+         Auth.Set_Ident (String '(Email.Get_Email));
+      end if;
+
       --  Reset the user password
-      User.Set_Salt (Model.Create_Key (User.Get_Id));
-      User.Set_Password (User_Service'Class (Model).Get_Password_Hash (User.Get_Salt, Password));
+      Auth.Set_Salt (Model.Create_Key (User.Get_Id));
+      Auth.Set_Hash (User_Service'Class (Model).Get_Password_Hash (Auth.Get_Salt, Password));
+      Auth.Save (DB);
+
       User.Set_Status (Models.USER_ENABLED);
       User.Save (DB);
 
       --  Create the authentication session.
-      Create_Session (Model, DB, Session, User, IpAddr, Principal);
+      Create_Session (Model, DB, Session, User, Auth, IpAddr, Principal);
 
       --  Send the email to warn about the password change
       declare
@@ -610,11 +677,12 @@ package body AWA.Users.Services is
    --  the account creation.
    --  Raises User_Exist exception if a user with such email is already registered.
    --  ------------------------------
-   procedure Create_User (Model : in out User_Service;
-                          User  : in out User_Ref'Class;
-                          Email : in out Email_Ref'Class;
-                          Key   : in out Access_Key_Ref'Class;
-                          Send  : in Boolean) is
+   procedure Create_User (Model    : in out User_Service;
+                          User     : in out User_Ref'Class;
+                          Email    : in out Email_Ref'Class;
+                          Password : in String;
+                          Key      : in out Access_Key_Ref'Class;
+                          Send     : in Boolean) is
       COUNT_SQL : constant String
         := "SELECT COUNT(*) FROM awa_email WHERE LOWER(email) = LOWER(?)";
 
@@ -622,7 +690,6 @@ package body AWA.Users.Services is
       DB            : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Stmt          : Query_Statement := DB.Create_Statement (COUNT_SQL);
       Email_Address : constant String := Email.Get_Email;
-      Password      : constant String := User.Get_Password;
    begin
       Log.Info ("Create user {0}", Email_Address);
       Ctx.Start;
@@ -643,19 +710,28 @@ package body AWA.Users.Services is
       if String '(User.Get_Name) = "" then
          User.Set_Name (String '(User.Get_First_Name) & " " & String '(User.Get_Last_Name));
       end if;
+      User.Save (DB);
+
+      Email.Set_User_Id (User.Get_Id);
+      Email.Save (DB);
 
       --  Make a random salt and generate the password hash.
       --  If there is no password, keep an empty salt/password,
       --  this will be refused at authentication.
       if Password'Length > 0 then
-         User.Set_Salt (Model.Create_Key (User.Get_Id));
-         User.Set_Password
-           (User_Service'Class (Model).Get_Password_Hash (User.Get_Salt, Password));
+         declare
+            Auth : Authenticate_Ref;
+         begin
+            Auth.Set_User (User);
+            Auth.Set_Salt (Model.Create_Key (User.Get_Id));
+            Auth.Set_Hash
+              (User_Service'Class (Model).Get_Password_Hash (Auth.Get_Salt, Password));
+            Auth.Set_Email (Email);
+            Auth.Set_Ident (Email_Address);
+            Auth.Set_Method (AUTH_HASH_SHA1);
+            Auth.Save (DB);
+         end;
       end if;
-      User.Save (DB);
-
-      Email.Set_User_Id (User.Get_Id);
-      Email.Save (DB);
 
       --  Create the access key
       Model.Create_Access_Key (User    => User,
@@ -689,22 +765,22 @@ package body AWA.Users.Services is
    procedure Create_User (Model     : in out User_Service;
                           User      : in out User_Ref'Class;
                           Email     : in out Email_Ref'Class;
+                          Password  : in String;
                           Key       : in String;
                           IpAddr    : in String;
                           Principal : out AWA.Users.Principals.Principal_Access) is
-      use type ADO.Identifier;
 
-      Ctx           : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      DB            : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Ctx           : constant ASC.Service_Context_Access := ASC.Current;
+      DB            : Master_Session := ASC.Get_Master_Session (Ctx);
       Access_Key    : Access_Key_Ref;
       Query         : ADO.SQL.Query;
       Session       : Session_Ref;
       Exist_Email   : Email_Ref;
       Email_Address : constant String := Email.Get_Email;
-      Password      : constant String := User.Get_Password;
       Found         : Boolean;
       Cur_User      : User_Ref;
       Cur_Email     : Email_Ref;
+      Auth          : Authenticate_Ref;
    begin
       Log.Info ("Create user {0} with key {1}", Email_Address, Key);
       Ctx.Start;
@@ -753,9 +829,15 @@ package body AWA.Users.Services is
       end if;
 
       --  Make a random salt and generate the password hash.
-      Cur_User.Set_Salt (Model.Create_Key (Cur_User.Get_Id));
-      Cur_User.Set_Password
-        (User_Service'Class (Model).Get_Password_Hash (Cur_User.Get_Salt, Password));
+      Auth.Set_Salt (Model.Create_Key (Cur_User.Get_Id));
+      Auth.Set_Hash
+        (User_Service'Class (Model).Get_Password_Hash (Auth.Get_Salt, Password));
+      Auth.Set_User (Cur_User);
+      Auth.Set_Email (Cur_Email);
+      Auth.Set_Method (Models.AUTH_HASH_SHA1);
+      Auth.Set_Ident (Email_Address);
+      Auth.Save (DB);
+
       Cur_User.Set_Status (Models.USER_ENABLED);
       Cur_User.Save (DB);
 
@@ -764,7 +846,7 @@ package body AWA.Users.Services is
       User_Lifecycle.Notify_Create (Model, User);
 
       --  Create the authentication session.
-      Create_Session (Model, DB, Session, User, IpAddr, Principal);
+      Create_Session (Model, DB, Session, User, Auth, IpAddr, Principal);
 
       --  Post the user creation event once the user is registered.
       declare
@@ -817,8 +899,8 @@ package body AWA.Users.Services is
                           Status : in Models.Status_type) is
       pragma Unreferenced (Model);
 
-      Ctx      : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      DB       : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+      Ctx      : constant ASC.Service_Context_Access := ASC.Current;
+      DB       : Master_Session := ASC.Get_Master_Session (Ctx);
       User     : User_Ref;
       Query    : ADO.SQL.Query;
       Found    : Boolean;
@@ -849,12 +931,11 @@ package body AWA.Users.Services is
    procedure Verify_User (Model    : in User_Service;
                           Key      : in String;
                           IpAddr   : in String;
-                          Principal : out AWA.Users.Principals.Principal_Access) is
-
-      Ctx    : constant Contexts.Service_Context_Access := AWA.Services.Contexts.Current;
-      DB     : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
-      Query  : ADO.SQL.Query;
-      Found  : Boolean;
+                          Principal : out Users.Principals.Principal_Access) is
+      Ctx        : constant ASC.Service_Context_Access := ASC.Current;
+      DB         : Master_Session := ASC.Get_Master_Session (Ctx);
+      Query      : ADO.SQL.Query;
+      Found      : Boolean;
       Access_Key : Access_Key_Ref;
       User       : User_Ref;
       Session    : Session_Ref;
@@ -886,11 +967,13 @@ package body AWA.Users.Services is
       --  If the user is registered and has a password, it is now verified
       --  and we can enable it.
       declare
-         Salt : constant String := User.Get_Salt;
+         Auth : Authenticate_Ref;
       begin
-         if User.Get_Status = Models.USER_REGISTERED
-           and then Salt'Length > 0
-         then
+         Query.Clear;
+         Query.Set_Filter ("o.method = 0 AND o.email_id = ?");
+         Query.Bind_Param (1, Email.Get_Id);
+         Auth.Find (DB, Query, Found);
+         if User.Get_Status = Models.USER_REGISTERED and then Found then
             User.Set_Status (Models.USER_ENABLED);
             User.Save (DB);
          end if;
@@ -901,11 +984,11 @@ package body AWA.Users.Services is
          --  This account has no password, keep the key so that we can
          --  redirect to the change password page.  Otherwise, we must
          --  remove the access key and create the authenticate session.
-         if Salt'Length > 0 then
+         if Found then
             Access_Key.Delete (DB);
 
             --  Create the authentication session.
-            Create_Session (Model, DB, Session, User, IpAddr, Principal);
+            Create_Session (Model, DB, Session, User, Auth, IpAddr, Principal);
 
             --  Post the user creation event once the user is registered.
             declare
@@ -1036,6 +1119,7 @@ package body AWA.Users.Services is
 
       Model.Permissions := Permissions.Services.Permission_Manager'Class (Sec_Manager.all)'Access;
       Model.Server_Id := Module.Get_Config ("server_id", 1);
+      Model.Allow_Register := Module.Get_Config ("allow_register", True);
       Set_Unbounded_String (Model.Auth_Key,
                             Module.Get_Config ("auth_key", DEFAULT_KEY));
       if Model.Auth_Key = DEFAULT_KEY then

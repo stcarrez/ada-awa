@@ -74,7 +74,7 @@ package body AWA.Commands.User is
          User.Set_First_Name (Util.Mail.Get_First_Name (Addr));
          User.Set_Last_Name (Util.Mail.Get_Last_Name (Addr));
          if Command.Register then
-            Service.Create_User (User, Email, Key, not Command.No_Email);
+            Service.Create_User (User, Email, "", Key, not Command.No_Email);
             Context.Console.Notice (N_INFO, "User '" & Param & "' is now registered");
             Context.Console.Notice (N_INFO, "Registration key: "
                                       & String '(Key.Get_Access_Key));

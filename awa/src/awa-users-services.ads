@@ -74,6 +74,8 @@ package AWA.Users.Services is
 
    User_Disabled : exception;
 
+   Registration_Disabled : exception;
+
    --  The session is an authenticate session.  The user authenticated using password or OpenID.
    --  When the user logout, this session is closed as well as any connection session linked to
    --  the authenticate session.
@@ -120,11 +122,12 @@ package AWA.Users.Services is
    --  Build an access key that allows to verify the user email and finish
    --  the account creation.
    --  Raises User_Exist exception if a user with such email is already registered.
-   procedure Create_User (Model : in out User_Service;
-                          User  : in out User_Ref'Class;
-                          Email : in out Email_Ref'Class;
-                          Key   : in out Access_Key_Ref'Class;
-                          Send  : in Boolean);
+   procedure Create_User (Model    : in out User_Service;
+                          User     : in out User_Ref'Class;
+                          Email    : in out Email_Ref'Class;
+                          Password : in String;
+                          Key      : in out Access_Key_Ref'Class;
+                          Send     : in Boolean);
 
    --  Create a user in the database with the given user information and
    --  the associated email address and for the given access key.  The access key is first
@@ -135,6 +138,7 @@ package AWA.Users.Services is
    procedure Create_User (Model     : in out User_Service;
                           User      : in out User_Ref'Class;
                           Email     : in out Email_Ref'Class;
+                          Password  : in String;
                           Key       : in String;
                           IpAddr    : in String;
                           Principal : out AWA.Users.Principals.Principal_Access);
@@ -251,14 +255,18 @@ private
                              DB      : in out ADO.Sessions.Master_Session;
                              Session : out Session_Ref'Class;
                              User    : in User_Ref'Class;
+                             Auth    : in Authenticate_Ref'Class;
                              Ip_Addr : in String;
-                             Principal : out AWA.Users.Principals.Principal_Access);
+                             Principal : out AWA.Users.Principals.Principal_Access) with
+     Pre => (User.Is_Loaded or else User.Is_Inserted)
+     and then (Auth.Is_Loaded or else Auth.Is_Inserted);
 
    type User_Service is new AWA.Modules.Module_Manager with record
       Server_Id   : Integer := 0;
       Random      : Security.Random.Generator;
       Auth_Key    : Ada.Strings.Unbounded.Unbounded_String;
       Permissions : AWA.Permissions.Services.Permission_Manager_Access;
+      Allow_Register : Boolean := True;
    end record;
 
 end AWA.Users.Services;

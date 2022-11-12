@@ -56,11 +56,11 @@ package body AWA.Users.Beans is
       Email.Set_Email (Data.Email);
       User.Set_First_Name (Data.First_Name);
       User.Set_Last_Name (Data.Last_Name);
-      User.Set_Password (Data.Password);
       if Key'Length > 0 then
          Data.Manager.Create_User (User      => User,
                                    Email     => Email,
                                    Key       => Key,
+                                   Password  => To_String (Data.Password),
                                    IpAddr    => "",
                                    Principal => Principal);
          Outcome := To_Unbounded_String ("success-key");
@@ -77,6 +77,7 @@ package body AWA.Users.Beans is
             Data.Manager.Create_User (User  => User,
                                       Email => Email,
                                       Key   => Access_Key,
+                                      Password => To_String (Data.Password),
                                       Send  => True);
          end;
          Outcome := To_Unbounded_String ("success");

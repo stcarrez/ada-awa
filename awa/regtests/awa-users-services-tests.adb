@@ -312,9 +312,8 @@ package body AWA.Users.Services.Tests is
       AWA.Tests.Helpers.Users.Initialize (Principal);
       Principal.User.Set_First_Name ("Joe");
       Principal.User.Set_Last_Name ("Pot");
-      Principal.User.Set_Password ("admin");
       Principal.Email.Set_Email (Email);
-      Principal.Manager.Create_User (Principal.User, Principal.Email, Key, False);
+      Principal.Manager.Create_User (Principal.User, Principal.Email, "admin", Key, False);
 
       begin
          AWA.Tests.Helpers.Users.Login (Principal);

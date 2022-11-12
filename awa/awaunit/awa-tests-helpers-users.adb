@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  files.tests -- Unit tests for files
+--  awa-tests-helpers-users -- Unit tests for AWA users
 --  Copyright (C) 2011, 2012, 2013, 2014, 2017, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -81,9 +81,9 @@ package body AWA.Tests.Helpers.Users is
       if not Found then
          Principal.User.Set_First_Name ("Joe");
          Principal.User.Set_Last_Name ("Pot");
-         Principal.User.Set_Password ("admin");
          Principal.Email.Set_Email (Email);
-         Principal.Manager.Create_User (Principal.User, Principal.Email, Key, True);
+         Principal.Manager.Create_User (Principal.User, Principal.Email,
+                                        "admin", Key, True);
 
          Find_Access_Key (Principal, Email, Key);
 
@@ -110,9 +110,8 @@ package body AWA.Tests.Helpers.Users is
       Initialize (Principal);
       Principal.User.Set_First_Name ("Joe");
       Principal.User.Set_Last_Name ("Pot");
-      Principal.User.Set_Password ("admin");
       Principal.Email.Set_Email (Email);
-      Principal.Manager.Create_User (Principal.User, Principal.Email, Key, True);
+      Principal.Manager.Create_User (Principal.User, Principal.Email, "admin", Key, True);
 
       Find_Access_Key (Principal, Email, Key);
 
