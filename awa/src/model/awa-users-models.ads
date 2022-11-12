@@ -38,6 +38,16 @@ package AWA.Users.Models is
 
    pragma Style_Checks ("-mrIu");
 
+   type Authenticate_Type is (AUTH_HASH_SHA1, AUTH_OAUTH);
+   for Authenticate_Type use (AUTH_HASH_SHA1 => 0, AUTH_OAUTH => 1);
+   package Authenticate_Type_Objects is
+      new Util.Beans.Objects.Enums (Authenticate_Type);
+
+   type Nullable_Authenticate_Type is record
+      Is_Null : Boolean := True;
+      Value   : Authenticate_Type;
+   end record;
+
    type Key_Type is (RESET_PASSWORD_KEY, SIGNUP_KEY, INVITATION_KEY);
    for Key_Type use (RESET_PASSWORD_KEY => 0, SIGNUP_KEY => 1, INVITATION_KEY => 2);
    package Key_Type_Objects is
@@ -88,6 +98,8 @@ package AWA.Users.Models is
    type User_Ref is new ADO.Objects.Object_Ref with null record;
 
    type Access_Key_Ref is new ADO.Objects.Object_Ref with null record;
+
+   type Authenticate_Ref is new ADO.Objects.Object_Ref with null record;
 
    type Session_Ref is new ADO.Objects.Object_Ref with null record;
 
@@ -243,30 +255,6 @@ package AWA.Users.Models is
    function Get_Last_Name (Object : in User_Ref)
                  return String;
 
-   --  Set the user password hash.
-   procedure Set_Password (Object : in out User_Ref;
-                           Value  : in Ada.Strings.Unbounded.Unbounded_String);
-   procedure Set_Password (Object : in out User_Ref;
-                           Value : in String);
-
-   --  Get the user password hash.
-   function Get_Password (Object : in User_Ref)
-                 return Ada.Strings.Unbounded.Unbounded_String;
-   function Get_Password (Object : in User_Ref)
-                 return String;
-
-   --  Set the user OpenID identifier.
-   procedure Set_Open_Id (Object : in out User_Ref;
-                          Value  : in Ada.Strings.Unbounded.Unbounded_String);
-   procedure Set_Open_Id (Object : in out User_Ref;
-                          Value : in String);
-
-   --  Get the user OpenID identifier.
-   function Get_Open_Id (Object : in User_Ref)
-                 return Ada.Strings.Unbounded.Unbounded_String;
-   function Get_Open_Id (Object : in User_Ref)
-                 return String;
-
    --  Set the user country.
    procedure Set_Country (Object : in out User_Ref;
                           Value  : in Ada.Strings.Unbounded.Unbounded_String);
@@ -301,18 +289,6 @@ package AWA.Users.Models is
    --  Get the user identifier.
    function Get_Id (Object : in User_Ref)
                  return ADO.Identifier;
-
-   --  Set the password salt.
-   procedure Set_Salt (Object : in out User_Ref;
-                       Value  : in Ada.Strings.Unbounded.Unbounded_String);
-   procedure Set_Salt (Object : in out User_Ref;
-                       Value : in String);
-
-   --  Get the password salt.
-   function Get_Salt (Object : in User_Ref)
-                 return Ada.Strings.Unbounded.Unbounded_String;
-   function Get_Salt (Object : in User_Ref)
-                 return String;
 
    --  Set the status of this user.
    procedure Set_Status (Object : in out User_Ref;
@@ -494,6 +470,149 @@ package AWA.Users.Models is
    procedure Copy (Object : in Access_Key_Ref;
                    Into   : in out Access_Key_Ref);
 
+   --  Create an object key for Authenticate.
+   function Authenticate_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
+   --  Create an object key for Authenticate from a string.
+   --  Raises Constraint_Error if the string cannot be converted into the object key.
+   function Authenticate_Key (Id : in String) return ADO.Objects.Object_Key;
+
+   Null_Authenticate : constant Authenticate_Ref;
+   function "=" (Left, Right : Authenticate_Ref'Class) return Boolean;
+
+   --  Set the identifier
+   procedure Set_Id (Object : in out Authenticate_Ref;
+                     Value  : in ADO.Identifier);
+
+   --  Get the identifier
+   function Get_Id (Object : in Authenticate_Ref)
+                 return ADO.Identifier;
+   --  Get the optimistic lock version.
+   function Get_Version (Object : in Authenticate_Ref)
+                 return Integer;
+
+   --  Set the identification string
+   procedure Set_Ident (Object : in out Authenticate_Ref;
+                        Value  : in Ada.Strings.Unbounded.Unbounded_String);
+   procedure Set_Ident (Object : in out Authenticate_Ref;
+                        Value : in String);
+
+   --  Get the identification string
+   function Get_Ident (Object : in Authenticate_Ref)
+                 return Ada.Strings.Unbounded.Unbounded_String;
+   function Get_Ident (Object : in Authenticate_Ref)
+                 return String;
+
+   --  Set the optional salt
+   procedure Set_Salt (Object : in out Authenticate_Ref;
+                       Value  : in Ada.Strings.Unbounded.Unbounded_String);
+   procedure Set_Salt (Object : in out Authenticate_Ref;
+                       Value : in String);
+
+   --  Get the optional salt
+   function Get_Salt (Object : in Authenticate_Ref)
+                 return Ada.Strings.Unbounded.Unbounded_String;
+   function Get_Salt (Object : in Authenticate_Ref)
+                 return String;
+
+   --  Set the optional hash
+   procedure Set_Hash (Object : in out Authenticate_Ref;
+                       Value  : in Ada.Strings.Unbounded.Unbounded_String);
+   procedure Set_Hash (Object : in out Authenticate_Ref;
+                       Value : in String);
+
+   --  Get the optional hash
+   function Get_Hash (Object : in Authenticate_Ref)
+                 return Ada.Strings.Unbounded.Unbounded_String;
+   function Get_Hash (Object : in Authenticate_Ref)
+                 return String;
+
+   --  Set the authenticate method
+   procedure Set_Method (Object : in out Authenticate_Ref;
+                         Value  : in Authenticate_Type);
+
+   --  Get the authenticate method
+   function Get_Method (Object : in Authenticate_Ref)
+                 return Authenticate_Type;
+
+   --  Set the email that we authenticate
+   procedure Set_Email (Object : in out Authenticate_Ref;
+                        Value  : in Email_Ref'Class);
+
+   --  Get the email that we authenticate
+   function Get_Email (Object : in Authenticate_Ref)
+                 return Email_Ref'Class;
+
+   --  Set the user that is authenticated
+   procedure Set_User (Object : in out Authenticate_Ref;
+                       Value  : in User_Ref'Class);
+
+   --  Get the user that is authenticated
+   function Get_User (Object : in Authenticate_Ref)
+                 return User_Ref'Class;
+
+   --  Load the entity identified by 'Id'.
+   --  Raises the NOT_FOUND exception if it does not exist.
+   procedure Load (Object  : in out Authenticate_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier);
+
+   --  Load the entity identified by 'Id'.
+   --  Returns True in <b>Found</b> if the object was found and False if it does not exist.
+   procedure Load (Object  : in out Authenticate_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier;
+                   Found   : out Boolean);
+
+   --  Reload from the database the same object if it was modified.
+   --  Returns True in `Updated` if the object was reloaded.
+   --  Raises the NOT_FOUND exception if it does not exist.
+   procedure Reload (Object  : in out Authenticate_Ref;
+                     Session : in out ADO.Sessions.Session'Class;
+                     Updated : out Boolean);
+
+   --  Find and load the entity.
+   overriding
+   procedure Find (Object  : in out Authenticate_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean);
+
+   --  Save the entity.  If the entity does not have an identifier, an identifier is allocated
+   --  and it is inserted in the table.  Otherwise, only data fields which have been changed
+   --  are updated.
+   overriding
+   procedure Save (Object  : in out Authenticate_Ref;
+                   Session : in out ADO.Sessions.Master_Session'Class);
+
+   --  Delete the entity.
+   overriding
+   procedure Delete (Object  : in out Authenticate_Ref;
+                     Session : in out ADO.Sessions.Master_Session'Class);
+
+   overriding
+   function Get_Value (From : in Authenticate_Ref;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Table definition
+   AUTHENTICATE_TABLE : constant ADO.Schemas.Class_Mapping_Access;
+
+   --  Internal method to allocate the Object_Record instance
+   overriding
+   procedure Allocate (Object : in out Authenticate_Ref);
+
+   --  Copy of the object.
+   procedure Copy (Object : in Authenticate_Ref;
+                   Into   : in out Authenticate_Ref);
+
+   package Authenticate_Vectors is
+      new Ada.Containers.Vectors (Index_Type   => Positive,
+                                  Element_Type => Authenticate_Ref,
+                                  "="          => "=");
+   subtype Authenticate_Vector is Authenticate_Vectors.Vector;
+
+   procedure List (Object  : in out Authenticate_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class);
    --  Create an object key for Session.
    function Session_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
    --  Create an object key for Session from a string.
@@ -573,6 +692,14 @@ package AWA.Users.Models is
    --
    function Get_User (Object : in Session_Ref)
                  return User_Ref'Class;
+
+   --  Set the user authenticate record that authentified this session.
+   procedure Set_User_Auth (Object : in out Session_Ref;
+                            Value  : in Authenticate_Ref'Class);
+
+   --  Get the user authenticate record that authentified this session.
+   function Get_User_Auth (Object : in Session_Ref)
+                 return Authenticate_Ref'Class;
 
    --  Load the entity identified by 'Id'.
    --  Raises the NOT_FOUND exception if it does not exist.
@@ -704,18 +831,15 @@ private
    USER_NAME : aliased constant String := "awa_user";
    COL_0_2_NAME : aliased constant String := "first_name";
    COL_1_2_NAME : aliased constant String := "last_name";
-   COL_2_2_NAME : aliased constant String := "password";
-   COL_3_2_NAME : aliased constant String := "open_id";
-   COL_4_2_NAME : aliased constant String := "country";
-   COL_5_2_NAME : aliased constant String := "name";
-   COL_6_2_NAME : aliased constant String := "version";
-   COL_7_2_NAME : aliased constant String := "id";
-   COL_8_2_NAME : aliased constant String := "salt";
-   COL_9_2_NAME : aliased constant String := "status";
-   COL_10_2_NAME : aliased constant String := "email_id";
+   COL_2_2_NAME : aliased constant String := "country";
+   COL_3_2_NAME : aliased constant String := "name";
+   COL_4_2_NAME : aliased constant String := "version";
+   COL_5_2_NAME : aliased constant String := "id";
+   COL_6_2_NAME : aliased constant String := "status";
+   COL_7_2_NAME : aliased constant String := "email_id";
 
    USER_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count   => 11,
+     (Count   => 8,
       Table   => USER_NAME'Access,
       Members => (
          1 => COL_0_2_NAME'Access,
@@ -725,10 +849,7 @@ private
          5 => COL_4_2_NAME'Access,
          6 => COL_5_2_NAME'Access,
          7 => COL_6_2_NAME'Access,
-         8 => COL_7_2_NAME'Access,
-         9 => COL_8_2_NAME'Access,
-         10 => COL_9_2_NAME'Access,
-         11 => COL_10_2_NAME'Access)
+         8 => COL_7_2_NAME'Access)
      );
    USER_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := USER_DEF'Access;
@@ -739,9 +860,9 @@ private
       Members  => (
          1 => 0,
          2 => 1,
-         3 => 4,
-         4 => 5,
-         5 => 9)
+         3 => 2,
+         4 => 3,
+         5 => 6)
      );
    USER_AUDIT_TABLE : constant ADO.Audits.Auditable_Mapping_Access
       := USER_AUDIT_DEF'Access;
@@ -756,12 +877,9 @@ private
    with record
        First_Name : Ada.Strings.Unbounded.Unbounded_String;
        Last_Name : Ada.Strings.Unbounded.Unbounded_String;
-       Password : Ada.Strings.Unbounded.Unbounded_String;
-       Open_Id : Ada.Strings.Unbounded.Unbounded_String;
        Country : Ada.Strings.Unbounded.Unbounded_String;
        Name : Ada.Strings.Unbounded.Unbounded_String;
        Version : Integer;
-       Salt : Ada.Strings.Unbounded.Unbounded_String;
        Status : Status_Type;
        Email : Email_Ref;
    end record;
@@ -867,20 +985,19 @@ private
 
    procedure Set_Field (Object : in out Access_Key_Ref'Class;
                         Impl   : out Access_Key_Access);
-   SESSION_NAME : aliased constant String := "awa_session";
-   COL_0_4_NAME : aliased constant String := "start_date";
-   COL_1_4_NAME : aliased constant String := "end_date";
-   COL_2_4_NAME : aliased constant String := "ip_address";
-   COL_3_4_NAME : aliased constant String := "stype";
-   COL_4_4_NAME : aliased constant String := "version";
-   COL_5_4_NAME : aliased constant String := "server_id";
-   COL_6_4_NAME : aliased constant String := "id";
-   COL_7_4_NAME : aliased constant String := "auth_id";
-   COL_8_4_NAME : aliased constant String := "user_id";
+   AUTHENTICATE_NAME : aliased constant String := "awa_authenticate";
+   COL_0_4_NAME : aliased constant String := "id";
+   COL_1_4_NAME : aliased constant String := "version";
+   COL_2_4_NAME : aliased constant String := "ident";
+   COL_3_4_NAME : aliased constant String := "salt";
+   COL_4_4_NAME : aliased constant String := "hash";
+   COL_5_4_NAME : aliased constant String := "method";
+   COL_6_4_NAME : aliased constant String := "email_id";
+   COL_7_4_NAME : aliased constant String := "user_id";
 
-   SESSION_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count   => 9,
-      Table   => SESSION_NAME'Access,
+   AUTHENTICATE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
+     (Count   => 8,
+      Table   => AUTHENTICATE_NAME'Access,
       Members => (
          1 => COL_0_4_NAME'Access,
          2 => COL_1_4_NAME'Access,
@@ -889,8 +1006,86 @@ private
          5 => COL_4_4_NAME'Access,
          6 => COL_5_4_NAME'Access,
          7 => COL_6_4_NAME'Access,
-         8 => COL_7_4_NAME'Access,
-         9 => COL_8_4_NAME'Access)
+         8 => COL_7_4_NAME'Access)
+     );
+   AUTHENTICATE_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := AUTHENTICATE_DEF'Access;
+
+
+   Null_Authenticate : constant Authenticate_Ref
+      := Authenticate_Ref'(ADO.Objects.Object_Ref with null record);
+
+   type Authenticate_Impl is
+      new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
+                                     Of_Class => AUTHENTICATE_DEF'Access)
+   with record
+       Version : Integer;
+       Ident : Ada.Strings.Unbounded.Unbounded_String;
+       Salt : Ada.Strings.Unbounded.Unbounded_String;
+       Hash : Ada.Strings.Unbounded.Unbounded_String;
+       Method : Authenticate_Type;
+       Email : Email_Ref;
+       User : User_Ref;
+   end record;
+
+   type Authenticate_Access is access all Authenticate_Impl;
+
+   overriding
+   procedure Destroy (Object : access Authenticate_Impl);
+
+   overriding
+   procedure Find (Object  : in out Authenticate_Impl;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean);
+
+   overriding
+   procedure Load (Object  : in out Authenticate_Impl;
+                   Session : in out ADO.Sessions.Session'Class);
+   procedure Load (Object  : in out Authenticate_Impl;
+                   Stmt    : in out ADO.Statements.Query_Statement'Class;
+                   Session : in out ADO.Sessions.Session'Class);
+
+   overriding
+   procedure Save (Object  : in out Authenticate_Impl;
+                   Session : in out ADO.Sessions.Master_Session'Class);
+
+   overriding
+   procedure Create (Object  : in out Authenticate_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class);
+
+   overriding
+   procedure Delete (Object  : in out Authenticate_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class);
+
+   procedure Set_Field (Object : in out Authenticate_Ref'Class;
+                        Impl   : out Authenticate_Access);
+   SESSION_NAME : aliased constant String := "awa_session";
+   COL_0_5_NAME : aliased constant String := "start_date";
+   COL_1_5_NAME : aliased constant String := "end_date";
+   COL_2_5_NAME : aliased constant String := "ip_address";
+   COL_3_5_NAME : aliased constant String := "stype";
+   COL_4_5_NAME : aliased constant String := "version";
+   COL_5_5_NAME : aliased constant String := "server_id";
+   COL_6_5_NAME : aliased constant String := "id";
+   COL_7_5_NAME : aliased constant String := "auth_id";
+   COL_8_5_NAME : aliased constant String := "user_id";
+   COL_9_5_NAME : aliased constant String := "user_auth_id";
+
+   SESSION_DEF : aliased constant ADO.Schemas.Class_Mapping :=
+     (Count   => 10,
+      Table   => SESSION_NAME'Access,
+      Members => (
+         1 => COL_0_5_NAME'Access,
+         2 => COL_1_5_NAME'Access,
+         3 => COL_2_5_NAME'Access,
+         4 => COL_3_5_NAME'Access,
+         5 => COL_4_5_NAME'Access,
+         6 => COL_5_5_NAME'Access,
+         7 => COL_6_5_NAME'Access,
+         8 => COL_7_5_NAME'Access,
+         9 => COL_8_5_NAME'Access,
+         10 => COL_9_5_NAME'Access)
      );
    SESSION_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := SESSION_DEF'Access;
@@ -911,6 +1106,7 @@ private
        Server_Id : Integer;
        Auth : Session_Ref;
        User : User_Ref;
+       User_Auth : Authenticate_Ref;
    end record;
 
    type Session_Access is access all Session_Impl;
