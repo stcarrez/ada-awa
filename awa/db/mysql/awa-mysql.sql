@@ -193,6 +193,26 @@ CREATE TABLE IF NOT EXISTS awa_access_key (
   `user_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*  */
+CREATE TABLE IF NOT EXISTS awa_authenticate (
+  /* the identifier */
+  `id` BIGINT NOT NULL,
+  /* the optimistic lock version. */
+  `version` INTEGER NOT NULL,
+  /* the identification string */
+  `ident` VARCHAR(255) BINARY NOT NULL,
+  /* the optional salt */
+  `salt` VARCHAR(255) BINARY NOT NULL,
+  /* the optional hash */
+  `hash` VARCHAR(255) BINARY NOT NULL,
+  /* the authenticate method */
+  `method` TINYINT NOT NULL,
+  /* the email that we authenticate */
+  `email_id` BIGINT NOT NULL,
+  /* the user that is authenticated */
+  `user_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The Email entity defines the user email addresses.
 The user has a primary email address that is obtained
 from the registration process (either through a form
@@ -232,6 +252,8 @@ CREATE TABLE IF NOT EXISTS awa_session (
   `auth_id` BIGINT ,
   /*  */
   `user_id` BIGINT NOT NULL,
+  /* the user authenticate record that authentified this session. */
+  `user_auth_id` BIGINT ,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The User entity represents a user that can access and use the application. */
@@ -240,10 +262,6 @@ CREATE TABLE IF NOT EXISTS awa_user (
   `first_name` VARCHAR(255) BINARY NOT NULL,
   /* the user last name. */
   `last_name` VARCHAR(255) BINARY NOT NULL,
-  /* the user password hash. */
-  `password` VARCHAR(255) BINARY NOT NULL,
-  /* the user OpenID identifier. */
-  `open_id` VARCHAR(255) BINARY NOT NULL,
   /* the user country. */
   `country` VARCHAR(255) BINARY NOT NULL,
   /* the user display name. */
@@ -252,8 +270,6 @@ CREATE TABLE IF NOT EXISTS awa_user (
   `version` INTEGER NOT NULL,
   /* the user identifier. */
   `id` BIGINT NOT NULL,
-  /* the password salt. */
-  `salt` VARCHAR(255) BINARY NOT NULL,
   /* the status of this user. */
   `status` TINYINT NOT NULL,
   /*  */
@@ -261,7 +277,7 @@ CREATE TABLE IF NOT EXISTS awa_user (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT IGNORE INTO ado_entity_type (name) VALUES
-("awa_audit"), ("awa_audit_field"), ("awa_message"), ("awa_message_type"), ("awa_queue"), ("awa_application"), ("awa_callback"), ("awa_oauth_session"), ("awa_acl"), ("awa_permission"), ("awa_access_key"), ("awa_email"), ("awa_session"), ("awa_user");
+("awa_audit"), ("awa_audit_field"), ("awa_message"), ("awa_message_type"), ("awa_queue"), ("awa_application"), ("awa_callback"), ("awa_oauth_session"), ("awa_acl"), ("awa_permission"), ("awa_access_key"), ("awa_authenticate"), ("awa_email"), ("awa_session"), ("awa_user");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_user"), "first_name");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
@@ -272,4 +288,4 @@ INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_user"), "name");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_user"), "status");
-INSERT IGNORE INTO ado_version (name, version) VALUES ("awa", 2);
+INSERT IGNORE INTO ado_version (name, version) VALUES ("awa", 3);
