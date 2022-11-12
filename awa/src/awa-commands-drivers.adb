@@ -77,7 +77,9 @@ package body AWA.Commands.Drivers is
    function Is_Application (Command : in Application_Command_Type;
                             URI     : in String) return Boolean is
    begin
-      return Command.Application_Name.all = URI;
+      return Command.Application_Name.all = Uri
+        or else (Uri (Uri'First) = '/'
+                   and then Command.Application_Name.all = Uri (Uri'First + 1 .. Uri'Last));
    end Is_Application;
 
    overriding
