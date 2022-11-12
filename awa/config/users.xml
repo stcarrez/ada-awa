@@ -225,6 +225,30 @@
     <description>Auth provider to use for GitLab</description>
   </context-param>
 
+  <context-param>
+    <param-name>gitlab.request_url</param-name>
+    <param-value>https://gitlab.com/oauth/token</param-value>
+    <description>Gitlab OAuth token access point</description>
+  </context-param>
+
+  <context-param>
+    <param-name>gitlab.scope</param-name>
+    <param-value>openid email</param-value>
+    <description>Gitlab OAuth scope</description>
+  </context-param>
+
+  <context-param>
+    <param-name>gitlab.callback_url</param-name>
+    <param-value>#{app_oauth_url_base}#{contextPath}/auth/verify</param-value>
+    <description>Gitlab verify callback</description>
+  </context-param>
+
+  <context-param>
+    <param-name>gitlab.issuer</param-name>
+    <param-value>https://gitlab.com</param-value>
+    <description>Gitlab issuer identification</description>
+  </context-param>
+
   <!--  OpenID Twitter -->
   <context-param>
     <param-name>auth.url.twitter</param-name>
