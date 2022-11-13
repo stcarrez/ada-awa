@@ -21,35 +21,35 @@
         xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{blogMsg.blog_page_title} - Tag #{postList.tag}"/>
-    <ui:param name="pageStyle" value="page-news"/>
+    <ui:param name="pageStyle" value="page-blog"/>
 
     <ui:define name="pageHeader">
-        <f:metadata>
-            <f:viewParam id='page' value='#{postList.page}' required="false"/>
-            <f:viewParam id='tag' value='#{postList.tag}'/>
-            <f:viewAction action="#{postList.load}"/>
-        </f:metadata>
-        <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/highlight/darcula.css"/>
+      <f:metadata>
+        <f:viewParam id='page' value='#{postList.page}' required="false"/>
+        <f:viewParam id='tag' value='#{postList.tag}'/>
+        <f:viewAction action="#{postList.load}"/>
+      </f:metadata>
+      <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/highlight/darcula.css"/>
     </ui:define>
 
     <!-- Main page body -->
     <ui:define name="pageBody">
-            <div class='grid_8 blog-post-tag-info'>
-                <h2>
-                    <h:outputFormat value="#{blogMsg.blog_tag_page_title}">
-                        <f:param value="#{postList.tag}"/>
-                    </h:outputFormat>
-                </h2>
-            </div>
-            <div class='grid_9'>
-                <ui:include src="lists/post-list.xhtml">
-                    <ui:param name="pageUrl" value="blogs/tagged.html"/>
-                    <ui:param name="pageParam" value="&amp;tag=#{util:urlEncode(postList.tag)}"/>
-                </ui:include>
-            </div>
-            <div class='grid_3 blog-post-info'>
-              <ui:include src="lists/post-info.xhtml"/>
-          </div>
+      <div class='grid_8 blog-post-tag-info'>
+        <h2>
+          <h:outputFormat value="#{blogMsg.blog_tag_page_title}">
+            <f:param value="#{postList.tag}"/>
+          </h:outputFormat>
+        </h2>
+      </div>
+      <div class='grid_9'>
+        <ui:include src="lists/post-list.xhtml">
+          <ui:param name="pageUrl" value="blogs/tagged.html"/>
+          <ui:param name="pageParam" value="&amp;tag=#{util:urlEncode(postList.tag)}"/>
+        </ui:include>
+      </div>
+      <div class='grid_3 blog-post-info'>
+        <ui:include src="lists/post-info.xhtml"/>
+      </div>
     </ui:define>
 
     <ui:define name="pageScript">

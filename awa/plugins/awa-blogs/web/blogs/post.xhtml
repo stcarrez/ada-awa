@@ -23,81 +23,82 @@
         xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{post.title}"/>
+    <ui:param name="pageStyle" value="page-blog"/>
 
     <ui:define name="pageHeader">
-        <f:metadata>
-            <f:viewParam id='post' value='#{post.uri}' required='false'/>
-            <f:viewAction action='#{post.load}'/>
-        </f:metadata>
-        <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/highlight/darcula.css"/>
+      <f:metadata>
+        <f:viewParam id='post' value='#{post.uri}' required='false'/>
+        <f:viewAction action='#{post.load}'/>
+      </f:metadata>
+      <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/highlight/darcula.css"/>
     </ui:define>
 
     <!-- Main page body -->
     <ui:define name="pageBody">
-            <div class='grid_9'>
-                <div class='blog-post' id="p_#{post.id}">
-                    <div class='post-title'>
-                        <h2><a href="#{contextPath}/blogs/post.html?post=#{post.uri}">#{post.title}</a></h2>
-                        <p>
-                            <h:outputFormat value="#{blogMsg.blog_post_author}">
-                                <f:param value="#{post.username}"/>
-                            </h:outputFormat>
-                            <h:outputText styleClass="post-date" value="#{post.publish_date}" converter="dateConverter"/>
-                            <h:outputFormat value="#{blogMsg.blog_post_count}" rendered="#{not empty postComments}"
-                                            styleClass="post-comment-count">
-                                <f:param value="#{postComments.count}"/>
-                            </h:outputFormat>
-                        </p>
-                    </div>
-                    <awa:tagList value='#{post.tags}' id='qtags' styleClass="tagedit-list"
-                                 tagLink="#{contextPath}/blogs/tagged.html?tag=#{util:urlEncode(tagName)}"
-                                 var="tagName"
-                                 tagClass="tagedit-listelement tagedit-listelement-old"/>
-
-                    <awa:wiki rendered="#{not empty post.summary}"
-                              styleClass='post-text'
-                              value="#{post.summary}"
-                              plugins="#{post}"
-                              links="#{post.links}"
-                              format="#{post.format}"/>
-
-                    <awa:wiki styleClass='post-text'
-                              value="#{post.text}"
-                              plugins="#{post}"
-                              links="#{post.links}"
-                              format="#{post.format}"/>
-                    <!-- Increment the post read counter but do not display anything -->
-                    <awa:counter value="#{post.counter}" hidden="true"/>
-                    <div class='awa-comment-list' id="comments">
-                        <h:panelGroup rendered="#{not empty postComments}">
-                            <h3>
-                                <h:outputFormat value="#{blogMsg.blog_comment_list}">
-                                    <f:param value="#{postComments.count}"/>
-                                </h:outputFormat>
-                            </h3>
-                            <ui:include src="/comments/lists/comment-list.xhtml">
-                                <ui:param name="commentList" value="#{postComments}"/>
-                            </ui:include>
-                        </h:panelGroup>
-                        <h:panelGroup id='comment-add' layout="div" rendered="#{post.allow_comments}">
-                            <c:choose>
-                                <c:when test="#{user.isLogged}">
-                                    <ajax:include styleClass="asf-container" async="true"
-                                                  src="/blogs/forms/comment-add-form.html?id=#{post.id}"/>
-                                </c:when>
-                                <c:otherwise>
-                                    <h3>#{blogMsg.blog_add_comment}</h3>
-                                    #{blogMsg.blog_sign_in_add_comment}
-                                    <a id="awa-login" rel="nofollow" href="#{contextPath}/auth/login.html?redirect=#{contextPath}/blogs/post.html%3Fpost%3D#{util:urlEncode(post.uri)}%23comment-add">#{blogMsg.blog_sign_in_label}</a>
-                                </c:otherwise>
-                            </c:choose>
-                        </h:panelGroup>
-                    </div>
-                </div>
-            </div>
-            <div class='grid_3 blog-post-info'>
-              <ui:include src="lists/post-info.xhtml"/>
+      <div class='grid_9'>
+        <div class='blog-post' id="p_#{post.id}">
+          <div class='post-title'>
+            <h2><a href="#{contextPath}/blogs/post.html?post=#{post.uri}">#{post.title}</a></h2>
+            <p>
+              <h:outputFormat value="#{blogMsg.blog_post_author}">
+                <f:param value="#{post.username}"/>
+              </h:outputFormat>
+              <h:outputText styleClass="post-date" value="#{post.publish_date}" converter="dateConverter"/>
+              <h:outputFormat value="#{blogMsg.blog_post_count}" rendered="#{not empty postComments}"
+                              styleClass="post-comment-count">
+                <f:param value="#{postComments.count}"/>
+              </h:outputFormat>
+            </p>
           </div>
+          <awa:tagList value='#{post.tags}' id='qtags' styleClass="tagedit-list"
+                       tagLink="#{contextPath}/blogs/tagged.html?tag=#{util:urlEncode(tagName)}"
+                       var="tagName"
+                       tagClass="tagedit-listelement tagedit-listelement-old"/>
+
+          <awa:wiki rendered="#{not empty post.summary}"
+                    styleClass='post-text'
+                    value="#{post.summary}"
+                    plugins="#{post}"
+                    links="#{post.links}"
+                    format="#{post.format}"/>
+
+          <awa:wiki styleClass='post-text'
+                    value="#{post.text}"
+                    plugins="#{post}"
+                    links="#{post.links}"
+                    format="#{post.format}"/>
+          <!-- Increment the post read counter but do not display anything -->
+          <awa:counter value="#{post.counter}" hidden="true"/>
+          <div class='awa-comment-list' id="comments">
+            <h:panelGroup rendered="#{not empty postComments}">
+              <h3>
+                <h:outputFormat value="#{blogMsg.blog_comment_list}">
+                  <f:param value="#{postComments.count}"/>
+                </h:outputFormat>
+              </h3>
+              <ui:include src="/comments/lists/comment-list.xhtml">
+                <ui:param name="commentList" value="#{postComments}"/>
+              </ui:include>
+            </h:panelGroup>
+            <h:panelGroup id='comment-add' layout="div" rendered="#{post.allow_comments}">
+              <c:choose>
+                <c:when test="#{user.isLogged}">
+                  <ajax:include styleClass="asf-container" async="true"
+                                src="/blogs/forms/comment-add-form.html?id=#{post.id}"/>
+                </c:when>
+                <c:otherwise>
+                  <h3>#{blogMsg.blog_add_comment}</h3>
+                  #{blogMsg.blog_sign_in_add_comment}
+                  <a id="awa-login" rel="nofollow" href="#{contextPath}/auth/login.html?redirect=#{contextPath}/blogs/post.html%3Fpost%3D#{util:urlEncode(post.uri)}%23comment-add">#{blogMsg.blog_sign_in_label}</a>
+                </c:otherwise>
+              </c:choose>
+            </h:panelGroup>
+          </div>
+        </div>
+      </div>
+      <div class='grid_3 blog-post-info'>
+        <ui:include src="lists/post-info.xhtml"/>
+      </div>
     </ui:define>
 
     <ui:define name="pageScript">

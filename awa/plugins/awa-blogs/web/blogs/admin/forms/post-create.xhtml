@@ -1,5 +1,5 @@
 <!-- Create a new post
-  -  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013, 2022 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,12 +14,56 @@
   -  See the License for the specific language governing permissions and
   -  limitations under the License.
   -->
-<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:w="http://code.google.com/p/ada-asf/widget"
+                xmlns:util="http://code.google.com/p/ada-asf/util"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:h="http://java.sun.com/jsf/html">
 
   <div class='awa-post'>
-    <ui:include src="post-form.xhtml">
-       <ui:param name="title" value="#{blogMsg.blog_create_post_title}"/>
-    </ui:include>
+    <h:form id='post'>
+      <h:inputHidden id='post-id' value='#{post.id}' required='false'/>
+      <h:inputHidden id='post-blog-id' value='#{post.blogId}'/>
+      <div class="awa-post-buttons">
+        <h2>#{title}</h2>
+      </div>
+      <div class="awa-post-editor post-text">
+        <h:messages styleClass='awa-error'/>
+        <w:inputText id='post-title'
+                     title="#{blogMsg.blog_post_title_label}"
+                     styleClass="awa-required ui-corner-all"
+                     size='80'
+                     placeholder="#{blogMsg.blog_post_title_placeholder}"
+                     value="#{post.title}"/>
+
+        <dl class="awa-required">
+          <dt>
+            <label for="post-format">#{blogMsg.blog_post_choose_format}</label>
+          </dt>
+          <dd>
+            <h:selectOneRadio id='post-format' size='10' value='#{post.format}'
+                              styleClass="blog-post-format">
+              <f:selectItems value="#{blogFormatList}"/>
+            </h:selectOneRadio>
+          </dd>
+          <dt>
+          </dt>
+          <dd>#{blogMsg.blog_post_create_message1}</dd>
+          <dd>#{blogMsg.blog_post_create_message2}</dd>
+        </dl>
+      </div>
+      <ul class='awa-buttons'>
+        <li>
+          <h:commandButton id='save-bottom' value='#{blogMsg.blog_post_create_button}'
+                           styleClass="ui-button ui-state-default ui-corner-all"
+                           action="#{post.save}" title="#{blogMsg.blog_post_create_title}"/>
+        </li>
+        <li>
+          <a class='awa-cancel' href="#{contextPath}/blogs/admin/list.html?id=#{post.blogId}">#{blogMsg.blog_post_create_cancel}</a>
+        </li>
+      </ul>
+    </h:form>
   </div>
 
 </ui:composition>

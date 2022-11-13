@@ -333,3 +333,28 @@ div.blog-post-comment-count a {
     border: 1px solid orange;
     background-color: #fee;
 }
+.blog-post-format {
+    margin-top: 0.3em;
+    width: auto;
+    background-color: transparent;
+}
+dl.awa-required .blog-post-format input {
+    float: left;
+    width: auto;
+    padding-right: 2em;
+    margin-top: 3px;
+}
+dl.awa-required .blog-post-format label {
+    float: left;
+    clear: none;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    margin-right: 1.5em;
+}
+.blog-post-format input:checked + label {
+    background-color: #d8e7fa;
+}
+.awa-cancel {
+    padding: 0.5em;
+    display: inline-block;
+}
