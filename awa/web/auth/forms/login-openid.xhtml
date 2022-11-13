@@ -18,7 +18,7 @@
   xmlns:util="http://code.google.com/p/ada-asf/util"
   xmlns:fn="http://java.sun.com/jsp/jstl/functions"
   xmlns:c="http://java.sun.com/jstl/core"
-  class='awa-login ui-widget ui-widget-content ui-corner-all'>
+  class='awa-login'>
   <h2>#{title}</h2>
   <ul class='openid-login'>
     <c:if test="#{fn:contains(initParam.app_openid_methods, 'yahoo')}">
@@ -63,7 +63,7 @@
         </a>
       </li>
     </c:if>
-    </ul>
+  </ul>
 </div>
 
 

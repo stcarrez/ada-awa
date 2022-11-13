@@ -448,6 +448,7 @@ ul.awa-pagination li {
     list-style-type: none;
     border-bottom: 2px solid #ccc;
     padding-bottom: 10px;
+    padding-top: 1em;
 }
 .awa-nav-left {
     float: left;
@@ -511,6 +512,15 @@ ul.awa-pagination li {
 }
 .awa-page-tab a {
     text-decoration: none;
+}
+
+/* Workspace page customization */
+.page-workspace h2 {
+    padding-top: 1em;
+    padding-left: 1em;
+}
+.page-workspace ul.awa-nav {
+    margin-bottom: 0.5em;
 }
 
 /**
