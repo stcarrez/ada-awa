@@ -31,6 +31,9 @@ CREATE TABLE IF NOT EXISTS ado_version (
 INSERT INTO ado_entity_type (name) VALUES
 ('ado_entity_type'), ('ado_sequence'), ('ado_version')
   ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("ado", 2)
+  ON CONFLICT DO NOTHING;
 /* Copied from awa-postgresql.sql*/
 /* File generated automatically by dynamo */
 /* The Audit table records the changes made on database on behalf of a user.

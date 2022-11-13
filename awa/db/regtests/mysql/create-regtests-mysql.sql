@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS ado_version (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("ado_entity_type"), ("ado_sequence"), ("ado_version");
+INSERT IGNORE INTO ado_version (name, version) VALUES ("ado", 2);
 /* Copied from awa-mysql.sql*/
 /* File generated automatically by dynamo */
 /* The Audit table records the changes made on database on behalf of a user.
