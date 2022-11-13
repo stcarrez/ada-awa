@@ -2,6 +2,7 @@ Version 2.5.0   - Under development
   - Fix #30: Configuration to authenticate with GitHub is incomplete
   - Fix #34: Configuration to authenticate with Gitlab is incomplete
   - Feature #35: Blog post creation improvement
+  - Feature #32: Support several authentication methods for a user
 
 Version 2.4.0   - Aug 2022
   - Add support for SQL queries embedded in applications with ARE
