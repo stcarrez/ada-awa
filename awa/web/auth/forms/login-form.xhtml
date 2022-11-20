@@ -24,9 +24,6 @@
     <h2>#{userMsg.login_classic_title}</h2>
     <h:form id='login'>
         <h:inputHidden id='redirect' value="#{login.redirect}" required='false'/>
-        <div class='awa-messages'>
-            <h:message styleClass='awa-error'/>
-        </div>
         <dl class="awa-required#{util:hasMessage('email') ? ' awa-error' : ''}">
             <dt>
                 <label for='email'>#{userMsg.login_email_label}</label>

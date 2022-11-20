@@ -57,12 +57,21 @@
       <to-view-id>/workspaces/main.xhtml</to-view-id>
       <redirect/>
     </navigation-case>
+    <navigation-case>
+      <from-outcome>login</from-outcome>
+      <to-view-id>/auth/login.xhtml</to-view-id>
+    </navigation-case>
   </navigation-rule>
 
   <navigation-rule>
     <from-view-id>/auth/register.xhtml</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
+      <to-view-id>/auth/login.xhtml</to-view-id>
+      <redirect/>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>disabled</from-outcome>
       <to-view-id>/auth/login.xhtml</to-view-id>
       <redirect/>
     </navigation-case>
@@ -133,6 +142,14 @@
     <param-value>#{contextPath}/workspaces/main.html</param-value>
     <description>
        The URI where the user is redirected after a successful authentication.
+    </description>
+  </context-param>
+
+  <context-param>
+    <param-name>openid.error_url</param-name>
+    <param-value>#{contextPath}/auth/login.html</param-value>
+    <description>
+       The URI where the user is redirected when some authenticate error occurred.
     </description>
   </context-param>
 
@@ -368,7 +385,7 @@
 
   <context-param>
     <param-name>verify-access-key.change-password</param-name>
-    <param-value>#{contextPath}/auth/change-password.html?key=</param-value>
+    <param-value>#{contextPath}/auth/change-password/</param-value>
     <description>URI to redirect to the change password page when
     the access key is verified, the user account is registered but
     there is no password for authentication</description>
@@ -408,19 +425,18 @@
     <url-pattern>/auth/verify</url-pattern>
   </servlet-mapping>
 
-  <filter-mapping>
-    <filter-name>service</filter-name>
-    <url-pattern>/auth/verify</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>service</filter-name>
-    <url-pattern>/auth/reset-password.html</url-pattern>
-  </filter-mapping>
+  <servlet-mapping>
+    <servlet-name>verify-access-key</servlet-name>
+    <url-pattern>/auth/validate/:key</url-pattern>
+  </servlet-mapping>
 
   <filter-mapping>
     <filter-name>service</filter-name>
     <url-pattern>/auth/*.html</url-pattern>
+    <url-pattern>/auth/verify</url-pattern>
+    <url-pattern>/auth/reset-password.html</url-pattern>
+    <url-pattern>/auth/change-password/#{resetPassword.key}</url-pattern>
+    <url-pattern>/auth/validate/:key</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
@@ -433,6 +449,11 @@
     <url-pattern>/auth/validate.html</url-pattern>
   </filter-mapping>
   
+  <url-mapping>
+    <pattern>/auth/change-password/#{resetPassword.key}</pattern>
+    <view-id>/auth/change-password.html</view-id>
+  </url-mapping>
+
     <url-policy>
         <description>
            Give access to login pages to anybody.

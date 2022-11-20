@@ -27,9 +27,10 @@
 	<!-- if registration is enabled, show the registration form otherwise show nothing -->
 	<c:if test="#{initParam.app_login_register}">
           <div class='awa-side1'>
-            <ui:include src="forms/login-openid.xhtml">
-              <ui:param name="title" value="#{userMsg.signup_openid_title}"/>
-            </ui:include>
+            <div class='awa-login'>
+              <h2>#{userMsg.signup_openid_title}</h2>
+              <ui:include src="forms/login-openid.xhtml"/>
+            </div>
           </div>
           <div class='awa-side2'>
             <div class='awa-login awa-form'>

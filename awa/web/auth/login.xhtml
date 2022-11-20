@@ -18,22 +18,29 @@
   template="/WEB-INF/layouts/anonymous.xhtml"
   xmlns:c="http://java.sun.com/jstl/core"
   xmlns:f="http://java.sun.com/jsf/core"
-  xmlns:ui="http://java.sun.com/jsf/facelets">
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{userMsg.login_page_title}"/>
     <ui:param name="top_nav" value="auth"/>
 
     <!-- Main page body -->
     <ui:define name="pageBody">
         <f:metadata>
-            <f:viewParam id='redirect' value='#{login.redirect}' required="false"/>
+          <f:viewParam id='redirect' value='#{login.redirect}' required="false"/>
+          <f:viewAction action='#{login.auth_error}'/>
         </f:metadata>
+        <div class='awa-messages'>
+            <h:message styleClass='awa-info'/>
+        </div>
         <ui:include src="views/welcome-login.xhtml"/>
 	<c:if test="#{initParam.app_login_openid}">
           <div class='awa-side1 container_6'>
-            <ui:include src="forms/login-openid.xhtml">
-              <ui:param name="title" value="#{userMsg.login_openid_title}"/>
-              <ui:param name="redirect" value="#{empty param['redirect'] ? '' : param['redirect']}"/>
-            </ui:include>
+            <div class='awa-login'>
+              <h2>#{userMsg.login_openid_title}</h2>
+              <ui:include src="forms/login-openid.xhtml">
+                <ui:param name="redirect" value="#{empty param['redirect'] ? '' : param['redirect']}"/>
+              </ui:include>
+            </div>
           </div>
 	</c:if>
 	<c:if test="#{initParam.app_login_email}">

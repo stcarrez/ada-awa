@@ -8,7 +8,7 @@ li.message {
     overflow: hidden;
 }
 
-div.awa-login h2, div.awa-login h3 {
+div.awa-login h2, div.awa-login h3, div.awa-accept-invitation h2, div.awa-accept-invication h3 {
     float: left;
     width: 100%;
     background: white;
@@ -18,7 +18,7 @@ div.awa-login h2, div.awa-login h3 {
     -webkit-border-top-right-radius: 6px;
     -webkit-border-top-left-radius: 6px;
 }
-div.awa-login {
+div.awa-login, div.awa-accept-invitation {
   border: 2px solid #A6C9E2;
   background: none repeat scroll 0 0 #F9FDFF;
   display: block;
@@ -31,10 +31,13 @@ div.awa-login {
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px 6px;
 }
+div.awa-accept-invitation {
+    border: none;
+}
 div.awa-lost-password {
     width: 50%;
 }
-div.awa-login p {
+div.awa-login p, div.awa-accept-invitation p {
     width: 100%;
     padding-left: 2%;
     padding-right: 2%;
@@ -42,7 +45,7 @@ div.awa-login p {
     display: block;
     float: left;
 }
-.awa-login ul, #awa-message-list {
+.awa-login ul, .awa-accept-invitation ul, #awa-message-list {
     list-style-type: none;
     margin: 1em 0;
     float: left;

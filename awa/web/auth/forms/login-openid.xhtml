@@ -14,13 +14,10 @@
   -  See the License for the specific language governing permissions and
   -  limitations under the License.
   -->
-<div
-  xmlns:util="http://code.google.com/p/ada-asf/util"
-  xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-  xmlns:c="http://java.sun.com/jstl/core"
-  class='awa-login'>
-  <h2>#{title}</h2>
-  <ul class='openid-login'>
+<ul class='openid-login'
+    xmlns:util="http://code.google.com/p/ada-asf/util"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    xmlns:c="http://java.sun.com/jstl/core">
     <c:if test="#{fn:contains(initParam.app_openid_methods, 'yahoo')}">
       <li class="awa-login-yahoo">
         <a href="#{contextPath}/auth/auth/yahoo?redirect=#{util:urlEncode(redirect)}" title="#{userMsg.openid_yahoo_auth}" class='openid-yahoo'>
@@ -63,7 +60,4 @@
         </a>
       </li>
     </c:if>
-  </ul>
-</div>
-
-
+</ul>

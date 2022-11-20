@@ -331,7 +331,7 @@ div.awa-modal {
 div.awa-modal-show {
 	visibility: visible;
 }
-div.awa-modal div.awa-login {
+div.awa-modal div.awa-login, div.awa-model div.awa-accept-invitation {
     position: relative;
 }
 
