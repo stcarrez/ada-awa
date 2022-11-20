@@ -21,7 +21,7 @@ and with the email address #{event.email}.
 
 To finish the registration process, click on the following link:
 
-#{initParam['app_url_base']}/auth/validate.html?key=#{event.key}
+#{initParam['app_url_base']}/auth/validate/#{event.key}
 
 Sincerely,
 
@@ -41,8 +41,7 @@ and with the email address #{event.email}.
 To finish the registration process, click on the following link:
 </p>
 
-<a href="#{initParam['app_url_base']}/auth/validate.html?key=#{event.key}">
-#{initParam['app_url_base']}/auth/validate.html?key=#{event.key}</a>
+<a href="#{initParam['app_url_base']}/auth/validate/#{event.key}">#{initParam['app_url_base']}/auth/validate/#{event.key}</a>
 
 <p>
 Sincerely,

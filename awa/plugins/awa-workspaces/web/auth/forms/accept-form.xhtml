@@ -20,7 +20,7 @@
      xmlns:c="http://java.sun.com/jstl/core"
      xmlns:util="http://code.google.com/p/ada-asf/util"
      xmlns:h="http://java.sun.com/jsf/html"
-     class='awa-login ui-widget ui-widget-content ui-corner-all'>
+     class='awa-accept-invitation ui-widget ui-widget-content ui-corner-all'>
     <h2>
         <h:outputFormat value="#{workspaceMsg.workspace_invite_message}">
             <f:param value="#{inviteUser.inviter}"/>
@@ -34,34 +34,16 @@
             #{workspaceMsg.workspace_accept_invitation_message}
         </p>
     </div>
-    <util:set var="redirect" value="#{contextPath}/workspaces/accept-invitation.html?key=#{inviteUser.key}"/>
-    <ul class='openid-login openid-invite'>
-        <li>
-            <a href="#{contextPath}/auth/auth/yahoo?redirect=#{util:urlEncode(redirect)}" title="#{userMsg.openid_yahoo_auth}" class='openid-yahoo'>
-                <em/>
-            </a>
-        </li>
-        <li>
-            <a href="#{contextPath}/auth/auth/google-plus?redirect=#{util:urlEncode(redirect)}" title="#{userMsg.openid_google_plus_auth}" class='openid-google-plus'>
-                <em/>
-            </a>
-        </li>
-        <li>
-            <a href="#{contextPath}/auth/auth/facebook?redirect=#{util:urlEncode(redirect)}" title="#{userMsg.openid_facebook_auth}" class='openid-facebook'>
-                <em/>
-            </a>
-        </li>
-        <li>
-            <a href="#{contextPath}/auth/auth/orange?redirect=#{util:urlEncode(redirect)}" title="#{userMsg.openid_orange_auth}" class='openid-orange'>
-                <em/>
-            </a>
-        </li>
-    </ul>
-    <div class="openid-separator">
+    <c:if test="#{initParam.app_login_openid}">
+      <ui:include src="/auth/forms/login-openid.xhtml">
+        <ui:param name="redirect" value="#{contextPath}/workspaces/accept-invitation.html?key=#{inviteUser.key}"/>
+      </ui:include>
+      <div class="openid-separator">
         <div class="openid-sep-left"/>
         <div class="openid-sep-text">#{workspaceMsg.workspace_invite_alternate_or_message}</div>
         <div class="openid-sep-right"/>
-    </div>
+      </div>
+    </c:if>
     <div class="invite-action">
         <p>#{workspaceMsg.workspace_invite_signup_alternative_message}</p>
     </div>

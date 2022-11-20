@@ -21,7 +21,7 @@ You have been invited by #{event.inviter} to join #{initParam['app_name']}.
 
 To accept this invitation, please go to the following URL:
 
-#{initParam['app_url_base']}/auth/invitation.html?key=#{event.key}
+#{initParam['app_url_base']}/auth/invitation/#{event.key}
 
 Thank you for using #{initParam['app_name']}.
 
@@ -43,8 +43,7 @@ You have been invited by #{event.inviter} to join #{initParam['app_name']}.
 To accept this invitation, please go to the following URL:
 </p>
 
-<a href="#{initParam['app_url_base']}/auth/invitation.html?key=#{event.key}">
-#{initParam['app_url_base']}/auth/invitation.html?key=#{event.key}</a>
+<a href="#{initParam['app_url_base']}/auth/invitation/#{event.key}">#{initParam['app_url_base']}/auth/invitation/#{event.key}</a>
 
 <p>
 Thank you for using #{initParam['app_name']}.

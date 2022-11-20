@@ -131,12 +131,25 @@
   <filter-mapping>
     <filter-name>service</filter-name>
     <url-pattern>/workspaces/*.html</url-pattern>
+    <url-pattern>/workspaces/accept-invitation/#{inviteUser.key}</url-pattern>
+    <url-pattern>/auth/invitation/#{inviteUser.key}</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
     <filter-name>auth-filter</filter-name>
     <url-pattern>/workspaces/*.html</url-pattern>
+    <url-pattern>/workspaces/accept-invitation/#{inviteUser.key}</url-pattern>
   </filter-mapping>
+
+  <url-mapping>
+    <pattern>/auth/invitation/#{inviteUser.key}</pattern>
+    <view-id>/auth/invitation.html</view-id>
+  </url-mapping>
+
+  <url-mapping>
+    <pattern>/workspaces/accept-invitation/#{inviteUser.key}</pattern>
+    <view-id>/workspaces/accept-nvitation.html</view-id>
+  </url-mapping>
 
   <url-policy>
     <description>
