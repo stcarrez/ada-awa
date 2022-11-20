@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-tests -- Unit tests for AWA users
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2020 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,6 +27,9 @@ package AWA.Users.Tests is
 
    --  Test creation of user by simulating web requests.
    procedure Test_Create_User (T : in out Test);
+
+   --  Test creation of user when the registration is disabled.
+   procedure Test_Registration_Disabled (T : in out Test);
 
    procedure Test_Logout_User (T : in out Test);
 

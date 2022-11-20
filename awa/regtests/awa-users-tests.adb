@@ -22,6 +22,8 @@ with Util.Test_Caller;
 with ASF.Tests;
 with AWA.Users.Models;
 with AWA.Tests.Helpers.Users;
+with AWA.Users.Services;
+with AWA.Tests.Helpers;
 
 with ASF.Requests.Mockup;
 with ASF.Responses.Mockup;
@@ -29,7 +31,9 @@ with ASF.Principals;
 package body AWA.Users.Tests is
 
    use ASF.Tests;
+   use AWA.Tests;
    use type ASF.Principals.Principal_Access;
+   use type AWA.Users.Services.User_Service_Access;
 
    package Caller is new Util.Test_Caller (Test, "Users.Tests");
 
@@ -37,6 +41,8 @@ package body AWA.Users.Tests is
    begin
       Caller.Add_Test (Suite, "Test AWA.Users.Tests.Create_User (/users/register.xhtml)",
                        Test_Create_User'Access);
+      Caller.Add_Test (Suite, "Test AWA.Users.Tests.Create_User (Disabled)",
+                       Test_Registration_Disabled'Access);
       Caller.Add_Test (Suite, "Test AWA.Users.Services.Close_Session",
                        Test_Logout_User'Access);
       Caller.Add_Test (Suite, "Test AWA.Users.Tests.Login_User (/users/login.xhtml)",
@@ -91,6 +97,61 @@ package body AWA.Users.Tests is
       --  Check that the user is logged and we have a user principal now.
       T.Assert (Request.Get_User_Principal /= null, "A user principal should be defined");
    end Test_Create_User;
+
+   --  ------------------------------
+   --  Test creation of user when the registration is disabled.
+   --  ------------------------------
+   procedure Test_Registration_Disabled (T : in out Test) is
+      Request   : ASF.Requests.Mockup.Request;
+      Reply     : ASF.Responses.Mockup.Response;
+      Email     : constant String := "Joe-" & Util.Tests.Get_Uuid & "@gmail.com";
+      Principal : AWA.Tests.Helpers.Users.Test_User;
+   begin
+      AWA.Tests.Helpers.Users.Initialize (Principal);
+
+      T.Assert (Principal.Manager /= null, "No User Manager defined");
+      Principal.Manager.Set_Allow_Register (False);
+      Do_Get (Request, Reply, "/auth/register.html", "register-disabled-1.html");
+
+      Request.Set_Parameter ("email", Email);
+      Request.Set_Parameter ("password", "asdf");
+      Request.Set_Parameter ("password2", "asdf");
+      Request.Set_Parameter ("firstName", "joe");
+      Request.Set_Parameter ("lastName", "dalton");
+      Request.Set_Parameter ("register", "1");
+      Request.Set_Parameter ("register-button", "1");
+      Do_Post (Request, Reply, "/auth/register.html", "register-disabled-2.html");
+
+      T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
+
+      --  Check that the user is NOT logged.
+      T.Assert (Request.Get_User_Principal = null, "A user principal should not be defined");
+
+      --  Check that we are redirected to the /auth/error.html page with the
+      --  user registration disabled message.
+      declare
+         Redir : constant String := Helpers.Extract_Redirect (Reply, "/asfunit");
+      begin
+         Util.Tests.Assert_Equals (T, "/auth/error.html", Redir,
+                                   "Invalid redirection when registration disabled");
+
+         Do_Get (Request, Reply, "/auth/error.html",
+                 "register-disabled-3.html");
+
+         ASF.Tests.Assert_Matches (T, "The user registration is disabled on this server.",
+                                   Reply, "Invalid error page after user creation (disabled)",
+                                   ASF.Responses.SC_OK);
+      end;
+
+      --  Restore user registration for other tests.
+      Principal.Manager.Set_Allow_Register (True);
+
+   exception
+      when others =>
+         Principal.Manager.Set_Allow_Register (True);
+         raise;
+
+   end Test_Registration_Disabled;
 
    procedure Test_Logout_User (T : in out Test) is
    begin
