@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa_test_app -
---  Copyright (C) 2020 Stephane Carrez
+--  Copyright (C) 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,6 +42,7 @@ package body AWA_Test_App is
       App.Add_Servlet (Name => "measures", Server => App.Self.Measures'Access);
       App.Add_Servlet (Name => "auth", Server => App.Self.Auth'Access);
       App.Add_Servlet (Name => "verify-auth", Server => App.Self.Verify_Auth'Access);
+      App.Add_Servlet (Name => "verify-access-key", Server => App.Self.Verify_Key'Access);
    end Initialize_Servlets;
 
    --  ------------------------------

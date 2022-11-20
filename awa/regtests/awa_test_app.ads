@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa_test_app -
---  Copyright (C) 2020 Stephane Carrez
+--  Copyright (C) 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -84,6 +84,7 @@ private
       --  Authentication servlet and filter.
       Auth              : aliased ASF.Security.Servlets.Request_Auth_Servlet;
       Verify_Auth       : aliased AWA.Users.Servlets.Verify_Auth_Servlet;
+      Verify_Key        : aliased AWA.Users.Servlets.Verify_Key_Servlet;
 
       --  Converters shared by web requests.
       Rel_Date_Converter : aliased AWA.Converters.Dates.Relative_Date_Converter;

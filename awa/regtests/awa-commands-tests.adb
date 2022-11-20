@@ -269,12 +269,12 @@ package body AWA.Commands.Tests is
          Reply      : ASF.Responses.Mockup.Response;
          Access_Key : constant String := Key.Get_Access_Key;
       begin
-         ASF.Tests.Do_Get (Request, Reply, "/auth/validate.html?key=" & Access_Key,
+         ASF.Tests.Do_Get (Request, Reply, "/auth/validate/" & Access_Key,
                            "validate-user.html");
 
          Util.Tests.Assert_Equals (T, ASF.Responses.Sc_Moved_Temporarily, Reply.Get_Status,
                                       "Invalid response");
-         ASF.Tests.Assert_Redirect (T, "/asfunit/auth/change-password.html?key=" & Access_Key,
+         ASF.Tests.Assert_Redirect (T, "/asfunit/auth/change-password/" & Access_Key,
                                     Reply, "Invalid redirect after verify");
 
          --  Simulate a user clicking on the reset password form.
@@ -282,7 +282,8 @@ package body AWA.Commands.Tests is
          Request.Set_Parameter ("key", Access_Key);
          Request.Set_Parameter ("password", "admin");
          Request.Set_Parameter ("reset-password", "1");
-         ASF.Tests.Do_Post (Request, Reply, "/auth/change-password.html", "reset-password-3.html");
+         ASF.Tests.Do_Post (Request, Reply, "/auth/change-password/" & Access_Key,
+                            "reset-password-3.html");
 
          Util.Tests.Assert_Equals (T, ASF.Responses.Sc_Moved_Temporarily, Reply.Get_Status,
                                       "Invalid response");

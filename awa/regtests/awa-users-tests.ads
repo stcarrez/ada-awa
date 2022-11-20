@@ -39,6 +39,9 @@ package AWA.Users.Tests is
    --  Test the reset password by simulating web requests.
    procedure Test_Reset_Password_User (T : in out Test);
 
+   --  Test the reset password with an invalid user.
+   procedure Test_Reset_Password_Invalid_User (T : in out Test);
+
    --  Test OAuth access using a fake OAuth provider.
    procedure Test_OAuth_Login (T : in out Test);
 

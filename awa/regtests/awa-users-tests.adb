@@ -25,14 +25,14 @@ with AWA.Tests.Helpers.Users;
 with AWA.Users.Services;
 with AWA.Tests.Helpers;
 
-with ASF.Requests.Mockup;
-with ASF.Responses.Mockup;
-with ASF.Principals;
+with Servlet.Requests.Mockup;
+with Servlet.Responses.Mockup;
+with Security;
 package body AWA.Users.Tests is
 
    use ASF.Tests;
    use AWA.Tests;
-   use type ASF.Principals.Principal_Access;
+   use type Security.Principal_Access;
    use type AWA.Users.Services.User_Service_Access;
 
    package Caller is new Util.Test_Caller (Test, "Users.Tests");
@@ -49,6 +49,8 @@ package body AWA.Users.Tests is
                        Test_Login_User'Access);
       Caller.Add_Test (Suite, "Test AWA.Users.Services.Lost_Password, Reset_Password",
                        Test_Reset_Password_User'Access);
+      Caller.Add_Test (Suite, "Test AWA.Users.Services.Lost_Password (No user)",
+                       Test_Reset_Password_Invalid_User'Access);
       Caller.Add_Test (Suite, "Test AWA.Users.Services.Authenticate",
                        Test_OAuth_Login'Access);
    end Add_Tests;
@@ -57,8 +59,8 @@ package body AWA.Users.Tests is
    --  Test creation of user by simulating web requests.
    --  ------------------------------
    procedure Test_Create_User (T : in out Test) is
-      Request   : ASF.Requests.Mockup.Request;
-      Reply     : ASF.Responses.Mockup.Response;
+      Request   : Servlet.Requests.Mockup.Request;
+      Reply     : Servlet.Responses.Mockup.Response;
       Email     : constant String := "Joe-" & Util.Tests.Get_Uuid & "@gmail.com";
       Principal : AWA.Tests.Helpers.Users.Test_User;
    begin
@@ -75,7 +77,7 @@ package body AWA.Users.Tests is
       Request.Set_Parameter ("register-button", "1");
       Do_Post (Request, Reply, "/auth/register.html", "create-user-2.html");
 
-      T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
+      T.Assert (Reply.Get_Status = Servlet.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
 
       --  Check that the user is NOT logged.
       T.Assert (Request.Get_User_Principal = null, "A user principal should not be defined");
@@ -88,10 +90,10 @@ package body AWA.Users.Tests is
          AWA.Tests.Helpers.Users.Find_Access_Key (Principal, Email, Key);
          T.Assert (not Key.Is_Null, "There is no access key associated with the user");
 
-         Do_Get (Request, Reply, "/auth/validate.html?key=" & Key.Get_Access_Key,
+         Do_Get (Request, Reply, "/auth/validate/" & Key.Get_Access_Key,
                  "validate-user-1.html");
 
-         T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
+         T.Assert (Reply.Get_Status = Servlet.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
       end;
 
       --  Check that the user is logged and we have a user principal now.
@@ -102,8 +104,8 @@ package body AWA.Users.Tests is
    --  Test creation of user when the registration is disabled.
    --  ------------------------------
    procedure Test_Registration_Disabled (T : in out Test) is
-      Request   : ASF.Requests.Mockup.Request;
-      Reply     : ASF.Responses.Mockup.Response;
+      Request   : Servlet.Requests.Mockup.Request;
+      Reply     : Servlet.Responses.Mockup.Response;
       Email     : constant String := "Joe-" & Util.Tests.Get_Uuid & "@gmail.com";
       Principal : AWA.Tests.Helpers.Users.Test_User;
    begin
@@ -122,26 +124,46 @@ package body AWA.Users.Tests is
       Request.Set_Parameter ("register-button", "1");
       Do_Post (Request, Reply, "/auth/register.html", "register-disabled-2.html");
 
-      T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
+      T.Assert (Reply.Get_Status = Servlet.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
 
       --  Check that the user is NOT logged.
       T.Assert (Request.Get_User_Principal = null, "A user principal should not be defined");
 
-      --  Check that we are redirected to the /auth/error.html page with the
+      --  Check that we are redirected to the /auth/login.html page with the
       --  user registration disabled message.
-      declare
-         Redir : constant String := Helpers.Extract_Redirect (Reply, "/asfunit");
-      begin
-         Util.Tests.Assert_Equals (T, "/auth/error.html", Redir,
-                                   "Invalid redirection when registration disabled");
+      ASF.Tests.Assert_Redirect (T, "/asfunit/auth/login.html",
+                                 Reply, "Invalid redirection when registration disabled");
 
-         Do_Get (Request, Reply, "/auth/error.html",
-                 "register-disabled-3.html");
+      Do_Get (Request, Reply, "/auth/login.html",
+              "register-disabled-3.html");
 
-         ASF.Tests.Assert_Matches (T, "The user registration is disabled on this server.",
-                                   Reply, "Invalid error page after user creation (disabled)",
-                                   ASF.Responses.SC_OK);
-      end;
+      ASF.Tests.Assert_Matches (T, "The user registration is disabled on this server.",
+                                Reply, "Invalid error page after user creation (disabled)",
+                                Servlet.Responses.SC_OK);
+
+      --  Second test using the OAuth2 fake provider.
+      Do_Get (Request, Reply, "/auth/auth/google", "oauth-google.html");
+      T.Assert (Reply.Get_Status = Servlet.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
+
+      Request.Set_Parameter ("email", "oauth-user-unreg@fake.com");
+      Request.Set_Parameter ("id", "oauth-user-id-not-registered-fake");
+      Request.Set_Parameter ("claimed_id", "oauth-user-unreg-claimed_id-fake");
+      Do_Get (Request, Reply, "/auth/verify?email=oauth-user-unreg@fake.com&"
+              & "id=oauth-user-id-not-registered-fake&claimed_id=oauth-user-unreg-claimed_id-fake",
+              "oauth-verify-unreg.html");
+
+      --  Check that the user is NOT logged.
+      T.Assert (Request.Get_User_Principal = null, "A user principal must not be defined");
+
+      ASF.Tests.Assert_Redirect (T, "/asfunit/auth/login.html",
+                                 Reply, "Invalid redirection when registration disabled");
+
+      Do_Get (Request, Reply, "/auth/login.html",
+              "register-disabled-4.html");
+
+      ASF.Tests.Assert_Matches (T, "The user registration is disabled on this server.",
+                                Reply, "Invalid error page after user creation (disabled)",
+                                Servlet.Responses.SC_OK);
 
       --  Restore user registration for other tests.
       Principal.Manager.Set_Allow_Register (True);
@@ -162,8 +184,8 @@ package body AWA.Users.Tests is
    --  Test user authentication by simulating a web request.
    --  ------------------------------
    procedure Test_Login_User (T : in out Test) is
-      Request   : ASF.Requests.Mockup.Request;
-      Reply     : ASF.Responses.Mockup.Response;
+      Request   : Servlet.Requests.Mockup.Request;
+      Reply     : Servlet.Responses.Mockup.Response;
       Principal : AWA.Tests.Helpers.Users.Test_User;
    begin
       AWA.Tests.Set_Application_Context;
@@ -180,7 +202,7 @@ package body AWA.Users.Tests is
 
       Do_Get (Request, Reply, "/auth/login.html", "login-user-1.html");
 
-      T.Assert (Reply.Get_Status = ASF.Responses.SC_OK, "Invalid response");
+      T.Assert (Reply.Get_Status = Servlet.Responses.SC_OK, "Invalid response");
 
       --  Check that the user is NOT logged.
       T.Assert (Request.Get_User_Principal = null, "A user principal should not be defined");
@@ -191,7 +213,7 @@ package body AWA.Users.Tests is
       Request.Set_Parameter ("login-button", "1");
       Do_Post (Request, Reply, "/auth/login.html", "login-user-2.html");
 
-      T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
+      T.Assert (Reply.Get_Status = Servlet.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
 
       --  Check that the user is logged and we have a user principal now.
       T.Assert (Request.Get_User_Principal /= null, "A user principal should be defined");
@@ -201,11 +223,11 @@ package body AWA.Users.Tests is
    --  Test OAuth access using a fake OAuth provider.
    --  ------------------------------
    procedure Test_OAuth_Login (T : in out Test) is
-      Request   : ASF.Requests.Mockup.Request;
-      Reply     : ASF.Responses.Mockup.Response;
+      Request   : Servlet.Requests.Mockup.Request;
+      Reply     : Servlet.Responses.Mockup.Response;
    begin
       Do_Get (Request, Reply, "/auth/auth/google", "oauth-google.html");
-      T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
+      T.Assert (Reply.Get_Status = Servlet.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
 
       Request.Set_Parameter ("email", "oauth-user@fake.com");
       Request.Set_Parameter ("id", "oauth-user-id-fake");
@@ -213,7 +235,7 @@ package body AWA.Users.Tests is
       Do_Get (Request, Reply, "/auth/verify?email=oauth-user@fake.com&"
               & "id=oauth-user-id-fake&claimed_id=oauth-user-claimed-id-fake",
               "oauth-verify.html");
-      T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
+      T.Assert (Reply.Get_Status = Servlet.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
 
       --  Check that the user is logged and we have a user principal now.
       T.Assert (Request.Get_User_Principal /= null, "A user principal should be defined");
@@ -227,12 +249,12 @@ package body AWA.Users.Tests is
    procedure Recover_Password (T : in out Test;
                                Email : in String;
                                Password : in String) is
-      Request : ASF.Requests.Mockup.Request;
-      Reply   : ASF.Responses.Mockup.Response;
+      Request : Servlet.Requests.Mockup.Request;
+      Reply   : Servlet.Responses.Mockup.Response;
    begin
       Do_Get (Request, Reply, "/auth/lost-password.html", "lost-password-1.html");
 
-      T.Assert (Reply.Get_Status = ASF.Responses.SC_OK, "Invalid response");
+      T.Assert (Reply.Get_Status = Servlet.Responses.SC_OK, "Invalid response");
 
       Request.Set_Parameter ("email", Email);
       Request.Set_Parameter ("lost-password", "1");
@@ -241,6 +263,12 @@ package body AWA.Users.Tests is
 
       ASF.Tests.Assert_Redirect (T, "/asfunit/auth/login.html",
                                  Reply, "Invalid redirect after lost password");
+
+      Do_Get (Request, Reply, "/auth/login.html", "lost-password-3.html");
+
+      ASF.Tests.Assert_Matches (T, "A message was sent to your email address.",
+                                Reply, "Invalid message after lost password",
+                                Servlet.Responses.SC_OK);
 
       --  Now, get the access key and simulate a click on the reset password link.
       declare
@@ -256,9 +284,11 @@ package body AWA.Users.Tests is
          Request.Set_Parameter ("key", Key.Get_Access_Key);
          Request.Set_Parameter ("password", Password);
          Request.Set_Parameter ("reset-password", "1");
-         Do_Post (Request, Reply, "/auth/change-password.html", "reset-password-2.html");
+         Do_Post (Request, Reply, "/auth/change-password/" & Key.Get_Access_Key,
+                  "recover-password-2.html");
 
-         T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
+         ASF.Tests.Assert_Redirect (T, "/asfunit/workspaces/main.html",
+                                    Reply, "Invalid redirect after lost password");
 
          --  Check that the user is logged and we have a user principal now.
          T.Assert (Request.Get_User_Principal /= null, "A user principal should be defined");
@@ -273,5 +303,26 @@ package body AWA.Users.Tests is
       T.Recover_Password ("Joe@gmail.com", "asf");
       T.Recover_Password ("Joe@gmail.com", "admin");
    end Test_Reset_Password_User;
+
+   --  ------------------------------
+   --  Test the reset password with an invalid user.
+   --  ------------------------------
+   procedure Test_Reset_Password_Invalid_User (T : in out Test) is
+      Request : Servlet.Requests.Mockup.Request;
+      Reply   : Servlet.Responses.Mockup.Response;
+   begin
+      Do_Get (Request, Reply, "/auth/lost-password.html", "lost-password-4.html");
+
+      T.Assert (Reply.Get_Status = Servlet.Responses.SC_OK, "Invalid response");
+
+      Request.Set_Parameter ("email", "voldemort@gmail.com");
+      Request.Set_Parameter ("lost-password", "1");
+      Request.Set_Parameter ("lost-password-button", "1");
+      Do_Post (Request, Reply, "/auth/lost-password.html", "lost-password-5.html");
+
+      ASF.Tests.Assert_Redirect (T, "/asfunit/auth/login.html",
+                                 Reply, "Invalid redirect after lost password");
+
+   end Test_Reset_Password_Invalid_User;
 
 end AWA.Users.Tests;
