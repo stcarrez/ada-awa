@@ -18,12 +18,12 @@
 
 with Util.Beans.Basic;
 with Util.Beans.Objects;
-with Util.Beans.Methods;
 with Ada.Strings.Unbounded;
 
 with AWA.Users.Services;
 with AWA.Users.Modules;
 with AWA.Users.Principals;
+with AWA.Users.Models;
 
 --  == Ada Beans ==
 --  Several bean types are provided to represent and manage the users.
@@ -37,8 +37,7 @@ package AWA.Users.Beans is
 
    use Ada.Strings.Unbounded;
 
-   type Authenticate_Bean is new Util.Beans.Basic.Bean
-     and Util.Beans.Methods.Method_Bean with record
+   type Authenticate_Bean is new AWA.Users.Models.Authenticate_Bean with record
       Module     : AWA.Users.Modules.User_Module_Access := null;
       Manager    : AWA.Users.Services.User_Service_Access := null;
       Email      : Unbounded_String;
@@ -70,11 +69,6 @@ package AWA.Users.Beans is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object);
 
-   --  This bean provides some methods that can be used in a Method_Expression
-   overriding
-   function Get_Method_Bindings (From : in Authenticate_Bean)
-                                 return Util.Beans.Methods.Method_Binding_Array_Access;
-
    procedure Set_Session_Principal (Data      : in Authenticate_Bean;
                                     Principal : in AWA.Users.Principals.Principal_Access);
 
@@ -82,31 +76,42 @@ package AWA.Users.Beans is
                                       Principal : in AWA.Users.Principals.Principal_Access);
 
    --  Action to register a user
-   procedure Register_User (Data    : in out Authenticate_Bean;
-                            Outcome : in out Unbounded_String);
+   overriding
+   procedure Register (Data    : in out Authenticate_Bean;
+                       Outcome : in out Unbounded_String);
 
    --  Action to verify the user after the registration
-   procedure Verify_User (Data    : in out Authenticate_Bean;
-                          Outcome : in out Unbounded_String);
+   overriding
+   procedure Verify (Data    : in out Authenticate_Bean;
+                     Outcome : in out Unbounded_String);
 
    --  Action to trigger the lost password email process.
+   overriding
    procedure Lost_Password (Data    : in out Authenticate_Bean;
                             Outcome : in out Unbounded_String);
 
    --  Action to validate the reset password key and set a new password.
+   overriding
    procedure Reset_Password (Data    : in out Authenticate_Bean;
                              Outcome : in out Unbounded_String);
 
    --  Action to authenticate a user (password authentication).
-   procedure Authenticate_User (Data    : in out Authenticate_Bean;
-                                Outcome : in out Unbounded_String);
+   overriding
+   procedure Authenticate (Data    : in out Authenticate_Bean;
+                           Outcome : in out Unbounded_String);
 
    --  Logout the user and closes the session.
-   procedure Logout_User (Data    : in out Authenticate_Bean;
-                          Outcome : in out Unbounded_String);
+   overriding
+   procedure Logout (Data    : in out Authenticate_Bean;
+                     Outcome : in out Unbounded_String);
 
-   procedure Load_User (Data    : in out Authenticate_Bean;
-                        Outcome : in out Unbounded_String);
+   overriding
+   procedure Load (Data    : in out Authenticate_Bean;
+                   Outcome : in out Unbounded_String);
+
+   overriding
+   procedure Auth_Error (Data    : in out Authenticate_Bean;
+                         Outcome : in out Unbounded_String);
 
    --  Create an authenticate bean.
    function Create_Authenticate_Bean (Module : in AWA.Users.Modules.User_Module_Access)

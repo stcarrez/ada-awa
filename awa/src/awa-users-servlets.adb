@@ -18,15 +18,14 @@
 with Util.Beans.Objects;
 with Util.Beans.Objects.Records;
 with Util.Log.Loggers;
-
-with ASF.Cookies;
-with ASF.Servlets;
+with Util.Http.Cookies;
 
 with AWA.Users.Services;
 with AWA.Users.Modules;
 with AWA.Users.Filters;
-with AWA.Users.Principals;
 package body AWA.Users.Servlets is
+
+   package UBO renames Util.Beans.Objects;
 
    --  Name of the session attribute which holds the URI to redirect after authentication.
    REDIRECT_ATTRIBUTE : constant String := "awa-redirect";
@@ -37,6 +36,7 @@ package body AWA.Users.Servlets is
    --  Name of the session attribute which holds information about the active authentication.
    OPENID_ASSOC_ATTRIBUTE : constant String := "openid-assoc";
 
+
    --  The logger
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Users.Servlets");
 
@@ -46,10 +46,20 @@ package body AWA.Users.Servlets is
    subtype Association_Access is Association_Bean.Element_Type_Access;
 
    function Get_Provider_URL (Server   : in Request_Auth_Servlet;
-                              Request  : in ASF.Requests.Request'Class) return String;
+                              Request  : in Servlet.Requests.Request'Class) return String;
+
+   --  ------------------------------
+   --  Set the user principal on the session associated with the ASF request.
+   --  ------------------------------
+   procedure Set_Session_Principal (Request   : in out Servlet.Requests.Request'Class;
+                                    Principal : in Principals.Principal_Access) is
+      Session   : Servlet.Sessions.Session := Request.Get_Session (Create => True);
+   begin
+      Session.Set_Principal (Principal.all'Access);
+   end Set_Session_Principal;
 
    function Get_Provider_URL (Server   : in Request_Auth_Servlet;
-                              Request  : in ASF.Requests.Request'Class) return String is
+                              Request  : in Servlet.Requests.Request'Class) return String is
       pragma Unreferenced (Server);
 
       URI  : constant String := Request.Get_Path_Info;
@@ -70,17 +80,19 @@ package body AWA.Users.Servlets is
    --  ------------------------------
    overriding
    procedure Do_Get (Server   : in Request_Auth_Servlet;
-                     Request  : in out ASF.Requests.Request'Class;
-                     Response : in out ASF.Responses.Response'Class) is
+                     Request  : in out Servlet.Requests.Request'Class;
+                     Response : in out Servlet.Responses.Response'Class) is
 
-      Ctx      : constant ASF.Servlets.Servlet_Registry_Access := Server.Get_Servlet_Context;
+      Ctx      : constant Servlet.Core.Servlet_Registry_Access := Server.Get_Servlet_Context;
       Name     : constant String := Get_Provider_URL (Server, Request);
       URL      : constant String := Ctx.Get_Init_Parameter ("auth.url." & Name);
+      Session  : Servlet.Sessions.Session := Request.Get_Session (Create => True);
    begin
       Log.Info ("GET: request OpenId authentication to {0} - {1}", Name, URL);
 
       if Name'Length = 0 or else URL'Length = 0 then
-         Response.Set_Status (ASF.Responses.SC_NOT_FOUND);
+         Session.Set_Attribute (AUTH_ERROR_ATTRIBUTE, UBO.To_Object (MESSAGE_BAD_CONFIGURATION));
+         Response.Set_Status (Servlet.Responses.SC_NOT_FOUND);
          return;
       end if;
 
@@ -103,7 +115,6 @@ package body AWA.Users.Servlets is
          --  redirect the user to the OpenID provider.
          declare
             Auth_URL : constant String := Mgr.Get_Authentication_URL (OP, Assoc.all);
-            Session  : ASF.Sessions.Session := Request.Get_Session (Create => True);
          begin
             Log.Info ("Redirect to auth URL: {0}", Auth_URL);
 
@@ -126,7 +137,7 @@ package body AWA.Users.Servlets is
    overriding
    procedure Create_Principal (Server : in Verify_Auth_Servlet;
                                Auth   : in Security.Auth.Authentication;
-                               Result : out ASF.Principals.Principal_Access) is
+                               Result : out Security.Principal_Access) is
       pragma Unreferenced (Server);
       use AWA.Users.Services;
 
@@ -143,25 +154,36 @@ package body AWA.Users.Servlets is
    --  Get the redirection URL that must be used after the authentication succeeded.
    --  ------------------------------
    function Get_Redirect_URL (Server  : in Verify_Auth_Servlet;
-                              Session : in ASF.Sessions.Session'Class;
-                              Request : in ASF.Requests.Request'Class) return String is
+                              Session : in Servlet.Sessions.Session'Class;
+                              Request : in Servlet.Requests.Request'Class) return String is
       Redir : constant Util.Beans.Objects.Object := Session.Get_Attribute (REDIRECT_ATTRIBUTE);
-      Ctx   : constant ASF.Servlets.Servlet_Registry_Access := Server.Get_Servlet_Context;
+      Ctx   : constant Servlet.Core.Servlet_Registry_Access := Server.Get_Servlet_Context;
    begin
       if not Util.Beans.Objects.Is_Null (Redir) then
          return Util.Beans.Objects.To_String (Redir);
       end if;
       declare
-         Cookies : constant ASF.Cookies.Cookie_Array := Request.Get_Cookies;
+         Cookies : constant Util.Http.Cookies.Cookie_Array := Request.Get_Cookies;
       begin
          for I in Cookies'Range loop
-            if ASF.Cookies.Get_Name (Cookies (I)) = AWA.Users.Filters.REDIRECT_COOKIE then
-               return ASF.Cookies.Get_Value (Cookies (I));
+            if Util.Http.Cookies.Get_Name (Cookies (I)) = AWA.Users.Filters.REDIRECT_COOKIE then
+               return Util.Http.Cookies.Get_Value (Cookies (I));
             end if;
          end loop;
       end;
       return Ctx.Get_Init_Parameter ("openid.success_url");
    end Get_Redirect_URL;
+
+   --  ------------------------------
+   --  Get the redirection URL that must be used after the authentication failed.
+   --  ------------------------------
+   function Get_Error_URL (Server  : in Verify_Auth_Servlet;
+                           Session : in Servlet.Sessions.Session'Class;
+                           Request : in Servlet.Requests.Request'Class) return String is
+      Ctx   : constant Servlet.Core.Servlet_Registry_Access := Server.Get_Servlet_Context;
+   begin
+      return Ctx.Get_Init_Parameter ("openid.error_url");
+   end Get_Error_URL;
 
    --  ------------------------------
    --  Verify the authentication result that was returned by the OpenID provider.
@@ -170,8 +192,8 @@ package body AWA.Users.Servlets is
    --  ------------------------------
    overriding
    procedure Do_Get (Server   : in Verify_Auth_Servlet;
-                     Request  : in out ASF.Requests.Request'Class;
-                     Response : in out ASF.Responses.Response'Class) is
+                     Request  : in out Servlet.Requests.Request'Class;
+                     Response : in out Servlet.Responses.Response'Class) is
       use type Security.Auth.Auth_Result;
 
       type Auth_Params is new Security.Auth.Parameters with null record;
@@ -188,18 +210,21 @@ package body AWA.Users.Servlets is
          return Request.Get_Parameter (Name);
       end Get_Parameter;
 
-      Session    : ASF.Sessions.Session := Request.Get_Session (Create => False);
+      Session    : Servlet.Sessions.Session := Request.Get_Session (Create => False);
       Bean       : Util.Beans.Objects.Object;
       Mgr        : Security.Auth.Manager;
       Assoc      : Association_Access;
       Credential : Security.Auth.Authentication;
       Params     : Auth_Params;
+      Error_URI  : constant String
+        := Verify_Auth_Servlet'Class (Server).Get_Error_URL (Session, Request);
    begin
       Log.Info ("GET: verify openid authentication");
 
       if not Session.Is_Valid then
-         Log.Warn ("Session has expired during OpenID authentication process");
-         Response.Set_Status (ASF.Responses.SC_FORBIDDEN);
+         Log.Warn ("Session has expired during OpenID authentication process, "
+                   & "redirect to {0}", Error_URI);
+         Response.Send_Redirect (Error_URI);
          return;
       end if;
 
@@ -208,8 +233,9 @@ package body AWA.Users.Servlets is
       --  Cleanup the session and drop the association end point.
       Session.Remove_Attribute (OPENID_ASSOC_ATTRIBUTE);
       if Util.Beans.Objects.Is_Null (Bean) then
-         Log.Warn ("Verify openid request without active session");
-         Response.Set_Status (ASF.Responses.SC_FORBIDDEN);
+         Log.Warn ("Verify openid request without active session, "
+                   & "redirect to {0}", Error_URI);
+         Response.Send_Redirect (Error_URI);
          return;
       end if;
 
@@ -219,8 +245,9 @@ package body AWA.Users.Servlets is
       --  Verify that what we receive through the callback matches the association key.
       Mgr.Verify (Assoc.all, Params, Credential);
       if Security.Auth.Get_Status (Credential) /= Security.Auth.AUTHENTICATED then
-         Log.Info ("Authentication has failed");
-         Response.Set_Status (ASF.Responses.SC_FORBIDDEN);
+         Log.Info ("Authentication has failed, redirect to {0}", Error_URI);
+         Session.Set_Attribute (AUTH_ERROR_ATTRIBUTE, UBO.To_Object (MESSAGE_AUTH_FAILED));
+         Response.Send_Redirect (Error_URI);
          return;
       end if;
 
@@ -228,7 +255,7 @@ package body AWA.Users.Servlets is
 
       --  Get a user principal and set it on the session.
       declare
-         User     : ASF.Principals.Principal_Access;
+         User     : Security.Principal_Access;
          Redirect : constant String
            := Verify_Auth_Servlet'Class (Server).Get_Redirect_URL (Session, Request);
       begin
@@ -238,7 +265,106 @@ package body AWA.Users.Servlets is
 
          Log.Info ("Redirect user to URL: {0}", Redirect);
          Response.Send_Redirect (Redirect);
+
+      exception
+         when AWA.Users.Services.Registration_Disabled =>
+            Log.Info ("User registration is disabled, redirect to {0}", Error_URI);
+            Session.Set_Attribute (AUTH_ERROR_ATTRIBUTE,
+                                   UBO.To_Object (MESSAGE_REGISTRATION_DISABLED));
+            Response.Send_Redirect (Error_URI);
+
       end;
+   end Do_Get;
+
+   --  ------------------------------
+   --  Get the redirection URL that must be used after the authentication succeeded.
+   --  ------------------------------
+   function Get_Redirect_URL (Server  : in Verify_Key_Servlet;
+                              Request : in Servlet.Requests.Request'Class) return String is
+      Ctx   : constant Servlet.Core.Servlet_Registry_Access := Server.Get_Servlet_Context;
+   begin
+      declare
+         Cookies : constant Util.Http.Cookies.Cookie_Array := Request.Get_Cookies;
+      begin
+         for I in Cookies'Range loop
+            if Util.Http.Cookies.Get_Name (Cookies (I)) = AWA.Users.Filters.REDIRECT_COOKIE then
+               return Util.Http.Cookies.Get_Value (Cookies (I));
+            end if;
+         end loop;
+      end;
+      return Ctx.Get_Init_Parameter ("openid.success_url");
+   end Get_Redirect_URL;
+
+   --  ------------------------------
+   --  Initialize the filter and configure the redirection URIs.
+   --  ------------------------------
+   --  Called by the servlet container to indicate to a servlet that the servlet
+   --  is being placed into service.
+   overriding
+   procedure Initialize (Server  : in out Verify_Key_Servlet;
+                         Context : in Servlet.Core.Servlet_Registry'Class) is
+      use Servlet.Core;
+      use Ada.Strings.Unbounded;
+
+      URI : constant String := Context.Get_Init_Parameter (VERIFY_FILTER_REDIRECT_PARAM);
+   begin
+      Server.Invalid_Key_URI := To_Unbounded_String (URI);
+      if Uri'Length = 0 then
+         Log.Error ("Missing configuration for {0}.{1}",
+                    Server.Get_Name,
+                    VERIFY_FILTER_REDIRECT_PARAM);
+      end if;
+      Server.Change_Password_Uri := Context.Get_Init_Parameter (VERIFY_FILTER_CHANGE_PASSWORD_PARAM);
+   end Initialize;
+
+   --  ------------------------------
+   --  Filter a request which contains an access key and verify that the
+   --  key is valid and identifies a user.  Once the user is known, create
+   --  a session and setup the user principal.
+   --
+   --  If the access key is missing or invalid, redirect to the
+   --  <b>Invalid_Key_URI</b> associated with the filter.
+   --  ------------------------------
+   overriding
+   procedure Do_Get (Server   : in Verify_Key_Servlet;
+                     Request  : in out Servlet.Requests.Request'Class;
+                     Response : in out Servlet.Responses.Response'Class) is
+      use type AWA.Users.Principals.Principal_Access;
+      use Ada.Strings.Unbounded;
+
+      Key       : constant String := Request.Get_Path_Parameter (1);
+      Manager   : constant Users.Services.User_Service_Access := Users.Modules.Get_User_Manager;
+      Principal : AWA.Users.Principals.Principal_Access;
+   begin
+      Log.Info ("Verify access key '{0}'", Key);
+
+      Manager.Verify_User (Key       => Key,
+                           IpAddr    => "",
+                           Principal => Principal);
+
+      if Principal = null then
+         declare
+            URI : constant String := To_String (Server.Change_Password_Uri) & Key;
+         begin
+            Log.Info ("Access key verified but no password, redirecting to {0}", URI);
+            Response.Send_Redirect (Location => URI);
+            return;
+         end;
+      end if;
+
+      Set_Session_Principal (Request, Principal);
+
+      --  Request is authorized, proceed to the next filter.
+      Response.Send_Redirect (Location => Server.Get_Redirect_URL (Request));
+
+   exception
+      when AWA.Users.Services.Not_Found =>
+         declare
+            URI : constant String := To_String (Server.Invalid_Key_URI);
+         begin
+            Log.Info ("Invalid access key '{0}', redirecting to {1}", Key, URI);
+            Response.Send_Redirect (Location => URI);
+         end;
    end Do_Get;
 
 end AWA.Users.Servlets;

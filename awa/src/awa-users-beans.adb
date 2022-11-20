@@ -18,9 +18,8 @@
 
 with Util.Log.Loggers;
 
-with ASF.Principals;
-with ASF.Sessions;
-with ASF.Events.Faces.Actions;
+with Security;
+with Servlet.Sessions;
 with ASF.Contexts.Faces;
 with ASF.Contexts.Flash;
 with ASF.Cookies;
@@ -29,12 +28,13 @@ with ASF.Security.Filters;
 
 with ADO.Sessions;
 
-with AWA.Users.Models;
 with AWA.Services.Contexts;
+with AWA.Users.Servlets;
 package body AWA.Users.Beans is
 
    use AWA.Users.Models;
    use ASF.Applications;
+   package UBO renames Util.Beans.Objects;
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Users.Beans");
 
@@ -44,8 +44,9 @@ package body AWA.Users.Beans is
    --  ------------------------------
    --  Action to register a user
    --  ------------------------------
-   procedure Register_User (Data    : in out Authenticate_Bean;
-                            Outcome : in out Unbounded_String) is
+   overriding
+   procedure Register (Data    : in out Authenticate_Bean;
+                       Outcome : in out Unbounded_String) is
       User  : User_Ref;
       Email : Email_Ref;
       Ctx   : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
@@ -92,13 +93,22 @@ package body AWA.Users.Beans is
          Outcome := To_Unbounded_String ("failure");
 
          Messages.Factory.Add_Message (Ctx.all, "users.signup_error_message");
-   end Register_User;
+
+      when Services.Registration_Disabled =>
+         Outcome := To_Unbounded_String ("disabled");
+
+         --  Add a message to the flash context so that it will be displayed on the error page.
+         Flash.Set_Keep_Messages (True);
+         Messages.Factory.Add_Message (Ctx.all, "users.message_registration_disabled", Messages.INFO);
+
+   end Register;
 
    --  ------------------------------
    --  Action to verify the user after the registration
    --  ------------------------------
-   procedure Verify_User (Data    : in out Authenticate_Bean;
-                          Outcome : in out Unbounded_String) is
+   overriding
+   procedure Verify (Data    : in out Authenticate_Bean;
+                     Outcome : in out Unbounded_String) is
       Principal : AWA.Users.Principals.Principal_Access;
       Ctx   : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
       Flash : constant ASF.Contexts.Faces.Flash_Context_Access := Ctx.Get_Flash;
@@ -118,11 +128,12 @@ package body AWA.Users.Beans is
       when Services.Not_Found =>
          Outcome := To_Unbounded_String ("failure");
          Messages.Factory.Add_Message (Ctx.all, "users.error_verify_register_key");
-   end Verify_User;
+   end Verify;
 
    --  ------------------------------
    --  Action to trigger the lost password email process.
    --  ------------------------------
+   overriding
    procedure Lost_Password (Data    : in out Authenticate_Bean;
                             Outcome : in out Unbounded_String) is
       Ctx   : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
@@ -144,6 +155,7 @@ package body AWA.Users.Beans is
    --  ------------------------------
    --  Action to validate the reset password key and set a new password.
    --  ------------------------------
+   overriding
    procedure Reset_Password (Data    : in out Authenticate_Bean;
                              Outcome : in out Unbounded_String) is
       Ctx   : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
@@ -171,7 +183,7 @@ package body AWA.Users.Beans is
       pragma Unreferenced (Data);
 
       Ctx       : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
-      Session   : ASF.Sessions.Session := Ctx.Get_Session (Create => True);
+      Session   : Servlet.Sessions.Session := Ctx.Get_Session (Create => True);
    begin
       Session.Set_Principal (Principal.all'Access);
    end Set_Session_Principal;
@@ -191,8 +203,9 @@ package body AWA.Users.Beans is
    --  ------------------------------
    --  Action to authenticate a user (password authentication).
    --  ------------------------------
-   procedure Authenticate_User (Data    : in out Authenticate_Bean;
-                                Outcome : in out Unbounded_String) is
+   overriding
+   procedure Authenticate (Data    : in out Authenticate_Bean;
+                           Outcome : in out Unbounded_String) is
       Principal : AWA.Users.Principals.Principal_Access;
    begin
       Data.Manager.Authenticate (Email    => To_String (Data.Email),
@@ -225,7 +238,7 @@ package body AWA.Users.Beans is
 
          ASF.Applications.Messages.Factory.Add_Message
            ("users.login_signup_account_disabled_message");
-   end Authenticate_User;
+   end Authenticate;
 
    --  ------------------------------
    --  Helper to send a remove cookie in the current response
@@ -242,12 +255,13 @@ package body AWA.Users.Beans is
    --  ------------------------------
    --  Logout the user and closes the session.
    --  ------------------------------
-   procedure Logout_User (Data    : in out Authenticate_Bean;
-                          Outcome : in out Unbounded_String) is
-      use type ASF.Principals.Principal_Access;
+   overriding
+   procedure Logout (Data    : in out Authenticate_Bean;
+                     Outcome : in out Unbounded_String) is
+      use type Security.Principal_Access;
 
       Ctx       : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
-      Session   : ASF.Sessions.Session := Ctx.Get_Session (Create => False);
+      Session   : Servlet.Sessions.Session := Ctx.Get_Session (Create => False);
    begin
       Outcome := To_Unbounded_String ("success");
 
@@ -257,7 +271,7 @@ package body AWA.Users.Beans is
       end if;
 
       declare
-         Principal : constant ASF.Principals.Principal_Access := Session.Get_Principal;
+         Principal : constant Security.Principal_Access := Session.Get_Principal;
       begin
          if Principal /= null and then Principal.all in AWA.Users.Principals.Principal'Class then
             declare
@@ -278,13 +292,14 @@ package body AWA.Users.Beans is
       --  Remove the session cookie.
       Remove_Cookie (ASF.Security.Filters.SID_COOKIE);
       Remove_Cookie (ASF.Security.Filters.AID_COOKIE);
-   end Logout_User;
+   end Logout;
 
    --  ------------------------------
    --  Helper to send a remove cookie in the current response
    --  ------------------------------
-   procedure Load_User (Data    : in out Authenticate_Bean;
-                        Outcome : in out Unbounded_String) is
+   overriding
+   procedure Load (Data    : in out Authenticate_Bean;
+                   Outcome : in out Unbounded_String) is
       pragma Unreferenced (Outcome);
       User  : User_Ref;
       Email : Email_Ref;
@@ -293,7 +308,29 @@ package body AWA.Users.Beans is
       Data.First_Name := User.Get_First_Name;
       Data.Last_Name := User.Get_Last_Name;
       Data.Email := Email.Get_Email;
-   end Load_User;
+   end Load;
+
+   overriding
+   procedure Auth_Error (Data    : in out Authenticate_Bean;
+                         Outcome : in out Unbounded_String) is
+      Ctx       : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
+      Session   : Servlet.Sessions.Session := Ctx.Get_Session (Create => False);
+   begin
+      Outcome := To_Unbounded_String ("login");
+      if not Session.Is_Valid then
+         return;
+      end if;
+      declare
+         Err : constant UBO.Object
+           := Session.Get_Attribute (AWA.Users.Servlets.AUTH_ERROR_ATTRIBUTE);
+      begin
+         Session.Remove_Attribute (AWA.Users.Servlets.AUTH_ERROR_ATTRIBUTE);
+         if UBO.Is_Null (Err) then
+            return;
+         end if;
+         ASF.Applications.Messages.Factory.Add_Message (UBO.To_String (Err));
+      end;
+   end Auth_Error;
 
    --  ------------------------------
    --  Create an authenticate bean.
@@ -306,52 +343,6 @@ package body AWA.Users.Beans is
       Object.Manager := AWA.Users.Modules.Get_User_Manager;
       return Object.all'Access;
    end Create_Authenticate_Bean;
-
-   --  The code below this line could be generated automatically by an Asis tool.
-
-   package Authenticate_Binding is
-     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
-                                                      Method => Authenticate_User,
-                                                      Name   => "authenticate");
-
-   package Register_Binding is
-     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
-                                                      Method => Register_User,
-                                                      Name   => "register");
-
-   package Verify_Binding is
-     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
-                                                      Method => Verify_User,
-                                                      Name   => "verify");
-
-   package Lost_Password_Binding is
-     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
-                                                      Method => Lost_Password,
-                                                      Name   => "lostPassword");
-
-   package Reset_Password_Binding is
-     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
-                                                      Method => Reset_Password,
-                                                      Name   => "resetPassword");
-
-   package Logout_Binding is
-     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
-                                                      Method => Logout_User,
-                                                      Name   => "logout");
-
-   package Load_Binding is
-     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
-                                                      Method => Load_User,
-                                                      Name   => "load");
-
-   Binding_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
-     := (Authenticate_Binding.Proxy'Access,
-         Register_Binding.Proxy'Access,
-         Verify_Binding.Proxy'Access,
-         Lost_Password_Binding.Proxy'Access,
-         Reset_Password_Binding.Proxy'Access,
-         Logout_Binding.Proxy'Access,
-         Load_Binding.Proxy'Access);
 
    --  ------------------------------
    --  Get the value identified by the name.
@@ -399,17 +390,6 @@ package body AWA.Users.Beans is
          From.Redirect := Util.Beans.Objects.To_Unbounded_String (Value);
       end if;
    end Set_Value;
-
-   --  ------------------------------
-   --  This bean provides some methods that can be used in a Method_Expression
-   --  ------------------------------
-   overriding
-   function Get_Method_Bindings (From : in Authenticate_Bean)
-                                 return Util.Beans.Methods.Method_Binding_Array_Access is
-      pragma Unreferenced (From);
-   begin
-      return Binding_Array'Access;
-   end Get_Method_Bindings;
 
    --  ------------------------------
    --  Get the value identified by the name.  The following names are recognized:

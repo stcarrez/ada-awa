@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-servlets -- OpenID verification servlet for user authentication
---  Copyright (C) 2011 - 2020 Stephane Carrez
+--  Copyright (C) 2011 - 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,12 +16,14 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with ASF.Principals;
-with ASF.Security.Servlets;
-with ASF.Requests;
-with ASF.Responses;
-with ASF.Sessions;
+with Servlet.Core;
+with Servlet.Security.Servlets;
+with Servlet.Requests;
+with Servlet.Responses;
+with Servlet.Sessions;
 with Security.Auth;
+with AWA.Users.Principals;
+private with Ada.Strings.Unbounded;
 
 --  == OAuth Authentication Flow ==
 --  The OAuth/OpenID authentication flow is implemented by using two servlets
@@ -50,12 +52,22 @@ with Security.Auth;
 --  under the `openid-verify` name for the second step.
 package AWA.Users.Servlets is
 
+   AUTH_ERROR_ATTRIBUTE          : constant String := "authError";
+   MESSAGE_BAD_CONFIGURATION     : constant String := "users.message_invalid_configuration";
+   MESSAGE_AUTH_FAILED           : constant String := "users.message_invalid_auth";
+   MESSAGE_REGISTRATION_DISABLED : constant String := "users.message_registration_disabled";
+
+   --  Set the user principal on the session associated with the ASF request.
+   procedure Set_Session_Principal (Request   : in out Servlet.Requests.Request'Class;
+                                    Principal : in AWA.Users.Principals.Principal_Access);
+
    --  ------------------------------
    --  OpenID Request Servlet
    --  ------------------------------
    --  The `Request_Auth_Servlet` servlet implements the first steps of an OpenID
    --  authentication.
-   type Request_Auth_Servlet is new ASF.Security.Servlets.Request_Auth_Servlet with null record;
+   type Request_Auth_Servlet is new Servlet.Security.Servlets.Request_Auth_Servlet
+     with null record;
 
    --  Proceed to the OpenID authentication with an OpenID provider.
    --  Find the OpenID provider URL and starts the discovery, association phases
@@ -64,8 +76,8 @@ package AWA.Users.Servlets is
    --  the OpenID provider.
    overriding
    procedure Do_Get (Server   : in Request_Auth_Servlet;
-                     Request  : in out ASF.Requests.Request'Class;
-                     Response : in out ASF.Responses.Response'Class);
+                     Request  : in out Servlet.Requests.Request'Class;
+                     Response : in out Servlet.Responses.Response'Class);
 
    --  ------------------------------
    --  OpenID Verification Servlet
@@ -75,7 +87,7 @@ package AWA.Users.Servlets is
    --  implementation to provide our own user principal once the authentication
    --  succeeded.  At the same time, if this is the first time we see the user,
    --  s/he will be registered by using the user service.
-   type Verify_Auth_Servlet is new ASF.Security.Servlets.Verify_Auth_Servlet with private;
+   type Verify_Auth_Servlet is new Servlet.Security.Servlets.Verify_Auth_Servlet with private;
 
    --  Create a principal object that correspond to the authenticated user
    --  identified by the `Auth` information.  The principal will be attached
@@ -83,23 +95,75 @@ package AWA.Users.Servlets is
    overriding
    procedure Create_Principal (Server : in Verify_Auth_Servlet;
                                Auth   : in Security.Auth.Authentication;
-                               Result : out ASF.Principals.Principal_Access);
+                               Result : out Security.Principal_Access);
 
    --  Verify the authentication result that was returned by the OpenID provider.
    --  If the authentication succeeded and the signature was correct, sets a
    --  user principals on the session.
    overriding
    procedure Do_Get (Server   : in Verify_Auth_Servlet;
-                     Request  : in out ASF.Requests.Request'Class;
-                     Response : in out ASF.Responses.Response'Class);
+                     Request  : in out Servlet.Requests.Request'Class;
+                     Response : in out Servlet.Responses.Response'Class);
 
    --  Get the redirection URL that must be used after the authentication succeeded.
    function Get_Redirect_URL (Server  : in Verify_Auth_Servlet;
-                              Session : in ASF.Sessions.Session'Class;
-                              Request : in ASF.Requests.Request'Class) return String;
+                              Session : in Servlet.Sessions.Session'Class;
+                              Request : in Servlet.Requests.Request'Class) return String;
+
+   --  Get the redirection URL that must be used after the authentication failed.
+   function Get_Error_URL (Server  : in Verify_Auth_Servlet;
+                           Session : in Servlet.Sessions.Session'Class;
+                           Request : in Servlet.Requests.Request'Class) return String;
+
+   --  ------------------------------
+   --  Verify access key
+   --  ------------------------------
+   --  The <b>Verify_Filter</b> filter verifies an access key associated to a user.
+   --  The access key should have been sent to the user by some mechanism (email).
+   --  The access key must be valid, that is an <b>Access_Key</b> database entry
+   --  must exist and it must be associated with an email address and a user.
+   type Verify_Key_Servlet is new Servlet.Core.Servlet with private;
+
+   --  The request parameter that <b>Verify_Filter</b> will check.
+   PARAM_ACCESS_KEY : constant String := "key";
+
+   --  The configuration parameter which controls the redirection page
+   --  when the access key is invalid.
+   VERIFY_FILTER_REDIRECT_PARAM : constant String := "verify-access-key.redirect";
+
+   --  Configuration parameter which controls the change password
+   --  page when the access key is valid, the user is enabled but
+   --  there is no password for authentication.
+   VERIFY_FILTER_CHANGE_PASSWORD_PARAM : constant String := "verify-access-key.change-password";
+
+   --  Get the redirection URL that must be used after the authentication succeeded.
+   function Get_Redirect_URL (Server  : in Verify_Key_Servlet;
+                              Request : in Servlet.Requests.Request'Class) return String;
+
+   --  Called by the servlet container to indicate to a servlet that the servlet
+   --  is being placed into service.
+   overriding
+   procedure Initialize (Server  : in out Verify_Key_Servlet;
+                         Context : in Servlet.Core.Servlet_Registry'Class);
+
+   --  Filter a request which contains an access key and verify that the
+   --  key is valid and identifies a user.  Once the user is known, create
+   --  a session and setup the user principal.
+   --
+   --  If the access key is missing or invalid, redirect to the
+   --  <b>Invalid_Key_URI</b> associated with the filter.
+   overriding
+   procedure Do_Get (Server   : in Verify_Key_Servlet;
+                     Request  : in out Servlet.Requests.Request'Class;
+                     Response : in out Servlet.Responses.Response'Class);
 
 private
 
-   type Verify_Auth_Servlet is new ASF.Security.Servlets.Verify_Auth_Servlet with null record;
+   type Verify_Auth_Servlet is new Servlet.Security.Servlets.Verify_Auth_Servlet with null record;
+
+   type Verify_Key_Servlet is new Servlet.Core.Servlet with record
+      Invalid_Key_URI     : Ada.Strings.Unbounded.Unbounded_String;
+      Change_Password_URI : Ada.Strings.Unbounded.Unbounded_String;
+   end record;
 
 end AWA.Users.Servlets;

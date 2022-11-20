@@ -241,6 +241,10 @@ package AWA.Users.Services is
                          User  : in User_Ref'Class;
                          Props : in out AWA.Events.Module_Event);
 
+   --  Allow to disable the user registration.
+   procedure Set_Allow_Register (Model : in out User_Service;
+                                 Allow : in Boolean);
+
    --  Initialize the user service.
    overriding
    procedure Initialize (Model  : in out User_Service;

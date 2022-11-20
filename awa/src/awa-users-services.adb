@@ -253,8 +253,12 @@ package body AWA.Users.Services is
       elsif Found_Email then
          if Email.Get_User_Id > 0 then
             User.Load (DB, Email.Get_User_Id, Found_User);
+         else
+            Found_User := False;
          end if;
          User_Auth.Set_Email (Email);
+      else
+         Found_User := False;
       end if;
 
       --  User is not found, registration must be enabled to create it.
@@ -692,6 +696,14 @@ package body AWA.Users.Services is
       Email_Address : constant String := Email.Get_Email;
    begin
       Log.Info ("Create user {0}", Email_Address);
+
+      --  Reject user creation if the registration is disabled.
+      if not Model.Allow_Register then
+         Log.Warn ("Registration disabled: cannot register user with email {0}",
+                   Email_Address);
+         raise Registration_Disabled;
+      end if;
+
       Ctx.Start;
 
       --  Check first if this user is already known
@@ -783,6 +795,14 @@ package body AWA.Users.Services is
       Auth          : Authenticate_Ref;
    begin
       Log.Info ("Create user {0} with key {1}", Email_Address, Key);
+
+      --  Reject user creation if the registration is disabled.
+      if not Model.Allow_Register then
+         Log.Warn ("Registration disabled: cannot register user with email {0}",
+                   Email_Address);
+         raise Registration_Disabled;
+      end if;
+
       Ctx.Start;
 
       --  Verify the access key validity.
@@ -942,6 +962,11 @@ package body AWA.Users.Services is
       Email      : Email_Ref;
    begin
       Log.Info ("Verify user with key {0}", Key);
+
+      if Key'Length = 0 then
+         Log.Warn ("Empty access key is refused");
+         raise Not_Found with "No access key: ''";
+      end if;
 
       Ctx.Start;
 
@@ -1104,6 +1129,15 @@ package body AWA.Users.Services is
       end if;
       Ctx.Commit;
    end Close_Session;
+
+   --  ------------------------------
+   --  Allow to disable the user registration.
+   --  ------------------------------
+   procedure Set_Allow_Register (Model : in out User_Service;
+                                 Allow : in Boolean) is
+   begin
+      Model.Allow_Register := Allow;
+   end Set_Allow_Register;
 
    --  ------------------------------
    --  Initialize the user service.

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-model -- User management module
---  Copyright (C) 2009, 2010, 2011, 2012, 2015 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2015, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,6 +48,8 @@ package body AWA.Users.Modules is
                        Server => Plugin.Auth'Unchecked_Access);
       App.Add_Servlet (Name   => "openid-verify",
                        Server => Plugin.Verify_Auth'Unchecked_Access);
+      App.Add_Servlet (Name   => "verify-access-key",
+                       Server => Plugin.Verify_Key'Unchecked_Access);
 
       --  Setup the verify access key filter.
       App.Add_Filter ("verify-access-key", Plugin.Key_Filter'Unchecked_Access);
