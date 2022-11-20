@@ -126,7 +126,7 @@ package body AWA.Modules is
                         Default : in Boolean := False) return Boolean is
       Value : constant String := Plugin.Config.Get (Name, Boolean'Image (Default));
    begin
-      if Value in "yes" | "true" | "1" then
+      if Value in "yes" | "true" | "1" | "YES" | "TRUE" then
          return True;
       else
          return False;
