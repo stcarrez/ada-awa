@@ -99,7 +99,8 @@ package body AWA.Users.Beans is
 
          --  Add a message to the flash context so that it will be displayed on the error page.
          Flash.Set_Keep_Messages (True);
-         Messages.Factory.Add_Message (Ctx.all, "users.message_registration_disabled", Messages.INFO);
+         Messages.Factory.Add_Message (Ctx.all, "users.message_registration_disabled",
+                                       Messages.INFO);
 
    end Register;
 

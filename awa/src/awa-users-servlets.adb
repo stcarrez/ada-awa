@@ -314,7 +314,8 @@ package body AWA.Users.Servlets is
                     Server.Get_Name,
                     VERIFY_FILTER_REDIRECT_PARAM);
       end if;
-      Server.Change_Password_Uri := Context.Get_Init_Parameter (VERIFY_FILTER_CHANGE_PASSWORD_PARAM);
+      Server.Change_Password_Uri
+        := Context.Get_Init_Parameter (VERIFY_FILTER_CHANGE_PASSWORD_PARAM);
    end Initialize;
 
    --  ------------------------------
