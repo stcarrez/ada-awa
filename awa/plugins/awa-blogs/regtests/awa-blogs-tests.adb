@@ -122,6 +122,7 @@ package body AWA.Blogs.Tests is
       declare
          Ident : constant String
             := Helpers.Extract_Redirect (Reply, "/asfunit/blogs/admin/create.html?id=");
+         Post_Ident : Unbounded_String;
       begin
          Util.Tests.Assert_Matches (T, "^[0-9]+$", Ident,
                                     "Invalid blog identifier in the response");
@@ -132,17 +133,33 @@ package body AWA.Blogs.Tests is
          Request.Set_Parameter ("post-title", "Post title");
          Request.Set_Parameter ("text", "The blog post content.");
          Request.Set_Parameter ("uri", Uuid);
-         Request.Set_Parameter ("save", "1");
+         Request.Set_Parameter ("post-create", "1");
          Request.Set_Parameter ("post-status", "POST_PUBLISHED");
          Request.Set_Parameter ("allow-comment", "0");
          Request.Set_Parameter ("post-format", "FORMAT_DOTCLEAR");
          ASF.Tests.Do_Post (Request, Reply, "/blogs/admin/create.html", "create-post.html");
 
-         T.Post_Ident := Helpers.Extract_Redirect (Reply, "/asfunit/blogs/admin/"
-                                                   & Ident & "/preview/");
+         T.Post_Ident := Helpers.Extract_Redirect (Reply, "/asfunit/blogs/admin/edit/"
+                                                   & Ident & "/");
 
          Util.Tests.Assert_Matches (T, "^[0-9]+$", To_String (T.Post_Ident),
                                     "Invalid post identifier in the response");
+
+         Request.Set_Parameter ("post-blog-id", Ident);
+         Request.Set_Parameter ("post-id", To_String (T.Post_Ident));
+         Request.Set_Parameter ("post", "1");
+         Request.Set_Parameter ("post-title", "Post title");
+         Request.Set_Parameter ("text", "The blog post content.");
+         Request.Set_Parameter ("uri", Uuid);
+         Request.Set_Parameter ("save", "1");
+         Request.Set_Parameter ("post-status", "POST_PUBLISHED");
+         Request.Set_Parameter ("post-format", "FORMAT_DOTCLEAR");
+         Request.Set_Parameter ("allow-comment", "0");
+         ASF.Tests.Do_Post (Request, Reply, "/blogs/admin/edit.html", "create-edit-post.html");
+
+         Post_Ident := Helpers.Extract_Redirect (Reply, "/asfunit/blogs/admin/"
+                                                 & Ident & "/preview/");
+
       end;
 
       --  Check public access to the post.
