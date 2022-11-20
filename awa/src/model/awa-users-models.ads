@@ -33,6 +33,7 @@ with Util.Beans.Objects;
 with Util.Beans.Objects.Enums;
 with Util.Beans.Basic.Lists;
 with ADO.Audits;
+with Util.Beans.Methods;
 pragma Warnings (On);
 package AWA.Users.Models is
 
@@ -756,6 +757,53 @@ package AWA.Users.Models is
                    Into   : in out Session_Ref);
 
 
+
+   --  --------------------
+   --    authenticate the user with email and password.
+   --  --------------------
+   type Authenticate_Bean is abstract
+     new Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with null record;
+
+
+   --  This bean provides some methods that can be used in a Method_Expression.
+   overriding
+   function Get_Method_Bindings (From : in Authenticate_Bean)
+                                 return Util.Beans.Methods.Method_Binding_Array_Access;
+
+   --  Get the bean attribute identified by the name.
+   overriding
+   function Get_Value (From : in Authenticate_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Authenticate_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   procedure Authenticate (Bean : in out Authenticate_Bean;
+                          Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   procedure Register (Bean : in out Authenticate_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   procedure Verify (Bean : in out Authenticate_Bean;
+                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   procedure Lost_Password (Bean : in out Authenticate_Bean;
+                           Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   procedure Logout (Bean : in out Authenticate_Bean;
+                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   procedure Load (Bean : in out Authenticate_Bean;
+                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   procedure Auth_Error (Bean : in out Authenticate_Bean;
+                        Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   procedure Reset_Password (Bean : in out Authenticate_Bean;
+                            Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
 
 private
