@@ -2725,17 +2725,6 @@ package body AWA.Users.Models is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
                                                       Method => Op_Register,
                                                       Name   => "register");
-   procedure Op_Verify (Bean    : in out Authenticate_Bean;
-                        Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
-   procedure Op_Verify (Bean    : in out Authenticate_Bean;
-                        Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
-   begin
-      Authenticate_Bean'Class (Bean).Verify (Outcome);
-   end Op_Verify;
-   package Binding_Authenticate_Bean_3 is
-     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
-                                                      Method => Op_Verify,
-                                                      Name   => "verify");
    procedure Op_Lost_Password (Bean    : in out Authenticate_Bean;
                                Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
    procedure Op_Lost_Password (Bean    : in out Authenticate_Bean;
@@ -2743,7 +2732,7 @@ package body AWA.Users.Models is
    begin
       Authenticate_Bean'Class (Bean).Lost_Password (Outcome);
    end Op_Lost_Password;
-   package Binding_Authenticate_Bean_4 is
+   package Binding_Authenticate_Bean_3 is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
                                                       Method => Op_Lost_Password,
                                                       Name   => "lost_password");
@@ -2754,7 +2743,7 @@ package body AWA.Users.Models is
    begin
       Authenticate_Bean'Class (Bean).Logout (Outcome);
    end Op_Logout;
-   package Binding_Authenticate_Bean_5 is
+   package Binding_Authenticate_Bean_4 is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
                                                       Method => Op_Logout,
                                                       Name   => "logout");
@@ -2765,7 +2754,7 @@ package body AWA.Users.Models is
    begin
       Authenticate_Bean'Class (Bean).Load (Outcome);
    end Op_Load;
-   package Binding_Authenticate_Bean_6 is
+   package Binding_Authenticate_Bean_5 is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
                                                       Method => Op_Load,
                                                       Name   => "load");
@@ -2776,7 +2765,7 @@ package body AWA.Users.Models is
    begin
       Authenticate_Bean'Class (Bean).Auth_Error (Outcome);
    end Op_Auth_Error;
-   package Binding_Authenticate_Bean_7 is
+   package Binding_Authenticate_Bean_6 is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
                                                       Method => Op_Auth_Error,
                                                       Name   => "auth_error");
@@ -2787,7 +2776,7 @@ package body AWA.Users.Models is
    begin
       Authenticate_Bean'Class (Bean).Reset_Password (Outcome);
    end Op_Reset_Password;
-   package Binding_Authenticate_Bean_8 is
+   package Binding_Authenticate_Bean_7 is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Authenticate_Bean,
                                                       Method => Op_Reset_Password,
                                                       Name   => "reset_password");
@@ -2799,8 +2788,7 @@ package body AWA.Users.Models is
          4 => Binding_Authenticate_Bean_4.Proxy'Access,
          5 => Binding_Authenticate_Bean_5.Proxy'Access,
          6 => Binding_Authenticate_Bean_6.Proxy'Access,
-         7 => Binding_Authenticate_Bean_7.Proxy'Access,
-         8 => Binding_Authenticate_Bean_8.Proxy'Access
+         7 => Binding_Authenticate_Bean_7.Proxy'Access
      );
 
    --  ------------------------------

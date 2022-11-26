@@ -787,9 +787,6 @@ package AWA.Users.Models is
    procedure Register (Bean : in out Authenticate_Bean;
                       Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
-   procedure Verify (Bean : in out Authenticate_Bean;
-                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
-
    procedure Lost_Password (Bean : in out Authenticate_Bean;
                            Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
