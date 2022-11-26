@@ -28,6 +28,13 @@ with Servlet.Security.Filters;
 with AWA.Applications;
 package AWA.Users.Filters is
 
+   --  Get the redirection URL from the redirect cookie.
+   function Get_Redirect_Cookie (Request : in Servlet.Requests.Request'Class) return String;
+
+   --  Clear the redirect cookie in the response.
+   procedure Clear_Redirect_Cookie (Request  : in Servlet.Requests.Request'Class;
+                                    Response : in out Servlet.Responses.Response'Class);
+
    --  ------------------------------
    --  Authentication verification filter
    --  ------------------------------

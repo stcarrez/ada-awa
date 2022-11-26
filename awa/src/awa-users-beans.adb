@@ -30,6 +30,7 @@ with ADO.Sessions;
 
 with AWA.Services.Contexts;
 with AWA.Users.Servlets;
+with AWA.Users.Filters;
 package body AWA.Users.Beans is
 
    use AWA.Users.Models;
@@ -190,6 +191,7 @@ package body AWA.Users.Beans is
 
       Data.Set_Session_Principal (Principal);
       Data.Set_Authenticate_Cookie (Principal);
+      Remove_Cookie (AWA.Users.Filters.REDIRECT_COOKIE);
       if Length (Data.Redirect) > 0 then
          declare
             Context : constant ASF.Contexts.Faces.Faces_Context_Access

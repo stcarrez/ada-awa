@@ -18,7 +18,6 @@
 with Util.Beans.Objects;
 with Util.Beans.Objects.Records;
 with Util.Log.Loggers;
-with Util.Http.Cookies;
 
 with AWA.Users.Services;
 with AWA.Users.Modules;
@@ -123,6 +122,7 @@ package body AWA.Users.Servlets is
             if Redirect'Length > 0 then
                Session.Set_Attribute (Name  => REDIRECT_ATTRIBUTE,
                                       Value => Util.Beans.Objects.To_Object (Redirect));
+               AWA.Users.Filters.Clear_Redirect_Cookie (Request, Response);
             end if;
          end;
       end;
@@ -162,15 +162,14 @@ package body AWA.Users.Servlets is
          return Util.Beans.Objects.To_String (Redir);
       end if;
       declare
-         Cookies : constant Util.Http.Cookies.Cookie_Array := Request.Get_Cookies;
+         URL : constant String := AWA.Users.Filters.Get_Redirect_Cookie (Request);
       begin
-         for I in Cookies'Range loop
-            if Util.Http.Cookies.Get_Name (Cookies (I)) = AWA.Users.Filters.REDIRECT_COOKIE then
-               return Util.Http.Cookies.Get_Value (Cookies (I));
-            end if;
-         end loop;
+         if URL'Length > 0 then
+            return URL;
+         else
+            return Ctx.Get_Init_Parameter ("openid.success_url");
+         end if;
       end;
-      return Ctx.Get_Init_Parameter ("openid.success_url");
    end Get_Redirect_URL;
 
    --  ------------------------------
@@ -264,6 +263,7 @@ package body AWA.Users.Servlets is
 
          Log.Info ("Redirect user to URL: {0}", Redirect);
          Response.Send_Redirect (Redirect);
+         AWA.Users.Filters.Clear_Redirect_Cookie (Request, Response);
 
       exception
          when AWA.Users.Services.Registration_Disabled =>
@@ -280,18 +280,14 @@ package body AWA.Users.Servlets is
    --  ------------------------------
    function Get_Redirect_URL (Server  : in Verify_Key_Servlet;
                               Request : in Servlet.Requests.Request'Class) return String is
-      Ctx   : constant Servlet.Core.Servlet_Registry_Access := Server.Get_Servlet_Context;
+      Ctx : constant Servlet.Core.Servlet_Registry_Access := Server.Get_Servlet_Context;
+      URL : constant String := AWA.Users.Filters.Get_Redirect_Cookie (Request);
    begin
-      declare
-         Cookies : constant Util.Http.Cookies.Cookie_Array := Request.Get_Cookies;
-      begin
-         for I in Cookies'Range loop
-            if Util.Http.Cookies.Get_Name (Cookies (I)) = AWA.Users.Filters.REDIRECT_COOKIE then
-               return Util.Http.Cookies.Get_Value (Cookies (I));
-            end if;
-         end loop;
-      end;
-      return Ctx.Get_Init_Parameter ("openid.success_url");
+      if URL'Length > 0 then
+         return URL;
+      else
+         return Ctx.Get_Init_Parameter ("openid.success_url");
+      end if;
    end Get_Redirect_URL;
 
    --  ------------------------------

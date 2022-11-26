@@ -34,6 +34,32 @@ package body AWA.Users.Filters is
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Users.Filters");
 
    --  ------------------------------
+   --  Get the redirection URL from the redirect cookie.
+   --  ------------------------------
+   function Get_Redirect_Cookie (Request : in Servlet.Requests.Request'Class) return String is
+      Cookies : constant Util.Http.Cookies.Cookie_Array := Request.Get_Cookies;
+   begin
+      for I in Cookies'Range loop
+         if Util.Http.Cookies.Get_Name (Cookies (I)) = REDIRECT_COOKIE then
+            return Util.Http.Cookies.Get_Value (Cookies (I));
+         end if;
+      end loop;
+      return "";
+   end Get_Redirect_Cookie;
+
+   --  ------------------------------
+   --  Clear the redirect cookie in the response.
+   --  ------------------------------
+   procedure Clear_Redirect_Cookie (Request : in Servlet.Requests.Request'Class;
+                                    Response : in out Servlet.Responses.Response'Class) is
+      C : Util.Http.Cookies.Cookie := Util.Http.Cookies.Create (REDIRECT_COOKIE, "");
+   begin
+      Util.Http.Cookies.Set_Path (C, Request.Get_Context_Path);
+      Util.Http.Cookies.Set_Max_Age (C, 0);
+      Response.Add_Cookie (Cookie => C);
+   end Clear_Redirect_Cookie;
+
+   --  ------------------------------
    --  Initialize the filter and configure the redirection URIs.
    --  ------------------------------
    overriding
