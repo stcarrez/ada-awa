@@ -36,7 +36,6 @@ package body AWA.Users.Servlets is
    --  Name of the session attribute which holds information about the active authentication.
    OPENID_ASSOC_ATTRIBUTE : constant String := "openid-assoc";
 
-
    --  The logger
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Users.Servlets");
 

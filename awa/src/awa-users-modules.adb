@@ -52,7 +52,6 @@ package body AWA.Users.Modules is
                        Server => Plugin.Verify_Key'Unchecked_Access);
 
       --  Setup the verify access key filter.
-      App.Add_Filter ("verify-access-key", Plugin.Key_Filter'Unchecked_Access);
       App.Add_Filter ("auth-filter", Plugin.Auth_Filter'Unchecked_Access);
 
       Register.Register (Plugin  => Plugin,

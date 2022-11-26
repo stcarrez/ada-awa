@@ -80,11 +80,6 @@ package AWA.Users.Beans is
    procedure Register (Data    : in out Authenticate_Bean;
                        Outcome : in out Unbounded_String);
 
-   --  Action to verify the user after the registration
-   overriding
-   procedure Verify (Data    : in out Authenticate_Bean;
-                     Outcome : in out Unbounded_String);
-
    --  Action to trigger the lost password email process.
    overriding
    procedure Lost_Password (Data    : in out Authenticate_Bean;

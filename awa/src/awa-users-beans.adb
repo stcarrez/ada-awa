@@ -105,33 +105,6 @@ package body AWA.Users.Beans is
    end Register;
 
    --  ------------------------------
-   --  Action to verify the user after the registration
-   --  ------------------------------
-   overriding
-   procedure Verify (Data    : in out Authenticate_Bean;
-                     Outcome : in out Unbounded_String) is
-      Principal : AWA.Users.Principals.Principal_Access;
-      Ctx   : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
-      Flash : constant ASF.Contexts.Faces.Flash_Context_Access := Ctx.Get_Flash;
-   begin
-      Data.Manager.Verify_User (Key     => To_String (Data.Access_Key),
-                                IpAddr  => "",
-                                Principal => Principal);
-
-      Data.Set_Session_Principal (Principal);
-      Outcome := To_Unbounded_String ("success");
-
-      --  Add a message to the flash context so that it will be displayed on the next page.
-      Flash.Set_Keep_Messages (True);
-      Messages.Factory.Add_Message (Ctx.all, "users.message_registration_done", Messages.INFO);
-
-   exception
-      when Services.Not_Found =>
-         Outcome := To_Unbounded_String ("failure");
-         Messages.Factory.Add_Message (Ctx.all, "users.error_verify_register_key");
-   end Verify;
-
-   --  ------------------------------
    --  Action to trigger the lost password email process.
    --  ------------------------------
    overriding

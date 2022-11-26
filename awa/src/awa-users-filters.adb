@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  awa-users-filters -- Specific filters for authentication and key verification
+--  awa-users-filters -- Specific filters for authentication
 --  Copyright (C) 2011, 2012, 2013, 2015, 2019, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -24,6 +24,7 @@ with Util.Http.Cookies;
 with AWA.Services.Contexts;
 with AWA.Users.Services;
 with AWA.Users.Modules;
+with AWA.Users.Principals;
 
 package body AWA.Users.Filters is
 
@@ -31,16 +32,6 @@ package body AWA.Users.Filters is
 
    --  The logger
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Users.Filters");
-
-   --  ------------------------------
-   --  Set the user principal on the session associated with the ASF request.
-   --  ------------------------------
-   procedure Set_Session_Principal (Request   : in out Servlet.Requests.Request'Class;
-                                    Principal : in Principals.Principal_Access) is
-      Session   : Servlet.Sessions.Session := Request.Get_Session (Create => True);
-   begin
-      Session.Set_Principal (Principal.all'Access);
-   end Set_Session_Principal;
 
    --  ------------------------------
    --  Initialize the filter and configure the redirection URIs.
@@ -133,78 +124,5 @@ package body AWA.Users.Filters is
          Response.Send_Error (Servlet.Responses.SC_UNAUTHORIZED);
       end if;
    end Do_Login;
-
-   --  ------------------------------
-   --  Initialize the filter and configure the redirection URIs.
-   --  ------------------------------
-   overriding
-   procedure Initialize (Filter  : in out Verify_Filter;
-                         Config  : in Servlet.Core.Filter_Config) is
-      use Servlet.Core;
-
-      URI : constant String := Servlet.Core.Get_Init_Parameter (Config,
-                                                                VERIFY_FILTER_REDIRECT_PARAM);
-   begin
-      Filter.Invalid_Key_URI := To_Unbounded_String (URI);
-      if Uri'Length = 0 then
-         Log.Error ("Missing configuration for {0}.{1}",
-                    Servlet.Core.Get_Filter_Name (Config),
-                    VERIFY_FILTER_REDIRECT_PARAM);
-      end if;
-      Filter.Change_Password_Uri := Get_Init_Parameter (Config,
-                                                        VERIFY_FILTER_CHANGE_PASSWORD_PARAM);
-   end Initialize;
-
-   --  ------------------------------
-   --  Filter a request which contains an access key and verify that the
-   --  key is valid and identifies a user.  Once the user is known, create
-   --  a session and setup the user principal.
-   --
-   --  If the access key is missing or invalid, redirect to the
-   --  <b>Invalid_Key_URI</b> associated with the filter.
-   --  ------------------------------
-   overriding
-   procedure Do_Filter (Filter   : in Verify_Filter;
-                        Request  : in out Servlet.Requests.Request'Class;
-                        Response : in out Servlet.Responses.Response'Class;
-                        Chain    : in out Servlet.Core.Filter_Chain) is
-      use type AWA.Users.Principals.Principal_Access;
-
-      Key       : constant String := Request.Get_Parameter (PARAM_ACCESS_KEY);
-      Manager   : constant Users.Services.User_Service_Access := Users.Modules.Get_User_Manager;
-      Principal : AWA.Users.Principals.Principal_Access;
-   begin
-      Log.Info ("Verify access key {0}", Key);
-
-      Manager.Verify_User (Key       => Key,
-                           IpAddr    => "",
-                           Principal => Principal);
-
-      if Principal = null then
-         declare
-            URI : constant String := To_String (Filter.Change_Password_Uri) & Key;
-         begin
-            Log.Info ("Access key verified but no password, redirecting to {0}", URI);
-            Response.Send_Redirect (Location => URI);
-            return;
-         end;
-      end if;
-
-      Set_Session_Principal (Request, Principal);
-
-      --  Request is authorized, proceed to the next filter.
-      Servlet.Core.Do_Filter (Chain    => Chain,
-                              Request  => Request,
-                              Response => Response);
-
-   exception
-      when AWA.Users.Services.Not_Found =>
-         declare
-            URI : constant String := To_String (Filter.Invalid_Key_URI);
-         begin
-            Log.Info ("Invalid access key {0}, redirecting to {1}", Key, URI);
-            Response.Send_Redirect (Location => URI);
-         end;
-   end Do_Filter;
 
 end AWA.Users.Filters;

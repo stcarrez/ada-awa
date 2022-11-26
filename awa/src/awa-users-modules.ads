@@ -75,7 +75,6 @@ private
 
    type User_Module is new AWA.Modules.Module with record
       Manager     : Services.User_Service_Access := null;
-      Key_Filter  : aliased AWA.Users.Filters.Verify_Filter;
       Auth_Filter : aliased AWA.Users.Filters.Auth_Filter;
       Auth        : aliased AWA.Users.Servlets.Request_Auth_Servlet;
       Verify_Auth : aliased AWA.Users.Servlets.Verify_Auth_Servlet;
