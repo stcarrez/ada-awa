@@ -99,6 +99,13 @@ package body AWA.Users.Tests is
 
       --  Check that the user is logged and we have a user principal now.
       T.Assert (Request.Get_User_Principal /= null, "A user principal should be defined");
+
+      --  Check that the logout removes the principal
+      Do_Get (Request, Reply, "/auth/logout.html",
+              "logout-created-user-1.html");
+      ASF.Tests.Assert_Redirect (T, "/asfunit/auth/login.html",
+                                 Reply, "Invalid redirection after logout");
+
    end Test_Create_User;
 
    --  ------------------------------
@@ -177,8 +184,16 @@ package body AWA.Users.Tests is
    end Test_Registration_Disabled;
 
    procedure Test_Logout_User (T : in out Test) is
+      Request   : Servlet.Requests.Mockup.Request;
+      Reply     : Servlet.Responses.Mockup.Response;
    begin
-      null;
+      Do_Get (Request, Reply, "/auth/logout.html",
+              "logout.html");
+
+      ASF.Tests.Assert_Redirect (T, "/asfunit/auth/login.html",
+                                 Reply, "Invalid redirection after logout");
+      T.Assert (Request.Get_User_Principal = null, "A user principal must be removed");
+
    end Test_Logout_User;
 
    --  ------------------------------
