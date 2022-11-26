@@ -56,6 +56,7 @@ package AWA.Users.Servlets is
    MESSAGE_BAD_CONFIGURATION     : constant String := "users.message_invalid_configuration";
    MESSAGE_AUTH_FAILED           : constant String := "users.message_invalid_auth";
    MESSAGE_REGISTRATION_DISABLED : constant String := "users.message_registration_disabled";
+   MESSAGE_INVALID_KEY           : constant String := "users.message_invalid_key";
 
    --  Set the user principal on the session associated with the ASF request.
    procedure Set_Session_Principal (Request   : in out Servlet.Requests.Request'Class;

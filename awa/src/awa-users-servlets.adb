@@ -336,6 +336,7 @@ package body AWA.Users.Servlets is
       Key       : constant String := Request.Get_Path_Parameter (1);
       Manager   : constant Users.Services.User_Service_Access := Users.Modules.Get_User_Manager;
       Principal : AWA.Users.Principals.Principal_Access;
+      Session   : Servlet.Sessions.Session := Request.Get_Session (Create => True);
    begin
       Log.Info ("Verify access key '{0}'", Key);
 
@@ -353,9 +354,9 @@ package body AWA.Users.Servlets is
          end;
       end if;
 
-      Set_Session_Principal (Request, Principal);
+      Session.Set_Principal (Principal.all'Access);
 
-      --  Request is authorized, proceed to the next filter.
+      --  Request is authorized, redirect to the final page.
       Response.Send_Redirect (Location => Server.Get_Redirect_URL (Request));
 
    exception
@@ -364,6 +365,8 @@ package body AWA.Users.Servlets is
             URI : constant String := To_String (Server.Invalid_Key_URI);
          begin
             Log.Info ("Invalid access key '{0}', redirecting to {1}", Key, URI);
+            Session.Set_Attribute (AUTH_ERROR_ATTRIBUTE,
+                                   UBO.To_Object (MESSAGE_INVALID_KEY));
             Response.Send_Redirect (Location => URI);
          end;
    end Do_Get;
