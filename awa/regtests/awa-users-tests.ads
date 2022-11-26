@@ -45,6 +45,9 @@ package AWA.Users.Tests is
    --  Test OAuth access using a fake OAuth provider.
    procedure Test_OAuth_Login (T : in out Test);
 
+   --  Test validation with an invalid access key.
+   procedure Test_Validate_Bad_Key (T : in out Test);
+
    --  Run the recovery password process for the given user and change the password.
    procedure Recover_Password (T        : in out Test;
                                Email    : in String;

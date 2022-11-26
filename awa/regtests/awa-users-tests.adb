@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  files.tests -- Unit tests for files
---  Copyright (C) 2009, 2010, 2011, 2012, 2017, 2018, 2020 Stephane Carrez
+--  awa-users-tests -- Unit tests for AWA users
+--  Copyright (C) 2009, 2010, 2011, 2012, 2017, 2018, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,7 +31,6 @@ with Security;
 package body AWA.Users.Tests is
 
    use ASF.Tests;
-   use AWA.Tests;
    use type Security.Principal_Access;
    use type AWA.Users.Services.User_Service_Access;
 
@@ -53,6 +52,8 @@ package body AWA.Users.Tests is
                        Test_Reset_Password_Invalid_User'Access);
       Caller.Add_Test (Suite, "Test AWA.Users.Services.Authenticate",
                        Test_OAuth_Login'Access);
+      Caller.Add_Test (Suite, "Test AWA.Users.Services.Verify_User (Bad Key)",
+                       Test_Validate_Bad_Key'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -242,6 +243,39 @@ package body AWA.Users.Tests is
       Util.Tests.Assert_Equals (T, "Oauth-user", Request.Get_User_Principal.Get_Name,
                                 "Invalid user name after OAuth authentication");
    end Test_OAuth_Login;
+
+   --  ------------------------------
+   --  Test validation with an invalid access key.
+   --  ------------------------------
+   procedure Test_Validate_Bad_Key (T : in out Test) is
+      Request : Servlet.Requests.Mockup.Request;
+      Reply   : Servlet.Responses.Mockup.Response;
+   begin
+      Do_Get (Request, Reply, "/auth/validate/",
+              "validate-bad-key-1.html");
+      ASF.Tests.Assert_Redirect (T, "/asfunit/auth/login.html",
+                                 Reply, "Invalid redirection when validation key is empty");
+
+      Do_Get (Request, Reply, "/auth/login.html",
+              "validate-bad-key-msg-1.html");
+
+      ASF.Tests.Assert_Matches (T, "The access key is invalid or has expired.",
+                                Reply, "Invalid error page after validate key (bad key)",
+                                Servlet.Responses.SC_OK);
+
+      Do_Get (Request, Reply, "/auth/validate/abcde",
+              "validate-bad-key-2.html");
+      ASF.Tests.Assert_Redirect (T, "/asfunit/auth/login.html",
+                                 Reply, "Invalid redirection when validation key is empty");
+
+      Do_Get (Request, Reply, "/auth/login.html",
+              "validate-bad-key-msg-2.html");
+
+      ASF.Tests.Assert_Matches (T, "The access key is invalid or has expired.",
+                                Reply, "Invalid error page after validate key (bad key)",
+                                Servlet.Responses.SC_OK);
+
+   end Test_Validate_Bad_Key;
 
    --  ------------------------------
    --  Run the recovery password process for the given user and change the password.
