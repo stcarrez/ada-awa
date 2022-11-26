@@ -72,12 +72,16 @@ the OpenID integration.
 | |1|
 |users.auth_key|An authentication key used to sign the authentication cookies.|
 | |8ef60aad66977c68b12f4f8acab5a4e00a77f6e8|
+|users.allow_register|Allow users to register themselves on the server. When disabled, users can be created by the AWA 'user' command.|
+| |#{app_login_register}|
 |openid.realm|The REALM URL used by OpenID providers to verify the validity of the verification callback.|
 | |#{app_url_base}/auth|
 |openid.callback_url|The verification callback URI used by the OpenID provider to redirect the user after authentication.|
 | |#{app_url_base}/auth/verify|
 |openid.success_url|The URI where the user is redirected after a successful authentication.|
 | |#{contextPath}/workspaces/main.html|
+|openid.error_url|The URI where the user is redirected when some authenticate error occurred.|
+| |#{contextPath}/auth/login.html|
 |auth.url.orange|Orange OpenID access point|
 | |https://openid.orange.fr|
 |auth.provider.orange|Auth provider to use for Orange|
@@ -94,10 +98,26 @@ the OpenID integration.
 | |https://github.com/login/oauth/authorize|
 |auth.provider.github|Auth provider to use for GitHub|
 | |github|
+|github.request_url|GitHub OAuth token access point|
+| |https://github.com/login/oauth/access_token|
+|github.scope|GitHub OAuth scope|
+| |read:user, read:email|
+|github.callback_url|GitHub verify callback|
+| |#{app_oauth_url_base}#{contextPath}/auth/verify|
+|github.issuer|GitHub issuer identification|
+| |https://github.com|
 |auth.url.gitlab|GitLab OAuth2 Connect access point|
 | |https://gitlab.com/oauth/authorize|
 |auth.provider.gitlab|Auth provider to use for GitLab|
 | |yahoo|
+|gitlab.request_url|Gitlab OAuth token access point|
+| |https://gitlab.com/oauth/token|
+|gitlab.scope|Gitlab OAuth scope|
+| |openid email|
+|gitlab.callback_url|Gitlab verify callback|
+| |#{app_oauth_url_base}#{contextPath}/auth/verify|
+|gitlab.issuer|Gitlab issuer identification|
+| |https://gitlab.com|
 |auth.url.twitter|Twitter OAuth2 Connect access point|
 | |https://api.twitter.com/oauth/authenticate|
 |auth.provider.twitter|Auth provider to use for Twitter|
@@ -137,7 +157,7 @@ the OpenID integration.
 |verify-access-key.redirect|URI to redirect to the login page|
 | |#{contextPath}/auth/login.html|
 |verify-access-key.change-password|URI to redirect to the change password page when the access key is verified, the user account is registered but there is no password for authentication|
-| |#{contextPath}/auth/change-password.html?key=|
+| |#{contextPath}/auth/change-password/|
 |app_login_register|Enable or disable user registration through the web interface|
 | |#{not empty app_login_register ? app_login_register : true}|
 |app_login_email|Enable or disable user login through the email/password form|
