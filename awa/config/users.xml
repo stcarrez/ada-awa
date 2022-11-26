@@ -121,6 +121,15 @@
   </context-param>
 
   <context-param>
+    <param-name>users.allow_register</param-name>
+    <param-value>#{app_login_register}</param-value>
+    <description>
+      Allow users to register themselves on the server.
+      When disabled, users can be created by the AWA 'user' command.
+    </description>
+  </context-param>
+
+  <context-param>
     <param-name>openid.realm</param-name>
     <param-value>#{app_url_base}/auth</param-value>
     <description>
@@ -444,11 +453,6 @@
     <url-pattern>/users/*.html</url-pattern>
   </filter-mapping>
 
-  <filter-mapping>
-    <filter-name>verify-access-key</filter-name>
-    <url-pattern>/auth/validate.html</url-pattern>
-  </filter-mapping>
-  
   <url-mapping>
     <pattern>/auth/change-password/#{resetPassword.key}</pattern>
     <view-id>/auth/change-password.html</view-id>
