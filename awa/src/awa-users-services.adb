@@ -796,11 +796,12 @@ package body AWA.Users.Services is
    begin
       Log.Info ("Create user {0} with key {1}", Email_Address, Key);
 
-      --  Reject user creation if the registration is disabled.
+      --  We want to allow the user creation if the access key is enabled
+      --  because that access key was sent by the site administrator and
+      --  we trust it.  If the access key is invalid, the user creation is rejected.
       if not Model.Allow_Register then
-         Log.Warn ("Registration disabled: cannot register user with email {0}",
+         Log.Info ("Registration is disabled but an access key is used with email {0}",
                    Email_Address);
-         raise Registration_Disabled;
       end if;
 
       Ctx.Start;
@@ -816,9 +817,6 @@ package body AWA.Users.Services is
       Cur_User := User_Ref (Access_Key.Get_User);
       Cur_Email := Email_Ref (Cur_User.Get_Email);
 
-      --  Invalidate the key.
-      Access_Key.Delete (DB);
-
       --  Check first if the email address is not used by another user.
       Query.Bind_Param (1, Email_Address);
       Query.Set_Filter ("LOWER(email) = LOWER(?)");
@@ -831,6 +829,7 @@ package body AWA.Users.Services is
 
       --  Make sure the user is not disabled.
       if Cur_User.Get_Status = Models.USER_DISABLED then
+         Access_Key.Delete (DB);
          Ctx.Commit;
          Log.Warn ("User account {0} is disabled", Email_Address);
          raise User_Disabled with "User account '" & Email_Address & "' is disabled";
@@ -877,7 +876,15 @@ package body AWA.Users.Services is
                               Principal => Principal.all'Access);
          Event.Set_Parameter ("email", Email.Get_Email);
          Model.Send_Alert (User_Create_Event.Kind, User, Event);
+
+         --  Post a second event to notify the access key was validated.
+         --  Can be used by an invitation process.
+         Event.Set_Parameter ("key", Key);
+         Model.Send_Alert (User_Key_Validation_Event.Kind, User, Event);
       end;
+
+      --  Invalidate the key at then end when the event are handled..
+      Access_Key.Delete (DB);
 
       Ctx.Commit;
    end Create_User;

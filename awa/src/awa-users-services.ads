@@ -52,6 +52,11 @@ with ADO.Sessions;
 --  This event is posted when a user has successfully reset his password.
 --  It can be used to send an email.
 --
+--  === user-key-validation ===
+--  This event is posted when a user has created a account and successfully
+--  validated an access key.  It can be used to finish the accept invitation
+--  process.
+--
 package AWA.Users.Services is
 
    use AWA.Users.Models;
@@ -60,6 +65,7 @@ package AWA.Users.Services is
    package User_Register_Event is new AWA.Events.Definition (Name => "user-register");
    package User_Lost_Password_Event is new AWA.Events.Definition (Name => "user-lost-password");
    package User_Reset_Password_Event is new AWA.Events.Definition (Name => "user-reset-password");
+   package User_Key_Validation_Event is new AWA.Events.Definition (Name => "user-key-validation");
 
    package User_Lifecycle is
      new AWA.Modules.Lifecycles (Element_Type => AWA.Users.Models.User_Ref'Class);

@@ -71,7 +71,7 @@ package body AWA.Users.Beans is
 
          --  Add a message to the flash context so that it will be displayed on the next page.
          Flash.Set_Keep_Messages (True);
-         Messages.Factory.Add_Message (Ctx.all, "users.message_signup_sent", Messages.INFO);
+         Messages.Factory.Add_Message (Ctx.all, "users.message_registration_done", Messages.INFO);
       else
          declare
             Access_Key : Access_Key_Ref;
@@ -276,7 +276,6 @@ package body AWA.Users.Beans is
    overriding
    procedure Load (Data    : in out Authenticate_Bean;
                    Outcome : in out Unbounded_String) is
-      pragma Unreferenced (Outcome);
       User  : User_Ref;
       Email : Email_Ref;
    begin
@@ -284,6 +283,10 @@ package body AWA.Users.Beans is
       Data.First_Name := User.Get_First_Name;
       Data.Last_Name := User.Get_Last_Name;
       Data.Email := Email.Get_Email;
+
+   exception
+      when others =>
+         Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("not-found");
    end Load;
 
    overriding
