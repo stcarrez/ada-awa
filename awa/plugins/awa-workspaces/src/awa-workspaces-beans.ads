@@ -73,7 +73,7 @@ package AWA.Workspaces.Beans is
 
    overriding
    procedure Accept_Invitation (Bean    : in out Invitation_Bean;
-                                Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+                                Event   : in AWA.Events.Module_Event'Class);
 
    overriding
    procedure Send (Bean    : in out Invitation_Bean;

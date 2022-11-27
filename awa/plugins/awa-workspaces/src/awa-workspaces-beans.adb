@@ -114,13 +114,12 @@ package body AWA.Workspaces.Beans is
 
    overriding
    procedure Accept_Invitation (Bean    : in out Invitation_Bean;
-                                Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
-      pragma Unreferenced (Outcome);
-
+                                Event   : in AWA.Events.Module_Event'Class) is
+      Key   : constant String := Event.Get_Parameter ("key");
       Ctx   : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
       Flash : constant ASF.Contexts.Faces.Flash_Context_Access := Ctx.Get_Flash;
    begin
-      Bean.Module.Accept_Invitation (Key => Ada.Strings.Unbounded.To_String (Bean.Key));
+      Bean.Module.Accept_Invitation (Key => Key);
       Flash.Set_Keep_Messages (True);
       Messages.Factory.Add_Message (Ctx.all, "workspaces.workspace_welcome_message",
                                     Messages.INFO);

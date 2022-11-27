@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-workspaces-tests -- Unit tests for workspaces and invitations
---  Copyright (C) 2017, 2018 Stephane Carrez
+--  Copyright (C) 2017, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,6 +27,7 @@ package AWA.Workspaces.Tests is
 
    type Test is new AWA.Tests.Test with record
       Member_Id : ADO.Identifier;
+      Invite_Id : ADO.Identifier;
       Key       : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 

@@ -23,9 +23,9 @@
     <ui:define name="pageHeader">
         <f:metadata>
             <f:viewParam id='key' value='#{inviteUser.key}' required="false"/>
-            <f:viewParam value='#{login.key}' from='#{inviteUser.key}'/>
-            <f:viewAction action='#{inviteUser.load}'/>
+            <f:viewParam value='#{login.key}' from='#{inviteUser.key}' required='false'/>
             <f:viewAction action='#{login.load}'/>
+            <f:viewAction action='#{inviteUser.load}'/>
         </f:metadata>
     </ui:define>
 

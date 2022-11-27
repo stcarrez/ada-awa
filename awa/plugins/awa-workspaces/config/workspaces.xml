@@ -45,6 +45,11 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
+  <!--  When a user is created and validates the access key, update the invitation.  -->
+  <on-event name="user-key-validation">
+     <action>#{inviteUser.accept_invitation}</action>
+  </on-event>
+
   <entity-permission>
     <name>workspace-create</name>
     <entity-type>awa_workspace</entity-type>
@@ -93,7 +98,8 @@
     </navigation-case>
     <navigation-case>
       <from-outcome>success-key</from-outcome>
-      <to-view-id>/auth/accept-invitation.xhtml</to-view-id>
+      <to-view-id>/workspaces/main.xhtml</to-view-id>
+      <redirect/>
     </navigation-case>
     <navigation-case>
       <from-outcome>not-found</from-outcome>
@@ -131,24 +137,17 @@
   <filter-mapping>
     <filter-name>service</filter-name>
     <url-pattern>/workspaces/*.html</url-pattern>
-    <url-pattern>/workspaces/accept-invitation/#{inviteUser.key}</url-pattern>
     <url-pattern>/auth/invitation/#{inviteUser.key}</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
     <filter-name>auth-filter</filter-name>
     <url-pattern>/workspaces/*.html</url-pattern>
-    <url-pattern>/workspaces/accept-invitation/#{inviteUser.key}</url-pattern>
   </filter-mapping>
 
   <url-mapping>
     <pattern>/auth/invitation/#{inviteUser.key}</pattern>
     <view-id>/auth/invitation.html</view-id>
-  </url-mapping>
-
-  <url-mapping>
-    <pattern>/workspaces/accept-invitation/#{inviteUser.key}</pattern>
-    <view-id>/workspaces/accept-nvitation.html</view-id>
   </url-mapping>
 
   <url-policy>
@@ -159,7 +158,6 @@
     <url-pattern>/workspaces/main.html</url-pattern>
     <url-pattern>/workspaces/members.html</url-pattern>
     <url-pattern>/workspaces/invite.html</url-pattern>
-    <url-pattern>/workspaces/accept-invitation.html</url-pattern>
     <url-pattern>/workspaces/forms/delete-member.html</url-pattern>
   </url-policy>
 

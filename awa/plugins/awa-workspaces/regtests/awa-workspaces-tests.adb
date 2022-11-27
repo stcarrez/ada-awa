@@ -20,9 +20,12 @@ with ASF.Requests.Mockup;
 with ASF.Responses.Mockup;
 with ASF.Helpers.Beans;
 with ASF.Tests;
+with ADO.Sessions;
 with AWA.Users.Models;
 with AWA.Tests.Helpers.Users;
 with AWA.Workspaces.Beans;
+with AWA.Workspaces.Models;
+with AWA.Workspaces.Modules;
 
 package body AWA.Workspaces.Tests is
 
@@ -60,11 +63,11 @@ package body AWA.Workspaces.Tests is
       ASF.Tests.Assert_Contains (T, "Bad or invalid invitation", Reply,
                                  "This invitation is invalid");
 
-      ASF.Tests.Do_Get (Request, Reply, "/auth/invitation.html?key=test", "invitation-bad.html");
+      ASF.Tests.Do_Get (Request, Reply, "/auth/invitation/test", "invitation-bad.html");
       ASF.Tests.Assert_Contains (T, "This invitation is invalid or has expired", Reply,
                                  "This invitation is invalid (key)");
 
-      ASF.Tests.Do_Get (Request, Reply, "/auth/invitation.html?key=x" & key,
+      ASF.Tests.Do_Get (Request, Reply, "/auth/invitation/x" & key,
                         "invitation-bad2.html");
       ASF.Tests.Assert_Contains (T, "This invitation is invalid or has expired",
                                  Reply, "This invitation is invalid (key)");
@@ -73,7 +76,7 @@ package body AWA.Workspaces.Tests is
          return;
       end if;
 
-      ASF.Tests.Do_Get (Request, Reply, "/auth/invitation.html?key=" & Key, "invitation-ok.html");
+      ASF.Tests.Do_Get (Request, Reply, "/auth/invitation/" & Key, "invitation-ok.html");
       ASF.Tests.Assert_Contains (T, "Accept invitation", Reply,
                                  "Accept invitation page is invalid");
 
@@ -107,6 +110,7 @@ package body AWA.Workspaces.Tests is
       T.Assert (not Invite.Get_Access_Key.Is_Null, "The invite access key is null");
       T.Assert (Invite.Get_Member.Is_Inserted, "The invitation has a workspace member");
       T.Key := Invite.Get_Access_Key.Get_Access_Key;
+      T.Invite_Id := Invite.Get_Id;
       T.Verify_Anonymous (Invite.Get_Access_Key.Get_Access_Key);
 
       T.Member_ID := Invite.Get_Member.Get_Id;
@@ -165,7 +169,7 @@ package body AWA.Workspaces.Tests is
    begin
       T.Test_Invite_User;
       Request.Set_Parameter ("key", To_String (T.Key));
-      ASF.Tests.Do_Get (Request, Reply, "/auth/invitation.html?key="
+      ASF.Tests.Do_Get (Request, Reply, "/auth/invitation/"
                         & To_String (T.Key),
                         "accept-invitation-email-1.html");
       ASF.Tests.Assert_Contains (T, "input type=""hidden"" name=""key"" value="""
@@ -187,10 +191,27 @@ package body AWA.Workspaces.Tests is
                          "accept-invitation-email-2.html");
       T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY,
                 "Accept invitation page failed");
-      Util.Tests.Assert_Equals (T, "/asfunit/workspaces/accept-invitation.html?key=" &
-                                To_String (T.Key),
+      Util.Tests.Assert_Equals (T, "/asfunit/workspaces/main.html",
                                 Reply.Get_Header ("Location"),
                                 "The accept invitation page must redirect to the workspace");
+
+      --  Verify that the invitation is accepted.
+      declare
+         Principal  : AWA.Tests.Helpers.Users.Test_User;
+         Module     : AWA.Workspaces.Modules.Workspace_Module_Access;
+         DB         : ADO.Sessions.Session;
+         Invitation : AWA.Workspaces.Models.Invitation_Ref;
+         Found      : Boolean;
+      begin
+         AWA.Tests.Helpers.Users.Initialize (Principal);
+
+         Module := AWA.Workspaces.Modules.Get_Workspace_Module;
+         DB := Module.Get_Session;
+         Invitation.Load (DB, T.Invite_Id, Found);
+         T.Assert (Found, "Invitation was not found");
+         T.Assert (not Invitation.Get_Acceptance_Date.Is_Null,
+                   "Invitation not accepted");
+      end;
    end Test_Accept_Invitation_With_Email;
 
    --  ------------------------------
