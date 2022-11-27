@@ -33,6 +33,7 @@ with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded;
 with Util.Beans.Objects;
 with Util.Beans.Basic.Lists;
+with AWA.Events;
 with AWA.Users.Models;
 with Util.Beans.Methods;
 pragma Warnings (On);
@@ -576,8 +577,8 @@ package AWA.Workspaces.Models is
    procedure Load (Bean : in out Invitation_Bean;
                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
-   procedure Accept_Invitation (Bean : in out Invitation_Bean;
-                               Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+   procedure Accept_Invitation (Bean  : in out Invitation_Bean;
+                                Event : in AWA.Events.Module_Event'Class) is abstract;
 
    procedure Send (Bean : in out Invitation_Bean;
                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;

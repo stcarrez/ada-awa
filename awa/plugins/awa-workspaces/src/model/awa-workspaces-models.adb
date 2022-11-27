@@ -24,6 +24,7 @@ pragma Warnings (Off);
 with Ada.Unchecked_Deallocation;
 with Util.Beans.Objects.Time;
 with ASF.Events.Faces.Actions;
+with AWA.Events.Action_Method;
 pragma Warnings (On);
 package body AWA.Workspaces.Models is
 
@@ -1941,17 +1942,17 @@ package body AWA.Workspaces.Models is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Invitation_Bean,
                                                       Method => Op_Load,
                                                       Name   => "load");
-   procedure Op_Accept_Invitation (Bean    : in out Invitation_Bean;
-                                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
-   procedure Op_Accept_Invitation (Bean    : in out Invitation_Bean;
-                                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   procedure Op_Accept_Invitation (Bean  : in out Invitation_Bean;
+                                   Event : in AWA.Events.Module_Event'Class);
+   procedure Op_Accept_Invitation (Bean  : in out Invitation_Bean;
+                                   Event : in AWA.Events.Module_Event'Class) is
    begin
-      Invitation_Bean'Class (Bean).Accept_Invitation (Outcome);
+      Invitation_Bean'Class (Bean).Accept_Invitation (Event);
    end Op_Accept_Invitation;
    package Binding_Invitation_Bean_2 is
-     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Invitation_Bean,
-                                                      Method => Op_Accept_Invitation,
-                                                      Name   => "accept_invitation");
+     new AWA.Events.Action_Method.Bind (Bean   => Invitation_Bean,
+                                        Method => Op_Accept_Invitation,
+                                        Name   => "accept_invitation");
    procedure Op_Send (Bean    : in out Invitation_Bean;
                       Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
    procedure Op_Send (Bean    : in out Invitation_Bean;
