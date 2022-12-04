@@ -178,6 +178,8 @@ package body AWA.Users.Servlets is
    function Get_Error_URL (Server  : in Verify_Auth_Servlet;
                            Session : in Servlet.Sessions.Session'Class;
                            Request : in Servlet.Requests.Request'Class) return String is
+      pragma Unreferenced (Session, Request);
+
       Ctx   : constant Servlet.Core.Servlet_Registry_Access := Server.Get_Servlet_Context;
    begin
       return Ctx.Get_Init_Parameter ("openid.error_url");

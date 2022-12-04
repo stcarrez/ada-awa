@@ -292,6 +292,8 @@ package body AWA.Users.Beans is
    overriding
    procedure Auth_Error (Data    : in out Authenticate_Bean;
                          Outcome : in out Unbounded_String) is
+      pragma Unreferenced (Data);
+
       Ctx       : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
       Session   : Servlet.Sessions.Session := Ctx.Get_Session (Create => False);
    begin
