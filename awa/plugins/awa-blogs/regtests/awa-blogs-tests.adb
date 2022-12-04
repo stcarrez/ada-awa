@@ -159,6 +159,8 @@ package body AWA.Blogs.Tests is
 
          Post_Ident := Helpers.Extract_Redirect (Reply, "/asfunit/blogs/admin/"
                                                  & Ident & "/preview/");
+         Util.Tests.Assert_Equals (T, To_String (T.Post_Ident), Post_Ident,
+                                   "Invalid post ident after edit");
 
       end;
 
