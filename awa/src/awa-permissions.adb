@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions -- Permissions module
---  Copyright (C) 2011, 2012, 2013, 2014, 2016, 2017, 2020 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2016, 2017, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +15,8 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+
+with Ada.Strings.Fixed;
 
 with Util.Log.Loggers;
 with Util.Serialize.Mappers.Record_Mapper;
@@ -85,6 +87,9 @@ package body AWA.Permissions is
                          Field : in Config_Fields;
                          Value : in Util.Beans.Objects.Object);
 
+   function SQL_Uses_Entity_Id (SQL : in String) return Boolean
+     is (Ada.Strings.Fixed.Index (SQL, ":entity_id") > 0);
+
    --  ------------------------------
    --  Called while parsing the XML policy file when the <name>, <entity-type>, <sql> and
    --  <entity-permission> XML entities are found.  Create the new permission when the complete
@@ -131,10 +136,12 @@ package body AWA.Permissions is
                end if;
                declare
                   SQL  : constant String := Util.Beans.Objects.To_String (Into.SQL);
+                  Use_Entity_Id : constant Boolean := SQL_Uses_Entity_Id (SQL);
                   Perm : constant Entity_Controller_Access
-                    := new Entity_Controller '(Len      => SQL'Length,
-                                               SQL      => SQL,
-                                               Entities => Into.Entities);
+                    := new Entity_Controller '(Len           => SQL'Length,
+                                               Use_Entity_Id => Use_Entity_Id,
+                                               SQL           => SQL,
+                                               Entities      => Into.Entities);
                begin
                   Into.Manager.Add_Permission (Name, Perm.all'Access);
                   Into.Count := 0;

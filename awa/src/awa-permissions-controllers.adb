@@ -62,17 +62,21 @@ package body AWA.Permissions.Controllers is
          return False;
       end if;
 
-      if not (Permission in Entity_Permission'Class) then
-         Log.Info ("Permission {0} denied because the entity is not given.",
-                   Security.Permissions.Permission_Index'Image (Permission.Id));
-         return False;
-      end if;
-      Entity_Id := Entity_Permission'Class (Permission).Entity;
+      if Handler.Use_Entity_Id then
+         if not (Permission in Entity_Permission'Class) then
+            Log.Info ("Permission {0} denied because the entity is not given.",
+                      Security.Permissions.Permission_Index'Image (Permission.Id));
+            return False;
+         end if;
+         Entity_Id := Entity_Permission'Class (Permission).Entity;
 
-      --  If the security context does not contain the entity identifier, permission is denied.
-      if Entity_Id = ADO.NO_IDENTIFIER then
-         Log.Info ("No entity identifier in the security context.  Permission is denied");
-         return False;
+         --  If the security context does not contain the entity identifier, permission is denied.
+         if Entity_Id = ADO.NO_IDENTIFIER then
+            Log.Info ("No entity identifier in the security context.  Permission is denied");
+            return False;
+         end if;
+      else
+         Entity_Id := ADO.NO_IDENTIFIER;
       end if;
 
       declare

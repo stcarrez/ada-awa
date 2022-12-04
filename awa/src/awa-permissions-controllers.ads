@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions-controllers -- Permission controllers
---  Copyright (C) 2011, 2012, 2013, 2014 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,7 +38,8 @@ package AWA.Permissions.Controllers is
    --    <dt>user_id</dt>
    --    <dd>The user identifier</dd>
    --  </dl>
-   type Entity_Controller (Len : Positive) is
+   type Entity_Controller (Len : Positive;
+                           Use_Entity_Id : Boolean) is
    limited new Security.Controllers.Controller with record
       Entities : Entity_Type_Array;
       SQL      : String (1 .. Len);
