@@ -66,6 +66,7 @@ You may get Ahven or Aunit at:
   - Fix #33: Application name not recognized by some AWA commands
   - Fix #34: Configuration to authenticate with Gitlab is incomplete
   - Feature #35: Blog post creation improvement
+  - Fix #37: Cannot use entity-permission for the url-policy
 
 ## Version 2.4.0 - Aug 2022
 - Add support for SQL queries embedded in applications with ARE
