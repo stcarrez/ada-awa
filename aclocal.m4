@@ -26,8 +26,11 @@ AC_DEFUN(AM_WITH_NLS,
       nls_cv_header_libgt=
 
       AC_CACHE_CHECK([for gettext in libc], gt_cv_func_gettext_libc,
-       [AC_TRY_LINK([extern int gettext(char*);], [return (int) gettext ("")],
-	gt_cv_func_gettext_libc=yes, gt_cv_func_gettext_libc=no)])
+        [AC_LINK_IFELSE(
+          [AC_LANG_PROGRAM([extern int gettext(char*);],
+                           [return (int) gettext ("")])],
+         [gt_cv_func_gettext_libc=yes],
+         [gt_cv_func_gettext_libc=no])])
 
       if test "$gt_cv_func_gettext_libc" != "yes"; then
         AC_CHECK_LIB(intl, bindtextdomain,
