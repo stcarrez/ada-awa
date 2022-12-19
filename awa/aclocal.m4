@@ -305,7 +305,7 @@ AC_DEFUN(AM_GNAT_FIND_ADA_OPENAPI,
     [git@github.com:stcarrez/swagger-ada.git],
     [Building $1 requires the Ada OpenAPI Library.],
     [
-      SWAGGER_DIR=${ac_cv_gnat_project_dir_openapi}
+      OPENAPI_DIR=${ac_cv_gnat_project_dir_openapi}
     ])
   AC_SUBST(OPENAPI_DIR)
 ])
