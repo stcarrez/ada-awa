@@ -29,7 +29,7 @@ INSERT INTO awa_authenticate (`id`, `version`, `ident`, `salt`, `hash`, `method`
   WHERE user.open_id = '';
 
 INSERT INTO `ado_sequence` (name, version, value, block_size)
-  SELECT 'awa_authenticate', 1, MAX(auth.id) + 1, 100 FROM awa_authenticate AS auth;
+  SELECT 'awa_authenticate', 1, COALESCE(MAX(auth.id), 0) + 1, 100 FROM awa_authenticate AS auth;
 
 ALTER TABLE awa_session ADD COLUMN `user_auth_id` BIGINT;
 
