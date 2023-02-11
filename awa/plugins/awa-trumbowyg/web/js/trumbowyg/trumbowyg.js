@@ -1,5 +1,5 @@
 /**
- * Trumbowyg v2.23.0 - A lightweight WYSIWYG editor
+ * Trumbowyg v2.26.0 - A lightweight WYSIWYG editor
  * Trumbowyg core file
  * ------------------------
  * @link http://alex-d.github.io/Trumbowyg
@@ -42,6 +42,9 @@ jQuery.trumbowyg = {
             link: 'Link',
             createLink: 'Insert link',
             unlink: 'Remove link',
+
+            _self: 'Same tab (default)',
+            _blank: 'New tab',
 
             justifyLeft: 'Align Left',
             justifyCenter: 'Align Center',
@@ -126,7 +129,7 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
 
         urlProtocol: false,
         minimalLinks: false,
-        defaultLinkTarget: undefined,
+        linkTargets: ['_self', '_blank'],
 
         svgPath: null
     },
@@ -272,7 +275,7 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
             }
         }
 
-        var baseHref = !!t.doc.querySelector('base') ? window.location.href.split(/[?#]/)[0] : '';
+        var baseHref = !!t.doc.querySelector('base') ? window.location.href.replace(window.location.hash, '') : '';
         t.svgPath = $trumbowyg.svgAbsoluteUseHref ? svgPathOption : baseHref;
 
 
@@ -1272,7 +1275,7 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                     return false;
                 }
 
-                if(t.range.startContainer.parentNode && t.range.startContainer.parentNode === this) {
+                if (t.range && t.range.startContainer.parentNode === this) {
                     resetRange = true;
                 }
                 var $newTag = $('<' + newTag + '/>');
@@ -1300,7 +1303,8 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                 text = new XMLSerializer().serializeToString(selectedRange.cloneContents()) || selectedRange + '',
                 url,
                 title,
-                target;
+                target,
+                linkDefaultTarget = t.o.linkTargets[0];
 
             while (['A', 'DIV'].indexOf(node.nodeName) < 0) {
                 node = node.parentNode;
@@ -1312,7 +1316,7 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                 url = $a.attr('href');
                 if (!t.o.minimalLinks) {
                     title = $a.attr('title');
-                    target = $a.attr('target') || t.o.defaultLinkTarget;
+                    target = $a.attr('target') || linkDefaultTarget;
                 }
                 var range = t.doc.createRange();
                 range.selectNode(node);
@@ -1334,6 +1338,12 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                 }
             };
             if (!t.o.minimalLinks) {
+                var targetOptions = t.o.linkTargets.reduce(function (options, optionValue) {
+                    options[optionValue] = t.lang[optionValue];
+
+                    return options;
+                }, {});
+
                 $.extend(options, {
                     title: {
                         label: t.lang.title,
@@ -1341,7 +1351,8 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                     },
                     target: {
                         label: t.lang.target,
-                        value: target
+                        value: target,
+                        options: targetOptions
                     }
                 });
             }
@@ -1357,8 +1368,8 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                 if (v.title) {
                     link.attr('title', v.title);
                 }
-                if (v.target || t.o.defaultLinkTarget) {
-                    link.attr('target', v.target || t.o.defaultLinkTarget);
+                if (v.target || linkDefaultTarget) {
+                    link.attr('target', v.target || linkDefaultTarget);
                 }
                 t.range.deleteContents();
                 t.range.insertNode(link[0]);
@@ -1559,6 +1570,11 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                 zIndex: 99999
             }).appendTo($(t.doc.body));
 
+            var darkClass = prefix + 'dark';
+            if (t.$c.parents('.' + darkClass).length !== 0) {
+                $modal.addClass(darkClass);
+            }
+
             // Click on overlay close modal by cancelling them
             t.$overlay.one('click', function () {
                 $modal.trigger(CANCEL_EVENT);
@@ -1617,7 +1633,7 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
 
             if (buildForm) {
                 // Focus in modal box
-                $('input:first', $box).focus();
+                $(':input:first', $box).focus();
 
                 // Append Confirm and Cancel buttons
                 t.buildModalBtn('submit', $box);
@@ -1668,22 +1684,45 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
             var t = this,
                 prefix = t.o.prefix,
                 lg = t.lang,
-                html = '';
+                html = '',
+                idPrefix = prefix + 'form-' + Date.now() + '-';
 
             $.each(fields, function (fieldName, field) {
                 var l = field.label || fieldName,
                     n = field.name || fieldName,
-                    a = field.attributes || {};
+                    a = field.attributes || {},
+                    fieldId = idPrefix + fieldName;
 
                 var attr = Object.keys(a).map(function (prop) {
                     return prop + '="' + a[prop] + '"';
                 }).join(' ');
 
-                html += '<label><input type="' + (field.type || 'text') + '" name="' + n + '"' +
-                    (field.type === 'checkbox' && field.value ? ' checked="checked"' : ' value="' + (field.value || '').replace(/"/g, '&quot;')) +
-                    '"' + attr + '><span class="' + prefix + 'input-infos"><span>' +
-                    (lg[l] ? lg[l] : l) +
-                    '</span></span></label>';
+                if (typeof field.type === 'function') {
+                  if (!field.name) {
+                    field.name = n;
+                  }
+
+                  html += field.type(field, fieldId, prefix, lg);
+
+                  return;
+                }
+
+                html += '<div class="' + prefix + 'input-row">';
+                html += '<div class="' + prefix + 'input-infos"><label for="' + fieldId + '"><span>' + (lg[l] ? lg[l] : l) + '</span></label></div>';
+                html += '<div class="' + prefix + 'input-html">';
+
+                if ($.isPlainObject(field.options)) {
+                    html += '<select name="target">';
+                    html += Object.keys(field.options).map((optionValue) => {
+                        return '<option value="' + optionValue + '" ' + (optionValue === field.value ? 'selected' : '') + '>' + field.options[optionValue] + '</option>';
+                    }).join('');
+                    html += '</select>';
+                } else {
+                    html += '<input id="' + fieldId + '" type="' + (field.type || 'text') + '" name="' + n + '" ' + attr;
+                    html += (field.type === 'checkbox' && field.value ? ' checked="checked"' : '') + ' value="' + (field.value || '').replace(/"/g, '&quot;') + '">';
+                }
+
+                html += '</div></div>';
             });
 
             return t.openModal(title, html)
@@ -1695,8 +1734,8 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                     $.each(fields, function (fieldName, field) {
                         var n = field.name || fieldName;
 
-                        var $field = $('input[name="' + n + '"]', $form),
-                            inputType = $field.attr('type');
+                        var $field = $(':input[name="' + n + '"]', $form),
+                            inputType = $field[0].type;
 
                         switch (inputType.toLowerCase()) {
                             case 'checkbox':
@@ -1738,19 +1777,19 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
         addErrorOnModalField: function ($field, err) {
             var prefix = this.o.prefix,
                 spanErrorClass = prefix + 'msg-error',
-                $label = $field.parent();
+                $row = $field.closest('.' + prefix + 'input-row');
 
             $field
                 .on('change keyup', function () {
-                    $label.removeClass(prefix + 'input-error');
+                    $row.removeClass(prefix + 'input-error');
                     setTimeout(function () {
-                        $label.find('.' + spanErrorClass).remove();
+                        $row.find('.' + spanErrorClass).remove();
                     }, 150);
                 });
 
-            $label
+            $row
                 .addClass(prefix + 'input-error')
-                .find('input+span')
+                .find('.' + prefix + 'input-infos label')
                 .append(
                     $('<span/>', {
                         class: spanErrorClass,

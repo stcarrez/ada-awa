@@ -53,6 +53,16 @@
                 file: 'File',
                 uploadError: 'Error'
             },
+            sl: {
+                upload: 'Naloži datoteko',
+                file: 'Datoteka',
+                uploadError: 'Napaka'
+            },
+            by: {
+                upload: 'Загрузка',
+                file: 'Файл',
+                uploadError: 'Памылка'
+            },
             cs: {
                 upload: 'Nahrát obrázek',
                 file: 'Soubor',
@@ -67,6 +77,11 @@
                 upload: 'Hochladen',
                 file: 'Datei',
                 uploadError: 'Fehler'
+            },
+            et: {
+                upload: 'Lae üles',
+                file: 'Fail',
+                uploadError: 'Viga'
             },
             fr: {
                 upload: 'Envoi',

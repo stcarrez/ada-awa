@@ -7,6 +7,12 @@
             en: {
                 fontFamily: 'Font'
             },
+            sl: {
+                fontFamily: 'Pisava'
+            },
+            by: {
+                fontFamily: 'Шрыфт'
+            },
             es: {
                 fontFamily: 'Fuente'
             },
@@ -15,6 +21,9 @@
             },
             de: {
                 fontFamily: 'Schriftart'
+            },
+            et: {
+                fontFamily: 'Font'
             },
             fr: {
                 fontFamily: 'Police'
@@ -31,8 +40,11 @@
             pt_br: {
                 fontFamily: 'Fonte',
             },
+            ru: {
+                fontFamily: 'Шрифт'
+            },
             tr: {
-                fontFamily: 'Yazı Tipi'
+                fontFamily: 'Yazı tipi'
             },
             zh_tw: {
                 fontFamily: '字體',

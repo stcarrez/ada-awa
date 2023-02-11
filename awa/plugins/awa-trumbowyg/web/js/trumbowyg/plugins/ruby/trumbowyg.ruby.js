@@ -19,9 +19,19 @@
                 rubyModal: 'Ruby modal',
                 rubyText: 'Ruby text'
             },
+            by: {
+                ruby: 'Уставіць ruby тэкст',
+                rubyModal: 'Ruby анатацыя',
+                rubyText: 'Ruby тэкст'
+            },
             da: {
                 ruby: 'Tilføj ruby tekst',
                 rubyModal: 'Ruby modal',
+                rubyText: 'Ruby tekst'
+            },
+            et: {
+                ruby: 'Lisa ruby tekst',
+                rubyModal: 'Ruby modaal',
                 rubyText: 'Ruby tekst'
             },
             fr: {
@@ -48,6 +58,11 @@
                 ruby: 'Adicionar texto ruby',
                 rubyModal: 'Modal ruby',
                 rubyText: 'Texto ruby'
+            },
+            ru: {
+                ruby: 'Вставить ruby текст',
+                rubyModal: 'Ruby аннотация',
+                rubyText: 'Ruby текст'
             },
             tr: {
                 ruby: 'Ruby metni ekle',

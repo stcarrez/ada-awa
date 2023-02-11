@@ -1,7 +1,16 @@
+/* ===========================================================
+ * sl.js
+ * Slovenian translation for Trumbowyg
+ * http://alex-d.github.com/Trumbowyg
+ * ===========================================================
+ * Author: Matjaz Zavski (https://github.com/matjaz321)
+ * Mod: Uros Gaber (uros@powercom.si)
+ */
+
 jQuery.trumbowyg.langs.sl = {
     viewHTML: 'Prikaži HTML',
 
-    formatting: 'Formatiranje',
+    formatting: 'Oblika',
     p: 'Odstavek',
     blockquote: 'Citat',
     code: 'Koda',
@@ -20,10 +29,10 @@ jQuery.trumbowyg.langs.sl = {
     orderedList: 'Oštevilčen seznam',
 
     image: 'Slika',
-    insertImage: 'Vzstavi sliko',
-    insertVideo: 'Vzstavi video',
+    insertImage: 'Vstavi sliko',
+    insertVideo: 'Vstavi video',
     link: 'Povezava',
-    createLink: 'Vzstavi povezavo',
+    createLink: 'Vstavi povezavo',
     unlink: 'Odstrani povezavo',
 
     justifyLeft: 'Poravnava levo',
@@ -33,15 +42,15 @@ jQuery.trumbowyg.langs.sl = {
 
     horizontalRule: 'Vstavite vodoravno črto',
     removeformat: 'Odstrani format',
-    
+
     fullscreen: 'Celozaslonski način',
 
     close: 'Zapri',
 
     submit: 'Potrdi',
-    reset: 'Resetiraj',
+    reset: 'Prekliči',
 
-    required: 'Erforderlich',
+    required: 'Zahtevano',
     description: 'Opis',
     title: 'Naslov',
     text: 'Besedilo'

@@ -55,7 +55,9 @@ jQuery.trumbowyg.langs.tr = {
     description: 'Açıklama',
     title: 'Başlık',
     text: 'Metin',
-    
+
     undo: 'Geri al',
-    redo: 'İleri al'
+    redo: 'İleri al',
+
+    removeformat: 'Biçimlendirmeyi temizle'
 };
