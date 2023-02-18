@@ -107,11 +107,11 @@
         <h:panelGroup rendered="#{empty imageList.folder}">
             <c:choose>
                 <c:when test="#{auth:hasPermission('folder-create',0)}">
-                    <div class="awa-container">
-                        <div class="grid_3">
+                    <div class="awa-columns">
+                        <div class="awa-grid-3">
                             <img src="#{contextPath}/images/storages/folder.png"/>
                         </div>
-                        <div class="grid_6">
+                        <div class="awa-grid-6">
                             <p>#{storageMsg.storage_no_folder}</p>
                             <div class="asf-container awa-form">
                                 <ajax:include src="/storages/forms/folder-create-first.xhtml"/>
@@ -120,11 +120,11 @@
                     </div>
                 </c:when>
                 <c:otherwise>
-                    <div class="awa-container">
-                        <div class="grid_3">
+                    <div class="awa-columns">
+                        <div class="awa-grid-3">
                             <img src="#{contextPath}/images/storages/folder.png"/>
                         </div>
-                        <div class="grid_6">
+                        <div class="awa-grid-6">
                             <p>#{storageMsg.storage_no_visible_folder}</p>
                         </div>
                     </div>

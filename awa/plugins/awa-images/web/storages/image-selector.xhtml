@@ -1,5 +1,5 @@
 <!-- Image Selector Dialog
-  -  Copyright (C) 2017 Stephane Carrez
+  -  Copyright (C) 2017, 2023 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,35 +19,35 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
         xmlns:c="http://java.sun.com/jstl/core"
-	    xmlns:util="http://code.google.com/p/ada-asf/util"
+	xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
     <f:metadata>
-        <f:viewParam id='page' value='#{imageList.page}' required="false"/>
-        <f:viewAction action='#{imageList.load}'/>
+      <f:viewParam id='page' value='#{imageList.page}' required="false"/>
+      <f:viewAction action='#{imageList.load}'/>
     </f:metadata>
-        <h:panelGroup rendered="#{not empty imageList.folder}">
-            <div class="ui-widget ui-corner-all awa-folder-list-editor">
-                <h2>Image Selector</h2>
-                <ui:include src="lists/folders.xhtml">
-                    <ui:param name="page_url" value="/storages/lists/images.html"/>
-                </ui:include>
-            </div>
-            <div class="ui-widget ui-corner-all awa-image-list-editor">
-                <ui:include src="lists/image-list.xhtml"/>
-            </div>
-         </h:panelGroup>
-        <h:panelGroup rendered="#{empty imageList.folder}">
-            <div>
-                <div class="grid_3">
-                    <img src="#{contextPath}/images/storages/folder.png"/>
-                </div>
-                <div class="grid_6">
-                    <p>#{storageMsg.storage_no_folder}</p>
-                    <div class="asf-container awa-form">
-                        <ajax:include src="/storages/forms/folder-create-first.xhtml"/>
-                    </div>
-                </div>
-            </div>
-        </h:panelGroup>
+    <h:panelGroup rendered="#{not empty imageList.folder}">
+      <div class="ui-widget ui-corner-all awa-folder-list-editor">
+        <h2>Image Selector</h2>
+        <ui:include src="lists/folders.xhtml">
+          <ui:param name="page_url" value="/storages/lists/images.html"/>
+        </ui:include>
+      </div>
+      <div class="ui-widget ui-corner-all awa-image-list-editor">
+        <ui:include src="lists/image-list.xhtml"/>
+      </div>
+    </h:panelGroup>
+    <h:panelGroup rendered="#{empty imageList.folder}">
+      <div class='awa-columns'>
+        <div class="awa-grid-3">
+          <img src="#{contextPath}/images/storages/folder.png"/>
+        </div>
+        <div class="awa-grid-6">
+          <p>#{storageMsg.storage_no_folder}</p>
+          <div class="asf-container awa-form">
+            <ajax:include src="/storages/forms/folder-create-first.xhtml"/>
+          </div>
+        </div>
+      </div>
+    </h:panelGroup>
 </f:view>
 
