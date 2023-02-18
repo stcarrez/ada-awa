@@ -1,6 +1,6 @@
 /**
  * blogs.css - Styles for blogs module
- * Copyright (C) 2011-2020 Stephane Carrez
+ * Copyright (C) 2011-2023 Stephane Carrez
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
 div.blog-post div.post-text, div.post-info, div.post-header,
@@ -283,14 +283,20 @@ div.blog-post-comment-count a {
 }
 .awa-post-buttons .awa-buttons {
     float: right;
-    width: auto;
+    width: 50%;
     margin: 0;
+}
+.awa-post-buttons .awa-buttons li {
+    float: right;
 }
 .awa-post-buttons h2 {
     float: left;
     padding: .4em 0;
+    width: 50%;
 }
-
+.awa-post-buttons .awa-buttons li:first-child {
+    padding-right: 0;
+}
 /*
  * Color and theme
  */
@@ -347,14 +353,16 @@ dl.awa-required .blog-post-format input {
 dl.awa-required .blog-post-format label {
     float: left;
     clear: none;
-    padding-left: 0.5em;
-    padding-right: 0.5em;
+    padding: 0.5em;
     margin-right: 1.5em;
+}
+.blog-post-format input[type="radio"] {
+    visibility: hidden;
 }
 .blog-post-format input:checked + label {
     background-color: #d8e7fa;
+    border-radius: 0.5em;
 }
-.awa-cancel {
-    padding: 0.5em;
-    display: inline-block;
+.blog-post-format label {
+    cursor: pointer;
 }

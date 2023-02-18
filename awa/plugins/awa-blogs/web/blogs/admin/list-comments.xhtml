@@ -1,5 +1,5 @@
 <!-- List the comments for the blog administrator
-  -  Copyright (C) 2011 - 2022 Stephane Carrez
+  -  Copyright (C) 2011 - 2023 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,10 +30,10 @@
       </f:metadata>
 
       <h:panelGroup rendered="#{empty adminBlog.id}">
-        <div class="grid_3">
+        <div class="awa-grid-3">
           <img src="#{contextPath}/images/blogs/blog-icon.png"/>
         </div>
-        <div class="grid_6">
+        <div class="awa-grid-6">
           <p>#{blogMsg.blog_create_blog_message}</p>
           <div class="asf-container awa-form">
             <ajax:include id='blog-create' src="/blogs/admin/forms/blog-create-form.xhtml"/>
@@ -56,7 +56,7 @@
             #{blogMsg.blog_post_author_label}
           </div>
         </div>
-        <div id='blog-comment-list' class='blog-admin'>
+        <div id='blog-comment-list' class='blog-admin awa-list'>
           <ui:include src="lists/comment-list.xhtml"/>
         </div>
         <div id='blog-comment-action' class='asf-list-action'>

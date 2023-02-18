@@ -1,5 +1,5 @@
 <!-- List of blog comments for the blog administrator
-  -  Copyright (C) 2014, 2019, 2021 Stephane Carrez
+  -  Copyright (C) 2014, 2019, 2021, 2023 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,7 @@
         xmlns:h="http://java.sun.com/jsf/html">
     <c:choose>
         <c:when test="#{adminBlog.comments.count == 0}">
-            #{blogMsg.blog_admin_list_comment_empty_message}
+           <div class='awa-list-empty'>#{blogMsg.blog_admin_list_comment_empty_message}</div>
         </c:when>
         <c:otherwise>
            <h:list var="cmt" value="#{adminBlog.comments}">

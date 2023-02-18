@@ -23,7 +23,7 @@
         xmlns:h="http://java.sun.com/jsf/html">
     <c:choose>
         <c:when test="#{adminBlog.posts.count == 0}">
-            #{blogMsg.blog_admin_list_post_empty_message}
+            <div class='awa-list-empty'>#{blogMsg.blog_admin_list_post_empty_message}</div>
         </c:when>
         <c:otherwise>
            <h:list var="post" value="#{adminBlog.posts}">

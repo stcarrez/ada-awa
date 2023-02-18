@@ -1,5 +1,5 @@
 <!-- List the posts filtered by a tag
-  -  Copyright (C) 2013, 2017, 2022 Stephane Carrez
+  -  Copyright (C) 2013, 2017, 2022, 2023 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,21 +34,23 @@
 
     <!-- Main page body -->
     <ui:define name="pageBody">
-      <div class='grid_8 blog-post-tag-info'>
+      <div class='awa-grid-12 blog-post-tag-info'>
         <h2>
           <h:outputFormat value="#{blogMsg.blog_tag_page_title}">
             <f:param value="#{postList.tag}"/>
           </h:outputFormat>
         </h2>
       </div>
-      <div class='grid_9'>
-        <ui:include src="lists/post-list.xhtml">
-          <ui:param name="pageUrl" value="blogs/tagged.html"/>
-          <ui:param name="pageParam" value="&amp;tag=#{util:urlEncode(postList.tag)}"/>
-        </ui:include>
-      </div>
-      <div class='grid_3 blog-post-info'>
-        <ui:include src="lists/post-info.xhtml"/>
+      <div class='awa-columns'>
+        <div class='awa-grid-8'>
+          <ui:include src="lists/post-list.xhtml">
+            <ui:param name="pageUrl" value="blogs/tagged.html"/>
+            <ui:param name="pageParam" value="&amp;tag=#{util:urlEncode(postList.tag)}"/>
+          </ui:include>
+        </div>
+        <div class='awa-grid-3 blog-post-info'>
+          <ui:include src="lists/post-info.xhtml"/>
+        </div>
       </div>
     </ui:define>
 

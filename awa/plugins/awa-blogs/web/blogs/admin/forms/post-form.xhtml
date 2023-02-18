@@ -24,7 +24,7 @@
         xmlns:c="http://java.sun.com/jstl/core"
         xmlns:h="http://java.sun.com/jsf/html">
 
-    <div id='awa-post-editor' class='awa-post ui-widget ui-widget-content ui-corner-all awa-form'>
+    <div id='awa-post-editor' class='awa-post awa-form'>
         <div id="image-selector"/>
         <h:form id='post'>
             <h:inputHidden id='post-id' value='#{post.id}' required='false'/>
@@ -33,9 +33,17 @@
                 <h2>#{title}</h2>
                 <ul class='awa-buttons'>
                     <li>
+                      <a class='awa-cancel' href="#{contextPath}/blogs/admin/list.html">#{layoutMsg.layout_cancel_label}</a>
+                    </li>
+                    <li>
                         <h:commandButton id='save' value='#{blogMsg.blog_post_save_button}'
                                          styleClass="ui-button ui-state-default ui-corner-all"
                                          action="#{post.save}" title="#{blogMsg.blog_post_save_title}"/>
+                    </li>
+                    <li>
+                        <h:commandButton id='publish' value='#{blogMsg.blog_post_publish_button}'
+                                         styleClass="ui-button ui-state-default ui-corner-all"
+                                         action="#{post.publish}" title="#{blogMsg.blog_post_publish_title}"/>
                     </li>
                 </ul>
             </div>
@@ -91,10 +99,11 @@
                                 <label for="post-format">#{blogMsg.blog_page_format_label}</label>
                             </dt>
                             <dd>
-                                <h:selectOneMenu id='post-format' size='10' value='#{post.format}'
+                                <w:chosen id='post-format' size='10' value='#{post.format}'
                                                  styleClass="ui-state-default ui-corner-all">
-                                    <f:selectItems value="#{blogFormatList}"/>
-                                </h:selectOneMenu>
+                                  <f:facet name="options">width: "auto",disable_search: true</f:facet>
+                                  <f:selectItems value="#{blogFormatList}"/>
+                                </w:chosen>
                             </dd>
                         </dl>
                         <w:inputText id='uri' title="#{blogMsg.blog_post_url_label}"
@@ -106,10 +115,11 @@
                                 <label for="post-status">#{blogMsg.blog_post_status_label}</label>
                             </dt>
                             <dd>
-                                <h:selectOneMenu id='post-status' size='10' value='#{post.status}'
+                                <w:chosen id='post-status' size='10' value='#{post.status}'
                                                  styleClass="ui-state-default ui-corner-all">
-                                    <f:selectItems value="#{postStatusList}"/>
-                                </h:selectOneMenu>
+                                  <f:facet name="options">width: "auto",disable_search: true</f:facet>
+                                  <f:selectItems value="#{postStatusList}"/>
+                                </w:chosen>
                             </dd>
                             <dt><label for='allow-comment'>#{blogMsg.blog_post_allow_comments_label}</label></dt>
                             <dd>
@@ -135,7 +145,7 @@
                     </w:tab>
                 </w:tabView>
             </div>
-            <div class="awa-post-buttons">
+            <!-- <div class="awa-post-buttons">
                 <ul class='awa-buttons'>
                     <li>
                         <h:commandButton id='save-bottom' value='#{blogMsg.blog_post_save_button}'
@@ -143,7 +153,7 @@
                                          action="#{post.save}" title="#{blogMsg.blog_post_save_title}"/>
                     </li>
                 </ul>
-            </div>
+            </div> -->
         </h:form>
     </div>
     <util:script>

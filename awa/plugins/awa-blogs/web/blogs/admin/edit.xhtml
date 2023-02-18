@@ -1,5 +1,5 @@
 <!-- Edit an existing post
-  -  Copyright (C) 2011 - 2022 Stephane Carrez
+  -  Copyright (C) 2011 - 2023 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,7 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html">
+    <ui:param name="pageStyle" value="page-edit-post"/>
     <ui:param name="title" value="#{blogMsg.blog_admin_edit_post_title}"/>
 
     <ui:define name="pageHeader">
@@ -26,6 +27,7 @@
     </ui:define>
 
     <ui:define name="pageScript">
+        <script type="text/javascript" src="#{jquery.chosenPath}"></script>
         <script type="text/javascript" src="#{contextPath}/js/markedit/showdown.js"></script>
         <script type="text/javascript" src="#{contextPath}/js/markedit/jquery.markedit.js"></script>
         <script type="text/javascript" src="#{contextPath}/js/dropzone.js"></script>
@@ -40,7 +42,7 @@
 
     <!-- Main page body -->
     <ui:define name="pageBody">
-      <ui:include src="lists/menu-list.xhtml"/>
+      <!-- <ui:include src="lists/menu-list.xhtml"/> -->
       <div id='blog-post-edit' class='awa-container'>
         <div class='awa-post'>
           <ui:include src="forms/post-form.xhtml">

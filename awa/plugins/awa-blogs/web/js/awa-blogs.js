@@ -150,11 +150,6 @@
                         ]}).imageSelector("openSelector");
                     }
                 },
-                }).each(function () {
-                    this.setAttribute("style", "height:" + (this.scrollHeight) + "px;overflow-y:hidden;");
-                }).on("input", function () {
-                    this.style.height = "auto";
-                    this.style.height = (this.scrollHeight) + "px";
                 });
             } else if (syntax == 'markdown') {
 
@@ -164,7 +159,7 @@
                         element: this,
                         autoDownloadFontAwesome: false,
                         spellChecker: false,
-                        indentWithTags: false,
+                        indentWithTabs: false,
                         autofocus: true,
                         tabSize: 4,
                         lineNumbers: true,
@@ -209,7 +204,7 @@
                 this.element.find('textarea').trumbowyg({
                     minimalLinks: true,
                     imageWidthModalEdit: true,
-                    autogrow: true,
+                    autogrow: false,
                     resetCss: false,
                     tagsToRemove: ['script', 'link'],
                     btns: [['viewHTML'], ['undo', 'redo'],

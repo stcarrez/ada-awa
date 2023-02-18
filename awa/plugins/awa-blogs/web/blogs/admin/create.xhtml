@@ -1,5 +1,5 @@
 <!-- Create a new post page
-  -  Copyright (C) 2011 - 2022 Stephane Carrez
+  -  Copyright (C) 2011 - 2023 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,7 @@
 <ui:composition template="/WEB-INF/layouts/layout.xhtml"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:f="http://java.sun.com/jsf/core">
+    <ui:param name="pageStyle" value="page-create-post"/>
     <ui:param name="title" value="#{blogMsg.blog_admin_create_post_title}"/>
 
     <!-- Main page body -->
@@ -25,7 +26,7 @@
             <f:viewParam id='id' value='#{post.blogId}' required="false"/>
             <f:viewAction action="#{post.setup}"/>
         </f:metadata>
-        <ui:include src="lists/menu-list.xhtml"/>
+        <!-- <ui:include src="lists/menu-list.xhtml"/> -->
         <div id='blog-post-create' class='awa-container'>
           <ui:include src="forms/post-create.xhtml"/>
         </div>
