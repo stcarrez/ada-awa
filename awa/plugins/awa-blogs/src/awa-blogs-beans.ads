@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-beans -- Beans for blog module
---  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2019, 2020 Stephane Carrez
+--  Copyright (C) 2011 - 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -219,6 +219,11 @@ package AWA.Blogs.Beans is
    overriding
    procedure Save (Bean    : in out Post_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Create or save the post and publish it.
+   overriding
+   procedure Publish (Bean    : in out Post_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
    --  Delete a post.
    overriding

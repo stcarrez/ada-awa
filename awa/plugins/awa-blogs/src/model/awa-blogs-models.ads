@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://github.com/stcarrez/dynamo Version 1.4.0
 -----------------------------------------------------------------------
---  Copyright (C) 2022 Stephane Carrez
+--  Copyright (C) 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -841,7 +841,7 @@ package AWA.Blogs.Models is
                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
    --  --------------------
-   --    load the post for the administrator
+   --    save a draft version of the post.
    --  --------------------
    type Post_Bean is abstract new AWA.Blogs.Models.Post_Ref
      and Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with null record;
@@ -873,6 +873,9 @@ package AWA.Blogs.Models is
 
    procedure Setup (Bean : in out Post_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
+   procedure Publish (Bean : in out Post_Bean;
+                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
    type Post_List_Bean is abstract limited
      new Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with  record

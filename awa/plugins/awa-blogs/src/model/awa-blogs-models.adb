@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://github.com/stcarrez/dynamo Version 1.4.0
 -----------------------------------------------------------------------
---  Copyright (C) 2022 Stephane Carrez
+--  Copyright (C) 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -2165,13 +2165,25 @@ package body AWA.Blogs.Models is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Post_Bean,
                                                       Method => Op_Setup,
                                                       Name   => "setup");
+   procedure Op_Publish (Bean    : in out Post_Bean;
+                         Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Publish (Bean    : in out Post_Bean;
+                         Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Post_Bean'Class (Bean).Publish (Outcome);
+   end Op_Publish;
+   package Binding_Post_Bean_6 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Post_Bean,
+                                                      Method => Op_Publish,
+                                                      Name   => "publish");
 
    Binding_Post_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
      := (1 => Binding_Post_Bean_1.Proxy'Access,
          2 => Binding_Post_Bean_2.Proxy'Access,
          3 => Binding_Post_Bean_3.Proxy'Access,
          4 => Binding_Post_Bean_4.Proxy'Access,
-         5 => Binding_Post_Bean_5.Proxy'Access
+         5 => Binding_Post_Bean_5.Proxy'Access,
+         6 => Binding_Post_Bean_6.Proxy'Access
      );
 
    --  ------------------------------

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-beans -- Beans for blog module
---  Copyright (C) 2011 - 2022 Stephane Carrez
+--  Copyright (C) 2011 - 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -378,6 +378,17 @@ package body AWA.Blogs.Beans is
       end if;
       Bean.Tags.Update_Tags (Result);
    end Save;
+
+   --  ------------------------------
+   --  Create or save the post and publish it.
+   --  ------------------------------
+   overriding
+   procedure Publish (Bean    : in out Post_Bean;
+                      Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Bean.Set_Status (Models.POST_PUBLISHED);
+      Bean.Save (Outcome);
+   end Publish;
 
    --  ------------------------------
    --  Delete a post.
