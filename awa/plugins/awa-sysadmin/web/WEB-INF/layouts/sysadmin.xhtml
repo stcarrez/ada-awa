@@ -26,10 +26,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/grids/reset.css"/>
-    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/grids/fluid_grid.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/asf.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/awa.css"/>
-    <link media="screen" type="text/css" rel="stylesheet" href="#{jquery.uiCssPath}"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{jquery.uiCssPath}/jquery-ui.structure.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{jquery.uiCssPath}/jquery-ui.theme.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{jquery.chosenCssPath}"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/users.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/jquery.tagedit.css"/>
@@ -39,10 +39,10 @@
 </head>
 <body class="#{not empty pageStyle ? pageStyle : ''}">
 
-<div id='awa-page' class='container_12'>
+<main id='awa-page'>
     <ui:insert name="pageBody"/>
     <div id="awa-clfooter"></div>
-</div>
+</main>
 
 <ui:include src="sysadmin-footer.xhtml"/>
 <!--dynamo-merge link="/js/all.js" prefix="#{contextPath}" -->
