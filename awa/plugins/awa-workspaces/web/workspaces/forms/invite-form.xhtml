@@ -22,7 +22,6 @@
     <h2>#{workspaceMsg.workspace_invite_title}</h2>
     <h:form id='invite'>
         <h:inputHidden id='invite-id' value='#{inviteUser.id}' required='false'/>
-        <div class='grid_8'>
             <h:messages styleClass='awa-error'/>
             <w:inputText styleClass="awa-required ui-corner-all"
                          id='email' size='50' required='true' value='#{inviteUser.email}'
@@ -48,7 +47,6 @@
                                      action="#{inviteUser.send}"/>
                 </li>
             </ul>
-        </div>
     </h:form>
 </div>
 
