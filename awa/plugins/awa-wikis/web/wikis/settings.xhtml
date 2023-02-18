@@ -30,16 +30,14 @@
         <f:metadata>
             <f:viewAction action='#{adminWikiSpace.load}'/>
         </f:metadata>
-        <ui:include src="views/wiki-nav.xhtml">
+        <!-- <ui:include src="views/wiki-nav.xhtml">
           <ui:param name="wikiSpaceId" value="#{adminWikiSpace.id}"/>
           <ui:param name="page_link" value="/grid"/>
-        </ui:include>
-        <div id='wiki-page-create' class='awa-container'>
-          <div class='awa-post'>
-            <ui:include src="forms/settings-form.xhtml">
-              <ui:param name="title" value="#{wikiMsg.wiki_edit_page_title}"/>
-            </ui:include>
-          </div>
+        </ui:include> -->
+        <div class='awa-container wiki-settings'>
+          <ui:include src="forms/settings-form.xhtml">
+            <ui:param name="title" value="#{wikiMsg.wiki_edit_page_title}"/>
+          </ui:include>
         </div>
     </ui:define>
 
@@ -49,6 +47,7 @@
         <script type="text/javascript" src="#{contextPath}/js/trumbowyg/trumbowyg.js"></script>
         <script type="text/javascript" src="#{contextPath}/js/trumbowyg/plugins/fontfamily/trumbowyg.fontfamily.js"></script>
         <script type="text/javascript" src="#{contextPath}/js/trumbowyg/plugins/preformatted/trumbowyg.preformatted.js"></script>
+        <script type="text/javascript" src="#{jquery.chosenPath}"></script>
         <script type="text/javascript" src="#{contextPath}/js/easymde/easymde.min.js"></script>
         <script type="text/javascript" src="#{contextPath}/js/awa-images.js"></script>
         <script type="text/javascript" src="#{contextPath}/js/awa-wikis.js"></script>

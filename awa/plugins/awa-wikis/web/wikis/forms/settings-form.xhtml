@@ -1,5 +1,5 @@
 <!-- Form to update the wiki space configuration
-  -  Copyright (C) 2015, 2018 Stephane Carrez
+  -  Copyright (C) 2015, 2018, 2023 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,77 +21,68 @@
                 xmlns:h="http://java.sun.com/jsf/html">
 
   <div class='awa-post ui-widget ui-widget-content awa-form ui-corner-all'>
-      <h2>#{wikiMsg.wiki_admin_settings_title}</h2>
-      <h:form id='post'>
-          <h:inputHidden id='wiki-space-id' value='#{adminWikiSpace.id}' required='false'/>
-          <div class='grid_12'>
-              <h:messages styleClass='awa-error'/>
-              <w:inputText styleClass="awa-required ui-corner-all"
-                           id='title' size='50' required='true' value='#{adminWikiSpace.name}'
-                           title='#{wikiMsg.wiki_admin_wiki_title_label}'/>
-              <div class="grid_12">
-                  <div class="grid_6 alpha">
-                      <dl class="awa-required">
-                          <dt><label for='page-is-public'>#{wikiMsg.wiki_admin_is_public_label}</label></dt>
-                          <dd>
-                              <h:selectOneRadio styleClass="awa-radio" id="page-is-public"
-                                                value="#{adminWikiSpace.is_public}">
-                                  <f:selectItem id="page-public-yes" name="page-is-public"
-                                                itemLabel="#{layoutMsg.layout_yes_label}" itemValue="TRUE"/>
-                                  <f:selectItem id="page-public-no" name="page-is-public"
-                                                itemLabel="#{layoutMsg.layout_no_label}" itemValue="FALSE"/>
-                              </h:selectOneRadio>
-                          </dd>
-                      </dl>
-                  </div>
-                  <div class="grid_6 omega">
-                      <dl class="awa-required">
-                          <dt>
-                              <label for="wiki-format">#{wikiMsg.wiki_admin_format_label}</label>
-                          </dt>
-                          <dd>
-                              <h:selectOneMenu id='wiki-format' size='10' value='#{adminWikiSpace.format}'
-                                               styleClass="ui-state-default ui-corner-all">
-                                  <f:selectItems value="#{wikiFormatList}"/>
-                              </h:selectOneMenu>
-                          </dd>
-                      </dl>
-                  </div>
-              </div>
-              <div class="grid_12">
-                  <div class="grid_6 alpha">
-                      <dl class="awa-required#{util:hasMessage('left_side') ? ' awa-error' : ''}">
-                          <dt>
-                              <label for='text'>#{wikiMsg.wiki_page_left_side_label}</label>
-                          </dt>
-                          <dd>
-                              <h:inputTextarea id='left_side' rows='20' required='false'
-                                               value='#{adminWikiSpace.left_side}'/>
-                          </dd>
-                      </dl>
-                  </div>
-                  <div class="grid_6 omega">
-                      <dl class="awa-required#{util:hasMessage('right_side') ? ' awa-error' : ''}">
-                          <dt>
-                              <label for='text'>#{wikiMsg.wiki_page_right_side_label}</label>
-                          </dt>
-                          <dd>
-                              <h:inputTextarea id='right_side' rows='20' required='false'
-                                               value='#{adminWikiSpace.right_side}'/>
-                          </dd>
-                      </dl>
-                  </div>
-              </div>
-              <ul class='awa-buttons'>
-                  <li>
-                      <h:commandButton id='save'
-                                       value='#{empty adminWikiSpace.id ? wikiMsg.wiki_admin_create_button : wikiMsg.wiki_admin_update_button}'
-                                       styleClass="ui-button ui-state-default ui-corner-all"
-                                       action="#{adminWikiSpace.save}"/>
-                  </li>
-              </ul>
-          </div>
-      </h:form>
+    <h2>#{wikiMsg.wiki_admin_settings_title}</h2>
+    <h:form id='post'>
+      <h:inputHidden id='wiki-space-id' value='#{adminWikiSpace.id}' required='false'/>
+      <h:messages styleClass='awa-error'/>
+      <w:inputText styleClass="awa-required ui-corner-all"
+                   id='title' size='50' required='true' value='#{adminWikiSpace.name}'
+                   title='#{wikiMsg.wiki_admin_wiki_title_label}'/>
+      <div class="wiki-settings">
+        <dl class="wiki-settings-left awa-required">
+          <dt><label for='page-is-public'>#{wikiMsg.wiki_admin_is_public_label}</label></dt>
+          <dd>
+            <h:selectOneRadio styleClass="awa-radio" id="page-is-public"
+                              value="#{adminWikiSpace.is_public}">
+              <f:selectItem id="page-public-yes" name="page-is-public"
+                            itemLabel="#{layoutMsg.layout_yes_label}" itemValue="TRUE"/>
+              <f:selectItem id="page-public-no" name="page-is-public"
+                            itemLabel="#{layoutMsg.layout_no_label}" itemValue="FALSE"/>
+            </h:selectOneRadio>
+          </dd>
+        </dl>
+        <dl class="wiki-settings-right awa-required">
+          <dt>
+            <label for="wiki-format">#{wikiMsg.wiki_admin_format_label}</label>
+          </dt>
+          <dd>
+            <w:chosen id='wiki-format' size='10' value='#{adminWikiSpace.format}'
+                      styleClass="ui-state-default ui-corner-all">
+              <f:facet name="options">disable_search: true</f:facet>
+              <f:selectItems value="#{wikiFormatList}"/>
+            </w:chosen>
+          </dd>
+        </dl>
+      </div>
+      <div class="wiki-settings">
+          <dl class="wiki-settings-left awa-required#{util:hasMessage('left_side') ? ' awa-error' : ''}">
+            <dt>
+              <label for='text'>#{wikiMsg.wiki_page_left_side_label}</label>
+            </dt>
+            <dd>
+              <h:inputTextarea id='left_side' rows='15' required='false'
+                               value='#{adminWikiSpace.left_side}'/>
+            </dd>
+          </dl>
+          <dl class="wiki-settings-right awa-required#{util:hasMessage('right_side') ? ' awa-error' : ''}">
+            <dt>
+              <label for='text'>#{wikiMsg.wiki_page_right_side_label}</label>
+            </dt>
+            <dd>
+              <h:inputTextarea id='right_side' rows='15' required='false'
+                               value='#{adminWikiSpace.right_side}'/>
+            </dd>
+          </dl>
+      </div>
+      <ul class='awa-buttons'>
+        <li>
+          <h:commandButton id='save'
+                           value='#{empty adminWikiSpace.id ? wikiMsg.wiki_admin_create_button : wikiMsg.wiki_admin_update_button}'
+                           styleClass="ui-button ui-state-default ui-corner-all"
+                           action="#{adminWikiSpace.save}"/>
+        </li>
+      </ul>
+    </h:form>
       <util:script>
           // Create a MarkEdit editor on page load
           $(function(){

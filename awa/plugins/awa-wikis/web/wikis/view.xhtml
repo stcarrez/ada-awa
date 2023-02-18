@@ -1,5 +1,5 @@
 <!-- View an existing wiki page
-  -  Copyright (C) 2015 - 2022 Stephane Carrez
+  -  Copyright (C) 2015 - 2023 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,10 +33,12 @@
 
     <!-- Main page body -->
     <ui:define name="pageBody">
-      <ui:include src="views/wiki-nav.xhtml">
-        <ui:param name="wikiSpaceId" value="#{wikiView.wiki_id}"/>
-        <ui:param name="page_link" value="/grid"/>
-      </ui:include>
+      <h:panelGroup rendered="#{user.isLogged}">
+        <ui:include src="views/wiki-nav.xhtml">
+          <ui:param name="wikiSpaceId" value="#{wikiView.wiki_id}"/>
+          <ui:param name="page_link" value="/grid"/>
+        </ui:include>
+      </h:panelGroup>
       <ui:include src="views/page-view.xhtml"/>
     </ui:define>
 

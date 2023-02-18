@@ -26,6 +26,7 @@
     </ui:define>
 
     <ui:define name="pageScript">
+        <script type="text/javascript" src="#{jquery.chosenPath}"></script>
         <script type="text/javascript" src="#{contextPath}/js/markedit/showdown.js"></script>
         <script type="text/javascript" src="#{contextPath}/js/markedit/jquery.markedit.js"></script>
         <script type="text/javascript" src="#{contextPath}/js/trumbowyg/trumbowyg.js"></script>
@@ -41,10 +42,10 @@
         <f:metadata>
             <f:viewAction action='#{wikiPage.load}'/>
         </f:metadata>
-        <ui:include src="views/wiki-nav.xhtml">
+        <!-- <ui:include src="views/wiki-nav.xhtml">
           <ui:param name="wikiSpaceId" value="#{wikiPage.wiki_id}"/>
           <ui:param name="page_link" value="/grid"/>
-        </ui:include>
+        </ui:include> -->
         <div id='wiki-page-create' class='awa-container'>
           <div class='awa-form-container'>
             <ui:include src="forms/page-form.xhtml">

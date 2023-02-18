@@ -1,5 +1,5 @@
 <!-- Information about a wiki page
-  -  Copyright (C) 2016, 2017, 2018 Stephane Carrez
+  -  Copyright (C) 2016, 2017, 2018, 2023 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,7 @@
      xmlns:util="http://code.google.com/p/ada-asf/util"
      xmlns:h="http://java.sun.com/jsf/html">
     <h:panelGroup rendered="#{not empty wikiView.left_side}">
-        <div class="grid_2">
+        <div class="wiki-left-container">
             <awa:wiki styleClass='wiki-text'
                       value="#{wikiView.left_side}"
                       plugins="#{wikiView.plugins}"
@@ -31,7 +31,7 @@
                       format="#{wikiView.side_format}"/>
         </div>
     </h:panelGroup>
-    <div class="#{not empty wikiView.left_side ? (not empty wikiView.right_side ? 'grid_8' : 'grid_10') : 'grid_12'}"
+    <div class="#{not empty wikiView.left_side ? (not empty wikiView.right_side ? 'wiki-content-2' : 'wiki-content-1') : 'wiki-content-3'}"
          id="p_#{wikiView.id}">
         <div class="#{wikiView.is_public ? 'wiki-title' : 'wiki-title-private'}">
             <ul class="wiki-page-actions">
@@ -100,7 +100,7 @@
         </div>
     </div>
     <h:panelGroup rendered="#{not empty wikiView.right_side}">
-        <div class="grid_2">
+        <div class="wiki-right-container">
             <awa:wiki styleClass='wiki-text'
                       value="#{wikiView.right_side}"
                       plugins="#{wikiView.plugins}"

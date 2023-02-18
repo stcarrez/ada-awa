@@ -20,7 +20,6 @@
      xmlns:c="http://java.sun.com/jstl/core"
      xmlns:util="http://code.google.com/p/ada-asf/util"
      xmlns:h="http://java.sun.com/jsf/html">
-    <div class="grid_6">
         <dl class="wiki-image-details">
             <dt>#{wikiMsg.wiki_image_file_label}</dt>
             <dd>#{wikiImageInfo.folder_name}/#{wikiImageInfo.name}</dd>
@@ -64,9 +63,8 @@
                 <dd>#{wikiMsg.wiki_image_missing_message}</dd>
             </h:panelGroup>
         </dl>
-    </div>
-    <div class="grid_6">
-        <div class='storage-upload'>
+
+        <div class='wiki-image-upload'>
             <a id="storage-reupload-button" class="awa-button">
                 #{storageMsg.storage_upload_new_image_version_label}
             </a>
@@ -84,7 +82,6 @@
                 dictInvalidFileType: "#{util:escapeJavaScript(storageMsg.storage_upload_form_invalid_file_message)}"
             });
         </util:script>
-    </div>
 
 </div>
 

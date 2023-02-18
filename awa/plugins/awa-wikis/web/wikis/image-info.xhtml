@@ -1,5 +1,5 @@
 <!-- Information about an image used in a wiki page
-  -  Copyright (C) 2016 - 2022 Stephane Carrez
+  -  Copyright (C) 2016 - 2023 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,13 +30,15 @@
         <f:metadata>
             <f:viewAction action='#{wikiImageInfo.load}'/>
         </f:metadata>
-        <ui:include src="views/wiki-nav.xhtml">
-          <ui:param name="wikiSpaceId" value="#{wikiImageInfo.wiki_id}"/>
-          <ui:param name="page_link" value="/grid"/>
-        </ui:include>
+        <h:panelGroup rendered="#{user.isLogged}">
+          <ui:include src="views/wiki-nav.xhtml">
+            <ui:param name="wikiSpaceId" value="#{wikiImageInfo.wiki_id}"/>
+            <ui:param name="page_link" value="/grid"/>
+          </ui:include>
+        </h:panelGroup>
         <div class='wiki-page-container'>
           <h:panelGroup rendered="#{not empty wikiView.left_side}">
-            <div class="grid_2">
+            <div class="wiki-left-container">
               <awa:wiki styleClass='wiki-text'
                         value="#{wikiView.left_side}"
                         plugins="#{wikiView.plugins}"
@@ -44,7 +46,7 @@
                         format="#{wikiView.side_format}"/>
             </div>
           </h:panelGroup>
-          <div class="#{not empty wikiView.left_side ? (not empty wikiView.right_side ? 'grid_8' : 'grid_10') : 'grid_12'}" id="p_#{wikiView.id}">
+          <div class="#{not empty wikiView.left_side ? (not empty wikiView.right_side ? 'wiki-content-2' : 'wiki-content-1') : 'wiki-content-3'}">
             <div class='wiki-title'>
               <ul class="wiki-page-actions">
                 <h:panelGroup rendered="#{wikiView.acl_id ge 1}">
@@ -81,7 +83,7 @@
             </h:panelGroup>
           </div>
           <h:panelGroup rendered="#{not empty wikiView.right_side}">
-            <div class="grid_2">
+            <div class="wiki-right-container">
               <awa:wiki styleClass='wiki-text'
                         value="#{wikiView.right_side}"
                         plugins="#{wikiView.plugins}"

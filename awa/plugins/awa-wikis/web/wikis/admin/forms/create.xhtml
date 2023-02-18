@@ -1,5 +1,5 @@
 <!-- Form to create the wiki space
-  -  Copyright (C) 2015, 2018, 2019 Stephane Carrez
+  -  Copyright (C) 2015, 2018, 2019, 2023 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,26 +15,24 @@
   -  limitations under the License.
   -->
 <ui:composition
-        xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:w="http://code.google.com/p/ada-asf/widget"
-        xmlns:h="http://java.sun.com/jsf/html">
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:w="http://code.google.com/p/ada-asf/widget"
+  xmlns:h="http://java.sun.com/jsf/html">
 
   <div class='ui-widget awa-form'>
     <h:form id='post'>
-        <div class='grid_8'>
-            <h:messages styleClass='awa-error'/>
-            <w:inputText styleClass="awa-required ui-corner-all"
-                         id='title' size='50' required='true' value='#{adminWikiSpace.name}'
-                         title='#{wikiMsg.wiki_admin_wiki_title_label}'/>
-            <ul class='awa-buttons'>
-                <li>
-                    <h:commandButton id='create'
-                                     value='#{wikiMsg.wiki_admin_create_button}'
-                                     styleClass="ui-button ui-state-default ui-corner-all"
-                                     action="#{adminWikiSpace.save}"/>
-                </li>
-            </ul>
-        </div>
+      <h:messages styleClass='awa-error'/>
+      <w:inputText styleClass="awa-required ui-corner-all"
+                   id='title' size='50' required='true' value='#{adminWikiSpace.name}'
+                   title='#{wikiMsg.wiki_admin_wiki_title_label}'/>
+      <ul class='awa-buttons'>
+        <li>
+          <h:commandButton id='create'
+                           value='#{wikiMsg.wiki_admin_create_button}'
+                           styleClass="ui-button ui-state-default ui-corner-all"
+                           action="#{adminWikiSpace.save}"/>
+        </li>
+      </ul>
     </h:form>
   </div>
 </ui:composition>

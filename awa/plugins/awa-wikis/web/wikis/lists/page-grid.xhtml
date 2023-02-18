@@ -1,5 +1,5 @@
 <!-- List of wiki pages displayed as preview (grid).
-  -  Copyright (C) 2015, 2016 Stephane Carrez
+  -  Copyright (C) 2015, 2016, 2023 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,7 @@
 	    xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
     <h:panelGroup rendered="#{wikiList.count == 0}">
-        #{wikiMsg.wiki_admin_list_pages_empty_message}
+        <div class='awa-list-empty'>#{wikiMsg.wiki_admin_list_pages_empty_message}</div>
     </h:panelGroup>
     <h:list var="page" value="#{wikiList.pages}">
         <div class='wiki-page-grid' id="p_#{page.id}">

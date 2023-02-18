@@ -1,5 +1,5 @@
 <!-- Form to create or update a wiki page
-  -  Copyright (C) 2015, 2017, 2018 Stephane Carrez
+  -  Copyright (C) 2015, 2017, 2018, 2023 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,13 +23,13 @@
         xmlns:c="http://java.sun.com/jstl/core"
         xmlns:h="http://java.sun.com/jsf/html">
 
-  <div class='awa-post ui-widget ui-widget-content ui-corner-all awa-form'>
-      <h2>#{title}</h2>
+  <div class='awa-post awa-form'>
       <div id="image-selector"/>
       <h:form id='post'>
         <h:inputHidden id='page-id' value='#{wikiPage.id}' required='false'/>
         <h:inputHidden id='page-wiki-id' value='#{wikiPage.wiki_id}'/>
-        <div class='grid_8'>
+        <div class='wiki-editor'>
+        <div class='wiki-editor-input'>
             <h:messages styleClass='awa-error'/>
             <w:inputText id='name' title="#{wikiMsg.wiki_page_name_label}"
                          styleClass="awa-required ui-corner-all"
@@ -67,7 +67,7 @@
                 </li>
             </ul>
         </div>
-        <div class='grid_4'>
+        <div class='wiki-editor-info'>
             <ul class='awa-buttons'>
                 <li>
                     <h:commandButton id='save-top' value='#{wikiMsg.wiki_page_save_button}'
@@ -90,10 +90,11 @@
                     <label for="wiki-format">#{wikiMsg.wiki_page_format_label}</label>
                 </dt>
                 <dd>
-                    <h:selectOneMenu id='wiki-format' size='10' value='#{wikiPage.format}'
+                    <w:chosen id='wiki-format' size='10' value='#{wikiPage.format}'
                                      styleClass="ui-state-default ui-corner-all">
-                        <f:selectItems value="#{wikiFormatList}"/>
-                    </h:selectOneMenu>
+                      <f:facet name="options">disable_search: true</f:facet>
+                      <f:selectItems value="#{wikiFormatList}"/>
+                    </w:chosen>
                 </dd>
             </dl>
             <dl class="awa-optional" id="wiki-syntax">
@@ -103,6 +104,7 @@
                     </ui:include>
                 </dd>
             </dl>
+        </div>
         </div>
     </h:form>
   </div>

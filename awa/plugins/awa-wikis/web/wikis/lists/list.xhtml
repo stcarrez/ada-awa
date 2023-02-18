@@ -1,5 +1,5 @@
 <!-- List the wiki pages for the wiki administrator
-  -  Copyright (C) 2015, 2016, 2017 Stephane Carrez
+  -  Copyright (C) 2015, 2016, 2017, 2023 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,10 +29,10 @@
         <ui:insert name="empty">
             <div class="wiki-list-message">
                 <h:panelGroup rendered="#{user.isLogged}">
-                    #{wikiMsg.wiki_list_pages_empty_message}
+                    <div class='awa-list-empty'>#{wikiMsg.wiki_list_pages_empty_message}</div>
                 </h:panelGroup>
                 <h:panelGroup rendered="#{not user.isLogged}">
-                    #{wikiMsg.wiki_list_public_pages_empty_message}
+                    <div class='awa-list-empty'>#{wikiMsg.wiki_list_public_pages_empty_message}</div>
                 </h:panelGroup>
             </div>
         </ui:insert>

@@ -4,9 +4,35 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
 .wiki-page-container,
+.wiki-settings,
 .wiki-text {
     float: left;
     width: 100%;
+}
+.wiki-page-container, .wiki-settings {
+    display: flex;
+    flex-direction: row;    
+}
+.wiki-left-container, .wiki-right-container {
+    width: 20%;
+    display: block;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+.wiki-content-1 {
+    width: 80%;
+    padding-right: 0.5em;
+    padding-left: 0.5em;
+}
+.wiki-content-2 {
+    width: 60%;
+    padding-right: 0.5em;
+    padding-left: 0.5em;
+}
+.wiki-content-3 {
+    width: 100%;
+    padding-right: 0.5em;
+    padding-left: 0.5em;
 }
 /* Columns in wiki page list */
 .wiki-page-name {
@@ -91,6 +117,8 @@
     padding-right: 5em;
 }
 .wiki-page-tag-info {
+    float: left;
+    width: 100%;
     padding-top: 1em;
     padding-bottom: 0.5em;
 }
@@ -282,6 +310,10 @@
     clear: both;
     width: 100%;
 }
+.wiki-image-info {
+    display: flex;
+    flex-direction: row;
+}
 .wiki-image-details {
     float: left;
     width: 80%;
@@ -299,7 +331,8 @@
     width: 80%;
 }
 .wiki-image-upload {
-    height: 80px;
+    width: 20%;
+    padding-top: 2em;
 }
 .wiki-image-view a {
     font-weight: bold;
@@ -347,4 +380,27 @@
 }
 .wiki-upload-form {
     background-color: #f6f6f3;
+}
+.wiki-editor {
+    display: flex;
+    flex-direction: row;
+    flex: 2;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+.wiki-editor-input {
+    width: 80%;
+}
+/* EasyMDE configuration for editor area height */
+.wiki-editor-input .CodeMirror-scroll {
+    min-height: 80px;
+    max-height: calc(100vh - 100px);
+}
+.wiki-editor-info {
+    width: 20%;
+}
+/* Wiki settings */
+.wiki-settings-left, .wiki-settings-right {
+    width: 50%;
 }

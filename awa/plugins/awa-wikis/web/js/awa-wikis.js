@@ -1,6 +1,6 @@
 /*
  *  awa-wikis -- Wiki editor support
- *  Copyright (C) 2016 - 2022 Stephane Carrez
+ *  Copyright (C) 2016 - 2023 Stephane Carrez
  *  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -65,11 +65,6 @@
                         ]}).imageSelector("openSelector");
                     }
                 },
-                }).each(function () {
-                    this.setAttribute("style", "height:" + (this.scrollHeight) + "px;overflow-y:hidden;");
-                }).on("input", function () {
-                    this.style.height = "auto";
-                    this.style.height = (this.scrollHeight) + "px";
                 });
             } else if (syntax == 'markdown') {
 
@@ -79,7 +74,7 @@
                         element: this,
                         autoDownloadFontAwesome: false,
                         spellChecker: false,
-                        indentWithTags: false,
+                        indentWithTabs: false,
                         autofocus: true,
                         tabSize: 4,
                         lineNumbers: true,

@@ -1,5 +1,5 @@
 <!-- List the wiki pages for the wiki administrator
-  -  Copyright (C) 2015 - 2022 Stephane Carrez
+  -  Copyright (C) 2015 - 2023 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,10 +29,10 @@
             <f:viewParam id='id' value='#{adminWiki.id}'/>
         </f:metadata>
         <h:panelGroup rendered="#{adminWiki.id &lt;= 0}">
-          <div class="grid_3">
+          <div class="awa-side1">
             <img src="#{contextPath}/images/wikis/wiki-document.png"/>
           </div>
-          <div class="grid_6">
+          <div class="awa-side2">
             <p>#{wikiMsg.wiki_create_wiki_message}</p>
             <div class="asf-container awa-form">
               <ajax:include id='wiki-create' src="/wikis/admin/forms/create.xhtml"/>
