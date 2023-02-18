@@ -45,7 +45,7 @@
     padding-top: 15px;
     font-weight: bold;
 }
-.markedit-dotclear, .markedit-markdown, .markedit-mediawiki {
+.markedit-dotclear, .markedit-markdown, .markedit-mediawiki, .markedit-creole {
     display: none;
 }
 .FORMAT_MEDIAWIKI .markedit-mediawiki {

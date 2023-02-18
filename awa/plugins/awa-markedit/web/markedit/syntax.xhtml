@@ -64,7 +64,7 @@
     </li>
     <li>
         <span class="markedit-dotclear markedit-mediawiki markedit-creole"># #{markeditMsg.numbered_label}</span>
-        <span class="markedit-markdown"> # #{markeditMsg.numbered_label}</span>
+        <span class="markedit-markdown"> 1. #{markeditMsg.numbered_label}</span>
     </li>
     <li class='spare'></li>
     <li>
@@ -72,10 +72,11 @@
         <span class="markedit-mediawiki"><h:outputText value="&lt;pre&gt;"/></span>
     </li>
     <li>
-        <span class="markedit-dotclear markedit-mediawiki">verbatim code block</span>
+        <span class="markedit-header markedit-dotclear markedit-mediawiki markedit-markdown">verbatim code block</span>
     </li>
     <li>
         <span class="markedit-dotclear">///</span>
+        <span class="markedit-markdown">```</span>
         <span class="markedit-mediawiki"><h:outputText value="&lt;/pre&gt;"/></span>
     </li>
     <li class="markedit-header">#{markeditMsg.markup_link_help}</li>
@@ -88,7 +89,7 @@
         <span class="markedit-dotclear">((#{markeditMsg.image_link} | #{markeditMsg.image_label}))</span>
         <span class="markedit-mediawiki">[[Image:#{markeditMsg.image_link} | #{markeditMsg.image_label} ]]</span>
         <span class="markedit-creole">{{#{markeditMsg.image_link} | #{markeditMsg.image_label} }}</span>
-        <span class="markedit-markdown">[#{markeditMsg.link_label}](Image:#{markeditMsg.image_link})</span>
+        <span class="markedit-markdown">![#{markeditMsg.link_label}](Image:#{markeditMsg.image_link})</span>
     </li>
 </ul>
 
