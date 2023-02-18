@@ -29,7 +29,7 @@
                     <div class='vote-down'><em></em></div>
                 </div>
                 <div class='question-content'>
-                    <awa:wiki styleClass='post-text' value="#{answerInfo.answer}" format="dotclear"/>
+                    <awa:wiki styleClass='post-text' value="#{answerInfo.answer}" format="markdown"/>
                     <div class='question-info'>
                         <div class='question-action'>
                             <h:panelGroup rendered="#{auth:hasPermission('answer-edit',answerInfo.id)}">

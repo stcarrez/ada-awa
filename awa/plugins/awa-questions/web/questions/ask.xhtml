@@ -15,13 +15,18 @@
   -  limitations under the License.
   -->
 <ui:composition template="/WEB-INF/layouts/layout.xhtml"
-        xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:c="http://java.sun.com/jstl/core"
-	    xmlns:util="http://code.google.com/p/ada-asf/util"
-        xmlns:h="http://java.sun.com/jsf/html">
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jstl/core"
+	        xmlns:util="http://code.google.com/p/ada-asf/util"
+                xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{questionMsg.question_ask_title}"/>
     <ui:param name="pageStyle" value="page-question"/>
+
+    <ui:define name="pageHeader">
+        <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/easymde.min.css"/>
+        <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/fontawesome.min.css"/>
+    </ui:define>
 
     <!-- Main page body -->
     <ui:define name="pageBody">
@@ -31,4 +36,9 @@
         <ui:include src="forms/ask-form.xhtml"/>
 
     </ui:define>
+
+    <ui:define name="pageScript">
+        <script type="text/javascript" src="#{contextPath}/js/easymde/easymde.min.js"></script>
+    </ui:define>
+
 </ui:composition>

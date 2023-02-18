@@ -11,6 +11,7 @@
     <depend name="ado"></depend>
     <depend name="security"></depend>
     <depend name="asf"></depend>
+    <depend name="awa_easymde"></depend>
     <depend name="awa-workspaces"></depend>
     <depend name="awa-tags"></depend>
     <depend name="servlet"></depend>

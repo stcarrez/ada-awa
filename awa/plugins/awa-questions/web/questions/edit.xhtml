@@ -23,6 +23,11 @@
     <ui:param name="title" value="#{question.title}"/>
     <ui:param name="pageStyle" value="page-question"/>
 
+    <ui:define name="pageHeader">
+        <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/easymde.min.css"/>
+        <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/fontawesome.min.css"/>
+    </ui:define>
+
     <!-- Main page body -->
     <ui:define name="pageBody">
         <f:metadata>
@@ -31,4 +36,9 @@
         </f:metadata>
         <ui:include src="forms/ask-form.xhtml"/>
     </ui:define>
+
+    <ui:define name="pageScript">
+        <script type="text/javascript" src="#{contextPath}/js/easymde/easymde.min.js"></script>
+    </ui:define>
+
 </ui:composition>

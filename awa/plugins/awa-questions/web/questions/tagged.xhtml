@@ -1,5 +1,5 @@
 <!-- List the questions filtered by a tag
-  -  Copyright (C) 2013 - 2022 Stephane Carrez
+  -  Copyright (C) 2013 - 2023 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,11 +15,11 @@
   -  limitations under the License.
   -->
 <ui:composition template="/WEB-INF/layouts/layout.xhtml"
-        xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:c="http://java.sun.com/jstl/core"
-	    xmlns:util="http://code.google.com/p/ada-asf/util"
-        xmlns:h="http://java.sun.com/jsf/html">
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jstl/core"
+	        xmlns:util="http://code.google.com/p/ada-asf/util"
+                xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{questionMsg.question_list_title}"/>
     <ui:param name="pageStyle" value="page-question"/>
 
@@ -29,19 +29,21 @@
             <f:viewParam id='tag' value='#{questionList.tag}' required="false"/>
             <f:viewAction action='#{questionList.load}'/>
         </f:metadata>
-        <div class='grid_8 blog-post-tag-info'>
+        <div class='awa-grid-8 blog-post-tag-info'>
           <h2>
             <h:outputFormat value="#{blogMsg.blog_tag_page_title}">
               <f:param value="#{questionList.tag}"/>
             </h:outputFormat>
           </h2>
         </div>
-        <div class='grid_10'>
-          <ui:include src="views/question-nav.xhtml"/>
-          <ui:include src="lists/question-list.xhtml"/>
-        </div>
-        <div class='grid_2 blog-post-info'>
-          <ui:include src="views/question-tags.xhtml"/>
+        <div class='awa-columns'>
+          <div class='awa-grid-10'>
+            <ui:include src="views/question-nav.xhtml"/>
+            <ui:include src="lists/question-list.xhtml"/>
+          </div>
+          <div class='awa-grid-2 blog-post-info'>
+            <ui:include src="views/question-tags.xhtml"/>
+          </div>
         </div>
     </ui:define>
 </ui:composition>

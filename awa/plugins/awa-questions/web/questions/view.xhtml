@@ -1,5 +1,5 @@
 <!-- View a question
-  -  Copyright (C) 2013 - 2022 Stephane Carrez
+  -  Copyright (C) 2013 - 2023 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,14 +15,19 @@
   -  limitations under the License.
   -->
 <ui:composition template="/WEB-INF/layouts/layout.xhtml"
-        xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:c="http://java.sun.com/jstl/core"
-	    xmlns:util="http://code.google.com/p/ada-asf/util"
-        xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
-        xmlns:h="http://java.sun.com/jsf/html">
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jstl/core"
+	        xmlns:util="http://code.google.com/p/ada-asf/util"
+                xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
+                xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{questionInfo.question.title}"/>
     <ui:param name="pageStyle" value="page-question"/>
+
+    <ui:define name="pageHeader">
+        <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/easymde.min.css"/>
+        <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/fontawesome.min.css"/>
+    </ui:define>
 
     <!-- Main page body -->
     <ui:define name="pageBody">
@@ -45,4 +50,9 @@
         </util:script>
 
     </ui:define>
+
+    <ui:define name="pageScript">
+        <script type="text/javascript" src="#{contextPath}/js/easymde/easymde.min.js"></script>
+    </ui:define>
+
 </ui:composition>

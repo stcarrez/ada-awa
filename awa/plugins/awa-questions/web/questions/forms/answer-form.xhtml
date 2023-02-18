@@ -23,10 +23,10 @@
 
   <div class='awa-post ui-widget ui-widget-content ui-corner-all awa-form'>
 
-    <h:form id='post'>
+    <h:form id='post' styleClass='awa-columns'>
         <h:inputHidden id='question-id' value='#{answer.question_id}' required='false'/>
         <h:inputHidden id='answer-id' value='#{answer.id}' required='false'/>
-        <div class='grid_8'>
+        <div class='awa-grid-8'>
             <dl class="awa-required">
                 <dt></dt>
                 <dd>
@@ -58,11 +58,11 @@
                 </li>
             </ul>
         </div>
-        <div class='grid_4'>
+        <div class='awa-grid-4'>
             <dl class="awa-optional">
                 <dd>
                     <ui:include src="/markedit/syntax.xhtml">
-                        <ui:param name="syntax" value="FORMAT_DOTCLEAR"/>
+                        <ui:param name="syntax" value="FORMAT_MARKDOWN"/>
                     </ui:include>
                 </dd>
             </dl>
@@ -71,15 +71,25 @@
     </h:form>
   </div>
     <util:script>
-            // Create a MarkEdit editor on page load
-            $(function(){
-               $('textarea').markedit({ 'preview': false,
-                'toolbar' : {
-                  'backgroundMode': 'light',
-                  'layout': 'bold italic underline strike | quote code | numberlist bulletlist heading line'
-                }
-               });
-            });
+    // Create a MarkEdit editor on page load
+      const easyMDE = new EasyMDE({
+         element: document.getElementById('text'),
+         autoDownloadFontAwesome: false,
+         spellChecker: false,
+         indentWithTabs: false,
+         autofocus: true,
+         tabSize: 4,
+         lineNumbers: true,
+         renderingConfig: {
+           singleLineBreaks: false
+         },
+         toolbar: [
+           'bold', 'italic', 'strikethrough', '|',
+           'code', 'quote', '|',
+           'unordered-list', 'ordered-list', '|',
+           'table', 'horizontal-rule', '|', 'clean-block'
+         ]
+      });
     </util:script>
 
 </ui:composition>
