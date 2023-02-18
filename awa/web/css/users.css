@@ -45,7 +45,7 @@ div.awa-login p, div.awa-accept-invitation p {
     display: block;
     float: left;
 }
-.awa-login ul, .awa-accept-invitation ul, #awa-message-list {
+.awa-login ul, ul.openid-login, .awa-accept-invitation ul, #awa-message-list {
     list-style-type: none;
     margin: 1em 0;
     float: left;
@@ -147,9 +147,11 @@ a.openid-gitlab em {
 }
 a.openid-github {
     border: 1px solid #ccc;
+    background: #eee;
 }
 a.openid-gitlab {
     border: 1px solid #ccc;
+    background: #eee;
 }
 div.openid-info {
     float: left;

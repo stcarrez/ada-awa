@@ -125,7 +125,7 @@
     <managed-property>
       <property-name>uiPath</property-name>
       <property-class>String</property-class>
-      <value>#{contextPath}/js/jquery-ui-1.12.1/</value>
+      <value>#{contextPath}/js/jquery-ui-1.13.2/</value>
     </managed-property>
     <managed-property>
       <property-name>chosenPath</property-name>
@@ -135,7 +135,7 @@
     <managed-property>
       <property-name>uiCssPath</property-name>
       <property-class>String</property-class>
-      <value>#{contextPath}/css/redmond/jquery-ui-1.12.1.css</value>
+      <value>#{contextPath}/css/jquery-ui-1.13.2/</value>
     </managed-property>
     <managed-property>
       <property-name>chosenCssPath</property-name>
@@ -197,6 +197,11 @@
   <servlet-mapping>
     <servlet-name>files</servlet-name>
     <url-pattern>*.gif</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>files</servlet-name>
+    <url-pattern>*.ico</url-pattern>
   </servlet-mapping>
 
   <grant-permission>
