@@ -67,6 +67,8 @@ You may get Ahven or Aunit at:
   - Fix #34: Configuration to authenticate with Gitlab is incomplete
   - Feature #35: Blog post creation improvement
   - Fix #37: Cannot use entity-permission for the url-policy
+  - Update Trumbowyg editor to version 2.26.0
+  - Use Markdown for the AWA comments and questions modules
 
 ## Version 2.4.0 - Aug 2022
 - Add support for SQL queries embedded in applications with ARE
