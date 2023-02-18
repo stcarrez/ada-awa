@@ -1,5 +1,5 @@
 <!-- List the documents available in the workspace
-  -  Copyright (C) 2012, 2013, 2016, 2018, 2019 Stephane Carrez
+  -  Copyright (C) 2012, 2013, 2016, 2018, 2019, 2023 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,52 +15,52 @@
   -  limitations under the License.
   -->
 <ui:composition template="/WEB-INF/layouts/layout.xhtml"
-        xmlns:auth="http://code.google.com/p/ada-awa/auth"
-        xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
-        xmlns:c="http://java.sun.com/jstl/core"
-	    xmlns:util="http://code.google.com/p/ada-asf/util"
-        xmlns:h="http://java.sun.com/jsf/html">
-    <ui:param name="title" value="#{storageMsg.documents_list_title}"/>
-    <ui:param name="top_nav" value="storages"/>
-    <ui:param name="pageStyle" value="page-storages"/>
+                xmlns:auth="http://code.google.com/p/ada-awa/auth"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
+                xmlns:c="http://java.sun.com/jstl/core"
+	        xmlns:util="http://code.google.com/p/ada-asf/util"
+                xmlns:h="http://java.sun.com/jsf/html">
+  <ui:param name="title" value="#{storageMsg.documents_list_title}"/>
+  <ui:param name="top_nav" value="storages"/>
+  <ui:param name="pageStyle" value="page-storages"/>
 
-    <!-- Main page body -->
-    <ui:define name="pageBody">
-        <f:metadata>
-            <f:viewParam id='folderId' value='#{storageList.folderId}' required="false"/>
-            <f:viewAction action='#{storageList.load}'/>
-        </f:metadata>
-        <util:script>
-            var contextPath = '#{contextPath}';
-        </util:script>
-        <h:panelGroup rendered="#{not empty storageList.folder}">
-            <div class="awa-side-panel">
-                <div id='storage-folder-left-panel' class="awa-left-panel">
-                    <div class="storage-folder-title">#{storageMsg.storage_folder_title}</div>
-                    <div id='storage-folder-list-editor' class="ui-widget ui-corner-all">
-                        <ui:include src="lists/folders.xhtml">
-                            <ui:param name="folderList" value="#{storageList.folders}"/>
-                        </ui:include>
-                    </div>
-                </div>
-                <div id='storage-list-right-panel' class="awa-right-panel">
-                    <ui:include src="views/storage-nav.xhtml"/>
-                    <div id='storage-list-editor' class="ui-widget ui-corner-all">
-                        <ui:include src="lists/document-list.xhtml"/>
-                    </div>
-                    <div id='storage-action' class='asf-list-action'>
-                        <a href="#" class='asf-icon asf-delete'
-                           title='#{storageMsg.storage_list_delete_file_tooltip}'></a>
-                    </div>
-                </div>
-            </div>
-            <util:script>
-                    $('#storage-folder-list').folder({
-                        selectClass: 'asf-selected',
-                        editUrl: '#{contextPath}/storages/forms/create-folder-form.html',
-                        currentItem: '#folder-' + #{not empty storageList.folder ? storageList.folder.id : 'null'},
+  <!-- Main page body -->
+  <ui:define name="pageBody">
+    <f:metadata>
+      <f:viewParam id='folderId' value='#{storageList.folderId}' required="false"/>
+      <f:viewAction action='#{storageList.load}'/>
+    </f:metadata>
+    <util:script>
+      var contextPath = '#{contextPath}';
+    </util:script>
+    <h:panelGroup rendered="#{not empty storageList.folder}">
+      <div class="awa-side-panel">
+        <div id='storage-folder-left-panel' class="awa-left-panel">
+          <div class="storage-folder-title">#{storageMsg.storage_folder_title}</div>
+          <div id='storage-folder-list-editor' class="ui-widget ui-corner-all">
+            <ui:include src="lists/folders.xhtml">
+              <ui:param name="folderList" value="#{storageList.folders}"/>
+            </ui:include>
+          </div>
+        </div>
+        <div id='storage-list-right-panel' class="awa-right-panel">
+          <ui:include src="views/storage-nav.xhtml"/>
+          <div id='storage-list-editor' class="ui-widget ui-corner-all">
+            <ui:include src="lists/document-list.xhtml"/>
+          </div>
+          <div id='storage-action' class='asf-list-action'>
+            <a href="#" class='asf-icon asf-delete'
+               title='#{storageMsg.storage_list_delete_file_tooltip}'></a>
+          </div>
+        </div>
+      </div>
+      <util:script>
+        $('#storage-folder-list').folder({
+            selectClass: 'asf-selected',
+            editUrl: '#{contextPath}/storages/forms/create-folder-form.html',
+            currentItem: '#folder-' + #{not empty storageList.folder ? storageList.folder.id : 'null'},
                         selectUrl: '#{contextPath}/storages/lists/documents.html',
                         uploadButton: '#storage-upload-button',
                         uploadUrl: '#{contextPath}/storages/forms/upload-form.html',
@@ -99,39 +99,39 @@
                             }
                         }
                     });
-            </util:script>
-        </h:panelGroup>
-        <h:panelGroup rendered="#{empty storageList.folder}">
-            <c:choose>
-                <c:when test="#{auth:hasPermission('folder-create',0)}">
-                    <div class="awa-container">
-                        <div class="grid_3">
-                            <img src="#{contextPath}/images/storages/folder.png"/>
-                        </div>
-                        <div class="grid_6">
-                            <p>#{storageMsg.storage_no_folder}</p>
-                            <div class="asf-container awa-form">
-                                <ajax:include src="/storages/forms/folder-create-first.xhtml"/>
-                            </div>
-                        </div>
-                    </div>
-                </c:when>
-                <c:otherwise>
-                    <div class="awa-container">
-                        <div class="grid_3">
-                            <img src="#{contextPath}/images/storages/folder.png"/>
-                        </div>
-                        <div class="grid_6">
-                            <p>#{storageMsg.storage_no_visible_folder}</p>
-                        </div>
-                    </div>
-                </c:otherwise>
-            </c:choose>
-        </h:panelGroup>
+      </util:script>
+    </h:panelGroup>
+    <h:panelGroup rendered="#{empty storageList.folder}">
+      <c:choose>
+        <c:when test="#{auth:hasPermission('folder-create',0)}">
+          <div class="awa-columns">
+            <div class="awa-grid-3">
+              <img src="#{contextPath}/images/storages/folder.png"/>
+            </div>
+            <div class="awa-grid-6">
+              <p>#{storageMsg.storage_no_folder}</p>
+              <div class="asf-container awa-form">
+                <ajax:include src="/storages/forms/folder-create-first.xhtml"/>
+              </div>
+            </div>
+          </div>
+        </c:when>
+        <c:otherwise>
+          <div class="awa-columns">
+            <div class="awa-grid-3">
+              <img src="#{contextPath}/images/storages/folder.png"/>
+            </div>
+            <div class="awa-grid-6">
+              <p>#{storageMsg.storage_no_visible_folder}</p>
+            </div>
+          </div>
+        </c:otherwise>
+      </c:choose>
+    </h:panelGroup>
 
-    </ui:define>
-    <ui:define name="pageScript">
-        <script type="text/javascript" src="#{contextPath}/js/dropzone.js"></script>
-    </ui:define>
+  </ui:define>
+  <ui:define name="pageScript">
+    <script type="text/javascript" src="#{contextPath}/js/dropzone.js"></script>
+  </ui:define>
 </ui:composition>
 

@@ -120,6 +120,8 @@ div.asf-active-list div.asf-active .storage-download {
 #storage-folder-add, .storage-file-info {
     float: left;
     width: 100%;
+    display: flex;
+    flex-direction: row;
 }
 #storage-list-editor {
     float: left;
@@ -175,8 +177,7 @@ div.asf-active-list div.asf-active .storage-download {
 .image-details {
     float: left;
     width: 100%;
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
+    padding: 0.5em;
 }
 .image-details dt {
     clear: both;

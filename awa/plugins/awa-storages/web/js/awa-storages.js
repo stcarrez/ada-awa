@@ -133,7 +133,7 @@
                     }
                 },
                 error: function(jqXHDR, status, error) {
-                    ASF.AjaxError(jqXHDR, status, error, d);
+                    ASF.AjaxError(jqXHDR, status, error, self.element);
                 }
             });
         }
@@ -299,7 +299,7 @@
                     }
                 },
                 error: function(jqXHDR, status, error) {
-                    ASF.AjaxError(jqXHDR, status, error, d);
+                    ASF.AjaxError(jqXHDR, status, error, self.element);
                 }
             });
         }
