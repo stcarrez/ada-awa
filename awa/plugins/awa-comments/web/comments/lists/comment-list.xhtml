@@ -1,5 +1,5 @@
 <!-- Display a list of comments
-  -  Copyright (C) 2014, 2017, 2020 Stephane Carrez
+  -  Copyright (C) 2014, 2017, 2020, 2023 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,6 +39,6 @@
             <h:outputText escape="#{cmt.format ne 'FORMAT_HTML'}" value="#{cmt.comment}"/>
         </h:panelGroup>
         <awa:wiki rendered="#{cmt.format eq 'FORMAT_WIKI'}"
-                  styleClass='comment-text' value="#{cmt.comment}" format="dotclear"/>
+                  styleClass='comment-text' value="#{cmt.comment}" format="markdown"/>
     </div>
 </h:list>
