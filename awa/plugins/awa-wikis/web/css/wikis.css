@@ -424,4 +424,7 @@
     .wiki-page-actions {
         display: none;
     }
+    .wiki-page-footer {
+        width: auto;
+    }
 }
