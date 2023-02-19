@@ -264,7 +264,7 @@ div.blog-post-comment-count a {
 #blog-post-preview {
     margin-left: 1em;
     margin-right: 1em;
-    width: auto;
+    width: 100%;
 }
 #blog-graph-tooltip {
     position: absolute;
