@@ -93,7 +93,6 @@ footer {
     font-weight: bold;
     padding-left: 10px;
     padding-right: 10px;
-    width: 100%;
     border-bottom: none;
 }
 .awa-nav-separator {
@@ -556,6 +555,9 @@ ul.awa-pagination li {
  * Responsive style for mobile and tablets.
  */
 @media (max-width: 768px) {
+    .awa-nav-icon {
+        width: 80px;
+    }
     .awa-columns {
         display: block;
     }
