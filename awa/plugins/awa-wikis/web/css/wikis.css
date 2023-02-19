@@ -404,3 +404,24 @@
 .wiki-settings-left, .wiki-settings-right {
     width: 50%;
 }
+@media (max-width: 768px) {
+    #awa-statistics {
+        display: none;
+    }
+    .wiki-page-container, .wiki-settings {
+        display: block;
+    }
+    .wiki-page-version, .wiki-page-access {
+        width: 20%;
+    }
+    #wiki-nav-sort,
+    .wiki-left-container, .wiki-right-container, .wiki-content-1, .wiki-content-2, .wiki-content-3,
+    .wiki-settings-left, .wiki-settings-right {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+    .wiki-page-actions {
+        display: none;
+    }
+}
