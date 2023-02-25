@@ -15,68 +15,51 @@
   -  limitations under the License.
   -->
 <div id='awa-hdr' xmlns:c="http://java.sun.com/jstl/core">
-    <div id='awa-top'>
-        <c:choose>
-            <c:when test="#{user.isLogged}">
-                <ul id='awa-top-nav'>
-                    <li>
-                        <a href="#{contextPath}/blogs/view.html" title="#{layoutMsg.layout_blogs_title}">
-                            #{layoutMsg.layout_blogs_label}
-                        </a>
-                    </li>
-                </ul>
-                <ul id='awa-tools'>
-                    <li id='awa-logout'>
-                        <a href="#{contextPath}/auth/logout.html"
-                           title="#{layoutMsg.layout_logout_title}">
-                        #{layoutMsg.layout_logout_label}
-                    </a></li>
-                    <li class='awa-nav-separator'></li>
-                    <li id='help'>
-                        <a href="https://github.com/stcarrez/ada-awa"
-                           title="#{layoutMsg.layout_help_title}">
-                        #{layoutMsg.layout_help_label}
-                    </a></li>
-                    <li class='awa-nav-separator'></li>
-                    <li id='awa-statistics'><a href="#{contextPath}/statistics.xml"
-                                         title="#{layoutMsg.layout_statistics_title}">
-                        #{layoutMsg.layout_statistics_label}
-                    </a></li>
-                    <li>|</li>
-                    <li>
-                        #{user.name}
-                    </li>
-                    <li>|</li>
-                    <li>
-                        <a href="#{contextPath}/workspaces/main.html" title="#{layoutMsg.layout_workspace_title}">
-                            #{layoutMsg.layout_workspace_label}
-                        </a>
-                    </li>
-                </ul>
-            </c:when>
-            <c:otherwise>
-                <ul id='awa-top-nav'>
-                    <li>
-                        <a href="#{contextPath}/blogs/view.html" title="#{layoutMsg.layout_blogs_title}">
-                            #{layoutMsg.layout_blogs_label}
-                        </a>
-                    </li>
-                </ul>
-                <ul id='awa-tools'>
-                    <li id='awa-login'><a href="#{contextPath}/auth/login.html" title="#{layoutMsg.layout_login_title}">
-                        #{layoutMsg.layout_login_label}
-                    </a></li>
-                    <li>|</li>
-                    <li id='help'><a href="https://github.com/stcarrez/ada-awa" title="#{layoutMsg.layout_help_title}">
-                        #{layoutMsg.layout_help_label}
-                    </a></li>
-                    <li>|</li>
-                    <li id='statistics'><a href="#{contextPath}/statistics.xml"
-                                         title="#{layoutMsg.layout_statistics_title}">
-                        #{layoutMsg.layout_statistics_label}
-                    </a></li>
-                </ul>
-            </c:otherwise>
-        </c:choose>
-    </div>
+  <div id='awa-top'>
+    <c:if test="#{user.isLogged}">
+      <input type='checkbox' id='awa-top-nav' class='awa-side-menu' />
+      <label for='awa-top-nav' class='awa-hamb-menu'><span class='awa-hamb-line'></span></label>
+      <nav id='awa-top-nav' class='awa-side-nav'>
+        <ul class='awa-menu'>
+          <li id='awa-logout'>
+            <a href="#{contextPath}/auth/logout.html"
+               title="#{layoutMsg.layout_logout_title}">
+              #{layoutMsg.layout_logout_label}
+          </a></li>
+          <li class='awa-nav-separator'></li>
+          <li id='help'>
+            <a href="https://github.com/stcarrez/ada-awa"
+               title="#{layoutMsg.layout_help_title}">
+              #{layoutMsg.layout_help_label}
+          </a></li>
+          <li class='awa-nav-separator'></li>
+          <li id='awa-statistics'><a href="#{contextPath}/statistics.xml"
+                                     title="#{layoutMsg.layout_statistics_title}">
+              #{layoutMsg.layout_statistics_label}
+          </a></li>
+          <li class='awa-nav-separator'></li>
+          <li>
+            #{user.name}
+          </li>
+          <li class='awa-nav-separator'></li>
+          <li>
+            <a href="#{contextPath}/workspaces/main.html" title="#{layoutMsg.layout_workspace_title}">
+              #{layoutMsg.layout_workspace_label}
+            </a>
+          </li>
+        </ul>
+    </c:if>
+  </div>
+
+  <input type='checkbox' id='vacs-nav' class='awa-side-menu' />
+  <label for='vacs-nav' class='awa-hamb-menu'><span class='awa-hamb-line'></span></label>
+  <nav id='awa-tools' class='awa-side-nav'>
+    <ul class='awa-menu'>
+      <li>
+        <a href="#{contextPath}/blogs/view.html" title="#{layoutMsg.layout_blogs_title}">
+          #{layoutMsg.layout_blogs_label}
+        </a>
+      </li>
+    </ul>
+  </nav>
 </div>
