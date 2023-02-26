@@ -126,35 +126,28 @@ PostgreSQL Development installation:
 sudo apt-get install postgresql-client libpq-dev
 ```
 
-## FreeBSD 12
+## FreeBSD 13
 
 First to get the LZMA, XML/Ada and CURL support, it is necessary
 to install the following packages before configuring AWA:
 
 ```
-pkg install lzma-18.05 curl-7.66.0 xmlada-17.0.0_1 aws-17.1_2
+pkg install gnat12 gprbuild lzma curl-7.87.0 xmlada
 ```
 
 MariaDB Development installation:
 ```
-pkg install mariadb104-client-10.4.7 mariadb104-server-10.4.7
+pkg install mariadb106-client mariadb106-client-10.4.7 mariadb106-server-10.6.11
 ```
 
 SQLite Development installation:
 ```
-pkg install sqlite3-3.29.0
+pkg install sqlite3
 ```
 
 PostgreSQL Development installation:
 ```
-pkg install postgresql12-client-12.r1 postgresql12-server-12.r1
-```
-
-Once these packages are installed, you may have to setup the following
-environment variables:
-```
-export PATH=/usr/local/gcc6-aux/bin:$PATH
-export ADA_PROJECT_PATH=/usr/local/lib/gnat
+pkg install postgresql15-client-15.1 postgresql15-server-15.1_1
 ```
 
 
@@ -207,7 +200,7 @@ cp ada-ado/win32/*.a C:/GNAT/2021/lib
 
 The [Ada Web Server](https://libre.adacore.com/libre/tools/aws/) should be compiled with the
 SSL support if you want to use the [OAuth 2.0](https://oauth.net/2/) protocol and integrate
-with Google or Facebook authentication systems.  The AWS version shipped with GNAT 2021
+with Google, GitHub and GitLab authentication systems.  The AWS version shipped with GNAT 2021
 will not work because it does not support SSL.
 
 You may build AWS by using:
