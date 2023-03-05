@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-images-modules -- Image management module
---  Copyright (C) 2012, 2016, 2020, 2022 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2020, 2022, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -211,6 +211,39 @@ package body AWA.Images.Modules is
       return Get;
    end Get_Image_Module;
 
+   --  ------------------------------
+   --  Extract the size information from a line produced by ImageMagick.
+   --  (function declared here for accessibility of unit tests).
+   --  ------------------------------
+   procedure Extract_Size (Line   : in String;
+                           Width  : in out Natural;
+                           Height : in out Natural) is
+      Pos, Sep, Last : Natural;
+   begin
+      --  The '-verbose' option of ImageMagick reports information
+      --  about the original image.  Extract the picture width and
+      --  height.
+      --  image.png PNG 120x282 120x282+0+0 8-bit \
+      --         DirectClass 34.4KB 0.000u 0:00.018
+      Pos := Util.Strings.Index (Line, ' ');
+      if Pos > 0 and then Width = 0 then
+         Pos := Util.Strings.Index (Line, ' ', Pos + 1);
+         if Pos > 0 then
+            Sep := Util.Strings.Index (Line, 'x', Pos + 1);
+            Last := Util.Strings.Index (Line, ' ', Pos + 1);
+            if Sep > 0 and then Sep < Last
+              and then (for all I in Pos + 1 .. Last - 1 => Line (I) in '0' .. '9' | 'x')
+            then
+               Log.Info ("Dimension {0} - {1}..{2}",
+                         Line (Pos .. Last),
+                         Natural'Image (Pos), Natural'Image (Last));
+               Width := Natural'Value (Line (Pos + 1 .. Sep - 1));
+               Height := Natural'Value (Line (Sep + 1 .. Last - 1));
+            end if;
+         end if;
+      end if;
+   end Extract_Size;
+
    procedure Create_Thumbnail (Service : in Image_Module;
                                Source  : in String;
                                Into    : in String;
@@ -238,37 +271,13 @@ package body AWA.Images.Modules is
          Input.Initialize (Pipe'Unchecked_Access, 1024);
          while not Input.Is_Eof loop
             declare
-               use Ada.Strings;
-
                Line : Ada.Strings.Unbounded.Unbounded_String;
-               Pos  : Natural;
-               Sep  : Natural;
-               Last : Natural;
             begin
                Input.Read_Line (Into  => Line, Strip => False);
                exit when Ada.Strings.Unbounded.Length (Line) = 0;
                Log.Info ("Received: {0}", Line);
 
-               --  The '-verbose' option of ImageMagick reports information
-               --  about the original image.  Extract the picture width and
-               --  height.
-               --  image.png PNG 120x282 120x282+0+0 8-bit \
-               --         DirectClass 34.4KB 0.000u 0:00.018
-               Pos := Ada.Strings.Unbounded.Index (Line, " ");
-               if Pos > 0 and then Width = 0 then
-                  Pos := Ada.Strings.Unbounded.Index (Line, " ", Pos + 1);
-                  if Pos > 0 then
-                     Sep := Ada.Strings.Unbounded.Index (Line, "x", Pos + 1);
-                     Last := Ada.Strings.Unbounded.Index (Line, "=", Pos + 1);
-                     if Sep > 0 and then Sep < Last then
-                        Log.Info ("Dimension {0} - {1}..{2}",
-                                  Ada.Strings.Unbounded.Slice (Line, Pos, Last),
-                                  Natural'Image (Pos), Natural'Image (Last));
-                        Width := Natural'Value (Unbounded.Slice (Line, Pos + 1, Sep - 1));
-                        Height := Natural'Value (Unbounded.Slice (Line, Sep + 1, Last - 1));
-                     end if;
-                  end if;
-               end if;
+               Extract_Size (Ada.Strings.Unbounded.To_String (Line), Width, Height);
             end;
          end loop;
          Pipe.Close;
@@ -281,7 +290,9 @@ package body AWA.Images.Modules is
       end;
    end Create_Thumbnail;
 
+   --  ------------------------------
    --  Build a thumbnail for the image identified by the Id.
+   --  ------------------------------
    procedure Build_Thumbnail (Service : in Image_Module;
                               Id      : in ADO.Identifier) is
       Storage_Service : constant AWA.Storages.Services.Storage_Service_Access
@@ -330,7 +341,9 @@ package body AWA.Images.Modules is
       end;
    end Build_Thumbnail;
 
+   --  ------------------------------
    --  Deletes the storage instance.
+   --  ------------------------------
    procedure Delete_Image (Service : in Image_Module;
                            File    : in AWA.Storages.Models.Storage_Ref'Class) is
    begin

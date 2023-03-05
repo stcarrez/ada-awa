@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-images-modules -- Image management module
---  Copyright (C) 2012, 2016, 2018, 2020 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2018, 2020, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -158,5 +158,11 @@ private
       Job_Module        : AWA.Jobs.Modules.Job_Module_Access;
       Image_Servlet     : aliased AWA.Images.Servlets.Image_Servlet;
    end record;
+
+   --  Extract the size information from a line produced by ImageMagick.
+   --  (function declared here for accessibility of unit tests).
+   procedure Extract_Size (Line   : in String;
+                           Width  : in out Natural;
+                           Height : in out Natural);
 
 end AWA.Images.Modules;

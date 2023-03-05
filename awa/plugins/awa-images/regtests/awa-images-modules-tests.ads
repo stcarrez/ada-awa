@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-images-modules-tests -- Unit tests for image service
---  Copyright (C) 2012, 2013, 2018, 2020 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2018, 2020, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,6 +30,9 @@ package AWA.Images.Modules.Tests is
 
    --  Test creation of a storage object
    procedure Test_Create_Image (T : in out Test);
+
+   --  Test the Extract_Size internal method.
+   procedure Test_Extract_Size (T : in out Test);
 
    --  Test the Get_Sizes operation.
    procedure Test_Get_Sizes (T : in out Test);
