@@ -60,13 +60,14 @@ You may get Ahven or Aunit at:
   - Feature #25: Update database schema for ADO 2.4
   - Feature #26: Support to enable/disable user account
   - Feature #27: New option for the list command to print the last audit fields
-  - Fix #30: Configuration to authenticate with GitHub is incomplete
   - Feature #31: Use <header>, <footer>, <main> for HTML layouts
   - Feature #32: Support several authentication methods for a user
+  - Feature #35: Blog post creation improvement
+  - Fix #30: Configuration to authenticate with GitHub is incomplete
   - Fix #33: Application name not recognized by some AWA commands
   - Fix #34: Configuration to authenticate with Gitlab is incomplete
-  - Feature #35: Blog post creation improvement
   - Fix #37: Cannot use entity-permission for the url-policy
+  - Fix #38: Image module does not handle SVG correctly
   - Update Trumbowyg editor to version 2.26.0
   - Use Markdown for the AWA comments and questions modules
 
