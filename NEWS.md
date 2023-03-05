@@ -4,7 +4,7 @@ Version 2.5.0   - Under development
   - Feature #25: Update database schema for ADO 2.4
   - Feature #26: Support to enable/disable user account
   - Feature #27: New option for the list command to print the last audit fields
-  - Feature #31: Use <header>, <footer>, <main> for HTML layouts
+  - Feature #31: Use `<header>`, `<footer>`, `<main>` for HTML layouts
   - Feature #32: Support several authentication methods for a user
   - Feature #35: Blog post creation improvement
   - Fix #30: Configuration to authenticate with GitHub is incomplete
