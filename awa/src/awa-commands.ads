@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-commands -- AWA commands for server or admin tool
---  Copyright (C) 2019, 2020, 2022 Stephane Carrez
+--  Copyright (C) 2019, 2020, 2022, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,12 +18,14 @@
 with Ada.Finalization;
 with Util.Commands;
 with Util.Properties;
+with Util.Strings;
 with Util.Systems.Constants;
 with AWA.Applications;
 with Ada.Exceptions;
 private with Keystore.Passwords;
 private with Keystore.Passwords.GPG;
 private with Util.Commands.Consoles.Text;
+private with Util.Commands.Text_IO;
 private with ASF.Applications;
 private with AWA.Applications.Factory;
 private with Keystore.Properties;
@@ -145,12 +147,17 @@ private
 
    type Notice_Type is (N_USAGE, N_INFO, N_ERROR);
 
+   function To_String (S : in String) return String is (S);
+
    package Consoles is
-     new Util.Commands.Consoles (Field_Type  => Field_Number,
-                                 Notice_Type => Notice_Type);
+     new Util.Commands.Consoles (Field_Type   => Field_Number,
+                                 Notice_Type  => Notice_Type,
+                                 Element_Type => Character,
+                                 Input_Type   => String,
+                                 To_Input     => Util.Strings.Image);
 
    package Text_Consoles is
-      new Consoles.Text;
+      new Consoles.Text (IO => Util.Commands.Text_IO);
 
    subtype Justify_Type is Consoles.Justify_Type;
 

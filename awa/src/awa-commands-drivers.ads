@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-commands-drivers -- Driver for AWA commands for server or admin tool
---  Copyright (C) 2020, 2021, 2022 Stephane Carrez
+--  Copyright (C) 2020, 2021, 2022, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +19,7 @@ with GNAT.Command_Line;
 with GNAT.Strings;
 with Util.Commands.Drivers;
 with Util.Commands.Parsers.GNAT_Parser;
+with Util.Commands.Raw_IO;
 with Servlet.Server;
 with AWA.Applications;
 generic
@@ -29,6 +30,7 @@ package AWA.Commands.Drivers is
    package Main_Driver is
      new Util.Commands.Drivers (Context_Type  => Context_Type,
                                 Config_Parser => Util.Commands.Parsers.GNAT_Parser.Config_Parser,
+                                IO            => Util.Commands.Raw_IO,
                                 Driver_Name   => Driver_Name);
 
    subtype Help_Command_Type is Main_Driver.Help_Command_Type;
