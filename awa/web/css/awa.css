@@ -113,6 +113,9 @@ header {
     height: 100%;
     position: absolute;
 }
+.awa-menu {
+    list-style-type: none;
+}
 .awa-menu li {
     float: left;
     border-bottom: none;
@@ -127,6 +130,7 @@ header {
     font-weight: bold;
     padding-left: 10px;
     padding-right: 10px;
+    text-decoration: none;
 }
 .awa-menu a:hover{
     background-color: #666;
