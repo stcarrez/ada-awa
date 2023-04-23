@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-commands-tests -- Test the AWA.Commands
---  Copyright (C) 2020, 2022 Stephane Carrez
+--  Copyright (C) 2020, 2022, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,13 +16,9 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Ada.Text_IO;
 with Ada.Exceptions;
-with Util.Processes;
-with Util.Streams.Pipes;
-with Util.Streams.Buffered;
+with Ada.Strings.Unbounded;
 with Util.Test_Caller;
-with Util.Log.Loggers;
 with Security;
 with ASF.Tests;
 with AWA.Tests.Helpers.Users;
@@ -32,8 +28,6 @@ with ASF.Requests.Mockup;
 with ASF.Responses.Mockup;
 
 package body AWA.Commands.Tests is
-
-   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Commands.Tests");
 
    package Caller is new Util.Test_Caller (Test, "Commands");
 
@@ -58,39 +52,6 @@ package body AWA.Commands.Tests is
       Caller.Add_Test (Suite, "Test AWA.Commands.User (register)",
                        Test_User_Command'Access);
    end Add_Tests;
-
-   --  ------------------------------
-   --  Execute the command and get the output in a string.
-   --  ------------------------------
-   procedure Execute (T       : in out Test;
-                      Command : in String;
-                      Input   : in String;
-                      Output  : in String;
-                      Result  : out Ada.Strings.Unbounded.Unbounded_String;
-                      Status  : in Natural := 0) is
-      P        : aliased Util.Streams.Pipes.Pipe_Stream;
-      Buffer   : Util.Streams.Buffered.Input_Buffer_Stream;
-   begin
-      if Input'Length > 0 then
-         Log.Info ("Execute: {0} < {1}", Command, Input);
-      elsif Output'Length > 0 then
-         Log.Info ("Execute: {0} > {1}", Command, Output);
-      else
-         Log.Info ("Execute: {0}", Command);
-      end if;
-      P.Set_Input_Stream (Input);
-      P.Set_Output_Stream (Output);
-      P.Open (Command, Util.Processes.READ_ALL);
-
-      --  Write on the process input stream.
-      Result := Ada.Strings.Unbounded.Null_Unbounded_String;
-      Buffer.Initialize (P'Unchecked_Access, 8192);
-      Buffer.Read (Result);
-      P.Close;
-      Ada.Text_IO.Put_Line (Ada.Strings.Unbounded.To_String (Result));
-      Log.Info ("Command result: {0}", Result);
-      Util.Tests.Assert_Equals (T, Status, P.Get_Exit_Status, "Command '" & Command & "' failed");
-   end Execute;
 
    --  ------------------------------
    --  Test start and stop command.

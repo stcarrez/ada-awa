@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-commands-tests -- Test the AWA.Commands
---  Copyright (C) 2020, 2022 Stephane Carrez
+--  Copyright (C) 2020, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,6 @@
 -----------------------------------------------------------------------
 
 with Util.Tests;
-with Ada.Strings.Unbounded;
 
 package AWA.Commands.Tests is
 
@@ -49,12 +48,5 @@ package AWA.Commands.Tests is
 
    --  Test the user command.
    procedure Test_User_Command (T : in out Test);
-
-   procedure Execute (T       : in out Test;
-                      Command : in String;
-                      Input   : in String;
-                      Output  : in String;
-                      Result  : out Ada.Strings.Unbounded.Unbounded_String;
-                      Status  : in Natural := 0);
 
 end AWA.Commands.Tests;
