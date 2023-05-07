@@ -238,11 +238,15 @@ package body AWA.Commands.Tests is
          ASF.Tests.Assert_Redirect (T, "/asfunit/auth/change-password/" & Access_Key,
                                     Reply, "Invalid redirect after verify");
 
+         ASF.Tests.Do_Get (Request, Reply, "/auth/change-password/" & Access_Key,
+                           "reset-password-get-3.html");
+
          --  Simulate a user clicking on the reset password form.
          --  This verifies the key, login the user and redirect him to the change-password page
          Request.Set_Parameter ("key", Access_Key);
          Request.Set_Parameter ("password", "admin");
          Request.Set_Parameter ("reset-password", "1");
+         ASF.Tests.Set_CSRF (Request, "reset-password-form", "reset-password-get-3.html");
          ASF.Tests.Do_Post (Request, Reply, "/auth/change-password/" & Access_Key,
                             "reset-password-3.html");
 

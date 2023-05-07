@@ -74,8 +74,8 @@ package body AWA.Users.Tests is
       Request.Set_Parameter ("password2", "asdf");
       Request.Set_Parameter ("firstName", "joe");
       Request.Set_Parameter ("lastName", "dalton");
-      Request.Set_Parameter ("register", "1");
       Request.Set_Parameter ("register-button", "1");
+      ASF.Tests.Set_CSRF (Request, "register", "create-user-1.html");
       Do_Post (Request, Reply, "/auth/register.html", "create-user-2.html");
 
       T.Assert (Reply.Get_Status = Servlet.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
@@ -128,8 +128,8 @@ package body AWA.Users.Tests is
       Request.Set_Parameter ("password2", "asdf");
       Request.Set_Parameter ("firstName", "joe");
       Request.Set_Parameter ("lastName", "dalton");
-      Request.Set_Parameter ("register", "1");
       Request.Set_Parameter ("register-button", "1");
+      ASF.Tests.Set_CSRF (Request, "register", "register-disabled-1.html");
       Do_Post (Request, Reply, "/auth/register.html", "register-disabled-2.html");
 
       T.Assert (Reply.Get_Status = Servlet.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
@@ -225,8 +225,8 @@ package body AWA.Users.Tests is
 
       Request.Set_Parameter ("email", "Joe@gmail.com");
       Request.Set_Parameter ("password", "admin");
-      Request.Set_Parameter ("login", "1");
       Request.Set_Parameter ("login-button", "1");
+      ASF.Tests.Set_CSRF (Request, "login", "login-user-1.html");
       Do_Post (Request, Reply, "/auth/login.html", "login-user-2.html");
 
       T.Assert (Reply.Get_Status = Servlet.Responses.SC_MOVED_TEMPORARILY, "Invalid response");
@@ -306,8 +306,8 @@ package body AWA.Users.Tests is
       T.Assert (Reply.Get_Status = Servlet.Responses.SC_OK, "Invalid response");
 
       Request.Set_Parameter ("email", Email);
-      Request.Set_Parameter ("lost-password", "1");
       Request.Set_Parameter ("lost-password-button", "1");
+      ASF.Tests.Set_CSRF (Request, "lost-password", "lost-password-1.html");
       Do_Post (Request, Reply, "/auth/lost-password.html", "lost-password-2.html");
 
       ASF.Tests.Assert_Redirect (T, "/asfunit/auth/login.html",
@@ -328,11 +328,15 @@ package body AWA.Users.Tests is
          AWA.Tests.Helpers.Users.Find_Access_Key (Principal, Email, Key);
          T.Assert (not Key.Is_Null, "There is no access key associated with the user");
 
+         Do_Get (Request, Reply, "/auth/change-password/" & Key.Get_Access_Key,
+                 "recover-password-get-2.html");
+
          --  Simulate user clicking on the reset password link.
          --  This verifies the key, login the user and redirect him to the change-password page
          Request.Set_Parameter ("key", Key.Get_Access_Key);
          Request.Set_Parameter ("password", Password);
          Request.Set_Parameter ("reset-password", "1");
+         ASF.Tests.Set_CSRF (Request, "reset-password-form", "recover-password-get-2.html");
          Do_Post (Request, Reply, "/auth/change-password/" & Key.Get_Access_Key,
                   "recover-password-2.html");
 
@@ -365,8 +369,8 @@ package body AWA.Users.Tests is
       T.Assert (Reply.Get_Status = Servlet.Responses.SC_OK, "Invalid response");
 
       Request.Set_Parameter ("email", "voldemort@gmail.com");
-      Request.Set_Parameter ("lost-password", "1");
       Request.Set_Parameter ("lost-password-button", "1");
+      ASF.Tests.Set_CSRF (Request, "lost-password", "lost-password-4.html");
       Do_Post (Request, Reply, "/auth/lost-password.html", "lost-password-5.html");
 
       ASF.Tests.Assert_Redirect (T, "/asfunit/auth/login.html",
