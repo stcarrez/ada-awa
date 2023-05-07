@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-tests-helpers-users -- Unit tests for AWA users
---  Copyright (C) 2011, 2012, 2013, 2014, 2017, 2020, 2022 Stephane Carrez
+--  Copyright (C) 2011 - 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -221,8 +221,8 @@ package body AWA.Tests.Helpers.Users is
 
       Request.Set_Parameter ("email", Email);
       Request.Set_Parameter ("password", "admin");
-      Request.Set_Parameter ("login", "1");
       Request.Set_Parameter ("login-button", "1");
+      ASF.Tests.Set_CSRF (Request, "login", "login-user-1.html");
       ASF.Tests.Do_Post (Request, Reply, "/auth/login.html", "login-user-2.html");
    end Login;
 
@@ -248,9 +248,11 @@ package body AWA.Tests.Helpers.Users is
       Request : ASF.Requests.Mockup.Request;
       Reply   : ASF.Responses.Mockup.Response;
    begin
+      ASF.Tests.Do_Get (Request, Reply, "/auth/lost-password.html", "lost-password-1.html");
+
       Request.Set_Parameter ("email", Email);
-      Request.Set_Parameter ("lost-password", "1");
       Request.Set_Parameter ("lost-password-button", "1");
+      ASF.Tests.Set_CSRF (Request, "lost-password", "lost-password-1.html");
       ASF.Tests.Do_Post (Request, Reply, "/auth/lost-password.html", "lost-password-2.html");
 
       if Reply.Get_Status /= ASF.Responses.SC_MOVED_TEMPORARILY then
@@ -267,12 +269,14 @@ package body AWA.Tests.Helpers.Users is
          if not Key.Is_Null then
             Log.Error ("There is no access key associated with the user");
          end if;
+         ASF.Tests.Do_Get (Request, Reply, "/auth/change-password.html", "reset-password-1.html");
 
          --  Simulate user clicking on the reset password link.
          --  This verifies the key, login the user and redirect him to the change-password page
          Request.Set_Parameter ("key", Key.Get_Access_Key);
          Request.Set_Parameter ("password", "admin");
          Request.Set_Parameter ("reset-password", "1");
+         ASF.Tests.Set_CSRF (Request, "reset-password-form", "reset-password-1.html");
          ASF.Tests.Do_Post (Request, Reply, "/auth/change-password.html", "reset-password-2.html");
 
          if Reply.Get_Status /= ASF.Responses.SC_MOVED_TEMPORARILY then
