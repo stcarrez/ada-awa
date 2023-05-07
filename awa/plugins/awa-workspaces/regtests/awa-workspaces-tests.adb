@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-workspaces-tests -- Unit tests for workspaces and invitations
---  Copyright (C) 2017, 2018 Stephane Carrez
+--  Copyright (C) 2017, 2018, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -94,10 +94,12 @@ package body AWA.Workspaces.Tests is
       Invite    : AWA.Workspaces.Beans.Invitation_Bean_Access;
    begin
       AWA.Tests.Helpers.Users.Login ("test-invite@test.com", Request);
+      ASF.Tests.Do_Get (Request, Reply, "/workspaces/invite.html", "invite-get.html");
+
       Request.Set_Parameter ("email", "invited-user@test.com");
       Request.Set_Parameter ("message", "I invite you to this application");
       Request.Set_Parameter ("send", "1");
-      Request.Set_Parameter ("invite", "1");
+      ASF.Tests.Set_CSRF (Request, "invite", "invite-get.html");
       ASF.Tests.Do_Post (Request, Reply, "/workspaces/invite.html", "invite.html");
 
       T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY,
@@ -128,9 +130,12 @@ package body AWA.Workspaces.Tests is
       declare
          Id : constant String := ADO.Identifier'Image (T.Member_Id);
       begin
+         ASF.Tests.Do_Get (Request, Reply, "/workspaces/forms/delete-member.html",
+                           "delete-member-get.html");
+
          Request.Set_Parameter ("member-id", Id);
          Request.Set_Parameter ("delete", "1");
-         Request.Set_Parameter ("delete-member-form", "1");
+         ASF.Tests.Set_CSRF (Request, "delete-member-form", "delete-member-get.html");
          ASF.Tests.Do_Post (Request, Reply, "/workspaces/forms/delete-member.html",
                             "delete-member.html");
 
@@ -151,7 +156,7 @@ package body AWA.Workspaces.Tests is
       T.Test_Invite_User;
       AWA.Tests.Helpers.Users.Recover_Password ("invited-user@test.com");
       AWA.Tests.Helpers.Users.Login ("invited-user@test.com", Request);
-      ASF.Tests.Do_Get (Request, Reply, "/workspaces/accept-invitation.html?key="
+      ASF.Tests.Do_Get (Request, Reply, "/auth/invitation/"
                         & To_String (T.Key),
                         "accept-member.html");
       T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY,
@@ -178,7 +183,6 @@ package body AWA.Workspaces.Tests is
                                  "The invitation form must setup the invitation key form");
 
       Request.Set_Parameter ("key", To_String (T.Key));
-      Request.Set_Parameter ("register", "1");
       Request.Set_Parameter ("register-button", "1");
       Request.Set_Parameter ("firstName", "Invitee");
       Request.Set_Parameter ("lastName", "With_Email");
@@ -186,6 +190,7 @@ package body AWA.Workspaces.Tests is
       Request.Set_Parameter ("email", "invited-user@test.com");
       Request.Set_Parameter ("password", "admin");
       Request.Set_Parameter ("password2", "admin");
+      ASF.Tests.Set_CSRF (Request, "register", "accept-invitation-email-1.html");
 
       ASF.Tests.Do_Post (Request, Reply, "/auth/invitation.html",
                          "accept-invitation-email-2.html");

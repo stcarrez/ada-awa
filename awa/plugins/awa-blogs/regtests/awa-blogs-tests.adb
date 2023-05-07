@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-tests -- Unit tests for blogs module
---  Copyright (C) 2017, 2018, 2019, 2020, 2022 Stephane Carrez
+--  Copyright (C) 2017, 2018, 2019, 2020, 2022, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -113,8 +113,8 @@ package body AWA.Blogs.Tests is
                                 "Blog post admin page is missing input field");
 
       Request.Set_Parameter ("title", "The Blog Title");
-      Request.Set_Parameter ("create-blog", "1");
       Request.Set_Parameter ("create", "1");
+      ASF.Tests.Set_CSRF (Request, "create-blog", "create-blog-get.html");
       ASF.Tests.Do_Post (Request, Reply, "/blogs/admin/create-blog.html", "create-blog.html");
 
       T.Assert (Reply.Get_Status = ASF.Responses.SC_MOVED_TEMPORARILY,
@@ -128,8 +128,10 @@ package body AWA.Blogs.Tests is
                                     "Invalid blog identifier in the response");
          T.Blog_Ident := To_Unbounded_String (Ident);
 
+         ASF.Tests.Do_Get (Request, Reply, "/blogs/admin/create.html?id=" & Ident,
+                           "create-post-get.html");
+
          Request.Set_Parameter ("post-blog-id", Ident);
-         Request.Set_Parameter ("post", "1");
          Request.Set_Parameter ("post-title", "Post title");
          Request.Set_Parameter ("text", "The blog post content.");
          Request.Set_Parameter ("uri", Uuid);
@@ -137,6 +139,7 @@ package body AWA.Blogs.Tests is
          Request.Set_Parameter ("post-status", "POST_PUBLISHED");
          Request.Set_Parameter ("allow-comment", "0");
          Request.Set_Parameter ("post-format", "FORMAT_DOTCLEAR");
+         ASF.Tests.Set_CSRF (Request, "post", "create-post-get.html");
          ASF.Tests.Do_Post (Request, Reply, "/blogs/admin/create.html", "create-post.html");
 
          T.Post_Ident := Helpers.Extract_Redirect (Reply, "/asfunit/blogs/admin/edit/"
@@ -147,7 +150,6 @@ package body AWA.Blogs.Tests is
 
          Request.Set_Parameter ("post-blog-id", Ident);
          Request.Set_Parameter ("post-id", To_String (T.Post_Ident));
-         Request.Set_Parameter ("post", "1");
          Request.Set_Parameter ("post-title", "Post title");
          Request.Set_Parameter ("text", "The blog post content.");
          Request.Set_Parameter ("uri", Uuid);
@@ -155,6 +157,7 @@ package body AWA.Blogs.Tests is
          Request.Set_Parameter ("post-status", "POST_PUBLISHED");
          Request.Set_Parameter ("post-format", "FORMAT_DOTCLEAR");
          Request.Set_Parameter ("allow-comment", "0");
+         ASF.Tests.Set_CSRF (Request, "post", "create-post-get.html");
          ASF.Tests.Do_Post (Request, Reply, "/blogs/admin/edit.html", "create-edit-post.html");
 
          Post_Ident := Helpers.Extract_Redirect (Reply, "/asfunit/blogs/admin/"
@@ -180,10 +183,11 @@ package body AWA.Blogs.Tests is
       Post_Ident : Unbounded_String;
    begin
       AWA.Tests.Helpers.Users.Login ("test-wiki@test.com", Request);
+      ASF.Tests.Do_Get (Request, Reply, "/blogs/admin/edit/" & Ident & "/"
+                        & To_String (T.Post_Ident), "edit-post-get.html");
 
       Request.Set_Parameter ("post-blog-id", Ident);
       Request.Set_Parameter ("post-id", To_String (T.Post_Ident));
-      Request.Set_Parameter ("post", "1");
       Request.Set_Parameter ("post-title", "New post title");
       Request.Set_Parameter ("text", "The blog post new content.");
       Request.Set_Parameter ("uri", Uuid);
@@ -191,6 +195,7 @@ package body AWA.Blogs.Tests is
       Request.Set_Parameter ("post-status", "POST_PUBLISHED");
       Request.Set_Parameter ("post-format", "FORMAT_DOTCLEAR");
       Request.Set_Parameter ("allow-comment", "0");
+      ASF.Tests.Set_CSRF (Request, "post", "edit-post-get.html");
       ASF.Tests.Do_Post (Request, Reply, "/blogs/admin/edit.html", "edit-post.html");
 
       Post_Ident := Helpers.Extract_Redirect (Reply, "/asfunit/blogs/admin/"
@@ -214,11 +219,10 @@ package body AWA.Blogs.Tests is
       AWA.Tests.Helpers.Users.Login ("test-wiki@test.com", Request);
       Request.Set_Parameter ("post_id", To_String (T.Post_Ident));
       Request.Set_Parameter ("blog_id", Ident);
-      ASF.Tests.Do_Get (Request, Reply, "/blogs/admin/edit.html", "edit-post-form.html");
+      ASF.Tests.Do_Get (Request, Reply, "/blogs/admin/edit.html", "edit-post-form-get.html");
 
       Request.Set_Parameter ("post-blog-id", Ident);
       Request.Set_Parameter ("post-id", To_String (T.Post_Ident));
-      Request.Set_Parameter ("post", "1");
       Request.Set_Parameter ("post-title", "New post title");
       Request.Set_Parameter ("text", "The blog post new content.");
       Request.Set_Parameter ("uri", Uuid);
@@ -227,6 +231,7 @@ package body AWA.Blogs.Tests is
       Request.Set_Parameter ("post-status", "POST_PUBLISHED");
       Request.Set_Parameter ("allow-comment", "0");
       Request.Set_Parameter ("publish-date", "");
+      ASF.Tests.Set_CSRF (Request, "post", "edit-post-form-get.html");
       ASF.Tests.Do_Post (Request, Reply, "/blogs/admin/edit.html", "edit-post.html");
 
       Post_Ident := Helpers.Extract_Redirect (Reply, "/asfunit/blogs/admin/"

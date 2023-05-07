@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-tests -- Unit tests for wikis module
---  Copyright (C) 2018, 2019, 2020, 2022 Stephane Carrez
+--  Copyright (C) 2018, 2019, 2020, 2022, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -226,8 +226,10 @@ package body AWA.Wikis.Tests is
                           Name    : in String;
                           Title   : in String) is
    begin
+      ASF.Tests.Do_Get (Request, Reply, "/wikis/create.html", "create-wiki-get.html");
+
       Request.Set_Parameter ("page-wiki-id", To_String (T.Wiki_Ident));
-      Request.Set_Parameter ("post", "1");
+      --  Request.Set_Parameter ("post", "1");
       Request.Set_Parameter ("page-title", Title);
       Request.Set_Parameter ("text", "# Main title" & ASCII.LF
                              & "* The wiki page content." & ASCII.LF
@@ -239,6 +241,7 @@ package body AWA.Wikis.Tests is
       Request.Set_Parameter ("save", "1");
       Request.Set_Parameter ("page-is-public", "1");
       Request.Set_Parameter ("wiki-format", "FORMAT_MARKDOWN");
+      ASF.Tests.Set_CSRF (Request, "post", "create-wiki-get.html");
       ASF.Tests.Do_Post (Request, Reply, "/wikis/create.html", "create-wiki.html");
 
       T.Page_Ident := Helpers.Extract_Redirect (Reply, "/asfunit/wikis/view/"
@@ -260,9 +263,11 @@ package body AWA.Wikis.Tests is
       Reply     : Servlet.Responses.Mockup.Response;
    begin
       AWA.Tests.Helpers.Users.Login ("test-wiki@test.com", Request);
+      ASF.Tests.Do_Get (Request, Reply, "/wikis/setup.html", "setup-wiki-get.html");
+
       Request.Set_Parameter ("title", "The Wiki Space Title");
-      Request.Set_Parameter ("post", "1");
       Request.Set_Parameter ("create", "1");
+      ASF.Tests.Set_CSRF (Request, "post", "setup-wiki-get.html");
       ASF.Tests.Do_Post (Request, Reply, "/wikis/setup.html", "setup-wiki.html");
 
       T.Assert (Reply.Get_Status = Servlet.Responses.SC_MOVED_TEMPORARILY,

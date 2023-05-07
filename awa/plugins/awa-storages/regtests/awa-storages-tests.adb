@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-tests -- Unit tests for storages module
---  Copyright (C) 2018, 2019, 2020, 2021 Stephane Carrez
+--  Copyright (C) 2018, 2019, 2020, 2021, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -86,9 +86,14 @@ package body AWA.Storages.Tests is
       Reply     : Servlet.Responses.Mockup.Response;
    begin
       AWA.Tests.Helpers.Users.Login ("test-storage@test.com", Request);
+      ASF.Tests.Do_Get (Request, Reply,
+                        "/storages/forms/folder-create.html",
+                        "folder-create-form-get-storage.html");
+
       Request.Set_Parameter ("folder-name", "Test Folder Name");
-      Request.Set_Parameter ("storage-folder-create-form", "1");
       Request.Set_Parameter ("storage-folder-create-button", "1");
+      ASF.Tests.Set_CSRF (Request, "storage-folder-create-form",
+                          "folder-create-form-get-storage.html");
       ASF.Tests.Do_Post (Request, Reply,
                          "/storages/forms/folder-create.html",
                          "folder-create-form.html");

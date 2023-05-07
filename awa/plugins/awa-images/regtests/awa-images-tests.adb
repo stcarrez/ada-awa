@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-images-tests -- Unit tests for images module
---  Copyright (C) 2018, 2019, 2020, 2021, 2022 Stephane Carrez
+--  Copyright (C) 2018, 2019, 2020, 2021, 2022, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -93,11 +93,13 @@ package body AWA.Images.Tests is
       Path      : constant String := Util.Tests.Get_Test_Path ("regtests/result/upload.jpg");
    begin
       AWA.Tests.Helpers.Users.Login ("test-image@test.com", Request);
+      ASF.Tests.Do_Get (Request, Reply, "/storages/forms/folder-create.html",
+                        "folder-create-form-get.html");
 
       --  Create the folder.
       Request.Set_Parameter ("folder-name", "Image Folder Name");
-      Request.Set_Parameter ("storage-folder-create-form", "1");
       Request.Set_Parameter ("storage-folder-create-button", "1");
+      ASF.Tests.Set_CSRF (Request, "storage-folder-create-form", "folder-create-form-get.html");
       ASF.Tests.Do_Post (Request, Reply, "/storages/forms/folder-create.html",
                          "folder-create-form.html");
 
@@ -123,13 +125,15 @@ package body AWA.Images.Tests is
       Ada.Directories.Copy_File (Source_Name => "regtests/files/images/Ada-Lovelace.jpg",
                                  Target_Name => Path,
                                  Form        => "all");
+      ASF.Tests.Do_Get (Request, Reply, "/storages/forms/upload-form.html",
+                        "upload-image-form-get.html");
 
       Request.Set_Parameter ("folder", ADO.Identifier'Image (Folder_Id));
-      Request.Set_Parameter ("uploadForm", "1");
       Request.Set_Parameter ("id", "-1");
       Request.Set_Parameter ("upload-button", "1");
       Request.Set_Part (Position => 1, Name => "upload-file",
                         Path => Path, Content_Type => "image/jpg");
+      ASF.Tests.Set_CSRF (Request, "uploadForm", "upload-image-form-get.html");
       ASF.Tests.Do_Post (Request, Reply, "/storages/forms/upload-form.html",
                          "upload-image-form.html");
 

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-questions-tests -- Unit tests for questions module
---  Copyright (C) 2018, 2019 Stephane Carrez
+--  Copyright (C) 2018, 2019, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -111,12 +111,14 @@ package body AWA.Questions.Tests is
 
       procedure Create_Question (Title : in String) is
       begin
-         Request.Set_Parameter ("post", "1");
+         ASF.Tests.Do_Get (Request, Reply, "/questions/ask.html", "questions-ask-get.html");
+
          Request.Set_Parameter ("title", Title);
          Request.Set_Parameter ("text", "# Main title" & ASCII.LF
                                 & "* The question content." & ASCII.LF
                                 & "* Second item." & ASCII.LF);
          Request.Set_Parameter ("save", "1");
+         ASF.Tests.Set_CSRF (Request, "post", "questions-ask-get.html");
          ASF.Tests.Do_Post (Request, Reply, "/questions/ask.html", "questions-ask.html");
 
          T.Question_Ident := Helpers.Extract_Redirect (Reply, "/asfunit/questions/view/");
@@ -174,11 +176,14 @@ package body AWA.Questions.Tests is
 
       procedure Create_Answer (Content : in String) is
       begin
-         Request.Set_Parameter ("post", "1");
+         ASF.Tests.Do_Get (Request, Reply, "/questions/forms/answer-form.html",
+                           "questions-answer-get.html");
+
          Request.Set_Parameter ("question-id", To_String (T.Question_Ident));
          Request.Set_Parameter ("answer-id", "");
          Request.Set_Parameter ("text", Content);
          Request.Set_Parameter ("save", "1");
+         ASF.Tests.Set_CSRF (Request, "post", "questions-answer-get.html");
          ASF.Tests.Do_Post (Request, Reply, "/questions/forms/answer-form.html",
                             "questions-answer.html");
 

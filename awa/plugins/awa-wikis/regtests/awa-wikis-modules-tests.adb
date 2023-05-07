@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-modules-tests -- Unit tests for wikis service
---  Copyright (C) 2015, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2015, 2017, 2018, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -240,6 +240,9 @@ package body AWA.Wikis.Modules.Tests is
       Pub_Ident : constant String := Util.Strings.Image (Natural (T.Public_Id));
    begin
       AWA.Tests.Helpers.Users.Login ("test-wiki@test.com", Request);
+      ASF.Tests.Do_Get (Request, Reply, "/wikis/edit/" & Ident & "/PublicPage",
+                        "update-wiki-get.html");
+
       Request.Set_Parameter ("title", "The Blog Title");
       Request.Set_Parameter ("page-id", Pub_Ident);
       Request.Set_Parameter ("page-wiki-id", Ident);
@@ -254,7 +257,7 @@ package body AWA.Wikis.Modules.Tests is
       Request.Set_Parameter ("wiki-format", "FORMAT_MEDIAWIKI");
       Request.Set_Parameter ("qtags[1]", "Test-Tag");
       Request.Set_Parameter ("save", "1");
-      Request.Set_Parameter ("post", "1");
+      ASF.Tests.Set_CSRF (Request, "post", "update-wiki-get.html");
       ASF.Tests.Do_Post (Request, Reply, "/wikis/edit/" & Ident & "/PublicPage",
                          "update-wiki.html");
 
