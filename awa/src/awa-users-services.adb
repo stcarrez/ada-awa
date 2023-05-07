@@ -847,14 +847,23 @@ package body AWA.Users.Services is
          User.Set_Name (String '(User.Get_First_Name) & " " & String '(User.Get_Last_Name));
       end if;
 
+      --  Get the authenticate information for the email address
+      --  (keep only AUTH_HASH_SHA1).
+      Query.Clear;
+      Query.Set_Filter ("o.method = 0 AND o.email_id = :email_id");
+      Query.Bind_Param ("email_id", Cur_Email.Get_Id);
+      Auth.Find (DB, Query, Found);
+      if not Found then
+         Auth.Set_User (Cur_User);
+         Auth.Set_Email (Cur_Email);
+         Auth.Set_Method (AUTH_HASH_SHA1);
+         Auth.Set_Ident (Email_Address);
+      end if;
+
       --  Make a random salt and generate the password hash.
       Auth.Set_Salt (Model.Create_Key (Cur_User.Get_Id));
       Auth.Set_Hash
         (User_Service'Class (Model).Get_Password_Hash (Auth.Get_Salt, Password));
-      Auth.Set_User (Cur_User);
-      Auth.Set_Email (Cur_Email);
-      Auth.Set_Method (Models.AUTH_HASH_SHA1);
-      Auth.Set_Ident (Email_Address);
       Auth.Save (DB);
 
       Cur_User.Set_Status (Models.USER_ENABLED);
