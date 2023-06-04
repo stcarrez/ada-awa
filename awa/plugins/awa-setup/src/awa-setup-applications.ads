@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-setup-applications -- Setup and installation
---  Copyright (C) 2016, 2017, 2018, 2019, 2020, 2022 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2018, 2019, 2020, 2022, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -61,6 +61,8 @@ with Util.Beans.Methods;
 --  To run again the installation, remove manually the <tt>.initialized</tt> file.
 package AWA.Setup.Applications is
 
+   package UBO renames Util.Beans.Objects;
+
    Empty : constant Util.Beans.Objects.Object := Util.Beans.Objects.To_Object (String '(""));
 
    --  The <b>Servlet</b> represents the component that will handle
@@ -102,6 +104,7 @@ package AWA.Setup.Applications is
       Changed     : ASF.Applications.Config;
       Factory     : ASF.Applications.Main.Application_Factory;
       Path        : Ada.Strings.Unbounded.Unbounded_String;
+      Name        : Ada.Strings.Unbounded.Unbounded_String;
       Database    : ADO.Connections.Configuration;
       Driver      : Util.Beans.Objects.Object;
       Result      : Util.Beans.Objects.Object;

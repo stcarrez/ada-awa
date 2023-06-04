@@ -79,12 +79,12 @@
         <managed-property>
           <property-name>path</property-name>
           <property-class>String</property-class>
-          <value>#{contextPath}/js/jquery-3.4.1.js</value>
+          <value>#{contextPath}/js/jquery-3.6.0.js</value>
         </managed-property>
         <managed-property>
-           <property-name>uiPath</property-name>
-           <property-class>String</property-class>
-           <value>#{contextPath}/js/jquery-ui-1.12.1/</value>
+          <property-name>uiPath</property-name>
+          <property-class>String</property-class>
+          <value>#{contextPath}/js/jquery-ui-1.13.2/</value>
         </managed-property>
         <managed-property>
            <property-name>chosenPath</property-name>
@@ -92,9 +92,9 @@
            <value>#{contextPath}/js/jquery-chosen-1.8.7/chosen.jquery.js</value>
         </managed-property>
         <managed-property>
-            <property-name>uiCssPath</property-name>
-            <property-class>String</property-class>
-            <value>#{contextPath}/css/redmond/jquery-ui-1.12.1.css</value>
+          <property-name>uiCssPath</property-name>
+          <property-class>String</property-class>
+          <value>#{contextPath}/css/jquery-ui-1.13.2/</value>
         </managed-property>
         <managed-property>
             <property-name>chosenCssPath</property-name>

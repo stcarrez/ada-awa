@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-setup -- Setup and installation
---  Copyright (C) 2016, 2017, 2018, 2020, 2022 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2018, 2020, 2022, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,12 +19,13 @@ with Ada.Text_IO;
 with Ada.IO_Exceptions;
 with Ada.Directories;
 with Util.Files;
-with Util.Processes;
 with Util.Properties;
 with Util.Log.Loggers;
-with Util.Streams.Pipes;
-with Util.Streams.Buffered;
+with Util.Strings.Vectors;
 with Util.Strings;
+with ADO.Configs;
+with ADO.Sessions.Sources;
+with ADO.Schemas.Databases;
 with ASF.Events.Faces.Actions;
 with ASF.Applications.Main.Configs;
 with ASF.Applications.Messages.Factory;
@@ -34,6 +35,7 @@ with AWA.Components.Factory;
 package body AWA.Setup.Applications is
 
    use ASF.Applications;
+   use Ada.Strings.Unbounded;
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Setup.Applications");
 
@@ -69,6 +71,21 @@ package body AWA.Setup.Applications is
          Start_Binding.Proxy'Access,
          Finish_Binding.Proxy'Access,
          Configure_Binding.Proxy'Access);
+
+   function Get_Schema_Path (Model_Dir : in String;
+                             Model     : in String;
+                             Config    : in ADO.Sessions.Sources.Data_Source) return String;
+   function Get_Model_Directory (From : in Application) return String;
+   function Get_Model_Name (From : in Application) return String;
+
+   function Get_Schema_Path (Model_Dir : in String;
+                             Model     : in String;
+                             Config    : in ADO.Sessions.Sources.Data_Source) return String is
+      Driver : constant String := Config.Get_Driver;
+      Dir    : constant String := Util.Files.Compose (Model_Dir, Driver);
+   begin
+      return Util.Files.Compose (Dir, "create-" & Model & "-" & Driver & ".sql");
+   end Get_Schema_Path;
 
    protected body State is
       --  ------------------------------
@@ -187,8 +204,6 @@ package body AWA.Setup.Applications is
    --  Get the database connection string to be used by the application.
    --  ------------------------------
    function Get_Database_URL (From : in Application) return String is
-      use Ada.Strings.Unbounded;
-
       Result   : Ada.Strings.Unbounded.Unbounded_String;
       Driver   : constant String := Util.Beans.Objects.To_String (From.Driver);
       User     : constant String := From.Database.Get_Property ("user");
@@ -226,6 +241,17 @@ package body AWA.Setup.Applications is
       end if;
       return To_String (Result);
    end Get_Database_URL;
+
+   function Get_Model_Directory (From : in Application) return String is
+      pragma Unreferenced (From);
+   begin
+      return "db";
+   end Get_Model_Directory;
+
+   function Get_Model_Name (From : in Application) return String is
+   begin
+      return To_String (From.Name);
+   end Get_Model_Name;
 
    --  ------------------------------
    --  Get the command to configure the database.
@@ -280,33 +306,54 @@ package body AWA.Setup.Applications is
    --  ------------------------------
    procedure Configure_Database (From    : in out Application;
                                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      Admin     : ADO.Sessions.Sources.Data_Source;
+      Config    : ADO.Sessions.Sources.Data_Source;
    begin
       From.Validate;
       if not From.Has_Error then
+         Config.Set_Connection (From.Get_Database_URL);
+         Admin := Config;
          declare
-            Pipe     : aliased Util.Streams.Pipes.Pipe_Stream;
-            Buffer   : Util.Streams.Buffered.Input_Buffer_Stream;
-            Content  : Ada.Strings.Unbounded.Unbounded_String;
-            Command  : constant String := From.Get_Configure_Command;
+            Msgs      : Util.Strings.Vectors.Vector;
+            Name      : constant String := From.Get_Model_Name;
+            Model_Dir : constant String := From.Get_Model_Directory;
+            Path      : constant String := Get_Schema_Path (Model_Dir, Name, Config);
+            Content   : Ada.Strings.Unbounded.Unbounded_String;
          begin
-            Log.Info ("Configure database with {0}", Command);
+            Log.Info ("Creating database tables using schema '{0}'", Path);
 
-            Pipe.Open (Command, Util.Processes.READ);
-            Buffer.Initialize (Pipe'Unchecked_Access, 64 * 1024);
-            Buffer.Read (Content);
-            Pipe.Close;
-            From.Result := Util.Beans.Objects.To_Object (Content);
-            From.Has_Error := Pipe.Get_Exit_Status /= 0;
-            if From.Has_Error then
-               Log.Error ("Command {0} exited with status {1}", Command,
-                          Util.Strings.Image (Pipe.Get_Exit_Status));
+            if not Ada.Directories.Exists (Path) then
+               Log.Error ("SQL file '{0}' does not exist.", Path);
+               Log.Error ("Please, run the following command: dynamo generate db");
                Messages.Factory.Add_Message ("setup.setup_database_error", Messages.ERROR);
-               if Pipe.Get_Exit_Status = 127 then
-                  Messages.Factory.Add_Message ("setup.setup_dynamo_missing_error",
-                                                Messages.ERROR);
-               end if;
+               Ada.Strings.Unbounded.Set_Unbounded_String (Outcome, "failure");
+               return;
             end if;
+
+            if Config.Get_Driver in "mysql" | "postgresql" then
+               Admin.Set_Property ("user", Ubo.To_String (From.Root_User));
+               Admin.Set_Property ("password", Ubo.To_String (From.Root_Passwd));
+
+            elsif Config.Get_Driver /= "sqlite" then
+               Log.Error ("Database driver {0} is not supported.", Config.Get_Driver);
+               return;
+            end if;
+            Admin.Set_Database ("");
+            ADO.Schemas.Databases.Create_Database (Admin, Config, Path, Msgs);
+            for Line of Msgs loop
+               Append (Content, Line);
+            end loop;
+            From.Result := Util.Beans.Objects.To_Object (Content);
+            From.Has_Error := not Msgs.Is_Empty;
+
+         exception
+            when ADO.Configs.Connection_Error =>
+               Messages.Factory.Add_Message ("setup.setup_database_error", Messages.ERROR);
+
          end;
+         if From.Has_Error then
+            Messages.Factory.Add_Message ("setup.setup_database_error", Messages.ERROR);
+         end if;
       end if;
       if From.Has_Error then
          Ada.Strings.Unbounded.Set_Unbounded_String (Outcome, "failure");
@@ -406,6 +453,7 @@ package body AWA.Setup.Applications is
       Done : constant String := Ada.Directories.Compose (Dir, ".initialized");
    begin
       Log.Info ("Entering configuration for {0}", Path);
+      App.Name := To_Unbounded_String (Config);
       App.Path := Ada.Strings.Unbounded.To_Unbounded_String (Path);
       begin
          App.Config.Load_Properties (Path);
