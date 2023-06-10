@@ -45,6 +45,16 @@
   </context-param>
 
   <context-param>
+    <param-name>app_page_500_report</param-name>
+    <param-value>#{empty app_url_base ? 'full' : app_page_500_report}</param-value>
+    <description>
+      Controls the level of information that is printed by the 500 error page when an error occurs.
+      When `full`, report the full stack track if available, when `minimal` report minimal information
+      but without a stack track, when 'none' don't give any information.
+    </description>
+  </context-param>
+
+  <context-param>
     <param-name>view.ext</param-name>
     <param-value>.html</param-value>
     <description>

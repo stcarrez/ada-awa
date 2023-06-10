@@ -1,5 +1,5 @@
 <!-- Server error page
-  -  Copyright (C) 2013, 2017, 2022 Stephane Carrez
+  -  Copyright (C) 2013, 2017, 2022, 2023 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,45 +19,41 @@
           xmlns:f="http://java.sun.com/jsf/core"
           xmlns:util="http://code.google.com/p/ada-asf/util"
           xmlns:c="http://java.sun.com/jstl/core">
-    <c:when test="#{not empty header['X-Requested-With']}">
-        <f:view contentType="application/json">
-[
-    { "action": "message", "data": "<util:escape>
-    <div class='awa-message'>
-        <p>
-            #{layoutMsg.layout_error_internal_error}
-        </p>
-    </div>
-    </util:escape>" }
-]
-        </f:view>
-    </c:when>
-    <c:otherwise>
-        <ui:composition template="/WEB-INF/layouts/layout.xhtml">
-            <ui:param name="title" value="#{layoutMsg.layout_error_internal_error_title}"/>
+  <c:when test="#{not empty header['X-Requested-With']}">
+    <f:view contentType="application/json">
+[{ "action": "message", "data": "<util:escape><div class='awa-message'><p>#{layoutMsg.layout_error_internal_error}</p></div></util:escape>" }]
+    </f:view>
+  </c:when>
+  <c:otherwise>
+    <ui:composition template="/WEB-INF/layouts/layout.xhtml">
+      <ui:param name="title" value="#{layoutMsg.layout_error_internal_error_title}"/>
 
-            <!-- Main page body -->
-            <ui:define name="pageBody">
-                  <div class='awa-error'>
-                      <p>#{layoutMsg.layout_error_internal_error}</p>
-                      <dl class="awa-error-details">
-                          <dt>#{layoutMsg.layout_exception_status_code_label}</dt>
-                          <dd>
-                              #{requestScope['servlet.error.status_code']}
-                          </dd>
-                          <dt>#{layoutMsg.layout_exception_type_label}</dt>
-                          <dd>
-                              #{requestScope['servlet.error.exception_type']}
-                          </dd>
-                          <dt>#{layoutMsg.layout_exception_message_label}</dt>
-                          <dd>
-                              #{requestScope['servlet.error.message']}
-                          </dd>
-                          <dt>#{layoutMsg.layout_exception_trace_label}</dt>
-                          <dd class="awa-error-traceback">#{requestScope['servlet.error.exception']}</dd>
-                      </dl>
-                  </div>
-            </ui:define>
-        </ui:composition>
-    </c:otherwise>
+      <!-- Main page body -->
+      <ui:define name="pageBody">
+        <div class='awa-error'>
+          <p>#{layoutMsg.layout_error_internal_error}</p>
+          <dl class="awa-error-details">
+            <c:if test="#{initParams.app_page_500_report eq 'full' or initParams.app_page_500_report eq 'minimal'}">
+              <dt>#{layoutMsg.layout_exception_status_code_label}</dt>
+              <dd>
+                #{requestScope['servlet.error.status_code']}
+              </dd>
+              <dt>#{layoutMsg.layout_exception_type_label}</dt>
+              <dd>
+                #{requestScope['servlet.error.exception_type']}
+              </dd>
+              <dt>#{layoutMsg.layout_exception_message_label}</dt>
+              <dd>
+                #{requestScope['servlet.error.message']}
+              </dd>
+              <c:if test="#{initParams.app_page_500_report eq 'full'}">
+                <dt>#{layoutMsg.layout_exception_trace_label}</dt>
+                <dd class="awa-error-traceback">#{requestScope['servlet.error.exception']}</dd>
+              </c:if>
+            </c:if>
+          </dl>
+        </div>
+      </ui:define>
+    </ui:composition>
+  </c:otherwise>
 </c:choose>
