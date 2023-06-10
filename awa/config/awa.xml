@@ -41,7 +41,7 @@
 
   <context-param>
     <param-name>app_oauth_url_base</param-name>
-    <param-value>http://localhost:8080</param-value>
+    <param-value>#{empty app_oauth_url_base ? 'http://localhost:8080' : app_oauth_url_base}</param-value>
   </context-param>
 
   <context-param>
