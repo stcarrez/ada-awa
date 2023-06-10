@@ -122,7 +122,7 @@
 
   <context-param>
     <param-name>users.allow_register</param-name>
-    <param-value>#{app_login_register}</param-value>
+    <param-value>#{not empty app_login_register ? app_login_register : true}</param-value>
     <description>
       Allow users to register themselves on the server.
       When disabled, users can be created by the AWA 'user' command.
