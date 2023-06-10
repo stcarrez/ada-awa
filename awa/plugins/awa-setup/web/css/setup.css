@@ -33,6 +33,7 @@ h2 {
 }
 .setup-database #setup-step-database,
 .setup-settings #setup-step-settings,
+.setup-auth #setup-step-auth,
 .setup-oauth #setup-step-oauth,
 .setup-finish #setup-step-finish {
     background: #fff;
@@ -54,6 +55,10 @@ h2 {
 .setup-description {
     margin: 1em;
 }
+.list-description {
+    margin: 1em;
+    padding-left: 1em;
+}
 #callback input {
     float: left;
     width: 75%;
@@ -69,4 +74,17 @@ h2 {
     background: #eee;
     margin: 0.5em;
     padding: 1%;
+}
+.setup-checkbox {
+    float: left;
+    width: 100%;
+    margin-left: 1em;
+}
+.setup-checkbox dt {
+    float: left;
+    width: 80%;
+}
+.setup-checkbox dd {
+    float: left;
+    width: 15%;
 }

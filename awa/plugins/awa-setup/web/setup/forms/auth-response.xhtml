@@ -1,5 +1,5 @@
-<!-- Response sent after the general settings step
-  -  Copyright (C) 2016, 2023 Stephane Carrez
+<!-- Response sent after the Auth step
+  -  Copyright (C) 2023 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,8 +18,16 @@
         xmlns:c="http://java.sun.com/jstl/core"
         xmlns:f="http://java.sun.com/jsf/core">
 [
-    { "action": "get", "url": "#{contextPath}/setup/forms/auth.html" },
-    { "action": "removeClass", "id": "#setup-steps", "data": "setup-settings" },
-    { "action": "addClass", "id": "#setup-steps", "data": "setup-auth" }
+    { "action": "removeClass", "id": "#setup-steps", "data": "setup-auth" },
+<c:choose>
+  <c:when test="#{setup.app_login_openid}">
+    { "action": "get", "url": "#{contextPath}/setup/forms/oauth.html" },
+    { "action": "addClass", "id": "#setup-steps", "data": "setup-oauth" }
+  </c:when>
+  <c:otherwise>
+    { "action": "get", "url": "#{contextPath}/setup/forms/finish.html" },
+    { "action": "addClass", "id": "#setup-steps", "data": "setup-finish" }
+  </c:otherwise>
+</c:choose>
 ]
 </f:view>

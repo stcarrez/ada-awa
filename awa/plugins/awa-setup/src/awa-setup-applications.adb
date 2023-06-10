@@ -57,6 +57,11 @@ package body AWA.Setup.Applications is
                                                       Method => Configure_Database,
                                                       Name   => "configure_database");
 
+   package Configure_Authentication_Binding is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Application,
+                                                      Method => Configure_Authentication,
+                                                      Name   => "configure_authentication");
+
    --  The application base URL.
    package P_Base_URL is
      new ASF.Applications.Main.Configs.Parameter ("app_url_base",
@@ -70,13 +75,17 @@ package body AWA.Setup.Applications is
      := (Save_Binding.Proxy'Access,
          Start_Binding.Proxy'Access,
          Finish_Binding.Proxy'Access,
-         Configure_Binding.Proxy'Access);
+         Configure_Binding.Proxy'Access,
+         Configure_Authentication_Binding.Proxy'Access);
 
    function Get_Schema_Path (Model_Dir : in String;
                              Model     : in String;
                              Config    : in ADO.Sessions.Sources.Data_Source) return String;
    function Get_Model_Directory (From : in Application) return String;
    function Get_Model_Name (From : in Application) return String;
+   procedure Append_Config (Into   : in out Unbounded_String;
+                            Tag    : in String;
+                            Enable : in Boolean);
 
    function Get_Schema_Path (Model_Dir : in String;
                              Model     : in String;
@@ -199,6 +208,16 @@ package body AWA.Setup.Applications is
          From.Changed.Set (Name, Util.Beans.Objects.To_String (Value));
       end if;
    end Set_Value;
+
+   function Get_Boolean (From : in Application;
+                         Name : in String) return Boolean is
+   begin
+      if From.Changed.Exists (Name) then
+         return UBO.To_Boolean (From.Changed.Get_Value (Name));
+      else
+         return UBO.To_Boolean (From.Config.Get_Value (Name));
+      end if;
+   end Get_Boolean;
 
    --  ------------------------------
    --  Get the database connection string to be used by the application.
@@ -359,6 +378,41 @@ package body AWA.Setup.Applications is
          Ada.Strings.Unbounded.Set_Unbounded_String (Outcome, "failure");
       end if;
    end Configure_Database;
+
+   procedure Append_Config (Into   : in out Unbounded_String;
+                            Tag    : in String;
+                            Enable : in Boolean) is
+   begin
+      if Enable then
+         if Length (Into) > 0 then
+            Append (Into, ",");
+         end if;
+         Append (Into, Tag);
+      end if;
+   end Append_Config;
+
+   procedure Configure_Authentication (From    : in out Application;
+                                       Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      Email    : constant Boolean := From.Get_Boolean ("app_login_email");
+      Google   : constant Boolean := From.Get_Boolean ("app_login_google");
+      Github   : constant Boolean := From.Get_Boolean ("app_login_github");
+      Gitlab   : constant Boolean := From.Get_Boolean ("app_login_gitlab");
+      Twitter  : constant Boolean := From.Get_Boolean ("app_login_twitter");
+      Yahoo    : constant Boolean := From.Get_Boolean ("app_login_yahoo");
+      Facebook : constant Boolean := From.Get_Boolean ("app_login_facebook");
+      Openid   : constant Boolean := Google or Github or Gitlab or Twitter or Facebook or Yahoo;
+      Methods  : Unbounded_String;
+   begin
+      Append_Config (Methods, "email", Email);
+      Append_Config (Methods, "google", Google);
+      Append_Config (Methods, "github", Github);
+      Append_Config (Methods, "gitlab", Gitlab);
+      Append_Config (Methods, "twitter", Twitter);
+      Append_Config (Methods, "facebook", Facebook);
+      Append_Config (Methods, "yahoo", Yahoo);
+      From.Changed.Set_Value ("app_login_methods", UBO.To_Object (Methods));
+      From.Changed.Set_Value ("app_login_openid", UBO.To_Object (Openid));
+   end Configure_Authentication;
 
    --  ------------------------------
    --  Save the configuration.

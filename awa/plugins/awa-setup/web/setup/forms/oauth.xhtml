@@ -15,6 +15,7 @@
   -  limitations under the License.
   -->
 <f:view contentType="text/html; charset=UTF-8"
+        xmlns:c="http://java.sun.com/jstl/core"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:w="http://code.google.com/p/ada-asf/widget"
         xmlns:h="http://java.sun.com/jsf/html">
@@ -27,32 +28,33 @@
                 The OAuth configuration form allows you to configure the Google+, Facebook, GitHub, Gitlab, Yahoo!, Twitter authentication.
                 If you want to use this authentication method you must have created an
                 application in :
-                <ul>
-                  <li>
-                    <a href="https://console.developers.google.com/" target="google-plus">
-                      GoogleAPIs Console
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://developers.facebook.com/" target="facebook">
-                      Facebook for developpers
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://github.com/settings/developers" target="github">
-                      GitHub Developper settings OAuth Apps
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://gitlab.com/-/profile/applications" target="gitlab">
-                      GitLab Applications
-                    </a>
-                  </li>
-                </ul>
             </p>
+            <ul class="list-description">
+              <li>
+                <a href="https://console.developers.google.com/" target="google-plus">
+                  GoogleAPIs Console
+                </a>
+              </li>
+              <li>
+                <a href="https://developers.facebook.com/" target="facebook">
+                  Facebook for developpers
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/settings/developers" target="github">
+                  GitHub Developper settings OAuth Apps
+                </a>
+              </li>
+              <li>
+                <a href="https://gitlab.com/-/profile/applications" target="gitlab">
+                  GitLab Applications
+                </a>
+              </li>
+            </ul>
 
             <p class="setup-description">
-                You can skip this step if you don't want to use Google+ or Facebook authentication.
+              If you do not have the application client id and client secret and don't want to use
+              the authentication provider, you should disable it in the previous step.
             </p>
 
             <p class="setup-description">
@@ -68,46 +70,118 @@
                 <span id="callback-fixed">#{contextPath}/auth/verify</span>
             </w:inputText>
         </div>
-        <h2>
+        <c:if test="#{setup.app_login_facebook}">
+          <h2>
             #{setupMsg.setup_facebook_auth_title}
-        </h2>
-        <div>
+          </h2>
+          <div>
             <w:inputText id='fb-app-id' title="#{setupMsg.setup_facebook_client_id}"
                          styleClass="awa-required ui-corner-all"
-                         size='80' placeholder="#{setupMsg.setup_database_name_placeholder}"
+                         size='80' placeholder="#{setupMsg.setup_oauth_client_id_placeholder}"
                          value="#{setup['facebook.client_id']}"/>
 
             <w:inputText id='fb-user' title="#{setupMsg.setup_facebook_secret}"
                          styleClass="awa-required ui-corner-all"
-                         size='80' placeholder="#{setupMsg.setup_database_user_placeholder}"
+                         size='80' placeholder="#{setupMsg.setup_oauth_secret_placeholder}"
                          value="#{setup['facebook.secret']}"/>
 
-        </div>
-        <h2>
+          </div>
+        </c:if>
+        <c:if test="#{setup.app_login_google}">
+          <h2>
             #{setupMsg.setup_google_auth_title}
-        </h2>
-        <div>
+          </h2>
+          <div>
             <w:inputText id='google-app-id' title="#{setupMsg.setup_google_client_id}"
                          styleClass="awa-required ui-corner-all"
-                         size='80' placeholder="#{setupMsg.setup_database_name_placeholder}"
+                         size='80' placeholder="#{setupMsg.setup_oauth_client_id_placeholder}"
                          value="#{setup['google-plus.client_id']}"/>
-
-            <w:inputText id='google-user' title="#{setupMsg.setup_google_secret}"
+            
+            <w:inputText id='google-secret' title="#{setupMsg.setup_google_secret}"
                          styleClass="awa-required ui-corner-all"
-                         size='80' placeholder="#{setupMsg.setup_database_user_placeholder}"
+                         size='80' placeholder="#{setupMsg.setup_oauth_secret_placeholder}"
                          value="#{setup['google-plus.secret']}"/>
 
-        </div>
+          </div>
+        </c:if>
+        <c:if test="#{setup.app_login_github}">
+          <h2>
+            #{setupMsg.setup_github_auth_title}
+          </h2>
+          <div>
+            <w:inputText id='github-app-id' title="#{setupMsg.setup_github_client_id}"
+                         styleClass="awa-required ui-corner-all"
+                         size='80' placeholder="#{setupMsg.setup_oauth_client_id_placeholder}"
+                         value="#{setup['github.client_id']}"/>
+            
+            <w:inputText id='github-secret' title="#{setupMsg.setup_github_secret}"
+                         styleClass="awa-required ui-corner-all"
+                         size='80' placeholder="#{setupMsg.setup_oauth_secret_placeholder}"
+                         value="#{setup['github.secret']}"/>
+
+          </div>
+        </c:if>
+        <c:if test="#{setup.app_login_gitlab}">
+          <h2>
+            #{setupMsg.setup_gitlab_auth_title}
+          </h2>
+          <div>
+            <w:inputText id='gitlab-app-id' title="#{setupMsg.setup_gitlab_client_id}"
+                         styleClass="awa-required ui-corner-all"
+                         size='80' placeholder="#{setupMsg.setup_oauth_client_id_placeholder}"
+                         value="#{setup['gitlab.client_id']}"/>
+            
+            <w:inputText id='gitlab-secret' title="#{setupMsg.setup_gitlab_secret}"
+                         styleClass="awa-required ui-corner-all"
+                         size='80' placeholder="#{setupMsg.setup_oauth_secret_placeholder}"
+                         value="#{setup['gitlab.secret']}"/>
+
+          </div>
+        </c:if>
+        <c:if test="#{setup.app_login_twitter}">
+          <h2>
+            #{setupMsg.setup_twitter_auth_title}
+          </h2>
+          <div>
+            <w:inputText id='twitter-app-id' title="#{setupMsg.setup_twitter_client_id}"
+                         styleClass="awa-required ui-corner-all"
+                         size='80' placeholder="#{setupMsg.setup_oauth_client_id_placeholder}"
+                         value="#{setup['twitter.client_id']}"/>
+            
+            <w:inputText id='twitter-secret' title="#{setupMsg.setup_twitter_secret}"
+                         styleClass="awa-required ui-corner-all"
+                         size='80' placeholder="#{setupMsg.setup_oauth_secret_placeholder}"
+                         value="#{setup['twitter.secret']}"/>
+
+          </div>
+        </c:if>
+        <c:if test="#{setup.app_login_yahoo}">
+          <h2>
+            #{setupMsg.setup_yahoo_auth_title}
+          </h2>
+          <div>
+            <w:inputText id='twitter-app-id' title="#{setupMsg.setup_yahoo_client_id}"
+                         styleClass="awa-required ui-corner-all"
+                         size='80' placeholder="#{setupMsg.setup_oauth_client_id_placeholder}"
+                         value="#{setup['yahoo.client_id']}"/>
+            
+            <w:inputText id='twitter-secret' title="#{setupMsg.setup_yahoo_secret}"
+                         styleClass="awa-required ui-corner-all"
+                         size='80' placeholder="#{setupMsg.setup_oauth_secret_placeholder}"
+                         value="#{setup['yahoo.secret']}"/>
+
+          </div>
+        </c:if>
         <ul class='awa-buttons'>
             <li class="previous">
                 <input type="submit" value="#{setupMsg.setup_previous_label}"
                        class="ui-button ui-state-default ui-corner-all"
-                       onclick="return previous_step('settings');"/>
+                       onclick="return previous_step('auth');"/>
             </li>
             <li>
-                <h:commandButton id='setup-oauth-button' value='#{setupMsg.setup_database_configure}'
+                <h:commandButton id='setup-oauth-button' value='#{setupMsg.setup_next_label}'
                                  styleClass="ui-button ui-state-default ui-corner-all"
-                                 action="#{setup.save}" title="#{setupMsg.setup_database_configure_tooltip}"/>
+                                 action="#{setup.save}" title="#{setupMsg.setup_next_tooltip}"/>
             </li>
         </ul>
     </h:form>

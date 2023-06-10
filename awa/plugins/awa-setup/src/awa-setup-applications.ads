@@ -137,6 +137,10 @@ package AWA.Setup.Applications is
    procedure Configure_Database (From    : in out Application;
                                  Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
+   --  Configure the authentication methods.
+   procedure Configure_Authentication (From    : in out Application;
+                                       Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
    --  Validate the database configuration parameters.
    procedure Validate (From : in out Application);
 
@@ -175,5 +179,8 @@ package AWA.Setup.Applications is
                         App    : in Application_Access;
                         Config : in String;
                         URI    : in String);
+
+   function Get_Boolean (From : in Application;
+                         Name : in String) return Boolean;
 
 end AWA.Setup.Applications;

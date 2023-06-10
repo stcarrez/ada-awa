@@ -1,0 +1,93 @@
+<!-- Form to configure the authenticate methods
+  -  Copyright (C) 2023 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<f:view contentType="text/html; charset=UTF-8"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:w="http://code.google.com/p/ada-asf/widget"
+        xmlns:h="http://java.sun.com/jsf/html">
+    <h:form id='setup-auth'>
+        <h2>
+            #{setupMsg.setup_auth_message}
+        </h2>
+        <div>
+            <p class="setup-description">
+              You can choose whether users can register themselves through the web interface.
+              If you disable the user registration, you can register manually by using the
+              <i>user</i> command.
+            </p>
+            <dl class="setup-checkbox">
+              <dt><label for='login-register'>Allow users to register</label> <h:message for='login-register'/></dt>
+              <dd>
+                <h:selectBooleanCheckbox id="login-register" value="#{setup.app_login_register}"/>
+              </dd>
+            </dl>
+        </div>
+        <h2>
+            #{setupMsg.setup_auth_methods}
+        </h2>
+        <div>
+            <p class="setup-description">
+                Choose the authenticate methods which are allowed for users to login.
+            </p>
+            <dl class="setup-checkbox">
+
+              <dt><label for='login-email'>Email login</label> <h:message for='login-email'/></dt>
+              <dd>
+                <h:selectBooleanCheckbox id="login-email" value="#{setup.app_login_email}"/>
+              </dd>
+
+              <dt><label for='login-google'>Google+ login</label> <h:message for='login-google'/></dt>
+              <dd>
+                <h:selectBooleanCheckbox id="login-google" value="#{setup.app_login_google}"/>
+              </dd>
+
+              <dt><label for='login-github'>GitHub login</label> <h:message for='login-github'/></dt>
+              <dd>
+                <h:selectBooleanCheckbox id="login-github" value="#{setup.app_login_github}"/>
+              </dd>
+
+              <dt><label for='login-gitlab'>GitLab login</label> <h:message for='login-gitlab'/></dt>
+              <dd>
+                <h:selectBooleanCheckbox id="login-gitlab" value="#{setup.app_login_gitlab}"/>
+              </dd>
+
+              <dt><label for='login-facebook'>Facebook login</label> <h:message for='login-facebook'/></dt>
+              <dd>
+                <h:selectBooleanCheckbox id="login-facebook" value="#{setup.app_login_facebook}"/>
+              </dd>
+
+              <dt><label for='login-facebook'>Twitter login</label> <h:message for='login-twitter'/></dt>
+              <dd>
+                <h:selectBooleanCheckbox id="login-twitter" value="#{setup.app_login_twitter}"/>
+              </dd>
+            </dl>
+
+        </div>
+        <ul class='awa-buttons'>
+            <li class="previous">
+                <input type="submit" value="#{setupMsg.setup_previous_label}"
+                       class="ui-button ui-state-default ui-corner-all"
+                       onclick="return previous_step('settings');"/>
+            </li>
+            <li>
+                <h:commandButton id='setup-auth-button' value='#{setupMsg.setup_next_label}'
+                                 styleClass="ui-button ui-state-default ui-corner-all"
+                                 action="#{setup.configure_authentication}"
+                                 title="#{setupMsg.setup_next_tooltip}"/>
+            </li>
+        </ul>
+    </h:form>
+</f:view>

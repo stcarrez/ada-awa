@@ -43,9 +43,11 @@
             function previous_step(form) {
                 ASF.Update('#step', '#{contextPath}/setup/forms/' + form + ".html", null);
                 if (form == 'settings') {
-                    $('#setup-steps').removeClass('setup-oauth').addClass('setup-settings');
+                    $('#setup-steps').removeClass('setup-auth').addClass('setup-settings');
                 } else if (form == 'database') {
                     $('#setup-steps').removeClass('setup-settings').addClass('setup-database');
+                } else if (form == 'auth') {
+                    $('#setup-steps').removeClass('setup-oauth').addClass('setup-auth');
                 }
                 return false;
             }
