@@ -43,7 +43,7 @@
             </div>
           </div>
 	</c:if>
-	<c:if test="#{initParam.app_login_email}">
+        <c:if test="#{fn:contains(initParam.app_login_methods, 'email')}">
           <div class='awa-side2 container_6'>
             <ui:include src="forms/login-form.xhtml"/>
           </div>

@@ -1,5 +1,5 @@
 <!-- OpenID login form
-  -  Copyright (C) 2011, 2012, 2013, 2014, 2017, 2022 Stephane Carrez
+  -  Copyright (C) 2011, 2012, 2013, 2014, 2017, 2022, 2023 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,42 +18,42 @@
     xmlns:util="http://code.google.com/p/ada-asf/util"
     xmlns:fn="http://java.sun.com/jsp/jstl/functions"
     xmlns:c="http://java.sun.com/jstl/core">
-    <c:if test="#{fn:contains(initParam.app_openid_methods, 'yahoo')}">
+    <c:if test="#{fn:contains(initParam.app_login_methods, 'yahoo')}">
       <li class="awa-login-yahoo">
         <a href="#{contextPath}/auth/auth/yahoo?redirect=#{util:urlEncode(redirect)}" title="#{userMsg.openid_yahoo_auth}" class='openid-yahoo'>
           <em/>
         </a>
       </li>
     </c:if>
-    <c:if test="#{fn:contains(initParam.app_openid_methods, 'google')}">
+    <c:if test="#{fn:contains(initParam.app_login_methods, 'google')}">
       <li class="awa-login-google">
         <a href="#{contextPath}/auth/auth/google-plus?redirect=#{util:urlEncode(redirect)}" title="#{userMsg.openid_google_plus_auth}" class='openid-google-plus'>
           <em/>
         </a>
       </li>
     </c:if>
-    <c:if test="#{fn:contains(initParam.app_openid_methods, 'facebook')}">
+    <c:if test="#{fn:contains(initParam.app_login_methods, 'facebook')}">
       <li class="awa-login-facebook">
         <a href="#{contextPath}/auth/auth/facebook?redirect=#{util:urlEncode(redirect)}" title="#{userMsg.openid_facebook_auth}" class='openid-facebook'>
           <em/>
         </a>
       </li>
     </c:if>
-    <c:if test="#{fn:contains(initParam.app_openid_methods, 'github')}">
+    <c:if test="#{fn:contains(initParam.app_login_methods, 'github')}">
       <li class="awa-login-github">
         <a href="#{contextPath}/auth/auth/github?redirect=#{util:urlEncode(redirect)}" title="#{userMsg.openid_github_auth}" class='openid-github'>
           <em/>
         </a>
       </li>
     </c:if>
-    <c:if test="#{fn:contains(initParam.app_openid_methods, 'gitlab')}">
+    <c:if test="#{fn:contains(initParam.app_login_methods, 'gitlab')}">
       <li class="awa-login-gitlab">
         <a href="#{contextPath}/auth/auth/gitlab?redirect=#{util:urlEncode(redirect)}" title="#{userMsg.openid_gitlab_auth}" class='openid-gitlab'>
           <em/>
         </a>
       </li>
     </c:if>
-    <c:if test="#{fn:contains(initParam.app_openid_methods, 'twitter')}">
+    <c:if test="#{fn:contains(initParam.app_login_methods, 'twitter')}">
       <li class="awa-login-twitter">
         <a href="#{contextPath}/auth/auth/twitter?redirect=#{util:urlEncode(redirect)}" title="#{userMsg.openid_twitter_auth}" class='openid-twitter'>
           <em/>
