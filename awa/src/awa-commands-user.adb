@@ -33,21 +33,17 @@ package body AWA.Commands.User is
                       Application : in out AWA.Applications.Application'Class;
                       Args        : in Argument_List'Class;
                       Context     : in out Context_Type) is
-      User_Module : constant AWA.Modules.Module_Access
-         := Application.Find_Module (AWA.Users.Modules.NAME);
+      User_Module : AWA.Modules.Module_Access;
       Service     : AWA.Users.Services.User_Service_Access;
    begin
       Application.Load_Bundle (Name   => "commands",
                                Locale => "en",
                                Bundle => Command.Bundle);
+      User_Module := Application.Find_Module (AWA.Users.Modules.NAME);
       if User_Module = null then
          Context.Console.Error ("There is no user manager in this application");
          return;
       end if;
-
-      --  Enable and start the application and setup the service context.
-      Application.Enable;
-      Application.Start;
 
       Service := AWA.Users.Modules.User_Module'Class (User_Module.all).Get_User_Manager;
 
