@@ -46,7 +46,6 @@ package body AWA.Commands.User is
       end if;
 
       Service := AWA.Users.Modules.User_Module'Class (User_Module.all).Get_User_Manager;
-
       if Args.Get_Count /= 1 then
          Context.Console.Error ("Invalid arguments for command: expecting a mail address");
          return;
@@ -56,6 +55,7 @@ package body AWA.Commands.User is
          Context.Console.Error ("Use one of --register, --enable or --disable option");
          return;
       end if;
+      Service.Set_Allow_Register (True);
 
       declare
          Service_Context : aliased AWA.Services.Contexts.Service_Context;
