@@ -1,7 +1,7 @@
-description = "Ada Web Application"
-name = "awa"
+description = "Ada Web Application (Testing framework)"
+name = "awa_unit"
 version = "2.4.0"
-tags = ["web", "users", "jobs", "wiki", "framework", "storage", "blog"]
+tags = ["web", "users", "jobs", "framework", "testing"]
 website = "https://gitlab.com/stcarrez/ada-awa"
 
 licenses = "Apache-2.0"
@@ -21,12 +21,8 @@ to many web application.  This includes the login, authentication, users, permis
 managing comments, tags, votes, documents, images.  It provides a complete blog,
 question and answers and a wiki module.
 
-AWA simplifies the Web Application development by taking care of user management with
-Google+, Facebook authentication and by providing the foundations on top of which you
-can construct your own application.  AWA provides a powerful permission management
-that gives flexibility to applications to grant access and protect your user's resources.
-
-![AWA Features](https://github.com/stcarrez/ada-awa/wiki/images/awa-features.png)
+This library provides a testing framework on top of AWA top help implementing
+unit tests for AWA applications.
 
 # Documentation
 
@@ -41,35 +37,13 @@ and it provides detailed description of AWA components:
 
 """
 
-project-files = [
-".alire/awa_blogs.gpr", ".alire/awa.gpr", ".alire/awa_settings.gpr", ".alire/awa_wikis.gpr",
-".alire/awa_changelogs.gpr", ".alire/awa_images.gpr", ".alire/awa_setup.gpr", ".alire/awa_workspaces.gpr",
-".alire/awa_comments.gpr", ".alire/awa_jobs.gpr", ".alire/awa_storages.gpr",
-".alire/awa_counters.gpr", ".alire/awa_mail.gpr", ".alire/awa_tags.gpr",
-".alire/awa_countries.gpr", ".alire/awa_questions.gpr", ".alire/awa_votes.gpr"
-]
+project-files = ["awa_unit.gpr"]
 
 [[depends-on]]
-utilada = "^2.5.0"
-utilada_xml = "^2.5.0"
-utilada_aws = "^2.5.0"
-ado = "^2.3.0"
-wikiada = "^1.4.0"
-elada = "^1.8.5"
-security = "^1.4.1"
-serverfaces = "^1.5.0"
-servletada = "^1.6.0"
-servletada_aws = "^1.6.0"
-keystoreada = "^1.3.3"
-
-[[actions]]
-type = "post-fetch"
-command = ["sh", "./alire-setup.sh"]
+awa = "^2.4.0"
+serverfaces_unit = "^1.5.0"
+servletada_unit = "^1.6.0"
 
 [gpr-externals]
 AWA_LIBRARY_TYPE = ["relocatable", "static", "static-pic"]
 AWA_BUILD = ["distrib", "debug", "optimize", "profile", "coverage"]
-
-[environment]
-DYNAMO_SEARCH_PATH.prepend = "${CRATE_ROOT}/awa/plugins"
-DYNAMO_UML_PATH.prepend = "${CRATE_ROOT}/awa/uml"

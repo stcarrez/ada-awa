@@ -1,5 +1,7 @@
 # Ada Web Application
 
+[![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/awa.json)](https://alire.ada.dev/crates/awa)
+[![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/awa_unit.json)](https://alire.ada.dev/crates/awa_unit)
 [![Build Status](https://img.shields.io/endpoint?url=https://porion.vacs.fr/porion/api/v1/projects/ada-awa/badges/build.json)](https://porion.vacs.fr/porion/projects/view/ada-awa/summary)
 [![Test Status](https://img.shields.io/endpoint?url=https://porion.vacs.fr/porion/api/v1/projects/ada-awa/badges/tests.json)](https://porion.vacs.fr/porion/projects/view/ada-awa/xunits)
 [![Coverage](https://img.shields.io/endpoint?url=https://porion.vacs.fr/porion/api/v1/projects/ada-awa/badges/coverage.json)](https://porion.vacs.fr/porion/projects/view/ada-awa/summary)
