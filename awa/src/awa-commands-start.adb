@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-commands-start -- Command to start the web server
---  Copyright (C) 2020, 2021, 2022 Stephane Carrez
+--  Copyright (C) 2020, 2021, 2022, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -207,14 +207,16 @@ package body AWA.Commands.Start is
                         Help   => -("The server upload directory"));
       GC.Define_Switch (Config => Config,
                         Output => Command.Upload_Size_Limit'Access,
-                        Switch => "-M",
-                        Long_Switch => "--max-upload-size",
+                        Switch => "-M:",
+                        Long_Switch => "--max-upload-size=",
+                        Argument => "SIZE",
                         Initial => Command.Upload_Size_Limit,
                         Help   => -("Maximum size of uploaded content"));
       GC.Define_Switch (Config => Config,
                         Output => Command.Input_Line_Size_Limit'Access,
-                        Switch => "-F",
-                        Long_Switch => "--max-form-size",
+                        Switch => "-F:",
+                        Long_Switch => "--max-form-size=",
+                        Argument => "SIZE",
                         Initial => Command.Input_Line_Size_Limit,
                         Help   => -("Maximum size of form submission"));
       if Sys_Daemon'Address /= System.Null_Address then
