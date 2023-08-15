@@ -25,6 +25,10 @@
     <ui:param name="title" value="#{wikiMsg.wiki_image_info_title}"/>
     <ui:param name="pageStyle" value="page-wiki"/>
 
+    <ui:define name="pageHeader">
+      <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/dropzone.css"/>
+    </ui:define>
+
     <!-- Main page body -->
     <ui:define name="pageBody">
         <f:metadata>
