@@ -130,7 +130,7 @@
     <managed-property>
       <property-name>path</property-name>
       <property-class>String</property-class>
-      <value>#{contextPath}/js/jquery-3.6.0.js</value>
+      <value>#{contextPath}/js/jquery-3.7.0.js</value>
     </managed-property>
     <managed-property>
       <property-name>uiPath</property-name>
