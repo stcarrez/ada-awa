@@ -70,6 +70,7 @@ You may get Ahven or Aunit at:
   - Fix #34: Configuration to authenticate with Gitlab is incomplete
   - Fix #37: Cannot use entity-permission for the url-policy
   - Fix #38: Image module does not handle SVG correctly
+  - Fix #45: AWA start command option --max-upload-size and --max-form-size don't accept a value
   - Update Trumbowyg editor to version 2.26.0
   - Use Markdown for the AWA comments and questions modules
 
