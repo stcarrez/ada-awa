@@ -22,7 +22,7 @@
         <f:viewParam id='id' value='#{uploadFile.id}' required="false"/>
     </f:metadata>
     <h2>#{storageMsg.storage_upload_image_form_title}</h2>
-    <h:form id='uploadForm' enctype="multipart/form-data" styleClass="dropzone">
+    <h:form id='uploadForm' enctype="multipart/form-data" styleClass="dropzone" validity="all">
         <h:inputHidden id="folder" value="#{uploadFile.folderId}"/>
         <h:inputHidden id="id" value="#{uploadFile.id}"/>
         <div class='uploadForm'>
