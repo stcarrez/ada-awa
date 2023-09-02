@@ -1,5 +1,5 @@
 dnl Autoconf configure script for Ada Web Application
-dnl Copyright (C) 2009 - 2022 Stephane Carrez
+dnl Copyright (C) 2009 - 2023 Stephane Carrez
 dnl Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 dnl
 dnl  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,17 +16,18 @@ dnl  limitations under the License.
 dnl 
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(Makefile.conf.in)
+AC_INIT
+AC_CONFIG_SRCDIR([Makefile.conf.in])
 
 cache_file=config.cache
 
 # Current release settings
 AWA_MAJOR_VERSION=2
-AWA_MINOR_VERSION=4
+AWA_MINOR_VERSION=5
 AWA_MICRO_VERSION=0
 AWA_VERSION=$AWA_MAJOR_VERSION.$AWA_MINOR_VERSION.$AWA_MICRO_VERSION
 
-AC_CANONICAL_SYSTEM
+AC_CANONICAL_TARGET
 AM_GNAT_CHECK_GPRBUILD
 AC_CHECK_PROGS(GNAT, gnat, "")
 if test -n "$GNAT"; then
@@ -98,6 +99,6 @@ AC_CONFIG_SUBDIRS(ada-lzma ada-util ada-el ada-security ada-wiki ada-ado ada-ser
 
 AM_GNAT_AWS_VERSION
 
-AC_OUTPUT(
-Makefile.conf
-)
+AC_CONFIG_FILES([Makefile.conf
+])
+AC_OUTPUT
