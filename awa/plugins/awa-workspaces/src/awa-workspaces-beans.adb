@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-workspaces-beans -- Beans for module workspaces
---  Copyright (C) 2011, 2012, 2017, 2018, 2022 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2017, 2018, 2022, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,6 +32,7 @@ package body AWA.Workspaces.Beans is
    use ASF.Applications;
 
    package ASC renames AWA.Services.Contexts;
+   use type ASC.Service_Context_Access;
 
    --  ------------------------------
    --  Get the value identified by the name.
@@ -102,10 +103,28 @@ package body AWA.Workspaces.Beans is
    overriding
    procedure Load (Bean : in out Invitation_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+      Ctx : constant ASC.Service_Context_Access := ASC.Current;
+      Key : constant String := Ada.Strings.Unbounded.To_String (Bean.Key);
    begin
-      Bean.Module.Load_Invitation (Key        => Ada.Strings.Unbounded.To_String (Bean.Key),
+      Bean.Module.Load_Invitation (Key        => Key,
                                    Invitation => Bean,
                                    Inviter    => Bean.Inviter);
+      if Ctx /= null then
+         declare
+            User  : constant AWA.Users.Models.User_Ref := Ctx.Get_User;
+            Fctx  : constant ASF.Contexts.Faces.Faces_Context_Access := ASF.Contexts.Faces.Current;
+            Flash : constant ASF.Contexts.Faces.Flash_Context_Access := Fctx.Get_Flash;
+         begin
+            --  If the user is logged, accept the invitation
+            if not User.Is_Null then
+               Bean.Module.Accept_Invitation (Key => Key);
+               Flash.Set_Keep_Messages (True);
+               Messages.Factory.Add_Message (Fctx.all, "workspaces.workspace_welcome_message",
+                                             Messages.INFO);
+               Outcome := Ada.Strings.Unbounded.To_Unbounded_String ("success-key");
+            end if;
+         end;
+      end if;
 
    exception
       when others =>
