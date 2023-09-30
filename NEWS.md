@@ -1,4 +1,4 @@
-Version 2.5.0   - Under development
+Version 2.5.0   - Sep 2023
   - Feature #22: Add command line support to register a new user
   - Feature #23: Add command line for database schema migration
   - Feature #25: Update database schema for ADO 2.4
