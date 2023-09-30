@@ -58,8 +58,8 @@ elada = "^1.8.6"
 security = "^1.5.0"
 serverfaces = "^1.6.0"
 servletada = "^1.7.0"
-servletada_aws = "^1.7.0"
 keystoreada = "^1.4.0"
+aws = "~23.0"
 
 [[actions]]
 type = "post-fetch"
