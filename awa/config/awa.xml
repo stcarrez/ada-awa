@@ -140,7 +140,7 @@
     <managed-property>
       <property-name>chosenPath</property-name>
       <property-class>String</property-class>
-      <value>#{contextPath}/js/jquery-chosen-1.8.7/chosen.jquery.js</value>
+      <value>#{contextPath}/js/jquery-chosen-2.2.1/chosen.jquery.js</value>
     </managed-property>
     <managed-property>
       <property-name>uiCssPath</property-name>
@@ -150,7 +150,7 @@
     <managed-property>
       <property-name>chosenCssPath</property-name>
       <property-class>String</property-class>
-      <value>#{contextPath}/css/jquery-chosen-1.8.7/chosen.css</value>
+      <value>#{contextPath}/css/jquery-chosen-2.2.1/chosen.css</value>
     </managed-property>
   </managed-bean>
 
