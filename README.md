@@ -6,9 +6,9 @@
 [![Test Status](https://img.shields.io/endpoint?url=https://porion.vacs.fr/porion/api/v1/projects/ada-awa/badges/tests.json)](https://porion.vacs.fr/porion/projects/view/ada-awa/xunits)
 [![Coverage](https://img.shields.io/endpoint?url=https://porion.vacs.fr/porion/api/v1/projects/ada-awa/badges/coverage.json)](https://porion.vacs.fr/porion/projects/view/ada-awa/summary)
 [![Documentation Status](https://readthedocs.org/projects/ada-awa/badge/?version=latest)](https://ada-awa.readthedocs.io/en/latest/?badge=latest)
-[![Download](https://img.shields.io/badge/download-2.4.0-brightgreen.svg)](http://download.vacs.fr/ada-awa/awa-all-2.4.0.tar.gz)
+[![Download](https://img.shields.io/badge/download-2.5.0-brightgreen.svg)](http://download.vacs.fr/ada-awa/awa-all-2.5.0.tar.gz)
 [![License](https://img.shields.io/badge/license-APACHE2-blue.svg)](LICENSE)
-![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-awa/2.4.0.svg)
+![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-awa/2.5.0.svg)
 
 Ada Web Application is a framework to build a Web Application in Ada 2012.
 The framework provides several ready to use and extendable modules that are common
@@ -73,15 +73,6 @@ You may get Ahven or Aunit at:
   - Fix #45: AWA start command option --max-upload-size and --max-form-size don't accept a value
   - Update Trumbowyg editor to version 2.26.0
   - Use Markdown for the AWA comments and questions modules
-
-## Version 2.4.0 - Aug 2022
-- Add support for SQL queries embedded in applications with ARE
-- Fix #20: Do not use git:// protocol
-- New EasyMDE plugin to integrate the Easy Markdown Editor
-- Update AWA blog and AWA wiki to use the EasyMDE editor for Markdown
-- Use Dynamo 1.3.0, Ada Server Faces 1.5.0, Ada Servlet 1.6.0, OpenAPI Ada 0.6.0
-- Use Ada Wiki 1.4.0, Ada Database Objects 2.3.0
-- Use Ada Keystore 1.3.3, Ada EL 1.8.5, Ada Utility Library 2.5.0
 
 [List all versions](https://github.com/stcarrez/ada-awa/blob/master/NEWS.md)
 
