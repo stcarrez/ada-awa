@@ -108,7 +108,7 @@ sudo apt-get install libmysqlclient-dev
 
 MariaDB Development installation:
 ```
-sudo apt-get install mariadb-client libmariadb-client-lgpl-dev
+sudo apt-get install mariadb-client libmariadb-dev
 ```
 
 SQLite Development installation:
