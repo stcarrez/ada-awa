@@ -20,8 +20,6 @@ Makefile.conf
 lib/
 obj/
 config.cache
-awa/awa.gpr
-awa/awa_tests.gpr
 awa/awa_unit.gpr
 awa/regtests.db
 awa/Makefile.conf
@@ -48,9 +46,7 @@ awa/plugins/awa-votes/awa-votes.properties
 awa/plugins/awa-wikis/awa-wikis.properties
 awa/plugins/awa-wikis/wikis.properties
 awa/plugins/awa-workspaces/awa-workspaces.properties
-awa/plugins/awa-mail/awa_mail.gpr
 awa/plugins/awa-sysadmin/awa-sysadmin.properties
-awa/plugins/awa-sysadmin/awa_sysadmin.gpr
 awa/plugins/awa-*/model.yaml
 awa/plugins/awa-images/config/images.xml
 alire.lock

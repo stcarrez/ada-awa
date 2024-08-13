@@ -1,5 +1,5 @@
-with "../../awa";
-with "@OPENAPI_DIR@openapi_server";
+with "awa";
+with "openapi_server";
 
 library project Awa_Sysadmin is
    Version      := awa.Version;
