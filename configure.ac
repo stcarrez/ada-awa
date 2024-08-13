@@ -1,5 +1,5 @@
 dnl Autoconf configure script for Ada Web Application
-dnl Copyright (C) 2009 - 2023 Stephane Carrez
+dnl Copyright (C) 2009 - 2024 Stephane Carrez
 dnl Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 dnl
 dnl  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,7 @@ cache_file=config.cache
 
 # Current release settings
 AWA_MAJOR_VERSION=2
-AWA_MINOR_VERSION=5
+AWA_MINOR_VERSION=6
 AWA_MICRO_VERSION=0
 AWA_VERSION=$AWA_MAJOR_VERSION.$AWA_MINOR_VERSION.$AWA_MICRO_VERSION
 
@@ -66,38 +66,10 @@ fi
 dnl Check if we are running under Windows with msys to use pwd -W which produces Windows paths such as d:/tool instead of /d/tool
 AM_CHECK_HOST_PWD
 
-ENABLE_AHVEN=yes
-AC_ARG_ENABLE(ahven,
-[  --enable-ahven          Enable internal Ahven support for Ada util unit tests (enabled)],
-[case "${enableval}" in
-  no|none)  ENABLE_AHVEN= ;;
-  *)        ENABLE_AHVEN=yes
-            ENABLE_AUNIT=no ;;
-esac])dnl
-
-AM_GNAT_FIND_XML_ADA([],[
-   AC_MSG_WARN(XML/Ada was not found.)
-   AC_MSG_ERROR([Please install XML/Ada, re-configure and re-build AWA.])
- ])
-
 DIR=`pwd $awa_pwd_option`
-
-##########################################
-# Check for Ada Web Server
-##########################################
-AM_GNAT_FIND_PROJECT([aws],[Ada Web Server],[aws],
-  [http://libre.adacore.com/libre/tools/aws/],
-  [],
-  [
-    AWS_DIR=${gnat_project_dir_aws}
-  ])
-AC_SUBST(AWS_DIR)
-AC_SUBST(AWS_SRC_DIR)
 
 ac_configure_args="${ac_configure_args} --with-build-root=${DIR}"
 AC_CONFIG_SUBDIRS(ada-lzma ada-util ada-el ada-security ada-wiki ada-ado ada-servlet openapi-ada ada-asf ada-keystore dynamo awa)
-
-AM_GNAT_AWS_VERSION
 
 AC_CONFIG_FILES([Makefile.conf
 ])
