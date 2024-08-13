@@ -174,7 +174,6 @@ endef
 
 define awa_plugin
 
-$(eval $(call ada_library,$(strip $(1)),$($(1)_dir)/))
 $(eval $(call awa_install_plugin,$(strip $(1))))
 
 ifdef $(1)_dynamo

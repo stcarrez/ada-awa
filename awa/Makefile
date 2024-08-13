@@ -4,6 +4,8 @@
 AWA_LIBRARY_TYPE=static
 HAVE_PANDOC=yes
 HAVE_DYNAMO=yes
+ALIRE=alr --non-interactive
+BUILD_COMMAND=$(ALIRE) build -- $(MAKE_ARGS)
 
 -include Makefile.conf
 
@@ -27,6 +29,8 @@ SHARED_MAKE_ARGS += -XLIBRARY_TYPE=relocatable
 
 include Makefile.defaults
 
+MAKE_ARGS = -XAWA_BUILD=$(BUILD) -XPROCESSORS=$(PROCESSORS)
+
 PLUGINS=awa-workspaces awa-mail awa-counters awa-storages awa-images awa-comments \
         awa-jobs awa-votes awa-tags awa-flotcharts awa-wikis awa-blogs awa-markedit \
         awa-trumbowyg awa-questions \
@@ -47,7 +51,7 @@ DYNAMO_ARGS=--package AWA.Users.Models \
   db uml/awa.zargo
 
 build-test:: setup
-	$(GNATMAKE) $(GPRFLAGS) -m -p -Pawa_tests $(MAKE_ARGS)
+	$(BUILD_COMMAND) $(GPRFLAGS) $(MAKE_ARGS)
 
 AWA_DOC= \
   title.md \
@@ -157,8 +161,8 @@ install::
 uninstall::
 	rm -rf $(DESTDIR)${dynamodir}/awa
 
-$(eval $(call ada_library,awa))
-$(eval $(call ada_library,awa_unit))
+# $(eval $(call ada_library,awa))
+# $(eval $(call ada_library,awa_unit))
 $(eval $(call awa_install_dir,awa,config,./))
 $(eval $(call awa_install_dir,awa,db,./))
 $(eval $(call awa_install_dir,awa,bundles,./))
@@ -186,3 +190,6 @@ generate::
 
 generate-test::
 	cd regtests && $(DYNAMO) generate ../db/regtests
+
+setup::
+
