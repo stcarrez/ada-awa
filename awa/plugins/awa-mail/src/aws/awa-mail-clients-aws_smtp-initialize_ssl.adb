@@ -25,17 +25,19 @@ procedure Initialize (Client : in out AWS_Mail_Manager'Class;
    User   : constant String := Props.Get (Name => "smtp.user", Default => "");
    Passwd : constant String := Props.Get (Name => "smtp.password", Default => "");
    Secure : constant String := Props.Get (Name => "smtp.ssl", Default => "0");
+   Security : AWS.SMTP.Secure_Connection;
 begin
    Client.Secure := Secure in "1" | "yes" | "true";
+   Security := (if Client.Secure then AWS.SMTP.TLS else AWS.SMTP.No);
    if User'Length > 0 then
       Client.Creds  := AWS.SMTP.Authentication.Plain.Initialize (User, Passwd);
       Client.Server := AWS.SMTP.Client.Initialize (Server_Name => Server,
                                                    Port        => Client.Port,
-                                                   Secure      => Client.Secure,
+                                                   Security    => Security,
                                                    Credential  => Client.Creds'Unchecked_Access);
    else
       Client.Server := AWS.SMTP.Client.Initialize (Server_Name => Server,
                                                    Port        => Client.Port,
-                                                   Secure      => Client.Secure);
+                                                   Security    => Security);
    end if;
 end Initialize;
