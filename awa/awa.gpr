@@ -11,22 +11,22 @@ library project Awa is
 
    Name    := "awa";
    Version := "2.5.0";
-   Library_Dir := "../lib";
+   Library_Dir := "lib";
    Library_Type : Awa_Config.Library_Type_Type := external ("AWA_LIBRARY_TYPE", "static");
-   Exec_Dir     := "../" &  Awa_Config'Exec_Dir & "/bin";
+   Exec_Dir     := Awa_Config'Exec_Dir & "/bin";
 
    Aws_Status : Awa_Config.Yes_No := "yes";
    SMTP_SSL_Status : Awa_Config.Yes_No := "no";
 
-   for Source_Dirs use ("../awa/src", "../awa/src/model");
+   for Source_Dirs use ("src", "src/model");
 
    for Library_Name use Name;
    for Library_Dir use Library_Dir & "/" & Name;
    for Library_Kind use Library_Type;
-   for Library_Version use "../lib" & Project'Library_Name & ".so." & Version;
+   for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
 
-   for Library_Dir use "../lib/" & Name & "/" & Project'Library_Kind;
-   for Object_Dir use "../obj/" & Name & "/" & Project'Library_Kind;
+   for Library_Dir use "lib/" & Name & "/" & Project'Library_Kind;
+   for Object_Dir use "obj/" & Name & "/" & Project'Library_Kind;
    for Exec_Dir use Project'Exec_Dir;
 
    package Binder renames Awa_Config.Binder;

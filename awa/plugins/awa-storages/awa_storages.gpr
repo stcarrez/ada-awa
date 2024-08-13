@@ -1,5 +1,5 @@
-with "../awa-workspaces/awa_workspaces";
-with "../../awa";
+with "awa_workspaces";
+with "awa";
 library project Awa_Storages is
    Version      := Awa.Version;
    Name         := "awa_storages";

@@ -1,10 +1,10 @@
-with "../../awa";
-with "../awa-workspaces/awa_workspaces";
-with "../awa-tags/awa_tags";
-with "../awa-storages/awa_storages";
-with "../awa-images/awa_images";
-with "../awa-jobs/awa_jobs";
-with "../awa-counters/awa_counters";
+with "awa";
+with "awa_workspaces";
+with "awa_tags";
+with "awa_storages";
+with "awa_images";
+with "awa_jobs";
+with "awa_counters";
 
 library project Awa_Wikis is
    Version      := Awa.Version;

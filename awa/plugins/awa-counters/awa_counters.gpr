@@ -1,4 +1,4 @@
-with "../../awa";
+with "awa";
 library project Awa_Counters is
    Version      := Awa.Version;
    Name         := "awa_counters";

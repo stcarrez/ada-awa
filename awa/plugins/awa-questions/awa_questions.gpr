@@ -1,6 +1,6 @@
-with "../../awa";
-with "../awa-workspaces/awa_workspaces";
-with "../awa-tags/awa_tags";
+with "awa";
+with "awa_workspaces";
+with "awa_tags";
 library project Awa_Questions is
    Version      := Awa.Version;
    Name         := "awa_questions";

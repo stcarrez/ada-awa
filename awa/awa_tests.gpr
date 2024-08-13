@@ -1,0 +1,60 @@
+with "utilada_base";
+with "utilada_unit";
+with "elada";
+with "wikiada";
+with "servletada";
+with "servletada_unit";
+with "asf";
+with "asf_unit";
+with "ado";
+with "ado_all";
+with "awa";
+with "awa_unit";
+with "awa_workspaces";
+with "awa_counters";
+with "awa_storages";
+with "awa_images";
+with "awa_mail";
+with "awa_jobs";
+with "awa_blogs";
+with "awa_votes";
+with "awa_questions";
+with "awa_tags";
+with "awa_settings";
+with "awa_comments";
+with "awa_changelogs";
+with "awa_wikis";
+with "awa_counters";
+with "awa_setup";
+with "awa_sysadmin";
+
+project Awa_Tests is
+
+   for Languages use ("Ada");
+
+   Mains := ("awa_harness.adb", "awa_command.adb");
+
+   for Source_Dirs use ("regtests",
+    "plugins/awa-counters/regtests",
+	"plugins/awa-storages/regtests",
+	"plugins/awa-images/regtests",
+	"plugins/awa-blogs/regtests",
+	"plugins/awa-comments/regtests",
+	"plugins/awa-votes/regtests",
+	"plugins/awa-tags/regtests",
+	"plugins/awa-settings/regtests",
+	"plugins/awa-wikis/regtests",
+	"plugins/awa-workspaces/regtests",
+	"plugins/awa-changelogs/regtests",
+	"plugins/awa-questions/regtests");
+
+   for Main use Mains;
+
+   for Object_Dir use "obj/awa_tests";
+   for Exec_Dir use Awa.Exec_Dir;
+
+   package Binder renames Awa.Binder;
+   package Builder renames Awa.Builder;
+   package Compiler renames Awa.Compiler;
+
+end Awa_Tests;

@@ -1,9 +1,9 @@
-with "../../awa";
-with "../awa-workspaces/awa_workspaces";
-with "../awa-tags/awa_tags";
-with "../awa-comments/awa_comments";
-with "../awa-images/awa_images";
-with "../awa-counters/awa_counters";
+with "awa";
+with "awa_workspaces";
+with "awa_tags";
+with "awa_comments";
+with "awa_images";
+with "awa_counters";
 library project Awa_Blogs is
    Version      := Awa.Version;
    Name         := "awa_blogs";

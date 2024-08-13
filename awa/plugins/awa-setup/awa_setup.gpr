@@ -1,4 +1,4 @@
-with "../../awa";
+with "awa";
 project Awa_Setup is
    Version      := Awa.Version;
    Name         := "awa_setup";

@@ -1,4 +1,4 @@
-with "../../awa";
+with "awa";
 library project Awa_Comments is
 
    Version      := awa.Version;

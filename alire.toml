@@ -59,7 +59,7 @@ security = "^1.5.0"
 serverfaces = "^1.6.0"
 servletada = "^1.7.0"
 keystoreada = "^1.4.0"
-aws = "~23.0"
+aws = "~24.0"
 
 [[actions]]
 type = "post-fetch"
@@ -72,3 +72,10 @@ AWA_BUILD = ["distrib", "debug", "optimize", "profile", "coverage"]
 [environment]
 DYNAMO_SEARCH_PATH.prepend = "${CRATE_ROOT}/awa/plugins"
 DYNAMO_UML_PATH.prepend = "${CRATE_ROOT}/awa/uml"
+
+[[pins]]
+utilada = { path = 'ada-util' }
+utilada_xml = { path = 'ada-util/.alire/xml' }
+utilada_aws = { path = 'ada-util/.alire/aws' }
+elada = { path = 'ada-el' }
+security = { path = 'ada-security' }
