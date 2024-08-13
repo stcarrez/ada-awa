@@ -83,7 +83,7 @@ dist-clean:: clean
 	-rm -f *.log *~ config.status Makefile.conf
 
 doc::
-ifeq (${HAVE_DYNAMO},yes)
+ifneq (${DYNAMO},)
 	$(DYNAMO) build-doc -markdown wiki
 endif
 
@@ -198,22 +198,22 @@ endef
 
 define pandoc_build
 
-ifeq (${HAVE_PANDOC},yes)
+ifneq (, ${PANDOC})
 
 doc::  docs/$(1).pdf docs/$(1).html
-ifeq (${HAVE_DYNAMO},yes)
+ifneq (${DYNAMO},)
 	$(DYNAMO) build-doc -markdown wiki
 endif
 
 docs/$(1).pdf:  force
-ifeq (${HAVE_DYNAMO},yes)
+ifneq (${DYNAMO},)
 	$(DYNAMO) build-doc -pandoc docs
 	$(3)
 endif
-	cd docs && pandoc $(DOC_OPTIONS) -o $(1).pdf --template=./eisvogel.tex $(2)
+	cd docs && $(PANDOC) $(DOC_OPTIONS) -o $(1).pdf --template=./eisvogel.tex $(2)
 
 docs/$(1).html: docs/$(1).pdf force
-	cd docs && pandoc $(HTML_OPTIONS) -o $(1).html $(2)
+	cd docs && $(PANDOC) $(HTML_OPTIONS) -o $(1).html $(2)
 
 endif
 
