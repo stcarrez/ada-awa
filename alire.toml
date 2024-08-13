@@ -1,6 +1,6 @@
 description = "Ada Web Application"
 name = "awa"
-version = "2.5.0"
+version = "2.6.0"
 tags = ["web", "users", "jobs", "wiki", "framework", "storage", "blog"]
 website = "https://gitlab.com/stcarrez/ada-awa"
 
@@ -42,11 +42,24 @@ and it provides detailed description of AWA components:
 """
 
 project-files = [
-".alire/awa_blogs.gpr", ".alire/awa.gpr", ".alire/awa_settings.gpr", ".alire/awa_wikis.gpr",
-".alire/awa_changelogs.gpr", ".alire/awa_images.gpr", ".alire/awa_setup.gpr", ".alire/awa_workspaces.gpr",
-".alire/awa_comments.gpr", ".alire/awa_jobs.gpr", ".alire/awa_storages.gpr",
-".alire/awa_counters.gpr", ".alire/awa_mail.gpr", ".alire/awa_tags.gpr",
-".alire/awa_countries.gpr", ".alire/awa_questions.gpr", ".alire/awa_votes.gpr"
+"awa/awa.gpr",
+"awa/plugins/awa-blogs/awa_blogs.gpr",
+"awa/plugins/awa-settings/awa_settings.gpr",
+"awa/plugins/awa-wikis/awa_wikis.gpr",
+"awa/plugins/awa-changelogs/awa_changelogs.gpr",
+"awa/plugins/awa-images/awa_images.gpr",
+"awa/plugins/awa-setup/awa_setup.gpr",
+"awa/plugins/awa-workspaces/awa_workspaces.gpr",
+"awa/plugins/awa-comments/awa_comments.gpr",
+"awa/plugins/awa-jobs/awa_jobs.gpr",
+"awa/plugins/awa-storages/awa_storages.gpr",
+"awa/plugins/awa-counters/awa_counters.gpr",
+"awa/plugins/awa-mail/awa_mail.gpr",
+"awa/plugins/awa-tags/awa_tags.gpr",
+"awa/plugins/awa-countries/awa_countries.gpr",
+"awa/plugins/awa-questions/awa_questions.gpr",
+"awa/plugins/awa-votes/awa_votes.gpr",
+"awa/plugins/awa-sysadmin/awa_sysadmin.gpr"
 ]
 
 [[depends-on]]
@@ -59,6 +72,8 @@ security = "^1.5.0"
 serverfaces = "^1.6.0"
 servletada = "^1.7.0"
 keystoreada = "^1.4.0"
+openapi = "~0.7.0"
+openapi_server = "~0.7.0"
 aws = "~24.0"
 
 [[actions]]
@@ -72,10 +87,3 @@ AWA_BUILD = ["distrib", "debug", "optimize", "profile", "coverage"]
 [environment]
 DYNAMO_SEARCH_PATH.prepend = "${CRATE_ROOT}/awa/plugins"
 DYNAMO_UML_PATH.prepend = "${CRATE_ROOT}/awa/uml"
-
-[[pins]]
-utilada = { path = 'ada-util' }
-utilada_xml = { path = 'ada-util/.alire/xml' }
-utilada_aws = { path = 'ada-util/.alire/aws' }
-elada = { path = 'ada-el' }
-security = { path = 'ada-security' }
