@@ -60,16 +60,6 @@ AM_GNAT_LIBRARY_PROJECT(awa)
 AC_CHECK_PROG(HAVE_PANDOC,pandoc,yes)
 AC_CHECK_PROG(HAVE_DYNAMO,dynamo,yes)
 
-AM_GNAT_FIND_ADA_UTIL([Ada Web Application])
-AM_GNAT_FIND_ADA_EL([Ada Web Application])
-AM_GNAT_FIND_ADA_SECURITY([Ada Web Application])
-AM_GNAT_FIND_ADA_SERVLET([Ada Web Application])
-AM_GNAT_FIND_ADA_SERVER_FACES([Ada Web Application])
-AM_GNAT_FIND_ADA_ADO([Ada Web Application])
-AM_GNAT_FIND_ADA_WIKI([Ada Web Application])
-AM_GNAT_FIND_ADA_OPENAPI([Ada Web Application])
-AM_GNAT_FIND_ADA_KEYSTORE([Ada Web Application])
-
 AC_CHECK_PROGS(MYSQL, mysql)
 if test "X$MYSQL" != "X" ; then
   ADO_DB_MYSQL=True
@@ -94,47 +84,7 @@ else
 fi
 AC_SUBST(ADO_DB_POSTGRESQL)
 
-##########################################
-# Ada Web Server
-##########################################
-AM_GNAT_CHECK_AWS(
-  [
-    WITH_SERVER=
-    AWA_AWS_STATUS=no
-  ], [
-    AWA_AWS_STATUS=yes
-    WITH_SERVER=$ac_cv_gnat_project_with_aws
-  ])
-
-AC_SUBST(AWA_AWS_STATUS)
-AC_SUBST(WITH_SERVER)
-AM_GNAT_AWS_VERSION
-
-AC_MSG_CHECKING([using AWS secure mail client])
-AWA_AWS_SECURE_MAIL=no
-case $AWS_VERSION in
-  *2015*|*2016*|*2017*|*2018*|*2019*|*202*|20.0|22.0)
-     AWA_AWS_SECURE_MAIL=yes
-     ;;
-
-  3.2.0|3.3.2)
-     AWA_AWS_SECURE_MAIL=yes
-     ;;
-
-  *)
-     AWA_AWS_SECURE_MAIL=no
-     ;;
-esac
-
-AC_MSG_RESULT(${AWA_AWS_SECURE_MAIL})
-AC_SUBST(AWA_AWS_SECURE_MAIL)
-
 AC_CONFIG_FILES([Makefile.conf
-awa.gpr
-awa_tests.gpr
-awa_unit.gpr
-plugins/awa-mail/awa_mail.gpr
-plugins/awa-sysadmin/awa_sysadmin.gpr
 plugins/awa-images/config/images.xml
 ])
 AC_OUTPUT
