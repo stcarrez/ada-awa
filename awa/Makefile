@@ -9,6 +9,9 @@ BUILD_COMMAND=$(ALIRE) build -- $(MAKE_ARGS)
 
 -include Makefile.conf
 
+PANDOC := $(shell which pandoc)
+DYNAMO := $(shell which dynamo)
+
 STATIC_MAKE_ARGS = $(MAKE_ARGS) -XAWA_LIBRARY_TYPE=static
 SHARED_MAKE_ARGS = $(MAKE_ARGS) -XAWA_LIBRARY_TYPE=relocatable
 SHARED_MAKE_ARGS += -XELADA_BUILD=relocatable -XEL_LIBRARY_TYPE=relocatable
