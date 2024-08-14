@@ -13,6 +13,8 @@ PROCESSORS?=1
 MKDIR?=mkdir
 CP?=cp
 LN?=ln -s
+ALIRE?=alr --non-interactive
+BUILD_COMMAND?=$(ALIRE) build --
 
 BUILDS_SHARED?=no
 
@@ -39,7 +41,7 @@ samplesdir?=${prefix}/share/doc/${docdir}
 dynamodir=${prefix}/share/dynamo
 aliredir=${prefix}/alire-index
 
-MAKE_ARGS += -XBUILD=$(BUILD) -XPROCESSORS=$(PROCESSORS)
+MAKE_ARGS += -XPROCESSORS=$(PROCESSORS)
 
 build:: all
 
@@ -83,7 +85,7 @@ dist-clean:: clean
 	-rm -f *.log *~ config.status Makefile.conf
 
 doc::
-ifeq (${HAVE_DYNAMO},yes)
+ifneq (${DYNAMO},)
 	$(DYNAMO) build-doc -markdown wiki
 endif
 
@@ -98,11 +100,11 @@ ifeq (${VERBOSE},1)
 endif
 
 define ada_library
-  static:: setup
-	$(GNATMAKE) $(GPRFLAGS) -p -P$(2)$(1).gpr $(STATIC_MAKE_ARGS)
+# static:: setup
+#	$(BUILD_COMMAND) $(GPRFLAGS) -p -P$(2)$(1).gpr $(STATIC_MAKE_ARGS)
 
   install-static::
-	$(GPRINSTALL) -p -f --prefix=$(DESTDIR)${prefix} \
+	$(ALIRE) exec -- gprinstall -p -f --prefix=$(DESTDIR)${prefix} \
           $(STATIC_MAKE_ARGS) \
           --build-name=static $(2)$(1).gpr  
 
@@ -116,13 +118,13 @@ ifeq ($(BUILDS_SHARED),yes)
 	$(GNATMAKE) $(GPRFLAGS) -p -P$(2)$(1).gpr $(SHARED_MAKE_ARGS)
 
   install-shared::
-	$(GPRINSTALL) -p -f --prefix=$(DESTDIR)${prefix} \
+	$(ALIRE) exec -- gprinstall -p -f --prefix=$(DESTDIR)${prefix} \
           $(SHARED_MAKE_ARGS) \
           --build-name=relocatable $(2)$(1).gpr
 endif
 
   uninstall::
-	-$(GPRINSTALL) --uninstall -q -f --prefix=$(DESTDIR)${prefix} $(MAKE_ARGS) $(1).gpr
+	-$(ALIRE) exec -- gprinstall --uninstall -q -f --prefix=$(DESTDIR)${prefix} $(MAKE_ARGS) $(1).gpr
 
 endef
 
@@ -174,7 +176,6 @@ endef
 
 define awa_plugin
 
-$(eval $(call ada_library,$(strip $(1)),$($(1)_dir)/))
 $(eval $(call awa_install_plugin,$(strip $(1))))
 
 ifdef $(1)_dynamo
@@ -191,30 +192,30 @@ endef
 define alire_publish
   publish::
 	-rm -f $(aliredir)/$(2)/$(3)
-	cd $(1) && alr -f --no-tty publish
+	alr -f --no-tty publish --manifest $(1)
 	mkdir -p $(aliredir)/$(2)
-	cp $(1)/alire/releases/$(3) $(aliredir)/$(2)/$(3)
+	cp alire/releases/$(3) $(aliredir)/$(2)/$(3)
 
 endef
 
 define pandoc_build
 
-ifeq (${HAVE_PANDOC},yes)
+ifneq (, ${PANDOC})
 
 doc::  docs/$(1).pdf docs/$(1).html
-ifeq (${HAVE_DYNAMO},yes)
+ifneq (${DYNAMO},)
 	$(DYNAMO) build-doc -markdown wiki
 endif
 
 docs/$(1).pdf:  force
-ifeq (${HAVE_DYNAMO},yes)
+ifneq (${DYNAMO},)
 	$(DYNAMO) build-doc -pandoc docs
 	$(3)
 endif
-	cd docs && pandoc $(DOC_OPTIONS) -o $(1).pdf --template=./eisvogel.tex $(2)
+	cd docs && $(PANDOC) $(DOC_OPTIONS) -o $(1).pdf --template=./eisvogel.tex $(2)
 
 docs/$(1).html: docs/$(1).pdf force
-	cd docs && pandoc $(HTML_OPTIONS) -o $(1).html $(2)
+	cd docs && $(PANDOC) $(HTML_OPTIONS) -o $(1).html $(2)
 
 endif
 
@@ -235,3 +236,5 @@ ifdef DESTDIR
 .NOTPARALLEL:
 
 endif
+
+setup::
