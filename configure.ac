@@ -69,7 +69,7 @@ AM_CHECK_HOST_PWD
 DIR=`pwd $awa_pwd_option`
 
 ac_configure_args="${ac_configure_args} --with-build-root=${DIR}"
-AC_CONFIG_SUBDIRS(ada-lzma ada-util ada-security ada-wiki ada-ado ada-servlet openapi-ada ada-asf ada-keystore dynamo awa)
+AC_CONFIG_SUBDIRS(ada-util ada-wiki ada-ado ada-servlet openapi-ada ada-asf ada-keystore dynamo awa)
 
 AC_CONFIG_FILES([Makefile.conf
 ])
