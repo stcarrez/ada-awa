@@ -703,7 +703,7 @@ enable_coverage
       ac_precious_vars='build_alias
 host_alias
 target_alias'
-ac_subdirs_all='ada-util ada-ado ada-servlet openapi-ada ada-keystore dynamo awa'
+ac_subdirs_all='ada-ado ada-servlet openapi-ada dynamo awa'
 
 # Initialize some variables set by options.
 ac_init_help=
@@ -2755,7 +2755,7 @@ DIR=`pwd $awa_pwd_option`
 ac_configure_args="${ac_configure_args} --with-build-root=${DIR}"
 
 
-subdirs="$subdirs ada-util ada-ado ada-servlet openapi-ada ada-keystore dynamo awa"
+subdirs="$subdirs ada-ado ada-servlet openapi-ada dynamo awa"
 
 
 ac_config_files="$ac_config_files Makefile.conf"
