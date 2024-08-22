@@ -9,7 +9,7 @@ with "awa";
 
 library project Awa_Unit is
 
-   for Source_Dirs use ("../../awa/awaunit");
+   for Source_Dirs use ("src");
 
    for Library_Name use "awa_unit";
    for Library_Kind use Awa.Library_Type;
