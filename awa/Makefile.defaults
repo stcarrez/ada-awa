@@ -8,11 +8,14 @@ GNATMAKE?=gprbuild
 GNATCLEAN?=gnatclean
 GPRINSTALL?=gprinstall
 INSTALL?=install
-DYNAMO?=dynamo
+PANDOC?=$(shell which pandoc)
+DYNAMO?=$(shell which dynamo)
 PROCESSORS?=1
 MKDIR?=mkdir
 CP?=cp
 LN?=ln -s
+ALR?=alr --non-interactive
+BUILD_COMMAND?=$(ALR) build --
 
 BUILDS_SHARED?=no
 
@@ -39,7 +42,7 @@ samplesdir?=${prefix}/share/doc/${docdir}
 dynamodir=${prefix}/share/dynamo
 aliredir=${prefix}/alire-index
 
-MAKE_ARGS += -XBUILD=$(BUILD) -XPROCESSORS=$(PROCESSORS)
+MAKE_ARGS +=
 
 build:: all
 
@@ -98,39 +101,39 @@ ifeq (${VERBOSE},1)
 endif
 
 define ada_library
-  static:: setup
-	$(GNATMAKE) $(GPRFLAGS) -p -P$(2)$(1).gpr $(STATIC_MAKE_ARGS)
+# static:: setup
+#	$(BUILD_COMMAND) $(GPRFLAGS) -p -P$(2)$(1).gpr $(STATIC_MAKE_ARGS)
 
   install-static::
-	$(GPRINSTALL) -p -f --prefix=$(DESTDIR)${prefix} \
+	cd $(2) && $(ALR) exec -- gprinstall -p -f --prefix=$(DESTDIR)${prefix} \
           $(STATIC_MAKE_ARGS) \
-          --build-name=static $(2)$(1).gpr  
+          --build-name=static $(1).gpr  
 
-  setup:: obj/$(1)/static
+  lib-setup:: obj/$(1)/static
 
   obj/$(1)/static:
 	$(MKDIR) -p obj/$(1)/static
 
 ifeq ($(BUILDS_SHARED),yes)
-  shared:: setup
-	$(GNATMAKE) $(GPRFLAGS) -p -P$(2)$(1).gpr $(SHARED_MAKE_ARGS)
+  shared:: lib-setup
+	cd $(2) && $(BUILD_COMMAND) $(GPRFLAGS) $(SHARED_MAKE_ARGS)
 
   install-shared::
-	$(GPRINSTALL) -p -f --prefix=$(DESTDIR)${prefix} \
+	cd $(2) && $(ALR) exec -- gprinstall -p -f --prefix=$(DESTDIR)${prefix} \
           $(SHARED_MAKE_ARGS) \
-          --build-name=relocatable $(2)$(1).gpr
+          --build-name=relocatable $(1).gpr
 endif
 
   uninstall::
-	-$(GPRINSTALL) --uninstall -q -f --prefix=$(DESTDIR)${prefix} $(MAKE_ARGS) $(1).gpr
+	-cd $(2) && $(ALR) exec -- gprinstall --uninstall -q -f --prefix=$(DESTDIR)${prefix} $(MAKE_ARGS) $(1).gpr
 
 endef
 
 define ada_program
-  all:: setup
+  all:: lib-setup
 	$(GNATMAKE) $(GPRFLAGS) -p -P$(2)$(1).gpr $(STATIC_MAKE_ARGS)
 
-  setup:: obj/$(1)/static
+  lib-setup:: obj/$(1)/static
 
   obj/$(1)/static:
 	$(MKDIR) -p obj/$(1)/static
@@ -234,3 +237,7 @@ ifdef DESTDIR
 .NOTPARALLEL:
 
 endif
+
+setup::
+	echo "BUILD=$(BUILD)" > Makefile.conf
+	echo "prefix=$(prefix)" >> Makefile.conf
