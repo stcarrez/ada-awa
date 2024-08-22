@@ -2,15 +2,12 @@
 ##   relocatable
 ##   static
 AWA_LIBRARY_TYPE=static
-HAVE_PANDOC=yes
-HAVE_DYNAMO=yes
-ALIRE=alr --non-interactive
-BUILD_COMMAND=$(ALIRE) build -- $(MAKE_ARGS)
 
 -include Makefile.conf
 
-PANDOC := $(shell which pandoc)
-DYNAMO := $(shell which dynamo)
+SQLITE?=$(shell which sqlite3)
+MYSQL?=$(shell which mysql)
+PSQL=$(shell which psql)
 
 STATIC_MAKE_ARGS = $(MAKE_ARGS) -XAWA_LIBRARY_TYPE=static
 SHARED_MAKE_ARGS = $(MAKE_ARGS) -XAWA_LIBRARY_TYPE=relocatable
@@ -43,8 +40,6 @@ PLUGINS=awa-workspaces awa-mail awa-counters awa-storages awa-images awa-comment
 NAME=awa
 LIBNAME=lib${NAME}
 
-# include rules.mk
-
 DYNAMO_ARGS=--package AWA.Users.Models \
   --package AWA.Events.Models \
   --package AWA.OAuth.Models \
@@ -53,7 +48,7 @@ DYNAMO_ARGS=--package AWA.Users.Models \
   --package AWA.Commands.Models \
   db uml/awa.zargo
 
-build-test:: setup
+build-test::
 	$(BUILD_COMMAND) $(GPRFLAGS) $(MAKE_ARGS)
 
 AWA_DOC= \
@@ -110,28 +105,28 @@ regtests/results/maildir:
 	mkdir -p $@
 
 test-sqlite:		build regtests.db regtests/results/maildir
-ifeq (${HAVE_SQLITE},True)
+ifneq (, ${SQLITE})
 	bin/awa_harness -l $(NAME):SQLite: -p SQLite -xml awa-sqlite-aunit.xml -config test-sqlite.properties
 endif
 
 test-mysql:		build create-mysql-tests regtests/results/maildir
-ifeq (${HAVE_MYSQL},True)
+ifneq (, ${MYSQL})
 	bin/awa_harness -l $(NAME):MySQL: -p MySQL -xml awa-mysql-aunit.xml -config test-mysql.properties
 endif
 
 test-postgresql:		build create-postgresql-tests regtests/results/maildir
-ifeq (${HAVE_POSTGRESQL},True)
+ifneq (, ${POSTGRESQL})
 	bin/awa_harness -l $(NAME):Postgresql: -p Postgresql -xml awa-postgresql-aunit.xml -config test-postgresql.properties
 endif
 
 # Create the test sqlite database
 regtests.db:
 	-rm -f $@
-ifeq (${HAVE_SQLITE},True)
+ifneq (, ${SQLITE})
 	sqlite3 $@ < db/regtests/sqlite/create-regtests-sqlite.sql
 endif
 
-stamp-test-setup: Makefile.conf
+stamp-test-setup:
 	# Apply access constraints to the test key and directory.
 	chmod 600 regtests/config/*.key
 	chmod 700 regtests/config
@@ -140,7 +135,7 @@ stamp-test-setup: Makefile.conf
 # Create the tables in the database.
 # (The database itself must have been created)
 create-mysql-tests:
-ifeq (${HAVE_MYSQL},True)
+ifneq (, ${MYSQL})
 	mysql --defaults-extra-file=db/mysql/mysql.cnf < db/regtests/mysql/drop-regtests-mysql.sql
 	mysql --defaults-extra-file=db/mysql/mysql.cnf < db/regtests/mysql/create-regtests-mysql.sql
 endif
@@ -148,7 +143,7 @@ endif
 # Create the tables in the database.
 # (The database itself must have been created)
 create-postgresql-tests:
-ifeq (${HAVE_POSTGRESQL},True)
+ifneq (, ${POSTGRESQL})
 	psql -q "postgresql://localhost:5432/awa_test?user=awa_user&password=awa_pass" \
            --file=db/regtests/postgresql/drop-regtests-postgresql.sql
 	psql -q "postgresql://localhost:5432/awa_test?user=awa_user&password=awa_pass" \
@@ -164,8 +159,8 @@ install::
 uninstall::
 	rm -rf $(DESTDIR)${dynamodir}/awa
 
-# $(eval $(call ada_library,awa))
-# $(eval $(call ada_library,awa_unit))
+$(eval $(call ada_library,awa,.))
+$(eval $(call ada_library,awa_unit,awaunit))
 $(eval $(call awa_install_dir,awa,config,./))
 $(eval $(call awa_install_dir,awa,db,./))
 $(eval $(call awa_install_dir,awa,bundles,./))
