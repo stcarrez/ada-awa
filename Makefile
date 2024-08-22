@@ -15,7 +15,7 @@ SUBDIRS+=ada-wiki ada-servlet openapi-ada ada-asf ada-keystore
 SUBDIRS+=ada-ado dynamo awa
 
 # Build executables for all mains defined by the project.
-build test clean dist-clean::
+setup build test clean dist-clean::
 	for i in $(SUBDIRS); do \
 	   $(MAKE) -C "$$i" $@ ; \
 	done
