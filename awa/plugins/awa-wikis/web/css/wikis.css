@@ -1,6 +1,6 @@
 /**
  * wikis.css - Styles for wikis module
- * Copyright (C) 2011-2020 Stephane Carrez
+ * Copyright (C) 2011-2024 Stephane Carrez
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
 .wiki-page-container,
@@ -231,6 +231,12 @@
   font-style: italic;
   line-height: 1.4;
 }
+.wiki-text .wiki-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0.1em 0;
+}
+
 /* Table of Contents */
 .wiki-toc {
     display: table;
