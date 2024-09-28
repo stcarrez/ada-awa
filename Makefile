@@ -40,10 +40,6 @@ dist::
 
 sync-configure:
 	for i in $(SUBDIRS); do \
-       echo "Updating configure in $$i" && \
-       cp aclocal.m4 $$i/aclocal.m4 && \
-       (cd $$i && autoconf); \
-       echo "Updating Makefile.defaults in $$i" && \
        cp Makefile.defaults $$i/Makefile.defaults ; \
     done
 
