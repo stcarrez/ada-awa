@@ -1,23 +1,29 @@
 ifndef MAKEFILE_DEFAULTS
 MAKEFILE_DEFAULTS=1
 
+# Define how to build the project: distrib, debug, optimize, coverage, profile
+BUILD?=distrib
+
+# Enable the build of shared libraries: yes, no
+BUILDS_SHARED?=no
+
+# The installation prefix for the project
+PREFIX?=/usr/local
+
 # You may edit this makefile as long as you keep these original 
 # target names defined.
-BUILD?=distrib
 GNATMAKE?=gprbuild
 GNATCLEAN?=gnatclean
 GPRINSTALL?=gprinstall
 INSTALL?=install
-PANDOC?=$(shell which pandoc)
-DYNAMO?=$(shell which dynamo)
+PANDOC?=$(shell which pandoc 2>/dev/null)
+DYNAMO?=$(shell which dynamo 2>/dev/null)
 PROCESSORS?=1
 MKDIR?=mkdir
 CP?=cp
 LN?=ln -s
 ALR?=alr --non-interactive
 BUILD_COMMAND?=$(ALR) build --
-
-BUILDS_SHARED?=no
 
 ifeq (${OS},Windows_NT)
 LIBEXT?=dll
@@ -29,7 +35,7 @@ endif
 
 srcdir ?= .
 top_builddir ?= .
-prefix ?= /usr/local
+prefix ?= $(PREFIX)
 exec_prefix ?= ${prefix}
 top_builddir ?= .
 
@@ -48,42 +54,26 @@ build:: all
 
 ifeq ($(BUILDS_SHARED),yes)
 all::     static shared build-test
-install:: uninstall install-shared install-static install-info
+install:: uninstall install-shared install-static
 else
 all::     static build-test
-install:: uninstall install-static install-info
+install:: uninstall install-static
 endif
 
 static::
 shared::
 install-data::
 
-# Not intended for manual invocation.
-# Invoked if automatic builds are enabled.
-# Analyzes only on those sources that have changed.
-# Does not build executables.
-autobuild:
-	$(GNATMAKE) $(MAKE_ARGS) -gnatc -c -k  -P "$(GPRPATH)"
-
 # Clean, then build executables for all mains defined by the project.
 rebuild: clean all
 
-# Check *all* sources for errors, even those not changed.
-# Does not build executables.
-analyze:
-	$(GNATMAKE) $(MAKE_ARGS) -f  -gnatc -c -k  -P "$(GPRPATH)"
-
-# Clean root project and all imported projects too.
-clean_tree:
-	$(GNATCLEAN) -q -P "$(GPRPATH)" -r
-
 # Clean the root project of all build products.
 clean::
-	-rm -rf lib obj bin autom4te.cache $(CLEAN_FILES)
+	-rm -rf lib obj bin $(CLEAN_FILES)
 	-rm -rf regtests/result
 
 dist-clean:: clean
-	-rm -f *.log *~ config.status Makefile.conf
+	-rm -f *.log *~ Makefile.conf
 
 doc::
 ifneq (${DYNAMO},)
@@ -94,18 +84,12 @@ dist::
 	rm -f $(DIST_FILE)
 	git archive -o $(DIST_FILE) --prefix=$(DIST_DIR)/ HEAD
 
-install-info::
-ifeq (${VERBOSE},1)
-	@echo "Environment setup:"
-	@echo "  export ADA_PROJECT_PATH=${projectdir}:$$ADA_PROJECT_PATH"
-endif
-
 define ada_library
-# static:: setup
-#	$(BUILD_COMMAND) $(GPRFLAGS) -p -P$(2)$(1).gpr $(STATIC_MAKE_ARGS)
+static:: lib-setup
+	cd $(2) && $(BUILD_COMMAND) $(STATIC_MAKE_ARGS)
 
   install-static::
-	cd $(2) && $(ALR) exec -- gprinstall -p -f --prefix=$(DESTDIR)${prefix} \
+	cd $(2) && $(ALR) exec -- $(GPRINSTALL) -p -f --prefix=$(DESTDIR)${prefix} \
           $(STATIC_MAKE_ARGS) \
           --build-name=static $(1).gpr  
 
@@ -116,16 +100,16 @@ define ada_library
 
 ifeq ($(BUILDS_SHARED),yes)
   shared:: lib-setup
-	cd $(2) && $(BUILD_COMMAND) $(GPRFLAGS) $(SHARED_MAKE_ARGS)
+	cd $(2) && $(BUILD_COMMAND) $(SHARED_MAKE_ARGS)
 
   install-shared::
-	cd $(2) && $(ALR) exec -- gprinstall -p -f --prefix=$(DESTDIR)${prefix} \
+	cd $(2) && $(ALR) exec -- $(GPRINSTALL) -p -f --prefix=$(DESTDIR)${prefix} \
           $(SHARED_MAKE_ARGS) \
           --build-name=relocatable $(1).gpr
 endif
 
   uninstall::
-	-cd $(2) && $(ALR) exec -- gprinstall --uninstall -q -f --prefix=$(DESTDIR)${prefix} $(MAKE_ARGS) $(1).gpr
+	-cd $(2) && $(ALR) exec -- $(GPRINSTALL) --uninstall -q -f --prefix=$(DESTDIR)${prefix} $(MAKE_ARGS) $(1).gpr
 
 endef
 
@@ -240,4 +224,5 @@ endif
 
 setup::
 	echo "BUILD=$(BUILD)" > Makefile.conf
-	echo "prefix=$(prefix)" >> Makefile.conf
+	echo "PREFIX=$(prefix)" >> Makefile.conf
+	echo "BUILDS_SHARED=$(BUILDS_SHARED)" >> Makefile.conf
