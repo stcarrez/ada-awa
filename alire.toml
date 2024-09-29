@@ -49,6 +49,13 @@ project-files = [
 ".alire/awa_countries.gpr", ".alire/awa_questions.gpr", ".alire/awa_votes.gpr"
 ]
 
+[available.'case(os)']
+linux = true
+freebsd = true
+windows = false
+macos = false
+'...' = false
+
 [[depends-on]]
 utilada = "^2.6.0"
 utilada_xml = "^2.6.0"
@@ -59,7 +66,7 @@ security = "^1.5.0"
 serverfaces = "^1.6.0"
 servletada = "^1.7.0"
 keystoreada = "^1.4.0"
-aws = "~23.0"
+aws = "~24.0"
 
 [[actions]]
 type = "post-fetch"
@@ -68,6 +75,10 @@ command = ["sh", "./alire-setup.sh"]
 [gpr-externals]
 AWA_LIBRARY_TYPE = ["relocatable", "static", "static-pic"]
 AWA_BUILD = ["distrib", "debug", "optimize", "profile", "coverage"]
+AWA_AWS_IMPL = ["none", "1", "2", "3", "4"]
+
+[gpr-set-externals]
+AWA_AWS_IMPL = "4"
 
 [environment]
 DYNAMO_SEARCH_PATH.prepend = "${CRATE_ROOT}/awa/plugins"
