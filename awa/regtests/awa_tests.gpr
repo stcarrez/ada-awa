@@ -51,7 +51,7 @@ project Awa_Tests is
    for Main use Mains;
 
    for Object_Dir use "../obj/awa_tests";
-   for Exec_Dir use Awa.Exec_Dir;
+   for Exec_Dir use "../bin";
 
    package Binder renames Awa.Binder;
    package Builder renames Awa.Builder;
