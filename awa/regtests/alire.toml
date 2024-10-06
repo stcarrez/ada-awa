@@ -1,0 +1,30 @@
+description = "Ada Web Application unit tests"
+name = "awa_tests"
+version = "2.5.0"
+tags = ["web", "users", "jobs", "framework", "testing"]
+website = "https://gitlab.com/stcarrez/ada-awa"
+
+licenses = "Apache-2.0"
+authors = ["Stephane.Carrez@gmail.com"]
+maintainers = ["Stephane.Carrez@gmail.com"]
+maintainers-logins = ["stcarrez"]
+
+project-files = ["awa_tests.gpr"]
+
+[[depends-on]]
+awa = "^2.5.0"
+awa_unit = "^2.5.0"
+ado_all = "^2.4.0"
+serverfaces_unit = "^1.6.0"
+servletada_unit = "^1.7.0"
+
+[gpr-externals]
+AWA_LIBRARY_TYPE = ["relocatable", "static", "static-pic"]
+AWA_BUILD = ["distrib", "debug", "optimize", "profile", "coverage"]
+
+[configuration]
+disabled = true
+
+[[pins]]
+awa = { path = '../..' }
+awa_unit = { path = '../unit' }
