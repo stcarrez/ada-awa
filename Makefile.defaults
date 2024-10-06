@@ -10,10 +10,13 @@ BUILDS_SHARED?=no
 # The installation prefix for the project
 PREFIX?=/usr/local
 
+HAVE_ALIRE?=yes
+
 # You may edit this makefile as long as you keep these original 
 # target names defined.
 GNATMAKE?=gprbuild
 GNATCLEAN?=gnatclean
+GPRBUILD?=gprbuild
 GPRINSTALL?=gprinstall
 INSTALL?=install
 PANDOC?=$(shell which pandoc 2>/dev/null)
@@ -23,7 +26,17 @@ MKDIR?=mkdir
 CP?=cp
 LN?=ln -s
 ALR?=alr --non-interactive
+SRC_ROOT?=$(shell pwd)
+
+DEFAULT_ADA_PROJECT_PATH?=$(SRC_ROOT):$(ADA_PROJECT_PATH)
+
+ifeq ($(HAVE_ALIRE),yes)
 BUILD_COMMAND?=$(ALR) build --
+GNATPREP?=$(ALR) exec -- gnatprep
+else
+BUILD_COMMAND?=env ADA_PROJECT_PATH="$(DEFAULT_ADA_PROJECT_PATH)" $(GPRBUILD)
+GNATPREP?=gnatprep
+endif
 
 ifeq (${OS},Windows_NT)
 LIBEXT?=dll
@@ -85,13 +98,24 @@ dist::
 	git archive -o $(DIST_FILE) --prefix=$(DIST_DIR)/ HEAD
 
 define ada_library
+
+ifeq ($(HAVE_ALIRE),yes)
 static:: lib-setup
 	cd $(2) && $(BUILD_COMMAND) $(STATIC_MAKE_ARGS)
 
   install-static::
 	cd $(2) && $(ALR) exec -- $(GPRINSTALL) -p -f --prefix=$(DESTDIR)${prefix} \
           $(STATIC_MAKE_ARGS) \
-          --build-name=static $(1).gpr  
+          --build-name=static $(1).gpr
+else
+  static:: lib-setup
+	cd $(2) && env ADA_PROJECT_PATH="$(DEFAULT_ADA_PROJECT_PATH)" $(GPRBUILD) -P $(1).gpr $(GPRFLAGS) $(STATIC_MAKE_ARGS)
+
+  install-static::
+	cd $(2) && env ADA_PROJECT_PATH="$(DEFAULT_ADA_PROJECT_PATH)" $(GPRINSTALL) -p -f --prefix=$(DESTDIR)${prefix} \
+          $(STATIC_MAKE_ARGS) \
+          --build-name=static $(1).gpr
+endif
 
   lib-setup:: obj/$(1)/static
 
@@ -99,6 +123,7 @@ static:: lib-setup
 	$(MKDIR) -p obj/$(1)/static
 
 ifeq ($(BUILDS_SHARED),yes)
+ifeq ($(HAVE_ALIRE),yes)
   shared:: lib-setup
 	cd $(2) && $(BUILD_COMMAND) $(SHARED_MAKE_ARGS)
 
@@ -106,10 +131,25 @@ ifeq ($(BUILDS_SHARED),yes)
 	cd $(2) && $(ALR) exec -- $(GPRINSTALL) -p -f --prefix=$(DESTDIR)${prefix} \
           $(SHARED_MAKE_ARGS) \
           --build-name=relocatable $(1).gpr
+else
+  shared:: lib-setup
+	cd $(2) && env ADA_PROJECT_PATH="$(DEFAULT_ADA_PROJECT_PATH)" $(GPRBUILD) -P $(1).gpr $(GPRFLAGS) $(SHARED_MAKE_ARGS)
+
+  install-shared::
+	cd $(2) && env ADA_PROJECT_PATH="$(DEFAULT_ADA_PROJECT_PATH)" $(GPRINSTALL) -p -f --prefix=$(DESTDIR)${prefix} \
+          $(SHARED_MAKE_ARGS) \
+          --build-name=relocatable $(1).gpr
+endif
 endif
 
+ifeq ($(HAVE_ALIRE),yes)
   uninstall::
 	-cd $(2) && $(ALR) exec -- $(GPRINSTALL) --uninstall -q -f --prefix=$(DESTDIR)${prefix} $(MAKE_ARGS) $(1).gpr
+else
+  uninstall::
+	-cd $(2) && $(GPRINSTALL) --uninstall -q -f --prefix=$(DESTDIR)${prefix} $(MAKE_ARGS) $(1).gpr
+
+endif
 
 endef
 
@@ -225,4 +265,5 @@ endif
 setup::
 	echo "BUILD=$(BUILD)" > Makefile.conf
 	echo "PREFIX=$(prefix)" >> Makefile.conf
+	echo "HAVE_ALIRE=$(HAVE_ALIRE)" >> Makefile.conf
 	echo "BUILDS_SHARED=$(BUILDS_SHARED)" >> Makefile.conf
