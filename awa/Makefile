@@ -49,7 +49,7 @@ DYNAMO_ARGS=--package AWA.Users.Models \
   db uml/awa.zargo
 
 build-test::
-	$(BUILD_COMMAND) $(GPRFLAGS) $(MAKE_ARGS)
+	cd regtests && $(BUILD_COMMAND) $(GPRFLAGS) $(MAKE_ARGS)
 
 AWA_DOC= \
   title.md \
@@ -160,7 +160,7 @@ uninstall::
 	rm -rf $(DESTDIR)${dynamodir}/awa
 
 $(eval $(call ada_library,awa,.))
-$(eval $(call ada_library,awa_unit,awaunit))
+$(eval $(call ada_library,awa_unit,unit))
 $(eval $(call awa_install_dir,awa,config,./))
 $(eval $(call awa_install_dir,awa,db,./))
 $(eval $(call awa_install_dir,awa,bundles,./))
