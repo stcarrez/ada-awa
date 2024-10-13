@@ -80,6 +80,8 @@ install-data::
 # Clean, then build executables for all mains defined by the project.
 rebuild: clean all
 
+build-install: build install
+
 # Clean the root project of all build products.
 clean::
 	-rm -rf lib obj bin $(CLEAN_FILES)
