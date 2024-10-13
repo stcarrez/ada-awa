@@ -80,7 +80,9 @@ install-data::
 # Clean, then build executables for all mains defined by the project.
 rebuild: clean all
 
+ifeq ($(NO_BUILD_INSTALL),yes)
 build-install: build install
+endif
 
 # Clean the root project of all build products.
 clean::
