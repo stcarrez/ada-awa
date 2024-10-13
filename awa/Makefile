@@ -27,9 +27,20 @@ SHARED_MAKE_ARGS += -XUTILADA_UNIT_BUILD=relocatable
 SHARED_MAKE_ARGS += -XUTIL_UNIT_LIBRARY_TYPE=relocatable
 SHARED_MAKE_ARGS += -XLIBRARY_TYPE=relocatable
 
+MAKE_ARGS = -XAWA_BUILD=$(BUILD) -XPROCESSORS=$(PROCESSORS)
+
 include Makefile.defaults
 
-MAKE_ARGS = -XAWA_BUILD=$(BUILD) -XPROCESSORS=$(PROCESSORS)
+DEFAULT_ADA_PROJECT_PATH=$(SRC_ROOT)
+DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/plugins/awa-blogs:$(SRC_ROOT)/plugins/awa-changelogs
+DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/plugins/awa-comments:$(SRC_ROOT)/plugins/awa-counters
+DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/plugins/awa-countries:$(SRC_ROOT)/plugins/awa-images
+DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/plugins/awa-jobs:$(SRC_ROOT)/plugins/awa-mail
+DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/plugins/awa-questions:$(SRC_ROOT)/plugins/awa-settings
+DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/plugins/awa-setup:$(SRC_ROOT)/plugins/awa-storages
+DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/plugins/awa-sysadmin:$(SRC_ROOT)/plugins/awa-tags
+DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/plugins/awa-votes:$(SRC_ROOT)/plugins/awa-wikis
+DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/plugins/awa-workspaces:$(SRC_ROOT)/unit:$(ADA_PROJECT_PATH)
 
 PLUGINS=awa-workspaces awa-mail awa-counters awa-storages awa-images awa-comments \
         awa-jobs awa-votes awa-tags awa-flotcharts awa-wikis awa-blogs awa-markedit \
@@ -49,7 +60,11 @@ DYNAMO_ARGS=--package AWA.Users.Models \
   db uml/awa.zargo
 
 build-test::
+ifeq ($(HAVE_ALIRE),yes)
 	cd regtests && $(BUILD_COMMAND) $(GPRFLAGS) $(MAKE_ARGS)
+else
+	cd regtests && $(BUILD_COMMAND) $(GPRFLAGS) $(MAKE_ARGS) -Pregtests.gpr
+endif
 
 AWA_DOC= \
   title.md \
