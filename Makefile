@@ -1,5 +1,7 @@
 NAME=awa
 
+NO_BUILD_INSTALL=yes
+
 -include Makefile.conf
 
 include Makefile.defaults
@@ -13,8 +15,6 @@ DIST_DIRS+=ada-ado dynamo
 SUBDIRS=ada-lzma ada-util ada-el ada-security
 SUBDIRS+=ada-wiki ada-servlet openapi-ada ada-asf ada-keystore
 SUBDIRS+=ada-ado dynamo awa
-
-NO_BUILD_INSTALL=yes
 
 # Build executables for all mains defined by the project.
 setup build build-install test clean dist-clean::

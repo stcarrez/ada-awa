@@ -80,7 +80,7 @@ install-data::
 # Clean, then build executables for all mains defined by the project.
 rebuild: clean all
 
-ifeq ($(NO_BUILD_INSTALL),yes)
+ifeq ($(NO_BUILD_INSTALL),)
 build-install: build install
 endif
 
