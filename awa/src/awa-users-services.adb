@@ -451,7 +451,7 @@ package body AWA.Users.Services is
 
       --  Reject authentication on disabled the user account.
       if User.Get_Status /= Models.USER_ENABLED then
-         Log.Warn ("Authenticate session {0} is disabled", Ado.Identifier'Image (Id));
+         Log.Warn ("Authenticate session {0} is disabled", ADO.Identifier'Image (Id));
          raise User_Disabled with "User account is disabled";
       end if;
 
@@ -932,7 +932,7 @@ package body AWA.Users.Services is
    --  ------------------------------
    procedure Update_User (Model  : in out User_Service;
                           Email  : in String;
-                          Status : in Models.Status_type) is
+                          Status : in Models.Status_Type) is
       pragma Unreferenced (Model);
 
       Ctx      : constant ASC.Service_Context_Access := ASC.Current;
@@ -955,7 +955,7 @@ package body AWA.Users.Services is
       end if;
 
       User.Set_Status (Status);
-      User.Save (Db);
+      User.Save (DB);
       Ctx.Commit;
    end Update_User;
 

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-servlets -- OpenID verification servlet for user authentication
---  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2018, 2022 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2018, 2022, 2024 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -306,12 +306,12 @@ package body AWA.Users.Servlets is
       URI : constant String := Context.Get_Init_Parameter (VERIFY_FILTER_REDIRECT_PARAM);
    begin
       Server.Invalid_Key_URI := To_Unbounded_String (URI);
-      if Uri'Length = 0 then
+      if URI'Length = 0 then
          Log.Error ("Missing configuration for {0}.{1}",
                     Server.Get_Name,
                     VERIFY_FILTER_REDIRECT_PARAM);
       end if;
-      Server.Change_Password_Uri
+      Server.Change_Password_URI
         := Context.Get_Init_Parameter (VERIFY_FILTER_CHANGE_PASSWORD_PARAM);
    end Initialize;
 
@@ -343,7 +343,7 @@ package body AWA.Users.Servlets is
 
       if Principal = null then
          declare
-            URI : constant String := To_String (Server.Change_Password_Uri) & Key;
+            URI : constant String := To_String (Server.Change_Password_URI) & Key;
          begin
             Log.Info ("Access key verified but no password, redirecting to {0}", URI);
             Response.Send_Redirect (Location => URI);

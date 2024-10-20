@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa.users -- User registration, authentication processes
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2017, 2018, 2022 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2017, 2018, 2022, 2024 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -158,7 +158,7 @@ package AWA.Users.Services is
    --  Update the user status to enable/disable the user account.
    procedure Update_User (Model  : in out User_Service;
                           Email  : in String;
-                          Status : in Models.Status_type);
+                          Status : in Models.Status_Type);
 
    --  Verify the access key and retrieve the user associated with that key.
    --  Starts a new session associated with the given IP address.
