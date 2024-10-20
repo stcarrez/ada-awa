@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-commands-drivers -- Driver for AWA commands for server or admin tool
---  Copyright (C) 2020, 2021, 2022 Stephane Carrez
+--  Copyright (C) 2020, 2021, 2022, 2024 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -77,9 +77,9 @@ package body AWA.Commands.Drivers is
    function Is_Application (Command : in Application_Command_Type;
                             URI     : in String) return Boolean is
    begin
-      return Command.Application_Name.all = Uri
-        or else (Uri (Uri'First) = '/'
-                   and then Command.Application_Name.all = Uri (Uri'First + 1 .. Uri'Last));
+      return Command.Application_Name.all = URI
+        or else (URI (URI'First) = '/'
+                   and then Command.Application_Name.all = URI (URI'First + 1 .. URI'Last));
    end Is_Application;
 
    overriding

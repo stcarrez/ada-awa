@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-commands-migrate -- Database schema migration command
---  Copyright (C) 2022 Stephane Carrez
+--  Copyright (C) 2022, 2024 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -75,7 +75,7 @@ package body AWA.Commands.Migrate is
       --  Get a writable database session for the migration.
       Session := Factory.Get_Master_Session;
 
-      Util.Files.Iterate_Path (Connection.Get_Property (Ado.Configs.Migrate_Paths_config),
+      Util.Files.Iterate_Path (Connection.Get_Property (ADO.Configs.MIGRATE_PATHS_CONFIG),
                                Scan_Migration'Access);
       if List.Is_Empty then
          Context.Console.Notice (N_INFO, "Database schema is up to date");
@@ -92,7 +92,7 @@ package body AWA.Commands.Migrate is
       else
          Context.Console.Notice (N_INFO, "Database schema migration is necessary"
                                    & " (launch again with --execute option)");
-         Context.Console.Notice (N_Info, "The following SQL scripts must be executed:");
+         Context.Console.Notice (N_INFO, "The following SQL scripts must be executed:");
          for Upgrade of List loop
             ADO.Schemas.Databases.Prepare_Migration
               (Session, Upgrade, Files);
