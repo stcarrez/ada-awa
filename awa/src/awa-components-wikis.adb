@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-components-wikis -- Wiki rendering component
---  Copyright (C) 2011, 2012, 2013, 2015, 2016, 2018, 2020, 2021, 2022 Stephane Carrez
+--  Copyright (C) 2011 - 2025 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,6 +38,17 @@ package body AWA.Components.Wikis is
    type Html_Writer_Type is limited new Wiki.Streams.Html.Html_Output_Stream with record
       Writer : ASF.Contexts.Writer.Response_Writer_Access;
    end record;
+
+   --  Enable/disable strict XML generation.  When disabled, the <br>, <hr>,
+   --  <img> elements are not closed.
+   overriding
+   procedure Set_Strict_XML (Writer : in out Html_Writer_Type;
+                             Strict : in Boolean) is null;
+
+   --  Enable/disable indentation temporarily.
+   overriding
+   procedure Set_Enable_Indent (Writer : in out Html_Writer_Type;
+                                Enable : in Boolean) is null;
 
    overriding
    procedure Write (Writer  : in out Html_Writer_Type;
