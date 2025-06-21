@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions -- Permissions module
---  Copyright (C) 2011, 2012, 2013, 2014, 2016, 2017, 2020, 2022 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2016, 2017, 2020, 2022, 2025 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -26,7 +26,7 @@ package body AWA.Permissions is
    --  ------------------------------
    procedure Check (Permission : in Security.Permissions.Permission_Index) is
    begin
-      if not (Security.Contexts.Has_Permission (Permission)) then
+      if not Security.Contexts.Has_Permission (Permission) then
          raise NO_PERMISSION;
       end if;
    end Check;

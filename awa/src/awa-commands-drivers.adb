@@ -1,10 +1,11 @@
 -----------------------------------------------------------------------
 --  awa-commands-drivers -- Driver for AWA commands for server or admin tool
---  Copyright (C) 2020, 2021, 2022, 2024 Stephane Carrez
+--  Copyright (C) 2020, 2021, 2022, 2024, 2025 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
 with Ada.Command_Line;
+with Ada.Strings.Unbounded;
 with Util.Strings.Formats;
 with Servlet.Core;
 package body AWA.Commands.Drivers is

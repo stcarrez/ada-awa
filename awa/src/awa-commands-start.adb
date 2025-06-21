@@ -1,10 +1,11 @@
 -----------------------------------------------------------------------
 --  awa-commands-start -- Command to start the web server
---  Copyright (C) 2020, 2021, 2022, 2023 Stephane Carrez
+--  Copyright (C) 2020, 2021, 2022, 2023, 2025 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
 with System;
+with Ada.Strings.Unbounded;
 with Servlet.Core;
 with Servlet.Server;
 with GNAT.Sockets;
