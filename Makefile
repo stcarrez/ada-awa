@@ -41,6 +41,14 @@ MAKE_ARGS = -XAWA_BUILD=$(BUILD) -XPROCESSORS=$(PROCESSORS)
 include Makefile.defaults
 
 DEFAULT_ADA_PROJECT_PATH=$(SRC_ROOT)
+DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/ada-lzma:$(SRC_ROOT)/ada-util:$(SRC_ROOT)/ada-util/unit:$(SRC_ROOT)/ada-util/xml
+DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/ada-util/aws:$(SRC_ROOT)/ada-util/curl:$(SRC_ROOT)/ada-util/lzma:$(SRC_ROOT)/ada-el
+DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/ada-security:$(SRC_ROOT)/ada-servlet:$(SRC_ROOT)/ada-servlet/unit:$(SRC_ROOT)/ada-servlet/aws:$(SRC_ROOT)/ada-servlet/ews
+DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/ada-asf:$(SRC_ROOT)/ada-asf/unit:$(SRC_ROOT)/ada-wiki
+DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/ada-ado:$(SRC_ROOT)/ada-ado/sqlite:$(SRC_ROOT)/ada-ado/mysql:$(SRC_ROOT)/ada-ado/postgresql:$(SRC_ROOT)/ada-ado/drivers
+DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/ada-keystore
+DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/openapi-ada:$(SRC_ROOT)/openapi-ada/server
+DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/dynamo
 DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/plugins/awa-blogs:$(SRC_ROOT)/plugins/awa-changelogs
 DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/plugins/awa-comments:$(SRC_ROOT)/plugins/awa-counters
 DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/plugins/awa-countries:$(SRC_ROOT)/plugins/awa-images
@@ -65,14 +73,15 @@ SUBDIRS+=ada-ado dynamo
 ifeq ($(AWA_TOP_LEVEL),1)
 setup build build-install test clean dist-clean::
 	for i in $(SUBDIRS); do \
-	   $(MAKE) -C "$$i" $@ ; \
+	   $(MAKE) -C "$$i" DEFAULT_ADA_PROJECT_PATH="${DEFAULT_ADA_PROJECT_PATH}" $@ ; \
 	done
-	$(MAKE) AWA_TOP_LEVEL=0
+	$(MAKE) AWA_TOP_LEVEL=0 $@
 
 install install-data uninstall::
 	for i in $(SUBDIRS); do \
 	   $(MAKE) -C "$$i" $@ ; \
 	done
+	$(MAKE) AWA_TOP_LEVEL=0 $@
 
 # Clean, then build executables for all mains defined by the project.
 rebuild: clean build

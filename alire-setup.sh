@@ -13,4 +13,4 @@ else
 fi
 sed -e "s,@USE_CONVERT@,$USE_CONVERT,g" \
     -e "s,@USE_MAGICK@,$USE_MAGICK,g" \
-    awa/plugins/awa-images/config/images.xml.in > awa/plugins/awa-images/config/images.xml
+    plugins/awa-images/config/images.xml.in > plugins/awa-images/config/images.xml
