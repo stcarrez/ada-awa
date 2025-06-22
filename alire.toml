@@ -103,4 +103,5 @@ DYNAMO_UML_PATH.prepend = "${CRATE_ROOT}/awa/uml"
 disabled = true
 
 [[pins]]
-wikiada = { url = 'https://github.com/stcarrez/ada-wiki.git' }
+# wikiada = { url = 'https://github.com/stcarrez/ada-wiki.git' }
+wikiada = { path = 'ada-wiki' }
