@@ -52,4 +52,4 @@ AWA_BUILD = ["distrib", "debug", "optimize", "profile", "coverage"]
 disabled = true
 
 [[pins]]
-awa = { path = '../..' }
+awa = { path = '..' }
