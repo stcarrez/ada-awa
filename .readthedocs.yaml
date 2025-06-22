@@ -10,4 +10,4 @@ mkdocs:
 
 python:
   install:
-  - requirements: awa/docs/requirements.txt
+  - requirements: docs/requirements.txt
