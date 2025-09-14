@@ -33,3 +33,6 @@ INSERT INTO `ado_sequence` (name, version, value, block_size)
 
 ALTER TABLE awa_session ADD COLUMN `user_auth_id` BIGINT;
 
+ALTER TABLE awa_user DROP COLUMN `password`;
+ALTER TABLE awa_user DROP COLUMN `open_id`;
+ALTER TABLE awa_user DROP COLUMN `salt`;
