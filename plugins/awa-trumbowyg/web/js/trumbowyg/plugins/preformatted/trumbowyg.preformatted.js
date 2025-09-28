@@ -16,14 +16,17 @@
             en: {
                 preformatted: 'Code sample <pre>'
             },
-            sl: {
-                preformatted: 'Vstavi neformatiran tekst <pre>'
+            az: {
+                preformatted: 'Kod nümunəsi <pre>'
             },
             by: {
                 preformatted: 'Прыклад кода <pre>'
             },
             da: {
                 preformatted: 'Præformateret <pre>'
+            },
+            de: {
+                preformatted: 'Code-Beispiel <pre>'
             },
             et: {
                 preformatted: 'Eelvormindatud tekst <pre>'
@@ -48,6 +51,9 @@
             },
             ru: {
                 preformatted: 'Пример кода <pre>'
+            },
+            sl: {
+                preformatted: 'Vstavi neformatiran tekst <pre>'
             },
             tr: {
                 preformatted: 'Kod örneği <pre>'

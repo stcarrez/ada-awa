@@ -20,19 +20,19 @@
                     value: '48px'
                 }
             },
-            sl: {
-                fontsize: 'Velikost pisave',
+            az: {
+                fontsize: 'Şrift həcmi',
                 fontsizes: {
-                    'x-small': 'Ekstra majhna',
-                    'small': 'Majhna',
-                    'medium': 'Navadno',
-                    'large': 'Velika',
-                    'x-large': 'Ekstra velika',
-                    'custom': 'Poljubna'
+                    'x-small': 'Daha kiçik',
+                    'small': 'Kiçik',
+                    'medium': 'Normal',
+                    'large': 'Böyük',
+                    'x-large': 'Daha böyük',
+                    'custom': 'Fərdi həcm'
                 },
                 fontCustomSize: {
-                    title: 'Poljubna velikost pisave',
-                    label: 'Velikost pisave',
+                    title: 'Fərdi şrift həcmi',
+                    label: 'Şrift həcmi',
                     value: '48px'
                 }
             },
@@ -49,6 +49,22 @@
                 fontCustomSize: {
                     title: 'Карыстальніцкі Памер Шрыфта',
                     label: 'Памер Шрыфта',
+                    value: '48px'
+                }
+            },
+            ca: {
+                fontsize: 'Mida de la lletra',
+                fontsizes: {
+                    'x-small': 'Molt petita',
+                    'small': 'Petita',
+                    'medium': 'Normal',
+                    'large': 'Gran',
+                    'x-large': 'Molt Gran',
+                    'custom': 'Personalitzada'
+                },
+                fontCustomSize: {
+                    title: 'Mida de lletra personalitzada',
+                    label: 'Mida de lletra',
                     value: '48px'
                 }
             },
@@ -223,6 +239,22 @@
                     value: '48px'
                 }
             },
+            sl: {
+                fontsize: 'Velikost pisave',
+                fontsizes: {
+                    'x-small': 'Ekstra majhna',
+                    'small': 'Majhna',
+                    'medium': 'Navadno',
+                    'large': 'Velika',
+                    'x-large': 'Ekstra velika',
+                    'custom': 'Poljubna'
+                },
+                fontCustomSize: {
+                    title: 'Poljubna velikost pisave',
+                    label: 'Velikost pisave',
+                    value: '48px'
+                }
+            },
             tr: {
                 fontsize: 'Yazı boyutu',
                 fontsizes: {
@@ -247,14 +279,14 @@
                     'medium': '中',
                     'large': '大',
                     'x-large': '最大',
-                    'custom': '自訂大小',
+                    'custom': '自訂大小'
                 },
                 fontCustomSize: {
                     title: '自訂義字體大小',
                     label: '字體大小',
                     value: '48px'
                 }
-            },
+            }
         }
     });
     // jshint camelcase:true
@@ -276,8 +308,8 @@
             fontsize: {
                 init: function (trumbowyg) {
                     trumbowyg.o.plugins.fontsize = $.extend({},
-                      defaultOptions,
-                      trumbowyg.o.plugins.fontsize || {}
+                        defaultOptions,
+                        trumbowyg.o.plugins.fontsize || {}
                     );
 
                     trumbowyg.addBtnDef('fontsize', {
@@ -303,10 +335,10 @@
         fontElements.find('span[style*="font-size"]').contents().unwrap();
 
         // Find <font> elements that were added and change to <span> with chosen size
-        fontElements.replaceWith(function() {
+        fontElements.replaceWith(function () {
             return $('<span/>', {
-                css: { 'font-size': size },
-                html: this.innerHTML,
+                css: {'font-size': size},
+                html: this.innerHTML
             });
         });
 

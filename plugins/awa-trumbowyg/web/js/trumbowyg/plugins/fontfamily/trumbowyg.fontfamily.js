@@ -7,20 +7,23 @@
             en: {
                 fontFamily: 'Font'
             },
-            sl: {
-                fontFamily: 'Pisava'
+            az: {
+                fontFamily: 'Şrift'
             },
             by: {
                 fontFamily: 'Шрыфт'
             },
-            es: {
-                fontFamily: 'Fuente'
+            ca: {
+                fontFamily: 'Font'
             },
             da: {
                 fontFamily: 'Skrifttype'
             },
             de: {
                 fontFamily: 'Schriftart'
+            },
+            es: {
+                fontFamily: 'Fuente'
             },
             et: {
                 fontFamily: 'Font'
@@ -38,17 +41,20 @@
                 fontFamily: 'Lettertype'
             },
             pt_br: {
-                fontFamily: 'Fonte',
+                fontFamily: 'Fonte'
             },
             ru: {
                 fontFamily: 'Шрифт'
+            },
+            sl: {
+                fontFamily: 'Pisava'
             },
             tr: {
                 fontFamily: 'Yazı tipi'
             },
             zh_tw: {
-                fontFamily: '字體',
-            },
+                fontFamily: '字體'
+            }
         }
     });
     // jshint camelcase:true
@@ -77,8 +83,8 @@
             fontfamily: {
                 init: function (trumbowyg) {
                     trumbowyg.o.plugins.fontfamily = $.extend({},
-                      defaultOptions,
-                      trumbowyg.o.plugins.fontfamily || {}
+                        defaultOptions,
+                        trumbowyg.o.plugins.fontfamily || {}
                     );
 
                     trumbowyg.addBtnDef('fontfamily', {

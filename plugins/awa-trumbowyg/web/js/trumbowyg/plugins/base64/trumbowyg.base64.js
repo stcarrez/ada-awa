@@ -26,11 +26,11 @@
                 errFileReaderNotSupported: 'FileReader is not supported by your browser.',
                 errInvalidImage: 'Invalid image file.'
             },
-            sl: {
-                base64: 'Slika kot base64',
-                file: 'Datoteka',
-                errFileReaderNotSupported: 'FileReader ni podprt v tem brskalniku.',
-                errInvalidImage: 'Neveljavna datoteka s sliko.'
+            az: {
+                base64: 'base64 olaraq şəkil',
+                file: 'Fayl',
+                errFileReaderNotSupported: 'FileReader brauzeriniz tərəfindən dəstəklənmir.',
+                errInvalidImage: 'Yanlış şəkil faylı.'
             },
             by: {
                 base64: 'Выява (фармат base64)',
@@ -48,6 +48,12 @@
                 errFileReaderNotSupported: 'FileReader er ikke understøttet af din browser.',
                 errInvalidImage: 'Ugyldig billedfil.'
             },
+            de: {
+                base64: 'Bild als base64',
+                file: 'Datei',
+                errFileReaderNotSupported: 'FileReader ist nicht in deinem Browser unterstützt.',
+                errInvalidImage: 'Ungültige Bilddatei.'
+            },
             et: {
                 base64: 'Pilt base64 formaadis',
                 file: 'Fail',
@@ -56,7 +62,9 @@
             },
             fr: {
                 base64: 'Image en base64',
-                file: 'Fichier'
+                file: 'Fichier',
+                errFileReaderNotSupported: 'FileReader n\'est pas supporté par votre navigateur.',
+                errInvalidImage: 'Fichier image invalide.'
             },
             hu: {
                 base64: 'Kép beszúrás inline',
@@ -93,6 +101,12 @@
                 file: 'Файл',
                 errFileReaderNotSupported: 'FileReader не поддерживается вашим браузером.',
                 errInvalidImage: 'Недопустимый файл изображения.'
+            },
+            sl: {
+                base64: 'Slika kot base64',
+                file: 'Datoteka',
+                errFileReaderNotSupported: 'FileReader ni podprt v tem brskalniku.',
+                errInvalidImage: 'Neveljavna datoteka s sliko.'
             },
             tr: {
                 base64: 'Base64 olarak resim',
@@ -150,6 +164,7 @@
                                         if (isValidImage(e.target.result)) {
                                             trumbowyg.execCmd('insertImage', fReader.result, false, true);
                                             $(['img[src="', fReader.result, '"]:not([alt])'].join(''), trumbowyg.$box).attr('alt', values.alt);
+                                            trumbowyg.syncCode();
                                             trumbowyg.closeModal();
                                         } else {
                                             trumbowyg.addErrorOnModalField(

@@ -19,6 +19,11 @@
                 rubyModal: 'Ruby modal',
                 rubyText: 'Ruby text'
             },
+            az: {
+                ruby: 'Ruby mətni əlavə et',
+                rubyModal: 'Ruby modal',
+                rubyText: 'Ruby mətni'
+            },
             by: {
                 ruby: 'Уставіць ruby тэкст',
                 rubyModal: 'Ruby анатацыя',
@@ -28,6 +33,11 @@
                 ruby: 'Tilføj ruby tekst',
                 rubyModal: 'Ruby modal',
                 rubyText: 'Ruby tekst'
+            },
+            de: {
+                ruby: 'Ruby-Text einfügen',
+                rubyModal: 'Ruby-Modal',
+                rubyText: 'Ruby-Text'
             },
             et: {
                 ruby: 'Lisa ruby tekst',
