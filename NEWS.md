@@ -2,6 +2,7 @@ Version 2.6.0   -
   - Use AWS 24.0 from Alire
   - Cleanup build environment to drop configure
   - Update EasyMDE to version 2.20.0
+  - Update Trumbowyg to version 2.31.0
 
 Version 2.5.0   - Sep 2023
   - Feature #22: Add command line support to register a new user
