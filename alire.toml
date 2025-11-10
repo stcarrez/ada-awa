@@ -62,13 +62,6 @@ project-files = [
 "plugins/awa-sysadmin/awa_sysadmin.gpr"
 ]
 
-[available.'case(os)']
-linux = true
-freebsd = true
-windows = false
-macos = false
-'...' = false
-
 [[depends-on]]
 utilada = "^2.8.0"
 utilada_xml = "^2.8.0"
