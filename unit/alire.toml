@@ -42,7 +42,7 @@ project-files = ["awa_unit.gpr"]
 [[depends-on]]
 awa = "^2.6.0"
 serverfaces_unit = "^1.6.0"
-servletada_unit = "^1.7.0"
+servletada_unit = "^1.8.0"
 
 [gpr-externals]
 AWA_LIBRARY_TYPE = ["relocatable", "static", "static-pic"]
@@ -53,3 +53,5 @@ disabled = true
 
 [[pins]]
 awa = { path = '..' }
+serverfaces_unit = { path = '../ada-asf/unit' }
+servletada_unit = { path = '../ada-servlet/unit' }

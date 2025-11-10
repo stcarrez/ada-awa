@@ -12,11 +12,11 @@ maintainers-logins = ["stcarrez"]
 project-files = ["awa_tests.gpr"]
 
 [[depends-on]]
-awa = "^2.5.0"
-awa_unit = "^2.5.0"
-ado_all = "^2.4.0"
+awa = "^2.6.0"
+awa_unit = "^2.6.0"
+ado_all = "^2.5.0"
 serverfaces_unit = "^1.6.0"
-servletada_unit = "^1.7.0"
+servletada_unit = "^1.8.0"
 
 [gpr-externals]
 AWA_LIBRARY_TYPE = ["relocatable", "static", "static-pic"]
@@ -28,3 +28,6 @@ disabled = true
 [[pins]]
 awa = { path = '..' }
 awa_unit = { path = '../unit' }
+utilada_unit = { path = '../ada-util/unit' }
+serverfaces_unit = { path = '../ada-asf/unit' }
+servletada_unit = { path = '../ada-servlet/unit' }
