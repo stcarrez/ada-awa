@@ -34,9 +34,11 @@ DEFAULT_ADA_PROJECT_PATH?=$(SRC_ROOT):$(ADA_PROJECT_PATH)
 ifeq ($(HAVE_ALIRE),yes)
 BUILD_COMMAND?=$(ALR) build --
 GNATPREP?=$(ALR) exec -- gnatprep
+RUN_COMMAND?=$(ALR) exec --
 else
 BUILD_COMMAND?=env ADA_PROJECT_PATH="$(DEFAULT_ADA_PROJECT_PATH)" $(GPRBUILD)
 GNATPREP?=gnatprep
+RUN_COMMAND?=
 endif
 
 ifeq (${OS},Windows_NT)
@@ -87,7 +89,7 @@ endif
 
 # Clean the root project of all build products.
 clean::
-	-rm -rf lib obj bin $(CLEAN_FILES)
+	-rm -rf lib obj bin alire $(CLEAN_FILES)
 	-rm -rf regtests/result
 
 dist-clean:: clean
