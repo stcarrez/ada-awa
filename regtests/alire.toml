@@ -28,6 +28,7 @@ disabled = true
 [[pins]]
 awa = { path = '..' }
 awa_unit = { path = '../unit' }
+ado_all = { path = '../ada-ado/drivers' }
 utilada_unit = { path = '../ada-util/unit' }
 serverfaces_unit = { path = '../ada-asf/unit' }
 servletada_unit = { path = '../ada-servlet/unit' }
