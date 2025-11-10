@@ -1,6 +1,6 @@
 description = "Ada Web Application unit tests"
 name = "awa_tests"
-version = "2.5.0"
+version = "2.6.0"
 tags = ["web", "users", "jobs", "framework", "testing"]
 website = "https://gitlab.com/stcarrez/ada-awa"
 
@@ -12,9 +12,11 @@ maintainers-logins = ["stcarrez"]
 project-files = ["awa_tests.gpr"]
 
 [[depends-on]]
-awa = "^2.6.0"
-awa_unit = "^2.6.0"
+awa = "*"
+awa_unit = "*"
 ado_all = "^2.5.0"
+ado_sqlite = "^2.5.0"
+ado_mysql = "^2.5.0"
 serverfaces_unit = "^1.6.0"
 servletada_unit = "^1.8.0"
 
@@ -28,6 +30,8 @@ disabled = true
 [[pins]]
 awa = { path = '..' }
 awa_unit = { path = '../unit' }
+ado_mysql = { path = '../ada-ado/mysql' }
+ado_sqlite = { path = '../ada-ado/sqlite' }
 ado_all = { path = '../ada-ado/drivers' }
 utilada_unit = { path = '../ada-util/unit' }
 serverfaces_unit = { path = '../ada-asf/unit' }
