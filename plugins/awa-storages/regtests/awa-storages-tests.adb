@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-tests -- Unit tests for storages module
---  Copyright (C) 2018, 2019, 2020, 2021, 2023 Stephane Carrez
+--  Copyright (C) 2018, 2019, 2020, 2021, 2023, 2025 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -11,7 +11,7 @@ with Util.Test_Caller;
 
 with ASF.Tests;
 with AWA.Tests.Helpers.Users;
-with Servlet.requests.Mockup;
+with Servlet.Requests.Mockup;
 with Servlet.Responses.Mockup;
 
 package body AWA.Storages.Tests is

@@ -1,13 +1,13 @@
 -----------------------------------------------------------------------
 --  awa-wikis-tests -- Unit tests for wikis module
---  Copyright (C) 2018, 2020 Stephane Carrez
+--  Copyright (C) 2018, 2020, 2025 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
 
 with Util.Tests;
 with AWA.Tests;
-with Servlet.requests.Mockup;
+with Servlet.Requests.Mockup;
 with Servlet.Responses.Mockup;
 with Ada.Strings.Unbounded;
 

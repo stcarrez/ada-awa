@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-commands-tests -- Test the AWA.Commands
---  Copyright (C) 2020, 2022, 2023 Stephane Carrez
+--  Copyright (C) 2020, 2022, 2023, 2025 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -222,7 +222,7 @@ package body AWA.Commands.Tests is
          ASF.Tests.Do_Get (Request, Reply, "/auth/validate/" & Access_Key,
                            "validate-user.html");
 
-         Util.Tests.Assert_Equals (T, ASF.Responses.Sc_Moved_Temporarily, Reply.Get_Status,
+         Util.Tests.Assert_Equals (T, ASF.Responses.SC_MOVED_TEMPORARILY, Reply.Get_Status,
                                       "Invalid response");
          ASF.Tests.Assert_Redirect (T, "/asfunit/auth/change-password/" & Access_Key,
                                     Reply, "Invalid redirect after verify");
@@ -239,7 +239,7 @@ package body AWA.Commands.Tests is
          ASF.Tests.Do_Post (Request, Reply, "/auth/change-password/" & Access_Key,
                             "reset-password-3.html");
 
-         Util.Tests.Assert_Equals (T, ASF.Responses.Sc_Moved_Temporarily, Reply.Get_Status,
+         Util.Tests.Assert_Equals (T, ASF.Responses.SC_MOVED_TEMPORARILY, Reply.Get_Status,
                                       "Invalid response");
          ASF.Tests.Assert_Redirect (T, "/asfunit/workspaces/main.html",
                                     Reply, "Invalid redirect after change-password");

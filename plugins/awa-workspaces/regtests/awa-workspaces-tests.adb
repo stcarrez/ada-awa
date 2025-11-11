@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-workspaces-tests -- Unit tests for workspaces and invitations
---  Copyright (C) 2017, 2018, 2023 Stephane Carrez
+--  Copyright (C) 2017, 2018, 2023, 2025 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -56,7 +56,7 @@ package body AWA.Workspaces.Tests is
       ASF.Tests.Assert_Contains (T, "This invitation is invalid or has expired", Reply,
                                  "This invitation is invalid (key)");
 
-      ASF.Tests.Do_Get (Request, Reply, "/auth/invitation/x" & key,
+      ASF.Tests.Do_Get (Request, Reply, "/auth/invitation/x" & Key,
                         "invitation-bad2.html");
       ASF.Tests.Assert_Contains (T, "This invitation is invalid or has expired",
                                  Reply, "This invitation is invalid (key)");
@@ -104,7 +104,7 @@ package body AWA.Workspaces.Tests is
       T.Invite_Id := Invite.Get_Id;
       T.Verify_Anonymous (Invite.Get_Access_Key.Get_Access_Key);
 
-      T.Member_ID := Invite.Get_Member.Get_Id;
+      T.Member_Id := Invite.Get_Member.Get_Id;
    end Test_Invite_User;
 
    --  ------------------------------
