@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-questions-beans -- Beans for module questions
---  Copyright (C) 2012, 2013, 2015, 2017, 2018, 2022 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2015, 2017, 2018, 2022, 2025 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -164,7 +164,7 @@ package body AWA.Questions.Beans is
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       Found : Boolean;
    begin
-      if not Bean.is_Null and then Bean.Get_Id /= ADO.NO_IDENTIFIER then
+      if not Bean.Is_Null and then Bean.Get_Id /= ADO.NO_IDENTIFIER then
          Bean.Service.Load_Answer (Bean, Bean.Question, Bean.Get_Id, Found);
       elsif not Bean.Question.Is_Null and then Bean.Question.Get_Id /= ADO.NO_IDENTIFIER then
          Bean.Service.Load_Question (Bean.Question, Bean.Question_Id, Found);

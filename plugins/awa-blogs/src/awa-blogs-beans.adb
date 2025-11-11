@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-beans -- Beans for blog module
---  Copyright (C) 2011 - 2023 Stephane Carrez
+--  Copyright (C) 2011 - 2025 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -279,7 +279,6 @@ package body AWA.Blogs.Beans is
       pragma Unreferenced (Event);
 
       Result  : ADO.Identifier;
-      pragma Unreferenced (Result);
    begin
       Bean.Module.Create_Blog (Title        => Bean.Get_Name,
                                Result       => Result);

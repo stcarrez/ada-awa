@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-setup -- Setup and installation
---  Copyright (C) 2016, 2017, 2018, 2020, 2022, 2023 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2018, 2020, 2022, 2023, 2025 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -339,8 +339,8 @@ package body AWA.Setup.Applications is
             end if;
 
             if Config.Get_Driver in "mysql" | "postgresql" then
-               Admin.Set_Property ("user", Ubo.To_String (From.Root_User));
-               Admin.Set_Property ("password", Ubo.To_String (From.Root_Passwd));
+               Admin.Set_Property ("user", UBO.To_String (From.Root_User));
+               Admin.Set_Property ("password", UBO.To_String (From.Root_Passwd));
 
             elsif Config.Get_Driver /= "sqlite" then
                Log.Error ("Database driver {0} is not supported.", Config.Get_Driver);
