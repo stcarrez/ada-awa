@@ -9,6 +9,7 @@ with "asf_unit";
 with "ado";
 with "ado_all";
 with "awa";
+with "awa_config";
 with "awa_unit";
 with "awa_workspaces";
 with "awa_counters";
@@ -29,6 +30,9 @@ with "awa_setup";
 with "awa_sysadmin";
 
 project Awa_Tests is
+
+   Library_Type : Awa_Config.Library_Type_Type := external ("AWA_LIBRARY_TYPE", "static");
+   Exec_Dir     := Awa_Config'Exec_Dir & "/bin";
 
    for Languages use ("Ada");
 
@@ -53,8 +57,9 @@ project Awa_Tests is
    for Object_Dir use "../obj/awa_tests";
    for Exec_Dir use "../bin";
 
-   package Binder renames Awa.Binder;
-   package Builder renames Awa.Builder;
-   package Compiler renames Awa.Compiler;
+   package Binder renames Awa_Config.Binder;
+   package Builder renames Awa_Config.Builder;
+   package Compiler renames Awa_Config.Compiler;
+   package Linker renames Awa_Config.Linker;
 
 end Awa_Tests;
