@@ -70,10 +70,10 @@ wikiada = "^1.5.0"
 elada = "^1.8.6"
 security = "^1.5.0"
 serverfaces = "^1.6.0"
-servletada = "^1.7.0"
+servletada = "^1.8.0"
 keystoreada = "^1.4.0"
-openapi = "~0.7.0"
-openapi_server = "~0.7.0"
+openapi = "~0.9.0"
+openapi_server = "~0.9.0"
 aws = "^24.0|^25.0"
 
 [[actions]]
