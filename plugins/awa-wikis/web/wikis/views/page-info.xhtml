@@ -1,5 +1,5 @@
 <!-- Information about a wiki page
-  -  Copyright (C) 2016, 2017, 2018, 2023 Stephane Carrez
+  -  Copyright (C) 2016, 2017, 2018, 2023, 2026 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -  SPDX-License-Identifier: Apache-2.0
   -->
@@ -52,16 +52,16 @@
         <div id="page-stats" class="wiki-post-graph"/>
         <h:panelGroup rendered="#{wikiPageInfo.templates.count ne 0}">
             <h3 class="wiki-info">#{wikiMsg.wiki_info_templates_label}</h3>
-            <div id="wiki-link-list" class="awa-list">
+            <div class="awa-list wiki-link-list">
                 <ui:include src="../lists/templates.xhtml"/>
             </div>
         </h:panelGroup>
         <h3 class="wiki-info">#{wikiMsg.wiki_info_pages_label}</h3>
-        <div id="wiki-link-list" class="awa-list">
+        <div class="awa-list wiki-link-list">
             <ui:include src="../lists/pages.xhtml"/>
         </div>
         <h3 class="wiki-info">#{wikiMsg.wiki_info_links_label}</h3>
-        <div id="wiki-link-list" class="awa-list">
+        <div class="awa-list wiki-link-list">
             <ui:include src="../lists/links.xhtml"/>
         </div>
         <h:panelGroup rendered="#{wikiPageInfo.images.count ne 0}">

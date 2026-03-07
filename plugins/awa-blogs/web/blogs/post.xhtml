@@ -1,5 +1,5 @@
 <!-- View a single post
-  -  Copyright (C) 2014 - 2023 Stephane Carrez
+  -  Copyright (C) 2014 - 2026 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -  SPDX-License-Identifier: Apache-2.0
   -->
@@ -105,15 +105,15 @@
     </ui:define>
 
     <ui:define name="pageScript">
-      <script type="text/javascript" src="#{contextPath}/js/highlight.pack.js"></script>
+      <script src="#{contextPath}/js/highlight.pack.js"></script>
       <script>hljs.initHighlightingOnLoad();</script>
       <c:if test="#{user.isLogged}">
-        <script type="text/javascript" src="#{jquery.path}"></script>
-        <script type="text/javascript" src="#{jquery.uiPath}core.js"></script>
-        <script type="text/javascript" src="#{jquery.uiPath}widget.js"></script>
-        <script type="text/javascript" src="#{contextPath}/js/asf.js"></script>
-        <script type="text/javascript" src="#{contextPath}/js/asf-message.js"></script>
-        <script type="text/javascript" src="#{contextPath}/js/awa.js"></script>
+        <script src="#{jquery.path}"></script>
+        <script src="#{jquery.uiPath}core.js"></script>
+        <script src="#{jquery.uiPath}widget.js"></script>
+        <script src="#{contextPath}/js/asf.js"></script>
+        <script src="#{contextPath}/js/asf-message.js"></script>
+        <script src="#{contextPath}/js/awa.js"></script>
       </c:if>
     </ui:define>
 

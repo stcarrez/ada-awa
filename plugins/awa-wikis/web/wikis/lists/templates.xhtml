@@ -1,5 +1,5 @@
 <!-- List of templates used in a wiki page
-  -  Copyright (C) 2016 Stephane Carrez
+  -  Copyright (C) 2016, 2026 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -  SPDX-License-Identifier: Apache-2.0
   -->
@@ -11,7 +11,7 @@
 	    xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
     <h:list var="link" value="#{wikiPageInfo.templates}">
-        <div class='wiki-info-link' id="t_#{wikiPageInfo.templates.rowIndex}">
+        <div class='wiki-info-link'>
             <div class='awa-list-col wiki-link-name'>
                 <a href="#{contextPath}/wikis/view/#{wikiPageInfo.wiki_id}/#{link.name}">#{link.name}</a>
             </div>

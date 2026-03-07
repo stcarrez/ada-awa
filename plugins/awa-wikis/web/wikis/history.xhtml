@@ -1,5 +1,5 @@
 <!-- List the wiki pages
-  -  Copyright (C) 2015 - 2023 Stephane Carrez
+  -  Copyright (C) 2015 - 2026 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -  SPDX-License-Identifier: Apache-2.0
   -->
@@ -11,6 +11,11 @@
                 xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
                 xmlns:util="http://code.google.com/p/ada-asf/util"
                 xmlns:h="http://java.sun.com/jsf/html">
+  <ui:define name="pageTitle">
+    <h:outputFormat value="History of page: {0}">
+      <f:param value="#{wikiView.title}"/>
+    </h:outputFormat>
+  </ui:define>
     <ui:param name="title" value="#{wikiMsg.wiki_history_list_title}"/>
     <ui:param name="pageStyle" value="page-wiki"/>
 

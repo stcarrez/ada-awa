@@ -1,6 +1,6 @@
 /**
  * wikis.css - Styles for wikis module
- * Copyright (C) 2011-2024 Stephane Carrez
+ * Copyright (C) 2011-2026 Stephane Carrez
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
 .wiki-page-container,
@@ -276,6 +276,10 @@
     float: right;
     padding-left: 1em;
 }
+.wiki-img-center {
+    display: block;
+    width: 100%;
+}
 .wiki-info {
     padding-top: 1em;
     float: left;
@@ -377,8 +381,18 @@
 }
 .wiki-toc,
 .wiki-img-thumb,
-.wiki-img-caption {
-    border: 1px solid #AAA;
+.wiki-img-caption,
+.wiki-img-right figurecaption,cp 
+.wiki-img-left figurecaption,
+.wiki-img-center figurecaption {
+    /*border: 1px solid #AAA; */
+    text-align: center;
+    width: 80%;
+    margin: auto;
+    display: block;
+}
+.wiki-img-center img {
+    margin: auto;
 }
 .wiki-image-grid span {
     border: 1px solid #ccc;
