@@ -4,6 +4,7 @@ with "awa_tags";
 with "awa_comments";
 with "awa_images";
 with "awa_counters";
+with "awa_seo";
 library project Awa_Blogs is
    Version      := Awa.Version;
    Name         := "awa_blogs";

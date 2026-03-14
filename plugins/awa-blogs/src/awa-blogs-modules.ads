@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-module -- Blog and post management module
---  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2017, 2018, 2019, 2020 Stephane Carrez
+--  Copyright (C) 2011 - 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -15,8 +15,10 @@ with AWA.Modules;
 with AWA.Blogs.Models;
 with AWA.Counters.Definition;
 with AWA.Blogs.Servlets;
+with AWA.SEO;
 
 with Security.Permissions;
+private with EL.Expressions;
 
 --  == Integration ==
 --  To be able to use the `Blogs` module, you will need to add the following line in your
@@ -42,12 +44,20 @@ with Security.Permissions;
 --              URI    => "blogs",
 --              Module => App.Blog_Module'Access);
 --
+--  == Configuration ==
+--  The `Blogs` module defines the following configuration parameters:
+--
+--  @include-config blogs.xml
 package AWA.Blogs.Modules is
 
    NAME : constant String := "blogs";
 
    --  The configuration parameter that defines the image link prefix in rendered HTML content.
    PARAM_IMAGE_PREFIX : constant String := "image_prefix";
+
+   --  The configuration parameter that defines the EL expression to create the
+   --  sitemap post URI.
+   PARAM_POST_URI     : constant String := "post_uri";
 
    --  Define the permissions.
    package ACL_Create_Blog is new Security.Permissions.Definition ("blog-create");
@@ -64,7 +74,8 @@ package AWA.Blogs.Modules is
 
    Not_Found : exception;
 
-   type Blog_Module is new AWA.Modules.Module with private;
+   type Blog_Module is new AWA.Modules.Module
+     and AWA.SEO.Sitemap_Provider with private;
    type Blog_Module_Access is access all Blog_Module'Class;
 
    --  Initialize the blog module.
@@ -129,11 +140,17 @@ package AWA.Blogs.Modules is
                          Date     : out Ada.Calendar.Time;
                          Into     : out ADO.Blob_Ref);
 
+   overriding
+   procedure Create_Sitemap (Provider : in Blog_Module;
+                             Sitemap  : in out AWA.SEO.Sitemap_Info);
+
 private
 
-   type Blog_Module is new AWA.Modules.Module with record
-      Image_Prefix : Wiki.Strings.UString;
+   type Blog_Module is new AWA.Modules.Module
+     and AWA.SEO.Sitemap_Provider with record
+      Image_Prefix  : Wiki.Strings.UString;
       Image_Servlet : aliased AWA.Blogs.Servlets.Image_Servlet;
+      Post_URI      : EL.Expressions.Expression;
    end record;
 
 end AWA.Blogs.Modules;

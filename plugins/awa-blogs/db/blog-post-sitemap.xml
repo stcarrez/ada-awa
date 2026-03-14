@@ -1,0 +1,47 @@
+<query-mapping package='AWA.Blogs.Models'>
+    <description>
+      Queries used to create the post sitemap.
+    </description>
+
+    <class name="AWA.Blogs.Models.Sitemap_Info" bean="yes">
+        <comment>The Post_Info describes a post to be displayed in the blog page</comment>
+        <property type='Identifier' name="id">
+            <comment>the post identifier.</comment>
+        </property>
+        <property type='Date' name="date">
+            <comment>the post publish date.</comment>
+        </property>
+        <property type='String' name="uri">
+            <comment>the post base URI.</comment>
+        </property>
+        <property type='Identifier' name="image_id">
+            <comment>the image identifier.</comment>
+        </property>
+        <property type='String' name="image_title">
+            <comment>the image title.</comment>
+        </property>
+    </class>
+
+    <query name='blog-post-sitemap'>
+       <comment>Get the list of post to create the sitemap</comment>
+       <sql>
+    SELECT
+      post.id,
+      post.publish_date,
+      post.uri,
+      img.id,
+      COALESCE(store.name, '')
+    FROM awa_post AS post
+    LEFT JOIN awa_image AS img ON post.image_id = img.id
+    LEFT JOIN awa_storage AS store ON img.storage_id = store.id
+    WHERE post.status = 1 ORDER BY post.id DESC;
+       </sql>
+       <sql-count>
+    SELECT
+      count(post.id)
+    FROM awa_post AS post
+    WHERE post.status = 1
+       </sql-count>
+    </query>
+
+</query-mapping>

@@ -9,6 +9,18 @@
     </description>
   </context-param>
 
+  <context-param>
+    <param-name>blogs.post_uri</param-name>
+    <param-value>#{app_url_base}/blogs/posts/\#{uri}</param-value>
+    <description>
+      The post URI to write in generated sitemaps.  The URI must be absolute and
+      specify the host and domain.  This EL expression is evaluated twice: a first time
+      during application setup and a second time for each URI that must be generated.
+      The blog post base URI is defined in the variable #{uri} (be careful to escape
+      the '#' by using \#{uri} due to the double EL evaluation).
+    </description>
+  </context-param>
+
   <managed-bean>
     <description>This bean describes a blog post for the creation or the update</description>
     <managed-bean-name>post</managed-bean-name>

@@ -5,8 +5,9 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://github.com/stcarrez/dynamo Version 1.4.0
 -----------------------------------------------------------------------
---  Copyright (C) 2023 Stephane Carrez
+--  Copyright (C) 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+--
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
 pragma Warnings (Off);
@@ -2014,6 +2015,92 @@ package body AWA.Blogs.Models is
    begin
       Stmt.Execute;
       Post_Info_Vectors.Clear (Object);
+      while Stmt.Has_Elements loop
+         Object.Insert_Space (Before => Pos);
+         Object.Update_Element (Index => Pos, Process => Read'Access);
+         Pos := Pos + 1;
+         Stmt.Next;
+      end loop;
+   end List;
+
+
+
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Sitemap_Info;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
+      elsif Name = "date" then
+         return Util.Beans.Objects.Time.To_Object (From.Date);
+      elsif Name = "uri" then
+         return Util.Beans.Objects.To_Object (From.Uri);
+      elsif Name = "image_id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Image_Id));
+      elsif Name = "image_title" then
+         return Util.Beans.Objects.To_Object (From.Image_Title);
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Sitemap_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "id" then
+         Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "date" then
+         Item.Date := Util.Beans.Objects.Time.To_Time (Value);
+      elsif Name = "uri" then
+         Item.Uri := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "image_id" then
+         Item.Image_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "image_title" then
+         Item.Image_Title := Util.Beans.Objects.To_Unbounded_String (Value);
+      end if;
+   end Set_Value;
+
+
+   --  --------------------
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   --  --------------------
+   procedure List (Object  : in out Sitemap_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+   begin
+      List (Object.List, Session, Context);
+   end List;
+
+   --  --------------------
+   --  The Post_Info describes a post to be displayed in the blog page
+   --  --------------------
+   procedure List (Object  : in out Sitemap_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+      procedure Read (Into : in out Sitemap_Info);
+
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Context);
+      Pos  : Positive := 1;
+      procedure Read (Into : in out Sitemap_Info) is
+      begin
+         Into.Id := Stmt.Get_Identifier (0);
+         Into.Date := Stmt.Get_Time (1);
+         Into.Uri := Stmt.Get_Unbounded_String (2);
+         Into.Image_Id := Stmt.Get_Identifier (3);
+         Into.Image_Title := Stmt.Get_Unbounded_String (4);
+      end Read;
+   begin
+      Stmt.Execute;
+      Sitemap_Info_Vectors.Clear (Object);
       while Stmt.Has_Elements loop
          Object.Insert_Space (Before => Pos);
          Object.Update_Element (Index => Pos, Process => Read'Access);

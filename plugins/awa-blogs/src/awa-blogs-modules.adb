@@ -9,6 +9,9 @@ with Util.Log.Loggers;
 with Util.Beans.Objects;
 with Util.Beans.Basic;
 
+with EL.Contexts.Default;
+with EL.Variables.Default;
+
 with AWA.Modules.Get;
 with AWA.Modules.Beans;
 with AWA.Blogs.Beans;
@@ -24,10 +27,12 @@ with AWA.Storages.Services;
 with ADO.Objects;
 with ADO.Sessions;
 with ADO.Statements;
+with ADO.Queries;
 
 package body AWA.Blogs.Modules is
 
    package ASC renames AWA.Services.Contexts;
+   package UBO renames Util.Beans.Objects;
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Blogs.Module");
 
@@ -94,6 +99,8 @@ package body AWA.Blogs.Modules is
       Image_Prefix : constant String := Plugin.Get_Config (PARAM_IMAGE_PREFIX);
    begin
       Plugin.Image_Prefix := Wiki.Strings.To_UString (Wiki.Strings.To_WString (Image_Prefix));
+      Plugin.Post_URI := Plugin.Get_Config (PARAM_POST_URI);
+      AWA.SEO.Register ("blog-sitemap.xml", Plugin'Unchecked_Access);
    end Configure;
 
    --  ------------------------------
@@ -382,5 +389,33 @@ package body AWA.Blogs.Modules is
          end;
       end if;
    end Load_Image;
+
+   overriding
+   procedure Create_Sitemap (Provider : in Blog_Module;
+                             Sitemap  : in out AWA.SEO.Sitemap_Info) is
+      DB    : ADO.Sessions.Session := Provider.Get_Session;
+      Query : ADO.Queries.Context;
+      List  : AWA.Blogs.Models.Sitemap_Info_Vector;
+      Ctx       : EL.Contexts.Default.Default_Context;
+      Variables : aliased EL.Variables.Default.Default_Variable_Mapper;
+   begin
+      Ctx.Set_Variable_Mapper (Variables'Unchecked_Access);
+      Query.Set_Query (AWA.Blogs.Models.Query_Blog_Post_Sitemap);
+      AWA.Blogs.Models.List (List, DB, Query);
+      Sitemap.Entries.Clear;
+      for Info of List loop
+         Variables.Bind ("uri", UBO.To_Object (Info.URI));
+         declare
+            Item : AWA.SEO.Sitemap_Entry;
+            URI  : constant Util.Beans.Objects.Object
+              := Provider.Post_URI.Get_Value (Ctx);
+         begin
+            Item.Location := UBO.To_Unbounded_String (URI);
+            Item.Date := Info.Date;
+            Item.Priority := 0;
+            Sitemap.Entries.Append (Item);
+         end;
+      end loop;
+   end Create_Sitemap;
 
 end AWA.Blogs.Modules;

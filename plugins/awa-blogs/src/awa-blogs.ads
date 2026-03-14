@@ -18,6 +18,7 @@
 --  * the [Tags Module] to associate one or several tags to a blog post,
 --  * the [Comments Module] to allow users to write comments on a blog post,
 --  * the [Images Module] to easily add images in blog post.
+--  * the [SEO Module] for the generation of sitemap entries for the blog posts.
 --
 --  @include awa-blogs-modules.ads
 --  @include awa-blogs-beans.ads

@@ -5,8 +5,9 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://github.com/stcarrez/dynamo Version 1.4.0
 -----------------------------------------------------------------------
---  Copyright (C) 2023 Stephane Carrez
+--  Copyright (C) 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+--
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
 pragma Warnings (Off);
@@ -419,14 +420,14 @@ package AWA.Blogs.Models is
 
 
 
+   Query_Blog_Tag_Cloud : constant ADO.Queries.Query_Definition_Access;
+
+
    Query_Blog_Image_Get_Data : constant ADO.Queries.Query_Definition_Access;
 
    Query_Blog_Image_Width_Get_Data : constant ADO.Queries.Query_Definition_Access;
 
    Query_Blog_Image_Height_Get_Data : constant ADO.Queries.Query_Definition_Access;
-
-
-   Query_Blog_Tag_Cloud : constant ADO.Queries.Query_Definition_Access;
 
    --  --------------------
    --    The Admin_Post_Info describes a post in the administration interface.
@@ -800,6 +801,61 @@ package AWA.Blogs.Models is
 
    Query_Blog_Post_Tag_List : constant ADO.Queries.Query_Definition_Access;
 
+   --  --------------------
+   --    The Post_Info describes a post to be displayed in the blog page
+   --  --------------------
+   type Sitemap_Info is
+     new Util.Beans.Basic.Bean with  record
+
+      --  the post identifier.
+      Id : ADO.Identifier;
+
+      --  the post publish date.
+      Date : Ada.Calendar.Time;
+
+      --  the post base URI.
+      Uri : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the image identifier.
+      Image_Id : ADO.Identifier;
+
+      --  the image title.
+      Image_Title : Ada.Strings.Unbounded.Unbounded_String;
+   end record;
+
+   --  Get the bean attribute identified by the name.
+   overriding
+   function Get_Value (From : in Sitemap_Info;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Sitemap_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+
+   package Sitemap_Info_Beans is
+      new Util.Beans.Basic.Lists (Element_Type => Sitemap_Info);
+   package Sitemap_Info_Vectors renames Sitemap_Info_Beans.Vectors;
+   subtype Sitemap_Info_List_Bean is Sitemap_Info_Beans.List_Bean;
+
+   type Sitemap_Info_List_Bean_Access is access all Sitemap_Info_List_Bean;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Sitemap_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   subtype Sitemap_Info_Vector is Sitemap_Info_Vectors.Vector;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Sitemap_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   Query_Blog_Post_Sitemap : constant ADO.Queries.Query_Definition_Access;
+
 
    --  --------------------
    --    load the blog instance.
@@ -1134,36 +1190,36 @@ private
                         Impl   : out Post_Access);
 
    package File_1 is
-      new ADO.Queries.Loaders.File (Path => "blog-images.xml",
-                                    Sha1 => "9B2B599473F75F92CB5AB5045675E4CCEF926543");
-
-   package Def_Blog_Image_Get_Data is
-      new ADO.Queries.Loaders.Query (Name => "blog-image-get-data",
-                                     File => File_1.File'Access);
-   Query_Blog_Image_Get_Data : constant ADO.Queries.Query_Definition_Access
-   := Def_Blog_Image_Get_Data.Query'Access;
-
-   package Def_Blog_Image_Width_Get_Data is
-      new ADO.Queries.Loaders.Query (Name => "blog-image-width-get-data",
-                                     File => File_1.File'Access);
-   Query_Blog_Image_Width_Get_Data : constant ADO.Queries.Query_Definition_Access
-   := Def_Blog_Image_Width_Get_Data.Query'Access;
-
-   package Def_Blog_Image_Height_Get_Data is
-      new ADO.Queries.Loaders.Query (Name => "blog-image-height-get-data",
-                                     File => File_1.File'Access);
-   Query_Blog_Image_Height_Get_Data : constant ADO.Queries.Query_Definition_Access
-   := Def_Blog_Image_Height_Get_Data.Query'Access;
-
-   package File_2 is
       new ADO.Queries.Loaders.File (Path => "blog-tags.xml",
                                     Sha1 => "9B2B599473F75F92CB5AB5045675E4CCEF926543");
 
    package Def_Blog_Tag_Cloud is
       new ADO.Queries.Loaders.Query (Name => "blog-tag-cloud",
-                                     File => File_2.File'Access);
+                                     File => File_1.File'Access);
    Query_Blog_Tag_Cloud : constant ADO.Queries.Query_Definition_Access
    := Def_Blog_Tag_Cloud.Query'Access;
+
+   package File_2 is
+      new ADO.Queries.Loaders.File (Path => "blog-images.xml",
+                                    Sha1 => "9B2B599473F75F92CB5AB5045675E4CCEF926543");
+
+   package Def_Blog_Image_Get_Data is
+      new ADO.Queries.Loaders.Query (Name => "blog-image-get-data",
+                                     File => File_2.File'Access);
+   Query_Blog_Image_Get_Data : constant ADO.Queries.Query_Definition_Access
+   := Def_Blog_Image_Get_Data.Query'Access;
+
+   package Def_Blog_Image_Width_Get_Data is
+      new ADO.Queries.Loaders.Query (Name => "blog-image-width-get-data",
+                                     File => File_2.File'Access);
+   Query_Blog_Image_Width_Get_Data : constant ADO.Queries.Query_Definition_Access
+   := Def_Blog_Image_Width_Get_Data.Query'Access;
+
+   package Def_Blog_Image_Height_Get_Data is
+      new ADO.Queries.Loaders.Query (Name => "blog-image-height-get-data",
+                                     File => File_2.File'Access);
+   Query_Blog_Image_Height_Get_Data : constant ADO.Queries.Query_Definition_Access
+   := Def_Blog_Image_Height_Get_Data.Query'Access;
 
    package File_3 is
       new ADO.Queries.Loaders.File (Path => "blog-admin-post-list.xml",
@@ -1242,4 +1298,14 @@ private
                                      File => File_8.File'Access);
    Query_Blog_Post_Tag_List : constant ADO.Queries.Query_Definition_Access
    := Def_Postinfo_Blog_Post_Tag_List.Query'Access;
+
+   package File_9 is
+      new ADO.Queries.Loaders.File (Path => "blog-post-sitemap.xml",
+                                    Sha1 => "A5E7C20ACF470428EFDAFFC159BA84875A23EBA3");
+
+   package Def_Sitemapinfo_Blog_Post_Sitemap is
+      new ADO.Queries.Loaders.Query (Name => "blog-post-sitemap",
+                                     File => File_9.File'Access);
+   Query_Blog_Post_Sitemap : constant ADO.Queries.Query_Definition_Access
+   := Def_Sitemapinfo_Blog_Post_Sitemap.Query'Access;
 end AWA.Blogs.Models;
