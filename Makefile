@@ -49,6 +49,7 @@ DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/ada-ado:$(SRC_
 DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/ada-keystore
 DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/openapi-ada:$(SRC_ROOT)/openapi-ada/server
 DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/dynamo
+DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/plugins/awa-seo
 DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/plugins/awa-blogs:$(SRC_ROOT)/plugins/awa-changelogs
 DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/plugins/awa-comments:$(SRC_ROOT)/plugins/awa-counters
 DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/plugins/awa-countries:$(SRC_ROOT)/plugins/awa-images
@@ -128,7 +129,7 @@ $(eval $(call alire_publish,.alire/unit,aw/awa_unit,awa_unit-$(VERSION).toml))
 
 else
 
-PLUGINS=awa-workspaces awa-mail awa-counters awa-storages awa-images awa-comments \
+PLUGINS=awa-workspaces awa-mail awa-seo awa-counters awa-storages awa-images awa-comments \
         awa-jobs awa-votes awa-tags awa-flotcharts awa-wikis awa-blogs awa-markedit \
         awa-trumbowyg awa-questions \
 	awa-countries awa-settings awa-changelogs \
@@ -187,6 +188,8 @@ AWA_DOC= \
   AWA_Comments.md \
   pagebreak.tex \
   AWA_Settings.md \
+  pagebreak.tex \
+  AWA_SEO.md \
   pagebreak.tex \
   AWA_Setup.md \
   pagebreak.tex \

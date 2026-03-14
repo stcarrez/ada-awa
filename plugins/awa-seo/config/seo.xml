@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<module version="1.0">
+
+  <context-param>
+    <param-name>seo.sitemap_prefix</param-name>
+    <param-value>#{app_url_base}/sitemaps/</param-value>
+    <description>
+       The URL base prefix to be used for sitemap XML files.
+    </description>
+  </context-param>
+
+  <context-param>
+    <param-name>seo.sitemap_refresh</param-name>
+    <param-value>3600</param-value>
+    <description>
+      The cache delay in seconds before refreshing the sitemap and querying
+      the sitemap provider.
+    </description>
+  </context-param>
+
+  <servlet-mapping>
+    <servlet-name>sitemaps</servlet-name>
+    <url-pattern>/sitemaps/*</url-pattern>
+  </servlet-mapping>
+
+  <filter-mapping>
+    <filter-name>service</filter-name>
+    <url-pattern>/sitemaps/*</url-pattern>
+  </filter-mapping>
+
+</module>

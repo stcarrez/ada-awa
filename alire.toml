@@ -43,6 +43,7 @@ and it provides detailed description of AWA components:
 
 project-files = [
 "awa.gpr",
+"plugins/awa-seo/awa_seo.gpr",
 "plugins/awa-blogs/awa_blogs.gpr",
 "plugins/awa-settings/awa_settings.gpr",
 "plugins/awa-wikis/awa_wikis.gpr",
