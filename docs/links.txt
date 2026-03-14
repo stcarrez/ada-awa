@@ -19,3 +19,4 @@ Users Module               AWA_Users.md
 Wikis Module               AWA_Wikis.md
 Counters Module            AWA_Counters.md
 Settings Module            AWA_Settings.md
+SEO Module                 AWA_SEO.md

@@ -73,7 +73,7 @@ the OpenID integration.
 |users.auth_key|An authentication key used to sign the authentication cookies.|
 | |8ef60aad66977c68b12f4f8acab5a4e00a77f6e8|
 |users.allow_register|Allow users to register themselves on the server. When disabled, users can be created by the AWA 'user' command.|
-| |#{app_login_register}|
+| |#{not empty app_login_register ? app_login_register : true}|
 |openid.realm|The REALM URL used by OpenID providers to verify the validity of the verification callback.|
 | |#{app_url_base}/auth|
 |openid.callback_url|The verification callback URI used by the OpenID provider to redirect the user after authentication.|

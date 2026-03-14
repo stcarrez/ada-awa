@@ -53,7 +53,9 @@ The following global configuration parameter are defined:
 |app_url_base|The application URL base to use when building URL.|
 | |#{empty app_url_base ? 'http://localhost:8080' : app_url_base}|
 |app_oauth_url_base||
-| |http://localhost:8080|
+| |#{empty app_oauth_url_base ? 'http://localhost:8080' : app_oauth_url_base}|
+|app_page_500_report|Controls the level of information that is printed by the 500 error page when an error occurs. When `full`, report the full stack track if available, when `minimal` report minimal information but without a stack track, when 'none' don't give any information.|
+| |#{empty app_page_500_report ? 'full' : app_page_500_report}|
 |view.ext|Defines the extension used for [Ada Server Faces](https://github.com/stcarrez/ada-asf) presentation pages.|
 | |.html|
 |view.dir|Defines a list of paths separated by ';' where the XHTML files are searched. The default searches for the 'web' directory in the application search paths.|

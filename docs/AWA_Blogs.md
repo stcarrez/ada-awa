@@ -11,6 +11,7 @@ The `blogs` module uses several other modules:
 * the [Tags Module](AWA_Tags.md) to associate one or several tags to a blog post,
 * the [Comments Module](AWA_Comments.md) to allow users to write comments on a blog post,
 * the [Images Module](AWA_Images.md) to easily add images in blog post.
+* the [SEO Module](AWA_SEO.md) for the generation of sitemap entries for the blog posts.
 
 ## Integration
 To be able to use the `Blogs` module, you will need to add the following line in your
@@ -41,6 +42,16 @@ Register (App    => App.Self.all'Access,
           URI    => "blogs",
           Module => App.Blog_Module'Access);
 ```
+
+## Configuration
+The `Blogs` module defines the following configuration parameters:
+
+| Name                      | Description                                                    |
+|:--------------------------|:---------------------------------------------------------------|
+|blogs.image_prefix|The URL base prefix to be used for blog post images.|
+| |#{contextPath}/blogs/images/|
+|blogs.post_uri|The post URI to write in generated sitemaps. The URI must be absolute and specify the host and domain. This EL expression is evaluated twice: a first time during application setup and a second time for each URI that must be generated. The blog post base URI is defined in the variable #{uri} (be careful to escape the '#' by using \#{uri} due to the double EL evaluation).|
+| |#{app_url_base}/blogs/posts/\#{uri}|
 
 ## Ada Beans
 Several bean types are provided to represent and manage the blogs and their posts.

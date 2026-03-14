@@ -56,6 +56,7 @@ be plugged and used by functional components.
 * The [Comments Module](AWA_Comments.md) is a general purpose module that allows to associate user comments to any database entity,
 * The [Counters Module](AWA_Counters.md) defines a general purpose counter service allowing to associate counters to database entities,
 * The [Changelogs Module](AWA_Changelogs.md) associates logs produced by users to any database entity.
+* The [SEO Module](AWA_SEO.md) provides tools for search engine optimization (sitemap generation).
 
 ## Functional Components
 
