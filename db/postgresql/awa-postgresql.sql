@@ -1,4 +1,5 @@
 /* File generated automatically by dynamo */
+SET client_min_messages = warning;
 /* The Audit table records the changes made on database on behalf of a user.
 The record indicates the database table and row, the field being updated,
 the old and new value. The old and new values are converted to a string
@@ -295,5 +296,5 @@ INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_user'), 'status')
   ON CONFLICT DO NOTHING;
 INSERT INTO ado_version (name, version)
-  VALUES ("awa", 3)
+  VALUES ('awa', 3)
   ON CONFLICT DO NOTHING;
