@@ -44,6 +44,11 @@ private with EL.Expressions;
 --              URI    => "blogs",
 --              Module => App.Blog_Module'Access);
 --
+--  == Permissions ==
+--  Permissions are defined to control who is allowed to create, update and delete blog posts:
+--
+--  @include-permission blogs.xml
+--
 --  == Configuration ==
 --  The `Blogs` module defines the following configuration parameters:
 --

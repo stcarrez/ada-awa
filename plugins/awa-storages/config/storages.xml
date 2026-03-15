@@ -103,6 +103,10 @@
   <entity-permission>
     <name>folder-create</name>
     <entity-type>awa_workspace</entity-type>
+    <description>
+      This permission grants the creation of storage folder for the given user
+      in a specific workspace.
+    </description>
     <sql>
        SELECT acl.id FROM awa_acl AS acl
        INNER JOIN awa_workspace AS workspace ON workspace.owner_id = :user_id
@@ -116,6 +120,10 @@
   <entity-permission>
     <name>storage-create</name>
     <entity-type>awa_workspace</entity-type>
+    <description>
+      This permission grants the creation of storage file for the given user
+      in a specific workspace.
+    </description>
     <sql>
        SELECT acl.id FROM awa_acl AS acl
        WHERE acl.entity_type = :entity_type
@@ -128,6 +136,10 @@
   <entity-permission>
     <name>storage-delete</name>
     <entity-type>awa_workspace</entity-type>
+    <description>
+      This permission grants the deletion of storage files for the given user
+      in a specific workspace.
+    </description>
     <sql>
        SELECT acl.id FROM awa_storage
        INNER JOIN awa_acl AS acl ON acl.entity_id = awa_storage.workspace_id

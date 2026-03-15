@@ -46,6 +46,11 @@ with Wiki.Strings;
 --              URI    => "wikis",
 --              Module => App.Wiki_Module'Access);
 --
+--  == Permissions ==
+--  Permissions are defined to control who is allowed to create, update and delete wiki pages:
+--
+--  @include-permission wikis.xml
+--
 --  == Configuration ==
 --  @include-config wikis.xml
 --

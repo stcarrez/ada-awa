@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-workspaces-module -- Module workspaces
---  Copyright (C) 2011, 2012, 2017 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2017, 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -20,8 +20,43 @@ with AWA.Permissions.Services;
 with AWA.Events;
 private with Ada.Strings.Unbounded;
 
+--  == Integration ==
+--  To be able to use the `Workspaces` module, you will need to add the following
+--  line in your GNAT project file:
+--
+--    with "awa_workspaces";
+--
+--  The `Workspace_Module` manages the creation, invitation, administration of
+--  members which are allowed to access the application.  It provides operations
+--  that are used by the other modules to setup and control specific permissions
+--  associated to the workspace and granted to workspace members.
+--  An instance of the `Workspace_Module` must be declared and registered in the
+--  AWA application.  The module instance can be defined as follows:
+--
+--    with AWA.Workspaces.Modules;
+--    ...
+--    type Application is new AWA.Applications.Application with record
+--       Workspace_Module : aliased AWA.Workspaces.Modules.Workspace_Module;
+--    end record;
+--
+--  And registered in the `Initialize_Modules` procedure by using:
+--
+--    Register (App    => App.Self.all'Access,
+--              Name   => AWA.Workspaces.Modules.NAME,
+--              URI    => "workspaces",
+--              Module => App.Workspace_Module'Access);
+--
+--  == Permissions ==
+--  Permissions are defined to control who is allowed to create a workspace, invite members
+--  in a workspace for cooperation:
+--
+--  @include-permission workspaces.xml
+--
+--  == Configuration ==
+--  @include-config workspaces.xml
+--
 --  == Events ==
---  The *workspaces* module provides several events that are posted when some action are performed.
+--  The `Workspaces` module provides several events that are posted when some action are performed.
 --
 --  === invite-user ===
 --  This event is posted when an invitation is created for a user.  The event can be used to

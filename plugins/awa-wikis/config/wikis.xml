@@ -336,73 +336,85 @@
     </navigation-case>
   </navigation-rule>
 
-    <entity-permission>
-        <name>wiki-space-create</name>
-        <entity-type>awa_workspace</entity-type>
-        <sql>
-            SELECT acl.id FROM awa_acl AS acl
-            WHERE acl.entity_type = :entity_type
-            AND acl.user_id = :user_id
-            AND acl.entity_id = :entity_id
-            AND acl.permission = $permission[wiki-space-create]
-        </sql>
-    </entity-permission>
+  <entity-permission>
+    <name>wiki-space-create</name>
+    <entity-type>awa_workspace</entity-type>
+    <description>
+      Grants the creation of a wiki space for the given user
+      in a specific workspace.
+    </description>
+    <sql>
+      SELECT acl.id FROM awa_acl AS acl
+      WHERE acl.entity_type = :entity_type
+      AND acl.user_id = :user_id
+      AND acl.entity_id = :entity_id
+      AND acl.permission = $permission[wiki-space-create]
+    </sql>
+  </entity-permission>
 
-    <entity-permission>
-        <name>wiki-space-update</name>
-        <entity-type>awa_wiki_space</entity-type>
-        <description>Grant the edit permission on the wiki space owner only</description>
-        <sql>
-            SELECT acl.id FROM awa_acl AS acl
-            WHERE acl.entity_type = :entity_type
-            AND acl.user_id = :user_id
-            AND acl.entity_id = :entity_id
-            AND acl.permission = $permission[wiki-space-update]
-        </sql>
-    </entity-permission>
+  <entity-permission>
+    <name>wiki-space-update</name>
+    <entity-type>awa_wiki_space</entity-type>
+    <description>
+      Grants the edit permission on the wiki space owner only
+    </description>
+    <sql>
+      SELECT acl.id FROM awa_acl AS acl
+      WHERE acl.entity_type = :entity_type
+      AND acl.user_id = :user_id
+      AND acl.entity_id = :entity_id
+      AND acl.permission = $permission[wiki-space-update]
+    </sql>
+  </entity-permission>
 
-    <entity-permission>
-        <name>wiki-space-delete</name>
-        <entity-type>awa_wiki_space</entity-type>
-        <description>Grant the delete permission on the wiki space owner only</description>
-        <sql>
-            SELECT acl.id FROM awa_acl AS acl
-            WHERE acl.entity_type = :entity_type
-            AND acl.user_id = :user_id
-            AND acl.entity_id = :entity_id
-            AND acl.permission = $permission[wiki-space-delete]
-        </sql>
-    </entity-permission>
+  <entity-permission>
+    <name>wiki-space-delete</name>
+    <entity-type>awa_wiki_space</entity-type>
+    <description>
+      Granta the delete permission on the wiki space owner only
+    </description>
+    <sql>
+      SELECT acl.id FROM awa_acl AS acl
+      WHERE acl.entity_type = :entity_type
+      AND acl.user_id = :user_id
+      AND acl.entity_id = :entity_id
+      AND acl.permission = $permission[wiki-space-delete]
+    </sql>
+  </entity-permission>
 
-    <entity-permission>
-        <name>wiki-page-view</name>
-        <entity-type>awa_wiki_space</entity-type>
-        <description>Grant the view wiki page permission when the page is public
-                     or when an ACL link exist betwen the user and the wiki space</description>
-        <sql>
-       SELECT page.id FROM awa_wiki_page AS page
-       LEFT JOIN awa_acl AS acl ON acl.entity_type = :entity_type AND acl.entity_id = page.wiki_id AND acl.user_id = :user_id
-          AND acl.permission = $permission[wiki-page-view]
-       WHERE page.id = :entity_id AND (page.is_public OR acl.id IS NOT NULL)
-        </sql>
-    </entity-permission>
+  <entity-permission>
+    <name>wiki-page-view</name>
+    <entity-type>awa_wiki_space</entity-type>
+    <description>Grant the view wiki page permission when the page is public
+    or when an ACL link exist betwen the user and the wiki space</description>
+    <sql>
+      SELECT page.id FROM awa_wiki_page AS page
+      LEFT JOIN awa_acl AS acl ON acl.entity_type = :entity_type AND acl.entity_id = page.wiki_id AND acl.user_id = :user_id
+      AND acl.permission = $permission[wiki-page-view]
+      WHERE page.id = :entity_id AND (page.is_public OR acl.id IS NOT NULL)
+    </sql>
+  </entity-permission>
 
-    <entity-permission>
-        <name>wiki-page-create</name>
-        <entity-type>awa_wiki_space</entity-type>
-        <description>Grant the create wiki page permission when an ACL link exist betwen the user and the wiki space</description>
-        <sql>
-            SELECT acl.id FROM awa_acl AS acl
-            WHERE acl.entity_type = :entity_type
-            AND acl.user_id = :user_id
-            AND acl.entity_id = :entity_id
-            AND acl.permission = $permission[wiki-page-create]
-        </sql>
-    </entity-permission>
+  <entity-permission>
+    <name>wiki-page-create</name>
+    <entity-type>awa_wiki_space</entity-type>
+    <description>Grant the create wiki page permission when an ACL link exist betwen the user and the wiki space</description>
+    <sql>
+      SELECT acl.id FROM awa_acl AS acl
+      WHERE acl.entity_type = :entity_type
+      AND acl.user_id = :user_id
+      AND acl.entity_id = :entity_id
+      AND acl.permission = $permission[wiki-page-create]
+    </sql>
+  </entity-permission>
 
   <entity-permission>
     <name>wiki-page-update</name>
     <entity-type>awa_wiki_space</entity-type>
+    <description>
+      Grants the permission to edit the wiki page to the given user and for the
+      given wiki space.
+    </description>
     <sql>
        SELECT acl.id FROM awa_wiki_page AS page
        INNER JOIN awa_acl AS acl ON acl.entity_type = :entity_type AND acl.entity_id = page.wiki_id
@@ -415,6 +427,10 @@
   <entity-permission>
     <name>wiki-page-delete</name>
     <entity-type>awa_wiki_space</entity-type>
+    <description>
+      Grants the permission to delete the wiki page to the given user and for the
+      given wiki space.
+    </description>
     <sql>
        SELECT acl.id FROM awa_wiki_page AS page
        INNER JOIN awa_acl AS acl ON acl.entity_type = :entity_type AND acl.entity_id = page.wiki_id
