@@ -1,4 +1,5 @@
 /* File generated automatically by dynamo */
+SET client_min_messages = warning;
 /*  */
 CREATE TABLE IF NOT EXISTS awa_city (
   /* the city identifier */
@@ -67,5 +68,5 @@ INSERT INTO ado_entity_type (name) VALUES
 ('awa_city'), ('awa_country'), ('awa_country_neighbor'), ('awa_region')
   ON CONFLICT DO NOTHING;
 INSERT INTO ado_version (name, version)
-  VALUES ("awa-countries", 1)
+  VALUES ('awa-countries', 1)
   ON CONFLICT DO NOTHING;

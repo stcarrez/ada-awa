@@ -5,8 +5,9 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://github.com/stcarrez/dynamo Version 1.4.0
 -----------------------------------------------------------------------
---  Copyright (C) 2023 Stephane Carrez
+--  Copyright (C) 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+--
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
 pragma Warnings (Off);

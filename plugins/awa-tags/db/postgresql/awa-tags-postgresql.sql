@@ -1,4 +1,5 @@
 /* File generated automatically by dynamo */
+SET client_min_messages = warning;
 /* The tag definition. */
 CREATE TABLE IF NOT EXISTS awa_tag (
   /* the tag identifier */
@@ -24,5 +25,5 @@ INSERT INTO ado_entity_type (name) VALUES
 ('awa_tag'), ('awa_tagged_entity')
   ON CONFLICT DO NOTHING;
 INSERT INTO ado_version (name, version)
-  VALUES ("awa-tags", 1)
+  VALUES ('awa-tags', 1)
   ON CONFLICT DO NOTHING;

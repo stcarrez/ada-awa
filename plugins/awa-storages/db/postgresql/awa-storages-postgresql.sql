@@ -1,4 +1,5 @@
 /* File generated automatically by dynamo */
+SET client_min_messages = warning;
 /* The uri member holds the URI if the storage type is URL.
 
 When storage is FILE, the local file path is built by using
@@ -88,5 +89,5 @@ INSERT INTO ado_entity_type (name) VALUES
 ('awa_storage'), ('awa_storage_data'), ('awa_storage_folder'), ('awa_store_local')
   ON CONFLICT DO NOTHING;
 INSERT INTO ado_version (name, version)
-  VALUES ("awa-storages", 1)
+  VALUES ('awa-storages', 1)
   ON CONFLICT DO NOTHING;

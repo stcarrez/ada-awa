@@ -1,4 +1,5 @@
 /* File generated automatically by dynamo */
+SET client_min_messages = warning;
 /* The Comment table records a user comment associated with a database entity.
 The comment can be associated with any other database record. */
 CREATE TABLE IF NOT EXISTS awa_comment (
@@ -35,5 +36,5 @@ INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_comment'), 'format')
   ON CONFLICT DO NOTHING;
 INSERT INTO ado_version (name, version)
-  VALUES ("awa-comments", 1)
+  VALUES ('awa-comments', 1)
   ON CONFLICT DO NOTHING;

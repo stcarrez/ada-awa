@@ -22,11 +22,11 @@ CREATE TABLE IF NOT EXISTS awa_comment (
   `author_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_comment");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_comment');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_comment"), "message");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_comment'), 'message');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_comment"), "status");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_comment'), 'status');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_comment"), "format");
-INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-comments", 1);
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_comment'), 'format');
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ('awa-comments', 1);

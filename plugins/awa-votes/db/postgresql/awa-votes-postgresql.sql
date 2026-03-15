@@ -1,4 +1,5 @@
 /* File generated automatically by dynamo */
+SET client_min_messages = warning;
 /*  */
 CREATE TABLE IF NOT EXISTS awa_rating (
   /* the rating identifier */
@@ -28,5 +29,5 @@ INSERT INTO ado_entity_type (name) VALUES
 ('awa_rating'), ('awa_vote')
   ON CONFLICT DO NOTHING;
 INSERT INTO ado_version (name, version)
-  VALUES ("awa-votes", 1)
+  VALUES ('awa-votes', 1)
   ON CONFLICT DO NOTHING;

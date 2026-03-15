@@ -63,8 +63,8 @@ CREATE TABLE IF NOT EXISTS awa_region (
   `country_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_city");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_country");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_country_neighbor");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_region");
-INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-countries", 1);
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_city');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_country');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_country_neighbor');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_region');
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ('awa-countries', 1);

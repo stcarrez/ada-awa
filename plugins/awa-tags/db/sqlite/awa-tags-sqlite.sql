@@ -20,6 +20,6 @@ Date: 2013-02-23the database entity to which the tag is associated */
   `tag_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_tag");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_tagged_entity");
-INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-tags", 1);
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_tag');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_tagged_entity');
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ('awa-tags', 1);

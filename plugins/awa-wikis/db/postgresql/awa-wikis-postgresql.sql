@@ -1,4 +1,5 @@
 /* File generated automatically by dynamo */
+SET client_min_messages = warning;
 /*  */
 CREATE TABLE IF NOT EXISTS awa_wiki_content (
   /* the wiki page content identifier */
@@ -96,5 +97,5 @@ INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_space'), 'format')
   ON CONFLICT DO NOTHING;
 INSERT INTO ado_version (name, version)
-  VALUES ("awa-wikis", 1)
+  VALUES ('awa-wikis', 1)
   ON CONFLICT DO NOTHING;

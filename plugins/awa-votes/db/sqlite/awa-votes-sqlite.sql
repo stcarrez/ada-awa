@@ -24,6 +24,6 @@ CREATE TABLE IF NOT EXISTS awa_vote (
   `user_id` BIGINT NOT NULL,
   PRIMARY KEY (`entity_id`, `user_id`)
 );
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_rating");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_vote");
-INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-votes", 1);
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_rating');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_vote');
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ('awa-votes', 1);

@@ -1,4 +1,5 @@
 /* File generated automatically by dynamo */
+SET client_min_messages = warning;
 /*  */
 CREATE TABLE IF NOT EXISTS awa_counter (
   /* the object associated with the counter. */
@@ -41,5 +42,5 @@ INSERT INTO ado_entity_type (name) VALUES
 ('awa_counter'), ('awa_counter_definition'), ('awa_visit')
   ON CONFLICT DO NOTHING;
 INSERT INTO ado_version (name, version)
-  VALUES ("awa-counters", 1)
+  VALUES ('awa-counters', 1)
   ON CONFLICT DO NOTHING;

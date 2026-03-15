@@ -30,5 +30,5 @@ CREATE TABLE IF NOT EXISTS awa_image (
   `storage_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_image");
-INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-images", 1);
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_image');
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ('awa-images', 1);

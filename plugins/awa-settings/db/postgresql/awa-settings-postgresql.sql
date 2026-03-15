@@ -1,4 +1,5 @@
 /* File generated automatically by dynamo */
+SET client_min_messages = warning;
 /* The global setting holds some generic
 application configuration parameter
 which can be stored in the database.
@@ -47,5 +48,5 @@ INSERT INTO ado_entity_type (name) VALUES
 ('awa_global_setting'), ('awa_setting'), ('awa_user_setting')
   ON CONFLICT DO NOTHING;
 INSERT INTO ado_version (name, version)
-  VALUES ("awa-settings", 1)
+  VALUES ('awa-settings', 1)
   ON CONFLICT DO NOTHING;

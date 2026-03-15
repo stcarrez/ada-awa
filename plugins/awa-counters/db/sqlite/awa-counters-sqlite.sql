@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS awa_visit (
   `definition_id` BIGINT NOT NULL,
   PRIMARY KEY (`object_id`, `user`, `definition_id`)
 );
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_counter");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_counter_definition");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_visit");
-INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-counters", 1);
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_counter');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_counter_definition');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_visit');
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ('awa-counters', 1);

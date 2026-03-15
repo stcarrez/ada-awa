@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS awa_user_setting (
   `user_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_global_setting");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_setting");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_user_setting");
-INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-settings", 1);
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_global_setting');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_setting');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_user_setting');
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ('awa-settings', 1);

@@ -1,4 +1,5 @@
 /* File generated automatically by dynamo */
+SET client_min_messages = warning;
 /*  */
 CREATE TABLE IF NOT EXISTS awa_invitation (
   /* the invitation identifier. */
@@ -70,5 +71,5 @@ INSERT INTO ado_entity_type (name) VALUES
 ('awa_invitation'), ('awa_workspace'), ('awa_workspace_feature'), ('awa_workspace_member')
   ON CONFLICT DO NOTHING;
 INSERT INTO ado_version (name, version)
-  VALUES ("awa-workspaces", 1)
+  VALUES ('awa-workspaces', 1)
   ON CONFLICT DO NOTHING;

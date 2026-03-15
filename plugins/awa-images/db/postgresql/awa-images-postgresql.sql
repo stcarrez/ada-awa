@@ -1,4 +1,5 @@
 /* File generated automatically by dynamo */
+SET client_min_messages = warning;
 /* - The workspace contains one or several folders.
 - Each image folder contains a set of images that have been uploaded by the user.
 - An image can be visible if a user has an ACL permission to read the associated folder.
@@ -34,5 +35,5 @@ INSERT INTO ado_entity_type (name) VALUES
 ('awa_image')
   ON CONFLICT DO NOTHING;
 INSERT INTO ado_version (name, version)
-  VALUES ("awa-images", 1)
+  VALUES ('awa-images', 1)
   ON CONFLICT DO NOTHING;

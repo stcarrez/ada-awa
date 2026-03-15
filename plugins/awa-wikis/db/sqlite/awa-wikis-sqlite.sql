@@ -71,21 +71,21 @@ CREATE TABLE IF NOT EXISTS awa_wiki_space (
   `workspace_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_wiki_content");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_wiki_page");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_wiki_space");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_wiki_content');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_wiki_page');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_wiki_space');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_page"), "name");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_page'), 'name');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_page"), "last_version");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_page'), 'last_version');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_page"), "is_public");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_page'), 'is_public');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_page"), "title");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_page'), 'title');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_space"), "name");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_space'), 'name');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_space"), "is_public");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_space'), 'is_public');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_space"), "format");
-INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-wikis", 1);
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_space'), 'format');
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ('awa-wikis', 1);

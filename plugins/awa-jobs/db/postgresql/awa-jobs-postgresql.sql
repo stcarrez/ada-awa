@@ -1,4 +1,5 @@
 /* File generated automatically by dynamo */
+SET client_min_messages = warning;
 /* The job is associated with a dispatching queue. */
 CREATE TABLE IF NOT EXISTS awa_job (
   /* the job identifier */
@@ -35,5 +36,5 @@ INSERT INTO ado_entity_type (name) VALUES
 ('awa_job')
   ON CONFLICT DO NOTHING;
 INSERT INTO ado_version (name, version)
-  VALUES ("awa-jobs", 1)
+  VALUES ('awa-jobs', 1)
   ON CONFLICT DO NOTHING;

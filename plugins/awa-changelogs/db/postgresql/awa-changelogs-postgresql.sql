@@ -1,4 +1,5 @@
 /* File generated automatically by dynamo */
+SET client_min_messages = warning;
 /*  */
 CREATE TABLE IF NOT EXISTS awa_changelog (
   /* the changelog identifier. */
@@ -19,5 +20,5 @@ INSERT INTO ado_entity_type (name) VALUES
 ('awa_changelog')
   ON CONFLICT DO NOTHING;
 INSERT INTO ado_version (name, version)
-  VALUES ("awa-changelogs", 1)
+  VALUES ('awa-changelogs', 1)
   ON CONFLICT DO NOTHING;

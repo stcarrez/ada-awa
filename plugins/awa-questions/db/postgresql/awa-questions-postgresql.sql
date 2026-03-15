@@ -1,4 +1,5 @@
 /* File generated automatically by dynamo */
+SET client_min_messages = warning;
 /* The answer table gives a list of anwsers to the question.
 Ranking is updating according to users voting for the anwser. */
 CREATE TABLE IF NOT EXISTS awa_answer (
@@ -55,5 +56,5 @@ INSERT INTO ado_entity_type (name) VALUES
 ('awa_answer'), ('awa_question')
   ON CONFLICT DO NOTHING;
 INSERT INTO ado_version (name, version)
-  VALUES ("awa-questions", 1)
+  VALUES ('awa-questions', 1)
   ON CONFLICT DO NOTHING;
