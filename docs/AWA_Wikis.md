@@ -33,6 +33,19 @@ Register (App    => App.Self.all'Access,
           Module => App.Wiki_Module'Access);
 ```
 
+## Permissions
+Permissions are defined to control who is allowed to create, update and delete wiki pages:
+
+| Name           | Entity type  | Description                                                |
+|:---------------|:-------------|:-----------------------------------------------------------|
+|wiki-space-create|awa_workspace|Grants the creation of a wiki space for the given user in a specific workspace.|
+|wiki-space-update|awa_wiki_space|Grants the edit permission on the wiki space owner only|
+|wiki-space-delete|awa_wiki_space|Granta the delete permission on the wiki space owner only|
+|wiki-page-view|awa_wiki_space|Grant the view wiki page permission when the page is public or when an ACL link exist betwen the user and the wiki space|
+|wiki-page-create|awa_wiki_space|Grant the create wiki page permission when an ACL link exist betwen the user and the wiki space|
+|wiki-page-update|awa_wiki_space|Grants the permission to edit the wiki page to the given user and for the given wiki space.|
+|wiki-page-delete|awa_wiki_space|Grants the permission to delete the wiki page to the given user and for the given wiki space.|
+
 ## Configuration
 
 | Name                      | Description                                                    |

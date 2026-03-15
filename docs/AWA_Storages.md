@@ -40,9 +40,9 @@ Register (App    => App.Self.all'Access,
 
 | Name           | Entity type  | Description                                                |
 |:---------------|:-------------|:-----------------------------------------------------------|
-|folder-create|awa_workspace||
-|storage-create|awa_workspace||
-|storage-delete|awa_workspace||
+|folder-create|awa_workspace|This permission grants the creation of storage folder for the given user in a specific workspace.|
+|storage-create|awa_workspace|This permission grants the creation of storage file for the given user in a specific workspace.|
+|storage-delete|awa_workspace|This permission grants the deletion of storage files for the given user in a specific workspace.|
 
 ## Configuration
 The `storages` module defines the following configuration parameters:

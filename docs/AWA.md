@@ -299,16 +299,16 @@ When the event is queued, there are two types of event queues:
 ### Data Model
 ![](images/awa_events_model.png)
 
-## AWA Commands
+# AWA Commands
 The `AWA.Commands` package provides a simple framework with commands that
 allow to start, stop, configure and manage the web application.  It is also
 possible to provide your own commands.  The command framework handles the
 parsing of command line options, identification of the command to execute
 and execution of the selected command.
 
-### Command Usage
+## Command Usage
 
-#### SYNOPSIS
+### SYNOPSIS
 
 _driver_ [-v] [-vv] [-vvv] [-c _config-file_ ] _command_
  [-k _file_ ] [ -d
@@ -318,7 +318,7 @@ _fd_ ] [--passask] [--passcmd
 _cmd_ ] [--wallet-key-file
 _file_ ]
 
-#### DESCRIPTION
+### DESCRIPTION
 
 The `AWA.Commands.Drivers` framework integrates the Ada Keystore support
 to access some sensitive configuration information such as passwords,
@@ -362,7 +362,7 @@ can contain the following configuration:
 |gpg-decrypt                | When GPG is used, the GPG command to decrypt some content        |
 |gpg-list-keys              | When GPG is used, the GPG command to list the available GPG keys |
 
-#### OPTIONS
+### OPTIONS
 
 The following options are recognized by the command driver:
 
@@ -436,9 +436,9 @@ the driver sets while launching the command.
 
 Defines the path of a file which contains the wallet master key file.
 
-#### COMMANDS
+## COMMANDS
 
-##### The start command
+### The start command
 
 _driver_ start [--management-port _PORT_] [--port _PORT_] [--connection _COUNT_]
 [--upload _DIR_] [--tcp-no-delay] [--daemon] [--keystore _PATH_]
@@ -476,7 +476,7 @@ that the server receives.
 The `--connection=`_COUNT_ option controls the maximum number of active
 HTTP requests that the server can handle.
 
-##### The setup command
+### The setup command
 
 _driver_ setup [--management-port _PORT_] [--port _PORT_] [--connection _COUNT_]
 [--upload _DIR_] [--tcp-no-delay] [--daemon] [--keystore _PATH_] _NAME_
@@ -485,7 +485,7 @@ The `setup` command is very close to the `start` command but it starts
 the [Setup Application](AWA_Setup.md) to configure the application by
 using a web browser.
 
-##### The stop command
+### The stop command
 
 _driver_ stop [--management-port _PORT_] [--keystore _PATH_]
 
@@ -495,7 +495,7 @@ The management port is local to the host and cannot be accessed remotely.
 
 The management port is configured with the `--management-port=`_PORT_ option.
 
-##### The migrate command
+### The migrate command
 
 _driver_ migrate [--application _NAME_] [--keystore _PATH_] [--execute]
 
@@ -511,7 +511,7 @@ the list of SQL scripts that will be executed if the migration is executed.
 
 The `--execute` option runs the SQL migration scripts.
 
-##### The list command
+### The list command
 
 _driver_ list [--application _NAME_] [--keystore _PATH_]
 [--users] [--jobs] [--sessions] [--tables]
@@ -532,7 +532,7 @@ The `--sessions` option triggers the list of user connection sessions.
 The `--jobs` option triggers the list of jobs that have been created
 and scheduled.
 
-##### The info command
+### The info command
 
 _driver_ info [--application _NAME_] [--keystore _PATH_] [--long-lines]
 
@@ -557,7 +557,7 @@ of modules are listed with their configuration.
 The `--long-lines` option triggers the list of database tables with the
 number of entries they contain.
 
-### Integration
+## Integration
 The `AWA.Commands` framework is split in several generic packages that
 must be instantiated.  The `AWA.Commands.Drivers` generic package is
 the primary package that must be instantiated.  It provides the core

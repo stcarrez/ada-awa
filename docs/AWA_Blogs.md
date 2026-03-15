@@ -43,6 +43,20 @@ Register (App    => App.Self.all'Access,
           Module => App.Blog_Module'Access);
 ```
 
+## Permissions
+Permissions are defined to control who is allowed to create, update and delete blog posts:
+
+| Name           | Entity type  | Description                                                |
+|:---------------|:-------------|:-----------------------------------------------------------|
+|blog-create|awa_workspace|Permission to create a new blog.|
+|blog-delete|awa_blog|Permission to delete a blog.|
+|blog-create-post|awa_blog|Permission to create a new post.|
+|blog-update-post|awa_blog|Permission to modify a post.|
+|blog-delete-post|awa_blog|Permission to delete a post.|
+|blog-add-comment|awa_blog||
+|blog-publish-comment|awa_blog|Permission to change the publish status of a comment.|
+|blog-delete-comment|awa_blog|Permission to delete the comment.|
+
 ## Configuration
 The `Blogs` module defines the following configuration parameters:
 
