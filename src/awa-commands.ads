@@ -23,7 +23,7 @@ private with Keystore.Passwords.Keys;
 private with GNAT.Command_Line;
 private with GNAT.Strings;
 
---  == AWA Commands ==
+--  = AWA Commands =
 --  The `AWA.Commands` package provides a simple framework with commands that
 --  allow to start, stop, configure and manage the web application.  It is also
 --  possible to provide your own commands.  The command framework handles the
@@ -32,7 +32,7 @@ private with GNAT.Strings;
 --
 --  @include-doc docs/command.md
 --
---  === Integration ===
+--  == Integration ==
 --  The `AWA.Commands` framework is split in several generic packages that
 --  must be instantiated.  The `AWA.Commands.Drivers` generic package is
 --  the primary package that must be instantiated.  It provides the core
