@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions-services -- Permissions controller
---  Copyright (C) 2011, 2012, 2013, 2017 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2017, 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -39,6 +39,11 @@ package AWA.Permissions.Services is
    function Get_Permission_Manager (Context : in ASC.Service_Context_Access)
                                     return Permission_Manager_Access;
 
+   --  Get the permission manager associated with the application.
+   --  Returns null if there is none.
+   function Get_Permission_Manager (Application : in AWA.Applications.Application'Class)
+                                    return Permission_Manager_Access;
+
    --  Get the application instance.
    function Get_Application (Manager : in Permission_Manager)
                              return AWA.Applications.Application_Access;
@@ -57,6 +62,14 @@ package AWA.Permissions.Services is
                              Kind       : in ADO.Entity_Type;
                              Workspace  : in ADO.Identifier;
                              Permission : in Security.Permissions.Permission_Index);
+
+   --  Remove a permission for the current user to forbid access to the entity
+   --  identified by `Entity` and `Kind` in the `Workspace`.
+   procedure Delete_Permission (Manager    : in Permission_Manager;
+                                Entity     : in ADO.Identifier;
+                                Kind       : in ADO.Entity_Type;
+                                Workspace  : in ADO.Identifier;
+                                Permission : in Security.Permissions.Permission_Index);
 
    --  Check that the current user has the specified permission.
    --  Raise NO_PERMISSION exception if the user does not have the permission.
@@ -89,6 +102,10 @@ package AWA.Permissions.Services is
                              Workspace  : in ADO.Identifier;
                              Permission : in Security.Permissions.Permission_Index);
 
+   --  Get the database permission ID from the permission name.
+   function Get_Permission (Manager : in Permission_Manager;
+                            Name    : in String) return ADO.Identifier;
+
    --  Create a permission manager for the given application.
    function Create_Permission_Manager (App : in AWA.Applications.Application_Access)
                                        return Security.Policies.Policy_Manager_Access;
@@ -105,16 +122,33 @@ package AWA.Permissions.Services is
                                  User      : in ADO.Identifier;
                                  Workspace : in ADO.Identifier);
 
+   --  Delete the permission for a user, on the given workspace and target entity.
+   procedure Delete_Permission (Session    : in out ADO.Sessions.Master_Session;
+                                User       : in ADO.Identifier;
+                                Workspace  : in ADO.Identifier;
+                                Kind       : in ADO.Entity_Type;
+                                Entity     : in ADO.Identifier;
+                                Permission : in ADO.Identifier);
+
+   --  Add a permission for the user `User` to access the entity identified by
+   --  `Entity` which is of type `Kind` in the given workspace.
+   procedure Add_Permission (Session    : in out ADO.Sessions.Master_Session;
+                             User       : in ADO.Identifier;
+                             Workspace  : in ADO.Identifier;
+                             Kind       : in ADO.Entity_Type;
+                             Entity     : in ADO.Identifier;
+                             Permission : in ADO.Identifier);
+
 private
 
    type Permission_Array is array (Security.Permissions.Permission_Index) of ADO.Identifier;
 
    type Permission_Manager is new Security.Policies.Policy_Manager with record
-      App   : AWA.Applications.Application_Access;
-      Roles : Security.Policies.Roles.Role_Policy_Access;
+      App         : AWA.Applications.Application_Access;
+      Roles       : Security.Policies.Roles.Role_Policy_Access;
 
       --  Mapping between the application permission index and the database permission identifier.
-      Map   : Permission_Array := (others => 0);
+      Map         : Permission_Array := (others => 0);
    end record;
 
 end AWA.Permissions.Services;

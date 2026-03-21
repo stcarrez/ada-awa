@@ -7,6 +7,7 @@
        <comment>Get the list of permissions for a given user</comment>
        <sql>
     SELECT
+      email.email,
       acl.id AS id,
       acl.workspace_id AS workspace_id,
       acl.entity_id AS entity_id,
@@ -18,7 +19,7 @@
     INNER JOIN awa_acl AS acl ON acl.user_id = u.id
     INNER JOIN awa_permission AS perm ON acl.permission = perm.id
     INNER JOIN ado_entity_type AS ent ON acl.entity_type = ent.id
-    WHERE email.email = :email
+    WHERE LOWER(email.email) = LOWER(:email)
        </sql>
        <sql-count>
     SELECT
@@ -28,7 +29,35 @@
     INNER JOIN awa_acl AS acl ON acl.user_id = u.id
     INNER JOIN awa_permission AS perm ON acl.permission = perm.id
     INNER JOIN ado_entity_type AS ent ON acl.entity_type = ent.id
-    WHERE email.email = :email
+    WHERE LOWER(email.email) = LOWER(:email)
+       </sql-count>
+    </query>
+
+    <query name='command-all-permissions'>
+       <comment>Get the list of permissions for a given user</comment>
+       <sql>
+    SELECT
+      email.email,
+      acl.id AS id,
+      acl.workspace_id AS workspace_id,
+      acl.entity_id AS entity_id,
+      acl.writeable AS writeable,
+      ent.name AS entity_type,
+      perm.name AS permission
+    FROM awa_email AS email
+    INNER JOIN awa_user AS u on u.email_id = email.id
+    INNER JOIN awa_acl AS acl ON acl.user_id = u.id
+    INNER JOIN awa_permission AS perm ON acl.permission = perm.id
+    INNER JOIN ado_entity_type AS ent ON acl.entity_type = ent.id
+       </sql>
+       <sql-count>
+    SELECT
+      COUNT(acl.id)
+    FROM awa_email AS email
+    INNER JOIN awa_user AS u on u.email_id = email.id
+    INNER JOIN awa_acl AS acl ON acl.user_id = u.id
+    INNER JOIN awa_permission AS perm ON acl.permission = perm.id
+    INNER JOIN ado_entity_type AS ent ON acl.entity_type = ent.id
        </sql-count>
     </query>
 

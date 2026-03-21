@@ -31,6 +31,8 @@ package AWA.Commands.Models is
 
    Query_Command_User_Permissions : constant ADO.Queries.Query_Definition_Access;
 
+   Query_Command_All_Permissions : constant ADO.Queries.Query_Definition_Access;
+
 
    Query_Command_User_List : constant ADO.Queries.Query_Definition_Access;
 
@@ -56,6 +58,12 @@ private
                                      File => File_1.File'Access);
    Query_Command_User_Permissions : constant ADO.Queries.Query_Definition_Access
    := Def_Command_User_Permissions.Query'Access;
+
+   package Def_Command_All_Permissions is
+      new ADO.Queries.Loaders.Query (Name => "command-all-permissions",
+                                     File => File_1.File'Access);
+   Query_Command_All_Permissions : constant ADO.Queries.Query_Definition_Access
+   := Def_Command_All_Permissions.Query'Access;
 
    package File_2 is
       new ADO.Queries.Loaders.File (Path => "command-users.xml",

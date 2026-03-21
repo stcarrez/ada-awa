@@ -112,6 +112,18 @@ package body AWA.Permissions.Services is
    end Get_Permission_Manager;
 
    --  ------------------------------
+   --  Get the permission manager associated with the application.
+   --  Returns null if there is none.
+   --  ------------------------------
+   function Get_Permission_Manager (Application : in AWA.Applications.Application'Class)
+                                    return Permission_Manager_Access is
+      Manager : constant Security.Policies.Policy_Manager_Access
+        := Application.Get_Security_Manager;
+   begin
+      return Permission_Manager'Class (Manager.all)'Access;
+   end Get_Permission_Manager;
+
+   --  ------------------------------
    --  Get the application instance.
    --  ------------------------------
    function Get_Application (Manager : in Permission_Manager)
@@ -226,6 +238,34 @@ package body AWA.Permissions.Services is
       Perm.Save (DB);
       Ctx.Commit;
    end Add_Permission;
+
+   --  Remove a permission for the current user to forbid access to the entity
+   --  identified by `Entity` and `Kind` in the `Workspace`.
+   procedure Delete_Permission (Manager    : in Permission_Manager;
+                                Entity     : in ADO.Identifier;
+                                Kind       : in ADO.Entity_Type;
+                                Workspace  : in ADO.Identifier;
+                                Permission : in Security.Permissions.Permission_Index) is
+      Ctx  : constant AWA.Services.Contexts.Service_Context_Access
+        := AWA.Services.Contexts.Current;
+      DB   : Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
+   begin
+      Ctx.Start;
+      Delete_Permission (DB, Ctx.Get_User_Identifier, Workspace,
+                         Kind, Entity, Manager.Map (Permission));
+      Ctx.Commit;
+   end Delete_Permission;
+
+   --  ------------------------------
+   --  Get the database permission ID from the permission name.
+   --  ------------------------------
+   function Get_Permission (Manager : in Permission_Manager;
+                            Name    : in String) return ADO.Identifier is
+      Idx : constant Security.Permissions.Permission_Index
+        := Security.Permissions.Get_Permission_Index (Name);
+   begin
+      return Manager.Map (Idx);
+   end Get_Permission;
 
    --  ------------------------------
    --  Check that the current user has the specified permission.
@@ -358,5 +398,58 @@ package body AWA.Permissions.Services is
                 Natural'Image (Result), ADO.Identifier'Image (User),
                 ADO.Identifier'Image (Workspace));
    end Delete_Permissions;
+
+   --  ------------------------------
+   --  Delete the permission for a user, on the given workspace and target entity.
+   --  ------------------------------
+   procedure Delete_Permission (Session    : in out ADO.Sessions.Master_Session;
+                                User       : in ADO.Identifier;
+                                Workspace  : in ADO.Identifier;
+                                Kind       : in ADO.Entity_Type;
+                                Entity     : in ADO.Identifier;
+                                Permission : in ADO.Identifier) is
+      Stmt   : ADO.Statements.Delete_Statement
+        := Session.Create_Statement (Models.ACL_TABLE);
+      Result : Natural;
+   begin
+      Stmt.Set_Filter (Filter => "workspace_id = :workspace_id AND user_id = :user_id"
+                       & " AND entity_id = :entity_id AND entity_type = :entity_type"
+                       & " AND permission = :permission");
+      Stmt.Bind_Param (Name => "workspace_id", Value => Workspace);
+      Stmt.Bind_Param (Name => "user_id", Value => User);
+      Stmt.Bind_Param (Name => "entity_id", Value => Entity);
+      Stmt.Bind_Param (Name => "entity_type", Value => Kind);
+      Stmt.Bind_Param (Name => "permission", Value => Permission);
+      Stmt.Execute (Result);
+      Log.Info ("Deleted {0} permission for user {1} in workspace {2}",
+                Natural'Image (Result), ADO.Identifier'Image (User),
+                ADO.Identifier'Image (Workspace));
+   end Delete_Permission;
+
+   --  ------------------------------
+   --  Add a permission for the user `User` to access the entity identified by
+   --  `Entity` which is of type `Kind` in the given workspace.
+   --  ------------------------------
+   procedure Add_Permission (Session    : in out ADO.Sessions.Master_Session;
+                             User       : in ADO.Identifier;
+                             Workspace  : in ADO.Identifier;
+                             Kind       : in ADO.Entity_Type;
+                             Entity     : in ADO.Identifier;
+                             Permission : in ADO.Identifier) is
+      Acl : AWA.Permissions.Models.ACL_Ref;
+   begin
+      Acl.Set_User_Id (User);
+      Acl.Set_Entity_Type (Kind);
+      Acl.Set_Entity_Id (Entity);
+      Acl.Set_Writeable (False);
+      Acl.Set_Workspace_Id (Workspace);
+      Acl.Set_Permission (Permission);
+      Acl.Save (Session);
+
+      Log.Info ("Permission created for {0} to access {1}, entity type {2}",
+                ADO.Identifier'Image (User),
+                ADO.Identifier'Image (Entity),
+                ADO.Entity_Type'Image (Kind));
+   end Add_Permission;
 
 end AWA.Permissions.Services;
