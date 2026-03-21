@@ -242,6 +242,7 @@
     display: table;
     padding: 0.5em;
     margin: 0.5em;
+    border: 1px solid #4b4b4b;
 }
 .wiki-toc-entry {
     list-style-type: none;
@@ -379,7 +380,6 @@
 .wiki-text a, ul.tag-cloud a {
     color: #47C;
 }
-.wiki-toc,
 .wiki-img-thumb,
 .wiki-img-caption,
 .wiki-img-right figurecaption,cp 

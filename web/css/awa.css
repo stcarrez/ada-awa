@@ -147,7 +147,7 @@ header {
 .awa-hamb-line {
     background: orange;
     display: block;
-    height: 1px;
+    height: 2px;
     position: relative;
     width: 24px;
 }

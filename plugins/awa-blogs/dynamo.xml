@@ -24,4 +24,5 @@
     <depend name="awa-seo"></depend>
     <depend name="servlet"></depend>
     <depend name="keystore"></depend>
+    <depend name="seo"></depend>
 </project>
