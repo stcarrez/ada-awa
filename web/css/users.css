@@ -17,6 +17,7 @@ div.awa-login h2, div.awa-login h3, div.awa-accept-invitation h2, div.awa-accept
     -moz-border-radius-topright: 6px;
     -webkit-border-top-right-radius: 6px;
     -webkit-border-top-left-radius: 6px;
+    padding-top: 0;
 }
 div.awa-login, div.awa-accept-invitation {
   border: 2px solid #A6C9E2;
@@ -30,6 +31,10 @@ div.awa-login, div.awa-accept-invitation {
   box-sizing: border-box;
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px 6px;
+  padding-top: 0;
+}
+div.awa-login h2 {
+    padding-top: 10px;
 }
 div.awa-accept-invitation {
     border: none;
