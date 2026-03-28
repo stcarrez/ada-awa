@@ -418,7 +418,7 @@
                 complete: function (XMLHttpRequest, textStatus) {
 
                     // Expected JSON Object: { "success": Boolean, "allowDelete": Boolean}
-                    var result = $.parseJSON(XMLHttpRequest.responseText);
+                    var result = JSON.parse(XMLHttpRequest.responseText);
                     if(result.success === true){
                         checkResult = result.allowDelete;
                     }
@@ -469,10 +469,10 @@
 
 			if (isNew == true && checkAutocomplete == true && options.autocompleteOptions.source != false) {
 				var result = [];
-				if ($.isArray(options.autocompleteOptions.source)) {
+				if (Array.isArray(options.autocompleteOptions.source)) {
 					result = options.autocompleteOptions.source;
 				}
-                else if ($.isFunction(options.autocompleteOptions.source)) {
+                else if (typeof options.autocompleteOptions.source === 'function') {
 					options.autocompleteOptions.source({term: value}, function (data) {result = data});
 				}
                 else if (typeof options.autocompleteOptions.source === "string") {
@@ -489,7 +489,7 @@
 						url: autocompleteURL,
 						dataType: 'json',
 						complete: function (XMLHttpRequest, textStatus) {
-							result = $.parseJSON(XMLHttpRequest.responseText);
+							result = JSON.parse(XMLHttpRequest.responseText);
 						}
 					});
 				}
