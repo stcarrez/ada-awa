@@ -71,7 +71,7 @@ div.blog-admin div.comment-author, div.blog-admin div.comment-date {
 div.post-header {
     font-weight: bold;
     padding-bottom: 5px;
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid var(--border-medium);
     margin-bottom: 5px;
 }
 div.blog-admin div.blog-info, div.blog-info div.blog-ref, div.blog-info div.blog-title, div.blog-info div.blog-date {
@@ -133,7 +133,7 @@ a.spam-icon {
     float: left;
     margin-top: 15px;
     width: 100%;
-    border-bottom: 2px solid #47C;
+    border-bottom: 2px solid var(--primary-color);
     padding-bottom: 2px;
     background: url(../images/blogs/ico_entry.gif) no-repeat;
     padding-left: 30px;
@@ -311,36 +311,36 @@ div.comment-COMMENT_PUBLISHED {
     color: #F91;
 }
 div.post-text pre {
-    background: #E8F0FF;
-    border: 1px solid #AAA;
+    background: var(--bg-highlight);
+    border: 1px solid var(--border-medium);
 }
 div.post-text h2, div.post-text h3, div.post-text h4,
 div.post-text h5, div.post-text h6 {
-    color: #346;
+    color: var(--color-info);
 }
 div.post-text a, ul.tag-cloud a {
-    color: #47C;
+    color: var(--text-link);
 }
 div.blog-post-tag-info {
-    border: 1px solid #f91;
+    border: 1px solid var(--accent-orange);
 }
 div.blog-post-tag-info h2 {
-    background: #f91;
-    color: #fff;
+    background: var(--accent-orange);
+    color: var(--text-light);
 }
 div.blog-post-info h2 {
     background: #d8e7fa;
-    color: #346;
+    color: var(--color-info);
 }
 .blog-post-comment {
-    border-top: 2px solid #ddd;
+    border-top: 2px solid var(--border-light);
 }
 .post-title .post-comment-count,
 div.blog-post-comment-count a {
-    color: #777;
+    color: var(--text-medium);
 }
 #blog-graph-tooltip {
-    border: 1px solid orange;
+    border: 1px solid var(--border-accent);
     background-color: #fee;
 }
 .blog-post-format {

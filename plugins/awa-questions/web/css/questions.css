@@ -25,7 +25,7 @@ div.question-content, div.answer-content {
     width: 90%;
 }
 div.question h2 {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--border-light);
     margin-bottom: 10px;
 }
 div.question-list div.question h2 {
@@ -39,7 +39,7 @@ div.question-vote, div.answer-vote {
     float: left;
     width: 40px;
     font-weight: bold;
-    color: #F91;
+    color: var(--accent-orange);
     font-size: 1.3em;
 }
 div.answer-vote div.vote-up, div.answer-vote div.vote-down, div.answer-vote div.vote-count,
@@ -76,7 +76,7 @@ div.question-info {
 div.question-action {
     float: left;
     width: 45%;
-    color: #888;
+    color: var(--secondary-dark);
 }
 div.question-action li {
     list-style-type: none;
@@ -100,19 +100,19 @@ div.question-author {
 }
 div.answer {
     margin-top: 5px;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid var(--border-light);
     padding-top: 5px;
 }
 
 div.question-list div.question-content {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--border-light);
     margin-top: 5px;
     padding-top: 5px;
     width: 80%;
 }
 div.question-list div.question-content h2 a, div.question-list div.question-content h2 a:visited {
     text-decoration: none;
-    color: #F91;
+    color: var(--accent-orange);
     font-size: 1.2em;
 }
 /**
@@ -146,7 +146,7 @@ ul.question-nav {
     width: 96%;
     padding-left: 3%;
     padding-right: 3%;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--border-light);
 }
 ul.question-nav li {
     list-style-type: none;

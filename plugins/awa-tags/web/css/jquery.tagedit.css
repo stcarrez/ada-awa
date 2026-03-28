@@ -12,11 +12,11 @@
  */
 .tagedit-list {margin: 0; padding: 5px 5px 0 5px; width: auto; overflow: auto; font-size: 0.7em; min-height: 25px; }
 .awa-form .tagedit-list {
-  border: 2px solid #9A9A9A;
+  border: 2px solid var(--border-medium);
   margin-bottom: 5px;
   border-radius: 5px;
-  border-bottom: 2px solid #EEEEEE;
-  border-right: 2px solid #EEEEEE;
+  border-bottom: 2px solid var(--border-light);
+  border-right: 2px solid var(--border-light);
   font-size: 1em;
 }
 .tagedit-list li.tagedit-listelement {list-style-type: none; float: left; margin: 0 5px 5px 0; padding: 0;}
@@ -26,7 +26,7 @@
 }
 
 /* New Item input */
-.tagedit-list li.tagedit-listelement-new input {border: 0; height: 100%; padding: 2px 5px; width: 15px; background: #fff;}
+.tagedit-list li.tagedit-listelement-new input {border: 0; height: 100%; padding: 2px 5px; width: 15px; background: var(--form-bg);}
 .tagedit-list li.tagedit-listelement-new input:focus {outline: none;}
 .tagedit-list li.tagedit-listelement-new input.tagedit-input-disabled {display: none;}
 /* Item that is put to the List */
@@ -40,7 +40,7 @@
 .tagedit-list li.tagedit-listelement-old a.tagedit-break {background-image: url(../images/undo.png); margin-right: 0;}
 .tagedit-list li.tagedit-listelement-old a.tagedit-delete {background-image: url(../images/delete.png); margin: 0 5px 0 2px; background-position: right center;}
 /* Items that are edited */
-.tagedit-list li.tagedit-listelement-edit input.tagedit-edit-input {border: 0; background: transparent; font-size: 11px; color: #666; padding: 0;}
+.tagedit-list li.tagedit-listelement-edit input.tagedit-edit-input {border: 0; background: transparent; font-size: 11px; color: var(--secondary-dark); padding: 0;}
 .tagedit-list li.tagedit-listelement-edit input:focus {outline: none;}
 .tagedit-list li.tagedit-listelement-edit a.tagedit-break {border: 0; margin-left: 0;}
 .tagedit-list li.tagedit-listelement-edit a.tagedit-close,
@@ -58,4 +58,4 @@ a.tag-link:hover { background-color: #c0d0e1; }
 .tag-cloud li { display: inline-block; }
 .tag-cloud a { padding: 4px; padding-right: 10px; text-decoration: none; display: inline-block; }
 .tag-cloud a:hover { text-decoration: underline; }
-.tagedit-list li.tagedit-listelement a { color: #47C; font-weight: bold; }
+.tagedit-list li.tagedit-listelement a { color: var(--text-link); font-weight: bold; }

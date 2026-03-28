@@ -8,7 +8,7 @@
     width: 100%;
     padding-top: 1em;
     padding-left: 30px;
-    border-top: 2px solid #ddd;
+    border-top: 2px solid var(--border-light);
     box-sizing: border-box;
 }
 .awa-comment {
@@ -35,7 +35,7 @@
 }
 .awa-comment div.comment-author {
     font-weight: bold;
-    color: #777;
+    color: var(--text-medium);
 }
 .awa-comment .comment-text {
     padding-top: 5px;
