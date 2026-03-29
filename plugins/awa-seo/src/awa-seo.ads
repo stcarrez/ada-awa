@@ -19,7 +19,7 @@ with Ada.Calendar;
 --  absolute URI location, a last modification date, a priority, an optional image URI
 --  location and an optional image title.  A module that wants to provide a list of
 --  sitemap entries must implement the `Sitemap_Provider` limited interface and implement
---  the `Create_Sitemap` procude.  That procedure must populate a `Sitemap_Info` record
+--  the `Create_Sitemap` procedure.  That procedure must populate a `Sitemap_Info` record
 --  which contains the sitemap entries that must be exposed.  For example:
 --
 --    with AWA.SEO;
