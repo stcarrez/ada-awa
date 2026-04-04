@@ -266,8 +266,8 @@ div.blog-post-comment-count a {
     margin-top: 0.5em;
 }
 #blog-post-preview {
-    margin-left: 1em;
-    margin-right: 1em;
+    padding-left: 1em;
+    padding-right: 1em;
     width: 100%;
 }
 #blog-graph-tooltip {
