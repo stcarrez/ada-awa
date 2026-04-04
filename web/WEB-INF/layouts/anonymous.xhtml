@@ -8,21 +8,25 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:f="http://java.sun.com/jsf/core"><h:doctype rootElement="html"/>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <!--dynamo-merge link="/css/all.css" prefix="#{contextPath}" -->
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/grids/reset.css"/>
-    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/asf.css"/>
-    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/awa.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/_variables.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{jquery.uiCssPath}/jquery-ui.structure.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{jquery.uiCssPath}/jquery-ui.theme.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{jquery.chosenCssPath}"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/jquery.tagedit.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/awa.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/users.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/comments.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/blogs.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/wikis.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/questions.css"/>
-    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/jquery.tagedit.css"/>
+    <!--dynamo-end-->
+
     <ui:insert name="pageHeader"/>
     <title>#{title}</title>
 </head>

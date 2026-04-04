@@ -641,6 +641,10 @@ ul.awa-pagination li {
     margin-bottom: 0.5em;
 }
 
+.ui-widget-content {
+    background-color: #fff;
+}
+
 /**
  * Responsive style for mobile and tablets.
  */
