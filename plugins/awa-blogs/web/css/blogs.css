@@ -275,6 +275,7 @@ div.blog-post-comment-count a {
     display: none;
     padding: 2px;
     opacity: 0.8;
+    border-radius: 6px;
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
 }
@@ -308,7 +309,7 @@ div.comment-COMMENT_PUBLISHED {
     color: #111;
 }
 .blog-post .post-title h2 a {
-    color: #F91;
+    color: var(--text-title);
 }
 div.post-text pre {
     background: var(--bg-highlight);

@@ -64,6 +64,10 @@ package AWA.Blogs.Modules is
    --  sitemap post URI.
    PARAM_POST_URI     : constant String := "post_uri";
 
+   --  The configuration parameter that defines the EL expression to create the
+   --  sitemap image URI.
+   PARAM_IMAGE_URI    : constant String := "image_uri";
+
    --  Define the permissions.
    package ACL_Create_Blog is new Security.Permissions.Definition ("blog-create");
    package ACL_Delete_Blog is new Security.Permissions.Definition ("blog-delete");
@@ -128,6 +132,7 @@ package AWA.Blogs.Modules is
                           Format  : in AWA.Blogs.Models.Format_Type;
                           Comment : in Boolean;
                           Publish_Date : in ADO.Nullable_Time;
+                          Image_Id : in ADO.Identifier;
                           Status  : in AWA.Blogs.Models.Post_Status_Type);
 
    --  Delete the post identified by the given identifier.
@@ -156,6 +161,7 @@ private
       Image_Prefix  : Wiki.Strings.UString;
       Image_Servlet : aliased AWA.Blogs.Servlets.Image_Servlet;
       Post_URI      : EL.Expressions.Expression;
+      Image_URI     : EL.Expressions.Expression;
    end record;
 
 end AWA.Blogs.Modules;

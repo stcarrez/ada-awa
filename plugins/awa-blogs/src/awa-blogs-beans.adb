@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-beans -- Beans for blog module
---  Copyright (C) 2011 - 2025 Stephane Carrez
+--  Copyright (C) 2011 - 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -328,6 +328,21 @@ package body AWA.Blogs.Beans is
       return Result (Result'First .. Len);
    end Get_Predefined_Uri;
 
+   -- Get from the image links the first image ID that we identify.
+   function Get_Image_Id (Bean : in Post_Bean) return ADO.Identifier is
+   begin
+      for Iter in Bean.Links.Images.Iterate loop
+         declare
+            Image : constant Models.Image_Info := Image_Info_Maps.Element (Iter);
+         begin
+            if Image.Id /= ADO.NO_IDENTIFIER then
+               return Image.Id;
+            end if;
+         end;
+      end loop;
+      return ADO.NO_IDENTIFIER;
+   end Get_Image_Id;
+
    --  ------------------------------
    --  Create or save the post.
    --  ------------------------------
@@ -353,6 +368,7 @@ package body AWA.Blogs.Beans is
                                   Result  => Result);
          Bean.Set_Id (Result);
       else
+         Bean.Make_Description;
          Bean.Module.Update_Post (Post_Id => Bean.Get_Id,
                                   Title   => Bean.Get_Title,
                                   URI     => Bean.Get_Uri,
@@ -361,6 +377,7 @@ package body AWA.Blogs.Beans is
                                   Format  => Bean.Get_Format,
                                   Comment => Bean.Get_Allow_Comments,
                                   Publish_Date => Bean.Get_Publish_Date,
+                                  Image_Id => Bean.Get_Image_Id,
                                   Status  => Bean.Get_Status);
          Result := Bean.Get_Id;
       end if;
@@ -437,6 +454,7 @@ package body AWA.Blogs.Beans is
       end Collect_Image;
 
    begin
+      From.Links.Post_Id := From.Get_Id;
       case From.Get_Format is
          when Models.FORMAT_DOTCLEAR =>
             Format := Wiki.SYNTAX_DOTCLEAR;

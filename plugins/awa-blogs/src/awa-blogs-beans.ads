@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-beans -- Beans for blog module
---  Copyright (C) 2011 - 2023 Stephane Carrez
+--  Copyright (C) 2011 - 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -242,6 +242,9 @@ package AWA.Blogs.Beans is
    procedure Load (Bean         : in out Post_Bean;
                    Outcome      : in out Ada.Strings.Unbounded.Unbounded_String;
                    Publish_Only : in Boolean);
+
+   -- Get from the image links the first image ID that we identify.
+   function Get_Image_Id (Bean : in Post_Bean) return ADO.Identifier;
 
    --  Create the Post_Bean bean instance.
    function Create_Post_Bean (Module : in AWA.Blogs.Modules.Blog_Module_Access)

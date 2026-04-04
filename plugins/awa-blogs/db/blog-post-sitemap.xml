@@ -15,7 +15,7 @@
             <comment>the post base URI.</comment>
         </property>
         <property type='Identifier' name="image_id">
-            <comment>the image identifier.</comment>
+            <comment>the image storage identifier.</comment>
         </property>
         <property type='String' name="image_title">
             <comment>the image title.</comment>
@@ -29,7 +29,7 @@
       post.id,
       post.publish_date,
       post.uri,
-      img.id,
+      store.id,
       COALESCE(store.name, '')
     FROM awa_post AS post
     LEFT JOIN awa_image AS img ON post.image_id = img.id

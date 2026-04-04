@@ -127,8 +127,16 @@ package body AWA.SEO.Servlets is
                                     "http://www.google.com/schemas/sitemap-image/1.1");
             for Item of List loop
                Stream.Start_Entity ("url");
-               Stream.Write_Entity ("loc", String '(To_String (Item.Location)));
+               Stream.Write_Entity ("loc", Item.Location);
                Stream.Write_Entity ("lastmod", Format_Date (Item.Date));
+               if Length (Item.Image) > 0 then
+                  Stream.Start_Entity ("image:image");
+                  Stream.Write_Entity ("image:loc", Item.Image);
+                  if Length (Item.Image_Title) > 0 then
+                     Stream.Write_Entity ("image:title", Item.Image_Title);
+                  end if;
+                  Stream.End_Entity ("image:image");
+               end if;
                Stream.End_Entity ("url");
             end loop;
             Stream.End_Entity ("urlset");

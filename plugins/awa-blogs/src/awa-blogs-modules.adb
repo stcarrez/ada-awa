@@ -23,16 +23,21 @@ with AWA.Workspaces.Modules;
 with AWA.Storages.Models;
 with AWA.Storages.Modules;
 with AWA.Storages.Services;
+with AWA.Images.Models;
 
 with ADO.Objects;
 with ADO.Sessions;
 with ADO.Statements;
 with ADO.Queries;
+with ADO.SQL;
+with ADO.Utils;
 
 package body AWA.Blogs.Modules is
 
    package ASC renames AWA.Services.Contexts;
    package UBO renames Util.Beans.Objects;
+
+   use type ADO.Identifier;
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Blogs.Module");
 
@@ -100,6 +105,7 @@ package body AWA.Blogs.Modules is
    begin
       Plugin.Image_Prefix := Wiki.Strings.To_UString (Wiki.Strings.To_WString (Image_Prefix));
       Plugin.Post_URI := Plugin.Get_Config (PARAM_POST_URI);
+      Plugin.Image_URI := Plugin.Get_Config (PARAM_IMAGE_URI);
       AWA.SEO.Register ("blog-sitemap.xml", Plugin'Unchecked_Access);
    end Configure;
 
@@ -262,6 +268,7 @@ package body AWA.Blogs.Modules is
                           Format  : in AWA.Blogs.Models.Format_Type;
                           Comment : in Boolean;
                           Publish_Date : in ADO.Nullable_Time;
+                          Image_Id : in ADO.Identifier;
                           Status  : in AWA.Blogs.Models.Post_Status_Type) is
       use type AWA.Blogs.Models.Post_Status_Type;
 
@@ -269,7 +276,10 @@ package body AWA.Blogs.Modules is
       DB    : ADO.Sessions.Master_Session := AWA.Services.Contexts.Get_Master_Session (Ctx);
       Post  : AWA.Blogs.Models.Post_Ref;
       Found : Boolean;
-      Published : Boolean;
+      Published   : Boolean;
+      Image       : AWA.Images.Models.Image_Ref;
+      Image_Found : Boolean := False;
+      Query       : ADO.SQL.Query;
    begin
       Ctx.Start;
       Post.Load (Session => DB, Id => Post_Id, Found => Found);
@@ -282,6 +292,13 @@ package body AWA.Blogs.Modules is
       AWA.Permissions.Check (Permission => ACL_Update_Post.Permission,
                              Entity     => Post);
 
+      if Image_Id > 0 then
+         Query.Set_Filter ("o.storage_id = ?");
+         Query.Bind_Param (1, Image_Id);
+         Image.Find (Session => DB,
+                     Query   => Query,
+                     Found   => Image_Found);
+      end if;
       if not Publish_Date.Is_Null then
          Post.Set_Publish_Date (Publish_Date);
       end if;
@@ -297,6 +314,7 @@ package body AWA.Blogs.Modules is
       Post.Set_Status (Status);
       Post.Set_Format (Format);
       Post.Set_Allow_Comments (Comment);
+      Post.Set_Image (Image);
       Post.Save (DB);
       Ctx.Commit;
 
@@ -404,15 +422,23 @@ package body AWA.Blogs.Modules is
       AWA.Blogs.Models.List (List, DB, Query);
       Sitemap.Entries.Clear;
       for Info of List loop
-         Variables.Bind ("uri", UBO.To_Object (Info.URI));
+         Variables.Bind ("uri", UBO.To_Object (Info.Uri));
+         Variables.Bind ("post_id", ADO.Utils.To_Object (Info.Id));
+         Variables.Bind ("image_id", ADO.Utils.To_Object (Info.Image_Id));
+         Variables.Bind ("image_title", UBO.To_Object (Info.Image_Title));
          declare
             Item : AWA.SEO.Sitemap_Entry;
-            URI  : constant Util.Beans.Objects.Object
+            URI  : Util.Beans.Objects.Object
               := Provider.Post_URI.Get_Value (Ctx);
          begin
             Item.Location := UBO.To_Unbounded_String (URI);
             Item.Date := Info.Date;
             Item.Priority := 0;
+            if Info.Image_Id /= ADO.NO_IDENTIFIER then
+               URI := Provider.Image_URI.Get_Value (Ctx);
+               Item.Image := UBO.To_Unbounded_String (URI);
+               Item.Image_Title := Info.Image_Title;
+            end if;
             Sitemap.Entries.Append (Item);
          end;
       end loop;

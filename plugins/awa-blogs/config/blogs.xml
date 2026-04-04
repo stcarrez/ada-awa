@@ -21,6 +21,18 @@
     </description>
   </context-param>
 
+  <context-param>
+    <param-name>blogs.image_uri</param-name>
+    <param-value>#{app_url_base}/blogs/images/\#{post_id}/\#{image_id}/default/\#{image_title}</param-value>
+    <description>
+      The image URI to write in generated sitemaps.  Similar to the blogs.post_uri,
+      this must be absolute and specify the host and domain.  This EL expression is
+      evaluated twice: a first time during application setup and a second time for each URI
+      that must be generated. The blog post base URI is defined in the variable #{post_id}
+      (be careful to escape the '#' by using \#{post_id} due to the double EL evaluation).
+    </description>
+  </context-param>
+
   <managed-bean>
     <description>This bean describes a blog post for the creation or the update</description>
     <managed-bean-name>post</managed-bean-name>

@@ -52,6 +52,9 @@ package AWA.SEO is
    function To_String (Value : in UString) return String
      renames Ada.Strings.Unbounded.To_String;
 
+   function Length (Value : in UString) return Natural
+     renames Ada.Strings.Unbounded.Length;
+
    --  Describe an entry in the sitmap generation.
    type Sitemap_Entry is record
       Location    : UString;
