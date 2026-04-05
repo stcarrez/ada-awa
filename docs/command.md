@@ -256,3 +256,24 @@ The `--long-lines` option triggers the list of database tables with the
 number of entries they contain.
 
 
+### The permission command
+
+
+_driver_ permission [--allow _PERM_] [--deny _PERM_] [email...]
+
+The `permission` command allows to list the permissions defined for users
+and it also allows to grant or revoke permissions.  When no argument are
+defined, the command lists every permissions granted for a given user
+with an email address and when an email address is defined, it lists the
+permissions granted for that user.  The output is similar to:
+
+```
+ACL     Permission:Workspace:Type:Entity                            Email
+1601    wiki-space-create:1302:awa_workspace:1302                   user@proton.me
+98      storage-create:1302:awa_workspace:1302                      user@proton.me
+99      storage-delete:1302:awa_workspace:1302                      user@proton.me
+100     folder-create:1302:awa_workspace:1302                       user@proton.me
+```
+
+The command provides a `--allow` and a `--deny` option to grant new permissions
+or revoke existing permissions.
