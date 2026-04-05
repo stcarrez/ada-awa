@@ -29,8 +29,8 @@ package AWA.Users.Models is
 
    pragma Style_Checks ("-mrIu");
 
-   type Authenticate_Type is (AUTH_HASH_SHA1, AUTH_OAUTH);
-   for Authenticate_Type use (AUTH_HASH_SHA1 => 0, AUTH_OAUTH => 1);
+   type Authenticate_Type is (AUTH_HASH_SHA1, AUTH_OAUTH, AUTH_APPLICATION);
+   for Authenticate_Type use (AUTH_HASH_SHA1 => 0, AUTH_OAUTH => 1, AUTH_APPLICATION => 2);
    package Authenticate_Type_Objects is
       new Util.Beans.Objects.Enums (Authenticate_Type);
 
@@ -49,8 +49,8 @@ package AWA.Users.Models is
       Value   : Key_Type;
    end record;
 
-   type MailDeliveryStatus is (UNKNOWN, VALID, SOFT_BOUNCE, HARD_BOUNCE);
-   for MailDeliveryStatus use (UNKNOWN => 0, VALID => 1, SOFT_BOUNCE => 2, HARD_BOUNCE => 3);
+   type MailDeliveryStatus is (UNKNOWN, VALID, SOFT_BOUNCE, HARD_BOUNCE, INVALID);
+   for MailDeliveryStatus use (UNKNOWN => 0, VALID => 1, SOFT_BOUNCE => 2, HARD_BOUNCE => 3, INVALID => 4);
    package MailDeliveryStatus_Objects is
       new Util.Beans.Objects.Enums (MailDeliveryStatus);
 
@@ -212,6 +212,7 @@ package AWA.Users.Models is
 
    --  --------------------
    --  The User entity represents a user that can access and use the application.
+   --  -
    --  --------------------
    --  Create an object key for User.
    function User_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;

@@ -816,7 +816,7 @@ package AWA.Blogs.Models is
       --  the post base URI.
       Uri : Ada.Strings.Unbounded.Unbounded_String;
 
-      --  the image identifier.
+      --  the image storage identifier.
       Image_Id : ADO.Identifier;
 
       --  the image title.

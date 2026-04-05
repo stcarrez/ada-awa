@@ -257,7 +257,8 @@ CREATE TABLE IF NOT EXISTS awa_session (
   "user_auth_id" BIGINT ,
   PRIMARY KEY ("id")
 );
-/* The User entity represents a user that can access and use the application. */
+/* The User entity represents a user that can access and use the application.
+- */
 CREATE TABLE IF NOT EXISTS awa_user (
   /* the user first name. */
   "first_name" VARCHAR(255) NOT NULL,
