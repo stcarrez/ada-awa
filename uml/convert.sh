@@ -32,11 +32,11 @@ convert -flatten TagsModel.png $TARGET/awa_tags_model.png
 
 convert -flatten OAuthModel.png $TARGET/awa_oauth_model.png
 convert -flatten CountryModel.png $TARGET/awa_country_model.png
-convert -flatten EventModel.png $TARGET/awa_event_model.png
+convert -flatten EventModel.png $TARGET/awa_events_model.png
 
 convert -flatten MailModel.png $TARGET/awa_mail_model.png
 
-convert -flatten PermissionModel.png $TARGET/awa_permission_model.png
+convert -flatten PermissionModel.png $TARGET/awa_permissions_model.png
 
 convert -flatten UserModel.png $TARGET/awa_user_model.png
 convert -flatten WorkspaceModel.png $TARGET/awa_workspace_model.png
