@@ -82,10 +82,20 @@ package body AWA.Commands.Start is
                            Application : in Servlet.Core.Servlet_Registry_Access) is
       begin
          if Application.all in ASF.Applications.Main.Application'Class then
-            Configure (URI (URI'First + 1 .. URI'Last), Context);
-            ASF.Applications.Main.Application'Class (Application.all).Initialize
-              (Context.App_Config, Context.Factory);
-            Count := Count + 1;
+            declare
+               App : constant ASF.Applications.Main.Application_Access
+                 := ASF.Applications.Main.Application'Class (Application.all)'Unchecked_Access;
+               Name : constant String
+                 := App.Get_Config (AWA.Applications.P_Config_Name.P);
+            begin
+               if Name'Length > 0 then
+                  Configure (Name, Context);
+               else
+                  Configure (URI (URI'First + 1 .. URI'Last), Context);
+               end if;
+               App.Initialize (Context.App_Config, Context.Factory);
+               Count := Count + 1;
+            end;
          end if;
       end Configure;
 

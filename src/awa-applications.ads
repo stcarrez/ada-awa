@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-applications -- Ada Web Application
---  Copyright (C) 2009 - 2022 Stephane Carrez
+--  Copyright (C) 2009 - 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -91,6 +91,10 @@ package AWA.Applications is
    package P_Context_Path is
      new ASF.Applications.Main.Configs.Parameter ("contextPath",
                                                   "");
+
+   --  The application configuration base name.
+   package P_Config_Name is
+     new ASF.Applications.Main.Configs.Parameter ("app.name", "");
 
    --  Module manager
    --
