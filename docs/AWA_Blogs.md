@@ -66,6 +66,8 @@ The `Blogs` module defines the following configuration parameters:
 | |#{contextPath}/blogs/images/|
 |blogs.post_uri|The post URI to write in generated sitemaps. The URI must be absolute and specify the host and domain. This EL expression is evaluated twice: a first time during application setup and a second time for each URI that must be generated. The blog post base URI is defined in the variable #{uri} (be careful to escape the '#' by using \#{uri} due to the double EL evaluation).|
 | |#{app_url_base}/blogs/posts/\#{uri}|
+|blogs.image_uri|The image URI to write in generated sitemaps. Similar to the blogs.post_uri, this must be absolute and specify the host and domain. This EL expression is evaluated twice: a first time during application setup and a second time for each URI that must be generated. The blog post base URI is defined in the variable #{post_id} (be careful to escape the '#' by using \#{post_id} due to the double EL evaluation).|
+| |#{app_url_base}/blogs/images/\#{post_id}/\#{image_id}/default/\#{image_title}|
 
 ## Ada Beans
 Several bean types are provided to represent and manage the blogs and their posts.
