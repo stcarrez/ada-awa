@@ -95,6 +95,7 @@ package body AWA.SEO.Servlets is
             List : Sitemap_Index_Vector;
          begin
             Module.Get_Sitemap_Index (List);
+            Stream.Write ("<?xml version=""1.0""?>" & ASCII.LF);
             Stream.Start_Document;
             Stream.Start_Entity ("sitemapindex");
             Stream.Write_Attribute ("xmlns",
@@ -119,6 +120,7 @@ package body AWA.SEO.Servlets is
                Response.Send_Error (Servlet.Responses.SC_NOT_FOUND);
                return;
             end if;
+            Stream.Write ("<?xml version=""1.0""?>" & ASCII.LF);
             Stream.Start_Document;
             Stream.Start_Entity ("urlset");
             Stream.Write_Attribute ("xmlns",
