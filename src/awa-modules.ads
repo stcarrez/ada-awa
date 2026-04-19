@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-modules -- Application Module
---  Copyright (C) 2009 - 2020, 2022 Stephane Carrez
+--  Copyright (C) 2009 - 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -78,6 +78,8 @@ limited with AWA.Applications;
 --
 package AWA.Modules is
 
+   subtype UString is Ada.Strings.Unbounded.Unbounded_String;
+
    type Application_Access is access all AWA.Applications.Application'Class;
 
    --  ------------------------------
@@ -131,6 +133,9 @@ package AWA.Modules is
    function Get_Config (Plugin  : Module;
                         Name    : String;
                         Default : String := "") return String;
+   function Get_Config (Plugin  : Module;
+                        Name    : String;
+                        Default : String := "") return UString;
 
    --  Get the module configuration property identified by the name.
    --  If the configuration property does not exist, returns the default value.

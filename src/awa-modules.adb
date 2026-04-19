@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-modules -- Application Module
---  Copyright (C) 2009 - 2020, 2022 Stephane Carrez
+--  Copyright (C) 2009 - 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -88,6 +88,13 @@ package body AWA.Modules is
                         Default : String := "") return String is
    begin
       return Plugin.Config.Get (Name, Default);
+   end Get_Config;
+
+   function Get_Config (Plugin  : Module;
+                        Name    : String;
+                        Default : String := "") return UString is
+   begin
+      return To_Unbounded_String (Plugin.Config.Get (Name, Default));
    end Get_Config;
 
    --  ------------------------------
@@ -178,7 +185,7 @@ package body AWA.Modules is
             return EL.Contexts.Default.Default_ELResolver (Resolver).Get_Value (Context, Base,
                                                                                 Name);
          else
-            return Util.Beans.Objects.To_Object (Plugin.Get_Config (To_String (Name), ""));
+            return Util.Beans.Objects.To_Object (UString '(Plugin.Get_Config (To_String (Name), "")));
          end if;
       end Get_Value;
 
