@@ -1,0 +1,23 @@
+<!-- Form to create a blog
+  -  Copyright (C) 2011, 2017, 2018, 2019, 2020, 2026 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -  SPDX-License-Identifier: Apache-2.0
+  -->
+<ui:composition
+        xmlns:c="http://java.sun.com/jstl/core"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:ajax="http://code.google.com/p/ada-asf/ajax">
+    <c:choose>
+        <c:when test="#{user.isLogged}">
+            <ajax:include styleClass="asf-container" async="true"
+                          src="/blogs/forms/comment-add-form.html?id=#{post.id}"/>
+        </c:when>
+        <c:otherwise>
+            <h3>#{blogMsg.blog_add_comment}</h3>
+            #{blogMsg.blog_sign_in_add_comment}
+            <a id="awa-login" rel="nofollow"
+               href="#{contextPath}/auth/login.html?redirect=#{contextPath}/blogs/posts/#{util:urlEncode(post.uri)}%23comment-add">#{blogMsg.blog_sign_in_label}</a>
+        </c:otherwise>
+    </c:choose>
+</ui:composition>
+

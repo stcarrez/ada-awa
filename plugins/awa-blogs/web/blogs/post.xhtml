@@ -83,17 +83,7 @@
                 </ui:include>
               </h:panelGroup>
               <h:panelGroup id='comment-add' layout="div" rendered="#{post.allow_comments}">
-                <c:choose>
-                  <c:when test="#{user.isLogged}">
-                    <ajax:include styleClass="asf-container" async="true"
-                                  src="/blogs/forms/comment-add-form.html?id=#{post.id}"/>
-                  </c:when>
-                  <c:otherwise>
-                    <h3>#{blogMsg.blog_add_comment}</h3>
-                    #{blogMsg.blog_sign_in_add_comment}
-                    <a id="awa-login" rel="nofollow" href="#{contextPath}/auth/login.html?redirect=#{contextPath}/blogs/posts/#{util:urlEncode(post.uri)}%23comment-add">#{blogMsg.blog_sign_in_label}</a>
-                  </c:otherwise>
-                </c:choose>
+                <ui:include src="/blogs/forms/comment-form.xhtml"/>
               </h:panelGroup>
             </div>
           </article>
