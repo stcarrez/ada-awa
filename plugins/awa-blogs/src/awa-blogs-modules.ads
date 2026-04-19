@@ -12,6 +12,8 @@ with ADO;
 with Wiki.Strings;
 with AWA.Events;
 with AWA.Modules;
+with AWA.Comments.Models;
+with AWA.Comments.Modules;
 with AWA.Blogs.Models;
 with AWA.Counters.Definition;
 with AWA.Blogs.Servlets;
@@ -77,6 +79,7 @@ package AWA.Blogs.Modules is
 
    --  Definition the events.
    package Post_Publish_Event is new AWA.Events.Definition (Name => "blog-post-publish");
+   package Comment_Create_Event is new AWA.Events.Definition (Name => "blog-comment-create");
 
    --  Define the read post counter.
    package Read_Counter is new AWA.Counters.Definition (Models.POST_TABLE, "read_count");
@@ -84,7 +87,8 @@ package AWA.Blogs.Modules is
    Not_Found : exception;
 
    type Blog_Module is new AWA.Modules.Module
-     and AWA.SEO.Sitemap_Provider with private;
+     and AWA.SEO.Sitemap_Provider
+     and AWA.Comments.Modules.Listener with private;
    type Blog_Module_Access is access all Blog_Module'Class;
 
    --  Initialize the blog module.
@@ -154,10 +158,26 @@ package AWA.Blogs.Modules is
    procedure Create_Sitemap (Provider : in Blog_Module;
                              Sitemap  : in out AWA.SEO.Sitemap_Info);
 
+   --  The `On_Create` procedure is called by `Notify_Create` to notify the creation of the item.
+   overriding
+   procedure On_Create (Instance : in Blog_Module;
+                        Item     : in AWA.Comments.Models.Comment_Ref'Class);
+
+   --  The `On_Update` procedure is called by `Notify_Update` to notify the update of the item.
+   overriding
+   procedure On_Update (Instance : in Blog_Module;
+                        Item     : in AWA.Comments.Models.Comment_Ref'Class);
+
+   --  The `On_Delete` procedure is called by `Notify_Delete` to notify the deletion of the item.
+   overriding
+   procedure On_Delete (Instance : in Blog_Module;
+                        Item     : in AWA.Comments.Models.Comment_Ref'Class);
+
 private
 
    type Blog_Module is new AWA.Modules.Module
-     and AWA.SEO.Sitemap_Provider with record
+     and AWA.SEO.Sitemap_Provider
+     and AWA.Comments.Modules.Listener with record
       Image_Prefix  : Wiki.Strings.UString;
       Image_Servlet : aliased AWA.Blogs.Servlets.Image_Servlet;
       Post_URI      : EL.Expressions.Expression;

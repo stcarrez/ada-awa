@@ -243,7 +243,7 @@ package AWA.Blogs.Beans is
                    Outcome      : in out Ada.Strings.Unbounded.Unbounded_String;
                    Publish_Only : in Boolean);
 
-   -- Get from the image links the first image ID that we identify.
+   --  Get from the image links the first image ID that we identify.
    function Get_Image_Id (Bean : in Post_Bean) return ADO.Identifier;
 
    --  Create the Post_Bean bean instance.

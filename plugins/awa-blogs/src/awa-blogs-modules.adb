@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-blogs-module -- Blog and post management module
---  Copyright (C) 2011, 2012, 2013, 2017, 2018, 2019, 2020, 2022 Stephane Carrez
+--  Copyright (C) 2011 - 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -91,6 +91,20 @@ package body AWA.Blogs.Modules is
       App.Add_Servlet ("blog-image", Plugin.Image_Servlet'Unchecked_Access);
 
       AWA.Modules.Module (Plugin).Initialize (App, Props);
+
+      --  Register the listener to be notified when comments are created.
+      declare
+         use AWA.Comments.Modules;
+
+         Module : constant Comment_Module_Access := AWA.Comments.Modules.Get_Comment_Module;
+      begin
+         if Module = null then
+            Log.Warn ("No comment module defined:"
+                      & " notification of blog post comments is disabled.");
+         else
+            Module.Add_Listener (Plugin'Unchecked_Access);
+         end if;
+      end;
    end Initialize;
 
    --  ------------------------------
@@ -443,5 +457,43 @@ package body AWA.Blogs.Modules is
          end;
       end loop;
    end Create_Sitemap;
+
+   --  ------------------------------
+   --  The `On_Create` procedure is called by `Notify_Create` to notify the creation of the item.
+   --  ------------------------------
+   overriding
+   procedure On_Create (Instance : in Blog_Module;
+                        Item     : in AWA.Comments.Models.Comment_Ref'Class) is
+      Event : AWA.Events.Module_Event;
+   begin
+      Event.Set_Event_Kind (Comment_Create_Event.Kind);
+      Event.Set_Parameter ("first_name", Item.Get_Author.Get_First_Name);
+      Event.Set_Parameter ("last_name", Item.Get_Author.Get_Last_Name);
+      Event.Set_Parameter ("name", Item.Get_Author.Get_Name);
+      Event.Set_Parameter ("email", Item.Get_Author.Get_Email.Get_Email);
+      Event.Set_Parameter ("message", Item.Get_Message);
+      Event.Set_Parameter ("id", ADO.Utils.To_Object (Item.Get_Entity_Id));
+      Instance.Send_Event (Event);
+   end On_Create;
+
+   --  ------------------------------
+   --  The `On_Update` procedure is called by `Notify_Update` to notify the update of the item.
+   --  ------------------------------
+   overriding
+   procedure On_Update (Instance : in Blog_Module;
+                        Item     : in AWA.Comments.Models.Comment_Ref'Class) is
+   begin
+      null;
+   end On_Update;
+
+   --  ------------------------------
+   --  The `On_Delete` procedure is called by `Notify_Delete` to notify the deletion of the item.
+   --  ------------------------------
+   overriding
+   procedure On_Delete (Instance : in Blog_Module;
+                        Item     : in AWA.Comments.Models.Comment_Ref'Class) is
+   begin
+      null;
+   end On_Delete;
 
 end AWA.Blogs.Modules;

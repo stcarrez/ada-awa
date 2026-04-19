@@ -328,7 +328,7 @@ package body AWA.Blogs.Beans is
       return Result (Result'First .. Len);
    end Get_Predefined_Uri;
 
-   -- Get from the image links the first image ID that we identify.
+   --  Get from the image links the first image ID that we identify.
    function Get_Image_Id (Bean : in Post_Bean) return ADO.Identifier is
    begin
       for Iter in Bean.Links.Images.Iterate loop
