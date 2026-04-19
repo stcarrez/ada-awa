@@ -690,6 +690,7 @@ ul.awa-pagination li {
     .awa-menu li {
         width: 100%;
         background: #111;
+        display: none;
     }
     .awa-hamb-menu {
         display: block;

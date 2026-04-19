@@ -30,7 +30,7 @@
 }
 .awa-comment div.comment-gravatar, div.awa-form div.comment-gravatar {
     position: absolute;
-    left: 0px;
+    left: 0;
     top: 0;
 }
 .awa-comment div.comment-author {
@@ -79,4 +79,7 @@
     clear: both;
     line-height: 2em;
     width: 100%;
+}
+@media screen and (max-width: 600px) {
+    .awa-comment-list, .awa-comment { padding-left: 0; }
 }
