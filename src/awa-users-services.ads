@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa.users -- User registration, authentication processes
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2017, 2018, 2022, 2024 Stephane Carrez
+--  Copyright (C) 2009 - 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -245,11 +245,6 @@ package AWA.Users.Services is
    procedure Initialize (Model  : in out User_Service;
                          Module : in AWA.Modules.Module'Class);
 
-private
-
-   function Create_Key (Model  : in out User_Service;
-                        Number : in ADO.Identifier) return String;
-
    procedure Create_Session (Model   : in User_Service;
                              DB      : in out ADO.Sessions.Master_Session;
                              Session : out Session_Ref'Class;
@@ -259,6 +254,11 @@ private
                              Principal : out AWA.Users.Principals.Principal_Access) with
      Pre => (User.Is_Loaded or else User.Is_Inserted)
      and then (Auth.Is_Loaded or else Auth.Is_Inserted);
+
+private
+
+   function Create_Key (Model  : in out User_Service;
+                        Number : in ADO.Identifier) return String;
 
    type User_Service is new AWA.Modules.Module_Manager with record
       Server_Id   : Integer := 0;
