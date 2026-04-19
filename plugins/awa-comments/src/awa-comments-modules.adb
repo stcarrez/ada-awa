@@ -14,16 +14,12 @@ with Security.Permissions;
 
 with AWA.Users.Models;
 with AWA.Permissions;
-with AWA.Modules.Beans;
 with AWA.Services.Contexts;
 with AWA.Comments.Beans;
 
 package body AWA.Comments.Modules is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("AWA.Comments.Module");
-
-   package Register is new AWA.Modules.Beans (Module        => Comment_Module,
-                                              Module_Access => Comment_Module_Access);
 
    --  ------------------------------
    --  Initialize the comments module.

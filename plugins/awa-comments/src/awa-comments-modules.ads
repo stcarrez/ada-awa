@@ -8,6 +8,7 @@ with ASF.Applications;
 
 with ADO;
 with AWA.Modules;
+with AWA.Modules.Beans;
 with AWA.Modules.Get;
 with AWA.Modules.Lifecycles;
 with AWA.Comments.Models;
@@ -83,5 +84,8 @@ package AWA.Comments.Modules is
 
    function Get_Comment_Module is
      new AWA.Modules.Get (Comment_Module, Comment_Module_Access, NAME);
+
+   package Register is new AWA.Modules.Beans (Module        => Comment_Module,
+                                              Module_Access => Comment_Module_Access);
 
 end AWA.Comments.Modules;
