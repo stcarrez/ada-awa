@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-beans -- Beans for module wikis
---  Copyright (C) 2015, 2016, 2020 Stephane Carrez
+--  Copyright (C) 2015, 2016, 2020, 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -44,6 +44,7 @@ with AWA.Components.Wikis;
 package AWA.Wikis.Beans is
 
    use Ada.Strings.Wide_Wide_Unbounded;
+   package UBO renames Util.Beans.Objects;
 
    package Image_Info_Maps is
      new Ada.Containers.Indefinite_Hashed_Maps (Key_Type        => Wiki.Strings.WString,

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-beans -- Beans for module wikis
---  Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2022 Stephane Carrez
+--  Copyright (C) 2015 - 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -362,6 +362,10 @@ package body AWA.Wikis.Beans is
    begin
       if Name = "wiki_id" then
          From.Set_Wiki_Id (ADO.Utils.To_Identifier (Value));
+      elsif Name = "image_prefix" then
+         From.Links.Image_Prefix := UBO.To_Unbounded_Wide_Wide_String (Value);
+      elsif Name = "page_prefix" then
+         From.Links.Page_Prefix := UBO.To_Unbounded_Wide_Wide_String (Value);
       else
          AWA.Wikis.Models.Wiki_View_Info (From).Set_Value (Name, Value);
       end if;
