@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-images-modules -- Image management module
---  Copyright (C) 2012, 2016, 2020, 2022, 2023 Stephane Carrez
+--  Copyright (C) 2012 - 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -14,6 +14,7 @@ with Util.Streams.Texts;
 with Util.Strings;
 
 with ADO.Sessions;
+with ADO.SQL;
 
 with EL.Variables.Default;
 with EL.Contexts.Default;
@@ -163,10 +164,9 @@ package body AWA.Images.Modules is
    procedure On_Update (Instance : in Image_Module;
                         Item     : in AWA.Storages.Models.Storage_Ref'Class) is
    begin
+      Image_Module'Class (Instance).Delete_Image (Item);
       if Is_Image (Item) then
          Image_Module'Class (Instance).Create_Image (Item);
-      else
-         Image_Module'Class (Instance).Delete_Image (Item);
       end if;
    end On_Update;
 
@@ -335,8 +335,32 @@ package body AWA.Images.Modules is
    --  ------------------------------
    procedure Delete_Image (Service : in Image_Module;
                            File    : in AWA.Storages.Models.Storage_Ref'Class) is
+      Ctx       : constant ASC.Service_Context_Access := ASC.Current;
+      DB        : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
+      Img       : AWA.Images.Models.Image_Ref;
+      Query     : ADO.SQL.Query;
+      Found     : Boolean;
    begin
-      null;
+      Query.Set_Filter ("o.storage_id=?");
+      Query.Bind_Param (1, File.Get_Id);
+      Img.Find (DB, Query, Found);
+      if Found then
+         declare
+            Thumbnail : AWA.Storages.Models.Storage_Ref'Class := Img.Get_Thumbnail;
+         begin
+            if not Thumbnail.Is_Null then
+               Thumbnail.Delete (DB);
+            end if;
+            Img.Delete (DB);
+            if not Thumbnail.Is_Null then
+               Query.Bind_Param (1, Thumbnail.Get_Id);
+               Img.Find (DB, Query, Found);
+               if Found then
+                  Img.Delete (DB);
+               end if;
+            end if;
+         end;
+      end if;
    end Delete_Image;
 
    --  ------------------------------
