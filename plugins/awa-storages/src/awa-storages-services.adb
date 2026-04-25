@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-services -- Storage service
---  Copyright (C) 2012, 2013, 2016, 2018, 2019, 2020, 2022 Stephane Carrez
+--  Copyright (C) 2012 - 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -283,11 +283,20 @@ package body AWA.Storages.Services is
             end if;
             Storage.Load (DB, From, Found);
             if not Found then
-               Log.Warn ("Storage entity {0} not found", ADO.Identifier'Image (From));
+               Log.Warn ("Storage entity {0} not found", From'Image);
                raise ADO.Objects.NOT_FOUND;
             end if;
             Store.Load (DB, Storage, File);
-            Into := ADO.Create_Blob (AWA.Storages.Get_Path (File));
+            declare
+               Path : constant String := AWA.Storages.Get_Path (File);
+            begin
+               if not Ada.Directories.Exists (Path) then
+                  Log.Error ("Storage entity {0} with missing content in {1}",
+                             From'Image, Path);
+                  raise ADO.Objects.NOT_FOUND;
+               end if;
+               Into := ADO.Create_Blob (Path);
+            end;
          end;
       end if;
    end Load;
@@ -312,11 +321,20 @@ package body AWA.Storages.Services is
       end if;
       Storage.Load (DB, From, Found);
       if not Found then
-         Log.Warn ("Storage entity {0} not found", ADO.Identifier'Image (From));
+         Log.Warn ("Storage entity {0} not found", From'Image);
          raise ADO.Objects.NOT_FOUND;
       end if;
       Store.Load (DB, Storage, File);
-      Into := ADO.Create_Blob (AWA.Storages.Get_Path (File));
+      declare
+         Path : constant String := AWA.Storages.Get_Path (File);
+      begin
+         if not Ada.Directories.Exists (Path) then
+            Log.Error ("Storage entity {0} with missing content in {1}",
+                       From'Image, Path);
+            raise ADO.Objects.NOT_FOUND;
+         end if;
+         Into := ADO.Create_Blob (Path);
+      end;
    end Load;
 
    --  Load the storage content into a file.  If the data is not stored in a file, a temporary
@@ -349,7 +367,7 @@ package body AWA.Storages.Services is
          Local.Find (DB, Query, Found);
          if Found then
             Into.Path := Local.Get_Path;
-            Log.Info ("Load local file {0} path {1}", ADO.Identifier'Image (From),
+            Log.Info ("Load local file {0} path {1}", From'Image,
                       Ada.Strings.Unbounded.To_String (Into.Path));
             return;
          end if;
@@ -360,7 +378,7 @@ package body AWA.Storages.Services is
       Query.Bind_Param ("user_id", User);
       Storage.Find (DB, Query, Found);
       if not Found then
-         Log.Info ("File Id {0} not found", ADO.Identifier'Image (From));
+         Log.Info ("File Id {0} not found", From'Image);
          raise ADO.Objects.NOT_FOUND;
       end if;
 
@@ -370,7 +388,7 @@ package body AWA.Storages.Services is
                   From    => Storage,
                   Into    => Into);
       Ctx.Commit;
-      Log.Info ("Load local file {0} path {1}", ADO.Identifier'Image (From),
+      Log.Info ("Load local file {0} path {1}", From'Image,
                 Ada.Strings.Unbounded.To_String (Into.Path));
    end Get_Local_File;
 
@@ -435,7 +453,7 @@ package body AWA.Storages.Services is
       Store := Storage_Service'Class (Service).Get_Store (S.Get_Storage);
       if Store = null then
          Log.Error ("There is no store associated with storage item {0}",
-                    ADO.Identifier'Image (Storage));
+                    Storage'Image);
       else
          Store.Delete (DB, S);
       end if;

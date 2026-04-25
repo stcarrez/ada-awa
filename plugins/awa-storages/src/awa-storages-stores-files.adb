@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-storages-stores-files -- File system store
---  Copyright (C) 2012, 2015, 2016, 2018, 2022 Stephane Carrez
+--  Copyright (C) 2012, 2015, 2016, 2018, 2022, 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -53,7 +53,7 @@ package body AWA.Storages.Stores.Files is
       Res : String (1 .. 16 + 5);
    begin
       Util.Encoders.Encode_LEB128 (Buffer, Buffer'First, Unsigned_64 (Workspace_Id), Last);
-      Util.Encoders.Encode_LEB128 (Buffer, Last, Unsigned_64 (File_Id), Last);
+      Util.Encoders.Encode_LEB128 (Buffer, Last + 1, Unsigned_64 (File_Id), Last);
 
       T.Transform (Data    => Buffer (1 .. Last),
                    Into    => R, Last => Last,
