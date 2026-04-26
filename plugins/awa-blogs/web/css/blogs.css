@@ -311,9 +311,10 @@ div.comment-COMMENT_PUBLISHED {
 .blog-post .post-title h2 a {
     color: var(--text-title);
 }
-div.post-text pre {
-    background: var(--bg-highlight);
+div.post-text pre code {
+    background: var(--bg-code);
     border: 1px solid var(--border-medium);
+    border-radius: 10px;
 }
 div.post-text h2, div.post-text h3, div.post-text h4,
 div.post-text h5, div.post-text h6 {
