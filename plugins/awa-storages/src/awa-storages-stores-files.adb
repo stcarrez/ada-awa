@@ -58,9 +58,11 @@ package body AWA.Storages.Stores.Files is
       T.Transform (Data    => Buffer (1 .. Last),
                    Into    => R, Last => Last,
                    Encoded => Encoded);
+      T.Finish (Into => R (Last + 1 .. R'Last), Last => Last);
 
       for I in 1 .. Last loop
          Res (Pos) := Character'Val (R (I));
+         exit when Res (Pos) = '=';
          Pos := Pos + 1;
          if (I mod 2) = 0 and then I /= Last then
             Res (Pos) := '/';
