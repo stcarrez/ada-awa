@@ -510,6 +510,7 @@
     <url-pattern>/blogs/posts/#{post.uri}</url-pattern>
     <url-pattern>/blogs/posts/#{post.year}/#{post.month}/#{post.day}/#{post.uri}</url-pattern>
     <url-pattern>/blogs/feeds</url-pattern>
+    <url-pattern>/blogs/feeds.xml</url-pattern>
     <url-pattern>/blogs/images/*</url-pattern>
     <url-pattern>/blogs/tags/#{postList.tag}</url-pattern>
   </filter-mapping>
@@ -538,7 +539,7 @@
     <url-pattern>/blogs/post.html</url-pattern>
     <url-pattern>/blogs/tagged.html</url-pattern>
     <url-pattern>/blogs/index.html</url-pattern>
-    <url-pattern>/blogs/feeds.html</url-pattern>
+    <url-pattern>/blogs/feeds.xml</url-pattern>
     <url-pattern>/blogs/feeds</url-pattern>
     <url-pattern>/blogs/images/.*</url-pattern>
   </url-policy>
@@ -597,7 +598,7 @@
 
   <url-mapping>
     <pattern>/blogs/feeds</pattern>
-    <view-id>/blogs/feeds.html</view-id>
+    <view-id>/blogs/feeds.xml</view-id>
   </url-mapping>
 
 </module>
