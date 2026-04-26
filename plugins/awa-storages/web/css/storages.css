@@ -41,12 +41,9 @@
 .storage-document {
     float: left;
     clear: both;
-    width: 92%;
+    width: 100%;
     font-size: 0.9em;
-    padding-top: 4px;
-    padding-bottom: 4px;
-    padding-left: 4%;
-    padding-right: 2%;
+    padding: 4px 0 4px 4%;
 }
 .storage-document storage-title {
     float: left;
@@ -131,6 +128,7 @@ div.asf-active-list div.asf-active .storage-download {
 #storage-action {
     width: 24px;
     left:  -4px;
+    padding-top: 4px;
 }
 #storage-folder-create {
     width: 96%;
@@ -188,6 +186,7 @@ div.asf-active-list div.asf-active .storage-download {
 .image-details dd {
     float: left;
     width: 80%;
+    padding-left: 8px;
 }
 .storage-upload {
     float: left;
@@ -272,21 +271,21 @@ div.storage-folder-list div.asf-selected {
     background-color: #A6C9E2;
 }
 .storage-folder-title {
-    border-bottom: 1px solid #A6C9E2;
+    border-bottom: 1px solid var(--border-separator);
 }
 #storage-doc-message-notif {
-    background: #DFEFFC;
+    background: var(--bg-notif);
     border: 1px solid var(--color-error);
 }
 #storage-folder-left-panel {
     background: #f3f9fe;
-    border-right: 3px solid #A6C9E2;
+    border-right: 3px solid var(--border-separator);
 }
 .storage-file-content,
 .storage-image-content {
     border-top: 1px solid var(--border-light);
 }
 .dropzone {
-    border: 2px dashed #A6C9E2;
+    border: 2px dashed var(--border-separator);
     background: #e8f3fd;
 }

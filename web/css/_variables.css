@@ -27,6 +27,7 @@
   --bg-hover: #666;
   --bg-active: #FFC;
   --bg-highlight: #E8F0FF;
+  --bg-notif: #DFEFFC;
 
   /* Text colors */
   --text-dark: #333;
@@ -41,6 +42,7 @@
   --border-medium: #aaa;
   --border-dark: #333;
   --border-accent: orange;
+  --border-separator: #A6C9E2;
 
   /* State colors */
   --color-error: red;
