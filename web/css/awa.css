@@ -109,9 +109,7 @@ header {
     position: relative;
 }
 .awa-side-nav {
-    width: calc(100% - 50px);
-    height: 100%;
-    position: absolute;
+    width: calc(100% - 60px);
 }
 .awa-menu {
     list-style-type: none;
@@ -174,17 +172,6 @@ header {
 /* Toggle menu icon */
 .awa-side-menu:checked ~ nav {
     max-height: 100%;
-}
-.awa-side-menu:checked ~ .awa-hamb-menu .awa-hamb-line {
-    background: transparent;
-}
-.awa-side-menu:checked ~ .awa-hamb-menu .awa-hamb-line::before {
-    transform: rotate(-45deg);
-    top:0;
-}
-.awa-side-menu:checked ~ .awa-hamb-menu .awa-hamb-line::after {
-    transform: rotate(45deg);
-    top:0;
 }
 
 
@@ -508,8 +495,7 @@ ul.awa-pagination li {
 }
 
 .awa-button {
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
+    border-radius: 6px;
     padding: 0.5em;
     border: 1px solid var(--button-border);
     text-decoration: none;
@@ -528,8 +514,7 @@ ul.awa-pagination li {
     border-collapse: separate;
 }
 .awa-radio input + label {
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
+    border-radius: 6px;
     padding: 0.5em;
     border: 1px solid #c5dbec;
     text-decoration: none;
@@ -692,8 +677,24 @@ ul.awa-pagination li {
         background: #111;
         display: none;
     }
+    .awa-side-nav {
+        position: absolute;
+        height: 100%;
+        top: 1.2em;
+    }
     .awa-hamb-menu {
         display: block;
+    }
+    .awa-side-menu:checked ~ .awa-hamb-menu .awa-hamb-line {
+        background: transparent;
+    }
+    .awa-side-menu:checked ~ .awa-hamb-menu .awa-hamb-line::before {
+        transform: rotate(-45deg);
+        top:0;
+    }
+    .awa-side-menu:checked ~ .awa-hamb-menu .awa-hamb-line::after {
+        transform: rotate(45deg);
+        top:0;
     }
 }
 @media screen and (max-width: 600px) {
