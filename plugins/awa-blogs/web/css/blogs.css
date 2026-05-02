@@ -247,11 +247,11 @@ div.blog-post-info h2 {
 }
 .blog-post-comment-count {
     float: left;
-    background: url(../images/blogs/ico_comm.gif) no-repeat left center;
+    background: url(../images/blogs/icon-post-comments-16.png) no-repeat left center;
 }
 .post-title .post-comment-count {
-    background: url(../images/blogs/ico_comm.gif) no-repeat left center;
-    padding-left: 16px;
+    background: url(../images/blogs/icon-post-comments-16.png) no-repeat left center;
+    padding-left: 20px;
     margin-left: 1em;
     text-decoration: none;
 }
