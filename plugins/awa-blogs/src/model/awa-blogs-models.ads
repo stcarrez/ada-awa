@@ -574,6 +574,12 @@ package AWA.Blogs.Models is
       --  the comment date.
       Date : Ada.Calendar.Time;
 
+      --  the comment format type.
+      Format : AWA.Comments.Models.Format_Type;
+
+      --  the comment text.
+      Comment : Ada.Strings.Unbounded.Unbounded_String;
+
       --  the comment status.
       Status : AWA.Comments.Models.Status_Type;
    end record;
@@ -1249,7 +1255,7 @@ private
 
    package File_5 is
       new ADO.Queries.Loaders.File (Path => "blog-comment-list.xml",
-                                    Sha1 => "44E136D659FBA9859F2F077995D82161C743CAF3");
+                                    Sha1 => "5318908A9AB2D3673EC55E051AAF8886785DC214");
 
    package Def_Commentinfo_Comment_List is
       new ADO.Queries.Loaders.Query (Name => "comment-list",

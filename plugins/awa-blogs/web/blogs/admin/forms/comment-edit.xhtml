@@ -1,25 +1,34 @@
 <!-- Edit a comment by the administrator
-  -  Copyright (C) 2017 Stephane Carrez
+  -  Copyright (C) 2017-2026 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -  SPDX-License-Identifier: Apache-2.0
   -->
 <f:view contentType="text/html; charset=UTF-8"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:util="http://code.google.com/p/ada-asf/util"
-        xmlns:ui="http://java.sun.com/jsf/facelets">
+        xmlns:util="http://code.google.com/p/ada-asf/util">
     <f:metadata>
-        <f:viewParam id='id' value='#{post.id}'/>
-        <f:viewParam id='id' value='#{postNewComment.entity_id}'/>
+        <f:viewParam id='id' value='#{blogPublishComment.id}'/>
     </f:metadata>
-    <h3>#{blogMsg.blog_add_comment}</h3>
-    <ui:decorate template="/comments/forms/comment-form.xhtml">
-        <ui:param name="comment" value="#{postNewComment}"/>
-        <ui:define name="comment-input">
-            <h:inputHidden id='post-id' value='#{post.id}'/>
-        </ui:define>
-    </ui:decorate>
+    <h:form id='post'>
+        <h:inputHidden id='comment-id' value='#{blogPublishComment.id}' required='false'/>
+        <h:messages styleClass='awa-error'/>
+        <dl class="awa-required#{util:hasMessage('text') ? ' awa-error' : ''}">
+            <dd>
+                <h:inputTextarea id='c_text}' rows='10' required='true' value='#{blogPublishComment.message}'/>
+            </dd>
+        </dl>
+        <ul class='awa-buttons'>
+            <li>
+                <h:commandButton id='create'
+                                 value='#{blogMsg.blog_post_save_comment}'
+                                 styleClass="ui-button ui-state-default ui-corner-all"
+                                 action="#{blogPublishComment.save}"/>
+            </li>
+        </ul>
+    </h:form>
+
     <util:script>
-        $('textarea').focus();
+        $('#c_#{blogPublishComment.id} textarea').focus();
     </util:script>
 </f:view>

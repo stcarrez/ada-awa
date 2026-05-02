@@ -77,18 +77,26 @@
               <div id='blog-comment-list' class='blog-admin'>
                 <ui:include src="/comments/lists/comment-list.xhtml">
                   <ui:param name="commentList" value="#{postComments}"/>
+                  <ui:param name="showStatus" value="true"/>
                 </ui:include>
               </div>
             </h:panelGroup>
-            <div id='blog-comment-action' class='asf-list-action'></div>
           </div>
         </div>
       </div>
+      <ul id='blog-comment-action' class="asf-list-action awa-comment-actions">
+        <li><a href="" class="comment-action-edit" title="#{commentMsg.comment_edit_tooltip}">#{commentMsg.comment_edit_label}</a></li>
+        <li><a href="" class="comment-action-publish" title="#{commentMsg.comment_publish_tooltip}">#{commentMsg.comment_publish_label}</a></li>
+        <li><a href="" class="comment-action-spam" title="#{commentMsg.comment_spam_tooltip}">#{commentMsg.comment_spam_label}</a></li>
+        <li><a href="" class="comment-action-waiting" title="#{commentMsg.comment_unpublish_tooltip}">#{commentMsg.comment_unpublish_label}</a></li>
+        <li><a href="" class="comment-action-delete" title="#{commentMsg.comment_delete_tooltip}">#{commentMsg.comment_delete_label}</a></li>
+      </ul>
       <util:script>
           $('#blog-comment-list').blog_comment_list({
-                  actionId: '#blog-comment-action',
                   itemPrefix: 'c_',
+                  actionId: '#blog-comment-action',
                   statusUrl: "#{contextPath}/blogs/ajax/blogPublishComment/publish",
+                  editUrl: '#{contextPath}/blogs/admin/forms/comment-edit.html?id=',
                   deleteUrl: '#{contextPath}/blogs/admin/forms/comment-delete.html?id=',
               });
           $("#post-stats").post_graph({url: "#{contextPath}/blogs/post/#{post.id}/stats/now-120"});

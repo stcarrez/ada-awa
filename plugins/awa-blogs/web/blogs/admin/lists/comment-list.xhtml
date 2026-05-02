@@ -1,36 +1,46 @@
 <!-- List of blog comments for the blog administrator
-  -  Copyright (C) 2014, 2019, 2021, 2023 Stephane Carrez
+  -  Copyright (C) 2014, 2019, 2021, 2023, 2026 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -  SPDX-License-Identifier: Apache-2.0
   -->
 <ui:composition
         xmlns:awa="http://code.google.com/p/ada-awa/jsf"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:f="http://java.sun.com/jsf/core"
         xmlns:w="http://code.google.com/p/ada-asf/widget"
         xmlns:c="http://java.sun.com/jstl/core"
-	    xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
     <c:choose>
         <c:when test="#{adminBlog.comments.count == 0}">
-           <div class='awa-list-empty'>#{blogMsg.blog_admin_list_comment_empty_message}</div>
+            <div class='awa-list-empty'>#{blogMsg.blog_admin_list_comment_empty_message}</div>
         </c:when>
         <c:otherwise>
-           <h:list var="cmt" value="#{adminBlog.comments}">
-                <div class='post-info ui-list-item comment-#{cmt.status}' id="p_#{cmt.id}">
-                    <div class='comment-status'>
-                    </div>
-                    <div class='comment-title'>
-                        <a href="edit/#{adminBlog.id}/#{cmt.post_id}">#{cmt.title}</a>
-                    </div>
-                    <div class='comment-date'>
-                        <h:outputText value="#{cmt.date}"/>
-                    </div>
+            <h:list var="cmt" value="#{adminBlog.comments}">
+                <div class='awa-blog-comment post-info ui-list-item comment-#{cmt.status}' id="c_#{cmt.id}">
                     <div class='comment-gravatar'>
                         <w:gravatar email="#{cmt.email}" size="32" secure="true"/>
                     </div>
-                    <div class='comment-author'>
-                        #{cmt.author}
+                    <div class="awa-comment">
+                        <div class="comment-author">
+                            <div class="comment-status">
+                                #{cmt.status eq 'COMMENT_WAITING' ? commentMsg.comment_pending_label : cmt.status eq 'COMMENT_PUBLISHED' ? commentMsg.comment_published_label : commentMsg.comment_spam_label}
+                            </div>
+                            <div class='comment-author-info'>
+
+                                #{cmt.author} on
+                                <h:outputText styleClass='comment-date' value="#{cmt.date}"
+                                              converter="dateConverter"/>
+                            </div>
+                        </div>
+                        <div class='comment-title'>
+                            <a href="edit/#{adminBlog.id}/#{cmt.post_id}">#{cmt.title}</a>
+                        </div>
+                        <div class="comment-text">
+                            <h:panelGroup rendered="#{cmt.format ne 'FORMAT_WIKI'}">
+                                <h:outputText escape="#{cmt.format ne 'FORMAT_HTML'}" value="#{cmt.comment}"/>
+                            </h:panelGroup>
+                            <awa:wiki rendered="#{cmt.format eq 'FORMAT_WIKI'}"
+                                      value="#{cmt.comment}" format="markdown"/>
+                        </div>
                     </div>
                 </div>
             </h:list>

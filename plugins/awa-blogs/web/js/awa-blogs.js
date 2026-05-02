@@ -32,7 +32,7 @@
         },
         getSelectedId: function(node) {
             while (node) {
-                if ($(node).hasClass("awa-comment")) {
+                if ($(node).hasClass("awa-blog-comment") || $(node).hasClass("awa-comment")) {
                     var id = $(node).attr('id');
                     return id == null ? null : id.substring(this.options.itemPrefix.length);
                 }
@@ -57,22 +57,19 @@
 
             return ASF.Post(this.activeItem, this.options.statusUrl, "id=" + id + "&status=COMMENT_WAITING");
         },
-
-        editTask: function(node) {
-            var list = this,
-                id   = this.getSelectedId(this.activeItem),
-                url  = this.options.editTaskUrl + "?id=" + id;
-
-            ASF.Popup(node, 'vdo-edit-popup', url, {
-                triggerHandler: function triggerHandler(action, node) {
-                                    if (action == "open") {
-                                        list.setMouseOver(false);
-                                    } else {
-                                        list.setMouseOver(true);
-                                    }
-                                },
-                attachment: node
-            });
+        /**
+         * Enter the edit mode for the current active list element.
+         */
+        enterEdit: function(event) {
+            var url, item = this.activeItem,
+                id = this.getSelectedId(item);
+            if (id) {
+                item = $(item).find(".comment-text");
+                url = this.getOperationUrl(item, id, this.options.editUrl);
+                if (url) {
+                    ASF.Update(item, url, item);
+                }
+            }
             return false;
         },
 
@@ -90,13 +87,15 @@
                 return this.doWait(node);
             } else if ($(node).hasClass("comment-action-delete")) {
                 return this.enterDelete(node);
+            } else if ($(node).hasClass("comment-action-edit")) {
+                return this.enterEdit(node);
             } else {
                 var t = event.target;
 
                 if ($(t).hasClass("time-day")) {
                     return this.editTime($(t));
                 } else {
-                    return this._super("selectAction", node);
+                    return false;
                 }
             }
         }

@@ -50,6 +50,9 @@ div.blog-admin div.post-title,
 div.blog-admin div.comment-title {
     width: 36%;
 }
+div.blog-admin div.comment-title {
+    width: 100%;
+}
 div.blog-admin div.post-date,
 div.blog-admin div.post-author {
     width: 16%;
@@ -59,20 +62,40 @@ div.blog-admin div.post-ref {
     padding-left: 30px;
 }
 div.blog-admin div.comment-gravatar {
-    width: 5%;
+    width: 60px;
 }
 div.blog-admin div.post-view, div.blog-admin div.post-comment-count, .blog-admin .post-read-count {
     width: 8%;
 }
-div.blog-admin div.comment-author, div.blog-admin div.comment-date {
-    width: 20%;
+div.blog-admin div.comment-date {
+    width: auto;
 }
-
+div.blog-admin .awa-comment-actions {
+    float: right;
+}
+.awa-blog-comment div.comment-author {
+    padding-left: 5px;
+}
+div.blog-admin div.comment-author li {
+    visibility: hidden;
+}
+.blog-admin .asf-active .comment-author li {
+    visibility: visible;
+}
 div.post-header {
     font-weight: bold;
     padding-bottom: 5px;
     border-bottom: 1px solid var(--border-medium);
     margin-bottom: 5px;
+    padding-left: 2%;
+    padding-right: 2%;
+}
+div.blog-admin.post-header .comment-title {
+    width: 50%;
+    text-align: center;
+}
+div.blog-admin.post-header .comment-date {
+    float: right;
 }
 div.blog-admin div.blog-info, div.blog-info div.blog-ref, div.blog-info div.blog-title, div.blog-info div.blog-date {
     float: left;
@@ -94,7 +117,6 @@ div.blog-info div.blog-date {
 /**
  * Comment list and admin.
  */
-div.comment-status,
 div.post-status, div.post-status-POST_DRAFT, div.post-status-POST_PUBLISHED, div.post-status-POST_SCHEDULED {
     width: 26px;
     height: 26px;
@@ -103,22 +125,15 @@ div.post-status, div.post-status-POST_DRAFT, div.post-status-POST_PUBLISHED, div
     margin-right: 2px;
     background: url(../images/blogs/icon-check-box-orange.png) no-repeat;
 }
-div.comment-COMMENT_PUBLISHED div.comment-status,
 div.post-status-POST_PUBLISHED {
     background: url(../images/blogs/icon-check-box-green.png) no-repeat;
 }
-.post-header .comment-status, div.post-status {
+div.post-status {
     background: none;
 }
-div.comment-status {
-    margin-left: 50px;
-    cursor: pointer;
-}
-div.comment-COMMENT_SPAM div.comment-status, div.comment-COMMENT_ARCHIVED div.comment-status {
-    background: url(../images/blogs/icon-spam-red.png) no-repeat;
-}
-a.spam-icon {
-    background: url(../images/blogs/icon-spam-grey.png) no-repeat;
+.awa-blog-comment .comment-text {
+    clear: both;
+    width: 100%;
 }
 /*
  * Blog post
@@ -276,8 +291,6 @@ div.blog-post-comment-count a {
     padding: 2px;
     opacity: 0.8;
     border-radius: 6px;
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
 }
 .awa-form .ui-tabs .ui-tabs-panel {
     overflow: hidden;

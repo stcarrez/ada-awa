@@ -11,23 +11,22 @@
         <div class='comment-gravatar'>
             <w:gravatar email="#{cmt.email}" size="60" secure="true"/>
         </div>
-        <div class='comment-author'>
-            #{cmt.author} on
-            <h:outputText styleClass='comment-date' value="#{cmt.date}"
-                          converter="dateConverter"/>
-            said:
+        <div class="comment-author">
+            <div class='comment-author-info'>
+                <h:outputText styleClass="comment-status"
+                              rendered="#{showStatus}"
+                              value="#{cmt.status eq 'COMMENT_WAITING' ? commentMsg.comment_pending_label : cmt.status eq 'COMMENT_PUBLISHED' ? commentMsg.comment_published_label : commentMsg.comment_spam_label}"/>
+                #{cmt.author}
+                <h:outputText styleClass='comment-date' value="#{cmt.date}"
+                              converter="dateConverter"/>
+            </div>
         </div>
-        <ul class="awa-comment-actions">
-            <li><a href="" class="comment-action-edit">#{commentMsg.comment_edit_label}</a></li>
-            <li><a href="" class="comment-action-publish">#{commentMsg.comment_publish_label}</a></li>
-            <li><a href="" class="comment-action-spam">#{commentMsg.comment_spam_label}</a></li>
-            <li><a href="" class="comment-action-waiting">#{commentMsg.comment_wait_label}</a></li>
-            <li><a href="" class="comment-action-delete">#{commentMsg.comment_delete_label}</a></li>
-        </ul>
-        <h:panelGroup rendered="#{cmt.format ne 'FORMAT_WIKI'}" styleClass='comment-text'>
-            <h:outputText escape="#{cmt.format ne 'FORMAT_HTML'}" value="#{cmt.comment}"/>
-        </h:panelGroup>
-        <awa:wiki rendered="#{cmt.format eq 'FORMAT_WIKI'}"
-                  styleClass='comment-text' value="#{cmt.comment}" format="markdown"/>
+        <div class="comment-text">
+            <h:panelGroup rendered="#{cmt.format ne 'FORMAT_WIKI'}">
+                <h:outputText escape="#{cmt.format ne 'FORMAT_HTML'}" value="#{cmt.comment}"/>
+            </h:panelGroup>
+            <awa:wiki rendered="#{cmt.format eq 'FORMAT_WIKI'}"
+                      value="#{cmt.comment}" format="markdown"/>
+        </div>
     </div>
 </h:list>

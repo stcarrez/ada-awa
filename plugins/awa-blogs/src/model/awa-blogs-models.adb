@@ -1655,6 +1655,10 @@ package body AWA.Blogs.Models is
          return Util.Beans.Objects.To_Object (From.Email);
       elsif Name = "date" then
          return Util.Beans.Objects.Time.To_Object (From.Date);
+      elsif Name = "format" then
+         return AWA.Comments.Models.Format_Type_Objects.To_Object (From.Format);
+      elsif Name = "comment" then
+         return Util.Beans.Objects.To_Object (From.Comment);
       elsif Name = "status" then
          return AWA.Comments.Models.Status_Type_Objects.To_Object (From.Status);
       end if;
@@ -1682,6 +1686,10 @@ package body AWA.Blogs.Models is
          Item.Email := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "date" then
          Item.Date := Util.Beans.Objects.Time.To_Time (Value);
+      elsif Name = "format" then
+         Item.Format := AWA.Comments.Models.Format_Type_Objects.To_Value (Value);
+      elsif Name = "comment" then
+         Item.Comment := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "status" then
          Item.Status := AWA.Comments.Models.Status_Type_Objects.To_Value (Value);
       end if;
@@ -1717,7 +1725,9 @@ package body AWA.Blogs.Models is
          Into.Author := Stmt.Get_Unbounded_String (3);
          Into.Email := Stmt.Get_Unbounded_String (4);
          Into.Date := Stmt.Get_Time (5);
-         Into.Status := AWA.Comments.Models.Status_Type'Enum_Val (Stmt.Get_Integer (6));
+         Into.Format := AWA.Comments.Models.Format_Type'Enum_Val (Stmt.Get_Integer (6));
+         Into.Comment := Stmt.Get_Unbounded_String (7);
+         Into.Status := AWA.Comments.Models.Status_Type'Enum_Val (Stmt.Get_Integer (8));
       end Read;
    begin
       Stmt.Execute;

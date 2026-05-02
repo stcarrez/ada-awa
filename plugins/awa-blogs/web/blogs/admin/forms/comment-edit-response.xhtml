@@ -1,0 +1,13 @@
+<f:view contentType="text/html; charset=UTF-8"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:util="http://code.google.com/p/ada-asf/util"
+        xmlns:awa="http://code.google.com/p/ada-awa/jsf"
+        xmlns:w="http://code.google.com/p/ada-asf/widget"
+        xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:panelGroup rendered="#{blogPublishComment.format ne 'FORMAT_WIKI'}">
+        <h:outputText escape="#{blogPublishComment.format ne 'FORMAT_HTML'}" value="#{blogPublishComment.message}"/>
+    </h:panelGroup>
+    <awa:wiki rendered="#{blogPublishComment.format eq 'FORMAT_WIKI'}"
+              value="#{blogPublishComment.message}" format="markdown"/>
+</f:view>

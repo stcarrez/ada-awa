@@ -1,14 +1,13 @@
 <!-- List the comments for the blog administrator
-  -  Copyright (C) 2011 - 2023 Stephane Carrez
+  -  Copyright (C) 2011 - 2026 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -  SPDX-License-Identifier: Apache-2.0
   -->
 <ui:composition template="/WEB-INF/layouts/layout.xhtml"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:c="http://java.sun.com/jstl/core"
         xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
-	xmlns:util="http://code.google.com/p/ada-asf/util"
+    	xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{blogMsg.blog_admin_list_comments_title}"/>
 
@@ -33,57 +32,55 @@
       <h:panelGroup rendered="#{not empty adminBlog.id}">
         <ui:include src="lists/menu-list.xhtml"/>
         <div class='blog-admin post-header' id="blog-comment-list-header">
-          <div class='comment-status'></div>
           <div class='comment-title'>
             #{blogMsg.blog_post_title_label}
           </div>
           <div class='comment-date'>
             #{blogMsg.blog_post_date_label}
           </div>
-          <div class='comment-gravatar'></div>
-          <div class='comment-author'>
-            #{blogMsg.blog_post_author_label}
-          </div>
         </div>
-        <div id='blog-comment-list' class='blog-admin awa-list'>
+        <div id='blog-comment-list' class='blog-admin awa-admin awa-list'>
           <ui:include src="lists/comment-list.xhtml"/>
         </div>
-        <div id='blog-comment-action' class='asf-list-action'>
-          <a href="#" class='asf-icon spam-icon' title='#{blogMsg.blog_comment_spam_action_tooltip}'></a>
-        </div>
+        <ul id='blog-comment-action' class="asf-list-action awa-comment-actions">
+          <li><a href="" class="comment-action-edit" title="#{commentMsg.comment_edit_tooltip}">#{commentMsg.comment_edit_label}</a>
+          </li>
+          <li><a href="" class="comment-action-publish"
+                 title="#{commentMsg.comment_publish_tooltip}">#{commentMsg.comment_publish_label}</a>
+          </li>
+          <li><a href="" class="comment-action-spam" title="#{commentMsg.comment_spam_tooltip}">#{commentMsg.comment_spam_label}</a>
+          </li>
+          <li><a href="" class="comment-action-waiting"
+                 title="#{commentMsg.comment_unpublish_tooltip}">#{commentMsg.comment_unpublish_label}</a>
+          </li>
+          <li><a href="" class="comment-action-delete"
+                 title="#{commentMsg.comment_delete_tooltip}">#{commentMsg.comment_delete_label}</a>
+          </li>
+        </ul>
       </h:panelGroup>
-      <util:script>
-            $('#blog-comment-list').list({
-                actionId: '#blog-comment-action',
-                itemPrefix: 'p_',
-                deleteUrl: '#{contextPath}/blogs/admin/forms/post-delete.html?post_id=',
-                selectAction: function(list, item, event) {
-                    if ($(event.target).hasClass("comment-status")) {
-                        if ($(item).hasClass("comment-COMMENT_WAITING")) {
-                            ASF.Post(item, "#{contextPath}/blogs/ajax/blogPublishComment/publish",
-                                     "id=" + list.getSelectedId(item) + "&amp;status=COMMENT_PUBLISHED");
 
-                        } else {
-                            ASF.Post(item, "#{contextPath}/blogs/ajax/blogPublishComment/publish",
-                                    "id=" + list.getSelectedId(item) + "&amp;status=COMMENT_WAITING");
-                        }
-                        return false;
-                    } else if ($(event.target).hasClass("spam-icon")) {
-                        item = $(list.currentNode);
-                        if ($(item).hasClass("comment-COMMENT_SPAM")) {
-                            ASF.Post(item, "#{contextPath}/blogs/ajax/blogPublishComment/publish",
-                                    "id=" + list.getSelectedId(item) + "&amp;status=COMMENT_WAITING");
-                        } else {
-                            ASF.Post(item, "#{contextPath}/blogs/ajax/blogPublishComment/publish",
-                                     "id=" + list.getSelectedId(item) + "&amp;status=COMMENT_SPAM");
-                        }
-                        return false;
-                    } else {
-                        return true;
-                    }
-                }
+      <util:script>
+            $('#blog-comment-list').blog_comment_list({
+                actionId: '#blog-comment-action',
+                itemPrefix: 'c_',
+                deleteUrl: '#{contextPath}/blogs/admin/forms/comment-delete.html?id=',
+                statusUrl: '#{contextPath}/blogs/ajax/blogPublishComment/publish',
+                editUrl: '#{contextPath}/blogs/admin/forms/comment-edit.html?id=',
             });
       </util:script>
+    </ui:define>
+    <ui:define name="pageScript">
+      <script src="#{contextPath}/js/highlight.pack.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script>
+        <script src="#{contextPath}/js/jquery.canvaswrapper.js"></script>
+        <script src="#{contextPath}/js/jquery.colorhelpers.js"></script>
+        <script src="#{contextPath}/js/jquery.flot.js"></script>
+        <script src="#{contextPath}/js/jquery.flot.saturated.js"></script>
+        <script src="#{contextPath}/js/jquery.flot.browser.js"></script>
+        <script src="#{contextPath}/js/jquery.flot.time.js"></script>
+        <script src="#{contextPath}/js/jquery.flot.drawSeries.js"></script>
+        <script src="#{contextPath}/js/jquery.flot.uiConstants.js"></script>
+        <script src="#{contextPath}/js/awa-blogs.js"></script>
     </ui:define>
 </ui:composition>
 

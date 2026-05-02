@@ -14,7 +14,10 @@
 .awa-comment {
     float: left;
     width: 100%;
+    padding-top: 5px;
+    padding-right: 5px;
     padding-left: 80px;
+    border-radius: 10px;
 }
 .awa-comment-form {
     padding-right: 2%;
@@ -23,34 +26,53 @@
 }
 .awa-comment, div.awa-comment-form {
     position: relative;
-    padding-bottom: 50px;
+    padding-bottom: 0;
 }
 .awa-comment-form dl {
     padding-left: 0;
 }
+.awa-admin div.comment-gravatar,
 .awa-comment div.comment-gravatar, div.awa-form div.comment-gravatar {
     position: absolute;
-    left: 0;
-    top: 0;
+    left: 5px;
+    top: 5px; /* same as .awa-comment padding */
+}
+div.comment-gravatar img {
+    border-radius: 100%;
 }
 .awa-comment div.comment-author {
     font-weight: bold;
-    color: var(--text-medium);
+    width: 100%;
 }
 .awa-comment .comment-text {
     padding-top: 5px;
     clear: both;
     float: left;
     display: block;
+    width: 100%;
+    padding-bottom: 20px;
 }
 .awa-comment-actions {
-    display: none;
+    position: absolute;
+    background: white;
+    right: 5px;
+    visibility: hidden;
     list-style-type: none;
-    float: left;
+    z-index: 10;
+    float: right;
+    padding: 2px;
+    border-radius: 10px;
+    border: solid 1px var(--border-separator);
+}
+.asf-active .awa-comment-actions {
+    visibility: visible;
 }
 .awa-comment-actions li {
     float: left;
-    padding-left: 2em;
+    padding-left: 10px;
+}
+.comment-date {
+    float: right;
 }
 .awa-comment-actions a, .awa-comment-actions a:visited, .awa-comment-actions a:hover {
     text-decoration: none;
@@ -60,17 +82,18 @@
 .comment-COMMENT_SPAM .comment-date,
 .comment-COMMENT_SPAM .comment-gravatar,
 .comment-COMMENT_SPAM .comment-author {
-    opacity: 0.2;
+    color: var(--accent-red);
 }
 .comment-COMMENT_WAITING .comment-title,
 .comment-COMMENT_WAITING .comment-date,
 .comment-COMMENT_WAITING .comment-gravatar,
 .comment-COMMENT_WAITING .comment-author {
-    opacity: 0.5;
+    color: var(--accent-orange);
 }
 .comment-COMMENT_PUBLISHED .comment-action-spam,
 .comment-COMMENT_WAITING .comment-action-waiting,
 .comment-COMMENT_SPAM .comment-action-spam,
+.comment-COMMENT_SPAM .comment-action-publish,
 .comment-COMMENT_PUBLISHED .comment-action-publish {
     display: none;
 }
@@ -79,6 +102,26 @@
     clear: both;
     line-height: 2em;
     width: 100%;
+}
+.comment-status {
+    float: left;
+    display: inline-block;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+.comment-COMMENT_PUBLISHED .comment-status {
+    background: var(--accent-green);
+    color: #fff;
+}
+.comment-COMMENT_WAITING .comment-status {
+    background: var(--accent-orange);
+    color: #fff;
+}
+.comment-COMMENT_SPAM .comment-status {
+    background: var(--accent-red);
+    color: #fff;
 }
 @media screen and (max-width: 600px) {
     .awa-comment-list, .awa-comment { padding-left: 0; }
