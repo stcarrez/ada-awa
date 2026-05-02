@@ -36,6 +36,8 @@
     position: absolute;
     left: 5px;
     top: 5px; /* same as .awa-comment padding */
+    width: 60px;
+    height: 60px;
 }
 div.comment-gravatar img {
     border-radius: 100%;
@@ -125,4 +127,7 @@ div.comment-gravatar img {
 }
 @media screen and (max-width: 600px) {
     .awa-comment-list, .awa-comment { padding-left: 0; }
+    .awa-comment div.comment-gravatar {
+        display: none;
+    }
 }
