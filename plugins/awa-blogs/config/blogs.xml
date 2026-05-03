@@ -33,6 +33,13 @@
     </description>
   </context-param>
 
+  <!--  When a comment is posted on a blog post article, notify the author.  -->
+  <on-event name="comment-create">
+     <action>#{userMail.send}</action>
+     <property name="template">/mail/notify-comment-message.html</property>
+     <property name="request.id">#{event.id}</property>
+  </on-event>
+
   <managed-bean>
     <description>This bean describes a blog post for the creation or the update</description>
     <managed-bean-name>post</managed-bean-name>

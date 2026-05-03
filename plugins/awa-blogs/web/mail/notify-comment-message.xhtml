@@ -1,0 +1,60 @@
+<f:view xmlns:mail="http://code.google.com/p/ada-awa/mail"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:awa="http://code.google.com/p/ada-awa/jsf"
+        xmlns:ui="http://java.sun.com/jsf/facelets">
+  <f:metadata>
+    <f:viewParam id='id' value='#{post.id}' required='true'/>
+    <f:viewAction action='#{post.load}'/>
+  </f:metadata>
+<ui:decorate template="/WEB-INF/layouts/mail.xhtml">
+    <ui:define name="subject">New comment on: #{post.title}</ui:define>
+    <ui:define name="mailTo">
+      <mail:from address="#{initParam['app_mail_name']}">#{initParam['app_mail_from']}</mail:from>
+      <mail:to address="#{post.authorName}">#{post.authorEmail}</mail:to>
+    </ui:define>
+    <ui:define name="mailTextBody">
+You have received a new comment on #{post.title}
+<h:panelGroup rendered="#{not empty event.first_name}">
+from #{event.first_name} #{event.last_name}.
+</h:panelGroup><h:panelGroup rendered="#{empty event.first_name}">
+from #{event.name}.</h:panelGroup>
+
+Message:
+
+#{event.message}
+</ui:define>
+    <ui:define name="mailBody">
+<p>
+  You have received a new comment on <b>#{post.title}</b>
+<h:panelGroup rendered="#{not empty event.first_name}">
+from <b>#{event.first_name} #{event.last_name}</b>
+</h:panelGroup><h:panelGroup rendered="#{empty event.first_name}">
+from <b>#{event.name}</b></h:panelGroup>
+</p>
+
+<p>The comment is waiting for your approval in
+  <a href="#{initParam['app_url_base']}/blogs/admin/list-comments.html?id=#{post.blogId}">
+    Blog comments
+  </a>
+</p>
+
+<p>
+Article summary:
+<blockquote style="font-style: italic;">
+  <awa:wiki value="#{post.summary}" format="#{post.format}"/>
+</blockquote>
+</p>
+
+<p>
+New comment message:
+</p>
+<blockquote style="font-style: italic;">
+<pre>
+  #{event.message}
+</pre>
+</blockquote>
+
+</ui:define>
+</ui:decorate>
+</f:view>

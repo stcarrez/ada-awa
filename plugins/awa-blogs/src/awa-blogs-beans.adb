@@ -560,6 +560,7 @@ package body AWA.Blogs.Beans is
       Bean.Counter.Value := Bean.Get_Read_Count;
       ADO.Objects.Set_Value (Bean.Counter.Object, Bean.Get_Id);
       Bean.Links.Post_Id := Bean.Get_Id;
+      Bean.Blog_Id := Bean.Get_Blog.Get_Id;
 
       Comment := AWA.Comments.Beans.Get_Comment_Bean ("postNewComment");
       if Comment /= null then
@@ -647,6 +648,10 @@ package body AWA.Blogs.Beans is
          return Util.Beans.Objects.To_Object (From.Image_Link);
       elsif Name = "links" then
          return Util.Beans.Objects.To_Object (From.Links_Bean, Util.Beans.Objects.STATIC);
+      elsif Name = "authorName" then
+         return From.Get_Author.Get_Value ("name");
+      elsif Name = "authorEmail" then
+         return From.Get_Author.Get_Email.Get_Value ("email");
       else
          return AWA.Blogs.Models.Post_Bean (From).Get_Value (Name);
       end if;
