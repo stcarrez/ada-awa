@@ -56,6 +56,8 @@ Permissions are defined to control who is allowed to create, update and delete w
 | |#{contextPath}/wikis/view/|
 |wikis.wiki_copy_list|A list of wiki page ID top copy when a new wiki space is created.|
 | ||
+|wikis.page_uri|The wiki page URI to write in generated sitemaps. The URI must be absolute and specify the host and domain. This EL expression is evaluated twice: a first time during application setup and a second time for each URI that must be generated. The wiki space ID is passed in the #{wikiSpaceId} and the wiki page name in #{wikiPage} (be careful to escape the '#' by using \#{wikiSpaceId} due to the double EL evaluation).|
+| |#{app_url_base}/wikis/view/\#{wikiSpaceId}/\#{wikiPage}|
 
 ## Events
 The `wikis` exposes a number of events which are posted when some action

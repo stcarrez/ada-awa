@@ -138,6 +138,8 @@ The comment information.
 ||String|author|the comment author's name.|
 ||String|email|the comment author's email.|
 ||Date|date|the comment date.|
+||AWA.Comments.Models.Format_Type|format|the comment format type.|
+||String|comment|the comment text.|
 ||AWA.Comments.Models.Status_Type|status|the comment status.|
 
 #### AWA.Blogs.Models.Blog_Info
