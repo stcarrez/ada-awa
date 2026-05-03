@@ -1,0 +1,38 @@
+<query-mapping package='AWA.Wikis.Models'>
+    <description>
+      Queries used to create the wiki sitemap.
+    </description>
+
+    <class name="AWA.Wikis.Models.Sitemap_Info" bean="yes">
+        <comment>The Sitemap_Info describes the information about public wiki pages for the sitemap generation</comment>
+        <property type='Identifier' name="wiki_id">
+            <comment>the wiki space identifier.</comment>
+        </property>
+        <property type='String' name="name">
+            <comment>the wiki page name.</comment>
+        </property>
+        <property type='Date' name="date">
+            <comment>the wiki page update date.</comment>
+        </property>
+    </class>
+
+    <query name='wiki-public-sitemap'>
+       <comment>Get the list of public wiki pages with their last modification date</comment>
+       <sql>
+    SELECT
+      wiki.wiki_id,
+      wiki.name,
+      content.create_date
+    FROM awa_wiki_page AS wiki
+    INNER JOIN awa_wiki_content AS content ON content.id = wiki.content_id
+    WHERE wiki.is_public = 1 ORDER BY content.create_date DESC;
+       </sql>
+       <sql-count>
+    SELECT
+      count(wiki.id)
+    FROM awa_wiki_page AS wiki
+    WHERE wiki.is_public = 1
+       </sql-count>
+    </query>
+
+</query-mapping>

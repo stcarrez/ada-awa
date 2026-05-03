@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-modules -- Module wikis
---  Copyright (C) 2015, 2016, 2018, 2020 Stephane Carrez
+--  Copyright (C) 2015, 2016, 2018, 2020, 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -18,6 +18,8 @@ with AWA.Wikis.Models;
 with AWA.Wikis.Servlets;
 with AWA.Tags.Beans;
 with AWA.Counters.Definition;
+with AWA.SEO;
+with EL.Expressions;
 with Security.Permissions;
 with Wiki.Strings;
 
@@ -82,6 +84,10 @@ package AWA.Wikis.Modules is
    --  to copy when a new wiki space is created.
    PARAM_WIKI_COPY_LIST : constant String := "wiki_copy_list";
 
+   --  The configuration parameter that defines the EL expression to create the
+   --  sitemap wiki page URI.
+   PARAM_WIKI_PAGE_URI  : constant String := "page_uri";
+
    --  Define the permissions.
    package ACL_Create_Wiki_Pages is
      new Security.Permissions.Definition ("wiki-page-create");
@@ -121,7 +127,9 @@ package AWA.Wikis.Modules is
    --  ------------------------------
    --  Module wikis
    --  ------------------------------
-   type Wiki_Module is new AWA.Modules.Module with private;
+   type Wiki_Module is new AWA.Modules.Module
+     and AWA.SEO.Sitemap_Provider
+   with private;
    type Wiki_Module_Access is access all Wiki_Module'Class;
 
    --  Initialize the wikis module.
@@ -208,6 +216,10 @@ package AWA.Wikis.Modules is
                          Date     : out Ada.Calendar.Time;
                          Into     : out ADO.Blob_Ref);
 
+   overriding
+   procedure Create_Sitemap (Provider : in Wiki_Module;
+                             Sitemap  : in out AWA.SEO.Sitemap_Info);
+
 private
    --  Copy the wiki page with its last version to the wiki space.
    procedure Copy_Page (Module  : in Wiki_Module;
@@ -227,10 +239,12 @@ private
                                 Page    : in out Models.Wiki_Page_Ref'Class;
                                 Content : in out Models.Wiki_Content_Ref'Class);
 
-   type Wiki_Module is new AWA.Modules.Module with record
+   type Wiki_Module is new AWA.Modules.Module
+     and AWA.SEO.Sitemap_Provider with record
       Image_Prefix  : Wiki.Strings.UString;
       Image_Servlet : aliased AWA.Wikis.Servlets.Image_Servlet;
       Page_Prefix   : Wiki.Strings.UString;
+      Page_URI      : EL.Expressions.Expression;
    end record;
 
 end AWA.Wikis.Modules;

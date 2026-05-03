@@ -25,6 +25,19 @@
     </description>
   </context-param>
 
+  <context-param>
+    <param-name>wikis.page_uri</param-name>
+    <param-value>#{app_url_base}/wikis/view/\#{wikiSpaceId}/\#{wikiPage}</param-value>
+    <description>
+      The wiki page URI to write in generated sitemaps.  The URI must be absolute and
+      specify the host and domain.  This EL expression is evaluated twice: a first time
+      during application setup and a second time for each URI that must be generated.
+      The wiki space ID is passed in the #{wikiSpaceId} and the wiki page name
+      in #{wikiPage} (be careful to escape
+      the '#' by using \#{wikiSpaceId} due to the double EL evaluation).
+    </description>
+  </context-param>
+
   <managed-bean>
     <description>The wiki page with all its information to display it.</description>
     <managed-bean-name>wikiView</managed-bean-name>

@@ -5,6 +5,7 @@ with "awa_storages";
 with "awa_images";
 with "awa_jobs";
 with "awa_counters";
+with "awa_seo";
 
 library project Awa_Wikis is
    Version      := Awa.Version;

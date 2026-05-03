@@ -492,6 +492,55 @@ package AWA.Wikis.Models is
    Query_Page_Access_Stats : constant ADO.Queries.Query_Definition_Access;
 
    --  --------------------
+   --    The Sitemap_Info describes the information about public wiki pages for the sitemap generation
+   --  --------------------
+   type Sitemap_Info is
+     new Util.Beans.Basic.Bean with  record
+
+      --  the wiki space identifier.
+      Wiki_Id : ADO.Identifier;
+
+      --  the wiki page name.
+      Name : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the wiki page update date.
+      Date : Ada.Calendar.Time;
+   end record;
+
+   --  Get the bean attribute identified by the name.
+   overriding
+   function Get_Value (From : in Sitemap_Info;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Sitemap_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+
+   package Sitemap_Info_Beans is
+      new Util.Beans.Basic.Lists (Element_Type => Sitemap_Info);
+   package Sitemap_Info_Vectors renames Sitemap_Info_Beans.Vectors;
+   subtype Sitemap_Info_List_Bean is Sitemap_Info_Beans.List_Bean;
+
+   type Sitemap_Info_List_Bean_Access is access all Sitemap_Info_List_Bean;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Sitemap_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   subtype Sitemap_Info_Vector is Sitemap_Info_Vectors.Vector;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Sitemap_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   Query_Wiki_Public_Sitemap : constant ADO.Queries.Query_Definition_Access;
+
+   --  --------------------
    --    The information about an image used in a wiki page.
    --  --------------------
    type Wiki_Image_Bean is abstract
@@ -1331,98 +1380,108 @@ private
    := Def_Page_Access_Stats.Query'Access;
 
    package File_2 is
+      new ADO.Queries.Loaders.File (Path => "wiki-public-sitemap.xml",
+                                    Sha1 => "B7849418A0867A8A3D7E2E596BD726CCD64504CA");
+
+   package Def_Sitemapinfo_Wiki_Public_Sitemap is
+      new ADO.Queries.Loaders.Query (Name => "wiki-public-sitemap",
+                                     File => File_2.File'Access);
+   Query_Wiki_Public_Sitemap : constant ADO.Queries.Query_Definition_Access
+   := Def_Sitemapinfo_Wiki_Public_Sitemap.Query'Access;
+
+   package File_3 is
       new ADO.Queries.Loaders.File (Path => "wiki-images-info.xml",
                                     Sha1 => "D7213D2A931D1393B673EF8B6028E5B6D36D2C22");
 
    package Def_Wikiimagebean_Wiki_Image is
       new ADO.Queries.Loaders.Query (Name => "wiki-image",
-                                     File => File_2.File'Access);
+                                     File => File_3.File'Access);
    Query_Wiki_Image : constant ADO.Queries.Query_Definition_Access
    := Def_Wikiimagebean_Wiki_Image.Query'Access;
 
-   package File_3 is
+   package File_4 is
       new ADO.Queries.Loaders.File (Path => "wiki-images.xml",
                                     Sha1 => "4282148DEBAB32E79BAC617BA9932D330B5FAFCC");
 
    package Def_Wikiimageinfo_Wiki_Image_Get_Data is
       new ADO.Queries.Loaders.Query (Name => "wiki-image-get-data",
-                                     File => File_3.File'Access);
+                                     File => File_4.File'Access);
    Query_Wiki_Image_Get_Data : constant ADO.Queries.Query_Definition_Access
    := Def_Wikiimageinfo_Wiki_Image_Get_Data.Query'Access;
 
    package Def_Wikiimageinfo_Wiki_Image_Width_Get_Data is
       new ADO.Queries.Loaders.Query (Name => "wiki-image-width-get-data",
-                                     File => File_3.File'Access);
+                                     File => File_4.File'Access);
    Query_Wiki_Image_Width_Get_Data : constant ADO.Queries.Query_Definition_Access
    := Def_Wikiimageinfo_Wiki_Image_Width_Get_Data.Query'Access;
 
    package Def_Wikiimageinfo_Wiki_Image_Height_Get_Data is
       new ADO.Queries.Loaders.Query (Name => "wiki-image-height-get-data",
-                                     File => File_3.File'Access);
+                                     File => File_4.File'Access);
    Query_Wiki_Image_Height_Get_Data : constant ADO.Queries.Query_Definition_Access
    := Def_Wikiimageinfo_Wiki_Image_Height_Get_Data.Query'Access;
 
-   package File_4 is
+   package File_5 is
       new ADO.Queries.Loaders.File (Path => "wiki-list.xml",
                                     Sha1 => "134AA901EAD20B164194D37CC198D8B6092FF0DF");
 
    package Def_Wikiinfo_Wiki_List is
       new ADO.Queries.Loaders.Query (Name => "wiki-list",
-                                     File => File_4.File'Access);
+                                     File => File_5.File'Access);
    Query_Wiki_List : constant ADO.Queries.Query_Definition_Access
    := Def_Wikiinfo_Wiki_List.Query'Access;
 
-   package File_5 is
+   package File_6 is
       new ADO.Queries.Loaders.File (Path => "wiki-pages.xml",
                                     Sha1 => "3D026597D06A525412B37B034831E5ABC1F9EFA5");
 
    package Def_Wikipageinfo_Wiki_Page_List is
       new ADO.Queries.Loaders.Query (Name => "wiki-page-list",
-                                     File => File_5.File'Access);
+                                     File => File_6.File'Access);
    Query_Wiki_Page_List : constant ADO.Queries.Query_Definition_Access
    := Def_Wikipageinfo_Wiki_Page_List.Query'Access;
 
    package Def_Wikipageinfo_Wiki_Page_Tag_List is
       new ADO.Queries.Loaders.Query (Name => "wiki-page-tag-list",
-                                     File => File_5.File'Access);
+                                     File => File_6.File'Access);
    Query_Wiki_Page_Tag_List : constant ADO.Queries.Query_Definition_Access
    := Def_Wikipageinfo_Wiki_Page_Tag_List.Query'Access;
 
-   package File_6 is
+   package File_7 is
       new ADO.Queries.Loaders.File (Path => "wiki-history.xml",
                                     Sha1 => "AC42BF3C04729AEE8ADED975B16EBB859D1E7276");
 
    package Def_Wikiversioninfo_Wiki_Version_List is
       new ADO.Queries.Loaders.Query (Name => "wiki-version-list",
-                                     File => File_6.File'Access);
+                                     File => File_7.File'Access);
    Query_Wiki_Version_List : constant ADO.Queries.Query_Definition_Access
    := Def_Wikiversioninfo_Wiki_Version_List.Query'Access;
 
-   package File_7 is
+   package File_8 is
       new ADO.Queries.Loaders.File (Path => "wiki-page.xml",
                                     Sha1 => "22207D56B65DA5B8AD7DA81FDADE5742133A8770");
 
    package Def_Wikiviewinfo_Wiki_Page is
       new ADO.Queries.Loaders.Query (Name => "wiki-page",
-                                     File => File_7.File'Access);
+                                     File => File_8.File'Access);
    Query_Wiki_Page : constant ADO.Queries.Query_Definition_Access
    := Def_Wikiviewinfo_Wiki_Page.Query'Access;
 
    package Def_Wikiviewinfo_Wiki_Page_Id is
       new ADO.Queries.Loaders.Query (Name => "wiki-page-id",
-                                     File => File_7.File'Access);
+                                     File => File_8.File'Access);
    Query_Wiki_Page_Id : constant ADO.Queries.Query_Definition_Access
    := Def_Wikiviewinfo_Wiki_Page_Id.Query'Access;
 
    package Def_Wikiviewinfo_Wiki_Page_Content is
       new ADO.Queries.Loaders.Query (Name => "wiki-page-content",
-                                     File => File_7.File'Access);
+                                     File => File_8.File'Access);
    Query_Wiki_Page_Content : constant ADO.Queries.Query_Definition_Access
    := Def_Wikiviewinfo_Wiki_Page_Content.Query'Access;
 
    package Def_Wikiviewinfo_Wiki_Page_Name_Count is
       new ADO.Queries.Loaders.Query (Name => "wiki-page-name-count",
-                                     File => File_7.File'Access);
+                                     File => File_8.File'Access);
    Query_Wiki_Page_Name_Count : constant ADO.Queries.Query_Definition_Access
    := Def_Wikiviewinfo_Wiki_Page_Name_Count.Query'Access;
 end AWA.Wikis.Models;

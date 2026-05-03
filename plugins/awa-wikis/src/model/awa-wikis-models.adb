@@ -1753,6 +1753,82 @@ package body AWA.Wikis.Models is
       Object.Version := Stmt.Get_Integer (5);
       ADO.Objects.Set_Created (Object);
    end Load;
+
+
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Sitemap_Info;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "wiki_id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Wiki_Id));
+      elsif Name = "name" then
+         return Util.Beans.Objects.To_Object (From.Name);
+      elsif Name = "date" then
+         return Util.Beans.Objects.Time.To_Object (From.Date);
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Sitemap_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "wiki_id" then
+         Item.Wiki_Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "name" then
+         Item.Name := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "date" then
+         Item.Date := Util.Beans.Objects.Time.To_Time (Value);
+      end if;
+   end Set_Value;
+
+
+   --  --------------------
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   --  --------------------
+   procedure List (Object  : in out Sitemap_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+   begin
+      List (Object.List, Session, Context);
+   end List;
+
+   --  --------------------
+   --  The Sitemap_Info describes the information about public wiki pages for the sitemap generation
+   --  --------------------
+   procedure List (Object  : in out Sitemap_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+      procedure Read (Into : in out Sitemap_Info);
+
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Context);
+      Pos  : Positive := 1;
+      procedure Read (Into : in out Sitemap_Info) is
+      begin
+         Into.Wiki_Id := Stmt.Get_Identifier (0);
+         Into.Name := Stmt.Get_Unbounded_String (1);
+         Into.Date := Stmt.Get_Time (2);
+      end Read;
+   begin
+      Stmt.Execute;
+      Sitemap_Info_Vectors.Clear (Object);
+      while Stmt.Has_Elements loop
+         Object.Insert_Space (Before => Pos);
+         Object.Update_Element (Index => Pos, Process => Read'Access);
+         Pos := Pos + 1;
+         Stmt.Next;
+      end loop;
+   end List;
+
    procedure Op_Load (Bean    : in out Wiki_Image_Bean;
                       Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
    procedure Op_Load (Bean    : in out Wiki_Image_Bean;

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-wikis-modules -- Module wikis
---  Copyright (C) 2015, 2016, 2017, 2018, 2019, 2022 Stephane Carrez
+--  Copyright (C) 2015, 2016, 2017, 2018, 2019, 2022, 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -16,15 +16,22 @@ with AWA.Storages.Models;
 with AWA.Storages.Services;
 with AWA.Storages.Modules;
 
+with EL.Contexts.Default;
+with EL.Variables.Default;
+
 with Ada.Strings;
 with ADO.Objects;
 with ADO.SQL;
 with ADO.Queries;
 with ADO.Statements;
+with ADO.Utils;
 
+with Util.Beans.Objects;
 with Util.Log.Loggers;
 with Util.Strings.Tokenizers;
 package body AWA.Wikis.Modules is
+
+   package UBO renames Util.Beans.Objects;
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Awa.Wikis.Module");
 
@@ -101,6 +108,8 @@ package body AWA.Wikis.Modules is
    begin
       Plugin.Image_Prefix := Wiki.Strings.To_UString (Wiki.Strings.To_WString (Image_Prefix));
       Plugin.Page_Prefix  := Wiki.Strings.To_UString (Wiki.Strings.To_WString (Page_Prefix));
+      Plugin.Page_URI := Plugin.Get_Config (PARAM_WIKI_PAGE_URI);
+      AWA.SEO.Register ("wiki-sitemap.xml", Plugin'Unchecked_Access);
    end Configure;
 
    --  ------------------------------
@@ -512,5 +521,34 @@ package body AWA.Wikis.Modules is
          end;
       end if;
    end Load_Image;
+
+   overriding
+   procedure Create_Sitemap (Provider : in Wiki_Module;
+                             Sitemap  : in out AWA.SEO.Sitemap_Info) is
+      DB    : ADO.Sessions.Session := Provider.Get_Session;
+      Query : ADO.Queries.Context;
+      List  : AWA.Wikis.Models.Sitemap_Info_Vector;
+      Ctx       : EL.Contexts.Default.Default_Context;
+      Variables : aliased EL.Variables.Default.Default_Variable_Mapper;
+   begin
+      Ctx.Set_Variable_Mapper (Variables'Unchecked_Access);
+      Query.Set_Query (AWA.Wikis.Models.Query_Wiki_Public_Sitemap);
+      AWA.Wikis.Models.List (List, DB, Query);
+      Sitemap.Entries.Clear;
+      for Info of List loop
+         Variables.Bind ("wikiSpaceId", ADO.Utils.To_Object (Info.Wiki_Id));
+         Variables.Bind ("wikiPage", UBO.To_Object (Info.Name));
+         declare
+            Item : AWA.SEO.Sitemap_Entry;
+            URI  : constant Util.Beans.Objects.Object
+              := Provider.Page_URI.Get_Value (Ctx);
+         begin
+            Item.Location := UBO.To_Unbounded_String (URI);
+            Item.Date := Info.Date;
+            Item.Priority := 0;
+            Sitemap.Entries.Append (Item);
+         end;
+      end loop;
+   end Create_Sitemap;
 
 end AWA.Wikis.Modules;
