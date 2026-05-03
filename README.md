@@ -64,6 +64,7 @@ You may get Ahven or Aunit at:
   - Feature #49: Support HTML5 Self-Closing Tag Syntax
   - Feature #50: Add a SEO module
   - Feature #51: Generate sitemap for blog posts
+  - Feature #55: Notify blog article author when a comment is posted
 
 ## Version 2.5.0 - Sep 2023
   - Feature #22: Add command line support to register a new user
