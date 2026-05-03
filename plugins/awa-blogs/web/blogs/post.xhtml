@@ -14,6 +14,7 @@
                 xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{post.title}"/>
     <ui:param name="pageStyle" value="page-blog"/>
+    <ui:param name="pageUseJQuery" value="true"/>
 
     <ui:define name="pageHeader">
       <link rel="canonical" href="#{initParam['app_url_base']}/blogs/posts/#{post.uri}"/>

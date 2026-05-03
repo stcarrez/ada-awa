@@ -113,11 +113,15 @@ header {
 }
 .awa-menu {
     list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
 }
 .awa-menu li {
     float: left;
     border-bottom: none;
-    line-height: 20px;
+    /* line-height: 20px; */
+    position: relative;
 }
 .awa-menu a {
     display: block;
@@ -129,6 +133,7 @@ header {
     padding-left: 10px;
     padding-right: 10px;
     text-decoration: none;
+    color: var(--text-menu);
 }
 .awa-menu a:hover{
     background-color: var(--bg-hover);
@@ -136,8 +141,6 @@ header {
 }
 .awa-hamb-menu {
     display: none;
-}
-.awa-hamb-menu {
     cursor: pointer;
     float: right;
     padding: 13px 13px; /* 27px = 13 + 13 + 1 */
@@ -173,7 +176,9 @@ header {
 .awa-side-menu:checked ~ nav {
     max-height: 100%;
 }
-
+.awa-side-menu:checked ~ nav li {
+    display: block;
+}
 
 .awa-side-panel {
     display: flex;
@@ -625,6 +630,13 @@ ul.awa-pagination li {
     background-color: #fff;
 }
 
+@media (min-width: 768px) {
+    .awa-menu a:hover {
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+    }
+}
+
 /**
  * Responsive style for mobile and tablets.
  */
@@ -665,8 +677,10 @@ ul.awa-pagination li {
         width: 100%;
         padding: 0;
     }
-
-    /* Top menu as drop down */
+    /* Adjust menu items for mobile, top menu as drop down */
+    .awa-menu {
+      flex-direction: column;
+    }
     .awa-menu li {
         width: 100%;
         background: #111;
@@ -677,8 +691,14 @@ ul.awa-pagination li {
         height: 100%;
         top: 1.2em;
     }
+    /* Show hamburger menu on mobile */
     .awa-hamb-menu {
         display: block;
+        float: right;
+    }
+    /* Show navigation when checkbox is checked */
+    .awa-side-menu:checked ~ .awa-side-nav {
+      display: block;
     }
     .awa-side-menu:checked ~ .awa-hamb-menu .awa-hamb-line {
         background: transparent;
