@@ -205,11 +205,6 @@ header {
   margin-left: 20px;
   margin-right: 5px;
 }
-#awa-clfooter {
-  clear: both;
-  height: 30px; /* See #awa-page margin bottom */
-  width: 100%;
-}
 #awa-footer_content {
   float: right;
   margin-right: 20px;

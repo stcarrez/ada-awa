@@ -11,7 +11,7 @@
 }
 .wiki-page-container, .wiki-settings {
     display: flex;
-    flex-direction: row;    
+    flex-direction: row;
 }
 .wiki-left-container, .wiki-right-container {
     width: 20%;
@@ -340,6 +340,7 @@
 .wiki-image-details dd {
     float: left;
     width: 80%;
+    padding-left: 0.5em;
 }
 .wiki-image-upload {
     width: 20%;
@@ -382,7 +383,7 @@
 }
 .wiki-img-thumb,
 .wiki-img-caption,
-.wiki-img-right figurecaption,cp 
+.wiki-img-right figurecaption,
 .wiki-img-left figurecaption,
 .wiki-img-center figurecaption {
     /*border: 1px solid #AAA; */

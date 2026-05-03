@@ -7,12 +7,13 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:util="http://code.google.com/p/ada-asf/util"
+        xmlns:c="http://java.sun.com/jstl/core"
         xmlns:h="http://java.sun.com/jsf/html"><h:doctype rootElement="html"/>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <!--dynamo-merge link="/css/all.css" prefix="#{contextPath}" -->
+    <!-- DYNAMO-MERGE-START link=#{contextPath}/css/app.css -->
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/grids/reset.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/_variables.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{jquery.uiCssPath}/jquery-ui.structure.css"/>
@@ -25,7 +26,7 @@
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/blogs.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/wikis.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/questions.css"/>
-    <!--dynamo-end-->
+    <!-- DYNAMO-MERGE-END -->
 
     <ui:insert name="pageHeader"/>
     <title><h:outputText value="#{title}"/></title>
@@ -40,9 +41,9 @@
 
 <main>
     <ui:insert name="pageBody"/>
-    <div id="awa-clfooter"></div>
 </main>
 <ui:include src="footer.xhtml"/>
+<c:if test="#{pageUseJQuery or user.isLogged}">
 <!--dynamo-merge link="/js/all.js" prefix="#{contextPath}" -->
 <script src="#{jquery.path}"></script>
 <script src="#{jquery.uiPath}core.js"></script>
@@ -59,6 +60,7 @@
 <script src="#{contextPath}/js/asf.js"></script>
 <script src="#{contextPath}/js/awa.js"></script>
 <!--dynamo-end-->
+</c:if>
 <ui:insert name="pageScript"/>
 
 <!--DEV_START-->

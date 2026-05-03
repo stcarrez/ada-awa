@@ -48,8 +48,14 @@
                      tagLink="#{contextPath}/wikis/tags/#{wikiView.wiki_id}/#{util:urlEncode(tagName)}/recent"
                      var="tagName"
                      tagClass="tagedit-listelement tagedit-listelement-old"/>
-        <h3 class="wiki-info">#{wikiMsg.wiki_info_access_label}</h3>
-        <div id="page-stats" class="wiki-post-graph"/>
+        <h:panelGroup rendered="#{user.isLogged}">
+            <h3 class="wiki-info">#{wikiMsg.wiki_info_access_label}</h3>
+            <div id="page-stats" class="wiki-post-graph"/>
+            <util:script>
+            $("#page-stats").post_graph({url: "#{contextPath}/wikis/stats/#{wikiView.id}/now-120"});
+            </util:script>
+        </h:panelGroup>
+
         <h:panelGroup rendered="#{wikiPageInfo.templates.count ne 0}">
             <h3 class="wiki-info">#{wikiMsg.wiki_info_templates_label}</h3>
             <div class="awa-list wiki-link-list">
@@ -97,9 +103,6 @@
                       format="#{wikiView.side_format}"/>
         </div>
     </h:panelGroup>
-    <util:script>
-    $("#page-stats").post_graph({url: "#{contextPath}/wikis/stats/#{wikiView.id}/now-120"});
-    </util:script>
 </div>
 
 

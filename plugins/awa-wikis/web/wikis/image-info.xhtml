@@ -13,6 +13,7 @@
                 xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{wikiMsg.wiki_image_info_title}"/>
     <ui:param name="pageStyle" value="page-wiki"/>
+    <ui:param name="pageUseJQuery" value="true"/>
 
     <ui:define name="pageHeader">
       <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/dropzone.css"/>
@@ -68,7 +69,7 @@
                          var="tagName"
                          tagClass="tagedit-listelement tagedit-listelement-old"/>
             <ui:include src="views/image-info.xhtml"/>
-            
+
             <h:panelGroup rendered="#{wikiImageInfo.id ne 0}">
               <div class="wiki-image-view">
                 <img src="#{wikiImageInfo.imageUrl}"/>
@@ -88,7 +89,9 @@
      </ui:define>
 
     <ui:define name="pageScript">
-        <script src="#{contextPath}/js/dropzone.js"></script>
+       <c:if test="#{user.isLogged}">
+            <script src="#{contextPath}/js/dropzone.js"/>
+       </c:if>
     </ui:define>
 
 </ui:composition>

@@ -53,6 +53,8 @@
             </h:panelGroup>
         </dl>
 
+    <h:panelGroup rendered="#{user.isLogged}">
+
         <div class='wiki-image-upload'>
             <a id="storage-reupload-button" class="awa-button">
                 #{storageMsg.storage_upload_new_image_version_label}
@@ -71,6 +73,7 @@
                 dictInvalidFileType: "#{util:escapeJavaScript(storageMsg.storage_upload_form_invalid_file_message)}"
             });
         </util:script>
+    </h:panelGroup>
 
 </div>
 
