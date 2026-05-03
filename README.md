@@ -307,6 +307,7 @@ setting up and building an Ada Web Application:
 
 # Articles
 
+  * [Implementing a Search Engine Optimization Module for AWA](https://blog.vacs.fr/vacs/blogs/posts/2026/03/28/Implementing-a-Search-Engine-Optimization-Module-for-AWA)
   * [Use Ada for Your Web Development | Electronic Design](https://www.electronicdesign.com/technologies/embedded-revolution/article/21119177/use-ada-for-your-web-development)
 
 # Sites Using AWA
