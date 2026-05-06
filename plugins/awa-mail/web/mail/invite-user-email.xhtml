@@ -9,8 +9,8 @@
         </h:outputFormat>
     </ui:define>
     <ui:define name="mailTo">
-        <mail:from address="#{initParam['app_mail_name']}">#{initParam['app_mail_from']}</mail:from>
-        <mail:to address="#{event.name}">#{event.email}</mail:to>
+      <mail:from address="#{initParam['app_mail_name']}">#{initParam['app_mail_from']}</mail:from>
+      <mail:to address="#{event.name}">#{event.email}</mail:to>
     </ui:define>
     <ui:define name="mailTextBody">
 Dear #{event.name},
@@ -36,8 +36,11 @@ Dear #{event.name},
 <p>
 You have been invited by #{event.inviter} to join #{initParam['app_name']}.
 </p>
-
+<blockquote style="font-style: italic;">
+<pre>
 #{event.message}
+</pre>
+</blockquote>
 
 <p>
 To accept this invitation, please go to the following URL:
