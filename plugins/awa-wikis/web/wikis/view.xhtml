@@ -22,7 +22,8 @@
         <link rel="canonical" href="#{initParam['app_url_base']}/wikis/view/#{wikiView.wiki_id}/#{wikiView.name}"/>
         <meta name="author" content="#{wikiView.author}"/>
         <meta name="description" content="#{util:escapeJavaScript(wikiView.title)}"/>
-	<link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/highlight/darcula.css"/>
+	    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/highlight/darcula.css"/>
+        <ui:include src="views/ld+json.xhtml"/>
     </ui:define>
 
     <!-- Main page body -->
