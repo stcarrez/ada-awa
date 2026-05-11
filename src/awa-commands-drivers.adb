@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-commands-drivers -- Driver for AWA commands for server or admin tool
---  Copyright (C) 2020, 2021, 2022, 2024, 2025 Stephane Carrez
+--  Copyright (C) 2020, 2021, 2022, 2024, 2025, 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -108,8 +108,16 @@ package body AWA.Commands.Drivers is
          Context.Console.Notice (N_ERROR, -("No application found"));
          return;
       end if;
-
-      Configure (To_String (App_Name), Context);
+      declare
+         Name : constant String
+           := Selected.Get_Config (AWA.Applications.P_Config_Name.P);
+      begin
+         if Name'Length > 0 then
+            Configure (Name, Context);
+         else
+            Configure (To_String (App_Name), Context);
+         end if;
+      end;
       if Command.Initialize_Application then
          Selected.Initialize (Context.App_Config, Context.Factory);
       end if;

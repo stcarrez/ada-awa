@@ -42,6 +42,13 @@
         </a>
       </li>
     </c:if>
+    <c:if test="#{fn:contains(initParam.app_login_methods, 'gitea')}">
+      <li class="awa-login-gitea">
+        <a href="#{contextPath}/auth/auth/gitea?redirect=#{util:urlEncode(redirect)}" title="#{userMsg.openid_gitea_auth}" class='openid-gitea'>
+          <em/>
+        </a>
+      </li>
+    </c:if>
     <c:if test="#{fn:contains(initParam.app_login_methods, 'twitter')}">
       <li class="awa-login-twitter">
         <a href="#{contextPath}/auth/auth/twitter?redirect=#{util:urlEncode(redirect)}" title="#{userMsg.openid_twitter_auth}" class='openid-twitter'>

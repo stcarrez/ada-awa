@@ -11,7 +11,7 @@ li.message {
 div.awa-login h2, div.awa-login h3, div.awa-accept-invitation h2, div.awa-accept-invication h3 {
     float: left;
     width: 100%;
-    background: white;
+    background: var(--bg-content);
     padding: 2%;
     -moz-border-radius-topleft: 6px;
     -moz-border-radius-topright: 6px;
@@ -20,8 +20,8 @@ div.awa-login h2, div.awa-login h3, div.awa-accept-invitation h2, div.awa-accept
     padding-top: 0;
 }
 div.awa-login, div.awa-accept-invitation {
-  border: 2px solid #A6C9E2;
-  background: none repeat scroll 0 0 #F9FDFF;
+  border: 2px solid var(--border-separator);
+  background: none repeat scroll 0 0 var(--bg-highlight);
   display: block;
   float: left;
   width: 98%;
@@ -110,6 +110,7 @@ a.openid-facebook em,
 a.openid-google-plus em,
 a.openid-yahoo em,
 a.openid-twitter em,
+a.openid-gitea em,
 a.openid-google em {
     display: block;
     float: left;
@@ -148,6 +149,11 @@ a.openid-github em {
 a.openid-gitlab em {
   margin-top: 3px;
   background-position: 0 -272px;
+  height: 33px;
+}
+a.openid-gitea em {
+  margin-top: 3px;
+  background-position: 0 -304px;
   height: 33px;
 }
 a.openid-github {
@@ -224,7 +230,7 @@ div.openid-retry {
 }
 .invite-message p {
     padding: 4px;
-    background: #e8f0ff;
+    background: var(--bg-highlight);
     white-space: pre;
 }
 .member-list div.asf-list-action {
