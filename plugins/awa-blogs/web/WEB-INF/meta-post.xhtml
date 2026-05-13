@@ -1,0 +1,41 @@
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:util="http://code.google.com/p/ada-asf/util"
+                xmlns:h="http://java.sun.com/jsf/html">
+    <meta name="author" content="#{post.username}"/>
+    <meta name="description" content="#{util:escapeJavaScript(pageDescription)}"/>
+    <link rel="canonical" href="#{pageUrl}"/>
+    <meta property="og:locale" content="en_US"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:url" content="#{pageUrl}"/>
+    <meta property="og:title" content="#{title}"/>
+    <meta property="og:site_name" content="#{initParam['app_name']}"/>
+    <h:panelGroup rendered="#{not empty post.image}">
+      <meta property="og:image" content="#{initParam['app_url_domain']}#{post.image}"/>
+      <meta name="twitter:image" content="#{initParam['app_url_domain']}#{post.image}"/>
+    </h:panelGroup>
+    <meta name="twitter:description" content="#{util:escapeJavaScript(pageDescription)}"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    <util:json jtype="BlogPosting">
+        <util:json-prop name="name" value="#{post.title}"/>
+        <util:json-prop name="url" value="#{pageUrl}"/>
+        <util:json-prop name="headline" value="#{post.title}"/>
+        <util:json-prop name="description" value="#{pageDescription}"/>
+        <util:json-obj name="author" jtype="Person">
+            <util:json-prop name="name" value="#{post.username}"/>
+        </util:json-obj>
+        <util:json-prop name="dateCreated" value="#{post.publish_date}"/>
+        <util:json-prop name="dateModified" value="#{post.publish_date}"/>
+        <util:json-prop name="datePublished" value="#{post.publish_date}"/>
+        <util:json-prop name="inLanguage" value="en"/>
+        <ui:include src="/WEB-INF/ld+json-org.xhtml"/>
+        <util:json-obj name="mainEntityOfPage" jtype="WebPage"
+                       jid="#{postUrl}"/>
+        <util:json-obj rendered="#{not empty post.image}" jtype="ImageObject"
+                       name="image" jid="#{initParam['app_url_domain']}#{post.image}"/>
+        <util:json-array name="potentialAction">
+            <util:json-obj jtype="ReadAction">
+                <util:json-prop name="target" value="#{postUrl}"/>
+            </util:json-obj>
+        </util:json-array>
+    </util:json>
+</ui:composition>

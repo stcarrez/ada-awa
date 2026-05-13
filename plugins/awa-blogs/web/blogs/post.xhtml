@@ -17,15 +17,10 @@
     <ui:param name="pageUseJQuery" value="true"/>
 
     <ui:define name="pageHeader">
-      <link rel="canonical" href="#{initParam['app_url_base']}/blogs/posts/#{post.uri}"/>
-      <meta name="author" content="#{post.username}"/>
-      <meta property="og:title" content="#{util:escapeJavaScript(post.title)}"/>
-      <meta property="og:url" content="#{initParam['app_url_base']}/blogs/posts/#{post.uri}"/>
-      <meta property="og:type" content="article"/>
-      <h:panelGroup rendered="#{not empty post.image}">
-        <meta property="og:image" content="#{initParam['app_url_domain']}#{post.image}"/>
-      </h:panelGroup>
-      <meta property="og:description" content="#{util:escapeJavaScript(fn:substring(fn:trim(post.description),1,200))}"/>
+      <ui:include src="/WEB-INF/meta-post.xhtml">
+        <ui:param name="pageUrl" value="#{initParam['app_url_base']}/blogs/posts/#{post.uri}"/>
+        <ui:param name="pageDescription" value="#{fn:substring(fn:trim(post.description),1,200)}"/>
+      </ui:include>
       <f:metadata>
         <f:viewParam id='post' value='#{post.uri}' required='false'/>
         <f:viewAction action='#{post.load}'/>

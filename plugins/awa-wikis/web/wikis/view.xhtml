@@ -10,6 +10,7 @@
                 xmlns:c="http://java.sun.com/jstl/core"
                 xmlns:u="http://code.google.com/p/ada-asf/util"
                 xmlns:util="http://code.google.com/p/ada-asf/util"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
                 xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{wikiView.title}"/>
     <ui:param name="pageStyle" value="page-wiki"/>
@@ -19,11 +20,11 @@
         <f:metadata>
             <f:viewAction action='#{wikiView.load}'/>
         </f:metadata>
-        <link rel="canonical" href="#{initParam['app_url_base']}/wikis/view/#{wikiView.wiki_id}/#{wikiView.name}"/>
-        <meta name="author" content="#{wikiView.author}"/>
-        <meta name="description" content="#{util:escapeJavaScript(wikiView.title)}"/>
 	    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/highlight/darcula.css"/>
-        <ui:include src="views/ld+json.xhtml"/>
+        <ui:include src="/WEB-INF/meta-page.xhtml">
+            <ui:param name="pageUrl" value="#{initParam['app_url_base']}/wikis/view/#{wikiView.wiki_id}/#{wikiView.name}"/>
+            <ui:param name="pageDescription" value="#{fn:substring(fn:trim(wikiView.content),1,200)}"/>
+        </ui:include>
     </ui:define>
 
     <!-- Main page body -->

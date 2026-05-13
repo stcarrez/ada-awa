@@ -1,0 +1,11 @@
+<util:json-obj xmlns:util="http://code.google.com/p/ada-asf/util"
+               name="publisher" jtype="Organization">
+    <util:json-prop name="name" value="#{initParam['app_name']}"/>
+    <util:json-prop name="url" value="#{initParam['app_url_base']}"/>
+    <util:json-obj name="logo" jtype="ImageObject">
+        <util:json-prop name="url" value="#{initParam['app_url_base']}/images/application.png"/>
+    </util:json-obj>
+    <util:json-array name="sameAs">
+        <util:json-prop value="#{initParam['app_url_base']}"/>
+    </util:json-array>
+</util:json-obj>
