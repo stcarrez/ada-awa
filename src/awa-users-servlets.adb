@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-servlets -- OpenID verification servlet for user authentication
---  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2018, 2022, 2024 Stephane Carrez
+--  Copyright (C) 2011 - 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -18,6 +18,10 @@ package body AWA.Users.Servlets is
    --  Name of the session attribute which holds the URI to redirect after authentication.
    REDIRECT_ATTRIBUTE : constant String := "awa-redirect";
 
+   --  Name of the session attribute which contains the access key for an invitation.
+   --  The access key was already checked but this is not enough to validate the invitation.
+   KEY_ATTRIBUTE      : constant String := "awa-key";
+
    --  Name of the request attribute that contains the URI to redirect after authentication.
    REDIRECT_PARAM     : constant String := "redirect";
 
@@ -34,6 +38,8 @@ package body AWA.Users.Servlets is
 
    function Get_Provider_URL (Server   : in Request_Auth_Servlet;
                               Request  : in Servlet.Requests.Request'Class) return String;
+
+   function Verify_Key (Key : in String) return Boolean;
 
    --  ------------------------------
    --  Set the user principal on the session associated with the ASF request.
@@ -57,6 +63,15 @@ package body AWA.Users.Servlets is
       Log.Info ("OpenID authentication with {0}", URI);
       return URI (URI'First + 1 .. URI'Last);
    end Get_Provider_URL;
+
+   function Verify_Key (Key : in String) return Boolean is
+      Manager   : constant AWA.Users.Services.User_Service_Access
+        := AWA.Users.Modules.Get_User_Manager;
+   begin
+      App : constant ASF.Servlets.Servlet_Registry_Access
+        := ASF.Servlets.Get_Servlet_Context (Chain);
+      return Manager.Verify_Key (Key);
+   end Verify_Key;
 
    --  ------------------------------
    --  Proceed to the OpenID authentication with an OpenID provider.
@@ -89,7 +104,14 @@ package body AWA.Users.Servlets is
          Bean  : constant Util.Beans.Objects.Object := Association_Bean.Create;
          Assoc : constant Association_Access := Association_Bean.To_Element_Access (Bean);
          Redirect : constant String := Request.Get_Parameter (REDIRECT_PARAM);
+         Key      : constant String := Request.Get_Parameter (PARAM_ACCESS_KEY);
       begin
+         if Key'Length > 0 and then not Verify_Key (Key) then
+            Session.Set_Attribute (AUTH_ERROR_ATTRIBUTE, UBO.To_Object (MESSAGE_INVALID_KEY));
+            Response.Set_Status (Servlet.Responses.SC_NOT_FOUND);
+            return;
+         end if;
+
          Server.Initialize (Name, Mgr);
 
          --  Yadis discovery (get the XRDS file).  This step does nothing for OAuth.
@@ -108,6 +130,10 @@ package body AWA.Users.Servlets is
             Response.Send_Redirect (Location => Auth_URL);
             Session.Set_Attribute (Name  => OPENID_ASSOC_ATTRIBUTE,
                                    Value => Bean);
+            if Key'Length > 0 then
+               Session.Set_Attribute (Name  => KEY_ATTRIBUTE,
+                                      Value => Util.Beans.Objects.To_Object (Key));
+            end if;
             if Redirect'Length > 0 then
                Session.Set_Attribute (Name  => REDIRECT_ATTRIBUTE,
                                       Value => Util.Beans.Objects.To_Object (Redirect));
@@ -122,17 +148,19 @@ package body AWA.Users.Servlets is
    --  by the <b>Auth</b> information.  The principal will be attached to the session
    --  and will be destroyed when the session is closed.
    --  ------------------------------
-   overriding
-   procedure Create_Principal (Server : in Verify_Auth_Servlet;
-                               Auth   : in Security.Auth.Authentication;
-                               Result : out Security.Principal_Access) is
-      pragma Unreferenced (Server);
+   procedure Create_Principal (Server  : in Verify_Auth_Servlet;
+                               Auth    : in Security.Auth.Authentication;
+                               Session : in Servlet.Sessions.Session'Class;
+                               Result  : out Security.Principal_Access) is
       use AWA.Users.Services;
 
+      Key      : constant String
+        := Verify_Auth_Servlet'Class (Server).Get_Access_Key (Session);
       Manager   : constant User_Service_Access := AWA.Users.Modules.Get_User_Manager;
       Principal : AWA.Users.Principals.Principal_Access;
    begin
       Manager.Authenticate (Auth    => Auth,
+                            Key     => Key,
                             IpAddr  => "",
                             Principal => Principal);
       Result := Principal.all'Access;
@@ -160,6 +188,21 @@ package body AWA.Users.Servlets is
          end if;
       end;
    end Get_Redirect_URL;
+
+   --  ------------------------------
+   --  Get the optional access key that was passed before starting
+   --  the OpenID connect authentication.
+   --  ------------------------------
+   function Get_Access_Key (Server  : in Verify_Auth_Servlet;
+                            Session : in Servlet.Sessions.Session'Class) return String is
+      Key : constant Util.Beans.Objects.Object := Session.Get_Attribute (KEY_ATTRIBUTE);
+   begin
+      if Util.Beans.Objects.Is_Null (Key) then
+         return "";
+      else
+         return Util.Beans.Objects.To_String (Key);
+      end if;
+   end Get_Access_Key;
 
    --  ------------------------------
    --  Get the redirection URL that must be used after the authentication failed.
@@ -248,7 +291,7 @@ package body AWA.Users.Servlets is
          Redirect : constant String
            := Verify_Auth_Servlet'Class (Server).Get_Redirect_URL (Session, Request);
       begin
-         Verify_Auth_Servlet'Class (Server).Create_Principal (Credential, User);
+         Verify_Auth_Servlet'Class (Server).Create_Principal (Credential, Session, User);
          Session.Set_Principal (User);
          Session.Remove_Attribute (REDIRECT_ATTRIBUTE);
 

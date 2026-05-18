@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-users-servlets -- OpenID verification servlet for user authentication
---  Copyright (C) 2011 - 2022 Stephane Carrez
+--  Copyright (C) 2011 - 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -82,10 +82,10 @@ package AWA.Users.Servlets is
    --  Create a principal object that correspond to the authenticated user
    --  identified by the `Auth` information.  The principal will be attached
    --  to the session and will be destroyed when the session is closed.
-   overriding
-   procedure Create_Principal (Server : in Verify_Auth_Servlet;
-                               Auth   : in Security.Auth.Authentication;
-                               Result : out Security.Principal_Access);
+   procedure Create_Principal (Server  : in Verify_Auth_Servlet;
+                               Auth    : in Security.Auth.Authentication;
+                               Session : in Servlet.Sessions.Session'Class;
+                               Result  : out Security.Principal_Access);
 
    --  Verify the authentication result that was returned by the OpenID provider.
    --  If the authentication succeeded and the signature was correct, sets a
@@ -129,6 +129,11 @@ package AWA.Users.Servlets is
    --  Get the redirection URL that must be used after the authentication succeeded.
    function Get_Redirect_URL (Server  : in Verify_Key_Servlet;
                               Request : in Servlet.Requests.Request'Class) return String;
+
+   --  Get the optional access key that was passed before starting
+   --  the OpenID connect authentication.
+   function Get_Access_Key (Server  : in Verify_Auth_Servlet;
+                            Session : in Servlet.Sessions.Session'Class) return String;
 
    --  Called by the servlet container to indicate to a servlet that the servlet
    --  is being placed into service.

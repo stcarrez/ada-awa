@@ -7,7 +7,6 @@
      xmlns:f="http://java.sun.com/jsf/core"
      xmlns:ui="http://java.sun.com/jsf/facelets"
      xmlns:c="http://java.sun.com/jstl/core"
-     xmlns:util="http://code.google.com/p/ada-asf/util"
      xmlns:h="http://java.sun.com/jsf/html"
      class='awa-accept-invitation ui-widget ui-widget-content ui-corner-all'>
     <h2>
@@ -25,7 +24,8 @@
     </div>
     <c:if test="#{initParam.app_login_openid}">
       <ui:include src="/auth/forms/login-openid.xhtml">
-        <ui:param name="redirect" value="#{contextPath}/workspaces/accept-invitation.html?key=#{inviteUser.key}"/>
+          <ui:param name="redirect" value="#{contextPath}/workspaces/main.html"/>
+          <ui:param name="key" value="#{inviteUser.key}"/>
       </ui:include>
       <div class="openid-separator">
         <div class="openid-sep-left"/>

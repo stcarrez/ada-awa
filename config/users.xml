@@ -446,6 +446,7 @@
     <url-pattern>/auth/reset-password.html</url-pattern>
     <url-pattern>/auth/change-password/#{resetPassword.key}</url-pattern>
     <url-pattern>/auth/validate/:key</url-pattern>
+    <url-pattern>/auth/auth/*</url-pattern>
   </filter-mapping>
 
   <filter-mapping>

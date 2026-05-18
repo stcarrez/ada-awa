@@ -149,6 +149,12 @@ package AWA.Users.Services is
                           Email  : in String;
                           Status : in Models.Status_Type);
 
+   --  Verify the access key and check that it is associated with a
+   --  user account that is not disabled.
+   --  Returns True if the access key is verified.
+   function Verify_Key (Model    : in User_Service;
+                        Key      : in String) return Boolean;
+
    --  Verify the access key and retrieve the user associated with that key.
    --  Starts a new session associated with the given IP address.
    --  The authenticated user is identified by a principal instance allocated
@@ -177,6 +183,7 @@ package AWA.Users.Services is
    --  Raises Not_Found exception if the user is not recognized
    procedure Authenticate (Model     : in User_Service;
                            Auth      : in Security.Auth.Authentication;
+                           Key       : in String;
                            IpAddr    : in String;
                            Principal : out AWA.Users.Principals.Principal_Access);
 

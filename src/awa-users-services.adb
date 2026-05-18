@@ -168,6 +168,7 @@ package body AWA.Users.Services is
    --  ------------------------------
    procedure Authenticate (Model     : in User_Service;
                            Auth      : in Security.Auth.Authentication;
+                           Key       : in String;
                            IpAddr    : in String;
                            Principal : out AWA.Users.Principals.Principal_Access) is
       --  Update the user first name/last name
@@ -181,10 +182,12 @@ package body AWA.Users.Services is
       Found_Email   : Boolean;
       Found_Auth    : Boolean;
       Found_User    : Boolean;
+      Found_Key     : Boolean;
       User          : User_Ref;
       Email         : Email_Ref;
       User_Auth     : Authenticate_Ref;
       Session       : Session_Ref;
+      Access_Key    : Access_Key_Ref;
 
       --  ------------------------------
       --  Update the user first name/last name
@@ -223,6 +226,19 @@ package body AWA.Users.Services is
       Log.Info ("Authenticated user {0}", Email_Address);
 
       Ctx.Start;
+      Found_User := False;
+      if Key'Length > 0 then
+         --  Verify the access key validity.
+         Query.Bind_Param (1, Key);
+         Query.Set_Filter ("access_key = ?");
+         Access_Key.Find (DB, Query, Found_Key);
+         if not Found_Key then
+            Log.Warn ("No access key {0}", Key);
+            raise Not_Found with "No access key: " & Key;
+         end if;
+         User := User_Ref (Access_Key.Get_User);
+         Found_User := True;
+      end if;
 
       --  Find the email address.
       Query.Set_Filter ("LOWER(o.email) = LOWER(:email)");
@@ -246,8 +262,6 @@ package body AWA.Users.Services is
             Found_User := False;
          end if;
          User_Auth.Set_Email (Email);
-      else
-         Found_User := False;
       end if;
 
       --  User is not found, registration must be enabled to create it.
@@ -258,10 +272,17 @@ package body AWA.Users.Services is
       end if;
 
       --  Email is not known and we have a new user: create it.
-      if not Found_Email and not Found_User then
+      if not Found_Email then
          Log.Info ("Creating email record for {0}", Email_Address);
          Email.Set_Email (Email_Address);
+         if Found_User then
+            Email.Set_User_Id (User.Get_Id);
+         end if;
          Email.Save (DB);
+         if Found_User then
+            User.Set_Email (Email);
+            Update_User;
+         end if;
       end if;
 
       if not Found_User then
@@ -317,6 +338,24 @@ package body AWA.Users.Services is
             Event.Set_Parameter ("email", Email_Address);
             Model.Send_Alert (User_Create_Event.Kind, User, Event);
          end;
+      end if;
+
+      --  If an access key was verified, post and event and delete the key.
+      if not Access_Key.Is_Null then
+         declare
+            Event   : AWA.Events.Module_Event;
+            Sec_Ctx : Security.Contexts.Security_Context;
+         begin
+            --  Make a security context with the user's credential.
+            Sec_Ctx.Set_Context (Manager   => Model.Permissions.all'Access,
+                                 Principal => Principal.all'Access);
+
+            --  Post an event to notify the access key was validated.
+            --  Can be used by an invitation process.
+            Event.Set_Parameter ("key", Key);
+            Model.Send_Alert (User_Key_Validation_Event.Kind, User, Event);
+         end;
+         Access_Key.Delete (DB);
       end if;
       Ctx.Commit;
    end Authenticate;
@@ -947,6 +986,55 @@ package body AWA.Users.Services is
       User.Save (DB);
       Ctx.Commit;
    end Update_User;
+
+   --  ------------------------------
+   --  Verify the access key and check that it is associated with a
+   --  user account that is not disabled.
+   --  Returns True if the access key is verified.
+   --  ------------------------------
+   function Verify_Key (Model    : in User_Service;
+                        Key      : in String) return Boolean is
+      Ctx        : constant ASC.Service_Context_Access := ASC.Current;
+      DB         : Master_Session := ASC.Get_Master_Session (Ctx);
+      Query      : ADO.SQL.Query;
+      Found      : Boolean;
+      Access_Key : Access_Key_Ref;
+      User       : User_Ref;
+      Email      : Email_Ref;
+   begin
+      Log.Info ("Verify access key {0}", Key);
+
+      if Key'Length = 0 then
+         Log.Warn ("Empty access key is refused");
+         return False;
+      end if;
+
+      --  Find the user associated with the given key
+      Query.Bind_Param (1, Key);
+      Query.Set_Filter ("access_key = ?");
+      Access_Key.Find (DB, Query, Found);
+      if not Found then
+         Log.Warn ("No access key {0}", Key);
+         return False;
+      end if;
+
+      User := User_Ref (Access_Key.Get_User);
+
+      Email := Email_Ref (User.Get_Email);
+
+      --  Reject key when the user account is disabled.
+      if User.Get_Status = Models.USER_DISABLED then
+         Log.Warn ("User account {0} is disabled", Email.Get_Email);
+         return False;
+      end if;
+      return True;
+
+   exception
+      when ADO.Objects.NOT_FOUND =>
+         Log.Warn ("No user linked to access key {0}", Key);
+         return False;
+
+   end Verify_Key;
 
    --  ------------------------------
    --  Verify the access key and retrieve the user associated with that key.
