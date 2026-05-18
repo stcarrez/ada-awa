@@ -38,6 +38,7 @@ div.awa-login h2 {
 }
 div.awa-accept-invitation {
     border: none;
+    margin-top: 1em;
 }
 div.awa-lost-password {
     width: 50%;

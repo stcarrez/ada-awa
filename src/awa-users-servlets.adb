@@ -68,8 +68,6 @@ package body AWA.Users.Servlets is
       Manager   : constant AWA.Users.Services.User_Service_Access
         := AWA.Users.Modules.Get_User_Manager;
    begin
-      App : constant ASF.Servlets.Servlet_Registry_Access
-        := ASF.Servlets.Get_Servlet_Context (Chain);
       return Manager.Verify_Key (Key);
    end Verify_Key;
 

@@ -1,5 +1,5 @@
 <!-- Accept Invitation form
-  -  Copyright (C) 2017, 2018 Stephane Carrez
+  -  Copyright (C) 2017, 2018, 2026 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -  SPDX-License-Identifier: Apache-2.0
   -->
@@ -23,20 +23,24 @@
         </p>
     </div>
     <c:if test="#{initParam.app_login_openid}">
-      <ui:include src="/auth/forms/login-openid.xhtml">
-          <ui:param name="redirect" value="#{contextPath}/workspaces/main.html"/>
-          <ui:param name="key" value="#{inviteUser.key}"/>
-      </ui:include>
-      <div class="openid-separator">
-        <div class="openid-sep-left"/>
-        <div class="openid-sep-text">#{workspaceMsg.workspace_invite_alternate_or_message}</div>
-        <div class="openid-sep-right"/>
-      </div>
+        <ui:include src="/auth/forms/login-openid.xhtml">
+            <ui:param name="redirect" value="#{contextPath}/workspaces/main.html"/>
+            <ui:param name="key" value="#{inviteUser.key}"/>
+        </ui:include>
+        <c:if test="#{initParam.app_login_email}">
+            <div class="openid-separator">
+                <div class="openid-sep-left"/>
+                <div class="openid-sep-text">#{workspaceMsg.workspace_invite_alternate_or_message}</div>
+                <div class="openid-sep-right"/>
+            </div>
+        </c:if>
     </c:if>
-    <div class="invite-action">
-        <p>#{workspaceMsg.workspace_invite_signup_alternative_message}</p>
-    </div>
-    <ui:include src="register-form.xhtml"/>
+    <c:if test="#{initParam.app_login_email}">
+        <div class="invite-action">
+            <p>#{workspaceMsg.workspace_invite_signup_alternative_message}</p>
+        </div>
+        <ui:include src="register-form.xhtml"/>
+    </c:if>
 </div>
 
 
