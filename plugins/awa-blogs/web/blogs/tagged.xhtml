@@ -16,7 +16,7 @@
     <ui:define name="pageHeader">
       <f:metadata>
         <f:viewParam id='page' value='#{postList.page}' required="false"/>
-        <f:viewParam id='tag' value='#{postList.tag}'/>
+        <f:viewParam id='tag' value='#{postList.tag}' required="false"/>
         <f:viewAction action="#{postList.load}"/>
       </f:metadata>
       <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/highlight/darcula.css"/>
