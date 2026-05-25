@@ -372,6 +372,7 @@ div.awa-messages {
 div.awa-error {
     width: 640px;
     margin: auto;
+    margin-top: 1em;
 }
 .awa-error-details {
     width: 100%;
