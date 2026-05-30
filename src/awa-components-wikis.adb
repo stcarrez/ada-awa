@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-components-wikis -- Wiki rendering component
---  Copyright (C) 2011 - 2025 Stephane Carrez
+--  Copyright (C) 2011 - 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -245,6 +245,8 @@ package body AWA.Components.Wikis is
          return;
       end if;
       declare
+         use type Wiki.Wiki_Syntax;
+
          Writer   : constant Response_Writer_Access := Context.Get_Response_Writer;
          Doc      : Wiki.Documents.Document;
          TOC      : aliased Wiki.Filters.TOC.TOC_Filter;
@@ -269,7 +271,9 @@ package body AWA.Components.Wikis is
                Engine.Set_Plugin_Factory (Plugins);
             end if;
             Links := UI.Get_Links_Renderer (Context);
-            Engine.Add_Filter (Autolink'Unchecked_Access);
+            if Format /= Wiki.SYNTAX_HTML then
+               Engine.Add_Filter (Autolink'Unchecked_Access);
+            end if;
             Engine.Add_Filter (Vars'Unchecked_Access);
             Engine.Add_Filter (TOC'Unchecked_Access);
             Engine.Add_Filter (Filter'Unchecked_Access);
