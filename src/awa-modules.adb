@@ -185,7 +185,8 @@ package body AWA.Modules is
             return EL.Contexts.Default.Default_ELResolver (Resolver).Get_Value (Context, Base,
                                                                                 Name);
          else
-            return Util.Beans.Objects.To_Object (UString '(Plugin.Get_Config (To_String (Name), "")));
+            return Util.Beans.Objects.To_Object
+              (UString '(Plugin.Get_Config (To_String (Name), "")));
          end if;
       end Get_Value;
 
