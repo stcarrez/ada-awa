@@ -183,6 +183,7 @@ package body AWA.Commands.Permission is
                    Context : in out Context_Type;
                    Session : in out ADO.Sessions.Master_Session;
                    Args    : in Argument_List'Class) is
+      pragma Unreferenced (Command);
       procedure List;
 
       Query       : ADO.Queries.Context;
