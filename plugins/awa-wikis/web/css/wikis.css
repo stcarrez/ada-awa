@@ -231,7 +231,7 @@
   font-style: italic;
   line-height: 1.4;
 }
-.wiki-text .wiki-table {
+.wiki-text .wiki-table, .post-text .wiki-table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0.1em 0;
