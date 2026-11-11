@@ -893,12 +893,12 @@ private
    USER_AUDIT_DEF : aliased constant ADO.Audits.Auditable_Mapping :=
      (Count    => 5,
       Of_Class => USER_DEF'Access,
-      Members  => (
+      Members  => [
          1 => 0,
          2 => 1,
          3 => 2,
          4 => 3,
-         5 => 6)
+         5 => 6]
      );
    USER_AUDIT_TABLE : constant ADO.Audits.Auditable_Mapping_Access
       := USER_AUDIT_DEF'Access;

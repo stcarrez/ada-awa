@@ -327,10 +327,10 @@ private
    COMMENT_AUDIT_DEF : aliased constant ADO.Audits.Auditable_Mapping :=
      (Count    => 3,
       Of_Class => COMMENT_DEF'Access,
-      Members  => (
+      Members  => [
          1 => 1,
          2 => 6,
-         3 => 7)
+         3 => 7]
      );
    COMMENT_AUDIT_TABLE : constant ADO.Audits.Auditable_Mapping_Access
       := COMMENT_AUDIT_DEF'Access;

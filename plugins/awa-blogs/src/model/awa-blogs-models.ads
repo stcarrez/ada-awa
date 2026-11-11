@@ -1022,12 +1022,12 @@ private
    BLOG_AUDIT_DEF : aliased constant ADO.Audits.Auditable_Mapping :=
      (Count    => 5,
       Of_Class => BLOG_DEF'Access,
-      Members  => (
+      Members  => [
          1 => 1,
          2 => 3,
          3 => 6,
          4 => 7,
-         5 => 8)
+         5 => 8]
      );
    BLOG_AUDIT_TABLE : constant ADO.Audits.Auditable_Mapping_Access
       := BLOG_AUDIT_DEF'Access;
@@ -1126,14 +1126,14 @@ private
    POST_AUDIT_DEF : aliased constant ADO.Audits.Auditable_Mapping :=
      (Count    => 7,
       Of_Class => POST_DEF'Access,
-      Members  => (
+      Members  => [
          1 => 1,
          2 => 4,
          3 => 6,
          4 => 7,
          5 => 8,
          6 => 10,
-         7 => 11)
+         7 => 11]
      );
    POST_AUDIT_TABLE : constant ADO.Audits.Auditable_Mapping_Access
       := POST_AUDIT_DEF'Access;

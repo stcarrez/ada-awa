@@ -1217,10 +1217,10 @@ private
    WIKI_SPACE_AUDIT_DEF : aliased constant ADO.Audits.Auditable_Mapping :=
      (Count    => 3,
       Of_Class => WIKI_SPACE_DEF'Access,
-      Members  => (
+      Members  => [
          1 => 1,
          2 => 2,
-         3 => 7)
+         3 => 7]
      );
    WIKI_SPACE_AUDIT_TABLE : constant ADO.Audits.Auditable_Mapping_Access
       := WIKI_SPACE_AUDIT_DEF'Access;
@@ -1308,11 +1308,11 @@ private
    WIKI_PAGE_AUDIT_DEF : aliased constant ADO.Audits.Auditable_Mapping :=
      (Count    => 4,
       Of_Class => WIKI_PAGE_DEF'Access,
-      Members  => (
+      Members  => [
          1 => 1,
          2 => 2,
          3 => 3,
-         4 => 4)
+         4 => 4]
      );
    WIKI_PAGE_AUDIT_TABLE : constant ADO.Audits.Auditable_Mapping_Access
       := WIKI_PAGE_AUDIT_DEF'Access;
