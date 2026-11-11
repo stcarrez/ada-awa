@@ -16,7 +16,7 @@ abstract project Awa_Config is
 
    package compiler is
       warnings := ("-gnatwua");
-      defaults := ("-gnat2012");
+      defaults := ("-gnat2022");
       case Mode is
          when "distrib" =>
             for Default_Switches ("Ada") use defaults & ("-O2", "-gnatafno", "-gnatVa", "-gnatwa");
