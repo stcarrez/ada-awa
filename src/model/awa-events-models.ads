@@ -440,9 +440,9 @@ private
    MESSAGE_TYPE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 2,
       Table   => MESSAGE_TYPE_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_1_NAME'Access,
-         2 => COL_1_1_NAME'Access)
+         2 => COL_1_1_NAME'Access]
      );
    MESSAGE_TYPE_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := MESSAGE_TYPE_DEF'Access;
@@ -498,10 +498,10 @@ private
    QUEUE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 3,
       Table   => QUEUE_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_2_NAME'Access,
          2 => COL_1_2_NAME'Access,
-         3 => COL_2_2_NAME'Access)
+         3 => COL_2_2_NAME'Access]
      );
    QUEUE_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := QUEUE_DEF'Access;
@@ -572,7 +572,7 @@ private
    MESSAGE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 17,
       Table   => MESSAGE_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_3_NAME'Access,
          2 => COL_1_3_NAME'Access,
          3 => COL_2_3_NAME'Access,
@@ -589,7 +589,7 @@ private
          14 => COL_13_3_NAME'Access,
          15 => COL_14_3_NAME'Access,
          16 => COL_15_3_NAME'Access,
-         17 => COL_16_3_NAME'Access)
+         17 => COL_16_3_NAME'Access]
      );
    MESSAGE_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := MESSAGE_DEF'Access;

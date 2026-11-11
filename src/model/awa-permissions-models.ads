@@ -252,14 +252,14 @@ private
    ACL_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 7,
       Table   => ACL_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_1_NAME'Access,
          2 => COL_1_1_NAME'Access,
          3 => COL_2_1_NAME'Access,
          4 => COL_3_1_NAME'Access,
          5 => COL_4_1_NAME'Access,
          6 => COL_5_1_NAME'Access,
-         7 => COL_6_1_NAME'Access)
+         7 => COL_6_1_NAME'Access]
      );
    ACL_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := ACL_DEF'Access;
@@ -319,9 +319,9 @@ private
    PERMISSION_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 2,
       Table   => PERMISSION_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_2_NAME'Access,
-         2 => COL_1_2_NAME'Access)
+         2 => COL_1_2_NAME'Access]
      );
    PERMISSION_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := PERMISSION_DEF'Access;

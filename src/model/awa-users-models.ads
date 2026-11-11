@@ -806,13 +806,13 @@ private
    EMAIL_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 6,
       Table   => EMAIL_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_1_NAME'Access,
          2 => COL_1_1_NAME'Access,
          3 => COL_2_1_NAME'Access,
          4 => COL_3_1_NAME'Access,
          5 => COL_4_1_NAME'Access,
-         6 => COL_5_1_NAME'Access)
+         6 => COL_5_1_NAME'Access]
      );
    EMAIL_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := EMAIL_DEF'Access;
@@ -877,7 +877,7 @@ private
    USER_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 8,
       Table   => USER_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_2_NAME'Access,
          2 => COL_1_2_NAME'Access,
          3 => COL_2_2_NAME'Access,
@@ -885,7 +885,7 @@ private
          5 => COL_4_2_NAME'Access,
          6 => COL_5_2_NAME'Access,
          7 => COL_6_2_NAME'Access,
-         8 => COL_7_2_NAME'Access)
+         8 => COL_7_2_NAME'Access]
      );
    USER_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := USER_DEF'Access;
@@ -963,13 +963,13 @@ private
    ACCESS_KEY_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 6,
       Table   => ACCESS_KEY_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_3_NAME'Access,
          2 => COL_1_3_NAME'Access,
          3 => COL_2_3_NAME'Access,
          4 => COL_3_3_NAME'Access,
          5 => COL_4_3_NAME'Access,
-         6 => COL_5_3_NAME'Access)
+         6 => COL_5_3_NAME'Access]
      );
    ACCESS_KEY_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := ACCESS_KEY_DEF'Access;
@@ -1034,7 +1034,7 @@ private
    AUTHENTICATE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 8,
       Table   => AUTHENTICATE_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_4_NAME'Access,
          2 => COL_1_4_NAME'Access,
          3 => COL_2_4_NAME'Access,
@@ -1042,7 +1042,7 @@ private
          5 => COL_4_4_NAME'Access,
          6 => COL_5_4_NAME'Access,
          7 => COL_6_4_NAME'Access,
-         8 => COL_7_4_NAME'Access)
+         8 => COL_7_4_NAME'Access]
      );
    AUTHENTICATE_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := AUTHENTICATE_DEF'Access;
@@ -1111,7 +1111,7 @@ private
    SESSION_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 10,
       Table   => SESSION_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_5_NAME'Access,
          2 => COL_1_5_NAME'Access,
          3 => COL_2_5_NAME'Access,
@@ -1121,7 +1121,7 @@ private
          7 => COL_6_5_NAME'Access,
          8 => COL_7_5_NAME'Access,
          9 => COL_8_5_NAME'Access,
-         10 => COL_9_5_NAME'Access)
+         10 => COL_9_5_NAME'Access]
      );
    SESSION_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := SESSION_DEF'Access;

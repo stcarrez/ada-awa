@@ -480,7 +480,7 @@ private
    APPLICATION_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 12,
       Table   => APPLICATION_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_1_NAME'Access,
          2 => COL_1_1_NAME'Access,
          3 => COL_2_1_NAME'Access,
@@ -492,7 +492,7 @@ private
          9 => COL_8_1_NAME'Access,
          10 => COL_9_1_NAME'Access,
          11 => COL_10_1_NAME'Access,
-         12 => COL_11_1_NAME'Access)
+         12 => COL_11_1_NAME'Access]
      );
    APPLICATION_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := APPLICATION_DEF'Access;
@@ -559,11 +559,11 @@ private
    CALLBACK_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 4,
       Table   => CALLBACK_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_2_NAME'Access,
          2 => COL_1_2_NAME'Access,
          3 => COL_2_2_NAME'Access,
-         4 => COL_3_2_NAME'Access)
+         4 => COL_3_2_NAME'Access]
      );
    CALLBACK_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := CALLBACK_DEF'Access;
@@ -625,14 +625,14 @@ private
    SESSION_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 7,
       Table   => SESSION_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_3_NAME'Access,
          2 => COL_1_3_NAME'Access,
          3 => COL_2_3_NAME'Access,
          4 => COL_3_3_NAME'Access,
          5 => COL_4_3_NAME'Access,
          6 => COL_5_3_NAME'Access,
-         7 => COL_6_3_NAME'Access)
+         7 => COL_6_3_NAME'Access]
      );
    SESSION_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := SESSION_DEF'Access;
