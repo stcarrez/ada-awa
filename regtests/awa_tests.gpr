@@ -21,6 +21,7 @@ with "awa_blogs";
 with "awa_votes";
 with "awa_questions";
 with "awa_tags";
+with "awa_seo";
 with "awa_settings";
 with "awa_comments";
 with "awa_changelogs";

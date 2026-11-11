@@ -514,7 +514,7 @@ package AWA.Wikis.Beans is
       Wiki_List_Bean   : AWA.Wikis.Models.Wiki_Info_List_Bean_Access;
 
       --  Initialization flags.
-      Init_Flags       : aliased Init_Map := (others => False);
+      Init_Flags       : aliased Init_Map := [others => False];
       Flags            : access Init_Map;
    end record;
    type Wiki_Admin_Bean_Access is access all Wiki_Admin_Bean;

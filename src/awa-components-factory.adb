@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-components-factory -- Factory for AWA UI Components
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -50,7 +50,7 @@ package body AWA.Components.Factory is
    WIKI_TAG           : aliased constant String := "wiki";
 
    AWA_Bindings : aliased constant ASF.Factory.Binding_Array
-     := (1 => (Name      => INPUT_TEXT_TAG'Access,
+     := [1 => (Name      => INPUT_TEXT_TAG'Access,
                Component => Create_Input'Access,
                Tag       => Create_Component_Node'Access),
          2 => (Name      => REDIRECT_TAG'Access,
@@ -59,7 +59,7 @@ package body AWA.Components.Factory is
          3 => (Name      => WIKI_TAG'Access,
                Component => Create_Wiki'Access,
                Tag       => Create_Component_Node'Access)
-        );
+        ];
 
    AWA_Factory : aliased constant ASF.Factory.Factory_Bindings
      := (URI => URI'Access, Bindings => AWA_Bindings'Access);

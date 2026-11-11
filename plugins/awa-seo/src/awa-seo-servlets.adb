@@ -96,7 +96,7 @@ package body AWA.SEO.Servlets is
          begin
             Module.Get_Sitemap_Index (List);
             Stream.Write ("<?xml version=""1.0""?>" & ASCII.LF);
-            Stream.Start_Document;
+            --  Stream.Start_Document;
             Stream.Start_Entity ("sitemapindex");
             Stream.Write_Attribute ("xmlns",
                                     "http://www.sitemaps.org/schemas/sitemap/0.9");
@@ -107,7 +107,7 @@ package body AWA.SEO.Servlets is
                Stream.End_Entity ("sitemap");
             end loop;
             Stream.End_Entity ("sitemapindex");
-            Stream.End_Document;
+            --  Stream.End_Document;
          end;
       else
          declare
@@ -121,7 +121,7 @@ package body AWA.SEO.Servlets is
                return;
             end if;
             Stream.Write ("<?xml version=""1.0""?>" & ASCII.LF);
-            Stream.Start_Document;
+            --  Stream.Start_Document;
             Stream.Start_Entity ("urlset");
             Stream.Write_Attribute ("xmlns",
                                     "http://www.sitemaps.org/schemas/sitemap/0.9");
@@ -142,7 +142,7 @@ package body AWA.SEO.Servlets is
                Stream.End_Entity ("url");
             end loop;
             Stream.End_Entity ("urlset");
-            Stream.End_Document;
+            --  Stream.End_Document;
          end;
       end if;
 

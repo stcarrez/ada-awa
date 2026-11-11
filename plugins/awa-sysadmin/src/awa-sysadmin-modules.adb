@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-sysadmin-modules -- Module sysadmin
---  Copyright (C) 2019, 2020, 2022 Stephane Carrez
+--  Copyright (C) 2019, 2020, 2022, 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -25,8 +25,8 @@ package body AWA.Sysadmin.Modules is
                                               Module_Access => Sysadmin_Module_Access);
 
    Mimes : aliased constant Swagger.Mime_List :=
-     (1 => Swagger.Mime_Json,
-      2 => Swagger.Mime_Xml);
+     [1 => Swagger.Mime_Json,
+      2 => Swagger.Mime_Xml];
 
    procedure List_Users
      (Req     : in out Swagger.Servers.Request'Class;

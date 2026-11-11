@@ -83,7 +83,7 @@ package body AWA.SEO.Modules is
       procedure Register (Name     : in String;
                           Provider : Sitemap_Provider_Access) is
       begin
-         Sitemaps.Append ((To_UString (Name), Provider, others => <>));
+         Sitemaps.Append (Sitemap_Record'(To_UString (Name), Provider, others => <>));
       end Register;
 
       --  Get the list of sitemap entries for the given sitemap name.
@@ -131,7 +131,7 @@ package body AWA.SEO.Modules is
                   Sitemap.Has_Data := True;
                   Sitemap.Date := Now;
                end if;
-               Index.Append ((Sitemap.Name, Sitemap.Date));
+               Index.Append (Sitemap_Index'(Sitemap.Name, Sitemap.Date));
             end;
          end loop;
       end Get_Sitemap_Index;
