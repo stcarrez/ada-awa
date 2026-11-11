@@ -1004,7 +1004,7 @@ private
    BLOG_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 10,
       Table   => BLOG_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_1_NAME'Access,
          2 => COL_1_1_NAME'Access,
          3 => COL_2_1_NAME'Access,
@@ -1014,7 +1014,7 @@ private
          7 => COL_6_1_NAME'Access,
          8 => COL_7_1_NAME'Access,
          9 => COL_8_1_NAME'Access,
-         10 => COL_9_1_NAME'Access)
+         10 => COL_9_1_NAME'Access]
      );
    BLOG_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := BLOG_DEF'Access;
@@ -1103,7 +1103,7 @@ private
    POST_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 15,
       Table   => POST_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_2_NAME'Access,
          2 => COL_1_2_NAME'Access,
          3 => COL_2_2_NAME'Access,
@@ -1118,7 +1118,7 @@ private
          12 => COL_11_2_NAME'Access,
          13 => COL_12_2_NAME'Access,
          14 => COL_13_2_NAME'Access,
-         15 => COL_14_2_NAME'Access)
+         15 => COL_14_2_NAME'Access]
      );
    POST_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := POST_DEF'Access;

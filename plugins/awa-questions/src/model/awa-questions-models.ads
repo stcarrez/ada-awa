@@ -668,7 +668,7 @@ private
    QUESTION_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 11,
       Table   => QUESTION_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_1_NAME'Access,
          2 => COL_1_1_NAME'Access,
          3 => COL_2_1_NAME'Access,
@@ -679,7 +679,7 @@ private
          8 => COL_7_1_NAME'Access,
          9 => COL_8_1_NAME'Access,
          10 => COL_9_1_NAME'Access,
-         11 => COL_10_1_NAME'Access)
+         11 => COL_10_1_NAME'Access]
      );
    QUESTION_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := QUESTION_DEF'Access;
@@ -749,7 +749,7 @@ private
    ANSWER_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 8,
       Table   => ANSWER_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_2_NAME'Access,
          2 => COL_1_2_NAME'Access,
          3 => COL_2_2_NAME'Access,
@@ -757,7 +757,7 @@ private
          5 => COL_4_2_NAME'Access,
          6 => COL_5_2_NAME'Access,
          7 => COL_6_2_NAME'Access,
-         8 => COL_7_2_NAME'Access)
+         8 => COL_7_2_NAME'Access]
      );
    ANSWER_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := ANSWER_DEF'Access;

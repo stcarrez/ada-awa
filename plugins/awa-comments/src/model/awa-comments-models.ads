@@ -310,7 +310,7 @@ private
    COMMENT_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 9,
       Table   => COMMENT_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_1_NAME'Access,
          2 => COL_1_1_NAME'Access,
          3 => COL_2_1_NAME'Access,
@@ -319,7 +319,7 @@ private
          6 => COL_5_1_NAME'Access,
          7 => COL_6_1_NAME'Access,
          8 => COL_7_1_NAME'Access,
-         9 => COL_8_1_NAME'Access)
+         9 => COL_8_1_NAME'Access]
      );
    COMMENT_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := COMMENT_DEF'Access;

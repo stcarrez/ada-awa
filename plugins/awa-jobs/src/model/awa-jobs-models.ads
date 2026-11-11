@@ -249,7 +249,7 @@ private
    JOB_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 14,
       Table   => JOB_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_1_NAME'Access,
          2 => COL_1_1_NAME'Access,
          3 => COL_2_1_NAME'Access,
@@ -263,7 +263,7 @@ private
          11 => COL_10_1_NAME'Access,
          12 => COL_11_1_NAME'Access,
          13 => COL_12_1_NAME'Access,
-         14 => COL_13_1_NAME'Access)
+         14 => COL_13_1_NAME'Access]
      );
    JOB_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := JOB_DEF'Access;

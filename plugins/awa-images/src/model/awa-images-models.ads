@@ -377,7 +377,7 @@ private
    IMAGE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 12,
       Table   => IMAGE_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_1_NAME'Access,
          2 => COL_1_1_NAME'Access,
          3 => COL_2_1_NAME'Access,
@@ -389,7 +389,7 @@ private
          9 => COL_8_1_NAME'Access,
          10 => COL_9_1_NAME'Access,
          11 => COL_10_1_NAME'Access,
-         12 => COL_11_1_NAME'Access)
+         12 => COL_11_1_NAME'Access]
      );
    IMAGE_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := IMAGE_DEF'Access;

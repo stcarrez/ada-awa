@@ -283,9 +283,9 @@ private
    TAG_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 2,
       Table   => TAG_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_1_NAME'Access,
-         2 => COL_1_1_NAME'Access)
+         2 => COL_1_1_NAME'Access]
      );
    TAG_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := TAG_DEF'Access;
@@ -342,11 +342,11 @@ private
    TAGGED_ENTITY_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 4,
       Table   => TAGGED_ENTITY_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_2_NAME'Access,
          2 => COL_1_2_NAME'Access,
          3 => COL_2_2_NAME'Access,
-         4 => COL_3_2_NAME'Access)
+         4 => COL_3_2_NAME'Access]
      );
    TAGGED_ENTITY_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := TAGGED_ENTITY_DEF'Access;

@@ -268,12 +268,12 @@ private
    RATING_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 5,
       Table   => RATING_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_1_NAME'Access,
          2 => COL_1_1_NAME'Access,
          3 => COL_2_1_NAME'Access,
          4 => COL_3_1_NAME'Access,
-         5 => COL_4_1_NAME'Access)
+         5 => COL_4_1_NAME'Access]
      );
    RATING_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := RATING_DEF'Access;
@@ -332,10 +332,10 @@ private
    VOTE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 3,
       Table   => VOTE_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_2_NAME'Access,
          2 => COL_1_2_NAME'Access,
-         3 => COL_2_2_NAME'Access)
+         3 => COL_2_2_NAME'Access]
      );
    VOTE_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := VOTE_DEF'Access;

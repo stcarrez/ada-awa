@@ -1122,7 +1122,7 @@ private
    WIKI_CONTENT_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 9,
       Table   => WIKI_CONTENT_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_1_NAME'Access,
          2 => COL_1_1_NAME'Access,
          3 => COL_2_1_NAME'Access,
@@ -1131,7 +1131,7 @@ private
          6 => COL_5_1_NAME'Access,
          7 => COL_6_1_NAME'Access,
          8 => COL_7_1_NAME'Access,
-         9 => COL_8_1_NAME'Access)
+         9 => COL_8_1_NAME'Access]
      );
    WIKI_CONTENT_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := WIKI_CONTENT_DEF'Access;
@@ -1200,7 +1200,7 @@ private
    WIKI_SPACE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 9,
       Table   => WIKI_SPACE_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_2_NAME'Access,
          2 => COL_1_2_NAME'Access,
          3 => COL_2_2_NAME'Access,
@@ -1209,7 +1209,7 @@ private
          6 => COL_5_2_NAME'Access,
          7 => COL_6_2_NAME'Access,
          8 => COL_7_2_NAME'Access,
-         9 => COL_8_2_NAME'Access)
+         9 => COL_8_2_NAME'Access]
      );
    WIKI_SPACE_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := WIKI_SPACE_DEF'Access;
@@ -1290,7 +1290,7 @@ private
    WIKI_PAGE_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 10,
       Table   => WIKI_PAGE_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_3_NAME'Access,
          2 => COL_1_3_NAME'Access,
          3 => COL_2_3_NAME'Access,
@@ -1300,7 +1300,7 @@ private
          7 => COL_6_3_NAME'Access,
          8 => COL_7_3_NAME'Access,
          9 => COL_8_3_NAME'Access,
-         10 => COL_9_3_NAME'Access)
+         10 => COL_9_3_NAME'Access]
      );
    WIKI_PAGE_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := WIKI_PAGE_DEF'Access;

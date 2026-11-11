@@ -420,11 +420,11 @@ private
    COUNTER_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 4,
       Table   => COUNTER_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_1_NAME'Access,
          2 => COL_1_1_NAME'Access,
          3 => COL_2_1_NAME'Access,
-         4 => COL_3_1_NAME'Access)
+         4 => COL_3_1_NAME'Access]
      );
    COUNTER_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := COUNTER_DEF'Access;
@@ -482,10 +482,10 @@ private
    COUNTER_DEFINITION_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 3,
       Table   => COUNTER_DEFINITION_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_2_NAME'Access,
          2 => COL_1_2_NAME'Access,
-         3 => COL_2_2_NAME'Access)
+         3 => COL_2_2_NAME'Access]
      );
    COUNTER_DEFINITION_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := COUNTER_DEFINITION_DEF'Access;
@@ -544,12 +544,12 @@ private
    VISIT_DEF : aliased constant ADO.Schemas.Class_Mapping :=
      (Count   => 5,
       Table   => VISIT_NAME'Access,
-      Members => (
+      Members => [
          1 => COL_0_3_NAME'Access,
          2 => COL_1_3_NAME'Access,
          3 => COL_2_3_NAME'Access,
          4 => COL_3_3_NAME'Access,
-         5 => COL_4_3_NAME'Access)
+         5 => COL_4_3_NAME'Access]
      );
    VISIT_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := VISIT_DEF'Access;
