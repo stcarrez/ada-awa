@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-events-services -- AWA Event Manager
---  Copyright (C) 2012, 2016, 2020 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2020, 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -138,7 +138,7 @@ private
       Actions     : Event_Queues_Array_Access := null;
       Queues      : AWA.Events.Queues.Maps.Map;
       Application : Application_Access := null;
-      Dispatchers : Events.Dispatchers.Dispatcher_Access_Array := (others => null);
+      Dispatchers : Events.Dispatchers.Dispatcher_Access_Array := [others => null];
    end record;
 
    --  Finalize the event manager by releasing the allocated storage.

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions-beans -- Permission beans
---  Copyright (C) 2015, 2017 Stephane Carrez
+--  Copyright (C) 2015, 2017, 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -26,7 +26,7 @@ package body AWA.Permissions.Beans is
                                         Name   => "create");
 
    Permission_Bean_Binding : aliased constant Util.Beans.Methods.Method_Binding_Array
-     := (1 => Create_Binding.Proxy'Access);
+     := [1 => Create_Binding.Proxy'Access];
 
    --  ------------------------------
    --  Set the value identified by the name.

@@ -148,7 +148,7 @@ private
       Roles       : Security.Policies.Roles.Role_Policy_Access;
 
       --  Mapping between the application permission index and the database permission identifier.
-      Map         : Permission_Array := (others => 0);
+      Map         : Permission_Array := [others => 0];
    end record;
 
 end AWA.Permissions.Services;

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions -- Permissions module
---  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2021 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2021, 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -128,7 +128,7 @@ private
       SQL      : Util.Beans.Objects.Object;
       Grant    : Util.Beans.Objects.Object;
       Entity   : ADO.Entity_Type := 0;
-      Entities : Entity_Type_Array := (others => ADO.NO_ENTITY_TYPE);
+      Entities : Entity_Type_Array := [others => ADO.NO_ENTITY_TYPE];
       Count    : Natural := 0;
       Manager  : Entity_Policy_Access;
       Session  : ADO.Sessions.Session;

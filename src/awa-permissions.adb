@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  awa-permissions -- Permissions module
---  Copyright (C) 2011, 2012, 2013, 2014, 2016, 2017, 2020, 2022, 2025 Stephane Carrez
+--  Copyright (C) 2011 - 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -134,7 +134,7 @@ package body AWA.Permissions is
                begin
                   Into.Manager.Add_Permission (Name, Perm.all'Access);
                   Into.Count := 0;
-                  Into.Entities := (others => ADO.NO_ENTITY_TYPE);
+                  Into.Entities := [others => ADO.NO_ENTITY_TYPE];
                end;
             end;
 
