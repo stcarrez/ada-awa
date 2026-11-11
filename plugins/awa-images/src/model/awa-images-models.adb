@@ -696,8 +696,8 @@ package body AWA.Images.Models is
                                                       Name   => "load");
 
    Binding_Image_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
-     := (1 => Binding_Image_Bean_1.Proxy'Access
-     );
+     := [1 => Binding_Image_Bean_1.Proxy'Access
+     ];
 
    --  ------------------------------
    --  This bean provides some methods that can be used in a Method_Expression.

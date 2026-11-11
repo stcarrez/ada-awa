@@ -2772,14 +2772,14 @@ package body AWA.Users.Models is
                                                       Name   => "reset_password");
 
    Binding_Authenticate_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
-     := (1 => Binding_Authenticate_Bean_1.Proxy'Access,
+     := [1 => Binding_Authenticate_Bean_1.Proxy'Access,
          2 => Binding_Authenticate_Bean_2.Proxy'Access,
          3 => Binding_Authenticate_Bean_3.Proxy'Access,
          4 => Binding_Authenticate_Bean_4.Proxy'Access,
          5 => Binding_Authenticate_Bean_5.Proxy'Access,
          6 => Binding_Authenticate_Bean_6.Proxy'Access,
          7 => Binding_Authenticate_Bean_7.Proxy'Access
-     );
+     ];
 
    --  ------------------------------
    --  This bean provides some methods that can be used in a Method_Expression.

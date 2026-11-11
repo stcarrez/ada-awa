@@ -1842,8 +1842,8 @@ package body AWA.Wikis.Models is
                                                       Name   => "load");
 
    Binding_Wiki_Image_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
-     := (1 => Binding_Wiki_Image_Bean_1.Proxy'Access
-     );
+     := [1 => Binding_Wiki_Image_Bean_1.Proxy'Access
+     ];
 
    --  ------------------------------
    --  This bean provides some methods that can be used in a Method_Expression.
@@ -2427,8 +2427,8 @@ package body AWA.Wikis.Models is
                                                       Name   => "load");
 
    Binding_Wiki_View_Info_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
-     := (1 => Binding_Wiki_View_Info_1.Proxy'Access
-     );
+     := [1 => Binding_Wiki_View_Info_1.Proxy'Access
+     ];
 
    --  ------------------------------
    --  This bean provides some methods that can be used in a Method_Expression.
@@ -2664,9 +2664,9 @@ package body AWA.Wikis.Models is
                                                       Name   => "load");
 
    Binding_Wiki_Space_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
-     := (1 => Binding_Wiki_Space_Bean_1.Proxy'Access,
+     := [1 => Binding_Wiki_Space_Bean_1.Proxy'Access,
          2 => Binding_Wiki_Space_Bean_2.Proxy'Access
-     );
+     ];
 
    --  ------------------------------
    --  This bean provides some methods that can be used in a Method_Expression.
@@ -2748,11 +2748,11 @@ package body AWA.Wikis.Models is
                                                       Name   => "setup");
 
    Binding_Wiki_Page_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
-     := (1 => Binding_Wiki_Page_Bean_1.Proxy'Access,
+     := [1 => Binding_Wiki_Page_Bean_1.Proxy'Access,
          2 => Binding_Wiki_Page_Bean_2.Proxy'Access,
          3 => Binding_Wiki_Page_Bean_3.Proxy'Access,
          4 => Binding_Wiki_Page_Bean_4.Proxy'Access
-     );
+     ];
 
    --  ------------------------------
    --  This bean provides some methods that can be used in a Method_Expression.
@@ -2799,8 +2799,8 @@ package body AWA.Wikis.Models is
                                                       Name   => "load");
 
    Binding_Wiki_Page_List_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
-     := (1 => Binding_Wiki_Page_List_Bean_1.Proxy'Access
-     );
+     := [1 => Binding_Wiki_Page_List_Bean_1.Proxy'Access
+     ];
 
    --  ------------------------------
    --  This bean provides some methods that can be used in a Method_Expression.
@@ -2872,8 +2872,8 @@ package body AWA.Wikis.Models is
                                                       Name   => "load");
 
    Binding_Wiki_Version_List_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
-     := (1 => Binding_Wiki_Version_List_Bean_1.Proxy'Access
-     );
+     := [1 => Binding_Wiki_Version_List_Bean_1.Proxy'Access
+     ];
 
    --  ------------------------------
    --  This bean provides some methods that can be used in a Method_Expression.
@@ -2941,8 +2941,8 @@ package body AWA.Wikis.Models is
                                                       Name   => "load");
 
    Binding_Wiki_Page_Info_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
-     := (1 => Binding_Wiki_Page_Info_Bean_1.Proxy'Access
-     );
+     := [1 => Binding_Wiki_Page_Info_Bean_1.Proxy'Access
+     ];
 
    --  ------------------------------
    --  This bean provides some methods that can be used in a Method_Expression.
